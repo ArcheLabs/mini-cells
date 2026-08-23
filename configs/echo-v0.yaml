@@ -1,0 +1,30 @@
+model:
+  num_cells: 64
+  max_seq_len: 32
+  vocab_size: auto
+  embedding_dim: 8
+  hidden_dim: 16
+  radius: 2
+  iterations: 4
+  mlp_width: 32
+  activation: relu
+  state_activation: hardtanh
+  residual_scale: 1.0
+data:
+  min_length: 1
+  max_length: 32
+  random_fraction: 0.7
+train:
+  seed: 1
+  batch_size: 256
+  steps: 5000
+  learning_rate: 0.001
+  weight_decay: 0.0
+  grad_clip_norm: 1.0
+  eval_every: 100
+  checkpoint_every: 500
+validation:
+  seed: 10001
+  examples: 4096
+output:
+  root: results/echo-v0
