@@ -20,6 +20,8 @@ git -C "${CLIENT}" fetch --quiet origin agent/season2-release-readiness
 git -C "${CLIENT}" checkout --quiet "${MINIJAM_CLIENT_REF}"
 git -C "${CLIENT}" submodule update --init external/jambda
 JAMBDA="${CLIENT}/external/jambda"
-git -C "${JAMBDA}" fetch --quiet origin codex/minicells-v01-gas || true
-git -C "${JAMBDA}" checkout --quiet 90d93f7
+# Keep the nested Jambda checkout aligned with the ownerless System ABI V2
+# recorded by the pinned MiniJAM commit above.
+git -C "${JAMBDA}" fetch --quiet origin codex/ownerless-system-abi-v2
+git -C "${JAMBDA}" checkout --quiet 0b087c1
 printf 'MiniJAM dependencies ready at %s\n' "${CLIENT}"
