@@ -8,5 +8,8 @@ work-package builder, and BulletinStore seam. External data order is always
 content-addressed, verifies Blake2b-256 and length on fetch, and is served to
 workers from Keeper's `/ipfs/{cid}` route.
 
-No browser wallet, Playground action endpoint, or Playground storage polling is
-required by this path.
+No browser wallet transaction or Playground action endpoint is required by this
+path. Browser login is only a Keeper challenge signature; ordinary inference is
+local WASM. The authenticated Keeper verification endpoint is intentionally
+separate and submits real MiniJAM Work, waits for finality, and reads the
+matching finalized inference-ring record.

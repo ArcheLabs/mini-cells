@@ -8,7 +8,7 @@ MINI Cells explores whether useful language behavior can emerge from small, loca
 - **Rust/PVM/MiniJAM runtime: implemented; validation evidence is tracked in [`IMPLEMENTATION_STATUS.md`](IMPLEMENTATION_STATUS.md).** It includes a deterministic Q8.8 kernel, exact 4,476-parameter model, SIGN-SPSA generation pairing, explicit protocol, simulator, no_std service artifact, CLI, and browser client.
 - **MiniJAM-native Echo learning: NOT YET VALIDATED.** A generation transition proves deterministic protocol execution; it does not by itself establish useful learning quality. No claim that “AI learned on MiniJAM” is made in this implementation round.
 
-Compatibility is pinned to JAM semantics 0.7.2 and the exact MiniJAM/Jambda/toolchain refs recorded in [`service/artifacts/manifest.json`](service/artifacts/manifest.json). The V0.1 production path is direct MiniJAM plus a non-canonical Keeper; the browser is a Keeper/SSE view and has no wallet or Playground dependency. See [`docs/architecture-v0.1.md`](docs/architecture-v0.1.md), [`docs/direct-minijam.md`](docs/direct-minijam.md), [`docs/keeper.md`](docs/keeper.md), and [`docs/protocol-v1.md`](docs/protocol-v1.md).
+Compatibility is pinned to JAM semantics 0.7.2 and the exact MiniJAM/Jambda/toolchain refs recorded in [`service/artifacts/manifest.json`](service/artifacts/manifest.json). V0.2 keeps MiniJAM canonical and the Keeper non-canonical: wallet authentication establishes an HttpOnly session, the Keeper serves a verified finalized model, and ordinary browser inference runs locally through the Rust/WASM kernel. PVM inference remains an explicitly authenticated verification/debug path; there is no Playground dependency. See [`docs/architecture-v0.1.md`](docs/architecture-v0.1.md), [`docs/direct-minijam.md`](docs/direct-minijam.md), [`docs/keeper.md`](docs/keeper.md), and [`docs/protocol-v1.md`](docs/protocol-v1.md).
 
 ## Validate and build
 
@@ -24,6 +24,20 @@ Build the Rust service artifact directly with:
 ```bash
 ./tools/build_service.sh
 ```
+
+For a fresh checkout, bootstrap the pinned MiniJAM/Jambda sources before an
+offline build, then build the browser ABI as part of the web production build:
+
+```bash
+./tools/bootstrap_deps.sh
+npm --prefix apps/web run build
+```
+
+Keeper authentication uses `MINICELLS_WEB_ORIGIN`,
+`MINICELLS_OPERATOR_ACCOUNT` (optional), and `MINICELLS_COOKIE_SECURE=1` for
+HTTPS. The web app uses `VITE_MINICELLS_KEEPER_URL`; users connect a normal
+sr25519 Polkadot extension, sign the displayed challenge bytes, and keep the
+verified model only in memory.
 
 For a running compatible MiniJAM stack, follow [`docs/deployment.md`](docs/deployment.md) or run the end-to-end procedure in [`docs/smoke-test.md`](docs/smoke-test.md). The browser app is under `apps/web`.
 

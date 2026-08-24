@@ -1,0 +1,11 @@
+[package]
+name = "minicells-wasm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+minicells-core = { path = "../minicells-core" }

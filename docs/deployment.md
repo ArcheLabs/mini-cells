@@ -13,10 +13,14 @@ cargo run --offline -p minicells-cli -- status-probe
 cargo run --offline -p minicells-cli -- status
 ```
 
-Run the Keeper with the same RPC, signer, service id, and Bulletin directory,
-then set `VITE_MINICELLS_KEEPER_URL` for the web app. The browser talks only to
-Keeper HTTP/SSE; there is no wallet signing, Playground action endpoint, or
-storage polling in this path.
+Run the Keeper with the same RPC, signer, service id, and Bulletin directory.
+Set `MINICELLS_WEB_ORIGIN` to the exact web origin and, for production HTTPS,
+set `MINICELLS_COOKIE_SECURE=1`; optionally set
+`MINICELLS_OPERATOR_ACCOUNT` to the canonical 32-byte operator account. Then
+set `VITE_MINICELLS_KEEPER_URL` for the web app. The browser signs only the
+Keeper authentication challenge, keeps the session in an HttpOnly cookie, and
+performs ordinary inference locally with `apps/web/public/minicells_core.wasm`.
+The `/v1/verify/infer` route is reserved for authenticated protocol verification.
 
 The measured Echo candidate uses about 42.4M Refine gas, so the reusable
 MiniJAM protocol and TinySpec ceilings are 1,000,000,000 Refine and Accumulate

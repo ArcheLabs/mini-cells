@@ -1,5 +1,6 @@
 [workspace]
 resolver = "2"
+exclude = [".deps/minijam-client"]
 members = [
   "crates/minicells-core",
   "crates/minicells-protocol",
@@ -9,12 +10,19 @@ members = [
   "crates/minicells-chain",
   "crates/minicells-cli",
   "crates/minicells-keeper",
+  "crates/minicells-wasm",
 ]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
+authors = ["ArcheLabs"]
+homepage = "https://github.com/ArcheLabs/mini-cells"
+repository = "https://github.com/ArcheLabs/mini-cells"
+rust-version = "1.88"
+
+[workspace.lints.rust]
 
 [workspace.dependencies]
 blake2b_simd = { version = "1.0.4", default-features = false }
@@ -28,6 +36,7 @@ tempfile = "3.23.0"
 cid = "0.11.1"
 multihash = "0.19.3"
 bounded-collections = { version = "0.2.4", default-features = false }
+getrandom = "0.3.4"
 hex = "0.4.3"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
@@ -36,8 +45,8 @@ reqwest = { version = "0.12.24", default-features = false, features = ["blocking
 schnorrkel = "0.11.5"
 
 [patch.crates-io]
-minijam-jamcore-api = { path = "/home/libingjiang/minijam-client/crates/minijam-jamcore-api" }
-minijam-protocol = { path = "/home/libingjiang/minijam-client/crates/minijam-protocol" }
+minijam-jamcore-api = { path = ".deps/minijam-client/crates/minijam-jamcore-api" }
+minijam-protocol = { path = ".deps/minijam-client/crates/minijam-protocol" }
 
 [profile.release]
 panic = "abort"

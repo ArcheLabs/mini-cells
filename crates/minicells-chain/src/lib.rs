@@ -3,6 +3,7 @@ use bounded_collections::BoundedVec;
 use cid::Cid;
 use jam_codec::Decode as JamDecode;
 use jp_core_primitives::types::ServiceInfo;
+use minicells_protocol::InferenceV1;
 use minicells_protocol::{keys, HistoryV1, MetaV1, PendingV1, WorkBody, WorkPayload};
 use minijam_bulletin_api::{
     AccountId, Authorization, BulletinError, BulletinStore, ContentStatus, RenewalRef,
@@ -55,6 +56,7 @@ pub struct FinalizedMiniCellsState {
     pub pending_plus: Option<PendingV1>,
     pub pending_minus: Option<PendingV1>,
     pub history: Vec<HistoryV1>,
+    pub inferences: Vec<InferenceV1>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -225,6 +227,15 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
         } else {
             Vec::new()
         };
+        let mut inferences = Vec::new();
+        for slot in 0..16u8 {
+            if let Some(bytes) = read(keys::inference_key(slot).to_vec()).await? {
+                inferences.push(
+                    InferenceV1::decode(&bytes)
+                        .map_err(|_| ChainError::State("invalid inference record".into()))?,
+                );
+            }
+        }
         Ok(FinalizedMiniCellsState {
             block_hash: context.block_hash,
             block_number: context.block_number,
@@ -235,6 +246,7 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
             pending_plus,
             pending_minus,
             history,
+            inferences,
         })
     }
 
@@ -382,6 +394,25 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
                         execution_receipt: receipt,
                     });
                 }
+            }
+            tokio::time::sleep(self.poll_interval).await;
+        }
+        Err(ChainError::WorkTimeout)
+    }
+
+    pub async fn wait_inference(
+        &self,
+        submitted: &SubmittedWork,
+    ) -> Result<InferenceV1, ChainError> {
+        self.wait_work(submitted).await?;
+        for _ in 0..3600 {
+            let state = self.finalized_state().await?;
+            if let Some(record) = state
+                .inferences
+                .into_iter()
+                .find(|record| record.request_id == submitted.request_id)
+            {
+                return Ok(record);
             }
             tokio::time::sleep(self.poll_interval).await;
         }

@@ -3101,12 +3101,17 @@ name = "minicells-keeper"
 version = "0.1.0"
 dependencies = [
  "axum",
+ "base64",
  "cid",
  "futures-core",
+ "getrandom 0.3.4",
  "hex",
  "minicells-chain",
+ "minicells-core",
+ "minicells-protocol",
  "serde",
  "serde_json",
+ "sp-core",
  "tokio",
  "tokio-stream",
  "tower-http",
@@ -3142,6 +3147,13 @@ dependencies = [
  "minicells-runtime",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "minicells-wasm"
+version = "0.1.0"
+dependencies = [
+ "minicells-core",
 ]
 
 [[package]]

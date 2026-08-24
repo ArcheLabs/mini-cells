@@ -6,10 +6,15 @@ license.workspace = true
 
 [dependencies]
 axum.workspace = true
+base64.workspace = true
 cid.workspace = true
 futures-core = "0.3"
+getrandom.workspace = true
 hex.workspace = true
 minicells-chain = { path = "../minicells-chain" }
+minicells-core = { path = "../minicells-core" }
+minicells-protocol = { path = "../minicells-protocol" }
+sp-core = { git = "https://github.com/paritytech/polkadot-sdk.git", rev = "2e4dd0bc22366a5af820492528869a493b5a5208", default-features = true }
 serde.workspace = true
 serde_json.workspace = true
 tokio.workspace = true
