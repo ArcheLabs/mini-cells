@@ -91,6 +91,8 @@
     "cargo test --offline --workspace: PASS (direct chain and Keeper compile/test)",
     "cargo test --offline -p service-state-plane: PASS (proof adapter and forged-root rejection)",
     "npm --prefix apps/web test && npm --prefix apps/web run build: PASS (Keeper/SSE UI)",
-    "real direct chain generation: BLOCKED_EXTERNAL_WORKER_SIGNATURE"
+    "real direct chain generation: BLOCKED_EXTERNAL_WORKER_SIGNATURE",
+    "python3 -m pip install -e '.[dev]': BLOCKED_NO_SETUP_PY",
+    "direct CLI status against legacy service 1677269814: BLOCKED_INCOMPATIBLE_LEGACY_META"
   ]
 }

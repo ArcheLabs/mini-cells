@@ -31,3 +31,11 @@ round-trip); `cargo test --offline -p service-state-plane` PASS; Keeper/CLI dire
 crate checks PASS; `npm --prefix apps/web test && npm --prefix apps/web run build`
 PASS. The remaining real-chain generation failure is the pre-existing external
 worker signature failure, not a local compilation or state-provider failure.
+
+Python follow-up: `python3 -m pip install -e '.[dev]'` is blocked because this
+repository has no `setup.py` editable backend; the non-editable install stalled
+on dependency processing and was cancelled. `python3 -m pytest -q` therefore
+remains a demonstrated environment blocker (`No module named pytest`). A direct
+CLI status probe against the existing service also rejected its legacy state as
+`invalid MetaV1`; this is recorded as an incompatible pre-existing chain state,
+not silently treated as a direct-path pass.
