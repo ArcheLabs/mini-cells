@@ -193,9 +193,8 @@ fn print_deployed_service(service: &DeployedService) {
 
 fn deployed_service_output(service: &DeployedService) -> String {
     format!(
-        "Service created\nService ID: {}\nController: 0x{}\nCode hash: 0x{}\nExtrinsic: 0x{}\nCreate correlation: 0x{}\nSet MINICELLS_SERVICE_ID={} for subsequent commands",
+        "Service created\nService ID: {}\nCode hash: 0x{}\nExtrinsic: 0x{}\nCreate correlation: 0x{}\nSet MINICELLS_SERVICE_ID={} for subsequent commands",
         service.service_id,
-        hex::encode(service.controller),
         hex::encode(service.code_hash),
         hex::encode(service.create_extrinsic_hash),
         hex::encode(service.create_correlation),
@@ -373,7 +372,6 @@ mod tests {
     fn deploy_output_uses_receipt_service_id() {
         let output = deployed_service_output(&DeployedService {
             service_id: 42,
-            controller: [1; 32],
             code_hash: [2; 32],
             create_extrinsic_hash: [3; 32],
             create_correlation: [4; 32],

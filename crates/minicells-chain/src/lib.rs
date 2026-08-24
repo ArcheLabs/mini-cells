@@ -11,7 +11,7 @@ use minijam_bulletin_api::{
 use minijam_chain_client::{FinalizedContext, MiniJamChainClient};
 use minijam_protocol_external::{
     blake2_256, CidConfig, ContentRef, Hash, HashingAlgorithm, StorageLocation, StorageReceipt,
-    SystemReceiptV1,
+    SystemReceiptV2,
 };
 use minijam_work_package_builder::{build_work_package, BuildWorkInput};
 use multihash::Multihash;
@@ -107,20 +107,15 @@ pub struct FinalizedWork {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DeployedService {
     pub service_id: u32,
-    pub controller: [u8; 32],
     pub code_hash: Hash,
     pub create_extrinsic_hash: Hash,
     pub create_correlation: Hash,
 }
 
-fn classify_service_receipt(receipt: SystemReceiptV1) -> Result<(u32, [u8; 32]), ChainError> {
+fn classify_service_receipt(receipt: SystemReceiptV2) -> Result<u32, ChainError> {
     match receipt {
-        SystemReceiptV1::ServiceCreated {
-            service_id,
-            controller,
-        } => Ok((service_id, controller)),
-        SystemReceiptV1::Rejected { code } => Err(ChainError::ServiceCreateRejected(code)),
-        _ => Err(ChainError::UnexpectedSystemReceipt),
+        SystemReceiptV2::ServiceCreated { service_id } => Ok(service_id),
+        SystemReceiptV2::Rejected { code } => Err(ChainError::ServiceCreateRejected(code)),
     }
 }
 
@@ -196,13 +191,7 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
         self.client.submit_preimage(artifact.to_vec()).await?;
         Ok(self
             .client
-            .submit_create_service(
-                self.bulletin_account,
-                code_hash,
-                artifact.len() as u32,
-                min_item_gas,
-                min_memo_gas,
-            )
+            .submit_create_service(code_hash, artifact.len() as u32, min_item_gas, min_memo_gas)
             .await?)
     }
 
@@ -223,13 +212,12 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
         for _ in 0..120 {
             if let Some(receipt) = self
                 .client
-                .system_receipt::<SystemReceiptV1>(submission.correlation)
+                .system_receipt::<SystemReceiptV2>(submission.correlation)
                 .await?
             {
-                let (service_id, controller) = classify_service_receipt(receipt)?;
+                let service_id = classify_service_receipt(receipt)?;
                 return Ok(DeployedService {
                     service_id,
-                    controller,
                     code_hash,
                     create_extrinsic_hash: submission.extrinsic_hash,
                     create_correlation: submission.correlation,
@@ -675,35 +663,18 @@ mod tests {
     }
 
     #[test]
-    fn service_created_receipt_returns_runtime_id_and_controller() {
-        let controller = [9; 32];
+    fn service_created_receipt_returns_runtime_id_without_owner_state() {
         assert_eq!(
-            classify_service_receipt(SystemReceiptV1::ServiceCreated {
-                service_id: 42,
-                controller,
-            })
-            .unwrap(),
-            (42, controller)
+            classify_service_receipt(SystemReceiptV2::ServiceCreated { service_id: 42 }).unwrap(),
+            42
         );
     }
 
     #[test]
     fn rejected_service_receipt_is_not_reported_as_created() {
         assert!(matches!(
-            classify_service_receipt(SystemReceiptV1::Rejected { code: 17 }),
+            classify_service_receipt(SystemReceiptV2::Rejected { code: 17 }),
             Err(ChainError::ServiceCreateRejected(17))
-        ));
-    }
-
-    #[test]
-    fn unexpected_service_receipt_is_rejected() {
-        assert!(matches!(
-            classify_service_receipt(SystemReceiptV1::ServiceUpgraded {
-                service_id: 42,
-                controller: [9; 32],
-                code_hash: [8; 32],
-            }),
-            Err(ChainError::UnexpectedSystemReceipt)
         ));
     }
 }

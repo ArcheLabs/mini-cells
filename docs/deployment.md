@@ -7,6 +7,9 @@ content-addressed Bulletin directory:
 export MINICELLS_RPC_URL=ws://127.0.0.1:9944
 export MINICELLS_KEEPER_SIGNER_URI=0x0707070707070707070707070707070707070707070707070707070707070707
 export MINICELLS_BULLETIN_DIR=.local/minicells-bulletin
+# The default is pinned to the released MiniJAM commit carrying ownerless
+# System ABI V2; override only when validating another release candidate.
+./tools/bootstrap_deps.sh
 cargo run --offline -p minicells-cli -- deploy service/artifacts/service.blob
 # Copy the receipt-derived Service ID printed by the command.
 export MINICELLS_SERVICE_ID=<receipt-derived-service-id>
