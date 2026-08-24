@@ -5,6 +5,9 @@ context, loads `META` and `MODEL` as ordered external data, builds a WorkPackage
 with the reusable MiniJAM builder, stores and verifies the Bulletin bundle, and
 submits it with `minijam-chain-client`. Finalized state is the only source of
 truth. The browser is a view of the Keeper and does not sign or poll storage.
+In V0.2, the Keeper is the trusted finalized-state gateway: browser/WASM checks
+delivered model byte/hash consistency, but does not independently verify a
+MiniJAM proof of the hash's origin.
 
 The Keeper is intentionally non-canonical. It provides recovery, serialized
 training scheduling, inference request tracking, SSE snapshots/events, and a

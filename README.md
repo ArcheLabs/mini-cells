@@ -37,7 +37,10 @@ Keeper authentication uses `MINICELLS_WEB_ORIGIN`,
 `MINICELLS_OPERATOR_ACCOUNT` (optional), and `MINICELLS_COOKIE_SECURE=1` for
 HTTPS. The web app uses `VITE_MINICELLS_KEEPER_URL`; users connect a normal
 sr25519 Polkadot extension, sign the displayed challenge bytes, and keep the
-verified model only in memory.
+verified model only in memory. V0.2 treats the Keeper as the trusted gateway
+for finalized MiniJAM state: the browser independently checks that delivered
+model bytes match the hash supplied by that gateway, but does not yet verify a
+direct MiniJAM proof that the hash came from canonical service storage.
 
 For a running compatible MiniJAM stack, follow [`docs/deployment.md`](docs/deployment.md) or run the end-to-end procedure in [`docs/smoke-test.md`](docs/smoke-test.md). The browser app is under `apps/web`.
 

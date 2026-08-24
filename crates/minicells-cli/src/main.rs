@@ -1,5 +1,7 @@
 use clap::{Parser, Subcommand};
-use minicells_chain::{FilesystemBulletinStore, MiniCellsChain, TrainSide};
+use minicells_chain::{
+    DeployedService, FilesystemBulletinStore, FinalizedMiniCellsState, MiniCellsChain, TrainSide,
+};
 use minicells_protocol::MetaV1;
 use std::{
     env, fs,
@@ -27,6 +29,7 @@ enum Command {
     Train {
         generations: u64,
     },
+    #[command(about = "Debug-only stale training replay")]
     ReplayTrain {
         generation: u64,
         parent_model_hash: String,
@@ -50,18 +53,32 @@ fn id() -> u64 {
         .unwrap_or_default()
         .as_nanos() as u64
 }
-async fn chain() -> Result<MiniCellsChain<FilesystemBulletinStore>, String> {
+async fn chain_for_service(
+    service: u32,
+) -> Result<MiniCellsChain<FilesystemBulletinStore>, String> {
     let rpc = env::var("MINICELLS_RPC_URL").unwrap_or_else(|_| "ws://127.0.0.1:9944".into());
-    let service = env::var("MINICELLS_SERVICE_ID")
-        .map_err(|_| "MINICELLS_SERVICE_ID is required".to_string())?
-        .parse()
-        .map_err(|_| "invalid service id".to_string())?;
     let root =
         env::var("MINICELLS_BULLETIN_DIR").unwrap_or_else(|_| ".local/minicells-bulletin".into());
     let bulletin = Arc::new(FilesystemBulletinStore::new(root).map_err(|e| e.to_string())?);
     MiniCellsChain::connect(rpc, seed()?, service, bulletin)
         .await
         .map_err(|e| e.to_string())
+}
+async fn chain() -> Result<MiniCellsChain<FilesystemBulletinStore>, String> {
+    let service = env::var("MINICELLS_SERVICE_ID")
+        .map_err(|_| "MINICELLS_SERVICE_ID is required".to_string())?
+        .parse()
+        .map_err(|_| "invalid service id".to_string())?;
+    chain_for_service(service).await
+}
+async fn deploy_chain() -> Result<MiniCellsChain<FilesystemBulletinStore>, String> {
+    let service = match env::var("MINICELLS_SERVICE_ID") {
+        Ok(value) => value
+            .parse()
+            .map_err(|_| "invalid service id".to_string())?,
+        Err(_) => 0,
+    };
+    chain_for_service(service).await
 }
 fn print_state(meta: Option<&MetaV1>, plus: bool, minus: bool) {
     if let Some(m) = meta {
@@ -84,20 +101,20 @@ async fn main() {
     }
 }
 async fn run() -> Result<(), String> {
-    let args = Args::parse();
+    let command = Args::parse().command;
+    if let Command::Deploy { artifact } = &command {
+        let chain = deploy_chain().await?;
+        let bytes = fs::read(artifact).map_err(|e| e.to_string())?;
+        let service = chain
+            .deploy_service_and_wait(&bytes, 20_000_000, 1)
+            .await
+            .map_err(|e| e.to_string())?;
+        print_deployed_service(&service);
+        return Ok(());
+    }
     let chain = chain().await?;
-    match args.command {
-        Command::Deploy { artifact } => {
-            let bytes = fs::read(artifact).map_err(|e| e.to_string())?;
-            let s = chain
-                .deploy_service(&bytes, 20_000_000, 1)
-                .await
-                .map_err(|e| e.to_string())?;
-            println!(
-                "Service deployment submitted: 0x{}",
-                hex::encode(s.extrinsic_hash)
-            );
-        }
+    match command {
+        Command::Deploy { .. } => unreachable!("deploy handled before connecting to a service"),
         Command::Status => {
             let s = chain.finalized_state().await.map_err(|e| e.to_string())?;
             print_state(
@@ -126,10 +143,10 @@ async fn run() -> Result<(), String> {
                 hex::encode(s.package_hash)
             );
         }
-        Command::TrainOne => run_train(&chain).await?,
+        Command::TrainOne => train_one_generation(&chain).await?,
         Command::Train { generations } => {
             for _ in 0..generations {
-                run_train(&chain).await?
+                train_one_generation(&chain).await?
             }
         }
         Command::ReplayTrain {
@@ -170,24 +187,198 @@ async fn run() -> Result<(), String> {
     }
     Ok(())
 }
-async fn run_train(chain: &MiniCellsChain<FilesystemBulletinStore>) -> Result<(), String> {
-    let s = chain.finalized_state().await.map_err(|e| e.to_string())?;
-    let m = s.meta.ok_or("service is not initialized")?;
-    for (side, pending) in [
-        (TrainSide::Plus, s.pending_plus),
-        (TrainSide::Minus, s.pending_minus),
-    ] {
-        if pending.is_none() {
-            let w = chain
-                .submit_train_side(side, m.generation, m.model_hash, id())
-                .await
-                .map_err(|e| e.to_string())?;
-            chain.wait_work(&w).await.map_err(|e| e.to_string())?;
+fn print_deployed_service(service: &DeployedService) {
+    println!("{}", deployed_service_output(service));
+}
+
+fn deployed_service_output(service: &DeployedService) -> String {
+    format!(
+        "Service created\nService ID: {}\nController: 0x{}\nCode hash: 0x{}\nExtrinsic: 0x{}\nCreate correlation: 0x{}\nSet MINICELLS_SERVICE_ID={} for subsequent commands",
+        service.service_id,
+        hex::encode(service.controller),
+        hex::encode(service.code_hash),
+        hex::encode(service.create_extrinsic_hash),
+        hex::encode(service.create_correlation),
+        service.service_id
+    )
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+enum TrainingAction {
+    SubmitPlus {
+        generation: u64,
+        model_hash: [u8; 32],
+    },
+    SubmitMinus {
+        generation: u64,
+        model_hash: [u8; 32],
+    },
+    Wait,
+    Complete,
+}
+
+fn decide_training_action(
+    start_generation: u64,
+    state: &FinalizedMiniCellsState,
+) -> Result<TrainingAction, String> {
+    let meta = state.meta.as_ref().ok_or("service is not initialized")?;
+    if meta.generation > start_generation {
+        return Ok(TrainingAction::Complete);
+    }
+    if state.pending_plus.is_none() {
+        return Ok(TrainingAction::SubmitPlus {
+            generation: meta.generation,
+            model_hash: meta.model_hash,
+        });
+    }
+    if state.pending_minus.is_none() {
+        return Ok(TrainingAction::SubmitMinus {
+            generation: meta.generation,
+            model_hash: meta.model_hash,
+        });
+    }
+    Ok(TrainingAction::Wait)
+}
+
+async fn train_one_generation(
+    chain: &MiniCellsChain<FilesystemBulletinStore>,
+) -> Result<(), String> {
+    let initial = chain.finalized_state().await.map_err(|e| e.to_string())?;
+    let start_generation = initial
+        .meta
+        .as_ref()
+        .ok_or("service is not initialized")?
+        .generation;
+    loop {
+        let state = chain.finalized_state().await.map_err(|e| e.to_string())?;
+        match decide_training_action(start_generation, &state)? {
+            TrainingAction::Complete => return Ok(()),
+            TrainingAction::SubmitPlus {
+                generation,
+                model_hash,
+            } => {
+                let work = chain
+                    .submit_train_side(TrainSide::Plus, generation, model_hash, id())
+                    .await
+                    .map_err(|e| e.to_string())?;
+                chain.wait_work(&work).await.map_err(|e| e.to_string())?;
+            }
+            TrainingAction::SubmitMinus {
+                generation,
+                model_hash,
+            } => {
+                let work = chain
+                    .submit_train_side(TrainSide::Minus, generation, model_hash, id())
+                    .await
+                    .map_err(|e| e.to_string())?;
+                chain.wait_work(&work).await.map_err(|e| e.to_string())?;
+            }
+            TrainingAction::Wait => {
+                chain
+                    .wait_generation_after(start_generation)
+                    .await
+                    .map_err(|e| e.to_string())?;
+                return Ok(());
+            }
         }
     }
-    chain
-        .wait_generation_after(m.generation)
-        .await
-        .map_err(|e| e.to_string())?;
-    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use minicells_protocol::PendingV1;
+
+    fn state(generation: u64, hash: [u8; 32], plus: bool, minus: bool) -> FinalizedMiniCellsState {
+        FinalizedMiniCellsState {
+            block_hash: [0; 32],
+            block_number: 0,
+            state_root: [0; 32],
+            lookup_anchor_slot: 0,
+            meta: Some(MetaV1 {
+                generation,
+                model_hash: hash,
+                ..MetaV1::new(hash)
+            }),
+            model: None,
+            pending_plus: plus.then(|| PendingV1 {
+                generation,
+                parent_hash: hash,
+                side: 1,
+                loss: 0,
+                correct: 0,
+                tokens: 0,
+                digest: [0; 32],
+            }),
+            pending_minus: minus.then(|| PendingV1 {
+                generation,
+                parent_hash: hash,
+                side: -1,
+                loss: 0,
+                correct: 0,
+                tokens: 0,
+                digest: [0; 32],
+            }),
+            history: Vec::new(),
+            inferences: Vec::new(),
+        }
+    }
+
+    #[test]
+    fn training_decision_handles_all_pending_shapes() {
+        assert_eq!(
+            decide_training_action(0, &state(0, [1; 32], false, false)).unwrap(),
+            TrainingAction::SubmitPlus {
+                generation: 0,
+                model_hash: [1; 32]
+            }
+        );
+        assert_eq!(
+            decide_training_action(0, &state(0, [2; 32], true, false)).unwrap(),
+            TrainingAction::SubmitMinus {
+                generation: 0,
+                model_hash: [2; 32]
+            }
+        );
+        assert_eq!(
+            decide_training_action(0, &state(0, [3; 32], false, true)).unwrap(),
+            TrainingAction::SubmitPlus {
+                generation: 0,
+                model_hash: [3; 32]
+            }
+        );
+        assert_eq!(
+            decide_training_action(0, &state(0, [4; 32], true, true)).unwrap(),
+            TrainingAction::Wait
+        );
+        assert_eq!(
+            decide_training_action(0, &state(1, [5; 32], true, true)).unwrap(),
+            TrainingAction::Complete
+        );
+    }
+
+    #[test]
+    fn training_decision_uses_current_meta_hash_after_refresh() {
+        let action = decide_training_action(4, &state(4, [9; 32], true, false)).unwrap();
+        assert_eq!(
+            action,
+            TrainingAction::SubmitMinus {
+                generation: 4,
+                model_hash: [9; 32]
+            }
+        );
+    }
+
+    #[test]
+    fn deploy_output_uses_receipt_service_id() {
+        let output = deployed_service_output(&DeployedService {
+            service_id: 42,
+            controller: [1; 32],
+            code_hash: [2; 32],
+            create_extrinsic_hash: [3; 32],
+            create_correlation: [4; 32],
+        });
+        assert!(output.contains("Service ID: 42"));
+        assert!(output.contains("Set MINICELLS_SERVICE_ID=42"));
+    }
 }

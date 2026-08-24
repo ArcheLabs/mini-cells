@@ -17,3 +17,11 @@ opaque 256-bit in-memory cookies (12-hour TTL), and challenges are one-use
 five-minute records. Set `MINICELLS_WEB_ORIGIN` to the exact browser origin and
 `MINICELLS_COOKIE_SECURE=1` in HTTPS deployments; wildcard credentialed CORS is
 never enabled.
+
+Trust boundary: MiniJAM remains the canonical source of model state, while the
+Keeper is the V0 trusted finalized-state gateway for browser clients. The
+browser/WASM runtime independently checks `H(modelBytes) == modelHash` for the
+delivered response and executes the deterministic Rust kernel locally. It does
+not prove that the Keeper's supplied hash came from MiniJAM; that requires a
+future State Plane/proof-RPC path. UI language therefore describes “local model
+integrity verified”, not a trustless chain proof.

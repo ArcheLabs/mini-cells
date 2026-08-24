@@ -11,6 +11,7 @@ use minijam_bulletin_api::{
 use minijam_chain_client::{FinalizedContext, MiniJamChainClient};
 use minijam_protocol_external::{
     blake2_256, CidConfig, ContentRef, Hash, HashingAlgorithm, StorageLocation, StorageReceipt,
+    SystemReceiptV1,
 };
 use minijam_work_package_builder::{build_work_package, BuildWorkInput};
 use multihash::Multihash;
@@ -43,6 +44,12 @@ pub enum ChainError {
     WorkFailed,
     #[error("invalid input: {0}")]
     Input(String),
+    #[error("service creation rejected by runtime: code {0}")]
+    ServiceCreateRejected(u32),
+    #[error("unexpected service creation receipt")]
+    UnexpectedSystemReceipt,
+    #[error("timed out waiting for service creation receipt (correlation 0x{0})")]
+    SystemOpTimeout(String),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -95,6 +102,26 @@ pub struct FinalizedWork {
     pub submitted: SubmittedWork,
     pub work_id: u64,
     pub execution_receipt: Hash,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DeployedService {
+    pub service_id: u32,
+    pub controller: [u8; 32],
+    pub code_hash: Hash,
+    pub create_extrinsic_hash: Hash,
+    pub create_correlation: Hash,
+}
+
+fn classify_service_receipt(receipt: SystemReceiptV1) -> Result<(u32, [u8; 32]), ChainError> {
+    match receipt {
+        SystemReceiptV1::ServiceCreated {
+            service_id,
+            controller,
+        } => Ok((service_id, controller)),
+        SystemReceiptV1::Rejected { code } => Err(ChainError::ServiceCreateRejected(code)),
+        _ => Err(ChainError::UnexpectedSystemReceipt),
+    }
 }
 
 #[async_trait]
@@ -177,6 +204,42 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
                 min_memo_gas,
             )
             .await?)
+    }
+
+    /// Submit a service creation and wait for the finalized canonical receipt.
+    ///
+    /// The service ID is allocated by the runtime; it must never be inferred
+    /// from storage enumeration, nonce, or extrinsic position.
+    pub async fn deploy_service_and_wait(
+        &self,
+        artifact: &[u8],
+        min_item_gas: u64,
+        min_memo_gas: u64,
+    ) -> Result<DeployedService, ChainError> {
+        let code_hash = blake2_256(artifact);
+        let submission = self
+            .deploy_service(artifact, min_item_gas, min_memo_gas)
+            .await?;
+        for _ in 0..120 {
+            if let Some(receipt) = self
+                .client
+                .system_receipt::<SystemReceiptV1>(submission.correlation)
+                .await?
+            {
+                let (service_id, controller) = classify_service_receipt(receipt)?;
+                return Ok(DeployedService {
+                    service_id,
+                    controller,
+                    code_hash,
+                    create_extrinsic_hash: submission.extrinsic_hash,
+                    create_correlation: submission.correlation,
+                });
+            }
+            tokio::time::sleep(self.poll_interval).await;
+        }
+        Err(ChainError::SystemOpTimeout(hex::encode(
+            submission.correlation,
+        )))
     }
 
     pub async fn finalized_context(&self) -> Result<FinalizedContext, ChainError> {
@@ -609,5 +672,38 @@ mod tests {
                 retention_until: u32::MAX
             }
         );
+    }
+
+    #[test]
+    fn service_created_receipt_returns_runtime_id_and_controller() {
+        let controller = [9; 32];
+        assert_eq!(
+            classify_service_receipt(SystemReceiptV1::ServiceCreated {
+                service_id: 42,
+                controller,
+            })
+            .unwrap(),
+            (42, controller)
+        );
+    }
+
+    #[test]
+    fn rejected_service_receipt_is_not_reported_as_created() {
+        assert!(matches!(
+            classify_service_receipt(SystemReceiptV1::Rejected { code: 17 }),
+            Err(ChainError::ServiceCreateRejected(17))
+        ));
+    }
+
+    #[test]
+    fn unexpected_service_receipt_is_rejected() {
+        assert!(matches!(
+            classify_service_receipt(SystemReceiptV1::ServiceUpgraded {
+                service_id: 42,
+                controller: [9; 32],
+                code_hash: [8; 32],
+            }),
+            Err(ChainError::UnexpectedSystemReceipt)
+        ));
     }
 }

@@ -20,8 +20,8 @@ truth is [`artifacts/implementation-status.json`](artifacts/implementation-statu
 | Rust verification | PASS | `cargo test --offline --workspace` passed: core, protocol, simulator, chain, Keeper auth/model tests, and WASM ABI tests. |
 | Web verification | PASS | `npm test -- --run` passed (5 tests); `npm run build` passed with current WASM artifact. |
 | Python validation | BLOCKED_EXTERNAL | `python3 -m pip install --upgrade pip setuptools wheel` could not reach PyPI (`ConnectTimeoutError: pypi.org`); no Python result is claimed. |
-| Fresh service deployment | PARTIAL_EXTERNAL | A new service was submitted from the rebuilt blob on a fresh local `--dev` chain (service id 0 observed at finalized RPC). Initialization/status Work could not finalize with the available direct worker setup. |
-| Worker signature / generation | BLOCKED_EXTERNAL | Direct worker follow-up execution remains unavailable in this local chain; no PLUS/MINUS, 0→1, gas, multi-generation, or restart result is fabricated. |
+| Service receipt / fresh deployment | BLOCKED_EXTERNAL | The repaired CLI submitted the current blob, but the finalized receipt timed out with correlation `0x3748334594aba778072163ef789abb7adf1667d9167b9c3d740ad9724d4c9a5e`; create extrinsic was included in block 8 (`0xb65eb4850d046e4a3c15cf73a1a07c2bf62e2b288c9a227ff3d04047d53db44e`). No `ServiceCreated` receipt was returned, so Service 0 (the pre-existing system service) is not claimed as the new Service ID. |
+| Worker / generation | BLOCKED_EXTERNAL | Because the canonical creation receipt never materialized, no receipt-derived Service ID exists for initialization. The available direct worker also reported `processed=0`; no PLUS/MINUS, 0→1, gas, multi-generation, or restart result is fabricated. |
 
 ## Commands and evidence
 
@@ -30,8 +30,8 @@ cargo test --offline --workspace                         PASS
 npm --prefix apps/web test -- --run                     PASS (5 tests)
 npm --prefix apps/web run build                         PASS
 ./tools/build_service.sh                                 PASS (69,414-byte blob)
-fresh local service submission                            PASS (service id 0 observed)
-status-probe / worker finalization                       BLOCKED_EXTERNAL
+minicells deploy ...                                     BLOCKED_EXTERNAL_RECEIPT (60s timeout)
+status-probe / worker finalization                       BLOCKED_EXTERNAL (no receipt-derived ID)
 ```
 
 The external chain blocker does not weaken the browser integrity invariant:
