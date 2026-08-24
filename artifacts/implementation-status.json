@@ -16,6 +16,8 @@
     "pvm_guest": "PASS",
     "cli": "PASS",
     "web": "PASS",
+    "direct_chain_keeper": "PASS_CODE_PATH",
+    "jamscript_state_plane_m0": "PASS",
     "real_minijam": "PARTIAL",
     "verification": "PARTIAL"
   },
@@ -58,7 +60,11 @@
     "cli_train_one": "PARTIAL_PVM_RESULTS",
     "cli_recovery": "PASS_SIMULATOR",
     "web_status": "PASS",
-    "web_wallet_echo": "PASS",
+    "web_wallet_echo": "REMOVED_PLAYGROUND_WALLET",
+    "direct_work_package_builder": "PASS_CODE_PATH",
+    "bulletin_store_verification": "PASS_UNIT",
+    "keeper_sse_and_recovery": "PASS_CODE_PATH",
+    "jamscript_state_plane_adapter": "PASS",
     "web_finalized_inference": "PASS_CODE_PATH",
     "web_history": "PASS_CODE_PATH",
     "web_generation": "PASS_CODE_PATH",
@@ -81,6 +87,10 @@
     "local MiniJAM inference hello: PASS; service 1677269814 finalized inference ring record, Refine gas 1944",
     "local MiniJAM candidate Refine: PASS; service 1677269814 work_id=20 returned Ok(ByteSequence len112), Refine gas 42415319, extrinsic_count 2",
     "local MiniJAM paired generation: BLOCKED_EXTERNAL; PLUS pending record finalized on service 1677269814, but work remains tracking_work and worker logs report repeated Transaction has a bad signature before the MINUS side can be submitted; MetaV1 remains generation 0",
-    "python3 -m pytest -q: BLOCKED, No module named pytest"
+    "python3 -m pytest -q: BLOCKED, No module named pytest",
+    "cargo test --offline --workspace: PASS (direct chain and Keeper compile/test)",
+    "cargo test --offline -p service-state-plane: PASS (proof adapter and forged-root rejection)",
+    "npm --prefix apps/web test && npm --prefix apps/web run build: PASS (Keeper/SSE UI)",
+    "real direct chain generation: BLOCKED_EXTERNAL_WORKER_SIGNATURE"
   ]
 }

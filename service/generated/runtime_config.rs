@@ -1,5 +1,6 @@
 // Generated from configs/runtime-v0.json; do not edit.
 pub const MODEL_FORMAT: i64 = 1;
+pub const OPTIMIZER_VERSION: i64 = 1;
 pub const CAPABILITY_ID: i64 = 1;
 pub const MODALITY_ID: i64 = 1;
 pub const MARGIN_Q: i64 = 256;

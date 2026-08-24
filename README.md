@@ -8,7 +8,7 @@ MINI Cells explores whether useful language behavior can emerge from small, loca
 - **Rust/PVM/MiniJAM runtime: implemented; validation evidence is tracked in [`IMPLEMENTATION_STATUS.md`](IMPLEMENTATION_STATUS.md).** It includes a deterministic Q8.8 kernel, exact 4,476-parameter model, SIGN-SPSA generation pairing, explicit protocol, simulator, no_std service artifact, CLI, and browser client.
 - **MiniJAM-native Echo learning: NOT YET VALIDATED.** A generation transition proves deterministic protocol execution; it does not by itself establish useful learning quality. No claim that “AI learned on MiniJAM” is made in this implementation round.
 
-Compatibility is pinned to JAM semantics 0.7.2 and the exact MiniJAM/Jambda/toolchain refs recorded in [`service/artifacts/manifest.json`](service/artifacts/manifest.json). See [`docs/implementation-minijam-v0.md`](docs/implementation-minijam-v0.md) for architecture and [`docs/protocol-v1.md`](docs/protocol-v1.md) for canonical formats.
+Compatibility is pinned to JAM semantics 0.7.2 and the exact MiniJAM/Jambda/toolchain refs recorded in [`service/artifacts/manifest.json`](service/artifacts/manifest.json). The V0.1 production path is direct MiniJAM plus a non-canonical Keeper; the browser is a Keeper/SSE view and has no wallet or Playground dependency. See [`docs/architecture-v0.1.md`](docs/architecture-v0.1.md), [`docs/direct-minijam.md`](docs/direct-minijam.md), [`docs/keeper.md`](docs/keeper.md), and [`docs/protocol-v1.md`](docs/protocol-v1.md).
 
 ## Validate and build
 

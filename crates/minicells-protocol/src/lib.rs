@@ -3,6 +3,9 @@
 pub mod codec;
 pub mod keys;
 pub mod result;
+pub mod runtime_config {
+    include!("../../../service/generated/runtime_config.rs");
+}
 pub mod state;
 pub mod work;
 

@@ -10,7 +10,8 @@ use minicells_core::{
     Scratch,
 };
 use minicells_protocol::{
-    Op, RefineResult, ResultBody, WorkBody, WorkPayload, STATUS_OK, USE_CURRENT_GENERATION,
+    validate_canonical_training_config, Op, RefineResult, ResultBody, WorkBody, WorkPayload,
+    STATUS_OK, USE_CURRENT_GENERATION,
 };
 
 pub const MAX_WORK_BYTES: usize = 96;
@@ -158,6 +159,7 @@ fn refine_training<H: Host>(
     generation: u64,
     parent_model_hash: [u8; 32],
 ) -> Result<RefineResult, HostError> {
+    validate_canonical_training_config(&meta).map_err(|_| HostError::Failure)?;
     read_model_into_or_genesis(host, &mut workspace.model, &mut workspace.model_bytes)?;
     if model_hash(&workspace.model) != meta.model_hash {
         return Err(HostError::Failure);

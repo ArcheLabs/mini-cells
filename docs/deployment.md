@@ -1,16 +1,24 @@
 # Deployment
 
-Start the pinned local MiniJAM native stack, then export a 32-byte development seed and the API URL:
+Start the pinned local MiniJAM native stack. Configure the direct client and
+content-addressed Bulletin directory:
 
 ```bash
-export MINICELLS_PLAYGROUND_URL=http://127.0.0.1:8080
-export MINICELLS_SIGNER_URI=0x0707070707070707070707070707070707070707070707070707070707070707
-cargo run -p minicells-cli -- deploy --artifact service/artifacts/service.blob
-export MINICELLS_SERVICE_ID=<printed-service-id>
-cargo run -p minicells-cli -- status-probe
-cargo run -p minicells-cli -- status
+export MINICELLS_RPC_URL=ws://127.0.0.1:9944
+export MINICELLS_KEEPER_SIGNER_URI=0x0707070707070707070707070707070707070707070707070707070707070707
+export MINICELLS_BULLETIN_DIR=.local/minicells-bulletin
+cargo run --offline -p minicells-cli -- deploy --artifact service/artifacts/service.blob
+export MINICELLS_SERVICE_ID=<service-id-from-chain>
+cargo run --offline -p minicells-cli -- status-probe
+cargo run --offline -p minicells-cli -- status
 ```
 
-The CLI signs Playground actions locally and reads only finalized service storage. The web app uses the same finalized APIs and wallet-signed action flow. Never use the example seed outside a disposable development chain.
+Run the Keeper with the same RPC, signer, service id, and Bulletin directory,
+then set `VITE_MINICELLS_KEEPER_URL` for the web app. The browser talks only to
+Keeper HTTP/SSE; there is no wallet signing, Playground action endpoint, or
+storage polling in this path.
 
-The Echo guest is computationally heavy in the interpreter and initializes an 8,952-byte canonical model. The validated local configuration uses 5,000,000,000 Refine gas, 1,000,000,000 Accumulate gas, a 6,000,000,000 total execution ceiling, a 2,000,000,000 block gas budget, and 600-block report/vote windows. These are local MiniJAM/Jambda compatibility overrides.
+The measured Echo candidate uses about 42.4M Refine gas, so the reusable
+MiniJAM protocol and TinySpec ceilings are 1,000,000,000 Refine and Accumulate
+gas. Local runtime report windows and child-service allowance remain explicit
+development-chain compatibility settings and are not canonical JAM claims.

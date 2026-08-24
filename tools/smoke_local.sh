@@ -3,14 +3,10 @@ set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "${ROOT}"
-: "${MINICELLS_SIGNER_URI:?set MINICELLS_SIGNER_URI to a disposable 0x-prefixed 32-byte seed}"
-export MINICELLS_PLAYGROUND_URL="${MINICELLS_PLAYGROUND_URL:-http://127.0.0.1:8080}"
-
-if [[ -z "${MINICELLS_SERVICE_ID:-}" ]]; then
-  deploy_output="$(cargo run --offline -q -p minicells-cli -- deploy --artifact service/artifacts/service.blob)"
-  printf '%s\n' "${deploy_output}"
-  export MINICELLS_SERVICE_ID="${deploy_output##* }"
-fi
+: "${MINICELLS_KEEPER_SIGNER_URI:?set MINICELLS_KEEPER_SIGNER_URI to a disposable 0x-prefixed 32-byte seed}"
+: "${MINICELLS_RPC_URL:?set MINICELLS_RPC_URL to the direct MiniJAM websocket endpoint}"
+: "${MINICELLS_SERVICE_ID:?deploy separately and set the finalized service id}"
+export MINICELLS_BULLETIN_DIR="${MINICELLS_BULLETIN_DIR:-.local/minicells-bulletin}"
 
 cargo run --offline -q -p minicells-cli -- status-probe
 initial="$(cargo run --offline -q -p minicells-cli -- status)"
