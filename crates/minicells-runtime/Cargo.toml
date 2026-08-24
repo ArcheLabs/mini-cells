@@ -1,0 +1,9 @@
+[package]
+name = "minicells-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+minicells-core = { path = "../minicells-core" }
+minicells-protocol = { path = "../minicells-protocol" }

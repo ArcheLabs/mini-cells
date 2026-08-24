@@ -1,0 +1,12 @@
+[package]
+name = "minicells-service"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+minicells-runtime = { path = "../minicells-runtime" }
+minicells-protocol = { path = "../minicells-protocol" }

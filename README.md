@@ -1,31 +1,38 @@
 # MINI Cells
 
-MINI Cells explores whether useful language behavior can emerge from small,
-local, shared neural-cell dynamics and eventually continue evolving natively
-on JAM.
+MINI Cells explores whether useful language behavior can emerge from small, local, shared neural-cell dynamics and eventually continue evolving natively on JAM. The first capability is Echo: a bounded neural field receives a short sequence and learns to reproduce it. This is an engineering copy task, not a claim that the model is alive or conscious.
 
-The project begins with the simplest developmental stage: **Echo**. A small
-field of neural cells receives a short sequence and learns to reproduce it.
-This is a technical copy task presented publicly as a developmental metaphor;
-it is not a claim that the model is alive or conscious.
+## Honest project status
 
-Experiment 001 uses Kaggle only to validate architecture choices cheaply before
-moving toward deterministic Rust/PVM execution. Kaggle is not part of the
-intended canonical runtime or trust model.
+- **Experiment 001A — PyTorch/Adam Echo architecture: PASS.** The preserved Python/Kaggle research validates the architecture under its original floating-point training setup.
+- **Rust/PVM/MiniJAM runtime: implemented; validation evidence is tracked in [`IMPLEMENTATION_STATUS.md`](IMPLEMENTATION_STATUS.md).** It includes a deterministic Q8.8 kernel, exact 4,476-parameter model, SIGN-SPSA generation pairing, explicit protocol, simulator, no_std service artifact, CLI, and browser client.
+- **MiniJAM-native Echo learning: NOT YET VALIDATED.** A generation transition proves deterministic protocol execution; it does not by itself establish useful learning quality. No claim that “AI learned on MiniJAM” is made in this implementation round.
 
-See [the experiment specification](docs/experiment-001-echo.md).
+Compatibility is pinned to JAM semantics 0.7.2 and the exact MiniJAM/Jambda/toolchain refs recorded in [`service/artifacts/manifest.json`](service/artifacts/manifest.json). See [`docs/implementation-minijam-v0.md`](docs/implementation-minijam-v0.md) for architecture and [`docs/protocol-v1.md`](docs/protocol-v1.md) for canonical formats.
 
-## Local use
+## Validate and build
 
-Requires Python 3.11 or newer.
+Python research requires Python 3.11 or newer with the development dependencies. Repository-owned validation is:
 
 ```bash
 python -m pip install -e '.[dev]'
-pytest
+./tools/test_all.sh
+```
+
+Build the Rust service artifact directly with:
+
+```bash
+./tools/build_service.sh
+```
+
+For a running compatible MiniJAM stack, follow [`docs/deployment.md`](docs/deployment.md) or run the end-to-end procedure in [`docs/smoke-test.md`](docs/smoke-test.md). The browser app is under `apps/web`.
+
+The original research commands remain available:
+
+```bash
 python scripts/train_echo.py --config configs/echo-v0.yaml
 python scripts/eval_echo.py --checkpoint results/echo-v0/checkpoints/best.pt
 python scripts/sample_echo.py --checkpoint results/echo-v0/checkpoints/best.pt --text "hello jam"
 ```
 
-Open `research/kaggle/experiment-001-echo.ipynb` on Kaggle and run it from top
-to bottom. Core behavior lives in the `minicells` package, not in the notebook.
+The Kaggle notebook is [`research/kaggle/experiment-001-echo.ipynb`](research/kaggle/experiment-001-echo.ipynb); reusable behavior remains in the `research/minicells` package rather than the notebook.
