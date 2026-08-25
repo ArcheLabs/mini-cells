@@ -1,0 +1,21 @@
+{
+  "checkpoints": [
+    10000000,
+    25000000,
+    50000000,
+    75000000,
+    100000000
+  ],
+  "format": "minicells.language-30m-task.v1",
+  "from_random_initialization": true,
+  "goal": "Test parameter scaling at ~30M parameters and retain the first MiniCells-30M model artifact.",
+  "parallel_strategy": "one independent model process per T4 when two GPUs are available",
+  "published_model_precision": "fp16",
+  "resume_interval_tokens": 5000000,
+  "resume_is_exact": true,
+  "same_tokenizer_as_006": true,
+  "source_006_prefix_reproduced": true,
+  "tokens_per_model": 100000000,
+  "train_stream_tokens": 120000000,
+  "validation_stream_tokens": 1000000
+}
