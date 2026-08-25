@@ -1,0 +1,179 @@
+{
+  "format": "minicells.quantization-localization.v1",
+  "experiment": "MINI Cells Experiment 003B \u2014 Quantization Localization",
+  "status": "PASS",
+  "diagnosis": "Q88_REPRESENTATION_PRESERVES_SOLUTION_TRAINING_DYNAMICS_BOTTLENECK",
+  "gates": {
+    "fp32_solved": true,
+    "parameter_range_preserves_solution": true,
+    "q88_weights_preserve_solution": true,
+    "production_like_preserves_solution": true,
+    "exact_integer_preserves_solution": true,
+    "float_integer_prediction_agreement": true
+  },
+  "accuracy": {
+    "fp32": 1.0,
+    "clip_only": 1.0,
+    "weights_q88": 1.0,
+    "production_like_q88": 1.0,
+    "exact_integer": 1.0,
+    "production_like_exact_agreement": 1.0
+  },
+  "parameter_summary": {
+    "count": 4476,
+    "min": -2.784468650817871,
+    "max": 2.844702959060669,
+    "mean_abs": 0.2101096510887146,
+    "clip_fraction": 0.0,
+    "q88_mae": 0.0009677180205471814,
+    "q88_rmse": 0.0011207389179617167,
+    "q88_max_error": 0.0019529834389686584
+  },
+  "forward_ablation": [
+    {
+      "variant": "fp32",
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0,
+      "weight_mode": "fp32",
+      "linear_frac_bits": null,
+      "state_frac_bits": null
+    },
+    {
+      "variant": "clip-only",
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0,
+      "weight_mode": "clip",
+      "linear_frac_bits": null,
+      "state_frac_bits": null
+    },
+    {
+      "variant": "weights-q88",
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0,
+      "weight_mode": "q88",
+      "linear_frac_bits": null,
+      "state_frac_bits": null
+    },
+    {
+      "variant": "weights-q88-linear-q88",
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0,
+      "weight_mode": "q88",
+      "linear_frac_bits": 8,
+      "state_frac_bits": null
+    },
+    {
+      "variant": "weights-q88-state-q88",
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0,
+      "weight_mode": "q88",
+      "linear_frac_bits": null,
+      "state_frac_bits": 8
+    },
+    {
+      "variant": "production-like-q88",
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0,
+      "weight_mode": "q88",
+      "linear_frac_bits": 8,
+      "state_frac_bits": 8
+    }
+  ],
+  "internal_precision_sweep": [
+    {
+      "internal_frac_bits": 8,
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0
+    },
+    {
+      "internal_frac_bits": 10,
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0
+    },
+    {
+      "internal_frac_bits": 12,
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0
+    },
+    {
+      "internal_frac_bits": 14,
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0
+    },
+    {
+      "internal_frac_bits": "float",
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0
+    }
+  ],
+  "exact_output_top_tokens": [
+    {
+      "token_id": 12,
+      "token": "l",
+      "count": 608,
+      "fraction": 0.07301549177374805
+    },
+    {
+      "token_id": 37,
+      "token": " ",
+      "count": 508,
+      "fraction": 0.06100636483727633
+    },
+    {
+      "token_id": 5,
+      "token": "e",
+      "count": 384,
+      "fraction": 0.046115047436051396
+    },
+    {
+      "token_id": 15,
+      "token": "o",
+      "count": 353,
+      "fraction": 0.04239221808574516
+    },
+    {
+      "token_id": 1,
+      "token": "a",
+      "count": 332,
+      "fraction": 0.039870301429086104
+    },
+    {
+      "token_id": 13,
+      "token": "m",
+      "count": 296,
+      "fraction": 0.03554701573195629
+    },
+    {
+      "token_id": 3,
+      "token": "c",
+      "count": 287,
+      "fraction": 0.03446619430767383
+    },
+    {
+      "token_id": 14,
+      "token": "n",
+      "count": 263,
+      "fraction": 0.03158400384292062
+    },
+    {
+      "token_id": 18,
+      "token": "r",
+      "count": 258,
+      "fraction": 0.030983547496097035
+    },
+    {
+      "token_id": 8,
+      "token": "h",
+      "count": 243,
+      "fraction": 0.029182178455626276
+    }
+  ],
+  "run": {
+    "seed": 3,
+    "full_run": true,
+    "train_steps": 1500,
+    "validation_examples": 2048,
+    "exact_examples": 512,
+    "device": "cuda"
+  }
+}
