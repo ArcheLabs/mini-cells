@@ -84,6 +84,33 @@ EXPERIMENTS: dict[str, ExperimentSpec] = {
         branch="kaggle/experiment-004-results",
         expected_format="minicells.tiny-arithmetic.v1",
     ),
+    "005": ExperimentSpec(
+        source_dir="results/consumer-language-bridge-v1",
+        artifact_dir="artifacts/experiments/005-consumer-language-bridge",
+        files=(
+            "decision.json",
+            "task-spec.json",
+            "corpus-manifest.json",
+            "tokenizer.json",
+            "model-configs.json",
+            "checkpoints.csv",
+            "model-summary.csv",
+            "relative-gap.csv",
+            "generation-samples.json",
+            "generation-progression.md",
+            "textnca-s-500k.pt",
+            "minitextnca-s-plus-500k.pt",
+            "transformer-s-500k.pt",
+            "training-curves.png",
+            "ppl-scaling.png",
+            "relative-gap.png",
+            "learning-slope.png",
+            "throughput.png",
+            "consumer-readiness-summary.png",
+        ),
+        branch="kaggle/experiment-005-results",
+        expected_format="minicells.consumer-language-bridge.v1",
+    ),
 }
 
 
@@ -221,7 +248,7 @@ def prepare_artifacts(
     results_md = f"""# Experiment {experiment_id.upper()} Results
 
 This directory contains curated, reproducible outputs of the Kaggle run.
-Unlisted checkpoints, caches, and other regenerable intermediate files are intentionally excluded.
+Unlisted caches and other regenerable intermediate files are intentionally excluded.
 
 ## Decision
 
