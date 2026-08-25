@@ -33,6 +33,7 @@ def build_manifest(args: argparse.Namespace) -> dict:
             "mini_cells_source_dirty": args.source_dirty == "true",
             "minijam_build_ref": args.minijam_ref,
             "jambda_build_ref": args.jambda_ref,
+            "jambda_standalone_adapter_ref": args.jambda_adapter_ref,
             "converter_build_ref": args.converter_ref,
             "jamscript_used_for_build": False,
             "jamscript_build_ref": None,
@@ -55,6 +56,7 @@ def main() -> None:
     parser.add_argument("--source-dirty", choices=("true", "false"), required=True)
     parser.add_argument("--minijam-ref", required=True)
     parser.add_argument("--jambda-ref", required=True)
+    parser.add_argument("--jambda-adapter-ref", required=True)
     parser.add_argument("--converter-ref", required=True)
     parser.add_argument("--rust-version", required=True)
     parser.add_argument("--target-hash", required=True)

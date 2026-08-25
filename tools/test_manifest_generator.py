@@ -17,6 +17,7 @@ class ManifestGeneratorTests(unittest.TestCase):
             "--pvm", str(pvm), "--genesis-hash", "0xgenesis", "--source-ref", "source-ref",
             "--source-tree", "tree-ref", "--source-dirty", "false", "--minijam-ref", "mini-ref",
             "--jambda-ref", "jambda-ref", "--converter-ref", "converter-ref",
+            "--jambda-adapter-ref", "jambda-adapter-ref",
             "--rust-version", "rust", "--target-hash", "target",
         ], check=True)
         return json.loads(output.read_text())
@@ -45,6 +46,7 @@ class ManifestGeneratorTests(unittest.TestCase):
             self.assertFalse(provenance["mini_cells_source_dirty"])
             self.assertEqual(provenance["minijam_build_ref"], "mini-ref")
             self.assertEqual(provenance["jambda_build_ref"], "jambda-ref")
+            self.assertEqual(provenance["jambda_standalone_adapter_ref"], "jambda-adapter-ref")
             self.assertFalse(provenance["jamscript_used_for_build"])
             self.assertIsNone(provenance["jamscript_build_ref"])
 

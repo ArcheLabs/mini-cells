@@ -20,13 +20,14 @@ git -C "${CLIENT}" checkout --quiet "${MINIJAM_CLIENT_REF}"
 git -C "${CLIENT}" submodule update --init external/jambda
 JAMBDA="${CLIENT}/external/jambda"
 git -C "${JAMBDA}" fetch --quiet origin codex/jambda-boundary-repair
-git -C "${JAMBDA}" checkout --quiet e52307a726868205a151e6917a0a70a79965a028
+adapter_jambda="${MINICELLS_JAMBDA_ADAPTER_REF:-f74de5325e0fe566b5b7e3f8eb4851173a937d76}"
+git -C "${JAMBDA}" checkout --quiet "${adapter_jambda}"
 resolved_jambda="$(git -C "${JAMBDA}" rev-parse HEAD)"
 recorded_jambda="$(git -C "${CLIENT}" ls-tree HEAD external/jambda | awk '{print $3}')"
-if [[ "${resolved_jambda}" != "${recorded_jambda}" ]]; then
-  echo "Jambda pin mismatch: MiniJAM records ${recorded_jambda}, resolved ${resolved_jambda}" >&2
+if ! git -C "${JAMBDA}" merge-base --is-ancestor "${recorded_jambda}" "${resolved_jambda}"; then
+  echo "Jambda adapter ${resolved_jambda} is not based on runtime pin ${recorded_jambda}" >&2
   exit 1
 fi
 printf 'Resolved MiniJAM %s\n' "$(git -C "${CLIENT}" rev-parse HEAD)"
-printf 'Resolved Jambda %s\n' "${resolved_jambda}"
+printf 'Jambda runtime pin %s; standalone adapter %s\n' "${recorded_jambda}" "${resolved_jambda}"
 printf 'MiniJAM dependencies ready at %s\n' "${CLIENT}"

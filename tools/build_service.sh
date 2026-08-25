@@ -42,7 +42,8 @@ install -m 0644 "${WORK}/service.polkavm" "${OUT}/service.polkavm"
 install -m 0644 "${WORK}/service.polkavm" "${OUT}/service.pvm"
 
 MINIJAM_REF="$(git -C "${CLIENT}" rev-parse HEAD)"
-JAMBDA_REF="$(git -C "${CLIENT}/external/jambda" rev-parse HEAD 2>/dev/null || printf unknown)"
+JAMBDA_REF="$(git -C "${CLIENT}" ls-tree HEAD external/jambda | awk '{print $3}')"
+JAMBDA_ADAPTER_REF="$(git -C "${CLIENT}/external/jambda" rev-parse HEAD 2>/dev/null || printf unknown)"
 TARGET_HASH="$(sha256sum "${TARGET}" | cut -d' ' -f1)"
 RUST_VERSION="$(rustc +nightly-2026-05-02 --version)"
 GENESIS_HASH="$(python -c 'import json;print(json.load(open("service/generated/genesis_model.json"))["model_hash"])')"
@@ -50,6 +51,7 @@ python "${ROOT}/tools/generate_service_manifest.py" \
   --output "${OUT}/manifest.json" --blob "${OUT}/service.blob" --pvm "${OUT}/service.pvm" \
   --genesis-hash "${GENESIS_HASH}" --source-ref "${SOURCE_REF}" --source-tree "${SOURCE_TREE}" \
   --source-dirty "${SOURCE_DIRTY}" --minijam-ref "${MINIJAM_REF}" --jambda-ref "${JAMBDA_REF}" \
+  --jambda-adapter-ref "${JAMBDA_ADAPTER_REF}" \
   --converter-ref "${MINIJAM_REF}" --rust-version "${RUST_VERSION}" --target-hash "${TARGET_HASH}"
 test -s "${OUT}/service.elf"; test -s "${OUT}/service.blob"; test -s "${OUT}/service.polkavm"
 printf 'built %s bytes: %s\n' "$(stat -c %s "${OUT}/service.blob")" "${OUT}/service.blob"
