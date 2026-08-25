@@ -25,5 +25,12 @@
   "wasm_artifact": "apps/web/public/minicells_core.wasm",
   "wasm_bytes": 18734,
   "wasm_sha256": "0caf515eec89c0994339e70cbbe6a002843942919fc3166bc5a1c7ff4bfea771",
-  "wasm_target": "wasm32-unknown-unknown"
+  "wasm_target": "wasm32-unknown-unknown",
+  "experiment_002": {
+    "native_trainer": "pass_0_to_1000",
+    "checkpoint_resume": "pass_byte_identical",
+    "dataset_compiler": "pass_deterministic_root_split_batch",
+    "direct_pvm": "blocked_external_refinectx_stateview_adapter",
+    "service_pvm_blake2_domain_v1": "0xe1ebe71a3dabdab59135a21e7d71c6d28a2a3f5aaacf3693c872d3dbdf0d8bb4"
+  }
 }

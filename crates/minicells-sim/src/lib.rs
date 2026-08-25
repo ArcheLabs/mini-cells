@@ -1,4 +1,5 @@
 pub mod memory_host;
+pub mod trainer;
 
 use memory_host::MemoryHost;
 use minicells_core::{
@@ -19,18 +20,18 @@ pub struct GenerationVector {
     pub history_record_hex: String,
 }
 
-fn encode_work(work: &WorkPayload) -> Vec<u8> {
+pub(crate) fn encode_work(work: &WorkPayload) -> Vec<u8> {
     let mut bytes = [0u8; 96];
     let n = work.encode_into(&mut bytes).unwrap();
     bytes[..n].to_vec()
 }
-fn execute_refine(host: &mut MemoryHost, work: WorkPayload) -> Vec<u8> {
+pub(crate) fn execute_refine(host: &mut MemoryHost, work: WorkPayload) -> Vec<u8> {
     host.payload = encode_work(&work);
     let mut output = [0u8; 160];
     let n = refine(host, &mut RefineWorkspace::new(), &mut output).unwrap();
     output[..n].to_vec()
 }
-fn meta(host: &MemoryHost) -> MetaV1 {
+pub(crate) fn meta(host: &MemoryHost) -> MetaV1 {
     let bytes = host.storage.get(keys::META).unwrap();
     MetaV1::decode(bytes).unwrap()
 }

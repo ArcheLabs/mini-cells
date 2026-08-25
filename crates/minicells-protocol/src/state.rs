@@ -149,6 +149,84 @@ pub struct PendingV1 {
     pub tokens: u32,
     pub digest: [u8; 32],
 }
+
+/// Batch identity committed by the V2 training path.  V1 remains unchanged
+/// for the synthetic golden vectors; V2 makes the dataset and selected batch
+/// explicit so PLUS and MINUS can never be compared across different data.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct BatchIdentityV1 {
+    pub dataset_root: [u8; 32],
+    pub batch_digest: [u8; 32],
+    pub generation: u64,
+    pub parent_hash: [u8; 32],
+}
+impl BatchIdentityV1 {
+    pub const LEN: usize = 104;
+    pub fn encode_into(&self, o: &mut [u8]) -> Result<usize, Error> {
+        let mut w = Writer::new(o);
+        w.bytes(&self.dataset_root)?;
+        w.bytes(&self.batch_digest)?;
+        w.u64(self.generation)?;
+        w.bytes(&self.parent_hash)?;
+        Ok(w.len())
+    }
+    pub fn decode(i: &[u8]) -> Result<Self, Error> {
+        let mut r = Reader::new(i);
+        let x = Self {
+            dataset_root: r.bytes()?,
+            batch_digest: r.bytes()?,
+            generation: r.u64()?,
+            parent_hash: r.bytes()?,
+        };
+        if r.done() {
+            Ok(x)
+        } else {
+            Err(Error::Invalid)
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PendingV2 {
+    pub identity: BatchIdentityV1,
+    pub side: i8,
+    pub loss: i64,
+    pub correct: u32,
+    pub tokens: u32,
+    pub eval_digest: [u8; 32],
+}
+impl PendingV2 {
+    pub const LEN: usize = BatchIdentityV1::LEN + 1 + 8 + 4 + 4 + 32;
+    pub fn encode_into(&self, o: &mut [u8]) -> Result<usize, Error> {
+        let mut w = Writer::new(o);
+        let mut identity = [0u8; BatchIdentityV1::LEN];
+        self.identity.encode_into(&mut identity)?;
+        w.bytes(&identity)?;
+        w.i8(self.side)?;
+        w.i64(self.loss)?;
+        w.u32(self.correct)?;
+        w.u32(self.tokens)?;
+        w.bytes(&self.eval_digest)?;
+        Ok(w.len())
+    }
+    pub fn decode(i: &[u8]) -> Result<Self, Error> {
+        let mut r = Reader::new(i);
+        let identity = BatchIdentityV1::decode(r.slice(BatchIdentityV1::LEN)?)?;
+        let x = Self {
+            identity,
+            side: r.i8()?,
+            loss: r.i64()?,
+            correct: r.u32()?,
+            tokens: r.u32()?,
+            eval_digest: r.bytes()?,
+        };
+        if r.done() && [-1, 1].contains(&x.side) {
+            Ok(x)
+        } else {
+            Err(Error::Invalid)
+        }
+    }
+}
 impl PendingV1 {
     pub const LEN: usize = 89;
     pub fn encode_into(&self, o: &mut [u8]) -> Result<usize, Error> {
@@ -289,5 +367,26 @@ mod tests {
         assert!(validate_canonical_training_config(&x).is_ok());
         x.margin_q = x.margin_q.saturating_add(1);
         assert!(validate_canonical_training_config(&x).is_err());
+    }
+
+    #[test]
+    fn v2_batch_identity_round_trip() {
+        let x = BatchIdentityV1 {
+            dataset_root: [1; 32],
+            batch_digest: [2; 32],
+            generation: 3,
+            parent_hash: [4; 32],
+        };
+        let p = PendingV2 {
+            identity: x,
+            side: 1,
+            loss: 9,
+            correct: 2,
+            tokens: 4,
+            eval_digest: [5; 32],
+        };
+        let mut bytes = [0; PendingV2::LEN];
+        let n = p.encode_into(&mut bytes).unwrap();
+        assert_eq!(PendingV2::decode(&bytes[..n]), Ok(p));
     }
 }

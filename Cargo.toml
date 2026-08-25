@@ -11,6 +11,9 @@ members = [
   "crates/minicells-cli",
   "crates/minicells-keeper",
   "crates/minicells-wasm",
+  "crates/minicells-dataset",
+  "crates/minicells-lab",
+  "crates/minicells-pvm",
 ]
 
 [workspace.package]
@@ -40,6 +43,7 @@ getrandom = "0.3.4"
 hex = "0.4.3"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
+unicode-normalization = "0.1.25"
 clap = { version = "4.5.13", features = ["derive"] }
 reqwest = { version = "0.12.24", default-features = false, features = ["blocking", "json", "rustls-tls"] }
 schnorrkel = "0.11.5"

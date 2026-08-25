@@ -3095,6 +3095,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "minicells-dataset"
+version = "0.1.0"
+dependencies = [
+ "blake2b_simd",
+ "hex",
+ "minicells-core",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.20",
+ "unicode-normalization",
+]
+
+[[package]]
 name = "minicells-keeper"
 version = "0.1.0"
 dependencies = [
@@ -3116,8 +3130,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "minicells-lab"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "minicells-dataset",
+ "minicells-pvm",
+ "minicells-sim",
+ "serde_json",
+]
+
+[[package]]
 name = "minicells-protocol"
 version = "0.1.0"
+
+[[package]]
+name = "minicells-pvm"
+version = "0.1.0"
+dependencies = [
+ "blake2b_simd",
+ "hex",
+ "minicells-protocol",
+ "minicells-runtime",
+ "serde",
+ "tempfile",
+ "thiserror 2.0.20",
+]
 
 [[package]]
 name = "minicells-runtime"
@@ -3141,10 +3179,12 @@ version = "0.1.0"
 dependencies = [
  "hex",
  "minicells-core",
+ "minicells-dataset",
  "minicells-protocol",
  "minicells-runtime",
  "serde",
  "serde_json",
+ "thiserror 2.0.20",
 ]
 
 [[package]]

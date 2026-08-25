@@ -2,6 +2,8 @@ pub const META: &[u8] = b"mc:v1:meta";
 pub const MODEL: &[u8] = b"mc:v1:model";
 pub const PENDING_PLUS: &[u8] = b"mc:v1:pending:plus";
 pub const PENDING_MINUS: &[u8] = b"mc:v1:pending:minus";
+pub const PENDING_V2_PLUS: &[u8] = b"mc:v2:pending:plus";
+pub const PENDING_V2_MINUS: &[u8] = b"mc:v2:pending:minus";
 pub fn history_key(slot: u8) -> [u8; 16] {
     let mut key = *b"mc:v1:history:00";
     key[14] = b'0' + (slot % 64) / 10;

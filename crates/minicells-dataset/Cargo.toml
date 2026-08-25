@@ -1,0 +1,15 @@
+[package]
+name = "minicells-dataset"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+blake2b_simd.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+unicode-normalization.workspace = true
+hex.workspace = true
+minicells-core = { path = "../minicells-core" }
+thiserror.workspace = true
+tempfile.workspace = true

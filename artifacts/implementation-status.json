@@ -1,6 +1,6 @@
 {
   "format": "minicells.implementation-status.v2",
-  "updated": "2026-08-24",
+  "updated": "2026-08-25",
   "compatibility": {
     "jam_semantics": "0.7.2",
     "mini_jam_ref": "5947c50699863948c51028bc346980481d839884",
@@ -24,7 +24,14 @@
     "web_verification": "PASS",
     "fresh_service": "BLOCKED_EXTERNAL_RECEIPT",
     "real_generation": "BLOCKED_EXTERNAL_RECEIPT_AND_WORKER",
-    "python_validation": "BLOCKED_EXTERNAL_PACKAGE_ENV"
+    "python_validation": "BLOCKED_EXTERNAL_PACKAGE_ENV",
+    "experiment_002_native_trainer": "PASS_0_TO_1000",
+    "experiment_002_checkpoint_resume": "PASS_BYTE_IDENTICAL",
+    "experiment_002_dataset_compiler": "PASS_DETERMINISTIC_ROOT_SPLIT_BATCH",
+    "experiment_002_research_cli": "PASS",
+    "experiment_002_local_pvm_host": "PASS_CODE_PATH_ARTIFACT_VERIFIED",
+    "experiment_002_direct_pvm": "BLOCKED_EXTERNAL_REFINCTX_STATEVIEW_ADAPTER",
+    "experiment_002_native_pvm_parity": "BLOCKED_DEPENDS_ON_DIRECT_PVM"
   },
   "definition_of_done": {
     "challenge_nonce_expiry_one_use": "PASS_TEST",
@@ -46,7 +53,11 @@
     "gas_measurements": "BLOCKED_DEPENDS_ON_GENERATION",
     "multi_generation_restart": "BLOCKED_DEPENDS_ON_GENERATION",
     "python_pytest": "BLOCKED_EXTERNAL_PACKAGE_ENV",
-    "ledger_complete": "PASS_WITH_EXPLICIT_BLOCKERS"
+    "ledger_complete": "PASS_WITH_EXPLICIT_BLOCKERS",
+    "experiment_002_native_arbitrary_generation": "PASS_1000_GENERATIONS",
+    "experiment_002_metrics_jsonl": "PASS",
+    "experiment_002_dataset_merkle_witness": "PASS_CODE_PATH",
+    "experiment_002_direct_pvm_plus_minus_accumulate": "BLOCKED_EXTERNAL_ADAPTER"
   },
   "evidence": [
     "cargo test --offline --workspace: PASS",
@@ -57,7 +68,11 @@
     "repaired deploy receipt wait: BLOCKED_EXTERNAL; correlation 0x3748334594aba778072163ef789abb7adf1667d9167b9c3d740ad9724d4c9a5e timed out after 60 seconds; no ServiceCreated receipt",
     "fresh service status-probe: NOT ATTEMPTED without a receipt-derived ID; direct worker previously reported processed=0",
     "generation/gas/restart parity: BLOCKED_EXTERNAL_WORKER_SIGNATURE",
-    "python install/test: BLOCKED_EXTERNAL_PACKAGE_ENV; pip upgrade hit ConnectTimeoutError for pypi.org; no result fabricated"
+    "python install/test: BLOCKED_EXTERNAL_PACKAGE_ENV; pip upgrade hit ConnectTimeoutError for pypi.org; no result fabricated",
+    "Experiment 002 native release run: PASS; 0->1000 generations, checkpoints every 250, 25.31 seconds wall clock",
+    "Experiment 002 resume: PASS; uninterrupted 0->5 and resumed 0->3->5 final model hashes equal",
+    "Experiment 002 dataset compiler: PASS; deterministic root/split/batch and Merkle proof tests",
+    "Experiment 002 direct PVM: BLOCKED_EXTERNAL_ADAPTER; real service.pvm loaded, typed RefineCtx/StateView blocker returned"
   ],
   "artifacts": {
     "wasm_target": "wasm32-unknown-unknown",

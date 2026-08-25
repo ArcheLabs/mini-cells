@@ -7,6 +7,10 @@ pub struct MemoryHost {
     pub results: Vec<Vec<u8>>,
     pub storage: BTreeMap<Vec<u8>, Vec<u8>>,
     pub yields: Vec<Vec<u8>>,
+    /// Ordered external data exposed to a refine invocation.  The production
+    /// SDK maps this to JAM's external-data hostcall; keeping it on the local
+    /// host makes the simulator suitable for deterministic dataset runs.
+    pub external_data: Vec<Vec<u8>>,
 }
 impl MemoryHost {
     pub fn with_payload(payload: Vec<u8>) -> Self {
@@ -14,6 +18,11 @@ impl MemoryHost {
             payload,
             ..Self::default()
         }
+    }
+
+    pub fn with_external_data(mut self, data: Vec<Vec<u8>>) -> Self {
+        self.external_data = data;
+        self
     }
 }
 impl Host for MemoryHost {

@@ -37,3 +37,29 @@ status-probe / worker finalization                       BLOCKED_EXTERNAL (no re
 The external chain blocker does not weaken the browser integrity invariant:
 the WASM runtime recomputes the canonical model hash before every forward pass,
 and the Keeper independently verifies the finalized model before serving it.
+
+## Experiment 002 — persistent local training status (2026-08-25)
+
+| Requirement | Status | Evidence |
+|---|---|---|
+| Persistent native trainer, arbitrary generation | PASS | `minicells-sim::trainer` drives the production no-std `refine`/`accumulate` entry points and completed a release 0→1000 run in 25.31 s (checkpointing at 250/500/750/1000); the recorded genesis evaluation was 1/80 tokens and the generation-1000 selected evaluation was 2/48. |
+| Checkpoint and resume | PASS | `run.json`, append-only `metrics.jsonl`, `model.bin`, `meta.bin`, and identity-checked checkpoint directories; uninterrupted vs 3→5 resumed runs ended with the same model hash. |
+| Real JSONL dataset compiler | PASS | `minicells-dataset`: NFKC/lowercase/space normalization, fixed punctuation mapping, unsupported-character rejection, 32-byte segmentation, hash sort/dedupe, deterministic split, domain-separated Merkle root, deterministic batch selection and membership proofs. |
+| Research CLI | PASS | `minicells-lab dataset build/inspect`, `train`, `resume`, `evaluate`, `compare`, and `benchmark`; dataset-backed native training uses the compiled batch rather than silently falling back to synthetic data. |
+| Batch identity / protocol V2 groundwork | PASS_CODE_PATH | `BatchIdentityV1`, `PendingV2`, V2 pending keys, and dataset `BatchSelection`/Merkle proofs are additive; V1 synthetic wire vectors remain unchanged. Full guest V2 wiring is reserved for the direct executor adapter. |
+| Local PVM host surface | PASS_CODE_PATH | `minicells-pvm::LocalPvmHost` implements payload/results/storage/external-data/yield surfaces and verifies the real `service/artifacts/service.pvm` artifact. |
+| Direct PVM PLUS/MINUS/ACCUMULATE | BLOCKED_EXTERNAL_ADAPTER | The pinned MiniJAM/Jambda public path only runs `VmEngine` through chain-oriented `RefineCtx`/`StateView`. Running `minicells-lab train --backend pvm` loads the real artifact and returns this typed blocker; no native fallback or fabricated PVM parity is reported. |
+| Native ↔ PVM parity | BLOCKED_DEPENDS_ON_DIRECT_PVM | Native V1 golden vectors and generation transitions pass; PVM byte parity cannot be evaluated until the demonstrated executor adapter blocker is removed. |
+
+Experiment 002 commands:
+
+```text
+cargo run --release --offline -p minicells-lab -- train --generations 1000 --checkpoint-every 250 --output .local/runs/native
+cargo run --offline -p minicells-lab -- resume --generations 1000 --output .local/runs/native
+cargo run --offline -p minicells-lab -- dataset build input.jsonl --output .local/datasets/echo-real-v1
+cargo run --offline -p minicells-lab -- train --backend native --dataset .local/datasets/echo-real-v1 --generations 10
+```
+
+The PVM blocker is intentionally explicit: `service.pvm` was loaded and hashed as
+`0xe1ebe71a3dabdab59135a21e7d71c6d28a2a3f5aaacf3693c872d3dbdf0d8bb4` by the
+local harness, but the pinned executor still requires a chain `StateView`.

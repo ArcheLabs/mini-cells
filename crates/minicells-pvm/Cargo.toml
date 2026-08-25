@@ -1,0 +1,16 @@
+[package]
+name = "minicells-pvm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+blake2b_simd.workspace = true
+minicells-protocol = { path = "../minicells-protocol" }
+minicells-runtime = { path = "../minicells-runtime" }
+serde.workspace = true
+thiserror.workspace = true
+hex.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
