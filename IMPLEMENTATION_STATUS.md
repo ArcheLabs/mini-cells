@@ -1,8 +1,8 @@
 # MINI Cells V0.2 implementation status
 
 Compatibility target: JAM semantics 0.7.2; MiniJAM
-`c980212cb7fa7d0d178e7c173169f41878a27b81`; Jambda
-`90d93f79d9a899e07667e7734fbb9c778618b831`; JamScript
+`5947c50699863948c51028bc346980481d839884`; Jambda
+`e52307a726868205a151e6917a0a70a79965a028`; JamScript
 `79347ca2435ca21a08cbd257bc9c3dce8ed77f4b`. The machine-readable source of
 truth is [`artifacts/implementation-status.json`](artifacts/implementation-status.json).
 

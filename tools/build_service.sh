@@ -39,8 +39,10 @@ export OUT MINIJAM_REF JAMBDA_REF TARGET_HASH RUST_VERSION GENESIS_HASH
 python - <<'PY'
 import hashlib,json,os,pathlib
 out=pathlib.Path(os.environ['OUT']);blob=(out/'service.blob').read_bytes()
-manifest={"protocol":"mini-cells-service-v1","jam_semantics":"0.7.2","model_format":1,"optimizer":"sign-spsa-v1","parameter_count":4476,"genesis_mode":"deterministic-splitmix64-seed-1","genesis_model_hash":os.environ['GENESIS_HASH'],"code_hash":"0x"+hashlib.blake2b(blob,digest_size=32).hexdigest(),"service_code_hash":"0x"+hashlib.blake2b(blob,digest_size=32).hexdigest(),"blob_bytes":len(blob),"rust_toolchain":os.environ['RUST_VERSION'],"rust_target_sha256":os.environ['TARGET_HASH'],"minijam_git_ref":os.environ['MINIJAM_REF'],"jambda_git_ref":os.environ['JAMBDA_REF'],"converter_git_ref":os.environ['MINIJAM_REF']}
-(out/'manifest.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
+manifest_path=out/'manifest.json'
+manifest=json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
+manifest.update({"protocol":"mini-cells-service-v1","jam_semantics":"0.7.2","model_format":1,"optimizer":"sign-spsa-v1","parameter_count":4476,"genesis_mode":"deterministic-splitmix64-seed-1","genesis_model_hash":os.environ['GENESIS_HASH'],"code_hash":"0x"+hashlib.blake2b(blob,digest_size=32).hexdigest(),"service_code_hash":"0x"+hashlib.blake2b(blob,digest_size=32).hexdigest(),"blob_bytes":len(blob),"rust_toolchain":os.environ['RUST_VERSION'],"rust_target_sha256":os.environ['TARGET_HASH'],"minijam_git_ref":os.environ['MINIJAM_REF'],"jambda_git_ref":os.environ['JAMBDA_REF'],"converter_git_ref":os.environ['MINIJAM_REF']})
+manifest_path.write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
 PY
 test -s "${OUT}/service.elf"; test -s "${OUT}/service.blob"; test -s "${OUT}/service.polkavm"
 printf 'built %s bytes: %s\n' "$(stat -c %s "${OUT}/service.blob")" "${OUT}/service.blob"
