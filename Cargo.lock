@@ -3134,7 +3134,9 @@ name = "minicells-lab"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "hex",
  "minicells-dataset",
+ "minicells-protocol",
  "minicells-pvm",
  "minicells-sim",
  "serde_json",
@@ -3150,6 +3152,9 @@ version = "0.1.0"
 dependencies = [
  "blake2b_simd",
  "hex",
+ "jp-vm-engine",
+ "jp-vm-interp",
+ "jp-vm-primitives",
  "minicells-protocol",
  "minicells-runtime",
  "serde",

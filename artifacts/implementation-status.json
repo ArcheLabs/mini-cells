@@ -5,6 +5,7 @@
     "jam_semantics": "0.7.2",
     "mini_jam_ref": "5947c50699863948c51028bc346980481d839884",
     "jambda_ref": "e52307a726868205a151e6917a0a70a79965a028",
+    "jambda_standalone_adapter_ref": "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
     "jamscript": {
       "used_for_build": false,
       "build_ref": null,
@@ -37,9 +38,9 @@
     "experiment_002_checkpoint_resume": "PASS_BYTE_IDENTICAL",
     "experiment_002_dataset_compiler": "PASS_DETERMINISTIC_ROOT_SPLIT_BATCH",
     "experiment_002_research_cli": "PASS",
-    "experiment_002_local_pvm_host": "PASS_CODE_PATH_ARTIFACT_VERIFIED",
-    "experiment_002_direct_pvm": "BLOCKED_EXTERNAL_REFINCTX_STATEVIEW_ADAPTER",
-    "experiment_002_native_pvm_parity": "BLOCKED_DEPENDS_ON_DIRECT_PVM"
+    "experiment_002_local_pvm_host": "PASS_CHAIN_FREE_SERVICE_BLOB",
+    "experiment_002_direct_pvm": "PASS_PLUS_MINUS_ACCUMULATE",
+    "experiment_002_native_pvm_parity": "PASS_STATUS_PLUS_MINUS_BYTE_EQUAL_ACCUMULATE_STORAGE_EQUAL"
   },
   "definition_of_done": {
     "challenge_nonce_expiry_one_use": "PASS_TEST",
@@ -52,7 +53,7 @@
     "wasm32_artifact": "PASS",
     "browser_hash_verification": "PASS_TEST",
     "native_wasm_parity": "PASS_SHARED_KERNEL_AND_DETERMINISM",
-    "pvm_parity": "BLOCKED_CHAIN_WORKER",
+    "pvm_parity": "PASS_DIRECT_SERVICE_STATUS_PLUS_MINUS",
     "absolute_paths_removed": "PASS",
     "service_created_receipt": "BLOCKED_EXTERNAL_RECEIPT_TIMEOUT",
     "fresh_service_submitted": "PASS_SUBMISSION_NO_RECEIPT",
@@ -65,7 +66,7 @@
     "experiment_002_native_arbitrary_generation": "PASS_1000_GENERATIONS",
     "experiment_002_metrics_jsonl": "PASS",
     "experiment_002_dataset_merkle_witness": "PASS_CODE_PATH",
-    "experiment_002_direct_pvm_plus_minus_accumulate": "BLOCKED_EXTERNAL_ADAPTER"
+    "experiment_002_direct_pvm_plus_minus_accumulate": "PASS_CHAIN_FREE_JAMBDA_RUNNER"
   },
   "evidence": [
     "cargo test --offline --workspace: PASS",
@@ -81,7 +82,7 @@
     "Experiment 002 native release run: PASS; 0->1000 generations, checkpoints every 250, 25.31 seconds wall clock",
     "Experiment 002 resume: PASS; uninterrupted 0->5 and resumed 0->3->5 final model hashes equal",
     "Experiment 002 dataset compiler: PASS; deterministic root/split/batch and Merkle proof tests",
-    "Experiment 002 direct PVM: BLOCKED_EXTERNAL_ADAPTER; real service.pvm loaded, typed RefineCtx/StateView blocker returned"
+    "Experiment 002 direct PVM: PASS; real service.blob decoded/executed chain-free; status, PLUS, MINUS byte parity and accumulate storage effects verified"
   ],
   "artifacts": {
     "wasm_target": "wasm32-unknown-unknown",

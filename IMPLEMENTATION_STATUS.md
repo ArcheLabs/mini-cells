@@ -1,8 +1,9 @@
 # MINI Cells V0.2 implementation status
 
 Compatibility target: JAM semantics 0.7.2; MiniJAM
-`5947c50699863948c51028bc346980481d839884`; Jambda
-`e52307a726868205a151e6917a0a70a79965a028`; JamScript
+`5947c50699863948c51028bc346980481d839884`; Jambda runtime pin
+`e52307a726868205a151e6917a0a70a79965a028`, standalone adapter
+`f74de5325e0fe566b5b7e3f8eb4851173a937d76`; JamScript
 `79347ca2435ca21a08cbd257bc9c3dce8ed77f4b`. The machine-readable source of
 truth is [`artifacts/implementation-status.json`](artifacts/implementation-status.json).
 
@@ -49,9 +50,9 @@ and the Keeper independently verifies the finalized model before serving it.
 | Real JSONL dataset compiler | PASS | `minicells-dataset`: NFKC/lowercase/space normalization, fixed punctuation mapping, unsupported-character rejection, 32-byte segmentation, hash sort/dedupe, deterministic split, domain-separated Merkle root, deterministic batch selection and membership proofs. |
 | Research CLI | PASS | `minicells-lab dataset build/inspect`, `train`, `resume`, `evaluate`, `compare`, and `benchmark`; dataset-backed native training uses the compiled batch rather than silently falling back to synthetic data. |
 | Batch identity / protocol V2 groundwork | PASS_CODE_PATH | `BatchIdentityV1`, `PendingV2`, V2 pending keys, and dataset `BatchSelection`/Merkle proofs are additive; V1 synthetic wire vectors remain unchanged. Full guest V2 wiring is reserved for the direct executor adapter. |
-| Local PVM host surface | PASS_CODE_PATH | `minicells-pvm::LocalPvmHost` implements payload/results/storage/external-data/yield surfaces and verifies the real `service/artifacts/service.pvm` artifact. |
-| Direct PVM PLUS/MINUS/ACCUMULATE | BLOCKED_EXTERNAL_ADAPTER | The pinned MiniJAM/Jambda public path only runs `VmEngine` through chain-oriented `RefineCtx`/`StateView`. Running `minicells-lab train --backend pvm` loads the real artifact and returns this typed blocker; no native fallback or fabricated PVM parity is reported. |
-| Native ↔ PVM parity | BLOCKED_DEPENDS_ON_DIRECT_PVM | Native V1 golden vectors and generation transitions pass; PVM byte parity cannot be evaluated until the demonstrated executor adapter blocker is removed. |
+| Local PVM host surface | PASS | `minicells-pvm::LocalPvmHost` implements payload/results/storage/external-data/yield surfaces and drives the real converted `service/artifacts/service.blob` through Jambda's production `VmEngine`. |
+| Direct PVM PLUS/MINUS/ACCUMULATE | PASS | Chain-free Jambda execution covers refine at PC 0 and accumulate at PC 5; status, PLUS, MINUS, and accumulate host-state effects are exercised against the tracked service artifact. |
+| Native ↔ PVM parity | PASS | Status, PLUS, and MINUS outputs match the production native `minicells-runtime` byte-for-byte for genesis state; accumulate is verified through matching storage effects. |
 
 Experiment 002 commands:
 
@@ -60,8 +61,12 @@ cargo run --release --offline -p minicells-lab -- train --generations 1000 --che
 cargo run --offline -p minicells-lab -- resume --generations 1000 --output .local/runs/native
 cargo run --offline -p minicells-lab -- dataset build input.jsonl --output .local/datasets/echo-real-v1
 cargo run --offline -p minicells-lab -- train --backend native --dataset .local/datasets/echo-real-v1 --generations 10
+cargo test --offline -p minicells-pvm
+cargo run --offline -p minicells-lab -- train --backend pvm
 ```
 
-The PVM blocker is intentionally explicit: `service.pvm` was loaded and hashed as
-`0xe1ebe71a3dabdab59135a21e7d71c6d28a2a3f5aaacf3693c872d3dbdf0d8bb4` by the
-local harness, but the pinned executor still requires a chain `StateView`.
+The direct PVM boundary is separate from the fresh-chain blocker: the converted
+service blob is decoded by Jambda's production predecoder and executed by
+`VmEngine<InterpBackend>` with only the local host surface. The fresh
+CreateService attempt remains independently blocked before inclusion by the
+node's codec panic.

@@ -1,5 +1,6 @@
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use minicells_dataset::{compile_jsonl, inspect as inspect_dataset, Dataset};
+use minicells_protocol::{Op, WorkBody, WorkPayload};
 use minicells_pvm::DirectPvmHarness;
 use minicells_sim::trainer::{read_metrics, run_persistent_native};
 use std::path::PathBuf;
@@ -86,14 +87,33 @@ fn dataset_root(path: &Option<PathBuf>) -> Result<String, Box<dyn std::error::Er
 
 fn train(args: TrainArgs, resume: bool) -> Result<(), Box<dyn std::error::Error>> {
     if matches!(args.backend, Backend::Pvm) {
-        let artifact = PathBuf::from("service/artifacts/service.pvm");
+        // Jambda's predecoder consumes the converted JAM service blob.  The
+        // sibling `.pvm` file is the raw PolkaVM image and is not this API's
+        // outer image format.
+        let artifact = PathBuf::from("service/artifacts/service.blob");
         let mut harness = DirectPvmHarness::load(
             &artifact,
             10_000_000,
             "5947c50699863948c51028bc346980481d839884",
             "e52307a726868205a151e6917a0a70a79965a028",
         )?;
-        return Err(harness.execute_refine(&[]).unwrap_err().to_string().into());
+        let work = WorkPayload {
+            op: Op::StatusProbe,
+            flags: 0,
+            request_id: 1,
+            body: WorkBody::StatusProbe,
+        };
+        let mut payload = [0u8; 96];
+        let payload_len = work
+            .encode_into(&mut payload)
+            .map_err(|error| format!("work payload encode failed: {error:?}"))?;
+        let output = harness.execute_refine(&payload[..payload_len])?;
+        println!(
+            "backend=pvm output_bytes={} output_hex={}",
+            output.len(),
+            hex::encode(output)
+        );
+        return Ok(());
     }
     let root = dataset_root(&args.dataset)?;
     let dataset = args.dataset.as_ref().map(Dataset::load).transpose()?;

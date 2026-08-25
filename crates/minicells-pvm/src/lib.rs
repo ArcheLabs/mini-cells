@@ -2,11 +2,17 @@
 //!
 //! `LocalPvmHost` is the complete chain-free host surface needed by the
 //! service: payload/results, storage, external data and yielded values.  The
-//! pinned MiniJAM/Jambda executor currently exposes execution through its
-//! chain-oriented `RefineCtx`; this crate intentionally refuses to substitute
-//! the native runtime until a real `RefineCtx` adapter is available.
+//! pinned Jambda `VmEngine` is used directly; no chain `StateView` is involved.
 
 use blake2b_simd::Params;
+use jp_vm_engine::{run_standalone, StandaloneProgram};
+use jp_vm_interp::{memory::InnerInterpMemory, register::InterpRegister, InterpBackend};
+use jp_vm_primitives::{
+    error::VmError,
+    host::HostCallTrait,
+    state::{VmMemory, VmRegister, VmState},
+    ExitKind,
+};
 use minicells_runtime::{Host, HostError};
 use std::{
     collections::BTreeMap,
@@ -20,8 +26,10 @@ pub enum PvmError {
     ArtifactMissing(PathBuf),
     #[error("service artifact is empty")]
     EmptyArtifact,
-    #[error("pinned direct executor adapter is blocked: {0}")]
-    ExecutorAdapterBlocked(String),
+    #[error("PVM decode error: {0}")]
+    Decode(String),
+    #[error("PVM execution error: {0}")]
+    Execution(String),
     #[error("I/O error: {0}")]
     Io(#[from] io::Error),
 }
@@ -94,6 +102,121 @@ impl Host for LocalPvmHost {
     }
 }
 
+const HOST_NONE: u64 = u64::MAX;
+const HOST_GAS: u32 = 0;
+const HOST_FETCH: u32 = 1;
+const HOST_READ: u32 = 3;
+const HOST_WRITE: u32 = 4;
+const HOST_YIELD: u32 = 25;
+const HOST_LOG: u32 = 100;
+
+impl HostCallTrait<InterpRegister, InnerInterpMemory> for LocalPvmHost {
+    fn ecalli(
+        &mut self,
+        id: u32,
+        state: &mut VmState<InterpRegister, InnerInterpMemory>,
+        gas: &mut i64,
+    ) -> Result<ExitKind, VmError> {
+        let arg = |index: u8| state.registers.get(index);
+        let set_result = |state: &mut VmState<InterpRegister, InnerInterpMemory>, value: u64| {
+            state.registers.set_a0(value);
+        };
+        match id {
+            HOST_GAS => set_result(state, (*gas).max(0) as u64),
+            HOST_FETCH => {
+                let ptr = arg(7) as u32;
+                let offset = arg(8) as usize;
+                let capacity = arg(9) as usize;
+                let mode = arg(10);
+                let index = arg(11) as usize;
+                let item = match mode {
+                    13 => Some(&self.payload),
+                    4 => self.external_data.get(index),
+                    15 => self.results.get(index),
+                    _ => None,
+                };
+                let Some(item) = item else {
+                    set_result(state, HOST_NONE);
+                    return Ok(ExitKind::Continue);
+                };
+                let remaining = item.get(offset..).unwrap_or_default();
+                let copy_len = remaining.len().min(capacity);
+                state
+                    .memory
+                    .write_bytes(ptr, &remaining[..copy_len])
+                    .map_err(|_| VmError::Panic)?;
+                set_result(state, remaining.len() as u64);
+            }
+            HOST_READ => {
+                let key_ptr = arg(8) as u32;
+                let key_len = arg(9) as usize;
+                let out_ptr = arg(10) as u32;
+                let capacity = arg(12) as usize;
+                let mut key = vec![0; key_len];
+                state
+                    .memory
+                    .read_bytes_into(key_ptr, &mut key)
+                    .map_err(|_| VmError::Panic)?;
+                let Some(value) = self.storage.get(&key) else {
+                    set_result(state, HOST_NONE);
+                    return Ok(ExitKind::Continue);
+                };
+                let copy_len = value.len().min(capacity);
+                state
+                    .memory
+                    .write_bytes(out_ptr, &value[..copy_len])
+                    .map_err(|_| VmError::Panic)?;
+                set_result(state, value.len() as u64);
+            }
+            HOST_WRITE => {
+                let key_ptr = arg(7) as u32;
+                let key_len = arg(8) as usize;
+                let value_ptr = arg(9) as u32;
+                let value_len = arg(10) as usize;
+                let mut key = vec![0; key_len];
+                let mut value = vec![0; value_len];
+                state
+                    .memory
+                    .read_bytes_into(key_ptr, &mut key)
+                    .map_err(|_| VmError::Panic)?;
+                state
+                    .memory
+                    .read_bytes_into(value_ptr, &mut value)
+                    .map_err(|_| VmError::Panic)?;
+                if value.is_empty() {
+                    self.storage.remove(&key);
+                } else {
+                    self.storage.insert(key, value);
+                }
+                set_result(state, 0);
+            }
+            HOST_YIELD => {
+                let ptr = arg(7) as u32;
+                let mut value = vec![0; 32];
+                state
+                    .memory
+                    .read_bytes_into(ptr, &mut value)
+                    .map_err(|_| VmError::Panic)?;
+                self.yields.push(value);
+                set_result(state, 0);
+            }
+            HOST_LOG => {
+                let ptr = arg(7) as u32;
+                let len = arg(8) as usize;
+                let mut message = vec![0; len];
+                state
+                    .memory
+                    .read_bytes_into(ptr, &mut message)
+                    .map_err(|_| VmError::Panic)?;
+                let _ = message;
+                set_result(state, 0);
+            }
+            _ => set_result(state, 0),
+        }
+        Ok(ExitKind::Continue)
+    }
+}
+
 fn copy_out(value: &[u8], output: &mut [u8]) -> Result<usize, HostError> {
     if output.len() < value.len() {
         return Err(HostError::BufferTooSmall);
@@ -126,19 +249,46 @@ impl DirectPvmHarness {
         })
     }
 
-    /// Deliberately does not execute native code under the name “PVM”.
-    /// Completing this method requires wiring `VmEngine<InterpBackend>` to a
-    /// chain-free `RefineCtx`/`StateView` implementation in the pinned Jambda
-    /// tree.  Returning a typed blocker keeps reports honest and prevents a
-    /// false parity result.
-    pub fn execute_refine(&mut self, _payload: &[u8]) -> Result<Vec<u8>, PvmError> {
-        Err(PvmError::ExecutorAdapterBlocked(format!("pinned MiniJAM client {} / Jambda {} only exposes RefineCtx through chain StateView; service artifact hash 0x{}", self.pinned_client_revision, self.pinned_jambda_revision, hex::encode(self.artifact.blake2_hash))))
+    /// Execute the service refine export through Jambda's chain-free runner.
+    pub fn execute_refine(&mut self, payload: &[u8]) -> Result<Vec<u8>, PvmError> {
+        self.host.payload = payload.to_vec();
+        self.execute_entry(payload, 0)
+    }
+
+    /// Execute the second converter dispatch entry, which is the service's
+    /// accumulate export.  Accumulate communicates through host storage/yield
+    /// side effects and normally returns no output bytes.
+    pub fn execute_accumulate(&mut self) -> Result<Vec<u8>, PvmError> {
+        self.host.payload.clear();
+        self.execute_entry(&[], 5)
+    }
+
+    fn execute_entry(&mut self, payload: &[u8], entry_point: u32) -> Result<Vec<u8>, PvmError> {
+        let program = StandaloneProgram::from_bytes(&self.artifact.bytes)
+            .map_err(|error| PvmError::Decode(error.to_string()))?;
+        let result = run_standalone(
+            &program,
+            InterpBackend::new(),
+            &mut self.host,
+            std::sync::Arc::from(payload.to_vec()),
+            entry_point,
+            self.gas_limit,
+        )
+        .map_err(|error| PvmError::Execution(error.to_string()))?;
+        match result.result {
+            jp_vm_primitives::VmResult::Ok(Some(output)) => Ok(output.into_vec()),
+            jp_vm_primitives::VmResult::Ok(None) => Ok(Vec::new()),
+            jp_vm_primitives::VmResult::Oog => Err(PvmError::Execution("out of gas".into())),
+            jp_vm_primitives::VmResult::Panic => Err(PvmError::Execution("PVM panic".into())),
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use minicells_protocol::{Op, WorkBody, WorkPayload};
+    use minicells_runtime::{genesis::GENESIS_MODEL_HASH, refine, RefineWorkspace};
     #[test]
     fn local_host_preserves_jam_surface() {
         let mut host = LocalPvmHost::default();
@@ -149,5 +299,89 @@ mod tests {
         host.external_data.push(b"sample".to_vec());
         host.yield_value(b"ok");
         assert_eq!(host.yields, vec![b"ok".to_vec()]);
+    }
+
+    #[test]
+    fn service_pvm_matches_native_runtime_for_status_probe() {
+        let artifact =
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../service/artifacts/service.blob");
+        let mut harness = DirectPvmHarness::load(
+            &artifact,
+            10_000_000,
+            "5947c50699863948c51028bc346980481d839884",
+            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        )
+        .expect("tracked service artifact");
+        let work = WorkPayload {
+            op: Op::StatusProbe,
+            flags: 0,
+            request_id: 1,
+            body: WorkBody::StatusProbe,
+        };
+        let mut payload = [0u8; 96];
+        let payload_len = work.encode_into(&mut payload).expect("encode work");
+        let pvm_output = harness
+            .execute_refine(&payload[..payload_len])
+            .expect("PVM status probe");
+
+        let mut native_host = LocalPvmHost::default();
+        native_host.payload = payload[..payload_len].to_vec();
+        let mut workspace = RefineWorkspace::new();
+        let mut native_output = [0u8; 160];
+        let native_len = refine(&mut native_host, &mut workspace, &mut native_output)
+            .expect("native status probe");
+        assert_eq!(pvm_output, native_output[..native_len]);
+    }
+
+    #[test]
+    fn service_pvm_matches_native_runtime_for_plus_and_minus() {
+        let artifact =
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../service/artifacts/service.blob");
+        for op in [Op::TrainPlus, Op::TrainMinus] {
+            let mut harness = DirectPvmHarness::load(
+                &artifact,
+                100_000_000,
+                "5947c50699863948c51028bc346980481d839884",
+                "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+            )
+            .expect("tracked service artifact");
+            let work = WorkPayload {
+                op,
+                flags: 0,
+                request_id: 2,
+                body: WorkBody::Train {
+                    generation: 0,
+                    parent_model_hash: GENESIS_MODEL_HASH,
+                },
+            };
+            let mut payload = [0u8; 96];
+            let payload_len = work.encode_into(&mut payload).expect("encode work");
+            let pvm_output = harness
+                .execute_refine(&payload[..payload_len])
+                .expect("PVM training probe");
+
+            let mut native_host = LocalPvmHost::default();
+            native_host.payload = payload[..payload_len].to_vec();
+            let mut workspace = RefineWorkspace::new();
+            let mut native_output = [0u8; 160];
+            let native_len = refine(&mut native_host, &mut workspace, &mut native_output)
+                .expect("native training probe");
+            assert_eq!(pvm_output, native_output[..native_len], "op={op:?}");
+        }
+    }
+
+    #[test]
+    fn service_pvm_accumulate_entry_is_chain_free() {
+        let artifact =
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../service/artifacts/service.blob");
+        let mut harness = DirectPvmHarness::load(
+            &artifact,
+            100_000_000,
+            "5947c50699863948c51028bc346980481d839884",
+            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        )
+        .expect("tracked service artifact");
+        harness.execute_accumulate().expect("PVM accumulate");
+        assert!(!harness.host.storage.is_empty());
     }
 }

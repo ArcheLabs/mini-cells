@@ -47,6 +47,9 @@ unicode-normalization = "0.1.25"
 clap = { version = "4.5.13", features = ["derive"] }
 reqwest = { version = "0.12.24", default-features = false, features = ["blocking", "json", "rustls-tls"] }
 schnorrkel = "0.11.5"
+jp-vm-engine = { path = ".deps/minijam-client/external/jambda/vm/engine" }
+jp-vm-interp = { path = ".deps/minijam-client/external/jambda/vm/interp" }
+jp-vm-primitives = { path = ".deps/minijam-client/external/jambda/vm/primitives" }
 
 [patch.crates-io]
 minijam-jamcore-api = { path = ".deps/minijam-client/crates/minijam-jamcore-api" }
