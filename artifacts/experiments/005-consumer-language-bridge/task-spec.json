@@ -1,0 +1,23 @@
+{
+  "format": "minicells.consumer-language-task.v1",
+  "dataset": "roneneldan/TinyStories",
+  "tokenizer": "ByteLevel BPE",
+  "vocab_size": 2048,
+  "max_context": 128,
+  "training_sequence_length": 125,
+  "batch_size": 8,
+  "tokens_per_step": 1000,
+  "training_steps": 500,
+  "consumed_tokens": 500000,
+  "checkpoints": [
+    125000,
+    250000,
+    500000
+  ],
+  "validation_batches": 24,
+  "generation": {
+    "temperature": 0.8,
+    "top_k": 40,
+    "new_tokens": 32
+  }
+}

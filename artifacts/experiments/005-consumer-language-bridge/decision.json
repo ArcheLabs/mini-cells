@@ -1,0 +1,54 @@
+{
+  "budget": {
+    "checkpoints": [
+      125000,
+      250000,
+      500000
+    ],
+    "same_training_schedule": true,
+    "tokens_per_model": 500000
+  },
+  "candidate": {
+    "learning_slope_alpha": 0.11436995542332326,
+    "model": "minitextnca-s-plus",
+    "ppl_125k": 329.2766260265014,
+    "ppl_250k": 184.3131586925909,
+    "ppl_500k": 140.7459644408141,
+    "ppl_ratio_500k": 1.253773724747802,
+    "ppl_ratio_trajectory": [
+      1.2357491586014422,
+      1.3052040242289071,
+      1.253773724747802
+    ],
+    "ratio_improvement_125k_to_500k": -0.018024566146359833,
+    "slope_ratio_to_transformer": 0.942933150260753
+  },
+  "diagnosis": "MINITEXTNCA_SCALING_SIGNAL_WORTH_CONTINUING",
+  "experiment": "MINI Cells Experiment 005 \u2014 500K Consumer Language Model Bridge",
+  "format": "minicells.consumer-language-bridge.v1",
+  "interpretation": {
+    "green": "Candidate PPL is <=1.25x Transformer at 500K; continue to >=2M tokens.",
+    "red": "Gap is too large and is not closing fast enough; redesign before spending a larger token budget.",
+    "yellow": "Gap is 1.25-1.60x but early scaling slope/gap trend remains competitive; extend cautiously."
+  },
+  "parameter_matching": {
+    "minitextnca_plus_parameters": 1169920,
+    "relative_error": 0.01198030634573304,
+    "transformer_parameters": 1183936,
+    "within_5_percent": true
+  },
+  "runtime": {
+    "device": "cuda",
+    "gpu": "Tesla T4"
+  },
+  "status": "YELLOW",
+  "structural_control": {
+    "model": "textnca-s",
+    "plus_improvement_fraction": 0.4473192019223705,
+    "ppl_500k": 254.66049287466822
+  },
+  "transformer": {
+    "learning_slope_alpha": 0.12129169007547999,
+    "ppl_500k": 112.25786731902147
+  }
+}
