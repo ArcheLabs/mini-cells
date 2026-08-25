@@ -1,0 +1,80 @@
+{
+  "budget": {
+    "checkpoints": [
+      10000000,
+      25000000,
+      50000000,
+      75000000,
+      100000000
+    ],
+    "tokens_per_model": 100000000,
+    "train_stream_tokens": 120000000,
+    "validation_stream_tokens": 1000000
+  },
+  "candidate": {
+    "learning_slope_alpha": 0.13771977867525095,
+    "model": "minicells-30m-v0",
+    "nll_100m": 1.6777012000481288,
+    "parameters": 29602800,
+    "ppl_100m": 5.3532357975464855
+  },
+  "comparison": {
+    "ppl_ratio_100m": 1.00454882088745,
+    "ppl_ratio_10m": 1.0001040502873653,
+    "ratio_change_10m_to_100m": 0.0044447706000847464,
+    "ratio_trajectory": [
+      1.0001040502873653,
+      1.0000997632831643,
+      0.9965675533049765,
+      1.0022870885605357,
+      1.00454882088745
+    ],
+    "slope_ratio_to_transformer": 0.9939814492466875,
+    "source_006_1m_parameter_ratio_at_10m": 1.0255877394621922
+  },
+  "diagnosis": "MINICELLS_30M_PARAMETER_SCALING_COMPETITIVE",
+  "experiment": "MINI Cells Experiment 007 \u2014 MiniCells-30M v0",
+  "format": "minicells.language-30m.v1",
+  "interpretation": {
+    "green": "At ~30M parameters, MiniCells remains within 1.15x Transformer PPL at 100M tokens with a competitive learning slope and bounded gap growth.",
+    "red": "A material parameter-scaling disadvantage emerges by 30M parameters.",
+    "yellow": "The 30M model remains viable but shows a measurable parameter-scaling gap that warrants optimization."
+  },
+  "parameter_matching": {
+    "minicells_parameters": 29602800,
+    "relative_error": 0.00487683597497534,
+    "transformer_config": {
+      "dim": 512,
+      "ffn_dim": 2048,
+      "heads": 8,
+      "layers": 9,
+      "parameters": 29458432,
+      "relative_parameter_error": 0.00487683597497534,
+      "target_parameters": 29602800
+    },
+    "transformer_parameters": 29458432,
+    "within_1_percent": true
+  },
+  "retained_model": {
+    "bytes": 62171013,
+    "optimizer_state_published": false,
+    "path": "minicells-30m-v0-fp16.pt",
+    "precision": "fp16",
+    "sha256": "95c33bca902e571675994257368d5f791b3d7c8dd0832c3f5cf2a67c406f14ed"
+  },
+  "runtime": {
+    "gpu_count_used": 2,
+    "physical_gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ]
+  },
+  "status": "GREEN",
+  "transformer": {
+    "learning_slope_alpha": 0.13855367097607824,
+    "model": "transformer-30m",
+    "nll_100m": 1.673162693778674,
+    "parameters": 29458432,
+    "ppl_100m": 5.328995153085013
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "format": "minicells.language-30m-models.v1",
+  "minicells-30m-v0": {
+    "auxiliary_stage_losses": null,
+    "context_length": 128,
+    "dim": 720,
+    "ffn_dim": 2880,
+    "gru_carry_bias": 2.0,
+    "heads": 8,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "name": "minicells-30m-v0",
+    "normalization": "LayerNorm",
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "shared": {
+    "batch_size": 8,
+    "context_length": 128,
+    "dataset": "roneneldan/TinyStories",
+    "learning_rate": 0.0003,
+    "optimizer": "AdamW",
+    "schedule_seed": 7007,
+    "sequence_length": 125,
+    "train_stream_tokens": 120000000,
+    "training_budget_tokens": 100000000,
+    "vocab_size": 2048,
+    "warmup_steps": 1000,
+    "weight_decay": 0.1
+  },
+  "transformer-30m": {
+    "context_length": 128,
+    "dim": 512,
+    "ffn_dim": 2048,
+    "heads": 8,
+    "layers": 9,
+    "name": "transformer-30m",
+    "normalization": "RMSNorm",
+    "parameters": 29458432,
+    "relative_parameter_error": 0.00487683597497534,
+    "target_parameters": 29602800,
+    "vocab_size": 2048
+  }
+}
