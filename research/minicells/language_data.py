@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import random
 from dataclasses import dataclass
@@ -98,6 +99,7 @@ def train_bpe_tokenizer(
         vocab_size=vocab_size,
         min_frequency=2,
         special_tokens=list(SPECIAL_TOKENS),
+        initial_alphabet=ByteLevel.alphabet(),
         show_progress=True,
     )
     tokenizer.train_from_iterator(
@@ -141,6 +143,11 @@ def encode_story_stream(
     return torch.tensor(ids[:target_tokens], dtype=torch.long), stories
 
 
+def _tensor_sha256(tensor: torch.Tensor) -> str:
+    values = tensor.detach().cpu().contiguous().numpy()
+    return hashlib.sha256(values.tobytes()).hexdigest()
+
+
 def prepare_tinystories_corpus(
     root: Path,
     *,
@@ -152,24 +159,34 @@ def prepare_tinystories_corpus(
     cache = root / "results" / "consumer-language-bridge-v1" / "cache"
     cache.mkdir(parents=True, exist_ok=True)
     tokenizer_path = cache / "tokenizer.json"
-    if tokenizer_path.exists():
-        tokenizer = load_tokenizer(tokenizer_path)
-    else:
-        tokenizer = train_bpe_tokenizer(
-            tokenizer_path,
-            vocab_size=vocab_size,
-            max_stories=tokenizer_stories,
-        )
-
     train_path = cache / "train-tokens.pt"
     validation_path = cache / "validation-tokens.pt"
     manifest_path = cache / "corpus-manifest.json"
-    if train_path.exists() and validation_path.exists() and manifest_path.exists():
-        train = torch.load(train_path, map_location="cpu")
-        validation = torch.load(validation_path, map_location="cpu")
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        return TokenizedCorpus(train, validation, tokenizer_path, manifest)
 
+    expected_cache = {
+        "vocab_size_requested": vocab_size,
+        "tokenizer_training_stories": tokenizer_stories,
+        "train_stream_tokens": train_stream_tokens,
+        "validation_stream_tokens": validation_stream_tokens,
+    }
+    if tokenizer_path.exists() and train_path.exists() and validation_path.exists() and manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if all(manifest.get(key) == value for key, value in expected_cache.items()):
+            train = torch.load(train_path, map_location="cpu")
+            validation = torch.load(validation_path, map_location="cpu")
+            if (
+                _tensor_sha256(train) == manifest.get("train_token_sha256")
+                and _tensor_sha256(validation) == manifest.get("validation_token_sha256")
+            ):
+                return TokenizedCorpus(train, validation, tokenizer_path, manifest)
+        for path in (tokenizer_path, train_path, validation_path, manifest_path):
+            path.unlink(missing_ok=True)
+
+    tokenizer = train_bpe_tokenizer(
+        tokenizer_path,
+        vocab_size=vocab_size,
+        max_stories=tokenizer_stories,
+    )
     train, train_stories = encode_story_stream(
         tokenizer,
         iter_tinystories("train"),
@@ -193,8 +210,11 @@ def prepare_tinystories_corpus(
         "validation_stream_tokens": int(validation.numel()),
         "train_stories_consumed": train_stories,
         "validation_stories_consumed": validation_stories,
+        "train_token_sha256": _tensor_sha256(train),
+        "validation_token_sha256": _tensor_sha256(validation),
+        "tokenizer_sha256": hashlib.sha256(tokenizer_path.read_bytes()).hexdigest(),
     }
-    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return TokenizedCorpus(train, validation, tokenizer_path, manifest)
 
 
