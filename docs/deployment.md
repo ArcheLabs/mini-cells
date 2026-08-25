@@ -17,6 +17,12 @@ cargo run --offline -p minicells-cli -- status-probe
 cargo run --offline -p minicells-cli -- status
 ```
 
+For the MiniJAM `--dev` chain specifically, genesis authorizes the local
+playground relayer (the sr25519 key derived from a seed of 32 bytes `0x92`),
+not `//Alice`. Use the corresponding seed when deploying CreateService; an
+Alice-signed extrinsic can enter the pool but is rejected by the runtime's
+ingress-relayer check.
+
 Run the Keeper with the same RPC, signer, service id, and Bulletin directory.
 Set `MINICELLS_WEB_ORIGIN` to the exact web origin and, for production HTTPS,
 set `MINICELLS_COOKIE_SECURE=1`; optionally set

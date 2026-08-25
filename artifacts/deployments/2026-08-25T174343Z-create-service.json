@@ -17,6 +17,13 @@
   "startup": "/home/libingjiang/minijam-client/target/release/minijam-node --dev --base-path <fresh-temp-dir> --rpc-port 9950 --no-telemetry --no-prometheus",
   "requester": "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d",
   "requester_secret_uri": "//Alice (public development key; no secret material committed)",
+  "configured_ingress_relayer": "0x901578a417300aa0ae533b5bd0e9af489a4cc4a6f38999b76283867087738209",
+  "authorization": "requester_is_not_configured_ingress_relayer",
+  "submitted_nonce": 0,
+  "system_account_next_index": 1,
+  "system_op_nonce": 0,
+  "min_item_gas": 20000000,
+  "min_memo_gas": 1,
   "create_extrinsic_hash": "0xfa5ca13fb0d79cac31c28a3420e9f4b619eead7c3a98ced1d74cbaa399aff0e1",
   "create_correlation": "0xbaa4bcf5d8480191b748b778efb1856ad144a9c97c329fb0b390d6a37808a6da",
   "included_block": null,
@@ -28,7 +35,7 @@
     },
     {
       "stage": "transaction_pool",
-      "result": "not_pending_after_submission_and_not_included_after_75_seconds",
+      "result": "pool_accepted_but_lifecycle_unknown",
       "pending_extrinsics": [],
       "pending_system_ops": "0x00",
       "pending_preimages": "0x00"
@@ -39,6 +46,6 @@
   "service_created": false,
   "service_id": null,
   "requester_scoped_preimage_verified": false,
-  "result": "blocked_not_accepted_by_transaction_pool",
-  "notes": "Fresh rebuilt 5947c node. Local exact CreateService extrinsic decodes/re-encodes and remote metadata matches the local runtime fingerprint. No Codec error was emitted; the transaction hash was returned but no pool inclusion or receipt occurred, so no Service ID was inferred."
+  "result": "POOL_ACCEPTED_BUT_LIFECYCLE_UNKNOWN",
+  "notes": "Fresh rebuilt 5947c node. author_submitExtrinsic returned a hash, which proves pool acceptance; author_pendingExtrinsics only reports ready transactions and is not evidence of rejection. This historical attempt used Alice while genesis configured the local playground relayer, so dispatch authorization was not satisfied. No inclusion/event watch was recorded and no Service ID is inferred."
 }

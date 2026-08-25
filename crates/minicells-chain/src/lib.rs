@@ -48,6 +48,8 @@ pub enum ChainError {
     ServiceCreateRejected(u32),
     #[error("unexpected service creation receipt")]
     UnexpectedSystemReceipt,
+    #[error("service creation extrinsic dispatched unsuccessfully in block {block}: {error}")]
+    SystemOpDispatchFailed { block: String, error: String },
     #[error(
         "timed out waiting for service creation receipt (extrinsic 0x{extrinsic_hash}, correlation 0x{correlation})"
     )]
@@ -214,6 +216,17 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
         let submission = self
             .deploy_service(artifact, min_item_gas, min_memo_gas)
             .await?;
+        if let Some(lifecycle) = &submission.lifecycle {
+            if let Some(error) = &lifecycle.dispatch_error {
+                return Err(ChainError::SystemOpDispatchFailed {
+                    block: lifecycle
+                        .included_block
+                        .map(hex::encode)
+                        .unwrap_or_else(|| "unknown".into()),
+                    error: error.clone(),
+                });
+            }
+        }
         for _ in 0..120 {
             if let Some(receipt) = self
                 .client
