@@ -42,6 +42,23 @@ EXPERIMENTS: dict[str, ExperimentSpec] = {
         branch="kaggle/experiment-003b-results",
         expected_format="minicells.quantization-localization.v1",
     ),
+    "003c": ExperimentSpec(
+        source_dir="results/native-continual-learning-v1",
+        artifact_dir="artifacts/experiments/003c-native-continual-learning",
+        files=(
+            "decision.json",
+            "summary.csv",
+            "task-spec.json",
+            "stability-global.csv",
+            "stability-block512.csv",
+            "adapt-replay-global.csv",
+            "adapt-new-block512.csv",
+            "adapt-replay-block512.csv",
+            "best-continual-q88-model.bin",
+        ),
+        branch="kaggle/experiment-003c-results",
+        expected_format="minicells.native-continual-learning.v1",
+    ),
 }
 
 
@@ -300,12 +317,10 @@ def push_results(
         if result.stdout.strip():
             print(result.stdout.strip())
         if result.stderr.strip():
-            # Git writes normal push progress to stderr. It contains no credentials.
             print(result.stderr.strip())
     finally:
         if askpass_path is not None:
             askpass_path.unlink(missing_ok=True)
-        # Minimize the lifetime of the secret in this process.
         token = ""
 
     print(f"Pushed experiment {experiment_id} results to branch: {branch}")
