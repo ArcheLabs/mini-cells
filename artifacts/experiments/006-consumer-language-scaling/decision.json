@@ -1,0 +1,61 @@
+{
+  "budget": {
+    "checkpoints": [
+      500000,
+      1000000,
+      2000000,
+      5000000,
+      10000000
+    ],
+    "tokens_per_model": 10000000,
+    "train_stream_tokens": 15000000,
+    "validation_stream_tokens": 200000
+  },
+  "candidate": {
+    "learning_slope_alpha": 0.14218091837225655,
+    "model": "minicells-v2",
+    "ppl_10m": 19.44867213327214,
+    "ppl_500k": 88.98716104733823,
+    "source_005b_best_ppl_500k": 129.2050739369041
+  },
+  "comparison": {
+    "ppl_ratio_10m": 1.0255877394621922,
+    "ppl_ratio_500k": 1.0414209556581662,
+    "ratio_change_500k_to_10m": -0.015833216195973998,
+    "ratio_trajectory": [
+      1.0414209556581662,
+      1.0188244410962874,
+      1.0646627596255245,
+      1.0223494686471941,
+      1.0255877394621922
+    ],
+    "slope_ratio_to_transformer": 0.9996725155346575
+  },
+  "diagnosis": "MINICELLS_SCALING_COMPETITIVE_TO_10M",
+  "experiment": "MINI Cells Experiment 006 \u2014 10M Language Scaling",
+  "format": "minicells.consumer-language-scaling.v1",
+  "interpretation": {
+    "green": "10M PPL ratio <=1.15, slope ratio >=0.90, and the relative gap does not materially worsen.",
+    "red": "The relative gap or learning slope indicates a scaling disadvantage before 10M tokens.",
+    "yellow": "10M PPL ratio <=1.30 with a still-competitive slope and bounded gap growth."
+  },
+  "parameter_matching": {
+    "minicells_parameters": 1170816,
+    "relative_error": 0.011205859844757844,
+    "transformer_parameters": 1183936,
+    "within_5_percent": true
+  },
+  "runtime": {
+    "gpu_count_used": 2,
+    "physical_gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ]
+  },
+  "status": "GREEN",
+  "transformer": {
+    "learning_slope_alpha": 0.14222749566763226,
+    "ppl_10m": 18.963440556993035,
+    "ppl_500k": 85.44783025908995
+  }
+}

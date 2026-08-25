@@ -1,0 +1,18 @@
+{
+  "budget_tokens_per_model": 10000000,
+  "checkpoints": [
+    500000,
+    1000000,
+    2000000,
+    5000000,
+    10000000
+  ],
+  "format": "minicells.consumer-language-scaling-task.v1",
+  "from_random_initialization": true,
+  "goal": "Measure whether MiniCells-v2 closes, preserves, or widens its gap to a parameter-matched Transformer through 10M consumed tokens.",
+  "parallel_strategy": "one independent model process per T4 when two GPUs are available",
+  "same_tokenizer_as_005": true,
+  "source_005_prefix_reproduced": true,
+  "train_stream_tokens": 15000000,
+  "validation_stream_tokens": 200000
+}
