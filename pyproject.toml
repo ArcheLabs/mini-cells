@@ -5,12 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mini-cells"
 version = "0.1.0"
-description = "MINI Cells Experiment 001 — Echo"
+description = "MINI Cells research experiments"
 requires-python = ">=3.11"
 dependencies = ["torch", "numpy", "pyyaml", "matplotlib", "pandas"]
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
+lm = ["datasets>=2.18", "tokenizers>=0.15"]
 
 [tool.setuptools]
 package-dir = {"" = "research"}
