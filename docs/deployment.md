@@ -5,7 +5,8 @@ content-addressed Bulletin directory:
 
 ```bash
 export MINICELLS_RPC_URL=ws://127.0.0.1:9944
-export MINICELLS_KEEPER_SIGNER_URI=0x0707070707070707070707070707070707070707070707070707070707070707
+# The --dev genesis ingress relayer is the 0x92…92 seed below.
+export MINICELLS_KEEPER_SIGNER_URI=0x9292929292929292929292929292929292929292929292929292929292929292
 export MINICELLS_BULLETIN_DIR=.local/minicells-bulletin
 # The default is pinned to the released MiniJAM commit carrying ownerless
 # System ABI V2; override only when validating another release candidate.
