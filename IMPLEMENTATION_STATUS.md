@@ -17,6 +17,8 @@ truth is [`artifacts/implementation-status.json`](artifacts/implementation-statu
 | PVM verification inference | PASS_CODE_PATH | `/v1/verify/infer` waits for a finalized inference-ring record matching the submitted request ID instead of treating an execution receipt as completion. |
 | Dependency portability | PASS | Absolute MiniJAM Cargo paths were removed. `tools/bootstrap_deps.sh` pins repository-relative `.deps` sources and exact MiniJAM/Jambda refs; `.deps` is ignored and never committed. |
 | Artifacts/refs | PASS | Service ELF/blob/PolkaVM artifacts rebuilt; manifest records actual dependency refs, toolchain, target hash, and WASM artifact provenance. |
+| Artifact provenance ledger | PASS | `tools/build_service.sh` now refuses dirty reproducibility builds unless explicitly opted in, captures source ref/tree/dirty identity, records JamScript as unused, and generates a clean non-sticky manifest. Stale-field and dependency-ref tests pass. |
+| Historical deployment evidence | PASS_CODE_PATH | Prior block-8/`0x3748…` attempt is preserved under `artifacts/deployments/`; generated artifact manifests no longer carry mutable deployment history. |
 | Rust verification | PASS | `cargo test --offline --workspace` passed: core, protocol, simulator, chain, Keeper auth/model tests, and WASM ABI tests. |
 | Web verification | PASS | `npm test -- --run` passed (5 tests); `npm run build` passed with current WASM artifact. |
 | Python validation | BLOCKED_EXTERNAL | `python3 -m pip install --upgrade pip setuptools wheel` could not reach PyPI (`ConnectTimeoutError: pypi.org`); no Python result is claimed. |
