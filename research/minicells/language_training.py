@@ -60,6 +60,14 @@ def _lr_multiplier(step: int, total_steps: int, warmup_steps: int) -> float:
     return 0.5 * (1.0 + math.cos(math.pi * progress))
 
 
+def _token_label(tokens: int) -> str:
+    if tokens % 1_000_000 == 0:
+        return f"{tokens // 1_000_000}m"
+    if tokens % 1_000 == 0:
+        return f"{tokens // 1_000}k"
+    return str(tokens)
+
+
 @torch.no_grad()
 def evaluate_language_model(
     model: torch.nn.Module,
@@ -154,7 +162,21 @@ def train_language_model(
     base_lr: float = 3e-4,
     weight_decay: float = 0.1,
     warmup_steps: int = 50,
+    checkpoint_tokens: tuple[int, ...] = CHECKPOINT_TOKENS,
+    final_checkpoint_label: str | None = None,
 ) -> TrainingResult:
+    if not checkpoint_tokens:
+        raise ValueError("checkpoint_tokens must not be empty")
+    if tuple(sorted(set(checkpoint_tokens))) != checkpoint_tokens:
+        raise ValueError("checkpoint_tokens must be unique and strictly increasing")
+    for tokens in checkpoint_tokens:
+        if tokens <= 0 or tokens > schedule.consumed_tokens:
+            raise ValueError(f"checkpoint {tokens} is outside the training budget")
+        if tokens % schedule.tokens_per_step != 0:
+            raise ValueError(
+                f"checkpoint {tokens} must be divisible by tokens_per_step={schedule.tokens_per_step}"
+            )
+
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
@@ -169,7 +191,7 @@ def train_language_model(
     )
     scaler = torch.cuda.amp.GradScaler(enabled=amp)
     total_steps = schedule.steps
-    checkpoint_set = set(CHECKPOINT_TOKENS)
+    checkpoint_set = set(checkpoint_tokens)
     rows: list[dict[str, object]] = []
     generations: list[dict[str, object]] = []
     started = time.perf_counter()
@@ -220,7 +242,7 @@ def train_language_model(
             }
             rows.append(row)
             print(
-                f"{name:18s} tokens={consumed:7d} "
+                f"{name:18s} tokens={consumed:9d} "
                 f"train={row['train_loss']:.4f} val_ppl={row['validation_ppl']:.2f} "
                 f"tok/s={throughput:.0f}"
             )
@@ -245,12 +267,14 @@ def train_language_model(
     elapsed = time.perf_counter() - started
     peak_vram = int(torch.cuda.max_memory_allocated()) if device.type == "cuda" else 0
     output_dir.mkdir(parents=True, exist_ok=True)
-    checkpoint_path = output_dir / f"{name}-500k.pt"
+    suffix = final_checkpoint_label or _token_label(schedule.consumed_tokens)
+    checkpoint_path = output_dir / f"{name}-{suffix}.pt"
     torch.save(
         {
             "format": "minicells.language-checkpoint.v1",
             "model_name": name,
             "consumed_tokens": schedule.consumed_tokens,
+            "checkpoint_tokens": list(checkpoint_tokens),
             "model_state_dict": model.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
         },
