@@ -1,0 +1,50 @@
+{
+  "best": {
+    "auxiliary_loss": false,
+    "carry_bias": true,
+    "learning_slope_alpha": 0.11808983759123896,
+    "name": "ln-c2-a0",
+    "rms_norm": false,
+    "validation_nll": 4.861400862534841,
+    "validation_ppl": 129.2050739369041
+  },
+  "caveat": "Single-seed factorial effects localize deterministic treatment effects for this 500K run; they are not statistical confidence intervals.",
+  "design": {
+    "budget_tokens_per_cell": 500000,
+    "cells": 8,
+    "parameter_spread_fraction": 0.0007652782333005357,
+    "same_corpus_as_005": true,
+    "same_model_seed": true,
+    "same_training_schedule": true
+  },
+  "diagnosis": "RECURRENT_OPTIMIZATION_FACTORS_LOCALIZED",
+  "dominant_main_effect": {
+    "effect_nll": -0.5228866686423617,
+    "label": "Carry bias +2",
+    "ppl_multiplier": 0.5928068387924094,
+    "term": "C"
+  },
+  "dominant_overall_effect": {
+    "effect_nll": -0.5228866686423617,
+    "label": "Carry bias +2",
+    "ppl_multiplier": 0.5928068387924094,
+    "term": "C"
+  },
+  "experiment": "MINI Cells Experiment 005B \u2014 Recurrent Optimization Factorial Ablation",
+  "format": "minicells.consumer-language-ablation.v1",
+  "recommended_006_variant": "ln-c2-a0",
+  "replication": {
+    "minitextnca_plus_relative_error": 0.0,
+    "pass": true,
+    "textnca_relative_error": 0.0,
+    "tolerance": 0.05
+  },
+  "runtime": {
+    "gpu_count_used": 2,
+    "physical_gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ]
+  },
+  "status": "PASS"
+}

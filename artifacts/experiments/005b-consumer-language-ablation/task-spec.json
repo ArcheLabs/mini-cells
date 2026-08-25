@@ -1,0 +1,21 @@
+{
+  "budget_tokens_per_cell": 500000,
+  "cells": 8,
+  "checkpoints": [
+    125000,
+    250000,
+    500000
+  ],
+  "design": "2^3 full factorial",
+  "factors": [
+    "RMSNorm",
+    "carry bias +2",
+    "auxiliary stage losses 0.1/0.2"
+  ],
+  "format": "minicells.consumer-language-ablation-task.v1",
+  "max_parallel_gpus": 2,
+  "negative_effect_is_better": true,
+  "replication_tolerance": 0.05,
+  "response_for_factorial_effects": "validation NLL at 500K",
+  "same_seed_and_training_schedule": true
+}
