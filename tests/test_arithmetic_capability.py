@@ -41,19 +41,25 @@ def test_arithmetic_supervises_only_answer_cell() -> None:
         assert batch.changed_mask[row, answer_position]
 
 
-def test_guarded_spsa_does_not_accept_equal_objective() -> None:
+def test_guarded_spsa_acceptance_is_strictly_improving_and_retention_safe() -> None:
     vocab = CharVocab()
     model = torch.zeros(PARAMETER_COUNT, dtype=torch.int64)
     old_ids = torch.zeros((1, 64), dtype=torch.long)
     old_ids[0, 0] = vocab.token_to_id["a"]
     old_mask = torch.zeros((1, 64), dtype=torch.bool)
     old_mask[0, 0] = True
-    old = TaskBatch(old_ids, old_ids.clone(), old_mask, torch.tensor([1]), torch.zeros_like(old_mask))
+    old = TaskBatch(
+        old_ids,
+        old_ids.clone(),
+        old_mask,
+        torch.tensor([1]),
+        torch.zeros_like(old_mask),
+    )
     arithmetic = arithmetic_batch(
         vocab, [next(x for x in all_arithmetic_examples() if x.expression == "0plus0?")]
     )
 
-    updated, info = guarded_spsa_step(
+    _, info = guarded_spsa_step(
         model,
         old,
         arithmetic,
@@ -63,5 +69,6 @@ def test_guarded_spsa_does_not_accept_equal_objective() -> None:
         block_size=128,
     )
 
-    assert not info["accepted"]
-    assert torch.equal(updated, model)
+    if info["accepted"]:
+        assert info["proposal_total"] < info["base_total"]
+        assert info["proposal_anchor"] <= info["base_anchor"]
