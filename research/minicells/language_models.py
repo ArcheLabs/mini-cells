@@ -130,11 +130,13 @@ class TextNCALM(nn.Module):
         rms_norm: bool = False,
         carry_bias: float = 0.0,
         tie_embeddings: bool = True,
+        stage_supervision: bool = False,
     ) -> None:
         super().__init__()
         if len(windows) != 3 or len(iterations) != 3:
             raise ValueError("Experiment 005 requires exactly three NCA stages")
         self.max_context = max_context
+        self.stage_supervision = stage_supervision
         self.token_embedding = nn.Embedding(vocab_size, dim)
         self.position_embedding = nn.Embedding(max_context, dim)
         self.stages = nn.ModuleList(
@@ -172,11 +174,15 @@ class TextNCALM(nn.Module):
         length = input_ids.shape[1]
         positions = torch.arange(length, device=input_ids.device)
         state = self.token_embedding(input_ids) + self.position_embedding(positions)[None, :, :]
-        stage_logits: list[torch.Tensor] = []
-        for stage in self.stages:
+        intermediate_logits: list[torch.Tensor] = []
+        for index, stage in enumerate(self.stages):
             state = stage(state)
-            stage_logits.append(self.lm_head(self.final_norm(state)))
-        return LanguageModelOutput(stage_logits[-1], tuple(stage_logits))
+            if self.stage_supervision and index < len(self.stages) - 1:
+                intermediate_logits.append(self.lm_head(self.final_norm(state)))
+        final_logits = self.lm_head(self.final_norm(state))
+        if self.stage_supervision:
+            return LanguageModelOutput(final_logits, tuple([*intermediate_logits, final_logits]))
+        return LanguageModelOutput(final_logits)
 
 
 class TransformerBlock(nn.Module):
@@ -250,6 +256,7 @@ def build_textnca_control(vocab_size: int) -> TextNCALM:
         rms_norm=False,
         carry_bias=0.0,
         tie_embeddings=True,
+        stage_supervision=False,
     )
 
 
@@ -259,6 +266,7 @@ def build_minitextnca_plus(vocab_size: int) -> TextNCALM:
         rms_norm=True,
         carry_bias=2.0,
         tie_embeddings=True,
+        stage_supervision=True,
     )
 
 
