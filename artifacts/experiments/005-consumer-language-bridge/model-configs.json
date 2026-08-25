@@ -1,0 +1,65 @@
+{
+  "format": "minicells.consumer-language-models.v1",
+  "minitextnca-s-plus": {
+    "auxiliary_stage_losses": [
+      0.1,
+      0.2
+    ],
+    "dim": 128,
+    "ffn_dim": 512,
+    "gru_carry_bias": 2.0,
+    "heads": 4,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "normalization": "RMSNorm",
+    "parameters": 1169920,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "shared": {
+    "context_length": 128,
+    "dataset": "roneneldan/TinyStories",
+    "gradient_clip": 1.0,
+    "learning_rate": 0.0003,
+    "optimizer": "AdamW",
+    "token_embedding_lm_head_tied": true,
+    "training_budget_tokens": 500000,
+    "vocab_size": 2048,
+    "warmup_steps": 50
+  },
+  "textnca-s": {
+    "auxiliary_stage_losses": null,
+    "dim": 128,
+    "ffn_dim": 512,
+    "gru_carry_bias": 0.0,
+    "heads": 4,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "normalization": "LayerNorm",
+    "parameters": 1170816,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "transformer-s": {
+    "dim": 128,
+    "ffn_dim": 448,
+    "heads": 4,
+    "layers": 5,
+    "normalization": "RMSNorm",
+    "parameters": 1183936,
+    "relative_parameter_error": 0.01198030634573304,
+    "target_parameters": 1169920
+  }
+}
