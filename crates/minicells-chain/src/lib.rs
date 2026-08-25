@@ -219,7 +219,9 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
             .deploy_service(artifact, min_item_gas, min_memo_gas)
             .await?;
         if let Some(lifecycle) = &submission.lifecycle {
-            if let Some(error) = &lifecycle.dispatch_error {
+            if let Some(minijam_chain_client::DispatchOutcome::Failed(error)) =
+                &lifecycle.dispatch_outcome
+            {
                 return Err(ChainError::SystemOpDispatchFailed {
                     block: lifecycle
                         .included_block
