@@ -1,0 +1,37 @@
+{
+  "format": "minicells.deployment-evidence.v1",
+  "attempt_id": "fresh-clean-chain-2026-08-25T035154Z",
+  "started_at": "2026-08-25T035154Z",
+  "mini_cells_source_ref": "bf96857bc6cd29be473cacd4c1b898de5d70302f",
+  "service_code_hash": "0x6f3624a68b7c8fbbc7d4be12dce447ceb284459eb0cff4bdaadd8dcdc40739b0",
+  "service_pvm_sha256": "3d12221be72e7c977d3878dfa415b6ead23ea235832da270f96165b51140b813",
+  "minijam_ref": "5947c50699863948c51028bc346980481d839884",
+  "jambda_ref": "e52307a726868205a151e6917a0a70a79965a028",
+  "chain_genesis_hash": "0x05cc868745308c2718e08c3e4cd0cb9fc84796a5540fa575d3ceef670ee1e7f7",
+  "node_runtime_version": "0.1.0-1dceda20d50",
+  "startup": "/home/libingjiang/minijam-client/target/release/minijam-node --dev --base-path <fresh-temp-dir> --rpc-port 9944 --no-telemetry --no-prometheus",
+  "requester": "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d",
+  "requester_secret_uri": "//Alice (public development key; no secret material committed)",
+  "create_extrinsic_hash": null,
+  "create_correlation": null,
+  "included_block": null,
+  "system_op_observations": [
+    {
+      "stage": "transaction_validation",
+      "result": "runtime_validate_transaction_panic_codec_error",
+      "diagnostic": "Bad input data provided to validate_transaction: Codec error"
+    },
+    {
+      "stage": "chain_head_after_attempt",
+      "block_number": "0x16d",
+      "extrinsics": ["0x280501000b81ac0937a001"]
+    }
+  ],
+  "receipt_presence": false,
+  "receipt_block": null,
+  "service_created": false,
+  "service_id": null,
+  "requester_scoped_preimage_verified": false,
+  "result": "blocked_case_a_extrinsic_not_included_invalid_transaction",
+  "notes": "Fresh chain directory and genesis were used. No Service ID was inferred and no receipt was fabricated. The node remained alive but the runtime validation panic prevented inclusion."
+}

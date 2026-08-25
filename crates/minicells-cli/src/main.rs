@@ -3,6 +3,7 @@ use minicells_chain::{
     DeployedService, FilesystemBulletinStore, FinalizedMiniCellsState, MiniCellsChain, TrainSide,
 };
 use minicells_protocol::MetaV1;
+use sp_core::{sr25519, Pair};
 use std::{
     env, fs,
     sync::Arc,
@@ -42,10 +43,14 @@ fn seed() -> Result<[u8; 32], String> {
     let value = env::var("MINICELLS_KEEPER_SIGNER_URI")
         .or_else(|_| env::var("MINICELLS_SIGNER_URI"))
         .map_err(|_| "MINICELLS_KEEPER_SIGNER_URI must be a 32-byte hex seed".to_string())?;
-    let bytes = hex::decode(value.trim_start_matches("0x")).map_err(|e| e.to_string())?;
-    bytes
-        .try_into()
-        .map_err(|_| "signer seed must be exactly 32 bytes".into())
+    if let Ok(bytes) = hex::decode(value.trim_start_matches("0x")) {
+        return bytes
+            .try_into()
+            .map_err(|_| "signer seed must be exactly 32 bytes".into());
+    }
+    let (_, seed) = sr25519::Pair::from_string_with_seed(&value, None)
+        .map_err(|e| format!("invalid signer URI: {e}"))?;
+    seed.ok_or_else(|| "signer URI did not expose a reproducible raw seed".into())
 }
 fn id() -> u64 {
     SystemTime::now()
