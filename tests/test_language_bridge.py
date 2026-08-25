@@ -53,6 +53,7 @@ def test_minitextnca_has_three_hierarchical_recurrent_stages() -> None:
     assert len(model.stages) == 3
     assert [stage.attention.window for stage in model.stages] == [8, 32, 128]
     assert [stage.iterations for stage in model.stages] == [4, 4, 4]
+    assert model.stage_supervision
     hidden = model.stages[0].gru.hidden_size
     update_bias = model.stages[0].gru.bias_ih[hidden : 2 * hidden]
     assert torch.all(update_bias > 0)
@@ -77,6 +78,7 @@ def test_language_model_outputs_have_expected_shape() -> None:
         iterations=(1, 1, 1),
         rms_norm=True,
         carry_bias=2.0,
+        stage_supervision=True,
     )
     output = model(torch.randint(0, 64, (2, 10)))
     assert output.logits.shape == (2, 10, 64)
