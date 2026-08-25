@@ -1,0 +1,93 @@
+{
+  "cells": [
+    {
+      "auxiliary_loss": false,
+      "carry_bias": false,
+      "name": "ln-c0-a0",
+      "rms_norm": false
+    },
+    {
+      "auxiliary_loss": false,
+      "carry_bias": false,
+      "name": "rms-c0-a0",
+      "rms_norm": true
+    },
+    {
+      "auxiliary_loss": false,
+      "carry_bias": true,
+      "name": "ln-c2-a0",
+      "rms_norm": false
+    },
+    {
+      "auxiliary_loss": true,
+      "carry_bias": false,
+      "name": "ln-c0-aux",
+      "rms_norm": false
+    },
+    {
+      "auxiliary_loss": false,
+      "carry_bias": true,
+      "name": "rms-c2-a0",
+      "rms_norm": true
+    },
+    {
+      "auxiliary_loss": true,
+      "carry_bias": false,
+      "name": "rms-c0-aux",
+      "rms_norm": true
+    },
+    {
+      "auxiliary_loss": true,
+      "carry_bias": true,
+      "name": "ln-c2-aux",
+      "rms_norm": false
+    },
+    {
+      "auxiliary_loss": true,
+      "carry_bias": true,
+      "name": "rms-c2-aux",
+      "rms_norm": true
+    }
+  ],
+  "factors": {
+    "A": {
+      "off": null,
+      "on": [
+        0.1,
+        0.2
+      ]
+    },
+    "C": {
+      "off": 0.0,
+      "on": 2.0
+    },
+    "R": {
+      "off": "LayerNorm",
+      "on": "RMSNorm"
+    }
+  },
+  "format": "minicells.consumer-language-ablation-models.v1",
+  "shared": {
+    "budget_tokens": 500000,
+    "context_length": 128,
+    "dataset": "roneneldan/TinyStories",
+    "dim": 128,
+    "ffn_dim": 512,
+    "heads": 4,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "learning_rate": 0.0003,
+    "model_seed": 55005,
+    "optimizer": "AdamW",
+    "schedule_seed": 5005,
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  }
+}
