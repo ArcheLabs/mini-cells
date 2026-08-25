@@ -1,6 +1,6 @@
 {
   "format": "minicells.implementation-status.v2",
-  "updated": "2026-08-25",
+  "updated": "2026-08-26",
   "compatibility": {
     "jam_semantics": "0.7.2",
     "mini_jam_ref": "5947c50699863948c51028bc346980481d839884",
@@ -42,7 +42,12 @@
     "experiment_002_research_cli": "PASS",
     "experiment_002_local_pvm_host": "PASS_CHAIN_FREE_SERVICE_BLOB",
     "experiment_002_direct_pvm": "PASS_PLUS_MINUS_ACCUMULATE",
-    "experiment_002_native_pvm_parity": "PASS_STATUS_PLUS_MINUS_BYTE_EQUAL_ACCUMULATE_STORAGE_YIELD_EQUAL_0_TO_1"
+    "experiment_002_native_pvm_parity": "PASS_STATUS_PLUS_MINUS_BYTE_EQUAL_ACCUMULATE_STORAGE_YIELD_EQUAL_0_TO_1",
+    "production_training_repair": "PASS_GUARDED_SIGN_SPSA_V2",
+    "native_training_gate_512": "FAIL_FIXED_PROBE_BEST_IMPROVEMENT",
+    "solved_model_regression_128": "PASS",
+    "pvm_training_gate_128": "NOT_STARTED_NATIVE_GATE_STOP",
+    "fresh_training_e2e": "NOT_STARTED_NATIVE_GATE_STOP"
   },
   "definition_of_done": {
     "challenge_nonce_expiry_one_use": "PASS_TEST",
@@ -85,16 +90,19 @@
     "Experiment 002 native release run: PASS; 0->1000 generations, checkpoints every 250, 25.31 seconds wall clock",
     "Experiment 002 resume: PASS; uninterrupted 0->5 and resumed 0->3->5 final model hashes equal",
     "Experiment 002 dataset compiler: PASS; deterministic root/split/batch and Merkle proof tests",
-    "Experiment 002 direct PVM: PASS; real service.blob decoded/executed chain-free; status, PLUS, MINUS byte parity and exact ACCUMULATE storage/yield plus 0->1 generation parity verified"
+    "Experiment 002 direct PVM: PASS; real service.blob decoded/executed chain-free; status, PLUS, MINUS byte parity and exact ACCUMULATE storage/yield plus 0->1 generation parity verified",
+    "Production training repair 2026-08-26: Training ABI v2, guarded BASE-aware optimizer, Refine/Accumulate integration tests, rebuilt service artifact, and persistent PVM trainer implemented",
+    "Native 512 gate: FAIL by fixed threshold; initial probe loss 607901, final 573303, best 573303, required best <=547110; solved-model regression PASS; PVM/E2E intentionally not started; evidence artifacts/local-training-gate/"
   ],
   "artifacts": {
     "wasm_target": "wasm32-unknown-unknown",
     "wasm_path": "apps/web/public/minicells_core.wasm",
     "wasm_bytes": 18734,
     "wasm_sha256": "0caf515eec89c0994339e70cbbe6a002843942919fc3166bc5a1c7ff4bfea771",
-    "service_blob_bytes": 69414,
+    "service_blob_bytes": 72115,
+    "service_blob_sha256": "71cd9166d636a4917afe92097d52e716769d8f436de153463a3c85e1075a6d99",
     "service_code_hash": "0x6f3624a68b7c8fbbc7d4be12dce447ceb284459eb0cff4bdaadd8dcdc40739b0",
-    "service_pvm_sha256": "3d12221be72e7c977d3878dfa415b6ead23ea235832da270f96165b51140b813",
+    "service_pvm_sha256": "5fd918f1aa6765405ed9d10c50d2dbd912464b3cc5ca11b9f93a8af2bc19abfd",
     "artifact_manifest_format": "minicells.artifact-manifest.v2"
   }
 }

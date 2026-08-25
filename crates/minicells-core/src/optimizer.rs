@@ -59,20 +59,37 @@ pub fn candidate_into(
     }
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum UpdateDecision {
+    Keep,
+    Plus,
+    Minus,
+}
+
+pub fn choose_update(base_loss: i64, plus_loss: i64, minus_loss: i64) -> UpdateDecision {
+    if plus_loss < base_loss && plus_loss < minus_loss {
+        UpdateDecision::Plus
+    } else if minus_loss < base_loss && minus_loss < plus_loss {
+        UpdateDecision::Minus
+    } else {
+        UpdateDecision::Keep
+    }
+}
+
 pub fn apply_update(
     model: &mut PackedModel,
     parent_hash: &[u8; 32],
     generation: u64,
+    base_loss: i64,
     loss_plus: i64,
     loss_minus: i64,
     step_q: i16,
-) -> bool {
-    let direction = if loss_plus < loss_minus {
-        1
-    } else if loss_plus > loss_minus {
-        -1
-    } else {
-        return false;
+) -> UpdateDecision {
+    let decision = choose_update(base_loss, loss_plus, loss_minus);
+    let direction = match decision {
+        UpdateDecision::Plus => 1,
+        UpdateDecision::Minus => -1,
+        UpdateDecision::Keep => return UpdateDecision::Keep,
     };
     for i in 0..PARAMETER_COUNT {
         model.parameters[i] = clamp_parameter(
@@ -80,7 +97,7 @@ pub fn apply_update(
                 + direction * step_q as i32 * delta_at(parent_hash, generation, i) as i32,
         );
     }
-    true
+    decision
 }
 
 #[cfg(test)]
@@ -101,13 +118,29 @@ mod tests {
         let mut m = PackedModel::default();
         let h = [2; 32];
         let p = candidate(&m, &h, 0, 1, 1);
-        assert!(apply_update(&mut m, &h, 0, 1, 2, 1));
+        assert_eq!(
+            apply_update(&mut m, &h, 0, 100, 1, 2, 1),
+            UpdateDecision::Plus
+        );
         assert_eq!(m, p);
     }
     #[test]
     fn tie_does_not_change() {
         let mut m = PackedModel::default();
-        assert!(!apply_update(&mut m, &[0; 32], 0, 1, 1, 1));
+        assert_eq!(
+            apply_update(&mut m, &[0; 32], 0, 100, 1, 1, 1),
+            UpdateDecision::Keep
+        );
         assert_eq!(m, PackedModel::default());
+    }
+
+    #[test]
+    fn guarded_decisions_require_unique_improvement_over_base() {
+        assert_eq!(choose_update(100, 80, 110), UpdateDecision::Plus);
+        assert_eq!(choose_update(100, 120, 90), UpdateDecision::Minus);
+        assert_eq!(choose_update(100, 110, 120), UpdateDecision::Keep);
+        assert_eq!(choose_update(100, 100, 120), UpdateDecision::Keep);
+        assert_eq!(choose_update(100, 80, 80), UpdateDecision::Keep);
+        assert_eq!(choose_update(100, 100, 100), UpdateDecision::Keep);
     }
 }

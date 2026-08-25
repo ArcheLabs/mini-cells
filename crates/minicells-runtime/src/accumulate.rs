@@ -1,7 +1,7 @@
 use crate::{ensure_initialized, Host, HostError};
 use minicells_core::{
     model::{model_hash, PackedModel, MODEL_BYTES},
-    optimizer::apply_update,
+    optimizer::{apply_update, UpdateDecision},
 };
 use minicells_protocol::{
     keys::{self, inference_key, inference_slot},
@@ -87,6 +87,8 @@ fn handle_training<H: Host>(
     meta: &mut MetaV1,
     result: &RefineResult,
     side: i8,
+    base_loss: i64,
+    base_correct_tokens: u32,
     loss: i64,
     correct_tokens: u32,
     total_tokens: u32,
@@ -127,7 +129,16 @@ fn handle_training<H: Host>(
     ) else {
         return Ok(());
     };
-    apply_pair(host, meta, plus, minus, workspace)
+    apply_pair(
+        host,
+        meta,
+        plus,
+        minus,
+        base_loss,
+        base_correct_tokens,
+        total_tokens,
+        workspace,
+    )
 }
 
 #[inline(never)]
@@ -136,14 +147,27 @@ fn apply_pair<H: Host>(
     meta: &mut MetaV1,
     plus: PendingV1,
     minus: PendingV1,
+    base_loss: i64,
+    base_correct_tokens: u32,
+    current_result_tokens: u32,
     workspace: &mut AccumulateWorkspace,
 ) -> Result<(), HostError> {
+    if plus.generation != meta.generation
+        || minus.generation != meta.generation
+        || plus.parent_hash != meta.model_hash
+        || minus.parent_hash != meta.model_hash
+        || plus.tokens != minus.tokens
+        || current_result_tokens != plus.tokens
+    {
+        return Err(HostError::Failure);
+    }
     read_model(host, &mut workspace.model, &mut workspace.model_bytes)?;
     let parent = meta.model_hash;
-    let updated = apply_update(
+    let decision = apply_update(
         &mut workspace.model,
         &parent,
         meta.generation,
+        base_loss,
         plus.loss,
         minus.loss,
         meta.update_step_q,
@@ -156,15 +180,20 @@ fn apply_pair<H: Host>(
     host.storage_write(keys::MODEL, &workspace.model_bytes)?;
     meta.generation = meta.generation.saturating_add(1);
     meta.model_hash = next_hash;
-    meta.current_eval_loss = plus.loss.min(minus.loss);
-    meta.current_correct = if plus.loss <= minus.loss {
-        plus.correct
-    } else {
-        minus.correct
+    let (retained_loss, retained_correct) = match decision {
+        UpdateDecision::Plus => (plus.loss, plus.correct),
+        UpdateDecision::Minus => (minus.loss, minus.correct),
+        UpdateDecision::Keep => (base_loss, base_correct_tokens),
     };
+    meta.current_eval_loss = retained_loss;
+    meta.current_correct = retained_correct;
     meta.current_tokens = plus.tokens;
-    meta.successful_updates = meta.successful_updates.saturating_add(updated as u64);
-    meta.zero_diff_updates = meta.zero_diff_updates.saturating_add((!updated) as u64);
+    meta.successful_updates = meta
+        .successful_updates
+        .saturating_add((decision != UpdateDecision::Keep) as u64);
+    meta.zero_diff_updates = meta
+        .zero_diff_updates
+        .saturating_add((decision == UpdateDecision::Keep) as u64);
     let history = HistoryV1 {
         generation: meta.generation,
         parent_hash: parent,
@@ -174,7 +203,7 @@ fn apply_pair<H: Host>(
         plus_correct: plus.correct,
         minus_correct: minus.correct,
         tokens: plus.tokens,
-        updated: updated as u8,
+        updated: (decision != UpdateDecision::Keep) as u8,
     };
     let mut b = [0u8; HistoryV1::LEN];
     let n = history
@@ -227,6 +256,9 @@ pub fn accumulate<H: Host>(
             }
             ResultBody::Training {
                 side,
+                base_loss,
+                base_correct_tokens,
+                base_eval_digest: _,
                 loss,
                 correct_tokens,
                 total_tokens,
@@ -236,6 +268,8 @@ pub fn accumulate<H: Host>(
                 &mut meta,
                 &result,
                 side,
+                base_loss,
+                base_correct_tokens,
                 loss,
                 correct_tokens,
                 total_tokens,
@@ -246,4 +280,117 @@ pub fn accumulate<H: Host>(
         }
     }
     write_meta(host, &meta)
+}
+
+#[cfg(test)]
+mod tests {
+    extern crate std;
+    use super::*;
+    use minicells_protocol::{Op, ResultBody, STATUS_OK};
+    use std::{collections::BTreeMap, vec};
+
+    #[derive(Default)]
+    struct TestHost {
+        storage: BTreeMap<std::vec::Vec<u8>, std::vec::Vec<u8>>,
+        results: std::vec::Vec<std::vec::Vec<u8>>,
+    }
+    impl Host for TestHost {
+        fn payload(&self, _: &mut [u8]) -> Result<usize, HostError> {
+            Err(HostError::Missing)
+        }
+        fn result_count(&self) -> usize {
+            self.results.len()
+        }
+        fn result(&self, index: usize, output: &mut [u8]) -> Result<usize, HostError> {
+            let value = self.results.get(index).ok_or(HostError::Missing)?;
+            if output.len() < value.len() {
+                return Err(HostError::BufferTooSmall);
+            }
+            output[..value.len()].copy_from_slice(value);
+            Ok(value.len())
+        }
+        fn storage_read(&self, key: &[u8], output: &mut [u8]) -> Result<Option<usize>, HostError> {
+            let Some(value) = self.storage.get(key) else {
+                return Ok(None);
+            };
+            if output.len() < value.len() {
+                return Err(HostError::BufferTooSmall);
+            }
+            output[..value.len()].copy_from_slice(value);
+            Ok(Some(value.len()))
+        }
+        fn storage_write(&mut self, key: &[u8], value: &[u8]) -> Result<(), HostError> {
+            self.storage.insert(key.to_vec(), value.to_vec());
+            Ok(())
+        }
+        fn storage_delete(&mut self, key: &[u8]) -> Result<(), HostError> {
+            self.storage.remove(key);
+            Ok(())
+        }
+        fn yield_value(&mut self, _: &[u8]) {}
+    }
+
+    fn result(op: Op, side: i8, base_loss: i64, loss: i64) -> std::vec::Vec<u8> {
+        let value = RefineResult {
+            op,
+            status: STATUS_OK,
+            request_id: if side == 1 { 1 } else { 2 },
+            generation: 0,
+            model_hash: crate::genesis::GENESIS_MODEL_HASH,
+            body: ResultBody::Training {
+                side,
+                base_loss,
+                base_correct_tokens: 7,
+                base_eval_digest: [1; 32],
+                loss,
+                correct_tokens: 8,
+                total_tokens: 16,
+                eval_digest: [2; 32],
+            },
+        };
+        let mut out = [0; 160];
+        let n = value.encode_into(&mut out).unwrap();
+        out[..n].to_vec()
+    }
+
+    #[test]
+    fn accepted_pair_changes_model_and_records_candidate() {
+        let mut host = TestHost::default();
+        ensure_initialized(&mut host).unwrap();
+        let parent = host.storage.get(keys::MODEL).unwrap().clone();
+        host.results = vec![result(Op::TrainPlus, 1, 100, 80)];
+        accumulate(&mut host, &mut AccumulateWorkspace::new()).unwrap();
+        host.results = vec![result(Op::TrainMinus, -1, 100, 120)];
+        accumulate(&mut host, &mut AccumulateWorkspace::new()).unwrap();
+        let meta = MetaV1::decode(host.storage.get(keys::META).unwrap()).unwrap();
+        assert_eq!(meta.generation, 1);
+        assert_ne!(host.storage.get(keys::MODEL).unwrap(), &parent);
+        assert_eq!(meta.successful_updates, 1);
+        assert_eq!(meta.current_eval_loss, 80);
+        assert_eq!(host.storage.get(keys::PENDING_PLUS), None);
+        assert_eq!(host.storage.get(keys::PENDING_MINUS), None);
+        let history =
+            HistoryV1::decode(host.storage.get(keys::history_key(0).as_slice()).unwrap()).unwrap();
+        assert_eq!(history.updated, 1);
+    }
+
+    #[test]
+    fn rejected_pair_keeps_model_and_records_base() {
+        let mut host = TestHost::default();
+        ensure_initialized(&mut host).unwrap();
+        let parent = host.storage.get(keys::MODEL).unwrap().clone();
+        host.results = vec![result(Op::TrainPlus, 1, 100, 110)];
+        accumulate(&mut host, &mut AccumulateWorkspace::new()).unwrap();
+        host.results = vec![result(Op::TrainMinus, -1, 100, 120)];
+        accumulate(&mut host, &mut AccumulateWorkspace::new()).unwrap();
+        let meta = MetaV1::decode(host.storage.get(keys::META).unwrap()).unwrap();
+        assert_eq!(meta.generation, 1);
+        assert_eq!(host.storage.get(keys::MODEL).unwrap(), &parent);
+        assert_eq!(meta.successful_updates, 0);
+        assert_eq!(meta.zero_diff_updates, 1);
+        assert_eq!(meta.current_eval_loss, 100);
+        let history =
+            HistoryV1::decode(host.storage.get(keys::history_key(0).as_slice()).unwrap()).unwrap();
+        assert_eq!(history.updated, 0);
+    }
 }

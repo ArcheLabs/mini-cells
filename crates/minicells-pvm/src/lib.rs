@@ -266,6 +266,23 @@ impl DirectPvmHarness {
         self.execute_entry(&[], 5)
     }
 
+    /// Wrap a RefineResult in the MiniJAM accumulation operand envelope.
+    /// This is shared by the PVM trainer and parity tests so the ABI is not
+    /// reimplemented by individual callers.
+    pub fn pack_accumulation_result(refine_output: &[u8]) -> Result<Vec<u8>, PvmError> {
+        if refine_output.is_empty() || refine_output.len() > u8::MAX as usize {
+            return Err(PvmError::Decode("invalid refine result length".into()));
+        }
+        // MiniJAM's accumulation operand is the four-hash/gas envelope that
+        // the SDK unwraps before handing the payload to RefineResult::decode.
+        let mut item = vec![0; 1 + 4 * 32];
+        item.push(0); // fnencode(gas)
+        item.push(0); // refine result marker
+        jp_vm_primitives::encode_fnencode(refine_output.len() as u64, &mut item);
+        item.extend_from_slice(refine_output);
+        Ok(item)
+    }
+
     fn execute_entry(&mut self, payload: &[u8], entry_point: u32) -> Result<Vec<u8>, PvmError> {
         let program = StandaloneProgram::from_bytes(&self.artifact.bytes)
             .map_err(|error| PvmError::Decode(error.to_string()))?;
@@ -290,7 +307,9 @@ impl DirectPvmHarness {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use minicells_protocol::{keys, Op, RefineResult, ResultBody, WorkBody, WorkPayload};
+    use minicells_protocol::{
+        keys, HistoryV1, MetaV1, Op, RefineResult, ResultBody, WorkBody, WorkPayload,
+    };
     use minicells_runtime::{
         accumulate, ensure_initialized, genesis::GENESIS_MODEL_HASH, refine, AccumulateWorkspace,
         RefineWorkspace,
@@ -310,7 +329,7 @@ mod tests {
         .expect("tracked service artifact")
     }
 
-    fn training_result(op: Op, request_id: u64, side: i8, loss: i64) -> Vec<u8> {
+    fn training_result(op: Op, request_id: u64, side: i8, base_loss: i64, loss: i64) -> Vec<u8> {
         let result = RefineResult {
             op,
             status: 0,
@@ -319,6 +338,9 @@ mod tests {
             model_hash: GENESIS_MODEL_HASH,
             body: ResultBody::Training {
                 side,
+                base_loss,
+                base_correct_tokens: 8,
+                base_eval_digest: [request_id as u8 + 1; 32],
                 loss,
                 correct_tokens: 7,
                 total_tokens: 16,
@@ -333,14 +355,7 @@ mod tests {
     }
 
     fn packed_result(payload: &[u8]) -> Vec<u8> {
-        // MiniJAM's accumulation operand is the four-hash/gas envelope that
-        // the SDK unwraps before handing the payload to RefineResult::decode.
-        let mut item = vec![0; 1 + 4 * 32];
-        item.push(0); // fnencode(gas)
-        item.push(0); // refine result marker
-        item.push(payload.len() as u8); // fnencode(payload_len)
-        item.extend_from_slice(payload);
-        item
+        DirectPvmHarness::pack_accumulation_result(payload).unwrap()
     }
 
     fn assert_storage_equal(native: &LocalPvmHost, pvm: &LocalPvmHost) {
@@ -430,8 +445,8 @@ mod tests {
 
     #[test]
     fn service_pvm_accumulate_matches_native_storage_and_yield() {
-        let plus = training_result(Op::TrainPlus, 11, 1, 100);
-        let minus = training_result(Op::TrainMinus, 12, -1, 110);
+        let plus = training_result(Op::TrainPlus, 11, 1, 90, 100);
+        let minus = training_result(Op::TrainMinus, 12, -1, 90, 110);
 
         let mut native = LocalPvmHost::default();
         ensure_initialized(&mut native).expect("native genesis");
@@ -455,6 +470,41 @@ mod tests {
         assert!(!native.storage.contains_key(keys::PENDING_PLUS));
         assert!(!native.storage.contains_key(keys::PENDING_MINUS));
         assert_eq!(meta, pvm.host.storage.get(keys::META).expect("PVM META"));
+    }
+
+    #[test]
+    fn service_pvm_keep_and_accept_paths_match_native() {
+        for (base, plus_loss, minus_loss, updated) in [(100, 110, 120, 0u8), (100, 80, 120, 1u8)] {
+            let plus = training_result(Op::TrainPlus, 31, 1, base, plus_loss);
+            let minus = training_result(Op::TrainMinus, 32, -1, base, minus_loss);
+            let mut native = LocalPvmHost::default();
+            ensure_initialized(&mut native).expect("native genesis");
+            let parent_model = native.storage.get(keys::MODEL).unwrap().clone();
+            native.results = vec![plus.clone(), minus.clone()];
+            accumulate(&mut native, &mut AccumulateWorkspace::new()).expect("native accumulate");
+            let mut pvm = harness();
+            ensure_initialized(&mut pvm.host).expect("PVM genesis");
+            pvm.host.results = vec![
+                DirectPvmHarness::pack_accumulation_result(&minus).unwrap(),
+                DirectPvmHarness::pack_accumulation_result(&plus).unwrap(),
+            ];
+            pvm.execute_accumulate().expect("PVM accumulate");
+            assert_storage_equal(&native, &pvm.host);
+            let meta = MetaV1::decode(native.storage.get(keys::META).unwrap()).unwrap();
+            let history =
+                HistoryV1::decode(native.storage.get(keys::history_key(0).as_slice()).unwrap())
+                    .unwrap();
+            assert_eq!(history.updated, updated);
+            assert_eq!(
+                meta.current_eval_loss,
+                if updated == 0 { base } else { plus_loss }
+            );
+            if updated == 0 {
+                assert_eq!(native.storage.get(keys::MODEL), Some(&parent_model));
+            } else {
+                assert_ne!(native.storage.get(keys::MODEL), Some(&parent_model));
+            }
+        }
     }
 
     #[test]

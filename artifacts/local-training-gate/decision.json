@@ -1,0 +1,23 @@
+{
+  "failed_gate": "native",
+  "native_gate": "FAIL",
+  "native_generations": 512,
+  "native_initial_probe_loss": 607901,
+  "native_final_probe_loss": 573303,
+  "native_best_probe_loss": 573303,
+  "native_successful_updates": 20,
+  "native_thresholds": {
+    "final_le_95_percent_initial": false,
+    "best_le_90_percent_initial": false,
+    "final_le_115_percent_best": true,
+    "successful_updates_ge_4": true
+  },
+  "next_action": "STOP",
+  "optimizer": "guarded-sign-spsa-v2",
+  "optimizer_version": 2,
+  "pvm_gate": "NOT_STARTED",
+  "reason": "fixed-probe threshold failed",
+  "schema": "minicells.local-training-gate.v1",
+  "solved_regression_gate": "PASS",
+  "status": "FAIL"
+}

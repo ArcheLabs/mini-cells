@@ -4,12 +4,15 @@ use crate::{
     Error,
 };
 pub const RESULT_MAGIC: [u8; 4] = *b"MCR1";
-pub const RESULT_VERSION: u8 = 1;
+pub const RESULT_VERSION: u8 = 2;
 pub const STATUS_OK: u16 = 0;
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ResultBody {
     Training {
         side: i8,
+        base_loss: i64,
+        base_correct_tokens: u32,
+        base_eval_digest: [u8; 32],
         loss: i64,
         correct_tokens: u32,
         total_tokens: u32,
@@ -46,6 +49,9 @@ impl RefineResult {
         match &self.body {
             ResultBody::Training {
                 side,
+                base_loss,
+                base_correct_tokens,
+                base_eval_digest,
                 loss,
                 correct_tokens,
                 total_tokens,
@@ -53,6 +59,9 @@ impl RefineResult {
             } => {
                 w.i8(*side)?;
                 w.bytes(&[0; 7])?;
+                w.i64(*base_loss)?;
+                w.u32(*base_correct_tokens)?;
+                w.bytes(base_eval_digest)?;
                 w.i64(*loss)?;
                 w.u32(*correct_tokens)?;
                 w.u32(*total_tokens)?;
@@ -94,6 +103,9 @@ impl RefineResult {
                 }
                 ResultBody::Training {
                     side,
+                    base_loss: r.i64()?,
+                    base_correct_tokens: r.u32()?,
+                    base_eval_digest: r.bytes()?,
                     loss: r.i64()?,
                     correct_tokens: r.u32()?,
                     total_tokens: r.u32()?,
@@ -138,14 +150,19 @@ mod tests {
             model_hash: [3; 32],
             body: ResultBody::Training {
                 side: 1,
-                loss: 4,
-                correct_tokens: 5,
-                total_tokens: 6,
-                eval_digest: [7; 32],
+                base_loss: 3,
+                base_correct_tokens: 4,
+                base_eval_digest: [5; 32],
+                loss: 6,
+                correct_tokens: 7,
+                total_tokens: 8,
+                eval_digest: [9; 32],
             },
         };
         let mut b = [0; 160];
         let n = x.encode_into(&mut b).unwrap();
         assert_eq!(RefineResult::decode(&b[..n]), Ok(x));
+        assert!(n <= 160);
+        assert_eq!(n, 156);
     }
 }

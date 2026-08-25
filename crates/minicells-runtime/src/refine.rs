@@ -174,6 +174,18 @@ fn refine_training<H: Host>(
     } else {
         return Err(HostError::Failure);
     };
+    let batch_size = u8::try_from(meta.train_batch_size).map_err(|_| HostError::Failure)?;
+    let batch = canonical_batch(&meta.model_hash, meta.generation, batch_size)
+        .map_err(|_| HostError::Failure)?;
+    let base = evaluate_batch_with_buffers(
+        &workspace.model,
+        &batch,
+        meta.margin_q as i32,
+        &mut workspace.scratch,
+        &mut workspace.predictions,
+        &mut workspace.logits,
+    )
+    .map_err(|_| HostError::Failure)?;
     candidate_into(
         &workspace.model,
         &mut workspace.evaluated_model,
@@ -182,13 +194,10 @@ fn refine_training<H: Host>(
         side,
         meta.perturbation_q,
     );
-    let batch_size = u8::try_from(meta.train_batch_size).map_err(|_| HostError::Failure)?;
-    let batch = canonical_batch(&meta.model_hash, meta.generation, batch_size)
-        .map_err(|_| HostError::Failure)?;
-    let evaluation = evaluate_batch_with_buffers(
+    let candidate = evaluate_batch_with_buffers(
         &workspace.evaluated_model,
         &batch,
-        256,
+        meta.margin_q as i32,
         &mut workspace.scratch,
         &mut workspace.predictions,
         &mut workspace.logits,
@@ -202,10 +211,13 @@ fn refine_training<H: Host>(
         model_hash: meta.model_hash,
         body: ResultBody::Training {
             side,
-            loss: evaluation.loss,
-            correct_tokens: evaluation.correct_tokens,
-            total_tokens: evaluation.total_tokens,
-            eval_digest: evaluation.digest,
+            base_loss: base.loss,
+            base_correct_tokens: base.correct_tokens,
+            base_eval_digest: base.digest,
+            loss: candidate.loss,
+            correct_tokens: candidate.correct_tokens,
+            total_tokens: candidate.total_tokens,
+            eval_digest: candidate.digest,
         },
     })
 }

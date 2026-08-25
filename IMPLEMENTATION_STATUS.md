@@ -43,6 +43,23 @@ and the Keeper independently verifies the finalized model before serving it.
 
 ## Experiment 002 — persistent local training status (2026-08-25)
 
+## Production training repair and conditional gates (2026-08-26)
+
+The Training result ABI is version 2 (156-byte maximum), carrying BASE and
+candidate metrics. The production Refine/Accumulate path now implements
+guarded SIGN-SPSA v2 with explicit `Keep`/`Plus`/`Minus` decisions, retained
+model metrics, generation advancement on `Keep`, and pair invariant checks.
+The real PVM trainer and shared accumulation envelope encoder are available in
+`minicells-lab`/`minicells-pvm`, and the rebuilt service artifact is recorded
+in `artifacts/local-training-gate/manifest.json`.
+
+The fixed 512-generation Native gate was executed without a dataset. It
+correctly stopped at the first failed gate: final fixed-probe loss was
+573,303 from 607,901 (5.69% improvement), while the required best loss was at
+most 90% of the initial loss. Solved-model regression passed. Per the
+non-stop phase contract, PVM parity and fresh-chain E2E were not started.
+Machine-readable evidence is in `artifacts/local-training-gate/`.
+
 | Requirement | Status | Evidence |
 |---|---|---|
 | Persistent native trainer, arbitrary generation | PASS | `minicells-sim::trainer` drives the production no-std `refine`/`accumulate` entry points and completed a release 0→1000 run in 25.31 s (checkpointing at 250/500/750/1000); the recorded genesis evaluation was 1/80 tokens and the generation-1000 selected evaluation was 2/48. |

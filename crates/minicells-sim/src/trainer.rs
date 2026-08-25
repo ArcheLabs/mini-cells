@@ -20,6 +20,81 @@ use std::{
     time::Instant,
 };
 
+pub const LOCAL_PROBE_DOMAIN: &[u8] = b"mini-cells:local-probe:v1";
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct ProbeMetrics {
+    pub generation: u64,
+    pub model_hash: String,
+    pub total_loss: i64,
+    pub correct_tokens: u64,
+    pub total_tokens: u64,
+    pub token_accuracy: f64,
+    pub loss_per_token: f64,
+}
+
+fn probe_parent_hash() -> [u8; 32] {
+    let mut state = blake2b_simd::Params::new().hash_length(32).to_state();
+    state.update(LOCAL_PROBE_DOMAIN);
+    let mut out = [0; 32];
+    out.copy_from_slice(state.finalize().as_bytes());
+    out
+}
+
+pub fn evaluate_fixed_probe(
+    model: &minicells_core::PackedModel,
+    generation: u64,
+) -> Result<ProbeMetrics, TrainerError> {
+    let parent = probe_parent_hash();
+    let mut total_loss = 0i64;
+    let mut correct_tokens = 0u64;
+    let mut total_tokens = 0u64;
+    for batch_generation in 0..32u64 {
+        let batch =
+            canonical_batch(&parent, batch_generation, 4).map_err(|_| TrainerError::Runtime)?;
+        let evaluation = minicells_core::batch::evaluate_batch(
+            model,
+            &batch,
+            minicells_protocol::runtime_config::MARGIN_Q as i32,
+            &mut minicells_core::Scratch::new(),
+        )
+        .map_err(|_| TrainerError::Runtime)?;
+        total_loss = total_loss.saturating_add(evaluation.loss);
+        correct_tokens += evaluation.correct_tokens as u64;
+        total_tokens += evaluation.total_tokens as u64;
+    }
+    Ok(ProbeMetrics {
+        generation,
+        model_hash: format!("0x{}", hex::encode(model_hash(model))),
+        total_loss,
+        correct_tokens,
+        total_tokens,
+        token_accuracy: if total_tokens == 0 {
+            0.0
+        } else {
+            correct_tokens as f64 / total_tokens as f64
+        },
+        loss_per_token: if total_tokens == 0 {
+            0.0
+        } else {
+            total_loss as f64 / total_tokens as f64
+        },
+    })
+}
+
+pub fn load_checkpoint_model(
+    root: &Path,
+    generation: u64,
+) -> Result<minicells_core::PackedModel, TrainerError> {
+    let path = root
+        .join("checkpoints")
+        .join(format!("generation-{generation:06}"))
+        .join("model.bin");
+    let bytes = fs::read(path)?;
+    minicells_core::PackedModel::decode_from(&bytes)
+        .map_err(|_| TrainerError::Checkpoint("model decode failed".into()))
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum TrainerError {
     #[error("I/O error: {0}")]
@@ -41,11 +116,16 @@ pub struct GenerationMetrics {
     pub parent_model_hash: String,
     pub next_model_hash: String,
     pub batch_digest: String,
+    pub base_loss: i64,
+    pub base_correct_tokens: u32,
     pub plus_loss: i64,
+    pub plus_correct_tokens: u32,
     pub minus_loss: i64,
-    pub selected_loss: i64,
-    pub selected_correct_tokens: u32,
+    pub minus_correct_tokens: u32,
+    pub retained_loss: i64,
+    pub retained_correct_tokens: u32,
     pub total_tokens: u32,
+    pub decision: String,
     pub updated: bool,
     pub wall_clock_ms: u128,
 }
@@ -119,7 +199,7 @@ impl NativeTrainer {
         let evaluation = minicells_core::batch::evaluate_batch(
             &genesis,
             &batch,
-            256,
+            meta(&self.host).margin_q as i32,
             &mut minicells_core::Scratch::new(),
         )
         .map_err(|_| TrainerError::Runtime)?;
@@ -170,7 +250,7 @@ impl NativeTrainer {
             },
         );
         self.next_request_id = self.next_request_id.saturating_add(1);
-        self.host.results = vec![minus];
+        self.host.results = vec![minus.clone()];
         accumulate(&mut self.host, &mut AccumulateWorkspace::new())
             .map_err(|_| TrainerError::Runtime)?;
         let after = meta(&self.host);
@@ -182,10 +262,24 @@ impl NativeTrainer {
             .and_then(|b| {
                 minicells_protocol::HistoryV1::decode(b).map_err(|_| TrainerError::Runtime)
             })?;
-        let (selected_loss, selected_correct) = if history.plus_loss <= history.minus_loss {
-            (history.plus_loss, history.plus_correct)
+        let minus_result =
+            minicells_protocol::RefineResult::decode(&minus).map_err(|_| TrainerError::Runtime)?;
+        let (base_loss, base_correct_tokens) = match minus_result.body {
+            minicells_protocol::ResultBody::Training {
+                base_loss,
+                base_correct_tokens,
+                ..
+            } => (base_loss, base_correct_tokens),
+            _ => return Err(TrainerError::Runtime),
+        };
+        let decision = if history.updated != 0 {
+            if history.plus_loss < base_loss && history.plus_loss < history.minus_loss {
+                "plus"
+            } else {
+                "minus"
+            }
         } else {
-            (history.minus_loss, history.minus_correct)
+            "keep"
         };
         Ok(GenerationMetrics {
             backend: "native".into(),
@@ -193,11 +287,16 @@ impl NativeTrainer {
             parent_model_hash: format!("0x{}", hex::encode(parent)),
             next_model_hash: format!("0x{}", hex::encode(after.model_hash)),
             batch_digest: format!("0x{}", hex::encode(digest)),
+            base_loss,
+            base_correct_tokens,
             plus_loss: history.plus_loss,
+            plus_correct_tokens: history.plus_correct,
             minus_loss: history.minus_loss,
-            selected_loss,
-            selected_correct_tokens: selected_correct,
+            minus_correct_tokens: history.minus_correct,
+            retained_loss: after.current_eval_loss,
+            retained_correct_tokens: after.current_correct,
             total_tokens: history.tokens,
+            decision: decision.into(),
             updated: history.updated != 0,
             wall_clock_ms: start.elapsed().as_millis(),
         })
@@ -250,10 +349,11 @@ impl NativeTrainer {
         )
         .map_err(|_| TrainerError::Runtime)?;
         let mut next = model.clone();
-        let updated = minicells_core::optimizer::apply_update(
+        let decision = minicells_core::optimizer::apply_update(
             &mut next,
             &parent,
             generation,
+            before.current_eval_loss,
             plus.loss,
             minus.loss,
             before.update_step_q,
@@ -267,15 +367,22 @@ impl NativeTrainer {
         let mut after = before.clone();
         after.generation = after.generation.saturating_add(1);
         after.model_hash = next_hash;
-        after.current_eval_loss = plus.loss.min(minus.loss);
-        after.current_correct = if plus.loss <= minus.loss {
-            plus.correct_tokens
-        } else {
-            minus.correct_tokens
+        let (retained_loss, retained_correct) = match decision {
+            minicells_core::optimizer::UpdateDecision::Plus => (plus.loss, plus.correct_tokens),
+            minicells_core::optimizer::UpdateDecision::Minus => (minus.loss, minus.correct_tokens),
+            minicells_core::optimizer::UpdateDecision::Keep => {
+                (before.current_eval_loss, before.current_correct)
+            }
         };
+        after.current_eval_loss = retained_loss;
+        after.current_correct = retained_correct;
         after.current_tokens = plus.total_tokens;
-        after.successful_updates = after.successful_updates.saturating_add(updated as u64);
-        after.zero_diff_updates = after.zero_diff_updates.saturating_add((!updated) as u64);
+        after.successful_updates = after
+            .successful_updates
+            .saturating_add((decision != minicells_core::optimizer::UpdateDecision::Keep) as u64);
+        after.zero_diff_updates = after
+            .zero_diff_updates
+            .saturating_add((decision == minicells_core::optimizer::UpdateDecision::Keep) as u64);
         let history = minicells_protocol::HistoryV1 {
             generation: after.generation,
             parent_hash: parent,
@@ -285,7 +392,7 @@ impl NativeTrainer {
             plus_correct: plus.correct_tokens,
             minus_correct: minus.correct_tokens,
             tokens: plus.total_tokens,
-            updated: updated as u8,
+            updated: (decision != minicells_core::optimizer::UpdateDecision::Keep) as u8,
         };
         let mut history_bytes = [0u8; minicells_protocol::HistoryV1::LEN];
         let history_len = history
@@ -303,10 +410,10 @@ impl NativeTrainer {
         self.host
             .storage
             .insert(keys::META.to_vec(), meta_bytes[..meta_len].to_vec());
-        let (selected_loss, selected_correct) = if plus.loss <= minus.loss {
-            (plus.loss, plus.correct_tokens)
-        } else {
-            (minus.loss, minus.correct_tokens)
+        let decision_name = match decision {
+            minicells_core::optimizer::UpdateDecision::Plus => "plus",
+            minicells_core::optimizer::UpdateDecision::Minus => "minus",
+            minicells_core::optimizer::UpdateDecision::Keep => "keep",
         };
         Ok(GenerationMetrics {
             backend: "native-dataset".into(),
@@ -314,12 +421,17 @@ impl NativeTrainer {
             parent_model_hash: format!("0x{}", hex::encode(parent)),
             next_model_hash: format!("0x{}", hex::encode(next_hash)),
             batch_digest: selection.digest,
+            base_loss: before.current_eval_loss,
+            base_correct_tokens: before.current_correct,
             plus_loss: plus.loss,
+            plus_correct_tokens: plus.correct_tokens,
             minus_loss: minus.loss,
-            selected_loss,
-            selected_correct_tokens: selected_correct,
+            minus_correct_tokens: minus.correct_tokens,
+            retained_loss: after.current_eval_loss,
+            retained_correct_tokens: after.current_correct,
             total_tokens: plus.total_tokens,
-            updated,
+            decision: decision_name.into(),
+            updated: decision != minicells_core::optimizer::UpdateDecision::Keep,
             wall_clock_ms: start.elapsed().as_millis(),
         })
     }
@@ -346,7 +458,7 @@ impl NativeTrainer {
             "schema": "minicells.checkpoint.v1", "generation": generation,
             "dataset_root": self.dataset_root, "model_hash": format!("0x{}", hex::encode(self.model_hash())),
             "model_bytes": MODEL_BYTES, "protocol": "minicells-protocol-v1",
-            "optimizer": "SIGN-SPSA-Q8.8-v1"
+            "optimizer": "guarded-sign-spsa-v2"
         });
         fs::write(
             dir.join("checkpoint.json"),
@@ -441,7 +553,7 @@ pub fn run_persistent_native(
         target_generation,
         checkpoint_every,
         protocol: "minicells-protocol-v1".into(),
-        optimizer: "SIGN-SPSA-Q8.8-v1".into(),
+        optimizer: "guarded-sign-spsa-v2".into(),
         initial_loss: initial.0,
         initial_correct_tokens: initial.1,
         initial_total_tokens: initial.2,
@@ -473,7 +585,7 @@ pub fn run_persistent_native(
     final_manifest.final_generation = trainer.generation();
     final_manifest.final_model_hash = format!("0x{}", hex::encode(trainer.model_hash()));
     if let Some(last) = metrics.last() {
-        final_manifest.final_correct_tokens = last.selected_correct_tokens;
+        final_manifest.final_correct_tokens = last.retained_correct_tokens;
         final_manifest.final_total_tokens = last.total_tokens;
     }
     fs::write(
