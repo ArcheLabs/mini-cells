@@ -12,7 +12,7 @@ else
   fi
 fi
 test -f "${CLIENT}/service-toolchain/compiler/toolchain.lock"
-git -C "${CLIENT}" submodule update --init external/jambda
+git -C "${CLIENT}" submodule update --init external/jambda >&2
 RECORDED_JAMBDA_REF="$(git -C "${CLIENT}" ls-tree HEAD external/jambda | awk '{print $3}')"
 JAMBDA_ADAPTER_REF="${MINICELLS_JAMBDA_ADAPTER_REF:-f74de5325e0fe566b5b7e3f8eb4851173a937d76}"
 JAMBDA="${CLIENT}/external/jambda"
