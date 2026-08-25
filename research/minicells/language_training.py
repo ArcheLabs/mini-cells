@@ -9,11 +9,12 @@ import pandas as pd
 import torch
 from torch.nn import functional as F
 
-from .language_data import BatchSchedule, batch_from_starts
+from .language_data import BOS_TOKEN, EOS_TOKEN, PAD_TOKEN, UNK_TOKEN, BatchSchedule, batch_from_starts
 from .language_models import LanguageModelOutput
 
 
 CHECKPOINT_TOKENS = (125_000, 250_000, 500_000)
+GENERATION_SEED = 65005
 FIXED_PROMPTS = (
     "Once upon a time",
     "There was a little girl",
@@ -112,17 +113,28 @@ def generate_text(
     generator = torch.Generator(device=device)
     generator.manual_seed(seed)
     sequence = list(ids)
+    eos_id = tokenizer.token_to_id(EOS_TOKEN)
+    forbidden = {
+        token_id
+        for token in (PAD_TOKEN, UNK_TOKEN, BOS_TOKEN)
+        if (token_id := tokenizer.token_to_id(token)) is not None
+    }
     for _ in range(max_new_tokens):
         context = sequence[-max_context:]
         input_ids = torch.tensor([context], dtype=torch.long, device=device)
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
             logits = model(input_ids).logits[0, -1].float()
+        for token_id in forbidden:
+            logits[token_id] = -torch.inf
         logits = logits / temperature
         k = min(top_k, logits.numel())
         values, indices = torch.topk(logits, k=k)
         probabilities = torch.softmax(values, dim=-1)
         choice = torch.multinomial(probabilities, 1, generator=generator)
-        sequence.append(int(indices[choice].item()))
+        next_id = int(indices[choice].item())
+        if eos_id is not None and next_id == eos_id:
+            break
+        sequence.append(next_id)
     return tokenizer.decode(sequence, skip_special_tokens=True)
 
 
@@ -218,7 +230,7 @@ def train_language_model(
                     tokenizer,
                     prompt,
                     device=device,
-                    seed=seed + consumed + prompt_index,
+                    seed=GENERATION_SEED + consumed + prompt_index,
                     amp=amp,
                 )
                 generations.append(
