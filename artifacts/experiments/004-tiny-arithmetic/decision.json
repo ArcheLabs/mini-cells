@@ -1,0 +1,132 @@
+{
+  "format": "minicells.tiny-arithmetic.v1",
+  "experiment": "MINI Cells Experiment 004 \u2014 Tiny Arithmetic Capability",
+  "status": "NEEDS_ITERATION",
+  "diagnosis": "FLOAT_ARITHMETIC_CAPACITY_NOT_LEARNED",
+  "gates": {
+    "source_echo_solved": true,
+    "fp32_train_capacity": false,
+    "fp32_heldout_accuracy": 0.045454545454545456,
+    "q88_capacity_preserved": false,
+    "native_arithmetic_acquired": false,
+    "native_generalization_demonstrated": false
+  },
+  "source": {
+    "artifact": "artifacts/experiments/003b-quantization-localization/solved-q88-model.bin",
+    "sha256": "3503ce348a51e2c74d22b669956a65613dcfd101d9377e0f0036422b5884dbd8",
+    "model_hash": "4cb02f1674110a17fbc2d2d61310048481691afe0125391cfb3ca3b17ec9242c"
+  },
+  "initial": {
+    "echo": {
+      "token_accuracy": 1.0,
+      "exact_sequence_accuracy": 1.0,
+      "margin_loss_per_token": 0.0
+    },
+    "train_answer_accuracy": 0.0,
+    "heldout_answer_accuracy": 0.0
+  },
+  "fp32": {
+    "echo": {
+      "token_accuracy": 0.9878524462275716,
+      "exact_sequence_accuracy": 0.818359375
+    },
+    "train_answer_accuracy": 0.3522727272727273,
+    "heldout_answer_accuracy": 0.045454545454545456
+  },
+  "q88_bridge": {
+    "echo": {
+      "token_accuracy": 0.988186782569932,
+      "exact_sequence_accuracy": 0.818359375,
+      "margin_loss_per_token": 9.551877855789591
+    },
+    "train_answer_accuracy": 0.3522727272727273,
+    "heldout_answer_accuracy": 0.045454545454545456
+  },
+  "native_winner": {
+    "name": "block512-w4",
+    "generation": 0,
+    "metrics": {
+      "old_token_accuracy": 1.0,
+      "train_answer_accuracy": 0.0,
+      "heldout_answer_accuracy": 0.0,
+      "addition_answer_accuracy": 0.0,
+      "subtraction_answer_accuracy": 0.0
+    }
+  },
+  "native_runs": [
+    {
+      "name": "block512-w4",
+      "block_size": 512,
+      "arithmetic_weight": 4,
+      "generations_completed": 1600,
+      "accepted_updates": 596,
+      "accept_rate": 0.3725,
+      "seconds": 83.7209849357605,
+      "best_generation": 0,
+      "best": {
+        "old_token_accuracy": 1.0,
+        "train_answer_accuracy": 0.0,
+        "heldout_answer_accuracy": 0.0,
+        "addition_answer_accuracy": 0.0,
+        "subtraction_answer_accuracy": 0.0
+      }
+    },
+    {
+      "name": "block256-w4",
+      "block_size": 256,
+      "arithmetic_weight": 4,
+      "generations_completed": 1600,
+      "accepted_updates": 675,
+      "accept_rate": 0.421875,
+      "seconds": 80.30536723136902,
+      "best_generation": 0,
+      "best": {
+        "old_token_accuracy": 1.0,
+        "train_answer_accuracy": 0.0,
+        "heldout_answer_accuracy": 0.0,
+        "addition_answer_accuracy": 0.0,
+        "subtraction_answer_accuracy": 0.0
+      }
+    },
+    {
+      "name": "block128-w4",
+      "block_size": 128,
+      "arithmetic_weight": 4,
+      "generations_completed": 1600,
+      "accepted_updates": 274,
+      "accept_rate": 0.17125,
+      "seconds": 62.743727922439575,
+      "best_generation": 0,
+      "best": {
+        "old_token_accuracy": 1.0,
+        "train_answer_accuracy": 0.0,
+        "heldout_answer_accuracy": 0.0,
+        "addition_answer_accuracy": 0.0,
+        "subtraction_answer_accuracy": 0.0
+      }
+    },
+    {
+      "name": "block256-w8",
+      "block_size": 256,
+      "arithmetic_weight": 8,
+      "generations_completed": 1600,
+      "accepted_updates": 675,
+      "accept_rate": 0.421875,
+      "seconds": 79.00453066825867,
+      "best_generation": 0,
+      "best": {
+        "old_token_accuracy": 1.0,
+        "train_answer_accuracy": 0.0,
+        "heldout_answer_accuracy": 0.0,
+        "addition_answer_accuracy": 0.0,
+        "subtraction_answer_accuracy": 0.0
+      }
+    }
+  ],
+  "run": {
+    "fp32_steps": 1800,
+    "native_generations": 1600,
+    "fp32_device": "cuda",
+    "native_device": "cpu/int64"
+  }
+}

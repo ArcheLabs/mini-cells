@@ -1,0 +1,106 @@
+{
+  "diagnosis": "FLOAT_ARITHMETIC_CAPACITY_NOT_LEARNED",
+  "experiment_format": "minicells.tiny-arithmetic.v1",
+  "experiment_id": "004",
+  "files": [
+    {
+      "bytes": 3836,
+      "path": "decision.json",
+      "sha256": "13f7bd70cce9de60edd5eaba316382ca6ce77769337882d51ff662be7faafe08"
+    },
+    {
+      "bytes": 460,
+      "path": "task-spec.json",
+      "sha256": "309b7a08a961a10e57c3c69f49c1b0bfceb180cf5b1294838184df606341c211"
+    },
+    {
+      "bytes": 2784,
+      "path": "arithmetic-split.csv",
+      "sha256": "6041e4efa281d0ac1da8524e0ed50d71d7b042453dd587af2b0d993ced8070a6"
+    },
+    {
+      "bytes": 1528,
+      "path": "fp32-capacity.csv",
+      "sha256": "1c7873d5b046de639d5c5c5195d9fabf7eed262d67c60b009f3641eccaf7ff8d"
+    },
+    {
+      "bytes": 504,
+      "path": "native-summary.csv",
+      "sha256": "78a37af52bf36c576a3f4eee8575fda7f297291169e2bded0a8596d827b658ba"
+    },
+    {
+      "bytes": 1001,
+      "path": "native-block512-w4.csv",
+      "sha256": "301321faac2de4e6f91931d4ca238467145d0e69845e92de0f5d3ff9e5e1861a"
+    },
+    {
+      "bytes": 1028,
+      "path": "native-block256-w4.csv",
+      "sha256": "51c5e14c987a294f0c1fd636aeb4756f8bc333f21ad1cceaecb237505d814eb5"
+    },
+    {
+      "bytes": 894,
+      "path": "native-block128-w4.csv",
+      "sha256": "016fa6d2b4b33ea0110981fcb14162d428f43cb4e53258b53a8adbb81bd1ac99"
+    },
+    {
+      "bytes": 1028,
+      "path": "native-block256-w8.csv",
+      "sha256": "51c5e14c987a294f0c1fd636aeb4756f8bc333f21ad1cceaecb237505d814eb5"
+    },
+    {
+      "bytes": 8952,
+      "path": "fp32-arithmetic-q88-model.bin",
+      "sha256": "4abe74be80cc73a9253ed004ad1833218b9ff8c84b488d5d98d884b857c0c2fb"
+    },
+    {
+      "bytes": 8952,
+      "path": "best-native-arithmetic-q88-model.bin",
+      "sha256": "3503ce348a51e2c74d22b669956a65613dcfd101d9377e0f0036422b5884dbd8"
+    },
+    {
+      "bytes": 75031,
+      "path": "capacity-learning-curves.png",
+      "sha256": "1aa3ab921da92cbdd5e76563417e3d095b9b7766983a8607266ade4caa8ec0c9"
+    },
+    {
+      "bytes": 52024,
+      "path": "learning-curves.png",
+      "sha256": "71a59fa74b24601379897ae87a27132b196282067917875ffa78a13fa08d14a1"
+    },
+    {
+      "bytes": 41425,
+      "path": "retention-vs-capability.png",
+      "sha256": "4c99b1e63e5641daa3c04bfa5d1dbc6438ac36f5e4cce8610b1be75781eaad7f"
+    },
+    {
+      "bytes": 38710,
+      "path": "addition-heatmap.png",
+      "sha256": "66f4b98f99be80070d01cc5aa477105ada60967307ec52ef335677953622e012"
+    },
+    {
+      "bytes": 39832,
+      "path": "subtraction-heatmap.png",
+      "sha256": "eda27ed6755b8c14d0477ee831d0ddcff41f6eb7bd25e28d3d9bd7bc4e7531d3"
+    },
+    {
+      "bytes": 55366,
+      "path": "capability-summary.png",
+      "sha256": "c108cba3a2ea4063e71cdb142cd87c56427cfac531afbe7cd09d03db6e3f3138"
+    }
+  ],
+  "format": "minicells.experiment-publication.v1",
+  "kaggle": {
+    "kernel_run_type": "Interactive",
+    "script_version_id": null
+  },
+  "published_at_utc": "2026-08-25T09:38:43.573443+00:00",
+  "runtime": {
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13"
+  },
+  "source_branch": "main",
+  "source_commit": "cbbd35e97358e956d7839ebb974b4798c61e9d40",
+  "source_results_dir": "results/tiny-arithmetic-v1",
+  "status": "NEEDS_ITERATION"
+}

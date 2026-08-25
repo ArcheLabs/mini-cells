@@ -1,0 +1,14 @@
+{
+  "format": "minicells.tiny-arithmetic-task.v1",
+  "examples": 110,
+  "train_examples": 88,
+  "heldout_examples": 22,
+  "addition_rule": "a+b<=9, formatted as '<a>plus<b>?', answer at the ? cell",
+  "subtraction_rule": "a>=b, formatted as '<a>minus<b>?', answer at the ? cell",
+  "answer_vocabulary": "0123456789",
+  "random_digit_baseline": 0.1,
+  "split_seed": 4004,
+  "old_retention_gate": 0.95,
+  "native_train_gate": 0.8,
+  "native_heldout_gate": 0.5
+}
