@@ -27,11 +27,11 @@
     "dependency_portability": "PASS",
     "artifact_rebuild": "PASS",
     "artifact_provenance": "PASS_CODE_PATH_PENDING_CLEAN_BUILD",
-    "fresh_create_service": "BLOCKED_CASE_A_RUNTIME_VALIDATE_TRANSACTION_CODEC_PANIC",
+    "fresh_create_service": "BLOCKED_NOT_ACCEPTED_BY_TRANSACTION_POOL",
     "requester_scoped_preimage": "BLOCKED_NO_RECEIPT_DERIVED_ID",
     "rust_verification": "PASS",
     "web_verification": "PASS",
-    "fresh_service": "BLOCKED_EXTERNAL_RECEIPT",
+    "fresh_service": "BLOCKED_NOT_ACCEPTED_BY_TRANSACTION_POOL",
     "real_generation": "BLOCKED_EXTERNAL_RECEIPT_AND_WORKER",
     "python_validation": "BLOCKED_EXTERNAL_PACKAGE_ENV",
     "experiment_002_native_trainer": "PASS_0_TO_1000",
@@ -40,7 +40,7 @@
     "experiment_002_research_cli": "PASS",
     "experiment_002_local_pvm_host": "PASS_CHAIN_FREE_SERVICE_BLOB",
     "experiment_002_direct_pvm": "PASS_PLUS_MINUS_ACCUMULATE",
-    "experiment_002_native_pvm_parity": "PASS_STATUS_PLUS_MINUS_BYTE_EQUAL_ACCUMULATE_STORAGE_EQUAL"
+    "experiment_002_native_pvm_parity": "PASS_STATUS_PLUS_MINUS_BYTE_EQUAL_ACCUMULATE_STORAGE_YIELD_EQUAL_0_TO_1"
   },
   "definition_of_done": {
     "challenge_nonce_expiry_one_use": "PASS_TEST",
@@ -55,8 +55,8 @@
     "native_wasm_parity": "PASS_SHARED_KERNEL_AND_DETERMINISM",
     "pvm_parity": "PASS_DIRECT_SERVICE_STATUS_PLUS_MINUS",
     "absolute_paths_removed": "PASS",
-    "service_created_receipt": "BLOCKED_EXTERNAL_RECEIPT_TIMEOUT",
-    "fresh_service_submitted": "PASS_SUBMISSION_NO_RECEIPT",
+    "service_created_receipt": "BLOCKED_NO_INCLUDED_CREATE_SERVICE",
+    "fresh_service_submitted": "BLOCKED_NOT_ACCEPTED_BY_TRANSACTION_POOL",
     "fresh_meta_status": "BLOCKED_NO_RECEIPT_DERIVED_ID",
     "plus_minus_generation": "BLOCKED_EXTERNAL_WORKER_SIGNATURE",
     "gas_measurements": "BLOCKED_DEPENDS_ON_GENERATION",
@@ -66,7 +66,7 @@
     "experiment_002_native_arbitrary_generation": "PASS_1000_GENERATIONS",
     "experiment_002_metrics_jsonl": "PASS",
     "experiment_002_dataset_merkle_witness": "PASS_CODE_PATH",
-    "experiment_002_direct_pvm_plus_minus_accumulate": "PASS_CHAIN_FREE_JAMBDA_RUNNER"
+    "experiment_002_direct_pvm_plus_minus_accumulate": "PASS_CHAIN_FREE_JAMBDA_RUNNER_EXACT_NATIVE_STORAGE_YIELD_0_TO_1_PARITY"
   },
   "evidence": [
     "cargo test --offline --workspace: PASS",
@@ -76,13 +76,14 @@
     "fresh local --dev chain: create extrinsic included in block 8 with code hash 0xdc6cbd63efa6c1749fc12570a92949619bb8ebe604702823fb791580fe0532a1",
     "repaired deploy receipt wait: BLOCKED_EXTERNAL; correlation 0x3748334594aba778072163ef789abb7adf1667d9167b9c3d740ad9724d4c9a5e timed out after 60 seconds; no ServiceCreated receipt",
     "fresh service status-probe: NOT ATTEMPTED without a receipt-derived ID; direct worker previously reported processed=0",
-    "fresh clean-chain CreateService attempt 2026-08-25T035154Z: BLOCKED_CASE_A; genesis 0x05cc868745308c2718e08c3e4cd0cb9fc84796a5540fa575d3ceef670ee1e7f7, runtime validate_transaction panicked with Codec error before inclusion; evidence artifacts/deployments/2026-08-25T035154Z-create-service.json",
+    "fresh clean-chain CreateService attempt 2026-08-25T035154Z: historical stale-node BLOCKED_CASE_A; evidence remains append-only",
+    "fresh rebuilt CreateService attempt 2026-08-25T174343Z: rebuilt node 5909559283e059329747134ed1b397e3eaf5a41042439e43acaa22436db1fcc0, source 5947c50699863948c51028bc346980481d839884, runtime spec/tx 1/1, metadata sha256 0x4123d54d8e8042e5ba9028c737b2f7e315cae1f6e177ae721ba72bbd1cb9e18c, genesis 0x2ca98e8a7945e359bef272f7472150fd9bb0b02984b27aa592278ad111ce3451; author_submitExtrinsic returned a hash but no transaction was pending or included after 75s; evidence artifacts/deployments/2026-08-25T174343Z-create-service.json",
     "generation/gas/restart parity: BLOCKED_EXTERNAL_WORKER_SIGNATURE",
     "python install/test: BLOCKED_EXTERNAL_PACKAGE_ENV; pip upgrade hit ConnectTimeoutError for pypi.org; no result fabricated",
     "Experiment 002 native release run: PASS; 0->1000 generations, checkpoints every 250, 25.31 seconds wall clock",
     "Experiment 002 resume: PASS; uninterrupted 0->5 and resumed 0->3->5 final model hashes equal",
     "Experiment 002 dataset compiler: PASS; deterministic root/split/batch and Merkle proof tests",
-    "Experiment 002 direct PVM: PASS; real service.blob decoded/executed chain-free; status, PLUS, MINUS byte parity and accumulate storage effects verified"
+    "Experiment 002 direct PVM: PASS; real service.blob decoded/executed chain-free; status, PLUS, MINUS byte parity and exact ACCUMULATE storage/yield plus 0->1 generation parity verified"
   ],
   "artifacts": {
     "wasm_target": "wasm32-unknown-unknown",

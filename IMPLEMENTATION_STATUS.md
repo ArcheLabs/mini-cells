@@ -23,7 +23,7 @@ truth is [`artifacts/implementation-status.json`](artifacts/implementation-statu
 | Rust verification | PASS | `cargo test --offline --workspace` passed: core, protocol, simulator, chain, Keeper auth/model tests, and WASM ABI tests. |
 | Web verification | PASS | `npm test -- --run` passed (5 tests); `npm run build` passed with current WASM artifact. |
 | Python validation | BLOCKED_EXTERNAL | `python3 -m pip install --upgrade pip setuptools wheel` could not reach PyPI (`ConnectTimeoutError: pypi.org`); no Python result is claimed. |
-| Service receipt / fresh deployment | BLOCKED_CASE_A | Historical block-8 attempt remains preserved. A genuinely fresh chain (genesis `0x05cc868745308c2718e08c3e4cd0cb9fc84796a5540fa575d3ceef670ee1e7f7`) was used for the rebuilt artifact; runtime `validate_transaction` panicked with `Codec error` before CreateService inclusion, so no receipt or Service ID is claimed. Evidence is append-only under `artifacts/deployments/2026-08-25T035154Z-create-service.json`. |
+| Service receipt / fresh deployment | BLOCKED_NOT_ACCEPTED_BY_TRANSACTION_POOL | The historical stale-node codec attempt remains preserved. A brand-new chain using freshly rebuilt `minijam-node 0.1.0-5947c506998` returned the CreateService hash (`0xfa5c…`) but had no pending extrinsic, inclusion, or receipt after 75 seconds. Local exact codec and remote metadata fingerprints match; no Service ID is inferred. Evidence is append-only under `artifacts/deployments/2026-08-25T174343Z-create-service.json`. |
 | Worker / generation | BLOCKED_EXTERNAL | Because the canonical creation receipt never materialized, no receipt-derived Service ID exists for initialization. The available direct worker also reported `processed=0`; no PLUS/MINUS, 0→1, gas, multi-generation, or restart result is fabricated. |
 
 ## Commands and evidence
@@ -33,7 +33,7 @@ cargo test --offline --workspace                         PASS
 npm --prefix apps/web test -- --run                     PASS (5 tests)
 npm --prefix apps/web run build                         PASS
 ./tools/build_service.sh                                 PASS (69,414-byte blob)
-minicells deploy ...                                     BLOCKED_EXTERNAL_RECEIPT (60s timeout)
+fresh rebuilt CreateService against MiniJAM 5947c           BLOCKED_NOT_ACCEPTED_BY_TRANSACTION_POOL (hash returned; no inclusion/receipt)
 status-probe / worker finalization                       BLOCKED_EXTERNAL (no receipt-derived ID)
 ```
 
@@ -51,8 +51,8 @@ and the Keeper independently verifies the finalized model before serving it.
 | Research CLI | PASS | `minicells-lab dataset build/inspect`, `train`, `resume`, `evaluate`, `compare`, and `benchmark`; dataset-backed native training uses the compiled batch rather than silently falling back to synthetic data. |
 | Batch identity / protocol V2 groundwork | PASS_CODE_PATH | `BatchIdentityV1`, `PendingV2`, V2 pending keys, and dataset `BatchSelection`/Merkle proofs are additive; V1 synthetic wire vectors remain unchanged. Full guest V2 wiring is reserved for the direct executor adapter. |
 | Local PVM host surface | PASS | `minicells-pvm::LocalPvmHost` implements payload/results/storage/external-data/yield surfaces and drives the real converted `service/artifacts/service.blob` through Jambda's production `VmEngine`. |
-| Direct PVM PLUS/MINUS/ACCUMULATE | PASS | Chain-free Jambda execution covers refine at PC 0 and accumulate at PC 5; status, PLUS, MINUS, and accumulate host-state effects are exercised against the tracked service artifact. |
-| Native ↔ PVM parity | PASS | Status, PLUS, and MINUS outputs match the production native `minicells-runtime` byte-for-byte for genesis state; accumulate is verified through matching storage effects. |
+| Direct PVM PLUS/MINUS/ACCUMULATE | PASS | Chain-free Jambda execution covers refine at PC 0 and accumulate at PC 5; status, PLUS, MINUS, exact accumulate storage/yield, and a full 0→1 transition are exercised against the tracked service artifact. |
+| Native ↔ PVM parity | PASS | Status, PLUS, and MINUS outputs match the production native `minicells-runtime` byte-for-byte; ACCUMULATE matches exact storage/yield state and final META/MODEL/history for genesis→generation 1. |
 
 Experiment 002 commands:
 

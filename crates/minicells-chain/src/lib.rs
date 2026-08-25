@@ -48,8 +48,13 @@ pub enum ChainError {
     ServiceCreateRejected(u32),
     #[error("unexpected service creation receipt")]
     UnexpectedSystemReceipt,
-    #[error("timed out waiting for service creation receipt (correlation 0x{0})")]
-    SystemOpTimeout(String),
+    #[error(
+        "timed out waiting for service creation receipt (extrinsic 0x{extrinsic_hash}, correlation 0x{correlation})"
+    )]
+    SystemOpTimeout {
+        extrinsic_hash: String,
+        correlation: String,
+    },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -225,9 +230,10 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
             }
             tokio::time::sleep(self.poll_interval).await;
         }
-        Err(ChainError::SystemOpTimeout(hex::encode(
-            submission.correlation,
-        )))
+        Err(ChainError::SystemOpTimeout {
+            extrinsic_hash: hex::encode(submission.extrinsic_hash),
+            correlation: hex::encode(submission.correlation),
+        })
     }
 
     pub async fn finalized_context(&self) -> Result<FinalizedContext, ChainError> {

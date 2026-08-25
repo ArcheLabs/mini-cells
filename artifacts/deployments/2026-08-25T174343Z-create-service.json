@@ -1,0 +1,44 @@
+{
+  "format": "minicells.deployment-evidence.v1",
+  "attempt_id": "fresh-rebuilt-chain-2026-08-25T174343Z",
+  "started_at": "2026-08-25T174343Z",
+  "mini_cells_source_ref": "c4e61a24f389cfbfb74dfdfc3ad2027dce2d9147",
+  "service_code_hash": "0x6f3624a68b7c8fbbc7d4be12dce447ceb284459eb0cff4bdaadd8dcdc40739b0",
+  "service_blob_bytes": 69414,
+  "minijam_source_ref": "5947c50699863948c51028bc346980481d839884",
+  "jambda_ref": "e52307a726868205a151e6917a0a70a79965a028",
+  "node_binary_sha256": "0x5909559283e059329747134ed1b397e3eaf5a41042439e43acaa22436db1fcc0",
+  "node_build_ref": "5947c50699863948c51028bc346980481d839884",
+  "node_reported_version": "minijam-node 0.1.0-5947c506998",
+  "runtime_spec_version": 1,
+  "transaction_version": 1,
+  "runtime_metadata_sha256": "0x4123d54d8e8042e5ba9028c737b2f7e315cae1f6e177ae721ba72bbd1cb9e18c",
+  "chain_genesis_hash": "0x2ca98e8a7945e359bef272f7472150fd9bb0b02984b27aa592278ad111ce3451",
+  "startup": "/home/libingjiang/minijam-client/target/release/minijam-node --dev --base-path <fresh-temp-dir> --rpc-port 9950 --no-telemetry --no-prometheus",
+  "requester": "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d",
+  "requester_secret_uri": "//Alice (public development key; no secret material committed)",
+  "create_extrinsic_hash": "0xfa5ca13fb0d79cac31c28a3420e9f4b619eead7c3a98ced1d74cbaa399aff0e1",
+  "create_correlation": "0xbaa4bcf5d8480191b748b778efb1856ad144a9c97c329fb0b390d6a37808a6da",
+  "included_block": null,
+  "system_op_observations": [
+    {
+      "stage": "author_submitExtrinsic",
+      "result": "hash_returned",
+      "extrinsic_hash": "0xfa5ca13fb0d79cac31c28a3420e9f4b619eead7c3a98ced1d74cbaa399aff0e1"
+    },
+    {
+      "stage": "transaction_pool",
+      "result": "not_pending_after_submission_and_not_included_after_75_seconds",
+      "pending_extrinsics": [],
+      "pending_system_ops": "0x00",
+      "pending_preimages": "0x00"
+    }
+  ],
+  "receipt_presence": false,
+  "receipt_block": null,
+  "service_created": false,
+  "service_id": null,
+  "requester_scoped_preimage_verified": false,
+  "result": "blocked_not_accepted_by_transaction_pool",
+  "notes": "Fresh rebuilt 5947c node. Local exact CreateService extrinsic decodes/re-encodes and remote metadata matches the local runtime fingerprint. No Codec error was emitted; the transaction hash was returned but no pool inclusion or receipt occurred, so no Service ID was inferred."
+}

@@ -145,7 +145,10 @@ impl HostCallTrait<InterpRegister, InnerInterpMemory> for LocalPvmHost {
                     .memory
                     .write_bytes(ptr, &remaining[..copy_len])
                     .map_err(|_| VmError::Panic)?;
-                set_result(state, remaining.len() as u64);
+                // FETCH returns the full item length even when an offset/length
+                // window was requested.  The SDK uses this to validate the
+                // second half of minijam_result.
+                set_result(state, item.len() as u64);
             }
             HOST_READ => {
                 let key_ptr = arg(8) as u32;
@@ -287,8 +290,72 @@ impl DirectPvmHarness {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use minicells_protocol::{Op, WorkBody, WorkPayload};
-    use minicells_runtime::{genesis::GENESIS_MODEL_HASH, refine, RefineWorkspace};
+    use minicells_protocol::{keys, Op, RefineResult, ResultBody, WorkBody, WorkPayload};
+    use minicells_runtime::{
+        accumulate, ensure_initialized, genesis::GENESIS_MODEL_HASH, refine, AccumulateWorkspace,
+        RefineWorkspace,
+    };
+
+    fn artifact_path() -> PathBuf {
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../service/artifacts/service.blob")
+    }
+
+    fn harness() -> DirectPvmHarness {
+        DirectPvmHarness::load(
+            artifact_path(),
+            100_000_000,
+            "5947c50699863948c51028bc346980481d839884",
+            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        )
+        .expect("tracked service artifact")
+    }
+
+    fn training_result(op: Op, request_id: u64, side: i8, loss: i64) -> Vec<u8> {
+        let result = RefineResult {
+            op,
+            status: 0,
+            request_id,
+            generation: 0,
+            model_hash: GENESIS_MODEL_HASH,
+            body: ResultBody::Training {
+                side,
+                loss,
+                correct_tokens: 7,
+                total_tokens: 16,
+                eval_digest: [request_id as u8; 32],
+            },
+        };
+        let mut encoded = [0; 160];
+        let size = result
+            .encode_into(&mut encoded)
+            .expect("training result codec");
+        encoded[..size].to_vec()
+    }
+
+    fn packed_result(payload: &[u8]) -> Vec<u8> {
+        // MiniJAM's accumulation operand is the four-hash/gas envelope that
+        // the SDK unwraps before handing the payload to RefineResult::decode.
+        let mut item = vec![0; 1 + 4 * 32];
+        item.push(0); // fnencode(gas)
+        item.push(0); // refine result marker
+        item.push(payload.len() as u8); // fnencode(payload_len)
+        item.extend_from_slice(payload);
+        item
+    }
+
+    fn assert_storage_equal(native: &LocalPvmHost, pvm: &LocalPvmHost) {
+        for key in native.storage.keys().chain(pvm.storage.keys()) {
+            if native.storage.get(key) != pvm.storage.get(key) {
+                eprintln!(
+                    "storage mismatch key={:?} native_len={:?} pvm_len={:?}",
+                    String::from_utf8_lossy(key),
+                    native.storage.get(key).map(Vec::len),
+                    pvm.storage.get(key).map(Vec::len)
+                );
+            }
+        }
+        assert_eq!(native.storage, pvm.storage);
+    }
     #[test]
     fn local_host_preserves_jam_surface() {
         let mut host = LocalPvmHost::default();
@@ -303,15 +370,7 @@ mod tests {
 
     #[test]
     fn service_pvm_matches_native_runtime_for_status_probe() {
-        let artifact =
-            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../service/artifacts/service.blob");
-        let mut harness = DirectPvmHarness::load(
-            &artifact,
-            10_000_000,
-            "5947c50699863948c51028bc346980481d839884",
-            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
-        )
-        .expect("tracked service artifact");
+        let mut harness = harness();
         let work = WorkPayload {
             op: Op::StatusProbe,
             flags: 0,
@@ -335,16 +394,8 @@ mod tests {
 
     #[test]
     fn service_pvm_matches_native_runtime_for_plus_and_minus() {
-        let artifact =
-            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../service/artifacts/service.blob");
         for op in [Op::TrainPlus, Op::TrainMinus] {
-            let mut harness = DirectPvmHarness::load(
-                &artifact,
-                100_000_000,
-                "5947c50699863948c51028bc346980481d839884",
-                "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
-            )
-            .expect("tracked service artifact");
+            let mut harness = harness();
             let work = WorkPayload {
                 op,
                 flags: 0,
@@ -372,16 +423,92 @@ mod tests {
 
     #[test]
     fn service_pvm_accumulate_entry_is_chain_free() {
-        let artifact =
-            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../service/artifacts/service.blob");
-        let mut harness = DirectPvmHarness::load(
-            &artifact,
-            100_000_000,
-            "5947c50699863948c51028bc346980481d839884",
-            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
-        )
-        .expect("tracked service artifact");
+        let mut harness = harness();
         harness.execute_accumulate().expect("PVM accumulate");
         assert!(!harness.host.storage.is_empty());
+    }
+
+    #[test]
+    fn service_pvm_accumulate_matches_native_storage_and_yield() {
+        let plus = training_result(Op::TrainPlus, 11, 1, 100);
+        let minus = training_result(Op::TrainMinus, 12, -1, 110);
+
+        let mut native = LocalPvmHost::default();
+        ensure_initialized(&mut native).expect("native genesis");
+        native.results = vec![plus.clone(), minus.clone()];
+        let mut native_workspace = AccumulateWorkspace::new();
+        accumulate(&mut native, &mut native_workspace).expect("native accumulate");
+        // This is the service ABI acknowledgement emitted by minijam_accumulate.
+        native.yields.push(vec![0; 32]);
+
+        let mut pvm = harness();
+        ensure_initialized(&mut pvm.host).expect("PVM genesis");
+        pvm.host.results = vec![packed_result(&plus), packed_result(&minus)];
+        pvm.execute_accumulate().expect("PVM accumulate");
+
+        assert_storage_equal(&native, &pvm.host);
+        assert_eq!(native.yields, pvm.host.yields);
+        let meta = native.storage.get(keys::META).expect("META");
+        let model = native.storage.get(keys::MODEL).expect("MODEL");
+        assert!(!model.is_empty());
+        assert!(native.storage.contains_key(keys::history_key(0).as_slice()));
+        assert!(!native.storage.contains_key(keys::PENDING_PLUS));
+        assert!(!native.storage.contains_key(keys::PENDING_MINUS));
+        assert_eq!(meta, pvm.host.storage.get(keys::META).expect("PVM META"));
+    }
+
+    #[test]
+    fn service_pvm_matches_native_full_zero_to_one_transition() {
+        let mut native = LocalPvmHost::default();
+        ensure_initialized(&mut native).expect("native genesis");
+        let mut native_refine_workspace = RefineWorkspace::new();
+        let mut pvm = harness();
+        ensure_initialized(&mut pvm.host).expect("PVM genesis");
+
+        for (request_id, op) in [(21, Op::TrainPlus), (22, Op::TrainMinus)] {
+            let work = WorkPayload {
+                op,
+                flags: 0,
+                request_id,
+                body: WorkBody::Train {
+                    generation: 0,
+                    parent_model_hash: GENESIS_MODEL_HASH,
+                },
+            };
+            let mut payload = [0u8; 96];
+            let payload_len = work.encode_into(&mut payload).expect("encode work");
+            native.payload = payload[..payload_len].to_vec();
+            let mut native_output = [0u8; 160];
+            let native_len = refine(
+                &mut native,
+                &mut native_refine_workspace,
+                &mut native_output,
+            )
+            .expect("native refine");
+            let pvm_output = pvm
+                .execute_refine(&payload[..payload_len])
+                .expect("PVM refine");
+            assert_eq!(&pvm_output, &native_output[..native_len], "op={op:?}");
+            native.results.push(native_output[..native_len].to_vec());
+            pvm.host.results.push(packed_result(&pvm_output));
+        }
+
+        let mut native_accumulate_workspace = AccumulateWorkspace::new();
+        accumulate(&mut native, &mut native_accumulate_workspace).expect("native accumulate");
+        native.yields.push(vec![0; 32]);
+        pvm.execute_accumulate().expect("PVM accumulate");
+
+        assert_storage_equal(&native, &pvm.host);
+        assert_eq!(native.yields, pvm.host.yields);
+        let native_meta = native.storage.get(keys::META).expect("native META");
+        let pvm_meta = pvm.host.storage.get(keys::META).expect("PVM META");
+        assert_eq!(native_meta, pvm_meta);
+        assert_eq!(
+            native.storage.get(keys::MODEL),
+            pvm.host.storage.get(keys::MODEL)
+        );
+        assert!(native.storage.contains_key(keys::history_key(0).as_slice()));
+        assert!(!native.storage.contains_key(keys::PENDING_PLUS));
+        assert!(!native.storage.contains_key(keys::PENDING_MINUS));
     }
 }
