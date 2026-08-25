@@ -198,11 +198,19 @@ fn print_deployed_service(service: &DeployedService) {
 
 fn deployed_service_output(service: &DeployedService) -> String {
     format!(
-        "Service created\nService ID: {}\nCode hash: 0x{}\nExtrinsic: 0x{}\nCreate correlation: 0x{}\nSet MINICELLS_SERVICE_ID={} for subsequent commands",
+        "Service created\nService ID: {}\nCode hash: 0x{}\nExtrinsic: 0x{}\nCreate correlation: 0x{}\nIncluded block: {}\nExtrinsic index: {}\nSet MINICELLS_SERVICE_ID={} for subsequent commands",
         service.service_id,
         hex::encode(service.code_hash),
         hex::encode(service.create_extrinsic_hash),
         hex::encode(service.create_correlation),
+        service
+            .create_included_block
+            .map(|hash| format!("0x{}", hex::encode(hash)))
+            .unwrap_or_else(|| "unknown".into()),
+        service
+            .create_extrinsic_index
+            .map(|index| index.to_string())
+            .unwrap_or_else(|| "unknown".into()),
         service.service_id
     )
 }
@@ -380,6 +388,8 @@ mod tests {
             code_hash: [2; 32],
             create_extrinsic_hash: [3; 32],
             create_correlation: [4; 32],
+            create_included_block: Some([5; 32]),
+            create_extrinsic_index: Some(0),
         });
         assert!(output.contains("Service ID: 42"));
         assert!(output.contains("Set MINICELLS_SERVICE_ID=42"));

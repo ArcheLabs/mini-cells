@@ -117,6 +117,8 @@ pub struct DeployedService {
     pub code_hash: Hash,
     pub create_extrinsic_hash: Hash,
     pub create_correlation: Hash,
+    pub create_included_block: Option<Hash>,
+    pub create_extrinsic_index: Option<u32>,
 }
 
 fn classify_service_receipt(receipt: SystemReceiptV2) -> Result<u32, ChainError> {
@@ -239,6 +241,14 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
                     code_hash,
                     create_extrinsic_hash: submission.extrinsic_hash,
                     create_correlation: submission.correlation,
+                    create_included_block: submission
+                        .lifecycle
+                        .as_ref()
+                        .and_then(|lifecycle| lifecycle.included_block),
+                    create_extrinsic_index: submission
+                        .lifecycle
+                        .as_ref()
+                        .and_then(|lifecycle| lifecycle.included_extrinsic_index),
                 });
             }
             tokio::time::sleep(self.poll_interval).await;
