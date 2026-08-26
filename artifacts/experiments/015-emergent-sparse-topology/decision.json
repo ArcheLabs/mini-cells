@@ -1,0 +1,125 @@
+{
+  "controls": {
+    "A": {
+      "edge_mi_significant_replicates": 0,
+      "logical_active_fraction": 1.0,
+      "mean_composition_reuse_margin": 0.0,
+      "mean_functional_specific_rows": 0.3333333333333333,
+      "mean_nll_geomean": 0.8874113043818329,
+      "mean_token_accuracy": 0.654,
+      "region_mi_significant_replicates": 0
+    },
+    "B": {
+      "edge_mi_significant_replicates": 0,
+      "logical_active_fraction": 0.37500003290673095,
+      "mean_composition_reuse_margin": -0.00010827482948662217,
+      "mean_functional_specific_rows": 1.0,
+      "mean_nll_geomean": 0.9423871435579345,
+      "mean_token_accuracy": 0.6271666666666665,
+      "region_mi_significant_replicates": 2
+    },
+    "C": {
+      "edge_mi_significant_replicates": 2,
+      "logical_active_fraction": 0.37500003290673095,
+      "mean_composition_reuse_margin": -5.324905666130123e-05,
+      "mean_functional_specific_rows": 6.333333333333333,
+      "mean_nll_geomean": 1.3080855748309999,
+      "mean_token_accuracy": 0.43933333333333335,
+      "region_mi_significant_replicates": 2
+    }
+  },
+  "corpus": {
+    "base_tasks": [
+      "REVERSE",
+      "ROTATE",
+      "INC",
+      "SWAP"
+    ],
+    "composition_map": {
+      "INC_SWAP": [
+        "INC",
+        "SWAP"
+      ],
+      "REVERSE_INC": [
+        "REVERSE",
+        "INC"
+      ],
+      "REVERSE_ROTATE": [
+        "REVERSE",
+        "ROTATE"
+      ],
+      "REVERSE_SWAP": [
+        "REVERSE",
+        "SWAP"
+      ],
+      "ROTATE_INC": [
+        "ROTATE",
+        "INC"
+      ],
+      "ROTATE_SWAP": [
+        "ROTATE",
+        "SWAP"
+      ]
+    },
+    "kind": "deterministic synthetic multi-skill autoregressive corpus",
+    "loss_scope": "transformed output tokens + EOS"
+  },
+  "design": {
+    "active_latent": 2,
+    "dynamic_edge_router_parameters": 0,
+    "dynamic_edges_same_token_position_only": true,
+    "equal_parameterization_across_variants": true,
+    "fixed_coordinate_buffer": true,
+    "gpu_count": 2,
+    "models_total": 9,
+    "replicates": 3,
+    "tissue_height": 8,
+    "tokens_per_model": 960000,
+    "trainable_row_embedding": false,
+    "variants": {
+      "A": "dense local tissue",
+      "B": "top-2 latent sparse local tissue",
+      "C": "top-2 latent sparse tissue + state-derived top-1 long-range source per receiver"
+    }
+  },
+  "dynamic_C": {
+    "composition_reuse_replicates": 0,
+    "edge_mi_signal_replicates": 2,
+    "functional_ablation_replicates": 3,
+    "logical_sparsity_replicates": 3,
+    "nll_ratio_to_dense_A_geometric_mean": 1.4740465535789034,
+    "pass_flags": {
+      "composition_reuse": false,
+      "functional_ablation": true,
+      "logical_sparsity": true,
+      "quality": false,
+      "task_edge_routing": true,
+      "task_region_specialization": true
+    },
+    "region_mi_signal_replicates": 2
+  },
+  "experiment": "MINI Cells Experiment 015 \u2014 Emergent Sparse Tissue Topology",
+  "format": "minicells.language-sparse-topology.v1",
+  "interpretation": {
+    "fail": "Do not add growth or transplantation until specialization/routing is made reproducible.",
+    "partial": "Some specialization/routing signal exists but one or more required properties are missing.",
+    "pass": "Evidence that sparse expert-like functional topology can emerge from shared cellular rules. It is not yet evidence for tissue transplantation, birth/death, or unbounded growth."
+  },
+  "pre_registered_signal": {
+    "composition_reuse": "mean true-component reuse margin versus best wrong pair > 0",
+    "dynamic_C_nll_ratio_to_dense_A_max": 1.1,
+    "functional_ablation": "at least one row with delta NLL >=0.02 and specificity >=1.5",
+    "logical_active_fraction_max": 0.4,
+    "minimum_signal_replicates": 2,
+    "task_edge_mi": "observed > label-shuffled p99",
+    "task_region_mi": "observed > label-shuffled p99"
+  },
+  "question": "Can a homogeneous cellular language tissue develop task-dependent sparse regions and dynamic region-to-region routing without predefined experts?",
+  "source_recipe": {
+    "experiment": "014-multiseed-core-recipe",
+    "random_depth": true,
+    "stability_weight": 0.1,
+    "step_embedding_init_scale": 1.0
+  },
+  "status": "PARTIAL_TOPOLOGY_SIGNAL"
+}
