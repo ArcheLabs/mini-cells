@@ -97,6 +97,8 @@ def collect() -> dict[str, object]:
         for key in keys:
             frame = read_csv(OUT / f"r{replicate}-{key}.csv")
             if not frame.empty:
+                if key == "structural-events" and "replicate" in frame.columns:
+                    frame["replicate"] = frame["replicate"].fillna(replicate).astype(int)
                 frames[key].append(frame)
     result: dict[str, object] = {"workers": workers, "summary": pd.DataFrame(summary_rows)}
     for key, parts in frames.items():
@@ -249,6 +251,8 @@ def make_decision(summary: pd.DataFrame, ablation: pd.DataFrame, gpu_count: int)
         l = group.loc["L"]
         paired.append({
             "replicate": replicate,
+            "baseline_skill_improvement": float(b["skill_improvement"]),
+            "localized_skill_improvement": float(l["skill_improvement"]),
             "localized_over_baseline_skill_improvement": float(l["skill_improvement"] / max(1e-12, b["skill_improvement"])),
             "baseline_language_ratio": float(b["donor_language_ratio"]),
             "localized_language_ratio": float(l["donor_language_ratio"]),
@@ -260,7 +264,7 @@ def make_decision(summary: pd.DataFrame, ablation: pd.DataFrame, gpu_count: int)
         })
     paired_frame = pd.DataFrame(paired)
     paired_frame.to_csv(OUT / "paired-policy-comparisons.csv", index=False)
-    skill_reps = int(((paired_frame["localized_over_baseline_skill_improvement"] >= 0.60)).sum())
+    skill_reps = int(((paired_frame["localized_skill_improvement"] > 0) & (paired_frame["localized_over_baseline_skill_improvement"] >= 0.60)).sum())
     retention_reps = int((paired_frame["localized_language_ratio"] <= 1.10).sum())
     retention_better_reps = int((paired_frame["localized_language_ratio"] < paired_frame["baseline_language_ratio"]).sum())
     stable_reps = int((paired_frame["localized_base_memory_drift"] <= 1e-6).sum())
@@ -304,6 +308,7 @@ def make_decision(summary: pd.DataFrame, ablation: pd.DataFrame, gpu_count: int)
             "gpu_count": gpu_count,
         },
         "pre_registered_signal": {
+            "localized_skill_improvement_must_be_positive": True,
             "localized_skill_improvement_fraction_of_baseline_min": 0.60,
             "donor_language_ratio_max": 1.10,
             "recipient_language_ratio_max": 1.10,
