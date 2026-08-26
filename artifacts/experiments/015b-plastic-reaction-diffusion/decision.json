@@ -1,0 +1,98 @@
+{
+  "design": {
+    "activity_budget": 3.0,
+    "activity_momentum": 0.25,
+    "balance_loss": false,
+    "controlled_backbone": "The existing three recurrent stage parameter sets and step embeddings are retained; homogeneity here means no cell/row/expert-specific learned rule within a stage.",
+    "gpu_count": 2,
+    "models_total": 6,
+    "nonlocal_prior": 0.25,
+    "plasticity": "co-active reaction similarity -> multiplicative Hebbian growth -> row homeostasis",
+    "plasticity_rate": 0.25,
+    "reaction_diffusion": "h <- h + saturating_activity * (local_reaction + W(h_neighbor-h))",
+    "replicates": 3,
+    "router_parameters": 0,
+    "shared_initialization": "D copies all shape-compatible B tensors before training",
+    "synaptic_budget": 0.25,
+    "tissue_height": 8,
+    "tokens_per_model": 960000,
+    "top_k": false,
+    "trainable_connectome": false,
+    "variants": {
+      "B": "Experiment-015 sparse-local control",
+      "D": "plastic reaction-diffusion tissue"
+    }
+  },
+  "experiment": "MINI Cells Experiment 015b \u2014 Plastic Reaction-Diffusion Tissue",
+  "format": "minicells.language-plastic-reaction-diffusion.v1",
+  "observability": {
+    "activity_dynamics": "activity-dynamics.png",
+    "connectome_dynamics": "connectome-dynamics.png",
+    "final_connectome_heatmap": "final-connectome-heatmap.png",
+    "final_node_topology": "final-node-topology.png",
+    "machine_readable": [
+      "activity.csv",
+      "connectome.csv",
+      "final-activity.csv",
+      "final-connectome.csv",
+      "dynamics.csv",
+      "interventions.csv",
+      "ablation.csv"
+    ],
+    "reaction_diffusion_dynamics": "reaction-diffusion-dynamics.png",
+    "task_topology_atlas": "task-node-topology-atlas.png"
+  },
+  "pre_registered_signal": {
+    "D_over_B_nll_geomean_max": 1.05,
+    "causal_plasticity": "normal beats plasticity-off with paired bootstrap 95% lower > 0",
+    "causal_routing": "normal beats diffusion-off and connectome-shuffled with paired bootstrap 95% lower > 0",
+    "depth_robustness_D_over_B_max": 1.15,
+    "minimum_signal_replicates": 2,
+    "per_seed_D_over_B_nll_max": 1.1,
+    "task_activity_mi": "observed > label-shuffled p99",
+    "task_connectome_mi": "observed > label-shuffled p99"
+  },
+  "question": "Can homogeneous tissue cells within the existing three-stage CLM backbone, using only resource-constrained activity and a plastic reaction-diffusion connectome, produce stable, causally useful topology without expert-specific parameters, a router, hard top-k gate, or load-balancing loss?",
+  "results": {
+    "D_over_B_depth_robustness_geometric_mean": 0.982632777272771,
+    "D_over_B_nll_geometric_mean": 1.1901188032255663,
+    "D_over_B_nll_ratios": [
+      1.0817732804498266,
+      1.0931073453045503,
+      1.4255153156451221
+    ],
+    "connectome_shuffled_causal_replicates": 3,
+    "diffusion_off_causal_replicates": 3,
+    "mean_connectome_change_l1": 0.0021602576598525047,
+    "mean_diffusion_to_reaction": 0.783478104405933,
+    "mean_effective_active_fraction": 0.9357025424639384,
+    "mean_final_nonlocal_mass": 0.42644567290941876,
+    "pass_flags": {
+      "causal_diffusion_routing": true,
+      "causal_plasticity": true,
+      "depth_stability": true,
+      "quality": false,
+      "task_activity_specialization": true,
+      "task_connectome_specialization": true
+    },
+    "plasticity_off_causal_replicates": 3,
+    "task_activity_signal_replicates": 3,
+    "task_connectome_signal_replicates": 3
+  },
+  "scope": {
+    "claim": "transient plastic functional topology only",
+    "not_claimed": [
+      "persistent long-term cellular memory",
+      "skill transplantation",
+      "birth/death",
+      "unbounded growth",
+      "clean zero-shot capability composition",
+      "one globally time-homogeneous rule across all three existing stages"
+    ]
+  },
+  "source_experiment": {
+    "experiment": "015-emergent-sparse-topology",
+    "reason": "015 showed specialization and routing signals but destructive dynamic messages."
+  },
+  "status": "PLASTIC_TOPOLOGY_DESTABILIZING"
+}
