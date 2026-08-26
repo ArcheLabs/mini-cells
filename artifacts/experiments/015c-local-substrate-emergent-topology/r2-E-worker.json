@@ -1,0 +1,116 @@
+{
+  "ablation": {
+    "functional_specific_rows": 6,
+    "specific_rows": [
+      {
+        "delta_nll": 0.03941161836896623,
+        "row": 2,
+        "specificity": 5.494584148685372,
+        "task": "REVERSE_ROTATE"
+      },
+      {
+        "delta_nll": 0.1563114241191319,
+        "row": 3,
+        "specificity": 3.0228769795254316,
+        "task": "REVERSE_ROTATE"
+      },
+      {
+        "delta_nll": 0.04206822940281463,
+        "row": 4,
+        "specificity": 7.015341892446795,
+        "task": "REVERSE_ROTATE"
+      },
+      {
+        "delta_nll": 0.05037479298455372,
+        "row": 5,
+        "specificity": 5.6232467446008565,
+        "task": "REVERSE_ROTATE"
+      },
+      {
+        "delta_nll": 0.07882569619587487,
+        "row": 6,
+        "specificity": 2.4623922119915864,
+        "task": "REVERSE_ROTATE"
+      },
+      {
+        "delta_nll": 0.050998804228646444,
+        "row": 7,
+        "specificity": 3.975593395022836,
+        "task": "REVERSE_ROTATE"
+      }
+    ]
+  },
+  "activity_budget": 3.0,
+  "activity_rate": 0.5,
+  "avg_recurrent_iterations": 8.941,
+  "bootstrap_seed": 84015,
+  "depth_seed": 44015,
+  "format": "minicells.local-substrate-emergent-topology-worker.v1",
+  "interventions": {
+    "local_diffusion_off": {
+      "bootstrap_95_lower": 0.36406593494117256,
+      "bootstrap_95_upper": 0.3901306717276573,
+      "mean_delta_nll": 0.377420381963253,
+      "positive_fraction": 0.989
+    },
+    "plastic_diffusion_off": {
+      "bootstrap_95_lower": -2.168619781732559e-05,
+      "bootstrap_95_upper": 0.0005553565271198746,
+      "mean_delta_nll": 0.000260893851518631,
+      "positive_fraction": 0.518
+    },
+    "plasticity_off": {
+      "bootstrap_95_lower": -1.664060279726982e-05,
+      "bootstrap_95_upper": 0.0005545689463615414,
+      "mean_delta_nll": 0.000260893851518631,
+      "positive_fraction": 0.518
+    },
+    "topology_shuffled": {
+      "bootstrap_95_lower": -5.40508508682251e-05,
+      "bootstrap_95_upper": 0.00014009334966540336,
+      "mean_delta_nll": 4.298990964889526e-05,
+      "positive_fraction": 0.515
+    }
+  },
+  "local_coupling": 0.08,
+  "long_range_max_coupling": 0.08,
+  "mean_exact_match": 0.08900000000000001,
+  "mean_nll": 0.7858240938186645,
+  "mean_token_accuracy": 0.7005000000000001,
+  "model_seed": 74015,
+  "null_seed": 64015,
+  "parameters": 902016,
+  "peak_vram_bytes": 1119532032,
+  "plasticity_rate": 0.75,
+  "replicate": 2,
+  "run": "r2-E",
+  "schedule_seed": 34015,
+  "seconds_per_million_tokens": 84.14675734999832,
+  "tokens": 960000,
+  "topology": {
+    "effective_active_fraction": 0.4214307963848114,
+    "final_activity_entropy": 0.7188079953193665,
+    "final_mean_plastic_strength": 0.005291857291013002,
+    "final_plastic_entropy": 0.9052128791809082,
+    "final_plastic_tv": 0.20281562209129333,
+    "mean_plastic_to_reaction": 0.024407500202263083,
+    "plastic_distribution_change_l1": 0.035554416477680206,
+    "task_activity_mi": {
+      "empirical_p": 0.000999000999000999,
+      "null_mean": 0.0001494220882749875,
+      "null_p95": 0.00023302830073528558,
+      "null_p99": 0.00028234563283778487,
+      "observed": 0.0024848111676884126
+    },
+    "task_topology_mi": {
+      "empirical_p": 0.000999000999000999,
+      "null_mean": 0.00042291713132530217,
+      "null_p95": 0.0006329394580361919,
+      "null_p99": 0.0007017460757962069,
+      "observed": 0.016501081101785824
+    }
+  },
+  "training_elapsed_seconds": 80.78088705599839,
+  "training_tokens_per_second": 11883.999235295783,
+  "variant": "E"
+}
