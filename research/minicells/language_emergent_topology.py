@@ -131,6 +131,18 @@ def _uniform_plastic_distribution(
     return distribution.to(dtype=dtype).view(1, 1, tissue, tissue).expand(batch, length, -1, -1).clone()
 
 
+def _permute_plastic_distribution(distribution: torch.Tensor) -> torch.Tensor:
+    """Permute only legal long-range source identities while preserving row mass/entropy exactly."""
+    tissue = distribution.shape[-1]
+    allowed = _long_range_mask(tissue, device=distribution.device)
+    shuffled = torch.zeros_like(distribution)
+    for receiver in range(tissue):
+        sources = torch.nonzero(allowed[receiver], as_tuple=False).flatten()
+        values = distribution[..., receiver, sources]
+        shuffled[..., receiver, sources] = torch.roll(values, shifts=1, dims=-1)
+    return shuffled
+
+
 def _initial_activity(batch: int, length: int, tissue: int, *, device: torch.device) -> torch.Tensor:
     return torch.full(
         (batch, length, tissue),
@@ -276,7 +288,6 @@ class EmergentTopologyStage(nn.Module):
 
         batch, length, tissue, _ = state.shape
         local = _local_weights(tissue, device=state.device, dtype=state.dtype).view(1, 1, tissue, tissue)
-        allowed = _long_range_mask(tissue, device=state.device).view(1, 1, tissue, tissue)
         last_before = state
 
         for step in range(iterations):
@@ -295,12 +306,8 @@ class EmergentTopologyStage(nn.Module):
                 plastic_weights = torch.zeros_like(plastic_weights)
                 strength = torch.zeros_like(strength)
             elif intervention == "topology_shuffled":
-                shuffled = torch.roll(plastic_distribution, shifts=1, dims=-1).masked_fill(~allowed, 0.0)
-                shuffled = shuffled / shuffled.sum(dim=-1, keepdim=True).clamp_min(1e-12)
-                entropy = _masked_row_entropy(shuffled, allowed)
-                shuffled_strength = LONG_RANGE_MAX_COUPLING * (1.0 - entropy).clamp(0.0, 1.0)
-                plastic_weights = shuffled * shuffled_strength.unsqueeze(-1).to(shuffled.dtype)
-                strength = shuffled_strength
+                shuffled = _permute_plastic_distribution(plastic_distribution)
+                plastic_weights, strength, _ = self._plastic_weights(shuffled)
 
             local_diffusion = self._diffusion(state, local.expand(batch, length, -1, -1))
             if intervention == "local_diffusion_off":
@@ -315,6 +322,7 @@ class EmergentTopologyStage(nn.Module):
                 state[..., ablate_row, :] = 0.0
 
             if traces is not None:
+                allowed = _long_range_mask(tissue, device=state.device).view(1, 1, tissue, tissue)
                 traces["activity"].append(activity.detach())
                 traces["plastic_distribution"].append(plastic_distribution.detach())
                 traces["plastic_strength"].append(strength.detach())
