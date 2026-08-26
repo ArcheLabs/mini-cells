@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import torch
 
-from research.minicells.language_2d import LatentTissueNCALM
-from research.minicells.language_models import TextNCALM
-from research.minicells.language_settling import relaxation_forward, settling_forward
+from minicells.language_2d import LatentTissueNCALM
+from minicells.language_models import TextNCALM
+from minicells.language_settling import relaxation_forward, settling_forward
 
 
 def build_1d() -> TextNCALM:
