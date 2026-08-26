@@ -62,7 +62,7 @@ def test_forward_computes_only_alive_cells_and_preserves_activity_budget() -> No
     assert torch.allclose(d.activity.sum(dim=-1), torch.full((2, 8), ACTIVITY_BUDGET), atol=1e-5)
 
 
-def test_only_interface_cell_receives_token_boundary_directly() -> None:
+def test_sequence_boundary_remains_causal() -> None:
     model = tiny_model("G").eval()
     left = torch.tensor([[1, 2, 3, 4, 5, 6]])
     right = left.clone()
@@ -138,7 +138,7 @@ def test_freeze_genome_leaves_only_cell_memory_trainable() -> None:
     assert trainable == ["cell_memory"]
 
 
-def test_tissue_copy_transfers_selected_memory_and_subgraph() -> None:
+def test_tissue_copy_transfers_selected_memory_and_subgraph_but_not_interface_memory() -> None:
     donor = tiny_model("G")
     recipient = tiny_model("G")
     direction = torch.zeros(32)
@@ -146,12 +146,17 @@ def test_tissue_copy_transfers_selected_memory_and_subgraph() -> None:
     child = donor.fork_cell(1, step=50, direction=direction)
     assert child == 3
     donor.connect(0, child)
+    interface_before = recipient.cell_memory[0].detach().clone()
     with torch.no_grad():
+        donor.cell_memory[0].add_(1.0)
         donor.cell_memory[child].add_(0.5)
     recipient.copy_tissue_from(donor, [1, child])
     assert bool(recipient.alive_mask[child])
     assert torch.equal(recipient.cell_memory[child], donor.cell_memory[child])
     assert torch.equal(recipient.adjacency[1, child], donor.adjacency[1, child])
+    assert torch.equal(recipient.adjacency[0, child], donor.adjacency[0, child])
+    assert torch.equal(recipient.cell_memory[0], interface_before)
+    assert not torch.equal(recipient.cell_memory[0], donor.cell_memory[0])
 
 
 def test_parameter_matched_transformer_is_close_to_cellular_model() -> None:
