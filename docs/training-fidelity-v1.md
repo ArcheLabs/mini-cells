@@ -40,6 +40,9 @@ accumulation and the corrected MCA1→MCF1 PVM path are bit-exact. MCA1 only
 deserializes and accumulates a shard with frozen weights/optimizer state; MCF1
 alone performs normalization, clipping and AdamW. Independent MCA1 measurements
 for 1/2/4/8/16 samples are recorded in the evidence directory; 8 samples is
-comfortably below the 5B Full profile. The full production logical-batch
-envelope remains a separate measurement, so no production gas limit or
-optimizer/model choice is changed before it is rerun.
+comfortably below the 5B Full profile. The completed 256-sample production
+envelope (32 sequential shards plus one finalize) is recorded in
+`full-logical-batch-gate.json`: max canonical shard is 2,256,027,812 gas,
+worst-case valid 8×32 shard is 2,311,013,084 gas, and the final result is
+bit-exact. This authorizes only the next MiniJAM milestone of changing Refine
+from 1B to 5B; Accumulate and unrelated topology limits remain unchanged.

@@ -1,11 +1,14 @@
 {
   "schema": "minicells.pvm-algorithm-fidelity-decision.v1",
-  "status": "PASS_CANONICAL_PVM_PARITY_MULTI_REFINE",
-  "next_action": "RE-RUN_CANONICAL_FULL_LOGICAL_BATCH_GAS_WITH_PRODUCTION_ENVELOPE",
+  "status": "PASS_FULL_COMFORTABLE_MULTI_REFINE",
+  "next_action": "AUTHORIZE_MINIJAM_REFINE_LIMIT_5B_ONLY",
   "fresh_chain_e2e": "NOT_STARTED_BY_POLICY",
   "blockers": [
-    "Canonical full logical-batch production gas remains unmeasured; parity envelope is diagnostic-only",
-    "16-sample MCA1 is NEAR_FULL, while 8-sample MCA1 is FULL_COMFORTABLE; no Refine limit change is authorized yet"
+    "32×8 canonical MCA1 shards and one MCF1 are bit-exact against monolithic Native",
+    "Canonical max shard 2,256,027,812 and worst-case valid 8×32 shard 2,311,013,084 are both FULL_COMFORTABLE"
   ],
-  "algorithm_changes": "NONE"
+  "algorithm_changes": "NONE",
+  "production_shard_size": 8,
+  "authorize_refine_limit_change": "1B_TO_5B",
+  "accumulate_gas_changed": false
 }
