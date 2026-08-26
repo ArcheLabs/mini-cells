@@ -1,0 +1,61 @@
+{
+  "base_tasks": [
+    "REVERSE",
+    "ROTATE",
+    "INC",
+    "SWAP"
+  ],
+  "composition_map": {
+    "INC_SWAP": [
+      "INC",
+      "SWAP"
+    ],
+    "REVERSE_INC": [
+      "REVERSE",
+      "INC"
+    ],
+    "REVERSE_ROTATE": [
+      "REVERSE",
+      "ROTATE"
+    ],
+    "REVERSE_SWAP": [
+      "REVERSE",
+      "SWAP"
+    ],
+    "ROTATE_INC": [
+      "ROTATE",
+      "INC"
+    ],
+    "ROTATE_SWAP": [
+      "ROTATE",
+      "SWAP"
+    ]
+  },
+  "format": "minicells.language-plastic-reaction-diffusion-corpus.v1",
+  "model_length": 15,
+  "objective": "autoregressive next-token prediction with loss restricted to transformed output + EOS",
+  "source_015_commit_scope": "same synthetic corpus protocol and seed family",
+  "source_015_format": "minicells.language-sparse-topology.v1",
+  "source_015_status": "PARTIAL_TOPOLOGY_SIGNAL",
+  "tasks": [
+    "REVERSE",
+    "ROTATE",
+    "INC",
+    "SWAP",
+    "REVERSE_ROTATE",
+    "REVERSE_INC",
+    "REVERSE_SWAP",
+    "ROTATE_INC",
+    "ROTATE_SWAP",
+    "INC_SWAP"
+  ],
+  "train_examples": 50000,
+  "train_seed": 15015,
+  "train_sequence_sha256": "06bffbed70c2ad7023d3fcedb5c2467bbbc71bde863233e4daf36d252812810e",
+  "train_task_sha256": "2c894fd2cdc050fa37b6e385bca22c1849273ae932162687517ea04ff2a5630f",
+  "validation_examples": 1000,
+  "validation_seed": 25015,
+  "validation_sequence_sha256": "21ef5bf83db5fc9825588ebd9e9642e808ccf9b542c8f1427ac1cd9acfe59a0e",
+  "validation_task_sha256": "624ffe75218b044ecfe0915ad062a05d04a9fc7e18b489a13a34db282fa10433",
+  "vocab_size": 26
+}

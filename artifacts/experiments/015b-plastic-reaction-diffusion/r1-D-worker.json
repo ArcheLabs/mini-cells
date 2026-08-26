@@ -1,0 +1,100 @@
+{
+  "ablation": {
+    "delta_nll_threshold": 0.02,
+    "functional_specific_rows": 4,
+    "specific_rows": [
+      {
+        "delta_nll": 0.07875499725341795,
+        "row": 4,
+        "specificity": 1.7654630359422447,
+        "task": "ROTATE"
+      },
+      {
+        "delta_nll": 0.046856611796787795,
+        "row": 5,
+        "specificity": 1.5936596420080231,
+        "task": "ROTATE"
+      },
+      {
+        "delta_nll": 0.1307862111500332,
+        "row": 6,
+        "specificity": 1.571001521080506,
+        "task": "ROTATE"
+      },
+      {
+        "delta_nll": 0.03662626675197056,
+        "row": 7,
+        "specificity": 2.030221369166358,
+        "task": "REVERSE_ROTATE"
+      }
+    ],
+    "specificity_threshold": 1.5
+  },
+  "activity_budget": 3.0,
+  "avg_recurrent_iterations": 8.971,
+  "bootstrap_seed": 82015,
+  "depth_seed": 42015,
+  "format": "minicells.language-plastic-reaction-diffusion-worker.v1",
+  "initialization": {
+    "copied_shared_tensors": 63
+  },
+  "interventions": {
+    "connectome_shuffled": {
+      "bootstrap_95_lower": 0.5005738224983215,
+      "bootstrap_95_upper": 0.5285942490175366,
+      "mean_delta_nll": 0.5149789591431617,
+      "positive_fraction": 0.992
+    },
+    "diffusion_off": {
+      "bootstrap_95_lower": 0.4441754998356104,
+      "bootstrap_95_upper": 0.47156817675977947,
+      "mean_delta_nll": 0.4578833809494972,
+      "positive_fraction": 0.986
+    },
+    "plasticity_off": {
+      "bootstrap_95_lower": 0.0014259051531553268,
+      "bootstrap_95_upper": 0.003077514404058455,
+      "mean_delta_nll": 0.002249111473560333,
+      "positive_fraction": 0.601
+    }
+  },
+  "mean_exact_match": 0.012,
+  "mean_nll": 1.1534514092036656,
+  "mean_token_accuracy": 0.5438333333333333,
+  "model_seed": 72015,
+  "null_seed": 62015,
+  "parameters": 902016,
+  "peak_vram_bytes": 1105790464,
+  "plasticity_rate": 0.25,
+  "replicate": 1,
+  "run": "r1-D",
+  "schedule_seed": 32015,
+  "seconds_per_million_tokens": 73.46356411770886,
+  "synaptic_budget": 0.25,
+  "tokens": 960000,
+  "topology": {
+    "connectome_change_l1": 0.0024454533122479916,
+    "effective_active_fraction": 0.9171923995018005,
+    "final_activity_entropy": 0.9388524889945984,
+    "final_connectome_entropy": 0.8045905828475952,
+    "final_nonlocal_mass": 0.41163355112075806,
+    "mean_diffusion_to_reaction": 0.782156765460968,
+    "task_activity_mi": {
+      "empirical_p": 0.000999000999000999,
+      "null_mean": 0.00021438128830470748,
+      "null_p95": 0.0003972865126872595,
+      "null_p99": 0.0005061484062614227,
+      "observed": 0.019784892383162323
+    },
+    "task_connectome_mi": {
+      "empirical_p": 0.000999000999000999,
+      "null_mean": 9.874657301762343e-06,
+      "null_p95": 1.4958104310272801e-05,
+      "null_p99": 1.8553701676301203e-05,
+      "observed": 0.00012646167829299888
+    }
+  },
+  "training_elapsed_seconds": 70.5250215530005,
+  "training_tokens_per_second": 13612.19009736207,
+  "variant": "D"
+}

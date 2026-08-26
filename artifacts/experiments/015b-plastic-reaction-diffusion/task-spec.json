@@ -1,0 +1,42 @@
+{
+  "activity_budget": 3.0,
+  "activity_momentum": 0.25,
+  "controlled_backbone": "existing three recurrent stage parameter sets retained",
+  "experiment": "015b",
+  "format": "minicells.language-plastic-reaction-diffusion-task.v1",
+  "mechanism": [
+    "homogeneous cell rule within each recurrent stage",
+    "continuous finite metabolic activity budget",
+    "graph-Laplacian-like diffusion",
+    "co-activity + reaction-correlation Hebbian plasticity",
+    "per-cell synaptic homeostasis"
+  ],
+  "name": "Plastic Reaction-Diffusion Tissue",
+  "nonlocal_prior": 0.25,
+  "plasticity_rate": 0.25,
+  "primary_endpoints": [
+    "D/B validation NLL",
+    "depth robustness",
+    "task-activity MI vs shuffled null",
+    "task-connectome MI vs shuffled null",
+    "paired diffusion-off causal intervention",
+    "paired connectome-shuffled causal intervention",
+    "paired plasticity-off causal intervention"
+  ],
+  "removed_from_015": [
+    "trainable activity gate",
+    "hard top-k",
+    "dynamic top-1 router",
+    "load-balancing loss",
+    "trainable edge parameters"
+  ],
+  "replicates": 3,
+  "stability_weight": 0.1,
+  "synaptic_budget": 0.25,
+  "tissue_height": 8,
+  "tokens_per_model": 960000,
+  "variants": [
+    "B",
+    "D"
+  ]
+}
