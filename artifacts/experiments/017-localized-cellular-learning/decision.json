@@ -1,0 +1,62 @@
+{
+  "design": {
+    "genome_frozen_in_both_policies": true,
+    "gpu_count": 2,
+    "local_steps": 200,
+    "max_local_newborns": 3,
+    "policies": {
+      "B": "016-style distributed phenotype learning: all cell memories trainable",
+      "L": "localized gradient diversion: existing phenotype frozen; only newborn cells trainable; only newborn-touching structure can change"
+    },
+    "replicates": 3,
+    "same_phase1_checkpoint_within_replicate": true,
+    "skill": "REVERSE_INC"
+  },
+  "experiment": "MINI Cells Experiment 017 \u2014 Localized Cellular Learning",
+  "format": "minicells.localized-cellular-learning.v1",
+  "pre_registered_signal": {
+    "base_memory_drift_max": 1e-06,
+    "donor_language_ratio_max": 1.1,
+    "localized_skill_improvement_fraction_of_baseline_min": 0.6,
+    "localized_skill_improvement_must_be_positive": true,
+    "minimum_replicates": 2,
+    "newborn_cell_count_max": 3,
+    "newborn_tissue_causal_fraction_min": 0.5,
+    "recipient_language_ratio_max": 1.1,
+    "transplant_recovery_min": 0.5
+  },
+  "question": "Can frozen existing tissue divert a new capability into compact newborn cellular capacity, retain old language behavior, and transfer that capability by grafting only the newborn tissue?",
+  "results": {
+    "compact_tissue_replicates": 3,
+    "compact_transplant_replicates": 0,
+    "language_retention_replicates": 0,
+    "mean_baseline_language_ratio": 1.5282821968408076,
+    "mean_localized_language_ratio": 1.2103539604535676,
+    "mean_localized_tissue_causal_fraction": 1.0,
+    "mean_localized_transplant_recovery": 1.0,
+    "old_tissue_stable_replicates": 3,
+    "pass_flags": {
+      "compact_new_tissue": true,
+      "compact_tissue_transplantation": false,
+      "language_retention": false,
+      "new_tissue_causally_used": true,
+      "old_tissue_stable": true,
+      "retention_improves_over_distributed": true,
+      "skill_preserved": true
+    },
+    "retention_better_replicates": 3,
+    "skill_preserved_replicates": 3,
+    "tissue_causal_replicates": 3
+  },
+  "scope": {
+    "claim": "controlled same-checkpoint test of distributed versus newborn-localized frozen-genome capability acquisition",
+    "not_claimed": [
+      "arbitrary real-world skill transplantation",
+      "optimal birth policy",
+      "zero forgetting at larger scales",
+      "cross-genome tissue compatibility",
+      "production compute efficiency"
+    ]
+  },
+  "status": "LOCALIZATION_WITHOUT_RETENTION"
+}
