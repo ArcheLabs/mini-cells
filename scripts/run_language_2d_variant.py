@@ -60,13 +60,13 @@ def build_model(name: str, vocab_size: int) -> tuple[torch.nn.Module, int]:
 
 
 @torch.no_grad()
-def evaluate_ablation(
+def evaluate_subset(
     model: LatentTissueNCALM,
     validation_stream: torch.Tensor,
     validation_starts: tuple[tuple[int, ...], ...],
     *,
-    row: int,
     device: torch.device,
+    ablate_row: int | None = None,
 ) -> float:
     model.eval()
     total_loss = 0.0
@@ -74,7 +74,8 @@ def evaluate_ablation(
     for starts in validation_starts[:12]:
         inputs, targets = batch_from_starts(validation_stream, starts, 128, device)
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=device.type == "cuda"):
-            logits = model.forward_with_ablation(inputs, row).logits
+            output = model(inputs) if ablate_row is None else model.forward_with_ablation(inputs, ablate_row)
+            logits = output.logits
             loss = F.cross_entropy(
                 logits.reshape(-1, logits.shape[-1]),
                 targets.reshape(-1),
@@ -95,25 +96,33 @@ def collect_tissue_diagnostics(
 ) -> dict[str, object]:
     inputs, _ = batch_from_starts(validation_stream, validation_starts[0], 128, device)
     diagnostics = model.diagnose(inputs)
-    baseline = model(inputs).logits
-    # The baseline tensor is evaluated only to synchronize the same autocast/device
-    # path before timed downstream use; PPL comes from the training checkpoints.
-    del baseline
+    baseline_subset_ppl = evaluate_subset(
+        model,
+        validation_stream,
+        validation_starts,
+        device=device,
+    )
     ablations = {
-        str(row): evaluate_ablation(
+        str(row): evaluate_subset(
             model,
             validation_stream,
             validation_starts,
-            row=row,
             device=device,
+            ablate_row=row,
         )
         for row in range(1, model.tissue_height)
+    }
+    relative = {
+        row: float(ppl / baseline_subset_ppl - 1.0)
+        for row, ppl in ablations.items()
     }
     return {
         "tissue_height": model.tissue_height,
         "row_cosine_to_token": list(diagnostics.row_cosine_to_token),
         "row_update_rms_flat_by_stage": [list(values) for values in diagnostics.row_update_rms],
+        "matched_subset_baseline_ppl": baseline_subset_ppl,
         "latent_row_ablation_ppl": ablations,
+        "latent_row_ablation_relative_ppl": relative,
     }
 
 
