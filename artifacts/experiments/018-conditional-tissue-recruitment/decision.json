@@ -1,0 +1,67 @@
+{
+  "design": {
+    "central_router": false,
+    "gpu_count": 2,
+    "homeostatic_reference": "per recurrent step and parent cell, calibrated on held-out Phase-1 training-language batches",
+    "policies": {
+      "C": "same localized learning with parent-local homeostatic excitability gating all newborn incident edges",
+      "S": "Experiment-017 static localized newborn tissue"
+    },
+    "replicates": 3,
+    "same_phase1_checkpoint_within_replicate": true,
+    "task_label_used_by_recruitment": false
+  },
+  "experiment": "MINI Cells Experiment 018 \u2014 Conditional Tissue Recruitment",
+  "format": "minicells.conditional-tissue-recruitment.v1",
+  "pre_registered_signal": {
+    "base_memory_drift_max": 1e-06,
+    "conditional_skill_fraction_of_static_min": 0.7,
+    "donor_language_ratio_max": 1.1,
+    "forced_on_language_delta_nll_min": 0.05,
+    "minimum_replicates": 2,
+    "newborn_cell_count_max": 3,
+    "recipient_language_ratio_max": 1.1,
+    "recruitment_causal_fraction_min": 0.5,
+    "skill_minus_language_recruitment_min": 0.2,
+    "skill_to_language_recruitment_ratio_min": 2.0,
+    "transplant_recovery_min": 0.5
+  },
+  "question": "Can a localized newborn capability tissue remain mostly quiescent on retained language but locally excite and conduct information when its birth-site dynamics depart from the Phase-1 homeostatic manifold?",
+  "results": {
+    "language_protection_causal_replicates": 1,
+    "language_retention_replicates": 0,
+    "mean_conditional_language_ratio": 1.1692059178184004,
+    "mean_language_recruitment": 0.8922774866223335,
+    "mean_skill_recruitment": 0.9118668337663015,
+    "mean_static_language_ratio": 1.2103539604535676,
+    "mean_transplant_recovery": 1.0,
+    "pass_flags": {
+      "compact_new_tissue": true,
+      "conditional_closure_causally_protects_language": false,
+      "conditional_tissue_transplantation": false,
+      "language_retention": false,
+      "new_tissue_causally_used": true,
+      "old_tissue_stable": true,
+      "recruitment_causally_required_for_skill": true,
+      "recruitment_selective": false,
+      "retention_improves_over_static": true,
+      "skill_preserved": true
+    },
+    "recruitment_causal_replicates": 3,
+    "retention_better_replicates": 3,
+    "selective_recruitment_replicates": 0,
+    "skill_preserved_replicates": 3,
+    "transfer_replicates": 0
+  },
+  "scope": {
+    "claim": "same-checkpoint causal test of local state-dependent recruitment for a compact newborn skill tissue",
+    "not_claimed": [
+      "general task routing",
+      "arbitrary real-world skills",
+      "cross-genome transplantation",
+      "optimal novelty thresholds",
+      "production compute efficiency"
+    ]
+  },
+  "status": "PARTIAL_CONDITIONAL_TISSUE_RECRUITMENT_SIGNAL"
+}
