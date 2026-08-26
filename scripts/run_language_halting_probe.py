@@ -40,7 +40,7 @@ SOURCE_005 = ROOT / "artifacts" / "experiments" / "005-consumer-language-bridge"
 MODELS = ("minicells-v2", "minicells-2d-k4")
 THRESHOLDS = (0.0, 0.005, 0.0075, 0.010, 0.0125, 0.015, 0.020, 0.030)
 MIN_ITERATIONS = 1
-VALIDATION_BATCHES = 24
+VALIDATION_PREFIXES = 192
 VALIDATION_STREAM_TOKENS = 200_000
 
 
@@ -116,10 +116,17 @@ def evaluate_config(
     device: torch.device,
     threshold: float | None,
 ) -> dict[str, float | int | str]:
+    """Evaluate causal next-token prediction at the end of independent prefixes.
+
+    Batch size is deliberately one. The stopping decision may inspect the complete
+    input prefix, but cannot depend on a future token or another example. This is
+    the correct first probe for autoregressive inference. It is not yet a
+    training-time per-position halting scheme.
+    """
+
     amp = device.type == "cuda"
     model.eval()
 
-    # Warm one batch so compilation/caches do not dominate the short probe.
     warm_inputs, _ = batch_from_starts(validation, starts[0], 128, device)
     with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
         if threshold is None:
@@ -134,12 +141,12 @@ def evaluate_config(
     synchronize(device)
 
     total_loss = 0.0
-    total_tokens = 0
+    total_predictions = 0
     stage_steps = [0, 0, 0]
-    batches = 0
+    examples = 0
     started = time.perf_counter()
-    for batch_starts in starts:
-        inputs, targets = batch_from_starts(validation, batch_starts, 128, device)
+    for example_starts in starts:
+        inputs, targets = batch_from_starts(validation, example_starts, 128, device)
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
             if threshold is None:
                 output = fixed_forward(model, inputs)
@@ -153,34 +160,36 @@ def evaluate_config(
                 )
                 output = adaptive.output
                 steps = adaptive.stage_steps
+            # Only the token immediately after the complete 128-token prefix is
+            # scored. This keeps the global stage-level halting decision causal.
             loss = F.cross_entropy(
-                output.logits.reshape(-1, output.logits.shape[-1]),
-                targets.reshape(-1),
+                output.logits[:, -1, :].float(),
+                targets[:, -1],
                 reduction="sum",
             )
         total_loss += float(loss.item())
-        total_tokens += int(targets.numel())
+        total_predictions += int(targets[:, -1].numel())
         for index, value in enumerate(steps):
             stage_steps[index] += int(value)
-        batches += 1
+        examples += 1
     synchronize(device)
     elapsed = time.perf_counter() - started
-    nll = total_loss / total_tokens
-    avg_stage_steps = [value / batches for value in stage_steps]
+    nll = total_loss / total_predictions
+    avg_stage_steps = [value / examples for value in stage_steps]
     total_avg_steps = sum(avg_stage_steps)
     return {
         "mode": "fixed" if threshold is None else "adaptive",
         "threshold": math.nan if threshold is None else threshold,
-        "validation_nll": nll,
-        "validation_ppl": math.exp(min(nll, 20.0)),
+        "validation_last_token_nll": nll,
+        "validation_last_token_ppl": math.exp(min(nll, 20.0)),
         "avg_stage1_steps": avg_stage_steps[0],
         "avg_stage2_steps": avg_stage_steps[1],
         "avg_stage3_steps": avg_stage_steps[2],
         "avg_total_steps": total_avg_steps,
         "iteration_fraction": total_avg_steps / 12.0,
         "elapsed_seconds": elapsed,
-        "tokens_per_second": total_tokens / elapsed,
-        "validation_tokens": total_tokens,
+        "prefixes_per_second": total_predictions / elapsed,
+        "validation_prefixes": total_predictions,
     }
 
 
@@ -189,9 +198,15 @@ def add_relative_metrics(frame: pd.DataFrame) -> pd.DataFrame:
     for model, group in frame.groupby("model", sort=False):
         fixed = group.loc[group["mode"] == "fixed"].iloc[0]
         enriched = group.copy()
-        enriched["ppl_ratio_to_fixed"] = enriched["validation_ppl"] / float(fixed["validation_ppl"])
-        enriched["wall_time_ratio_to_fixed"] = enriched["elapsed_seconds"] / float(fixed["elapsed_seconds"])
-        enriched["throughput_ratio_to_fixed"] = enriched["tokens_per_second"] / float(fixed["tokens_per_second"])
+        enriched["ppl_ratio_to_fixed"] = (
+            enriched["validation_last_token_ppl"] / float(fixed["validation_last_token_ppl"])
+        )
+        enriched["wall_time_ratio_to_fixed"] = (
+            enriched["elapsed_seconds"] / float(fixed["elapsed_seconds"])
+        )
+        enriched["throughput_ratio_to_fixed"] = (
+            enriched["prefixes_per_second"] / float(fixed["prefixes_per_second"])
+        )
         enriched["theoretical_iteration_saving"] = 1.0 - enriched["iteration_fraction"]
         parts.append(enriched)
     return pd.concat(parts, ignore_index=True)
@@ -212,6 +227,11 @@ def select_best(group: pd.DataFrame) -> dict[str, object] | None:
         "threshold": float(best["threshold"]),
         "ppl_ratio_to_fixed": float(best["ppl_ratio_to_fixed"]),
         "avg_total_steps": float(best["avg_total_steps"]),
+        "avg_stage_steps": [
+            float(best["avg_stage1_steps"]),
+            float(best["avg_stage2_steps"]),
+            float(best["avg_stage3_steps"]),
+        ],
         "iteration_fraction": float(best["iteration_fraction"]),
         "theoretical_iteration_saving": float(best["theoretical_iteration_saving"]),
         "wall_time_ratio_to_fixed": float(best["wall_time_ratio_to_fixed"]),
@@ -245,18 +265,19 @@ def make_decision(frame: pd.DataFrame, source: Path) -> dict[str, object]:
         "source_009": str(source.relative_to(ROOT)),
         "question": "Can the already-trained 1D and 2D cellular language models stop recurrent computation from their own state-update residual without retraining?",
         "halting_rule": {
-            "signal": "absolute RMS(state_t - state_t_minus_1)",
+            "signal": "absolute RMS update of the final-prefix readout position (all K tissue cells for 2D)",
             "thresholds": list(THRESHOLDS),
             "minimum_iterations_per_stage": MIN_ITERATIONS,
             "maximum_iterations_per_stage": 4,
-            "scope": "batch-global stage early exit",
-            "quality_budget": "validation PPL <= 1.01x fixed-depth PPL",
+            "scope": "one autoregressive prefix at a time; batch size 1; stage-level early exit",
+            "quality_budget": "last-token next-token PPL <= 1.01x fixed-depth PPL",
         },
         "best": best,
         "interpretation": {
-            "algorithmic": "A viable point shows the learned dynamics already expose a state-derived stopping signal; it does not require a learned halting head.",
-            "runtime": "Observed wall-clock includes the GPU-to-host scalar synchronization needed by this prototype control flow. Iteration savings can exist even when this unoptimized implementation is not faster yet.",
-            "training": "This experiment probes frozen checkpoints. A positive signal justifies a later training experiment with randomized depth/stability loss and adaptive unrolling; it does not by itself prove lower training cost.",
+            "algorithmic": "A viable point shows the learned dynamics already expose a state-derived stopping signal; this does not require a learned halting head and is not specific to 2D.",
+            "runtime": "Observed wall-clock includes GPU-to-host scalar synchronization in this prototype. Iteration savings can exist even if the current Python control flow is not faster yet.",
+            "training": "This experiment probes frozen checkpoints. A positive result justifies a later training experiment with randomized depth/stability loss and causal per-position or per-cell adaptive unrolling; it does not by itself prove lower training cost.",
+            "causality": "Only the prediction after the complete prefix is scored, so the stopping decision cannot inspect future target tokens. Training-time all-position loss requires a finer-grained causal scheduler.",
         },
     }
 
@@ -274,7 +295,7 @@ def save_plots(frame: pd.DataFrame) -> None:
     axis.axhline(1.0, linewidth=1, linestyle="--")
     axis.axhline(1.01, linewidth=1, linestyle=":", label="1% PPL budget")
     axis.set_xlabel("Executed recurrent-iteration fraction (fixed = 1.0)")
-    axis.set_ylabel("PPL / fixed-depth PPL")
+    axis.set_ylabel("Last-token PPL / fixed-depth PPL")
     axis.set_title("Experiment 010 — quality vs recurrent compute")
     axis.grid(alpha=0.25)
     axis.legend()
@@ -294,7 +315,7 @@ def save_plots(frame: pd.DataFrame) -> None:
     axis.axhline(1.0, linewidth=1, linestyle="--")
     axis.set_xlabel("Executed recurrent-iteration fraction (fixed = 1.0)")
     axis.set_ylabel("Wall time / fixed-depth wall time")
-    axis.set_title("Experiment 010 — measured runtime vs recurrent compute")
+    axis.set_title("Experiment 010 — measured prefix runtime vs recurrent compute")
     axis.grid(alpha=0.25)
     axis.legend()
     fig.tight_layout()
@@ -311,8 +332,8 @@ def main() -> int:
     tokenizer = load_tokenizer(tokenizer_path)
     starts = fixed_validation_starts(
         int(validation.numel()),
-        batches=VALIDATION_BATCHES,
-        batch_size=8,
+        batches=VALIDATION_PREFIXES,
+        batch_size=1,
         sequence_length=128,
         seed=10109,
     )
@@ -331,8 +352,8 @@ def main() -> int:
         )
         rows.append({"model": name, **fixed})
         print(
-            f"{name:18s} fixed       ppl={fixed['validation_ppl']:.3f} "
-            f"steps={fixed['avg_total_steps']:.2f} tok/s={fixed['tokens_per_second']:.0f}"
+            f"{name:18s} fixed       ppl={fixed['validation_last_token_ppl']:.3f} "
+            f"steps={fixed['avg_total_steps']:.2f} prefix/s={fixed['prefixes_per_second']:.1f}"
         )
         for threshold in THRESHOLDS:
             result = evaluate_config(
@@ -345,8 +366,9 @@ def main() -> int:
             rows.append({"model": name, **result})
             print(
                 f"{name:18s} eps={threshold:0.4f} "
-                f"ppl={result['validation_ppl']:.3f} steps={result['avg_total_steps']:.2f} "
-                f"tok/s={result['tokens_per_second']:.0f}"
+                f"ppl={result['validation_last_token_ppl']:.3f} "
+                f"steps={result['avg_total_steps']:.2f} "
+                f"prefix/s={result['prefixes_per_second']:.1f}"
             )
         model.to("cpu")
         torch.cuda.empty_cache()
@@ -363,7 +385,8 @@ def main() -> int:
         "source_experiment": "009",
         "models": list(MODELS),
         "frozen_checkpoints": True,
-        "validation_batches": VALIDATION_BATCHES,
+        "evaluation": "192 independent 128-token prefixes, batch size 1, score only the next token",
+        "validation_prefixes": VALIDATION_PREFIXES,
         "thresholds": list(THRESHOLDS),
         "min_iterations": MIN_ITERATIONS,
         "max_iterations": 4,
