@@ -4,11 +4,11 @@
   "artifact_hash": "0x6c176f306940fd68118fc508a3b19b70e16f60091889251c780766415b6b4f2e",
   "gas_limit": 10000000000,
   "measurements": [
-    {"samples": 1, "gas_used": 262840499, "classification": "TINY"},
-    {"samples": 2, "gas_used": 522598183, "classification": "TINY"},
-    {"samples": 4, "gas_used": 1034247702, "classification": "FULL_COMFORTABLE"},
-    {"samples": 8, "gas_used": 2116157414, "classification": "FULL_COMFORTABLE"},
-    {"samples": 16, "gas_used": 4354540161, "classification": "NEAR_FULL"}
+    {"samples": 1, "shard_size": 1, "shard_index": 0, "sample_range": [0, 1], "gas_used": 262840499, "classification": "SHARD_PASS_TINY"},
+    {"samples": 2, "shard_size": 2, "shard_index": 0, "sample_range": [0, 2], "gas_used": 522598183, "classification": "SHARD_PASS_TINY"},
+    {"samples": 4, "shard_size": 4, "shard_index": 0, "sample_range": [0, 4], "gas_used": 1034247702, "classification": "SHARD_PASS_FULL_COMFORTABLE"},
+    {"samples": 8, "shard_size": 8, "shard_index": 0, "sample_range": [0, 8], "gas_used": 2116157414, "classification": "SHARD_PASS_FULL_COMFORTABLE"},
+    {"samples": 16, "shard_size": 16, "shard_index": 0, "sample_range": [0, 16], "gas_used": 4354540161, "classification": "SHARD_NEAR_FULL"}
   ],
   "finalize_gas_used": 11018740,
   "notes": "MCA1 is accumulation-only; weights, Adam state and step remain unchanged. MCAR serialization is included in each measurement."

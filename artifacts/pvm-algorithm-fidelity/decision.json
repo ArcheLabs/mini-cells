@@ -1,8 +1,8 @@
 {
   "schema": "minicells.pvm-algorithm-fidelity-decision.v1",
   "status": "PASS_FULL_COMFORTABLE_MULTI_REFINE",
-  "next_action": "AUTHORIZE_MINIJAM_REFINE_LIMIT_5B_ONLY",
-  "fresh_chain_e2e": "NOT_STARTED_BY_POLICY",
+  "next_action": "RUN_FRESH_CHAIN_CREATE_SERVICE_AND_ONE_STEP",
+  "fresh_chain_e2e": "BLOCKED_EXTERNAL_CHAIN",
   "blockers": [
     "32×8 canonical MCA1 shards and one MCF1 are bit-exact against monolithic Native",
     "Canonical max shard 2,256,027,812 and worst-case valid 8×32 shard 2,311,013,084 are both FULL_COMFORTABLE"
@@ -10,5 +10,6 @@
   "algorithm_changes": "NONE",
   "production_shard_size": 8,
   "authorize_refine_limit_change": "1B_TO_5B",
+  "minijam_refine_limit": 5000000000,
   "accumulate_gas_changed": false
 }

@@ -4,7 +4,7 @@ ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 DEPS="${ROOT}/.deps"
 mkdir -p "${DEPS}"
 CLIENT="${DEPS}/minijam-client"
-MINIJAM_CLIENT_REF="${MINIJAM_CLIENT_REF:-cb1742f}"
+MINIJAM_CLIENT_REF="${MINIJAM_CLIENT_REF:-aba21df406bac24f6880df1da8c1a0cc88534bcf}"
 if [[ -e "${CLIENT}" && ! -f "${CLIENT}/Cargo.toml" ]]; then
   echo "refusing to use ${CLIENT}: expected a MiniJAM checkout" >&2
   exit 1

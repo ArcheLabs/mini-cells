@@ -2,7 +2,7 @@
   "gas": {
     "algorithm": "echo-adamw-ce-v1",
     "artifact_hash": "0x6c176f306940fd68118fc508a3b19b70e16f60091889251c780766415b6b4f2e",
-    "classification": "FULL_COMFORTABLE",
+    "classification": "SHARD_PASS_FULL_COMFORTABLE",
     "completed": true,
     "error": null,
     "full_limit": 5000000000,
@@ -12,10 +12,13 @@
     "gas_remaining": 8965752298,
     "gas_used": 1034247702,
     "logical_batch_size": 256,
+    "shard_size": 4,
+    "shard_index": 0,
+    "sample_range": [0, 4],
     "schema": "minicells.pvm-training-gas.v1",
     "tiny_limit": 1000000000,
     "tiny_ratio": 1.034247702
   },
-  "next_action": "SWITCH_MINIJAM_REFINE_LIMIT_TO_5B_THEN_INTEGRATE",
-  "status": "PASS_FULL_COMFORTABLE"
+  "next_action": "SHARD_MEASUREMENT_ONLY_PRODUCTION_BASELINE_IS_8",
+  "status": "SHARD_PASS_FULL_COMFORTABLE"
 }

@@ -658,17 +658,17 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
         "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
     let worst_ex = wh.execute_refine_measured(&worst_payload)?;
     let worst_gas = worst_ex.gas_used;
-    let worst_class = if worst_gas <= 4_000_000_000 { "FULL_COMFORTABLE" } else if worst_gas <= 5_000_000_000 { "NEAR_FULL" } else { "OVER_FULL" };
+    let worst_class = if worst_gas <= 4_000_000_000 { "SHARD_PASS_FULL_COMFORTABLE" } else if worst_gas <= 5_000_000_000 { "SHARD_NEAR_FULL" } else { "SHARD_OVER_FULL" };
     let mut sorted = shard_gas.clone(); sorted.sort_unstable();
     let p95 = sorted[((sorted.len() * 95).saturating_sub(1) / 100).min(sorted.len() - 1)];
     let mean = shard_gas.iter().sum::<u64>() as f64 / shard_gas.len() as f64;
     let max = *sorted.last().unwrap();
-    let report = serde_json::json!({"schema":"minicells.pvm-full-logical-batch-gate.v1","status":if bit_exact && max <= 4_000_000_000 && worst_gas <= 4_000_000_000 {"PASS_FULL_COMFORTABLE_MULTI_REFINE"} else {"FAIL"},"logical_batch_size":256,"shard_size":8,"shard_count":32,"shards":shard_records,"shard_gas_summary":{"min":sorted[0],"mean":mean,"p95":p95,"max":max},"finalize":{"gas_used":final_ex.gas_used,"classification":"FINALIZE_PASS"},"total_refine_gas":shard_gas.iter().sum::<u64>() + final_ex.gas_used,"native_vs_pvm_bit_exact":bit_exact,"worst_case_shard":{"samples":8,"length":32,"gas_used":worst_gas,"classification":worst_class},"production_refine_limit_authorized":bit_exact && max <= 4_000_000_000 && worst_gas <= 4_000_000_000,"fresh_chain_e2e":"NOT_STARTED_BY_POLICY"});
+    let report = serde_json::json!({"schema":"minicells.pvm-full-logical-batch-gate.v1","status":if bit_exact && max <= 4_000_000_000 && worst_gas <= 4_000_000_000 {"PASS_FULL_COMFORTABLE_MULTI_REFINE"} else {"FAIL"},"logical_batch_size":256,"shard_size":8,"shard_count":32,"shards":shard_records,"shard_gas_summary":{"min":sorted[0],"mean":mean,"p95":p95,"max":max},"finalize":{"gas_used":final_ex.gas_used,"classification":"FINALIZE_PASS"},"total_refine_gas":shard_gas.iter().sum::<u64>() + final_ex.gas_used,"native_vs_pvm_bit_exact":bit_exact,"worst_case_shard":{"samples":8,"length":32,"gas_used":worst_gas,"classification":worst_class},"production_refine_limit_authorized":bit_exact && max <= 4_000_000_000 && worst_gas <= 4_000_000_000,"fresh_chain_e2e":"BLOCKED_EXTERNAL_CHAIN"});
     if let Some(parent) = args.output.parent() { std::fs::create_dir_all(parent)?; }
     std::fs::write(&args.output, serde_json::to_vec_pretty(&report)?)?;
     let gas_dir = args.output.parent().unwrap_or(std::path::Path::new("." )).join("mca-gas-full"); std::fs::create_dir_all(&gas_dir)?;
     for record in &shard_records { let index = record["shard_index"].as_u64().unwrap(); std::fs::write(gas_dir.join(format!("shard-{index:02}.json")), serde_json::to_vec_pretty(record)?)?; }
-    std::fs::write(gas_dir.join("worst-case-8.json"), serde_json::to_vec_pretty(&serde_json::json!({"logical_batch_size":256,"shard_size":8,"shard_index":null,"sample_range":null,"all_lengths":32,"gas_used":worst_gas,"classification":worst_class}))?)?;
+    std::fs::write(gas_dir.join("worst-case-8.json"), serde_json::to_vec_pretty(&serde_json::json!({"logical_batch_size":256,"shard_size":8,"shard_index":0,"sample_range":[0,8],"all_lengths":32,"gas_used":worst_gas,"classification":worst_class}))?)?;
     println!("{}", serde_json::to_string_pretty(&report)?);
     if report["status"] != "PASS_FULL_COMFORTABLE_MULTI_REFINE" { return Err("full logical-batch gate failed".into()); }
     Ok(())
@@ -844,7 +844,25 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
         }
     };
     let error_ref = error.as_deref();
-    let classification = classify_execution(completed, gas_used, error_ref, args.gas_limit);
+    let base_classification = classify_execution(completed, gas_used, error_ref, args.gas_limit);
+    // MCA1 is a shard measurement, not a complete logical-batch decision.
+    // Keep its evidence explicitly scoped so a tiny shard can never authorize
+    // integrating the full 256-sample algorithm with the Tiny profile.
+    let is_shard = payload.get(..4) == Some(b"MCA1");
+    const PAYLOAD_HEADER: usize = 4 + 8;
+    const MODEL_BYTES: usize = PARAMETER_COUNT * 4;
+    let shard_size = if is_shard && payload.len() >= PAYLOAD_HEADER + MODEL_BYTES * 3 + 2 {
+        u16::from_le_bytes(payload[PAYLOAD_HEADER + MODEL_BYTES * 3..PAYLOAD_HEADER + MODEL_BYTES * 3 + 2].try_into().unwrap()) as usize
+    } else { 0 };
+    let classification = if is_shard {
+        match base_classification {
+            "TINY" => "SHARD_PASS_TINY",
+            "FULL_COMFORTABLE" => "SHARD_PASS_FULL_COMFORTABLE",
+            "NEAR_FULL" => "SHARD_NEAR_FULL",
+            "OVER_FULL" => "SHARD_OVER_FULL",
+            _ => "SHARD_NOT_MEASURED",
+        }
+    } else { base_classification };
     if let Some((stage_name, stage_code)) = diagnostic_stage {
         let report = serde_json::json!({
             "schema": "minicells.pvm-training-diagnostic.v1",
@@ -871,21 +889,26 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
         "tiny_limit":1_000_000_000u64, "full_limit":5_000_000_000u64,
         "tiny_ratio":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used as f64/1_000_000_000f64)},
         "full_ratio":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used as f64/5_000_000_000f64)},
-        "classification":classification, "error":error});
+        "classification":classification, "error":error,
+        "shard_size":if is_shard {serde_json::json!(shard_size)} else {serde_json::Value::Null},
+        "shard_index":if is_shard {serde_json::json!(0)} else {serde_json::Value::Null},
+        "sample_range":if is_shard {serde_json::json!([0, shard_size])} else {serde_json::Value::Null}});
     std::fs::write(
         args.output.join("pvm-gas.json"),
         serde_json::to_vec_pretty(&report)?,
     )?;
-    let next = match classification {
+    let next = if is_shard {
+        "SHARD_MEASUREMENT_ONLY_NO_FULL_STEP_DECISION"
+    } else { match classification {
         "TINY" => "INTEGRATE_REFERENCE_ALGORITHM_WITH_TINY_PROFILE",
         "FULL_COMFORTABLE" => "SWITCH_MINIJAM_REFINE_LIMIT_TO_5B_THEN_INTEGRATE",
         "NEAR_FULL" => "OPTIMIZE_SINGLE_REFINE_WITHOUT_ALGORITHM_CHANGE",
         "OVER_FULL" => "IMPLEMENT_LOGICAL_BATCH_MULTI_REFINE",
         _ => "BLOCK_UNTIL_DEDICATED_PVM_EXECUTION_IS_VALID",
-    };
+    }};
     let status = if completed {
-        format!("PASS_{classification}")
-    } else if classification == "OVER_FULL" {
+        if is_shard { classification.to_string() } else { format!("PASS_{classification}") }
+    } else if base_classification == "OVER_FULL" {
         "ENGINEERING_SPLIT_REQUIRED".to_string()
     } else {
         "BLOCKED_PVM_EXECUTION".to_string()

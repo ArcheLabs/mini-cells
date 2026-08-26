@@ -44,5 +44,16 @@ comfortably below the 5B Full profile. The completed 256-sample production
 envelope (32 sequential shards plus one finalize) is recorded in
 `full-logical-batch-gate.json`: max canonical shard is 2,256,027,812 gas,
 worst-case valid 8×32 shard is 2,311,013,084 gas, and the final result is
-bit-exact. This authorizes only the next MiniJAM milestone of changing Refine
-from 1B to 5B; Accumulate and unrelated topology limits remain unchanged.
+bit-exact. The authorized MiniJAM integration is now pinned at Refine 5B;
+Accumulate remains 1B and unrelated topology limits remain unchanged.
+
+Production integration is pinned to MiniJAM
+`aba21df406bac24f6880df1da8c1a0cc88534bcf` on
+`agent/minicells-full-refine`, with the dedicated non-diagnostic artifact
+described by `service/artifacts/minicells-training-v1.manifest.json`. The
+local `TrainingRoundStateV1` gate proves 32 ordered MCA1 transitions followed
+by one MCF1 finalize, with weights, Adam state, loss, gradient norm, token
+count, and step all bit-exact against the monolithic Native step. The fresh
+chain CreateService/one-step gate remains `NOT_STARTED_BY_POLICY` because the
+required Season 2 probe exits 77 when no Docker daemon is available; no
+receipt or service ID is fabricated.
