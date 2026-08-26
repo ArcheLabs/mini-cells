@@ -1,11 +1,11 @@
 {
   "schema": "minicells.pvm-algorithm-fidelity-decision.v1",
-  "status": "BLOCKED_EXTERNAL",
-  "next_action": "RUN_5000_STEP_LEARNING_GATE_THEN_CANONICAL_PVM_PARITY_AND_GAS",
+  "status": "BLOCKED_PVM_GAS",
+  "next_action": "OPTIMIZE_PVM_GUEST_OUTPUT_AND_RE-RUN_CANONICAL_PARITY",
   "fresh_chain_e2e": "NOT_STARTED_BY_POLICY",
   "blockers": [
-    "5000-step Python/Rust learning gate is still pending",
-    "Canonical PVM parity and gas remain pending; synthetic full-batch diagnostic is OOG at 10B"
+    "Exact accumulator guest exceeds the 10B Direct Jambda diagnostic ceiling before returning the parity envelope; gas_used is intentionally unknown",
+    "Canonical multi-Refine shard output path requires a lower-gas state transfer or persistent accumulator ABI"
   ],
   "algorithm_changes": "NONE"
 }

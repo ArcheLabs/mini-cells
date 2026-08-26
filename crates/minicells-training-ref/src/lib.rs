@@ -64,6 +64,30 @@ pub struct TrainingWorkspace {
     pub dprev: [[F32; HIDDEN_DIM]; NUM_CELLS],
 }
 
+/// Exact FP32 accumulation state for one logical optimizer step.  Gradients
+/// are accumulated directly in sample order; normalization, clipping and
+/// AdamW are applied only by `finalize_adamw_step`.
+pub struct GradientAccumulator {
+    pub gradient: [F32; PARAMETER_COUNT],
+    pub loss_sum: F32,
+    pub token_count: u32,
+}
+
+impl GradientAccumulator {
+    pub const fn new() -> Self {
+        Self { gradient: [0.0; PARAMETER_COUNT], loss_sum: 0.0, token_count: 0 }
+    }
+    pub fn reset(&mut self) {
+        self.gradient = [0.0; PARAMETER_COUNT];
+        self.loss_sum = 0.0;
+        self.token_count = 0;
+    }
+}
+
+impl Default for GradientAccumulator {
+    fn default() -> Self { Self::new() }
+}
+
 impl TrainingWorkspace {
     pub const fn new() -> Self {
         Self {
@@ -195,6 +219,7 @@ fn forward_backward(
     ids: &[u8; NUM_CELLS],
     length: usize,
     workspace: &mut TrainingWorkspace,
+    gradient: &mut [F32; PARAMETER_COUNT],
     backward: bool,
 ) -> (F32, u32) {
     workspace.reset_sample();
@@ -266,14 +291,14 @@ fn forward_backward(
             let dlogit = probability - if row == target { 1.0 } else { 0.0 };
             for col in 0..HIDDEN_DIM {
                 grad_add(
-                    &mut workspace.gradient,
+                    gradient,
                     OUTPUT_WEIGHT_OFFSET + row * HIDDEN_DIM + col,
                     dlogit * states[ITERATIONS][cell][col],
                 );
                 dstate[cell][col] +=
                     weight(weights, OUTPUT_WEIGHT_OFFSET, row, col, HIDDEN_DIM) * dlogit;
             }
-            grad_add(&mut workspace.gradient, OUTPUT_BIAS_OFFSET + row, dlogit);
+            grad_add(gradient, OUTPUT_BIAS_OFFSET + row, dlogit);
             if logits[cell][row] > best {
                 best = logits[cell][row];
                 prediction = row;
@@ -308,11 +333,11 @@ fn forward_backward(
                 };
                 dprev[cell][row] += d;
                 ddelta[row] = d;
-                grad_add(&mut workspace.gradient, UPDATE_OUT_BIAS_OFFSET + row, d);
+                grad_add(gradient, UPDATE_OUT_BIAS_OFFSET + row, d);
                 for col in 0..MLP_WIDTH {
                     let h = relu(hidden_pre[iteration][cell][col]);
                     grad_add(
-                        &mut workspace.gradient,
+                        gradient,
                         UPDATE_OUT_WEIGHT_OFFSET + row * MLP_WIDTH + col,
                         d * h,
                     );
@@ -328,14 +353,14 @@ fn forward_backward(
                     dhidden[col] = 0.0;
                 }
                 grad_add(
-                    &mut workspace.gradient,
+                    gradient,
                     UPDATE_IN_BIAS_OFFSET + col,
                     dhidden[col],
                 );
                 for input in 0..UPDATE_INPUT_DIM {
                     let value = input_value(weights, &states[iteration], ids[cell], cell, input);
                     grad_add(
-                        &mut workspace.gradient,
+                        gradient,
                         UPDATE_IN_WEIGHT_OFFSET + col * UPDATE_INPUT_DIM + input,
                         dhidden[col] * value,
                     );
@@ -363,7 +388,7 @@ fn forward_backward(
             if ids[cell] != 0 {
                 let embedding = EMBEDDING_OFFSET + ids[cell] as usize * EMBEDDING_DIM;
                 for row in 0..EMBEDDING_DIM {
-                    grad_add(&mut workspace.gradient, embedding + row, dinput[80 + row]);
+                    grad_add(gradient, embedding + row, dinput[80 + row]);
                 }
             }
         }
@@ -380,7 +405,8 @@ pub fn diagnostic_sample_forward(
     workspace: &mut TrainingWorkspace,
 ) -> TrainStepReport {
     let length = (batch.lengths[0] as usize).min(MAX_SEQ_LEN);
-    let (loss, _) = forward_backward(&state.weights, &batch.ids[0], length, workspace, false);
+    let gradient = &mut workspace.gradient as *mut [F32; PARAMETER_COUNT];
+    let (loss, _) = unsafe { forward_backward(&state.weights, &batch.ids[0], length, workspace, &mut *gradient, false) };
     TrainStepReport {
         loss,
         token_count: length as u32,
@@ -394,7 +420,8 @@ pub fn diagnostic_sample_backward(
     workspace: &mut TrainingWorkspace,
 ) -> TrainStepReport {
     let length = (batch.lengths[0] as usize).min(MAX_SEQ_LEN);
-    let (loss, _) = forward_backward(&state.weights, &batch.ids[0], length, workspace, true);
+    let gradient = &mut workspace.gradient as *mut [F32; PARAMETER_COUNT];
+    let (loss, _) = unsafe { forward_backward(&state.weights, &batch.ids[0], length, workspace, &mut *gradient, true) };
     TrainStepReport {
         loss,
         token_count: length as u32,
@@ -456,8 +483,10 @@ pub fn train_step_with_gradient(
     gradient_out: &mut [F32; PARAMETER_COUNT],
 ) -> TrainStepReport {
     let mut workspace = TrainingWorkspace::new();
-    let report = train_step_with_workspace(state, batch, &mut workspace);
-    *gradient_out = workspace.gradient;
+    let mut accumulator = GradientAccumulator::new();
+    accumulate_batch_gradients(state, batch, &mut workspace, &mut accumulator);
+    let report = finalize_adamw_step(state, &mut accumulator);
+    *gradient_out = accumulator.gradient;
     report
 }
 
@@ -466,28 +495,57 @@ pub fn train_step_with_workspace(
     batch: &TrainingBatch,
     workspace: &mut TrainingWorkspace,
 ) -> TrainStepReport {
-    workspace.gradient = [0.0; PARAMETER_COUNT];
-    let mut loss = 0.0;
-    let mut tokens = 0u32;
+    let mut accumulator = GradientAccumulator::new();
+    train_step_with_accumulator(state, batch, workspace, &mut accumulator)
+}
+
+/// Execute a step using caller-owned accumulator storage (required by the
+/// small PVM stack).
+pub fn train_step_with_accumulator(
+    state: &mut TrainingState,
+    batch: &TrainingBatch,
+    workspace: &mut TrainingWorkspace,
+    accumulator: &mut GradientAccumulator,
+) -> TrainStepReport {
+    accumulator.reset();
+    accumulate_batch_gradients(state, batch, workspace, accumulator);
+    finalize_adamw_step(state, accumulator)
+}
+
+/// Accumulate unnormalized per-token gradients in deterministic sample order.
+pub fn accumulate_batch_gradients(
+    state: &TrainingState,
+    batch: &TrainingBatch,
+    workspace: &mut TrainingWorkspace,
+    accumulator: &mut GradientAccumulator,
+) {
     for sample in 0..(batch.size as usize).min(LOGICAL_BATCH_SIZE) {
         let length = (batch.lengths[sample] as usize).min(MAX_SEQ_LEN);
         let (sample_loss, _) =
-            forward_backward(&state.weights, &batch.ids[sample], length, workspace, true);
-        loss += sample_loss;
-        tokens += length as u32;
+            forward_backward(&state.weights, &batch.ids[sample], length, workspace, &mut accumulator.gradient, true);
+        accumulator.loss_sum += sample_loss;
+        accumulator.token_count += length as u32;
     }
+}
+
+/// Normalize once, clip once and apply one AdamW update.
+pub fn finalize_adamw_step(
+    state: &mut TrainingState,
+    accumulator: &mut GradientAccumulator,
+) -> TrainStepReport {
+    let tokens = accumulator.token_count;
     if tokens == 0 {
         return TrainStepReport::default();
     }
     let inverse_tokens = 1.0 / tokens as F32;
     let mut norm_squared = 0.0;
-    for value in &mut workspace.gradient {
+    for value in &mut accumulator.gradient {
         *value *= inverse_tokens;
         norm_squared += *value * *value;
     }
     let norm = sqrtf(norm_squared);
     let scale = if norm > 1.0 { 1.0 / norm } else { 1.0 };
-    for value in &mut workspace.gradient {
+    for value in &mut accumulator.gradient {
         *value *= scale;
     }
     state.step += 1;
@@ -499,15 +557,15 @@ pub fn train_step_with_workspace(
     let bias2 = 1.0 - powf(beta2, state.step);
     for index in 0..PARAMETER_COUNT {
         state.adam_m[index] =
-            beta1 * state.adam_m[index] + (1.0 - beta1) * workspace.gradient[index];
+            beta1 * state.adam_m[index] + (1.0 - beta1) * accumulator.gradient[index];
         state.adam_v[index] = beta2 * state.adam_v[index]
-            + (1.0 - beta2) * workspace.gradient[index] * workspace.gradient[index];
+            + (1.0 - beta2) * accumulator.gradient[index] * accumulator.gradient[index];
         let mhat = state.adam_m[index] / bias1;
         let vhat = state.adam_v[index] / bias2;
         state.weights[index] -= lr * mhat / (sqrtf(vhat) + eps);
     }
     TrainStepReport {
-        loss: loss * inverse_tokens,
+        loss: accumulator.loss_sum * inverse_tokens,
         token_count: tokens,
         grad_norm: norm,
     }
@@ -533,13 +591,10 @@ pub fn evaluate_batch_report(state: &TrainingState, batch: &TrainingBatch) -> Ev
     let sample_count = (batch.size as usize).min(LOGICAL_BATCH_SIZE);
     for sample in 0..(batch.size as usize).min(LOGICAL_BATCH_SIZE) {
         let length = (batch.lengths[sample] as usize).min(MAX_SEQ_LEN);
-        let (sample_loss, sample_correct) = forward_backward(
-            &state.weights,
-            &batch.ids[sample],
-            length,
-            &mut workspace,
-            true,
-        );
+        let gradient = &mut workspace.gradient as *mut [F32; PARAMETER_COUNT];
+        let (sample_loss, sample_correct) = unsafe {
+            forward_backward(&state.weights, &batch.ids[sample], length, &mut workspace, &mut *gradient, true)
+        };
         loss += sample_loss;
         tokens += length as u32;
         correct_tokens += sample_correct;

@@ -3,7 +3,7 @@
   "algorithm": "echo-adamw-cross-entropy-v1",
   "logical_batch_size": 256,
   "artifact": "service/artifacts/training-fidelity.blob",
-  "artifact_hash": "0x04d27bcfd6a9cff1579a2618c423e3516c5179ba13545a3e9c67f5ec3eecf9c5",
+  "artifact_hash": "UNAVAILABLE_DUE_PVM_OOG",
   "gas_limit": 10000000000,
   "gas_used": 0,
   "gas_remaining": 0,
@@ -13,5 +13,6 @@
   "tiny_ratio": 0.0,
   "full_ratio": 0.0,
   "classification": "NOT_MEASURED",
-  "error": "Canonical PyTorch fixture is unavailable. Synthetic diagnostic payload completes through decode and sample backward, but full logical batch is OOG at 10B; synthetic result is not final canonical gas evidence"
+  "gas_lower_bound": null,
+  "error": "Canonical execution did not return within the local Direct Jambda diagnostic run; no canonical gas_used value is claimed. Synthetic full-batch diagnostics are OOG at 10B and remain non-canonical."
 }

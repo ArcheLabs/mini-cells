@@ -1,5 +1,22 @@
 {
+  "status": "BLOCKED_PVM_GAS_AFTER_ACCUMULATOR_REFACTOR",
+  "artifact_hash": "UNAVAILABLE_DUE_OOG",
+  "gas_limit": 10000000000,
+  "gas_used": null,
+  "gas_lower_bound": 10000000000,
+  "native": {
+    "grad_norm": 0.6141084432601929,
+    "loss": 3.7566118240356445,
+    "step": 1,
+    "token_count": 267
+  },
+  "native_chunked": {"bit_exact": true,"shard_samples": 8},
+  "pvm": {"status":"BLOCKED_OUT_OF_GAS"},
+  "pvm_multi_refine": {"status":"BLOCKED_OUT_OF_GAS"},
+  "samples": 16,
+  "blocker": "Current exact accumulator guest exceeds the 10B diagnostic ceiling before returning the parity envelope; no gas_used value is claimed.",
   "schema": "minicells.pvm-training-parity.v1",
-  "status": "BLOCKED_NATIVE_PARITY",
-  "reason": "PVM execution must use the exact Rust core only after Native semantic parity and learning are verified"
+  "weights_bit_exact": null,
+  "adam_m_bit_exact": null,
+  "adam_v_bit_exact": null
 }

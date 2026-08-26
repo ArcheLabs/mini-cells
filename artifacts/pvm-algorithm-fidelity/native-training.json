@@ -1,9 +1,13 @@
 {
   "schema": "minicells.native-training-fidelity.v1",
-  "status": "PASS_SHORT_TRACE_PENDING_5000_LEARNING_GATE",
+  "status": "PASS_5000_LEARNING_GATE",
   "fixture": "fixtures/training-fidelity-v1",
-  "steps_verified": 16,
-  "python_validation_metrics": "fixtures/training-fidelity-v1/validation-metrics.json",
-  "rust_validation_metrics": ".local/runs/fidelity-native-16/validation.json",
-  "next": "RUN_LOCAL_5000_STEP_PYTHON_AND_RUST_LEARNING_COMPARISON"
+  "steps_verified": 5000,
+  "python_validation_metrics": ".local/training-fidelity-python-5000/validation-metrics.json",
+  "rust_validation_metrics": ".local/runs/fidelity-native-5000/validation.json",
+  "python_token_accuracy": 1.0,
+  "rust_token_accuracy": 1.0,
+  "python_exact_sequence_accuracy": 1.0,
+  "rust_exact_sequence_accuracy": 1.0,
+  "next": "COMPLETE_CANONICAL_PVM_GAS_AND_MULTI_REFINE_GATE"
 }

@@ -90,6 +90,7 @@ def main() -> None:
     parser.add_argument("--config", default=str(ROOT / "configs/echo-v0.yaml"))
     parser.add_argument("--output", default=str(ROOT / "fixtures/training-fidelity-v1"))
     parser.add_argument("--steps", type=int, default=5000)
+    parser.add_argument("--device", default="cpu", help="torch device (cpu or cuda) for local reference runs")
     args = parser.parse_args()
     if args.steps < 16:
         raise SystemExit("training fidelity export requires at least 16 steps (use --steps 16 for a short gate)")
@@ -97,7 +98,10 @@ def main() -> None:
 
     config = resolved_config(load_config(args.config), len(CharVocab()))
     set_global_seed(int(config["train"]["seed"]))
-    model = EchoModel(**config["model"])
+    device = torch.device(args.device)
+    if device.type == "cuda" and not torch.cuda.is_available():
+        raise SystemExit("requested cuda device but torch.cuda.is_available() is false")
+    model = EchoModel(**config["model"]).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=config["train"]["learning_rate"],
                                   weight_decay=config["train"]["weight_decay"])
     vocab = CharVocab()
@@ -109,7 +113,7 @@ def main() -> None:
     write_f32(output / "initial-weights-f32.bin", initial)
     trace = []
     for step in range(1, args.steps + 1):
-        batch = generator.batch(config["train"]["batch_size"])
+        batch = generator.batch(config["train"]["batch_size"], device=device)
         write_batch(output / f"batch-{step:06d}.bin", batch)
         optimizer.zero_grad(set_to_none=True)
         loss = masked_cross_entropy(model(batch.input_ids), batch.target_ids, batch.mask)
@@ -129,6 +133,7 @@ def main() -> None:
     validation = fixed_dataset(vocab, config["validation"]["seed"], config["validation"]["examples"],
                                min_length=config["data"]["min_length"], max_length=config["data"]["max_length"],
                                num_cells=config["model"]["num_cells"], random_fraction=config["data"]["random_fraction"])
+    validation = validation.to(device)
     write_batch(output / "validation.bin", validation)
     validation_metrics = evaluate(model, validation)
     (output / "validation-metrics.json").write_text(
@@ -145,6 +150,7 @@ def main() -> None:
         "torch_cuda": torch.version.cuda,
         "cuda_available": bool(torch.cuda.is_available()),
         "torch_device_count": torch.cuda.device_count(),
+        "requested_device": str(device),
         "torch_config": torch.__config__.show(),
         "git_revision": git_revision(),
         "deterministic_algorithms": True,
@@ -157,6 +163,7 @@ def main() -> None:
                 "validation": config["validation"], "optimizer": "torch.optim.AdamW",
                 "optimizer_defaults": optimizer.defaults, "torch_version": torch.__version__,
                 "parameter_order": [name for name, _ in model.named_parameters()], "fixture_steps": args.steps,
+                "device": str(device),
                 "production_train_module": production_train.__file__,
                 "validation_metrics": "validation-metrics.json",
                 "environment": "environment.json",

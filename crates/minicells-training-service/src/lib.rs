@@ -1,16 +1,17 @@
 #![no_std]
 
 use minicells_training_ref::{
-    diagnostic_sample_backward, diagnostic_sample_forward, train_step_with_workspace,
-    TrainingBatch, TrainingState, TrainingWorkspace, PARAMETER_COUNT,
+    accumulate_batch_gradients, diagnostic_sample_backward, diagnostic_sample_forward,
+    finalize_adamw_step, train_step_with_accumulator, GradientAccumulator, TrainingBatch,
+    TrainingState, TrainingWorkspace, PARAMETER_COUNT,
 };
 
-const OUTPUT_CAPACITY: usize = 32;
+const OUTPUT_CAPACITY: usize = 24 + MODEL_BYTES * 3;
 const HEADER: usize = 4 + 8;
 const MODEL_BYTES: usize = PARAMETER_COUNT * 4;
 const STATE_BYTES: usize = HEADER + MODEL_BYTES * 3 + 256 * 64 + 256;
 const DIAGNOSTIC_HEADER: usize = 5;
-const PAYLOAD_CAPACITY: usize = STATE_BYTES + DIAGNOSTIC_HEADER;
+const PAYLOAD_CAPACITY: usize = STATE_BYTES + DIAGNOSTIC_HEADER + 2 + 8 + MODEL_BYTES;
 
 extern "C" {
     fn minijam_payload(output: *mut u8, capacity: usize, output_size: *mut usize) -> u32;
@@ -23,6 +24,7 @@ static mut OUTPUT: [u8; OUTPUT_CAPACITY] = [0; OUTPUT_CAPACITY];
 static mut STATE: TrainingState = TrainingState::from_weights([0.0; PARAMETER_COUNT]);
 static mut BATCH: TrainingBatch = TrainingBatch::empty();
 static mut WORKSPACE: TrainingWorkspace = TrainingWorkspace::new();
+static mut ACCUMULATOR: GradientAccumulator = GradientAccumulator::new();
 
 #[repr(C)]
 pub struct RefineOutput {
@@ -81,10 +83,11 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
         } else {
             (None, raw)
         };
-    if input.len() < STATE_BYTES {
+    if input.len() < HEADER + MODEL_BYTES * 3 {
         return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
     }
-    if &input[..4] != b"MCT1" {
+    let mode = &input[..4];
+    if mode != b"MCT1" && mode != b"MCP1" && mode != b"MCA1" && mode != b"MCF1" {
         return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
     }
     let mut cursor = 4usize;
@@ -104,13 +107,47 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
     if diagnostic_stage == Some(1) {
         return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), 1) };
     }
+    if mode == b"MCF1" {
+        if input.len() < cursor + 8 + MODEL_BYTES { return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) }; }
+        let token_count = u32::from_le_bytes(input[cursor..cursor + 4].try_into().unwrap()); cursor += 4;
+        let loss_sum = read_f32(input, &mut cursor);
+        let accumulator = unsafe { &mut *core::ptr::addr_of_mut!(ACCUMULATOR) };
+        accumulator.reset(); accumulator.token_count = token_count; accumulator.loss_sum = loss_sum;
+        for value in &mut accumulator.gradient { *value = read_f32(input, &mut cursor); }
+        let report = finalize_adamw_step(state, accumulator);
+        let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };
+        output[..4].copy_from_slice(b"MCPR"); output[4..8].copy_from_slice(&report.loss.to_le_bytes());
+        output[8..12].copy_from_slice(&report.grad_norm.to_le_bytes()); output[12..16].copy_from_slice(&report.token_count.to_le_bytes());
+        output[16..24].copy_from_slice(&state.step.to_le_bytes());
+        let mut out_cursor = 24;
+        for value in &state.weights { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
+        for value in &state.adam_m { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
+        for value in &state.adam_v { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
+        return RefineOutput { data: output.as_ptr(), size: out_cursor };
+    }
     let batch = unsafe { &mut *core::ptr::addr_of_mut!(BATCH) };
-    batch.size = 256;
-    for row in 0..256 {
+    let count = if mode == b"MCP1" || mode == b"MCA1" {
+        if input.len() < cursor + 2 { return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) }; }
+        let count = u16::from_le_bytes(input[cursor..cursor + 2].try_into().unwrap());
+        cursor += 2;
+        if count == 0 || count as usize > 256 { return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) }; }
+        count as usize
+    } else { 256 };
+    if mode == b"MCA1" {
+        if input.len() < cursor + 8 + MODEL_BYTES { return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) }; }
+        let accumulator = unsafe { &mut *core::ptr::addr_of_mut!(ACCUMULATOR) };
+        accumulator.token_count = u32::from_le_bytes(input[cursor..cursor + 4].try_into().unwrap()); cursor += 4;
+        accumulator.loss_sum = read_f32(input, &mut cursor);
+        for value in &mut accumulator.gradient { *value = read_f32(input, &mut cursor); }
+    }
+    let required = cursor + count * 64 + count;
+    if input.len() < required { return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) }; }
+    batch.size = count as u16;
+    for row in 0..count {
         batch.ids[row].copy_from_slice(&input[cursor..cursor + 64]);
         cursor += 64;
     }
-    batch.lengths.copy_from_slice(&input[cursor..cursor + 256]);
+    batch.lengths[..count].copy_from_slice(&input[cursor..cursor + count]);
     if diagnostic_stage == Some(2) {
         return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), 2) };
     }
@@ -121,13 +158,37 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
     let report = match diagnostic_stage {
         Some(4) => diagnostic_sample_forward(state, batch, workspace),
         Some(5) => diagnostic_sample_backward(state, batch, workspace),
-        Some(6) | Some(7) | Some(8) | None => train_step_with_workspace(state, batch, workspace),
+        Some(6) | Some(7) | Some(8) | None => unsafe {
+            train_step_with_accumulator(state, batch, workspace, &mut *core::ptr::addr_of_mut!(ACCUMULATOR))
+        },
         _ => unreachable!(),
     };
     if let Some(stage) = diagnostic_stage {
         return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), stage) };
     }
+    if mode == b"MCA1" {
+        let accumulator = unsafe { &mut *core::ptr::addr_of_mut!(ACCUMULATOR) };
+        accumulate_batch_gradients(state, batch, workspace, accumulator);
+        let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };
+        output[..4].copy_from_slice(b"MCAR"); output[4..8].copy_from_slice(&accumulator.loss_sum.to_le_bytes());
+        output[8..12].copy_from_slice(&accumulator.token_count.to_le_bytes());
+        let mut out_cursor = 12;
+        for value in &accumulator.gradient { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
+        return RefineOutput { data: output.as_ptr(), size: out_cursor };
+    }
     let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };
+    if mode == b"MCP1" {
+        output[..4].copy_from_slice(b"MCPR");
+        output[4..8].copy_from_slice(&report.loss.to_le_bytes());
+        output[8..12].copy_from_slice(&report.grad_norm.to_le_bytes());
+        output[12..16].copy_from_slice(&report.token_count.to_le_bytes());
+        output[16..24].copy_from_slice(&state.step.to_le_bytes());
+        let mut out_cursor = 24;
+        for value in &state.weights { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
+        for value in &state.adam_m { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
+        for value in &state.adam_v { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
+        return RefineOutput { data: output.as_ptr(), size: out_cursor };
+    }
     output[..4].copy_from_slice(&report.loss.to_le_bytes());
     output[4..8].copy_from_slice(&report.grad_norm.to_le_bytes());
     output[8..12].copy_from_slice(&report.token_count.to_le_bytes());

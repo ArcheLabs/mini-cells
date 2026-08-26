@@ -11,7 +11,8 @@ use minicells_sim::trainer::{
     evaluate_fixed_probe, load_checkpoint_model, read_metrics, run_persistent_native, NativeTrainer,
 };
 use minicells_training_ref::{
-    evaluate_batch_report, train_step_with_gradient, TrainStepReport, TrainingBatch, TrainingState,
+    accumulate_batch_gradients, evaluate_batch_report, finalize_adamw_step, train_step_with_gradient,
+    GradientAccumulator, TrainStepReport, TrainingBatch, TrainingState, TrainingWorkspace,
     PARAMETER_COUNT,
 };
 use std::path::PathBuf;
@@ -45,6 +46,7 @@ enum Command {
     Benchmark(TrainArgs),
     Gate(GateArgs),
     FidelityNative(FidelityNativeArgs),
+    PvmParity(PvmParityArgs),
     PvmGas(PvmGasArgs),
 }
 
@@ -125,6 +127,23 @@ struct PvmGasArgs {
     diagnostic_stage: Option<String>,
     #[arg(long, default_value = "artifacts/pvm-algorithm-fidelity")]
     output: PathBuf,
+}
+
+#[derive(Args)]
+struct PvmParityArgs {
+    #[arg(long, default_value = "service/artifacts/training-fidelity.blob")]
+    artifact: PathBuf,
+    #[arg(long, default_value = "fixtures/training-fidelity-v1")]
+    fixture: PathBuf,
+    #[arg(long, default_value_t = 16)]
+    samples: usize,
+    #[arg(long, default_value_t = 10_000_000_000)]
+    gas_limit: u64,
+    #[arg(long, default_value = "artifacts/pvm-algorithm-fidelity/pvm-parity.json")]
+    output: PathBuf,
+    /// Also execute the experimental multi-Refine round trip (costly).
+    #[arg(long, default_value_t = false)]
+    multi_refine: bool,
 }
 
 fn dataset_root(path: &Option<PathBuf>) -> Result<String, Box<dyn std::error::Error>> {
@@ -578,6 +597,127 @@ fn classify_execution(
     }
 }
 
+fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>> {
+    if args.samples == 0 || args.samples > 256 { return Err("samples must be 1..=256".into()); }
+    let initial = read_f32_array(&args.fixture.join("initial-weights-f32.bin"))?;
+    if initial.len() != PARAMETER_COUNT { return Err("initial weight fixture length mismatch".into()); }
+    let mut weights = [0.0f32; PARAMETER_COUNT];
+    weights.copy_from_slice(&initial);
+    let mut state = TrainingState::from_weights(weights);
+    let mut batch = load_fidelity_batch(&args.fixture.join("batch-000001.bin"))?;
+    batch.size = args.samples as u16;
+    let mut native_gradient = [0.0f32; PARAMETER_COUNT];
+    let native_report = train_step_with_gradient(&mut state, &batch, &mut native_gradient);
+    let mut chunked_state = TrainingState::from_weights(weights);
+    let mut chunked_workspace = TrainingWorkspace::new();
+    let mut accumulator = GradientAccumulator::new();
+    for start in if args.multi_refine { (0..args.samples).step_by(8).collect::<Vec<_>>() } else { Vec::new() } {
+        let end = (start + 8).min(args.samples);
+        let mut shard = TrainingBatch::empty();
+        shard.size = (end - start) as u16;
+        for row in 0..(end - start) {
+            shard.ids[row] = batch.ids[start + row];
+            shard.lengths[row] = batch.lengths[start + row];
+        }
+        accumulate_batch_gradients(&chunked_state, &shard, &mut chunked_workspace, &mut accumulator);
+    }
+    let chunked_report = finalize_adamw_step(&mut chunked_state, &mut accumulator);
+    let chunked_exact = f32_bytes(&chunked_state.weights) == f32_bytes(&state.weights)
+        && f32_bytes(&chunked_state.adam_m) == f32_bytes(&state.adam_m)
+        && f32_bytes(&chunked_state.adam_v) == f32_bytes(&state.adam_v)
+        && chunked_report.loss.to_bits() == native_report.loss.to_bits()
+        && chunked_report.grad_norm.to_bits() == native_report.grad_norm.to_bits();
+    let mut payload = Vec::with_capacity(4 + 8 + PARAMETER_COUNT * 12 + 2 + args.samples * 65);
+    payload.extend_from_slice(b"MCP1");
+    payload.extend_from_slice(&0u64.to_le_bytes());
+    payload.extend_from_slice(&f32_bytes(&weights));
+    payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 4]);
+    payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 4]);
+    payload.extend_from_slice(&(args.samples as u16).to_le_bytes());
+    for row in 0..args.samples { payload.extend_from_slice(&batch.ids[row]); }
+    payload.extend_from_slice(&batch.lengths[..args.samples]);
+    let mut harness = DirectPvmHarness::load(&args.artifact, args.gas_limit,
+        "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
+    let execution = harness.execute_refine_measured(&payload)?;
+    if execution.output.len() != 24 + PARAMETER_COUNT * 12 || &execution.output[..4] != b"MCPR" {
+        return Err(format!("invalid MCPR output length {}", execution.output.len()).into());
+    }
+    let out = &execution.output;
+    let read = |offset: usize| f32::from_le_bytes(out[offset..offset + 4].try_into().unwrap());
+    let pvm_loss = read(4);
+    let pvm_norm = read(8);
+    let pvm_tokens = u32::from_le_bytes(out[12..16].try_into().unwrap());
+    let pvm_step = u64::from_le_bytes(out[16..24].try_into().unwrap());
+    let state_bytes = |offset: usize| &out[offset..offset + PARAMETER_COUNT * 4];
+    let native_weights = f32_bytes(&state.weights);
+    let native_m = f32_bytes(&state.adam_m);
+    let native_v = f32_bytes(&state.adam_v);
+    let weights_exact = state_bytes(24) == native_weights.as_slice();
+    let m_exact = state_bytes(24 + PARAMETER_COUNT * 4) == native_m.as_slice();
+    let v_exact = state_bytes(24 + PARAMETER_COUNT * 8) == native_v.as_slice();
+    let scalar_exact = pvm_loss.to_bits() == native_report.loss.to_bits()
+        && pvm_norm.to_bits() == native_report.grad_norm.to_bits()
+        && pvm_tokens == native_report.token_count && pvm_step == state.step;
+    let mut shard_gas = Vec::new();
+    let mut shard_acc = GradientAccumulator::new();
+    let mut shard_ok = true;
+    for start in (0..args.samples).step_by(8) {
+        let end = (start + 8).min(args.samples);
+        let mut shard_payload = Vec::with_capacity(payload.len());
+        shard_payload.extend_from_slice(b"MCA1"); shard_payload.extend_from_slice(&0u64.to_le_bytes());
+        shard_payload.extend_from_slice(&f32_bytes(&weights)); shard_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]);
+        shard_payload.extend_from_slice(&((end - start) as u16).to_le_bytes());
+        shard_payload.extend_from_slice(&shard_acc.token_count.to_le_bytes()); shard_payload.extend_from_slice(&shard_acc.loss_sum.to_le_bytes());
+        shard_payload.extend_from_slice(&f32_bytes(&shard_acc.gradient));
+        for row in start..end { shard_payload.extend_from_slice(&batch.ids[row]); }
+        shard_payload.extend_from_slice(&batch.lengths[start..end]);
+        let mut h = DirectPvmHarness::load(&args.artifact, args.gas_limit,
+            "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
+        let ex = h.execute_refine_measured(&shard_payload)?;
+        shard_gas.push(ex.gas_used);
+        if ex.output.len() != 12 + PARAMETER_COUNT * 4 || &ex.output[..4] != b"MCAR" { shard_ok = false; break; }
+        let loss = f32::from_le_bytes(ex.output[4..8].try_into().unwrap());
+        let tokens = u32::from_le_bytes(ex.output[8..12].try_into().unwrap());
+        shard_acc.loss_sum = loss; shard_acc.token_count = tokens;
+        for i in 0..PARAMETER_COUNT {
+            let v = f32::from_le_bytes(ex.output[12 + i * 4..16 + i * 4].try_into().unwrap());
+            shard_acc.gradient[i] = v;
+        }
+    }
+    let mut finalize_gas = 0u64;
+    let mut multi_refine_exact = false;
+    if shard_ok {
+        let mut final_payload = Vec::with_capacity(4 + 8 + PARAMETER_COUNT * 12 + 8 + PARAMETER_COUNT * 4);
+        final_payload.extend_from_slice(b"MCF1"); final_payload.extend_from_slice(&0u64.to_le_bytes());
+        final_payload.extend_from_slice(&f32_bytes(&weights)); final_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]);
+        final_payload.extend_from_slice(&shard_acc.token_count.to_le_bytes()); final_payload.extend_from_slice(&shard_acc.loss_sum.to_le_bytes());
+        final_payload.extend_from_slice(&f32_bytes(&shard_acc.gradient));
+        let mut h = DirectPvmHarness::load(&args.artifact, args.gas_limit,
+            "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
+        let ex = h.execute_refine_measured(&final_payload)?; finalize_gas = ex.gas_used;
+        if ex.output.len() == 24 + PARAMETER_COUNT * 12 && &ex.output[..4] == b"MCPR" {
+            multi_refine_exact = ex.output[24..24 + PARAMETER_COUNT * 4] == native_weights[..]
+                && ex.output[24 + PARAMETER_COUNT * 4..24 + PARAMETER_COUNT * 8] == native_m[..]
+                && ex.output[24 + PARAMETER_COUNT * 8..24 + PARAMETER_COUNT * 12] == native_v[..];
+        }
+    }
+    let report = serde_json::json!({
+        "schema":"minicells.pvm-training-parity.v1", "status":if weights_exact && m_exact && v_exact && scalar_exact {"PASS_BIT_EXACT"} else {"FAIL"},
+        "samples":args.samples, "gas_used":execution.gas_used, "gas_remaining":execution.gas_remaining,
+        "scalar_exact":scalar_exact, "weights_bit_exact":weights_exact, "adam_m_bit_exact":m_exact, "adam_v_bit_exact":v_exact,
+        "native_chunked": {"shard_samples":8,"bit_exact":chunked_exact},
+        "pvm_multi_refine": {"status":if args.multi_refine {if multi_refine_exact {"PASS_BIT_EXACT"} else {"FAIL"}} else {"NOT_RUN"},"shard_samples":8,"shard_gas":shard_gas,"finalize_gas":finalize_gas,"bit_exact":multi_refine_exact},
+        "native":{"loss":native_report.loss,"grad_norm":native_report.grad_norm,"token_count":native_report.token_count,"step":state.step},
+        "pvm":{"loss":pvm_loss,"grad_norm":pvm_norm,"token_count":pvm_tokens,"step":pvm_step},
+        "artifact_hash":format!("0x{}",hex::encode(harness.artifact.blake2_hash)), "gas_classification":classify_gas(execution.gas_used)
+    });
+    if let Some(parent) = args.output.parent() { std::fs::create_dir_all(parent)?; }
+    std::fs::write(&args.output, serde_json::to_vec_pretty(&report)?)?;
+    println!("{}", serde_json::to_string_pretty(&report)?);
+    if report["status"] != "PASS_BIT_EXACT" { return Err("PVM parity failed".into()); }
+    Ok(())
+}
+
 fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     let mut harness = DirectPvmHarness::load(
         &args.artifact,
@@ -612,8 +752,8 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     };
     let execution = harness.execute_refine_measured(&payload);
     std::fs::create_dir_all(&args.output)?;
-    let (completed, gas_used, gas_remaining, error) = match execution {
-        Ok(result) => (true, result.gas_used, result.gas_remaining, None),
+    let (completed, gas_used, gas_remaining, error, exhausted) = match execution {
+        Ok(result) => (true, result.gas_used, result.gas_remaining, None, false),
         Err(error) => {
             let message = error.to_string();
             let exhausted = message.contains("out of gas");
@@ -621,7 +761,7 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
                 false,
                 if exhausted { args.gas_limit } else { 0 },
                 0,
-                Some(message),
+                Some(message), exhausted,
             )
         }
     };
@@ -647,9 +787,12 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     }
     let report = serde_json::json!({"schema":"minicells.pvm-training-gas.v1", "algorithm":"echo-adamw-ce-v1",
         "logical_batch_size":256, "artifact_hash":format!("0x{}",hex::encode(harness.artifact.blake2_hash)),
-        "gas_limit":args.gas_limit, "gas_used":gas_used, "gas_remaining":gas_remaining, "completed":completed,
+        "gas_limit":args.gas_limit, "gas_used":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used)},
+        "gas_lower_bound":if exhausted {serde_json::json!(args.gas_limit)} else {serde_json::Value::Null},
+        "gas_remaining":gas_remaining, "completed":completed,
         "tiny_limit":1_000_000_000u64, "full_limit":5_000_000_000u64,
-        "tiny_ratio":gas_used as f64/1_000_000_000f64, "full_ratio":gas_used as f64/5_000_000_000f64,
+        "tiny_ratio":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used as f64/1_000_000_000f64)},
+        "full_ratio":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used as f64/5_000_000_000f64)},
         "classification":classification, "error":error});
     std::fs::write(
         args.output.join("pvm-gas.json"),
@@ -906,6 +1049,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::Train(args) | Command::Benchmark(args) => train(args, false)?,
         Command::Gate(args) => run_gate(args)?,
         Command::FidelityNative(args) => run_fidelity_native(args)?,
+        Command::PvmParity(args) => run_pvm_parity(args)?,
         Command::PvmGas(args) => run_pvm_gas(args)?,
         Command::Resume(args) => train(
             TrainArgs {
