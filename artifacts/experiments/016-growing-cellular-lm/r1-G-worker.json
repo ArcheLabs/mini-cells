@@ -1,0 +1,62 @@
+{
+  "final_nll": 4.582965970039368,
+  "final_ppl": 97.80404831904815,
+  "final_token_accuracy": 0.20758056640625,
+  "format": "minicells.growing-cellular-lm-worker.v1",
+  "interventions": [
+    {
+      "altered_nll": 4.607937514781952,
+      "delta_nll": 0.02497154474258423,
+      "intervention": "learned_edges_off",
+      "normal_nll": 4.582965970039368,
+      "replicate": 1
+    },
+    {
+      "altered_nll": 4.60692635178566,
+      "delta_nll": 0.023960381746292114,
+      "intervention": "initial_organism",
+      "normal_nll": 4.582965970039368,
+      "replicate": 1
+    }
+  ],
+  "language_structural_events": 5,
+  "language_wall_seconds": 43.170536269000024,
+  "local_learning": {
+    "base_language_nll": 4.582965970039368,
+    "base_skill_nll": 9.902867998395648,
+    "donor_alive_cells": 9,
+    "donor_language_nll": 7.369427353143692,
+    "donor_language_ratio": 1.6080039435859892,
+    "donor_skill_nll": 6.165267467498779,
+    "recipient_alive_cells": 9,
+    "recipient_language_nll": 6.256224721670151,
+    "recipient_language_ratio": 1.3651039005241423,
+    "recipient_skill_nll": 7.116080624716623,
+    "replicate": 1,
+    "selected_cell_count": 5,
+    "selected_cells": "[1, 2, 3, 7, 8]",
+    "skill": "REVERSE_INC",
+    "skill_improvement": 3.7376005308968683,
+    "transplant_recovery": 0.7456086734368887
+  },
+  "local_wall_seconds": 10.864883059999954,
+  "model_config": {
+    "initial_cells": 4,
+    "max_cells": 12,
+    "parameters": 395712,
+    "target_cellular_parameters": 395712
+  },
+  "model_seed": 92016,
+  "parameters": 395712,
+  "peak_vram_bytes": 553885696,
+  "phase1_alive_cells": 7,
+  "phase1_edges": 14,
+  "replicate": 1,
+  "run": "r1-G",
+  "schedule_seed": 32016,
+  "seconds_per_million_tokens": 38.95428049902328,
+  "tokens": 1024000,
+  "training_elapsed_seconds": 39.88918323099983,
+  "variant": "G",
+  "wall_seconds_per_million_tokens": 42.15872682519534
+}

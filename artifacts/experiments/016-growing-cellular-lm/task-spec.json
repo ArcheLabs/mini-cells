@@ -1,0 +1,29 @@
+{
+  "experiment": "016",
+  "format": "minicells.growing-cellular-lm-task.v1",
+  "phase1": {
+    "dataset": "roneneldan/TinyStories",
+    "objective": "autoregressive next-token prediction",
+    "tokens_per_model": 1024000,
+    "variants": {
+      "F": "fixed four-cell organism with one shared time-homogeneous cellular rule",
+      "G": "same cellular model with utility-driven connect/prune and pressure-conflict-driven fork",
+      "T": "parameter-matched standard causal Transformer"
+    }
+  },
+  "phase2": {
+    "genome": "frozen",
+    "purpose": "test local capability acquisition without global genome update",
+    "skill": "REVERSE_INC synthetic transformation",
+    "trainable": "cell_memory plus non-parametric structural events"
+  },
+  "phase3": {
+    "operation": "copy high-change/newborn phenotype cells and their internal subgraph into a phase1-identical recipient",
+    "purpose": "first same-genome tissue transplantation probe"
+  },
+  "structural_principle": {
+    "connect": "persistent positive first-order marginal edge utility -dL/dw",
+    "fork": "persistent phenotype-gradient pressure + microbatch gradient conflict, only after useful connection is unavailable",
+    "prune": "persistent negative marginal edge utility for non-protected edges"
+  }
+}

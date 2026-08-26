@@ -1,0 +1,62 @@
+{
+  "design": {
+    "cell_rule": "one globally shared time-homogeneous recurrent rule",
+    "cellular_interface": "only cell 0 receives token embedding and supplies logits",
+    "gpu_count": 2,
+    "initial_cells": 4,
+    "max_cells": 12,
+    "models_total": 9,
+    "parameter_matched_transformer": true,
+    "persistent_phenotype": "per-cell memory vector",
+    "replicates": 3,
+    "structure": "directed graph with protected initial/lineage edges plus utility-selected learned edges",
+    "tokens_per_model": 1024000
+  },
+  "experiment": "MINI Cells Experiment 016 \u2014 Growing Cellular Language Model",
+  "format": "minicells.growing-cellular-lm.v1",
+  "pre_registered_signal": {
+    "G_over_T_nll_geomean_max": 1.25,
+    "language_retention_ratio_max": 1.1,
+    "minimum_frozen_genome_skill_improvement_replicates": 2,
+    "minimum_growth_replicates": 2,
+    "minimum_signal_replicates": 2,
+    "minimum_structural_causal_replicates": 2,
+    "per_seed_G_over_T_nll_max": 1.5,
+    "transplant_recovery_min": 0.5
+  },
+  "question": "Can a small language organism with one shared cell genome autonomously allocate activity, connect, prune and fork while remaining competitive with a parameter-matched Transformer, then acquire and transplant a skill with the genome frozen?",
+  "results": {
+    "F_over_T_nll_geomean": 1.0533640145903826,
+    "G_over_F_nll_geomean": 0.9999908294742196,
+    "G_over_T_nll_geomean": 1.0533543546885307,
+    "G_over_T_wall_cost_geomean": 5.887818226460623,
+    "connect_replicates": 3,
+    "fork_replicates": 3,
+    "growth_replicates": 3,
+    "language_retention_replicates": 0,
+    "local_skill_improvement_replicates": 3,
+    "mean_phase1_alive_cells": 7.0,
+    "mean_phase1_edges": 14.0,
+    "pass_flags": {
+      "frozen_genome_skill_learning": true,
+      "language_competitiveness": true,
+      "language_retention": false,
+      "structural_causal_use": true,
+      "structural_growth": true,
+      "tissue_transplantation": true
+    },
+    "structural_causal_replicates": 3,
+    "transplant_recovery_replicates": 3
+  },
+  "scope": {
+    "claim": "small end-to-end prototype of a growing cellular language organism",
+    "not_claimed": [
+      "production-scale language quality",
+      "arbitrary cross-genome transplantation",
+      "unbounded physical allocation",
+      "proof that mature capabilities must form MoE-like communities",
+      "optimal structural policy"
+    ]
+  },
+  "status": "PARTIAL_HOLISTIC_GROWING_CLM_SIGNAL"
+}
