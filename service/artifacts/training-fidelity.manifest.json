@@ -2,13 +2,13 @@
   "format": "minicells.training-fidelity-guest-artifact.v1",
   "algorithm": "echo-adamw-cross-entropy-v1",
   "artifact": "training-fidelity.blob",
-  "blob_bytes": 17984,
-  "blob_sha256": "7d3ab2fe29e4da2f23afd573b51a99787e8afeb5ce3d660b77142ad0e449338b",
-  "pvm_sha256": "2f8c16c7316e0ba09fae3b72d365566c41100f4890c19b721f9739f6daf89f5b",
+  "blob_bytes": 18959,
+  "blob_sha256": "974ca797472a2de0faccde994a52c57f2cbf7f2dafcc796f514e91068302872a",
+  "pvm_sha256": "899a688d6467615db9a9bb7e6a9f75e687ea89b815408159118eeaf588cb2633",
   "parameter_count": 4476,
   "logical_batch_size": 256,
   "payload_format": "MCT1",
   "runtime_ref": "5947c50699863948c51028bc346980481d839884",
   "jambda_adapter_ref": "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
-  "link_note": "RISC-V --no-relax is required to link the large FP32 guest; execution remains blocked pending Direct Jambda validation"
+  "link_note": "RISC-V --no-relax is required to link the large FP32 guest; diagnostic execution now reaches sample backward, while canonical full-batch gas awaits the PyTorch fixture"
 }

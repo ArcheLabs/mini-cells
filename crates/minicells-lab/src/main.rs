@@ -11,7 +11,7 @@ use minicells_sim::trainer::{
     evaluate_fixed_probe, load_checkpoint_model, read_metrics, run_persistent_native, NativeTrainer,
 };
 use minicells_training_ref::{
-    evaluate_batch, train_step_with_gradient, TrainStepReport, TrainingBatch, TrainingState,
+    evaluate_batch_report, train_step_with_gradient, TrainStepReport, TrainingBatch, TrainingState,
     PARAMETER_COUNT,
 };
 use std::path::PathBuf;
@@ -120,6 +120,9 @@ struct PvmGasArgs {
     payload_hex: Option<String>,
     #[arg(long, conflicts_with = "payload_hex")]
     payload_file: Option<PathBuf>,
+    /// Diagnostic-only stage probe; its gas is never written as final gas evidence.
+    #[arg(long)]
+    diagnostic_stage: Option<String>,
     #[arg(long, default_value = "artifacts/pvm-algorithm-fidelity")]
     output: PathBuf,
 }
@@ -408,6 +411,9 @@ fn run_fidelity_native(args: FidelityNativeArgs) -> Result<(), Box<dyn std::erro
     let mut parity_blocked = false;
     let mut parity_pass = true;
     let steps = args.steps as usize;
+    if steps < 16 {
+        return Err("Native fidelity gate requires at least 16 optimizer steps".into());
+    }
     for step in 1..=steps {
         let batch = load_fidelity_batch(&args.fixture.join(format!("batch-{step:06}.bin")))?;
         let mut gradient = [0.0f32; PARAMETER_COUNT];
@@ -417,7 +423,7 @@ fn run_fidelity_native(args: FidelityNativeArgs) -> Result<(), Box<dyn std::erro
             serde_json::json!({"step": step, "loss": report.loss, "token_count": report.token_count,
             "grad_norm": report.grad_norm, "weight_digest": digest_bytes(&bytes)}),
         );
-        if step <= 2 {
+        if matches!(step, 1 | 2 | 4 | 16) {
             let expected_root = args.fixture.join("expected");
             let paths = [
                 (
@@ -498,13 +504,22 @@ fn run_fidelity_native(args: FidelityNativeArgs) -> Result<(), Box<dyn std::erro
         let validation_batches = load_fidelity_batches(&args.fixture.join("validation.bin"))?;
         let mut loss_sum = 0.0f32;
         let mut token_count = 0u64;
+        let mut correct_tokens = 0u64;
+        let mut exact_sum = 0.0f32;
+        let mut sample_count = 0u64;
         for batch in &validation_batches {
-            let report = evaluate_batch(&state, batch);
+            let report = evaluate_batch_report(&state, batch);
             loss_sum += report.loss * report.token_count as f32;
             token_count += report.token_count as u64;
+            correct_tokens += report.correct_tokens as u64;
+            exact_sum += report.exact_sequence_accuracy * batch.size as f32;
+            sample_count += batch.size as u64;
         }
         serde_json::json!({"status":"PASS", "batches":validation_batches.len(), "token_count":token_count,
-            "loss":if token_count == 0 { 0.0 } else { loss_sum / token_count as f32 }})
+            "loss":if token_count == 0 { 0.0 } else { loss_sum / token_count as f32 },
+            "correct_tokens":correct_tokens,
+            "token_accuracy":if token_count == 0 { 0.0 } else { correct_tokens as f32 / token_count as f32 },
+            "exact_sequence_accuracy":if sample_count == 0 { 0.0 } else { exact_sum / sample_count as f32 }})
     } else {
         serde_json::json!({"status":"BLOCKED_VALIDATION_FIXTURE"})
     };
@@ -575,14 +590,61 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
         (None, Some(path)) => std::fs::read(path)?,
         _ => return Err("provide exactly one of --payload-hex or --payload-file".into()),
     };
+    let (payload, diagnostic_stage) = if let Some(stage) = args.diagnostic_stage.as_deref() {
+        let code = match stage {
+            "payload" | "0" => 0,
+            "decode" | "state" | "1" => 1,
+            "batch" | "2" => 2,
+            "train" | "3" => 3,
+            "forward" | "4" => 4,
+            "backward" | "5" => 5,
+            "full-batch" | "6" => 6,
+            "adamw" | "7" => 7,
+            "return" | "8" => 8,
+            _ => return Err(format!("unknown diagnostic stage: {stage}").into()),
+        };
+        let mut wrapped = b"MCD1".to_vec();
+        wrapped.push(code);
+        wrapped.extend_from_slice(&payload);
+        (wrapped, Some((stage.to_string(), code)))
+    } else {
+        (payload, None)
+    };
     let execution = harness.execute_refine_measured(&payload);
     std::fs::create_dir_all(&args.output)?;
     let (completed, gas_used, gas_remaining, error) = match execution {
         Ok(result) => (true, result.gas_used, result.gas_remaining, None),
-        Err(error) => (false, 0, 0, Some(error.to_string())),
+        Err(error) => {
+            let message = error.to_string();
+            let exhausted = message.contains("out of gas");
+            (
+                false,
+                if exhausted { args.gas_limit } else { 0 },
+                0,
+                Some(message),
+            )
+        }
     };
     let error_ref = error.as_deref();
     let classification = classify_execution(completed, gas_used, error_ref, args.gas_limit);
+    if let Some((stage_name, stage_code)) = diagnostic_stage {
+        let report = serde_json::json!({
+            "schema": "minicells.pvm-training-diagnostic.v1",
+            "stage": stage_name,
+            "stage_code": stage_code,
+            "completed": completed,
+            "gas_used": gas_used,
+            "gas_remaining": gas_remaining,
+            "classification": "NOT_MEASURED",
+            "error": error,
+        });
+        std::fs::write(
+            args.output.join("pvm-diagnostic.json"),
+            serde_json::to_vec_pretty(&report)?,
+        )?;
+        println!("{}", serde_json::to_string_pretty(&report)?);
+        return Ok(());
+    }
     let report = serde_json::json!({"schema":"minicells.pvm-training-gas.v1", "algorithm":"echo-adamw-ce-v1",
         "logical_batch_size":256, "artifact_hash":format!("0x{}",hex::encode(harness.artifact.blake2_hash)),
         "gas_limit":args.gas_limit, "gas_used":gas_used, "gas_remaining":gas_remaining, "completed":completed,

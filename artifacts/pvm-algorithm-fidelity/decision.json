@@ -5,7 +5,7 @@
   "fresh_chain_e2e": "NOT_STARTED_BY_POLICY",
   "blockers": [
     "PyTorch is unavailable, so Python reference tensors cannot be exported",
-    "Dedicated training-fidelity guest builds but panics in Direct Jambda harness before authoritative gas measurement"
+    "Canonical PVM gas cannot be measured until the PyTorch fixture is available; synthetic full-batch diagnostic is OOG at 10B"
   ],
   "algorithm_changes": "NONE"
 }

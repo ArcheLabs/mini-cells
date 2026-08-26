@@ -1,12 +1,16 @@
 #![no_std]
 
-use minicells_training_ref::{train_step, TrainingBatch, TrainingState, PARAMETER_COUNT};
+use minicells_training_ref::{
+    diagnostic_sample_backward, diagnostic_sample_forward, train_step_with_workspace,
+    TrainingBatch, TrainingState, TrainingWorkspace, PARAMETER_COUNT,
+};
 
 const OUTPUT_CAPACITY: usize = 32;
 const HEADER: usize = 4 + 8;
 const MODEL_BYTES: usize = PARAMETER_COUNT * 4;
 const STATE_BYTES: usize = HEADER + MODEL_BYTES * 3 + 256 * 64 + 256;
-const PAYLOAD_CAPACITY: usize = STATE_BYTES;
+const DIAGNOSTIC_HEADER: usize = 5;
+const PAYLOAD_CAPACITY: usize = STATE_BYTES + DIAGNOSTIC_HEADER;
 
 extern "C" {
     fn minijam_payload(output: *mut u8, capacity: usize, output_size: *mut usize) -> u32;
@@ -18,6 +22,7 @@ static mut OUTPUT: [u8; OUTPUT_CAPACITY] = [0; OUTPUT_CAPACITY];
 // PVM call stack.
 static mut STATE: TrainingState = TrainingState::from_weights([0.0; PARAMETER_COUNT]);
 static mut BATCH: TrainingBatch = TrainingBatch::empty();
+static mut WORKSPACE: TrainingWorkspace = TrainingWorkspace::new();
 
 #[repr(C)]
 pub struct RefineOutput {
@@ -44,16 +49,41 @@ fn fail(output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
     }
 }
 
+fn diagnostic(output: &mut [u8; OUTPUT_CAPACITY], stage: u8) -> RefineOutput {
+    output[..4].copy_from_slice(b"MDG1");
+    output[4] = stage;
+    RefineOutput {
+        data: output.as_ptr(),
+        size: 5,
+    }
+}
+
 #[no_mangle]
 pub extern "C" fn minijam_refine() -> RefineOutput {
     let mut size = 0usize;
-    let input = unsafe {
+    let raw = unsafe {
         let ptr = core::ptr::addr_of_mut!(INPUT).cast::<u8>();
-        if minijam_payload(ptr, PAYLOAD_CAPACITY, &mut size) != 0 || size < STATE_BYTES {
+        if minijam_payload(ptr, PAYLOAD_CAPACITY, &mut size) != 0 {
             return fail(&mut *core::ptr::addr_of_mut!(OUTPUT));
         }
         core::slice::from_raw_parts(ptr, size)
     };
+    let (diagnostic_stage, input) =
+        if raw.first().copied() == Some(b'M') && raw.get(1..4) == Some(b"CD1") {
+            let stage = raw.get(4).copied().unwrap_or(u8::MAX);
+            if stage > 8 || raw.len() < DIAGNOSTIC_HEADER {
+                return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
+            }
+            if stage == 0 {
+                return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), stage) };
+            }
+            (Some(stage), &raw[DIAGNOSTIC_HEADER..])
+        } else {
+            (None, raw)
+        };
+    if input.len() < STATE_BYTES {
+        return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
+    }
     if &input[..4] != b"MCT1" {
         return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
     }
@@ -71,6 +101,9 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
         *value = read_f32(input, &mut cursor);
     }
     state.step = step;
+    if diagnostic_stage == Some(1) {
+        return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), 1) };
+    }
     let batch = unsafe { &mut *core::ptr::addr_of_mut!(BATCH) };
     batch.size = 256;
     for row in 0..256 {
@@ -78,7 +111,22 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
         cursor += 64;
     }
     batch.lengths.copy_from_slice(&input[cursor..cursor + 256]);
-    let report = train_step(state, batch);
+    if diagnostic_stage == Some(2) {
+        return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), 2) };
+    }
+    let workspace = unsafe { &mut *core::ptr::addr_of_mut!(WORKSPACE) };
+    if diagnostic_stage == Some(3) {
+        return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), 3) };
+    }
+    let report = match diagnostic_stage {
+        Some(4) => diagnostic_sample_forward(state, batch, workspace),
+        Some(5) => diagnostic_sample_backward(state, batch, workspace),
+        Some(6) | Some(7) | Some(8) | None => train_step_with_workspace(state, batch, workspace),
+        _ => unreachable!(),
+    };
+    if let Some(stage) = diagnostic_stage {
+        return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), stage) };
+    }
     let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };
     output[..4].copy_from_slice(&report.loss.to_le_bytes());
     output[4..8].copy_from_slice(&report.grad_norm.to_le_bytes());

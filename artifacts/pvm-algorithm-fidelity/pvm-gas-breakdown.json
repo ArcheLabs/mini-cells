@@ -1,6 +1,16 @@
 {
   "schema": "minicells.pvm-training-gas-breakdown.v1",
-  "status": "NOT_MEASURED",
+  "status": "DIAGNOSTIC_ONLY",
   "stages": ["START", "AFTER_FORWARD", "AFTER_CE", "AFTER_BACKWARD", "AFTER_GRAD_REDUCTION", "AFTER_GRAD_NORM", "AFTER_CLIP", "AFTER_ADAMW", "AFTER_SERIALIZATION", "END"],
-  "reason": "Instrumentation is deferred until the uninstrumented dedicated guest executes successfully"
+  "synthetic_payload": true,
+  "observations": {
+    "payload": {"completed": true, "gas_used": 84},
+    "state_decode": {"completed": true, "gas_used": 483558},
+    "batch_decode": {"completed": true, "gas_used": 571906},
+    "train_enter": {"completed": true, "gas_used": 571903},
+    "sample_forward": {"completed": true, "gas_used": 60700797},
+    "sample_backward": {"completed": true, "gas_used": 205116755},
+    "full_batch": {"completed": false, "diagnostic_limit": 10000000000, "error": "out of gas"}
+  },
+  "reason": "Workspace migration removed the panic: payload/decode/forward/backward probes return. A synthetic full logical batch exceeds the 10B diagnostic limit; this is not canonical gas evidence."
 }

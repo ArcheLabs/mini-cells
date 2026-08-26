@@ -52,6 +52,45 @@ pub struct TrainingBatch {
     pub size: u16,
 }
 
+/// Reusable scratch storage for one logical training step.  Keeping this
+/// workspace outside the call stack is required by the small PVM guest stack;
+/// it does not change the order or precision of any arithmetic operation.
+pub struct TrainingWorkspace {
+    pub gradient: [F32; PARAMETER_COUNT],
+    pub states: [[[F32; HIDDEN_DIM]; NUM_CELLS]; ITERATIONS + 1],
+    pub hidden_pre: [[[F32; MLP_WIDTH]; NUM_CELLS]; ITERATIONS],
+    pub logits: [[F32; VOCAB_SIZE]; MAX_SEQ_LEN],
+    pub dstate: [[F32; HIDDEN_DIM]; NUM_CELLS],
+    pub dprev: [[F32; HIDDEN_DIM]; NUM_CELLS],
+}
+
+impl TrainingWorkspace {
+    pub const fn new() -> Self {
+        Self {
+            gradient: [0.0; PARAMETER_COUNT],
+            states: [[[0.0; HIDDEN_DIM]; NUM_CELLS]; ITERATIONS + 1],
+            hidden_pre: [[[0.0; MLP_WIDTH]; NUM_CELLS]; ITERATIONS],
+            logits: [[0.0; VOCAB_SIZE]; MAX_SEQ_LEN],
+            dstate: [[0.0; HIDDEN_DIM]; NUM_CELLS],
+            dprev: [[0.0; HIDDEN_DIM]; NUM_CELLS],
+        }
+    }
+
+    fn reset_sample(&mut self) {
+        self.states = [[[0.0; HIDDEN_DIM]; NUM_CELLS]; ITERATIONS + 1];
+        self.hidden_pre = [[[0.0; MLP_WIDTH]; NUM_CELLS]; ITERATIONS];
+        self.logits = [[0.0; VOCAB_SIZE]; MAX_SEQ_LEN];
+        self.dstate = [[0.0; HIDDEN_DIM]; NUM_CELLS];
+        self.dprev = [[0.0; HIDDEN_DIM]; NUM_CELLS];
+    }
+}
+
+impl Default for TrainingWorkspace {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TrainingBatch {
     pub const fn empty() -> Self {
         Self {
@@ -67,6 +106,15 @@ pub struct TrainStepReport {
     pub loss: F32,
     pub token_count: u32,
     pub grad_norm: F32,
+}
+
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct EvaluationReport {
+    pub loss: F32,
+    pub token_count: u32,
+    pub correct_tokens: u32,
+    pub token_accuracy: F32,
+    pub exact_sequence_accuracy: F32,
 }
 
 #[inline(always)]
@@ -146,11 +194,13 @@ fn forward_backward(
     weights: &[F32; PARAMETER_COUNT],
     ids: &[u8; NUM_CELLS],
     length: usize,
-    grad: &mut [F32; PARAMETER_COUNT],
+    workspace: &mut TrainingWorkspace,
+    backward: bool,
 ) -> (F32, u32) {
-    let mut states = [[[0.0; HIDDEN_DIM]; NUM_CELLS]; ITERATIONS + 1];
-    let mut hidden_pre = [[[0.0; MLP_WIDTH]; NUM_CELLS]; ITERATIONS];
-    let mut logits = [[0.0; VOCAB_SIZE]; MAX_SEQ_LEN];
+    workspace.reset_sample();
+    let states = &mut workspace.states;
+    let hidden_pre = &mut workspace.hidden_pre;
+    let logits = &mut workspace.logits;
     for iteration in 0..ITERATIONS {
         for cell in 0..NUM_CELLS {
             let mut input = [0.0; UPDATE_INPUT_DIM];
@@ -193,7 +243,7 @@ fn forward_backward(
             logits[cell][row] = value;
         }
     }
-    let mut dstate = [[0.0; HIDDEN_DIM]; NUM_CELLS];
+    let dstate = &mut workspace.dstate;
     let mut loss = 0.0;
     let mut correct = 0;
     for cell in 0..length {
@@ -216,14 +266,14 @@ fn forward_backward(
             let dlogit = probability - if row == target { 1.0 } else { 0.0 };
             for col in 0..HIDDEN_DIM {
                 grad_add(
-                    grad,
+                    &mut workspace.gradient,
                     OUTPUT_WEIGHT_OFFSET + row * HIDDEN_DIM + col,
                     dlogit * states[ITERATIONS][cell][col],
                 );
                 dstate[cell][col] +=
                     weight(weights, OUTPUT_WEIGHT_OFFSET, row, col, HIDDEN_DIM) * dlogit;
             }
-            grad_add(grad, OUTPUT_BIAS_OFFSET + row, dlogit);
+            grad_add(&mut workspace.gradient, OUTPUT_BIAS_OFFSET + row, dlogit);
             if logits[cell][row] > best {
                 best = logits[cell][row];
                 prediction = row;
@@ -233,8 +283,12 @@ fn forward_backward(
             correct += 1;
         }
     }
+    if !backward {
+        return (loss, correct);
+    }
     for iteration in (0..ITERATIONS).rev() {
-        let mut dprev = [[0.0; HIDDEN_DIM]; NUM_CELLS];
+        let dprev = &mut workspace.dprev;
+        *dprev = [[0.0; HIDDEN_DIM]; NUM_CELLS];
         for cell in 0..NUM_CELLS {
             let mut dinput = [0.0; UPDATE_INPUT_DIM];
             let mut ddelta = [0.0; HIDDEN_DIM];
@@ -254,11 +308,11 @@ fn forward_backward(
                 };
                 dprev[cell][row] += d;
                 ddelta[row] = d;
-                grad_add(grad, UPDATE_OUT_BIAS_OFFSET + row, d);
+                grad_add(&mut workspace.gradient, UPDATE_OUT_BIAS_OFFSET + row, d);
                 for col in 0..MLP_WIDTH {
                     let h = relu(hidden_pre[iteration][cell][col]);
                     grad_add(
-                        grad,
+                        &mut workspace.gradient,
                         UPDATE_OUT_WEIGHT_OFFSET + row * MLP_WIDTH + col,
                         d * h,
                     );
@@ -273,11 +327,15 @@ fn forward_backward(
                 if hidden_pre[iteration][cell][col] <= 0.0 {
                     dhidden[col] = 0.0;
                 }
-                grad_add(grad, UPDATE_IN_BIAS_OFFSET + col, dhidden[col]);
+                grad_add(
+                    &mut workspace.gradient,
+                    UPDATE_IN_BIAS_OFFSET + col,
+                    dhidden[col],
+                );
                 for input in 0..UPDATE_INPUT_DIM {
                     let value = input_value(weights, &states[iteration], ids[cell], cell, input);
                     grad_add(
-                        grad,
+                        &mut workspace.gradient,
                         UPDATE_IN_WEIGHT_OFFSET + col * UPDATE_INPUT_DIM + input,
                         dhidden[col] * value,
                     );
@@ -305,13 +363,43 @@ fn forward_backward(
             if ids[cell] != 0 {
                 let embedding = EMBEDDING_OFFSET + ids[cell] as usize * EMBEDDING_DIM;
                 for row in 0..EMBEDDING_DIM {
-                    grad_add(grad, embedding + row, dinput[80 + row]);
+                    grad_add(&mut workspace.gradient, embedding + row, dinput[80 + row]);
                 }
             }
         }
-        dstate = dprev;
+        *dstate = *dprev;
     }
     (loss, correct)
+}
+
+/// Diagnostic-only probes used by the PVM memory/stack investigation.  They
+/// intentionally reuse the production forward/backward implementation.
+pub fn diagnostic_sample_forward(
+    state: &TrainingState,
+    batch: &TrainingBatch,
+    workspace: &mut TrainingWorkspace,
+) -> TrainStepReport {
+    let length = (batch.lengths[0] as usize).min(MAX_SEQ_LEN);
+    let (loss, _) = forward_backward(&state.weights, &batch.ids[0], length, workspace, false);
+    TrainStepReport {
+        loss,
+        token_count: length as u32,
+        grad_norm: 0.0,
+    }
+}
+
+pub fn diagnostic_sample_backward(
+    state: &TrainingState,
+    batch: &TrainingBatch,
+    workspace: &mut TrainingWorkspace,
+) -> TrainStepReport {
+    let length = (batch.lengths[0] as usize).min(MAX_SEQ_LEN);
+    let (loss, _) = forward_backward(&state.weights, &batch.ids[0], length, workspace, true);
+    TrainStepReport {
+        loss,
+        token_count: length as u32,
+        grad_norm: 0.0,
+    }
 }
 
 #[inline(always)]
@@ -354,8 +442,8 @@ fn clamp_state(x: F32) -> F32 {
 }
 
 pub fn train_step(state: &mut TrainingState, batch: &TrainingBatch) -> TrainStepReport {
-    let mut gradient = [0.0; PARAMETER_COUNT];
-    train_step_with_gradient(state, batch, &mut gradient)
+    let mut workspace = TrainingWorkspace::new();
+    train_step_with_workspace(state, batch, &mut workspace)
 }
 
 /// Execute one canonical optimizer step and copy the post-normalization,
@@ -367,13 +455,24 @@ pub fn train_step_with_gradient(
     batch: &TrainingBatch,
     gradient_out: &mut [F32; PARAMETER_COUNT],
 ) -> TrainStepReport {
-    let mut gradient = [0.0; PARAMETER_COUNT];
+    let mut workspace = TrainingWorkspace::new();
+    let report = train_step_with_workspace(state, batch, &mut workspace);
+    *gradient_out = workspace.gradient;
+    report
+}
+
+pub fn train_step_with_workspace(
+    state: &mut TrainingState,
+    batch: &TrainingBatch,
+    workspace: &mut TrainingWorkspace,
+) -> TrainStepReport {
+    workspace.gradient = [0.0; PARAMETER_COUNT];
     let mut loss = 0.0;
     let mut tokens = 0u32;
     for sample in 0..(batch.size as usize).min(LOGICAL_BATCH_SIZE) {
         let length = (batch.lengths[sample] as usize).min(MAX_SEQ_LEN);
         let (sample_loss, _) =
-            forward_backward(&state.weights, &batch.ids[sample], length, &mut gradient);
+            forward_backward(&state.weights, &batch.ids[sample], length, workspace, true);
         loss += sample_loss;
         tokens += length as u32;
     }
@@ -382,16 +481,15 @@ pub fn train_step_with_gradient(
     }
     let inverse_tokens = 1.0 / tokens as F32;
     let mut norm_squared = 0.0;
-    for value in &mut gradient {
+    for value in &mut workspace.gradient {
         *value *= inverse_tokens;
         norm_squared += *value * *value;
     }
     let norm = sqrtf(norm_squared);
     let scale = if norm > 1.0 { 1.0 / norm } else { 1.0 };
-    for value in &mut gradient {
+    for value in &mut workspace.gradient {
         *value *= scale;
     }
-    *gradient_out = gradient;
     state.step += 1;
     let beta1 = 0.9;
     let beta2 = 0.999;
@@ -400,9 +498,10 @@ pub fn train_step_with_gradient(
     let bias1 = 1.0 - powf(beta1, state.step);
     let bias2 = 1.0 - powf(beta2, state.step);
     for index in 0..PARAMETER_COUNT {
-        state.adam_m[index] = beta1 * state.adam_m[index] + (1.0 - beta1) * gradient[index];
-        state.adam_v[index] =
-            beta2 * state.adam_v[index] + (1.0 - beta2) * gradient[index] * gradient[index];
+        state.adam_m[index] =
+            beta1 * state.adam_m[index] + (1.0 - beta1) * workspace.gradient[index];
+        state.adam_v[index] = beta2 * state.adam_v[index]
+            + (1.0 - beta2) * workspace.gradient[index] * workspace.gradient[index];
         let mhat = state.adam_m[index] / bias1;
         let vhat = state.adam_v[index] / bias2;
         state.weights[index] -= lr * mhat / (sqrtf(vhat) + eps);
@@ -417,25 +516,55 @@ pub fn train_step_with_gradient(
 /// Evaluate a fixed batch without mutating optimizer state.  The same forward
 /// and CE implementation is used as in `train_step`; gradients are discarded.
 pub fn evaluate_batch(state: &TrainingState, batch: &TrainingBatch) -> TrainStepReport {
-    let mut gradient = [0.0; PARAMETER_COUNT];
+    let report = evaluate_batch_report(state, batch);
+    TrainStepReport {
+        loss: report.loss,
+        token_count: report.token_count,
+        grad_norm: 0.0,
+    }
+}
+
+pub fn evaluate_batch_report(state: &TrainingState, batch: &TrainingBatch) -> EvaluationReport {
+    let mut workspace = TrainingWorkspace::new();
     let mut loss = 0.0;
     let mut tokens = 0u32;
+    let mut correct_tokens = 0u32;
+    let mut exact_sequences = 0u32;
+    let sample_count = (batch.size as usize).min(LOGICAL_BATCH_SIZE);
     for sample in 0..(batch.size as usize).min(LOGICAL_BATCH_SIZE) {
         let length = (batch.lengths[sample] as usize).min(MAX_SEQ_LEN);
-        let (sample_loss, sample_correct) =
-            forward_backward(&state.weights, &batch.ids[sample], length, &mut gradient);
+        let (sample_loss, sample_correct) = forward_backward(
+            &state.weights,
+            &batch.ids[sample],
+            length,
+            &mut workspace,
+            true,
+        );
         loss += sample_loss;
         tokens += length as u32;
-        let _ = sample_correct;
+        correct_tokens += sample_correct;
+        if sample_correct == length as u32 {
+            exact_sequences += 1;
+        }
     }
-    TrainStepReport {
+    EvaluationReport {
         loss: if tokens == 0 {
             0.0
         } else {
             loss / tokens as F32
         },
         token_count: tokens,
-        grad_norm: 0.0,
+        correct_tokens,
+        token_accuracy: if tokens == 0 {
+            0.0
+        } else {
+            correct_tokens as F32 / tokens as F32
+        },
+        exact_sequence_accuracy: if sample_count == 0 {
+            0.0
+        } else {
+            exact_sequences as F32 / sample_count as F32
+        },
     }
 }
 
@@ -481,5 +610,19 @@ mod tests {
         assert!(state.weights[..EMBEDDING_DIM]
             .iter()
             .all(|value| *value == 0.0));
+    }
+
+    #[test]
+    fn evaluation_reports_token_and_exact_accuracy() {
+        let state = TrainingState::from_weights([0.0; PARAMETER_COUNT]);
+        let mut batch = TrainingBatch::empty();
+        batch.size = 1;
+        batch.lengths[0] = 1;
+        batch.ids[0][0] = 0;
+        let report = evaluate_batch_report(&state, &batch);
+        assert_eq!(report.token_count, 1);
+        assert_eq!(report.correct_tokens, 1);
+        assert_eq!(report.token_accuracy, 1.0);
+        assert_eq!(report.exact_sequence_accuracy, 1.0);
     }
 }

@@ -91,7 +91,7 @@ def main() -> None:
         loss = masked_cross_entropy(model(batch.input_ids), batch.target_ids, batch.mask)
         loss.backward()
         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), config["train"]["grad_clip_norm"])
-        if step <= 2:
+        if step in (1, 2, 4, 16):
             write_f32(expected / f"step-{step:06d}-gradients-f32.bin", flat_parameters(type("G", (), {"parameters": lambda self: [p.grad for p in model.parameters()]})()))
         optimizer.step()
         write_f32(expected / f"step-{step:06d}-weights-f32.bin", flat_parameters(model))
