@@ -21,13 +21,7 @@ class AdaptiveForward:
 
 
 def state_delta_rms(before: torch.Tensor, after: torch.Tensor) -> torch.Tensor:
-    """Absolute RMS state update used as the first adaptive-halting signal.
-
-    This deliberately matches the update-magnitude diagnostic introduced in
-    Experiment 009. The threshold is a runtime tolerance, analogous to a
-    numerical fixed-point solver tolerance; no learned halting head is added in
-    Experiment 010.
-    """
+    """Absolute RMS state update used as the first adaptive-halting signal."""
 
     return (after.float() - before.float()).square().mean().sqrt()
 
@@ -53,6 +47,13 @@ def run_1d_stage_adaptive(
     threshold: float | None,
     min_iterations: int,
 ) -> tuple[torch.Tensor, int, tuple[float, ...]]:
+    """Run one trained 1D stage with a readout-position stopping criterion.
+
+    Experiment 010 evaluates one autoregressive prefix at a time. Halting is based
+    only on the final input position, whose next-token prediction is being scored;
+    later sequence positions therefore cannot influence the stopping decision.
+    """
+
     if min_iterations < 1 or min_iterations > stage.iterations:
         raise ValueError("min_iterations must be within the trained stage iteration range")
     batch, length, dim = state.shape
@@ -70,7 +71,7 @@ def run_1d_stage_adaptive(
             proposal.reshape(batch * length, dim),
             state.reshape(batch * length, dim),
         ).view(batch, length, dim)
-        residual = state_delta_rms(before, state)
+        residual = state_delta_rms(before[:, -1, :], state[:, -1, :])
         residuals.append(float(residual.detach().cpu()))
         steps = index + 1
         if _should_halt(
@@ -123,6 +124,8 @@ def run_2d_stage_adaptive(
     threshold: float | None,
     min_iterations: int,
 ) -> tuple[torch.Tensor, int, tuple[float, ...]]:
+    """Run one trained 2D stage using the final-position tissue column to halt."""
+
     if min_iterations < 1 or min_iterations > stage.iterations:
         raise ValueError("min_iterations must be within the trained stage iteration range")
     if state.ndim != 4:
@@ -149,7 +152,7 @@ def run_2d_stage_adaptive(
             proposal.reshape(batch * length * tissue, dim),
             state.reshape(batch * length * tissue, dim),
         ).view(batch, length, tissue, dim)
-        residual = state_delta_rms(before, state)
+        residual = state_delta_rms(before[:, -1, :, :], state[:, -1, :, :])
         residuals.append(float(residual.detach().cpu()))
         steps = index + 1
         if _should_halt(
@@ -199,6 +202,14 @@ def adaptive_forward(
     threshold: float | None,
     min_iterations: int = 1,
 ) -> AdaptiveForward:
+    """Adaptive prefix inference for a TextNCA or 2D latent-tissue NCA.
+
+    The current prototype uses one stopping decision for the whole input example,
+    so Experiment 010 evaluates batch size 1 and scores only the next token after
+    the complete prefix. A future training-time implementation should move to
+    per-position/per-cell active masks or an equivalent causal sparse scheduler.
+    """
+
     if isinstance(model, LatentTissueNCALM):
         return run_2d_adaptive(
             model,
