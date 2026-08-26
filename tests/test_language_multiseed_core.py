@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import math
-
 import pytest
 
 from minicells.language_depth_ablation import variant_by_code
@@ -80,6 +78,8 @@ def test_core_recipe_confirmation_requires_aggregate_and_seed_level_evidence() -
     )
     assert confirmed["confirmed"] is True
     assert confirmed["joint_pass_replicates"] == 5
+    assert confirmed["ppl"]["aggregate_pass"] is True
+    assert confirmed["cost"]["aggregate_pass"] is True
 
     # A favorable geometric mean is not enough if too many paired seeds miss
     # the pre-registered joint quality/cost envelope.
@@ -87,6 +87,5 @@ def test_core_recipe_confirmation_requires_aggregate_and_seed_level_evidence() -
         ppl_ratios=(0.94, 0.95, 1.02, 1.03, 1.04),
         cost_ratios=(0.70, 0.72, 0.90, 0.91, 0.92),
     )
-    assert math.prod(mixed["ppl"][key] for key in ()) == 1  # type-shape smoke check
     assert mixed["confirmed"] is False
     assert mixed["joint_pass_replicates"] < 4
