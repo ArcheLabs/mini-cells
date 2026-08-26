@@ -1,0 +1,57 @@
+topology,metric,term,label,order,log_contrast,ratio_high_to_low,percent_change_high_vs_low
+1d,final_ppl_2m,random_depth,Random depth,1,0.01922283321619045,1.0194087814474815,1.9408781447481482
+1d,final_ppl_2m,low_step_init,Step init 0.25,1,-0.0073985432585079725,0.9926287585898717,-0.7371241410128349
+1d,final_ppl_2m,stability_loss,Residual loss,1,-0.04066116611162751,0.9601544076885211,-3.9845592311478883
+1d,final_ppl_2m,random_depth*low_step_init,Random × step init,2,0.0024617364009223985,1.0024647689619208,0.24647689619208268
+1d,final_ppl_2m,random_depth*stability_loss,Random × residual,2,-0.00891740868488955,0.9911222334812916,-0.8877766518708419
+1d,final_ppl_2m,low_step_init*stability_loss,Step init × residual,2,-0.0027799829840661205,0.9972238775903574,-0.2776122409642645
+1d,final_ppl_2m,random_depth*low_step_init*stability_loss,3-way interaction,3,-0.00020583470662416392,0.9997941864758857,-0.020581352411430665
+1d,seconds_per_million_tokens,random_depth,Random depth,1,-0.21812866923271812,0.8040219821191443,-19.59780178808557
+1d,seconds_per_million_tokens,low_step_init,Step init 0.25,1,-0.00048580559035860116,0.9995143123940706,-0.048568760592937466
+1d,seconds_per_million_tokens,stability_loss,Residual loss,1,0.0427509613561593,1.0436779463429804,4.367794634298039
+1d,seconds_per_million_tokens,random_depth*low_step_init,Random × step init,2,-0.012316982975133839,0.9877585605853342,-1.2241439414665822
+1d,seconds_per_million_tokens,random_depth*stability_loss,Random × residual,2,-0.022733657274544128,0.9775228051925102,-2.2477194807489775
+1d,seconds_per_million_tokens,low_step_init*stability_loss,Step init × residual,2,0.0061892798290982265,1.0062084729983665,0.6208472998366465
+1d,seconds_per_million_tokens,random_depth*low_step_init*stability_loss,3-way interaction,3,2.0753990318422844e-05,1.000020754205684,0.0020754205684037075
+1d,depth_robustness_ratio_2_to_4,random_depth,Random depth,1,-0.4932539016008379,0.6106362078708665,-38.93637921291335
+1d,depth_robustness_ratio_2_to_4,low_step_init,Step init 0.25,1,-0.005043312907218732,0.9949693832428017,-0.5030616757198292
+1d,depth_robustness_ratio_2_to_4,stability_loss,Residual loss,1,-0.12642242511113497,0.8812425091816984,-11.875749081830156
+1d,depth_robustness_ratio_2_to_4,random_depth*low_step_init,Random × step init,2,0.009712234139442534,1.009759550945338,0.9759550945338091
+1d,depth_robustness_ratio_2_to_4,random_depth*stability_loss,Random × residual,2,0.12343068917592384,1.1313715855275377,13.13715855275377
+1d,depth_robustness_ratio_2_to_4,low_step_init*stability_loss,Step init × residual,2,0.01286406318346648,1.0129471611879433,1.2947161187943257
+1d,depth_robustness_ratio_2_to_4,random_depth*low_step_init*stability_loss,3-way interaction,3,-0.013757705688476195,0.9863364990359665,-1.366350096403346
+1d,final_step_embedding_rms,random_depth,Random depth,1,0.1416389327132085,1.1521605659351268,15.216056593512683
+1d,final_step_embedding_rms,low_step_init,Step init 0.25,1,-0.902134721325139,0.40570267253507536,-59.42973274649246
+1d,final_step_embedding_rms,stability_loss,Residual loss,1,0.05334378216478808,1.054792201542017,5.479220154201703
+1d,final_step_embedding_rms,random_depth*low_step_init,Random × step init,2,0.0847317634224164,1.0884250721220343,8.842507212203433
+1d,final_step_embedding_rms,random_depth*stability_loss,Random × residual,2,-0.11703190512080863,0.8895568112931198,-11.04431887068802
+1d,final_step_embedding_rms,low_step_init*stability_loss,Step init × residual,2,0.05692628730362581,1.0585777768972489,5.857777689724886
+1d,final_step_embedding_rms,random_depth*low_step_init*stability_loss,3-way interaction,3,-0.06522075916146408,0.9368606199820803,-6.313938001791975
+2d,final_ppl_2m,random_depth,Random depth,1,0.019801990439494377,1.0199993504063878,1.9999350406387784
+2d,final_ppl_2m,low_step_init,Step init 0.25,1,-0.007029519726832412,0.9929951295556054,-0.7004870444394573
+2d,final_ppl_2m,stability_loss,Residual loss,1,-0.03769937778512622,0.9630023972941104,-3.6997602705889587
+2d,final_ppl_2m,random_depth*low_step_init,Random × step init,2,0.00019042318065976005,1.0001904413123046,0.019044131230461225
+2d,final_ppl_2m,random_depth*stability_loss,Random × residual,2,-0.009912852197885624,0.9901361181758574,-0.9863881824142551
+2d,final_ppl_2m,low_step_init*stability_loss,Step init × residual,2,-0.0010084422926108783,0.9989920660144375,-0.10079339855625369
+2d,final_ppl_2m,random_depth*low_step_init*stability_loss,3-way interaction,3,0.0007230353852114568,1.000723296838305,0.07232968383050764
+2d,seconds_per_million_tokens,random_depth,Random depth,1,-0.2402869825262458,0.786402145005601,-21.359785499439898
+2d,seconds_per_million_tokens,low_step_init,Step init 0.25,1,-0.007059971276746957,0.9929648917752488,-0.7035108224751174
+2d,seconds_per_million_tokens,stability_loss,Residual loss,1,0.011147750590541294,1.011210118299925,1.121011829992491
+2d,seconds_per_million_tokens,random_depth*low_step_init,Random × step init,2,-0.00545638153896566,0.9945584774730202,-0.5441522526979825
+2d,seconds_per_million_tokens,random_depth*stability_loss,Random × residual,2,-0.012498141446457889,0.9875796359618063,-1.2420364038193688
+2d,seconds_per_million_tokens,low_step_init*stability_loss,Step init × residual,2,0.01959935479022601,1.0197926831155524,1.9792683115552379
+2d,seconds_per_million_tokens,random_depth*low_step_init*stability_loss,3-way interaction,3,0.012476018268294142,1.012554168447055,1.2554168447054925
+2d,depth_robustness_ratio_2_to_4,random_depth,Random depth,1,-0.46884556859731696,0.6257242071622331,-37.427579283776694
+2d,depth_robustness_ratio_2_to_4,low_step_init,Step init 0.25,1,0.007398116091886991,1.0074255497635083,0.7425549763508288
+2d,depth_robustness_ratio_2_to_4,stability_loss,Residual loss,1,-0.09256142626206086,0.9115932134809971,-8.84067865190029
+2d,depth_robustness_ratio_2_to_4,random_depth*low_step_init,Random × step init,2,-0.003579951822757655,0.9964264485647979,-0.35735514352021047
+2d,depth_robustness_ratio_2_to_4,random_depth*stability_loss,Random × residual,2,0.09025275955597577,1.0944508816662362,9.445088166623616
+2d,depth_robustness_ratio_2_to_4,low_step_init*stability_loss,Step init × residual,2,0.00843506306409834,1.0084707384460299,0.8470738446029857
+2d,depth_robustness_ratio_2_to_4,random_depth*low_step_init*stability_loss,3-way interaction,3,-0.008536659181117946,0.9914996746305719,-0.850032536942813
+2d,final_step_embedding_rms,random_depth,Random depth,1,0.2660722217033298,1.3048292922780746,30.482929227807464
+2d,final_step_embedding_rms,low_step_init,Step init 0.25,1,-0.8601189064842438,0.4231117685936484,-57.68882314063516
+2d,final_step_embedding_rms,stability_loss,Residual loss,1,0.07079822371762523,1.0733646244930193,7.336462449301928
+2d,final_step_embedding_rms,random_depth*low_step_init,Random × step init,2,0.14992404196275233,1.1617459954311866,16.17459954311866
+2d,final_step_embedding_rms,random_depth*stability_loss,Random × residual,2,-0.08397654418624989,0.9194528223563497,-8.054717764365027
+2d,final_step_embedding_rms,low_step_init*stability_loss,Step init × residual,2,0.04867326288206386,1.0498772608225873,4.9877260822587255
+2d,final_step_embedding_rms,random_depth*low_step_init*stability_loss,3-way interaction,3,-0.05071394587678535,0.9505505405472512,-4.944945945274881

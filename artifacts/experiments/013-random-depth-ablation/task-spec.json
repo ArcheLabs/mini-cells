@@ -1,0 +1,72 @@
+{
+  "checkpoints": [
+    250000,
+    500000,
+    1000000,
+    2000000
+  ],
+  "experiment": "013",
+  "format": "minicells.language-depth-ablation-task.v1",
+  "name": "Random-Depth Ablation",
+  "primary_metrics": [
+    "fixed-depth validation PPL at 2M",
+    "measured seconds per 1M tokens",
+    "depth 2/3/4 PPL robustness",
+    "step-embedding RMS growth"
+  ],
+  "tokens_per_model": 2000000,
+  "topologies": [
+    "1d",
+    "2d"
+  ],
+  "variants": [
+    {
+      "code": "A",
+      "random_depth": false,
+      "stability_weight": 0.0,
+      "step_embedding_init_scale": 1.0
+    },
+    {
+      "code": "B",
+      "random_depth": true,
+      "stability_weight": 0.0,
+      "step_embedding_init_scale": 1.0
+    },
+    {
+      "code": "C",
+      "random_depth": true,
+      "stability_weight": 0.0,
+      "step_embedding_init_scale": 0.25
+    },
+    {
+      "code": "D",
+      "random_depth": true,
+      "stability_weight": 0.1,
+      "step_embedding_init_scale": 0.25
+    },
+    {
+      "code": "E",
+      "random_depth": false,
+      "stability_weight": 0.0,
+      "step_embedding_init_scale": 0.25
+    },
+    {
+      "code": "F",
+      "random_depth": false,
+      "stability_weight": 0.1,
+      "step_embedding_init_scale": 1.0
+    },
+    {
+      "code": "G",
+      "random_depth": false,
+      "stability_weight": 0.1,
+      "step_embedding_init_scale": 0.25
+    },
+    {
+      "code": "H",
+      "random_depth": true,
+      "stability_weight": 0.1,
+      "step_embedding_init_scale": 1.0
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "design": {
+    "factors": {
+      "random_depth": {
+        "high": "per-stage Uniform{2,3,4}",
+        "low": [
+          4,
+          4,
+          4
+        ]
+      },
+      "stability_weight": {
+        "high": 0.1,
+        "low": 0.0
+      },
+      "step_embedding_init_scale": {
+        "high": 0.25,
+        "low": 1.0,
+        "note": "initialization-only scaling; embeddings remain trainable"
+      }
+    },
+    "models_total": 16,
+    "same_1d_initialization_across_cells": true,
+    "same_2d_initialization_across_cells": true,
+    "same_random_depth_schedule_where_enabled": true,
+    "same_training_schedule_across_cells": true,
+    "tokens_per_model": 2000000,
+    "topologies": [
+      "1d",
+      "2d"
+    ],
+    "type": "complete 2x2x2 matched-seed factorial",
+    "variants_per_topology": 8
+  },
+  "diagnosis": "RANDOM_DEPTH_EFFECT_IS_MIXED_ACROSS_TOPOLOGIES",
+  "evaluation": {
+    "gpu_count_used_for_parallel_execution": 2,
+    "standard_quality": "fixed (4,4,4) validation PPL at 2M tokens",
+    "step_clock_diagnostic": "initial and final trainable step-embedding RMS",
+    "temporal_robustness": "PPL at (2,2,2), (3,3,3), and (4,4,4); lower max/min ratio is better",
+    "training_cost": "synchronized forward/backward/optimizer wall clock, validation excluded"
+  },
+  "experiment": "MINI Cells Experiment 013 \u2014 Random-Depth Ablation",
+  "format": "minicells.language-depth-ablation.v1",
+  "question": "Which Experiment 011 ingredient explains the quality/cost gain: random recurrent depth, low step-embedding initialization, residual stability loss, or their interactions?",
+  "replication": {
+    "compares_A_and_D_to_experiment_011": true,
+    "max_absolute_ppl_ratio_deviation_from_011": 0.0
+  },
+  "results": {
+    "1d": {
+      "factorial_main_effect_ppl_ratios": {
+        "low_step_init": 0.9926287585898717,
+        "random_depth": 1.0194087814474815,
+        "stability_loss": 0.9601544076885211
+      },
+      "pure_random_depth_ppl_ratio_B_to_A": 1.0257998715908794,
+      "random_depth_main_effect_depth_robustness_ratio": 0.6106362078708665,
+      "random_depth_main_effect_training_cost_ratio": 0.8040219821191443,
+      "residual_after_random_low_step_ppl_ratio_D_to_C": 0.9487932239331897,
+      "stability_loss_only_fixed_scale1_ppl_ratio_F_to_A": 0.9712517173181605,
+      "step_init_after_random_no_reg_ppl_ratio_C_to_B": 0.9980509127753784
+    },
+    "2d": {
+      "factorial_main_effect_ppl_ratios": {
+        "low_step_init": 0.9929951295556054,
+        "random_depth": 1.0199993504063878,
+        "stability_loss": 0.9630023972941104
+      },
+      "pure_random_depth_ppl_ratio_B_to_A": 1.030709556469311,
+      "random_depth_main_effect_depth_robustness_ratio": 0.6257242071622331,
+      "random_depth_main_effect_training_cost_ratio": 0.786402145005601,
+      "residual_after_random_low_step_ppl_ratio_D_to_C": 0.9532313578095405,
+      "stability_loss_only_fixed_scale1_ppl_ratio_F_to_A": 0.9742814559752164,
+      "step_init_after_random_no_reg_ppl_ratio_C_to_B": 0.9934677389475112
+    }
+  },
+  "scope": {
+    "important": "This experiment tests the actual Experiment 011 recipe. The 0.25 step-embedding factor is initialization scaling, not a permanent forward-time clock attenuation.",
+    "interpretation": "Matched initialization isolates within-seed effects, but a multi-seed confirmation is required before treating any small effect as architecture-general.",
+    "single_seed": true
+  },
+  "status": "ABLATION_COMPLETE"
+}
