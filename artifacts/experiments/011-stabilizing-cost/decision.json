@@ -1,0 +1,80 @@
+{
+  "budget": {
+    "checkpoints": [
+      250000,
+      500000,
+      1000000,
+      2000000
+    ],
+    "context_length": 128,
+    "models": [
+      "transformer-s",
+      "minicells-v2-fixed",
+      "minicells-v2-stable",
+      "minicells-2d-k4-fixed",
+      "minicells-2d-k4-stable"
+    ],
+    "tokens_per_model": 2000000
+  },
+  "cost_measurement": {
+    "excludes": [
+      "validation",
+      "plotting",
+      "post-training adaptive-halting probe",
+      "result publication"
+    ],
+    "gpu_count_used_for_parallel_execution": 2,
+    "hardware": "Tesla T4 on Kaggle when available",
+    "important_scope": "Transformer-S is a small parameter-matched LLM baseline; these measurements are not a claim about the cost of all LLMs or frontier-scale training.",
+    "metric": "synchronized train-step wall clock only"
+  },
+  "diagnosis": "RANDOM_DEPTH_STABILIZATION_REDUCES_MEASURED_TRAINING_COST_WITH_BOUNDED_QUALITY_LOSS",
+  "experiment": "MINI Cells Experiment 011 \u2014 Self-Stabilizing Training and Cost",
+  "format": "minicells.language-stabilizing-cost.v1",
+  "one_d": {
+    "ppl_ratio_stable_to_fixed": 0.9713749753194605,
+    "stable_avg_recurrent_iterations": 8.952,
+    "stable_training_iteration_fraction": 0.746,
+    "throughput_ratio_stable_to_fixed": 1.1879714677440996,
+    "training_seconds_ratio_stable_to_fixed": 0.8417710586087996,
+    "vram_ratio_stable_to_fixed": 1.0077107619090961
+  },
+  "question": "Can randomized-depth, stability-regularized cellular training reduce recurrent training cost, and how does the measured cost compare with a parameter-matched Transformer-S LLM baseline?",
+  "stable_vs_transformer": {
+    "one_d_ppl_ratio": 0.970840777371196,
+    "one_d_training_cost_ratio": 1.5273118667889796,
+    "two_d_ppl_ratio": 0.9787020630854637,
+    "two_d_training_cost_ratio": 1.8978738042309984
+  },
+  "status": "PASS_COST_SIGNAL",
+  "training_recipe": {
+    "expected_stabilizing_iterations_total": 9.0,
+    "fixed_iterations_total": 12,
+    "fixed_recurrent_depth": [
+      4,
+      4,
+      4
+    ],
+    "stability_regularizer": "mean relative RMS of each stage's final state update",
+    "stability_weight": 0.1,
+    "stabilizing_random_depth_per_stage": [
+      2,
+      4
+    ],
+    "step_embedding_scale_stable": 0.25
+  },
+  "transformer_baseline": {
+    "parameters": 1183936,
+    "peak_vram_gib": 0.0816497802734375,
+    "ppl_2m": 47.48562703990679,
+    "seconds_per_million_tokens": 16.78800996250095
+  },
+  "two_d": {
+    "ppl_ratio_stable_to_fixed": 0.9760866930306472,
+    "stable_avg_recurrent_iterations": 8.952,
+    "stable_training_iteration_fraction": 0.746,
+    "throughput_ratio_stable_to_fixed": 1.2713757394697773,
+    "training_seconds_ratio_stable_to_fixed": 0.7865495376032945,
+    "vram_ratio_stable_to_fixed": 1.012218437719323
+  }
+}
