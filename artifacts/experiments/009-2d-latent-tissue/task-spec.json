@@ -1,0 +1,43 @@
+{
+  "2d_change_only": {
+    "decoder": "token row 0 only",
+    "horizontal_update": "existing causal local attention, shared independently over tissue rows",
+    "tissue_height": 4,
+    "vertical_update": "depthwise 3-cell same-position convolution"
+  },
+  "budget_tokens_per_model": 2000000,
+  "checkpoints": [
+    250000,
+    500000,
+    1000000,
+    2000000
+  ],
+  "format": "minicells.language-2d-task.v1",
+  "goal": "Isolate the effect of adding a causal latent-tissue axis while preserving the MiniCells-v2 language recipe.",
+  "models": [
+    "minicells-v2",
+    "minicells-2d-k4"
+  ],
+  "primary_models": [
+    "minicells-v2",
+    "minicells-2d-k4"
+  ],
+  "same_language_recipe_as_006": {
+    "dim": 128,
+    "ffn_dim": 512,
+    "gru_carry_bias": 2.0,
+    "heads": 4,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "normalization": "LayerNorm",
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "same_tokenizer_as_005": true
+}
