@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import torch
 
-from research.minicells.language_emergent_topology import (
+from minicells.language_emergent_topology import (
     ACTIVITY_BUDGET,
     LOCAL_COUPLING,
     LONG_RANGE_MAX_COUPLING,
@@ -13,7 +13,7 @@ from research.minicells.language_emergent_topology import (
     _uniform_plastic_distribution,
     build_emergent_topology_model,
 )
-from research.minicells.language_models import count_parameters
+from minicells.language_models import count_parameters
 
 
 def tiny_model(variant: str):
