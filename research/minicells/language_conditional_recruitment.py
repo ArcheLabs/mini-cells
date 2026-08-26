@@ -7,7 +7,6 @@ import torch
 
 from .language_growing_organism import (
     ACTIVITY_BUDGET,
-    STABILITY_WEIGHT,
     STEP_SIZE,
     GrowingCellularLM,
     StructuralProbe,
@@ -24,11 +23,11 @@ HOMEOSTATIC_QUANTILE = 0.95
 
 @dataclass(frozen=True)
 class HomeostaticProfile:
-    """Per-cell Phase-1 activity statistics used as a local novelty reference."""
+    """Normal Phase-1 state statistics indexed by recurrent step and cell."""
 
-    mean: torch.Tensor
-    scale: torch.Tensor
-    threshold: torch.Tensor
+    mean: torch.Tensor  # [steps, max_cells, dim]
+    scale: torch.Tensor  # [steps, max_cells, dim]
+    threshold: torch.Tensor  # [steps, max_cells]
     quantile: float = HOMEOSTATIC_QUANTILE
 
     def to(self, device: torch.device) -> "HomeostaticProfile":
@@ -44,12 +43,37 @@ class HomeostaticProfile:
 class RecruitmentForward:
     output: LanguageModelOutput
     stability_loss: torch.Tensor
-    recruitment_trace: torch.Tensor
+    recruitment_trace: torch.Tensor  # [steps, batch, length, alive_cells]
     final_state: torch.Tensor
 
-    @property
-    def mean_recruitment(self) -> torch.Tensor:
-        return self.recruitment_trace.float().mean()
+
+@torch.no_grad()
+def _base_state_trace(model: GrowingCellularLM, input_ids: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    """Return pre-update states for each recurrent step under ordinary Phase-1 dynamics."""
+    alive_indices = torch.nonzero(model.alive_mask, as_tuple=False).flatten()
+    memory = model.cell_memory.index_select(0, alive_indices)
+    batch, length = input_ids.shape
+    positions = torch.arange(length, device=input_ids.device)
+    token_state = model.token_embedding(input_ids) + model.position_embedding(positions)[None, :, :]
+    state = memory[None, None, :, :].expand(batch, length, -1, -1).clone()
+    state[:, :, 0, :] = state[:, :, 0, :] + token_state
+    activity = torch.full(
+        (batch, length, len(alive_indices)),
+        ACTIVITY_BUDGET / len(alive_indices),
+        device=input_ids.device,
+        dtype=torch.float32,
+    )
+    weights = model._graph_weights(alive_indices, None).to(device=input_ids.device)
+    traces: list[torch.Tensor] = []
+    for _ in range(model.iterations):
+        traces.append(state.detach().float())
+        reaction = model.rule(state, memory)
+        activity = model._replicator_activity(activity, reaction)
+        diffusion = model._diffusion(state, weights)
+        relative = activity / (ACTIVITY_BUDGET / len(alive_indices))
+        gain = relative.clamp(0.05, 3.0).unsqueeze(-1).to(state.dtype)
+        state = state + STEP_SIZE * gain * (reaction + diffusion)
+    return torch.stack(traces), alive_indices
 
 
 @torch.no_grad()
@@ -59,46 +83,49 @@ def calibrate_homeostasis(
     *,
     quantile: float = HOMEOSTATIC_QUANTILE,
 ) -> HomeostaticProfile:
-    """Estimate the normal Phase-1 state manifold for every currently live cell.
+    """Estimate a per-step local homeostatic manifold from retained language.
 
-    The profile is calibrated before any adaptation cell exists. It is not a
-    task classifier: it only records what each old cell normally looks like on
-    the retained language distribution.
+    Calibration happens before adaptation cells exist. Each old cell receives a
+    recurrent-step-specific normal state distribution, preventing ordinary
+    early-vs-late recurrent evolution from being mistaken for novelty.
     """
     if not 0.5 < quantile < 1.0:
         raise ValueError("quantile must be in (0.5, 1.0)")
     model.eval()
     device = model.cell_memory.device
-    alive = torch.nonzero(model.alive_mask, as_tuple=False).flatten().tolist()
-    samples: dict[int, list[torch.Tensor]] = {int(cell): [] for cell in alive}
+    alive = [int(v) for v in torch.nonzero(model.alive_mask, as_tuple=False).flatten().tolist()]
+    samples: list[dict[int, list[torch.Tensor]]] = [
+        {cell: [] for cell in alive} for _ in range(model.iterations)
+    ]
     for inputs in input_batches:
-        result = model.forward_variable(inputs.to(device), collect_observability=True)
-        diagnostics = result.diagnostics
-        assert diagnostics is not None
-        states = diagnostics.cell_states.detach().float().cpu()
-        local_alive = diagnostics.alive_indices.cpu().tolist()
-        for local_index, cell in enumerate(local_alive):
-            samples[int(cell)].append(states[:, :, local_index, :].reshape(-1, states.shape[-1]))
-    if not all(samples[cell] for cell in alive):
-        raise RuntimeError("homeostatic calibration received no samples for a live cell")
+        trace, alive_indices = _base_state_trace(model, inputs.to(device))
+        local_alive = alive_indices.cpu().tolist()
+        trace = trace.cpu()
+        for step in range(model.iterations):
+            for local_index, cell in enumerate(local_alive):
+                values = trace[step, :, :, local_index, :].reshape(-1, model.dim)
+                samples[step][int(cell)].append(values)
+    if not all(samples[step][cell] for step in range(model.iterations) for cell in alive):
+        raise RuntimeError("homeostatic calibration received incomplete live-cell samples")
 
-    mean = torch.zeros(model.max_cells, model.dim, dtype=torch.float32)
-    scale = torch.ones(model.max_cells, model.dim, dtype=torch.float32)
-    threshold = torch.full((model.max_cells,), float("inf"), dtype=torch.float32)
-    for cell in alive:
-        values = torch.cat(samples[cell], dim=0)
-        cell_mean = values.mean(dim=0)
-        cell_scale = values.std(dim=0, unbiased=False).clamp_min(1e-3)
-        novelty = ((values - cell_mean) / cell_scale).square().mean(dim=-1).sqrt()
-        mean[cell] = cell_mean
-        scale[cell] = cell_scale
-        threshold[cell] = torch.quantile(novelty, quantile)
+    mean = torch.zeros(model.iterations, model.max_cells, model.dim, dtype=torch.float32)
+    scale = torch.ones(model.iterations, model.max_cells, model.dim, dtype=torch.float32)
+    threshold = torch.full((model.iterations, model.max_cells), float("inf"), dtype=torch.float32)
+    for step in range(model.iterations):
+        for cell in alive:
+            values = torch.cat(samples[step][cell], dim=0)
+            cell_mean = values.mean(dim=0)
+            cell_scale = values.std(dim=0, unbiased=False).clamp_min(1e-3)
+            novelty = ((values - cell_mean) / cell_scale).square().mean(dim=-1).sqrt()
+            mean[step, cell] = cell_mean
+            scale[step, cell] = cell_scale
+            threshold[step, cell] = torch.quantile(novelty, quantile)
     return HomeostaticProfile(mean=mean, scale=scale, threshold=threshold, quantile=quantile)
 
 
 def _dynamic_diffusion(state: torch.Tensor, weights: torch.Tensor, cell_gate: torch.Tensor) -> torch.Tensor:
-    # Old cells have gate 1. A newborn-old edge therefore receives exactly the
-    # newborn gate; newborn-newborn edges require both tissues to be excitable.
+    # Old cells have gate 1. A newborn-old edge receives the newborn gate;
+    # newborn-newborn communication requires both tissues to be excitable.
     edge_gate = cell_gate.unsqueeze(-1) * cell_gate.unsqueeze(-2)
     dynamic = weights[None, None, :, :] * edge_gate.to(weights.dtype)
     source = torch.einsum("blrs,blsd->blrd", dynamic, state)
@@ -113,6 +140,7 @@ def _cell_recruitment(
     localized_state: LocalizedLearningState,
     profile: HomeostaticProfile,
     *,
+    step_index: int,
     force_recruitment: float | None,
 ) -> torch.Tensor:
     batch, length, cells, _ = state.shape
@@ -138,9 +166,9 @@ def _cell_recruitment(
             if local_parent is None:
                 raise RuntimeError("newborn parent must remain alive for local recruitment")
             parent_state = state[:, :, local_parent, :].float()
-            mean = profile.mean[parent].to(state.device)
-            scale = profile.scale[parent].to(state.device)
-            threshold = profile.threshold[parent].to(state.device)
+            mean = profile.mean[step_index, parent].to(state.device)
+            scale = profile.scale[step_index, parent].to(state.device)
+            threshold = profile.threshold[step_index, parent].to(state.device)
             novelty = ((parent_state - mean) / scale).square().mean(dim=-1).sqrt()
             gate = RECRUITMENT_FLOOR + (1.0 - RECRUITMENT_FLOOR) * torch.sigmoid(
                 RECRUITMENT_TEMPERATURE * (novelty - threshold)
@@ -159,12 +187,12 @@ def forward_with_recruitment(
     edge_probe: torch.Tensor | None = None,
     force_recruitment: float | None = None,
 ) -> RecruitmentForward:
-    """Run the shared cellular genome with local state-dependent tissue conductance."""
+    """Run the shared cellular genome with local state-dependent conductance."""
     if input_ids.ndim != 2 or input_ids.shape[1] > model.max_context:
         raise ValueError(f"input_ids must be [batch, <= {model.max_context}]")
     steps = model.iterations if iterations is None else int(iterations)
-    if steps < 1:
-        raise ValueError("iterations must be positive")
+    if steps < 1 or steps > profile.mean.shape[0]:
+        raise ValueError("iterations must be positive and covered by the homeostatic profile")
     alive_indices = torch.nonzero(model.alive_mask, as_tuple=False).flatten()
     if alive_indices.numel() < 1 or int(alive_indices[0]) != 0:
         raise RuntimeError("interface cell 0 must remain alive")
@@ -184,7 +212,7 @@ def forward_with_recruitment(
     profile = profile.to(input_ids.device)
     traces: list[torch.Tensor] = []
     last_before = state
-    for _ in range(steps):
+    for step_index in range(steps):
         last_before = state
         reaction = model.rule(state, memory)
         activity = model._replicator_activity(activity, reaction)
@@ -194,6 +222,7 @@ def forward_with_recruitment(
             alive_indices,
             localized_state,
             profile,
+            step_index=step_index,
             force_recruitment=force_recruitment,
         )
         diffusion = _dynamic_diffusion(state, weights, gates)
@@ -209,6 +238,17 @@ def forward_with_recruitment(
         recruitment_trace=torch.stack(traces),
         final_state=state,
     )
+
+
+def newborn_recruitment_mean(result: RecruitmentForward, model: GrowingCellularLM, localized_state: LocalizedLearningState) -> torch.Tensor:
+    newborn = localized_state.newborn_cells(model)
+    if not newborn:
+        return result.recruitment_trace.new_zeros(())
+    alive = torch.nonzero(model.alive_mask, as_tuple=False).flatten().tolist()
+    positions = [alive.index(cell) for cell in newborn if cell in alive]
+    if not positions:
+        return result.recruitment_trace.new_zeros(())
+    return result.recruitment_trace[..., positions].float().mean()
 
 
 def make_recruitment_probe(
