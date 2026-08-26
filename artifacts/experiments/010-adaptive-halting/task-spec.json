@@ -1,0 +1,24 @@
+{
+  "corpus_validation_sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+  "evaluation": "192 independent 128-token prefixes, batch size 1, score only the next token",
+  "format": "minicells.language-adaptive-halting-task.v1",
+  "frozen_checkpoints": true,
+  "max_iterations": 4,
+  "min_iterations": 1,
+  "models": [
+    "minicells-v2",
+    "minicells-2d-k4"
+  ],
+  "source_experiment": "009",
+  "thresholds": [
+    0.0,
+    0.005,
+    0.0075,
+    0.01,
+    0.0125,
+    0.015,
+    0.02,
+    0.03
+  ],
+  "validation_prefixes": 192
+}

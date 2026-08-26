@@ -1,0 +1,63 @@
+{
+  "best": {
+    "minicells-2d-k4": {
+      "avg_stage_steps": [
+        4.0,
+        4.0,
+        2.9635416666666665
+      ],
+      "avg_total_steps": 10.963541666666666,
+      "iteration_fraction": 0.9136284722222222,
+      "ppl_ratio_to_fixed": 1.0064486659613252,
+      "runtime_speedup_observed": false,
+      "theoretical_iteration_saving": 0.08637152777777779,
+      "threshold": 0.0125,
+      "throughput_ratio_to_fixed": 0.9288326660580852,
+      "wall_time_ratio_to_fixed": 1.0766201884823292
+    },
+    "minicells-v2": {
+      "avg_stage_steps": [
+        4.0,
+        4.0,
+        3.8541666666666665
+      ],
+      "avg_total_steps": 11.854166666666666,
+      "iteration_fraction": 0.9878472222222222,
+      "ppl_ratio_to_fixed": 1.0031178194640427,
+      "runtime_speedup_observed": false,
+      "theoretical_iteration_saving": 0.01215277777777779,
+      "threshold": 0.01,
+      "throughput_ratio_to_fixed": 0.8336243013224984,
+      "wall_time_ratio_to_fixed": 1.1995811523411155
+    }
+  },
+  "diagnosis": "BOTH_1D_AND_2D_SUPPORT_RESIDUAL_EARLY_EXIT_WITHIN_1PCT_PPL",
+  "experiment": "MINI Cells Experiment 010 \u2014 Residual Adaptive Halting Probe",
+  "format": "minicells.language-adaptive-halting.v1",
+  "halting_rule": {
+    "maximum_iterations_per_stage": 4,
+    "minimum_iterations_per_stage": 1,
+    "quality_budget": "last-token next-token PPL <= 1.01x fixed-depth PPL",
+    "scope": "one autoregressive prefix at a time; batch size 1; stage-level early exit",
+    "signal": "absolute RMS update of the final-prefix readout position (all K tissue cells for 2D)",
+    "thresholds": [
+      0.0,
+      0.005,
+      0.0075,
+      0.01,
+      0.0125,
+      0.015,
+      0.02,
+      0.03
+    ]
+  },
+  "interpretation": {
+    "algorithmic": "A viable point shows the learned dynamics already expose a state-derived stopping signal; this does not require a learned halting head and is not specific to 2D.",
+    "causality": "Only the prediction after the complete prefix is scored, so the stopping decision cannot inspect future target tokens. Training-time all-position loss requires a finer-grained causal scheduler.",
+    "runtime": "Observed wall-clock includes GPU-to-host scalar synchronization in this prototype. Iteration savings can exist even if the current Python control flow is not faster yet.",
+    "training": "This experiment probes frozen checkpoints. A positive result justifies a later training experiment with randomized depth/stability loss and causal per-position or per-cell adaptive unrolling; it does not by itself prove lower training cost."
+  },
+  "question": "Can the already-trained 1D and 2D cellular language models stop recurrent computation from their own state-update residual without retraining?",
+  "source_009": "results/language-2d-latent-tissue-v1",
+  "status": "HALTING_SIGNAL_BOTH"
+}
