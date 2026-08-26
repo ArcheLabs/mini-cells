@@ -1,0 +1,19 @@
+{
+  "experiment": "017",
+  "format": "minicells.localized-cellular-learning-task.v1",
+  "phase1": {
+    "dataset": "roneneldan/TinyStories",
+    "model": "Experiment 016 Growing Cellular LM",
+    "shared_checkpoint": "B and L branch from the exact same phase1 state per replicate",
+    "tokens": 1024000
+  },
+  "policy_B": "freeze genome, update all existing/newborn cell_memory as in Experiment 016 local phase",
+  "policy_L": {
+    "continued_growth": "connect first; conservative fork only when old rewrite pressure persists",
+    "initial_allocation": "conservative fork from the non-interface old cell with maximum counterfactual rewrite pressure",
+    "old_phenotype": "bit-stable / optimizer gradient masked to zero",
+    "structural_changes": "only edges touching newborn tissue",
+    "trainable": "newborn cell_memory only",
+    "transplant": "newborn phenotype plus its boundary graph; no old-cell phenotype copied"
+  }
+}
