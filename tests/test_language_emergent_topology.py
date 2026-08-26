@@ -10,6 +10,7 @@ from minicells.language_emergent_topology import (
     _initial_activity,
     _local_weights,
     _long_range_mask,
+    _permute_plastic_distribution,
     _uniform_plastic_distribution,
     build_emergent_topology_model,
 )
@@ -99,6 +100,21 @@ def test_plasticity_can_create_nonzero_long_range_topology() -> None:
     assert strength.max().item() <= LONG_RANGE_MAX_COUPLING + 1e-6
     assert tv.max().item() > 0.0
     assert weights[..., 0, 3].item() > 0.0
+
+
+def test_topology_shuffle_changes_identity_but_preserves_row_strength_and_entropy() -> None:
+    distribution = _uniform_plastic_distribution(1, 1, 8, device=torch.device("cpu"), dtype=torch.float32)
+    reaction = torch.randn(1, 1, 8, 6)
+    activity = _initial_activity(1, 1, 8, device=torch.device("cpu"))
+    for _ in range(5):
+        distribution = EmergentTopologyStage._update_plastic_distribution(distribution, reaction, activity)
+    shuffled = _permute_plastic_distribution(distribution)
+    weights, strength, _ = EmergentTopologyStage._plastic_weights(distribution)
+    shuffled_weights, shuffled_strength, _ = EmergentTopologyStage._plastic_weights(shuffled)
+    assert torch.allclose(distribution.sum(dim=-1), shuffled.sum(dim=-1), atol=1e-6)
+    assert torch.allclose(strength, shuffled_strength, atol=1e-6)
+    assert torch.allclose(weights.sum(dim=-1), shuffled_weights.sum(dim=-1), atol=1e-6)
+    assert not torch.allclose(distribution, shuffled)
 
 
 def test_diffusion_is_zero_when_all_cell_states_agree() -> None:
