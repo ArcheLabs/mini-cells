@@ -7,6 +7,8 @@ import torch
 
 from .language_growing_organism import (
     ACTIVITY_BUDGET,
+    ACTIVITY_RATE,
+    EDGE_COUPLING,
     STEP_SIZE,
     GrowingCellularLM,
     StructuralProbe,
@@ -49,7 +51,6 @@ class RecruitmentForward:
 
 @torch.no_grad()
 def _base_state_trace(model: GrowingCellularLM, input_ids: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-    """Return pre-update states for each recurrent step under ordinary Phase-1 dynamics."""
     alive_indices = torch.nonzero(model.alive_mask, as_tuple=False).flatten()
     memory = model.cell_memory.index_select(0, alive_indices)
     batch, length = input_ids.shape
@@ -83,28 +84,20 @@ def calibrate_homeostasis(
     *,
     quantile: float = HOMEOSTATIC_QUANTILE,
 ) -> HomeostaticProfile:
-    """Estimate a per-step local homeostatic manifold from retained language.
-
-    Calibration happens before adaptation cells exist. Each old cell receives a
-    recurrent-step-specific normal state distribution, preventing ordinary
-    early-vs-late recurrent evolution from being mistaken for novelty.
-    """
+    """Estimate per-step local homeostasis from retained language before adaptation."""
     if not 0.5 < quantile < 1.0:
         raise ValueError("quantile must be in (0.5, 1.0)")
     model.eval()
     device = model.cell_memory.device
     alive = [int(v) for v in torch.nonzero(model.alive_mask, as_tuple=False).flatten().tolist()]
-    samples: list[dict[int, list[torch.Tensor]]] = [
-        {cell: [] for cell in alive} for _ in range(model.iterations)
-    ]
+    samples: list[dict[int, list[torch.Tensor]]] = [{cell: [] for cell in alive} for _ in range(model.iterations)]
     for inputs in input_batches:
         trace, alive_indices = _base_state_trace(model, inputs.to(device))
         local_alive = alive_indices.cpu().tolist()
         trace = trace.cpu()
         for step in range(model.iterations):
             for local_index, cell in enumerate(local_alive):
-                values = trace[step, :, :, local_index, :].reshape(-1, model.dim)
-                samples[step][int(cell)].append(values)
+                samples[step][int(cell)].append(trace[step, :, :, local_index, :].reshape(-1, model.dim))
     if not all(samples[step][cell] for step in range(model.iterations) for cell in alive):
         raise RuntimeError("homeostatic calibration received incomplete live-cell samples")
 
@@ -123,14 +116,15 @@ def calibrate_homeostasis(
     return HomeostaticProfile(mean=mean, scale=scale, threshold=threshold, quantile=quantile)
 
 
-def _dynamic_diffusion(state: torch.Tensor, weights: torch.Tensor, cell_gate: torch.Tensor) -> torch.Tensor:
-    # Old cells have gate 1. A newborn-old edge receives the newborn gate;
-    # newborn-newborn communication requires both tissues to be excitable.
-    edge_gate = cell_gate.unsqueeze(-1) * cell_gate.unsqueeze(-2)
-    dynamic = weights[None, None, :, :] * edge_gate.to(weights.dtype)
-    source = torch.einsum("blrs,blsd->blrd", dynamic, state)
-    row_mass = dynamic.sum(dim=-1, keepdim=True)
-    return source - row_mass * state
+def _base_graph_weights(
+    model: GrowingCellularLM,
+    alive_indices: torch.Tensor,
+    localized_state: LocalizedLearningState,
+) -> torch.Tensor:
+    adjacency = localized_state.base_adjacency.to(model.adjacency.device)
+    adjacency = adjacency.index_select(0, alive_indices).index_select(1, alive_indices)
+    scores = adjacency.to(dtype=model.cell_memory.dtype)
+    return EDGE_COUPLING * scores / scores.sum(dim=-1, keepdim=True).clamp_min(1.0)
 
 
 def _cell_recruitment(
@@ -154,12 +148,7 @@ def _cell_recruitment(
         if local_child is None:
             continue
         if force_recruitment is not None:
-            gate = torch.full(
-                (batch, length),
-                float(force_recruitment),
-                device=state.device,
-                dtype=torch.float32,
-            ).clamp(0.0, 1.0)
+            gate = torch.full((batch, length), float(force_recruitment), device=state.device, dtype=torch.float32).clamp(0.0, 1.0)
         else:
             parent = int(model.parent[child].item())
             local_parent = global_to_local.get(parent)
@@ -177,6 +166,42 @@ def _cell_recruitment(
     return gates
 
 
+def _gated_replicator_activity(
+    previous: torch.Tensor | None,
+    reaction: torch.Tensor,
+    availability: torch.Tensor,
+) -> torch.Tensor:
+    drive = reaction.float().square().mean(dim=-1).add(1e-8).sqrt()
+    mass = availability.sum(dim=-1, keepdim=True).clamp_min(1e-6)
+    mean = (availability * drive).sum(dim=-1, keepdim=True) / mass
+    variance = (availability * (drive - mean).square()).sum(dim=-1, keepdim=True) / mass
+    fitness = (drive - mean) / variance.sqrt().clamp_min(1e-4)
+    growth = torch.exp(ACTIVITY_RATE * fitness).clamp_max(20.0)
+    prior = availability if previous is None else previous.float() * availability
+    updated = prior * growth
+    return ACTIVITY_BUDGET * updated / updated.sum(dim=-1, keepdim=True).clamp_min(1e-12)
+
+
+def _conditional_diffusion(
+    state: torch.Tensor,
+    base_weights: torch.Tensor,
+    full_weights: torch.Tensor,
+    gates: torch.Tensor,
+    newborn_positions: list[int],
+) -> torch.Tensor:
+    if not newborn_positions:
+        dynamic = base_weights[None, None, :, :].expand(state.shape[0], state.shape[1], -1, -1)
+    else:
+        # The structural delta (birth edges + learned newborn edges) is itself a
+        # conductance. At gate=0 the exact Phase-1 graph is restored; at gate=1
+        # the current adapted graph is recovered.
+        alpha = gates[..., newborn_positions].amax(dim=-1, keepdim=True)
+        dynamic = base_weights[None, None, :, :] + alpha.unsqueeze(-1) * (full_weights - base_weights)[None, None, :, :]
+    source = torch.einsum("blrs,blsd->blrd", dynamic, state)
+    row_mass = dynamic.sum(dim=-1, keepdim=True)
+    return source - row_mass * state
+
+
 def forward_with_recruitment(
     model: GrowingCellularLM,
     input_ids: torch.Tensor,
@@ -187,7 +212,7 @@ def forward_with_recruitment(
     edge_probe: torch.Tensor | None = None,
     force_recruitment: float | None = None,
 ) -> RecruitmentForward:
-    """Run the shared cellular genome with local state-dependent conductance."""
+    """Run local excitability over both communication and metabolic participation."""
     if input_ids.ndim != 2 or input_ids.shape[1] > model.max_context:
         raise ValueError(f"input_ids must be [batch, <= {model.max_context}]")
     steps = model.iterations if iterations is None else int(iterations)
@@ -202,20 +227,16 @@ def forward_with_recruitment(
     token_state = model.token_embedding(input_ids) + model.position_embedding(positions)[None, :, :]
     state = memory[None, None, :, :].expand(batch, length, -1, -1).clone()
     state[:, :, 0, :] = state[:, :, 0, :] + token_state
-    activity = torch.full(
-        (batch, length, len(alive_indices)),
-        ACTIVITY_BUDGET / len(alive_indices),
-        device=input_ids.device,
-        dtype=torch.float32,
-    )
-    weights = model._graph_weights(alive_indices, edge_probe).to(device=input_ids.device)
+    full_weights = model._graph_weights(alive_indices, edge_probe).to(device=input_ids.device)
+    base_weights = _base_graph_weights(model, alive_indices, localized_state).to(device=input_ids.device)
     profile = profile.to(input_ids.device)
+    global_alive = alive_indices.tolist()
+    newborn_positions = [global_alive.index(cell) for cell in localized_state.newborn_cells(model) if cell in global_alive]
+    activity: torch.Tensor | None = None
     traces: list[torch.Tensor] = []
     last_before = state
     for step_index in range(steps):
         last_before = state
-        reaction = model.rule(state, memory)
-        activity = model._replicator_activity(activity, reaction)
         gates = _cell_recruitment(
             model,
             state,
@@ -225,9 +246,13 @@ def forward_with_recruitment(
             step_index=step_index,
             force_recruitment=force_recruitment,
         )
-        diffusion = _dynamic_diffusion(state, weights, gates)
-        relative = activity / (ACTIVITY_BUDGET / len(alive_indices))
-        gain = relative.clamp(0.05, 3.0).unsqueeze(-1).to(state.dtype)
+        reaction = model.rule(state, memory)
+        activity = _gated_replicator_activity(activity, reaction, gates)
+        diffusion = _conditional_diffusion(state, base_weights, full_weights, gates, newborn_positions)
+        effective_cells = gates.sum(dim=-1).clamp_min(1.0)
+        baseline_activity = ACTIVITY_BUDGET / effective_cells
+        relative = activity / baseline_activity.unsqueeze(-1)
+        gain = relative.clamp(0.0, 3.0).unsqueeze(-1).to(state.dtype)
         state = state + STEP_SIZE * gain * (reaction + diffusion)
         traces.append(gates)
     logits = model.lm_head(model.final_norm(state[:, :, 0, :]))
@@ -259,7 +284,6 @@ def make_recruitment_probe(
     *,
     loss_fn,
 ) -> StructuralProbe:
-    """Structural utility/pressure probe under the same conditional dynamics."""
     if not microbatches:
         raise ValueError("microbatches must not be empty")
     device = model.cell_memory.device
