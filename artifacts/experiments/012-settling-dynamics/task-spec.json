@@ -1,0 +1,24 @@
+{
+  "baseline_source": "artifacts/experiments/011-stabilizing-cost",
+  "experiment": "012",
+  "format": "minicells.language-settling-task.v1",
+  "free_run_depths": [
+    2,
+    4,
+    6,
+    8,
+    12,
+    16
+  ],
+  "new_training_models": [
+    "minicells-v2-settling",
+    "minicells-2d-k4-settling"
+  ],
+  "primary_metrics": [
+    "late_ppl_plateau_ratio",
+    "relative_state_residual",
+    "residual_ratio_16_to_4",
+    "depth4_language_quality"
+  ],
+  "validation_batches_per_depth": 16
+}
