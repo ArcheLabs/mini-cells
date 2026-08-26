@@ -1,0 +1,56 @@
+{
+  "base_tasks": [
+    "REVERSE",
+    "ROTATE",
+    "INC",
+    "SWAP"
+  ],
+  "composition_map": {
+    "INC_SWAP": [
+      "INC",
+      "SWAP"
+    ],
+    "REVERSE_INC": [
+      "REVERSE",
+      "INC"
+    ],
+    "REVERSE_ROTATE": [
+      "REVERSE",
+      "ROTATE"
+    ],
+    "REVERSE_SWAP": [
+      "REVERSE",
+      "SWAP"
+    ],
+    "ROTATE_INC": [
+      "ROTATE",
+      "INC"
+    ],
+    "ROTATE_SWAP": [
+      "ROTATE",
+      "SWAP"
+    ]
+  },
+  "format": "minicells.local-substrate-emergent-topology-task.v1",
+  "mechanism": {
+    "activity": "replicator competition with fixed total budget",
+    "local": "fixed nearest-neighbor diffusion",
+    "plastic": "initially uniform long-range candidate distribution; actual coupling is zero at maximum entropy and grows only as the distribution differentiates"
+  },
+  "tasks": [
+    "REVERSE",
+    "ROTATE",
+    "INC",
+    "SWAP",
+    "REVERSE_ROTATE",
+    "REVERSE_INC",
+    "REVERSE_SWAP",
+    "ROTATE_INC",
+    "ROTATE_SWAP",
+    "INC_SWAP"
+  ],
+  "variants": {
+    "E": "same substrate plus emergent plastic long-range topology",
+    "L": "local substrate only"
+  }
+}

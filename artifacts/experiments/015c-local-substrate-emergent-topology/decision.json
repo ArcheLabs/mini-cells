@@ -1,0 +1,99 @@
+{
+  "design": {
+    "activity_budget": 3.0,
+    "activity_dynamics": "multiplicative replicator competition driven by standardized local reaction magnitude",
+    "activity_rate": 0.5,
+    "expert_specific_parameters": 0,
+    "gpu_count": 2,
+    "identical_parameterization": true,
+    "initial_plastic_effect": 0.0,
+    "local_coupling": 0.08,
+    "local_substrate": "fixed nearest-neighbor graph diffusion",
+    "long_range_max_coupling": 0.08,
+    "models_total": 6,
+    "plastic_candidate_graph": "long-range only, uniform distribution at initialization",
+    "plastic_edge_strength": "LONG_RANGE_MAX_COUPLING * (1 - normalized_entropy(distribution))",
+    "plasticity": "multiplicative Hebbian competition over long-range candidate sources with row homeostasis",
+    "plasticity_rate": 0.75,
+    "replicates": 3,
+    "router_parameters": 0,
+    "tissue_height": 8,
+    "tokens_per_model": 960000,
+    "variants": {
+      "E": "same L dynamics plus emergent long-range plastic topology",
+      "L": "replicator activity + fixed nearest-neighbor local substrate only"
+    }
+  },
+  "experiment": "MINI Cells Experiment 015c \u2014 Local Substrate + Emergent Plastic Topology",
+  "format": "minicells.local-substrate-emergent-topology.v1",
+  "observability": {
+    "activity_competition": "activity-competition.png",
+    "final_node_topology": "final-node-topology.png",
+    "final_plastic_topology_heatmap": "final-plastic-topology-heatmap.png",
+    "graph_semantics": "dashed neighbor edges are fixed local substrate; directed solid arrows are only emergent long-range plastic edges; node size is mean activity",
+    "plastic_topology_growth": "plastic-topology-growth.png",
+    "reaction_diffusion_dynamics": "reaction-diffusion-dynamics.png",
+    "task_topology_atlas": "task-node-topology-atlas.png"
+  },
+  "pre_registered_signal": {
+    "E_over_L_nll_geomean_max": 1.05,
+    "causal_plasticity": "normal beats plasticity-off with paired bootstrap 95% lower > 0",
+    "causal_topology": "normal beats plastic-diffusion-off and topology-shuffled with paired bootstrap 95% lower > 0",
+    "depth_robustness_E_over_L_max": 1.15,
+    "effective_active_fraction_max": 0.75,
+    "final_plastic_strength_min": 0.005,
+    "final_plastic_tv_min": 0.05,
+    "minimum_signal_replicates": 2,
+    "per_seed_E_over_L_nll_max": 1.1,
+    "task_activity_mi": "observed > label-shuffled p99",
+    "task_plastic_topology_mi": "observed > label-shuffled p99"
+  },
+  "question": "Can a fixed local NCA substrate plus replicator activity and an initially structureless long-range plastic graph form stable, causally useful functional topology without a router or expert-specific parameters?",
+  "results": {
+    "E_over_L_depth_robustness_geometric_mean": 1.0038924413096044,
+    "E_over_L_nll_geometric_mean": 0.9359809663162371,
+    "E_over_L_nll_ratios": [
+      1.1097570803684154,
+      0.6737796266730848,
+      1.0966177020629315
+    ],
+    "activity_competition_replicates": 3,
+    "local_diffusion_off_causal_replicates": 3,
+    "mean_effective_active_fraction": 0.3454853693644206,
+    "mean_final_plastic_strength": 0.005256869364529848,
+    "mean_final_plastic_tv": 0.18768385549386343,
+    "mean_plastic_to_reaction": 0.018456204483097986,
+    "pass_flags": {
+      "activity_competition": true,
+      "causal_plastic_topology": false,
+      "causal_plasticity": false,
+      "depth_stability": true,
+      "plastic_topology_emergence": true,
+      "quality": false,
+      "task_activity_specialization": true,
+      "task_plastic_topology_specialization": true
+    },
+    "plastic_diffusion_off_causal_replicates": 1,
+    "plastic_topology_emergence_replicates": 3,
+    "plasticity_off_causal_replicates": 1,
+    "task_activity_signal_replicates": 3,
+    "task_plastic_topology_signal_replicates": 3,
+    "topology_shuffled_causal_replicates": 0
+  },
+  "scope": {
+    "claim": "transient emergent long-range functional topology over a fixed local substrate",
+    "not_claimed": [
+      "persistent long-term cellular memory",
+      "skill transplantation",
+      "birth/death",
+      "unbounded growth",
+      "clean zero-shot capability composition",
+      "one globally time-homogeneous rule across all three existing stages"
+    ]
+  },
+  "source_experiment": {
+    "experiment": "015b-plastic-reaction-diffusion",
+    "finding": "015b made diffusion causally important but mixed fixed geometry with plastic topology, remained dense, and over-coupled computation."
+  },
+  "status": "EMERGENT_TOPOLOGY_EPIPHENOMENAL"
+}

@@ -1,0 +1,110 @@
+{
+  "ablation": {
+    "functional_specific_rows": 5,
+    "specific_rows": [
+      {
+        "delta_nll": 0.021629615511213007,
+        "row": 2,
+        "specificity": 2.2629591420708595,
+        "task": "REVERSE_SWAP"
+      },
+      {
+        "delta_nll": 0.029121727943420384,
+        "row": 3,
+        "specificity": 2.245538771275665,
+        "task": "REVERSE_ROTATE"
+      },
+      {
+        "delta_nll": 0.024814703123910098,
+        "row": 4,
+        "specificity": 2.8782530017843238,
+        "task": "REVERSE_SWAP"
+      },
+      {
+        "delta_nll": 0.04637074334280822,
+        "row": 6,
+        "specificity": 2.585897725564726,
+        "task": "REVERSE_ROTATE"
+      },
+      {
+        "delta_nll": 0.03977442741394044,
+        "row": 7,
+        "specificity": 3.2723650138912546,
+        "task": "INC"
+      }
+    ]
+  },
+  "activity_budget": 3.0,
+  "activity_rate": 0.5,
+  "avg_recurrent_iterations": 8.971,
+  "bootstrap_seed": 82015,
+  "depth_seed": 42015,
+  "format": "minicells.local-substrate-emergent-topology-worker.v1",
+  "interventions": {
+    "local_diffusion_off": {
+      "bootstrap_95_lower": 0.18155122528225184,
+      "bootstrap_95_upper": 0.19779122708588837,
+      "mean_delta_nll": 0.18964817857742308,
+      "positive_fraction": 0.945
+    },
+    "plastic_diffusion_off": {
+      "bootstrap_95_lower": -0.0004631871610879898,
+      "bootstrap_95_upper": -4.760585874319079e-05,
+      "mean_delta_nll": -0.0002601323127746582,
+      "positive_fraction": 0.47
+    },
+    "plasticity_off": {
+      "bootstrap_95_lower": -0.0004573570355772972,
+      "bootstrap_95_upper": -5.659425705671316e-05,
+      "mean_delta_nll": -0.0002601323127746582,
+      "positive_fraction": 0.47
+    },
+    "topology_shuffled": {
+      "bootstrap_95_lower": -0.00019226532578468322,
+      "bootstrap_95_upper": -4.6853007376194016e-05,
+      "mean_delta_nll": -0.00011914467811584472,
+      "positive_fraction": 0.463
+    }
+  },
+  "local_coupling": 0.08,
+  "long_range_max_coupling": 0.08,
+  "mean_exact_match": 0.016999999999999998,
+  "mean_nll": 1.098390062740871,
+  "mean_token_accuracy": 0.567,
+  "model_seed": 72015,
+  "null_seed": 62015,
+  "parameters": 902016,
+  "peak_vram_bytes": 1119794176,
+  "plasticity_rate": 0.75,
+  "replicate": 0,
+  "run": "r0-E",
+  "schedule_seed": 32015,
+  "seconds_per_million_tokens": 85.89544768333232,
+  "tokens": 960000,
+  "topology": {
+    "effective_active_fraction": 0.2518085241317749,
+    "final_activity_entropy": 0.5903581380844116,
+    "final_mean_plastic_strength": 0.005213698372244835,
+    "final_plastic_entropy": 0.9400477409362793,
+    "final_plastic_tv": 0.16511642932891846,
+    "mean_plastic_to_reaction": 0.014339652392663993,
+    "plastic_distribution_change_l1": 0.036007240414619446,
+    "task_activity_mi": {
+      "empirical_p": 0.000999000999000999,
+      "null_mean": 0.0003716586362594132,
+      "null_p95": 0.0005922062924956028,
+      "null_p99": 0.0007400522873693957,
+      "observed": 0.004669158086813913
+    },
+    "task_topology_mi": {
+      "empirical_p": 0.000999000999000999,
+      "null_mean": 0.0004859451772193242,
+      "null_p95": 0.0006603419662786693,
+      "null_p99": 0.00073193697899881,
+      "observed": 0.005411181509815328
+    }
+  },
+  "training_elapsed_seconds": 82.45962977599902,
+  "training_tokens_per_second": 11642.06051625302,
+  "variant": "E"
+}
