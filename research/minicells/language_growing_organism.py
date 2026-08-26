@@ -180,7 +180,6 @@ class GrowingCellularLM(nn.Module):
         self.token_embedding = nn.Embedding(vocab_size, dim)
         self.position_embedding = nn.Embedding(max_context, dim)
         self.cell_memory = nn.Parameter(torch.zeros(max_cells, dim))
-        nn.init.normal_(self.cell_memory, mean=0.0, std=0.02)
         self.rule = SharedCellRule(dim=dim, heads=heads, ffn_dim=ffn_dim, window=attention_window)
         self.final_norm = RMSNorm(dim)
         self.lm_head = nn.Linear(dim, vocab_size, bias=False)
@@ -246,13 +245,12 @@ class GrowingCellularLM(nn.Module):
 
     def _graph_weights(self, alive_indices: torch.Tensor, edge_probe: torch.Tensor | None) -> torch.Tensor:
         adjacency = self.adjacency.index_select(0, alive_indices).index_select(1, alive_indices)
-        base = adjacency.to(dtype=self.cell_memory.dtype)
-        base = EDGE_COUPLING * base / base.sum(dim=-1, keepdim=True).clamp_min(1.0)
-        if edge_probe is None:
-            return base
-        probe = edge_probe.index_select(0, alive_indices).index_select(1, alive_indices)
-        eye = torch.eye(len(alive_indices), device=probe.device, dtype=torch.bool)
-        return base + probe.masked_fill(eye, 0.0).to(base.dtype)
+        scores = adjacency.to(dtype=self.cell_memory.dtype)
+        if edge_probe is not None:
+            probe = edge_probe.index_select(0, alive_indices).index_select(1, alive_indices)
+            eye = torch.eye(len(alive_indices), device=probe.device, dtype=torch.bool)
+            scores = scores + probe.masked_fill(eye, 0.0).to(scores.dtype)
+        return EDGE_COUPLING * scores / scores.sum(dim=-1, keepdim=True).clamp_min(1.0)
 
     def forward_variable(
         self,
@@ -361,19 +359,19 @@ class GrowingCellularLM(nn.Module):
     @torch.no_grad()
     def copy_tissue_from(self, donor: "GrowingCellularLM", cells: Iterable[int]) -> None:
         selected = sorted(set(int(cell) for cell in cells))
-        if 0 not in selected:
-            selected = [0, *selected]
         for cell in selected:
-            if cell < 0 or cell >= self.max_cells:
-                raise ValueError("cell index outside organism")
+            if cell <= 0 or cell >= self.max_cells:
+                raise ValueError("transplanted cells must be non-interface cells inside organism")
             self.cell_memory[cell].copy_(donor.cell_memory[cell])
             self.alive_mask[cell] = donor.alive_mask[cell]
             self.parent[cell] = donor.parent[cell]
             self.birth_step[cell] = donor.birth_step[cell]
-        for receiver in selected:
-            for source in selected:
-                self.adjacency[receiver, source] = donor.adjacency[receiver, source]
-                self.protected_edges[receiver, source] = donor.protected_edges[receiver, source]
+        boundary = sorted(set([0, *selected]))
+        for receiver in boundary:
+            for source in boundary:
+                if receiver in selected or source in selected:
+                    self.adjacency[receiver, source] = donor.adjacency[receiver, source]
+                    self.protected_edges[receiver, source] = donor.protected_edges[receiver, source]
 
 
 class StructuralController:
@@ -443,13 +441,7 @@ class StructuralController:
             flat = int(scores.argmax().item())
             receiver, source = divmod(flat, model.max_cells)
             if model.connect(receiver, source):
-                event = StructuralEvent(
-                    step=step,
-                    event="connect",
-                    receiver=receiver,
-                    source=source,
-                    utility_score=float(utility_z[receiver, source]),
-                )
+                event = StructuralEvent(step=step, event="connect", receiver=receiver, source=source, utility_score=float(utility_z[receiver, source]))
                 self.events.append(event)
                 new_events.append(event)
                 self.connect_streak[receiver, source] = 0
@@ -465,13 +457,7 @@ class StructuralController:
             flat = int(scores.argmin().item())
             receiver, source = divmod(flat, model.max_cells)
             if model.prune(receiver, source):
-                event = StructuralEvent(
-                    step=step,
-                    event="prune",
-                    receiver=receiver,
-                    source=source,
-                    utility_score=float(utility_z[receiver, source]),
-                )
+                event = StructuralEvent(step=step, event="prune", receiver=receiver, source=source, utility_score=float(utility_z[receiver, source]))
                 self.events.append(event)
                 new_events.append(event)
                 self.prune_streak[receiver, source] = 0
@@ -504,12 +490,7 @@ class StructuralController:
         return new_events
 
 
-def make_structural_probe(
-    model: GrowingCellularLM,
-    microbatches: list[tuple[torch.Tensor, torch.Tensor]],
-    *,
-    loss_fn,
-) -> StructuralProbe:
+def make_structural_probe(model: GrowingCellularLM, microbatches: list[tuple[torch.Tensor, torch.Tensor]], *, loss_fn) -> StructuralProbe:
     if not microbatches:
         raise ValueError("microbatches must not be empty")
     device = model.cell_memory.device
@@ -532,8 +513,7 @@ def make_structural_probe(
     summed = gradients.sum(dim=0)
     numerator = summed.square().sum(dim=-1)
     denominator = gradients.square().sum(dim=-1).sum(dim=0) * gradients.shape[0]
-    conflict = 1.0 - numerator / denominator.clamp_min(1e-12)
-    conflict = conflict.clamp(0.0, 1.0)
+    conflict = (1.0 - numerator / denominator.clamp_min(1e-12)).clamp(0.0, 1.0)
     directions = torch.zeros_like(model.cell_memory.detach().float())
     for cell in range(model.max_cells):
         centered = gradients[:, cell, :] - gradients[:, cell, :].mean(dim=0, keepdim=True)
@@ -549,12 +529,7 @@ def build_cellular_model(vocab_size: int, variant_code: str, **kwargs: object) -
     return GrowingCellularLM(vocab_size=vocab_size, variant=variant_by_code(variant_code), **kwargs)
 
 
-def build_parameter_matched_small_transformer(
-    vocab_size: int,
-    target_parameters: int,
-    *,
-    max_context: int = 128,
-) -> tuple[TransformerLM, dict[str, int | float]]:
+def build_parameter_matched_small_transformer(vocab_size: int, target_parameters: int, *, max_context: int = 128) -> tuple[TransformerLM, dict[str, int | float]]:
     candidates: list[tuple[float, TransformerLM, int, int, int, int]] = []
     for dim in (80, 96, 112, 128):
         heads = 4
@@ -562,14 +537,7 @@ def build_parameter_matched_small_transformer(
             continue
         for layers in range(1, 7):
             for ffn_dim in (256, 320, 384, 448, 512):
-                model = TransformerLM(
-                    vocab_size=vocab_size,
-                    max_context=max_context,
-                    dim=dim,
-                    heads=heads,
-                    ffn_dim=ffn_dim,
-                    layers=layers,
-                )
+                model = TransformerLM(vocab_size=vocab_size, max_context=max_context, dim=dim, heads=heads, ffn_dim=ffn_dim, layers=layers)
                 parameters = count_parameters(model)
                 error = abs(parameters - target_parameters) / max(1, target_parameters)
                 candidates.append((error, model, dim, layers, ffn_dim, parameters))
