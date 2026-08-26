@@ -1,7 +1,7 @@
 {
   "schema": "minicells.training-fidelity-reference.v1",
   "algorithm": "echo-adamw-cross-entropy-v1",
-  "status": "FIXTURE_REQUIRED",
+  "status": "PASS_CANONICAL_FIXTURE_16",
   "model": {
     "num_cells": 64,
     "max_seq_len": 32,
@@ -33,5 +33,8 @@
     "validation_examples": 4096
   },
   "initialization": "export exact FP32 PyTorch EchoModel parameters; do not substitute production SplitMix64/int16 genesis",
-  "blocker": "PyTorch is not installed in the current execution environment; no canonical fixture was fabricated"
+  "fixture": "fixtures/training-fidelity-v1",
+  "fixture_steps": 16,
+  "environment": "fixtures/training-fidelity-v1/environment.json",
+  "validation_metrics": "fixtures/training-fidelity-v1/validation-metrics.json"
 }

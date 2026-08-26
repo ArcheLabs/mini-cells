@@ -1,11 +1,11 @@
 {
   "schema": "minicells.pvm-algorithm-fidelity-decision.v1",
   "status": "BLOCKED_EXTERNAL",
-  "next_action": "INSTALL_PYTORCH_EXPORT_CANONICAL_FIXTURE_AND_REPAIR_DEDICATED_PVM_EXECUTION",
+  "next_action": "RUN_5000_STEP_LEARNING_GATE_THEN_CANONICAL_PVM_PARITY_AND_GAS",
   "fresh_chain_e2e": "NOT_STARTED_BY_POLICY",
   "blockers": [
-    "PyTorch is unavailable, so Python reference tensors cannot be exported",
-    "Canonical PVM gas cannot be measured until the PyTorch fixture is available; synthetic full-batch diagnostic is OOG at 10B"
+    "5000-step Python/Rust learning gate is still pending",
+    "Canonical PVM parity and gas remain pending; synthetic full-batch diagnostic is OOG at 10B"
   ],
   "algorithm_changes": "NONE"
 }

@@ -1,0 +1,62 @@
+{
+  "schema": "minicells.training-fidelity.v1",
+  "algorithm": "echo-adamw-ce-v1",
+  "model": {
+    "num_cells": 64,
+    "max_seq_len": 32,
+    "vocab_size": 44,
+    "embedding_dim": 8,
+    "hidden_dim": 16,
+    "radius": 2,
+    "iterations": 4,
+    "mlp_width": 32,
+    "activation": "relu",
+    "state_activation": "hardtanh",
+    "residual_scale": 1.0
+  },
+  "logical_batch_size": 256,
+  "steps": 5000,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0,
+  "grad_clip_norm": 1.0,
+  "data": {
+    "min_length": 1,
+    "max_length": 32,
+    "random_fraction": 0.7
+  },
+  "validation": {
+    "seed": 10001,
+    "examples": 4096
+  },
+  "optimizer": "torch.optim.AdamW",
+  "optimizer_defaults": {
+    "lr": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0,
+    "amsgrad": false,
+    "foreach": null,
+    "maximize": false,
+    "capturable": false,
+    "differentiable": false,
+    "fused": null
+  },
+  "torch_version": "2.4.1+cu121",
+  "parameter_order": [
+    "embedding.weight",
+    "update_in.weight",
+    "update_in.bias",
+    "update_out.weight",
+    "update_out.bias",
+    "output.weight",
+    "output.bias"
+  ],
+  "fixture_steps": 16,
+  "production_train_module": "/home/libingjiang/mini-cells/research/minicells/train.py",
+  "validation_metrics": "validation-metrics.json",
+  "environment": "environment.json",
+  "weight_digest": "blake2b-256 over little-endian FP32 parameter bytes"
+}

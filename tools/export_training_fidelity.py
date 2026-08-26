@@ -8,7 +8,10 @@ emitting a fabricated fixture.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import platform
+import subprocess
 import struct
 import sys
 from pathlib import Path
@@ -22,6 +25,7 @@ try:
     import torch
     from minicells.config import load_config, resolved_config
     from minicells.data import CopyDataGenerator, fixed_dataset
+    from minicells.evaluate import evaluate
     from minicells.metrics import masked_cross_entropy
     from minicells.model import EchoModel
     # Import the production training module as part of the provenance check;
@@ -35,8 +39,28 @@ except ModuleNotFoundError as exc:  # pragma: no cover - environment diagnostic
 
 
 def flat_parameters(model: EchoModel) -> np.ndarray:
-    return np.concatenate([p.detach().cpu().contiguous().numpy().astype("<f4").reshape(-1)
-                           for p in model.parameters()])
+    return flat_tensors(model.parameters())
+
+
+def flat_tensors(tensors) -> np.ndarray:
+    return np.concatenate([tensor.detach().cpu().contiguous().numpy().astype("<f4").reshape(-1)
+                           for tensor in tensors])
+
+
+def flat_gradients(model: EchoModel) -> np.ndarray:
+    return flat_tensors([parameter.grad for parameter in model.parameters()])
+
+
+def f32_digest(values: np.ndarray) -> str:
+    payload = np.asarray(values, dtype="<f4").tobytes()
+    return "blake2b-256:0x" + hashlib.blake2b(payload, digest_size=32).hexdigest()
+
+
+def git_revision() -> str | None:
+    try:
+        return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
 
 
 def write_f32(path: Path, values: np.ndarray) -> None:
@@ -92,13 +116,13 @@ def main() -> None:
         loss.backward()
         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), config["train"]["grad_clip_norm"])
         if step in (1, 2, 4, 16):
-            write_f32(expected / f"step-{step:06d}-gradients-f32.bin", flat_parameters(type("G", (), {"parameters": lambda self: [p.grad for p in model.parameters()]})()))
+            write_f32(expected / f"step-{step:06d}-gradients-f32.bin", flat_gradients(model))
         optimizer.step()
         write_f32(expected / f"step-{step:06d}-weights-f32.bin", flat_parameters(model))
         write_f32(expected / f"step-{step:06d}-adam-m-f32.bin", optimizer_state(optimizer, "exp_avg"))
         write_f32(expected / f"step-{step:06d}-adam-v-f32.bin", optimizer_state(optimizer, "exp_avg_sq"))
         report = {"step": step, "loss": float(loss.detach().cpu()), "token_count": int(batch.mask.sum()),
-                  "grad_norm": float(grad_norm), "weight_digest": flat_parameters(model).tobytes().hex()[:64]}
+                  "grad_norm": float(grad_norm), "weight_digest": f32_digest(flat_parameters(model))}
         (expected / f"step-{step:06d}-loss.json").write_text(json.dumps(report, indent=2) + "\n")
         trace.append(report)
 
@@ -106,6 +130,26 @@ def main() -> None:
                                min_length=config["data"]["min_length"], max_length=config["data"]["max_length"],
                                num_cells=config["model"]["num_cells"], random_fraction=config["data"]["random_fraction"])
     write_batch(output / "validation.bin", validation)
+    validation_metrics = evaluate(model, validation)
+    (output / "validation-metrics.json").write_text(
+        json.dumps({"schema": "minicells.training-fidelity-validation.v1", "step": args.steps,
+                    **validation_metrics}, indent=2) + "\n"
+    )
+    environment = {
+        "python": sys.version,
+        "python_executable": sys.executable,
+        "platform": platform.platform(),
+        "machine": platform.machine(),
+        "numpy": np.__version__,
+        "torch": torch.__version__,
+        "torch_cuda": torch.version.cuda,
+        "cuda_available": bool(torch.cuda.is_available()),
+        "torch_device_count": torch.cuda.device_count(),
+        "torch_config": torch.__config__.show(),
+        "git_revision": git_revision(),
+        "deterministic_algorithms": True,
+    }
+    (output / "environment.json").write_text(json.dumps(environment, indent=2, default=str) + "\n")
     manifest = {"schema": "minicells.training-fidelity.v1", "algorithm": "echo-adamw-ce-v1",
                 "model": config["model"], "logical_batch_size": 256, "steps": config["train"]["steps"],
                 "learning_rate": config["train"]["learning_rate"], "weight_decay": config["train"]["weight_decay"],
@@ -113,7 +157,10 @@ def main() -> None:
                 "validation": config["validation"], "optimizer": "torch.optim.AdamW",
                 "optimizer_defaults": optimizer.defaults, "torch_version": torch.__version__,
                 "parameter_order": [name for name, _ in model.named_parameters()], "fixture_steps": args.steps,
-                "production_train_module": production_train.__file__}
+                "production_train_module": production_train.__file__,
+                "validation_metrics": "validation-metrics.json",
+                "environment": "environment.json",
+                "weight_digest": "blake2b-256 over little-endian FP32 parameter bytes"}
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2, default=float) + "\n")
     (output / "reference-trace.jsonl").write_text("".join(json.dumps(row) + "\n" for row in trace))
     print(json.dumps({"output": str(output), "steps": args.steps, "torch_version": torch.__version__}))

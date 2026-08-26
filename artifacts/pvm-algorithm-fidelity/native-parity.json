@@ -1,7 +1,9 @@
 {
   "schema": "minicells.native-training-parity.v1",
-  "status": "BLOCKED_PYTORCH_UNAVAILABLE",
+  "status": "PASS",
   "tolerance": {"absolute": 0.0005, "relative": 0.0005},
   "steps_required": [1, 2, 4, 16],
-  "reason": "tools/export_training_fidelity.py imports the production research path and fails closed because torch is unavailable"
+  "fixture": "fixtures/training-fidelity-v1",
+  "runner": ".local/runs/fidelity-native-16/native-parity.json",
+  "validation": "all four checkpoints passed loss, clipped gradient, grad norm, weights, Adam m and Adam v"
 }
