@@ -1,0 +1,67 @@
+{
+  "active_latent": 2,
+  "balance_weight": 0.01,
+  "composition_map": {
+    "INC_SWAP": [
+      "INC",
+      "SWAP"
+    ],
+    "REVERSE_INC": [
+      "REVERSE",
+      "INC"
+    ],
+    "REVERSE_ROTATE": [
+      "REVERSE",
+      "ROTATE"
+    ],
+    "REVERSE_SWAP": [
+      "REVERSE",
+      "SWAP"
+    ],
+    "ROTATE_INC": [
+      "ROTATE",
+      "INC"
+    ],
+    "ROTATE_SWAP": [
+      "ROTATE",
+      "SWAP"
+    ]
+  },
+  "confirmation_thresholds": {
+    "dynamic_C_nll_ratio_to_dense_A_max": 1.1,
+    "logical_active_fraction_max": 0.4,
+    "minimum_signal_replicates": 2
+  },
+  "experiment": "015",
+  "format": "minicells.language-sparse-topology-task.v1",
+  "name": "Emergent Sparse Tissue Topology",
+  "primary_endpoints": [
+    "masked output NLL",
+    "task-region mutual information vs shuffled null",
+    "task-edge mutual information vs shuffled null",
+    "targeted row ablation specificity",
+    "composition reuse margin",
+    "logical active-cell fraction"
+  ],
+  "replicates": 3,
+  "stability_weight": 0.1,
+  "tasks": [
+    "REVERSE",
+    "ROTATE",
+    "INC",
+    "SWAP",
+    "REVERSE_ROTATE",
+    "REVERSE_INC",
+    "REVERSE_SWAP",
+    "ROTATE_INC",
+    "ROTATE_SWAP",
+    "INC_SWAP"
+  ],
+  "tissue_height": 8,
+  "tokens_per_model": 960000,
+  "variants": [
+    "A",
+    "B",
+    "C"
+  ]
+}

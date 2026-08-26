@@ -1,0 +1,94 @@
+{
+  "ablation": {
+    "best_rows": [
+      {
+        "delta_nll": 0.13420899595533098,
+        "row": 7,
+        "specificity": 2.236090961678684,
+        "task": "SWAP"
+      },
+      {
+        "delta_nll": 0.08767201014927473,
+        "row": 4,
+        "specificity": 2.0575457528510626,
+        "task": "INC_SWAP"
+      },
+      {
+        "delta_nll": 0.08394350188119071,
+        "row": 3,
+        "specificity": 2.00993466644435,
+        "task": "ROTATE_INC"
+      },
+      {
+        "delta_nll": 0.0789002023424421,
+        "row": 6,
+        "specificity": 3.41348033636708,
+        "task": "REVERSE_INC"
+      },
+      {
+        "delta_nll": 0.06919828414917006,
+        "row": 1,
+        "specificity": 1.4596031600220614,
+        "task": "INC_SWAP"
+      },
+      {
+        "delta_nll": 0.056738181795392695,
+        "row": 5,
+        "specificity": 2.2493079946732544,
+        "task": "REVERSE_INC"
+      },
+      {
+        "delta_nll": 0.03849170480455677,
+        "row": 2,
+        "specificity": 1.6441161671138425,
+        "task": "REVERSE"
+      }
+    ],
+    "functional_delta_nll_threshold": 0.02,
+    "functional_specific_rows": 6,
+    "functional_specificity_threshold": 1.5
+  },
+  "active_latent": 2,
+  "avg_recurrent_iterations": 9.008,
+  "balance_weight": 0.01,
+  "depth_seed": 43015,
+  "format": "minicells.language-sparse-topology-worker.v1",
+  "model_seed": 73015,
+  "null_seed": 53015,
+  "parameters": 903168,
+  "peak_vram_bytes": 1079670272,
+  "replicate": 2,
+  "run": "r2-C",
+  "schedule_seed": 33015,
+  "seconds_per_million_tokens": 73.16581344479083,
+  "stability_weight": 0.1,
+  "tissue_height": 8,
+  "tokens": 960000,
+  "topology": {
+    "composition_reuse_margin_mean": -6.492633805097829e-05,
+    "composition_reuse_mean": 0.9995536028267558,
+    "composition_reuse_positive": 1,
+    "composition_reuse_total": 6,
+    "logical_active_fraction": 0.375000037252903,
+    "mean_exact_match": 0.01,
+    "mean_nll": 1.2524465579986575,
+    "mean_token_accuracy": 0.4913333333333334,
+    "task_edge_mi": {
+      "empirical_p": 0.000999000999000999,
+      "null_mean": 0.001359402570179315,
+      "null_p95": 0.001841799996513604,
+      "null_p99": 0.002113390487139811,
+      "observed": 0.057512394348670386
+    },
+    "task_region_mi": {
+      "empirical_p": 0.000999000999000999,
+      "null_mean": 7.504326760409935e-05,
+      "null_p95": 0.0001137970859758814,
+      "null_p99": 0.00013421067185184895,
+      "observed": 0.0007755257498763565
+    }
+  },
+  "training_elapsed_seconds": 70.2391809069992,
+  "training_tokens_per_second": 13667.585350562336,
+  "variant": "C"
+}

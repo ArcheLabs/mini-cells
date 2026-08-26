@@ -1,0 +1,94 @@
+{
+  "ablation": {
+    "best_rows": [
+      {
+        "delta_nll": 0.2856055535588944,
+        "row": 1,
+        "specificity": 2.6514928899992456,
+        "task": "REVERSE_INC"
+      },
+      {
+        "delta_nll": 0.00933611869812001,
+        "row": 2,
+        "specificity": 2.592333444256801,
+        "task": "ROTATE_SWAP"
+      },
+      {
+        "delta_nll": 0.000495576858520419,
+        "row": 3,
+        "specificity": 1.567409157948101,
+        "task": "REVERSE_INC"
+      },
+      {
+        "delta_nll": 5.209514072945787e-05,
+        "row": 4,
+        "specificity": 3.5852886711312038,
+        "task": "INC"
+      },
+      {
+        "delta_nll": 3.933293478830535e-05,
+        "row": 5,
+        "specificity": 2.1845984399601086,
+        "task": "ROTATE"
+      },
+      {
+        "delta_nll": 2.571480614799171e-05,
+        "row": 7,
+        "specificity": 2.233756969285326,
+        "task": "ROTATE_SWAP"
+      },
+      {
+        "delta_nll": 1.4212131500324077e-05,
+        "row": 6,
+        "specificity": 0.7419423030596425,
+        "task": "REVERSE_ROTATE"
+      }
+    ],
+    "functional_delta_nll_threshold": 0.02,
+    "functional_specific_rows": 1,
+    "functional_specificity_threshold": 1.5
+  },
+  "active_latent": 2,
+  "avg_recurrent_iterations": 8.99,
+  "balance_weight": 0.01,
+  "depth_seed": 41015,
+  "format": "minicells.language-sparse-topology-worker.v1",
+  "model_seed": 71015,
+  "null_seed": 51015,
+  "parameters": 903168,
+  "peak_vram_bytes": 888526848,
+  "replicate": 0,
+  "run": "r0-A",
+  "schedule_seed": 31015,
+  "seconds_per_million_tokens": 53.065787937499984,
+  "stability_weight": 0.1,
+  "tissue_height": 8,
+  "tokens": 960000,
+  "topology": {
+    "composition_reuse_margin_mean": 0.0,
+    "composition_reuse_mean": 0.9999999999999999,
+    "composition_reuse_positive": 0,
+    "composition_reuse_total": 6,
+    "logical_active_fraction": 1.0,
+    "mean_exact_match": 0.022000000000000002,
+    "mean_nll": 1.038864130667278,
+    "mean_token_accuracy": 0.5854999999999999,
+    "task_edge_mi": {
+      "empirical_p": 1.0,
+      "null_mean": 0.0,
+      "null_p95": 0.0,
+      "null_p99": 0.0,
+      "observed": 0.0
+    },
+    "task_region_mi": {
+      "empirical_p": 1.0,
+      "null_mean": -2.2204460492503128e-16,
+      "null_p95": -2.2204460492503126e-16,
+      "null_p99": -2.2204460492503126e-16,
+      "observed": -2.2204460492503126e-16
+    }
+  },
+  "training_elapsed_seconds": 50.94315641999998,
+  "training_tokens_per_second": 18844.533151524738,
+  "variant": "A"
+}
