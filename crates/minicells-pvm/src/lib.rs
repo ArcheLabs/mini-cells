@@ -236,6 +236,13 @@ pub struct DirectPvmHarness {
     pub pinned_jambda_revision: String,
 }
 
+#[derive(Clone, Debug)]
+pub struct PvmExecution {
+    pub output: Vec<u8>,
+    pub gas_used: u64,
+    pub gas_remaining: u64,
+}
+
 impl DirectPvmHarness {
     pub fn load(
         path: impl AsRef<Path>,
@@ -255,6 +262,11 @@ impl DirectPvmHarness {
     /// Execute the service refine export through Jambda's chain-free runner.
     pub fn execute_refine(&mut self, payload: &[u8]) -> Result<Vec<u8>, PvmError> {
         self.host.payload = payload.to_vec();
+        Ok(self.execute_refine_measured(payload)?.output)
+    }
+
+    pub fn execute_refine_measured(&mut self, payload: &[u8]) -> Result<PvmExecution, PvmError> {
+        self.host.payload = payload.to_vec();
         self.execute_entry(payload, 0)
     }
 
@@ -263,7 +275,7 @@ impl DirectPvmHarness {
     /// side effects and normally returns no output bytes.
     pub fn execute_accumulate(&mut self) -> Result<Vec<u8>, PvmError> {
         self.host.payload.clear();
-        self.execute_entry(&[], 5)
+        Ok(self.execute_entry(&[], 5)?.output)
     }
 
     /// Wrap a RefineResult in the MiniJAM accumulation operand envelope.
@@ -283,7 +295,11 @@ impl DirectPvmHarness {
         Ok(item)
     }
 
-    fn execute_entry(&mut self, payload: &[u8], entry_point: u32) -> Result<Vec<u8>, PvmError> {
+    fn execute_entry(
+        &mut self,
+        payload: &[u8],
+        entry_point: u32,
+    ) -> Result<PvmExecution, PvmError> {
         let program = StandaloneProgram::from_bytes(&self.artifact.bytes)
             .map_err(|error| PvmError::Decode(error.to_string()))?;
         let result = run_standalone(
@@ -295,9 +311,19 @@ impl DirectPvmHarness {
             self.gas_limit,
         )
         .map_err(|error| PvmError::Execution(error.to_string()))?;
+        let gas_used = result.gas_used;
+        let gas_remaining = result.gas_remaining as u64;
         match result.result {
-            jp_vm_primitives::VmResult::Ok(Some(output)) => Ok(output.into_vec()),
-            jp_vm_primitives::VmResult::Ok(None) => Ok(Vec::new()),
+            jp_vm_primitives::VmResult::Ok(Some(output)) => Ok(PvmExecution {
+                output: output.into_vec(),
+                gas_used,
+                gas_remaining,
+            }),
+            jp_vm_primitives::VmResult::Ok(None) => Ok(PvmExecution {
+                output: Vec::new(),
+                gas_used,
+                gas_remaining,
+            }),
             jp_vm_primitives::VmResult::Oog => Err(PvmError::Execution("out of gas".into())),
             jp_vm_primitives::VmResult::Panic => Err(PvmError::Execution("PVM panic".into())),
         }

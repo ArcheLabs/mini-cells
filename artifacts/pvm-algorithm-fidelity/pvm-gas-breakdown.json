@@ -1,0 +1,6 @@
+{
+  "schema": "minicells.pvm-training-gas-breakdown.v1",
+  "status": "NOT_MEASURED",
+  "stages": ["START", "AFTER_FORWARD", "AFTER_CE", "AFTER_BACKWARD", "AFTER_GRAD_REDUCTION", "AFTER_GRAD_NORM", "AFTER_CLIP", "AFTER_ADAMW", "AFTER_SERIALIZATION", "END"],
+  "reason": "Instrumentation is deferred until the uninstrumented dedicated guest executes successfully"
+}

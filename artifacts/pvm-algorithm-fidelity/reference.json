@@ -1,0 +1,37 @@
+{
+  "schema": "minicells.training-fidelity-reference.v1",
+  "algorithm": "echo-adamw-cross-entropy-v1",
+  "status": "FIXTURE_REQUIRED",
+  "model": {
+    "num_cells": 64,
+    "max_seq_len": 32,
+    "vocab_size": 44,
+    "embedding_dim": 8,
+    "hidden_dim": 16,
+    "radius": 2,
+    "iterations": 4,
+    "mlp_width": 32,
+    "activation": "relu",
+    "state_clamp": [-1.0, 1.0],
+    "residual_scale": 1.0,
+    "parameter_count": 4476
+  },
+  "optimizer": {
+    "name": "torch.optim.AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "grad_clip_norm": 1.0,
+    "logical_batch_size": 256,
+    "steps": 5000,
+    "seed": 1
+  },
+  "data": {
+    "min_length": 1,
+    "max_length": 32,
+    "random_fraction": 0.7,
+    "validation_seed": 10001,
+    "validation_examples": 4096
+  },
+  "initialization": "export exact FP32 PyTorch EchoModel parameters; do not substitute production SplitMix64/int16 genesis",
+  "blocker": "PyTorch is not installed in the current execution environment; no canonical fixture was fabricated"
+}

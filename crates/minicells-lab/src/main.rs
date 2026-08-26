@@ -10,6 +10,10 @@ use minicells_pvm::DirectPvmHarness;
 use minicells_sim::trainer::{
     evaluate_fixed_probe, load_checkpoint_model, read_metrics, run_persistent_native, NativeTrainer,
 };
+use minicells_training_ref::{
+    evaluate_batch, train_step_with_gradient, TrainStepReport, TrainingBatch, TrainingState,
+    PARAMETER_COUNT,
+};
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -40,6 +44,8 @@ enum Command {
     },
     Benchmark(TrainArgs),
     Gate(GateArgs),
+    FidelityNative(FidelityNativeArgs),
+    PvmGas(PvmGasArgs),
 }
 
 #[derive(Subcommand)]
@@ -92,6 +98,30 @@ struct GateArgs {
     output: PathBuf,
     #[arg(long, default_value_t = 512)]
     generations: u64,
+}
+
+#[derive(Args)]
+struct FidelityNativeArgs {
+    #[arg(long, default_value = "fixtures/training-fidelity-v1")]
+    fixture: PathBuf,
+    #[arg(long, default_value = ".local/runs/fidelity-native")]
+    output: PathBuf,
+    #[arg(long, default_value_t = 5000)]
+    steps: u64,
+}
+
+#[derive(Args)]
+struct PvmGasArgs {
+    #[arg(long)]
+    artifact: PathBuf,
+    #[arg(long, default_value_t = 10_000_000_000)]
+    gas_limit: u64,
+    #[arg(long, conflicts_with = "payload_file")]
+    payload_hex: Option<String>,
+    #[arg(long, conflicts_with = "payload_hex")]
+    payload_file: Option<PathBuf>,
+    #[arg(long, default_value = "artifacts/pvm-algorithm-fidelity")]
+    output: PathBuf,
 }
 
 fn dataset_root(path: &Option<PathBuf>) -> Result<String, Box<dyn std::error::Error>> {
@@ -272,6 +302,318 @@ fn run_persistent_pvm(
         generations,
         output.display()
     );
+    Ok(())
+}
+
+fn load_fidelity_batch(path: &PathBuf) -> Result<TrainingBatch, Box<dyn std::error::Error>> {
+    let mut batches = load_fidelity_batches(path)?;
+    if batches.len() != 1 || batches[0].size != 256 {
+        return Err("training batch must be exactly 256x64".into());
+    }
+    Ok(batches.pop().unwrap())
+}
+
+fn load_fidelity_batches(
+    path: &std::path::Path,
+) -> Result<Vec<TrainingBatch>, Box<dyn std::error::Error>> {
+    let bytes = std::fs::read(path)?;
+    if bytes.len() < 12 || &bytes[..4] != b"MCB1" {
+        return Err(format!("invalid training batch fixture: {}", path.display()).into());
+    }
+    let rows = u32::from_le_bytes(bytes[4..8].try_into().unwrap()) as usize;
+    let width = u32::from_le_bytes(bytes[8..12].try_into().unwrap()) as usize;
+    if rows == 0 || width != 64 || rows > u16::MAX as usize {
+        return Err("training fixture must have non-empty rows of width 64".into());
+    }
+    let ids_len = rows * width;
+    let expected = 12 + ids_len + rows;
+    if bytes.len() != expected {
+        return Err("training batch length mismatch".into());
+    }
+    let mut batches = Vec::new();
+    for base in (0..rows).step_by(256) {
+        let count = (rows - base).min(256);
+        let mut batch = TrainingBatch::empty();
+        batch.size = count as u16;
+        for row in 0..count {
+            let source = base + row;
+            batch.ids[row].copy_from_slice(&bytes[12 + source * width..12 + (source + 1) * width]);
+            batch.lengths[row] = bytes[12 + ids_len + source];
+        }
+        batches.push(batch);
+    }
+    Ok(batches)
+}
+
+fn f32_bytes(values: &[f32]) -> Vec<u8> {
+    let mut bytes = Vec::with_capacity(values.len() * 4);
+    for value in values {
+        bytes.extend_from_slice(&value.to_le_bytes());
+    }
+    bytes
+}
+
+fn read_f32_array(path: &std::path::Path) -> Result<Vec<f32>, Box<dyn std::error::Error>> {
+    let bytes = std::fs::read(path)?;
+    if bytes.len() % 4 != 0 {
+        return Err(format!("{} is not an f32 fixture", path.display()).into());
+    }
+    Ok(bytes
+        .chunks_exact(4)
+        .map(|chunk| f32::from_le_bytes(chunk.try_into().unwrap()))
+        .collect())
+}
+
+fn compare_f32(actual: &[f32], expected: &[f32]) -> (f32, f32) {
+    if actual.len() != expected.len() {
+        return (f32::INFINITY, f32::INFINITY);
+    }
+    let mut max_abs = 0.0f32;
+    let mut max_rel = 0.0f32;
+    for (&left, &right) in actual.iter().zip(expected) {
+        let abs = (left - right).abs();
+        max_abs = max_abs.max(abs);
+        max_rel = max_rel.max(abs / right.abs().max(1.0e-12));
+    }
+    (max_abs, max_rel)
+}
+
+fn expected_scalar(path: &std::path::Path, key: &str) -> Result<f32, Box<dyn std::error::Error>> {
+    let value: serde_json::Value = serde_json::from_slice(&std::fs::read(path)?)?;
+    value[key]
+        .as_f64()
+        .map(|value| value as f32)
+        .ok_or_else(|| format!("missing numeric {key} in {}", path.display()).into())
+}
+
+fn digest_bytes(bytes: &[u8]) -> String {
+    let mut state = blake2b_simd::Params::new().hash_length(32).to_state();
+    state.update(bytes);
+    format!("0x{}", hex::encode(state.finalize().as_bytes()))
+}
+
+fn run_fidelity_native(args: FidelityNativeArgs) -> Result<(), Box<dyn std::error::Error>> {
+    let initial = std::fs::read(args.fixture.join("initial-weights-f32.bin"))?;
+    if initial.len() != PARAMETER_COUNT * 4 {
+        return Err("initial weight fixture length mismatch".into());
+    }
+    let mut weights = [0.0f32; PARAMETER_COUNT];
+    for (index, chunk) in initial.chunks_exact(4).enumerate() {
+        weights[index] = f32::from_le_bytes(chunk.try_into().unwrap());
+    }
+    let mut state = TrainingState::from_weights(weights);
+    std::fs::create_dir_all(&args.output)?;
+    let mut reports = Vec::new();
+    let mut parity_steps = Vec::new();
+    let mut parity_blocked = false;
+    let mut parity_pass = true;
+    let steps = args.steps as usize;
+    for step in 1..=steps {
+        let batch = load_fidelity_batch(&args.fixture.join(format!("batch-{step:06}.bin")))?;
+        let mut gradient = [0.0f32; PARAMETER_COUNT];
+        let report: TrainStepReport = train_step_with_gradient(&mut state, &batch, &mut gradient);
+        let bytes = f32_bytes(&state.weights);
+        reports.push(
+            serde_json::json!({"step": step, "loss": report.loss, "token_count": report.token_count,
+            "grad_norm": report.grad_norm, "weight_digest": digest_bytes(&bytes)}),
+        );
+        if step <= 2 {
+            let expected_root = args.fixture.join("expected");
+            let paths = [
+                (
+                    "gradient",
+                    expected_root.join(format!("step-{step:06}-gradients-f32.bin")),
+                    &gradient[..],
+                ),
+                (
+                    "weights",
+                    expected_root.join(format!("step-{step:06}-weights-f32.bin")),
+                    &state.weights[..],
+                ),
+                (
+                    "adam_m",
+                    expected_root.join(format!("step-{step:06}-adam-m-f32.bin")),
+                    &state.adam_m[..],
+                ),
+                (
+                    "adam_v",
+                    expected_root.join(format!("step-{step:06}-adam-v-f32.bin")),
+                    &state.adam_v[..],
+                ),
+            ];
+            let mut metrics = serde_json::Map::new();
+            metrics.insert("step".into(), serde_json::json!(step));
+            let mut available = true;
+            for (name, path, actual) in paths {
+                if !path.is_file() {
+                    available = false;
+                    parity_blocked = true;
+                    continue;
+                }
+                let expected = read_f32_array(&path)?;
+                let (max_abs, max_rel) = compare_f32(actual, &expected);
+                let pass = max_abs <= 5.0e-4 || max_rel <= 5.0e-4;
+                parity_pass &= pass;
+                metrics.insert(
+                    name.into(),
+                    serde_json::json!({"max_abs":max_abs,"max_rel":max_rel,"pass":pass}),
+                );
+            }
+            let loss_path = expected_root.join(format!("step-{step:06}-loss.json"));
+            if loss_path.is_file() {
+                let expected_loss = expected_scalar(&loss_path, "loss")?;
+                let error = (report.loss - expected_loss).abs();
+                let pass = error <= 5.0e-4 || error / expected_loss.abs().max(1.0e-12) <= 5.0e-4;
+                parity_pass &= pass;
+                metrics.insert("loss".into(), serde_json::json!({"actual":report.loss,"expected":expected_loss,"abs_error":error,"pass":pass}));
+                let expected_norm = expected_scalar(&loss_path, "grad_norm")?;
+                let norm_error = (report.grad_norm - expected_norm).abs();
+                let norm_pass =
+                    norm_error <= 5.0e-4 || norm_error / expected_norm.abs().max(1.0e-12) <= 5.0e-4;
+                parity_pass &= norm_pass;
+                metrics.insert("grad_norm".into(), serde_json::json!({"actual":report.grad_norm,"expected":expected_norm,"abs_error":norm_error,"pass":norm_pass}));
+            } else {
+                available = false;
+                parity_blocked = true;
+            }
+            metrics.insert("available".into(), serde_json::json!(available));
+            parity_steps.push(serde_json::Value::Object(metrics));
+        }
+    }
+    let weight_bytes = f32_bytes(&state.weights);
+    let m_bytes = f32_bytes(&state.adam_m);
+    let v_bytes = f32_bytes(&state.adam_v);
+    std::fs::write(args.output.join("weights-f32.bin"), &weight_bytes)?;
+    std::fs::write(args.output.join("adam-m-f32.bin"), &m_bytes)?;
+    std::fs::write(args.output.join("adam-v-f32.bin"), &v_bytes)?;
+    std::fs::write(
+        args.output.join("native-training.json"),
+        serde_json::to_vec_pretty(&serde_json::json!({
+            "schema": "minicells.native-training-fidelity.v1", "algorithm": "echo-adamw-ce-v1",
+            "steps": steps, "logical_batch_size": 256, "final_step": state.step,
+            "final_weight_digest": digest_bytes(&weight_bytes), "reports": reports
+        }))?,
+    )?;
+    let validation_report = if args.fixture.join("validation.bin").is_file() {
+        let validation_batches = load_fidelity_batches(&args.fixture.join("validation.bin"))?;
+        let mut loss_sum = 0.0f32;
+        let mut token_count = 0u64;
+        for batch in &validation_batches {
+            let report = evaluate_batch(&state, batch);
+            loss_sum += report.loss * report.token_count as f32;
+            token_count += report.token_count as u64;
+        }
+        serde_json::json!({"status":"PASS", "batches":validation_batches.len(), "token_count":token_count,
+            "loss":if token_count == 0 { 0.0 } else { loss_sum / token_count as f32 }})
+    } else {
+        serde_json::json!({"status":"BLOCKED_VALIDATION_FIXTURE"})
+    };
+    std::fs::write(
+        args.output.join("validation.json"),
+        serde_json::to_vec_pretty(&validation_report)?,
+    )?;
+    let parity_status = if parity_blocked {
+        "BLOCKED_EXPECTED_FIXTURE"
+    } else if parity_pass {
+        "PASS"
+    } else {
+        "FAIL"
+    };
+    let parity = serde_json::json!({"schema": "minicells.native-training-parity.v1", "status": parity_status,
+        "tolerance": {"absolute": 5.0e-4, "relative": 5.0e-4}, "steps": parity_steps,
+        "reason": if parity_blocked { Some("Python exporter must provide expected FP32 tensors") } else { None::<&str> }});
+    std::fs::write(
+        args.output.join("native-parity.json"),
+        serde_json::to_vec_pretty(&parity)?,
+    )?;
+    println!("{}", serde_json::to_string_pretty(&parity)?);
+    Ok(())
+}
+
+fn classify_gas(gas_used: u64) -> &'static str {
+    if gas_used <= 1_000_000_000 {
+        "TINY"
+    } else if gas_used <= 4_000_000_000 {
+        "FULL_COMFORTABLE"
+    } else if gas_used <= 5_000_000_000 {
+        "NEAR_FULL"
+    } else {
+        "OVER_FULL"
+    }
+}
+
+fn classify_execution(
+    completed: bool,
+    gas_used: u64,
+    error: Option<&str>,
+    gas_limit: u64,
+) -> &'static str {
+    if completed {
+        classify_gas(gas_used)
+    } else if error.is_some_and(|value| value.contains("out of gas")) {
+        // OOG at the diagnostic limit is authoritative evidence that the
+        // workload exceeds that limit, even though no result was returned.
+        if gas_limit >= 5_000_000_000 {
+            "OVER_FULL"
+        } else {
+            "OOG_AT_LIMIT"
+        }
+    } else {
+        "NOT_MEASURED"
+    }
+}
+
+fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
+    let mut harness = DirectPvmHarness::load(
+        &args.artifact,
+        args.gas_limit,
+        "5947c50699863948c51028bc346980481d839884",
+        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+    )?;
+    let payload = match (&args.payload_hex, &args.payload_file) {
+        (Some(hex), None) => hex::decode(hex.trim_start_matches("0x"))?,
+        (None, Some(path)) => std::fs::read(path)?,
+        _ => return Err("provide exactly one of --payload-hex or --payload-file".into()),
+    };
+    let execution = harness.execute_refine_measured(&payload);
+    std::fs::create_dir_all(&args.output)?;
+    let (completed, gas_used, gas_remaining, error) = match execution {
+        Ok(result) => (true, result.gas_used, result.gas_remaining, None),
+        Err(error) => (false, 0, 0, Some(error.to_string())),
+    };
+    let error_ref = error.as_deref();
+    let classification = classify_execution(completed, gas_used, error_ref, args.gas_limit);
+    let report = serde_json::json!({"schema":"minicells.pvm-training-gas.v1", "algorithm":"echo-adamw-ce-v1",
+        "logical_batch_size":256, "artifact_hash":format!("0x{}",hex::encode(harness.artifact.blake2_hash)),
+        "gas_limit":args.gas_limit, "gas_used":gas_used, "gas_remaining":gas_remaining, "completed":completed,
+        "tiny_limit":1_000_000_000u64, "full_limit":5_000_000_000u64,
+        "tiny_ratio":gas_used as f64/1_000_000_000f64, "full_ratio":gas_used as f64/5_000_000_000f64,
+        "classification":classification, "error":error});
+    std::fs::write(
+        args.output.join("pvm-gas.json"),
+        serde_json::to_vec_pretty(&report)?,
+    )?;
+    let next = match classification {
+        "TINY" => "INTEGRATE_REFERENCE_ALGORITHM_WITH_TINY_PROFILE",
+        "FULL_COMFORTABLE" => "SWITCH_MINIJAM_REFINE_LIMIT_TO_5B_THEN_INTEGRATE",
+        "NEAR_FULL" => "OPTIMIZE_SINGLE_REFINE_WITHOUT_ALGORITHM_CHANGE",
+        "OVER_FULL" => "IMPLEMENT_LOGICAL_BATCH_MULTI_REFINE",
+        _ => "BLOCK_UNTIL_DEDICATED_PVM_EXECUTION_IS_VALID",
+    };
+    let status = if completed {
+        format!("PASS_{classification}")
+    } else if classification == "OVER_FULL" {
+        "ENGINEERING_SPLIT_REQUIRED".to_string()
+    } else {
+        "BLOCKED_PVM_EXECUTION".to_string()
+    };
+    std::fs::write(
+        args.output.join("decision.json"),
+        serde_json::to_vec_pretty(
+            &serde_json::json!({"status":status, "next_action":next, "gas":report}),
+        )?,
+    )?;
+    println!("{}", serde_json::to_string_pretty(&report)?);
     Ok(())
 }
 
@@ -501,6 +843,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         } => println!("{}", serde_json::to_string_pretty(&inspect_dataset(path)?)?),
         Command::Train(args) | Command::Benchmark(args) => train(args, false)?,
         Command::Gate(args) => run_gate(args)?,
+        Command::FidelityNative(args) => run_fidelity_native(args)?,
+        Command::PvmGas(args) => run_pvm_gas(args)?,
         Command::Resume(args) => train(
             TrainArgs {
                 backend: Backend::Native,

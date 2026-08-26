@@ -1,0 +1,11 @@
+[package]
+name = "minicells-training-service"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+minicells-training-ref = { path = "../minicells-training-ref" }

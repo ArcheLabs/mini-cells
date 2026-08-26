@@ -1,0 +1,11 @@
+{
+  "schema": "minicells.pvm-algorithm-fidelity-decision.v1",
+  "status": "BLOCKED_EXTERNAL",
+  "next_action": "INSTALL_PYTORCH_EXPORT_CANONICAL_FIXTURE_AND_REPAIR_DEDICATED_PVM_EXECUTION",
+  "fresh_chain_e2e": "NOT_STARTED_BY_POLICY",
+  "blockers": [
+    "PyTorch is unavailable, so Python reference tensors cannot be exported",
+    "Dedicated training-fidelity guest builds but panics in Direct Jambda harness before authoritative gas measurement"
+  ],
+  "algorithm_changes": "NONE"
+}
