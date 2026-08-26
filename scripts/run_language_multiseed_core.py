@@ -89,10 +89,7 @@ def worker_command(topology: str, replicate: int, code: str, cache_dir: Path) ->
     ]
 
 
-def _run_batch(
-    jobs: list[tuple[str, int, str, int]],
-    cache_dir: Path,
-) -> None:
+def _run_batch(jobs: list[tuple[str, int, str, int]], cache_dir: Path) -> None:
     active: list[tuple[str, int, subprocess.Popen[str], Path, object]] = []
     for topology, replicate, code, gpu_index in jobs:
         run_name = f"{topology}-r{replicate}-{code}"
@@ -124,13 +121,7 @@ def _run_batch(
 
 
 def run_models(cache_dir: Path) -> int:
-    """Run matched timing cells without cross-GPU timing confounding.
-
-    With two GPUs, one topology stays on one physical GPU for all A/B/F/H
-    variants inside a replicate. The topology-to-GPU assignment swaps on the
-    next replicate. Thus H/A and the 2x2 main effects are always measured on
-    the same physical GPU within a matched replicate.
-    """
+    """Run matched timing cells without cross-GPU timing confounding."""
 
     available = torch.cuda.device_count()
     if available < 1:
@@ -144,10 +135,7 @@ def run_models(cache_dir: Path) -> int:
                     _run_batch([(topology, replicate, code, 0)], cache_dir)
             continue
 
-        assignment = {
-            "1d": replicate % 2,
-            "2d": 1 - (replicate % 2),
-        }
+        assignment = {"1d": replicate % 2, "2d": 1 - (replicate % 2)}
         for code in CORE_VARIANT_CODES:
             _run_batch(
                 [
@@ -390,7 +378,7 @@ def write_task_spec() -> None:
         "confirmation_thresholds": {
             "aggregate_H_over_A_ppl_ratio_max": CORE_PPL_RATIO_MAX,
             "aggregate_H_over_A_cost_ratio_max": CORE_COST_RATIO_MAX,
-            "per_seed_joint_ppl_ratio_max": PER_SEED_PPL_RATIO_RATIO_MAX if False else PER_SEED_PPL_RATIO_MAX,
+            "per_seed_joint_ppl_ratio_max": PER_SEED_PPL_RATIO_MAX,
             "per_seed_joint_cost_ratio_max": PER_SEED_COST_RATIO_MAX,
             "minimum_joint_pass_replicates": MIN_JOINT_PASS_REPLICATES,
         },
