@@ -1,0 +1,29 @@
+{
+  "budget_tokens_per_model": 2000000,
+  "checkpoints": [
+    250000,
+    500000,
+    1000000,
+    2000000
+  ],
+  "cost_definition": "Synchronized train-step wall clock; validation and post-training probes excluded.",
+  "fairness": {
+    "fixed_and_stable_pairs_share_initialization_seed": true,
+    "parameter_matched_transformer": true,
+    "same_batch_schedule": true,
+    "same_optimizer_family": "AdamW",
+    "same_tokenizer": true,
+    "same_training_stream": true
+  },
+  "format": "minicells.language-stabilizing-cost-task.v1",
+  "goal": "Measure whether self-stabilizing randomized-depth training reduces recurrent cost, while comparing quality and measured T4 cost against fixed cellular baselines and a parameter-matched Transformer-S LLM baseline.",
+  "models": [
+    "transformer-s",
+    "minicells-v2-fixed",
+    "minicells-v2-stable",
+    "minicells-2d-k4-fixed",
+    "minicells-2d-k4-stable"
+  ],
+  "same_corpus_as_009": true,
+  "warning": "Transformer-S is a small parameter-matched LLM baseline, not a proxy for every LLM or frontier-scale training."
+}
