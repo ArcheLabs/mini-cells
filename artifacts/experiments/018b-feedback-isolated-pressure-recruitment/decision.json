@@ -1,0 +1,70 @@
+{
+  "design": {
+    "central_router": false,
+    "gpu_count": 2,
+    "newborn_feedback_enters_pressure_sensor": false,
+    "policies": {
+      "N": "Experiment-018 state-novelty recruitment, capped to exactly one newborn",
+      "P": "feedback-isolated old-only reaction+diffusion pressure recruitment, capped to exactly one newborn"
+    },
+    "replicates": 3,
+    "same_phase1_checkpoint_within_replicate": true,
+    "task_label_used_by_recruitment": false
+  },
+  "experiment": "MINI Cells Experiment 018b \u2014 Feedback-Isolated Pressure Recruitment",
+  "format": "minicells.feedback-isolated-pressure-recruitment.v1",
+  "pre_registered_signal": {
+    "base_memory_drift_max": 1e-06,
+    "donor_language_ratio_max": 1.1,
+    "feedback_sensor_max_delta_max": 1e-07,
+    "forced_on_language_delta_nll_min": 0.05,
+    "minimum_replicates": 2,
+    "newborn_cell_count": 1,
+    "pressure_skill_fraction_of_novelty_min": 0.8,
+    "recipient_language_ratio_max": 1.1,
+    "recruitment_causal_fraction_min": 0.5,
+    "skill_minus_language_recruitment_min": 0.2,
+    "skill_to_language_recruitment_ratio_min": 2.0,
+    "transplant_recovery_min": 0.5
+  },
+  "question": "Can an old-only local computational-pressure sensor recruit a one-cell skill tissue selectively without newborn-to-sensor feedback?",
+  "results": {
+    "feedback_isolated_replicates": 3,
+    "language_protection_causal_replicates": 3,
+    "language_retention_replicates": 2,
+    "mean_novelty_language_ratio": 1.195273112201896,
+    "mean_pressure_language_ratio": 1.0879794281423427,
+    "mean_pressure_language_recruitment": 0.16626484040170908,
+    "mean_pressure_skill_recruitment": 0.14274863805621862,
+    "mean_pressure_transplant_recovery": 1.0,
+    "pass_flags": {
+      "conditional_closure_causally_protects_language": true,
+      "exactly_one_newborn": true,
+      "language_retention": true,
+      "new_tissue_causally_used": true,
+      "old_tissue_stable": true,
+      "pressure_recruitment_selective": false,
+      "pressure_tissue_transplantation": true,
+      "recruitment_causally_required_for_skill": true,
+      "retention_improves_over_novelty": true,
+      "sensor_feedback_isolated": true,
+      "skill_preserved": false
+    },
+    "recruitment_causal_replicates": 3,
+    "retention_better_replicates": 3,
+    "selective_recruitment_replicates": 0,
+    "skill_preserved_replicates": 0,
+    "transfer_replicates": 2
+  },
+  "scope": {
+    "claim": "same-checkpoint one-newborn causal comparison of feedback-contaminated novelty sensing versus feedback-isolated local computational pressure",
+    "not_claimed": [
+      "general task routing",
+      "optimal pressure statistic",
+      "arbitrary real-world skills",
+      "cross-genome transplantation",
+      "production compute efficiency"
+    ]
+  },
+  "status": "RETENTION_WITHOUT_PRESSURE_SELECTIVITY"
+}
