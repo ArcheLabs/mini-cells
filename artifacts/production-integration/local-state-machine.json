@@ -1,0 +1,18 @@
+{
+  "schema": "minicells.production-local-state-machine.v1",
+  "status": "PASS_BIT_EXACT",
+  "logical_batch_size": 256,
+  "shard_size": 8,
+  "accepted_mca_transitions": 32,
+  "finalize_transitions": 1,
+  "state_machine": "TrainingRoundStateV1",
+  "native_vs_production_bit_exact": true,
+  "weights_bit_exact": true,
+  "adam_m_bit_exact": true,
+  "adam_v_bit_exact": true,
+  "loss_bit_exact": true,
+  "grad_norm_bit_exact": true,
+  "token_count_exact": true,
+  "step_exact": true,
+  "negative_transition_guards": ["duplicate", "skipped", "out_of_order", "wrong_batch", "wrong_model", "stale_step", "early_finalize", "double_finalize"]
+}

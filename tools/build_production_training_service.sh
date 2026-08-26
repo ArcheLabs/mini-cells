@@ -16,7 +16,8 @@ p = {
   "schema": "minicells.production-training-service.v1",
   "algorithm": "echo-adamw-cross-entropy-v1", "logical_batch_size": 256,
   "shard_size": 8, "shard_count": 32, "parameter_count": 4476,
-  "minijam_commit": "cb1742f", "jambda_commit": "e52307a726868205a151e6917a0a70a79965a028",
+  "minijam_commit": "cb1742fc3890dcc94d945b54473a12503e732cc1", "jambda_commit": "e52307a726868205a151e6917a0a70a79965a028",
+  "jambda_adapter_commit": "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
   "refine_limit": 5000000000, "accumulate_limit": 1000000000,
   "diagnostic_stage": False, "code_hash": "0x" + hashlib.blake2b(blob, digest_size=32).hexdigest()
 }
