@@ -1,0 +1,68 @@
+{
+  "diagnosis": "CURRENT_FIXED_POINT_OBJECTIVE_DOES_NOT_YET_CREATE_A_STABLE_FREE_RUNNING_PLATEAU",
+  "evaluation": {
+    "free_run_depths_per_stage": [
+      2,
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "gpu_count_used_for_new_training": 2,
+    "maximum_total_recurrent_iterations": 48,
+    "pass_criteria": {
+      "depth4_ppl_vs_011_standard_max": 1.05,
+      "late_ppl_plateau_ratio_8_to_16_max": 1.02,
+      "residual_ratio_16_to_4_max": 0.75
+    },
+    "shared_rule": "identical update rule at every iteration; no absolute step identity"
+  },
+  "experiment": "MINI Cells Experiment 012 \u2014 Shared-Rule Settling Dynamics",
+  "format": "minicells.language-settling-dynamics.v1",
+  "interpretation": {
+    "baseline": "Experiment 011 stable checkpoints are free-run with the same step-independent rule to show whether Experiment 012 improves beyond random-depth training alone.",
+    "next_level": "Per-cell event-driven sleeping should only be attempted after a reproducible settling plateau exists.",
+    "pass": "A pass is evidence for bounded settling under an autonomous shared cellular rule, not proof of a unique mathematical fixed point or global convergence."
+  },
+  "one_d": {
+    "baseline_011_free_run_plateau_ratio": 4.658075647861005,
+    "baseline_011_free_run_residual_ratio_16_to_4": 0.5819654308620392,
+    "depth4_ppl_ratio_to_011_standard": 1.045788311369599,
+    "improves_plateau_vs_011": false,
+    "improves_residual_contraction_vs_011": false,
+    "late_ppl_drift_percent": 530.4923062199865,
+    "late_ppl_plateau_ratio_8_to_16": 6.304923062199865,
+    "pass": false,
+    "residual_ratio_16_to_4": 0.7218794506919538
+  },
+  "question": "Can a language NCA learn a shared update rule whose state and predictions settle under free-running iterations beyond the trained depth?",
+  "status": "NO_SETTLING_YET",
+  "training": {
+    "absolute_step_embedding_used": false,
+    "fixed_point_probe": "one additional shared-rule update after each sampled stage depth",
+    "logit_consistency_weight": 0.05,
+    "new_models": [
+      "minicells-v2-settling",
+      "minicells-2d-k4-settling"
+    ],
+    "note": "The three probe updates participate in training loss; Experiment 012 tests settling, not lower training cost.",
+    "random_main_depth_per_stage": [
+      2,
+      4
+    ],
+    "state_stability_weight": 0.1,
+    "tokens_per_new_model": 2000000
+  },
+  "two_d": {
+    "baseline_011_free_run_plateau_ratio": 6.020439323444981,
+    "baseline_011_free_run_residual_ratio_16_to_4": 0.6924295926893226,
+    "depth4_ppl_ratio_to_011_standard": 1.0384968378928117,
+    "improves_plateau_vs_011": true,
+    "improves_residual_contraction_vs_011": true,
+    "late_ppl_drift_percent": 398.12910696557503,
+    "late_ppl_plateau_ratio_8_to_16": 4.98129106965575,
+    "pass": false,
+    "residual_ratio_16_to_4": 0.6529737737627279
+  }
+}
