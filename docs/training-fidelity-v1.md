@@ -36,7 +36,10 @@ The current machine evidence is in
 `artifacts/pvm-algorithm-fidelity/`. Native parity passes at steps 1/2/4/16
 with the existing 5e-4 tolerance, and the 5000-step Python/Rust learning gate
 reaches 1.0 token and exact-sequence accuracy on both sides. Native chunked
-accumulation is bit-exact. The exact accumulator guest currently exceeds the
-10B Direct Jambda diagnostic ceiling before returning its large parity envelope;
-this is recorded fail-closed as unknown gas. No production gas limit or
-optimizer/model choice is changed while that PVM output/ABI blocker remains.
+accumulation and the corrected MCA1→MCF1 PVM path are bit-exact. MCA1 only
+deserializes and accumulates a shard with frozen weights/optimizer state; MCF1
+alone performs normalization, clipping and AdamW. Independent MCA1 measurements
+for 1/2/4/8/16 samples are recorded in the evidence directory; 8 samples is
+comfortably below the 5B Full profile. The full production logical-batch
+envelope remains a separate measurement, so no production gas limit or
+optimizer/model choice is changed before it is rerun.

@@ -3,7 +3,7 @@
   "algorithm": "echo-adamw-cross-entropy-v1",
   "logical_batch_size": 256,
   "artifact": "service/artifacts/training-fidelity.blob",
-  "artifact_hash": "UNAVAILABLE_DUE_PVM_OOG",
+  "artifact_hash": "0x6c176f306940fd68118fc508a3b19b70e16f60091889251c780766415b6b4f2e",
   "gas_limit": 10000000000,
   "gas_used": 0,
   "gas_remaining": 0,
@@ -14,5 +14,5 @@
   "full_ratio": 0.0,
   "classification": "NOT_MEASURED",
   "gas_lower_bound": null,
-  "error": "Canonical execution did not return within the local Direct Jambda diagnostic run; no canonical gas_used value is claimed. Synthetic full-batch diagnostics are OOG at 10B and remain non-canonical."
+  "error": "Canonical full logical-batch production envelope gas has not been rerun after the corrected MCA1 dispatch; no gas_used value is claimed."
 }

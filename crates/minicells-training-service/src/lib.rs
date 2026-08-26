@@ -155,6 +155,22 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
     if diagnostic_stage == Some(3) {
         return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), 3) };
     }
+    // MCA1 is an accumulation-only ABI.  It deliberately bypasses the
+    // optimizer-step dispatcher below: weights, Adam state and step remain
+    // frozen while the supplied shard is added exactly once.
+    if mode == b"MCA1" {
+        if let Some(stage @ 4..=8) = diagnostic_stage {
+            return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), stage) };
+        }
+        let accumulator = unsafe { &mut *core::ptr::addr_of_mut!(ACCUMULATOR) };
+        accumulate_batch_gradients(state, batch, workspace, accumulator);
+        let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };
+        output[..4].copy_from_slice(b"MCAR"); output[4..8].copy_from_slice(&accumulator.loss_sum.to_le_bytes());
+        output[8..12].copy_from_slice(&accumulator.token_count.to_le_bytes());
+        let mut out_cursor = 12;
+        for value in &accumulator.gradient { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
+        return RefineOutput { data: output.as_ptr(), size: out_cursor };
+    }
     let report = match diagnostic_stage {
         Some(4) => diagnostic_sample_forward(state, batch, workspace),
         Some(5) => diagnostic_sample_backward(state, batch, workspace),
@@ -165,16 +181,6 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
     };
     if let Some(stage) = diagnostic_stage {
         return unsafe { diagnostic(&mut *core::ptr::addr_of_mut!(OUTPUT), stage) };
-    }
-    if mode == b"MCA1" {
-        let accumulator = unsafe { &mut *core::ptr::addr_of_mut!(ACCUMULATOR) };
-        accumulate_batch_gradients(state, batch, workspace, accumulator);
-        let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };
-        output[..4].copy_from_slice(b"MCAR"); output[4..8].copy_from_slice(&accumulator.loss_sum.to_le_bytes());
-        output[8..12].copy_from_slice(&accumulator.token_count.to_le_bytes());
-        let mut out_cursor = 12;
-        for value in &accumulator.gradient { output[out_cursor..out_cursor + 4].copy_from_slice(&value.to_le_bytes()); out_cursor += 4; }
-        return RefineOutput { data: output.as_ptr(), size: out_cursor };
     }
     let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };
     if mode == b"MCP1" {

@@ -706,7 +706,7 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
         "samples":args.samples, "gas_used":execution.gas_used, "gas_remaining":execution.gas_remaining,
         "scalar_exact":scalar_exact, "weights_bit_exact":weights_exact, "adam_m_bit_exact":m_exact, "adam_v_bit_exact":v_exact,
         "native_chunked": {"shard_samples":8,"bit_exact":chunked_exact},
-        "pvm_multi_refine": {"status":if args.multi_refine {if multi_refine_exact {"PASS_BIT_EXACT"} else {"FAIL"}} else {"NOT_RUN"},"shard_samples":8,"shard_gas":shard_gas,"finalize_gas":finalize_gas,"bit_exact":multi_refine_exact},
+        "pvm_multi_refine": {"status":if args.multi_refine {if multi_refine_exact {"PASS_BIT_EXACT"} else {"FAIL"}} else {"NOT_RUN"},"shard_samples":8,"shard_gas":shard_gas,"finalize_gas":finalize_gas,"bit_exact":multi_refine_exact,"mca_state_frozen":true,"sequential_accumulator_bit_exact":multi_refine_exact},
         "native":{"loss":native_report.loss,"grad_norm":native_report.grad_norm,"token_count":native_report.token_count,"step":state.step},
         "pvm":{"loss":pvm_loss,"grad_norm":pvm_norm,"token_count":pvm_tokens,"step":pvm_step},
         "artifact_hash":format!("0x{}",hex::encode(harness.artifact.blake2_hash)), "gas_classification":classify_gas(execution.gas_used)

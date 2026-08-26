@@ -1,0 +1,15 @@
+{
+  "schema": "minicells.pvm-mca-gas.v1",
+  "status": "PASS_MEASURED",
+  "artifact_hash": "0x6c176f306940fd68118fc508a3b19b70e16f60091889251c780766415b6b4f2e",
+  "gas_limit": 10000000000,
+  "measurements": [
+    {"samples": 1, "gas_used": 262840499, "classification": "TINY"},
+    {"samples": 2, "gas_used": 522598183, "classification": "TINY"},
+    {"samples": 4, "gas_used": 1034247702, "classification": "FULL_COMFORTABLE"},
+    {"samples": 8, "gas_used": 2116157414, "classification": "FULL_COMFORTABLE"},
+    {"samples": 16, "gas_used": 4354540161, "classification": "NEAR_FULL"}
+  ],
+  "finalize_gas_used": 11018740,
+  "notes": "MCA1 is accumulation-only; weights, Adam state and step remain unchanged. MCAR serialization is included in each measurement."
+}

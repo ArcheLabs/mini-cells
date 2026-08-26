@@ -4,7 +4,7 @@ import argparse, struct
 from pathlib import Path
 
 def main():
-    p = argparse.ArgumentParser(); p.add_argument("--fixture", type=Path, default=Path("fixtures/training-fidelity-v1")); p.add_argument("--samples", type=int, default=16); p.add_argument("--format", choices=("subset", "full"), default="subset"); p.add_argument("--output", type=Path, required=True); a = p.parse_args()
+    p = argparse.ArgumentParser(); p.add_argument("--fixture", type=Path, default=Path("fixtures/training-fidelity-v1")); p.add_argument("--samples", type=int, default=16); p.add_argument("--format", choices=("subset", "mca", "full"), default="subset"); p.add_argument("--output", type=Path, required=True); a = p.parse_args()
     if not 1 <= a.samples <= 256: raise SystemExit("samples must be 1..=256")
     initial = (a.fixture / "initial-weights-f32.bin").read_bytes()
     batch = (a.fixture / "batch-000001.bin").read_bytes()
@@ -14,6 +14,8 @@ def main():
     if a.format == "full":
         a.samples = 256
         out = bytearray(b"MCT1" + struct.pack("<Q", 0) + initial + bytes(len(initial)) + bytes(len(initial)))
+    elif a.format == "mca":
+        out = bytearray(b"MCA1" + struct.pack("<Q", 0) + initial + bytes(len(initial)) + bytes(len(initial)) + struct.pack("<H", a.samples) + struct.pack("<If", 0, 0.0) + bytes(len(initial)))
     else:
         out = bytearray(b"MCP1" + struct.pack("<Q", 0) + initial + bytes(len(initial)) + bytes(len(initial)) + struct.pack("<H", a.samples))
     for i in range(a.samples): out.extend(ids[i * 64:(i + 1) * 64])

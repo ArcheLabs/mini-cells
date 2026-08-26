@@ -680,4 +680,37 @@ mod tests {
         assert_eq!(report.token_accuracy, 1.0);
         assert_eq!(report.exact_sequence_accuracy, 1.0);
     }
+
+    #[test]
+    fn accumulator_shard_does_not_mutate_optimizer_state() {
+        let state = TrainingState::from_weights([0.01; PARAMETER_COUNT]);
+        let before = state;
+        let mut batch = TrainingBatch::empty(); batch.size = 1; batch.lengths[0] = 1; batch.ids[0][0] = 1;
+        let mut workspace = TrainingWorkspace::new(); let mut acc = GradientAccumulator::new();
+        accumulate_batch_gradients(&state, &batch, &mut workspace, &mut acc);
+        assert_eq!(state.weights, before.weights); assert_eq!(state.adam_m, before.adam_m);
+        assert_eq!(state.adam_v, before.adam_v); assert_eq!(state.step, before.step);
+        assert_eq!(acc.token_count, 1); assert!(acc.loss_sum.is_finite());
+    }
+
+    #[test]
+    fn sequential_accumulation_is_bit_exact() {
+        let weights = [0.01; PARAMETER_COUNT];
+        let mut full = TrainingBatch::empty(); full.size = 2;
+        for row in 0..2 { full.lengths[row] = 1; full.ids[row][0] = (row + 1) as u8; }
+        let mut ws = TrainingWorkspace::new(); let mut one = GradientAccumulator::new();
+        accumulate_batch_gradients(&TrainingState::from_weights(weights), &full, &mut ws, &mut one);
+        let mut a = GradientAccumulator::new(); let mut ws2 = TrainingWorkspace::new();
+        let mut first = full; first.size = 1;
+        accumulate_batch_gradients(&TrainingState::from_weights(weights), &first, &mut ws2, &mut a);
+        let mut second = TrainingBatch::empty(); second.size = 1; second.ids[0] = full.ids[1]; second.lengths[0] = full.lengths[1];
+        accumulate_batch_gradients(&TrainingState::from_weights(weights), &second, &mut ws2, &mut a);
+        assert_eq!(one.gradient, a.gradient); assert_eq!(one.loss_sum.to_bits(), a.loss_sum.to_bits());
+        assert_eq!(one.token_count, a.token_count);
+        let mut mono = TrainingState::from_weights(weights); let mut chunk = TrainingState::from_weights(weights);
+        let mut g = GradientAccumulator::new(); let mut w = TrainingWorkspace::new();
+        accumulate_batch_gradients(&mono, &full, &mut w, &mut g); finalize_adamw_step(&mut mono, &mut g);
+        let mut g2 = GradientAccumulator::new(); accumulate_batch_gradients(&chunk, &first, &mut w, &mut g2); accumulate_batch_gradients(&chunk, &second, &mut w, &mut g2); finalize_adamw_step(&mut chunk, &mut g2);
+        assert_eq!(mono.weights, chunk.weights); assert_eq!(mono.adam_m, chunk.adam_m); assert_eq!(mono.adam_v, chunk.adam_v); assert_eq!(mono.step, chunk.step);
+    }
 }

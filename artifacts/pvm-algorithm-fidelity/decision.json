@@ -1,11 +1,11 @@
 {
   "schema": "minicells.pvm-algorithm-fidelity-decision.v1",
-  "status": "BLOCKED_PVM_GAS",
-  "next_action": "OPTIMIZE_PVM_GUEST_OUTPUT_AND_RE-RUN_CANONICAL_PARITY",
+  "status": "PASS_CANONICAL_PVM_PARITY_MULTI_REFINE",
+  "next_action": "RE-RUN_CANONICAL_FULL_LOGICAL_BATCH_GAS_WITH_PRODUCTION_ENVELOPE",
   "fresh_chain_e2e": "NOT_STARTED_BY_POLICY",
   "blockers": [
-    "Exact accumulator guest exceeds the 10B Direct Jambda diagnostic ceiling before returning the parity envelope; gas_used is intentionally unknown",
-    "Canonical multi-Refine shard output path requires a lower-gas state transfer or persistent accumulator ABI"
+    "Canonical full logical-batch production gas remains unmeasured; parity envelope is diagnostic-only",
+    "16-sample MCA1 is NEAR_FULL, while 8-sample MCA1 is FULL_COMFORTABLE; no Refine limit change is authorized yet"
   ],
   "algorithm_changes": "NONE"
 }
