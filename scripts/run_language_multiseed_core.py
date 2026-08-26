@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-import hashlib
 import json
-import math
 import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -22,8 +19,8 @@ if not (ROOT / "research").exists():
 if not (ROOT / "research").exists():
     raise RuntimeError("Run from a mini-cells checkout or /kaggle/working/mini-cells")
 sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "scripts"))
 
-from minicells.language_data import encode_story_stream, iter_tinystories, load_tokenizer  # noqa: E402
 from minicells.language_multiseed_core import (  # noqa: E402
     CORE_COST_RATIO_MAX,
     CORE_PPL_RATIO_MAX,
@@ -38,16 +35,14 @@ from minicells.language_multiseed_core import (  # noqa: E402
     ratio_summary,
     seed_bundle,
 )
+from run_language_depth_ablation import prepare_corpus as prepare_013_corpus  # noqa: E402
 
 
 OUT = ROOT / "results" / "language-multiseed-core-v1"
-SOURCE_005 = ROOT / "artifacts" / "experiments" / "005-consumer-language-bridge"
 SOURCE_013 = ROOT / "artifacts" / "experiments" / "013-random-depth-ablation"
 WORKER = ROOT / "scripts" / "run_language_multiseed_core_variant.py"
 TOPOLOGIES = ("1d", "2d")
 CHECKPOINTS = (250_000, 500_000, 1_000_000, 2_000_000)
-TRAIN_STREAM_TOKENS = 3_000_000
-VALIDATION_STREAM_TOKENS = 200_000
 METRICS = (
     "final_ppl_2m",
     "seconds_per_million_tokens",
@@ -55,87 +50,25 @@ METRICS = (
 )
 
 
-def tensor_sha256(tensor: torch.Tensor) -> str:
-    values = tensor.detach().cpu().contiguous().numpy()
-    return hashlib.sha256(values.tobytes()).hexdigest()
-
-
 def prepare_corpus() -> tuple[Path, dict[str, object]]:
-    source_tokenizer = SOURCE_005 / "tokenizer.json"
-    source_005_manifest_path = SOURCE_005 / "corpus-manifest.json"
-    source_013_manifest_path = SOURCE_013 / "corpus-manifest.json"
-    if not source_tokenizer.is_file() or not source_005_manifest_path.is_file():
-        raise FileNotFoundError("Experiment 005 tokenizer/corpus manifest must exist before 014")
-    if not source_013_manifest_path.is_file():
+    """Reuse the exact Experiment 013 token streams and verify provenance."""
+
+    cache, generated = prepare_013_corpus()
+    source_path = SOURCE_013 / "corpus-manifest.json"
+    if not source_path.is_file():
         raise FileNotFoundError("Experiment 013 results must be merged before 014")
-
-    source_005_manifest = json.loads(source_005_manifest_path.read_text(encoding="utf-8"))
-    source_013_manifest = json.loads(source_013_manifest_path.read_text(encoding="utf-8"))
-    source_tokenizer_sha = hashlib.sha256(source_tokenizer.read_bytes()).hexdigest()
-    if source_tokenizer_sha != source_005_manifest.get("tokenizer_sha256"):
-        raise RuntimeError("Experiment 005 tokenizer hash mismatch")
-
-    cache = OUT / "cache"
-    cache.mkdir(parents=True, exist_ok=True)
-    tokenizer_path = cache / "tokenizer.json"
-    train_path = cache / "train-tokens.pt"
-    validation_path = cache / "validation-tokens.pt"
-    manifest_path = cache / "corpus-manifest.json"
-    expected = {
-        "format": "minicells.language-multiseed-core-corpus.v1",
-        "source_005_tokenizer_sha256": source_tokenizer_sha,
-        "source_013_train_token_sha256": source_013_manifest.get("train_token_sha256"),
-        "source_013_validation_token_sha256": source_013_manifest.get("validation_token_sha256"),
-        "train_stream_tokens": TRAIN_STREAM_TOKENS,
-        "validation_stream_tokens": VALIDATION_STREAM_TOKENS,
-    }
-
-    if tokenizer_path.exists() and train_path.exists() and validation_path.exists() and manifest_path.exists():
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if all(manifest.get(key) == value for key, value in expected.items()):
-            train = torch.load(train_path, map_location="cpu")
-            validation = torch.load(validation_path, map_location="cpu")
-            if (
-                tensor_sha256(train) == manifest.get("train_token_sha256")
-                and tensor_sha256(validation) == manifest.get("validation_token_sha256")
-                and hashlib.sha256(tokenizer_path.read_bytes()).hexdigest() == source_tokenizer_sha
-            ):
-                return cache, manifest
-
-    shutil.copy2(source_tokenizer, tokenizer_path)
-    tokenizer = load_tokenizer(tokenizer_path)
-    train, train_stories = encode_story_stream(
-        tokenizer,
-        iter_tinystories("train"),
-        target_tokens=TRAIN_STREAM_TOKENS,
-    )
-    validation, validation_stories = encode_story_stream(
-        tokenizer,
-        iter_tinystories("validation"),
-        target_tokens=VALIDATION_STREAM_TOKENS,
-    )
-    train_sha = tensor_sha256(train)
-    validation_sha = tensor_sha256(validation)
-    if train_sha != source_013_manifest.get("train_token_sha256"):
-        raise RuntimeError("Experiment 014 train stream does not reproduce Experiment 013")
-    if validation_sha != source_013_manifest.get("validation_token_sha256"):
-        raise RuntimeError("Experiment 014 validation stream does not reproduce Experiment 013")
-
-    torch.save(train, train_path)
-    torch.save(validation, validation_path)
+    source = json.loads(source_path.read_text(encoding="utf-8"))
+    for key in ("tokenizer_sha256", "train_token_sha256", "validation_token_sha256"):
+        if generated.get(key) != source.get(key):
+            raise RuntimeError(f"Experiment 014 corpus differs from Experiment 013: {key}")
     manifest = {
-        **expected,
-        "dataset": source_005_manifest.get("dataset"),
-        "streaming": True,
-        "vocab_size_actual": tokenizer.get_vocab_size(),
-        "train_stories_consumed": train_stories,
-        "validation_stories_consumed": validation_stories,
-        "train_token_sha256": train_sha,
-        "validation_token_sha256": validation_sha,
-        "tokenizer_sha256": source_tokenizer_sha,
+        **generated,
+        "format": "minicells.language-multiseed-core-corpus.v1",
+        "source_experiment": "013-random-depth-ablation",
+        "source_013_train_token_sha256": source.get("train_token_sha256"),
+        "source_013_validation_token_sha256": source.get("validation_token_sha256"),
         "reproduces_013_corpus": True,
     }
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return cache, manifest
 
 
@@ -156,52 +89,73 @@ def worker_command(topology: str, replicate: int, code: str, cache_dir: Path) ->
     ]
 
 
+def _run_batch(
+    jobs: list[tuple[str, int, str, int]],
+    cache_dir: Path,
+) -> None:
+    active: list[tuple[str, int, subprocess.Popen[str], Path, object]] = []
+    for topology, replicate, code, gpu_index in jobs:
+        run_name = f"{topology}-r{replicate}-{code}"
+        env = os.environ.copy()
+        env["CUDA_VISIBLE_DEVICES"] = str(gpu_index)
+        log_path = OUT / f"{run_name}.log"
+        handle = log_path.open("w", encoding="utf-8")
+        process = subprocess.Popen(
+            worker_command(topology, replicate, code, cache_dir),
+            cwd=ROOT,
+            env=env,
+            stdout=handle,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
+        active.append((run_name, gpu_index, process, log_path, handle))
+        print(f"started {run_name:9s} on physical GPU {gpu_index}")
+
+    failures: list[str] = []
+    for run_name, gpu_index, process, log_path, handle in active:
+        exit_code = process.wait()
+        handle.close()
+        print(f"--- {run_name} / GPU {gpu_index} ---")
+        print(log_path.read_text(encoding="utf-8").rstrip())
+        if exit_code != 0:
+            failures.append(f"{run_name} exited {exit_code}; see {log_path}")
+    if failures:
+        raise RuntimeError("; ".join(failures))
+
+
 def run_models(cache_dir: Path) -> int:
+    """Run matched timing cells without cross-GPU timing confounding.
+
+    With two GPUs, one topology stays on one physical GPU for all A/B/F/H
+    variants inside a replicate. The topology-to-GPU assignment swaps on the
+    next replicate. Thus H/A and the 2x2 main effects are always measured on
+    the same physical GPU within a matched replicate.
+    """
+
     available = torch.cuda.device_count()
     if available < 1:
         raise RuntimeError("Experiment 014 requires CUDA")
     gpu_count = min(2, available)
 
-    jobs: list[tuple[str, int, str]] = []
-    pair_index = 0
     for replicate in range(N_REPLICATES):
-        for code in CORE_VARIANT_CODES:
-            pair = [("1d", replicate, code), ("2d", replicate, code)]
-            if pair_index % 2:
-                pair.reverse()
-            jobs.extend(pair)
-            pair_index += 1
+        if gpu_count == 1:
+            for topology in TOPOLOGIES:
+                for code in CORE_VARIANT_CODES:
+                    _run_batch([(topology, replicate, code, 0)], cache_dir)
+            continue
 
-    while jobs:
-        batch = jobs[:gpu_count]
-        jobs = jobs[gpu_count:]
-        active: list[tuple[str, int, subprocess.Popen[str], Path, object]] = []
-        for gpu_index, (topology, replicate, code) in enumerate(batch):
-            run_name = f"{topology}-r{replicate}-{code}"
-            env = os.environ.copy()
-            env["CUDA_VISIBLE_DEVICES"] = str(gpu_index)
-            log_path = OUT / f"{run_name}.log"
-            handle = log_path.open("w", encoding="utf-8")
-            process = subprocess.Popen(
-                worker_command(topology, replicate, code, cache_dir),
-                cwd=ROOT,
-                env=env,
-                stdout=handle,
-                stderr=subprocess.STDOUT,
-                text=True,
+        assignment = {
+            "1d": replicate % 2,
+            "2d": 1 - (replicate % 2),
+        }
+        for code in CORE_VARIANT_CODES:
+            _run_batch(
+                [
+                    ("1d", replicate, code, assignment["1d"]),
+                    ("2d", replicate, code, assignment["2d"]),
+                ],
+                cache_dir,
             )
-            active.append((run_name, gpu_index, process, log_path, handle))
-            print(f"started {run_name:9s} on physical GPU {gpu_index}")
-        failures: list[str] = []
-        for run_name, gpu_index, process, log_path, handle in active:
-            exit_code = process.wait()
-            handle.close()
-            print(f"--- {run_name} / GPU {gpu_index} ---")
-            print(log_path.read_text(encoding="utf-8").rstrip())
-            if exit_code != 0:
-                failures.append(f"{run_name} exited {exit_code}; see {log_path}")
-        if failures:
-            raise RuntimeError("; ".join(failures))
     return gpu_count
 
 
@@ -378,7 +332,9 @@ def make_decision(ratios: pd.DataFrame, effects: pd.DataFrame, gpu_count: int) -
                 "training schedule",
                 "random-depth schedule",
                 "validation sample schedule",
+                "physical GPU for all A/B/F/H timing cells within topology",
             ],
+            "gpu_assignment": "topology stays on one GPU within a replicate; assignments swap across replicates",
         },
         "pre_registered_confirmation": {
             "aggregate_H_over_A_ppl_ratio_max": CORE_PPL_RATIO_MAX,
@@ -397,6 +353,7 @@ def make_decision(ratios: pd.DataFrame, effects: pd.DataFrame, gpu_count: int) -
         },
         "scope": {
             "source_experiment": "013-random-depth-ablation",
+            "replicate_zero": "preserves Experiment 013 model/schedule/depth/evaluation seeds",
             "interpretation": (
                 "Confirmation establishes a reproducible training recipe for the current 1D and K=4 "
                 "2D topologies; it does not establish that the current 2D topology is compute-efficient."
@@ -422,6 +379,7 @@ def write_task_spec() -> None:
         "replicates": [seed_bundle(index).as_dict() for index in range(N_REPLICATES)],
         "tokens_per_model": 2_000_000,
         "checkpoints": list(CHECKPOINTS),
+        "timing_pairing": "same physical GPU for A/B/F/H within topology and replicate",
         "primary_metrics": [
             "fixed-depth validation PPL at 2M",
             "measured seconds per 1M tokens",
@@ -432,7 +390,7 @@ def write_task_spec() -> None:
         "confirmation_thresholds": {
             "aggregate_H_over_A_ppl_ratio_max": CORE_PPL_RATIO_MAX,
             "aggregate_H_over_A_cost_ratio_max": CORE_COST_RATIO_MAX,
-            "per_seed_joint_ppl_ratio_max": PER_SEED_PPL_RATIO_MAX,
+            "per_seed_joint_ppl_ratio_max": PER_SEED_PPL_RATIO_RATIO_MAX if False else PER_SEED_PPL_RATIO_MAX,
             "per_seed_joint_cost_ratio_max": PER_SEED_COST_RATIO_MAX,
             "minimum_joint_pass_replicates": MIN_JOINT_PASS_REPLICATES,
         },
@@ -489,8 +447,8 @@ def plot_factor_effects(effects: pd.DataFrame) -> None:
         effects["metric"].isin(["final_ppl_2m", "seconds_per_million_tokens"])
         & effects["effect"].isin(["random_depth_main", "stability_loss_main"])
     ].copy()
-    labels = []
-    values = []
+    labels: list[str] = []
+    values: list[float] = []
     for topology in TOPOLOGIES:
         for effect in ("random_depth_main", "stability_loss_main"):
             for metric in ("final_ppl_2m", "seconds_per_million_tokens"):
