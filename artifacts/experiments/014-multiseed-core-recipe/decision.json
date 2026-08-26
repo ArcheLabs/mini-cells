@@ -1,0 +1,131 @@
+{
+  "design": {
+    "gpu_assignment": "topology stays on one GPU within a replicate; assignments swap across replicates",
+    "matched_within_replicate": [
+      "model initialization within topology",
+      "training schedule",
+      "random-depth schedule",
+      "validation sample schedule",
+      "physical GPU for all A/B/F/H timing cells within topology"
+    ],
+    "models_total": 40,
+    "replicates": 5,
+    "step_embedding_init_scale": 1.0,
+    "tokens_per_model": 2000000,
+    "topologies": [
+      "1d",
+      "2d"
+    ],
+    "type": "5-replicate matched-seed 2x2 factorial",
+    "variants": [
+      "A",
+      "B",
+      "F",
+      "H"
+    ]
+  },
+  "evaluation": {
+    "aggregate_estimator": "paired geometric mean ratio across five replicates",
+    "gpu_count_used_for_parallel_execution": 2,
+    "standard_quality": "fixed (4,4,4) validation PPL at 2M tokens",
+    "temporal_robustness": "PPL at (2,2,2), (3,3,3), and (4,4,4)",
+    "training_cost": "synchronized forward/backward/optimizer wall clock, validation excluded",
+    "uncertainty": "deterministic exact 5**5 percentile bootstrap on paired ratios"
+  },
+  "experiment": "MINI Cells Experiment 014 \u2014 Multi-Seed Core Recipe Confirmation",
+  "format": "minicells.language-multiseed-core.v1",
+  "pre_registered_confirmation": {
+    "aggregate_H_over_A_cost_ratio_max": 0.9,
+    "aggregate_H_over_A_ppl_ratio_max": 1.0,
+    "minimum_joint_pass_replicates": 4,
+    "per_seed_joint_cost_ratio_max": 0.95,
+    "per_seed_joint_ppl_ratio_max": 1.01
+  },
+  "question": "Does the Experiment 013 scale-1.0 core recipe (random recurrent depth + residual stability loss) reproducibly reduce training cost without worsening 2M-token PPL?",
+  "results": {
+    "1d": {
+      "core_recipe_H_over_A": {
+        "confirmed": true,
+        "cost": {
+          "aggregate_pass": true,
+          "aggregate_threshold": 0.9,
+          "bootstrap_95_lower": 0.8109026400185311,
+          "bootstrap_95_upper": 0.8459676717661464,
+          "geometric_mean_ratio": 0.8282496111713534,
+          "max_ratio": 0.8509396784592442,
+          "min_ratio": 0.7995925992404638,
+          "replicates": 5
+        },
+        "joint_pass_replicates": 5,
+        "joint_pass_required": 4,
+        "per_seed_cost_ratio_max": 0.95,
+        "per_seed_ppl_ratio_max": 1.01,
+        "ppl": {
+          "aggregate_pass": true,
+          "aggregate_threshold": 1.0,
+          "bootstrap_95_lower": 0.9784072338176742,
+          "bootstrap_95_upper": 0.9832309656040422,
+          "geometric_mean_ratio": 0.9805994786034429,
+          "max_ratio": 0.9849562918909659,
+          "min_ratio": 0.9770763006393802,
+          "replicates": 5
+        }
+      },
+      "random_depth_main": {
+        "depth_robustness_ratio_2_to_4": 0.6019687024459209,
+        "final_ppl_2m": 1.019397770004424,
+        "seconds_per_million_tokens": 0.8083794703932176
+      },
+      "stability_loss_main": {
+        "depth_robustness_ratio_2_to_4": 0.8796747270628871,
+        "final_ppl_2m": 0.9619399879589566,
+        "seconds_per_million_tokens": 1.0245802144981124
+      }
+    },
+    "2d": {
+      "core_recipe_H_over_A": {
+        "confirmed": true,
+        "cost": {
+          "aggregate_pass": true,
+          "aggregate_threshold": 0.9,
+          "bootstrap_95_lower": 0.8007724126157909,
+          "bootstrap_95_upper": 0.8551369907038855,
+          "geometric_mean_ratio": 0.827508375282666,
+          "max_ratio": 0.8623332475112258,
+          "min_ratio": 0.7887113038903745,
+          "replicates": 5
+        },
+        "joint_pass_replicates": 5,
+        "joint_pass_required": 4,
+        "per_seed_cost_ratio_max": 0.95,
+        "per_seed_ppl_ratio_max": 1.01,
+        "ppl": {
+          "aggregate_pass": true,
+          "aggregate_threshold": 1.0,
+          "bootstrap_95_lower": 0.9808729553360616,
+          "bootstrap_95_upper": 0.9882182752333398,
+          "geometric_mean_ratio": 0.9845004722802159,
+          "max_ratio": 0.9901856135321974,
+          "min_ratio": 0.9787368460598691,
+          "replicates": 5
+        }
+      },
+      "random_depth_main": {
+        "depth_robustness_ratio_2_to_4": 0.6198339059339567,
+        "final_ppl_2m": 1.0213071730109151,
+        "seconds_per_million_tokens": 0.8119996182818895
+      },
+      "stability_loss_main": {
+        "depth_robustness_ratio_2_to_4": 0.9032774988668397,
+        "final_ppl_2m": 0.9639611845453024,
+        "seconds_per_million_tokens": 1.0190994634130388
+      }
+    }
+  },
+  "scope": {
+    "interpretation": "Confirmation establishes a reproducible training recipe for the current 1D and K=4 2D topologies; it does not establish that the current 2D topology is compute-efficient.",
+    "replicate_zero": "preserves Experiment 013 model/schedule/depth/evaluation seeds",
+    "source_experiment": "013-random-depth-ablation"
+  },
+  "status": "CORE_RECIPE_CONFIRMED_BOTH_TOPOLOGIES"
+}

@@ -1,0 +1,97 @@
+{
+  "checkpoints": [
+    250000,
+    500000,
+    1000000,
+    2000000
+  ],
+  "confirmation_thresholds": {
+    "aggregate_H_over_A_cost_ratio_max": 0.9,
+    "aggregate_H_over_A_ppl_ratio_max": 1.0,
+    "minimum_joint_pass_replicates": 4,
+    "per_seed_joint_cost_ratio_max": 0.95,
+    "per_seed_joint_ppl_ratio_max": 1.01
+  },
+  "experiment": "014",
+  "format": "minicells.language-multiseed-core-task.v1",
+  "name": "Multi-Seed Core Recipe Confirmation",
+  "primary_metrics": [
+    "fixed-depth validation PPL at 2M",
+    "measured seconds per 1M tokens",
+    "H/A paired ratio",
+    "random-depth 2x2 main effect",
+    "stability-loss 2x2 main effect"
+  ],
+  "replicates": [
+    {
+      "depth_eval_seed": 51013,
+      "depth_seed": 21011,
+      "model_seed_1d": 61011,
+      "model_seed_2d": 61015,
+      "replicate": 0,
+      "schedule_seed": 11011,
+      "validation_seed": 41011
+    },
+    {
+      "depth_eval_seed": 52013,
+      "depth_seed": 22011,
+      "model_seed_1d": 62011,
+      "model_seed_2d": 62015,
+      "replicate": 1,
+      "schedule_seed": 12011,
+      "validation_seed": 42011
+    },
+    {
+      "depth_eval_seed": 53013,
+      "depth_seed": 23011,
+      "model_seed_1d": 63011,
+      "model_seed_2d": 63015,
+      "replicate": 2,
+      "schedule_seed": 13011,
+      "validation_seed": 43011
+    },
+    {
+      "depth_eval_seed": 54013,
+      "depth_seed": 24011,
+      "model_seed_1d": 64011,
+      "model_seed_2d": 64015,
+      "replicate": 3,
+      "schedule_seed": 14011,
+      "validation_seed": 44011
+    },
+    {
+      "depth_eval_seed": 55013,
+      "depth_seed": 25011,
+      "model_seed_1d": 65011,
+      "model_seed_2d": 65015,
+      "replicate": 4,
+      "schedule_seed": 15011,
+      "validation_seed": 45011
+    }
+  ],
+  "step_embedding_init_scale": 1.0,
+  "timing_pairing": "same physical GPU for A/B/F/H within topology and replicate",
+  "tokens_per_model": 2000000,
+  "topologies": [
+    "1d",
+    "2d"
+  ],
+  "variants": {
+    "A": {
+      "random_depth": false,
+      "stability_weight": 0.0
+    },
+    "B": {
+      "random_depth": true,
+      "stability_weight": 0.0
+    },
+    "F": {
+      "random_depth": false,
+      "stability_weight": 0.1
+    },
+    "H": {
+      "random_depth": true,
+      "stability_weight": 0.1
+    }
+  }
+}

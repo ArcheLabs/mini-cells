@@ -1,0 +1,36 @@
+{
+  "avg_recurrent_iterations": 8.9765,
+  "depth_robustness_ratio_2_to_4": 1.020186746844679,
+  "format": "minicells.language-multiseed-core-worker.v1",
+  "model_metadata": {
+    "architecture": "1D MiniCells-v2",
+    "replicate": 4,
+    "seed": 65011,
+    "step_embedding_init_scale": 1.0
+  },
+  "parameters": 1170816,
+  "peak_vram_bytes": 158716928,
+  "ppl_depth2": 52.36022861448449,
+  "ppl_depth3": 51.32416077392565,
+  "ppl_depth4": 51.74164529482516,
+  "random_depth": true,
+  "replicate": 4,
+  "run": "1d-r4-B",
+  "seconds_per_million_tokens": 25.383496609499957,
+  "seed": 65011,
+  "seed_bundle": {
+    "depth_eval_seed": 55013,
+    "depth_seed": 25011,
+    "model_seed_1d": 65011,
+    "model_seed_2d": 65015,
+    "replicate": 4,
+    "schedule_seed": 15011,
+    "validation_seed": 45011
+  },
+  "stability_weight": 0.0,
+  "step_embedding_init_scale": 1.0,
+  "topology": "1d",
+  "training_elapsed_seconds": 50.766993218999914,
+  "training_tokens_per_second": 39395.675677941974,
+  "variant": "B"
+}
