@@ -4,7 +4,7 @@ ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 DEPS="${ROOT}/.deps"
 mkdir -p "${DEPS}"
 CLIENT="${DEPS}/minijam-client"
-MINIJAM_CLIENT_REF="${MINIJAM_CLIENT_REF:-5947c50699863948c51028bc346980481d839884}"
+MINIJAM_CLIENT_REF="${MINIJAM_CLIENT_REF:-cb1742f}"
 if [[ -e "${CLIENT}" && ! -f "${CLIENT}/Cargo.toml" ]]; then
   echo "refusing to use ${CLIENT}: expected a MiniJAM checkout" >&2
   exit 1
@@ -12,7 +12,7 @@ fi
 if [[ ! -e "${CLIENT}" ]]; then
   git clone --recurse-submodules https://github.com/ArcheLabs/minijam-client.git "${CLIENT}"
 fi
-git -C "${CLIENT}" fetch --quiet origin agent/season2-release-readiness
+git -C "${CLIENT}" fetch --quiet origin agent/season2-release-readiness agent/minicells-full-refine
 # Keep the MiniJAM and nested Jambda revisions explicit and reproducible.
 # The MiniJAM gitlink and this nested checkout must resolve to the same clean
 # adapter line used by the release artifact.

@@ -73,6 +73,66 @@ pub struct GradientAccumulator {
     pub token_count: u32,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum TrainingPhaseV1 { Idle, Accumulating, FinalizeReady }
+
+#[derive(Clone, Copy)]
+pub struct GradientAccumulatorStateV1 {
+    pub gradient: [F32; PARAMETER_COUNT],
+    pub loss_sum: F32,
+    pub token_count: u32,
+    pub processed_samples: u16,
+}
+
+impl GradientAccumulatorStateV1 {
+    pub const fn empty() -> Self { Self { gradient: [0.0; PARAMETER_COUNT], loss_sum: 0.0, token_count: 0, processed_samples: 0 } }
+}
+
+#[derive(Clone, Copy)]
+pub struct TrainingRoundStateV1 {
+    pub version: u16,
+    pub generation: u64,
+    pub optimizer_step: u64,
+    pub phase: TrainingPhaseV1,
+    pub logical_batch_size: u16,
+    pub shard_size: u16,
+    pub next_shard_index: u16,
+    pub batch_commitment: [u8; 32],
+    pub model_commitment: [u8; 32],
+    pub optimizer_commitment: [u8; 32],
+    pub accumulator: GradientAccumulatorStateV1,
+}
+
+impl TrainingRoundStateV1 {
+    pub const fn new(generation: u64, optimizer_step: u64, batch_commitment: [u8; 32], model_commitment: [u8; 32], optimizer_commitment: [u8; 32]) -> Self {
+        Self { version: 1, generation, optimizer_step, phase: TrainingPhaseV1::Accumulating, logical_batch_size: 256, shard_size: 8, next_shard_index: 0, batch_commitment, model_commitment, optimizer_commitment, accumulator: GradientAccumulatorStateV1::empty() }
+    }
+
+    pub fn accept_mca(&mut self, generation: u64, optimizer_step: u64, batch_commitment: [u8; 32], model_commitment: [u8; 32], shard_index: u16, sample_start: u16, sample_end: u16, candidate: GradientAccumulatorStateV1) -> Result<(), RoundError> {
+        if self.phase != TrainingPhaseV1::Accumulating { return Err(RoundError::InvalidPhase); }
+        if generation != self.generation || optimizer_step != self.optimizer_step { return Err(RoundError::StaleStep); }
+        if batch_commitment != self.batch_commitment { return Err(RoundError::WrongBatch); }
+        if model_commitment != self.model_commitment { return Err(RoundError::WrongModel); }
+        if shard_index != self.next_shard_index || sample_start != shard_index * self.shard_size || sample_end != sample_start + self.shard_size { return Err(RoundError::OutOfOrderShard); }
+        if candidate.processed_samples != sample_end { return Err(RoundError::AccumulatorMismatch); }
+        self.accumulator = candidate;
+        self.next_shard_index += 1;
+        if self.next_shard_index == self.logical_batch_size / self.shard_size { self.phase = TrainingPhaseV1::FinalizeReady; }
+        Ok(())
+    }
+
+    pub fn finalize(&mut self, state: &mut TrainingState) -> Result<TrainStepReport, RoundError> {
+        if self.phase != TrainingPhaseV1::FinalizeReady || self.next_shard_index != 32 || self.accumulator.processed_samples != 256 { return Err(RoundError::InvalidPhase); }
+        let mut accumulator = GradientAccumulator { gradient: self.accumulator.gradient, loss_sum: self.accumulator.loss_sum, token_count: self.accumulator.token_count };
+        let report = finalize_adamw_step(state, &mut accumulator);
+        self.accumulator = GradientAccumulatorStateV1::empty(); self.next_shard_index = 0; self.phase = TrainingPhaseV1::Idle;
+        Ok(report)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum RoundError { InvalidPhase, StaleStep, WrongBatch, WrongModel, OutOfOrderShard, AccumulatorMismatch }
+
 impl GradientAccumulator {
     pub const fn new() -> Self {
         Self { gradient: [0.0; PARAMETER_COUNT], loss_sum: 0.0, token_count: 0 }
@@ -712,5 +772,21 @@ mod tests {
         accumulate_batch_gradients(&mono, &full, &mut w, &mut g); finalize_adamw_step(&mut mono, &mut g);
         let mut g2 = GradientAccumulator::new(); accumulate_batch_gradients(&chunk, &first, &mut w, &mut g2); accumulate_batch_gradients(&chunk, &second, &mut w, &mut g2); finalize_adamw_step(&mut chunk, &mut g2);
         assert_eq!(mono.weights, chunk.weights); assert_eq!(mono.adam_m, chunk.adam_m); assert_eq!(mono.adam_v, chunk.adam_v); assert_eq!(mono.step, chunk.step);
+    }
+
+    #[test]
+    fn round_state_enforces_order_and_finalizes_once() {
+        let commitment = [7u8; 32]; let model = [8u8; 32]; let optimizer = [9u8; 32];
+        let mut round = TrainingRoundStateV1::new(0, 0, commitment, model, optimizer);
+        let bad = GradientAccumulatorStateV1::empty();
+        assert_eq!(round.accept_mca(0, 0, commitment, model, 1, 8, 16, bad), Err(RoundError::OutOfOrderShard));
+        for index in 0..32u16 {
+            let mut candidate = round.accumulator; candidate.processed_samples = (index + 1) * 8; candidate.token_count = candidate.processed_samples as u32;
+            assert_eq!(round.accept_mca(0, 0, commitment, model, index, index * 8, index * 8 + 8, candidate), Ok(()));
+        }
+        assert_eq!(round.phase, TrainingPhaseV1::FinalizeReady);
+        let mut state = TrainingState::from_weights([0.0; PARAMETER_COUNT]);
+        assert!(round.finalize(&mut state).is_ok()); assert_eq!(state.step, 1); assert_eq!(round.phase, TrainingPhaseV1::Idle);
+        assert_eq!(round.finalize(&mut state), Err(RoundError::InvalidPhase));
     }
 }

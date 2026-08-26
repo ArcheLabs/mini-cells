@@ -18,7 +18,9 @@ for unit in host minijam crypto; do "${CLANG}" -std=c11 "${COMMON[@]}" -c "${SDK
 # default RISC-V relaxation pass to produce an invalid data relocation.  Keep
 # the exact code path, but disable that link-only relaxation; this does not
 # alter the guest's arithmetic or its measured execution semantics.
-RUSTFLAGS="${RUSTFLAGS:-} -C link-arg=--no-relax -C link-arg=-z -C link-arg=notext -L native=${WORK} -l static=minijam_guest" cargo +nightly-2026-05-02 -Z build-std=core -Z json-target-spec build --offline --release --target "${TARGET}" -p minicells-training-service
+FEATURE_ARGS=()
+if [[ -n "${MINICELLS_TRAINING_FEATURES:-}" ]]; then FEATURE_ARGS+=(--features "${MINICELLS_TRAINING_FEATURES}"); fi
+RUSTFLAGS="${RUSTFLAGS:-} -C link-arg=--no-relax -C link-arg=-z -C link-arg=notext -L native=${WORK} -l static=minijam_guest" cargo +nightly-2026-05-02 -Z build-std=core -Z json-target-spec build --offline --release --target "${TARGET}" -p minicells-training-service "${FEATURE_ARGS[@]}"
 ELF="${ROOT}/target/riscv64emac-unknown-none/release/minicells_training_service.elf"
 test -s "${ELF}"
 CONVERTER_MANIFEST="${CLIENT}/service-toolchain/compiler/polkavm-to-jam/Cargo.toml"

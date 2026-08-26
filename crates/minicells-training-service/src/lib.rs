@@ -70,6 +70,10 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
         }
         core::slice::from_raw_parts(ptr, size)
     };
+    #[cfg(feature = "production")]
+    if raw.first().copied() == Some(b'M') && raw.get(1..4) == Some(b"CD1") {
+        return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
+    }
     let (diagnostic_stage, input) =
         if raw.first().copied() == Some(b'M') && raw.get(1..4) == Some(b"CD1") {
             let stage = raw.get(4).copied().unwrap_or(u8::MAX);
