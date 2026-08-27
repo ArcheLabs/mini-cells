@@ -10,6 +10,7 @@ from minicells.clm_v2_validation import (
     make_v2_decision,
     replay_v2_masks,
     static_mask,
+    v2_router_diagnostics,
 )
 from minicells.language_models import TextNCALM
 from minicells.textnca_to_clm_v2 import convert_textnca_to_clm_v2
@@ -41,6 +42,27 @@ def test_v2_static_mask_is_deterministic_topk() -> None:
     second = static_mask(masks, 6)
     assert int(first.sum()) == 6
     torch.testing.assert_close(first, second)
+
+
+def test_router_diagnostics_observes_off_path_bank_at_alpha_one() -> None:
+    model = _model()
+    model.set_scaffold_alpha(1.0)
+    stream = torch.randint(0, 29, (48,))
+    inputs = stream[:8].unsqueeze(0)
+    before = model(inputs).logits
+
+    diagnostics = v2_router_diagnostics(
+        model,
+        stream,
+        ((0, 8),),
+        sequence_length=8,
+        device=torch.device("cpu"),
+    )
+
+    after = model(inputs).logits
+    assert diagnostics["soft_usage"]
+    assert diagnostics["hard_usage"]
+    torch.testing.assert_close(after, before)
 
 
 def test_stage_checkpoint_discovery_supports_resume(tmp_path: Path) -> None:

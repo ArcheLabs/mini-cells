@@ -170,11 +170,19 @@ def v2_router_diagnostics(
         for starts in starts_batches:
             inputs, _ = batch_from_starts(stream, starts, sequence_length, device)
             with V2RoutingRecorder(model) as recorder:
-                model(inputs)
+                # At scaffold alpha=1 the main recurrent path intentionally skips the
+                # conditional bank.  Request its off-path local-imitation execution so
+                # routing remains observable without affecting the scaffold output.
+                model(inputs, return_local_imitation=True)
             masks.extend(recorder.masks)
     finally:
         for handle in handles:
             handle.remove()
+    if not captured or not masks:
+        raise RuntimeError(
+            "v2 router diagnostics captured no conditional-bank activity; "
+            "diagnostics must execute the bank off-path when scaffold_alpha == 1"
+        )
     logits = torch.stack(captured)
     profiles = logits.mean((0, 2))
     rankings = profiles.argsort(-1, descending=True)

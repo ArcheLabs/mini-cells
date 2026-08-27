@@ -217,7 +217,7 @@ def main() -> int:
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer, T_max=total_sparse_steps, eta_min=1e-5
     )
-    scaler = torch.cuda.amp.GradScaler(enabled=True)
+    scaler = torch.amp.GradScaler("cuda", enabled=True)
     rows = []
     diagnostics = []
     stage_index = 0
