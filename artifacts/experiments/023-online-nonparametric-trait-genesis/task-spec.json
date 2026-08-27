@@ -1,0 +1,18 @@
+{
+  "arithmetic_domain": "same deterministic arithmetic corpus as Experiments 021/022",
+  "curriculum_steps": 1152,
+  "duplicate_negative_control": "ARITH_A and ARITH_B are independent schedules over the exact same arithmetic token distribution",
+  "format": "minicells.online-nonparametric-trait-genesis-task.v1",
+  "posthoc_labels_used_for_scientific_validation": true,
+  "stage_end_steps": {
+    "A_STORY_ONLY": 192,
+    "B_EMERGING_MATH": 576,
+    "C_DUPLICATE_CONTROL": 768,
+    "D_THIRD_MODE": 1152
+  },
+  "story_domain": "TinyStories token stream",
+  "task_boundary_exposed_to_model": false,
+  "task_labels_used_by_routing": false,
+  "task_labels_used_by_trigger": false,
+  "transform_domain": "deterministic six-digit reverse transformation rendered as language"
+}
