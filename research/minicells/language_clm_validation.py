@@ -46,6 +46,7 @@ class EvaluationResult:
     program_usage: torch.Tensor
     program_coactivation: torch.Tensor
     structural_variation: float
+    position_variation: float
     temporal_variation: float
 
 
@@ -287,14 +288,147 @@ def shuffled_masks(masks: list[torch.Tensor], permutation: torch.Tensor) -> list
     return [mask.index_select(0, permutation.to(mask.device)) for mask in masks]
 
 
-def routing_variation(masks: list[torch.Tensor]) -> tuple[float, float]:
+def routing_variation_metrics(masks: list[torch.Tensor]) -> dict[str, float]:
+    """Measure routing differences without mixing sample, position, or time axes."""
+    if not masks:
+        raise ValueError("routing masks must not be empty")
+    expected_shape = masks[0].shape
+    if len(expected_shape) != 3:
+        raise ValueError("routing masks must have shape [batch, position, program]")
+    if any(mask.shape != expected_shape for mask in masks):
+        raise ValueError("all routing masks must have the same shape")
     stacked = torch.stack([mask.detach().float().cpu() for mask in masks])
-    if stacked.shape[1] < 2:
-        structural = 0.0
+    # [step, batch, position, program] -> aggregate position and recurrent time.
+    sample_profiles = stacked.mean((0, 2))
+    if sample_profiles.shape[0] < 2:
+        sample = 0.0
     else:
-        structural = float((stacked[:, 1:] - stacked[:, :-1]).abs().mean())
+        sample = float((sample_profiles[1:] - sample_profiles[:-1]).abs().mean())
+    position = (
+        float((stacked[:, :, 1:] - stacked[:, :, :-1]).abs().mean())
+        if stacked.shape[2] > 1
+        else 0.0
+    )
     temporal = float((stacked[1:] - stacked[:-1]).abs().mean()) if len(masks) > 1 else 0.0
-    return structural, temporal
+    return {"sample": sample, "position": position, "temporal": temporal}
+
+
+def routing_variation(masks: list[torch.Tensor]) -> tuple[float, float]:
+    metrics = routing_variation_metrics(masks)
+    return metrics["sample"], metrics["temporal"]
+
+
+def reset_program_routing_logits(
+    model: SparseCellularTextNCA,
+    *,
+    seed: int,
+    symmetry_breaking_scale: float = 1e-4,
+) -> None:
+    """Reset only program-head biases; cell logits and every executor weight stay untouched."""
+    generator = torch.Generator(device="cpu").manual_seed(seed)
+    with torch.no_grad():
+        for stage in model.stages:
+            bias = stage.receptor.out_proj.bias[1:]
+            noise = torch.randn(bias.numel(), generator=generator, dtype=torch.float32)
+            noise = (noise - noise.mean()) * symmetry_breaking_scale
+            bias.copy_(noise.to(device=bias.device, dtype=bias.dtype))
+
+
+@torch.no_grad()
+def router_diagnostics(
+    model: SparseCellularTextNCA,
+    stream: torch.Tensor,
+    starts_batches: tuple[tuple[int, ...], ...],
+    *,
+    sequence_length: int,
+    device: torch.device,
+) -> dict[str, float]:
+    captured: list[torch.Tensor] = []
+    handles = [
+        stage.receptor.register_forward_hook(
+            lambda _module, _inputs, output: captured.append(output[..., 1:].detach().float().cpu())
+        )
+        for stage in model.stages
+    ]
+    try:
+        for starts in starts_batches:
+            inputs, _ = batch_from_starts(stream, starts, sequence_length, device)
+            model(inputs)
+    finally:
+        for handle in handles:
+            handle.remove()
+    logits = torch.stack(captured)
+    probabilities = logits.sigmoid()
+    sample_profiles = logits.mean((0, 2))
+    cross_sample_variance = float(sample_profiles.var(0, unbiased=False).mean())
+    rankings = sample_profiles.argsort(dim=-1, descending=True)
+    if rankings.shape[0] < 2:
+        ranking_disagreement = 0.0
+    else:
+        ranking_disagreement = float((rankings[1:] != rankings[:-1]).float().mean())
+    winners = logits.argmax(-1).reshape(-1)
+    frequency = torch.bincount(winners, minlength=NUM_PROGRAMS).float()
+    frequency = frequency / frequency.sum().clamp_min(1)
+    nonzero = frequency > 0
+    ranking_entropy = float(
+        -(frequency[nonzero] * frequency[nonzero].log()).sum() / math.log(NUM_PROGRAMS)
+    )
+    return {
+        "program_logit_mean": float(logits.mean()),
+        "program_logit_std": float(logits.std(unbiased=False)),
+        "program_probability_mean": float(probabilities.mean()),
+        "program_probability_std": float(probabilities.std(unbiased=False)),
+        "program_ranking_entropy": ranking_entropy,
+        "mean_cross_sample_program_logit_variance": cross_sample_variance,
+        "mean_pairwise_ranking_disagreement": ranking_disagreement,
+    }
+
+
+def configure_hard_program_stage(
+    model: SparseCellularTextNCA,
+    optimizer: torch.optim.Optimizer,
+    *,
+    top_k: int,
+) -> torch.optim.Optimizer:
+    """Configure a discrete continuation stage without replacing optimizer state."""
+    model.set_routing_mode("hard_program")
+    model.set_execution_backend("masked_dense")
+    model.set_program_top_k(top_k)
+    return optimizer
+
+
+def minimum_quality_safe_k(
+    progression: list[tuple[int, float]],
+    *,
+    quality_ratio_max: float = QUALITY_RATIO_THRESHOLD,
+) -> int:
+    """Return the last safe K, stopping logically at the first failed stage."""
+    if not progression or progression[0][0] != NUM_PROGRAMS:
+        raise ValueError("progression must begin at top-8")
+    safe = NUM_PROGRAMS
+    expected = NUM_PROGRAMS
+    for top_k, ratio in progression:
+        if top_k != expected:
+            raise ValueError("progression must be contiguous and descending")
+        if ratio > quality_ratio_max:
+            break
+        safe = top_k
+        expected -= 1
+    return safe
+
+
+def quality_gated_progression(
+    progression: list[tuple[int, float]],
+    *,
+    quality_ratio_max: float = QUALITY_RATIO_THRESHOLD,
+) -> list[int]:
+    """Return stages that execute through the first failure; later stages must not run."""
+    executed: list[int] = []
+    for top_k, ratio in progression:
+        executed.append(top_k)
+        if ratio > quality_ratio_max:
+            break
+    return executed
 
 
 @torch.no_grad()
@@ -324,6 +458,7 @@ def evaluate_arm(
     usage: list[torch.Tensor] = []
     coactivation: list[torch.Tensor] = []
     structural: list[float] = []
+    position: list[float] = []
     temporal: list[float] = []
     generator = torch.Generator(device="cpu").manual_seed(permutation_seed)
     for starts in starts_batches:
@@ -360,9 +495,11 @@ def evaluate_arm(
             if device.type == "cuda":
                 torch.cuda.synchronize(device)
             elapsed += time.perf_counter() - batch_started
-            variation = routing_variation(masks)
-            structural.append(variation[0])
-            temporal.append(variation[1])
+        if arm != "dense":
+            variation = routing_variation_metrics(masks)
+            structural.append(variation["sample"])
+            position.append(variation["position"])
+            temporal.append(variation["temporal"])
         total_loss += float(
             F.cross_entropy(output.logits.flatten(0, 1), targets.flatten(), reduction="sum")
         )
@@ -383,8 +520,94 @@ def evaluate_arm(
         torch.cuda.max_memory_allocated(device) if device.type == "cuda" else 0,
         torch.stack(usage).mean(0), torch.stack(coactivation).mean(0),
         sum(structural) / len(structural) if structural else 0.0,
+        sum(position) / len(position) if position else 0.0,
         sum(temporal) / len(temporal) if temporal else 0.0,
     )
+
+
+def make_validation_001b_decision(
+    arms_rows: list[dict[str, object]],
+    progression_rows: list[dict[str, object]],
+    *,
+    router_warmup_ok: dict[int, bool] | None = None,
+) -> dict[str, object]:
+    by_replicate: dict[int, dict[str, dict[str, object]]] = {}
+    for row in arms_rows:
+        by_replicate.setdefault(int(row["replicate"]), {})[str(row["arm"])] = row
+    safe_k = {
+        int(row["replicate"]): int(row["quality_safe_k"])
+        for row in progression_rows
+        if bool(row.get("selected", False))
+    }
+    evidence: list[dict[str, object]] = []
+    success_count = safe_count = variation_count = causal_count = 0
+    for replicate, arms in sorted(by_replicate.items()):
+        if set(arms) != {"dense", "dynamic", "static", "shuffled"}:
+            raise ValueError(f"replicate {replicate} is missing one or more final arms")
+        if replicate not in safe_k:
+            raise ValueError(f"replicate {replicate} has no selected quality-safe K")
+        dense = arms["dense"]
+        dynamic = arms["dynamic"]
+        quality_ratio = float(dynamic["validation_ppl"]) / float(dense["validation_ppl"])
+        static_advantage = (
+            float(arms["static"]["validation_nll"]) - float(dynamic["validation_nll"])
+        ) / float(dense["validation_nll"])
+        shuffled_advantage = (
+            float(arms["shuffled"]["validation_nll"]) - float(dynamic["validation_nll"])
+        ) / float(dense["validation_nll"])
+        safe = safe_k[replicate] <= 6 and quality_ratio <= QUALITY_RATIO_THRESHOLD
+        varied = float(dynamic["structural_variation"]) >= CONDITIONALITY_THRESHOLD
+        causal = (
+            static_advantage >= NORMALIZED_ADVANTAGE_THRESHOLD
+            and shuffled_advantage >= NORMALIZED_ADVANTAGE_THRESHOLD
+        )
+        receptor_ok = float(dynamic["receptor_ratio"]) <= RECEPTOR_RATIO_THRESHOLD
+        passed = safe and varied and causal and receptor_ok
+        safe_count += safe
+        variation_count += varied
+        causal_count += causal
+        success_count += passed
+        evidence.append(
+            {
+                "replicate": replicate,
+                "quality_safe_k": safe_k[replicate],
+                "quality_ratio": quality_ratio,
+                "sample_variation": float(dynamic["structural_variation"]),
+                "temporal_variation": float(dynamic["temporal_variation"]),
+                "static_advantage": static_advantage,
+                "shuffled_advantage": shuffled_advantage,
+                "receptor_ratio": float(dynamic["receptor_ratio"]),
+                "passed": passed,
+            }
+        )
+    warmup_failures = sum(not value for value in (router_warmup_ok or {}).values())
+    if warmup_failures >= 2:
+        diagnosis = "CLM_ROUTER_WARMUP_FAILURE"
+    elif success_count >= 2:
+        diagnosis = "CLM_PROGRAM_CONDITIONALITY_SIGNAL"
+    elif safe_count < 2:
+        diagnosis = "CLM_NO_QUALITY_SAFE_SPARSITY"
+    elif variation_count < 2:
+        diagnosis = "CLM_STATIC_PRUNING_ONLY"
+    elif causal_count < 2:
+        diagnosis = "CLM_DYNAMIC_ROUTING_WITHOUT_CAUSAL_VALUE"
+    else:
+        diagnosis = "CLM_STATIC_PRUNING_ONLY"
+    return {
+        "format": "minicells.clm-validation-001b.v1",
+        "experiment": "CLM Validation 001b — Stable Program Conditionality",
+        "status": "PASS" if diagnosis == "CLM_PROGRAM_CONDITIONALITY_SIGNAL" else "FAIL",
+        "diagnosis": diagnosis,
+        "successful_replicates": success_count,
+        "thresholds": {
+            "quality_ratio_max": QUALITY_RATIO_THRESHOLD,
+            "required_safe_k_max": 6,
+            "sample_variation_min": CONDITIONALITY_THRESHOLD,
+            "normalized_advantage_min": NORMALIZED_ADVANTAGE_THRESHOLD,
+            "receptor_ratio_max": RECEPTOR_RATIO_THRESHOLD,
+        },
+        "evidence": evidence,
+    }
 
 
 def make_validation_decision(rows: list[dict[str, object]]) -> dict[str, object]:
