@@ -113,6 +113,10 @@ class OnlineTraitTextNCA(ForkableTextNCA):
     def spawn_first_bifurcation(self, ordered_centroids: torch.Tensor) -> None:
         if ordered_centroids.shape[0] != 2:
             raise ValueError("first bifurcation requires two centroids")
+        ordered_centroids = ordered_centroids.to(
+            device=self.online_traits.device,
+            dtype=self.online_traits.dtype,
+        )
         axis = F.normalize(ordered_centroids[0] - ordered_centroids[1], dim=0, eps=1e-8)
         parent = self.online_traits[0].clone()
         self.online_traits[0].copy_(parent + FORK_EPSILON * axis)
@@ -129,6 +133,14 @@ class OnlineTraitTextNCA(ForkableTextNCA):
     ) -> None:
         if not 1 <= new_branch < self.max_traits:
             raise ValueError("new branch outside latent phenotype pool")
+        parent_centroid = parent_centroid.to(
+            device=self.online_traits.device,
+            dtype=self.online_traits.dtype,
+        )
+        new_centroid = new_centroid.to(
+            device=self.online_traits.device,
+            dtype=self.online_traits.dtype,
+        )
         direction = F.normalize(new_centroid - parent_centroid, dim=0, eps=1e-8)
         self.online_traits[new_branch].copy_(
             self.online_traits[parent_branch] + FORK_EPSILON * direction
