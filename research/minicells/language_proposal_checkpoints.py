@@ -10,6 +10,7 @@ from .language_localized_learning import LocalizedLearningState
 
 
 CHECKPOINT_FORMAT = "minicells.proposal-utility-checkpoint.v1"
+TRAINING_PROTOCOL_ID = "minicells.proposal-utility-training.v1"
 CHECKPOINT_ENV = "MINICELLS_019_CHECKPOINT_DIR"
 FORCE_RETRAIN_ENV = "MINICELLS_019_FORCE_RETRAIN"
 
@@ -75,6 +76,11 @@ def load_checkpoint(
     payload = torch.load(path, map_location="cpu", weights_only=False)
     if payload.get("format") != CHECKPOINT_FORMAT:
         raise RuntimeError(f"unsupported Experiment 019 checkpoint format: {path}")
+    if payload.get("training_protocol") != TRAINING_PROTOCOL_ID:
+        raise RuntimeError(
+            f"Experiment 019 checkpoint training protocol mismatch: {path}; "
+            "use --force-retrain instead of mixing model generations"
+        )
     if payload.get("kind") != kind or int(payload.get("replicate", -1)) != int(replicate):
         raise RuntimeError(f"Experiment 019 checkpoint identity mismatch: {path}")
     if family is not None and payload.get("family") != family:
