@@ -212,9 +212,13 @@ def plot_utility_matrix(evaluation: pd.DataFrame, arm: str, filename: str) -> No
 def plot_routing(routing: pd.DataFrame) -> None:
     if routing.empty:
         return
+    selected = routing.loc[routing["arm"] == "differentiation-fork"].copy()
+    selected = selected.loc[np.isfinite(pd.to_numeric(selected["projection_score"], errors="coerce"))]
+    if selected.empty:
+        return
     fig, ax = plt.subplots(figsize=(7, 4.5))
     for domain in DOMAINS:
-        values = routing.loc[routing["domain_posthoc"] == domain, "projection_score"].to_numpy(float)
+        values = selected.loc[selected["domain_posthoc"] == domain, "projection_score"].to_numpy(float)
         ax.hist(values, bins=30, alpha=0.5, label=domain)
     ax.axvline(0.0, linewidth=1)
     ax.set_xlabel("Unlabeled gradient projection score")
@@ -264,6 +268,8 @@ def decide(data: dict[str, pd.DataFrame | list[dict[str, object]]], gpu_count: i
             "task_labels_used_for_posthoc_validation": True,
             "shared_genome_after_fork": True,
             "capacity_and_differentiation_same_symmetry_break": True,
+            "capacity_routing": "task-agnostic deterministic 50/50",
+            "one_child_update_per_microbatch_in_both_fork_controls": True,
             "identity_normalized_margin_min": IDENTITY_NORMALIZED_MARGIN_MIN,
             "routing_purity_min": ROUTING_PURITY_MIN,
             "positive_replicates_min": DIFFERENTIATION_REPLICATES_MIN,
@@ -286,7 +292,7 @@ def decide(data: dict[str, pd.DataFrame | list[dict[str, object]]], gpu_count: i
         },
         "interpretation": {
             "success": "A positive result requires conflict, posthoc evidence that unlabeled gradient geometry separates the abilities, functional branch identity in >=2/3 replicates, and failure of the capacity-only control to explain the effect.",
-            "capacity_control": "Capacity fork receives the same symmetry breaking as differentiation fork, but both children see every microbatch. It tests whether extra phenotype capacity alone creates identity.",
+            "capacity_control": "Capacity fork uses the same symmetry break and the same per-child update budget as differentiation fork, but routes by a deterministic task-agnostic 50/50 schedule rather than conflict geometry.",
             "scope": "021 proves or falsifies conflict->division->differentiation in a minimal fixed-topology TextNCA substrate. It does not yet test autonomous topology rewiring or inference-time recruitment.",
         },
         "status": status,
@@ -302,8 +308,8 @@ def write_task_spec() -> None:
         "arithmetic_domain": "deterministic synthetic ADD/SUB/MUL/solve-x text encoded by the same TinyStories byte-level BPE",
         "pre_fork": "one TextNCA parent trained on story only",
         "fork_site": "population phenotype injected before the final shared NCA stage",
-        "capacity_fork": "two symmetry-broken child phenotypes; both children train on every mixed-domain microbatch",
-        "differentiation_fork": "same child initialization; each microbatch trains only the child selected by the sign of its unlabeled gradient projection onto the fixed conflict axis",
+        "capacity_fork": "two symmetry-broken child phenotypes; each microbatch updates one child selected by a deterministic task-agnostic 50/50 schedule",
+        "differentiation_fork": "same child initialization and update budget; each microbatch updates only the child selected by the sign of its unlabeled gradient projection onto the fixed conflict axis",
         "forbidden_routing_inputs": ["task label", "domain id", "expert id", "learned central router"],
     }
     (OUT / "task-spec.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
