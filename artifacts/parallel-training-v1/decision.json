@@ -4,10 +4,12 @@
   "native_tree32": "PASS_PARALLEL_NATIVE",
   "schedule_determinism": "PASS_DETERMINISTIC_REDUCTION_ONLY",
   "root_payload": "PASS_PAYLOAD_UNDER_1M",
+  "work_package": "PASS_WORK_PACKAGE_UNDER_PROTOCOL_LIMIT",
   "pvm_parity": "PASS_PARALLEL_PVM",
-  "minijam_lanes": "BLOCKED_MINIJAM_LANES",
-  "fresh_chain": "NOT_STARTED_BY_POLICY",
+  "minijam_lanes": "PASS_PRODUCTION_CANDIDATE_LANE_PATH",
+  "scheduler_evidence": "PASS_SCOPED_LANE_OVERLAP_TEST",
+  "fresh_chain": "BLOCKED_EXTERNAL_CHAIN_CREDENTIALS",
   "algorithm_changes": "NUMERIC_REDUCTION_ORDER_ONLY",
   "stop_condition": "Root parity gate passed after fixed-stride reducer repair; WorkPackage, MiniJAM lane wiring and fresh-chain execution remain explicitly out of scope for this commit.",
-  "next_action": "MEASURE_FULL_SERIALIZED_MCRF1_WORKPACKAGE"
+  "next_action": "START_FRESH_CHAIN_WIDTH2_WHEN_CHAIN_AND_CREDENTIALS_ARE_AVAILABLE"
 }

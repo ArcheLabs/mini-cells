@@ -1,0 +1,10 @@
+{
+  "schema": "minicells.parallel-training-width2.v1",
+  "status": "BLOCKED_EXTERNAL_CHAIN_NOT_STARTED",
+  "required_next_gate": "PASS_MINIJAM_WIDTH2_CONCURRENCY",
+  "leaf_indices": [0, 1],
+  "lane_count": 4,
+  "overlap": null,
+  "reason": "Fresh-chain execution was not started because the required wallet/relayer/worker credentials and an exact runnable chain environment are not available. This is an external precondition blocker, not evidence of scheduler serialization.",
+  "policy": "Do not launch width32 or infer concurrency from submission order."
+}
