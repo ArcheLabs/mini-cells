@@ -99,3 +99,12 @@ def test_aggregate_status_requires_screening_and_rejects_early_birth() -> None:
     early = [dict(row) for row in positive]
     early[2]["weak_reject"] = 0
     assert aggregate_status(early, screening_qualified=True) == "INDEPENDENT_CAPABILITY_CAUSES_EARLY_BIRTH"
+
+
+def test_first_birth_failure_precedes_unexecuted_weak_stage() -> None:
+    no_first = [
+        {"arithmetic_birth": 1, "weak_reject": 1, "strong_birth": 0, "final_k": 2},
+        {"arithmetic_birth": 0, "weak_reject": 0, "strong_birth": 0, "final_k": 1},
+        {"arithmetic_birth": 0, "weak_reject": 0, "strong_birth": 0, "final_k": 1},
+    ]
+    assert aggregate_status(no_first, screening_qualified=True) == "NO_STABLE_FIRST_TRAIT_BIRTH"
