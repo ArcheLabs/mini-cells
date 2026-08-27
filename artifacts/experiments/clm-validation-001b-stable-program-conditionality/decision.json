@@ -1,0 +1,55 @@
+{
+  "diagnosis": "CLM_NO_QUALITY_SAFE_SPARSITY",
+  "evidence": [
+    {
+      "passed": false,
+      "quality_ratio": 1.0000000298023228,
+      "quality_safe_k": 8,
+      "receptor_ratio": 0.0207868303571428,
+      "replicate": 0,
+      "sample_variation": 0.0,
+      "shuffled_advantage": -9.129841166835878e-09,
+      "static_advantage": -1.0271071236164918e-08,
+      "temporal_variation": 2.119817181049181e-08
+    },
+    {
+      "passed": false,
+      "quality_ratio": 0.9999999801317851,
+      "quality_safe_k": 8,
+      "receptor_ratio": 0.0207868303571428,
+      "replicate": 1,
+      "sample_variation": 0.0,
+      "shuffled_advantage": 6.847380875126908e-09,
+      "static_advantage": 6.847380875126908e-09,
+      "temporal_variation": 2.11231245828003e-08
+    },
+    {
+      "passed": false,
+      "quality_ratio": 1.0000000099341073,
+      "quality_safe_k": 8,
+      "receptor_ratio": 0.0207868303571428,
+      "replicate": 2,
+      "sample_variation": 0.0,
+      "shuffled_advantage": -5.706150652746979e-09,
+      "static_advantage": -3.42369036103801e-09,
+      "temporal_variation": 2.1543531625312085e-08
+    }
+  ],
+  "experiment": "CLM Validation 001b \u2014 Stable Program Conditionality",
+  "format": "minicells.clm-validation-001b.v1",
+  "provenance": {
+    "clm_implementation_commit": "63af81d47755b4975d4e300560c1c72f779e0d11",
+    "source_model": "artifacts/experiments/006-consumer-language-scaling/minicells-v2-10m.pt",
+    "validation_001_diagnosis": "CONTINUATION_DID_NOT_LEAVE_DENSE_BASIN",
+    "validation_001_status": "FAIL / CLM_PROGRAM_SPARSITY_QUALITY_FAILURE"
+  },
+  "status": "FAIL",
+  "successful_replicates": 0,
+  "thresholds": {
+    "normalized_advantage_min": 0.002,
+    "quality_ratio_max": 1.03,
+    "receptor_ratio_max": 0.05,
+    "required_safe_k_max": 6,
+    "sample_variation_min": 0.05
+  }
+}
