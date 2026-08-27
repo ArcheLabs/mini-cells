@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 from pathlib import Path
 
 from publish_experiment_results import DEFAULT_SECRET_NAME, ExperimentSpec, prepare_artifacts, push_results, repo_root
@@ -17,6 +18,8 @@ SPEC = ExperimentSpec(
         "task-spec.json",
         "invariants.json",
         "checkpoint-manifest.json",
+        "source-019b-decision.json",
+        "source-019-stable-checkpoint-manifest.json",
         "corpus-manifest.json",
         "tokenizer.json",
         "baseline-019b-specificity.csv",
@@ -61,6 +64,21 @@ def write_checkpoint_manifest(root: Path) -> Path:
     return path
 
 
+def copy_source_provenance(root: Path) -> None:
+    destination = root / SPEC.source_dir
+    stable_manifest = root / "results" / "proposal-utility-discovery-stable-v1" / "checkpoint-manifest.json"
+    if not stable_manifest.is_file():
+        raise FileNotFoundError("stable-019 checkpoint manifest is required for Experiment 020 provenance")
+    shutil.copy2(stable_manifest, destination / "source-019-stable-checkpoint-manifest.json")
+
+    local_019b = root / "results" / "recruitment-response-curves-v1" / "decision.json"
+    artifact_019b = root / "artifacts" / "experiments" / "019b-recruitment-response-curves" / "decision.json"
+    source_019b = local_019b if local_019b.is_file() else artifact_019b
+    if not source_019b.is_file():
+        raise FileNotFoundError("Experiment 019b decision.json is required for Experiment 020 provenance")
+    shutil.copy2(source_019b, destination / "source-019b-decision.json")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--push", action="store_true")
@@ -70,6 +88,7 @@ def main() -> int:
     args = parser.parse_args()
     root = repo_root()
     write_checkpoint_manifest(root)
+    copy_source_provenance(root)
     destination = prepare_artifacts(root, "020", SPEC, args.kaggle_script_version_id)
     print(f"Prepared curated artifacts: {destination.relative_to(root)}")
     print("36 Experiment 020 donor checkpoints remain Kaggle-local and are intentionally excluded from GitHub artifacts.")
