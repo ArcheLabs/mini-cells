@@ -43,6 +43,11 @@ EXPECTED_GEOMETRY_PPL = {
     1: 17.97998454539842,
     2: 17.968933276012226,
 }
+EXPECTED_DENSE_PPL = {
+    0: 18.259920376422937,
+    1: 18.240726800852418,
+    2: 18.226103414956103,
+}
 REPRODUCTION_PPL_ATOL = 0.05
 BACKEND_PPL_ATOL = 1e-4
 
@@ -124,15 +129,10 @@ def train_block(model, teacher, stream, starts_batches, optimizer, scheduler, sc
 
 def optimizer_for(model, steps: int):
     optimizer = torch.optim.AdamW(
-        model.parameters(),
-        lr=1e-4,
-        betas=(0.9, 0.95),
-        weight_decay=0.1,
+        model.parameters(), lr=1e-4, betas=(0.9, 0.95), weight_decay=0.1
     )
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        optimizer,
-        T_max=steps,
-        eta_min=1e-5,
+        optimizer, T_max=steps, eta_min=1e-5
     )
     return optimizer, scheduler
 
@@ -157,15 +157,9 @@ def main() -> int:
         raise RuntimeError("CLM-0.1 release reproduction requires CUDA")
 
     device = torch.device("cuda:0")
-    train = torch.load(
-        args.cache_dir / "train-tokens.pt",
-        map_location="cpu",
-        weights_only=True,
-    )
+    train = torch.load(args.cache_dir / "train-tokens.pt", map_location="cpu", weights_only=True)
     validation = torch.load(
-        args.cache_dir / "validation-tokens.pt",
-        map_location="cpu",
-        weights_only=True,
+        args.cache_dir / "validation-tokens.pt", map_location="cpu", weights_only=True
     )
     gate_starts = fixed_validation_starts(
         validation.numel(), batches=12, batch_size=8, sequence_length=128, seed=7105
@@ -180,9 +174,7 @@ def main() -> int:
         validation.numel(), batches=24, batch_size=8, sequence_length=128, seed=7405
     )
     teacher = load_experiment_006_teacher(
-        str(args.checkpoint),
-        device=device,
-        model_config_path=str(args.model_config),
+        str(args.checkpoint), device=device, model_config_path=str(args.model_config)
     )
     teacher.eval().requires_grad_(False)
 
@@ -198,8 +190,6 @@ def main() -> int:
     ]
     total_steps = sum(len(row) for row in schedules)
 
-    # Matched dense continuation. Keep only a CPU inference copy after training so
-    # optimizer state and the frozen teacher cannot contaminate benchmark VRAM.
     dense = copy.deepcopy(teacher).to(device).requires_grad_(True)
     dense_opt, dense_sched = optimizer_for(dense, total_steps)
     dense_scaler = torch.amp.GradScaler("cuda", enabled=True)
@@ -229,7 +219,6 @@ def main() -> int:
     del dense, dense_opt, dense_sched, dense_scaler
     torch.cuda.empty_cache()
 
-    # Geometry initialization is extracted only from frozen-teacher local perceptions.
     stage_samples = collect_stage_perceptions(
         teacher,
         validation,
@@ -240,29 +229,19 @@ def main() -> int:
         seed=122001 + args.replicate,
     )
     prototypes, geometry_diag = geometry_prototypes(
-        stage_samples,
-        4,
-        seed=123001 + args.replicate * 100,
+        stage_samples, 4, seed=123001 + args.replicate * 100
     )
     torch.manual_seed(131001 + args.replicate * 100 + 1)
     torch.cuda.manual_seed_all(131001 + args.replicate * 100 + 1)
     model = convert_textnca_to_upcycled(
-        teacher,
-        config=UpcyclingConfig(num_experts=4, top_k=1, router_scale=4.0),
+        teacher, config=UpcyclingConfig(num_experts=4, top_k=1, router_scale=4.0)
     ).to(device)
     model.set_router_prototypes(prototypes)
     parity = validate_upcycled_parity(
-        teacher,
-        model,
-        validation,
-        gate_starts[:4],
-        sequence_length=128,
-        device=device,
+        teacher, model, validation, gate_starts[:4], sequence_length=128, device=device
     )
     if parity["status"] != "CLM_UPCYCLING_EQUIVALENCE":
-        raise RuntimeError(
-            json.dumps({"replicate": args.replicate, "parity": parity}, indent=2)
-        )
+        raise RuntimeError(json.dumps({"replicate": args.replicate, "parity": parity}, indent=2))
 
     optimizer, scheduler = optimizer_for(model, total_steps)
     scaler = torch.amp.GradScaler("cuda", enabled=True)
@@ -272,21 +251,15 @@ def main() -> int:
 
     model.set_execution_backend("sparse_dispatch")
     dynamic = evaluate_upcycled(
-        model,
-        validation,
-        formal_starts,
-        sequence_length=128,
-        device=device,
-        arm="dynamic",
-        templates=[],
+        model, validation, formal_starts, sequence_length=128, device=device,
+        arm="dynamic", templates=[]
     )
-    reproduced = (
-        abs(dynamic.ppl - EXPECTED_GEOMETRY_PPL[args.replicate])
-        <= REPRODUCTION_PPL_ATOL
+    geometry_reproduced = (
+        abs(dynamic.ppl - EXPECTED_GEOMETRY_PPL[args.replicate]) <= REPRODUCTION_PPL_ATOL
     )
-    if not reproduced:
+    if not geometry_reproduced:
         raise RuntimeError(
-            f"release reproduction drift: observed PPL={dynamic.ppl:.6f}, "
+            f"geometry reproduction drift: observed PPL={dynamic.ppl:.6f}, "
             f"expected={EXPECTED_GEOMETRY_PPL[args.replicate]:.6f}"
         )
 
@@ -298,23 +271,13 @@ def main() -> int:
         calibration.append(recorder.masks)
     templates = static_templates(calibration)
     static = evaluate_upcycled(
-        model,
-        validation,
-        formal_starts,
-        sequence_length=128,
-        device=device,
-        arm="static",
-        templates=templates,
+        model, validation, formal_starts, sequence_length=128, device=device,
+        arm="static", templates=templates
     )
     shuffled_runs = [
         evaluate_upcycled(
-            model,
-            validation,
-            formal_starts,
-            sequence_length=128,
-            device=device,
-            arm="shuffled",
-            templates=templates,
+            model, validation, formal_starts, sequence_length=128, device=device,
+            arm="shuffled", templates=templates,
             permutation_seed=143001 + args.replicate * 100 + index,
         )
         for index in range(3)
@@ -323,22 +286,24 @@ def main() -> int:
     shuffled_ppl = math.exp(shuffled_nll)
     aligned = collect_masks_and_aligned(model, validation, formal_starts, device)
 
-    # Training and control evaluation are complete. Strip training-only allocations
-    # before measuring inference memory/throughput, then benchmark one model at a time.
     del optimizer, scheduler, scaler, teacher
     model = model.cpu()
     torch.cuda.empty_cache()
 
     dense_benchmark_model = dense_cpu.to(device)
-    dense_metrics = evaluate_lm(
-        dense_benchmark_model,
-        validation,
-        formal_starts,
-        device,
-    )
+    dense_metrics = evaluate_lm(dense_benchmark_model, validation, formal_starts, device)
     dense_benchmark_model = dense_benchmark_model.cpu()
     del dense_benchmark_model, dense_cpu
     torch.cuda.empty_cache()
+    dense_reproduced = (
+        abs(dense_metrics["ppl"] - EXPECTED_DENSE_PPL[args.replicate])
+        <= REPRODUCTION_PPL_ATOL
+    )
+    if not dense_reproduced:
+        raise RuntimeError(
+            f"dense reproduction drift: observed PPL={dense_metrics['ppl']:.6f}, "
+            f"expected={EXPECTED_DENSE_PPL[args.replicate]:.6f}"
+        )
 
     model = model.to(device)
     model.set_execution_backend("masked_dense")
@@ -365,10 +330,14 @@ def main() -> int:
         "complete": True,
         "replicate": args.replicate,
         "initial_equivalence": parity,
+        "reproduction_ppl_atol": REPRODUCTION_PPL_ATOL,
         "expected_geometry_ppl": EXPECTED_GEOMETRY_PPL[args.replicate],
         "observed_geometry_ppl": dynamic.ppl,
-        "reproduction_ppl_atol": REPRODUCTION_PPL_ATOL,
-        "reproduction_pass": reproduced,
+        "geometry_reproduction_pass": geometry_reproduced,
+        "expected_dense_ppl": EXPECTED_DENSE_PPL[args.replicate],
+        "observed_dense_ppl": dense_metrics["ppl"],
+        "dense_reproduction_pass": dense_reproduced,
+        "reproduction_pass": geometry_reproduced and dense_reproduced,
         "dense_nll": dense_metrics["nll"],
         "dense_ppl": dense_metrics["ppl"],
         "dynamic": {
