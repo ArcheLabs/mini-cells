@@ -23,6 +23,7 @@ from minicells.clm_upcycling_validation import (  # noqa: E402
     evaluate_upcycled,
     geometry_prototypes,
     static_templates,
+    validate_upcycled_parity,
 )
 from minicells.language_clm_validation import load_experiment_006_teacher  # noqa: E402
 from minicells.language_data import batch_from_starts, fixed_validation_starts, make_training_schedule  # noqa: E402
@@ -36,6 +37,7 @@ EXPECTED_GEOMETRY_PPL = {
     2: 17.968933276012226,
 }
 REPRODUCTION_PPL_ATOL = 0.05
+BACKEND_PPL_ATOL = 1e-4
 
 
 def parse_args() -> argparse.Namespace:
@@ -136,31 +138,33 @@ def main() -> int:
 
     schedules = [
         make_training_schedule(
-            int(train.numel()),
-            seed=121001 + args.replicate * 100 + block,
-            budget_tokens=TRAINING_BLOCK_TOKENS,
-            batch_size=8,
-            sequence_length=125,
+            int(train.numel()), seed=121001 + args.replicate * 100 + block,
+            budget_tokens=TRAINING_BLOCK_TOKENS, batch_size=8, sequence_length=125,
         ).starts
         for block in range(TRAINING_BLOCKS)
     ]
     total_steps = sum(len(row) for row in schedules)
 
+    # Matched dense continuation is rerun rather than copied from the prior result so that
+    # Conditionality 002 compares against the same executable environment and data schedule.
     dense = copy.deepcopy(teacher).to(device).requires_grad_(True)
     dense_opt, dense_sched = optimizer_for(dense, total_steps)
     dense_scaler = torch.amp.GradScaler("cuda", enabled=True)
     for starts in schedules:
-        amp = True
         for batch_starts in starts:
             dense.train()
             inputs, targets = batch_from_starts(train, batch_starts, 125, device)
             dense_opt.zero_grad(set_to_none=True)
-            with torch.no_grad(), torch.autocast(device_type="cuda", dtype=torch.float16, enabled=amp):
+            with torch.no_grad(), torch.autocast(device_type="cuda", dtype=torch.float16):
                 teacher_logits = teacher(inputs).logits.detach()
-            with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=amp):
+            with torch.autocast(device_type="cuda", dtype=torch.float16):
                 logits = dense(inputs).logits
                 ce = F.cross_entropy(logits.flatten(0, 1), targets.flatten())
-                kl = F.kl_div(logits.reshape(-1, logits.shape[-1]).log_softmax(-1), teacher_logits.reshape(-1, teacher_logits.shape[-1]).softmax(-1), reduction="batchmean")
+                kl = F.kl_div(
+                    logits.reshape(-1, logits.shape[-1]).log_softmax(-1),
+                    teacher_logits.reshape(-1, teacher_logits.shape[-1]).softmax(-1),
+                    reduction="batchmean",
+                )
                 loss = ce + 0.5 * kl
             dense_scaler.scale(loss).backward()
             dense_scaler.unscale_(dense_opt)
@@ -176,13 +180,21 @@ def main() -> int:
         teacher, validation, geometry_starts, sequence_length=128, device=device,
         max_samples_per_stage=8192, seed=122001 + args.replicate,
     )
-    prototypes, geometry_diag = geometry_prototypes(stage_samples, 4, seed=123001 + args.replicate * 100)
+    prototypes, geometry_diag = geometry_prototypes(
+        stage_samples, 4, seed=123001 + args.replicate * 100
+    )
     torch.manual_seed(131001 + args.replicate * 100 + 1)
     torch.cuda.manual_seed_all(131001 + args.replicate * 100 + 1)
     model = convert_textnca_to_upcycled(
         teacher, config=UpcyclingConfig(num_experts=4, top_k=1, router_scale=4.0)
     ).to(device)
     model.set_router_prototypes(prototypes)
+    parity = validate_upcycled_parity(
+        teacher, model, validation, gate_starts[:4], sequence_length=128, device=device
+    )
+    if parity["status"] != "CLM_UPCYCLING_EQUIVALENCE":
+        raise RuntimeError(json.dumps({"replicate": args.replicate, "parity": parity}, indent=2))
+
     optimizer, scheduler = optimizer_for(model, total_steps)
     scaler = torch.amp.GradScaler("cuda", enabled=True)
     for starts in schedules:
@@ -190,12 +202,17 @@ def main() -> int:
         train_block(model, teacher, train, starts, optimizer, scheduler, scaler, device)
 
     model.set_execution_backend("sparse_dispatch")
-    dynamic = evaluate_upcycled(model, validation, formal_starts, sequence_length=128, device=device, arm="dynamic", templates=[])
+    dynamic = evaluate_upcycled(
+        model, validation, formal_starts, sequence_length=128, device=device,
+        arm="dynamic", templates=[]
+    )
     reproduced = abs(dynamic.ppl - EXPECTED_GEOMETRY_PPL[args.replicate]) <= REPRODUCTION_PPL_ATOL
     if not reproduced:
         raise RuntimeError(
-            f"release reproduction drift: observed PPL={dynamic.ppl:.6f}, expected={EXPECTED_GEOMETRY_PPL[args.replicate]:.6f}"
+            f"release reproduction drift: observed PPL={dynamic.ppl:.6f}, "
+            f"expected={EXPECTED_GEOMETRY_PPL[args.replicate]:.6f}"
         )
+
     calibration = []
     for starts in calibration_starts:
         inputs, _ = batch_from_starts(validation, starts, 128, device)
@@ -203,7 +220,10 @@ def main() -> int:
             model(inputs)
         calibration.append(recorder.masks)
     templates = static_templates(calibration)
-    static = evaluate_upcycled(model, validation, formal_starts, sequence_length=128, device=device, arm="static", templates=templates)
+    static = evaluate_upcycled(
+        model, validation, formal_starts, sequence_length=128, device=device,
+        arm="static", templates=templates
+    )
     shuffled_runs = [
         evaluate_upcycled(
             model, validation, formal_starts, sequence_length=128, device=device,
@@ -221,18 +241,23 @@ def main() -> int:
     masked_metrics = evaluate_lm(masked_model, validation, formal_starts, device)
     sparse_metrics = evaluate_lm(model, validation, formal_starts, device)
     del masked_model
+    if abs(masked_metrics["ppl"] - sparse_metrics["ppl"]) > BACKEND_PPL_ATOL:
+        raise RuntimeError(
+            "masked_dense/sparse_dispatch release parity failed: "
+            f"{masked_metrics['ppl']} vs {sparse_metrics['ppl']}"
+        )
 
-    checkpoint_path = args.output_dir / f"r{args.replicate}-geometry-release.pt"
     torch.save({
         "format": "minicells.clm-0.1-release-candidate.v1",
         "replicate": args.replicate,
         "model_state": model.state_dict(),
         "provenance": model.provenance,
-    }, checkpoint_path)
+    }, args.output_dir / f"r{args.replicate}-geometry-release.pt")
     manifest = {
         "format": "minicells.clm-0.1-release-worker.v1",
         "complete": True,
         "replicate": args.replicate,
+        "initial_equivalence": parity,
         "expected_geometry_ppl": EXPECTED_GEOMETRY_PPL[args.replicate],
         "observed_geometry_ppl": dynamic.ppl,
         "reproduction_ppl_atol": REPRODUCTION_PPL_ATOL,
@@ -244,6 +269,12 @@ def main() -> int:
         "shuffled": {"nll": shuffled_nll, "ppl": shuffled_ppl},
         "aligned_route_disagreement": aligned,
         "geometry_init": geometry_diag,
+        "backend_parity": {
+            "ppl_atol": BACKEND_PPL_ATOL,
+            "masked_dense_ppl": masked_metrics["ppl"],
+            "sparse_dispatch_ppl": sparse_metrics["ppl"],
+            "passed": True,
+        },
         "benchmark": {
             "dense": dense_metrics,
             "clm_sparse_dispatch": sparse_metrics,
