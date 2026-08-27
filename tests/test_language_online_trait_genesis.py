@@ -7,6 +7,7 @@ import torch
 from minicells.language_online_trait_genesis import (
     MIN_SILHOUETTE_Q10,
     GrowthEvidence,
+    OnlineTraitTextNCA,
     align_growth_centroids,
     developmental_curriculum,
     mode_set_stability,
@@ -78,6 +79,29 @@ def test_growth_alignment_preserves_existing_mode_order_and_adds_one() -> None:
     assert parent in (0, 1)
     assert torch.linalg.vector_norm(ordered[0] - old[0]) < 0.05
     assert torch.linalg.vector_norm(ordered[1] - old[1]) < 0.05
+
+
+def test_trait_spawn_normalizes_external_centroid_dtype() -> None:
+    model = OnlineTraitTextNCA(32, max_traits=4)
+    centroids = torch.zeros(2, model.dim, dtype=torch.float64)
+    centroids[0, 0] = 1.0
+    centroids[1, 1] = 1.0
+    model.spawn_first_bifurcation(centroids)
+    assert model.online_traits.dtype == torch.float32
+    assert torch.isfinite(model.online_traits[:2]).all()
+
+    parent_centroid = torch.zeros(model.dim, dtype=torch.float64)
+    newborn_centroid = torch.zeros(model.dim, dtype=torch.float64)
+    parent_centroid[0] = 1.0
+    newborn_centroid[2] = 1.0
+    model.spawn_additional_trait(
+        new_branch=2,
+        parent_branch=0,
+        parent_centroid=parent_centroid,
+        new_centroid=newborn_centroid,
+    )
+    assert model.online_traits[2].dtype == torch.float32
+    assert torch.isfinite(model.online_traits[2]).all()
 
 
 def test_curriculum_has_exact_negative_control_and_three_mode_counts() -> None:
