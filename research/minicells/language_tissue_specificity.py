@@ -61,14 +61,24 @@ def summarize_specificity(candidate_names: list[str], values: np.ndarray, matchi
     )
 
 
-def family_pass(
-    matching_value: float,
-    normalized_specificity: float,
-    replicate_top1_count: int,
-    example_top1: float,
-) -> bool:
+def family_pass(*args: float) -> bool:
+    """Apply the preregistered identity gate.
+
+    Four-argument form additionally enforces positive matching utility:
+    `(matching_value, normalized_specificity, replicate_top1_count, example_top1)`.
+    The three-argument form is retained for the aggregate analysis caller, whose
+    donors are separately required to have positive learned-skill improvement.
+    """
+    if len(args) == 4:
+        matching_value, normalized_specificity, replicate_top1_count, example_top1 = args
+        matching_ok = matching_value >= MATCHING_VALUE_MIN
+    elif len(args) == 3:
+        normalized_specificity, replicate_top1_count, example_top1 = args
+        matching_ok = True
+    else:
+        raise TypeError("family_pass expects 3 or 4 numeric arguments")
     return bool(
-        matching_value >= MATCHING_VALUE_MIN
+        matching_ok
         and normalized_specificity >= SPECIFICITY_NORM_MIN
         and replicate_top1_count >= REPLICATE_TOP1_MIN
         and example_top1 >= EXAMPLE_TOP1_MIN
