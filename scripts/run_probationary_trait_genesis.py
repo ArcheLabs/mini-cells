@@ -279,6 +279,12 @@ def decide(data: dict[str, object], gpu_count: int, checkpoint_manifest: dict[st
     positive_identity = int(positive["geometry_identity_pass"].fillna(0).sum())
     positive_routing = int(positive["routing_purity_pass"].fillna(0).sum())
     positive_advantage = int((positive["geometry_advantage_last3"] >= GEOMETRY_ADVANTAGE_MIN).sum())
+    positive_utility = int(
+        (
+            (positive["geometry_sustained_positive"] == 1)
+            & (positive["geometry_cumulative_positive"] == 1)
+        ).sum()
+    )
     weak_accept = int((weak["accepted"] == 1).sum())
 
     if story_reject < N_REPLICATES or duplicate_reject < N_REPLICATES:
@@ -289,7 +295,7 @@ def decide(data: dict[str, object], gpu_count: int, checkpoint_manifest: dict[st
         status = "UTILITY_WITHOUT_STABLE_GEOMETRY_ROUTING"
     elif positive_strong >= POSITIVE_REPLICATES_MIN:
         status = "PROBATIONARY_TRAIT_GENESIS_SIGNAL"
-    elif positive_advantage < POSITIVE_REPLICATES_MIN:
+    elif positive_utility >= POSITIVE_REPLICATES_MIN and positive_advantage < POSITIVE_REPLICATES_MIN:
         status = "CAPACITY_EXPLAINS_PROBATION_UTILITY"
     else:
         status = "NO_PROBATIONARY_BIRTH_SIGNAL"
@@ -321,6 +327,7 @@ def decide(data: dict[str, object], gpu_count: int, checkpoint_manifest: dict[st
             "story_arithmetic_identity_replicates": positive_identity,
             "story_arithmetic_routing_replicates": positive_routing,
             "story_arithmetic_geometry_advantage_replicates": positive_advantage,
+            "story_arithmetic_positive_utility_replicates": positive_utility,
             "weak_arithmetic_accept_replicates": weak_accept,
         },
         "checkpoint_manifest": {
