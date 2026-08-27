@@ -26,8 +26,15 @@ from minicells.clm_upcycling_validation import (  # noqa: E402
     validate_upcycled_parity,
 )
 from minicells.language_clm_validation import load_experiment_006_teacher  # noqa: E402
-from minicells.language_data import batch_from_starts, fixed_validation_starts, make_training_schedule  # noqa: E402
-from minicells.upcycled_cellular_textnca import UpcyclingConfig, convert_textnca_to_upcycled  # noqa: E402
+from minicells.language_data import (  # noqa: E402
+    batch_from_starts,
+    fixed_validation_starts,
+    make_training_schedule,
+)
+from minicells.upcycled_cellular_textnca import (  # noqa: E402
+    UpcyclingConfig,
+    convert_textnca_to_upcycled,
+)
 
 TRAINING_BLOCK_TOKENS = 250_000
 TRAINING_BLOCKS = 4
@@ -55,14 +62,21 @@ def evaluate_lm(model, stream, starts_batches, device) -> dict[str, float]:
     model.eval()
     total = 0.0
     tokens = 0
-    started = time.perf_counter()
     if device.type == "cuda":
+        torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats(device)
         torch.cuda.synchronize(device)
+    started = time.perf_counter()
     for starts in starts_batches:
         inputs, targets = batch_from_starts(stream, starts, 128, device)
         output = model(inputs)
-        total += float(F.cross_entropy(output.logits.flatten(0, 1), targets.flatten(), reduction="sum"))
+        total += float(
+            F.cross_entropy(
+                output.logits.flatten(0, 1),
+                targets.flatten(),
+                reduction="sum",
+            )
+        )
         tokens += targets.numel()
     if device.type == "cuda":
         torch.cuda.synchronize(device)
@@ -72,7 +86,9 @@ def evaluate_lm(model, stream, starts_batches, device) -> dict[str, float]:
         "nll": nll,
         "ppl": math.exp(min(nll, 20)),
         "tokens_per_second": tokens / elapsed,
-        "peak_vram_bytes": torch.cuda.max_memory_allocated(device) if device.type == "cuda" else 0,
+        "peak_vram_bytes": (
+            torch.cuda.max_memory_allocated(device) if device.type == "cuda" else 0
+        ),
     }
 
 
@@ -82,7 +98,11 @@ def train_block(model, teacher, stream, starts_batches, optimizer, scheduler, sc
         model.train()
         inputs, targets = batch_from_starts(stream, starts, 125, device)
         optimizer.zero_grad(set_to_none=True)
-        with torch.no_grad(), torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
+        with torch.no_grad(), torch.autocast(
+            device_type=device.type,
+            dtype=torch.float16,
+            enabled=amp,
+        ):
             teacher_logits = teacher(inputs).logits.detach()
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
             output, stats = model(inputs, return_stats=True)
@@ -103,8 +123,17 @@ def train_block(model, teacher, stream, starts_batches, optimizer, scheduler, sc
 
 
 def optimizer_for(model, steps: int):
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, betas=(0.9, 0.95), weight_decay=0.1)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=steps, eta_min=1e-5)
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=1e-4,
+        betas=(0.9, 0.95),
+        weight_decay=0.1,
+    )
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer,
+        T_max=steps,
+        eta_min=1e-5,
+    )
     return optimizer, scheduler
 
 
@@ -126,27 +155,51 @@ def main() -> int:
         return 0
     if not torch.cuda.is_available():
         raise RuntimeError("CLM-0.1 release reproduction requires CUDA")
+
     device = torch.device("cuda:0")
-    train = torch.load(args.cache_dir / "train-tokens.pt", map_location="cpu", weights_only=True)
-    validation = torch.load(args.cache_dir / "validation-tokens.pt", map_location="cpu", weights_only=True)
-    gate_starts = fixed_validation_starts(validation.numel(), batches=12, batch_size=8, sequence_length=128, seed=7105)
-    geometry_starts = fixed_validation_starts(validation.numel(), batches=8, batch_size=8, sequence_length=128, seed=7205)
-    calibration_starts = fixed_validation_starts(validation.numel(), batches=8, batch_size=8, sequence_length=128, seed=7305)
-    formal_starts = fixed_validation_starts(validation.numel(), batches=24, batch_size=8, sequence_length=128, seed=7405)
-    teacher = load_experiment_006_teacher(str(args.checkpoint), device=device, model_config_path=str(args.model_config))
+    train = torch.load(
+        args.cache_dir / "train-tokens.pt",
+        map_location="cpu",
+        weights_only=True,
+    )
+    validation = torch.load(
+        args.cache_dir / "validation-tokens.pt",
+        map_location="cpu",
+        weights_only=True,
+    )
+    gate_starts = fixed_validation_starts(
+        validation.numel(), batches=12, batch_size=8, sequence_length=128, seed=7105
+    )
+    geometry_starts = fixed_validation_starts(
+        validation.numel(), batches=8, batch_size=8, sequence_length=128, seed=7205
+    )
+    calibration_starts = fixed_validation_starts(
+        validation.numel(), batches=8, batch_size=8, sequence_length=128, seed=7305
+    )
+    formal_starts = fixed_validation_starts(
+        validation.numel(), batches=24, batch_size=8, sequence_length=128, seed=7405
+    )
+    teacher = load_experiment_006_teacher(
+        str(args.checkpoint),
+        device=device,
+        model_config_path=str(args.model_config),
+    )
     teacher.eval().requires_grad_(False)
 
     schedules = [
         make_training_schedule(
-            int(train.numel()), seed=121001 + args.replicate * 100 + block,
-            budget_tokens=TRAINING_BLOCK_TOKENS, batch_size=8, sequence_length=125,
+            int(train.numel()),
+            seed=121001 + args.replicate * 100 + block,
+            budget_tokens=TRAINING_BLOCK_TOKENS,
+            batch_size=8,
+            sequence_length=125,
         ).starts
         for block in range(TRAINING_BLOCKS)
     ]
     total_steps = sum(len(row) for row in schedules)
 
-    # Matched dense continuation is rerun rather than copied from the prior result so that
-    # Conditionality 002 compares against the same executable environment and data schedule.
+    # Matched dense continuation. Keep only a CPU inference copy after training so
+    # optimizer state and the frozen teacher cannot contaminate benchmark VRAM.
     dense = copy.deepcopy(teacher).to(device).requires_grad_(True)
     dense_opt, dense_sched = optimizer_for(dense, total_steps)
     dense_scaler = torch.amp.GradScaler("cuda", enabled=True)
@@ -172,28 +225,44 @@ def main() -> int:
             dense_scaler.step(dense_opt)
             dense_scaler.update()
             dense_sched.step()
-    dense_metrics = evaluate_lm(dense, validation, formal_starts, device)
-    del dense, dense_opt, dense_sched
+    dense_cpu = copy.deepcopy(dense).cpu().eval()
+    del dense, dense_opt, dense_sched, dense_scaler
     torch.cuda.empty_cache()
 
+    # Geometry initialization is extracted only from frozen-teacher local perceptions.
     stage_samples = collect_stage_perceptions(
-        teacher, validation, geometry_starts, sequence_length=128, device=device,
-        max_samples_per_stage=8192, seed=122001 + args.replicate,
+        teacher,
+        validation,
+        geometry_starts,
+        sequence_length=128,
+        device=device,
+        max_samples_per_stage=8192,
+        seed=122001 + args.replicate,
     )
     prototypes, geometry_diag = geometry_prototypes(
-        stage_samples, 4, seed=123001 + args.replicate * 100
+        stage_samples,
+        4,
+        seed=123001 + args.replicate * 100,
     )
     torch.manual_seed(131001 + args.replicate * 100 + 1)
     torch.cuda.manual_seed_all(131001 + args.replicate * 100 + 1)
     model = convert_textnca_to_upcycled(
-        teacher, config=UpcyclingConfig(num_experts=4, top_k=1, router_scale=4.0)
+        teacher,
+        config=UpcyclingConfig(num_experts=4, top_k=1, router_scale=4.0),
     ).to(device)
     model.set_router_prototypes(prototypes)
     parity = validate_upcycled_parity(
-        teacher, model, validation, gate_starts[:4], sequence_length=128, device=device
+        teacher,
+        model,
+        validation,
+        gate_starts[:4],
+        sequence_length=128,
+        device=device,
     )
     if parity["status"] != "CLM_UPCYCLING_EQUIVALENCE":
-        raise RuntimeError(json.dumps({"replicate": args.replicate, "parity": parity}, indent=2))
+        raise RuntimeError(
+            json.dumps({"replicate": args.replicate, "parity": parity}, indent=2)
+        )
 
     optimizer, scheduler = optimizer_for(model, total_steps)
     scaler = torch.amp.GradScaler("cuda", enabled=True)
@@ -203,10 +272,18 @@ def main() -> int:
 
     model.set_execution_backend("sparse_dispatch")
     dynamic = evaluate_upcycled(
-        model, validation, formal_starts, sequence_length=128, device=device,
-        arm="dynamic", templates=[]
+        model,
+        validation,
+        formal_starts,
+        sequence_length=128,
+        device=device,
+        arm="dynamic",
+        templates=[],
     )
-    reproduced = abs(dynamic.ppl - EXPECTED_GEOMETRY_PPL[args.replicate]) <= REPRODUCTION_PPL_ATOL
+    reproduced = (
+        abs(dynamic.ppl - EXPECTED_GEOMETRY_PPL[args.replicate])
+        <= REPRODUCTION_PPL_ATOL
+    )
     if not reproduced:
         raise RuntimeError(
             f"release reproduction drift: observed PPL={dynamic.ppl:.6f}, "
@@ -221,13 +298,23 @@ def main() -> int:
         calibration.append(recorder.masks)
     templates = static_templates(calibration)
     static = evaluate_upcycled(
-        model, validation, formal_starts, sequence_length=128, device=device,
-        arm="static", templates=templates
+        model,
+        validation,
+        formal_starts,
+        sequence_length=128,
+        device=device,
+        arm="static",
+        templates=templates,
     )
     shuffled_runs = [
         evaluate_upcycled(
-            model, validation, formal_starts, sequence_length=128, device=device,
-            arm="shuffled", templates=templates,
+            model,
+            validation,
+            formal_starts,
+            sequence_length=128,
+            device=device,
+            arm="shuffled",
+            templates=templates,
             permutation_seed=143001 + args.replicate * 100 + index,
         )
         for index in range(3)
@@ -236,23 +323,41 @@ def main() -> int:
     shuffled_ppl = math.exp(shuffled_nll)
     aligned = collect_masks_and_aligned(model, validation, formal_starts, device)
 
-    masked_model = copy.deepcopy(model)
-    masked_model.set_execution_backend("masked_dense")
-    masked_metrics = evaluate_lm(masked_model, validation, formal_starts, device)
+    # Training and control evaluation are complete. Strip training-only allocations
+    # before measuring inference memory/throughput.
+    del optimizer, scheduler, scaler, teacher
+    torch.cuda.empty_cache()
+
+    dense_benchmark_model = dense_cpu.to(device)
+    dense_metrics = evaluate_lm(
+        dense_benchmark_model,
+        validation,
+        formal_starts,
+        device,
+    )
+    dense_cpu = dense_benchmark_model.cpu()
+    del dense_benchmark_model
+    torch.cuda.empty_cache()
+
+    model.set_execution_backend("masked_dense")
+    masked_metrics = evaluate_lm(model, validation, formal_starts, device)
+    model.set_execution_backend("sparse_dispatch")
     sparse_metrics = evaluate_lm(model, validation, formal_starts, device)
-    del masked_model
     if abs(masked_metrics["ppl"] - sparse_metrics["ppl"]) > BACKEND_PPL_ATOL:
         raise RuntimeError(
             "masked_dense/sparse_dispatch release parity failed: "
             f"{masked_metrics['ppl']} vs {sparse_metrics['ppl']}"
         )
 
-    torch.save({
-        "format": "minicells.clm-0.1-release-candidate.v1",
-        "replicate": args.replicate,
-        "model_state": model.state_dict(),
-        "provenance": model.provenance,
-    }, args.output_dir / f"r{args.replicate}-geometry-release.pt")
+    torch.save(
+        {
+            "format": "minicells.clm-0.1-release-candidate.v1",
+            "replicate": args.replicate,
+            "model_state": model.state_dict(),
+            "provenance": model.provenance,
+        },
+        args.output_dir / f"r{args.replicate}-geometry-release.pt",
+    )
     manifest = {
         "format": "minicells.clm-0.1-release-worker.v1",
         "complete": True,
@@ -264,7 +369,11 @@ def main() -> int:
         "reproduction_pass": reproduced,
         "dense_nll": dense_metrics["nll"],
         "dense_ppl": dense_metrics["ppl"],
-        "dynamic": {"nll": dynamic.nll, "ppl": dynamic.ppl, "usage_entropy": dynamic.usage_entropy},
+        "dynamic": {
+            "nll": dynamic.nll,
+            "ppl": dynamic.ppl,
+            "usage_entropy": dynamic.usage_entropy,
+        },
         "static": {"nll": static.nll, "ppl": static.ppl},
         "shuffled": {"nll": shuffled_nll, "ppl": shuffled_ppl},
         "aligned_route_disagreement": aligned,
