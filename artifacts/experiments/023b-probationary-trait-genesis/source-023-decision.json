@@ -1,0 +1,73 @@
+{
+  "checkpoint_manifest": {
+    "expected_file_count": 15,
+    "file_count": 15,
+    "published_model_checkpoints": false
+  },
+  "design": {
+    "curriculum": [
+      "A: STORY only",
+      "B: ARITHMETIC enters at 10%, 30%, 50%",
+      "C: same arithmetic distribution split into A/B negative-control labels",
+      "D: STORY + ARITHMETIC + TRANSFORM"
+    ],
+    "gpu_count": 2,
+    "max_traits": 4,
+    "mode_stability_min": 0.65,
+    "persistence_evaluations": 3,
+    "replicates": 3,
+    "routing_purity_min": 0.75,
+    "routing_uses_task_label": false,
+    "sensor": "fixed parent phenotype gradient shadow",
+    "sensor_buffer": 96,
+    "sensor_interval": 32,
+    "structural_objective": "J_K = R_K / R_1 + lambda * (K - 1)",
+    "structural_penalty": 0.2,
+    "trigger_uses_task_label": false
+  },
+  "experiment": "MINI Cells Experiment 023 — Online Nonparametric Trait Genesis",
+  "format": "minicells.online-nonparametric-trait-genesis.v1",
+  "interpretation": {
+    "classification_correction": "The original aggregate status incorrectly labeled this run DUPLICATE_MODE_OVERSEGMENTATION because the duplicate-control pass predicate required the organism to have already reached K=2. In fact no replicate ever left K=1, so there was no duplicate-mode oversegmentation. Numerical results are unchanged; only the scientific status classification is corrected.",
+    "scope": "023 tests online unknown-K structural genesis with a fixed shadow gradient sensor. It does not yet establish a purely local NCA sensing rule, rewiring, pruning, merging, or inference-time recruitment.",
+    "success": "A strong positive requires zero false genesis on STORY-only in all replicates, stable 1->2 genesis with two-domain functional identity in >=2/3, no 2->3 growth under the duplicate-arithmetic control in all replicates, and genuine 2->3 genesis with three-domain functional identity in >=2/3."
+  },
+  "question": "Can one TextNCA organism decide online when and how many persistent phenotype traits to create from an unlabeled gradient field under an explicit structural complexity cost?",
+  "results": {
+    "duplicate_control_no_extra_genesis_replicates": 0,
+    "overgrowth_replicates": 0,
+    "per_replicate": [
+      {
+        "duplicate_control_no_extra_genesis": 0,
+        "final_active_k": 1,
+        "overgrowth": 0,
+        "replicate": 0,
+        "story_only_no_false_genesis": 1,
+        "three_mode_genesis": 0,
+        "two_mode_genesis": 0
+      },
+      {
+        "duplicate_control_no_extra_genesis": 0,
+        "final_active_k": 1,
+        "overgrowth": 0,
+        "replicate": 1,
+        "story_only_no_false_genesis": 1,
+        "three_mode_genesis": 0,
+        "two_mode_genesis": 0
+      },
+      {
+        "duplicate_control_no_extra_genesis": 0,
+        "final_active_k": 1,
+        "overgrowth": 0,
+        "replicate": 2,
+        "story_only_no_false_genesis": 1,
+        "three_mode_genesis": 0,
+        "two_mode_genesis": 0
+      }
+    ],
+    "story_only_no_false_genesis_replicates": 3,
+    "three_mode_genesis_replicates": 0,
+    "two_mode_genesis_replicates": 0
+  },
+  "status": "NO_ONLINE_TRAIT_GENESIS"
+}

@@ -1,0 +1,29 @@
+{
+  "arms": [
+    "parent",
+    "capacity-shadow",
+    "geometry-shadow"
+  ],
+  "capacity_control_uses_stream_identity_only_for_exact_balance": true,
+  "checkpoint_files": 5,
+  "commit_uses_task_label": false,
+  "conditions": [
+    "STORY_ONLY",
+    "DUPLICATED_STORY",
+    "STORY_ARITHMETIC",
+    "WEAK_ARITHMETIC"
+  ],
+  "experiment": "023b",
+  "format": "minicells.probationary-trait-genesis-worker.v1",
+  "geometry_routing_uses_task_label": false,
+  "gpu": "Tesla T4",
+  "parent_losses": {
+    "ARITHMETIC": 7.754682242870331,
+    "STORY": 5.493913292884827
+  },
+  "pretrain_steps": 300,
+  "pretrain_wall_seconds": 7.834780577999993,
+  "proposal_uses_task_label": false,
+  "replicate": 2,
+  "vocab_size": 2048
+}

@@ -1,0 +1,58 @@
+{
+  "checkpoint_manifest": {
+    "expected_file_count": 12,
+    "file_count": 12,
+    "published_model_checkpoints": false
+  },
+  "design": {
+    "arms": [
+      "unified",
+      "stratified-capacity-fork",
+      "geometry-bifurcation-fork"
+    ],
+    "bifurcation_axis_stability_min": 0.5,
+    "bifurcation_gain_min": 0.2,
+    "bifurcation_split_balance_min": 0.25,
+    "calibration_windows": 3,
+    "capacity_control_uses_labels_only_to_enforce_exact_domain_balance": true,
+    "domains": [
+      "STORY",
+      "ARITHMETIC"
+    ],
+    "fork_epsilon": 0.02,
+    "geometry_margin_advantage_min": 0.05,
+    "geometry_routing_uses_task_label": false,
+    "gpu_count": 2,
+    "identity_normalized_margin_min": 0.01,
+    "positive_replicates_min": 2,
+    "postfork_steps": 400,
+    "replicates": 3,
+    "routing_purity_min": 0.75,
+    "story_pretraining_steps": 300,
+    "trigger_uses_task_label": false
+  },
+  "experiment": "MINI Cells Experiment 022 \u2014 Emergent Trait Bifurcation",
+  "format": "minicells.emergent-trait-bifurcation.v1",
+  "interpretation": {
+    "capacity_control": "The negative control deliberately uses benchmark labels only to guarantee that each child receives exactly the same count of STORY and ARITHMETIC updates. It is not a proposed routing mechanism.",
+    "scope": "022 tests developmental bifurcation in a minimal fixed-topology TextNCA phenotype substrate. It does not test inference-time recruitment or autonomous rewiring.",
+    "success": "A positive result requires persistent K=2 gradient-field structure, functional identity and posthoc label purity in >=2/3 replicates, a >=0.05 identity-margin advantage over stratified capacity in >=2/3, and failure of the strictly balanced capacity control to explain specialization."
+  },
+  "question": "Can a persistent task-label-free two-mode phenotype-gradient field cause functional trait bifurcation beyond a strictly stratified capacity control?",
+  "results": {
+    "bifurcation_windows_passed": 9,
+    "bifurcation_windows_total": 9,
+    "geometry_identity_pass_replicates": 3,
+    "geometry_margin_advantage_replicates": 3,
+    "geometry_routing_pass_replicates": 3,
+    "mean_capacity_identity_margin": 0.0009795126189500666,
+    "mean_geometry_identity_margin": 0.15834542444481478,
+    "mean_geometry_minus_capacity_margin": 0.1573659118258647,
+    "mean_geometry_oracle_combined_nll": 6.053901796539624,
+    "mean_geometry_routing_purity": 0.8983333333333333,
+    "mean_unified_combined_nll": 6.353699803352356,
+    "persistent_multimodality_replicates": 3,
+    "stratified_capacity_identity_pass_replicates": 0
+  },
+  "status": "EMERGENT_TRAIT_BIFURCATION_SIGNAL"
+}

@@ -1,0 +1,50 @@
+{
+  "checkpoint_manifest": {
+    "expected_file_count": 15,
+    "file_count": 15,
+    "published_model_checkpoints": false
+  },
+  "design": {
+    "arms": [
+      "parent",
+      "capacity-shadow",
+      "geometry-shadow"
+    ],
+    "commit_uses_task_label": false,
+    "conditions": [
+      "STORY_ONLY",
+      "DUPLICATED_STORY",
+      "STORY_ARITHMETIC",
+      "WEAK_ARITHMETIC"
+    ],
+    "geometry_advantage_min": 0.005,
+    "geometry_routing_uses_task_label": false,
+    "gpu_count": 2,
+    "probation_windows": 4,
+    "proposal_always_opened": true,
+    "proposal_uses_task_label": false,
+    "replicates": 3,
+    "routing_purity_min": 0.75,
+    "structural_cost_fraction": 0.005,
+    "utility": "(parent prequential NLL - candidate prequential NLL) / abs(parent NLL) - structural_cost"
+  },
+  "experiment": "MINI Cells Experiment 023b \u2014 Probationary Trait Genesis",
+  "format": "minicells.probationary-trait-genesis.v1",
+  "interpretation": {
+    "scope": "023b tests birth valuation, not unknown-K growth, local sensing, rewiring, merging, pruning, or inference-time recruitment.",
+    "success": "Strong positive requires STORY_ONLY and DUPLICATED_STORY rejection in 3/3, and STORY+ARITHMETIC probation acceptance with 2x2 functional identity and routing purity >=0.75 in >=2/3. WEAK_ARITHMETIC is discovery-only."
+  },
+  "question": "Can a temporary task-label-free fork prove on future online data that it deserves to become a persistent trait?",
+  "results": {
+    "duplicated_story_reject_replicates": 3,
+    "story_arithmetic_accept_replicates": 3,
+    "story_arithmetic_geometry_advantage_replicates": 3,
+    "story_arithmetic_identity_replicates": 3,
+    "story_arithmetic_positive_utility_replicates": 3,
+    "story_arithmetic_routing_replicates": 3,
+    "story_arithmetic_strong_positive_replicates": 3,
+    "story_only_reject_replicates": 3,
+    "weak_arithmetic_accept_replicates": 0
+  },
+  "status": "PROBATIONARY_TRAIT_GENESIS_SIGNAL"
+}
