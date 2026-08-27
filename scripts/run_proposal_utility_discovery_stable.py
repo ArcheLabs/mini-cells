@@ -29,7 +29,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--postprocess-only",
         action="store_true",
-        help="Reuse complete stable worker CSV/JSON outputs without launching GPU workers.",
+        help="Reuse complete stable worker CSV/JSON outputs without launching GPU workers or touching the corpus cache.",
     )
     parser.add_argument(
         "--force-retrain",
@@ -62,7 +62,7 @@ def _write_checkpoint_manifest() -> dict[str, object]:
     return manifest
 
 
-def _annotate_decision(decision: dict[str, object], manifest: dict[str, object]) -> None:
+def _annotate_outputs(decision: dict[str, object], manifest: dict[str, object]) -> None:
     validation = decision.setdefault("numerical_validation", {})
     assert isinstance(validation, dict)
     validation.update({
@@ -81,6 +81,14 @@ def _annotate_decision(decision: dict[str, object], manifest: dict[str, object])
         encoding="utf-8",
     )
 
+    task_path = OUT / "task-spec.json"
+    if task_path.is_file():
+        task = json.loads(task_path.read_text(encoding="utf-8"))
+        task["stable_gradient_oracle"] = True
+        task["checkpoint_protocol"] = "minicells.proposal-utility-checkpoint.v1"
+        task["checkpoint_expected_file_count"] = int(manifest["expected_file_count"])
+        task_path.write_text(json.dumps(task, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
 
 def main() -> int:
     args = parse_args()
@@ -94,7 +102,6 @@ def main() -> int:
     else:
         os.environ.pop("MINICELLS_019_FORCE_RETRAIN", None)
 
-    cache, _ = base.prepare_corpus()
     if args.postprocess_only:
         missing = [
             replicate
@@ -103,9 +110,10 @@ def main() -> int:
         ]
         if missing:
             raise RuntimeError(f"stable worker outputs incomplete for replicates {missing}; cannot postprocess-only")
-        gpu_count = min(2, max(1, torch.cuda.device_count()))
+        gpu_count = min(2, torch.cuda.device_count())
         print("postprocess-only: reusing complete stable worker CSV/JSON outputs")
     else:
+        cache, _ = base.prepare_corpus()
         print(f"checkpoint cache: {CHECKPOINT_DIR}")
         if args.force_retrain:
             print("force-retrain enabled: existing checkpoints will be ignored and replaced")
@@ -115,7 +123,7 @@ def main() -> int:
 
     decision = resumable._postprocess(gpu_count)
     manifest = _write_checkpoint_manifest()
-    _annotate_decision(decision, manifest)
+    _annotate_outputs(decision, manifest)
     print(
         json.dumps(
             {
