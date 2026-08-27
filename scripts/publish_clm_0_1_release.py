@@ -23,6 +23,7 @@ SPEC = ExperimentSpec(
         "tokenizer.json",
         "config.json",
         "MODEL_CARD.md",
+        "generation-samples.json",
         "r0-release-worker.json",
         "r1-release-worker.json",
         "r2-release-worker.json",
@@ -41,7 +42,10 @@ def main() -> int:
     args = parser.parse_args()
     root = repo_root()
     destination = prepare_artifacts(
-        root, "clm-0.1", SPEC, args.kaggle_script_version_id
+        root,
+        "clm-0.1",
+        SPEC,
+        args.kaggle_script_version_id,
     )
     print(f"Prepared CLM-0.1 artifacts: {destination.relative_to(root)}")
     if args.push:
