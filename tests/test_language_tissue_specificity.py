@@ -7,6 +7,7 @@ from minicells.language_growing_organism import build_cellular_model
 from minicells.language_localized_learning import LocalizedLearningState
 from minicells.language_tissue_specificity import (
     EXAMPLE_TOP1_MIN,
+    MATCHING_VALUE_MIN,
     SPECIFICITY_NORM_MIN,
     allocate_fixed_tissue,
     family_pass,
@@ -29,14 +30,15 @@ def test_flat_generic_utility_does_not_pass_identity_gate() -> None:
     summary = summarize_specificity(names, np.array([1.00, 1.01, 0.99]), "A")
     assert summary.normalized_specificity < SPECIFICITY_NORM_MIN
     assert summary.matching_rank != 1
-    assert not family_pass(summary.normalized_specificity, 1, EXAMPLE_TOP1_MIN - 0.01)
+    assert not family_pass(summary.matching_value, summary.normalized_specificity, 1, EXAMPLE_TOP1_MIN - 0.01)
 
 
-def test_family_pass_requires_all_identity_components() -> None:
-    assert family_pass(0.11, 2, 0.51)
-    assert not family_pass(0.09, 3, 0.8)
-    assert not family_pass(0.2, 1, 0.8)
-    assert not family_pass(0.2, 3, 0.49)
+def test_family_pass_requires_benefit_and_all_identity_components() -> None:
+    assert family_pass(MATCHING_VALUE_MIN + 0.1, 0.11, 2, 0.51)
+    assert not family_pass(MATCHING_VALUE_MIN - 0.01, 0.2, 3, 0.8)
+    assert not family_pass(1.0, 0.09, 3, 0.8)
+    assert not family_pass(1.0, 0.2, 1, 0.8)
+    assert not family_pass(1.0, 0.2, 3, 0.49)
 
 
 def _probe_for(model):
