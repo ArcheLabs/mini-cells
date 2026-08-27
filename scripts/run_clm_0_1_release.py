@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import csv
+import hashlib
 import json
 import os
 import platform
@@ -31,6 +33,14 @@ SOURCE_005 = ROOT / "artifacts" / "experiments" / "005-consumer-language-bridge"
 SOURCE_006 = ROOT / "artifacts" / "experiments" / "006-consumer-language-scaling"
 WORKER = ROOT / "scripts" / "run_clm_0_1_release_worker.py"
 RELEASE_REPLICATE = 2
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def parse_args() -> argparse.Namespace:
@@ -186,15 +196,28 @@ def main() -> int:
             )
         )
     conditionality = make_conditionality_002_decision(evidence)
+    source_checkpoint = SOURCE_006 / "minicells-v2-10m.pt"
+    implementation_commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"],
+        cwd=ROOT,
+        text=True,
+    ).strip()
     conditionality["provenance"] = {
-        "base_checkpoint": "Experiment 006 minicells-v2-10m.pt",
+        "base_checkpoint": source_checkpoint.name,
+        "base_checkpoint_sha256": sha256_file(source_checkpoint),
         "upcycling_study_001": "CLM_UPCYCLING_QUALITY_SIGNAL",
         "release_candidate": "copy_geometry replicate 2",
         "training_tokens_after_base": 1_000_000,
+        "implementation_commit": implementation_commit,
     }
     (OUT / "conditionality-002-decision.json").write_text(
         json.dumps(conditionality, indent=2, sort_keys=True) + "\n"
     )
+    with (OUT / "conditionality-002-evidence.csv").open("w", newline="") as handle:
+        rows = conditionality["evidence"]
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
     if conditionality["status"] != "PASS":
         raise RuntimeError(
             "CLM-0.1 release gate failed: Conditionality Validation 002 did not pass"
@@ -255,7 +278,8 @@ def main() -> int:
 
     provenance = {
         "release": "clm-0.1",
-        "source_checkpoint": "Experiment 006 minicells-v2-10m.pt",
+        "source_checkpoint": source_checkpoint.name,
+        "source_checkpoint_sha256": sha256_file(source_checkpoint),
         "source_training_tokens": 10_000_000,
         "continuation_training_tokens": 1_000_000,
         "upcycling_method": "copy_geometry",
@@ -263,6 +287,7 @@ def main() -> int:
         "reproduction_expected_ppl": release_worker["expected_geometry_ppl"],
         "reproduction_observed_ppl": release_worker["observed_geometry_ppl"],
         "conditionality_002": conditionality["diagnosis"],
+        "implementation_commit": implementation_commit,
     }
     metrics = {
         "validation_ppl": release_worker["dynamic"]["ppl"],
@@ -284,6 +309,10 @@ def main() -> int:
     shutil.copy2(
         OUT / "conditionality-002-decision.json",
         BUNDLE / "conditionality-002-decision.json",
+    )
+    shutil.copy2(
+        OUT / "conditionality-002-evidence.csv",
+        BUNDLE / "conditionality-002-evidence.csv",
     )
 
     # The release build must load through the public API and generate deterministically.
@@ -343,6 +372,7 @@ def main() -> int:
         },
         "metrics": metrics,
         "parameters": params,
+        "provenance": provenance,
         "limitations": [
             "TinyStories-only research model",
             "active FFN compute is not below the original dense TextNCA",
@@ -361,6 +391,7 @@ def main() -> int:
         "MODEL_CARD.md",
         "benchmark.json",
         "conditionality-002-decision.json",
+        "conditionality-002-evidence.csv",
         "generation-samples.json",
     ):
         shutil.copy2(BUNDLE / name, OUT / name)
