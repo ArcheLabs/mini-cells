@@ -25,9 +25,10 @@
     "structural_penalty": 0.2,
     "trigger_uses_task_label": false
   },
-  "experiment": "MINI Cells Experiment 023 \u2014 Online Nonparametric Trait Genesis",
+  "experiment": "MINI Cells Experiment 023 — Online Nonparametric Trait Genesis",
   "format": "minicells.online-nonparametric-trait-genesis.v1",
   "interpretation": {
+    "classification_correction": "The original aggregate status incorrectly labeled this run DUPLICATE_MODE_OVERSEGMENTATION because the duplicate-control pass predicate required the organism to have already reached K=2. In fact no replicate ever left K=1, so there was no duplicate-mode oversegmentation. Numerical results are unchanged; only the scientific status classification is corrected.",
     "scope": "023 tests online unknown-K structural genesis with a fixed shadow gradient sensor. It does not yet establish a purely local NCA sensing rule, rewiring, pruning, merging, or inference-time recruitment.",
     "success": "A strong positive requires zero false genesis on STORY-only in all replicates, stable 1->2 genesis with two-domain functional identity in >=2/3, no 2->3 growth under the duplicate-arithmetic control in all replicates, and genuine 2->3 genesis with three-domain functional identity in >=2/3."
   },
@@ -68,5 +69,5 @@
     "three_mode_genesis_replicates": 0,
     "two_mode_genesis_replicates": 0
   },
-  "status": "DUPLICATE_MODE_OVERSEGMENTATION"
+  "status": "NO_ONLINE_TRAIT_GENESIS"
 }
