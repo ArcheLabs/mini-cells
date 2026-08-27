@@ -21,7 +21,7 @@ from minicells.clm_conditionality_002 import (  # noqa: E402
     evaluate_conditionality_evidence,
     make_conditionality_002_decision,
 )
-from minicells.clm_release import build_release_model, save_release_bundle  # noqa: E402
+from minicells.clm_release import CLM, build_release_model, save_release_bundle  # noqa: E402
 from minicells.language_models import TextNCALM, count_parameters  # noqa: E402
 from minicells.language_scaling import prepare_scaling_corpus  # noqa: E402
 
@@ -48,11 +48,16 @@ def command(replicate: int, cache: Path) -> list[str]:
     return [
         sys.executable,
         str(WORKER),
-        "--replicate", str(replicate),
-        "--cache-dir", str(cache),
-        "--output-dir", str(OUT),
-        "--checkpoint", str(SOURCE_006 / "minicells-v2-10m.pt"),
-        "--model-config", str(SOURCE_006 / "model-configs.json"),
+        "--replicate",
+        str(replicate),
+        "--cache-dir",
+        str(cache),
+        "--output-dir",
+        str(OUT),
+        "--checkpoint",
+        str(SOURCE_006 / "minicells-v2-10m.pt"),
+        "--model-config",
+        str(SOURCE_006 / "model-configs.json"),
     ]
 
 
@@ -71,8 +76,12 @@ def run_workers(cache: Path) -> int:
             env = os.environ.copy()
             env["CUDA_VISIBLE_DEVICES"] = str(gpu)
             process = subprocess.Popen(
-                command(replicate, cache), cwd=ROOT, env=env,
-                stdout=handle, stderr=subprocess.STDOUT, text=True,
+                command(replicate, cache),
+                cwd=ROOT,
+                env=env,
+                stdout=handle,
+                stderr=subprocess.STDOUT,
+                text=True,
             )
             active.append((replicate, process, handle, log))
         failures = []
@@ -87,8 +96,16 @@ def run_workers(cache: Path) -> int:
     return used
 
 
-def model_card(decision: dict[str, object], release_worker: dict[str, object], params: dict[str, int]) -> str:
-    evidence = next(row for row in decision["evidence"] if int(row["replicate"]) == RELEASE_REPLICATE)
+def model_card(
+    decision: dict[str, object],
+    release_worker: dict[str, object],
+    params: dict[str, int],
+) -> str:
+    evidence = next(
+        row
+        for row in decision["evidence"]
+        if int(row["replicate"]) == RELEASE_REPLICATE
+    )
     return f"""# MiniCells CLM-0.1 Research Preview
 
 MiniCells CLM-0.1 is a small recurrent cellular language model research release built from the
@@ -141,27 +158,33 @@ def main() -> int:
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True, exist_ok=True)
     _, _, tokenizer_path, corpus_manifest = prepare_scaling_corpus(
-        ROOT, source_005_dir=SOURCE_005
+        ROOT,
+        source_005_dir=SOURCE_005,
     )
     cache = ROOT / "results" / "consumer-language-scaling-v1" / "cache"
     used_gpus = run_workers(cache)
-    workers = [json.loads((OUT / f"r{r}-release-worker.json").read_text()) for r in range(3)]
+    workers = [
+        json.loads((OUT / f"r{r}-release-worker.json").read_text())
+        for r in range(3)
+    ]
 
     evidence: list[Conditionality002Evidence] = []
     for worker in workers:
-        evidence.append(evaluate_conditionality_evidence(
-            replicate=int(worker["replicate"]),
-            dense_ppl=float(worker["dense_ppl"]),
-            dense_nll=float(worker["dense_nll"]),
-            dynamic={
-                "ppl": worker["dynamic"]["ppl"],
-                "nll": worker["dynamic"]["nll"],
-                "usage_entropy": worker["dynamic"]["usage_entropy"],
-            },
-            static=worker["static"],
-            shuffled=worker["shuffled"],
-            aligned_disagreement=float(worker["aligned_route_disagreement"]),
-        ))
+        evidence.append(
+            evaluate_conditionality_evidence(
+                replicate=int(worker["replicate"]),
+                dense_ppl=float(worker["dense_ppl"]),
+                dense_nll=float(worker["dense_nll"]),
+                dynamic={
+                    "ppl": worker["dynamic"]["ppl"],
+                    "nll": worker["dynamic"]["nll"],
+                    "usage_entropy": worker["dynamic"]["usage_entropy"],
+                },
+                static=worker["static"],
+                shuffled=worker["shuffled"],
+                aligned_disagreement=float(worker["aligned_route_disagreement"]),
+            )
+        )
     conditionality = make_conditionality_002_decision(evidence)
     conditionality["provenance"] = {
         "base_checkpoint": "Experiment 006 minicells-v2-10m.pt",
@@ -173,21 +196,32 @@ def main() -> int:
         json.dumps(conditionality, indent=2, sort_keys=True) + "\n"
     )
     if conditionality["status"] != "PASS":
-        raise RuntimeError("CLM-0.1 release gate failed: Conditionality Validation 002 did not pass")
+        raise RuntimeError(
+            "CLM-0.1 release gate failed: Conditionality Validation 002 did not pass"
+        )
 
     release_worker = workers[RELEASE_REPLICATE]
     checkpoint = torch.load(
         OUT / f"r{RELEASE_REPLICATE}-geometry-release.pt",
-        map_location="cpu", weights_only=False,
+        map_location="cpu",
+        weights_only=False,
     )
     model = build_release_model()
     model.load_state_dict(checkpoint["model_state"], strict=True)
     model.set_execution_backend("sparse_dispatch")
 
     dense_model = TextNCALM(
-        vocab_size=2048, max_context=128, dim=128, heads=4, ffn_dim=512,
-        windows=(8, 32, 128), iterations=(4, 4, 4), carry_bias=2.0,
-        rms_norm=False, tie_embeddings=True, stage_supervision=False,
+        vocab_size=2048,
+        max_context=128,
+        dim=128,
+        heads=4,
+        ffn_dim=512,
+        windows=(8, 32, 128),
+        iterations=(4, 4, 4),
+        carry_bias=2.0,
+        rms_norm=False,
+        tie_embeddings=True,
+        stage_supervision=False,
     )
     total_expert = sum(
         p.numel()
@@ -196,7 +230,9 @@ def main() -> int:
         for p in expert.parameters()
     )
     router_params = sum(
-        p.numel() for stage in model.stages for p in stage.program_bank.router.parameters()
+        p.numel()
+        for stage in model.stages
+        for p in stage.program_bank.router.parameters()
     )
     params = {
         "dense_total": count_parameters(dense_model),
@@ -209,9 +245,13 @@ def main() -> int:
         "release_replicate": RELEASE_REPLICATE,
         "telemetry": release_worker["benchmark"],
         "parameters": params,
-        "claim_boundary": "No wall-clock speedup or sub-dense active-FLOP claim is made for CLM-0.1.",
+        "claim_boundary": (
+            "No wall-clock speedup or sub-dense active-FLOP claim is made for CLM-0.1."
+        ),
     }
-    (OUT / "benchmark.json").write_text(json.dumps(benchmark, indent=2, sort_keys=True) + "\n")
+    (OUT / "benchmark.json").write_text(
+        json.dumps(benchmark, indent=2, sort_keys=True) + "\n"
+    )
 
     provenance = {
         "release": "clm-0.1",
@@ -230,10 +270,52 @@ def main() -> int:
         "aligned_route_disagreement": release_worker["aligned_route_disagreement"],
         "usage_entropy": release_worker["dynamic"]["usage_entropy"],
     }
-    save_release_bundle(model, tokenizer_path, BUNDLE, provenance=provenance, metrics=metrics)
-    (BUNDLE / "MODEL_CARD.md").write_text(model_card(conditionality, release_worker, params))
+    save_release_bundle(
+        model,
+        tokenizer_path,
+        BUNDLE,
+        provenance=provenance,
+        metrics=metrics,
+    )
+    (BUNDLE / "MODEL_CARD.md").write_text(
+        model_card(conditionality, release_worker, params)
+    )
     shutil.copy2(OUT / "benchmark.json", BUNDLE / "benchmark.json")
-    shutil.copy2(OUT / "conditionality-002-decision.json", BUNDLE / "conditionality-002-decision.json")
+    shutil.copy2(
+        OUT / "conditionality-002-decision.json",
+        BUNDLE / "conditionality-002-decision.json",
+    )
+
+    # The release build must load through the public API and generate deterministically.
+    smoke_device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    public_model = CLM.from_pretrained(BUNDLE, device=smoke_device)
+    prompts = (
+        "Once upon a time",
+        "The little girl opened the door",
+        "One day the dog found a",
+    )
+    generation_samples = []
+    for index, prompt in enumerate(prompts):
+        generated = public_model.generate(
+            prompt,
+            max_new_tokens=32,
+            temperature=0.8,
+            top_k=40,
+            seed=701 + index,
+            return_routing=True,
+        )
+        generation_samples.append(
+            {
+                "prompt": prompt,
+                "text": generated.text,
+                "generated_token_count": 32,
+                "routing_steps": len(generated.routing_usage),
+            }
+        )
+    del public_model
+    (BUNDLE / "generation-samples.json").write_text(
+        json.dumps(generation_samples, indent=2, ensure_ascii=False) + "\n"
+    )
 
     runtime = {
         "python": platform.python_version(),
@@ -243,7 +325,9 @@ def main() -> int:
         "gpus_used": used_gpus,
         "corpus_manifest": corpus_manifest,
     }
-    (OUT / "runtime.json").write_text(json.dumps(runtime, indent=2, sort_keys=True) + "\n")
+    (OUT / "runtime.json").write_text(
+        json.dumps(runtime, indent=2, sort_keys=True) + "\n"
+    )
 
     release_decision = {
         "format": "minicells.clm-0.1.release.v1",
@@ -254,6 +338,7 @@ def main() -> int:
         "gates": {
             "reproduction": all(bool(row["reproduction_pass"]) for row in workers),
             "conditionality_002": conditionality["status"],
+            "public_api_smoke": True,
             "bundle_created": True,
         },
         "metrics": metrics,
@@ -265,11 +350,18 @@ def main() -> int:
             "no phenotype, multimodality, or 100M+ token scaling claim",
         ],
     }
-    (OUT / "decision.json").write_text(json.dumps(release_decision, indent=2, sort_keys=True) + "\n")
+    (OUT / "decision.json").write_text(
+        json.dumps(release_decision, indent=2, sort_keys=True) + "\n"
+    )
 
     for name in (
-        "model.pt", "tokenizer.json", "config.json", "MODEL_CARD.md",
-        "benchmark.json", "conditionality-002-decision.json",
+        "model.pt",
+        "tokenizer.json",
+        "config.json",
+        "MODEL_CARD.md",
+        "benchmark.json",
+        "conditionality-002-decision.json",
+        "generation-samples.json",
     ):
         shutil.copy2(BUNDLE / name, OUT / name)
 
