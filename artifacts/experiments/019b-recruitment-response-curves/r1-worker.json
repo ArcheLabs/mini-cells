@@ -1,0 +1,41 @@
+{
+  "candidate_families": [
+    "REVERSE_INC",
+    "MOD_ADD",
+    "PARITY",
+    "LOOKUP",
+    "DELAY_COPY",
+    "LOCAL_RULE",
+    "RANDOM"
+  ],
+  "checkpoint_dir": "/kaggle/working/mini-cells/results/proposal-utility-discovery-stable-v1/checkpoints",
+  "examples_per_family": 256,
+  "experiment": "019b",
+  "format": "minicells.recruitment-response-worker.v1",
+  "gpu": "Tesla T4",
+  "input_families": [
+    "REVERSE_INC",
+    "MOD_ADD",
+    "PARITY",
+    "LOOKUP",
+    "DELAY_COPY",
+    "LOCAL_RULE"
+  ],
+  "recruitment_grid": [
+    0.0,
+    0.0001,
+    0.0003,
+    0.001,
+    0.003,
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.25,
+    0.5,
+    1.0
+  ],
+  "replicate": 1,
+  "rows": 129024,
+  "training_performed": false
+}

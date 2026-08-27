@@ -1,0 +1,111 @@
+{
+  "design": {
+    "autonomous_growth_during_utility_measurement": false,
+    "boundary_features": [
+      "parent_state_rms",
+      "parent_settling_rms",
+      "proposal_parent_rms",
+      "proposal_parent_alignment",
+      "child_memory_norm",
+      "child_parent_memory_cosine",
+      "interface_settling_rms",
+      "proposal_interface_rms",
+      "proposal_interface_alignment",
+      "base_entropy",
+      "base_margin",
+      "probe_logit_shift_rms",
+      "probe_kl",
+      "probe_entropy_delta",
+      "probe_margin_delta"
+    ],
+    "candidate_tissues": [
+      "REVERSE_INC",
+      "MOD_ADD",
+      "PARITY",
+      "LOOKUP",
+      "DELAY_COPY",
+      "LOCAL_RULE",
+      "RANDOM"
+    ],
+    "epsilon": 0.02,
+    "finite_difference_oracle": "[L(0)-L(epsilon)]/epsilon",
+    "gpu_count": 2,
+    "leave_one_family_out": "held-out input family and its donor tissue are both excluded from estimator training",
+    "local_features": [
+      "parent_state_rms",
+      "parent_settling_rms",
+      "proposal_parent_rms",
+      "proposal_parent_alignment",
+      "child_memory_norm",
+      "child_parent_memory_cosine"
+    ],
+    "one_newborn_per_candidate": true,
+    "recruitment_training_during_utility_measurement": false,
+    "replicates": 3,
+    "same_phase1_checkpoint_within_replicate": true,
+    "skill_families": [
+      "REVERSE_INC",
+      "MOD_ADD",
+      "PARITY",
+      "LOOKUP",
+      "DELAY_COPY",
+      "LOCAL_RULE"
+    ],
+    "task_or_tissue_ids_in_estimator": false,
+    "utility_oracle": "-d masked validation NLL / de at e=0"
+  },
+  "experiment": "MINI Cells Experiment 019 \u2014 Proposal Utility Discovery",
+  "format": "minicells.proposal-utility-discovery.v1",
+  "interpretation": {
+    "boundary_only": "Boundary success without local success means proposal utility is observable at the language interface but a genuinely local endogenous error field is still missing.",
+    "cost": "019 measures signal existence, not cheap-probe efficiency. The epsilon probe currently executes the same cellular rule and must be compressed in a later experiment before claiming compute savings.",
+    "fail": "Do not tune another recruitment threshold. Either the oracle is inconsistent or the recorded endogenous observables do not contain enough proposal-specific utility information.",
+    "local": "A local signal means parent/proposal dynamics alone generalize to unseen input and tissue families; this is the evidence needed before implementing a shared local recruitment gate.",
+    "partial": "Some held-out families are predictable, but the signal is not yet architecture-general."
+  },
+  "numerical_validation": {
+    "checkpoint_expected_file_count": 24,
+    "checkpoint_file_count": 24,
+    "checkpoint_protocol": "minicells.proposal-utility-checkpoint.v1",
+    "checkpoints_published": false,
+    "feature_nonfinite_rows_total": 0,
+    "finite_audit_file": "finite-audit.csv",
+    "gradient_oracle_numerics": "forward-equivalent stable gated replicator",
+    "growth": "exp(min(ACTIVITY_RATE * fitness, log(20)))",
+    "oracle_imputation": false,
+    "original_failed_run_preserved": "results/proposal-utility-discovery-v1",
+    "repair": "fold-local finite-training-median imputation; all-nonfinite training columns -> zero",
+    "stable_run": "results/proposal-utility-discovery-stable-v1",
+    "variance_denominator": "sqrt(max(weighted_variance, 1e-8))"
+  },
+  "pre_registered_signal": {
+    "heldout_family_pass": {
+      "auc_positive_utility_min": 0.75,
+      "median_normalized_regret_max": 0.35,
+      "spearman_min": 0.5,
+      "top1_selection_accuracy_min": 0.6
+    },
+    "heldout_family_pass_count_min": 4,
+    "local_estimator_must_beat_proposal_norm_on_families_min": 4,
+    "oracle_overall_pearson_min": 0.95,
+    "oracle_overall_sign_agreement_min": 0.9,
+    "usable_donor_families_min": 5,
+    "usable_donor_family_median_skill_improvement_min": 0.25
+  },
+  "question": "Can label-free local or boundary observables predict the true marginal value of a sleeping capability-tissue proposal across held-out skill families?",
+  "results": {
+    "best_local_beats_proposal_norm_families": 6,
+    "best_local_estimator": "local-mlp",
+    "boundary_mlp_pass_families": 0,
+    "boundary_ridge_pass_families": 1,
+    "local_mlp_pass_families": 0,
+    "local_ridge_pass_families": 0,
+    "oracle_family_pearson_ge_0_90": 0,
+    "oracle_overall_pearson": 0.24125416546309048,
+    "oracle_overall_sign_agreement": 0.8773561507936508,
+    "oracle_overall_spearman": 0.7700432528118718,
+    "positive_utility_fraction": 0.7308097718253969,
+    "usable_donor_families": 6
+  },
+  "status": "UTILITY_ORACLE_INCONSISTENT"
+}
