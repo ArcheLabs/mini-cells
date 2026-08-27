@@ -5,7 +5,6 @@ import json
 import random
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable
 
 import numpy as np
 import torch
@@ -184,10 +183,10 @@ def aggregate_status(
     final_k3 = sum(int(row["final_k"] == 3) for row in per_replicate)
     if not screening_qualified:
         return "NO_FUNCTIONALLY_INDEPENDENT_THIRD_CAPABILITY"
-    if weak < len(per_replicate):
-        return "INDEPENDENT_CAPABILITY_CAUSES_EARLY_BIRTH"
     if arithmetic < POSITIVE_REPLICATES_MIN:
         return "NO_STABLE_FIRST_TRAIT_BIRTH"
+    if weak < len(per_replicate):
+        return "INDEPENDENT_CAPABILITY_CAUSES_EARLY_BIRTH"
     if strong >= POSITIVE_REPLICATES_MIN and final_k3 >= POSITIVE_REPLICATES_MIN:
         return "INDEPENDENT_THIRD_TRAIT_GENESIS_SIGNAL"
     return "INDEPENDENT_CAPABILITY_WITHOUT_THIRD_TRAIT_GENESIS"
