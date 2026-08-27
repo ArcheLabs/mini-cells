@@ -1,0 +1,26 @@
+{
+  "format": "minicells.independent-third-trait-selection.v1",
+  "median_independence": {
+    "DELAY_COPY": 0.0026285759854765,
+    "MODSUM": -0.0042634786950151,
+    "PARITY": 0.0004386950461214,
+    "ROTATE": -0.0046017942753079,
+    "SORT": -0.005015423105654,
+    "STATE_MACHINE": 0.0034392909580401,
+    "TRANSFORM": -0.0020800394435901
+  },
+  "qualified": false,
+  "qualifying_candidates": [],
+  "qualifying_replicates": {
+    "DELAY_COPY": 0,
+    "MODSUM": 0,
+    "PARITY": 0,
+    "ROTATE": 0,
+    "SORT": 0,
+    "STATE_MACHINE": 0,
+    "TRANSFORM": 0
+  },
+  "rule": "among candidates qualifying in >=2/3 replicates, choose highest median independence advantage; ties lexicographic; if none qualify choose highest median only as exploratory challenge",
+  "selected": "STATE_MACHINE",
+  "selection_frozen_before_challenge": true
+}
