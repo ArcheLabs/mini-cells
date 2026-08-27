@@ -324,8 +324,9 @@ def main() -> int:
     aligned = collect_masks_and_aligned(model, validation, formal_starts, device)
 
     # Training and control evaluation are complete. Strip training-only allocations
-    # before measuring inference memory/throughput.
+    # before measuring inference memory/throughput, then benchmark one model at a time.
     del optimizer, scheduler, scaler, teacher
+    model = model.cpu()
     torch.cuda.empty_cache()
 
     dense_benchmark_model = dense_cpu.to(device)
@@ -335,10 +336,11 @@ def main() -> int:
         formal_starts,
         device,
     )
-    dense_cpu = dense_benchmark_model.cpu()
-    del dense_benchmark_model
+    dense_benchmark_model = dense_benchmark_model.cpu()
+    del dense_benchmark_model, dense_cpu
     torch.cuda.empty_cache()
 
+    model = model.to(device)
     model.set_execution_backend("masked_dense")
     masked_metrics = evaluate_lm(model, validation, formal_starts, device)
     model.set_execution_backend("sparse_dispatch")
