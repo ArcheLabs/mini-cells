@@ -25,9 +25,11 @@ exact-sequence accuracy; its trajectory and provenance are recorded under
 `artifacts/parallel-training-v1/native/learning-5000.json`.
 
 The root payload is 630,823 bytes, below the 1 MiB WorkPackage limit.  The
-current runtime audit still reports a 6B block aggregate execution budget and
-two duties per worker, so actual chain overlap and speedup remain a separate
-fail-closed gate.  See `artifacts/parallel-training-v1/decision.json` for the
-current evidence state; direct tree-guest execution is currently blocked by a
-PVM panic before gas accounting, and fresh-chain E2E remains blocked when no
-Docker daemon is available.
+rebuilt MCG1 leaf guest reports 2,115,674,786 gas for the canonical eight-sample
+shard and 2,310,530,456 gas for a valid all-`MAX_SEQ_LEN` shard; both are
+`SHARD_PASS_FULL_COMFORTABLE`.  The full MCRF1 root bit-exact probe remains
+fail-closed and is not claimed.  The current runtime audit still reports a 6B
+block aggregate execution budget and two duties per worker, so actual chain
+overlap and speedup remain a separate gate.  See
+`artifacts/parallel-training-v1/decision.json` for the current evidence state;
+fresh-chain E2E remains blocked when no Docker daemon is available.
