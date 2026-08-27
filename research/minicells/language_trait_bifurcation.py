@@ -183,5 +183,14 @@ def routing_purity_from_branches(branches: list[int], labels: list[str]) -> floa
     return max(direct, swapped)
 
 
+def stratified_capacity_branch(domain: str, occurrence: int, replicate: int) -> int:
+    """Negative-control assignment with exactly matched exposure within each domain."""
+    if domain not in DOMAINS:
+        raise ValueError(domain)
+    if occurrence < 0:
+        raise ValueError("occurrence must be non-negative")
+    return int((occurrence + replicate) % 2)
+
+
 def geometry_advantage(geometry_identity_margin: float, capacity_identity_margin: float) -> float:
     return float(geometry_identity_margin - capacity_identity_margin)
