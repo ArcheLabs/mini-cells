@@ -42,10 +42,17 @@ The release script aborts unless all of the following are true:
 
 1. all three Geometry replicas reproduce the published Upcycling Study 001 final PPL within absolute
    tolerance 0.05;
-2. Conditionality Validation 002 returns `CLM_LOCAL_CONDITIONALITY_SIGNAL` in at least 2/3 replicas;
-3. the selected r2 checkpoint loads strictly into the public CLM model;
-4. the public release bundle is created with model, tokenizer, config, model card, conditionality
-   decision, and benchmark telemetry.
+2. all three matched dense-continuation replicas also reproduce their published Study 001 PPL within
+   absolute tolerance 0.05, protecting against training/environment drift;
+3. before continuation, every copied-expert Geometry model passes the existing logits/PPL/recurrent-
+   state `CLM_UPCYCLING_EQUIVALENCE` gate;
+4. Conditionality Validation 002 returns `CLM_LOCAL_CONDITIONALITY_SIGNAL` in at least 2/3 replicas;
+5. the selected r2 checkpoint loads strictly into the public CLM model;
+6. `masked_dense` and `sparse_dispatch` produce matching release-evaluation PPL within `1e-4`;
+7. the exact generated bundle loads through `CLM.from_pretrained()` and completes deterministic
+   generation smoke tests;
+8. the public release bundle is created with model, tokenizer, config, model card, conditionality
+   evidence/decision, generation samples, and isolated inference benchmark telemetry.
 
 ## Public bundle
 
@@ -60,7 +67,9 @@ and contains:
 - `tokenizer.json` — exact tokenizer inherited from Experiment 005/006;
 - `MODEL_CARD.md` — generated model card containing the actual Validation 002 result;
 - `benchmark.json` — dense, masked-dense, and sparse-dispatch telemetry;
-- `conditionality-002-decision.json` — authoritative conditional-routing release gate.
+- `conditionality-002-decision.json` — authoritative conditional-routing release gate;
+- `conditionality-002-evidence.csv` — per-replicate release evidence;
+- `generation-samples.json` — public API smoke-test generations.
 
 The same files are copied to the flat release-results directory for publication by
 `scripts/publish_clm_0_1_release.py`.
@@ -101,7 +110,8 @@ forward pass; it is diagnostic telemetry, not a semantic expert label.
 
 ## Benchmark boundary
 
-CLM-0.1 reports:
+CLM-0.1 reports isolated inference-only telemetry after optimizer/scaler/teacher allocations are
+removed and after the non-benchmarked model is moved off the GPU:
 
 - validation PPL;
 - total model parameters;
@@ -145,8 +155,8 @@ or run:
 python scripts/run_clm_0_1_release.py --fresh
 ```
 
-After reviewing `decision.json`, `conditionality-002-decision.json`, the generated model card and
-benchmark, publish with:
+After reviewing `decision.json`, `conditionality-002-decision.json`, the generated model card,
+generation samples, and benchmark, publish with:
 
 ```bash
 python scripts/publish_clm_0_1_release.py --push
