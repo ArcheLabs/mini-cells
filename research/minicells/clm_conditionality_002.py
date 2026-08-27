@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 from dataclasses import asdict, dataclass
 
 import torch
@@ -43,9 +42,9 @@ def aligned_route_disagreement(masks: list[torch.Tensor]) -> float:
         return 0.0
     values: list[torch.Tensor] = []
     for mask in masks:
-        routes = mask.detach().float().argmax(-1)  # [batch, position]
+        routes = mask.detach().float().argmax(-1)
         one_hot = torch.nn.functional.one_hot(routes, num_classes=shape[-1]).float()
-        counts = one_hot.sum(0)  # [position, expert]
+        counts = one_hot.sum(0)
         pair_count = float(batch * (batch - 1))
         agreement = (counts * (counts - 1)).sum(-1) / pair_count
         values.append(1.0 - agreement)
