@@ -23,7 +23,6 @@ from minicells.language_conflict_differentiation import (  # noqa: E402
     BATCH_SIZE,
     CALIBRATION_BATCHES_PER_DOMAIN,
     CALIBRATION_WINDOWS,
-    DIFFERENTIATION_REPLICATES_MIN,
     DOMAINS,
     FORK_EPSILON,
     PHENOTYPE_LR,
@@ -83,8 +82,8 @@ def load_streams(cache_dir: Path):
     tokenizer = load_tokenizer(cache_dir / "tokenizer.json")
     arithmetic = prepare_arithmetic_cache(cache_dir, tokenizer)
     return {
-        "STORY": {"train": train, "validation": validation},
-        "ARITHMETIC": {"train": arithmetic["train"], "validation": arithmetic["validation"]},
+        DOMAINS[0]: {"train": train, "validation": validation},
+        DOMAINS[1]: {"train": arithmetic["train"], "validation": arithmetic["validation"]},
         "story_manifest": manifest,
         "arithmetic_manifest": arithmetic["manifest"],
         "arithmetic_manifest_path": arithmetic["path"],
@@ -125,7 +124,11 @@ def pretrain_parent(
 ) -> tuple[ForkableTextNCA, list[dict[str, object]], float]:
     if checkpoint_path.is_file() and checkpoint_path.stat().st_size > 0:
         payload = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
-        if payload.get("format") != CHECKPOINT_FORMAT or payload.get("kind") != "parent":
+        if (
+            payload.get("format") != CHECKPOINT_FORMAT
+            or payload.get("kind") != "parent"
+            or int(payload.get("replicate", -1)) != replicate
+        ):
             raise RuntimeError(f"invalid Experiment 021 parent checkpoint: {checkpoint_path}")
         model.load_state_dict(payload["model_state"])
         return model, list(payload.get("learning_curve", [])), float(payload.get("wall_seconds", 0.0))
@@ -194,7 +197,6 @@ def calibrate_conflict(model: ForkableTextNCA, streams: dict[str, object], *, re
     all_gradients: list[torch.Tensor] = []
     all_labels: list[str] = []
     windows_raw: list[dict[str, object]] = []
-    per_window_payload = []
     for window in range(CALIBRATION_WINDOWS):
         batches = calibration_batches(streams, replicate=replicate, window=window, device=device)
         gradients = []
@@ -240,7 +242,6 @@ def calibrate_conflict(model: ForkableTextNCA, streams: dict[str, object], *, re
             "window_conflict_pass": int(passed),
             "mean_probe_loss": float(np.mean(losses)),
         })
-        per_window_payload.append((gradient_tensor, labels))
         all_gradients.extend(gradients)
         all_labels.extend(labels)
 
@@ -292,6 +293,16 @@ def validation_schedules(streams: dict[str, object], *, replicate: int):
             seed=SCHEDULE_SEED_BASE + 7000 * replicate + domain_index,
         )
     return schedules
+
+
+def balanced_capacity_branch(step: int, replicate: int) -> int:
+    """Task-agnostic 50/50 load split used by the capacity control.
+
+    The offset keeps the exact assignment deterministic while avoiding a branch-0
+    convention across replicates.  It depends only on step and replicate, never on
+    tokens, task labels, loss, gradients or the learned conflict axis.
+    """
+    return int((step + replicate) % 2)
 
 
 def evaluate_arm(
@@ -348,7 +359,11 @@ def train_arm(
 ):
     if checkpoint_path.is_file() and checkpoint_path.stat().st_size > 0:
         payload = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
-        if payload.get("format") != CHECKPOINT_FORMAT or payload.get("arm") != arm:
+        if (
+            payload.get("format") != CHECKPOINT_FORMAT
+            or payload.get("arm") != arm
+            or int(payload.get("replicate", -1)) != replicate
+        ):
             raise RuntimeError(f"invalid Experiment 021 arm checkpoint: {checkpoint_path}")
         model = clone_parent(parent_state, vocab_size, device)
         model.load_state_dict(payload["model_state"])
@@ -367,7 +382,8 @@ def train_arm(
     def record(step: int) -> None:
         model.eval()
         for domain in DOMAINS:
-            for branch in ((0,) if arm == "unified" else (0, 1)):
+            branches = (0,) if arm == "unified" else (0, 1)
+            for branch in branches:
                 nll = evaluate_trait(
                     model,
                     streams[domain]["validation"],
@@ -393,25 +409,32 @@ def train_arm(
         domain = domain_schedule[step - 1]
         inputs, targets = make_batch(streams[domain]["train"], starts[domain][step - 1], device)
         optimizer.zero_grad(set_to_none=True)
+
         if arm == "unified":
-            loss = language_model_loss(model.forward_child(inputs, 0).float(), targets)
+            branch = 0
+            routing_source = "unified"
+            score = None
         elif arm == "capacity-fork":
-            loss0 = language_model_loss(model.forward_child(inputs, 0).float(), targets)
-            loss1 = language_model_loss(model.forward_child(inputs, 1).float(), targets)
-            loss = 0.5 * (loss0 + loss1)
+            branch = balanced_capacity_branch(step, replicate)
+            routing_source = "task-agnostic-balanced"
+            score = None
         elif arm == "differentiation-fork":
             gradient, _ = trait_gradient(model, inputs, targets)
             branch, score = route_gradient(gradient, geometry)
-            routing_rows.append({
-                "replicate": replicate,
-                "step": step,
-                "domain_posthoc": domain,
-                "branch": branch,
-                "projection_score": score,
-            })
-            loss = language_model_loss(model.forward_child(inputs, branch).float(), targets)
+            routing_source = "gradient-conflict"
         else:
             raise ValueError(arm)
+
+        routing_rows.append({
+            "replicate": replicate,
+            "arm": arm,
+            "step": step,
+            "domain_posthoc": domain,
+            "branch": branch,
+            "routing_source": routing_source,
+            "projection_score": score,
+        })
+        loss = language_model_loss(model.forward_child(inputs, branch).float(), targets)
         loss.backward()
         torch.nn.utils.clip_grad_norm_([model.child_traits], 1.0)
         optimizer.step()
@@ -430,11 +453,16 @@ def train_arm(
         device=device,
     )
     final_distance = float((model.child_traits[0] - model.child_traits[1]).detach().norm().cpu())
+
     route_purity = None
-    if routing_rows:
+    branch_counts = {"0": 0, "1": 0}
+    for row in routing_rows:
+        branch_counts[str(int(row["branch"]))] += 1
+    if arm == "differentiation-fork":
         scores = [float(row["projection_score"]) for row in routing_rows]
         labels = [str(row["domain_posthoc"]) for row in routing_rows]
         route_purity = routing_purity(scores, labels)
+
     summary = {
         "replicate": replicate,
         "arm": arm,
@@ -442,6 +470,8 @@ def train_arm(
         "final_child_distance": final_distance,
         "distance_growth_ratio": final_distance / max(initial_distance, 1e-8) if arm != "unified" else 0.0,
         "routing_purity_posthoc": route_purity,
+        "branch0_updates": branch_counts["0"],
+        "branch1_updates": branch_counts["1"],
         "wall_seconds": wall,
         "identity_pass": None if identity is None else int(identity.passes),
         "identity_assignment": None if identity is None else json.dumps(identity.assignment),
@@ -555,6 +585,8 @@ def main() -> int:
         "sequence_length": SEQUENCE_LENGTH,
         "batch_size": BATCH_SIZE,
         "fork_epsilon": FORK_EPSILON,
+        "capacity_routing": "task-agnostic deterministic 50/50",
+        "differentiation_routing": "fixed unlabeled conflict-gradient projection",
         "parent_losses": parent_losses,
         "conflict": conflict_summary,
         "pretrain_wall_seconds": pretrain_wall,
