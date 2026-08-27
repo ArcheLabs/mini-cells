@@ -4,7 +4,7 @@ from collections import Counter
 
 import torch
 
-from research.minicells.language_online_trait_genesis import (
+from minicells.language_online_trait_genesis import (
     GrowthEvidence,
     align_growth_centroids,
     developmental_curriculum,
