@@ -32,4 +32,6 @@ fail-closed and is not claimed.  The current runtime audit still reports a 6B
 block aggregate execution budget and two duties per worker, so actual chain
 overlap and speedup remain a separate gate.  See
 `artifacts/parallel-training-v1/decision.json` for the current evidence state;
-fresh-chain E2E remains blocked when no Docker daemon is available.
+Docker preflight now passes, but fresh-chain E2E remains blocked until images
+verified at MiniJAM `511b435` are built and the required wallet/relayer/worker
+credentials are supplied; cached season2 images identify a different commit.
