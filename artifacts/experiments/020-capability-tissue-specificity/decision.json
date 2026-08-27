@@ -1,0 +1,62 @@
+{
+  "baseline_019b": {
+    "matching_rank1_curves": 9,
+    "mean_normalized_specificity": 0.19592194208118885,
+    "replicate_family_curves": 18,
+    "source_status": "MIXED_RECRUITMENT_RESPONSE",
+    "zero_training": true
+  },
+  "design": {
+    "arms": {
+      "one-cell": 1,
+      "three-cell-chain": 3
+    },
+    "autonomous_growth_or_topology_updates": false,
+    "causal_fraction_min": 0.9,
+    "example_top1_min": 0.5,
+    "general_family_pass_min": 4,
+    "genome_frozen_during_skill_learning": true,
+    "gpu_count": 2,
+    "normalized_specificity_min": 0.1,
+    "old_phenotype_protected": true,
+    "recruitment_gate_or_router": false,
+    "replicate_mean_top1_min": ">=2/3",
+    "replicates": 3,
+    "retention_ratio_max": 1.1,
+    "same_phase1_checkpoint_within_replicate": true,
+    "same_skill_corpus_and_schedule_across_arms": true,
+    "skill_families": [
+      "REVERSE_INC",
+      "MOD_ADD",
+      "PARITY",
+      "LOOKUP",
+      "DELAY_COPY",
+      "LOCAL_RULE"
+    ],
+    "specificity": "U_aa - mean_{b!=a} U_ab",
+    "transplant_recovery_min": 0.9
+  },
+  "experiment": "MINI Cells Experiment 020 \u2014 Capability Tissue Specificity",
+  "format": "minicells.capability-tissue-specificity.v1",
+  "interpretation": {
+    "fail": "If both arms remain nonspecific, recruitment should remain deferred; the next problem is the learning objective or phenotype/genome degrees of freedom, not the gate.",
+    "multicell": "If the three-cell arm succeeds while the matched one-cell arm fails, tissue capacity/geometry is evidence for capability differentiation under a shared frozen genome.",
+    "scope": "020 trains capability tissues but no router, recruitment gate, task-ID-conditioned inference, or autonomous topology policy.",
+    "success": "A specificity signal requires diagonal functional preference, not merely stronger generic utility. Matching tissues must be identifiable across both replicate-mean and example-level tests."
+  },
+  "question": "Do distinct capabilities form functionally distinct cellular tissues, and does a fixed three-cell tissue create more capability identity than a matched one-cell tissue?",
+  "results": {
+    "joint_specificity_integrity_pass_families": {
+      "one-cell": 0,
+      "three-cell-chain": 0
+    },
+    "specificity_pass_families": {
+      "one-cell": 0,
+      "three-cell-chain": 1
+    },
+    "three_minus_one_mean_example_top1": 0.05078124999999998,
+    "three_minus_one_mean_normalized_specificity": 2.0929885712479734,
+    "three_minus_one_skill_improvement": 0.2921691130078025
+  },
+  "status": "NO_CAPABILITY_TISSUE_IDENTITY"
+}
