@@ -3,8 +3,6 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import torch
-
 ROOT = Path.cwd()
 if not (ROOT / "research").exists():
     ROOT = Path("/kaggle/working/mini-cells")
@@ -16,6 +14,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import minicells.language_proposal_utility as proposal_utility  # noqa: E402
 from minicells.language_proposal_checkpoints import (  # noqa: E402
     CHECKPOINT_FORMAT,
+    TRAINING_PROTOCOL_ID,
     atomic_torch_save,
     checkpoint_root,
     cpu_state_dict,
@@ -78,6 +77,7 @@ def checkpointed_train_phase1(*, replicate, train_stream, validation_stream, voc
     model, base_state, checkpoints, events, wall_seconds, validation_starts = result
     atomic_torch_save(path, {
         "format": CHECKPOINT_FORMAT,
+        "training_protocol": TRAINING_PROTOCOL_ID,
         "kind": "phase1",
         "replicate": int(replicate),
         "vocab_size": int(vocab_size),
@@ -118,6 +118,7 @@ def checkpointed_train_donor(
     model, localized_state, summary, events = result
     atomic_torch_save(path, {
         "format": CHECKPOINT_FORMAT,
+        "training_protocol": TRAINING_PROTOCOL_ID,
         "kind": "donor",
         "replicate": int(replicate),
         "family": family,
@@ -151,6 +152,7 @@ def checkpointed_random_control(*, replicate, vocab_size, base_state, device):
     model, localized_state, summary, events = result
     atomic_torch_save(path, {
         "format": CHECKPOINT_FORMAT,
+        "training_protocol": TRAINING_PROTOCOL_ID,
         "kind": "donor",
         "replicate": int(replicate),
         "family": family,
