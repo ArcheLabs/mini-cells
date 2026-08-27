@@ -11,11 +11,10 @@ use minicells_sim::trainer::{
     evaluate_fixed_probe, load_checkpoint_model, read_metrics, run_persistent_native, NativeTrainer,
 };
 use minicells_training_ref::{
-    accumulate_batch_gradients, compute_gradient_leaf, evaluate_batch_report,
-    finalize_adamw_step, reduce_partial_gradients, train_step_with_gradient,
-    GradientAccumulator, PartialGradientV1, TrainStepReport, TrainingBatch, TrainingState,
-    TrainingWorkspace, LOGICAL_BATCH_SIZE, PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE,
-    PARAMETER_COUNT,
+    accumulate_batch_gradients, compute_gradient_leaf, evaluate_batch_report, finalize_adamw_step,
+    reduce_partial_gradients, train_step_with_gradient, GradientAccumulator, PartialGradientV1,
+    TrainStepReport, TrainingBatch, TrainingState, TrainingWorkspace, LOGICAL_BATCH_SIZE,
+    PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE, PARAMETER_COUNT,
 };
 use std::path::PathBuf;
 
@@ -154,7 +153,10 @@ struct PvmParityArgs {
     samples: usize,
     #[arg(long, default_value_t = 10_000_000_000)]
     gas_limit: u64,
-    #[arg(long, default_value = "artifacts/pvm-algorithm-fidelity/pvm-parity.json")]
+    #[arg(
+        long,
+        default_value = "artifacts/pvm-algorithm-fidelity/pvm-parity.json"
+    )]
     output: PathBuf,
     /// Also execute the experimental multi-Refine round trip (costly).
     #[arg(long, default_value_t = false)]
@@ -598,18 +600,20 @@ fn run_parallel_native(args: ParallelNativeArgs) -> Result<(), Box<dyn std::erro
     let mut batch_paths = Vec::new();
     for step in 1..=LOGICAL_BATCH_SIZE.max(16) {
         let path = args.fixture.join(format!("batch-{step:06}.bin"));
-        if !path.is_file() { break; }
+        if !path.is_file() {
+            break;
+        }
         batch_paths.push(path);
     }
-    if batch_paths.is_empty() { return Err("parallel runner found no canonical batches".into()); }
+    if batch_paths.is_empty() {
+        return Err("parallel runner found no canonical batches".into());
+    }
     let mut state = TrainingState::from_weights(weights);
     let mut workspace = TrainingWorkspace::new();
-    let mut leaves = std::vec::Vec::from_iter(
-        (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
-    );
-    let mut scratch = std::vec::Vec::from_iter(
-        (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
-    );
+    let mut leaves =
+        std::vec::Vec::from_iter((0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()));
+    let mut scratch =
+        std::vec::Vec::from_iter((0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()));
     let mut reports = Vec::new();
     for step in 0..args.steps as usize {
         let batch = load_fidelity_batch(&batch_paths[step % batch_paths.len()])?;
@@ -652,7 +656,9 @@ fn run_parallel_native(args: ParallelNativeArgs) -> Result<(), Box<dyn std::erro
     }
     let validation = if args.fixture.join("validation.bin").is_file() {
         let batches = load_fidelity_batches(&args.fixture.join("validation.bin"))?;
-        let mut tokens = 0u64; let mut correct = 0u64; let mut exact = 0u64;
+        let mut tokens = 0u64;
+        let mut correct = 0u64;
+        let mut exact = 0u64;
         for item in &batches {
             let result = evaluate_batch_report(&state, item);
             tokens += result.token_count as u64;
@@ -661,7 +667,9 @@ fn run_parallel_native(args: ParallelNativeArgs) -> Result<(), Box<dyn std::erro
         }
         serde_json::json!({"status":"PASS","token_accuracy":if tokens == 0 {0.0} else {correct as f64/tokens as f64},
             "exact_sequence_accuracy":if batches.is_empty() {0.0} else {exact as f64/(batches.iter().map(|x| x.size as u64).sum::<u64>()) as f64}})
-    } else { serde_json::json!({"status":"BLOCKED_VALIDATION_FIXTURE"}) };
+    } else {
+        serde_json::json!({"status":"BLOCKED_VALIDATION_FIXTURE"})
+    };
     std::fs::create_dir_all(&args.output)?;
     let pass = validation["token_accuracy"].as_f64() == Some(1.0)
         && validation["exact_sequence_accuracy"].as_f64() == Some(1.0);
@@ -678,9 +686,14 @@ fn run_parallel_native(args: ParallelNativeArgs) -> Result<(), Box<dyn std::erro
         "final_step":state.step,"final_weight_digest":digest_bytes(&f32_bytes(&state.weights)),
         "algorithm_changes":"NUMERIC_REDUCTION_ORDER_ONLY"
     });
-    std::fs::write(args.output.join("parallel-native.json"), serde_json::to_vec_pretty(&report)?)?;
+    std::fs::write(
+        args.output.join("parallel-native.json"),
+        serde_json::to_vec_pretty(&report)?,
+    )?;
     println!("{}", serde_json::to_string_pretty(&report)?);
-    if !pass { return Err("parallel Native learning gate failed".into()); }
+    if !pass {
+        return Err("parallel Native learning gate failed".into());
+    }
     Ok(())
 }
 
@@ -720,8 +733,11 @@ fn classify_execution(
 fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>> {
     const SHARD_SIZE: usize = 8;
     let initial = read_f32_array(&args.fixture.join("initial-weights-f32.bin"))?;
-    if initial.len() != PARAMETER_COUNT { return Err("initial weight fixture length mismatch".into()); }
-    let mut weights = [0.0f32; PARAMETER_COUNT]; weights.copy_from_slice(&initial);
+    if initial.len() != PARAMETER_COUNT {
+        return Err("initial weight fixture length mismatch".into());
+    }
+    let mut weights = [0.0f32; PARAMETER_COUNT];
+    weights.copy_from_slice(&initial);
     let full = load_fidelity_batch(&args.fixture.join("batch-000001.bin"))?;
     let mut mono_state = TrainingState::from_weights(weights);
     let mut mono_gradient = [0.0f32; PARAMETER_COUNT];
@@ -731,74 +747,151 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
     let mut shard_records = Vec::with_capacity(32);
     let pack_prefix = |mode: &[u8; 4]| {
         let mut p = Vec::with_capacity(64_000);
-        p.extend_from_slice(mode); p.extend_from_slice(&0u64.to_le_bytes());
-        p.extend_from_slice(&f32_bytes(&weights)); p.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]); p
+        p.extend_from_slice(mode);
+        p.extend_from_slice(&0u64.to_le_bytes());
+        p.extend_from_slice(&f32_bytes(&weights));
+        p.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]);
+        p
     };
     for shard_index in 0..32usize {
         let start = shard_index * SHARD_SIZE;
         let mut payload = pack_prefix(b"MCA1");
         payload.extend_from_slice(&(SHARD_SIZE as u16).to_le_bytes());
-        payload.extend_from_slice(&acc.token_count.to_le_bytes()); payload.extend_from_slice(&acc.loss_sum.to_le_bytes());
+        payload.extend_from_slice(&acc.token_count.to_le_bytes());
+        payload.extend_from_slice(&acc.loss_sum.to_le_bytes());
         payload.extend_from_slice(&f32_bytes(&acc.gradient));
-        for row in start..start + SHARD_SIZE { payload.extend_from_slice(&full.ids[row]); }
+        for row in start..start + SHARD_SIZE {
+            payload.extend_from_slice(&full.ids[row]);
+        }
         payload.extend_from_slice(&full.lengths[start..start + SHARD_SIZE]);
-        let mut h = DirectPvmHarness::load(&args.artifact, args.gas_limit,
-            "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
+        let mut h = DirectPvmHarness::load(
+            &args.artifact,
+            args.gas_limit,
+            "5947c50699863948c51028bc346980481d839884",
+            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        )?;
         let ex = h.execute_refine_measured(&payload)?;
-        if ex.output.len() != 12 + PARAMETER_COUNT * 4 || &ex.output[..4] != b"MCAR" { return Err(format!("invalid MCAR output for shard {shard_index}").into()); }
+        if ex.output.len() != 12 + PARAMETER_COUNT * 4 || &ex.output[..4] != b"MCAR" {
+            return Err(format!("invalid MCAR output for shard {shard_index}").into());
+        }
         acc.loss_sum = f32::from_le_bytes(ex.output[4..8].try_into().unwrap());
         acc.token_count = u32::from_le_bytes(ex.output[8..12].try_into().unwrap());
-        for i in 0..PARAMETER_COUNT { acc.gradient[i] = f32::from_le_bytes(ex.output[12 + i * 4..16 + i * 4].try_into().unwrap()); }
+        for i in 0..PARAMETER_COUNT {
+            acc.gradient[i] =
+                f32::from_le_bytes(ex.output[12 + i * 4..16 + i * 4].try_into().unwrap());
+        }
         shard_gas.push(ex.gas_used);
-        let classification = if ex.gas_used <= 1_000_000_000 { "SHARD_PASS_TINY" } else if ex.gas_used <= 4_000_000_000 { "SHARD_PASS_FULL_COMFORTABLE" } else if ex.gas_used <= 5_000_000_000 { "SHARD_NEAR_FULL" } else { "SHARD_OVER_FULL" };
+        let classification = if ex.gas_used <= 1_000_000_000 {
+            "SHARD_PASS_TINY"
+        } else if ex.gas_used <= 4_000_000_000 {
+            "SHARD_PASS_FULL_COMFORTABLE"
+        } else if ex.gas_used <= 5_000_000_000 {
+            "SHARD_NEAR_FULL"
+        } else {
+            "SHARD_OVER_FULL"
+        };
         shard_records.push(serde_json::json!({"logical_batch_size":256,"shard_size":8,"shard_index":shard_index,"sample_range":[start,start+SHARD_SIZE],"gas_used":ex.gas_used,"classification":classification}));
     }
     let mut final_payload = pack_prefix(b"MCF1");
-    final_payload.extend_from_slice(&acc.token_count.to_le_bytes()); final_payload.extend_from_slice(&acc.loss_sum.to_le_bytes()); final_payload.extend_from_slice(&f32_bytes(&acc.gradient));
-    let mut h = DirectPvmHarness::load(&args.artifact, args.gas_limit,
-        "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
+    final_payload.extend_from_slice(&acc.token_count.to_le_bytes());
+    final_payload.extend_from_slice(&acc.loss_sum.to_le_bytes());
+    final_payload.extend_from_slice(&f32_bytes(&acc.gradient));
+    let mut h = DirectPvmHarness::load(
+        &args.artifact,
+        args.gas_limit,
+        "5947c50699863948c51028bc346980481d839884",
+        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+    )?;
     let final_ex = h.execute_refine_measured(&final_payload)?;
-    if final_ex.output.len() != 24 + PARAMETER_COUNT * 12 || &final_ex.output[..4] != b"MCPR" { return Err("invalid MCF1 output".into()); }
+    if final_ex.output.len() != 24 + PARAMETER_COUNT * 12 || &final_ex.output[..4] != b"MCPR" {
+        return Err("invalid MCF1 output".into());
+    }
     let final_loss = f32::from_le_bytes(final_ex.output[4..8].try_into().unwrap());
     let final_norm = f32::from_le_bytes(final_ex.output[8..12].try_into().unwrap());
     let final_tokens = u32::from_le_bytes(final_ex.output[12..16].try_into().unwrap());
     let final_step = u64::from_le_bytes(final_ex.output[16..24].try_into().unwrap());
-    let mono_w = f32_bytes(&mono_state.weights); let mono_m = f32_bytes(&mono_state.adam_m); let mono_v = f32_bytes(&mono_state.adam_v);
+    let mono_w = f32_bytes(&mono_state.weights);
+    let mono_m = f32_bytes(&mono_state.adam_m);
+    let mono_v = f32_bytes(&mono_state.adam_v);
     let bit_exact = final_ex.output[24..24 + PARAMETER_COUNT * 4] == mono_w[..]
         && final_ex.output[24 + PARAMETER_COUNT * 4..24 + PARAMETER_COUNT * 8] == mono_m[..]
         && final_ex.output[24 + PARAMETER_COUNT * 8..24 + PARAMETER_COUNT * 12] == mono_v[..]
-        && final_loss.to_bits() == mono_report.loss.to_bits() && final_norm.to_bits() == mono_report.grad_norm.to_bits()
-        && final_tokens == mono_report.token_count && final_step == mono_state.step;
+        && final_loss.to_bits() == mono_report.loss.to_bits()
+        && final_norm.to_bits() == mono_report.grad_norm.to_bits()
+        && final_tokens == mono_report.token_count
+        && final_step == mono_state.step;
     let worst_ids = full.ids;
-    let mut worst_payload = pack_prefix(b"MCA1"); worst_payload.extend_from_slice(&(SHARD_SIZE as u16).to_le_bytes());
-    worst_payload.extend_from_slice(&0u32.to_le_bytes()); worst_payload.extend_from_slice(&0.0f32.to_le_bytes()); worst_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 4]);
-    for row in 0..SHARD_SIZE { worst_payload.extend_from_slice(&worst_ids[row]); }
+    let mut worst_payload = pack_prefix(b"MCA1");
+    worst_payload.extend_from_slice(&(SHARD_SIZE as u16).to_le_bytes());
+    worst_payload.extend_from_slice(&0u32.to_le_bytes());
+    worst_payload.extend_from_slice(&0.0f32.to_le_bytes());
+    worst_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 4]);
+    for row in 0..SHARD_SIZE {
+        worst_payload.extend_from_slice(&worst_ids[row]);
+    }
     worst_payload.extend_from_slice(&[32u8; SHARD_SIZE]);
-    let mut wh = DirectPvmHarness::load(&args.artifact, args.gas_limit,
-        "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
+    let mut wh = DirectPvmHarness::load(
+        &args.artifact,
+        args.gas_limit,
+        "5947c50699863948c51028bc346980481d839884",
+        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+    )?;
     let worst_ex = wh.execute_refine_measured(&worst_payload)?;
     let worst_gas = worst_ex.gas_used;
-    let worst_class = if worst_gas <= 4_000_000_000 { "SHARD_PASS_FULL_COMFORTABLE" } else if worst_gas <= 5_000_000_000 { "SHARD_NEAR_FULL" } else { "SHARD_OVER_FULL" };
-    let mut sorted = shard_gas.clone(); sorted.sort_unstable();
+    let worst_class = if worst_gas <= 4_000_000_000 {
+        "SHARD_PASS_FULL_COMFORTABLE"
+    } else if worst_gas <= 5_000_000_000 {
+        "SHARD_NEAR_FULL"
+    } else {
+        "SHARD_OVER_FULL"
+    };
+    let mut sorted = shard_gas.clone();
+    sorted.sort_unstable();
     let p95 = sorted[((sorted.len() * 95).saturating_sub(1) / 100).min(sorted.len() - 1)];
     let mean = shard_gas.iter().sum::<u64>() as f64 / shard_gas.len() as f64;
     let max = *sorted.last().unwrap();
     let report = serde_json::json!({"schema":"minicells.pvm-full-logical-batch-gate.v1","status":if bit_exact && max <= 4_000_000_000 && worst_gas <= 4_000_000_000 {"PASS_FULL_COMFORTABLE_MULTI_REFINE"} else {"FAIL"},"logical_batch_size":256,"shard_size":8,"shard_count":32,"shards":shard_records,"shard_gas_summary":{"min":sorted[0],"mean":mean,"p95":p95,"max":max},"finalize":{"gas_used":final_ex.gas_used,"classification":"FINALIZE_PASS"},"total_refine_gas":shard_gas.iter().sum::<u64>() + final_ex.gas_used,"native_vs_pvm_bit_exact":bit_exact,"worst_case_shard":{"samples":8,"length":32,"gas_used":worst_gas,"classification":worst_class},"production_refine_limit_authorized":bit_exact && max <= 4_000_000_000 && worst_gas <= 4_000_000_000,"fresh_chain_e2e":"BLOCKED_EXTERNAL_CHAIN"});
-    if let Some(parent) = args.output.parent() { std::fs::create_dir_all(parent)?; }
+    if let Some(parent) = args.output.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
     std::fs::write(&args.output, serde_json::to_vec_pretty(&report)?)?;
-    let gas_dir = args.output.parent().unwrap_or(std::path::Path::new("." )).join("mca-gas-full"); std::fs::create_dir_all(&gas_dir)?;
-    for record in &shard_records { let index = record["shard_index"].as_u64().unwrap(); std::fs::write(gas_dir.join(format!("shard-{index:02}.json")), serde_json::to_vec_pretty(record)?)?; }
-    std::fs::write(gas_dir.join("worst-case-8.json"), serde_json::to_vec_pretty(&serde_json::json!({"logical_batch_size":256,"shard_size":8,"shard_index":0,"sample_range":[0,8],"all_lengths":32,"gas_used":worst_gas,"classification":worst_class}))?)?;
+    let gas_dir = args
+        .output
+        .parent()
+        .unwrap_or(std::path::Path::new("."))
+        .join("mca-gas-full");
+    std::fs::create_dir_all(&gas_dir)?;
+    for record in &shard_records {
+        let index = record["shard_index"].as_u64().unwrap();
+        std::fs::write(
+            gas_dir.join(format!("shard-{index:02}.json")),
+            serde_json::to_vec_pretty(record)?,
+        )?;
+    }
+    std::fs::write(
+        gas_dir.join("worst-case-8.json"),
+        serde_json::to_vec_pretty(
+            &serde_json::json!({"logical_batch_size":256,"shard_size":8,"shard_index":0,"sample_range":[0,8],"all_lengths":32,"gas_used":worst_gas,"classification":worst_class}),
+        )?,
+    )?;
     println!("{}", serde_json::to_string_pretty(&report)?);
-    if report["status"] != "PASS_FULL_COMFORTABLE_MULTI_REFINE" { return Err("full logical-batch gate failed".into()); }
+    if report["status"] != "PASS_FULL_COMFORTABLE_MULTI_REFINE" {
+        return Err("full logical-batch gate failed".into());
+    }
     Ok(())
 }
 
 fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>> {
-    if args.multi_refine && args.samples == 256 { return run_full_multi_refine(args); }
-    if args.samples == 0 || args.samples > 256 { return Err("samples must be 1..=256".into()); }
+    if args.multi_refine && args.samples == 256 {
+        return run_full_multi_refine(args);
+    }
+    if args.samples == 0 || args.samples > 256 {
+        return Err("samples must be 1..=256".into());
+    }
     let initial = read_f32_array(&args.fixture.join("initial-weights-f32.bin"))?;
-    if initial.len() != PARAMETER_COUNT { return Err("initial weight fixture length mismatch".into()); }
+    if initial.len() != PARAMETER_COUNT {
+        return Err("initial weight fixture length mismatch".into());
+    }
     let mut weights = [0.0f32; PARAMETER_COUNT];
     weights.copy_from_slice(&initial);
     let mut state = TrainingState::from_weights(weights);
@@ -809,7 +902,11 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
     let mut chunked_state = TrainingState::from_weights(weights);
     let mut chunked_workspace = TrainingWorkspace::new();
     let mut accumulator = GradientAccumulator::new();
-    for start in if args.multi_refine { (0..args.samples).step_by(8).collect::<Vec<_>>() } else { Vec::new() } {
+    for start in if args.multi_refine {
+        (0..args.samples).step_by(8).collect::<Vec<_>>()
+    } else {
+        Vec::new()
+    } {
         let end = (start + 8).min(args.samples);
         let mut shard = TrainingBatch::empty();
         shard.size = (end - start) as u16;
@@ -817,7 +914,12 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
             shard.ids[row] = batch.ids[start + row];
             shard.lengths[row] = batch.lengths[start + row];
         }
-        accumulate_batch_gradients(&chunked_state, &shard, &mut chunked_workspace, &mut accumulator);
+        accumulate_batch_gradients(
+            &chunked_state,
+            &shard,
+            &mut chunked_workspace,
+            &mut accumulator,
+        );
     }
     let chunked_report = finalize_adamw_step(&mut chunked_state, &mut accumulator);
     let chunked_exact = f32_bytes(&chunked_state.weights) == f32_bytes(&state.weights)
@@ -832,10 +934,16 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
     payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 4]);
     payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 4]);
     payload.extend_from_slice(&(args.samples as u16).to_le_bytes());
-    for row in 0..args.samples { payload.extend_from_slice(&batch.ids[row]); }
+    for row in 0..args.samples {
+        payload.extend_from_slice(&batch.ids[row]);
+    }
     payload.extend_from_slice(&batch.lengths[..args.samples]);
-    let mut harness = DirectPvmHarness::load(&args.artifact, args.gas_limit,
-        "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
+    let mut harness = DirectPvmHarness::load(
+        &args.artifact,
+        args.gas_limit,
+        "5947c50699863948c51028bc346980481d839884",
+        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+    )?;
     let execution = harness.execute_refine_measured(&payload)?;
     if execution.output.len() != 24 + PARAMETER_COUNT * 12 || &execution.output[..4] != b"MCPR" {
         return Err(format!("invalid MCPR output length {}", execution.output.len()).into());
@@ -855,28 +963,42 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
     let v_exact = state_bytes(24 + PARAMETER_COUNT * 8) == native_v.as_slice();
     let scalar_exact = pvm_loss.to_bits() == native_report.loss.to_bits()
         && pvm_norm.to_bits() == native_report.grad_norm.to_bits()
-        && pvm_tokens == native_report.token_count && pvm_step == state.step;
+        && pvm_tokens == native_report.token_count
+        && pvm_step == state.step;
     let mut shard_gas = Vec::new();
     let mut shard_acc = GradientAccumulator::new();
     let mut shard_ok = true;
     for start in (0..args.samples).step_by(8) {
         let end = (start + 8).min(args.samples);
         let mut shard_payload = Vec::with_capacity(payload.len());
-        shard_payload.extend_from_slice(b"MCA1"); shard_payload.extend_from_slice(&0u64.to_le_bytes());
-        shard_payload.extend_from_slice(&f32_bytes(&weights)); shard_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]);
+        shard_payload.extend_from_slice(b"MCA1");
+        shard_payload.extend_from_slice(&0u64.to_le_bytes());
+        shard_payload.extend_from_slice(&f32_bytes(&weights));
+        shard_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]);
         shard_payload.extend_from_slice(&((end - start) as u16).to_le_bytes());
-        shard_payload.extend_from_slice(&shard_acc.token_count.to_le_bytes()); shard_payload.extend_from_slice(&shard_acc.loss_sum.to_le_bytes());
+        shard_payload.extend_from_slice(&shard_acc.token_count.to_le_bytes());
+        shard_payload.extend_from_slice(&shard_acc.loss_sum.to_le_bytes());
         shard_payload.extend_from_slice(&f32_bytes(&shard_acc.gradient));
-        for row in start..end { shard_payload.extend_from_slice(&batch.ids[row]); }
+        for row in start..end {
+            shard_payload.extend_from_slice(&batch.ids[row]);
+        }
         shard_payload.extend_from_slice(&batch.lengths[start..end]);
-        let mut h = DirectPvmHarness::load(&args.artifact, args.gas_limit,
-            "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
+        let mut h = DirectPvmHarness::load(
+            &args.artifact,
+            args.gas_limit,
+            "5947c50699863948c51028bc346980481d839884",
+            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        )?;
         let ex = h.execute_refine_measured(&shard_payload)?;
         shard_gas.push(ex.gas_used);
-        if ex.output.len() != 12 + PARAMETER_COUNT * 4 || &ex.output[..4] != b"MCAR" { shard_ok = false; break; }
+        if ex.output.len() != 12 + PARAMETER_COUNT * 4 || &ex.output[..4] != b"MCAR" {
+            shard_ok = false;
+            break;
+        }
         let loss = f32::from_le_bytes(ex.output[4..8].try_into().unwrap());
         let tokens = u32::from_le_bytes(ex.output[8..12].try_into().unwrap());
-        shard_acc.loss_sum = loss; shard_acc.token_count = tokens;
+        shard_acc.loss_sum = loss;
+        shard_acc.token_count = tokens;
         for i in 0..PARAMETER_COUNT {
             let v = f32::from_le_bytes(ex.output[12 + i * 4..16 + i * 4].try_into().unwrap());
             shard_acc.gradient[i] = v;
@@ -885,14 +1007,23 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
     let mut finalize_gas = 0u64;
     let mut multi_refine_exact = false;
     if shard_ok {
-        let mut final_payload = Vec::with_capacity(4 + 8 + PARAMETER_COUNT * 12 + 8 + PARAMETER_COUNT * 4);
-        final_payload.extend_from_slice(b"MCF1"); final_payload.extend_from_slice(&0u64.to_le_bytes());
-        final_payload.extend_from_slice(&f32_bytes(&weights)); final_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]);
-        final_payload.extend_from_slice(&shard_acc.token_count.to_le_bytes()); final_payload.extend_from_slice(&shard_acc.loss_sum.to_le_bytes());
+        let mut final_payload =
+            Vec::with_capacity(4 + 8 + PARAMETER_COUNT * 12 + 8 + PARAMETER_COUNT * 4);
+        final_payload.extend_from_slice(b"MCF1");
+        final_payload.extend_from_slice(&0u64.to_le_bytes());
+        final_payload.extend_from_slice(&f32_bytes(&weights));
+        final_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]);
+        final_payload.extend_from_slice(&shard_acc.token_count.to_le_bytes());
+        final_payload.extend_from_slice(&shard_acc.loss_sum.to_le_bytes());
         final_payload.extend_from_slice(&f32_bytes(&shard_acc.gradient));
-        let mut h = DirectPvmHarness::load(&args.artifact, args.gas_limit,
-            "5947c50699863948c51028bc346980481d839884", "f74de5325e0fe566b5b7e3f8eb4851173a937d76")?;
-        let ex = h.execute_refine_measured(&final_payload)?; finalize_gas = ex.gas_used;
+        let mut h = DirectPvmHarness::load(
+            &args.artifact,
+            args.gas_limit,
+            "5947c50699863948c51028bc346980481d839884",
+            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        )?;
+        let ex = h.execute_refine_measured(&final_payload)?;
+        finalize_gas = ex.gas_used;
         if ex.output.len() == 24 + PARAMETER_COUNT * 12 && &ex.output[..4] == b"MCPR" {
             multi_refine_exact = ex.output[24..24 + PARAMETER_COUNT * 4] == native_weights[..]
                 && ex.output[24 + PARAMETER_COUNT * 4..24 + PARAMETER_COUNT * 8] == native_m[..]
@@ -909,10 +1040,14 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
         "pvm":{"loss":pvm_loss,"grad_norm":pvm_norm,"token_count":pvm_tokens,"step":pvm_step},
         "artifact_hash":format!("0x{}",hex::encode(harness.artifact.blake2_hash)), "gas_classification":classify_gas(execution.gas_used)
     });
-    if let Some(parent) = args.output.parent() { std::fs::create_dir_all(parent)?; }
+    if let Some(parent) = args.output.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
     std::fs::write(&args.output, serde_json::to_vec_pretty(&report)?)?;
     println!("{}", serde_json::to_string_pretty(&report)?);
-    if report["status"] != "PASS_BIT_EXACT" { return Err("PVM parity failed".into()); }
+    if report["status"] != "PASS_BIT_EXACT" {
+        return Err("PVM parity failed".into());
+    }
     Ok(())
 }
 
@@ -959,7 +1094,8 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
                 false,
                 if exhausted { args.gas_limit } else { 0 },
                 0,
-                Some(message), exhausted,
+                Some(message),
+                exhausted,
             )
         }
     };
@@ -971,11 +1107,34 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     let is_shard = payload.get(..4) == Some(b"MCA1") || payload.get(..4) == Some(b"MCG1");
     const PAYLOAD_HEADER: usize = 4 + 8;
     const MODEL_BYTES: usize = PARAMETER_COUNT * 4;
-    let shard_size = if payload.get(..4) == Some(b"MCG1") {
-        PARALLEL_SHARD_SIZE
+    let (shard_size, shard_index, sample_range) = if payload.get(..4) == Some(b"MCG1") {
+        // MCG1 metadata is: magic/version/job/step/model/batch, then the
+        // canonical leaf index and its exact sample range.  Preserve those
+        // values in the gas artifact so a leaf probe cannot be mistaken for
+        // a different shard.
+        const MCG1_META: usize = 4 + 2 + 32 + 8 + 32 + 32;
+        if payload.len() >= MCG1_META + 6 {
+            let index =
+                u16::from_le_bytes(payload[MCG1_META..MCG1_META + 2].try_into().unwrap()) as usize;
+            let start =
+                u16::from_le_bytes(payload[MCG1_META + 2..MCG1_META + 4].try_into().unwrap())
+                    as usize;
+            let end = u16::from_le_bytes(payload[MCG1_META + 4..MCG1_META + 6].try_into().unwrap())
+                as usize;
+            (PARALLEL_SHARD_SIZE, index, [start, end])
+        } else {
+            (PARALLEL_SHARD_SIZE, 0, [0, PARALLEL_SHARD_SIZE])
+        }
     } else if is_shard && payload.len() >= PAYLOAD_HEADER + MODEL_BYTES * 3 + 2 {
-        u16::from_le_bytes(payload[PAYLOAD_HEADER + MODEL_BYTES * 3..PAYLOAD_HEADER + MODEL_BYTES * 3 + 2].try_into().unwrap()) as usize
-    } else { 0 };
+        let size = u16::from_le_bytes(
+            payload[PAYLOAD_HEADER + MODEL_BYTES * 3..PAYLOAD_HEADER + MODEL_BYTES * 3 + 2]
+                .try_into()
+                .unwrap(),
+        ) as usize;
+        (size, 0, [0, size])
+    } else {
+        (0, 0, [0, 0])
+    };
     let classification = if is_shard {
         match base_classification {
             "TINY" => "SHARD_PASS_TINY",
@@ -984,7 +1143,9 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
             "OVER_FULL" => "SHARD_OVER_FULL",
             _ => "SHARD_NOT_MEASURED",
         }
-    } else { base_classification };
+    } else {
+        base_classification
+    };
     if let Some((stage_name, stage_code)) = diagnostic_stage {
         let report = serde_json::json!({
             "schema": "minicells.pvm-training-diagnostic.v1",
@@ -1003,7 +1164,7 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
         println!("{}", serde_json::to_string_pretty(&report)?);
         return Ok(());
     }
-    let report = serde_json::json!({"schema":"minicells.pvm-training-gas.v1", "algorithm":"echo-adamw-ce-v1",
+    let report = serde_json::json!({"schema":"minicells.pvm-training-gas.v1", "algorithm":if is_shard {"echo-adamw-ce-tree32-v1"} else {"echo-adamw-ce-v1"},
         "logical_batch_size":256, "artifact_hash":format!("0x{}",hex::encode(harness.artifact.blake2_hash)),
         "gas_limit":args.gas_limit, "gas_used":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used)},
         "gas_lower_bound":if exhausted {serde_json::json!(args.gas_limit)} else {serde_json::Value::Null},
@@ -1013,23 +1174,29 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
         "full_ratio":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used as f64/5_000_000_000f64)},
         "classification":classification, "error":error,
         "shard_size":if is_shard {serde_json::json!(shard_size)} else {serde_json::Value::Null},
-        "shard_index":if is_shard {serde_json::json!(0)} else {serde_json::Value::Null},
-        "sample_range":if is_shard {serde_json::json!([0, shard_size])} else {serde_json::Value::Null}});
+        "shard_index":if is_shard {serde_json::json!(shard_index)} else {serde_json::Value::Null},
+        "sample_range":if is_shard {serde_json::json!(sample_range)} else {serde_json::Value::Null}});
     std::fs::write(
         args.output.join("pvm-gas.json"),
         serde_json::to_vec_pretty(&report)?,
     )?;
     let next = if is_shard {
         "SHARD_MEASUREMENT_ONLY_NO_FULL_STEP_DECISION"
-    } else { match classification {
-        "TINY" => "INTEGRATE_REFERENCE_ALGORITHM_WITH_TINY_PROFILE",
-        "FULL_COMFORTABLE" => "SWITCH_MINIJAM_REFINE_LIMIT_TO_5B_THEN_INTEGRATE",
-        "NEAR_FULL" => "OPTIMIZE_SINGLE_REFINE_WITHOUT_ALGORITHM_CHANGE",
-        "OVER_FULL" => "IMPLEMENT_LOGICAL_BATCH_MULTI_REFINE",
-        _ => "BLOCK_UNTIL_DEDICATED_PVM_EXECUTION_IS_VALID",
-    }};
+    } else {
+        match classification {
+            "TINY" => "INTEGRATE_REFERENCE_ALGORITHM_WITH_TINY_PROFILE",
+            "FULL_COMFORTABLE" => "SWITCH_MINIJAM_REFINE_LIMIT_TO_5B_THEN_INTEGRATE",
+            "NEAR_FULL" => "OPTIMIZE_SINGLE_REFINE_WITHOUT_ALGORITHM_CHANGE",
+            "OVER_FULL" => "IMPLEMENT_LOGICAL_BATCH_MULTI_REFINE",
+            _ => "BLOCK_UNTIL_DEDICATED_PVM_EXECUTION_IS_VALID",
+        }
+    };
     let status = if completed {
-        if is_shard { classification.to_string() } else { format!("PASS_{classification}") }
+        if is_shard {
+            classification.to_string()
+        } else {
+            format!("PASS_{classification}")
+        }
     } else if base_classification == "OVER_FULL" {
         "ENGINEERING_SPLIT_REQUIRED".to_string()
     } else {
