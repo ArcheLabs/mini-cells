@@ -1,0 +1,26 @@
+{
+  "arms": [
+    "dense",
+    "dynamic",
+    "static",
+    "shuffled"
+  ],
+  "cell_activation": 1.0,
+  "continuation_tokens_per_replicate": 1500000,
+  "forbidden": [
+    "cell sparsity",
+    "phenotype differentiation",
+    "topology changes",
+    "capability labels",
+    "fork/death",
+    "semantic experts"
+  ],
+  "format": "minicells.clm-validation-001-task.v1",
+  "programs": 8,
+  "question": "Does state-dependent sparse program routing preserve LM quality better than matched static pruning?",
+  "replicates": 3,
+  "top_k": [
+    6,
+    4
+  ]
+}
