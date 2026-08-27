@@ -16,6 +16,8 @@
     "memory_available_kib": 6932560
   },
   "preflight": "PASS_DOCKER_INFO_AND_COMPOSE",
-  "exact_image_build": "BLOCKED_BASE_IMAGE_PULL_TIMEOUT",
-  "recorded_at": "2026-08-27T08:45:44Z"
+  "exact_image_build": "BLOCKED_DOCKER_REGISTRY_TLS_TIMEOUT",
+  "credential_helper": "PASS_EPHEMERAL_LOCAL_ONLY",
+  "recorded_at": "2026-08-27T08:45:44Z",
+  "latest_probe": "docker build --pull=false failed fetching Docker Hub auth token for debian:bookworm-slim (TLS handshake timeout)"
 }

@@ -11,5 +11,5 @@
   },
   "verified_exact_commit": false,
   "observed_image_revision": "bc0f0f20ee6d8086f5c1041c1294759b89f2b4fc",
-  "reason": "Docker has cached images, but their OCI revision is not 511b435. Building exact local images was attempted and canceled while pulling the rust:1.88-bookworm base image; no season2 run was started against unverifiable images."
+  "reason": "Docker has cached images, but their OCI revision is not 85ff2ae. Exact local image build is blocked by a Docker Hub TLS handshake timeout while fetching debian:bookworm-slim/rust:1.88-bookworm; no Season2 run was started against unverifiable images."
 }

@@ -1,11 +1,11 @@
 {
   "schema": "minicells.parallel-training-fresh-chain-decision.v1",
-  "status": "BLOCKED_ROOT_PARITY",
+  "status": "BLOCKED_EXACT_IMAGE_PROVENANCE",
   "docker_preflight": "PASS_DOCKER_INFO_AND_COMPOSE",
-  "image_provenance": "BLOCKED_EXACT_IMAGE_PROVENANCE",
-  "base_chain": "NOT_STARTED",
+  "image_provenance": "BLOCKED_DOCKER_REGISTRY_TLS_TIMEOUT",
+  "base_chain": "BLOCKED_BASE_CHAIN_EXACT_IMAGES",
   "create_service": "NOT_STARTED_BY_POLICY",
   "width2": "NOT_STARTED_BY_POLICY",
-  "reason": "Phase 1 MCRF1 root parity failed before chain work: real PVM root token_count=987 versus Native 4127. Per stop condition, no chain execution was started. Exact local image provenance and E2E credentials remain unresolved as secondary blockers.",
-  "next_action": "REPAIR_MCRF1_TOKEN_PARITY_BEFORE_CHAIN_WORK"
+  "reason": "Canonical PVM root parity and WorkPackage gates are passing. Fresh-chain work is blocked before startup because exact local images for MiniJAM 85ff2ae cannot currently be built: Docker Hub base-image authentication/TLS timed out. Cached images are revision bc0f0f20 and are rejected. Ephemeral credential generation is implemented and verified.",
+  "next_action": "RETRY_EXACT_IMAGE_BUILD_THEN_RUN_BASE_SEASON2_E2E"
 }
