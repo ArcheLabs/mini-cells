@@ -1,0 +1,11 @@
+{
+  "schema": "minicells.parallel-training-fresh-chain-decision.v1",
+  "status": "BLOCKED_EXACT_IMAGE_PROVENANCE",
+  "docker_preflight": "PASS_DOCKER_INFO_AND_COMPOSE",
+  "image_provenance": "BLOCKED_EXACT_IMAGE_PROVENANCE",
+  "base_chain": "NOT_STARTED",
+  "create_service": "NOT_STARTED_BY_POLICY",
+  "width2": "NOT_STARTED_BY_POLICY",
+  "reason": "Docker preflight passes, but cached season2 images report commit bc0f0f20ee6d8086f5c1041c1294759b89f2b4fc rather than required 511b435. Exact local image build was attempted but canceled during the large rust:1.88-bookworm base-image pull. The mandated E2E script also exits 2 because MINIJAM_E2E_WALLET_SEED and relayer/worker credentials are not configured.",
+  "next_action": "BUILD_OR_PROVIDE_IMAGES_VERIFIED_AT_511B435"
+}

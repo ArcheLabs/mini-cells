@@ -1,0 +1,15 @@
+{
+  "schema": "minicells.parallel-training-fresh-chain-image-provenance.v1",
+  "minijam_commit": "511b4357245db194678537e1b3ac111c38507278",
+  "jambda_commit": "e52307a726868205a151e6917a0a70a79965a028",
+  "pull_policy": "never",
+  "images": {
+    "node_image": "ghcr.io/archelabs/minijam-node@sha256:9f08a2d75489d2796739485214dada0634e55973de01719f19d6264c4766e465",
+    "worker_image": "ghcr.io/archelabs/minijam-worker@sha256:1aa3520114cfac9df136fbc615bf7777925f4a1210159080f5385b96f40f3ae9",
+    "compiler_image": "ghcr.io/archelabs/minijam-compiler-api@sha256:0aebb617acd126f1daa9c97e0de309a6a8477716d7d8a23df64dd454e71a8242",
+    "api_image": "ghcr.io/archelabs/minijam-playground-api@sha256:6d760752582d32cc50e2e4d26a25f83e20aadfd4fc80bb482e8e853b9f8c3c2c"
+  },
+  "verified_exact_commit": false,
+  "observed_image_revision": "bc0f0f20ee6d8086f5c1041c1294759b89f2b4fc",
+  "reason": "Docker has cached images, but their OCI revision is not 511b435. Building exact local images was attempted and canceled while pulling the rust:1.88-bookworm base image; no season2 run was started against unverifiable images."
+}

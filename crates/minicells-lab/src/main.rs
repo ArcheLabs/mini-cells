@@ -141,6 +141,9 @@ struct PvmGasArgs {
     diagnostic_stage: Option<String>,
     #[arg(long, default_value = "artifacts/pvm-algorithm-fidelity")]
     output: PathBuf,
+    /// Optional raw guest output capture for ABI/parity probes.
+    #[arg(long)]
+    raw_output: Option<PathBuf>,
 }
 
 #[derive(Args)]
@@ -1086,7 +1089,13 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     let execution = harness.execute_refine_measured(&payload);
     std::fs::create_dir_all(&args.output)?;
     let (completed, gas_used, gas_remaining, error, exhausted) = match execution {
-        Ok(result) => (true, result.gas_used, result.gas_remaining, None, false),
+        Ok(result) => {
+            if let Some(path) = &args.raw_output {
+                if let Some(parent) = path.parent() { std::fs::create_dir_all(parent)?; }
+                std::fs::write(path, &result.output)?;
+            }
+            (true, result.gas_used, result.gas_remaining, None, false)
+        },
         Err(error) => {
             let message = error.to_string();
             let exhausted = message.contains("out of gas");
