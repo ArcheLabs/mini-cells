@@ -1,0 +1,49 @@
+{
+  "capacity_control_uses_stream_identity_only_for_local matched split": true,
+  "duplicate_negative_control": "ARITH_A and ARITH_B are independent schedules over the exact same arithmetic token distribution",
+  "format": "minicells.sequential-probationary-genesis-task.v1",
+  "posthoc_labels_used_for_scientific_validation": true,
+  "stages": {
+    "A_STORY_NULL": {
+      "counts": {
+        "STORY": 256
+      },
+      "expected_outcome": "REJECT"
+    },
+    "B_ARITHMETIC_BIRTH": {
+      "counts": {
+        "ARITH_A": 128,
+        "STORY": 128
+      },
+      "expected_outcome": "ACCEPT"
+    },
+    "C_DUPLICATE_ARITHMETIC": {
+      "counts": {
+        "ARITH_A": 64,
+        "ARITH_B": 64,
+        "STORY": 128
+      },
+      "expected_outcome": "REJECT"
+    },
+    "D_WEAK_TRANSFORM": {
+      "counts": {
+        "ARITH_A": 115,
+        "STORY": 115,
+        "TRANSFORM": 26
+      },
+      "expected_outcome": "REJECT"
+    },
+    "E_TRANSFORM_BIRTH": {
+      "counts": {
+        "ARITH_A": 85,
+        "STORY": 86,
+        "TRANSFORM": 85
+      },
+      "expected_outcome": "ACCEPT"
+    }
+  },
+  "task_labels_used_by_commit": false,
+  "task_labels_used_by_geometry_routing": false,
+  "task_labels_used_by_proposal": false,
+  "weak_negative_control": "D_WEAK_TRANSFORM contains only 10% transform samples while preserving Story and Arithmetic exposure"
+}

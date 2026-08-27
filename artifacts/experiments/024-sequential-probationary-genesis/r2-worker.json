@@ -1,0 +1,28 @@
+{
+  "capacity_control_uses_stream_identity_only_for_matched_split": true,
+  "checkpoint_files": 6,
+  "commit_uses_task_label": false,
+  "experiment": "024",
+  "final_active_k": 2,
+  "format": "minicells.sequential-probationary-genesis-worker.v1",
+  "geometry_routing_uses_task_label": false,
+  "gpu": "Tesla T4",
+  "parent_losses": {
+    "ARITHMETIC": 7.651446223258972,
+    "STORY": 5.525049597024918,
+    "TRANSFORM": 7.963890969753265
+  },
+  "pretrain_steps": 300,
+  "pretrain_wall_seconds": 7.643944516000033,
+  "proposal_uses_task_label": false,
+  "replicate": 2,
+  "sensor": "fixed pretrained parent phenotype gradient",
+  "stages": [
+    "A_STORY_NULL",
+    "B_ARITHMETIC_BIRTH",
+    "C_DUPLICATE_ARITHMETIC",
+    "D_WEAK_TRANSFORM",
+    "E_TRANSFORM_BIRTH"
+  ],
+  "vocab_size": 2048
+}
