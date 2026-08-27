@@ -1,0 +1,113 @@
+{
+  "counts": {
+    "causal": 3,
+    "executor_sparse": 0,
+    "non_static": 0,
+    "quality": 0
+  },
+  "diagnosis": "CLM_PROGRAM_SPARSITY_QUALITY_FAILURE",
+  "evidence": [
+    {
+      "quality_ratio": 2.364713792305655,
+      "replicate": 0,
+      "shuffle_advantage": 0.043189794254988374,
+      "static_advantage": 0.07790248801447952,
+      "structural_variation": 0.0
+    },
+    {
+      "quality_ratio": 2.2785957718364656,
+      "replicate": 1,
+      "shuffle_advantage": 0.04882162123807846,
+      "static_advantage": 0.09033557539994298,
+      "structural_variation": 0.0
+    },
+    {
+      "quality_ratio": 2.263490141272729,
+      "replicate": 2,
+      "shuffle_advantage": 0.05129366607681878,
+      "static_advantage": 0.06827663612607497,
+      "structural_variation": 0.0
+    }
+  ],
+  "experiment": "CLM Validation 001 \u2014 Program Conditionality",
+  "format": "minicells.clm-validation-001.v1",
+  "replicates": 3,
+  "runtime": {
+    "cuda": "12.8",
+    "gpu_count_used": 2,
+    "gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "source": {
+    "checkpoint": "artifacts/experiments/006-consumer-language-scaling/minicells-v2-10m.pt",
+    "commit": "63af81d47755b4975d4e300560c1c72f779e0d11",
+    "training_tokens": 10000000
+  },
+  "stage_0": [
+    {
+      "dense_executor_flops": 22548578304,
+      "max_logits_abs_diff": 1.430511474609375e-05,
+      "max_recurrent_state_abs_diff": 2.086162567138672e-07,
+      "ppl_ratio": 0.999999940395357,
+      "receptor_flops": 468713472,
+      "receptor_ratio": 0.020786830357142856,
+      "status": "CLM_DENSE_EQUIVALENCE",
+      "student_nll": 2.929150402545929,
+      "student_ppl": 18.71172630651855,
+      "teacher_nll": 2.9291504621505737,
+      "teacher_ppl": 18.71172742182438,
+      "tolerances": {
+        "logits_atol": 5e-05,
+        "ppl_ratio_atol": 1e-05,
+        "recurrent_state_atol": 1e-06
+      }
+    },
+    {
+      "dense_executor_flops": 22548578304,
+      "max_logits_abs_diff": 1.430511474609375e-05,
+      "max_recurrent_state_abs_diff": 2.086162567138672e-07,
+      "ppl_ratio": 0.999999940395357,
+      "receptor_flops": 468713472,
+      "receptor_ratio": 0.020786830357142856,
+      "status": "CLM_DENSE_EQUIVALENCE",
+      "student_nll": 2.929150402545929,
+      "student_ppl": 18.71172630651855,
+      "teacher_nll": 2.9291504621505737,
+      "teacher_ppl": 18.71172742182438,
+      "tolerances": {
+        "logits_atol": 5e-05,
+        "ppl_ratio_atol": 1e-05,
+        "recurrent_state_atol": 1e-06
+      }
+    },
+    {
+      "dense_executor_flops": 22548578304,
+      "max_logits_abs_diff": 1.430511474609375e-05,
+      "max_recurrent_state_abs_diff": 2.086162567138672e-07,
+      "ppl_ratio": 0.999999940395357,
+      "receptor_flops": 468713472,
+      "receptor_ratio": 0.020786830357142856,
+      "status": "CLM_DENSE_EQUIVALENCE",
+      "student_nll": 2.929150402545929,
+      "student_ppl": 18.71172630651855,
+      "teacher_nll": 2.9291504621505737,
+      "teacher_ppl": 18.71172742182438,
+      "tolerances": {
+        "logits_atol": 5e-05,
+        "ppl_ratio_atol": 1e-05,
+        "recurrent_state_atol": 1e-06
+      }
+    }
+  ],
+  "status": "FAIL",
+  "thresholds": {
+    "normalized_advantage": 0.002,
+    "quality_ppl_ratio": 1.03,
+    "receptor_ratio": 0.05,
+    "structural_variation": 0.05
+  }
+}

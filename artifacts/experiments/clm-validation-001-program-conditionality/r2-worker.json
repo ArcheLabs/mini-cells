@@ -1,0 +1,27 @@
+{
+  "cell_sparsity": false,
+  "dense_conversion": {
+    "dense_executor_flops": 22548578304,
+    "max_logits_abs_diff": 1.430511474609375e-05,
+    "max_recurrent_state_abs_diff": 2.086162567138672e-07,
+    "ppl_ratio": 0.999999940395357,
+    "receptor_flops": 468713472,
+    "receptor_ratio": 0.020786830357142856,
+    "status": "CLM_DENSE_EQUIVALENCE",
+    "student_nll": 2.929150402545929,
+    "student_ppl": 18.71172630651855,
+    "teacher_nll": 2.9291504621505737,
+    "teacher_ppl": 18.71172742182438,
+    "tolerances": {
+      "logits_atol": 5e-05,
+      "ppl_ratio_atol": 1e-05,
+      "recurrent_state_atol": 1e-06
+    }
+  },
+  "format": "minicells.clm-validation-001-worker.v1",
+  "programs": 8,
+  "receptor_seed": 71003,
+  "replicate": 2,
+  "schedule_seed_base": 81201,
+  "source_checkpoint": "/kaggle/working/mini-cells/artifacts/experiments/006-consumer-language-scaling/minicells-v2-10m.pt"
+}
