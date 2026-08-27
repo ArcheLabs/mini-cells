@@ -1,0 +1,17 @@
+{
+  "schema": "minicells.parallel-training-root-parity.v1",
+  "status": "FAIL_TOKEN_COUNT",
+  "leaf_inputs": "32_REAL_PVM_MCGR",
+  "root_execution": "PASS",
+  "pvm_root_gas_used": 23688137,
+  "native_token_count": 4127,
+  "pvm_token_count": 987,
+  "native_loss_bits": "0x4070a4f3",
+  "pvm_loss_bits": "0x407053b9",
+  "weights_bit_exact": false,
+  "adam_m_bit_exact": false,
+  "adam_v_bit_exact": false,
+  "grad_norm_bit_exact": false,
+  "step_exact": true,
+  "reason": "MCRF1 completed with real PVM leaf records, but its reported token_count does not equal the canonical Native tree32 step. Chain testing is stopped fail-closed."
+}

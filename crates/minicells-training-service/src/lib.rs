@@ -4,7 +4,7 @@ use minicells_training_ref::{
     accumulate_batch_gradients, diagnostic_sample_backward, diagnostic_sample_forward,
     finalize_adamw_step, train_step_with_accumulator, GradientAccumulator, TrainingBatch,
     PartialGradientV1, TrainingState, TrainingWorkspace, PARAMETER_COUNT,
-    PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE, reduce_32_leaves_in_place, compute_gradient_leaf,
+    PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE, reduce_32_leaves_in_place_ref, compute_gradient_leaf,
 };
 
 #[cfg(not(feature = "tree"))]
@@ -206,7 +206,7 @@ fn tree_root(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
     }
     if seen != u32::MAX { return tree_fail(output); }
     let scratch = unsafe { &mut *core::ptr::addr_of_mut!(ACCUMULATOR) };
-    let root = reduce_32_leaves_in_place(leaves);
+    let root = reduce_32_leaves_in_place_ref(leaves);
     scratch.gradient = root.gradient; scratch.loss_sum = root.loss_sum; scratch.token_count = root.token_count;
     let report = finalize_adamw_step(state, scratch);
     let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };

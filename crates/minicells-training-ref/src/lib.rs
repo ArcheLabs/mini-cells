@@ -790,12 +790,23 @@ pub fn reduce_32_leaves(
 pub fn reduce_32_leaves_in_place(
     leaves: &mut [PartialGradientV1; PARALLEL_LEAF_COUNT],
 ) -> PartialGradientV1 {
+    reduce_32_leaves_in_place_ref(leaves);
+    leaves[0]
+}
+
+/// Stack-bounded reference form for guests that already own the leaf arena.
+/// It avoids copying the 18 KiB root record onto the PVM call stack.
+pub fn reduce_32_leaves_in_place_ref(
+    leaves: &mut [PartialGradientV1; PARALLEL_LEAF_COUNT],
+) -> &PartialGradientV1 {
     let mut width = PARALLEL_LEAF_COUNT;
     while width > 1 {
         for index in 0..(width / 2) {
             let left_index = index * 2;
-            let right = leaves[left_index + 1];
-            let left = &mut leaves[left_index];
+            let right_index = left_index + 1;
+            let (before_right, at_right) = leaves.split_at_mut(right_index);
+            let left = &mut before_right[left_index];
+            let right = &at_right[0];
             for parameter in 0..PARAMETER_COUNT {
                 left.gradient[parameter] = left.gradient[parameter] + right.gradient[parameter];
             }
@@ -805,7 +816,7 @@ pub fn reduce_32_leaves_in_place(
         }
         width /= 2;
     }
-    leaves[0]
+    &leaves[0]
 }
 
 /// Slice form of the fixed pairwise reduction, useful to executors that keep

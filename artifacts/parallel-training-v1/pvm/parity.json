@@ -5,7 +5,7 @@
   "status": "BLOCKED_TREE_PVM_PARITY",
   "native_leaf_bit_exact": true,
   "pvm_leaf_bit_exact": null,
-  "native_root_bit_exact": null,
-  "pvm_root_bit_exact": null,
-  "reason": "Dedicated MCG1 leaf execution and gas measurement now pass, but this probe does not decode and compare the MCGR bytes. Full MCRF1 root parity remains to be run; no PVM bit-exact result is claimed."
+  "native_root_bit_exact": false,
+  "pvm_root_bit_exact": false,
+  "reason": "All 32 MCGR inputs were produced by real MCG1 PVM executions and consumed by MCRF1. Root execution completed at 23,688,137 gas, but token_count was 987 versus Native 4127; chain work is stopped fail-closed."
 }
