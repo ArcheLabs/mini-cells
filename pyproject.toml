@@ -5,13 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mini-cells"
 version = "0.1.0"
-description = "MINI Cells research experiments"
+description = "MiniCells cellular language model research and CLM-0.1 Research Preview"
 requires-python = ">=3.11"
-dependencies = ["torch", "numpy", "pyyaml", "matplotlib", "pandas"]
+dependencies = ["torch", "numpy", "pyyaml", "matplotlib", "pandas", "tokenizers>=0.15"]
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
-lm = ["datasets>=2.18", "tokenizers>=0.15"]
+lm = ["datasets>=2.18"]
 
 [tool.setuptools]
 package-dir = {"" = "research"}
