@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import json
 import sys
 import time
@@ -60,6 +59,17 @@ N_REPLICATES = 3
 MODEL_SEED_BASE = 123_023
 SCHEDULE_SEED_BASE = 223_023
 STAGES = ("A_STORY_ONLY", "B_EMERGING_MATH", "C_DUPLICATE_CONTROL", "D_THIRD_MODE")
+GENESIS_COLUMNS = (
+    "replicate",
+    "step",
+    "stage",
+    "from_k",
+    "to_k",
+    "selected_k",
+    "parent_branch",
+    "structural_penalty",
+    "stability",
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -83,6 +93,22 @@ def cpu_state_dict(model: torch.nn.Module) -> dict[str, torch.Tensor]:
 
 def make_batch(stream: torch.Tensor, starts: tuple[int, ...], device: torch.device):
     return batch_from_starts(stream, starts, SEQUENCE_LENGTH, device)
+
+
+def inherit_optimizer_row_state(
+    optimizer: torch.optim.Optimizer,
+    parameter: torch.nn.Parameter,
+    *,
+    parent_branch: int,
+    newborn_branch: int,
+) -> None:
+    """Copy Adam row history so optimizer age cannot explain differentiation."""
+    state = optimizer.state.get(parameter)
+    if not state:
+        return
+    for value in state.values():
+        if torch.is_tensor(value) and value.shape == parameter.shape:
+            value[newborn_branch].copy_(value[parent_branch])
 
 
 def load_streams(cache_dir: Path):
@@ -265,7 +291,11 @@ def evaluate_stage(
     if len(domains) >= 2 and active_k >= len(domains):
         identity = summarize_multi_identity(losses, parent_losses, domains)
 
-    selected_routes = [row for row in routing_rows if row["stage"] == stage and int(row["active_k_after"]) == active_k]
+    selected_routes = [
+        row
+        for row in routing_rows
+        if row["stage"] == stage and int(row["active_k_before"]) == active_k
+    ]
     route_purity = None
     if active_k >= 2 and selected_routes:
         branches = torch.tensor([int(row["branch"]) for row in selected_routes], dtype=torch.long)
@@ -411,7 +441,11 @@ def main() -> int:
         path = checkpoint_dir / f"r{replicate}-{stage.lower()}.pt"
         if path.is_file() and path.stat().st_size > 0:
             payload = torch.load(path, map_location="cpu", weights_only=False)
-            if payload.get("format") != CHECKPOINT_FORMAT or payload.get("stage") != stage:
+            if (
+                payload.get("format") != CHECKPOINT_FORMAT
+                or payload.get("stage") != stage
+                or int(payload.get("replicate", -1)) != replicate
+            ):
                 raise RuntimeError(f"invalid Experiment 023 stage checkpoint: {path}")
             latest_payload = payload
         else:
@@ -487,12 +521,24 @@ def main() -> int:
                 )
                 if active_k == 1:
                     model.spawn_first_bifurcation(ordered.to(device))
+                    inherit_optimizer_row_state(
+                        optimizer,
+                        model.online_traits,
+                        parent_branch=0,
+                        newborn_branch=1,
+                    )
                 else:
                     model.spawn_additional_trait(
                         new_branch=newborn,
                         parent_branch=parent_branch,
                         parent_centroid=ordered[parent_branch].to(device),
                         new_centroid=ordered[newborn].to(device),
+                    )
+                    inherit_optimizer_row_state(
+                        optimizer,
+                        model.online_traits,
+                        parent_branch=parent_branch,
+                        newborn_branch=newborn,
                     )
                 active_k += 1
                 route_centroids = ordered
@@ -588,7 +634,9 @@ def main() -> int:
     online_wall = time.perf_counter() - started
     pd.DataFrame(structural_rows).to_csv(output_dir / f"r{replicate}-structure.csv", index=False)
     pd.DataFrame(routing_rows).to_csv(output_dir / f"r{replicate}-routing.csv", index=False)
-    pd.DataFrame(genesis_rows).to_csv(output_dir / f"r{replicate}-genesis.csv", index=False)
+    pd.DataFrame(genesis_rows, columns=GENESIS_COLUMNS).to_csv(
+        output_dir / f"r{replicate}-genesis.csv", index=False
+    )
     pd.DataFrame(stage_rows).to_csv(output_dir / f"r{replicate}-stage-summary.csv", index=False)
     pd.DataFrame(evaluation_rows).to_csv(output_dir / f"r{replicate}-evaluation.csv", index=False)
     pd.DataFrame(pretrain_curve).to_csv(output_dir / f"r{replicate}-pretrain.csv", index=False)
@@ -607,6 +655,7 @@ def main() -> int:
         "max_traits": MAX_TRAITS,
         "trigger_uses_task_label": False,
         "routing_uses_task_label": False,
+        "optimizer_history_inherited_on_genesis": True,
         "shadow_sensor": "fixed parent phenotype gradient",
         "pretrain_steps": PRETRAIN_STEPS,
         "online_steps": len(curriculum),
