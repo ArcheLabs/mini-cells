@@ -20,6 +20,7 @@ STREAM_KEYS = ("STORY", "ARITH_A", "ARITH_B", "TRANSFORM")
 MAX_TRAITS = 4
 STRUCTURAL_PENALTY = 0.20
 MIN_CLUSTER_FRACTION = 0.12
+INVALID_MODEL_OBJECTIVE = 1_000_000.0
 SENSOR_BUFFER = 96
 SENSOR_INTERVAL = 32
 PERSISTENCE_EVALS = 3
@@ -77,11 +78,10 @@ class MultiIdentitySummary:
 class OnlineTraitTextNCA(ForkableTextNCA):
     """Experiment-023 TextNCA with a bounded pool of latent phenotype slots.
 
-    Only the first `active_traits` slots are physically active.  The shared
-    TextNCA genome and the frozen parent phenotype act as the organism and its
-    fixed shadow developmental sensor respectively.  Experiment 023 studies
-    online structural model selection; replacing the shadow gradient oracle is
-    deliberately deferred to the next experiment.
+    Only the first active traits are physically active. The shared TextNCA
+    genome and the frozen parent phenotype act as the organism and its fixed
+    shadow developmental sensor respectively. Replacing the shadow gradient
+    oracle is deliberately deferred to the next experiment.
     """
 
     def __init__(self, vocab_size: int, *, max_traits: int = MAX_TRAITS) -> None:
@@ -128,7 +128,9 @@ class OnlineTraitTextNCA(ForkableTextNCA):
         if not 1 <= new_branch < self.max_traits:
             raise ValueError("new branch outside latent phenotype pool")
         direction = F.normalize(new_centroid - parent_centroid, dim=0, eps=1e-8)
-        self.online_traits[new_branch].copy_(self.online_traits[parent_branch] + FORK_EPSILON * direction)
+        self.online_traits[new_branch].copy_(
+            self.online_traits[parent_branch] + FORK_EPSILON * direction
+        )
 
 
 def _farthest_first(unit: torch.Tensor, k: int) -> list[int]:
@@ -145,7 +147,9 @@ def _farthest_first(unit: torch.Tensor, k: int) -> list[int]:
     return selected
 
 
-def fit_k_modes(gradients: torch.Tensor, k: int) -> tuple[torch.Tensor, torch.Tensor, float, float]:
+def fit_k_modes(
+    gradients: torch.Tensor, k: int
+) -> tuple[torch.Tensor, torch.Tensor, float, float]:
     if gradients.ndim != 2 or len(gradients) < k:
         raise ValueError("gradients must be [samples, phenotype_dim] with samples >= k")
     if not torch.isfinite(gradients).all():
@@ -186,17 +190,20 @@ def select_model_order(
     fits: list[ModeFit] = []
     for k in range(1, min(max_k, len(gradients)) + 1):
         centroids, assignment, residual, min_fraction = fit_k_modes(gradients, k)
-        normalized = residual / max(residual_k1, 1e-12)
+        if residual_k1 <= 1e-12:
+            normalized = 1.0
+        else:
+            normalized = residual / residual_k1
         objective = normalized + structural_penalty * (k - 1)
         if k > 1 and min_fraction < MIN_CLUSTER_FRACTION:
-            objective = float("inf")
+            objective = INVALID_MODEL_OBJECTIVE
         fits.append(
             ModeFit(
                 k=k,
                 centroids=centroids,
                 assignment=assignment,
                 residual=residual,
-                normalized_residual=normalized,
+                normalized_residual=float(normalized),
                 min_cluster_fraction=min_fraction,
                 objective=float(objective),
             )
@@ -238,11 +245,7 @@ def align_growth_centroids(
     old_centroids: torch.Tensor,
     new_centroids: torch.Tensor,
 ) -> tuple[torch.Tensor, int, int]:
-    """Align K+1 centroids to existing branch order and identify the newborn.
-
-    Returns `(ordered, newborn_branch, parent_branch)`. Existing branch centroids
-    appear first in their previous order, followed by the unmatched new mode.
-    """
+    """Align K+1 centroids to existing branch order and identify the newborn."""
     old_k = old_centroids.shape[0]
     if new_centroids.shape[0] != old_k + 1:
         raise ValueError("growth alignment requires exactly one new centroid")
@@ -298,7 +301,9 @@ def route_to_centroid(gradient: torch.Tensor, centroids: torch.Tensor) -> tuple[
     distances = (target - unit[None, :]).square().sum(dim=1)
     branch = int(distances.argmin().item())
     sorted_distance = torch.sort(distances).values
-    margin = float(sorted_distance[1] - sorted_distance[0]) if len(sorted_distance) > 1 else 0.0
+    margin = (
+        float(sorted_distance[1] - sorted_distance[0]) if len(sorted_distance) > 1 else 0.0
+    )
     return branch, margin
 
 
@@ -307,8 +312,9 @@ def cluster_purity(assignment: torch.Tensor, labels: list[str]) -> float:
         raise ValueError("assignments and labels must align")
     total = 0
     labels_array = np.asarray(labels)
+    assignment_array = assignment.detach().cpu().numpy()
     for cluster in sorted(set(int(value) for value in assignment.tolist())):
-        mask = assignment.detach().cpu().numpy() == cluster
+        mask = assignment_array == cluster
         values, counts = np.unique(labels_array[mask], return_counts=True)
         if len(values):
             total += int(counts.max())
@@ -362,8 +368,16 @@ def developmental_curriculum(replicate: int) -> list[dict[str, object]]:
         ("B_EMERGING_MATH", "math-10", {"STORY": 115, "ARITH_A": 13}),
         ("B_EMERGING_MATH", "math-30", {"STORY": 90, "ARITH_A": 38}),
         ("B_EMERGING_MATH", "math-50", {"STORY": 64, "ARITH_A": 64}),
-        ("C_DUPLICATE_CONTROL", "duplicate-arithmetic", {"STORY": 64, "ARITH_A": 64, "ARITH_B": 64}),
-        ("D_THIRD_MODE", "three-way", {"STORY": 128, "ARITH_A": 128, "TRANSFORM": 128}),
+        (
+            "C_DUPLICATE_CONTROL",
+            "duplicate-arithmetic",
+            {"STORY": 64, "ARITH_A": 64, "ARITH_B": 64},
+        ),
+        (
+            "D_THIRD_MODE",
+            "three-way",
+            {"STORY": 128, "ARITH_A": 128, "TRANSFORM": 128},
+        ),
     )
     rows: list[dict[str, object]] = []
     global_step = 0
@@ -399,7 +413,9 @@ def _transform_text(rng: random.Random) -> str:
     return f"Transform sequence {source}. Reverse answer {target}."
 
 
-def _transform_stream(tokenizer: object, *, target_tokens: int, seed: int) -> tuple[torch.Tensor, int]:
+def _transform_stream(
+    tokenizer: object, *, target_tokens: int, seed: int
+) -> tuple[torch.Tensor, int]:
     eos_id = tokenizer.token_to_id("<eos>")
     if eos_id is None:
         raise RuntimeError("tokenizer does not contain EOS")
@@ -436,7 +452,12 @@ def prepare_transform_cache(cache_dir: Path, tokenizer: object) -> dict[str, obj
             and _tensor_sha256(train) == manifest.get("train_sha256")
             and _tensor_sha256(validation) == manifest.get("validation_sha256")
         ):
-            return {"train": train, "validation": validation, "manifest": manifest, "path": manifest_path}
+            return {
+                "train": train,
+                "validation": validation,
+                "manifest": manifest,
+                "path": manifest_path,
+            }
     train, train_examples = _transform_stream(
         tokenizer, target_tokens=expected["train_tokens"], seed=expected["seed"]
     )
@@ -453,5 +474,12 @@ def prepare_transform_cache(cache_dir: Path, tokenizer: object) -> dict[str, obj
         "train_sha256": _tensor_sha256(train),
         "validation_sha256": _tensor_sha256(validation),
     }
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    return {"train": train, "validation": validation, "manifest": manifest, "path": manifest_path}
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return {
+        "train": train,
+        "validation": validation,
+        "manifest": manifest,
+        "path": manifest_path,
+    }
