@@ -40,6 +40,14 @@ def test_dense_copy_upcycling_is_function_preserving_for_random_router() -> None
         torch.testing.assert_close(left, right, rtol=1e-5, atol=1e-6)
 
 
+def test_conversion_inherits_values_not_frozen_teacher_flags() -> None:
+    source, _ = _models()
+    source.requires_grad_(False)
+    model = convert_textnca_to_upcycled(source)
+    assert not any(parameter.requires_grad for parameter in source.parameters())
+    assert all(parameter.requires_grad for parameter in model.parameters())
+
+
 def test_geometry_router_initialization_preserves_function() -> None:
     source, model = _models()
     inputs = torch.randint(0, 37, (2, 9))
