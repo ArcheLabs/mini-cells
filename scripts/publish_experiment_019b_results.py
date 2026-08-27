@@ -12,7 +12,6 @@ SPEC = ExperimentSpec(
     artifact_dir="artifacts/experiments/019b-recruitment-response-curves",
     files=(
         "decision.json",
-        "task-spec.json",
         "source-019-decision.json",
         "invariants.json",
         "response-observations.csv.gz",
