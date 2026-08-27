@@ -1,9 +1,20 @@
 {
   "schema": "minicells.parallel-training-root-work-package.v1",
+  "abi": "MCRF1",
+  "codec": "production WorkPackage::encode (JAM codec)",
+  "codec_version": "jam-codec 0.1.1 / Jambda WorkPackage v1",
   "inner_payload_bytes": 630823,
-  "work_package_bytes": null,
-  "protocol_overhead_bytes": null,
-  "remaining_margin_bytes": null,
-  "status": "BLOCKED_WORK_PACKAGE_CODEC_PROBE",
-  "reason": "The direct PVM root payload is under 1 MiB; this run did not invoke the chain WorkPackage builder, so no complete serialized WorkPackage size is claimed."
+  "work_item_bytes": 630882,
+  "work_package_bytes": 631054,
+  "protocol_overhead_bytes": 231,
+  "bundle_bytes": 631093,
+  "configured_protocol_limit": 1048576,
+  "remaining_margin_bytes": 417522,
+  "margin_ratio": 0.3982,
+  "package_hash": "0x2d7fef8faab6a9000dffbd3b38c60d08e0f829c02309f127b4b5b3965d19730d",
+  "service_code_hash": "0x1b4034657aa6ec8861bdc7ecb20f0944ea9a00977c56c52ebc873277ce739836",
+  "minijam_commit": "511b4357245db194678537e1b3ac111c38507278",
+  "jambda_commit": "e52307a726868205a151e6917a0a70a79965a028",
+  "status": "PASS_WORK_PACKAGE_UNDER_PROTOCOL_LIMIT",
+  "note": "Measured with the production minijam-work-package-builder against the exact passing MCRF1 root payload; no manual protocol-overhead estimate was used."
 }
