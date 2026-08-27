@@ -705,12 +705,33 @@ pub fn accumulate_batch_gradients(
     workspace: &mut TrainingWorkspace,
     accumulator: &mut GradientAccumulator,
 ) {
+    accumulate_batch_gradients_into(
+        state,
+        batch,
+        workspace,
+        &mut accumulator.gradient,
+        &mut accumulator.loss_sum,
+        &mut accumulator.token_count,
+    );
+}
+
+/// Stack-bounded accumulation primitive used by independent PVM leaves.
+/// Callers provide the destination fields directly so computing a leaf does
+/// not materialize a second 18 KiB `GradientAccumulator` frame.
+pub fn accumulate_batch_gradients_into(
+    state: &TrainingState,
+    batch: &TrainingBatch,
+    workspace: &mut TrainingWorkspace,
+    gradient: &mut [F32; PARAMETER_COUNT],
+    loss_sum: &mut F32,
+    token_count: &mut u32,
+) {
     for sample in 0..(batch.size as usize).min(LOGICAL_BATCH_SIZE) {
         let length = (batch.lengths[sample] as usize).min(MAX_SEQ_LEN);
         let (sample_loss, _) =
-            forward_backward(&state.weights, &batch.ids[sample], length, workspace, &mut accumulator.gradient, true);
-        accumulator.loss_sum += sample_loss;
-        accumulator.token_count += length as u32;
+            forward_backward(&state.weights, &batch.ids[sample], length, workspace, gradient, true);
+        *loss_sum += sample_loss;
+        *token_count += length as u32;
     }
 }
 
@@ -728,11 +749,14 @@ pub fn compute_gradient_leaf(
     out.loss_sum = 0.0;
     out.token_count = 0;
     out.processed_samples = batch.size;
-    let mut accumulator = GradientAccumulator::new();
-    accumulate_batch_gradients(state, batch, workspace, &mut accumulator);
-    out.gradient = accumulator.gradient;
-    out.loss_sum = accumulator.loss_sum;
-    out.token_count = accumulator.token_count;
+    accumulate_batch_gradients_into(
+        state,
+        batch,
+        workspace,
+        &mut out.gradient,
+        &mut out.loss_sum,
+        &mut out.token_count,
+    );
 }
 
 /// Deterministically merge two raw leaves.  The caller chooses the tree shape;
