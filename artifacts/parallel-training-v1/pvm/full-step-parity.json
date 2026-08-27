@@ -1,9 +1,20 @@
 {
   "schema": "minicells.parallel-training-full-step-parity.v1",
-  "status": "BLOCKED_ROOT_PARITY",
+  "status": "PASS_PARALLEL_PVM",
   "native_tree32": "PASS_PARALLEL_NATIVE",
   "pvm_mcg1_leaf_count": 32,
-  "pvm_mcrf1": "FAIL_TOKEN_COUNT",
-  "bit_exact": false,
-  "next_action": "REPAIR_MCRF1_TOKEN_AND_STATE_PARITY_BEFORE_CHAIN_WORK"
+  "pvm_mcrf1": "PASS_BIT_EXACT",
+  "bit_exact": true,
+  "native_vs_pvm": {
+    "token_count": true,
+    "processed_samples": true,
+    "loss": true,
+    "grad_norm": true,
+    "weights": true,
+    "adam_m": true,
+    "adam_v": true,
+    "step": true
+  },
+  "raw_root_gradient_digest": "0x1713d870a9ec74420da4b5d9c5c68f16f9a9c882a26cf7d55c5e2721c27ae9d4",
+  "next_action": "MEASURE_FULL_SERIALIZED_MCRF1_WORKPACKAGE_AFTER_REAL_ROOT_PARITY"
 }

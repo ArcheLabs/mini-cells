@@ -27,11 +27,11 @@ exact-sequence accuracy; its trajectory and provenance are recorded under
 The root payload is 630,823 bytes, below the 1 MiB WorkPackage limit.  The
 rebuilt MCG1 leaf guest reports 2,115,674,786 gas for the canonical eight-sample
 shard and 2,310,530,456 gas for a valid all-`MAX_SEQ_LEN` shard; both are
-`SHARD_PASS_FULL_COMFORTABLE`.  The full MCRF1 root bit-exact probe remains
-fail-closed and is not claimed.  The current runtime audit still reports a 6B
-block aggregate execution budget and two duties per worker, so actual chain
-overlap and speedup remain a separate gate.  See
-`artifacts/parallel-training-v1/decision.json` for the current evidence state;
-Docker preflight now passes, but fresh-chain E2E remains blocked until images
-verified at MiniJAM `511b435` are built and the required wallet/relayer/worker
-credentials are supplied; cached season2 images identify a different commit.
+`SHARD_PASS_FULL_COMFORTABLE`.  After correcting the in-place reducer to use
+fixed physical strides, the real MCRF1 root consumed 32 captured MCGR records,
+used 23,630,101 gas, and matched the canonical Native tree32 step bit-for-bit
+for token count, loss, grad norm, weights, Adam state, and optimizer step.
+This closes the `PASS_PARALLEL_PVM` root parity gate.  The complete serialized
+WorkPackage measurement, MiniJAM lane wiring, and fresh-chain execution remain
+separate gates and are intentionally not started in this commit.  See
+`artifacts/parallel-training-v1/decision.json` for the evidence state.

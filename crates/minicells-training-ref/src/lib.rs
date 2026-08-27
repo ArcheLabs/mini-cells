@@ -799,11 +799,12 @@ pub fn reduce_32_leaves_in_place(
 pub fn reduce_32_leaves_in_place_ref(
     leaves: &mut [PartialGradientV1; PARALLEL_LEAF_COUNT],
 ) -> &PartialGradientV1 {
-    let mut width = PARALLEL_LEAF_COUNT;
-    while width > 1 {
-        for index in 0..(width / 2) {
-            let left_index = index * 2;
-            let right_index = left_index + 1;
+    let mut stride = 1usize;
+    while stride < PARALLEL_LEAF_COUNT {
+        let pair_span = stride * 2;
+        let mut left_index = 0usize;
+        while left_index < PARALLEL_LEAF_COUNT {
+            let right_index = left_index + stride;
             let (before_right, at_right) = leaves.split_at_mut(right_index);
             let left = &mut before_right[left_index];
             let right = &at_right[0];
@@ -813,8 +814,9 @@ pub fn reduce_32_leaves_in_place_ref(
             left.loss_sum = left.loss_sum + right.loss_sum;
             left.token_count = left.token_count + right.token_count;
             left.processed_samples = left.processed_samples + right.processed_samples;
+            left_index += pair_span;
         }
-        width /= 2;
+        stride *= 2;
     }
     &leaves[0]
 }
@@ -1123,6 +1125,59 @@ mod tests {
         assert_eq!(state_a.adam_m, state_b.adam_m);
         assert_eq!(state_a.adam_v, state_b.adam_v);
         assert_eq!(state_a.step, state_b.step);
+    }
+
+    #[test]
+    fn in_place_tree32_matches_canonical_synthetic_metadata() {
+        let mut leaves = [const { PartialGradientV1::new() }; PARALLEL_LEAF_COUNT];
+        for (index, leaf) in leaves.iter_mut().enumerate() {
+            leaf.token_count = (index + 1) as u32;
+            leaf.processed_samples = 8;
+            leaf.loss_sum = (index as f32) * 0.25 + 0.125;
+            for parameter in 0..PARAMETER_COUNT {
+                leaf.gradient[parameter] = (index as f32 + 1.0) * 0.001
+                    + parameter as f32 * 0.000001;
+            }
+        }
+        let mut scratch = [const { PartialGradientV1::new() }; PARALLEL_LEAF_COUNT];
+        let expected = reduce_partial_gradients(&leaves, &mut scratch).unwrap();
+        let actual = reduce_32_leaves_in_place_ref(&mut leaves);
+        assert_eq!(actual.gradient, expected.gradient);
+        assert_eq!(actual.loss_sum.to_bits(), expected.loss_sum.to_bits());
+        assert_eq!(actual.token_count, 528);
+        assert_eq!(actual.token_count, expected.token_count);
+        assert_eq!(actual.processed_samples, 256);
+        assert_eq!(actual.processed_samples, expected.processed_samples);
+    }
+
+    #[test]
+    fn in_place_tree32_matches_canonical_native_leaves() {
+        let mut batch = TrainingBatch::empty();
+        batch.size = LOGICAL_BATCH_SIZE as u16;
+        for row in 0..LOGICAL_BATCH_SIZE {
+            batch.lengths[row] = 1;
+            batch.ids[row][0] = (row % VOCAB_SIZE) as u8;
+        }
+        let state = TrainingState::from_weights([0.01; PARAMETER_COUNT]);
+        let mut leaves = [const { PartialGradientV1::new() }; PARALLEL_LEAF_COUNT];
+        let mut workspace = TrainingWorkspace::new();
+        for leaf_index in 0..PARALLEL_LEAF_COUNT {
+            let mut shard = TrainingBatch::empty();
+            shard.size = PARALLEL_SHARD_SIZE as u16;
+            let start = leaf_index * PARALLEL_SHARD_SIZE;
+            for row in 0..PARALLEL_SHARD_SIZE {
+                shard.ids[row] = batch.ids[start + row];
+                shard.lengths[row] = batch.lengths[start + row];
+            }
+            compute_gradient_leaf(&state, &shard, &mut workspace, &mut leaves[leaf_index]);
+        }
+        let mut scratch = [const { PartialGradientV1::new() }; PARALLEL_LEAF_COUNT];
+        let expected = reduce_partial_gradients(&leaves, &mut scratch).unwrap();
+        let actual = reduce_32_leaves_in_place_ref(&mut leaves);
+        assert_eq!(actual.gradient, expected.gradient);
+        assert_eq!(actual.loss_sum.to_bits(), expected.loss_sum.to_bits());
+        assert_eq!(actual.token_count, expected.token_count);
+        assert_eq!(actual.processed_samples, expected.processed_samples);
     }
 
     #[test]

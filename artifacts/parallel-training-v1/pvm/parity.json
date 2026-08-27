@@ -1,11 +1,15 @@
 {
   "schema": "minicells.parallel-training-pvm-parity.v1",
+  "status": "PASS_PARALLEL_PVM",
   "leaf_abi": "MCG1/MCGR",
   "root_abi": "MCRF1/MCPR",
-  "status": "BLOCKED_TREE_PVM_PARITY",
-  "native_leaf_bit_exact": true,
-  "pvm_leaf_bit_exact": null,
-  "native_root_bit_exact": false,
-  "pvm_root_bit_exact": false,
-  "reason": "All 32 MCGR inputs were produced by real MCG1 PVM executions and consumed by MCRF1. Root execution completed at 23,688,137 gas, but token_count was 987 versus Native 4127; chain work is stopped fail-closed."
+  "leaf_count": 32,
+  "leaf_outputs": "REAL_PVM_MCGR",
+  "root_gas_used": 23630101,
+  "root_bit_exact": true,
+  "token_count": 4127,
+  "processed_samples": 256,
+  "optimizer_state_bit_exact": true,
+  "step_exact": true,
+  "next_action": "MEASURE_WORKPACKAGE_CODEC_AFTER_ROOT_PARITY"
 }

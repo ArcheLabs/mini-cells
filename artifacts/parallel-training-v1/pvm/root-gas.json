@@ -1,14 +1,16 @@
 {
   "schema": "minicells.parallel-training-root-gas.v1",
   "abi": "MCRF1/MCPR",
-  "guest_code_hash": "0x5c96052c9d28d58ae1d8d92e11d97eb63b63567cc7bb73994dcb1650ee6894ef",
+  "guest_code_hash": "0x1b4034657aa6ec8861bdc7ecb20f0944ea9a00977c56c52ebc873277ce739836",
+  "runtime_artifact_hash": "0xbff7f8c5275f515bc55f04ca42aba14c3becb6055ce2b4db5a839ec0d818b8dc",
   "payload_bytes": 630823,
   "gas_limit": 10000000000,
-  "gas_used": 23688137,
+  "gas_used": 23630101,
   "gas_exact": true,
   "completed": true,
   "classification": "ROOT_PASS_FULL_COMFORTABLE",
   "refine_limit": 5000000000,
   "output_bytes": 53736,
-  "note": "MCRF1 consumed 32 real MCGR outputs produced by MCG1 PVM executions."
+  "leaf_inputs": "32_REAL_PVM_MCGR",
+  "note": "MCRF1 consumed the captured 32 real MCG1/MCGR records after fixed-stride reducer repair; execution remained below the 5B Refine ceiling."
 }

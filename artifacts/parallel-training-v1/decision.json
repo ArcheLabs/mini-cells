@@ -1,12 +1,13 @@
 {
   "schema": "minicells.parallel-training-decision.v1",
-  "status": "BLOCKED_TREE_PVM_PARITY",
+  "status": "PASS_PARALLEL_PVM",
   "native_tree32": "PASS_PARALLEL_NATIVE",
   "schedule_determinism": "PASS_DETERMINISTIC_REDUCTION_ONLY",
   "root_payload": "PASS_PAYLOAD_UNDER_1M",
-  "pvm_parity": "BLOCKED_TREE_PVM_PARITY",
+  "pvm_parity": "PASS_PARALLEL_PVM",
   "minijam_lanes": "BLOCKED_MINIJAM_LANES",
-  "fresh_chain": "BLOCKED_BY_PVM_ROOT_PARITY",
+  "fresh_chain": "NOT_STARTED_BY_POLICY",
   "algorithm_changes": "NUMERIC_REDUCTION_ORDER_ONLY",
-  "stop_condition": "MCRF1 token_count parity failed (PVM 987 vs Native 4127); stop before chain work and repair root ABI arithmetic/state fidelity."
+  "stop_condition": "Root parity gate passed after fixed-stride reducer repair; WorkPackage, MiniJAM lane wiring and fresh-chain execution remain explicitly out of scope for this commit.",
+  "next_action": "MEASURE_FULL_SERIALIZED_MCRF1_WORKPACKAGE"
 }
