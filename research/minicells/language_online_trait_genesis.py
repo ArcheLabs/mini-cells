@@ -20,6 +20,7 @@ STREAM_KEYS = ("STORY", "ARITH_A", "ARITH_B", "TRANSFORM")
 MAX_TRAITS = 4
 STRUCTURAL_PENALTY = 0.20
 MIN_CLUSTER_FRACTION = 0.12
+MIN_SILHOUETTE_Q10 = 0.15
 INVALID_MODEL_OBJECTIVE = 1_000_000.0
 SENSOR_BUFFER = 96
 SENSOR_INTERVAL = 32
@@ -38,6 +39,7 @@ class ModeFit:
     residual: float
     normalized_residual: float
     min_cluster_fraction: float
+    silhouette_q10: float
     objective: float
 
 
@@ -180,6 +182,55 @@ def fit_k_modes(
     return centroids.detach(), assignment.detach(), residual, min(fractions)
 
 
+def lower_tail_silhouette(
+    gradients: torch.Tensor,
+    assignment: torch.Tensor,
+    *,
+    quantile: float = 0.10,
+) -> float:
+    """Return a lower-tail silhouette score for a proposed discrete mode split.
+
+    K-means will reduce SSE even when it merely quantizes one smooth unimodal
+    cloud.  Such artificial splits contain many boundary samples with poor
+    cluster membership.  A genuine mode split should keep even the lower tail
+    of samples more cohesive with its own cluster than with the nearest other
+    cluster.  The sensor buffer is only 96 rows, so the O(N^2) distance matrix
+    is negligible relative to the TextNCA gradient probes.
+    """
+    if gradients.ndim != 2 or len(gradients) != len(assignment):
+        raise ValueError("gradients and assignments must align")
+    clusters = sorted(set(int(value) for value in assignment.detach().cpu().tolist()))
+    if len(clusters) <= 1:
+        return 1.0
+    unit = F.normalize(gradients.float(), dim=1, eps=1e-8)
+    pairwise = torch.cdist(unit, unit, p=2)
+    values = []
+    for index in range(len(unit)):
+        own = int(assignment[index].item())
+        own_mask = assignment == own
+        own_mask = own_mask.clone()
+        own_mask[index] = False
+        if int(own_mask.sum()) == 0:
+            values.append(torch.tensor(0.0, device=unit.device))
+            continue
+        cohesion = pairwise[index][own_mask].mean()
+        alternatives = []
+        for cluster in clusters:
+            if cluster == own:
+                continue
+            mask = assignment == cluster
+            if int(mask.sum()) > 0:
+                alternatives.append(pairwise[index][mask].mean())
+        if not alternatives:
+            values.append(torch.tensor(0.0, device=unit.device))
+            continue
+        separation = torch.stack(alternatives).min()
+        denominator = torch.maximum(cohesion, separation).clamp_min(1e-8)
+        values.append((separation - cohesion) / denominator)
+    scores = torch.stack(values)
+    return float(torch.quantile(scores, quantile))
+
+
 def select_model_order(
     gradients: torch.Tensor,
     *,
@@ -194,8 +245,12 @@ def select_model_order(
             normalized = 1.0
         else:
             normalized = residual / residual_k1
+        silhouette_q10 = lower_tail_silhouette(gradients, assignment) if k > 1 else 1.0
         objective = normalized + structural_penalty * (k - 1)
-        if k > 1 and min_fraction < MIN_CLUSTER_FRACTION:
+        if k > 1 and (
+            min_fraction < MIN_CLUSTER_FRACTION
+            or silhouette_q10 < MIN_SILHOUETTE_Q10
+        ):
             objective = INVALID_MODEL_OBJECTIVE
         fits.append(
             ModeFit(
@@ -205,6 +260,7 @@ def select_model_order(
                 residual=residual,
                 normalized_residual=float(normalized),
                 min_cluster_fraction=min_fraction,
+                silhouette_q10=float(silhouette_q10),
                 objective=float(objective),
             )
         )
