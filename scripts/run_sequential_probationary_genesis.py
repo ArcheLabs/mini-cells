@@ -226,7 +226,7 @@ def validate_invariants(data: dict[str, object]) -> dict[str, object]:
         # The newborn branch is active_k at proposal time and can be inferred as
         # the largest branch used only by the split control. Alternation permits
         # one extra sample when the routed subset has odd cardinality.
-        values = sorted(int(v) for v in counts.values(), reverse=True)
+        values = sorted((int(v) for v in counts.values()), reverse=True)
         if len(values) >= 2 and values[0] - values[1] > 1:
             split_balance_ok = False
     if not split_balance_ok:
