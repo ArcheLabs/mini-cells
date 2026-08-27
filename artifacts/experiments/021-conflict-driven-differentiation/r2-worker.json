@@ -1,0 +1,39 @@
+{
+  "arms": [
+    "unified",
+    "capacity-fork",
+    "differentiation-fork"
+  ],
+  "batch_size": 8,
+  "capacity_routing": "task-agnostic deterministic 50/50",
+  "checkpoint_files": 4,
+  "conflict": {
+    "combined_directional_cancellation": 0.6990145444869995,
+    "combined_oracle_mean_gradient_cosine": 0.3634452223777771,
+    "combined_pc1_variance_ratio": 0.42094331979751587,
+    "combined_routing_purity_posthoc": 0.9583333333333334,
+    "combined_split_balance": 0.4583333432674408,
+    "conflict_confirmed": 0,
+    "conflict_windows_passed": 0,
+    "replicate": 2
+  },
+  "differentiation_routing": "fixed unlabeled conflict-gradient projection",
+  "domains": [
+    "STORY",
+    "ARITHMETIC"
+  ],
+  "experiment": "021",
+  "fork_epsilon": 0.02,
+  "format": "minicells.conflict-driven-differentiation-worker.v1",
+  "gpu": "Tesla T4",
+  "parent_losses": {
+    "ARITHMETIC": 7.819498240947723,
+    "STORY": 5.398255467414856
+  },
+  "postfork_steps": 400,
+  "pretrain_steps": 300,
+  "pretrain_wall_seconds": 10.53529054300003,
+  "replicate": 2,
+  "sequence_length": 64,
+  "vocab_size": 2048
+}

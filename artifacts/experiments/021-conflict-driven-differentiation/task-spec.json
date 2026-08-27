@@ -1,0 +1,15 @@
+{
+  "arithmetic_domain": "deterministic synthetic ADD/SUB/MUL/solve-x text encoded by the same TinyStories byte-level BPE",
+  "capacity_fork": "two symmetry-broken child phenotypes; each microbatch updates one child selected by a deterministic task-agnostic 50/50 schedule",
+  "differentiation_fork": "same child initialization and update budget; each microbatch updates only the child selected by the sign of its unlabeled gradient projection onto the fixed conflict axis",
+  "forbidden_routing_inputs": [
+    "task label",
+    "domain id",
+    "expert id",
+    "learned central router"
+  ],
+  "fork_site": "population phenotype injected before the final shared NCA stage",
+  "format": "minicells.conflict-driven-differentiation-task.v1",
+  "pre_fork": "one TextNCA parent trained on story only",
+  "story_domain": "TinyStories token stream"
+}
