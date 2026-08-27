@@ -1,0 +1,38 @@
+{
+  "arms": [
+    "unified",
+    "stratified-capacity-fork",
+    "geometry-bifurcation-fork"
+  ],
+  "bifurcation": {
+    "axis_stability": 0.8786592483520508,
+    "combined_bifurcation_gain": 0.38417018868173713,
+    "combined_centroid_separation": 1.0717391967773438,
+    "combined_routing_purity_posthoc": 0.9791666666666666,
+    "combined_split_balance": 0.4791666567325592,
+    "persistent_multimodality": 1,
+    "replicate": 1,
+    "windows_passed": 3
+  },
+  "capacity_control_uses_labels_only_for_exact_stratification": true,
+  "checkpoint_files": 4,
+  "domains": [
+    "STORY",
+    "ARITHMETIC"
+  ],
+  "experiment": "022",
+  "fork_epsilon": 0.02,
+  "format": "minicells.emergent-trait-bifurcation-worker.v1",
+  "geometry_routing_uses_task_label": false,
+  "gpu": "Tesla T4",
+  "parent_losses": {
+    "ARITHMETIC": 7.622761458158493,
+    "STORY": 5.425915062427521
+  },
+  "postfork_steps": 400,
+  "pretrain_steps": 300,
+  "pretrain_wall_seconds": 8.379622379000011,
+  "replicate": 1,
+  "trigger_uses_task_label": false,
+  "vocab_size": 2048
+}
