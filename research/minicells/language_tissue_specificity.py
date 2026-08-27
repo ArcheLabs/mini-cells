@@ -11,6 +11,7 @@ from .language_localized_learning import LocalizedLearningState, conservative_fo
 TISSUE_ARMS = ("one-cell", "three-cell-chain")
 ONE_CELL_SIZE = 1
 THREE_CELL_SIZE = 3
+MATCHING_VALUE_MIN = 0.05
 SPECIFICITY_NORM_MIN = 0.10
 EXAMPLE_TOP1_MIN = 0.50
 REPLICATE_TOP1_MIN = 2
@@ -61,12 +62,14 @@ def summarize_specificity(candidate_names: list[str], values: np.ndarray, matchi
 
 
 def family_pass(
+    matching_value: float,
     normalized_specificity: float,
     replicate_top1_count: int,
     example_top1: float,
 ) -> bool:
     return bool(
-        normalized_specificity >= SPECIFICITY_NORM_MIN
+        matching_value >= MATCHING_VALUE_MIN
+        and normalized_specificity >= SPECIFICITY_NORM_MIN
         and replicate_top1_count >= REPLICATE_TOP1_MIN
         and example_top1 >= EXAMPLE_TOP1_MIN
     )
