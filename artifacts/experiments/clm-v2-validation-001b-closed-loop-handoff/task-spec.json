@@ -1,0 +1,46 @@
+{
+  "advantage_min": 0.002,
+  "alphas": [
+    1,
+    0.75,
+    0.5,
+    0.25,
+    0
+  ],
+  "cell_activation": 1.0,
+  "consolidation_tokens": 500000,
+  "experiment": "CLM v2 Validation 001b \u2014 Closed-Loop Scaffold Handoff",
+  "expert_hidden": 64,
+  "final_handoff_ratio_max": 1.03,
+  "format": "minicells.clm-v2-validation-001b-task.v1",
+  "genome_capacity_ratio": 1.75,
+  "handoff_progress_ratio_max": 1.01,
+  "handoff_safety_ratio_max": 1.2,
+  "handoff_tokens_per_alpha": 250000,
+  "imitation_tokens_initial": 500000,
+  "imitation_tokens_max": 1000000,
+  "initial_k": 6,
+  "k_progression": [
+    6,
+    5,
+    4,
+    3
+  ],
+  "k_reduction_tokens_per_stage": 375000,
+  "local_gate": {
+    "cosine_min": 0.95,
+    "direct_alpha_zero_ppl": "telemetry_only",
+    "relative_mse_max": 0.1
+  },
+  "programs": 12,
+  "quality_safe_k_max": 5,
+  "receptor_ratio_max": 0.05,
+  "replicates": 3,
+  "sample_variation_min": 0.05,
+  "seeds": {
+    "model_router": "103001+r",
+    "schedule": "104001+r*100+stage",
+    "shuffle": "112001+r*100+permutation"
+  },
+  "shared_hidden": 128
+}
