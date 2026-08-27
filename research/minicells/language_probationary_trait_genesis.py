@@ -34,6 +34,18 @@ class ProbationDecision:
     beats_capacity: bool
     accepted: bool
 
+    @property
+    def geometry_mean_net_utility_last3(self) -> float:
+        return float(np.mean(self.geometry_window_net_utility[-3:]))
+
+    @property
+    def capacity_mean_net_utility_last3(self) -> float:
+        return float(np.mean(self.capacity_window_net_utility[-3:]))
+
+    @property
+    def geometry_advantage_last3(self) -> float:
+        return float(np.mean(self.geometry_advantage[-3:]))
+
 
 def condition_counts(condition: str, *, steps: int = PROBATION_STEPS) -> dict[str, int]:
     if steps <= 0:
