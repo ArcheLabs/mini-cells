@@ -1,0 +1,160 @@
+{
+  "checkpoint_manifest": {
+    "file_count": 14,
+    "maximum_file_count": 15,
+    "observed_path_complete": true,
+    "published_model_checkpoints": false
+  },
+  "design": {
+    "candidates": [
+      "TRANSFORM",
+      "PARITY",
+      "MODSUM",
+      "SORT",
+      "ROTATE",
+      "DELAY_COPY",
+      "STATE_MACHINE"
+    ],
+    "challenge_commit_uses_task_label": false,
+    "challenge_geometry_routing_uses_task_label": false,
+    "challenge_proposal_uses_task_label": false,
+    "expected_trajectory": [
+      1,
+      2,
+      2,
+      3
+    ],
+    "geometry_advantage_min": 0.005,
+    "gpu_count": 2,
+    "replicates": 3,
+    "routing_purity_min": 0.75,
+    "screen_absorption_ratio_max": 0.5,
+    "screen_independence_min": 0.01,
+    "screen_learnability_min": 0.02,
+    "screen_qualify_replicates_min": 2,
+    "screen_steps": 128,
+    "screening_qualified": false,
+    "selected_candidate": "STATE_MACHINE",
+    "selection_frozen_before_challenge": true,
+    "structural_cost_fraction": 0.005
+  },
+  "experiment": "MINI Cells Experiment 024b \u2014 Independent Third-Trait Challenge",
+  "format": "minicells.independent-third-trait.v1",
+  "interpretation": {
+    "scope": "024b tests functional non-substitutability before third-trait birth. It still uses benchmark-controlled screening, a fixed pretrained gradient sensor, frozen shared genome, and synthetic capabilities; it does not establish local sensing, rewiring, pruning, merging, or inference-time recruitment.",
+    "success": "Strong positive requires a preregistered screening-qualified candidate, stable Story/Arithmetic first birth in >=2/3, weak selected-capability rejection with two-trait retention in 3/3, and strong selected-capability 2->3 birth with three-domain identity and routing purity >=0.75 in >=2/3."
+  },
+  "question": "Can a two-trait Story/Arithmetic organism first identify a functionally non-substitutable third capability and then grow a third persistent trait under the unchanged probationary birth rule?",
+  "results": {
+    "arithmetic_birth_replicates": 2,
+    "final_k3_replicates": 1,
+    "per_replicate": [
+      {
+        "arithmetic_birth": 0,
+        "final_k": 2,
+        "replicate": 0,
+        "strong_birth": 0,
+        "weak_reject": 1
+      },
+      {
+        "arithmetic_birth": 1,
+        "final_k": 2,
+        "replicate": 1,
+        "strong_birth": 0,
+        "weak_reject": 1
+      },
+      {
+        "arithmetic_birth": 1,
+        "final_k": 3,
+        "replicate": 2,
+        "strong_birth": 0,
+        "weak_reject": 0
+      }
+    ],
+    "strong_third_birth_replicates": 0,
+    "weak_reject_replicates": 2
+  },
+  "selected_candidate_screening_rows": [
+    {
+      "absorption_ratio": 1.013362089189763,
+      "arithmetic_damage": 0.0045024242915139,
+      "baseline_arithmetic_nll": 6.703480750322342,
+      "baseline_candidate_nll": 6.576218128204346,
+      "candidate": "STATE_MACHINE",
+      "computational_branch": 0,
+      "existing_arithmetic_nll": 6.733662664890289,
+      "existing_candidate_gain": 0.0417529240655487,
+      "existing_candidate_nll": 6.301641792058945,
+      "existing_value": 0.0372504997740347,
+      "independence_advantage": -0.0004911812921103,
+      "newborn_candidate_gain": 0.0417593184819244,
+      "newborn_candidate_nll": 6.301599740982056,
+      "newborn_value": 0.0367593184819244,
+      "qualifies": false,
+      "replicate": 0
+    },
+    {
+      "absorption_ratio": 0.6444807910680332,
+      "arithmetic_damage": 0.015832995085596,
+      "baseline_arithmetic_nll": 6.703327983617783,
+      "baseline_candidate_nll": 6.57725664973259,
+      "candidate": "STATE_MACHINE",
+      "computational_branch": 0,
+      "existing_arithmetic_nll": 6.809461742639542,
+      "existing_candidate_gain": 0.035465853768488,
+      "existing_candidate_nll": 6.343988627195358,
+      "existing_value": 0.0196328586828919,
+      "independence_advantage": 0.010830203917246,
+      "newborn_candidate_gain": 0.0354630626001379,
+      "newborn_candidate_nll": 6.344006985425949,
+      "newborn_value": 0.0304630626001379,
+      "qualifies": false,
+      "replicate": 1
+    },
+    {
+      "absorption_ratio": 0.923646088272932,
+      "arithmetic_damage": 0.0084558244629684,
+      "baseline_arithmetic_nll": 6.740790158510208,
+      "baseline_candidate_nll": 6.788369834423065,
+      "candidate": "STATE_MACHINE",
+      "computational_branch": 0,
+      "existing_arithmetic_nll": 6.797789096832275,
+      "existing_candidate_gain": 0.0500606036808499,
+      "existing_candidate_nll": 6.448539942502976,
+      "existing_value": 0.0416047792178815,
+      "independence_advantage": 0.0034392909580401,
+      "newborn_candidate_gain": 0.0500440701759216,
+      "newborn_candidate_nll": 6.448652178049088,
+      "newborn_value": 0.0450440701759216,
+      "qualifies": false,
+      "replicate": 2
+    }
+  ],
+  "selection": {
+    "format": "minicells.independent-third-trait-selection.v1",
+    "median_independence": {
+      "DELAY_COPY": 0.0026285759854765,
+      "MODSUM": -0.0042634786950151,
+      "PARITY": 0.0004386950461214,
+      "ROTATE": -0.0046017942753079,
+      "SORT": -0.005015423105654,
+      "STATE_MACHINE": 0.0034392909580401,
+      "TRANSFORM": -0.0020800394435901
+    },
+    "qualified": false,
+    "qualifying_candidates": [],
+    "qualifying_replicates": {
+      "DELAY_COPY": 0,
+      "MODSUM": 0,
+      "PARITY": 0,
+      "ROTATE": 0,
+      "SORT": 0,
+      "STATE_MACHINE": 0,
+      "TRANSFORM": 0
+    },
+    "rule": "among candidates qualifying in >=2/3 replicates, choose highest median independence advantage; ties lexicographic; if none qualify choose highest median only as exploratory challenge",
+    "selected": "STATE_MACHINE",
+    "selection_frozen_before_challenge": true
+  },
+  "status": "NO_FUNCTIONALLY_INDEPENDENT_THIRD_CAPABILITY"
+}

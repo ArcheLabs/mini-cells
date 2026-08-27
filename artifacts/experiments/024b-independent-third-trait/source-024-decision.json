@@ -1,0 +1,128 @@
+{
+  "checkpoint_manifest": {
+    "expected_file_count": 18,
+    "file_count": 18,
+    "published_model_checkpoints": false
+  },
+  "design": {
+    "commit_uses_task_label": false,
+    "expected_trajectory": [
+      1,
+      1,
+      2,
+      2,
+      2,
+      3
+    ],
+    "geometry_advantage_min": 0.005,
+    "geometry_routing_uses_task_label": false,
+    "gpu_count": 2,
+    "positive_replicates_min": 2,
+    "proposal_always_opened": true,
+    "proposal_uses_task_label": false,
+    "replicates": 3,
+    "routing_purity_min": 0.75,
+    "sensor": "fixed pretrained parent phenotype gradient",
+    "sequential_commit_semantics": "accepted stage continues from geometry-shadow model+Adam state; rejected stage continues from incumbent model+Adam state",
+    "stages": [
+      {
+        "counts": {
+          "STORY": 256
+        },
+        "expected_end_k": 1,
+        "expected_outcome": "REJECT",
+        "expected_start_k": 1,
+        "stage": "A_STORY_NULL"
+      },
+      {
+        "counts": {
+          "ARITH_A": 128,
+          "STORY": 128
+        },
+        "expected_end_k": 2,
+        "expected_outcome": "ACCEPT",
+        "expected_start_k": 1,
+        "stage": "B_ARITHMETIC_BIRTH"
+      },
+      {
+        "counts": {
+          "ARITH_A": 64,
+          "ARITH_B": 64,
+          "STORY": 128
+        },
+        "expected_end_k": 2,
+        "expected_outcome": "REJECT",
+        "expected_start_k": 2,
+        "stage": "C_DUPLICATE_ARITHMETIC"
+      },
+      {
+        "counts": {
+          "ARITH_A": 115,
+          "STORY": 115,
+          "TRANSFORM": 26
+        },
+        "expected_end_k": 2,
+        "expected_outcome": "REJECT",
+        "expected_start_k": 2,
+        "stage": "D_WEAK_TRANSFORM"
+      },
+      {
+        "counts": {
+          "ARITH_A": 85,
+          "STORY": 86,
+          "TRANSFORM": 85
+        },
+        "expected_end_k": 3,
+        "expected_outcome": "ACCEPT",
+        "expected_start_k": 2,
+        "stage": "E_TRANSFORM_BIRTH"
+      }
+    ],
+    "structural_cost_fraction": 0.005
+  },
+  "experiment": "MINI Cells Experiment 024 \u2014 Sequential Probationary Genesis",
+  "format": "minicells.sequential-probationary-genesis.v1",
+  "interpretation": {
+    "scope": "024 validates repeated birth valuation in one persistent organism. It still uses a fixed pretrained gradient sensor and does not establish local sensing, rewiring, pruning, merging, or inference-time recruitment.",
+    "success": "Strong positive requires Story null rejection in 3/3; a 1->2 Story/Arithmetic birth with functional identity and routing purity >=0.75 in >=2/3; duplicate-Arithmetic and 10% weak-Transform rejection with two-trait retention in 3/3; and a later 2->3 Story/Arithmetic/Transform birth with three-trait functional identity and routing purity >=0.75 in >=2/3, ending at exactly K=3."
+  },
+  "question": "Can one continuous TextNCA organism repeatedly reject or commit temporary task-label-free trait births and thereby grow from one to two to three persistent functional traits?",
+  "results": {
+    "arithmetic_birth_replicates": 2,
+    "duplicate_reject_replicates": 3,
+    "final_k3_replicates": 1,
+    "per_replicate": [
+      {
+        "arithmetic_birth": 0,
+        "duplicate_reject": 1,
+        "final_k": 2,
+        "replicate": 0,
+        "story_null_reject": 1,
+        "transform_birth": 0,
+        "weak_transform_reject": 1
+      },
+      {
+        "arithmetic_birth": 1,
+        "duplicate_reject": 1,
+        "final_k": 3,
+        "replicate": 1,
+        "story_null_reject": 1,
+        "transform_birth": 0,
+        "weak_transform_reject": 1
+      },
+      {
+        "arithmetic_birth": 1,
+        "duplicate_reject": 1,
+        "final_k": 2,
+        "replicate": 2,
+        "story_null_reject": 1,
+        "transform_birth": 0,
+        "weak_transform_reject": 1
+      }
+    ],
+    "story_null_reject_replicates": 3,
+    "transform_birth_replicates": 0,
+    "weak_transform_reject_replicates": 3
+  },
+  "status": "FIRST_BIRTH_WITHOUT_SECOND_TRAIT_GENESIS"
+}
