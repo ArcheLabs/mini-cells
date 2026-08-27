@@ -23,7 +23,9 @@ STAGES = (
     "D_WEAK_TRANSFORM",
     "E_TRANSFORM_BIRTH",
 )
-MAX_TRAITS = 3
+# Four latent slots are available only so an erroneous early birth can be
+# recorded instead of crashing the run. A strong positive must still end at K=3.
+MAX_TRAITS = 4
 PROPOSAL_BATCHES = 64
 POSITIVE_REPLICATES_MIN = 2
 IDENTITY_NORMALIZED_MARGIN_MIN = 0.01
@@ -56,12 +58,10 @@ def stage_spec(stage: str, *, steps: int = PROBATION_STEPS) -> StageSpec:
     if steps <= 0:
         raise ValueError("steps must be positive")
     if stage == "A_STORY_NULL":
-        counts = {"STORY": steps}
-        return StageSpec(stage, counts, "REJECT", 1, 1)
+        return StageSpec(stage, {"STORY": steps}, "REJECT", 1, 1)
     if stage == "B_ARITHMETIC_BIRTH":
         story = steps // 2
-        counts = {"STORY": story, "ARITH_A": steps - story}
-        return StageSpec(stage, counts, "ACCEPT", 1, 2)
+        return StageSpec(stage, {"STORY": story, "ARITH_A": steps - story}, "ACCEPT", 1, 2)
     if stage == "C_DUPLICATE_ARITHMETIC":
         story = steps // 2
         remaining = steps - story
@@ -73,7 +73,7 @@ def stage_spec(stage: str, *, steps: int = PROBATION_STEPS) -> StageSpec:
         remaining = steps - transform
         story = remaining // 2
         counts = {"STORY": story, "ARITH_A": remaining - story, "TRANSFORM": transform}
-        return StageSpec(stage, counts, "DISCOVER", 2, 2)
+        return StageSpec(stage, counts, "REJECT", 2, 2)
     if stage == "E_TRANSFORM_BIRTH":
         story = steps // 3 + (1 if steps % 3 > 0 else 0)
         arithmetic = steps // 3 + (1 if steps % 3 > 1 else 0)
@@ -178,7 +178,12 @@ def classify_replicate(stages: list[dict[str, object]]) -> dict[str, object]:
             and int(c["end_k"]) == 2
             and int(c.get("retention_identity_pass", 0) or 0) == 1
         ),
-        "weak_transform_accepted": int(int(d["accepted"]) == 1),
+        "weak_transform_reject": int(
+            int(d["start_k"]) == 2
+            and int(d["accepted"]) == 0
+            and int(d["end_k"]) == 2
+            and int(d.get("retention_identity_pass", 0) or 0) == 1
+        ),
         "transform_birth": int(
             int(e["accepted"]) == 1
             and int(e["start_k"]) == 2
@@ -196,6 +201,7 @@ def aggregate_status(replicates: list[dict[str, object]]) -> str:
     null_reject = sum(int(row["story_null_reject"]) for row in replicates)
     arithmetic_birth = sum(int(row["arithmetic_birth"]) for row in replicates)
     duplicate_reject = sum(int(row["duplicate_reject"]) for row in replicates)
+    weak_reject = sum(int(row["weak_transform_reject"]) for row in replicates)
     transform_birth = sum(int(row["transform_birth"]) for row in replicates)
     final_three = sum(int(row["final_k"] == 3) for row in replicates)
     if null_reject < len(replicates):
@@ -204,6 +210,8 @@ def aggregate_status(replicates: list[dict[str, object]]) -> str:
         return "NO_FIRST_PROBATIONARY_BIRTH"
     if duplicate_reject < POSITIVE_REPLICATES_MIN:
         return "DUPLICATE_SIGNAL_CAUSES_EXTRA_BIRTH"
+    if weak_reject < POSITIVE_REPLICATES_MIN:
+        return "WEAK_SIGNAL_CAUSES_EARLY_BIRTH"
     if transform_birth >= POSITIVE_REPLICATES_MIN and final_three >= POSITIVE_REPLICATES_MIN:
         return "SEQUENTIAL_PROBATIONARY_GENESIS_SIGNAL"
     return "FIRST_BIRTH_WITHOUT_SECOND_TRAIT_GENESIS"
