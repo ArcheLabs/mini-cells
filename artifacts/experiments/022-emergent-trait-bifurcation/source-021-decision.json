@@ -1,0 +1,54 @@
+{
+  "checkpoint_manifest": {
+    "expected_file_count": 12,
+    "file_count": 12,
+    "published_model_checkpoints": false
+  },
+  "design": {
+    "arms": [
+      "unified",
+      "capacity-fork",
+      "differentiation-fork"
+    ],
+    "calibration_windows": 3,
+    "capacity_and_differentiation_same_symmetry_break": true,
+    "capacity_routing": "task-agnostic deterministic 50/50",
+    "conflict_axis_uses_task_label": false,
+    "domains": [
+      "STORY",
+      "ARITHMETIC"
+    ],
+    "fork_epsilon": 0.02,
+    "gpu_count": 2,
+    "identity_normalized_margin_min": 0.01,
+    "one_child_update_per_microbatch_in_both_fork_controls": true,
+    "positive_replicates_min": 2,
+    "postfork_steps": 400,
+    "replicates": 3,
+    "routing_purity_min": 0.75,
+    "routing_uses_task_label": false,
+    "shared_genome_after_fork": true,
+    "story_pretraining_steps": 300,
+    "task_labels_used_for_posthoc_validation": true
+  },
+  "experiment": "MINI Cells Experiment 021 \u2014 Conflict-Driven Differentiation",
+  "format": "minicells.conflict-driven-differentiation.v1",
+  "interpretation": {
+    "capacity_control": "Capacity fork uses the same symmetry break and the same per-child update budget as differentiation fork, but routes by a deterministic task-agnostic 50/50 schedule rather than conflict geometry.",
+    "scope": "021 proves or falsifies conflict->division->differentiation in a minimal fixed-topology TextNCA substrate. It does not yet test autonomous topology rewiring or inference-time recruitment.",
+    "success": "A positive result requires conflict, posthoc evidence that unlabeled gradient geometry separates the abilities, functional branch identity in >=2/3 replicates, and failure of the capacity-only control to explain the effect."
+  },
+  "question": "Can persistent story/arithmetic learning conflict cause two shared-genome TextNCA populations to become functionally distinct when learning pressure is split by unlabeled phenotype-gradient geometry?",
+  "results": {
+    "capacity_identity_pass_replicates": 2,
+    "conflict_confirmed_replicates": 0,
+    "conflict_windows_passed": 1,
+    "conflict_windows_total": 9,
+    "differentiation_identity_pass_replicates": 3,
+    "differentiation_routing_pass_replicates": 3,
+    "mean_capacity_identity_margin": 0.0202615405824321,
+    "mean_differentiation_identity_margin": 0.159978064195173,
+    "mean_differentiation_routing_purity": 0.9341666666666667
+  },
+  "status": "CAPACITY_ALONE_SPECIALIZES"
+}
