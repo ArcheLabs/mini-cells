@@ -6,6 +6,7 @@ from minicells.language_growing_organism import build_cellular_model
 from minicells.language_localized_learning import LocalizedLearningState, conservative_fork
 from minicells.language_proposal_checkpoints import (
     CHECKPOINT_FORMAT,
+    TRAINING_PROTOCOL_ID,
     atomic_torch_save,
     cpu_state_dict,
     donor_path,
@@ -27,6 +28,15 @@ def _model_and_localized_state():
     return model, localized
 
 
+def _identity(kind: str, replicate: int) -> dict[str, object]:
+    return {
+        "format": CHECKPOINT_FORMAT,
+        "training_protocol": TRAINING_PROTOCOL_ID,
+        "kind": kind,
+        "replicate": replicate,
+    }
+
+
 def test_checkpoint_paths_are_replicate_and_family_specific(tmp_path) -> None:
     assert phase1_path(tmp_path, 2).name == "r2-phase1.pt"
     assert donor_path(tmp_path, 1, "REVERSE_INC").name == "r1-donor-REVERSE_INC.pt"
@@ -36,9 +46,7 @@ def test_donor_checkpoint_roundtrip_preserves_model_and_localized_state(tmp_path
     model, localized = _model_and_localized_state()
     path = donor_path(tmp_path, 0, "PARITY")
     payload = {
-        "format": CHECKPOINT_FORMAT,
-        "kind": "donor",
-        "replicate": 0,
+        **_identity("donor", 0),
         "family": "PARITY",
         "vocab_size": 128,
         "model_state": cpu_state_dict(model.state_dict()),
@@ -59,12 +67,7 @@ def test_donor_checkpoint_roundtrip_preserves_model_and_localized_state(tmp_path
 
 def test_checkpoint_identity_mismatch_is_rejected(tmp_path) -> None:
     path = phase1_path(tmp_path, 0)
-    atomic_torch_save(path, {
-        "format": CHECKPOINT_FORMAT,
-        "kind": "phase1",
-        "replicate": 0,
-        "base_state": {},
-    })
+    atomic_torch_save(path, {**_identity("phase1", 0), "base_state": {}})
     try:
         load_checkpoint(path, kind="phase1", replicate=1)
     except RuntimeError as exc:
@@ -73,13 +76,25 @@ def test_checkpoint_identity_mismatch_is_rejected(tmp_path) -> None:
         raise AssertionError("mismatched checkpoint identity must fail")
 
 
-def test_force_retrain_bypasses_existing_checkpoint(tmp_path, monkeypatch) -> None:
+def test_training_protocol_mismatch_is_rejected(tmp_path) -> None:
     path = phase1_path(tmp_path, 0)
     atomic_torch_save(path, {
         "format": CHECKPOINT_FORMAT,
+        "training_protocol": "obsolete-training-protocol",
         "kind": "phase1",
         "replicate": 0,
         "base_state": {},
     })
+    try:
+        load_checkpoint(path, kind="phase1", replicate=0)
+    except RuntimeError as exc:
+        assert "training protocol mismatch" in str(exc)
+    else:
+        raise AssertionError("mismatched training protocol must fail")
+
+
+def test_force_retrain_bypasses_existing_checkpoint(tmp_path, monkeypatch) -> None:
+    path = phase1_path(tmp_path, 0)
+    atomic_torch_save(path, {**_identity("phase1", 0), "base_state": {}})
     monkeypatch.setenv("MINICELLS_019_FORCE_RETRAIN", "1")
     assert load_checkpoint(path, kind="phase1", replicate=0) is None
