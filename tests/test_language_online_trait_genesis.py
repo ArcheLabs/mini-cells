@@ -5,6 +5,7 @@ from collections import Counter
 import torch
 
 from minicells.language_online_trait_genesis import (
+    MIN_SILHOUETTE_Q10,
     GrowthEvidence,
     align_growth_centroids,
     developmental_curriculum,
@@ -25,6 +26,7 @@ def test_structural_objective_keeps_unimodal_field_at_one() -> None:
     gradients = _cloud(center, 96, 0.05, 1)
     selection = select_model_order(gradients)
     assert selection.selected_k == 1
+    assert selection.fit(2).silhouette_q10 < MIN_SILHOUETTE_Q10
 
 
 def test_structural_objective_discovers_two_and_three_modes_without_labels() -> None:
@@ -37,8 +39,14 @@ def test_structural_objective_discovers_two_and_three_modes_without_labels() -> 
         _cloud(b, 32, 0.04, 5),
         _cloud(c, 32, 0.04, 6),
     ])
-    assert select_model_order(two).selected_k == 2
-    assert select_model_order(three).selected_k == 3
+    two_selection = select_model_order(two)
+    three_selection = select_model_order(three)
+    assert two_selection.selected_k == 2
+    assert three_selection.selected_k == 3
+    assert two_selection.fit(2).silhouette_q10 >= MIN_SILHOUETTE_Q10
+    assert three_selection.fit(3).silhouette_q10 >= MIN_SILHOUETTE_Q10
+    assert two_selection.fit(3).silhouette_q10 < MIN_SILHOUETTE_Q10
+    assert three_selection.fit(4).silhouette_q10 < MIN_SILHOUETTE_Q10
 
 
 def test_growth_requires_three_stable_online_evaluations() -> None:
