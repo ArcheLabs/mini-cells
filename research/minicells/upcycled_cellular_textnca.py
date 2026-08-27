@@ -180,6 +180,9 @@ class UpcycledCellularTextNCA(nn.Module):
             "source_model": "TextNCALM",
             "initialization": "dense_ffn_copy",
         }
+        # The source checkpoint is deliberately frozen as a teacher before conversion.
+        # Upcycling inherits its values, not its requires_grad flags.
+        self.requires_grad_(True)
 
     def _replace_config(self, **changes: object) -> None:
         config = replace(self.config, **changes)
