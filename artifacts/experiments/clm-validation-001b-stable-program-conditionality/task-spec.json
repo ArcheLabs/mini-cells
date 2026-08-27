@@ -1,0 +1,32 @@
+{
+  "budgets": [
+    250000,
+    250000,
+    375000,
+    500000,
+    500000
+  ],
+  "cell_activation": 1.0,
+  "format": "minicells.clm-validation-001b-task.v1",
+  "programs": 8,
+  "progression": [
+    8,
+    7,
+    6,
+    5,
+    4
+  ],
+  "quality_ratio_max": 1.03,
+  "receptor_ratio_max": 0.05,
+  "replicates": 3,
+  "required_safe_k_max": 6,
+  "sample_variation_min": 0.05,
+  "seeds": {
+    "receptor": "72001+r",
+    "schedule": "82001+r*100+stage",
+    "shuffle": "92001+r*100+permutation"
+  },
+  "shuffle_advantage_min": 0.002,
+  "shuffle_permutations": 3,
+  "static_advantage_min": 0.002
+}
