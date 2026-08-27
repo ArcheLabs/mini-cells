@@ -20,6 +20,10 @@ MiniJAM worker branch `agent/minicells-parallel-refine` adds a wrapper-level
 lane executor, and refine queue metrics.  These are a concurrency compatibility
 layer, not a claim of full JAM multi-core protocol conformance.
 
+The canonical 5000-step Native tree32 run reaches 1.0 token accuracy and 1.0
+exact-sequence accuracy; its trajectory and provenance are recorded under
+`artifacts/parallel-training-v1/native/learning-5000.json`.
+
 The root payload is 630,823 bytes, below the 1 MiB WorkPackage limit.  The
 current runtime audit still reports a 6B block aggregate execution budget and
 two duties per worker, so actual chain overlap and speedup remain a separate

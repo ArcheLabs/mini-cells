@@ -2,8 +2,21 @@
   "schema": "minicells.parallel-training-learning.v1",
   "algorithm": "echo-adamw-ce-tree32-v1",
   "steps": 5000,
-  "status": "PENDING_RUN",
-  "token_accuracy": null,
-  "exact_sequence_accuracy": null,
-  "reason": "The canonical release run is executing separately; no learning result is fabricated."
+  "status": "PASS_PARALLEL_NATIVE",
+  "token_accuracy": 1.0,
+  "exact_sequence_accuracy": 1.0,
+  "parallel_width": 4,
+  "final_step": 5000,
+  "final_weight_digest": "0xdeb8577d1f838a52b62d24cbe7bcc761d7f91939b1497b4e3ee2ebbfb6d128c2",
+  "trajectory_steps": [1, 2, 4, 16, 100, 500, 1000, 5000],
+  "trajectory": {
+    "step_1_loss": 3.758971929550171,
+    "step_100_loss": 1.9217400550842285,
+    "step_500_loss": 0.2601091265678406,
+    "step_1000_loss": 0.08844125270843506,
+    "step_5000_loss": 0.0033829580061137676
+  },
+  "completion_order_indexed": true,
+  "actual_wall_clock_overlap_proven": false,
+  "note": "Native tree32 learning gate passed; runtime overlap remains a separate MiniJAM gate."
 }
