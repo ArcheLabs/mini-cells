@@ -1,0 +1,77 @@
+{
+  "candidate_control": "RANDOM",
+  "checkpoint_expected_file_count": 24,
+  "checkpoint_protocol": "minicells.proposal-utility-checkpoint.v1",
+  "estimators": {
+    "boundary-mlp": [
+      "parent_state_rms",
+      "parent_settling_rms",
+      "proposal_parent_rms",
+      "proposal_parent_alignment",
+      "child_memory_norm",
+      "child_parent_memory_cosine",
+      "interface_settling_rms",
+      "proposal_interface_rms",
+      "proposal_interface_alignment",
+      "base_entropy",
+      "base_margin",
+      "probe_logit_shift_rms",
+      "probe_kl",
+      "probe_entropy_delta",
+      "probe_margin_delta"
+    ],
+    "boundary-ridge": [
+      "parent_state_rms",
+      "parent_settling_rms",
+      "proposal_parent_rms",
+      "proposal_parent_alignment",
+      "child_memory_norm",
+      "child_parent_memory_cosine",
+      "interface_settling_rms",
+      "proposal_interface_rms",
+      "proposal_interface_alignment",
+      "base_entropy",
+      "base_margin",
+      "probe_logit_shift_rms",
+      "probe_kl",
+      "probe_entropy_delta",
+      "probe_margin_delta"
+    ],
+    "local-mlp": [
+      "parent_state_rms",
+      "parent_settling_rms",
+      "proposal_parent_rms",
+      "proposal_parent_alignment",
+      "child_memory_norm",
+      "child_parent_memory_cosine"
+    ],
+    "local-ridge": [
+      "parent_state_rms",
+      "parent_settling_rms",
+      "proposal_parent_rms",
+      "proposal_parent_alignment",
+      "child_memory_norm",
+      "child_parent_memory_cosine"
+    ],
+    "probe-kl": [
+      "probe_kl"
+    ],
+    "proposal-norm": [
+      "proposal_parent_rms"
+    ]
+  },
+  "experiment": "019",
+  "families": [
+    "REVERSE_INC",
+    "MOD_ADD",
+    "PARITY",
+    "LOOKUP",
+    "DELAY_COPY",
+    "LOCAL_RULE"
+  ],
+  "format": "minicells.proposal-utility-task.v1",
+  "gpu_count": 2,
+  "oracle_epsilon": 0.02,
+  "replicates": 3,
+  "stable_gradient_oracle": true
+}

@@ -1,0 +1,54 @@
+{
+  "boundary_features": [
+    "parent_state_rms",
+    "parent_settling_rms",
+    "proposal_parent_rms",
+    "proposal_parent_alignment",
+    "child_memory_norm",
+    "child_parent_memory_cosine",
+    "interface_settling_rms",
+    "proposal_interface_rms",
+    "proposal_interface_alignment",
+    "base_entropy",
+    "base_margin",
+    "probe_logit_shift_rms",
+    "probe_kl",
+    "probe_entropy_delta",
+    "probe_margin_delta"
+  ],
+  "candidate_families": [
+    "REVERSE_INC",
+    "MOD_ADD",
+    "PARITY",
+    "LOOKUP",
+    "DELAY_COPY",
+    "LOCAL_RULE",
+    "RANDOM"
+  ],
+  "donor_steps": 200,
+  "experiment": "019",
+  "families": [
+    "REVERSE_INC",
+    "MOD_ADD",
+    "PARITY",
+    "LOOKUP",
+    "DELAY_COPY",
+    "LOCAL_RULE"
+  ],
+  "format": "minicells.proposal-utility-worker.v1",
+  "gpu": "Tesla T4",
+  "local_features": [
+    "parent_state_rms",
+    "parent_settling_rms",
+    "proposal_parent_rms",
+    "proposal_parent_alignment",
+    "child_memory_norm",
+    "child_parent_memory_cosine"
+  ],
+  "observations": 10752,
+  "phase1_alive_cells": 7,
+  "phase1_wall_seconds": 41.22924247900005,
+  "replicate": 0,
+  "utility_epsilon": 0.02,
+  "utility_examples_per_family": 256
+}
