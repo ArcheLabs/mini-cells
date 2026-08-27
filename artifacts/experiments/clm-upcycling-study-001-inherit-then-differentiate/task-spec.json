@@ -1,0 +1,46 @@
+{
+  "active_ffn_capacity_ratio": 1.0,
+  "balance_weight": 0.01,
+  "block_tokens": 250000,
+  "cell_activation": 1.0,
+  "distillation_weight": 0.5,
+  "experiment": "CLM Upcycling Study 001 \u2014 Inherit Then Differentiate",
+  "forbidden": [
+    "capability labels",
+    "semantic experts",
+    "phenotype",
+    "cell sparsity",
+    "topology growth",
+    "cell lifecycle"
+  ],
+  "formal_arms": [
+    "dense_continued",
+    "copy_random",
+    "copy_geometry"
+  ],
+  "format": "minicells.clm-upcycling-study-001-task.v1",
+  "geometry": {
+    "clusters": 4,
+    "labels_used": false,
+    "max_samples_per_stage": 8192,
+    "method": "cosine k-means",
+    "source": "frozen teacher norm_ffn local perceptions"
+  },
+  "historical_control": "random-newborn CLM v2 Validation 001b",
+  "learning_rate": 0.0001,
+  "num_experts": 4,
+  "optimizer": "AdamW",
+  "replicates": 3,
+  "same_data_schedule_across_arms": true,
+  "scientific_question": "Can exact dense-FFN inheritance create a function-preserving routed cellular model, and does local-state geometry improve subsequent expert differentiation?",
+  "thresholds": {
+    "normalized_advantage_min": 0.002,
+    "quality_ratio_to_dense_continued_max": 1.03,
+    "sample_variation_min": 0.05,
+    "usage_entropy_min": 0.8
+  },
+  "top_k": 1,
+  "total_ffn_capacity_ratio": 4.0,
+  "training_blocks": 4,
+  "training_tokens_per_arm": 1000000
+}
