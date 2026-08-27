@@ -140,7 +140,7 @@ def main() -> int:
     if args.fresh and OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True, exist_ok=True)
-    train, validation, tokenizer_path, corpus_manifest = prepare_scaling_corpus(
+    _, _, tokenizer_path, corpus_manifest = prepare_scaling_corpus(
         ROOT, source_005_dir=SOURCE_005
     )
     cache = ROOT / "results" / "consumer-language-scaling-v1" / "cache"
@@ -162,17 +162,17 @@ def main() -> int:
             shuffled=worker["shuffled"],
             aligned_disagreement=float(worker["aligned_route_disagreement"]),
         ))
-    decision = make_conditionality_002_decision(evidence)
-    decision["provenance"] = {
+    conditionality = make_conditionality_002_decision(evidence)
+    conditionality["provenance"] = {
         "base_checkpoint": "Experiment 006 minicells-v2-10m.pt",
         "upcycling_study_001": "CLM_UPCYCLING_QUALITY_SIGNAL",
         "release_candidate": "copy_geometry replicate 2",
         "training_tokens_after_base": 1_000_000,
     }
     (OUT / "conditionality-002-decision.json").write_text(
-        json.dumps(decision, indent=2, sort_keys=True) + "\n"
+        json.dumps(conditionality, indent=2, sort_keys=True) + "\n"
     )
-    if decision["status"] != "PASS":
+    if conditionality["status"] != "PASS":
         raise RuntimeError("CLM-0.1 release gate failed: Conditionality Validation 002 did not pass")
 
     release_worker = workers[RELEASE_REPLICATE]
@@ -184,13 +184,11 @@ def main() -> int:
     model.load_state_dict(checkpoint["model_state"], strict=True)
     model.set_execution_backend("sparse_dispatch")
 
-    dense_cfg = {
-        "vocab_size": 2048, "max_context": 128, "dim": 128, "heads": 4,
-        "ffn_dim": 512, "windows": (8, 32, 128), "iterations": (4, 4, 4),
-        "carry_bias": 2.0, "rms_norm": False, "tie_embeddings": True,
-        "stage_supervision": False,
-    }
-    dense_model = TextNCALM(**dense_cfg)
+    dense_model = TextNCALM(
+        vocab_size=2048, max_context=128, dim=128, heads=4, ffn_dim=512,
+        windows=(8, 32, 128), iterations=(4, 4, 4), carry_bias=2.0,
+        rms_norm=False, tie_embeddings=True, stage_supervision=False,
+    )
     total_expert = sum(
         p.numel()
         for stage in model.stages
@@ -208,7 +206,6 @@ def main() -> int:
     }
     benchmark = {
         "format": "minicells.clm-0.1.benchmark.v1",
-        "device": "Kaggle CUDA worker; see runtime.json",
         "release_replicate": RELEASE_REPLICATE,
         "telemetry": release_worker["benchmark"],
         "parameters": params,
@@ -225,7 +222,7 @@ def main() -> int:
         "replicate": RELEASE_REPLICATE,
         "reproduction_expected_ppl": release_worker["expected_geometry_ppl"],
         "reproduction_observed_ppl": release_worker["observed_geometry_ppl"],
-        "conditionality_002": decision["diagnosis"],
+        "conditionality_002": conditionality["diagnosis"],
     }
     metrics = {
         "validation_ppl": release_worker["dynamic"]["ppl"],
@@ -234,7 +231,7 @@ def main() -> int:
         "usage_entropy": release_worker["dynamic"]["usage_entropy"],
     }
     save_release_bundle(model, tokenizer_path, BUNDLE, provenance=provenance, metrics=metrics)
-    (BUNDLE / "MODEL_CARD.md").write_text(model_card(decision, release_worker, params))
+    (BUNDLE / "MODEL_CARD.md").write_text(model_card(conditionality, release_worker, params))
     shutil.copy2(OUT / "benchmark.json", BUNDLE / "benchmark.json")
     shutil.copy2(OUT / "conditionality-002-decision.json", BUNDLE / "conditionality-002-decision.json")
 
@@ -247,7 +244,36 @@ def main() -> int:
         "corpus_manifest": corpus_manifest,
     }
     (OUT / "runtime.json").write_text(json.dumps(runtime, indent=2, sort_keys=True) + "\n")
-    print(json.dumps(decision, indent=2, sort_keys=True))
+
+    release_decision = {
+        "format": "minicells.clm-0.1.release.v1",
+        "release": "MiniCells CLM-0.1 Research Preview",
+        "status": "PASS",
+        "diagnosis": "CLM_0_1_RELEASE_READY",
+        "release_candidate": "copy_geometry replicate 2",
+        "gates": {
+            "reproduction": all(bool(row["reproduction_pass"]) for row in workers),
+            "conditionality_002": conditionality["status"],
+            "bundle_created": True,
+        },
+        "metrics": metrics,
+        "parameters": params,
+        "limitations": [
+            "TinyStories-only research model",
+            "active FFN compute is not below the original dense TextNCA",
+            "no autonomous growth or online self-learning in CLM-0.1",
+            "no phenotype, multimodality, or 100M+ token scaling claim",
+        ],
+    }
+    (OUT / "decision.json").write_text(json.dumps(release_decision, indent=2, sort_keys=True) + "\n")
+
+    for name in (
+        "model.pt", "tokenizer.json", "config.json", "MODEL_CARD.md",
+        "benchmark.json", "conditionality-002-decision.json",
+    ):
+        shutil.copy2(BUNDLE / name, OUT / name)
+
+    print(json.dumps(release_decision, indent=2, sort_keys=True))
     print(f"Release bundle: {BUNDLE}")
     return 0
 
