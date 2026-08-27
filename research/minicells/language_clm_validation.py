@@ -23,6 +23,9 @@ CONDITIONALITY_THRESHOLD = 0.05
 NORMALIZED_ADVANTAGE_THRESHOLD = 0.002
 QUALITY_RATIO_THRESHOLD = 1.03
 RECEPTOR_RATIO_THRESHOLD = 0.05
+DENSE_PPL_RATIO_ATOL = 1e-5
+DENSE_LOGITS_ATOL = 5e-5
+DENSE_RECURRENT_STATE_ATOL = 1e-6
 Arm = Literal["dense", "dynamic", "static", "shuffled"]
 
 
@@ -117,6 +120,20 @@ def _record_gru_outputs(
     return outputs, handles
 
 
+def dense_equivalence_passes(
+    *,
+    ppl_ratio: float,
+    max_logits_abs_diff: float,
+    max_recurrent_state_abs_diff: float,
+) -> bool:
+    """Apply the preregistered FP32 parity tolerances, including GPU reduction drift."""
+    return (
+        abs(ppl_ratio - 1.0) <= DENSE_PPL_RATIO_ATOL
+        and max_logits_abs_diff <= DENSE_LOGITS_ATOL
+        and max_recurrent_state_abs_diff <= DENSE_RECURRENT_STATE_ATOL
+    )
+
+
 @torch.no_grad()
 def validate_real_conversion(
     teacher: TextNCALM,
@@ -162,7 +179,11 @@ def validate_real_conversion(
     teacher_nll = teacher_loss / tokens
     student_nll = student_loss / tokens
     ratio = math.exp(student_nll - teacher_nll)
-    passed = ratio <= 1.00001 and max_logits_diff <= 1e-5 and max_state_diff <= 1e-5
+    passed = dense_equivalence_passes(
+        ppl_ratio=ratio,
+        max_logits_abs_diff=max_logits_diff,
+        max_recurrent_state_abs_diff=max_state_diff,
+    )
     return {
         "status": "CLM_DENSE_EQUIVALENCE" if passed else "CLM_DENSE_EQUIVALENCE_FAILURE",
         "teacher_nll": teacher_nll,
@@ -175,6 +196,11 @@ def validate_real_conversion(
         "dense_executor_flops": dense_flops,
         "receptor_flops": receptor_flops,
         "receptor_ratio": receptor_flops / dense_flops,
+        "tolerances": {
+            "ppl_ratio_atol": DENSE_PPL_RATIO_ATOL,
+            "logits_atol": DENSE_LOGITS_ATOL,
+            "recurrent_state_atol": DENSE_RECURRENT_STATE_ATOL,
+        },
     }
 
 

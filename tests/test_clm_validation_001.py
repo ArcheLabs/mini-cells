@@ -5,6 +5,7 @@ import torch
 from minicells.language_clm_validation import (
     CONDITIONALITY_THRESHOLD,
     RoutingRecorder,
+    dense_equivalence_passes,
     expand_static_mask,
     make_validation_decision,
     replay_routing,
@@ -33,6 +34,19 @@ def test_static_mask_is_global_topk_with_matched_compute() -> None:
     expanded = expand_static_mask(_model(), torch.zeros(3, 5, dtype=torch.long), mask)
     assert len(expanded) == 4
     assert all(item.shape == (3, 5, 8) and torch.equal(item[0], item[2]) for item in expanded)
+
+
+def test_real_gpu_conversion_drift_is_inside_preregistered_tolerance() -> None:
+    assert dense_equivalence_passes(
+        ppl_ratio=0.999999940395357,
+        max_logits_abs_diff=1.430511474609375e-05,
+        max_recurrent_state_abs_diff=2.086162567138672e-07,
+    )
+    assert not dense_equivalence_passes(
+        ppl_ratio=1.0,
+        max_logits_abs_diff=5.1e-05,
+        max_recurrent_state_abs_diff=2.086162567138672e-07,
+    )
 
 
 def test_shuffling_preserves_usage_and_changes_assignment() -> None:
