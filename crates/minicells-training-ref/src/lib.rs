@@ -5,6 +5,9 @@
 //! This crate intentionally has no host, filesystem, protocol, or allocator
 //! dependencies.  Native and guest runners call this same implementation.
 
+#[cfg(test)]
+extern crate std;
+
 pub type F32 = f32;
 pub const PARAMETER_COUNT: usize = 4476;
 pub const VOCAB_SIZE: usize = 44;
@@ -17,6 +20,9 @@ pub const ITERATIONS: usize = 4;
 pub const MLP_WIDTH: usize = 32;
 pub const UPDATE_INPUT_DIM: usize = 88;
 pub const LOGICAL_BATCH_SIZE: usize = 256;
+/// Concurrent-training v1 freezes eight samples per independent leaf.
+pub const PARALLEL_SHARD_SIZE: usize = 8;
+pub const PARALLEL_LEAF_COUNT: usize = LOGICAL_BATCH_SIZE / PARALLEL_SHARD_SIZE;
 
 pub const EMBEDDING_OFFSET: usize = 0;
 pub const UPDATE_IN_WEIGHT_OFFSET: usize = 352;
@@ -71,6 +77,126 @@ pub struct GradientAccumulator {
     pub gradient: [F32; PARAMETER_COUNT],
     pub loss_sum: F32,
     pub token_count: u32,
+}
+
+/// Raw, unnormalised gradient produced by one independent parallel leaf.
+///
+/// A leaf is evaluated against the same frozen `TrainingState`; it never
+/// clips, normalises, or updates optimizer state.  The explicit metadata is
+/// carried through reduction so malformed or mixed leaves can be rejected by
+/// the application-level coordinator.
+#[derive(Clone, Copy)]
+pub struct PartialGradientV1 {
+    pub gradient: [F32; PARAMETER_COUNT],
+    pub loss_sum: F32,
+    pub token_count: u32,
+    pub processed_samples: u16,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ParallelJobStatusV1 { LeavesReady, LeavesRunning, RootReady, Finalizing, Complete, Failed }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ParallelJobErrorV1 {
+    WrongJob,
+    WrongModel,
+    WrongOptimizer,
+    WrongBatch,
+    WrongStep,
+    WrongLeaf,
+    WrongRange,
+    DuplicateLeaf,
+    ConflictingLeaf,
+    MissingLeaf,
+    StaleRoot,
+    InvalidStatus,
+}
+
+/// Application-level DAG state for one parallel logical batch.  Leaf records
+/// are immutable and keyed by leaf index; completion order is intentionally
+/// not represented as a sequential `next_shard_index`.
+#[derive(Clone, Copy)]
+pub struct ParallelTrainingJobV1 {
+    pub job_id: [u8; 32],
+    pub generation: u64,
+    pub optimizer_step: u64,
+    pub model_commitment: [u8; 32],
+    pub optimizer_commitment: [u8; 32],
+    pub batch_commitment: [u8; 32],
+    pub logical_batch_size: u16,
+    pub shard_size: u16,
+    pub leaf_count: u16,
+    pub status: ParallelJobStatusV1,
+    pub leaf_commitments: [Option<[u8; 32]>; PARALLEL_LEAF_COUNT],
+}
+
+impl ParallelTrainingJobV1 {
+    pub const fn new(
+        job_id: [u8; 32], generation: u64, optimizer_step: u64,
+        model_commitment: [u8; 32], optimizer_commitment: [u8; 32], batch_commitment: [u8; 32],
+    ) -> Self {
+        Self { job_id, generation, optimizer_step, model_commitment, optimizer_commitment,
+            batch_commitment, logical_batch_size: LOGICAL_BATCH_SIZE as u16,
+            shard_size: PARALLEL_SHARD_SIZE as u16, leaf_count: PARALLEL_LEAF_COUNT as u16,
+            status: ParallelJobStatusV1::LeavesReady, leaf_commitments: [None; PARALLEL_LEAF_COUNT] }
+    }
+
+    pub fn accept_leaf(
+        &mut self, job_id: [u8; 32], generation: u64, optimizer_step: u64,
+        model_commitment: [u8; 32], optimizer_commitment: [u8; 32], batch_commitment: [u8; 32],
+        leaf_index: u16, sample_start: u16, sample_end: u16, commitment: [u8; 32],
+    ) -> Result<(), ParallelJobErrorV1> {
+        if !matches!(self.status, ParallelJobStatusV1::LeavesReady | ParallelJobStatusV1::LeavesRunning) { return Err(ParallelJobErrorV1::InvalidStatus); }
+        if job_id != self.job_id { return Err(ParallelJobErrorV1::WrongJob); }
+        if generation != self.generation || optimizer_step != self.optimizer_step { return Err(ParallelJobErrorV1::WrongStep); }
+        if model_commitment != self.model_commitment { return Err(ParallelJobErrorV1::WrongModel); }
+        if optimizer_commitment != self.optimizer_commitment { return Err(ParallelJobErrorV1::WrongOptimizer); }
+        if batch_commitment != self.batch_commitment { return Err(ParallelJobErrorV1::WrongBatch); }
+        let index = leaf_index as usize;
+        if index >= PARALLEL_LEAF_COUNT { return Err(ParallelJobErrorV1::WrongLeaf); }
+        if sample_start != leaf_index * self.shard_size || sample_end != sample_start + self.shard_size { return Err(ParallelJobErrorV1::WrongRange); }
+        if let Some(existing) = self.leaf_commitments[index] {
+            return if existing == commitment { Err(ParallelJobErrorV1::DuplicateLeaf) } else { Err(ParallelJobErrorV1::ConflictingLeaf) };
+        }
+        self.leaf_commitments[index] = Some(commitment);
+        self.status = ParallelJobStatusV1::LeavesRunning;
+        Ok(())
+    }
+
+    pub fn mark_root_ready(&mut self) -> Result<(), ParallelJobErrorV1> {
+        if !matches!(self.status, ParallelJobStatusV1::LeavesRunning | ParallelJobStatusV1::LeavesReady) { return Err(ParallelJobErrorV1::InvalidStatus); }
+        if self.leaf_commitments.iter().any(|item| item.is_none()) { return Err(ParallelJobErrorV1::MissingLeaf); }
+        self.status = ParallelJobStatusV1::RootReady;
+        Ok(())
+    }
+
+    pub fn begin_finalize(&mut self, current_model_commitment: [u8; 32]) -> Result<(), ParallelJobErrorV1> {
+        if self.status != ParallelJobStatusV1::RootReady { return Err(ParallelJobErrorV1::InvalidStatus); }
+        if current_model_commitment != self.model_commitment { self.status = ParallelJobStatusV1::Failed; return Err(ParallelJobErrorV1::StaleRoot); }
+        self.status = ParallelJobStatusV1::Finalizing;
+        Ok(())
+    }
+
+    pub fn complete(&mut self) -> Result<(), ParallelJobErrorV1> {
+        if self.status != ParallelJobStatusV1::Finalizing { return Err(ParallelJobErrorV1::InvalidStatus); }
+        self.status = ParallelJobStatusV1::Complete;
+        Ok(())
+    }
+}
+
+impl PartialGradientV1 {
+    pub const fn new() -> Self {
+        Self {
+            gradient: [0.0; PARAMETER_COUNT],
+            loss_sum: 0.0,
+            token_count: 0,
+            processed_samples: 0,
+        }
+    }
+}
+
+impl Default for PartialGradientV1 {
+    fn default() -> Self { Self::new() }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -588,6 +714,132 @@ pub fn accumulate_batch_gradients(
     }
 }
 
+/// Compute one raw gradient leaf against frozen model/optimizer state.
+/// `batch.size` must be the configured parallel shard size (the final API
+/// rejects malformed sizes at its coordinator boundary); this core routine is
+/// deliberately allocation-free and reuses the canonical accumulator path.
+pub fn compute_gradient_leaf(
+    state: &TrainingState,
+    batch: &TrainingBatch,
+    workspace: &mut TrainingWorkspace,
+    out: &mut PartialGradientV1,
+) {
+    out.gradient = [0.0; PARAMETER_COUNT];
+    out.loss_sum = 0.0;
+    out.token_count = 0;
+    out.processed_samples = batch.size;
+    let mut accumulator = GradientAccumulator::new();
+    accumulate_batch_gradients(state, batch, workspace, &mut accumulator);
+    out.gradient = accumulator.gradient;
+    out.loss_sum = accumulator.loss_sum;
+    out.token_count = accumulator.token_count;
+}
+
+/// Deterministically merge two raw leaves.  The caller chooses the tree shape;
+/// this primitive never depends on completion order or shared mutable sums.
+pub fn merge_partial_gradients(
+    left: &PartialGradientV1,
+    right: &PartialGradientV1,
+    out: &mut PartialGradientV1,
+) {
+    for index in 0..PARAMETER_COUNT {
+        out.gradient[index] = left.gradient[index] + right.gradient[index];
+    }
+    out.loss_sum = left.loss_sum + right.loss_sum;
+    out.token_count = left.token_count + right.token_count;
+    out.processed_samples = left.processed_samples + right.processed_samples;
+}
+
+/// Fixed five-level balanced reduction for exactly 32 leaves.  Leaves may be
+/// produced in any order by an executor, but must be placed by index before
+/// calling this function.  `scratch` is caller-owned to keep PVM stack use
+/// bounded and to make the reduction storage explicit.
+pub fn reduce_32_leaves(
+    leaves: &[PartialGradientV1; PARALLEL_LEAF_COUNT],
+    scratch: &mut [PartialGradientV1; PARALLEL_LEAF_COUNT],
+) -> PartialGradientV1 {
+    reduce_partial_gradients(leaves, scratch).expect("the 32-leaf tree is non-empty")
+}
+
+/// In-place tree reduction for memory-constrained guests.  The left slot is
+/// overwritten by each pairwise merge, so only one 32-leaf arena is needed.
+pub fn reduce_32_leaves_in_place(
+    leaves: &mut [PartialGradientV1; PARALLEL_LEAF_COUNT],
+) -> PartialGradientV1 {
+    let mut width = PARALLEL_LEAF_COUNT;
+    while width > 1 {
+        for index in 0..(width / 2) {
+            let left_index = index * 2;
+            let right = leaves[left_index + 1];
+            let left = &mut leaves[left_index];
+            for parameter in 0..PARAMETER_COUNT {
+                left.gradient[parameter] = left.gradient[parameter] + right.gradient[parameter];
+            }
+            left.loss_sum = left.loss_sum + right.loss_sum;
+            left.token_count = left.token_count + right.token_count;
+            left.processed_samples = left.processed_samples + right.processed_samples;
+        }
+        width /= 2;
+    }
+    leaves[0]
+}
+
+/// Slice form of the fixed pairwise reduction, useful to executors that keep
+/// leaf storage in a heap-backed arena.  The caller still supplies leaves in
+/// canonical index order; completion order is never observed here.
+pub fn reduce_partial_gradients(
+    leaves: &[PartialGradientV1],
+    scratch: &mut [PartialGradientV1],
+) -> Option<PartialGradientV1> {
+    if leaves.is_empty() || scratch.len() < leaves.len() {
+        return None;
+    }
+    for index in 0..leaves.len() {
+        scratch[index] = leaves[index].clone();
+    }
+    let mut width = leaves.len();
+    while width > 1 {
+        for index in 0..(width / 2) {
+            let left = scratch[index * 2].clone();
+            let right = scratch[index * 2 + 1].clone();
+            merge_partial_gradients(&left, &right, &mut scratch[index]);
+        }
+        width /= 2;
+    }
+    Some(scratch[0].clone())
+}
+
+/// Execute the canonical tree32 logical step.  This helper schedules leaves
+/// in index order for a deterministic Native reference; production executors
+/// may compute the same leaves concurrently and then call the same reduction
+/// and finalize primitives.
+pub fn train_step_tree32(
+    state: &mut TrainingState,
+    batch: &TrainingBatch,
+    workspace: &mut TrainingWorkspace,
+    leaves: &mut [PartialGradientV1; PARALLEL_LEAF_COUNT],
+    scratch: &mut [PartialGradientV1; PARALLEL_LEAF_COUNT],
+) -> TrainStepReport {
+    debug_assert_eq!(batch.size as usize, LOGICAL_BATCH_SIZE);
+    for leaf_index in 0..PARALLEL_LEAF_COUNT {
+        let start = leaf_index * PARALLEL_SHARD_SIZE;
+        let mut shard = TrainingBatch::empty();
+        shard.size = PARALLEL_SHARD_SIZE as u16;
+        for row in 0..PARALLEL_SHARD_SIZE {
+            shard.ids[row] = batch.ids[start + row];
+            shard.lengths[row] = batch.lengths[start + row];
+        }
+        compute_gradient_leaf(state, &shard, workspace, &mut leaves[leaf_index]);
+    }
+    let root = reduce_32_leaves(leaves, scratch);
+    let mut accumulator = GradientAccumulator {
+        gradient: root.gradient,
+        loss_sum: root.loss_sum,
+        token_count: root.token_count,
+    };
+    finalize_adamw_step(state, &mut accumulator)
+}
+
 /// Normalize once, clip once and apply one AdamW update.
 pub fn finalize_adamw_step(
     state: &mut TrainingState,
@@ -775,6 +1027,70 @@ mod tests {
     }
 
     #[test]
+    fn tree32_reduction_is_completion_order_independent() {
+        let mut batch = TrainingBatch::empty();
+        batch.size = LOGICAL_BATCH_SIZE as u16;
+        for row in 0..LOGICAL_BATCH_SIZE {
+            batch.lengths[row] = 1;
+            batch.ids[row][0] = (row % VOCAB_SIZE) as u8;
+        }
+        let initial = TrainingState::from_weights([0.01; PARAMETER_COUNT]);
+        let mut state_a = initial;
+        let mut state_b = initial;
+        let mut ws_a = TrainingWorkspace::new();
+        let mut ws_b = TrainingWorkspace::new();
+        let mut leaves_a = std::vec::Vec::from_iter(
+            (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
+        );
+        let mut leaves_b = std::vec::Vec::from_iter(
+            (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
+        );
+        let mut scratch_a = std::vec::Vec::from_iter(
+            (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
+        );
+        let mut scratch_b = std::vec::Vec::from_iter(
+            (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
+        );
+        // Simulate arbitrary completion order while retaining index-addressed
+        // output slots.  The tree must be identical to the canonical order.
+        for leaf_index in (0..PARALLEL_LEAF_COUNT).rev() {
+            let start = leaf_index * PARALLEL_SHARD_SIZE;
+            let mut shard = TrainingBatch::empty();
+            shard.size = PARALLEL_SHARD_SIZE as u16;
+            for row in 0..PARALLEL_SHARD_SIZE {
+                shard.ids[row] = batch.ids[start + row];
+                shard.lengths[row] = batch.lengths[start + row];
+            }
+            compute_gradient_leaf(&state_a, &shard, &mut ws_a, &mut leaves_a[leaf_index]);
+        }
+        for leaf_index in 0..PARALLEL_LEAF_COUNT {
+            let start = leaf_index * PARALLEL_SHARD_SIZE;
+            let mut shard = TrainingBatch::empty();
+            shard.size = PARALLEL_SHARD_SIZE as u16;
+            for row in 0..PARALLEL_SHARD_SIZE {
+                shard.ids[row] = batch.ids[start + row];
+                shard.lengths[row] = batch.lengths[start + row];
+            }
+            compute_gradient_leaf(&state_b, &shard, &mut ws_b, &mut leaves_b[leaf_index]);
+        }
+        let report_a = finalize_adamw_step(&mut state_a, &mut {
+            let root = reduce_partial_gradients(&leaves_a, &mut scratch_a).unwrap();
+            GradientAccumulator { gradient: root.gradient, loss_sum: root.loss_sum, token_count: root.token_count }
+        });
+        let report_b = finalize_adamw_step(&mut state_b, &mut {
+            let root = reduce_partial_gradients(&leaves_b, &mut scratch_b).unwrap();
+            GradientAccumulator { gradient: root.gradient, loss_sum: root.loss_sum, token_count: root.token_count }
+        });
+        assert_eq!(report_a.loss.to_bits(), report_b.loss.to_bits());
+        assert_eq!(report_a.grad_norm.to_bits(), report_b.grad_norm.to_bits());
+        assert_eq!(report_a.token_count, report_b.token_count);
+        assert_eq!(state_a.weights, state_b.weights);
+        assert_eq!(state_a.adam_m, state_b.adam_m);
+        assert_eq!(state_a.adam_v, state_b.adam_v);
+        assert_eq!(state_a.step, state_b.step);
+    }
+
+    #[test]
     fn round_state_enforces_order_and_finalizes_once() {
         let commitment = [7u8; 32]; let model = [8u8; 32]; let optimizer = [9u8; 32];
         let mut round = TrainingRoundStateV1::new(0, 0, commitment, model, optimizer);
@@ -788,5 +1104,23 @@ mod tests {
         let mut state = TrainingState::from_weights([0.0; PARAMETER_COUNT]);
         assert!(round.finalize(&mut state).is_ok()); assert_eq!(state.step, 1); assert_eq!(round.phase, TrainingPhaseV1::Idle);
         assert_eq!(round.finalize(&mut state), Err(RoundError::InvalidPhase));
+    }
+
+    #[test]
+    fn parallel_job_accepts_out_of_order_immutable_leaves_and_rejects_mixing() {
+        let mut job = ParallelTrainingJobV1::new([1; 32], 4, 7, [2; 32], [3; 32], [4; 32]);
+        assert_eq!(job.mark_root_ready(), Err(ParallelJobErrorV1::MissingLeaf));
+        assert_eq!(job.accept_leaf([9; 32], 4, 7, [2; 32], [3; 32], [4; 32], 0, 0, 8, [5; 32]), Err(ParallelJobErrorV1::WrongJob));
+        assert_eq!(job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [8; 32]), Ok(()));
+        assert_eq!(job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [8; 32]), Err(ParallelJobErrorV1::DuplicateLeaf));
+        assert_eq!(job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [9; 32]), Err(ParallelJobErrorV1::ConflictingLeaf));
+        for index in 0..PARALLEL_LEAF_COUNT as u16 {
+            if index == 3 { continue; }
+            assert_eq!(job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], index, index * 8, index * 8 + 8, [index as u8; 32]), Ok(()));
+        }
+        assert_eq!(job.mark_root_ready(), Ok(()));
+        assert_eq!(job.begin_finalize([2; 32]), Ok(()));
+        assert_eq!(job.complete(), Ok(()));
+        assert_eq!(job.complete(), Err(ParallelJobErrorV1::InvalidStatus));
     }
 }

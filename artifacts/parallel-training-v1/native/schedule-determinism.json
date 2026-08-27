@@ -1,0 +1,14 @@
+{
+  "schema": "minicells.parallel-training-schedule-determinism.v1",
+  "algorithm": "echo-adamw-ce-tree32-v1",
+  "widths_tested": [1, 2, 4, 8, 16, 32],
+  "smoke_widths_verified": [1, 4],
+  "smoke_steps": 16,
+  "smoke_final_digest_width1": "0x23d3a725bffc48814c44df72f3fe7d5e84b831d3791e79d6a5abdf6686feb4e8",
+  "smoke_final_digest_width4": "0x23d3a725bffc48814c44df72f3fe7d5e84b831d3791e79d6a5abdf6686feb4e8",
+  "completion_orders_indexed_before_reduce": true,
+  "bit_exact_across_schedules": true,
+  "actual_wall_clock_overlap_proven": false,
+  "status": "PASS_DETERMINISTIC_REDUCTION_ONLY",
+  "note": "Native scheduler simulation does not claim MiniJAM runtime concurrency."
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "minicells.parallel-training-pvm-parity.v1",
+  "leaf_abi": "MCG1/MCGR",
+  "root_abi": "MCRF1/MCPR",
+  "status": "BLOCKED_TREE_PVM_GUEST_PANIC",
+  "native_leaf_bit_exact": true,
+  "pvm_leaf_bit_exact": null,
+  "native_root_bit_exact": null,
+  "pvm_root_bit_exact": null,
+  "reason": "The dedicated tree guest builds, but the first direct MCG1 probe fails closed with PVM panic before gas is measured; root parity is not attempted."
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "minicells.parallel-training-decision.v1",
+  "status": "BLOCKED_TREE_LEARNING",
+  "native_tree32": "PENDING_5000_STEP_GATE",
+  "schedule_determinism": "PASS_DETERMINISTIC_REDUCTION_ONLY",
+  "root_payload": "PASS_PAYLOAD_UNDER_1M",
+  "pvm_parity": "BLOCKED_TREE_PVM_GUEST_PANIC",
+  "minijam_lanes": "BLOCKED_MINIJAM_LANES",
+  "fresh_chain": "BLOCKED_EXTERNAL_CHAIN",
+  "algorithm_changes": "NUMERIC_REDUCTION_ORDER_ONLY",
+  "stop_condition": "Do not claim concurrent-training PASS until tree learning, direct PVM parity, and actual overlap gates pass."
+}

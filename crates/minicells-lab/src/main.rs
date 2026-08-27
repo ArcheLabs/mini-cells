@@ -11,8 +11,10 @@ use minicells_sim::trainer::{
     evaluate_fixed_probe, load_checkpoint_model, read_metrics, run_persistent_native, NativeTrainer,
 };
 use minicells_training_ref::{
-    accumulate_batch_gradients, evaluate_batch_report, finalize_adamw_step, train_step_with_gradient,
-    GradientAccumulator, TrainStepReport, TrainingBatch, TrainingState, TrainingWorkspace,
+    accumulate_batch_gradients, compute_gradient_leaf, evaluate_batch_report,
+    finalize_adamw_step, reduce_partial_gradients, train_step_with_gradient,
+    GradientAccumulator, PartialGradientV1, TrainStepReport, TrainingBatch, TrainingState,
+    TrainingWorkspace, LOGICAL_BATCH_SIZE, PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE,
     PARAMETER_COUNT,
 };
 use std::path::PathBuf;
@@ -46,6 +48,7 @@ enum Command {
     Benchmark(TrainArgs),
     Gate(GateArgs),
     FidelityNative(FidelityNativeArgs),
+    ParallelNative(ParallelNativeArgs),
     PvmParity(PvmParityArgs),
     PvmGas(PvmGasArgs),
 }
@@ -110,6 +113,18 @@ struct FidelityNativeArgs {
     output: PathBuf,
     #[arg(long, default_value_t = 5000)]
     steps: u64,
+}
+
+#[derive(Args)]
+struct ParallelNativeArgs {
+    #[arg(long, default_value = "fixtures/training-fidelity-v1")]
+    fixture: PathBuf,
+    #[arg(long, default_value = ".local/runs/parallel-native")]
+    output: PathBuf,
+    #[arg(long, default_value_t = 5000)]
+    steps: u64,
+    #[arg(long, default_value_t = 4)]
+    parallel_width: usize,
 }
 
 #[derive(Args)]
@@ -564,6 +579,111 @@ fn run_fidelity_native(args: FidelityNativeArgs) -> Result<(), Box<dyn std::erro
     Ok(())
 }
 
+/// Run the tree32 algorithm with deterministic, index-addressed leaf slots.
+/// This is intentionally a scheduler simulation: it proves that completion
+/// order does not affect the numerical result, while leaving claims about
+/// actual wall-clock overlap to the MiniJAM lane executor and its evidence.
+fn run_parallel_native(args: ParallelNativeArgs) -> Result<(), Box<dyn std::error::Error>> {
+    if args.parallel_width == 0 || args.parallel_width > PARALLEL_LEAF_COUNT {
+        return Err(format!("parallel width must be 1..={PARALLEL_LEAF_COUNT}").into());
+    }
+    let initial = std::fs::read(args.fixture.join("initial-weights-f32.bin"))?;
+    if initial.len() != PARAMETER_COUNT * 4 {
+        return Err("initial weight fixture length mismatch".into());
+    }
+    let mut weights = [0.0f32; PARAMETER_COUNT];
+    for (index, chunk) in initial.chunks_exact(4).enumerate() {
+        weights[index] = f32::from_le_bytes(chunk.try_into().unwrap());
+    }
+    let mut batch_paths = Vec::new();
+    for step in 1..=LOGICAL_BATCH_SIZE.max(16) {
+        let path = args.fixture.join(format!("batch-{step:06}.bin"));
+        if !path.is_file() { break; }
+        batch_paths.push(path);
+    }
+    if batch_paths.is_empty() { return Err("parallel runner found no canonical batches".into()); }
+    let mut state = TrainingState::from_weights(weights);
+    let mut workspace = TrainingWorkspace::new();
+    let mut leaves = std::vec::Vec::from_iter(
+        (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
+    );
+    let mut scratch = std::vec::Vec::from_iter(
+        (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
+    );
+    let mut reports = Vec::new();
+    for step in 0..args.steps as usize {
+        let batch = load_fidelity_batch(&batch_paths[step % batch_paths.len()])?;
+        if batch.size as usize != LOGICAL_BATCH_SIZE {
+            return Err("parallel runner requires logical batch size 256".into());
+        }
+        // A lane scheduler may complete leaves in any order.  The output slot
+        // remains keyed by leaf index, so reduction order is always 0..31.
+        let mut completion_order = Vec::with_capacity(PARALLEL_LEAF_COUNT);
+        for lane in 0..args.parallel_width {
+            let mut index = lane;
+            while index < PARALLEL_LEAF_COUNT {
+                completion_order.push(index);
+                index += args.parallel_width;
+            }
+        }
+        for leaf_index in completion_order {
+            let start = leaf_index * PARALLEL_SHARD_SIZE;
+            let mut shard = TrainingBatch::empty();
+            shard.size = PARALLEL_SHARD_SIZE as u16;
+            for row in 0..PARALLEL_SHARD_SIZE {
+                shard.ids[row] = batch.ids[start + row];
+                shard.lengths[row] = batch.lengths[start + row];
+            }
+            compute_gradient_leaf(&state, &shard, &mut workspace, &mut leaves[leaf_index]);
+        }
+        let root = reduce_partial_gradients(&leaves, &mut scratch)
+            .ok_or("tree32 reduction received no leaves")?;
+        let mut accumulator = GradientAccumulator {
+            gradient: root.gradient,
+            loss_sum: root.loss_sum,
+            token_count: root.token_count,
+        };
+        let report = finalize_adamw_step(&mut state, &mut accumulator);
+        if matches!(step + 1, 1 | 2 | 4 | 16 | 100 | 500 | 1000 | 5000) {
+            reports.push(serde_json::json!({"step":step + 1,"loss":report.loss,
+                "grad_norm":report.grad_norm,"token_count":report.token_count,
+                "weight_digest":digest_bytes(&f32_bytes(&state.weights))}));
+        }
+    }
+    let validation = if args.fixture.join("validation.bin").is_file() {
+        let batches = load_fidelity_batches(&args.fixture.join("validation.bin"))?;
+        let mut tokens = 0u64; let mut correct = 0u64; let mut exact = 0u64;
+        for item in &batches {
+            let result = evaluate_batch_report(&state, item);
+            tokens += result.token_count as u64;
+            correct += result.correct_tokens as u64;
+            exact += (result.exact_sequence_accuracy * item.size as f32) as u64;
+        }
+        serde_json::json!({"status":"PASS","token_accuracy":if tokens == 0 {0.0} else {correct as f64/tokens as f64},
+            "exact_sequence_accuracy":if batches.is_empty() {0.0} else {exact as f64/(batches.iter().map(|x| x.size as u64).sum::<u64>()) as f64}})
+    } else { serde_json::json!({"status":"BLOCKED_VALIDATION_FIXTURE"}) };
+    std::fs::create_dir_all(&args.output)?;
+    let pass = validation["token_accuracy"].as_f64() == Some(1.0)
+        && validation["exact_sequence_accuracy"].as_f64() == Some(1.0);
+    let report = serde_json::json!({
+        "schema":"minicells.parallel-native-training.v1",
+        "algorithm":"echo-adamw-ce-tree32-v1",
+        "steps":args.steps,"logical_batch_size":LOGICAL_BATCH_SIZE,
+        "shard_size":PARALLEL_SHARD_SIZE,"leaf_count":PARALLEL_LEAF_COUNT,
+        "parallel_width":args.parallel_width,
+        "completion_order_indexed":true,
+        "actual_overlap_proven":false,
+        "status":if pass {"PASS_PARALLEL_NATIVE"} else {"BLOCKED_PARALLEL_LEARNING"},
+        "validation":validation,"trajectory":reports,
+        "final_step":state.step,"final_weight_digest":digest_bytes(&f32_bytes(&state.weights)),
+        "algorithm_changes":"NUMERIC_REDUCTION_ORDER_ONLY"
+    });
+    std::fs::write(args.output.join("parallel-native.json"), serde_json::to_vec_pretty(&report)?)?;
+    println!("{}", serde_json::to_string_pretty(&report)?);
+    if !pass { return Err("parallel Native learning gate failed".into()); }
+    Ok(())
+}
+
 fn classify_gas(gas_used: u64) -> &'static str {
     if gas_used <= 1_000_000_000 {
         "TINY"
@@ -848,10 +968,12 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     // MCA1 is a shard measurement, not a complete logical-batch decision.
     // Keep its evidence explicitly scoped so a tiny shard can never authorize
     // integrating the full 256-sample algorithm with the Tiny profile.
-    let is_shard = payload.get(..4) == Some(b"MCA1");
+    let is_shard = payload.get(..4) == Some(b"MCA1") || payload.get(..4) == Some(b"MCG1");
     const PAYLOAD_HEADER: usize = 4 + 8;
     const MODEL_BYTES: usize = PARAMETER_COUNT * 4;
-    let shard_size = if is_shard && payload.len() >= PAYLOAD_HEADER + MODEL_BYTES * 3 + 2 {
+    let shard_size = if payload.get(..4) == Some(b"MCG1") {
+        PARALLEL_SHARD_SIZE
+    } else if is_shard && payload.len() >= PAYLOAD_HEADER + MODEL_BYTES * 3 + 2 {
         u16::from_le_bytes(payload[PAYLOAD_HEADER + MODEL_BYTES * 3..PAYLOAD_HEADER + MODEL_BYTES * 3 + 2].try_into().unwrap()) as usize
     } else { 0 };
     let classification = if is_shard {
@@ -1150,6 +1272,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::Train(args) | Command::Benchmark(args) => train(args, false)?,
         Command::Gate(args) => run_gate(args)?,
         Command::FidelityNative(args) => run_fidelity_native(args)?,
+        Command::ParallelNative(args) => run_parallel_native(args)?,
         Command::PvmParity(args) => run_pvm_parity(args)?,
         Command::PvmGas(args) => run_pvm_gas(args)?,
         Command::Resume(args) => train(

@@ -9,6 +9,8 @@ crate-type = ["cdylib"]
 
 [features]
 production = []
+tree = []
+tree_leaf_only = ["tree"]
 
 [dependencies]
 minicells-training-ref = { path = "../minicells-training-ref" }

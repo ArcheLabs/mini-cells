@@ -1,0 +1,20 @@
+{
+  "schema": "minicells.parallel-training-service.v1",
+  "algorithm": "echo-adamw-ce-tree32-v1",
+  "algorithm_changes": "NUMERIC_REDUCTION_ORDER_ONLY",
+  "abi": {
+    "leaf": "MCG1/MCGR",
+    "root": "MCRF1/MCPR"
+  },
+  "logical_batch_size": 256,
+  "shard_size": 8,
+  "leaf_count": 32,
+  "minijam_commit": "aba21df406bac24f6880df1da8c1a0cc88534bcf",
+  "jambda_commit": "e52307a726868205a151e6917a0a70a79965a028",
+  "jambda_adapter_commit": "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+  "refine_limit": 5000000000,
+  "accumulate_limit": 1000000000,
+  "root_payload_limit": 1048576,
+  "diagnostic_stage": false,
+  "code_hash": "0x13296d3e023f7a5a04ebabf0ce8eac042b0852a4cb28d8f495a2773a556ecc9f"
+}
