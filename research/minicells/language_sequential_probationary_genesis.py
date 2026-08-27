@@ -198,19 +198,20 @@ def classify_replicate(stages: list[dict[str, object]]) -> dict[str, object]:
 def aggregate_status(replicates: list[dict[str, object]]) -> str:
     if len(replicates) == 0:
         raise ValueError("replicate summaries required")
+    total = len(replicates)
     null_reject = sum(int(row["story_null_reject"]) for row in replicates)
     arithmetic_birth = sum(int(row["arithmetic_birth"]) for row in replicates)
     duplicate_reject = sum(int(row["duplicate_reject"]) for row in replicates)
     weak_reject = sum(int(row["weak_transform_reject"]) for row in replicates)
     transform_birth = sum(int(row["transform_birth"]) for row in replicates)
     final_three = sum(int(row["final_k"] == 3) for row in replicates)
-    if null_reject < len(replicates):
+    if null_reject < total:
         return "FALSE_POSITIVE_SEQUENTIAL_BIRTH"
     if arithmetic_birth < POSITIVE_REPLICATES_MIN:
         return "NO_FIRST_PROBATIONARY_BIRTH"
-    if duplicate_reject < POSITIVE_REPLICATES_MIN:
+    if duplicate_reject < total:
         return "DUPLICATE_SIGNAL_CAUSES_EXTRA_BIRTH"
-    if weak_reject < POSITIVE_REPLICATES_MIN:
+    if weak_reject < total:
         return "WEAK_SIGNAL_CAUSES_EARLY_BIRTH"
     if transform_birth >= POSITIVE_REPLICATES_MIN and final_three >= POSITIVE_REPLICATES_MIN:
         return "SEQUENTIAL_PROBATIONARY_GENESIS_SIGNAL"
