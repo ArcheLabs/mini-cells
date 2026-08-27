@@ -26,6 +26,7 @@ SPEC = ExperimentSpec(
         "donor-summary.csv",
         "donor-events.csv",
         "utility-observations.csv",
+        "finite-audit.csv",
         "oracle-consistency.csv",
         "utility-matrix.csv",
         "feature-correlations.csv",
