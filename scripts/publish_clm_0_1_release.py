@@ -17,6 +17,7 @@ SPEC = ExperimentSpec(
     files=(
         "decision.json",
         "conditionality-002-decision.json",
+        "conditionality-002-evidence.csv",
         "benchmark.json",
         "runtime.json",
         "model.pt",
