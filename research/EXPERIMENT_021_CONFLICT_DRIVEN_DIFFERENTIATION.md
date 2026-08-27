@@ -4,7 +4,7 @@
 
 Experiments 017–020 established that learned capability state can be localized, causally ablated, and transplanted, but adding one or three newborn cells did not reliably create capability identity. Experiment 020 ended with `NO_CAPABILITY_TISSUE_IDENTITY`.
 
-The missing variable may be **differential learning pressure** rather than capacity. Two descendants that receive the same objective and the same experience have little reason to become different, even if they have separate phenotype memory.
+The missing variable may be **differential learning pressure** rather than capacity. Two descendants that receive the same objective distribution have little reason to become different, even if they have separate phenotype memory.
 
 Experiment 021 therefore tests the smallest causal chain needed for an emergent expert:
 
@@ -118,7 +118,7 @@ One child phenotype is initialized exactly from the parent and receives every mi
 
 ### Capacity Fork
 
-Two child phenotypes receive the same symmetry break:
+Two child phenotypes receive the same symmetry break used by Differentiation Fork:
 
 ```text
 m0 = m + epsilon * v
@@ -127,11 +127,13 @@ m1 = m - epsilon * v
 
 with `epsilon = 0.02`.
 
-Both children train on **every** microbatch. Their two losses are averaged. This gives extra phenotype capacity and the same initial asymmetry as the differentiation arm, but no differential experience.
+Each incoming microbatch updates **exactly one** child according to a deterministic 50/50 schedule based only on step and replicate. The control does not inspect tokens, domain labels, loss, gradients or the conflict axis. Thus both forked arms have the same one-child-per-microbatch update budget, while the capacity children see the same mixed distribution in expectation.
+
+This is the critical capacity control: extra phenotype capacity + symmetry breaking + matched update count, but no conflict-aware differential experience.
 
 ### Differentiation Fork
 
-Initialization is identical to Capacity Fork.
+Initialization and per-step update budget are identical to Capacity Fork.
 
 For every incoming microbatch, the parent phenotype gradient is measured and projected onto the fixed unlabeled conflict axis:
 
