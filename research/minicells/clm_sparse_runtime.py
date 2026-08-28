@@ -12,13 +12,12 @@ Backends installed on every CLM program bank:
   router gates are preserved.
 - ``reference_sparse``: original per-expert nonzero/index_select/index_add
   implementation.
-- ``sparse_dispatch``: optimized inference policy. On SM80+ (or CPU when the
-  API is available) it prefers PyTorch grouped GEMM. On Turing/T4 (SM75), where
-  PyTorch 2.10 grouped GEMM is unavailable, it one-time autotunes the original
-  sparse path against a packed batched-expert path for the observed token
-  shape and caches the faster choice. With gradients enabled it retains the
-  historical reference-sparse behavior rather than silently changing the STE
-  gradient estimator.
+- ``sparse_dispatch``: optimized inference policy. It one-time autotunes the
+  available exact-forward implementations for each stage/token shape. On
+  SM80+ this includes PyTorch grouped GEMM; on Tesla T4/SM75 it compares the
+  original sparse path with a persistent packed-batched expert path and caches
+  the faster choice. With gradients enabled it retains historical
+  reference-sparse behavior rather than silently changing the STE estimator.
 
 The installer also adds a telemetry-free fast model forward for ordinary calls
 that do not request stats/debug state. Historical experiments remain immutable
@@ -74,7 +73,7 @@ def _fingerprint(bank: nn.Module, expert_ids: tuple[str, ...]) -> tuple[object, 
     for expert_id in expert_ids:
         first, second = _linear_gelu_linear(bank.experts[expert_id])
         for tensor in (first.weight, first.bias, second.weight, second.bias):
-            values.extend(
+            values.append(
                 (
                     int(tensor._version),
                     int(tensor.data_ptr()),
@@ -91,6 +90,8 @@ def _pack(bank: nn.Module, expert_ids: tuple[str, ...]) -> PackedExpertMLP:
     cached = _PACKED.get(bank)
     if cached is not None and cached.fingerprint == fingerprint:
         return cached
+    if cached is not None:
+        _AUTOTUNE.pop(bank, None)
 
     first_layers: list[nn.Linear] = []
     second_layers: list[nn.Linear] = []
@@ -110,8 +111,6 @@ def _pack(bank: nn.Module, expert_ids: tuple[str, ...]) -> PackedExpertMLP:
         b2=torch.stack([layer.bias.detach() for layer in second_layers]),
     )
     _PACKED[bank] = packed
-    # A changed weight/expert set invalidates any old shape choice.
-    _AUTOTUNE.pop(bank, None)
     return packed
 
 
@@ -161,13 +160,7 @@ def _packed_dense_inference(
     gates: torch.Tensor,
     expert_ids: tuple[str, ...],
 ) -> torch.Tensor:
-    """Inference-only dense expert batching using persistent packed weights.
-
-    This deliberately computes all experts. On Turing GPUs that can still be
-    faster than fine-grained sparse gather/scatter because it turns many tiny
-    kernels and synchronizing ``nonzero`` operations into two large batched
-    GEMMs. The runtime autotuner chooses it only when measured faster.
-    """
+    """Inference-only dense expert batching using persistent packed weights."""
 
     flat_inputs = perception.reshape(-1, perception.shape[-1])
     flat_gates = gates.reshape(-1, gates.shape[-1])
@@ -246,9 +239,7 @@ def _grouped_sparse(bank: nn.Module, perception: torch.Tensor, gates: torch.Tens
 
 
 def _elapsed_cuda_or_cpu(fn: Callable[[], torch.Tensor], device: torch.device, repeats: int = 3) -> float:
-    # The result is consumed only for one-time backend selection. Synchronizing
-    # here is intentional; the chosen path is cached and normal inference does
-    # not contain this timing barrier.
+    # Synchronization is intentional only during one-time backend selection.
     if device.type == "cuda":
         torch.cuda.synchronize(device)
         start = torch.cuda.Event(enable_timing=True)
@@ -265,36 +256,47 @@ def _elapsed_cuda_or_cpu(fn: Callable[[], torch.Tensor], device: torch.device, r
     return max(time.perf_counter() - started, 1e-9)
 
 
-def _autotuned_legacy_sparse(
+def _autotuned_inference(
     bank: nn.Module,
     perception: torch.Tensor,
     gates: torch.Tensor,
     expert_ids: tuple[str, ...],
-) -> tuple[torch.Tensor, str]:
+) -> tuple[torch.Tensor, str, str | None]:
+    packed = _pack(bank, expert_ids)
     flat_tokens = int(perception.numel() // perception.shape[-1])
     key = (
         str(perception.device),
         str(perception.dtype),
         flat_tokens,
         len(expert_ids),
-        _fingerprint(bank, expert_ids),
+        packed.fingerprint,
     )
     choices = _AUTOTUNE.setdefault(bank, {})
     selected = choices.get(key)
+    failures: list[str] = []
+
+    candidates: dict[str, Callable[[], torch.Tensor]] = {
+        "reference_sparse": lambda: _reference_sparse(bank, perception, gates, expert_ids),
+        "packed_batched_dense": lambda: _packed_dense_inference(bank, perception, gates, expert_ids),
+    }
+    if _has_grouped_mm(perception):
+        candidates["grouped_mm"] = lambda: _grouped_sparse(bank, perception, gates, expert_ids)
+
     if selected is None:
-        # Warm both candidates after packing, then time identical routing data.
-        _pack(bank, expert_ids)
-        reference_fn = lambda: _reference_sparse(bank, perception, gates, expert_ids)
-        packed_fn = lambda: _packed_dense_inference(bank, perception, gates, expert_ids)
-        reference_fn()
-        packed_fn()
-        reference_time = _elapsed_cuda_or_cpu(reference_fn, perception.device)
-        packed_time = _elapsed_cuda_or_cpu(packed_fn, perception.device)
-        selected = "reference_sparse" if reference_time <= packed_time else "packed_batched_dense"
+        timings: dict[str, float] = {}
+        for name, fn in candidates.items():
+            try:
+                fn()  # warm the candidate
+                timings[name] = _elapsed_cuda_or_cpu(fn, perception.device)
+            except (AttributeError, TypeError, RuntimeError, NotImplementedError) as exc:
+                failures.append(f"{name}: {type(exc).__name__}: {exc}")
+        if not timings:
+            raise RuntimeError("no CLM inference runtime candidate succeeded: " + "; ".join(failures))
+        selected = min(timings, key=timings.get)
         choices[key] = selected
-    if selected == "reference_sparse":
-        return _reference_sparse(bank, perception, gates, expert_ids), selected
-    return _packed_dense_inference(bank, perception, gates, expert_ids), selected
+
+    output = candidates[selected]()
+    return output, selected, "; ".join(failures) if failures else None
 
 
 def _optimized_bank_forward(
@@ -304,6 +306,11 @@ def _optimized_bank_forward(
     backend: str = "masked_dense",
     merge_back_child: str | None = None,
 ):
+    if self.training and torch.is_grad_enabled():
+        # Any subsequent optimizer update would stale packed inference weights.
+        _PACKED.pop(self, None)
+        _AUTOTUNE.pop(self, None)
+
     gates, root_indices, root_probabilities, choices, gates_by_id = self.route(
         perception, merge_back_child=merge_back_child
     )
@@ -330,19 +337,13 @@ def _optimized_bank_forward(
             output = _reference_sparse(self, perception, gates, expert_ids)
             _LAST_BACKEND[self] = "reference_sparse_grad"
             _LAST_FALLBACK[self] = "optimized sparse execution is inference-only under current STE semantics"
-        elif _has_grouped_mm(perception):
-            try:
-                output = _grouped_sparse(self, perception, gates, expert_ids)
-                _LAST_BACKEND[self] = "grouped_mm"
-                _LAST_FALLBACK.pop(self, None)
-            except (AttributeError, TypeError, RuntimeError, NotImplementedError) as exc:
-                output, selected = _autotuned_legacy_sparse(self, perception, gates, expert_ids)
-                _LAST_BACKEND[self] = f"autotuned_{selected}"
-                _LAST_FALLBACK[self] = f"grouped_mm failed: {type(exc).__name__}: {exc}"
         else:
-            output, selected = _autotuned_legacy_sparse(self, perception, gates, expert_ids)
+            output, selected, failure = _autotuned_inference(self, perception, gates, expert_ids)
             _LAST_BACKEND[self] = f"autotuned_{selected}"
-            _LAST_FALLBACK[self] = "grouped_mm unavailable for this device; runtime autotuned fallback"
+            if failure is None:
+                _LAST_FALLBACK.pop(self, None)
+            else:
+                _LAST_FALLBACK[self] = failure
     else:
         raise ValueError(f"unknown execution backend: {backend}")
     return output, gates, root_indices, root_probabilities, choices, gates_by_id
