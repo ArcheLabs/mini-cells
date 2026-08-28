@@ -96,6 +96,15 @@ def main() -> int:
             gpu = next(index for index in range(capacity) if index not in used)
             env = os.environ.copy()
             env["CUDA_VISIBLE_DEVICES"] = str(gpu)
+            # Workers are standalone Python processes. Notebook-level sys.path
+            # changes do not propagate across exec(), so explicitly expose the
+            # repository's research package root to every worker.
+            existing_pythonpath = env.get("PYTHONPATH", "")
+            env["PYTHONPATH"] = (
+                str(RESEARCH_ROOT)
+                if not existing_pythonpath
+                else str(RESEARCH_ROOT) + os.pathsep + existing_pythonpath
+            )
             active.append((item, gpu, subprocess.Popen(cmd, env=env, cwd=REPO_ROOT)))
 
         states = []
