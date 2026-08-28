@@ -75,15 +75,56 @@ def _checkpoint_payload(path: Path) -> dict[str, object] | None:
     return payload
 
 
-def _latest_resume_checkpoint(directory: Path, target_tokens: int) -> Path | None:
-    """Return the most advanced valid committed checkpoint for a worker.
+def _offset_zero_diagnostics(directory: Path) -> set[int]:
+    path = directory / "newborn-diagnostics.json"
+    if not path.exists():
+        return set()
+    try:
+        rows = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    result: set[int] = set()
+    if not isinstance(rows, list):
+        return result
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        try:
+            if int(row.get("offset_tokens", -1)) == 0:
+                result.add(int(row["birth_index"]))
+        except (KeyError, TypeError, ValueError):
+            continue
+    return result
 
-    At the same token/step boundary an after-birth checkpoint outranks a
-    before-birth checkpoint through ``growth_event_index``.  This preserves the
-    exact birth state while still allowing a failed birth parity check to fall
-    back to the pre-birth checkpoint.
+
+def _checkpoint_has_complete_birth_evidence(
+    payload: dict[str, object], diagnostic_births: set[int]
+) -> bool:
+    history = payload.get("growth_history", [])
+    if not isinstance(history, list):
+        return False
+    for event in history:
+        if not isinstance(event, dict):
+            return False
+        try:
+            birth_index = int(event["birth_index"])
+        except (KeyError, TypeError, ValueError):
+            return False
+        if birth_index not in diagnostic_births:
+            return False
+    return True
+
+
+def _latest_resume_checkpoint(directory: Path, target_tokens: int) -> Path | None:
+    """Return the most advanced valid evidence-complete checkpoint.
+
+    A committed birth is resumable only after its offset-zero newborn diagnostic
+    has been persisted. If a process dies after ``after-birth-N.pt`` but before
+    that diagnostic, the parent falls back to the pre-birth checkpoint and
+    deterministically replays the birth instead of silently losing evidence.
     """
 
+    diagnostic_births = _offset_zero_diagnostics(directory)
     candidates: list[tuple[tuple[int, int, int], Path]] = []
     seen: set[Path] = set()
     for pattern in ("checkpoint-*.pt", "before-birth-*.pt", "after-birth-*.pt", "final.pt"):
@@ -98,6 +139,10 @@ def _latest_resume_checkpoint(directory: Path, target_tokens: int) -> Path | Non
             step = int(payload.get("training_step", -1))
             growth_index = int(payload.get("growth_event_index", -1))
             if consumed < 0 or consumed > target_tokens or step < 0 or growth_index < 0:
+                continue
+            if growth_index > 0 and not _checkpoint_has_complete_birth_evidence(
+                payload, diagnostic_births
+            ):
                 continue
             candidates.append(((consumed, step, growth_index), path))
     if not candidates:
@@ -239,8 +284,6 @@ def main() -> int:
     if gpu_count < 1:
         raise RuntimeError("formal CLM-0.3 execution requires at least one CUDA GPU")
 
-    # Corpus materialization mutates a shared cache. Do it exactly once in the
-    # parent process so the two Kaggle GPU workers never race on cache files.
     _prepare_shared_corpus(args)
 
     capacity = min(args.max_workers or gpu_count, gpu_count)
@@ -254,9 +297,6 @@ def main() -> int:
             gpu = next(index for index in range(capacity) if index not in used)
             env = os.environ.copy()
             env["CUDA_VISIBLE_DEVICES"] = str(gpu)
-            # Workers are standalone Python processes. Notebook-level sys.path
-            # changes do not propagate across exec(), so explicitly expose the
-            # repository's research package root to every worker.
             existing_pythonpath = env.get("PYTHONPATH", "")
             env["PYTHONPATH"] = (
                 str(RESEARCH_ROOT)
