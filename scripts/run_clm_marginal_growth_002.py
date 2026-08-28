@@ -65,6 +65,7 @@ def _worker_complete(directory: Path, *, code_commit: str) -> bool:
             event.get("type") == "worker_complete"
             and event.get("mode") != "preflight_only"
             and event.get("code_commit") == code_commit
+            and int(event.get("consumed_tokens", -1)) >= int(event.get("target_tokens", 0))
         ):
             return True
     return False
