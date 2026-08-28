@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -47,6 +48,24 @@ def _complete(directory: Path, code_commit: str) -> bool:
     except (OSError, json.JSONDecodeError):
         return False
     return value.get("code_commit") == code_commit and int(value.get("births_checked", 0)) == 13
+
+
+def _existing_training_commit(directory: Path) -> str | None:
+    path = directory / "events.jsonl"
+    if not path.exists():
+        return None
+    observed: str | None = None
+    with path.open(encoding="utf-8") as handle:
+        for line in handle:
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if row.get("type") == "worker_started" and row.get("mode") != "preflight_only":
+                commit = row.get("code_commit")
+                if commit:
+                    observed = str(commit)
+    return observed
 
 
 def _command(args: argparse.Namespace, replicate: int) -> list[str]:
@@ -165,7 +184,17 @@ def main() -> int:
     pending: list[tuple[int, list[str]]] = []
     for replicate in range(3):
         directory = _worker_dir(args.output_root, replicate)
-        if not args.restart_existing and _complete(directory, code_commit):
+        existing_commit = _existing_training_commit(directory)
+        if args.restart_existing and directory.exists():
+            print(f"RESTART r{replicate}: removing prior evidence", flush=True)
+            shutil.rmtree(directory)
+            existing_commit = None
+        elif existing_commit is not None and existing_commit != code_commit:
+            raise RuntimeError(
+                f"r{replicate} contains evidence from {existing_commit[:12]}, current code is "
+                f"{code_commit[:12]}; rerun with --restart-existing rather than mixing commits"
+            )
+        if _complete(directory, code_commit):
             print(f"SKIP r{replicate}: completed on {code_commit[:12]}", flush=True)
             continue
         pending.append((replicate, _command(args, replicate)))
