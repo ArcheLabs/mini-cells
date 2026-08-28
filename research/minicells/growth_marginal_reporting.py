@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -60,14 +61,44 @@ def _latest_age_diagnostic(rows: list[dict[str, Any]], age: int) -> dict[str, An
     return candidates[-1] if candidates else None
 
 
+def _paired_prebirth_ok(
+    replicate: int,
+    worker_rows: dict[tuple[int, str], list[dict[str, Any]]],
+    *,
+    cutoff: int,
+    rtol: float = 1e-8,
+) -> bool:
+    maps = {
+        arm: {
+            int(row["tokens"]): float(row["ppl"])
+            for row in worker_rows[(replicate, arm)]
+            if int(row["tokens"]) <= cutoff
+        }
+        for arm in FORMAL_ARMS
+    }
+    token_sets = [set(rows) for rows in maps.values()]
+    if not token_sets or any(tokens != token_sets[0] for tokens in token_sets[1:]):
+        return False
+    for token in sorted(token_sets[0]):
+        reference = maps["fixed4"][token]
+        for arm in ("marginal_growth", "random_growth"):
+            observed = maps[arm][token]
+            if not math.isclose(reference, observed, rel_tol=rtol, abs_tol=1e-10):
+                return False
+    return True
+
+
 def marginal_growth_decision(
     summaries: list[dict[str, Any]],
     *,
     saturation_replicates: int,
+    paired_prebirth_replicates: int,
     equivalent_growth_births: int,
     viable_marginal_births: int,
     causal_positive_ci_replicates: int,
     formal_gpu_experiment_run: bool,
+    training_code_commit: str | None = None,
+    training_code_tree_sha: str | None = None,
 ) -> dict[str, Any]:
     by_arm = {
         arm: sorted((row for row in summaries if row["arm"] == arm), key=lambda row: row["replicate"])
@@ -86,15 +117,22 @@ def marginal_growth_decision(
         for growth, control in zip(marginal, random_rows)
         if growth["replicate"] == control["replicate"]
     )
+    paired_ok = paired_prebirth_replicates == len(FORMAL_REPLICATES)
     saturation_ok = saturation_replicates == len(FORMAL_REPLICATES)
     equivalence_ok = equivalent_growth_births == 2 * len(FORMAL_REPLICATES)
     viability_ok = viable_marginal_births == len(FORMAL_REPLICATES)
-    utility_ok = saturation_ok and viability_ok and utility_passes >= 2
-    selection_ok = saturation_ok and viability_ok and selector_wins >= 2
-    causal_ok = causal_positive_ci_replicates >= 2
+    utility_ok = paired_ok and saturation_ok and viability_ok and utility_passes >= 2
+    selection_ok = paired_ok and saturation_ok and viability_ok and selector_wins >= 2
+    causal_ok = saturation_ok and causal_positive_ci_replicates >= 2
     return {
         "format": "minicells.clm-0.3b-marginal-growth-utility.decision.v1",
         "formal_gpu_experiment_run": bool(formal_gpu_experiment_run),
+        "training_code_commit": training_code_commit,
+        "training_code_tree_sha": training_code_tree_sha,
+        "paired_prebirth": {
+            "status": "CLM_PAIRED_PREBIRTH_EQUIVALENCE" if paired_ok else "CLM_PAIRED_PREBIRTH_MISMATCH",
+            "replicates_passed": paired_prebirth_replicates,
+        },
         "saturation_regime": {
             "status": "CLM_SATURATION_REGIME_ESTABLISHED" if saturation_ok else "NO_SATURATION_REGIME",
             "replicates_passed": saturation_replicates,
@@ -133,6 +171,8 @@ def aggregate_marginal_results(
     saturation: dict[tuple[int, str], dict[str, Any]] = {}
     worker_complete: dict[tuple[int, str], dict[str, Any]] = {}
     growth_evidence: dict[tuple[int, str], dict[str, Any]] = {}
+    code_commits: set[str] = set()
+    code_trees: set[str] = set()
 
     for replicate in FORMAL_REPLICATES:
         for arm in FORMAL_ARMS:
@@ -144,10 +184,20 @@ def aggregate_marginal_results(
             if missing:
                 raise RuntimeError(f"CLM-0.3b worker artifacts missing for r{replicate}/{arm}: {missing}")
             events = _read_events(directory / "events.jsonl")
-            completes = [event for event in events if event.get("type") == "worker_complete" and event.get("mode") != "preflight_only"]
+            completes = [
+                event for event in events
+                if event.get("type") == "worker_complete" and event.get("mode") != "preflight_only"
+            ]
             if not completes:
                 raise RuntimeError(f"r{replicate}/{arm} has no completed worker event")
-            worker_complete[(replicate, arm)] = completes[-1]
+            complete = completes[-1]
+            if int(complete.get("consumed_tokens", -1)) < int(complete.get("target_tokens", 0)):
+                raise RuntimeError(f"r{replicate}/{arm} stopped before its declared target")
+            worker_complete[(replicate, arm)] = complete
+            if complete.get("code_commit"):
+                code_commits.add(str(complete["code_commit"]))
+            if complete.get("code_tree_sha"):
+                code_trees.add(str(complete["code_tree_sha"]))
             worker_rows[(replicate, arm)] = _read_ppl(directory / "ppl-history.csv")
             saturation[(replicate, arm)] = _read_json(directory / "saturation.json")
             if arm != "fixed4":
@@ -160,8 +210,16 @@ def aggregate_marginal_results(
                     "final_diagnostic": final_diag,
                 }
 
+    if formal_gpu_experiment_run and (len(code_commits) != 1 or len(code_trees) != 1):
+        raise RuntimeError(
+            f"formal CLM-0.3b matrix mixed code provenance: commits={sorted(code_commits)}, trees={sorted(code_trees)}"
+        )
+    training_commit = next(iter(code_commits)) if len(code_commits) == 1 else None
+    training_tree = next(iter(code_trees)) if len(code_trees) == 1 else None
+
     saturation_replicates = 0
     saturation_tokens: dict[int, int] = {}
+    paired_prebirth_replicates = 0
     for replicate in FORMAL_REPLICATES:
         entries = [saturation[(replicate, arm)] for arm in FORMAL_ARMS]
         detected = all(bool(item.get("detected", False)) for item in entries)
@@ -169,6 +227,14 @@ def aggregate_marginal_results(
         if detected and len(tokens) == 1:
             saturation_replicates += 1
             saturation_tokens[replicate] = next(iter(tokens))
+        cutoff = saturation_tokens.get(
+            replicate,
+            min(max(int(row["tokens"]) for row in worker_rows[(replicate, arm)]) for arm in FORMAL_ARMS),
+        )
+        if _paired_prebirth_ok(replicate, worker_rows, cutoff=cutoff):
+            paired_prebirth_replicates += 1
+        elif formal_gpu_experiment_run:
+            raise RuntimeError(f"paired pre-birth trajectory mismatch in replicate {replicate}")
 
     fixed_by_key: dict[tuple[int, int], float] = {}
     for replicate in FORMAL_REPLICATES:
@@ -243,10 +309,13 @@ def aggregate_marginal_results(
     decision = marginal_growth_decision(
         summaries,
         saturation_replicates=saturation_replicates,
+        paired_prebirth_replicates=paired_prebirth_replicates,
         equivalent_growth_births=equivalent_births,
         viable_marginal_births=viable_marginal,
         causal_positive_ci_replicates=causal_positive_ci,
         formal_gpu_experiment_run=formal_gpu_experiment_run,
+        training_code_commit=training_commit,
+        training_code_tree_sha=training_tree,
     )
     (root / "replicate-summary.json").write_text(
         json.dumps(summaries, indent=2, sort_keys=True) + "\n",
@@ -261,4 +330,6 @@ def aggregate_marginal_results(
         "summaries": summaries,
         "decision": decision,
         "saturation_tokens": saturation_tokens,
+        "training_code_commit": training_commit,
+        "training_code_tree_sha": training_tree,
     }
