@@ -100,12 +100,13 @@ def _padded_sparse(
     *,
     capacity_factor: float,
 ) -> torch.Tensor:
-    """T4-friendly exact top-1 sparse FFN using padded batched GEMMs.
+    """T4-friendly exact top-1 sparse FFN using fixed-shape batched GEMMs.
 
     Capacity is derived from tensor shape rather than observed expert load, so
     the recurrent hot path never needs a load-dependent GPU-to-CPU sync.
-    Overflow is represented as a fixed-shape gate mask and evaluated by the
-    exact reference sparse path; no token is dropped.
+    Main-path packing uses fixed-length sort/index_add/gather tensors; overflow
+    is represented as a fixed-shape gate mask and evaluated by the exact
+    reference sparse path. No token is dropped.
     """
 
     if torch.is_grad_enabled():
@@ -134,38 +135,42 @@ def _padded_sparse(
     capacity = max(1, int(math.ceil(token_count * capacity_factor / expert_count)))
     keep_sorted = positions < capacity
     overflow_sorted = ~keep_sorted
+    safe_positions = positions.clamp_max(capacity - 1)
 
-    # Keep tensors fixed-size on the hot path. Advanced indexing of the kept
-    # routes is still device-side; overflow itself is handled below without a
-    # Python branch on a dynamic tensor length.
-    padded = torch.zeros(
-        (expert_count, capacity, flat_inputs.shape[-1]),
+    # Every tensor below has a shape determined by N/E/capacity, not by the
+    # observed number of kept or overflow routes. Overflow values are multiplied
+    # by zero before index_add, so they cannot overwrite a valid capacity slot.
+    sorted_inputs = flat_inputs.index_select(0, order).to(dtype=compute_dtype)
+    kept_values = sorted_inputs * keep_sorted[:, None].to(dtype=compute_dtype)
+    flat_slots = sorted_assignments * capacity + safe_positions
+    padded_flat = torch.zeros(
+        (expert_count * capacity, flat_inputs.shape[-1]),
         device=perception.device,
         dtype=compute_dtype,
     )
-    kept_assignments = sorted_assignments[keep_sorted]
-    kept_positions = positions[keep_sorted]
-    kept_order = order[keep_sorted]
-    padded[kept_assignments, kept_positions] = flat_inputs.index_select(0, kept_order).to(
-        dtype=compute_dtype
-    )
+    padded_flat.index_add_(0, flat_slots, kept_values)
+    padded = padded_flat.view(expert_count, capacity, flat_inputs.shape[-1])
 
     hidden = torch.bmm(padded, packed.w1_t) + packed.b1[:, None, :]
     hidden = torch.nn.functional.gelu(hidden)
     expert_output = torch.bmm(hidden, packed.w2_t) + packed.b2[:, None, :]
 
-    selected = expert_output[kept_assignments, kept_positions]
-    selected_gates = flat_gates.index_select(0, kept_order).gather(
-        1, kept_assignments[:, None]
-    ).to(dtype=selected.dtype)
-    selected = selected * selected_gates
+    selected_sorted = expert_output[sorted_assignments, safe_positions]
+    selected_gates_sorted = flat_gates.index_select(0, order).gather(
+        1, sorted_assignments[:, None]
+    ).to(dtype=selected_sorted.dtype)
+    selected_sorted = (
+        selected_sorted
+        * selected_gates_sorted
+        * keep_sorted[:, None].to(dtype=selected_sorted.dtype)
+    )
 
     flat_output = torch.zeros_like(flat_inputs)
-    flat_output.index_copy_(0, kept_order, selected.to(dtype=flat_output.dtype))
+    flat_output.index_copy_(0, order, selected_sorted.to(dtype=flat_output.dtype))
 
-    # Build an original-order, fixed-length overflow mask. reference_sparse then
-    # sees zero gates for already-computed routes and exact top-1 gates only for
-    # overflow routes. This avoids inspecting a dynamic overflow tensor on host.
+    # Fixed-size overflow mask in original token order. reference_sparse sees
+    # zero gates for the already-computed routes and exact top-1 gates only for
+    # overflow routes; this keeps correctness without a dynamic host branch.
     overflow_original = torch.zeros(token_count, device=perception.device, dtype=torch.bool)
     overflow_original.index_copy_(0, order, overflow_sorted)
     overflow_gates = flat_gates * overflow_original[:, None].to(dtype=flat_gates.dtype)
@@ -198,7 +203,7 @@ def _autotuned_inference_v2(
     packed = v1._pack(bank, expert_ids, compute_dtype)
     flat_tokens = int(perception.numel() // perception.shape[-1])
     key = (
-        "runtime-v2-padded-sparse",
+        "runtime-v2-padded-sparse-fixed-shape",
         str(perception.device),
         str(perception.dtype),
         str(compute_dtype),
