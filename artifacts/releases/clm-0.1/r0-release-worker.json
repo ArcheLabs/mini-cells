@@ -1,0 +1,105 @@
+{
+  "aligned_route_disagreement": 0.7324519033233324,
+  "backend_parity": {
+    "masked_dense_ppl": 17.997296926977583,
+    "passed": true,
+    "ppl_atol": 0.0001,
+    "sparse_dispatch_ppl": 17.99729567546806
+  },
+  "benchmark": {
+    "clm_masked_dense": {
+      "nll": 2.890221575895945,
+      "peak_vram_bytes": 76681728,
+      "ppl": 17.997296926977583,
+      "tokens_per_second": 56672.1333276116
+    },
+    "clm_sparse_dispatch": {
+      "nll": 2.890221506357193,
+      "peak_vram_bytes": 76681728,
+      "ppl": 17.99729567546806,
+      "tokens_per_second": 36598.18789201381
+    },
+    "dense": {
+      "nll": 2.904708514610926,
+      "peak_vram_bytes": 61913088,
+      "ppl": 18.259920376422937,
+      "tokens_per_second": 115168.83603277897
+    }
+  },
+  "complete": true,
+  "dense_nll": 2.904708514610926,
+  "dense_ppl": 18.259920376422937,
+  "dense_reproduction_pass": true,
+  "dynamic": {
+    "nll": 2.890221506357193,
+    "ppl": 17.99729567546806,
+    "usage_entropy": 0.9959278951088587
+  },
+  "expected_dense_ppl": 18.259920376422937,
+  "expected_geometry_ppl": 17.99729567546806,
+  "format": "minicells.clm-0.1-release-worker.v1",
+  "geometry_init": [
+    {
+      "mean_cosine_distance": 0.6354577541351318,
+      "occupancy": [
+        0.2200927734375,
+        0.2418212890625,
+        0.2579345703125,
+        0.2801513671875
+      ],
+      "occupancy_entropy": 0.9972055554389954,
+      "samples": 8192,
+      "stage": 0
+    },
+    {
+      "mean_cosine_distance": 0.5885381698608398,
+      "occupancy": [
+        0.1624755859375,
+        0.1810302734375,
+        0.25927734375,
+        0.397216796875
+      ],
+      "occupancy_entropy": 0.9531735777854919,
+      "samples": 8192,
+      "stage": 1
+    },
+    {
+      "mean_cosine_distance": 0.574936032295227,
+      "occupancy": [
+        0.318115234375,
+        0.239990234375,
+        0.2421875,
+        0.19970703125
+      ],
+      "occupancy_entropy": 0.9896855354309082,
+      "samples": 8192,
+      "stage": 2
+    }
+  ],
+  "geometry_reproduction_pass": true,
+  "initial_equivalence": {
+    "max_logits_abs_diff": 1.430511474609375e-05,
+    "max_recurrent_state_abs_diff": 2.086162567138672e-07,
+    "ppl_ratio": 1.0,
+    "status": "CLM_UPCYCLING_EQUIVALENCE",
+    "student_nll": 2.972552180290222,
+    "student_ppl": 19.54173002460253,
+    "teacher_nll": 2.972552180290222,
+    "teacher_ppl": 19.54173002460253
+  },
+  "observed_dense_ppl": 18.259920376422937,
+  "observed_geometry_ppl": 17.99729567546806,
+  "replicate": 0,
+  "reproduction_pass": true,
+  "reproduction_ppl_atol": 0.05,
+  "same_recipe_as_upcycling_study_001": true,
+  "shuffled": {
+    "nll": 2.9204762644237943,
+    "ppl": 18.5501201185089
+  },
+  "static": {
+    "nll": 2.9205048978328705,
+    "ppl": 18.550651279291102
+  },
+  "training_tokens": 1000000
+}

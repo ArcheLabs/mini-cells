@@ -1,0 +1,50 @@
+{
+  "architecture": {
+    "carry_bias": 2.0,
+    "dim": 128,
+    "ffn_dim": 512,
+    "heads": 4,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "max_context": 128,
+    "rms_norm": false,
+    "stage_supervision": false,
+    "tie_embeddings": true,
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "format": "minicells.clm-0.1.bundle.v1",
+  "metrics": {
+    "aligned_route_disagreement": 0.7267862955729166,
+    "dense_continued_ppl": 18.226103414956103,
+    "usage_entropy": 0.9964856132864952,
+    "validation_ppl": 17.968933276012226
+  },
+  "provenance": {
+    "conditionality_002": "CLM_LOCAL_CONDITIONALITY_SIGNAL",
+    "continuation_training_tokens": 1000000,
+    "implementation_commit": "88f58830f253e68852d07e0c4d2fca229e291f30",
+    "release": "clm-0.1",
+    "replicate": 2,
+    "reproduction_expected_ppl": 17.968933276012226,
+    "reproduction_observed_ppl": 17.968933276012226,
+    "source_checkpoint": "minicells-v2-10m.pt",
+    "source_checkpoint_sha256": "b76e2dd28b31470c1ce8bcd265c56e1b306191631e304161ded55b4e763f9e9e",
+    "source_training_tokens": 10000000,
+    "upcycling_method": "copy_geometry"
+  },
+  "release": "MiniCells CLM-0.1 Research Preview",
+  "routing": {
+    "execution_backend": "sparse_dispatch",
+    "num_experts": 4,
+    "router": "strictly-pointwise-local-cosine-prototype",
+    "top_k": 1
+  }
+}

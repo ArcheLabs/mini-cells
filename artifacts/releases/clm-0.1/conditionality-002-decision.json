@@ -1,0 +1,50 @@
+{
+  "diagnosis": "CLM_LOCAL_CONDITIONALITY_SIGNAL",
+  "evidence": [
+    {
+      "aligned_route_disagreement": 0.7324519033233324,
+      "passed": true,
+      "quality_ratio_to_dense_continued": 0.9856174235406866,
+      "replicate": 0,
+      "shuffled_advantage": 0.010415763893147046,
+      "static_advantage": 0.010425621477456173,
+      "usage_entropy": 0.9959278951088587
+    },
+    {
+      "aligned_route_disagreement": 0.7286745135982832,
+      "passed": true,
+      "quality_ratio_to_dense_continued": 0.9857054897921166,
+      "replicate": 1,
+      "shuffled_advantage": 0.009950752376392686,
+      "static_advantage": 0.009846178748571764,
+      "usage_entropy": 0.9952794487277666
+    },
+    {
+      "aligned_route_disagreement": 0.7267862955729166,
+      "passed": true,
+      "quality_ratio_to_dense_continued": 0.9858900098891765,
+      "replicate": 2,
+      "shuffled_advantage": 0.010420660713537793,
+      "static_advantage": 0.010406451799644105,
+      "usage_entropy": 0.9964856132864952
+    }
+  ],
+  "experiment": "CLM Conditionality Validation 002 \u2014 Aligned Local Routing",
+  "format": "minicells.clm-conditionality-002.v1",
+  "provenance": {
+    "base_checkpoint": "minicells-v2-10m.pt",
+    "base_checkpoint_sha256": "b76e2dd28b31470c1ce8bcd265c56e1b306191631e304161ded55b4e763f9e9e",
+    "implementation_commit": "88f58830f253e68852d07e0c4d2fca229e291f30",
+    "release_candidate": "copy_geometry replicate 2",
+    "training_tokens_after_base": 1000000,
+    "upcycling_study_001": "CLM_UPCYCLING_QUALITY_SIGNAL"
+  },
+  "status": "PASS",
+  "successful_replicates": 3,
+  "thresholds": {
+    "aligned_route_disagreement_min": 0.1,
+    "normalized_advantage_min": 0.002,
+    "quality_ratio_to_dense_continued_max": 1.03,
+    "usage_entropy_min": 0.8
+  }
+}
