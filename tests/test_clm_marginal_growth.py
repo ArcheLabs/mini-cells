@@ -55,18 +55,30 @@ def test_saturation_detects_flat_log_ppl_window() -> None:
     assert result.detected is True
     assert result.token == 1_500_000
     assert result.projected_improvement_500k is not None
-    assert result.projected_improvement_500k <= 0.005
+    assert result.projected_improvement_500k <= 0.02
+    assert result.threshold == 0.02
 
 
 def test_saturation_rejects_still_improving_model() -> None:
     rows = [
-        {"tokens": 1_100_000 + index * 100_000, "ppl": 15.0 * (0.997 ** index)}
+        {"tokens": 1_100_000 + index * 100_000, "ppl": 15.0 * (0.995 ** index)}
         for index in range(5)
     ]
     result = detect_saturation(rows, min_tokens=1_500_000)
     assert result.detected is False
     assert result.projected_improvement_500k is not None
-    assert result.projected_improvement_500k > 0.005
+    assert result.projected_improvement_500k > 0.02
+
+
+def test_saturation_threshold_is_not_growth_utility_threshold() -> None:
+    rows = [
+        {"tokens": 1_100_000 + index * 100_000, "ppl": 15.0 * (0.998 ** index)}
+        for index in range(5)
+    ]
+    result = detect_saturation(rows, min_tokens=1_500_000)
+    assert result.detected is True
+    assert result.projected_improvement_500k is not None
+    assert 0.005 < result.projected_improvement_500k <= 0.02
 
 
 def test_formal_decision_requires_paired_utility_and_selector_wins() -> None:
@@ -95,6 +107,7 @@ def test_formal_decision_requires_paired_utility_and_selector_wins() -> None:
     assert decision["saturation_regime"]["status"] == "CLM_SATURATION_REGIME_ESTABLISHED"
     assert decision["growth_equivalence"]["status"] == "CLM_GROWTH_EQUIVALENCE"
     assert decision["marginal_growth_utility"]["status"] == "CLM_MARGINAL_GROWTH_UTILITY_SIGNAL"
+    assert decision["marginal_growth_utility"]["threshold"] == 0.995
     assert decision["marginal_selection"]["status"] == "CLM_MARGINAL_SELECTION_SIGNAL"
     assert decision["causal_utility"]["status"] == "CLM_NEWBORN_CAUSAL_UTILITY_SIGNAL"
     assert decision["training_code_commit"] == "abc"
