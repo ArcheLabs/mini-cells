@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import torch
@@ -89,6 +90,36 @@ def test_pareto_crossover_is_first_joint_dominance_point() -> None:
     result = pareto_crossover(llm, clm)
     assert result is not None
     assert result["shift_tokens"] == 20
+
+
+def test_unattended_protocol_is_frozen_to_eight_hours() -> None:
+    protocol = json.loads(
+        (ROOT / "research/experiment-025-protocol.json").read_text(encoding="utf-8")
+    )
+    hardware = protocol["hardware_budget"]
+    assert hardware["global_wall_hours"] == 8.0
+    assert hardware["finalization_reserve_minutes"] == 30
+    assert hardware["worker_round_wall_hours"] == 2.5
+    assert hardware["automatic_resume"] is True
+    assert hardware["one_shot_kaggle_run_all"] is True
+    assert protocol["runtime_estimate"]["clm_main_plus_counterfactual_physical_tokens"] == 54_000_000
+
+
+def test_kaggle_notebook_uses_one_shot_budget_and_auto_publish() -> None:
+    notebook = json.loads(
+        (ROOT / "research/kaggle/experiment-025-story-math-growth.ipynb").read_text(
+            encoding="utf-8"
+        )
+    )
+    source = "\n".join(
+        "".join(cell.get("source", []))
+        for cell in notebook["cells"]
+        if cell.get("cell_type") == "code"
+    )
+    assert "--total-wall-hours', '8'" in source
+    assert "--round-wall-hours', '2.5'" in source
+    assert "publish_experiment_025_story_math_growth.py" in source
+    assert "--push" in source
 
 
 def test_experiment_025_scripts_compile() -> None:
