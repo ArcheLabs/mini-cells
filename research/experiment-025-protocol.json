@@ -1,0 +1,93 @@
+{
+  "format": "minicells.story-math-shift-30m.protocol.v1",
+  "experiment_id": "025",
+  "title": "30M Story-to-Math Developmental Shift",
+  "public_arms": [
+    "matched 30M Transformer LLM",
+    "growing CLM upcycled from retained 30M TextNCA source"
+  ],
+  "starting_boundary": {
+    "story_pretraining_tokens": 100000000,
+    "optimizer_reset_for_both_arms": true,
+    "clm_upcycle_function_preserving": true,
+    "panel_a_comparability_symmetric_story_ppl_ratio_max": 1.03
+  },
+  "shift": {
+    "tokens": 50000000,
+    "batch_size": 8,
+    "sequence_length": 125,
+    "tokens_per_step": 1000,
+    "math_fraction": 0.9,
+    "story_fraction": 0.1,
+    "objective": "standard next-token cross entropy",
+    "base_learning_rate": 0.0001,
+    "optimizer": "AdamW",
+    "betas": [0.9, 0.95],
+    "weight_decay": 0.1,
+    "gradient_clip": 1.0
+  },
+  "measurements": {
+    "old_knowledge": ["TinyStories validation NLL", "TinyStories validation PPL"],
+    "new_capability": [
+      "synthetic arithmetic validation NLL/PPL",
+      "teacher-forced arithmetic exact-answer accuracy",
+      "arithmetic answer-token accuracy"
+    ],
+    "structure": [
+      "persistent program-cell count",
+      "stored parameters",
+      "active-parameter proxy",
+      "birth proposals/promotions/rejections"
+    ],
+    "cost": ["elapsed seconds", "physical training tokens", "peak VRAM"]
+  },
+  "pareto_crossover": {
+    "math_condition": "CLM exact-answer accuracy >= LLM exact-answer accuracy",
+    "story_condition": "CLM Story PPL <= LLM Story PPL",
+    "strict_condition": "at least one inequality is strict",
+    "selection": "first shared preregistered evaluation checkpoint satisfying all conditions"
+  },
+  "growth": {
+    "decision_shift_tokens": [10000000, 25000000],
+    "max_promotions": 2,
+    "proposal": "highest recent route-utilization eligible active lineage",
+    "proposal_is_birth": false,
+    "probation_tokens": 2000000,
+    "control": "no-growth continuation",
+    "shadow": "function-preserving child birth",
+    "future_schedule_identical": true,
+    "promotion": {
+      "balanced_nll_mean_gain_positive": true,
+      "paired_bootstrap_ci_level": 0.8,
+      "paired_bootstrap_lower_bound_positive": true,
+      "math_nll_not_worse": true,
+      "story_ppl_ratio_max": 1.01
+    }
+  },
+  "hardware_budget": {
+    "target": "Tesla T4 x2",
+    "global_wall_hours": 8.0,
+    "finalization_reserve_minutes": 30,
+    "worker_round_wall_hours": 2.5,
+    "automatic_resume": true,
+    "minimum_resume_window_minutes": 20,
+    "probation_start_guard_minutes": 30,
+    "one_shot_kaggle_run_all": true,
+    "llm_gpu": "reproduce 100M Story Transformer then shift",
+    "clm_gpu": "reuse retained 100M Story TextNCA source then shift"
+  },
+  "runtime_estimate": {
+    "basis": "Experiment-007 T4 throughput plus measured batched-dense CLM training-tax proxy",
+    "llm_pretrain_hours_approx": 1.0,
+    "llm_shift_hours_approx": 0.5,
+    "clm_main_plus_counterfactual_physical_tokens": 54000000,
+    "clm_pure_training_hours_approx": 2.5,
+    "clm_expected_with_eval_checkpoint_growth_overhead_hours": "3-4",
+    "budget_interpretation": "arms run concurrently; CLM is expected to dominate wall time"
+  },
+  "claim_limits": {
+    "math_scope": "synthetic integer arithmetic; not general mathematical reasoning",
+    "growth": "persistent growth only after promotion",
+    "compute": "no claim that stored-capacity growth keeps measured wall-clock compute constant"
+  }
+}
