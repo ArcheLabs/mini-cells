@@ -100,8 +100,6 @@ def compare_birth_equivalence(
     """Compare a pre-birth capture with the current model after a birth."""
 
     if before is None:
-        # Useful as a defensive check for callers that only have a post-birth
-        # model: it still verifies finite execution and stable state hooks.
         before = capture_execution(model, input_ids)
     after = capture_execution(model, input_ids)
     result = compare_captures(before, after, validation_targets=validation_targets)
@@ -125,8 +123,14 @@ def _children_equal_parents(model: Any, *, atol: float = 0.0) -> bool:
 
 
 def parameter_diagnostics(model: Any, stage: int, parent_id: str, child_id: str) -> dict[str, float]:
-    parent = torch.cat([item.detach().float().reshape(-1) for item in model.stages[stage].program_bank.experts[parent_id].parameters()])
-    child = torch.cat([item.detach().float().reshape(-1) for item in model.stages[stage].program_bank.experts[child_id].parameters()])
+    parent = torch.cat([
+        item.detach().float().reshape(-1)
+        for item in model.stages[stage].program_bank.experts[parent_id].parameters()
+    ])
+    child = torch.cat([
+        item.detach().float().reshape(-1)
+        for item in model.stages[stage].program_bank.experts[child_id].parameters()
+    ])
     delta = (child - parent).norm()
     return {
         "relative_l2": float(delta / (parent.norm() + 1e-12)),
@@ -135,7 +139,12 @@ def parameter_diagnostics(model: Any, stage: int, parent_id: str, child_id: str)
 
 
 @torch.no_grad()
-def evaluate_nll(model: Any, batches: list[tuple[torch.Tensor, torch.Tensor]], *, merge_back: tuple[int, str] | None = None) -> float:
+def evaluate_nll(
+    model: Any,
+    batches: list[tuple[torch.Tensor, torch.Tensor]],
+    *,
+    merge_back: tuple[int, str] | None = None,
+) -> float:
     was_training = model.training
     model.eval()
     total = 0.0
@@ -151,7 +160,11 @@ def evaluate_nll(model: Any, batches: list[tuple[torch.Tensor, torch.Tensor]], *
             if merge_back is not None:
                 raise ValueError("merge-back is only valid for a progressive-growth model")
             output = model(inputs)
-        total += float(F.cross_entropy(output.logits.flatten(0, 1), targets.reshape(-1), reduction="sum"))
+        total += float(
+            F.cross_entropy(
+                output.logits.flatten(0, 1), targets.reshape(-1), reduction="sum"
+            )
+        )
         tokens += targets.numel()
     if was_training:
         model.train()
@@ -185,8 +198,18 @@ def newborn_causal_diagnostics(
         perceptions = [item for item in bank.last_perceptions.get(parent_id, [])]
         perceptions.extend(bank.last_perceptions.get(child_id, []))
         if perceptions:
-            logits = bank.router.split_routers[split_id](torch.cat(perceptions))
-            logit_variance = float(logits.var(unbiased=False))
+            # Pressure collection intentionally offloads routed perceptions to CPU.
+            # Diagnostics are transient, so move only this concatenated batch back
+            # to the split router's actual device/dtype before evaluating logits.
+            split_router = bank.router.split_routers[split_id]
+            reference = split_router.prototypes
+            routed = torch.cat(perceptions).to(
+                device=reference.device,
+                dtype=reference.dtype,
+                non_blocking=reference.device.type == "cuda",
+            )
+            logits = split_router(routed)
+            logit_variance = float(logits.var(unbiased=False).item())
     return {
         "parent_usage": parent_usage,
         "child_usage": child_usage,
@@ -254,11 +277,25 @@ def health_label(growth_ppl: float, clm01_start_ppl: float) -> str:
     return "RED"
 
 
-def make_ppl_row(*, replicate: int, arm: str, tokens: int, phase: str, ppl: float, nll: float,
-                 fixed4_ppl: float, clm01_start_ppl: float, textnca_frozen_ppl: float) -> dict[str, Any]:
+def make_ppl_row(
+    *,
+    replicate: int,
+    arm: str,
+    tokens: int,
+    phase: str,
+    ppl: float,
+    nll: float,
+    fixed4_ppl: float,
+    clm01_start_ppl: float,
+    textnca_frozen_ppl: float,
+) -> dict[str, Any]:
     return {
-        "replicate": replicate, "arm": arm, "tokens": tokens, "phase": phase,
-        "ppl": ppl, "nll": nll,
+        "replicate": replicate,
+        "arm": arm,
+        "tokens": tokens,
+        "phase": phase,
+        "ppl": ppl,
+        "nll": nll,
         "ppl_vs_fixed4": ppl / fixed4_ppl,
         "ppl_vs_clm01": ppl / clm01_start_ppl,
         "ppl_vs_textnca": ppl / textnca_frozen_ppl,
@@ -293,19 +330,32 @@ def progressive_growth_decision(
     return {
         "format": "minicells.clm-0.3-progressive-growth.decision.v1",
         "growth_equivalence": {
-            "status": "CLM_GROWTH_EQUIVALENCE" if births_expected > 0 and equivalence == births_expected else "CLM_GROWTH_EQUIVALENCE_FAILURE",
+            "status": (
+                "CLM_GROWTH_EQUIVALENCE"
+                if births_expected > 0 and equivalence == births_expected
+                else "CLM_GROWTH_EQUIVALENCE_FAILURE"
+            ),
             "births_checked": equivalence,
         },
         "growth_viability": {
-            "status": "CLM_PROGRESSIVE_GROWTH_VIABILITY" if viability_pass else "NO_PROGRESSIVE_GROWTH_VIABILITY",
+            "status": (
+                "CLM_PROGRESSIVE_GROWTH_VIABILITY"
+                if viability_pass
+                else "NO_PROGRESSIVE_GROWTH_VIABILITY"
+            ),
             "replicates_passed": viable,
         },
         "growth_utility": {
             "status": "CLM_PROGRESSIVE_GROWTH_SIGNAL" if utility_pass else "NO_GROWTH_UTILITY_SIGNAL",
-            "threshold": 0.995, "replicates_passed": improved,
+            "threshold": 0.995,
+            "replicates_passed": improved,
         },
         "pressure_selection": {
-            "status": "CLM_GROWTH_PRESSURE_SELECTION_SIGNAL" if pressure_wins >= 2 else "NO_GROWTH_PRESSURE_SELECTION_SIGNAL",
+            "status": (
+                "CLM_GROWTH_PRESSURE_SELECTION_SIGNAL"
+                if pressure_wins >= 2
+                else "NO_GROWTH_PRESSURE_SELECTION_SIGNAL"
+            ),
             "replicates_passed": pressure_wins,
         },
         "formal_gpu_experiment_run": bool(formal_gpu_experiment_run),
