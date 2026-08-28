@@ -13,13 +13,27 @@ TextNCA appears only as the CLM source in the internal starting-condition panel.
 
 ## Hardware budget
 
-The experiment is designed for approximately **10 hours of Kaggle wall time on Tesla T4 ×2**.
+The formal job is designed for **8 hours of Kaggle wall time on Tesla T4 ×2** and for unattended **Save Version → Run All** execution.
 
 - GPU0: reproduce the Experiment-007 Transformer to 100M TinyStories tokens, then run the Story→Math shift.
 - GPU1: reuse the retained 30M TextNCA@100M checkpoint, function-preservingly upcycle it to CLM, then immediately run the same shift.
-- Each worker has a default 9.25-hour soft wall guard and resumable checkpoints.
+- The orchestrator reserves 30 minutes for final evaluation, reporting, figures, and result publication.
+- Incomplete workers run in at most 2.5-hour slices and automatically resume from periodic checkpoints within the same Kaggle job.
+- Automatic new rounds stop when less than 20 minutes of training budget remain.
+- The existing worker already requires at least 30 minutes remaining before starting a 2M-token growth probation, so a counterfactual growth decision is not intentionally started at the end of a worker slice.
 - The first 100M TextNCA Story training is not repeated.
 - The 72-shadow CLM-0.3d formal mechanism experiment is not repeated at 30M scale.
+
+### Runtime estimate
+
+The estimate is deliberately based on previously measured T4 data rather than assuming ideal scaling:
+
+- Experiment 007 Transformer training throughput was about 28.4k tokens/s. Reproducing 100M Story tokens is therefore about **1.0 hour** of pure training, and the 50M shift is another **~0.5 hour** before evaluation/checkpoint overhead.
+- Experiment 007 30M TextNCA throughput was about 12.6k tokens/s. Using the already measured batched-dense CLM training-time ratio of about 2.07× as a conservative proxy gives roughly 6.1k tokens/s for the CLM path.
+- The CLM selected trajectory is 50M shift tokens. Two 2M control/shadow probations add at most one duplicated 2M future branch per decision relative to the selected trajectory, so the maximum physical CLM training budget is approximately **54M tokens**, not 58M.
+- At the conservative 6.1k tokens/s proxy, that is about **2.5 hours of pure CLM training**. Allowing evaluation, checkpointing, routing calibration, shadow restore, and birth bookkeeping, the expected CLM wall time is **roughly 3–4 hours**.
+
+Because the two arms run concurrently, CLM is expected to dominate wall time. Eight hours therefore provides substantial margin; the hard budget remains authoritative if real 30M CLM throughput is worse than this proxy.
 
 ## Fairness boundary
 
@@ -133,7 +147,7 @@ Each decision works as follows:
 
 A proposal or shadow does **not** increase the persistent cell count. Only promotion is recorded as birth.
 
-The two 2M probation windows add at most 4M duplicate counterfactual training tokens beyond the selected main trajectory per decision pair, bounded by the two-decision limit.
+Across two decisions, the counterfactual procedure adds at most 4M physical training tokens beyond the selected 50M shift trajectory, for a maximum of approximately 54M CLM training tokens.
 
 ## Hypotheses
 
@@ -168,21 +182,33 @@ Public-facing outputs:
 - `growth-timeline.png` — Math capability, Story retention index, and persistent CLM cells on one synchronized timeline.
 - `growth-animation.gif` — generated when Pillow animation support is available.
 
-## Kaggle run
+## Kaggle unattended run
 
-From a clean checkout of `codex/experiment-025-story-math-growth`:
+The canonical notebook is:
 
-```bash
-python -m pytest tests/test_story_math_shift_30m.py -q
-python scripts/run_experiment_025_story_math_growth.py
+```text
+research/kaggle/experiment-025-story-math-growth.ipynb
 ```
 
-The default run uses 50M shift tokens and a 9.25-hour per-worker soft limit. If the session stops at the wall guard, rerun the same command; both workers resume from periodic checkpoints.
+With Kaggle configured for **T4 ×2** and Internet access, choose **Save Version → Run All**. The notebook:
 
-For a short preflight before spending the full GPU budget:
+1. checks out the experiment branch;
+2. runs the regression tests;
+3. verifies two visible GPUs;
+4. launches the 8h one-shot orchestrator;
+5. automatically resumes incomplete worker slices while budget remains;
+6. generates `decision.json`, Panel A, the performance figure, growth timeline and optional GIF when complete;
+7. automatically publishes curated non-checkpoint outputs to `kaggle/experiment-025-story-math-growth-results` when complete and when the existing `GITHUB_TOKEN` Kaggle secret is available.
+
+The core command is:
 
 ```bash
-python scripts/run_experiment_025_story_math_growth.py --shift-tokens 2000000 --max-wall-hours 1.0
+python scripts/run_experiment_025_story_math_growth.py \
+  --total-wall-hours 8 \
+  --finalization-reserve-minutes 30 \
+  --round-wall-hours 2.5
 ```
 
-A short preflight is a systems check only and is not formal Experiment-025 evidence.
+If the global 8h budget is exhausted before completion, the run does not manufacture a formal decision. Available checkpoints and partial metrics are preserved.
+
+A short preflight remains a systems check only and is not formal Experiment-025 evidence.
