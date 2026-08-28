@@ -11,6 +11,7 @@ from minicells.growth_validation import (ExecutionCapture, compare_captures, pro
                                          root_router_balance_loss, student_teacher_kl)
 from minicells.language_data import make_training_schedule
 from minicells.language_models import TextNCALM
+from minicells.language_scaling import _promote_stream_requirements
 from minicells.upcycled_cellular_textnca import UpcyclingConfig, convert_textnca_to_upcycled
 
 
@@ -89,6 +90,15 @@ def test_resume_boundaries_execute_each_birth_once() -> None:
 def test_stop_after_tokens() -> None:
     assert stop_target(1_500_000, 523_001, 1_000) == 524_000
     assert stop_target(1_500_000, None, 1_000) == 1_500_000
+
+
+def test_corpus_requirements_preserve_experiment_005_prefixes() -> None:
+    manifest = {"train_stream_tokens": 800_000, "validation_stream_tokens": 100_000}
+    assert _promote_stream_requirements(
+        manifest,
+        train_stream_tokens=1_500_127,
+        validation_stream_tokens=4_032,
+    ) == (1_500_127, 100_000)
 
 
 def test_replicate_schedules_are_paired_and_distinct() -> None:

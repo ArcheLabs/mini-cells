@@ -29,6 +29,28 @@ def _tensor_sha256(tensor: torch.Tensor) -> str:
     return hashlib.sha256(values.tobytes()).hexdigest()
 
 
+def _promote_stream_requirements(
+    source_manifest: dict[str, object],
+    *,
+    train_stream_tokens: int,
+    validation_stream_tokens: int,
+) -> tuple[int, int]:
+    """Materialize at least the registered Experiment-005 corpus prefixes.
+
+    Downstream experiments may need only a small validation window, but the
+    provenance gate below must still be able to reproduce the complete 005
+    train/validation prefixes before accepting a newly materialized stream.
+    """
+
+    requested_train = int(train_stream_tokens)
+    requested_validation = int(validation_stream_tokens)
+    if requested_train <= 0 or requested_validation <= 0:
+        raise ValueError("corpus stream token requirements must be positive")
+    source_train = int(source_manifest["train_stream_tokens"])
+    source_validation = int(source_manifest["validation_stream_tokens"])
+    return max(requested_train, source_train), max(requested_validation, source_validation)
+
+
 def prepare_scaling_corpus(
     root: Path,
     *,
@@ -44,6 +66,14 @@ def prepare_scaling_corpus(
     source_tokenizer_sha = hashlib.sha256(source_tokenizer.read_bytes()).hexdigest()
     if source_tokenizer_sha != source_manifest.get("tokenizer_sha256"):
         raise RuntimeError("Experiment 005 tokenizer hash does not match its corpus manifest")
+
+    train_stream_tokens, validation_stream_tokens = _promote_stream_requirements(
+        source_manifest,
+        train_stream_tokens=train_stream_tokens,
+        validation_stream_tokens=validation_stream_tokens,
+    )
+    source_train_tokens = int(source_manifest["train_stream_tokens"])
+    source_validation_tokens = int(source_manifest["validation_stream_tokens"])
 
     cache = root / "results" / "consumer-language-scaling-v1" / "cache"
     cache.mkdir(parents=True, exist_ok=True)
@@ -85,8 +115,6 @@ def prepare_scaling_corpus(
         target_tokens=validation_stream_tokens,
     )
 
-    source_train_tokens = int(source_manifest["train_stream_tokens"])
-    source_validation_tokens = int(source_manifest["validation_stream_tokens"])
     prefix_train_sha = _tensor_sha256(train[:source_train_tokens])
     prefix_validation_sha = _tensor_sha256(validation[:source_validation_tokens])
     if prefix_train_sha != source_manifest.get("train_token_sha256"):

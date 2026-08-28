@@ -1,7 +1,13 @@
 import torch
 
 from minicells.clm_growth import ProgressiveGrowthCLM
-from minicells.growth_checkpoint import GlobalLRScheduler, load_growth_checkpoint, save_growth_checkpoint
+from minicells.growth_checkpoint import (
+    GlobalLRScheduler,
+    capture_rng_state,
+    load_growth_checkpoint,
+    restore_rng_state,
+    save_growth_checkpoint,
+)
 from minicells.language_models import TextNCALM
 from minicells.upcycled_cellular_textnca import UpcyclingConfig, convert_textnca_to_upcycled
 
@@ -41,3 +47,22 @@ def test_optimizer_inherits_parent_state_and_scheduler_continues(tmp_path) -> No
     assert restored.expert_counts_by_stage() == [5, 4, 4]
     assert payload["consumed_tokens"] == 500_000
     torch.testing.assert_close(restored(inputs).logits, model(inputs).logits, rtol=1e-5, atol=1e-6)
+
+
+def test_restore_rng_state_accepts_cuda_mapped_byte_tensors() -> None:
+    if not torch.cuda.is_available():
+        return
+
+    state = capture_rng_state()
+    expected = torch.rand(8, device="cuda")
+
+    # Simulate torch.load(checkpoint, map_location="cuda"): metadata tensors,
+    # including CPU/CUDA RNG states, are moved to CUDA along with model tensors.
+    mapped_state = {
+        **state,
+        "torch_cpu": state["torch_cpu"].to("cuda"),
+        "torch_cuda": [item.to("cuda") for item in state["torch_cuda"]],
+    }
+    restore_rng_state(mapped_state)
+    actual = torch.rand(8, device="cuda")
+    torch.testing.assert_close(actual, expected, rtol=0.0, atol=0.0)
