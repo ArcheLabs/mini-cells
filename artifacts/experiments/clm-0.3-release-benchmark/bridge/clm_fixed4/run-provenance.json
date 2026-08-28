@@ -1,0 +1,28 @@
+{
+  "arm": "clm_fixed4",
+  "base_lr": 0.0003,
+  "batch_size": 8,
+  "budget_tokens": 1000000,
+  "code_commit": "260df3a18116e1f38895790c5b24e14596f756c6",
+  "code_tree_sha": "430c793e850dd90b1c3400fb0f2fc45ede33427e",
+  "format": "minicells.clm-0.3-release-bridge-worker.v1",
+  "full_train_token_sha256": "beab0ec485dec58b4dc4dbcf5cbe39f716a5f105f25a0f584ce36809674ed466",
+  "kl_beta": 0.5,
+  "objective": "CE + 0.5 * KL(student || frozen source TextNCA)",
+  "optimizer": "AdamW",
+  "optimizer_betas": [
+    0.9,
+    0.95
+  ],
+  "schedule_sha256": "06143c64da6d1493c26a460581c74e11a131825412b3759823bf5ebd57861b93",
+  "sequence_length": 125,
+  "source_checkpoint_path": "artifacts/experiments/006-consumer-language-scaling/minicells-v2-10m.pt",
+  "source_checkpoint_sha256": "b76e2dd28b31470c1ce8bcd265c56e1b306191631e304161ded55b4e763f9e9e",
+  "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "tracked_tree_dirty": false,
+  "train_suffix_offset": 15000000,
+  "train_suffix_sha256": "f6083b8ea39105a6d1b8f9d28105db02129bb692a17cce66d537b12ddc0b884b",
+  "validation_schedule_sha256": "59c4ae4f8347f6050a0d543b9a3778a670fcfaf26f68cd0e87d3b061224d16fa",
+  "validation_token_sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+  "weight_decay": 0.1
+}

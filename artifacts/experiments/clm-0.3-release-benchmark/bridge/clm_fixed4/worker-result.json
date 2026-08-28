@@ -1,0 +1,45 @@
+{
+  "age_zero_equivalence": {
+    "max_logits_abs_diff": 0.0,
+    "max_logits_diff_threshold": 2e-05,
+    "ppl_ratio": 1.0,
+    "ppl_ratio_tolerance": 1e-05,
+    "status": "CLM_RELEASE_BRIDGE_EQUIVALENCE"
+  },
+  "arm": "clm_fixed4",
+  "checkpoint_ages": [
+    0,
+    100000,
+    250000,
+    500000,
+    1000000
+  ],
+  "code_commit": "260df3a18116e1f38895790c5b24e14596f756c6",
+  "code_tree_sha": "430c793e850dd90b1c3400fb0f2fc45ede33427e",
+  "final_nll": 2.8668895016113916,
+  "final_ppl": 17.582243515593404,
+  "formal_gpu_experiment_run": true,
+  "format": "minicells.clm-0.3-release-bridge-worker.v1",
+  "parameters": {
+    "active_expert_parameters": 395136,
+    "active_parameter_proxy": 1434496,
+    "expert_parameters_total": 1580544,
+    "router_parameters": 1536,
+    "shared_parameters": 1037824,
+    "total_parameters": 2619904
+  },
+  "runtime": {
+    "device": "cuda",
+    "gpu": "Tesla T4",
+    "inference_backend": "sparse_dispatch",
+    "inference_peak_vram_bytes": 49113600,
+    "inference_timed_iterations": 100,
+    "inference_tokens_per_second": 26974.75882541827,
+    "inference_warmup_iterations": 20,
+    "train_elapsed_seconds": 106.95623455999998,
+    "train_peak_vram_bytes": 323948032,
+    "train_tokens_per_second": 9349.618599736914
+  },
+  "source_checkpoint_sha256": "b76e2dd28b31470c1ce8bcd265c56e1b306191631e304161ded55b4e763f9e9e",
+  "tracked_tree_dirty": false
+}
