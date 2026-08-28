@@ -106,7 +106,7 @@ def _prepare_corpus(args: argparse.Namespace) -> None:
     )
     validation_tokens = max(
         100_000,
-        EVAL_BATCHES * BATCH_SIZE * (SEQUENCE_LENGTH + 1),
+        2 * EVAL_BATCHES * BATCH_SIZE * (SEQUENCE_LENGTH + 1),
         int(manifest["validation_stream_tokens"]),
     )
     print(
@@ -162,6 +162,15 @@ def main() -> int:
     provenance = git_provenance(REPO_ROOT)
     if args.execute and provenance["tracked_tree_dirty"]:
         raise RuntimeError("formal CLM-0.3c matrix requires a clean tracked Git tree")
+    if args.execute and (
+        args.decision_tokens != DECISION_TOKENS
+        or args.probe_tokens != PROBE_TOKENS
+        or args.confirm_tokens != CONFIRM_TOKENS
+    ):
+        raise RuntimeError(
+            "formal CLM-0.3c horizons are preregistered at 1.5M/100K/500K; "
+            "custom horizons require a separate non-formal experiment script"
+        )
     code_commit = str(provenance["code_commit"])
 
     if not args.execute:
@@ -172,6 +181,7 @@ def main() -> int:
             "+ 500K selected confirm + 500K no-growth confirm.",
             flush=True,
         )
+        print("Probe and confirmation use disjoint 32K-target validation holdouts.", flush=True)
         print("PREFLIGHT ONLY: pass --execute to launch CLM-0.3c.", flush=True)
         return 0
 
