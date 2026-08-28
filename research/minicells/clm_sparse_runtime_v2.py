@@ -1,14 +1,14 @@
 """Second-generation CLM sparse runtime focused on Turing/Tesla T4.
 
 This module layers on top of :mod:`clm_sparse_runtime` without changing the
-frozen CLM-0.3 research model.  The main addition is a true top-1 sparse
+frozen CLM-0.3 research model. The main addition is a true top-1 sparse
 ``padded_sparse`` inference backend that keeps the expert dimension batched for
 T4 while avoiding dense expert-token work for inactive routes.
 
 For N tokens and E experts, the path allocates a fixed per-expert capacity C,
-executes two ``torch.bmm`` calls over [E, C, D], and sends only overflow tokens
-through the exact reference sparse path.  No routed token is dropped.  Several
-capacity factors are considered by the one-time autotuner.  Every candidate
+executes two ``torch.bmm`` calls over [E, C, D], and sends only overflow routes
+through the exact reference sparse path. No routed token is dropped. Several
+capacity factors are considered by the one-time autotuner. Every candidate
 must pass a numerical parity gate against ``reference_sparse`` before it may be
 timed or selected.
 
@@ -20,6 +20,7 @@ inference-only.
 from __future__ import annotations
 
 import math
+from types import MethodType
 from typing import Callable
 from weakref import WeakKeyDictionary
 
@@ -51,7 +52,7 @@ def _parity_metrics(
             "reason": f"shape mismatch: {tuple(reference.shape)} != {tuple(candidate.shape)}",
             "max_abs_diff": float("inf"),
         }
-    if not torch.isfinite(candidate).all():
+    if not bool(torch.isfinite(candidate).all().item()):
         return {
             "ok": False,
             "reason": "candidate produced non-finite values",
@@ -86,11 +87,8 @@ def _record_route_shape(
         "counts": counts,
         "selected_backend": selected_backend,
         "capacity": capacity,
+        "overflow_count": overflow_mask.detach().sum() if overflow_mask is not None else None,
     }
-    if overflow_mask is not None:
-        row["overflow_count"] = overflow_mask.detach().sum()
-    else:
-        row["overflow_count"] = None
     _LAST_ROUTE_TENSORS[bank] = row
 
 
@@ -104,10 +102,10 @@ def _padded_sparse(
 ) -> torch.Tensor:
     """T4-friendly exact top-1 sparse FFN using padded batched GEMMs.
 
-    The fixed capacity avoids a CPU synchronization on the per-step maximum
-    expert load. Tokens beyond capacity are processed by the exact reference
-    sparse implementation, so the optimization never drops or truncates
-    traffic.
+    Capacity is derived from tensor shape rather than observed expert load, so
+    the recurrent hot path never needs a load-dependent GPU-to-CPU sync.
+    Overflow is represented as a fixed-shape gate mask and evaluated by the
+    exact reference sparse path; no token is dropped.
     """
 
     if torch.is_grad_enabled():
@@ -133,20 +131,21 @@ def _padded_sparse(
         0, sorted_assignments
     )
 
-    # Capacity is shape-derived, not load-derived, so no GPU->CPU sync occurs on
-    # the recurrent hot path. Any excess traffic takes the overflow path below.
     capacity = max(1, int(math.ceil(token_count * capacity_factor / expert_count)))
-    keep = positions < capacity
-    overflow = ~keep
+    keep_sorted = positions < capacity
+    overflow_sorted = ~keep_sorted
 
+    # Keep tensors fixed-size on the hot path. Advanced indexing of the kept
+    # routes is still device-side; overflow itself is handled below without a
+    # Python branch on a dynamic tensor length.
     padded = torch.zeros(
         (expert_count, capacity, flat_inputs.shape[-1]),
         device=perception.device,
         dtype=compute_dtype,
     )
-    kept_assignments = sorted_assignments[keep]
-    kept_positions = positions[keep]
-    kept_order = order[keep]
+    kept_assignments = sorted_assignments[keep_sorted]
+    kept_positions = positions[keep_sorted]
+    kept_order = order[keep_sorted]
     padded[kept_assignments, kept_positions] = flat_inputs.index_select(0, kept_order).to(
         dtype=compute_dtype
     )
@@ -164,19 +163,19 @@ def _padded_sparse(
     flat_output = torch.zeros_like(flat_inputs)
     flat_output.index_copy_(0, kept_order, selected.to(dtype=flat_output.dtype))
 
-    # Overflow remains exact top-1 sparse work. Boolean indexing creates a
-    # dynamic-sized tensor on device but requires no host synchronization.
-    overflow_order = order[overflow]
-    if overflow_order.numel() != 0:
-        overflow_inputs = flat_inputs.index_select(0, overflow_order)
-        overflow_gates = flat_gates.index_select(0, overflow_order)
-        overflow_output = v1._reference_sparse(
-            bank,
-            overflow_inputs,
-            overflow_gates,
-            expert_ids,
-        )
-        flat_output.index_copy_(0, overflow_order, overflow_output)
+    # Build an original-order, fixed-length overflow mask. reference_sparse then
+    # sees zero gates for already-computed routes and exact top-1 gates only for
+    # overflow routes. This avoids inspecting a dynamic overflow tensor on host.
+    overflow_original = torch.zeros(token_count, device=perception.device, dtype=torch.bool)
+    overflow_original.index_copy_(0, order, overflow_sorted)
+    overflow_gates = flat_gates * overflow_original[:, None].to(dtype=flat_gates.dtype)
+    overflow_output = v1._reference_sparse(
+        bank,
+        flat_inputs,
+        overflow_gates,
+        expert_ids,
+    )
+    flat_output = flat_output + overflow_output
 
     _record_route_shape(
         bank,
@@ -184,7 +183,7 @@ def _padded_sparse(
         expert_count,
         selected_backend=f"padded_sparse_{capacity_factor:.2f}",
         capacity=capacity,
-        overflow_mask=overflow,
+        overflow_mask=overflow_sorted,
     )
     return flat_output.view_as(perception)
 
@@ -236,9 +235,12 @@ def _autotuned_inference_v2(
 
     failures: list[str] = []
     if selected is None:
-        # Reference output is the semantic oracle for runtime optimization.
         reference = candidates["reference_sparse"]()
-        timings: dict[str, float] = {}
+        timings: dict[str, float] = {
+            "reference_sparse": v1._elapsed_cuda_or_cpu(
+                candidates["reference_sparse"], perception.device
+            )
+        }
         parity: dict[str, dict[str, object]] = {
             "reference_sparse": {
                 "ok": True,
@@ -248,9 +250,6 @@ def _autotuned_inference_v2(
                 "atol": AUTOTUNE_ATOL,
             }
         }
-        timings["reference_sparse"] = v1._elapsed_cuda_or_cpu(
-            candidates["reference_sparse"], perception.device
-        )
 
         for name, fn in candidates.items():
             if name == "reference_sparse":
@@ -280,13 +279,10 @@ def _autotuned_inference_v2(
         }
 
     if selected not in candidates:
-        # Defensive handling if a process reused an incompatible cache entry.
         choices.pop(key, None)
         return _autotuned_inference_v2(bank, perception, gates, expert_ids)
 
     output = candidates[selected]()
-    # Ensure route reporting describes the actually selected path even when it
-    # is not padded_sparse.
     if not selected.startswith("padded_sparse_"):
         _record_route_shape(
             bank,
@@ -297,14 +293,69 @@ def _autotuned_inference_v2(
     return output, selected, "; ".join(failures) if failures else None
 
 
-def install_optimized_runtime(model: nn.Module) -> nn.Module:
-    """Install runtime v2 while preserving all CLM-0.3 model semantics."""
+def _optimized_bank_forward_v2(
+    self: nn.Module,
+    perception: torch.Tensor,
+    *,
+    backend: str = "masked_dense",
+    merge_back_child: str | None = None,
+):
+    if self.training and torch.is_grad_enabled():
+        v1._PACKED.pop(self, None)
+        v1._AUTOTUNE.pop(self, None)
+        _LAST_AUTOTUNE.pop(self, None)
 
-    # v1's optimized bank forward resolves this module global dynamically on
-    # every sparse_dispatch call; replacing the policy is therefore sufficient
-    # and avoids touching the frozen research model implementation.
-    v1._autotuned_inference = _autotuned_inference_v2
-    return v1.install_optimized_runtime(model)
+    gates, root_indices, root_probabilities, choices, gates_by_id = self.route(
+        perception, merge_back_child=merge_back_child
+    )
+    expert_ids = tuple(self.expert_ids)
+    if backend == "masked_dense":
+        output = v1._masked_dense(self, perception, gates, expert_ids)
+        v1._LAST_BACKEND[self] = "masked_dense"
+        v1._LAST_FALLBACK.pop(self, None)
+    elif backend == "batched_dense":
+        try:
+            output = v1._batched_dense(self, perception, gates, expert_ids)
+            v1._LAST_BACKEND[self] = "batched_dense"
+            v1._LAST_FALLBACK.pop(self, None)
+        except (TypeError, RuntimeError) as exc:
+            output = v1._masked_dense(self, perception, gates, expert_ids)
+            v1._LAST_BACKEND[self] = "masked_dense_fallback"
+            v1._LAST_FALLBACK[self] = f"{type(exc).__name__}: {exc}"
+    elif backend == "reference_sparse":
+        output = v1._reference_sparse(self, perception, gates, expert_ids)
+        v1._LAST_BACKEND[self] = "reference_sparse"
+        v1._LAST_FALLBACK.pop(self, None)
+    elif backend == "sparse_dispatch":
+        if torch.is_grad_enabled():
+            output = v1._reference_sparse(self, perception, gates, expert_ids)
+            v1._LAST_BACKEND[self] = "reference_sparse_grad"
+            v1._LAST_FALLBACK[self] = (
+                "optimized sparse execution is inference-only under current STE semantics"
+            )
+        else:
+            output, selected, failure = _autotuned_inference_v2(
+                self, perception, gates, expert_ids
+            )
+            v1._LAST_BACKEND[self] = f"autotuned_{selected}"
+            if failure is None:
+                v1._LAST_FALLBACK.pop(self, None)
+            else:
+                v1._LAST_FALLBACK[self] = failure
+    else:
+        raise ValueError(f"unknown execution backend: {backend}")
+    return output, gates, root_indices, root_probabilities, choices, gates_by_id
+
+
+def install_optimized_runtime(model: nn.Module) -> nn.Module:
+    """Install runtime v2 without mutating runtime-v1 process globals."""
+
+    v1.install_optimized_runtime(model)
+    for stage in getattr(model, "stages", ()):
+        bank = getattr(stage, "program_bank", None)
+        if bank is not None and bank in v1._ORIGINAL_BANK_FORWARD:
+            bank.forward = MethodType(_optimized_bank_forward_v2, bank)
+    return model
 
 
 def clear_runtime_cache(model: nn.Module) -> None:
@@ -367,5 +418,4 @@ def runtime_status(model: nn.Module) -> list[dict[str, object]]:
     return rows
 
 
-# Re-export the exact-STE training optimization and uninstall helper from v1.
 remove_optimized_runtime = v1.remove_optimized_runtime
