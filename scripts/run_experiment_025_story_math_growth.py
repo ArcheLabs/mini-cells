@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Orchestrate Experiment 025 on up to two CUDA GPUs."""
+"""Orchestrate Experiment 025 on exactly two CUDA GPUs."""
 
 from __future__ import annotations
 
@@ -27,6 +27,7 @@ from minicells.story_math_shift_30m import (  # noqa: E402
 )
 
 SOURCE_006 = ROOT / "artifacts" / "experiments" / "006-consumer-language-scaling"
+PROTOCOL = ROOT / "research" / "experiment-025-protocol.json"
 OUT = ROOT / "results" / RESULT_DIR_NAME
 WORKER = ROOT / "scripts" / "run_experiment_025_story_math_worker.py"
 REPORT = ROOT / "scripts" / "report_experiment_025_story_math_growth.py"
@@ -56,9 +57,8 @@ def worker_command(
     math_cache: Path,
     shift_tokens: int,
     max_wall_hours: float,
-    reset: bool,
 ) -> list[str]:
-    result = [
+    return [
         sys.executable,
         str(WORKER),
         "--arm",
@@ -74,9 +74,6 @@ def worker_command(
         "--max-wall-hours",
         str(max_wall_hours),
     ]
-    if reset:
-        result.append("--reset")
-    return result
 
 
 def main() -> int:
@@ -94,9 +91,12 @@ def main() -> int:
         raise RuntimeError("Experiment 025 requires a clean tracked Git tree")
 
     available = torch.cuda.device_count()
-    if available < 1:
-        raise RuntimeError("Experiment 025 requires at least one CUDA GPU")
-    used = min(2, available)
+    if available < 2:
+        raise RuntimeError(
+            "Formal Experiment 025 is budgeted for two concurrent CUDA GPUs; "
+            f"only {available} visible. Enable Tesla T4 x2 before running."
+        )
+    used = 2
     OUT.mkdir(parents=True, exist_ok=True)
     if args.reset:
         # Preserve expensive corpus caches and the reproducible LLM pretrain if present.
@@ -111,6 +111,10 @@ def main() -> int:
                     shutil.rmtree(path)
                 else:
                     path.unlink()
+
+    if not PROTOCOL.is_file():
+        raise FileNotFoundError(PROTOCOL)
+    shutil.copy2(PROTOCOL, OUT / "protocol.json")
 
     print("preparing/reusing Experiment-007 TinyStories corpus")
     corpus = prepare_30m_corpus(ROOT, source_006_dir=SOURCE_006)
@@ -138,66 +142,37 @@ def main() -> int:
     _json_write(OUT / "run-provenance.json", provenance)
 
     arms = ("llm", "clm")
-    failures: list[str] = []
-    if used == 1:
-        print("only one CUDA GPU visible; arms will run sequentially")
-        for arm in arms:
-            env = os.environ.copy()
-            env["CUDA_VISIBLE_DEVICES"] = "0"
-            log_path = OUT / f"{arm}.log"
-            with log_path.open("w", encoding="utf-8") as handle:
-                result = subprocess.run(
-                    worker_command(
-                        arm,
-                        story_cache=story_cache,
-                        math_cache=math_cache,
-                        shift_tokens=args.shift_tokens,
-                        max_wall_hours=args.max_wall_hours,
-                        reset=False,
-                    ),
-                    cwd=ROOT,
-                    env=env,
-                    stdout=handle,
-                    stderr=subprocess.STDOUT,
-                    text=True,
-                    check=False,
-                )
-            print(f"--- {arm} / GPU 0 ---")
-            print(log_path.read_text(encoding="utf-8").rstrip())
-            if result.returncode != 0:
-                failures.append(f"{arm} exited {result.returncode}")
-    else:
-        active: list[tuple[str, int, subprocess.Popen[str], Path]] = []
-        for gpu_index, arm in enumerate(arms):
-            env = os.environ.copy()
-            env["CUDA_VISIBLE_DEVICES"] = str(gpu_index)
-            log_path = OUT / f"{arm}.log"
-            handle = log_path.open("w", encoding="utf-8")
-            process = subprocess.Popen(
-                worker_command(
-                    arm,
-                    story_cache=story_cache,
-                    math_cache=math_cache,
-                    shift_tokens=args.shift_tokens,
-                    max_wall_hours=args.max_wall_hours,
-                    reset=False,
-                ),
-                cwd=ROOT,
-                env=env,
-                stdout=handle,
-                stderr=subprocess.STDOUT,
-                text=True,
-            )
-            handle.close()
-            active.append((arm, gpu_index, process, log_path))
-            print(f"started {arm:3s} on physical GPU {gpu_index}")
-        for arm, gpu_index, process, log_path in active:
-            code = process.wait()
-            print(f"--- {arm} / GPU {gpu_index} ---")
-            print(log_path.read_text(encoding="utf-8").rstrip())
-            if code != 0:
-                failures.append(f"{arm} exited {code}; see {log_path}")
+    active: list[tuple[str, int, subprocess.Popen[str], Path]] = []
+    for gpu_index, arm in enumerate(arms):
+        env = os.environ.copy()
+        env["CUDA_VISIBLE_DEVICES"] = str(gpu_index)
+        log_path = OUT / f"{arm}.log"
+        handle = log_path.open("w", encoding="utf-8")
+        process = subprocess.Popen(
+            worker_command(
+                arm,
+                story_cache=story_cache,
+                math_cache=math_cache,
+                shift_tokens=args.shift_tokens,
+                max_wall_hours=args.max_wall_hours,
+            ),
+            cwd=ROOT,
+            env=env,
+            stdout=handle,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
+        handle.close()
+        active.append((arm, gpu_index, process, log_path))
+        print(f"started {arm:3s} on physical GPU {gpu_index}")
 
+    failures: list[str] = []
+    for arm, gpu_index, process, log_path in active:
+        code = process.wait()
+        print(f"--- {arm} / GPU {gpu_index} ---")
+        print(log_path.read_text(encoding="utf-8").rstrip())
+        if code != 0:
+            failures.append(f"{arm} exited {code}; see {log_path}")
     if failures:
         raise RuntimeError("; ".join(failures))
 
