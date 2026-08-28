@@ -65,7 +65,7 @@ def parser() -> argparse.ArgumentParser:
         help="Maximum wall time given to one worker invocation before checkpoint/resume.",
     )
     result.add_argument("--reset", action="store_true")
-    return result.parse_args()
+    return result
 
 
 def _git(*args: str) -> str:
