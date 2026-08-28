@@ -2,18 +2,12 @@
 //!
 //! `LocalPvmHost` is the complete chain-free host surface needed by the
 //! service: payload/results, storage, external data and yielded values.  The
-//! pinned Jambda `VmEngine` is used directly; no chain `StateView` is involved.
+//! pinned MiniJAM executor is used directly; no chain `StateView` or Jambda VM
+//! implementation type crosses into this workload crate.
 
 use blake2b_simd::Params;
-use jp_vm_engine::{run_standalone, StandaloneProgram};
-use jp_vm_interp::{memory::InnerInterpMemory, register::InterpRegister, InterpBackend};
-use jp_vm_primitives::{
-    error::VmError,
-    host::HostCallTrait,
-    state::{VmMemory, VmRegister, VmState},
-    ExitKind,
-};
 use minicells_runtime::{Host, HostError};
+use minijam_pvm_executor::{Error as MiniJamExecutionError, Host as MiniJamHost};
 use std::{
     collections::BTreeMap,
     fs, io,
@@ -102,121 +96,30 @@ impl Host for LocalPvmHost {
     }
 }
 
-const HOST_NONE: u64 = u64::MAX;
-const HOST_GAS: u32 = 0;
-const HOST_FETCH: u32 = 1;
-const HOST_READ: u32 = 3;
-const HOST_WRITE: u32 = 4;
-const HOST_YIELD: u32 = 25;
-const HOST_LOG: u32 = 100;
-
-impl HostCallTrait<InterpRegister, InnerInterpMemory> for LocalPvmHost {
-    fn ecalli(
-        &mut self,
-        id: u32,
-        state: &mut VmState<InterpRegister, InnerInterpMemory>,
-        gas: &mut i64,
-    ) -> Result<ExitKind, VmError> {
-        let arg = |index: u8| state.registers.get(index);
-        let set_result = |state: &mut VmState<InterpRegister, InnerInterpMemory>, value: u64| {
-            state.registers.set_a0(value);
-        };
-        match id {
-            HOST_GAS => set_result(state, (*gas).max(0) as u64),
-            HOST_FETCH => {
-                let ptr = arg(7) as u32;
-                let offset = arg(8) as usize;
-                let capacity = arg(9) as usize;
-                let mode = arg(10);
-                let index = arg(11) as usize;
-                let item = match mode {
-                    13 => Some(&self.payload),
-                    4 => self.external_data.get(index),
-                    15 => self.results.get(index),
-                    _ => None,
-                };
-                let Some(item) = item else {
-                    set_result(state, HOST_NONE);
-                    return Ok(ExitKind::Continue);
-                };
-                let remaining = item.get(offset..).unwrap_or_default();
-                let copy_len = remaining.len().min(capacity);
-                state
-                    .memory
-                    .write_bytes(ptr, &remaining[..copy_len])
-                    .map_err(|_| VmError::Panic)?;
-                // FETCH returns the full item length even when an offset/length
-                // window was requested.  The SDK uses this to validate the
-                // second half of minijam_result.
-                set_result(state, item.len() as u64);
-            }
-            HOST_READ => {
-                let key_ptr = arg(8) as u32;
-                let key_len = arg(9) as usize;
-                let out_ptr = arg(10) as u32;
-                let capacity = arg(12) as usize;
-                let mut key = vec![0; key_len];
-                state
-                    .memory
-                    .read_bytes_into(key_ptr, &mut key)
-                    .map_err(|_| VmError::Panic)?;
-                let Some(value) = self.storage.get(&key) else {
-                    set_result(state, HOST_NONE);
-                    return Ok(ExitKind::Continue);
-                };
-                let copy_len = value.len().min(capacity);
-                state
-                    .memory
-                    .write_bytes(out_ptr, &value[..copy_len])
-                    .map_err(|_| VmError::Panic)?;
-                set_result(state, value.len() as u64);
-            }
-            HOST_WRITE => {
-                let key_ptr = arg(7) as u32;
-                let key_len = arg(8) as usize;
-                let value_ptr = arg(9) as u32;
-                let value_len = arg(10) as usize;
-                let mut key = vec![0; key_len];
-                let mut value = vec![0; value_len];
-                state
-                    .memory
-                    .read_bytes_into(key_ptr, &mut key)
-                    .map_err(|_| VmError::Panic)?;
-                state
-                    .memory
-                    .read_bytes_into(value_ptr, &mut value)
-                    .map_err(|_| VmError::Panic)?;
-                if value.is_empty() {
-                    self.storage.remove(&key);
-                } else {
-                    self.storage.insert(key, value);
-                }
-                set_result(state, 0);
-            }
-            HOST_YIELD => {
-                let ptr = arg(7) as u32;
-                let mut value = vec![0; 32];
-                state
-                    .memory
-                    .read_bytes_into(ptr, &mut value)
-                    .map_err(|_| VmError::Panic)?;
-                self.yields.push(value);
-                set_result(state, 0);
-            }
-            HOST_LOG => {
-                let ptr = arg(7) as u32;
-                let len = arg(8) as usize;
-                let mut message = vec![0; len];
-                state
-                    .memory
-                    .read_bytes_into(ptr, &mut message)
-                    .map_err(|_| VmError::Panic)?;
-                let _ = message;
-                set_result(state, 0);
-            }
-            _ => set_result(state, 0),
+impl MiniJamHost for LocalPvmHost {
+    fn fetch(&self, mode: u64, index: usize) -> Option<&[u8]> {
+        match mode {
+            13 => Some(&self.payload),
+            4 => self.external_data.get(index).map(Vec::as_slice),
+            15 => self.results.get(index).map(Vec::as_slice),
+            _ => None,
         }
-        Ok(ExitKind::Continue)
+    }
+
+    fn storage_read(&self, key: &[u8]) -> Option<&[u8]> {
+        self.storage.get(key).map(Vec::as_slice)
+    }
+
+    fn storage_write(&mut self, key: Vec<u8>, value: Vec<u8>) {
+        self.storage.insert(key, value);
+    }
+
+    fn storage_delete(&mut self, key: &[u8]) {
+        self.storage.remove(key);
+    }
+
+    fn yield_value(&mut self, value: Vec<u8>) {
+        self.yields.push(value);
     }
 }
 
@@ -290,7 +193,7 @@ impl DirectPvmHarness {
         let mut item = vec![0; 1 + 4 * 32];
         item.push(0); // fnencode(gas)
         item.push(0); // refine result marker
-        jp_vm_primitives::encode_fnencode(refine_output.len() as u64, &mut item);
+        minijam_pvm_executor::encode_fnencode(refine_output.len() as u64, &mut item);
         item.extend_from_slice(refine_output);
         Ok(item)
     }
@@ -300,33 +203,24 @@ impl DirectPvmHarness {
         payload: &[u8],
         entry_point: u32,
     ) -> Result<PvmExecution, PvmError> {
-        let program = StandaloneProgram::from_bytes(&self.artifact.bytes)
-            .map_err(|error| PvmError::Decode(error.to_string()))?;
-        let result = run_standalone(
-            &program,
-            InterpBackend::new(),
+        let result = minijam_pvm_executor::execute(
+            &self.artifact.bytes,
             &mut self.host,
-            std::sync::Arc::from(payload.to_vec()),
+            payload,
             entry_point,
             self.gas_limit,
         )
-        .map_err(|error| PvmError::Execution(error.to_string()))?;
-        let gas_used = result.gas_used;
-        let gas_remaining = result.gas_remaining as u64;
-        match result.result {
-            jp_vm_primitives::VmResult::Ok(Some(output)) => Ok(PvmExecution {
-                output: output.into_vec(),
-                gas_used,
-                gas_remaining,
-            }),
-            jp_vm_primitives::VmResult::Ok(None) => Ok(PvmExecution {
-                output: Vec::new(),
-                gas_used,
-                gas_remaining,
-            }),
-            jp_vm_primitives::VmResult::Oog => Err(PvmError::Execution("out of gas".into())),
-            jp_vm_primitives::VmResult::Panic => Err(PvmError::Execution("PVM panic".into())),
-        }
+        .map_err(|error| match error {
+            MiniJamExecutionError::Decode(message) => PvmError::Decode(message),
+            MiniJamExecutionError::OutOfGas => PvmError::Execution("out of gas".into()),
+            MiniJamExecutionError::Panic => PvmError::Execution("PVM panic".into()),
+            MiniJamExecutionError::Execution(message) => PvmError::Execution(message),
+        })?;
+        Ok(PvmExecution {
+            output: result.output,
+            gas_used: result.gas_used,
+            gas_remaining: result.gas_remaining,
+        })
     }
 }
 
@@ -400,12 +294,15 @@ mod tests {
     #[test]
     fn local_host_preserves_jam_surface() {
         let mut host = LocalPvmHost::default();
-        host.storage_write(b"k", b"v").unwrap();
+        minicells_runtime::Host::storage_write(&mut host, b"k", b"v").unwrap();
         let mut out = [0; 1];
-        assert_eq!(host.storage_read(b"k", &mut out), Ok(Some(1)));
+        assert_eq!(
+            minicells_runtime::Host::storage_read(&host, b"k", &mut out),
+            Ok(Some(1))
+        );
         assert_eq!(out, [b'v']);
         host.external_data.push(b"sample".to_vec());
-        host.yield_value(b"ok");
+        minicells_runtime::Host::yield_value(&mut host, b"ok");
         assert_eq!(host.yields, vec![b"ok".to_vec()]);
     }
 

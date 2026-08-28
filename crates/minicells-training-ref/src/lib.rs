@@ -94,7 +94,14 @@ pub struct PartialGradientV1 {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum ParallelJobStatusV1 { LeavesReady, LeavesRunning, RootReady, Finalizing, Complete, Failed }
+pub enum ParallelJobStatusV1 {
+    LeavesReady,
+    LeavesRunning,
+    RootReady,
+    Finalizing,
+    Complete,
+    Failed,
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ParallelJobErrorV1 {
@@ -132,31 +139,77 @@ pub struct ParallelTrainingJobV1 {
 
 impl ParallelTrainingJobV1 {
     pub const fn new(
-        job_id: [u8; 32], generation: u64, optimizer_step: u64,
-        model_commitment: [u8; 32], optimizer_commitment: [u8; 32], batch_commitment: [u8; 32],
+        job_id: [u8; 32],
+        generation: u64,
+        optimizer_step: u64,
+        model_commitment: [u8; 32],
+        optimizer_commitment: [u8; 32],
+        batch_commitment: [u8; 32],
     ) -> Self {
-        Self { job_id, generation, optimizer_step, model_commitment, optimizer_commitment,
-            batch_commitment, logical_batch_size: LOGICAL_BATCH_SIZE as u16,
-            shard_size: PARALLEL_SHARD_SIZE as u16, leaf_count: PARALLEL_LEAF_COUNT as u16,
-            status: ParallelJobStatusV1::LeavesReady, leaf_commitments: [None; PARALLEL_LEAF_COUNT] }
+        Self {
+            job_id,
+            generation,
+            optimizer_step,
+            model_commitment,
+            optimizer_commitment,
+            batch_commitment,
+            logical_batch_size: LOGICAL_BATCH_SIZE as u16,
+            shard_size: PARALLEL_SHARD_SIZE as u16,
+            leaf_count: PARALLEL_LEAF_COUNT as u16,
+            status: ParallelJobStatusV1::LeavesReady,
+            leaf_commitments: [None; PARALLEL_LEAF_COUNT],
+        }
     }
 
     pub fn accept_leaf(
-        &mut self, job_id: [u8; 32], generation: u64, optimizer_step: u64,
-        model_commitment: [u8; 32], optimizer_commitment: [u8; 32], batch_commitment: [u8; 32],
-        leaf_index: u16, sample_start: u16, sample_end: u16, commitment: [u8; 32],
+        &mut self,
+        job_id: [u8; 32],
+        generation: u64,
+        optimizer_step: u64,
+        model_commitment: [u8; 32],
+        optimizer_commitment: [u8; 32],
+        batch_commitment: [u8; 32],
+        leaf_index: u16,
+        sample_start: u16,
+        sample_end: u16,
+        commitment: [u8; 32],
     ) -> Result<(), ParallelJobErrorV1> {
-        if !matches!(self.status, ParallelJobStatusV1::LeavesReady | ParallelJobStatusV1::LeavesRunning) { return Err(ParallelJobErrorV1::InvalidStatus); }
-        if job_id != self.job_id { return Err(ParallelJobErrorV1::WrongJob); }
-        if generation != self.generation || optimizer_step != self.optimizer_step { return Err(ParallelJobErrorV1::WrongStep); }
-        if model_commitment != self.model_commitment { return Err(ParallelJobErrorV1::WrongModel); }
-        if optimizer_commitment != self.optimizer_commitment { return Err(ParallelJobErrorV1::WrongOptimizer); }
-        if batch_commitment != self.batch_commitment { return Err(ParallelJobErrorV1::WrongBatch); }
+        if !matches!(
+            self.status,
+            ParallelJobStatusV1::LeavesReady | ParallelJobStatusV1::LeavesRunning
+        ) {
+            return Err(ParallelJobErrorV1::InvalidStatus);
+        }
+        if job_id != self.job_id {
+            return Err(ParallelJobErrorV1::WrongJob);
+        }
+        if generation != self.generation || optimizer_step != self.optimizer_step {
+            return Err(ParallelJobErrorV1::WrongStep);
+        }
+        if model_commitment != self.model_commitment {
+            return Err(ParallelJobErrorV1::WrongModel);
+        }
+        if optimizer_commitment != self.optimizer_commitment {
+            return Err(ParallelJobErrorV1::WrongOptimizer);
+        }
+        if batch_commitment != self.batch_commitment {
+            return Err(ParallelJobErrorV1::WrongBatch);
+        }
         let index = leaf_index as usize;
-        if index >= PARALLEL_LEAF_COUNT { return Err(ParallelJobErrorV1::WrongLeaf); }
-        if sample_start != leaf_index * self.shard_size || sample_end != sample_start + self.shard_size { return Err(ParallelJobErrorV1::WrongRange); }
+        if index >= PARALLEL_LEAF_COUNT {
+            return Err(ParallelJobErrorV1::WrongLeaf);
+        }
+        if sample_start != leaf_index * self.shard_size
+            || sample_end != sample_start + self.shard_size
+        {
+            return Err(ParallelJobErrorV1::WrongRange);
+        }
         if let Some(existing) = self.leaf_commitments[index] {
-            return if existing == commitment { Err(ParallelJobErrorV1::DuplicateLeaf) } else { Err(ParallelJobErrorV1::ConflictingLeaf) };
+            return if existing == commitment {
+                Err(ParallelJobErrorV1::DuplicateLeaf)
+            } else {
+                Err(ParallelJobErrorV1::ConflictingLeaf)
+            };
         }
         self.leaf_commitments[index] = Some(commitment);
         self.status = ParallelJobStatusV1::LeavesRunning;
@@ -164,21 +217,38 @@ impl ParallelTrainingJobV1 {
     }
 
     pub fn mark_root_ready(&mut self) -> Result<(), ParallelJobErrorV1> {
-        if !matches!(self.status, ParallelJobStatusV1::LeavesRunning | ParallelJobStatusV1::LeavesReady) { return Err(ParallelJobErrorV1::InvalidStatus); }
-        if self.leaf_commitments.iter().any(|item| item.is_none()) { return Err(ParallelJobErrorV1::MissingLeaf); }
+        if !matches!(
+            self.status,
+            ParallelJobStatusV1::LeavesRunning | ParallelJobStatusV1::LeavesReady
+        ) {
+            return Err(ParallelJobErrorV1::InvalidStatus);
+        }
+        if self.leaf_commitments.iter().any(|item| item.is_none()) {
+            return Err(ParallelJobErrorV1::MissingLeaf);
+        }
         self.status = ParallelJobStatusV1::RootReady;
         Ok(())
     }
 
-    pub fn begin_finalize(&mut self, current_model_commitment: [u8; 32]) -> Result<(), ParallelJobErrorV1> {
-        if self.status != ParallelJobStatusV1::RootReady { return Err(ParallelJobErrorV1::InvalidStatus); }
-        if current_model_commitment != self.model_commitment { self.status = ParallelJobStatusV1::Failed; return Err(ParallelJobErrorV1::StaleRoot); }
+    pub fn begin_finalize(
+        &mut self,
+        current_model_commitment: [u8; 32],
+    ) -> Result<(), ParallelJobErrorV1> {
+        if self.status != ParallelJobStatusV1::RootReady {
+            return Err(ParallelJobErrorV1::InvalidStatus);
+        }
+        if current_model_commitment != self.model_commitment {
+            self.status = ParallelJobStatusV1::Failed;
+            return Err(ParallelJobErrorV1::StaleRoot);
+        }
         self.status = ParallelJobStatusV1::Finalizing;
         Ok(())
     }
 
     pub fn complete(&mut self) -> Result<(), ParallelJobErrorV1> {
-        if self.status != ParallelJobStatusV1::Finalizing { return Err(ParallelJobErrorV1::InvalidStatus); }
+        if self.status != ParallelJobStatusV1::Finalizing {
+            return Err(ParallelJobErrorV1::InvalidStatus);
+        }
         self.status = ParallelJobStatusV1::Complete;
         Ok(())
     }
@@ -196,11 +266,17 @@ impl PartialGradientV1 {
 }
 
 impl Default for PartialGradientV1 {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum TrainingPhaseV1 { Idle, Accumulating, FinalizeReady }
+pub enum TrainingPhaseV1 {
+    Idle,
+    Accumulating,
+    FinalizeReady,
+}
 
 #[derive(Clone, Copy)]
 pub struct GradientAccumulatorStateV1 {
@@ -211,7 +287,14 @@ pub struct GradientAccumulatorStateV1 {
 }
 
 impl GradientAccumulatorStateV1 {
-    pub const fn empty() -> Self { Self { gradient: [0.0; PARAMETER_COUNT], loss_sum: 0.0, token_count: 0, processed_samples: 0 } }
+    pub const fn empty() -> Self {
+        Self {
+            gradient: [0.0; PARAMETER_COUNT],
+            loss_sum: 0.0,
+            token_count: 0,
+            processed_samples: 0,
+        }
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -230,38 +313,105 @@ pub struct TrainingRoundStateV1 {
 }
 
 impl TrainingRoundStateV1 {
-    pub const fn new(generation: u64, optimizer_step: u64, batch_commitment: [u8; 32], model_commitment: [u8; 32], optimizer_commitment: [u8; 32]) -> Self {
-        Self { version: 1, generation, optimizer_step, phase: TrainingPhaseV1::Accumulating, logical_batch_size: 256, shard_size: 8, next_shard_index: 0, batch_commitment, model_commitment, optimizer_commitment, accumulator: GradientAccumulatorStateV1::empty() }
+    pub const fn new(
+        generation: u64,
+        optimizer_step: u64,
+        batch_commitment: [u8; 32],
+        model_commitment: [u8; 32],
+        optimizer_commitment: [u8; 32],
+    ) -> Self {
+        Self {
+            version: 1,
+            generation,
+            optimizer_step,
+            phase: TrainingPhaseV1::Accumulating,
+            logical_batch_size: 256,
+            shard_size: 8,
+            next_shard_index: 0,
+            batch_commitment,
+            model_commitment,
+            optimizer_commitment,
+            accumulator: GradientAccumulatorStateV1::empty(),
+        }
     }
 
-    pub fn accept_mca(&mut self, generation: u64, optimizer_step: u64, batch_commitment: [u8; 32], model_commitment: [u8; 32], shard_index: u16, sample_start: u16, sample_end: u16, candidate: GradientAccumulatorStateV1) -> Result<(), RoundError> {
-        if self.phase != TrainingPhaseV1::Accumulating { return Err(RoundError::InvalidPhase); }
-        if generation != self.generation || optimizer_step != self.optimizer_step { return Err(RoundError::StaleStep); }
-        if batch_commitment != self.batch_commitment { return Err(RoundError::WrongBatch); }
-        if model_commitment != self.model_commitment { return Err(RoundError::WrongModel); }
-        if shard_index != self.next_shard_index || sample_start != shard_index * self.shard_size || sample_end != sample_start + self.shard_size { return Err(RoundError::OutOfOrderShard); }
-        if candidate.processed_samples != sample_end { return Err(RoundError::AccumulatorMismatch); }
+    pub fn accept_mca(
+        &mut self,
+        generation: u64,
+        optimizer_step: u64,
+        batch_commitment: [u8; 32],
+        model_commitment: [u8; 32],
+        shard_index: u16,
+        sample_start: u16,
+        sample_end: u16,
+        candidate: GradientAccumulatorStateV1,
+    ) -> Result<(), RoundError> {
+        if self.phase != TrainingPhaseV1::Accumulating {
+            return Err(RoundError::InvalidPhase);
+        }
+        if generation != self.generation || optimizer_step != self.optimizer_step {
+            return Err(RoundError::StaleStep);
+        }
+        if batch_commitment != self.batch_commitment {
+            return Err(RoundError::WrongBatch);
+        }
+        if model_commitment != self.model_commitment {
+            return Err(RoundError::WrongModel);
+        }
+        if shard_index != self.next_shard_index
+            || sample_start != shard_index * self.shard_size
+            || sample_end != sample_start + self.shard_size
+        {
+            return Err(RoundError::OutOfOrderShard);
+        }
+        if candidate.processed_samples != sample_end {
+            return Err(RoundError::AccumulatorMismatch);
+        }
         self.accumulator = candidate;
         self.next_shard_index += 1;
-        if self.next_shard_index == self.logical_batch_size / self.shard_size { self.phase = TrainingPhaseV1::FinalizeReady; }
+        if self.next_shard_index == self.logical_batch_size / self.shard_size {
+            self.phase = TrainingPhaseV1::FinalizeReady;
+        }
         Ok(())
     }
 
     pub fn finalize(&mut self, state: &mut TrainingState) -> Result<TrainStepReport, RoundError> {
-        if self.phase != TrainingPhaseV1::FinalizeReady || self.next_shard_index != 32 || self.accumulator.processed_samples != 256 { return Err(RoundError::InvalidPhase); }
-        let mut accumulator = GradientAccumulator { gradient: self.accumulator.gradient, loss_sum: self.accumulator.loss_sum, token_count: self.accumulator.token_count };
+        if self.phase != TrainingPhaseV1::FinalizeReady
+            || self.next_shard_index != 32
+            || self.accumulator.processed_samples != 256
+        {
+            return Err(RoundError::InvalidPhase);
+        }
+        let mut accumulator = GradientAccumulator {
+            gradient: self.accumulator.gradient,
+            loss_sum: self.accumulator.loss_sum,
+            token_count: self.accumulator.token_count,
+        };
         let report = finalize_adamw_step(state, &mut accumulator);
-        self.accumulator = GradientAccumulatorStateV1::empty(); self.next_shard_index = 0; self.phase = TrainingPhaseV1::Idle;
+        self.accumulator = GradientAccumulatorStateV1::empty();
+        self.next_shard_index = 0;
+        self.phase = TrainingPhaseV1::Idle;
         Ok(report)
     }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum RoundError { InvalidPhase, StaleStep, WrongBatch, WrongModel, OutOfOrderShard, AccumulatorMismatch }
+pub enum RoundError {
+    InvalidPhase,
+    StaleStep,
+    WrongBatch,
+    WrongModel,
+    OutOfOrderShard,
+    AccumulatorMismatch,
+}
 
 impl GradientAccumulator {
     pub const fn new() -> Self {
-        Self { gradient: [0.0; PARAMETER_COUNT], loss_sum: 0.0, token_count: 0 }
+        Self {
+            gradient: [0.0; PARAMETER_COUNT],
+            loss_sum: 0.0,
+            token_count: 0,
+        }
     }
     pub fn reset(&mut self) {
         self.gradient = [0.0; PARAMETER_COUNT];
@@ -271,7 +421,9 @@ impl GradientAccumulator {
 }
 
 impl Default for GradientAccumulator {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl TrainingWorkspace {
@@ -538,11 +690,7 @@ fn forward_backward(
                 if hidden_pre[iteration][cell][col] <= 0.0 {
                     dhidden[col] = 0.0;
                 }
-                grad_add(
-                    gradient,
-                    UPDATE_IN_BIAS_OFFSET + col,
-                    dhidden[col],
-                );
+                grad_add(gradient, UPDATE_IN_BIAS_OFFSET + col, dhidden[col]);
                 for input in 0..UPDATE_INPUT_DIM {
                     let value = input_value(weights, &states[iteration], ids[cell], cell, input);
                     grad_add(
@@ -592,7 +740,16 @@ pub fn diagnostic_sample_forward(
 ) -> TrainStepReport {
     let length = (batch.lengths[0] as usize).min(MAX_SEQ_LEN);
     let gradient = &mut workspace.gradient as *mut [F32; PARAMETER_COUNT];
-    let (loss, _) = unsafe { forward_backward(&state.weights, &batch.ids[0], length, workspace, &mut *gradient, false) };
+    let (loss, _) = unsafe {
+        forward_backward(
+            &state.weights,
+            &batch.ids[0],
+            length,
+            workspace,
+            &mut *gradient,
+            false,
+        )
+    };
     TrainStepReport {
         loss,
         token_count: length as u32,
@@ -607,7 +764,16 @@ pub fn diagnostic_sample_backward(
 ) -> TrainStepReport {
     let length = (batch.lengths[0] as usize).min(MAX_SEQ_LEN);
     let gradient = &mut workspace.gradient as *mut [F32; PARAMETER_COUNT];
-    let (loss, _) = unsafe { forward_backward(&state.weights, &batch.ids[0], length, workspace, &mut *gradient, true) };
+    let (loss, _) = unsafe {
+        forward_backward(
+            &state.weights,
+            &batch.ids[0],
+            length,
+            workspace,
+            &mut *gradient,
+            true,
+        )
+    };
     TrainStepReport {
         loss,
         token_count: length as u32,
@@ -728,8 +894,14 @@ pub fn accumulate_batch_gradients_into(
 ) {
     for sample in 0..(batch.size as usize).min(LOGICAL_BATCH_SIZE) {
         let length = (batch.lengths[sample] as usize).min(MAX_SEQ_LEN);
-        let (sample_loss, _) =
-            forward_backward(&state.weights, &batch.ids[sample], length, workspace, gradient, true);
+        let (sample_loss, _) = forward_backward(
+            &state.weights,
+            &batch.ids[sample],
+            length,
+            workspace,
+            gradient,
+            true,
+        );
         *loss_sum += sample_loss;
         *token_count += length as u32;
     }
@@ -942,7 +1114,14 @@ pub fn evaluate_batch_report(state: &TrainingState, batch: &TrainingBatch) -> Ev
         let length = (batch.lengths[sample] as usize).min(MAX_SEQ_LEN);
         let gradient = &mut workspace.gradient as *mut [F32; PARAMETER_COUNT];
         let (sample_loss, sample_correct) = unsafe {
-            forward_backward(&state.weights, &batch.ids[sample], length, &mut workspace, &mut *gradient, true)
+            forward_backward(
+                &state.weights,
+                &batch.ids[sample],
+                length,
+                &mut workspace,
+                &mut *gradient,
+                true,
+            )
         };
         loss += sample_loss;
         tokens += length as u32;
@@ -1034,33 +1213,75 @@ mod tests {
     fn accumulator_shard_does_not_mutate_optimizer_state() {
         let state = TrainingState::from_weights([0.01; PARAMETER_COUNT]);
         let before = state;
-        let mut batch = TrainingBatch::empty(); batch.size = 1; batch.lengths[0] = 1; batch.ids[0][0] = 1;
-        let mut workspace = TrainingWorkspace::new(); let mut acc = GradientAccumulator::new();
+        let mut batch = TrainingBatch::empty();
+        batch.size = 1;
+        batch.lengths[0] = 1;
+        batch.ids[0][0] = 1;
+        let mut workspace = TrainingWorkspace::new();
+        let mut acc = GradientAccumulator::new();
         accumulate_batch_gradients(&state, &batch, &mut workspace, &mut acc);
-        assert_eq!(state.weights, before.weights); assert_eq!(state.adam_m, before.adam_m);
-        assert_eq!(state.adam_v, before.adam_v); assert_eq!(state.step, before.step);
-        assert_eq!(acc.token_count, 1); assert!(acc.loss_sum.is_finite());
+        assert_eq!(state.weights, before.weights);
+        assert_eq!(state.adam_m, before.adam_m);
+        assert_eq!(state.adam_v, before.adam_v);
+        assert_eq!(state.step, before.step);
+        assert_eq!(acc.token_count, 1);
+        assert!(acc.loss_sum.is_finite());
     }
 
     #[test]
     fn sequential_accumulation_is_bit_exact() {
         let weights = [0.01; PARAMETER_COUNT];
-        let mut full = TrainingBatch::empty(); full.size = 2;
-        for row in 0..2 { full.lengths[row] = 1; full.ids[row][0] = (row + 1) as u8; }
-        let mut ws = TrainingWorkspace::new(); let mut one = GradientAccumulator::new();
-        accumulate_batch_gradients(&TrainingState::from_weights(weights), &full, &mut ws, &mut one);
-        let mut a = GradientAccumulator::new(); let mut ws2 = TrainingWorkspace::new();
-        let mut first = full; first.size = 1;
-        accumulate_batch_gradients(&TrainingState::from_weights(weights), &first, &mut ws2, &mut a);
-        let mut second = TrainingBatch::empty(); second.size = 1; second.ids[0] = full.ids[1]; second.lengths[0] = full.lengths[1];
-        accumulate_batch_gradients(&TrainingState::from_weights(weights), &second, &mut ws2, &mut a);
-        assert_eq!(one.gradient, a.gradient); assert_eq!(one.loss_sum.to_bits(), a.loss_sum.to_bits());
+        let mut full = TrainingBatch::empty();
+        full.size = 2;
+        for row in 0..2 {
+            full.lengths[row] = 1;
+            full.ids[row][0] = (row + 1) as u8;
+        }
+        let mut ws = TrainingWorkspace::new();
+        let mut one = GradientAccumulator::new();
+        accumulate_batch_gradients(
+            &TrainingState::from_weights(weights),
+            &full,
+            &mut ws,
+            &mut one,
+        );
+        let mut a = GradientAccumulator::new();
+        let mut ws2 = TrainingWorkspace::new();
+        let mut first = full;
+        first.size = 1;
+        accumulate_batch_gradients(
+            &TrainingState::from_weights(weights),
+            &first,
+            &mut ws2,
+            &mut a,
+        );
+        let mut second = TrainingBatch::empty();
+        second.size = 1;
+        second.ids[0] = full.ids[1];
+        second.lengths[0] = full.lengths[1];
+        accumulate_batch_gradients(
+            &TrainingState::from_weights(weights),
+            &second,
+            &mut ws2,
+            &mut a,
+        );
+        assert_eq!(one.gradient, a.gradient);
+        assert_eq!(one.loss_sum.to_bits(), a.loss_sum.to_bits());
         assert_eq!(one.token_count, a.token_count);
-        let mut mono = TrainingState::from_weights(weights); let mut chunk = TrainingState::from_weights(weights);
-        let mut g = GradientAccumulator::new(); let mut w = TrainingWorkspace::new();
-        accumulate_batch_gradients(&mono, &full, &mut w, &mut g); finalize_adamw_step(&mut mono, &mut g);
-        let mut g2 = GradientAccumulator::new(); accumulate_batch_gradients(&chunk, &first, &mut w, &mut g2); accumulate_batch_gradients(&chunk, &second, &mut w, &mut g2); finalize_adamw_step(&mut chunk, &mut g2);
-        assert_eq!(mono.weights, chunk.weights); assert_eq!(mono.adam_m, chunk.adam_m); assert_eq!(mono.adam_v, chunk.adam_v); assert_eq!(mono.step, chunk.step);
+        let mut mono = TrainingState::from_weights(weights);
+        let mut chunk = TrainingState::from_weights(weights);
+        let mut g = GradientAccumulator::new();
+        let mut w = TrainingWorkspace::new();
+        accumulate_batch_gradients(&mono, &full, &mut w, &mut g);
+        finalize_adamw_step(&mut mono, &mut g);
+        let mut g2 = GradientAccumulator::new();
+        accumulate_batch_gradients(&chunk, &first, &mut w, &mut g2);
+        accumulate_batch_gradients(&chunk, &second, &mut w, &mut g2);
+        finalize_adamw_step(&mut chunk, &mut g2);
+        assert_eq!(mono.weights, chunk.weights);
+        assert_eq!(mono.adam_m, chunk.adam_m);
+        assert_eq!(mono.adam_v, chunk.adam_v);
+        assert_eq!(mono.step, chunk.step);
     }
 
     #[test]
@@ -1076,18 +1297,14 @@ mod tests {
         let mut state_b = initial;
         let mut ws_a = TrainingWorkspace::new();
         let mut ws_b = TrainingWorkspace::new();
-        let mut leaves_a = std::vec::Vec::from_iter(
-            (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
-        );
-        let mut leaves_b = std::vec::Vec::from_iter(
-            (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
-        );
-        let mut scratch_a = std::vec::Vec::from_iter(
-            (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
-        );
-        let mut scratch_b = std::vec::Vec::from_iter(
-            (0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()),
-        );
+        let mut leaves_a =
+            std::vec::Vec::from_iter((0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()));
+        let mut leaves_b =
+            std::vec::Vec::from_iter((0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()));
+        let mut scratch_a =
+            std::vec::Vec::from_iter((0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()));
+        let mut scratch_b =
+            std::vec::Vec::from_iter((0..PARALLEL_LEAF_COUNT).map(|_| PartialGradientV1::new()));
         // Simulate arbitrary completion order while retaining index-addressed
         // output slots.  The tree must be identical to the canonical order.
         for leaf_index in (0..PARALLEL_LEAF_COUNT).rev() {
@@ -1112,11 +1329,19 @@ mod tests {
         }
         let report_a = finalize_adamw_step(&mut state_a, &mut {
             let root = reduce_partial_gradients(&leaves_a, &mut scratch_a).unwrap();
-            GradientAccumulator { gradient: root.gradient, loss_sum: root.loss_sum, token_count: root.token_count }
+            GradientAccumulator {
+                gradient: root.gradient,
+                loss_sum: root.loss_sum,
+                token_count: root.token_count,
+            }
         });
         let report_b = finalize_adamw_step(&mut state_b, &mut {
             let root = reduce_partial_gradients(&leaves_b, &mut scratch_b).unwrap();
-            GradientAccumulator { gradient: root.gradient, loss_sum: root.loss_sum, token_count: root.token_count }
+            GradientAccumulator {
+                gradient: root.gradient,
+                loss_sum: root.loss_sum,
+                token_count: root.token_count,
+            }
         });
         assert_eq!(report_a.loss.to_bits(), report_b.loss.to_bits());
         assert_eq!(report_a.grad_norm.to_bits(), report_b.grad_norm.to_bits());
@@ -1135,8 +1360,8 @@ mod tests {
             leaf.processed_samples = 8;
             leaf.loss_sum = (index as f32) * 0.25 + 0.125;
             for parameter in 0..PARAMETER_COUNT {
-                leaf.gradient[parameter] = (index as f32 + 1.0) * 0.001
-                    + parameter as f32 * 0.000001;
+                leaf.gradient[parameter] =
+                    (index as f32 + 1.0) * 0.001 + parameter as f32 * 0.000001;
             }
         }
         let mut scratch = [const { PartialGradientV1::new() }; PARALLEL_LEAF_COUNT];
@@ -1182,17 +1407,38 @@ mod tests {
 
     #[test]
     fn round_state_enforces_order_and_finalizes_once() {
-        let commitment = [7u8; 32]; let model = [8u8; 32]; let optimizer = [9u8; 32];
+        let commitment = [7u8; 32];
+        let model = [8u8; 32];
+        let optimizer = [9u8; 32];
         let mut round = TrainingRoundStateV1::new(0, 0, commitment, model, optimizer);
         let bad = GradientAccumulatorStateV1::empty();
-        assert_eq!(round.accept_mca(0, 0, commitment, model, 1, 8, 16, bad), Err(RoundError::OutOfOrderShard));
+        assert_eq!(
+            round.accept_mca(0, 0, commitment, model, 1, 8, 16, bad),
+            Err(RoundError::OutOfOrderShard)
+        );
         for index in 0..32u16 {
-            let mut candidate = round.accumulator; candidate.processed_samples = (index + 1) * 8; candidate.token_count = candidate.processed_samples as u32;
-            assert_eq!(round.accept_mca(0, 0, commitment, model, index, index * 8, index * 8 + 8, candidate), Ok(()));
+            let mut candidate = round.accumulator;
+            candidate.processed_samples = (index + 1) * 8;
+            candidate.token_count = candidate.processed_samples as u32;
+            assert_eq!(
+                round.accept_mca(
+                    0,
+                    0,
+                    commitment,
+                    model,
+                    index,
+                    index * 8,
+                    index * 8 + 8,
+                    candidate
+                ),
+                Ok(())
+            );
         }
         assert_eq!(round.phase, TrainingPhaseV1::FinalizeReady);
         let mut state = TrainingState::from_weights([0.0; PARAMETER_COUNT]);
-        assert!(round.finalize(&mut state).is_ok()); assert_eq!(state.step, 1); assert_eq!(round.phase, TrainingPhaseV1::Idle);
+        assert!(round.finalize(&mut state).is_ok());
+        assert_eq!(state.step, 1);
+        assert_eq!(round.phase, TrainingPhaseV1::Idle);
         assert_eq!(round.finalize(&mut state), Err(RoundError::InvalidPhase));
     }
 
@@ -1200,13 +1446,41 @@ mod tests {
     fn parallel_job_accepts_out_of_order_immutable_leaves_and_rejects_mixing() {
         let mut job = ParallelTrainingJobV1::new([1; 32], 4, 7, [2; 32], [3; 32], [4; 32]);
         assert_eq!(job.mark_root_ready(), Err(ParallelJobErrorV1::MissingLeaf));
-        assert_eq!(job.accept_leaf([9; 32], 4, 7, [2; 32], [3; 32], [4; 32], 0, 0, 8, [5; 32]), Err(ParallelJobErrorV1::WrongJob));
-        assert_eq!(job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [8; 32]), Ok(()));
-        assert_eq!(job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [8; 32]), Err(ParallelJobErrorV1::DuplicateLeaf));
-        assert_eq!(job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [9; 32]), Err(ParallelJobErrorV1::ConflictingLeaf));
+        assert_eq!(
+            job.accept_leaf([9; 32], 4, 7, [2; 32], [3; 32], [4; 32], 0, 0, 8, [5; 32]),
+            Err(ParallelJobErrorV1::WrongJob)
+        );
+        assert_eq!(
+            job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [8; 32]),
+            Ok(())
+        );
+        assert_eq!(
+            job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [8; 32]),
+            Err(ParallelJobErrorV1::DuplicateLeaf)
+        );
+        assert_eq!(
+            job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], 3, 24, 32, [9; 32]),
+            Err(ParallelJobErrorV1::ConflictingLeaf)
+        );
         for index in 0..PARALLEL_LEAF_COUNT as u16 {
-            if index == 3 { continue; }
-            assert_eq!(job.accept_leaf([1; 32], 4, 7, [2; 32], [3; 32], [4; 32], index, index * 8, index * 8 + 8, [index as u8; 32]), Ok(()));
+            if index == 3 {
+                continue;
+            }
+            assert_eq!(
+                job.accept_leaf(
+                    [1; 32],
+                    4,
+                    7,
+                    [2; 32],
+                    [3; 32],
+                    [4; 32],
+                    index,
+                    index * 8,
+                    index * 8 + 8,
+                    [index as u8; 32]
+                ),
+                Ok(())
+            );
         }
         assert_eq!(job.mark_root_ready(), Ok(()));
         assert_eq!(job.begin_finalize([2; 32]), Ok(()));

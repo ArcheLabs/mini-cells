@@ -1,8 +1,6 @@
 use async_trait::async_trait;
 use bounded_collections::BoundedVec;
 use cid::Cid;
-use jam_codec::Decode as JamDecode;
-use jp_core_primitives::types::ServiceInfo;
 use minicells_protocol::InferenceV1;
 use minicells_protocol::{keys, HistoryV1, MetaV1, PendingV1, WorkBody, WorkPayload};
 use minijam_bulletin_api::{
@@ -333,14 +331,11 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
     }
 
     async fn service_code_hash(&self, block: Hash) -> Result<Hash, ChainError> {
-        let bytes = self
+        self
             .client
-            .service_info_at(block, self.service_id)
+            .service_code_hash_at(block, self.service_id)
             .await?
-            .ok_or_else(|| ChainError::State("service info is missing".into()))?;
-        let info = ServiceInfo::decode(&mut bytes.as_slice())
-            .map_err(|error| ChainError::ServiceInfo(error.to_string()))?;
-        Ok(info.code_hash.0)
+            .ok_or_else(|| ChainError::State("service info is missing".into()))
     }
 
     async fn submit_payload(

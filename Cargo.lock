@@ -2500,6 +2500,7 @@ dependencies = [
  "jambda-accumulate",
  "jambda-authorizations",
  "jambda-history",
+ "jambda-minijam-spec",
  "jambda-preimages",
  "jambda-safrole",
  "jambda-state-backend",
@@ -2511,6 +2512,13 @@ dependencies = [
  "minijam-protocol",
  "parity-scale-codec",
  "spin",
+]
+
+[[package]]
+name = "jambda-minijam-spec"
+version = "0.0.1"
+dependencies = [
+ "jp-core-primitives",
 ]
 
 [[package]]
@@ -3155,11 +3163,9 @@ version = "0.1.0"
 dependencies = [
  "blake2b_simd",
  "hex",
- "jp-vm-engine",
- "jp-vm-interp",
- "jp-vm-primitives",
  "minicells-protocol",
  "minicells-runtime",
+ "minijam-pvm-executor",
  "serde",
  "tempfile",
  "thiserror 2.0.20",
@@ -3271,6 +3277,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "minijam-pvm-executor"
+version = "0.1.0"
+dependencies = [
+ "jp-vm-engine",
+ "jp-vm-interp",
+ "jp-vm-primitives",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "minijam-rpc-runtime-api"
 version = "0.1.0"
 dependencies = [
@@ -3288,6 +3304,7 @@ dependencies = [
  "frame-system",
  "frame-system-rpc-runtime-api",
  "jambda-minijam-executive",
+ "jambda-minijam-spec",
  "minijam-jamcore-api",
  "minijam-protocol",
  "minijam-rpc-runtime-api",
@@ -3335,6 +3352,7 @@ dependencies = [
  "bounded-collections 0.2.4",
  "cid",
  "jam-codec",
+ "jambda-minijam-spec",
  "jambda-refine",
  "jp-core-primitives",
  "minijam-protocol",
