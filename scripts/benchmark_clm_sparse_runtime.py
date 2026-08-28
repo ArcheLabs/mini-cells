@@ -12,7 +12,6 @@ runtime engineering only and does not make a language-quality claim.
 from __future__ import annotations
 
 import argparse
-import copy
 import json
 import sys
 import time
@@ -107,6 +106,16 @@ def _bench_training(model, inputs: torch.Tensor, targets: torch.Tensor, backend:
     }
 
 
+def _build_model(source_checkpoint: Path, device: torch.device):
+    model = build_bridge_model(
+        "clm_fixed4",
+        source_checkpoint,
+        vocab_size=2048,
+        device=device,
+    )
+    return install_optimized_runtime(model)
+
+
 def main() -> int:
     args = parser().parse_args()
     device = torch.device(args.device)
@@ -117,13 +126,7 @@ def main() -> int:
 
     torch.manual_seed(61003)
     source_checkpoint = ROOT / SOURCE_006_CHECKPOINT
-    model = build_bridge_model(
-        "clm_fixed4",
-        source_checkpoint,
-        vocab_size=2048,
-        device=device,
-    )
-    install_optimized_runtime(model)
+    model = _build_model(source_checkpoint, device)
     inputs = torch.randint(0, 2048, (args.batch_size, args.sequence_length), device=device)
     targets = torch.randint(0, 2048, (args.batch_size, args.sequence_length), device=device)
 
@@ -148,10 +151,10 @@ def main() -> int:
             iterations=args.iterations,
         )
 
-    baseline_train = copy.deepcopy(model)
-    batched_train = copy.deepcopy(model)
-    install_optimized_runtime(baseline_train)
-    install_optimized_runtime(batched_train)
+    # Fresh, identical checkpoints avoid any interaction between inference
+    # packing state and the training microbenchmark.
+    baseline_train = _build_model(source_checkpoint, device)
+    batched_train = _build_model(source_checkpoint, device)
     training = {
         "masked_dense": _bench_training(
             baseline_train, inputs, targets, "masked_dense", iterations=args.train_iterations
