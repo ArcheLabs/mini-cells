@@ -12,10 +12,40 @@ FORMAL_CANDIDATES_PER_REPLICATE = 12
 FORMAL_BIRTHS_PER_REPLICATE = 13  # 12 probes + one independent confirmation birth
 FORMAL_RHO_THRESHOLD = 0.30
 FORMAL_PPL_RATIO_THRESHOLD = 0.995
+FORMAL_DECISION_TOKENS = 1_500_000
+FORMAL_PROBE_TOKENS = 100_000
+FORMAL_CONFIRM_TOKENS = 500_000
+FORMAL_EVAL_BATCHES = 32
+FORMAL_CALIBRATION_BATCHES = 16
+FORMAL_BOOTSTRAP_SAMPLES = 2_000
 
 
 def _read(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _validate_identity(identity: dict[str, Any], replicate: int) -> None:
+    expected = {
+        "replicate_seed": (55031, 55032, 55033)[replicate],
+        "decision_tokens": FORMAL_DECISION_TOKENS,
+        "probe_tokens": FORMAL_PROBE_TOKENS,
+        "confirm_tokens": FORMAL_CONFIRM_TOKENS,
+        "eval_batches": FORMAL_EVAL_BATCHES,
+        "calibration_batches": FORMAL_CALIBRATION_BATCHES,
+        "bootstrap_samples": FORMAL_BOOTSTRAP_SAMPLES,
+        "balance_weight": 0.0,
+    }
+    for key, value in expected.items():
+        if identity.get(key) != value:
+            raise RuntimeError(
+                f"r{replicate} formal semantic mismatch for {key}: {identity.get(key)!r} != {value!r}"
+            )
+    probe_hash = identity.get("probe_validation_schedule_sha256")
+    confirm_hash = identity.get("confirm_validation_schedule_sha256")
+    if not probe_hash or not confirm_hash or probe_hash == confirm_hash:
+        raise RuntimeError(f"r{replicate} does not have two distinct validation holdouts")
+    if identity.get("tracked_tree_dirty") is not False:
+        raise RuntimeError(f"r{replicate} was not executed from a clean tracked tree")
 
 
 def aggregate_counterfactual_results(
@@ -31,6 +61,7 @@ def aggregate_counterfactual_results(
     for replicate in FORMAL_REPLICATES:
         directory = root / f"r{replicate}-counterfactual"
         required = [
+            directory / "run-provenance.json",
             directory / "replicate-result.json",
             directory / "probe-results.json",
             directory / "growth-equivalence.json",
@@ -43,9 +74,12 @@ def aggregate_counterfactual_results(
         missing = [str(path) for path in required if not path.exists()]
         if missing:
             raise RuntimeError(f"CLM-0.3c artifacts missing for replicate {replicate}: {missing}")
+        identity = _read(directory / "run-provenance.json")
         result = _read(directory / "replicate-result.json")
         probes = _read(directory / "probe-results.json")
         parity = _read(directory / "growth-equivalence.json")
+        if formal_gpu_experiment_run:
+            _validate_identity(identity, replicate)
         if len(probes) != FORMAL_CANDIDATES_PER_REPLICATE:
             raise RuntimeError(f"r{replicate} does not contain 12 candidate probes")
         if len(parity) != FORMAL_CANDIDATES_PER_REPLICATE:
@@ -54,6 +88,10 @@ def aggregate_counterfactual_results(
             raise RuntimeError(f"r{replicate} confirmation birth evidence is incomplete")
         if not result.get("code_commit") or not result.get("code_tree_sha"):
             raise RuntimeError(f"r{replicate} is missing immutable code provenance")
+        if identity.get("code_commit") != result.get("code_commit"):
+            raise RuntimeError(f"r{replicate} run identity and result commit differ")
+        if identity.get("code_tree_sha") != result.get("code_tree_sha"):
+            raise RuntimeError(f"r{replicate} run identity and result tree differ")
         commits.add(str(result["code_commit"]))
         trees.add(str(result["code_tree_sha"]))
 
