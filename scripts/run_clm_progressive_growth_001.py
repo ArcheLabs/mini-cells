@@ -23,9 +23,13 @@ from minicells.growth_reporting import (  # noqa: E402
     FORMAL_TARGET_TOKENS,
     aggregate_formal_results,
 )
+from minicells.language_scaling import prepare_scaling_corpus  # noqa: E402
 
 
 ARMS = ("fixed4", "pressure_growth", "random_growth")
+WORKER_BATCH_SIZE = 8
+WORKER_SEQUENCE_LENGTH = 125
+WORKER_EVAL_BATCHES = 4
 
 
 def jobs() -> list[tuple[int, str]]:
@@ -37,10 +41,14 @@ def command(args: argparse.Namespace, replicate: int, arm: str) -> list[str]:
         sys.executable,
         str(Path(__file__).with_name("run_clm_progressive_growth_001_worker.py")),
         "--release-dir", str(args.release_dir),
+        "--source-005-dir", str(args.source_005_dir),
         "--output-dir", str(args.output_root / f"r{replicate}-{arm}"),
         "--arm", arm,
         "--replicate", str(replicate),
         "--target-tokens", str(args.target_tokens),
+        "--batch-size", str(WORKER_BATCH_SIZE),
+        "--sequence-length", str(WORKER_SEQUENCE_LENGTH),
+        "--eval-batches", str(WORKER_EVAL_BATCHES),
     ]
     if args.execute:
         result.append("--execute")
@@ -65,10 +73,57 @@ def _dashboard_line(
     )
 
 
+def _resolve_repo_path(path: Path) -> Path:
+    return path if path.is_absolute() else REPO_ROOT / path
+
+
+def _prepare_shared_corpus(args: argparse.Namespace) -> None:
+    """Materialize the deterministic corpus once before concurrent workers start."""
+
+    source_dir = _resolve_repo_path(args.source_005_dir)
+    source_manifest_path = source_dir / "corpus-manifest.json"
+    if not source_manifest_path.is_file():
+        raise FileNotFoundError(f"Experiment 005 corpus manifest missing: {source_manifest_path}")
+    source_manifest = json.loads(source_manifest_path.read_text(encoding="utf-8"))
+
+    train_tokens = max(
+        args.target_tokens + WORKER_SEQUENCE_LENGTH + 2,
+        int(source_manifest["train_stream_tokens"]),
+    )
+    validation_tokens = max(
+        2048,
+        WORKER_EVAL_BATCHES * WORKER_BATCH_SIZE * (WORKER_SEQUENCE_LENGTH + 1),
+        int(source_manifest["validation_stream_tokens"]),
+    )
+    print(
+        "Preparing shared corpus cache before GPU workers: "
+        f"train={train_tokens:,}, validation={validation_tokens:,}",
+        flush=True,
+    )
+    train, validation, _tokenizer, manifest = prepare_scaling_corpus(
+        REPO_ROOT,
+        source_005_dir=source_dir,
+        train_stream_tokens=train_tokens,
+        validation_stream_tokens=validation_tokens,
+    )
+    print(
+        "Shared corpus cache ready: "
+        f"train_sha={manifest.get('train_token_sha256')} "
+        f"validation_sha={manifest.get('validation_token_sha256')}",
+        flush=True,
+    )
+    del train, validation
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the CLM-0.3 three-arm, three-replicate matrix")
     parser.add_argument("--output-root", type=Path, default=Path("results/clm-0.3-progressive-growth"))
     parser.add_argument("--release-dir", type=Path, default=Path("artifacts/releases/clm-0.1"))
+    parser.add_argument(
+        "--source-005-dir",
+        type=Path,
+        default=Path("artifacts/experiments/005-consumer-language-bridge"),
+    )
     parser.add_argument("--target-tokens", type=int, default=FORMAL_TARGET_TOKENS)
     parser.add_argument("--max-workers", type=int)
     parser.add_argument("--execute", action="store_true", help="start formal workers; default is plan-only")
@@ -84,6 +139,11 @@ def main() -> int:
     gpu_count = torch.cuda.device_count()
     if gpu_count < 1:
         raise RuntimeError("formal CLM-0.3 execution requires at least one CUDA GPU")
+
+    # Corpus materialization mutates a shared cache. Do it exactly once in the
+    # parent process so the two Kaggle GPU workers never race on cache files.
+    _prepare_shared_corpus(args)
+
     capacity = min(args.max_workers or gpu_count, gpu_count)
     pending = list(planned)
     active: list[tuple[tuple[int, str], int, subprocess.Popen[bytes]]] = []
