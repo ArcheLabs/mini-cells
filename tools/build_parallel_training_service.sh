@@ -4,11 +4,14 @@ ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "${ROOT}"
 MINICELLS_TRAINING_FEATURES=tree tools/build_training_fidelity_service.sh
 OUT="${ROOT}/service/artifacts"
+CLIENT="$(${ROOT}/tools/bootstrap_minijam.sh)"
+MINIJAM_COMMIT="$(git -C "${CLIENT}" rev-parse HEAD)"
+JAMBDA_COMMIT="$(git -C "${CLIENT}" ls-tree HEAD external/jambda | awk '{print $3}')"
 for suffix in blob polkavm pvm elf; do
   install -m 0644 "${OUT}/training-fidelity.${suffix}" "${OUT}/minicells-training-tree-v1.${suffix}"
 done
-python3 - <<'PY'
-import hashlib, json, pathlib
+MINIJAM_COMMIT="${MINIJAM_COMMIT}" JAMBDA_COMMIT="${JAMBDA_COMMIT}" python3 - <<'PY'
+import hashlib, json, os, pathlib
 root = pathlib.Path("service/artifacts")
 blob = root.joinpath("minicells-training-tree-v1.blob").read_bytes()
 manifest = {
@@ -19,10 +22,12 @@ manifest = {
     "logical_batch_size": 256,
     "shard_size": 8,
     "leaf_count": 32,
-    "minijam_commit": "aba21df406bac24f6880df1da8c1a0cc88534bcf",
-    "jambda_commit": "e52307a726868205a151e6917a0a70a79965a028",
-    "jambda_adapter_commit": "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
-    "refine_limit": 5000000000,
+    "minijam_commit": os.environ["MINIJAM_COMMIT"],
+    "jambda_commit": os.environ["JAMBDA_COMMIT"],
+    "jambda_adapter_commit": os.environ["JAMBDA_COMMIT"],
+    "minijam_spec": "v1",
+    "execution_lanes": 4,
+    "refine_limit": 1000000000,
     "accumulate_limit": 1000000000,
     "root_payload_limit": 1048576,
     "diagnostic_stage": False,

@@ -34,6 +34,6 @@ performs ordinary inference locally with `apps/web/public/minicells_core.wasm`.
 The `/v1/verify/infer` route is reserved for authenticated protocol verification.
 
 The measured Echo candidate uses about 42.4M Refine gas, so the reusable
-MiniJAM protocol and TinySpec ceilings are 1,000,000,000 Refine and Accumulate
+MiniJAM protocol and MiniJamSpec v1 ceilings are 1,000,000,000 Refine and Accumulate
 gas. Local runtime report windows and child-service allowance remain explicit
 development-chain compatibility settings and are not canonical JAM claims.

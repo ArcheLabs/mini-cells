@@ -21,6 +21,7 @@ def build_manifest(args: argparse.Namespace) -> dict:
         "model_format": 1,
         "optimizer": "guarded-sign-spsa-v2",
         "optimizer_version": 2,
+        "minijam_spec": "v1",
         "parameter_count": 4476,
         "genesis_mode": "deterministic-splitmix64-seed-1",
         "genesis_model_hash": args.genesis_hash,
@@ -34,7 +35,8 @@ def build_manifest(args: argparse.Namespace) -> dict:
             "mini_cells_source_dirty": args.source_dirty == "true",
             "minijam_build_ref": args.minijam_ref,
             "jambda_build_ref": args.jambda_ref,
-            "jambda_standalone_adapter_ref": args.jambda_adapter_ref,
+            "jambda_standalone_adapter_ref": args.jambda_ref,
+            "execution_lanes": args.execution_lanes,
             "converter_build_ref": args.converter_ref,
             "jamscript_used_for_build": False,
             "jamscript_build_ref": None,
@@ -58,6 +60,7 @@ def main() -> None:
     parser.add_argument("--minijam-ref", required=True)
     parser.add_argument("--jambda-ref", required=True)
     parser.add_argument("--jambda-adapter-ref", required=True)
+    parser.add_argument("--execution-lanes", type=int, default=1)
     parser.add_argument("--converter-ref", required=True)
     parser.add_argument("--rust-version", required=True)
     parser.add_argument("--target-hash", required=True)

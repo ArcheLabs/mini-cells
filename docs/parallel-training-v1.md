@@ -27,7 +27,7 @@ exact-sequence accuracy; its trajectory and provenance are recorded under
 The root payload is 630,823 bytes, below the 1 MiB WorkPackage limit.  The
 rebuilt MCG1 leaf guest reports 2,115,674,786 gas for the canonical eight-sample
 shard and 2,310,530,456 gas for a valid all-`MAX_SEQ_LEN` shard; both are
-`SHARD_PASS_FULL_COMFORTABLE`.  A release-harness rerun of all 32 real leaves
+`SHARD_OVER_MINIJAM_SPEC`. A MiniJamSpec v1 release-harness rerun of all 32 real leaves
 measured 2,109,770,501–2,255,643,199 gas (mean 2,171,232,061.875; p95
 2,238,578,741), with host-decoded totals of 4,127 tokens and 256 samples.
 After correcting the in-place reducer to use

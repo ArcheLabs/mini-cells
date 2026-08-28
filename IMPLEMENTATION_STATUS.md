@@ -1,10 +1,9 @@
 # MINI Cells V0.2 implementation status
 
-Compatibility target: JAM semantics 0.7.2; MiniJAM
-`5947c50699863948c51028bc346980481d839884`; Jambda runtime pin
-`e52307a726868205a151e6917a0a70a79965a028`, standalone adapter
-`f74de5325e0fe566b5b7e3f8eb4851173a937d76`; JamScript
-`79347ca2435ca21a08cbd257bc9c3dce8ed77f4b`. The machine-readable source of
+Compatibility target: JAM semantics 0.7.2; MiniJamSpec v1 MiniJAM
+`0b352d42726c548e932f81138c8dff7bc9b5a786`; Jambda exact gitlink
+`788bc054223f81282e4d88a83f05f2fe9e94c121`; JamScript is validated separately
+against this MiniJAM pin. The machine-readable source of
 truth is [`artifacts/implementation-status.json`](artifacts/implementation-status.json).
 
 | Area | Status | Evidence |

@@ -349,8 +349,8 @@ mod tests {
         DirectPvmHarness::load(
             artifact_path(),
             100_000_000,
-            "5947c50699863948c51028bc346980481d839884",
-            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+            "0b352d42726c548e932f81138c8dff7bc9b5a786",
+            "788bc054223f81282e4d88a83f05f2fe9e94c121",
         )
         .expect("tracked service artifact")
     }

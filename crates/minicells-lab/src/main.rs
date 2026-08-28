@@ -205,8 +205,8 @@ fn run_persistent_pvm(
     let mut harness = DirectPvmHarness::load(
         "service/artifacts/service.blob",
         1_000_000_000,
-        "5947c50699863948c51028bc346980481d839884",
-        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     harness.execute_accumulate()?;
     let mut metrics_file = std::fs::File::create(output.join("metrics.jsonl"))?;
@@ -702,13 +702,9 @@ fn run_parallel_native(args: ParallelNativeArgs) -> Result<(), Box<dyn std::erro
 
 fn classify_gas(gas_used: u64) -> &'static str {
     if gas_used <= 1_000_000_000 {
-        "TINY"
-    } else if gas_used <= 4_000_000_000 {
-        "FULL_COMFORTABLE"
-    } else if gas_used <= 5_000_000_000 {
-        "NEAR_FULL"
+        "WITHIN_MINIJAM_SPEC"
     } else {
-        "OVER_FULL"
+        "OVER_MINIJAM_SPEC"
     }
 }
 
@@ -723,8 +719,8 @@ fn classify_execution(
     } else if error.is_some_and(|value| value.contains("out of gas")) {
         // OOG at the diagnostic limit is authoritative evidence that the
         // workload exceeds that limit, even though no result was returned.
-        if gas_limit >= 5_000_000_000 {
-            "OVER_FULL"
+        if gas_limit >= 1_000_000_000 {
+            "OVER_MINIJAM_SPEC"
         } else {
             "OOG_AT_LIMIT"
         }
@@ -770,8 +766,8 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "5947c50699863948c51028bc346980481d839884",
-            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+            "0b352d42726c548e932f81138c8dff7bc9b5a786",
+            "788bc054223f81282e4d88a83f05f2fe9e94c121",
         )?;
         let ex = h.execute_refine_measured(&payload)?;
         if ex.output.len() != 12 + PARAMETER_COUNT * 4 || &ex.output[..4] != b"MCAR" {
@@ -785,13 +781,9 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
         }
         shard_gas.push(ex.gas_used);
         let classification = if ex.gas_used <= 1_000_000_000 {
-            "SHARD_PASS_TINY"
-        } else if ex.gas_used <= 4_000_000_000 {
-            "SHARD_PASS_FULL_COMFORTABLE"
-        } else if ex.gas_used <= 5_000_000_000 {
-            "SHARD_NEAR_FULL"
+            "SHARD_WITHIN_MINIJAM_SPEC"
         } else {
-            "SHARD_OVER_FULL"
+            "SHARD_OVER_MINIJAM_SPEC"
         };
         shard_records.push(serde_json::json!({"logical_batch_size":256,"shard_size":8,"shard_index":shard_index,"sample_range":[start,start+SHARD_SIZE],"gas_used":ex.gas_used,"classification":classification}));
     }
@@ -802,8 +794,8 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
     let mut h = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "5947c50699863948c51028bc346980481d839884",
-        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     let final_ex = h.execute_refine_measured(&final_payload)?;
     if final_ex.output.len() != 24 + PARAMETER_COUNT * 12 || &final_ex.output[..4] != b"MCPR" {
@@ -836,24 +828,22 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
     let mut wh = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "5947c50699863948c51028bc346980481d839884",
-        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     let worst_ex = wh.execute_refine_measured(&worst_payload)?;
     let worst_gas = worst_ex.gas_used;
-    let worst_class = if worst_gas <= 4_000_000_000 {
-        "SHARD_PASS_FULL_COMFORTABLE"
-    } else if worst_gas <= 5_000_000_000 {
-        "SHARD_NEAR_FULL"
+    let worst_class = if worst_gas <= 1_000_000_000 {
+        "SHARD_WITHIN_MINIJAM_SPEC"
     } else {
-        "SHARD_OVER_FULL"
+        "SHARD_OVER_MINIJAM_SPEC"
     };
     let mut sorted = shard_gas.clone();
     sorted.sort_unstable();
     let p95 = sorted[((sorted.len() * 95).saturating_sub(1) / 100).min(sorted.len() - 1)];
     let mean = shard_gas.iter().sum::<u64>() as f64 / shard_gas.len() as f64;
     let max = *sorted.last().unwrap();
-    let report = serde_json::json!({"schema":"minicells.pvm-full-logical-batch-gate.v1","status":if bit_exact && max <= 4_000_000_000 && worst_gas <= 4_000_000_000 {"PASS_FULL_COMFORTABLE_MULTI_REFINE"} else {"FAIL"},"logical_batch_size":256,"shard_size":8,"shard_count":32,"shards":shard_records,"shard_gas_summary":{"min":sorted[0],"mean":mean,"p95":p95,"max":max},"finalize":{"gas_used":final_ex.gas_used,"classification":"FINALIZE_PASS"},"total_refine_gas":shard_gas.iter().sum::<u64>() + final_ex.gas_used,"native_vs_pvm_bit_exact":bit_exact,"worst_case_shard":{"samples":8,"length":32,"gas_used":worst_gas,"classification":worst_class},"production_refine_limit_authorized":bit_exact && max <= 4_000_000_000 && worst_gas <= 4_000_000_000,"fresh_chain_e2e":"BLOCKED_EXTERNAL_CHAIN"});
+    let report = serde_json::json!({"schema":"minicells.pvm-full-logical-batch-gate.v1","minijam_spec":"v1","status":if bit_exact && max <= 1_000_000_000 && worst_gas <= 1_000_000_000 {"PASS_MINIJAM_SPEC_MULTI_REFINE"} else {"FAIL_MINIJAM_SPEC_GAS"},"logical_batch_size":256,"shard_size":8,"shard_count":32,"shards":shard_records,"shard_gas_summary":{"min":sorted[0],"mean":mean,"p95":p95,"max":max},"finalize":{"gas_used":final_ex.gas_used,"classification":"FINALIZE_PASS"},"total_refine_gas":shard_gas.iter().sum::<u64>() + final_ex.gas_used,"native_vs_pvm_bit_exact":bit_exact,"worst_case_shard":{"samples":8,"length":32,"gas_used":worst_gas,"classification":worst_class},"production_refine_limit_authorized":bit_exact && max <= 1_000_000_000 && worst_gas <= 1_000_000_000,"fresh_chain_e2e":"BLOCKED_EXTERNAL_CHAIN"});
     if let Some(parent) = args.output.parent() {
         std::fs::create_dir_all(parent)?;
     }
@@ -878,7 +868,7 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
         )?,
     )?;
     println!("{}", serde_json::to_string_pretty(&report)?);
-    if report["status"] != "PASS_FULL_COMFORTABLE_MULTI_REFINE" {
+    if report["status"] != "PASS_MINIJAM_SPEC_MULTI_REFINE" {
         return Err("full logical-batch gate failed".into());
     }
     Ok(())
@@ -944,8 +934,8 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
     let mut harness = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "5947c50699863948c51028bc346980481d839884",
-        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     let execution = harness.execute_refine_measured(&payload)?;
     if execution.output.len() != 24 + PARAMETER_COUNT * 12 || &execution.output[..4] != b"MCPR" {
@@ -989,8 +979,8 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "5947c50699863948c51028bc346980481d839884",
-            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+            "0b352d42726c548e932f81138c8dff7bc9b5a786",
+            "788bc054223f81282e4d88a83f05f2fe9e94c121",
         )?;
         let ex = h.execute_refine_measured(&shard_payload)?;
         shard_gas.push(ex.gas_used);
@@ -1022,8 +1012,8 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "5947c50699863948c51028bc346980481d839884",
-            "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+            "0b352d42726c548e932f81138c8dff7bc9b5a786",
+            "788bc054223f81282e4d88a83f05f2fe9e94c121",
         )?;
         let ex = h.execute_refine_measured(&final_payload)?;
         finalize_gas = ex.gas_used;
@@ -1058,8 +1048,8 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     let mut harness = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "5947c50699863948c51028bc346980481d839884",
-        "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
+        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     let payload = match (&args.payload_hex, &args.payload_file) {
         (Some(hex), None) => hex::decode(hex.trim_start_matches("0x"))?,
@@ -1091,11 +1081,13 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     let (completed, gas_used, gas_remaining, error, exhausted) = match execution {
         Ok(result) => {
             if let Some(path) = &args.raw_output {
-                if let Some(parent) = path.parent() { std::fs::create_dir_all(parent)?; }
+                if let Some(parent) = path.parent() {
+                    std::fs::create_dir_all(parent)?;
+                }
                 std::fs::write(path, &result.output)?;
             }
             (true, result.gas_used, result.gas_remaining, None, false)
-        },
+        }
         Err(error) => {
             let message = error.to_string();
             let exhausted = message.contains("out of gas");
@@ -1146,10 +1138,8 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     };
     let classification = if is_shard {
         match base_classification {
-            "TINY" => "SHARD_PASS_TINY",
-            "FULL_COMFORTABLE" => "SHARD_PASS_FULL_COMFORTABLE",
-            "NEAR_FULL" => "SHARD_NEAR_FULL",
-            "OVER_FULL" => "SHARD_OVER_FULL",
+            "WITHIN_MINIJAM_SPEC" => "SHARD_WITHIN_MINIJAM_SPEC",
+            "OVER_MINIJAM_SPEC" => "SHARD_OVER_MINIJAM_SPEC",
             _ => "SHARD_NOT_MEASURED",
         }
     } else {
@@ -1178,9 +1168,8 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
         "gas_limit":args.gas_limit, "gas_used":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used)},
         "gas_lower_bound":if exhausted {serde_json::json!(args.gas_limit)} else {serde_json::Value::Null},
         "gas_remaining":gas_remaining, "completed":completed,
-        "tiny_limit":1_000_000_000u64, "full_limit":5_000_000_000u64,
-        "tiny_ratio":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used as f64/1_000_000_000f64)},
-        "full_ratio":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used as f64/5_000_000_000f64)},
+        "minijam_refine_limit":1_000_000_000u64,
+        "minijam_refine_fraction":if exhausted {serde_json::Value::Null} else {serde_json::json!(gas_used as f64/1_000_000_000f64)},
         "classification":classification, "error":error,
         "shard_size":if is_shard {serde_json::json!(shard_size)} else {serde_json::Value::Null},
         "shard_index":if is_shard {serde_json::json!(shard_index)} else {serde_json::Value::Null},
@@ -1193,10 +1182,8 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
         "SHARD_MEASUREMENT_ONLY_NO_FULL_STEP_DECISION"
     } else {
         match classification {
-            "TINY" => "INTEGRATE_REFERENCE_ALGORITHM_WITH_TINY_PROFILE",
-            "FULL_COMFORTABLE" => "SWITCH_MINIJAM_REFINE_LIMIT_TO_5B_THEN_INTEGRATE",
-            "NEAR_FULL" => "OPTIMIZE_SINGLE_REFINE_WITHOUT_ALGORITHM_CHANGE",
-            "OVER_FULL" => "IMPLEMENT_LOGICAL_BATCH_MULTI_REFINE",
+            "WITHIN_MINIJAM_SPEC" => "INTEGRATE_REFERENCE_ALGORITHM_WITH_MINIJAM_SPEC",
+            "OVER_MINIJAM_SPEC" => "IMPLEMENT_LOGICAL_BATCH_MULTI_REFINE_OR_REDUCE_PAYLOAD",
             _ => "BLOCK_UNTIL_DEDICATED_PVM_EXECUTION_IS_VALID",
         }
     };
@@ -1206,7 +1193,7 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
         } else {
             format!("PASS_{classification}")
         }
-    } else if base_classification == "OVER_FULL" {
+    } else if base_classification == "OVER_MINIJAM_SPEC" {
         "ENGINEERING_SPLIT_REQUIRED".to_string()
     } else {
         "BLOCKED_PVM_EXECUTION".to_string()

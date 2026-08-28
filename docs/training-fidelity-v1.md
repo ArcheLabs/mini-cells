@@ -27,6 +27,13 @@ reported only by `minicells-lab pvm-gas` from
 `StandaloneExecutionResult.gas_used`; a decode or panic is recorded as
 `NOT_MEASURED`, never classified as a gas ceiling.
 
+Every real MiniJAM measurement is normalized with
+`tools/summarize_minijam_telemetry.py`. The input records measured Refine and
+Accumulate gas, wall time, peak memory, batch count, and sample count; the
+summary emits p50/p95/max and Refine/Accumulate headroom against the canonical
+1B limits. Synthetic or diagnostic-only runs cannot be promoted to this
+telemetry record.
+
 For memory debugging only, `pvm-gas --diagnostic-stage payload|decode|batch|train|forward|backward|full-batch|adamw|return`
 wraps the payload in the diagnostic ABI and writes `pvm-diagnostic.json`; those
 numbers are never promoted to final gas evidence. A valid synthetic payload can
@@ -40,16 +47,15 @@ accumulation and the corrected MCA1→MCF1 PVM path are bit-exact. MCA1 only
 deserializes and accumulates a shard with frozen weights/optimizer state; MCF1
 alone performs normalization, clipping and AdamW. Independent MCA1 measurements
 for 1/2/4/8/16 samples are recorded in the evidence directory; 8 samples is
-comfortably below the 5B Full profile. The completed 256-sample production
+comfortably below the MiniJamSpec v1 1B Refine ceiling. The completed 256-sample production
 envelope (32 sequential shards plus one finalize) is recorded in
 `full-logical-batch-gate.json`: max canonical shard is 2,256,027,812 gas,
 worst-case valid 8×32 shard is 2,311,013,084 gas, and the final result is
-bit-exact. The authorized MiniJAM integration is now pinned at Refine 5B;
-Accumulate remains 1B and unrelated topology limits remain unchanged.
+bit-exact. The authorized MiniJAM integration is pinned to MiniJamSpec v1:
+Refine and Accumulate are each 1B, and unrelated topology limits remain unchanged.
 
-Production integration is pinned to MiniJAM
-`aba21df406bac24f6880df1da8c1a0cc88534bcf` on
-`agent/minicells-full-refine`, with the dedicated non-diagnostic artifact
+Production integration is pinned to the exact MiniJAM commit recorded in the
+artifact manifest, with the dedicated non-diagnostic artifact
 described by `service/artifacts/minicells-training-v1.manifest.json`. The
 local `TrainingRoundStateV1` gate proves 32 ordered MCA1 transitions followed
 by one MCF1 finalize, with weights, Adam state, loss, gradient norm, token
