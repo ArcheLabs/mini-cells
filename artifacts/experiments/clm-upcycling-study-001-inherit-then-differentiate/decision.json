@@ -1,0 +1,79 @@
+{
+  "diagnosis": "CLM_UPCYCLING_QUALITY_SIGNAL",
+  "evidence": {
+    "copy_geometry": [
+      {
+        "passed": false,
+        "quality_ratio_to_dense_continued": 0.9856174235406866,
+        "replicate": 0,
+        "sample_variation": 0.0340440534831335,
+        "shuffled_advantage": 0.010415763893147046,
+        "static_advantage": 0.010425621477456173,
+        "usage_entropy": 0.9959278951088588
+      },
+      {
+        "passed": false,
+        "quality_ratio_to_dense_continued": 0.9857054897921166,
+        "replicate": 1,
+        "sample_variation": 0.0361076235615958,
+        "shuffled_advantage": 0.009950752376392686,
+        "static_advantage": 0.009846178748571764,
+        "usage_entropy": 0.9952794487277666
+      },
+      {
+        "passed": false,
+        "quality_ratio_to_dense_continued": 0.9858900098891765,
+        "replicate": 2,
+        "sample_variation": 0.0311027412923673,
+        "shuffled_advantage": 0.010420660713537946,
+        "static_advantage": 0.010406451799644105,
+        "usage_entropy": 0.9964856132864952
+      }
+    ],
+    "copy_random": [
+      {
+        "passed": false,
+        "quality_ratio_to_dense_continued": 0.9873540554581371,
+        "replicate": 0,
+        "sample_variation": 0.0488203736022114,
+        "shuffled_advantage": 0.008031174690747721,
+        "static_advantage": 0.007320691040166831,
+        "usage_entropy": 0.9912571658690772
+      },
+      {
+        "passed": false,
+        "quality_ratio_to_dense_continued": 0.9879008629039856,
+        "replicate": 1,
+        "sample_variation": 0.0466541107743978,
+        "shuffled_advantage": 0.007529025223060202,
+        "static_advantage": 0.008992339832938224,
+        "usage_entropy": 0.9950574512283008
+      },
+      {
+        "passed": false,
+        "quality_ratio_to_dense_continued": 0.9866267107337467,
+        "replicate": 2,
+        "sample_variation": 0.0440518809482455,
+        "shuffled_advantage": 0.007925384475859432,
+        "static_advantage": 0.0077656779263433895,
+        "usage_entropy": 0.988623005648454
+      }
+    ]
+  },
+  "experiment": "CLM Upcycling Study 001 \u2014 Inherit Then Differentiate",
+  "format": "minicells.clm-upcycling-study-001.v1",
+  "geometry_advantage": false,
+  "provenance": {
+    "clm_v1": "CLM_NO_QUALITY_SAFE_SPARSITY at K=7 in Validation 001b",
+    "clm_v2_random_newborn": "CLMV2_CLOSED_LOOP_HANDOFF_FAILURE; closed-loop homotopy reduced the direct zero-scaffold gap but scaffold-free K6 plateaued near 1.098x teacher PPL",
+    "implementation_commit": "2fd8602c16d058082f3d231a093acda71b3034ee",
+    "source": "Experiment 006 minicells-v2-10m.pt"
+  },
+  "status": "PASS",
+  "thresholds": {
+    "normalized_advantage_min": 0.002,
+    "quality_ratio_to_dense_continued_max": 1.03,
+    "sample_variation_min": 0.05,
+    "usage_entropy_min": 0.8
+  }
+}
