@@ -74,7 +74,7 @@ def _existing_training_commit(directory: Path) -> str | None:
 def _command(args: argparse.Namespace, replicate: int) -> list[str]:
     result = [
         sys.executable,
-        str(Path(__file__).with_name("run_clm_probationary_mitosis_004_worker.py")),
+        str(Path(__file__).with_name("run_clm_probationary_mitosis_004_worker_entry.py")),
         "--release-dir", str(args.release_dir),
         "--source-005-dir", str(args.source_005_dir),
         "--cache-dir", str(args.cache_dir),
