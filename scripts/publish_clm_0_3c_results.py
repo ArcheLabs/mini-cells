@@ -19,6 +19,7 @@ EXPECTED_DECISION_FORMAT = "minicells.clm-0.3c-counterfactual-mitosis.decision.v
 
 TOP_LEVEL = ("decision.json", "replicate-summary.json")
 WORKER_FILES = (
+    "run-provenance.json",
     "events.jsonl",
     "trunk-history.json",
     "split-regret.csv",
@@ -69,12 +70,17 @@ def _validate(source: Path) -> tuple[dict[str, object], str, str]:
         result = json.loads(
             (source / f"r{replicate}-counterfactual" / "replicate-result.json").read_text(encoding="utf-8")
         )
+        identity = json.loads(
+            (source / f"r{replicate}-counterfactual" / "run-provenance.json").read_text(encoding="utf-8")
+        )
         if int(result.get("births_checked", -1)) != 13:
             raise RuntimeError(f"r{replicate} counterfactual birth evidence is incomplete")
         commit = result.get("code_commit")
         tree = result.get("code_tree_sha")
         if not commit or not tree:
             raise RuntimeError(f"r{replicate} missing immutable code provenance")
+        if identity.get("code_commit") != commit or identity.get("code_tree_sha") != tree:
+            raise RuntimeError(f"r{replicate} run identity does not match final result provenance")
         commits.add(str(commit))
         trees.add(str(tree))
     if len(commits) != 1 or len(trees) != 1:
@@ -155,7 +161,8 @@ This directory contains the curated evidence from the formal 3-replicate counter
 - Shadow probe horizon: 100K tokens
 - Candidates: all 12 CLM-0.1 root lineages
 - Confirmation horizon: 500K tokens
-- Validation: 32 batches / 32K target tokens
+- Probe holdout: 32 batches / 32K target tokens
+- Confirmation holdout: separate 32 batches / 32K target tokens
 - Bootstrap: 2,000 paired resamples
 - Practical PPL threshold: 0.995
 
