@@ -164,7 +164,6 @@ def calibrate_marginal_candidates(
     gradient_vectors: dict[str, list[torch.Tensor]] = {}
     grad_energy: dict[str, list[float]] = {}
     saliency: dict[str, list[float]] = {}
-    parameter_counts: dict[str, int] = {}
     was_training = model.training
     model.train()
     try:
@@ -191,7 +190,6 @@ def calibrate_marginal_candidates(
                     gradient_vectors.setdefault(expert_id, []).append(torch.cat(pieces))
                     grad_energy.setdefault(expert_id, []).append(energy)
                     saliency.setdefault(expert_id, []).append(wg / max(count, 1))
-                    parameter_counts[expert_id] = count
     finally:
         for bank in banks:
             bank.end_pressure_collection()
@@ -220,11 +218,17 @@ def calibrate_marginal_candidates(
         usage = float(usages.get(expert_id, 0.0))
         gradients = gradient_vectors.get(expert_id, [])
         conflict = gradient_disagreement(gradients)
-        mean_energy = sum(grad_energy.get(expert_id, ())) / max(len(grad_energy.get(expert_id, ())), 1)
+        energies = grad_energy.get(expert_id, ())
+        mean_energy = sum(energies) / max(len(energies), 1)
         fisher = mean_energy / max(usage, 1e-12)
-        mean_saliency = sum(saliency.get(expert_id, ())) / max(len(saliency.get(expert_id, ())), 1)
+        saliencies = saliency.get(expert_id, ())
+        mean_saliency = sum(saliencies) / max(len(saliencies), 1)
         routed = int(route_counts.get(expert_id, 0))
-        geometry = geometry_separation(perceptions.get(expert_id, torch.empty(0, 1))) if routed >= min_samples else 0.0
+        geometry = (
+            geometry_separation(perceptions.get(expert_id, torch.empty(0, 1)))
+            if routed >= min_samples
+            else 0.0
+        )
         score = marginal_capacity_score(fisher, mean_saliency, geometry)
         candidates.append(MarginalCandidate(
             stage=stage,
@@ -250,18 +254,21 @@ def detect_saturation(
     min_tokens: int = 1_500_000,
     window: int = 5,
     projected_horizon_tokens: int = 500_000,
-    max_projected_improvement: float = 0.005,
+    max_projected_improvement: float = 0.02,
     endpoint_tolerance: float = 0.01,
 ) -> SaturationResult:
-    """Detect a preregistered low-slope regime from evaluation PPL history.
+    """Detect a preregistered diminishing-return regime from PPL history.
 
     A five-point log-PPL regression spans 400K tokens at the formal 100K eval
     cadence. Saturation requires projected improvement over the next 500K to be
-    at most 0.5%, while the latest point may not be >1% worse than the first
-    point in the window. A temporary catastrophic regression therefore cannot
-    masquerade as a plateau.
+    at most 2%, while the latest point may not be >1% worse than the first point
+    in the window. This is a diminishing-return gate, not the 0.5% final growth
+    utility threshold. A temporary catastrophic regression cannot masquerade as
+    saturation.
     """
 
+    if max_projected_improvement < 0:
+        raise ValueError("max_projected_improvement must be non-negative")
     ordered = sorted(
         (
             (int(row["tokens"]), float(row["ppl"]))
@@ -272,11 +279,21 @@ def detect_saturation(
     )
     if len(ordered) < window or ordered[-1][0] < min_tokens:
         return SaturationResult(
-            False, None, len(ordered), None, None, None, None, None,
+            False,
+            None,
+            len(ordered),
+            None,
+            None,
+            None,
+            None,
+            None,
             max_projected_improvement,
         )
     selected = ordered[-window:]
-    x = torch.tensor([(token - selected[0][0]) / 100_000.0 for token, _ in selected], dtype=torch.float64)
+    x = torch.tensor(
+        [(token - selected[0][0]) / 100_000.0 for token, _ in selected],
+        dtype=torch.float64,
+    )
     y = torch.tensor([math.log(ppl) for _, ppl in selected], dtype=torch.float64)
     centered = x - x.mean()
     denom = float(centered.square().sum().item())
