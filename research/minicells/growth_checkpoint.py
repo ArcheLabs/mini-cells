@@ -150,13 +150,18 @@ def save_growth_checkpoint(
     scheduler: Any = None,
     consumed_tokens: int = 0,
     training_step: int = 0,
-    growth_event_index: int = 0,
+    growth_event_index: int | None = None,
     data_schedule_state: dict[str, Any] | None = None,
     metrics: dict[str, Any] | None = None,
 ) -> Path:
     structure = model.growth_structure() if hasattr(model, "growth_structure") else {}
     lineages = model.lineage_metadata() if hasattr(model, "lineage_metadata") else []
     growth_history = list(getattr(model, "growth_history", []))
+    completed_events = len(growth_history)
+    if growth_event_index is None:
+        growth_event_index = completed_events
+    if int(growth_event_index) != completed_events:
+        raise ValueError("growth_event_index must equal the number of committed births")
     payload = {
         "format": GROWTH_CHECKPOINT_FORMAT,
         "base_release": "clm-0.1",
@@ -180,6 +185,45 @@ def save_growth_checkpoint(
     return destination
 
 
+def validate_growth_checkpoint_payload(payload: dict[str, Any]) -> None:
+    history = list(payload.get("growth_history", []))
+    event_index = int(payload.get("growth_event_index", -1))
+    if event_index != len(history):
+        raise RuntimeError(
+            "growth checkpoint is inconsistent: growth_event_index does not match growth_history"
+        )
+    expected_indices = list(range(1, event_index + 1))
+    observed_indices = [int(event.get("birth_index", -1)) for event in history]
+    if observed_indices != expected_indices:
+        raise RuntimeError("growth checkpoint birth indices are not contiguous")
+    consumed_tokens = int(payload.get("consumed_tokens", 0))
+    if any(int(event.get("token", consumed_tokens + 1)) > consumed_tokens for event in history):
+        raise RuntimeError("growth checkpoint contains a birth after consumed_tokens")
+    structure = payload.get("model_structure", {})
+    stages = structure.get("stages", []) if isinstance(structure, dict) else []
+    if stages:
+        def count_leaves(node: dict[str, Any]) -> int:
+            if "leaf" in node:
+                return 1
+            return count_leaves(node["left"]) + count_leaves(node["right"])
+
+        expert_count = sum(
+            count_leaves(root)
+            for stage in stages
+            for root in stage.get("roots", [])
+        )
+        if expert_count != 12 + event_index:
+            raise RuntimeError("growth checkpoint expert tree does not match committed births")
+    schedule = payload.get("data_schedule_state", {})
+    if schedule:
+        step = int(schedule.get("current_step", payload.get("training_step", 0)))
+        consumed = int(schedule.get("consumed_tokens", payload.get("consumed_tokens", 0)))
+        if step != int(payload.get("training_step", step)):
+            raise RuntimeError("data schedule step does not match checkpoint training_step")
+        if consumed != int(payload.get("consumed_tokens", consumed)):
+            raise RuntimeError("data schedule tokens do not match checkpoint consumed_tokens")
+
+
 def load_growth_checkpoint(
     path: str | Path,
     *,
@@ -192,6 +236,7 @@ def load_growth_checkpoint(
     payload = torch.load(Path(path), map_location=map_location, weights_only=False)
     if payload.get("format") != GROWTH_CHECKPOINT_FORMAT:
         raise RuntimeError(f"unsupported growth checkpoint format: {payload.get('format')!r}")
+    validate_growth_checkpoint_payload(payload)
     if model is None:
         if model_factory is None:
             raise ValueError("model or model_factory is required to reconstruct a checkpoint")

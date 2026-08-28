@@ -49,7 +49,7 @@ def capture_execution(model: Any, input_ids: torch.Tensor) -> ExecutionCapture:
     return ExecutionCapture(
         output.logits.detach().clone(),
         tuple(state.detach().clone() for state in states),
-        tuple(item.detach().clone() for item in stats.root_usage),
+        tuple(item.detach().clone() for item in stats.root_routes),
     )
 
 
@@ -141,7 +141,16 @@ def evaluate_nll(model: Any, batches: list[tuple[torch.Tensor, torch.Tensor]], *
     total = 0.0
     tokens = 0
     for inputs, targets in batches:
-        output = model(inputs, execution_backend="sparse_dispatch", merge_back=merge_back)
+        if hasattr(model, "growth_structure"):
+            output = model(
+                inputs,
+                execution_backend="sparse_dispatch",
+                merge_back=merge_back,
+            )
+        else:
+            if merge_back is not None:
+                raise ValueError("merge-back is only valid for a progressive-growth model")
+            output = model(inputs)
         total += float(F.cross_entropy(output.logits.flatten(0, 1), targets.reshape(-1), reduction="sum"))
         tokens += targets.numel()
     if was_training:
@@ -161,7 +170,11 @@ def newborn_causal_diagnostics(
     merged = evaluate_nll(model, batches, merge_back=(stage, child_id))
     bank = model.stages[stage].program_bank
     diagnostics = parameter_diagnostics(model, stage, parent_id, child_id)
-    output, stats = model(batches[0][0], return_stats=True)
+    bank.begin_pressure_collection()
+    try:
+        output, stats = model(batches[0][0], return_stats=True)
+    finally:
+        bank.end_pressure_collection()
     del output
     parent_usage = float(stats.usage.get(parent_id, torch.tensor(0.0)))
     child_usage = float(stats.usage.get(child_id, torch.tensor(0.0)))
@@ -192,19 +205,44 @@ def clm_growth_loss(
     teacher: LanguageModelOutput,
     targets: torch.Tensor,
     *,
-    root_usage: torch.Tensor | None = None,
+    root_usage: torch.Tensor | tuple[torch.Tensor, ...] | None = None,
     beta: float = 0.5,
     balance_weight: float = 0.01,
 ) -> torch.Tensor:
     ce = F.cross_entropy(student.logits.flatten(0, 1), targets.reshape(-1))
-    student_log_probs = student.logits.flatten(0, 1).log_softmax(-1)
-    teacher_probs = teacher.logits.detach().flatten(0, 1).softmax(-1)
-    kl = F.kl_div(student_log_probs, teacher_probs, reduction="batchmean")
-    balance = student.logits.new_zeros(())
-    if root_usage is not None:
-        desired = torch.full_like(root_usage, 1.0 / root_usage.numel())
-        balance = (root_usage / root_usage.sum().clamp_min(1e-8) - desired).square().mean()
+    kl = student_teacher_kl(student.logits, teacher.logits)
+    balance = root_router_balance_loss(root_usage, reference=student.logits)
     return ce + beta * kl + balance_weight * balance
+
+
+def student_teacher_kl(student_logits: torch.Tensor, teacher_logits: torch.Tensor) -> torch.Tensor:
+    """Explicit ``KL(student || frozen teacher)`` over token distributions."""
+
+    student_logp = F.log_softmax(student_logits, dim=-1)
+    student_p = student_logp.exp()
+    teacher_logp = F.log_softmax(teacher_logits.detach(), dim=-1)
+    return (student_p * (student_logp - teacher_logp)).sum(dim=-1).mean()
+
+
+def root_router_balance_loss(
+    root_usage: torch.Tensor | tuple[torch.Tensor, ...] | None,
+    *,
+    reference: torch.Tensor | None = None,
+) -> torch.Tensor:
+    if root_usage is None:
+        if reference is None:
+            raise ValueError("reference is required when root usage is absent")
+        return reference.new_zeros(())
+    stages = (root_usage,) if torch.is_tensor(root_usage) else tuple(root_usage)
+    if not stages:
+        if reference is None:
+            raise ValueError("reference is required for empty root usage")
+        return reference.new_zeros(())
+    losses = []
+    for usage in stages:
+        target = torch.full_like(usage, 1.0 / usage.numel())
+        losses.append((usage - target).square().mean())
+    return torch.stack(losses).mean()
 
 
 def health_label(growth_ppl: float, clm01_start_ppl: float) -> str:
@@ -228,34 +266,47 @@ def make_ppl_row(*, replicate: int, arm: str, tokens: int, phase: str, ppl: floa
     }
 
 
-def progressive_growth_decision(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def progressive_growth_decision(
+    rows: list[dict[str, Any]], *, formal_gpu_experiment_run: bool = False
+) -> dict[str, Any]:
     by_arm: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         by_arm.setdefault(str(row["arm"]), []).append(row)
-    pressure = by_arm.get("pressure_growth", [])
-    fixed = by_arm.get("fixed4", [])
-    viable = sum(
-        1 for row in pressure
-        if row.get("both_births_equivalent", False)
-        and row.get("children_nontrivial", False)
-        and row.get("differentiated", False)
-        and row.get("health") != "RED"
-    )
+    pressure = sorted(by_arm.get("pressure_growth", []), key=lambda x: x.get("replicate", 0))
+    fixed = sorted(by_arm.get("fixed4", []), key=lambda x: x.get("replicate", 0))
+    random_rows = sorted(by_arm.get("random_growth", []), key=lambda x: x.get("replicate", 0))
+    viable = sum(bool(row.get("viable", False)) for row in pressure)
+    equivalence = sum(int(row.get("equivalent_births", 0)) for row in pressure)
+    births_expected = 2 * len(pressure)
     improved = sum(
-        1 for growth, control in zip(sorted(pressure, key=lambda x: x.get("replicate", 0)),
-                                     sorted(fixed, key=lambda x: x.get("replicate", 0)))
-        if growth.get("ppl", math.inf) / max(control.get("ppl", math.inf), 1e-12) <= 0.995
+        growth.get("ppl", math.inf) / max(control.get("ppl", math.inf), 1e-12) <= 0.995
+        for growth, control in zip(pressure, fixed)
+        if growth.get("replicate") == control.get("replicate")
     )
-    equivalence = sum(1 for row in pressure if row.get("both_births_equivalent", False))
-    viability_pass = len(pressure) > 0 and viable == len(pressure)
-    utility_pass = improved >= 2
+    pressure_wins = sum(
+        growth.get("ppl", math.inf) < control.get("ppl", math.inf)
+        for growth, control in zip(pressure, random_rows)
+        if growth.get("replicate") == control.get("replicate")
+    )
+    viability_pass = len(pressure) == 3 and viable == 3
+    utility_pass = improved >= 2 and viability_pass
     return {
         "format": "minicells.clm-0.3-progressive-growth.decision.v1",
-        "growth_equivalence": "CLM_GROWTH_EQUIVALENCE" if equivalence == len(pressure) else "CLM_GROWTH_EQUIVALENCE_FAILURE",
-        "progressive_growth_viability": "CLM_PROGRESSIVE_GROWTH_VIABILITY" if viability_pass else "NO_PROGRESSIVE_GROWTH_VIABILITY",
-        "progressive_growth_utility": "CLM_PROGRESSIVE_GROWTH_SIGNAL" if utility_pass and viability_pass else "NO_GROWTH_UTILITY_SIGNAL",
-        "equivalent_replicates": equivalence,
-        "viable_replicates": viable,
-        "utility_replicates": improved,
-        "formal_gpu_experiment_run": False,
+        "growth_equivalence": {
+            "status": "CLM_GROWTH_EQUIVALENCE" if births_expected > 0 and equivalence == births_expected else "CLM_GROWTH_EQUIVALENCE_FAILURE",
+            "births_checked": equivalence,
+        },
+        "growth_viability": {
+            "status": "CLM_PROGRESSIVE_GROWTH_VIABILITY" if viability_pass else "NO_PROGRESSIVE_GROWTH_VIABILITY",
+            "replicates_passed": viable,
+        },
+        "growth_utility": {
+            "status": "CLM_PROGRESSIVE_GROWTH_SIGNAL" if utility_pass else "NO_GROWTH_UTILITY_SIGNAL",
+            "threshold": 0.995, "replicates_passed": improved,
+        },
+        "pressure_selection": {
+            "status": "CLM_GROWTH_PRESSURE_SELECTION_SIGNAL" if pressure_wins >= 2 else "NO_GROWTH_PRESSURE_SELECTION_SIGNAL",
+            "replicates_passed": pressure_wins,
+        },
+        "formal_gpu_experiment_run": bool(formal_gpu_experiment_run),
     }

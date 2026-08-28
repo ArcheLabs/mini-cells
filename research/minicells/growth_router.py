@@ -203,15 +203,26 @@ class HierarchicalGrowthRouter(nn.Module):
     def route(
         self, perception: torch.Tensor
     ) -> tuple[dict[str, torch.Tensor], torch.Tensor, dict[str, torch.Tensor]]:
+        gates, root_indices, choices, _probabilities = self.route_with_details(perception)
+        return gates, root_indices, choices
+
+    def route_with_details(
+        self, perception: torch.Tensor
+    ) -> tuple[
+        dict[str, torch.Tensor],
+        torch.Tensor,
+        dict[str, torch.Tensor],
+        torch.Tensor,
+    ]:
         root_logits = self.root_router(perception)
         if root_logits.shape[-1] != self.root_expert_count:
             raise ValueError("root router output count does not match growth tree")
-        root_gates, _probabilities, root_indices = straight_through_top1(root_logits)
+        root_gates, probabilities, root_indices = straight_through_top1(root_logits)
         gates: dict[str, torch.Tensor] = {}
         choices: dict[str, torch.Tensor] = {}
         for index, root in enumerate(self.roots):
             self._route_node(root, perception, root_gates[..., index], gates, choices)
-        return gates, root_indices, choices
+        return gates, root_indices, choices, probabilities
 
     def get_extra_state(self) -> dict[str, Any]:
         return {"stage": self.stage, "structure": self.structure()}

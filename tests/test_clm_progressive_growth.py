@@ -1,7 +1,13 @@
 import torch
 
-from minicells.clm_growth import ProgressiveGrowthCLM
-from minicells.growth_pressure import cosine_kmeans_2, gradient_disagreement, pressure_score
+from minicells.clm_growth import ProgressiveGrowthCLM, next_growth_event, replicate_seed, stop_target
+from minicells.growth_pressure import (PressureCandidate, calibrate_model_pressure, cosine_kmeans_2,
+                                       gradient_disagreement, pressure_score, select_pressure_parent,
+                                       select_random_parent)
+from minicells.growth_validation import (ExecutionCapture, compare_captures, progressive_growth_decision,
+                                         root_router_balance_loss, student_teacher_kl)
+from minicells.language_data import make_training_schedule
+from minicells.language_models import LanguageModelOutput
 from minicells.language_models import TextNCALM
 from minicells.upcycled_cellular_textnca import UpcyclingConfig, convert_textnca_to_upcycled
 
@@ -54,3 +60,93 @@ def test_pressure_formula_and_geometry_are_deterministic() -> None:
     assert pressure_score(.25, .4) == .35
     samples = torch.tensor([[1.0, 0.0], [0.9, 0.1], [-1.0, 0.0], [-.9, -.1]])
     torch.testing.assert_close(cosine_kmeans_2(samples), cosine_kmeans_2(samples))
+
+
+def test_normal_training_does_not_collect_pressure_perceptions() -> None:
+    model = _model()
+    model(torch.randint(0, 23, (2, 6)))
+    assert all(not any(bank.last_perceptions.values())
+               for bank in (stage.program_bank for stage in model.stages))
+
+
+def test_pressure_collection_is_bounded() -> None:
+    model = _model()
+    batches = [(torch.randint(0, 23, (8, 8)), torch.randint(0, 23, (8, 8))) for _ in range(12)]
+    _, perceptions = calibrate_model_pressure(model, batches, min_samples=1)
+    assert perceptions
+    assert all(value.shape[0] <= 8192 for value in perceptions.values())
+
+
+def test_resume_boundaries_execute_each_birth_once() -> None:
+    assert next_growth_event(500_000, []) == (0, 500_000)
+    assert next_growth_event(500_000, [{"birth_index": 1}]) is None
+    assert next_growth_event(1_000_000, [{"birth_index": 1}]) == (1, 1_000_000)
+    assert next_growth_event(1_000_000, [{"birth_index": 1}, {"birth_index": 2}]) is None
+
+
+def test_stop_after_tokens() -> None:
+    assert stop_target(1_500_000, 523_001, 1_000) == 524_000
+    assert stop_target(1_500_000, None, 1_000) == 1_500_000
+
+
+def test_replicate_schedules_are_paired_and_distinct() -> None:
+    schedules = [make_training_schedule(50_000, seed=replicate_seed(i), budget_tokens=8_000,
+                                        batch_size=4, sequence_length=8).starts for i in range(3)]
+    for replicate in range(3):
+        assert schedules[replicate] == make_training_schedule(
+            50_000, seed=replicate_seed(replicate), budget_tokens=8_000,
+            batch_size=4, sequence_length=8).starts
+    assert len(set(schedules)) == 3
+
+
+def test_kl_is_student_to_teacher() -> None:
+    student = torch.tensor([[[2.0, -1.0]]], requires_grad=True)
+    teacher = torch.tensor([[[-2.0, 1.0]]])
+    value = student_teacher_kl(student, teacher)
+    student_logp = torch.log_softmax(student, -1)
+    expected = (student_logp.exp() * (student_logp - torch.log_softmax(teacher, -1))).sum(-1).mean()
+    torch.testing.assert_close(value, expected)
+
+
+def test_root_balance_has_router_gradient_before_and_after_growth() -> None:
+    model = _model()
+    inputs = torch.randint(0, 23, (2, 6))
+    for grow in (False, True):
+        if grow:
+            model.birth(stage=0, parent_id="s0-e0", routed_perceptions=torch.randn(512, 8), token=500_000)
+        model.zero_grad(set_to_none=True)
+        _, stats = model(inputs, return_stats=True)
+        root_router_balance_loss(stats.root_usage).backward()
+        assert any(parameter.grad is not None for stage in model.stages
+                   for parameter in stage.program_bank.router.root_router.parameters())
+
+
+def test_birth_checks_real_ppl_ratio_and_aligned_routes() -> None:
+    logits = torch.tensor([[[2.0, 0.0], [0.0, 2.0]]])
+    states = (torch.zeros(1),)
+    before = ExecutionCapture(logits, states, (torch.tensor([[[0, 1]]]),))
+    after = ExecutionCapture(logits.flip(-1), states, (torch.tensor([[[1, 0]]]),))
+    result = compare_captures(before, after, validation_targets=torch.tensor([[0, 1]]))
+    assert result["ppl_ratio"] != 1.0
+    assert not result["non_parent_root_routes_unchanged"]
+
+
+def test_pressure_and_random_use_same_eligible_pool() -> None:
+    pool = [PressureCandidate(0, "a", .4, .2, .48, 600, True),
+            PressureCandidate(0, "b", .5, .0, .5, 600, True),
+            PressureCandidate(0, "c", .9, .9, 1.71, 5, False)]
+    assert select_pressure_parent(pool).expert_id == "b"
+    assert select_random_parent(pool, seed=2).expert_id in {"a", "b"}
+
+
+def test_growth_and_pressure_selection_decisions_are_separate() -> None:
+    rows = []
+    for replicate in range(3):
+        rows.extend([{"arm": "fixed4", "replicate": replicate, "ppl": 10.0},
+                     {"arm": "pressure_growth", "replicate": replicate, "ppl": 9.9,
+                      "viable": True, "equivalent_births": 2},
+                     {"arm": "random_growth", "replicate": replicate, "ppl": 10.1}])
+    decision = progressive_growth_decision(rows)
+    assert decision["growth_utility"]["status"] == "CLM_PROGRESSIVE_GROWTH_SIGNAL"
+    assert decision["pressure_selection"]["status"] == "CLM_GROWTH_PRESSURE_SELECTION_SIGNAL"
+    assert decision["formal_gpu_experiment_run"] is False

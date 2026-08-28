@@ -22,7 +22,7 @@ def validate_telemetry_event(event: dict[str, Any]) -> None:
     required = {
         "training_progress": ("consumed_tokens", "target_tokens", "phase"),
         "birth": ("birth_index", "stage", "parent", "child", "parity_status"),
-        "evaluation": ("tokens", "growth_ppl", "fixed4_ppl", "clm01_start_ppl", "textnca_frozen_ppl"),
+        "evaluation": ("tokens", "ppl", "nll", "raw_model_ppl", "clm01_start_ppl", "textnca_frozen_ppl"),
     }.get(event_type, ())
     missing = [key for key in required if key not in event]
     if missing:
@@ -59,8 +59,7 @@ def save_growth_plots(
 ) -> list[Path]:
     """Generate the required plot set when an experiment has data.
 
-    Empty inputs still produce valid titled figures, which keeps downstream
-    notebook/report code deterministic during preflight.
+    No placeholder plots are emitted when the formal experiment has no data.
     """
 
     import matplotlib.pyplot as plt
@@ -71,6 +70,8 @@ def save_growth_plots(
     events = list(growth_history)
     lineages = list(lineage_rows)
     telemetry = list(telemetry_rows)
+    if not ppl:
+        return []
 
     def figure(name: str, title: str, x: list[float] | None = None, y: list[float] | None = None) -> Path:
         fig, axis = plt.subplots(figsize=(7, 4))

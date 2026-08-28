@@ -9,7 +9,6 @@ from typing import Iterable, Mapping
 
 import torch
 from torch.nn import functional as F
-from torch.nn import functional as F
 
 
 MIN_ROUTED_PERCEPTIONS = 512
@@ -29,9 +28,9 @@ class PressureCandidate:
     def to_row(self) -> dict[str, object]:
         return {
             "stage": self.stage,
-            "expert": self.expert_id,
+            "expert_id": self.expert_id,
             "usage": self.usage,
-            "grad_conflict": self.grad_conflict,
+            "gradient_disagreement": self.grad_conflict,
             "pressure": self.pressure,
             "routed_samples": self.routed_samples,
             "eligible": "yes" if self.eligible else "no",
@@ -98,7 +97,7 @@ def write_pressure_table(path: str | Path, candidates: Iterable[PressureCandidat
     with destination.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=["stage", "expert", "usage", "grad_conflict", "pressure", "routed_samples", "eligible"],
+            fieldnames=["stage", "expert_id", "usage", "gradient_disagreement", "pressure", "routed_samples", "eligible"],
         )
         writer.writeheader()
         writer.writerows(rows)
@@ -177,30 +176,42 @@ def calibrate_model_pressure(
     batches = list(microbatches)
     if not batches:
         raise ValueError("at least one pressure microbatch is required")
-    for stage in model.stages:
-        stage.program_bank.reset_pressure_window()
+    banks = [stage.program_bank for stage in model.stages]
+    for bank in banks:
+        bank.begin_pressure_collection(cap=PREFERRED_ROUTED_PERCEPTIONS)
     gradients: dict[str, list[torch.Tensor]] = {}
+    was_training = model.training
     model.train()
-    for inputs, targets in batches:
-        model.zero_grad(set_to_none=True)
-        output = model(inputs, execution_backend="masked_dense")
-        loss = F.cross_entropy(output.logits.flatten(0, 1), targets.reshape(-1))
-        loss.backward()
-        for stage in model.stages:
-            bank = stage.program_bank
-            for expert_id in bank.expert_ids:
-                pieces = []
-                for parameter in bank.experts[expert_id].parameters():
-                    pieces.append((parameter.grad if parameter.grad is not None else torch.zeros_like(parameter)).detach().reshape(-1))
-                gradients.setdefault(expert_id, []).append(torch.cat(pieces))
+    try:
+        for inputs, targets in batches:
+            model.zero_grad(set_to_none=True)
+            output = model(inputs, execution_backend="masked_dense")
+            loss = F.cross_entropy(output.logits.flatten(0, 1), targets.reshape(-1))
+            loss.backward()
+            for bank in banks:
+                for expert_id in bank.expert_ids:
+                    pieces = []
+                    for parameter in bank.experts[expert_id].parameters():
+                        gradient = (
+                            parameter.grad
+                            if parameter.grad is not None
+                            else torch.zeros_like(parameter)
+                        )
+                        pieces.append(gradient.detach().reshape(-1))
+                    gradients.setdefault(expert_id, []).append(torch.cat(pieces))
+    finally:
+        for bank in banks:
+            bank.end_pressure_collection()
+        if not was_training:
+            model.eval()
     route_counts = {
         expert_id: int(bank.last_route_counts.get(expert_id, 0))
-        for stage in model.stages for bank in [stage.program_bank]
+        for bank in banks
         for expert_id in bank.expert_ids
     }
     stage_by_expert = {
-        expert_id: stage.program_bank.stage
-        for stage in model.stages for expert_id in stage.program_bank.expert_ids
+        expert_id: bank.stage
+        for bank in banks for expert_id in bank.expert_ids
     }
     candidates = make_pressure_candidates(
         stage_by_expert=stage_by_expert,
@@ -210,7 +221,7 @@ def calibrate_model_pressure(
     )
     perceptions = {
         expert_id: torch.cat(values) if values else torch.empty(0, model.stages[0].gru.hidden_size)
-        for stage in model.stages for expert_id, values in stage.program_bank.last_perceptions.items()
+        for bank in banks for expert_id, values in bank.last_perceptions.items()
     }
     model.zero_grad(set_to_none=True)
     return rank_pressure_candidates(candidates), perceptions

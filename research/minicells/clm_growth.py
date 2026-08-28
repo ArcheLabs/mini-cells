@@ -15,7 +15,11 @@ import torch
 from torch import nn
 
 from .growth_checkpoint import add_fresh_parameter_group, add_newborn_parameters
-from .growth_pressure import MIN_ROUTED_PERCEPTIONS, cosine_kmeans_2
+from .growth_pressure import (
+    MIN_ROUTED_PERCEPTIONS,
+    PREFERRED_ROUTED_PERCEPTIONS,
+    cosine_kmeans_2,
+)
 from .growth_router import HierarchicalGrowthRouter, clone_module
 from .language_models import LanguageModelOutput, TextNCALM
 from .upcycled_cellular_textnca import UpcycledCellularTextNCA, UpcycledNCAStage, convert_textnca_to_upcycled
@@ -25,6 +29,42 @@ GROWTH_BIRTH_TOKENS = (500_000, 1_000_000)
 GROWTH_TOTAL_TOKENS = 1_500_000
 FORMAL_ARMS = ("fixed4", "pressure_growth", "random_growth")
 REPLICATE_SEEDS = (55031, 55032, 55033)
+
+
+def replicate_seed(replicate: int) -> int:
+    try:
+        return REPLICATE_SEEDS[replicate]
+    except IndexError as exc:
+        raise ValueError("replicate must be 0, 1, or 2") from exc
+
+
+def phase_for_tokens(consumed_tokens: int, *, complete_tokens: int = GROWTH_TOTAL_TOKENS) -> str:
+    if consumed_tokens >= complete_tokens:
+        return "complete"
+    if consumed_tokens >= GROWTH_BIRTH_TOKENS[1]:
+        return "post_birth_2"
+    if consumed_tokens >= GROWTH_BIRTH_TOKENS[0]:
+        return "post_birth_1"
+    return "pre_birth_1"
+
+
+def next_growth_event(
+    consumed_tokens: int, growth_history: list[dict[str, Any]]
+) -> tuple[int, int] | None:
+    completed = len(growth_history)
+    if completed >= len(GROWTH_BIRTH_TOKENS):
+        return None
+    scheduled_token = GROWTH_BIRTH_TOKENS[completed]
+    return (completed, scheduled_token) if consumed_tokens >= scheduled_token else None
+
+
+def stop_target(target_tokens: int, stop_after_tokens: int | None, tokens_per_step: int) -> int:
+    """Return the first step boundary at/after the requested stop, capped by budget."""
+
+    if target_tokens < 0 or tokens_per_step <= 0:
+        raise ValueError("target tokens must be non-negative and tokens_per_step must be positive")
+    requested = target_tokens if stop_after_tokens is None else min(target_tokens, stop_after_tokens)
+    return min(target_tokens, ((requested + tokens_per_step - 1) // tokens_per_step) * tokens_per_step)
 
 
 @dataclass(frozen=True)
@@ -53,6 +93,7 @@ class Lineage:
 class GrowthStageTelemetry:
     gates: list[torch.Tensor]
     root_indices: list[torch.Tensor]
+    root_probabilities: list[torch.Tensor]
     split_choices: list[dict[str, torch.Tensor]]
     perceptions: list[torch.Tensor]
     states: list[torch.Tensor]
@@ -64,6 +105,7 @@ class GrowthStats:
     route_counts: dict[str, int]
     split_entropy: dict[str, float]
     root_usage: tuple[torch.Tensor, ...]
+    root_routes: tuple[torch.Tensor, ...]
     recurrent_states: tuple[torch.Tensor, ...] = ()
 
 
@@ -88,6 +130,8 @@ class GrowthProgramBank(nn.Module):
         self.split_by_child: dict[str, str] = {}
         self.last_route_counts: dict[str, int] = {expert_id: 0 for expert_id in ids}
         self.last_perceptions: dict[str, list[torch.Tensor]] = {expert_id: [] for expert_id in ids}
+        self.collect_pressure = False
+        self.pressure_perception_cap = PREFERRED_ROUTED_PERCEPTIONS
 
     @property
     def expert_ids(self) -> tuple[str, ...]:
@@ -98,17 +142,31 @@ class GrowthProgramBank(nn.Module):
         return self.router.root_expert_count
 
     def _record_routes(self, gates: dict[str, torch.Tensor], perception: torch.Tensor) -> None:
+        if not self.collect_pressure:
+            return
         for expert_id in self.expert_ids:
             hard = gates[expert_id].detach().reshape(-1) >= 0.5
             self.last_route_counts[expert_id] = self.last_route_counts.get(expert_id, 0) + int(hard.sum())
             if hard.any():
-                self.last_perceptions.setdefault(expert_id, []).append(
-                    perception.detach().reshape(-1, perception.shape[-1])[hard].cpu()
-                )
+                stored = sum(item.shape[0] for item in self.last_perceptions[expert_id])
+                remaining = max(0, self.pressure_perception_cap - stored)
+                if remaining:
+                    selected = perception.detach().reshape(-1, perception.shape[-1])[hard]
+                    self.last_perceptions[expert_id].append(selected[:remaining].cpu())
 
     def reset_pressure_window(self) -> None:
         self.last_route_counts = {expert_id: 0 for expert_id in self.expert_ids}
         self.last_perceptions = {expert_id: [] for expert_id in self.expert_ids}
+
+    def begin_pressure_collection(self, *, cap: int = PREFERRED_ROUTED_PERCEPTIONS) -> None:
+        if cap < MIN_ROUTED_PERCEPTIONS:
+            raise ValueError("pressure collection cap is below the minimum sample requirement")
+        self.reset_pressure_window()
+        self.pressure_perception_cap = int(cap)
+        self.collect_pressure = True
+
+    def end_pressure_collection(self) -> None:
+        self.collect_pressure = False
 
     @torch.no_grad()
     def add_birth(
@@ -157,8 +215,16 @@ class GrowthProgramBank(nn.Module):
         perception: torch.Tensor,
         *,
         merge_back_child: str | None = None,
-    ) -> tuple[torch.Tensor, torch.Tensor, dict[str, torch.Tensor], dict[str, torch.Tensor]]:
-        gates_by_id, root_indices, choices = self.router.route(perception)
+    ) -> tuple[
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+        dict[str, torch.Tensor],
+        dict[str, torch.Tensor],
+    ]:
+        gates_by_id, root_indices, choices, root_probabilities = (
+            self.router.route_with_details(perception)
+        )
         if merge_back_child is not None and merge_back_child in self.parent_by_child:
             parent_id = self.parent_by_child[merge_back_child]
             child_gate = gates_by_id[merge_back_child]
@@ -166,7 +232,7 @@ class GrowthProgramBank(nn.Module):
             gates_by_id[merge_back_child] = torch.zeros_like(child_gate)
         gates = torch.stack([gates_by_id[expert_id] for expert_id in self.expert_ids], dim=-1)
         self._record_routes(gates_by_id, perception)
-        return gates, root_indices, choices, gates_by_id
+        return gates, root_indices, root_probabilities, choices, gates_by_id
 
     def forward(
         self,
@@ -174,8 +240,15 @@ class GrowthProgramBank(nn.Module):
         *,
         backend: str = "masked_dense",
         merge_back_child: str | None = None,
-    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, dict[str, torch.Tensor], dict[str, torch.Tensor]]:
-        gates, root_indices, choices, gates_by_id = self.route(
+    ) -> tuple[
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+        dict[str, torch.Tensor],
+        dict[str, torch.Tensor],
+    ]:
+        gates, root_indices, root_probabilities, choices, gates_by_id = self.route(
             perception, merge_back_child=merge_back_child
         )
         if backend not in ("masked_dense", "sparse_dispatch"):
@@ -196,7 +269,7 @@ class GrowthProgramBank(nn.Module):
                 contribution = contribution * flat_gates.index_select(0, active)[:, index, None]
                 flat_output.index_add_(0, active, contribution)
             output = flat_output.view_as(perception)
-        return output, gates, root_indices, choices, gates_by_id
+        return output, gates, root_indices, root_probabilities, choices, gates_by_id
 
     def split_diagnostics(self, telemetry: GrowthStageTelemetry) -> dict[str, dict[str, float]]:
         result: dict[str, dict[str, float]] = {}
@@ -236,12 +309,12 @@ class GrowthNCAStage(nn.Module):
         merge_back_child: str | None = None,
     ) -> tuple[torch.Tensor, GrowthStageTelemetry]:
         batch, length, dim = state.shape
-        telemetry = GrowthStageTelemetry([], [], [], [], [])
+        telemetry = GrowthStageTelemetry([], [], [], [], [], [])
         for step in range(self.iterations):
             conditioned = state + self.step_embedding[step].view(1, 1, dim)
             attention_delta = self.attention(self.norm_attention(conditioned))
             perception = self.norm_ffn(state + attention_delta)
-            ffn_delta, gates, root_indices, choices, _ = self.program_bank(
+            ffn_delta, gates, root_indices, root_probabilities, choices, _ = self.program_bank(
                 perception, backend=backend, merge_back_child=merge_back_child
             )
             proposal = attention_delta + ffn_delta
@@ -250,6 +323,7 @@ class GrowthNCAStage(nn.Module):
             ).view(batch, length, dim)
             telemetry.gates.append(gates)
             telemetry.root_indices.append(root_indices)
+            telemetry.root_probabilities.append(root_probabilities)
             telemetry.split_choices.append(choices)
             if return_debug:
                 telemetry.perceptions.append(perception.detach().clone())
@@ -359,11 +433,17 @@ class ProgressiveGrowthCLM(nn.Module):
         for stage, item in zip(self.stages, telemetry):
             for split_id, values in stage.program_bank.split_diagnostics(item).items():
                 split_entropy[split_id] = values["entropy"]
-        roots = tuple(
-            torch.cat([item.reshape(-1) for item in stage_telemetry.root_indices]).bincount(minlength=4).float()
+        root_usage = tuple(
+            torch.cat(
+                [item.reshape(-1, item.shape[-1]) for item in stage_telemetry.root_probabilities]
+            ).mean(0)
             for stage_telemetry in telemetry
         )
-        return GrowthStats(usage, route_counts, split_entropy, roots)
+        root_routes = tuple(
+            torch.stack(stage_telemetry.root_indices, dim=0).detach().cpu()
+            for stage_telemetry in telemetry
+        )
+        return GrowthStats(usage, route_counts, split_entropy, root_usage, root_routes)
 
     def forward(
         self,
