@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 from pathlib import Path
 
 import torch
@@ -7,6 +8,7 @@ import torch
 from minicells.clm_growth import ProgressiveGrowthCLM
 from minicells.clm_release_benchmark import (
     AGE_ZERO_MAX_LOGITS_DIFF,
+    BRIDGE_TOKENS_PER_STEP,
     SOURCE_006_CHECKPOINT,
     SOURCE_006_CHECKPOINT_SHA256,
     build_bridge_model,
@@ -45,3 +47,23 @@ def test_current_clm_fixed4_conversion_preserves_frozen_source_logits_on_cpu() -
         clm_logits = clm(inputs, execution_backend="masked_dense").logits
     max_diff = float((dense_logits - clm_logits).abs().max().item())
     assert max_diff <= AGE_ZERO_MAX_LOGITS_DIFF
+
+
+def test_formal_worker_entry_exports_all_runtime_accounting_constants() -> None:
+    """Import the actual formal worker wrapper, not only its source modules.
+
+    ``py_compile`` cannot detect an undefined global that is only reached after
+    GPU setup.  This regression test executes the entrypoint's module-loading
+    path and verifies that the canonical tokens-per-step constant is available
+    in the loaded worker before any formal run can start.
+    """
+
+    entry = ROOT / "scripts" / "run_clm_0_3_release_bridge_worker_entry.py"
+    spec = importlib.util.spec_from_file_location("clm_release_bridge_entry_test", entry)
+    assert spec is not None and spec.loader is not None
+    loaded = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(loaded)
+    assert loaded.module.BRIDGE_TOKENS_PER_STEP == BRIDGE_TOKENS_PER_STEP
+    assert loaded.module.BRIDGE_TOKENS_PER_STEP == (
+        loaded.module.BRIDGE_BATCH_SIZE * loaded.module.BRIDGE_SEQUENCE_LENGTH
+    )
