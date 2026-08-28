@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Launch, monitor, and aggregate the paired nine-worker CLM-0.3 matrix."""
+"""Launch, monitor, resume, and aggregate the paired nine-worker CLM-0.3 matrix."""
 
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ RESEARCH_ROOT = REPO_ROOT / "research"
 if str(RESEARCH_ROOT) not in sys.path:
     sys.path.insert(0, str(RESEARCH_ROOT))
 
+from minicells.growth_checkpoint import GROWTH_CHECKPOINT_FORMAT  # noqa: E402
 from minicells.growth_reporting import (  # noqa: E402
     FORMAL_TARGET_TOKENS,
     aggregate_formal_results,
@@ -36,13 +37,88 @@ def jobs() -> list[tuple[int, str]]:
     return [(replicate, arm) for replicate in range(3) for arm in ARMS]
 
 
-def command(args: argparse.Namespace, replicate: int, arm: str) -> list[str]:
+def _worker_dir(args: argparse.Namespace, replicate: int, arm: str) -> Path:
+    return args.output_root / f"r{replicate}-{arm}"
+
+
+def _worker_complete(directory: Path, target_tokens: int) -> bool:
+    path = directory / "events.jsonl"
+    if not path.exists():
+        return False
+    complete = False
+    try:
+        with path.open(encoding="utf-8") as handle:
+            for line in handle:
+                try:
+                    event = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if (
+                    event.get("type") == "worker_complete"
+                    and int(event.get("consumed_tokens", -1)) >= target_tokens
+                    and int(event.get("target_tokens", -1)) == target_tokens
+                    and event.get("mode") != "preflight_only"
+                ):
+                    complete = True
+    except OSError:
+        return False
+    return complete
+
+
+def _checkpoint_payload(path: Path) -> dict[str, object] | None:
+    try:
+        payload = torch.load(path, map_location="cpu", weights_only=False)
+    except Exception:
+        return None
+    if not isinstance(payload, dict) or payload.get("format") != GROWTH_CHECKPOINT_FORMAT:
+        return None
+    return payload
+
+
+def _latest_resume_checkpoint(directory: Path, target_tokens: int) -> Path | None:
+    """Return the most advanced valid committed checkpoint for a worker.
+
+    At the same token/step boundary an after-birth checkpoint outranks a
+    before-birth checkpoint through ``growth_event_index``.  This preserves the
+    exact birth state while still allowing a failed birth parity check to fall
+    back to the pre-birth checkpoint.
+    """
+
+    candidates: list[tuple[tuple[int, int, int], Path]] = []
+    seen: set[Path] = set()
+    for pattern in ("checkpoint-*.pt", "before-birth-*.pt", "after-birth-*.pt", "final.pt"):
+        for path in directory.glob(pattern):
+            if path in seen:
+                continue
+            seen.add(path)
+            payload = _checkpoint_payload(path)
+            if payload is None:
+                continue
+            consumed = int(payload.get("consumed_tokens", -1))
+            step = int(payload.get("training_step", -1))
+            growth_index = int(payload.get("growth_event_index", -1))
+            if consumed < 0 or consumed > target_tokens or step < 0 or growth_index < 0:
+                continue
+            candidates.append(((consumed, step, growth_index), path))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda item: item[0])
+    return candidates[-1][1]
+
+
+def command(
+    args: argparse.Namespace,
+    replicate: int,
+    arm: str,
+    *,
+    resume_input: Path | None = None,
+) -> list[str]:
     result = [
         sys.executable,
         str(Path(__file__).with_name("run_clm_progressive_growth_001_worker.py")),
         "--release-dir", str(args.release_dir),
         "--source-005-dir", str(args.source_005_dir),
-        "--output-dir", str(args.output_root / f"r{replicate}-{arm}"),
+        "--output-dir", str(_worker_dir(args, replicate, arm)),
         "--arm", arm,
         "--replicate", str(replicate),
         "--target-tokens", str(args.target_tokens),
@@ -50,6 +126,8 @@ def command(args: argparse.Namespace, replicate: int, arm: str) -> list[str]:
         "--sequence-length", str(WORKER_SEQUENCE_LENGTH),
         "--eval-batches", str(WORKER_EVAL_BATCHES),
     ]
+    if resume_input is not None:
+        result.extend(("--resume-input", str(resume_input)))
     if args.execute:
         result.append("--execute")
     return result
@@ -126,12 +204,33 @@ def main() -> int:
     )
     parser.add_argument("--target-tokens", type=int, default=FORMAL_TARGET_TOKENS)
     parser.add_argument("--max-workers", type=int)
+    parser.add_argument(
+        "--restart-existing",
+        action="store_true",
+        help="ignore existing checkpoints/completed workers and start each arm from zero",
+    )
     parser.add_argument("--execute", action="store_true", help="start formal workers; default is plan-only")
     args = parser.parse_args()
 
-    planned = [(item, command(args, *item)) for item in jobs()]
-    for _, cmd in planned:
-        print("PLAN", " ".join(cmd), flush=True)
+    planned: list[tuple[tuple[int, str], list[str]]] = []
+    completed_count = 0
+    for replicate, arm in jobs():
+        directory = _worker_dir(args, replicate, arm)
+        if args.execute and not args.restart_existing and _worker_complete(directory, args.target_tokens):
+            completed_count += 1
+            print(f"SKIP COMPLETE r{replicate} {arm}: {directory}", flush=True)
+            continue
+        resume = None
+        if args.execute and not args.restart_existing:
+            resume = _latest_resume_checkpoint(directory, args.target_tokens)
+        cmd = command(args, replicate, arm, resume_input=resume)
+        planned.append(((replicate, arm), cmd))
+        if resume is None:
+            print("PLAN", " ".join(cmd), flush=True)
+        else:
+            print(f"RESUME r{replicate} {arm} <- {resume}", flush=True)
+            print("PLAN", " ".join(cmd), flush=True)
+
     if not args.execute:
         print("PREFLIGHT ONLY: pass --execute to launch the formal matrix.", flush=True)
         return 0
@@ -147,7 +246,6 @@ def main() -> int:
     capacity = min(args.max_workers or gpu_count, gpu_count)
     pending = list(planned)
     active: list[tuple[tuple[int, str], int, subprocess.Popen[bytes]]] = []
-    completed_count = 0
 
     while pending or active:
         while pending and len(active) < capacity:
@@ -169,7 +267,7 @@ def main() -> int:
 
         states = []
         for (replicate, arm), gpu, _process in active:
-            progress = args.output_root / f"r{replicate}-{arm}" / "progress.json"
+            progress = _worker_dir(args, replicate, arm) / "progress.json"
             if progress.exists():
                 try:
                     record = json.loads(progress.read_text(encoding="utf-8"))
