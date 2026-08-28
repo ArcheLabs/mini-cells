@@ -3,14 +3,17 @@
 
 The historical release-benchmark result remains pinned to its original code.
 This branch keeps the same model/training semantics while installing the new
-optional CLM runtime for inference measurements:
+optional CLM runtime for engineering measurements:
 
 1. Re-export the canonical ``BRIDGE_TOKENS_PER_STEP`` constant into the loaded
    worker module.
-2. Install grouped sparse execution on ProgressiveGrowthCLM instances. Training
-   still requests ``masked_dense`` and is therefore scientifically unchanged;
-   inference requests ``sparse_dispatch`` and can use grouped GEMM.
-3. Remove residual parameter gradients before measuring inference VRAM.
+2. Install the autotuned CLM runtime on ProgressiveGrowthCLM instances.
+   Training still requests ``masked_dense`` and is scientifically unchanged;
+   inference requests ``sparse_dispatch`` and chooses the fastest supported
+   exact-forward runtime for the current GPU/shape.
+3. Remove residual parameter gradients and benchmark under inference mode so
+   the public runtime metric describes deployed inference rather than the final
+   training step.
 """
 
 from __future__ import annotations
@@ -18,6 +21,8 @@ from __future__ import annotations
 import importlib.util
 import sys
 from pathlib import Path
+
+import torch
 
 
 HERE = Path(__file__).resolve().parent
@@ -57,13 +62,14 @@ _original_benchmark = module._benchmark_inference
 
 def _clean_inference_benchmark(model, validation_stream, starts, *, device, **kwargs):
     model.zero_grad(set_to_none=True)
-    return _original_benchmark(
-        model,
-        validation_stream,
-        starts,
-        device=device,
-        **kwargs,
-    )
+    with torch.inference_mode():
+        return _original_benchmark(
+            model,
+            validation_stream,
+            starts,
+            device=device,
+            **kwargs,
+        )
 
 
 module._benchmark_inference = _clean_inference_benchmark
