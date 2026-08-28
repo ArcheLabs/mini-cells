@@ -67,12 +67,9 @@ def _validate(source: Path) -> tuple[dict[str, object], str, str]:
         raise RuntimeError("refusing publication: CLM-0.3c was not aggregated as a formal GPU run")
 
     for replicate in range(3):
-        result = json.loads(
-            (source / f"r{replicate}-counterfactual" / "replicate-result.json").read_text(encoding="utf-8")
-        )
-        identity = json.loads(
-            (source / f"r{replicate}-counterfactual" / "run-provenance.json").read_text(encoding="utf-8")
-        )
+        worker = source / f"r{replicate}-counterfactual"
+        result = json.loads((worker / "replicate-result.json").read_text(encoding="utf-8"))
+        identity = json.loads((worker / "run-provenance.json").read_text(encoding="utf-8"))
         if int(result.get("births_checked", -1)) != 13:
             raise RuntimeError(f"r{replicate} counterfactual birth evidence is incomplete")
         commit = result.get("code_commit")
@@ -81,6 +78,27 @@ def _validate(source: Path) -> tuple[dict[str, object], str, str]:
             raise RuntimeError(f"r{replicate} missing immutable code provenance")
         if identity.get("code_commit") != commit or identity.get("code_tree_sha") != tree:
             raise RuntimeError(f"r{replicate} run identity does not match final result provenance")
+
+        probe_hash = identity.get("probe_validation_schedule_sha256")
+        confirm_hash = identity.get("confirm_validation_schedule_sha256")
+        if not probe_hash or not confirm_hash or probe_hash == confirm_hash:
+            raise RuntimeError(f"r{replicate} validation holdout provenance is invalid")
+        for path in sorted((worker / "probes").glob("*.json")):
+            probe = json.loads(path.read_text(encoding="utf-8"))
+            if probe.get("code_commit") != commit:
+                raise RuntimeError(f"r{replicate} stale probe commit in {path.name}")
+            if probe.get("probe_validation_schedule_sha256") != probe_hash:
+                raise RuntimeError(f"r{replicate} probe holdout mismatch in {path.name}")
+        probe_control = json.loads((worker / "probe-control.json").read_text(encoding="utf-8"))
+        confirm_control = json.loads((worker / "confirm-control.json").read_text(encoding="utf-8"))
+        confirm_candidate = json.loads((worker / "confirm-candidate.json").read_text(encoding="utf-8"))
+        if probe_control.get("code_commit") != commit or probe_control.get("validation_schedule_sha256") != probe_hash:
+            raise RuntimeError(f"r{replicate} probe control provenance mismatch")
+        if confirm_control.get("code_commit") != commit or confirm_control.get("validation_schedule_sha256") != confirm_hash:
+            raise RuntimeError(f"r{replicate} confirmation control provenance mismatch")
+        if confirm_candidate.get("code_commit") != commit or confirm_candidate.get("confirm_validation_schedule_sha256") != confirm_hash:
+            raise RuntimeError(f"r{replicate} confirmation candidate provenance mismatch")
+
         commits.add(str(commit))
         trees.add(str(tree))
     if len(commits) != 1 or len(trees) != 1:
