@@ -29,7 +29,7 @@ def _model() -> ProgressiveGrowthCLM:
     return ProgressiveGrowthCLM(upcycled)
 
 
-def test_grouped_sparse_matches_dense_and_reference_sparse() -> None:
+def test_autotuned_sparse_matches_dense_and_reference_sparse() -> None:
     model = _model().eval()
     inputs = torch.randint(0, 31, (4, 12))
     with torch.no_grad():
@@ -42,16 +42,22 @@ def test_grouped_sparse_matches_dense_and_reference_sparse() -> None:
     torch.testing.assert_close(optimized, baseline, rtol=2e-5, atol=2e-6)
     statuses = runtime_status(model)
     assert len(statuses) == 3
-    assert all(row["backend"] in {"grouped_mm", "reference_sparse_fallback"} for row in statuses)
+    allowed = {
+        "autotuned_grouped_mm",
+        "autotuned_reference_sparse",
+        "autotuned_packed_batched_dense",
+    }
+    assert all(row["backend"] in allowed for row in statuses)
+    assert all(row["fast_model_forward"] is True for row in statuses)
+    assert all(int(row["autotune_shapes"]) == 1 for row in statuses)
 
 
-def test_grouped_sparse_rebuilds_after_birth() -> None:
+def test_autotuned_sparse_rebuilds_after_birth() -> None:
     model = install_optimized_runtime(_model().eval())
     inputs = torch.randint(0, 31, (4, 12))
     with torch.no_grad():
         model(inputs, execution_backend="sparse_dispatch")
-    assert all(row["packed_inference_cache"] or row["backend"] == "reference_sparse_fallback"
-               for row in runtime_status(model))
+    assert all(row["packed_inference_cache"] for row in runtime_status(model))
 
     model.birth(
         stage=1,
@@ -65,6 +71,7 @@ def test_grouped_sparse_rebuilds_after_birth() -> None:
     torch.testing.assert_close(sparse, dense, rtol=2e-5, atol=2e-6)
     statuses = runtime_status(model)
     assert statuses[1]["expert_count"] == 5
+    assert int(statuses[1]["autotune_shapes"]) == 1
 
 
 def test_batched_dense_preserves_forward_and_training_gradients() -> None:
