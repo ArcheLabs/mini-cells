@@ -1,6 +1,7 @@
 import math
 
 import torch
+from torch.nn import functional as F
 
 from minicells.clm_growth import ProgressiveGrowthCLM
 from minicells.growth_router import (
@@ -9,6 +10,7 @@ from minicells.growth_router import (
     RouteLeaf,
     RouteSplit,
     iter_leaves,
+    straight_through_top1,
 )
 from minicells.growth_validation import newborn_causal_diagnostics
 from minicells.upcycled_cellular_textnca import UpcyclingConfig, convert_textnca_to_upcycled
@@ -53,6 +55,25 @@ def test_binary_router_is_pointwise() -> None:
     torch.testing.assert_close(actual[mask], baseline[mask])
 
 
+def test_straight_through_top1_is_forward_exact_and_keeps_soft_gradient() -> None:
+    logits = torch.tensor(
+        [[0.125, -0.75, 0.333], [1.1, 1.2, -0.4]],
+        dtype=torch.float32,
+        requires_grad=True,
+    )
+    gates, probabilities, indices = straight_through_top1(logits)
+    expected = F.one_hot(indices, num_classes=logits.shape[-1]).to(logits.dtype)
+    assert torch.equal(gates.detach(), expected)
+    assert torch.equal(gates.detach().unique().sort().values, torch.tensor([0.0, 1.0]))
+
+    weights = torch.tensor([[1.0, 2.0, -1.0], [-2.0, 0.5, 3.0]])
+    (gates * weights).sum().backward()
+    assert logits.grad is not None
+    assert torch.isfinite(logits.grad).all()
+    assert float(logits.grad.abs().sum()) > 0.0
+    assert torch.isfinite(probabilities).all()
+
+
 def test_dynamic_split_inherits_root_router_device_and_dtype() -> None:
     # float64 catches placement drift even on CPU; CUDA additionally exercises
     # the exact failure mode seen in the formal Kaggle birth.
@@ -79,6 +100,45 @@ def test_dynamic_split_inherits_root_router_device_and_dtype() -> None:
     assert restored_split.prototypes.device == restored_root_parameter.device
     assert restored_split.prototypes.dtype == restored_root_parameter.dtype == torch.float64
     restored.route_with_details(perception.to(restored_root_parameter.device))
+
+
+def test_birth_rollback_restores_tree_without_moduledict_pop_error() -> None:
+    model = _growth_model()
+    bank = model.stages[0].program_bank
+    before = bank.router.structure()
+    child_id, _parent, _router_module, _centroids = bank.add_birth(
+        "s0-e0",
+        torch.randn(512, 8),
+    )
+    split_id = bank.split_by_child[child_id]
+    assert child_id in bank.experts
+    assert split_id in bank.router.split_routers
+
+    bank.remove_birth(child_id, split_id, before)
+    assert child_id not in bank.experts
+    assert split_id not in bank.router.split_routers
+    assert bank.router.structure() == before
+    # Rollback is intentionally idempotent for abort/error paths.
+    bank.remove_birth(child_id, split_id, before)
+
+
+def test_function_preserving_birth_passes_parity_on_runtime_device() -> None:
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = _growth_model().to(device)
+    inputs = torch.randint(0, 17, (2, 6), device=device)
+    targets = torch.randint(0, 17, (2, 6), device=device)
+    event = model.birth(
+        stage=0,
+        parent_id="s0-e0",
+        routed_perceptions=torch.randn(512, 8, device=device),
+        token=500_000,
+        validation_inputs=inputs,
+        validation_targets=targets,
+    )
+    parity = event["parity"]
+    assert parity["status"] == "CLM_GROWTH_EQUIVALENCE"
+    assert parity["non_parent_root_routes_unchanged"] is True
+    assert parity["child_parameters_equal_parent"] is True
 
 
 def test_newborn_diagnostics_rehydrates_cpu_perceptions_to_router_device() -> None:
