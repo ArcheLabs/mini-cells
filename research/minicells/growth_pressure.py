@@ -91,13 +91,17 @@ def select_random_parent(
 
 
 def write_pressure_table(path: str | Path, candidates: Iterable[PressureCandidate]) -> None:
-    rows = [item.to_row() for item in rank_pressure_candidates(candidates)]
+    ranked = rank_pressure_candidates(candidates)
+    rows = [{"rank": rank, **item.to_row()} for rank, item in enumerate(ranked, start=1)]
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
     with destination.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=["stage", "expert_id", "usage", "gradient_disagreement", "pressure", "routed_samples", "eligible"],
+            fieldnames=[
+                "rank", "stage", "expert_id", "usage", "gradient_disagreement",
+                "pressure", "routed_samples", "eligible",
+            ],
         )
         writer.writeheader()
         writer.writerows(rows)
@@ -127,8 +131,6 @@ def cosine_kmeans_2(
         for cluster in range(2):
             members = x[assignments == cluster]
             if members.numel() == 0:
-                # This deterministic fallback preserves both branches without
-                # introducing random split initialization.
                 updated.append(centroids[cluster])
             else:
                 updated.append(F.normalize(members.mean(0, keepdim=True), dim=-1).squeeze(0))
@@ -166,12 +168,7 @@ def calibrate_model_pressure(
     *,
     min_samples: int = MIN_ROUTED_PERCEPTIONS,
 ) -> tuple[list[PressureCandidate], dict[str, torch.Tensor]]:
-    """Calibrate utilization/conflict without retaining autograd graphs.
-
-    ``model`` is intentionally duck-typed so this helper remains useful for
-    tiny CPU fixtures as well as the full CLM.  Each backward pass is cleared
-    before the next microbatch.
-    """
+    """Calibrate utilization/conflict without retaining autograd graphs."""
 
     batches = list(microbatches)
     if not batches:
@@ -192,11 +189,7 @@ def calibrate_model_pressure(
                 for expert_id in bank.expert_ids:
                     pieces = []
                     for parameter in bank.experts[expert_id].parameters():
-                        gradient = (
-                            parameter.grad
-                            if parameter.grad is not None
-                            else torch.zeros_like(parameter)
-                        )
+                        gradient = parameter.grad if parameter.grad is not None else torch.zeros_like(parameter)
                         pieces.append(gradient.detach().reshape(-1))
                     gradients.setdefault(expert_id, []).append(torch.cat(pieces))
     finally:
