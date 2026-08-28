@@ -144,28 +144,45 @@ def test_function_preserving_birth_passes_parity_on_runtime_device() -> None:
 def test_newborn_diagnostics_rehydrates_cpu_perceptions_to_router_device() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = _growth_model().to(device)
+    # Pick a parent that this exact diagnostic batch actually visits.  The old
+    # test hard-coded s0-e0, which made the assertion below depend on random
+    # root-router initialization and could legitimately collect no perceptions
+    # for that lineage on CUDA even though the device rehydration code was fine.
+    inputs = torch.randint(0, 17, (2, 6), device=device)
+    targets = torch.randint(0, 17, (2, 6), device=device)
+    with torch.no_grad():
+        _output, pre_stats = model(inputs, return_stats=True)
+    root_indices = pre_stats.root_routes[0].reshape(-1)
+    counts = torch.bincount(root_indices, minlength=4)
+    parent_index = int(counts.argmax().item())
+    assert int(counts[parent_index].item()) > 0
+    parent_id = f"s0-e{parent_index}"
+
     event = model.birth(
         stage=0,
-        parent_id="s0-e0",
+        parent_id=parent_id,
         routed_perceptions=torch.randn(512, 8, device=device),
         token=500_000,
     )
-    inputs = torch.randint(0, 17, (2, 6), device=device)
-    targets = torch.randint(0, 17, (2, 6), device=device)
+    child_id = str(event["child"])
     diagnostics = newborn_causal_diagnostics(
         model,
         [(inputs, targets)],
         stage=0,
-        parent_id="s0-e0",
-        child_id=str(event["child"]),
+        parent_id=parent_id,
+        child_id=child_id,
     )
     assert math.isfinite(diagnostics["router_logit_variance"])
+
     # Collection remains CPU-backed by design; diagnostics must rehydrate only
-    # the transient concatenated batch rather than retaining GPU perceptions.
+    # the transient concatenated batch to the split router's runtime device.
     bank = model.stages[0].program_bank
+    split_id = bank.split_by_child[child_id]
+    split_router = bank.router.split_routers[split_id]
+    assert split_router.prototypes.device == device
     collected = [
         item
-        for expert_id in ("s0-e0", str(event["child"]))
+        for expert_id in (parent_id, child_id)
         for item in bank.last_perceptions.get(expert_id, [])
     ]
     assert collected
