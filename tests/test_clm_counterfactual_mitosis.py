@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import torch
 
 from minicells.growth_counterfactual import (
@@ -55,8 +57,18 @@ def test_paired_bootstrap_detects_consistent_candidate_gain() -> None:
 
 
 def test_spearman_detects_monotone_proxy() -> None:
-    assert spearman_rank_correlation([1, 2, 3, 4], [10, 20, 30, 40]) == 1.0
-    assert spearman_rank_correlation([1, 2, 3, 4], [40, 30, 20, 10]) == -1.0
+    assert math.isclose(
+        spearman_rank_correlation([1, 2, 3, 4], [10, 20, 30, 40]),
+        1.0,
+        rel_tol=0.0,
+        abs_tol=1e-12,
+    )
+    assert math.isclose(
+        spearman_rank_correlation([1, 2, 3, 4], [40, 30, 20, 10]),
+        -1.0,
+        rel_tol=0.0,
+        abs_tol=1e-12,
+    )
 
 
 def test_counterfactual_policy_uses_lower_confidence_bound() -> None:
