@@ -246,6 +246,17 @@ def main() -> int:
     math_cache = OUT / "cache"
     arithmetic = prepare_math_corpus(math_cache, tokenizer)
 
+    effective_budget = {
+        **experiment_budget(),
+        "available_wall_hours_approx": args.total_wall_hours,
+        "worker_soft_wall_limit_hours": args.round_wall_hours,
+        "global_wall_hours": args.total_wall_hours,
+        "finalization_reserve_minutes": args.finalization_reserve_minutes,
+        "worker_round_wall_hours": args.round_wall_hours,
+        "minimum_resume_window_minutes": MIN_RESUME_WINDOW_MINUTES,
+        "automatic_resume": True,
+        "one_shot_kaggle_run_all": True,
+    }
     provenance = {
         "format": "minicells.story-math-shift-30m-run.v2",
         "code_commit": _git("rev-parse", "HEAD"),
@@ -254,13 +265,7 @@ def main() -> int:
         "gpu_count_visible": available,
         "gpu_names": [torch.cuda.get_device_name(index) for index in range(available)],
         "gpu_count_used": used,
-        "budget": {
-            **experiment_budget(),
-            "global_wall_hours": args.total_wall_hours,
-            "finalization_reserve_minutes": args.finalization_reserve_minutes,
-            "worker_round_wall_hours": args.round_wall_hours,
-            "one_shot_kaggle_run_all": True,
-        },
+        "budget": effective_budget,
         "requested_shift_tokens": args.shift_tokens,
         "schedule": schedule_manifest(args.shift_tokens),
         "story_corpus_manifest": corpus.manifest,
