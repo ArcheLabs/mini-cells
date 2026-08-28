@@ -2,7 +2,7 @@
 
 ## Question
 
-Can a trained CLM that has entered a low-slope continuation regime gain measurable utility from one function-preserving lineage birth, and can a marginal-capacity WHERE signal choose a better parent than random selection?
+Can a trained CLM that has entered a diminishing-return continuation regime gain measurable utility from one function-preserving lineage birth, and can a marginal-capacity WHERE signal choose a better parent than random selection?
 
 CLM-0.3b does **not** change the CLM-0.3 growth operator. Hierarchical lineage routing, exact parent duplication, geometry initialization, optimizer-state inheritance, and birth equivalence remain fixed.
 
@@ -12,7 +12,7 @@ CLM-0.3 established 6/6 pressure-growth birth equivalence, but did not establish
 
 0.3b isolates the unresolved variables:
 
-1. Enter a preregistered low-slope regime before birth.
+1. Enter a preregistered diminishing-return regime before birth.
 2. Permit exactly one birth.
 3. Give every newborn the same 1M-token age window.
 4. Replace pressure selection with an objective-sensitivity-based marginal score.
@@ -63,7 +63,7 @@ All formal arms use:
 
 Root-router auxiliary balance weight is fixed to `0.0` in the formal 0.3b matrix. This avoids using an objective that actively flattens utilization while simultaneously treating utilization as evidence of growth demand.
 
-## Saturation gate
+## Diminishing-return gate
 
 Evaluation cadence: every 100K training tokens.
 
@@ -76,12 +76,14 @@ At each evaluation at or after 1.5M:
 1. Take the latest five PPL observations (400K-token span).
 2. Fit a least-squares line to `log(PPL)` versus units of 100K tokens.
 3. Project the implied improvement over the next 500K tokens.
-4. Declare saturation only when projected improvement is <= 0.5%.
+4. Declare the diminishing-return regime only when projected improvement is <= 2.0%.
 5. The latest PPL may not be >1% worse than the first point in the window, preventing a temporary regression from masquerading as saturation.
 
-If no saturation boundary exists by 3.0M tokens, the replicate is recorded as `NO_SATURATION_REGIME`. No forced birth is allowed, and growth-utility claims are invalid for that matrix.
+The 2.0% gate is intentionally distinct from the final growth-utility success threshold. CLM-0.3 still showed substantial ordinary continuation gains near 1.5M tokens; requiring only <=0.5% projected continuation gain would make the regime gate unnecessarily close to a hard plateau and could prevent the experiment from testing marginal capacity at all. The formal utility endpoint below remains a stricter requirement that growth beat the matched fixed4 control by at least 0.5%.
 
-The saturation trajectory is identical across paired arms before birth by construction; aggregation requires the detected token to match across all three arms of a replicate.
+If no diminishing-return boundary exists by 3.0M tokens, the replicate is recorded as `NO_SATURATION_REGIME`. No forced birth is allowed, and growth-utility claims are invalid for that matrix.
+
+The pre-birth trajectory is identical across paired arms by construction; aggregation requires both the detected token and all pre-birth PPL observations to match across the three arms of a replicate.
 
 ## WHERE — marginal-capacity score
 
@@ -137,9 +139,17 @@ A positive lower CI bound at age 1M is treated as strong evidence that the newbo
 
 ## Formal decisions
 
-### 1. Saturation regime
+### 1. Paired pre-birth equivalence
 
-All three paired replicates must detect the same saturation boundary across their three arms:
+For every replicate, all three arms must have matching evaluation token sets and numerically matching PPL values through the detected diminishing-return boundary:
+
+`CLM_PAIRED_PREBIRTH_EQUIVALENCE`
+
+A mismatch aborts formal aggregation rather than being interpreted as a growth effect.
+
+### 2. Saturation regime
+
+All three paired replicates must detect the same diminishing-return boundary across their three arms:
 
 `CLM_SATURATION_REGIME_ESTABLISHED`
 
@@ -147,13 +157,13 @@ Otherwise:
 
 `NO_SATURATION_REGIME`
 
-### 2. Growth equivalence
+### 3. Growth equivalence
 
 All six growth-arm births (marginal + random, 3 replicates each) must pass the existing exact birth gate:
 
 `CLM_GROWTH_EQUIVALENCE`
 
-### 3. Marginal growth viability
+### 4. Marginal growth viability
 
 All three marginal-growth newborns must, at age 1M:
 
@@ -163,7 +173,7 @@ All three marginal-growth newborns must, at age 1M:
 
 Causal sign is not used as a binary viability gate because 0.3 showed that a small validation sample can flip a near-zero merge-back estimate.
 
-### 4. Marginal growth utility
+### 5. Marginal growth utility
 
 For each replicate, compare final PPL at newborn age 1M against the paired fixed4 worker at the exact same global token count.
 
@@ -175,7 +185,9 @@ Signal requires at least 2/3 replicates:
 
 `CLM_MARGINAL_GROWTH_UTILITY_SIGNAL`
 
-### 5. Marginal selection
+This 0.5% improvement endpoint is unchanged by the 2.0% diminishing-return gate.
+
+### 6. Marginal selection
 
 Compare marginal growth directly against random growth at matched replicate and token count.
 
@@ -183,7 +195,7 @@ Signal requires marginal PPL < random PPL in at least 2/3 replicates:
 
 `CLM_MARGINAL_SELECTION_SIGNAL`
 
-### 6. Strong causal utility
+### 7. Strong causal utility
 
 At age 1M, the merge-back bootstrap 95% lower bound must be >0 in at least 2/3 marginal-growth replicates:
 
@@ -201,9 +213,11 @@ Every worker records:
 - schedule hash
 - validation schedule hash
 - replicate seed
-- all formal experiment parameters
+- all fixed formal experiment parameters encoded by the immutable training commit
 
 These semantics are stored in checkpoints. Resume rejects any mismatch. A bug fix that changes the code commit therefore requires a new formal run rather than silently continuing an old one.
+
+The publisher additionally requires all nine workers to report the same training commit and tree SHA before it will create a result branch.
 
 ## Out of scope
 
@@ -218,4 +232,4 @@ CLM-0.3b does not attempt:
 - sub-dense FLOP claims
 - full balance-mechanism research
 
-The next step after 0.3b depends on the result. Repeated growth should only resume after marginal utility is established under a saturated regime.
+The next step after 0.3b depends on the result. Repeated growth should only resume after marginal utility is established under a diminishing-return regime.
