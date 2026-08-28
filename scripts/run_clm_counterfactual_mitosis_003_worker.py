@@ -30,7 +30,6 @@ from minicells.growth_experiment_utils import (
     release_teacher,
     schedule_digest,
     seed_all,
-    validation_batches,
     validation_starts,
     value_digest,
 )
@@ -104,7 +103,23 @@ def _latest_trunk_checkpoint(output_dir: Path, code_commit: str, decision_tokens
     decision = output_dir / "decision-trunk.pt"
     if decision.exists() and _checkpoint_commit(decision) == code_commit:
         candidates.append((decision_tokens, decision))
-    return max(candidates, default=(None, None), key=lambda item: item[0])[1]
+    if not candidates:
+        return None
+    return max(candidates, key=lambda item: item[0])[1]
+
+
+def _batches_from_starts(
+    stream: torch.Tensor,
+    starts: tuple[int, ...],
+    *,
+    batch_size: int,
+    sequence_length: int,
+    device: torch.device,
+) -> list[tuple[torch.Tensor, torch.Tensor]]:
+    return [
+        batch_from_starts(stream, starts[index:index + batch_size], sequence_length, device)
+        for index in range(0, len(starts), batch_size)
+    ]
 
 
 def _batch_nlls(model: ProgressiveGrowthCLM, validation: list[tuple[torch.Tensor, torch.Tensor]]) -> list[float]:
@@ -209,20 +224,21 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
     seed = replicate_seed(args.replicate)
     seed_all(seed)
 
-    if args.decision_tokens % (args.batch_size * args.sequence_length) != 0:
+    tokens_per_step = args.batch_size * args.sequence_length
+    if args.decision_tokens % tokens_per_step != 0:
         raise ValueError("decision token boundary must align with a training step")
+    if args.probe_tokens % tokens_per_step != 0 or args.confirm_tokens % tokens_per_step != 0:
+        raise ValueError("probe/confirmation horizons must align with a training step")
     if args.probe_tokens <= 0 or args.confirm_tokens < args.probe_tokens:
         raise ValueError("probe/confirmation horizons are invalid")
 
     max_total = args.decision_tokens + args.confirm_tokens
+    holdout_targets = 2 * args.eval_batches * args.batch_size * (args.sequence_length + 1)
     train, validation_stream, _, corpus_manifest = prepare_scaling_corpus(
         Path("."),
         source_005_dir=args.source_005_dir,
         train_stream_tokens=max_total + args.sequence_length + 2,
-        validation_stream_tokens=max(
-            100_000,
-            args.eval_batches * args.batch_size * (args.sequence_length + 1),
-        ),
+        validation_stream_tokens=max(100_000, holdout_targets),
     )
     schedule = make_training_schedule(
         len(train),
@@ -231,18 +247,21 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         batch_size=args.batch_size,
         sequence_length=args.sequence_length,
     )
-    validation_schedule = validation_starts(
+    probe_validation_starts = validation_starts(
         eval_batches=args.eval_batches,
         batch_size=args.batch_size,
         sequence_length=args.sequence_length,
     )
+    holdout_offset = args.eval_batches * args.batch_size * (args.sequence_length + 1)
+    confirm_validation_starts = tuple(holdout_offset + value for value in probe_validation_starts)
     schedule_state: dict[str, object] = {
         "format": EXPERIMENT_FORMAT,
         **provenance,
         "replicate_seed": seed,
         "schedule_seed": seed,
         "schedule_sha256": schedule_digest(schedule.starts),
-        "validation_schedule_sha256": value_digest(validation_schedule),
+        "probe_validation_schedule_sha256": value_digest(probe_validation_starts),
+        "confirm_validation_schedule_sha256": value_digest(confirm_validation_starts),
         "tokens_per_step": schedule.tokens_per_step,
         "batch_size": args.batch_size,
         "sequence_length": args.sequence_length,
@@ -254,9 +273,26 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         "bootstrap_samples": args.bootstrap_samples,
         "balance_weight": 0.0,
     }
-    validation = validation_batches(
+    identity_path = args.output_dir / "run-provenance.json"
+    existing_identity = _json_read(identity_path, None)
+    formal_identity = {**schedule_state, "base_model_sha256": observed_hash}
+    if existing_identity is not None and existing_identity != formal_identity:
+        raise RuntimeError(
+            "existing CLM-0.3c evidence uses different code or formal semantics; "
+            "restart the replicate instead of mixing evidence"
+        )
+    _json_write(identity_path, formal_identity)
+
+    probe_validation = _batches_from_starts(
         validation_stream,
-        eval_batches=args.eval_batches,
+        probe_validation_starts,
+        batch_size=args.batch_size,
+        sequence_length=args.sequence_length,
+        device=device,
+    )
+    confirm_validation = _batches_from_starts(
+        validation_stream,
+        confirm_validation_starts,
         batch_size=args.batch_size,
         sequence_length=args.sequence_length,
         device=device,
@@ -271,7 +307,7 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         **schedule_state,
     })
 
-    # Phase 1: build or resume the common 1.5M decision trunk.
+    # Phase 1: build or resume the common decision trunk.
     trunk_path = args.output_dir / "decision-trunk.pt"
     latest = _latest_trunk_checkpoint(args.output_dir, code_commit, args.decision_tokens)
     model = ProgressiveGrowthCLM.from_clm01_release(str(args.release_dir), device=device)
@@ -316,7 +352,7 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             scheduler.step(step + 1)
             consumed = (step + 1) * schedule.tokens_per_step
             if consumed % EVAL_INTERVAL == 0:
-                losses = _batch_nlls(model, validation)
+                losses = _batch_nlls(model, probe_validation)
                 nll = sum(losses) / len(losses)
                 trunk_history = [row for row in trunk_history if int(row["tokens"]) != consumed]
                 trunk_history.append({"tokens": consumed, "nll": nll, "ppl": math.exp(nll)})
@@ -369,7 +405,7 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             reason="decision_trunk_normalized",
         )
 
-    # Reload the immutable trunk before calibration so previous resume paths do not matter.
+    # Reload the immutable trunk before calibration so resume history cannot perturb the scan.
     model, optimizer, scheduler, _ = _restore_branch(args.release_dir, trunk_path, device)
     calibration = [
         batch_from_starts(train, schedule.starts[index], schedule.sequence_length, device)
@@ -387,7 +423,7 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         "candidates": [_candidate_payload(item, rank) for rank, item in enumerate(candidates, start=1)],
     })
 
-    # Phase 2: common no-growth 100K probe.
+    # Phase 2: common no-growth 100K probe, evaluated only on holdout A.
     probe_step = decision_step + args.probe_tokens // schedule.tokens_per_step
     control_probe_path = args.output_dir / "probe-control.json"
     control_probe = _json_read(control_probe_path, None)
@@ -398,15 +434,17 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             start_step=decision_step, end_step=probe_step, device=device,
             telemetry=telemetry, phase="probe_no_growth",
         )
-        batch_losses = _batch_nlls(branch, validation)
+        batch_losses = _batch_nlls(branch, probe_validation)
         control_probe = {
+            "code_commit": code_commit,
+            "validation_schedule_sha256": schedule_state["probe_validation_schedule_sha256"],
             "batch_nlls": batch_losses,
             "nll": sum(batch_losses) / len(batch_losses),
             "ppl": math.exp(sum(batch_losses) / len(batch_losses)),
         }
         _json_write(control_probe_path, control_probe)
 
-    # Phase 3: probe every lineage from the same trunk. Each result is separately durable.
+    # Phase 3: probe every lineage from the same trunk. Each candidate is durable and replayable.
     probe_dir = args.output_dir / "probes"
     probe_dir.mkdir(parents=True, exist_ok=True)
     probe_rows: list[dict[str, object]] = []
@@ -415,6 +453,8 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         result_path = probe_dir / f"{candidate.expert_id}.json"
         existing = _json_read(result_path, None)
         if existing is not None:
+            if existing.get("code_commit") != code_commit:
+                raise RuntimeError(f"stale probe evidence for {candidate.expert_id}")
             probe_rows.append(existing["probe"])
             parity_rows.append(existing["parity"])
             continue
@@ -424,8 +464,8 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             parent_id=candidate.expert_id,
             routed_perceptions=perceptions[candidate.expert_id].to(device),
             token=args.decision_tokens,
-            validation_inputs=validation[0][0],
-            validation_targets=validation[0][1],
+            validation_inputs=probe_validation[0][0],
+            validation_targets=probe_validation[0][1],
             selection_method="counterfactual_probe",
             pressure={
                 "split_regret": candidate.split_regret,
@@ -441,7 +481,7 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             start_step=decision_step, end_step=probe_step, device=device,
             telemetry=telemetry, phase=f"probe_{candidate.expert_id}",
         )
-        batch_losses = _batch_nlls(branch, validation)
+        batch_losses = _batch_nlls(branch, probe_validation)
         utility = paired_bootstrap_utility(
             control_probe["batch_nlls"],
             batch_losses,
@@ -462,7 +502,13 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             "stage": candidate.stage,
             "parity": event["parity"],
         }
-        _json_write(result_path, {"probe": probe, "parity": parity, "birth": event})
+        _json_write(result_path, {
+            "code_commit": code_commit,
+            "probe_validation_schedule_sha256": schedule_state["probe_validation_schedule_sha256"],
+            "probe": probe,
+            "parity": parity,
+            "birth": event,
+        })
         probe_rows.append(probe)
         parity_rows.append(parity)
         telemetry.write({"type": "counterfactual_probe", **probe})
@@ -481,11 +527,12 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         "spearman_split_regret_vs_probe_utility": rho,
         "decision_tokens": args.decision_tokens,
         "probe_tokens": args.probe_tokens,
+        "probe_validation_schedule_sha256": schedule_state["probe_validation_schedule_sha256"],
     })
     _json_write(args.output_dir / "policy-decision.json", policy)
     telemetry.write({"type": "policy_decision", **policy})
 
-    # Phase 4: 500K confirmation of the probe-selected candidate and matched no-growth control.
+    # Phase 4: independent-holdout 500K confirmation from the original trunk.
     confirm_step = decision_step + args.confirm_tokens // schedule.tokens_per_step
     confirm_control_path = args.output_dir / "confirm-control.json"
     confirm_control = _json_read(confirm_control_path, None)
@@ -496,8 +543,10 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             start_step=decision_step, end_step=confirm_step, device=device,
             telemetry=telemetry, phase="confirm_no_growth",
         )
-        batch_losses = _batch_nlls(branch, validation)
+        batch_losses = _batch_nlls(branch, confirm_validation)
         confirm_control = {
+            "code_commit": code_commit,
+            "validation_schedule_sha256": schedule_state["confirm_validation_schedule_sha256"],
             "batch_nlls": batch_losses,
             "nll": sum(batch_losses) / len(batch_losses),
             "ppl": math.exp(sum(batch_losses) / len(batch_losses)),
@@ -515,8 +564,8 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             parent_id=selected.expert_id,
             routed_perceptions=perceptions[selected.expert_id].to(device),
             token=args.decision_tokens,
-            validation_inputs=validation[0][0],
-            validation_targets=validation[0][1],
+            validation_inputs=confirm_validation[0][0],
+            validation_targets=confirm_validation[0][1],
             selection_method="counterfactual_confirm",
             pressure={
                 "split_regret": selected.split_regret,
@@ -532,7 +581,7 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             start_step=decision_step, end_step=confirm_step, device=device,
             telemetry=telemetry, phase=f"confirm_{selected_id}",
         )
-        batch_losses = _batch_nlls(branch, validation)
+        batch_losses = _batch_nlls(branch, confirm_validation)
         utility = paired_bootstrap_utility(
             confirm_control["batch_nlls"],
             batch_losses,
@@ -540,6 +589,8 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             bootstrap_samples=args.bootstrap_samples,
         )
         confirm_candidate = {
+            "code_commit": code_commit,
+            "confirm_validation_schedule_sha256": schedule_state["confirm_validation_schedule_sha256"],
             "expert_id": selected_id,
             "stage": selected.stage,
             "analytic_rank": analytic_rank[selected_id],
@@ -552,6 +603,8 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             **utility.to_dict(),
         }
         _json_write(confirm_candidate_path, confirm_candidate)
+    elif confirm_candidate.get("code_commit") != code_commit:
+        raise RuntimeError("stale confirmation evidence from a different commit")
 
     action = str(policy["action"])
     calibrated = bool(
