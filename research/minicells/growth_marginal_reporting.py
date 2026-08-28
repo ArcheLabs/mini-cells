@@ -56,6 +56,27 @@ def _read_ppl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def _normalize_worker_rows(
+    rows: list[dict[str, Any]],
+    *,
+    replicate: int,
+    arm: str,
+) -> list[dict[str, Any]]:
+    """Assign inherited pre-birth rows to the worker that consumed the fork.
+
+    Growth workers can start from the canonical fixed4 saturation checkpoint and
+    intentionally inherit its exact PPL history. The raw inherited CSV rows keep
+    their original fixed4 label as provenance; formal aggregation normalizes the
+    logical arm here so paired histories and no-saturation outcomes remain
+    complete without synthesizing any metric values.
+    """
+
+    return [
+        {**row, "replicate": int(replicate), "arm": arm}
+        for row in rows
+    ]
+
+
 def _latest_age_diagnostic(rows: list[dict[str, Any]], age: int) -> dict[str, Any] | None:
     candidates = [row for row in rows if int(row.get("offset_tokens", -1)) == age]
     return candidates[-1] if candidates else None
@@ -198,7 +219,12 @@ def aggregate_marginal_results(
                 code_commits.add(str(complete["code_commit"]))
             if complete.get("code_tree_sha"):
                 code_trees.add(str(complete["code_tree_sha"]))
-            worker_rows[(replicate, arm)] = _read_ppl(directory / "ppl-history.csv")
+            raw_rows = _read_ppl(directory / "ppl-history.csv")
+            worker_rows[(replicate, arm)] = _normalize_worker_rows(
+                raw_rows,
+                replicate=replicate,
+                arm=arm,
+            )
             saturation[(replicate, arm)] = _read_json(directory / "saturation.json")
             if arm != "fixed4":
                 history = _read_json(directory / "growth-history.json")
