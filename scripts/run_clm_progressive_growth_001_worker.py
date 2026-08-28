@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import math
@@ -62,6 +63,53 @@ def seed_all(seed: int) -> None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+
+
+def _load_ppl_history(path: Path, *, through_tokens: int) -> list[dict[str, object]]:
+    if not path.exists():
+        return []
+    rows: list[dict[str, object]] = []
+    with path.open(newline="", encoding="utf-8") as handle:
+        for raw in csv.DictReader(handle):
+            tokens = int(raw["tokens"])
+            if tokens > through_tokens:
+                continue
+            row: dict[str, object] = dict(raw)
+            row["replicate"] = int(raw["replicate"])
+            row["tokens"] = tokens
+            for key in (
+                "ppl", "nll", "fixed4_ppl", "clm01_start_ppl", "textnca_frozen_ppl",
+                "ppl_vs_fixed4", "ppl_vs_clm01", "ppl_vs_textnca",
+            ):
+                value = raw.get(key, "")
+                row[key] = None if value in (None, "", "None", "nan", "NaN") else float(value)
+            rows.append(row)
+    return rows
+
+
+def _load_diagnostics(
+    path: Path,
+    *,
+    through_tokens: int,
+    growth_history: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    if not path.exists():
+        return []
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    birth_tokens = {int(event["birth_index"]): int(event["token"]) for event in growth_history}
+    rows = []
+    for item in raw:
+        birth_index = int(item["birth_index"])
+        birth_token = birth_tokens.get(birth_index)
+        if birth_token is None:
+            continue
+        if birth_token + int(item.get("offset_tokens", 0)) <= through_tokens:
+            rows.append(item)
+    return rows
+
+
+def _persist_diagnostics(path: Path, rows: list[dict[str, object]]) -> None:
+    path.write_text(json.dumps(rows, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 class Telemetry:
@@ -163,11 +211,8 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         ),
     )
     schedule = make_training_schedule(
-        len(train),
-        seed=seed,
-        budget_tokens=args.target_tokens,
-        batch_size=args.batch_size,
-        sequence_length=args.sequence_length,
+        len(train), seed=seed, budget_tokens=args.target_tokens,
+        batch_size=args.batch_size, sequence_length=args.sequence_length,
     )
     digest = schedule_digest(schedule.starts)
     validation_schedule = validation_starts(args)
@@ -187,14 +232,11 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
     lr = lambda step: 3e-4 * min(1.0, (step + 1) / 100.0)
     scheduler = GlobalLRScheduler(optimizer, lr)
 
-    # Construct frozen reference models before restoring RNG from a resume
-    # checkpoint. Model constructors may consume RNG while allocating their
-    # initial parameters; exact resume requires those allocations not to happen
-    # after RNG restoration.
+    # Construct frozen references before restoring checkpoint RNG. Their model
+    # constructors may consume RNG while allocating initial parameters.
     fixed_teacher = release_teacher(args.release_dir, device)
     textnca = load_experiment_006_teacher(
-        str(args.textnca_checkpoint),
-        device=device,
+        str(args.textnca_checkpoint), device=device,
         model_config_path=str(args.textnca_config),
     )
 
@@ -202,10 +244,7 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
     start_step = 0
     if args.resume_input:
         model, payload = load_growth_checkpoint(
-            args.resume_input,
-            model=model,
-            optimizer=optimizer,
-            scheduler=scheduler,
+            args.resume_input, model=model, optimizer=optimizer, scheduler=scheduler,
             map_location=device,
         )
         consumed = int(payload["consumed_tokens"])
@@ -214,26 +253,36 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         for key, expected in schedule_state.items():
             observed = saved_state.get(key)
             if observed is not None and observed != expected:
-                raise RuntimeError(f"resume data schedule mismatch for {key}: {observed!r} != {expected!r}")
+                raise RuntimeError(
+                    f"resume data schedule mismatch for {key}: {observed!r} != {expected!r}"
+                )
 
     validation = validation_batches(validation_stream, args, device)
     clm01_ppl = math.exp(evaluate_nll(fixed_teacher, validation))
     textnca_ppl = math.exp(evaluate_nll(textnca, validation))
     telemetry.write({
-        "type": "worker_started",
-        "consumed_tokens": consumed,
-        "target_tokens": target,
-        "base_model_sha256": observed_hash,
-        "replicate_seed": seed,
+        "type": "worker_started", "consumed_tokens": consumed, "target_tokens": target,
+        "base_model_sha256": observed_hash, "replicate_seed": seed,
         "schedule_sha256": digest,
         "validation_schedule_sha256": schedule_state["validation_schedule_sha256"],
         "corpus_manifest": corpus_manifest,
     })
 
-    rows: list[dict[str, object]] = []
-    diagnostics: list[dict[str, object]] = []
+    evidence_source = args.resume_input.parent if args.resume_input else args.output_dir
+    rows = _load_ppl_history(evidence_source / "ppl-history.csv", through_tokens=consumed)
+    diagnostics = _load_diagnostics(
+        evidence_source / "newborn-diagnostics.json",
+        through_tokens=consumed,
+        growth_history=model.growth_history,
+    )
+    # When resuming into a new output directory, seed it with the evidence that
+    # is valid at the checkpoint boundary.
+    write_ppl_history(args.output_dir / "ppl-history.csv", rows)
+    write_growth_history(args.output_dir / "growth-history.json", model.growth_history)
+    _persist_diagnostics(args.output_dir / "newborn-diagnostics.json", diagnostics)
+
     started = time.time()
-    latest_ppl: float | None = None
+    latest_ppl = float(rows[-1]["ppl"]) if rows else None
 
     for step in range(start_step, schedule.steps):
         if consumed >= target:
@@ -255,8 +304,7 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
                 else select_random_parent(candidates, seed=seed + birth_index)
             )
             telemetry.write({
-                "type": "pressure_scan",
-                "birth_index": birth_index,
+                "type": "pressure_scan", "birth_index": birth_index,
                 "scheduled_token": scheduled_token,
                 "candidates": [
                     {"rank": rank, **item.to_row()}
@@ -265,23 +313,14 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
                 "selected_expert": parent.expert_id,
             })
             checkpoint(
-                args.output_dir / f"before-birth-{birth_index}.pt",
-                model,
-                optimizer,
-                scheduler,
-                consumed,
-                step,
-                schedule_state,
-                telemetry=telemetry,
+                args.output_dir / f"before-birth-{birth_index}.pt", model, optimizer,
+                scheduler, consumed, step, schedule_state, telemetry=telemetry,
                 reason=f"before_birth_{birth_index}",
             )
             event = model.birth(
-                stage=parent.stage,
-                parent_id=parent.expert_id,
-                routed_perceptions=perceptions[parent.expert_id].to(device),
-                token=consumed,
-                validation_inputs=validation[0][0],
-                validation_targets=validation[0][1],
+                stage=parent.stage, parent_id=parent.expert_id,
+                routed_perceptions=perceptions[parent.expert_id].to(device), token=consumed,
+                validation_inputs=validation[0][0], validation_targets=validation[0][1],
                 selection_method="pressure" if args.arm == "pressure_growth" else "random",
                 pressure={
                     "usage": parent.usage,
@@ -291,35 +330,23 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
                 optimizer=optimizer,
             )
             telemetry.write({
-                "type": "birth",
-                "birth_index": birth_index,
-                "scheduled_token": scheduled_token,
-                "actual_token": consumed,
-                "stage": parent.stage,
-                "parent": parent.expert_id,
-                "child": event["child"],
-                "parity": event["parity"],
-                "parity_status": event["parity"]["status"],
+                "type": "birth", "birth_index": birth_index,
+                "scheduled_token": scheduled_token, "actual_token": consumed,
+                "stage": parent.stage, "parent": parent.expert_id, "child": event["child"],
+                "parity": event["parity"], "parity_status": event["parity"]["status"],
             })
+            write_growth_history(args.output_dir / "growth-history.json", model.growth_history)
             checkpoint(
-                args.output_dir / f"after-birth-{birth_index}.pt",
-                model,
-                optimizer,
-                scheduler,
-                consumed,
-                step,
-                schedule_state,
-                telemetry=telemetry,
+                args.output_dir / f"after-birth-{birth_index}.pt", model, optimizer,
+                scheduler, consumed, step, schedule_state, telemetry=telemetry,
                 reason=f"after_birth_{birth_index}",
             )
             diag = newborn_causal_diagnostics(
-                model,
-                validation,
-                stage=parent.stage,
-                parent_id=parent.expert_id,
-                child_id=event["child"],
+                model, validation, stage=parent.stage,
+                parent_id=parent.expert_id, child_id=event["child"],
             )
             diagnostics.append({"birth_index": birth_index, "offset_tokens": 0, **diag})
+            _persist_diagnostics(args.output_dir / "newborn-diagnostics.json", diagnostics)
             telemetry.write({"type": "newborn_diagnostic", **diagnostics[-1]})
 
         inputs, targets = batch_from_starts(
@@ -340,55 +367,43 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
             nll = evaluate_nll(model, validation)
             ppl = math.exp(nll)
             latest_ppl = ppl
-            # A worker does not know the matched continued fixed-4 denominator.
-            # It records the two frozen sentinels here; ppl_vs_fixed4 is filled
-            # only by the 3x3 formal aggregator after all paired workers finish.
             row = make_ppl_row(
-                replicate=args.replicate,
-                arm=args.arm,
-                tokens=consumed,
-                phase=phase_for_tokens(consumed),
-                ppl=ppl,
-                nll=nll,
-                fixed4_ppl=clm01_ppl,
-                clm01_start_ppl=clm01_ppl,
+                replicate=args.replicate, arm=args.arm, tokens=consumed,
+                phase=phase_for_tokens(consumed), ppl=ppl, nll=nll,
+                fixed4_ppl=clm01_ppl, clm01_start_ppl=clm01_ppl,
                 textnca_frozen_ppl=textnca_ppl,
             )
+            # The matched continued fixed-4 denominator is intentionally unknown
+            # to a single worker. Only the 3x3 aggregator may fill these fields.
             row["fixed4_ppl"] = None
             row["ppl_vs_fixed4"] = None
             row["clm01_start_ppl"] = clm01_ppl
             row["textnca_frozen_ppl"] = textnca_ppl
+            rows = [existing for existing in rows if int(existing["tokens"]) != consumed]
             rows.append(row)
+            rows.sort(key=lambda item: int(item["tokens"]))
+            write_ppl_history(args.output_dir / "ppl-history.csv", rows)
             telemetry.write({
-                "type": "evaluation",
-                **row,
-                "raw_model_ppl": ppl,
-                "clm01_start_ppl": clm01_ppl,
-                "textnca_frozen_ppl": textnca_ppl,
+                "type": "evaluation", **row, "raw_model_ppl": ppl,
+                "clm01_start_ppl": clm01_ppl, "textnca_frozen_ppl": textnca_ppl,
             })
             checkpoint(
-                args.output_dir / f"checkpoint-{consumed}.pt",
-                model,
-                optimizer,
-                scheduler,
-                consumed,
-                step + 1,
-                schedule_state,
-                telemetry=telemetry,
-                reason="evaluation",
+                args.output_dir / f"checkpoint-{consumed}.pt", model, optimizer,
+                scheduler, consumed, step + 1, schedule_state,
+                telemetry=telemetry, reason="evaluation",
             )
 
         if consumed % PROGRESS_INTERVAL == 0 or consumed >= target:
             elapsed = max(time.time() - started, 1e-9)
             telemetry.write({
-                "type": "training_progress",
-                "consumed_tokens": consumed,
-                "target_tokens": target,
-                "phase": phase_for_tokens(consumed),
+                "type": "training_progress", "consumed_tokens": consumed,
+                "target_tokens": target, "phase": phase_for_tokens(consumed),
                 "train_loss": float(loss.detach()),
                 "lr": scheduler.optimizer.param_groups[0]["lr"],
                 "ppl": latest_ppl,
-                "tokens_per_second": (consumed - start_step * schedule.tokens_per_step) / elapsed,
+                "tokens_per_second": (
+                    consumed - start_step * schedule.tokens_per_step
+                ) / elapsed,
                 "peak_vram_bytes": (
                     torch.cuda.max_memory_allocated(device) if device.type == "cuda" else 0
                 ),
@@ -397,46 +412,32 @@ def run(args: argparse.Namespace, telemetry: Telemetry, observed_hash: str) -> i
         for event in model.growth_history:
             offset = consumed - int(event["token"])
             already_recorded = any(
-                d["birth_index"] == event["birth_index"] and d["offset_tokens"] == offset
+                int(d["birth_index"]) == int(event["birth_index"])
+                and int(d["offset_tokens"]) == offset
                 for d in diagnostics
             )
             if offset in (100_000, 250_000) or (consumed >= target and not already_recorded):
                 diag = newborn_causal_diagnostics(
-                    model,
-                    validation,
-                    stage=int(event["stage"]),
-                    parent_id=str(event["parent"]),
-                    child_id=str(event["child"]),
+                    model, validation, stage=int(event["stage"]),
+                    parent_id=str(event["parent"]), child_id=str(event["child"]),
                 )
                 diagnostics.append({
-                    "birth_index": event["birth_index"],
-                    "offset_tokens": offset,
-                    **diag,
+                    "birth_index": event["birth_index"], "offset_tokens": offset, **diag,
                 })
+                _persist_diagnostics(args.output_dir / "newborn-diagnostics.json", diagnostics)
                 telemetry.write({"type": "newborn_diagnostic", **diagnostics[-1]})
 
     write_ppl_history(args.output_dir / "ppl-history.csv", rows)
     write_growth_history(args.output_dir / "growth-history.json", model.growth_history)
-    args.output_dir.joinpath("newborn-diagnostics.json").write_text(
-        json.dumps(diagnostics, indent=2) + "\n", encoding="utf-8"
-    )
+    _persist_diagnostics(args.output_dir / "newborn-diagnostics.json", diagnostics)
     checkpoint(
-        args.output_dir / "final.pt",
-        model,
-        optimizer,
-        scheduler,
-        consumed,
-        consumed // schedule.tokens_per_step,
-        schedule_state,
-        telemetry=telemetry,
-        reason="final",
+        args.output_dir / "final.pt", model, optimizer, scheduler, consumed,
+        consumed // schedule.tokens_per_step, schedule_state,
+        telemetry=telemetry, reason="final",
     )
     telemetry.write({
-        "type": "worker_complete",
-        "consumed_tokens": consumed,
-        "target_tokens": target,
-        "completed_births": len(model.growth_history),
-        "base_model_sha256": observed_hash,
+        "type": "worker_complete", "consumed_tokens": consumed, "target_tokens": target,
+        "completed_births": len(model.growth_history), "base_model_sha256": observed_hash,
     })
     return 0
 
@@ -448,28 +449,19 @@ def main() -> int:
     try:
         if not args.execute:
             telemetry.write({
-                "type": "worker_started",
-                "consumed_tokens": 0,
-                "target_tokens": args.target_tokens,
-                "base_model_sha256": observed,
+                "type": "worker_started", "consumed_tokens": 0,
+                "target_tokens": args.target_tokens, "base_model_sha256": observed,
                 "mode": "preflight_only",
             })
             telemetry.write({
-                "type": "training_progress",
-                "consumed_tokens": 0,
-                "target_tokens": args.target_tokens,
-                "phase": "preflight_only",
-                "train_loss": None,
-                "lr": None,
-                "ppl": None,
-                "tokens_per_second": 0.0,
-                "peak_vram_bytes": 0,
+                "type": "training_progress", "consumed_tokens": 0,
+                "target_tokens": args.target_tokens, "phase": "preflight_only",
+                "train_loss": None, "lr": None, "ppl": None,
+                "tokens_per_second": 0.0, "peak_vram_bytes": 0,
             })
             telemetry.write({
-                "type": "worker_complete",
-                "consumed_tokens": 0,
-                "target_tokens": args.target_tokens,
-                "mode": "preflight_only",
+                "type": "worker_complete", "consumed_tokens": 0,
+                "target_tokens": args.target_tokens, "mode": "preflight_only",
             })
             return 0
         return run(args, telemetry, observed)
