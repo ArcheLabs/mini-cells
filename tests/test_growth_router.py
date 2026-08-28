@@ -44,24 +44,28 @@ def test_binary_router_is_pointwise() -> None:
 
 def test_dynamic_split_inherits_root_router_device_and_dtype() -> None:
     # float64 catches placement drift even on CPU; CUDA additionally exercises
-    # the exact failure mode seen in the formal Kaggle birth.
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    router = _router().to(device=device, dtype=torch.float64)
+    # the exact failure mode seen in the formal Kaggle birth. Compare against
+    # the root router's resolved device (e.g. cuda:0), not the unresolved
+    # torch.device("cuda") specification.
+    requested_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    router = _router().to(device=requested_device, dtype=torch.float64)
+    expected_device = next(router.root_router.parameters()).device
     prototypes = torch.tensor(
         [[1.0] + [0.0] * 7, [-1.0] + [0.0] * 7],
-        device=device,
+        device=expected_device,
         dtype=torch.float64,
     )
     split = router.add_split("s0-e2", "s0-e4", "s0-split0", prototypes)
-    assert split.prototypes.device == device
+    assert split.prototypes.device == expected_device
     assert split.prototypes.dtype == torch.float64
-    perception = torch.randn(2, 5, 8, device=device, dtype=torch.float64)
+    perception = torch.randn(2, 5, 8, device=expected_device, dtype=torch.float64)
     router.route_with_details(perception)
 
     structure = router.structure()
-    restored = _router().to(device=device, dtype=torch.float64)
+    restored = _router().to(device=requested_device, dtype=torch.float64)
+    restored_device = next(restored.root_router.parameters()).device
     restored.restore_structure(structure)
     restored_split = restored.split_routers["s0-split0"]
-    assert restored_split.prototypes.device == device
+    assert restored_split.prototypes.device == restored_device
     assert restored_split.prototypes.dtype == torch.float64
-    restored.route_with_details(perception)
+    restored.route_with_details(perception.to(restored_device))
