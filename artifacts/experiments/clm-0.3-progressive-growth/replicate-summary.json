@@ -1,0 +1,461 @@
+[
+  {
+    "arm": "fixed4",
+    "birth_evidence": [],
+    "equivalent_births": 0,
+    "fixed4_ppl": 14.893034429959057,
+    "ppl": 14.893034429959057,
+    "ppl_vs_clm01": 0.9547334770432551,
+    "ppl_vs_fixed4": 1.0,
+    "ppl_vs_textnca": 0.9171516704497179,
+    "replicate": 0,
+    "tokens": 1500000,
+    "viable": true
+  },
+  {
+    "arm": "pressure_growth",
+    "birth_evidence": [
+      {
+        "birth_index": 1,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s2-e4",
+        "latest_diagnostic": {
+          "birth_index": 1,
+          "causal_merge_back_penalty": 0.0013951122416927461,
+          "child_usage": 0.1172500029206276,
+          "cosine_similarity": 0.9813231229782104,
+          "nll_dynamic": 2.6995930786132813,
+          "nll_mergeback": 2.7033593139648437,
+          "offset_tokens": 1000000,
+          "parent_usage": 0.11575000733137131,
+          "relative_l2": 0.1931290179491043,
+          "router_logit_variance": 0.3046417534351349,
+          "split_entropy": 0.6874858438968658
+        },
+        "parent": "s2-e3",
+        "stage": 2,
+        "viable": true
+      },
+      {
+        "birth_index": 2,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s1-e4",
+        "latest_diagnostic": {
+          "birth_index": 2,
+          "causal_merge_back_penalty": 0.002098004091464031,
+          "child_usage": 0.14625000953674316,
+          "cosine_similarity": 0.9897843599319458,
+          "nll_dynamic": 2.6995930786132813,
+          "nll_mergeback": 2.7052568359375,
+          "offset_tokens": 500000,
+          "parent_usage": 0.09550000727176666,
+          "relative_l2": 0.14302045106887817,
+          "router_logit_variance": 0.3085898160934448,
+          "split_entropy": 0.6863138228654861
+        },
+        "parent": "s1-e0",
+        "stage": 1,
+        "viable": true
+      }
+    ],
+    "equivalent_births": 2,
+    "fixed4_ppl": 14.893034429959057,
+    "ppl": 14.873678075568565,
+    "ppl_vs_clm01": 0.9534926177934476,
+    "ppl_vs_fixed4": 0.9987003082225101,
+    "ppl_vs_textnca": 0.9159596559649233,
+    "replicate": 0,
+    "tokens": 1500000,
+    "viable": true
+  },
+  {
+    "arm": "random_growth",
+    "birth_evidence": [
+      {
+        "birth_index": 1,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s0-e4",
+        "latest_diagnostic": {
+          "birth_index": 1,
+          "causal_merge_back_penalty": 0.002519493774973746,
+          "child_usage": 0.13600000739097595,
+          "cosine_similarity": 0.9813803434371948,
+          "nll_dynamic": 2.6982474975585937,
+          "nll_mergeback": 2.705045715332031,
+          "offset_tokens": 1000000,
+          "parent_usage": 0.14475001394748688,
+          "relative_l2": 0.19285421073436737,
+          "router_logit_variance": 0.3203393816947937,
+          "split_entropy": 0.6504049152135849
+        },
+        "parent": "s0-e3",
+        "stage": 0,
+        "viable": true
+      },
+      {
+        "birth_index": 2,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s1-e4",
+        "latest_diagnostic": {
+          "birth_index": 2,
+          "causal_merge_back_penalty": 0.0027261301761372266,
+          "child_usage": 0.13625000417232513,
+          "cosine_similarity": 0.9894001483917236,
+          "nll_dynamic": 2.6982474975585937,
+          "nll_mergeback": 2.705603271484375,
+          "offset_tokens": 500000,
+          "parent_usage": 0.1210000067949295,
+          "relative_l2": 0.14567366242408752,
+          "router_logit_variance": 0.37853407859802246,
+          "split_entropy": 0.6927605867385864
+        },
+        "parent": "s1-e0",
+        "stage": 1,
+        "viable": true
+      }
+    ],
+    "equivalent_births": 2,
+    "fixed4_ppl": 14.893034429959057,
+    "ppl": 14.853677795153454,
+    "ppl_vs_clm01": 0.9522104789954503,
+    "ppl_vs_fixed4": 0.9973573797206543,
+    "ppl_vs_textnca": 0.9147279868461518,
+    "replicate": 0,
+    "tokens": 1500000,
+    "viable": true
+  },
+  {
+    "arm": "fixed4",
+    "birth_evidence": [],
+    "equivalent_births": 0,
+    "fixed4_ppl": 14.766184296226815,
+    "ppl": 14.766184296226815,
+    "ppl_vs_clm01": 0.9466016171586125,
+    "ppl_vs_fixed4": 1.0,
+    "ppl_vs_textnca": 0.9093399103549945,
+    "replicate": 1,
+    "tokens": 1500000,
+    "viable": true
+  },
+  {
+    "arm": "pressure_growth",
+    "birth_evidence": [
+      {
+        "birth_index": 1,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s1-e4",
+        "latest_diagnostic": {
+          "birth_index": 1,
+          "causal_merge_back_penalty": 0.00016694579404769055,
+          "child_usage": 0.11750000715255737,
+          "cosine_similarity": 0.9801307916641235,
+          "nll_dynamic": 2.6915372314453125,
+          "nll_mergeback": 2.691986572265625,
+          "offset_tokens": 1000000,
+          "parent_usage": 0.08775000274181366,
+          "relative_l2": 0.1989438682794571,
+          "router_logit_variance": 0.28930994868278503,
+          "split_entropy": 0.6865087896585464
+        },
+        "parent": "s1-e1",
+        "stage": 1,
+        "viable": true
+      },
+      {
+        "birth_index": 2,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s1-e5",
+        "latest_diagnostic": {
+          "birth_index": 2,
+          "causal_merge_back_penalty": 0.0009610608119443666,
+          "child_usage": 0.12200000882148743,
+          "cosine_similarity": 0.9891806244850159,
+          "nll_dynamic": 2.6915372314453125,
+          "nll_mergeback": 2.694123962402344,
+          "offset_tokens": 500000,
+          "parent_usage": 0.14150001108646393,
+          "relative_l2": 0.14691221714019775,
+          "router_logit_variance": 0.3189811110496521,
+          "split_entropy": 0.6915578842163086
+        },
+        "parent": "s1-e0",
+        "stage": 1,
+        "viable": true
+      }
+    ],
+    "equivalent_births": 2,
+    "fixed4_ppl": 14.766184296226815,
+    "ppl": 14.754339330900281,
+    "ppl_vs_clm01": 0.9458422833247425,
+    "ppl_vs_fixed4": 0.9991978316747977,
+    "ppl_vs_textnca": 0.9086104666820655,
+    "replicate": 1,
+    "tokens": 1500000,
+    "viable": true
+  },
+  {
+    "arm": "random_growth",
+    "birth_evidence": [
+      {
+        "birth_index": 1,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": false,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s0-e4",
+        "latest_diagnostic": {
+          "birth_index": 1,
+          "causal_merge_back_penalty": -0.00016699708486544535,
+          "child_usage": 0.0860000029206276,
+          "cosine_similarity": 0.9852340817451477,
+          "nll_dynamic": 2.6910760498046873,
+          "nll_mergeback": 2.6906266479492187,
+          "offset_tokens": 1000000,
+          "parent_usage": 0.10100000351667404,
+          "relative_l2": 0.1714702546596527,
+          "router_logit_variance": 0.4071650505065918,
+          "split_entropy": 0.684802234172821
+        },
+        "parent": "s0-e2",
+        "stage": 0,
+        "viable": false
+      },
+      {
+        "birth_index": 2,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s0-e5",
+        "latest_diagnostic": {
+          "birth_index": 2,
+          "causal_merge_back_penalty": 0.0013105517526529604,
+          "child_usage": 0.0637500062584877,
+          "cosine_similarity": 0.9924476146697998,
+          "nll_dynamic": 2.6910760498046873,
+          "nll_mergeback": 2.6946028442382812,
+          "offset_tokens": 500000,
+          "parent_usage": 0.0860000029206276,
+          "relative_l2": 0.12302612513303757,
+          "router_logit_variance": 0.3785305917263031,
+          "split_entropy": 0.6902665346860886
+        },
+        "parent": "s0-e4",
+        "stage": 0,
+        "viable": true
+      }
+    ],
+    "equivalent_births": 2,
+    "fixed4_ppl": 14.766184296226815,
+    "ppl": 14.74753646927933,
+    "ppl_vs_clm01": 0.9454061787981761,
+    "ppl_vs_fixed4": 0.9987371262220904,
+    "ppl_vs_textnca": 0.9081915288270006,
+    "replicate": 1,
+    "tokens": 1500000,
+    "viable": false
+  },
+  {
+    "arm": "fixed4",
+    "birth_evidence": [],
+    "equivalent_births": 0,
+    "fixed4_ppl": 14.981118618212166,
+    "ppl": 14.981118618212166,
+    "ppl_vs_clm01": 0.960380205634324,
+    "ppl_vs_fixed4": 1.0,
+    "ppl_vs_textnca": 0.9225761231209637,
+    "replicate": 2,
+    "tokens": 1500000,
+    "viable": true
+  },
+  {
+    "arm": "pressure_growth",
+    "birth_evidence": [
+      {
+        "birth_index": 1,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s1-e4",
+        "latest_diagnostic": {
+          "birth_index": 1,
+          "causal_merge_back_penalty": 0.002373534886434544,
+          "child_usage": 0.1290000081062317,
+          "cosine_similarity": 0.9791909456253052,
+          "nll_dynamic": 2.7064650268554686,
+          "nll_mergeback": 2.712888916015625,
+          "offset_tokens": 1000000,
+          "parent_usage": 0.11225000768899918,
+          "relative_l2": 0.2044578194618225,
+          "router_logit_variance": 0.3654656410217285,
+          "split_entropy": 0.6895262748003006
+        },
+        "parent": "s1-e1",
+        "stage": 1,
+        "viable": true
+      },
+      {
+        "birth_index": 2,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": false,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s1-e5",
+        "latest_diagnostic": {
+          "birth_index": 2,
+          "causal_merge_back_penalty": -0.001005283324616702,
+          "child_usage": 0.10175000131130219,
+          "cosine_similarity": 0.9895198941230774,
+          "nll_dynamic": 2.7064650268554686,
+          "nll_mergeback": 2.7037442626953125,
+          "offset_tokens": 500000,
+          "parent_usage": 0.1210000067949295,
+          "relative_l2": 0.14439967274665833,
+          "router_logit_variance": 0.29467564821243286,
+          "split_entropy": 0.6737165302038193
+        },
+        "parent": "s1-e0",
+        "stage": 1,
+        "viable": false
+      }
+    ],
+    "equivalent_births": 2,
+    "fixed4_ppl": 14.981118618212166,
+    "ppl": 14.976241222175293,
+    "ppl_vs_clm01": 0.9600675350835978,
+    "ppl_vs_fixed4": 0.9996744304506778,
+    "ppl_vs_textnca": 0.9222757604283438,
+    "replicate": 2,
+    "tokens": 1500000,
+    "viable": false
+  },
+  {
+    "arm": "random_growth",
+    "birth_evidence": [
+      {
+        "birth_index": 1,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": false,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s0-e4",
+        "latest_diagnostic": {
+          "birth_index": 1,
+          "causal_merge_back_penalty": -0.00033958947646030855,
+          "child_usage": 0.16875000298023224,
+          "cosine_similarity": 0.9817085266113281,
+          "nll_dynamic": 2.7067666015625,
+          "nll_mergeback": 2.705847412109375,
+          "offset_tokens": 1000000,
+          "parent_usage": 0.11150000244379044,
+          "relative_l2": 0.19125911593437195,
+          "router_logit_variance": 0.25940918922424316,
+          "split_entropy": 0.5671728402376175
+        },
+        "parent": "s0-e3",
+        "stage": 0,
+        "viable": false
+      },
+      {
+        "birth_index": 2,
+        "checks": {
+          "child_received_traffic": true,
+          "equivalent": true,
+          "has_final_diagnostic": true,
+          "mergeback_nonnegative": true,
+          "parameters_differentiated": true,
+          "split_noncollapsed": true
+        },
+        "child": "s0-e5",
+        "latest_diagnostic": {
+          "birth_index": 2,
+          "causal_merge_back_penalty": 0.0014543719822536672,
+          "child_usage": 0.11225000768899918,
+          "cosine_similarity": 0.9910798668861389,
+          "nll_dynamic": 2.7067666015625,
+          "nll_mergeback": 2.7107032470703123,
+          "offset_tokens": 500000,
+          "parent_usage": 0.09550000727176666,
+          "relative_l2": 0.13343867659568787,
+          "router_logit_variance": 0.28347909450531006,
+          "split_entropy": 0.6424238681793213
+        },
+        "parent": "s0-e2",
+        "stage": 0,
+        "viable": true
+      }
+    ],
+    "equivalent_births": 2,
+    "fixed4_ppl": 14.981118618212166,
+    "ppl": 14.980758358827144,
+    "ppl_vs_clm01": 0.9603571108313866,
+    "ppl_vs_fixed4": 0.9999759524375847,
+    "ppl_vs_textnca": 0.9225539374140601,
+    "replicate": 2,
+    "tokens": 1500000,
+    "viable": false
+  }
+]
