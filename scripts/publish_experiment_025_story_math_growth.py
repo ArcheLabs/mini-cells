@@ -10,7 +10,7 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
-from publish_experiment_results import DEFAULT_SECRET_NAME, push_results, repo_root, run_git
+from publish_experiment_results import DEFAULT_SECRET_NAME, push_results, repo_root
 
 
 SOURCE_DIR = Path("results/experiment-025-story-math-growth")
@@ -19,6 +19,7 @@ DEFAULT_BRANCH = "kaggle/experiment-025-story-math-growth-results"
 EXPECTED_FORMAT = "minicells.story-math-shift-30m.v1"
 
 TOP_LEVEL = (
+    "protocol.json",
     "decision.json",
     "run-provenance.json",
     "worker-summary.json",
@@ -63,13 +64,21 @@ def main() -> int:
     if not source.is_dir():
         raise FileNotFoundError(source)
     missing = [source / name for name in TOP_LEVEL if not (source / name).is_file()]
-    missing.extend(source / arm / name for arm, name, _ in ARM_FILES if not (source / arm / name).is_file())
+    missing.extend(
+        source / arm / name
+        for arm, name, _ in ARM_FILES
+        if not (source / arm / name).is_file()
+    )
     if missing:
-        raise FileNotFoundError(f"missing Experiment-025 outputs: {[str(path) for path in missing]}")
+        raise FileNotFoundError(
+            f"missing Experiment-025 outputs: {[str(path) for path in missing]}"
+        )
 
     decision = json.loads((source / "decision.json").read_text(encoding="utf-8"))
     if decision.get("format") != EXPECTED_FORMAT:
-        raise RuntimeError(f"unexpected Experiment-025 decision format: {decision.get('format')!r}")
+        raise RuntimeError(
+            f"unexpected Experiment-025 decision format: {decision.get('format')!r}"
+        )
     workers = json.loads((source / "worker-summary.json").read_text(encoding="utf-8"))
     if workers.get("complete") is not True:
         raise RuntimeError("refusing publication: both Experiment-025 arms must be complete")
@@ -125,7 +134,7 @@ def main() -> int:
         f"- Persistent promotions: `{decision.get('growth', {}).get('promotions')}`\n"
         "- Main comparison: fixed 30M Transformer LLM vs growing 30M-source CLM.\n"
         "- Math scope: held-out synthetic integer arithmetic, not general mathematical reasoning.\n\n"
-        "See `decision.json` for the preregistered crossover definition and machine-readable result.\n",
+        "See `protocol.json` for the frozen preregistration and `decision.json` for the machine-readable result.\n",
         encoding="utf-8",
     )
 
