@@ -83,13 +83,18 @@ def test_formal_decision_requires_paired_utility_and_selector_wins() -> None:
     decision = marginal_growth_decision(
         summaries,
         saturation_replicates=3,
+        paired_prebirth_replicates=3,
         equivalent_growth_births=6,
         viable_marginal_births=3,
         causal_positive_ci_replicates=2,
         formal_gpu_experiment_run=True,
+        training_code_commit="abc",
+        training_code_tree_sha="def",
     )
+    assert decision["paired_prebirth"]["status"] == "CLM_PAIRED_PREBIRTH_EQUIVALENCE"
     assert decision["saturation_regime"]["status"] == "CLM_SATURATION_REGIME_ESTABLISHED"
     assert decision["growth_equivalence"]["status"] == "CLM_GROWTH_EQUIVALENCE"
     assert decision["marginal_growth_utility"]["status"] == "CLM_MARGINAL_GROWTH_UTILITY_SIGNAL"
     assert decision["marginal_selection"]["status"] == "CLM_MARGINAL_SELECTION_SIGNAL"
     assert decision["causal_utility"]["status"] == "CLM_NEWBORN_CAUSAL_UTILITY_SIGNAL"
+    assert decision["training_code_commit"] == "abc"
