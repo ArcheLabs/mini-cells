@@ -205,7 +205,7 @@ fn run_persistent_pvm(
     let mut harness = DirectPvmHarness::load(
         "service/artifacts/service.blob",
         1_000_000_000,
-        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "2288a030587be4e201bdefa9806476dc3d891bca",
         "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     harness.execute_accumulate()?;
@@ -766,7 +766,7 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "0b352d42726c548e932f81138c8dff7bc9b5a786",
+            "2288a030587be4e201bdefa9806476dc3d891bca",
             "788bc054223f81282e4d88a83f05f2fe9e94c121",
         )?;
         let ex = h.execute_refine_measured(&payload)?;
@@ -794,7 +794,7 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
     let mut h = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "2288a030587be4e201bdefa9806476dc3d891bca",
         "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     let final_ex = h.execute_refine_measured(&final_payload)?;
@@ -828,7 +828,7 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
     let mut wh = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "2288a030587be4e201bdefa9806476dc3d891bca",
         "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     let worst_ex = wh.execute_refine_measured(&worst_payload)?;
@@ -934,7 +934,7 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
     let mut harness = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "2288a030587be4e201bdefa9806476dc3d891bca",
         "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     let execution = harness.execute_refine_measured(&payload)?;
@@ -979,7 +979,7 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "0b352d42726c548e932f81138c8dff7bc9b5a786",
+            "2288a030587be4e201bdefa9806476dc3d891bca",
             "788bc054223f81282e4d88a83f05f2fe9e94c121",
         )?;
         let ex = h.execute_refine_measured(&shard_payload)?;
@@ -1012,7 +1012,7 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "0b352d42726c548e932f81138c8dff7bc9b5a786",
+            "2288a030587be4e201bdefa9806476dc3d891bca",
             "788bc054223f81282e4d88a83f05f2fe9e94c121",
         )?;
         let ex = h.execute_refine_measured(&final_payload)?;
@@ -1048,7 +1048,7 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     let mut harness = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "0b352d42726c548e932f81138c8dff7bc9b5a786",
+        "2288a030587be4e201bdefa9806476dc3d891bca",
         "788bc054223f81282e4d88a83f05f2fe9e94c121",
     )?;
     let payload = match (&args.payload_hex, &args.payload_file) {

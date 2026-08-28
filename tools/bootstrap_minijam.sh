@@ -12,7 +12,7 @@ else
   fi
 fi
 test -f "${CLIENT}/service-toolchain/compiler/toolchain.lock"
-EXPECTED_MINIJAM_REF="${MINICELLS_MINIJAM_REF:-0b352d42726c548e932f81138c8dff7bc9b5a786}"
+EXPECTED_MINIJAM_REF="${MINICELLS_MINIJAM_REF:-2288a030587be4e201bdefa9806476dc3d891bca}"
 RESOLVED_MINIJAM_REF="$(git -C "${CLIENT}" rev-parse HEAD)"
 if [[ "${RESOLVED_MINIJAM_REF}" != "${EXPECTED_MINIJAM_REF}" ]]; then
   echo "MiniJAM checkout ${RESOLVED_MINIJAM_REF} does not match canonical MiniJamSpec pin ${EXPECTED_MINIJAM_REF}" >&2
