@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import hashlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -14,6 +15,19 @@ from .upcycled_cellular_textnca import UpcyclingConfig, UpcycledCellularTextNCA,
 
 BUNDLE_FORMAT = "minicells.clm-0.1.bundle.v1"
 MODEL_FORMAT = "minicells.clm-0.1.model.v1"
+CLM01_MODEL_SHA256 = "87d36c408ae3873ffd567ebf17050661b42ddae2c8d5d1bab84b2c27c3c7e7a0"
+CLM01_RELEASE_VALIDATION_PPL = 17.968933276012226
+
+
+def verify_clm01_model_sha256(path: str | Path, expected: str = CLM01_MODEL_SHA256) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    observed = digest.hexdigest()
+    if observed != expected:
+        raise RuntimeError(f"CLM-0.1 checkpoint hash mismatch: expected {expected}, observed {observed}")
+    return observed
 
 
 @dataclass(frozen=True)
