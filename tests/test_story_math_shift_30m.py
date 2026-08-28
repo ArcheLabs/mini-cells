@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import argparse
+import importlib.util
 import json
 from pathlib import Path
 
@@ -120,6 +122,29 @@ def test_kaggle_notebook_uses_one_shot_budget_and_auto_publish() -> None:
     assert "--round-wall-hours', '2.5'" in source
     assert "publish_experiment_025_story_math_growth.py" in source
     assert "--push" in source
+
+
+def test_orchestrator_parser_returns_parser_and_accepts_kaggle_budget() -> None:
+    path = ROOT / "scripts/run_experiment_025_story_math_growth.py"
+    spec = importlib.util.spec_from_file_location("experiment_025_orchestrator", path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    argument_parser = module.parser()
+    assert isinstance(argument_parser, argparse.ArgumentParser)
+    args = argument_parser.parse_args(
+        [
+            "--total-wall-hours",
+            "8",
+            "--finalization-reserve-minutes",
+            "30",
+            "--round-wall-hours",
+            "2.5",
+        ]
+    )
+    assert args.total_wall_hours == 8.0
+    assert args.finalization_reserve_minutes == 30.0
+    assert args.round_wall_hours == 2.5
 
 
 def test_experiment_025_scripts_compile() -> None:
