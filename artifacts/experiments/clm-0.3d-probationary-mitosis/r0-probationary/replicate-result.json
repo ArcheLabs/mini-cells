@@ -1,0 +1,57 @@
+{
+  "births_checked": 24,
+  "births_equivalent": 24,
+  "code_commit": "af1eed85ac674495b684c22db49e839cf433bbe0",
+  "code_tree_sha": "dbe4c7ff609105cdeb2083f0269de0af17289cdb",
+  "conditions": {
+    "stationary_story": {
+      "absorption": null,
+      "action": "REJECT",
+      "code_commit": "af1eed85ac674495b684c22db49e839cf433bbe0",
+      "condition": "stationary_story",
+      "confirmation": null,
+      "final_ppl_ratio": null,
+      "independent_confirmed": false,
+      "maturation_rescue": false,
+      "probe_accepted": false,
+      "selected_expert": null
+    },
+    "story_arithmetic_shift": {
+      "absorption": {
+        "absorbable_without_mitosis": true,
+        "absorption_value": 0.9025569171267216,
+        "arithmetic_gain": 0.9125224791748846,
+        "learnability_min": 0.02,
+        "story_damage": 0.009965562048163056,
+        "story_damage_max": 0.01
+      },
+      "action": "PROMOTE",
+      "code_commit": "af1eed85ac674495b684c22db49e839cf433bbe0",
+      "condition": "story_arithmetic_shift",
+      "confirmation": {
+        "batches": 32,
+        "bootstrap_samples": 2000,
+        "candidate_nll": 1.6620935760438442,
+        "candidate_ppl": 5.270333145624859,
+        "ci95_high": 0.013753952576778397,
+        "ci95_low": 0.004211191349534685,
+        "confirmed": true,
+        "control_nll": 1.675940690562129,
+        "control_ppl": 5.3438196661704405,
+        "delta_nll": 0.013847114518284798,
+        "ppl_ratio": 0.9862483157860295,
+        "relative_improvement": 0.008262293884421604,
+        "story_nll_ratio_vs_control": 0.9998866006193895,
+        "story_retention_pass": true
+      },
+      "final_ppl_ratio": 0.9862483157860295,
+      "independent_confirmed": true,
+      "maturation_rescue": false,
+      "probe_accepted": true,
+      "selected_expert": "s1-e3"
+    }
+  },
+  "format": "minicells.clm-0.3d-probationary-replicate.v1",
+  "replicate": 0,
+  "tracked_tree_dirty": false
+}
