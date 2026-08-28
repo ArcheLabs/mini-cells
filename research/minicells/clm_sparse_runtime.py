@@ -43,6 +43,7 @@ from .language_models import LanguageModelOutput
 class PackedExpertMLP:
     fingerprint: tuple[object, ...]
     expert_ids: tuple[str, ...]
+    compute_dtype: torch.dtype
     w1_t: torch.Tensor
     b1: torch.Tensor
     w2_t: torch.Tensor
@@ -68,8 +69,26 @@ def _linear_gelu_linear(expert: nn.Module) -> tuple[nn.Linear, nn.Linear]:
     return first, second
 
 
-def _fingerprint(bank: nn.Module, expert_ids: tuple[str, ...]) -> tuple[object, ...]:
-    values: list[object] = [expert_ids]
+def _inference_compute_dtype(perception: torch.Tensor) -> torch.dtype:
+    device_type = perception.device.type
+    if device_type in {"cuda", "cpu"}:
+        try:
+            if torch.is_autocast_enabled(device_type):
+                return torch.get_autocast_dtype(device_type)
+        except TypeError:
+            # Compatibility with older torch signatures; CUDA autocast was the
+            # only device-global mode exposed there.
+            if device_type == "cuda" and torch.is_autocast_enabled():
+                return torch.float16
+    return perception.dtype
+
+
+def _fingerprint(
+    bank: nn.Module,
+    expert_ids: tuple[str, ...],
+    compute_dtype: torch.dtype,
+) -> tuple[object, ...]:
+    values: list[object] = [expert_ids, str(compute_dtype)]
     for expert_id in expert_ids:
         first, second = _linear_gelu_linear(bank.experts[expert_id])
         for tensor in (first.weight, first.bias, second.weight, second.bias):
@@ -85,8 +104,12 @@ def _fingerprint(bank: nn.Module, expert_ids: tuple[str, ...]) -> tuple[object, 
     return tuple(values)
 
 
-def _pack(bank: nn.Module, expert_ids: tuple[str, ...]) -> PackedExpertMLP:
-    fingerprint = _fingerprint(bank, expert_ids)
+def _pack(
+    bank: nn.Module,
+    expert_ids: tuple[str, ...],
+    compute_dtype: torch.dtype,
+) -> PackedExpertMLP:
+    fingerprint = _fingerprint(bank, expert_ids, compute_dtype)
     cached = _PACKED.get(bank)
     if cached is not None and cached.fingerprint == fingerprint:
         return cached
@@ -103,12 +126,18 @@ def _pack(bank: nn.Module, expert_ids: tuple[str, ...]) -> PackedExpertMLP:
     packed = PackedExpertMLP(
         fingerprint=fingerprint,
         expert_ids=expert_ids,
+        compute_dtype=compute_dtype,
         # grouped_mm consumes [E, K, N]. Detached copies are inference-only and
-        # are invalidated by the parameter fingerprint above.
-        w1_t=torch.stack([layer.weight.detach().transpose(0, 1).contiguous() for layer in first_layers]),
-        b1=torch.stack([layer.bias.detach() for layer in first_layers]),
-        w2_t=torch.stack([layer.weight.detach().transpose(0, 1).contiguous() for layer in second_layers]),
-        b2=torch.stack([layer.bias.detach() for layer in second_layers]),
+        # are materialized once in the active inference compute dtype so T4 does
+        # not repeatedly cast persistent FP32 parameters on every recurrent step.
+        w1_t=torch.stack(
+            [layer.weight.detach().transpose(0, 1).contiguous() for layer in first_layers]
+        ).to(dtype=compute_dtype),
+        b1=torch.stack([layer.bias.detach() for layer in first_layers]).to(dtype=compute_dtype),
+        w2_t=torch.stack(
+            [layer.weight.detach().transpose(0, 1).contiguous() for layer in second_layers]
+        ).to(dtype=compute_dtype),
+        b2=torch.stack([layer.bias.detach() for layer in second_layers]).to(dtype=compute_dtype),
     )
     _PACKED[bank] = packed
     return packed
@@ -164,12 +193,17 @@ def _packed_dense_inference(
 
     flat_inputs = perception.reshape(-1, perception.shape[-1])
     flat_gates = gates.reshape(-1, gates.shape[-1])
-    packed = _pack(bank, expert_ids)
-    hidden = torch.matmul(flat_inputs.unsqueeze(0), packed.w1_t) + packed.b1[:, None, :]
+    compute_dtype = _inference_compute_dtype(perception)
+    packed = _pack(bank, expert_ids, compute_dtype)
+    runtime_inputs = flat_inputs.to(dtype=compute_dtype)
+    hidden = torch.matmul(runtime_inputs.unsqueeze(0), packed.w1_t) + packed.b1[:, None, :]
     hidden = F.gelu(hidden)
     expert_outputs = torch.matmul(hidden, packed.w2_t) + packed.b2[:, None, :]
-    mixed = (expert_outputs * flat_gates.transpose(0, 1)[..., None].to(expert_outputs.dtype)).sum(dim=0)
-    return mixed.view_as(perception)
+    mixed = (
+        expert_outputs
+        * flat_gates.transpose(0, 1)[..., None].to(dtype=expert_outputs.dtype)
+    ).sum(dim=0)
+    return mixed.to(dtype=perception.dtype).view_as(perception)
 
 
 def _reference_sparse(bank: nn.Module, perception: torch.Tensor, gates: torch.Tensor, expert_ids: tuple[str, ...]) -> torch.Tensor:
@@ -215,13 +249,14 @@ def _grouped_sparse(bank: nn.Module, perception: torch.Tensor, gates: torch.Tens
     if flat_inputs.numel() == 0:
         return torch.zeros_like(perception)
 
+    compute_dtype = _inference_compute_dtype(perception)
     assignments = flat_gates.detach().argmax(dim=-1)
     order = torch.argsort(assignments, stable=True)
     sorted_assignments = assignments.index_select(0, order)
-    sorted_inputs = flat_inputs.index_select(0, order).contiguous()
+    sorted_inputs = flat_inputs.index_select(0, order).to(dtype=compute_dtype).contiguous()
     counts = torch.bincount(sorted_assignments, minlength=len(expert_ids))
     offsets = counts.cumsum(dim=0, dtype=torch.int32)
-    packed = _pack(bank, expert_ids)
+    packed = _pack(bank, expert_ids, compute_dtype)
 
     hidden = _grouped_mm(sorted_inputs, packed.w1_t, offsets)
     hidden = hidden + packed.b1.index_select(0, sorted_assignments)
@@ -235,7 +270,7 @@ def _grouped_sparse(bank: nn.Module, perception: torch.Tensor, gates: torch.Tens
     sorted_output = sorted_output * selected_gates
     flat_output = torch.empty_like(sorted_output)
     flat_output.index_copy_(0, order, sorted_output)
-    return flat_output.view_as(perception)
+    return flat_output.to(dtype=perception.dtype).view_as(perception)
 
 
 def _elapsed_cuda_or_cpu(fn: Callable[[], torch.Tensor], device: torch.device, repeats: int = 3) -> float:
@@ -262,11 +297,13 @@ def _autotuned_inference(
     gates: torch.Tensor,
     expert_ids: tuple[str, ...],
 ) -> tuple[torch.Tensor, str, str | None]:
-    packed = _pack(bank, expert_ids)
+    compute_dtype = _inference_compute_dtype(perception)
+    packed = _pack(bank, expert_ids, compute_dtype)
     flat_tokens = int(perception.numel() // perception.shape[-1])
     key = (
         str(perception.device),
         str(perception.dtype),
+        str(compute_dtype),
         flat_tokens,
         len(expert_ids),
         packed.fingerprint,
@@ -447,12 +484,14 @@ def runtime_status(model: nn.Module) -> list[dict[str, object]]:
         bank = getattr(stage, "program_bank", None)
         if bank is None:
             continue
+        packed = _PACKED.get(bank)
         rows.append(
             {
                 "stage": stage_index,
                 "backend": _LAST_BACKEND.get(bank, "not_executed"),
                 "fallback_reason": _LAST_FALLBACK.get(bank),
-                "packed_inference_cache": bank in _PACKED,
+                "packed_inference_cache": packed is not None,
+                "packed_compute_dtype": str(packed.compute_dtype) if packed is not None else None,
                 "autotune_shapes": len(_AUTOTUNE.get(bank, {})),
                 "expert_count": len(tuple(bank.expert_ids)),
                 "fast_model_forward": model in _ORIGINAL_MODEL_FORWARD,
