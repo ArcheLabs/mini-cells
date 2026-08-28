@@ -142,6 +142,25 @@ class HierarchicalGrowthRouter(nn.Module):
     def structure(self) -> dict[str, Any]:
         return {"stage": self.stage, "roots": [root.to_dict() for root in self.roots]}
 
+    def _new_split_router(self) -> BinaryLineageRouter:
+        """Create a dynamic split on the root router's current placement.
+
+        ``Module.to(...)`` only moves modules that already exist.  Split routers
+        are born later, so assigning a freshly constructed CPU module into a
+        CUDA-resident ``ModuleDict`` would otherwise leave its prototypes on
+        CPU.  The same rule applies while reconstructing a grown checkpoint.
+        """
+
+        anchor = next(self.root_router.parameters(), None)
+        if anchor is None:
+            anchor = next(self.root_router.buffers(), None)
+        router = BinaryLineageRouter(self.dim, scale=self.router_scale)
+        if anchor is None:
+            return router
+        if anchor.is_floating_point() or anchor.is_complex():
+            return router.to(device=anchor.device, dtype=anchor.dtype)
+        return router.to(device=anchor.device)
+
     def restore_structure(self, structure: dict[str, Any]) -> None:
         if int(structure.get("stage", -1)) != self.stage:
             raise ValueError("growth router stage does not match checkpoint")
@@ -151,7 +170,7 @@ class HierarchicalGrowthRouter(nn.Module):
         self.roots = roots
         wanted = set(self.split_ids)
         for split_id in wanted - set(self.split_routers):
-            self.split_routers[split_id] = BinaryLineageRouter(self.dim, scale=self.router_scale)
+            self.split_routers[split_id] = self._new_split_router()
         for split_id in tuple(self.split_routers):
             if split_id not in wanted:
                 del self.split_routers[split_id]
@@ -168,7 +187,7 @@ class HierarchicalGrowthRouter(nn.Module):
             raise ValueError(f"split already exists: {split_id}")
         if parent_id not in self.expert_ids:
             raise KeyError(f"parent is not a current leaf: {parent_id}")
-        router = BinaryLineageRouter(self.dim, scale=self.router_scale)
+        router = self._new_split_router()
         router.set_prototypes(prototypes)
         replacement = RouteSplit(split_id, RouteLeaf(parent_id), RouteLeaf(child_id))
         new_roots: list[RouteNode] = []
