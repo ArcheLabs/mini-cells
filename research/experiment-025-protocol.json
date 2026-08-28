@@ -66,10 +66,24 @@
   },
   "hardware_budget": {
     "target": "Tesla T4 x2",
-    "wall_hours_approx": 10,
-    "default_worker_soft_limit_hours": 9.25,
+    "global_wall_hours": 8.0,
+    "finalization_reserve_minutes": 30,
+    "worker_round_wall_hours": 2.5,
+    "automatic_resume": true,
+    "minimum_resume_window_minutes": 20,
+    "probation_start_guard_minutes": 30,
+    "one_shot_kaggle_run_all": true,
     "llm_gpu": "reproduce 100M Story Transformer then shift",
     "clm_gpu": "reuse retained 100M Story TextNCA source then shift"
+  },
+  "runtime_estimate": {
+    "basis": "Experiment-007 T4 throughput plus measured batched-dense CLM training-tax proxy",
+    "llm_pretrain_hours_approx": 1.0,
+    "llm_shift_hours_approx": 0.5,
+    "clm_main_plus_counterfactual_physical_tokens": 54000000,
+    "clm_pure_training_hours_approx": 2.5,
+    "clm_expected_with_eval_checkpoint_growth_overhead_hours": "3-4",
+    "budget_interpretation": "arms run concurrently; CLM is expected to dominate wall time"
   },
   "claim_limits": {
     "math_scope": "synthetic integer arithmetic; not general mathematical reasoning",
