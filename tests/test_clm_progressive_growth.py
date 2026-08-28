@@ -1,13 +1,15 @@
+import json
+
 import torch
 
 from minicells.clm_growth import ProgressiveGrowthCLM, next_growth_event, replicate_seed, stop_target
 from minicells.growth_pressure import (PressureCandidate, calibrate_model_pressure, cosine_kmeans_2,
                                        gradient_disagreement, pressure_score, select_pressure_parent,
                                        select_random_parent)
+from minicells.growth_reporting import aggregate_formal_results, write_ppl_history
 from minicells.growth_validation import (ExecutionCapture, compare_captures, progressive_growth_decision,
                                          root_router_balance_loss, student_teacher_kl)
 from minicells.language_data import make_training_schedule
-from minicells.language_models import LanguageModelOutput
 from minicells.language_models import TextNCALM
 from minicells.upcycled_cellular_textnca import UpcyclingConfig, convert_textnca_to_upcycled
 
@@ -150,3 +152,55 @@ def test_growth_and_pressure_selection_decisions_are_separate() -> None:
     assert decision["growth_utility"]["status"] == "CLM_PROGRESSIVE_GROWTH_SIGNAL"
     assert decision["pressure_selection"]["status"] == "CLM_GROWTH_PRESSURE_SELECTION_SIGNAL"
     assert decision["formal_gpu_experiment_run"] is False
+
+
+def test_formal_aggregation_uses_matched_fixed4_and_derives_viability(tmp_path) -> None:
+    for replicate in range(3):
+        for arm, ppl in (("fixed4", 10.0), ("pressure_growth", 9.9), ("random_growth", 10.1)):
+            directory = tmp_path / f"r{replicate}-{arm}"
+            directory.mkdir(parents=True)
+            complete = {
+                "type": "worker_complete", "arm": arm, "replicate": replicate,
+                "consumed_tokens": 1_500_000, "target_tokens": 1_500_000,
+            }
+            (directory / "events.jsonl").write_text(json.dumps(complete) + "\n", encoding="utf-8")
+            write_ppl_history(directory / "ppl-history.csv", [{
+                "replicate": replicate, "arm": arm, "tokens": 1_500_000,
+                "phase": "complete", "ppl": ppl, "nll": 2.0,
+                "fixed4_ppl": None, "clm01_start_ppl": 11.0,
+                "textnca_frozen_ppl": 12.0, "ppl_vs_fixed4": None,
+                "ppl_vs_clm01": ppl / 11.0, "ppl_vs_textnca": ppl / 12.0,
+                "health": "GREEN",
+            }])
+            if arm != "fixed4":
+                history = [
+                    {"birth_index": 1, "stage": 0, "parent": "s0-e0", "child": "s0-e4",
+                     "parity": {"status": "CLM_GROWTH_EQUIVALENCE"}},
+                    {"birth_index": 2, "stage": 1, "parent": "s1-e1", "child": "s1-e4",
+                     "parity": {"status": "CLM_GROWTH_EQUIVALENCE"}},
+                ]
+                diagnostic = {
+                    "offset_tokens": 500_000, "child_usage": .1, "relative_l2": .01,
+                    "split_entropy": .5, "causal_merge_back_penalty": .001,
+                }
+                diagnostics = [
+                    {"birth_index": 1, **diagnostic},
+                    {"birth_index": 2, **diagnostic},
+                ]
+                (directory / "growth-history.json").write_text(
+                    json.dumps(history), encoding="utf-8"
+                )
+                (directory / "newborn-diagnostics.json").write_text(
+                    json.dumps(diagnostics), encoding="utf-8"
+                )
+
+    aggregate = aggregate_formal_results(tmp_path, formal_gpu_experiment_run=True)
+    pressure = [row for row in aggregate["formal_rows"] if row["arm"] == "pressure_growth"]
+    assert len(pressure) == 3
+    assert all(abs(row["fixed4_ppl"] - 10.0) < 1e-12 for row in pressure)
+    assert all(abs(row["ppl_vs_fixed4"] - .99) < 1e-12 for row in pressure)
+    assert aggregate["decision"]["growth_equivalence"]["status"] == "CLM_GROWTH_EQUIVALENCE"
+    assert aggregate["decision"]["growth_viability"]["status"] == "CLM_PROGRESSIVE_GROWTH_VIABILITY"
+    assert aggregate["decision"]["growth_utility"]["status"] == "CLM_PROGRESSIVE_GROWTH_SIGNAL"
+    assert aggregate["decision"]["pressure_selection"]["status"] == "CLM_GROWTH_PRESSURE_SELECTION_SIGNAL"
+    assert aggregate["decision"]["formal_gpu_experiment_run"] is True
