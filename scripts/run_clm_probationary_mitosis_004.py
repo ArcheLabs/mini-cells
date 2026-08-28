@@ -23,6 +23,7 @@ from minicells.growth_experiment_utils import git_provenance  # noqa: E402
 from minicells.growth_probationary import FORMAL_HORIZONS, SHORTLIST_K  # noqa: E402
 from minicells.growth_probationary_reporting import aggregate_probationary_results  # noqa: E402
 from minicells.language_conflict_differentiation import prepare_arithmetic_cache  # noqa: E402
+from minicells.language_data import load_tokenizer  # noqa: E402
 from minicells.language_scaling import prepare_scaling_corpus  # noqa: E402
 
 DECISION_TOKENS = 1_500_000
@@ -111,12 +112,13 @@ def _prepare_corpora(args: argparse.Namespace) -> None:
         f"validation={validation_tokens:,}",
         flush=True,
     )
-    train, validation, tokenizer, produced = prepare_scaling_corpus(
+    train, validation, tokenizer_path, produced = prepare_scaling_corpus(
         REPO_ROOT,
         source_005_dir=source,
         train_stream_tokens=train_tokens,
         validation_stream_tokens=validation_tokens,
     )
+    tokenizer = load_tokenizer(tokenizer_path)
     arithmetic = prepare_arithmetic_cache(_resolve(args.cache_dir), tokenizer)
     print(
         "Shared corpora ready: "
