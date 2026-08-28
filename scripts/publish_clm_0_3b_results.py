@@ -37,8 +37,8 @@ WORKER_COMMON_FILES = (
 WORKER_GROWTH_FILES = (
     "growth-history.json",
     "newborn-diagnostics.json",
-    "marginal-scan-1.csv",
 )
+WORKER_SCAN_FILE = "marginal-scan-1.csv"
 
 
 def sha256_file(path: Path) -> str:
@@ -90,7 +90,8 @@ def _validate_formal_results(source: Path) -> tuple[dict[str, object], str, str]
 
     for replicate in FORMAL_REPLICATES:
         for arm in FORMAL_ARMS:
-            events = _read_events(source / f"r{replicate}-{arm}" / "events.jsonl")
+            worker = source / f"r{replicate}-{arm}"
+            events = _read_events(worker / "events.jsonl")
             complete = [
                 event for event in events
                 if event.get("type") == "worker_complete" and event.get("mode") != "preflight_only"
@@ -98,17 +99,31 @@ def _validate_formal_results(source: Path) -> tuple[dict[str, object], str, str]
             if not complete:
                 raise RuntimeError(f"r{replicate}-{arm} has no completed formal worker event")
             final = complete[-1]
+            if int(final.get("consumed_tokens", -1)) < int(final.get("target_tokens", 0)):
+                raise RuntimeError(f"r{replicate}-{arm} stopped before its declared target")
             code_commit = final.get("code_commit")
             code_tree = final.get("code_tree_sha")
             if not code_commit or not code_tree:
                 raise RuntimeError(f"r{replicate}-{arm} is missing immutable code provenance")
             worker_commits.add(str(code_commit))
             worker_trees.add(str(code_tree))
+            if arm != "fixed4":
+                saturation = json.loads((worker / "saturation.json").read_text(encoding="utf-8"))
+                if bool(saturation.get("detected", False)) and not (worker / WORKER_SCAN_FILE).is_file():
+                    raise FileNotFoundError(
+                        f"r{replicate}-{arm} detected saturation but is missing {WORKER_SCAN_FILE}"
+                    )
     if len(worker_commits) != 1 or len(worker_trees) != 1:
         raise RuntimeError(
             f"CLM-0.3b workers used mixed code provenance: commits={sorted(worker_commits)}, trees={sorted(worker_trees)}"
         )
-    return decision, next(iter(worker_commits)), next(iter(worker_trees))
+    worker_commit = next(iter(worker_commits))
+    worker_tree = next(iter(worker_trees))
+    if decision.get("training_code_commit") not in (None, worker_commit):
+        raise RuntimeError("decision training_code_commit does not match worker provenance")
+    if decision.get("training_code_tree_sha") not in (None, worker_tree):
+        raise RuntimeError("decision training_code_tree_sha does not match worker provenance")
+    return decision, worker_commit, worker_tree
 
 
 def prepare_clm_0_3b_artifacts(
@@ -138,6 +153,9 @@ def prepare_clm_0_3b_artifacts(
             if arm != "fixed4":
                 for name in WORKER_GROWTH_FILES:
                     _copy(worker_source / name, worker_destination / name)
+                scan = worker_source / WORKER_SCAN_FILE
+                if scan.is_file():
+                    _copy(scan, worker_destination / scan.name)
     for plot in sorted(source.glob("*.png")):
         _copy(plot, destination / plot.name)
 
@@ -185,6 +203,7 @@ Training/resume checkpoints and corpus caches are intentionally excluded.
 
 ## Formal decision
 
+- Paired pre-birth: `{decision.get('paired_prebirth', {}).get('status', 'unknown')}`
 - Saturation regime: `{decision.get('saturation_regime', {}).get('status', 'unknown')}`
 - Growth equivalence: `{decision.get('growth_equivalence', {}).get('status', 'unknown')}`
 - Marginal growth viability: `{decision.get('growth_viability', {}).get('status', 'unknown')}`
