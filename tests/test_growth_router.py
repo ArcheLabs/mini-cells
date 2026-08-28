@@ -123,14 +123,15 @@ def test_birth_rollback_restores_tree_without_moduledict_pop_error() -> None:
 
 
 def test_function_preserving_birth_passes_parity_on_runtime_device() -> None:
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = _growth_model().to(device)
-    inputs = torch.randint(0, 17, (2, 6), device=device)
-    targets = torch.randint(0, 17, (2, 6), device=device)
+    requested_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = _growth_model().to(requested_device)
+    runtime_device = next(model.parameters()).device
+    inputs = torch.randint(0, 17, (2, 6), device=runtime_device)
+    targets = torch.randint(0, 17, (2, 6), device=runtime_device)
     event = model.birth(
         stage=0,
         parent_id="s0-e0",
-        routed_perceptions=torch.randn(512, 8, device=device),
+        routed_perceptions=torch.randn(512, 8, device=runtime_device),
         token=500_000,
         validation_inputs=inputs,
         validation_targets=targets,
@@ -142,14 +143,18 @@ def test_function_preserving_birth_passes_parity_on_runtime_device() -> None:
 
 
 def test_newborn_diagnostics_rehydrates_cpu_perceptions_to_router_device() -> None:
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = _growth_model().to(device)
-    # Pick a parent that this exact diagnostic batch actually visits.  The old
-    # test hard-coded s0-e0, which made the assertion below depend on random
-    # root-router initialization and could legitimately collect no perceptions
-    # for that lineage on CUDA even though the device rehydration code was fine.
-    inputs = torch.randint(0, 17, (2, 6), device=device)
-    targets = torch.randint(0, 17, (2, 6), device=device)
+    requested_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = _growth_model().to(requested_device)
+    # Resolve the concrete runtime device (e.g. cuda:0) from the model itself.
+    # torch.device("cuda") has index=None and does not necessarily compare equal
+    # to tensors/modules resident on torch.device("cuda:0").
+    runtime_device = next(model.parameters()).device
+
+    # Pick a parent that this exact diagnostic batch actually visits.  The test
+    # must verify device rehydration, not depend on a randomly chosen root leaf
+    # receiving traffic.
+    inputs = torch.randint(0, 17, (2, 6), device=runtime_device)
+    targets = torch.randint(0, 17, (2, 6), device=runtime_device)
     with torch.no_grad():
         _output, pre_stats = model(inputs, return_stats=True)
     root_indices = pre_stats.root_routes[0].reshape(-1)
@@ -161,7 +166,7 @@ def test_newborn_diagnostics_rehydrates_cpu_perceptions_to_router_device() -> No
     event = model.birth(
         stage=0,
         parent_id=parent_id,
-        routed_perceptions=torch.randn(512, 8, device=device),
+        routed_perceptions=torch.randn(512, 8, device=runtime_device),
         token=500_000,
     )
     child_id = str(event["child"])
@@ -175,11 +180,12 @@ def test_newborn_diagnostics_rehydrates_cpu_perceptions_to_router_device() -> No
     assert math.isfinite(diagnostics["router_logit_variance"])
 
     # Collection remains CPU-backed by design; diagnostics must rehydrate only
-    # the transient concatenated batch to the split router's runtime device.
+    # the transient concatenated batch to the split router's concrete runtime
+    # device/dtype and must not retain the GPU copy in the pressure cache.
     bank = model.stages[0].program_bank
     split_id = bank.split_by_child[child_id]
     split_router = bank.router.split_routers[split_id]
-    assert split_router.prototypes.device == device
+    assert split_router.prototypes.device == runtime_device
     collected = [
         item
         for expert_id in (parent_id, child_id)
