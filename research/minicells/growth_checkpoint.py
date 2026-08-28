@@ -134,12 +134,45 @@ def capture_rng_state() -> dict[str, Any]:
     }
 
 
+def _cpu_byte_rng_state(value: torch.Tensor) -> torch.Tensor:
+    """Normalize serialized RNG tensors for PyTorch RNG restoration APIs.
+
+    ``torch.load(..., map_location='cuda')`` also moves checkpoint metadata
+    tensors, including RNG states, to CUDA.  PyTorch's RNG setters require CPU
+    ByteTensors, so checkpoint loading must normalize them explicitly.
+    """
+
+    if not torch.is_tensor(value):
+        raise TypeError("serialized torch RNG state must be a tensor")
+    return value.detach().to(device="cpu", dtype=torch.uint8).contiguous()
+
+
 def restore_rng_state(state: dict[str, Any]) -> None:
     random.setstate(state["python"])
     np.random.set_state(state["numpy"])
-    torch.random.set_rng_state(state["torch_cpu"].cpu())
-    if torch.cuda.is_available() and state.get("torch_cuda") is not None:
-        torch.cuda.set_rng_state_all(state["torch_cuda"])
+    torch.random.set_rng_state(_cpu_byte_rng_state(state["torch_cpu"]))
+
+    saved_cuda = state.get("torch_cuda")
+    if not torch.cuda.is_available() or saved_cuda is None:
+        return
+
+    cuda_states = [_cpu_byte_rng_state(item) for item in saved_cuda]
+    visible_devices = torch.cuda.device_count()
+    if not cuda_states:
+        return
+    if len(cuda_states) == visible_devices:
+        torch.cuda.set_rng_state_all(cuda_states)
+        return
+    if len(cuda_states) == 1:
+        # Workers run under CUDA_VISIBLE_DEVICES and therefore normally expose
+        # exactly one logical GPU.  This also permits moving a saved worker to a
+        # different physical GPU without changing its logical RNG stream.
+        torch.cuda.set_rng_state(cuda_states[0], device=torch.cuda.current_device())
+        return
+    raise RuntimeError(
+        "checkpoint CUDA RNG state count does not match visible CUDA devices: "
+        f"saved={len(cuda_states)}, visible={visible_devices}"
+    )
 
 
 def save_growth_checkpoint(
