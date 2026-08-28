@@ -27,7 +27,7 @@ CLM-0.3c therefore does not introduce another direct `pressure` heuristic as the
 - Geometry initialization: deterministic cosine k-means, k=2
 - Optimizer: AdamW; child inherits parent moments; split router starts fresh
 - Scheduler: continuous global continuation schedule
-- Objective: `CE + 0.5 * KL(student || frozen CLM-0.1)`
+- Training objective: `CE + 0.5 * KL(student || frozen CLM-0.1)`
 - Root balance auxiliary loss: `0.0`
 
 ## Formal replicates
@@ -52,11 +52,13 @@ CLM-0.3c intentionally does not require a saturation gate. CLM-0.3b showed that 
 
 Calibration uses the 16 training microbatches immediately preceding the decision checkpoint.
 
-For each active lineage `i`, the calibration records routed perceptions and the gradient of the expert parameters for each microbatch. A deterministic two-cluster cosine partition is fitted to the lineage perceptions.
+For each active lineage `i`, calibration records routed perceptions and the **next-token CE gradient** of the expert parameters for each microbatch. The distillation KL is deliberately excluded from the analytic score: teacher-matching pressure is a training stabilizer, not evidence that additional task capacity is needed. The actual shadow branches still train with the full frozen formal objective.
+
+A deterministic two-cluster cosine partition is fitted to the lineage perceptions.
 
 For microbatch `b`, let:
 
-- `g_ib`: expert gradient divided by the number of routes through lineage `i`
+- `g_ib`: expert CE gradient divided by the number of routes through lineage `i`
 - `n_ib0`, `n_ib1`: routed perceptions assigned to the two prospective child regions
 
 The prospective region gradients are estimated as route-count-weighted means:
@@ -73,7 +75,7 @@ With lineage utilization `U_i` and region masses `pi_i0`, `pi_i1`, the preregist
 
 `R_i = U_i * pi_i0 * pi_i1 * D_i`
 
-`R_i` is interpreted as a local **split regret / untying-value proxy**: the amount of learning pressure hidden by forcing two prospective child regions to share the same parameters.
+`R_i` is interpreted as a local **split regret / untying-value proxy**: the amount of task-learning pressure hidden by forcing two prospective child regions to share the same parameters.
 
 The proxy is *not* allowed to decide the formal birth by itself.
 
@@ -86,11 +88,11 @@ Formal branches:
 1. `no_growth`
 2. one `split_i` branch for every one of the 12 CLM-0.1 lineages
 
-Each branch receives the exact same next **100K training tokens**, validation schedule, LR schedule, and starting optimizer/RNG state.
+Each branch receives the exact same next **100K training tokens**, LR schedule, and starting optimizer/RNG state.
 
 Every split branch must pass the existing `CLM_GROWTH_EQUIVALENCE` gate before its first optimizer step.
 
-The probe endpoint is evaluated on 32 validation batches (32,000 target tokens).
+The probe endpoint is evaluated on holdout **A**: 32 validation batches / 32,000 target tokens.
 
 For candidate `i`:
 
@@ -113,13 +115,13 @@ Then:
 - if `LCB95[Q_i*] > 0`: action = `GROW(i*)`
 - otherwise: action = `NO_GROW`
 
-This is the formal unification of WHEN and WHERE.
+This is the formal unification of WHEN and WHERE for the fixed 100K decision horizon.
 
 ## Long-horizon confirmation
 
-Selection by a 100K shadow continuation can overfit short-term optimization dynamics. Therefore the selected candidate and a fresh no-growth control are both reconstructed again from the original 1.5M decision checkpoint and continued for **500K tokens**.
+Selection by a 100K shadow continuation can overfit short-term optimization dynamics or holdout noise. Therefore the selected candidate and a fresh no-growth control are both reconstructed again from the original 1.5M decision checkpoint and continued for **500K tokens**.
 
-The confirm endpoint uses the same 32 validation batches and paired bootstrap:
+The confirmation endpoint is evaluated on a completely disjoint holdout **B**: another 32 validation batches / 32,000 target tokens. No target used to select the 100K policy appears in the confirmation holdout.
 
 `Q_i*(500K) = (NLL_no_growth_500K - NLL_split_i*_500K) / NLL_no_growth_500K`
 
@@ -129,7 +131,7 @@ The 500K continuation is an evaluation of the 100K decision, not an input to tha
 
 ### 1. Counterfactual birth equivalence
 
-All 36 executed probe births (12 candidates × 3 replicates), plus the three confirmation births, must pass the existing exact parity gate.
+All 36 executed probe births (12 candidates × 3 replicates), plus the three independent confirmation births, must pass the existing exact parity gate.
 
 Status:
 
@@ -147,20 +149,22 @@ This is a secondary endpoint; failure does not invalidate counterfactual selecti
 
 ### 3. Counterfactual decision calibration
 
-The 100K policy is considered correctly calibrated for a replicate when:
+The 100K policy is considered horizon-consistent for a replicate when:
 
 - it chooses `GROW` and the selected candidate has `LCB95[Q_i*(500K)] > 0`, or
-- it chooses `NO_GROW` and the selected candidate has `UCB95[Q_i*(500K)] <= 0`.
+- it chooses `NO_GROW` and the short-horizon frontier candidate has `UCB95[Q_i*(500K)] <= 0`.
+
+For a `NO_GROW` action this does **not** prove that every candidate has non-positive 500K value; only the candidate that maximized the 100K lower confidence bound is confirmed. The endpoint therefore measures horizon stability of the chosen frontier, not exhaustive long-horizon optimality.
 
 An interval crossing zero is inconclusive, not a success.
 
-Signal requires at least 2/3 calibrated replicates:
+Signal requires at least 2/3 horizon-consistent replicates:
 
 `CLM_COUNTERFACTUAL_DECISION_SIGNAL`
 
 ### 4. Confirmed marginal capacity value
 
-Independent of the 100K action, record whether the probe-selected candidate has a strictly positive 500K lower confidence bound.
+Independent of the 100K action, record whether the probe-selected candidate has a strictly positive 500K lower confidence bound on disjoint holdout B.
 
 At least 2/3 gives:
 
@@ -168,7 +172,7 @@ At least 2/3 gives:
 
 ### 5. Practical growth effect
 
-The prior 0.5% practical threshold remains a separate endpoint. A replicate passes when the selected split has at least 0.5% lower PPL than the 500K no-growth control.
+The prior 0.5% practical threshold remains a separate endpoint. A replicate passes when the selected split has at least 0.5% lower PPL than the 500K no-growth control on holdout B.
 
 At least 2/3 gives:
 
@@ -185,7 +189,8 @@ Every worker records:
 - CLM-0.1 SHA
 - corpus/tokenizer hashes
 - replicate seed
-- training and validation schedule hashes
+- training schedule hash
+- separate probe/confirmation validation schedule hashes
 - decision checkpoint token
 - probe and confirmation horizons
 - analytic candidate table
@@ -193,9 +198,9 @@ Every worker records:
 - no-growth and candidate per-batch NLLs
 - paired bootstrap intervals
 - policy decision
-- 500K confirmation
+- 500K independent-holdout confirmation
 
-The publisher rejects mixed training commits/trees.
+The formal runner refuses to mix partial evidence across different code commits, and the publisher rejects mixed training commits/trees.
 
 ## Out of scope
 
@@ -206,6 +211,7 @@ CLM-0.3c does not yet implement:
 - expert death/merge
 - learned probe horizons
 - explicit hardware/energy pricing in the decision objective
+- exhaustive 500K confirmation of all 12 candidates after a `NO_GROW` decision
 - 2D topology
 - multimodality
 - online continual learning
