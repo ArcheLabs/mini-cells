@@ -9,7 +9,6 @@ measures identical synthetic batches on one device.
 from __future__ import annotations
 
 import argparse
-import copy
 import json
 import sys
 import time
@@ -122,6 +121,25 @@ def _bench_training(
     }
 
 
+def _build_dense(source_checkpoint: Path, device: torch.device):
+    return build_bridge_model(
+        "textnca_continuation",
+        source_checkpoint,
+        vocab_size=2048,
+        device=device,
+    )
+
+
+def _build_clm(source_checkpoint: Path, device: torch.device):
+    model = build_bridge_model(
+        "clm_fixed4",
+        source_checkpoint,
+        vocab_size=2048,
+        device=device,
+    )
+    return install_optimized_runtime(model)
+
+
 def main() -> int:
     args = parser().parse_args()
     device = torch.device(args.device)
@@ -131,19 +149,8 @@ def main() -> int:
         raise ValueError("benchmark dimensions and iteration counts must be positive")
 
     source_checkpoint = ROOT / SOURCE_006_CHECKPOINT
-    dense = build_bridge_model(
-        "textnca_continuation",
-        source_checkpoint,
-        vocab_size=2048,
-        device=device,
-    )
-    clm = build_bridge_model(
-        "clm_fixed4",
-        source_checkpoint,
-        vocab_size=2048,
-        device=device,
-    )
-    install_optimized_runtime(clm)
+    dense = _build_dense(source_checkpoint, device)
+    clm = _build_clm(source_checkpoint, device)
 
     generator = torch.Generator(device=device).manual_seed(62003)
     inputs = torch.randint(
@@ -197,11 +204,11 @@ def main() -> int:
     }
     inference_runtime_status = runtime_status(clm)
 
-    dense_train = copy.deepcopy(dense)
-    clm_masked_train = copy.deepcopy(clm)
-    clm_batched_train = copy.deepcopy(clm)
-    install_optimized_runtime(clm_masked_train)
-    install_optimized_runtime(clm_batched_train)
+    # Rebuild fresh models for training measurements. This avoids copying bound
+    # runtime methods/caches from the already-autotuned inference model.
+    dense_train = _build_dense(source_checkpoint, device)
+    clm_masked_train = _build_clm(source_checkpoint, device)
+    clm_batched_train = _build_clm(source_checkpoint, device)
     training = {
         "textnca_dense": _bench_training(
             dense_train, inputs, targets, None, iterations=args.train_iterations
