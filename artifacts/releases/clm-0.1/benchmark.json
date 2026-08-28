@@ -1,0 +1,31 @@
+{
+  "claim_boundary": "No wall-clock speedup or sub-dense active-FLOP claim is made for CLM-0.1.",
+  "format": "minicells.clm-0.1.benchmark.v1",
+  "parameters": {
+    "active_expert": 395136,
+    "clm_total": 2357760,
+    "dense_total": 1170816,
+    "router": 1536
+  },
+  "release_replicate": 2,
+  "telemetry": {
+    "clm_masked_dense": {
+      "nll": 2.8886442879835763,
+      "peak_vram_bytes": 76681728,
+      "ppl": 17.968932383485676,
+      "tokens_per_second": 53664.55661339867
+    },
+    "clm_sparse_dispatch": {
+      "nll": 2.8886443376541138,
+      "peak_vram_bytes": 76681728,
+      "ppl": 17.968933276012226,
+      "tokens_per_second": 33931.102642045276
+    },
+    "dense": {
+      "nll": 2.9028548200925193,
+      "peak_vram_bytes": 61913088,
+      "ppl": 18.226103414956103,
+      "tokens_per_second": 110669.62793781175
+    }
+  }
+}
