@@ -99,11 +99,38 @@ class BinaryLineageRouter(nn.Module):
         return self.scale * F.normalize(perception, dim=-1) @ F.normalize(self.prototypes, dim=-1).T
 
 
+class SafeModuleDict(nn.ModuleDict):
+    """``ModuleDict`` with ``dict.pop(key, default)`` rollback semantics.
+
+    PyTorch's ``ModuleDict.pop`` accepts only ``key``.  Growth rollback used the
+    normal mapping form with a default value, which masked the original parity
+    failure with a secondary ``TypeError``.  Keeping the compatibility behavior
+    local to dynamic split routers makes rollback idempotent without changing
+    module registration semantics.
+    """
+
+    _MISSING = object()
+
+    def pop(self, key: str, default: object = _MISSING):  # type: ignore[override]
+        if key in self:
+            return super().pop(key)
+        if default is self._MISSING:
+            raise KeyError(key)
+        return default
+
+
 def straight_through_top1(logits: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     probabilities = logits.softmax(dim=-1)
     indices = probabilities.argmax(dim=-1)
     hard = F.one_hot(indices, num_classes=logits.shape[-1]).to(logits.dtype)
-    return hard + probabilities - probabilities.detach(), probabilities, indices
+    # Parenthesize the zero-valued straight-through residual so the forward pass
+    # is *exactly* one-hot.  ``hard + probabilities - probabilities.detach()``
+    # is left-associative and can round an active gate away from exactly 1.0.
+    # A newborn lineage multiplies a root gate by an additional split gate, so
+    # that tiny rounding error was compounded at birth and could spuriously fail
+    # CLM_GROWTH_EQUIVALENCE on some CUDA inputs.  Gradients are unchanged.
+    straight_through = probabilities - probabilities.detach()
+    return hard + straight_through, probabilities, indices
 
 
 class HierarchicalGrowthRouter(nn.Module):
@@ -126,7 +153,7 @@ class HierarchicalGrowthRouter(nn.Module):
         self.dim = dim
         self.root_expert_count = root_expert_count
         self.router_scale = float(router_scale)
-        self.split_routers = nn.ModuleDict()
+        self.split_routers = SafeModuleDict()
         self.roots: tuple[RouteNode, ...] = tuple(
             RouteLeaf(f"s{stage}-e{index}") for index in range(root_expert_count)
         )
