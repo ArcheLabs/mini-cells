@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Launch, resume, monitor, and aggregate the formal CLM-0.3b 3x3 matrix."""
+"""Launch, resume, monitor, and aggregate the formal CLM-0.3b matrix."""
 
 from __future__ import annotations
 
@@ -31,15 +31,13 @@ from minicells.growth_marginal_reporting import (  # noqa: E402
 from minicells.language_scaling import prepare_scaling_corpus  # noqa: E402
 
 
+FIXED_ARM = "fixed4"
+GROWTH_ARMS = tuple(arm for arm in FORMAL_ARMS if arm != FIXED_ARM)
 WORKER_BATCH_SIZE = 8
 WORKER_SEQUENCE_LENGTH = 125
 WORKER_EVAL_BATCHES = 32
 WORKER_CALIBRATION_BATCHES = 16
 WORKER_BALANCE_WEIGHT = 0.0
-
-
-def jobs() -> list[tuple[int, str]]:
-    return [(replicate, arm) for replicate in range(3) for arm in FORMAL_ARMS]
 
 
 def _worker_dir(args: argparse.Namespace, replicate: int, arm: str) -> Path:
@@ -81,6 +79,14 @@ def _checkpoint_payload(path: Path) -> dict[str, object] | None:
     return payload
 
 
+def _checkpoint_matches_commit(path: Path, code_commit: str) -> bool:
+    payload = _checkpoint_payload(path)
+    if payload is None:
+        return False
+    state = payload.get("data_schedule_state", {})
+    return isinstance(state, dict) and state.get("code_commit") == code_commit
+
+
 def _offset_zero_diagnostics(directory: Path) -> set[int]:
     path = directory / "newborn-diagnostics.json"
     if not path.exists():
@@ -93,6 +99,8 @@ def _offset_zero_diagnostics(directory: Path) -> set[int]:
     if not isinstance(rows, list):
         return result
     for row in rows:
+        if not isinstance(row, dict):
+            continue
         try:
             if int(row.get("offset_tokens", -1)) == 0:
                 result.add(int(row["birth_index"]))
@@ -155,6 +163,38 @@ def _latest_resume_checkpoint(
         return None
     candidates.sort(key=lambda item: item[0])
     return candidates[-1][1]
+
+
+def _fixed4_fork_checkpoint(
+    args: argparse.Namespace,
+    replicate: int,
+    *,
+    code_commit: str,
+) -> Path:
+    """Return the exact pre-birth state shared by both growth arms.
+
+    The fixed4 worker is the canonical pre-birth trajectory. If a diminishing-
+    return boundary was detected, fork its dedicated saturation checkpoint. If
+    the boundary was not established by 3M, fork the final no-saturation state;
+    growth workers then terminate immediately and record the same negative
+    regime result without repeating 3M tokens of identical training.
+    """
+
+    directory = _worker_dir(args, replicate, FIXED_ARM)
+    if not _worker_complete(directory, code_commit=code_commit):
+        raise RuntimeError(f"r{replicate} fixed4 must complete before growth arms can fork")
+    saturation_path = directory / "saturation.json"
+    if not saturation_path.is_file():
+        raise FileNotFoundError(f"missing fixed4 saturation evidence: {saturation_path}")
+    saturation = json.loads(saturation_path.read_text(encoding="utf-8"))
+    if bool(saturation.get("detected", False)):
+        token = int(saturation["token"])
+        checkpoint = directory / f"saturation-{token}.pt"
+    else:
+        checkpoint = directory / "final.pt"
+    if not checkpoint.is_file() or not _checkpoint_matches_commit(checkpoint, code_commit):
+        raise RuntimeError(f"invalid fixed4 fork checkpoint: {checkpoint}")
+    return checkpoint
 
 
 def command(
@@ -241,61 +281,15 @@ def _prepare_shared_corpus(args: argparse.Namespace) -> None:
     del train, validation
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Run the CLM-0.3b marginal-growth 3x3 matrix")
-    parser.add_argument("--output-root", type=Path, default=Path("results/clm-0.3b-marginal-growth-utility"))
-    parser.add_argument("--release-dir", type=Path, default=Path("artifacts/releases/clm-0.1"))
-    parser.add_argument("--source-005-dir", type=Path, default=Path("artifacts/experiments/005-consumer-language-bridge"))
-    parser.add_argument("--min-saturation-tokens", type=int, default=FORMAL_MIN_SATURATION_TOKENS)
-    parser.add_argument("--max-prebirth-tokens", type=int, default=FORMAL_MAX_PREBIRTH_TOKENS)
-    parser.add_argument("--post-birth-tokens", type=int, default=FORMAL_POST_BIRTH_TOKENS)
-    parser.add_argument("--max-workers", type=int)
-    parser.add_argument("--restart-existing", action="store_true")
-    parser.add_argument("--execute", action="store_true")
-    args = parser.parse_args()
-
-    provenance = git_provenance(REPO_ROOT)
-    if args.execute and provenance["tracked_tree_dirty"]:
-        raise RuntimeError("formal CLM-0.3b matrix requires a clean tracked Git tree")
-    code_commit = str(provenance["code_commit"])
-    max_total = args.max_prebirth_tokens + args.post_birth_tokens
-
-    planned: list[tuple[tuple[int, str], list[str]]] = []
-    completed_count = 0
-    for replicate, arm in jobs():
-        directory = _worker_dir(args, replicate, arm)
-        if args.execute and not args.restart_existing and _worker_complete(directory, code_commit=code_commit):
-            completed_count += 1
-            print(f"SKIP COMPLETE r{replicate} {arm}: {directory}", flush=True)
-            continue
-        resume = None
-        if args.execute and not args.restart_existing:
-            resume = _latest_resume_checkpoint(
-                directory,
-                code_commit=code_commit,
-                max_total_tokens=max_total,
-            )
-        cmd = command(args, replicate, arm, resume_input=resume)
-        planned.append(((replicate, arm), cmd))
-        if resume is None:
-            print("PLAN", " ".join(cmd), flush=True)
-        else:
-            print(f"RESUME r{replicate} {arm} <- {resume}", flush=True)
-            print("PLAN", " ".join(cmd), flush=True)
-
-    if not args.execute:
-        print("PREFLIGHT ONLY: pass --execute to launch CLM-0.3b.", flush=True)
-        return 0
-
-    gpu_count = torch.cuda.device_count()
-    if gpu_count < 1:
-        raise RuntimeError("formal CLM-0.3b execution requires CUDA")
-    _prepare_shared_corpus(args)
-
-    capacity = min(args.max_workers or gpu_count, gpu_count)
+def _run_queue(
+    args: argparse.Namespace,
+    planned: list[tuple[tuple[int, str], list[str]]],
+    *,
+    capacity: int,
+    completed_count: int,
+) -> int:
     pending = list(planned)
     active: list[tuple[tuple[int, str], int, subprocess.Popen[bytes]]] = []
-
     while pending or active:
         while pending and len(active) < capacity:
             item, cmd = pending.pop(0)
@@ -352,6 +346,110 @@ def main() -> int:
             process, code = failed
             raise subprocess.CalledProcessError(code, process.args)
         active = remaining
+    return completed_count
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Run the CLM-0.3b marginal-growth 3x3 matrix")
+    parser.add_argument("--output-root", type=Path, default=Path("results/clm-0.3b-marginal-growth-utility"))
+    parser.add_argument("--release-dir", type=Path, default=Path("artifacts/releases/clm-0.1"))
+    parser.add_argument("--source-005-dir", type=Path, default=Path("artifacts/experiments/005-consumer-language-bridge"))
+    parser.add_argument("--min-saturation-tokens", type=int, default=FORMAL_MIN_SATURATION_TOKENS)
+    parser.add_argument("--max-prebirth-tokens", type=int, default=FORMAL_MAX_PREBIRTH_TOKENS)
+    parser.add_argument("--post-birth-tokens", type=int, default=FORMAL_POST_BIRTH_TOKENS)
+    parser.add_argument("--max-workers", type=int)
+    parser.add_argument("--restart-existing", action="store_true")
+    parser.add_argument("--execute", action="store_true")
+    args = parser.parse_args()
+
+    provenance = git_provenance(REPO_ROOT)
+    if args.execute and provenance["tracked_tree_dirty"]:
+        raise RuntimeError("formal CLM-0.3b matrix requires a clean tracked Git tree")
+    code_commit = str(provenance["code_commit"])
+    max_total = args.max_prebirth_tokens + args.post_birth_tokens
+
+    if not args.execute:
+        for replicate in range(3):
+            cmd = command(args, replicate, FIXED_ARM, resume_input=None)
+            print("PLAN PREBIRTH+CONTROL", " ".join(cmd), flush=True)
+        for replicate in range(3):
+            for arm in GROWTH_ARMS:
+                cmd = command(args, replicate, arm, resume_input=None)
+                print(
+                    f"PLAN FORK r{replicate} {arm} <- r{replicate}-fixed4 saturation checkpoint",
+                    flush=True,
+                )
+                print("PLAN POSTBIRTH", " ".join(cmd), flush=True)
+        print("PREFLIGHT ONLY: pass --execute to launch CLM-0.3b.", flush=True)
+        return 0
+
+    gpu_count = torch.cuda.device_count()
+    if gpu_count < 1:
+        raise RuntimeError("formal CLM-0.3b execution requires CUDA")
+    _prepare_shared_corpus(args)
+    capacity = min(args.max_workers or gpu_count, gpu_count)
+
+    completed_count = 0
+    fixed_planned: list[tuple[tuple[int, str], list[str]]] = []
+    for replicate in range(3):
+        directory = _worker_dir(args, replicate, FIXED_ARM)
+        if not args.restart_existing and _worker_complete(directory, code_commit=code_commit):
+            completed_count += 1
+            print(f"SKIP COMPLETE r{replicate} {FIXED_ARM}: {directory}", flush=True)
+            continue
+        resume = None
+        if not args.restart_existing:
+            resume = _latest_resume_checkpoint(
+                directory,
+                code_commit=code_commit,
+                max_total_tokens=max_total,
+            )
+        if resume is not None:
+            print(f"RESUME r{replicate} {FIXED_ARM} <- {resume}", flush=True)
+        fixed_planned.append(((replicate, FIXED_ARM), command(
+            args,
+            replicate,
+            FIXED_ARM,
+            resume_input=resume,
+        )))
+    completed_count = _run_queue(
+        args,
+        fixed_planned,
+        capacity=capacity,
+        completed_count=completed_count,
+    )
+
+    growth_planned: list[tuple[tuple[int, str], list[str]]] = []
+    for replicate in range(3):
+        fork = _fixed4_fork_checkpoint(args, replicate, code_commit=code_commit)
+        for arm in GROWTH_ARMS:
+            directory = _worker_dir(args, replicate, arm)
+            if not args.restart_existing and _worker_complete(directory, code_commit=code_commit):
+                completed_count += 1
+                print(f"SKIP COMPLETE r{replicate} {arm}: {directory}", flush=True)
+                continue
+            local_resume = None
+            if not args.restart_existing:
+                local_resume = _latest_resume_checkpoint(
+                    directory,
+                    code_commit=code_commit,
+                    max_total_tokens=max_total,
+                )
+            resume = local_resume or fork
+            source = "local" if local_resume is not None else "fixed4 fork"
+            print(f"RESUME r{replicate} {arm} <- {resume} ({source})", flush=True)
+            growth_planned.append(((replicate, arm), command(
+                args,
+                replicate,
+                arm,
+                resume_input=resume,
+            )))
+    completed_count = _run_queue(
+        args,
+        growth_planned,
+        capacity=capacity,
+        completed_count=completed_count,
+    )
 
     formal_defaults = (
         args.min_saturation_tokens == FORMAL_MIN_SATURATION_TOKENS
