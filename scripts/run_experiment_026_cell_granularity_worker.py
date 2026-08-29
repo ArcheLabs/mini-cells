@@ -21,8 +21,8 @@ sys.path.insert(0, str(ROOT / "research"))
 from minicells.granularity_30m import (  # noqa: E402
     BASE_LR,
     BETAS,
-    CONTINUATION_STEPS,
     CONTINUATION_TOKENS,
+    DOMAINS,
     EVAL_TOKENS,
     FORMAT,
     GRANULARITIES,
@@ -41,18 +41,35 @@ from minicells.granularity_30m import (  # noqa: E402
     summarize_diagnostics,
 )
 from minicells.language_data import load_tokenizer  # noqa: E402
-from minicells.story_math_shift_30m import SOURCE_007_ARTIFACT, build_30m_clm  # noqa: E402
-
+from minicells.local_plasticity import (  # noqa: E402
+    LocalPlasticityConfig,
+    build_local_plasticity_optimizer,
+    plasticity_summary,
+    set_global_lr,
+    update_local_plasticity,
+)
+from minicells.story_math_shift_30m import (  # noqa: E402
+    SOURCE_007_ARTIFACT,
+    build_30m_clm,
+)
 
 RESUME_INTERVAL_TOKENS = 2_000_000
 PROGRESS_INTERVAL_TOKENS = 250_000
 DEFAULT_MAX_WALL_HOURS = 2.5
 AGE_ZERO_MAX_ABS_TOLERANCE = 5e-4
+PLASTICITY_CONFIG = LocalPlasticityConfig()
 
 
 def parser() -> argparse.Namespace:
-    result = argparse.ArgumentParser(description="Run one Experiment-026 granularity arm")
-    result.add_argument("--granularity", type=int, choices=GRANULARITIES, required=True)
+    result = argparse.ArgumentParser(
+        description="Run one Experiment-026 granularity arm"
+    )
+    result.add_argument(
+        "--granularity",
+        type=int,
+        choices=GRANULARITIES,
+        required=True,
+    )
     result.add_argument("--tokenizer-path", type=Path, required=True)
     result.add_argument("--story-train", type=Path, required=True)
     result.add_argument("--story-validation", type=Path, required=True)
@@ -63,8 +80,16 @@ def parser() -> argparse.Namespace:
     result.add_argument("--facts-train", type=Path, required=True)
     result.add_argument("--facts-validation", type=Path, required=True)
     result.add_argument("--output-dir", type=Path, required=True)
-    result.add_argument("--continuation-tokens", type=int, default=CONTINUATION_TOKENS)
-    result.add_argument("--max-wall-hours", type=float, default=DEFAULT_MAX_WALL_HOURS)
+    result.add_argument(
+        "--continuation-tokens",
+        type=int,
+        default=CONTINUATION_TOKENS,
+    )
+    result.add_argument(
+        "--max-wall-hours",
+        type=float,
+        default=DEFAULT_MAX_WALL_HOURS,
+    )
     result.add_argument("--reset", action="store_true")
     return result.parse_args()
 
@@ -91,7 +116,10 @@ def git_identity() -> dict[str, object]:
 def _json_write(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.write_text(
+        json.dumps(value, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     temporary.replace(path)
 
 
@@ -106,22 +134,6 @@ def _memmap(path: Path) -> np.memmap:
     if not path.is_file():
         raise FileNotFoundError(path)
     return np.memmap(path, dtype=np.uint16, mode="r")
-
-
-def _optimizer(model: torch.nn.Module) -> torch.optim.AdamW:
-    return torch.optim.AdamW(
-        model.parameters(),
-        lr=BASE_LR,
-        betas=BETAS,
-        weight_decay=WEIGHT_DECAY,
-    )
-
-
-def _set_lr(optimizer: torch.optim.Optimizer, step: int, total_steps: int) -> float:
-    lr = continuation_lr(step, total_steps=total_steps)
-    for group in optimizer.param_groups:
-        group["lr"] = lr
-    return lr
 
 
 def _age_zero_parity(
@@ -142,11 +154,13 @@ def _age_zero_parity(
         with torch.no_grad():
             expected = reference(inputs).logits.float()
             actual = tissue_model(inputs).logits.float()
-        diff = actual - expected
+        difference = actual - expected
         result = {
-            "max_abs_diff": float(diff.abs().max().item()),
-            "rms_diff": float(diff.square().mean().sqrt().item()),
-            "argmax_agreement": float((actual.argmax(-1) == expected.argmax(-1)).float().mean().item()),
+            "max_abs_diff": float(difference.abs().max().item()),
+            "rms_diff": float(difference.square().mean().sqrt().item()),
+            "argmax_agreement": float(
+                (actual.argmax(-1) == expected.argmax(-1)).float().mean().item()
+            ),
         }
     finally:
         del reference
@@ -164,7 +178,10 @@ def _save_tables(
 ) -> None:
     pd.DataFrame(metrics).to_csv(arm_dir / "metrics.csv", index=False)
     pd.DataFrame(cell_rows).to_csv(arm_dir / "cell-diagnostics.csv", index=False)
-    pd.DataFrame(tissue_rows).to_csv(arm_dir / "tissue-diagnostics.csv", index=False)
+    pd.DataFrame(tissue_rows).to_csv(
+        arm_dir / "tissue-diagnostics.csv",
+        index=False,
+    )
 
 
 def _evaluate_checkpoint(
@@ -177,32 +194,38 @@ def _evaluate_checkpoint(
     probe_batches,
     baseline_profiles,
     device: torch.device,
-) -> tuple[dict[str, object], list[dict[str, object]], list[dict[str, object]], dict[str, dict[str, float]]]:
+) -> tuple[
+    dict[str, object],
+    list[dict[str, object]],
+    list[dict[str, object]],
+    dict[str, dict[str, float]],
+]:
     domain_metrics = evaluate_domains(
         model,
         validation_streams=validation_streams,
         validation_starts=validation_starts,
         device=device,
     )
-    domain_nlls = {domain: float(domain_metrics[f"{domain}_nll"]) for domain in ("story", "math", "symbolic", "facts")}
+    domain_nlls = {
+        domain: float(domain_metrics[f"{domain}_nll"])
+        for domain in DOMAINS
+    }
     cells, tissues, profiles = collect_cell_diagnostics(
         model,
         batches=probe_batches,
         domain_nlls=domain_nlls,
         baseline_profiles=baseline_profiles,
     )
-    diagnostic_summary = summarize_diagnostics(cells, tissues)
-    tokens = step * TOKENS_PER_STEP
-    structure = model_structure(model)
     metric = {
         "granularity": granularity,
         "continuation_step": step,
-        "continuation_tokens": tokens,
-        "total_experience_tokens": 100_000_000 + tokens,
-        **structure,
+        "continuation_tokens": step * TOKENS_PER_STEP,
+        "total_experience_tokens": 100_000_000 + step * TOKENS_PER_STEP,
+        **model_structure(model),
         **domain_metrics,
-        **diagnostic_summary,
+        **summarize_diagnostics(cells, tissues),
     }
+    tokens = step * TOKENS_PER_STEP
     for row in cells:
         row.update({"granularity": granularity, "continuation_tokens": tokens})
     for row in tissues:
@@ -210,12 +233,46 @@ def _evaluate_checkpoint(
     return metric, cells, tissues, profiles
 
 
+def _resume_payload(
+    *,
+    granularity: int,
+    model: torch.nn.Module,
+    optimizer: torch.optim.Optimizer,
+    scaler: torch.amp.GradScaler,
+    step: int,
+    metrics: list[dict[str, object]],
+    cell_rows: list[dict[str, object]],
+    tissue_rows: list[dict[str, object]],
+    baseline_profiles: dict[str, dict[str, float]] | None,
+    age_zero: dict[str, float] | None,
+    elapsed: float,
+    provenance: dict[str, object],
+) -> dict[str, object]:
+    return {
+        "format": WORKER_FORMAT,
+        "granularity": granularity,
+        "model_state": model.state_dict(),
+        "optimizer_state": optimizer.state_dict(),
+        "scaler_state": scaler.state_dict(),
+        "step": step,
+        "metrics": metrics,
+        "cell_rows": cell_rows,
+        "tissue_rows": tissue_rows,
+        "baseline_profiles": baseline_profiles,
+        "age_zero_parity": age_zero,
+        "accumulated_elapsed_seconds": elapsed,
+        "provenance": provenance,
+    }
+
+
 def main() -> int:
     args = parser()
     if args.continuation_tokens <= 0 or args.continuation_tokens > CONTINUATION_TOKENS:
         raise ValueError("--continuation-tokens must be in (0, 20M]")
     if args.continuation_tokens % TOKENS_PER_STEP != 0:
-        raise ValueError("--continuation-tokens must be a multiple of TOKENS_PER_STEP")
+        raise ValueError(
+            "--continuation-tokens must be a multiple of TOKENS_PER_STEP"
+        )
     if args.max_wall_hours <= 0:
         raise ValueError("--max-wall-hours must be positive")
     if not torch.cuda.is_available():
@@ -256,7 +313,12 @@ def main() -> int:
         granularity=granularity,
         device=device,
     )
-    optimizer = _optimizer(model)
+    optimizer, cell_group_index = build_local_plasticity_optimizer(
+        model,
+        lr=BASE_LR,
+        betas=BETAS,
+        weight_decay=WEIGHT_DECAY,
+    )
     scaler = torch.amp.GradScaler("cuda", enabled=True)
     target_steps = args.continuation_tokens // TOKENS_PER_STEP
     metrics: list[dict[str, object]] = []
@@ -281,9 +343,14 @@ def main() -> int:
         all_cell_rows = list(payload.get("cell_rows", []))
         all_tissue_rows = list(payload.get("tissue_rows", []))
         baseline_profiles = payload.get("baseline_profiles")
-        accumulated_elapsed = float(payload.get("accumulated_elapsed_seconds", 0.0))
+        accumulated_elapsed = float(
+            payload.get("accumulated_elapsed_seconds", 0.0)
+        )
         age_zero = payload.get("age_zero_parity")
-        print(f"resumed g{granularity} at {step * TOKENS_PER_STEP:,} continuation tokens")
+        print(
+            f"resumed g{granularity} at "
+            f"{step * TOKENS_PER_STEP:,} continuation tokens"
+        )
 
     invocation_started = time.monotonic()
     deadline = invocation_started + args.max_wall_hours * 3600.0
@@ -298,7 +365,11 @@ def main() -> int:
         )
         _json_write(arm_dir / "age-zero-parity.json", age_zero)
 
-    eval_steps = {token // TOKENS_PER_STEP for token in EVAL_TOKENS if token <= args.continuation_tokens}
+    eval_steps = {
+        token // TOKENS_PER_STEP
+        for token in EVAL_TOKENS
+        if token <= args.continuation_tokens
+    }
     if step == 0 and not metrics:
         metric, cells, tissues, profiles = _evaluate_checkpoint(
             model,
@@ -317,44 +388,81 @@ def main() -> int:
         _save_tables(arm_dir, metrics, all_cell_rows, all_tissue_rows)
         print(
             f"g{granularity} age0 balanced_nll={metric['balanced_nll']:.4f} "
-            f"specialization={metric['mean_cell_specialization']:.4f}"
+            f"specialization={metric['median_cell_specialization']:.4f}"
         )
 
     last_progress_tokens = step * TOKENS_PER_STEP
     last_resume_tokens = step * TOKENS_PER_STEP
     last_loss = float("nan")
     last_domain = ""
+    last_plasticity = {
+        "mean_plasticity": 1.0,
+        "min_plasticity": 1.0,
+        "max_plasticity": 1.0,
+        "mean_local_pressure": 1.0,
+    }
     stop_reason = "complete"
+
     while step < target_steps:
         if time.monotonic() >= deadline:
             stop_reason = "worker_soft_wall_limit"
             break
-        domain, inputs, targets = continuation_batch(step, streams=train_streams, device=device)
-        lr = _set_lr(optimizer, step + 1, target_steps)
+        domain, inputs, targets = continuation_batch(
+            step,
+            streams=train_streams,
+            device=device,
+        )
+        scheduled_lr = continuation_lr(step + 1, total_steps=target_steps)
+        set_global_lr(
+            optimizer,
+            cell_group_index,
+            base_lr=scheduled_lr,
+        )
         model.train()
         optimizer.zero_grad(set_to_none=True)
         with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=True):
             output = model(inputs)
-            loss = F.cross_entropy(output.logits.reshape(-1, output.logits.shape[-1]), targets.reshape(-1))
+            loss = F.cross_entropy(
+                output.logits.reshape(-1, output.logits.shape[-1]),
+                targets.reshape(-1),
+            )
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
         torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP)
+        plasticity_rows = update_local_plasticity(
+            model,
+            optimizer,
+            cell_group_index,
+            base_lr=scheduled_lr,
+            config=PLASTICITY_CONFIG,
+        )
+        last_plasticity = plasticity_summary(plasticity_rows)
         scaler.step(optimizer)
         scaler.update()
+
         step += 1
         last_loss = float(loss.detach().item())
         last_domain = domain
         tokens = step * TOKENS_PER_STEP
 
-        if tokens - last_progress_tokens >= PROGRESS_INTERVAL_TOKENS or step == target_steps:
+        if (
+            tokens - last_progress_tokens >= PROGRESS_INTERVAL_TOKENS
+            or step == target_steps
+        ):
             elapsed = accumulated_elapsed + (time.monotonic() - invocation_started)
             print(
                 f"g{granularity} tokens={tokens:,}/{args.continuation_tokens:,} "
-                f"domain={domain} loss={last_loss:.4f} lr={lr:.2e} elapsed={elapsed/3600:.2f}h"
+                f"domain={domain} loss={last_loss:.4f} lr={scheduled_lr:.2e} "
+                f"plasticity=[{last_plasticity['min_plasticity']:.3f},"
+                f"{last_plasticity['max_plasticity']:.3f}] "
+                f"elapsed={elapsed / 3600:.2f}h"
             )
             last_progress_tokens = tokens
 
-        if step in eval_steps and (not metrics or int(metrics[-1]["continuation_tokens"]) != tokens):
+        if step in eval_steps and (
+            not metrics
+            or int(metrics[-1]["continuation_tokens"]) != tokens
+        ):
             metric, cells, tissues, _ = _evaluate_checkpoint(
                 model,
                 granularity=granularity,
@@ -370,29 +478,32 @@ def main() -> int:
             all_tissue_rows.extend(tissues)
             _save_tables(arm_dir, metrics, all_cell_rows, all_tissue_rows)
             print(
-                f"g{granularity} eval@{tokens:,}: balanced_nll={metric['balanced_nll']:.4f} "
-                f"specialization={metric['mean_cell_specialization']:.4f} "
-                f"conflict={metric['mean_gradient_conflict']:.4f}"
+                f"g{granularity} eval@{tokens:,}: "
+                f"balanced_nll={metric['balanced_nll']:.4f} "
+                f"specialization={metric['median_cell_specialization']:.4f} "
+                f"plasticity_std={metric['plasticity_std']:.4f}"
             )
 
-        if tokens - last_resume_tokens >= RESUME_INTERVAL_TOKENS or step == target_steps:
+        if (
+            tokens - last_resume_tokens >= RESUME_INTERVAL_TOKENS
+            or step == target_steps
+        ):
             elapsed = accumulated_elapsed + (time.monotonic() - invocation_started)
             _atomic_torch_save(
-                {
-                    "format": WORKER_FORMAT,
-                    "granularity": granularity,
-                    "model_state": model.state_dict(),
-                    "optimizer_state": optimizer.state_dict(),
-                    "scaler_state": scaler.state_dict(),
-                    "step": step,
-                    "metrics": metrics,
-                    "cell_rows": all_cell_rows,
-                    "tissue_rows": all_tissue_rows,
-                    "baseline_profiles": baseline_profiles,
-                    "age_zero_parity": age_zero,
-                    "accumulated_elapsed_seconds": elapsed,
-                    "provenance": provenance,
-                },
+                _resume_payload(
+                    granularity=granularity,
+                    model=model,
+                    optimizer=optimizer,
+                    scaler=scaler,
+                    step=step,
+                    metrics=metrics,
+                    cell_rows=all_cell_rows,
+                    tissue_rows=all_tissue_rows,
+                    baseline_profiles=baseline_profiles,
+                    age_zero=age_zero,
+                    elapsed=elapsed,
+                    provenance=provenance,
+                ),
                 resume_path,
             )
             last_resume_tokens = tokens
@@ -401,21 +512,20 @@ def main() -> int:
     total_elapsed = accumulated_elapsed + (time.monotonic() - invocation_started)
     if not complete:
         _atomic_torch_save(
-            {
-                "format": WORKER_FORMAT,
-                "granularity": granularity,
-                "model_state": model.state_dict(),
-                "optimizer_state": optimizer.state_dict(),
-                "scaler_state": scaler.state_dict(),
-                "step": step,
-                "metrics": metrics,
-                "cell_rows": all_cell_rows,
-                "tissue_rows": all_tissue_rows,
-                "baseline_profiles": baseline_profiles,
-                "age_zero_parity": age_zero,
-                "accumulated_elapsed_seconds": total_elapsed,
-                "provenance": provenance,
-            },
+            _resume_payload(
+                granularity=granularity,
+                model=model,
+                optimizer=optimizer,
+                scaler=scaler,
+                step=step,
+                metrics=metrics,
+                cell_rows=all_cell_rows,
+                tissue_rows=all_tissue_rows,
+                baseline_profiles=baseline_profiles,
+                age_zero=age_zero,
+                elapsed=total_elapsed,
+                provenance=provenance,
+            ),
             resume_path,
         )
 
@@ -430,6 +540,13 @@ def main() -> int:
         "target_continuation_tokens": args.continuation_tokens,
         "last_loss": last_loss,
         "last_domain": last_domain,
+        "last_plasticity": last_plasticity,
+        "local_plasticity_config": {
+            "ema_decay": PLASTICITY_CONFIG.ema_decay,
+            "pressure_exponent": PLASTICITY_CONFIG.pressure_exponent,
+            "minimum": PLASTICITY_CONFIG.minimum,
+            "maximum": PLASTICITY_CONFIG.maximum,
+        },
         "elapsed_seconds": total_elapsed,
         "peak_vram_bytes": int(torch.cuda.max_memory_allocated(device)),
         "source": source_identity,
