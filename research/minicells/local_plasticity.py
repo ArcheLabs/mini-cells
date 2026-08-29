@@ -2,13 +2,13 @@
 
 The controller changes no forward parameter and has no trainable parameter of
 its own. Every micro-cell starts at plasticity 1.0, so all granularity arms have
-identical age-zero functions and parameter counts. After each backward pass,
+identical age-zero functions and parameter counts. At selected backward passes,
 local gradient pressure relative to immediate tissue neighbours determines a
-bounded learning-rate multiplier for the next optimizer step.
+bounded learning-rate multiplier.
 
-The multipliers are renormalized to mean 1.0 inside every tissue. This prevents
-a finer tissue from receiving a systematically larger global learning rate and
-makes the granularity comparison about the resolution of local adaptation.
+Multipliers remain inside configured bounds and have mean exactly 1.0 inside
+every tissue. Finer tissues therefore receive finer local adaptation control,
+not a systematically larger global learning rate.
 """
 
 from __future__ import annotations
@@ -82,6 +82,57 @@ def _iter_tissues(model: nn.Module):
                 yield stage_index, str(expert_id), expert
 
 
+def _bounded_mean_one(
+    values: list[float],
+    *,
+    minimum: float,
+    maximum: float,
+) -> list[float]:
+    """Scale positive values to bounded mean one using monotone bisection."""
+    if not values:
+        return []
+    if any(value <= 0.0 or not math.isfinite(value) for value in values):
+        raise ValueError("plasticity targets must be positive finite values")
+    if not minimum <= 1.0 <= maximum:
+        raise ValueError("bounds must contain 1.0")
+    if len(values) == 1:
+        return [1.0]
+
+    def mean_at(scale: float) -> float:
+        return sum(
+            min(maximum, max(minimum, scale * value))
+            for value in values
+        ) / len(values)
+
+    low = 0.0
+    high = 1.0
+    while mean_at(high) < 1.0:
+        high *= 2.0
+    for _ in range(80):
+        middle = 0.5 * (low + high)
+        if mean_at(middle) < 1.0:
+            low = middle
+        else:
+            high = middle
+    scale = 0.5 * (low + high)
+    result = [
+        min(maximum, max(minimum, scale * value))
+        for value in values
+    ]
+    residual = len(values) - sum(result)
+    if abs(residual) > 1e-12:
+        adjustable = [
+            index
+            for index, value in enumerate(result)
+            if minimum < value < maximum
+        ]
+        if adjustable:
+            correction = residual / len(adjustable)
+            for index in adjustable:
+                result[index] += correction
+    return result
+
+
 def build_local_plasticity_optimizer(
     model: nn.Module,
     *,
@@ -153,7 +204,11 @@ def set_global_lr(
         raise ValueError("base_lr must be non-negative")
     cell_groups = set(group_index.values())
     for index, group in enumerate(optimizer.param_groups):
-        multiplier = float(group.get("plasticity", 1.0)) if index in cell_groups else 1.0
+        multiplier = (
+            float(group.get("plasticity", 1.0))
+            if index in cell_groups
+            else 1.0
+        )
         group["base_lr"] = base_lr
         group["lr"] = base_lr * multiplier
 
@@ -167,21 +222,15 @@ def update_local_plasticity(
     base_lr: float,
     config: LocalPlasticityConfig | None = None,
 ) -> list[CellPlasticityTelemetry]:
-    """Update local LR multipliers from the current backward-pass gradients.
-
-    Pressure is the cell gradient RMS divided by the mean RMS of its immediate
-    neighbours. A single-cell tissue uses itself as the local reference and
-    therefore remains exactly at multiplier 1.0. Targets are bounded and then
-    renormalized to mean 1.0 within each tissue before EMA smoothing.
-    """
+    """Update bounded local LR multipliers from current unscaled gradients."""
     config = config or LocalPlasticityConfig()
     telemetry: list[CellPlasticityTelemetry] = []
 
     for stage, expert_id, tissue in _iter_tissues(model):
         gradients = [_cell_gradient_rms(cell) for cell in tissue.cells]
         if len(gradients) == 1:
-            targets = [1.0]
             pressures = [1.0]
+            targets = [1.0]
         else:
             pressures = []
             raw_targets = []
@@ -196,33 +245,38 @@ def update_local_plasticity(
                 if gradient <= config.epsilon and reference <= config.epsilon:
                     pressure = 1.0
                 else:
-                    pressure = (gradient + config.epsilon) / (reference + config.epsilon)
-                pressures.append(float(pressure))
-                raw_targets.append(
-                    min(
-                        config.maximum,
-                        max(config.minimum, pressure**config.pressure_exponent),
+                    pressure = (
+                        gradient + config.epsilon
+                    ) / (
+                        reference + config.epsilon
                     )
-                )
-            target_mean = sum(raw_targets) / len(raw_targets)
-            targets = [target / max(target_mean, config.epsilon) for target in raw_targets]
-            targets = [min(config.maximum, max(config.minimum, target)) for target in targets]
-            second_mean = sum(targets) / len(targets)
-            targets = [target / max(second_mean, config.epsilon) for target in targets]
+                pressures.append(float(pressure))
+                raw_targets.append(pressure**config.pressure_exponent)
+            targets = _bounded_mean_one(
+                raw_targets,
+                minimum=config.minimum,
+                maximum=config.maximum,
+            )
 
-        smoothed = []
-        for cell_index, target in enumerate(targets):
-            cell = tissue.cells[cell_index]
-            previous = float(cell.plasticity.item())
-            value = config.ema_decay * previous + (1.0 - config.ema_decay) * float(target)
-            smoothed.append(value)
-        mean_smoothed = sum(smoothed) / len(smoothed)
-        smoothed = [value / max(mean_smoothed, config.epsilon) for value in smoothed]
+        previous_values = [float(cell.plasticity.item()) for cell in tissue.cells]
+        smoothed_raw = [
+            config.ema_decay * previous
+            + (1.0 - config.ema_decay) * target
+            for previous, target in zip(previous_values, targets, strict=True)
+        ]
+        smoothed = _bounded_mean_one(
+            smoothed_raw,
+            minimum=config.minimum,
+            maximum=config.maximum,
+        )
 
         for cell_index, value in enumerate(smoothed):
             cell = tissue.cells[cell_index]
             cell.plasticity.fill_(float(value))
-            normalized_stress = max(0.0, min(1.0, (pressures[cell_index] - 0.5) / 1.5))
+            normalized_stress = max(
+                0.0,
+                min(1.0, (pressures[cell_index] - 0.5) / 1.5),
+            )
             cell.stress.mul_(config.ema_decay).add_(
                 (1.0 - config.ema_decay) * normalized_stress
             )
@@ -246,7 +300,9 @@ def update_local_plasticity(
     return telemetry
 
 
-def plasticity_summary(rows: list[CellPlasticityTelemetry]) -> dict[str, float]:
+def plasticity_summary(
+    rows: list[CellPlasticityTelemetry],
+) -> dict[str, float]:
     if not rows:
         return {
             "mean_plasticity": 1.0,
