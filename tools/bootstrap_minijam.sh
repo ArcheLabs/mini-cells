@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
-EXPECTED_MINIJAM_REF="${MINICELLS_MINIJAM_REF:-c4dec2db5d59ab40f8293335e29c94dd82b8eaf4}"
+EXPECTED_MINIJAM_REF="${MINICELLS_MINIJAM_REF:-d4cecd4cce277ccaa334b24d18013288dbd6a66b}"
 if [[ -n "${MINIJAM_CLIENT_DIR:-}" ]]; then
   CLIENT="${MINIJAM_CLIENT_DIR}"
 else
