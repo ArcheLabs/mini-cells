@@ -3,6 +3,11 @@
 //! The compiler is intentionally small and dependency-light.  Its output is
 //! canonical JSON in `dataset.bin` (the extension is kept for the stable lab
 //! interface), plus a human-readable manifest and rejected-record log.
+#![allow(
+    clippy::field_reassign_with_default,
+    clippy::manual_div_ceil,
+    clippy::manual_is_multiple_of
+)]
 
 use blake2b_simd::Params;
 use minicells_core::{

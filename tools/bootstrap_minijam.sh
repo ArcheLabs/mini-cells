@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+EXPECTED_MINIJAM_REF="${MINICELLS_MINIJAM_REF:-c4dec2db5d59ab40f8293335e29c94dd82b8eaf4}"
 if [[ -n "${MINIJAM_CLIENT_DIR:-}" ]]; then
   CLIENT="${MINIJAM_CLIENT_DIR}"
-elif [[ -d "${ROOT}/../minijam-client/.git" ]]; then
-  CLIENT="${ROOT}/../minijam-client"
 else
   CLIENT="${ROOT}/.deps/minijam-client"
   if [[ ! -d "${CLIENT}/.git" ]]; then
@@ -12,7 +11,10 @@ else
   fi
 fi
 test -f "${CLIENT}/service-toolchain/compiler/toolchain.lock"
-EXPECTED_MINIJAM_REF="${MINICELLS_MINIJAM_REF:-2288a030587be4e201bdefa9806476dc3d891bca}"
+if ! git -C "${CLIENT}" cat-file -e "${EXPECTED_MINIJAM_REF}^{commit}"; then
+  git -C "${CLIENT}" fetch --quiet origin
+fi
+git -C "${CLIENT}" checkout --quiet "${EXPECTED_MINIJAM_REF}"
 RESOLVED_MINIJAM_REF="$(git -C "${CLIENT}" rev-parse HEAD)"
 if [[ "${RESOLVED_MINIJAM_REF}" != "${EXPECTED_MINIJAM_REF}" ]]; then
   echo "MiniJAM checkout ${RESOLVED_MINIJAM_REF} does not match canonical MiniJamSpec pin ${EXPECTED_MINIJAM_REF}" >&2

@@ -1,4 +1,11 @@
-#![no_std]
+#![cfg_attr(target_arch = "riscv64", no_std)]
+#![allow(
+    dead_code,
+    unused_imports,
+    unreachable_code,
+    clippy::missing_safety_doc,
+    clippy::needless_question_mark
+)]
 
 use minicells_training_ref::{
     accumulate_batch_gradients, compute_gradient_leaf, diagnostic_sample_backward,
@@ -596,7 +603,7 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
 #[no_mangle]
 pub extern "C" fn minijam_accumulate() {}
 
-#[cfg(not(test))]
+#[cfg(target_arch = "riscv64")]
 #[panic_handler]
 fn panic(_: &core::panic::PanicInfo) -> ! {
     unsafe { core::arch::asm!("unimp", options(noreturn)) }

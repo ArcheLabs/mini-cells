@@ -1,3 +1,5 @@
+#![allow(clippy::needless_range_loop)]
+
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use minicells_core::{
     batch::{batch_digest, canonical_batch},
@@ -16,7 +18,7 @@ use minicells_training_ref::{
     TrainStepReport, TrainingBatch, TrainingState, TrainingWorkspace, LOGICAL_BATCH_SIZE,
     PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE, PARAMETER_COUNT,
 };
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 #[derive(Parser)]
 #[command(
@@ -205,8 +207,8 @@ fn run_persistent_pvm(
     let mut harness = DirectPvmHarness::load(
         "service/artifacts/service.blob",
         1_000_000_000,
-        "2288a030587be4e201bdefa9806476dc3d891bca",
-        "788bc054223f81282e4d88a83f05f2fe9e94c121",
+        "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+        "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
     )?;
     harness.execute_accumulate()?;
     let mut metrics_file = std::fs::File::create(output.join("metrics.jsonl"))?;
@@ -347,7 +349,7 @@ fn run_persistent_pvm(
     Ok(())
 }
 
-fn load_fidelity_batch(path: &PathBuf) -> Result<TrainingBatch, Box<dyn std::error::Error>> {
+fn load_fidelity_batch(path: &Path) -> Result<TrainingBatch, Box<dyn std::error::Error>> {
     let mut batches = load_fidelity_batches(path)?;
     if batches.len() != 1 || batches[0].size != 256 {
         return Err("training batch must be exactly 256x64".into());
@@ -766,8 +768,8 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "2288a030587be4e201bdefa9806476dc3d891bca",
-            "788bc054223f81282e4d88a83f05f2fe9e94c121",
+            "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+            "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
         )?;
         let ex = h.execute_refine_measured(&payload)?;
         if ex.output.len() != 12 + PARAMETER_COUNT * 4 || &ex.output[..4] != b"MCAR" {
@@ -794,8 +796,8 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
     let mut h = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "2288a030587be4e201bdefa9806476dc3d891bca",
-        "788bc054223f81282e4d88a83f05f2fe9e94c121",
+        "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+        "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
     )?;
     let final_ex = h.execute_refine_measured(&final_payload)?;
     if final_ex.output.len() != 24 + PARAMETER_COUNT * 12 || &final_ex.output[..4] != b"MCPR" {
@@ -828,8 +830,8 @@ fn run_full_multi_refine(args: PvmParityArgs) -> Result<(), Box<dyn std::error::
     let mut wh = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "2288a030587be4e201bdefa9806476dc3d891bca",
-        "788bc054223f81282e4d88a83f05f2fe9e94c121",
+        "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+        "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
     )?;
     let worst_ex = wh.execute_refine_measured(&worst_payload)?;
     let worst_gas = worst_ex.gas_used;
@@ -934,8 +936,8 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
     let mut harness = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "2288a030587be4e201bdefa9806476dc3d891bca",
-        "788bc054223f81282e4d88a83f05f2fe9e94c121",
+        "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+        "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
     )?;
     let execution = harness.execute_refine_measured(&payload)?;
     if execution.output.len() != 24 + PARAMETER_COUNT * 12 || &execution.output[..4] != b"MCPR" {
@@ -979,8 +981,8 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "2288a030587be4e201bdefa9806476dc3d891bca",
-            "788bc054223f81282e4d88a83f05f2fe9e94c121",
+            "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+            "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
         )?;
         let ex = h.execute_refine_measured(&shard_payload)?;
         shard_gas.push(ex.gas_used);
@@ -1012,8 +1014,8 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
         let mut h = DirectPvmHarness::load(
             &args.artifact,
             args.gas_limit,
-            "2288a030587be4e201bdefa9806476dc3d891bca",
-            "788bc054223f81282e4d88a83f05f2fe9e94c121",
+            "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+            "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
         )?;
         let ex = h.execute_refine_measured(&final_payload)?;
         finalize_gas = ex.gas_used;
@@ -1048,8 +1050,8 @@ fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     let mut harness = DirectPvmHarness::load(
         &args.artifact,
         args.gas_limit,
-        "2288a030587be4e201bdefa9806476dc3d891bca",
-        "788bc054223f81282e4d88a83f05f2fe9e94c121",
+        "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+        "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
     )?;
     let payload = match (&args.payload_hex, &args.payload_file) {
         (Some(hex), None) => hex::decode(hex.trim_start_matches("0x"))?,

@@ -1,4 +1,5 @@
-#![no_std]
+#![cfg_attr(target_arch = "riscv64", no_std)]
+#![allow(clippy::missing_safety_doc)]
 
 use core::cell::UnsafeCell;
 use minicells_runtime::{
@@ -170,7 +171,7 @@ pub extern "C" fn minijam_accumulate() {
     }
 }
 
-#[cfg(not(test))]
+#[cfg(target_arch = "riscv64")]
 #[panic_handler]
 fn panic(_: &core::panic::PanicInfo) -> ! {
     // SAFETY: deliberately terminate the guest so MiniJAM records a PVM panic

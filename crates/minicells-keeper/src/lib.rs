@@ -39,20 +39,11 @@ const SESSION_TTL: Duration = Duration::from_secs(12 * 60 * 60);
 const MAX_CHALLENGES: usize = 1024;
 const MAX_SESSIONS: usize = 4096;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct AuthConfig {
     pub origin: Option<String>,
     pub operator: Option<[u8; 32]>,
     pub secure_cookie: bool,
-}
-impl Default for AuthConfig {
-    fn default() -> Self {
-        Self {
-            origin: None,
-            operator: None,
-            secure_cookie: false,
-        }
-    }
 }
 impl AuthConfig {
     pub fn from_env() -> Self {
@@ -923,8 +914,10 @@ mod tests {
         let good = sr25519::Pair::from_seed(&[7u8; 32]);
         let other = sr25519::Pair::from_seed(&[8u8; 32]);
         let account = good.public().0;
-        let mut config = AuthConfig::default();
-        config.operator = Some(account);
+        let config = AuthConfig {
+            operator: Some(account),
+            ..AuthConfig::default()
+        };
         let mut store = AuthStore::default();
         store.challenges.insert(
             "valid".into(),

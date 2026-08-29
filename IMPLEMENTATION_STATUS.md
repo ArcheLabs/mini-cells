@@ -1,8 +1,8 @@
 # MINI Cells V0.2 implementation status
 
 Compatibility target: JAM semantics 0.7.2; MiniJamSpec v1 MiniJAM
-`2288a030587be4e201bdefa9806476dc3d891bca`; Jambda exact gitlink
-`788bc054223f81282e4d88a83f05f2fe9e94c121`; JamScript is validated separately
+`c4dec2db5d59ab40f8293335e29c94dd82b8eaf4`; Jambda exact gitlink
+`fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86`; JamScript is validated separately
 against this MiniJAM pin. The machine-readable source of
 truth is [`artifacts/implementation-status.json`](artifacts/implementation-status.json).
 

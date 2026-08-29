@@ -5,6 +5,8 @@
 //! pinned MiniJAM executor is used directly; no chain `StateView` or Jambda VM
 //! implementation type crosses into this workload crate.
 
+#![allow(clippy::field_reassign_with_default)]
+
 use blake2b_simd::Params;
 use minicells_runtime::{Host, HostError};
 use minijam_pvm_executor::{Error as MiniJamExecutionError, Host as MiniJamHost};
@@ -243,8 +245,8 @@ mod tests {
         DirectPvmHarness::load(
             artifact_path(),
             100_000_000,
-            "2288a030587be4e201bdefa9806476dc3d891bca",
-            "788bc054223f81282e4d88a83f05f2fe9e94c121",
+            "c4dec2db5d59ab40f8293335e29c94dd82b8eaf4",
+            "fe67ecf5ccbe16b3490d73cc4d8b1e48eb7bea86",
         )
         .expect("tracked service artifact")
     }

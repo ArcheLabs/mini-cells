@@ -313,7 +313,7 @@ mod tests {
                 ..MetaV1::new(hash)
             }),
             model: None,
-            pending_plus: plus.then(|| PendingV1 {
+            pending_plus: plus.then_some(PendingV1 {
                 generation,
                 parent_hash: hash,
                 side: 1,
@@ -322,7 +322,7 @@ mod tests {
                 tokens: 0,
                 digest: [0; 32],
             }),
-            pending_minus: minus.then(|| PendingV1 {
+            pending_minus: minus.then_some(PendingV1 {
                 generation,
                 parent_hash: hash,
                 side: -1,

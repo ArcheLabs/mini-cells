@@ -1,7 +1,7 @@
-#![no_std]
+#![cfg_attr(target_arch = "wasm32", no_std)]
 #![allow(static_mut_refs)]
 
-#[cfg(not(test))]
+#[cfg(target_arch = "wasm32")]
 use core::panic::PanicInfo;
 use minicells_core::model::MAX_SEQ_LEN;
 use minicells_core::{forward, model_hash, vocab::encode_text, PackedModel, Scratch, MODEL_BYTES};
@@ -12,7 +12,7 @@ static mut INPUT: [u8; MAX_SEQ_LEN] = [0; MAX_SEQ_LEN];
 static mut OUTPUT: [u8; MAX_SEQ_LEN] = [0; MAX_SEQ_LEN];
 static mut OUTPUT_LEN: u32 = 0;
 
-#[cfg(not(test))]
+#[cfg(target_arch = "wasm32")]
 #[panic_handler]
 fn panic(_info: &PanicInfo<'_>) -> ! {
     loop {}

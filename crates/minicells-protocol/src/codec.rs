@@ -11,6 +11,9 @@ impl<'a> Writer<'a> {
     pub fn len(&self) -> usize {
         self.offset
     }
+    pub fn is_empty(&self) -> bool {
+        self.offset == 0
+    }
     pub fn bytes(&mut self, value: &[u8]) -> Result<(), Error> {
         let end = self
             .offset

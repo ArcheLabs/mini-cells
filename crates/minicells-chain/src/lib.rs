@@ -331,8 +331,7 @@ impl<B: BulletinStore + 'static> MiniCellsChain<B> {
     }
 
     async fn service_code_hash(&self, block: Hash) -> Result<Hash, ChainError> {
-        self
-            .client
+        self.client
             .service_code_hash_at(block, self.service_id)
             .await?
             .ok_or_else(|| ChainError::State("service info is missing".into()))

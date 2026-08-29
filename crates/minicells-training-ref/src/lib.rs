@@ -1,4 +1,15 @@
 #![no_std]
+#![allow(
+    clippy::approx_constant,
+    clippy::assign_op_pattern,
+    clippy::clone_on_copy,
+    clippy::excessive_precision,
+    clippy::manual_clamp,
+    clippy::manual_memcpy,
+    clippy::manual_range_contains,
+    clippy::needless_range_loop,
+    clippy::too_many_arguments
+)]
 
 //! The authoritative FP32 Echo training step.
 //!
