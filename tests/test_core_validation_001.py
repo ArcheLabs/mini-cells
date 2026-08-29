@@ -59,19 +59,25 @@ def test_frozen_protocol_matches_config() -> None:
     assert sum(config.curriculum_fractions) < 1.0
     assert payload["scope"]["growth"] is False
     assert payload["task"]["replay_old_examples"] is False
+    assert payload["replication"]["require_all_control_memorization_valid"] is True
 
 
-def test_curriculum_is_disjoint_and_control_is_balanced() -> None:
+def test_curriculum_is_disjoint_and_control_is_balanced_commutative() -> None:
     config = smoke_config()
     addition = make_curriculum(config, seed=11, task="modular_addition")
     control = make_curriculum(config, seed=11, task="balanced_random_labels")
     groups = [*addition.phases, addition.heldout]
     flattened = torch.cat(groups)
     assert len(torch.unique(flattened)) == len(flattened) == config.modulus**2
+
     expected = torch.bincount(addition.labels, minlength=config.modulus)
     observed = torch.bincount(control.labels, minlength=config.modulus)
     assert torch.equal(expected, observed)
+    assert torch.equal(observed, torch.full_like(observed, config.modulus))
     assert not torch.equal(addition.labels, control.labels)
+
+    labels = control.labels.view(config.modulus, config.modulus)
+    assert torch.equal(labels, labels.transpose(0, 1))
 
 
 def test_hidden_cell_ablation_and_responsibility_are_explicit() -> None:
@@ -116,20 +122,29 @@ def test_path_reuse_metric_is_well_formed() -> None:
     assert 0 < reuse < 1
 
 
-def test_decision_requires_every_primary_seed_and_zero_control_false_positives() -> None:
+def test_decision_requires_every_primary_valid_controls_and_zero_false_positives() -> None:
     passing = {"gates": {"pass": True}}
     failing = {"gates": {"pass": False}}
     runs = [
         {"task": "modular_addition", **passing},
         {"task": "modular_addition", **passing},
-        {"task": "balanced_random_labels", **failing},
+        {"task": "balanced_random_labels", "control_valid": True, **failing},
     ]
-    assert summarize_experiment(runs)["supported"] is True
+    decision = summarize_experiment(runs)
+    assert decision["supported"] is True
+    assert decision["valid_control_runs"] == 1
+
     runs[1] = {"task": "modular_addition", **failing}
     assert summarize_experiment(runs)["supported"] is False
+
     runs[1] = {"task": "modular_addition", **passing}
-    runs[2] = {"task": "balanced_random_labels", **passing}
+    runs[2] = {"task": "balanced_random_labels", "control_valid": True, **passing}
     assert summarize_experiment(runs)["supported"] is False
+
+    runs[2] = {"task": "balanced_random_labels", "control_valid": False, **failing}
+    decision = summarize_experiment(runs)
+    assert decision["supported"] is False
+    assert decision["requirements"]["all_controls_memorization_valid"] is False
 
 
 def test_tiny_sequential_run_produces_all_core_measurements() -> None:
@@ -150,3 +165,14 @@ def test_tiny_sequential_run_produces_all_core_measurements() -> None:
     }
     assert "key_frequency_pairs" in run["mechanistic"]
     assert "path_reuse_gain" in run["mechanistic"]
+
+
+def test_tiny_control_reports_validity_field() -> None:
+    config = replace(smoke_config(), phase_steps=(1, 1), eval_interval_steps=1)
+    run = train_sequential_run(
+        config,
+        seed=14,
+        task="balanced_random_labels",
+        device=torch.device("cpu"),
+    )
+    assert isinstance(run["control_valid"], bool)

@@ -30,6 +30,7 @@ def _flatten_run(run: dict[str, object]) -> dict[str, object]:
         "seed": run["seed"],
         "parameter_count": run["parameter_count"],
         "total_steps": run["total_steps"],
+        "control_valid": run.get("control_valid"),
         "early_seen_accuracy": early["seen_accuracy"],
         "early_unseen_accuracy": early["unseen_accuracy"],
         "late_old_accuracy": late["old"]["accuracy"],

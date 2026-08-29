@@ -28,7 +28,13 @@ Primary task:
 y=(a+b) \bmod 31.
 \]
 
-Negative control: the same inputs with a deterministic, class-balanced random relabeling. The control has the same class counts and curriculum sizes but no modular-addition rule to discover.
+Negative control: a deterministic random **commutative** mapping over the same `(a,b)` inputs. It is constructed so that:
+
+- `label(a,b) == label(b,a)`, matching the exact symmetry of the model input;
+- every output class occurs exactly 31 times over the 31 x 31 ordered input pairs;
+- the mapping is random and therefore does not contain the modular-addition rule.
+
+This matters because an asymmetric random-label control would be structurally unrepresentable by a model whose input is `embedding(a) + embedding(b)`, creating a trivial negative control.
 
 The full 31 x 31 pair set is shuffled deterministically for each seed. Four disjoint training phases consume 10%, 20%, 20%, and 20% of the pairs. The remaining ~30% is held out for the entire run. During a phase, the optimizer receives only that phase's examples; old examples are never replayed.
 
@@ -56,7 +62,7 @@ The same frequency set is then applied to both early and late checkpoints:
 - **restricted model**: retain DC plus only the selected key frequency pairs;
 - **excluded model**: remove only those key frequency pairs and retain the rest.
 
-This produces a direct operational test of circuit formation and cleanup:
+This gives a direct operational test of circuit formation and cleanup:
 
 - if the early excluded model still fits early examples, memorizing computation exists outside the future generalizing frequencies;
 - if the late restricted model handles old and held-out examples, the compact generalizing circuit has become sufficient;
@@ -66,7 +72,7 @@ This is a task-specific mechanistic test, not a universal definition of knowledg
 
 ## Secondary causal-cell diagnostic
 
-For example x and fixed hidden cell i, responsibility is the positive increase in per-example NLL after ablating that cell:
+For example `x` and fixed hidden cell `i`, responsibility is the positive increase in per-example NLL after ablating that cell:
 
 \[
 R_{i,x}=\max(0, L_x(M^{-i})-L_x(M)).
@@ -116,14 +122,24 @@ Using the complementary excluded model:
 
 The first condition establishes that early success did not already depend on the eventual generalizing frequencies. The late conditions establish that, after learning, removing the generalizing circuit destroys both the retained old behavior and unseen generalization: the new circuit has subsumed the old behavior.
 
+## Negative-control validity
+
+A random-label run is allowed to count as a negative control only if it is demonstrably learnable by the same system:
+
+- it must satisfy the same early-memorization gate;
+- its final current-phase accuracy must be >= 0.90.
+
+If a control does not meet these conditions, the whole formal experiment is invalid rather than treating the control's failure to form a generalizing circuit as evidence for the hypothesis.
+
 ## Replication rule
 
 Formal seeds are 73101, 73102, and 73103.
 
 The experiment reports `KNOWLEDGE_SUBSUMPTION_SUPPORTED` only if:
 
-1. **all three** modular-addition runs pass all four gates; and
-2. **zero** balanced-random-label runs produce a false positive.
+1. **all three** modular-addition runs pass all four gates;
+2. **all three** random-label controls satisfy the control-validity requirement; and
+3. **zero** random-label controls produce a false positive under the same four formal gates.
 
 There is no majority-vote rescue and no post-hoc threshold tuning in the frozen v1 protocol.
 
@@ -167,4 +183,4 @@ Outputs are written to:
 results/core-validation-001-knowledge-subsumption/
 ```
 
-The Kaggle notebook is `research/kaggle/core-validation-001-knowledge-subsumption.ipynb`.
+The Kaggle notebook is `research/kaggle/core-validation-001-knowledge-subsumption.ipynb` and its final cell publishes curated formal results to `kaggle/core-validation-001-knowledge-subsumption-results` using the existing Kaggle secret `GITHUB_TOKEN`.

@@ -193,6 +193,41 @@ class CellularModularNet(nn.Module):
         return latent @ embedding.transpose(0, 1) + self.output_bias
 
 
+def _balanced_symmetric_random_labels(
+    pairs: torch.Tensor,
+    modulus: int,
+    *,
+    generator: torch.Generator,
+) -> torch.Tensor:
+    """Random commutative mapping with exactly modulus examples per class.
+
+    There are `modulus` diagonal ordered pairs and modulus*(modulus-1)/2
+    off-diagonal unordered pairs. Each class receives one diagonal pair and
+    (modulus-1)/2 off-diagonal unordered pairs, yielding exactly `modulus`
+    ordered examples per class while preserving label(a,b) == label(b,a).
+    """
+
+    labels = torch.empty(len(pairs), dtype=torch.long)
+    diagonal = torch.tensor([value * modulus + value for value in range(modulus)])
+    upper = torch.tensor(
+        [left * modulus + right for left in range(modulus) for right in range(left + 1, modulus)]
+    )
+    diagonal = diagonal[torch.randperm(len(diagonal), generator=generator)]
+    upper = upper[torch.randperm(len(upper), generator=generator)]
+    unordered_per_class = (modulus - 1) // 2
+    for class_id in range(modulus):
+        diagonal_index = int(diagonal[class_id].item())
+        labels[diagonal_index] = class_id
+        start = class_id * unordered_per_class
+        stop = start + unordered_per_class
+        for ordered_index in upper[start:stop].tolist():
+            left = ordered_index // modulus
+            right = ordered_index % modulus
+            labels[ordered_index] = class_id
+            labels[right * modulus + left] = class_id
+    return labels
+
+
 def make_curriculum(
     config: KnowledgeSubsumptionConfig,
     *,
@@ -207,7 +242,11 @@ def make_curriculum(
     if task == "modular_addition":
         labels = true_labels
     elif task == "balanced_random_labels":
-        labels = true_labels[torch.randperm(len(true_labels), generator=label_generator)]
+        labels = _balanced_symmetric_random_labels(
+            pairs,
+            modulus,
+            generator=label_generator,
+        )
     else:
         raise ValueError(f"unknown task: {task}")
 
@@ -436,23 +475,20 @@ def mechanistic_diagnostics(
         responsibility_matrix(late_model, curriculum, late_probe, device=device),
         config.path_cells,
     )
+    early_reuse = mean_pairwise_jaccard(early_paths)
+    late_reuse = mean_pairwise_jaccard(late_paths)
+    early_concentration = fourier_concentration(early_model.embedding.weight, key_pairs)
+    late_concentration = fourier_concentration(late_model.embedding.weight, key_pairs)
     return {
         "key_frequency_pairs": list(key_pairs),
-        "early_fourier_concentration": fourier_concentration(
-            early_model.embedding.weight, key_pairs
-        ),
-        "late_fourier_concentration": fourier_concentration(
-            late_model.embedding.weight, key_pairs
-        ),
-        "fourier_concentration_gain": (
-            fourier_concentration(late_model.embedding.weight, key_pairs)
-            - fourier_concentration(early_model.embedding.weight, key_pairs)
-        ),
+        "early_fourier_concentration": early_concentration,
+        "late_fourier_concentration": late_concentration,
+        "fourier_concentration_gain": late_concentration - early_concentration,
         "early": early_fourier,
         "late": late_fourier,
-        "early_path_reuse": mean_pairwise_jaccard(early_paths),
-        "late_path_reuse": mean_pairwise_jaccard(late_paths),
-        "path_reuse_gain": mean_pairwise_jaccard(late_paths) - mean_pairwise_jaccard(early_paths),
+        "early_path_reuse": early_reuse,
+        "late_path_reuse": late_reuse,
+        "path_reuse_gain": late_reuse - early_reuse,
     }
 
 
@@ -603,6 +639,10 @@ def train_sequential_run(
         device=device,
     )
     gates = _run_gate(early_metrics, late, mechanistic, config)
+    control_valid = bool(
+        gates["early_memorization"]
+        and late["current"]["accuracy"] >= config.late_minimum_current_accuracy
+    )
 
     checkpoint_paths: dict[str, str] = {}
     if save_dir is not None:
@@ -624,6 +664,7 @@ def train_sequential_run(
         "late": late,
         "mechanistic": mechanistic,
         "gates": gates,
+        "control_valid": control_valid if task == "balanced_random_labels" else None,
         "checkpoints": checkpoint_paths,
     }
 
@@ -710,18 +751,22 @@ def summarize_experiment(
     control = [run for run in runs if run.get("task") == "balanced_random_labels"]
     primary_passes = sum(bool(run["gates"]["pass"]) for run in primary)
     control_false_positives = sum(bool(run["gates"]["pass"]) for run in control)
+    valid_controls = sum(bool(run.get("control_valid")) for run in control)
     all_primary = bool(primary) and primary_passes == len(primary)
+    all_controls_valid = bool(control) and valid_controls == len(control)
     zero_control = bool(control) and control_false_positives == 0
-    supported = all_primary and zero_control
+    supported = all_primary and all_controls_valid and zero_control
     return {
         "status": positive_status if supported else negative_status,
         "supported": supported,
         "primary_runs": len(primary),
         "primary_passes": primary_passes,
         "control_runs": len(control),
+        "valid_control_runs": valid_controls,
         "control_false_positives": control_false_positives,
         "requirements": {
             "all_primary_seeds_pass": all_primary,
+            "all_controls_memorization_valid": all_controls_valid,
             "zero_control_false_positives": zero_control,
         },
     }

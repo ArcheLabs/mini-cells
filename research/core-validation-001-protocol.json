@@ -15,7 +15,8 @@
   },
   "task": {
     "primary": "modular_addition",
-    "control": "balanced_random_labels",
+    "control": "balanced_commutative_random_labels",
+    "control_definition": "A deterministic random commutative mapping with exactly modulus ordered examples per class; label(a,b)=label(b,a), so the negative control respects the model's exact input symmetry while removing the modular-addition rule.",
     "modulus": 31,
     "curriculum_fractions": [0.10, 0.20, 0.20, 0.20],
     "heldout_fraction_approx": 0.30,
@@ -45,6 +46,7 @@
   "replication": {
     "seeds": [73101, 73102, 73103],
     "require_all_primary_seeds": true,
+    "require_all_control_memorization_valid": true,
     "require_zero_control_false_positives": true,
     "oracle_reference": true,
     "oracle_reference_seed": 73101
@@ -74,6 +76,10 @@
       "maximum_late_excluded_old_accuracy": 0.30,
       "maximum_late_excluded_heldout_accuracy": 0.20
     },
+    "control_validity": {
+      "require_early_memorization_gate": true,
+      "minimum_late_current_accuracy": 0.90
+    },
     "positive_status": "KNOWLEDGE_SUBSUMPTION_SUPPORTED",
     "negative_status": "KNOWLEDGE_SUBSUMPTION_NOT_SUPPORTED"
   },
@@ -82,6 +88,8 @@
     "Behavioral retention is required; preserving historical internal representations is not.",
     "Fourier restricted/excluded evaluation operationalizes circuit formation and cleanup for modular addition; it is task-specific evidence, not a universal definition of knowledge.",
     "Cell-path reuse is reported as a secondary causal diagnostic and is not part of the formal pass/fail gate.",
+    "The random-label control preserves the model's commutative input symmetry and exact class balance, so a negative control result cannot be explained by an unrepresentable asymmetric target.",
+    "Every random-label control must itself satisfy the memorization-validity requirement; an unlearned control invalidates the experiment rather than counting as a successful negative control.",
     "The balanced-random-label arm must not produce a false positive under the same gate.",
     "The oracle arm is descriptive and is not part of the pass/fail gate.",
     "Failure rejects this frozen v1 mechanism test; it does not prove that all possible neural systems can never reorganize knowledge."
