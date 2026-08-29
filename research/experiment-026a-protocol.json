@@ -1,0 +1,47 @@
+{
+  "experiment_id": "026a",
+  "format": "minicells.cell-granularity-screening-30m.v1",
+  "title": "30M Cell Granularity Screening under Local Plasticity",
+  "purpose": "mechanism screening before the longer Experiment 026 confirmation run",
+  "source": {
+    "artifact": "artifacts/experiments/007-minicells-30m/minicells-30m-v0-fp16.pt",
+    "experience_tokens": 100000000,
+    "upcycle": "ProgressiveGrowthCLM fixed 12 roots"
+  },
+  "arms": {
+    "granularities": [1, 4, 8],
+    "program_tissues": 12,
+    "persistent_growth": false,
+    "initial_parameter_count": "identical across arms",
+    "initial_function": "function-preserving hidden-dimension tissue partition",
+    "local_plasticity_rule": "same normalized local gradient-pressure rule used by Experiment 026",
+    "local_plasticity_update_interval_steps": 100,
+    "local_plasticity_update_interval_tokens": 100000
+  },
+  "continuation": {
+    "tokens_per_arm": 5000000,
+    "total_training_tokens": 15000000,
+    "domains": ["story", "math", "symbolic", "facts"],
+    "mixture": "25% each; deterministic shuffled four-step blocks",
+    "eval_tokens": [0, 1000000, 2000000, 5000000]
+  },
+  "screening_gate": {
+    "baseline": "G=1",
+    "minimum_specialization_gain_delta": 0.02,
+    "maximum_balanced_nll_ratio": 1.03,
+    "require_nonzero_local_plasticity_variance": true,
+    "positive_status": "PROCEED_TO_026_CONFIRMATION",
+    "negative_status": "DO_NOT_PROCEED_TO_026_CONFIRMATION"
+  },
+  "interpretation_limits": [
+    "026a is a screening experiment, not a confirmatory result.",
+    "A positive gate means the mechanism is worth spending the larger Experiment 026 budget on; it is not itself evidence of autonomous mitosis.",
+    "A negative gate should trigger architecture/plasticity diagnostics before increasing token budget.",
+    "The synthetic domains are controlled environments, not broad capability benchmarks."
+  ],
+  "hardware": {
+    "target": "Kaggle Tesla T4 x2",
+    "expected_parallelism": 2,
+    "persistent_checkpoint_resume": true
+  }
+}
