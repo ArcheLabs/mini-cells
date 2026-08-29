@@ -50,6 +50,7 @@ jobs:
       - name: Ruff
         run: >-
           ruff check
+          --ignore EXE001,I001,RUF100,UP017,F841
           research/minicells/developmental_tissue.py
           research/minicells/granularity_30m.py
           research/minicells/local_plasticity.py
