@@ -32,7 +32,6 @@ from .knowledge_subsumption import (
     CellularModularNet,
     Curriculum,
     KnowledgeSubsumptionConfig,
-    evaluate_indices,
     fourier_filter_embedding,
     fourier_pair_energy,
     make_curriculum,
@@ -65,26 +64,26 @@ class ResidualMemorizationConfig:
                 ]
             ),
             minimum_correlation=float(
-                coupling["minimum_exclusion_accuracy_correlation"]
+                coupling["minimum_exclusion_balanced_accuracy_correlation"]
             ),
             maximum_mean_absolute_gap=float(
-                coupling["maximum_mean_absolute_old_heldout_gap"]
+                coupling["maximum_mean_absolute_old_heldout_balanced_gap"]
             ),
             maximum_positive_gap=float(
-                coupling["maximum_positive_old_heldout_gap"]
+                coupling["maximum_positive_old_heldout_balanced_gap"]
             ),
             maximum_dc_only_accuracy=max(
                 float(endpoint["maximum_dc_only_old_accuracy"]),
                 float(endpoint["maximum_dc_only_heldout_accuracy"]),
             ),
             oracle_minimum_correlation=float(
-                oracle["minimum_exclusion_accuracy_correlation"]
+                oracle["minimum_exclusion_balanced_accuracy_correlation"]
             ),
             oracle_maximum_mean_absolute_gap=float(
-                oracle["maximum_mean_absolute_seen_heldout_gap"]
+                oracle["maximum_mean_absolute_seen_heldout_balanced_gap"]
             ),
             oracle_maximum_positive_gap=float(
-                oracle["maximum_positive_seen_heldout_gap"]
+                oracle["maximum_positive_seen_heldout_balanced_gap"]
             ),
             oracle_maximum_dc_only_accuracy=max(
                 float(oracle["maximum_dc_only_seen_accuracy"]),
@@ -98,6 +97,41 @@ def rank_all_frequency_pairs(embedding: torch.Tensor) -> tuple[int, ...]:
     energy = fourier_pair_energy(embedding)
     order = torch.argsort(energy, descending=True) + 1
     return tuple(int(value) for value in order.tolist())
+
+
+@torch.no_grad()
+def evaluate_partition(
+    model: CellularModularNet,
+    curriculum: Curriculum,
+    indices: torch.Tensor,
+    *,
+    device: torch.device,
+    embedding_override: torch.Tensor | None = None,
+) -> dict[str, float]:
+    """Return raw and output-class-balanced metrics for one audit partition."""
+    model.eval()
+    pairs = curriculum.pairs[indices].to(device)
+    labels = curriculum.labels[indices].to(device)
+    if embedding_override is not None:
+        embedding_override = embedding_override.to(device)
+    logits = model(pairs, embedding_override=embedding_override)
+    losses = F.cross_entropy(logits, labels, reduction="none")
+    correct = (logits.argmax(dim=-1) == labels).float()
+    classes = torch.unique(labels)
+    class_accuracy = []
+    class_nll = []
+    for class_id in classes:
+        mask = labels == class_id
+        class_accuracy.append(correct[mask].mean())
+        class_nll.append(losses[mask].mean())
+    return {
+        "nll": float(losses.mean().item()),
+        "accuracy": float(correct.mean().item()),
+        "balanced_nll": float(torch.stack(class_nll).mean().item()),
+        "balanced_accuracy": float(torch.stack(class_accuracy).mean().item()),
+        "examples": float(len(labels)),
+        "classes": float(len(classes)),
+    }
 
 
 @torch.no_grad()
@@ -124,14 +158,14 @@ def cumulative_fourier_sweep(
             "restricted": {},
         }
         for name, indices in partitions.items():
-            row["excluded"][name] = evaluate_indices(
+            row["excluded"][name] = evaluate_partition(
                 model,
                 curriculum,
                 indices,
                 device=device,
                 embedding_override=excluded,
             )
-            row["restricted"][name] = evaluate_indices(
+            row["restricted"][name] = evaluate_partition(
                 model,
                 curriculum,
                 indices,
@@ -163,26 +197,45 @@ def coupling_metrics(
     left_partition: str,
     right_partition: str,
 ) -> dict[str, float]:
-    """Summarize whether two random partitions degrade together under exclusion."""
-    left = [
+    """Summarize membership coupling using class-balanced accuracy as the gate."""
+    left_balanced = [
+        float(row["excluded"][left_partition]["balanced_accuracy"])
+        for row in sweep
+    ]
+    right_balanced = [
+        float(row["excluded"][right_partition]["balanced_accuracy"])
+        for row in sweep
+    ]
+    left_raw = [
         float(row["excluded"][left_partition]["accuracy"])
         for row in sweep
     ]
-    right = [
+    right_raw = [
         float(row["excluded"][right_partition]["accuracy"])
         for row in sweep
     ]
-    gaps = [a - b for a, b in zip(left, right)]
-    absolute = [abs(value) for value in gaps]
+    balanced_gaps = [a - b for a, b in zip(left_balanced, right_balanced)]
+    raw_gaps = [a - b for a, b in zip(left_raw, right_raw)]
+    balanced_absolute = [abs(value) for value in balanced_gaps]
+    raw_absolute = [abs(value) for value in raw_gaps]
     return {
-        "exclusion_accuracy_correlation": _pearson(left, right),
-        "mean_absolute_gap": sum(absolute) / len(absolute),
-        "maximum_positive_gap": max(0.0, max(gaps)),
-        "maximum_absolute_gap": max(absolute),
-        "endpoint_left_accuracy": left[-1],
-        "endpoint_right_accuracy": right[-1],
-        "left_auc_mean": sum(left) / len(left),
-        "right_auc_mean": sum(right) / len(right),
+        "exclusion_balanced_accuracy_correlation": _pearson(
+            left_balanced, right_balanced
+        ),
+        "mean_absolute_balanced_gap": (
+            sum(balanced_absolute) / len(balanced_absolute)
+        ),
+        "maximum_positive_balanced_gap": max(0.0, max(balanced_gaps)),
+        "maximum_absolute_balanced_gap": max(balanced_absolute),
+        "endpoint_left_balanced_accuracy": left_balanced[-1],
+        "endpoint_right_balanced_accuracy": right_balanced[-1],
+        "left_balanced_auc_mean": sum(left_balanced) / len(left_balanced),
+        "right_balanced_auc_mean": sum(right_balanced) / len(right_balanced),
+        "exclusion_raw_accuracy_correlation": _pearson(left_raw, right_raw),
+        "mean_absolute_raw_gap": sum(raw_absolute) / len(raw_absolute),
+        "maximum_positive_raw_gap": max(0.0, max(raw_gaps)),
+        "endpoint_left_raw_accuracy": left_raw[-1],
+        "endpoint_right_raw_accuracy": right_raw[-1],
     }
 
 
@@ -244,8 +297,8 @@ def analyze_checkpoint_pair(
     )
     late_coupling = coupling_metrics(late_sweep, "old", "heldout")
     early_gap = (
-        float(early_sweep[0]["excluded"]["seen"]["accuracy"])
-        - float(early_sweep[0]["excluded"]["unseen"]["accuracy"])
+        float(early_sweep[0]["excluded"]["seen"]["balanced_accuracy"])
+        - float(early_sweep[0]["excluded"]["unseen"]["balanced_accuracy"])
     )
     parent_gates = source_run["gates"]
     parent_preconditions = bool(
@@ -257,19 +310,19 @@ def analyze_checkpoint_pair(
         "parent_preconditions": parent_preconditions,
         "assay_sensitivity": early_gap >= residual_config.minimum_early_gap,
         "synchronized_decay": (
-            late_coupling["exclusion_accuracy_correlation"]
+            late_coupling["exclusion_balanced_accuracy_correlation"]
             >= residual_config.minimum_correlation
         ),
         "no_material_membership_advantage": (
-            late_coupling["mean_absolute_gap"]
+            late_coupling["mean_absolute_balanced_gap"]
             <= residual_config.maximum_mean_absolute_gap
-            and late_coupling["maximum_positive_gap"]
+            and late_coupling["maximum_positive_balanced_gap"]
             <= residual_config.maximum_positive_gap
         ),
         "dc_endpoint_destroyed": (
-            late_coupling["endpoint_left_accuracy"]
+            late_coupling["endpoint_left_balanced_accuracy"]
             <= residual_config.maximum_dc_only_accuracy
-            and late_coupling["endpoint_right_accuracy"]
+            and late_coupling["endpoint_right_balanced_accuracy"]
             <= residual_config.maximum_dc_only_accuracy
         ),
     }
@@ -351,19 +404,19 @@ def analyze_oracle(
     coupling = coupling_metrics(sweep, "seen", "heldout")
     gates = {
         "synchronized_decay": (
-            coupling["exclusion_accuracy_correlation"]
+            coupling["exclusion_balanced_accuracy_correlation"]
             >= residual_config.oracle_minimum_correlation
         ),
         "no_material_membership_advantage": (
-            coupling["mean_absolute_gap"]
+            coupling["mean_absolute_balanced_gap"]
             <= residual_config.oracle_maximum_mean_absolute_gap
-            and coupling["maximum_positive_gap"]
+            and coupling["maximum_positive_balanced_gap"]
             <= residual_config.oracle_maximum_positive_gap
         ),
         "dc_endpoint_destroyed": (
-            coupling["endpoint_left_accuracy"]
+            coupling["endpoint_left_balanced_accuracy"]
             <= residual_config.oracle_maximum_dc_only_accuracy
-            and coupling["endpoint_right_accuracy"]
+            and coupling["endpoint_right_balanced_accuracy"]
             <= residual_config.oracle_maximum_dc_only_accuracy
         ),
     }

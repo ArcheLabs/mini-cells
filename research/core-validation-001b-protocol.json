@@ -19,12 +19,25 @@
   },
   "sweep": {
     "ranking": "all non-DC conjugate Fourier pairs ranked by late embedding energy, descending",
-    "interventions": ["cumulative_exclusion", "cumulative_restriction"],
+    "interventions": [
+      "cumulative_exclusion",
+      "cumulative_restriction"
+    ],
     "k": "0..(modulus-1)/2",
-    "primary_partitions": ["late_old", "late_heldout"],
-    "positive_control_partitions": ["early_seen", "early_unseen"],
-    "oracle_partitions": ["seen", "heldout"],
-    "dc_retained": true
+    "primary_partitions": [
+      "late_old",
+      "late_heldout"
+    ],
+    "positive_control_partitions": [
+      "early_seen",
+      "early_unseen"
+    ],
+    "oracle_partitions": [
+      "seen",
+      "heldout"
+    ],
+    "dc_retained": true,
+    "gate_metric": "output-class-balanced accuracy; raw accuracy is diagnostic only"
   },
   "gates": {
     "parent_preconditions": {
@@ -33,21 +46,21 @@
       "require_generalizing_circuit_gate": true
     },
     "assay_sensitivity": {
-      "minimum_early_seen_minus_unseen_gap_at_k0": 0.50
+      "minimum_early_seen_minus_unseen_gap_at_k0": 0.5
     },
     "late_membership_coupling": {
-      "minimum_exclusion_accuracy_correlation": 0.95,
-      "maximum_mean_absolute_old_heldout_gap": 0.05,
-      "maximum_positive_old_heldout_gap": 0.10
+      "minimum_exclusion_balanced_accuracy_correlation": 0.95,
+      "maximum_mean_absolute_old_heldout_balanced_gap": 0.05,
+      "maximum_positive_old_heldout_balanced_gap": 0.1
     },
     "sweep_endpoint": {
       "maximum_dc_only_old_accuracy": 0.15,
       "maximum_dc_only_heldout_accuracy": 0.15
     },
     "oracle_validity": {
-      "minimum_exclusion_accuracy_correlation": 0.95,
-      "maximum_mean_absolute_seen_heldout_gap": 0.05,
-      "maximum_positive_seen_heldout_gap": 0.10,
+      "minimum_exclusion_balanced_accuracy_correlation": 0.95,
+      "maximum_mean_absolute_seen_heldout_balanced_gap": 0.05,
+      "maximum_positive_seen_heldout_balanced_gap": 0.1,
       "maximum_dc_only_seen_accuracy": 0.15,
       "maximum_dc_only_heldout_accuracy": 0.15
     },
@@ -62,6 +75,7 @@
   },
   "interpretation_limits": [
     "The old and heldout partitions are random subsets of the same modular-addition function, so a persistent old-only advantage under the same intervention is the operational signature of residual memorization.",
+    "Formal old-vs-heldout coupling gates use output-class-balanced accuracy so random class-count imbalance cannot masquerade as a membership effect.",
     "Synchronized degradation of old and heldout performance supports shared generalized computation, but does not prove that every historical parameter trace vanished.",
     "The early seen-vs-unseen gap is a positive control showing that the assay can detect membership-specific memorization in the same trained model family.",
     "The oracle cumulative-replay model must itself satisfy the coupling assay; otherwise the diagnostic is considered invalid rather than evidence against the hypothesis.",

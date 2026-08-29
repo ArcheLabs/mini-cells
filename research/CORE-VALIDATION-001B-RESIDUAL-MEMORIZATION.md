@@ -56,7 +56,7 @@ For each late checkpoint:
 
 The early model is a positive-control assay for memorization. At `k=0`, seen accuracy should be high while unseen accuracy is low.
 
-The late old and held-out sets are random partitions of the same modular-addition function. If the surviving computation is generalized, the two partitions should degrade together as Fourier pairs are removed. If old examples retain a material advantage over held-out examples, that is the operational signature of residual memorization.
+The late old and held-out sets are random partitions of the same modular-addition function. Formal coupling gates use **output-class-balanced accuracy** so incidental class-count imbalance cannot masquerade as a membership effect. Raw accuracy is retained only as a secondary diagnostic. If the surviving computation is generalized, the two partitions should degrade together as Fourier pairs are removed. If old examples retain a material advantage over held-out examples, that is the operational signature of residual memorization.
 
 ## Frozen primary gates
 
@@ -85,7 +85,7 @@ This prevents a negative residual-memory result from being accepted when the ass
 Across the full `k=0..15` exclusion curve:
 
 ```text
-corr(old accuracy, heldout accuracy) >= 0.95
+corr(old balanced accuracy, heldout balanced accuracy) >= 0.95
 ```
 
 ### No material membership advantage
@@ -93,8 +93,8 @@ corr(old accuracy, heldout accuracy) >= 0.95
 Across the same curve:
 
 ```text
-mean |old accuracy - heldout accuracy| <= 0.05
-max(old accuracy - heldout accuracy, 0) <= 0.10
+mean |old balanced accuracy - heldout balanced accuracy| <= 0.05
+max(old balanced accuracy - heldout balanced accuracy, 0) <= 0.10
 ```
 
 The second condition specifically prevents a transient old-only plateau from being hidden by averaging.
@@ -104,8 +104,8 @@ The second condition specifically prevents a transient old-only plateau from bei
 After all 15 non-DC pairs are removed:
 
 ```text
-old accuracy <= 0.15
-heldout accuracy <= 0.15
+old balanced accuracy <= 0.15
+heldout balanced accuracy <= 0.15
 ```
 
 This verifies that the sweep actually destroys the informative computation rather than ending while substantial function remains.
@@ -156,7 +156,7 @@ A positive result does **not** mean that all historical parameter traces were er
 
 It means something narrower and falsifiable:
 
-> Under a complete cumulative Fourier-removal intervention, the late model shows no material behavioral advantage for training-membership examples over held-out examples, while the same model family clearly exhibits such an advantage in its early memorization state.
+> Under a complete cumulative Fourier-removal intervention, the late model shows no material class-balanced behavioral advantage for training-membership examples over held-out examples, while the same model family clearly exhibits such an advantage in its early memorization state.
 
 That would support the claim that the surviving late behavior is primarily shared generalized computation rather than a privileged old-example lookup path.
 

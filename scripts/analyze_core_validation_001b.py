@@ -119,9 +119,9 @@ def main() -> int:
         print(
             "[core-001b] "
             f"pass={run['gates']['pass']} "
-            f"corr={coupling['exclusion_accuracy_correlation']:.4f} "
-            f"mean_gap={coupling['mean_absolute_gap']:.4f} "
-            f"max_positive_gap={coupling['maximum_positive_gap']:.4f}",
+            f"corr={coupling['exclusion_balanced_accuracy_correlation']:.4f} "
+            f"mean_gap={coupling['mean_absolute_balanced_gap']:.4f} "
+            f"max_positive_gap={coupling['maximum_positive_balanced_gap']:.4f}",
             flush=True,
         )
 

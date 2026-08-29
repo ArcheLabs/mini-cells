@@ -23,8 +23,18 @@ def _sweep(left: list[float], right: list[float]) -> list[dict[str, object]]:
         {
             "k": index,
             "excluded": {
-                "old": {"accuracy": a, "nll": 0.0},
-                "heldout": {"accuracy": b, "nll": 0.0},
+                "old": {
+                    "accuracy": a,
+                    "balanced_accuracy": a,
+                    "nll": 0.0,
+                    "balanced_nll": 0.0,
+                },
+                "heldout": {
+                    "accuracy": b,
+                    "balanced_accuracy": b,
+                    "nll": 0.0,
+                    "balanced_nll": 0.0,
+                },
             },
             "restricted": {},
         }
@@ -41,6 +51,7 @@ def test_protocol_is_frozen_diagnostic_extension() -> None:
     assert payload["scope"]["training_changes_from_parent"] == "none"
     assert payload["scope"]["growth"] is False
     assert payload["scope"]["replay_old_examples"] is False
+    assert payload["sweep"]["gate_metric"].startswith("output-class-balanced accuracy")
     assert payload["gates"]["replication"]["require_oracle_valid"] is True
 
 
@@ -67,9 +78,9 @@ def test_coupling_metrics_accepts_synchronized_decay() -> None:
         "old",
         "heldout",
     )
-    assert metrics["exclusion_accuracy_correlation"] > 0.99
-    assert metrics["mean_absolute_gap"] < 0.02
-    assert metrics["maximum_positive_gap"] < 0.03
+    assert metrics["exclusion_balanced_accuracy_correlation"] > 0.99
+    assert metrics["mean_absolute_balanced_gap"] < 0.02
+    assert metrics["maximum_positive_balanced_gap"] < 0.03
 
 
 def test_coupling_metrics_detects_membership_advantage() -> None:
@@ -78,8 +89,8 @@ def test_coupling_metrics_detects_membership_advantage() -> None:
         "old",
         "heldout",
     )
-    assert metrics["maximum_positive_gap"] > 0.5
-    assert metrics["mean_absolute_gap"] > 0.2
+    assert metrics["maximum_positive_balanced_gap"] > 0.5
+    assert metrics["mean_absolute_balanced_gap"] > 0.2
 
 
 def test_residual_config_matches_protocol() -> None:

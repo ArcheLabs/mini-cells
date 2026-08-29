@@ -31,16 +31,33 @@ def _flatten_run(run: dict[str, object]) -> dict[str, object]:
             "early_seen_minus_unseen_gap_at_k0"
         ],
         "frequency_ranking": ",".join(str(v) for v in run["frequency_ranking"]),
-        "exclusion_accuracy_correlation": coupling[
-            "exclusion_accuracy_correlation"
+        "exclusion_balanced_accuracy_correlation": coupling[
+            "exclusion_balanced_accuracy_correlation"
         ],
-        "mean_absolute_old_heldout_gap": coupling["mean_absolute_gap"],
-        "maximum_positive_old_heldout_gap": coupling["maximum_positive_gap"],
-        "maximum_absolute_old_heldout_gap": coupling["maximum_absolute_gap"],
-        "dc_only_old_accuracy": coupling["endpoint_left_accuracy"],
-        "dc_only_heldout_accuracy": coupling["endpoint_right_accuracy"],
-        "old_exclusion_auc_mean": coupling["left_auc_mean"],
-        "heldout_exclusion_auc_mean": coupling["right_auc_mean"],
+        "mean_absolute_old_heldout_balanced_gap": coupling[
+            "mean_absolute_balanced_gap"
+        ],
+        "maximum_positive_old_heldout_balanced_gap": coupling[
+            "maximum_positive_balanced_gap"
+        ],
+        "maximum_absolute_old_heldout_balanced_gap": coupling[
+            "maximum_absolute_balanced_gap"
+        ],
+        "dc_only_old_balanced_accuracy": coupling[
+            "endpoint_left_balanced_accuracy"
+        ],
+        "dc_only_heldout_balanced_accuracy": coupling[
+            "endpoint_right_balanced_accuracy"
+        ],
+        "old_exclusion_balanced_auc_mean": coupling["left_balanced_auc_mean"],
+        "heldout_exclusion_balanced_auc_mean": coupling[
+            "right_balanced_auc_mean"
+        ],
+        "exclusion_raw_accuracy_correlation": coupling[
+            "exclusion_raw_accuracy_correlation"
+        ],
+        "mean_absolute_raw_gap": coupling["mean_absolute_raw_gap"],
+        "maximum_positive_raw_gap": coupling["maximum_positive_raw_gap"],
         "parent_preconditions": gates["parent_preconditions"],
         "assay_sensitivity": gates["assay_sensitivity"],
         "synchronized_decay": gates["synchronized_decay"],
@@ -74,7 +91,9 @@ def _sweep_rows(runs: list[dict[str, object]]) -> list[dict[str, object]]:
                                 "intervention": intervention,
                                 "partition": partition,
                                 "accuracy": metrics["accuracy"],
+                                "balanced_accuracy": metrics["balanced_accuracy"],
                                 "nll": metrics["nll"],
+                                "balanced_nll": metrics["balanced_nll"],
                             }
                         )
     return rows
@@ -95,7 +114,9 @@ def _oracle_rows(oracle: dict[str, object]) -> list[dict[str, object]]:
                         "intervention": intervention,
                         "partition": partition,
                         "accuracy": metrics["accuracy"],
+                        "balanced_accuracy": metrics["balanced_accuracy"],
                         "nll": metrics["nll"],
+                        "balanced_nll": metrics["balanced_nll"],
                     }
                 )
     return rows
@@ -118,10 +139,20 @@ def _plot_exclusion(sweep: pd.DataFrame, destination: Path) -> None:
         frame = primary[primary["seed"] == seed]
         for partition in ("old", "heldout"):
             part = frame[frame["partition"] == partition].sort_values("k")
-            ax.plot(part["k"], part["accuracy"], marker="o", label=partition)
-        ax.axhline(1 / 31, linestyle="--", linewidth=1, label="chance" if seed == seeds[0] else None)
+            ax.plot(
+                part["k"],
+                part["balanced_accuracy"],
+                marker="o",
+                label=partition,
+            )
+        ax.axhline(
+            1 / 31,
+            linestyle="--",
+            linewidth=1,
+            label="chance" if seed == seeds[0] else None,
+        )
         ax.set_ylim(0, 1.05)
-        ax.set_ylabel("Accuracy")
+        ax.set_ylabel("Class-balanced accuracy")
         ax.set_title(f"seed {seed}: cumulative exclusion")
         ax.legend()
     axes[-1].set_xlabel("Top Fourier pairs removed (k)")
@@ -141,16 +172,28 @@ def _plot_gap(sweep: pd.DataFrame, destination: Path) -> None:
     if primary.empty:
         return
     pivot = primary.pivot_table(
-        index=["seed", "k"], columns="partition", values="accuracy"
+        index=["seed", "k"],
+        columns="partition",
+        values="balanced_accuracy",
     ).reset_index()
     fig, ax = plt.subplots(figsize=(8, 5))
     for seed, frame in pivot.groupby("seed"):
         frame = frame.sort_values("k")
-        ax.plot(frame["k"], frame["old"] - frame["heldout"], marker="o", label=f"seed {seed}")
+        ax.plot(
+            frame["k"],
+            frame["old"] - frame["heldout"],
+            marker="o",
+            label=f"seed {seed}",
+        )
     ax.axhline(0.0, linewidth=1)
-    ax.axhline(0.10, linestyle="--", linewidth=1, label="preregistered +0.10 limit")
+    ax.axhline(
+        0.10,
+        linestyle="--",
+        linewidth=1,
+        label="preregistered +0.10 limit",
+    )
     ax.set_xlabel("Top Fourier pairs removed (k)")
-    ax.set_ylabel("Old accuracy - heldout accuracy")
+    ax.set_ylabel("Old - heldout class-balanced accuracy")
     ax.set_title("Membership-specific advantage under cumulative exclusion")
     ax.legend()
     fig.tight_layout()
@@ -168,11 +211,16 @@ def _plot_oracle(frame: pd.DataFrame, destination: Path) -> None:
     fig, ax = plt.subplots(figsize=(8, 5))
     for partition in ("seen", "heldout"):
         part = frame[frame["partition"] == partition].sort_values("k")
-        ax.plot(part["k"], part["accuracy"], marker="o", label=partition)
+        ax.plot(
+            part["k"],
+            part["balanced_accuracy"],
+            marker="o",
+            label=partition,
+        )
     ax.axhline(1 / 31, linestyle="--", linewidth=1, label="chance")
     ax.set_ylim(0, 1.05)
     ax.set_xlabel("Top Fourier pairs removed (k)")
-    ax.set_ylabel("Accuracy")
+    ax.set_ylabel("Class-balanced accuracy")
     ax.set_title("Oracle assay validity: seen vs heldout degradation")
     ax.legend()
     fig.tight_layout()
