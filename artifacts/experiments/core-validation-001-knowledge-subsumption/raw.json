@@ -1,0 +1,1071 @@
+{
+  "config": {
+    "batch_size": 256,
+    "betas": [
+      0.9,
+      0.98
+    ],
+    "curriculum_fractions": [
+      0.1,
+      0.2,
+      0.2,
+      0.2
+    ],
+    "early_excluded_minimum_seen_accuracy": 0.8,
+    "early_maximum_unseen_accuracy": 0.2,
+    "early_minimum_seen_accuracy": 0.98,
+    "embedding_dim": 64,
+    "eval_interval_steps": 250,
+    "gradient_clip_norm": 1.0,
+    "key_frequency_pairs": 3,
+    "late_excluded_maximum_heldout_accuracy": 0.2,
+    "late_excluded_maximum_old_accuracy": 0.3,
+    "late_minimum_current_accuracy": 0.9,
+    "late_minimum_heldout_accuracy": 0.9,
+    "late_minimum_old_accuracy": 0.9,
+    "learning_rate": 0.001,
+    "modulus": 31,
+    "neurons_per_cell": 8,
+    "num_cells": 16,
+    "path_cells": 3,
+    "phase_steps": [
+      3000,
+      5000,
+      8000,
+      12000
+    ],
+    "probe_examples_per_partition": 64,
+    "restricted_minimum_heldout_accuracy": 0.8,
+    "restricted_minimum_old_accuracy": 0.8,
+    "weight_decay": 1.0
+  },
+  "decision": {
+    "control_false_positives": 0,
+    "control_runs": 3,
+    "primary_passes": 1,
+    "primary_runs": 3,
+    "requirements": {
+      "all_controls_memorization_valid": true,
+      "all_primary_seeds_pass": false,
+      "zero_control_false_positives": true
+    },
+    "status": "KNOWLEDGE_SUBSUMPTION_NOT_SUPPORTED",
+    "supported": false,
+    "valid_control_runs": 3
+  },
+  "elapsed_seconds": 342.29592633247375,
+  "experiment_id": "core-validation-001",
+  "format": "minicells.core-validation.knowledge-subsumption.v1",
+  "heldout_fraction": 0.29999999999999993,
+  "mode": "formal",
+  "oracle_reference": {
+    "fourier_concentration": 0.6059991526025826,
+    "heldout": {
+      "excluded": {
+        "accuracy": 0.7681661248207092,
+        "nll": 0.8677401542663574
+      },
+      "full": {
+        "accuracy": 1.0,
+        "nll": 1.3071738749204087e-06
+      },
+      "restricted": {
+        "accuracy": 1.0,
+        "nll": 0.1570613980293274
+      }
+    },
+    "key_frequency_pairs": [
+      1,
+      9,
+      12
+    ],
+    "seed": 73101,
+    "seen": {
+      "excluded": {
+        "accuracy": 0.8288690447807312,
+        "nll": 0.8443123698234558
+      },
+      "full": {
+        "accuracy": 1.0,
+        "nll": 4.154584871685074e-07
+      },
+      "restricted": {
+        "accuracy": 1.0,
+        "nll": 0.13970868289470673
+      }
+    },
+    "task": "oracle_modular_addition",
+    "training_mode": "cumulative_replay_reference"
+  },
+  "provenance": {
+    "code_commit": "aa310331bb1541d8c491519803f114cfb2281d00",
+    "code_tree": "c1c91e8e096b781c718a28fb22cd67f43d9458de",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "runs": [
+    {
+      "checkpoints": {
+        "early": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/modular_addition-seed73101-early.pt",
+        "late": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/modular_addition-seed73101-late.pt"
+      },
+      "control_valid": null,
+      "early": {
+        "captured_global_step": 250.0,
+        "seen_accuracy": 1.0,
+        "seen_nll": 0.0013944641686975956,
+        "unseen_accuracy": 0.09017340838909149,
+        "unseen_nll": 9.02149486541748
+      },
+      "gates": {
+        "early_memorization": true,
+        "generalizing_circuit": true,
+        "late_generalization": true,
+        "memorization_cleanup": false,
+        "pass": false
+      },
+      "late": {
+        "current": {
+          "accuracy": 1.0,
+          "nll": 3.570069111447083e-07
+        },
+        "heldout": {
+          "accuracy": 0.9792388081550598,
+          "nll": 0.0655982568860054
+        },
+        "old": {
+          "accuracy": 0.9791667461395264,
+          "nll": 0.08050394803285599
+        }
+      },
+      "mechanistic": {
+        "early": {
+          "seen": {
+            "excluded": {
+              "accuracy": 0.8958333730697632,
+              "nll": 0.5150878429412842
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 0.0013944641686975956
+            },
+            "restricted": {
+              "accuracy": 0.125,
+              "nll": 3.068180799484253
+            }
+          },
+          "unseen": {
+            "excluded": {
+              "accuracy": 0.08208092302083969,
+              "nll": 6.635619163513184
+            },
+            "full": {
+              "accuracy": 0.09017340838909149,
+              "nll": 9.02149486541748
+            },
+            "restricted": {
+              "accuracy": 0.050867050886154175,
+              "nll": 3.3925647735595703
+            }
+          }
+        },
+        "early_fourier_concentration": 0.22092734499187433,
+        "early_path_reuse": 0.12643849206349,
+        "fourier_concentration_gain": 0.3475238312409112,
+        "key_frequency_pairs": [
+          3,
+          7,
+          15
+        ],
+        "late": {
+          "current": {
+            "excluded": {
+              "accuracy": 0.7291666865348816,
+              "nll": 0.7650969624519348
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 3.570069111447083e-07
+            },
+            "restricted": {
+              "accuracy": 0.921875,
+              "nll": 0.2873564064502716
+            }
+          },
+          "heldout": {
+            "excluded": {
+              "accuracy": 0.5017301440238953,
+              "nll": 1.3819283246994019
+            },
+            "full": {
+              "accuracy": 0.9792388081550598,
+              "nll": 0.0655982568860054
+            },
+            "restricted": {
+              "accuracy": 0.9031141996383667,
+              "nll": 0.345312237739563
+            }
+          },
+          "old": {
+            "excluded": {
+              "accuracy": 0.5229166746139526,
+              "nll": 1.3570821285247803
+            },
+            "full": {
+              "accuracy": 0.9791667461395264,
+              "nll": 0.08050394803285599
+            },
+            "restricted": {
+              "accuracy": 0.8770833611488342,
+              "nll": 0.4057961702346802
+            }
+          }
+        },
+        "late_fourier_concentration": 0.5684511762327855,
+        "late_path_reuse": 0.1313318062827222,
+        "path_reuse_gain": 0.004893314219232198
+      },
+      "parameter_count": 18527,
+      "phase_history": [
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 0.0013944641686975956
+          },
+          "global_step": 250,
+          "phase": 1
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.489354583052773e-07
+          },
+          "global_step": 5250,
+          "phase": 2
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.098199101714272e-07
+          },
+          "global_step": 13250,
+          "phase": 3
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.570069111447083e-07
+          },
+          "global_step": 25250,
+          "phase": 4
+        }
+      ],
+      "seed": 73101,
+      "task": "modular_addition",
+      "total_steps": 25250
+    },
+    {
+      "checkpoints": {
+        "early": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/balanced_random_labels-seed73101-early.pt",
+        "late": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/balanced_random_labels-seed73101-late.pt"
+      },
+      "control_valid": true,
+      "early": {
+        "captured_global_step": 250.0,
+        "seen_accuracy": 1.0,
+        "seen_nll": 0.0013519866624847054,
+        "unseen_accuracy": 0.11560693383216858,
+        "unseen_nll": 7.7462382316589355
+      },
+      "gates": {
+        "early_memorization": true,
+        "generalizing_circuit": false,
+        "late_generalization": false,
+        "memorization_cleanup": true,
+        "pass": false
+      },
+      "late": {
+        "current": {
+          "accuracy": 1.0,
+          "nll": 3.8929275092414173e-07
+        },
+        "heldout": {
+          "accuracy": 0.19723184406757355,
+          "nll": 13.769730567932129
+        },
+        "old": {
+          "accuracy": 0.2291666716337204,
+          "nll": 12.561663627624512
+        }
+      },
+      "mechanistic": {
+        "early": {
+          "seen": {
+            "excluded": {
+              "accuracy": 0.8854166865348816,
+              "nll": 0.43156710267066956
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 0.0013519866624847054
+            },
+            "restricted": {
+              "accuracy": 0.09375,
+              "nll": 3.2364718914031982
+            }
+          },
+          "unseen": {
+            "excluded": {
+              "accuracy": 0.10520230978727341,
+              "nll": 5.779101371765137
+            },
+            "full": {
+              "accuracy": 0.11560693383216858,
+              "nll": 7.7462382316589355
+            },
+            "restricted": {
+              "accuracy": 0.03815028816461563,
+              "nll": 3.6707746982574463
+            }
+          }
+        },
+        "early_fourier_concentration": 0.21421580192366543,
+        "early_path_reuse": 0.12326388888888702,
+        "fourier_concentration_gain": 0.024201932004031118,
+        "key_frequency_pairs": [
+          6,
+          13,
+          14
+        ],
+        "late": {
+          "current": {
+            "excluded": {
+              "accuracy": 0.5833333730697632,
+              "nll": 1.9309495687484741
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 3.8929275092414173e-07
+            },
+            "restricted": {
+              "accuracy": 0.0625,
+              "nll": 5.496293544769287
+            }
+          },
+          "heldout": {
+            "excluded": {
+              "accuracy": 0.14186851680278778,
+              "nll": 11.515913963317871
+            },
+            "full": {
+              "accuracy": 0.19723184406757355,
+              "nll": 13.769730567932129
+            },
+            "restricted": {
+              "accuracy": 0.034602075815200806,
+              "nll": 6.40300178527832
+            }
+          },
+          "old": {
+            "excluded": {
+              "accuracy": 0.12708334624767303,
+              "nll": 11.255877494812012
+            },
+            "full": {
+              "accuracy": 0.2291666716337204,
+              "nll": 12.561663627624512
+            },
+            "restricted": {
+              "accuracy": 0.05833333730697632,
+              "nll": 6.04394006729126
+            }
+          }
+        },
+        "late_fourier_concentration": 0.23841773392769655,
+        "late_path_reuse": 0.12642342931937509,
+        "path_reuse_gain": 0.003159540430488064
+      },
+      "parameter_count": 18527,
+      "phase_history": [
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 0.0013519866624847054
+          },
+          "global_step": 250,
+          "phase": 1
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.942598141293274e-07
+          },
+          "global_step": 5250,
+          "phase": 2
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.396222325591225e-07
+          },
+          "global_step": 13250,
+          "phase": 3
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.8929275092414173e-07
+          },
+          "global_step": 25250,
+          "phase": 4
+        }
+      ],
+      "seed": 73101,
+      "task": "balanced_random_labels",
+      "total_steps": 25250
+    },
+    {
+      "checkpoints": {
+        "early": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/modular_addition-seed73102-early.pt",
+        "late": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/modular_addition-seed73102-late.pt"
+      },
+      "control_valid": null,
+      "early": {
+        "captured_global_step": 250.0,
+        "seen_accuracy": 1.0,
+        "seen_nll": 0.0016170922899618745,
+        "unseen_accuracy": 0.10057803243398666,
+        "unseen_nll": 8.89282512664795
+      },
+      "gates": {
+        "early_memorization": true,
+        "generalizing_circuit": true,
+        "late_generalization": true,
+        "memorization_cleanup": false,
+        "pass": false
+      },
+      "late": {
+        "current": {
+          "accuracy": 1.0,
+          "nll": 2.589076473213936e-07
+        },
+        "heldout": {
+          "accuracy": 0.9377163052558899,
+          "nll": 0.2920722961425781
+        },
+        "old": {
+          "accuracy": 0.9250000715255737,
+          "nll": 0.2940397262573242
+        }
+      },
+      "mechanistic": {
+        "early": {
+          "seen": {
+            "excluded": {
+              "accuracy": 0.8541666865348816,
+              "nll": 0.5338230133056641
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 0.0016170922899618745
+            },
+            "restricted": {
+              "accuracy": 0.0625,
+              "nll": 2.983464241027832
+            }
+          },
+          "unseen": {
+            "excluded": {
+              "accuracy": 0.0890173390507698,
+              "nll": 6.491551876068115
+            },
+            "full": {
+              "accuracy": 0.10057803243398666,
+              "nll": 8.89282512664795
+            },
+            "restricted": {
+              "accuracy": 0.053179189562797546,
+              "nll": 3.385774612426758
+            }
+          }
+        },
+        "early_fourier_concentration": 0.2254822832437835,
+        "early_path_reuse": 0.1204365079365063,
+        "fourier_concentration_gain": 0.36708667463279077,
+        "key_frequency_pairs": [
+          11,
+          13,
+          15
+        ],
+        "late": {
+          "current": {
+            "excluded": {
+              "accuracy": 0.53125,
+              "nll": 1.312827467918396
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 2.589076473213936e-07
+            },
+            "restricted": {
+              "accuracy": 0.9375,
+              "nll": 0.21551017463207245
+            }
+          },
+          "heldout": {
+            "excluded": {
+              "accuracy": 0.27681660652160645,
+              "nll": 2.5072858333587646
+            },
+            "full": {
+              "accuracy": 0.9377163052558899,
+              "nll": 0.2920722961425781
+            },
+            "restricted": {
+              "accuracy": 0.8927335739135742,
+              "nll": 0.34943297505378723
+            }
+          },
+          "old": {
+            "excluded": {
+              "accuracy": 0.29375001788139343,
+              "nll": 2.435638427734375
+            },
+            "full": {
+              "accuracy": 0.9250000715255737,
+              "nll": 0.2940397262573242
+            },
+            "restricted": {
+              "accuracy": 0.9062500596046448,
+              "nll": 0.3278973400592804
+            }
+          }
+        },
+        "late_fourier_concentration": 0.5925689578765743,
+        "late_path_reuse": 0.14686954624780993,
+        "path_reuse_gain": 0.026433038311303628
+      },
+      "parameter_count": 18527,
+      "phase_history": [
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 0.0016170922899618745
+          },
+          "global_step": 250,
+          "phase": 1
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.5452339375297015e-07
+          },
+          "global_step": 5250,
+          "phase": 2
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.209957810668129e-07
+          },
+          "global_step": 13250,
+          "phase": 3
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 2.589076473213936e-07
+          },
+          "global_step": 25250,
+          "phase": 4
+        }
+      ],
+      "seed": 73102,
+      "task": "modular_addition",
+      "total_steps": 25250
+    },
+    {
+      "checkpoints": {
+        "early": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/balanced_random_labels-seed73102-early.pt",
+        "late": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/balanced_random_labels-seed73102-late.pt"
+      },
+      "control_valid": true,
+      "early": {
+        "captured_global_step": 250.0,
+        "seen_accuracy": 1.0,
+        "seen_nll": 0.0014601186849176884,
+        "unseen_accuracy": 0.12716762721538544,
+        "unseen_nll": 7.999480724334717
+      },
+      "gates": {
+        "early_memorization": true,
+        "generalizing_circuit": false,
+        "late_generalization": false,
+        "memorization_cleanup": true,
+        "pass": false
+      },
+      "late": {
+        "current": {
+          "accuracy": 1.0,
+          "nll": 3.855674606256798e-07
+        },
+        "heldout": {
+          "accuracy": 0.19031143188476562,
+          "nll": 15.389504432678223
+        },
+        "old": {
+          "accuracy": 0.22500000894069672,
+          "nll": 16.523136138916016
+        }
+      },
+      "mechanistic": {
+        "early": {
+          "seen": {
+            "excluded": {
+              "accuracy": 0.9166666865348816,
+              "nll": 0.41211482882499695
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 0.0014601186849176884
+            },
+            "restricted": {
+              "accuracy": 0.03125,
+              "nll": 3.3759963512420654
+            }
+          },
+          "unseen": {
+            "excluded": {
+              "accuracy": 0.11791907250881195,
+              "nll": 6.1602463722229
+            },
+            "full": {
+              "accuracy": 0.12716762721538544,
+              "nll": 7.999480724334717
+            },
+            "restricted": {
+              "accuracy": 0.04739884287118912,
+              "nll": 3.7012012004852295
+            }
+          }
+        },
+        "early_fourier_concentration": 0.20967275264899263,
+        "early_path_reuse": 0.12549603174602958,
+        "fourier_concentration_gain": 0.035286795127471154,
+        "key_frequency_pairs": [
+          1,
+          9,
+          15
+        ],
+        "late": {
+          "current": {
+            "excluded": {
+              "accuracy": 0.5572916865348816,
+              "nll": 2.4706151485443115
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 3.855674606256798e-07
+            },
+            "restricted": {
+              "accuracy": 0.0625,
+              "nll": 4.9964776039123535
+            }
+          },
+          "heldout": {
+            "excluded": {
+              "accuracy": 0.12110727280378342,
+              "nll": 12.605575561523438
+            },
+            "full": {
+              "accuracy": 0.19031143188476562,
+              "nll": 15.389504432678223
+            },
+            "restricted": {
+              "accuracy": 0.024221453815698624,
+              "nll": 6.144862174987793
+            }
+          },
+          "old": {
+            "excluded": {
+              "accuracy": 0.1458333432674408,
+              "nll": 13.12826156616211
+            },
+            "full": {
+              "accuracy": 0.22500000894069672,
+              "nll": 16.523136138916016
+            },
+            "restricted": {
+              "accuracy": 0.04791666939854622,
+              "nll": 6.1737446784973145
+            }
+          }
+        },
+        "late_fourier_concentration": 0.24495954777646378,
+        "late_path_reuse": 0.13089550610820247,
+        "path_reuse_gain": 0.00539947436217289
+      },
+      "parameter_count": 18527,
+      "phase_history": [
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 0.0014601186849176884
+          },
+          "global_step": 250,
+          "phase": 1
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.731498452452797e-07
+          },
+          "global_step": 5250,
+          "phase": 2
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.346551693539368e-07
+          },
+          "global_step": 13250,
+          "phase": 3
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.855674606256798e-07
+          },
+          "global_step": 25250,
+          "phase": 4
+        }
+      ],
+      "seed": 73102,
+      "task": "balanced_random_labels",
+      "total_steps": 25250
+    },
+    {
+      "checkpoints": {
+        "early": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/modular_addition-seed73103-early.pt",
+        "late": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/modular_addition-seed73103-late.pt"
+      },
+      "control_valid": null,
+      "early": {
+        "captured_global_step": 250.0,
+        "seen_accuracy": 1.0,
+        "seen_nll": 0.0015049166977405548,
+        "unseen_accuracy": 0.0971098244190216,
+        "unseen_nll": 9.364192008972168
+      },
+      "gates": {
+        "early_memorization": true,
+        "generalizing_circuit": true,
+        "late_generalization": true,
+        "memorization_cleanup": true,
+        "pass": true
+      },
+      "late": {
+        "current": {
+          "accuracy": 1.0,
+          "nll": 3.998477495770203e-07
+        },
+        "heldout": {
+          "accuracy": 0.9757785797119141,
+          "nll": 0.08230867981910706
+        },
+        "old": {
+          "accuracy": 0.9875000715255737,
+          "nll": 0.04160195216536522
+        }
+      },
+      "mechanistic": {
+        "early": {
+          "seen": {
+            "excluded": {
+              "accuracy": 0.8645833730697632,
+              "nll": 0.5174563527107239
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 0.0015049166977405548
+            },
+            "restricted": {
+              "accuracy": 0.1354166716337204,
+              "nll": 2.9666144847869873
+            }
+          },
+          "unseen": {
+            "excluded": {
+              "accuracy": 0.09017340838909149,
+              "nll": 7.013158798217773
+            },
+            "full": {
+              "accuracy": 0.0971098244190216,
+              "nll": 9.364192008972168
+            },
+            "restricted": {
+              "accuracy": 0.05433525890111923,
+              "nll": 3.4679224491119385
+            }
+          }
+        },
+        "early_fourier_concentration": 0.2086045875351087,
+        "early_path_reuse": 0.12247023809523613,
+        "fourier_concentration_gain": 0.4961055768459304,
+        "key_frequency_pairs": [
+          4,
+          13,
+          15
+        ],
+        "late": {
+          "current": {
+            "excluded": {
+              "accuracy": 0.2083333432674408,
+              "nll": 2.2578463554382324
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 3.998477495770203e-07
+            },
+            "restricted": {
+              "accuracy": 0.96875,
+              "nll": 0.11722677946090698
+            }
+          },
+          "heldout": {
+            "excluded": {
+              "accuracy": 0.193771630525589,
+              "nll": 2.671694755554199
+            },
+            "full": {
+              "accuracy": 0.9757785797119141,
+              "nll": 0.08230867981910706
+            },
+            "restricted": {
+              "accuracy": 0.89619380235672,
+              "nll": 0.31407633423805237
+            }
+          },
+          "old": {
+            "excluded": {
+              "accuracy": 0.18333333730697632,
+              "nll": 2.738351345062256
+            },
+            "full": {
+              "accuracy": 0.9875000715255737,
+              "nll": 0.04160195216536522
+            },
+            "restricted": {
+              "accuracy": 0.9416667222976685,
+              "nll": 0.18686160445213318
+            }
+          }
+        },
+        "late_fourier_concentration": 0.7047101643810391,
+        "late_path_reuse": 0.14777486910993856,
+        "path_reuse_gain": 0.025304631014702428
+      },
+      "parameter_count": 18527,
+      "phase_history": [
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 0.0015049166977405548
+          },
+          "global_step": 250,
+          "phase": 1
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 4.0233126696875843e-07
+          },
+          "global_step": 5250,
+          "phase": 2
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 4.389632977108704e-07
+          },
+          "global_step": 13250,
+          "phase": 3
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.998477495770203e-07
+          },
+          "global_step": 25250,
+          "phase": 4
+        }
+      ],
+      "seed": 73103,
+      "task": "modular_addition",
+      "total_steps": 25250
+    },
+    {
+      "checkpoints": {
+        "early": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/balanced_random_labels-seed73103-early.pt",
+        "late": "/kaggle/working/mini-cells/results/core-validation-001-knowledge-subsumption/checkpoints/balanced_random_labels-seed73103-late.pt"
+      },
+      "control_valid": true,
+      "early": {
+        "captured_global_step": 250.0,
+        "seen_accuracy": 1.0,
+        "seen_nll": 0.0012137852609157562,
+        "unseen_accuracy": 0.1387283205986023,
+        "unseen_nll": 7.869779586791992
+      },
+      "gates": {
+        "early_memorization": true,
+        "generalizing_circuit": false,
+        "late_generalization": false,
+        "memorization_cleanup": true,
+        "pass": false
+      },
+      "late": {
+        "current": {
+          "accuracy": 1.0,
+          "nll": 3.427266221933678e-07
+        },
+        "heldout": {
+          "accuracy": 0.21799308061599731,
+          "nll": 14.615950584411621
+        },
+        "old": {
+          "accuracy": 0.19166667759418488,
+          "nll": 15.556429862976074
+        }
+      },
+      "mechanistic": {
+        "early": {
+          "seen": {
+            "excluded": {
+              "accuracy": 0.8333333730697632,
+              "nll": 0.5078078508377075
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 0.0012137852609157562
+            },
+            "restricted": {
+              "accuracy": 0.0625,
+              "nll": 3.2338597774505615
+            }
+          },
+          "unseen": {
+            "excluded": {
+              "accuracy": 0.12138728052377701,
+              "nll": 6.374985694885254
+            },
+            "full": {
+              "accuracy": 0.1387283205986023,
+              "nll": 7.869779586791992
+            },
+            "restricted": {
+              "accuracy": 0.031213872134685516,
+              "nll": 3.660175085067749
+            }
+          }
+        },
+        "early_fourier_concentration": 0.21418344355100172,
+        "early_path_reuse": 0.11934523809523624,
+        "fourier_concentration_gain": 0.021208783158400413,
+        "key_frequency_pairs": [
+          2,
+          8,
+          12
+        ],
+        "late": {
+          "current": {
+            "excluded": {
+              "accuracy": 0.6614583730697632,
+              "nll": 1.8166249990463257
+            },
+            "full": {
+              "accuracy": 1.0,
+              "nll": 3.427266221933678e-07
+            },
+            "restricted": {
+              "accuracy": 0.0625,
+              "nll": 5.178737163543701
+            }
+          },
+          "heldout": {
+            "excluded": {
+              "accuracy": 0.1764705926179886,
+              "nll": 12.836103439331055
+            },
+            "full": {
+              "accuracy": 0.21799308061599731,
+              "nll": 14.615950584411621
+            },
+            "restricted": {
+              "accuracy": 0.038062285631895065,
+              "nll": 6.104072093963623
+            }
+          },
+          "old": {
+            "excluded": {
+              "accuracy": 0.14375001192092896,
+              "nll": 13.474682807922363
+            },
+            "full": {
+              "accuracy": 0.19166667759418488,
+              "nll": 15.556429862976074
+            },
+            "restricted": {
+              "accuracy": 0.03541667014360428,
+              "nll": 5.881684303283691
+            }
+          }
+        },
+        "late_fourier_concentration": 0.23539222670940213,
+        "late_path_reuse": 0.13104821116928458,
+        "path_reuse_gain": 0.011702973074048342
+      },
+      "parameter_count": 18527,
+      "phase_history": [
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 0.0012137852609157562
+          },
+          "global_step": 250,
+          "phase": 1
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.358969422606606e-07
+          },
+          "global_step": 5250,
+          "phase": 2
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.8867187868163455e-07
+          },
+          "global_step": 13250,
+          "phase": 3
+        },
+        {
+          "current": {
+            "accuracy": 1.0,
+            "nll": 3.427266221933678e-07
+          },
+          "global_step": 25250,
+          "phase": 4
+        }
+      ],
+      "seed": 73103,
+      "task": "balanced_random_labels",
+      "total_steps": 25250
+    }
+  ]
+}
