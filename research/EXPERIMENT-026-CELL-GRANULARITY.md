@@ -1,115 +1,145 @@
-# Experiment 026 — 30M Cell Granularity Differentiation
+# Experiment 026 — 30M Cell Granularity under Local Plasticity
 
 ## Question
 
-Does the current CLM fail to develop clear cellular specialization partly because one program cell is too coarse?
+Does the current CLM fail to form clear cellular phenotypes partly because one program cell is too coarse?
 
-Experiment 026 isolates **cell granularity** from model capacity and growth. The same retained 30M TextNCA source is function-preservingly upcycled into the same fixed 12-root CLM. Each existing FFN expert is then interpreted as a tissue and exactly partitioned along its hidden dimension into:
+Experiment 026 compares G={1,2,4,8} micro-cells per existing FFN tissue while preserving the same retained 30M TextNCA source, the same fixed 12-root ProgressiveGrowthCLM, the same trainable parameter count and the same age-zero function. Persistent birth is disabled.
 
-- G=1 micro-cell per tissue;
-- G=2;
-- G=4;
-- G=8.
+A pure exact partition would only regroup hidden units: without a cell-level update rule, all G arms would follow almost the same mathematical training trajectory. Experiment 026 therefore applies one identical **local-plasticity rule** to every arm. G is the resolution at which that rule can act.
 
-All four arms have the same initial parameter count, the same tissue-level router, the same source experience, and—up to floating-point summation order—the same age-zero function. Persistent birth is disabled.
+The causal question is:
 
-The experiment therefore asks a narrow causal question:
+> With capacity, age-zero function, tissue router, data, global LR schedule and mean tissue LR fixed, does finer local adaptation resolution produce additional stable functional differentiation?
 
-> Holding capacity, routing architecture, initialization, optimizer, data and training budget fixed, does finer cell granularity produce stronger and more stable functional differentiation?
+## Developmental environment
 
-## Why Experiment 025 is not reused directly
-
-Experiment 025 used a 90% arithmetic / 10% TinyStories developmental shift. That environment was intentionally strong but structurally simple: the organism could benefit from a largely global adaptation toward arithmetic. It is therefore a weak environment for testing whether smaller cells spontaneously form distinct phenotypes.
-
-Experiment 026 uses a persistent four-domain environment instead:
+Every arm starts after the same 100M-token TinyStories source experience and receives 20M continuation tokens from a persistent balanced environment:
 
 - **Story** — TinyStories;
-- **Math** — the existing six-family synthetic integer arithmetic generator;
-- **Symbolic** — deterministic sequence reversal, sorting and elementwise-offset transformations;
-- **Facts** — deterministic synthetic key/value question-answer examples.
+- **Math** — the six-family controlled integer arithmetic generator already used in Experiment 025;
+- **Symbolic** — deterministic sequence reverse, sort and elementwise-offset transformations;
+- **Facts** — deterministic synthetic key/value QA examples.
 
-The latter three are controlled synthetic environments. They are not claimed as broad mathematical reasoning, symbolic reasoning, or factual-knowledge benchmarks.
+The latter three are controlled synthetic environments. They are not broad reasoning or factual-knowledge benchmarks.
 
-## Fixed developmental environment
+Every four training steps contain exactly one step from every domain. The order inside each four-step block is deterministically shuffled. All G arms therefore receive the same domain schedule and the same sampled examples.
 
-Each arm receives 20M continuation tokens after the common 100M Story source experience.
+Evaluation checkpoints are 0, 1M, 2M, 5M, 10M, 15M and 20M continuation tokens.
 
-The four domains are exactly balanced over every four training steps. Within each four-step block, the order is deterministically shuffled from a frozen seed. Therefore every arm sees the same domain sequence and the same sampled examples.
+## Exact structural control
 
-Evaluation checkpoints:
+Each original FFN tissue is decomposed along its hidden dimension:
 
-- 0;
-- 1M;
-- 2M;
-- 5M;
-- 10M;
-- 15M;
-- 20M continuation tokens.
+\[
+f(x)=\sum_{i=1}^{G} W_{2,i}\sigma(W_{1,i}x)+b.
+\]
 
-## What is held fixed
+At age zero this is the same function as the original FFN up to floating-point summation order. The partition does not add trainable parameters.
 
-Across G={1,2,4,8}:
+Across G={1,2,4,8}, the experiment fixes:
 
-1. source checkpoint;
-2. ProgressiveGrowthCLM 12-root upcycle;
-3. tissue-level hierarchical router;
-4. total initial parameter count;
-5. age-zero model function;
-6. 20M deterministic four-domain schedule;
-7. AdamW optimizer and LR schedule;
-8. batch size and sequence length;
-9. next-token cross-entropy objective;
-10. no persistent growth and no juvenile LR multiplier.
+1. source checkpoint and 100M prior experience;
+2. 12 root tissues and tissue-level hierarchical router;
+3. trainable parameter count;
+4. age-zero forward function;
+5. continuation data and exact sample schedule;
+6. AdamW, global LR schedule, weight decay and clipping;
+7. next-token cross-entropy objective;
+8. local-plasticity equation and hyperparameters;
+9. mean local-plasticity multiplier within each tissue at 1.0;
+10. no persistent division.
 
-This is intentionally **not** an autonomous-mitosis experiment.
+## Local plasticity
+
+Every micro-cell starts at multiplier:
+
+\[
+p_i(0)=1.
+\]
+
+After backward, the cell gradient RMS is compared only with its immediate tissue neighbours. Let
+
+\[
+r_i=\frac{g_i+\epsilon}{\operatorname{mean}_{j\in N(i)}g_j+\epsilon}.
+\]
+
+The unsmoothed target is:
+
+\[
+q_i=\operatorname{clip}(r_i^{1/2},0.5,2.0).
+\]
+
+Targets are renormalized to tissue mean 1.0, then updated with EMA decay 0.95. The effective cell LR is:
+
+\[
+\eta_i(t)=\eta_{global}(t)p_i(t).
+\]
+
+The final multipliers are again mean-normalized inside each tissue. Thus finer G does not receive a larger average learning rate; it receives finer **local control resolution**.
+
+For G=1 there is no distinct neighbour comparison. The rule deliberately degenerates to:
+
+\[
+p_1(t)=1.
+\]
+
+This makes G=1 the non-local-plasticity baseline without changing the global optimizer.
 
 ## Measurements
 
 ### Performance
 
-At each checkpoint:
+At every checkpoint:
 
-- per-domain validation NLL/PPL;
+- Story/Math/Symbolic/Facts validation NLL and PPL;
 - balanced four-domain NLL;
 - geometric-mean PPL;
 - elapsed time and peak VRAM.
 
-### Cell differentiation
+### Functional phenotype
 
-For each micro-cell, a fixed diagnostic probe records its first tissue invocation on a held-out batch from each domain. The four resulting contribution RMS values form a domain profile.
+A fixed held-out probe captures the first invocation of each tissue for each domain. For micro-cell i, the RMS contribution across the four domains produces profile \(p_i\).
 
-Cell specialization is:
+Specialization is:
 
 \[
-D_i = 1 - \frac{H(p_i)}{\log 4},
+D_i=1-\frac{H(p_i)}{\log 4}.
 \]
 
-where the contribution profile is normalized across the four domains. `0` means a uniform profile; values closer to `1` indicate stronger domain selectivity.
+`0` is domain-uniform; values closer to `1` are more selective.
 
-The experiment also measures:
+Because a finer partition can reveal heterogeneity even before training, the formal comparison does **not** use absolute final specialization. For each arm:
 
-- output-projection gradient phenotype cosine between domains;
-- gradient-conflict proxy `0.5 * (1 - mean cosine)`;
+\[
+\Delta D_G=D_G^{final}-D_G^{age0}.
+\]
+
+The causal quantity is then:
+
+\[
+\Delta\Delta D_G=\Delta D_G-\Delta D_{G=1}.
+\]
+
+The experiment also records:
+
+- output-projection gradient phenotype cosine/conflict across domains;
 - profile cosine stability versus the same cell at age zero;
-- within-tissue pairwise domain-profile cosine as a redundancy measure.
+- within-tissue profile cosine redundancy;
+- plasticity mean/variance;
+- diagnostic stress.
 
-### Stress diagnostic
-
-The developmental-tissue v0 stress equation is evaluated diagnostically from normalized contribution load, validation residual loss, change from the age-zero domain profile, gradient conflict, and local neighbor capacity.
-
-It does **not** modify training and cannot trigger division in Experiment 026. A stress trend therefore cannot by itself be reported as evidence of autonomous developmental pressure.
+Diagnostic stress is not used to alter topology or trigger division.
 
 ## Preregistered decision
 
-G=1 is the baseline.
+A G>1 arm qualifies only if, at 20M continuation tokens:
 
-A finer-granularity arm qualifies only when, at the final 20M checkpoint:
+1. its median specialization **gain** exceeds the G=1 gain by at least **0.05**;
+2. its balanced NLL ratio versus G=1 is at most **1.02**;
+3. its mean cell-profile cosine versus age zero is at least **0.80**.
 
-1. median micro-cell specialization is at least **0.05 higher** than G=1;
-2. balanced NLL ratio versus G=1 is at most **1.02**;
-3. mean cell-profile cosine versus age zero is at least **0.80**.
-
-If at least one G>1 arm satisfies all three conditions, and parameter/function parity checks pass, the status is:
+If at least one finer arm qualifies and parameter/function parity checks pass:
 
 `GRANULARITY_DIFFERENTIATION_SIGNAL`
 
@@ -117,35 +147,21 @@ Otherwise:
 
 `NO_GRANULARITY_DIFFERENTIATION_SIGNAL`
 
-This decision does not claim that the qualifying G is globally optimal. It only tests whether finer granularity provides a useful developmental substrate under the frozen environment.
+A positive result means finer local adaptation resolution produced measurable additional stable phenotype differentiation under this frozen environment. It does not prove that the selected G is globally optimal.
 
 ## Formal outputs
 
-The formal result directory is:
+The result bundle is `results/experiment-026-cell-granularity/` and contains the frozen `protocol.json`, run provenance, per-arm worker summaries and diagnostics, combined trajectory/final tables, `decision.json`, and three figures:
 
-`results/experiment-026-cell-granularity/`
-
-It contains:
-
-- `protocol.json` — frozen protocol copied into the run bundle before training;
-- `run-provenance.json`;
-- `worker-summary.json`;
-- per-arm `metrics.csv`;
-- per-arm `cell-diagnostics.csv`;
-- per-arm `tissue-diagnostics.csv`;
-- per-arm `age-zero-parity.json`;
-- combined `granularity-trajectory.csv`;
-- combined `cell-diagnostics.csv`;
-- combined `tissue-diagnostics.csv`;
-- `granularity-final.csv`;
-- `decision.json`;
 - `performance-by-granularity.png`;
 - `differentiation-by-granularity.png`;
 - `granularity-frontier.png`.
 
+The frozen protocol is copied into the result directory **before training**, avoiding the publication-provenance failure found in Experiment 025.
+
 ## Kaggle target
 
-The formal job targets **Tesla T4 ×2** with an 8-hour hard wall budget and a 30-minute finalization reserve. Two granularity arms run concurrently; incomplete arms are rotated through worker slices and resume from checkpoints.
+Target: Tesla T4 ×2, 8-hour hard wall budget, 30-minute finalization reserve. Two arms run concurrently; incomplete arms rotate through 2.25-hour worker slices and resume automatically.
 
 Canonical command:
 
@@ -156,14 +172,14 @@ python scripts/run_experiment_026_cell_granularity.py \
   --worker-slice-hours 2.25
 ```
 
-The canonical notebook is:
+Canonical notebook:
 
 `research/kaggle/experiment-026-cell-granularity.ipynb`
 
-The notebook is intended for unattended **Save Version → Run All** execution and publishes only after all four arms and the formal report are complete.
+It is intended for unattended **Save Version → Run All** and publishes only after every arm and the formal report complete.
 
 ## Interpretation boundary
 
-A positive result would support the hypothesis that the previous `Expert = Cell` abstraction was too coarse and that `Expert = Tissue` is a better substrate for developmental organization.
+Experiment 026 tests **granularity as the resolution of local adaptation**. It does not test autonomous mitosis, apoptosis, endogenous routing, learned topology or full NCA self-organization.
 
-It would **not** show that routing is endogenous, that morphology self-organizes, or that cells autonomously divide. Those are subsequent experiments. The natural next stage after a positive 026 is to enable stress-driven function-preserving micro-cell fission while keeping the 026 environment frozen, so the effect of autonomous growth can be tested separately.
+If 026 is positive, a clean next experiment can enable stress-driven function-preserving micro-cell fission while freezing the 026 environment and local-plasticity rule. If 026 is negative, adding division would be premature: the finer cells would not yet have demonstrated useful developmental differentiation.
