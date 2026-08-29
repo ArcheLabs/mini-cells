@@ -1,0 +1,75 @@
+{
+  "experiment_id": "core-validation-001b",
+  "format": "minicells.core-validation.residual-memorization.v1",
+  "title": "Generalization vs Residual Memorization",
+  "parent_experiment": "core-validation-001",
+  "hypothesis": "After late modular-addition generalization, performance that survives partial removal of dominant Fourier modes is predominantly alternative generalized computation rather than membership-specific residual memorization.",
+  "source": {
+    "training_protocol": "research/core-validation-001-protocol.json",
+    "fresh_rerun_required": true,
+    "reuse_parent_runner": "scripts/run_core_validation_001.py",
+    "reuse_parent_checkpoints": true,
+    "parent_oracle_skipped_during_training": true
+  },
+  "scope": {
+    "growth": false,
+    "replay_old_examples": false,
+    "training_changes_from_parent": "none",
+    "claim_limit": "A positive result means no material residual memorization was detected by the preregistered membership-gap assay. It does not prove that every historical trace was erased."
+  },
+  "sweep": {
+    "ranking": "all non-DC conjugate Fourier pairs ranked by late embedding energy, descending",
+    "interventions": ["cumulative_exclusion", "cumulative_restriction"],
+    "k": "0..(modulus-1)/2",
+    "primary_partitions": ["late_old", "late_heldout"],
+    "positive_control_partitions": ["early_seen", "early_unseen"],
+    "oracle_partitions": ["seen", "heldout"],
+    "dc_retained": true
+  },
+  "gates": {
+    "parent_preconditions": {
+      "require_early_memorization_gate": true,
+      "require_late_generalization_gate": true,
+      "require_generalizing_circuit_gate": true
+    },
+    "assay_sensitivity": {
+      "minimum_early_seen_minus_unseen_gap_at_k0": 0.50
+    },
+    "late_membership_coupling": {
+      "minimum_exclusion_accuracy_correlation": 0.95,
+      "maximum_mean_absolute_old_heldout_gap": 0.05,
+      "maximum_positive_old_heldout_gap": 0.10
+    },
+    "sweep_endpoint": {
+      "maximum_dc_only_old_accuracy": 0.15,
+      "maximum_dc_only_heldout_accuracy": 0.15
+    },
+    "oracle_validity": {
+      "minimum_exclusion_accuracy_correlation": 0.95,
+      "maximum_mean_absolute_seen_heldout_gap": 0.05,
+      "maximum_positive_seen_heldout_gap": 0.10,
+      "maximum_dc_only_seen_accuracy": 0.15,
+      "maximum_dc_only_heldout_accuracy": 0.15
+    },
+    "replication": {
+      "require_all_primary_seeds": true,
+      "require_all_control_memorization_valid": true,
+      "require_zero_control_false_positives": true,
+      "require_oracle_valid": true
+    },
+    "positive_status": "NO_MATERIAL_RESIDUAL_MEMORIZATION_DETECTED",
+    "negative_status": "RESIDUAL_MEMORIZATION_OR_INCONCLUSIVE"
+  },
+  "interpretation_limits": [
+    "The old and heldout partitions are random subsets of the same modular-addition function, so a persistent old-only advantage under the same intervention is the operational signature of residual memorization.",
+    "Synchronized degradation of old and heldout performance supports shared generalized computation, but does not prove that every historical parameter trace vanished.",
+    "The early seen-vs-unseen gap is a positive control showing that the assay can detect membership-specific memorization in the same trained model family.",
+    "The oracle cumulative-replay model must itself satisfy the coupling assay; otherwise the diagnostic is considered invalid rather than evidence against the hypothesis.",
+    "Random-label controls must remain valid memorization controls and must not pass the full 001b gate.",
+    "No Cell growth, routing, mitosis, tissue, apoptosis, or new training mechanism is introduced."
+  ],
+  "hardware": {
+    "target": "Kaggle Tesla T4",
+    "gpu_required_for_formal_run": true
+  }
+}
