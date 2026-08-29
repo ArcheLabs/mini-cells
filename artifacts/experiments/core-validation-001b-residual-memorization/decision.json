@@ -1,0 +1,77 @@
+{
+  "control_false_positives": 0,
+  "control_runs": 3,
+  "elapsed_seconds": 60.07597231864929,
+  "experiment_id": "core-validation-001b",
+  "format": "minicells.core-validation.residual-memorization.v1",
+  "mode": "formal",
+  "oracle": {
+    "coupling": {
+      "endpoint_left_balanced_accuracy": 0.032258063554763794,
+      "endpoint_left_raw_accuracy": 0.0282738097012043,
+      "endpoint_right_balanced_accuracy": 0.032258063554763794,
+      "endpoint_right_raw_accuracy": 0.041522491723299026,
+      "exclusion_balanced_accuracy_correlation": 0.9994543177856092,
+      "exclusion_raw_accuracy_correlation": 0.9988049751429161,
+      "left_balanced_auc_mean": 0.2787176347337663,
+      "maximum_absolute_balanced_gap": 0.05263572931289673,
+      "maximum_positive_balanced_gap": 0.05263572931289673,
+      "maximum_positive_raw_gap": 0.06070291996002197,
+      "mean_absolute_balanced_gap": 0.0057155468966811895,
+      "mean_absolute_raw_gap": 0.015137440641410649,
+      "right_balanced_auc_mean": 0.2771096683572978
+    },
+    "gates": {
+      "dc_endpoint_destroyed": true,
+      "no_material_membership_advantage": true,
+      "synchronized_decay": true,
+      "valid": true
+    },
+    "seed": 73101
+  },
+  "oracle_valid": true,
+  "parent_decision": {
+    "control_false_positives": 0,
+    "control_runs": 3,
+    "primary_passes": 1,
+    "primary_runs": 3,
+    "requirements": {
+      "all_controls_memorization_valid": true,
+      "all_primary_seeds_pass": false,
+      "zero_control_false_positives": true
+    },
+    "status": "KNOWLEDGE_SUBSUMPTION_NOT_SUPPORTED",
+    "supported": false,
+    "valid_control_runs": 3
+  },
+  "parent_experiment": "core-validation-001",
+  "parent_training_provenance": {
+    "code_commit": "76c879e134065b1b1a7b16f969c8970938b03ac6",
+    "code_tree": "9743fd4fec58d45227c7f8a5dcc9917d037d003b",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "primary_passes": 3,
+  "primary_runs": 3,
+  "provenance": {
+    "code_commit": "76c879e134065b1b1a7b16f969c8970938b03ac6",
+    "code_tree": "9743fd4fec58d45227c7f8a5dcc9917d037d003b",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "requirements": {
+    "all_controls_memorization_valid": true,
+    "all_primary_seeds_pass": true,
+    "oracle_valid": true,
+    "zero_control_false_positives": true
+  },
+  "status": "NO_MATERIAL_RESIDUAL_MEMORIZATION_DETECTED",
+  "supported": true,
+  "valid_control_runs": 3
+}
