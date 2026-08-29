@@ -55,6 +55,7 @@ from minicells.story_math_shift_30m import (  # noqa: E402
 
 RESUME_INTERVAL_TOKENS = 2_000_000
 PROGRESS_INTERVAL_TOKENS = 250_000
+PLASTICITY_UPDATE_INTERVAL_STEPS = 100
 DEFAULT_MAX_WALL_HOURS = 2.5
 AGE_ZERO_MAX_ABS_TOLERANCE = 5e-4
 PLASTICITY_CONFIG = LocalPlasticityConfig()
@@ -429,14 +430,15 @@ def main() -> int:
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
         torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP)
-        plasticity_rows = update_local_plasticity(
-            model,
-            optimizer,
-            cell_group_index,
-            base_lr=scheduled_lr,
-            config=PLASTICITY_CONFIG,
-        )
-        last_plasticity = plasticity_summary(plasticity_rows)
+        if (step + 1) % PLASTICITY_UPDATE_INTERVAL_STEPS == 0:
+            plasticity_rows = update_local_plasticity(
+                model,
+                optimizer,
+                cell_group_index,
+                base_lr=scheduled_lr,
+                config=PLASTICITY_CONFIG,
+            )
+            last_plasticity = plasticity_summary(plasticity_rows)
         scaler.step(optimizer)
         scaler.update()
 
@@ -546,6 +548,10 @@ def main() -> int:
             "pressure_exponent": PLASTICITY_CONFIG.pressure_exponent,
             "minimum": PLASTICITY_CONFIG.minimum,
             "maximum": PLASTICITY_CONFIG.maximum,
+            "update_interval_steps": PLASTICITY_UPDATE_INTERVAL_STEPS,
+            "update_interval_tokens": (
+                PLASTICITY_UPDATE_INTERVAL_STEPS * TOKENS_PER_STEP
+            ),
         },
         "elapsed_seconds": total_elapsed,
         "peak_vram_bytes": int(torch.cuda.max_memory_allocated(device)),
