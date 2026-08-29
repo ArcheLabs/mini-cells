@@ -1,7 +1,7 @@
 {
   "experiment_id": "026",
-  "format": "minicells.cell-granularity-30m.v1",
-  "title": "30M Cell Granularity Differentiation",
+  "format": "minicells.cell-granularity-30m.v2",
+  "title": "30M Cell Granularity under Local Plasticity",
   "source": {
     "artifact": "artifacts/experiments/007-minicells-30m/minicells-30m-v0-fp16.pt",
     "experience_tokens": 100000000,
@@ -12,7 +12,14 @@
     "program_tissues": 12,
     "persistent_growth": false,
     "initial_function": "exact hidden-dimension partition of each existing FFN expert",
-    "initial_parameter_count": "identical across arms"
+    "initial_parameter_count": "identical across arms",
+    "local_plasticity_rule": "identical across arms; gradient pressure relative to immediate tissue neighbors controls bounded per-cell LR multiplier",
+    "local_plasticity_initial_value": 1.0,
+    "local_plasticity_ema_decay": 0.95,
+    "local_plasticity_pressure_exponent": 0.5,
+    "local_plasticity_bounds": [0.5, 2.0],
+    "local_plasticity_normalization": "multipliers renormalized to mean 1.0 within every tissue",
+    "g1_degenerate_case": "one-cell tissues remain at multiplier 1.0"
   },
   "continuation": {
     "tokens": 20000000,
@@ -28,7 +35,9 @@
     "weight_decay": 0.1,
     "warmup_steps": 500,
     "grad_clip": 1.0,
-    "objective": "next-token cross entropy only"
+    "objective": "next-token cross entropy only",
+    "shared_parameters": "scheduled base LR",
+    "micro_cell_parameters": "scheduled base LR multiplied by local plasticity"
   },
   "measurements": {
     "performance": [
@@ -40,9 +49,11 @@
     "cell_differentiation": [
       "per-cell four-domain contribution profile",
       "normalized contribution-profile specialization entropy",
+      "specialization gain from the arm's own age-zero baseline",
       "output-projection gradient phenotype cosine/conflict",
       "cell profile stability versus age zero",
-      "within-tissue pairwise domain-profile cosine redundancy"
+      "within-tissue pairwise domain-profile cosine redundancy",
+      "cell plasticity distribution"
     ],
     "stress_proxy": [
       "contribution load",
@@ -54,7 +65,7 @@
   },
   "decision_rule": {
     "baseline": "G=1",
-    "differentiation_signal": "final median cell specialization improves by at least 0.05 versus G=1",
+    "differentiation_signal": "final-minus-age0 median specialization gain exceeds the G=1 gain by at least 0.05",
     "performance_guardrail": "final balanced NLL ratio versus G=1 is <= 1.02",
     "stability_guardrail": "mean final profile cosine versus age zero is >= 0.80",
     "positive_status": "GRANULARITY_DIFFERENTIATION_SIGNAL",
@@ -62,9 +73,10 @@
   },
   "interpretation_limits": [
     "Experiment 026 does not enable or test autonomous mitosis.",
+    "Exact partition without a cell-local update rule would be only a reparameterized measurement; therefore v2 applies the same local-plasticity rule to every arm and treats G as the resolution of local adaptation.",
     "The symbolic and facts domains are deterministic synthetic training environments, not broad symbolic reasoning or factual-knowledge benchmarks.",
-    "The diagnostic stress score is not an endogenous biological variable and is not used to trigger growth.",
-    "A positive result supports finer cell granularity as a useful developmental substrate; it does not by itself establish full NCA self-organization."
+    "The diagnostic stress score is recorded but is not used to trigger growth.",
+    "A positive result supports finer cell granularity as a useful substrate for local developmental adaptation; it does not by itself establish full NCA self-organization."
   ],
   "hardware": {
     "target": "Kaggle Tesla T4 x2",
