@@ -1,11 +1,11 @@
 """Experiment 026 — 30M tissue granularity differentiation helpers.
 
-The experiment changes only the number of micro-cells used to represent each
-pre-existing CLM FFN tissue. Every arm starts from the same retained 30M
-TextNCA checkpoint, receives the same function-preserving CLM upcycle, and then
-uses an exact hidden-dimension partition of each expert into G micro-cells.
-Persistent growth is disabled. The scientific question is therefore about cell
-granularity and differentiation, not about capacity growth.
+Every arm starts from the same retained 30M TextNCA checkpoint, receives the
+same function-preserving fixed-root CLM upcycle, and partitions every existing
+FFN tissue into G micro-cells. Persistent growth is disabled. Experiment 026
+combines this structural granularity with one shared local-plasticity rule so
+G controls the resolution at which adaptation can be regulated while age-zero
+function and trainable parameter count remain fixed.
 """
 
 from __future__ import annotations
@@ -22,7 +22,12 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 
-from .developmental_tissue import StressObservation, TissueConfig, TissueFFN, convert_model_experts_to_tissues
+from .developmental_tissue import (
+    StressObservation,
+    TissueConfig,
+    TissueFFN,
+    convert_model_experts_to_tissues,
+)
 from .language_30m import BATCH_SIZE, CONTEXT_LENGTH, TRAIN_SEQUENCE_LENGTH, memmap_batch
 from .story_math_shift_30m import (
     EXPECTED_SOURCE_TOKENS,
@@ -32,10 +37,9 @@ from .story_math_shift_30m import (
     prepare_math_corpus,
 )
 
-
 EXPERIMENT_ID = "026"
-FORMAT = "minicells.cell-granularity-30m.v1"
-WORKER_FORMAT = "minicells.cell-granularity-30m-worker.v1"
+FORMAT = "minicells.cell-granularity-30m.v2"
+WORKER_FORMAT = "minicells.cell-granularity-30m-worker.v2"
 RESULT_DIR_NAME = "experiment-026-cell-granularity"
 
 GRANULARITIES = (1, 2, 4, 8)
@@ -43,7 +47,15 @@ DOMAINS = ("story", "math", "symbolic", "facts")
 CONTINUATION_TOKENS = 20_000_000
 TOKENS_PER_STEP = BATCH_SIZE * TRAIN_SEQUENCE_LENGTH
 CONTINUATION_STEPS = CONTINUATION_TOKENS // TOKENS_PER_STEP
-EVAL_TOKENS = (0, 1_000_000, 2_000_000, 5_000_000, 10_000_000, 15_000_000, 20_000_000)
+EVAL_TOKENS = (
+    0,
+    1_000_000,
+    2_000_000,
+    5_000_000,
+    10_000_000,
+    15_000_000,
+    20_000_000,
+)
 
 BASE_LR = 1e-4
 WARMUP_STEPS = 500
@@ -54,7 +66,6 @@ GRAD_CLIP = 1.0
 SYNTHETIC_TRAIN_TOKENS = 6_000_000
 SYNTHETIC_VALIDATION_TOKENS = 500_000
 VALIDATION_BATCHES = 8
-DIAGNOSTIC_BATCH_SIZE = BATCH_SIZE
 DIAGNOSTIC_PERCEPTION_CAP = 256
 
 MIXTURE_SEED = 26026
@@ -70,12 +81,9 @@ VALIDATION_SEEDS = {
     "symbolic": 26726,
     "facts": 26826,
 }
-SYNTHETIC_SEEDS = {
-    "symbolic": 26926,
-    "facts": 27026,
-}
+SYNTHETIC_SEEDS = {"symbolic": 26926, "facts": 27026}
 
-DIFFERENTIATION_MIN_DELTA = 0.05
+DIFFERENTIATION_MIN_GAIN_DELTA = 0.05
 PERFORMANCE_NLL_RATIO_MAX = 1.02
 STABILITY_MIN_COSINE = 0.80
 
@@ -137,15 +145,18 @@ def schedule_manifest(tokens: int = CONTINUATION_TOKENS) -> dict[str, object]:
         "tokens_per_step": TOKENS_PER_STEP,
         "domains": list(DOMAINS),
         "domain_tokens": counts,
-        "mixture_rule": "one example from every domain per four-step block; block order deterministically shuffled",
+        "mixture_rule": (
+            "one occurrence from every domain per four-step block; "
+            "block order deterministically shuffled"
+        ),
         "mixture_seed": MIXTURE_SEED,
     }
 
 
 def _symbolic_text(rng: random.Random) -> str:
     values = [rng.randrange(0, 100) for _ in range(rng.randrange(4, 8))]
-    kind = rng.randrange(3)
     source = " ".join(str(value) for value in values)
+    kind = rng.randrange(3)
     if kind == 0:
         target = " ".join(str(value) for value in reversed(values))
         return f"Sequence {source}. Reverse gives {target}."
@@ -162,7 +173,10 @@ def _facts_text(rng: random.Random) -> str:
     name = "".join(rng.choice(syllables) for _ in range(2)).title()
     key = rng.choice(("code", "score", "year", "count"))
     value = rng.randrange(10, 1000)
-    return f"Fact: {name} has {key} {value}. Question: What is {name}'s {key}? Answer: {value}."
+    return (
+        f"Fact: {name} has {key} {value}. Question: What is {name}'s {key}? "
+        f"Answer: {value}."
+    )
 
 
 def _write_synthetic_stream(
@@ -200,9 +214,13 @@ def _write_synthetic_stream(
     return examples
 
 
-def prepare_synthetic_corpus(cache_dir: Path, tokenizer: object, domain: str) -> SyntheticCorpus:
+def prepare_synthetic_corpus(
+    cache_dir: Path,
+    tokenizer: object,
+    domain: str,
+) -> SyntheticCorpus:
     if domain not in {"symbolic", "facts"}:
-        raise ValueError("Experiment 026 only materializes symbolic/facts synthetic corpora")
+        raise ValueError("Experiment 026 only materializes symbolic/facts corpora")
     root = cache_dir / f"{domain}-granularity-026"
     train_path = root / "train.u16"
     validation_path = root / "validation.u16"
@@ -248,18 +266,18 @@ def prepare_synthetic_corpus(cache_dir: Path, tokenizer: object, domain: str) ->
         "train_sha256": sha256_file(train_path),
         "validation_sha256": sha256_file(validation_path),
     }
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     return SyntheticCorpus(train_path, validation_path, manifest_path, manifest)
 
 
 def prepare_domain_corpora(cache_dir: Path, tokenizer: object) -> dict[str, object]:
-    math = prepare_math_corpus(cache_dir, tokenizer)
-    symbolic = prepare_synthetic_corpus(cache_dir, tokenizer, "symbolic")
-    facts = prepare_synthetic_corpus(cache_dir, tokenizer, "facts")
     return {
-        "math": math,
-        "symbolic": symbolic,
-        "facts": facts,
+        "math": prepare_math_corpus(cache_dir, tokenizer),
+        "symbolic": prepare_synthetic_corpus(cache_dir, tokenizer, "symbolic"),
+        "facts": prepare_synthetic_corpus(cache_dir, tokenizer, "facts"),
     }
 
 
@@ -297,7 +315,10 @@ def continuation_batch(
     return domain, inputs, targets
 
 
-def fixed_validation_starts(stream_length: int, domain: str) -> tuple[tuple[int, ...], ...]:
+def fixed_validation_starts(
+    stream_length: int,
+    domain: str,
+) -> tuple[tuple[int, ...], ...]:
     rng = random.Random(VALIDATION_SEEDS[domain])
     high = stream_length - CONTEXT_LENGTH - 1
     if high <= 0:
@@ -317,7 +338,11 @@ def build_granularity_model(
 ) -> tuple[torch.nn.Module, dict[str, object]]:
     if granularity not in GRANULARITIES:
         raise ValueError(f"granularity must be one of {GRANULARITIES}")
-    clm, source_identity = build_30m_clm(source_artifact, vocab_size=vocab_size, device=device)
+    clm, source_identity = build_30m_clm(
+        source_artifact,
+        vocab_size=vocab_size,
+        device=device,
+    )
     model = convert_model_experts_to_tissues(
         clm,
         config=TissueConfig(cells_per_tissue=granularity),
@@ -334,7 +359,8 @@ def build_granularity_model(
 def iter_tissues(model: torch.nn.Module) -> Iterable[tuple[int, str, TissueFFN]]:
     for stage_index, stage in enumerate(model.stages):
         experts = stage.program_bank.experts
-        for expert_id, expert in experts.items():
+        items = experts.items() if hasattr(experts, "items") else enumerate(experts)
+        for expert_id, expert in items:
             if not isinstance(expert, TissueFFN):
                 raise TypeError("Experiment 026 requires TissueFFN experts")
             yield stage_index, str(expert_id), expert
@@ -342,12 +368,15 @@ def iter_tissues(model: torch.nn.Module) -> Iterable[tuple[int, str, TissueFFN]]
 
 def model_structure(model: torch.nn.Module) -> dict[str, int]:
     tissues = list(iter_tissues(model))
-    total_cells = sum(tissue.cell_count for _, _, tissue in tissues)
     return {
         "program_tissues": len(tissues),
-        "micro_cells": total_cells,
+        "micro_cells": sum(tissue.cell_count for _, _, tissue in tissues),
         "stored_parameters": sum(parameter.numel() for parameter in model.parameters()),
-        "trainable_parameters": sum(parameter.numel() for parameter in model.parameters() if parameter.requires_grad),
+        "trainable_parameters": sum(
+            parameter.numel()
+            for parameter in model.parameters()
+            if parameter.requires_grad
+        ),
     }
 
 
@@ -374,7 +403,9 @@ def evaluate_domains(
         result[f"{domain}_ppl"] = float(metrics["ppl"])
         nlls.append(nll)
     result["balanced_nll"] = float(sum(nlls) / len(nlls))
-    result["balanced_ppl_geomean"] = float(math.exp(min(result["balanced_nll"], 20.0)))
+    result["balanced_ppl_geomean"] = float(
+        math.exp(min(result["balanced_nll"], 20.0))
+    )
     return result
 
 
@@ -386,7 +417,12 @@ def diagnostic_batches(
     batches: dict[str, DiagnosticBatch] = {}
     for domain in DOMAINS:
         starts = fixed_validation_starts(len(validation_streams[domain]), domain)[0]
-        inputs, targets = memmap_batch(validation_streams[domain], starts, CONTEXT_LENGTH, device)
+        inputs, targets = memmap_batch(
+            validation_streams[domain],
+            starts,
+            CONTEXT_LENGTH,
+            device,
+        )
         batches[domain] = DiagnosticBatch(domain, inputs, targets)
     return batches
 
@@ -414,7 +450,9 @@ def _profile_specialization(values: list[float]) -> float:
     if total <= 1e-12:
         return 0.0
     probabilities = array / total
-    entropy = -float(np.sum(probabilities * np.log(np.clip(probabilities, 1e-12, 1.0))))
+    entropy = -float(
+        np.sum(probabilities * np.log(np.clip(probabilities, 1e-12, 1.0)))
+    )
     return max(0.0, min(1.0, 1.0 - entropy / math.log(len(values))))
 
 
@@ -428,10 +466,9 @@ def _capture_first_tissue_inputs(
         key = _tissue_key(stage, expert_id)
 
         def hook(_module, inputs, *, key=key):
-            if key in captured:
-                return
-            flat = inputs[0].detach().reshape(-1, inputs[0].shape[-1])
-            captured[key] = flat[:DIAGNOSTIC_PERCEPTION_CAP].clone()
+            if key not in captured:
+                flat = inputs[0].detach().reshape(-1, inputs[0].shape[-1])
+                captured[key] = flat[:DIAGNOSTIC_PERCEPTION_CAP].clone()
 
         hooks.append(tissue.register_forward_pre_hook(hook))
     was_training = model.training
@@ -444,8 +481,8 @@ def _capture_first_tissue_inputs(
         ):
             model(batch.inputs)
     finally:
-        for hook in hooks:
-            hook.remove()
+        for hook_handle in hooks:
+            hook_handle.remove()
         model.train(was_training)
     return captured
 
@@ -456,7 +493,8 @@ def _contribution_profiles(
 ) -> dict[str, dict[str, float]]:
     profiles: dict[str, dict[str, float]] = {}
     tissue_lookup = {
-        _tissue_key(stage, expert_id): tissue for stage, expert_id, tissue in iter_tissues(model)
+        _tissue_key(stage, expert_id): tissue
+        for stage, expert_id, tissue in iter_tissues(model)
     }
     for domain in DOMAINS:
         captured = _capture_first_tissue_inputs(model, batches[domain])
@@ -464,9 +502,13 @@ def _contribution_profiles(
             for tissue_key, perceptions in captured.items():
                 tissue = tissue_lookup[tissue_key]
                 for cell_index, cell in enumerate(tissue.cells):
-                    value = cell(perceptions)
-                    rms = float(value.float().square().mean().sqrt().item())
-                    profiles.setdefault(f"{tissue_key}/c{cell_index}", {})[domain] = rms
+                    contribution = cell(perceptions)
+                    rms = float(
+                        contribution.float().square().mean().sqrt().item()
+                    )
+                    profiles.setdefault(
+                        f"{tissue_key}/c{cell_index}", {}
+                    )[domain] = rms
     return profiles
 
 
@@ -487,16 +529,20 @@ def _gradient_profiles(
                 enabled=batch.inputs.device.type == "cuda",
             ):
                 logits = model(batch.inputs).logits
-                loss = F.cross_entropy(logits.reshape(-1, logits.shape[-1]), batch.targets.reshape(-1))
+                loss = F.cross_entropy(
+                    logits.reshape(-1, logits.shape[-1]),
+                    batch.targets.reshape(-1),
+                )
             loss.backward()
             for stage, expert_id, tissue in iter_tissues(model):
                 for cell_index, cell in enumerate(tissue.cells):
-                    grad = cell.out_proj.weight.grad
-                    if grad is None:
+                    gradient = cell.out_proj.weight.grad
+                    if gradient is None:
                         signature = torch.zeros(cell.out_proj.out_features)
                     else:
-                        signature = grad.detach().float().mean(dim=1).cpu()
-                    profiles.setdefault(_cell_key(stage, expert_id, cell_index), {})[domain] = signature
+                        signature = gradient.detach().float().mean(dim=1).cpu()
+                    key = _cell_key(stage, expert_id, cell_index)
+                    profiles.setdefault(key, {})[domain] = signature
     finally:
         model.zero_grad(set_to_none=True)
         model.train(was_training)
@@ -509,7 +555,11 @@ def collect_cell_diagnostics(
     batches: Mapping[str, DiagnosticBatch],
     domain_nlls: Mapping[str, float],
     baseline_profiles: Mapping[str, Mapping[str, float]] | None = None,
-) -> tuple[list[dict[str, object]], list[dict[str, object]], dict[str, dict[str, float]]]:
+) -> tuple[
+    list[dict[str, object]],
+    list[dict[str, object]],
+    dict[str, dict[str, float]],
+]:
     contribution = _contribution_profiles(model, batches)
     gradients = _gradient_profiles(model, batches)
     rows: list[dict[str, object]] = []
@@ -521,7 +571,10 @@ def collect_cell_diagnostics(
         raw_means: list[float] = []
         for cell_index in range(tissue.cell_count):
             key = _cell_key(stage, expert_id, cell_index)
-            values = [float(contribution.get(key, {}).get(domain, 0.0)) for domain in DOMAINS]
+            values = [
+                float(contribution.get(key, {}).get(domain, 0.0))
+                for domain in DOMAINS
+            ]
             cell_profiles.append(np.asarray(values, dtype=np.float64))
             raw_means.append(float(np.mean(values)))
         max_mean = max(raw_means, default=0.0)
@@ -530,34 +583,55 @@ def collect_cell_diagnostics(
         redundancies: list[float] = []
         for left in range(len(cell_profiles)):
             for right in range(left + 1, len(cell_profiles)):
-                a = torch.tensor(cell_profiles[left])
-                b = torch.tensor(cell_profiles[right])
-                redundancies.append(_cosine(a, b))
+                redundancies.append(
+                    _cosine(
+                        torch.tensor(cell_profiles[left]),
+                        torch.tensor(cell_profiles[right]),
+                    )
+                )
 
         specializations: list[float] = []
         stresses: list[float] = []
         stabilities: list[float] = []
         for cell_index, profile in enumerate(cell_profiles):
+            cell = tissue.cells[cell_index]
             key = _cell_key(stage, expert_id, cell_index)
             values = profile.tolist()
             specialization = _profile_specialization(values)
             specializations.append(specialization)
-            preference_index = int(np.argmax(profile)) if float(profile.sum()) > 0 else 0
+            preference_index = (
+                int(np.argmax(profile)) if float(profile.sum()) > 0.0 else 0
+            )
             preference = DOMAINS[preference_index]
+
             gradient_vectors = gradients.get(key, {})
             pairwise: list[float] = []
             for left in range(len(DOMAINS)):
                 for right in range(left + 1, len(DOMAINS)):
-                    if DOMAINS[left] in gradient_vectors and DOMAINS[right] in gradient_vectors:
+                    left_domain = DOMAINS[left]
+                    right_domain = DOMAINS[right]
+                    if left_domain in gradient_vectors and right_domain in gradient_vectors:
                         pairwise.append(
-                            _cosine(gradient_vectors[DOMAINS[left]], gradient_vectors[DOMAINS[right]])
+                            _cosine(
+                                gradient_vectors[left_domain],
+                                gradient_vectors[right_domain],
+                            )
                         )
             mean_gradient_cosine = float(np.mean(pairwise)) if pairwise else 0.0
-            gradient_conflict = max(0.0, min(1.0, 0.5 * (1.0 - mean_gradient_cosine)))
+            gradient_conflict = max(
+                0.0,
+                min(1.0, 0.5 * (1.0 - mean_gradient_cosine)),
+            )
 
-            baseline = baseline_profiles.get(key) if baseline_profiles is not None else None
+            baseline = (
+                baseline_profiles.get(key)
+                if baseline_profiles is not None
+                else None
+            )
             if baseline:
-                baseline_vector = torch.tensor([float(baseline.get(domain, 0.0)) for domain in DOMAINS])
+                baseline_vector = torch.tensor(
+                    [float(baseline.get(domain, 0.0)) for domain in DOMAINS]
+                )
                 stability = _cosine(torch.tensor(profile), baseline_vector)
                 novelty = max(0.0, min(1.0, 1.0 - stability))
             else:
@@ -570,7 +644,10 @@ def collect_cell_diagnostics(
                 float(nll_weights[index]) * float(domain_nlls[domain])
                 for index, domain in enumerate(DOMAINS)
             )
-            residual_loss = max(0.0, min(1.0, weighted_nll / (1.0 + weighted_nll)))
+            residual_loss = max(
+                0.0,
+                min(1.0, weighted_nll / (1.0 + weighted_nll)),
+            )
             neighbors = tissue.neighbors(cell_index)
             neighbor_capacity = (
                 float(np.mean([1.0 - usage_scaled[index] for index in neighbors]))
@@ -587,50 +664,95 @@ def collect_cell_diagnostics(
                 )
             )
             stresses.append(stress)
-            rows.append(
+            row = {
+                "stage": stage,
+                "expert_id": expert_id,
+                "cell_index": cell_index,
+                "cell_key": key,
+                "hidden_width": cell.in_proj.out_features,
+                "preferred_domain": preference,
+                "specialization": specialization,
+                "mean_gradient_cosine": mean_gradient_cosine,
+                "gradient_conflict": gradient_conflict,
+                "profile_stability_vs_age0": stability,
+                "diagnostic_stress": stress,
+                "plasticity": float(cell.plasticity.item()),
+            }
+            row.update(
                 {
-                    "stage": stage,
-                    "expert_id": expert_id,
-                    "cell_index": cell_index,
-                    "cell_key": key,
-                    "hidden_width": cell.in_proj.out_features,
-                    "preferred_domain": preference,
-                    "specialization": specialization,
-                    "mean_gradient_cosine": mean_gradient_cosine,
-                    "gradient_conflict": gradient_conflict,
-                    "profile_stability_vs_age0": stability,
-                    "diagnostic_stress": stress,
-                    **{f"contribution_{domain}": values[index] for index, domain in enumerate(DOMAINS)},
+                    f"contribution_{domain}": values[index]
+                    for index, domain in enumerate(DOMAINS)
                 }
             )
+            rows.append(row)
+
         tissue_rows.append(
             {
                 "stage": stage,
                 "expert_id": expert_id,
                 "cell_count": tissue.cell_count,
-                "mean_cell_specialization": float(np.mean(specializations)) if specializations else 0.0,
-                "mean_pairwise_profile_cosine": float(np.mean(redundancies)) if redundancies else 0.0,
-                "mean_profile_stability_vs_age0": float(np.mean(stabilities)) if stabilities else 1.0,
-                "mean_diagnostic_stress": float(np.mean(stresses)) if stresses else 0.0,
-                "max_diagnostic_stress": float(np.max(stresses)) if stresses else 0.0,
+                "mean_cell_specialization": (
+                    float(np.mean(specializations)) if specializations else 0.0
+                ),
+                "mean_pairwise_profile_cosine": (
+                    float(np.mean(redundancies)) if redundancies else 0.0
+                ),
+                "mean_profile_stability_vs_age0": (
+                    float(np.mean(stabilities)) if stabilities else 1.0
+                ),
+                "mean_diagnostic_stress": (
+                    float(np.mean(stresses)) if stresses else 0.0
+                ),
+                "max_diagnostic_stress": (
+                    float(np.max(stresses)) if stresses else 0.0
+                ),
+                "mean_plasticity": float(
+                    np.mean([float(cell.plasticity.item()) for cell in tissue.cells])
+                ),
+                "plasticity_std": float(
+                    np.std([float(cell.plasticity.item()) for cell in tissue.cells])
+                ),
             }
         )
     return rows, tissue_rows, contribution
 
 
-def summarize_diagnostics(cell_rows: Iterable[Mapping[str, object]], tissue_rows: Iterable[Mapping[str, object]]) -> dict[str, float]:
+def summarize_diagnostics(
+    cell_rows: Iterable[Mapping[str, object]],
+    tissue_rows: Iterable[Mapping[str, object]],
+) -> dict[str, float]:
     cells = list(cell_rows)
     tissues = list(tissue_rows)
     if not cells or not tissues:
         raise ValueError("diagnostics require cell and tissue rows")
     return {
-        "mean_cell_specialization": float(np.mean([float(row["specialization"]) for row in cells])),
-        "median_cell_specialization": float(np.median([float(row["specialization"]) for row in cells])),
-        "mean_gradient_conflict": float(np.mean([float(row["gradient_conflict"]) for row in cells])),
-        "mean_profile_stability_vs_age0": float(np.mean([float(row["profile_stability_vs_age0"]) for row in cells])),
-        "mean_tissue_redundancy": float(np.mean([float(row["mean_pairwise_profile_cosine"]) for row in tissues])),
-        "mean_diagnostic_stress": float(np.mean([float(row["mean_diagnostic_stress"]) for row in tissues])),
-        "max_diagnostic_stress": float(np.max([float(row["max_diagnostic_stress"]) for row in tissues])),
+        "mean_cell_specialization": float(
+            np.mean([float(row["specialization"]) for row in cells])
+        ),
+        "median_cell_specialization": float(
+            np.median([float(row["specialization"]) for row in cells])
+        ),
+        "mean_gradient_conflict": float(
+            np.mean([float(row["gradient_conflict"]) for row in cells])
+        ),
+        "mean_profile_stability_vs_age0": float(
+            np.mean([float(row["profile_stability_vs_age0"]) for row in cells])
+        ),
+        "mean_tissue_redundancy": float(
+            np.mean([float(row["mean_pairwise_profile_cosine"]) for row in tissues])
+        ),
+        "mean_diagnostic_stress": float(
+            np.mean([float(row["mean_diagnostic_stress"]) for row in tissues])
+        ),
+        "max_diagnostic_stress": float(
+            np.max([float(row["max_diagnostic_stress"]) for row in tissues])
+        ),
+        "mean_plasticity": float(
+            np.mean([float(row["plasticity"]) for row in cells])
+        ),
+        "plasticity_std": float(
+            np.std([float(row["plasticity"]) for row in cells])
+        ),
     }
 
 
@@ -643,6 +765,7 @@ def protocol_manifest() -> dict[str, object]:
         "granularities": list(GRANULARITIES),
         "program_tissues": 12,
         "persistent_growth": False,
+        "local_plasticity": True,
         "domains": list(DOMAINS),
         "continuation_tokens": CONTINUATION_TOKENS,
         "schedule": schedule_manifest(),
@@ -656,13 +779,12 @@ def protocol_manifest() -> dict[str, object]:
             "grad_clip": GRAD_CLIP,
         },
         "decision_thresholds": {
-            "differentiation_min_delta": DIFFERENTIATION_MIN_DELTA,
+            "differentiation_min_gain_delta": DIFFERENTIATION_MIN_GAIN_DELTA,
             "performance_nll_ratio_max": PERFORMANCE_NLL_RATIO_MAX,
             "stability_min_cosine": STABILITY_MIN_COSINE,
         },
         "diagnostic_caveat": (
-            "diagnostic_stress is a preregistered proxy derived from contribution load, validation loss, "
-            "age-zero profile novelty, output-projection gradient conflict, and local neighbor capacity; "
-            "it is not used to trigger division in Experiment 026"
+            "diagnostic stress is recorded but never triggers division in "
+            "Experiment 026"
         ),
     }
