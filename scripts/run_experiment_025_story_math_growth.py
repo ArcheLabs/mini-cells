@@ -34,8 +34,8 @@ from minicells.story_math_shift_30m import (  # noqa: E402
 
 SOURCE_006 = ROOT / "artifacts" / "experiments" / "006-consumer-language-scaling"
 OUT = ROOT / "results" / RESULT_DIR_NAME
-WORKER = ROOT / "scripts" / "run_experiment_025_story_math_worker.py"
-REPORT = ROOT / "scripts" / "report_experiment_025_story_math_growth.py"
+WORKER = ROOT / "scripts" / "run_experiment_025_story_math_worker_entry.py"
+REPORT = ROOT / "scripts" / "report_experiment_025_story_math_growth_entry.py"
 
 DEFAULT_TOTAL_WALL_HOURS = 8.0
 DEFAULT_FINALIZATION_RESERVE_MINUTES = 30.0
