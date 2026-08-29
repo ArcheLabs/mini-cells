@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Aggregate and report formal Experiment 026 results."""
 
 from __future__ import annotations
@@ -228,7 +227,14 @@ def main() -> int:
             }
         )
 
-    decision_frame = pd.DataFrame(decision_rows)
+    decision_frame = pd.DataFrame(decision_rows)[
+        [
+            "granularity",
+            "specialization_gain_delta_vs_g1",
+            "balanced_nll_ratio_vs_g1",
+            "qualifies",
+        ]
+    ]
     final = final.merge(decision_frame, on="granularity", how="left")
     final.to_csv(results / "granularity-final.csv", index=False)
 
