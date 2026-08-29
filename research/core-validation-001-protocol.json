@@ -1,0 +1,94 @@
+{
+  "experiment_id": "core-validation-001",
+  "format": "minicells.core-validation.knowledge-subsumption.v1",
+  "title": "Knowledge Subsumption and Computational Reorganization",
+  "hypothesis": "Cumulative experience can replace memorizing computation with a reusable generalizing circuit while preserving previously acquired behavior.",
+  "scope": {
+    "growth": false,
+    "mitosis": false,
+    "tissues": false,
+    "hierarchy": false,
+    "apoptosis": false,
+    "message_passing": false,
+    "fixed_cell_partition": true,
+    "claim_limit": "This experiment tests representational reorganization. A positive result is not evidence that MiniCells uniquely causes grokking or that structural growth is necessary."
+  },
+  "task": {
+    "primary": "modular_addition",
+    "control": "balanced_random_labels",
+    "modulus": 31,
+    "curriculum_fractions": [0.10, 0.20, 0.20, 0.20],
+    "heldout_fraction_approx": 0.30,
+    "replay_old_examples": false,
+    "phase_steps": [3000, 5000, 8000, 12000],
+    "evaluation_interval_steps": 250
+  },
+  "model": {
+    "architecture": "factored one-hidden-layer modular-addition MLP",
+    "embedding_dim": 64,
+    "num_cells": 16,
+    "neurons_per_cell": 8,
+    "hidden_dim": 128,
+    "activation": "ReLU",
+    "tied_input_output_embedding": true,
+    "cell_definition": "fixed contiguous hidden-neuron groups used only for causal ablation",
+    "parameter_growth": false
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "learning_rate": 0.001,
+    "betas": [0.9, 0.98],
+    "weight_decay": 1.0,
+    "gradient_clip_norm": 1.0,
+    "batch_size": 256
+  },
+  "replication": {
+    "seeds": [73101, 73102, 73103],
+    "require_all_primary_seeds": true,
+    "require_zero_control_false_positives": true,
+    "oracle_reference": true,
+    "oracle_reference_seed": 73101
+  },
+  "causal_probe": {
+    "examples_per_partition": 64,
+    "path_cells": 3,
+    "key_frequency_pairs": 3,
+    "key_frequency_selection": "top conjugate Fourier-frequency pairs by late embedding energy; DC excluded from ranking and retained in restricted/excluded filters"
+  },
+  "gates": {
+    "early_memorization": {
+      "minimum_seen_accuracy": 0.98,
+      "maximum_unseen_accuracy": 0.20
+    },
+    "late_generalization": {
+      "minimum_old_accuracy": 0.90,
+      "minimum_current_accuracy": 0.90,
+      "minimum_heldout_accuracy": 0.90
+    },
+    "generalizing_circuit": {
+      "minimum_restricted_old_accuracy": 0.80,
+      "minimum_restricted_heldout_accuracy": 0.80
+    },
+    "memorization_cleanup": {
+      "minimum_early_excluded_seen_accuracy": 0.80,
+      "maximum_late_excluded_old_accuracy": 0.30,
+      "maximum_late_excluded_heldout_accuracy": 0.20
+    },
+    "positive_status": "KNOWLEDGE_SUBSUMPTION_SUPPORTED",
+    "negative_status": "KNOWLEDGE_SUBSUMPTION_NOT_SUPPORTED"
+  },
+  "interpretation_limits": [
+    "A fact is not assumed to map one-to-one to a cell.",
+    "Behavioral retention is required; preserving historical internal representations is not.",
+    "Fourier restricted/excluded evaluation operationalizes circuit formation and cleanup for modular addition; it is task-specific evidence, not a universal definition of knowledge.",
+    "Cell-path reuse is reported as a secondary causal diagnostic and is not part of the formal pass/fail gate.",
+    "The balanced-random-label arm must not produce a false positive under the same gate.",
+    "The oracle arm is descriptive and is not part of the pass/fail gate.",
+    "Failure rejects this frozen v1 mechanism test; it does not prove that all possible neural systems can never reorganize knowledge."
+  ],
+  "hardware": {
+    "target": "Kaggle Tesla T4",
+    "gpu_required_for_formal_run": true,
+    "cpu_smoke_supported": true
+  }
+}
