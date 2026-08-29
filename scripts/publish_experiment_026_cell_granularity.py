@@ -12,11 +12,10 @@ from pathlib import Path
 
 from publish_experiment_results import DEFAULT_SECRET_NAME, push_results, repo_root
 
-
 SOURCE_DIR = Path("results/experiment-026-cell-granularity")
 ARTIFACT_DIR = Path("artifacts/experiments/026-cell-granularity")
 DEFAULT_BRANCH = "kaggle/experiment-026-cell-granularity-results"
-EXPECTED_FORMAT = "minicells.cell-granularity-30m.v1"
+EXPECTED_FORMAT = "minicells.cell-granularity-30m.v2"
 
 TOP_LEVEL = (
     "protocol.json",
@@ -73,17 +72,29 @@ def main() -> int:
             if not (source / f"g{granularity}" / name).is_file()
         )
     if missing:
-        raise FileNotFoundError(f"missing Experiment-026 outputs: {[str(path) for path in missing]}")
+        raise FileNotFoundError(
+            f"missing Experiment-026 outputs: {[str(path) for path in missing]}"
+        )
 
     decision = json.loads((source / "decision.json").read_text(encoding="utf-8"))
     if decision.get("format") != EXPECTED_FORMAT:
-        raise RuntimeError(f"unexpected Experiment-026 decision format: {decision.get('format')!r}")
-    workers = json.loads((source / "worker-summary.json").read_text(encoding="utf-8"))
+        raise RuntimeError(
+            f"unexpected Experiment-026 decision format: {decision.get('format')!r}"
+        )
+    workers = json.loads(
+        (source / "worker-summary.json").read_text(encoding="utf-8")
+    )
     if workers.get("complete") is not True:
-        raise RuntimeError("refusing publication: all Experiment-026 arms must be complete")
-    provenance = json.loads((source / "run-provenance.json").read_text(encoding="utf-8"))
+        raise RuntimeError(
+            "refusing publication: all Experiment-026 arms must be complete"
+        )
+    provenance = json.loads(
+        (source / "run-provenance.json").read_text(encoding="utf-8")
+    )
     if provenance.get("tracked_tree_dirty") is not False:
-        raise RuntimeError("refusing publication from dirty tracked training provenance")
+        raise RuntimeError(
+            "refusing publication from dirty tracked training provenance"
+        )
 
     if destination.exists():
         shutil.rmtree(destination)
@@ -129,13 +140,16 @@ def main() -> int:
         f"- Selected qualifying granularity: `{decision.get('selected_granularity')}`\n"
         f"- Parameter parity: `{decision.get('parameter_parity')}`\n"
         f"- Max age-zero logit difference: `{decision.get('max_age_zero_logit_abs_diff')}`\n"
-        "- Scope: fixed-capacity G={1,2,4,8} cell-granularity ablation under a balanced four-domain continuation.\n"
+        "- Scope: fixed-capacity G={1,2,4,8} granularity under the same normalized local-plasticity rule and balanced four-domain continuation.\n"
         "- Persistent growth is disabled; this experiment does not test autonomous mitosis.\n\n"
         "See `protocol.json` for the frozen preregistration and `decision.json` for the machine-readable result.\n",
         encoding="utf-8",
     )
 
-    print(f"Prepared curated Experiment-026 artifacts: {destination.relative_to(root)}")
+    print(
+        "Prepared curated Experiment-026 artifacts: "
+        f"{destination.relative_to(root)}"
+    )
     if args.push:
         push_results(root, destination, "026", args.branch, args.secret_name)
     else:
