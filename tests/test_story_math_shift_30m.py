@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import torch
@@ -147,11 +149,35 @@ def test_orchestrator_parser_returns_parser_and_accepts_kaggle_budget() -> None:
     assert args.round_wall_hours == 2.5
 
 
+def test_all_experiment_025_cli_boundaries_parse_help() -> None:
+    scripts = (
+        "scripts/run_experiment_025_story_math_growth.py",
+        "scripts/run_experiment_025_story_math_worker_entry.py",
+        "scripts/report_experiment_025_story_math_growth_entry.py",
+        "scripts/publish_experiment_025_story_math_growth.py",
+    )
+    for relative in scripts:
+        completed = subprocess.run(
+            [sys.executable, relative, "--help"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        assert completed.returncode == 0, (
+            relative,
+            completed.stdout,
+            completed.stderr,
+        )
+
+
 def test_experiment_025_scripts_compile() -> None:
     for relative in (
         "scripts/run_experiment_025_story_math_worker.py",
+        "scripts/run_experiment_025_story_math_worker_entry.py",
         "scripts/run_experiment_025_story_math_growth.py",
         "scripts/report_experiment_025_story_math_growth.py",
+        "scripts/report_experiment_025_story_math_growth_entry.py",
     ):
         path = ROOT / relative
         compile(path.read_text(encoding="utf-8"), str(path), "exec")
