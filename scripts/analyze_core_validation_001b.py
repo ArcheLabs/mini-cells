@@ -74,6 +74,24 @@ def main() -> int:
     if source.get("provenance", {}).get("tracked_tree_dirty") is not False:
         raise RuntimeError("refusing analysis from dirty parent training provenance")
 
+    parent_protocol_path = ROOT / str(protocol["source"]["training_protocol"])
+    parent_protocol = json.loads(parent_protocol_path.read_text(encoding="utf-8"))
+    expected_seeds = {int(value) for value in parent_protocol["replication"]["seeds"]}
+    expected_runs = {
+        (task, seed)
+        for seed in expected_seeds
+        for task in ("modular_addition", "balanced_random_labels")
+    }
+    observed_runs = {
+        (str(run["task"]), int(run["seed"]))
+        for run in source.get("runs", [])
+    }
+    if observed_runs != expected_runs:
+        raise RuntimeError(
+            "001b requires the complete frozen parent run set: "
+            f"expected={sorted(expected_runs)!r} observed={sorted(observed_runs)!r}"
+        )
+
     training_config = KnowledgeSubsumptionConfig(**source["config"])
     residual_config = ResidualMemorizationConfig.from_protocol(args.protocol)
     if args.device == "auto":
