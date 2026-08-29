@@ -1,0 +1,66 @@
+{
+  "control_false_positives": 0,
+  "control_runs": 3,
+  "elapsed_seconds": 342.29592633247375,
+  "experiment_id": "core-validation-001",
+  "format": "minicells.core-validation.knowledge-subsumption.v1",
+  "mode": "formal",
+  "oracle_reference": {
+    "fourier_concentration": 0.6059991526025826,
+    "heldout": {
+      "excluded": {
+        "accuracy": 0.7681661248207092,
+        "nll": 0.8677401542663574
+      },
+      "full": {
+        "accuracy": 1.0,
+        "nll": 1.3071738749204087e-06
+      },
+      "restricted": {
+        "accuracy": 1.0,
+        "nll": 0.1570613980293274
+      }
+    },
+    "key_frequency_pairs": [
+      1,
+      9,
+      12
+    ],
+    "seed": 73101,
+    "seen": {
+      "excluded": {
+        "accuracy": 0.8288690447807312,
+        "nll": 0.8443123698234558
+      },
+      "full": {
+        "accuracy": 1.0,
+        "nll": 4.154584871685074e-07
+      },
+      "restricted": {
+        "accuracy": 1.0,
+        "nll": 0.13970868289470673
+      }
+    },
+    "task": "oracle_modular_addition",
+    "training_mode": "cumulative_replay_reference"
+  },
+  "primary_passes": 1,
+  "primary_runs": 3,
+  "provenance": {
+    "code_commit": "aa310331bb1541d8c491519803f114cfb2281d00",
+    "code_tree": "c1c91e8e096b781c718a28fb22cd67f43d9458de",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "requirements": {
+    "all_controls_memorization_valid": true,
+    "all_primary_seeds_pass": false,
+    "zero_control_false_positives": true
+  },
+  "status": "KNOWLEDGE_SUBSUMPTION_NOT_SUPPORTED",
+  "supported": false,
+  "valid_control_runs": 3
+}
