@@ -1,0 +1,126 @@
+{
+  "experiment_id": "core-validation-002",
+  "format": "minicells.core-validation.write-addressability.v1",
+  "title": "Write Addressability under Superposition",
+  "hypothesis": "A neural system can learn a sparse functional coordinate system from dense superposition and use an inferred, aligned write address to update a shared latent function with substantially less off-target interference than an otherwise identical sparse model using global writer optimization.",
+  "scope": {
+    "natural_language": false,
+    "growth": false,
+    "mitosis": false,
+    "routing_growth": false,
+    "replay_old_examples": false,
+    "editor_sees_ground_truth_feature_id": false,
+    "editor_sees_ground_truth_sparse_code": false,
+    "encoder_frozen_during_edits": true,
+    "primary_claim": "This is a mechanism test for learned functional read/write coordinates, not a language-model benchmark or evidence that SAE-style coordinates are the final architecture."
+  },
+  "world": {
+    "observation_dim": 128,
+    "num_features": 512,
+    "active_features": 4,
+    "output_dim": 32,
+    "coefficient_min_abs": 0.5,
+    "coefficient_max_abs": 1.5,
+    "edit_scale": 0.75,
+    "observation_equation": "x = A s with fixed dense column-normalized Gaussian A",
+    "behavior_equation": "y = V s",
+    "superposition_load": "alpha = F / d",
+    "recovery_load": "rho = k log(F/k) / d"
+  },
+  "model": {
+    "candidate": "top-k sparse functional encoder + linear writer",
+    "latent_dim": 1024,
+    "latent_topk": 8,
+    "writer": "y_hat = W z",
+    "auxiliary_reconstruction": "x_hat = D z",
+    "moe_topk": 2,
+    "decisive_baseline": "same pretrained sparse model and frozen encoder, but ordinary SGD updates the entire writer",
+    "contextual_baselines": ["parameter-matched dense MLP", "approximately parameter-matched top-k MoE"]
+  },
+  "pretraining": {
+    "examples": 65536,
+    "steps": 6000,
+    "batch_size": 512,
+    "learning_rate": 0.001,
+    "weight_decay": 0.00001,
+    "reconstruction_weight": 0.5,
+    "gradient_clip_norm": 1.0,
+    "validation_examples": 4096,
+    "same_data_stream_across_models": true
+  },
+  "editing": {
+    "edit_count": 100,
+    "edit_examples": 8,
+    "repeat_every": 5,
+    "previous_target_distractor_every": 4,
+    "address_inference": "For each latent q, solve the least-squares residual r_i ~= z_iq delta_q and choose the valid q with minimum residual error.",
+    "address_min_shared_fraction": 0.75,
+    "address_min_energy": 1e-8,
+    "inferred_write": "Only the inferred writer column is changed by the least-squares delta.",
+    "oracle_address": "Evaluator-only diagnostic: map each true feature to its most correlated learned latent on a held-out probe set.",
+    "permutation_control": "Inference is unchanged; only the inferred read-address -> write-destination mapping is cyclically permuted.",
+    "global_write": {
+      "steps": 32,
+      "learning_rate": 0.02
+    },
+    "dense": {
+      "steps": 32,
+      "learning_rate": 0.002
+    },
+    "moe": {
+      "steps": 32,
+      "learning_rate": 0.002
+    }
+  },
+  "evaluation": {
+    "affected_examples": 512,
+    "invariant_examples": 512,
+    "retention_examples_per_edit": 16,
+    "oracle_probe_examples": 8192,
+    "update_error": "U = E_A ||(yhat_after-yhat_before) - (y_after-y_before)||^2 / E_A ||y_after-y_before||^2",
+    "write_leakage": "L = E_I ||yhat_after-yhat_before||^2 / E_A ||y_after-y_before||^2",
+    "mechanistic_proxy": "Q = E_I[z_q^2] / E_A[s_j^2], predicting L up to write-magnitude fit error",
+    "retention": "After each edit, evaluate all retained probes from earlier edited atoms against the evaluator's current V. Retention probes are never used for optimization."
+  },
+  "replication": {
+    "seeds": [74201, 74202, 74203],
+    "require_all_primary_seeds": true
+  },
+  "gates": {
+    "maximum_base_normalized_mse": 0.10,
+    "maximum_candidate_update_error": 0.10,
+    "maximum_baseline_update_error": 0.15,
+    "maximum_leakage_ratio": 0.10,
+    "minimum_mechanistic_correlation": 0.70,
+    "minimum_permutation_degradation": 2.0,
+    "positive_status": "WRITE_ADDRESSABILITY_SUPPORTED",
+    "negative_status": "WRITE_ADDRESSABILITY_NOT_SUPPORTED"
+  },
+  "diagnostic_sweep": {
+    "seed": 74201,
+    "pretrain_steps": 3000,
+    "edit_count": 40,
+    "conditions": [
+      {"num_features": 128, "active_features": 4, "latent_dim": 256, "latent_topk": 8},
+      {"num_features": 512, "active_features": 4, "latent_dim": 1024, "latent_topk": 8},
+      {"num_features": 1024, "active_features": 4, "latent_dim": 2048, "latent_topk": 8},
+      {"num_features": 512, "active_features": 8, "latent_dim": 1024, "latent_topk": 16},
+      {"num_features": 512, "active_features": 16, "latent_dim": 1024, "latent_topk": 32}
+    ],
+    "role": "Descriptive capacity-boundary diagnostic. It is not part of the frozen primary pass/fail gate in v1."
+  },
+  "interpretation_limits": [
+    "A positive result establishes the mechanism only in the synthetic additive sparse-functional world used here.",
+    "The Gaussian mixing matrix is intentionally favorable to sparse recovery; structured and correlated superposition is a later validation.",
+    "The learned encoder is frozen during edits, so this experiment does not test continual creation or reorganization of the functional basis.",
+    "The decisive causal comparison is inferred addressed write versus global writer SGD from the exact same pretrained sparse model. Dense and MoE baselines are contextual.",
+    "Ground-truth s, A, V, and target feature ids are evaluator-only. Any use of them by the inferred-address editor invalidates the experiment.",
+    "Failure of a contextual baseline to learn the base world cannot be counted as evidence for write addressability.",
+    "Failure rejects this frozen v1 mechanism test; it does not prove that no alternative addressable architecture can work."
+  ],
+  "hardware": {
+    "target": "Kaggle Tesla T4 or better",
+    "gpu_required_for_formal_run": true,
+    "cpu_smoke_supported": true
+  }
+}
