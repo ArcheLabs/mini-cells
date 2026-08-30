@@ -1,9 +1,15 @@
 import json
+import os
+from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
 from minicells.clm04mini import M0_SEED, run_m0
 
+
+ROOT = Path(__file__).resolve().parents[2]
 
 TRANSACTION_REQUIRED = {
     "transaction_id",
@@ -107,3 +113,38 @@ def test_m0_rejects_development_and_formal_seeds(tmp_path):
     for seed in (90401, 90411, 90412, 90413):
         with pytest.raises(ValueError):
             run_m0(tmp_path / str(seed), device="cpu", seed=seed)
+
+
+@pytest.mark.smoke
+def test_m0_unified_runner_and_report(tmp_path):
+    env = dict(os.environ, PYTHONPATH=str(ROOT / "src"))
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/run.py",
+            "clm-0.4-mini-m0",
+            "--device",
+            "cpu",
+            "--out",
+            str(tmp_path),
+        ],
+        cwd=ROOT,
+        env=env,
+        check=True,
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/report.py",
+            "clm-0.4-mini-m0",
+            "--out",
+            str(tmp_path),
+        ],
+        cwd=ROOT,
+        env=env,
+        check=True,
+    )
+    decision = json.loads((tmp_path / "decision.json").read_text(encoding="utf-8"))
+    assert decision["status"] == "SMOKE_ONLY"
+    assert decision["scientific_decision"] is False
+    assert (tmp_path / "RESULTS.md").exists()
