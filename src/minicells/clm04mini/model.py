@@ -1,4 +1,4 @@
-"""Small token-level CLM primitives used by the 0.4-mini execution smoke."""
+"""Small token-level CLM primitives used by MiniCells experiments and preview runs."""
 
 from __future__ import annotations
 
@@ -23,6 +23,8 @@ class MiniCLMConfig:
     base_cells: int = 8
     cell_hidden: int = 8
     routing_salt: str = "clm-0.4-mini-m0"
+    # Preview-only by default. Zero preserves all historical M0/M1 architectures.
+    shared_cell_ff_hidden: int = 0
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -147,8 +149,15 @@ class CLMBlock(nn.Module):
         self.norm1 = nn.LayerNorm(cfg.d_model)
         self.attn = nn.MultiheadAttention(cfg.d_model, cfg.n_heads, batch_first=True, dropout=0.0)
         self.norm2 = nn.LayerNorm(cfg.d_model)
+        self.shared_ff: nn.Module | None = None
         if sparse:
             self.ff = SparseCellFFN(cfg, layer_id=layer_id, router=router)
+            if int(cfg.shared_cell_ff_hidden) > 0:
+                self.shared_ff = nn.Sequential(
+                    nn.Linear(cfg.d_model, int(cfg.shared_cell_ff_hidden)),
+                    nn.GELU(),
+                    nn.Linear(int(cfg.shared_cell_ff_hidden), cfg.d_model),
+                )
         else:
             self.ff = nn.Sequential(
                 nn.Linear(cfg.d_model, cfg.dense_ff_hidden),
@@ -167,6 +176,8 @@ class CLMBlock(nn.Module):
         x = x + attn_out
         q = self.norm2(x)
         if self.sparse:
+            if self.shared_ff is not None:
+                x = x + self.shared_ff(q)
             x = x + self.ff(q, address_ids)
         else:
             x = x + self.ff(q)
@@ -174,12 +185,12 @@ class CLMBlock(nn.Module):
 
 
 class TinyCLMDecoder(nn.Module):
-    """Reduced 4-block decoder preserving the formal M1 mutable/frozen boundary."""
+    """Four-block decoder preserving independently mutable Cell boundaries."""
 
     def __init__(self, cfg: MiniCLMConfig) -> None:
         super().__init__()
         if cfg.num_layers != 4:
-            raise ValueError("M0 model intentionally preserves the 4-block M1 topology")
+            raise ValueError("MiniCells currently preserves a four-block topology")
         self.cfg = cfg
         self.router = StableAddressRouter(num_cells=cfg.base_cells, salt=cfg.routing_salt)
         self.token_embedding = nn.Embedding(cfg.vocab_size, cfg.d_model)
@@ -199,6 +210,14 @@ class TinyCLMDecoder(nn.Module):
         block = self.blocks[layer_id - 1]
         assert isinstance(block.ff, SparseCellFFN)
         return block.ff
+
+    def shared_cell_ffn_parameters(self) -> int:
+        total = 0
+        for layer_id in (3, 4):
+            shared = self.blocks[layer_id - 1].shared_ff
+            if shared is not None:
+                total += sum(parameter.numel() for parameter in shared.parameters())
+        return int(total)
 
     def base_routes(self, address_id: str | int) -> dict[str, list[int]]:
         return {
