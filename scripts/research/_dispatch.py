@@ -17,6 +17,7 @@ REGISTRY = {
         "core-validation-003": "run_core_validation_003.py",
         "core-validation-004": "run_core_validation_004.py",
         "clm-0.4-mini-m0": "run_clm_0_4_mini_m0.py",
+        "clm-0.4-mini-m1": "run_clm_0_4_mini_m1.py",
     },
     "report": {
         "core-validation-001": "report_core_validation_001.py",
@@ -27,6 +28,7 @@ REGISTRY = {
         "core-validation-003": "report_core_validation_003.py",
         "core-validation-004": "report_core_validation_004.py",
         "clm-0.4-mini-m0": "report_clm_0_4_mini_m0.py",
+        "clm-0.4-mini-m1": "report_clm_0_4_mini_m1.py",
     },
     "publish": {
         "core-validation-001": "publish_core_validation_001.py",
