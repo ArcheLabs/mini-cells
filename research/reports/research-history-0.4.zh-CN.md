@@ -85,7 +85,7 @@ Pilot 使用 5–10M 参数、受控数学+故事 curriculum，在 token 级测�
 - 机器目录：[`research/catalog.yaml`](../catalog.yaml)
 - 协议与摘要：[`research/validations/`](../validations/)
 - 规范证据：[`artifacts/experiments/`](../../artifacts/experiments/)
-- 稳定 notebook 路径：[`research/notebooks/`](../kaggle/)
+- 稳定 notebook 路径：[`research/notebooks/`](../notebooks/)
 - 历史来源：[`research/stages/*/sources/`](../stages/)
 - 分支审计：[`research/archive/branch-manifest-pre-0.4.json`](../archive/branch-manifest-pre-0.4.json)
 - 旧路径映射：[`research/archive/legacy-path-map.csv`](../archive/legacy-path-map.csv)

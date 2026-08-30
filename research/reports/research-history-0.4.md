@@ -92,7 +92,7 @@ The pilot is a 5–10M-parameter controlled math-and-story curriculum testing th
 - Machine-readable catalog: [`research/catalog.yaml`](../catalog.yaml)
 - Core protocols and summaries: [`research/validations/`](../validations/)
 - Immutable canonical evidence: [`artifacts/experiments/`](../../artifacts/experiments/)
-- Stable notebooks: [`research/notebooks/`](../kaggle/)
+- Stable notebooks: [`research/notebooks/`](../notebooks/)
 - Historical source documents: [`research/stages/*/sources/`](../stages/)
 - Pre-cleanup branch audit: [`research/archive/branch-manifest-pre-0.4.json`](../archive/branch-manifest-pre-0.4.json)
 - Legacy path map: [`research/archive/legacy-path-map.csv`](../archive/legacy-path-map.csv)
