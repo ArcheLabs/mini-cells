@@ -1,0 +1,41 @@
+{
+  "base_train": {
+    "data_parallel_devices": [
+      "cuda:0",
+      "cuda:1"
+    ],
+    "mean_nll": 3.7992563200289475,
+    "optimizer": {
+      "batch_size": 64,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "gradient_clip_norm": 1.0,
+      "learning_rate": 0.0003,
+      "optimizer": "AdamW",
+      "warmup_fraction": 0.02,
+      "weight_decay": 0.1
+    },
+    "steps": 7630,
+    "training_precision": "fp16-amp",
+    "training_tokens": 30000054,
+    "wall_seconds": 617.073133719
+  },
+  "capability": {
+    "diagnostics": {
+      "math_answer_nll": 0.3916067906109935,
+      "math_greedy_exact_match": 0.390625,
+      "math_teacher_forced_token_accuracy": 0.8366533864541833,
+      "story_answer_nll": 0.00020947936372678788,
+      "story_greedy_exact_match": 1.0,
+      "story_teacher_forced_token_accuracy": 1.0
+    },
+    "math_teacher_forced_answer_exact": 0.390625,
+    "story_teacher_forced_answer_exact": 1.0
+  },
+  "checkpoint": "/kaggle/working/mini-cells/results/clm-0.4-mini-m1-v2-calibration/base/dense_equal_parameter/checkpoint.pt",
+  "checkpoint_source": "trained-once",
+  "numeric_finite": true,
+  "parameter_count": 5010464
+}
