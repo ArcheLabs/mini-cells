@@ -1,0 +1,36 @@
+{
+  "elapsed_seconds": 107.26607298851013,
+  "experiment_id": "core-validation-004",
+  "format": "minicells.core-validation.growth-restored-plasticity.v1",
+  "hypotheses": {
+    "growth_is_bounded_and_reusable": true,
+    "growth_preserves_dependency_scoped_safety": true,
+    "growth_restores_plasticity": true
+  },
+  "mode": "formal",
+  "parent_experiment": {
+    "experiment_id": "core-validation-003",
+    "frozen_outcome": "DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED",
+    "rule": "004 cannot relabel Core Validation 003. It tests the missing growth mechanism exposed by 003.",
+    "supported_submechanisms": [
+      "Frozen-router structural locality had zero structural escape in all formal 003 seeds/granularities.",
+      "Frozen-router dependency-scoped validation had zero false-safe events in formal 003.",
+      "Fine granularity reduced dependency coverage, but naive transactional SGD retained insufficient new-learning gain."
+    ]
+  },
+  "pass": true,
+  "passed_seeds": 3,
+  "protocol_sha256": "c34bbc7f5aecd9ef05ab50034a248353d065795dca303d3c3a815812f7f64c81",
+  "provenance": {
+    "code_commit": "4e9dc2673e23457b9e8c4830a30f7ee356037e99",
+    "code_tree": "cf9ca80ed8c4936e8117e8fae678549de3643550",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "scientific_decision": true,
+  "status": "GROWTH_RESTORED_PLASTICITY_SUPPORTED",
+  "total_seeds": 3
+}

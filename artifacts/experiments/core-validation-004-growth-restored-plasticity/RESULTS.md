@@ -1,0 +1,5 @@
+# Core Validation 004 Results
+
+- Status: `GROWTH_RESTORED_PLASTICITY_SUPPORTED`
+- Passed seeds: `3/3`
+- Parent 003 remains `DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED`.
