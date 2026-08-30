@@ -1,0 +1,166 @@
+{
+  "clm": {
+    "base_sequences": 488312,
+    "base_train": {
+      "data_parallel_devices": [
+        "cuda:0",
+        "cuda:1"
+      ],
+      "mean_nll": 4.066348649204311,
+      "optimizer": {
+        "batch_size": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "gradient_clip_norm": 1.0,
+        "learning_rate": 0.0003,
+        "optimizer": "AdamW",
+        "warmup_fraction": 0.02,
+        "weight_decay": 0.1
+      },
+      "steps": 7630,
+      "training_precision": "fp16-amp",
+      "training_tokens": 30000054,
+      "wall_seconds": 1109.9368830489998
+    },
+    "capability": {
+      "diagnostics": {
+        "math_answer_nll": 0.49639345450230327,
+        "math_greedy_exact_match": 0.34375,
+        "math_teacher_forced_token_accuracy": 0.8047808764940239,
+        "story_answer_nll": 0.02640712261199951,
+        "story_greedy_exact_match": 0.96875,
+        "story_teacher_forced_token_accuracy": 0.9918032786885246
+      },
+      "math_teacher_forced_answer_exact": 0.34375,
+      "story_teacher_forced_answer_exact": 0.96875
+    },
+    "checkpoint": "/kaggle/working/mini-cells/results/clm-0.4-mini-m1-v2-calibration/base/clm/checkpoint.pt",
+    "checkpoint_source": "trained-once",
+    "minimum_base_cell_activation": 15259,
+    "parameter_count": 5009920,
+    "prerequisites": {
+      "gates": {
+        "base_cell_activation": {
+          "pass": true,
+          "threshold": 15259,
+          "value": 15259
+        },
+        "base_math_teacher_forced_answer_exact": {
+          "pass": false,
+          "threshold": 0.85,
+          "value": 0.34375
+        },
+        "base_story_teacher_forced_answer_exact": {
+          "pass": true,
+          "threshold": 0.85,
+          "value": 0.96875
+        },
+        "hashes_match_lock": {
+          "pass": true,
+          "threshold": true,
+          "value": true
+        },
+        "numeric_finite": {
+          "pass": true,
+          "threshold": true,
+          "value": true
+        }
+      },
+      "pass": false
+    },
+    "route_balanced_eval": {
+      "all_base_cells_covered": true,
+      "math_unique_addresses": 64,
+      "story_unique_addresses": 64
+    },
+    "state_hash": "35c253043e0a1715e4564b1bd0e06d29e32de1395eb120bbe8e72021af349383"
+  },
+  "comparison_authority": "diagnostic-only",
+  "dense": {
+    "equal_active_compute": {
+      "base_train": {
+        "data_parallel_devices": [
+          "cuda:0",
+          "cuda:1"
+        ],
+        "mean_nll": 4.054575091615708,
+        "optimizer": {
+          "batch_size": 64,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "gradient_clip_norm": 1.0,
+          "learning_rate": 0.0003,
+          "optimizer": "AdamW",
+          "warmup_fraction": 0.02,
+          "weight_decay": 0.1
+        },
+        "steps": 7630,
+        "training_precision": "fp16-amp",
+        "training_tokens": 30000054,
+        "wall_seconds": 592.5539915279996
+      },
+      "capability": {
+        "diagnostics": {
+          "math_answer_nll": 0.41212536329292204,
+          "math_greedy_exact_match": 0.421875,
+          "math_teacher_forced_token_accuracy": 0.8406374501992032,
+          "story_answer_nll": 0.00022358844270471668,
+          "story_greedy_exact_match": 1.0,
+          "story_teacher_forced_token_accuracy": 1.0
+        },
+        "math_teacher_forced_answer_exact": 0.421875,
+        "story_teacher_forced_answer_exact": 1.0
+      },
+      "checkpoint": "/kaggle/working/mini-cells/results/clm-0.4-mini-m1-v2-calibration/base/dense_equal_active_compute/checkpoint.pt",
+      "checkpoint_source": "trained-once",
+      "numeric_finite": true,
+      "parameter_count": 4009088
+    },
+    "equal_parameter": {
+      "base_train": {
+        "data_parallel_devices": [
+          "cuda:0",
+          "cuda:1"
+        ],
+        "mean_nll": 3.7992563200289475,
+        "optimizer": {
+          "batch_size": 64,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "gradient_clip_norm": 1.0,
+          "learning_rate": 0.0003,
+          "optimizer": "AdamW",
+          "warmup_fraction": 0.02,
+          "weight_decay": 0.1
+        },
+        "steps": 7630,
+        "training_precision": "fp16-amp",
+        "training_tokens": 30000054,
+        "wall_seconds": 617.073133719
+      },
+      "capability": {
+        "diagnostics": {
+          "math_answer_nll": 0.3916067906109935,
+          "math_greedy_exact_match": 0.390625,
+          "math_teacher_forced_token_accuracy": 0.8366533864541833,
+          "story_answer_nll": 0.00020947936372678788,
+          "story_greedy_exact_match": 1.0,
+          "story_teacher_forced_token_accuracy": 1.0
+        },
+        "math_teacher_forced_answer_exact": 0.390625,
+        "story_teacher_forced_answer_exact": 1.0
+      },
+      "checkpoint": "/kaggle/working/mini-cells/results/clm-0.4-mini-m1-v2-calibration/base/dense_equal_parameter/checkpoint.pt",
+      "checkpoint_source": "trained-once",
+      "numeric_finite": true,
+      "parameter_count": 5010464
+    }
+  },
+  "format": "minicells.clm-0.4-mini.m1-v2-dense-baselines.v1"
+}

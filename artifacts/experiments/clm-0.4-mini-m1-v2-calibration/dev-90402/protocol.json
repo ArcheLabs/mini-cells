@@ -1,0 +1,323 @@
+{
+  "experiment_id": "clm-0.4-mini-m1-v2-language-validation",
+  "format": "minicells.language-validation.clm-0.4-mini.m1-v2.v1",
+  "protocol_version": "0.4-mini-m1-v2-rc1",
+  "title": "CLM-0.4-mini M1-v2 Aligned Token-Level Continual-Learning Validation",
+  "status": "PROTOCOL_FROZEN_DATA_LOCK_PENDING",
+  "predecessor": {
+    "experiment_id": "clm-0.4-mini-language-validation",
+    "protocol_version": "0.4-mini-rc1",
+    "development_seed": 90401,
+    "status": "CALIBRATION_BASE_PREREQUISITES_FAILED",
+    "candidate_search_started": false,
+    "formal_seeds_observed": false,
+    "observed_metrics": {
+      "base_train_mean_nll": 3.922878999483625,
+      "math_greedy_exact_match": 0.359375,
+      "story_greedy_exact_match": 0.0,
+      "math_teacher_forced_token_accuracy": 0.8358778625954199,
+      "math_answer_nll": 0.42110119885160724,
+      "story_teacher_forced_token_accuracy": 0.2413793103448276,
+      "story_answer_nll": 4.24629916487069,
+      "minimum_cell_activation": 19958,
+      "minimum_cell_activation_threshold": 19335
+    },
+    "diagnosis": [
+      "story base train/eval task mismatch",
+      "base admission metric inconsistent with teacher-forced M1 certification",
+      "evaluation addresses concentrated on one route per domain",
+      "math showed genuine residual arithmetic error and partial base-task mismatch"
+    ]
+  },
+  "decision_question": "After correcting base-task/evaluation alignment and adding dense controls, can the dependency-scoped transactional growth loop preserve useful stability and plasticity in a token-level language model?",
+  "interpretation_scope": {
+    "token_level_language_model": true,
+    "controlled_math": true,
+    "controlled_story_worlds": true,
+    "explicit_stable_addressing": true,
+    "dense_static_baselines": true,
+    "dense_continual_baseline": true,
+    "autonomous_semantic_routing": false,
+    "open_domain_continual_learning": false,
+    "llm_scale": false
+  },
+  "model": {
+    "type": "decoder-only-transformer-with-two-sparse-cell-ffn-layers",
+    "target_base_parameters": 5000000,
+    "vocab_size": 8192,
+    "sequence_length": 256,
+    "layers": 4,
+    "model_dim": 256,
+    "attention_heads": 8,
+    "tie_embedding_lm_head": true,
+    "positional_encoding": "parameter-free-deterministic",
+    "shared_dense_layers": {
+      "layers": [
+        1,
+        2
+      ],
+      "ffn_hidden": 768,
+      "continual_phase_mutable": false
+    },
+    "cell_layers": {
+      "layers": [
+        3,
+        4
+      ],
+      "base_cells_per_layer": 32,
+      "base_cell_hidden": 32,
+      "topk_base": 2,
+      "continual_phase_mutable": "only-routed-base-cells-or-owner-private-growth-cells"
+    },
+    "continual_frozen_parameters": [
+      "token_embeddings",
+      "attention",
+      "normalization",
+      "dense_ffn_layers_1_2",
+      "lm_head",
+      "all_non-touched-base-cells"
+    ]
+  },
+  "dense_baselines": {
+    "controls_clm_calibration": false,
+    "diagnostic_only": true,
+    "shared_topology": "same-vocab-sequence-embedding-attention-layer-count-position-and-tied-head",
+    "equal_parameter": {
+      "name": "dense-5m-equal-parameter",
+      "ffn_hidden": 904,
+      "expected_parameter_count": 5010464,
+      "clm_parameter_count": 5009920,
+      "parameter_delta": 544,
+      "base_training": "same-30m-data-order-optimizer-budget",
+      "continual_variants": [
+        "dense_full_always",
+        "dense_global_tx"
+      ]
+    },
+    "equal_active_compute": {
+      "name": "dense-equal-active-ffn-compute",
+      "ffn_hidden": 416,
+      "expected_parameter_count": 4009088,
+      "approx_active_ffn_parameters": 854656,
+      "clm_approx_active_ffn_parameters": 855168,
+      "base_training": "same-30m-data-order-optimizer-budget",
+      "continual_variants": []
+    }
+  },
+  "addressing": {
+    "formal_router": "deterministic-out-of-band-address-hash",
+    "address_visible_in_token_sequence": false,
+    "route_formula": "stable_hash(protocol_salt, layer_id, address_id) -> two distinct base Cell IDs",
+    "mutable_hidden_state_dependency": false,
+    "base_route_rewrite_allowed": false,
+    "private_route_addition": "monotonic-only"
+  },
+  "growth": {
+    "unit": "private-growth-bundle",
+    "cells_per_bundle": 2,
+    "layers": [
+      3,
+      4
+    ],
+    "cell_hidden": 32,
+    "approx_weights_per_bundle": 32768,
+    "zero_output_initialization": true,
+    "owner_scope": "exact-address-id",
+    "max_bundles_per_address_m1": 1,
+    "atomic_commit": "parameters-plus-private-route",
+    "failed_probationary_growth_deleted": true,
+    "reuse_rule": "after bundle commit, later updates for the address train only that bundle",
+    "second_generation_allowed_m1": false
+  },
+  "base_training": {
+    "target_tokens": 30000000,
+    "token_tolerance_fraction": 0.01,
+    "mixture_token_fraction": {
+      "language_carrier": 0.6,
+      "controlled_base_math": 0.2,
+      "controlled_base_story": 0.2
+    },
+    "language_carrier": "pinned TinyStories subset identical source policy to v1",
+    "base_math": [
+      "qa-small-integer-addition",
+      "qa-small-integer-subtraction",
+      "qa-comparison",
+      "qa-simple-one-step-verbal-arithmetic"
+    ],
+    "base_story": "context-conditioned retrieval QA with train/eval generator seeds separated",
+    "base_route_coverage": "all 32 base Cells in each Cell layer must exceed the locked minimum activation count"
+  },
+  "base_alignment": {
+    "primary_gate": "teacher-forced-answer-exact",
+    "answer_exact_definition": "per-example all answer targets including EOS must be argmax-correct under teacher forcing",
+    "greedy_exact_match": "diagnostic-only",
+    "teacher_forced_token_accuracy": "diagnostic-only",
+    "answer_nll": "diagnostic-only",
+    "evaluation_routes": "held-out-route-balanced",
+    "evaluation_examples_per_domain": 64,
+    "all_32_cells_per_sparse_layer_must_be_covered": true,
+    "story_task": "context -> question -> answer",
+    "math_task": "question -> answer"
+  },
+  "continual_curriculum": {
+    "total_transactions": 192,
+    "same_semantic_schedule_across_formal_model_seeds": true,
+    "unchanged_from_v1": true,
+    "math": {
+      "transactions": 96,
+      "addresses": 12,
+      "visits_per_address": 8,
+      "families": [
+        "multiplication",
+        "exact_integer_division",
+        "modulo",
+        "precedence_and_two_step_expressions",
+        "bounded_affine_transforms",
+        "synthetic_binary_operators"
+      ]
+    },
+    "story": {
+      "transactions": 96,
+      "addresses": 24,
+      "visits_per_address": 4,
+      "operations": [
+        "append",
+        "supersede"
+      ],
+      "supersede_rule": "remove protection only for the exact superseded knowledge key; unrelated facts remain protected"
+    },
+    "per_transaction": {
+      "train_examples": 64,
+      "new_validation_examples": 128,
+      "protected_probes_added_on_commit": 32
+    },
+    "truth_advances_on_reject": true
+  },
+  "transaction": {
+    "direct_candidate": "train four routed base Cells: Top-2 in each of two Cell layers",
+    "direct_reject_action": "rollback then attempt probationary private growth bundle",
+    "existing_private_action": "train only owner private bundle",
+    "second_bundle_on_private_reject": false,
+    "candidate_kinds": [
+      "direct",
+      "spawn",
+      "private-reuse"
+    ]
+  },
+  "dependency_validation": {
+    "formal_local_index": "exact-inverted-index",
+    "mapping": "cell_id -> protected_probe_ids",
+    "probabilistic_false_negative_index_allowed": false,
+    "direct_scope": "union of protected probes for touched base Cells",
+    "hidden_global_oracle": {
+      "enabled": true,
+      "controls_commit": false,
+      "controls_growth": false,
+      "scope": "all protected history except intentionally superseded keys"
+    }
+  },
+  "metrics": {
+    "teacher_forced_certification": true,
+    "old_regression": "(NLL_after - NLL_before) / max(NLL_before, eps)",
+    "new_gain": "(NLL_before_new - NLL_candidate_new) / max(NLL_before_new, eps)",
+    "minimum_new_gain_for_local_pass": 0.02,
+    "maximum_local_old_regression": 0.005,
+    "maximum_global_old_regression_for_oracle_pass": 0.005,
+    "structural_logit_tolerance": 1e-05,
+    "free_generation_is_separate_behavioral_evaluation": true
+  },
+  "primary_variants": [
+    "local_always",
+    "local_tx",
+    "local_tx_growth"
+  ],
+  "calibration": {
+    "development_seed": 90402,
+    "formal_seeds_forbidden_during_calibration": [
+      90411,
+      90412,
+      90413
+    ],
+    "selection_rule": "enumerate in increasing estimated candidate compute and choose the first configuration satisfying development sanity gates; if none passes, revise protocol before formal execution",
+    "direct_grid": {
+      "optimizer": "AdamW",
+      "batch_size": 32,
+      "weight_decay": 0.0,
+      "learning_rates": [
+        0.001,
+        0.003,
+        0.01
+      ],
+      "steps": [
+        16,
+        32,
+        64
+      ]
+    },
+    "growth_private_grid": {
+      "optimizer": "AdamW",
+      "batch_size": 32,
+      "weight_decay": 0.0,
+      "learning_rates": [
+        0.001,
+        0.003,
+        0.01
+      ],
+      "steps": [
+        32,
+        64,
+        96
+      ]
+    },
+    "protocol_lock_required_before_formal": true
+  },
+  "replication": {
+    "development_seed": 90402,
+    "prior_development_seed_90401_reserved_for_v1": true,
+    "formal_model_seeds": [
+      90411,
+      90412,
+      90413
+    ],
+    "require_all_formal_seeds": true,
+    "formal_gpu_required": true,
+    "target_gpu": "Kaggle Tesla T4 or better",
+    "cpu_smoke_supported": true
+  },
+  "base_prerequisites": {
+    "minimum_base_math_teacher_forced_answer_exact": 0.85,
+    "minimum_base_story_teacher_forced_answer_exact": 0.85,
+    "all_base_cells_must_meet_locked_minimum_activation": true,
+    "nan_inf_allowed": false,
+    "hashes_must_match_predevelopment_asset_lock": true,
+    "carrier_perplexity_primary_gate": false
+  },
+  "m1_gates": {
+    "maximum_false_safe_rate": 0.02,
+    "maximum_structural_escape_rate": 0.0,
+    "maximum_regression_damage_ratio_vs_local_always": 0.35,
+    "minimum_effective_acceptance_rate": 0.75,
+    "minimum_committed_gain_ratio_vs_local_always": 0.75,
+    "minimum_final_protected_retention_ratio": 0.95,
+    "growth_must_exceed_local_tx_committed_gain": true,
+    "minimum_growth_rescue_rate": 0.7,
+    "minimum_private_reuse_acceptance_rate": 0.6,
+    "maximum_spawned_bundles_per_effective_commit": 0.5,
+    "maximum_growth_parameter_overhead_ratio": 0.25,
+    "maximum_active_private_cells_per_growth_layer_per_input": 1,
+    "maximum_mean_direct_dependency_coverage": 0.3,
+    "rule": "all gates must pass independently on all three formal model seeds"
+  },
+  "formal_statuses": {
+    "positive": "CLM_0_4_MINI_M1_V2_TOKEN_LEVEL_LOOP_SUPPORTED",
+    "negative": "CLM_0_4_MINI_M1_V2_TOKEN_LEVEL_LOOP_NOT_SUPPORTED",
+    "smoke": "SMOKE_ONLY"
+  },
+  "result_publication": {
+    "curated_git_artifacts": true,
+    "checkpoint_committed_to_git": false,
+    "raw_30m_data_committed_to_git": false,
+    "result_branch_pattern": "kaggle/clm-0.4-mini-m1-v2-<seed>-results",
+    "publisher": "scripts/research/publish.py clm-0.4-mini-m1-v2-calibration"
+  }
+}
