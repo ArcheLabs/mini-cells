@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from pathlib import Path
 
 from minicells.clm04mini.model import MiniCLMConfig, TinyCLMDecoder
@@ -50,7 +51,7 @@ def test_preview_base_mix_reallocates_story_budget_to_math():
         "controlled_base_math": 0.30,
         "controlled_base_story": 0.10,
     }
-    assert sum(PREVIEW_MIXTURE.values()) == 1.0
+    assert math.isclose(sum(PREVIEW_MIXTURE.values()), 1.0, rel_tol=0.0, abs_tol=1e-12)
 
 
 def test_digit_aware_tokenizer_exposes_multi_digit_structure(tmp_path: Path):
