@@ -1,0 +1,42 @@
+name: CLM-0.4-mini Stage 05
+
+on:
+  pull_request:
+    paths:
+      - 'src/minicells/clm04mini/**'
+      - 'research/validations/clm-0.4-mini-language-validation/**'
+      - 'research/experiments/05-language-validation/**'
+      - 'research/notebooks/05-language-validation/**'
+      - 'scripts/research/*clm_0_4_mini*'
+      - 'scripts/research/_dispatch.py'
+      - 'tests/**/*clm_0_4_mini*'
+      - '.github/workflows/clm-0.4-mini-stage05.yml'
+  workflow_dispatch:
+
+jobs:
+  infrastructure-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Compile Stage 05 code
+        run: python -m compileall -q src/minicells/clm04mini scripts/research tests/unit/continual_learning tests/smoke
+      - name: Protocol and data unit tests
+        run: >-
+          python -m pytest -q
+          tests/unit/continual_learning/test_clm_0_4_mini_primitives.py
+          tests/unit/continual_learning/test_clm_0_4_mini_m1_protocol.py
+          tests/unit/continual_learning/test_clm_0_4_mini_m1_data.py
+      - name: M0 and M1 smoke tests
+        run: >-
+          python -m pytest -q
+          tests/smoke/test_clm_0_4_mini_m0.py
+          tests/smoke/test_clm_0_4_mini_m1.py
+      - name: Repository architecture check
+        run: python scripts/maintenance/check_architecture.py
