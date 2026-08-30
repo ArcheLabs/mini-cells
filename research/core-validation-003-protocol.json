@@ -1,0 +1,140 @@
+{
+  "experiment_id": "core-validation-003",
+  "format": "minicells.core-validation.dependency-scoped-transactional-learning.v1",
+  "title": "Dependency-Scoped Transactional Continual Learning",
+  "research_transition": {
+    "from": "Core Validation 002/002B/002C studied precise functional write-addressability.",
+    "to": "003 tests whether sparse routing can make continual-learning safety a local validation problem even when updates are ordinary gradient training.",
+    "frozen_prior_outcomes": [
+      "WRITE_ADDRESSABILITY_NOT_SUPPORTED",
+      "SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED",
+      "ORACLE_SPARSE_ASSEMBLY_NOT_SUPPORTED"
+    ],
+    "rule": "003 is a new systems/mechanism validation and cannot relabel prior frozen outcomes."
+  },
+  "hypotheses": {
+    "H1": "With a frozen router and frozen shared parameters, changing only routed expert blocks must leave historical computations whose routes do not intersect those blocks unchanged.",
+    "H2": "The pre-update routing trace can define a dependency-scoped regression set whose PASS decision agrees with a hidden full-history oracle with false-safe rate <= 1%.",
+    "H3": "Transactional commit should reduce cumulative positive old-regression damage versus always committing the same local update while retaining useful new-learning gain.",
+    "H4": "Finer independently routed blocks should reduce dependency coverage and candidate-state size enough to create a useful granularity/cost frontier.",
+    "H5": "A controlled router-drift stress should demonstrate why dependency indexes require a stable routing plane; this is diagnostic and does not veto the core frozen-router mechanism."
+  },
+  "scope": {
+    "natural_language": false,
+    "knowledge_localization": false,
+    "replay": false,
+    "growth": false,
+    "mitosis": false,
+    "learn_router_during_continual_stream": false,
+    "router_specialization": "favorable structured router: each context composes two shared functional families and is hashed to one replica inside each family",
+    "hidden_global_validation_used_for_commit": false,
+    "primary_question": "Can sparse routing convert global continual-learning regression safety into dependency-scoped local validation with transactional commit?"
+  },
+  "world": {
+    "num_contexts": 64,
+    "anchor_contexts": 16,
+    "mutable_contexts": 48,
+    "content_dim": 16,
+    "output_dim": 4,
+    "num_function_families": 4,
+    "basis_hidden": 2,
+    "residual_hidden": 2,
+    "base_behavior": "Each context is a convex composition of two shared nonlinear basis functions.",
+    "new_knowledge": "Each mutable context has a fixed private nonlinear residual function whose amplitude increases when that context receives a transaction.",
+    "anchor_rule": "The first 16 contexts never receive updates and provide an invariant forgetting probe."
+  },
+  "model": {
+    "type": "single sparse routed expert layer with shared content trunk",
+    "model_dim": 16,
+    "router_dim": 8,
+    "base_experts": 4,
+    "base_expert_hidden": 64,
+    "topk": 2,
+    "granularities": [1, 2, 4, 8, 16],
+    "granularity_rule": "At granularity g there are 4g experts and each expert hidden width is 64/g. Total expert hidden/parameter budget is approximately constant while a context still routes to exactly two blocks.",
+    "active_compute_note": "Logical active expert parameters decrease with finer granularity; this is intentional and is reported as part of the cost/plasticity frontier rather than hidden as a confound.",
+    "shared_parameters": "content trunk and shared head are trained during pretraining, then frozen for local variants"
+  },
+  "pretraining": {
+    "steps": 600,
+    "batch_size": 512,
+    "learning_rate": 0.003,
+    "weight_decay": 1e-05,
+    "validation_examples": 4096,
+    "same_world_and_data_seed_across_granularities": true,
+    "router_frozen": true
+  },
+  "continual_stream": {
+    "transactions": 96,
+    "train_examples": 32,
+    "validation_examples": 128,
+    "train_steps": 24,
+    "learning_rate": 0.05,
+    "update_amplitude": 0.35,
+    "stream_rule": "The 48 mutable contexts are traversed in independently shuffled epochs, so 96 transactions update every mutable context twice.",
+    "finite_data_rule": "Each transaction receives one fixed 32-example training set; optimization reuses that same set for all 24 steps.",
+    "truth_advances_on_reject": true,
+    "variants": [
+      "standard_moe_always",
+      "local_always",
+      "local_tx_frozen",
+      "local_tx_router_drift"
+    ],
+    "variant_definitions": {
+      "standard_moe_always": "Update shared trunk/head plus routed experts and always commit.",
+      "local_always": "Freeze shared state/router, update only routed experts, always commit.",
+      "local_tx_frozen": "Same local candidate as local_always, but commit only if new gain and dependency-scoped old regression pass.",
+      "local_tx_router_drift": "Same as local_tx_frozen, then perturb the router before validation to stress a stale pre-update dependency index."
+    },
+    "router_drift_stress": {
+      "noise_scale": 0.03,
+      "rule": "Add deterministic Gaussian noise to all replica-router vectors and renormalize before candidate validation. This is a causal stress control, not a model of a particular router optimizer."
+    }
+  },
+  "evaluation": {
+    "historical_examples_per_context": 32,
+    "dependency_scope": "Historical sample x is locally tested iff its pre-update route intersects any expert touched by the current transaction; current target-context samples are excluded because their old behavior is intentionally superseded.",
+    "hidden_global_scope": "All historical samples except the target context. It is evaluator-only and never influences commit.",
+    "new_gain": "[MSE_before(new truth)-MSE_candidate(new truth)] / E[(y_new-y_old)^2], measured on an independent 128-example set.",
+    "old_regression": "[MSE_candidate(old truth)-MSE_before(old truth)] / E[y_old^2].",
+    "false_safe": "local PASS but hidden global oracle FAIL.",
+    "dependency_coverage": "|V_local|/|V_global|.",
+    "structural_escape": "Fraction of out-of-scope historical samples whose candidate prediction changes by >1e-6.",
+    "candidate_state_fraction": "Parameter count of touched expert blocks divided by total model parameter count.",
+    "cost_proxy": "Per transaction candidate_state_fraction + dependency_coverage; summed and divided by accepted updates.",
+    "final_anchor_retention": "Normalized MSE on never-updated anchor contexts.",
+    "final_mutable_fit": "Normalized MSE on all mutable contexts under the final truth."
+  },
+  "gates": {
+    "maximum_base_normalized_mse": 0.1,
+    "minimum_new_gain_fraction": 0.05,
+    "maximum_local_regression": 0.002,
+    "maximum_false_safe_rate": 0.01,
+    "maximum_dependency_coverage": 0.2,
+    "maximum_structural_escape_rate": 0.0,
+    "minimum_acceptance_rate": 0.5,
+    "maximum_regression_damage_ratio_vs_local_always": 0.7,
+    "minimum_committed_gain_ratio_vs_local_always": 0.6,
+    "maximum_dependency_ratio_vs_coarsest": 0.5,
+    "shared_granularity_required_across_seeds": true,
+    "positive_status": "DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_SUPPORTED",
+    "negative_status": "DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED",
+    "rule": "A fixed granularity g>1 must pass every core gate in all formal seeds. Router-drift stress is diagnostic only."
+  },
+  "replication": {
+    "seeds": [80301, 80302, 80303],
+    "require_all_primary_seeds": true
+  },
+  "interpretation_limits": [
+    "This is a favorable synthetic mechanism test, not evidence that natural-language MoE routers already create suitable dependency domains.",
+    "Positive H1/H2 results rely on a stable pre-update routing plane and frozen shared parameters in the local candidate.",
+    "Granularity changes logical active expert compute as well as block size; the experiment reports the resulting cost/plasticity frontier rather than claiming a pure block-size causal effect.",
+    "The hidden global oracle is run only for scientific measurement and must never be used by the transactional commit decision.",
+    "A negative result rejects this frozen structured-routing mechanism and gate set, not all forms of transactional continual learning."
+  ],
+  "hardware": {
+    "target": "Kaggle Tesla T4 or better",
+    "gpu_required_for_formal_run": true,
+    "cpu_smoke_supported": true
+  }
+}
