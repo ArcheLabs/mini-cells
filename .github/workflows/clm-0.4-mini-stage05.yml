@@ -27,13 +27,14 @@ jobs:
         run: python -m pip install -e '.[dev]'
       - name: Compile Stage 05 code
         run: python -m compileall -q src/minicells/clm04mini scripts/research tests/unit/continual_learning tests/smoke
-      - name: Protocol, data, and calibration unit tests
+      - name: Protocol, data, calibration, and performance unit tests
         run: >-
           python -m pytest -q
           tests/unit/continual_learning/test_clm_0_4_mini_primitives.py
           tests/unit/continual_learning/test_clm_0_4_mini_m1_protocol.py
           tests/unit/continual_learning/test_clm_0_4_mini_m1_data.py
           tests/unit/continual_learning/test_clm_0_4_mini_calibration.py
+          tests/unit/continual_learning/test_clm_0_4_mini_performance.py
       - name: M0, M1, and calibration plan-only smoke tests
         run: >-
           python -m pytest -q
