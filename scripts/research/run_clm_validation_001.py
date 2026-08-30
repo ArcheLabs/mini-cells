@@ -14,9 +14,9 @@ import matplotlib.pyplot as plt  # noqa: E402
 import pandas as pd
 import torch
 ROOT = Path.cwd()
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     ROOT = Path("/kaggle/working/mini-cells")
-sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.language_clm_validation import make_validation_decision  # noqa: E402
 from minicells.language_scaling import prepare_scaling_corpus  # noqa: E402

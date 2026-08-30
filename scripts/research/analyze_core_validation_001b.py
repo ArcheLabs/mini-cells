@@ -20,7 +20,7 @@ from minicells.residual_memorization import (
     summarize_experiment,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "core-001b-residual-memorization" / "protocol.json"
 DEFAULT_SOURCE = (
     ROOT / "results" / "core-validation-001b-residual-memorization" / "source-001"

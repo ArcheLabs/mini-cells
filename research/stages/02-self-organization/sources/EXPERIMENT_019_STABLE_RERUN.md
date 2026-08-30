@@ -1,6 +1,6 @@
 # Experiment 019 stable rerun and checkpoint policy
 
-The original Experiment 019 run is preserved as an invalid numerical-oracle run. The corrected official rerun uses `scripts/run_proposal_utility_discovery_stable.py` and writes to `results/proposal-utility-discovery-stable-v1`.
+The original Experiment 019 run is preserved as an invalid numerical-oracle run. The corrected official rerun uses `scripts/research/run_proposal_utility_discovery_stable.py` and writes to `results/proposal-utility-discovery-stable-v1`.
 
 ## Scientific invariants
 
@@ -27,7 +27,7 @@ Checkpoints are written atomically. They are for recovery/re-measurement and are
 First official stable run:
 
 ```bash
-python scripts/run_proposal_utility_discovery_stable.py
+python scripts/research/run_proposal_utility_discovery_stable.py
 ```
 
 If the run is interrupted after some Phase-1 or donor trainings, run the same command again. Completed checkpoints are restored and only missing training plus oracle/feature measurement is executed.
@@ -35,13 +35,13 @@ If the run is interrupted after some Phase-1 or donor trainings, run the same co
 To deliberately ignore the cache:
 
 ```bash
-python scripts/run_proposal_utility_discovery_stable.py --force-retrain
+python scripts/research/run_proposal_utility_discovery_stable.py --force-retrain
 ```
 
 If all stable worker CSV/JSON outputs already exist and only estimator/plot/decision postprocessing changed:
 
 ```bash
-python scripts/run_proposal_utility_discovery_stable.py --postprocess-only
+python scripts/research/run_proposal_utility_discovery_stable.py --postprocess-only
 ```
 
 If oracle epsilon or feature extraction changes but donor learning does not, rerun the normal stable command. The 24 model checkpoints are reused and the observation matrix is remeasured without Phase-1/donor retraining.

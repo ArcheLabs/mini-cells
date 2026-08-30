@@ -135,8 +135,8 @@ If both fail, recruitment remains deferred. The next experimental variable shoul
 020 requires the local stable-019 checkpoints and the 019b response-curve baseline in the same Kaggle workspace (or merged 019b curated artifacts).
 
 ```bash
-python -m pytest tests/test_language_tissue_specificity.py -q
-python scripts/run_capability_tissue_specificity.py
+python -m pytest tests/research/02-self-organization/test_language_tissue_specificity.py -q
+python scripts/research/run_capability_tissue_specificity.py
 ```
 
 The runner uses up to two GPUs concurrently. Each of the 36 trained donors is checkpointed independently, so interrupted runs reuse completed donors.

@@ -43,7 +43,7 @@ The completed worker CSVs already contain a finite one-sided probationary utilit
 Run:
 
 ```bash
-python scripts/run_proposal_utility_fd_diagnostic.py
+python scripts/research/run_proposal_utility_fd_diagnostic.py
 ```
 
 This repeats the exact leave-one-family-out estimator analysis using `oracle_fd` in a copy of the observations. Its outputs are explicitly marked `exploratory_only=true` and MUST NOT be reported as the preregistered Experiment 019 result. It exists only to determine whether a stable-gradient rerun is scientifically worth the GPU cost.
@@ -53,7 +53,7 @@ This repeats the exact leave-one-family-out estimator analysis using `oracle_fd`
 Run:
 
 ```bash
-python scripts/run_proposal_utility_discovery_stable.py
+python scripts/research/run_proposal_utility_discovery_stable.py
 ```
 
 This writes to a separate `results/proposal-utility-discovery-stable-v1` directory, uses the same models, seeds, corpora, epsilon, features, LOFO split and decision thresholds, and changes only the forward-equivalent autodiff numerics. Because the first worker format did not checkpoint Phase-1/donor states, regenerating the corrected gradient oracle currently requires rebuilding the donors.

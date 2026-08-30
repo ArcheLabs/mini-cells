@@ -15,7 +15,7 @@ from typing import Any
 
 import torch
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 RESEARCH = ROOT / "research"
 if str(RESEARCH) not in sys.path:
     sys.path.insert(0, str(RESEARCH))
@@ -45,7 +45,7 @@ from minicells.language_scaling import prepare_scaling_corpus  # noqa: E402
 
 OUTPUT_ROOT = Path("results/clm-0.3-release-benchmark")
 SOURCE_005 = Path("artifacts/experiments/005-consumer-language-bridge")
-WORKER = Path("scripts/run_clm_0_3_release_bridge_worker.py")
+WORKER = Path("scripts/release/run_clm_0_3_release_bridge_worker.py")
 CAPABILITY_REMOTE_REF = f"refs/remotes/origin/{CAPABILITY_RESULTS_REF}"
 
 

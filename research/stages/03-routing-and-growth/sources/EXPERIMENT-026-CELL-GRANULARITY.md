@@ -166,7 +166,7 @@ Target: Tesla T4 ×2, 8-hour hard wall budget, 30-minute finalization reserve. T
 Canonical command:
 
 ```bash
-python scripts/run_experiment_026_cell_granularity.py \
+python scripts/research/run_experiment_026_cell_granularity.py \
   --total-wall-hours 8 \
   --finalization-reserve-minutes 30 \
   --worker-slice-hours 2.25
@@ -174,7 +174,7 @@ python scripts/run_experiment_026_cell_granularity.py \
 
 Canonical notebook:
 
-`research/kaggle/experiment-026-cell-granularity.ipynb`
+`research/notebooks/03-routing-and-growth/experiment-026-cell-granularity.ipynb`
 
 It is intended for unattended **Save Version → Run All** and publishes only after every arm and the formal report complete.
 

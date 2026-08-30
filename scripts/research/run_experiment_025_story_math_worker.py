@@ -27,8 +27,8 @@ import pandas as pd
 import torch
 from torch.nn import functional as F
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "research"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.clm_growth import ProgressiveGrowthCLM  # noqa: E402
 from minicells.clm_sparse_runtime import install_optimized_runtime  # noqa: E402

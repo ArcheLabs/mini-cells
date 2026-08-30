@@ -110,4 +110,4 @@ Only the best 500K checkpoint is curated. The other seven checkpoints are intent
 
 ## Kaggle
 
-Use `research/kaggle/experiment-005b-consumer-language-ablation.ipynb` with a T4 accelerator and Internet enabled. The notebook refreshes `main`, installs the LM dependencies, runs the language bridge + ablation invariant tests, executes 005B, displays the reports, and leaves publication disabled until the outputs have been reviewed.
+Use `research/notebooks/01-foundations/experiment-005b-consumer-language-ablation.ipynb` with a T4 accelerator and Internet enabled. The notebook refreshes `main`, installs the LM dependencies, runs the language bridge + ablation invariant tests, executes 005B, displays the reports, and leaves publication disabled until the outputs have been reviewed.

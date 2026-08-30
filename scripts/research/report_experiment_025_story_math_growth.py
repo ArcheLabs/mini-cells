@@ -14,10 +14,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 import sys
 
-sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.story_math_shift_30m import (  # noqa: E402
     EXPECTED_SOURCE_TOKENS,

@@ -95,7 +95,7 @@ The `full` profile uses:
 The CLI accepts generation overrides. A longer 4096-generation finalist validation can be run with:
 
 ```bash
-python scripts/run_optimizer_search.py \
+python scripts/research/run_optimizer_search.py \
   --profile full \
   --final-generations 4096
 ```
@@ -166,8 +166,8 @@ Each run is resumable. Re-running the script continues an existing compatible co
 
 ```bash
 python -m pip install -e .
-pytest tests/test_optimizer_search.py -q
-python scripts/run_optimizer_search.py --profile smoke
+pytest tests/research/01-foundations/test_optimizer_search.py -q
+python scripts/research/run_optimizer_search.py --profile smoke
 ```
 
 The smoke profile validates parity and orchestration only.
@@ -177,7 +177,7 @@ The smoke profile validates parity and orchestration only.
 Open:
 
 ```text
-research/kaggle/experiment-008-production-optimizer-search.ipynb
+research/notebooks/01-foundations/experiment-008-production-optimizer-search.ipynb
 ```
 
 Run all cells. CUDA is not required: the experiment deliberately uses the exact integer CPU mirror so the search measures production Q8.8 semantics rather than a floating-point proxy.

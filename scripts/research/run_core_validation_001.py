@@ -21,7 +21,7 @@ from minicells.knowledge_subsumption import (
     train_sequential_run,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "core-001-knowledge-subsumption" / "protocol.json"
 DEFAULT_OUT = ROOT / "results" / "core-validation-001-knowledge-subsumption"
 

@@ -21,7 +21,7 @@ from minicells.write_addressability_experiment import (
     summarize_experiment,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "core-002-write-addressability" / "protocol.json"
 DEFAULT_OUT = ROOT / "results" / "core-validation-002-write-addressability"
 

@@ -70,7 +70,7 @@ MiniCells has not demonstrated general natural-language continual learning, solv
 - [`research/`](research/README.md): four-stage history, catalog, final reports, protocols, and historical sources.
 - [`artifacts/experiments/`](artifacts/experiments/): immutable canonical experimental evidence.
 - [`src/minicells/`](src/minicells/): research implementation package.
-- [`research/kaggle/`](research/kaggle/): experiment notebooks at stable historical paths.
+- [`research/notebooks/`](research/notebooks/): experiment notebooks at stable historical paths.
 - [`scripts/`](scripts/): experiment, reporting, and integrity utilities.
 - [`tests/`](tests/): automated checks.
 

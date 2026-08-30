@@ -2,7 +2,7 @@
 import argparse
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "research"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 from minicells.data import fixed_dataset
 from minicells.evaluate import evaluate
 from minicells.train import load_checkpoint

@@ -1,5 +1,9 @@
 # CLM-0.3 Progressive Growth implementation
 
+> Status: Historical Release
+>
+> This document describes a historical implementation and is not the current research status.
+
 This implementation adds a research-only growth layer on top of the exact
 CLM-0.1 model. The four CLM-0.1 root routes and the GRU recurrent substrate
 are copied unchanged. A birth adds one stable-ID expert and a local binary

@@ -8,7 +8,7 @@ import torch
 from minicells.growth_plasticity_004_config import CoreValidation004Config
 from minicells.growth_plasticity_004_ops import smoke_config
 from minicells.growth_plasticity_004_experiment import run_primary_seed, summarize_experiment
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "core-004-growth-restored-plasticity" / "protocol.json"
 DEFAULT_OUT = ROOT / "results" / "core-validation-004-growth-restored-plasticity"
 

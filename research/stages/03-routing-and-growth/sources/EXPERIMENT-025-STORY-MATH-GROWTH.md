@@ -187,7 +187,7 @@ Public-facing outputs:
 The canonical notebook is:
 
 ```text
-research/kaggle/experiment-025-story-math-growth.ipynb
+research/notebooks/03-routing-and-growth/experiment-025-story-math-growth.ipynb
 ```
 
 With Kaggle configured for **T4 ×2** and Internet access, choose **Save Version → Run All**. The notebook:
@@ -203,7 +203,7 @@ With Kaggle configured for **T4 ×2** and Internet access, choose **Save Version
 The core command is:
 
 ```bash
-python scripts/run_experiment_025_story_math_growth.py \
+python scripts/research/run_experiment_025_story_math_growth.py \
   --total-wall-hours 8 \
   --finalization-reserve-minutes 30 \
   --round-wall-hours 2.5

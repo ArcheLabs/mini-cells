@@ -140,7 +140,7 @@ def sha256_file(path: Path) -> str:
 
 
 def repo_root() -> Path:
-    root = Path(__file__).resolve().parents[1]
+    root = Path(__file__).resolve().parents[2]
     if not (root / ".git").exists():
         raise RuntimeError(f"{root} is not a Git checkout")
     return root

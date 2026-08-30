@@ -1,5 +1,9 @@
 # MiniCells CLM-0.1 Research Preview
 
+> Status: Historical Release
+>
+> This document describes a historical release and is not the current research status.
+
 CLM-0.1 is the first public MiniCells cellular-language-model checkpoint. Its purpose is to freeze
 and expose the conditional-computation primitive that has already produced a positive result before
 research moves directly toward progressive growth in CLM-0.3.
@@ -72,7 +76,7 @@ and contains:
 - `generation-samples.json` — public API smoke-test generations.
 
 The same files are copied to the flat release-results directory for publication by
-`scripts/publish_clm_0_1_release.py`.
+`scripts/release/publish_clm_0_1_release.py`.
 
 ## Python API
 
@@ -147,19 +151,19 @@ next public research target is CLM-0.3 Progressive Growth.
 
 On Kaggle with Internet enabled and two T4 GPUs when available, use:
 
-`research/kaggle/clm-0.1-release.ipynb`
+`research/notebooks/03-routing-and-growth/clm-0.1-release.ipynb`
 
 or run:
 
 ```bash
-python scripts/run_clm_0_1_release.py --fresh
+python scripts/release/run_clm_0_1_release.py --fresh
 ```
 
 After reviewing `decision.json`, `conditionality-002-decision.json`, the generated model card,
 generation samples, and benchmark, publish with:
 
 ```bash
-python scripts/publish_clm_0_1_release.py --push
+python scripts/release/publish_clm_0_1_release.py --push
 ```
 
 The publication branch is `release/clm-0.1-artifacts`.

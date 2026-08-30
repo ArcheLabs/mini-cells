@@ -13,9 +13,9 @@ import torch
 from torch.nn import functional as F
 
 ROOT = Path.cwd()
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     ROOT = Path("/kaggle/working/mini-cells")
-sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.clm_upcycling_validation import (  # noqa: E402
     UpcyclingRoutingRecorder,

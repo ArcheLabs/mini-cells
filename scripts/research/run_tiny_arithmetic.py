@@ -16,11 +16,11 @@ import torch
 matplotlib.use("Agg")
 
 ROOT = Path.cwd()
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     ROOT = Path("/kaggle/working/mini-cells")
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     raise RuntimeError("Run from a mini-cells checkout or /kaggle/working/mini-cells")
-sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.arithmetic_optimizer import guarded_spsa_step, select_arithmetic_batch  # noqa: E402
 from minicells.arithmetic_tasks import (  # noqa: E402

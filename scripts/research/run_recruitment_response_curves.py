@@ -14,11 +14,11 @@ import pandas as pd
 import torch
 
 ROOT = Path.cwd()
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     ROOT = Path("/kaggle/working/mini-cells")
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     raise RuntimeError("Run from a mini-cells checkout or /kaggle/working/mini-cells")
-sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import run_proposal_utility_discovery as e019_analysis  # noqa: E402
@@ -54,7 +54,7 @@ def validate_source() -> dict[str, object]:
     if not decision_path.is_file() or not manifest_path.is_file():
         raise FileNotFoundError(
             "Experiment 019b requires the local stable-019 results and checkpoints. "
-            "Run scripts/run_proposal_utility_discovery_stable.py first in this Kaggle workspace."
+            "Run scripts/research/run_proposal_utility_discovery_stable.py first in this Kaggle workspace."
         )
     decision = json.loads(decision_path.read_text(encoding="utf-8"))
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

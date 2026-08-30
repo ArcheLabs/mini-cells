@@ -28,7 +28,7 @@ The scientific oracle, leave-one-family-out split, feature definitions, estimato
 After pulling the hotfix, an interrupted run with complete worker outputs only needs:
 
 ```bash
-python scripts/run_proposal_utility_discovery_resumable.py
+python scripts/research/run_proposal_utility_discovery_resumable.py
 ```
 
 The script prints `reusing completed Experiment 019 workers` when no GPU donor retraining is performed.

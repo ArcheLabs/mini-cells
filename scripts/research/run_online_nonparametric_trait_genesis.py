@@ -15,11 +15,11 @@ import pandas as pd
 import torch
 
 ROOT = Path.cwd()
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     ROOT = Path("/kaggle/working/mini-cells")
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     raise RuntimeError("Run from a mini-cells checkout or /kaggle/working/mini-cells")
-sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import run_online_nonparametric_trait_genesis_worker as worker  # noqa: E402

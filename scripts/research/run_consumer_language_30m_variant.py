@@ -12,8 +12,8 @@ import pandas as pd
 import torch
 from torch.nn import functional as F
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "research"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.language_30m import (  # noqa: E402
     BASE_LR,

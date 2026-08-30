@@ -249,13 +249,13 @@ The full run writes:
 Run:
 
 ```text
-research/kaggle/experiment-019-proposal-utility-discovery.ipynb
+research/notebooks/02-self-organization/experiment-019-proposal-utility-discovery.ipynb
 ```
 
 The notebook runs invariant/regression tests before launching the three-replicate GPU experiment. Result publication is handled by:
 
 ```bash
-python scripts/publish_experiment_019_results.py --push
+python scripts/research/publish_experiment_019_results.py --push
 ```
 
 Default result branch:

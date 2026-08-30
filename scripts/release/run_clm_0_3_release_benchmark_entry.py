@@ -25,7 +25,7 @@ import torch
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CORE = HERE / "run_clm_0_3_release_benchmark.py"
-WORKER_ENTRY = Path("scripts/run_clm_0_3_release_bridge_worker_entry.py")
+WORKER_ENTRY = Path("scripts/release/run_clm_0_3_release_bridge_worker_entry.py")
 SOURCE_006_CORPUS = ROOT / "artifacts/experiments/006-consumer-language-scaling/corpus-manifest.json"
 
 spec = importlib.util.spec_from_file_location("clm_0_3_release_benchmark_core", CORE)

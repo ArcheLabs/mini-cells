@@ -8,8 +8,8 @@ from pathlib import Path
 
 import torch
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "research"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.language_ablation import AblationSpec  # noqa: E402
 from minicells.language_data import (  # noqa: E402

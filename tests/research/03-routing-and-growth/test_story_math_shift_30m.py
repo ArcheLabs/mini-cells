@@ -107,7 +107,7 @@ def test_unattended_protocol_is_frozen_to_eight_hours() -> None:
 
 def test_kaggle_notebook_uses_one_shot_budget_and_auto_publish() -> None:
     notebook = json.loads(
-        (ROOT / "research/kaggle/experiment-025-story-math-growth.ipynb").read_text(
+        (ROOT / "research/notebooks/03-routing-and-growth/experiment-025-story-math-growth.ipynb").read_text(
             encoding="utf-8"
         )
     )
@@ -124,9 +124,9 @@ def test_kaggle_notebook_uses_one_shot_budget_and_auto_publish() -> None:
 
 def test_experiment_025_scripts_compile() -> None:
     for relative in (
-        "scripts/run_experiment_025_story_math_worker.py",
-        "scripts/run_experiment_025_story_math_growth.py",
-        "scripts/report_experiment_025_story_math_growth.py",
+        "scripts/research/run_experiment_025_story_math_worker.py",
+        "scripts/research/run_experiment_025_story_math_growth.py",
+        "scripts/research/report_experiment_025_story_math_growth.py",
     ):
         path = ROOT / relative
         compile(path.read_text(encoding="utf-8"), str(path), "exec")

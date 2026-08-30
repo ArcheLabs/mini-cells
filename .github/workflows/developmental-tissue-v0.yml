@@ -19,8 +19,8 @@ jobs:
       - name: Install
         run: python -m pip install -e ".[dev]"
       - name: Unit tests
-        run: pytest -q tests/test_developmental_tissue.py
+        run: pytest -q tests/research/02-self-organization/test_developmental_tissue.py
       - name: Granularity smoke
-        run: python scripts/run_experiment_026_cell_granularity_smoke.py
+        run: python scripts/research/run_experiment_026_cell_granularity_smoke.py
       - name: Ruff
-        run: ruff check research/minicells/developmental_tissue.py tests/test_developmental_tissue.py scripts/run_experiment_026_cell_granularity_smoke.py
+        run: ruff check research/minicells/developmental_tissue.py tests/research/02-self-organization/test_developmental_tissue.py scripts/research/run_experiment_026_cell_granularity_smoke.py

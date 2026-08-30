@@ -16,7 +16,7 @@ from typing import Any
 import torch
 from torch.nn import functional as F
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 RESEARCH = ROOT / "research"
 if str(RESEARCH) not in sys.path:
     sys.path.insert(0, str(RESEARCH))

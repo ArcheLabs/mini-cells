@@ -100,13 +100,13 @@ The LR schedule always targets 100M tokens. Stopping at 25M or 50M and resuming 
 To stop deliberately while preserving an exact continuation point:
 
 ```bash
-python scripts/run_consumer_language_30m.py --stop-after-tokens 25000000
+python scripts/research/run_consumer_language_30m.py --stop-after-tokens 25000000
 ```
 
 On Kaggle, save the two `*-latest.pt` files as notebook output or a Kaggle Dataset. In a later session, mount that output and run:
 
 ```bash
-python scripts/run_consumer_language_30m.py \
+python scripts/research/run_consumer_language_30m.py \
   --resume-input /kaggle/input/<saved-output>/resume
 ```
 
@@ -139,7 +139,7 @@ This artifact contains FP16 inference weights and the architecture configuration
 After results are merged, generate text with:
 
 ```bash
-python scripts/generate_minicells_30m.py \
+python scripts/research/generate_minicells_30m.py \
   --prompt "Once upon a time there was a small robot"
 ```
 
@@ -151,7 +151,7 @@ Use T4 x2 and Internet ON.
 
 The reproducible notebook is:
 
-`research/kaggle/experiment-007-minicells-30m.ipynb`
+`research/notebooks/01-foundations/experiment-007-minicells-30m.ipynb`
 
 The notebook:
 
@@ -170,7 +170,7 @@ For a first attempt, run the default 100M target. If Kaggle session length becom
 After a complete run and review:
 
 ```bash
-python scripts/publish_experiment_007_results.py --push
+python scripts/research/publish_experiment_007_results.py --push
 ```
 
 This publishes curated results to:

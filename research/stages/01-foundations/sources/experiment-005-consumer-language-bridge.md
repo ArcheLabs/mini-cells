@@ -194,7 +194,7 @@ The runner produces:
 
 ## Kaggle procedure
 
-The notebook `research/kaggle/experiment-005-consumer-language-bridge.ipynb` contains a self-recovering bootstrap. If `/kaggle/working/mini-cells` disappeared after a session reset, it clones `main` again automatically.
+The notebook `research/notebooks/01-foundations/experiment-005-consumer-language-bridge.ipynb` contains a self-recovering bootstrap. If `/kaggle/working/mini-cells` disappeared after a session reset, it clones `main` again automatically.
 
 The equivalent manual sequence is:
 
@@ -203,14 +203,14 @@ cd /kaggle/working
 git clone --depth 1 https://github.com/ArcheLabs/mini-cells.git
 cd mini-cells
 pip install -e '.[lm]'
-python -m pytest tests/test_language_bridge.py -q
-python scripts/run_consumer_language_bridge.py
+python -m pytest tests/research/01-foundations/test_language_bridge.py -q
+python scripts/research/run_consumer_language_bridge.py
 ```
 
 After reviewing the figures and `decision.json`:
 
 ```bash
-python scripts/publish_experiment_results.py 005 --push
+python scripts/research/publish_experiment_results.py 005 --push
 ```
 
 The curated result branch is:

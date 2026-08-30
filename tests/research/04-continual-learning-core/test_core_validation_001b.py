@@ -47,7 +47,7 @@ def test_protocol_is_frozen_diagnostic_extension() -> None:
     assert payload["experiment_id"] == "core-validation-001b"
     assert payload["parent_experiment"] == "core-validation-001"
     assert payload["source"]["fresh_rerun_required"] is True
-    assert payload["source"]["reuse_parent_runner"] == "scripts/run_core_validation_001.py"
+    assert payload["source"]["reuse_parent_runner"] == "scripts/research/run_core_validation_001.py"
     assert payload["scope"]["training_changes_from_parent"] == "none"
     assert payload["scope"]["growth"] is False
     assert payload["scope"]["replay_old_examples"] is False

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 import matplotlib.pyplot as plt
 import pandas as pd
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 DEFAULT_OUT=ROOT/"results"/"core-validation-004-growth-restored-plasticity"
 def parse_args():
  p=argparse.ArgumentParser(); p.add_argument("--out",type=Path,default=DEFAULT_OUT); return p.parse_args()

@@ -12,9 +12,9 @@ import torch
 from torch.nn import functional as F
 
 ROOT = Path.cwd()
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     ROOT = Path("/kaggle/working/mini-cells")
-sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.clm_v2_closed_loop_validation import (  # noqa: E402
     FINAL_HANDOFF_RATIO_MAX,

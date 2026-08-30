@@ -10,11 +10,11 @@ import torch
 from torch.nn import functional as F
 
 ROOT = Path.cwd()
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     ROOT = Path("/kaggle/working/mini-cells")
-if not (ROOT / "research").exists():
+if not (ROOT / "src").exists():
     raise RuntimeError("Run from a mini-cells checkout or /kaggle/working/mini-cells")
-sys.path.insert(0, str(ROOT / "research"))
+sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.language_2d import LatentTissueNCALM, build_minicells_2d  # noqa: E402
 from minicells.language_data import (  # noqa: E402

@@ -10,7 +10,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 GRANULARITIES = (1, 4, 8)
 FORMAT = "minicells.cell-granularity-screening-30m.v1"
 MIN_GAIN_DELTA = 0.02
