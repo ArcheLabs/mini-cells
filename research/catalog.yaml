@@ -186,14 +186,30 @@ entries:
     title: CLM-0.4-mini Token-Level Continual-Learning Validation
     kind: language-validation
     stage: language-validation
-    outcome: PROTOCOL_FROZEN_NOT_RUN
+    outcome: CALIBRATION_BASE_PREREQUISITES_FAILED
     scientific_decision: false
     canonical: true
     report: research/validations/clm-0.4-mini-language-validation/README.md
     protocol: research/validations/clm-0.4-mini-language-validation/protocol.json
     artifacts: null
-    notebook: null
-    implementation: null
+    notebook: research/notebooks/05-language-validation/clm-0.4-mini-m1-calibration.ipynb
+    implementation: research/experiments/05-language-validation/clm-0.4-mini
     supersedes: core-validation-004
+    superseded_by: clm-0.4-mini-m1-v2-language-validation
+    notes: "M1-v1 development seed 90401 failed base prerequisites before candidate search; formal seeds remained unopened. Preserved as historical development evidence."
+
+  - id: clm-0.4-mini-m1-v2-language-validation
+    title: CLM-0.4-mini M1-v2 Aligned Token-Level Continual-Learning Validation
+    kind: language-validation
+    stage: language-validation
+    outcome: PROTOCOL_FROZEN_DATA_LOCK_PENDING
+    scientific_decision: false
+    canonical: true
+    report: research/validations/clm-0.4-mini-m1-v2-language-validation/README.md
+    protocol: research/validations/clm-0.4-mini-m1-v2-language-validation/protocol.json
+    artifacts: null
+    notebook: research/notebooks/05-language-validation/clm-0.4-mini-m1-v2-calibration.ipynb
+    implementation: research/experiments/05-language-validation/clm-0.4-mini-m1-v2
+    supersedes: clm-0.4-mini-language-validation
     superseded_by: null
-    notes: "Approx. 5M parameter controlled language pilot. Formal result is not yet available; 30–50M work requires M1 scientific Go plus M2 engineering Go."
+    notes: "Task-aligned base data, teacher-forced answer-exact admission, route-balanced evaluation, and diagnostic dense baselines. Development seed 90402 and all formal seeds remain unopened until the v2 data asset lock is committed."

@@ -19,6 +19,7 @@ REGISTRY = {
         "clm-0.4-mini-m0": "run_clm_0_4_mini_m0.py",
         "clm-0.4-mini-m1": "run_clm_0_4_mini_m1.py",
         "clm-0.4-mini-calibration": "run_clm_0_4_mini_calibration.py",
+        "clm-0.4-mini-m1-v2-calibration": "run_clm_0_4_mini_v2_calibration.py",
     },
     "report": {
         "core-validation-001": "report_core_validation_001.py",
@@ -31,6 +32,7 @@ REGISTRY = {
         "clm-0.4-mini-m0": "report_clm_0_4_mini_m0.py",
         "clm-0.4-mini-m1": "report_clm_0_4_mini_m1.py",
         "clm-0.4-mini-calibration": "report_clm_0_4_mini_calibration.py",
+        "clm-0.4-mini-m1-v2-calibration": "report_clm_0_4_mini_v2_calibration.py",
     },
     "publish": {
         "core-validation-001": "publish_core_validation_001.py",
@@ -40,6 +42,8 @@ REGISTRY = {
         "core-validation-002c": "publish_core_validation_002c.py",
         "core-validation-003": "publish_core_validation_003.py",
         "core-validation-004": "publish_core_validation_004.py",
+        "clm-0.4-mini-m1-v1-calibration": "publish_clm_0_4_mini_calibration_results.py",
+        "clm-0.4-mini-m1-v2-calibration": "publish_clm_0_4_mini_calibration_results.py",
     },
 }
 
@@ -48,8 +52,12 @@ def dispatch(kind: str, argv: list[str] | None = None) -> None:
     args = list(sys.argv[1:] if argv is None else argv)
     if not args or args[0] not in REGISTRY[kind]:
         available = ", ".join(sorted(REGISTRY[kind]))
-        raise SystemExit(f"usage: {kind}.py <experiment-id> [args...]\navailable: {available}")
+        raise SystemExit(
+            f"usage: {kind}.py <experiment-id> [args...]\navailable: {available}"
+        )
     experiment_id = args.pop(0)
     script = Path(__file__).with_name(REGISTRY[kind][experiment_id])
+    if kind == "publish" and script.name == "publish_clm_0_4_mini_calibration_results.py":
+        args.insert(0, experiment_id)
     sys.argv = [str(script), *args]
     runpy.run_path(str(script), run_name="__main__")

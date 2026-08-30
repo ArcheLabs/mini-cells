@@ -1,0 +1,13 @@
+{
+  "format": "minicells.clm-0.4-mini.m1-calibration-plan-lock.v1",
+  "experiment_id": "clm-0.4-mini-m1-v2-language-validation",
+  "development_seed": 90402,
+  "formal_seeds_observed_when_committed": false,
+  "candidate_count": 81,
+  "plan_sha256": "d7f5d4d9bb3b6c098513ab5c3dbf8d28dcc9b13348a057008d0bed39b1e2655f",
+  "selection_rule": "first passing candidate in ascending (direct_steps+growth_steps, direct_steps, growth_steps, direct_lr, growth_lr)",
+  "base_training_policy": "train exactly once for development seed and reuse one immutable checkpoint",
+  "candidate_isolation": "every candidate starts from the identical immutable base checkpoint",
+  "base_prerequisite_eval_examples_per_domain": 64,
+  "base_cell_minimum_activation_rule": "floor(base_sequences * topk_base / base_cells_per_layer * 0.5)"
+}
