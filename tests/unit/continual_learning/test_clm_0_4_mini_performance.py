@@ -43,11 +43,28 @@ def test_grouped_sparse_forward_matches_legacy_with_private_cell():
     layer = model.sparse_layer(3)
     layer.spawn_private("address-1", d_model=32, hidden=8)
     x = torch.randn(7, 9, 32)
-    addresses = ["address-1", "address-2", "address-1", "address-3", "address-4", "address-2", "address-5"]
+    addresses = [
+        "address-1",
+        "address-2",
+        "address-1",
+        "address-3",
+        "address-4",
+        "address-2",
+        "address-5",
+    ]
 
     legacy = _ORIGINAL_SPARSE_FORWARD(layer, x, addresses)
     grouped = grouped_sparse_forward(layer, x, addresses)
     torch.testing.assert_close(grouped, legacy, rtol=1e-5, atol=1e-6)
+
+
+def test_grouped_sparse_forward_accepts_empty_parallel_shard():
+    model = TinyCLMDecoder(_cfg()).eval()
+    layer = model.sparse_layer(3)
+    x = torch.empty(0, 9, 32)
+    grouped = grouped_sparse_forward(layer, x, [])
+    assert grouped.shape == x.shape
+    assert grouped.data_ptr() == x.data_ptr()
 
 
 def test_batched_structural_logits_match_legacy_within_registered_tolerance():
@@ -105,7 +122,12 @@ def test_cached_summary_gate_algebra_matches_registered_gate_evaluator():
         "mean_direct_dependency_coverage": 0.2,
     }
     records = [
-        {"active_cells_by_layer": {"3": ["base:L3:C00", "growth:L3:a_x"], "4": ["base:L4:C00", "growth:L4:a_x"]}}
+        {
+            "active_cells_by_layer": {
+                "3": ["base:L3:C00", "growth:L3:a_x"],
+                "4": ["base:L4:C00", "growth:L4:a_x"],
+            }
+        }
     ]
 
     class FakeHarness:
@@ -124,7 +146,11 @@ def test_cached_summary_gate_algebra_matches_registered_gate_evaluator():
     registered = evaluate_m1_gates(protocol=protocol, harnesses=harnesses)
     optimized = evaluate_gate_summaries(
         protocol=protocol,
-        summaries={"local_always": always, "local_tx": local_tx, "local_tx_growth": growth},
+        summaries={
+            "local_always": always,
+            "local_tx": local_tx,
+            "local_tx_growth": growth,
+        },
         growth_harness=harnesses["local_tx_growth"],
     )
     assert optimized == registered
