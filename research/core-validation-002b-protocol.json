@@ -1,0 +1,144 @@
+{
+  "experiment_id": "core-validation-002b",
+  "format": "minicells.core-validation.sparse-write-assembly.v1",
+  "title": "Sparse Functional Write Assemblies under Superposition",
+  "parent_experiment": {
+    "experiment_id": "core-validation-002",
+    "frozen_outcome": "WRITE_ADDRESSABILITY_NOT_SUPPORTED",
+    "rule": "002B is a new pre-registered mechanism test. It must not alter, relabel, or retroactively rescue the frozen 002 v1 decision."
+  },
+  "hypothesis": "A learned functional atom under superposition may be represented by a small sparse latent assembly rather than a single latent coordinate. A non-oracle rank-1 sparse write address with width r <= 8 should substantially improve update fidelity while preserving locality, and should outperform a full-writer baseline at matched update success.",
+  "scope": {
+    "natural_language": false,
+    "growth": false,
+    "mitosis": false,
+    "routing_growth": false,
+    "replay_old_examples": false,
+    "editor_sees_ground_truth_feature_id": false,
+    "editor_sees_ground_truth_sparse_code": false,
+    "encoder_frozen_during_edits": true,
+    "same_pretraining_architecture_as_002": true,
+    "primary_claim": "This tests whether the relevant writable mathematical object is a small sparse functional assembly rather than one neuron/latent index."
+  },
+  "world": {
+    "observation_dim": 128,
+    "num_features": 512,
+    "active_features": 4,
+    "output_dim": 32,
+    "coefficient_min_abs": 0.5,
+    "coefficient_max_abs": 1.5,
+    "edit_scale": 0.75,
+    "observation_equation": "x = A s with fixed dense column-normalized Gaussian A",
+    "behavior_equation": "y = V s",
+    "superposition_load": "alpha = F / d",
+    "recovery_load": "rho = k log(F/k) / d"
+  },
+  "model": {
+    "candidate": "same top-k sparse functional encoder + linear writer as Core Validation 002",
+    "latent_dim": 1024,
+    "latent_topk": 8,
+    "writer": "y_hat = W z",
+    "auxiliary_reconstruction": "x_hat = D z",
+    "moe_topk": 2,
+    "contextual_baselines": [
+      "parameter-matched dense MLP",
+      "approximately parameter-matched top-k MoE"
+    ]
+  },
+  "pretraining": {
+    "examples": 65536,
+    "steps": 6000,
+    "batch_size": 512,
+    "learning_rate": 0.001,
+    "weight_decay": 0.00001,
+    "reconstruction_weight": 0.5,
+    "gradient_clip_norm": 1.0,
+    "validation_examples": 4096,
+    "same_data_stream_across_models": true,
+    "note": "002B intentionally keeps the 002 sparse pretraining architecture/objective fixed so address-width effects are identifiable."
+  },
+  "editing": {
+    "edit_count": 100,
+    "edit_examples": 8,
+    "repeat_every": 5,
+    "previous_target_distractor_every": 4,
+    "address_min_shared_fraction": 0.75,
+    "address_min_energy": 1e-8,
+    "legacy_global_write": {
+      "steps": 32,
+      "learning_rate": 0.02,
+      "role": "configuration compatibility only; not the decisive 002B global baseline"
+    },
+    "dense": {
+      "steps": 32,
+      "learning_rate": 0.002
+    },
+    "moe": {
+      "steps": 32,
+      "learning_rate": 0.002
+    }
+  },
+  "sparse_address": {
+    "widths": [1, 2, 4, 8],
+    "factorization": "Delta W = delta a^T with ||a||_0 <= r",
+    "inference": "Compute residual R from the 8 edit examples only; extract its dominant sample-space singular direction; use deterministic OMP on frozen learned z to select a support; refine a and delta by alternating least squares on that support.",
+    "als_refinement_steps": 3,
+    "editor_inputs": ["edit x", "edit y", "current model prediction"],
+    "editor_forbidden_inputs": ["s", "target feature id", "A", "V", "affected evaluation set", "invariant evaluation set"],
+    "write_rule": "Only writer parameters on the inferred sparse support change; encoder and reconstructor remain frozen."
+  },
+  "matched_global": {
+    "type": "deterministic full-writer ridge update curve",
+    "equation": "Delta W^T = scale * Z^T (Z Z^T + lambda I)^(-1) R",
+    "ridge_lambda": 0.0001,
+    "scales": [0.125, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0],
+    "matching_rule": "For each formal seed, match the best sparse-width candidate to the pre-registered global curve point with nearest sequence-level median U. No-op or badly unmatched global points cannot establish locality superiority.",
+    "reason": "Core Validation 002's SGD global writer had median U about 0.83, so its very small leakage was not a valid matched-success locality comparator."
+  },
+  "evaluation": {
+    "affected_examples": 512,
+    "invariant_examples": 512,
+    "retention_examples_per_edit": 16,
+    "oracle_probe_examples": 8192,
+    "update_error": "U = E_A ||(yhat_after-yhat_before) - (y_after-y_before)||^2 / E_A ||y_after-y_before||^2",
+    "write_leakage": "L = E_I ||yhat_after-yhat_before||^2 / E_A ||y_after-y_before||^2",
+    "assembly_fit_error": "Evaluator-only best linear reconstruction error of true target coefficient s_j from h = z^T a on unseen affected combinations.",
+    "off_support_energy": "Evaluator-only E_I[h^2] / E_A[h^2].",
+    "context_invariance": "Evaluator-only Var[beta h / s_j | s_j != 0].",
+    "oracle_latent_reference": "Use evaluator-only z=s with exact target-column writes; expected U approximately 0 and L approximately 0.",
+    "retention": "After each edit, evaluate retained probes from earlier edits against current evaluator V; probes are never optimized on."
+  },
+  "replication": {
+    "seeds": [74201, 74202, 74203],
+    "require_all_primary_seeds": true
+  },
+  "gates": {
+    "maximum_sparse_base_normalized_mse": 0.20,
+    "maximum_oracle_update_error": 1e-10,
+    "maximum_oracle_write_leakage": 1e-12,
+    "maximum_best_width_update_error": 0.10,
+    "maximum_relative_update_error_vs_width1": 0.60,
+    "maximum_absolute_write_leakage": 0.005,
+    "maximum_matched_u_gap": 0.05,
+    "maximum_leakage_ratio_vs_matched_global": 0.50,
+    "maximum_repeated_update_error": 0.20,
+    "maximum_repeated_write_leakage": 0.01,
+    "maximum_assembly_fit_error": 0.10,
+    "positive_status": "SPARSE_WRITE_ASSEMBLY_SUPPORTED",
+    "negative_status": "SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED",
+    "all_gates_required_per_seed": true
+  },
+  "interpretation_limits": [
+    "A positive result does not overturn Core Validation 002; it supports a different hypothesis in which a write address is a sparse functional subspace rather than one latent coordinate.",
+    "The Gaussian additive world remains intentionally favorable and is not evidence for language-scale continual learning.",
+    "Dense and MoE models are contextual controls and cannot veto the sparse mechanism gate.",
+    "Ground-truth geometry diagnostics are evaluator-only and may not influence address inference or writes.",
+    "Failure in this favorable regime is evidence against the frozen rank-1 sparse-assembly mechanism with r <= 8, not against every possible continual-learning architecture.",
+    "Thresholds and scales are frozen before the three formal seeds are run and must not be changed after observing formal results."
+  ],
+  "hardware": {
+    "target": "Kaggle Tesla T4 or better",
+    "gpu_required_for_formal_run": true,
+    "cpu_smoke_supported": true
+  }
+}
