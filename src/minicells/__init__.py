@@ -1,4 +1,4 @@
-"""MiniCells research package and CLM-0.1 public inference API."""
+"""Public MiniCells model and inference API."""
 
 from .config import load_config
 from .vocab import CharVocab
