@@ -1,10 +1,11 @@
-"""Deterministic tokenizer build/load helpers for CLM-0.4-mini M1."""
+"""Deterministic tokenizer build/load helpers for CLM-0.4-mini and Preview."""
 
 from __future__ import annotations
 
 import hashlib
 import json
 from pathlib import Path
+import re
 from typing import Iterable
 
 from tokenizers import Tokenizer
@@ -22,6 +23,20 @@ EOS = "<eos>"
 UNK = "<unk>"
 SPECIAL_TOKENS = [PAD, BOS, EOS, UNK]
 TOKENIZER_VERSION = "clm-0.4-mini-byte-bpe-v1"
+PREVIEW_TOKENIZER_VERSION = "clm-0.4-preview-byte-bpe-digit-aware-v1"
+
+
+def separate_digits(text: str) -> str:
+    """Prevent BPE from hiding multi-digit arithmetic structure.
+
+    Only boundaries inside a contiguous digit run are expanded. Ordinary prose
+    is unchanged, and preview decoding joins those digit boundaries again.
+    """
+    return re.sub(r"(?<=\d)(?=\d)", " ", str(text))
+
+
+def join_digits(text: str) -> str:
+    return re.sub(r"(?<=\d) (?=\d)", "", str(text))
 
 
 class TokenizerBundle:
@@ -71,6 +86,17 @@ class TokenizerBundle:
         return cls(Tokenizer.from_file(str(path)))
 
 
+class DigitAwareTokenizerBundle(TokenizerBundle):
+    """Preview tokenizer that exposes individual digits without changing BPE internals."""
+
+    def encode(self, text: str, *, add_special_tokens: bool = True) -> list[int]:
+        return super().encode(separate_digits(text), add_special_tokens=add_special_tokens)
+
+    def decode(self, ids: Iterable[int], *, skip_special_tokens: bool = True) -> str:
+        return join_digits(super().decode(ids, skip_special_tokens=skip_special_tokens))
+
+
+
 def _training_source_hash(texts: Iterable[str]) -> tuple[list[str], str, int]:
     values: list[str] = []
     hasher = hashlib.sha256()
@@ -85,19 +111,15 @@ def _training_source_hash(texts: Iterable[str]) -> tuple[list[str], str, int]:
     return values, hasher.hexdigest(), byte_count
 
 
-def train_tokenizer(
+def _train(
     texts: Iterable[str],
     *,
     out_dir: str | Path,
-    vocab_size: int = 8192,
-    min_frequency: int = 2,
-    source_manifest: dict | None = None,
+    vocab_size: int,
+    min_frequency: int,
+    source_manifest: dict | None,
+    tokenizer_version: str,
 ) -> dict:
-    """Train and persist a deterministic byte-level BPE tokenizer.
-
-    Determinism depends on the input iterator order, which is hashed into the
-    tokenizer manifest and later copied into the protocol lock.
-    """
     values, source_hash, byte_count = _training_source_hash(texts)
     if not values:
         raise ValueError("tokenizer training text is empty")
@@ -119,7 +141,7 @@ def train_tokenizer(
     bundle.save(tokenizer_path)
     manifest = {
         "format": "minicells.clm-0.4-mini.tokenizer-manifest.v1",
-        "tokenizer_version": TOKENIZER_VERSION,
+        "tokenizer_version": tokenizer_version,
         "requested_vocab_size": int(vocab_size),
         "actual_vocab_size": bundle.vocab_size,
         "min_frequency": int(min_frequency),
@@ -138,6 +160,49 @@ def train_tokenizer(
     }
     manifest["manifest_sha256"] = canonical_json_hash(manifest)
     (out_dir / "tokenizer-manifest.json").write_text(
-        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n"
     )
+    return manifest
+
+
+def train_tokenizer(
+    texts: Iterable[str],
+    *,
+    out_dir: str | Path,
+    vocab_size: int = 8192,
+    min_frequency: int = 2,
+    source_manifest: dict | None = None,
+) -> dict:
+    """Train and persist the historical deterministic byte-level BPE tokenizer."""
+    return _train(
+        texts,
+        out_dir=out_dir,
+        vocab_size=vocab_size,
+        min_frequency=min_frequency,
+        source_manifest=source_manifest,
+        tokenizer_version=TOKENIZER_VERSION,
+    )
+
+
+def train_digit_aware_tokenizer(
+    texts: Iterable[str],
+    *,
+    out_dir: str | Path,
+    vocab_size: int = 8192,
+    min_frequency: int = 2,
+    source_manifest: dict | None = None,
+) -> dict:
+    """Train the Preview tokenizer on the same digit-separated surface it encodes."""
+    manifest = _train(
+        (separate_digits(text) for text in texts),
+        out_dir=out_dir,
+        vocab_size=vocab_size,
+        min_frequency=min_frequency,
+        source_manifest=source_manifest,
+        tokenizer_version=PREVIEW_TOKENIZER_VERSION,
+    )
+    manifest["digit_policy"] = "split-contiguous-decimal-digits-before-bpe"
+    manifest["manifest_sha256"] = canonical_json_hash(manifest)
+    out = Path(out_dir) / "tokenizer-manifest.json"
+    out.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return manifest
