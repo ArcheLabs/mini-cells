@@ -1,4 +1,4 @@
-"""Explicit registry for unified research entrypoints."""
+"""Explicit registry for unified research/product entrypoints."""
 
 from __future__ import annotations
 
@@ -20,6 +20,7 @@ REGISTRY = {
         "clm-0.4-mini-m1": "run_clm_0_4_mini_m1.py",
         "clm-0.4-mini-calibration": "run_clm_0_4_mini_calibration.py",
         "clm-0.4-mini-m1-v2-calibration": "run_clm_0_4_mini_v2_calibration.py",
+        "clm-0.4-preview": "run_clm_0_4_preview.py",
     },
     "report": {
         "core-validation-001": "report_core_validation_001.py",
@@ -33,6 +34,7 @@ REGISTRY = {
         "clm-0.4-mini-m1": "report_clm_0_4_mini_m1.py",
         "clm-0.4-mini-calibration": "report_clm_0_4_mini_calibration.py",
         "clm-0.4-mini-m1-v2-calibration": "report_clm_0_4_mini_v2_calibration.py",
+        "clm-0.4-preview": "report_clm_0_4_preview.py",
     },
     "publish": {
         "core-validation-001": "publish_core_validation_001.py",
@@ -44,6 +46,7 @@ REGISTRY = {
         "core-validation-004": "publish_core_validation_004.py",
         "clm-0.4-mini-m1-v1-calibration": "publish_clm_0_4_mini_calibration_results.py",
         "clm-0.4-mini-m1-v2-calibration": "publish_clm_0_4_mini_calibration_results.py",
+        "clm-0.4-preview": "publish_clm_0_4_preview_results.py",
     },
 }
 
