@@ -1,0 +1,27 @@
+{
+  "elapsed_seconds": 181.4036726951599,
+  "experiment_id": "core-validation-002b",
+  "format": "minicells.core-validation.sparse-write-assembly.v1",
+  "mode": "formal",
+  "parent_experiment": {
+    "experiment_id": "core-validation-002",
+    "frozen_outcome": "WRITE_ADDRESSABILITY_NOT_SUPPORTED",
+    "rule": "002B is a new pre-registered mechanism test. It must not alter, relabel, or retroactively rescue the frozen 002 v1 decision."
+  },
+  "pass": false,
+  "passed_seeds": 0,
+  "protocol_sha256": "dc6ca60f60b2675f62b9225320fa10d557a5887497cdbb38f9ccf2c94fe34310",
+  "provenance": {
+    "code_commit": "3d925de0e87ae8d0d5039c02c6a25d15f71d2771",
+    "code_tree": "00f251b76fc3bd00a0f7c6fe1f63e49e42fd5b0f",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "require_all_seeds": true,
+  "scientific_decision": true,
+  "status": "SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED",
+  "total_seeds": 3
+}
