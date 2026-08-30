@@ -130,7 +130,6 @@ def batched_scored_logits(
             x, _, mask, addresses = collate_scored(
                 batch, pad_id=tokenizer.pad_id, device=device
             )
-            # No autocast here: the frozen structural tolerance is 1e-5.
             logits = model(x, addresses)
             for row, example in enumerate(batch):
                 result[example.example_id] = logits[row][mask[row]].detach().cpu()
@@ -242,12 +241,11 @@ class AddressDataParallel(nn.DataParallel):
             raise TypeError("token_ids must be a tensor")
         if token_ids.size(0) != len(address_ids):
             raise ValueError("address list must align with token batch")
-        # torch.chunk returns no empty trailing chunks when batch < GPU count.
         target_count = min(len(device_ids), max(1, int(token_ids.size(0))))
         chunks = torch.chunk(token_ids, target_count, dim=0)
         scattered_inputs = []
         cursor = 0
-        for device_id, chunk in zip(device_ids, chunks, strict=True):
+        for device_id, chunk in zip(device_ids[:target_count], chunks, strict=True):
             size = int(chunk.size(0))
             addresses = list(address_ids[cursor : cursor + size])
             cursor += size
@@ -466,7 +464,6 @@ def materialize_tokenized_curriculum(
     tokenizer: TokenizerBundle,
     max_seq_len: int,
 ) -> dict[int, dict[str, list[ScoredTokenExample]]]:
-    """Tokenize all 192 deterministic transactions once for the entire search."""
     from .m1 import _tokenize_transaction
 
     cache: dict[int, dict[str, list[ScoredTokenExample]]] = {}
@@ -562,7 +559,6 @@ def evaluate_gate_summaries(
     summaries: Mapping[str, Mapping[str, Any]],
     growth_harness: VariantHarness,
 ) -> dict[str, Any]:
-    """Same algebra as evaluate_m1_gates, but accepts cached baseline summaries."""
     always = summaries["local_always"]
     local_tx = summaries["local_tx"]
     growth = summaries["local_tx_growth"]
@@ -577,71 +573,19 @@ def evaluate_gate_summaries(
     )
     active_private = _maximum_active_private_from_records(growth_harness)
     gates = {
-        "false_safe_rate": {
-            "value": growth["false_safe_rate"],
-            "threshold": registered["maximum_false_safe_rate"],
-            "pass": growth["false_safe_rate"] <= registered["maximum_false_safe_rate"],
-        },
-        "structural_escape_rate": {
-            "value": growth["maximum_structural_escape_rate"],
-            "threshold": registered["maximum_structural_escape_rate"],
-            "pass": growth["maximum_structural_escape_rate"] <= registered["maximum_structural_escape_rate"],
-        },
-        "regression_damage_ratio_vs_local_always": {
-            "value": damage_ratio,
-            "threshold": registered["maximum_regression_damage_ratio_vs_local_always"],
-            "pass": damage_ratio <= registered["maximum_regression_damage_ratio_vs_local_always"],
-        },
-        "effective_acceptance_rate": {
-            "value": growth["effective_acceptance_rate"],
-            "threshold": registered["minimum_effective_acceptance_rate"],
-            "pass": growth["effective_acceptance_rate"] >= registered["minimum_effective_acceptance_rate"],
-        },
-        "committed_gain_ratio_vs_local_always": {
-            "value": gain_ratio,
-            "threshold": registered["minimum_committed_gain_ratio_vs_local_always"],
-            "pass": gain_ratio >= registered["minimum_committed_gain_ratio_vs_local_always"],
-        },
-        "final_protected_retention_ratio": {
-            "value": growth["final_protected_retention_ratio"],
-            "threshold": registered["minimum_final_protected_retention_ratio"],
-            "pass": growth["final_protected_retention_ratio"] >= registered["minimum_final_protected_retention_ratio"],
-        },
-        "growth_exceeds_local_tx_gain": {
-            "value": growth["committed_new_gain"] - local_tx["committed_new_gain"],
-            "threshold": ">0",
-            "pass": growth["committed_new_gain"] > local_tx["committed_new_gain"],
-        },
-        "growth_rescue_rate": {
-            "value": growth["growth_rescue_rate"],
-            "threshold": registered["minimum_growth_rescue_rate"],
-            "pass": growth["growth_rescue_rate"] >= registered["minimum_growth_rescue_rate"],
-        },
-        "private_reuse_acceptance_rate": {
-            "value": growth["private_reuse_acceptance_rate"],
-            "threshold": registered["minimum_private_reuse_acceptance_rate"],
-            "pass": growth["private_reuse_acceptance_rate"] >= registered["minimum_private_reuse_acceptance_rate"],
-        },
-        "spawned_bundles_per_effective_commit": {
-            "value": growth["spawned_bundles_per_effective_commit"],
-            "threshold": registered["maximum_spawned_bundles_per_effective_commit"],
-            "pass": growth["spawned_bundles_per_effective_commit"] <= registered["maximum_spawned_bundles_per_effective_commit"],
-        },
-        "growth_parameter_overhead_ratio": {
-            "value": growth["growth_parameter_overhead_ratio"],
-            "threshold": registered["maximum_growth_parameter_overhead_ratio"],
-            "pass": growth["growth_parameter_overhead_ratio"] <= registered["maximum_growth_parameter_overhead_ratio"],
-        },
-        "active_private_cells_per_layer_per_input": {
-            "value": active_private,
-            "threshold": registered["maximum_active_private_cells_per_growth_layer_per_input"],
-            "pass": active_private <= registered["maximum_active_private_cells_per_growth_layer_per_input"],
-        },
-        "mean_direct_dependency_coverage": {
-            "value": growth["mean_direct_dependency_coverage"],
-            "threshold": registered["maximum_mean_direct_dependency_coverage"],
-            "pass": growth["mean_direct_dependency_coverage"] <= registered["maximum_mean_direct_dependency_coverage"],
-        },
+        "false_safe_rate": {"value": growth["false_safe_rate"], "threshold": registered["maximum_false_safe_rate"], "pass": growth["false_safe_rate"] <= registered["maximum_false_safe_rate"]},
+        "structural_escape_rate": {"value": growth["maximum_structural_escape_rate"], "threshold": registered["maximum_structural_escape_rate"], "pass": growth["maximum_structural_escape_rate"] <= registered["maximum_structural_escape_rate"]},
+        "regression_damage_ratio_vs_local_always": {"value": damage_ratio, "threshold": registered["maximum_regression_damage_ratio_vs_local_always"], "pass": damage_ratio <= registered["maximum_regression_damage_ratio_vs_local_always"]},
+        "effective_acceptance_rate": {"value": growth["effective_acceptance_rate"], "threshold": registered["minimum_effective_acceptance_rate"], "pass": growth["effective_acceptance_rate"] >= registered["minimum_effective_acceptance_rate"]},
+        "committed_gain_ratio_vs_local_always": {"value": gain_ratio, "threshold": registered["minimum_committed_gain_ratio_vs_local_always"], "pass": gain_ratio >= registered["minimum_committed_gain_ratio_vs_local_always"]},
+        "final_protected_retention_ratio": {"value": growth["final_protected_retention_ratio"], "threshold": registered["minimum_final_protected_retention_ratio"], "pass": growth["final_protected_retention_ratio"] >= registered["minimum_final_protected_retention_ratio"]},
+        "growth_exceeds_local_tx_gain": {"value": growth["committed_new_gain"] - local_tx["committed_new_gain"], "threshold": ">0", "pass": growth["committed_new_gain"] > local_tx["committed_new_gain"]},
+        "growth_rescue_rate": {"value": growth["growth_rescue_rate"], "threshold": registered["minimum_growth_rescue_rate"], "pass": growth["growth_rescue_rate"] >= registered["minimum_growth_rescue_rate"]},
+        "private_reuse_acceptance_rate": {"value": growth["private_reuse_acceptance_rate"], "threshold": registered["minimum_private_reuse_acceptance_rate"], "pass": growth["private_reuse_acceptance_rate"] >= registered["minimum_private_reuse_acceptance_rate"]},
+        "spawned_bundles_per_effective_commit": {"value": growth["spawned_bundles_per_effective_commit"], "threshold": registered["maximum_spawned_bundles_per_effective_commit"], "pass": growth["spawned_bundles_per_effective_commit"] <= registered["maximum_spawned_bundles_per_effective_commit"]},
+        "growth_parameter_overhead_ratio": {"value": growth["growth_parameter_overhead_ratio"], "threshold": registered["maximum_growth_parameter_overhead_ratio"], "pass": growth["growth_parameter_overhead_ratio"] <= registered["maximum_growth_parameter_overhead_ratio"]},
+        "active_private_cells_per_layer_per_input": {"value": active_private, "threshold": registered["maximum_active_private_cells_per_growth_layer_per_input"], "pass": active_private <= registered["maximum_active_private_cells_per_growth_layer_per_input"]},
+        "mean_direct_dependency_coverage": {"value": growth["mean_direct_dependency_coverage"], "threshold": registered["maximum_mean_direct_dependency_coverage"], "pass": growth["mean_direct_dependency_coverage"] <= registered["maximum_mean_direct_dependency_coverage"]},
     }
     return {
         "variant_summaries": {name: dict(value) for name, value in summaries.items()},
@@ -787,7 +731,6 @@ def run_calibration_optimized(
     code_tree: str,
     tracked_tree_dirty: bool,
 ) -> dict[str, Any]:
-    """Run the frozen development search with pre-90401 execution optimizations."""
     install_runtime_patches()
     protocol = load_protocol(protocol_path)
     assert_seed_allowed(protocol, mode="calibration", seed=seed)
@@ -858,7 +801,6 @@ def run_calibration_optimized(
         _write(out_dir / "summary.json", {**common, "decision": decision})
         return decision
 
-    # Materialize deterministic language data once, before any candidate is run.
     tokenized_transactions = materialize_tokenized_curriculum(
         curriculum_manifest=assets["curriculum_manifest"],
         tokenizer=tokenizer,
@@ -1083,7 +1025,6 @@ def equivalence_probe(
     tokenizer: TokenizerBundle,
     device: torch.device,
 ) -> dict[str, Any]:
-    """Compare legacy and optimized structural logits before seed 90401."""
     restore_runtime_patches()
     legacy = _ORIGINAL_SCORED_LOGITS(
         model, examples, tokenizer=tokenizer, device=device
