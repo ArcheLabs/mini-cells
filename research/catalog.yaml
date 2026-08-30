@@ -202,7 +202,7 @@ entries:
     title: CLM-0.4-mini M1-v2 Aligned Token-Level Continual-Learning Validation
     kind: language-validation
     stage: language-validation
-    outcome: PROTOCOL_FROZEN_DATA_LOCK_PENDING
+    outcome: PROTOCOL_FROZEN_DATA_LOCKED
     scientific_decision: false
     canonical: true
     report: research/validations/clm-0.4-mini-m1-v2-language-validation/README.md
@@ -212,4 +212,4 @@ entries:
     implementation: research/experiments/05-language-validation/clm-0.4-mini-m1-v2
     supersedes: clm-0.4-mini-language-validation
     superseded_by: null
-    notes: "Task-aligned base data, teacher-forced answer-exact admission, route-balanced evaluation, and diagnostic dense baselines. Development seed 90402 and all formal seeds remain unopened until the v2 data asset lock is committed."
+    notes: "Task-aligned base data, teacher-forced answer-exact admission, route-balanced evaluation, and diagnostic dense baselines. Seed-independent v2 data identity is locked; development seed 90402 and formal seeds 90411/90412/90413 were unobserved when locked."
