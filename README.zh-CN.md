@@ -50,7 +50,7 @@ Core Validation 002、002B、002C 分别否定了精确单地址、稀疏组装�
 
 - [`research/`](research/README.zh-CN.md)：四阶段历史、目录、报告、协议和历史来源。
 - [`artifacts/experiments/`](artifacts/experiments/)：不可变的规范实验证据。
-- [`research/minicells/`](research/minicells/)：研究实现；[`research/kaggle/`](research/kaggle/)：保持稳定路径的 notebooks。
+- [`src/minicells/`](src/minicells/)：研究实现；[`research/kaggle/`](research/kaggle/)：保持稳定路径的 notebooks。
 
 运行 `python -m pytest -q` 与 `./tools/test_all.sh`。协议、notebook 和 artifact 索引见 [`research/catalog.yaml`](research/catalog.yaml)。文档整理不应重新生成正式结果。
 

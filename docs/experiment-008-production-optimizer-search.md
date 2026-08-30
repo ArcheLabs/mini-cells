@@ -35,7 +35,7 @@ The search compares three apply modes:
 
 ## Exact mirror and baseline gate
 
-`research/minicells/optimizer_search.py` reuses the integer Q8.8 forward path from `continual_learning.py` and mirrors Rust `canonical_batch` plus the fixed local probe.
+`src/minicells/optimizer_search.py` reuses the integer Q8.8 forward path from `continual_learning.py` and mirrors Rust `canonical_batch` plus the fixed local probe.
 
 Before any search, the full Kaggle profile must reproduce the committed local run exactly:
 

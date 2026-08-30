@@ -16,7 +16,7 @@ entries:
     protocol: null
     artifacts: artifacts/experiments
     notebook: research/kaggle/experiment-001-echo.ipynb
-    implementation: research/minicells
+    implementation: src/minicells
     supersedes: null
     superseded_by: stage-self-organization
     notes: "Experiments roughly 001–013; individual historical outcomes remain in canonical artifacts."
@@ -32,7 +32,7 @@ entries:
     protocol: null
     artifacts: artifacts/experiments
     notebook: research/kaggle/experiment-014-multiseed-core-recipe.ipynb
-    implementation: research/minicells
+    implementation: src/minicells
     supersedes: stage-foundations
     superseded_by: stage-routing-and-growth
     notes: "Experiments roughly 014–024; emergence is not classified as validated continual learning."
@@ -48,7 +48,7 @@ entries:
     protocol: null
     artifacts: artifacts/experiments
     notebook: research/kaggle/experiment-025-story-math-growth.ipynb
-    implementation: research/minicells
+    implementation: src/minicells
     supersedes: stage-self-organization
     superseded_by: stage-continual-learning-core
     notes: "Covers experiments 025/026 and CLM routing, growth, mitosis, and sparse-runtime studies."
@@ -64,7 +64,7 @@ entries:
     protocol: research/validations/core-001-knowledge-subsumption/protocol.json
     artifacts: artifacts/experiments/core-validation-001-knowledge-subsumption
     notebook: research/kaggle/core-validation-001-knowledge-subsumption.ipynb
-    implementation: research/minicells/knowledge_subsumption.py
+    implementation: src/minicells/knowledge_subsumption.py
     supersedes: null
     superseded_by: core-validation-001b
     notes: "Outcome copied from canonical decision.json status."
@@ -80,7 +80,7 @@ entries:
     protocol: research/validations/core-001b-residual-memorization/protocol.json
     artifacts: artifacts/experiments/core-validation-001b-residual-memorization
     notebook: research/kaggle/core-validation-001b-residual-memorization.ipynb
-    implementation: research/minicells/residual_memorization.py
+    implementation: src/minicells/residual_memorization.py
     supersedes: core-validation-001
     superseded_by: null
     notes: "Outcome copied from canonical decision.json status."
@@ -96,7 +96,7 @@ entries:
     protocol: research/validations/core-002-write-addressability/protocol.json
     artifacts: artifacts/experiments/core-validation-002-write-addressability
     notebook: research/kaggle/core-validation-002-write-addressability.ipynb
-    implementation: research/minicells/write_addressability.py
+    implementation: src/minicells/write_addressability.py
     supersedes: null
     superseded_by: core-validation-002b
     notes: "Frozen No-Go; locality did not provide adequate update fidelity."
@@ -112,7 +112,7 @@ entries:
     protocol: research/validations/core-002b-sparse-write-assembly/protocol.json
     artifacts: artifacts/experiments/core-validation-002b-sparse-write-assembly
     notebook: research/kaggle/core-validation-002b-sparse-write-assembly.ipynb
-    implementation: research/minicells/write_addressability_002b.py
+    implementation: src/minicells/write_addressability_002b.py
     supersedes: core-validation-002
     superseded_by: core-validation-002c
     notes: "Frozen No-Go; wider sparse assemblies did not rescue addressable writing."
@@ -128,7 +128,7 @@ entries:
     protocol: research/validations/core-002c-oracle-tomography/protocol.json
     artifacts: artifacts/experiments/core-validation-002c-oracle-tomography
     notebook: research/kaggle/core-validation-002c-oracle-tomography.ipynb
-    implementation: research/minicells/write_addressability_002c.py
+    implementation: src/minicells/write_addressability_002c.py
     supersedes: core-validation-002b
     superseded_by: core-validation-003
     notes: "Frozen No-Go; does not imply that the representation contains no useful information."
@@ -144,7 +144,7 @@ entries:
     protocol: research/validations/core-003-dependency-scoped-transactional-learning/protocol.json
     artifacts: artifacts/experiments/core-validation-003-dependency-scoped-transactional-learning
     notebook: research/kaggle/core-validation-003-dependency-scoped-transactional-learning.ipynb
-    implementation: research/minicells/dependency_scoped_experiment.py
+    implementation: src/minicells/dependency_scoped_experiment.py
     supersedes: core-validation-002c
     superseded_by: core-validation-004
     notes: "Frozen overall No-Go; gate-level summaries support mechanistic safety interpretation under registered conditions."
@@ -160,7 +160,7 @@ entries:
     protocol: research/validations/core-004-growth-restored-plasticity/protocol.json
     artifacts: artifacts/experiments/core-validation-004-growth-restored-plasticity
     notebook: research/kaggle/core-validation-004-growth-restored-plasticity.ipynb
-    implementation: research/minicells/growth_plasticity_004_experiment.py
+    implementation: src/minicells/growth_plasticity_004_experiment.py
     supersedes: core-validation-003
     superseded_by: null
     notes: "Supported only in the registered controlled synthetic setting; 3/3 seeds."

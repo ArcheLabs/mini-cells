@@ -98,7 +98,7 @@ For each eligible parent lineage `i`, record:
 - `S_i`: mean absolute weight-gradient saliency
 - `D_i`: deterministic two-cluster cosine geometry separation
 
-Definitions implemented in `research/minicells/growth_marginal.py`:
+Definitions implemented in `src/minicells/growth_marginal.py`:
 
 `F_i = mean_b ||g_i,b||^2 / max(U_i, eps)`
 

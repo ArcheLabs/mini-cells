@@ -2,7 +2,7 @@
 
 This path freezes the validated Python Echo experiment before any optimizer or
 model search. `tools/export_training_fidelity.py` imports the production
-`research/minicells` model, data, metrics, and trainer modules and exports the
+`src/minicells` model, data, metrics, and trainer modules and exports the
 exact FP32 initial parameters, deterministic batches, AdamW metadata, and
 step-1/step-2/step-4/step-16 tensors. The checked-in fixture records Python
 3.8.10, torch 2.4.1+cu121, device and validation provenance.
