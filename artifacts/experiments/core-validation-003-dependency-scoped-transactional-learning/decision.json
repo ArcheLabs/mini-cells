@@ -1,0 +1,41 @@
+{
+  "elapsed_seconds": 388.5899519920349,
+  "experiment_id": "core-validation-003",
+  "format": "minicells.core-validation.dependency-scoped-transactional-learning.v1",
+  "hypotheses": {
+    "h1_structural_locality": true,
+    "h2_dependency_scoped_validation": false,
+    "h3_transactional_commit_benefit": false,
+    "h4_granularity_benefit": false,
+    "h5_router_stability_stress_escape": true,
+    "h5_router_stability_stress_false_safe": true
+  },
+  "mode": "formal",
+  "pass": false,
+  "passed_seeds": 0,
+  "protocol_sha256": "387c4e6b30af69fecbc5e14d7a34718d308b4274b3f41710839f98a85cbec3a5",
+  "provenance": {
+    "code_commit": "3911795cb73b8b49cd76a103b24de53c35ce2a36",
+    "code_tree": "29d7794fa429e35425f07f2db24c1930bd6b25ee",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "require_same_granularity_across_seeds": true,
+  "research_transition": {
+    "from": "Core Validation 002/002B/002C studied precise functional write-addressability.",
+    "frozen_prior_outcomes": [
+      "WRITE_ADDRESSABILITY_NOT_SUPPORTED",
+      "SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED",
+      "ORACLE_SPARSE_ASSEMBLY_NOT_SUPPORTED"
+    ],
+    "rule": "003 is a new systems/mechanism validation and cannot relabel prior frozen outcomes.",
+    "to": "003 tests whether sparse routing can make continual-learning safety a local validation problem even when updates are ordinary gradient training."
+  },
+  "scientific_decision": true,
+  "shared_supported_granularities": [],
+  "status": "DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED",
+  "total_seeds": 3
+}
