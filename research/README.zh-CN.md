@@ -15,4 +15,11 @@ CLM 是由可独立路由、修改和验证的神经 Cell 构成的稀疏图。�
 
 建议先读[研究历史](reports/research-history-0.4.zh-CN.md)，再读[最终机制报告](reports/clm-core-mechanism-0.4.zh-CN.md)。机器可读索引见 [`catalog.yaml`](catalog.yaml)，不可变证据见 [`../artifacts/experiments/`](../artifacts/experiments/)。
 
+## 研究资产
+
+- [实验实现](experiments/README.md) 是按阶段组织的适配层，复用 `src/minicells/` 中的代码。
+- [Notebook 资产](notebooks/README.md) 按阶段组织，历史实验 ID 与内容保持不变。
+- [Core validations](validations/) 保存冻结协议和双语摘要。
+- [规范 artifacts](../artifacts/experiments/) 是不可变科学证据。
+
 Core Validation 004 通过 3/3 正式 seeds，但这不等于自然语言持续学习已经成立。下一步是 5–10M 参数受控语言 pilot；只有 pilot Go 后才进入 30–50M 正式候选。

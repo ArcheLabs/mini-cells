@@ -143,16 +143,16 @@ A negative result in this favorable Gaussian additive world would be evidence ag
 CPU execution check:
 
 ```bash
-python -m pytest -q tests/test_core_validation_002b.py
-python scripts/run_core_validation_002b.py --smoke --device cpu
-python scripts/report_core_validation_002b.py
+python -m pytest -q tests/research/04-continual-learning-core/test_core_validation_002b.py
+python scripts/research/run_core_validation_002b.py --smoke --device cpu
+python scripts/research/report_core_validation_002b.py
 ```
 
 Formal CUDA run:
 
 ```bash
-python scripts/run_core_validation_002b.py --device cuda
-python scripts/report_core_validation_002b.py
+python scripts/research/run_core_validation_002b.py --device cuda
+python scripts/research/report_core_validation_002b.py
 ```
 
 Formal outputs are written to:
@@ -161,4 +161,4 @@ Formal outputs are written to:
 
 Use the Kaggle notebook at:
 
-`research/kaggle/core-validation-002b-sparse-write-assembly.ipynb`
+`research/notebooks/04-continual-learning-core/core-validation-002b-sparse-write-assembly.ipynb`

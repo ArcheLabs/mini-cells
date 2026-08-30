@@ -166,15 +166,15 @@ A negative formal result rejects the frozen Core Validation 001 v1 mechanism tes
 Formal Kaggle/GPU run:
 
 ```bash
-python scripts/run_core_validation_001.py
-python scripts/report_core_validation_001.py
+python scripts/research/run_core_validation_001.py
+python scripts/research/report_core_validation_001.py
 ```
 
 CPU smoke run:
 
 ```bash
-python scripts/run_core_validation_001.py --smoke --device cpu --skip-oracle
-python scripts/report_core_validation_001.py
+python scripts/research/run_core_validation_001.py --smoke --device cpu --skip-oracle
+python scripts/research/report_core_validation_001.py
 ```
 
 Outputs are written to:
@@ -183,4 +183,4 @@ Outputs are written to:
 results/core-validation-001-knowledge-subsumption/
 ```
 
-The Kaggle notebook is `research/kaggle/core-validation-001-knowledge-subsumption.ipynb` and its final cell publishes curated formal results to `kaggle/core-validation-001-knowledge-subsumption-results` using the existing Kaggle secret `GITHUB_TOKEN`.
+The Kaggle notebook is `research/notebooks/04-continual-learning-core/core-validation-001-knowledge-subsumption.ipynb` and its final cell publishes curated formal results to `kaggle/core-validation-001-knowledge-subsumption-results` using the existing Kaggle secret `GITHUB_TOKEN`.

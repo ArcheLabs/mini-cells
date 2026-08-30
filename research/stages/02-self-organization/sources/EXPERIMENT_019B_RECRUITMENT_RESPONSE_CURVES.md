@@ -105,8 +105,8 @@ results/proposal-utility-discovery-stable-v1/checkpoints/
 Then run:
 
 ```bash
-python -m pytest tests/test_language_recruitment_response.py -q
-python scripts/run_recruitment_response_curves.py
+python -m pytest tests/research/02-self-organization/test_language_recruitment_response.py -q
+python scripts/research/run_recruitment_response_curves.py
 ```
 
 The three replicate sweeps use up to two GPUs concurrently. Completed replicate response files are resumable.

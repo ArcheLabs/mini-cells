@@ -10,21 +10,28 @@ requires-python = ">=3.11"
 dependencies = ["torch", "numpy", "pyyaml", "matplotlib", "pandas", "tokenizers>=0.15"]
 
 [project.scripts]
-minicells-clm = "minicells.clm_cli:main"
+minicells-clm = "minicells.cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
 lm = ["datasets>=2.18"]
 
 [tool.setuptools]
-package-dir = {"" = "research"}
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
-where = ["research"]
+where = ["src"]
 
 [tool.pytest.ini_options]
-pythonpath = ["research"]
+pythonpath = ["src"]
 testpaths = ["tests"]
+markers = [
+  "unit: isolated software tests",
+  "integration: multi-component integration tests",
+  "research: scientific experiment regression tests",
+  "smoke: low-cost execution smoke tests",
+  "gpu: requires CUDA/GPU",
+]
 
 [tool.ruff]
 line-length = 100

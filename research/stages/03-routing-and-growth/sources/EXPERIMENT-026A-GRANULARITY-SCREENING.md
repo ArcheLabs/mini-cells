@@ -32,12 +32,12 @@ This is deliberately a decision gate, not a confirmatory scientific claim.
 
 ## Kaggle
 
-Use `research/kaggle/experiment-026a-granularity-screening.ipynb` with Tesla T4x2 and Internet enabled. The notebook clones `codex/experiment-026a-granularity-screening`, runs regression/mechanism tests and the granularity smoke check, then starts the screening runner.
+Use `research/notebooks/03-routing-and-growth/experiment-026a-granularity-screening.ipynb` with Tesla T4x2 and Internet enabled. The notebook clones `codex/experiment-026a-granularity-screening`, runs regression/mechanism tests and the granularity smoke check, then starts the screening runner.
 
 Canonical local/Kaggle command:
 
 ```bash
-python scripts/run_experiment_026a_granularity_screening.py
+python scripts/research/run_experiment_026a_granularity_screening.py
 ```
 
 Formal outputs are written to `results/experiment-026a-granularity-screening/`.

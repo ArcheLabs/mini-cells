@@ -210,8 +210,8 @@ for 12 checkpoints total. Completed parent/arm checkpoints are reused after inte
 ## Run
 
 ```bash
-python -m pytest tests/test_language_conflict_differentiation.py -q
-python scripts/run_conflict_driven_differentiation.py
+python -m pytest tests/research/02-self-organization/test_language_conflict_differentiation.py -q
+python scripts/research/run_conflict_driven_differentiation.py
 ```
 
 The runner uses up to two GPUs concurrently across the three replicates.

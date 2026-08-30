@@ -6,4 +6,4 @@
 
 这些工作为细胞式语言动力学提供了历史实验支持，但扩展、稳定 settling 和训练效率仍有困难；局部动力学和二维 tissue 都没有证明真正的持续学习。进入下一阶段的是局部状态、重复计算、受控动力学和明确机制检验。
 
-证据见 [`artifacts/experiments/`](../../../artifacts/experiments/) 与 [notebooks](../../kaggle/)。
+证据见 [`artifacts/experiments/`](../../../artifacts/experiments/) 与 [notebooks](../../notebooks/)。

@@ -294,22 +294,22 @@ It does **not** establish that:
 Formal Kaggle/GPU run:
 
 ```bash
-python scripts/run_core_validation_002.py --device cuda
-python scripts/report_core_validation_002.py
+python scripts/research/run_core_validation_002.py --device cuda
+python scripts/research/report_core_validation_002.py
 ```
 
 Optional recovery-load diagnostic:
 
 ```bash
-python scripts/run_core_validation_002.py --device cuda --sweep
-python scripts/report_core_validation_002.py
+python scripts/research/run_core_validation_002.py --device cuda --sweep
+python scripts/research/report_core_validation_002.py
 ```
 
 CPU smoke run:
 
 ```bash
-python scripts/run_core_validation_002.py --smoke --device cpu
-python scripts/report_core_validation_002.py
+python scripts/research/run_core_validation_002.py --smoke --device cpu
+python scripts/research/report_core_validation_002.py
 ```
 
 Outputs are written to:
@@ -321,5 +321,5 @@ results/core-validation-002-write-addressability/
 The Kaggle notebook is:
 
 ```text
-research/kaggle/core-validation-002-write-addressability.ipynb
+research/notebooks/04-continual-learning-core/core-validation-002-write-addressability.ipynb
 ```

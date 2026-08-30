@@ -15,4 +15,11 @@ The core loop is supported only in a **controlled synthetic setting**. Natural-l
 
 Start with the [research history](reports/research-history-0.4.md), then read the [CLM Core Mechanism 0.4 report](reports/clm-core-mechanism-0.4.md). Machine-readable paths and outcomes are in [`catalog.yaml`](catalog.yaml); immutable evidence is in [`../artifacts/experiments/`](../artifacts/experiments/).
 
+## Research assets
+
+- [Experiment implementations](experiments/README.md) are stage-aligned adapters that import reusable code from `src/minicells/`.
+- [Notebook assets](notebooks/README.md) are organized by stage; their historical experiment IDs and bytes are preserved.
+- [Core validations](validations/) contain frozen protocols and bilingual summaries.
+- [Canonical artifacts](../artifacts/experiments/) are immutable scientific evidence.
+
 Core Validation 004 passed 3/3 registered seeds. This does not establish general natural-language continual learning. The next experiment is a 5–10M-parameter controlled language pilot, followed—only after a Go—by a 30–50M formal candidate.

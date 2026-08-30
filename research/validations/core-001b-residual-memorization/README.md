@@ -22,7 +22,7 @@ Core Validation 001b tests only that ambiguity.
 The Kaggle notebook first reruns the existing frozen Core Validation 001 training code:
 
 ```text
-scripts/run_core_validation_001.py
+scripts/research/run_core_validation_001.py
 ```
 
 with the same:
