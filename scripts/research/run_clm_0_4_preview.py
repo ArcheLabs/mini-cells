@@ -6,11 +6,13 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import platform
+import subprocess
 import sys
 
 import torch
 
-from minicells.clm04mini.preview import PREVIEW_SEED, run_preview
+from minicells.clm04mini.preview import PREVIEW_SEED, preview_model_config, run_preview
 from minicells.clm04mini.protocol import CandidateOptimizerConfig
 
 
@@ -18,6 +20,10 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "clm-0.4-mini-m1-v2-language-validation" / "protocol.json"
 DEFAULT_DATA = ROOT / "results" / "clm-0.4-preview-data"
 DEFAULT_OUT = ROOT / "results" / "clm-0.4-preview"
+
+
+def _git(*args: str) -> str:
+    return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
 
 
 def main() -> int:
@@ -60,6 +66,33 @@ def main() -> int:
         resume=not args.no_resume,
         direct_optimizer=direct,
         growth_optimizer=growth,
+    )
+    try:
+        import tokenizers
+        tokenizers_version = tokenizers.__version__
+    except Exception:
+        tokenizers_version = None
+    provenance = {
+        "format": "minicells.clm-0.4-preview.provenance.v1",
+        "git_commit": _git("rev-parse", "HEAD"),
+        "git_tree": _git("rev-parse", "HEAD^{tree}"),
+        "seed": int(args.seed),
+        "model_config": preview_model_config().to_dict(),
+        "direct_optimizer": direct.to_dict(),
+        "growth_optimizer": growth.to_dict(),
+        "max_transactions": int(args.max_transactions),
+        "checkpoint_every": int(args.checkpoint_every),
+        "capability_every": int(args.capability_every),
+        "python": platform.python_version(),
+        "torch": torch.__version__,
+        "cuda": torch.version.cuda,
+        "tokenizers": tokenizers_version,
+        "gpu_names": [torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())],
+        "requested_devices": args.devices,
+    }
+    args.out.mkdir(parents=True, exist_ok=True)
+    (args.out / "provenance.json").write_text(
+        json.dumps(provenance, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
