@@ -25,11 +25,29 @@ def main() -> None:
             if isinstance(node, ast.ImportFrom) and (node.module or "").startswith("research"):
                 require(False, f"reusable package imports research: {path}")
             if isinstance(node, ast.Import):
-                require(not any(alias.name.startswith("research") for alias in node.names), f"reusable package imports research: {path}")
-    require(not list((ROOT / "docs").glob("experiment-*.md")), "top-level historical experiment docs remain")
-    require(not list((ROOT / "scripts").glob("run_core_validation_*.py")), "top-level Core Validation runners remain")
-    for stage in ("01-foundations", "02-self-organization", "03-routing-and-growth", "04-continual-learning-core"):
-        require((ROOT / "research/notebooks" / stage).is_dir(), f"missing notebook stage {stage}")
+                require(
+                    not any(alias.name.startswith("research") for alias in node.names),
+                    f"reusable package imports research: {path}",
+                )
+    require(
+        not list((ROOT / "docs").glob("experiment-*.md")),
+        "top-level historical experiment docs remain",
+    )
+    require(
+        not list((ROOT / "scripts").glob("run_core_validation_*.py")),
+        "top-level Core Validation runners remain",
+    )
+    for stage in (
+        "01-foundations",
+        "02-self-organization",
+        "03-routing-and-growth",
+        "04-continual-learning-core",
+        "05-language-validation",
+    ):
+        require(
+            (ROOT / "research/notebooks" / stage).is_dir(),
+            f"missing notebook stage {stage}",
+        )
     notebooks = list((ROOT / "research/notebooks").rglob("*.ipynb"))
     for path in notebooks:
         json.loads(path.read_text(encoding="utf-8"))
