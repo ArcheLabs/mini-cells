@@ -1,0 +1,372 @@
+{
+  "experiment_id": "clm-0.4-mini-language-validation",
+  "format": "minicells.language-validation.clm-0.4-mini.v1",
+  "title": "CLM-0.4-mini Token-Level Continual-Learning Validation",
+  "status": "PROTOCOL_FROZEN_NOT_RUN",
+  "parent_evidence": {
+    "core_validation_002": "WRITE_ADDRESSABILITY_NOT_SUPPORTED",
+    "core_validation_002b": "SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED",
+    "core_validation_002c": "ORACLE_SPARSE_ASSEMBLY_NOT_SUPPORTED",
+    "core_validation_003": "DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED",
+    "core_validation_004": "GROWTH_RESTORED_PLASTICITY_SUPPORTED"
+  },
+  "decision_question": "Can the dependency-scoped transactional growth loop preserve useful stability and plasticity in a real autoregressive token-level language model under a controlled continual-learning curriculum?",
+  "interpretation_scope": {
+    "token_level_language_model": true,
+    "controlled_math": true,
+    "controlled_story_worlds": true,
+    "explicit_stable_addressing": true,
+    "autonomous_semantic_routing": false,
+    "open_domain_continual_learning": false,
+    "llm_scale": false,
+    "jam_native_training": false
+  },
+  "phases": {
+    "m0": {
+      "name": "execution_smoke",
+      "scientific_decision": false,
+      "status": "SMOKE_ONLY"
+    },
+    "m1": {
+      "name": "formal_token_level_pilot",
+      "scientific_decision": true,
+      "transactions": 192
+    },
+    "m2": {
+      "name": "scale_rehearsal",
+      "scientific_decision": false,
+      "transactions": 768,
+      "requires_m1_go": true
+    }
+  },
+  "model": {
+    "type": "decoder-only-transformer-with-two-sparse-cell-ffn-layers",
+    "target_base_parameters": 5000000,
+    "vocab_size": 8192,
+    "sequence_length": 256,
+    "layers": 4,
+    "model_dim": 256,
+    "attention_heads": 8,
+    "tie_embedding_lm_head": true,
+    "positional_encoding": "parameter-free-deterministic",
+    "shared_dense_layers": {
+      "layers": [1, 2],
+      "ffn_hidden": 768,
+      "continual_phase_mutable": false
+    },
+    "cell_layers": {
+      "layers": [3, 4],
+      "base_cells_per_layer": 32,
+      "base_cell_hidden": 32,
+      "topk_base": 2,
+      "continual_phase_mutable": "only-routed-base-cells-or-owner-private-growth-cells"
+    },
+    "continual_frozen_parameters": [
+      "token_embeddings",
+      "attention",
+      "normalization",
+      "dense_ffn_layers_1_2",
+      "lm_head",
+      "all_non-touched-base-cells"
+    ]
+  },
+  "addressing": {
+    "formal_router": "deterministic-out-of-band-address-hash",
+    "address_visible_in_token_sequence": false,
+    "route_formula": "stable_hash(protocol_salt, layer_id, address_id) -> two distinct base Cell IDs",
+    "mutable_hidden_state_dependency": false,
+    "base_route_rewrite_allowed": false,
+    "private_route_addition": "monotonic-only",
+    "shadow_semantic_router": {
+      "allowed": true,
+      "controls_commit": false,
+      "controls_validation_scope": false,
+      "controls_growth": false
+    }
+  },
+  "growth": {
+    "unit": "private-growth-bundle",
+    "cells_per_bundle": 2,
+    "layers": [3, 4],
+    "cell_hidden": 32,
+    "approx_weights_per_bundle": 32768,
+    "zero_output_initialization": true,
+    "owner_scope": "exact-address-id",
+    "max_bundles_per_address_m1": 1,
+    "atomic_commit": "parameters-plus-private-route",
+    "failed_probationary_growth_deleted": true,
+    "reuse_rule": "after bundle commit, later updates for the address train only that bundle",
+    "second_generation_allowed_m1": false
+  },
+  "base_training": {
+    "target_tokens": 30000000,
+    "token_tolerance_fraction": 0.01,
+    "mixture_token_fraction": {
+      "language_carrier": 0.60,
+      "controlled_base_math": 0.20,
+      "controlled_base_story": 0.20
+    },
+    "language_carrier": "pinned TinyStories subset or equivalent repository-supported corpus",
+    "formal_lock_required": [
+      "dataset_revision",
+      "sample_manifest_hash",
+      "preprocessing_version",
+      "tokenizer_manifest_hash",
+      "tokenizer_hash"
+    ],
+    "base_math": [
+      "small_integer_addition",
+      "small_integer_subtraction",
+      "comparison",
+      "simple_one_step_verbal_arithmetic"
+    ],
+    "base_story": "generated natural-language micro-world declarative and QA examples",
+    "base_route_coverage": "all 32 base Cells in each Cell layer must exceed the protocol-lock minimum activation count"
+  },
+  "continual_curriculum": {
+    "total_transactions": 192,
+    "same_semantic_schedule_across_formal_model_seeds": true,
+    "math": {
+      "transactions": 96,
+      "addresses": 12,
+      "visits_per_address": 8,
+      "families": [
+        "multiplication",
+        "exact_integer_division",
+        "modulo",
+        "precedence_and_two_step_expressions",
+        "bounded_affine_transforms",
+        "synthetic_binary_operators"
+      ]
+    },
+    "story": {
+      "transactions": 96,
+      "addresses": 24,
+      "visits_per_address": 4,
+      "operations": ["append", "supersede"],
+      "supersede_rule": "remove protection only for the exact superseded knowledge key; unrelated facts remain protected"
+    },
+    "per_transaction": {
+      "train_examples": 64,
+      "new_validation_examples": 128,
+      "protected_probes_added_on_commit": 32
+    },
+    "truth_advances_on_reject": true,
+    "formal_lock_required": ["curriculum_generator_version", "transaction_manifest_hash"]
+  },
+  "transaction": {
+    "direct_candidate": "train four routed base Cells: Top-2 in each of two Cell layers",
+    "direct_reject_action": "rollback then attempt probationary private growth bundle",
+    "existing_private_action": "train only owner private bundle",
+    "second_bundle_on_private_reject": false,
+    "candidate_kinds": ["direct", "spawn", "private-reuse"]
+  },
+  "dependency_validation": {
+    "formal_local_index": "exact-inverted-index",
+    "mapping": "cell_id -> protected_probe_ids",
+    "probabilistic_false_negative_index_allowed": false,
+    "direct_scope": "union of protected probes for touched base Cells",
+    "private_reuse_scope": "protected owner-address probes for private bundle",
+    "new_spawn_preexisting_private_scope": "empty outside intentionally superseded target key",
+    "hidden_global_oracle": {
+      "enabled": true,
+      "controls_commit": false,
+      "controls_growth": false,
+      "scope": "all protected history except intentionally superseded keys"
+    }
+  },
+  "metrics": {
+    "teacher_forced_certification": true,
+    "old_regression": "(NLL_after - NLL_before) / max(NLL_before, eps)",
+    "new_gain": "(NLL_before_new - NLL_candidate_new) / max(NLL_before_new, eps)",
+    "minimum_new_gain_for_local_pass": 0.02,
+    "maximum_local_old_regression": 0.005,
+    "maximum_global_old_regression_for_oracle_pass": 0.005,
+    "structural_logit_tolerance": 0.00001,
+    "free_generation_is_separate_behavioral_evaluation": true
+  },
+  "primary_variants": [
+    "local_always",
+    "local_tx",
+    "local_tx_growth"
+  ],
+  "secondary_diagnostics": [
+    "dense_continual_optional",
+    "bounded_replay_optional",
+    "shadow_semantic_router"
+  ],
+  "calibration": {
+    "development_seed": 90401,
+    "formal_seeds_forbidden_during_calibration": [90411, 90412, 90413],
+    "selection_rule": "enumerate in increasing estimated candidate compute and choose the first configuration satisfying development sanity gates; if none passes, revise protocol before formal execution",
+    "direct_grid": {
+      "optimizer": "AdamW",
+      "batch_size": 32,
+      "weight_decay": 0.0,
+      "learning_rates": [0.001, 0.003, 0.01],
+      "steps": [16, 32, 64]
+    },
+    "growth_private_grid": {
+      "optimizer": "AdamW",
+      "batch_size": 32,
+      "weight_decay": 0.0,
+      "learning_rates": [0.001, 0.003, 0.01],
+      "steps": [32, 64, 96]
+    },
+    "protocol_lock_required_before_formal": true,
+    "lock_fields": [
+      "selected_direct_optimizer_config",
+      "selected_growth_optimizer_config",
+      "tokenizer_hash",
+      "base_corpus_manifest_hash",
+      "curriculum_manifest_hash",
+      "code_commit",
+      "code_tree",
+      "routing_salt",
+      "environment_versions",
+      "minimum_base_cell_activation",
+      "structural_logit_tolerance"
+    ]
+  },
+  "replication": {
+    "development_seed": 90401,
+    "formal_model_seeds": [90411, 90412, 90413],
+    "require_all_formal_seeds": true,
+    "formal_gpu_required": true,
+    "target_gpu": "Kaggle Tesla T4 or better",
+    "cpu_smoke_supported": true
+  },
+  "base_prerequisites": {
+    "minimum_base_math_exact_match": 0.85,
+    "minimum_base_story_qa_exact_match": 0.85,
+    "all_base_cells_must_meet_locked_minimum_activation": true,
+    "nan_inf_allowed": false,
+    "hashes_must_match_protocol_lock": true,
+    "carrier_perplexity_primary_gate": false
+  },
+  "m1_gates": {
+    "maximum_false_safe_rate": 0.02,
+    "maximum_structural_escape_rate": 0.0,
+    "maximum_regression_damage_ratio_vs_local_always": 0.35,
+    "minimum_effective_acceptance_rate": 0.75,
+    "minimum_committed_gain_ratio_vs_local_always": 0.75,
+    "minimum_final_protected_retention_ratio": 0.95,
+    "growth_must_exceed_local_tx_committed_gain": true,
+    "minimum_growth_rescue_rate": 0.70,
+    "minimum_private_reuse_acceptance_rate": 0.60,
+    "maximum_spawned_bundles_per_effective_commit": 0.50,
+    "maximum_growth_parameter_overhead_ratio": 0.25,
+    "maximum_active_private_cells_per_growth_layer_per_input": 1,
+    "maximum_mean_direct_dependency_coverage": 0.30,
+    "rule": "all gates must pass independently on all three formal model seeds"
+  },
+  "formal_statuses": {
+    "positive": "CLM_0_4_MINI_TOKEN_LEVEL_LOOP_SUPPORTED",
+    "negative": "CLM_0_4_MINI_TOKEN_LEVEL_LOOP_NOT_SUPPORTED",
+    "smoke": "SMOKE_ONLY"
+  },
+  "observability": {
+    "transaction_fields_required": [
+      "transaction_id",
+      "operation",
+      "address_id",
+      "knowledge_key",
+      "train_manifest_ids",
+      "validation_manifest_ids",
+      "probe_manifest_ids",
+      "state_hash_before",
+      "base_route_cells_by_layer",
+      "private_bundle_id",
+      "candidate_kind",
+      "touched_parameter_count",
+      "touched_parameter_fraction",
+      "local_dependency_probe_count",
+      "local_dependency_coverage",
+      "new_metrics_before_candidate",
+      "local_old_metrics_before_candidate",
+      "global_old_metrics_before_candidate",
+      "local_regression",
+      "global_regression",
+      "local_pass",
+      "oracle_pass",
+      "false_safe",
+      "structural_escape_count",
+      "structural_escape_rate",
+      "decision",
+      "cell_births",
+      "cell_deletions",
+      "state_hash_after",
+      "active_cells_by_layer",
+      "training_tokens",
+      "validation_tokens",
+      "optimizer_steps",
+      "candidate_wall_seconds",
+      "validation_wall_seconds",
+      "transaction_wall_seconds",
+      "peak_gpu_memory_bytes",
+      "checkpoint_reference",
+      "journal_reference"
+    ],
+    "cell_registry_required": true,
+    "cell_lineage_required": true,
+    "state_hash_every_commit": true
+  },
+  "replayability": {
+    "base_checkpoint_required": true,
+    "full_checkpoint_interval_transactions": 16,
+    "transaction_rng_record_required": true,
+    "transaction_manifest_hash_required": true,
+    "route_table_version_required": true,
+    "sampled_state_hash_replay_required": true
+  },
+  "m2": {
+    "engineering_seed": 90421,
+    "transactions": 768,
+    "bounded_address_set": true,
+    "gates": {
+      "no_oom_or_unrecoverable_numeric_failure": true,
+      "maximum_growth_parameter_overhead_ratio": 0.30,
+      "minimum_second_half_private_reuse_acceptance": 0.75,
+      "maximum_mean_direct_dependency_coverage": 0.30,
+      "maximum_p95_direct_dependency_coverage": 0.45,
+      "sampled_state_hash_replay_required": true,
+      "maximum_model_only_checkpoint_ratio_vs_base": 1.35,
+      "maximum_active_private_cells_per_growth_layer_per_input": 1
+    },
+    "bounded_validator_shadow": {
+      "controls_commit": false,
+      "reservoir_sizes": [32, 64, 128],
+      "readiness_minimum_decision_agreement": 0.95,
+      "readiness_maximum_shadow_false_safe_rate": 0.02
+    }
+  },
+  "required_formal_artifacts": [
+    "protocol-lock.json",
+    "run-manifest.json",
+    "decision.json",
+    "base-metrics.csv",
+    "seed-summary.csv",
+    "gate-summary.csv",
+    "transaction-records.csv-or-parquet-plus-csv-summary",
+    "cell-registry.jsonl",
+    "cell-lineage.json",
+    "dependency-summary.csv",
+    "cost-summary.csv",
+    "environment-provenance.json"
+  ],
+  "required_m2_artifact": "scaling-readiness.json",
+  "go_to_30_50m": {
+    "requires_m1_positive_status": true,
+    "requires_m2_engineering_go": true,
+    "requires_observability_and_replay_contract": true,
+    "requires_scaling_projection": [
+      "parameter_growth",
+      "dependency_index_memory",
+      "checkpoint_growth",
+      "transaction_time",
+      "validation_time",
+      "peak_gpu_memory"
+    ],
+    "post_formal_gate_or_hyperparameter_changes_allowed": false
+  }
+}
