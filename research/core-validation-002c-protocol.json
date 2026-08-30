@@ -1,0 +1,107 @@
+{
+  "experiment_id": "core-validation-002c",
+  "format": "minicells.core-validation.oracle-tomography.v1",
+  "title": "Oracle Sparse-Assembly Representation Tomography",
+  "parent_experiments": [
+    {
+      "experiment_id": "core-validation-002",
+      "frozen_outcome": "WRITE_ADDRESSABILITY_NOT_SUPPORTED"
+    },
+    {
+      "experiment_id": "core-validation-002b",
+      "frozen_outcome": "SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED"
+    }
+  ],
+  "hypothesis": "The learned sparse latent representation may still contain a small linear sparse assembly that reconstructs each true functional atom, even though 8-example non-oracle 002B inference failed to discover it. With evaluator access to true sparse coefficients and a large independent oracle probe set, a width r <= 16 decoder should substantially improve held-out functional fidelity over r = 1 while preserving off-support locality if such assemblies exist.",
+  "scope": {
+    "editing": false,
+    "sequential_updates": false,
+    "natural_language": false,
+    "growth": false,
+    "replay": false,
+    "encoder_frozen": true,
+    "oracle_evaluator_sees_ground_truth_sparse_code": true,
+    "oracle_evaluator_sees_target_feature_ids": true,
+    "same_sparse_pretraining_architecture_as_002_and_002b": true,
+    "primary_question": "Does the learned z contain a small linearly decodable sparse functional assembly, or was 002B failure representation-limited rather than inference-limited?"
+  },
+  "world": {
+    "observation_dim": 128,
+    "num_features": 512,
+    "active_features": 4,
+    "output_dim": 32,
+    "coefficient_min_abs": 0.5,
+    "coefficient_max_abs": 1.5,
+    "edit_scale": 0.75
+  },
+  "model": {
+    "latent_dim": 1024,
+    "latent_topk": 8,
+    "moe_topk": 2
+  },
+  "pretraining": {
+    "examples": 65536,
+    "steps": 6000,
+    "batch_size": 512,
+    "learning_rate": 0.001,
+    "weight_decay": 0.00001,
+    "reconstruction_weight": 0.5,
+    "gradient_clip_norm": 1.0,
+    "validation_examples": 4096,
+    "note": "Only the sparse model is trained in 002C, but its initialization, data stream, objective, and optimizer schedule are identical to 002/002B."
+  },
+  "tomography": {
+    "widths": [1, 2, 4, 8, 16],
+    "train_probe_examples": 32768,
+    "test_probe_examples": 16384,
+    "probe_batch_size": 2048,
+    "omp_jitter": 1e-8,
+    "dense_ridge_lambda": 0.0001,
+    "fit_objective": "Oracle least-squares reconstruction of every true coefficient column s_j from frozen learned z on an iid train probe stream. OMP support selection uses only train-probe moments G=E[z z^T] and C=E[z s^T].",
+    "held_out_rule": "All fidelity, leakage, context-ratio, and classification metrics are computed on an independent test probe stream never used for support selection or coefficient fitting.",
+    "sparse_decoder": "For each true feature j and each width r, fit h_j = z^T a_j with ||a_j||_0 <= r using deterministic Gram-matrix OMP.",
+    "dense_reference": "Fit the full linear oracle decoder B=(G+lambda I)^(-1)C. It is interpretive only and cannot make the sparse-assembly gate pass."
+  },
+  "evaluation": {
+    "affected_fit_error": "U_repr(j) = E[(h_j-s_j)^2 | s_j != 0] / E[s_j^2 | s_j != 0]",
+    "off_support_leakage": "L_repr(j) = E[h_j^2 | s_j = 0] / E[s_j^2 | s_j != 0]",
+    "unconditional_normalized_mse": "E[(h_j-s_j)^2] / E[s_j^2]",
+    "context_ratio_variance": "Var[h_j/s_j | s_j != 0]",
+    "feature_success": "U_repr <= maximum_sparse_affected_fit_error and L_repr <= maximum_sparse_leakage",
+    "relative_improvement": "U_repr(r) / U_repr(r=1)"
+  },
+  "replication": {
+    "seeds": [74201, 74202, 74203],
+    "require_all_primary_seeds": true,
+    "all_features_per_seed": true
+  },
+  "gates": {
+    "maximum_sparse_base_normalized_mse": 0.20,
+    "maximum_sparse_affected_fit_error": 0.10,
+    "maximum_sparse_leakage": 0.005,
+    "maximum_relative_fit_error_vs_width1": 0.60,
+    "minimum_joint_feature_success_fraction": 0.50,
+    "minimum_feature_improvement_fraction": 0.50,
+    "positive_status": "ORACLE_SPARSE_ASSEMBLY_PRESENT",
+    "negative_status": "ORACLE_SPARSE_ASSEMBLY_NOT_SUPPORTED",
+    "invalid_status": "ORACLE_TOMOGRAPHY_INVALID",
+    "rule": "A positive seed requires some fixed width r > 1 to pass every sparse gate on held-out probes. All three formal seeds must pass. Thresholds may not be changed after formal results are observed."
+  },
+  "interpretation": {
+    "sparse_positive": "A small sparse linear assembly exists in learned z; 002B failure is primarily an address-inference/sample-complexity problem.",
+    "dense_only": "Sparse gate fails but the dense linear reference reaches the same fidelity/locality thresholds; target atoms remain linearly recoverable but are distributed across a wider latent subspace.",
+    "linear_negative": "Neither sparse widths <= 16 nor the dense linear reference reaches the fidelity/locality thresholds; the current learned z is not a stable linearly writable basis for true atoms.",
+    "limits": [
+      "002C is oracle representation tomography, not a deployable editor.",
+      "A negative result rejects only the frozen linear sparse-assembly hypothesis for the current 002/002B encoder and favorable synthetic world.",
+      "OMP is a deterministic sparse approximation algorithm, not an exhaustive combinatorial search over all supports.",
+      "The dense reference diagnoses distributed linear recoverability but does not rescue the sparse hypothesis.",
+      "002 and 002B frozen outcomes remain unchanged regardless of 002C."
+    ]
+  },
+  "hardware": {
+    "target": "Kaggle Tesla T4 or better",
+    "gpu_required_for_formal_run": true,
+    "cpu_smoke_supported": true
+  }
+}

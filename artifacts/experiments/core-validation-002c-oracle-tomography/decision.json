@@ -1,0 +1,37 @@
+{
+  "elapsed_seconds": 52.43213510513306,
+  "experiment_id": "core-validation-002c",
+  "format": "minicells.core-validation.oracle-tomography.v1",
+  "mode": "formal",
+  "parent_experiments": [
+    {
+      "experiment_id": "core-validation-002",
+      "frozen_outcome": "WRITE_ADDRESSABILITY_NOT_SUPPORTED"
+    },
+    {
+      "experiment_id": "core-validation-002b",
+      "frozen_outcome": "SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED"
+    }
+  ],
+  "pass": false,
+  "passed_seeds": 0,
+  "protocol_sha256": "68398d31fe51294894a2602f40dc27664a6582f98f9f3323c903b40bee15bf16",
+  "provenance": {
+    "code_commit": "b85f9064135113aca9b961a348c451c80eafc9d9",
+    "code_tree": "0a25a33754d40e86f75eaac4ac98b8800952c32a",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "representation_regimes": [
+    "DENSE_LINEAR_ONLY",
+    "DENSE_LINEAR_ONLY",
+    "DENSE_LINEAR_ONLY"
+  ],
+  "require_all_seeds": true,
+  "scientific_decision": true,
+  "status": "ORACLE_SPARSE_ASSEMBLY_NOT_SUPPORTED",
+  "total_seeds": 3
+}
