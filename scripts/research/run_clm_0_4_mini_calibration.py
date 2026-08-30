@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import random
 import subprocess
 import sys
 
@@ -73,6 +74,13 @@ def main() -> int:
         device = "cuda" if torch.cuda.is_available() else "cpu"
     if device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("--device cuda requested but CUDA is unavailable")
+
+    # Seed before constructing the formal model. The base checkpoint is then trained once
+    # and reused unchanged for every candidate configuration.
+    torch.manual_seed(args.seed)
+    random.seed(args.seed)
+    if device == "cuda":
+        torch.cuda.manual_seed_all(args.seed)
 
     result = run_calibration(
         protocol_path=args.protocol,
