@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "minicells.clm-0.4-mini.cell-registry.v1",
+  "title": "CLM-0.4-mini Cell Registry Entry",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "cell_id",
+    "layer_id",
+    "cell_type",
+    "parameter_count",
+    "state_hash",
+    "activation_count",
+    "dependency_probe_count",
+    "accepted_updates",
+    "rejected_updates"
+  ],
+  "properties": {
+    "cell_id": {"type": ["string", "integer"]},
+    "layer_id": {"type": "integer", "enum": [3, 4]},
+    "cell_type": {"enum": ["base", "private-growth"]},
+    "owner_address_id": {"type": ["string", "integer", "null"]},
+    "parent_base_route": {
+      "type": ["array", "null"],
+      "items": {"type": ["string", "integer"]}
+    },
+    "birth_transaction": {"type": ["integer", "null"], "minimum": 0},
+    "parameter_count": {"type": "integer", "minimum": 0},
+    "state_hash": {"type": "string", "minLength": 1},
+    "state_version": {"type": "integer", "minimum": 0},
+    "activation_count": {"type": "integer", "minimum": 0},
+    "dependency_probe_count": {"type": "integer", "minimum": 0},
+    "accepted_updates": {"type": "integer", "minimum": 0},
+    "rejected_updates": {"type": "integer", "minimum": 0},
+    "growth_rescue_transaction": {"type": ["integer", "null"], "minimum": 0},
+    "reuse_events": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+    "semantic_analysis_labels": {
+      "type": "object",
+      "description": "Post-hoc analysis only. These labels must never control routing, validation, commit, rollback, or growth."
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"cell_type": {"const": "private-growth"}}},
+      "then": {
+        "required": ["owner_address_id", "birth_transaction", "parent_base_route"]
+      }
+    }
+  ]
+}

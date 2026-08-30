@@ -4,6 +4,7 @@ stages:
   - self-organization
   - routing-and-growth
   - continual-learning-core
+  - language-validation
 entries:
   - id: stage-foundations
     title: "Foundations: Echo, NCA Language Dynamics, and Training Mechanics"
@@ -164,3 +165,35 @@ entries:
     supersedes: core-validation-003
     superseded_by: null
     notes: "Supported only in the registered controlled synthetic setting; 3/3 seeds."
+
+  - id: stage-language-validation
+    title: "Language Validation: Token-Level Transfer and Scale Readiness"
+    kind: research-stage
+    stage: language-validation
+    outcome: active
+    scientific_decision: false
+    canonical: true
+    report: research/stages/05-language-validation/README.md
+    protocol: null
+    artifacts: null
+    notebook: null
+    implementation: null
+    supersedes: stage-continual-learning-core
+    superseded_by: null
+    notes: "Current stage begins after the controlled synthetic CLM core-loop freeze and tests token-level transfer before 30–50M scaling."
+
+  - id: clm-0.4-mini-language-validation
+    title: CLM-0.4-mini Token-Level Continual-Learning Validation
+    kind: language-validation
+    stage: language-validation
+    outcome: PROTOCOL_FROZEN_NOT_RUN
+    scientific_decision: false
+    canonical: true
+    report: research/validations/clm-0.4-mini-language-validation/README.md
+    protocol: research/validations/clm-0.4-mini-language-validation/protocol.json
+    artifacts: null
+    notebook: null
+    implementation: null
+    supersedes: core-validation-004
+    superseded_by: null
+    notes: "Approx. 5M parameter controlled language pilot. Formal result is not yet available; 30–50M work requires M1 scientific Go plus M2 engineering Go."

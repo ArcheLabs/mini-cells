@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "minicells.clm-0.4-mini.transaction-record.v1",
+  "title": "CLM-0.4-mini Transaction Record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "transaction_id",
+    "operation",
+    "address_id",
+    "train_manifest_ids",
+    "validation_manifest_ids",
+    "probe_manifest_ids",
+    "state_hash_before",
+    "base_route_cells_by_layer",
+    "attempts",
+    "final_decision",
+    "growth_attempted",
+    "cell_births",
+    "cell_deletions",
+    "state_hash_after",
+    "active_cells_by_layer",
+    "transaction_wall_seconds"
+  ],
+  "properties": {
+    "transaction_id": {"type": "integer", "minimum": 0},
+    "operation": {"enum": ["capability", "append", "supersede"]},
+    "address_id": {"type": ["string", "integer"]},
+    "knowledge_key": {"type": ["string", "null"]},
+    "train_manifest_ids": {"type": "array", "items": {"type": ["string", "integer"]}},
+    "validation_manifest_ids": {"type": "array", "items": {"type": ["string", "integer"]}},
+    "probe_manifest_ids": {"type": "array", "items": {"type": ["string", "integer"]}},
+    "state_hash_before": {"type": "string", "minLength": 1},
+    "base_route_cells_by_layer": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {"type": "integer", "minimum": 0}
+      }
+    },
+    "private_bundle_id_before": {"type": ["string", "integer", "null"]},
+    "attempts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "attempt_index",
+          "candidate_kind",
+          "touched_cells",
+          "touched_parameter_count",
+          "touched_parameter_fraction",
+          "local_dependency_probe_count",
+          "local_dependency_coverage",
+          "new_gain",
+          "local_regression",
+          "global_regression",
+          "local_pass",
+          "oracle_pass",
+          "false_safe",
+          "structural_escape_count",
+          "structural_escape_rate",
+          "training_tokens",
+          "validation_tokens",
+          "optimizer_steps",
+          "candidate_wall_seconds",
+          "validation_wall_seconds",
+          "peak_gpu_memory_bytes"
+        ],
+        "properties": {
+          "attempt_index": {"type": "integer", "minimum": 0},
+          "candidate_kind": {"enum": ["direct", "spawn", "private-reuse"]},
+          "touched_cells": {"type": "array", "items": {"type": ["string", "integer"]}},
+          "touched_parameter_count": {"type": "integer", "minimum": 0},
+          "touched_parameter_fraction": {"type": "number", "minimum": 0.0},
+          "local_dependency_probe_count": {"type": "integer", "minimum": 0},
+          "local_dependency_coverage": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "new_metrics_before": {"type": "object"},
+          "new_metrics_candidate": {"type": "object"},
+          "local_old_metrics_before": {"type": "object"},
+          "local_old_metrics_candidate": {"type": "object"},
+          "global_old_metrics_before": {"type": "object"},
+          "global_old_metrics_candidate": {"type": "object"},
+          "new_gain": {"type": "number"},
+          "local_regression": {"type": "number"},
+          "global_regression": {"type": "number"},
+          "local_pass": {"type": "boolean"},
+          "oracle_pass": {"type": "boolean"},
+          "false_safe": {"type": "boolean"},
+          "structural_escape_count": {"type": "integer", "minimum": 0},
+          "structural_escape_rate": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "training_tokens": {"type": "integer", "minimum": 0},
+          "validation_tokens": {"type": "integer", "minimum": 0},
+          "optimizer_steps": {"type": "integer", "minimum": 0},
+          "candidate_wall_seconds": {"type": "number", "minimum": 0.0},
+          "validation_wall_seconds": {"type": "number", "minimum": 0.0},
+          "peak_gpu_memory_bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "final_decision": {
+      "enum": ["direct-commit", "growth-commit", "private-reuse-commit", "rollback"]
+    },
+    "growth_attempted": {"type": "boolean"},
+    "cell_births": {"type": "array", "items": {"type": ["string", "integer"]}},
+    "cell_deletions": {"type": "array", "items": {"type": ["string", "integer"]}},
+    "state_hash_after": {"type": "string", "minLength": 1},
+    "active_cells_by_layer": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {"type": ["string", "integer"]}
+      }
+    },
+    "transaction_wall_seconds": {"type": "number", "minimum": 0.0},
+    "checkpoint_reference": {"type": ["string", "null"]},
+    "journal_reference": {"type": ["string", "null"]}
+  }
+}
