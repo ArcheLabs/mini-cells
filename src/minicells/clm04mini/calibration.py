@@ -205,7 +205,7 @@ def verify_calibration_assets(
     tolerance = float(protocol["base_training"]["token_tolerance_fraction"])
     if abs(actual["base_tokens"] - target) > target * tolerance:
         raise RuntimeError("base token count outside protocol tolerance")
-    if int(curriculum_manifest["total_transactions"]) != int(
+    if int(curriculum_manifest["counts"]["total"]) != int(
         protocol["continual_curriculum"]["total_transactions"]
     ):
         raise RuntimeError("curriculum transaction count drift")
@@ -271,10 +271,6 @@ def prepare_or_load_base(
         saved = _load_base(checkpoint, model, seed, assets["identity"], device)
         base_train, source = saved["base_train"], "resumed"
     else:
-        torch.manual_seed(seed)
-        random.seed(seed)
-        if device.type == "cuda":
-            torch.cuda.manual_seed_all(seed)
         base_train = train_base_model(
             model, dataset=dataset, tokenizer=tokenizer, device=device, seed=seed
         )
@@ -415,6 +411,12 @@ def run_calibration(
     })
 
     device = torch.device(device)
+    # Seed here, before constructing the formal model, so direct API calls are as
+    # deterministic as the CLI runner. The base checkpoint is then trained once.
+    torch.manual_seed(seed)
+    random.seed(seed)
+    if device.type == "cuda":
+        torch.cuda.manual_seed_all(seed)
     model, tokenizer, base = prepare_or_load_base(
         protocol=protocol, data_dir=data_dir, out_dir=out_dir,
         assets=assets, seed=seed, device=device
