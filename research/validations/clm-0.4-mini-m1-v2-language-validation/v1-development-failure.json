@@ -1,0 +1,25 @@
+{
+  "experiment_id": "clm-0.4-mini-language-validation",
+  "protocol_version": "0.4-mini-rc1",
+  "development_seed": 90401,
+  "status": "CALIBRATION_BASE_PREREQUISITES_FAILED",
+  "candidate_search_started": false,
+  "formal_seeds_observed": false,
+  "observed_metrics": {
+    "base_train_mean_nll": 3.922878999483625,
+    "math_greedy_exact_match": 0.359375,
+    "story_greedy_exact_match": 0.0,
+    "math_teacher_forced_token_accuracy": 0.8358778625954199,
+    "math_answer_nll": 0.42110119885160724,
+    "story_teacher_forced_token_accuracy": 0.2413793103448276,
+    "story_answer_nll": 4.24629916487069,
+    "minimum_cell_activation": 19958,
+    "minimum_cell_activation_threshold": 19335
+  },
+  "diagnosis": [
+    "story base train/eval task mismatch",
+    "base admission metric inconsistent with teacher-forced M1 certification",
+    "evaluation addresses concentrated on one route per domain",
+    "math showed genuine residual arithmetic error and partial base-task mismatch"
+  ]
+}

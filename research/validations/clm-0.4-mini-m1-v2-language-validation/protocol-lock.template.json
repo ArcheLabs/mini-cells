@@ -1,0 +1,64 @@
+{
+  "experiment_id": "clm-0.4-mini-m1-v2-language-validation",
+  "protocol_format": "minicells.language-validation.clm-0.4-mini.m1-v2.v1",
+  "protocol_sha256": null,
+  "lock_status": "UNLOCKED_TEMPLATE",
+  "lock_created_before_formal": true,
+  "code": {
+    "commit": null,
+    "tree": null,
+    "tracked_tree_dirty": false
+  },
+  "routing": {
+    "stable_hash_algorithm": null,
+    "protocol_salt": null,
+    "structural_logit_tolerance": 1e-05
+  },
+  "tokenizer": {
+    "type": "BPE",
+    "vocab_size": 8192,
+    "hash": null,
+    "training_manifest_hash": null
+  },
+  "base_corpus": {
+    "dataset_revision": null,
+    "sample_manifest_hash": null,
+    "preprocessing_version": null,
+    "target_tokens": 30000000
+  },
+  "curriculum": {
+    "generator_version": null,
+    "transaction_manifest_hash": null,
+    "transactions": 192
+  },
+  "base_cell_minimum_activation": null,
+  "selected_direct_candidate": {
+    "optimizer": "AdamW",
+    "batch_size": 32,
+    "learning_rate": null,
+    "steps": null,
+    "weight_decay": 0.0
+  },
+  "selected_growth_private_candidate": {
+    "optimizer": "AdamW",
+    "batch_size": 32,
+    "learning_rate": null,
+    "steps": null,
+    "weight_decay": 0.0
+  },
+  "environment": {
+    "python": null,
+    "torch": null,
+    "cuda": null,
+    "gpu": null,
+    "tokenizers": null
+  },
+  "development_seed_used": 90402,
+  "formal_seeds": [
+    90411,
+    90412,
+    90413
+  ],
+  "formal_results_observed_when_locked": false,
+  "notes": "Generated only after v2 development calibration. Dense baselines are diagnostic and are recorded in environment provenance."
+}
