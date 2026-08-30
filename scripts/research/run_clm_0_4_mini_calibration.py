@@ -6,13 +6,13 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import random
 import subprocess
 import sys
 
 import torch
 
-from minicells.clm04mini.calibration import run_calibration, write_plan_only
+from minicells.clm04mini.calibration import write_plan_only
+from minicells.clm04mini.performance import run_calibration_optimized
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -44,6 +44,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--data-dir", type=Path)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--device", choices=("auto", "cpu", "cuda"), default="auto")
+    parser.add_argument(
+        "--devices",
+        type=str,
+        default=None,
+        help=(
+            "comma-separated CUDA devices for optimized calibration, e.g. cuda:0,cuda:1; "
+            "when omitted, --device cuda uses every visible CUDA device"
+        ),
+    )
     parser.add_argument("--seed", type=int, default=90401)
     parser.add_argument("--confirm-development-seed", type=int)
     parser.add_argument("--plan-only", action="store_true")
@@ -75,14 +84,7 @@ def main() -> int:
     if device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("--device cuda requested but CUDA is unavailable")
 
-    # Seed before constructing the formal model. The base checkpoint is then trained once
-    # and reused unchanged for every candidate configuration.
-    torch.manual_seed(args.seed)
-    random.seed(args.seed)
-    if device == "cuda":
-        torch.cuda.manual_seed_all(args.seed)
-
-    result = run_calibration(
+    result = run_calibration_optimized(
         protocol_path=args.protocol,
         expected_assets_path=args.expected_assets,
         committed_plan_path=args.plan,
@@ -91,6 +93,7 @@ def main() -> int:
         out_dir=args.out,
         seed=args.seed,
         device=device,
+        devices=args.devices,
         code_commit=_git(["rev-parse", "HEAD"]),
         code_tree=_git(["rev-parse", "HEAD^{tree}"]),
         tracked_tree_dirty=_tracked_tree_dirty(),
