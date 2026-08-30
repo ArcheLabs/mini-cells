@@ -6,11 +6,14 @@ on:
       - 'src/minicells/clm04mini/**'
       - 'research/validations/clm-0.4-mini-language-validation/**'
       - 'research/validations/clm-0.4-mini-m1-v2-language-validation/**'
+      - 'research/previews/clm-0.4-preview/**'
       - 'research/experiments/05-language-validation/**'
       - 'research/notebooks/05-language-validation/**'
       - 'scripts/research/*clm_0_4_mini*'
+      - 'scripts/research/*clm_0_4_preview*'
       - 'scripts/research/_dispatch.py'
       - 'tests/**/*clm_0_4_mini*'
+      - 'tests/**/*clm_0_4_preview*'
       - '.github/workflows/clm-0.4-mini-stage05.yml'
   workflow_dispatch:
 
@@ -28,7 +31,7 @@ jobs:
         run: python -m pip install -e '.[dev]'
       - name: Compile Stage 05 code
         run: python -m compileall -q src/minicells/clm04mini scripts/research tests/unit/continual_learning tests/smoke
-      - name: Protocol, data, calibration, performance, and v2 unit tests
+      - name: Protocol, data, calibration, performance, v2, and Preview unit tests
         run: >-
           python -m pytest -q
           tests/unit/continual_learning/test_clm_0_4_mini_primitives.py
@@ -37,6 +40,7 @@ jobs:
           tests/unit/continual_learning/test_clm_0_4_mini_calibration.py
           tests/unit/continual_learning/test_clm_0_4_mini_performance.py
           tests/unit/continual_learning/test_clm_0_4_mini_v2.py
+          tests/unit/continual_learning/test_clm_0_4_preview.py
       - name: M0, M1, and calibration plan-only smoke tests
         run: >-
           python -m pytest -q
@@ -51,5 +55,7 @@ jobs:
         run: >-
           python scripts/research/run.py clm-0.4-mini-m1-v2-calibration
           --plan-only --out /tmp/clm-0.4-mini-m1-v2-plan
+      - name: Preview notebook JSON guard
+        run: python -m json.tool research/notebooks/05-language-validation/clm-0.4-preview.ipynb >/dev/null
       - name: Repository architecture check
         run: python scripts/maintenance/check_architecture.py
