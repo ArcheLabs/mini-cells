@@ -1,0 +1,124 @@
+{
+  "experiment_id": "core-validation-004",
+  "format": "minicells.core-validation.growth-restored-plasticity.v1",
+  "title": "Growth-Restored Plasticity",
+  "parent_experiment": {
+    "experiment_id": "core-validation-003",
+    "frozen_outcome": "DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED",
+    "supported_submechanisms": [
+      "Frozen-router structural locality had zero structural escape in all formal 003 seeds/granularities.",
+      "Frozen-router dependency-scoped validation had zero false-safe events in formal 003.",
+      "Fine granularity reduced dependency coverage, but naive transactional SGD retained insufficient new-learning gain."
+    ],
+    "rule": "004 cannot relabel Core Validation 003. It tests the missing growth mechanism exposed by 003."
+  },
+  "hypothesis": "When a dependency-constrained existing Cell cannot safely absorb a new update, atomically spawning a new context-scoped Cell and additive route should restore plasticity while preserving dependency-scoped safety and bounded sparse activation.",
+  "scope": {
+    "natural_language": false,
+    "knowledge_localization": false,
+    "router_learning": false,
+    "router_drift": false,
+    "replay": false,
+    "two_dimensional_nca": false,
+    "growth": true,
+    "mitosis_semantics": "A rejected existing-Cell candidate may create one private additive Cell for that context. The base routing plane is never rewritten.",
+    "primary_question": "Does monotonic Cell growth recover useful continual-learning plasticity after dependency-scoped transaction rejection?"
+  },
+  "world": {
+    "num_contexts": 64,
+    "anchor_contexts": 16,
+    "mutable_contexts": 48,
+    "content_dim": 16,
+    "output_dim": 4,
+    "num_function_families": 4,
+    "basis_hidden": 2,
+    "residual_hidden": 2,
+    "base_behavior": "Same favorable shared nonlinear function-family world as 003.",
+    "new_knowledge": "Each mutable context has a private nonlinear residual whose amplitude increases on each transaction.",
+    "truth_advances_on_reject": true
+  },
+  "model": {
+    "type": "sparse routed base Cells plus monotonic context-scoped additive growth Cells",
+    "model_dim": 16,
+    "router_dim": 8,
+    "base_experts": 4,
+    "base_expert_hidden": 64,
+    "topk": 2,
+    "granularity": 8,
+    "granularity_choice": "Frozen at g=8 because formal 003 showed about 12% dependency coverage, zero frozen-router FSR/SER, and the best near-threshold direct acceptance among fine-grained settings.",
+    "stable_addressing_rule": "The base router and all existing context routes are immutable during the continual stream. Growth may only add one context-scoped route; it may not rewrite old routes."
+  },
+  "pretraining": {
+    "steps": 600,
+    "batch_size": 512,
+    "learning_rate": 0.003,
+    "weight_decay": 0.00001,
+    "validation_examples": 4096
+  },
+  "continual_stream": {
+    "transactions": 96,
+    "train_examples": 32,
+    "validation_examples": 128,
+    "direct_train_steps": 24,
+    "direct_learning_rate": 0.05,
+    "update_amplitude": 0.35,
+    "stream_rule": "The 48 mutable contexts are traversed in shuffled epochs, so every context is updated twice.",
+    "variants": ["local_always", "local_tx", "local_tx_growth"]
+  },
+  "growth": {
+    "cell_hidden": 8,
+    "train_steps": 64,
+    "learning_rate": 0.05,
+    "zero_output_initialization": true,
+    "trigger": "In local_tx_growth, if a context without a private growth Cell fails the ordinary direct local transaction, rollback that candidate and attempt an atomic spawn+route+train transaction.",
+    "reuse": "After a context owns a growth Cell, later updates train only that private Cell. No second Cell may be spawned for the same context in v1.",
+    "route_scope": "A growth Cell is routed only for its owning context; therefore its historical dependency domain outside the intentionally superseded target context is empty.",
+    "atomicity": "Cell parameters and the additive route commit together or are both discarded."
+  },
+  "evaluation": {
+    "historical_examples_per_context": 32,
+    "hidden_global_scope": "All historical samples except the current target context; evaluator-only and never used to decide commit.",
+    "direct_dependency_scope": "Historical samples whose frozen base route intersects a directly updated base expert.",
+    "growth_dependency_scope": "Empty outside the current target context because the route addition is explicitly context-scoped and no shared/base parameter changes.",
+    "new_gain": "Same innovation-normalized new-truth gain as 003.",
+    "old_regression": "Same normalized change in old-truth MSE as 003.",
+    "false_safe": "A locally accepted direct/private/growth candidate whose hidden global old regression violates the same old-regression threshold.",
+    "bounded_growth": "Report total spawned Cells, spawned Cells per effective commit, private-Cell reuse acceptance, and maximum active growth Cells per input.",
+    "cost_proxy": "Sum candidate-state fraction and dependency-coverage for every attempted candidate, divided by effective commits."
+  },
+  "gates": {
+    "maximum_base_normalized_mse": 0.10,
+    "minimum_new_gain_fraction": 0.05,
+    "maximum_local_regression": 0.002,
+    "maximum_false_safe_rate": 0.01,
+    "maximum_structural_escape_rate": 0.0,
+    "minimum_effective_acceptance_rate": 0.80,
+    "maximum_regression_damage_ratio_vs_local_always": 0.30,
+    "minimum_committed_gain_ratio_vs_local_always": 0.80,
+    "minimum_growth_rescue_rate": 0.80,
+    "minimum_private_cell_reuse_acceptance_rate": 0.80,
+    "maximum_spawned_cells_per_effective_commit": 0.60,
+    "maximum_active_growth_cells_per_input": 1,
+    "maximum_final_mutable_nrmse_ratio_vs_local_always": 1.10,
+    "positive_status": "GROWTH_RESTORED_PLASTICITY_SUPPORTED",
+    "negative_status": "GROWTH_RESTORED_PLASTICITY_NOT_SUPPORTED",
+    "rule": "All gates must pass independently on every formal seed. Thresholds may not change after formal results are observed."
+  },
+  "replication": {
+    "development_seed_excluded_from_formal": 80401,
+    "development_note": "Seed 80401 was used only before protocol freeze to verify implementation and candidate-training sufficiency. It is excluded from all formal decisions.",
+    "seeds": [80411, 80412, 80413],
+    "require_all_primary_seeds": true
+  },
+  "interpretation_limits": [
+    "004 is a favorable synthetic mechanism test, not evidence that natural-language routing already supplies exact context-scoped growth addresses.",
+    "The new Cell route uses known synthetic context identity. Learning a safe semantic growth address remains an extension problem after core mechanism validation.",
+    "A positive result validates stability-plasticity recovery by monotonic growth under the frozen 004 mechanism, not arbitrary dynamic architecture growth.",
+    "A negative result rejects this one-private-Cell growth mechanism and frozen gate set, not all Cell-growth strategies."
+  ],
+  "hardware": {
+    "target": "Kaggle Tesla T4 or better",
+    "gpu_required_for_formal_run": true,
+    "cpu_smoke_supported": true
+  }
+}
