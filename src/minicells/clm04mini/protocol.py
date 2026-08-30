@@ -119,7 +119,7 @@ def smoke_model_config(
     """Reduced shape for infrastructure smoke while preserving the M1 topology."""
     validate_protocol(protocol)
     return MiniCLMConfig(
-        vocab_size=256,
+        vocab_size=512,
         max_seq_len=48,
         num_layers=4,
         d_model=48,
