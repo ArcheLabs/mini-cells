@@ -9,7 +9,7 @@ on:
       - "research/minicells/developmental_tissue.py"
       - "research/minicells/granularity_30m.py"
       - "research/minicells/local_plasticity.py"
-      - "research/experiment-026-protocol.json"
+      - "research/stages/03-routing-and-growth/sources/experiment-026-protocol.json"
       - "research/kaggle/experiment-026-cell-granularity.ipynb"
       - "scripts/run_experiment_026_cell_granularity.py"
       - "scripts/run_experiment_026_cell_granularity_worker.py"
@@ -38,7 +38,7 @@ jobs:
         run: python scripts/run_experiment_026_cell_granularity_smoke.py
       - name: Validate JSON assets
         run: |
-          python -m json.tool research/experiment-026-protocol.json >/dev/null
+          python -m json.tool research/stages/03-routing-and-growth/sources/experiment-026-protocol.json >/dev/null
           python -m json.tool research/kaggle/experiment-026-cell-granularity.ipynb >/dev/null
       - name: Compile formal scripts
         run: >-

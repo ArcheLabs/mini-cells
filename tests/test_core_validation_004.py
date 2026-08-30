@@ -16,7 +16,7 @@ from minicells.growth_plasticity_004_experiment import (
     summarize_experiment,
 )
 
-PROTOCOL = Path(__file__).resolve().parents[1] / "research" / "core-validation-004-protocol.json"
+PROTOCOL = Path(__file__).resolve().parents[1] / "research" / "validations" / "core-004-growth-restored-plasticity" / "protocol.json"
 
 
 def test_protocol_parses_and_freezes_g8() -> None:

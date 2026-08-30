@@ -21,7 +21,7 @@ from minicells.dependency_scoped_transactional import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PROTOCOL = ROOT / "research" / "core-validation-003-protocol.json"
+DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "core-003-dependency-scoped-transactional-learning" / "protocol.json"
 DEFAULT_OUT = ROOT / "results" / "core-validation-003-dependency-scoped-transactional-learning"
 
 

@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FORMAL_RUNNER = ROOT / "scripts" / "run_experiment_026_cell_granularity.py"
 SCREENING_REPORT = ROOT / "scripts" / "report_experiment_026a_granularity_screening.py"
-SCREENING_PROTOCOL = ROOT / "research" / "experiment-026a-protocol.json"
+SCREENING_PROTOCOL = ROOT / "research" / "stages" / "03-routing-and-growth" / "sources" / "experiment-026a-protocol.json"
 SCREENING_OUT = ROOT / "results" / "experiment-026a-granularity-screening"
 
 

@@ -34,7 +34,7 @@ SOURCE_006 = ROOT / "artifacts" / "experiments" / "006-consumer-language-scaling
 OUT = ROOT / "results" / RESULT_DIR_NAME
 WORKER = ROOT / "scripts" / "run_experiment_026_cell_granularity_worker.py"
 REPORT = ROOT / "scripts" / "report_experiment_026_cell_granularity.py"
-FROZEN_PROTOCOL = ROOT / "research" / "experiment-026-protocol.json"
+FROZEN_PROTOCOL = ROOT / "research" / "stages" / "03-routing-and-growth" / "sources" / "experiment-026-protocol.json"
 
 DEFAULT_TOTAL_WALL_HOURS = 8.0
 DEFAULT_FINALIZATION_RESERVE_MINUTES = 30.0

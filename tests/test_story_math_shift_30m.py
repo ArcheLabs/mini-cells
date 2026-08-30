@@ -94,7 +94,7 @@ def test_pareto_crossover_is_first_joint_dominance_point() -> None:
 
 def test_unattended_protocol_is_frozen_to_eight_hours() -> None:
     protocol = json.loads(
-        (ROOT / "research/experiment-025-protocol.json").read_text(encoding="utf-8")
+        (ROOT / "research/stages/03-routing-and-growth/sources/experiment-025-protocol.json").read_text(encoding="utf-8")
     )
     hardware = protocol["hardware_budget"]
     assert hardware["global_wall_hours"] == 8.0

@@ -28,7 +28,7 @@ jobs:
         run: python scripts/run_experiment_026_cell_granularity_smoke.py
       - name: Validate assets
         run: |
-          python -m json.tool research/experiment-026a-protocol.json >/dev/null
+          python -m json.tool research/stages/03-routing-and-growth/sources/experiment-026a-protocol.json >/dev/null
           python -m json.tool research/kaggle/experiment-026a-granularity-screening.ipynb >/dev/null
           python -m py_compile scripts/run_experiment_026a_granularity_screening.py scripts/report_experiment_026a_granularity_screening.py
       - name: Semantic Ruff checks

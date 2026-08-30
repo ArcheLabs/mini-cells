@@ -81,10 +81,10 @@ def main() -> int:
         shutil.copy2(source / name, target)
         copied.append(target)
     protocol_target = destination / "protocol.json"
-    shutil.copy2(root / "research" / "core-validation-001b-protocol.json", protocol_target)
+    shutil.copy2(root / "research" / "validations" / "core-001b-residual-memorization" / "protocol.json", protocol_target)
     copied.append(protocol_target)
     parent_protocol_target = destination / "parent-core-validation-001-protocol.json"
-    shutil.copy2(root / "research" / "core-validation-001-protocol.json", parent_protocol_target)
+    shutil.copy2(root / "research" / "validations" / "core-001-knowledge-subsumption" / "protocol.json", parent_protocol_target)
     copied.append(parent_protocol_target)
 
     metadata = {

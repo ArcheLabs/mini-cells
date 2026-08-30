@@ -61,7 +61,7 @@ def main() -> int:
     destination.mkdir(parents=True)
     for name in FILES:
         shutil.copy2(source / name, destination / name)
-    shutil.copy2(root / "research/core-validation-003-protocol.json", destination / "protocol.json")
+    shutil.copy2(root / "research/validations/core-003-dependency-scoped-transactional-learning/protocol.json", destination / "protocol.json")
     (destination / "RESULTS.md").write_text(
         "# Core Validation 003 Results\n\n"
         f"- Status: `{decision.get('status')}`\n"

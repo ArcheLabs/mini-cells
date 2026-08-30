@@ -1,0 +1,236 @@
+{
+  "bridge": {
+    "budget_tokens_per_arm": 1000000,
+    "source_checkpoint_sha256": "b76e2dd28b31470c1ce8bcd265c56e1b306191631e304161ded55b4e763f9e9e"
+  },
+  "decision": {
+    "bridge": {
+      "final_clm_ppl": 17.582243515593404,
+      "final_textnca_ppl": 18.16985210905939,
+      "source_checkpoint_sha256": "b76e2dd28b31470c1ce8bcd265c56e1b306191631e304161ded55b4e763f9e9e",
+      "training_commit": "260df3a18116e1f38895790c5b24e14596f756c6",
+      "training_tree_sha": "430c793e850dd90b1c3400fb0f2fc45ede33427e"
+    },
+    "developmental_capability": {
+      "births_checked": 72,
+      "births_equivalent": 72,
+      "promoted_replicates": [
+        {
+          "ppl_improvement_percent": 1.375168421397055,
+          "ppl_ratio": 0.9862483157860295,
+          "replicate": 0,
+          "selected_expert": "s1-e3"
+        },
+        {
+          "ppl_improvement_percent": 0.8678070636560564,
+          "ppl_ratio": 0.9913219293634394,
+          "replicate": 1,
+          "selected_expert": "s1-e0"
+        }
+      ],
+      "shift_promoted": 2,
+      "shift_total": 3,
+      "source_commit": "856f6a60d7db4b4eaca2fcac7ebc133a85719b9e",
+      "source_ref": "kaggle/clm-0.3d-probationary-mitosis-results",
+      "stationary_rejected": 3,
+      "stationary_total": 3,
+      "status": "CLM_RELEASE_DEVELOPMENTAL_CAPABILITY_CONFIRMED",
+      "training_code_commit": "af1eed85ac674495b684c22db49e839cf433bbe0",
+      "training_code_tree_sha": "dbe4c7ff609105cdeb2083f0269de0af17289cdb"
+    },
+    "figures": [
+      "figure-1-language-quality.png",
+      "figure-1-language-quality.svg",
+      "figure-2-machinery-bridge.png",
+      "figure-2-machinery-bridge.svg",
+      "figure-3-developmental-selectivity.png",
+      "figure-3-developmental-selectivity.svg",
+      "figure-4-reference-cost.png",
+      "figure-4-reference-cost.svg"
+    ],
+    "formal_gpu_experiment_run": true,
+    "format": "minicells.clm-0.3-release-benchmark.v1",
+    "language_foundation": {
+      "experiment_006": {
+        "parameters_textnca": 1170816,
+        "parameters_transformer": 1183936,
+        "ppl_ratio_textnca_over_transformer": 1.0255877394621922,
+        "textnca_ppl": 19.44867213327214,
+        "training_tokens": 10000000,
+        "transformer_ppl": 18.963440556993035
+      },
+      "experiment_007": {
+        "parameters_textnca": 29602800,
+        "parameters_transformer": 29458432,
+        "ppl_ratio_textnca_over_transformer": 1.00454882088745,
+        "textnca_ppl": 5.3532357975464855,
+        "training_tokens": 100000000,
+        "transformer_ppl": 5.328995153085013
+      },
+      "status": "CLM_RELEASE_TEXTNCA_LANGUAGE_FOUNDATION_CONFIRMED"
+    },
+    "language_quality": {
+      "competitive_threshold": 1.03,
+      "final_ppl_ratio_clm_over_textnca": 0.9676602434659879,
+      "modest_overhead_threshold": 1.05,
+      "status": "CLM_RELEASE_LM_QUALITY_COMPETITIVE"
+    },
+    "overall": {
+      "status": "CLM_0_3_PUBLIC_RESEARCH_RELEASE_READY"
+    },
+    "reference_runtime": {
+      "active_parameter_proxy_ratio_clm_over_textnca": 1.2252104515141578,
+      "inference_throughput_ratio_clm_over_textnca": 0.28441220541273854,
+      "inference_time_per_token_ratio_clm_over_textnca": 3.516023507320305,
+      "inference_vram_ratio_clm_over_textnca": 1.2296027585146065,
+      "maximum_inference_vram_ratio": 2.5,
+      "minimum_inference_throughput_ratio": 0.5,
+      "status": "CLM_RELEASE_REFERENCE_RUNTIME_OPTIMIZATION_REQUIRED",
+      "stored_parameter_ratio_clm_over_textnca": 2.237673554170766,
+      "train_time_per_token_ratio_clm_over_textnca": 2.0995247115642623
+    },
+    "runtime_environment": {
+      "cuda": "12.8",
+      "gpus": [
+        "Tesla T4",
+        "Tesla T4"
+      ],
+      "python": "3.12.13",
+      "torch": "2.10.0+cu128"
+    },
+    "source_corpus_equivalence": {
+      "release_materialized_train_tokens": 18000000,
+      "source_train_prefix_sha256": "85dbc64fca3c5c5744d02b25d434e9e0c3cdfffd123f5ef019eb6efd245dcb07",
+      "source_train_prefix_tokens": 15000000,
+      "source_validation_sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+      "source_validation_tokens": 200000,
+      "status": "CLM_RELEASE_SOURCE_006_CORPUS_EQUIVALENCE",
+      "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+      "unseen_suffix_tokens_available": 3000000
+    }
+  },
+  "experiment_format": "minicells.clm-0.3-release-benchmark.v1",
+  "experiment_id": "clm-0.3-release-benchmark",
+  "files": [
+    {
+      "bytes": 5149,
+      "path": "PUBLIC-RELEASE-SUMMARY.md",
+      "sha256": "d619029092a9128af150d7b5e7bd6d6a3678f23d7b49bff545afd2ee0b5144d5"
+    },
+    {
+      "bytes": 169,
+      "path": "bridge/clm_fixed4/age-zero-equivalence.json",
+      "sha256": "48ac044d4ac23c00c334a778bee69569ac4a12ff5c9d8f84370850dc5b9e2978"
+    },
+    {
+      "bytes": 1737,
+      "path": "bridge/clm_fixed4/bridge-checkpoints.json",
+      "sha256": "05c394381c188c45fc135f56ad4cfddba9080a1e38548e7fea2314bdded779dc"
+    },
+    {
+      "bytes": 1312,
+      "path": "bridge/clm_fixed4/run-provenance.json",
+      "sha256": "7f8b7dd7354acfdfb989e26366806c7a88c5a742d024ba3f38e8eff9f7798f3e"
+    },
+    {
+      "bytes": 1396,
+      "path": "bridge/clm_fixed4/worker-result.json",
+      "sha256": "41dfd6e8aea07b7a194cb700df7026a4491f766c589b0a7d7eeb554db6941548"
+    },
+    {
+      "bytes": 1784,
+      "path": "bridge/textnca_continuation/bridge-checkpoints.json",
+      "sha256": "ea5bce5c7832b2c31035e28dca8fa2a756cb4e4bc149be238d6f6f8002d1915e"
+    },
+    {
+      "bytes": 1322,
+      "path": "bridge/textnca_continuation/run-provenance.json",
+      "sha256": "d839134414149f730bccf6d1eeeb8d9d74bac8e144203308ca53d1b574b73d1e"
+    },
+    {
+      "bytes": 1204,
+      "path": "bridge/textnca_continuation/worker-result.json",
+      "sha256": "33706fcbd7bb3ce217c617082c13c100aa02f93d96ff418a02d0acb12eca47fd"
+    },
+    {
+      "bytes": 7300,
+      "path": "bridge-summary.json",
+      "sha256": "8d63a5bb31f77c117c90671e835f6f937fa4ff62a64c40469c3a6e36873ae20f"
+    },
+    {
+      "bytes": 831,
+      "path": "capability-evidence.json",
+      "sha256": "973b97b497004d2c8870d6c1a8e9761775eac066745b9160a8f983a88ea01eb5"
+    },
+    {
+      "bytes": 3987,
+      "path": "decision.json",
+      "sha256": "a205d5ba4ebe2441255100b11c165abfaffa724da424cfe65f9bcfcafb3ccbb4"
+    },
+    {
+      "bytes": 82041,
+      "path": "figures/figure-1-language-quality.png",
+      "sha256": "82bfc8e6fe70400c8591d78c7fe038bdb466a4e10bd0eef49547f9eb2de9689d"
+    },
+    {
+      "bytes": 53541,
+      "path": "figures/figure-1-language-quality.svg",
+      "sha256": "e2750533fc476c32a8ebbc83d75ecd2a1e4f67da72516db6891e7066fa9cc7ff"
+    },
+    {
+      "bytes": 96901,
+      "path": "figures/figure-2-machinery-bridge.png",
+      "sha256": "1917a249e3208910696dfca79c73f48f7be445aecd2d435002c90706b7dee158"
+    },
+    {
+      "bytes": 40733,
+      "path": "figures/figure-2-machinery-bridge.svg",
+      "sha256": "a85bc371b73fb487f69a3e33c09bbdc759de5479e7b6c9b6dee0dc8c69752272"
+    },
+    {
+      "bytes": 57661,
+      "path": "figures/figure-3-developmental-selectivity.png",
+      "sha256": "46e40900b2ca1666eb3d625d47d813426e62d38fcce1aac7ed356bc2183a86ca"
+    },
+    {
+      "bytes": 38638,
+      "path": "figures/figure-3-developmental-selectivity.svg",
+      "sha256": "bd9e511f100efbd0d3d5e6c06ed16666e9b492d33321991c39a76fe8bcf50008"
+    },
+    {
+      "bytes": 84901,
+      "path": "figures/figure-4-reference-cost.png",
+      "sha256": "a1c265c526b14b852d7021a64447474506fe398edbb0ac967f26f971e7b4ab00"
+    },
+    {
+      "bytes": 56238,
+      "path": "figures/figure-4-reference-cost.svg",
+      "sha256": "87f189af368fceae3d243b38e24ccfe45488045148ba60ed831501f00e726fd5"
+    },
+    {
+      "bytes": 621,
+      "path": "historical-evidence.json",
+      "sha256": "77c3f34cd42043f5aa9397a96f957eb2c8419a1b664abc3c3a98f8c46a056bee"
+    },
+    {
+      "bytes": 522,
+      "path": "source-corpus-equivalence.json",
+      "sha256": "e92078501edeb160e913e4e936d2629b35e44aececd229d66e10ba1a23cd0c5a"
+    }
+  ],
+  "format": "minicells.experiment-publication.v1",
+  "kaggle": {
+    "kernel_run_type": "Interactive",
+    "script_version_id": null
+  },
+  "published_at_utc": "2026-08-28T13:17:43.110679+00:00",
+  "publishing_branch": "codex/clm-0.3-release-benchmark",
+  "publishing_commit": "260df3a18116e1f38895790c5b24e14596f756c6",
+  "runtime": {
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13"
+  },
+  "source_results_dir": "results/clm-0.3-release-benchmark",
+  "training_code_commit": "260df3a18116e1f38895790c5b24e14596f756c6",
+  "training_code_tree_sha": "430c793e850dd90b1c3400fb0f2fc45ede33427e"
+}

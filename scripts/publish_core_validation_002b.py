@@ -84,7 +84,7 @@ def main() -> int:
         shutil.copy2(source / name, target)
         copied.append(target)
     protocol_target = destination / "protocol.json"
-    shutil.copy2(root / "research" / "core-validation-002b-protocol.json", protocol_target)
+    shutil.copy2(root / "research" / "validations" / "core-002b-sparse-write-assembly" / "protocol.json", protocol_target)
     copied.append(protocol_target)
 
     metadata = {

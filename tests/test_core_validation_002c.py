@@ -156,7 +156,7 @@ def test_seed_classification_distinguishes_sparse_and_dense_only() -> None:
 
 def test_frozen_protocol_parses() -> None:
     root = Path(__file__).resolve().parents[1]
-    config = CoreValidation002CConfig.from_protocol(root / "research" / "core-validation-002c-protocol.json")
+    config = CoreValidation002CConfig.from_protocol(root / "research" / "validations" / "core-002c-oracle-tomography" / "protocol.json")
     assert config.widths == (1, 2, 4, 8, 16)
     assert config.train_probe_examples == 32768
     assert config.test_probe_examples == 16384

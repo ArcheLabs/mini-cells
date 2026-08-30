@@ -9,7 +9,7 @@ from minicells.growth_plasticity_004_config import CoreValidation004Config
 from minicells.growth_plasticity_004_ops import smoke_config
 from minicells.growth_plasticity_004_experiment import run_primary_seed, summarize_experiment
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PROTOCOL = ROOT / "research" / "core-validation-004-protocol.json"
+DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "core-004-growth-restored-plasticity" / "protocol.json"
 DEFAULT_OUT = ROOT / "results" / "core-validation-004-growth-restored-plasticity"
 
 def _git(command:list[str])->str|None:
