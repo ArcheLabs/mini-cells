@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PROTOCOL = ROOT / "research" / "experiment-026a-protocol.json"
+PROTOCOL = ROOT / "research" / "stages" / "03-routing-and-growth" / "sources" / "experiment-026a-protocol.json"
 
 
 def test_026a_protocol_is_low_cost_screening() -> None:

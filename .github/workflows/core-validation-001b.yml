@@ -22,7 +22,7 @@ jobs:
         run: pytest -q tests/test_core_validation_001.py tests/test_core_validation_001b.py
       - name: Validate assets
         run: |
-          python -m json.tool research/core-validation-001b-protocol.json >/dev/null
+          python -m json.tool research/validations/core-001b-residual-memorization/protocol.json >/dev/null
           python -m json.tool research/kaggle/core-validation-001b-residual-memorization.ipynb >/dev/null
           python -m py_compile \
             research/minicells/residual_memorization.py \

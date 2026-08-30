@@ -20,7 +20,7 @@ def main()->int:
  missing=[n for n in FILES if not (source/n).is_file()]
  if missing: raise FileNotFoundError(f"missing Core Validation 004 outputs: {missing}")
  if destination.exists(): shutil.rmtree(destination)
- destination.mkdir(parents=True); [shutil.copy2(source/n,destination/n) for n in FILES]; shutil.copy2(root/"research/core-validation-004-protocol.json",destination/"protocol.json")
+ destination.mkdir(parents=True); [shutil.copy2(source/n,destination/n) for n in FILES]; shutil.copy2(root/"research/validations/core-004-growth-restored-plasticity/protocol.json",destination/"protocol.json")
  (destination/"RESULTS.md").write_text("# Core Validation 004 Results\n\n" f"- Status: `{decision.get('status')}`\n" f"- Passed seeds: `{decision.get('passed_seeds')}/{decision.get('total_seeds')}`\n" "- Parent 003 remains `DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED`.\n")
  print(f"Prepared {destination.relative_to(root)}")
  if args.push: push_results(root,destination,"core-validation-004",args.branch,args.secret_name)

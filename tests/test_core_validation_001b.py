@@ -14,7 +14,7 @@ from minicells.residual_memorization import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-PROTOCOL = ROOT / "research" / "core-validation-001b-protocol.json"
+PROTOCOL = ROOT / "research" / "validations" / "core-001b-residual-memorization" / "protocol.json"
 NOTEBOOK = ROOT / "research" / "kaggle" / "core-validation-001b-residual-memorization.ipynb"
 
 

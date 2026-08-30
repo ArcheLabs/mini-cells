@@ -20,7 +20,7 @@ from minicells.knowledge_subsumption import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-PROTOCOL = ROOT / "research" / "core-validation-001-protocol.json"
+PROTOCOL = ROOT / "research" / "validations" / "core-001-knowledge-subsumption" / "protocol.json"
 
 
 def smoke_config() -> KnowledgeSubsumptionConfig:

@@ -22,7 +22,7 @@ from minicells.knowledge_subsumption import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PROTOCOL = ROOT / "research" / "core-validation-001-protocol.json"
+DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "core-001-knowledge-subsumption" / "protocol.json"
 DEFAULT_OUT = ROOT / "results" / "core-validation-001-knowledge-subsumption"
 
 

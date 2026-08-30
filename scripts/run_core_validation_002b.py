@@ -19,7 +19,7 @@ from minicells.write_addressability_002b import CoreValidation002BConfig
 from minicells.write_addressability_002b_experiment import run_primary_seed, summarize_experiment
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PROTOCOL = ROOT / "research" / "core-validation-002b-protocol.json"
+DEFAULT_PROTOCOL = ROOT / "research" / "validations" / "core-002b-sparse-write-assembly" / "protocol.json"
 DEFAULT_OUT = ROOT / "results" / "core-validation-002b-sparse-write-assembly"
 
 
