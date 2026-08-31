@@ -1,0 +1,57 @@
+{
+  "base_capability": {
+    "math_teacher_forced_answer_exact": 0.1875,
+    "story_teacher_forced_answer_exact": 0.234375
+  },
+  "cost": {
+    "base_training_wall_seconds": 51.41903680899998,
+    "continual_training_wall_seconds": 214.54476321400068,
+    "transaction_wall_seconds": 834.5476648739991,
+    "validation_wall_seconds": 502.81513621600016
+  },
+  "format": "minicells.clm-0.4-preview.public-dashboard.v1",
+  "growth": {
+    "growth_parameter_overhead_ratio": 0.22764346053014856,
+    "private_bundles": 36
+  },
+  "learning": {
+    "acceptance_rate": 0.4114583333333333,
+    "effective_commits": 79,
+    "growth_attempts": 43,
+    "growth_commits": 36,
+    "growth_rescue_rate": 0.8372093023255814,
+    "private_reuse_acceptance_rate": 0.23741007194244604,
+    "private_reuse_attempts": 139,
+    "protected_probe_count": 2080,
+    "transactions": 192
+  },
+  "live_capability": {
+    "math_teacher_forced_answer_exact": 0.15625,
+    "story_teacher_forced_answer_exact": 0.1875
+  },
+  "model": {
+    "base_cells": 64,
+    "parameter_count": 6473472,
+    "private_cells": 72,
+    "shared_cell_ffn_parameters": 263168,
+    "total_cells": 136
+  },
+  "safety": {
+    "false_safe_rate": 0.012658227848101266,
+    "final_protected_token_accuracy": 0.5489254108723135,
+    "maximum_structural_escape_rate": 0.07407407407407407,
+    "mean_direct_dependency_coverage": 0.23188194662437694,
+    "positive_global_regression_damage": 0.15215502257717792
+  },
+  "status": "PREVIEW_COMPLETE",
+  "visualizations": [
+    "visualizations/cells-growth.png",
+    "visualizations/learning-decisions.png",
+    "visualizations/learning-vs-regression.png",
+    "visualizations/dependency-coverage.png",
+    "visualizations/compute-cost.png",
+    "visualizations/parameter-growth.png",
+    "visualizations/capability-over-time.png",
+    "visualizations/cell-activity-top20.png"
+  ]
+}

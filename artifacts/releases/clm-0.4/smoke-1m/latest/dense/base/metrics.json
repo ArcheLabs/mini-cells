@@ -1,0 +1,33 @@
+{
+  "base_train": {
+    "data_parallel_devices": [
+      "cuda:0",
+      "cuda:1"
+    ],
+    "mean_nll": 15.24202315029236,
+    "optimizer": {
+      "batch_size": 64,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "gradient_clip_norm": 1.0,
+      "learning_rate": 0.0003,
+      "optimizer": "AdamW",
+      "warmup_fraction": 0.02,
+      "weight_decay": 0.1
+    },
+    "steps": 345,
+    "training_precision": "fp16-amp",
+    "training_tokens": 1000219,
+    "wall_seconds": 29.044892434999838
+  },
+  "capability": {
+    "math_teacher_forced_answer_exact": 0.140625,
+    "story_teacher_forced_answer_exact": 0.328125
+  },
+  "checkpoint_source": "trained-once",
+  "format": "minicells.clm-0.4-release.v1",
+  "kind": "dense-equal-parameter",
+  "parameter_count": 5273120
+}
