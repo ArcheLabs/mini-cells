@@ -3,6 +3,8 @@ from __future__ import annotations
 import math
 from pathlib import Path
 
+import torch
+
 from minicells.clm04mini.model import MiniCLMConfig, TinyCLMDecoder
 from minicells.clm04mini.preview import PREVIEW_MIXTURE, preview_model_config
 from minicells.clm04mini.tokenizer import (
@@ -43,6 +45,16 @@ def test_preview_adds_frozen_shared_capacity_without_changing_cell_addressabilit
     assert cell_parameter_ids
     assert shared_parameter_ids
     assert cell_parameter_ids.isdisjoint(shared_parameter_ids)
+
+
+def test_runtime_growth_cells_inherit_parent_device_and_dtype():
+    model = TinyCLMDecoder(preview_model_config()).to(dtype=torch.float64)
+    growth_ids = model.spawn_growth_bundle("preview/device-inheritance")
+    assert len(growth_ids) == 2
+    for module in model.modules_for_cell_ids(growth_ids):
+        for parameter in module.parameters():
+            assert parameter.device == model.token_embedding.weight.device
+            assert parameter.dtype == model.token_embedding.weight.dtype
 
 
 def test_preview_base_mix_reallocates_story_budget_to_math():
