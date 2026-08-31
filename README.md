@@ -2,6 +2,11 @@
 
 # MiniCells
 
+MiniCells remains a research project. Any future MiniJAM-native production
+integration must use the application-neutral Stage-1 node, Formal Work,
+state, and Service-lifecycle interfaces; Playground is a legacy Stage-0
+product and is not an integration boundary.
+
 MiniCells is a research project exploring Cellular Language Models (CLMs): sparse networks of independently mutable and verifiable neural Cells that can learn locally, reject unsafe updates, and grow when existing Cells can no longer absorb new learning safely.
 
 ## What MiniCells is
