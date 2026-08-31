@@ -1,0 +1,44 @@
+{
+  "capability_every": 16,
+  "checkpoint_every": 8,
+  "cuda": "12.8",
+  "direct_optimizer": {
+    "batch_size": 32,
+    "learning_rate": 0.003,
+    "optimizer": "AdamW",
+    "steps": 32,
+    "weight_decay": 0.0
+  },
+  "format": "minicells.clm-0.4-preview.provenance.v1",
+  "git_commit": "7e830a853c29fd602ed8984bfc66f101ce753089",
+  "git_tree": "7e86618f43e462c3c502154b98b17e72a90c845d",
+  "gpu_names": [
+    "Tesla T4",
+    "Tesla T4"
+  ],
+  "growth_optimizer": {
+    "batch_size": 32,
+    "learning_rate": 0.003,
+    "optimizer": "AdamW",
+    "steps": 64,
+    "weight_decay": 0.0
+  },
+  "max_transactions": 192,
+  "model_config": {
+    "base_cells": 32,
+    "cell_hidden": 32,
+    "d_model": 256,
+    "dense_ff_hidden": 768,
+    "max_seq_len": 256,
+    "n_heads": 8,
+    "num_layers": 4,
+    "routing_salt": "clm-0.4-preview-v1",
+    "shared_cell_ff_hidden": 256,
+    "vocab_size": 8192
+  },
+  "python": "3.12.13",
+  "requested_devices": "cuda:0,cuda:1",
+  "seed": 90500,
+  "tokenizers": "0.22.2",
+  "torch": "2.10.0+cu128"
+}

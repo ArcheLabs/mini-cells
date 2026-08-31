@@ -1,0 +1,115 @@
+{
+  "base": {
+    "asset_summary": {
+      "base_corpus_manifest_hash": "e781391c811a8a937aaaa0af6b40444a5850642b2c07098c4882d9e93ba4d4a1",
+      "base_generator_version": "clm-0.4-preview-base-corpus-v1",
+      "base_tokens": 30000039,
+      "curriculum_manifest_hash": "1637cc834f7f9493d1187637ef2a4e38cabdb7ebb4cf48b70ba71a1da23296bb",
+      "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "format": "minicells.clm-0.4-preview.assets.v1",
+      "mixture": {
+        "controlled_base_math": 0.3,
+        "controlled_base_story": 0.1,
+        "language_carrier": 0.6
+      },
+      "routing_salt": "clm-0.4-preview-v1",
+      "target_tokens": 30000000,
+      "tokenizer_hash": "1275ba714a7c7b176a0c2e761323ceff64fbe833b29abad102df84a71d914832",
+      "tokenizer_manifest_hash": "87f6610df9545eb2fea9c0b3473cd96cad801f93ac92acab51fb6be5131e3dd0",
+      "tokenizer_version": "clm-0.4-preview-byte-bpe-digit-aware-v1"
+    },
+    "base_train": {
+      "data_parallel_devices": [
+        "cuda:0",
+        "cuda:1"
+      ],
+      "mean_nll": 3.7016546003832165,
+      "optimizer": {
+        "batch_size": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "gradient_clip_norm": 1.0,
+        "learning_rate": 0.0003,
+        "optimizer": "AdamW",
+        "warmup_fraction": 0.02,
+        "weight_decay": 0.1
+      },
+      "steps": 10331,
+      "training_precision": "fp16-amp",
+      "training_tokens": 30000039,
+      "wall_seconds": 1581.985755579
+    },
+    "capability": {
+      "math_teacher_forced_answer_exact": 0.90625,
+      "story_teacher_forced_answer_exact": 0.984375
+    },
+    "cell_activation": {
+      "maximum": 123966,
+      "mean": 41321.9375,
+      "minimum": 20660
+    },
+    "checkpoint_source": "trained-once",
+    "format": "minicells.clm-0.4-preview.base-metrics.v1",
+    "parameter_count": 5273088,
+    "shared_cell_ffn_parameters": 263168
+  },
+  "dashboard": {
+    "base_capability": {
+      "math_teacher_forced_answer_exact": 0.90625,
+      "story_teacher_forced_answer_exact": 0.984375
+    },
+    "cost": {
+      "base_training_wall_seconds": 1581.985755579,
+      "continual_training_wall_seconds": 233.52021994499864,
+      "transaction_wall_seconds": 843.7803321399974,
+      "validation_wall_seconds": 500.4171180139974
+    },
+    "format": "minicells.clm-0.4-preview.public-dashboard.v1",
+    "growth": {
+      "growth_parameter_overhead_ratio": 0.22764346053014856,
+      "private_bundles": 36
+    },
+    "learning": {
+      "acceptance_rate": 0.3854166666666667,
+      "effective_commits": 74,
+      "growth_attempts": 36,
+      "growth_commits": 36,
+      "growth_rescue_rate": 1.0,
+      "private_reuse_acceptance_rate": 0.23870967741935484,
+      "private_reuse_attempts": 155,
+      "protected_probe_count": 1728,
+      "transactions": 192
+    },
+    "live_capability": {
+      "math_teacher_forced_answer_exact": 0.828125,
+      "story_teacher_forced_answer_exact": 0.984375
+    },
+    "model": {
+      "base_cells": 64,
+      "parameter_count": 6473472,
+      "private_cells": 72,
+      "shared_cell_ffn_parameters": 263168,
+      "total_cells": 136
+    },
+    "safety": {
+      "false_safe_rate": 0.013513513513513514,
+      "final_protected_token_accuracy": 0.7818917237087741,
+      "maximum_structural_escape_rate": 0.019230769230769232,
+      "mean_direct_dependency_coverage": 0.23448202825247821,
+      "positive_global_regression_damage": 0.02821314492113328
+    },
+    "status": "PREVIEW_COMPLETE"
+  },
+  "decision": {
+    "capability_metrics_block_execution": false,
+    "format": "minicells.clm-0.4-preview.v1",
+    "release_track": "preview",
+    "scientific_decision": false,
+    "seed": 90500,
+    "state_hash": "c7c67f6741af7743da1df394f9d90af542d3c5e1a0c3600b2468a03367e56b0f",
+    "status": "PREVIEW_COMPLETE",
+    "transactions": 192
+  }
+}
