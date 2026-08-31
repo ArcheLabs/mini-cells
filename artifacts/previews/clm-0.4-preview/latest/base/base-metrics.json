@@ -1,0 +1,56 @@
+{
+  "asset_summary": {
+    "base_corpus_manifest_hash": "e781391c811a8a937aaaa0af6b40444a5850642b2c07098c4882d9e93ba4d4a1",
+    "base_generator_version": "clm-0.4-preview-base-corpus-v1",
+    "base_tokens": 30000039,
+    "curriculum_manifest_hash": "1637cc834f7f9493d1187637ef2a4e38cabdb7ebb4cf48b70ba71a1da23296bb",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "format": "minicells.clm-0.4-preview.assets.v1",
+    "mixture": {
+      "controlled_base_math": 0.3,
+      "controlled_base_story": 0.1,
+      "language_carrier": 0.6
+    },
+    "routing_salt": "clm-0.4-preview-v1",
+    "target_tokens": 30000000,
+    "tokenizer_hash": "1275ba714a7c7b176a0c2e761323ceff64fbe833b29abad102df84a71d914832",
+    "tokenizer_manifest_hash": "87f6610df9545eb2fea9c0b3473cd96cad801f93ac92acab51fb6be5131e3dd0",
+    "tokenizer_version": "clm-0.4-preview-byte-bpe-digit-aware-v1"
+  },
+  "base_train": {
+    "data_parallel_devices": [
+      "cuda:0",
+      "cuda:1"
+    ],
+    "mean_nll": 3.7016546003832165,
+    "optimizer": {
+      "batch_size": 64,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "gradient_clip_norm": 1.0,
+      "learning_rate": 0.0003,
+      "optimizer": "AdamW",
+      "warmup_fraction": 0.02,
+      "weight_decay": 0.1
+    },
+    "steps": 10331,
+    "training_precision": "fp16-amp",
+    "training_tokens": 30000039,
+    "wall_seconds": 1581.985755579
+  },
+  "capability": {
+    "math_teacher_forced_answer_exact": 0.90625,
+    "story_teacher_forced_answer_exact": 0.984375
+  },
+  "cell_activation": {
+    "maximum": 123966,
+    "mean": 41321.9375,
+    "minimum": 20660
+  },
+  "checkpoint_source": "trained-once",
+  "format": "minicells.clm-0.4-preview.base-metrics.v1",
+  "parameter_count": 5273088,
+  "shared_cell_ffn_parameters": 263168
+}
