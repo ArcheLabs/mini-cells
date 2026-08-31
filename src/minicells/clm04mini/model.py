@@ -94,7 +94,12 @@ class SparseCellFFN(nn.Module):
         key = _private_key(address_id)
         if key in self.private_cells:
             raise ValueError(f"private cell already exists for {address_id}")
-        self.private_cells[key] = CellFFN(d_model, hidden, zero_output=True)
+        reference = next(self.base_cells[0].parameters())
+        cell = CellFFN(d_model, hidden, zero_output=True).to(
+            device=reference.device,
+            dtype=reference.dtype,
+        )
+        self.private_cells[key] = cell
         self.private_owners[key] = str(address_id)
         return key
 
