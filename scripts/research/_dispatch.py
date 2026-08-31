@@ -21,6 +21,7 @@ REGISTRY = {
         "clm-0.4-mini-calibration": "run_clm_0_4_mini_calibration.py",
         "clm-0.4-mini-m1-v2-calibration": "run_clm_0_4_mini_v2_calibration.py",
         "clm-0.4-preview": "run_clm_0_4_preview.py",
+        "clm-0.4-release": "run_clm_0_4_release.py",
     },
     "report": {
         "core-validation-001": "report_core_validation_001.py",
@@ -35,6 +36,7 @@ REGISTRY = {
         "clm-0.4-mini-calibration": "report_clm_0_4_mini_calibration.py",
         "clm-0.4-mini-m1-v2-calibration": "report_clm_0_4_mini_v2_calibration.py",
         "clm-0.4-preview": "report_clm_0_4_preview.py",
+        "clm-0.4-release": "report_clm_0_4_release.py",
     },
     "publish": {
         "core-validation-001": "publish_core_validation_001.py",
@@ -47,6 +49,7 @@ REGISTRY = {
         "clm-0.4-mini-m1-v1-calibration": "publish_clm_0_4_mini_calibration_results.py",
         "clm-0.4-mini-m1-v2-calibration": "publish_clm_0_4_mini_calibration_results.py",
         "clm-0.4-preview": "publish_clm_0_4_preview_results.py",
+        "clm-0.4-release": "publish_clm_0_4_release_results.py",
     },
 }
 
