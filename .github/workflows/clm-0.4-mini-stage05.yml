@@ -7,13 +7,16 @@ on:
       - 'research/validations/clm-0.4-mini-language-validation/**'
       - 'research/validations/clm-0.4-mini-m1-v2-language-validation/**'
       - 'research/previews/clm-0.4-preview/**'
+      - 'research/releases/clm-0.4/**'
       - 'research/experiments/05-language-validation/**'
       - 'research/notebooks/05-language-validation/**'
       - 'scripts/research/*clm_0_4_mini*'
       - 'scripts/research/*clm_0_4_preview*'
+      - 'scripts/research/*clm_0_4_release*'
       - 'scripts/research/_dispatch.py'
       - 'tests/**/*clm_0_4_mini*'
       - 'tests/**/*clm_0_4_preview*'
+      - 'tests/**/*clm_0_4_release*'
       - '.github/workflows/clm-0.4-mini-stage05.yml'
   workflow_dispatch:
 
@@ -31,7 +34,7 @@ jobs:
         run: python -m pip install -e '.[dev]'
       - name: Compile Stage 05 code
         run: python -m compileall -q src/minicells/clm04mini scripts/research tests/unit/continual_learning tests/smoke
-      - name: Protocol, data, calibration, performance, v2, and Preview unit tests
+      - name: Protocol, data, calibration, performance, v2, Preview, and Release unit tests
         run: >-
           python -m pytest -q
           tests/unit/continual_learning/test_clm_0_4_mini_primitives.py
@@ -41,6 +44,7 @@ jobs:
           tests/unit/continual_learning/test_clm_0_4_mini_performance.py
           tests/unit/continual_learning/test_clm_0_4_mini_v2.py
           tests/unit/continual_learning/test_clm_0_4_preview.py
+          tests/unit/continual_learning/test_clm_0_4_release.py
       - name: M0, M1, and calibration plan-only smoke tests
         run: >-
           python -m pytest -q
@@ -55,7 +59,13 @@ jobs:
         run: >-
           python scripts/research/run.py clm-0.4-mini-m1-v2-calibration
           --plan-only --out /tmp/clm-0.4-mini-m1-v2-plan
-      - name: Preview notebook JSON guard
-        run: python -m json.tool research/notebooks/05-language-validation/clm-0.4-preview.ipynb >/dev/null
+      - name: Release 1M plan-only guard
+        run: >-
+          python scripts/research/run.py clm-0.4-release
+          --profile smoke-1m --plan-only
+      - name: Preview and Release notebook JSON guards
+        run: >-
+          python -m json.tool research/notebooks/05-language-validation/clm-0.4-preview.ipynb >/dev/null
+          && python -m json.tool research/notebooks/05-language-validation/clm-0.4-release.ipynb >/dev/null
       - name: Repository architecture check
         run: python scripts/maintenance/check_architecture.py
