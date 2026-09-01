@@ -6,6 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[3]
 VALIDATION = ROOT / "research" / "validations" / "core-007-functional-boundary-discovery"
 AMENDMENT = VALIDATION / "confirmation-protocol-v1.1.json"
@@ -27,8 +29,7 @@ def test_confirmation_amendment_retires_exposed_seed_set_without_gate_changes() 
     assert retired == {80711, 80712, 80713}
     assert fresh == {80721, 80722, 80723}
     assert retired.isdisjoint(fresh)
-    invariants = amendment["scientific_invariants"]
-    assert invariants == {
+    assert amendment["scientific_invariants"] == {
         "winner_changed": False,
         "boundary_mechanism_changed": False,
         "model_or_data_changed": False,
@@ -36,6 +37,9 @@ def test_confirmation_amendment_retires_exposed_seed_set_without_gate_changes() 
         "core006_baselines_changed": False,
     }
     assert amendment["winner"] == "interference_cut"
+    assert amendment["expected_data_manifest_sha256"] == (
+        "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc"
+    )
 
 
 def test_seed_checkpoint_identity_refuses_mismatch(tmp_path: Path) -> None:
@@ -111,7 +115,24 @@ def test_hydrate_restores_seed_checkpoint_across_sessions(tmp_path: Path) -> Non
     assert json.loads(restored.read_text(encoding="utf-8"))["complete"] is True
 
 
-def test_partial_confirmation_can_be_copied_to_canonical_artifacts(tmp_path: Path) -> None:
+def test_host_level_failure_record_survives_sigkill_style_exit(tmp_path: Path) -> None:
+    module = _load_script(
+        "core007_orchestrator_failure",
+        "scripts/research/orchestrate_core_validation_007_confirmation.py",
+    )
+    module.RESULTS = tmp_path / "results"
+    log_path = module.RESULTS / "confirmation" / "logs" / "seed-80721.log"
+    log_path.parent.mkdir(parents=True)
+    log_path.write_text("killed\n", encoding="utf-8")
+    module._record_host_failure(80721, -9, log_path)
+    failure = module.RESULTS / "confirmation" / "failures" / "seed-80721.json"
+    payload = json.loads(failure.read_text(encoding="utf-8"))
+    assert payload["complete"] is False
+    assert payload["returncode"] == -9
+    assert payload["failure_kind"] == "child_process_terminated_without_python_failure_record"
+
+
+def test_partial_confirmation_requires_explicit_allow_partial(tmp_path: Path) -> None:
     module = _load_script(
         "core007_publisher",
         "scripts/research/publish_core_validation_007.py",
@@ -134,7 +155,17 @@ def test_partial_confirmation_can_be_copied_to_canonical_artifacts(tmp_path: Pat
     )
     module.RESULTS = results
     module.ARTIFACTS = artifacts
-    dest, decision = module._copy_phase("confirmation")
+    with pytest.raises(RuntimeError):
+        module._copy_phase("confirmation", allow_partial=False)
+    dest, decision = module._copy_phase("confirmation", allow_partial=True)
     assert decision["scientific_decision"] is False
     assert (dest / "seeds" / "seed-80721.json").is_file()
     assert (artifacts / "confirmation-protocol-v1.1.json").is_file()
+
+
+def test_publisher_reuses_historical_github_token_secret_name() -> None:
+    module = _load_script(
+        "core007_publisher_secret",
+        "scripts/research/publish_core_validation_007.py",
+    )
+    assert module.DEFAULT_SECRET_NAME == "GITHUB_TOKEN"
