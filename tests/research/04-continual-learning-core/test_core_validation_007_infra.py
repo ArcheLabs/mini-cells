@@ -177,3 +177,24 @@ def test_publisher_reuses_historical_github_token_secret_name() -> None:
         "scripts/research/publish_core_validation_007.py",
     )
     assert module.DEFAULT_SECRET_NAME == "GITHUB_TOKEN"
+
+
+def test_retired_monolithic_confirmation_entrypoint_fails_before_gpu_work() -> None:
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts/research/run_core_validation_007.py"),
+            "--phase",
+            "confirmation",
+            "--device",
+            "cpu",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert proc.returncode != 0
+    combined = proc.stdout + proc.stderr
+    assert "monolithic confirmation entrypoint is retired" in combined
+    assert "orchestrate_core_validation_007_confirmation.py" in combined
