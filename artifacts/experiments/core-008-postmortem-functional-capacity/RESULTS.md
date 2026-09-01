@@ -1,9 +1,9 @@
 # Core 008 Postmortem — Functional Capacity Decomposition
 
-- Status: `POSTMORTEM_INCOMPLETE`
+- Status: `PER_WRITE_LOW_RANK_BUT_NOT_SHARED`
 - Scientific decision: `false` (diagnostic bridge on already-observed Core 008 seeds)
-- Completed seeds: `[80821, 80822]`
-- Missing seeds: `[80823]`
+- Completed seeds: `[80821, 80822, 80823]`
+- Missing seeds: `[]`
 
 ## Seed summary
 
@@ -11,6 +11,7 @@
 |---:|---|---:|---:|---:|---:|
 | 80821 | PER_WRITE_LOW_RANK_BUT_NOT_SHARED | 0.0009 | 0.6657 | 0.7815 (r=1) | 0.8574 |
 | 80822 | PER_WRITE_LOW_RANK_BUT_NOT_SHARED | 0.0009 | 0.6507 | 0.7708 (r=1) | 0.8608 |
+| 80823 | PER_WRITE_LOW_RANK_BUT_NOT_SHARED | 0.0007 | 0.6572 | 0.7796 (r=1) | 0.8649 |
 
 ## Reading the result
 
