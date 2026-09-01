@@ -1,0 +1,122 @@
+{
+  "format": "minicells.core-validation.009a-right-collapse-bridge.v1",
+  "experiment_id": "core-validation-009a-right-collapse-bridge",
+  "title": "Core Validation 009A Bridge — Right-Side Collapse Robustness",
+  "protocol_version": "1.0-frozen",
+  "status": "DIAGNOSTIC_PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "source_009a": {
+    "branch": "codex/core-validation-009a-factorized-functional-coordinates",
+    "commit": "8290d4d674a8ec9ce98d4de129043526841e5f95",
+    "protocol_sha256": "60f20d8f0b1fb14a487e88c6c16087acbafc62969a5a6ea4da0715cc749ab98d",
+    "status": "FACTORIZED_FUNCTIONAL_COORDINATES_SUPPORTED",
+    "scientific_decision": true,
+    "locked_split": {"left_dim": 56, "right_dim": 8},
+    "confirmation_seeds": [80911, 80912, 80913]
+  },
+  "decision_question": "Why did Core Validation 009A require a wide left/output-effect space but an apparently near-one-dimensional right/input-condition space, and does that right-side collapse survive controls for activation mean, anisotropy, whitening and sequence averaging?",
+  "scope": {
+    "kind": "post-confirmation diagnostic bridge",
+    "source_result_immutable": true,
+    "may_change_source_009a_decision": false,
+    "support_decision_emitted": false,
+    "next_core_validation_gate": false,
+    "purpose": "Distinguish robust common-right functional geometry from activation-coordinate or sequence-aggregation confounds before designing 009B sparsity/addressability experiments."
+  },
+  "foundation": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "step143000",
+    "expected_hidden_dim": 768,
+    "frozen": true,
+    "insertion_point": "gpt_neox.last_hidden_state before embed_out"
+  },
+  "data": {
+    "dataset_id": "DKYoon/SlimPajama-6B",
+    "dataset_revision": "1224c66add28b96ab045cd1058e795e8d3595485",
+    "expected_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+    "selection_and_partition": "exact Core 006/007/009A pinned sequence selection and train/eval partition",
+    "raw_text_persisted": false,
+    "hidden_cache_required": false
+  },
+  "replication": {
+    "diagnostic_seeds": [80911, 80912, 80913],
+    "seed_policy": "Reuse the exact positive 009A confirmation seeds because this bridge explains an already-observed result; these are not fresh confirmatory seeds.",
+    "formal_hardware": "Kaggle GPU for frozen gradient/write extraction; all bridge geometry after extraction is CPU-safe",
+    "calibration_allowed": false,
+    "source_reproduction_required": true,
+    "maximum_source_009a_raw_56x8_action_residual_delta": 1e-8
+  },
+  "write_geometry": {
+    "cell_dim": 64,
+    "projected_gradient": "q_t = U^T dL/dh_t on the frozen foundation path",
+    "raw_sequence_write": "G_i = mean_t[q_t z_t^T], normalized by Frobenius norm exactly as Core 009A",
+    "token_write": "g_t = q_t z_t^T; token-normalized spectra use g_t/||g_t||_F and energy-weighted spectra use unnormalized g_t^T g_t",
+    "sequence_covariance": "C_R = mean_i G_i^T G_i over training sequences",
+    "token_normalized_covariance": "C_R_token = mean_t[(g_t/||g_t||_F)^T(g_t/||g_t||_F)]",
+    "token_energy_weighted_covariance": "C_R_token_energy proportional to sum_t g_t^T g_t",
+    "dimension_grid": [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64],
+    "two_sided_left_reference_dim": 56,
+    "two_sided_right_grid": [1, 2, 4, 8],
+    "energy_thresholds": [0.9, 0.95, 0.99]
+  },
+  "controls": {
+    "fit_on_train_only": true,
+    "raw": "z'_t = z_t",
+    "centered": "z'_t = z_t - mean_train(z)",
+    "whitened": "z'_t = (z_t - mean_train(z)) C_train^{-1/2}; eigenvalues are floored before inversion",
+    "mean_direction_removed": "z'_t = z_t (I - m_hat m_hat^T), where m_hat is the normalized train-token mean direction",
+    "whitening_eigenvalue_floor_fraction_of_max": 0.0001,
+    "all_eval_transforms_use_train_statistics_only": true
+  },
+  "top1_ablation": {
+    "basis_source": "top right eigenvector of raw normalized training sequence-write covariance",
+    "residual_write": "G_res = G(I-r_1 r_1^T)",
+    "measure": [
+      "heldout residual Frobenius fraction ||G_res||/||G||",
+      "heldout residual local-action fraction ||Z G_res^T||/||Z G^T||",
+      "heldout removed-component local-action fraction",
+      "right spectrum of normalized residual training writes"
+    ]
+  },
+  "diagnostics": {
+    "primary": [
+      "sequence-write right top-1/top-8 cumulative energy under each z control",
+      "token-normalized and token-energy-weighted right top-1/top-8 energy under each z control",
+      "heldout right-only residual at n in {1,2,4,8}",
+      "heldout two-sided residual at (m=56,n in {1,2,4,8})",
+      "top-1 ablation residual local-action fraction"
+    ],
+    "alignment": [
+      "raw sequence right-PC1 vs train-token mean direction",
+      "raw sequence right-PC1 vs raw token-normalized right-PC1",
+      "raw sequence right-PC1 vs raw token-energy-weighted right-PC1",
+      "raw sequence right-PC1 vs top eigenvector of uncentered z second moment",
+      "raw sequence right-PC1 vs top eigenvector of centered z covariance"
+    ],
+    "whole_model_nll": "not measured; the bridge diagnoses local write geometry only"
+  },
+  "descriptive_flags": {
+    "note": "These thresholds generate diagnostic labels only. They are frozen before GPU execution but never produce a scientific supported/not-supported decision.",
+    "right_collapse_top1_energy": 0.9,
+    "substantial_top1_energy_drop": 0.2,
+    "sequence_over_token_amplification": 0.2,
+    "small_top1_ablation_residual_action_fraction": 0.35,
+    "residual_low_dimensional_top1_energy": 0.5
+  },
+  "interpretation_boundary": [
+    "This bridge cannot revoke, weaken or strengthen the formal 009A support decision; it only explains the observed asymmetry.",
+    "A large collapse reduction after centering or whitening is evidence that activation coordinates/anisotropy materially contribute to the near-one-dimensional right spectrum.",
+    "A much stronger sequence-level collapse than token-level collapse is evidence that sequence averaging or q-z correlation/cancellation contributes materially.",
+    "Persistence after centering, whitening and mean-direction removal is evidence for a robust common-right write geometry under these controls, but is still not evidence for sparse routing or continual learning.",
+    "A small residual local-action fraction after removing raw right-PC1 means the common right direction dominates local functional action; a large residual means substantial functional structure remains outside the first direction.",
+    "Whitening and centering are diagnostic reparameterizations/ablations, not claims that they preserve the exact original operator semantics."
+  ],
+  "publication": {
+    "canonical_results": "results/core-validation-009a-right-collapse-bridge",
+    "canonical_artifacts": "artifacts/experiments/core-validation-009a-right-collapse-bridge",
+    "hidden_cache_excluded": true,
+    "automatic_commit_and_push_supported": true,
+    "checkpoint_each_seed": true
+  },
+  "stop_rule": "Always report diagnostic evidence with scientific_decision=false. Use the completed bridge only to choose the hypothesis tested by a later 009B; do not retrofit Core 009A gates, dimensions or winner selection."
+}
