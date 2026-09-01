@@ -1,0 +1,191 @@
+{
+  "format": "minicells.core-validation.compositional-operator-geometry.v1",
+  "experiment_id": "core-validation-009d",
+  "title": "Core Validation 009D — Compositional Operator Geometry",
+  "protocol_version": "1.0-frozen",
+  "status": "DISCOVERY_PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "parent_evidence": {
+    "core009c_result_commit": "3a524abd5b29a42c425dddab7df497cbfadfeecd",
+    "core009c_status": "SPARSE_LOCAL_EFFECT_GEOMETRY_NOT_FOUND",
+    "core009c_protocol_sha256": "a125d5fd56d2ee6b85e0d14e381c81447a33d02aee100e93f5b8b2d1b37e6b17",
+    "core009a_status": "FACTORIZED_FUNCTIONAL_COORDINATES_SUPPORTED",
+    "core009a_protocol_sha256": "5e7a153518537534732b0817d5c73189e1152d6cc9b00f092489c031c3af2e5d",
+    "core009a_locked_left_dim": 56,
+    "core009a_locked_right_dim": 8
+  },
+  "decision_question": "After carrier-effect vector geometry fails, does the full normalized write operator retain reusable joint structure that was destroyed by Ghat_i r: either sparse tensor-product coordinates inside the independently validated 56x8 factor subspace, or a train-learned relationship from compact right/address factors to broad left/effect factors?",
+  "scope": {
+    "representation_only": true,
+    "full_operator_Ghat": true,
+    "sparse_tensor_core": true,
+    "right_conditioned_left_prediction": true,
+    "deployable_router": false,
+    "semantic_labels_forbidden": true,
+    "eval_assisted_fitting_forbidden": true,
+    "carrier_effect_dictionary_forbidden": true,
+    "continual_mutation": false,
+    "certificates": false
+  },
+  "foundation": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "step143000",
+    "expected_hidden_dim": 768,
+    "frozen": true,
+    "insertion_point": "gpt_neox.last_hidden_state before embed_out"
+  },
+  "data": {
+    "dataset_id": "DKYoon/SlimPajama-6B",
+    "dataset_revision": "1224c66add28b96ab045cd1058e795e8d3595485",
+    "expected_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+    "selection_and_partition": "exact Core 009B-1/009B-2/009C causal-sequence extraction and train/eval filtering",
+    "raw_text_persisted": false
+  },
+  "operator_definition": {
+    "cell_dim": 64,
+    "write": "G_i = mean_t[(U^T dL/dh_t) z_t^T]",
+    "operator": "Ghat_i = G_i/max(||G_i||_F,eps) in R^{64x64}",
+    "primary_frobenius_residual": "||Ghat_i-Gtilde_i||_F/max(||Ghat_i||_F,eps)",
+    "primary_local_action_residual": "||z_i Ghat_i^T-z_i Gtilde_i^T||_F/max(||z_i Ghat_i^T||_F,eps)",
+    "per_write_rank1": "best rank-1 SVD of Ghat_i; oracle diagnostic only"
+  },
+  "validated_factor_subspace": {
+    "fit": "train-only covariance bases exactly as Core 009A: eig(mean Ghat Ghat^T), eig(mean Ghat^T Ghat)",
+    "left_dim": 56,
+    "right_dim": 8,
+    "basis_parameter_count": 4096,
+    "dense_core_coefficients_per_write": 448,
+    "rank1_core_coefficients_per_write": 65,
+    "rank1_core_rule": "project to 56x8 core, take best rank-1 SVD of that core, reconstruct through the shared bases",
+    "rank1_core_is_diagnostic": true
+  },
+  "sparse_tensor_core": {
+    "active_coordinate_grid": [1, 2, 4, 8, 16, 32],
+    "compact_active_limit": 16,
+    "coding": "Within the fixed train-only 56x8 orthonormal factor basis, keep the s largest-magnitude core entries. This is the exact best s-term Frobenius approximation in that fixed tensor-product dictionary.",
+    "atom_identity": "(left basis coordinate p, right basis coordinate q)",
+    "shared_dictionary_size": 448,
+    "shared_parameter_count": 4096,
+    "matched_null": "deterministic independent Haar-like orthogonal rotations within the learned 56D left and 8D right subspaces; dense projection is identical, so null isolates coordinate sparsity rather than subspace quality",
+    "description_bits": "each active pair uses ceil(log2(56*8)) support bits plus a coefficient"
+  },
+  "right_conditioned_operator": {
+    "right_address_dim": 8,
+    "left_effect_dim": 56,
+    "factor_extraction": "top SVD pair of each Ghat; orient right factor to have nonnegative dot with the train-only carrier and flip left factor with it",
+    "address": "project the oriented right factor into the train-only 8D right basis",
+    "target": "project the oriented left factor into the train-only 56D left basis",
+    "predictor": "centered ridge regression target~address with lambda chosen by deterministic train-only 4-fold CV",
+    "ridge_lambda_grid": [0.0001, 0.001, 0.01, 0.1, 1.0],
+    "heldout_reconstruction": "predicted left factor x heldout projected-right factor, scaled by heldout top singular value; heldout left factor never enters prediction",
+    "baselines": [
+      "train mean left-factor coordinate with heldout right factor",
+      "nearest train right-address neighbor's left factor",
+      "deterministically permuted train left targets with the identical ridge/CV procedure"
+    ],
+    "interpretation": "This is an operator-structure oracle because heldout right factor is extracted from Ghat; it tests whether right-side variation contains organizational information, not whether inference can recover that address."
+  },
+  "global_baselines": {
+    "vectorized_pca": "train-only uncentered PCA of vec(Ghat) in R^4096",
+    "active_matched_dimensions": [1, 2, 4, 8, 16, 32],
+    "storage_matched_dimension": 1,
+    "storage_match_reason": "one dense vectorized PCA component costs 4096 shared scalars, equal to the entire 56D+8D separable factor bases"
+  },
+  "diagnostics": {
+    "factor_spectra": {
+      "dimensions": [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64],
+      "energy_thresholds": [0.5, 0.75, 0.9, 0.95],
+      "report_participation_rank": true
+    },
+    "report": [
+      "per-write rank1 oracle",
+      "dense 56x8 projection",
+      "rank1-in-56x8 compression",
+      "sparse tensor-core train/eval/null curves",
+      "vectorized PCA curves",
+      "right-to-left predictor and baselines",
+      "left/right factor spectra",
+      "shared and per-write storage/description cost"
+    ]
+  },
+  "discovery": {
+    "seeds": [81301, 81302],
+    "scientific_decision": false,
+    "rank1_core_guard": {
+      "maximum_eval_median_local_action_excess_over_dense_56x8": 0.03,
+      "maximum_eval_median_frobenius_excess_over_dense_56x8": 0.03,
+      "maximum_eval_median_local_action_residual": 0.4
+    },
+    "sparse_tensor_gates": {
+      "maximum_active_coordinates": 16,
+      "maximum_eval_median_local_action_residual": 0.45,
+      "maximum_eval_p90_local_action_residual": 0.65,
+      "maximum_eval_median_frobenius_residual": 0.5,
+      "maximum_train_eval_median_action_gap": 0.12,
+      "minimum_relative_median_action_improvement_over_rotated_null": 0.15,
+      "minimum_relative_median_action_improvement_over_storage_matched_vector_pca": 0.2
+    },
+    "right_conditioned_gates": {
+      "maximum_eval_median_local_action_residual": 0.55,
+      "maximum_eval_p90_local_action_residual": 0.75,
+      "maximum_eval_median_frobenius_residual": 0.6,
+      "maximum_train_eval_median_action_gap": 0.15,
+      "minimum_eval_median_left_factor_cosine": 0.65,
+      "minimum_relative_median_action_improvement_over_mean_left": 0.2,
+      "minimum_relative_median_action_improvement_over_permuted_ridge": 0.15
+    },
+    "selection_rule": "First require the rank1-core guard on both seeds. A sparse tensor configuration is viable only if the same s<=16 passes every sparse gate on both seeds; choose the smallest viable s. If no sparse tensor configuration is viable, right-conditioned geometry may be locked only if the single frozen train-CV ridge procedure passes every right-conditioned gate on both seeds. No per-seed family switching.",
+    "sparse_positive_status": "SPARSE_TENSOR_OPERATOR_GEOMETRY_DISCOVERED",
+    "conditional_positive_status": "RIGHT_CONDITIONED_OPERATOR_GEOMETRY_DISCOVERED",
+    "factor_compression_only_status": "OPERATOR_FACTOR_COMPRESSION_ONLY",
+    "failure_status": "COMPOSITIONAL_OPERATOR_GEOMETRY_NOT_FOUND"
+  },
+  "confirmation": {
+    "seeds": [81311, 81312, 81313],
+    "all_seeds_must_pass": true,
+    "lock_required": true,
+    "rank1_core_guard": {
+      "maximum_eval_median_local_action_excess_over_dense_56x8": 0.03,
+      "maximum_eval_median_frobenius_excess_over_dense_56x8": 0.03,
+      "maximum_eval_median_local_action_residual": 0.4
+    },
+    "sparse_tensor_gates": {
+      "maximum_eval_median_local_action_residual": 0.45,
+      "maximum_eval_p90_local_action_residual": 0.65,
+      "maximum_eval_median_frobenius_residual": 0.5,
+      "maximum_train_eval_median_action_gap": 0.12,
+      "minimum_relative_median_action_improvement_over_rotated_null": 0.15,
+      "minimum_relative_median_action_improvement_over_storage_matched_vector_pca": 0.2
+    },
+    "right_conditioned_gates": {
+      "maximum_eval_median_local_action_residual": 0.55,
+      "maximum_eval_p90_local_action_residual": 0.75,
+      "maximum_eval_median_frobenius_residual": 0.6,
+      "maximum_train_eval_median_action_gap": 0.15,
+      "minimum_eval_median_left_factor_cosine": 0.65,
+      "minimum_relative_median_action_improvement_over_mean_left": 0.2,
+      "minimum_relative_median_action_improvement_over_permuted_ridge": 0.15
+    },
+    "positive_status": "COMPOSITIONAL_OPERATOR_GEOMETRY_SUPPORTED",
+    "negative_status": "COMPOSITIONAL_OPERATOR_GEOMETRY_NOT_SUPPORTED"
+  },
+  "replication": {
+    "smoke_seed": 81300,
+    "formal_hardware": "Kaggle GPU for frozen hidden/gradient extraction; operator geometry is CPU-safe after extraction",
+    "checkpoint_each_seed": true,
+    "hidden_cache_excluded_from_publication": true
+  },
+  "stop_rule": {
+    "discovery_failure": "Do not open confirmation or deployable routing. If only rank1 factor compression survives, natural reusable operator Cells are unsupported under 009D; pivot toward engineered mutable rank-1/low-rank Cells plus certificates/growth, unless a separately frozen nonlinear operator hypothesis is justified.",
+    "confirmation_failure": "Do not claim natural reusable operator Cells. Preserve factor-compression diagnostics but pivot product work to engineered modules.",
+    "confirmation_success_sparse": "Proceed to inference-visible addressability of locked operator coordinate pairs, then composition/certificate/growth validation.",
+    "confirmation_success_conditional": "Proceed first to inference-visible recovery of the right/address coordinate; do not claim sparse Cells until a separate reuse test passes."
+  },
+  "interpretation_boundary": [
+    "009D does not revise the negative 009B-2 or 009C scientific decisions.",
+    "A sparse-tensor positive supports reusable rank-1 operator coordinate pairs inside the validated 56x8 subspace; it does not establish semantic Cells or deployable routing.",
+    "A right-conditioned positive supports organizational information in right-side operator variation lost by Ghat r; it is not deployable because heldout right factors are oracle-extracted from Ghat.",
+    "Rank1-in-56x8 compression alone is useful compression but is not evidence of cross-write reuse.",
+    "A negative result rejects these frozen linear/separable operator hypotheses, not all nonlinear operator manifolds and not engineered adaptive modules."
+  ]
+}

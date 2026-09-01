@@ -1,0 +1,131 @@
+{
+  "format": "minicells.core-validation.sparse-local-effect-geometry.v1",
+  "experiment_id": "core-validation-009c",
+  "title": "Core Validation 009C — Sparse / Local Effect Geometry",
+  "protocol_version": "1.0-frozen",
+  "status": "DISCOVERY_PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "parent_evidence": {
+    "core009b2_result_commit": "7112aeeafc1d13c01db3e9a8879300c9368f4faa",
+    "core009b2_status": "EFFECT_GEOMETRY_DISCOVERY_NO_COMPACT_SUBSPACE",
+    "core009b2_protocol_sha256": "650a7cc4990c941ddf5c5f601bc23e9cd9e416239ade3a2f2f105c43d3a59f3f"
+  },
+  "decision_question": "After global compact linear effect geometry fails, are carrier-preserved causal effects nevertheless reusable through sparse overcomplete composition or a small union of local low-dimensional charts, with train-only fitting and heldout assignment?",
+  "scope": {
+    "representation_only": true,
+    "sparse_dictionary": true,
+    "local_subspaces": true,
+    "deployable_router": false,
+    "certificates": false,
+    "continual_mutation": false,
+    "semantic_labels_forbidden": true,
+    "eval_assisted_fitting_forbidden": true
+  },
+  "foundation": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "step143000",
+    "expected_hidden_dim": 768,
+    "frozen": true,
+    "insertion_point": "gpt_neox.last_hidden_state before embed_out"
+  },
+  "data": {
+    "dataset_id": "DKYoon/SlimPajama-6B",
+    "dataset_revision": "1224c66add28b96ab045cd1058e795e8d3595485",
+    "expected_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+    "selection_and_partition": "exact Core 006/007/009A/009B pinned selection; train/eval filtering unchanged",
+    "raw_text_persisted": false
+  },
+  "effect_definition": {
+    "cell_dim": 64,
+    "write": "G_i = mean_t[(U^T dL/dh_t) z_t^T]",
+    "full_direction": "Ghat_i = G_i/max(||G_i||_F,eps)",
+    "carrier": "r = normalized mean of train-token projected activations z, fitted independently per seed using train only",
+    "effect": "a_i = Ghat_i r in R^64",
+    "no_effect_renormalization": true,
+    "primary_residual": "||a_i - ahat_i||_2/max(||a_i||_2,eps)"
+  },
+  "global_baseline": {
+    "dimension": 32,
+    "source": "Core 009B-2 train-only origin-preserving PCA",
+    "required_for_comparison": true
+  },
+  "sparse_dictionary": {
+    "atom_counts": [64, 96, 128],
+    "sparsities": [1, 2, 4, 8],
+    "iterations": 12,
+    "initialization": "deterministic SHA-ordered train effects followed by deterministic Gaussian fill when K>N",
+    "coding": "OMP with exact least-squares refit on selected atoms",
+    "update": "MOD least-squares dictionary update followed by unit-norm atom normalization",
+    "selection_metric": "heldout median normalized residual, then smaller sparsity, then smaller atom count",
+    "description_bits": "support IDs use s*ceil(log2(K)) bits; coefficients reported separately at 16 and 32 bits"
+  },
+  "local_subspaces": {
+    "chart_counts": [4, 8, 16],
+    "local_dimensions": [2, 4, 8],
+    "iterations": 20,
+    "clustering": "deterministic spherical k-means on train effects only",
+    "chart_fit": "origin-preserving PCA independently inside each train cluster",
+    "eval_assignment": "nearest train centroid by cosine; eval effects never alter centroids or bases"
+  },
+  "nulls": {
+    "random_dictionary": "deterministic Gaussian unit-norm atoms with the same K and OMP sparsity",
+    "random_chart_assignment": "deterministic hash assignment with same chart counts and local dimensions",
+    "purpose": "positive evidence must beat non-learned capacity-matched controls"
+  },
+  "discovery": {
+    "seeds": [81201, 81202],
+    "scientific_decision": false,
+    "gates": {
+      "maximum_eval_median_residual": 0.35,
+      "maximum_eval_p90_residual": 0.55,
+      "minimum_relative_median_improvement_over_global32": 0.30,
+      "minimum_relative_median_improvement_over_matched_null": 0.20,
+      "maximum_sparse_active_coordinates": 8,
+      "maximum_local_dimension": 8,
+      "maximum_chart_count": 16
+    },
+    "selection_rule": "A family is discovery-viable only if one fixed configuration independently passes every gate on both discovery seeds. Prefer sparse over local only by lower per-write active dimension after residual gates; no cross-family cherry-picking per seed.",
+    "failure_status": "SPARSE_LOCAL_EFFECT_GEOMETRY_NOT_FOUND",
+    "sparse_positive_status": "SPARSE_EFFECT_GEOMETRY_DISCOVERED",
+    "local_positive_status": "LOCAL_EFFECT_GEOMETRY_DISCOVERED"
+  },
+  "confirmation": {
+    "seeds": [81211, 81212, 81213],
+    "all_seeds_must_pass": true,
+    "lock_required": true,
+    "gates": {
+      "maximum_eval_median_residual": 0.35,
+      "maximum_eval_p90_residual": 0.55,
+      "minimum_relative_median_improvement_over_global32": 0.30,
+      "minimum_relative_median_improvement_over_matched_null": 0.20
+    },
+    "positive_status": "SPARSE_LOCAL_EFFECT_GEOMETRY_SUPPORTED",
+    "negative_status": "SPARSE_LOCAL_EFFECT_GEOMETRY_NOT_SUPPORTED"
+  },
+  "growth_diagnostic": {
+    "enabled_in_confirmation_only": true,
+    "residual_threshold_tau": 0.35,
+    "orderings": ["canonical", "sha-0", "sha-1", "sha-2"],
+    "sparse_rule": "append a normalized residual atom only when locked sparse dictionary cannot reconstruct the arriving train effect below tau at locked sparsity",
+    "local_rule": "spawn a new chart only when no locked chart reconstructs the arriving train effect below tau",
+    "metrics": ["final atoms/charts", "new units per 100 writes", "late-half new units per 100 writes", "heldout residual after growth"],
+    "interpretation": "growth is diagnostic in 009C and cannot rescue a discovery configuration"
+  },
+  "replication": {
+    "smoke_seed": 81200,
+    "formal_hardware": "Kaggle GPU for frozen hidden/gradient extraction; 64D sparse/local geometry is CPU-safe after extraction",
+    "checkpoint_each_seed": true,
+    "hidden_cache_excluded_from_publication": true
+  },
+  "stop_rule": {
+    "discovery_failure": "Do not open confirmation. Return to the full G_i operator and freeze a bilinear/compositional representation hypothesis before further addressability work.",
+    "confirmation_failure": "Do not open deployable routing. Sparse/local carrier-effect geometry is not a supported CLM substrate under this protocol.",
+    "confirmation_success": "Proceed to deployable addressability for the locked sparse/local representation, then certificates and growth."
+  },
+  "interpretation_boundary": [
+    "A positive sparse result supports sparse composition of carrier effects, not natural semantic Cells.",
+    "A positive local result supports a union-of-subspaces effect model, not inference-visible routing.",
+    "A negative result rejects these representations of a_i only; it does not reject operator-level factorization of G_i or engineered adaptive modules.",
+    "No semantic/source label may be used for dictionary fitting, clustering, configuration selection or heldout assignment."
+  ]
+}
