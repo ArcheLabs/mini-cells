@@ -1,9 +1,9 @@
 # Core Validation 009B-2 — Persistent Effect Geometry
 
 - Phase: `discovery`
-- Status: `DISCOVERY_INCOMPLETE`
-- Completed seeds: `[81101]`
-- Missing seeds: `[81102]`
+- Status: `EFFECT_GEOMETRY_DISCOVERY_NO_COMPACT_SUBSPACE`
+- Completed seeds: `[81101, 81102]`
+- Missing seeds: `[]`
 - Locked dimension: `None`
 - Confirmation allowed: `False`
 

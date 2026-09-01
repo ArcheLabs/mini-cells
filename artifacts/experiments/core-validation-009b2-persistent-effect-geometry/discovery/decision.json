@@ -11,6 +11,14 @@
           "seed": 81101,
           "train_to_eval_median_residual_gap": -0.0022484149979573598,
           "viable": false
+        },
+        {
+          "dimension": 1,
+          "eval_median_normalized_residual": 0.9930459478704161,
+          "eval_p90_normalized_residual": 0.9994872718741539,
+          "seed": 81102,
+          "train_to_eval_median_residual_gap": 0.005672091504027477,
+          "viable": false
         }
       ]
     },
@@ -24,6 +32,14 @@
           "eval_p90_normalized_residual": 0.99671641581617,
           "seed": 81101,
           "train_to_eval_median_residual_gap": 0.007521873712447613,
+          "viable": false
+        },
+        {
+          "dimension": 2,
+          "eval_median_normalized_residual": 0.9839368938900961,
+          "eval_p90_normalized_residual": 0.9978881482659328,
+          "seed": 81102,
+          "train_to_eval_median_residual_gap": 0.013414972380558776,
           "viable": false
         }
       ]
@@ -39,6 +55,14 @@
           "seed": 81101,
           "train_to_eval_median_residual_gap": 0.022005321035613146,
           "viable": false
+        },
+        {
+          "dimension": 4,
+          "eval_median_normalized_residual": 0.9571708596447351,
+          "eval_p90_normalized_residual": 0.9849432931683063,
+          "seed": 81102,
+          "train_to_eval_median_residual_gap": 0.03286640403554297,
+          "viable": false
         }
       ]
     },
@@ -52,6 +76,14 @@
           "eval_p90_normalized_residual": 0.9560884410553027,
           "seed": 81101,
           "train_to_eval_median_residual_gap": 0.0563346843692456,
+          "viable": false
+        },
+        {
+          "dimension": 8,
+          "eval_median_normalized_residual": 0.9148487154801517,
+          "eval_p90_normalized_residual": 0.9574037219878004,
+          "seed": 81102,
+          "train_to_eval_median_residual_gap": 0.057927988215550785,
           "viable": false
         }
       ]
@@ -67,6 +99,14 @@
           "seed": 81101,
           "train_to_eval_median_residual_gap": 0.08329353058948519,
           "viable": false
+        },
+        {
+          "dimension": 12,
+          "eval_median_normalized_residual": 0.8767875344369831,
+          "eval_p90_normalized_residual": 0.9210498682461288,
+          "seed": 81102,
+          "train_to_eval_median_residual_gap": 0.09355756063882237,
+          "viable": false
         }
       ]
     },
@@ -80,6 +120,14 @@
           "eval_p90_normalized_residual": 0.9020494838499893,
           "seed": 81101,
           "train_to_eval_median_residual_gap": 0.10656391294785972,
+          "viable": false
+        },
+        {
+          "dimension": 16,
+          "eval_median_normalized_residual": 0.8244005188969161,
+          "eval_p90_normalized_residual": 0.8843154826827558,
+          "seed": 81102,
+          "train_to_eval_median_residual_gap": 0.10596923560330962,
           "viable": false
         }
       ]
@@ -95,6 +143,14 @@
           "seed": 81101,
           "train_to_eval_median_residual_gap": 0.11873173213988797,
           "viable": false
+        },
+        {
+          "dimension": 24,
+          "eval_median_normalized_residual": 0.7474678172204321,
+          "eval_p90_normalized_residual": 0.821588939811904,
+          "seed": 81102,
+          "train_to_eval_median_residual_gap": 0.14057400710175538,
+          "viable": false
         }
       ]
     },
@@ -109,23 +165,30 @@
           "seed": 81101,
           "train_to_eval_median_residual_gap": 0.13908046425296017,
           "viable": false
+        },
+        {
+          "dimension": 32,
+          "eval_median_normalized_residual": 0.6688379548467362,
+          "eval_p90_normalized_residual": 0.7459634640448272,
+          "seed": 81102,
+          "train_to_eval_median_residual_gap": 0.17686071728895492,
+          "viable": false
         }
       ]
     }
   ],
   "completed_seeds": [
-    81101
+    81101,
+    81102
   ],
   "confirmation_allowed": false,
   "data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
   "experiment_id": "core-validation-009b2",
   "format": "minicells.core-validation.persistent-effect-geometry-discovery-decision.v1",
   "locked_dimension": null,
-  "missing_seeds": [
-    81102
-  ],
+  "missing_seeds": [],
   "protocol_sha256": "650a7cc4990c941ddf5c5f601bc23e9cd9e416239ade3a2f2f105c43d3a59f3f",
   "protocol_version": "1.0-frozen",
   "scientific_decision": false,
-  "status": "DISCOVERY_INCOMPLETE"
+  "status": "EFFECT_GEOMETRY_DISCOVERY_NO_COMPACT_SUBSPACE"
 }
