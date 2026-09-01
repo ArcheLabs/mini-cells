@@ -8,6 +8,7 @@ checkpointed, reported, committed and pushed before the next seed begins.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 import subprocess
@@ -30,6 +31,17 @@ DEFAULT_BRANCH = "codex/core-validation-007-functional-boundary-discovery"
 
 def _run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
     return subprocess.run(command, cwd=ROOT, check=check, text=True)
+
+
+def _atomic_json(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.replace(path)
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def _hydrate_partial_results() -> None:
@@ -103,7 +115,7 @@ def _preflight(branch: str, secret_name: str, *, push: bool) -> None:
     )
 
 
-def _run_seed(seed: int, *, no_cache: bool) -> int:
+def _run_seed(seed: int, *, no_cache: bool) -> tuple[int, Path]:
     logs = RESULTS / "confirmation" / "logs"
     logs.mkdir(parents=True, exist_ok=True)
     log_path = logs / f"seed-{seed}.log"
@@ -135,7 +147,32 @@ def _run_seed(seed: int, *, no_cache: bool) -> int:
             log.flush()
         returncode = process.wait()
         log.write(f"=== returncode={returncode} elapsed={time.time() - started:.3f}s ===\n")
-    return returncode
+    return returncode, log_path
+
+
+def _record_host_failure(seed: int, returncode: int, log_path: Path) -> None:
+    """Record SIGKILL/OOM-style failures where Python never caught an exception."""
+    checkpoint = RESULTS / "confirmation" / "seeds" / f"seed-{seed}.json"
+    failure = RESULTS / "confirmation" / "failures" / f"seed-{seed}.json"
+    if checkpoint.is_file() or failure.is_file():
+        return
+    amendment = json.loads(AMENDMENT.read_text(encoding="utf-8"))
+    _atomic_json(
+        failure,
+        {
+            "format": "minicells.core-validation.functional-boundary-confirmation-failure.v1",
+            "experiment_id": "core-validation-007",
+            "phase": "confirmation",
+            "complete": False,
+            "seed": seed,
+            "winner": amendment["winner"],
+            "base_protocol_sha256": amendment["base_discovery_protocol_sha256"],
+            "confirmation_protocol_sha256": _sha256(AMENDMENT),
+            "failure_kind": "child_process_terminated_without_python_failure_record",
+            "returncode": returncode,
+            "log_path": str(log_path.relative_to(ROOT)),
+        },
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -165,16 +202,18 @@ def main() -> int:
         checkpoint = RESULTS / "confirmation" / "seeds" / f"seed-{seed}.json"
         if checkpoint.is_file():
             print(f"[core-007] seed={seed} checkpoint found; seed runner will validate and skip")
-        returncode = _run_seed(seed, no_cache=args.no_cache)
+        returncode, log_path = _run_seed(seed, no_cache=args.no_cache)
+        if returncode != 0:
+            _record_host_failure(seed, returncode, log_path)
 
-        # Aggregate whatever survived, even if the child process was killed.
+        # Aggregate whatever survived, even if the child process was SIGKILLed/OOMed.
         _run([sys.executable, str(REPORTER)])
         _publish(args.branch, args.secret_name, push=args.push_results)
 
         if returncode != 0:
             print(
                 f"[core-007] seed={seed} failed with returncode={returncode}. "
-                "Completed checkpoints/logs were published. Re-run this same one-cell command; "
+                "Completed checkpoints/logs/failure record were published. Re-run this same one-cell command; "
                 "matching completed seeds will be skipped.",
                 file=sys.stderr,
             )
