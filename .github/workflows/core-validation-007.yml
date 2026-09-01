@@ -46,6 +46,7 @@ jobs:
             src/minicells/real_representation_007_config.py \
             src/minicells/real_representation_007_core.py \
             src/minicells/real_representation_007_experiment.py \
+            src/minicells/real_representation_007_runtime.py \
             scripts/research/run_core_validation_007.py \
             scripts/research/select_core_validation_007.py \
             scripts/research/report_core_validation_007.py \
@@ -59,6 +60,7 @@ jobs:
             src/minicells/real_representation_007_config.py \
             src/minicells/real_representation_007_core.py \
             src/minicells/real_representation_007_experiment.py \
+            src/minicells/real_representation_007_runtime.py \
             scripts/research/run_core_validation_007.py \
             scripts/research/select_core_validation_007.py \
             scripts/research/report_core_validation_007.py \
@@ -81,5 +83,6 @@ jobs:
           assert amendment['confirmation_seeds'] == [80721,80722,80723]
           assert set(amendment['retired_confirmation_seeds']).isdisjoint(amendment['confirmation_seeds'])
           assert all(value is False for value in amendment['scientific_invariants'].values())
+          assert amendment['expected_data_manifest_sha256'] == 'd098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc'
           print('CI validates infrastructure only and never runs Core 007 confirmation seeds.')
           PY
