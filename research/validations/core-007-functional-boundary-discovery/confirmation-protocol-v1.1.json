@@ -1,0 +1,51 @@
+{
+  "format": "minicells.core-validation.functional-boundary-confirmation-amendment.v1",
+  "experiment_id": "core-validation-007",
+  "protocol_version": "1.1-resumable-confirmation",
+  "status_before_run": "CONFIRMATION_V2_PROTOCOL_FROZEN_UNRUN",
+  "base_discovery_protocol": "protocol.json",
+  "base_discovery_protocol_sha256": "bf72fd372dbbc3720f824b07f81a66ac16094d7b2a72ec4db99605f6c7d4332c",
+  "winner_lock": "winner-lock.json",
+  "winner": "interference_cut",
+  "retired_confirmation_seeds": [80711, 80712, 80713],
+  "retirement_reason": "The original confirmation runner executed all seeds in one long-lived Python/CUDA process and wrote raw.json only after all seeds completed. Seed 80711 completed and was observed; seed 80712 then terminated the process before any per-seed checkpoint existed. The original confirmation set is therefore retired rather than rerun as untouched confirmation.",
+  "observed_attempt_1": {
+    "80711": {
+      "status": "completed_observed_not_canonical",
+      "pass": false,
+      "winner": "interference_cut",
+      "median_split_conflict_reduction": 0.163,
+      "spawned_fraction_of_addresses": 2.094,
+      "regression_ratio_vs_unsafe": 0.152,
+      "gain_ratio_vs_replay": 1.257,
+      "routing_agreement": 0.411
+    },
+    "80712": {
+      "status": "started_process_terminated_before_seed_checkpoint"
+    },
+    "80713": {
+      "status": "not_opened_but_retired_with_original_confirmation_set"
+    }
+  },
+  "confirmation_seeds": [80721, 80722, 80723],
+  "scientific_invariants": {
+    "winner_changed": false,
+    "boundary_mechanism_changed": false,
+    "model_or_data_changed": false,
+    "gate_thresholds_changed": false,
+    "core006_baselines_changed": false
+  },
+  "infrastructure_changes_only": [
+    "one confirmation seed per fresh Python/CUDA process",
+    "atomic per-seed checkpoints",
+    "resume skips completed matching seed checkpoints",
+    "partial reports are explicitly non-scientific",
+    "partial artifacts may be committed and pushed after every seed",
+    "failed child processes preserve completed seed checkpoints and write failure records",
+    "preflight validates branch, winner lock, CUDA and GitHub push credentials before GPU work"
+  ],
+  "completion_rule": "A scientific confirmation decision may be emitted only when all three amended confirmation seeds 80721/80722/80723 have complete checkpoints matching the same base protocol hash, amendment hash, winner lock, data manifest and frozen winner.",
+  "allowed_partial_status": "CONFIRMATION_INCOMPLETE",
+  "positive_status": "FUNCTIONAL_BOUNDARY_MECHANISM_SUPPORTED",
+  "negative_status": "FUNCTIONAL_BOUNDARY_MECHANISM_NOT_SUPPORTED"
+}
