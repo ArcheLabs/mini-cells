@@ -13,6 +13,17 @@
           "rho": 0.0003,
           "seed": 81001,
           "viable": true
+        },
+        {
+          "count": 56,
+          "full_descent_fraction": 1.0,
+          "median_full_nll_gain": 0.0016040802001953125,
+          "median_full_normalized_nll_gain": 0.0004922844407862224,
+          "median_half_step_linearity_error": 0.031775977713194375,
+          "p90_half_step_linearity_error": 0.0702351027650451,
+          "rho": 0.0003,
+          "seed": 81002,
+          "viable": true
         }
       ],
       "rho": 0.0003
@@ -29,6 +40,17 @@
           "p90_half_step_linearity_error": 0.018123306233062332,
           "rho": 0.001,
           "seed": 81001,
+          "viable": true
+        },
+        {
+          "count": 56,
+          "full_descent_fraction": 1.0,
+          "median_full_nll_gain": 0.0053293704986572266,
+          "median_full_normalized_nll_gain": 0.0016505774944580538,
+          "median_half_step_linearity_error": 0.012128878064425273,
+          "p90_half_step_linearity_error": 0.022438226744186048,
+          "rho": 0.001,
+          "seed": 81002,
           "viable": true
         }
       ],
@@ -47,6 +69,17 @@
           "rho": 0.003,
           "seed": 81001,
           "viable": true
+        },
+        {
+          "count": 56,
+          "full_descent_fraction": 1.0,
+          "median_full_nll_gain": 0.015717625617980957,
+          "median_full_normalized_nll_gain": 0.004860092701927971,
+          "median_half_step_linearity_error": 0.010916788461760196,
+          "p90_half_step_linearity_error": 0.017420300687038263,
+          "rho": 0.003,
+          "seed": 81002,
+          "viable": true
         }
       ],
       "rho": 0.003
@@ -64,24 +97,34 @@
           "rho": 0.01,
           "seed": 81001,
           "viable": true
+        },
+        {
+          "count": 56,
+          "full_descent_fraction": 1.0,
+          "median_full_nll_gain": 0.049936652183532715,
+          "median_full_normalized_nll_gain": 0.015469919154067854,
+          "median_half_step_linearity_error": 0.03679958745809561,
+          "p90_half_step_linearity_error": 0.045025330724349305,
+          "rho": 0.01,
+          "seed": 81002,
+          "viable": true
         }
       ],
       "rho": 0.01
     }
   ],
   "completed_seeds": [
-    81001
+    81001,
+    81002
   ],
-  "confirmation_allowed": false,
+  "confirmation_allowed": true,
   "data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
   "experiment_id": "core-validation-009b1",
   "format": "minicells.core-validation.carrier-causal-sufficiency-discovery-decision.v1",
-  "locked_rho": null,
-  "missing_seeds": [
-    81002
-  ],
+  "locked_rho": 0.01,
+  "missing_seeds": [],
   "protocol_sha256": "e6887f40ae8d1def0c675d4ba8750e3b449d49379e721373981b931de0aa43ca",
   "protocol_version": "1.0-frozen",
   "scientific_decision": false,
-  "status": "DISCOVERY_INCOMPLETE"
+  "status": "CAUSAL_SCALE_DISCOVERY_COMPLETE"
 }
