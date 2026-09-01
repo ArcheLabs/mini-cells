@@ -1,8 +1,9 @@
 # MiniCells Continual-Learning Research Roadmap
 
-Status: **causal funnel frozen; updated after Core 009B-1 positive**  
+Status: **causal funnel frozen; 009B-3 implementation prepared behind the 009B-2 gate**  
 Current evidence frontier: `CARRIER_CAUSAL_SUFFICIENCY_SUPPORTED`  
-Current experiment: **Core 009B-2 — Persistent Effect Geometry**
+Current experiment: **Core 009B-2 — Persistent Effect Geometry**  
+Next-stage implementation: **Core 009B-3 — Deployable Effect Addressability (`PREPARED_WAITING_FOR_009B2_LOCK`)**
 
 ## Mission
 
@@ -43,7 +44,7 @@ Result: `CARRIER_CAUSAL_SUFFICIENCY_SUPPORTED`. This opens 009B-2.
 
 ### Core 009B-2 — Persistent Effect Geometry
 
-**Status: current frontier.**
+**Status: current frontier; implementation complete, GPU result pending.**
 
 Test whether heldout effects admit reusable coordinates:
 
@@ -59,17 +60,40 @@ Two independent requirements are mandatory.
 
 The critical scalability signal is **compact heldout reconstruction plus late growth collapse**, not a raw reuse count and not the trivial 64-dimensional ambient ceiling.
 
-If negative, persistent effect dictionaries are not a scalable CLM substrate and 009B-3 is not opened.
+If negative, persistent effect dictionaries are not a scalable CLM substrate and 009B-3 remains permanently blocked under the current hypothesis.
 
 ### Core 009B-3 — Deployable Effect Addressability
 
-Opened only if 009B-2 is positive.
+**Status: implementation prepared; scientific execution blocked by the 009B-2 parent gate.**
 
-Training oracle: \(\beta_i=V^\top a_i\).
+No 812xx seed may run until an exact positive 009B-2 result and committed basis lock are bound into a committed `parent-lock.json`.
 
-Deployable requirement: \(f_\theta(x_i)\to\hat\beta_i\) using inference-visible context only. Gradients, target labels, future tokens, oracle modes and replay targets are forbidden router inputs.
+Training oracle:
 
-Test ridge, then a small MLP, then tiny attention only if required. Primary metric is causal effect recovery, not coefficient MSE.
+\[
+\beta_i=V^\top a_i.
+\]
+
+Deployable requirement:
+
+\[
+\boxed{f_\theta(x_i)\to\hat\beta_i}
+\]
+
+using **only the first half of inference-visible projected activation tokens**. Gradients, labels, future/suffix tokens, `Ghat`, `a_i`, oracle `beta_i`, oracle modes and replay targets are forbidden router inputs.
+
+Discovery (`81201/81202`) compares:
+- mean-effect baseline;
+- nearest-neighbor retrieval baseline;
+- ridge on prefix-mean context;
+- a 64-hidden MLP on prefix-mean context;
+- tiny learned attention pooling only if simpler learned families fail.
+
+Router selection uses **effect-space IID + source-heldout metrics only**. Causal NLL cannot influence the router lock. The first viable family in the frozen complexity hierarchy is selected and committed as `router-lock.json`.
+
+Untouched confirmation (`81211/81212/81213`) reuses the Core 009B-1 causal scale `rho=0.01` and measures actual lm-head NLL under oracle/deploy/mean/NN effects. A positive result requires both IID and source-heldout causal recovery, correct-direction rates, bounded unrelated harm, and improvement over the mean baseline. IID-only success is explicitly negative: `EFFECT_ADDRESSABILITY_DOES_NOT_GENERALIZE`.
+
+Only `DEPLOYABLE_EFFECT_ADDRESSABILITY_SUPPORTED` opens Core 010.
 
 ### Core 010 — Certified Persistent Effect Memory
 
@@ -105,17 +129,19 @@ K(N)&\ll N &&\text{scalable}
 Current position:
 
 \[
-\boxed{\underbrace{G_i\rightarrow a_i\mu^\top}_{\text{supported}}\Longrightarrow\underbrace{a_i\rightarrow V\beta_i}_{\text{009B-2}}}
+\boxed{\underbrace{G_i\rightarrow a_i\mu^\top}_{\text{supported}}\Longrightarrow\underbrace{a_i\rightarrow V\beta_i}_{\text{009B-2 current gate}}\Longrightarrow\underbrace{x\rightarrow\hat\beta}_{\text{009B-3 prepared only}}}
 \]
 
 ## Experimental discipline
 
 - Every confirmatory result uses untouched seeds.
 - Discovery and confirmation are separated by a committed lock artifact.
+- 009B-3 has an additional committed parent lock before any discovery seed may run.
 - Failed scientific gates are preserved; no silent seed replacement.
 - Diagnostic bridges never overwrite source scientific decisions.
 - Causal interventions take priority over normalized geometry when they disagree.
-- No router/certificate/growth mechanism is added before the representation prerequisite it depends on is confirmed.
+- No router **scientific execution**, certificate or growth mechanism is opened before the representation prerequisite it depends on is confirmed.
+- Preparing downstream code behind a hard parent gate does not count as opening the scientific stage.
 - Ambient-dimensional saturation is not called bounded growth.
 - Selection/reuse counters are never primary scalability evidence.
 - Online results must be robust to more than one frozen stream order.
