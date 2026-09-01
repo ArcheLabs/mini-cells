@@ -163,8 +163,24 @@ entries:
     notebook: research/notebooks/04-continual-learning-core/core-validation-004-growth-restored-plasticity.ipynb
     implementation: research/experiments/04-continual-learning-core/core-validation-004
     supersedes: core-validation-003
+    superseded_by: core-validation-005
+    notes: "Frozen supported result remains unchanged; 005 replaces its learner-visible old-probe safety oracle with a bounded subspace certificate."
+
+  - id: core-validation-005
+    title: Replay-Free Subspace-Certified Mitosis
+    kind: core-validation
+    stage: continual-learning-core
+    outcome: SUBSPACE_CERTIFIED_MITOSIS_SUPPORTED
+    scientific_decision: true
+    canonical: true
+    report: research/validations/core-005-subspace-certified-mitosis/README.md
+    protocol: research/validations/core-005-subspace-certified-mitosis/protocol.json
+    artifacts: artifacts/experiments/core-validation-005-subspace-certified-mitosis
+    notebook: research/notebooks/04-continual-learning-core/core-validation-005-subspace-certified-mitosis.ipynb
+    implementation: research/experiments/04-continual-learning-core/core-validation-005
+    supersedes: core-validation-004
     superseded_by: null
-    notes: "Supported only in the registered controlled synthetic setting; 3/3 seeds."
+    notes: "Frozen positive result; 3/3 seeds. In the registered linear-writable, fixed-feature, explicit-routing world, Cell-local Q replaced learner-side historical replay for exact registered-history protection, saturation detection, and bounded reusable growth."
 
   - id: stage-language-validation
     title: "Language Validation: Token-Level Transfer and Scale Readiness"
