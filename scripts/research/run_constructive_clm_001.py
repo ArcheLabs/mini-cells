@@ -10,7 +10,7 @@ from pathlib import Path
 from minicells.constructive_clm_001 import run_seed
 
 
-FORMAL_SEEDS = (1001, 1002, 1003)
+FORMAL_SEEDS = (90111, 90112, 90113)
 
 
 def _protocol_sha(repo_root: Path) -> str:
