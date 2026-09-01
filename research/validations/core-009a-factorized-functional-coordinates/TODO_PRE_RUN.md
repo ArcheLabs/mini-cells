@@ -1,0 +1,1 @@
+Before the first discovery seed is opened, verify that `protocol.json` treats heldout local-action residual as the scientific support target and Frobenius reconstruction as diagnostic only. This file is a pre-run implementation reminder and must not be used to alter thresholds after any discovery result is observed.
