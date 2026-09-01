@@ -1,6 +1,7 @@
 {
   "completed_seeds": [
-    80911
+    80911,
+    80912
   ],
   "data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
   "experiment_id": "core-validation-009a",
@@ -22,6 +23,23 @@
       "seed": 80911,
       "train_eval_local_action_gap": 0.12252720982808471,
       "train_median_local_action_residual": 0.17963748705160856
+    },
+    {
+      "basis_parameter_count": 4096,
+      "budget": true,
+      "eval_median_frobenius_residual": 0.3417347659915566,
+      "eval_median_local_action_residual": 0.3130823469801244,
+      "generalization_gap": true,
+      "heldout_action": true,
+      "heldout_frobenius": true,
+      "left_dim": 56,
+      "pass": true,
+      "rank1_eval_local_action_residual": 0.004939932369695365,
+      "rank1_identity_guard": true,
+      "right_dim": 8,
+      "seed": 80912,
+      "train_eval_local_action_gap": 0.1367119274014399,
+      "train_median_local_action_residual": 0.1763704195786845
     }
   ],
   "locked_split": {
@@ -29,7 +47,6 @@
     "right_dim": 8
   },
   "missing_seeds": [
-    80912,
     80913
   ],
   "protocol_sha256": "60f20d8f0b1fb14a487e88c6c16087acbafc62969a5a6ea4da0715cc749ab98d",
