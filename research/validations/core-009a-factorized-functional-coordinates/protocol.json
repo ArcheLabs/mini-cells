@@ -81,6 +81,7 @@
     "all_seeds_must_pass": true,
     "gates": {
       "maximum_heldout_median_local_action_residual": 0.35,
+      "maximum_heldout_median_frobenius_residual": 1.0,
       "maximum_train_eval_local_action_gap": 0.15,
       "maximum_per_write_rank1_oracle_action_residual": 0.01,
       "required_basis_parameter_count": 4096
@@ -108,7 +109,7 @@
   },
   "interpretation_boundary": [
     "A positive 009A establishes only that shared two-sided linear factor spaces preserve heldout local functional action under this budget and data regime.",
-    "Frobenius reconstruction is diagnostic rather than a support gate because prior experiments show local functional action can be preserved despite matrix-space residual in directions not exercised by the sequence.",
+    "Frobenius reconstruction is diagnostic rather than a support discriminator; its numeric gate is fixed at the non-discriminative orthogonal-projection bound of 1.0 only as an implementation sanity check.",
     "A positive 009A does not establish that factor coordinates are sparse, identifiable from inference-visible context, safe to mutate continually, or sufficient for an end-to-end language model.",
     "A negative 009A is evidence against the current shared linear left/right coordinate hypothesis; it is not evidence against continual learning in general.",
     "Core 008 and its postmortem remain immutable historical evidence and are not overwritten by 009A."
