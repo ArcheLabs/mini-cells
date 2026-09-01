@@ -49,7 +49,7 @@ jobs:
       - name: Commit formal artifacts
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: research: record Core Validation 005 formal results
+          commit_message: "research: record Core Validation 005 formal results"
           file_pattern: artifacts/experiments/core-validation-005-subspace-certified-mitosis/**
       - name: Upload formal artifacts
         uses: actions/upload-artifact@v4
