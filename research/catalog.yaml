@@ -195,8 +195,24 @@ entries:
     notebook: research/notebooks/04-continual-learning-core/core-validation-006-real-representation-continual-plasticity.ipynb
     implementation: research/experiments/04-continual-learning-core/core-validation-006
     supersedes: core-validation-005
-    superseded_by: null
+    superseded_by: core-validation-007
     notes: "Frozen formal No-Go; 0/3 seeds. Real Pythia hidden states showed reusable low-dimensional geometry and replay-free certificates reduced registered forgetting while retaining 0.84–0.89x replay gain, but address-based dependency-partitioned mitosis failed to reduce functional conflict and spawned 65.6–68.8% of addresses. Canonical decision/gate summary were recovered after the Kaggle session closed; missing raw/detail artifacts are explicitly documented."
+
+  - id: core-validation-007
+    title: Functional Boundary Discovery
+    kind: core-validation
+    stage: continual-learning-core
+    outcome: DISCOVERY_PROTOCOL_FROZEN_UNRUN
+    scientific_decision: false
+    canonical: true
+    report: research/validations/core-007-functional-boundary-discovery/README.md
+    protocol: research/validations/core-007-functional-boundary-discovery/protocol.json
+    artifacts: artifacts/experiments/core-validation-007-functional-boundary-discovery
+    notebook: research/notebooks/04-continual-learning-core/core-validation-007-functional-boundary-discovery.ipynb
+    implementation: research/experiments/04-continual-learning-core/core-validation-007
+    supersedes: core-validation-006
+    superseded_by: null
+    notes: "Frozen mechanism-discovery protocol. Discovery seeds 80701/80702 compare semantic, activation, write-demand and direct-interference boundaries; untouched confirmation seeds 80711/80712/80713 remain locked until a deterministic winner-lock is committed."
 
   - id: stage-language-validation
     title: "Language Validation: Token-Level Transfer and Scale Readiness"
