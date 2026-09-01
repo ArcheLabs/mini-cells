@@ -2,44 +2,29 @@
 
 Status: **CONFIRMATION_V2_PROTOCOL_FROZEN_UNRUN**
 
-## Current scientific state
+## Frozen discovery result
 
-Core 007 discovery is complete and immutable.
+Discovery is complete and immutable.
 
-Frozen discovery seeds:
+- discovery seeds: `80701 / 80702`
+- frozen winner: `interference_cut`
+- mean interference-cut fraction: `0.5508129572944579`
+- mean z-only/oracle routing agreement: `0.8973214285714286`
+- mean partition balance: `0.9375`
+- mean frozen selection score: `0.7127685550833804`
+- mean soft-Top2 oracle coverage: `0.9665178571428572`
 
-```text
-80701
-80702
-```
+Discovery is mechanism selection only; it is not a supported/not-supported scientific confirmation.
 
-Frozen winner:
+## Why the first confirmation set is retired
 
-```text
-interference_cut
-```
+The original runner opened `80711/80712/80713` in one long-lived Python/CUDA process and wrote `raw.json` only after all seeds completed. In the first attempt:
 
-The committed `winner-lock.json` records:
+- `80711` completed and was observed;
+- `80712` started, then the process terminated before a per-seed checkpoint existed;
+- `80713` was not opened.
 
-- mean interference-cut fraction: `0.5508129572944579`;
-- mean z-only/oracle routing agreement: `0.8973214285714286`;
-- mean partition balance: `0.9375`;
-- mean frozen selection score: `0.7127685550833804`;
-- mean soft-Top2 oracle coverage: `0.9665178571428572`.
-
-Discovery is mechanism selection only and is not a scientific supported/not-supported decision.
-
-## Why confirmation v1 was retired
-
-The original confirmation infrastructure used seeds `80711/80712/80713` in one long-lived Python/CUDA process. It accumulated all seed results in memory and wrote `raw.json` only after every seed completed.
-
-During the first real run:
-
-- `80711` completed and its console summary was observed;
-- `80712` started, then the child process terminated before the runner produced a Python traceback or any per-seed checkpoint;
-- `80713` was never opened.
-
-Observed non-canonical `80711` summary:
+Observed non-canonical `80711` console summary:
 
 ```text
 pass=False
@@ -51,15 +36,15 @@ gain/replay=1.257
 route=0.411
 ```
 
-Because `80711` was observed and `80712` was partially opened, the complete original confirmation seed set is retired. It must not be rerun and described as untouched confirmation.
+The exact `80712` termination cause cannot be proven from the surviving notebook output. The infrastructure defect is unambiguous: a completed seed was not durably checkpointed before the next seed began.
 
-The repository cannot prove the exact cause of the `80712` process termination from the notebook output alone. The absence of a child Python traceback is consistent with a process-level termination such as CUDA/host OOM, but this is not recorded as a proven root cause. The infrastructure defect itself is proven: completed seeds were not checkpointed before the next seed began.
+Because part of the original set was observed, `80711/80712/80713` are retired and must not be rerun as "untouched confirmation".
 
 The audit is frozen in `confirmation-protocol-v1.1.json`.
 
 ## Confirmation v1.1 amendment
 
-The amended untouched confirmation seeds are:
+Untouched confirmation seeds are now:
 
 ```text
 80721
@@ -67,69 +52,59 @@ The amended untouched confirmation seeds are:
 80723
 ```
 
-The amendment changes **infrastructure only**. It does not change:
+The amendment changes infrastructure only. It does **not** change:
 
-- frozen model or dataset;
-- data selection or manifest identity;
-- the discovery winner (`interference_cut`);
-- functional-mode or mitosis mechanism;
+- Pythia model or SlimPajama data;
+- the pinned data manifest;
+- discovery winner `interference_cut`;
+- functional-mode / mitosis mechanism;
 - Core 006 baselines;
 - any confirmation gate threshold.
 
-The original `protocol.json` and `winner-lock.json` remain the discovery lock. `confirmation-protocol-v1.1.json` references their exact hash and pins the known real-data manifest.
+The original `protocol.json` and `winner-lock.json` remain frozen. `confirmation-protocol-v1.1.json` pins their identities and the expected data manifest.
 
 ## Decision question
 
-Core 006 established that real frozen Pythia representations contain substantial low-dimensional functional reuse and that bounded replay-free certificates reduce registered forgetting. It failed because semantic/address-based mitosis did not create a useful functional separation.
+Core 006 showed that frozen real Pythia representations contain substantial low-dimensional functional reuse and that bounded replay-free certificates reduce registered forgetting, but semantic/address-based mitosis did not provide a useful functional split boundary.
 
 Core 007 asks:
 
-> **Can bounded write-demand/interference geometry provide a better mitosis boundary than semantic address identity, and can that functional identity be recovered from inference-visible representations after the split?**
-
-## Frozen mechanism
+> Can bounded write-demand/interference geometry provide a better mitosis boundary than semantic address identity, and can that functional identity be recovered from inference-visible representations after the split?
 
 For frozen hidden state `h`:
 
 \[
-z=U^Th\in\mathbb R^{64}.
+z=U^Th
 \]
 
-Core 007 also uses the frozen-foundation projected loss signal
+and frozen-foundation projected loss signal:
 
 \[
-u_t=U^T\frac{\partial L}{\partial h_t}
+u_t=U^T\frac{\partial L}{\partial h_t},
 \]
 
-and sequence write demand
+the write-demand signature is:
 
 \[
-G=\frac1T\sum_t u_tz_t^T.
+G=\frac1T\sum_tu_tz_t^T.
 \]
 
-Each semantic address may contain at most four bounded functional modes. A mode retains dependency counts, a `z` prototype, `z` second moment, running mean write matrix, and a rank-bounded write basis. Raw historical text is not learner state.
+Discovery compared:
 
-The discovery candidates were:
-
-1. `semantic_singleton` — Core 006 semantic control;
+1. `semantic_singleton` — Core 006 control;
 2. `activation_community` — activation-subspace geometry;
 3. `write_community` — write-demand geometry;
-4. `interference_cut` — direct symmetric cross-write damage with deterministic balanced max-cut.
+4. `interference_cut` — direct symmetric cross-write damage with deterministic balanced cut.
 
 The frozen winner is `interference_cut`.
 
-The global K-means address router remains frozen. The confirmation still distinguishes:
-
-- oracle functional identity from frozen-foundation write demand;
-- deployable local routing from inference-visible `z` prototypes;
-- soft Top-2 routing as a diagnostic only.
-
 ## Frozen confirmation gates
 
-Every amended confirmation seed must independently satisfy the original gates:
+Every amended confirmation seed must independently satisfy the existing gates:
 
 - registered regression <= `0.50x` unsafe;
 - new-learning gain >= `0.80x` replay;
-- functional-mitosis gain > no-growth certificate baseline;
+- candidate gain > no-growth certificate baseline;
 - median split-conflict reduction >= `0.30` and greater than the same-seed Core 006 semantic split;
 - spawned Cells <= `0.50 * 32 addresses`;
 - at least four later transactions reuse children;
@@ -137,16 +112,16 @@ Every amended confirmation seed must independently satisfy the original gates:
 - deploy heldout NLL within `2%` of oracle functional routing;
 - at least one non-zero heldout causal-ablation signal.
 
-No threshold was changed after observing the retired attempt.
+No gate was changed after the retired attempt.
 
-Only when all `80721/80722/80723` checkpoints are complete and identity-matched may the reporter emit either:
+Only after all `80721/80722/80723` checkpoints complete with matching identities may the reporter emit:
 
 ```text
 FUNCTIONAL_BOUNDARY_MECHANISM_SUPPORTED
 FUNCTIONAL_BOUNDARY_MECHANISM_NOT_SUPPORTED
 ```
 
-Otherwise the only allowed confirmation status is:
+Until then the only allowed status is:
 
 ```text
 CONFIRMATION_INCOMPLETE
@@ -154,63 +129,80 @@ CONFIRMATION_INCOMPLETE
 
 with `scientific_decision=false`.
 
-## Resumable execution infrastructure
+## Final resumable infrastructure
 
-The amended confirmation is intentionally seed-isolated.
+The canonical confirmation path is:
 
-`scripts/research/run_core_validation_007_confirmation_seed.py`:
+```text
+orchestrate_core_validation_007_confirmation.py
+    -> run_core_validation_007_confirmation_seed.py  (fresh process / one seed)
+    -> report_core_validation_007_confirmation.py
+    -> publish_core_validation_007.py
+```
 
-- accepts exactly one amended confirmation seed;
-- starts from a fresh Python/CUDA process;
-- verifies base protocol, amendment, winner and manifest identity;
-- computes a hash over the scientific implementation files;
-- atomically writes `confirmation/seeds/seed-<seed>.json` on success;
-- writes a structured Python failure record on catchable exceptions;
-- refuses to overwrite a checkpoint produced by another scientific identity;
-- skips an already-complete matching seed.
+The seed runner:
 
-`scripts/research/orchestrate_core_validation_007_confirmation.py`:
+- accepts one amended seed;
+- verifies protocol, amendment, winner, data manifest and scientific-code identity;
+- atomically writes `confirmation/seeds/seed-<seed>.json` immediately after success;
+- writes a structured failure record for catchable exceptions;
+- skips a matching completed checkpoint;
+- refuses to overwrite a checkpoint from another scientific identity.
 
-- runs preflight before GPU work;
-- hydrates previously pushed partial seed checkpoints from canonical artifacts after a new Kaggle session starts;
-- launches each seed in a separate child process;
-- tees child stdout/stderr into a per-seed log;
-- records process-level failure metadata if a child dies without a Python failure record;
-- regenerates the aggregate report after every seed;
-- publishes/commits/pushes partial canonical artifacts after every seed;
-- stops after a failed seed without destroying completed checkpoints;
-- resumes by skipping completed matching seeds.
+The orchestrator:
 
-`scripts/research/preflight_core_validation_007.py` validates, before GPU work:
+- validates CUDA and GitHub write access **before** opening a new seed;
+- runs every seed in a fresh Python/CUDA child process;
+- captures per-seed stdout/stderr logs;
+- records process-level failures such as SIGKILL/OOM when Python cannot write its own traceback;
+- regenerates the partial/final report after every seed;
+- commits and pushes canonical partial artifacts after every seed;
+- stops after failure without losing completed checkpoints;
+- hydrates pushed checkpoints in a fresh Kaggle session and resumes from the first unfinished seed.
 
-- branch identity;
-- clean tracked tree;
-- discovery protocol and winner-lock hashes;
-- amended confirmation identity;
-- CUDA availability;
-- GitHub push credentials using a `git push --dry-run`.
+## Publication path
 
-## Kaggle execution
+Core 007 now reuses the same authentication mechanism as the repository's established Kaggle publisher (`scripts/research/publish_experiment_results.py`):
 
-Use only:
+- Kaggle Secret name: `GITHUB_TOKEN`;
+- token loaded directly through `kaggle_secrets.UserSecretsClient` when not already in the environment;
+- temporary `GIT_ASKPASS` supplies `x-access-token` / token credentials;
+- `GIT_TERMINAL_PROMPT=0`;
+- an authenticated `git push --dry-run` is performed before GPU work;
+- the token is not persisted in the Git remote or repository config.
+
+This replaces the ad-hoc `GH_TOKEN` path used by the first Core 007 notebook.
+
+## Kaggle execution — one cell
+
+Use:
 
 ```text
 research/notebooks/04-continual-learning-core/
 core-validation-007-functional-boundary-discovery.ipynb
 ```
 
-The notebook no longer exposes discovery or retired confirmation cells. It loads `GH_TOKEN` or `GITHUB_TOKEN` from Kaggle Secrets, optionally loads `HF_TOKEN`, runs preflight, and then runs:
+Before running it, configure:
+
+```text
+GITHUB_TOKEN
+```
+
+in Kaggle Secrets with Contents read/write permission for `ArcheLabs/mini-cells`. `HF_TOKEN` is optional.
+
+The notebook contains one execution cell. It fresh-clones the latest research branch, installs dependencies and runs:
 
 ```bash
 python scripts/research/orchestrate_core_validation_007_confirmation.py \
   --branch codex/core-validation-007-functional-boundary-discovery \
+  --secret-name GITHUB_TOKEN \
   --push-results
 ```
 
-The same command is safe to rerun after interruption. Completed seed checkpoints are recovered from the repository and skipped.
+No separate token-loading or publish cell is required. Re-running the same notebook after interruption is the intended resume procedure.
 
 ## Interpretation boundary
 
-A positive Core 007 result would establish only that, under a frozen real Pythia representation and frozen coarse router, a bounded functional-interference geometry can generate a better mitosis boundary and that this identity is sufficiently predictable from inference-visible `z`.
+A positive result would establish only that, under frozen Pythia representations and a frozen coarse router, bounded functional-interference geometry can provide a better mitosis boundary and that the resulting identity is sufficiently predictable from inference-visible `z`.
 
-It would not establish safe nonlinear foundation updates, learned global router drift, reconstruction of certificates for opaque historical checkpoints, or full-scale autonomous CLM growth.
+It would not establish safe nonlinear foundation updates, learned global-router drift, reconstruction of certificates for opaque historical checkpoints, or full-scale autonomous CLM growth.
