@@ -15,6 +15,9 @@ AMENDMENT = VALIDATION / "confirmation-protocol-v1.1.json"
 
 def _load_script(name: str, rel: str):
     path = ROOT / rel
+    scripts_dir = str(ROOT / "scripts" / "research")
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
     spec = importlib.util.spec_from_file_location(name, path)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
