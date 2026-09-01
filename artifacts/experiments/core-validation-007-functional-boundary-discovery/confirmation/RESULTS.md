@@ -4,8 +4,8 @@
 - Scientific decision: `False`
 - Winner: `interference_cut`
 - Completed: `[80721, 80722]`
-- Failed: `[]`
-- Pending: `[80723]`
+- Failed: `[80723]`
+- Pending: `[]`
 
 The original 80711/80712/80713 confirmation set is retired by the infrastructure amendment and is not merged into this decision.
 
