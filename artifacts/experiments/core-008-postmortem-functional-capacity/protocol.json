@@ -1,0 +1,68 @@
+{
+  "format": "minicells.core008-postmortem.functional-capacity.v1",
+  "title": "Core 008 Postmortem — Functional Capacity Decomposition",
+  "status": "DIAGNOSTIC_PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "source_experiment": "core-validation-008",
+  "source_status_must_remain_unchanged": true,
+  "purpose": "Determine whether Core 008 failed because real write demands lack compressible shared structure, because the rank/sparsity budget was too restrictive, or because the online certified allocator failed to discover structure that exists offline.",
+  "data_identity": {
+    "model": "EleutherAI/pythia-160m@step143000",
+    "dataset": "DKYoon/SlimPajama-6B@1224c66add28b96ab045cd1058e795e8d3595485",
+    "expected_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+    "reuse_core008_formal_seeds": [80821, 80822, 80823],
+    "reason_reuse_is_diagnostic_only": "The seeds and outcomes are already observed. This bridge may diagnose them but cannot emit a new confirmatory supported/not-supported decision."
+  },
+  "write_geometry": {
+    "cell_dim": 64,
+    "write_demand": "G = mean_t[(U^T dL/dh_t) z_t^T] on the frozen foundation path",
+    "normalization": "G / max(||G||_F, eps)",
+    "local_action": "Z G^T",
+    "ranks": [1, 2, 4, 8, 16, 32],
+    "global_dimensions": [1, 2, 4, 8, 16, 32],
+    "sparsities": [1, 2, 4, 8, 16, 32]
+  },
+  "diagnostics": {
+    "per_write_svd": "For each train/eval write independently, compute the optimal rank-r truncated-SVD residual. This measures intrinsic rank without any shared-basis assumption.",
+    "global_pca": "Fit the optimal uncentered SVD basis through the origin to flattened normalized train writes and evaluate heldout residual at dimensions 1..32. This is the correct linear shared-subspace upper bound for G=sum alpha_k B_k without a free full-matrix offset; it is not parameter-budget matched.",
+    "pca_sparse": "Within the frozen 32-dimensional uncentered SVD basis, retain the largest k coefficients for k in 1,2,4,8,16,32. This isolates the cost of sparsity after the best dense linear subspace is known.",
+    "factorized_offline_dictionary": "Under exactly 32 total rank units (4096 conceptual factor scalars at d=64), initialize shared rank-r matrix atoms from leading global SVD directions projected to rank r for r in 1,2,4,8, then run deterministic alternating residual refinement and signed OMP recoding with up to min(8, atom_count) active atoms. This is an offline no-certificate capacity control, not a deployable learner.",
+    "core008_reference": "Report the published Core 008 adaptive oracle/deploy residuals beside the capacity curves but do not alter the frozen Core 008 decision."
+  },
+  "factor_budget": {
+    "total_rank_units": 32,
+    "conceptual_factor_scalars": 4096,
+    "factor_scalars_per_rank_unit": 128,
+    "dictionary_atom_ranks": [1, 2, 4, 8],
+    "atom_count_rule": "32 // atom_rank",
+    "maximum_active_atoms": 8,
+    "refinement_rounds": 2
+  },
+  "interpretation_reference": {
+    "core008_target_local_action_residual": 0.35,
+    "not_a_new_gate": true,
+    "classifications": {
+      "SHARED_LOW_DIMENSIONAL_STRUCTURE_PRESENT": "heldout uncentered-SVD-32 median local-action residual <= 0.35",
+      "PER_WRITE_LOW_RANK_BUT_NOT_SHARED": "median per-write rank-16 local-action residual <= 0.35 but heldout global-32 residual > 0.35",
+      "BUDGET_MATCHED_FACTORIZED_STRUCTURE_PRESENT": "at least one 32-rank-unit offline factorized dictionary has heldout median local-action residual <= 0.35",
+      "NO_STRONG_COMPRESSION_EVIDENCE": "neither per-write rank-16 nor global-32 reaches the 0.35 reference",
+      "MIXED_CAPACITY_EVIDENCE": "other combinations"
+    }
+  },
+  "required_outputs": [
+    "per-write-rank-summary.csv",
+    "global-pca-summary.csv",
+    "pca-sparsity-summary.csv",
+    "factorized-dictionary-summary.csv",
+    "seed-summary.csv",
+    "decision.json",
+    "RESULTS.md"
+  ],
+  "interpretation_boundary": [
+    "This is a postmortem diagnostic on already-observed Core 008 seeds and cannot overturn, rescue, or replace the Core 008 scientific decision.",
+    "Good unconstrained global-SVD performance is evidence of shared linear geometry, not evidence that a practical Cell representation fits the same parameter budget.",
+    "Good per-write SVD with poor global SVD means writes are individually low-rank but do not share a small global basis.",
+    "Good factorized offline performance with poor Core 008 online performance localizes failure to online atom formation, sparsity, routing, certificate interaction, or allocation policy.",
+    "Poor performance even for per-write SVD/global-SVD upper bounds is evidence against further elaborating the current normalized G-matrix basis hypothesis."
+  ]
+}

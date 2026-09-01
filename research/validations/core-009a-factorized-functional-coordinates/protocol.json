@@ -1,0 +1,117 @@
+{
+  "format": "minicells.core-validation.factorized-functional-coordinates.v1",
+  "experiment_id": "core-validation-009a",
+  "title": "Core Validation 009A — Factorized Functional Coordinates",
+  "protocol_version": "1.0-frozen",
+  "status": "DISCOVERY_PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "parent_evidence": [
+    "core-validation-008-certified-functional-atoms",
+    "core-008-postmortem-functional-capacity"
+  ],
+  "decision_question": "Do real frozen-Pythia functional writes share compact left/output-effect and right/input-condition coordinate subspaces even though a small shared matrix basis fails?",
+  "hypothesis": {
+    "write_form": "Each normalized sequence-level write G is nearly rank-1 but its matrix orientation varies across contexts.",
+    "factorized_coordinates": "There exist shared L in R^(64xm) and R in R^(64xn) such that G ~= P_L G P_R, with P_L=L L^T and P_R=R R^T.",
+    "budget_claim": "If m+n <= 64, storing L and R costs at most 4096 scalars, matching the Core 008 conceptual factor budget while allowing an m*n tensor-product functional space.",
+    "scope": "009A tests geometry only. It does not test deployable routing, sparse coefficients, certificates, growth, continual learning, or end-to-end model quality."
+  },
+  "foundation": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "step143000",
+    "expected_hidden_dim": 768,
+    "frozen": true,
+    "insertion_point": "gpt_neox.last_hidden_state before embed_out"
+  },
+  "data": {
+    "dataset_id": "DKYoon/SlimPajama-6B",
+    "dataset_revision": "1224c66add28b96ab045cd1058e795e8d3595485",
+    "expected_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+    "selection_and_partition": "exact Core 006/007 pinned sequence selection and train/eval partition",
+    "raw_text_persisted": false,
+    "hidden_cache_required": false
+  },
+  "write_geometry": {
+    "cell_dim": 64,
+    "write_demand": "G = mean_t[(U^T dL/dh_t) z_t^T] on the frozen foundation path",
+    "normalization": "G / max(||G||_F, eps)",
+    "local_action": "Z G^T",
+    "left_covariance": "C_L = mean_i G_i G_i^T on training writes",
+    "right_covariance": "C_R = mean_i G_i^T G_i on training writes",
+    "left_basis": "top eigenvectors of C_L",
+    "right_basis": "top eigenvectors of C_R",
+    "two_sided_projection": "G_hat = P_L G P_R",
+    "dimension_grid": [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64],
+    "budget_matched_splits": [
+      [8, 56], [12, 52], [16, 48], [20, 44], [24, 40], [28, 36], [32, 32],
+      [36, 28], [40, 24], [44, 20], [48, 16], [52, 12], [56, 8]
+    ],
+    "basis_parameter_count": "64*(m+n)",
+    "core008_budget_scalars": 4096,
+    "per_write_rank1_oracle": "best rank-1 truncated SVD of each heldout G; diagnostic identity guard only"
+  },
+  "metrics": {
+    "primary": [
+      "heldout median two-sided local-action residual",
+      "train-to-heldout local-action generalization gap"
+    ],
+    "diagnostic_not_gate": [
+      "two-sided normalized Frobenius residual",
+      "left-only residual by m",
+      "right-only residual by n",
+      "two-sided residual landscape R(m,n)",
+      "left and right cumulative covariance energy",
+      "per-write rank-1 oracle residual"
+    ],
+    "whole_model_nll": "not measured and not a gate"
+  },
+  "discovery": {
+    "scientific_decision": false,
+    "seeds": [80901, 80902],
+    "selection_rule": "Among exactly the frozen m+n=64 budget splits, select the split with minimum mean heldout median local-action residual across both discovery seeds; tie-break by lower worst-seed residual, then lower |m-n|, then lower m.",
+    "viability_reference": 0.45,
+    "winner_is_viable_if": "the selected split has heldout median local-action residual <= 0.45 independently on both discovery seeds",
+    "winner_lock_required_before_confirmation": true,
+    "no_confirmation_seed_may_be_opened_before_winner_lock_commit": true,
+    "no_post_hoc_dimension_or_threshold_changes": true
+  },
+  "confirmation": {
+    "seeds": [80911, 80912, 80913],
+    "require_exact_locked_split": true,
+    "all_seeds_must_pass": true,
+    "gates": {
+      "maximum_heldout_median_local_action_residual": 0.35,
+      "maximum_heldout_median_frobenius_residual": 1.0,
+      "maximum_train_eval_local_action_gap": 0.15,
+      "maximum_per_write_rank1_oracle_action_residual": 0.01,
+      "required_basis_parameter_count": 4096
+    },
+    "positive_status": "FACTORIZED_FUNCTIONAL_COORDINATES_SUPPORTED",
+    "negative_status": "FACTORIZED_FUNCTIONAL_COORDINATES_NOT_SUPPORTED"
+  },
+  "replication": {
+    "smoke_seed": 80900,
+    "discovery_seeds": [80901, 80902],
+    "confirmation_seeds": [80911, 80912, 80913],
+    "formal_hardware": "Kaggle GPU for hidden/write extraction; coordinate decomposition is CPU-safe",
+    "calibration_allowed": false
+  },
+  "stop_rule": {
+    "if_discovery_not_viable": "Do not run confirmation. Close 009A as GEOMETRY_DISCOVERY_NO_VIABLE_BUDGET_SPLIT and reconsider the shared-factor hypothesis.",
+    "if_confirmation_negative": "Do not proceed to routing/certificate/continual-learning variants of factorized coordinates without a new hypothesis.",
+    "if_confirmation_positive": "Proceed to a separate 009B sparsity/addressability study before any continual-learning mechanism."
+  },
+  "publication": {
+    "canonical_artifacts": "artifacts/experiments/core-validation-009a-factorized-functional-coordinates",
+    "hidden_cache_excluded": true,
+    "automatic_commit_and_push_supported": true,
+    "checkpoint_each_seed": true
+  },
+  "interpretation_boundary": [
+    "A positive 009A establishes only that shared two-sided linear factor spaces preserve heldout local functional action under this budget and data regime.",
+    "Frobenius reconstruction is diagnostic rather than a support discriminator; its numeric gate is fixed at the non-discriminative orthogonal-projection bound of 1.0 only as an implementation sanity check.",
+    "A positive 009A does not establish that factor coordinates are sparse, identifiable from inference-visible context, safe to mutate continually, or sufficient for an end-to-end language model.",
+    "A negative 009A is evidence against the current shared linear left/right coordinate hypothesis; it is not evidence against continual learning in general.",
+    "Core 008 and its postmortem remain immutable historical evidence and are not overwritten by 009A."
+  ]
+}
