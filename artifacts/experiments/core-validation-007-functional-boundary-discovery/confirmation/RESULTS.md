@@ -1,0 +1,16 @@
+# Core Validation 007 Confirmation v1.1
+
+- Status: `CONFIRMATION_INCOMPLETE`
+- Scientific decision: `False`
+- Winner: `interference_cut`
+- Completed: `[80721]`
+- Failed: `[]`
+- Pending: `[80722, 80723]`
+
+The original 80711/80712/80713 confirmation set is retired by the infrastructure amendment and is not merged into this decision.
+
+## Completed seed gates
+
+|   seed | pass   |   causal_nonzero_cells |   child_reuse_transactions |   core006_median_split_conflict_reduction |   cumulative_new_gain |   deploy_eval_nll |   deploy_relative_nll_gap |   eval_routing_agreement |   final_positive_registered_regression |   gain_ratio_vs_replay |   median_split_conflict_reduction |   oracle_eval_nll |   regression_ratio_vs_unsafe |   routing_agreement |   soft_top2_eval_nll |   spawned_cells |   spawned_fraction_of_addresses |   train_routing_agreement | gate_beats_core006_split_geometry   | gate_bounded_growth   | gate_causal_signal_present   | gate_child_reuse   | gate_deploy_nll_close_to_oracle   | gate_improves_no_growth   | gate_no_replay_candidate   | gate_plasticity_vs_replay   | gate_registered_retention   | gate_routing_identifiable   | gate_split_reduces_conflict   |
+|-------:|:-------|-----------------------:|---------------------------:|------------------------------------------:|----------------------:|------------------:|--------------------------:|-------------------------:|---------------------------------------:|-----------------------:|----------------------------------:|------------------:|-----------------------------:|--------------------:|---------------------:|----------------:|--------------------------------:|--------------------------:|:------------------------------------|:----------------------|:-----------------------------|:-------------------|:----------------------------------|:--------------------------|:---------------------------|:----------------------------|:----------------------------|:----------------------------|:------------------------------|
+|  80721 | False  |                     38 |                         48 |                                 0.0487967 |             0.0112143 |           3.18788 |                         0 |                 0.285714 |                            3.55111e-06 |                1.30673 |                          0.111904 |           3.18789 |                     0.202881 |            0.285714 |              3.18788 |              60 |                           1.875 |                  0.964286 | True                                | False                 | True                         | True               | True                              | True                      | True                       | True                        | True                        | False                       | False                         |
