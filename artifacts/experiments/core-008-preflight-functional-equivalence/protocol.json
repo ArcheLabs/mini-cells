@@ -1,0 +1,55 @@
+{
+  "format": "minicells.core008-preflight.functional-equivalence-bridge.v1",
+  "status": "MEASUREMENT_PROTOCOL_FROZEN",
+  "scientific_decision": false,
+  "purpose": "Distinguish functional redundancy/equivalence from a weak-Cell-effect confound before designing Core Validation 008.",
+  "source_experiment": "core-validation-007-functional-boundary-discovery",
+  "source_status_must_remain_unchanged": true,
+  "source_completed_seeds": [80721, 80722],
+  "excluded_seed": {
+    "seed": 80723,
+    "reason": "Core 007 evaluation boundary bug: no modes for an eval-only address; no completed canonical candidate state exists."
+  },
+  "data_identity": {
+    "model": "EleutherAI/pythia-160m@step143000",
+    "dataset": "DKYoon/SlimPajama-6B@1224c66add28b96ab045cd1058e795e8d3595485",
+    "expected_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+    "original_kaggle_hidden_cache_required": false,
+    "rehydration_rule": "Re-select the pinned source data, verify the exact manifest SHA, and regenerate frozen hidden states when frozen-hidden.pt is absent."
+  },
+  "reproduction_guard": {
+    "require_rehydrated_candidate_to_match_published_core007": true,
+    "maximum_absolute_nll_difference": 0.0001,
+    "maximum_routing_agreement_difference": 1e-12
+  },
+  "diagnostics": [
+    "mode mismatch fraction",
+    "fraction of mode mismatches that retain the same final Cell owner",
+    "oracle-vs-deploy hidden Cell-output RMS difference",
+    "hidden output difference normalized by active Cell-output magnitude",
+    "oracle-vs-deploy logit RMS difference",
+    "logit difference normalized by Cell-induced logit magnitude",
+    "symmetric token-distribution KL",
+    "absolute oracle-vs-deploy per-sequence NLL regret",
+    "NLL regret normalized by the larger oracle/deploy Cell effect relative to the frozen foundation path"
+  ],
+  "interpretation": {
+    "same_owner_mode_mismatch": "Exact functional equivalence under the current single-owner Cell architecture because oracle and deploy select the same mutable matrix A despite different mode labels.",
+    "owner_mismatch": "The decisive subset. Whole-model NLL must not be interpreted without normalization by Cell contribution magnitude.",
+    "weak_effect_confound_diagnostic": "Report median max(|L_oracle-L_foundation|, |L_deploy-L_foundation|) / L_foundation. A value <= 1e-4 is classified as a weak-effect regime for this bridge only.",
+    "near_equivalent_owner_mismatch_diagnostic": "For this bridge only, classify owner mismatches as behaviorally near-equivalent when both median normalized logit-route difference and median normalized NLL regret are <= 0.25 in each completed seed.",
+    "thresholds_are_not_core008_gates": true
+  },
+  "allowed_bridge_statuses": [
+    "REHYDRATION_MISMATCH",
+    "WEAK_EFFECT_CONFOUND_DOMINATES",
+    "FUNCTIONAL_REDUNDANCY_EVIDENCE",
+    "MIXED_BRIDGE_EVIDENCE"
+  ],
+  "interpretation_boundary": [
+    "This bridge uses already-observed Core 007 seeds and therefore cannot be a new confirmatory scientific result.",
+    "It may determine which hypothesis Core 008 should test and which metrics should replace raw mode-label accuracy.",
+    "It must not change Core 007 protocol, gates, winner, status, or scientific_decision.",
+    "A fresh hidden-state extraction is recomputation of pinned inputs, not recovery or reconstruction of missing Core 007 results."
+  ]
+}
