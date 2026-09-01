@@ -44,6 +44,13 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def _hydrate_partial_results() -> None:
     """Restore canonical seed/failure checkpoints in a fresh Kaggle session."""
     source = ARTIFACTS / "confirmation"
@@ -61,7 +68,7 @@ def _hydrate_partial_results() -> None:
             target = dest / item.name
             if not target.exists():
                 shutil.copy2(item, target)
-                print(f"[core-007] hydrated {target.relative_to(ROOT)} from canonical artifacts")
+                print(f"[core-007] hydrated {_display_path(target)} from canonical artifacts")
 
 
 def _publish(branch: str, secret_name: str, *, push: bool) -> None:
@@ -170,7 +177,7 @@ def _record_host_failure(seed: int, returncode: int, log_path: Path) -> None:
             "confirmation_protocol_sha256": _sha256(AMENDMENT),
             "failure_kind": "child_process_terminated_without_python_failure_record",
             "returncode": returncode,
-            "log_path": str(log_path.relative_to(ROOT)),
+            "log_path": _display_path(log_path),
         },
     )
 
