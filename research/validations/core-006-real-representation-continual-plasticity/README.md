@@ -1,268 +1,97 @@
 # Core Validation 006 — Real-Representation Continual Plasticity
 
-Status: **PROTOCOL_FROZEN_UNRUN**
+Status: **REAL_REPRESENTATION_CONTINUAL_PLASTICITY_NOT_SUPPORTED**
+
+Formal result: **0/3 seeds passed** (`80611`, `80612`, `80613`). The frozen gates were not retuned after formal opening.
 
 ## Decision question
 
-Can bounded dependency-aware subspace state support replay-free continual learning on **real pretrained language-model representations** without rapid saturation or growth explosion?
+Can bounded dependency-aware subspace state support replay-free continual learning on real pretrained language-model representations without rapid saturation or growth explosion?
 
-Core Validation 005 established certificate → safe write → saturation → growth in a registered linear-writable synthetic world. Core 006 removes the synthetic representation while preserving the part of the architecture for which the certificate mathematics remains auditable.
+Core Validation 006 used:
 
-The frozen experiment uses:
-
-- `EleutherAI/pythia-160m` at `step143000`, permanently frozen;
-- pinned `DKYoon/SlimPajama-6B` real text from seven sources;
+- frozen `EleutherAI/pythia-160m@step143000`;
+- pinned `DKYoon/SlimPajama-6B@1224c66add28b96ab045cd1058e795e8d3595485` real text from seven sources;
 - 64-D projected Pythia hidden states;
-- a fixed K-means address router;
-- linear writable Cells;
-- per-address covariance/dependency certificates;
-- dependency-partitioned mitosis;
-- actual next-token NLL plus a replay baseline.
-
-No raw dataset text is committed. Results retain source labels and SHA-256 identities only.
-
-## Writable Cell
-
-For frozen final Pythia hidden state
-
-\[
-h\in\mathbb R^{768},
-\]
-
-a seeded orthonormal projection
-
-\[
-U\in\mathbb R^{768\times64}
-\]
-
-defines
-
-\[
-z=U^Th.
-\]
-
-A Cell contributes
-
-\[
-\Delta h=UAz,
-\]
-
-where only
-
-\[
-A\in\mathbb R^{64\times64}
-\]
-
-is mutable. The Pythia foundation and LM head are frozen.
-
-For current real text, standard next-token cross entropy supplies
-
-\[
-g_h=\partial L_{NLL}/\partial h,
-\]
-
-and the local functional target is
-
-\[
-R=-\eta U^Tg_h.
-\]
-
-The experiment fits a bounded local `Delta A` rather than updating foundation weights.
-
-## Dependency-aware certificate
-
-Every fixed address `a` accumulates only bounded state:
-
-\[
-\Sigma_a=\sum_{z\in a}zz^T,
-\]
-
-plus token/sequence counts. A Cell certificate is
-
-\[
-\Sigma_c=\sum_{a:owner(a)=c}\Sigma_a.
-\]
-
-The smallest eigenspace covering 99.5% of `Sigma_c` energy is `Q_c`. Future safe writes use
-
-\[
-P_c=I-Q_cQ_c^T,
-\qquad
-\Delta A=BP_c,
-\]
-
-so
-
-\[
-\Delta A Q_c=0.
-\]
-
-The learner never receives old samples for the candidate variants.
-
-The experiment records exact rank, 99%-energy rank, 99.5%-certificate rank, participation rank, entropy rank, covariance trace, dependency tokens/sequences, address count, and
-
-\[
-\eta_c=\frac{N_{tokens,c}}{r_{participation,c}}
-\]
-
-as functional reuse density.
-
-## Certificate conflict
-
-For the current transaction, the experiment solves both unrestricted and safe least-squares functional writes. Their normalized residual gap is the **certificate conflict fraction**.
-
-This distinguishes:
-
-- inability of the Cell parameterization to express the requested update at all; from
-- inability caused specifically by already-protected historical geometry.
-
-## Dependency-partitioned mitosis
-
-Core 006 does not attach an empty additive side Cell.
-
-If a current address conflicts with its parent Cell certificate:
-
-1. clone the parent's current `A` into a child;
-2. move that fixed address to the child;
-3. move the address covariance/dependency state with it;
-4. recompute the parent's certificate from its remaining addresses;
-5. recompute safe-write feasibility.
-
-Because child `A` initially equals parent `A`, the split itself is function-preserving.
-
-The dependency state is exactly partitioned:
-
-\[
-\Sigma_{parent}^{before}
-=
-\Sigma_{parent}^{after}+
-\Sigma_{child}^{after}.
-\]
-
-This directly tests whether a heavily reused/high-rank Cell can regain plasticity by separating dependency sets rather than forgetting them.
-
-V1 does not recursively subdivide an address whose owner has only one address; such saturation is recorded as `blocked_saturation`.
-
-## Fixed real router
-
-A disjoint bootstrap partition of SlimPajama is encoded by frozen Pythia, projected to 64-D, mean pooled and deterministically clustered into 32 addresses. The addresses are greedily load-balanced across eight base Cells.
-
-After bootstrap:
-
-- centroids never move;
-- Pythia never moves;
-- address assignment is fixed by the frozen representation;
-- mitosis changes only address ownership.
-
-Router learning and router drift are intentionally outside this experiment.
-
-## Real continual stream
-
-Sources are processed in this frozen order:
-
-1. Wikipedia
-2. GitHub
-3. ArXiv
-4. Books
-5. StackExchange
-6. C4
-7. CommonCrawl
-
-Per source:
-
-- 8 router-bootstrap sequences;
-- 32 continual train sequences;
-- 8 disjoint heldout sequences;
-- sequence length 128.
-
-The 32 train sequences form eight transactions of four sequences, giving 56 total continual transactions.
-
-## Variants
-
-- `unsafe`: current data only, unrestricted Cell writes, no growth.
-- `certificate_no_growth`: replay-free safe writes, no growth.
-- `certificate_mitosis`: replay-free safe writes plus dependency-partitioned mitosis.
-- `replay`: unrestricted writes with an explicit old-sequence buffer.
-
-The important comparison is therefore
-
-\[
-certificate\_mitosis\stackrel{?}{\approx}replay
-\]
-
-without learner-side history.
-
-## Hidden evaluator and causal diagnostics
-
-The hidden evaluator may retain committed sequences and their post-commit NLL only to measure later regression. Candidate learner update functions never receive those sequences again.
-
-At the end, each active Cell is ablated on heldout sequences currently routed to it:
-
-\[
-C_c=L_{NLL}(A_c=0)-L_{NLL}(full).
-\]
-
-The report compares routing/dependency frequency, effective rank, reuse density, and causal ablation effect. A monotonic dependency→causality relation is **not** assumed and is not a positive gate.
-
-## Frozen gates
-
-Every formal seed must pass all gates:
-
-1. candidate old-sample and old-label accesses are exactly zero;
-2. median 99%-energy rank at stream midpoint is at most 90% of Cell dimension;
-3. median reuse density at midpoint is at least 1.25× its quarter-stream value;
-4. final positive registered-history regression is at most 0.50× `unsafe`;
-5. cumulative new-learning gain is at least 0.80× `replay`;
-6. mitosis gains more than `certificate_no_growth`;
-7. median split conflict reduction is at least 0.15;
-8. spawned Cells are at most 50% of the 32 addresses;
-9. at least four later transactions reuse spawned children;
-10. at least one active Cell has a non-zero heldout causal ablation effect.
-
-Formal seeds:
+- 32 fixed K-means addresses across eight base Cells;
+- linear writable Cells with per-address covariance certificates;
+- four variants: `unsafe`, `certificate_no_growth`, `certificate_mitosis`, and `replay`;
+- dependency-partitioned clone-and-move mitosis;
+- real next-token NLL, registered-history regression, effective-rank, dependency, reuse, and causal-ablation diagnostics.
+
+## Formal provenance
+
+- code commit: `4d5fdddeef7aa3b665846c7ba3c268206d133294`
+- code tree: `02ab41489bbba4f956aade6f962d1a83829273d8`
+- protocol SHA-256: `d278e038b92abaa5ca85f72abbc0041b25f962da79f3b2a05a0ad49e42eb9a7d`
+- data manifest SHA-256: `d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc`
+- resolved model SHA: `b56d9bee36300031aeea723b73c4d62ac7fa71a2`
+- GPU: Tesla T4, CUDA 12.8
+- Python: 3.12.13
+- PyTorch: 2.10.0+cu128
+- elapsed formal runtime: 143.95795154571533 s
+
+## Formal gate summary
+
+| seed | regression / unsafe | gain / replay | midstream rank fraction | reuse ratio | split conflict reduction | spawned/address fraction | child reuse | result |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 80611 | 0.2712 | 0.8526 | 0.3281 | 1.8083 | 0.1495 | 0.6875 | 48 | FAIL |
+| 80612 | 0.3455 | 0.8861 | 0.3281 | 1.3032 | 0.0000 | 0.6563 | 49 | FAIL |
+| 80613 | 0.2808 | 0.8384 | 0.2813 | 1.5108 | 0.0000 | 0.6563 | 52 | FAIL |
+
+All three seeds passed the following registered gates:
+
+- no learner replay for the candidate;
+- real representation did not immediately fill the 64-D Cell space;
+- functional reuse grew;
+- registered-history regression was reduced relative to `unsafe`;
+- new-learning gain remained at least 0.80x `replay`;
+- mitosis improved plasticity relative to `certificate_no_growth`;
+- spawned children were reused;
+- non-zero heldout causal signals existed.
+
+All three seeds failed bounded growth because spawned Cells covered about 65.6–68.8% of the 32 addresses, above the frozen 50% maximum.
+
+All three seeds also failed the split-conflict-relief requirement. Median conflict reduction was `0.149531...`, `0`, and `0`, below the frozen minimum `0.15`.
+
+## Scientific interpretation
+
+The formal hypotheses resolved as:
 
 ```text
-80611
-80612
-80613
+bounded_certificate_reduces_registered_forgetting_without_replay = true
+real_hidden_states_have_reusable_functional_geometry = true
+dependency_partitioned_mitosis_restores_plasticity = false
+growth_remains_bounded_and_reused = false
 ```
 
-The only scientific statuses are:
+The negative result is therefore narrower than a complete rejection of the certificate mechanism.
+
+The real Pythia representation did **not** rapidly saturate: midpoint 99%-energy rank occupied only about 28–33% of the 64-D Cell space. Functional reuse also increased, and replay-free certificate writes retained roughly 84–89% of replay new-learning gain while reducing registered forgetting to roughly 27–35% of the `unsafe` baseline.
+
+The failed mechanism was the proposed **address-based mitosis boundary**. Moving a routing address into a cloned child usually did not materially reduce the parent's protected functional conflict. This indicates that fixed semantic/routing addresses are not equivalent to independent writable functional subspaces.
+
+The actionable No-Go is therefore:
+
+> **Dependency/routing address is not a sufficient functional boundary for bounded mitosis.**
+
+A future continuation should derive Cell boundaries from functional-subspace geometry itself (for example covariance/eigenspace overlap or principal angles), rather than assuming routing addresses are the correct split units.
+
+## Artifact completeness
+
+The Kaggle formal run completed and printed the formal decision and full gate summary, but the session was closed before the generated result directory was published.
+
+Canonical artifacts recovered from the completed run are stored under:
 
 ```text
-REAL_REPRESENTATION_CONTINUAL_PLASTICITY_SUPPORTED
-REAL_REPRESENTATION_CONTINUAL_PLASTICITY_NOT_SUPPORTED
+artifacts/experiments/core-validation-006-real-representation-continual-plasticity/
 ```
 
-Formal results may not be used to retune the frozen gates.
+Recovered:
 
-## Interpretation boundary
+- `decision.json`
+- `gate-summary.csv`
+- frozen `protocol.json`
+- `RECOVERY_NOTES.md`
 
-A positive result would establish only that the Core 005 mechanism survives a first contact with real frozen Pythia representations and real next-token loss under a fixed router.
-
-It would not establish safe nonlinear foundation updates, autonomous semantic routing, router drift, certificate recovery from opaque historical checkpoints, or full-scale CLM continual learning.
-
-A negative result is intended to be actionable. Rapid effective-rank saturation, poor plasticity relative to replay, or near-linear Cell growth should be treated as a No-Go before investing in a full CLM training run.
-
-## Run
-
-Formal Kaggle/GPU run:
-
-```bash
-python -m pip install -e ".[lm]"
-python scripts/research/run_core_validation_006.py --device cuda
-python scripts/research/report_core_validation_006.py
-```
-
-Reduced real-data smoke:
-
-```bash
-python scripts/research/run_core_validation_006.py --smoke --device cuda
-python scripts/research/report_core_validation_006.py
-```
-
-Formal outputs can be copied into the canonical artifact tree with:
-
-```bash
-python scripts/research/publish_core_validation_006.py
-```
+Detailed files such as `raw.json`, transaction/rank/split records, heldout/causal CSVs, plots, and the hidden-state cache were not available after session closure and have deliberately not been reconstructed.
