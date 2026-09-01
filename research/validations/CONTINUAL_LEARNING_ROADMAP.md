@@ -1,13 +1,12 @@
 # MiniCells Continual-Learning Research Roadmap
 
-Status: **causal funnel frozen; 009B-3 implementation prepared behind the 009B-2 gate**  
-Current evidence frontier: `CARRIER_CAUSAL_SUFFICIENCY_SUPPORTED`  
-Current experiment: **Core 009B-2 — Persistent Effect Geometry**  
-Next-stage implementation: **Core 009B-3 — Deployable Effect Addressability (`PREPARED_WAITING_FOR_009B2_LOCK`)**
+Status: **causal funnel frozen; updated after Core 009B-2 discovery negative**  
+Current evidence frontier: `EFFECT_GEOMETRY_DISCOVERY_NO_COMPACT_SUBSPACE`  
+Current experiment: **Core 009C — Sparse / Local Effect Geometry**
 
 ## Mission
 
-The research program no longer assumes that knowledge is naturally partitioned into semantic Cells, hard functional modes, or a small fixed matrix dictionary.
+The research program does not assume that knowledge is naturally partitioned into semantic Cells, hard functional modes, or one small fixed global linear dictionary.
 
 The working product hypothesis is:
 
@@ -15,7 +14,7 @@ The working product hypothesis is:
 \boxed{\text{slow/frozen foundation}+\text{fast persistent effect memory}+\text{learned addressability}+\text{safety certificates}+\text{adaptive growth}}
 \]
 
-The program must establish this hypothesis through a causal evidence funnel. A later stage is not opened when an earlier prerequisite fails. Until the full chain is established, repository documentation must use **candidate CLM substrate**, not “confirmed CLM architecture”.
+A later stage is not opened when an earlier prerequisite fails. Until the full chain is established, repository documentation must use **candidate CLM substrate**, not “confirmed CLM architecture”.
 
 ## Evidence established so far
 
@@ -25,14 +24,15 @@ The program must establish this hypothesis through a causal evidence funnel. A l
 4. Core 009A supports raw asymmetric factor geometry.
 5. The 009A right-collapse bridge shows the dominant right direction is mainly the train-token activation mean/representation carrier, not sequence averaging.
 6. Core 009B-1 formally supports **carrier causal sufficiency**: with `rho=0.01` locked using full-write discovery only, 3/3 untouched confirmation seeds passed. Carrier-only writes preserved roughly 97.6–98.2% of full target gain, residual-only writes contributed roughly 1.9–2.5%, and excess unrelated harm was negligible.
+7. Core 009B-2 discovery rejects a **single compact global linear carrier-effect dictionary**. On both discovery seeds, 32D left heldout median residual around 0.64–0.67; even 56D remained around 0.31. The spectrum was broad and highly reproducible. Confirmation is forbidden.
 
-The active decomposition is therefore:
+The active causal decomposition remains:
 
 \[
 G_i\approx a_i\mu^\top,\qquad a_i=\hat G_i r\in\mathbb R^{64}.
 \]
 
-The next question is whether the effect vectors form a compact reusable persistent coordinate system.
+What failed is the stronger hypothesis that all `a_i` share one compact global linear basis. This does **not** rule out sparse overcomplete composition, a union of local subspaces, operator-level bilinear composition of `G_i`, or engineered adaptive modules.
 
 ## Evidence funnel
 
@@ -40,97 +40,69 @@ The next question is whether the effect vectors form a compact reusable persiste
 
 **Status: formally supported.**
 
-Result: `CARRIER_CAUSAL_SUFFICIENCY_SUPPORTED`. This opens 009B-2.
+Result: `CARRIER_CAUSAL_SUFFICIENCY_SUPPORTED`.
 
 ### Core 009B-2 — Persistent Effect Geometry
 
-**Status: current frontier; implementation complete, GPU result pending.**
+**Status: discovery negative; closed.**
 
-Test whether heldout effects admit reusable coordinates:
-
-\[
-\boxed{a_i\approx V\beta_i}.
-\]
-
-Two independent requirements are mandatory.
-
-**Offline compact shared geometry:** fit an origin-preserving shared linear subspace from train effects only. Primary evidence is heldout normalized effect residual by dimension, train→heldout generalization gap and covariance energy. A full 64-dimensional basis is not evidence; only dimensions <=32 can unlock confirmation.
-
-**Online low-growth span:** start with no coordinates and add one only when the current effect cannot be reconstructed below the frozen residual threshold. Primary evidence is `K(N)`, final coordinate count, new coordinates per 100 writes, late-half growth, independent-memory compression `N/K`, heldout residual and robustness across multiple frozen stream orders.
-
-The critical scalability signal is **compact heldout reconstruction plus late growth collapse**, not a raw reuse count and not the trivial 64-dimensional ambient ceiling.
-
-If negative, persistent effect dictionaries are not a scalable CLM substrate and 009B-3 remains permanently blocked under the current hypothesis.
-
-### Core 009B-3 — Deployable Effect Addressability
-
-**Status: implementation prepared; scientific execution blocked by the 009B-2 parent gate.**
-
-No 812xx seed may run until an exact positive 009B-2 result and committed basis lock are bound into a committed `parent-lock.json`.
-
-Training oracle:
+Rejected hypothesis:
 
 \[
-\beta_i=V^\top a_i.
+\boxed{a_i\approx V\beta_i,\quad \dim(V)\le32}
 \]
 
-Deployable requirement:
+under a single train-fitted, origin-preserving global linear subspace with heldout residual/generalization gates. No confirmation may be run.
+
+Interpretation boundary: 009B-2 rejects **compact global linear effect geometry**, not every persistent effect dictionary and not the carrier-effect object itself.
+
+### Core 009C — Sparse / Local Effect Geometry
+
+**Status: current frontier; discovery protocol frozen.**
+
+009C tests two alternative explanations for the high global rank.
+
+**H1 — sparse overcomplete composition**
 
 \[
-\boxed{f_\theta(x_i)\to\hat\beta_i}
+\boxed{a_i\approx Dc_i,\qquad \|c_i\|_0\ll K}
 \]
 
-using **only the first half of inference-visible projected activation tokens**. Gradients, labels, future/suffix tokens, `Ghat`, `a_i`, oracle `beta_i`, oracle modes and replay targets are forbidden router inputs.
+with train-only dictionary learning, OMP coding, `K in {64,96,128}` and sparsity `s in {1,2,4,8}`. Capacity-matched deterministic random dictionaries are mandatory controls.
 
-Discovery (`81201/81202`) compares:
-- mean-effect baseline;
-- nearest-neighbor retrieval baseline;
-- ridge on prefix-mean context;
-- a 64-hidden MLP on prefix-mean context;
-- tiny learned attention pooling only if simpler learned families fail.
-
-Router selection uses **effect-space IID + source-heldout metrics only**. Causal NLL cannot influence the router lock. The first viable family in the frozen complexity hierarchy is selected and committed as `router-lock.json`.
-
-Untouched confirmation (`81211/81212/81213`) reuses the Core 009B-1 causal scale `rho=0.01` and measures actual lm-head NLL under oracle/deploy/mean/NN effects. A positive result requires both IID and source-heldout causal recovery, correct-direction rates, bounded unrelated harm, and improvement over the mean baseline. IID-only success is explicitly negative: `EFFECT_ADDRESSABILITY_DOES_NOT_GENERALIZE`.
-
-Only `DEPLOYABLE_EFFECT_ADDRESSABILITY_SUPPORTED` opens Core 010.
-
-### Core 010 — Certified Persistent Effect Memory
-
-Opened only if all of Core 009B is positive.
-
-For effect coordinates `V` and historical coefficient dependencies `beta_j`:
+**H2 — union of local subspaces**
 
 \[
-Q_\beta=\operatorname{basis}\operatorname{span}\{\beta_j\},\qquad \Delta VQ_\beta=0.
+\boxed{a_i\approx V_{z_i}\beta_i}
 \]
 
-Compare unsafe, certificate/no-growth, certificate+growth and replay oracle. Growth is triggered only when the desired write is infeasible under existing dependency constraints.
+with train-only spherical clustering, small origin-preserving PCA charts, and heldout assignment by train centroids only. Semantic/source labels and eval-assisted fitting are forbidden. Capacity-matched random chart assignments are mandatory controls.
 
-### Core 011 — Transfer and Product Validation
+A discovery-positive family must use one fixed configuration that independently passes both discovery seeds. Primary gates are heldout residual, improvement over the known 32D global baseline, improvement over matched nulls, and per-write/local complexity. Discovery cannot be rescued by confirmation-time growth.
 
-Opened only if Core 010 is positive. Test another dense modern LM, at least one MoE, multiple insertion layers, longer streams and comparison with LoRA/adapters, replay and conventional MoE adaptation. A Pythia-only positive is not sufficient for product architecture.
+If both families fail, return to the full operator `G_i` and freeze a new bilinear/compositional representation hypothesis before any deployable routing experiment.
 
-## Product threshold
+### Deployable Effect Addressability — blocked until 009C positive
 
-The CLM core representation is considered experimentally supported only when untouched confirmation establishes:
+If 009C locks a representation, the next experiment must learn an inference-visible map from context to the locked sparse support/coefficients or local chart/coordinates. Gradients, targets, future tokens, oracle effects and replay targets are forbidden router inputs. Primary metric is causal effect recovery, not coefficient MSE.
+
+### Certified Persistent Effect Memory — blocked until addressability positive
+
+For locked persistent coordinates and historical dependencies, compare unsafe mutation, certificate/no-growth, certificate+growth and replay oracle. Growth is triggered only when the desired write is infeasible under existing dependency constraints.
+
+### Transfer and Product Validation
+
+Only after representation, deployable addressability and certified mutation are positive: test another dense modern LM, at least one MoE, multiple insertion layers, longer streams and comparisons with LoRA/adapters, replay and conventional MoE adaptation. A Pythia-only positive is not sufficient for product architecture.
+
+## Product fallback path
+
+Even if natural sparse/local effect structure is not supported, the already-established certificate/growth evidence keeps an engineered product path open:
 
 \[
-\begin{aligned}
-G_i&\approx a_i\mu^\top &&\text{causally sufficient}\\
-a_i&\approx V\beta_i &&\text{compact/reusable}\\
-\beta_i&\approx f_\theta(x_i) &&\text{deployably addressable}\\
-\Delta VQ_\beta&=0 &&\text{safe}\\
-P_{\rm free}\approx0&\Rightarrow\text{growth} &&\text{plastic}\\
-K(N)&\ll N &&\text{scalable}
-\end{aligned}
-\]
 
-Current position:
+\boxed{\text{frozen/slow foundation}+\text{engineered sparse mutable modules}+\text{router}+\text{certificate}+\text{growth}}
 
-\[
-\boxed{\underbrace{G_i\rightarrow a_i\mu^\top}_{\text{supported}}\Longrightarrow\underbrace{a_i\rightarrow V\beta_i}_{\text{009B-2 current gate}}\Longrightarrow\underbrace{x\rightarrow\hat\beta}_{\text{009B-3 prepared only}}}
-\]
+This path does not claim that natural Cells were discovered. It treats Cells as persistent lifecycle-managed adaptation modules whose writes are protected and whose capacity can grow when constrained plasticity is exhausted.
 
 ## Experimental discipline
 
@@ -140,8 +112,10 @@ Current position:
 - Failed scientific gates are preserved; no silent seed replacement.
 - Diagnostic bridges never overwrite source scientific decisions.
 - Causal interventions take priority over normalized geometry when they disagree.
-- No router **scientific execution**, certificate or growth mechanism is opened before the representation prerequisite it depends on is confirmed.
-- Preparing downstream code behind a hard parent gate does not count as opening the scientific stage.
+- Semantic/source labels cannot create a functional boundary unless the protocol explicitly tests semantics.
+- No deployable router/certificate/growth mechanism is added before the representation prerequisite it depends on is confirmed.
 - Ambient-dimensional saturation is not called bounded growth.
+- Overcomplete dictionaries must report per-write sparsity and description-length costs; lowering residual by adding atoms is not sufficient evidence.
+- Local-subspace models must route heldout effects using train-fitted information only.
 - Selection/reuse counters are never primary scalability evidence.
-- Online results must be robust to more than one frozen stream order.
+- Online growth must be robust to multiple frozen stream orders when it becomes a scientific gate.
