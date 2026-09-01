@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import shutil
@@ -84,12 +85,16 @@ def _push(branch: str) -> None:
         return
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if token:
+        # Git smart-HTTP accepts the same Basic token form used by GitHub's
+        # credential helpers. Keep the token in the child-process environment,
+        # not in the remote URL or repository config.
+        encoded = base64.b64encode(f"x-access-token:{token}".encode()).decode()
         env = os.environ.copy()
         env.update(
             {
                 "GIT_CONFIG_COUNT": "1",
                 "GIT_CONFIG_KEY_0": "http.extraHeader",
-                "GIT_CONFIG_VALUE_0": f"AUTHORIZATION: bearer {token}",
+                "GIT_CONFIG_VALUE_0": f"AUTHORIZATION: Basic {encoded}",
             }
         )
         second = _run(
