@@ -1,10 +1,10 @@
 # Core Validation 009A Confirmation
 
-- Status: `CONFIRMATION_INCOMPLETE`
-- Scientific decision: `False`
+- Status: `FACTORIZED_FUNCTIONAL_COORDINATES_SUPPORTED`
+- Scientific decision: `True`
 - Locked split: `{'left_dim': 56, 'right_dim': 8}`
-- Completed seeds: `[80911, 80912]`
-- Missing seeds: `[80913]`
+- Completed seeds: `[80911, 80912, 80913]`
+- Missing seeds: `[]`
 
 ## Gate summary
 
@@ -12,5 +12,6 @@
 |-------:|-----------:|------------:|-------------------------------------:|------------------------------------:|---------------------------------:|------------------------------:|-----------------------------------:|------------------------:|:-----------------|:--------------------|:---------------------|:-----------------------|:---------|:-------|
 |  80911 |         56 |           8 |                             0.179637 |                            0.302165 |                         0.338456 |                      0.122527 |                         0.0040982  |                    4096 | True             | True                | True                 | True                   | True     | True   |
 |  80912 |         56 |           8 |                             0.17637  |                            0.313082 |                         0.341735 |                      0.136712 |                         0.00493993 |                    4096 | True             | True                | True                 | True                   | True     | True   |
+|  80913 |         56 |           8 |                             0.181259 |                            0.310378 |                         0.329633 |                      0.129119 |                         0.00477181 |                    4096 | True             | True                | True                 | True                   | True     | True   |
 
 009A confirmation concerns factor geometry only; routing, sparsity, certificates, growth and continual learning remain outside scope.

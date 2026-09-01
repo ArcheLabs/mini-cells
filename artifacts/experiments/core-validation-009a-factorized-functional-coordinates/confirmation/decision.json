@@ -1,7 +1,8 @@
 {
   "completed_seeds": [
     80911,
-    80912
+    80912,
+    80913
   ],
   "data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
   "experiment_id": "core-validation-009a",
@@ -40,18 +41,35 @@
       "seed": 80912,
       "train_eval_local_action_gap": 0.1367119274014399,
       "train_median_local_action_residual": 0.1763704195786845
+    },
+    {
+      "basis_parameter_count": 4096,
+      "budget": true,
+      "eval_median_frobenius_residual": 0.32963306989904156,
+      "eval_median_local_action_residual": 0.3103777894725398,
+      "generalization_gap": true,
+      "heldout_action": true,
+      "heldout_frobenius": true,
+      "left_dim": 56,
+      "pass": true,
+      "rank1_eval_local_action_residual": 0.004771807350191691,
+      "rank1_identity_guard": true,
+      "right_dim": 8,
+      "seed": 80913,
+      "train_eval_local_action_gap": 0.12911855461784683,
+      "train_median_local_action_residual": 0.18125923485469297
     }
   ],
   "locked_split": {
     "left_dim": 56,
     "right_dim": 8
   },
-  "missing_seeds": [
-    80913
-  ],
+  "missing_seeds": [],
+  "passed_seeds": 3,
   "protocol_sha256": "60f20d8f0b1fb14a487e88c6c16087acbafc62969a5a6ea4da0715cc749ab98d",
   "protocol_version": "1.0-frozen",
-  "scientific_decision": false,
-  "status": "CONFIRMATION_INCOMPLETE",
-  "supported": null
+  "scientific_decision": true,
+  "status": "FACTORIZED_FUNCTIONAL_COORDINATES_SUPPORTED",
+  "supported": true,
+  "total_formal_seeds": 3
 }
