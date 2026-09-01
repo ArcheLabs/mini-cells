@@ -51,9 +51,23 @@ No task label, factor ID, replay buffer, old sample, Pythia gradient, certificat
 
 This is deliberately a **scaffolded constructive** experiment: growth is still an engineered rule. The question is coordinate/read-key formation, not learned mitosis policy.
 
+## Seed discipline
+
+Development seeds `1001/1002/1003` were observed while implementing and testing the mechanism. They are permanently excluded from the scientific decision.
+
+The untouched formal seeds are:
+
+```text
+90111
+90112
+90113
+```
+
+All three formal seeds are required.
+
 ## Primary gates
 
-All formal seeds `1001/1002/1003` must independently satisfy:
+Every formal seed must independently satisfy:
 
 - final active Cells `<= 8` for six hidden factors;
 - late-half spawns `<= 1`;
@@ -77,7 +91,7 @@ A positive main result must substantially outperform this control. This guards a
 
 ## Run
 
-Single diagnostic seed:
+Development diagnostic only:
 
 ```bash
 python scripts/research/run_constructive_clm_001.py --seed 1001
