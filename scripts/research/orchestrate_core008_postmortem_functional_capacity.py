@@ -42,6 +42,20 @@ def _hydrate(seed: int) -> bool:
     return True
 
 
+def _report() -> None:
+    _run([sys.executable, "scripts/research/report_core008_postmortem_functional_capacity.py"])
+
+
+def _publish(branch: str, secret_name: str) -> None:
+    _run([
+        sys.executable,
+        "scripts/research/publish_core008_postmortem_functional_capacity.py",
+        "--push-results",
+        "--branch", branch,
+        "--secret-name", secret_name,
+    ])
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--branch", default="codex/core-008-postmortem-functional-capacity")
@@ -61,6 +75,7 @@ def main() -> int:
         ])
 
     RESULTS.mkdir(parents=True, exist_ok=True)
+    changed = False
     for seed in SEEDS:
         dst = RESULTS / "seeds" / f"seed-{seed}.json"
         if not args.force and (_valid(dst, seed) or _hydrate(seed)):
@@ -72,16 +87,15 @@ def main() -> int:
             "--seed", str(seed),
             "--device", args.device,
         ])
+        changed = True
+        # Persist each completed diagnostic seed before attempting the next one.
+        if args.push_results:
+            _report()
+            _publish(args.branch, args.secret_name)
 
-    _run([sys.executable, "scripts/research/report_core008_postmortem_functional_capacity.py"])
-    if args.push_results:
-        _run([
-            sys.executable,
-            "scripts/research/publish_core008_postmortem_functional_capacity.py",
-            "--push-results",
-            "--branch", args.branch,
-            "--secret-name", args.secret_name,
-        ])
+    _report()
+    if args.push_results and (changed or not (ARTIFACTS / "decision.json").is_file()):
+        _publish(args.branch, args.secret_name)
     return 0
 
 
