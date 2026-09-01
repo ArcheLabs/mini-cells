@@ -179,8 +179,24 @@ entries:
     notebook: research/notebooks/04-continual-learning-core/core-validation-005-subspace-certified-mitosis.ipynb
     implementation: research/experiments/04-continual-learning-core/core-validation-005
     supersedes: core-validation-004
-    superseded_by: null
+    superseded_by: core-validation-006
     notes: "Frozen positive result; 3/3 seeds. In the registered linear-writable, fixed-feature, explicit-routing world, Cell-local Q replaced learner-side historical replay for exact registered-history protection, saturation detection, and bounded reusable growth."
+
+  - id: core-validation-006
+    title: Real-Representation Continual Plasticity
+    kind: core-validation
+    stage: continual-learning-core
+    outcome: PROTOCOL_FROZEN_UNRUN
+    scientific_decision: false
+    canonical: true
+    report: research/validations/core-006-real-representation-continual-plasticity/README.md
+    protocol: research/validations/core-006-real-representation-continual-plasticity/protocol.json
+    artifacts: artifacts/experiments/core-validation-006-real-representation-continual-plasticity
+    notebook: research/notebooks/04-continual-learning-core/core-validation-006-real-representation-continual-plasticity.ipynb
+    implementation: research/experiments/04-continual-learning-core/core-validation-006
+    supersedes: core-validation-005
+    superseded_by: null
+    notes: "Frozen real-representation bridge; formal seeds 80611/80612/80613 remain unopened. Tests dependency load, effective rank, causal importance, replay-free certificate writes, and dependency-partitioned mitosis on frozen Pythia representations."
 
   - id: stage-language-validation
     title: "Language Validation: Token-Level Transfer and Scale Readiness"
