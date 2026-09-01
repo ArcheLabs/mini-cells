@@ -2,14 +2,15 @@
 
 - Status: `POSTMORTEM_INCOMPLETE`
 - Scientific decision: `false` (diagnostic bridge on already-observed Core 008 seeds)
-- Completed seeds: `[80821]`
-- Missing seeds: `[80822, 80823]`
+- Completed seeds: `[80821, 80822]`
+- Missing seeds: `[80823]`
 
 ## Seed summary
 
 | seed | classification | rank-16 per-write | PCA-32 | best factorized | Core008 oracle |
 |---:|---|---:|---:|---:|---:|
 | 80821 | PER_WRITE_LOW_RANK_BUT_NOT_SHARED | 0.0009 | 0.6657 | 0.7815 (r=1) | 0.8574 |
+| 80822 | PER_WRITE_LOW_RANK_BUT_NOT_SHARED | 0.0009 | 0.6507 | 0.7708 (r=1) | 0.8608 |
 
 ## Reading the result
 
