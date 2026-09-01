@@ -14,7 +14,7 @@ minicells-clm = "minicells.cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
-lm = ["datasets>=2.18"]
+lm = ["datasets>=2.18", "transformers>=4.40", "huggingface_hub>=0.23"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}

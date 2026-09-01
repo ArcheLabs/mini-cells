@@ -1,0 +1,50 @@
+name: Core Validation 006 real-representation bridge
+
+on:
+  push:
+    branches:
+      - codex/core-validation-006-real-representation
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install core test dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Core Validation 006 unit tests
+        run: pytest -q tests/research/04-continual-learning-core/test_core_validation_006.py
+      - name: Validate frozen assets
+        run: |
+          python -m json.tool research/validations/core-006-real-representation-continual-plasticity/protocol.json >/dev/null
+          python -m json.tool research/notebooks/04-continual-learning-core/core-validation-006-real-representation-continual-plasticity.ipynb >/dev/null
+          python -m py_compile \
+            src/minicells/real_representation_006_config.py \
+            src/minicells/real_representation_006_core.py \
+            src/minicells/real_representation_006_io.py \
+            src/minicells/real_representation_006_experiment.py \
+            scripts/research/run_core_validation_006.py \
+            scripts/research/report_core_validation_006.py \
+            scripts/research/publish_core_validation_006.py
+      - name: Semantic Ruff checks
+        run: >-
+          ruff check --select F,E9
+          src/minicells/real_representation_006_config.py
+          src/minicells/real_representation_006_core.py
+          src/minicells/real_representation_006_io.py
+          src/minicells/real_representation_006_experiment.py
+          scripts/research/run_core_validation_006.py
+          scripts/research/report_core_validation_006.py
+          scripts/research/publish_core_validation_006.py
+          tests/research/04-continual-learning-core/test_core_validation_006.py
+      - name: Formal-run policy
+        run: |
+          echo "Core 006 formal is intentionally not run in GitHub CI."
+          echo "It requires the frozen real Pythia/SlimPajama GPU protocol and must be run on Kaggle or equivalent."
