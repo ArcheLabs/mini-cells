@@ -1,0 +1,58 @@
+name: Core Validation 005 subspace-certified mitosis
+
+on:
+  push:
+    branches:
+      - codex/core-validation-005-subspace-certified-mitosis
+    paths-ignore:
+      - artifacts/experiments/core-validation-005-subspace-certified-mitosis/**
+      - research/catalog.yaml
+      - research/validations/core-005-subspace-certified-mitosis/README.md
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  formal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Unit tests
+        run: pytest -q tests/research/04-continual-learning-core/test_core_validation_005.py
+      - name: Validate frozen assets
+        run: |
+          python -m json.tool research/validations/core-005-subspace-certified-mitosis/protocol.json >/dev/null
+          python -m json.tool research/notebooks/04-continual-learning-core/core-validation-005-subspace-certified-mitosis.ipynb >/dev/null
+          python -m py_compile src/minicells/subspace_mitosis_005.py scripts/research/run_core_validation_005.py scripts/research/report_core_validation_005.py
+          ruff check --select F,E9 src/minicells/subspace_mitosis_005.py scripts/research/run_core_validation_005.py scripts/research/report_core_validation_005.py tests/research/04-continual-learning-core/test_core_validation_005.py
+      - name: Formal three-seed CPU run
+        run: |
+          python scripts/research/run_core_validation_005.py --device cpu
+          python scripts/research/report_core_validation_005.py
+      - name: Show formal decision
+        run: |
+          cat results/core-validation-005-subspace-certified-mitosis/decision.json
+          cat results/core-validation-005-subspace-certified-mitosis/gate-summary.csv
+      - name: Prepare canonical artifacts
+        run: |
+          mkdir -p artifacts/experiments/core-validation-005-subspace-certified-mitosis
+          cp -R results/core-validation-005-subspace-certified-mitosis/. artifacts/experiments/core-validation-005-subspace-certified-mitosis/
+          cp research/validations/core-005-subspace-certified-mitosis/protocol.json artifacts/experiments/core-validation-005-subspace-certified-mitosis/protocol.json
+      - name: Commit formal artifacts
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "research: record Core Validation 005 formal results"
+          file_pattern: artifacts/experiments/core-validation-005-subspace-certified-mitosis/**
+      - name: Upload formal artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-validation-005-formal
+          path: artifacts/experiments/core-validation-005-subspace-certified-mitosis
