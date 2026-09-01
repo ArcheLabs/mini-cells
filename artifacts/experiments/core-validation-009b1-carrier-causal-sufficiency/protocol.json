@@ -1,0 +1,105 @@
+{
+  "format": "minicells.core-validation.carrier-causal-sufficiency.v1",
+  "experiment_id": "core-validation-009b1",
+  "title": "Core Validation 009B-1 — Carrier Causal Sufficiency",
+  "protocol_version": "1.0-frozen",
+  "status": "DISCOVERY_PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "parent_evidence": {
+    "core009a_result_commit": "8290d4d674a8ec9ce98d4de129043526841e5f95",
+    "core009a_status": "FACTORIZED_FUNCTIONAL_COORDINATES_SUPPORTED",
+    "right_collapse_bridge_commit": "656317e8708f7fc7f64fcf438c299e93f15b8e82",
+    "right_collapse_bridge_status": "RIGHT_COLLAPSE_DIAGNOSTIC_COMPLETE",
+    "bridge_protocol_sha256": "82845eac6d6b4ad5dafcc721a9d4ff1fabe3dbca07358c97d7fc9571da369696"
+  },
+  "decision_question": "Using the same causal step size, does the train-fitted common carrier component of a real frozen-Pythia write preserve most full-write target improvement without materially increasing unrelated harm, while the non-carrier residual contributes little target gain?",
+  "foundation": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "step143000",
+    "expected_hidden_dim": 768,
+    "frozen": true,
+    "insertion_point": "gpt_neox.last_hidden_state before embed_out"
+  },
+  "data": {
+    "dataset_id": "DKYoon/SlimPajama-6B",
+    "dataset_revision": "1224c66add28b96ab045cd1058e795e8d3595485",
+    "expected_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+    "selection_and_partition": "exact Core 006/007/009A pinned sequence selection; router examples may participate in projection preparation/extraction batching but never in 009B-1 train/eval statistics",
+    "raw_text_persisted": false
+  },
+  "geometry": {
+    "cell_dim": 64,
+    "write": "G_i = mean_t[(U^T dL/dh_t) z_t^T] on the frozen foundation path",
+    "full_direction": "Ghat = G/max(||G||_F,eps)",
+    "carrier": "r = normalized mean of train-token projected activations z; fitted independently per seed using train only",
+    "carrier_direction": "G_parallel = Ghat r r^T",
+    "residual_direction": "G_perp = Ghat (I-r r^T)",
+    "same_step_rule": "full, carrier and residual always use the same eta for a target; carrier/residual are never renormalized after projection",
+    "intervention": "delta_h = U (DeltaA z), DeltaA = -eta * direction"
+  },
+  "discovery": {
+    "seeds": [81001, 81002],
+    "scientific_decision": false,
+    "perturbation_ratio_grid": [0.0003, 0.001, 0.003, 0.01],
+    "ratio_definition": "rho = ||delta_h_full||_F / ||h||_F on the target sequence; eta is solved independently per target from the full normalized direction",
+    "selection_uses_only_full_write": true,
+    "selection_rule": "Select the largest rho that independently on both discovery seeds has full-write descent fraction >=0.95, median full normalized NLL gain >=1e-5, median half-step linearity error <=0.25 and p90 half-step linearity error <=0.50.",
+    "gates": {
+      "minimum_full_descent_fraction": 0.95,
+      "minimum_median_full_normalized_nll_gain": 1e-5,
+      "maximum_median_half_step_linearity_error": 0.25,
+      "maximum_p90_half_step_linearity_error": 0.50
+    },
+    "scale_lock_required_before_confirmation": true,
+    "carrier_or_residual_metrics_forbidden_for_scale_selection": true
+  },
+  "confirmation": {
+    "seeds": [81011, 81012, 81013],
+    "all_seeds_must_pass": true,
+    "matched_same_source_peers_per_target": 1,
+    "unrelated_different_source_peers_per_target": 6,
+    "peer_selection": "deterministic SHA ordering; one unrelated peer per other source where available",
+    "gates": {
+      "minimum_full_descent_fraction": 0.95,
+      "minimum_carrier_descent_fraction": 0.90,
+      "minimum_median_carrier_over_full_target_gain": 0.90,
+      "maximum_median_residual_over_full_target_gain": 0.20,
+      "maximum_median_carrier_excess_unrelated_harm_over_full_target_gain": 0.10
+    },
+    "positive_status": "CARRIER_CAUSAL_SUFFICIENCY_SUPPORTED",
+    "negative_status": "CARRIER_CAUSAL_SUFFICIENCY_NOT_SUPPORTED"
+  },
+  "metrics": {
+    "primary": [
+      "actual target mean-NLL gain under full/carrier/residual interventions",
+      "carrier/full target gain ratio",
+      "residual/full target gain ratio",
+      "unrelated positive NLL harm and carrier excess harm normalized by full target gain"
+    ],
+    "diagnostic": [
+      "same-source transfer",
+      "absolute unrelated NLL change",
+      "carrier energy fraction of each write",
+      "target hidden perturbation ratio",
+      "full half-step linearity"
+    ],
+    "whole_model_causal_nll": "required; geometry-only local-action residual is not a scientific gate"
+  },
+  "replication": {
+    "smoke_seed": 81000,
+    "formal_hardware": "Kaggle GPU; foundation is used only to extract frozen hidden/gradient signatures, after which causal interventions use frozen hidden states and lm_head",
+    "checkpoint_each_seed": true,
+    "hidden_cache_excluded_from_publication": true
+  },
+  "stop_rule": {
+    "discovery_failure": "Do not open confirmation; the causal intervention scale could not be made both measurable and locally stable.",
+    "confirmation_failure": "Stop the shared-carrier persistent-effect route. Do not run effect compression/addressability experiments without a new residual-aware hypothesis.",
+    "confirmation_success": "Proceed to Core 009B-2 Persistent Effect Geometry. Do not add routing, certificates or growth yet."
+  },
+  "interpretation_boundary": [
+    "A positive result supports causal sufficiency of the common-carrier component for this frozen-Pythia regime; it does not establish reusable effect coordinates, deployable addressability, safe continual mutation, bounded growth or an end-to-end CLM.",
+    "A negative result does not invalidate Core 009A geometry; it shows that the geometry is not causally sufficient under the frozen intervention protocol.",
+    "Carrier and residual use the exact same eta as the full direction. Renormalizing projected components is forbidden because it would erase the causal magnitude question.",
+    "All carrier statistics are fitted on train tokens only. Eval targets and peers never influence r."
+  ]
+}
