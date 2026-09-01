@@ -1,9 +1,9 @@
 # Core Validation 009D — Compositional Operator Geometry
 
 - Phase: `discovery`
-- Status: `DISCOVERY_INCOMPLETE`
-- Completed seeds: `[81301]`
-- Missing seeds: `[81302]`
+- Status: `OPERATOR_FACTOR_COMPRESSION_ONLY`
+- Completed seeds: `[81301, 81302]`
+- Missing seeds: `[]`
 - Confirmation allowed: `False`
 - Locked configuration: `None`
 - Rank-1-in-56x8 compression guard: `True`
