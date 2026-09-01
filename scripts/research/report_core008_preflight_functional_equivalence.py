@@ -9,7 +9,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_IN = ROOT / "results" / "core-008-preflight-functional-equivalence"
-DEFAULT_OUT = ROOT / "results" / "core-008-preflight-functional-equivalence" / "RESULTS.md"
+DEFAULT_OUT = DEFAULT_IN / "RESULTS.md"
 SEEDS = (80721, 80722)
 
 
@@ -37,12 +37,13 @@ def main() -> int:
     runs = _load(args.indir)
 
     reproduction_ok = all(bool(r["reproduction"]["matches_reference"]) for r in runs)
+    per_seed_weak: list[bool] = []
+    per_seed_near: list[bool] = []
+    any_same_owner_redundancy = False
+    weak_ratio_medians: dict[str, float] = {}
     if not reproduction_ok:
         status = "REHYDRATION_MISMATCH"
     else:
-        per_seed_weak = []
-        per_seed_near = []
-        any_same_owner_redundancy = False
         for run in runs:
             records = run["records"]
             ratios = [
@@ -50,7 +51,9 @@ def main() -> int:
                 / max(abs(float(r["foundation_nll"])), 1e-12)
                 for r in records
             ]
-            per_seed_weak.append(_median(ratios) <= 1e-4)
+            ratio_median = _median(ratios)
+            weak_ratio_medians[str(run["seed"])] = ratio_median
+            per_seed_weak.append(ratio_median <= 1e-4)
             owner = run["summary"]["owner_mismatch"]
             per_seed_near.append(
                 int(owner["count"]) > 0
@@ -68,6 +71,24 @@ def main() -> int:
             status = "FUNCTIONAL_REDUNDANCY_EVIDENCE"
         else:
             status = "MIXED_BRIDGE_EVIDENCE"
+
+    decision = {
+        "format": "minicells.core008-preflight.functional-equivalence-bridge-decision.v1",
+        "status": status,
+        "scientific_decision": False,
+        "source_core007_status_changed": False,
+        "completed_seeds": list(SEEDS),
+        "rehydration_matches_core007": reproduction_ok,
+        "weak_effect_regime_by_seed": {
+            str(seed): value for seed, value in zip(SEEDS, per_seed_weak)
+        },
+        "near_equivalent_owner_mismatch_by_seed": {
+            str(seed): value for seed, value in zip(SEEDS, per_seed_near)
+        },
+        "median_local_cell_effect_over_foundation_nll": weak_ratio_medians,
+        "same_owner_mode_redundancy_present": any_same_owner_redundancy,
+        "interpretation_boundary": "Diagnostic bridge on already-observed Core 007 seeds; not a confirmatory scientific result and not a Core 008 gate."
+    }
 
     lines = [
         "# Core 008 Preflight — Functional Equivalence Bridge Results",
@@ -110,6 +131,9 @@ def main() -> int:
     ]
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(lines), encoding="utf-8")
+    (args.out.parent / "decision.json").write_text(
+        json.dumps(decision, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(args.out)
     return 0
 
