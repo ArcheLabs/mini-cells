@@ -1,220 +1,329 @@
 # MiniCells Continual-Learning Research Roadmap
 
-Status: **carrier-effect vector route closed; operator-level compositional test frozen**  
-Current evidence frontier: `SPARSE_LOCAL_EFFECT_GEOMETRY_NOT_FOUND`  
-Current experiment: **Core 009D — Compositional Operator Geometry**
+Status: **two-track roadmap; Constructive CLM is the native-CLM main line**  
+Frozen evidence map: [`CLM_FEASIBILITY_EVIDENCE_MAP.md`](CLM_FEASIBILITY_EVIDENCE_MAP.md)  
+Current constructive experiment: **Constructive CLM-001 — Learned Coordinate Formation**  
+Current foundation-interface diagnostic: **Core 009D — Compositional Operator Geometry**
 
 ## Mission
 
-The research program does not assume that knowledge is naturally partitioned into semantic Cells, hard functional modes, one small fixed global linear dictionary, or a sparse code in any representation chosen post hoc.
-
-The working product hypothesis is:
-
-\[
-\boxed{\text{slow/frozen foundation}+\text{persistent mutable modules}+\text{learned addressability}+\text{safety certificates}+\text{adaptive growth}}
-\]
-
-A stronger research hypothesis remains open only while evidence supports a reusable natural substrate inside pretrained LMs. A later stage is not opened when an earlier prerequisite fails. Until the full chain is established, repository documentation must use **candidate CLM substrate**, not “confirmed CLM architecture”.
-
-## Evidence established so far
-
-1. Core 005/006 support replay-free local subspace certificates and growth-restored plasticity.
-2. Core 006/007 do not support semantic or hard discrete functional Cell boundaries.
-3. Core 008 rejects a small fixed shared matrix basis; individual writes are nevertheless nearly rank-1.
-4. Core 009A formally supports raw asymmetric factor geometry. The locked split is `left_dim=56`, `right_dim=8`, with heldout local-action residual around 0.30–0.31 on confirmation.
-5. The 009A right-collapse bridge shows the dominant right direction is mainly the train-token activation mean/representation carrier, not sequence averaging.
-6. Core 009B-1 formally supports **carrier causal sufficiency**: with `rho=0.01` locked using full-write discovery only, 3/3 untouched confirmation seeds passed. Carrier-only writes preserved roughly 97.6–98.2% of full target gain, residual-only writes contributed roughly 1.9–2.5%, and excess unrelated harm was negligible.
-7. Core 009B-2 discovery rejects a **single compact global linear carrier-effect dictionary**. On both discovery seeds, 32D heldout median residual was around 0.64–0.67; even 56D remained around 0.31. Confirmation is forbidden.
-8. Core 009C discovery rejects the frozen **sparse overcomplete carrier-effect dictionary** and **centroid-routed local-subspace** hypotheses. Across discovery seeds, sparse dictionaries generalized poorly: the strongest `K=128,s=8` configuration fit train effects to roughly 0.21 median residual but remained around 0.64–0.65 on heldout effects and improved only a few percent over matched random dictionaries. Local chart models remained near 0.90+ heldout residual. Confirmation is forbidden.
-9. The combined 009B-2/009C evidence closes the hypothesis that `a_i = Ghat_i r` itself is a useful persistent global/sparse/local organizational coordinate under the frozen linear models. Carrier causal sufficiency is therefore treated as **execution sufficiency**, not structural sufficiency.
-
-The active operator-level observation is:
-
-\[
-\hat G_i \approx \sigma_i\,\ell_i r_i^\top,
-\]
-
-with a broad left/effect side and compact right/condition side. Core 009D tests whether the joint pair contains reusable structure that was destroyed by the carrier projection.
-
-## Evidence funnel
-
-### Core 009B-1 — Carrier Causal Sufficiency
-
-**Status: formally supported.**
-
-Result: `CARRIER_CAUSAL_SUFFICIENCY_SUPPORTED`.
-
-Interpretation: the dominant carrier is sufficient to execute most of the tested causal write. This does not imply that the carrier-compressed effect vector preserves the write's reusable identity.
-
-### Core 009B-2 — Persistent Effect Geometry
-
-**Status: discovery negative; closed.**
-
-Rejected hypothesis:
-
-\[
-\boxed{a_i\approx V\beta_i,\quad \dim(V)\le32}
-\]
-
-under a single train-fitted, origin-preserving global linear subspace with heldout residual/generalization gates. No confirmation may be run.
-
-### Core 009C — Sparse / Local Effect Geometry
-
-**Status: discovery negative; closed.**
-
-Rejected frozen carrier-effect hypotheses:
-
-\[
-\boxed{a_i\approx Dc_i,\qquad \|c_i\|_0\le 8,\quad K\le128}
-\]
-
-under the registered MOD+OMP dictionary learner and matched random dictionaries, and:
-
-\[
-\boxed{a_i\approx V_{z_i}\beta_i}
-\]
-
-under train-only spherical clustering, local PCA charts and centroid-based heldout assignment.
-
-The local result must not be over-generalized to all possible union-of-subspaces algorithms: 009C specifically tested centroid-routed charts, not residual-optimized k-subspaces. The sparse result is stronger because the frozen optimizer substantially fit train effects while heldout residual remained high.
-
-The scientific decision is not altered by later diagnostics. No 009C confirmation may be run.
-
-### Core 009D — Compositional Operator Geometry
-
-**Status: current frontier; discovery protocol frozen.**
-
-009D returns to the full normalized operator:
-
-\[
-\hat G_i\in\mathbb R^{64\times64}
-\]
-
-and inherits the independently supported 009A train-only factor subspace:
-
-\[
-U_{56},\qquad V_8.
-\]
-
-It tests two pre-registered mechanisms.
-
-#### H1 — Sparse tensor-product operator coordinates
-
-For:
-
-\[
-C_i = U_{56}^\top \hat G_i V_8\in\mathbb R^{56\times8},
-\]
-
-test whether a compact set of coordinate pairs is enough:
+The product path is:
 
 \[
 \boxed{
-\hat G_i\approx U_{56}\,\operatorname{TopS}(C_i)\,V_8^\top,
-\qquad s\in\{1,2,4,8,16,32\}
+\text{pretrained LLM}
+\rightarrow
+\text{external CLM layer}
+\rightarrow
+\text{hybrid CLM}
+\rightarrow
+\text{endogenous/native CLM}
 }
 \]
 
-with `s<=16` required for a compact discovery-positive result.
+The research program now separates two questions that were previously mixed together:
 
-Because `U` and `V` are orthonormal, top-|coefficient| selection is the exact best `s`-term Frobenius approximation in this fixed 448-atom tensor-product dictionary. There is no OMP/dictionary-optimizer failure mode.
+1. **Foundation Interface Research** — what writable structure already exists in a mature pretrained LLM and what is the cheapest causal interface for an external CLM layer?
+2. **Constructive CLM Research** — can persistent sparse functional coordinates, read addressability and growth be learned during continual experience even when the pretrained foundation does not already contain a deployable natural Cell ontology?
 
-The matched null performs deterministic independent orthogonal rotations **inside the same learned 56D and 8D subspaces**. Dense projection is therefore identical under the null; any improvement isolates coordinate sparsity rather than subspace quality.
+A negative result in Track A no longer stops Track B.
 
-Train-only vectorized PCA of `vec(Ghat)` is reported both at active-matched dimensions and at a shared-storage-matched 1D baseline.
+The canonical evidence-reuse and no-repeat rules are frozen in the CLM Feasibility Evidence Map. New experiments must cite the missing integration claim they test rather than re-proving already-settled components.
 
-#### H2 — Right-conditioned operator organization
+---
 
-For each write's oriented rank-1 factors:
+# Track A — Foundation Interface Research
 
-\[
-\hat G_i\approx \sigma_i\ell_i r_i^\top,
-\]
+## Purpose
 
-use only the compact right-side coordinate:
+Track A characterizes a mature LLM as a substrate for an external CLM layer. It is not responsible for proving that a native CLM exists naturally inside the checkpoint.
 
-\[
-x_i = V_8^\top r_i
-\]
-
-to predict the broad left-side coordinate:
+The surviving product-level hypothesis is:
 
 \[
-y_i = U_{56}^\top \ell_i.
+\boxed{
+\text{slow/frozen foundation}
++
+\text{persistent mutable modules}
++
+\text{learned addressability}
++
+\text{safety certificates}
++
+\text{adaptive growth}
+}
 \]
 
-The predictor is centered ridge regression with its regularization selected by deterministic **train-only 4-fold CV**. Heldout `y_i` is never used for prediction.
+## Evidence established
 
-Baselines are:
-- mean train left factor;
-- nearest train right-address neighbor;
-- deterministically permuted train left targets passed through the same ridge/CV procedure.
+1. Core 005 formally supports replay-free Cell-local subspace certificates and reusable growth in the registered linear-writable world.
+2. Core 006 shows that real Pythia hidden states do not immediately saturate, that functional reuse exists, and that replay-free certificates reduce registered forgetting while retaining roughly 0.84–0.89x replay new-learning gain.
+3. Core 006 also rejects the assumption that routing/semantic address is automatically the correct functional mitosis boundary; address-based splitting produced poor conflict relief and excessive growth.
+4. Core 008 rejects a small fixed shared matrix basis while showing that individual normalized writes are nearly rank-1.
+5. Core 009A formally supports asymmetric factorized functional geometry.
+6. The 009A right-collapse diagnostic shows that the dominant right side is largely a common representation/activation carrier.
+7. Core 009B-1 formally supports carrier causal sufficiency: carrier-only writes retain roughly 97.6–98.2% of full target gain at the locked causal scale, while the residual contributes only a few percent.
+8. Core 009B-2 discovery finds no viable compact persistent global carrier-effect subspace under the frozen model; confirmation is forbidden.
+9. Core 009C discovery finds neither the frozen sparse overcomplete carrier-effect dictionary nor centroid-routed local subspace geometry; confirmation is forbidden.
 
-This is intentionally an **operator-structure oracle**, because the heldout right factor is extracted from the heldout `Ghat`. A positive result would show that right-side variation contains organizational information lost by `Ghat r`; it would not yet establish deployable routing.
-
-#### Rank-1-in-factor-subspace compression guard
-
-009D separately measures:
+The resulting interface interpretation is:
 
 \[
-C_i\rightarrow \operatorname{rank1}(C_i).
+\boxed{
+\text{the pretrained model exposes a simple useful write interface}
+\neq
+\text{the pretrained model exposes a ready-made Cell ontology}
+}
 \]
 
-If the 56x8 factor core can be reduced to rank-1 with no material additional heldout residual, a write can be represented by roughly `56+8+1=65` factor coefficients rather than a dense 448-coefficient core. This is useful operator compression but **does not count as cross-write reuse** and cannot by itself open confirmation.
+## Core 009D — Compositional Operator Geometry
 
-#### 009D decision hierarchy
+009D remains useful and may be completed. It asks whether the **full normalized write operator** retains reusable joint structure that was lost by the carrier projection.
 
-1. Rank-1 core guard must pass on both discovery seeds.
-2. Prefer the smallest fixed sparse tensor `s<=16` that passes every frozen gate on both seeds.
-3. Only if sparse tensor reuse fails may the single frozen right-conditioned procedure be locked, and only if it passes all gates on both seeds.
-4. Rank-1 compression alone produces `OPERATOR_FACTOR_COMPRESSION_ONLY` and stops.
-5. If no reusable family passes, confirmation and deployable routing are forbidden.
+A positive 009D result may improve:
 
-Discovery seeds: `81301, 81302`.  
-Confirmation seeds (only after committed lock): `81311, 81312, 81313`.
+- external CLM write compression;
+- initialization of constructive coordinates;
+- operator-level composition priors;
+- later deployable router design.
 
-### Deployable Operator Addressability — blocked until 009D reusable positive
+A negative 009D result closes the tested natural operator-organization hypothesis only. It does **not** stop Constructive CLM.
 
-If sparse tensor coordinates are locked, the next experiment must predict the locked coordinate-pair support/coefficients using inference-visible context only.
+## Track-A stop boundary
 
-If right-conditioned organization is locked, the next experiment must first recover the right/address coordinate from inference-visible context without gradients, targets, future tokens or oracle operators.
+Do not continue indefinitely searching for near-equivalent hidden natural Cell ontologies. New Track-A work must have a concrete product/interface payoff, such as:
 
-Primary metrics must include causal operator/effect recovery; coefficient prediction alone is insufficient.
+- lower write state;
+- better causal fidelity;
+- cross-model/layer stability;
+- deployable context-to-write prediction;
+- lower inference/write cost.
 
-### Certified Persistent Operator Memory — blocked until addressability positive
+---
 
-For locked persistent operator coordinates and historical dependencies, compare unsafe mutation, certificate/no-growth, certificate+growth and replay oracle. Growth is triggered only when the desired write is infeasible under existing dependency constraints.
+# Track B — Constructive CLM Research
 
-### Transfer and Product Validation
-
-Only after representation, deployable addressability and certified mutation are positive: test another dense modern LM, at least one MoE, multiple insertion layers, longer streams and comparisons with LoRA/adapters, replay and conventional MoE adaptation. A Pythia-only positive is not sufficient for product architecture.
-
-## Product fallback path
-
-Even if 009D finds only compression or is fully negative, the already-established certificate/growth evidence keeps an engineered product path open:
+## Core question
 
 \[
-\boxed{\text{frozen/slow foundation}+\text{engineered rank-1/low-rank mutable modules}+\text{router}+\text{certificate}+\text{controlled growth}}
+\boxed{
+\text{Can continual pressure produce a reusable, addressable, protected and growing functional coordinate system?}
+}
 \]
 
-This path does not claim that natural Cells were discovered. It treats Cells as persistent lifecycle-managed adaptation modules whose writes are protected and whose capacity can grow when constrained plasticity is exhausted.
+This track does not require:
 
-A rank-1 operator representation is still useful in this fallback because it reduces the state required for each engineered write, even when there is no cross-write natural dictionary.
+\[
+\exists\text{ a natural global Cell partition inside the pretrained LLM}.
+\]
 
-## Experimental discipline
+Instead, the system is allowed to **learn the coordinate system itself**.
 
-- Every confirmatory result uses untouched seeds.
-- Discovery and confirmation are separated by a committed lock artifact.
-- Failed scientific gates are preserved; no silent seed replacement.
-- Diagnostic bridges never overwrite source scientific decisions.
-- Causal interventions take priority over normalized geometry when they disagree.
-- Semantic/source labels cannot create a functional boundary unless the protocol explicitly tests semantics.
-- No deployable router/certificate/growth mechanism is added before the representation prerequisite it depends on is confirmed.
-- Carrier causal sufficiency is never treated as proof that the carrier-compressed effect is a sufficient organizational representation.
-- Ambient-dimensional saturation is not called bounded growth.
-- Sparse representations must report per-write active coordinates and description-length costs; lowering residual by increasing representation capacity is not sufficient evidence.
-- Matched operator nulls must preserve the relevant shared factor subspace whenever the hypothesis concerns coordinates inside that subspace.
-- Right-conditioned 009D evaluation may use an oracle-extracted heldout right factor only as a representation diagnostic and must never be described as deployable routing.
-- Rank-1-per-write compression is not evidence of cross-write reuse.
-- Selection/reuse counters are never primary scalability evidence.
-- Online growth must be robust to multiple frozen stream orders when it becomes a scientific gate.
+## Reused mechanism stack
+
+Track B treats the following as reusable components rather than new research questions:
+
+```text
+sparse routed mutable state
++
+transactional candidate/commit lifecycle
++
+growth as a plasticity escape
++
+replay-free Cell-local protection
++
+foundation writable interface
+```
+
+The first missing bridge is:
+
+```text
+continual pressure
+  -> learned Cell coordinates
+  <-> learned read keys
+  -> reuse before spawn
+  -> bounded long-run growth
+```
+
+## G1 — Learned coordinate formation and read/write alignment
+
+Current experiment:
+
+**Constructive CLM-001 — Learned Coordinate Formation**
+
+Decision question:
+
+> Can a continual learner form reusable Cell effect coordinates and matching deployable read keys from structured experience without task/factor labels, while growth stops after the reusable factors have been acquired?
+
+The first protocol is deliberately controlled and synthetic so it isolates the only new mechanism instead of re-running Pythia geometry, certificates or language modeling.
+
+It includes:
+
+- hidden reusable functional factors;
+- unlabeled singleton and pairwise compositional transactions;
+- learned Cell read keys and effect values;
+- sparse Top-K execution;
+- residual/confidence-triggered growth;
+- local online reuse updates;
+- shuffled-address causal control;
+- post-hoc coordinate and routing recovery metrics;
+- a late consolidation region in which no new factors exist.
+
+A positive result closes G1 only. It is not a Native CLM proof.
+
+## G2 — Long-horizon growth law
+
+Open only after G1 positive.
+
+Primary question:
+
+\[
+\boxed{K(N)=o(N)?}
+\]
+
+The first practical standard is weaker but measurable:
+
+\[
+\frac{K(N)}{N}\downarrow,
+\qquad
+P(\text{spawn}\mid t)\downarrow,
+\qquad
+\text{reuse rate}\uparrow.
+\]
+
+Constructive CLM-002 must vary stream length and order and report:
+
+- `K(N)`;
+- `K(N)/N`;
+- late-window spawn probability;
+- Cell lifetime;
+- reuse count distribution;
+- heldout performance as memory grows.
+
+Do not infer asymptotic sublinearity from a short fixed stream.
+
+## G3 — Learned coordinates + existing protection
+
+Open only after G1 positive.
+
+Constructive CLM-003 integrates the learned coordinate/read system with the already-supported Core-005 certificate logic.
+
+This is an **integration** test, not a new certificate-principle test.
+
+Required comparison:
+
+```text
+learned coordinates + unsafe writes
+learned coordinates + certificate/no-growth
+learned coordinates + certificate/growth
+replay oracle
+```
+
+Primary question:
+
+> Does protection preserve the learned coordinate system without collapsing plasticity or forcing near-linear growth?
+
+## G4 — Multi-Cell composition
+
+Open after G1 and informed by 009D when available.
+
+The model must activate multiple learned Cells on unseen combinations and demonstrate that the combined behavior is not merely nearest-memory retrieval.
+
+Required metrics include:
+
+- unseen combination accuracy/loss;
+- cross-Cell destructive interference;
+- route support recovery;
+- superposition/composition residual;
+- compute versus active Cell count.
+
+Representation-level operator composition from 009D is informative but is not a substitute for model-level Cell composition.
+
+## G5 — External -> endogenous transition
+
+Only after G1–G4 establish a stable constructive core.
+
+Remove scaffolding one component at a time:
+
+```text
+engineered read-key prototype
+  -> learned router
+  -> learned write controller
+  -> learned growth controller
+  -> slow-plastic foundation
+  -> endogenous cellular model
+```
+
+Each removal is accepted only if it preserves or improves:
+
+- new learning;
+- old retention;
+- growth efficiency;
+- routing generalization;
+- composition;
+- compute/storage cost.
+
+This creates a continuous product-to-native path rather than a second unrelated model project.
+
+---
+
+# Product Track — External CLM Layer
+
+Product feasibility is a separate decision from Native CLM feasibility.
+
+The first product can remain:
+
+\[
+\boxed{
+\text{mature frozen/slow LLM}
++
+\text{persistent sparse mutable Cells}
++
+\text{router}
++
+\text{certificate}
++
+\text{growth}
++
+\text{version/rollback lifecycle}
+}
+\]
+
+It may use engineered LoRA/rank-1/low-rank Cells and a practical router. Native-CLM research is allowed to fail without invalidating this product.
+
+The product benchmark must eventually compare against:
+
+- RAG/external memory;
+- ordinary LoRA/PEFT;
+- continual adapters;
+- replay;
+- adapter banks / MoE-style routing.
+
+The differentiating value must include parameterized behavior/skill adaptation, not factual storage alone.
+
+---
+
+# Experimental discipline
+
+- Frozen formal seeds are never silently replaced.
+- Discovery/diagnostic results are not promoted to formal confirmation claims.
+- Negative natural-geometry results do not automatically become Native-CLM No-Gos.
+- Hidden semantic/task/factor labels may be used for post-hoc evaluation only unless explicitly registered as learner input.
+- An existing supported mechanism is not re-tested unless a new integration variable is named in advance.
+- Growth evidence must report state growth and reuse, not only task accuracy.
+- Short-stream bounded growth is not described as asymptotically sublinear.
+- Coordinate recovery is not sufficient without deployable read addressability.
+- Read addressability is not sufficient without write safety and long-run growth control.
+- Rank-1-per-write compression is not evidence of cross-write Cell reuse.
+- Pythia-only evidence is not sufficient for product generalization.
+- The formal research stop rule is the one frozen in the CLM Feasibility Evidence Map.
+
+## Immediate order
+
+```text
+1. Complete/freeze Constructive CLM-001 implementation and formal run.
+2. 009D may proceed in parallel as a non-blocking Foundation Interface diagnostic.
+3. If C-CLM-001 is positive -> C-CLM-002 long-horizon growth.
+4. Then integrate Core-005 protection in C-CLM-003.
+5. Then composition and external->endogenous transition.
+```
