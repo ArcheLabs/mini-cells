@@ -1,6 +1,26 @@
 # Core Validation 005 — Replay-Free Subspace-Certified Mitosis
 
-Status: **PROTOCOL_FROZEN_UNRUN**
+Status: **SUBSPACE_CERTIFIED_MITOSIS_SUPPORTED**
+
+## Formal result
+
+The frozen three-seed CPU formal run passed all registered gates on seeds `80501`, `80502`, and `80503`.
+
+For `certificate_growth`, every seed produced:
+
+- 48 / 48 effective commits;
+- cumulative committed new-learning gain `48.0`, equal to `unsafe_always`;
+- cumulative positive historical regression `0.0`;
+- `0` false-safe events;
+- `0` certificate-vs-full-history feasibility mismatches;
+- `0` learner old-sample accesses, old-label accesses, or retained replay items;
+- 12 / 12 successful growth rescues;
+- 16 / 16 successful child-reuse writes;
+- 12 spawned Cells, or `0.25` spawned Cells per effective commit.
+
+The no-growth certificate control committed only 28 / 48 transactions while preserving zero regression, exposing the expected stability/plasticity limit. The `wrong_certificate` causal control retained full apparent plasticity but produced 4 false-safe events per seed and cumulative historical regression of approximately `1.01`, `1.23`, and `1.12`, showing that certificate geometry rather than certificate size is causally important.
+
+Canonical formal artifacts are in `artifacts/experiments/core-validation-005-subspace-certified-mitosis/`. The frozen decision is `SUBSPACE_CERTIFIED_MITOSIS_SUPPORTED` with 3 / 3 formal seeds passing.
 
 ## Decision question
 
@@ -109,24 +129,22 @@ Formal seeds are:
 80503
 ```
 
-There is no development seed, calibration, majority-vote rescue, or post-hoc threshold tuning.
+There was no development seed, calibration, majority-vote rescue, or post-hoc threshold tuning.
 
-Formal statuses are only:
+Formal statuses were restricted to:
 
 ```text
 SUBSPACE_CERTIFIED_MITOSIS_SUPPORTED
 SUBSPACE_CERTIFIED_MITOSIS_NOT_SUPPORTED
 ```
 
-Smoke mode emits only `SMOKE_ONLY`.
-
 ## Interpretation boundary
 
-A positive result would establish the complete replay-free mechanism only in the registered linear-writable, fixed-feature, explicit-routing setting. It would not establish that arbitrary Transformer weights have a fixed sufficient subspace certificate, that language-scale activation spans remain low-rank, that semantic routing is solved, or that missing certificates can be reconstructed from an opaque pretrained checkpoint.
+This positive result establishes the replay-free mechanism only in the registered linear-writable, fixed-feature, explicit-routing setting. It does not establish that arbitrary Transformer weights have a fixed sufficient subspace certificate, that language-scale activation spans remain low-rank, that semantic routing is solved, or that missing certificates can be reconstructed from an opaque pretrained checkpoint.
 
-The intended scientific decision is narrower: whether bounded local state can replace raw historical replay for exact registered-history write protection, saturation detection, and growth control.
+The supported claim is narrower: bounded Cell-local state can replace raw historical replay for exact registered-history write protection, saturation detection, and growth control in this frozen synthetic system.
 
-## Run
+## Reproduction
 
 CPU formal run:
 
@@ -140,10 +158,4 @@ CPU smoke:
 ```bash
 python scripts/research/run_core_validation_005.py --smoke --device cpu
 python scripts/research/report_core_validation_005.py
-```
-
-The branch workflow runs tests and the full three-seed CPU formal experiment automatically and records formal outputs under:
-
-```text
-artifacts/experiments/core-validation-005-subspace-certified-mitosis/
 ```
