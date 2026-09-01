@@ -99,8 +99,8 @@ Only after representation, deployable addressability and certified mutation are 
 Even if natural sparse/local effect structure is not supported, the already-established certificate/growth evidence keeps an engineered product path open:
 
 \[
+
 \boxed{\text{frozen/slow foundation}+\text{engineered sparse mutable modules}+\text{router}+\text{certificate}+\text{growth}}
-\]
 
 This path does not claim that natural Cells were discovered. It treats Cells as persistent lifecycle-managed adaptation modules whose writes are protected and whose capacity can grow when constrained plasticity is exhausted.
 
@@ -108,6 +108,7 @@ This path does not claim that natural Cells were discovered. It treats Cells as 
 
 - Every confirmatory result uses untouched seeds.
 - Discovery and confirmation are separated by a committed lock artifact.
+- 009B-3 has an additional committed parent lock before any discovery seed may run.
 - Failed scientific gates are preserved; no silent seed replacement.
 - Diagnostic bridges never overwrite source scientific decisions.
 - Causal interventions take priority over normalized geometry when they disagree.
