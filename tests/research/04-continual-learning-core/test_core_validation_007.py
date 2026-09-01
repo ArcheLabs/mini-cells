@@ -71,7 +71,6 @@ def test_interference_partition_places_damage_across_cut() -> None:
 
 
 def test_functional_split_is_parameter_preserving_and_covariance_conserving() -> None:
-    catalog = _catalog()
     system = FunctionalSystem.initialize(
         dim=4,
         base_address_owner={0: 0, 1: 0, 2: 0, 3: 0},
