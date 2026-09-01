@@ -5,7 +5,6 @@ must not mutate or reinterpret the frozen Core 008 scientific decision.
 """
 from __future__ import annotations
 
-import math
 import statistics
 from typing import Any
 
@@ -28,15 +27,15 @@ def normalize_write(write: torch.Tensor) -> torch.Tensor:
 
 
 def make_rows(projected: list[Any], signatures: dict[str, Any]) -> list[dict[str, Any]]:
-    out: list[dict[str, Any]] = []
-    for seq in projected:
-        out.append({
+    return [
+        {
             "token_sha256": seq.token_sha256,
             "partition": str(seq.partition),
             "z": seq.z.detach().cpu().to(torch.float64),
             "g": normalize_write(signatures[seq.token_sha256].write_matrix),
-        })
-    return out
+        }
+        for seq in projected
+    ]
 
 
 def _rank_approx(g: torch.Tensor, rank: int) -> torch.Tensor:
@@ -59,10 +58,15 @@ def per_write_svd(rows: list[dict[str, Any]], ranks: list[int]) -> list[dict[str
     out: list[dict[str, Any]] = []
     for part in ("train", "eval"):
         subset = [r for r in rows if r["partition"] == part]
+        decomposed = []
+        for row in subset:
+            u, s, vh = torch.linalg.svd(row["g"], full_matrices=False)
+            decomposed.append((row, u, s, vh))
         for rank in ranks:
             fr, ar = [], []
-            for row in subset:
-                approx = _rank_approx(row["g"], rank)
+            for row, u, s, vh in decomposed:
+                r = min(rank, int(s.numel()))
+                approx = (u[:, :r] * s[:r]) @ vh[:r]
                 fr.append(fro_residual(row["g"], approx))
                 ar.append(action_residual(row["z"], row["g"], approx))
             out.append({
@@ -78,10 +82,14 @@ def per_write_svd(rows: list[dict[str, Any]], ranks: list[int]) -> list[dict[str
 
 
 def fit_global_pca(train: list[dict[str, Any]], max_dim: int) -> tuple[torch.Tensor, torch.Tensor]:
+    """Return an uncentered optimal linear subspace through the origin.
+
+    The zero mean is intentional: Core 008 models G as a linear combination of
+    functional atoms without a free full-matrix offset.
+    """
     x = torch.stack([r["g"].reshape(-1) for r in train])
-    mean = x.mean(dim=0)
-    centered = x - mean
-    _, _, vh = torch.linalg.svd(centered, full_matrices=False)
+    _, _, vh = torch.linalg.svd(x, full_matrices=False)
+    mean = torch.zeros(x.shape[1], dtype=torch.float64)
     return mean, vh[: min(max_dim, vh.shape[0])].contiguous()
 
 
@@ -147,10 +155,14 @@ def global_pca_diagnostics(rows: list[dict[str, Any]], dimensions: list[int], sp
     return dense_rows, sparse_rows
 
 
+def _dictionary_matrix(atoms: list[torch.Tensor]) -> torch.Tensor:
+    return torch.stack([a.reshape(-1) for a in atoms], dim=1)
+
+
 def _omp(g: torch.Tensor, atoms: list[torch.Tensor], top_k: int) -> torch.Tensor:
     if not atoms:
         return torch.zeros(0, dtype=torch.float64)
-    d = torch.stack([a.reshape(-1) for a in atoms], dim=1)
+    d = _dictionary_matrix(atoms)
     y = g.reshape(-1)
     coeff = torch.zeros(len(atoms), dtype=torch.float64)
     residual = y.clone()
@@ -173,10 +185,8 @@ def _omp(g: torch.Tensor, atoms: list[torch.Tensor], top_k: int) -> torch.Tensor
 
 
 def _reconstruct_atoms(coeff: torch.Tensor, atoms: list[torch.Tensor]) -> torch.Tensor:
-    out = torch.zeros_like(atoms[0])
-    for c, atom in zip(coeff, atoms):
-        out += float(c.item()) * atom
-    return out
+    d = _dictionary_matrix(atoms)
+    return (d @ coeff).reshape_as(atoms[0])
 
 
 def _project_atom_rank(atom: torch.Tensor, rank: int) -> torch.Tensor:
@@ -185,44 +195,33 @@ def _project_atom_rank(atom: torch.Tensor, rank: int) -> torch.Tensor:
     return a / max(norm, _EPS)
 
 
+def _initial_factorized_atoms(train: list[dict[str, Any]], atom_rank: int, atom_count: int) -> list[torch.Tensor]:
+    x = torch.stack([r["g"].reshape(-1) for r in train])
+    _, _, vh = torch.linalg.svd(x, full_matrices=False)
+    dim = int(train[0]["g"].shape[0])
+    return [_project_atom_rank(vh[j].reshape(dim, dim), atom_rank) for j in range(min(atom_count, vh.shape[0]))]
+
+
 def fit_factorized_dictionary(train: list[dict[str, Any]], atom_rank: int, total_rank_units: int, top_k: int, refinement_rounds: int) -> list[torch.Tensor]:
     atom_count = max(1, total_rank_units // atom_rank)
-    dim = train[0]["g"].shape[0]
-    atoms: list[torch.Tensor] = []
-    # Greedy residual seeding: each atom explains the currently worst represented train write.
-    for _ in range(atom_count):
-        best_row, best_residual, best_norm = None, None, -1.0
-        for row in train:
-            if atoms:
-                coeff = _omp(row["g"], atoms, min(top_k, len(atoms)))
-                residual = row["g"] - _reconstruct_atoms(coeff, atoms)
-            else:
-                residual = row["g"]
-            n = float(torch.linalg.norm(residual).item())
-            if n > best_norm:
-                best_row, best_residual, best_norm = row, residual, n
-        if best_row is None or best_residual is None or best_norm <= 1e-10:
-            break
-        atoms.append(_project_atom_rank(best_residual, atom_rank))
-    # Cheap deterministic refinement: replace each atom by the rank-r projection of
-    # its coefficient-weighted residual aggregate, then recode on the next sweep.
+    dim = int(train[0]["g"].shape[0])
+    atoms = _initial_factorized_atoms(train, atom_rank, atom_count)
+    x = torch.stack([r["g"].reshape(-1) for r in train])
     for _ in range(refinement_rounds):
-        codes = [_omp(r["g"], atoms, min(top_k, len(atoms))) for r in train]
+        codes = torch.stack([_omp(r["g"], atoms, min(top_k, len(atoms))) for r in train])
+        a = torch.stack([atom.reshape(-1) for atom in atoms])
+        recon = codes @ a
+        updated: list[torch.Tensor] = []
         for j in range(len(atoms)):
-            numerator = torch.zeros(dim, dim, dtype=torch.float64)
-            denom = 0.0
-            for row, code in zip(train, codes):
-                alpha = float(code[j].item())
-                if abs(alpha) <= 1e-10:
-                    continue
-                other = torch.zeros(dim, dim, dtype=torch.float64)
-                for k, (c, atom) in enumerate(zip(code, atoms)):
-                    if k != j:
-                        other += float(c.item()) * atom
-                numerator += alpha * (row["g"] - other)
-                denom += alpha * alpha
-            if denom > 1e-12:
-                atoms[j] = _project_atom_rank(numerator / denom, atom_rank)
+            alpha = codes[:, j : j + 1]
+            denom = float(torch.sum(alpha * alpha).item())
+            if denom <= 1e-12:
+                updated.append(atoms[j])
+                continue
+            residual_without_j = x - recon + alpha @ a[j : j + 1]
+            candidate = ((alpha.T @ residual_without_j) / denom).reshape(dim, dim)
+            updated.append(_project_atom_rank(candidate, atom_rank))
+        atoms = updated
     return atoms
 
 
@@ -264,14 +263,13 @@ def classify(seed_payload: dict[str, Any], reference: float = 0.35) -> str:
     pca32 = next(r for r in pca if r["partition"] == "eval" and int(r["dimension"]) == 32)
     fac_eval = [r for r in fac if r["partition"] == "eval"]
     factorized_ok = any(float(r["median_local_action_residual"]) <= reference for r in fac_eval)
-    if float(pca32["median_local_action_residual"]) <= reference:
-        return "SHARED_LOW_DIMENSIONAL_STRUCTURE_PRESENT" if not factorized_ok else "BUDGET_MATCHED_FACTORIZED_STRUCTURE_PRESENT"
-    if float(per16["median_local_action_residual"]) <= reference:
-        return "PER_WRITE_LOW_RANK_BUT_NOT_SHARED"
     if factorized_ok:
         return "BUDGET_MATCHED_FACTORIZED_STRUCTURE_PRESENT"
-    per8 = next(r for r in per if r["partition"] == "eval" and int(r["rank"]) == 8)
-    if float(per8["median_local_action_residual"]) > reference and float(pca32["median_local_action_residual"]) > reference:
+    if float(pca32["median_local_action_residual"]) <= reference:
+        return "SHARED_LOW_DIMENSIONAL_STRUCTURE_PRESENT"
+    if float(per16["median_local_action_residual"]) <= reference:
+        return "PER_WRITE_LOW_RANK_BUT_NOT_SHARED"
+    if float(per16["median_local_action_residual"]) > reference and float(pca32["median_local_action_residual"]) > reference:
         return "NO_STRONG_COMPRESSION_EVIDENCE"
     return "MIXED_CAPACITY_EVIDENCE"
 
@@ -287,7 +285,7 @@ def run_capacity_diagnostics(projected: list[Any], signatures: dict[str, Any], p
         [int(x) for x in budget["dictionary_atom_ranks"]],
         int(budget["total_rank_units"]),
         int(budget["maximum_active_atoms"]),
-        int(budget["greedy_refinement_rounds"]),
+        int(budget["refinement_rounds"]),
     )
     payload = {
         "format": "minicells.core008-postmortem.functional-capacity-seed.v1",
