@@ -1,0 +1,202 @@
+{
+  "curriculum": {
+    "construction": "the same 12-transaction template is instantiated independently for each base Cell; transaction matrices are deterministic from formal seed",
+    "expected_child_reuse_attempts_per_base": 4,
+    "expected_growth_attempts_per_base": 3,
+    "intent": {
+      "collision": "requested residual lies only in the already protected base span and is therefore mathematically infeasible without growth",
+      "free": "new residual lies in currently unused feature directions",
+      "near": "new residual is expressed by a weak remaining free direction",
+      "reuse": "a previously spawned child sees a new direction outside its own Q"
+    },
+    "transaction_classes": [
+      "free",
+      "near",
+      "collision",
+      "reuse"
+    ],
+    "transaction_template": [
+      {
+        "activation_dims": [0, 1],
+        "address_offset": 0,
+        "kind": "free",
+        "residual_dims": [0, 1]
+      },
+      {
+        "activation_dims": [2, 3],
+        "address_offset": 1,
+        "kind": "free",
+        "residual_dims": [2, 3]
+      },
+      {
+        "activation_dims": [0, 2, 4],
+        "address_offset": 2,
+        "dimension_scales": {"4": 0.25},
+        "kind": "near",
+        "residual_dims": [4]
+      },
+      {
+        "activation_dims": [0, 1, 2, 3, 4],
+        "address_offset": 3,
+        "kind": "collision",
+        "residual_dims": [0]
+      },
+      {
+        "activation_dims": [0, 1, 2, 3, 4],
+        "address_offset": 4,
+        "kind": "collision",
+        "residual_dims": [1]
+      },
+      {
+        "activation_dims": [5, 6],
+        "address_offset": 5,
+        "kind": "free",
+        "residual_dims": [5, 6]
+      },
+      {
+        "activation_dims": [7, 8],
+        "address_offset": 3,
+        "kind": "reuse",
+        "residual_dims": [7, 8]
+      },
+      {
+        "activation_dims": [9, 10],
+        "address_offset": 4,
+        "kind": "reuse",
+        "residual_dims": [9, 10]
+      },
+      {
+        "activation_dims": [1, 5, 11],
+        "address_offset": 6,
+        "dimension_scales": {"11": 0.25},
+        "kind": "near",
+        "residual_dims": [11]
+      },
+      {
+        "activation_dims": [0, 1],
+        "address_offset": 7,
+        "kind": "collision",
+        "residual_dims": [0]
+      },
+      {
+        "activation_dims": [11],
+        "address_offset": 3,
+        "kind": "reuse",
+        "residual_dims": [11]
+      },
+      {
+        "activation_dims": [6, 10],
+        "address_offset": 7,
+        "kind": "reuse",
+        "residual_dims": [6, 10]
+      }
+    ]
+  },
+  "decision_question": "Can bounded Cell-local subspace state replace historical replay for deciding safe writes and saturation-triggered mitosis in a controlled continual-learning system?",
+  "experiment_id": "core-validation-005",
+  "format": "minicells.core-validation.subspace-certified-mitosis.v1",
+  "gates": {
+    "maximum_decision_mismatch_count": 0,
+    "maximum_false_safe_count": 0,
+    "maximum_regression_damage_ratio_vs_unsafe": 0.05,
+    "maximum_spawned_cells_per_effective_commit": 0.3,
+    "minimum_child_reuse_acceptance_rate": 0.95,
+    "minimum_committed_gain_ratio_vs_unsafe": 0.95,
+    "minimum_growth_rescue_rate": 0.95,
+    "minimum_wrong_certificate_false_safe_count": 1,
+    "minimum_wrong_certificate_regression": 0.05,
+    "negative_status": "SUBSPACE_CERTIFIED_MITOSIS_NOT_SUPPORTED",
+    "positive_status": "SUBSPACE_CERTIFIED_MITOSIS_SUPPORTED",
+    "rule": "all gates must pass independently on all three formal seeds; no majority rescue or post-hoc threshold changes",
+    "smoke_status": "SMOKE_ONLY"
+  },
+  "hidden_evaluator": {
+    "cannot_control": ["commit", "rollback", "growth", "thresholds", "routing"],
+    "learner_access": false,
+    "stores_full_history": true,
+    "uses": [
+      "global historical regression measurement",
+      "full-history constrained-feasibility oracle",
+      "certificate-vs-full-history decision equivalence"
+    ]
+  },
+  "interpretation": {
+    "positive_does_not_establish": [
+      "that arbitrary nonlinear Transformer parameters admit a fixed sufficient subspace certificate",
+      "that hidden-state activation spans stay low-rank at language-model scale",
+      "that natural-language semantic routing provides exact dependency domains",
+      "that an opaque pretrained checkpoint can reconstruct missing certificates",
+      "that all semantic knowledge is preserved beyond the registered functional subspace"
+    ],
+    "positive_supports": [
+      "for linear-writable Cells with frozen feature coordinates and stable explicit routing, a finite Cell-local activation-subspace certificate can replace raw historical replay for exact registered-history write protection",
+      "safe-write feasibility can be computed from current data plus Q",
+      "infeasibility can act as a saturation signal",
+      "monotonic private-Cell growth can restore plasticity while remaining reusable and bounded in the registered synthetic curriculum"
+    ]
+  },
+  "mechanism": {
+    "cell_form": "y = W z with frozen feature coordinates during continual learning",
+    "certificate": "Q is an orthonormal basis spanning committed activation rows for the Cell",
+    "child_reuse": "later writes for an address with a private Cell update only the private Cell; base Q still records every committed activation because base output remains on-path",
+    "feasibility": "solve min_A ||Z P_free A - R||_F^2; direct write is feasible iff normalized residual <= threshold",
+    "feasibility_threshold": 1e-10,
+    "hidden_evaluator_controls_decision": false,
+    "learner_forbidden": [
+      "old_examples",
+      "old_labels",
+      "old_hidden_activations",
+      "protected_probes",
+      "replay_buffer",
+      "hidden_full_history_oracle"
+    ],
+    "learner_state": ["W", "Q", "route"],
+    "mitosis": "on infeasible first-address direct write, attach a zero-output exact-address private Cell and retry with empty Q",
+    "numerical_rank_tolerance": 1e-09,
+    "regression_tolerance": 1e-12,
+    "safe_projector": "P_free = I - Q Q^T",
+    "safe_write_constraint": "delta_W @ Q = 0",
+    "wrong_certificate_control": "row-roll Q by one feature coordinate, preserving rank/norm but corrupting geometry"
+  },
+  "parent_experiment": "core-validation-004-growth-restored-plasticity",
+  "protocol_version": "1.0-frozen",
+  "replication": {
+    "calibration_allowed": false,
+    "development_seed": null,
+    "formal_hardware": "CPU",
+    "formal_run_must_use_exact_seed_set": true,
+    "formal_seeds": [80501, 80502, 80503],
+    "require_all_formal_seeds": true
+  },
+  "scope": {
+    "arbitrary_nonlinear_cell_writes": false,
+    "autonomous_semantic_routing": false,
+    "controlled_synthetic_linear_writable_cells": true,
+    "finite_functional_certificate": true,
+    "natural_language": false,
+    "opaque_pretrained_model_recovery": false,
+    "replay_free_learner": true,
+    "saturation_triggered_growth": true,
+    "stable_explicit_routing": true
+  },
+  "status": "PROTOCOL_FROZEN_UNRUN",
+  "title": "Core Validation 005 — Replay-Free Subspace-Certified Mitosis",
+  "variants": [
+    "unsafe_always",
+    "certificate_no_growth",
+    "certificate_growth",
+    "wrong_certificate"
+  ],
+  "world": {
+    "addresses_per_base": 8,
+    "base_cells": 4,
+    "dtype": "float64",
+    "examples_per_transaction": 24,
+    "feature_dim": 12,
+    "output_dim": 3,
+    "private_growth_route": "exact address only, monotonic addition, zero-output initialization",
+    "routing": "address_id // addresses_per_base",
+    "transactions": 48,
+    "transactions_per_base": 12
+  }
+}
