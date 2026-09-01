@@ -202,7 +202,7 @@ entries:
     title: Functional Boundary Discovery
     kind: core-validation
     stage: continual-learning-core
-    outcome: DISCOVERY_PROTOCOL_FROZEN_UNRUN
+    outcome: CONFIRMATION_V2_PROTOCOL_FROZEN_UNRUN
     scientific_decision: false
     canonical: true
     report: research/validations/core-007-functional-boundary-discovery/README.md
@@ -212,7 +212,7 @@ entries:
     implementation: research/experiments/04-continual-learning-core/core-validation-007
     supersedes: core-validation-006
     superseded_by: null
-    notes: "Frozen mechanism-discovery protocol. Discovery seeds 80701/80702 compare semantic, activation, write-demand and direct-interference boundaries; untouched confirmation seeds 80711/80712/80713 remain locked until a deterministic winner-lock is committed."
+    notes: "Discovery 80701/80702 is complete and frozen with interference_cut selected. The original confirmation set 80711/80712/80713 is retired after an infrastructure interruption exposed 80711 and started 80712 without durable per-seed checkpoints. Infrastructure-only amendment v1.1 freezes untouched confirmation seeds 80721/80722/80723; winner, model, data, baselines, mechanism and gates are unchanged. Confirmation is now seed-isolated, resumable and published after every seed through the established Kaggle GITHUB_TOKEN/GIT_ASKPASS path."
 
   - id: stage-language-validation
     title: "Language Validation: Token-Level Transfer and Scale Readiness"
