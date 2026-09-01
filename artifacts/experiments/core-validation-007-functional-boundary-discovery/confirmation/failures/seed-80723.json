@@ -1,0 +1,15 @@
+{
+  "base_protocol_sha256": "bf72fd372dbbc3720f824b07f81a66ac16094d7b2a72ec4db99605f6c7d4332c",
+  "complete": false,
+  "confirmation_protocol_sha256": "71bab7558a212af5e3c2d6986d39fbfa437164acfb0191c1765112cfef72795c",
+  "elapsed_seconds": 81.00592041015625,
+  "exception": "'no modes for address 1'",
+  "exception_type": "KeyError",
+  "experiment_id": "core-validation-007",
+  "format": "minicells.core-validation.functional-boundary-confirmation-failure.v1",
+  "phase": "confirmation",
+  "scientific_code_sha256": "c8c547d58904a702336e8e6dc561953195a002600f013b91b585a7a0ab19a25b",
+  "seed": 80723,
+  "traceback": "Traceback (most recent call last):\n  File \"/kaggle/working/mini-cells/scripts/research/run_core_validation_007_confirmation_seed.py\", line 226, in main\n    run = run_confirmation_seed(\n          ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/kaggle/working/mini-cells/src/minicells/real_representation_007_experiment.py\", line 911, in run_confirmation_seed\n    oracle_modes, eval_agreement = _eval_mode_ids(\n                                   ^^^^^^^^^^^^^^^\n  File \"/kaggle/working/mini-cells/src/minicells/real_representation_007_experiment.py\", line 727, in _eval_mode_ids\n    oracle, _ = _match_write_mode(\n                ^^^^^^^^^^^^^^^^^^\n  File \"/kaggle/working/mini-cells/src/minicells/real_representation_007_experiment.py\", line 265, in _match_write_mode\n    raise KeyError(f\"no modes for address {address}\")\nKeyError: 'no modes for address 1'\n",
+  "winner": "interference_cut"
+}
