@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
 import time
@@ -14,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 VALIDATION = ROOT / "research" / "validations" / "core-007-functional-boundary-discovery"
 AMENDMENT = VALIDATION / "confirmation-protocol-v1.1.json"
 RESULTS = ROOT / "results" / "core-validation-007-functional-boundary-discovery"
+ARTIFACTS = ROOT / "artifacts" / "experiments" / "core-validation-007-functional-boundary-discovery"
 SEED_RUNNER = ROOT / "scripts" / "research" / "run_core_validation_007_confirmation_seed.py"
 REPORTER = ROOT / "scripts" / "research" / "report_core_validation_007_confirmation.py"
 PUBLISHER = ROOT / "scripts" / "research" / "publish_core_validation_007.py"
@@ -33,6 +35,24 @@ def _atomic_json(path: Path, payload: dict) -> None:
 
 def _run_checked(command: list[str]) -> None:
     subprocess.run(command, cwd=ROOT, check=True)
+
+
+def _hydrate_partial_results() -> None:
+    """Restore canonical partial seed/failure artifacts into an empty new session."""
+    source = ARTIFACTS / "confirmation"
+    if not source.is_dir():
+        return
+    for subdir in ("seeds", "failures"):
+        src = source / subdir
+        if not src.is_dir():
+            continue
+        dest = RESULTS / "confirmation" / subdir
+        dest.mkdir(parents=True, exist_ok=True)
+        for item in src.glob("*.json"):
+            target = dest / item.name
+            if not target.exists():
+                shutil.copy2(item, target)
+                print(f"[core-007] hydrated {target.relative_to(ROOT)} from canonical artifacts")
 
 
 def _publish(branch: str, *, push: bool) -> None:
@@ -123,6 +143,7 @@ def main() -> int:
             preflight.append("--skip-push-check")
         _run_checked(preflight)
 
+    _hydrate_partial_results()
     for seed in seeds:
         checkpoint = RESULTS / "confirmation" / "seeds" / f"seed-{seed}.json"
         if checkpoint.is_file():
@@ -134,7 +155,7 @@ def main() -> int:
             print(
                 f"[core-007] seed={seed} failed with returncode={returncode}; "
                 "completed checkpoints and failure artifacts were published. "
-                "Rerun this same orchestrator after fixing the underlying issue; completed seeds will be skipped.",
+                "Rerun this same orchestrator after fixing the underlying issue; completed seeds will be hydrated/skipped.",
                 file=sys.stderr,
             )
             return returncode if returncode > 0 else 1
