@@ -186,8 +186,8 @@ entries:
     title: Real-Representation Continual Plasticity
     kind: core-validation
     stage: continual-learning-core
-    outcome: PROTOCOL_FROZEN_UNRUN
-    scientific_decision: false
+    outcome: REAL_REPRESENTATION_CONTINUAL_PLASTICITY_NOT_SUPPORTED
+    scientific_decision: true
     canonical: true
     report: research/validations/core-006-real-representation-continual-plasticity/README.md
     protocol: research/validations/core-006-real-representation-continual-plasticity/protocol.json
@@ -196,7 +196,7 @@ entries:
     implementation: research/experiments/04-continual-learning-core/core-validation-006
     supersedes: core-validation-005
     superseded_by: null
-    notes: "Frozen real-representation bridge; formal seeds 80611/80612/80613 remain unopened. Tests dependency load, effective rank, causal importance, replay-free certificate writes, and dependency-partitioned mitosis on frozen Pythia representations."
+    notes: "Frozen formal No-Go; 0/3 seeds. Real Pythia hidden states showed reusable low-dimensional geometry and replay-free certificates reduced registered forgetting while retaining 0.84–0.89x replay gain, but address-based dependency-partitioned mitosis failed to reduce functional conflict and spawned 65.6–68.8% of addresses. Canonical decision/gate summary were recovered after the Kaggle session closed; missing raw/detail artifacts are explicitly documented."
 
   - id: stage-language-validation
     title: "Language Validation: Token-Level Transfer and Scale Readiness"
