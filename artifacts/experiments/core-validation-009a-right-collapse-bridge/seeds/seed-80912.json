@@ -1,0 +1,1707 @@
+{
+  "alignment": {
+    "centered_z_covariance_top1_energy": 0.24570219307950708,
+    "raw_sequence_right_pc1_vs_centered_z_covariance_pc1": 0.7325138613715753,
+    "raw_sequence_right_pc1_vs_raw_token_energy_weighted_right_pc1": 0.9999877824158591,
+    "raw_sequence_right_pc1_vs_raw_token_normalized_right_pc1": 0.9999859625426126,
+    "raw_sequence_right_pc1_vs_raw_z_second_moment_pc1": 0.9999838499166651,
+    "raw_sequence_right_pc1_vs_train_token_mean_direction": 0.999980812060904,
+    "raw_z_second_moment_top1_energy": 0.9629165482260968
+  },
+  "conditions": {
+    "centered": {
+      "condition": "centered",
+      "left_56": [
+        {
+          "count": 224,
+          "dimension": 56,
+          "mean_frobenius_residual": 0.2682238995164395,
+          "mean_local_action_residual": 0.2408932117612122,
+          "median_frobenius_residual": 0.2700596274969195,
+          "median_local_action_residual": 0.24214671612621835,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 56,
+          "mean_frobenius_residual": 0.3003455847877748,
+          "mean_local_action_residual": 0.288775935063237,
+          "median_frobenius_residual": 0.30087958609651055,
+          "median_local_action_residual": 0.2857296639297726,
+          "partition": "eval"
+        }
+      ],
+      "right_only": [
+        {
+          "count": 224,
+          "dimension": 1,
+          "mean_frobenius_residual": 0.9462333112011937,
+          "mean_local_action_residual": 0.8469299316549737,
+          "median_frobenius_residual": 0.9479224285212763,
+          "median_local_action_residual": 0.863959915246232,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 1,
+          "mean_frobenius_residual": 0.9469678178051605,
+          "mean_local_action_residual": 0.8483638570132735,
+          "median_frobenius_residual": 0.9465630419624153,
+          "median_local_action_residual": 0.871917839735133,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 2,
+          "mean_frobenius_residual": 0.9171018299087793,
+          "mean_local_action_residual": 0.7827689026501671,
+          "median_frobenius_residual": 0.928498828550733,
+          "median_local_action_residual": 0.8007289019861185,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 2,
+          "mean_frobenius_residual": 0.9202134927513005,
+          "mean_local_action_residual": 0.7937903326320407,
+          "median_frobenius_residual": 0.9337471281352497,
+          "median_local_action_residual": 0.7974720619761106,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 4,
+          "mean_frobenius_residual": 0.881063165346014,
+          "mean_local_action_residual": 0.7090137391627493,
+          "median_frobenius_residual": 0.893818238072005,
+          "median_local_action_residual": 0.7332763059168449,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 4,
+          "mean_frobenius_residual": 0.8858218748376742,
+          "mean_local_action_residual": 0.7229145343488416,
+          "median_frobenius_residual": 0.8961160392885468,
+          "median_local_action_residual": 0.7320677599272709,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 8,
+          "mean_frobenius_residual": 0.8242825646350423,
+          "mean_local_action_residual": 0.6109830017127801,
+          "median_frobenius_residual": 0.8346195793237619,
+          "median_local_action_residual": 0.6151020701906692,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 8,
+          "mean_frobenius_residual": 0.8331107727472423,
+          "mean_local_action_residual": 0.6297814673443878,
+          "median_frobenius_residual": 0.842584469909208,
+          "median_local_action_residual": 0.6273698995878811,
+          "partition": "eval"
+        }
+      ],
+      "sequence_left_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.038179623080711635,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.07180225576788657,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.1333667122384938,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.22878433332363968,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.39000051722454815,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.5235285132035663,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.6427532373963155,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.7498243725238232,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8442110669647949,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9273550943613446,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 1.0,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 54,
+          "0.95": 59,
+          "0.99": 63
+        },
+        "participation_rank": 55.20394186630338
+      },
+      "sequence_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.10419362726085966,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.15424944843309416,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.2193434661911499,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.3162368747276888,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.46506707125335606,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.5849806212078775,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.6887536816152513,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.7801173020822629,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8614194692976992,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9344605249641882,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 1.0000000000000004,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 53,
+          "0.95": 58,
+          "0.99": 63
+        },
+        "participation_rank": 37.2080621698941
+      },
+      "token_count": 28436,
+      "token_energy_weighted_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.2908653670526528,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.3599552122366051,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.4107184141364459,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.4860322462393958,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.5964577680166465,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.6850253650986591,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.7629393525621588,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.8322372745385417,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8936665898355547,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9495155702384838,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 0.9999999999999998,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 49,
+          "0.95": 57,
+          "0.99": 63
+        },
+        "participation_rank": 10.291505883313322
+      },
+      "token_normalized_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.10648576164291908,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.15063138729545808,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.21987732321168768,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.31882744588169953,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.4648545328589167,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.5839417193049907,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.6874493810437214,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.7786688944882876,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8600446104241715,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9334564530109656,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 0.9999999999999999,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 53,
+          "0.95": 58,
+          "0.99": 63
+        },
+        "participation_rank": 36.953161878060506
+      },
+      "two_sided_56": [
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9494667970893202,
+          "mean_local_action_residual": 0.8558784540412698,
+          "median_frobenius_residual": 0.951348740744339,
+          "median_local_action_residual": 0.8731670579676725,
+          "partition": "train",
+          "right_dim": 1
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9515759088515392,
+          "mean_local_action_residual": 0.8625093109331866,
+          "median_frobenius_residual": 0.9507315686025088,
+          "median_local_action_residual": 0.8757559780205363,
+          "partition": "eval",
+          "right_dim": 1
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9218793387623867,
+          "mean_local_action_residual": 0.7960849387606966,
+          "median_frobenius_residual": 0.9330187039648796,
+          "median_local_action_residual": 0.8143856634677822,
+          "partition": "train",
+          "right_dim": 2
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9273680171163166,
+          "mean_local_action_residual": 0.8150335909711627,
+          "median_frobenius_residual": 0.9391818725015613,
+          "median_local_action_residual": 0.8191805890912702,
+          "partition": "eval",
+          "right_dim": 2
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.8884463680923324,
+          "mean_local_action_residual": 0.7279611351324796,
+          "median_frobenius_residual": 0.9014785941808537,
+          "median_local_action_residual": 0.7482712037465812,
+          "partition": "train",
+          "right_dim": 4
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.8962916844551024,
+          "mean_local_action_residual": 0.751970846734254,
+          "median_frobenius_residual": 0.9067107675520464,
+          "median_local_action_residual": 0.7637393193827555,
+          "partition": "eval",
+          "right_dim": 4
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.836272464044339,
+          "mean_local_action_residual": 0.639294370190755,
+          "median_frobenius_residual": 0.848134973092923,
+          "median_local_action_residual": 0.6505763203071897,
+          "partition": "train",
+          "right_dim": 8
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.8490482000968312,
+          "mean_local_action_residual": 0.6711163773172084,
+          "median_frobenius_residual": 0.8585079699171541,
+          "median_local_action_residual": 0.6616964596637931,
+          "partition": "eval",
+          "right_dim": 8
+        }
+      ]
+    },
+    "mean_direction_removed": {
+      "condition": "mean_direction_removed",
+      "left_56": [
+        {
+          "count": 224,
+          "dimension": 56,
+          "mean_frobenius_residual": 0.26904051612773816,
+          "mean_local_action_residual": 0.24232264185177768,
+          "median_frobenius_residual": 0.2716273966499173,
+          "median_local_action_residual": 0.24336030165246936,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 56,
+          "mean_frobenius_residual": 0.3008725546047789,
+          "mean_local_action_residual": 0.28940698135848375,
+          "median_frobenius_residual": 0.3048982994299288,
+          "median_local_action_residual": 0.28764976951386734,
+          "partition": "eval"
+        }
+      ],
+      "right_only": [
+        {
+          "count": 224,
+          "dimension": 1,
+          "mean_frobenius_residual": 0.9461496839744296,
+          "mean_local_action_residual": 0.8470876382872442,
+          "median_frobenius_residual": 0.9471498931799296,
+          "median_local_action_residual": 0.8595269265581016,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 1,
+          "mean_frobenius_residual": 0.9474456790566264,
+          "mean_local_action_residual": 0.8510063123104455,
+          "median_frobenius_residual": 0.9490940039518365,
+          "median_local_action_residual": 0.873902871616975,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 2,
+          "mean_frobenius_residual": 0.9227650722348598,
+          "mean_local_action_residual": 0.798019126720999,
+          "median_frobenius_residual": 0.9311361855045627,
+          "median_local_action_residual": 0.812902912078149,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 2,
+          "mean_frobenius_residual": 0.9245400788865945,
+          "mean_local_action_residual": 0.8058705666419262,
+          "median_frobenius_residual": 0.9330801430478242,
+          "median_local_action_residual": 0.8061147659753323,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 4,
+          "mean_frobenius_residual": 0.8858593187691801,
+          "mean_local_action_residual": 0.7221225343284546,
+          "median_frobenius_residual": 0.8951584172500824,
+          "median_local_action_residual": 0.7454185931759936,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 4,
+          "mean_frobenius_residual": 0.8896284225444537,
+          "mean_local_action_residual": 0.7347045761429685,
+          "median_frobenius_residual": 0.8988414365597961,
+          "median_local_action_residual": 0.7624883557627735,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 8,
+          "mean_frobenius_residual": 0.8286225589121244,
+          "mean_local_action_residual": 0.615017538870306,
+          "median_frobenius_residual": 0.8392684141377444,
+          "median_local_action_residual": 0.6239802258432834,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 8,
+          "mean_frobenius_residual": 0.8366352643334263,
+          "mean_local_action_residual": 0.6358834097351841,
+          "median_frobenius_residual": 0.8462407930953942,
+          "median_local_action_residual": 0.6301674321794577,
+          "partition": "eval"
+        }
+      ],
+      "sequence_left_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.038160705183324636,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.0715788036924061,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.13316174818655943,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.22836384409226748,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.38860811793528216,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.5222404114547446,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.6414939241901756,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.7487943849909897,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8435374629721991,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9270115479520231,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 1.0000000000000002,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 54,
+          "0.95": 59,
+          "0.99": 63
+        },
+        "participation_rank": 55.30506665580543
+      },
+      "sequence_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.10427329929004288,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.14588681408832235,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.2126455774198583,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.31052408360881123,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.4616710662191515,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.5843308306111717,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.6901238095966334,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.7836221490126195,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8664222045657619,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9411433197920268,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 1.0000000000000004,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 52,
+          "0.95": 58,
+          "0.99": 62
+        },
+        "participation_rank": 37.639572067772896
+      },
+      "token_count": 28436,
+      "token_energy_weighted_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.18735164312637978,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.2686974068372194,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.32613086165217525,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.4084744710709639,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.5362542576173753,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.6398342292073101,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.7307501254770065,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.8114439629383712,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.882984897577094,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9481706664237329,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 1.0000000000000002,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 51,
+          "0.95": 57,
+          "0.99": 62
+        },
+        "participation_rank": 19.273525904249748
+      },
+      "token_normalized_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.10701567461103541,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.1476756880425649,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.21434811462093178,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.3131485360664091,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.46292031349543933,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.5847084920238436,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.6899755302747198,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.7826522631219146,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8655273059847046,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.94048764492312,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 1.0,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 52,
+          "0.95": 58,
+          "0.99": 62
+        },
+        "participation_rank": 37.03830036459019
+      },
+      "two_sided_56": [
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9494179086720701,
+          "mean_local_action_residual": 0.8560696629949179,
+          "median_frobenius_residual": 0.9506037335969538,
+          "median_local_action_residual": 0.866811353335382,
+          "partition": "train",
+          "right_dim": 1
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9520918655312142,
+          "mean_local_action_residual": 0.8651380507732434,
+          "median_frobenius_residual": 0.9522176877201454,
+          "median_local_action_residual": 0.8791713757520732,
+          "partition": "eval",
+          "right_dim": 1
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9274164890298406,
+          "mean_local_action_residual": 0.8103559363591861,
+          "median_frobenius_residual": 0.9355243949192551,
+          "median_local_action_residual": 0.8248381759511035,
+          "partition": "train",
+          "right_dim": 2
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9310727731658549,
+          "mean_local_action_residual": 0.8247662762850643,
+          "median_frobenius_residual": 0.9387911974633136,
+          "median_local_action_residual": 0.8172759829657185,
+          "partition": "eval",
+          "right_dim": 2
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.8931648062112397,
+          "mean_local_action_residual": 0.7401641516362993,
+          "median_frobenius_residual": 0.9025208726172138,
+          "median_local_action_residual": 0.7629113131829726,
+          "partition": "train",
+          "right_dim": 4
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.8995634590132896,
+          "mean_local_action_residual": 0.7616127635830493,
+          "median_frobenius_residual": 0.9088745537371365,
+          "median_local_action_residual": 0.776878700127293,
+          "partition": "eval",
+          "right_dim": 4
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.8405592092692629,
+          "mean_local_action_residual": 0.6433010029072725,
+          "median_frobenius_residual": 0.8501257344337894,
+          "median_local_action_residual": 0.6539384944728235,
+          "partition": "train",
+          "right_dim": 8
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.8520345312055405,
+          "mean_local_action_residual": 0.6758321247736008,
+          "median_frobenius_residual": 0.8603760118147323,
+          "median_local_action_residual": 0.6631180949142071,
+          "partition": "eval",
+          "right_dim": 8
+        }
+      ]
+    },
+    "raw": {
+      "condition": "raw",
+      "left_56": [
+        {
+          "count": 224,
+          "dimension": 56,
+          "mean_frobenius_residual": 0.1815172875058872,
+          "mean_local_action_residual": 0.1763334017553094,
+          "median_frobenius_residual": 0.18244012980270613,
+          "median_local_action_residual": 0.17626442180895818,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 56,
+          "mean_frobenius_residual": 0.3032096518206147,
+          "mean_local_action_residual": 0.30277974802247537,
+          "median_frobenius_residual": 0.31266391009881966,
+          "median_local_action_residual": 0.31302567059608166,
+          "partition": "eval"
+        }
+      ],
+      "right_only": [
+        {
+          "count": 224,
+          "dimension": 1,
+          "mean_frobenius_residual": 0.17535578180040692,
+          "mean_local_action_residual": 0.017812024306951234,
+          "median_frobenius_residual": 0.1591256142921848,
+          "median_local_action_residual": 0.007881255786943576,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 1,
+          "mean_frobenius_residual": 0.1732375992640327,
+          "mean_local_action_residual": 0.016120423144906703,
+          "median_frobenius_residual": 0.16306824047680768,
+          "median_local_action_residual": 0.00777387779929424,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 2,
+          "mean_frobenius_residual": 0.1661358738431387,
+          "mean_local_action_residual": 0.008876976333197752,
+          "median_frobenius_residual": 0.15720056068262084,
+          "median_local_action_residual": 0.007586690850042991,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 2,
+          "mean_frobenius_residual": 0.16458488548906527,
+          "mean_local_action_residual": 0.008813626008052505,
+          "median_frobenius_residual": 0.15940580099209423,
+          "median_local_action_residual": 0.007587754508919043,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 4,
+          "mean_frobenius_residual": 0.15389711310441911,
+          "mean_local_action_residual": 0.007189002776701731,
+          "median_frobenius_residual": 0.14581212558137868,
+          "median_local_action_residual": 0.006158577962251405,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 4,
+          "mean_frobenius_residual": 0.15282717495826895,
+          "mean_local_action_residual": 0.007204443218509621,
+          "median_frobenius_residual": 0.14622793659536085,
+          "median_local_action_residual": 0.005979495954723904,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 8,
+          "mean_frobenius_residual": 0.14367440237364487,
+          "mean_local_action_residual": 0.005993080471164947,
+          "median_frobenius_residual": 0.1371378573879678,
+          "median_local_action_residual": 0.005158605448855578,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 8,
+          "mean_frobenius_residual": 0.1435155579473725,
+          "mean_local_action_residual": 0.0061188093294924795,
+          "median_frobenius_residual": 0.13614766162196318,
+          "median_local_action_residual": 0.005113503802274341,
+          "partition": "eval"
+        }
+      ],
+      "sequence_left_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.04844736374647082,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.09080359233244911,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.16539367252276665,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.2911141299623704,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.486357508020233,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.6355988135928031,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.7516675923226013,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.8426608959002488,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.913218708358826,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9652821676098707,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 0.9999999999999998,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 47,
+          "0.95": 54,
+          "0.99": 62
+        },
+        "participation_rank": 44.720912226267195
+      },
+      "sequence_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.962319743500361,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.9711219257440822,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.9751157066999989,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.9783975833495394,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.983221907409879,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.987066082348399,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.9903395497545907,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.9932198258043224,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.9957626730075219,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9979982518425254,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 0.9999999999999998,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 1,
+          "0.95": 1,
+          "0.99": 32
+        },
+        "participation_rank": 1.0797292571696355
+      },
+      "token_count": 28436,
+      "token_energy_weighted_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.966477059535137,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.9727526811169683,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.9764872294402513,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.9795127018919032,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.9839598222118107,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.9874986994469285,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.9905951788129873,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.993346624186496,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.9957818219770393,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.997996188794599,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 1.0000000000000002,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 1,
+          "0.95": 1,
+          "0.99": 31
+        },
+        "participation_rank": 1.0705078275034892
+      },
+      "token_normalized_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.9583783778921237,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.967224168786729,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.9712697483124474,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.975081968517803,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.9803966516802005,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.9846744848869565,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.9884549351755944,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.9918051853977983,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.9948176823517031,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9975494281975552,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 0.9999999999999999,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 1,
+          "0.95": 1,
+          "0.99": 36
+        },
+        "participation_rank": 1.0886223831398367
+      },
+      "two_sided_56": [
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.2510897165128335,
+          "mean_local_action_residual": 0.1831324815073733,
+          "median_frobenius_residual": 0.23807650574376016,
+          "median_local_action_residual": 0.17839012958960765,
+          "partition": "train",
+          "right_dim": 1
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.34966873053486747,
+          "mean_local_action_residual": 0.30633323265579204,
+          "median_frobenius_residual": 0.3519340925326572,
+          "median_local_action_residual": 0.31318711524128984,
+          "partition": "eval",
+          "right_dim": 1
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.24327897148259778,
+          "mean_local_action_residual": 0.17659900324460626,
+          "median_frobenius_residual": 0.23726444580730366,
+          "median_local_action_residual": 0.17712448835861,
+          "partition": "train",
+          "right_dim": 2
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.3435096221915766,
+          "mean_local_action_residual": 0.30292668715592613,
+          "median_frobenius_residual": 0.35148136310477907,
+          "median_local_action_residual": 0.3131800296303734,
+          "partition": "eval",
+          "right_dim": 2
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.23559306717385448,
+          "mean_local_action_residual": 0.1765146510172617,
+          "median_frobenius_residual": 0.23040486300946356,
+          "median_local_action_residual": 0.17678643502740438,
+          "partition": "train",
+          "right_dim": 4
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.3384820800865182,
+          "mean_local_action_residual": 0.3028824046164493,
+          "median_frobenius_residual": 0.34534256267643304,
+          "median_local_action_residual": 0.31309943549211416,
+          "partition": "eval",
+          "right_dim": 4
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.2293518787520422,
+          "mean_local_action_residual": 0.17645423003709104,
+          "median_frobenius_residual": 0.22486272097545457,
+          "median_local_action_residual": 0.1763704195786845,
+          "partition": "train",
+          "right_dim": 8
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.3345772436053304,
+          "mean_local_action_residual": 0.3028542767056948,
+          "median_frobenius_residual": 0.3417347659915566,
+          "median_local_action_residual": 0.3130823469801244,
+          "partition": "eval",
+          "right_dim": 8
+        }
+      ]
+    },
+    "whitened": {
+      "condition": "whitened",
+      "left_56": [
+        {
+          "count": 224,
+          "dimension": 56,
+          "mean_frobenius_residual": 0.27329545021126156,
+          "mean_local_action_residual": 0.2528861964607832,
+          "median_frobenius_residual": 0.2730939918891594,
+          "median_local_action_residual": 0.2518764561007225,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 56,
+          "mean_frobenius_residual": 0.301594442576965,
+          "mean_local_action_residual": 0.29467316675121735,
+          "median_frobenius_residual": 0.3039634028366158,
+          "median_local_action_residual": 0.2956436072468217,
+          "partition": "eval"
+        }
+      ],
+      "right_only": [
+        {
+          "count": 224,
+          "dimension": 1,
+          "mean_frobenius_residual": 0.9887979324772752,
+          "mean_local_action_residual": 0.9774348458085482,
+          "median_frobenius_residual": 0.9897657926797725,
+          "median_local_action_residual": 0.9829300647938263,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 1,
+          "mean_frobenius_residual": 0.9892892008450841,
+          "mean_local_action_residual": 0.9769022977346833,
+          "median_frobenius_residual": 0.990618101004547,
+          "median_local_action_residual": 0.9834978350077853,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 2,
+          "mean_frobenius_residual": 0.9781472217604044,
+          "mean_local_action_residual": 0.9570477739483733,
+          "median_frobenius_residual": 0.979636348289318,
+          "median_local_action_residual": 0.9640054735956711,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 2,
+          "mean_frobenius_residual": 0.9795412655181012,
+          "mean_local_action_residual": 0.9590270339067609,
+          "median_frobenius_residual": 0.9822842788451566,
+          "median_local_action_residual": 0.9683981881436887,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 4,
+          "mean_frobenius_residual": 0.9570853525133199,
+          "mean_local_action_residual": 0.9199272809513267,
+          "median_frobenius_residual": 0.9596659478206695,
+          "median_local_action_residual": 0.9315444142476653,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 4,
+          "mean_frobenius_residual": 0.9623045411018946,
+          "mean_local_action_residual": 0.932375363217108,
+          "median_frobenius_residual": 0.9653794769377211,
+          "median_local_action_residual": 0.9415673670957186,
+          "partition": "eval"
+        },
+        {
+          "count": 224,
+          "dimension": 8,
+          "mean_frobenius_residual": 0.9152577097590662,
+          "mean_local_action_residual": 0.8440471339794228,
+          "median_frobenius_residual": 0.9175665094401035,
+          "median_local_action_residual": 0.8573600986898035,
+          "partition": "train"
+        },
+        {
+          "count": 56,
+          "dimension": 8,
+          "mean_frobenius_residual": 0.9249655793330894,
+          "mean_local_action_residual": 0.8631774363069447,
+          "median_frobenius_residual": 0.92591556983863,
+          "median_local_action_residual": 0.8666857421164202,
+          "partition": "eval"
+        }
+      ],
+      "sequence_left_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.037862563950655376,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.070419237811104,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.13182371239071597,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.22591682792703047,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.3833743697502454,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.5164922429476153,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.6355804506574974,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.7434821156696095,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8397255113393918,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9249145586849064,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 0.9999999999999999,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 54,
+          "0.95": 59,
+          "0.99": 63
+        },
+        "participation_rank": 55.757559943366196
+      },
+      "sequence_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.022244695626607167,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.04314356576728248,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.0837612671440894,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.16178912439189957,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.3087345575378267,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.4459435240822829,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.5750247038009618,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.6958724816130702,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8097730572243802,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9150731112782785,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 0.9999999999999997,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 55,
+          "0.95": 59,
+          "0.99": 63
+        },
+        "participation_rank": 61.744253858872405
+      },
+      "token_count": 28436,
+      "token_energy_weighted_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.021239468021620675,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.041326438724848674,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.08006778810816087,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.15355245576846496,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.2951508271097125,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.42995519094846474,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.5578360815645054,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.6797671528298381,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.7954732652661662,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9040501817790372,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 1.0000000000000002,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 56,
+          "0.95": 60,
+          "0.99": 63
+        },
+        "participation_rank": 62.713656815631296
+      },
+      "token_normalized_right_spectrum": {
+        "curve": [
+          {
+            "cumulative_energy": 0.024928047656517068,
+            "dimension": 1
+          },
+          {
+            "cumulative_energy": 0.047628115962168927,
+            "dimension": 2
+          },
+          {
+            "cumulative_energy": 0.08963521917668328,
+            "dimension": 4
+          },
+          {
+            "cumulative_energy": 0.16675702583100047,
+            "dimension": 8
+          },
+          {
+            "cumulative_energy": 0.3100353593910361,
+            "dimension": 16
+          },
+          {
+            "cumulative_energy": 0.44485448676823924,
+            "dimension": 24
+          },
+          {
+            "cumulative_energy": 0.572721438750219,
+            "dimension": 32
+          },
+          {
+            "cumulative_energy": 0.6935849424928833,
+            "dimension": 40
+          },
+          {
+            "cumulative_energy": 0.8074412460271274,
+            "dimension": 48
+          },
+          {
+            "cumulative_energy": 0.9150044803660777,
+            "dimension": 56
+          },
+          {
+            "cumulative_energy": 0.9999999999999999,
+            "dimension": 64
+          }
+        ],
+        "dimension_at_energy": {
+          "0.9": 55,
+          "0.95": 59,
+          "0.99": 63
+        },
+        "participation_rank": 61.54996351257853
+      },
+      "two_sided_56": [
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.989634222704492,
+          "mean_local_action_residual": 0.9788451835815982,
+          "median_frobenius_residual": 0.990568441463529,
+          "median_local_action_residual": 0.9840289388762795,
+          "partition": "train",
+          "right_dim": 1
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9902272095584287,
+          "mean_local_action_residual": 0.9789127561737182,
+          "median_frobenius_residual": 0.9912660334481656,
+          "median_local_action_residual": 0.984677999287551,
+          "partition": "eval",
+          "right_dim": 1
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9797248757154542,
+          "mean_local_action_residual": 0.9596993357036906,
+          "median_frobenius_residual": 0.9810847155820699,
+          "median_local_action_residual": 0.9659068870539655,
+          "partition": "train",
+          "right_dim": 2
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9813709460241989,
+          "mean_local_action_residual": 0.9627313037387679,
+          "median_frobenius_residual": 0.9839959338910751,
+          "median_local_action_residual": 0.9708379304432035,
+          "partition": "eval",
+          "right_dim": 2
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9601880329204387,
+          "mean_local_action_residual": 0.9249897361850655,
+          "median_frobenius_residual": 0.9621353931915423,
+          "median_local_action_residual": 0.9355551717429631,
+          "partition": "train",
+          "right_dim": 4
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9657854307888111,
+          "mean_local_action_residual": 0.9385688670911954,
+          "median_frobenius_residual": 0.9690519744787265,
+          "median_local_action_residual": 0.9480457033021266,
+          "partition": "eval",
+          "right_dim": 4
+        },
+        {
+          "count": 224,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9215280022448094,
+          "mean_local_action_residual": 0.8542864662436994,
+          "median_frobenius_residual": 0.9248393557759931,
+          "median_local_action_residual": 0.8656383330754593,
+          "partition": "train",
+          "right_dim": 8
+        },
+        {
+          "count": 56,
+          "left_dim": 56,
+          "mean_frobenius_residual": 0.9321797338052269,
+          "mean_local_action_residual": 0.8766759963522601,
+          "median_frobenius_residual": 0.9329279840018874,
+          "median_local_action_residual": 0.8807237620571503,
+          "partition": "eval",
+          "right_dim": 8
+        }
+      ]
+    }
+  },
+  "data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+  "device": "cuda",
+  "elapsed_seconds": 45.329824447631836,
+  "experiment_id": "core-validation-009a-right-collapse-bridge",
+  "format": "minicells.core-validation.009a-right-collapse-bridge-seed.v1",
+  "partition_filter": {
+    "analysis_sequences": 280,
+    "excluded_router_sequences": 56,
+    "extracted_sequences": 336,
+    "included_partitions": [
+      "train",
+      "eval"
+    ]
+  },
+  "protocol_sha256": "82845eac6d6b4ad5dafcc721a9d4ff1fabe3dbca07358c97d7fc9571da369696",
+  "protocol_version": "1.0-frozen",
+  "raw_source_reference": {
+    "eval_median_frobenius_residual": 0.3417347659915566,
+    "eval_median_local_action_residual": 0.3130823469801244,
+    "left_dim": 56,
+    "right_dim": 8
+  },
+  "scientific_decision": false,
+  "seed": 80912,
+  "source_009a_reproduction": {
+    "absolute_delta": 0.0,
+    "expected_eval_median_local_action_residual_56x8": 0.3130823469801244,
+    "observed_eval_median_local_action_residual_56x8": 0.3130823469801244,
+    "pass": true,
+    "source_seed_format": "minicells.core-validation.factorized-functional-coordinates-seed.v1",
+    "tolerance": 1e-08
+  },
+  "source_009a_status_changed": false,
+  "top1_ablation": {
+    "normalized_residual_training_write_count": 224,
+    "partition_summary": {
+      "eval": {
+        "count": 56,
+        "mean_removed_component_local_action_fraction": 0.990010443029768,
+        "mean_residual_frobenius_fraction": 0.17323759926403273,
+        "mean_residual_local_action_fraction": 0.01612042314490671,
+        "median_removed_component_local_action_fraction": 0.9950521168634333,
+        "median_residual_frobenius_fraction": 0.16306824047680768,
+        "median_residual_local_action_fraction": 0.007773877799294259
+      },
+      "train": {
+        "count": 224,
+        "mean_removed_component_local_action_fraction": 0.9858205948802455,
+        "mean_residual_frobenius_fraction": 0.17535578180040692,
+        "mean_residual_local_action_fraction": 0.01781202430695124,
+        "median_removed_component_local_action_fraction": 0.9951765711014384,
+        "median_residual_frobenius_fraction": 0.1591256142921848,
+        "median_residual_local_action_fraction": 0.007881255786943597
+      }
+    },
+    "residual_right_spectrum": {
+      "curve": [
+        {
+          "cumulative_energy": 0.10426637048609098,
+          "dimension": 1
+        },
+        {
+          "cumulative_energy": 0.1449884247858419,
+          "dimension": 2
+        },
+        {
+          "cumulative_energy": 0.21111762082683372,
+          "dimension": 4
+        },
+        {
+          "cumulative_energy": 0.3089270535730856,
+          "dimension": 8
+        },
+        {
+          "cumulative_energy": 0.4602609148892313,
+          "dimension": 16
+        },
+        {
+          "cumulative_energy": 0.5832035465608097,
+          "dimension": 24
+        },
+        {
+          "cumulative_energy": 0.6892474115288191,
+          "dimension": 32
+        },
+        {
+          "cumulative_energy": 0.7830013526667341,
+          "dimension": 40
+        },
+        {
+          "cumulative_energy": 0.8660193871908587,
+          "dimension": 48
+        },
+        {
+          "cumulative_energy": 0.9409639772122861,
+          "dimension": 56
+        },
+        {
+          "cumulative_energy": 0.9999999999999998,
+          "dimension": 64
+        }
+      ],
+      "dimension_at_energy": {
+        "0.9": 52,
+        "0.95": 58,
+        "0.99": 62
+      },
+      "participation_rank": 37.75774915612229
+    }
+  }
+}

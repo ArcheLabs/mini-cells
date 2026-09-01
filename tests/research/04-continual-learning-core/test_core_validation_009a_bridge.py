@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import runpy
 from pathlib import Path
+from types import SimpleNamespace
 
 import torch
 
@@ -17,6 +19,7 @@ from minicells.real_representation_009a_experiment import normalize_write
 
 ROOT = Path(__file__).resolve().parents[3]
 PROTOCOL = ROOT / "research" / "validations" / "core-009a-right-collapse-bridge" / "protocol.json"
+RUNNER = ROOT / "scripts" / "research" / "run_core_validation_009a_bridge_seed.py"
 
 
 def _protocol() -> dict:
@@ -97,6 +100,20 @@ def test_full_bridge_can_distinguish_mean_induced_sequence_collapse() -> None:
     assert raw - mean_removed > 0.20
     assert result["scientific_decision"] is False
     assert result["source_009a_status_changed"] is False
+
+
+def test_runner_filters_router_only_after_full_extraction() -> None:
+    namespace = runpy.run_path(str(RUNNER))
+    filter_fn = namespace["_analysis_sequences"]
+    rows = [
+        SimpleNamespace(partition="router", marker=0),
+        SimpleNamespace(partition="train", marker=1),
+        SimpleNamespace(partition="eval", marker=2),
+        SimpleNamespace(partition="router", marker=3),
+    ]
+    filtered = filter_fn(rows)
+    assert [row.marker for row in filtered] == [1, 2]
+    assert {row.partition for row in filtered} == {"train", "eval"}
 
 
 def test_protocol_is_diagnostic_and_pins_the_positive_009a_source() -> None:

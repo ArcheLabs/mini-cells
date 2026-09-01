@@ -60,6 +60,18 @@ def _source_009a_seed(seed: int, protocol: dict[str, Any]) -> tuple[dict[str, An
     return payload, float(row["median_local_action_residual"])
 
 
+def _analysis_sequences(sequences: list[Any]) -> list[Any]:
+    """Keep only the partitions used by 009A geometry after extraction.
+
+    The projected list also contains `router` examples. They are required by
+    `prepare_seed` for address/projection setup, and gradient extraction is kept
+    on the complete list so batching stays identical to the frozen 009A path.
+    Router examples are not part of 009A train/eval geometry or this bridge's
+    diagnostic statistics.
+    """
+    return [s for s in sequences if str(s.partition) in {"train", "eval"}]
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--seed", type=int, required=True)
@@ -108,9 +120,10 @@ def main() -> int:
         torch.cuda.empty_cache()
 
     u, _, _, projected = prepare_seed(frozen, cfg.base, seed=args.seed)
-    bridge_sequences = extract_bridge_sequences(
-        projected, u, lm_head_weight, device=device
-    )
+    extracted = extract_bridge_sequences(projected, u, lm_head_weight, device=device)
+    bridge_sequences = _analysis_sequences(extracted)
+    if not bridge_sequences or any(str(s.partition) not in {"train", "eval"} for s in bridge_sequences):
+        raise RuntimeError("bridge analysis sequence filtering failed")
     payload = run_bridge(bridge_sequences, protocol, seed=args.seed)
 
     source_observed = float(payload["raw_source_reference"]["eval_median_local_action_residual"])
@@ -131,6 +144,12 @@ def main() -> int:
             "data_manifest_sha256": got,
             "device": str(device),
             "elapsed_seconds": time.time() - started,
+            "partition_filter": {
+                "extracted_sequences": len(extracted),
+                "analysis_sequences": len(bridge_sequences),
+                "excluded_router_sequences": sum(str(s.partition) == "router" for s in extracted),
+                "included_partitions": ["train", "eval"],
+            },
             "source_009a_reproduction": {
                 "source_seed_format": source_seed.get("format"),
                 "expected_eval_median_local_action_residual_56x8": source_expected,
@@ -150,6 +169,7 @@ def main() -> int:
                 "seed": args.seed,
                 "elapsed_seconds": payload["elapsed_seconds"],
                 "source_reproduction_delta": delta,
+                "partition_filter": payload["partition_filter"],
                 "output": str(path),
             },
             indent=2,
