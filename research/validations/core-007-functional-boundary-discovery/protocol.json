@@ -1,0 +1,188 @@
+{
+  "format": "minicells.core-validation.functional-boundary-discovery.v1",
+  "experiment_id": "core-validation-007",
+  "protocol_version": "1.0-frozen-discovery",
+  "status_before_run": "DISCOVERY_PROTOCOL_FROZEN_UNRUN",
+  "parent_experiment": "core-validation-006-real-representation-continual-plasticity",
+  "decision_question": "Can bounded write-demand/interference geometry provide a better mitosis boundary than semantic address identity, and can the resulting functional identity be recovered from inference-visible frozen representations?",
+  "foundation": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "step143000",
+    "expected_hidden_dim": 768,
+    "frozen": true,
+    "insertion_point": "gpt_neox.last_hidden_state before embed_out"
+  },
+  "data": {
+    "dataset_id": "DKYoon/SlimPajama-6B",
+    "dataset_revision": "1224c66add28b96ab045cd1058e795e8d3595485",
+    "split": "train",
+    "sources": [
+      "RedPajamaWikipedia",
+      "RedPajamaGithub",
+      "RedPajamaArXiv",
+      "RedPajamaBook",
+      "RedPajamaStackExchange",
+      "RedPajamaC4",
+      "RedPajamaCommonCrawl"
+    ],
+    "sequence_length": 128,
+    "router_bootstrap_sequences_per_source": 8,
+    "train_sequences_per_source": 32,
+    "eval_sequences_per_source": 8,
+    "identity": "same pinned model/dataset revisions and SHA-256 manifest mechanism as Core 006",
+    "raw_text_persisted": false
+  },
+  "continual_stream": {
+    "sequences_per_transaction": 4,
+    "transactions_per_source": 8,
+    "transactions_total": 56,
+    "source_order": "exactly data.sources",
+    "learner_replay_for_candidate": false
+  },
+  "router": {
+    "addresses": 32,
+    "base_cells": 8,
+    "kmeans_iterations": 25,
+    "global_router": "exact Core 006 frozen K-means address router",
+    "global_router_frozen": true
+  },
+  "cells": {
+    "cell_dim": 64,
+    "certificate_energy": 0.995,
+    "ridge": 0.001,
+    "functional_step": 0.05,
+    "maximum_delta_norm": 0.5,
+    "form": "delta_h = U A z, z=U^T h, U fixed orthonormal; only A mutable"
+  },
+  "functional_modes": {
+    "identity_signal": "foundation-path write demand G=mean_t[(U^T dL/dh_t) z_t^T]",
+    "bounded_state": [
+      "dependency count",
+      "z prototype",
+      "z second moment",
+      "running mean write matrix",
+      "bounded low-rank write basis"
+    ],
+    "maximum_modes_per_address": 4,
+    "maximum_write_rank": 8,
+    "creation_cosine_threshold": 0.8,
+    "boundary_candidates": [
+      "semantic_singleton",
+      "activation_community",
+      "write_community",
+      "interference_cut"
+    ],
+    "activation_geometry": "99%-energy principal-subspace overlap of per-mode z covariance",
+    "write_geometry": "principal-subspace overlap of bounded vec(G) write bases",
+    "interference_geometry": "symmetric normalized tr(D_i Sigma_j D_i^T), where D_i is mean write matrix",
+    "partition": "deterministic balanced max-cut heuristic; semantic_singleton isolates the triggering address/mode as Core 006 control"
+  },
+  "routing": {
+    "oracle": "functional mode inferred from foundation-path write demand; diagnostic/upper-bound only",
+    "deployable": "z-only cosine prototype router within the frozen global address",
+    "soft_top2": "evaluation-only diagnostic over the two closest z prototypes; not used to select the scientific winner",
+    "soft_top2_temperature": 0.2
+  },
+  "mitosis": {
+    "split_conflict_threshold": 0.35,
+    "maximum_splits_per_transaction": 2,
+    "operation": [
+      "partition currently owned functional modes using frozen winner boundary",
+      "clone parent A into child",
+      "move one partition of modes to child",
+      "recompute parent/child certificates from bounded mode covariances",
+      "split is function preserving under oracle mode identity because child A equals parent A"
+    ]
+  },
+  "baselines": {
+    "source": "Core 006 run_seed executed on the same confirmation seed/data",
+    "variants": [
+      "unsafe",
+      "certificate_no_growth",
+      "semantic_singleton_core006",
+      "replay"
+    ],
+    "replay_buffer_sequences": 64,
+    "replay_sequences_per_transaction": 8
+  },
+  "base_protocol": {
+    "core006_split_conflict_threshold": 0.35,
+    "core006_maximum_splits_per_transaction": 2,
+    "core006_minimum_midstream_reuse_ratio": 1.25,
+    "core006_maximum_midstream_energy_rank_fraction": 0.9,
+    "core006_maximum_registered_regression_ratio_vs_unsafe": 0.5,
+    "core006_minimum_gain_ratio_vs_replay": 0.8,
+    "core006_minimum_split_conflict_reduction": 0.15,
+    "core006_maximum_spawned_fraction_of_addresses": 0.5,
+    "core006_minimum_child_reuse_transactions": 4
+  },
+  "evaluation": {
+    "retention_checkpoint_every_transactions": 8,
+    "pair_diagnostics": [
+      "activation overlap",
+      "write overlap",
+      "direct interference"
+    ],
+    "routing_diagnostics": [
+      "oracle/deploy mode agreement",
+      "soft-top2 oracle coverage",
+      "oracle-vs-deploy heldout NLL gap"
+    ],
+    "continual_diagnostics": [
+      "split conflict reduction",
+      "spawned Cells",
+      "child reuse",
+      "gain/replay",
+      "regression/unsafe",
+      "Cell rank/reuse",
+      "heldout Cell ablation"
+    ]
+  },
+  "discovery": {
+    "scientific_decision": false,
+    "minimum_routing_agreement": 0.65,
+    "selection_rule": "aggregate the two discovery seeds; choose exactly one boundary candidate by maximum frozen weighted score, lexical candidate name as deterministic tie-break",
+    "selection_weights": {
+      "interference_cut": 0.55,
+      "routing_agreement": 0.3,
+      "balance": 0.15
+    },
+    "winner_lock_required_before_confirmation": true
+  },
+  "confirmation_gates": {
+    "all_confirmation_seeds_must_pass": true,
+    "minimum_split_conflict_reduction": 0.3,
+    "maximum_spawned_fraction_of_addresses": 0.5,
+    "maximum_regression_ratio_vs_unsafe": 0.5,
+    "minimum_gain_ratio_vs_replay": 0.8,
+    "minimum_child_reuse_transactions": 4,
+    "minimum_routing_agreement": 0.7,
+    "maximum_deploy_nll_gap": 0.02,
+    "positive_status": "FUNCTIONAL_BOUNDARY_MECHANISM_SUPPORTED",
+    "negative_status": "FUNCTIONAL_BOUNDARY_MECHANISM_NOT_SUPPORTED"
+  },
+  "replication": {
+    "smoke_seed": 80700,
+    "discovery_seeds": [80701, 80702],
+    "confirmation_seeds": [80711, 80712, 80713],
+    "confirmation_seeds_must_remain_unopened_until_winner_lock_is_committed": true
+  },
+  "hardware": {
+    "gpu_required_for_real_run": true,
+    "recommended": "Kaggle T4/P100 or better",
+    "github_ci_scientific_decision": false
+  },
+  "publication": {
+    "canonical_artifacts": "artifacts/experiments/core-validation-007-functional-boundary-discovery",
+    "hidden_cache_excluded": true,
+    "automatic_commit_and_push_supported": true,
+    "push_requires_existing git credentials or GH_TOKEN/GITHUB_TOKEN"
+  },
+  "interpretation_boundary": [
+    "Discovery seeds may select the boundary mechanism but cannot emit a scientific supported/not-supported decision.",
+    "The confirmation winner must be locked before 80711/80712/80713 are opened.",
+    "Oracle functional routing uses labels/gradients and is not deployable; confirmation additionally gates z-only routing identifiability.",
+    "A positive result remains limited to frozen Pythia representations, frozen global addresses, linear writable Cells, and bounded functional-mode state.",
+    "Core 006 thresholds/results are frozen and are not retuned or overwritten by this experiment."
+  ]
+}
