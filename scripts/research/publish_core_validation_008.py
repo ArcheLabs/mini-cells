@@ -53,8 +53,9 @@ def _copy_results() -> None:
         raise RuntimeError("refusing to publish non-Core-008 decision")
     if decision.get("scientific_decision") is True and decision.get("missing_seeds"):
         raise RuntimeError("scientific Core 008 decision cannot have missing formal seeds")
-    ARTIFACTS.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(RESULTS, ARTIFACTS, dirs_exist_ok=True, ignore=_ignore)
+    if ARTIFACTS.exists():
+        shutil.rmtree(ARTIFACTS)
+    shutil.copytree(RESULTS, ARTIFACTS, ignore=_ignore)
     shutil.copy2(PROTOCOL, ARTIFACTS / "protocol.json")
 
 
