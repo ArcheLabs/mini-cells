@@ -1,0 +1,127 @@
+{
+  "format": "minicells.core-validation.certified-functional-atoms.v1",
+  "experiment_id": "core-validation-008",
+  "title": "Core Validation 008 — Certified Adaptive Functional Atoms",
+  "protocol_version": "1.0-frozen",
+  "status": "PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "parent_evidence": [
+    "core-005-subspace-certified-mitosis",
+    "core-006-real-representation-continual-plasticity",
+    "core-007-functional-boundary-discovery",
+    "core-008-preflight-functional-equivalence"
+  ],
+  "decision_question": "Under real frozen Pythia representations, can replay-free subspace certificates support a sparse compositional low-rank functional basis with better reuse/growth behavior than rank-1 fragmentation or a monolithic certified transform?",
+  "hypothesis": {
+    "primary": "Functional memory is better modeled as a sparse composition of certified low-rank atoms than as a hard semantic/functional partition.",
+    "rank_question": "Rank-1 is treated as the smallest natural write primitive, not as an assumed persistent Cell boundary; fixed rank-1, rank-2, rank-4 and adaptive-rank atom caps are compared under the same conceptual factor-parameter budget.",
+    "growth_question": "Growth is triggered when the desired local write cannot be represented or safely absorbed by existing atoms under their protected dependency subspaces."
+  },
+  "foundation": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "step143000",
+    "expected_hidden_dim": 768,
+    "frozen": true,
+    "insertion_point": "gpt_neox.last_hidden_state before embed_out"
+  },
+  "data": {
+    "dataset_id": "DKYoon/SlimPajama-6B",
+    "dataset_revision": "1224c66add28b96ab045cd1058e795e8d3595485",
+    "expected_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+    "reuse_core007_selection_and_partition": true,
+    "raw_text_persisted": false,
+    "hidden_cache_required": false
+  },
+  "representation": {
+    "cell_dim": 64,
+    "projection": "exact Core 006/007 prepare_seed orthonormal U",
+    "write_demand": "G = mean_t[(U^T dL/dh_t) z_t^T] on the frozen foundation path",
+    "target_normalization": "G / max(||G||_F, eps) so primary geometry is not confounded by the weak whole-model Cell effect observed in the preflight bridge",
+    "local_action": "for sequence activation rows Z, compare Z G^T and Z G_hat^T"
+  },
+  "certificate": {
+    "learner_state": "per-atom bounded z covariance plus derived Q; no historical examples, labels, raw activations or replay buffer",
+    "energy": 0.995,
+    "safe_projector": "P_free = I - Q Q^T",
+    "safe_update": "Delta B = rank_r_approx(R P_free), hence Delta B Q ~= 0",
+    "growth_signal": "spawn when sparse reconstruction remains above threshold and no existing selected atom can safely reduce the residual enough",
+    "hidden_evaluator": "may retain exact historical z rows only to measure false-safe drift; these rows cannot influence routing, updates, growth or thresholds",
+    "maximum_constraint_violation": 1e-8
+  },
+  "composition": {
+    "oracle_training_assignment": "OMP-style signed sparse coefficients over current atoms using write-demand geometry; target-dependent and non-deployable",
+    "maximum_active_atoms": 4,
+    "target_normalized_frobenius_residual": 0.35,
+    "minimum_safe_update_improvement": 0.05,
+    "maximum_growth_actions_per_sequence": 4,
+    "deployable_router": "ridge map from pooled frozen z to final oracle coefficient vectors, followed by top-k sparsification",
+    "router_ridge": 0.001,
+    "no_hard_mode_label_gate": true
+  },
+  "budget": {
+    "conceptual_factor_scalars": 4096,
+    "accounting": "each added rank unit costs 2*d factor scalars; with d=64 this allows at most 32 rank units, approximately one dense 64x64 Cell",
+    "same_budget_for_all_main_variants": true
+  },
+  "variants": {
+    "monolithic_certified": {"maximum_atoms": 1, "maximum_rank_per_atom": 32, "adaptive_append_rank": false},
+    "rank1_atoms": {"maximum_atoms": 32, "maximum_rank_per_atom": 1, "adaptive_append_rank": false},
+    "rank2_atoms": {"maximum_atoms": 16, "maximum_rank_per_atom": 2, "adaptive_append_rank": false},
+    "rank4_atoms": {"maximum_atoms": 8, "maximum_rank_per_atom": 4, "adaptive_append_rank": false},
+    "adaptive_atoms": {"maximum_atoms": 32, "maximum_rank_per_atom": 8, "adaptive_append_rank": true, "maximum_append_rank_per_action": 4}
+  },
+  "primary_metrics": [
+    "heldout oracle normalized Frobenius reconstruction residual",
+    "heldout oracle local-action residual",
+    "heldout deployable-router local-action residual",
+    "online reuse fraction",
+    "spawned atoms per train sequence",
+    "unresolved-write fraction",
+    "factor-budget fraction",
+    "certificate rank fraction",
+    "certificate constraint violation",
+    "hidden-evaluator historical action drift"
+  ],
+  "secondary_metrics": [
+    "oracle/deploy coefficient cosine",
+    "oracle/deploy active-set overlap",
+    "whole-model NLL is diagnostic only and is not a Core 008 support gate"
+  ],
+  "confirmation_gates": {
+    "all_formal_seeds_must_pass": true,
+    "adaptive_maximum_median_oracle_local_action_residual": 0.35,
+    "adaptive_maximum_median_deploy_local_action_residual": 0.55,
+    "adaptive_maximum_unresolved_write_fraction": 0.10,
+    "adaptive_minimum_reuse_fraction": 0.50,
+    "adaptive_maximum_spawned_atoms_per_train_sequence": 0.50,
+    "adaptive_maximum_factor_budget_fraction": 1.0,
+    "adaptive_maximum_p95_hidden_history_drift": 0.10,
+    "maximum_certificate_constraint_violation": 1e-8,
+    "comparative_rule_rank1": "adaptive must have <= 0.85x rank1 deploy local-action residual OR <= 0.75x rank1 spawn rate, while the other quantity is <= 1.10x rank1",
+    "comparative_rule_monolithic": "adaptive must have <= 0.80x monolithic unresolved-write fraction OR <= 0.85x monolithic deploy local-action residual, while certificate safety remains within the same absolute gate",
+    "positive_status": "CERTIFIED_ADAPTIVE_FUNCTIONAL_ATOMS_SUPPORTED",
+    "negative_status": "CERTIFIED_ADAPTIVE_FUNCTIONAL_ATOMS_NOT_SUPPORTED"
+  },
+  "replication": {
+    "smoke_seed": 80800,
+    "formal_seeds": [80821, 80822, 80823],
+    "formal_run_must_use_exact_seed_set": true,
+    "calibration_allowed": false
+  },
+  "hardware": {
+    "gpu_required_for_hidden_extraction_and_write_signatures": true,
+    "recommended": "Kaggle T4/P100 or better",
+    "scientific_decision_from_ci": false
+  },
+  "publication": {
+    "canonical_artifacts": "artifacts/experiments/core-validation-008-certified-functional-atoms",
+    "hidden_cache_excluded": true,
+    "automatic_commit_and_push_supported": true
+  },
+  "interpretation_boundary": [
+    "A positive result would support sparse compositional certified functional atoms in this frozen-representation linear-write setting; it would not establish end-to-end Transformer continual learning.",
+    "A rank-1 failure with adaptive-rank success would reject rank-1 as the persistent atom boundary without rejecting rank-1 as an elementary write primitive.",
+    "A monolithic failure with compositional success would support growth by local safe-write infeasibility rather than hard semantic/function labels.",
+    "A failure of all variants would be evidence against the current write-demand/certificate geometry and should block further architectural elaboration."
+  ]
+}
