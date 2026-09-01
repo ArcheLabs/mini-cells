@@ -1,9 +1,9 @@
 # Core Validation 009C — Sparse / Local Effect Geometry
 
 - Phase: `discovery`
-- Status: `DISCOVERY_INCOMPLETE`
-- Completed seeds: `[81201]`
-- Missing seeds: `[81202]`
+- Status: `SPARSE_LOCAL_EFFECT_GEOMETRY_NOT_FOUND`
+- Completed seeds: `[81201, 81202]`
+- Missing seeds: `[]`
 - Confirmation allowed: `False`
 - Locked configuration: `None`
 
