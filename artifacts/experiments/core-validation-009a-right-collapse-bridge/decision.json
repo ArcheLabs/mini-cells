@@ -1,23 +1,43 @@
 {
-  "aggregate_metrics": null,
+  "aggregate_metrics": {
+    "centered_sequence_right_top1_energy": 0.12796883184222158,
+    "maximum_source_reproduction_absolute_delta": 0.0,
+    "mean_direction_removed_sequence_right_top1_energy": 0.11797817918855676,
+    "raw_eval_two_sided_56x1_action_residual": 0.31044547830701963,
+    "raw_eval_two_sided_56x8_action_residual": 0.3103777894725398,
+    "raw_sequence_right_top1_energy": 0.9665393439146105,
+    "raw_token_energy_weighted_right_top1_energy": 0.969114442003077,
+    "raw_token_normalized_right_top1_energy": 0.9635393120036276,
+    "top1_ablation_eval_residual_action_fraction": 0.007507349020233809,
+    "top1_ablation_residual_right_top1_energy": 0.11707964857992785,
+    "whitened_sequence_right_top1_energy": 0.022550776480442392
+  },
   "completed_seeds": [
     80911,
-    80912
+    80912,
+    80913
   ],
   "data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
   "experiment_id": "core-validation-009a-right-collapse-bridge",
   "format": "minicells.core-validation.009a-right-collapse-bridge-decision.v1",
   "interpretation_boundary": "Post-confirmation diagnostic only; no Core 009A gate, winner, or scientific result is changed.",
-  "interpretation_flags": null,
-  "missing_seeds": [
-    80913
-  ],
+  "interpretation_flags": {
+    "centering_sensitive": true,
+    "mean_direction_sensitive": true,
+    "post_top1_residual_still_low_dimensional": false,
+    "raw_right_collapse_reproduced": true,
+    "robust_common_right_direction_across_controls": false,
+    "sequence_aggregation_sensitive": false,
+    "top1_functionally_dominant": true,
+    "whitening_sensitive": true
+  },
+  "missing_seeds": [],
   "protocol_sha256": "82845eac6d6b4ad5dafcc721a9d4ff1fabe3dbca07358c97d7fc9571da369696",
   "protocol_version": "1.0-frozen",
   "scientific_decision": false,
   "source_009a_scientific_decision": true,
   "source_009a_status": "FACTORIZED_FUNCTIONAL_COORDINATES_SUPPORTED",
   "source_009a_status_changed": false,
-  "status": "RIGHT_COLLAPSE_DIAGNOSTIC_INCOMPLETE",
+  "status": "RIGHT_COLLAPSE_DIAGNOSTIC_COMPLETE",
   "supported": null
 }

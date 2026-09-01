@@ -1,10 +1,43 @@
 # Core Validation 009A Bridge — Right-Side Collapse Robustness
 
-- Status: `RIGHT_COLLAPSE_DIAGNOSTIC_INCOMPLETE`
+- Status: `RIGHT_COLLAPSE_DIAGNOSTIC_COMPLETE`
 - Scientific decision: `False` (diagnostic bridge by construction)
 - Source 009A remains: `FACTORIZED_FUNCTIONAL_COORDINATES_SUPPORTED`
-- Completed seeds: `[80911, 80912]`
-- Missing seeds: `[80913]`
+- Completed seeds: `[80911, 80912, 80913]`
+- Missing seeds: `[]`
+
+## Aggregate diagnostics
+
+```json
+{
+  "centered_sequence_right_top1_energy": 0.12796883184222158,
+  "maximum_source_reproduction_absolute_delta": 0.0,
+  "mean_direction_removed_sequence_right_top1_energy": 0.11797817918855676,
+  "raw_eval_two_sided_56x1_action_residual": 0.31044547830701963,
+  "raw_eval_two_sided_56x8_action_residual": 0.3103777894725398,
+  "raw_sequence_right_top1_energy": 0.9665393439146105,
+  "raw_token_energy_weighted_right_top1_energy": 0.969114442003077,
+  "raw_token_normalized_right_top1_energy": 0.9635393120036276,
+  "top1_ablation_eval_residual_action_fraction": 0.007507349020233809,
+  "top1_ablation_residual_right_top1_energy": 0.11707964857992785,
+  "whitened_sequence_right_top1_energy": 0.022550776480442392
+}
+```
+
+## Descriptive flags
+
+```json
+{
+  "centering_sensitive": true,
+  "mean_direction_sensitive": true,
+  "post_top1_residual_still_low_dimensional": false,
+  "raw_right_collapse_reproduced": true,
+  "robust_common_right_direction_across_controls": false,
+  "sequence_aggregation_sensitive": false,
+  "top1_functionally_dominant": true,
+  "whitening_sensitive": true
+}
+```
 
 ## Per-condition summary
 
@@ -18,5 +51,9 @@
 |  80912 | centered               |                    0.104194  |                     0.316237 |                            37.2081  |                     58 |                            0.106486  |                             0.318827 |                                 0.290865  |                                  0.486032 |                     0.927355 |         28436 |                           0.871918   |                              0.875756 |                           0.797472   |                              0.819181 |                           0.732068   |                              0.763739 |                            0.62737   |                              0.661696 |
 |  80912 | whitened               |                    0.0222447 |                     0.161789 |                            61.7443  |                     59 |                            0.024928  |                             0.166757 |                                 0.0212395 |                                  0.153552 |                     0.924915 |         28436 |                           0.983498   |                              0.984678 |                           0.968398   |                              0.970838 |                           0.941567   |                              0.948046 |                            0.866686  |                              0.880724 |
 |  80912 | mean_direction_removed |                    0.104273  |                     0.310524 |                            37.6396  |                     58 |                            0.107016  |                             0.313149 |                                 0.187352  |                                  0.408474 |                     0.927012 |         28436 |                           0.873903   |                              0.879171 |                           0.806115   |                              0.817276 |                           0.762488   |                              0.776879 |                            0.630167  |                              0.663118 |
+|  80913 | raw                    |                    0.966539  |                     0.982007 |                             1.07034 |                      1 |                            0.963539  |                             0.979274 |                                 0.969114  |                                  0.982926 |                     0.962321 |         28437 |                           0.00750735 |                              0.310445 |                           0.00686518 |                              0.310419 |                           0.00469016 |                              0.310399 |                            0.0041802 |                              0.310378 |
+|  80913 | centered               |                    0.17256   |                     0.371677 |                            23.0505  |                     58 |                            0.173051  |                             0.375011 |                                 0.29246   |                                  0.519423 |                     0.927959 |         28437 |                           0.745795   |                              0.765063 |                           0.692124   |                              0.735441 |                           0.611332   |                              0.667145 |                            0.51271   |                              0.569635 |
+|  80913 | whitened               |                    0.0231237 |                     0.16109  |                            61.704   |                     59 |                            0.0268024 |                             0.169146 |                                 0.0210322 |                                  0.154908 |                     0.923764 |         28437 |                           0.982896   |                              0.984389 |                           0.963568   |                              0.968391 |                           0.938387   |                              0.945231 |                            0.852203  |                              0.866277 |
+|  80913 | mean_direction_removed |                    0.171584  |                     0.363736 |                            23.3294  |                     57 |                            0.172615  |                             0.367    |                                 0.226034  |                                  0.465672 |                     0.927896 |         28437 |                           0.755858   |                              0.778727 |                           0.70976    |                              0.73878  |                           0.648429   |                              0.68667  |                            0.531837  |                              0.581452 |
 
 This bridge explains the 009A asymmetry only. It cannot revoke or strengthen the formal 009A support decision and does not test routing, sparsity, certificates, growth, or continual learning.
