@@ -47,10 +47,23 @@ artifacts/experiments/core-008-preflight-functional-equivalence/artifact-audit.j
 
 A fresh GPU session can regenerate the frozen inputs; the lost Kaggle cache is not needed.
 
+Recommended one-command path:
+
 ```bash
-python scripts/research/run_core008_preflight_functional_equivalence_seed.py --seed 80721 --device cuda
-python scripts/research/run_core008_preflight_functional_equivalence_seed.py --seed 80722 --device cuda
-python scripts/research/report_core008_preflight_functional_equivalence.py
+python scripts/research/orchestrate_core008_preflight_functional_equivalence.py \
+  --branch codex/core-008-preflight-functional-equivalence \
+  --secret-name GITHUB_TOKEN \
+  --device cuda \
+  --batch-size 1 \
+  --push-results
+```
+
+The orchestrator performs GitHub write preflight before GPU work, runs `80721` and `80722` in fresh processes, hydrates already-published completed bridge seeds after a session restart, generates `decision.json`/`RESULTS.md`, excludes the hidden-state cache from publication, commits, and pushes the bridge artifacts.
+
+For Kaggle use the one-cell notebook:
+
+```text
+research/notebooks/04-continual-learning-core/core-008-preflight-functional-equivalence.ipynb
 ```
 
 The seed runner validates the same data-manifest SHA used by Core 007:
