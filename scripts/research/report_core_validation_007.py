@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def _decision_envelope(payload: dict[str, Any]) -> dict[str, Any]:
-    return {
+    out = {
         **payload["decision"],
         "format": payload["format"],
         "experiment_id": payload["experiment_id"],
@@ -34,6 +34,11 @@ def _decision_envelope(payload: dict[str, Any]) -> dict[str, Any]:
         "elapsed_seconds": payload["elapsed_seconds"],
         "provenance": payload["provenance"],
     }
+    if "confirmation_amendment_sha256" in payload:
+        out["confirmation_amendment_sha256"] = payload["confirmation_amendment_sha256"]
+    if "base_protocol_version" in payload:
+        out["base_protocol_version"] = payload["base_protocol_version"]
+    return out
 
 
 def _discovery(payload: dict[str, Any], out: Path) -> None:
@@ -52,9 +57,8 @@ def _discovery(payload: dict[str, Any], out: Path) -> None:
     pair_df.to_csv(out / "pair-diagnostics.csv", index=False)
     routing_df.to_csv(out / "routing-records.csv", index=False)
     mode_df.to_csv(out / "mode-metrics.csv", index=False)
-    pd.DataFrame(payload["decision"]["candidate_summary"]).to_csv(
-        out / "candidate-summary.csv", index=False
-    )
+    summary = pd.DataFrame(payload["decision"]["candidate_summary"])
+    summary.to_csv(out / "candidate-summary.csv", index=False)
 
     if not pair_df.empty:
         fig, ax = plt.subplots(figsize=(8, 6))
@@ -66,7 +70,6 @@ def _discovery(payload: dict[str, Any], out: Path) -> None:
         fig.tight_layout()
         fig.savefig(out / "activation-write-interference.png", dpi=180)
         plt.close(fig)
-    summary = pd.DataFrame(payload["decision"]["candidate_summary"])
     if not summary.empty:
         fig, ax = plt.subplots(figsize=(8, 5))
         ax.bar(summary["candidate"], summary["mean_selection_score"])
@@ -90,38 +93,44 @@ def _discovery(payload: dict[str, Any], out: Path) -> None:
         "",
         summary.to_markdown(index=False) if not summary.empty else "No candidate rows.",
         "",
-        "Confirmation seeds remain unopened until `winner-lock.json` is committed.",
-        "",
     ]
     (out / "RESULTS.md").write_text("\n".join(lines), encoding="utf-8")
 
 
 def _confirmation(payload: dict[str, Any], out: Path) -> None:
     gates, tx, splits, routing, ranks, causal, modes = [], [], [], [], [], [], []
-    for run in payload["runs"]:
+    for run in payload.get("runs", []):
         seed = run["seed"]
-        gates.append({"seed": seed, "pass": run["pass"], **run["candidate"], **{f"gate_{k}": v for k, v in run["gates"].items()}})
+        gates.append(
+            {
+                "seed": seed,
+                "pass": run["pass"],
+                **run["candidate"],
+                **{f"gate_{k}": v for k, v in run["gates"].items()},
+            }
+        )
         tx.extend({"seed": seed, **r} for r in run["records"])
         splits.extend({"seed": seed, **r} for r in run["split_records"])
         routing.extend({"seed": seed, **r} for r in run["routing_records"])
         ranks.extend({"seed": seed, **r} for r in run["rank_records"])
         causal.extend({"seed": seed, **r} for r in run["causal_records"])
         modes.extend({"seed": seed, **r} for r in run["mode_metrics"])
-    gate_df = pd.DataFrame(gates)
-    tx_df = pd.DataFrame(tx)
-    split_df = pd.DataFrame(splits)
-    routing_df = pd.DataFrame(routing)
-    rank_df = pd.DataFrame(ranks)
-    causal_df = pd.DataFrame(causal)
-    mode_df = pd.DataFrame(modes)
-    gate_df.to_csv(out / "gate-summary.csv", index=False)
-    tx_df.to_csv(out / "transaction-records.csv", index=False)
-    split_df.to_csv(out / "split-records.csv", index=False)
-    routing_df.to_csv(out / "routing-records.csv", index=False)
-    rank_df.to_csv(out / "rank-trajectory.csv", index=False)
-    causal_df.to_csv(out / "causal-load.csv", index=False)
-    mode_df.to_csv(out / "mode-metrics.csv", index=False)
 
+    frames = {
+        "gate-summary.csv": pd.DataFrame(gates),
+        "transaction-records.csv": pd.DataFrame(tx),
+        "split-records.csv": pd.DataFrame(splits),
+        "routing-records.csv": pd.DataFrame(routing),
+        "rank-trajectory.csv": pd.DataFrame(ranks),
+        "causal-load.csv": pd.DataFrame(causal),
+        "mode-metrics.csv": pd.DataFrame(modes),
+    }
+    for name, frame in frames.items():
+        frame.to_csv(out / name, index=False)
+
+    split_df = frames["split-records.csv"]
+    rank_df = frames["rank-trajectory.csv"]
+    routing_df = frames["routing-records.csv"]
     if not split_df.empty:
         fig, ax = plt.subplots(figsize=(8, 5))
         x = range(len(split_df))
@@ -136,8 +145,7 @@ def _confirmation(payload: dict[str, Any], out: Path) -> None:
         plt.close(fig)
     if not rank_df.empty:
         grouped = rank_df.groupby("transaction", as_index=False).agg(
-            participation_rank=("participation_rank", "median"),
-            dependency_tokens=("dependency_tokens", "median"),
+            participation_rank=("participation_rank", "median")
         )
         fig, ax = plt.subplots(figsize=(8, 5))
         ax.plot(grouped["transaction"], grouped["participation_rank"])
@@ -159,22 +167,42 @@ def _confirmation(payload: dict[str, Any], out: Path) -> None:
         fig.savefig(out / "routing-agreement.png", dpi=180)
         plt.close(fig)
 
+    decision = payload["decision"]
+    scientific = decision.get("scientific_decision") is True
     lines = [
         "# Core Validation 007 Confirmation",
         "",
-        f"- Status: `{payload['decision']['status']}`",
-        f"- Winner: `{payload['decision']['winner']}`",
-        f"- Passed seeds: `{payload['decision']['passed_seeds']}/{payload['decision']['total_seeds']}`",
-        "",
-        "## Gate summary",
-        "",
-        gate_df.to_markdown(index=False) if not gate_df.empty else "No confirmation rows.",
-        "",
-        "## Interpretation",
-        "",
-        "The oracle functional router is an upper bound only. A positive scientific decision additionally requires the inference-visible z-only router to remain close to the oracle under the frozen gates.",
-        "",
+        f"- Status: `{decision['status']}`",
+        f"- Winner: `{decision['winner']}`",
     ]
+    if scientific:
+        lines.append(
+            f"- Passed seeds: `{decision['passed_seeds']}/{decision['total_seeds']}`"
+        )
+    else:
+        lines.extend(
+            [
+                f"- Completed seeds: `{decision.get('completed_seeds', [])}`",
+                f"- Remaining seeds: `{decision.get('remaining_seeds', [])}`",
+                f"- Failed seed: `{decision.get('failed_seed')}`",
+                "- Scientific decision: `false` (partial checkpoint only)",
+            ]
+        )
+    lines.extend(
+        [
+            "",
+            "## Gate summary",
+            "",
+            frames["gate-summary.csv"].to_markdown(index=False)
+            if not frames["gate-summary.csv"].empty
+            else "No completed confirmation seed rows yet.",
+            "",
+            "## Interpretation",
+            "",
+            "Partial confirmation artifacts are resumable engineering evidence only. A scientific decision is emitted only after all amended confirmation seeds complete with matching identities.",
+            "",
+        ]
+    )
     (out / "RESULTS.md").write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -189,7 +217,9 @@ def main() -> int:
         raise RuntimeError("phase mismatch between command and raw payload")
     out.mkdir(parents=True, exist_ok=True)
     decision = _decision_envelope(payload)
-    (out / "decision.json").write_text(json.dumps(decision, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (out / "decision.json").write_text(
+        json.dumps(decision, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     if args.phase == "discovery":
         _discovery(payload, out)
     else:
