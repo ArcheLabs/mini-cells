@@ -257,8 +257,6 @@ def main() -> int:
             "elapsed_seconds": time.time() - started,
         }
         _atomic_json(checkpoint, payload)
-        if failure.exists():
-            failure.unlink()
         print(
             f"[core-007] seed={args.seed} pass={run['pass']} "
             f"split={c['median_split_conflict_reduction']:.3f} "
