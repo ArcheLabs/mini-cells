@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Run Core Validation 007 discovery or untouched confirmation."""
+"""Run frozen Core Validation 007 discovery/smoke.
+
+The original monolithic confirmation entrypoint is deliberately retired after
+it exposed 80711 and terminated during 80712 without a durable per-seed
+checkpoint. Formal confirmation v1.1 must use the isolated resumable
+orchestrator instead.
+"""
 from __future__ import annotations
 
 import argparse
@@ -9,7 +15,6 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any
 
 import torch
 
@@ -22,17 +27,11 @@ from minicells.real_representation_006_io import (
     write_data_manifest,
 )
 from minicells.real_representation_007_config import CoreValidation007Config, smoke_config
-from minicells.real_representation_007_experiment import (
-    run_confirmation_seed,
-    run_discovery_seed,
-    summarize_confirmation,
-    summarize_discovery,
-)
+from minicells.real_representation_007_experiment import run_discovery_seed, summarize_discovery
 
 ROOT = Path(__file__).resolve().parents[2]
 VALIDATION = ROOT / "research" / "validations" / "core-007-functional-boundary-discovery"
 DEFAULT_PROTOCOL = VALIDATION / "protocol.json"
-DEFAULT_WINNER_LOCK = VALIDATION / "winner-lock.json"
 DEFAULT_OUT = ROOT / "results" / "core-validation-007-functional-boundary-discovery"
 
 
@@ -83,7 +82,6 @@ def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--phase", choices=("discovery", "confirmation"), required=True)
     p.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
-    p.add_argument("--winner-lock", type=Path, default=DEFAULT_WINNER_LOCK)
     p.add_argument("--out", type=Path, default=DEFAULT_OUT)
     p.add_argument("--device", choices=("auto", "cpu", "cuda"), default="auto")
     p.add_argument("--smoke", action="store_true")
@@ -92,63 +90,40 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
-def _load_winner_lock(path: Path, protocol_sha: str, cfg: CoreValidation007Config) -> dict[str, Any]:
-    if not path.is_file():
-        raise RuntimeError(
-            "Core 007 confirmation is locked: run discovery, select the winner, "
-            "commit research/validations/core-007-functional-boundary-discovery/winner-lock.json, "
-            "then run confirmation."
-        )
-    lock = json.loads(path.read_text(encoding="utf-8"))
-    if lock.get("format") != "minicells.core-validation.functional-boundary-winner-lock.v1":
-        raise RuntimeError("invalid Core 007 winner-lock format")
-    if lock.get("protocol_sha256") != protocol_sha:
-        raise RuntimeError("winner lock was created for a different frozen protocol")
-    if lock.get("winner") not in cfg.boundary_candidates:
-        raise RuntimeError("winner lock names an unknown boundary candidate")
-    if lock.get("confirmation_opened") is not False:
-        raise RuntimeError("winner lock must record confirmation_opened=false before formal run")
-    return lock
-
-
 def main() -> int:
     args = parse_args()
-    protocol: dict[str, Any] = json.loads(args.protocol.read_text(encoding="utf-8"))
+    if args.phase == "confirmation" and not args.smoke:
+        raise RuntimeError(
+            "The original Core 007 monolithic confirmation entrypoint is retired. "
+            "Use scripts/research/orchestrate_core_validation_007_confirmation.py; "
+            "it runs amended seeds 80721/80722/80723 in isolated resumable processes."
+        )
+
+    protocol = json.loads(args.protocol.read_text(encoding="utf-8"))
     formal_cfg = CoreValidation007Config.from_protocol(args.protocol)
     cfg = smoke_config(formal_cfg) if args.smoke else formal_cfg
     protocol_sha = _sha256(args.protocol)
     device = _device(args.device)
     if not args.smoke and bool(protocol["hardware"]["gpu_required_for_real_run"]):
         if device.type != "cuda" or not torch.cuda.is_available():
-            raise RuntimeError("formal Core Validation 007 requires CUDA")
+            raise RuntimeError("formal Core Validation 007 discovery requires CUDA")
 
     if args.smoke:
         seeds = args.seeds or [cfg.smoke_seed]
-    elif args.phase == "discovery":
+    else:
         frozen = list(formal_cfg.discovery_seeds)
         seeds = args.seeds or frozen
         if seeds != frozen:
             raise RuntimeError(f"discovery must run exactly frozen seeds {frozen}")
-    else:
-        frozen = list(formal_cfg.confirmation_seeds)
-        seeds = args.seeds or frozen
-        if seeds != frozen:
-            raise RuntimeError(f"confirmation must run exactly frozen seeds {frozen}")
 
-    winner_lock = None
-    winner = None
-    if args.phase == "confirmation" and not args.smoke:
-        winner_lock = _load_winner_lock(args.winner_lock, protocol_sha, formal_cfg)
-        winner = str(winner_lock["winner"])
-
-    phase_out = args.out / ("smoke" if args.smoke else args.phase)
+    phase_out = args.out / ("smoke" if args.smoke else "discovery")
     phase_out.mkdir(parents=True, exist_ok=True)
     cache_path = args.out / ("frozen-hidden-smoke.pt" if args.smoke else "frozen-hidden.pt")
     manifest_path = args.out / "data-manifest.json"
     started = time.time()
 
     print(
-        f"[core-007] phase={args.phase} loading {cfg.base.model_id}@{cfg.base.model_revision} on {device}",
+        f"[core-007] phase=discovery loading {cfg.base.model_id}@{cfg.base.model_revision} on {device}",
         flush=True,
     )
     tokenizer, model = load_foundation(cfg.base, device=device)
@@ -177,40 +152,19 @@ def main() -> int:
 
     runs = []
     for seed in seeds:
-        print(f"[core-007] phase={args.phase} seed={seed}", flush=True)
-        if args.phase == "discovery" or args.smoke:
-            run = run_discovery_seed(
-                frozen_sequences,
-                cfg,
-                seed=seed,
-                lm_head_weight=lm_head_weight,
-                device=device,
-            )
-            print(
-                f"[core-007] seed={seed} modes={run['mode_count']} "
-                f"route={run['routing_agreement']:.3f} top2={run['soft_top2_coverage']:.3f}",
-                flush=True,
-            )
-        else:
-            assert winner is not None
-            run = run_confirmation_seed(
-                frozen_sequences,
-                cfg,
-                seed=seed,
-                winner=winner,
-                lm_head_weight=lm_head_weight,
-                device=device,
-            )
-            c = run["candidate"]
-            print(
-                f"[core-007] seed={seed} pass={run['pass']} winner={winner} "
-                f"split={c['median_split_conflict_reduction']:.3f} "
-                f"spawn={c['spawned_fraction_of_addresses']:.3f} "
-                f"reg/unsafe={c['regression_ratio_vs_unsafe']:.3f} "
-                f"gain/replay={c['gain_ratio_vs_replay']:.3f} "
-                f"route={c['routing_agreement']:.3f}",
-                flush=True,
-            )
+        print(f"[core-007] phase=discovery seed={seed}", flush=True)
+        run = run_discovery_seed(
+            frozen_sequences,
+            cfg,
+            seed=seed,
+            lm_head_weight=lm_head_weight,
+            device=device,
+        )
+        print(
+            f"[core-007] seed={seed} modes={run['mode_count']} "
+            f"route={run['routing_agreement']:.3f} top2={run['soft_top2_coverage']:.3f}",
+            flush=True,
+        )
         runs.append(run)
 
     if args.smoke:
@@ -220,26 +174,18 @@ def main() -> int:
             "pass": None,
             "reason": "Reduced real-data smoke cannot select or confirm a Core 007 mechanism.",
         }
-    elif args.phase == "discovery":
-        decision = summarize_discovery(runs, formal_cfg)
     else:
-        assert winner is not None
-        decision = summarize_confirmation(
-            runs,
-            winner=winner,
-            positive_status=str(protocol["confirmation_gates"]["positive_status"]),
-            negative_status=str(protocol["confirmation_gates"]["negative_status"]),
-        )
+        decision = summarize_discovery(runs, formal_cfg)
 
     payload = {
         "format": protocol["format"],
         "experiment_id": protocol["experiment_id"],
         "protocol_version": protocol["protocol_version"],
-        "phase": "smoke" if args.smoke else args.phase,
+        "phase": "smoke" if args.smoke else "discovery",
         "protocol_sha256": protocol_sha,
         "parent_experiment": protocol["parent_experiment"],
         "data_manifest_sha256": manifest["manifest_sha256"],
-        "winner_lock": winner_lock,
+        "winner_lock": None,
         "provenance": {
             "code_commit": _git(["rev-parse", "HEAD"]),
             "code_tree": _git(["rev-parse", "HEAD^{tree}"]),

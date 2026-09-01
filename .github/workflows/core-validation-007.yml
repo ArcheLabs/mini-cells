@@ -9,8 +9,8 @@ on:
   pull_request:
     paths:
       - "src/minicells/real_representation_007_*.py"
-      - "scripts/research/*core_validation_007.py"
-      - "tests/research/04-continual-learning-core/test_core_validation_007.py"
+      - "scripts/research/*core_validation_007*.py"
+      - "tests/research/04-continual-learning-core/test_core_validation_007*.py"
       - "research/validations/core-007-functional-boundary-discovery/**"
       - "research/notebooks/04-continual-learning-core/core-validation-007-functional-boundary-discovery.ipynb"
       - ".github/workflows/core-validation-007.yml"
@@ -31,22 +31,28 @@ jobs:
           cache: pip
       - name: Install core test dependencies
         run: python -m pip install -e ".[dev]"
-      - name: Core Validation 007 unit tests
-        run: pytest -q tests/research/04-continual-learning-core/test_core_validation_007.py
+      - name: Core Validation 007 unit and infrastructure tests
+        run: |
+          pytest -q \
+            tests/research/04-continual-learning-core/test_core_validation_007.py \
+            tests/research/04-continual-learning-core/test_core_validation_007_infra.py
       - name: Validate frozen assets
         run: |
           python -m json.tool research/validations/core-007-functional-boundary-discovery/protocol.json >/dev/null
-          if [ -f research/validations/core-007-functional-boundary-discovery/winner-lock.json ]; then
-            python -m json.tool research/validations/core-007-functional-boundary-discovery/winner-lock.json >/dev/null
-          fi
+          python -m json.tool research/validations/core-007-functional-boundary-discovery/confirmation-protocol-v1.1.json >/dev/null
+          python -m json.tool research/validations/core-007-functional-boundary-discovery/winner-lock.json >/dev/null
           python -m json.tool research/notebooks/04-continual-learning-core/core-validation-007-functional-boundary-discovery.ipynb >/dev/null
           python -m py_compile \
             src/minicells/real_representation_007_config.py \
             src/minicells/real_representation_007_core.py \
             src/minicells/real_representation_007_experiment.py \
+            src/minicells/real_representation_007_runtime.py \
             scripts/research/run_core_validation_007.py \
             scripts/research/select_core_validation_007.py \
             scripts/research/report_core_validation_007.py \
+            scripts/research/report_core_validation_007_confirmation.py \
+            scripts/research/run_core_validation_007_confirmation_seed.py \
+            scripts/research/orchestrate_core_validation_007_confirmation.py \
             scripts/research/publish_core_validation_007.py
       - name: Semantic Ruff checks
         run: |
@@ -54,20 +60,29 @@ jobs:
             src/minicells/real_representation_007_config.py \
             src/minicells/real_representation_007_core.py \
             src/minicells/real_representation_007_experiment.py \
+            src/minicells/real_representation_007_runtime.py \
             scripts/research/run_core_validation_007.py \
             scripts/research/select_core_validation_007.py \
             scripts/research/report_core_validation_007.py \
+            scripts/research/report_core_validation_007_confirmation.py \
+            scripts/research/run_core_validation_007_confirmation_seed.py \
+            scripts/research/orchestrate_core_validation_007_confirmation.py \
             scripts/research/publish_core_validation_007.py \
-            tests/research/04-continual-learning-core/test_core_validation_007.py
-      - name: Confirmation lock policy
+            tests/research/04-continual-learning-core/test_core_validation_007.py \
+            tests/research/04-continual-learning-core/test_core_validation_007_infra.py
+      - name: Confirmation amendment policy
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          p=Path('research/validations/core-007-functional-boundary-discovery/winner-lock.json')
-          if p.exists():
-              lock=json.loads(p.read_text())
-              assert lock['confirmation_opened'] is False
-              assert lock['winner'] in {'semantic_singleton','activation_community','write_community','interference_cut'}
-          print('CI never runs Core 007 confirmation seeds.')
+          root=Path('research/validations/core-007-functional-boundary-discovery')
+          lock=json.loads((root/'winner-lock.json').read_text())
+          amendment=json.loads((root/'confirmation-protocol-v1.1.json').read_text())
+          assert lock['winner'] == amendment['winner'] == 'interference_cut'
+          assert amendment['retired_confirmation_seeds'] == [80711,80712,80713]
+          assert amendment['confirmation_seeds'] == [80721,80722,80723]
+          assert set(amendment['retired_confirmation_seeds']).isdisjoint(amendment['confirmation_seeds'])
+          assert all(value is False for value in amendment['scientific_invariants'].values())
+          assert amendment['expected_data_manifest_sha256'] == 'd098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc'
+          print('CI validates infrastructure only and never runs Core 007 confirmation seeds.')
           PY

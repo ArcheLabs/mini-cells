@@ -1,0 +1,60 @@
+{
+  "candidate_summary": [
+    {
+      "candidate": "semantic_singleton",
+      "mean_balance": 0.5357142857142857,
+      "mean_interference_cut_fraction": 0.4938724239026083,
+      "mean_routing_agreement": 0.8973214285714286,
+      "mean_selection_score": 0.621183404575006,
+      "mean_soft_top2_coverage": 0.9665178571428572
+    },
+    {
+      "candidate": "activation_community",
+      "mean_balance": 0.8660714285714286,
+      "mean_interference_cut_fraction": 0.5454969510862262,
+      "mean_routing_agreement": 0.8973214285714286,
+      "mean_selection_score": 0.6991304659545672,
+      "mean_soft_top2_coverage": 0.9665178571428572
+    },
+    {
+      "candidate": "write_community",
+      "mean_balance": 0.8166666666666667,
+      "mean_interference_cut_fraction": 0.5454503100841763,
+      "mean_routing_agreement": 0.8973214285714286,
+      "mean_selection_score": 0.6916940991177256,
+      "mean_soft_top2_coverage": 0.9665178571428572
+    },
+    {
+      "candidate": "interference_cut",
+      "mean_balance": 0.9375,
+      "mean_interference_cut_fraction": 0.5508129572944579,
+      "mean_routing_agreement": 0.8973214285714286,
+      "mean_selection_score": 0.7127685550833804,
+      "mean_soft_top2_coverage": 0.9665178571428572
+    }
+  ],
+  "data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+  "elapsed_seconds": 86.31633281707764,
+  "experiment_id": "core-validation-007",
+  "format": "minicells.core-validation.functional-boundary-discovery.v1",
+  "parent_experiment": "core-validation-006-real-representation-continual-plasticity",
+  "phase": "discovery",
+  "protocol_sha256": "bf72fd372dbbc3720f824b07f81a66ac16094d7b2a72ec4db99605f6c7d4332c",
+  "protocol_version": "1.0-frozen-discovery",
+  "provenance": {
+    "code_commit": "43a33cb2afc71d3613cd1e2a9d3559c6a40749b6",
+    "code_tree": "42a5a302fe740733b94d272a16df9e1980da3b6e",
+    "cuda": "12.8",
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "python": "3.12.13",
+    "resolved_dataset_sha": "1224c66add28b96ab045cd1058e795e8d3595485",
+    "resolved_model_sha": "b56d9bee36300031aeea723b73c4d62ac7fa71a2",
+    "torch": "2.10.0+cu128",
+    "tracked_tree_dirty": false
+  },
+  "provisional_winner": "interference_cut",
+  "scientific_decision": false,
+  "status": "FUNCTIONAL_BOUNDARY_DISCOVERY_COMPLETED",
+  "winner_meets_routing_floor": true
+}

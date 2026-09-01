@@ -1,0 +1,28 @@
+{
+  "confirmation_opened": false,
+  "discovery_code_commit": "43a33cb2afc71d3613cd1e2a9d3559c6a40749b6",
+  "discovery_data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+  "discovery_seeds": [
+    80701,
+    80702
+  ],
+  "experiment_id": "core-validation-007",
+  "format": "minicells.core-validation.functional-boundary-winner-lock.v1",
+  "protocol_sha256": "bf72fd372dbbc3720f824b07f81a66ac16094d7b2a72ec4db99605f6c7d4332c",
+  "selection_rule": "aggregate the two discovery seeds; choose exactly one boundary candidate by maximum frozen weighted score, lexical candidate name as deterministic tie-break",
+  "selection_weights": {
+    "balance": 0.15,
+    "interference_cut": 0.55,
+    "routing_agreement": 0.3
+  },
+  "winner": "interference_cut",
+  "winner_meets_routing_floor": true,
+  "winner_summary": {
+    "candidate": "interference_cut",
+    "mean_balance": 0.9375,
+    "mean_interference_cut_fraction": 0.5508129572944579,
+    "mean_routing_agreement": 0.8973214285714286,
+    "mean_selection_score": 0.7127685550833804,
+    "mean_soft_top2_coverage": 0.9665178571428572
+  }
+}
