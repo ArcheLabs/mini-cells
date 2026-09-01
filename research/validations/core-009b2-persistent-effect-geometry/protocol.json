@@ -48,15 +48,9 @@
   "offline_geometry": {
     "fit": "uncentered train-effect covariance C = mean_i[a_i a_i^T]; V_d is the top-d eigenspace",
     "dimension_grid": [1, 2, 4, 8, 12, 16, 24, 32, 40, 48, 56, 64],
-    "compact_candidate_dimensions": [4, 8, 12, 16, 24, 32],
+    "compact_candidate_dimensions": [1, 2, 4, 8, 12, 16, 24, 32],
     "compact_dimension_limit": 32,
-    "metrics": [
-      "train/eval median normalized effect residual",
-      "train/eval p90 normalized effect residual",
-      "train-to-eval median residual gap",
-      "cumulative effect covariance energy",
-      "median projected cosine similarity"
-    ]
+    "metrics": ["train/eval median normalized effect residual", "train/eval p90 normalized effect residual", "train-to-eval median residual gap", "cumulative effect covariance energy", "median projected cosine similarity"]
   },
   "online_growth": {
     "algorithm": "Start V empty. For each training effect in the frozen stream order, compute residual e=(I-VV^T)a. If ||e||/||a|| > tau, append normalized e after double re-orthogonalization. Never rotate or refit existing coordinates.",
@@ -64,27 +58,14 @@
     "orderings": ["canonical", "sha-0", "sha-1", "sha-2"],
     "sha_order": "sort train effects by SHA256(seed:ordering_name:token_sha256); canonical preserves repository sequence order",
     "late_window": "final half of the training stream",
-    "metrics": [
-      "K(N) growth curve",
-      "final coordinate count",
-      "new coordinates per 100 writes",
-      "late-window new coordinates per 100 writes",
-      "independent-memory compression ratio N/K",
-      "heldout median/p90 effect residual of final online basis",
-      "online/offline locked-dimension ratio"
-    ],
+    "metrics": ["K(N) growth curve", "final coordinate count", "new coordinates per 100 writes", "late-window new coordinates per 100 writes", "independent-memory compression ratio N/K", "heldout median/p90 effect residual of final online basis", "online/offline locked-dimension ratio"],
     "independent_memory_baseline": "one effect vector per write, K_independent=N"
   },
   "discovery": {
     "seeds": [81101, 81102],
     "scientific_decision": false,
     "selection_rule": "Choose the smallest compact candidate dimension d that independently on both discovery seeds has eval median residual <=0.25, eval p90 residual <=0.50 and train-to-eval median residual gap <=0.10. Dimensions above 32 are diagnostic only and can never unlock confirmation.",
-    "gates": {
-      "maximum_eval_median_residual": 0.25,
-      "maximum_eval_p90_residual": 0.50,
-      "maximum_train_to_eval_median_residual_gap": 0.10,
-      "maximum_locked_dimension": 32
-    },
+    "gates": {"maximum_eval_median_residual": 0.25, "maximum_eval_p90_residual": 0.50, "maximum_train_to_eval_median_residual_gap": 0.10, "maximum_locked_dimension": 32},
     "basis_lock_required_before_confirmation": true,
     "online_metrics_forbidden_for_dimension_selection": true,
     "failure_status": "EFFECT_GEOMETRY_DISCOVERY_NO_COMPACT_SUBSPACE"
@@ -92,37 +73,11 @@
   "confirmation": {
     "seeds": [81111, 81112, 81113],
     "all_seeds_must_pass": true,
-    "gates": {
-      "maximum_offline_eval_median_residual": 0.25,
-      "maximum_offline_eval_p90_residual": 0.50,
-      "maximum_offline_train_to_eval_median_residual_gap": 0.10,
-      "maximum_online_final_dimension": 32,
-      "maximum_online_over_locked_dimension_ratio": 2.0,
-      "maximum_online_eval_median_residual": 0.25,
-      "maximum_online_eval_p90_residual": 0.50,
-      "maximum_late_growth_per_100_writes": 5.0,
-      "minimum_independent_memory_compression_ratio": 4.0
-    },
+    "gates": {"maximum_offline_eval_median_residual": 0.25, "maximum_offline_eval_p90_residual": 0.50, "maximum_offline_train_to_eval_median_residual_gap": 0.10, "maximum_online_final_dimension": 32, "maximum_online_over_locked_dimension_ratio": 2.0, "maximum_online_eval_median_residual": 0.25, "maximum_online_eval_p90_residual": 0.50, "maximum_late_growth_per_100_writes": 5.0, "minimum_independent_memory_compression_ratio": 4.0},
     "positive_status": "PERSISTENT_EFFECT_GEOMETRY_SUPPORTED",
     "negative_status": "PERSISTENT_EFFECT_GEOMETRY_NOT_SUPPORTED"
   },
-  "replication": {
-    "smoke_seed": 81100,
-    "formal_hardware": "Kaggle GPU for frozen hidden/gradient extraction; all effect-space geometry and online growth are CPU-safe after extraction",
-    "checkpoint_each_seed": true,
-    "hidden_cache_excluded_from_publication": true,
-    "effect_pack_excluded_from_publication": true
-  },
-  "stop_rule": {
-    "discovery_failure": "Do not open confirmation. A compact <=32-dimensional shared effect space was not found under the frozen residual criterion.",
-    "confirmation_failure": "Stop the persistent-effect dictionary route. Do not run 009B-3 deployable addressability unless a new effect representation hypothesis is frozen.",
-    "confirmation_success": "Proceed to Core 009B-3 Deployable Effect Addressability. Do not add certificates or continual mutation yet."
-  },
-  "interpretation_boundary": [
-    "A positive result supports compact/reusable effect geometry for this frozen-Pythia regime. It does not establish sparse coefficients, deployable routing, safe continual mutation, bounded long-horizon growth across models, or an end-to-end CLM.",
-    "A 64-dimensional ambient cap is not evidence of bounded growth. Confirmation requires compact <=32-dimensional representation plus late-growth and heldout-residual gates.",
-    "Online growth uses multiple frozen orderings so a lucky stream order cannot by itself create a positive result.",
-    "Effect vectors retain their natural carrier magnitude from Ghat r. They are not individually renormalized before fitting or growth.",
-    "All shared coordinates are learned from train effects only; eval effects never influence V or the growth stream."
-  ]
+  "replication": {"smoke_seed": 81100, "formal_hardware": "Kaggle GPU for frozen hidden/gradient extraction; all effect-space geometry and online growth are CPU-safe after extraction", "checkpoint_each_seed": true, "hidden_cache_excluded_from_publication": true, "effect_pack_excluded_from_publication": true},
+  "stop_rule": {"discovery_failure": "Do not open confirmation. A compact <=32-dimensional shared effect space was not found under the frozen residual criterion.", "confirmation_failure": "Stop the persistent-effect dictionary route. Do not run 009B-3 deployable addressability unless a new effect representation hypothesis is frozen.", "confirmation_success": "Proceed to Core 009B-3 Deployable Effect Addressability. Do not add certificates or continual mutation yet."},
+  "interpretation_boundary": ["A positive result supports compact/reusable effect geometry for this frozen-Pythia regime. It does not establish sparse coefficients, deployable routing, safe continual mutation, bounded long-horizon growth across models, or an end-to-end CLM.", "A 64-dimensional ambient cap is not evidence of bounded growth. Confirmation requires compact <=32-dimensional representation plus late-growth and heldout-residual gates.", "Online growth uses multiple frozen orderings so a lucky stream order cannot by itself create a positive result.", "Effect vectors retain their natural carrier magnitude from Ghat r. They are not individually renormalized before fitting or growth.", "All shared coordinates are learned from train effects only; eval effects never influence V or the growth stream."]
 }
