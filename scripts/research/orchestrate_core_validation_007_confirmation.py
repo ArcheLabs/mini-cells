@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
-"""Run amended Core 007 confirmation one isolated seed process at a time."""
+"""One-cell resumable Kaggle orchestration for Core Validation 007 confirmation.
+
+The mature repository publisher owns GitHub authentication. Each amended
+confirmation seed runs in a fresh Python/CUDA child process, is atomically
+checkpointed, reported, committed and pushed before the next seed begins.
+"""
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import shutil
 import subprocess
 import sys
 import time
 from pathlib import Path
+
+import torch
 
 ROOT = Path(__file__).resolve().parents[2]
 VALIDATION = ROOT / "research" / "validations" / "core-007-functional-boundary-discovery"
@@ -19,55 +25,82 @@ ARTIFACTS = ROOT / "artifacts" / "experiments" / "core-validation-007-functional
 SEED_RUNNER = ROOT / "scripts" / "research" / "run_core_validation_007_confirmation_seed.py"
 REPORTER = ROOT / "scripts" / "research" / "report_core_validation_007_confirmation.py"
 PUBLISHER = ROOT / "scripts" / "research" / "publish_core_validation_007.py"
-PREFLIGHT = ROOT / "scripts" / "research" / "preflight_core_validation_007.py"
+DEFAULT_BRANCH = "codex/core-validation-007-functional-boundary-discovery"
 
 
-def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _atomic_json(path: Path, payload: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    tmp.replace(path)
-
-
-def _run_checked(command: list[str]) -> None:
-    subprocess.run(command, cwd=ROOT, check=True)
+def _run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, cwd=ROOT, check=check, text=True)
 
 
 def _hydrate_partial_results() -> None:
-    """Restore canonical partial seed/failure artifacts into an empty new session."""
+    """Restore canonical seed/failure checkpoints in a fresh Kaggle session."""
     source = ARTIFACTS / "confirmation"
     if not source.is_dir():
         return
-    for subdir in ("seeds", "failures"):
+    for subdir in ("seeds", "failures", "logs"):
         src = source / subdir
         if not src.is_dir():
             continue
         dest = RESULTS / "confirmation" / subdir
         dest.mkdir(parents=True, exist_ok=True)
-        for item in src.glob("*.json"):
+        for item in src.iterdir():
+            if not item.is_file():
+                continue
             target = dest / item.name
             if not target.exists():
                 shutil.copy2(item, target)
                 print(f"[core-007] hydrated {target.relative_to(ROOT)} from canonical artifacts")
 
 
-def _publish(branch: str, *, push: bool) -> None:
+def _publish(branch: str, secret_name: str, *, push: bool) -> None:
     command = [
         sys.executable,
         str(PUBLISHER),
         "--phase",
         "confirmation",
+        "--allow-partial",
         "--commit-results",
         "--branch",
         branch,
+        "--secret-name",
+        secret_name,
     ]
     if push:
         command.append("--push-results")
-    _run_checked(command)
+    _run(command)
+
+
+def _preflight(branch: str, secret_name: str, *, push: bool) -> None:
+    if not torch.cuda.is_available():
+        raise RuntimeError("Core 007 amended confirmation requires CUDA")
+    if push:
+        _run(
+            [
+                sys.executable,
+                str(PUBLISHER),
+                "--preflight-only",
+                "--branch",
+                branch,
+                "--secret-name",
+                secret_name,
+            ]
+        )
+    amendment = json.loads(AMENDMENT.read_text(encoding="utf-8"))
+    print(
+        json.dumps(
+            {
+                "status": "PREFLIGHT_OK",
+                "branch": branch,
+                "winner": amendment["winner"],
+                "confirmation_seeds": amendment["confirmation_seeds"],
+                "gpu": torch.cuda.get_device_name(0),
+                "github_push_checked": push,
+                "github_secret_name": secret_name if push else None,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
 
 
 def _run_seed(seed: int, *, no_cache: bool) -> int:
@@ -102,33 +135,15 @@ def _run_seed(seed: int, *, no_cache: bool) -> int:
             log.flush()
         returncode = process.wait()
         log.write(f"=== returncode={returncode} elapsed={time.time() - started:.3f}s ===\n")
-    if returncode != 0:
-        failure = RESULTS / "confirmation" / "failures" / f"seed-{seed}.json"
-        if not failure.is_file():
-            _atomic_json(
-                failure,
-                {
-                    "format": "minicells.core-validation.functional-boundary-confirmation-failure.v1",
-                    "experiment_id": "core-validation-007",
-                    "phase": "confirmation",
-                    "complete": False,
-                    "seed": seed,
-                    "failure_kind": "child_process_terminated_without_python_failure_record",
-                    "returncode": returncode,
-                    "confirmation_protocol_sha256": _sha256(AMENDMENT),
-                    "log_path": str(log_path.relative_to(ROOT)),
-                    "elapsed_seconds": time.time() - started,
-                },
-            )
     return returncode
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
-    p.add_argument("--branch", required=True)
-    p.add_argument("--push-results", action="store_true")
+    p.add_argument("--branch", default=DEFAULT_BRANCH)
+    p.add_argument("--secret-name", default="GITHUB_TOKEN")
+    p.add_argument("--push-results", action=argparse.BooleanOptionalAction, default=True)
     p.add_argument("--no-cache", action="store_true")
-    p.add_argument("--skip-preflight", action="store_true")
     return p.parse_args()
 
 
@@ -137,25 +152,30 @@ def main() -> int:
     amendment = json.loads(AMENDMENT.read_text(encoding="utf-8"))
     seeds = [int(x) for x in amendment["confirmation_seeds"]]
 
-    if not args.skip_preflight:
-        preflight = [sys.executable, str(PREFLIGHT), "--branch", args.branch]
-        if not args.push_results:
-            preflight.append("--skip-push-check")
-        _run_checked(preflight)
-
+    # This check happens before a new amended confirmation seed is opened.
+    _preflight(args.branch, args.secret_name, push=args.push_results)
     _hydrate_partial_results()
+
+    print(
+        f"[core-007] amended confirmation seeds={seeds}; "
+        "one fresh Python/CUDA process per seed",
+        flush=True,
+    )
     for seed in seeds:
         checkpoint = RESULTS / "confirmation" / "seeds" / f"seed-{seed}.json"
         if checkpoint.is_file():
-            print(f"[core-007] orchestrator sees seed={seed} checkpoint; runner will validate/skip")
+            print(f"[core-007] seed={seed} checkpoint found; seed runner will validate and skip")
         returncode = _run_seed(seed, no_cache=args.no_cache)
-        _run_checked([sys.executable, str(REPORTER)])
-        _publish(args.branch, push=args.push_results)
+
+        # Aggregate whatever survived, even if the child process was killed.
+        _run([sys.executable, str(REPORTER)])
+        _publish(args.branch, args.secret_name, push=args.push_results)
+
         if returncode != 0:
             print(
-                f"[core-007] seed={seed} failed with returncode={returncode}; "
-                "completed checkpoints and failure artifacts were published. "
-                "Rerun this same orchestrator after fixing the underlying issue; completed seeds will be hydrated/skipped.",
+                f"[core-007] seed={seed} failed with returncode={returncode}. "
+                "Completed checkpoints/logs were published. Re-run this same one-cell command; "
+                "matching completed seeds will be skipped.",
                 file=sys.stderr,
             )
             return returncode if returncode > 0 else 1
@@ -164,7 +184,7 @@ def main() -> int:
         (RESULTS / "confirmation" / "decision.json").read_text(encoding="utf-8")
     )
     if decision.get("scientific_decision") is not True:
-        raise RuntimeError("all seed processes returned success but final scientific decision was not emitted")
+        raise RuntimeError("all amended seed processes returned success but final decision is incomplete")
     print(json.dumps(decision, indent=2, sort_keys=True))
     return 0
 
