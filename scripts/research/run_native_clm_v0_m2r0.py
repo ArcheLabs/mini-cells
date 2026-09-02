@@ -44,6 +44,7 @@ ARMS = (
     "current_adamw_grad_projection",
     "adamw_no_decay_grad_projection",
     "sgd_no_decay_grad_projection",
+    "sgd_with_decay_grad_projection",
     "adamw_final_update_projection",
 )
 
@@ -59,7 +60,7 @@ def _sha256(path: Path) -> str:
 def _load_protocol(path: Path) -> tuple[dict[str, Any], str]:
     raw = path.read_bytes()
     protocol = json.loads(raw)
-    if protocol.get("format") != "minicells.native-clm-v0.m2r0-update-invariant-audit.protocol.v1":
+    if protocol.get("format") != "minicells.native-clm-v0.m2r0-update-invariant-audit.protocol.v2":
         raise RuntimeError("unexpected M2-R0 protocol format")
     if protocol.get("status") != "FROZEN_UNRUN":
         raise RuntimeError("M2-R0 protocol is not frozen/unrun")
@@ -67,6 +68,8 @@ def _load_protocol(path: Path) -> tuple[dict[str, Any], str]:
         raise RuntimeError("M2-R0 must remain a non-decision diagnostic")
     if protocol.get("new_formal_seeds_consumed") is not False:
         raise RuntimeError("M2-R0 must consume no formal seed")
+    if tuple(protocol.get("arms", {})) != ARMS:
+        raise RuntimeError("M2-R0 frozen optimizer arm order mismatch")
     return protocol, hashlib.sha256(raw).hexdigest()
 
 
@@ -91,6 +94,8 @@ def _validate_inputs(
     if not manifest_path.exists():
         raise RuntimeError("M2-R0 data manifest missing")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("format") != train_record["source_manifest_format"]:
+        raise RuntimeError("M2-R0 data manifest format mismatch")
     revision = manifest.get("dataset_revisions", {}).get("B", {}).get("resolved_revision")
     if revision != train_record["resolved_revision"]:
         raise RuntimeError("M2-R0 WikiText revision mismatch")
@@ -213,6 +218,7 @@ def run_arm(
     losses: list[float] = []
     started = time.time()
     model.train()
+    minimum_update_norm = float(protocol["invariant"]["minimum_update_norm_for_ratio"])
 
     for step in range(1, int(audit["steps_per_arm"]) + 1):
         factor = _lr_factor(step - 1, config)
@@ -244,6 +250,7 @@ def run_arm(
                 before,
                 arm=arm,
                 step=step,
+                minimum_update_norm=minimum_update_norm,
             )
         )
         losses.append(float(loss.detach().cpu()))
@@ -258,7 +265,7 @@ def run_arm(
     summary = summarize_invariant_rows(rows)
     summary.update(
         {
-            "format": "minicells.native-clm-v0.m2r0-arm-result.v1",
+            "format": "minicells.native-clm-v0.m2r0-arm-result.v2",
             "arm": arm,
             "protocol_sha256": protocol_sha256,
             "data_manifest_sha256": data_manifest_sha256,
@@ -280,6 +287,7 @@ def run_arm(
             ),
             "certificate_ranks": certificate_ranks_before,
             "certificate_updates": 0,
+            "minimum_update_norm_for_ratio": minimum_update_norm,
             "learner_replay_bytes": 0,
             "native_clm_formal_training": False,
             "elapsed_seconds": time.time() - started,
@@ -301,6 +309,7 @@ def run_arm(
             {
                 "arm": arm,
                 "audited_cell_updates": summary["audited_cell_updates"],
+                "skipped_zero_or_tiny": summary["tiny_or_zero_updates_skipped"],
                 "violation_p95": summary["violation_ratio_p95"],
                 "violation_max": summary["violation_ratio_max"],
             },
@@ -354,7 +363,7 @@ def _aggregate(
     }
     classification = classify_optimizer_invariant(summaries, _thresholds(protocol))
     result = {
-        "format": "minicells.native-clm-v0.m2r0-update-invariant-audit.result.v1",
+        "format": "minicells.native-clm-v0.m2r0-update-invariant-audit.result.v2",
         "classification": classification,
         "scientific_decision": False,
         "native_clm_training_milestone": False,
@@ -375,6 +384,7 @@ def _aggregate(
             [
                 "arm",
                 "audited_cell_updates",
+                "skipped_zero_or_tiny",
                 "rank_min",
                 "rank_max",
                 "violation_mean",
@@ -390,6 +400,7 @@ def _aggregate(
                 [
                     arm,
                     summary["audited_cell_updates"],
+                    summary["tiny_or_zero_updates_skipped"],
                     summary["certificate_rank_min"],
                     summary["certificate_rank_max"],
                     summary["violation_ratio_mean"],
@@ -409,15 +420,16 @@ def _aggregate(
         f"- Protocol SHA-256: `{protocol_sha256}`",
         f"- Data manifest SHA-256: `{data_manifest_sha256}`",
         "",
-        "| arm | audited updates | rank min/max | mean rho | p95 rho | max rho |",
-        "|---|---:|---:|---:|---:|---:|",
+        "| arm | audited updates | skipped tiny/zero | rank min/max | mean rho | p95 rho | max rho |",
+        "|---|---:|---:|---:|---:|---:|---:|",
     ]
     for arm in ARMS:
         summary = summaries[arm]
         lines.append(
-            "| {arm} | {n} | {rmin}/{rmax} | {mean:.6g} | {p95:.6g} | {maxv:.6g} |".format(
+            "| {arm} | {n} | {skip} | {rmin}/{rmax} | {mean:.6g} | {p95:.6g} | {maxv:.6g} |".format(
                 arm=arm,
                 n=summary["audited_cell_updates"],
+                skip=summary["tiny_or_zero_updates_skipped"],
                 rmin=summary["certificate_rank_min"],
                 rmax=summary["certificate_rank_max"],
                 mean=summary["violation_ratio_mean"],
@@ -472,7 +484,6 @@ def main() -> int:
     if len(devices) < 2:
         raise RuntimeError("canonical M2-R0 runner requires two devices")
 
-    # Preserve identical batches across arms while using both GPUs: run two arms per wave.
     for start in range(0, len(ARMS), 2):
         processes: list[tuple[str, subprocess.Popen]] = []
         for offset, arm in enumerate(ARMS[start : start + 2]):
