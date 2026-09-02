@@ -5,7 +5,7 @@
   "status": "FROZEN_UNRUN",
   "frozen_before_diagnostic": true,
   "scientific_decision": false,
-  "scientific_question": "Using only the already-published M3L-2 final checkpoints, how much of residual A forgetting is causally attributable to writes in the original eight roots versus writes in descendants, when routing/address state is held fixed?",
+  "scientific_question": "Using only the already-published M3L-2 final checkpoints, how much of residual A forgetting is causally attributable to final operator-state drift in the original eight roots versus final operator-state drift in descendants, when routing/address state is held fixed?",
   "parent_evidence": {
     "m3l2_status": "NATIVE_CLM_V0_M3L2_ONLINE_ADDRESS_STATE_NOT_SUPPORTED",
     "m3l2_publish_commit": "348a6cd28cda13298b6d61c01453d06e14efbd33",
@@ -55,16 +55,17 @@
     "all_lineage_restore": "restore every Cell operator to the exact M1 operator of its root ancestor; keep final routing/address state unchanged"
   },
   "factorial_mapping": {
-    "00": "all_lineage_restore: root writes off, descendant writes off",
-    "10": "descendant_root_restore: root writes on, descendant writes off",
-    "01": "root_restore: root writes off, descendant writes on",
-    "11": "final: root writes on, descendant writes on"
+    "00": "all_lineage_restore: root operator drift off, descendant operator-state drift off",
+    "10": "descendant_root_restore: root operator drift on, descendant operator-state drift off",
+    "01": "root_restore: root operator drift off, descendant operator-state drift on",
+    "11": "final: root operator drift on, descendant operator-state drift on"
   },
   "attribution": {
     "A_loss_root_shapley": "0.5 * ((L10_A - L00_A) + (L11_A - L01_A))",
     "A_loss_descendant_shapley": "0.5 * ((L01_A - L00_A) + (L11_A - L10_A))",
     "A_root_fraction": "root_shapley / (root_shapley + descendant_shapley)",
-    "new_domain_gain_retention_under_root_restore": "for each D in B,C,D: (L_M1_D - L_root_restore_D) / (L_M1_D - L_final_D)"
+    "new_domain_gain_retention_under_root_restore": "for each D in B,C,D: (L_M1_D - L_root_restore_D) / (L_M1_D - L_final_D)",
+    "interpretation_boundary": "The factors attribute causal effects of final operator-state deviations from an M1-root baseline. A descendant final operator may include drift inherited from its parent at birth because exact child birth tensors were not persisted. Therefore descendant Shapley is not a count or isolation of post-birth child write events, and root Shapley is not a complete historical attribution of every update that originated while an ancestor was a root."
   },
   "evaluation": {
     "batch_size": 16,
@@ -86,9 +87,10 @@
     "DESCENDANT_WRITE_DOMINANT",
     "DISTRIBUTED_WRITE_DRIFT"
   ],
-  "classification_rule": "INCONCLUSIVE_IDENTITY if any seed fails all-lineage M1 reconstruction or recovers <95% of A excess loss. Otherwise ROOT_WRITE_DOMINANT_* if every seed has A_root_fraction >=0.60, split by whether every B/C/D gain-retention ratio under root_restore is >=0.70. DESCENDANT_WRITE_DOMINANT if every seed has descendant Shapley fraction >=0.60. Otherwise DISTRIBUTED_WRITE_DRIFT.",
+  "classification_rule": "INCONCLUSIVE_IDENTITY if any seed fails all-lineage M1 reconstruction or recovers <95% of A excess loss. Otherwise ROOT_WRITE_DOMINANT_* if every seed has A_root_fraction >=0.60, split by whether every B/C/D gain-retention ratio under root_restore is >=0.70. DESCENDANT_WRITE_DOMINANT if every seed has descendant Shapley fraction >=0.60. Otherwise DISTRIBUTED_WRITE_DRIFT. Classification names use write-drift shorthand but are interpreted only as final operator-state attribution under the registered M1-root baseline.",
   "explicit_nonclaims": [
     "child birth-state restoration",
+    "historical per-update or post-birth write-event attribution",
     "proof that copy-on-write will solve continual learning",
     "new continual-language scientific decision",
     "bootstrap-free address state",
@@ -96,5 +98,5 @@
     "semantic Cell ontology"
   ],
   "next_if_root_write_dominant": "register a new formal experiment whose only new integration variable is write-ownership separation / copy-on-write immutable committed parents",
-  "next_if_not_root_write_dominant": "freeze M3W-0 result and diagnose descendant/write interaction before adding a write controller"
+  "next_if_not_root_write_dominant": "freeze M3W-0 result and diagnose descendant/operator-state interaction before adding a write controller"
 }
