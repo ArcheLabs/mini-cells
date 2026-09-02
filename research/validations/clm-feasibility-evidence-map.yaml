@@ -1,9 +1,9 @@
 schema: minicells.clm-feasibility-evidence-map.v1
 status: FROZEN
-version: "1.0"
+version: "1.1"
 frozen_against:
   branch: main
-  commit: 474f7f1c736a61a433e4d5a01691edc6795177da
+  commit: 7c99ef3f4aedb8d561cf9600ea5d79da1eb99b99
   date: "2026-09-02"
 mission: >-
   Reuse validated MiniCells research components and spend new experiments only on
@@ -86,27 +86,48 @@ items:
     claim: full write operators retain reusable joint structure after carrier-effect reduction fails
     sources: ["core-validation-009d"]
     grade: Open
-    disposition: await_result
+    disposition: foundation_interface_nonblocking
+  - id: constructive_clm_001
+    claim: reusable learned Cell keys/effects form without task/factor labels when hidden factors receive singleton exposure
+    sources:
+      - "constructive-clm-001"
+      - "research/validations/constructive-clm-001-learned-coordinate-formation/FORMAL_RESULT.md"
+    grade: A
+    outcome: LEARNED_COORDINATE_FORMATION_SUPPORTED
+    disposition: g1a_supported_reuse_do_not_retest
+    protocol_sha256: 16c23861b1220fa223b220148a9172de7b792663d79a6103289999be3eed35e5
+    formal_seeds: [90111, 90112, 90113]
+    metrics:
+      cells_per_seed: [6, 6, 6]
+      pair_route_recall: [1.0, 1.0, 1.0]
+      late_spawns: [0, 1, 1]
 open_gaps:
-  - id: G1
-    claim: learned Cell coordinates and read/write alignment form without hidden task/factor labels
+  - id: G1a
+    claim: learned Cell coordinates and read/write alignment form without hidden task/factor labels when factors receive singleton exposure
     experiment: constructive-clm-001
+    status: supported
+  - id: G1b
+    claim: latent Cell coordinates can be recovered when no hidden factor is ever presented alone
+    experiment: constructive-clm-001b
+    status: active_protocol_frozen_unrun
+    boundary: registered experiment assumes additive pair-superposition discovery structure; arbitrary mixing remains open
     priority: primary
   - id: G2
     claim: long-horizon growth becomes sublinear or spawn probability declines materially
     experiment: constructive-clm-002
+    blocked_by: G1b
   - id: G3
     claim: learned coordinates integrate with the existing replay-free certificate mechanism
     experiment: constructive-clm-003
   - id: G4
-    claim: multiple learned Cells compose safely on unseen combinations
+    claim: multiple learned Cells compose safely on unseen combinations at model level
     experiment: constructive-clm-004
   - id: G5
     claim: external CLM scaffolding can be removed progressively toward endogenous CLM
     experiment: constructive-clm-005
 native_route_stop_rule:
   require_repeated_failure_of:
-    - reusable_learned_coordinates
+    - reusable_learned_coordinates_under_progressively_weaker_scaffolds
     - deployable_read_write_alignment
     - bounded_or_improving_growth
   natural_geometry_negative_is_not_stop: true
