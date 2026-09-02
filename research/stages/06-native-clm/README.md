@@ -4,15 +4,9 @@
 
 Status: **ACTIVE**
 
-Constructive CLM 001–005 closed the controlled mechanism-feasibility sequence. Stage 06 trains and evaluates those mechanisms inside a real token-predictive model.
+Stage 06 moves the formally supported Constructive CLM mechanisms into a real token-predictive model.
 
 ## Stable roadmap
-
-- 🟢 complete / supported
-- 🟡 partial evidence
-- 🔵 active
-- ⚪ planned
-- 🔴 blocked / not supported
 
 ```text
 Constructive CLM 001–005                                  🟢 CLOSED
@@ -20,36 +14,19 @@ Constructive CLM 001–005                                  🟢 CLOSED
 Native CLM v0
   M0  architecture + execution                           🟢 COMPLETE
   M1  ~12M next-token training                           🟢 COMPLETE
-  M2  replay-free continual language stream              🔵 ACTIVE
-  M3  autonomous Cell growth                             ⚪ PLANNED
+  M2  fixed-topology replay-free continual language      🔴 NOT SUPPORTED
+      protection causally reduced forgetting             🟡 PARTIAL EVIDENCE
+  M3  growth-restored continual language                 🔵 ACTIVE
   M4  Cell ontology / specialization analysis            ⚪ PLANNED
   M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
 ```
 
-Do not scale to 30M before M2/M3 close. The current scientific uncertainty is continual behavior, not basic trainability.
+Do not scale to 30M before M3 closes. The active uncertainty is whether topology growth restores protected continual capacity.
 
-## Native CLM v0 substrate
-
-```text
-UTF-8 bytes
-   ↓
-Token + position embedding
-   ↓
-shared causal Transformer blocks
-   ↓
-learned sparse Cellular Layer
-   ↓
-remaining shared blocks
-   ↓
-LM head
-   ↓
-next-token loss
-```
-
-The canonical substrate remains unchanged through M2:
+## Canonical substrate
 
 ```text
-parameters                  12,154,368
+parameters                  12,154,368 at M1 start
 vocab                       256 UTF-8 bytes
 context                     256
 shared width                384
@@ -57,183 +34,171 @@ shared blocks               6
 attention heads             6
 FFN width                   1536
 Cellular Layers             1
-Cells                       8
+initial Cells               8
 active Cells/token          2
 Cell operator               384 × 384 linear residual
 certificate max rank        64
 ```
 
-For Cell `i`:
+Canonical M1 checkpoint:
 
 ```text
-g_i(h) = W_i h
-h' = h + Σ gate_i · g_i(h), i ∈ TopK(router(h))
+Hugging Face  archelabsxyz/native-clm-v0
+file          final-model.pt
+SHA-256       91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f
 ```
 
-## M0 — Architecture + execution — 🟢 COMPLETE
+## M0 — Architecture + execution — 🟢
 
-M0 established the runtime: next-token forward/backward, sparse routing, router/Cell gradients, bounded certificate updates, certificate-nullspace gradient projection, dynamic child spawn, optimizer enrollment, dynamic-topology checkpoint round-trip, and generation after reload.
+M0 established sparse routing, Cell-local gradients, certificate projection, dynamic spawn, optimizer enrollment, dynamic checkpoint round-trip and generation.
 
-## M1 — First next-token Native CLM — 🟢 COMPLETE
+## M1 — Real next-token training — 🟢
 
-M1 established that the real token-predictive architecture can train end-to-end from next-token loss while retaining sparse Cell execution.
-
-Canonical result:
+M1 trained the 12.15M Native CLM from real next-token loss:
 
 ```text
-status              NATIVE_CLM_V0_M1_NEXT_TOKEN_TRAINING_PASS
-parameters          12,154,368
-Cells               8
-active Cells/token  2
-initial val loss    5.7234292984008786
-final val loss      0.7885352313518524
-initial perplexity  305.9523278270837
-final perplexity    2.200171322843134
-active fraction     0.25
-initial route H     0.6929467022418976
-final route H       0.5747594475746155
+validation loss       5.723429 -> 0.788535
+perplexity             305.9523 -> 2.2002
+active Cell fraction   2/8 = 0.25
 ```
-
-All ten registered engineering gates passed. `scientific_decision=false`: M1 is a real-model training milestone, not yet a continual-learning result.
 
 See [M1_CLOSURE.md](M1_CLOSURE.md).
 
-### Canonical M1 checkpoint
+## M2 — Fixed-topology continual language — 🔴 NOT SUPPORTED
+
+M2 started from the exact M1 checkpoint and trained only Cell operators through the replay-free stream:
 
 ```text
-Hugging Face: archelabsxyz/native-clm-v0
-file:         final-model.pt
-SHA-256:      91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f
+B WikiText-2 raw
+  ↓
+C cleaned Python CodeParrot
+  ↓
+D Databricks Dolly
 ```
 
-M2 resolves the current Hub commit but trusts the checkpoint only if this exact SHA-256 matches.
+A/TinyStories remained evaluation-only. Shared substrate and learned router were frozen.
 
-## M2 — Replay-free continual language — 🔵 ACTIVE
-
-Frozen question:
-
-> Starting from the exact trained M1 checkpoint, can protected sparse Cell-local updates learn sequential language distributions without learner-side replay while retaining prior language behavior better than unsafe writes?
-
-M2 introduces only the continual-time variable and a direct causal safety control. It does **not** enable growth or change the 12.15M architecture.
-
-### Registered stream
-
-```text
-A  TinyStories validation        evaluation-only M1 retention anchor
-
-B  WikiText-2 raw                continual training phase 1
-        ↓
-C  CodeParrot codecomplex        continual training phase 2
-        ↓
-D  Databricks Dolly              continual training phase 3
-```
-
-Old training data are never supplied to later phases. Historical domains remain available only to the evaluator:
-
-```text
-learner replay bytes = 0
-```
-
-At each boundary M2 records the full loss/perplexity matrix over A/B/C/D.
-
-### Why shared substrate and router are frozen
-
-M2 is deliberately a **Cell-local write test**. The M1 shared substrate and learned router are frozen; only `W_i` is writable.
-
-This gives both experimental arms the same learned read-address geometry. Routing inputs occur before Cell execution, so protected and unsafe arms have the same route policy while their Cell writes diverge. That isolates the certificate intervention rather than conflating it with router drift or shared-model forgetting.
-
-Each phase starts a fresh Cell-only AdamW optimizer. Optimizer state is not carried across domain boundaries.
-
-### Protected vs unsafe
-
-Protected:
-
-```text
-dW <- dW (I - QᵀQ)
-```
-
-Unsafe control:
-
-```text
-dW <- dW
-```
-
-Everything else is registered identically: M1 parent, data, seed, batch schedule, routing, topology, LR, and phase order.
-
-### Two-GPU strategy
-
-For this 12.15M model, DDP would add synchronization overhead with little benefit. Kaggle's two GPUs are instead used for the causal comparison itself:
-
-```text
-GPU0  protected arm
-GPU1  unsafe arm
-```
-
-The two arms run concurrently for each seed. Formal seeds then execute sequentially:
-
-```text
-73211
-73212
-73213
-```
-
-This approximately halves wall-clock time for the registered comparison while avoiding distributed-gradient complexity.
-
-### Formal gates
-
-All gates must pass on all formal seeds:
-
-- exact same canonical M1 checkpoint;
-- Cell-only writes;
-- shared substrate/router unchanged bit-for-bit;
-- zero learner replay;
-- fixed 8-Cell topology;
-- sparse execution <=30%;
-- protected gain >=5% on each new B/C/D phase;
-- final protected A regression <=20%;
-- unsafe mean forgetting >=3% so interference is actually exposed;
-- protected mean forgetting improves over unsafe by >=2 percentage points;
-- protected mean plasticity remains >=80% of unsafe plasticity.
-
-Positive decision:
-
-```text
-NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_SUPPORTED
-```
-
-Negative decision is preserved as:
+Formal seeds `73211 / 73212 / 73213` all produced the same decision:
 
 ```text
 NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED
 ```
 
-Frozen protocol: [`../../validations/native-clm-v0-m2-continual-language/protocol.json`](../../validations/native-clm-v0-m2-continual-language/protocol.json)
-
-## Kaggle M2 notebook
-
-Canonical notebook:
-
-[`../../notebooks/06-native-clm/native-clm-v0-m2-continual-language-kaggle.ipynb`](../../notebooks/06-native-clm/native-clm-v0-m2-continual-language-kaggle.ipynb)
-
-Required Kaggle Secrets:
+Protection was nevertheless causally useful:
 
 ```text
-HF_TOKEN
-GITHUB_TOKEN
+protected mean forgetting     ~0.2115
+unsafe mean forgetting        ~0.2790
+retention advantage           ~0.0675
+protected/unsafe plasticity    ~0.964
 ```
 
-The notebook:
+The only failed registered gate was absolute A retention: protected TinyStories regression remained ~43.9% against the pre-registered <=20% ceiling.
 
-1. verifies two GPUs;
-2. downloads the exact M1 checkpoint from `archelabsxyz/native-clm-v0` and verifies SHA-256;
-3. prepares A/B/C/D local UTF-8 corpora;
-4. runs protected and unsafe arms concurrently on GPU0/GPU1 for each frozen formal seed;
-5. writes the registered scientific decision whether positive or negative;
-6. uploads all six final M2 arm checkpoints to Hugging Face;
-7. pushes only lightweight evidence to Git.
+See [M2_CLOSURE.md](M2_CLOSURE.md). Those formal seeds are consumed and must never be reused as untouched evidence.
 
-## Stop / advance rule
+## M3 — Growth-Restored Continual Language — 🔵 ACTIVE
 
-If M2 is supported, advance to **M3 — autonomous Cell growth** at the same model scale. If M2 is not supported, preserve the negative result and diagnose whether the failure is insufficient protected capacity, certificate transfer, or fixed-topology limits before changing the mechanism.
+M3 does not change the failed M2 gate or tune on its seeds. It asks a new causal question:
 
-Do not use formal seeds for tuning and do not turn a failed frozen M2 into a post-hoc threshold edit.
+> Does autonomous context-addressed Cell growth restore replay-free old-domain retention beyond an otherwise identical fixed-topology protected control while preserving new-domain plasticity?
+
+Because the original M2 local data manifest was lost when the Kaggle session terminated, M3 freezes a new exact Hub-revision-pinned data snapshot and runs both causal arms on that same snapshot:
+
+```text
+GPU0  fixed_protected
+      8 Cells forever
+
+GPU1  growth_protected
+      starts at 8 Cells
+      may grow to at most 16 Cells
+```
+
+Both arms use:
+
+- the same exact M1 checkpoint;
+- identical B -> C -> D data and seed schedule;
+- zero learner replay;
+- certificate-projected Cell-local gradients;
+- frozen shared Transformer, query projection, norm and original eight route keys;
+- two active Cells per token.
+
+### Autonomous growth signal
+
+Every 50 learner steps, the growth arm may inspect only current-training quantities:
+
+```text
+window train loss
+Cell route hits
+certificate rank
+projected/raw Cell-gradient ratio
+frozen-router query vectors
+```
+
+No domain ID, phase name, evaluation metric, hidden novelty label or historical training example is visible to the growth decision.
+
+When persistent protected-write pressure is detected, M3 chooses the Cell maximizing:
+
+```text
+route_hits * (1 - projected/raw gradient ratio)
+```
+
+and creates a child with:
+
+```text
+W_child        = exact W_parent clone
+route_key      = mean current conflict-query vector
+certificate    = empty / rank 0
+parent_id      = lineage pointer
+```
+
+The exact operator clone is intended to avoid a large functional discontinuity at birth; the child then supplies fresh writable directions and must prove post-birth reuse.
+
+### Registered M3 gates
+
+All three untouched formal seeds must independently pass, including:
+
+- fixed control remains 8 Cells and exposes >=30% A regression;
+- growth uses learner-visible signals only;
+- 1–8 children are created, final Cells <=16;
+- >=75% of children receive >=512 post-birth routed token hits;
+- active Cell compute remains <=30% of dense-all-Cell compute;
+- each B/C/D phase improves >=5%;
+- growth A regression <=20%;
+- growth improves A retention by >=10 percentage points vs matched fixed control;
+- growth mean forgetting <=15%;
+- growth retains >=80% of fixed-control new-domain plasticity.
+
+Development seeds:
+
+```text
+73301 / 73302 / 73303
+```
+
+Untouched formal seeds:
+
+```text
+73411 / 73412 / 73413
+```
+
+Positive status:
+
+```text
+NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_SUPPORTED
+```
+
+Negative status:
+
+```text
+NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_NOT_SUPPORTED
+```
+
+Frozen protocol: [`../../validations/native-clm-v0-m3-growth-restored-continual-language/protocol.json`](../../validations/native-clm-v0-m3-growth-restored-continual-language/protocol.json)
+
+Canonical Kaggle notebook: [`../../notebooks/06-native-clm/native-clm-v0-m3-growth-restored-continual-language-kaggle.ipynb`](../../notebooks/06-native-clm/native-clm-v0-m3-growth-restored-continual-language-kaggle.ipynb)
+
+The notebook preflights two GPUs and Hugging Face model-repository write permission **before** formal training, uploads all six final fixed/growth checkpoints to `archelabsxyz/native-clm-v0`, and Git-publishes only lightweight evidence.
+
+## Advance rule
+
+If M3 is supported, move to M4 Cell ontology/specialization analysis at the same scale before any 30M reproduction. If M3 is not supported, preserve the negative result and diagnose growth addressing/trigger/certificate lifecycle rather than tuning the formal seeds post hoc.
