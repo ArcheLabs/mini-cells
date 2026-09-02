@@ -5,8 +5,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from pathlib import Path
 import subprocess
+from pathlib import Path
 
 DEFAULT_BRANCH = "codex/native-clm-v0-m2r0-update-invariant-audit"
 DEFAULT_OUTPUT = Path("artifacts/experiments/native-clm-v0-m2r0-update-invariant-audit")
