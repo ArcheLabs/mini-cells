@@ -27,13 +27,17 @@ Core 009D remains a non-blocking operator-geometry diagnostic.
 
 This is now the main native-CLM feasibility line.
 
-The first missing question is not whether growth or replay-free protection work in isolation; those already have repository evidence. It is whether reusable Cell coordinates and matching read keys can **form from continual experience without hidden task/factor labels**.
+Constructive CLM-001 is formally supported on untouched seeds `90111/90112/90113`: six learned Cells covered six hidden factors, routing recall was 1.0, and late growth stopped after coverage. Its boundary is equally important: every hidden factor first received a clean singleton exposure.
 
-Current experiment: [Constructive CLM-001 — Learned Coordinate Formation](validations/constructive-clm-001-learned-coordinate-formation/README.md).
+The active question is therefore stronger:
+
+> Can reusable latent Cell coordinates be recovered when **no hidden factor is ever presented alone**?
+
+Current experiment: [Constructive CLM-001B — Latent Coordinate Discovery under Superposition](validations/constructive-clm-001b-latent-superposition/README.md).
 
 The canonical reuse/no-repeat policy is frozen in the [CLM Feasibility Evidence Map](validations/CLM_FEASIBILITY_EVIDENCE_MAP.md), with a machine-readable companion at [`validations/clm-feasibility-evidence-map.yaml`](validations/clm-feasibility-evidence-map.yaml).
 
-Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md) for the G1–G5 constructive sequence.
+Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md) for the constructive sequence.
 
 ## Research stages
 
@@ -50,6 +54,7 @@ Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEA
 - Core 006: real pretrained representations contain reusable structure and replay-free certificate writes retain useful plasticity, while semantic/routing address is not a sufficient mitosis boundary.
 - Core 009A/009B-1: a compact foundation write interface exists; carrier-only writes preserve most of the tested causal target gain.
 - Core 009B-2/009C: the tested pretrained carrier-effect representation does not expose the desired compact persistent sparse/local Cell ontology. These are natural-geometry No-Gos, not Constructive-CLM No-Gos.
+- Constructive CLM-001: addressable learned Cell formation is supported in the registered singleton-exposure world; this is now G1a parent evidence rather than the active frontier.
 
 ## Research assets
 
@@ -59,4 +64,4 @@ Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEA
 - [Canonical artifacts](../artifacts/experiments/) are immutable scientific evidence once formal runs are published.
 - Machine-readable historical paths/outcomes remain in [`catalog.yaml`](catalog.yaml).
 
-No current repository result establishes general natural-language continual learning, asymptotically sublinear Cell growth, a fully learned growth policy, or an endogenous LLM-scale CLM. Constructive CLM-001 is deliberately narrower: it isolates the learned-coordinate/read-key bridge before those later claims are tested.
+No current repository result establishes general natural-language continual learning, asymptotically sublinear Cell growth, arbitrary latent-source discovery, a fully learned growth policy, or an endogenous LLM-scale CLM. Constructive CLM-001B is deliberately narrower: it removes singleton exposure under a registered additive pair-superposition scaffold before the program moves to long-horizon growth-law validation.
