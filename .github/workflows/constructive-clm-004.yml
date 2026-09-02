@@ -1,0 +1,60 @@
+name: Constructive CLM-004 model-level multi-Cell computation
+
+on:
+  push:
+    branches:
+      - codex/constructive-clm-004-model-level-multicell-computation
+    paths:
+      - src/minicells/constructive_clm_004.py
+      - scripts/research/run_constructive_clm_004.py
+      - tests/research/04-continual-learning-core/test_constructive_clm_004.py
+      - research/validations/constructive-clm-004-model-level-multicell-computation/**
+      - .github/workflows/constructive-clm-004.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Validate frozen protocol
+        run: python -m json.tool research/validations/constructive-clm-004-model-level-multicell-computation/protocol.json >/dev/null
+      - name: Compile and lint
+        run: |
+          python -m py_compile src/minicells/constructive_clm_004.py scripts/research/run_constructive_clm_004.py
+          ruff check --select F,E9 src/minicells/constructive_clm_004.py scripts/research/run_constructive_clm_004.py tests/research/04-continual-learning-core/test_constructive_clm_004.py
+      - name: Unit tests
+        run: pytest -q tests/research/04-continual-learning-core/test_constructive_clm_004.py
+      - name: Mechanism smoke
+        run: python scripts/research/run_constructive_clm_004.py --smoke >/tmp/clm004-smoke.json
+      - name: Full development bridge seed 501
+        run: |
+          rm -rf /tmp/clm004-dev
+          python scripts/research/run_constructive_clm_004.py --seed 501 --output-dir /tmp/clm004-dev
+          python - <<'PY'
+          import json
+          data = json.load(open('/tmp/clm004-dev/decision.json'))
+          assert data['status'] == 'DEVELOPMENT_RUN'
+          assert data['scientific_decision'] is False
+          result = data['results'][0]
+          print('development-pass', result['pass'])
+          print('bridge', result['structural_bridge'])
+          print('acquisition', result['acquisition'])
+          print('simultaneous', result['simultaneous'])
+          print('sequential', result['sequential'])
+          print('protected_mutation', result['protected_mutation'])
+          print('gates', result['gates'])
+          assert result['pass'] is True
+          PY
+
+# Formal seeds 90611/90612/90613 are intentionally NOT run by CI.
