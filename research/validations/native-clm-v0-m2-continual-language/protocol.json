@@ -18,6 +18,13 @@
   "formal_seeds": [73211, 73212, 73213],
   "development_seeds": [73101],
   "formal_seed_policy": "formal seeds must remain untouched until the frozen protocol is run",
+  "pre_formal_corrections": [
+    {
+      "reason": "Data feasibility preflight found codeparrot/codecomplex has only 4517 rows, below the registered 8000 train + 2000 evaluation requirement.",
+      "change": "Replace C with the larger cleaned Python CodeParrot train/validation repositories while preserving the role, document counts, phase order, training schedule, thresholds, gates, and untouched formal seeds.",
+      "formal_seeds_touched_before_change": false
+    }
+  ],
   "stream": {
     "A": {
       "role": "evaluation-only retention anchor",
@@ -34,7 +41,12 @@
     },
     "C": {
       "role": "continual training phase 2",
-      "dataset": "codeparrot/codecomplex",
+      "train_dataset": "codeparrot/codeparrot-clean-train",
+      "train_split": "train",
+      "eval_dataset": "codeparrot/codeparrot-clean-valid",
+      "eval_split": "train",
+      "text_column": "content",
+      "language": "Python",
       "train_documents": 8000,
       "eval_documents": 2000
     },
