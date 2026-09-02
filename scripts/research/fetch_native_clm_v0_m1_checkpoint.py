@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Fetch and verify the canonical Native CLM v0 M1 checkpoint from Hugging Face."""
 
 from __future__ import annotations
@@ -7,8 +6,8 @@ import argparse
 import hashlib
 import json
 import os
-import shutil
 from pathlib import Path
+import shutil
 
 from huggingface_hub import HfApi, hf_hub_download
 
