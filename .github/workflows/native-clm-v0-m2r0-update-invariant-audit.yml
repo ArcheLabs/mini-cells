@@ -111,9 +111,10 @@ jobs:
           forbidden_m2 = 'run_native_clm_v0_' + 'm2.py'
           forbidden_m3 = 'run_native_clm_v0_' + 'm3.py'
           forbidden_m3r = 'run_native_clm_v0_' + 'm3r.py'
+          formal_flag = '--' + 'formal'
           assert forbidden_m2 not in text
           assert forbidden_m3 not in text
           assert forbidden_m3r not in text
-          assert '--formal' not in text
+          assert formal_flag not in text
           print('M2-R0 is an optimizer-mechanics diagnostic and consumes no formal seed.')
           PY
