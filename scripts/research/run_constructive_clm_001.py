@@ -5,7 +5,16 @@ import argparse
 import csv
 import hashlib
 import json
+import sys
 from pathlib import Path
+
+# Support direct execution from a repository checkout without requiring
+# `pip install -e .` or an externally configured PYTHONPATH.  The project uses a
+# src-layout, so scripts/research/*.py do not otherwise see `src/minicells`.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+SRC_ROOT = REPO_ROOT / "src"
+if str(SRC_ROOT) not in sys.path:
+    sys.path.insert(0, str(SRC_ROOT))
 
 from minicells.constructive_clm_001 import run_seed
 
@@ -92,7 +101,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    repo_root = Path(__file__).resolve().parents[2]
+    repo_root = REPO_ROOT
     if args.formal and args.seed:
         raise SystemExit("use either --formal or --seed, not both")
 
