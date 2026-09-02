@@ -2,7 +2,7 @@
 
 # Stage 06 — Native CLM
 
-状态：**ACTIVE — ONLINE HISTORICAL ADDRESS-STATE INTEGRATION**
+状态：**ACTIVE — WRITE-DRIFT ATTRIBUTION**
 
 Stage 06 将 Constructive CLM 已正式支持的机制带入真正的 token-predictive model。
 
@@ -23,12 +23,14 @@ Native CLM v0
   M3L query-sketch lineage gate                           🔴 NOT FEASIBLE
   M3L-1 historical address-state capacity                🟢 LOW_RANK_CAPACITY_SUFFICIENT
       minimum passing low-rank state = 32
-  M3L-2 online historical address-state integration      🔵 FROZEN / UNRUN
+  M3L-2 online historical address-state integration      🔴 NOT SUPPORTED
+      online address state 稳定减少 forgetting            🟡 PARTIAL EVIDENCE
+  M3W-0 root/descendant operator-drift restoration       🔵 FROZEN / UNRUN
   M4  Cell ontology / specialization analysis            ⚪ BLOCKED
   M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
 ```
 
-在 M3L-2 得到有效 formal decision 之前，不升级到 30M，也不进入 M4。
+在 M3L-2 暴露出的 write-ownership blocker 被解决前，不升级到 30M，也不进入 M4。
 
 ## Canonical substrate
 
@@ -178,34 +180,52 @@ publish commit = 5ace6faf344b1b805752a33ffb861aeaf34dad6e
 
 这解决了 checkpoint-level capacity selection：冻结的 Gaussian second-order family 不需要 dense covariance，但 rank 16 对注册规则而言容量不足。这个结果本身**不是** online continual-learning success。
 
-## M3L-2 — Online Historical Address-State Integration — 🔵 FROZEN / UNRUN
+## M3L-2 — Online Historical Address-State Integration — 🔴 NOT SUPPORTED
 
-M3L-2 是新的 registered formal experiment。它将 exact M3R lineage-cosine algorithm 与同样的 protected-write/growth algorithm 对比，唯一新增机制是 persistent rank-32 historical query state 和 affine lineage-local parent/child gate。
-
-注册的 address state：
+正式结论：
 
 ```text
-rank                         32
-query width                  384
-maximum persistent bytes     52,360 / Cell
-current queries / leaf/batch <= 256
-bootstrap batches            160
+NATIVE_CLM_V0_M3L2_ONLINE_ADDRESS_STATE_NOT_SUPPORTED
+seeds = 74211 / 74212 / 74213
+publish commit = 348a6cd28cda13298b6d61c01453d06e14efbd33
+HF revision = 2b6ac153e926f899f038ff02c8c10041baaacb4a
 ```
 
-由于历史 M1 checkpoint 产生时还没有 address sidecar，M3L-2 明确注册一次 pre-continual bootstrap：从 pinned TinyStories revision 的 `train` split 中读取 10,000 documents，仅构造原始 8 roots 的 sidecar。它不执行 optimizer、parameter、certificate 或 growth update。One-shot bootstrap handle 在 B 开始前释放；A retention 继续使用独立的 TinyStories `validation` split。
+M3L-2 将 exact M3R lineage-cosine control 与相同 protected-write/growth algorithm 对比，唯一新增机制是 persistent rank-32 historical query state 和 affine lineage-local gate。注册的一次性 TinyStories-train bootstrap 在 B 前完成，不修改模型参数；B 开始后 bootstrap handle 被释放，learner replay 保持为 0。
 
-Continual start 之后 learner replay 保持为 0。每 50-step growth check，当前 routed-query sufficient statistics 要么合并进尚未分裂 leaf 的 rank-32 state，要么在该 leaf 分裂时成为 child 的初始 state；parent 的 pre-window history 在 split 后冻结。Child operator 精确复制 parent，因此 birth 仍要求 function-preserving。
+Address/read lifecycle 本身工作正常：三个 seed 全部通过 bootstrap identity、root-route invariance、birth preservation、rank-32 state bound、address checkpoint round-trip、affine-gate creation、child reuse、sparse compute、B/C/D phase plasticity 与 plasticity preservation。稳定失败的只有 absolute A retention、retention advantage 与 mean forgetting。
 
-新的 untouched formal seeds：
+| seed | cosine-control A regression | M3L-2 A regression | A advantage | M3L-2 forgetting |
+|---:|---:|---:|---:|---:|
+| 74211 | 0.4782 | 0.4250 | 0.0532 | 0.1945 |
+| 74212 | 0.4737 | 0.4214 | 0.0523 | 0.1975 |
+| 74213 | 0.4702 | 0.4216 | 0.0487 | 0.1948 |
+
+因此 online address state 稳定带来约 5 个百分点的 retention 改善，并基本保留 plasticity，但仍远高于注册的 <=20% A-regression 目标。即使 old-domain child leakage 已大幅下降，主要 residual damage 仍在第一个 B phase 中产生。这将 active blocker 从 read-address decoding 转移到 **operator write ownership / write isolation**。
+
+Canonical registration 见 [M3L2_REGISTRATION.zh-CN.md](M3L2_REGISTRATION.zh-CN.md)，正式 evidence 位于 `artifacts/experiments/native-clm-v0-m3l2-online-address-state/`。
+
+## M3W-0 — Root Write-Drift Counterfactual Restoration — 🔵 FROZEN / UNRUN
+
+M3W-0 只使用三个已发布 M3L-2 treatment checkpoints 做 checkpoint-only diagnostic，不训练模型，也不消耗新的 formal seeds。
+
+它固定 final routing、topology、address states 与 affine gates，仅执行 2×2 operator restoration：
 
 ```text
-74211 / 74212 / 74213
+00  roots 与 descendants 全部恢复为所属 root 的 exact M1 operator
+10  roots 保持 final；descendants 恢复为所属 root 的 M1 operator
+01  roots 恢复为 M1；descendants 保持 final
+11  published final M3L-2 checkpoint
 ```
 
-Canonical protocol、执行方式和 evidence boundary 详见 [M3L2_REGISTRATION.zh-CN.md](M3L2_REGISTRATION.zh-CN.md)。
+之后使用 two-factor Shapley 将 residual A loss 归因到 original roots 与 descendants 的 **final operator-state drift**。由于 M3L-2 没有持久化 child birth tensor，descendant factor 可能包含 birth 时从 parent 继承的 drift；因此 M3W-0 不声称 historical per-update attribution，也不声称隔离了 child 出生后的写入事件。
+
+`ALL_LINEAGE_RESTORE` 同时是 identity gate：root router 在 M3L-2 中保持为 immutable M1 routing；如果一个 lineage 内所有 concrete Cell 都执行相同 exact M1 root operator，则 local gate 选择应在函数上失去影响。A/B/C/D loss 必须在 `1e-4` 内重构 M1，否则整个 diagnostic 判 `INCONCLUSIVE_IDENTITY`。
+
+详见 [M3W0_REGISTRATION.md](M3W0_REGISTRATION.md)。
 
 ## Evidence boundary
 
-M2/M3/M3R formal seeds 均已消耗，禁止再次作为 untouched evidence。M3R Address Diagnostic、M3L 与 M3L-1 都只是 checkpoint-only mechanism diagnostics，不能事后修改任何 M3R formal gate 或 decision。
+M2/M3/M3R/M3L-2 formal seeds 均已消耗，禁止再次作为 untouched evidence。M3R Address Diagnostic、M3L、M3L-1 与 M3W-0 都只是 checkpoint-only mechanism diagnostics，不能事后修改任何 formal decision。
 
-M3L-2 formal seeds 在 canonical two-GPU Kaggle runner 被明确执行之前保持 untouched。M4 ontology analysis 与 30M scale-up 均继续 blocked，直到 M3L-2 获得有效 formal decision。
+M3W-0 只把已消耗的 M3L-2 checkpoints 当作 immutable evidence，执行 0 learner updates，不引入新的 formal seed。Write-ownership 问题解决前，M4 ontology analysis 与 30M scale-up 继续 blocked。
