@@ -1,0 +1,99 @@
+name: Native CLM v0 M3W-0 Write-Drift Restoration
+
+# Checkpoint-only counterfactual diagnostic; no Native CLM training or new formal seeds.
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m3w0-write-drift-restoration
+    paths:
+      - 'src/minicells/native_clm_m3w0.py'
+      - 'scripts/research/*m3w0*'
+      - 'research/validations/native-clm-v0-m3w0-write-drift-restoration/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3w0-write-drift-restoration-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3w0.py'
+      - '.github/workflows/native-clm-v0-m3w0-write-drift-restoration.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m3w0.py'
+      - 'scripts/research/*m3w0*'
+      - 'research/validations/native-clm-v0-m3w0-write-drift-restoration/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3w0-write-drift-restoration-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3w0.py'
+      - '.github/workflows/native-clm-v0-m3w0-write-drift-restoration.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen M3W-0 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/native-clm-v0-m3w0-write-drift-restoration/protocol.json').read_text())
+          assert p['format'] == 'minicells.native-clm-v0.m3w0-write-drift-restoration.protocol.v1'
+          assert p['status'] == 'FROZEN_UNRUN'
+          assert p['scientific_decision'] is False
+          assert p['parent_evidence']['m3l2_publish_commit'] == '348a6cd28cda13298b6d61c01453d06e14efbd33'
+          assert p['parent_evidence']['m3l2_formal_seeds'] == [74211, 74212, 74213]
+          assert p['parent_evidence']['hf_revision'] == '2b6ac153e926f899f038ff02c8c10041baaacb4a'
+          assert p['data']['training_data_used'] is False
+          assert p['data']['learner_updates'] == 0
+          assert p['data']['new_formal_seeds_consumed'] is False
+          assert set(p['counterfactuals']) == {'final', 'root_restore', 'descendant_root_restore', 'all_lineage_restore'}
+          assert p['thresholds']['root_write_dominant_fraction'] == 0.60
+          assert p['thresholds']['maximum_all_lineage_vs_m1_loss_delta_each_domain'] == 0.0001
+          PY
+      - name: Validate canonical notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('research/notebooks/06-native-clm/native-clm-v0-m3w0-write-drift-restoration-kaggle.ipynb')
+          if path.exists():
+              notebook = json.loads(path.read_text())
+              assert notebook['nbformat'] == 4
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q \
+            src/minicells/native_clm_m3w0.py \
+            scripts/research/fetch_native_clm_v0_m3w0_checkpoints.py \
+            scripts/research/run_native_clm_v0_m3w0.py \
+            scripts/research/publish_native_clm_v0_m3w0.py
+          ruff check \
+            src/minicells/native_clm_m3w0.py \
+            scripts/research/fetch_native_clm_v0_m3w0_checkpoints.py \
+            scripts/research/run_native_clm_v0_m3w0.py \
+            scripts/research/publish_native_clm_v0_m3w0.py \
+            tests/research/06-native-clm/test_native_clm_m3w0.py
+      - name: M3W-0 mechanics smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m3w0.py
+      - name: No training / new-formal-seed guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('.github/workflows/native-clm-v0-m3w0-write-drift-restoration.yml'),
+              Path('scripts/research/run_native_clm_v0_m3w0.py'),
+          ]
+          text = '\n'.join(path.read_text() for path in files)
+          forbidden_m3l2 = 'run_native_clm_v0_' + 'm3l2.py --formal'
+          forbidden_m3r = 'run_native_clm_v0_' + 'm3r.py --formal'
+          forbidden_m2 = 'run_native_clm_v0_' + 'm2.py'
+          assert forbidden_m3l2 not in text
+          assert forbidden_m3r not in text
+          assert forbidden_m2 not in text
+          assert '74211' not in text or 'm3w0' in text.lower()
+          print('M3W-0 CI is checkpoint-only and consumes no new formal seeds.')
+          PY
