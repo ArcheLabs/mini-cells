@@ -36,6 +36,8 @@ from .native_clm_m3 import (
     _phase_gain,
     original_read_state_sha256,
     root_cell_weight_sha256,
+)
+from .native_clm_m3 import (
     run_arm as run_m3_arm,
 )
 from .native_clm_v0 import NativeCLM, NativeCLMConfig
@@ -214,7 +216,7 @@ class LineageNativeCLM(NativeCLM):
         path: str | Path,
         *,
         map_location: str | torch.device = "cpu",
-    ) -> tuple["LineageNativeCLM", dict[str, Any]]:
+    ) -> tuple[LineageNativeCLM, dict[str, Any]]:
         payload = torch.load(path, map_location=map_location, weights_only=False)
         if payload.get("format") != "minicells.native-clm-v0.checkpoint.v1":
             raise ValueError("unsupported Native CLM checkpoint format")

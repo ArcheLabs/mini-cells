@@ -110,17 +110,17 @@ def _growth_config(protocol: dict) -> NativeCLMM3GrowthConfig:
 
 def _run_worker(args, protocol: dict) -> int:
     train, evaluation = _paths(args.data_dir)
-    common = dict(
-        checkpoint_path=args.checkpoint,
-        expected_checkpoint_sha256=protocol["parent_checkpoint"]["sha256"],
-        train_paths=train,
-        eval_paths=evaluation,
-        output_dir=args.output_dir / f"seed-{args.seed}" / args.arm,
-        seed=args.seed,
-        train_config=NativeCLMM2Config(**protocol["training"]),
-        growth_config=_growth_config(protocol),
-        device=args.device,
-    )
+    common = {
+        "checkpoint_path": args.checkpoint,
+        "expected_checkpoint_sha256": protocol["parent_checkpoint"]["sha256"],
+        "train_paths": train,
+        "eval_paths": evaluation,
+        "output_dir": args.output_dir / f"seed-{args.seed}" / args.arm,
+        "seed": args.seed,
+        "train_config": NativeCLMM2Config(**protocol["training"]),
+        "growth_config": _growth_config(protocol),
+        "device": args.device,
+    }
     if args.arm == "global_growth_control":
         summary = run_global_growth_control(**common)
     else:
@@ -296,7 +296,7 @@ def main() -> int:
     if len(devices) != 2:
         raise ValueError("--devices must name exactly two workers, e.g. 0,1")
 
-    consumed = set(int(seed) for seed in protocol["consumed_seeds_forbidden"])
+    consumed = {int(seed) for seed in protocol["consumed_seeds_forbidden"]}
     if args.formal:
         seeds = [int(seed) for seed in protocol["formal_seeds"]]
     elif args.seed is not None:
