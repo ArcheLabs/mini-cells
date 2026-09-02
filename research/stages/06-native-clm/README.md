@@ -2,7 +2,7 @@
 
 # Stage 06 — Native CLM
 
-Status: **ACTIVE — ONLINE HISTORICAL ADDRESS-STATE INTEGRATION**
+Status: **ACTIVE — WRITE-DRIFT ATTRIBUTION**
 
 Stage 06 moves the formally supported Constructive CLM mechanisms into a real token-predictive model.
 
@@ -23,12 +23,14 @@ Native CLM v0
   M3L query-sketch lineage gate                           🔴 NOT FEASIBLE
   M3L-1 historical address-state capacity                🟢 LOW_RANK_CAPACITY_SUFFICIENT
       minimum passing low-rank state = 32
-  M3L-2 online historical address-state integration      🔵 FROZEN / UNRUN
+  M3L-2 online historical address-state integration      🔴 NOT SUPPORTED
+      online address state reduced forgetting             🟡 PARTIAL EVIDENCE
+  M3W-0 root/descendant operator-drift restoration       🔵 FROZEN / UNRUN
   M4  Cell ontology / specialization analysis            ⚪ BLOCKED
   M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
 ```
 
-Do not scale to 30M and do not advance to M4 until M3L-2 has a valid formal decision.
+Do not scale to 30M and do not advance to M4 until the write-ownership blocker exposed after M3L-2 is resolved.
 
 ## Canonical substrate
 
@@ -182,34 +184,52 @@ publish commit = 5ace6faf344b1b805752a33ffb861aeaf34dad6e
 
 This closes the checkpoint-level capacity selection question: the registered Gaussian second-order family did not require dense covariance, but rank 16 was too small for the frozen feasibility rule. This does **not** establish online continual-learning success.
 
-## M3L-2 — Online Historical Address-State Integration — 🔵 FROZEN / UNRUN
+## M3L-2 — Online Historical Address-State Integration — 🔴 NOT SUPPORTED
 
-M3L-2 is the new registered formal experiment. It compares the exact M3R lineage-cosine algorithm against the same protected-write/growth algorithm with a persistent rank-32 historical query state and affine lineage-local parent/child gate.
-
-Registered address state:
+Formal decision:
 
 ```text
-rank                         32
-query width                  384
-maximum persistent bytes     52,360 / Cell
-current queries / leaf/batch <= 256
-bootstrap batches            160
+NATIVE_CLM_V0_M3L2_ONLINE_ADDRESS_STATE_NOT_SUPPORTED
+seeds = 74211 / 74212 / 74213
+publish commit = 348a6cd28cda13298b6d61c01453d06e14efbd33
+HF revision = 2b6ac153e926f899f038ff02c8c10041baaacb4a
 ```
 
-Because the historical M1 checkpoint predates address sidecars, M3L-2 explicitly registers a one-time pre-continual bootstrap from 10,000 TinyStories `train` documents at the pinned TinyStories revision. It performs no optimizer, parameter, certificate or growth update. Its one-shot data handle is released before B starts; A retention continues to use the separate TinyStories `validation` split.
+M3L-2 compared the exact M3R lineage-cosine control against the same protected-write/growth algorithm with persistent rank-32 historical query state and affine lineage-local gates. The registered one-time TinyStories-train bootstrap occurred before continual phase B, did not mutate model parameters, and became inaccessible after B began. Learner replay remained zero.
 
-After continual start, learner replay remains zero. At each 50-step growth check, current routed-query sufficient statistics are either merged into an unsplit leaf's rank-32 state or become the child state if that leaf splits. The pre-window parent history freezes at split. Child operators are exact parent clones, so birth remains function-preserving.
+The address/read lifecycle worked: all three seeds passed bootstrap identity, root-route invariance, birth preservation, bounded rank-32 state, address-state checkpoint round-trip, affine-gate creation, child reuse, sparse compute, B/C/D phase plasticity and plasticity preservation. The only stable failures were absolute A retention, retention advantage and mean forgetting.
 
-New untouched formal seeds:
+| seed | cosine-control A regression | M3L-2 A regression | A advantage | M3L-2 forgetting |
+|---:|---:|---:|---:|---:|
+| 74211 | 0.4782 | 0.4250 | 0.0532 | 0.1945 |
+| 74212 | 0.4737 | 0.4214 | 0.0523 | 0.1975 |
+| 74213 | 0.4702 | 0.4216 | 0.0487 | 0.1948 |
+
+Thus online address state produced a stable ~5 percentage-point retention gain while preserving plasticity, but remained far above the registered <=20% A-regression target. The residual damage appeared predominantly during the first B phase even after old-domain child leakage was strongly reduced. This shifts the active blocker from read-address decoding toward **operator write ownership / write isolation**.
+
+Canonical registration remains in [M3L2_REGISTRATION.md](M3L2_REGISTRATION.md). Formal evidence is under `artifacts/experiments/native-clm-v0-m3l2-online-address-state/`.
+
+## M3W-0 — Root Write-Drift Counterfactual Restoration — 🔵 FROZEN / UNRUN
+
+M3W-0 is a checkpoint-only diagnostic over the three already-published M3L-2 treatment checkpoints. It performs no training and consumes no new formal seeds.
+
+It holds final routing, topology, address states and affine gates fixed and evaluates a 2×2 operator-restoration design:
 
 ```text
-74211 / 74212 / 74213
+00  all roots and descendants restored to their exact M1-root operator
+10  roots final; descendants restored to their M1-root operator
+01  roots restored to M1; descendants final
+11  published final M3L-2 checkpoint
 ```
 
-Canonical details and execution surface are recorded in [M3L2_REGISTRATION.md](M3L2_REGISTRATION.md).
+A two-factor Shapley decomposition attributes residual A loss to final operator-state drift in original roots versus descendants. Because exact child birth tensors were not persisted, descendant attribution may contain drift inherited from the parent at birth; M3W-0 does not claim historical per-update or post-birth write-event attribution.
+
+The all-lineage restoration is an identity gate: with immutable M1 root routing, making every concrete Cell in a lineage execute the same exact M1 root operator should reconstruct M1 function despite retaining final local gates. Failure to reconstruct every A/B/C/D loss within `1e-4` makes the diagnostic inconclusive.
+
+See [M3W0_REGISTRATION.md](M3W0_REGISTRATION.md).
 
 ## Evidence boundary
 
-M2/M3/M3R formal seeds are consumed and must not be reused as untouched evidence. M3R Address Diagnostic, M3L and M3L-1 are checkpoint-only mechanism diagnostics and cannot retroactively change any formal M3R gate or decision.
+M2/M3/M3R/M3L-2 formal seeds are consumed and must not be reused as untouched evidence. M3R Address Diagnostic, M3L, M3L-1 and M3W-0 are checkpoint-only mechanism diagnostics and cannot retroactively change any formal decision.
 
-M3L-2 formal seeds remain untouched until the canonical two-GPU Kaggle formal runner is deliberately executed. M4 ontology analysis and 30M scaling remain blocked until M3L-2 receives a valid formal decision.
+M3W-0 uses the consumed M3L-2 checkpoints only as immutable evidence, performs zero learner updates and introduces no new formal seed. M4 ontology analysis and 30M scaling remain blocked while the write-ownership question is unresolved.
