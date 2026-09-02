@@ -78,11 +78,19 @@ def measure_realized_update_invariant(
     *,
     arm: str,
     step: int,
+    minimum_update_norm: float = 1e-12,
 ) -> list[dict[str, Any]]:
-    """Measure certificate violation on the actual Cell parameter delta."""
+    """Measure certificate violation on the actual Cell parameter delta.
+
+    Certificate-ranked Cell/steps with a numerically zero parameter transaction are
+    retained in the raw audit table but marked ineligible for the rho distribution.
+    This prevents inactive/zero updates from artificially improving p95 coverage.
+    """
 
     if len(before) != model.cell_count:
         raise ValueError("M2-R0 weight snapshot does not match Cell count")
+    if minimum_update_norm < 0:
+        raise ValueError("minimum_update_norm must be non-negative")
     rows: list[dict[str, Any]] = []
     for cell_id, (cell, baseline) in enumerate(
         zip(model.cellular.cells, before, strict=True)
@@ -96,7 +104,8 @@ def measure_realized_update_invariant(
         q = cell.certificate_basis[:rank].to(device=delta.device, dtype=delta.dtype)
         residual = delta.matmul(q.transpose(0, 1))
         violation_norm = float(torch.linalg.vector_norm(residual).item())
-        violation_ratio = violation_norm / (delta_norm + 1e-12)
+        eligible = delta_norm > minimum_update_norm
+        violation_ratio = violation_norm / (delta_norm + 1e-12) if eligible else 0.0
         rows.append(
             {
                 "arm": arm,
@@ -106,6 +115,7 @@ def measure_realized_update_invariant(
                 "update_norm": delta_norm,
                 "violation_norm": violation_norm,
                 "violation_ratio": violation_ratio,
+                "eligible_for_ratio": bool(eligible),
             }
         )
     return rows
@@ -123,13 +133,14 @@ def _percentile(values: list[float], fraction: float) -> float:
 
 
 def summarize_invariant_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    ratios = [float(row["violation_ratio"]) for row in rows]
-    update_norms = [float(row["update_norm"]) for row in rows]
-    nonzero = [value for value in update_norms if value > 1e-20]
-    ranks = [int(row["certificate_rank"]) for row in rows]
+    eligible_rows = [row for row in rows if bool(row.get("eligible_for_ratio", True))]
+    ratios = [float(row["violation_ratio"]) for row in eligible_rows]
+    update_norms = [float(row["update_norm"]) for row in eligible_rows]
+    ranks = [int(row["certificate_rank"]) for row in eligible_rows]
     return {
-        "audited_cell_updates": len(rows),
-        "nonzero_cell_updates": len(nonzero),
+        "certificate_ranked_cell_steps": len(rows),
+        "audited_cell_updates": len(eligible_rows),
+        "tiny_or_zero_updates_skipped": len(rows) - len(eligible_rows),
         "certificate_rank_min": min(ranks) if ranks else 0,
         "certificate_rank_max": max(ranks) if ranks else 0,
         "violation_ratio_mean": sum(ratios) / len(ratios) if ratios else float("nan"),
@@ -163,6 +174,7 @@ def classify_optimizer_invariant(
         "current_adamw_grad_projection",
         "adamw_no_decay_grad_projection",
         "sgd_no_decay_grad_projection",
+        "sgd_with_decay_grad_projection",
         "adamw_final_update_projection",
     }
     if set(arm_summaries) != required:
@@ -178,14 +190,19 @@ def classify_optimizer_invariant(
     current_bad = _material_violation(
         arm_summaries["current_adamw_grad_projection"], thresholds
     )
-    no_decay_bad = _material_violation(
+    preconditioner_bad = _material_violation(
         arm_summaries["adamw_no_decay_grad_projection"], thresholds
+    )
+    decay_bad = _material_violation(
+        arm_summaries["sgd_with_decay_grad_projection"], thresholds
     )
 
     if not current_bad:
         return "CURRENT_UPDATE_INVARIANT_HOLDS"
-    if not no_decay_bad:
-        return "WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT"
-    if no_decay_bad:
+    if preconditioner_bad and decay_bad:
+        return "BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT"
+    if preconditioner_bad:
         return "ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT"
-    return "MIXED_ADAMW_UPDATE_INVARIANT_VIOLATION"
+    if decay_bad:
+        return "WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT"
+    return "MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION"
