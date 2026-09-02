@@ -16,8 +16,8 @@ if str(SRC) not in sys.path:
 from minicells.constructive_clm_002 import run_seed
 
 
-DEVELOPMENT_ONLY_SEEDS = (301, 302, 303)
-FORMAL_SEEDS = (90311, 90312, 90313)
+OBSERVED_EXCLUDED_SEEDS = (301, 302, 303, 90311, 90312, 90313)
+FORMAL_SEEDS = (90411, 90412, 90413)
 
 
 def _protocol_sha() -> str:
@@ -152,7 +152,7 @@ def main() -> None:
         "format": "minicells.constructive-clm-002.decision.v1",
         "experiment_id": "constructive-clm-002",
         "protocol_sha256": _protocol_sha(),
-        "development_only_seeds": list(DEVELOPMENT_ONLY_SEEDS),
+        "observed_excluded_seeds": list(OBSERVED_EXCLUDED_SEEDS),
         "formal_seeds": list(FORMAL_SEEDS),
         "completed_seeds": completed,
         "missing_seeds": missing,
