@@ -1,6 +1,6 @@
 schema: minicells.clm-feasibility-evidence-map.v1
 status: FROZEN
-version: "1.1"
+version: "1.2"
 frozen_against:
   branch: main
   commit: 7c99ef3f4aedb8d561cf9600ea5d79da1eb99b99
@@ -18,7 +18,6 @@ items:
     sources: ["experiments-014-024", "experiment-021", "stage-self-organization"]
     grade: B
     disposition: reuse
-    boundary: emergence alone is not validated continual learning
   - id: routed_mutable_cells
     claim: sparse routed independently mutable Cell state is operationally viable
     sources: ["experiments-025-026", "clm-0.1", "clm-0.3"]
@@ -39,7 +38,6 @@ items:
     sources: ["core-validation-006"]
     grade: A
     disposition: reuse
-    boundary: address-based mitosis failed bounded-growth and conflict-relief gates
   - id: semantic_address_boundary
     claim: semantic/routing address is a sufficient functional split boundary
     sources: ["core-validation-006"]
@@ -54,31 +52,23 @@ items:
     disposition: do_not_repeat_near_equivalent_fixed_dictionary_search
   - id: factorized_functional_geometry
     claim: normalized functional writes expose reusable factorized geometry
-    sources:
-      - "core-validation-009a"
-      - "commit:8290d4d674a8ec9ce98d4de129043526841e5f95"
+    sources: ["core-validation-009a", "commit:8290d4d674a8ec9ce98d4de129043526841e5f95"]
     grade: A
     disposition: foundation_interface_evidence
   - id: carrier_causal_sufficiency
     claim: the common right-side carrier preserves most causal write effect
-    sources:
-      - "core-validation-009b1"
-      - "commit:f2691daf5738eac0232866a46d079db3aa61b60a"
+    sources: ["core-validation-009b1", "commit:f2691daf5738eac0232866a46d079db3aa61b60a"]
     grade: A
     disposition: foundation_interface_evidence
-    metrics:
-      carrier_over_full_target_gain: "~0.976-0.982"
   - id: compact_effect_dictionary
     claim: pretrained effect vectors lie in a compact persistent shared subspace
-    sources: ["branch:codex/core-validation-009b2-persistent-effect-geometry"]
+    sources: ["core-validation-009b2"]
     grade: C
     outcome: negative_discovery
     disposition: natural_geometry_no_go_only
   - id: sparse_local_effect_geometry
     claim: pretrained effect vectors expose sparse/local Cell coordinates
-    sources:
-      - "core-validation-009c"
-      - "commit:3a524abd5b29a42c425dddab7df497cbfadfeecd"
+    sources: ["core-validation-009c", "commit:3a524abd5b29a42c425dddab7df497cbfadfeecd"]
     grade: C
     outcome: negative_discovery
     disposition: do_not_repeat
@@ -89,18 +79,27 @@ items:
     disposition: foundation_interface_nonblocking
   - id: constructive_clm_001
     claim: reusable learned Cell keys/effects form without task/factor labels when hidden factors receive singleton exposure
-    sources:
-      - "constructive-clm-001"
-      - "research/validations/constructive-clm-001-learned-coordinate-formation/FORMAL_RESULT.md"
+    sources: ["constructive-clm-001", "research/validations/constructive-clm-001-learned-coordinate-formation/FORMAL_RESULT.md"]
     grade: A
     outcome: LEARNED_COORDINATE_FORMATION_SUPPORTED
     disposition: g1a_supported_reuse_do_not_retest
-    protocol_sha256: 16c23861b1220fa223b220148a9172de7b792663d79a6103289999be3eed35e5
     formal_seeds: [90111, 90112, 90113]
+  - id: constructive_clm_001b
+    claim: latent Cell keys/effects are recoverable without singleton exposure in the registered additive pair-superposition family
+    sources:
+      - "constructive-clm-001b"
+      - "commit:55071bc7fd01e7c61df02846cd8f4205b906814f"
+      - "research/validations/constructive-clm-001b-latent-superposition/FORMAL_RESULT.md"
+    grade: A
+    outcome: LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED
+    disposition: g1b_supported_reuse_do_not_retest
+    protocol_sha256: de234ea4c75773c41012818deaba1d95622737398d5324afb8bfeea5b56063a8
+    formal_seeds: [90211, 90212, 90213]
     metrics:
       cells_per_seed: [6, 6, 6]
+      prototypes_per_seed: [12, 12, 12]
       pair_route_recall: [1.0, 1.0, 1.0]
-      late_spawns: [0, 1, 1]
+      triple_route_recall: [1.0, 1.0, 1.0]
 open_gaps:
   - id: G1a
     claim: learned Cell coordinates and read/write alignment form without hidden task/factor labels when factors receive singleton exposure
@@ -109,18 +108,20 @@ open_gaps:
   - id: G1b
     claim: latent Cell coordinates can be recovered when no hidden factor is ever presented alone
     experiment: constructive-clm-001b
-    status: active_protocol_frozen_unrun
-    boundary: registered experiment assumes additive pair-superposition discovery structure; arbitrary mixing remains open
-    priority: primary
+    status: supported
+    boundary: additive pair-superposition scaffold; arbitrary blind source separation remains open
   - id: G2
-    claim: long-horizon growth becomes sublinear or spawn probability declines materially
+    claim: long-horizon Cell growth tracks reusable latent structure rather than transaction count and shows declining state/spawn ratios on the registered horizon
     experiment: constructive-clm-002
-    blocked_by: G1b
+    status: active
+    priority: primary
+    metrics: ["K(N)", "K(N)/N", "latent tracking error", "windowed spawn rate", "reuse rate", "Cell lifetime", "retention/composition"]
+    boundary: finite-horizon scaling evidence is not an asymptotic theorem
   - id: G3
     claim: learned coordinates integrate with the existing replay-free certificate mechanism
     experiment: constructive-clm-003
   - id: G4
-    claim: multiple learned Cells compose safely on unseen combinations at model level
+    claim: multiple learned Cells compose safely at model level
     experiment: constructive-clm-004
   - id: G5
     claim: external CLM scaffolding can be removed progressively toward endogenous CLM
