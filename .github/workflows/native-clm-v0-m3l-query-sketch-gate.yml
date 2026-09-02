@@ -1,0 +1,100 @@
+name: Native CLM v0 M3L Query-Sketch Gate
+
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m3l-learned-lineage-gate
+    paths:
+      - 'src/minicells/native_clm_m3l_gate.py'
+      - 'scripts/research/*m3l_query_sketch*'
+      - 'research/validations/native-clm-v0-m3l-query-sketch-gate/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3l-query-sketch-gate-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3l_gate.py'
+      - '.github/workflows/native-clm-v0-m3l-query-sketch-gate.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m3l_gate.py'
+      - 'scripts/research/*m3l_query_sketch*'
+      - 'research/validations/native-clm-v0-m3l-query-sketch-gate/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3l-query-sketch-gate-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3l_gate.py'
+      - '.github/workflows/native-clm-v0-m3l-query-sketch-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate registered mechanism boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/native-clm-v0-m3l-query-sketch-gate/protocol.json').read_text())
+          assert p['format'] == 'minicells.native-clm-v0.m3l-query-sketch-gate.protocol.v1'
+          assert p['status'] == 'REGISTERED_DIAGNOSTIC_READY'
+          assert p['scientific_decision'] is False
+          assert p['parent_address_diagnostic']['publish_commit'] == '3e96a0a2ffe08430b5b04c58a2a3ffb98e0f3176'
+          assert p['parent_address_diagnostic']['classification'] == 'QUERY_GEOMETRY_SEPARABLE'
+          assert p['parent_m3r']['formal_seeds'] == [73611, 73612, 73613]
+          assert p['parent_m3r']['formal_seeds_are_consumed'] is True
+          b = p['learner_boundary']
+          assert b['native_clm_training'] is False
+          assert b['cell_updates'] is False
+          assert b['router_updates'] is False
+          assert b['certificate_updates'] is False
+          assert b['growth'] is False
+          assert b['new_formal_seeds'] is False
+          assert b['old_raw_tokens_allowed_during_gate_fit'] is False
+          assert b['old_raw_query_samples_allowed_during_gate_fit'] is False
+          assert p['historical_query_sketch']['rank'] == 16
+          assert p['sketch_gate']['no_old_sample_replay'] is True
+          assert p['sampling']['group_unit'].startswith('ByteSequenceDataset sequence row')
+          PY
+      - name: Validate canonical notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('research/notebooks/06-native-clm/native-clm-v0-m3l-query-sketch-gate-kaggle.ipynb')
+          if path.exists():
+              notebook = json.loads(path.read_text())
+              assert notebook['nbformat'] == 4
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q \
+            src/minicells/native_clm_m3l_gate.py \
+            scripts/research/run_native_clm_v0_m3l_query_sketch_gate.py \
+            scripts/research/publish_native_clm_v0_m3l_query_sketch_gate.py
+          ruff check \
+            src/minicells/native_clm_m3l_gate.py \
+            scripts/research/run_native_clm_v0_m3l_query_sketch_gate.py \
+            scripts/research/publish_native_clm_v0_m3l_query_sketch_gate.py \
+            tests/research/06-native-clm/test_native_clm_m3l_gate.py
+      - name: M3L mechanics smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m3l_gate.py
+      - name: No continual-language rerun guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('.github/workflows/native-clm-v0-m3l-query-sketch-gate.yml'),
+              Path('scripts/research/run_native_clm_v0_m3l_query_sketch_gate.py'),
+          ]
+          text = '\n'.join(path.read_text() for path in files)
+          forbidden = 'run_native_clm_v0_m3r.py' + ' --formal'
+          assert forbidden not in text
+          assert 'run_native_clm_v0_m2.py' not in text
+          assert '--worker-seed' in text
+          print('M3L CI is checkpoint-only and does not rerun continual-language formal training.')
+          PY
