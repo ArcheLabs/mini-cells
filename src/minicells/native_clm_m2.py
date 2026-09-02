@@ -9,15 +9,16 @@ with zero learner-side replay.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 import csv
+from dataclasses import asdict, dataclass
 import hashlib
 import json
 import math
+from pathlib import Path
 import random
 import time
-from dataclasses import asdict, dataclass
-from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 import numpy as np
 import torch
