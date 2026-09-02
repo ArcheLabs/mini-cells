@@ -19,7 +19,7 @@ from typing import Any
 import torch
 from torch import Tensor
 
-from .native_clm_v0 import NativeCLM, NativeCell
+from .native_clm_v0 import NativeCell, NativeCLM
 
 
 @dataclass(frozen=True)
