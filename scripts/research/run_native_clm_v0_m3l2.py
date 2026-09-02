@@ -128,6 +128,14 @@ def _address_config(protocol: dict) -> M3L2AddressConfig:
     if int(protocol["bootstrap"]["sampling_seed"]) != 74001:
         raise RuntimeError("registered M3L-2 bootstrap sampling seed drift")
     address = protocol["address_state"]
+    if int(address["maximum_persistent_sketch_bytes_per_cell"]) != int(
+        address["maximum_persistent_bytes_per_cell"]
+    ):
+        raise RuntimeError("registered M3L-2 sketch budget aliases disagree")
+    if int(address["maximum_affine_gate_bytes_per_edge"]) != 1552:
+        raise RuntimeError("registered M3L-2 affine-gate budget drift")
+    if int(address["maximum_total_address_bytes_per_node"]) != 53912:
+        raise RuntimeError("registered M3L-2 total-node address budget drift")
     config = M3L2AddressConfig(
         rank=int(address["rank"]),
         diagonal_regularization=float(address["diagonal_regularization"]),
@@ -309,8 +317,12 @@ def compare_arms(control: dict, treatment: dict, *, thresholds: dict) -> dict:
     control_plasticity = mean(control_gains.values())
     treatment_plasticity = mean(treatment_gains.values())
     treatment_forgetting = _mean_forgetting(treatment)
-    address = treatment.get("address_state", {})
+    address = dict(treatment.get("address_state", {}))
     bootstrap = treatment.get("bootstrap", {})
+    logical_gate_bytes = 1552 if int(address.get("gate_count", 0)) > 0 else 0
+    logical_total_node_bytes = int(address.get("maximum_bytes_per_cell", 10**9)) + logical_gate_bytes
+    address["maximum_affine_gate_bytes_per_edge"] = logical_gate_bytes
+    address["maximum_total_address_bytes_per_node"] = logical_total_node_bytes
 
     gates = {
         "exact_same_m1_checkpoint": True,
@@ -348,6 +360,9 @@ def compare_arms(control: dict, treatment: dict, *, thresholds: dict) -> dict:
             <= int(thresholds["maximum_address_state_rank"])
             and int(address.get("maximum_bytes_per_cell", 10**9))
             <= int(thresholds["maximum_address_state_bytes_per_cell"])
+            and logical_gate_bytes <= int(thresholds["maximum_affine_gate_bytes_per_edge"])
+            and logical_total_node_bytes
+            <= int(thresholds["maximum_total_address_bytes_per_node"])
         ),
         "address_state_checkpoint_roundtrip": bool(
             treatment.get("address_state_checkpoint_roundtrip")
