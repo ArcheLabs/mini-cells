@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Prepare the registered Native CLM v0 M2 continual-language stream.
 
 A is evaluation-only TinyStories retention. Training proceeds B -> C -> D with no
@@ -15,12 +14,12 @@ and manifest has been fsynced, avoiding the Arrow finalization crash seen on Kag
 from __future__ import annotations
 
 import argparse
+from collections.abc import Callable, Iterable
 import hashlib
 import json
 import os
-import sys
 from pathlib import Path
-from typing import Callable, Iterable
+import sys
 
 
 FORMAT = "minicells.native-clm-v0.m2-data-manifest.v1"
@@ -58,7 +57,7 @@ def _verified_cache(output: Path) -> dict | None:
         return None
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except Exception:
+    except (OSError, json.JSONDecodeError):
         return None
     if manifest.get("format") != FORMAT:
         return None
@@ -150,7 +149,6 @@ def main() -> int:
 
     files: dict[str, dict] = {}
 
-    # A: exact dataset family used for M1, evaluation only.
     a_stream = load_dataset(
         "roneneldan/TinyStories", split="validation", streaming=True, token=token
     )
@@ -159,7 +157,6 @@ def main() -> int:
     if a_count < args.a_eval_docs:
         raise RuntimeError(f"TinyStories yielded only {a_count} evaluation documents")
 
-    # B: separate train/validation splits, small raw WikiText configuration.
     b_train_stream = load_dataset(
         "Salesforce/wikitext",
         "wikitext-2-raw-v1",
@@ -181,7 +178,6 @@ def main() -> int:
     if b_train_count < args.b_train_docs or b_eval_count < args.b_eval_docs:
         raise RuntimeError("WikiText did not yield the registered document counts")
 
-    # C: one split; reserve a disjoint suffix for evaluation.
     c_stream = load_dataset("codeparrot/codecomplex", split="train", streaming=True, token=token)
     c_train, c_eval = _split_single_stream(c_stream, _code, args.c_train_docs, args.c_eval_docs)
     c_train_path = output / "C-code-train.txt"
@@ -189,7 +185,6 @@ def main() -> int:
     c_train_count = _fsync_text(c_train_path, c_train, args.c_train_docs)
     c_eval_count = _fsync_text(c_eval_path, c_eval, args.c_eval_docs)
 
-    # D: one split; reserve a disjoint suffix for evaluation.
     d_stream = load_dataset(
         "databricks/databricks-dolly-15k", split="train", streaming=True, token=token
     )
@@ -241,9 +236,6 @@ def main() -> int:
         os.fsync(handle.fileno())
     print(json.dumps(manifest, indent=2), flush=True)
 
-    # Kaggle currently uses Python 3.12. datasets/pyarrow can abort during interpreter
-    # teardown after a streaming iterator is stopped early. Every artifact is durable now;
-    # bypass only that native finalizer path in this dedicated data-prep subprocess.
     if sys.version_info >= (3, 12):
         os._exit(0)
     return 0
