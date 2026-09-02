@@ -36,9 +36,9 @@ MiniCells 明确区分 **产品架构** 与更强的 **内生 / Native CLM 研�
 | 7 | 可复用 Cell coordinates / read address 能从经验中形成 | Constructive CLM-001、001B | 🟢 受控构造性形成已支持，包括无 singleton 的 superposition discovery |
 | 8 | 长期 Cell growth 能跟随可复用结构而不是 transaction 数增长 | Constructive CLM-002 | 🟢 有限 horizon structure-tracking growth 已正式支持；不是渐近定理 |
 | 9 | learned/growing Cells 能进行 replay-free protected continual writes | Constructive CLM-003 | 🟢 `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`，3/3 formal seeds |
-| 10 | 多个 learned Cells 能稳定进行模型级计算 / composition | **Constructive CLM-004** | 🔵 **当前主实验** |
-| 11 | Router / write / growth scaffold 能逐步撤掉并转向 endogenous control | Constructive CLM-005 | ⚪ 后续计划 |
-| 12 | 训练 Small Native CLM v0 | 004–005 之后 | ⚪ 里程碑 |
+| 10 | 多个 learned Cells 能稳定进行模型级计算 / composition | Constructive CLM-004 | 🟢 `MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED`，3/3 formal seeds |
+| 11 | Router / write / growth scaffold 能逐步撤掉并转向 endogenous control | **Constructive CLM-005** | 🔵 **当前主实验** |
+| 12 | 训练 Small Native CLM v0 | CLM-005 之后 | ⚪ 里程碑 |
 
 一个必须持续保留的负面边界是：
 
@@ -52,13 +52,13 @@ Core 006 与 002/009 的天然几何研究已经阻止我们回到这个旧假�
 
 ## 当前主实验
 
-### Constructive CLM-004 — Model-Level Multi-Cell Computation
+### Constructive CLM-005 — Scaffold Removal / Endogenous Transition
 
 当前问题：
 
-> **多个 learned Cells 能否共同参与同一次模型级计算，同时保持 sparse active compute、稳定 routing、未见 composition 质量和低 destructive interference？**
+> **现在已经支持的 Constructive CLM 栈，能否逐步把工程化 routing、growth、protected-write scaffold 替换成 learned / endogenous control，同时不丢失 coordinate formation、retention、有界 growth、sparse computation 和 unseen composition？**
 
-CLM-004 必须直接复用，而不是重新验证现在已经支持的 constructive chain：
+CLM-005 必须直接复用，而不是重新验证已经支持的 constructive chain：
 
 ```text
 CLM-001 / 001B
@@ -68,12 +68,15 @@ CLM-002
   bounded structure-tracking growth
 +
 CLM-003
-  replay-free protected writes + context-keyed mitosis
+  replay-free protected writes
++
+CLM-004
+  sparse model-level multi-Cell computation
 ```
 
-新的 integration variable 是：**多个 active learned Cells 的模型级 computation / composition**。
+新的 integration variable 是：**progressive scaffold removal / endogenous control**。
 
-CLM-003 从现在起冻结为 parent evidence；不要再创建 cosmetic 003B certificate rerun。
+CLM-004 从现在起冻结为 parent evidence；不要再创建 cosmetic 004B composition rerun。
 
 ## Constructive CLM 固定序列
 
@@ -82,8 +85,8 @@ G1a  CLM-001   addressable learned coordinate formation      🟢
 G1b  CLM-001B  latent discovery under superposition          🟢
 G2   CLM-002   long-horizon structure-tracking growth        🟢
 G3   CLM-003   protected learned/growing Cells                🟢
-G4   CLM-004   model-level multi-Cell computation             🔵
-G5   CLM-005   scaffold removal / endogenous transition       ⚪
+G4   CLM-004   model-level multi-Cell computation             🟢
+G5   CLM-005   scaffold removal / endogenous transition       🔵
                                                           ↓
                                               Small Native CLM v0
 ```
@@ -118,6 +121,7 @@ Core 009D 仍可作为非阻塞 operator-geometry diagnostic。Track A 的 negat
 - **CLM-001B** — `LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED`，seeds `90211/90212/90213`。
 - **CLM-002** — `LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED`，seeds `90411/90412/90413`；在已登记 `N=4096` 时，30 个 latent factors 对应 30 个 Cells，`K/N=0.007324`。
 - **CLM-003** — `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`，seeds `90511/90512/90513`；三个 formal seeds 的 15 个 registered gates 全部通过，certificate-growth arm 的 learner replay 为 0。
+- **CLM-004** — `MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED`，seeds `90611/90612/90613`；三个 formal seeds 的 17 个 registered gates 全部通过，包括 unseen simultaneous/sequential composition、sparse active compute，以及 full-composition output 上的 protected mutation。
 
 ## 研究阶段
 
@@ -125,7 +129,7 @@ Core 009D 仍可作为非阻塞 operator-geometry diagnostic。Track A 的 negat
 2. [自组织](stages/02-self-organization/README.zh-CN.md)：稀疏拓扑、招募、分化和 trait genesis。
 3. [路由与生长](stages/03-routing-and-growth/README.zh-CN.md)：可路由、可独立修改的 Cell state 与 capacity growth。
 4. [持续学习核心](stages/04-continual-learning-core/README.zh-CN.md)：write-addressability failures、growth-restored plasticity、replay-free certificates、真实表征约束、Foundation Interface 与 Constructive CLM。
-5. [语言级验证](stages/05-language-validation/README.zh-CN.md)：历史 token-level transfer / scale-readiness 工作；Constructive core 整合后再恢复新的 Native-CLM language validation。
+5. [语言级验证](stages/05-language-validation/README.zh-CN.md)：历史 token-level transfer / scale-readiness 工作；Constructive core endogenous 化后再恢复新的 Native-CLM language validation。
 
 ## 研究资产
 
@@ -137,6 +141,6 @@ Core 009D 仍可作为非阻塞 operator-geometry diagnostic。Track A 的 negat
 
 ## 当前边界
 
-仓库目前仍**没有**证明通用自然语言持续学习、渐近 `K(N)=o(N)` 定理、任意 latent-source discovery、完全 learned router/growth controller、稳定的模型级 multi-Cell computation，或 LLM 规模 endogenous CLM。
+仓库目前仍**没有**证明通用自然语言持续学习、渐近 `K(N)=o(N)` 定理、任意 latent-source discovery、完全 learned/endogenous 的 router-growth-write controller、任意 nonlinear Transformer Cell computation，或 LLM 规模 endogenous CLM。
 
-如果 CLM-004、CLM-005 都在各自冻结边界下通过，那么下一步就不应再继续做 toy mechanism validation，而应直接训练第一个 **Small Native CLM v0**。
+如果 CLM-005 在其冻结边界下通过，那么下一步就不应再继续做 toy mechanism validation，而应直接训练第一个 **Small Native CLM v0**。
