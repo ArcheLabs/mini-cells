@@ -52,6 +52,9 @@ jobs:
           assert p['audit']['registered_m2_steps_per_phase'] == 400
           assert p['audit']['warmup_steps'] == 40
           assert p['audit']['certificate_updates_during_audit'] == 0
+          assert p['data']['source_builder'] == 'scripts/research/prepare_native_clm_v0_m2r0_data.py'
+          assert p['data']['source_manifest_format'] == 'minicells.native-clm-v0.m2r0-data-manifest.v1'
+          assert p['data']['sha256'] == 'c7029622b9a1c4b4f249d927b3ab30d4c09ddffe845e031aee3412b4735ca440'
           assert p['data']['learner_replay_bytes'] == 0
           assert set(p['arms']) == {
               'current_adamw_grad_projection',
@@ -74,18 +77,23 @@ jobs:
           import json
           from pathlib import Path
           path = Path('research/notebooks/06-native-clm/native-clm-v0-m2r0-update-invariant-audit-kaggle.ipynb')
-          if path.exists():
-              notebook = json.loads(path.read_text())
-              assert notebook['nbformat'] == 4
+          notebook = json.loads(path.read_text())
+          assert notebook['nbformat'] == 4
+          text = path.read_text()
+          assert 'prepare_native_clm_v0_m2r0_data.py' in text
+          assert 'run_native_clm_v0_m2r0.py' in text
+          assert 'publish_native_clm_v0_m2r0.py' in text
           PY
       - name: Compile and lint
         run: |
           python -m compileall -q \
             src/minicells/native_clm_m2r0.py \
+            scripts/research/prepare_native_clm_v0_m2r0_data.py \
             scripts/research/run_native_clm_v0_m2r0.py \
             scripts/research/publish_native_clm_v0_m2r0.py
           ruff check \
             src/minicells/native_clm_m2r0.py \
+            scripts/research/prepare_native_clm_v0_m2r0_data.py \
             scripts/research/run_native_clm_v0_m2r0.py \
             scripts/research/publish_native_clm_v0_m2r0.py \
             tests/research/06-native-clm/test_native_clm_m2r0.py
