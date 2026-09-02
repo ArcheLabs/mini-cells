@@ -1,0 +1,104 @@
+name: Native CLM v0 M3L-1 Address-State Capacity
+
+# Checkpoint-only mechanism diagnostic; no Native CLM training or new formal seeds.
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m3l1-address-state-capacity
+    paths:
+      - 'src/minicells/native_clm_m3l1_capacity.py'
+      - 'scripts/research/*m3l1_address_state_capacity*'
+      - 'research/validations/native-clm-v0-m3l1-address-state-capacity/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3l1-address-state-capacity-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3l1_capacity.py'
+      - '.github/workflows/native-clm-v0-m3l1-address-state-capacity.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m3l1_capacity.py'
+      - 'scripts/research/*m3l1_address_state_capacity*'
+      - 'research/validations/native-clm-v0-m3l1-address-state-capacity/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3l1-address-state-capacity-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3l1_capacity.py'
+      - '.github/workflows/native-clm-v0-m3l1-address-state-capacity.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen M3L-1 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/native-clm-v0-m3l1-address-state-capacity/protocol.json').read_text())
+          i = json.loads(Path('research/validations/native-clm-v0-m3l1-address-state-capacity/identity.json').read_text())
+          parent = json.loads(Path('artifacts/experiments/native-clm-v0-m3l-query-sketch-gate/diagnostic-result.json').read_text())
+          assert p['format'] == 'minicells.native-clm-v0.m3l1-address-state-capacity.protocol.v1'
+          assert p['status'] == 'REGISTERED_DIAGNOSTIC_READY'
+          assert p['scientific_decision'] is False
+          assert p['parent_m3l']['publish_commit'] == 'f2b4b8fa1c9b0ba187af0164c86e8bba4def32d9'
+          assert p['parent_m3l']['classification'] == 'QUERY_SKETCH_GATE_NOT_FEASIBLE'
+          assert p['capacity_grid']['low_rank_gaussian_ranks'] == [0, 8, 16, 32, 64, 128]
+          assert p['capacity_grid']['full_covariance_candidate'] is True
+          assert p['learner_boundary']['native_clm_training'] is False
+          assert p['learner_boundary']['new_formal_seeds'] is False
+          assert p['learner_boundary']['consumed_m3r_checkpoints_only'] is True
+          assert parent['classification'] == 'QUERY_SKETCH_GATE_NOT_FEASIBLE'
+          assert abs(parent['sketch_gate']['median'] - i['rank16_parent_median_auc']) < 1e-12
+          assert abs(parent['sketch_gate']['fraction_auc_ge_floor'] - i['rank16_parent_fraction_auc_ge_floor']) < 1e-12
+          assert abs(parent['sketch_gate']['median_normalized_oracle_excess_recovery'] - i['rank16_parent_median_normalized_oracle_excess_recovery']) < 1e-12
+          assert abs(parent['sketch_gate']['median_old_fpr'] - i['rank16_parent_median_old_fpr']) < 1e-12
+          assert abs(parent['sketch_gate']['median_current_tpr'] - i['rank16_parent_median_current_tpr']) < 1e-12
+          assert parent['sketch_gate']['median_sketch_bytes'] == i['rank16_parent_median_sketch_bytes']
+          PY
+      - name: Validate canonical notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('research/notebooks/06-native-clm/native-clm-v0-m3l1-address-state-capacity-kaggle.ipynb')
+          if path.exists():
+              notebook = json.loads(path.read_text())
+              assert notebook['nbformat'] == 4
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q \
+            src/minicells/native_clm_m3l1_capacity.py \
+            scripts/research/run_native_clm_v0_m3l1_address_state_capacity.py \
+            scripts/research/publish_native_clm_v0_m3l1_address_state_capacity.py
+          ruff check \
+            src/minicells/native_clm_m3l1_capacity.py \
+            scripts/research/run_native_clm_v0_m3l1_address_state_capacity.py \
+            scripts/research/publish_native_clm_v0_m3l1_address_state_capacity.py \
+            tests/research/06-native-clm/test_native_clm_m3l1_capacity.py
+      - name: M3L-1 mechanics smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m3l1_capacity.py
+      - name: No continual-language rerun guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('.github/workflows/native-clm-v0-m3l1-address-state-capacity.yml'),
+              Path('scripts/research/run_native_clm_v0_m3l1_address_state_capacity.py'),
+          ]
+          text = '\n'.join(path.read_text() for path in files)
+          forbidden_m3r = 'run_native_clm_v0_' + 'm3r.py --formal'
+          forbidden_m2 = 'run_native_clm_v0_' + 'm2.py'
+          forbidden_m3l = 'run_native_clm_v0_' + 'm3l_query_sketch_gate.py'
+          assert forbidden_m3r not in text
+          assert forbidden_m2 not in text
+          assert forbidden_m3l not in text
+          assert '--worker-seed' in text
+          print('M3L-1 CI is checkpoint-only and does not rerun continual-language training.')
+          PY
