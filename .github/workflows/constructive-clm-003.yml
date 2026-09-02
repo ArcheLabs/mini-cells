@@ -52,6 +52,31 @@ jobs:
                   'tail_spawns': row['tail_spawns'],
               })
           PY
+      - name: Full development bridge seed 401
+        run: |
+          rm -rf /tmp/clm003-dev
+          python scripts/research/run_constructive_clm_003.py --seed 401 --output-dir /tmp/clm003-dev
+          python - <<'PY'
+          import json
+          data = json.load(open('/tmp/clm003-dev/decision.json'))
+          assert data['status'] == 'DEVELOPMENT_RUN'
+          assert data['scientific_decision'] is False
+          result = data['results'][0]
+          print('development-pass', result['pass'])
+          print('bridge', result['structural_bridge'])
+          print('gates', result['gates'])
+          for name in ('unsafe', 'certificate_no_growth', 'certificate_growth', 'replay_growth_oracle'):
+              row = result['variants'][name]
+              print(name, {
+                  'cells': row['final_cells'],
+                  'gain': row['acquisition_gain'],
+                  'history_mse': row['final_historical_regression_mse'],
+                  'replay': row['replay_accesses'],
+                  'route': row['route']['exact_mode_accuracy'],
+                  'tail_spawns': row['tail_spawns'],
+              })
+          assert result['pass'] is True
+          PY
 
 # Formal seeds 90511/90512/90513 are intentionally NOT run by CI.
 # They remain reserved for an explicit reviewed `--formal` execution.
