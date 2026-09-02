@@ -1,16 +1,30 @@
 # Constructive CLM-004 — Model-Level Multi-Cell Computation
 
-Status: **PROTOCOL FROZEN — FORMAL SEEDS UNRUN**
+Status: **FORMAL RESULT SUPPORTED**
+
+Formal summary: [`FORMAL_RESULT.md`](FORMAL_RESULT.md)
+
+## Formal decision
+
+```text
+MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED
+scientific_decision = true
+formal seeds = 90611 / 90612 / 90613
+missing seeds = none
+protocol_sha256 = 899c466747b5bec28b548fff2fc48173524b4fba7475f59085cb5f7accc75176
+```
+
+All 17 registered gates passed on all three formal seeds. G4 is now frozen as supported under the registered controlled boundary. The next main experiment is **Constructive CLM-005 — Scaffold Removal / Endogenous Transition**.
 
 ## Question
 
 Constructive CLM-001/001B established learned/addressable Cell coordinates. CLM-002 established finite-horizon structure-tracking growth. CLM-003 established replay-free protected writes inside learned/growing Cell lineages.
 
-CLM-004 asks the next distinct question:
+CLM-004 asked:
 
 > Can multiple learned Cells become reusable **computational modules** that act on hidden state inside the same model execution, generalize to unseen compositions, preserve order when order matters, execute sparsely, and retain the G3 protected-write invariant at full-composition output?
 
-The new variable is **model-level multi-Cell computation**. This experiment does not re-prove Cell formation, growth, or the Core-005 certificate principle.
+The new variable was **model-level multi-Cell computation**. This experiment did not re-prove Cell formation, growth, or the Core-005 certificate principle.
 
 ## From effect atom to computational module
 
@@ -162,7 +176,7 @@ This does not re-prove Core-005. It tests whether the invariant survives when th
 
 ## Formal gates
 
-Every formal seed must pass all gates.
+Every formal seed passed all registered gates.
 
 ### 1. Structural bridge
 
@@ -219,7 +233,7 @@ See [`protocol.json`](protocol.json) for canonical thresholds.
 
 ## Seed discipline
 
-Development-only:
+Development-only seeds:
 
 ```text
 501
@@ -227,7 +241,7 @@ Development-only:
 503
 ```
 
-Frozen untouched formal seeds:
+Formal seeds consumed by the first registered formal execution:
 
 ```text
 90611
@@ -235,44 +249,11 @@ Frozen untouched formal seeds:
 90613
 ```
 
-Formal seeds are rejected through ordinary `--seed` invocation. CI must not execute them.
+These formal seeds are now observed. Any later rerun is reproduction or artifact recovery, not another untouched confirmation.
 
-## Smoke
+## Canonical artifacts
 
-```bash
-python scripts/research/run_constructive_clm_004.py --smoke
-```
-
-This checks operator/composition/protection mechanics with synthetic route keys and does not run the full Constructive bridge.
-
-## Development run
-
-```bash
-python scripts/research/run_constructive_clm_004.py --seed 501
-```
-
-Expected top-level status:
-
-```text
-DEVELOPMENT_RUN
-scientific_decision = false
-```
-
-## Formal run
-
-Only after smoke/development review:
-
-```bash
-python scripts/research/run_constructive_clm_004.py --formal
-```
-
-Formal positive status:
-
-```text
-MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED
-```
-
-Canonical artifacts:
+The first formal execution generated:
 
 ```text
 artifacts/experiments/constructive-clm-004-model-level-multicell-computation/
@@ -283,14 +264,16 @@ artifacts/experiments/constructive-clm-004-model-level-multicell-computation/
   RESULTS.md
 ```
 
+The original Kaggle artifacts should be imported from that working tree; they must not be reconstructed from the formal summary.
+
 ## Interpretation boundary
 
-A positive CLM-004 result would support the registered controlled claim:
+The positive CLM-004 result supports the registered controlled claim:
 
 > learned route-addressed Cell operators can act as reusable hidden-state computational modules, compose simultaneously and sequentially on unseen combinations, execute sparsely at the Cell-operator level, and preserve a replay-free protected mutation invariant through the full composition path.
 
-It would **not** establish arbitrary nonlinear Transformer Cell operators, natural-language generation, router emergence inside G4, a learned growth controller, a learned write controller, router lookup cost proportional only to active Cells, a fully endogenous Native CLM, or JAM execution.
+It does **not** establish arbitrary nonlinear Transformer Cell operators, natural-language generation, router emergence inside G4, a learned growth controller, a learned write controller, router lookup cost proportional only to active Cells, a fully endogenous Native CLM, or JAM execution.
 
-If positive, the next main experiment is **Constructive CLM-005 — Scaffold Removal / Endogenous Transition**.
+The next main experiment is **Constructive CLM-005 — Scaffold Removal / Endogenous Transition**.
 
-Do not create a cosmetic CLM-004B that only increases synthetic composition count or Cell count unless formal CLM-004 identifies a specific composition failure.
+Do not create a cosmetic CLM-004B that only increases synthetic composition count or Cell count.
