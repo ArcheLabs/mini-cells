@@ -1,0 +1,162 @@
+{
+  "experiment_id": "constructive-clm-005",
+  "title": "Constructive CLM-005 — Scaffold Removal / Endogenous Control",
+  "status": "FROZEN_BEFORE_FORMAL",
+  "registered_date": "2026-09-02",
+  "parent_evidence": {
+    "constructive_clm_001": "LEARNED_COORDINATE_FORMATION_SUPPORTED",
+    "constructive_clm_001b": "LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED",
+    "constructive_clm_002": "LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED",
+    "constructive_clm_003": "PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED",
+    "constructive_clm_004": "MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED",
+    "core_005": "replay-free Cell-local subspace certificate reused as fixed safety primitive"
+  },
+  "question": "Can learned routing and learned write/grow control replace the explicit Constructive CLM control scaffolds while preserving protected continual writes, bounded growth, child reuse, sparse compute and unseen simultaneous/sequential multi-Cell composition?",
+  "claim_boundary": {
+    "required_for_positive": [
+      "learned pairwise route compatibility at inference",
+      "learned write commit/reject controller",
+      "learned growth/reuse controller",
+      "zero learner-side replay in protected mutation stream",
+      "bounded reusable child growth",
+      "unseen simultaneous and order-sensitive sequential composition after scaffold removal",
+      "sparse active Cell operator execution",
+      "safe slow-plastic shared-substrate compatibility probe"
+    ],
+    "retained_fixed_primitives": [
+      "persistent Cell route keys/state",
+      "Core-005 certificate basis Q",
+      "certificate-constrained linear update solver",
+      "registered Cell residual operator family"
+    ],
+    "not_claimed": [
+      "arbitrary nonlinear Transformer Cell operators",
+      "fully learned safety geometry",
+      "language-scale continual learning",
+      "asymptotic K(N)=o(N)",
+      "foundation-scale endogenous CLM",
+      "JAM deployment"
+    ]
+  },
+  "controller_learning": {
+    "principle": "controllers are trained only on permanently development-only meta episodes; labels are current-transaction intrinsic/counterfactual utility decisions, never hidden factor/task/Cell IDs",
+    "router": {
+      "architecture": "shared 5->12->1 pairwise MLP over query/key compatibility statistics",
+      "meta_train_seeds": [6501, 6502, 6503, 6504, 6505, 6506],
+      "meta_validation_seeds": [6507, 6508],
+      "label": "candidate Cell with lowest current-transaction operator-fit error"
+    },
+    "growth": {
+      "architecture": "5->12->1 binary MLP",
+      "meta_train_seeds": [6601, 6602, 6603, 6604, 6605, 6606],
+      "meta_validation_seeds": [6607, 6608],
+      "label": "fresh Cell utility beats best existing Cell utility by registered spawn cost",
+      "spawn_cost": 0.03
+    },
+    "write": {
+      "architecture": "5->12->1 binary MLP",
+      "meta_train_seeds": [6701, 6702, 6703, 6704, 6705, 6706],
+      "meta_validation_seeds": [6707, 6708],
+      "label": "current-data certificate-constrained update is feasible"
+    },
+    "minimum_heldout_meta_accuracy_each": 0.98,
+    "formal_seed_data_allowed": false,
+    "hidden_id_targets_allowed": false
+  },
+  "world": {
+    "root_cells": 12,
+    "route_dim": 48,
+    "hidden_dim": 16,
+    "operator_spectral_norm": 0.4,
+    "operator_acquisition_batches_per_root": 4,
+    "operator_acquisition_batch_size": 32,
+    "multi_cell_compositions_seen_during_operator_acquisition": 0,
+    "evaluation_cases_per_mode": 64,
+    "active_cells_per_composition": [2, 4],
+    "mutation_target_roots": 4,
+    "history_cases_per_mutation_target": 6,
+    "child_reuse_repeats": 3,
+    "expected_children": 4,
+    "expected_final_cells": 16,
+    "always_spawn_control_children": 16,
+    "shared_substrate_history_cases": 8
+  },
+  "stages": [
+    {
+      "id": "engineered_parent",
+      "description": "unchanged CLM-004 on the same new seed, evaluator-only baseline"
+    },
+    {
+      "id": "learned_router",
+      "description": "replace fixed cosine argmax route rule with frozen meta-learned pairwise compatibility scorer"
+    },
+    {
+      "id": "learned_write_growth",
+      "description": "learned write controller commits certificate-feasible updates and rejects conflicts; learned growth controller converts rejected useful conflicts into reusable children"
+    },
+    {
+      "id": "full_learned_control",
+      "description": "evaluate unseen simultaneous/sequential composition over roots plus learned children"
+    },
+    {
+      "id": "slow_shared_substrate_probe",
+      "description": "a certificate-safe shared residual update must fit current data without changing registered historical full-composition outputs"
+    }
+  ],
+  "anti_cheating": {
+    "learner_forbidden_inputs": [
+      "hidden factor ID",
+      "hidden task/mode label as controller target",
+      "correct Cell ID",
+      "oracle route support",
+      "oracle novelty flag",
+      "future stream information",
+      "historical raw-example replay"
+    ],
+    "evaluator_only": [
+      "source Cell identity used to generate/evaluate synthetic transactions",
+      "true operator list",
+      "historical full-composition outputs"
+    ]
+  },
+  "gates": {
+    "parent_g4_baseline_reusable": true,
+    "controller_meta_generalization_min": 0.98,
+    "structural_mean_root_key_cosine_min": 0.985,
+    "learned_router_acquisition_accuracy_min": 0.99,
+    "operator_mean_relative_error_max": 0.01,
+    "operator_max_relative_error_max": 0.02,
+    "composition_mean_mse_max": 0.0001,
+    "composition_exact_route_accuracy_min": 0.995,
+    "sequential_order_effect_mse_min": 0.001,
+    "simultaneous_permutation_mse_max": 1e-12,
+    "safe_commits_required": 4,
+    "conflict_write_rejections_required": 4,
+    "conflict_spawns_required": 4,
+    "final_cells_required": 16,
+    "learned_spawn_ratio_vs_always_spawn_max": 0.4,
+    "child_reuse_accuracy_required": 1.0,
+    "learner_replay_accesses_required": 0,
+    "historical_composition_mse_max": 1e-10,
+    "unsafe_reuse_historical_mse_min": 0.0001,
+    "unrelated_cell_parameter_drift_max": 1e-15,
+    "cell_execution_fraction_vs_dense_max": 0.3,
+    "shared_safe_fit_mse_max": 1e-10,
+    "shared_safe_history_mse_max": 1e-10,
+    "shared_unsafe_history_mse_min": 1e-6
+  },
+  "seed_discipline": {
+    "development_only_seeds": [601, 602, 603],
+    "observed_meta_training_and_validation_ranges": ["6501-6508", "6601-6608", "6701-6708"],
+    "excluded_after_partial_development_diagnostic": [90711, 90712, 90713],
+    "formal_seeds": [90811, 90812, 90813],
+    "note": "90711/90712/90713 were used only in a partial shared-substrate diagnostic before protocol freeze and are permanently excluded. 90811/90812/90813 are untouched at freeze time."
+  },
+  "formal_decision": {
+    "positive": "LEARNED_CONTROL_PLANE_TRANSITION_SUPPORTED",
+    "negative": "LEARNED_CONTROL_PLANE_TRANSITION_NOT_SUPPORTED",
+    "all_formal_seeds_must_pass_all_registered_gates": true
+  },
+  "next_milestone_if_positive": "Small Native CLM v0",
+  "no_repeat": "A positive result closes the controlled Constructive CLM mechanism-validation sequence. Do not create CLM-005B by merely increasing synthetic cells/transactions; move to Small Native CLM v0."
+}
