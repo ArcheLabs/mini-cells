@@ -2,7 +2,7 @@
 
 # Stage 06 — Native CLM
 
-Status: **ACTIVE**
+Status: **ACTIVE — READ-GEOMETRY GAP**
 
 Stage 06 moves the formally supported Constructive CLM mechanisms into a real token-predictive model.
 
@@ -15,13 +15,14 @@ Native CLM v0
   M0  architecture + execution                           🟢 COMPLETE
   M1  ~12M next-token training                           🟢 COMPLETE
   M2  fixed-topology replay-free continual language      🔴 NOT SUPPORTED
-      protection causally reduced forgetting             🟡 PARTIAL EVIDENCE
-  M3  growth-restored continual language                 🔵 ACTIVE
-  M4  Cell ontology / specialization analysis            ⚪ PLANNED
+      certificate protection reduced forgetting          🟡 PARTIAL EVIDENCE
+  M3  global-pool growth-restored continual language     🔴 NOT SUPPORTED
+  M3R read-preserving / lineage-isolated growth          🔵 NEXT ACTIVE DESIGN
+  M4  Cell ontology / specialization analysis            ⚪ BLOCKED ON M3R
   M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
 ```
 
-Do not scale to 30M before M3 closes. The active uncertainty is whether topology growth restores protected continual capacity.
+Do not scale to 30M and do not advance to M4 until the read-geometry gap exposed by M3 is closed.
 
 ## Canonical substrate
 
@@ -66,25 +67,16 @@ See [M1_CLOSURE.md](M1_CLOSURE.md).
 
 ## M2 — Fixed-topology continual language — 🔴 NOT SUPPORTED
 
-M2 started from the exact M1 checkpoint and trained only Cell operators through the replay-free stream:
-
-```text
-B WikiText-2 raw
-  ↓
-C cleaned Python CodeParrot
-  ↓
-D Databricks Dolly
-```
-
-A/TinyStories remained evaluation-only. Shared substrate and learned router were frozen.
-
-Formal seeds `73211 / 73212 / 73213` all produced the same decision:
+Formal decision:
 
 ```text
 NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED
+seeds = 73211 / 73212 / 73213
 ```
 
-Protection was nevertheless causally useful:
+M2 trained only Cell operators over the zero-replay stream `B -> C -> D`, with A/TinyStories evaluation-only and the shared substrate/router frozen.
+
+Protection was causally useful:
 
 ```text
 protected mean forgetting     ~0.2115
@@ -93,112 +85,131 @@ retention advantage           ~0.0675
 protected/unsafe plasticity    ~0.964
 ```
 
-The only failed registered gate was absolute A retention: protected TinyStories regression remained ~43.9% against the pre-registered <=20% ceiling.
+But protected A regression remained ~43.9% against the registered <=20% ceiling. The M2 formal seeds are consumed.
 
-See [M2_CLOSURE.md](M2_CLOSURE.md). Those formal seeds are consumed and must never be reused as untouched evidence.
+See [M2_CLOSURE.md](M2_CLOSURE.md).
 
-## M3 — Growth-Restored Continual Language — 🔵 ACTIVE
+## M3 — Global-pool growth-restored continual language — 🔴 NOT SUPPORTED
 
-M3 does not change the failed M2 gate or tune on its seeds. It asks a new causal question:
-
-> Does autonomous context-addressed Cell growth restore replay-free old-domain retention beyond an otherwise identical fixed-topology protected control while preserving new-domain plasticity?
-
-Because the original M2 local data manifest was lost when the Kaggle session terminated, M3 freezes a new exact Hub-revision-pinned data snapshot and runs both causal arms on that same snapshot:
-
-```text
-GPU0  fixed_protected
-      8 Cells forever
-
-GPU1  growth_protected
-      starts at 8 Cells
-      may grow to at most 16 Cells
-```
-
-Both arms use:
-
-- the same exact M1 checkpoint;
-- identical B -> C -> D data and seed schedule;
-- zero learner replay;
-- certificate-projected Cell-local gradients;
-- frozen shared Transformer, query projection, norm and original eight route keys;
-- two active Cells per token.
-
-### Autonomous growth signal
-
-Every 50 learner steps, the growth arm may inspect only current-training quantities:
-
-```text
-window train loss
-Cell route hits
-certificate rank
-projected/raw Cell-gradient ratio
-frozen-router query vectors
-```
-
-No domain ID, phase name, evaluation metric, hidden novelty label or historical training example is visible to the growth decision.
-
-When persistent protected-write pressure is detected, M3 chooses the Cell maximizing:
-
-```text
-route_hits * (1 - projected/raw gradient ratio)
-```
-
-and creates a child with:
-
-```text
-W_child        = exact W_parent clone
-route_key      = mean current conflict-query vector
-certificate    = empty / rank 0
-parent_id      = lineage pointer
-```
-
-The exact operator clone is intended to avoid a large functional discontinuity at birth; the child then supplies fresh writable directions and must prove post-birth reuse.
-
-### Registered M3 gates
-
-All three untouched formal seeds must independently pass, including:
-
-- fixed control remains 8 Cells and exposes >=30% A regression;
-- growth uses learner-visible signals only;
-- 1–8 children are created, final Cells <=16;
-- >=75% of children receive >=512 post-birth routed token hits;
-- active Cell compute remains <=30% of dense-all-Cell compute;
-- each B/C/D phase improves >=5%;
-- growth A regression <=20%;
-- growth improves A retention by >=10 percentage points vs matched fixed control;
-- growth mean forgetting <=15%;
-- growth retains >=80% of fixed-control new-domain plasticity.
-
-Development seeds:
-
-```text
-73301 / 73302 / 73303
-```
-
-Untouched formal seeds:
-
-```text
-73411 / 73412 / 73413
-```
-
-Positive status:
-
-```text
-NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_SUPPORTED
-```
-
-Negative status:
+Formal decision:
 
 ```text
 NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_NOT_SUPPORTED
+protocol = 9bc23cac3cf4e4512f251836e4dd2cd48750b5894565c1a346396df06028f658
+seeds = 73411 / 73412 / 73413
 ```
 
-Frozen protocol: [`../../validations/native-clm-v0-m3-growth-restored-continual-language/protocol.json`](../../validations/native-clm-v0-m3-growth-restored-continual-language/protocol.json)
+M3 compared, on the same pinned data snapshot and seed:
 
-Canonical Kaggle notebook: [`../../notebooks/06-native-clm/native-clm-v0-m3-growth-restored-continual-language-kaggle.ipynb`](../../notebooks/06-native-clm/native-clm-v0-m3-growth-restored-continual-language-kaggle.ipynb)
+```text
+fixed_protected   8 Cells forever
+vs
+growth_protected 8 -> at most 16 Cells
+```
 
-The notebook preflights two GPUs and Hugging Face model-repository write permission **before** formal training, uploads all six final fixed/growth checkpoints to `archelabsxyz/native-clm-v0`, and Git-publishes only lightweight evidence.
+Both arms retained zero learner replay, frozen shared substrate/original router, two active Cells/token and certificate-projected Cell writes.
 
-## Advance rule
+### Formal outcome
 
-If M3 is supported, move to M4 Cell ontology/specialization analysis at the same scale before any 30M reproduction. If M3 is not supported, preserve the negative result and diagnose growth addressing/trigger/certificate lifecycle rather than tuning the formal seeds post hoc.
+| seed | fixed A reg | growth A reg | growth advantage | fixed forgetting | growth forgetting | growth Cells | child reuse |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 73411 | 0.4416 | 0.4938 | -0.0522 | 0.2137 | 0.2201 | 16 | 1.000 |
+| 73412 | 0.4293 | 0.4838 | -0.0545 | 0.2107 | 0.2170 | 16 | 1.000 |
+| 73413 | 0.4351 | 0.4889 | -0.0539 | 0.2123 | 0.2186 | 16 | 1.000 |
+
+The failing registered gates on every seed were:
+
+```text
+growth_A_retention_advantage
+growth_absolute_A_retention
+growth_mean_forgetting
+```
+
+Growth itself worked mechanically: all seeds reached 16 Cells, children were reused, sparse compute survived, B/C/D plasticity passed, and zero replay remained true. Therefore the negative result is not explained by failure to allocate fresh capacity.
+
+### Post-formal diagnosis: read-address leakage
+
+The registered child key was the mean frozen-router query of current conflict contexts, and each child was inserted into the same global Top-K candidate pool as the original roots.
+
+For seed `73411`, the four children born during B already received approximately:
+
+```text
+A route mass  40.33%
+B route mass  40.01%
+C route mass  41.52%
+D route mass  39.32%
+```
+
+After C, all eight children received approximately:
+
+```text
+A route mass  50.30%
+B route mass  51.79%
+C route mass  57.21%
+D route mass  50.59%
+```
+
+This is high reuse but poor address selectivity. New Cells steal substantial read traffic from old contexts.
+
+M3 also reached the maximum eight children at steps `50/150/250/350/450/550/650/750`, before phase D. The growth rule therefore behaved close to cooldown-limited repeated spawning under persistent pressure.
+
+The key learned boundary is:
+
+```text
+fresh writable capacity
+!=
+safe continual expansion
+```
+
+More specifically:
+
+```text
+safe write growth requires safe read-address growth
+```
+
+See the frozen [M3 formal result](../../validations/native-clm-v0-m3-growth-restored-continual-language/FORMAL_RESULT.md).
+
+## M3R — Read-preserving / lineage-isolated growth — 🔵 NEXT ACTIVE DESIGN
+
+M3R must be a new integration experiment, not a threshold-tuned M3 rerun.
+
+Preferred computational invariant:
+
+```text
+root router selects the same original root lineages as before growth
+                         ↓
+within each selected lineage, a local gate chooses parent vs child
+```
+
+A child must not immediately enter a global competition with unrelated roots.
+
+A stronger birth invariant is gate-mass-preserving mitosis. If the original parent receives gate mass `g_p`, after birth that same mass is split only inside the lineage:
+
+```text
+g_p * W_parent
+        ↓ birth
+g_p * [(1-alpha) W_parent + alpha W_child]
+```
+
+with `W_child = W_parent` at birth. Then the forward function is exactly unchanged for any `alpha`, while later child divergence can be restricted to contexts routed into that lineage.
+
+The next frozen protocol should therefore test:
+
+- near-zero/logit-exact functional drift at birth;
+- root-lineage route invariance for old contexts;
+- child selectivity rather than raw route-hit reuse alone;
+- bounded non-cap-saturating growth;
+- zero replay and protected writes;
+- restoration of the same A-retention gate that failed M2/M3.
+
+M4 ontology analysis remains blocked until this mechanism works in the trained token-predictive model.
+
+## Evidence
+
+- [M3 protocol](../../validations/native-clm-v0-m3-growth-restored-continual-language/protocol.json)
+- [M3 formal result](../../validations/native-clm-v0-m3-growth-restored-continual-language/FORMAL_RESULT.md)
+- canonical artifacts: `artifacts/experiments/native-clm-v0-m3-growth-restored-continual-language/`
+- artifact commit: `e8b6a40f68862d6f01f67b125afdaeec97e6c45c`
+- Hugging Face evidence revision: `4bc1e73518f09039335a368d4352ff0201cee06c`
+
+The M3 formal seeds are consumed and must never be reused as untouched evidence.
