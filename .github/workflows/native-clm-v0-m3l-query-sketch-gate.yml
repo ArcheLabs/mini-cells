@@ -93,9 +93,10 @@ jobs:
               Path('scripts/research/run_native_clm_v0_m3l_query_sketch_gate.py'),
           ]
           text = '\n'.join(path.read_text() for path in files)
-          forbidden = 'run_native_clm_v0_m3r.py' + ' --formal'
-          assert forbidden not in text
-          assert 'run_native_clm_v0_m2.py' not in text
+          forbidden_m3 = 'run_native_clm_v0_m3r.py' + ' --formal'
+          forbidden_m2 = 'run_native_clm_v0_' + 'm2.py'
+          assert forbidden_m3 not in text
+          assert forbidden_m2 not in text
           assert '--worker-seed' in text
           print('M3L CI is checkpoint-only and does not rerun continual-language formal training.')
           PY
