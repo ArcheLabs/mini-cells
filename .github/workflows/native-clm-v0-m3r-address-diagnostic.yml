@@ -20,9 +20,6 @@ on:
       - 'tests/research/06-native-clm/test_native_clm_m3r_address_diag.py'
       - '.github/workflows/native-clm-v0-m3r-address-diagnostic.yml'
 
-permissions:
-  contents: write
-
 jobs:
   preflight:
     runs-on: ubuntu-latest
@@ -34,17 +31,6 @@ jobs:
           python-version: '3.11'
       - name: Install
         run: python -m pip install -e '.[dev,lm]'
-      - name: Persist deterministic Ruff fixes
-        if: github.event_name == 'push'
-        run: |
-          ruff check --fix --unsafe-fixes src/minicells/native_clm_m3r_address_diag.py
-          if ! git diff --quiet -- src/minicells/native_clm_m3r_address_diag.py; then
-            git config user.name 'MiniCells Research'
-            git config user.email 'research@minicells.local'
-            git add src/minicells/native_clm_m3r_address_diag.py
-            git commit -m 'style: apply M3R address diagnostic Ruff fixes'
-            git push origin HEAD:${GITHUB_REF_NAME}
-          fi
       - name: Validate registered checkpoint-only boundary
         run: |
           python - <<'PY'
@@ -76,9 +62,8 @@ jobs:
           import json
           from pathlib import Path
           path = Path('research/notebooks/06-native-clm/native-clm-v0-m3r-address-diagnostic-kaggle.ipynb')
-          if path.exists():
-              notebook = json.loads(path.read_text())
-              assert notebook['nbformat'] == 4
+          notebook = json.loads(path.read_text())
+          assert notebook['nbformat'] == 4
           PY
       - name: Compile and lint
         run: |
@@ -107,5 +92,6 @@ jobs:
           assert forbidden not in workflow
           assert forbidden not in runner
           assert '--worker-seed' in runner
+          assert 'model_training' in Path('research/validations/native-clm-v0-m3r-address-diagnostic/protocol.json').read_text()
           print('CI does not rerun M3R formal training.')
           PY
