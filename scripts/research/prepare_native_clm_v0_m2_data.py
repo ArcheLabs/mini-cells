@@ -3,7 +3,7 @@
 A is evaluation-only TinyStories retention. Training proceeds B -> C -> D with no
 learner-side replay:
   B: WikiText-2 raw factual/encyclopedic prose
-  C: CodeParrot codecomplex competitive-programming source code
+  C: cleaned Python files from CodeParrot
   D: Databricks Dolly instruction/response text
 
 The script writes plain UTF-8 files so the M2 learner never depends on datasets/Arrow.
@@ -79,8 +79,8 @@ def _text(row: dict) -> str:
     return row["text"]
 
 
-def _code(row: dict) -> str:
-    return row["src"]
+def _content(row: dict) -> str:
+    return row["content"]
 
 
 def _dolly(row: dict) -> str:
@@ -178,12 +178,18 @@ def main() -> int:
     if b_train_count < args.b_train_docs or b_eval_count < args.b_eval_docs:
         raise RuntimeError("WikiText did not yield the registered document counts")
 
-    c_stream = load_dataset("codeparrot/codecomplex", split="train", streaming=True, token=token)
-    c_train, c_eval = _split_single_stream(c_stream, _code, args.c_train_docs, args.c_eval_docs)
+    c_train_stream = load_dataset(
+        "codeparrot/codeparrot-clean-train", split="train", streaming=True, token=token
+    )
+    c_eval_stream = load_dataset(
+        "codeparrot/codeparrot-clean-valid", split="train", streaming=True, token=token
+    )
     c_train_path = output / "C-code-train.txt"
     c_eval_path = output / "C-code-eval.txt"
-    c_train_count = _fsync_text(c_train_path, c_train, args.c_train_docs)
-    c_eval_count = _fsync_text(c_eval_path, c_eval, args.c_eval_docs)
+    c_train_count = _fsync_text(c_train_path, _rows(c_train_stream, _content), args.c_train_docs)
+    c_eval_count = _fsync_text(c_eval_path, _rows(c_eval_stream, _content), args.c_eval_docs)
+    if c_train_count < args.c_train_docs or c_eval_count < args.c_eval_docs:
+        raise RuntimeError("CodeParrot clean did not yield the registered document counts")
 
     d_stream = load_dataset(
         "databricks/databricks-dolly-15k", split="train", streaming=True, token=token
@@ -223,7 +229,8 @@ def main() -> int:
         "sources": {
             "A": "roneneldan/TinyStories validation",
             "B": "Salesforce/wikitext wikitext-2-raw-v1",
-            "C": "codeparrot/codecomplex train (disjoint train/eval prefix)",
+            "C_train": "codeparrot/codeparrot-clean-train train",
+            "C_eval": "codeparrot/codeparrot-clean-valid train",
             "D": "databricks/databricks-dolly-15k train (disjoint train/eval prefix)",
         },
         "files": files,
