@@ -35,10 +35,10 @@ MiniCells 明确区分 **产品架构** 与更强的 **内生 / Native CLM 研�
 | 6 | 成熟 LLM 存在可利用的写接口 | Core 006、009A、009B-1 | 🟢 Foundation Interface 已有很强证据；**不等于天然 Cell ontology** |
 | 7 | 可复用 Cell coordinates / read address 能从经验中形成 | Constructive CLM-001、001B | 🟢 受控构造性形成已支持，包括无 singleton 的 superposition discovery |
 | 8 | 长期 Cell growth 能跟随可复用结构而不是 transaction 数增长 | Constructive CLM-002 | 🟢 有限 horizon structure-tracking growth 已正式支持；不是渐近定理 |
-| 9 | learned/growing Cells 能进行 replay-free protected continual writes | **Constructive CLM-003** | 🔵 **当前主实验** |
-| 10 | 多个 learned Cells 能稳定进行模型级计算 / composition | Constructive CLM-004 | ⚪ 后续计划 |
+| 9 | learned/growing Cells 能进行 replay-free protected continual writes | Constructive CLM-003 | 🟢 `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`，3/3 formal seeds |
+| 10 | 多个 learned Cells 能稳定进行模型级计算 / composition | **Constructive CLM-004** | 🔵 **当前主实验** |
 | 11 | Router / write / growth scaffold 能逐步撤掉并转向 endogenous control | Constructive CLM-005 | ⚪ 后续计划 |
-| 12 | 训练 Small Native CLM v0 | 003–005 之后 | ⚪ 里程碑 |
+| 12 | 训练 Small Native CLM v0 | 004–005 之后 | ⚪ 里程碑 |
 
 一个必须持续保留的负面边界是：
 
@@ -52,34 +52,28 @@ Core 006 与 002/009 的天然几何研究已经阻止我们回到这个旧假�
 
 ## 当前主实验
 
-### Constructive CLM-003 — Protected Learned/Growing Cells
+### Constructive CLM-004 — Model-Level Multi-Cell Computation
 
 当前问题：
 
-> **learned/growing Cell coordinates 能否与已经支持的 Core-005 replay-free certificate 整合，使新写入既不破坏历史，又保留 plasticity，并通过有界、context-addressable 的 child mitosis 扩容，而不是 destructive overwrite 或 replay？**
+> **多个 learned Cells 能否共同参与同一次模型级计算，同时保持 sparse active compute、稳定 routing、未见 composition 质量和低 destructive interference？**
 
-CLM-003 直接复用：
-
-```text
-Constructive CLM-001 / 001B
-  learned Cell coordinates
-+
-Constructive CLM-002
-  structure-tracking growth
-+
-Core 005
-  replay-free subspace certificate
-```
-
-新的 integration variable 是：
+CLM-004 必须直接复用，而不是重新验证现在已经支持的 constructive chain：
 
 ```text
-learned hierarchical routing
-  + protected mutable W/Q state
-  + certificate-triggered context-keyed mitosis
+CLM-001 / 001B
+  learned coordinates
++
+CLM-002
+  bounded structure-tracking growth
++
+CLM-003
+  replay-free protected writes + context-keyed mitosis
 ```
 
-验证文档：[Constructive CLM-003 — Protected Learned/Growing Cells](validations/constructive-clm-003-protected-growing-cells/README.md)。
+新的 integration variable 是：**多个 active learned Cells 的模型级 computation / composition**。
+
+CLM-003 从现在起冻结为 parent evidence；不要再创建 cosmetic 003B certificate rerun。
 
 ## Constructive CLM 固定序列
 
@@ -87,8 +81,8 @@ learned hierarchical routing
 G1a  CLM-001   addressable learned coordinate formation      🟢
 G1b  CLM-001B  latent discovery under superposition          🟢
 G2   CLM-002   long-horizon structure-tracking growth        🟢
-G3   CLM-003   protected learned/growing Cells                🔵
-G4   CLM-004   model-level multi-Cell computation             ⚪
+G3   CLM-003   protected learned/growing Cells                🟢
+G4   CLM-004   model-level multi-Cell computation             🔵
 G5   CLM-005   scaffold removal / endogenous transition       ⚪
                                                           ↓
                                               Small Native CLM v0
@@ -123,6 +117,7 @@ Core 009D 仍可作为非阻塞 operator-geometry diagnostic。Track A 的 negat
 - **CLM-001** — `LEARNED_COORDINATE_FORMATION_SUPPORTED`，seeds `90111/90112/90113`。
 - **CLM-001B** — `LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED`，seeds `90211/90212/90213`。
 - **CLM-002** — `LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED`，seeds `90411/90412/90413`；在已登记 `N=4096` 时，30 个 latent factors 对应 30 个 Cells，`K/N=0.007324`。
+- **CLM-003** — `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`，seeds `90511/90512/90513`；三个 formal seeds 的 15 个 registered gates 全部通过，certificate-growth arm 的 learner replay 为 0。
 
 ## 研究阶段
 
@@ -142,6 +137,6 @@ Core 009D 仍可作为非阻塞 operator-geometry diagnostic。Track A 的 negat
 
 ## 当前边界
 
-仓库目前仍**没有**证明通用自然语言持续学习、渐近 `K(N)=o(N)` 定理、任意 latent-source discovery、完全 learned router/growth controller、模型级 simultaneous multi-Cell computation，或 LLM 规模 endogenous CLM。
+仓库目前仍**没有**证明通用自然语言持续学习、渐近 `K(N)=o(N)` 定理、任意 latent-source discovery、完全 learned router/growth controller、稳定的模型级 multi-Cell computation，或 LLM 规模 endogenous CLM。
 
-如果 CLM-003、CLM-004、CLM-005 都在各自冻结边界下通过，那么下一步就不应再继续做 toy mechanism validation，而应直接训练第一个 **Small Native CLM v0**。
+如果 CLM-004、CLM-005 都在各自冻结边界下通过，那么下一步就不应再继续做 toy mechanism validation，而应直接训练第一个 **Small Native CLM v0**。
