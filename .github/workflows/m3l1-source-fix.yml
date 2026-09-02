@@ -1,0 +1,36 @@
+name: Temporary M3L-1 source correction
+
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m3l1-address-state-capacity
+    paths:
+      - '.github/workflows/m3l1-source-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/native-clm-v0-m3l1-address-state-capacity
+      - name: Apply exact full-covariance regularization correction
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('src/minicells/native_clm_m3l1_capacity.py')
+          text = path.read_text()
+          old = '''    covariance = centered.transpose(0, 1).matmul(centered) / max(1, x.size(0) - 1)\n    covariance = covariance + diagonal_regularization * torch.eye(\n        x.size(1), device=device, dtype=x.dtype\n    )\n'''
+          new = '''    covariance = centered.transpose(0, 1).matmul(centered) / max(1, x.size(0) - 1)\n'''
+          if old not in text:
+              raise SystemExit('expected full-covariance block not found')
+          path.write_text(text.replace(old, new, 1))
+          PY
+          git config user.name 'MiniCells Research'
+          git config user.email 'research@minicells.local'
+          git add src/minicells/native_clm_m3l1_capacity.py
+          git commit -m 'fix: apply M3L-1 full-covariance regularization once'
+          git push origin HEAD:codex/native-clm-v0-m3l1-address-state-capacity
