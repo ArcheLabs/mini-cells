@@ -1,0 +1,840 @@
+{
+  "completed_seeds": [
+    90811,
+    90812,
+    90813
+  ],
+  "development_only_seeds": [
+    601,
+    602,
+    603
+  ],
+  "excluded_diagnostic_seeds": [
+    90711,
+    90712,
+    90713
+  ],
+  "experiment_id": "constructive-clm-005",
+  "formal_seeds": [
+    90811,
+    90812,
+    90813
+  ],
+  "format": "minicells.constructive-clm-005.decision.v1",
+  "missing_seeds": [],
+  "protocol_sha256": "3188e56af52763d2de75e4d13f25c5cbff2e56b25d5b32520495148e5e65b27d",
+  "results": [
+    {
+      "acquisition": {
+        "max_operator_relative_error": 0.0036848982695019397,
+        "mean_operator_relative_error": 0.003416904497092574,
+        "raw_examples_retained": 0,
+        "route_accuracy": 1.0,
+        "transactions": 48
+      },
+      "config": {
+        "acquisition_batch_size": 32,
+        "acquisition_batches_per_cell": 4,
+        "acquisition_noise": 0.002,
+        "child_operator_scale": 0.3,
+        "child_reuse_repeats": 3,
+        "child_route_shift": 0.35,
+        "conflict_mutation_examples": 40,
+        "evaluation_batch_size": 24,
+        "evaluation_cases_per_mode": 64,
+        "hidden_dim": 16,
+        "maximum_active_cells": 4,
+        "minimum_active_cells": 2,
+        "mutation_history_cases": 6,
+        "mutation_target_cells": 4,
+        "numerical_rank_tolerance": 1e-10,
+        "operator_spectral_norm": 0.4,
+        "ridge": 1e-08,
+        "root_count": 12,
+        "route_dim": 48,
+        "route_noise": 0.01,
+        "safe_mutation_examples": 32,
+        "shared_history_cases": 8,
+        "shared_mutation_examples": 6,
+        "shared_update_scale": 0.05
+      },
+      "controller_diagnostics": {
+        "growth": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 0.9972222222222222
+        },
+        "growth_label_source": "current-only reuse-vs-fresh utility with spawn cost",
+        "meta_train_seeds": {
+          "growth": [
+            6601,
+            6602,
+            6603,
+            6604,
+            6605,
+            6606
+          ],
+          "router": [
+            6501,
+            6502,
+            6503,
+            6504,
+            6505,
+            6506
+          ],
+          "write": [
+            6701,
+            6702,
+            6703,
+            6704,
+            6705,
+            6706
+          ]
+        },
+        "meta_training_uses_formal_seed_data": false,
+        "meta_training_uses_hidden_ids_as_targets": false,
+        "meta_validation_seeds": {
+          "growth": [
+            6607,
+            6608
+          ],
+          "router": [
+            6507,
+            6508
+          ],
+          "write": [
+            6707,
+            6708
+          ]
+        },
+        "router": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 1.0
+        },
+        "router_label_source": "current-transaction candidate operator fit utility",
+        "write": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 1.0
+        },
+        "write_label_source": "current-data certificate-constrained feasibility utility"
+      },
+      "controller_state_sha256": "5119a8aa3373f58f240e6dc07b00cbaa176bf1656d483032973f4071f3a05e22",
+      "final_composition": {
+        "sequential": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.177734375,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 3.1282976105061155e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 2.84375,
+          "mean_mse": 1.3423041749842607e-06,
+          "mean_simultaneous_permutation_mse": 0.0,
+          "mean_true_order_effect_mse": 0.026451657609622533,
+          "mode": "sequential",
+          "total_cells": 16
+        },
+        "simultaneous": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.185546875,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 2.4013705870101323e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 2.96875,
+          "mean_mse": 1.1307907178545105e-06,
+          "mean_simultaneous_permutation_mse": 3.066410849049671e-33,
+          "mean_true_order_effect_mse": 0.0,
+          "mode": "simultaneous",
+          "total_cells": 16
+        }
+      },
+      "gates": {
+        "bounded_learned_growth": true,
+        "cell_local_isolation_preserved": true,
+        "controller_meta_generalization": true,
+        "controller_training_is_formal_data_free": true,
+        "final_unseen_multicell_composition": true,
+        "learned_child_reuse": true,
+        "learned_growth_controller_spawns_on_conflict": true,
+        "learned_operator_quality": true,
+        "learned_router_acquisition": true,
+        "learned_write_controller_commits_safe_updates": true,
+        "learned_write_controller_rejects_conflicts": true,
+        "parent_g4_baseline_reusable": true,
+        "pre_removal_composition_preserved": true,
+        "protected_history_survives_learned_control": true,
+        "replay_free_endogenous_control": true,
+        "slow_shared_substrate_plasticity": true,
+        "slow_shared_substrate_retention": true,
+        "sparse_compute_survives_scaffold_removal": true,
+        "structural_bridge_valid": true,
+        "unsafe_reuse_control_exposes_interference": true
+      },
+      "mutation": {
+        "always_spawn_control_cells_added": 16,
+        "child_reuse_growth_rejections": 12,
+        "child_reuse_hits": 12,
+        "child_reuse_trials": 12,
+        "conflict_spawn_count": 4,
+        "conflict_write_rejection_count": 4,
+        "final_cells": 16,
+        "learner_raw_history_retained": 0,
+        "learner_replay_accesses": 0,
+        "maximum_historical_composition_mse": 5.122973652070047e-32,
+        "mean_unsafe_reuse_historical_mse": 0.024046784605835075,
+        "safe_commit_count": 4,
+        "spawned_children": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "target_cells": [
+          7,
+          9,
+          2,
+          10
+        ],
+        "unrelated_cell_parameter_drift": 0.0
+      },
+      "parent_g4": {
+        "pass": true,
+        "sequential_mse": 1.8416137730253633e-06,
+        "simultaneous_mse": 1.8515945941374915e-06
+      },
+      "pass": true,
+      "pre_mutation": {
+        "sequential": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.2578125,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 3.1733653267826154e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 3.09375,
+          "mean_mse": 1.9023251604213942e-06,
+          "mean_simultaneous_permutation_mse": 0.0,
+          "mean_true_order_effect_mse": 0.015255114008270234,
+          "mode": "sequential",
+          "total_cells": 12
+        },
+        "simultaneous": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.24348958333333334,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 2.6733689793600757e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 2.921875,
+          "mean_mse": 1.5763202180028373e-06,
+          "mean_simultaneous_permutation_mse": 1.9417483024821294e-33,
+          "mean_true_order_effect_mse": 0.0,
+          "mode": "simultaneous",
+          "total_cells": 12
+        }
+      },
+      "seed": 90811,
+      "shared_substrate": {
+        "certificate_rank": 8,
+        "learner_replay_accesses": 0,
+        "safe_fit_mse": 1.8611572669210508e-32,
+        "safe_historical_composition_mse": 1.5256976278192634e-32,
+        "safe_protected_change": 1.9857152995170297e-17,
+        "unsafe_historical_composition_mse": 0.006754081440553182
+      },
+      "structural_bridge": {
+        "bootstrap_fit": {
+          "cell_count": 6,
+          "distance_high_mean": 1.3032144218141455,
+          "distance_low_mean": 0.9219870489379139,
+          "distance_separation_ratio": 1.413484520542222,
+          "distance_threshold": 1.1126007353760297,
+          "incidence_rank": 6,
+          "largest_clique_size": 4,
+          "maximal_clique_sizes": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "membership_all_two": true,
+          "prototype_count": 12,
+          "reason": null,
+          "star_count": 6,
+          "valid": true
+        },
+        "covered_factors": 12,
+        "duplicate_assignments": 0,
+        "last_spawn_step": 961,
+        "mapping": [
+          0,
+          4,
+          1,
+          3,
+          5,
+          2,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "mean_matched_root_key_cosine": 0.9987606412049148,
+        "min_matched_root_key_cosine": 0.9968939081986383,
+        "root_cells": 12,
+        "spawn_count": 6,
+        "transactions": 1024,
+        "true_factors": 12
+      }
+    },
+    {
+      "acquisition": {
+        "max_operator_relative_error": 0.004011155982311917,
+        "mean_operator_relative_error": 0.003437429951758178,
+        "raw_examples_retained": 0,
+        "route_accuracy": 1.0,
+        "transactions": 48
+      },
+      "config": {
+        "acquisition_batch_size": 32,
+        "acquisition_batches_per_cell": 4,
+        "acquisition_noise": 0.002,
+        "child_operator_scale": 0.3,
+        "child_reuse_repeats": 3,
+        "child_route_shift": 0.35,
+        "conflict_mutation_examples": 40,
+        "evaluation_batch_size": 24,
+        "evaluation_cases_per_mode": 64,
+        "hidden_dim": 16,
+        "maximum_active_cells": 4,
+        "minimum_active_cells": 2,
+        "mutation_history_cases": 6,
+        "mutation_target_cells": 4,
+        "numerical_rank_tolerance": 1e-10,
+        "operator_spectral_norm": 0.4,
+        "ridge": 1e-08,
+        "root_count": 12,
+        "route_dim": 48,
+        "route_noise": 0.01,
+        "safe_mutation_examples": 32,
+        "shared_history_cases": 8,
+        "shared_mutation_examples": 6,
+        "shared_update_scale": 0.05
+      },
+      "controller_diagnostics": {
+        "growth": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 0.9972222222222222
+        },
+        "growth_label_source": "current-only reuse-vs-fresh utility with spawn cost",
+        "meta_train_seeds": {
+          "growth": [
+            6601,
+            6602,
+            6603,
+            6604,
+            6605,
+            6606
+          ],
+          "router": [
+            6501,
+            6502,
+            6503,
+            6504,
+            6505,
+            6506
+          ],
+          "write": [
+            6701,
+            6702,
+            6703,
+            6704,
+            6705,
+            6706
+          ]
+        },
+        "meta_training_uses_formal_seed_data": false,
+        "meta_training_uses_hidden_ids_as_targets": false,
+        "meta_validation_seeds": {
+          "growth": [
+            6607,
+            6608
+          ],
+          "router": [
+            6507,
+            6508
+          ],
+          "write": [
+            6707,
+            6708
+          ]
+        },
+        "router": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 1.0
+        },
+        "router_label_source": "current-transaction candidate operator fit utility",
+        "write": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 1.0
+        },
+        "write_label_source": "current-data certificate-constrained feasibility utility"
+      },
+      "controller_state_sha256": "5119a8aa3373f58f240e6dc07b00cbaa176bf1656d483032973f4071f3a05e22",
+      "final_composition": {
+        "sequential": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.1875,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 2.308300578434849e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 3.0,
+          "mean_mse": 1.3413813634520573e-06,
+          "mean_simultaneous_permutation_mse": 0.0,
+          "mean_true_order_effect_mse": 0.031181362601776067,
+          "mode": "sequential",
+          "total_cells": 16
+        },
+        "simultaneous": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.1865234375,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 2.688720611426223e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 2.984375,
+          "mean_mse": 1.2493700568565765e-06,
+          "mean_simultaneous_permutation_mse": 2.6353796009115293e-33,
+          "mean_true_order_effect_mse": 0.0,
+          "mode": "simultaneous",
+          "total_cells": 16
+        }
+      },
+      "gates": {
+        "bounded_learned_growth": true,
+        "cell_local_isolation_preserved": true,
+        "controller_meta_generalization": true,
+        "controller_training_is_formal_data_free": true,
+        "final_unseen_multicell_composition": true,
+        "learned_child_reuse": true,
+        "learned_growth_controller_spawns_on_conflict": true,
+        "learned_operator_quality": true,
+        "learned_router_acquisition": true,
+        "learned_write_controller_commits_safe_updates": true,
+        "learned_write_controller_rejects_conflicts": true,
+        "parent_g4_baseline_reusable": true,
+        "pre_removal_composition_preserved": true,
+        "protected_history_survives_learned_control": true,
+        "replay_free_endogenous_control": true,
+        "slow_shared_substrate_plasticity": true,
+        "slow_shared_substrate_retention": true,
+        "sparse_compute_survives_scaffold_removal": true,
+        "structural_bridge_valid": true,
+        "unsafe_reuse_control_exposes_interference": true
+      },
+      "mutation": {
+        "always_spawn_control_cells_added": 16,
+        "child_reuse_growth_rejections": 12,
+        "child_reuse_hits": 12,
+        "child_reuse_trials": 12,
+        "conflict_spawn_count": 4,
+        "conflict_write_rejection_count": 4,
+        "final_cells": 16,
+        "learner_raw_history_retained": 0,
+        "learner_replay_accesses": 0,
+        "maximum_historical_composition_mse": 2.1630600687899143e-32,
+        "mean_unsafe_reuse_historical_mse": 0.02631415592732873,
+        "safe_commit_count": 4,
+        "spawned_children": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "target_cells": [
+          10,
+          6,
+          1,
+          0
+        ],
+        "unrelated_cell_parameter_drift": 0.0
+      },
+      "parent_g4": {
+        "pass": true,
+        "sequential_mse": 2.1005730098778837e-06,
+        "simultaneous_mse": 1.8791998982542797e-06
+      },
+      "pass": true,
+      "pre_mutation": {
+        "sequential": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.2513020833333333,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 3.480684589439835e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 3.015625,
+          "mean_mse": 1.723830066171859e-06,
+          "mean_simultaneous_permutation_mse": 0.0,
+          "mean_true_order_effect_mse": 0.015136919735967693,
+          "mode": "sequential",
+          "total_cells": 12
+        },
+        "simultaneous": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.26953125,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 2.8325749740453496e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 3.234375,
+          "mean_mse": 1.8041419620788871e-06,
+          "mean_simultaneous_permutation_mse": 2.660118369313897e-33,
+          "mean_true_order_effect_mse": 0.0,
+          "mode": "simultaneous",
+          "total_cells": 12
+        }
+      },
+      "seed": 90812,
+      "shared_substrate": {
+        "certificate_rank": 8,
+        "learner_replay_accesses": 0,
+        "safe_fit_mse": 2.4253740530412315e-33,
+        "safe_historical_composition_mse": 3.1732705099317816e-33,
+        "safe_protected_change": 2.9355568769719884e-17,
+        "unsafe_historical_composition_mse": 0.003451795463692127
+      },
+      "structural_bridge": {
+        "bootstrap_fit": {
+          "cell_count": 6,
+          "distance_high_mean": 1.3048095765202266,
+          "distance_low_mean": 0.9231984692150846,
+          "distance_separation_ratio": 1.413357604058413,
+          "distance_threshold": 1.1140040228676555,
+          "incidence_rank": 6,
+          "largest_clique_size": 4,
+          "maximal_clique_sizes": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "membership_all_two": true,
+          "prototype_count": 12,
+          "reason": null,
+          "star_count": 6,
+          "valid": true
+        },
+        "covered_factors": 12,
+        "duplicate_assignments": 0,
+        "last_spawn_step": 961,
+        "mapping": [
+          2,
+          0,
+          3,
+          5,
+          4,
+          1,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "mean_matched_root_key_cosine": 0.9991126933675923,
+        "min_matched_root_key_cosine": 0.9975831893279321,
+        "root_cells": 12,
+        "spawn_count": 6,
+        "transactions": 1024,
+        "true_factors": 12
+      }
+    },
+    {
+      "acquisition": {
+        "max_operator_relative_error": 0.004006661485295871,
+        "mean_operator_relative_error": 0.0035882151679035978,
+        "raw_examples_retained": 0,
+        "route_accuracy": 1.0,
+        "transactions": 48
+      },
+      "config": {
+        "acquisition_batch_size": 32,
+        "acquisition_batches_per_cell": 4,
+        "acquisition_noise": 0.002,
+        "child_operator_scale": 0.3,
+        "child_reuse_repeats": 3,
+        "child_route_shift": 0.35,
+        "conflict_mutation_examples": 40,
+        "evaluation_batch_size": 24,
+        "evaluation_cases_per_mode": 64,
+        "hidden_dim": 16,
+        "maximum_active_cells": 4,
+        "minimum_active_cells": 2,
+        "mutation_history_cases": 6,
+        "mutation_target_cells": 4,
+        "numerical_rank_tolerance": 1e-10,
+        "operator_spectral_norm": 0.4,
+        "ridge": 1e-08,
+        "root_count": 12,
+        "route_dim": 48,
+        "route_noise": 0.01,
+        "safe_mutation_examples": 32,
+        "shared_history_cases": 8,
+        "shared_mutation_examples": 6,
+        "shared_update_scale": 0.05
+      },
+      "controller_diagnostics": {
+        "growth": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 0.9972222222222222
+        },
+        "growth_label_source": "current-only reuse-vs-fresh utility with spawn cost",
+        "meta_train_seeds": {
+          "growth": [
+            6601,
+            6602,
+            6603,
+            6604,
+            6605,
+            6606
+          ],
+          "router": [
+            6501,
+            6502,
+            6503,
+            6504,
+            6505,
+            6506
+          ],
+          "write": [
+            6701,
+            6702,
+            6703,
+            6704,
+            6705,
+            6706
+          ]
+        },
+        "meta_training_uses_formal_seed_data": false,
+        "meta_training_uses_hidden_ids_as_targets": false,
+        "meta_validation_seeds": {
+          "growth": [
+            6607,
+            6608
+          ],
+          "router": [
+            6507,
+            6508
+          ],
+          "write": [
+            6707,
+            6708
+          ]
+        },
+        "router": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 1.0
+        },
+        "router_label_source": "current-transaction candidate operator fit utility",
+        "write": {
+          "heldout_meta_accuracy": 1.0,
+          "train_accuracy": 1.0
+        },
+        "write_label_source": "current-data certificate-constrained feasibility utility"
+      },
+      "controller_state_sha256": "5119a8aa3373f58f240e6dc07b00cbaa176bf1656d483032973f4071f3a05e22",
+      "final_composition": {
+        "sequential": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.2001953125,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 3.2990629620351303e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 3.203125,
+          "mean_mse": 1.7059741493539693e-06,
+          "mean_simultaneous_permutation_mse": 0.0,
+          "mean_true_order_effect_mse": 0.03316597607065825,
+          "mode": "sequential",
+          "total_cells": 16
+        },
+        "simultaneous": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.185546875,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 2.7751258053796074e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 2.96875,
+          "mean_mse": 1.263201890073223e-06,
+          "mean_simultaneous_permutation_mse": 2.692296914931016e-33,
+          "mean_true_order_effect_mse": 0.0,
+          "mode": "simultaneous",
+          "total_cells": 16
+        }
+      },
+      "gates": {
+        "bounded_learned_growth": true,
+        "cell_local_isolation_preserved": true,
+        "controller_meta_generalization": true,
+        "controller_training_is_formal_data_free": true,
+        "final_unseen_multicell_composition": true,
+        "learned_child_reuse": true,
+        "learned_growth_controller_spawns_on_conflict": true,
+        "learned_operator_quality": true,
+        "learned_router_acquisition": true,
+        "learned_write_controller_commits_safe_updates": true,
+        "learned_write_controller_rejects_conflicts": true,
+        "parent_g4_baseline_reusable": true,
+        "pre_removal_composition_preserved": true,
+        "protected_history_survives_learned_control": true,
+        "replay_free_endogenous_control": true,
+        "slow_shared_substrate_plasticity": true,
+        "slow_shared_substrate_retention": true,
+        "sparse_compute_survives_scaffold_removal": true,
+        "structural_bridge_valid": true,
+        "unsafe_reuse_control_exposes_interference": true
+      },
+      "mutation": {
+        "always_spawn_control_cells_added": 16,
+        "child_reuse_growth_rejections": 12,
+        "child_reuse_hits": 12,
+        "child_reuse_trials": 12,
+        "conflict_spawn_count": 4,
+        "conflict_write_rejection_count": 4,
+        "final_cells": 16,
+        "learner_raw_history_retained": 0,
+        "learner_replay_accesses": 0,
+        "maximum_historical_composition_mse": 2.315930758125651e-32,
+        "mean_unsafe_reuse_historical_mse": 0.029571586008738455,
+        "safe_commit_count": 4,
+        "spawned_children": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "target_cells": [
+          7,
+          9,
+          1,
+          5
+        ],
+        "unrelated_cell_parameter_drift": 0.0
+      },
+      "parent_g4": {
+        "pass": true,
+        "sequential_mse": 1.723830066171859e-06,
+        "simultaneous_mse": 1.8041419620788871e-06
+      },
+      "pass": true,
+      "pre_mutation": {
+        "sequential": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.2591145833333333,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 4.143955399165373e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 3.109375,
+          "mean_mse": 2.1005730098778837e-06,
+          "mean_simultaneous_permutation_mse": 0.0,
+          "mean_true_order_effect_mse": 0.016830446677509315,
+          "mode": "sequential",
+          "total_cells": 12
+        },
+        "simultaneous": {
+          "cases": 64,
+          "cell_execution_fraction_vs_dense": 0.2604166666666667,
+          "exact_route_sequence_accuracy": 1.0,
+          "max_mse": 3.079995989105215e-06,
+          "maximum_active_cells": 4,
+          "mean_active_cells": 3.125,
+          "mean_mse": 1.8791998982542797e-06,
+          "mean_simultaneous_permutation_mse": 2.2734055847009913e-33,
+          "mean_true_order_effect_mse": 0.0,
+          "mode": "simultaneous",
+          "total_cells": 12
+        }
+      },
+      "seed": 90813,
+      "shared_substrate": {
+        "certificate_rank": 8,
+        "learner_replay_accesses": 0,
+        "safe_fit_mse": 1.9565633271696647e-33,
+        "safe_historical_composition_mse": 4.6432967252961014e-33,
+        "safe_protected_change": 2.1394898924878057e-17,
+        "unsafe_historical_composition_mse": 0.006728499820967439
+      },
+      "structural_bridge": {
+        "bootstrap_fit": {
+          "cell_count": 6,
+          "distance_high_mean": 1.3067209764246712,
+          "distance_low_mean": 0.9236277289602906,
+          "distance_separation_ratio": 1.4147701887378599,
+          "distance_threshold": 1.1151743526924809,
+          "incidence_rank": 6,
+          "largest_clique_size": 4,
+          "maximal_clique_sizes": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "membership_all_two": true,
+          "prototype_count": 12,
+          "reason": null,
+          "star_count": 6,
+          "valid": true
+        },
+        "covered_factors": 12,
+        "duplicate_assignments": 0,
+        "last_spawn_step": 961,
+        "mapping": [
+          1,
+          2,
+          4,
+          3,
+          0,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "mean_matched_root_key_cosine": 0.9986603294642582,
+        "min_matched_root_key_cosine": 0.9958946118980715,
+        "root_cells": 12,
+        "spawn_count": 6,
+        "transactions": 1024,
+        "true_factors": 12
+      }
+    }
+  ],
+  "scientific_decision": true,
+  "status": "LEARNED_CONTROL_PLANE_TRANSITION_SUPPORTED"
+}
