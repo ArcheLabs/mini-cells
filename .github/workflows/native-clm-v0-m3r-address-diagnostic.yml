@@ -1,0 +1,97 @@
+name: Native CLM v0 M3R Address Diagnostic
+
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m3r-address-diagnostic
+    paths:
+      - 'src/minicells/native_clm_m3r_address_diag.py'
+      - 'scripts/research/*m3r_address*'
+      - 'research/validations/native-clm-v0-m3r-address-diagnostic/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3r-address-diagnostic-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3r_address_diag.py'
+      - '.github/workflows/native-clm-v0-m3r-address-diagnostic.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m3r_address_diag.py'
+      - 'scripts/research/*m3r_address*'
+      - 'research/validations/native-clm-v0-m3r-address-diagnostic/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3r-address-diagnostic-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3r_address_diag.py'
+      - '.github/workflows/native-clm-v0-m3r-address-diagnostic.yml'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate registered checkpoint-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/native-clm-v0-m3r-address-diagnostic/protocol.json').read_text())
+          assert p['format'] == 'minicells.native-clm-v0.m3r-address-diagnostic.protocol.v1'
+          assert p['status'] == 'REGISTERED_DIAGNOSTIC_READY'
+          assert p['scientific_decision'] is False
+          assert p['parent_m3r']['formal_result_commit'] == '986b043a5d2f5ee9140cf35b14f68aacc3b7a942'
+          assert p['parent_m3r']['formal_seeds'] == [73611, 73612, 73613]
+          assert p['parent_m3r']['formal_seeds_are_consumed'] is True
+          assert p['parent_m3r']['hf_revision'] == 'a23b521e137a7e44616809895d44d87cc7d6f87f'
+          boundary = p['learner_boundary']
+          assert boundary['model_training'] is False
+          assert boundary['cell_updates'] is False
+          assert boundary['router_updates'] is False
+          assert boundary['certificate_updates'] is False
+          assert boundary['growth'] is False
+          assert boundary['new_formal_seeds'] is False
+          assert set(p['registered_features']) == {
+              'current_cosine_margin', 'query', 'write_input', 'write_left',
+              'write_pair', 'certificate_residual'
+          }
+          PY
+      - name: Validate canonical notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('research/notebooks/06-native-clm/native-clm-v0-m3r-address-diagnostic-kaggle.ipynb')
+          notebook = json.loads(path.read_text())
+          assert notebook['nbformat'] == 4
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q \
+            src/minicells/native_clm_m3r_address_diag.py \
+            scripts/research/prepare_native_clm_v0_m3r_address_data.py \
+            scripts/research/fetch_native_clm_v0_m3r_address_checkpoints.py \
+            scripts/research/run_native_clm_v0_m3r_address_diagnostic.py \
+            scripts/research/publish_native_clm_v0_m3r_address_diagnostic.py
+          ruff check \
+            src/minicells/native_clm_m3r_address_diag.py \
+            scripts/research/prepare_native_clm_v0_m3r_address_data.py \
+            scripts/research/fetch_native_clm_v0_m3r_address_checkpoints.py \
+            scripts/research/run_native_clm_v0_m3r_address_diagnostic.py \
+            scripts/research/publish_native_clm_v0_m3r_address_diagnostic.py \
+            tests/research/06-native-clm/test_native_clm_m3r_address_diag.py
+      - name: Address-diagnostic mechanics smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m3r_address_diag.py
+      - name: No formal rerun guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          workflow = Path('.github/workflows/native-clm-v0-m3r-address-diagnostic.yml').read_text()
+          runner = Path('scripts/research/run_native_clm_v0_m3r_address_diagnostic.py').read_text()
+          forbidden = 'run_native_clm_v0_m3r.py' + ' --formal'
+          assert forbidden not in workflow
+          assert forbidden not in runner
+          assert '--worker-seed' in runner
+          assert 'model_training' in Path('research/validations/native-clm-v0-m3r-address-diagnostic/protocol.json').read_text()
+          print('CI does not rerun M3R formal training.')
+          PY

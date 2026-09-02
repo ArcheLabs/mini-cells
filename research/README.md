@@ -15,7 +15,7 @@ mature pretrained LLM
 
 - 🟢 supported / complete
 - 🟡 partial evidence
-- 🔵 active blocking gap / next registered design
+- 🔵 active diagnostic / blocking gap
 - ⚪ later milestone
 - 🔴 registered hypothesis not supported
 
@@ -34,8 +34,9 @@ mature pretrained LLM
 | 11 | Router/write/growth scaffolds can transition toward learned control | Constructive CLM-005 | 🟢 formal |
 | 12 | A real next-token Native CLM can train end-to-end | Stage 06 M0/M1 | 🟢 complete |
 | 13 | Fixed-topology protected Cells are sufficient for replay-free continual language | Stage 06 M2 | 🔴 not supported; protection has partial causal value |
-| 14 | Global-pool context-addressed growth restores continual-language retention | Stage 06 M3 | 🔴 not supported |
-| 15 | Read-preserving / lineage-isolated growth can restore continual retention | Stage 06 M3R | 🔵 next blocking design |
+| 14 | Global-pool growth restores continual-language retention | Stage 06 M3 | 🔴 not supported |
+| 15 | Read-preserving / lineage-isolated growth restores continual retention | Stage 06 M3R | 🔴 not supported; root read conservation has partial causal value |
+| 16 | The local parent/child functional split is recoverable from current query or write/effect geometry | M3R Address Diagnostic | 🔵 active diagnostic |
 
 ## Trained-model evidence
 
@@ -59,65 +60,97 @@ SHA-256   91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f
 
 ### M2 — protection helps, fixed topology fails
 
-Formal decision:
-
 ```text
 NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED
 seeds = 73211 / 73212 / 73213
 ```
 
-Certificate projection reduced mean forgetting from ~0.2790 to ~0.2115 while preserving ~96% of unsafe plasticity, but final A/TinyStories regression remained ~43.9% versus the registered <=20% gate.
+Certificate projection reduced mean forgetting from ~0.2790 to ~0.2115 while preserving ~96% of unsafe plasticity, but A/TinyStories regression remained ~43.9% against the registered <=20% gate.
 
-### M3 — fresh capacity grows, but read geometry is unsafe
-
-Formal decision:
+### M3 — fresh capacity grows, but global read geometry is unsafe
 
 ```text
 NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_NOT_SUPPORTED
-protocol = 9bc23cac3cf4e4512f251836e4dd2cd48750b5894565c1a346396df06028f658
 seeds = 73411 / 73412 / 73413
 ```
 
-All three seeds grew from 8 to 16 Cells, achieved 100% registered child reuse, preserved sparse compute, zero learner replay and new-domain plasticity — yet A retention became consistently **worse** than the matched fixed-topology protected control:
+All three seeds grew from 8 to 16 Cells with 100% registered child reuse and preserved new-domain plasticity, yet A retention became worse than the matched fixed-topology protected control. Post-formal analysis showed newly spawned global candidates stealing old-context Top-K ownership.
 
-```text
-seed 73411  fixed A reg 0.4416  -> growth 0.4938
-seed 73412  fixed A reg 0.4293  -> growth 0.4838
-seed 73413  fixed A reg 0.4351  -> growth 0.4889
-```
-
-The new scientific boundary is therefore not merely writable capacity:
+The resulting invariant was:
 
 ```text
 safe write growth requires safe read-address growth
 ```
 
-Post-formal artifact analysis shows strong route leakage. In seed 73411, the four children born during B already captured about 40% of Cell routing mass on **every** A/B/C/D evaluation domain; after C, the eight children captured about 50% of A routing mass. Raw child reuse is therefore not equivalent to correct address reuse.
-
-## Current blocking gap — M3R
-
-The next experiment must introduce a genuinely new mechanism: **function-preserving, lineage-isolated read growth**.
-
-Preferred invariant:
+### M3R — root read conservation works, lineage-local address still fails
 
 ```text
-old root router selects the same root lineages before and after growth
-                           ↓
-a lineage-local gate selects parent vs child
+NATIVE_CLM_V0_M3R_READ_PRESERVING_GROWTH_NOT_SUPPORTED
+protocol = c3e73545899ccf20f54411df701f22dd64b10cb46ff728e862c2d002a94f8627
+seeds = 73611 / 73612 / 73613
+artifact commit = 986b043a5d2f5ee9140cf35b14f68aacc3b7a942
+HF revision = a23b521e137a7e44616809895d44d87cc7d6f87f
 ```
 
-At birth, parent gate mass should be conserved within the lineage so that an exact parent clone creates zero forward-function drift. New children must not immediately enter global Top-K competition with unrelated roots.
+M3R kept the original eight M1 roots as the only top-level candidates and routed children only inside their root lineage.
 
-M3R should register:
+What transferred successfully:
 
-- birth-time function invariance;
-- old-context root-lineage route invariance;
-- child selectivity, not route-hit reuse alone;
-- bounded non-cap-saturating growth;
-- zero replay and protected writes;
-- restoration of the same absolute A-retention boundary that failed M2/M3.
+- A/B/C/D root-route probe hashes stayed invariant throughout B -> C -> D;
+- birth root ownership and gate probabilities were conserved;
+- growth reached 16 Cells and child reuse stayed at 100%;
+- sparse compute, zero replay and plasticity were preserved;
+- A retention improved by a small but stable ~2.5 percentage points relative to matched global growth.
 
-Do **not** advance to M4 ontology analysis or 30M scaling until this gap is closed.
+What did not transfer:
+
+```text
+seed 73611  global A reg 0.4967 -> lineage 0.4722
+seed 73612  global A reg 0.4947 -> lineage 0.4691
+seed 73613  global A reg 0.4961 -> lineage 0.4713
+```
+
+The absolute <=20% A-regression gate remained far away. Final child execution share was still broad across domains (~52% A, ~55% B, ~59% C, ~54% D), so the local cosine rule did not form a selective functional boundary.
+
+The new blocking gap is therefore narrower than M3:
+
+```text
+root read ownership can be conserved
+but lineage-local parent/child functional address remains unresolved
+```
+
+## Active blocking diagnostic — M3R Address Diagnostic
+
+Before another continual-learning formal run, Stage 06 now performs a **checkpoint-only** diagnostic over the already-published M3R lineage checkpoints. It consumes no new formal seeds and updates no Native CLM parameter.
+
+For every actual M3R `parent -> child` edge, samples are conditioned on reaching that edge's immutable root/ancestor path. The diagnostic compares A with the child's birth domain using pre-registered feature families:
+
+```text
+current cosine margin
+frozen query q
+Cell write input x
+downstream write-left factor dL/dh_cell_out
+normalized write pair [x, dL/dh_cell_out]
+parent-certificate residual
+```
+
+The registered output is one diagnostic classification:
+
+```text
+QUERY_GEOMETRY_SEPARABLE
+WRITE_EFFECT_GEOMETRY_SEPARABLE
+NO_CLEAR_LOCAL_BOUNDARY
+INCONCLUSIVE_COVERAGE
+```
+
+The classification selects the architecture family for the next **new registered** experiment:
+
+- query separable -> learned lineage-local read gate;
+- query fails but write/effect separates -> split read and write addressing and introduce a write-side conflict controller;
+- neither separates -> investigate richer learned functional coordinates before another routing heuristic;
+- insufficient eligible samples -> redesign the diagnostic coverage, not the M3R result.
+
+This diagnostic cannot retroactively alter M3R thresholds or its NOT_SUPPORTED decision.
 
 ## Stable Stage-06 sequence
 
@@ -126,10 +159,13 @@ M0  architecture + execution                           🟢
 M1  ~12M next-token training                           🟢
 M2  fixed-topology replay-free continual language      🔴
 M3  global-pool growth-restored continual language     🔴
-M3R read-preserving / lineage-isolated growth          🔵
+M3R read-preserving / lineage-isolated growth          🔴
+M3R Address Diagnostic                                 🔵
 M4  Cell ontology / specialization                     ⚪ BLOCKED
 M5  Dense Transformer / static-MoE comparison          ⚪
 ```
+
+Do **not** advance to M4 ontology analysis or 30M scaling until the local functional-address mechanism is selected and validated.
 
 ## Canonical documents
 
@@ -137,6 +173,7 @@ M5  Dense Transformer / static-MoE comparison          ⚪
 - [M1 closure](stages/06-native-clm/M1_CLOSURE.md)
 - [M2 closure](stages/06-native-clm/M2_CLOSURE.md)
 - [M3 formal result](validations/native-clm-v0-m3-growth-restored-continual-language/FORMAL_RESULT.md)
+- [M3R Address Diagnostic](validations/native-clm-v0-m3r-address-diagnostic/README.md)
 - [CLM Feasibility Evidence Map](validations/CLM_FEASIBILITY_EVIDENCE_MAP.md)
 
 ## Constructive CLM sequence — closed
@@ -152,7 +189,7 @@ G5   CLM-005   scaffold removal / endogenous transition       🟢
                                               Native CLM v0
 ```
 
-Constructive support remains reusable evidence. The M2/M3 trained-model negatives do not invalidate those controlled mechanisms; they identify the missing integration invariant in a real token-predictive model.
+Constructive support remains reusable evidence. The M2/M3/M3R trained-model negatives do not invalidate those controlled mechanisms; they progressively isolate the missing integration invariants in a real token-predictive model.
 
 ## Product boundary
 
