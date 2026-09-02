@@ -8,9 +8,9 @@ local write/effect factors at the Cellular Layer boundary.
 from __future__ import annotations
 
 import csv
+import itertools
 import json
 import math
-import random
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import median
@@ -21,7 +21,6 @@ import torch
 import torch.nn.functional as F
 from torch import Tensor, nn
 
-from .native_clm_m2 import NativeCLMM2Config
 from .native_clm_m3 import _loader
 from .native_clm_m3r import LineageNativeCLM
 
@@ -164,7 +163,7 @@ def _edge_eligible_mask(
     if len(path_to_parent) == 1:
         return eligible
     keys = [F.normalize(cell.route_key.detach(), dim=0) for cell in model.cellular.cells]
-    for parent_id, child_id in zip(path_to_parent[:-1], path_to_parent[1:], strict=True):
+    for parent_id, child_id in itertools.pairwise(path_to_parent):
         parent_score = query.matmul(keys[parent_id])
         child_score = query.matmul(keys[child_id])
         eligible = eligible & (child_score > parent_score)
@@ -305,7 +304,7 @@ def _split_indices(n: int, train_fraction: float, seed: int) -> tuple[Tensor, Te
     generator = torch.Generator(device="cpu")
     generator.manual_seed(seed)
     order = torch.randperm(n, generator=generator)
-    train_count = max(1, min(n - 1, int(math.floor(n * train_fraction))))
+    train_count = max(1, min(n - 1, math.floor(n * train_fraction)))
     return order[:train_count], order[train_count:]
 
 
