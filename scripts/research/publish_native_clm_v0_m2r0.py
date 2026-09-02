@@ -36,14 +36,15 @@ def main() -> int:
     if not result_path.exists():
         raise FileNotFoundError(result_path)
     result = json.loads(result_path.read_text(encoding="utf-8"))
-    if result.get("format") != "minicells.native-clm-v0.m2r0-update-invariant-audit.result.v1":
+    if result.get("format") != "minicells.native-clm-v0.m2r0-update-invariant-audit.result.v2":
         raise RuntimeError("unexpected M2-R0 result format")
     allowed = {
         "INCONCLUSIVE_REFERENCE_FAILURE",
         "CURRENT_UPDATE_INVARIANT_HOLDS",
         "WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT",
         "ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT",
-        "MIXED_ADAMW_UPDATE_INVARIANT_VIOLATION",
+        "BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT",
+        "MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION",
     }
     if result.get("classification") not in allowed:
         raise RuntimeError("unknown M2-R0 classification")
