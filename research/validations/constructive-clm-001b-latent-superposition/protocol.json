@@ -1,0 +1,113 @@
+{
+  "format": "minicells.constructive-clm-001b.protocol.v1",
+  "experiment_id": "constructive-clm-001b",
+  "title": "Constructive CLM-001B — Latent Coordinate Discovery under Superposition",
+  "protocol_version": "1.0-frozen",
+  "status": "PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "parent": {
+    "experiment": "constructive-clm-001",
+    "status": "LEARNED_COORDINATE_FORMATION_SUPPORTED",
+    "formal_seeds": [90111, 90112, 90113],
+    "protocol_sha256": "16c23861b1220fa223b220148a9172de7b792663d79a6103289999be3eed35e5",
+    "interpretation": "G1a supported: addressable reusable Cell formation works in the registered singleton-exposure world. 001B removes the singleton prototype scaffold."
+  },
+  "decision_question": "Can reusable latent Cell keys/effects be recovered from continual pair superpositions when no training transaction ever presents a hidden factor alone, and can the recovered Cells address unseen pair and triple compositions from x alone?",
+  "scope": {
+    "controlled_synthetic_world": true,
+    "training_singletons_forbidden": true,
+    "hidden_factor_labels_forbidden_in_learner": true,
+    "hidden_factor_count_forbidden_in_learner": true,
+    "inference_uses_x_only": true,
+    "replay_of_raw_transactions": false,
+    "pair_arity_scaffold": 2,
+    "training_pair_weights": [0.5, 0.5],
+    "correlated_nonorthogonal_atoms": true,
+    "language_model": false,
+    "arbitrary_unknown_mixing_rule": false,
+    "certificate_retested": false,
+    "learned_growth_controller": false,
+    "full_native_clm_claim": false
+  },
+  "world": {
+    "factor_count_hidden_from_learner": 6,
+    "context_dim": 16,
+    "effect_dim": 12,
+    "context_common_rho": 0.32,
+    "effect_common_rho": 0.22,
+    "atom_jitter": 0.1,
+    "heldout_pair_design": "seeded perfect matching: 3 of 15 pair types are never shown in training",
+    "train_pair_types": 12,
+    "discovery_cycles": 8,
+    "train_transactions": 96,
+    "samples_per_transaction": 24,
+    "train_noise": 0.03,
+    "training_support": "exactly two hidden factors per transaction; no singleton or triple exposure",
+    "heldout_pair_test": "3 completely unseen pair types with unequal random convex weights in [0.25, 0.75]",
+    "heldout_triple_test": "all 20 triples, never shown in training, with random positive convex weights"
+  },
+  "learner": {
+    "stage_1": "online x/y transaction means are clustered into stable mixture prototypes; learner sees no factor or pair identity",
+    "stage_2": "pairwise prototype distances are split into near/far classes by deterministic 1D two-means",
+    "stage_3": "near-distance graph is treated as the learned overlap graph; maximal largest cliques become latent star candidates",
+    "stage_4": "each mixture prototype must belong to exactly two learned stars; the resulting incidence matrix B is solved by least squares P = B D for latent joint Cell state D",
+    "cell_state": "split recovered joint atom into context read key and effect value",
+    "inference": "enumerate supports of size <=3 and solve x-only nonnegative simplex least squares; predicted effect is the same coefficient mixture of Cell values",
+    "prototype_radius": 0.08,
+    "support_complexity_penalty": 0.0002,
+    "max_inference_support": 3
+  },
+  "controls": {
+    "transaction_memory": "nearest observed training mixture prototype; cannot synthesize a latent unseen composition",
+    "shuffled_effect_address": "preserve learned context prototypes but derange associated effect prototypes before nearest-prototype prediction",
+    "purpose": "distinguish latent reusable Cell recovery from transaction memorization or an arbitrary x/effect association"
+  },
+  "development_only_seeds": [201, 202, 203, 204, 205, 206, 207, 208, 209, 210],
+  "formal": {
+    "seeds": [90211, 90212, 90213],
+    "all_seeds_required": true,
+    "gates": {
+      "no_singleton_training": true,
+      "prototype_count": 12,
+      "latent_cell_count": 6,
+      "largest_line_graph_clique": 4,
+      "latent_star_count": 6,
+      "prototype_memberships_per_star_system": 2,
+      "distance_separation_ratio_min": 1.25,
+      "mean_matched_key_cosine_min": 0.98,
+      "mean_matched_effect_cosine_min": 0.98,
+      "covered_factors": 6,
+      "heldout_pair_mse_max": 0.001,
+      "heldout_triple_mse_max": 0.001,
+      "heldout_pair_route_recall_min": 0.95,
+      "heldout_triple_route_recall_min": 0.95,
+      "heldout_pair_exact_support_min": 0.9,
+      "heldout_triple_exact_support_min": 0.9,
+      "relative_to_transaction_memory_max": 0.1,
+      "relative_to_shuffled_effect_pair_mse_max": 0.1,
+      "late_checkpoint_cell_similarity_min": 0.995,
+      "transaction_to_cell_compression_min": 12.0,
+      "prototype_to_cell_compression_min": 1.5
+    }
+  },
+  "statuses": [
+    "LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED",
+    "LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_NOT_SUPPORTED"
+  ],
+  "interpretation": {
+    "positive": "Within the registered relational pair-superposition family, singleton exposure is not necessary: repeated overlap structure can identify latent reusable Cell keys/effects, and x-only inference can synthesize unseen pairs/triples. This supports G1b under the registered scaffold and opens long-horizon growth-law validation.",
+    "negative": "The registered relational mechanism does not reliably recover latent Cells without singleton exposure. Do not proceed by assuming 001's prototype formation generalizes to entangled mixtures.",
+    "not_established": [
+      "arbitrary blind source separation",
+      "unknown mixture arity",
+      "unknown nonlinear composition law",
+      "language-scale latent Cell discovery",
+      "certificate integration with learned latent coordinates",
+      "sublinear asymptotic growth",
+      "learned growth policy",
+      "endogenous foundation plasticity",
+      "JAM execution"
+    ]
+  },
+  "next_if_positive": "constructive-clm-002-long-horizon-growth-law"
+}
