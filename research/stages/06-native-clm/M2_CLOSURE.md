@@ -70,99 +70,26 @@ Observed A regression was approximately 43.6–44.0% on every formal seed.
 | B / WikiText forgetting | 0.0342 | 0.0588 |
 | C / Python-code forgetting | 0.1616 | 0.2553 |
 
-Additional aggregate comparisons:
+Protected retention advantage was about 6.75 percentage points; mean forgetting fell by about 24% relative to unsafe while preserving about 96% of unsafe new-domain plasticity. Protection therefore had a strong causal effect, but the registered fixed eight-Cell system was insufficient for the absolute retention requirement.
+
+Per-seed protected / unsafe forgetting and A regression:
 
 ```text
-protected retention advantage       0.06748  (~6.75 percentage points)
-relative mean-forgetting reduction  24.19%
-protected / unsafe plasticity       96.38%
-A-regression reduction vs unsafe    0.08415  (~8.41 percentage points)
+73211  0.212006 / 0.279022   A=0.436378
+73212  0.211121 / 0.279085   A=0.439569
+73213  0.211381 / 0.278853   A=0.440100
 ```
 
-Per-seed headline values:
+## Interpretation boundary
 
-| seed | protected forgetting | unsafe forgetting | retention advantage | protected A regression |
-|---:|---:|---:|---:|---:|
-| 73211 | 0.212006 | 0.279022 | 0.067016 | 0.436378 |
-| 73212 | 0.211121 | 0.279085 | 0.067965 | 0.439569 |
-| 73213 | 0.211381 | 0.278853 | 0.067473 | 0.440100 |
+M2 rejects the claim that the registered fixed 8-Cell topology + frozen read-address geometry + current bounded certificate is sufficient for replay-free long-horizon language retention.
 
-Protected phase gains were also stable and comfortably above the registered 5% gate:
+It does not show that protection is ineffective. The strongest next causal test is whether new Cell capacity can absorb later-domain writes rather than forcing continued reuse of the same protected operators.
 
-```text
-B / WikiText       mean gain 0.38044
-C / Python code    mean gain 0.51366
-D / Dolly          mean gain 0.17392
-```
+The original local M2 lightweight artifacts and six end-state checkpoints were lost after the Kaggle session terminated before publication completed. The formal console output and this closure preserve the decision and registered headline metrics, but later work must not pretend the missing binary artifacts still exist.
 
-## Scientific interpretation
+## No-repeat rule
 
-M2 rejects the claim that the registered **fixed 8-Cell topology + frozen read-address
-geometry + current bounded certificate** is sufficient for replay-free long-horizon
-language retention.
+Do not change the M2 20% gate, tune on 73211/73212/73213 and call the result untouched, or create a cosmetic M2B. A rerun of those seeds would be reproduction / artifact reconstruction only.
 
-It does **not** show that protection is ineffective. The causal intervention is strong
-and extremely consistent across all three seeds:
-
-1. protected writes retain essentially the same new-domain plasticity as unsafe writes;
-2. protected writes reduce overall forgetting by roughly 24%;
-3. protected writes reduce old-domain regression on A, B, and C;
-4. nevertheless the oldest M1 behavior (A) still regresses by roughly 44%, far above
-   the registered 20% ceiling.
-
-The strongest current diagnosis is therefore a **capacity / topology / certificate
-coverage limit**, not a failure to learn new domains and not a failure of the
-certificate intervention to have causal effect. With only eight fixed operators and a
-frozen router, every new domain must reuse the same read/write address set. Protection
-reduces destructive overlap, but the registered system cannot preserve enough of the
-oldest token-predictive function through three sequential shifts.
-
-This diagnosis remains a hypothesis until the next registered experiment separates
-fixed-topology saturation from certificate-representation limits.
-
-## What must not happen next
-
-Do not:
-
-- raise the 20% A-retention threshold after seeing this result;
-- tune on seeds 73211/73212/73213 and call a rerun untouched confirmation;
-- create a cosmetic M2B that only changes learning rate, step count, or certificate
-  rank to turn this frozen negative into a positive;
-- claim replay-free continual language is already solved.
-
-## Next milestone
-
-The clean next experiment is **M3 — growth-restored continual language**.
-
-M3 should use the M2 result as the fixed-topology baseline and introduce dynamic Cell
-growth as the principal new mechanism. The preferred causal design is:
-
-```text
-same canonical M1 checkpoint
-same registered B -> C -> D corpus stream
-same zero learner replay requirement
-same sparse Cell execution objective
-same protected-write mechanism
-new untouched formal seeds
-+
-dynamic child creation / reuse under conflict or protected-capacity pressure
-```
-
-Where possible, M3 should keep all other M2 quantities fixed. It should test whether
-new functional capacity can absorb later domains without forcing unsafe overwrite of
-the oldest M1 behavior.
-
-A positive M3 would support the stronger interpretation already suggested by the
-constructive sequence: protection reduces interference, while growth is required when
-protected reusable capacity is insufficient.
-
-## Publication note
-
-The first M2 publisher invocation encountered a Hugging Face `403 Forbidden` while
-attempting the first LFS checkpoint upload. This was an infrastructure permission
-failure, not a scientific-run failure: all formal seeds and the registered decision had
-already completed locally.
-
-The publisher is now designed so lightweight scientific evidence can still be pushed
-to Git when Hugging Face binary publication is unavailable. Future canonical notebooks
-also preflight model-repository write access before expensive formal training.
+Next milestone: **M3 — Growth-Restored Continual Language** with new formal seeds and a matched fixed-topology control in the same newly pinned data snapshot.
