@@ -27,15 +27,17 @@ Core 009D 仍可继续，作为非阻塞的 operator-geometry 诊断。
 
 这现在是验证 Native CLM 可行性的主线。
 
-当前首要缺口已经不是“growth 是否有效”或“certificate 是否能免 replay”——这些问题仓库已有证据。真正缺失的是：
+Constructive CLM-001 已在 untouched formal seeds `90111/90112/90113` 上正式通过：六个 learned Cells 覆盖六个隐藏 factor，routing recall 为 1.0，并且在完成覆盖后 late growth 停止。它的边界也同样重要：每个隐藏 factor 都曾首先获得干净的 singleton exposure。
 
-> **在不向 learner 提供隐藏 task/factor label 的情况下，可复用 Cell 坐标和与之匹配的 read key 能否从持续经验中形成？**
+因此当前问题被进一步收紧为：
 
-当前主实验：[Constructive CLM-001 — Learned Coordinate Formation](validations/constructive-clm-001-learned-coordinate-formation/README.md)。
+> **当任何隐藏 factor 都从未单独出现时，系统能否仍然从 superposition 中恢复可复用的 latent Cell 坐标？**
+
+当前主实验：[Constructive CLM-001B — Latent Coordinate Discovery under Superposition](validations/constructive-clm-001b-latent-superposition/README.md)。
 
 哪些结论可以直接复用、哪些实验禁止重复，已经冻结在 [CLM Feasibility Evidence Map](validations/CLM_FEASIBILITY_EVIDENCE_MAP.md)；机器可读版本见 [`validations/clm-feasibility-evidence-map.yaml`](validations/clm-feasibility-evidence-map.yaml)。
 
-G1–G5 的后续路径见更新后的 [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md)。
+后续 Constructive CLM 路径见更新后的 [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md)。
 
 ## 研究阶段
 
@@ -52,6 +54,7 @@ G1–G5 的后续路径见更新后的 [Continual-Learning Research Roadmap](val
 - Core 006：真实预训练表征中存在可复用结构，replay-free certificate write 能保留有意义的 plasticity；同时 semantic/routing address 不是充分的 mitosis boundary。
 - Core 009A / 009B-1：Foundation 存在较简单的可用写接口；carrier-only write 保留了绝大多数已测试 causal target gain。
 - Core 009B-2 / 009C：当前测试的 pretrained carrier-effect 表示没有暴露出我们需要的 compact persistent sparse/local Cell ontology。这些结论只关闭对应的“天然几何发现”假设，不关闭 Constructive CLM。
+- Constructive CLM-001：在 singleton-exposure 世界中，addressable learned Cell formation 已正式支持；它现在是 G1a parent evidence，而不是当前 frontier。
 
 ## 研究资产
 
@@ -61,4 +64,4 @@ G1–G5 的后续路径见更新后的 [Continual-Learning Research Roadmap](val
 - [规范 artifacts](../artifacts/experiments/) 在正式运行发布后作为不可变科学证据。
 - 历史机器可读路径与结果仍保存在 [`catalog.yaml`](catalog.yaml)。
 
-当前仓库仍**没有**证明通用自然语言持续学习、渐近次线性 Cell growth、完全 learned growth policy 或 LLM 规模的内生 CLM。Constructive CLM-001 有意更窄：它先单独验证 learned-coordinate / read-key 这座桥，再决定是否进入更长 stream、certificate integration、composition 和 external -> endogenous 演化实验。
+当前仓库仍**没有**证明通用自然语言持续学习、渐近次线性 Cell growth、任意 latent source discovery、完全 learned growth policy 或 LLM 规模的内生 CLM。Constructive CLM-001B 有意更窄：它先在已登记的 additive pair-superposition scaffold 下移除 singleton exposure，再决定是否进入 long-horizon growth-law 验证。
