@@ -1,0 +1,68 @@
+name: Native CLM v0 M3R
+
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m3r-read-preserving-growth
+    paths:
+      - 'src/minicells/native_clm_m3r.py'
+      - 'scripts/research/*native_clm_v0_m3r*'
+      - 'research/validations/native-clm-v0-m3r-read-preserving-growth/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3r-read-preserving-growth-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3r.py'
+      - '.github/workflows/native-clm-v0-m3r.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m3r.py'
+      - 'scripts/research/*native_clm_v0_m3r*'
+      - 'research/validations/native-clm-v0-m3r-read-preserving-growth/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3r-read-preserving-growth-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3r.py'
+      - '.github/workflows/native-clm-v0-m3r.yml'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen protocol and unchanged M3 growth controller
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m3 = json.loads(Path('research/validations/native-clm-v0-m3-growth-restored-continual-language/protocol.json').read_text())
+          p = json.loads(Path('research/validations/native-clm-v0-m3r-read-preserving-growth/protocol.json').read_text())
+          assert p['frozen_before_formal_run'] is True
+          assert p['formal_seeds'] == [73611, 73612, 73613]
+          assert p['development_seeds'] == [73501, 73502, 73503]
+          assert p['consumed_seeds_forbidden'] == [73211, 73212, 73213, 73411, 73412, 73413]
+          assert p['parent_checkpoint']['sha256'] == '91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f'
+          names = [
+              'growth_check_interval', 'growth_cooldown_steps', 'max_new_cells',
+              'max_final_cells', 'min_parent_route_hits_per_window',
+              'min_parent_certificate_rank', 'max_projected_to_raw_gradient_ratio',
+              'min_window_train_loss', 'inherit_scale',
+          ]
+          assert {name: p['growth'][name] for name in names} == {name: m3['growth'][name] for name in names}
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q src/minicells/native_clm_m3r.py scripts/research/run_native_clm_v0_m3r.py scripts/research/prepare_native_clm_v0_m3r_data.py scripts/research/publish_native_clm_v0_m3r.py
+          ruff check src/minicells/native_clm_m3r.py scripts/research/run_native_clm_v0_m3r.py scripts/research/prepare_native_clm_v0_m3r_data.py scripts/research/publish_native_clm_v0_m3r.py tests/research/06-native-clm/test_native_clm_m3r.py
+      - name: M3R unit smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m3r.py
+      - name: Formal-seed guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          workflow = Path('.github/workflows/native-clm-v0-m3r.yml').read_text()
+          forbidden = 'run_native_clm_v0_m3r.py' + ' --formal'
+          assert forbidden not in workflow
+          print('CI does not execute formal M3R seeds.')
+          PY
