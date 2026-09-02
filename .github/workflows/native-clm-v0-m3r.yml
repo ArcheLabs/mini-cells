@@ -9,7 +9,7 @@ on:
       - 'scripts/research/*native_clm_v0_m3r*'
       - 'research/validations/native-clm-v0-m3r-read-preserving-growth/**'
       - 'research/notebooks/06-native-clm/native-clm-v0-m3r-read-preserving-growth-kaggle.ipynb'
-      - 'tests/research/06-native-clm/test_native_clm_m3r.py'
+      - 'tests/research/06-native-clm/test_native_clm_m3r*.py'
       - '.github/workflows/native-clm-v0-m3r.yml'
   pull_request:
     paths:
@@ -17,7 +17,7 @@ on:
       - 'scripts/research/*native_clm_v0_m3r*'
       - 'research/validations/native-clm-v0-m3r-read-preserving-growth/**'
       - 'research/notebooks/06-native-clm/native-clm-v0-m3r-read-preserving-growth-kaggle.ipynb'
-      - 'tests/research/06-native-clm/test_native_clm_m3r.py'
+      - 'tests/research/06-native-clm/test_native_clm_m3r*.py'
       - '.github/workflows/native-clm-v0-m3r.yml'
 
 jobs:
@@ -54,9 +54,9 @@ jobs:
       - name: Compile and lint
         run: |
           python -m compileall -q src/minicells/native_clm_m3r.py scripts/research/run_native_clm_v0_m3r.py scripts/research/prepare_native_clm_v0_m3r_data.py scripts/research/publish_native_clm_v0_m3r.py
-          ruff check src/minicells/native_clm_m3r.py scripts/research/run_native_clm_v0_m3r.py scripts/research/prepare_native_clm_v0_m3r_data.py scripts/research/publish_native_clm_v0_m3r.py tests/research/06-native-clm/test_native_clm_m3r.py
+          ruff check src/minicells/native_clm_m3r.py scripts/research/run_native_clm_v0_m3r.py scripts/research/prepare_native_clm_v0_m3r_data.py scripts/research/publish_native_clm_v0_m3r.py tests/research/06-native-clm/test_native_clm_m3r*.py
       - name: M3R unit smoke
-        run: pytest -q tests/research/06-native-clm/test_native_clm_m3r.py
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m3r*.py
       - name: Formal-seed guard
         run: |
           python - <<'PY'
