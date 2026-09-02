@@ -1,0 +1,95 @@
+{
+  "format": "minicells.constructive-clm-001.protocol.v1",
+  "experiment_id": "constructive-clm-001",
+  "title": "Constructive CLM-001 — Learned Coordinate Formation",
+  "protocol_version": "1.0-frozen",
+  "status": "PROTOCOL_FROZEN_UNRUN",
+  "scientific_decision": false,
+  "frozen_against_main": "474f7f1c736a61a433e4d5a01691edc6795177da",
+  "evidence_map": "research/validations/CLM_FEASIBILITY_EVIDENCE_MAP.md",
+  "decision_question": "Can a continual learner form reusable Cell effect coordinates and matching read keys from structured experience, without task/factor labels, while growth stops after the reusable factors have been acquired?",
+  "scope": {
+    "controlled_synthetic_world": true,
+    "mechanism_isolation": "learned coordinate/read-key formation",
+    "hidden_factor_labels_forbidden_in_learner": true,
+    "replay_buffer": false,
+    "certificate_retested": false,
+    "language_model": false,
+    "foundation_plasticity": false,
+    "learned_growth_controller": false,
+    "full_native_clm_claim": false
+  },
+  "reused_parent_evidence": {
+    "growth_restores_plasticity": "core-validation-004",
+    "replay_free_subspace_certificate": "core-validation-005",
+    "real_representation_reuse_and_certificate_signal": "core-validation-006",
+    "factorized_functional_coordinates": "core-validation-009a",
+    "carrier_causal_sufficiency_result_commit": "f2691daf5738eac0232866a46d079db3aa61b60a",
+    "natural_compact_effect_dictionary_discovery": "EFFECT_GEOMETRY_DISCOVERY_NO_COMPACT_SUBSPACE",
+    "natural_sparse_local_effect_geometry_discovery": "SPARSE_LOCAL_EFFECT_GEOMETRY_NOT_FOUND"
+  },
+  "world": {
+    "factor_count": 6,
+    "context_dim": 16,
+    "effect_dim": 12,
+    "samples_per_transaction": 24,
+    "train_noise": 0.025,
+    "eval_noise": 0.015,
+    "curriculum": "factors appear without labels; each novel factor first appears alone, then participates in repeated and compositional transactions; a late consolidation region contains only reuse/recombination",
+    "heldout": "all singleton factors and all pairwise compositions with fresh noise",
+    "oracle_use": "factor IDs define the hidden world and post-hoc metrics only; learner methods receive only x,y,phase"
+  },
+  "learner": {
+    "cell_state": "(read_key, effect_value, usage, born_at)",
+    "read": "cosine-key top-k routing followed by temperature-softmax composition",
+    "top_k": 2,
+    "temperature": 0.08,
+    "birth": "residual/loss-triggered probationary Cell initialized from current transaction means only",
+    "reuse_update": "local key/value EMA on currently routed examples only",
+    "max_cells": 24,
+    "spawn_loss_threshold": 0.035,
+    "spawn_margin_threshold": 0.18,
+    "reuse_update_loss_threshold": 0.02,
+    "key_update_rate": 0.15,
+    "value_update_rate": 0.15
+  },
+  "controls": {
+    "shuffled_address": "preserve target effects and transaction counts while permuting transaction contexts, breaking stable read->effect structure",
+    "independent_memory": "description-cost baseline represented by one independent memory per transaction"
+  },
+  "formal": {
+    "development_seeds_observed_and_excluded": [1001, 1002, 1003],
+    "seeds": [90111, 90112, 90113],
+    "all_seeds_required": true,
+    "gates": {
+      "active_cells_max": 8,
+      "late_spawns_max": 1,
+      "independent_memory_compression_min": 4.0,
+      "heldout_singleton_mse_max": 0.02,
+      "heldout_pair_mse_max": 0.03,
+      "heldout_single_route_recall_min": 0.9,
+      "heldout_pair_route_recall_min": 0.85,
+      "mean_best_value_cosine_min": 0.9,
+      "mean_matched_key_cosine_min": 0.85,
+      "covered_factors_min": 5,
+      "pair_mse_relative_to_shuffled_address_max": 0.5
+    }
+  },
+  "statuses": [
+    "LEARNED_COORDINATE_FORMATION_SUPPORTED",
+    "LEARNED_COORDINATE_FORMATION_NOT_SUPPORTED"
+  ],
+  "interpretation": {
+    "positive": "Structured continual pressure can produce a bounded reusable Cell coordinate/read-key system in the controlled world. This closes G1 only and opens long-horizon growth validation.",
+    "negative": "The current constructive coordinate/read-key mechanism is insufficient even in a favorable controlled world. Do not proceed to language-scale native-CLM claims until G1 is redesigned.",
+    "not_established": [
+      "language-scale coordinate formation",
+      "Core-005 certificate integration with learned coordinates",
+      "sublinear asymptotic growth",
+      "learned growth policy",
+      "endogenous foundation plasticity",
+      "JAM execution"
+    ]
+  },
+  "next_if_positive": "constructive-clm-002-long-horizon-growth-law"
+}

@@ -1,0 +1,112 @@
+schema: minicells.clm-feasibility-evidence-map.v1
+status: FROZEN
+version: "1.0"
+frozen_against:
+  branch: main
+  commit: 474f7f1c736a61a433e4d5a01691edc6795177da
+  date: "2026-09-02"
+mission: >-
+  Reuse validated MiniCells research components and spend new experiments only on
+  missing integration claims required for constructive/endogenous CLM feasibility.
+evidence_grades:
+  A: registered/formal scientific evidence
+  B: controlled repeatable mechanism evidence
+  C: diagnostic or discovery evidence
+items:
+  - id: self_organization
+    claim: functional organization can emerge under differential pressure
+    sources: ["experiments-014-024", "experiment-021", "stage-self-organization"]
+    grade: B
+    disposition: reuse
+    boundary: emergence alone is not validated continual learning
+  - id: routed_mutable_cells
+    claim: sparse routed independently mutable Cell state is operationally viable
+    sources: ["experiments-025-026", "clm-0.1", "clm-0.3"]
+    grade: B
+    disposition: reuse
+  - id: growth_restores_plasticity
+    claim: saturation/rejection-triggered growth can restore plasticity
+    sources: ["core-validation-004"]
+    grade: A
+    disposition: reuse_do_not_retest
+  - id: replay_free_certificate
+    claim: bounded Cell-local subspace state can replace learner-side replay for registered-history protection and growth decisions
+    sources: ["core-validation-005"]
+    grade: A
+    disposition: reuse_do_not_retest
+  - id: real_representation_certificate
+    claim: replay-free certificate writes retain useful plasticity on real Pythia representations
+    sources: ["core-validation-006"]
+    grade: A
+    disposition: reuse
+    boundary: address-based mitosis failed bounded-growth and conflict-relief gates
+  - id: semantic_address_boundary
+    claim: semantic/routing address is a sufficient functional split boundary
+    sources: ["core-validation-006"]
+    grade: A
+    outcome: negative
+    disposition: do_not_revive_as_main_hypothesis
+  - id: natural_write_addressability
+    claim: pretrained representations already expose adequate local/sparse write addresses
+    sources: ["core-validation-002", "core-validation-002b", "core-validation-002c"]
+    grade: A
+    outcome: negative
+    disposition: do_not_repeat_near_equivalent_fixed_dictionary_search
+  - id: factorized_functional_geometry
+    claim: normalized functional writes expose reusable factorized geometry
+    sources:
+      - "core-validation-009a"
+      - "commit:8290d4d674a8ec9ce98d4de129043526841e5f95"
+    grade: A
+    disposition: foundation_interface_evidence
+  - id: carrier_causal_sufficiency
+    claim: the common right-side carrier preserves most causal write effect
+    sources:
+      - "core-validation-009b1"
+      - "commit:f2691daf5738eac0232866a46d079db3aa61b60a"
+    grade: A
+    disposition: foundation_interface_evidence
+    metrics:
+      carrier_over_full_target_gain: "~0.976-0.982"
+  - id: compact_effect_dictionary
+    claim: pretrained effect vectors lie in a compact persistent shared subspace
+    sources: ["branch:codex/core-validation-009b2-persistent-effect-geometry"]
+    grade: C
+    outcome: negative_discovery
+    disposition: natural_geometry_no_go_only
+  - id: sparse_local_effect_geometry
+    claim: pretrained effect vectors expose sparse/local Cell coordinates
+    sources:
+      - "core-validation-009c"
+      - "commit:3a524abd5b29a42c425dddab7df497cbfadfeecd"
+    grade: C
+    outcome: negative_discovery
+    disposition: do_not_repeat
+  - id: compositional_operator_geometry
+    claim: full write operators retain reusable joint structure after carrier-effect reduction fails
+    sources: ["core-validation-009d"]
+    grade: Open
+    disposition: await_result
+open_gaps:
+  - id: G1
+    claim: learned Cell coordinates and read/write alignment form without hidden task/factor labels
+    experiment: constructive-clm-001
+    priority: primary
+  - id: G2
+    claim: long-horizon growth becomes sublinear or spawn probability declines materially
+    experiment: constructive-clm-002
+  - id: G3
+    claim: learned coordinates integrate with the existing replay-free certificate mechanism
+    experiment: constructive-clm-003
+  - id: G4
+    claim: multiple learned Cells compose safely on unseen combinations
+    experiment: constructive-clm-004
+  - id: G5
+    claim: external CLM scaffolding can be removed progressively toward endogenous CLM
+    experiment: constructive-clm-005
+native_route_stop_rule:
+  require_repeated_failure_of:
+    - reusable_learned_coordinates
+    - deployable_read_write_alignment
+    - bounded_or_improving_growth
+  natural_geometry_negative_is_not_stop: true
