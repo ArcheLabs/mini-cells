@@ -1,5 +1,5 @@
 {
-  "format": "minicells.native-clm-v0.m2r0-update-invariant-audit.protocol.v1",
+  "format": "minicells.native-clm-v0.m2r0-update-invariant-audit.protocol.v2",
   "experiment_id": "native-clm-v0-m2r0-update-invariant-audit",
   "title": "Native CLM v0 M2-R0 — Protected Update Invariant Audit",
   "status": "FROZEN_UNRUN",
@@ -74,7 +74,7 @@
       "weight_decay": 0.0,
       "gradient_projection": true,
       "actual_update_projection": false,
-      "role": "isolates Adam elementwise preconditioning from decoupled weight decay"
+      "role": "isolates Adam elementwise preconditioning with weight decay removed"
     },
     "sgd_no_decay_grad_projection": {
       "optimizer": "SGD",
@@ -83,6 +83,14 @@
       "gradient_projection": true,
       "actual_update_projection": false,
       "role": "algebraic reference where projected gradient equals actual update direction"
+    },
+    "sgd_with_decay_grad_projection": {
+      "optimizer": "SGD",
+      "momentum": 0.0,
+      "weight_decay": 0.01,
+      "gradient_projection": true,
+      "actual_update_projection": false,
+      "role": "isolates the weight-decay transaction from adaptive preconditioning"
     },
     "adamw_final_update_projection": {
       "optimizer": "AdamW",
@@ -96,7 +104,9 @@
     "per_cell_step": "rho = ||DeltaW Q^T||_F / (||DeltaW||_F + 1e-12)",
     "certificate_basis_frozen": true,
     "measure_actual_parameter_delta": true,
-    "minimum_certificate_rank_to_audit": 1
+    "minimum_certificate_rank_to_audit": 1,
+    "minimum_update_norm_for_ratio": 1e-12,
+    "zero_or_tiny_updates_excluded_from_ratio_distribution": true
   },
   "thresholds": {
     "minimum_audited_cell_updates_per_arm": 128,
@@ -109,9 +119,10 @@
     "CURRENT_UPDATE_INVARIANT_HOLDS",
     "WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT",
     "ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT",
-    "MIXED_ADAMW_UPDATE_INVARIANT_VIOLATION"
+    "BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT",
+    "MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION"
   ],
-  "classification_rule": "First require sufficient coverage and require both SGD-no-decay and AdamW-final-update-projection references to satisfy the reference max/p95 thresholds. If either reference fails, INCONCLUSIVE_REFERENCE_FAILURE. If canonical AdamW max violation is below material_violation_ratio, CURRENT_UPDATE_INVARIANT_HOLDS. If canonical AdamW violates but AdamW-no-decay does not, WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT. If canonical and AdamW-no-decay both violate, ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT. Otherwise MIXED_ADAMW_UPDATE_INVARIANT_VIOLATION.",
+  "classification_rule": "First require sufficient nonzero-update coverage and require both SGD-no-decay and AdamW-final-update-projection references to satisfy the reference max/p95 thresholds. If either reference fails, INCONCLUSIVE_REFERENCE_FAILURE. If canonical AdamW does not materially violate, CURRENT_UPDATE_INVARIANT_HOLDS. Otherwise classify adaptive preconditioning from AdamW-no-decay and weight decay from SGD-with-decay: both bad -> BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT; only AdamW-no-decay bad -> ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT; only SGD-with-decay bad -> WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT; if canonical is bad while neither isolated arm is materially bad -> MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION.",
   "explicit_nonclaims": [
     "that repairing the optimizer update invariant is sufficient for continual learning",
     "that the M1 certificate covers the full old-language functional manifold",
