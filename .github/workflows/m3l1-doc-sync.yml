@@ -1,0 +1,93 @@
+name: Temporary M3L-1 research roadmap sync
+
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m3l1-address-state-capacity
+    paths:
+      - '.github/workflows/m3l1-doc-sync.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/native-clm-v0-m3l1-address-state-capacity
+      - name: Sync Stage-06 roadmap to completed M3L and active M3L-1
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_between(path, start, end, replacement):
+              p = Path(path)
+              text = p.read_text()
+              i = text.index(start)
+              j = text.index(end, i)
+              p.write_text(text[:i] + replacement + text[j:])
+
+          p = Path('research/README.md')
+          text = p.read_text()
+          old = '| 16 | The local parent/child functional split is recoverable from current query or write/effect geometry | M3R Address Diagnostic | 🔵 active diagnostic |'
+          new = '''| 16 | The local parent/child functional split is recoverable from current query geometry | M3R Address Diagnostic | 🟢 `QUERY_GEOMETRY_SEPARABLE` |\n| 17 | A compact replay-free historical query sketch is sufficient to recover the local affine gate | M3L Query-Sketch Gate | 🔴 `QUERY_SKETCH_GATE_NOT_FEASIBLE`; single-gate near miss |\n| 18 | The M3L shortfall is rank/capacity-limited rather than Gaussian-family-limited | M3L-1 Address-State Capacity | 🔵 active diagnostic |'''
+          if old not in text:
+              raise SystemExit('English research table marker not found')
+          p.write_text(text.replace(old, new, 1))
+
+          replace_between(
+              'research/README.md',
+              '## Active blocking diagnostic — M3R Address Diagnostic\n',
+              '## Stable Stage-06 sequence\n',
+              '''## Completed address diagnostics and current blocker\n\n### M3R Address Diagnostic — 🟢 `QUERY_GEOMETRY_SEPARABLE`\n\nCheckpoint-only analysis over 24/24 M3R lineage edges found that the current parent/child cosine rule was nearly random (median AUC ~0.5315), while a free affine probe on the same frozen query representation reached median AUC ~0.9623. The functional split is therefore present in query geometry, but is not decoded by centroid/cosine addressing.\n\n### M3L Query-Sketch Gate — 🔴 `QUERY_SKETCH_GATE_NOT_FEASIBLE`\n\nM3L tested whether that affine boundary could be recovered without old-token/query replay in gate fitting, using only a rank-16 Gaussian historical query sketch plus the current conflict stream. The result was a frozen single-gate negative:\n\n```text\nvalid edges                  24/24\noffline oracle median AUC    0.9281\nrank-16 sketch median AUC    0.8968   (required >=0.9000)\nedge-floor fraction          0.7500   PASS\nnormalized oracle recovery   0.9356   PASS\nold FPR                      0.1855   PASS\ncurrent TPR                  0.8204   PASS\n```\n\nThe miss is concentrated most strongly in first differentiation A -> B; B -> C and A+B -> C are substantially stronger.\n\n### M3L-1 Historical Address-State Capacity — 🔵 ACTIVE\n\nBefore another continual-language formal run, M3L-1 keeps the exact M3L samples, temporal ownership semantics, sequence-group split, thresholds and oracle fixed while sweeping the historical address state:\n\n```text\ndiagonal / rank 0\nrank 8\nrank 16  (must reproduce M3L exactly)\nrank 32\nrank 64\nrank 128\nfull dense covariance\noffline linear oracle\n```\n\nThe diagnostic distinguishes `LOW_RANK_CAPACITY_SUFFICIENT`, `FULL_COVARIANCE_REQUIRED`, and `GAUSSIAN_FAMILY_LIMITED`. It is checkpoint-only, consumes no new formal seeds, and cannot retroactively change M3L/M3R/M3.\n\n'''
+          )
+
+          p = Path('research/README.zh-CN.md')
+          text = p.read_text()
+          old = '| 16 | lineage-local parent/child functional split 能从 query 或 write/effect geometry 中恢复 | M3R Address Diagnostic | 🔵 active diagnostic |'
+          new = '''| 16 | lineage-local parent/child functional split 能从 query geometry 中恢复 | M3R Address Diagnostic | 🟢 `QUERY_GEOMETRY_SEPARABLE` |\n| 17 | compact replay-free historical query sketch 足以恢复 local affine gate | M3L Query-Sketch Gate | 🔴 `QUERY_SKETCH_GATE_NOT_FEASIBLE`；single-gate near miss |\n| 18 | M3L 缺口主要由 rank/capacity 而非 Gaussian family 限制 | M3L-1 Address-State Capacity | 🔵 active diagnostic |'''
+          if old not in text:
+              raise SystemExit('Chinese research table marker not found')
+          p.write_text(text.replace(old, new, 1))
+
+          replace_between(
+              'research/README.zh-CN.md',
+              '## 当前 blocking diagnostic — M3R Address Diagnostic\n',
+              '## Stable Stage-06 sequence\n',
+              '''## 已完成的 address diagnostics 与当前 blocker\n\n### M3R Address Diagnostic — 🟢 `QUERY_GEOMETRY_SEPARABLE`\n\n对 24/24 个 M3R lineage edges 的 checkpoint-only 分析显示：当前 parent/child cosine rule 的 median AUC 约 0.5315，接近随机；但同一 frozen query representation 上的自由 affine probe 达到约 0.9623。functional split 已存在于 query geometry 中，问题在于 centroid/cosine addressing 无法读出它。\n\n### M3L Query-Sketch Gate — 🔴 `QUERY_SKETCH_GATE_NOT_FEASIBLE`\n\nM3L 检验在 gate fitting 中不 replay old token/query、只保存 rank-16 Gaussian historical query sketch 并结合当前 conflict stream，是否足以恢复该 affine boundary。结果是一个冻结的 single-gate negative：\n\n```text\nvalid edges                  24/24\noffline oracle median AUC    0.9281\nrank-16 sketch median AUC    0.8968   (要求 >=0.9000)\nedge-floor fraction          0.7500   PASS\nnormalized oracle recovery   0.9356   PASS\nold FPR                      0.1855   PASS\ncurrent TPR                  0.8204   PASS\n```\n\n缺口主要集中在第一次 A -> B differentiation；B -> C 与 A+B -> C 明显更强。\n\n### M3L-1 Historical Address-State Capacity — 🔵 ACTIVE\n\n在新的 continual-language formal run 之前，M3L-1 固定 M3L 的 exact samples、temporal ownership、sequence-group split、thresholds 与 oracle，只扫描 historical address-state capacity：\n\n```text\ndiagonal / rank 0\nrank 8\nrank 16  （必须复现 M3L）\nrank 32\nrank 64\nrank 128\nfull dense covariance\noffline linear oracle\n```\n\n诊断区分 `LOW_RANK_CAPACITY_SUFFICIENT`、`FULL_COVARIANCE_REQUIRED` 与 `GAUSSIAN_FAMILY_LIMITED`。它仍是 checkpoint-only，不消耗新 formal seeds，也不能事后改写 M3L/M3R/M3。\n\n'''
+          )
+
+          for path, status_line, roadmap_old, roadmap_new, start, section in [
+              (
+                  'research/stages/06-native-clm/README.md',
+                  'Status: **ACTIVE — LINEAGE-LOCAL FUNCTIONAL ADDRESS DIAGNOSIS**',
+                  '''  M3R Address Diagnostic                                 🔵 ACTIVE\n  M4  Cell ontology / specialization analysis            ⚪ BLOCKED''',
+                  '''  M3R Address Diagnostic                                 🟢 QUERY GEOMETRY SEPARABLE\n  M3L query-sketch lineage gate                           🔴 NOT FEASIBLE\n  M3L-1 historical address-state capacity                 🔵 ACTIVE\n  M4  Cell ontology / specialization analysis            ⚪ BLOCKED''',
+                  '## M3R Address Diagnostic — 🔵 ACTIVE\n',
+                  '''## M3R Address Diagnostic — 🟢 QUERY GEOMETRY SEPARABLE\n\nThe completed checkpoint-only diagnostic found 24/24 valid lineage edges. Current cosine addressing had median AUC ~0.5315, while a free affine query probe reached ~0.9623. Query geometry contains the boundary; centroid/cosine decoding does not recover it.\n\n## M3L — Replay-Free Query-Sketch Gate — 🔴 NOT FEASIBLE\n\nUsing the stricter temporal parent-lifetime ownership and sequence-group-heldout split, the offline affine oracle remained separable (median AUC 0.9281). A rank-16 Gaussian historical query sketch recovered median AUC 0.8968, narrowly below the frozen >=0.90 gate while passing every other registered feasibility metric. M3L therefore remains a valid negative mechanism diagnostic.\n\n## M3L-1 — Historical Address-State Capacity — 🔵 ACTIVE\n\nM3L-1 keeps the M3L data, edge ownership, splits, oracle and feasibility thresholds fixed and sweeps diagonal/rank-8/16/32/64/128/full-covariance Gaussian historical address states. Rank 16 is an explicit parent-identity anchor and the run is rejected if it does not reproduce M3L within frozen tolerance.\n\nThe registered outcome distinguishes a low-rank capacity limit, a full-covariance requirement, or failure of the Gaussian second-order family. No Native CLM parameter is updated and no new formal seed is consumed.\n\n'''
+              ),
+              (
+                  'research/stages/06-native-clm/README.zh-CN.md',
+                  '状态：**ACTIVE — LINEAGE-LOCAL FUNCTIONAL ADDRESS DIAGNOSIS**',
+                  '''  M3R Address Diagnostic                                 🔵 ACTIVE\n  M4  Cell ontology / specialization analysis            ⚪ BLOCKED''',
+                  '''  M3R Address Diagnostic                                 🟢 QUERY GEOMETRY SEPARABLE\n  M3L query-sketch lineage gate                           🔴 NOT FEASIBLE\n  M3L-1 historical address-state capacity                 🔵 ACTIVE\n  M4  Cell ontology / specialization analysis            ⚪ BLOCKED''',
+                  '## M3R Address Diagnostic — 🔵 ACTIVE\n',
+                  '''## M3R Address Diagnostic — 🟢 QUERY GEOMETRY SEPARABLE\n\n已完成的 checkpoint-only diagnostic 在 24/24 个 lineage edges 上获得有效 coverage。当前 cosine addressing 的 median AUC 约 0.5315，而自由 affine query probe 达到约 0.9623。因此 query geometry 中存在 boundary，但 centroid/cosine decoding 无法恢复它。\n\n## M3L — Replay-Free Query-Sketch Gate — 🔴 NOT FEASIBLE\n\n在更严格的 temporal parent-lifetime ownership 与 sequence-group-heldout split 下，offline affine oracle 仍可分（median AUC 0.9281）。rank-16 Gaussian historical query sketch 达到 0.8968，略低于冻结的 >=0.90 gate，同时其它注册 feasibility metrics 全部通过。因此 M3L 保持有效的 negative mechanism diagnostic。\n\n## M3L-1 — Historical Address-State Capacity — 🔵 ACTIVE\n\nM3L-1 固定 M3L 的数据、edge ownership、split、oracle 与 feasibility thresholds，扫描 diagonal/rank-8/16/32/64/128/full-covariance Gaussian historical address state。rank 16 是显式 parent identity anchor；若不能在冻结 tolerance 内复现 M3L，整个 run 会被拒绝。\n\n注册结果用于区分 low-rank capacity limit、full-covariance requirement 或 Gaussian second-order family failure。不更新任何 Native CLM 参数，也不消耗新的 formal seed。\n\n'''
+              ),
+          ]:
+              p = Path(path)
+              text = p.read_text()
+              if status_line not in text or roadmap_old not in text:
+                  raise SystemExit(f'roadmap marker not found in {path}')
+              text = text.replace(status_line, status_line.replace('LINEAGE-LOCAL FUNCTIONAL ADDRESS DIAGNOSIS', 'HISTORICAL ADDRESS-STATE CAPACITY DIAGNOSIS'), 1)
+              text = text.replace(roadmap_old, roadmap_new, 1)
+              p.write_text(text)
+              replace_between(path, start, '## Evidence boundary\n', section)
+          PY
+          git config user.name 'MiniCells Research'
+          git config user.email 'research@minicells.local'
+          git add research/README.md research/README.zh-CN.md research/stages/06-native-clm/README.md research/stages/06-native-clm/README.zh-CN.md
+          git commit -m 'docs: make M3L-1 the active Native CLM blocker'
+          git push origin HEAD:codex/native-clm-v0-m3l1-address-state-capacity
