@@ -1,0 +1,111 @@
+{
+  "format": "minicells.native-clm-v0.m2-protocol.v1",
+  "milestone": "M2-continual-language-stream",
+  "frozen_before_formal_run": true,
+  "scientific_question": "Starting from the exact trained Native CLM v0 M1 checkpoint, can protected sparse Cell-local updates learn sequential language distributions without learner-side replay while retaining prior language behavior better than unsafe writes?",
+  "positive_decision": "NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_SUPPORTED",
+  "negative_decision": "NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED",
+  "parent_checkpoint": {
+    "repo_id": "archelabsxyz/native-clm-v0",
+    "filename": "final-model.pt",
+    "requested_revision": "main",
+    "sha256": "91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f",
+    "parameters": 12154368,
+    "cells": 8,
+    "active_cells": 2,
+    "cellular_layers": 1
+  },
+  "formal_seeds": [73211, 73212, 73213],
+  "development_seeds": [73101],
+  "formal_seed_policy": "formal seeds must remain untouched until the frozen protocol is run",
+  "stream": {
+    "A": {
+      "role": "evaluation-only retention anchor",
+      "dataset": "roneneldan/TinyStories",
+      "split": "validation",
+      "documents": 2000
+    },
+    "B": {
+      "role": "continual training phase 1",
+      "dataset": "Salesforce/wikitext",
+      "config": "wikitext-2-raw-v1",
+      "train_documents": 20000,
+      "eval_documents": 2000
+    },
+    "C": {
+      "role": "continual training phase 2",
+      "dataset": "codeparrot/codecomplex",
+      "train_documents": 8000,
+      "eval_documents": 2000
+    },
+    "D": {
+      "role": "continual training phase 3",
+      "dataset": "databricks/databricks-dolly-15k",
+      "train_documents": 10000,
+      "eval_documents": 2000
+    },
+    "order": ["B", "C", "D"],
+    "learner_replay_bytes": 0
+  },
+  "registered_mechanism": {
+    "shared_substrate": "frozen from M1",
+    "router": "frozen from M1",
+    "cell_count": 8,
+    "active_cells_per_token": 2,
+    "growth": "disabled until M3",
+    "writes": "Cell operator weights only",
+    "optimizer": "fresh AdamW at each phase; optimizer state is not carried across domain boundaries",
+    "protected_arm": "Cell gradients projected through certificate nullspace before optimizer step",
+    "unsafe_arm": "identical Cell-local write stream with certificate projection disabled",
+    "certificate_updates": "both arms continue the same registered periodic certificate update mechanism",
+    "reason_for_freezing_router": "routing inputs occur before Cell execution; freezing shared/router makes protected and unsafe arms share the same read-address geometry, isolating write protection"
+  },
+  "training": {
+    "batch_size": 16,
+    "steps_per_phase": 400,
+    "eval_batches": 20,
+    "log_interval": 50,
+    "warmup_steps": 40,
+    "lr_cells": 0.0008,
+    "min_lr_ratio": 0.1,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "certificate_update_interval": 50,
+    "precision": "fp16",
+    "num_workers": 0
+  },
+  "two_gpu_execution": {
+    "strategy": "parallel causal-control arms",
+    "gpu0": "protected arm",
+    "gpu1": "unsafe arm",
+    "rationale": "the 12.15M model is too small to benefit materially from DDP; independent arms avoid gradient synchronization and approximately halve wall-clock time for the registered causal comparison",
+    "formal_schedule": "for each formal seed, run protected and unsafe concurrently; seeds execute sequentially"
+  },
+  "thresholds": {
+    "max_active_fraction": 0.30,
+    "min_phase_gain": 0.05,
+    "max_A_regression": 0.20,
+    "min_unsafe_mean_forgetting": 0.03,
+    "min_retention_advantage": 0.02,
+    "min_plasticity_ratio_vs_unsafe": 0.80
+  },
+  "registered_gates": [
+    "exact_same_m1_checkpoint",
+    "cell_only_writes",
+    "shared_and_router_frozen",
+    "replay_free_stream",
+    "fixed_topology",
+    "sparse_cell_execution",
+    "protected_phase_plasticity",
+    "protected_absolute_A_retention",
+    "unsafe_interference_exposed",
+    "protected_retention_advantage",
+    "protected_plasticity_preserved"
+  ],
+  "claim_boundary": [
+    "This is real token-predictive continual-language training, not a synthetic operator world.",
+    "The M1 shared substrate and learned router are frozen in M2 to isolate Cell-local write protection.",
+    "M2 does not test autonomous growth, learned topology change, router continual adaptation, Dense/MoE superiority, or language-scale asymptotics.",
+    "A negative result is preserved and advances the diagnosis to capacity/protection limits rather than being retuned on formal seeds."
+  ]
+}
