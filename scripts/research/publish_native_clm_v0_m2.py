@@ -1,7 +1,9 @@
 """Publish Native CLM v0 M2 evidence and checkpoints.
 
-Binary M2 checkpoints go to the existing Hugging Face model repository. Git receives
-only lightweight scientific evidence plus exact HF revision/path/SHA provenance.
+Binary M2 checkpoints are best-effort published to the existing Hugging Face model
+repository. Git publication of the lightweight scientific decision is independent:
+a missing/insufficient HF write token must never erase or block a valid formal result.
+Use --require-hf-upload when binary preservation is intended to be a hard requirement.
 """
 
 from __future__ import annotations
@@ -13,7 +15,8 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from huggingface_hub import HfApi
+from huggingface_hub import HfApi, auth_check
+from huggingface_hub.errors import HfHubHTTPError
 
 from minicells.native_clm_m2 import sha256_file
 
@@ -36,6 +39,111 @@ def run(command: list[str], *, env=None, capture=False, timeout=180) -> str:
     return result.stdout.strip() if capture else ""
 
 
+def _checkpoint_records(output_dir: Path, formal_seeds: list[int]) -> list[dict]:
+    records: list[dict] = []
+    for seed in formal_seeds:
+        for arm in ("protected", "unsafe"):
+            local = output_dir / f"seed-{seed}" / arm / "final.pt"
+            if not local.exists():
+                raise FileNotFoundError(local)
+            records.append(
+                {
+                    "seed": seed,
+                    "arm": arm,
+                    "local_path": str(local),
+                    "path": f"m2/seed-{seed}/{arm}-final.pt",
+                    "sha256": sha256_file(local),
+                    "bytes": local.stat().st_size,
+                    "uploaded": False,
+                }
+            )
+    return records
+
+
+def _publish_hf(
+    *,
+    output_dir: Path,
+    decision_path: Path,
+    decision: dict,
+    repo_id: str,
+    token: str | None,
+    require_upload: bool,
+) -> dict:
+    records = _checkpoint_records(output_dir, [int(seed) for seed in decision["formal_seeds"]])
+    result = {
+        "format": "minicells.native-clm-v0.m2-model-artifacts.v1",
+        "repo_id": repo_id,
+        "hf_upload_status": "NOT_ATTEMPTED",
+        "resolved_revision_after_upload": None,
+        "files": records,
+        "scientific_status": decision["status"],
+        "error": None,
+    }
+
+    if not token:
+        result["hf_upload_status"] = "SKIPPED_MISSING_TOKEN"
+        result["error"] = "HF token is missing; lightweight Git evidence can still be published."
+        if require_upload:
+            raise RuntimeError(result["error"])
+        return result
+
+    api = HfApi(token=token)
+    try:
+        auth_check(repo_id, repo_type="model", token=token, write=True)
+    except HfHubHTTPError as exc:
+        result["hf_upload_status"] = "SKIPPED_WRITE_PERMISSION_DENIED"
+        result["error"] = (
+            "HF token lacks content-write access to the target model repository. "
+            "Create a write token, or a fine-grained token with repository-contents write "
+            f"permission for {repo_id}, then rerun only the publisher."
+        )
+        print(f"WARNING: {result['error']}", flush=True)
+        if require_upload:
+            raise RuntimeError(result["error"]) from exc
+        return result
+
+    result["hf_upload_status"] = "IN_PROGRESS"
+    try:
+        for record in records:
+            local = Path(record["local_path"])
+            print(
+                f"Uploading M2 seed={record['seed']} arm={record['arm']} -> "
+                f"{repo_id}/{record['path']} ({record['bytes'] / 1024 / 1024:.1f} MiB)",
+                flush=True,
+            )
+            api.upload_file(
+                path_or_fileobj=str(local),
+                path_in_repo=record["path"],
+                repo_id=repo_id,
+                repo_type="model",
+                commit_message=(
+                    f"Native CLM v0 M2 seed {record['seed']} {record['arm']}"
+                ),
+            )
+            record["uploaded"] = True
+
+        api.upload_file(
+            path_or_fileobj=str(decision_path),
+            path_in_repo="m2/decision.json",
+            repo_id=repo_id,
+            repo_type="model",
+            commit_message="Native CLM v0 M2 decision",
+        )
+        result["resolved_revision_after_upload"] = api.model_info(repo_id).sha
+        result["hf_upload_status"] = "PUBLISHED"
+    except HfHubHTTPError as exc:
+        result["hf_upload_status"] = "FAILED_DURING_UPLOAD"
+        result["error"] = str(exc)
+        print(
+            "WARNING: Hugging Face upload failed after formal evidence already existed locally. "
+            "Git evidence publication will continue.",
+            flush=True,
+        )
+        if require_upload:
+            raise RuntimeError("Hugging Face M2 checkpoint upload failed") from exc
+    return result
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--branch", default=DEFAULT_BRANCH)
@@ -45,6 +153,11 @@ def main() -> int:
     parser.add_argument("--hf-repo", default=DEFAULT_HF_REPO)
     parser.add_argument("--hf-token-env", default="HF_TOKEN")
     parser.add_argument("--github-token-env", default="GITHUB_TOKEN")
+    parser.add_argument(
+        "--require-hf-upload",
+        action="store_true",
+        help="fail instead of degrading gracefully when HF binary publication is unavailable",
+    )
     args = parser.parse_args()
 
     decision_path = args.output_dir / "decision.json"
@@ -58,55 +171,14 @@ def main() -> int:
     shutil.copy2(args.checkpoint_provenance, args.output_dir / "m1-checkpoint-provenance.json")
     shutil.copy2(args.data_manifest, args.output_dir / "data-manifest.json")
 
-    hf_token = os.environ.get(args.hf_token_env)
-    if not hf_token:
-        raise RuntimeError(f"missing environment variable {args.hf_token_env}")
-    api = HfApi(token=hf_token)
-    uploads = []
-    for seed in decision["formal_seeds"]:
-        for arm in ("protected", "unsafe"):
-            local = args.output_dir / f"seed-{seed}" / arm / "final.pt"
-            if not local.exists():
-                raise FileNotFoundError(local)
-            remote = f"m2/seed-{seed}/{arm}-final.pt"
-            digest = sha256_file(local)
-            print(
-                f"Uploading M2 seed={seed} arm={arm} -> {args.hf_repo}/{remote} "
-                f"({local.stat().st_size / 1024 / 1024:.1f} MiB)",
-                flush=True,
-            )
-            api.upload_file(
-                path_or_fileobj=str(local),
-                path_in_repo=remote,
-                repo_id=args.hf_repo,
-                repo_type="model",
-                commit_message=f"Native CLM v0 M2 seed {seed} {arm}",
-            )
-            uploads.append(
-                {
-                    "seed": seed,
-                    "arm": arm,
-                    "path": remote,
-                    "sha256": digest,
-                    "bytes": local.stat().st_size,
-                }
-            )
-
-    api.upload_file(
-        path_or_fileobj=str(decision_path),
-        path_in_repo="m2/decision.json",
+    model_artifacts = _publish_hf(
+        output_dir=args.output_dir,
+        decision_path=decision_path,
+        decision=decision,
         repo_id=args.hf_repo,
-        repo_type="model",
-        commit_message="Native CLM v0 M2 decision",
+        token=os.environ.get(args.hf_token_env),
+        require_upload=args.require_hf_upload,
     )
-    final_revision = api.model_info(args.hf_repo).sha
-    model_artifacts = {
-        "format": "minicells.native-clm-v0.m2-model-artifacts.v1",
-        "repo_id": args.hf_repo,
-        "resolved_revision_after_upload": final_revision,
-        "files": uploads,
-        "scientific_status": decision["status"],
-    }
     (args.output_dir / "model-artifacts.json").write_text(
         json.dumps(model_artifacts, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
@@ -183,7 +255,8 @@ def main() -> int:
                 "commit": commit,
                 "m2_status": decision["status"],
                 "hf_repo": args.hf_repo,
-                "hf_revision": final_revision,
+                "hf_upload_status": model_artifacts["hf_upload_status"],
+                "hf_revision": model_artifacts["resolved_revision_after_upload"],
             },
             indent=2,
         ),
