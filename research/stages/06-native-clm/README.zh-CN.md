@@ -4,7 +4,7 @@
 
 状态：**ACTIVE**
 
-Constructive CLM 的机制验证已经在 CLM-005 关闭。Stage 06 不再继续问“这些 Cell 机制能否在受控世界中存在”，而是开始训练一个真正进行 token prediction、且内部计算原生经过 persistent Cells 的模型。
+Constructive CLM 的机制验证已经在 CLM-005 关闭。Stage 06 开始训练一个真正进行 token prediction、且内部计算原生经过 persistent Cells 的模型。
 
 ## 固定路线图
 
@@ -20,7 +20,7 @@ Constructive CLM 的机制验证已经在 CLM-005 关闭。Stage 06 不再继续
 Constructive CLM 001–005                                  🟢 CLOSED
         ↓
 Native CLM v0
-  M0  architecture + execution                           🔵 ACTIVE
+  M0  architecture + execution                           🟢 COMPLETE
   M1  ~12M next-token training                           🔵 IMPLEMENTED / GPU RUN PENDING
   M2  continual language stream                          ⚪ PLANNED
   M3  autonomous Cell growth                             ⚪ PLANNED
@@ -28,11 +28,11 @@ Native CLM v0
   M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
 ```
 
-这条顺序保持稳定。M1 不把 M2/M3 一起塞进第一次训练：先证明正常 next-token trainability，再加入持续学习压力，再把 autonomous growth 变成独立科学变量。
+这条顺序保持稳定。M1 不把 M2/M3 一起塞进第一次训练：先证明 next-token trainability，再加入持续学习压力，再把 autonomous growth 变成独立科学变量。
 
 ## Native CLM v0 的定义
 
-第一台模型不是外挂 memory。Token 必须在 LM head 之前经过 Cellular Layer：
+第一台模型不是外挂 memory。Token 必须在 LM head 之前经过 learned sparse Cellular Layer：
 
 ```text
 UTF-8 bytes
@@ -50,35 +50,28 @@ LM head
 next-token loss
 ```
 
-M0/M1 中，每个 Cell 沿用已被 Constructive CLM 验证过的线性 residual operator：
+M0/M1 中每个 Cell 使用已被 Constructive CLM 验证过的线性 residual operator：
 
 ```text
 g_i(h) = W_i h
-```
-
-learned router 对每个 token 只选择少量 active Cells：
-
-```text
 h' = h + Σ gate_i · g_i(h),  i ∈ TopK(router(h))
 ```
 
-它与 static MoE 的重要区别包括：Cell 自带 persistent certificate/lineage state，而且 runtime 支持动态新增 Cell。自主 growth policy 的科学验证有意留到 M3。
+Cell 保存 persistent operator、route key、certificate、usage 与 lineage state。Runtime 已支持动态新增 Cell；autonomous growth policy 的科学验证有意留到 M3。
 
-## M0 — Architecture + execution
+## M0 — Architecture + execution — 🟢 COMPLETE
 
-M0 是工程执行 gate，不是科学结论。
+M0 是工程执行 gate，不是科学结论。GitHub CI 已通过完整 execution smoke，当前 runtime 已验证：
 
-一个低成本、CPU 可运行的 smoke 必须证明：
-
-- next-token forward/backward 可运行；
-- router 与 Cell 参数都能收到梯度；
-- 只执行 top-k Cells，而不是所有 Cells；
-- bounded Cell certificate state 可以更新；
-- Cell gradient 可以经过 certificate nullspace projection；
-- 可以 spawn child Cell，并把新参数加入 optimizer；
-- Cell 集合变化后 sparse execution 仍成立；
-- 动态 Cell 数量可 checkpoint / reload；
-- reload 后仍能生成 token。
+- next-token forward/backward；
+- router 与 Cell 参数均能收到梯度；
+- sparse top-k Cell execution；
+- bounded Cell certificate 更新；
+- certificate-nullspace Cell-gradient projection；
+- dynamic child spawn，并将新参数加入 optimizer；
+- topology 变化后仍保持 sparse execution；
+- 动态 Cell 数量 checkpoint save/reload；
+- reload 后 generation 可运行。
 
 Canonical runner：
 
@@ -86,15 +79,15 @@ Canonical runner：
 python scripts/research/run_native_clm_v0_m0.py
 ```
 
-M0 只保存轻量结果；用于 round-trip 的 smoke checkpoint 在验证后删除。
+M0 smoke checkpoint 仅用于 round-trip，验证后删除；仓库保留轻量 decision artifacts。
 
-## M1 — 第一台 next-token Native CLM
+## M1 — 第一台 next-token Native CLM — 🔵 ACTIVE
 
 M1 只回答：
 
 > 一个具有 learned sparse Cellular Layer 的真实 token-predictive 模型，能否在非平凡但可反复训练的规模上直接从 next-token loss 端到端训练？
 
-它暂时不声称：continual learning、autonomous growth、Cell ontology 已正确形成，或优于 Dense/MoE baseline。
+它暂时不声称 continual learning、autonomous growth、正确的 Cell ontology，或优于 Dense/MoE baseline。
 
 Canonical 配置：
 
@@ -121,64 +114,24 @@ router LR   = 4e-4
 Cell LR     = 8e-4
 ```
 
-即保持：
-
-```text
-Cell > router > shared
-```
-
-但 M1 本身不把这一点解释成持续学习结论。
-
-### M1 中保留的 safety state
-
-每个 Cell 保存：
-
-```text
-W_i                mutable operator
-route_key_i        learned read address
-Q_i                bounded certificate basis
-usage_count_i       runtime state
-parent_id_i         lineage state
-```
-
-optimizer step 前，对 Cell weight gradient 做：
+每个 Cell 保存 `W_i`、`route_key_i`、bounded certificate `Q_i`、`usage_count_i` 与 `parent_id_i`。optimizer commit 前，Cell weight gradient 做：
 
 ```text
 dW <- dW (I - QᵀQ)
 ```
 
-M1 仅以较慢频率向 certificate 写入每个 Cell 的代表性 routed context，让保护机制真实参与训练，但历史 retention 本身仍不是 M1 的 claim。
+Canonical M1 固定为 8 个 Cells。M0 已证明 runtime 能 growth；M2 引入 continual pressure；M3 再正式验证 autonomous growth。
 
-### 为什么 M1 默认不开 autonomous growth
+## M1 数据与 gates
 
-M0 已证明 runtime 能 spawn Cell，但 canonical M1 将 Cell 数固定在 8 个。否则第一次语言训练如果失败，会同时混入：
-
-```text
-language-model optimization
-+
-routing
-+
-continual-learning pressure
-+
-growth policy
-```
-
-M2 加入 continual stream，M3 再正式验证 autonomous growth。
-
-## M1 数据
-
-Canonical Kaggle 流程默认从公开 TinyStories 构建本地 UTF-8 cache，使用 byte tokenizer：
+Canonical Kaggle 流程从公开 TinyStories 构建本地 cache，使用 byte tokenizer：
 
 ```text
 train documents       50,000
 validation documents   2,000
 ```
 
-模型 trainer 只读取本地文本文件。数据下载单独放在 preparation script 中，因此以后更换 corpus 不需要改模型架构。
-
-## M1 工程 gates
-
-只有全部满足时，canonical M1 run 才标记：
+只有全部满足时 M1 才标记：
 
 ```text
 NATIVE_CLM_V0_M1_NEXT_TOKEN_TRAINING_PASS
@@ -189,10 +142,10 @@ Gates：
 - 总参数量 10M–15M；
 - 请求的 optimizer steps 全部完成且 loss finite；
 - validation loss 相比初始化至少改善 5%；
-- 每 token 执行的 Cell operator 不超过总 Cell 的 30%（canonical 为 `2/8=25%`）；
+- 每 token 执行的 Cell operator 不超过总 Cell 的 30%（canonical `2/8=25%`）；
 - router 收到非零梯度；
 - Cells 收到非零梯度；
-- generation 可以执行；
+- generation 可执行；
 - 只使用一个 Cellular Layer；
 - M1 Cell 数保持不变，因此不会偷渡 autonomous-growth claim。
 
@@ -211,7 +164,7 @@ RESULTS.md
 data-manifest.json
 ```
 
-`summary.json` 会记录 final checkpoint 的 SHA-256 与字节数。这样可以固定模型身份，而不把 Git 仓库变成模型权重仓库。
+`summary.json` 记录 final checkpoint 的 SHA-256 与字节数，因此可固定模型身份，又不会把 Git 仓库变成权重仓库。
 
 ## Kaggle notebook
 
@@ -219,18 +172,8 @@ Canonical notebook：
 
 [`../../notebooks/06-native-clm/native-clm-v0-m0-m1-kaggle.ipynb`](../../notebooks/06-native-clm/native-clm-v0-m0-m1-kaggle.ipynb)
 
-从上到下运行后会：
-
-1. clone M0/M1 分支；
-2. 安装 LM dependencies；
-3. 运行 M0；
-4. 准备注册的 TinyStories cache；
-5. 训练 canonical ~12M M1；
-6. 打印全部 M1 gates 与 generation sample；
-7. 使用 `GITHUB_TOKEN` 自动将 M0/M1 轻量结果推回分支。
-
-M1 无论 pass 还是 incomplete 都允许发布，避免只保留成功结果。
+在 Kaggle 开启 GPU，并配置 `GITHUB_TOKEN`，从上到下运行即可。Notebook 会 clone 分支、运行 M0、准备 TinyStories、训练 canonical M1、打印全部 gates 与 generation sample，并自动把 M0/M1 轻量结果推回分支。M1 无论 pass 还是 incomplete 都允许发布。
 
 ## 推进规则
 
-如果 M1 通过，不要立刻升级到 30M。下一步应保持约 12M，进入 **M2 — continual language stream**。第一轮 30M 应该放在持续学习与 growth 行为已经看清楚以后，作为 scaling confirmation，而不是 debug 环境。
+如果 M1 通过，不要立刻升级到 30M。下一步保持约 12M，进入 **M2 — continual language stream**。第一轮 30M 应放在持续学习与 growth 行为已经看清楚以后，作为 scaling confirmation，而不是 debug 环境。
