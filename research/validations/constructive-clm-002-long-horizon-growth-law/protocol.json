@@ -106,8 +106,11 @@
     "early_factor_retention": "final evaluation restricted to the first six factors has pair/triple MSE <= 0.0005 and recall >= 0.98",
     "state_compression": "4096 / final Cell count >= 100"
   },
-  "development_only_seeds_observed_and_excluded": [301, 302, 303],
-  "formal_seeds_frozen_after_development": [90311, 90312, 90313],
+  "observed_and_excluded_seeds": {
+    "full_development": [301, 302, 303],
+    "bootstrap_only_diagnostic": [90311, 90312, 90313]
+  },
+  "formal_seeds_frozen_after_all_development_observation": [90411, 90412, 90413],
   "formal_decision_rule": "SUPPORTED only if every formal seed completes and every registered gate is true on every formal seed",
   "positive_status": "LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED",
   "negative_status": "LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_NOT_SUPPORTED",
