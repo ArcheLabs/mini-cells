@@ -1,7 +1,7 @@
 # CLM Feasibility Evidence Map
 
-Status: **FROZEN v1.4**  
-Constructive baseline through formal CLM-003 result on frozen implementation commit `42474157be24dca9daef2ecd908ef8de323fa550` (2026-09-02).
+Status: **FROZEN v1.5**  
+Constructive baseline through formal CLM-004 result on frozen implementation commit `a6f3fb94a68172b8a89e68e742adae43c4662510` (2026-09-02).
 
 ## Purpose
 
@@ -43,6 +43,7 @@ The native route no longer depends on discovering a ready-made Cell ontology ins
 | Latent Cell coordinates can be recovered with no singleton exposure | Constructive CLM-001B; seeds `90211/90212/90213` | A | `LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED` | G1b frozen within registered additive scaffold |
 | Long-horizon Cell growth can track reusable latent structure rather than transaction count | Constructive CLM-002; seeds `90411/90412/90413` | A | `LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED`; final `K=M=30` at `N=4096`, fitted finite-horizon exponent `0.6631`, final `K/N=0.007324` | G2 frozen; no cosmetic longer synthetic streams |
 | Learned/growing Cells can host replay-free protected continual writes with bounded functional mitosis | Constructive CLM-003; seeds `90511/90512/90513`; [`FORMAL_RESULT.md`](constructive-clm-003-protected-growing-cells/FORMAL_RESULT.md) | A | `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`; all 15 registered gates passed on all three seeds | G3 frozen; no cosmetic certificate rerun |
+| Learned Cell operators can compose at model level with sparse active compute and protected mutation | Constructive CLM-004; seeds `90611/90612/90613`; [`FORMAL_RESULT.md`](constructive-clm-004-model-level-multicell-computation/FORMAL_RESULT.md) | A | `MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED`; all 17 registered gates passed on all three seeds | G4 frozen; no cosmetic composition rerun |
 
 ## Reusable constructive mechanism chain
 
@@ -64,9 +65,11 @@ latent discovery under registered superposition
 finite-horizon structure-tracking growth
 +
 protected learned/growing writes with context-keyed mitosis
++
+sparse simultaneous/sequential model-level multi-Cell computation
 ```
 
-The immediate missing bridge is now **model-level computation/composition across multiple learned Cells**.
+The immediate missing bridge is now **progressive scaffold removal toward learned/endogenous control**.
 
 ## Frozen gaps
 
@@ -103,62 +106,63 @@ protocol = 6122b8a6dd62ac69bc371909fe503c24cea319837b0a5989a4b640492aeeda86
 all 15 registered gates = pass on every seed
 ```
 
-Frozen interpretation:
-
-```text
-learned hierarchical routing
-+
-Core-005 Cell-local Q certificate
-+
-context-keyed child mitosis on certificate saturation
--> protected continual writes without learner-side replay
-```
-
-Boundary: controlled learned-root + linear protected-write integration. This is not arbitrary Transformer write safety and does not yet establish simultaneous model-level multi-Cell computation.
+Boundary: controlled learned-root + linear protected-write integration. This is not arbitrary Transformer write safety.
 
 ### G4 — Model-level multi-Cell computation
 
+Status: **SUPPORTED** by Constructive CLM-004.
+
+Formal decision:
+
+```text
+MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED
+seeds = 90611 / 90612 / 90613
+protocol = 899c466747b5bec28b548fff2fc48173524b4fba7475f59085cb5f7accc75176
+all 17 registered gates = pass on every seed
+```
+
+Frozen interpretation:
+
+```text
+learned route-addressed Cell operators
++
+held-out simultaneous composition
++
+order-sensitive sequential composition
++
+sparse active Cell execution
++
+replay-free protected mutation through full composition output
+-> model-level multi-Cell computation under the registered linear residual world
+```
+
+Boundary: controlled linear residual operators and engineered routing/execution scaffold. This is not arbitrary nonlinear Transformer Cell computation and not endogenous control.
+
+### G5 — External -> endogenous transition
+
 Status: **ACTIVE**.
 
-Primary experiment: **Constructive CLM-004**.
+Primary experiment: **Constructive CLM-005 — Scaffold Removal / Endogenous Transition**.
 
 New integration variable:
 
 ```text
-multiple active learned Cells
+working engineered Constructive CLM stack
 +
-model-level computation / composition
+progressive removal/replacement of router, growth and write scaffolds
+-> learned/endogenous control
 ```
 
-CLM-004 must test whether multiple learned Cells can participate in the same execution path while preserving:
+The experiment must remove scaffold components one at a time and preserve the already-supported invariants:
 
-- unseen composition quality;
-- route-support recovery;
-- low destructive cross-Cell interference;
-- stable sequential and/or simultaneous composition;
-- sparse compute proportional to active rather than total Cell count.
+- coordinate/read-address formation;
+- protected continual learning without learner replay;
+- bounded/improving growth;
+- unseen multi-Cell composition;
+- sparse active compute;
+- routing and mutation isolation.
 
-Controlled algebraic composition in 001/001B remains reusable evidence but is not sufficient for G4.
-
-### G5 — External -> endogenous transition
-
-Status: **PLANNED**.
-
-Remove scaffolding one component at a time:
-
-```text
-prototype / relational discovery
-  -> learned router
-residual / probation growth
-  -> learned growth controller
-engineered protected write update
-  -> learned write controller
-frozen foundation
-  -> slow-plastic foundation
-  -> endogenous cellular model
-```
-
-Each removal must preserve learning, retention, growth efficiency, routing generalization, composition and compute/storage efficiency.
+A positive G5 result must not be obtained by keeping hidden evaluator labels, fixed oracle routes, explicit novelty flags, or hand-coded correct Cell addresses available to the learner.
 
 ## Explicit no-repeat list
 
@@ -178,6 +182,7 @@ Do not create a new core validation whose primary question is only one of the fo
 12. Can the registered additive pair-superposition 001B world recover the same six latent Cells again?
 13. Can the registered 002 synthetic growth curve be reproduced merely by extending the horizon?
 14. Can the registered 003 certificate-growth world reproduce the same protected-write result under cosmetic parameter changes?
+15. Can the registered 004 linear-operator world reproduce the same multi-Cell composition result with more synthetic cases or Cells?
 
 A new experiment touching any of these topics must name a distinct integration variable in advance.
 
@@ -198,4 +203,4 @@ External CLM Layer feasibility and Native CLM feasibility remain separate decisi
 
 ## Milestone boundary
 
-If CLM-004 and CLM-005 are supported under their registered boundaries, the next main milestone is **Small Native CLM v0**, not another indefinite synthetic mechanism series.
+If CLM-005 is supported under its registered boundary, the next main milestone is **Small Native CLM v0**, not another indefinite synthetic mechanism series.
