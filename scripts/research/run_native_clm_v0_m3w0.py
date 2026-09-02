@@ -290,9 +290,9 @@ def _aggregate(output_dir: Path, protocol: dict, protocol_sha: str, data_sha: st
     decision = {
         "format": "minicells.native-clm-v0.m3w0-write-drift-restoration.result.v1",
         "classification": classification,
-        "scientific_decision": false,
-        "native_clm_training": false,
-        "new_formal_seeds_consumed": false,
+        "scientific_decision": False,
+        "native_clm_training": False,
+        "new_formal_seeds_consumed": False,
         "source_m3l2_formal_seeds": seeds,
         "protocol_sha256": protocol_sha,
         "data_manifest_sha256": data_sha,
