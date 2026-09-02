@@ -1,6 +1,6 @@
 # Native CLM M2 重开路线图 — Safe Functional Write Primitive
 
-状态：**M2 REOPENED / M2-R0 FROZEN UNRUN**
+状态：**M2 REOPENED / M2-R0b FROZEN UNRUN**
 
 ## 0. 为什么回到 M2
 
@@ -19,9 +19,7 @@ registered A-regression target <= 0.20
 
 因此 Native CLM 在科学意义上至今没有通过 M2。
 
-M3、M3R、Address Diagnostic、M3L、M3L-1、M3L-2、M3W-0 统一解释为 **M2 failure-decomposition series**，而不是已经跨过 M2 后的更高 continual-learning milestones。它们证明 growth/read-address 会增加额外损伤，也证明 online rank-32 address state 能消除相当一部分 read leakage；但修复后仍回到约 42–44% 的 A-regression ceiling。M3W-0 又将约 94.4–95.2% 的 residual A operator damage 归因到 original roots 的 final operator-state drift。
-
-active question 因此回到最底层的不变量：
+M3、M3R、Address Diagnostic、M3L、M3L-1、M3L-2、M3W-0 统一解释为 **M2 failure-decomposition series**，而不是已经跨过 M2 后的更高 continual-learning milestones。它们仍然是有效的机制证据，但当前 active question 回到最底层的不变量：
 
 \[
 \boxed{\text{新知识写入时，实际参数事务是否真的位于旧功能允许的安全区域？}}
@@ -35,7 +33,7 @@ active question 因此回到最底层的不变量：
 y=Wh
 \]
 
-M2 certificate 保存正交 basis `Q`，并在 optimizer step 前执行：
+M2 certificate 保存 basis `Q`，并在 optimizer step 前执行：
 
 \[
 G_p=G(I-Q^\top Q).
@@ -47,7 +45,7 @@ G_p=G(I-Q^\top Q).
 \Delta W=-\eta G_p,
 \]
 
-则：
+则在精确算术中应有：
 
 \[
 \Delta WQ^\top=0.
@@ -74,13 +72,13 @@ G_pQ^\top=0
 \Delta W_{actual}Q^\top=0.
 \]
 
-M2-R0 在任何新 certificate 研究之前先审计这一点。
-
 ## 2. M2-R0 — Protected Update Invariant Audit
 
-状态：**FROZEN / UNRUN**
+状态：**PUBLISHED / `INCONCLUSIVE_REFERENCE_FAILURE`**
 
-M2-R0 不是 continual-learning formal，也不会修改历史 M2 decision。它使用 exact M1 checkpoint 和 pinned WikiText B-train 仅产生真实梯度，固定 certificate，不做 certificate update、不做 growth、不读取旧 A replay。
+发布 commit：`c1f9e132b026efe24a0238e6ea333bdd2ae5fbdb`。
+
+M2-R0 不是 continual-learning formal，也没有修改历史 M2 decision。它使用 exact M1 checkpoint 和 pinned WikiText B-train 仅产生真实梯度，固定 certificate，不做 certificate update、不做 growth、不读取旧 A replay。
 
 每个有非零实际事务的 Cell/step 直接测量：
 
@@ -88,50 +86,106 @@ M2-R0 不是 continual-learning formal，也不会修改历史 M2 decision。它
 \rho=\frac{\|\Delta WQ^\top\|_F}{\|\Delta W\|_F+10^{-12}}.
 \]
 
-`||ΔW|| <= 1e-12` 的 zero/tiny transaction 保留在 raw audit table，但不进入 rho 分布，也不能用于虚增 coverage。
+冻结五个 arms 的结果为：
 
-冻结五个 arms：
+| arm | mean rho | p95 rho | max rho |
+|---|---:|---:|---:|
+| canonical AdamW + gradient projection | 0.089760 | 0.155416 | 0.240160 |
+| AdamW no decay + gradient projection | 0.089761 | 0.155417 | 0.240162 |
+| SGD no decay + gradient projection | 0.004237 | 0.015315 | 0.090235 |
+| SGD with decay + gradient projection | 0.324492 | 0.425478 | 0.434843 |
+| AdamW + final realized-update projection | 1.90e-6 | 5.44e-6 | 1.53e-5 |
 
-| arm | optimizer | weight decay | grad projection | actual-update projection | 作用 |
-|---|---|---:|---|---|---|
-| canonical current | AdamW | .01 | yes | no | exact M2 mechanics |
-| AdamW no decay | AdamW | 0 | yes | no | 隔离 adaptive preconditioner |
-| SGD no decay | SGD | 0 | yes | no | 代数 reference |
-| SGD with decay | SGD | .01 | yes | no | 在无 adaptive preconditioner 时隔离 decay |
-| AdamW final-update projection | AdamW | .01 | yes | yes | 对完整 realized delta 做修复 |
+这组模式强烈提示：
 
-final-update repair 定义为：
+1. adaptive preconditioning 会让 realized update 离开 certificate nullspace；
+2. weight decay 单独也会破坏该约束；
+3. 对完整 realized update 再投影，几乎可以把约束恢复到数值零附近。
 
-\[
-U_{raw}=W_{after\ AdamW}-W_{before},
-\]
+但 `SGD no decay` 这个代数 reference 也没有通过原先严格的 relative-rho gate。其最小实际 update 约为 `1e-6`，而 absolute residual 约为 `1e-7`。这意味着 R0 不能区分“真正的几何违例”和“float32 parameter transaction 的 add/subtract roundoff floor”。
 
-\[
-U=U_{raw}(I-Q^\top Q),\qquad W\leftarrow W_{before}+U.
-\]
+因此 R0 返回 `INCONCLUSIVE_REFERENCE_FAILURE` 是正确的研究治理行为，而不是把可能的数值误差强行解释成科学结论。
 
-这保证约束作用在**实际 parameter transaction**上，而不是只作用在 raw gradient 上。
+## 3. M2-R0b — Numerical Reference Audit
 
-M2-R0 只允许产生：
+状态：**FROZEN / UNRUN**
+
+注册文档：`research/stages/06-native-clm/M2_R0B_REGISTRATION.md`。
+
+R0b 不重新运行 continual language，也不消耗新的 formal seeds。它保持：
 
 ```text
-INCONCLUSIVE_REFERENCE_FAILURE
-CURRENT_UPDATE_INVARIANT_HOLDS
-WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT
-ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT
-BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT
-MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION
+exact M1 checkpoint
+同一个 pinned WikiText-B gradient source
+audit seed = 75001
+同样五个 optimizer arms
+certificate/router/topology frozen
+certificate updates = 0
+growth = false
+learner replay bytes = 0
 ```
 
-判定先要求 `SGD no decay` 与 `AdamW final-update projection` 两个 reference 通过严格 max/p95 gate；之后分别用 `AdamW no decay` 和 `SGD with decay` 识别 preconditioner 与 decay 的独立破坏作用。
+对每个 certificate-ranked Cell/step，R0b 分离七层量：
 
-即使发现并修复 optimizer invariant，M2-R0 也不能声称 continual learning 成功；它只关闭 implementation-level ambiguity。
+1. gradient projection + clipping 后的 analytic transaction `-lr * g`；
+2. 在 frozen certificate span 上用 fp64 得到的 safe projection；
+3. parameter dtype 下的 `fl(W + Δsafe) - W`；
+4. optimizer 原始 realized update；
+5. 对该 optimizer update 做 matched fp64 safe projection；
+6. 同一 update scale 下的 matched-safe parameter commit；
+7. arm 可选 final-update projection 后真正持久化的 committed update。
 
-## 3. M2-R1 — Functional Certificate Reconstruction
+fp64 reference 使用 frozen stored certificate rows 的 QR 正交化。它只修正数值正交误差，不改变 certificate 所表示的 span。
 
-状态：**PLANNED / BLOCKED ON M2-R0**
+机器数值 floor 在 canonical run 之前冻结为：
 
-R0 结束后，不立即运行新的 continual-language formal。R1 回到 exact final M1 representation，重新问：**certificate 到底应该表示什么？**
+\[
+\max\left(
+\text{empirical matched-safe float-commit residual},
+8\epsilon_{dtype}(\|W\|_F+\|\Delta W_{safe}\|_F),
+10^{-30}
+\right).
+\]
+
+定义：
+
+\[
+E=\frac{\|\Delta W_{commit}Q^\top\|_F}{\text{machine-floor envelope}}.
+\]
+
+冻结 gate：
+
+```text
+minimum audited Cell updates / arm = 128
+fp64 ideal projection rho max <= 1e-10
+reference excess p95 <= 2
+reference excess max <= 4
+material structural excess p95 >= 16
+material committed rho p95 >= 1e-4
+```
+
+reference 仍然是：
+
+- `SGD no decay`
+- `AdamW final-update projection`
+
+只有两个 reference 都通过，R0b 才允许关闭 numerical/mechanics ambiguity。
+
+注册的 primary classifications：
+
+```text
+INCONCLUSIVE_SGD_NUMERICAL_REFERENCE_FAILURE
+INCONCLUSIVE_FINAL_PROJECTION_NUMERICAL_REFERENCE_FAILURE
+R0_REFERENCE_FAILURE_EXPLAINED_BY_PARAMETER_TRANSACTION_ROUNDOFF
+```
+
+只有最后一个分类可以解除 M2-R1 的 blocker。它只表示 measurement/update-mechanics 层闭合，不表示 continual learning 成功。
+
+## 4. M2-R1 — Functional Certificate Reconstruction
+
+状态：**PLANNED / BLOCKED ON M2-R0b**
+
+R0b 闭合后，不立即运行新的 continual-language formal。R1 回到 exact final M1 representation，重新问：**certificate 到底应该表示什么？**
 
 当前 M1 certificate 有三个已知弱点：
 
@@ -178,9 +232,9 @@ D_i(\Delta W)\approx\operatorname{tr}(B_i\Delta W A_i\Delta W^T).
 
 R1 的核心 gate 不是“rank 多大”，而是 candidate certificate 能否预测/约束 **held-out old-function drift**。必须满足 sketch/evaluation separation、all-active coverage、fixed final-M1 coordinates、明确 storage budget 和 capacity curve；最终机制不得依赖 raw old replay buffer。
 
-## 4. M2-R2 — Fixed-Topology Replay-Free Continual Language
+## 5. M2-R2 — Fixed-Topology Replay-Free Continual Language
 
-状态：**BLOCKED ON R0 + R1**
+状态：**BLOCKED ON R0b + R1**
 
 R2 才重新做真正的 Native continual-learning formal。
 
@@ -197,7 +251,7 @@ B → C → D
 learner raw replay = 0
 ```
 
-只允许改变两个已经由 R0/R1 单独验证过的部件：
+只允许改变两个已经由 R0b/R1 单独验证过的部件：
 
 1. actual-update constrained optimizer；
 2. selected functional certificate。
@@ -234,7 +288,7 @@ fixed 8-Cell topology
 \boxed{\text{Native CLM basic replay-free continual-write primitive supported}}
 \]
 
-## 5. Growth 何时重新开放
+## 6. Growth 何时重新开放
 
 在 R2 之前，任何新的 growth/mitosis formal 都 blocked。
 
@@ -253,33 +307,24 @@ safe-write infeasible
 
 因此未来 mitosis 是 **safe-write infeasibility 的结果**，不再是独立 heuristic milestone。
 
-## 6. 研究治理规则
-
-1. **M2 未通过前，不创建新的高阶 Native CLM milestone。**
-2. R0/R1 都是 diagnostics/mechanism validations，不允许被描述为 continual-learning success。
-3. 每个 intervention 必须报告它关闭了原 M2 retention gap 的多少，而不是只报告局部指标改善。
-4. 不再以“Cell 更像 Cell / router 更聪明 / growth 更稳定”替代端到端 retention + plasticity gate。
-5. M3–M3W-0 继续保留为 failure-decomposition evidence，但不代表已跨越 M2。
-6. 30M scale-up 和 M4 ontology 继续 blocked，直到 M2-R2 获得正式正结果。
-
-## 7. 当前执行顺序
+## 7. 研究治理规则
 
 ```text
-M1                                 🟢 PASS
+M1                                  PASS
   ↓
-M2 original                         🔴 NOT SUPPORTED
+M2 original                         NOT SUPPORTED
   ↓
-M2-R0 actual-update invariant       🔵 FROZEN / UNRUN
+M2-R0 actual-update invariant       INCONCLUSIVE_REFERENCE_FAILURE
   ↓
-M2-R1 functional certificate        ⚪ BLOCKED
+M2-R0b numerical reference          FROZEN / UNRUN
   ↓
-M2-R2 fixed-topology continual CL   ⚪ BLOCKED
+M2-R1 functional certificate        BLOCKED
+  ↓
+M2-R2 fixed-topology continual CL   BLOCKED
   ↓ only if PASS
-growth / mitosis reopened           ⚪ BLOCKED
+growth / mitosis reopened           BLOCKED
 ```
 
-路线的核心不再是“怎样让 Cell 继续增长”，而是先建立：
-
-\[
-\boxed{\text{每一次真实参数事务都能被证明处于旧功能允许的安全区域内。}}
-\]
+1. **M2 未通过前，不创建新的高阶 Native CLM milestone。**
+2. R0b/R1 都是 diagnostics/mechanism validations，不允许被描述为 continual-learning success。
+3. 每个 intervention 必须报告它关闭了原 M2 retention gap 的多少，而不是只报告局部指标改善。
