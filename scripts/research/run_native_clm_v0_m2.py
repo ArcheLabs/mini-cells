@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Run Native CLM v0 M2 protected-vs-unsafe continual-language validation.
 
 On a two-GPU Kaggle host the parent process assigns the protected arm to GPU0 and the
@@ -13,9 +12,9 @@ import csv
 import hashlib
 import json
 import os
+from pathlib import Path
 import subprocess
 import sys
-from pathlib import Path
 
 from minicells.native_clm_m2 import (
     NativeCLMM2Config,
@@ -28,9 +27,7 @@ from minicells.native_clm_m2 import (
 DEFAULT_PROTOCOL = Path(
     "research/validations/native-clm-v0-m2-continual-language/protocol.json"
 )
-DEFAULT_OUTPUT = Path(
-    "artifacts/experiments/native-clm-v0-m2-continual-language"
-)
+DEFAULT_OUTPUT = Path("artifacts/experiments/native-clm-v0-m2-continual-language")
 
 
 def _load_protocol(path: Path) -> tuple[dict, str]:
@@ -115,6 +112,14 @@ def _arm_command(args, seed: int, arm: str, device: str) -> tuple[list[str], dic
 
 
 def _run_seed_pair(args, protocol: dict, seed: int, devices: tuple[str, str]) -> dict:
+    seed_dir = args.output_dir / f"seed-{seed}"
+    completed_summary = seed_dir / "seed-summary.json"
+    protected_summary = seed_dir / "protected/arm-summary.json"
+    unsafe_summary = seed_dir / "unsafe/arm-summary.json"
+    if completed_summary.exists() and protected_summary.exists() and unsafe_summary.exists():
+        print(f"[M2 seed={seed}] reusing completed seed artifacts", flush=True)
+        return json.loads(completed_summary.read_text(encoding="utf-8"))
+
     print(
         f"\n[M2 seed={seed}] GPU/worker 0 = protected ({devices[0]}), "
         f"GPU/worker 1 = unsafe ({devices[1]})",
@@ -127,19 +132,12 @@ def _run_seed_pair(args, protocol: dict, seed: int, devices: tuple[str, str]) ->
     p_rc = protected_proc.wait()
     u_rc = unsafe_proc.wait()
     if p_rc != 0 or u_rc != 0:
-        raise RuntimeError(
-            f"M2 seed {seed} arm failure: protected={p_rc}, unsafe={u_rc}"
-        )
+        raise RuntimeError(f"M2 seed {seed} arm failure: protected={p_rc}, unsafe={u_rc}")
 
-    seed_dir = args.output_dir / f"seed-{seed}"
-    protected = json.loads((seed_dir / "protected/arm-summary.json").read_text())
-    unsafe = json.loads((seed_dir / "unsafe/arm-summary.json").read_text())
-    result = compare_arms(
-        protected,
-        unsafe,
-        thresholds=protocol["thresholds"],
-    )
-    (seed_dir / "seed-summary.json").write_text(
+    protected = json.loads(protected_summary.read_text(encoding="utf-8"))
+    unsafe = json.loads(unsafe_summary.read_text(encoding="utf-8"))
+    result = compare_arms(protected, unsafe, thresholds=protocol["thresholds"])
+    completed_summary.write_text(
         json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     print(
