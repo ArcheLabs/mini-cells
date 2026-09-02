@@ -1,0 +1,124 @@
+{
+  "format": "minicells.native-clm-v0.m3l1-address-state-capacity.protocol.v1",
+  "status": "REGISTERED_DIAGNOSTIC_READY",
+  "scientific_decision": false,
+  "mission": "Determine whether the M3L rank-16 query-sketch shortfall is primarily a historical address-state capacity limit or a limitation of the Gaussian second-order sketch family, before any new continual-language formal experiment.",
+  "parent_m3l": {
+    "publish_commit": "f2b4b8fa1c9b0ba187af0164c86e8bba4def32d9",
+    "merge_commit": "8acbc668f7234205e0892530909a978fdb2c2f9a",
+    "result_path": "artifacts/experiments/native-clm-v0-m3l-query-sketch-gate/diagnostic-result.json",
+    "classification": "QUERY_SKETCH_GATE_NOT_FEASIBLE",
+    "valid_edges": 24,
+    "edge_count": 24,
+    "current_cosine_median_auc": 0.5227479849185046,
+    "offline_oracle_median_auc": 0.9280664065071165,
+    "rank16_sketch_median_auc": 0.8968305421556132,
+    "rank16_fraction_auc_ge_floor": 0.75,
+    "rank16_median_normalized_oracle_excess_recovery": 0.9356483126694585,
+    "rank16_median_old_fpr": 0.18546973913908005,
+    "rank16_median_current_tpr": 0.8203997910022736,
+    "rank16_median_sketch_bytes": 27720.0
+  },
+  "parent_m3r": {
+    "formal_result_commit": "986b043a5d2f5ee9140cf35b14f68aacc3b7a942",
+    "data_manifest_sha256": "213ddb9d093ea44fd0524e6ba6318f86a61c54270bd5cad6ddeb3233470565b0",
+    "formal_seeds": [73611, 73612, 73613],
+    "formal_seeds_are_consumed": true,
+    "hf_repo": "archelabsxyz/native-clm-v0",
+    "hf_revision": "a23b521e137a7e44616809895d44d87cc7d6f87f"
+  },
+  "learner_boundary": {
+    "native_clm_training": false,
+    "cell_updates": false,
+    "router_updates": false,
+    "certificate_updates": false,
+    "growth": false,
+    "new_formal_seeds": false,
+    "consumed_m3r_checkpoints_only": true,
+    "old_raw_tokens_allowed_during_gate_fit": false,
+    "old_raw_queries_allowed_only_to_construct_candidate_address_state_before_gate_fit": true,
+    "heldout_old_queries_allowed_only_for_offline_evaluation": true,
+    "offline_oracle_may_use_raw_old_and_current_train_queries_for_upper_bound_only": true,
+    "diagnostic_result_must_not_retroactively_modify_M3L_or_M3R": true
+  },
+  "sampling": {
+    "max_batches_per_domain": 64,
+    "batch_size": 8,
+    "max_samples_per_domain_per_edge": 4096,
+    "minimum_train_samples_per_side": 512,
+    "minimum_test_samples_per_side": 256,
+    "train_group_fraction": 0.7,
+    "group_unit": "ByteSequenceDataset sequence row; all tokens from one sequence remain in the same train or test split",
+    "split_seed_base": 73800,
+    "ownership_semantics": "identical to M3L temporal parent-lifetime ownership",
+    "old_domain_balancing": "identical to M3L equal cap per old domain before concatenation"
+  },
+  "capacity_grid": {
+    "low_rank_gaussian_ranks": [0, 8, 16, 32, 64, 128],
+    "rank_0_semantics": "diagonal Gaussian moments only: count, mean, and per-dimension residual variance",
+    "full_covariance_candidate": true,
+    "full_covariance_storage": "count + mean + dense dxd float32 covariance; report implementation bytes explicitly",
+    "input": "L2-normalized frozen router query q",
+    "all_candidates_use_same_edge_samples_and_same_sequence-group split": true
+  },
+  "gate_family": {
+    "model": "single affine lineage-local gate score(q)=w^Tq+b",
+    "low_rank_estimator": "regularized pooled low-rank Gaussian LDA; rank 0 reduces to diagonal LDA",
+    "full_covariance_estimator": "regularized pooled dense-covariance Gaussian LDA",
+    "diagonal_regularization": 0.0001,
+    "class_priors": "equal",
+    "operating_threshold": "Gaussian historical-score threshold targeting 10 percent old false-positive rate",
+    "target_old_fpr": 0.1,
+    "no_gradient_training_for_gaussian_candidates": true,
+    "no_old_sample_replay": true
+  },
+  "offline_oracle": {
+    "model": "single linear logistic probe",
+    "purpose": "same upper-bound comparator as M3L; never used to construct a Gaussian candidate",
+    "steps": 300,
+    "learning_rate": 0.05,
+    "weight_decay": 0.0001,
+    "standardize_from_oracle_train_split_only": true
+  },
+  "candidate_feasibility_thresholds": {
+    "minimum_valid_edge_fraction": 0.75,
+    "oracle_separable_median_auc": 0.85,
+    "oracle_edge_auc_floor": 0.8,
+    "minimum_fraction_oracle_edges_above_floor": 0.75,
+    "candidate_median_auc": 0.9,
+    "candidate_edge_auc_floor": 0.85,
+    "minimum_fraction_candidate_edges_above_floor": 0.75,
+    "median_normalized_oracle_excess_recovery": 0.85,
+    "median_old_fpr_max": 0.2,
+    "median_current_tpr_min": 0.7
+  },
+  "classification_order": [
+    "INCONCLUSIVE_COVERAGE",
+    "ORACLE_NOT_SEPARABLE",
+    "LOW_RANK_CAPACITY_SUFFICIENT",
+    "FULL_COVARIANCE_REQUIRED",
+    "GAUSSIAN_FAMILY_LIMITED"
+  ],
+  "classification_rules": {
+    "INCONCLUSIVE_COVERAGE": "valid_edge_fraction < minimum_valid_edge_fraction",
+    "ORACLE_NOT_SEPARABLE": "coverage is sufficient but the offline oracle fails the registered M3L separability rule under the same temporal ownership semantics",
+    "LOW_RANK_CAPACITY_SUFFICIENT": "at least one low-rank Gaussian candidate in the frozen rank grid satisfies every candidate feasibility threshold; report the minimum passing rank",
+    "FULL_COVARIANCE_REQUIRED": "no low-rank candidate through rank 128 passes, but dense full-covariance Gaussian LDA satisfies every candidate feasibility threshold",
+    "GAUSSIAN_FAMILY_LIMITED": "oracle remains separable but neither any low-rank candidate nor dense full-covariance Gaussian LDA satisfies every candidate feasibility threshold"
+  },
+  "transition_summaries": [
+    "A->B",
+    "B->C",
+    "A+B->C"
+  ],
+  "metrics": [
+    "candidate_auc",
+    "candidate_old_fpr",
+    "candidate_current_tpr",
+    "normalized_oracle_excess_recovery",
+    "historical_address_state_bytes",
+    "fraction_auc_ge_floor",
+    "median_auc_by_transition"
+  ],
+  "interpretation_boundary": "M3L-1 is a checkpoint-only capacity/family diagnostic. A low-rank or full-covariance positive classification only selects the historical address-state representation for a future registered online continual-language experiment. It does not convert M3L, M3R, or M3 into positive continual-learning results."
+}
