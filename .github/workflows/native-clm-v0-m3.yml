@@ -56,6 +56,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           workflow = Path('.github/workflows/native-clm-v0-m3.yml').read_text()
-          assert 'run_native_clm_v0_m3.py --formal' not in workflow
+          forbidden = 'run_native_clm_v0_m3.py' + ' --formal'
+          assert forbidden not in workflow
           print('CI does not execute formal M3 seeds.')
           PY
