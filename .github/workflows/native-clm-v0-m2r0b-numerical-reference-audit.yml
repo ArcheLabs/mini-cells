@@ -1,0 +1,123 @@
+name: Native CLM v0 M2-R0b Numerical Reference Audit
+
+# Numerical/optimizer-mechanics diagnostic only. No continual-language formal seeds.
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m2r0b-numerical-reference-audit
+    paths:
+      - 'src/minicells/native_clm_m2r0b.py'
+      - 'scripts/research/*m2r0b*'
+      - 'research/validations/native-clm-v0-m2r0b-numerical-reference-audit/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m2r0b-numerical-reference-audit-kaggle.ipynb'
+      - 'research/stages/06-native-clm/M2_R0B_REGISTRATION.md'
+      - 'tests/research/06-native-clm/test_native_clm_m2r0b.py'
+      - '.github/workflows/native-clm-v0-m2r0b-numerical-reference-audit.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m2r0b.py'
+      - 'scripts/research/*m2r0b*'
+      - 'research/validations/native-clm-v0-m2r0b-numerical-reference-audit/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m2r0b-numerical-reference-audit-kaggle.ipynb'
+      - 'research/stages/06-native-clm/M2_R0B_REGISTRATION.md'
+      - 'tests/research/06-native-clm/test_native_clm_m2r0b.py'
+      - '.github/workflows/native-clm-v0-m2r0b-numerical-reference-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen M2-R0b boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/native-clm-v0-m2r0b-numerical-reference-audit/protocol.json').read_text())
+          assert p['format'] == 'minicells.native-clm-v0.m2r0b-numerical-reference-audit.protocol.v1'
+          assert p['status'] == 'FROZEN_UNRUN'
+          assert p['scientific_decision'] is False
+          assert p['native_clm_training_milestone'] is False
+          assert p['new_formal_seeds_consumed'] is False
+          assert p['parent_m2']['formal_seeds_consumed'] == [73211, 73212, 73213]
+          assert p['parent_m2']['formal_seeds_forbidden_in_r0b'] is True
+          assert p['parent_r0']['publish_commit'] == 'c1f9e132b026efe24a0238e6ea333bdd2ae5fbdb'
+          assert p['audit']['audit_seed'] == 75001
+          assert p['audit']['steps_per_arm'] == 64
+          assert p['audit']['certificate_updates_during_audit'] == 0
+          assert p['data']['source_builder'] == 'scripts/research/prepare_native_clm_v0_m2r0_data.py'
+          assert p['data']['learner_replay_bytes'] == 0
+          assert tuple(p['arms']) == (
+              'current_adamw_grad_projection',
+              'adamw_no_decay_grad_projection',
+              'sgd_no_decay_grad_projection',
+              'sgd_with_decay_grad_projection',
+              'adamw_final_update_projection',
+          )
+          assert p['thresholds'] == {
+              'minimum_audited_cell_updates_per_arm': 128,
+              'roundoff_bound_multiplier': 8.0,
+              'reference_floor_excess_p95_max': 2.0,
+              'reference_floor_excess_max_max': 4.0,
+              'ideal_projection_rho_max': 1e-10,
+              'material_floor_excess_p95_min': 16.0,
+              'material_violation_rho_p95_min': 0.0001,
+          }
+          assert p['m2_r1_unblock_rule'].startswith('M2-R1 is unblocked iff')
+          PY
+      - name: Validate canonical notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('research/notebooks/06-native-clm/native-clm-v0-m2r0b-numerical-reference-audit-kaggle.ipynb')
+          notebook = json.loads(path.read_text())
+          assert notebook['nbformat'] == 4
+          text = path.read_text()
+          assert 'prepare_native_clm_v0_m2r0_data.py' in text
+          assert 'run_native_clm_v0_m2r0b.py' in text
+          assert 'publish_native_clm_v0_m2r0b.py' in text
+          assert '73211' not in text and '73212' not in text and '73213' not in text
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q \
+            src/minicells/native_clm_m2r0b.py \
+            scripts/research/run_native_clm_v0_m2r0b.py \
+            scripts/research/publish_native_clm_v0_m2r0b.py
+          ruff check \
+            src/minicells/native_clm_m2r0b.py \
+            scripts/research/run_native_clm_v0_m2r0b.py \
+            scripts/research/publish_native_clm_v0_m2r0b.py \
+            tests/research/06-native-clm/test_native_clm_m2r0b.py
+      - name: M2-R0b numerical mechanics smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m2r0b.py
+      - name: No continual-language formal rerun guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('.github/workflows/native-clm-v0-m2r0b-numerical-reference-audit.yml'),
+              Path('scripts/research/run_native_clm_v0_m2r0b.py'),
+              Path('scripts/research/publish_native_clm_v0_m2r0b.py'),
+          ]
+          text = '\n'.join(path.read_text() for path in files)
+          forbidden = [
+              'run_native_clm_v0_' + 'm2.py',
+              'run_native_clm_v0_' + 'm3.py',
+              'run_native_clm_v0_' + 'm3r.py',
+              '--' + 'formal',
+          ]
+          for token in forbidden:
+              assert token not in text, token
+          print('M2-R0b is numerical/optimizer-mechanics only and consumes no formal seed.')
+          PY
