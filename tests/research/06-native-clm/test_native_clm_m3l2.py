@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+import copy
+import importlib.util
+import json
+from pathlib import Path
+
 import torch
 import torch.nn.functional as F
 
@@ -168,3 +173,125 @@ def test_protocol_config_is_exactly_registered_rank32_budget() -> None:
     assert config.maximum_persistent_bytes_per_cell == 52360
     assert config.bootstrap_batches == 160
     assert config.max_queries_per_cell_per_batch == 256
+    protocol = json.loads(
+        Path(
+            "research/validations/native-clm-v0-m3l2-online-address-state/protocol.json"
+        ).read_text()
+    )
+    assert protocol["address_state"]["maximum_affine_gate_bytes_per_edge"] == 1552
+    assert protocol["address_state"]["maximum_total_address_bytes_per_node"] == 53912
+
+
+def _load_runner_module():
+    path = Path("scripts/research/run_native_clm_v0_m3l2.py")
+    spec = importlib.util.spec_from_file_location("m3l2_runner_test", path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _metrics(loss: float, cells: int) -> dict:
+    return {
+        "loss": loss,
+        "active_fraction_vs_dense": 2 / cells,
+        "cell_usage_share": [1 / cells] * cells,
+    }
+
+
+def _synthetic_summary(*, treatment: bool) -> dict:
+    cells = 9
+    initial = {
+        "A": _metrics(1.0, 8),
+        "B": _metrics(2.0, 8),
+        "C": _metrics(3.0, 8),
+        "D": _metrics(2.5, 8),
+    }
+    a_final = 1.10 if treatment else 1.40
+    summary = {
+        "arm": "online_address_state" if treatment else "lineage_cosine_control",
+        "seed": 74101,
+        "parent_checkpoint_sha256": "same-m1",
+        "growth_config": {"frozen": True},
+        "learner_replay_bytes": 0,
+        "shared_and_original_router_frozen": True,
+        "spawned_cells": 1,
+        "final_cell_count": cells,
+        "child_post_birth_route_hits": {"8": 4096},
+        "growth_events": [
+            {
+                "birth_logits_max_abs_drift": 0.0,
+                "birth_logits_mse": 0.0,
+                "birth_root_topk_match": 1.0,
+                "birth_root_prob_max_abs_drift": 0.0,
+            }
+        ],
+        "lineage_chain_valid": True,
+        "root_route_probes": {
+            stage: {domain: f"stable-{domain}" for domain in "ABCD"}
+            for stage in ("initial", "after_B", "after_C", "after_D")
+        },
+        "evaluation_matrix": {
+            "initial": initial,
+            "after_B": {
+                "A": _metrics(1.02, cells),
+                "B": _metrics(1.20, cells),
+                "C": _metrics(3.0, cells),
+                "D": _metrics(2.5, cells),
+            },
+            "after_C": {
+                "A": _metrics(1.05, cells),
+                "B": _metrics(1.22, cells),
+                "C": _metrics(1.50, cells),
+                "D": _metrics(2.5, cells),
+            },
+            "after_D": {
+                "A": _metrics(a_final, cells),
+                "B": _metrics(1.24, cells),
+                "C": _metrics(1.53, cells),
+                "D": _metrics(1.75, cells),
+            },
+        },
+    }
+    if treatment:
+        summary.update(
+            {
+                "address_state": {
+                    "maximum_rank": 32,
+                    "maximum_bytes_per_cell": 52360,
+                    "gate_count": 1,
+                },
+                "address_state_checkpoint_roundtrip": True,
+                "bootstrap": {
+                    "complete": True,
+                    "parameter_sha256_before": "same-params",
+                    "parameter_sha256_after": "same-params",
+                    "A_access_after_continual_start": False,
+                    "access_released_before_continual_start": True,
+                },
+            }
+        )
+    return summary
+
+
+def test_formal_gate_aggregation_counts_sketch_gate_and_total_storage() -> None:
+    runner = _load_runner_module()
+    protocol = json.loads(
+        Path(
+            "research/validations/native-clm-v0-m3l2-online-address-state/protocol.json"
+        ).read_text()
+    )
+    control = _synthetic_summary(treatment=False)
+    treatment = _synthetic_summary(treatment=True)
+    result = runner.compare_arms(control, treatment, thresholds=protocol["thresholds"])
+    assert set(result["gates"]) == set(protocol["registered_gates"])
+    assert result["gates"]["rank32_address_state_bounded"] is True
+    assert result["treatment_address_state"]["maximum_affine_gate_bytes_per_edge"] == 1552
+    assert result["treatment_address_state"]["maximum_total_address_bytes_per_node"] == 53912
+    assert result["pass"] is True
+
+    too_small = copy.deepcopy(protocol["thresholds"])
+    too_small["maximum_total_address_bytes_per_node"] = 53911
+    rejected = runner.compare_arms(control, treatment, thresholds=too_small)
+    assert rejected["gates"]["rank32_address_state_bounded"] is False
+    assert rejected["pass"] is False
