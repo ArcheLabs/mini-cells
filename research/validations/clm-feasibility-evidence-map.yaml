@@ -1,9 +1,9 @@
 schema: minicells.clm-feasibility-evidence-map.v1
 status: FROZEN
-version: "1.4"
+version: "1.5"
 frozen_against:
-  branch: codex/constructive-clm-003-protected-growing-cells
-  commit: 42474157be24dca9daef2ecd908ef8de323fa550
+  branch: codex/constructive-clm-004-model-level-multicell-computation
+  commit: a6f3fb94a68172b8a89e68e742adae43c4662510
   date: "2026-09-02"
 mission: >-
   Reuse validated MiniCells research components and spend new experiments only on
@@ -132,6 +132,19 @@ items:
     all_registered_gates_passed: true
     learner_replay_requirement: zero_in_certificate_growth_arm
     boundary: controlled learned-root plus linear protected-write integration; not arbitrary Transformer write safety or model-level multi-Cell computation
+  - id: constructive_clm_004
+    claim: learned route-addressed Cell operators compose at model level on held-out simultaneous and order-sensitive sequential executions with sparse active Cell compute and replay-free protected mutation through full composition output
+    sources:
+      - "constructive-clm-004"
+      - "research/validations/constructive-clm-004-model-level-multicell-computation/FORMAL_RESULT.md"
+    grade: A
+    outcome: MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED
+    disposition: g4_supported_reuse_do_not_retest
+    protocol_sha256: 899c466747b5bec28b548fff2fc48173524b4fba7475f59085cb5f7accc75176
+    formal_seeds: [90611, 90612, 90613]
+    all_registered_gates_passed: true
+    registered_gate_count: 17
+    boundary: controlled linear residual operators; not arbitrary nonlinear Transformer Cells or endogenous routing/growth/write control
 open_gaps:
   - id: G1a
     claim: learned Cell coordinates and read/write alignment form without hidden task/factor labels when factors receive singleton exposure
@@ -155,13 +168,14 @@ open_gaps:
   - id: G4
     claim: multiple learned Cells compose safely at model level with sparse active compute and low destructive interference
     experiment: constructive-clm-004
-    status: active
-    priority: primary
-    new_integration_variable: model-level computation/composition across multiple active learned Cells
+    status: supported
+    boundary: controlled linear residual operators with engineered routing/execution scaffolds
   - id: G5
     claim: external CLM scaffolding can be removed progressively toward endogenous CLM
     experiment: constructive-clm-005
-    status: planned
+    status: active
+    priority: primary
+    new_integration_variable: progressive scaffold removal and learned endogenous router/growth/write control
 native_route_stop_rule:
   require_repeated_failure_of:
     - reusable_learned_coordinates_under_progressively_weaker_scaffolds
@@ -169,5 +183,6 @@ native_route_stop_rule:
     - bounded_or_improving_growth
     - protected_continual_writes_without_replay
     - stable_model_level_multi_cell_computation
+    - progressive_scaffold_removal
   natural_geometry_negative_is_not_stop: true
-next_milestone_after_g4_g5: small_native_clm_v0
+next_milestone_after_g5: small_native_clm_v0
