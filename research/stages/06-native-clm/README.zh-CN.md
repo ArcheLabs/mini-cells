@@ -4,11 +4,9 @@
 
 状态：**ACTIVE**
 
-Constructive CLM 的机制验证已经在 CLM-005 关闭。Stage 06 开始训练一个真正进行 token prediction、且内部计算原生经过 persistent Cells 的模型。
+Constructive CLM 001–005 已关闭受控机制可行性序列。Stage 06 开始把这些机制放进真正的 token-predictive model 中训练与验证。
 
 ## 固定路线图
-
-沿用仓库统一状态颜色：
 
 - 🟢 完成 / 已支持
 - 🟡 部分证据
@@ -21,18 +19,16 @@ Constructive CLM 001–005                                  🟢 CLOSED
         ↓
 Native CLM v0
   M0  architecture + execution                           🟢 COMPLETE
-  M1  ~12M next-token training                           🔵 IMPLEMENTED / GPU RUN PENDING
-  M2  continual language stream                          ⚪ PLANNED
+  M1  ~12M next-token training                           🟢 COMPLETE
+  M2  replay-free continual language stream              🔵 ACTIVE
   M3  autonomous Cell growth                             ⚪ PLANNED
   M4  Cell ontology / specialization analysis            ⚪ PLANNED
   M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
 ```
 
-这条顺序保持稳定。M1 不把 M2/M3 一起塞进第一次训练：先证明 next-token trainability，再加入持续学习压力，再把 autonomous growth 变成独立科学变量。
+在 M2/M3 关闭之前，不升级到 30M。当前主要科学不确定性已经不是“能否训练”，而是持续学习行为。
 
-## Native CLM v0 的定义
-
-第一台模型不是外挂 memory。Token 必须在 LM head 之前经过 learned sparse Cellular Layer：
+## Native CLM v0 substrate
 
 ```text
 UTF-8 bytes
@@ -50,48 +46,10 @@ LM head
 next-token loss
 ```
 
-M0/M1 中每个 Cell 使用已被 Constructive CLM 验证过的线性 residual operator：
+M2 继续完全沿用 M1 的 canonical substrate：
 
 ```text
-g_i(h) = W_i h
-h' = h + Σ gate_i · g_i(h),  i ∈ TopK(router(h))
-```
-
-Cell 保存 persistent operator、route key、certificate、usage 与 lineage state。Runtime 已支持动态新增 Cell；autonomous growth policy 的科学验证有意留到 M3。
-
-## M0 — Architecture + execution — 🟢 COMPLETE
-
-M0 是工程执行 gate，不是科学结论。GitHub CI 已通过完整 execution smoke，当前 runtime 已验证：
-
-- next-token forward/backward；
-- router 与 Cell 参数均能收到梯度；
-- sparse top-k Cell execution；
-- bounded Cell certificate 更新；
-- certificate-nullspace Cell-gradient projection；
-- dynamic child spawn，并将新参数加入 optimizer；
-- topology 变化后仍保持 sparse execution；
-- 动态 Cell 数量 checkpoint save/reload；
-- reload 后 generation 可运行。
-
-Canonical runner：
-
-```bash
-python scripts/research/run_native_clm_v0_m0.py
-```
-
-M0 smoke checkpoint 仅用于 round-trip，验证后删除；仓库保留轻量 decision artifacts。
-
-## M1 — 第一台 next-token Native CLM — 🔵 ACTIVE
-
-M1 只回答：
-
-> 一个具有 learned sparse Cellular Layer 的真实 token-predictive 模型，能否在非平凡但可反复训练的规模上直接从 next-token loss 端到端训练？
-
-它暂时不声称 continual learning、autonomous growth、正确的 Cell ontology，或优于 Dense/MoE baseline。
-
-Canonical 配置：
-
-```text
+parameters                  12,154,368
 vocab                       256 UTF-8 bytes
 context                     256
 shared width                384
@@ -99,81 +57,183 @@ shared blocks               6
 attention heads             6
 FFN width                   1536
 Cellular Layers             1
-initial Cells               8
+Cells                       8
 active Cells/token          2
 Cell operator               384 × 384 linear residual
 certificate max rank        64
-parameters                  ≈ 12.15M
 ```
 
-参数使用不同 plasticity：
+Cell `i`：
 
 ```text
-shared LR   = 2e-4
-router LR   = 4e-4
-Cell LR     = 8e-4
+g_i(h) = W_i h
+h' = h + Σ gate_i · g_i(h), i ∈ TopK(router(h))
 ```
 
-每个 Cell 保存 `W_i`、`route_key_i`、bounded certificate `Q_i`、`usage_count_i` 与 `parent_id_i`。optimizer commit 前，Cell weight gradient 做：
+## M0 — Architecture + execution — 🟢 COMPLETE
+
+M0 已关闭 runtime 工程问题：next-token forward/backward、sparse routing、router/Cell gradient、bounded certificate、certificate-nullspace projection、dynamic child spawn、optimizer enrollment、动态 topology checkpoint round-trip，以及 reload 后 generation。
+
+## M1 — 第一台 next-token Native CLM — 🟢 COMPLETE
+
+M1 已证明：真实 token-predictive Native CLM 可以直接从 next-token loss 端到端训练，并保持 sparse Cell execution。
+
+Canonical 结果：
+
+```text
+status              NATIVE_CLM_V0_M1_NEXT_TOKEN_TRAINING_PASS
+parameters          12,154,368
+Cells               8
+active Cells/token  2
+initial val loss    5.7234292984008786
+final val loss      0.7885352313518524
+initial perplexity  305.9523278270837
+final perplexity    2.200171322843134
+active fraction     0.25
+initial route H     0.6929467022418976
+final route H       0.5747594475746155
+```
+
+M1 十个 registered engineering gates 全部通过。`scientific_decision=false`：M1 是真实模型训练里程碑，不是持续学习科学结论。
+
+详见 [M1_CLOSURE.md](M1_CLOSURE.md)。
+
+### Canonical M1 checkpoint
+
+```text
+Hugging Face: archelabsxyz/native-clm-v0
+file:         final-model.pt
+SHA-256:      91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f
+```
+
+M2 会解析当前 Hub commit，但只有文件实际 SHA-256 与上述值完全一致才允许开始 formal seed。
+
+## M2 — Replay-free continual language — 🔵 ACTIVE
+
+冻结问题：
+
+> 从精确的 M1 trained checkpoint 出发，protected sparse Cell-local writes 是否能够在 learner-side replay 为 0 的情况下学习连续语言分布，同时比 unsafe writes 更好地保留历史语言行为？
+
+M2 只引入 continual-time variable 和直接 causal safety control，不开启 growth，也不改变 12.15M 架构。
+
+### Registered stream
+
+```text
+A  TinyStories validation        只用于 M1 retention evaluation
+
+B  WikiText-2 raw                continual training phase 1
+        ↓
+C  CodeParrot codecomplex        continual training phase 2
+        ↓
+D  Databricks Dolly              continual training phase 3
+```
+
+离开一个 phase 后，旧训练数据不再提供给 learner。历史 domain 只允许 evaluator 使用：
+
+```text
+learner replay bytes = 0
+```
+
+每个 phase boundary 都评估完整 A/B/C/D loss/perplexity matrix。
+
+### 为什么 M2 冻结 shared substrate 与 router
+
+M2 有意设计成**纯 Cell-local write test**。M1 的 shared substrate 和 learned router 全部冻结，只允许 `W_i` 写入。
+
+这样 protected 与 unsafe 两个 arm 使用完全相同的 learned read-address geometry。由于 routing input 位于 Cell execution 之前，只要 shared/router 不变，两臂的 route policy 就一致，差异只来自 certificate protection，而不会混入 router drift 或 shared-model forgetting。
+
+每个 phase 都新建一个 Cell-only AdamW；optimizer state 不跨 domain boundary 保存。
+
+### Protected vs unsafe
+
+Protected：
 
 ```text
 dW <- dW (I - QᵀQ)
 ```
 
-Canonical M1 固定为 8 个 Cells。M0 已证明 runtime 能 growth；M2 引入 continual pressure；M3 再正式验证 autonomous growth。
-
-## M1 数据与 gates
-
-Canonical Kaggle 流程从公开 TinyStories 构建本地 cache，使用 byte tokenizer：
+Unsafe control：
 
 ```text
-train documents       50,000
-validation documents   2,000
+dW <- dW
 ```
 
-只有全部满足时 M1 才标记：
+其他条件完全注册一致：M1 parent、数据、seed、batch schedule、routing、topology、LR 与 phase order。
+
+### 双 GPU 策略
+
+12.15M 模型太小，DDP 的同步开销不划算。两张 Kaggle GPU 直接用于最重要的 causal comparison：
 
 ```text
-NATIVE_CLM_V0_M1_NEXT_TOKEN_TRAINING_PASS
+GPU0  protected arm
+GPU1  unsafe arm
 ```
 
-Gates：
-
-- 总参数量 10M–15M；
-- 请求的 optimizer steps 全部完成且 loss finite；
-- validation loss 相比初始化至少改善 5%；
-- 每 token 执行的 Cell operator 不超过总 Cell 的 30%（canonical `2/8=25%`）；
-- router 收到非零梯度；
-- Cells 收到非零梯度；
-- generation 可执行；
-- 只使用一个 Cellular Layer；
-- M1 Cell 数保持不变，因此不会偷渡 autonomous-growth claim。
-
-`scientific_decision=false`：M1 是第一台真实模型的训练 milestone，不是正式持续学习结论。
-
-## Checkpoint 与仓库 artifacts
-
-Kaggle runtime 保留二进制 checkpoint；Git 只发布轻量证据：
+每个 seed 两臂并发，然后 formal seeds 顺序推进：
 
 ```text
-summary.json
-metrics.csv
-run-config.json
-sample.txt
-RESULTS.md
-data-manifest.json
+73211
+73212
+73213
 ```
 
-`summary.json` 记录 final checkpoint 的 SHA-256 与字节数，因此可固定模型身份，又不会把 Git 仓库变成权重仓库。
+这样没有梯度同步复杂度，并且大约把 registered causal comparison 的 wall-clock 减半。
 
-## Kaggle notebook
+### Formal gates
+
+三个 formal seeds 上全部 gates 都必须通过：
+
+- 两臂使用完全相同 canonical M1 checkpoint；
+- 只有 Cell operator 可写；
+- shared substrate/router bit-for-bit 不变；
+- learner replay = 0；
+- topology 固定 8 Cells；
+- sparse execution <=30%；
+- protected 在 B/C/D 每个新 domain 上 gain >=5%；
+- protected 最终 A regression <=20%；
+- unsafe mean forgetting >=3%，确保干扰真实出现；
+- protected 相对 unsafe 的 mean forgetting 至少改善 2 个百分点；
+- protected mean plasticity >= unsafe 的 80%。
+
+Positive：
+
+```text
+NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_SUPPORTED
+```
+
+Negative 也必须保留：
+
+```text
+NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED
+```
+
+冻结 protocol：[`../../validations/native-clm-v0-m2-continual-language/protocol.json`](../../validations/native-clm-v0-m2-continual-language/protocol.json)
+
+## Kaggle M2 notebook
 
 Canonical notebook：
 
-[`../../notebooks/06-native-clm/native-clm-v0-m0-m1-kaggle.ipynb`](../../notebooks/06-native-clm/native-clm-v0-m0-m1-kaggle.ipynb)
+[`../../notebooks/06-native-clm/native-clm-v0-m2-continual-language-kaggle.ipynb`](../../notebooks/06-native-clm/native-clm-v0-m2-continual-language-kaggle.ipynb)
 
-在 Kaggle 开启 GPU，并配置 `GITHUB_TOKEN`，从上到下运行即可。Notebook 会 clone 分支、运行 M0、准备 TinyStories、训练 canonical M1、打印全部 gates 与 generation sample，并自动把 M0/M1 轻量结果推回分支。M1 无论 pass 还是 incomplete 都允许发布。
+Kaggle Secrets：
+
+```text
+HF_TOKEN
+GITHUB_TOKEN
+```
+
+Notebook 会：
+
+1. 验证两张 GPU；
+2. 从 `archelabsxyz/native-clm-v0` 下载精确 M1 checkpoint 并校验 SHA；
+3. 准备 A/B/C/D 本地 UTF-8 corpus；
+4. 对每个 frozen formal seed，在 GPU0/GPU1 并发运行 protected/unsafe；
+5. 无论 positive/negative 都写入 registered scientific decision；
+6. 将 6 个 formal arm final checkpoints 上传 Hugging Face；
+7. Git 只 push lightweight evidence，不提交 `.pt`。
 
 ## 推进规则
 
-如果 M1 通过，不要立刻升级到 30M。下一步保持约 12M，进入 **M2 — continual language stream**。第一轮 30M 应放在持续学习与 growth 行为已经看清楚以后，作为 scaling confirmation，而不是 debug 环境。
+如果 M2 SUPPORTED，保持相同模型规模进入 **M3 — autonomous Cell growth**。如果 M2 NOT_SUPPORTED，保留 negative，优先判断是 protected capacity、certificate transfer 还是 fixed-topology limit，再决定机制变化。
+
+formal seeds 禁止用于调参；冻结 M2 失败后也禁止 post-hoc 修改 threshold 再把同一 seeds 当 untouched evidence。
