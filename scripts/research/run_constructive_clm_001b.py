@@ -5,8 +5,10 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import sys
 from pathlib import Path
+from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SRC = REPO_ROOT / "src"
@@ -28,7 +30,20 @@ def _protocol_sha() -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _strict_json_value(value: Any) -> Any:
+    if isinstance(value, float) and not math.isfinite(value):
+        return 1e30
+    if isinstance(value, dict):
+        return {key: _strict_json_value(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_strict_json_value(item) for item in value]
+    if isinstance(value, tuple):
+        return [_strict_json_value(item) for item in value]
+    return value
+
+
 def _write_results(output: Path, payload: dict) -> None:
+    payload = _strict_json_value(payload)
     output.mkdir(parents=True, exist_ok=True)
     (output / "decision.json").write_text(
         json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n",
