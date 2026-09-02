@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Publish Native CLM v0 M2 evidence and checkpoints.
 
 Binary M2 checkpoints go to the existing Hugging Face model repository. Git receives
@@ -10,9 +9,9 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from pathlib import Path
 import shutil
 import subprocess
-from pathlib import Path
 
 from huggingface_hub import HfApi
 
@@ -93,7 +92,6 @@ def main() -> int:
                 }
             )
 
-    # Lightweight result docs are useful alongside the binary model lineage.
     api.upload_file(
         path_or_fileobj=str(decision_path),
         path_in_repo="m2/decision.json",
@@ -144,7 +142,7 @@ def main() -> int:
     print("Rebasing M2 evidence commit...", flush=True)
     try:
         run(["git", "rebase", f"origin/{args.branch}"], timeout=120)
-    except Exception:
+    except subprocess.CalledProcessError:
         subprocess.run(["git", "rebase", "--abort"], check=False)
         raise
 
