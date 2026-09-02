@@ -38,6 +38,64 @@ def _load_protocol(path: Path) -> tuple[dict, str]:
     return protocol, hashlib.sha256(raw).hexdigest()
 
 
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _validate_data_manifest(data_dir: Path, protocol: dict) -> str:
+    manifest_path = data_dir / "manifest.json"
+    if not manifest_path.exists():
+        raise FileNotFoundError(manifest_path)
+    raw = manifest_path.read_bytes()
+    manifest = json.loads(raw)
+    if manifest.get("format") != "minicells.native-clm-v0.m2-data-manifest.v1":
+        raise RuntimeError("unexpected M2 data manifest format")
+    if manifest.get("stream") != ["B", "C", "D"]:
+        raise RuntimeError("unexpected M2 data stream order")
+    if manifest.get("learner_replay_bytes") != 0:
+        raise RuntimeError("M2 data manifest does not declare zero learner replay")
+
+    expected_docs = {
+        "A_eval": int(protocol["stream"]["A"]["documents"]),
+        "B_train": int(protocol["stream"]["B"]["train_documents"]),
+        "B_eval": int(protocol["stream"]["B"]["eval_documents"]),
+        "C_train": int(protocol["stream"]["C"]["train_documents"]),
+        "C_eval": int(protocol["stream"]["C"]["eval_documents"]),
+        "D_train": int(protocol["stream"]["D"]["train_documents"]),
+        "D_eval": int(protocol["stream"]["D"]["eval_documents"]),
+    }
+    files = manifest.get("files", {})
+    if set(files) != set(expected_docs):
+        raise RuntimeError("M2 data manifest has an unexpected file set")
+    for name, expected_count in expected_docs.items():
+        record = files[name]
+        if int(record["documents"]) != expected_count:
+            raise RuntimeError(
+                f"M2 data document count mismatch for {name}: "
+                f"expected {expected_count}, got {record['documents']}"
+            )
+        path = data_dir / record["path"]
+        if not path.exists() or path.stat().st_size != int(record["bytes"]):
+            raise RuntimeError(f"M2 data file size mismatch for {name}")
+        actual_sha = _sha256(path)
+        if actual_sha != record["sha256"]:
+            raise RuntimeError(f"M2 data SHA mismatch for {name}")
+
+    revisions = manifest.get("dataset_revisions", {})
+    expected_revision_keys = {"A", "B", "C_train", "C_eval", "D"}
+    if set(revisions) != expected_revision_keys:
+        raise RuntimeError("M2 data manifest lacks exact dataset revisions")
+    for name, record in revisions.items():
+        if not record.get("repo_id") or not record.get("resolved_revision"):
+            raise RuntimeError(f"M2 data revision is incomplete for {name}")
+
+    return hashlib.sha256(raw).hexdigest()
+
+
 def _paths(data_dir: Path):
     train = {
         "B": data_dir / "B-wikitext-train.txt",
@@ -111,14 +169,27 @@ def _arm_command(args, seed: int, arm: str, device: str) -> tuple[list[str], dic
     return command, env
 
 
-def _run_seed_pair(args, protocol: dict, seed: int, devices: tuple[str, str]) -> dict:
+def _run_seed_pair(
+    args,
+    protocol: dict,
+    seed: int,
+    devices: tuple[str, str],
+    *,
+    protocol_sha256: str,
+    data_manifest_sha256: str,
+) -> dict:
     seed_dir = args.output_dir / f"seed-{seed}"
     completed_summary = seed_dir / "seed-summary.json"
     protected_summary = seed_dir / "protected/arm-summary.json"
     unsafe_summary = seed_dir / "unsafe/arm-summary.json"
     if completed_summary.exists() and protected_summary.exists() and unsafe_summary.exists():
-        print(f"[M2 seed={seed}] reusing completed seed artifacts", flush=True)
-        return json.loads(completed_summary.read_text(encoding="utf-8"))
+        cached = json.loads(completed_summary.read_text(encoding="utf-8"))
+        if cached.get("protocol_sha256") != protocol_sha256:
+            raise RuntimeError(f"seed {seed} cache belongs to a different M2 protocol")
+        if cached.get("data_manifest_sha256") != data_manifest_sha256:
+            raise RuntimeError(f"seed {seed} cache belongs to different M2 data")
+        print(f"[M2 seed={seed}] reusing verified completed seed artifacts", flush=True)
+        return cached
 
     print(
         f"\n[M2 seed={seed}] GPU/worker 0 = protected ({devices[0]}), "
@@ -137,6 +208,8 @@ def _run_seed_pair(args, protocol: dict, seed: int, devices: tuple[str, str]) ->
     protected = json.loads(protected_summary.read_text(encoding="utf-8"))
     unsafe = json.loads(unsafe_summary.read_text(encoding="utf-8"))
     result = compare_arms(protected, unsafe, thresholds=protocol["thresholds"])
+    result["protocol_sha256"] = protocol_sha256
+    result["data_manifest_sha256"] = data_manifest_sha256
     completed_summary.write_text(
         json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
@@ -186,6 +259,7 @@ def _write_formal_artifacts(output: Path, decision: dict) -> None:
     results_md += f"- Status: `{decision['status']}`\n"
     results_md += f"- Scientific decision: `{decision['scientific_decision']}`\n"
     results_md += f"- Protocol SHA-256: `{decision['protocol_sha256']}`\n"
+    results_md += f"- Data manifest SHA-256: `{decision['data_manifest_sha256']}`\n"
     results_md += f"- Formal seeds: `{decision['formal_seeds']}`\n"
     results_md += "- Learner replay: `0 bytes`\n"
     results_md += "- Topology: `8 Cells / 2 active / growth disabled`\n"
@@ -217,6 +291,9 @@ def main() -> int:
             parser.error("--worker requires --arm and --seed")
         return _run_worker(args, protocol)
 
+    data_manifest_sha = _validate_data_manifest(args.data_dir, protocol)
+    print(f"Verified M2 data manifest SHA-256: {data_manifest_sha}", flush=True)
+
     devices = tuple(part.strip() for part in args.devices.split(","))
     if len(devices) != 2:
         raise ValueError("--devices must name exactly two workers, e.g. 0,1")
@@ -231,7 +308,17 @@ def main() -> int:
         parser.error("choose --formal or --seed <development-seed>")
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    seed_results = [_run_seed_pair(args, protocol, seed, devices) for seed in seeds]
+    seed_results = [
+        _run_seed_pair(
+            args,
+            protocol,
+            seed,
+            devices,
+            protocol_sha256=protocol_sha,
+            data_manifest_sha256=data_manifest_sha,
+        )
+        for seed in seeds
+    ]
 
     if args.formal:
         decision = aggregate_formal(
@@ -239,6 +326,7 @@ def main() -> int:
             protocol_sha256=protocol_sha,
             formal_seeds=seeds,
         )
+        decision["data_manifest_sha256"] = data_manifest_sha
         _write_formal_artifacts(args.output_dir, decision)
         print(json.dumps(decision, indent=2), flush=True)
         return 0 if decision["scientific_decision"] else 2
