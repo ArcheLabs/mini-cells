@@ -49,6 +49,11 @@
     "width": 384,
     "representation": "count + mean + top-rank covariance eigenvectors/eigenvalues + residual diagonal variance",
     "maximum_persistent_bytes_per_cell": 52360,
+    "maximum_persistent_sketch_bytes_per_cell": 52360,
+    "affine_gate_persistent_fields": "384-D float32 weight plus bias, threshold, historical-score mean and historical-score standard deviation",
+    "maximum_affine_gate_bytes_per_edge": 1552,
+    "maximum_total_address_bytes_per_node": 53912,
+    "storage_accounting_note": "52,360 bytes is the M3L-1-compatible rank-32 sketch budget. A split node additionally owns one lineage edge gate. The conservative total-node budget therefore counts the full persisted four-scalar gate payload as 1,552 logical float32 bytes.",
     "diagonal_regularization": 0.0001,
     "target_old_fpr": 0.1,
     "max_queries_per_cell_per_batch": 256,
@@ -112,7 +117,9 @@
     "maximum_birth_logits_mse": 1e-10,
     "maximum_birth_root_prob_drift": 1e-7,
     "maximum_address_state_rank": 32,
-    "maximum_address_state_bytes_per_cell": 52360
+    "maximum_address_state_bytes_per_cell": 52360,
+    "maximum_affine_gate_bytes_per_edge": 1552,
+    "maximum_total_address_bytes_per_node": 53912
   },
   "registered_gates": [
     "exact_same_m1_checkpoint",
