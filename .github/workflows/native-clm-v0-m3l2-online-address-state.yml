@@ -1,0 +1,113 @@
+name: Native CLM v0 M3L-2 Online Address State
+
+on:
+  push:
+    branches: [codex/native-clm-v0-m3l2-online-address-state]
+    paths:
+      - 'src/minicells/native_clm_m3l2.py'
+      - 'scripts/research/*m3l2*'
+      - 'research/validations/native-clm-v0-m3l2-online-address-state/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3l2-online-address-state-kaggle.ipynb'
+      - 'research/stages/06-native-clm/**'
+      - 'tests/research/06-native-clm/test_native_clm_m3l2.py'
+      - '.github/workflows/native-clm-v0-m3l2-online-address-state.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m3l2.py'
+      - 'scripts/research/*m3l2*'
+      - 'research/validations/native-clm-v0-m3l2-online-address-state/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3l2-online-address-state-kaggle.ipynb'
+      - 'research/stages/06-native-clm/**'
+      - 'tests/research/06-native-clm/test_native_clm_m3l2.py'
+      - '.github/workflows/native-clm-v0-m3l2-online-address-state.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen M3L-2 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('research/validations/native-clm-v0-m3l2-online-address-state/protocol.json').read_text())
+          assert p['format']=='minicells.native-clm-v0.m3l2-online-address-state.protocol.v1'
+          assert p['status']=='FROZEN_UNRUN'
+          assert p['frozen_before_formal_run'] is True
+          assert p['address_state']['rank']==32
+          assert p['address_state']['maximum_persistent_bytes_per_cell']==52360
+          assert p['address_state']['max_queries_per_cell_per_batch']==256
+          assert p['bootstrap']['documents']==10000
+          assert p['bootstrap']['batches']==160
+          assert p['bootstrap']['sampling_seed']==74001
+          assert p['growth']['growth_check_interval']==50
+          assert p['growth']['growth_cooldown_steps']==100
+          assert p['growth']['max_new_cells']==8
+          assert p['growth']['max_final_cells']==16
+          assert p['formal_seeds']==[74211,74212,74213]
+          assert set(p['formal_seeds']).isdisjoint(p['consumed_seeds_forbidden'])
+          assert p['bootstrap']['A_bootstrap_access_after_B_starts'] is False
+          assert p['learner_replay_bytes_after_continual_start']==0
+          assert len(p['registered_gates'])==25
+          PY
+      - name: Validate canonical notebook
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('research/notebooks/06-native-clm/native-clm-v0-m3l2-online-address-state-kaggle.ipynb')
+          nb=json.loads(path.read_text())
+          assert nb['nbformat']==4
+          assert nb['cells'][0]['cell_type']=='markdown'
+          code='\n'.join(''.join(cell.get('source',[])) for cell in nb['cells'] if cell['cell_type']=='code')
+          assert "scripts/research/run_native_clm_v0_m3l2.py" in code
+          assert "'--formal'" in code
+          assert "scripts/research/publish_native_clm_v0_m3l2.py" in code
+          assert "'--require-hf-upload'" in code
+          assert "BRANCH = 'codex/native-clm-v0-m3l2-online-address-state'" in code
+          for cell in nb['cells']:
+              if cell['cell_type']=='code':
+                  assert cell.get('execution_count') is None
+                  assert cell.get('outputs')==[]
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q \
+            src/minicells/native_clm_m3l2.py \
+            scripts/research/run_native_clm_v0_m3l2.py \
+            scripts/research/prepare_native_clm_v0_m3l2_data.py \
+            scripts/research/publish_native_clm_v0_m3l2.py
+          ruff check \
+            src/minicells/native_clm_m3l2.py \
+            scripts/research/run_native_clm_v0_m3l2.py \
+            scripts/research/prepare_native_clm_v0_m3l2_data.py \
+            scripts/research/publish_native_clm_v0_m3l2.py \
+            tests/research/06-native-clm/test_native_clm_m3l2.py
+      - name: M3L-2 mechanics smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m3l2.py
+      - name: Formal seed guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text='\n'.join(p.read_text() for p in [
+              Path('.github/workflows/native-clm-v0-m3l2-online-address-state.yml'),
+              Path('scripts/research/run_native_clm_v0_m3l2.py'),
+              Path('scripts/research/publish_native_clm_v0_m3l2.py'),
+          ])
+          for seed in ('74211','74212','74213'):
+              assert f'--seed {seed}' not in text
+          assert 'subprocess.run' not in Path('.github/workflows/native-clm-v0-m3l2-online-address-state.yml').read_text().split('Formal seed guard')[0]
+          forbidden='run_native_clm_v0_'+'m3r.py --formal'
+          assert forbidden not in text
+          print('M3L-2 formal seeds remain untouched by CI.')
+          PY
