@@ -38,10 +38,11 @@ jobs:
       - name: Protection-only smoke
         run: python scripts/research/run_constructive_clm_003.py --smoke >/tmp/clm003-smoke.json
       - name: Show smoke summary
-        run: python - <<'PY'
+        run: |
+          python - <<'PY'
           import json
-          data=json.load(open('/tmp/clm003-smoke.json'))
-          for name,row in data['variants'].items():
+          data = json.load(open('/tmp/clm003-smoke.json'))
+          for name, row in data['variants'].items():
               print(name, {
                   'cells': row['final_cells'],
                   'gain': row['acquisition_gain'],
