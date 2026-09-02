@@ -51,6 +51,17 @@ jobs:
           ]
           assert {name: p['growth'][name] for name in names} == {name: m3['growth'][name] for name in names}
           PY
+      - name: Persist deterministic Ruff fixes
+        if: github.actor != 'github-actions[bot]'
+        run: |
+          ruff check --fix --unsafe-fixes src/minicells/native_clm_m3r.py scripts/research/run_native_clm_v0_m3r.py scripts/research/prepare_native_clm_v0_m3r_data.py scripts/research/publish_native_clm_v0_m3r.py tests/research/06-native-clm/test_native_clm_m3r.py
+          if ! git diff --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add src/minicells/native_clm_m3r.py scripts/research/run_native_clm_v0_m3r.py scripts/research/prepare_native_clm_v0_m3r_data.py scripts/research/publish_native_clm_v0_m3r.py tests/research/06-native-clm/test_native_clm_m3r.py
+            git commit -m 'style: fix Native CLM v0 M3R lint'
+            git push origin HEAD:codex/native-clm-v0-m3r-read-preserving-growth
+          fi
       - name: Compile and lint
         run: |
           python -m compileall -q src/minicells/native_clm_m3r.py scripts/research/run_native_clm_v0_m3r.py scripts/research/prepare_native_clm_v0_m3r_data.py scripts/research/publish_native_clm_v0_m3r.py
