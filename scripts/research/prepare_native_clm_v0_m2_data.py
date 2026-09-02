@@ -6,23 +6,33 @@ learner-side replay:
   C: cleaned Python files from CodeParrot
   D: Databricks Dolly instruction/response text
 
-The script writes plain UTF-8 files so the M2 learner never depends on datasets/Arrow.
-On Python 3.12 the dedicated preparation subprocess hard-exits only after every output
+Every Hugging Face dataset is resolved from `main` to an exact Hub commit before
+streaming. The resulting local UTF-8 files are independently SHA-256 identified.
+On Python 3.12 this dedicated preparation subprocess hard-exits only after every output
 and manifest has been fsynced, avoiding the Arrow finalization crash seen on Kaggle.
 """
 
 from __future__ import annotations
 
 import argparse
-from collections.abc import Callable, Iterable
 import hashlib
 import json
 import os
-from pathlib import Path
 import sys
+from collections.abc import Callable, Iterable
+from pathlib import Path
+
+from huggingface_hub import HfApi
 
 
 FORMAT = "minicells.native-clm-v0.m2-data-manifest.v1"
+DATASET_REPOS = {
+    "A": "roneneldan/TinyStories",
+    "B": "Salesforce/wikitext",
+    "C_train": "codeparrot/codeparrot-clean-train",
+    "C_eval": "codeparrot/codeparrot-clean-valid",
+    "D": "databricks/databricks-dolly-15k",
+}
 
 
 def _sha256(path: Path) -> str:
@@ -60,6 +70,8 @@ def _verified_cache(output: Path) -> dict | None:
     except (OSError, json.JSONDecodeError):
         return None
     if manifest.get("format") != FORMAT:
+        return None
+    if set(manifest.get("dataset_revisions", {})) != set(DATASET_REPOS):
         return None
     for record in manifest.get("files", {}).values():
         path = output / record["path"]
@@ -116,6 +128,22 @@ def _split_single_stream(stream, formatter, train_count: int, eval_count: int):
     return train, eval_rows
 
 
+def _resolve_revisions(token: str) -> dict[str, dict[str, str]]:
+    api = HfApi(token=token)
+    resolved: dict[str, dict[str, str]] = {}
+    for name, repo_id in DATASET_REPOS.items():
+        info = api.dataset_info(repo_id, revision="main")
+        if not info.sha:
+            raise RuntimeError(f"Hugging Face did not resolve a revision for {repo_id}")
+        resolved[name] = {
+            "repo_id": repo_id,
+            "requested_revision": "main",
+            "resolved_revision": info.sha,
+        }
+        print(f"Resolved dataset {name}: {repo_id}@main -> {info.sha}", flush=True)
+    return resolved
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -145,12 +173,18 @@ def main() -> int:
     if not token:
         raise RuntimeError(f"missing environment variable {args.token_env}")
 
+    revisions = _resolve_revisions(token)
+
     from datasets import load_dataset
 
     files: dict[str, dict] = {}
 
     a_stream = load_dataset(
-        "roneneldan/TinyStories", split="validation", streaming=True, token=token
+        DATASET_REPOS["A"],
+        split="validation",
+        streaming=True,
+        token=token,
+        revision=revisions["A"]["resolved_revision"],
     )
     a_path = output / "A-tinystories-eval.txt"
     a_count = _fsync_text(a_path, _rows(a_stream, _text), args.a_eval_docs)
@@ -158,18 +192,20 @@ def main() -> int:
         raise RuntimeError(f"TinyStories yielded only {a_count} evaluation documents")
 
     b_train_stream = load_dataset(
-        "Salesforce/wikitext",
+        DATASET_REPOS["B"],
         "wikitext-2-raw-v1",
         split="train",
         streaming=True,
         token=token,
+        revision=revisions["B"]["resolved_revision"],
     )
     b_eval_stream = load_dataset(
-        "Salesforce/wikitext",
+        DATASET_REPOS["B"],
         "wikitext-2-raw-v1",
         split="validation",
         streaming=True,
         token=token,
+        revision=revisions["B"]["resolved_revision"],
     )
     b_train_path = output / "B-wikitext-train.txt"
     b_eval_path = output / "B-wikitext-eval.txt"
@@ -179,10 +215,18 @@ def main() -> int:
         raise RuntimeError("WikiText did not yield the registered document counts")
 
     c_train_stream = load_dataset(
-        "codeparrot/codeparrot-clean-train", split="train", streaming=True, token=token
+        DATASET_REPOS["C_train"],
+        split="train",
+        streaming=True,
+        token=token,
+        revision=revisions["C_train"]["resolved_revision"],
     )
     c_eval_stream = load_dataset(
-        "codeparrot/codeparrot-clean-valid", split="train", streaming=True, token=token
+        DATASET_REPOS["C_eval"],
+        split="train",
+        streaming=True,
+        token=token,
+        revision=revisions["C_eval"]["resolved_revision"],
     )
     c_train_path = output / "C-code-train.txt"
     c_eval_path = output / "C-code-eval.txt"
@@ -192,7 +236,11 @@ def main() -> int:
         raise RuntimeError("CodeParrot clean did not yield the registered document counts")
 
     d_stream = load_dataset(
-        "databricks/databricks-dolly-15k", split="train", streaming=True, token=token
+        DATASET_REPOS["D"],
+        split="train",
+        streaming=True,
+        token=token,
+        revision=revisions["D"]["resolved_revision"],
     )
     d_train, d_eval = _split_single_stream(d_stream, _dolly, args.d_train_docs, args.d_eval_docs)
     d_train_path = output / "D-dolly-train.txt"
@@ -226,13 +274,7 @@ def main() -> int:
         "stream": ["B", "C", "D"],
         "A_role": "evaluation_only_M1_retention",
         "learner_replay_bytes": 0,
-        "sources": {
-            "A": "roneneldan/TinyStories validation",
-            "B": "Salesforce/wikitext wikitext-2-raw-v1",
-            "C_train": "codeparrot/codeparrot-clean-train train",
-            "C_eval": "codeparrot/codeparrot-clean-valid train",
-            "D": "databricks/databricks-dolly-15k train (disjoint train/eval prefix)",
-        },
+        "dataset_revisions": revisions,
         "files": files,
     }
     manifest_path = output / "manifest.json"
