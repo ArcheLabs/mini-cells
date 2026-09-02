@@ -1,9 +1,11 @@
 """M3L-2: persistent online rank-32 query address state for lineage routing."""
+
 from __future__ import annotations
 
 import contextlib
 import hashlib
-from dataclasses import dataclass
+import math
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
@@ -13,7 +15,11 @@ from torch import Tensor
 
 from .native_clm_m2 import NativeCLMM2Config
 from .native_clm_m3 import GrowthWindow, NativeCLMM3GrowthConfig, _loader
-from .native_clm_m3l_gate import LowRankGaussianSketch, derive_sketch_gate
+from .native_clm_m3l_gate import (
+    LowRankGaussianSketch,
+    derive_sketch_gate,
+    sketch_covariance_matvec,
+)
 from .native_clm_m3r import LineageNativeCLM
 from .native_clm_v0 import NativeCLMConfig
 
@@ -25,20 +31,41 @@ class M3L2AddressConfig:
     target_old_fpr: float = 0.1
     maximum_persistent_bytes_per_cell: int = 52360
     bootstrap_batches: int = 160
+    max_queries_per_cell_per_batch: int = 256
+
+    def validate(self) -> None:
+        if self.rank != 32:
+            raise ValueError("registered M3L-2 requires rank 32")
+        if self.diagonal_regularization <= 0:
+            raise ValueError("diagonal_regularization must be positive")
+        if abs(self.target_old_fpr - 0.1) > 1e-12:
+            raise ValueError("registered M3L-2 requires target_old_fpr=0.1")
+        if self.maximum_persistent_bytes_per_cell != 52360:
+            raise ValueError("registered M3L-2 persistent-state budget drift")
+        if self.bootstrap_batches != 160:
+            raise ValueError("registered M3L-2 requires 160 bootstrap batches")
+        if self.max_queries_per_cell_per_batch != 256:
+            raise ValueError("registered M3L-2 requires 256 sampled queries per cell per batch")
 
 
 class MomentAccumulator:
-    """Bounded-memory normalized-query first/second moments."""
+    """Ephemeral bounded normalized-query first/second moments."""
 
     def __init__(self, width: int, *, device: torch.device | str = "cpu") -> None:
         self.count = 0
-        self.sum = torch.zeros(width, dtype=torch.float64, device=device)
-        self.second = torch.zeros(width, width, dtype=torch.float64, device=device)
+        self.sum = torch.zeros(width, dtype=torch.float32, device=device)
+        self.second = torch.zeros(width, width, dtype=torch.float32, device=device)
 
-    def update(self, values: Tensor) -> None:
+    def update(self, values: Tensor, *, max_samples: int | None = None) -> None:
         if values.numel() == 0:
             return
-        x = F.normalize(values.detach().to(self.sum.device, dtype=torch.float64), dim=-1)
+        x = F.normalize(values.detach().to(self.sum.device, dtype=torch.float32), dim=-1)
+        if max_samples is not None:
+            if max_samples < 1:
+                raise ValueError("max_samples must be positive")
+            x = x[:max_samples]
+        if x.numel() == 0:
+            return
         self.count += int(x.size(0))
         self.sum.add_(x.sum(dim=0))
         self.second.add_(x.transpose(0, 1).matmul(x))
@@ -46,11 +73,12 @@ class MomentAccumulator:
     def add_sketch(self, sketch: LowRankGaussianSketch) -> None:
         if sketch.count < 1:
             return
-        mean = sketch.mean.to(self.sum.device, dtype=torch.float64)
-        basis = sketch.basis.to(self.sum.device, dtype=torch.float64)
-        eig = sketch.eigenvalues.to(self.sum.device, dtype=torch.float64)
-        residual = sketch.residual_variance.to(self.sum.device, dtype=torch.float64)
-        cov = basis.matmul(torch.diag(eig)).matmul(basis.transpose(0, 1)) + torch.diag(residual)
+        mean = sketch.mean.to(self.sum.device, dtype=torch.float32)
+        basis = sketch.basis.to(self.sum.device, dtype=torch.float32)
+        eig = sketch.eigenvalues.to(self.sum.device, dtype=torch.float32)
+        residual = sketch.residual_variance.to(self.sum.device, dtype=torch.float32)
+        cov = (basis * eig.unsqueeze(0)).matmul(basis.transpose(0, 1))
+        cov = cov + torch.diag(residual)
         self.count += int(sketch.count)
         self.sum.add_(mean * sketch.count)
         self.second.add_(cov * max(1, sketch.count - 1) + sketch.count * torch.outer(mean, mean))
@@ -120,12 +148,28 @@ def _sketch_from_payload(value: dict[str, Any]) -> LowRankGaussianSketch:
     )
 
 
+def _map_sketch(sketch: LowRankGaussianSketch, fn) -> LowRankGaussianSketch:
+    return LowRankGaussianSketch(
+        count=sketch.count,
+        mean=fn(sketch.mean),
+        basis=fn(sketch.basis),
+        eigenvalues=fn(sketch.eigenvalues),
+        residual_variance=fn(sketch.residual_variance),
+    )
+
+
 class OnlineAddressNativeCLM(LineageNativeCLM):
     """Immutable-root lineage model whose local edges use persistent affine gates."""
 
     address_config = M3L2AddressConfig()
 
-    def __init__(self, config: NativeCLMConfig, *, cell_count: int | None = None, lineage_root_count: int | None = None) -> None:
+    def __init__(
+        self,
+        config: NativeCLMConfig,
+        *,
+        cell_count: int | None = None,
+        lineage_root_count: int | None = None,
+    ) -> None:
         super().__init__(config, cell_count=cell_count, lineage_root_count=lineage_root_count)
         self.historical_sketches: dict[int, LowRankGaussianSketch] = {}
         self.affine_gates: dict[int, dict[str, Tensor | float]] = {}
@@ -133,11 +177,34 @@ class OnlineAddressNativeCLM(LineageNativeCLM):
         self.bootstrap_complete = False
         self.bootstrap_parameter_hash_before: str | None = None
         self.bootstrap_parameter_hash_after: str | None = None
+        self.bootstrap_access_released = False
+        self.bootstrap_sampled_queries = 0
+
+    def _apply(self, fn, recurse: bool = True):
+        super()._apply(fn, recurse=recurse)
+        self.historical_sketches = {
+            cell_id: _map_sketch(sketch, fn)
+            for cell_id, sketch in self.historical_sketches.items()
+        }
+        for gate in self.affine_gates.values():
+            weight = gate.get("weight")
+            if isinstance(weight, Tensor):
+                gate["weight"] = fn(weight)
+        for accumulator in self.current_moments.values():
+            accumulator.sum = fn(accumulator.sum)
+            accumulator.second = fn(accumulator.second)
+        return self
 
     def _lineage_route_details(self, x: Tensor) -> dict[str, Tensor]:
         route_input = self.cellular.norm(x)
         query = F.normalize(self.cellular.query_proj(route_input), dim=-1)
-        root_keys = torch.stack([F.normalize(self.cellular.cells[i].route_key, dim=0) for i in range(self.lineage_root_count)], dim=0)
+        root_keys = torch.stack(
+            [
+                F.normalize(self.cellular.cells[index].route_key, dim=0)
+                for index in range(self.lineage_root_count)
+            ],
+            dim=0,
+        )
         root_scores = query.matmul(root_keys.transpose(0, 1)) / self.config.route_temperature
         k = min(self.config.active_cells, self.lineage_root_count)
         root_top_scores, root_idx = torch.topk(root_scores, k=k, dim=-1)
@@ -148,7 +215,8 @@ class OnlineAddressNativeCLM(LineageNativeCLM):
             if gate is None:
                 continue
             weight = gate["weight"]
-            assert isinstance(weight, Tensor)
+            if not isinstance(weight, Tensor):
+                raise TypeError("M3L-2 affine gate weight must be a Tensor")
             score = query.matmul(weight.to(query.device, query.dtype)) + float(gate["bias"])
             switch = (concrete == parent_id) & (score > float(gate["threshold"])).unsqueeze(-1)
             concrete = torch.where(switch, torch.full_like(concrete, child_id), concrete)
@@ -171,25 +239,40 @@ class OnlineAddressNativeCLM(LineageNativeCLM):
             "address_rank": self.address_config.rank,
         }
         payload["address_state"] = {
-            "historical_sketches": {str(k): _sketch_payload(v) for k, v in self.historical_sketches.items()},
+            "config": asdict(self.address_config),
+            "historical_sketches": {
+                str(cell_id): _sketch_payload(sketch)
+                for cell_id, sketch in self.historical_sketches.items()
+            },
             "affine_gates": {
-                str(k): {
-                    "weight": v["weight"].detach().cpu() if isinstance(v["weight"], Tensor) else v["weight"],
-                    "bias": float(v["bias"]),
-                    "threshold": float(v["threshold"]),
-                    "old_score_mean": float(v.get("old_score_mean", 0.0)),
-                    "old_score_std": float(v.get("old_score_std", 0.0)),
+                str(cell_id): {
+                    "weight": (
+                        gate["weight"].detach().cpu()
+                        if isinstance(gate["weight"], Tensor)
+                        else gate["weight"]
+                    ),
+                    "bias": float(gate["bias"]),
+                    "threshold": float(gate["threshold"]),
+                    "old_score_mean": float(gate.get("old_score_mean", 0.0)),
+                    "old_score_std": float(gate.get("old_score_std", 0.0)),
                 }
-                for k, v in self.affine_gates.items()
+                for cell_id, gate in self.affine_gates.items()
             },
             "bootstrap_complete": self.bootstrap_complete,
             "bootstrap_parameter_hash_before": self.bootstrap_parameter_hash_before,
             "bootstrap_parameter_hash_after": self.bootstrap_parameter_hash_after,
+            "bootstrap_access_released": self.bootstrap_access_released,
+            "bootstrap_sampled_queries": self.bootstrap_sampled_queries,
         }
         return payload
 
     @classmethod
-    def load_checkpoint(cls, path: str | Path, *, map_location: str | torch.device = "cpu") -> tuple["OnlineAddressNativeCLM", dict[str, Any]]:
+    def load_checkpoint(
+        cls,
+        path: str | Path,
+        *,
+        map_location: str | torch.device = "cpu",
+    ) -> tuple[OnlineAddressNativeCLM, dict[str, Any]]:
         payload = torch.load(path, map_location=map_location, weights_only=False)
         if payload.get("format") != "minicells.native-clm-v0.checkpoint.v1":
             raise ValueError("unsupported Native CLM checkpoint format")
@@ -199,32 +282,45 @@ class OnlineAddressNativeCLM(LineageNativeCLM):
         model = cls(config, cell_count=int(payload["cell_count"]), lineage_root_count=root_count)
         model.load_state_dict(payload["state_dict"])
         state = payload.get("address_state", {})
-        model.historical_sketches = {int(k): _sketch_from_payload(v) for k, v in state.get("historical_sketches", {}).items()}
-        model.affine_gates = {int(k): dict(v) for k, v in state.get("affine_gates", {}).items()}
+        if state.get("config"):
+            model.address_config = M3L2AddressConfig(**state["config"])
+            model.address_config.validate()
+        model.historical_sketches = {
+            int(cell_id): _sketch_from_payload(value)
+            for cell_id, value in state.get("historical_sketches", {}).items()
+        }
+        model.affine_gates = {
+            int(cell_id): dict(value)
+            for cell_id, value in state.get("affine_gates", {}).items()
+        }
         model.bootstrap_complete = bool(state.get("bootstrap_complete", False))
         model.bootstrap_parameter_hash_before = state.get("bootstrap_parameter_hash_before")
         model.bootstrap_parameter_hash_after = state.get("bootstrap_parameter_hash_after")
+        model.bootstrap_access_released = bool(state.get("bootstrap_access_released", False))
+        model.bootstrap_sampled_queries = int(state.get("bootstrap_sampled_queries", 0))
         return model, payload.get("extra", {})
 
     def address_state_metrics(self) -> dict[str, Any]:
-        ranks = [s.rank for s in self.historical_sketches.values()]
-        sizes = [s.storage_bytes for s in self.historical_sketches.values()]
+        ranks = [sketch.rank for sketch in self.historical_sketches.values()]
+        sizes = [sketch.storage_bytes for sketch in self.historical_sketches.values()]
         return {
             "sketch_count": len(ranks),
             "maximum_rank": max(ranks or [0]),
             "maximum_bytes_per_cell": max(sizes or [0]),
             "gate_count": len(self.affine_gates),
             "bootstrap_complete": self.bootstrap_complete,
+            "bootstrap_access_released": self.bootstrap_access_released,
+            "bootstrap_sampled_queries": self.bootstrap_sampled_queries,
         }
 
 
 def parameter_sha256(model: LineageNativeCLM) -> str:
-    h = hashlib.sha256()
-    for name, p in sorted(model.named_parameters(), key=lambda pair: pair[0]):
-        v = p.detach().cpu().contiguous()
-        h.update(name.encode())
-        h.update(v.numpy().tobytes())
-    return h.hexdigest()
+    digest = hashlib.sha256()
+    for name, parameter in sorted(model.named_parameters(), key=lambda pair: pair[0]):
+        value = parameter.detach().cpu().contiguous()
+        digest.update(name.encode("utf-8"))
+        digest.update(value.numpy().tobytes())
+    return digest.hexdigest()
 
 
 def _extract_query(model: OnlineAddressNativeCLM, cell_input: Tensor) -> Tensor:
@@ -236,13 +332,21 @@ def observe_online_queries(model: OnlineAddressNativeCLM, info: dict[str, Any]) 
     query = _extract_query(model, info["cell_input"])
     top_idx = info["top_idx"].to(query.device)
     for cell_id in torch.unique(top_idx).tolist():
-        cid = int(cell_id)
-        mask = (top_idx == cid).any(dim=-1)
+        cell_id = int(cell_id)
+        if not model.is_lineage_leaf(cell_id):
+            continue
+        mask = (top_idx == cell_id).any(dim=-1)
         values = query[mask]
         if values.numel() == 0:
             continue
-        acc = model.current_moments.setdefault(cid, MomentAccumulator(model.config.d_model))
-        acc.update(values.cpu())
+        accumulator = model.current_moments.setdefault(
+            cell_id,
+            MomentAccumulator(model.config.d_model, device=query.device),
+        )
+        accumulator.update(
+            values,
+            max_samples=model.address_config.max_queries_per_cell_per_batch,
+        )
 
 
 def bootstrap_address_state(
@@ -252,10 +356,22 @@ def bootstrap_address_state(
     device: torch.device,
     train_config: NativeCLMM2Config,
     address_config: M3L2AddressConfig,
+    sampling_seed: int = 74001,
 ) -> dict[str, Any]:
+    address_config.validate()
+    model.address_config = address_config
     before = parameter_sha256(model)
-    accum = {i: MomentAccumulator(model.config.d_model) for i in range(model.lineage_root_count)}
-    loader = _loader(bootstrap_path, seq_len=model.config.max_seq_len, batch_size=train_config.batch_size, seed=74001, num_workers=0)
+    accumulators = {
+        index: MomentAccumulator(model.config.d_model, device=device)
+        for index in range(model.lineage_root_count)
+    }
+    loader = _loader(
+        bootstrap_path,
+        seq_len=model.config.max_seq_len,
+        batch_size=train_config.batch_size,
+        seed=sampling_seed,
+        num_workers=0,
+    )
     was_training = model.training
     model.eval()
     with torch.no_grad():
@@ -268,40 +384,86 @@ def bootstrap_address_state(
             hidden = model.dropout(hidden)
             for index, block in enumerate(model.blocks):
                 hidden = block(hidden)
-                if index == model.config.cellular_layer_index:
-                    details = model._lineage_route_details(hidden)
-                    query, roots = details["query"], details["root_idx"]
-                    for root in range(model.lineage_root_count):
-                        mask = (roots == root).any(dim=-1)
-                        if bool(mask.any()):
-                            accum[root].update(query[mask].cpu())
-                    break
+                if index != model.config.cellular_layer_index:
+                    continue
+                details = model._lineage_route_details(hidden)
+                query = details["query"]
+                roots = details["root_idx"]
+                for root in range(model.lineage_root_count):
+                    mask = (roots == root).any(dim=-1)
+                    if bool(mask.any()):
+                        accumulators[root].update(
+                            query[mask],
+                            max_samples=address_config.max_queries_per_cell_per_batch,
+                        )
+                break
     model.train(was_training)
     model.historical_sketches = {
-        root: acc.to_sketch(rank=address_config.rank, diagonal_regularization=address_config.diagonal_regularization)
-        for root, acc in accum.items()
-        if acc.count >= 2
+        root: accumulator.to_sketch(
+            rank=address_config.rank,
+            diagonal_regularization=address_config.diagonal_regularization,
+        )
+        for root, accumulator in accumulators.items()
+        if accumulator.count >= 2
     }
     after = parameter_sha256(model)
     model.bootstrap_complete = True
     model.bootstrap_parameter_hash_before = before
     model.bootstrap_parameter_hash_after = after
+    model.bootstrap_sampled_queries = sum(accumulator.count for accumulator in accumulators.values())
     if before != after:
         raise RuntimeError("M3L-2 bootstrap mutated Native CLM parameters")
     if len(model.historical_sketches) != model.lineage_root_count:
         raise RuntimeError("M3L-2 bootstrap failed to construct all root address states")
     for sketch in model.historical_sketches.values():
-        if sketch.rank > address_config.rank or sketch.storage_bytes > address_config.maximum_persistent_bytes_per_cell:
+        if (
+            sketch.rank > address_config.rank
+            or sketch.storage_bytes > address_config.maximum_persistent_bytes_per_cell
+        ):
             raise RuntimeError("M3L-2 bootstrap address state exceeds registered bound")
-    return {"parameter_sha256_before": before, "parameter_sha256_after": after, "root_sketches": len(model.historical_sketches)}
+    return {
+        "parameter_sha256_before": before,
+        "parameter_sha256_after": after,
+        "root_sketches": len(model.historical_sketches),
+        "sampled_queries": model.bootstrap_sampled_queries,
+    }
 
 
-def _commit_nonspawn_windows(model: OnlineAddressNativeCLM, *, except_cell: int | None = None) -> None:
-    for cid, acc in list(model.current_moments.items()):
-        if cid == except_cell:
+def _commit_nonspawn_windows(
+    model: OnlineAddressNativeCLM,
+    *,
+    except_cell: int | None = None,
+) -> None:
+    for cell_id, accumulator in list(model.current_moments.items()):
+        if cell_id == except_cell:
             continue
-        model.historical_sketches[cid] = merge_sketch_and_moments(model.historical_sketches.get(cid), acc, config=model.address_config)  # type: ignore[assignment]
-        acc.clear()
+        if not model.is_lineage_leaf(cell_id):
+            model.current_moments.pop(cell_id, None)
+            continue
+        merged = merge_sketch_and_moments(
+            model.historical_sketches.get(cell_id),
+            accumulator,
+            config=model.address_config,
+        )
+        if merged is not None:
+            model.historical_sketches[cell_id] = merged
+        accumulator.clear()
+
+
+def _estimated_gate_activation(
+    sketch: LowRankGaussianSketch,
+    gate: dict[str, Tensor | float],
+) -> float:
+    weight = gate["weight"]
+    if not isinstance(weight, Tensor):
+        raise TypeError("M3L-2 affine gate weight must be a Tensor")
+    weight = weight.to(sketch.mean.device, sketch.mean.dtype)
+    mean = torch.dot(weight, sketch.mean) + float(gate["bias"])
+    variance = torch.dot(weight, sketch_covariance_matvec(sketch, weight)).clamp_min(1e-12)
+    z = (float(gate["threshold"]) - float(mean.detach().cpu())) / math.sqrt(
+        float(variance.detach().cpu())
+    )
+    return 0.5 * math.erfc(z / math.sqrt(2.0))
 
 
 def maybe_spawn_online_address(
@@ -333,8 +495,16 @@ def maybe_spawn_online_address(
     if current is None or current.count < 2 or old is None:
         _commit_nonspawn_windows(model)
         return None
-    current_sketch = current.to_sketch(rank=model.address_config.rank, diagonal_regularization=model.address_config.diagonal_regularization)
-    gate = derive_sketch_gate(old, current_sketch, diagonal_regularization=model.address_config.diagonal_regularization, target_old_fpr=model.address_config.target_old_fpr)
+    current_sketch = current.to_sketch(
+        rank=model.address_config.rank,
+        diagonal_regularization=model.address_config.diagonal_regularization,
+    )
+    gate = derive_sketch_gate(
+        old,
+        current_sketch,
+        diagonal_regularization=model.address_config.diagonal_regularization,
+        target_old_fpr=model.address_config.target_old_fpr,
+    )
 
     was_training = model.training
     model.eval()
@@ -344,7 +514,11 @@ def maybe_spawn_online_address(
         before_roots = before["cell_info"]["root_idx"]
         before_probs = before["cell_info"]["root_probs"]
     route_key = F.normalize(current_sketch.mean.to(dtype=torch.float32), dim=0)
-    child_id = model.spawn_cell(parent_id=parent_id, route_key=route_key, inherit_scale=growth.inherit_scale)
+    child_id = model.spawn_cell(
+        parent_id=parent_id,
+        route_key=route_key,
+        inherit_scale=growth.inherit_scale,
+    )
     child = model.cellular.cells[child_id]
     child.route_key.requires_grad_(False)
     child.weight.requires_grad_(True)
@@ -352,8 +526,8 @@ def maybe_spawn_online_address(
     window.ensure_cells(model.cell_count)
     model.affine_gates[parent_id] = gate
     model.historical_sketches[child_id] = current_sketch
-    current.clear()
-    _commit_nonspawn_windows(model, except_cell=parent_id)
+    model.current_moments.pop(parent_id, None)
+    _commit_nonspawn_windows(model)
     with torch.no_grad():
         after = model(probe_tokens, return_info=True)
         after_logits = after["logits"].detach().float()
@@ -379,17 +553,43 @@ def maybe_spawn_online_address(
         "address_parent_rank": old.rank,
         "address_child_rank": current_sketch.rank,
         "address_child_bytes": current_sketch.storage_bytes,
+        "estimated_old_gate_activation": _estimated_gate_activation(old, gate),
+        "estimated_current_gate_activation": _estimated_gate_activation(current_sketch, gate),
     }
 
 
+@dataclass
+class _BootstrapLease:
+    path: Path | None
+    consumed: bool = False
+
+    def consume(self) -> Path:
+        if self.path is None or self.consumed:
+            raise RuntimeError("M3L-2 bootstrap may be consumed exactly once")
+        path = self.path
+        self.path = None
+        self.consumed = True
+        return path
+
+    @property
+    def accessible(self) -> bool:
+        return self.path is not None
+
+
 @contextlib.contextmanager
-def _patched_m3r_online(bootstrap_path: str | Path, address_config: M3L2AddressConfig):
+def _patched_m3r_online(
+    bootstrap_path: str | Path,
+    address_config: M3L2AddressConfig,
+    train_config: NativeCLMM2Config,
+):
     import minicells.native_clm_m3r as m3r
 
+    address_config.validate()
     original_cls = m3r.LineageNativeCLM
     original_observe = m3r._observe_growth_window
     original_spawn = m3r.maybe_spawn_lineage_from_pressure
     original_freeze = m3r._freeze_to_cell_only
+    lease = _BootstrapLease(Path(bootstrap_path))
 
     OnlineAddressNativeCLM.address_config = address_config
 
@@ -397,7 +597,14 @@ def _patched_m3r_online(bootstrap_path: str | Path, address_config: M3L2AddressC
         original_freeze(model)
         if isinstance(model, OnlineAddressNativeCLM):
             device = next(model.parameters()).device
-            bootstrap_address_state(model, bootstrap_path, device=device, train_config=_patched_m3r_online.train_config, address_config=address_config)
+            bootstrap_address_state(
+                model,
+                lease.consume(),
+                device=device,
+                train_config=train_config,
+                address_config=address_config,
+            )
+            model.bootstrap_access_released = not lease.accessible
 
     def observe(model, window, info, ratios, loss, child_hits):
         original_observe(model, window, info, ratios, loss, child_hits)
@@ -409,15 +616,12 @@ def _patched_m3r_online(bootstrap_path: str | Path, address_config: M3L2AddressC
     m3r._observe_growth_window = observe
     m3r.maybe_spawn_lineage_from_pressure = maybe_spawn_online_address
     try:
-        yield
+        yield lease
     finally:
         m3r.LineageNativeCLM = original_cls
         m3r._freeze_to_cell_only = original_freeze
         m3r._observe_growth_window = original_observe
         m3r.maybe_spawn_lineage_from_pressure = original_spawn
-
-
-_patched_m3r_online.train_config = NativeCLMM2Config()  # type: ignore[attr-defined]
 
 
 def run_online_address_state_arm(
@@ -437,8 +641,8 @@ def run_online_address_state_arm(
     import minicells.native_clm_m3r as m3r
 
     config = address_config or M3L2AddressConfig()
-    _patched_m3r_online.train_config = train_config  # type: ignore[attr-defined]
-    with _patched_m3r_online(bootstrap_path, config):
+    config.validate()
+    with _patched_m3r_online(bootstrap_path, config, train_config) as lease:
         summary = m3r.run_lineage_growth_arm(
             checkpoint_path=checkpoint_path,
             expected_checkpoint_sha256=expected_checkpoint_sha256,
@@ -450,11 +654,21 @@ def run_online_address_state_arm(
             growth_config=growth_config,
             device=device,
         )
-    final_path = Path(output_dir) / "final-model.pt"
+    if not lease.consumed or lease.accessible:
+        raise RuntimeError("M3L-2 bootstrap access was not released before continual learning")
+
+    final_path = Path(output_dir) / "final.pt"
     restored, _ = OnlineAddressNativeCLM.load_checkpoint(final_path, map_location="cpu")
     metrics = restored.address_state_metrics()
-    payload = restored.checkpoint_payload()
-    roundtrip = bool(payload.get("address_state") and metrics["gate_count"] == len(summary.get("growth_events", [])))
+    payload = torch.load(final_path, map_location="cpu", weights_only=False)
+    address_payload = payload.get("address_state", {})
+    roundtrip = bool(
+        address_payload
+        and metrics["gate_count"] == len(summary.get("growth_events", []))
+        and metrics["bootstrap_complete"]
+        and metrics["bootstrap_access_released"]
+        and address_payload.get("config", {}).get("rank") == config.rank
+    )
     summary["arm"] = "online_address_state"
     summary["format"] = "minicells.native-clm-v0.m3l2-arm-summary.v1"
     summary["address_state"] = metrics
@@ -463,7 +677,12 @@ def run_online_address_state_arm(
         "complete": restored.bootstrap_complete,
         "parameter_sha256_before": restored.bootstrap_parameter_hash_before,
         "parameter_sha256_after": restored.bootstrap_parameter_hash_after,
-        "A_access_after_continual_start": False,
+        "A_access_after_continual_start": not restored.bootstrap_access_released,
+        "access_released_before_continual_start": restored.bootstrap_access_released,
+        "sampled_queries": restored.bootstrap_sampled_queries,
     }
-    (Path(output_dir) / "arm-summary.json").write_text(__import__("json").dumps(summary, indent=2, sort_keys=True) + "\n")
+    (Path(output_dir) / "arm-summary.json").write_text(
+        __import__("json").dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     return summary
