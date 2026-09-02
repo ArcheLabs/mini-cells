@@ -2,11 +2,18 @@
 
 # Stage 06 — Native CLM
 
-状态：**ACTIVE — WRITE-DRIFT ATTRIBUTION**
+状态：**ACTIVE — M2 SAFE-FUNCTIONAL-WRITE REOPENED**
 
-Stage 06 将 Constructive CLM 已正式支持的机制带入真正的 token-predictive model。
+Stage 06 的目标仍然只有一个：在真实 token-predictive model 中建立 replay-free continual learning。M1 证明 Native Cellular architecture 可以训练；M2 是第一个真正的 continual-learning milestone，并且至今仍然 **NOT SUPPORTED**。
 
-## 固定路线图
+因此从本版本开始，M3、M3R、M3L、M3L-1、M3L-2、M3W-0 不再解释为“已经跨过 M2 后的更高 milestones”，而统一归入 **M2 failure-decomposition evidence**。
+
+完整重开路线见：
+
+- [M2_REOPENED_ROADMAP.zh-CN.md](M2_REOPENED_ROADMAP.zh-CN.md)
+- [M2_REOPENED_ROADMAP.md](M2_REOPENED_ROADMAP.md)
+
+## 当前路线图
 
 ```text
 Constructive CLM 001–005                                  🟢 CLOSED
@@ -14,23 +21,31 @@ Constructive CLM 001–005                                  🟢 CLOSED
 Native CLM v0
   M0  architecture + execution                           🟢 COMPLETE
   M1  ~12M next-token training                           🟢 COMPLETE
+        ↓
   M2  fixed-topology replay-free continual language      🔴 NOT SUPPORTED
-      certificate protection 减少 forgetting             🟡 PARTIAL EVIDENCE
-  M3  global-pool growth-restored continual language     🔴 NOT SUPPORTED
-  M3R read-preserving / lineage-isolated growth          🔴 NOT SUPPORTED
-      root read ownership 得到保持                       🟡 PARTIAL EVIDENCE
-  M3R Address Diagnostic                                 🟢 QUERY GEOMETRY SEPARABLE
-  M3L query-sketch lineage gate                           🔴 NOT FEASIBLE
-  M3L-1 historical address-state capacity                🟢 LOW_RANK_CAPACITY_SUFFICIENT
-      minimum passing low-rank state = 32
-  M3L-2 online historical address-state integration      🔴 NOT SUPPORTED
-      online address state 稳定减少 forgetting            🟡 PARTIAL EVIDENCE
-  M3W-0 root/descendant operator-drift restoration       🔵 FROZEN / UNRUN
-  M4  Cell ontology / specialization analysis            ⚪ BLOCKED
-  M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
+        ↓  reopened failure analysis
+  M2-R0 actual optimizer-update invariant audit          🔵 FROZEN / UNRUN
+        ↓
+  M2-R1 functional certificate reconstruction            ⚪ BLOCKED ON R0
+        ↓
+  M2-R2 fixed-topology replay-free continual language    ⚪ BLOCKED ON R0/R1
+        ↓ only if formal PASS
+  growth / mitosis reopened                              ⚪ BLOCKED
+
+Historical M2 failure decomposition:
+  M3   global-pool growth                                🔴 NOT SUPPORTED
+  M3R  lineage-isolated read routing                     🔴 NOT SUPPORTED
+  Address Diagnostic                                     🟢 QUERY GEOMETRY SEPARABLE
+  M3L  rank-16 query-sketch gate                         🔴 NOT FEASIBLE
+  M3L-1 address-state capacity                           🟢 LOW_RANK_CAPACITY_SUFFICIENT (rank 32)
+  M3L-2 online address integration                       🔴 NOT SUPPORTED / partial retention benefit
+  M3W-0 write-drift restoration                          🟡 ROOT_WRITE_DOMINANT_TRANSFER_GAP
+
+  M4   Cell ontology / specialization                    ⚪ BLOCKED
+  30M scale-up                                            ⚪ BLOCKED
 ```
 
-在 M3L-2 暴露出的 write-ownership blocker 被解决前，不升级到 30M，也不进入 M4。
+硬规则：**M2-R2 未正式通过前，不注册新的 Native growth milestone，不进入 M4，不升级 30M。**
 
 ## Canonical substrate
 
@@ -57,11 +72,11 @@ file          final-model.pt
 SHA-256       91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f
 ```
 
-## M0 — Architecture + execution — 🟢
+## M0 / M1 — 🟢
 
-M0 已完成 sparse routing、Cell-local gradients、certificate projection、dynamic spawn、optimizer enrollment、动态 checkpoint round-trip 与 generation。
+M0 建立 sparse routing、Cell-local gradients、certificate projection、dynamic spawn、optimizer enrollment、checkpoint round-trip 与 generation。
 
-## M1 — 真实 next-token training — 🟢
+M1 证明该架构可做真实 next-token training：
 
 ```text
 validation loss       5.723429 -> 0.788535
@@ -71,161 +86,203 @@ active Cell fraction   2/8 = 0.25
 
 详见 [M1_CLOSURE.md](M1_CLOSURE.md)。
 
-## M2 — Fixed-topology continual language — 🔴 NOT SUPPORTED
+## M2 — 🔴 NOT SUPPORTED / 当前唯一未完成的核心 milestone
 
 正式结论：
 
 ```text
 NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED
-seeds = 73211 / 73212 / 73213
+formal seeds = 73211 / 73212 / 73213  (consumed)
 ```
 
-Certificate protection 有稳定因果收益：
+结果：
 
 ```text
-protected mean forgetting     ~0.2115
-unsafe mean forgetting        ~0.2790
-retention advantage           ~0.0675
+protected mean forgetting     ~0.211502
+unsafe mean forgetting        ~0.278987
+protected A regression        ~0.438682
+registered A regression       <=0.20
 protected/unsafe plasticity    ~0.964
 ```
 
-但 protected A regression 仍约 43.9%，远高于注册的 <=20% 上限。详见 [M2_CLOSURE.md](M2_CLOSURE.md)。
+Certificate projection 有真实因果收益，但远未关闭 end-to-end retention gap。
 
-## M3 — Global-pool growth — 🔴 NOT SUPPORTED
-
-正式结论：
+原 M2 的固定边界仍然是我们重新验证 continual-write primitive 的基线：
 
 ```text
-NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_NOT_SUPPORTED
-seeds = 73411 / 73412 / 73413
+exact M1 start
+8 Cells fixed
+active Cells = 2
+shared Transformer frozen
+router / route keys frozen
+growth disabled
+B -> C -> D
+learner raw replay = 0
 ```
 
-Growth 成功增长到 16 Cells、child reuse 100%、plasticity 保持，但 A regression 从 fixed control 的约 43–44% 恶化到 growth 的约 48–49%。
+## 为什么 M3 以后降级为 failure-decomposition evidence
 
-Post-formal analysis 表明，child 进入 global Top-K 后占据了大约一半的旧域 Cell execution。因此得到新的边界：
+M3 以后揭示了真实但次级的附加问题：
+
+- M3：children 进入 global Top-K 后破坏 old-domain read ownership；
+- M3R：保住 root ownership，但 lineage-local cosine boundary 不足；
+- Address Diagnostic：query representation 中实际存在可分 boundary；
+- M3L-1：rank-32 historical address state 足以表示该 boundary；
+- M3L-2：online address state 将 A regression 相对 cosine control 稳定改善约 5pp，同时保持约 99% plasticity，但 A regression 仍约 42%；
+- M3W-0：checkpoint-only 2×2 restoration 将 residual A operator damage 的约 94.4–95.2% 归因到 original-root final operator drift。
+
+M3W-0 的注册分类为：
 
 ```text
-safe write growth requires safe read-address growth
+ROOT_WRITE_DOMINANT_TRANSFER_GAP
+publish commit = 7bd8d554fea89fc44ef16287453c97f90a4e3f06
+scientific_decision = false
 ```
 
-详见 [M3 formal result](../../validations/native-clm-v0-m3-growth-restored-continual-language/FORMAL_RESULT.md)。
+它同时说明简单冻结 roots 也不是答案：恢复 roots 到 M1 后，只保留约 49–50% B gain、67–68% C gain、33% D gain。Root 中混合了大量 useful plasticity 与 destructive interference。
 
-## M3R — Read-preserving / lineage-isolated growth — 🔴 NOT SUPPORTED
+因此当前问题不是“root 要不要学”，而是：
 
-正式结论：
+\[
+\boxed{\text{哪些实际参数事务可以安全提交到旧 Cell？}}
+\]
+
+## M2-R0 — 🔵 Protected Update Invariant Audit
+
+M2-R0 在任何新 certificate 研究之前先验证原 M2 以为自己满足的数学不变量。
+
+原 protected path：
+
+\[
+G_p=G(I-Q^TQ)
+\]
+
+之后却由 AdamW 执行 element-wise preconditioning 和 decoupled weight decay。M2-R0 不再只测 projected gradient，而直接测每个 Cell/step 的真实 optimizer parameter delta：
+
+\[
+\rho=\frac{\|\Delta WQ^T\|_F}{\|\Delta W\|_F+10^{-12}}.
+\]
+
+冻结四个 matched arms：
 
 ```text
-NATIVE_CLM_V0_M3R_READ_PRESERVING_GROWTH_NOT_SUPPORTED
-protocol = c3e73545899ccf20f54411df701f22dd64b10cb46ff728e862c2d002a94f8627
-seeds = 73611 / 73612 / 73613
-artifact commit = 986b043a5d2f5ee9140cf35b14f68aacc3b7a942
-HF revision = a23b521e137a7e44616809895d44d87cc7d6f87f
+1. canonical AdamW + gradient projection + wd=.01
+2. AdamW + gradient projection + wd=0
+3. SGD + gradient projection + wd=0            (algebraic reference)
+4. AdamW + gradient projection + final-delta projection
 ```
 
-M3R 将 M1 的原始 8 个 roots 固定为唯一 top-level routing candidates，child 只能在所属 root lineage 内竞争。
+第 4 路先产生完整 AdamW proposal，再提交：
 
-三个 seed 全部满足：
+\[
+U=U_{raw}(I-Q^TQ).
+\]
 
-- A/B/C/D 的 root-route probe hash 从 initial 到 after-B/C/D 完全不变；
-- birth 时 root Top-K ownership 与 root probability 保持；
-- growth 到 16 Cells；
-- child reuse 100%；
-- B/C/D plasticity、zero replay、sparse execution 均保持；
-- lineage routing 相比 matched global-growth control 对 A retention 带来约 2.5 个百分点的稳定改善。
+M2-R0：
 
-但 registered absolute retention target 仍未达到：
+- 使用 exact M1 checkpoint；
+- 只用 pinned WikiText B-train 产生真实梯度；
+- 64 steps/arm；
+- certificate 固定，不新增 basis；
+- shared/router 不更新；
+- 不做 growth；
+- 不读取 A replay；
+- 不消耗新的 formal seed；
+- 不产生新模型 checkpoint；
+- `scientific_decision=false`。
 
-| seed | global A regression | lineage A regression | A advantage | lineage forgetting |
-|---:|---:|---:|---:|---:|
-| 73611 | 0.4967 | 0.4722 | 0.0245 | 0.2106 |
-| 73612 | 0.4947 | 0.4691 | 0.0256 | 0.2089 |
-| 73613 | 0.4961 | 0.4713 | 0.0248 | 0.2098 |
-
-Child 仍缺少足够 selectivity，最终 child execution share 约为：
+Canonical protocol：
 
 ```text
-A   ~52.3%
-B   ~55.1%
-C   ~59.5%
-D   ~53.6%
+research/validations/native-clm-v0-m2r0-update-invariant-audit/protocol.json
 ```
 
-因此 M3R 解决了 **global root ownership**，但没有解决 **lineage 内 parent/child functional boundary**。其 local decision 仍然只是：
+Canonical Kaggle notebook：
 
 ```text
-q · k_child > q · k_parent
+research/notebooks/06-native-clm/native-clm-v0-m2r0-update-invariant-audit-kaggle.ipynb
 ```
 
-这与 Core 006/007 的早期警告一致：representation/query similarity 不会自动成为安全的 functional mitosis address。
+## M2-R1 — ⚪ Functional Certificate Reconstruction
 
-## M3R Address Diagnostic — 🟢 QUERY GEOMETRY SEPARABLE
+R1 在 R0 关闭 optimizer-level ambiguity 以后再研究 certificate 本身，不立即进入新的 continual formal。
 
-Checkpoint-only diagnostic 在 24/24 个 lineage edges 上获得有效 coverage。当前 cosine addressing median AUC 约 0.5315，而自由 affine query probe 达到约 0.9623。因此 query geometry 中存在 boundary，但 centroid/cosine decoding 无法恢复它。
-
-## M3L — Replay-Free Query-Sketch Gate — 🔴 NOT FEASIBLE
-
-在更严格的 temporal parent-lifetime ownership 与 sequence-group-heldout split 下，offline affine oracle 仍可分（median AUC 0.9281）。rank-16 Gaussian historical query sketch 达到 0.8968，略低于冻结的 >=0.90 gate，同时其它注册 feasibility metrics 全部通过。因此 M3L 保持有效的 negative mechanism diagnostic。
-
-## M3L-1 — Historical Address-State Capacity — 🟢 LOW_RANK_CAPACITY_SUFFICIENT
-
-M3L-1 固定 M3L 的数据、edge ownership、split、oracle 与 feasibility thresholds，扫描 diagonal/rank-8/16/32/64/128/full-covariance Gaussian historical address state。
-
-已完成 diagnostic 的分类为：
+候选方向：
 
 ```text
-LOW_RANK_CAPACITY_SUFFICIENT
-minimum passing rank = 32
-publish commit = 5ace6faf344b1b805752a33ffb861aeaf34dad6e
+A. current top-1 mean basis                 historical baseline
+B. all-active probability-weighted SVD      activation coverage
+C. importance-weighted activation subspace  soft/scaled protection
+D. Jacobian/Fisher functional sketch         old-function protection
 ```
 
-这解决了 checkpoint-level capacity selection：冻结的 Gaussian second-order family 不需要 dense covariance，但 rank 16 对注册规则而言容量不足。这个结果本身**不是** online continual-learning success。
+对 Cell：
 
-## M3L-2 — Online Historical Address-State Integration — 🔴 NOT SUPPORTED
+\[
+\delta z\approx J_i(x)p_i\Delta W_i h
+\]
 
-正式结论：
+因此最终希望逼近的不是 activation similarity，而是：
+
+\[
+D_i(\Delta W)=\mathbb E_{old}\|J_i p_i\Delta W_i h\|^2.
+\]
+
+可持久化近似优先考虑：
+
+\[
+F_i\approx A_i\otimes B_i,
+\]
+
+\[
+A_i=\mathbb E[p_i^2hh^T],\quad B_i=\mathbb E[J_i^TJ_i].
+\]
+
+R1 必须用 held-out old-function drift 验证 certificate fidelity，并显式报告 storage/rank/capacity；raw old replay 不允许成为最终机制。
+
+## M2-R2 — ⚪ 下一次真正的 continual-learning formal
+
+只有 R0/R1 mechanism validation 完成后，才使用**全新 untouched formal seeds**重新运行固定 8-Cell B→C→D。
+
+只允许引入 R0/R1 已单独验证过的变量：
+
+1. actual-update constrained optimizer；
+2. selected functional certificate。
+
+最低 end-to-end gate 保持：
 
 ```text
-NATIVE_CLM_V0_M3L2_ONLINE_ADDRESS_STATE_NOT_SUPPORTED
-seeds = 74211 / 74212 / 74213
-publish commit = 348a6cd28cda13298b6d61c01453d06e14efbd33
-HF revision = 2b6ac153e926f899f038ff02c8c10041baaacb4a
+A absolute regression <= 20%
+mean forgetting <= 15%
+B/C/D phase gain >= registered plasticity floor
+plasticity >= 80% matched control
+shared/router frozen
+zero learner replay
+fixed 8-Cell topology
 ```
 
-M3L-2 将 exact M3R lineage-cosine control 与相同 protected-write/growth algorithm 对比，唯一新增机制是 persistent rank-32 historical query state 和 affine lineage-local gate。注册的一次性 TinyStories-train bootstrap 在 B 前完成，不修改模型参数；B 开始后 bootstrap handle 被释放，learner replay 保持为 0。
+只有 M2-R2 formal PASS，才允许声明：
 
-Address/read lifecycle 本身工作正常：三个 seed 全部通过 bootstrap identity、root-route invariance、birth preservation、rank-32 state bound、address checkpoint round-trip、affine-gate creation、child reuse、sparse compute、B/C/D phase plasticity 与 plasticity preservation。稳定失败的只有 absolute A retention、retention advantage 与 mean forgetting。
+\[
+\boxed{\text{Native CLM basic replay-free continual-write primitive supported}}
+\]
 
-| seed | cosine-control A regression | M3L-2 A regression | A advantage | M3L-2 forgetting |
-|---:|---:|---:|---:|---:|
-| 74211 | 0.4782 | 0.4250 | 0.0532 | 0.1945 |
-| 74212 | 0.4737 | 0.4214 | 0.0523 | 0.1975 |
-| 74213 | 0.4702 | 0.4216 | 0.0487 | 0.1948 |
+## Growth 重新开放的条件
 
-因此 online address state 稳定带来约 5 个百分点的 retention 改善，并基本保留 plasticity，但仍远高于注册的 <=20% A-regression 目标。即使 old-domain child leakage 已大幅下降，主要 residual damage 仍在第一个 B phase 中产生。这将 active blocker 从 read-address decoding 转移到 **operator write ownership / write isolation**。
+未来 growth 不再由 `loss high + rank pressure + cooldown` 独立触发，而由 safe-write infeasibility 推导。
 
-Canonical registration 见 [M3L2_REGISTRATION.zh-CN.md](M3L2_REGISTRATION.zh-CN.md)，正式 evidence 位于 `artifacts/experiments/native-clm-v0-m3l2-online-address-state/`。
+定义 Cell 的安全更新集合：
 
-## M3W-0 — Root Write-Drift Counterfactual Restoration — 🔵 FROZEN / UNRUN
+\[
+\mathcal S_i(\epsilon)=\{\Delta W:D_i(\Delta W)\le\epsilon\}.
+\]
 
-M3W-0 只使用三个已发布 M3L-2 treatment checkpoints 做 checkpoint-only diagnostic，不训练模型，也不消耗新的 formal seeds。
-
-它固定 final routing、topology、address states 与 affine gates，仅执行 2×2 operator restoration：
-
-```text
-00  roots 与 descendants 全部恢复为所属 root 的 exact M1 operator
-10  roots 保持 final；descendants 恢复为所属 root 的 M1 operator
-01  roots 恢复为 M1；descendants 保持 final
-11  published final M3L-2 checkpoint
-```
-
-之后使用 two-factor Shapley 将 residual A loss 归因到 original roots 与 descendants 的 **final operator-state drift**。由于 M3L-2 没有持久化 child birth tensor，descendant factor 可能包含 birth 时从 parent 继承的 drift；因此 M3W-0 不声称 historical per-update attribution，也不声称隔离了 child 出生后的写入事件。
-
-`ALL_LINEAGE_RESTORE` 同时是 identity gate：root router 在 M3L-2 中保持为 immutable M1 routing；如果一个 lineage 内所有 concrete Cell 都执行相同 exact M1 root operator，则 local gate 选择应在函数上失去影响。A/B/C/D loss 必须在 `1e-4` 内重构 M1，否则整个 diagnostic 判 `INCONCLUSIVE_IDENTITY`。
-
-详见 [M3W0_REGISTRATION.md](M3W0_REGISTRATION.md)。
+如果已有 Cell 能在 \(\mathcal S_i\) 中取得足够 new-domain gain，则 reuse/write；只有所有已有 Cell 都无法安全吸收该写入时，才重新开放 capacity allocation / mitosis。
 
 ## Evidence boundary
 
-M2/M3/M3R/M3L-2 formal seeds 均已消耗，禁止再次作为 untouched evidence。M3R Address Diagnostic、M3L、M3L-1 与 M3W-0 都只是 checkpoint-only mechanism diagnostics，不能事后修改任何 formal decision。
-
-M3W-0 只把已消耗的 M3L-2 checkpoints 当作 immutable evidence，执行 0 learner updates，不引入新的 formal seed。Write-ownership 问题解决前，M4 ontology analysis 与 30M scale-up 继续 blocked。
+- M2/M3/M3R/M3L-2 formal seeds 均已消耗，不得作为 untouched evidence 重跑；
+- Address Diagnostic、M3L、M3L-1、M3W-0 都是 diagnostics，不能修改历史 formal decision；
+- M2-R0/R1 也都是 diagnostics；
+- M2-R2 必须使用全新 formal seeds；
+- 在 R2 PASS 前，M4、growth milestone 与 30M scale-up 全部 blocked。
