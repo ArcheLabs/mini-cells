@@ -16,7 +16,6 @@ from pathlib import Path
 from statistics import median
 from typing import Any
 
-import numpy as np
 import torch
 import torch.nn.functional as F
 from torch import Tensor, nn
@@ -25,7 +24,6 @@ from .native_clm_m2 import sha256_file
 from .native_clm_m3 import _loader
 from .native_clm_m3r import LineageNativeCLM
 from .native_clm_m3r_address_diag import _auc, _edge_eligible_mask, _edge_metadata
-
 
 PHASE_ORDER = ("A", "B", "C", "D")
 _NORMAL_90 = 1.2815515655446004

@@ -12,9 +12,9 @@ from minicells.native_clm_m3l_gate import (
     derive_sketch_gate,
     fit_low_rank_sketch,
 )
-from minicells.native_clm_v0 import NativeCLMConfig
 from minicells.native_clm_m3r import LineageNativeCLM
 from minicells.native_clm_m3r_address_diag import _auc
+from minicells.native_clm_v0 import NativeCLMConfig
 
 
 def _tiny_model() -> LineageNativeCLM:
