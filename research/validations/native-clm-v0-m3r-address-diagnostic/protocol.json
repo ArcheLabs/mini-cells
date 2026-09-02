@@ -1,0 +1,80 @@
+{
+  "format": "minicells.native-clm-v0.m3r-address-diagnostic.protocol.v1",
+  "status": "REGISTERED_DIAGNOSTIC_READY",
+  "scientific_decision": false,
+  "mission": "Determine whether the M3R parent/child functional split is linearly recoverable from the frozen query representation, from write/effect geometry, or from neither, without retraining Native CLM or reusing consumed formal seeds as new evidence.",
+  "parent_m3r": {
+    "formal_result_commit": "986b043a5d2f5ee9140cf35b14f68aacc3b7a942",
+    "protocol_sha256": "c3e73545899ccf20f54411df701f22dd64b10cb46ff728e862c2d002a94f8627",
+    "data_manifest_sha256": "213ddb9d093ea44fd0524e6ba6318f86a61c54270bd5cad6ddeb3233470565b0",
+    "formal_seeds": [73611, 73612, 73613],
+    "formal_seeds_are_consumed": true,
+    "hf_repo": "archelabsxyz/native-clm-v0",
+    "hf_revision": "a23b521e137a7e44616809895d44d87cc7d6f87f",
+    "checkpoint_manifest": "artifacts/experiments/native-clm-v0-m3r-read-preserving-growth/model-artifacts.json",
+    "data_manifest": "artifacts/experiments/native-clm-v0-m3r-read-preserving-growth/data-manifest.json"
+  },
+  "learner_boundary": {
+    "model_training": false,
+    "cell_updates": false,
+    "router_updates": false,
+    "certificate_updates": false,
+    "growth": false,
+    "new_formal_seeds": false,
+    "domain_labels_allowed_only_inside_offline_diagnostic_probes": true,
+    "diagnostic_outputs_must_not_be_used_as_post_hoc_M3R_gates": true
+  },
+  "diagnostic_unit": "Each spawned lineage child edge parent->child in each canonical M3R lineage-growth checkpoint. Samples are conditioned on reaching that edge's root/ancestor path before the parent-vs-child decision.",
+  "domains": {
+    "old_anchor": "A",
+    "birth_domain_rule": {
+      "1-400": "B",
+      "401-800": "C",
+      "801-1200": "D"
+    }
+  },
+  "sampling": {
+    "max_batches_per_domain": 48,
+    "batch_size": 8,
+    "max_samples_per_class_per_edge": 2048,
+    "minimum_samples_per_class_per_edge": 256,
+    "train_fraction": 0.7,
+    "probe_split_seed_base": 73700
+  },
+  "probe_training": {
+    "model": "single linear logistic probe",
+    "steps": 300,
+    "learning_rate": 0.05,
+    "weight_decay": 0.0001,
+    "standardize_from_train_split_only": true,
+    "balanced_classes": true,
+    "metric": "heldout_roc_auc"
+  },
+  "registered_features": {
+    "current_cosine_margin": "scalar q dot k_child minus q dot k_parent, evaluated with the M3R rule's fixed direction",
+    "query": "normalized frozen router query q",
+    "write_input": "Cell operator input x at the Cellular Layer",
+    "write_left": "downstream loss gradient dL/dh_cell_out with the Cellular Layer output detached and treated as the differentiable boundary",
+    "write_pair": "concatenation of L2-normalized write_input and write_left; diagnostic proxy for the rank-1 local write gradient factors",
+    "certificate_residual": "parent Cell input residual x - Q^T Q x under the final parent certificate basis"
+  },
+  "classification_thresholds": {
+    "minimum_valid_edge_fraction": 0.75,
+    "separable_median_auc": 0.85,
+    "separable_edge_auc_floor": 0.8,
+    "minimum_fraction_edges_above_floor": 0.75
+  },
+  "diagnostic_classification_order": [
+    "INCONCLUSIVE_COVERAGE",
+    "QUERY_GEOMETRY_SEPARABLE",
+    "WRITE_EFFECT_GEOMETRY_SEPARABLE",
+    "NO_CLEAR_LOCAL_BOUNDARY"
+  ],
+  "classification_rules": {
+    "INCONCLUSIVE_COVERAGE": "valid_edge_fraction < minimum_valid_edge_fraction",
+    "QUERY_GEOMETRY_SEPARABLE": "query median AUC >= separable_median_auc and fraction of valid edges with query AUC >= separable_edge_auc_floor >= minimum_fraction_edges_above_floor",
+    "WRITE_EFFECT_GEOMETRY_SEPARABLE": "query rule fails, and at least one of write_left/write_pair/certificate_residual satisfies the same separability rule",
+    "NO_CLEAR_LOCAL_BOUNDARY": "coverage is sufficient but neither query nor registered write/effect features satisfy the separability rule"
+  },
+  "interpretation_boundary": "This is a checkpoint-only diagnostic classification, not a new continual-learning success/failure claim. It may select the architecture family for the next registered experiment, but it may not retroactively alter M3R thresholds or its NOT_SUPPORTED decision."
+}
