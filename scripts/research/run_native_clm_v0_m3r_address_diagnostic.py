@@ -175,9 +175,11 @@ def _run_parallel(args: argparse.Namespace, seeds: list[int]) -> None:
     pending = list(seeds)
     active: list[tuple[int, subprocess.Popen, str]] = []
     while pending or active:
-        while pending and len(active) < len(devices):
+        busy_devices = {device for _, _, device in active}
+        free_devices = [device for device in devices if device not in busy_devices]
+        while pending and free_devices:
             seed = pending.pop(0)
-            device = devices[len(active)]
+            device = free_devices.pop(0)
             output = args.output_dir / f"seed-{seed}" / "diagnostic.json"
             if output.exists():
                 try:
@@ -188,6 +190,7 @@ def _run_parallel(args: argparse.Namespace, seeds: list[int]) -> None:
                         == "minicells.native-clm-v0.m3r-address-diagnostic.seed.v1"
                     ):
                         print(f"Reusing completed diagnostic seed={seed}.", flush=True)
+                        free_devices.insert(0, device)
                         continue
                 except (OSError, json.JSONDecodeError):
                     pass
