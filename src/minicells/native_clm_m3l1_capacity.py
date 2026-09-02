@@ -232,9 +232,6 @@ def fit_full_gaussian_state(
     mean = x.mean(dim=0)
     centered = x - mean
     covariance = centered.transpose(0, 1).matmul(centered) / max(1, x.size(0) - 1)
-    covariance = covariance + diagonal_regularization * torch.eye(
-        x.size(1), device=device, dtype=x.dtype
-    )
     return FullGaussianState(
         count=int(x.size(0)),
         mean=mean.detach(),
