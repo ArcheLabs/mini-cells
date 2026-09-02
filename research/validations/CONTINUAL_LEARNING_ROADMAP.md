@@ -2,7 +2,7 @@
 
 Status: **two-track roadmap; Constructive CLM is the native-CLM main line**  
 Frozen evidence map: [`CLM_FEASIBILITY_EVIDENCE_MAP.md`](CLM_FEASIBILITY_EVIDENCE_MAP.md)  
-Current constructive experiment: **Constructive CLM-001 — Learned Coordinate Formation**  
+Current constructive experiment: **Constructive CLM-001B — Latent Coordinate Discovery under Superposition**  
 Current foundation-interface diagnostic: **Core 009D — Compositional Operator Geometry**
 
 ## Mission
@@ -21,12 +21,12 @@ The product path is:
 }
 \]
 
-The research program now separates two questions that were previously mixed together:
+The research program separates two questions:
 
 1. **Foundation Interface Research** — what writable structure already exists in a mature pretrained LLM and what is the cheapest causal interface for an external CLM layer?
 2. **Constructive CLM Research** — can persistent sparse functional coordinates, read addressability and growth be learned during continual experience even when the pretrained foundation does not already contain a deployable natural Cell ontology?
 
-A negative result in Track A no longer stops Track B.
+A negative result in Track A does not stop Track B.
 
 The canonical evidence-reuse and no-repeat rules are frozen in the CLM Feasibility Evidence Map. New experiments must cite the missing integration claim they test rather than re-proving already-settled components.
 
@@ -135,45 +135,74 @@ replay-free Cell-local protection
 foundation writable interface
 ```
 
-The first missing bridge is:
+Constructive CLM-001 now adds a first formal constructive component:
 
 ```text
-continual pressure
-  -> learned Cell coordinates
-  <-> learned read keys
-  -> reuse before spawn
-  -> bounded long-run growth
+structured continual experience + singleton exposure
+  -> learned Cell keys/effects
+  -> deployable read addressability
+  -> pair composition
+  -> growth stops after factor coverage
 ```
 
-## G1 — Learned coordinate formation and read/write alignment
+The active missing bridge is whether that result survives removal of the clean singleton prototype scaffold.
 
-Current experiment:
+## G1a — Addressable learned coordinate formation
+
+Status: **SUPPORTED**.
+
+Experiment:
 
 **Constructive CLM-001 — Learned Coordinate Formation**
 
+Formal result:
+
+```text
+status = LEARNED_COORDINATE_FORMATION_SUPPORTED
+seeds = 90111 / 90112 / 90113
+Cells = 6 / 6 / 6
+pair route recall = 1.0 / 1.0 / 1.0
+late spawns = 0 / 1 / 1
+```
+
+This establishes that reusable Cell keys/effects can form without task/factor labels in the registered controlled world.
+
+It does **not** establish latent factor discovery under superposition because every hidden factor first had singleton exposure.
+
+Do not rerun the singleton world as a new core validation.
+
+## G1b — Latent coordinate discovery under superposition
+
+Current experiment:
+
+**Constructive CLM-001B — Latent Coordinate Discovery under Superposition**
+
 Decision question:
 
-> Can a continual learner form reusable Cell effect coordinates and matching deployable read keys from structured experience without task/factor labels, while growth stops after the reusable factors have been acquired?
+> Can reusable latent Cell keys/effects be recovered when no hidden factor is ever presented alone, and can those recovered Cells address completely unseen compositions from `x` alone?
 
-The first protocol is deliberately controlled and synthetic so it isolates the only new mechanism instead of re-running Pythia geometry, certificates or language modeling.
+The registered 001B world deliberately removes singleton exposure while keeping the discovery problem identifiable and falsifiable:
 
-It includes:
+- six correlated, non-orthogonal latent context/effect factors;
+- training contains only equal-weight pair superpositions;
+- three pair types are held out entirely;
+- no singleton or triple appears during training;
+- learner receives no factor labels, pair labels or hidden factor count;
+- online transaction means form mixture prototypes;
+- pairwise prototype geometry induces a learned overlap graph;
+- largest maximal cliques recover latent star incidence;
+- the learned incidence system is solved for latent Cell keys/effects;
+- heldout inference uses `x` only;
+- heldout pairs use coefficients not seen during discovery;
+- every triple is unseen during training and tested compositionally.
 
-- hidden reusable functional factors;
-- unlabeled singleton and pairwise compositional transactions;
-- learned Cell read keys and effect values;
-- sparse Top-K execution;
-- residual/confidence-triggered growth;
-- local online reuse updates;
-- shuffled-address causal control;
-- post-hoc coordinate and routing recovery metrics;
-- a late consolidation region in which no new factors exist.
+Controls compare against nearest transaction memory and a shuffled effect-address baseline.
 
-A positive result closes G1 only. It is not a Native CLM proof.
+A positive result supports G1b **only for this registered additive pair-superposition family**. It does not establish arbitrary blind source separation, unknown arity or nonlinear composition.
 
 ## G2 — Long-horizon growth law
 
-Open only after G1 positive.
+Open only after G1b positive.
 
 Primary question:
 
@@ -204,8 +233,6 @@ Do not infer asymptotic sublinearity from a short fixed stream.
 
 ## G3 — Learned coordinates + existing protection
 
-Open only after G1 positive.
-
 Constructive CLM-003 integrates the learned coordinate/read system with the already-supported Core-005 certificate logic.
 
 This is an **integration** test, not a new certificate-principle test.
@@ -225,7 +252,7 @@ Primary question:
 
 ## G4 — Multi-Cell composition
 
-Open after G1 and informed by 009D when available.
+001 and 001B contain controlled algebraic composition tests, but G4 remains a model-level execution question.
 
 The model must activate multiple learned Cells on unseen combinations and demonstrate that the combined behavior is not merely nearest-memory retrieval.
 
@@ -241,12 +268,12 @@ Representation-level operator composition from 009D is informative but is not a 
 
 ## G5 — External -> endogenous transition
 
-Only after G1–G4 establish a stable constructive core.
+Only after the constructive core is stable.
 
 Remove scaffolding one component at a time:
 
 ```text
-engineered read-key prototype
+prototype / relational-discovery scaffold
   -> learned router
   -> learned write controller
   -> learned growth controller
@@ -314,6 +341,7 @@ The differentiating value must include parameterized behavior/skill adaptation, 
 - Short-stream bounded growth is not described as asymptotically sublinear.
 - Coordinate recovery is not sufficient without deployable read addressability.
 - Read addressability is not sufficient without write safety and long-run growth control.
+- A positive 001B result must not be generalized beyond its registered pair-superposition scaffold.
 - Rank-1-per-write compression is not evidence of cross-write Cell reuse.
 - Pythia-only evidence is not sufficient for product generalization.
 - The formal research stop rule is the one frozen in the CLM Feasibility Evidence Map.
@@ -321,9 +349,10 @@ The differentiating value must include parameterized behavior/skill adaptation, 
 ## Immediate order
 
 ```text
-1. Complete/freeze Constructive CLM-001 implementation and formal run.
-2. 009D may proceed in parallel as a non-blocking Foundation Interface diagnostic.
-3. If C-CLM-001 is positive -> C-CLM-002 long-horizon growth.
-4. Then integrate Core-005 protection in C-CLM-003.
-5. Then composition and external->endogenous transition.
+1. Constructive CLM-001 = formally supported; freeze it as G1a parent evidence.
+2. Run Constructive CLM-001B on untouched formal seeds 90211/90212/90213.
+3. 009D may proceed in parallel as a non-blocking Foundation Interface diagnostic.
+4. If C-CLM-001B is positive -> C-CLM-002 long-horizon growth law.
+5. Then integrate Core-005 protection in C-CLM-003.
+6. Then model-level composition and external->endogenous transition.
 ```
