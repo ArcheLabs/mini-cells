@@ -1,7 +1,7 @@
 # CLM Feasibility Evidence Map
 
-Status: **FROZEN v1.3**  
-Constructive baseline through formal CLM-002 result commit `243ac29c38f79d0f4c82723f13ecf8e093b6eee1` (2026-09-02).
+Status: **FROZEN v1.4**  
+Constructive baseline through formal CLM-003 result on frozen implementation commit `42474157be24dca9daef2ecd908ef8de323fa550` (2026-09-02).
 
 ## Purpose
 
@@ -16,7 +16,7 @@ pretrained LLM
   -> endogenous / Native CLM
 ```
 
-The native route no longer depends on discovering a ready-made Cell ontology inside a pretrained checkpoint. It asks whether already-supported mechanisms can be composed into a learned, protected, bounded-growth coordinate system and then progressively endogenousized.
+The native route no longer depends on discovering a ready-made Cell ontology inside a pretrained checkpoint. It asks whether already-supported mechanisms can be composed into a learned, protected, bounded-growth computational coordinate system and then progressively endogenousized.
 
 ## Evidence grades
 
@@ -33,15 +33,16 @@ The native route no longer depends on discovering a ready-made Cell ontology ins
 | A Cell can be a sparse routed, independently mutable computational state unit | 025/026; CLM-0.1–0.3 | B | Operational Cell granularity, sparse routing, independent mutation and capacity growth are viable mechanisms | No basic Cell-unit rerun |
 | Rejection/saturation can be converted into useful growth | Core 004 | A | Growth can restore plasticity in the controlled CLM loop | No basic growth-rescue rerun |
 | Bounded Cell-local state can replace learner-side replay for protected writes and mitosis | Core 005 | A | `Q` is sufficient for registered-history protection, saturation detection and reusable growth in the frozen linear-writable world | No certificate-principle rerun |
-| Replay-free protection retains useful plasticity on real pretrained representations | Core 006 | A mixed | Real Pythia states retain useful plasticity under protection; semantic/address mitosis fails as a sufficient boundary | Reuse the positive bridge; do not revive semantic address |
+| Replay-free protection retains useful plasticity on real pretrained representations | Core 006 | A mixed | Real Pythia states retain useful plasticity under protection; semantic/address mitosis fails as a sufficient boundary | Reuse positive bridge; do not revive semantic address |
 | Natural local/sparse write addressability already exists in the pretrained model | Core 002/002B/002C | A negative | Registered natural-address hypotheses failed | Do not repeat cosmetic variants |
 | Normalized functional writes expose reusable factorized geometry | Core 009A | A/C | Useful two-sided geometry exists, but later diagnostics show right-side carrier collapse | Foundation-interface evidence only |
 | The common right-side carrier is causally useful | Core 009B-1 | A | Carrier-preserved writes retain roughly 97.6–98.2% of registered full-write target gain | No carrier-causality rerun |
 | Pretrained effect vectors already lie in a compact persistent dictionary | Core 009B-2 | C negative | No useful compact persistent global effect subspace under the frozen discovery protocol | Natural-geometry No-Go only |
 | Pretrained effect vectors expose sparse/local Cell coordinates | Core 009C | C negative | `SPARSE_LOCAL_EFFECT_GEOMETRY_NOT_FOUND` | Do not keep searching for the same natural ontology |
-| Reusable Cell coordinates/read keys can form with clean singleton exposure | Constructive CLM-001; seeds `90111/90112/90113` | A | `LEARNED_COORDINATE_FORMATION_SUPPORTED` | G1a frozen; no singleton-world rerun |
-| Latent Cell coordinates can be recovered with no singleton exposure | Constructive CLM-001B; seeds `90211/90212/90213`; result commit `55071bc7...` | A | `LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED`; six latent Cells recovered from twelve pair prototypes and generalized to unseen pair/triple composition | G1b frozen within registered additive scaffold |
-| Long-horizon Cell growth can track reusable latent structure rather than transaction count | Constructive CLM-002; seeds `90411/90412/90413`; result commit `243ac29c...` | A | `LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED`; final `K=M=30` at `N=4096`, fitted finite-horizon exponent `0.6631`, final `K/N=0.007324` | G2 frozen; do not extend with cosmetic longer synthetic streams |
+| Reusable Cell coordinates/read keys can form with clean singleton exposure | Constructive CLM-001; seeds `90111/90112/90113` | A | `LEARNED_COORDINATE_FORMATION_SUPPORTED` | G1a frozen |
+| Latent Cell coordinates can be recovered with no singleton exposure | Constructive CLM-001B; seeds `90211/90212/90213` | A | `LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED` | G1b frozen within registered additive scaffold |
+| Long-horizon Cell growth can track reusable latent structure rather than transaction count | Constructive CLM-002; seeds `90411/90412/90413` | A | `LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED`; final `K=M=30` at `N=4096`, fitted finite-horizon exponent `0.6631`, final `K/N=0.007324` | G2 frozen; no cosmetic longer synthetic streams |
+| Learned/growing Cells can host replay-free protected continual writes with bounded functional mitosis | Constructive CLM-003; seeds `90511/90512/90513`; [`FORMAL_RESULT.md`](constructive-clm-003-protected-growing-cells/FORMAL_RESULT.md) | A | `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`; all 15 registered gates passed on all three seeds | G3 frozen; no cosmetic certificate rerun |
 
 ## Reusable constructive mechanism chain
 
@@ -61,9 +62,11 @@ learned addressable coordinates
 latent discovery under registered superposition
 +
 finite-horizon structure-tracking growth
++
+protected learned/growing writes with context-keyed mitosis
 ```
 
-The immediate missing bridge is now **protected continual writes inside the learned/growing constructive coordinate system**.
+The immediate missing bridge is now **model-level computation/composition across multiple learned Cells**.
 
 ## Frozen gaps
 
@@ -77,17 +80,7 @@ Boundary: controlled structured continual world with singleton exposure.
 
 Status: **SUPPORTED** by Constructive CLM-001B.
 
-Boundary:
-
-```text
-correlated / non-orthogonal latent factors
-+ no singleton training
-+ additive pair-superposition discovery scaffold
--> latent Cell keys/effects
--> x-only unseen pair/triple composition
-```
-
-This is not arbitrary blind source separation.
+Boundary: registered additive pair-superposition discovery scaffold; not arbitrary blind source separation.
 
 ### G2 — Long-horizon structure-tracking growth
 
@@ -95,27 +88,22 @@ Status: **SUPPORTED** by Constructive CLM-002.
 
 Formal seeds: `90411 / 90412 / 90413`.
 
-Registered endpoint on all seeds:
-
-```text
-N = 4096
-true latent factors M = 30
-learned Cells K = 30
-K/N = 0.00732421875
-finite-horizon Cell growth exponent = 0.6631226816
-late spawn rate = 0.00439453125
-late reuse rate ≈ 0.991
-```
-
 This is finite-horizon scaling evidence, not an asymptotic proof that `K(N)=o(N)`.
 
 ### G3 — Learned/growing Cells + replay-free protection
 
-Status: **ACTIVE**.
+Status: **SUPPORTED** by Constructive CLM-003.
 
-Primary experiment: **Constructive CLM-003 — Protected Learned/Growing Cells**.
+Formal decision:
 
-New integration variable:
+```text
+PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED
+seeds = 90511 / 90512 / 90513
+protocol = 6122b8a6dd62ac69bc371909fe503c24cea319837b0a5989a4b640492aeeda86
+all 15 registered gates = pass on every seed
+```
+
+Frozen interpretation:
 
 ```text
 learned hierarchical routing
@@ -123,26 +111,34 @@ learned hierarchical routing
 Core-005 Cell-local Q certificate
 +
 context-keyed child mitosis on certificate saturation
+-> protected continual writes without learner-side replay
 ```
 
-CLM-003 deliberately does **not** re-prove Core-005. It imports the Core-005 `constrained_update` and `extend_basis` primitives directly and asks whether they remain useful when explicit registered addresses are replaced by learned root coordinates plus context-derived lineage keys.
-
-Registered four-arm comparison:
-
-```text
-unsafe
-certificate_no_growth
-certificate_growth
-replay_growth_oracle
-```
-
-A positive result must preserve old behavior with zero learner replay, retain replay-oracle-level acquisition gain, route old/new contexts to the correct lineage Cells, and finish with functional Cell count tracking recurring modes rather than write transactions.
+Boundary: controlled learned-root + linear protected-write integration. This is not arbitrary Transformer write safety and does not yet establish simultaneous model-level multi-Cell computation.
 
 ### G4 — Model-level multi-Cell computation
 
-Status: **PLANNED**.
+Status: **ACTIVE**.
 
-Controlled algebraic composition in 001/001B is reusable evidence, but it is not the final model-level claim. CLM-004 must test simultaneous/sequential learned-Cell computation, destructive interaction, sparse active compute and unseen compositions.
+Primary experiment: **Constructive CLM-004**.
+
+New integration variable:
+
+```text
+multiple active learned Cells
++
+model-level computation / composition
+```
+
+CLM-004 must test whether multiple learned Cells can participate in the same execution path while preserving:
+
+- unseen composition quality;
+- route-support recovery;
+- low destructive cross-Cell interference;
+- stable sequential and/or simultaneous composition;
+- sparse compute proportional to active rather than total Cell count.
+
+Controlled algebraic composition in 001/001B remains reusable evidence but is not sufficient for G4.
 
 ### G5 — External -> endogenous transition
 
@@ -151,10 +147,13 @@ Status: **PLANNED**.
 Remove scaffolding one component at a time:
 
 ```text
-prototype / relational / residual-growth / certificate-routing scaffolds
+prototype / relational discovery
   -> learned router
-  -> learned write controller
+residual / probation growth
   -> learned growth controller
+engineered protected write update
+  -> learned write controller
+frozen foundation
   -> slow-plastic foundation
   -> endogenous cellular model
 ```
@@ -178,6 +177,7 @@ Do not create a new core validation whose primary question is only one of the fo
 11. Can the registered singleton-exposure 001 world form six Cells again?
 12. Can the registered additive pair-superposition 001B world recover the same six latent Cells again?
 13. Can the registered 002 synthetic growth curve be reproduced merely by extending the horizon?
+14. Can the registered 003 certificate-growth world reproduce the same protected-write result under cosmetic parameter changes?
 
 A new experiment touching any of these topics must name a distinct integration variable in advance.
 
@@ -198,4 +198,4 @@ External CLM Layer feasibility and Native CLM feasibility remain separate decisi
 
 ## Milestone boundary
 
-If CLM-003, CLM-004 and CLM-005 are all supported under their registered boundaries, the next main milestone is **Small Native CLM v0**, not another indefinite synthetic mechanism series.
+If CLM-004 and CLM-005 are supported under their registered boundaries, the next main milestone is **Small Native CLM v0**, not another indefinite synthetic mechanism series.

@@ -35,10 +35,10 @@ Status legend:
 | 6 | Mature LLMs expose a useful writable interface | Core 006, 009A, 009B-1 | 🟢 Strong foundation-interface evidence; **not** a natural Cell ontology |
 | 7 | Reusable Cell coordinates / read addresses can form from experience | Constructive CLM-001 and 001B | 🟢 Controlled constructive formation supported, including no-singleton superposition discovery |
 | 8 | Long-horizon Cell growth can track reusable structure rather than transaction count | Constructive CLM-002 | 🟢 Finite-horizon structure-tracking growth supported; not an asymptotic theorem |
-| 9 | Learned/growing Cells can support replay-free protected continual writes | **Constructive CLM-003** | 🔵 **Active** |
-| 10 | Multiple learned Cells can perform stable model-level computation/composition | Constructive CLM-004 | ⚪ Planned |
+| 9 | Learned/growing Cells can support replay-free protected continual writes | Constructive CLM-003 | 🟢 `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`, 3/3 formal seeds |
+| 10 | Multiple learned Cells can perform stable model-level computation/composition | **Constructive CLM-004** | 🔵 **Active** |
 | 11 | Router/write/growth scaffolds can be removed toward endogenous control | Constructive CLM-005 | ⚪ Planned |
-| 12 | Train a Small Native CLM v0 | after 003–005 | ⚪ Milestone |
+| 12 | Train a Small Native CLM v0 | after 004–005 | ⚪ Milestone |
 
 The important negative boundary remains:
 
@@ -52,34 +52,28 @@ Core 006 and the 002/009 natural-geometry line prevent us from returning to that
 
 ## Current main experiment
 
-### Constructive CLM-003 — Protected Learned/Growing Cells
+### Constructive CLM-004 — Model-Level Multi-Cell Computation
 
 Current question:
 
-> Can learned/growing Cell coordinates be combined with the already-supported Core-005 replay-free certificate so that new writes retain old behavior, preserve plasticity, and create bounded context-addressable children instead of destructive overwrite or replay?
+> Can multiple learned Cells participate in the same model-level computation while preserving sparse active compute, stable routing, unseen composition quality and low destructive interference?
 
-CLM-003 directly reuses:
-
-```text
-Constructive CLM-001 / 001B
-  learned Cell coordinates
-+
-Constructive CLM-002
-  structure-tracking growth
-+
-Core 005
-  replay-free subspace certificate
-```
-
-The new integration variable is:
+CLM-004 must reuse rather than re-prove the now-supported constructive chain:
 
 ```text
-learned hierarchical routing
-  + protected mutable W/Q state
-  + certificate-triggered context-keyed mitosis
+CLM-001 / 001B
+  learned coordinates
++
+CLM-002
+  bounded structure-tracking growth
++
+CLM-003
+  replay-free protected writes + context-keyed mitosis
 ```
 
-Validation: [Constructive CLM-003 — Protected Learned/Growing Cells](validations/constructive-clm-003-protected-growing-cells/README.md).
+The new integration variable is **model-level computation/composition across multiple active learned Cells**.
+
+CLM-003 is frozen as parent evidence; do not create a cosmetic 003B certificate rerun.
 
 ## Constructive CLM sequence
 
@@ -87,8 +81,8 @@ Validation: [Constructive CLM-003 — Protected Learned/Growing Cells](validatio
 G1a  CLM-001   addressable learned coordinate formation      🟢
 G1b  CLM-001B  latent discovery under superposition          🟢
 G2   CLM-002   long-horizon structure-tracking growth        🟢
-G3   CLM-003   protected learned/growing Cells                🔵
-G4   CLM-004   model-level multi-Cell computation             ⚪
+G3   CLM-003   protected learned/growing Cells                🟢
+G4   CLM-004   model-level multi-Cell computation             🔵
 G5   CLM-005   scaffold removal / endogenous transition       ⚪
                                                           ↓
                                               Small Native CLM v0
@@ -123,6 +117,7 @@ Formal constructive parent evidence now includes:
 - **CLM-001** — `LEARNED_COORDINATE_FORMATION_SUPPORTED`, seeds `90111/90112/90113`.
 - **CLM-001B** — `LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED`, seeds `90211/90212/90213`.
 - **CLM-002** — `LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED`, seeds `90411/90412/90413`; final registered growth tracked 30 latent factors with 30 Cells at `N=4096` and `K/N=0.007324`.
+- **CLM-003** — `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`, seeds `90511/90512/90513`; all 15 registered gates passed on all three formal seeds with zero learner replay in the certificate-growth arm.
 
 ## Research stages
 
@@ -142,6 +137,6 @@ Formal constructive parent evidence now includes:
 
 ## Current boundary
 
-The repository does **not** yet establish general natural-language continual learning, an asymptotic `K(N)=o(N)` theorem, arbitrary latent-source discovery, a fully learned router/growth controller, simultaneous model-level multi-Cell computation, or an endogenous LLM-scale CLM.
+The repository does **not** yet establish general natural-language continual learning, an asymptotic `K(N)=o(N)` theorem, arbitrary latent-source discovery, a fully learned router/growth controller, stable model-level multi-Cell computation, or an endogenous LLM-scale CLM.
 
-If CLM-003, CLM-004 and CLM-005 succeed under their registered boundaries, the next milestone is no longer another toy mechanism validation: it is training the first **Small Native CLM v0**.
+If CLM-004 and CLM-005 succeed under their registered boundaries, the next milestone is no longer another toy mechanism validation: it is training the first **Small Native CLM v0**.

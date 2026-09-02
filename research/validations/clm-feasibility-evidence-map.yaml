@@ -1,9 +1,9 @@
 schema: minicells.clm-feasibility-evidence-map.v1
 status: FROZEN
-version: "1.3"
+version: "1.4"
 frozen_against:
-  branch: constructive-chain-through-clm-002
-  commit: 243ac29c38f79d0f4c82723f13ecf8e093b6eee1
+  branch: codex/constructive-clm-003-protected-growing-cells
+  commit: 42474157be24dca9daef2ecd908ef8de323fa550
   date: "2026-09-02"
 mission: >-
   Reuse validated MiniCells research components and spend new experiments only on
@@ -119,6 +119,19 @@ items:
       final_cell_to_transaction_ratio: [0.00732421875, 0.00732421875, 0.00732421875]
       late_spawn_rate: [0.00439453125, 0.00439453125, 0.00439453125]
       late_reuse_rate: [0.99072265625, 0.9912109375, 0.99072265625]
+  - id: constructive_clm_003
+    claim: learned/growing Cell coordinates integrate with replay-free Cell-local certificates and context-keyed mitosis without destructive forgetting or transaction-linear protective growth
+    sources:
+      - "constructive-clm-003"
+      - "research/validations/constructive-clm-003-protected-growing-cells/FORMAL_RESULT.md"
+    grade: A
+    outcome: PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED
+    disposition: g3_supported_reuse_do_not_retest
+    protocol_sha256: 6122b8a6dd62ac69bc371909fe503c24cea319837b0a5989a4b640492aeeda86
+    formal_seeds: [90511, 90512, 90513]
+    all_registered_gates_passed: true
+    learner_replay_requirement: zero_in_certificate_growth_arm
+    boundary: controlled learned-root plus linear protected-write integration; not arbitrary Transformer write safety or model-level multi-Cell computation
 open_gaps:
   - id: G1a
     claim: learned Cell coordinates and read/write alignment form without hidden task/factor labels when factors receive singleton exposure
@@ -137,13 +150,14 @@ open_gaps:
   - id: G3
     claim: learned/growing Cell coordinates integrate with the existing replay-free certificate mechanism without destructive forgetting or transaction-linear protective growth
     experiment: constructive-clm-003
-    status: active_protocol_frozen_unrun
-    priority: primary
-    new_integration_variable: replay-free Cell-local protection plus learned hierarchical routing and context-keyed mitosis
+    status: supported
+    boundary: controlled learned-root plus linear protected-write integration
   - id: G4
-    claim: multiple learned Cells compose safely at model level
+    claim: multiple learned Cells compose safely at model level with sparse active compute and low destructive interference
     experiment: constructive-clm-004
-    status: planned
+    status: active
+    priority: primary
+    new_integration_variable: model-level computation/composition across multiple active learned Cells
   - id: G5
     claim: external CLM scaffolding can be removed progressively toward endogenous CLM
     experiment: constructive-clm-005
@@ -154,5 +168,6 @@ native_route_stop_rule:
     - deployable_read_write_alignment
     - bounded_or_improving_growth
     - protected_continual_writes_without_replay
+    - stable_model_level_multi_cell_computation
   natural_geometry_negative_is_not_stop: true
-next_milestone_after_g3_g4_g5: small_native_clm_v0
+next_milestone_after_g4_g5: small_native_clm_v0

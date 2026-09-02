@@ -1,6 +1,11 @@
 # Constructive CLM-003 — Protected Learned/Growing Cells
 
-Status: **PROTOCOL FROZEN — FORMAL SEEDS UNRUN**
+Status: **SUPPORTED — FORMAL 3/3**
+
+Formal decision: `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED`  
+Formal seeds: `90511 / 90512 / 90513`  
+Protocol SHA-256: `6122b8a6dd62ac69bc371909fe503c24cea319837b0a5989a4b640492aeeda86`  
+Formal summary: [`FORMAL_RESULT.md`](FORMAL_RESULT.md)
 
 ## Question
 
@@ -11,6 +16,19 @@ CLM-003 asks the first integration question:
 > Can learned/growing Cell coordinates host replay-free protected writes without either destructive forgetting or a return to transaction-linear growth?
 
 The new variable is therefore **certificate integration with learned hierarchical routing and context-keyed mitosis**. This experiment does not re-prove the Core-005 certificate principle.
+
+## Formal result
+
+All three registered formal seeds completed with `pass=true`, no missing seeds, and every one of the 15 frozen gates passed on every seed.
+
+```text
+status = PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED
+scientific_decision = true
+seeds = 90511 / 90512 / 90513
+missing = none
+```
+
+The result freezes G3 as supported under this controlled integration boundary. The certificate-growth learner satisfies the registered zero-replay requirement, while the control gates separately verify unsafe forgetting, the no-growth stability/plasticity limit, replay-oracle history access, growth rescue, route stability, child reuse and bounded functional growth.
 
 ## Reused evidence
 
@@ -141,7 +159,7 @@ K = 36 \ll N_{write}=792.
 
 ## Formal gates
 
-Every formal seed must satisfy all registered gates. Important groups are:
+Every formal seed satisfied all registered gates. Important groups are:
 
 1. **Structural bridge**
    - 12 learned roots;
@@ -187,9 +205,9 @@ Development-only seeds:
 403
 ```
 
-They are permanently excluded from formal confirmation once observed.
+They remain excluded from formal confirmation.
 
-Untouched formal seeds frozen after implementation:
+Formal seeds consumed by the registered decision:
 
 ```text
 90511
@@ -197,42 +215,29 @@ Untouched formal seeds frozen after implementation:
 90513
 ```
 
-The runner rejects formal seeds through `--seed`.
+The runner rejects formal seeds through the ordinary `--seed` path.
 
-## Fast smoke
+## Reproduction commands
 
-This checks only the protection/lineage mechanism with synthetic orthogonal root anchors. It does not run the CLM-002 bridge:
+Protection-only smoke:
 
 ```bash
 python scripts/research/run_constructive_clm_003.py --smoke
 ```
 
-## Development run
+Development-only run:
 
 ```bash
 python scripts/research/run_constructive_clm_003.py --seed 401
 ```
 
-Expected top-level status:
-
-```text
-DEVELOPMENT_RUN
-scientific_decision = false
-```
-
-## Formal run
-
-Only after smoke/development review:
+Registered formal runner:
 
 ```bash
 python scripts/research/run_constructive_clm_003.py --formal
 ```
 
-Formal positive status:
-
-```text
-PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED
-```
+The first registered formal execution has already been observed and produced the supported decision above. Any later execution is reproduction/artifact recovery, not a new untouched-seed confirmation.
 
 Artifacts are written to:
 
@@ -246,11 +251,11 @@ artifacts/experiments/constructive-clm-003-protected-growing-cells/
 
 ## Interpretation boundary
 
-A positive result would establish only the registered controlled integration:
+The positive result establishes only the registered controlled integration:
 
 > learned root coordinates + context-keyed lineage routing + Core-005 replay-free certificates can retain old behavior and achieve replay-oracle-level new-learning gain while functional mitosis tracks recurring context modes rather than individual writes.
 
-It would **not** establish:
+It does **not** establish:
 
 - arbitrary Transformer write safety;
 - a fully learned router;
@@ -261,4 +266,4 @@ It would **not** establish:
 - foundation-model plasticity;
 - JAM execution.
 
-If positive, the next main experiment is **Constructive CLM-004 — model-level multi-Cell computation**. Do not create a cosmetic 003B certificate rerun unless CLM-003 identifies a distinct integration failure.
+The next main experiment is **Constructive CLM-004 — model-level multi-Cell computation**. Do not create a cosmetic 003B certificate rerun unless a genuinely distinct integration failure is identified.
