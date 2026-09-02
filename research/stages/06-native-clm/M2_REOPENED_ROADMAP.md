@@ -31,7 +31,7 @@ Canonical M2 projects the Cell gradient before AdamW:
 G_p=G(I-Q^TQ).
 \]
 
-For plain SGD, `DeltaW = -eta G_p` preserves `DeltaW Q^T = 0`. AdamW instead applies elementwise moment preconditioning plus decoupled weight decay, so the same implication is not automatic.
+For plain SGD, `DeltaW = -eta G_p` preserves `DeltaW Q^T = 0`. AdamW then applies elementwise moment preconditioning plus decoupled weight decay, so the implication is not automatic.
 
 M2-R0 measures the realized post-optimizer delta directly:
 
@@ -39,14 +39,17 @@ M2-R0 measures the realized post-optimizer delta directly:
 \rho=\frac{\|\Delta WQ^T\|_F}{\|\Delta W\|_F+10^{-12}}.
 \]
 
+Transactions with `||DeltaW|| <= 1e-12` remain in the raw audit table but are excluded from the rho distribution and cannot inflate coverage.
+
 Frozen arms:
 
-| arm | optimizer | wd | grad projection | realized-update projection |
-|---|---|---:|---|---|
-| canonical current | AdamW | .01 | yes | no |
-| AdamW no decay | AdamW | 0 | yes | no |
-| SGD algebraic reference | SGD | 0 | yes | no |
-| AdamW final-update repair | AdamW | .01 | yes | yes |
+| arm | optimizer | wd | grad projection | realized-update projection | role |
+|---|---|---:|---|---|---|
+| canonical current | AdamW | .01 | yes | no | exact M2 mechanics |
+| AdamW no decay | AdamW | 0 | yes | no | isolate adaptive preconditioning |
+| SGD no decay | SGD | 0 | yes | no | algebraic reference |
+| SGD with decay | SGD | .01 | yes | no | isolate weight decay without adaptive preconditioning |
+| AdamW final-update projection | AdamW | .01 | yes | yes | repair complete realized delta |
 
 The repair first lets AdamW form its complete proposal and then commits only:
 
@@ -54,7 +57,20 @@ The repair first lets AdamW form its complete proposal and then commits only:
 U=U_{raw}(I-Q^TQ).
 \]
 
-M2-R0 is an optimizer-mechanics diagnostic only. It cannot alter the historical M2 decision or claim continual-learning success.
+The registered classifications are:
+
+```text
+INCONCLUSIVE_REFERENCE_FAILURE
+CURRENT_UPDATE_INVARIANT_HOLDS
+WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT
+ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT
+BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT
+MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION
+```
+
+The two reference arms are `SGD no decay` and `AdamW final-update projection`. If both references pass, `AdamW no decay` identifies preconditioner damage and `SGD with decay` identifies decay damage.
+
+M2-R0 is optimizer-mechanics only. It cannot alter the historical M2 decision or claim continual-learning success.
 
 ## M2-R1 — Functional Certificate Reconstruction
 
@@ -62,12 +78,18 @@ Status: **PLANNED / BLOCKED ON M2-R0**
 
 After R0, rebuild certificates in the fixed final-M1 representation rather than immediately rerunning continual learning.
 
-Candidate families are registered at the roadmap level:
+Known weaknesses of the historical certificate are:
 
-1. historical baseline: top-1 mean-vector basis;
-2. all-active probability-weighted activation SVD / covariance sketch;
+1. certificate updates only cover routed top-1 Cells although `active_cells=2`;
+2. every update stores only one mean input vector, which is weak for high-variance/superposed history;
+3. M1 certificates were accumulated while the shared representation was still moving, rather than in the final-M1 coordinate system.
+
+Candidate families:
+
+1. historical top-1 mean-vector basis;
+2. all-active probability-weighted activation SVD/covariance sketch;
 3. importance-weighted activation subspace;
-4. functional Jacobian / Fisher / Gauss-Newton sketch.
+4. functional Jacobian/Fisher/Gauss-Newton sketch.
 
 For Cell output `y_i=W_i h`, a first-order old-logit perturbation is:
 
@@ -75,13 +97,13 @@ For Cell output `y_i=W_i h`, a first-order old-logit perturbation is:
 \delta z\approx J_i(x)p_i\Delta W_i h.
 \]
 
-A functional damage metric is therefore:
+A functional damage metric is:
 
 \[
 D_i(\Delta W)=\mathbb E_{old}\|J_i p_i\Delta W_i h\|^2.
 \]
 
-R1 prioritizes low-rank / Kronecker persistent approximations such as:
+R1 prioritizes persistent low-rank/Kronecker approximations such as:
 
 \[
 F_i\approx A_i\otimes B_i,
@@ -97,7 +119,7 @@ so that:
 D_i(\Delta W)\approx\operatorname{tr}(B_i\Delta W A_i\Delta W^T).
 \]
 
-R1 must evaluate certificate quality against held-out old-function drift, with sketch/evaluation separation, all-active coverage, fixed final-M1 coordinates and explicit storage budgets. Raw old replay is not an allowed final mechanism.
+R1 must compare candidates against held-out old-function drift with sketch/evaluation separation, all-active coverage, fixed final-M1 coordinates, explicit storage budgets and capacity curves. Raw old replay is not an allowed final mechanism.
 
 ## M2-R2 — Fixed-Topology Replay-Free Continual Language
 
@@ -147,7 +169,7 @@ zero learner replay
 fixed 8-Cell topology
 ```
 
-Only a formal R2 pass supports the claim:
+Only a formal R2 pass supports:
 
 \[
 \boxed{\text{Native CLM basic replay-free continual-write primitive supported.}}
