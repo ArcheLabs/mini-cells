@@ -12,9 +12,9 @@ import csv
 import hashlib
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 from minicells.native_clm_m2 import (
     NativeCLMM2Config,
