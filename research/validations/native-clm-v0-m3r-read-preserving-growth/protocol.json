@@ -1,0 +1,156 @@
+{
+  "format": "minicells.native-clm-v0.m3r-protocol.v1",
+  "experiment_id": "native-clm-v0-m3r-read-preserving-growth",
+  "title": "Native CLM v0 M3R — Read-Preserving / Lineage-Isolated Growth",
+  "status": "FROZEN_UNRUN",
+  "frozen_before_formal_run": true,
+  "scientific_question": "Starting from the exact canonical M1 checkpoint and reusing the exact M3 protected-write pressure controller, does immutable-root, lineage-local function-preserving mitosis restore replay-free continual-language retention relative to the matched M3 global-pool growth algorithm?",
+  "new_integration_variable": "read topology during growth: global dynamic Top-K versus immutable root Top-K plus lineage-local parent-child chain routing",
+  "parent_checkpoint": {
+    "repo_id": "archelabsxyz/native-clm-v0",
+    "path": "final-model.pt",
+    "sha256": "91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f",
+    "parameters": 12154368,
+    "initial_cells": 8,
+    "active_cells": 2
+  },
+  "parent_m2": {
+    "status": "NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED",
+    "formal_seeds_consumed": [73211, 73212, 73213],
+    "interpretation": "certificate-projected Cell writes reduce forgetting, but fixed protected capacity fails absolute A retention"
+  },
+  "parent_m3": {
+    "status": "NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_NOT_SUPPORTED",
+    "protocol_sha256": "9bc23cac3cf4e4512f251836e4dd2cd48750b5894565c1a346396df06028f658",
+    "formal_seeds_consumed": [73411, 73412, 73413],
+    "artifact_commit": "e8b6a40f68862d6f01f67b125afdaeec97e6c45c",
+    "hf_revision": "4bc1e73518f09039335a368d4352ff0201cee06c",
+    "interpretation": "global-pool children were created and reused but changed read ownership, worsening old-domain retention"
+  },
+  "causal_arms": {
+    "global_growth_control": "exact frozen M3 global dynamic Top-K growth algorithm",
+    "lineage_growth": "same M3 pressure controller, but original eight roots are the only top-level candidates and children compete only inside their root lineage"
+  },
+  "read_topology": {
+    "root_count": 8,
+    "root_active_per_token": 2,
+    "root_router": "frozen M1 query projection and original eight route keys only",
+    "lineage_router": "deterministic parent-to-child chain; child replaces parent only when its frozen key has strictly higher cosine score for the current query; ties retain parent",
+    "birth_operator": "exact parent clone",
+    "gate_mass_rule": "root-level probability is conserved and applied to the concrete root/descendant selected inside that lineage",
+    "direct_children_per_node": 1,
+    "spawn_parent_constraint": "leaf only",
+    "claim": "new children cannot steal another original root's sparse route slot"
+  },
+  "growth": {
+    "growth_check_interval": 50,
+    "growth_cooldown_steps": 100,
+    "max_new_cells": 8,
+    "max_final_cells": 16,
+    "min_parent_route_hits_per_window": 512,
+    "min_parent_certificate_rank": 8,
+    "max_projected_to_raw_gradient_ratio": 0.9,
+    "min_window_train_loss": 1.5,
+    "inherit_scale": 1.0,
+    "oracle_domain_or_novelty_labels_visible_to_growth_controller": false,
+    "note": "These numerical thresholds are copied unchanged from frozen M3. M3R does not tune the growth controller."
+  },
+  "training": {
+    "batch_size": 16,
+    "steps_per_phase": 400,
+    "lr_cells": 0.0008,
+    "weight_decay": 0.01,
+    "warmup_steps": 40,
+    "min_lr_ratio": 0.1,
+    "grad_clip": 1.0,
+    "certificate_update_interval": 50,
+    "eval_batches": 20,
+    "log_interval": 50,
+    "num_workers": 0,
+    "precision": "fp16"
+  },
+  "stream": {
+    "A": {
+      "dataset": "roneneldan/TinyStories",
+      "role": "evaluation_only_M1_retention_anchor",
+      "documents": 2000
+    },
+    "B": {
+      "dataset": "Salesforce/wikitext",
+      "config": "wikitext-2-raw-v1",
+      "train_documents": 20000,
+      "eval_documents": 2000
+    },
+    "C": {
+      "train_dataset": "codeparrot/codeparrot-clean-train",
+      "eval_dataset": "codeparrot/codeparrot-clean-valid",
+      "train_documents": 8000,
+      "eval_documents": 2000
+    },
+    "D": {
+      "dataset": "databricks/databricks-dolly-15k",
+      "train_documents": 10000,
+      "eval_documents": 2000
+    }
+  },
+  "learner_replay_bytes": 0,
+  "thresholds": {
+    "minimum_phase_gain_each_B_C_D": 0.05,
+    "maximum_lineage_A_regression": 0.20,
+    "minimum_global_A_regression": 0.30,
+    "minimum_A_retention_advantage_vs_global": 0.10,
+    "maximum_lineage_mean_forgetting": 0.15,
+    "minimum_lineage_to_global_plasticity_ratio": 0.80,
+    "maximum_active_fraction_vs_dense": 0.30,
+    "minimum_spawned_cells": 1,
+    "maximum_spawned_cells": 8,
+    "minimum_child_reuse_fraction": 0.75,
+    "minimum_child_post_birth_route_hits": 512,
+    "maximum_birth_logits_max_abs_drift": 0.00001,
+    "maximum_birth_logits_mse": 1e-10,
+    "maximum_birth_root_prob_drift": 1e-7,
+    "minimum_A_child_share_reduction_vs_global": 0.10,
+    "minimum_child_selectivity_margin": 0.10
+  },
+  "registered_gates": [
+    "exact_same_m1_checkpoint",
+    "matched_seed_and_data_snapshot",
+    "zero_learner_replay",
+    "same_frozen_m3_growth_controller",
+    "shared_query_norm_and_root_keys_frozen",
+    "global_control_exposes_m3_read_failure",
+    "global_growth_occurs_and_is_bounded",
+    "lineage_growth_occurs_and_is_bounded",
+    "birth_function_preserving",
+    "birth_root_ownership_preserved",
+    "root_route_function_preserved",
+    "lineage_chain_valid",
+    "children_are_reused",
+    "child_read_leakage_reduced",
+    "children_are_selective",
+    "sparse_compute_survives_growth",
+    "lineage_phase_plasticity",
+    "lineage_absolute_A_retention",
+    "lineage_A_retention_advantage",
+    "lineage_mean_forgetting",
+    "lineage_plasticity_preserved"
+  ],
+  "development_seeds": [73501, 73502, 73503],
+  "formal_seeds": [73611, 73612, 73613],
+  "consumed_seeds_forbidden": [73211, 73212, 73213, 73411, 73412, 73413],
+  "formal_decision_rule": "SUPPORTED only if every formal seed completes and every registered gate is true on every seed",
+  "positive_status": "NATIVE_CLM_V0_M3R_READ_PRESERVING_GROWTH_SUPPORTED",
+  "negative_status": "NATIVE_CLM_V0_M3R_READ_PRESERVING_GROWTH_NOT_SUPPORTED",
+  "positive_interpretation": "Under the registered 12.15M real-language stream, conserving root read ownership and making mitosis function-preserving restores protected continual-language retention beyond the otherwise identical global-pool growth algorithm without learner replay.",
+  "explicit_nonclaims": [
+    "arbitrary continual learning",
+    "semantic Cell ontology",
+    "asymptotic sublinear Cell growth",
+    "Dense Transformer or MoE superiority",
+    "LLM-scale Native CLM",
+    "fully learned lineage routing",
+    "JAM deployment"
+  ],
+  "next_if_supported": "M4 Cell ontology / specialization analysis at the same model scale",
+  "next_if_not_supported": "freeze M3R negative and diagnose lineage-local functional boundary/selectivity; do not tune or reuse M3R formal seeds"
+}

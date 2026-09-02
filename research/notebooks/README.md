@@ -10,6 +10,8 @@ Notebooks are grouped by the research stage they belong to. Their filenames and 
 - [`05-language-validation/`](05-language-validation/): historical CLM-0.4-mini token-level transfer and infrastructure/data preparation.
 - [`06-native-clm/`](06-native-clm/): Native CLM v0 real-model workflows:
   - `native-clm-v0-m0-m1-kaggle.ipynb` — M0 execution plus canonical ~12M M1 next-token training.
-  - `native-clm-v0-m2-continual-language-kaggle.ipynb` — frozen M2 replay-free continual-language validation. It downloads the exact M1 checkpoint from Hugging Face, prepares A/B/C/D corpora, runs protected and unsafe arms concurrently on two GPUs for each formal seed, uploads all formal end-state checkpoints to Hugging Face, and Git-publishes lightweight positive or negative evidence.
+  - `native-clm-v0-m2-continual-language-kaggle.ipynb` — frozen M2 replay-free continual-language validation.
+  - `native-clm-v0-m3-growth-restored-continual-language-kaggle.ipynb` — consumed M3 global-pool growth formal workflow; canonical result is negative and must not be rerun as untouched evidence.
+  - `native-clm-v0-m3r-read-preserving-growth-kaggle.ipynb` — frozen M3R two-GPU causal workflow comparing the exact M3 global-pool growth algorithm against immutable-root, lineage-isolated function-preserving mitosis.
 
 Canonical numerical evidence remains under [`artifacts/experiments/`](../../artifacts/experiments/); notebooks are orchestration and reproducibility assets, not the source of frozen decisions. Frozen protocols live under `research/validations/`. Native CLM failures are evidence and must not be silently discarded or converted into post-hoc threshold edits.
