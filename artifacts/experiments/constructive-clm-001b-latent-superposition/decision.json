@@ -1,0 +1,458 @@
+{
+  "completed_seeds": [
+    90211,
+    90212,
+    90213
+  ],
+  "development_only_seeds": [
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210
+  ],
+  "experiment_id": "constructive-clm-001b",
+  "formal_seeds": [
+    90211,
+    90212,
+    90213
+  ],
+  "format": "minicells.constructive-clm-001b.decision.v1",
+  "missing_seeds": [],
+  "protocol_sha256": "de234ea4c75773c41012818deaba1d95622737398d5324afb8bfeea5b56063a8",
+  "results": [
+    {
+      "active_cells": 6,
+      "alignment": {
+        "covered_factors": 6,
+        "exact_permutation": true,
+        "mapping": [
+          3,
+          4,
+          1,
+          5,
+          0,
+          2
+        ],
+        "mean_joint_cosine": 0.9999775584872355,
+        "mean_matched_effect_cosine": 0.9999967566495999,
+        "mean_matched_key_cosine": 0.9999583603248711
+      },
+      "checkpoint_cell_counts": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "distinct_train_pair_types": 12,
+      "fit": {
+        "cell_count": 6,
+        "distance_high_mean": 1.2074737576074588,
+        "distance_low_mean": 0.8550006727332179,
+        "distance_separation_ratio": 1.4122488977084366,
+        "distance_threshold": 1.0312372151703384,
+        "incidence_rank": 6,
+        "largest_clique_size": 4,
+        "maximal_clique_sizes": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "membership_all_two": true,
+        "prototype_count": 12,
+        "reason": null,
+        "star_count": 6,
+        "valid": true
+      },
+      "gates": {
+        "beats_shuffled_effect_address": true,
+        "beats_transaction_memory": true,
+        "coordinate_recovery": true,
+        "distance_class_separation": true,
+        "expected_prototype_count": true,
+        "heldout_pair_addressability": true,
+        "heldout_pair_quality": true,
+        "heldout_triple_addressability": true,
+        "heldout_triple_quality": true,
+        "late_coordinate_stability": true,
+        "latent_cell_count": true,
+        "line_graph_structure": true,
+        "no_singleton_training": true,
+        "state_compression": true
+      },
+      "heldout_pair": {
+        "exact_support_rate": 1.0,
+        "mean_context_residual": 6.79968910621735e-06,
+        "mean_inferred_support": 2.0,
+        "mse": 1.7392292863804043e-06,
+        "route_recall": 1.0
+      },
+      "heldout_pair_types": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "heldout_triple": {
+        "exact_support_rate": 1.0,
+        "mean_context_residual": 4.108302914933486e-06,
+        "mean_inferred_support": 3.0,
+        "mse": 1.3566585769132728e-06,
+        "route_recall": 1.0
+      },
+      "late_checkpoint_similarity": [
+        0.9999867958098704,
+        0.999994140247463,
+        0.999996616737857,
+        0.9999999999999999
+      ],
+      "late_checkpoint_similarity_min": 0.9999867958098704,
+      "learner": {
+        "max_inference_support": 3,
+        "minimum_clique_size": 3,
+        "prototype_radius": 0.08,
+        "support_complexity_penalty": 0.0002
+      },
+      "maximum_training_support": 2,
+      "minimum_training_support": 2,
+      "no_singleton_training": true,
+      "pass": true,
+      "prototype_count": 12,
+      "prototype_to_cell_compression": 2.0,
+      "seed": 90211,
+      "shuffled_effect_pair_mse": 0.03655540672121614,
+      "transaction_memory_pair_mse": 0.02603916319056038,
+      "transaction_memory_triple_mse": 0.007112515725353974,
+      "transaction_to_cell_compression": 16.0,
+      "transactions": 96,
+      "world": {
+        "atom_jitter": 0.1,
+        "context_common_rho": 0.32,
+        "context_dim": 16,
+        "discovery_cycles": 8,
+        "effect_common_rho": 0.22,
+        "effect_dim": 12,
+        "eval_noise": 0.015,
+        "factor_count": 6,
+        "heldout_pair_repeats": 8,
+        "heldout_triple_repeats": 2,
+        "samples_per_transaction": 24,
+        "train_noise": 0.03
+      }
+    },
+    {
+      "active_cells": 6,
+      "alignment": {
+        "covered_factors": 6,
+        "exact_permutation": true,
+        "mapping": [
+          3,
+          1,
+          0,
+          2,
+          5,
+          4
+        ],
+        "mean_joint_cosine": 0.9999795825819183,
+        "mean_matched_effect_cosine": 0.9999975197498187,
+        "mean_matched_key_cosine": 0.999961645414018
+      },
+      "checkpoint_cell_counts": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "distinct_train_pair_types": 12,
+      "fit": {
+        "cell_count": 6,
+        "distance_high_mean": 1.2087228984705276,
+        "distance_low_mean": 0.8533352606110485,
+        "distance_separation_ratio": 1.4164689475095595,
+        "distance_threshold": 1.031029079540788,
+        "incidence_rank": 6,
+        "largest_clique_size": 4,
+        "maximal_clique_sizes": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "membership_all_two": true,
+        "prototype_count": 12,
+        "reason": null,
+        "star_count": 6,
+        "valid": true
+      },
+      "gates": {
+        "beats_shuffled_effect_address": true,
+        "beats_transaction_memory": true,
+        "coordinate_recovery": true,
+        "distance_class_separation": true,
+        "expected_prototype_count": true,
+        "heldout_pair_addressability": true,
+        "heldout_pair_quality": true,
+        "heldout_triple_addressability": true,
+        "heldout_triple_quality": true,
+        "late_coordinate_stability": true,
+        "latent_cell_count": true,
+        "line_graph_structure": true,
+        "no_singleton_training": true,
+        "state_compression": true
+      },
+      "heldout_pair": {
+        "exact_support_rate": 1.0,
+        "mean_context_residual": 6.412664656632341e-06,
+        "mean_inferred_support": 2.0,
+        "mse": 1.485757820571599e-06,
+        "route_recall": 1.0
+      },
+      "heldout_pair_types": [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "heldout_triple": {
+        "exact_support_rate": 1.0,
+        "mean_context_residual": 4.568469796726444e-06,
+        "mean_inferred_support": 3.0,
+        "mse": 1.1633581269159368e-06,
+        "route_recall": 1.0
+      },
+      "late_checkpoint_similarity": [
+        0.9999850372927127,
+        0.9999933853961339,
+        0.9999968646092565,
+        1.0
+      ],
+      "late_checkpoint_similarity_min": 0.9999850372927127,
+      "learner": {
+        "max_inference_support": 3,
+        "minimum_clique_size": 3,
+        "prototype_radius": 0.08,
+        "support_complexity_penalty": 0.0002
+      },
+      "maximum_training_support": 2,
+      "minimum_training_support": 2,
+      "no_singleton_training": true,
+      "pass": true,
+      "prototype_count": 12,
+      "prototype_to_cell_compression": 2.0,
+      "seed": 90212,
+      "shuffled_effect_pair_mse": 0.04575240710764738,
+      "transaction_memory_pair_mse": 0.025791366413632957,
+      "transaction_memory_triple_mse": 0.007366723060223424,
+      "transaction_to_cell_compression": 16.0,
+      "transactions": 96,
+      "world": {
+        "atom_jitter": 0.1,
+        "context_common_rho": 0.32,
+        "context_dim": 16,
+        "discovery_cycles": 8,
+        "effect_common_rho": 0.22,
+        "effect_dim": 12,
+        "eval_noise": 0.015,
+        "factor_count": 6,
+        "heldout_pair_repeats": 8,
+        "heldout_triple_repeats": 2,
+        "samples_per_transaction": 24,
+        "train_noise": 0.03
+      }
+    },
+    {
+      "active_cells": 6,
+      "alignment": {
+        "covered_factors": 6,
+        "exact_permutation": true,
+        "mapping": [
+          3,
+          5,
+          2,
+          4,
+          0,
+          1
+        ],
+        "mean_joint_cosine": 0.9999782824699274,
+        "mean_matched_effect_cosine": 0.999996338181902,
+        "mean_matched_key_cosine": 0.9999602267579526
+      },
+      "checkpoint_cell_counts": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "distinct_train_pair_types": 12,
+      "fit": {
+        "cell_count": 6,
+        "distance_high_mean": 1.2192893201993633,
+        "distance_low_mean": 0.8606234591464405,
+        "distance_separation_ratio": 1.4167512019816946,
+        "distance_threshold": 1.0399563896729018,
+        "incidence_rank": 6,
+        "largest_clique_size": 4,
+        "maximal_clique_sizes": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "membership_all_two": true,
+        "prototype_count": 12,
+        "reason": null,
+        "star_count": 6,
+        "valid": true
+      },
+      "gates": {
+        "beats_shuffled_effect_address": true,
+        "beats_transaction_memory": true,
+        "coordinate_recovery": true,
+        "distance_class_separation": true,
+        "expected_prototype_count": true,
+        "heldout_pair_addressability": true,
+        "heldout_pair_quality": true,
+        "heldout_triple_addressability": true,
+        "heldout_triple_quality": true,
+        "late_coordinate_stability": true,
+        "latent_cell_count": true,
+        "line_graph_structure": true,
+        "no_singleton_training": true,
+        "state_compression": true
+      },
+      "heldout_pair": {
+        "exact_support_rate": 1.0,
+        "mean_context_residual": 6.384196376185051e-06,
+        "mean_inferred_support": 2.0,
+        "mse": 1.332720149303277e-06,
+        "route_recall": 1.0
+      },
+      "heldout_pair_types": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "heldout_triple": {
+        "exact_support_rate": 1.0,
+        "mean_context_residual": 4.166730708898884e-06,
+        "mean_inferred_support": 3.0,
+        "mse": 1.3275694172086248e-06,
+        "route_recall": 1.0
+      },
+      "late_checkpoint_similarity": [
+        0.9999869533467903,
+        0.9999936087828031,
+        0.9999962844271449,
+        1.0
+      ],
+      "late_checkpoint_similarity_min": 0.9999869533467903,
+      "learner": {
+        "max_inference_support": 3,
+        "minimum_clique_size": 3,
+        "prototype_radius": 0.08,
+        "support_complexity_penalty": 0.0002
+      },
+      "maximum_training_support": 2,
+      "minimum_training_support": 2,
+      "no_singleton_training": true,
+      "pass": true,
+      "prototype_count": 12,
+      "prototype_to_cell_compression": 2.0,
+      "seed": 90213,
+      "shuffled_effect_pair_mse": 0.04738947958952069,
+      "transaction_memory_pair_mse": 0.02788926794630941,
+      "transaction_memory_triple_mse": 0.007845132596439324,
+      "transaction_to_cell_compression": 16.0,
+      "transactions": 96,
+      "world": {
+        "atom_jitter": 0.1,
+        "context_common_rho": 0.32,
+        "context_dim": 16,
+        "discovery_cycles": 8,
+        "effect_common_rho": 0.22,
+        "effect_dim": 12,
+        "eval_noise": 0.015,
+        "factor_count": 6,
+        "heldout_pair_repeats": 8,
+        "heldout_triple_repeats": 2,
+        "samples_per_transaction": 24,
+        "train_noise": 0.03
+      }
+    }
+  ],
+  "scientific_decision": true,
+  "status": "LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED"
+}
