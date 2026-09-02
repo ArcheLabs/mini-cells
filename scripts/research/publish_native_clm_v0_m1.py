@@ -29,15 +29,30 @@ M1_ALLOWED = {
 }
 
 
-def run(command: list[str], *, env: dict[str, str] | None = None, capture: bool = False) -> str:
+def run(
+    command: list[str],
+    *,
+    env: dict[str, str] | None = None,
+    capture: bool = False,
+    timeout: int | None = None,
+) -> str:
+    print("+", " ".join(command), flush=True)
     result = subprocess.run(
         command,
         check=True,
         env=env,
         text=True,
         capture_output=capture,
+        timeout=timeout,
     )
     return result.stdout.strip() if capture else ""
+
+
+def _abort_interrupted_rebase() -> None:
+    git_dir = Path(run(["git", "rev-parse", "--git-dir"], capture=True))
+    if (git_dir / "rebase-merge").exists() or (git_dir / "rebase-apply").exists():
+        print("Recovering from an interrupted rebase...", flush=True)
+        run(["git", "rebase", "--abort"])
 
 
 def validate() -> tuple[dict, dict]:
@@ -96,23 +111,42 @@ def main() -> int:
     parser.add_argument("--token-env", default="GITHUB_TOKEN")
     args = parser.parse_args()
 
+    _abort_interrupted_rebase()
     current = run(["git", "branch", "--show-current"], capture=True)
     if current != args.branch:
         raise RuntimeError(f"expected branch {args.branch}, got {current}")
 
     _, m1 = validate()
     staged = stage_allowed()
-    print("Files to publish:")
+    print("Files to publish:", flush=True)
     for path in staged:
-        print(" ", path)
+        print(" ", path, flush=True)
 
     if staged:
         run(["git", "config", "user.name", "MiniCells Research"])
         run(["git", "config", "user.email", "research@minicells.local"])
         run(["git", "commit", "-m", "research: publish Native CLM v0 M0/M1 results"])
+    else:
+        print("No new files staged; continuing with existing local publication commit.", flush=True)
 
-    run(["git", "fetch", "origin"])
-    run(["git", "rebase", f"origin/{args.branch}"])
+    # Fetch only the publication branch. A full `git fetch origin` can be very slow in
+    # Kaggle because this research repository has many historical branches/artifacts.
+    print("Fetching only the target research branch...", flush=True)
+    run(
+        [
+            "git",
+            "fetch",
+            "--no-tags",
+            "origin",
+            f"+refs/heads/{args.branch}:refs/remotes/origin/{args.branch}",
+        ],
+        timeout=300,
+    )
+
+    print("Rebasing publication commit onto remote branch...", flush=True)
+    rebase_env = os.environ.copy()
+    rebase_env["GIT_EDITOR"] = "true"
+    run(["git", "rebase", f"origin/{args.branch}"], env=rebase_env, timeout=120)
 
     token = os.environ.get(args.token_env)
     if not token:
@@ -132,6 +166,7 @@ def main() -> int:
     env["GIT_ASKPASS"] = str(askpass)
     env["GIT_TERMINAL_PROMPT"] = "0"
     try:
+        print("Pushing lightweight M0/M1 artifacts...", flush=True)
         run(
             [
                 "git",
@@ -140,6 +175,7 @@ def main() -> int:
                 f"HEAD:{args.branch}",
             ],
             env=env,
+            timeout=300,
         )
     finally:
         askpass.unlink(missing_ok=True)
@@ -156,7 +192,8 @@ def main() -> int:
                 "checkpoint_sha256": m1["final_checkpoint_sha256"],
             },
             indent=2,
-        )
+        ),
+        flush=True,
     )
     return 0
 
