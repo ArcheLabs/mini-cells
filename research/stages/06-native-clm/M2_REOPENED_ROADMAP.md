@@ -1,6 +1,6 @@
 # Native CLM M2 Reopened Roadmap — Safe Functional Write Primitive
 
-Status: **M2 REOPENED / M2-R0 FROZEN UNRUN**
+Status: **M2 REOPENED / M2-R0b FROZEN UNRUN**
 
 ## Why M2 is reopened
 
@@ -23,7 +23,9 @@ M3, M3R, the Address Diagnostic, M3L, M3L-1, M3L-2 and M3W-0 are therefore recla
 
 ## M2-R0 — Protected Update Invariant Audit
 
-Status: **FROZEN / UNRUN**
+Status: **PUBLISHED / `INCONCLUSIVE_REFERENCE_FAILURE`**
+
+Published commit: `c1f9e132b026efe24a0238e6ea333bdd2ae5fbdb`.
 
 Canonical M2 projects the Cell gradient before AdamW:
 
@@ -31,52 +33,79 @@ Canonical M2 projects the Cell gradient before AdamW:
 G_p=G(I-Q^TQ).
 \]
 
-For plain SGD, `DeltaW = -eta G_p` preserves `DeltaW Q^T = 0`. AdamW then applies elementwise moment preconditioning plus decoupled weight decay, so the implication is not automatic.
+For plain SGD, `DeltaW = -eta G_p` should preserve `DeltaW Q^T = 0` in exact arithmetic. AdamW then applies elementwise moment preconditioning plus decoupled weight decay, so the implication is not automatic.
 
-M2-R0 measures the realized post-optimizer delta directly:
+M2-R0 measured the realized post-optimizer delta directly:
 
 \[
 \rho=\frac{\|\Delta WQ^T\|_F}{\|\Delta W\|_F+10^{-12}}.
 \]
 
-Transactions with `||DeltaW|| <= 1e-12` remain in the raw audit table but are excluded from the rho distribution and cannot inflate coverage.
+The frozen five-arm result was:
 
-Frozen arms:
+| arm | mean rho | p95 rho | max rho |
+|---|---:|---:|---:|
+| canonical AdamW + gradient projection | 0.089760 | 0.155416 | 0.240160 |
+| AdamW no decay + gradient projection | 0.089761 | 0.155417 | 0.240162 |
+| SGD no decay + gradient projection | 0.004237 | 0.015315 | 0.090235 |
+| SGD with decay + gradient projection | 0.324492 | 0.425478 | 0.434843 |
+| AdamW + final realized-update projection | 1.90e-6 | 5.44e-6 | 1.53e-5 |
 
-| arm | optimizer | wd | grad projection | realized-update projection | role |
-|---|---|---:|---|---|---|
-| canonical current | AdamW | .01 | yes | no | exact M2 mechanics |
-| AdamW no decay | AdamW | 0 | yes | no | isolate adaptive preconditioning |
-| SGD no decay | SGD | 0 | yes | no | algebraic reference |
-| SGD with decay | SGD | .01 | yes | no | isolate weight decay without adaptive preconditioning |
-| AdamW final-update projection | AdamW | .01 | yes | yes | repair complete realized delta |
+The mechanism pattern strongly suggests that both adaptive preconditioning and weight decay can move the realized parameter transaction outside the registered certificate nullspace, while constraining the complete realized update nearly restores the invariant.
 
-The repair first lets AdamW form its complete proposal and then commits only:
+However, the algebraic SGD/no-decay reference also failed the pre-registered relative threshold. Its smallest realized updates were around `1e-6` while absolute residuals were around `1e-7`, so R0 correctly refused a scientific/mechanics classification rather than treating a possible float32 transaction floor as structural damage.
+
+M2-R0 therefore remains optimizer-mechanics evidence only. It does not alter the historical M2 decision.
+
+## M2-R0b — Numerical Reference Audit
+
+Status: **FROZEN / UNRUN**
+
+Registration: `research/stages/06-native-clm/M2_R0B_REGISTRATION.md`.
+
+R0b does not rerun continual language. It uses the same M1 checkpoint, the same pinned WikiText-B gradient source, audit seed `75001`, the same five optimizer arms, frozen certificates/router/topology, and zero learner replay.
+
+For every certificate-ranked Cell/step it separates:
+
+1. projected-gradient analytic transaction `-lr * g`;
+2. fp64 safe projection in the exact span represented by the stored certificate rows;
+3. parameter-dtype `fl(W + Delta_safe) - W` commit;
+4. raw optimizer-realized update;
+5. matched-safe fp64 projection of that optimizer update;
+6. matched-safe parameter-dtype commit at the same update scale;
+7. actually committed update after the arm's optional final-update projection.
+
+The numerical floor is frozen before execution as the maximum of an empirical matched-safe float-commit residual and a conservative dtype bound:
 
 \[
-U=U_{raw}(I-Q^TQ).
+8\,\epsilon_{dtype}(\|W\|_F+\|\Delta W_{safe}\|_F).
 \]
 
-The registered classifications are:
+R0b then uses the excess factor:
+
+\[
+E=\frac{\|\Delta W_{commit}Q^T\|_F}{\text{machine-floor envelope}}.
+\]
+
+The two references remain `SGD no decay` and `AdamW final-update projection`. Both must have sufficient coverage, fp64 ideal-projection rho `<= 1e-10`, p95 excess `<= 2`, and max excess `<= 4`. Structural optimizer violations require both p95 excess `>= 16` and committed p95 rho `>= 1e-4`.
+
+No threshold may be changed after observing the canonical R0b run.
+
+Registered primary classifications:
 
 ```text
-INCONCLUSIVE_REFERENCE_FAILURE
-CURRENT_UPDATE_INVARIANT_HOLDS
-WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT
-ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT
-BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT
-MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION
+INCONCLUSIVE_SGD_NUMERICAL_REFERENCE_FAILURE
+INCONCLUSIVE_FINAL_PROJECTION_NUMERICAL_REFERENCE_FAILURE
+R0_REFERENCE_FAILURE_EXPLAINED_BY_PARAMETER_TRANSACTION_ROUNDOFF
 ```
 
-The two reference arms are `SGD no decay` and `AdamW final-update projection`. If both references pass, `AdamW no decay` identifies preconditioner damage and `SGD with decay` identifies decay damage.
-
-M2-R0 is optimizer-mechanics only. It cannot alter the historical M2 decision or claim continual-learning success.
+Only the last classification closes the numerical/mechanics gate and unblocks M2-R1. It is not a continual-learning success claim.
 
 ## M2-R1 — Functional Certificate Reconstruction
 
-Status: **PLANNED / BLOCKED ON M2-R0**
+Status: **PLANNED / BLOCKED ON M2-R0b**
 
-After R0, rebuild certificates in the fixed final-M1 representation rather than immediately rerunning continual learning.
+After R0b closes the update-transaction measurement layer, rebuild certificates in the fixed final-M1 representation rather than immediately rerunning continual learning.
 
 Known weaknesses of the historical certificate are:
 
@@ -123,7 +152,7 @@ R1 must compare candidates against held-out old-function drift with sketch/evalu
 
 ## M2-R2 — Fixed-Topology Replay-Free Continual Language
 
-Status: **BLOCKED ON R0 + R1**
+Status: **BLOCKED ON R0b + R1**
 
 R2 is the next true continual-learning formal experiment. It keeps the original M2 boundary:
 
@@ -138,7 +167,7 @@ B -> C -> D
 learner raw replay = 0
 ```
 
-Only mechanisms independently validated in R0/R1 may change:
+Only mechanisms independently validated in R0b/R1 may change:
 
 - realized-update constrained optimizer;
 - selected functional certificate.
@@ -194,7 +223,9 @@ M1                                  PASS
   ↓
 M2 original                         NOT SUPPORTED
   ↓
-M2-R0 actual-update invariant       FROZEN / UNRUN
+M2-R0 actual-update invariant       INCONCLUSIVE_REFERENCE_FAILURE
+  ↓
+M2-R0b numerical reference          FROZEN / UNRUN
   ↓
 M2-R1 functional certificate        BLOCKED
   ↓
