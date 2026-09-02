@@ -1,0 +1,100 @@
+{
+  "format": "minicells.native-clm-v0.m3w0-write-drift-restoration.protocol.v1",
+  "experiment_id": "native-clm-v0-m3w0-write-drift-restoration",
+  "title": "Native CLM v0 M3W-0 — Root Write-Drift Counterfactual Restoration",
+  "status": "FROZEN_UNRUN",
+  "frozen_before_diagnostic": true,
+  "scientific_decision": false,
+  "scientific_question": "Using only the already-published M3L-2 final checkpoints, how much of residual A forgetting is causally attributable to writes in the original eight roots versus writes in descendants, when routing/address state is held fixed?",
+  "parent_evidence": {
+    "m3l2_status": "NATIVE_CLM_V0_M3L2_ONLINE_ADDRESS_STATE_NOT_SUPPORTED",
+    "m3l2_publish_commit": "348a6cd28cda13298b6d61c01453d06e14efbd33",
+    "m3l2_protocol_sha256": "b5f95f9a4d920577d5ff0ddbaf120631f7ed0faf04e1c5ba39492e28d3b20adb",
+    "m3l2_data_manifest_sha256": "ed0b50c8bf3a822bf13c1a542a78cb9ad4b15daa09c612c4c1cfff782f30f409",
+    "m3l2_formal_seeds": [74211, 74212, 74213],
+    "hf_repo": "archelabsxyz/native-clm-v0",
+    "hf_revision": "2b6ac153e926f899f038ff02c8c10041baaacb4a"
+  },
+  "m1_checkpoint": {
+    "repo_id": "archelabsxyz/native-clm-v0",
+    "path": "final-model.pt",
+    "sha256": "91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f",
+    "initial_cells": 8
+  },
+  "treatment_checkpoints": [
+    {
+      "seed": 74211,
+      "hf_path": "m3l2/seed-74211/online_address_state-final.pt",
+      "sha256": "4699d9d844419b459e1f3086fd181667c62275150f5983cddef1cfc1483f650c",
+      "bytes": 55835383
+    },
+    {
+      "seed": 74212,
+      "hf_path": "m3l2/seed-74212/online_address_state-final.pt",
+      "sha256": "71ddf4f852115f23f9d8f3b2184da6aba74f1d39459f02d20c1e1b5cc467ad28",
+      "bytes": 55835383
+    },
+    {
+      "seed": 74213,
+      "hf_path": "m3l2/seed-74213/online_address_state-final.pt",
+      "sha256": "71e13ed2f06ef81bfb56fec2be7f10e2a38d7afea4c74730c3777da148aac90b",
+      "bytes": 55835383
+    }
+  ],
+  "data": {
+    "source_manifest": "artifacts/experiments/native-clm-v0-m3l2-online-address-state/data-manifest.json",
+    "evaluation_domains": ["A", "B", "C", "D"],
+    "training_data_used": false,
+    "learner_updates": 0,
+    "new_formal_seeds_consumed": false
+  },
+  "counterfactuals": {
+    "final": "published M3L-2 online-address checkpoint, unchanged",
+    "root_restore": "restore only original Cells 0..7 operator weights to exact M1 weights; keep descendants, final routing, address states, affine gates and all non-operator state unchanged",
+    "descendant_root_restore": "keep original root operators final; restore every descendant operator to the exact M1 operator of its root ancestor; keep final routing/address state unchanged",
+    "all_lineage_restore": "restore every Cell operator to the exact M1 operator of its root ancestor; keep final routing/address state unchanged"
+  },
+  "factorial_mapping": {
+    "00": "all_lineage_restore: root writes off, descendant writes off",
+    "10": "descendant_root_restore: root writes on, descendant writes off",
+    "01": "root_restore: root writes off, descendant writes on",
+    "11": "final: root writes on, descendant writes on"
+  },
+  "attribution": {
+    "A_loss_root_shapley": "0.5 * ((L10_A - L00_A) + (L11_A - L01_A))",
+    "A_loss_descendant_shapley": "0.5 * ((L01_A - L00_A) + (L11_A - L10_A))",
+    "A_root_fraction": "root_shapley / (root_shapley + descendant_shapley)",
+    "new_domain_gain_retention_under_root_restore": "for each D in B,C,D: (L_M1_D - L_root_restore_D) / (L_M1_D - L_final_D)"
+  },
+  "evaluation": {
+    "batch_size": 16,
+    "eval_batches": 20,
+    "precision": "fp16",
+    "num_workers": 0
+  },
+  "thresholds": {
+    "maximum_all_lineage_vs_m1_loss_delta_each_domain": 0.0001,
+    "minimum_all_lineage_A_excess_recovery_fraction": 0.95,
+    "root_write_dominant_fraction": 0.60,
+    "descendant_write_dominant_fraction": 0.60,
+    "minimum_new_domain_gain_retention_each_for_children_carry_plasticity": 0.70
+  },
+  "registered_classifications": [
+    "INCONCLUSIVE_IDENTITY",
+    "ROOT_WRITE_DOMINANT_CHILDREN_CARRY_PLASTICITY",
+    "ROOT_WRITE_DOMINANT_TRANSFER_GAP",
+    "DESCENDANT_WRITE_DOMINANT",
+    "DISTRIBUTED_WRITE_DRIFT"
+  ],
+  "classification_rule": "INCONCLUSIVE_IDENTITY if any seed fails all-lineage M1 reconstruction or recovers <95% of A excess loss. Otherwise ROOT_WRITE_DOMINANT_* if every seed has A_root_fraction >=0.60, split by whether every B/C/D gain-retention ratio under root_restore is >=0.70. DESCENDANT_WRITE_DOMINANT if every seed has descendant Shapley fraction >=0.60. Otherwise DISTRIBUTED_WRITE_DRIFT.",
+  "explicit_nonclaims": [
+    "child birth-state restoration",
+    "proof that copy-on-write will solve continual learning",
+    "new continual-language scientific decision",
+    "bootstrap-free address state",
+    "arbitrary continual learning",
+    "semantic Cell ontology"
+  ],
+  "next_if_root_write_dominant": "register a new formal experiment whose only new integration variable is write-ownership separation / copy-on-write immutable committed parents",
+  "next_if_not_root_write_dominant": "freeze M3W-0 result and diagnose descendant/write interaction before adding a write controller"
+}
