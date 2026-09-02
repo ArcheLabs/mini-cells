@@ -1,7 +1,7 @@
 # CLM Feasibility Evidence Map
 
-Status: **FROZEN v1.0**  
-Frozen against `main@474f7f1c736a61a433e4d5a01691edc6795177da` (2026-09-02).
+Status: **FROZEN v1.1**  
+Baseline: `main@7c99ef3f4aedb8d561cf9600ea5d79da1eb99b99` plus the registered Constructive CLM-001 formal result from 2026-09-02.
 
 ## Purpose
 
@@ -16,7 +16,7 @@ pretrained LLM
   -> endogenous / native CLM
 ```
 
-The native-CLM research question is therefore **not** whether every cellular mechanism can be rediscovered from scratch. It is whether the already-supported mechanisms can be composed with a learned read/write coordinate system and remain bounded over a long continual stream.
+The native-CLM research question is therefore **not** whether every cellular mechanism can be rediscovered from scratch. It is whether the already-supported mechanisms can be composed with learned read/write coordinates, latent structure can be discovered under increasingly weak scaffolds, and growth remains bounded over long continual streams.
 
 ## Evidence grades
 
@@ -40,11 +40,12 @@ The native-CLM research question is therefore **not** whether every cellular mec
 | The common right-side carrier is causally useful | Core 009B-1; result commit `f2691daf5738eac0232866a46d079db3aa61b60a` | A | Carrier-preserved writes retain roughly 97.6–98.2% of full-write target gain at the locked causal scale | **No** carrier-causality rerun |
 | Pretrained effect vectors already lie in a compact persistent shared dictionary | Core 009B-2 discovery, branch `codex/core-validation-009b2-persistent-effect-geometry` | C negative | Discovery found no viable compact `<=32D` persistent effect subspace; confirmation was forbidden | Treat as natural-geometry No-Go, not native-CLM No-Go |
 | Pretrained effect vectors already expose sparse/local Cell coordinates | Core 009C; result commit `3a524abd5b29a42c425dddab7df497cbfadfeecd` | C negative | `SPARSE_LOCAL_EFFECT_GEOMETRY_NOT_FOUND`; no confirmation | **Do not** keep searching for the same natural ontology |
-| Full write operators retain compositional organization lost by carrier compression | Core 009D | Open | Protocol/implementation exists at the frozen map baseline; no scientific result is imported into this map | Await result; do not duplicate |
+| Full write operators retain compositional organization lost by carrier compression | Core 009D | Open | Representation-level operator question remains independent of the constructive route | Do not block Constructive CLM on this result |
+| Reusable Cell keys/effects can form from continual experience without task/factor labels when factors receive clean singleton exposure | Constructive CLM-001; formal seeds `90111/90112/90113`; protocol `16c23861...35e5` | A | `LEARNED_COORDINATE_FORMATION_SUPPORTED`: 3/3 seeds passed, six Cells covered six hidden factors, pair routing recall was 1.0, late growth was 0/1/1 | **No** singleton-world rerun; reuse as G1a |
 
 ## What is already strong enough to reuse as a component
 
-The repository already supports this mechanism chain strongly enough that new native-CLM experiments should **compose** it rather than re-prove it:
+The repository now supports this mechanism chain strongly enough that new native-CLM experiments should **compose** it rather than re-prove it:
 
 ```text
 sparse routed mutable state
@@ -56,29 +57,51 @@ replay-free local protection
 real-representation writable geometry
         +
 simple causal foundation interface
+        +
+addressable Cell formation in a controlled continual world
 ```
 
-The missing bridge is:
-
-```text
-continual pressure
-    -> learned Cell coordinates
-    <-> learned read address
-    -> reuse before spawn
-    -> bounded long-run growth
-```
+The remaining bridge is no longer “can any learned Cell coordinate form?” The immediate question is whether clean singleton prototypes are necessary.
 
 ## Frozen open gaps
 
-### G1 — Learned coordinate formation and read/write alignment
+### G1a — Addressable learned coordinate formation
 
-Can the system form reusable Cell coordinates and a deployable read key from data **without task/factor labels** and without assuming a pretrained natural Cell ontology?
+Status: **SUPPORTED** by Constructive CLM-001.
 
-Primary experiment: **Constructive CLM-001 — Learned Coordinate Formation**.
+Frozen boundary:
+
+```text
+continual data + singleton factor exposure
+  -> learned read keys / effect Cells
+  -> reuse and composition
+  -> growth stops after factor coverage
+```
+
+This result must not be generalized to latent factor discovery under entangled mixtures.
+
+### G1b — Latent coordinate discovery under superposition
+
+Can reusable Cell coordinates be recovered when **no hidden factor is ever presented alone**?
+
+Primary experiment: **Constructive CLM-001B — Latent Coordinate Discovery under Superposition**.
+
+Registered 001B deliberately tests a structured but stronger family:
+
+```text
+correlated non-orthogonal latent factors
+  + no singleton training transactions
+  + pair superpositions only during discovery
+  -> relational overlap recovery
+  -> latent Cell keys/effects
+  -> x-only unseen pair/triple composition
+```
+
+A positive 001B result applies only to its registered pair-superposition scaffold; arbitrary unknown mixing remains a later stress-test question.
 
 ### G2 — Long-horizon growth law
 
-After G1, does growth become sublinear or at least show a declining spawn probability on a structured continual stream?
+After G1b, does growth become sublinear or at least show a declining spawn probability on a structured continual stream?
 
 Primary metric family:
 
@@ -90,7 +113,7 @@ Planned experiment: Constructive CLM-002.
 
 ### G3 — Learned coordinates + existing protection
 
-Can G1 coordinates coexist with the already-supported Core-005 certificate mechanism without collapsing plasticity or forcing near-linear growth?
+Can learned coordinates coexist with the already-supported Core-005 certificate mechanism without collapsing plasticity or forcing near-linear growth?
 
 This is an **integration** test, not a new certificate-principle test.
 
@@ -98,7 +121,7 @@ Planned experiment: Constructive CLM-003.
 
 ### G4 — Multi-Cell composition
 
-Can multiple learned Cells activate together on unseen combinations without destructive interaction? Core 009D may inform the representation, but it does not substitute for model-level compositional execution.
+Can multiple learned Cells activate together on unseen combinations without destructive interaction? 001/001B test controlled algebraic composition, while Core 009D may inform representation-level operator composition. Neither substitutes for model-level compositional execution.
 
 Planned experiment: Constructive CLM-004.
 
@@ -107,7 +130,7 @@ Planned experiment: Constructive CLM-004.
 Can handcrafted components be removed one at a time while preserving the validated behavior?
 
 ```text
-prototype/read-key scaffold
+prototype/relational discovery scaffold
   -> learned router
   -> learned write controller
   -> learned growth controller
@@ -131,6 +154,7 @@ Do not create new core validations whose primary question is only one of the fol
 8. Is the common carrier causally useful?
 9. Is semantic routing address automatically the functional split boundary?
 10. Is the same pretrained effect geometry secretly sparse/local under another near-equivalent fixed dictionary?
+11. Can the already-registered singleton-exposure 001 world form six learned Cells again?
 
 A new experiment touching one of these topics must state the **new integration variable** that makes it non-duplicative.
 
@@ -138,7 +162,7 @@ A new experiment touching one of these topics must state the **new integration v
 
 A negative result in natural-geometry characterization (009B-2/009C/009D) does **not** stop Constructive CLM. The native route stops only if repeated constructive experiments fail to produce all three of:
 
-1. reusable learned coordinates;
+1. reusable learned coordinates under progressively weaker scaffolds;
 2. deployable read/write alignment;
 3. bounded or improving growth behavior.
 
