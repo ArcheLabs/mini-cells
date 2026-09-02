@@ -48,7 +48,7 @@ jobs:
       - name: Compile and lint
         run: |
           python -m compileall -q src/minicells/native_clm_m2.py scripts/research/run_native_clm_v0_m2.py scripts/research/prepare_native_clm_v0_m2_data.py scripts/research/fetch_native_clm_v0_m1_checkpoint.py scripts/research/publish_native_clm_v0_m2.py
-          ruff check src/minicells/native_clm_m2.py scripts/research/run_native_clm_v0_m2.py scripts/research/prepare_native_clm_v0_m2_data.py scripts/research/fetch_native_clm_v0_m1_checkpoint.py scripts/research/publish_native_clm_v0_m2.py tests/research/06-native-clm/test_native_clm_m2.py
+          ruff check --diff src/minicells/native_clm_m2.py scripts/research/run_native_clm_v0_m2.py scripts/research/prepare_native_clm_v0_m2_data.py scripts/research/fetch_native_clm_v0_m1_checkpoint.py scripts/research/publish_native_clm_v0_m2.py tests/research/06-native-clm/test_native_clm_m2.py
       - name: M2 unit smoke
         run: pytest -q tests/research/06-native-clm/test_native_clm_m2.py
       - name: Formal-seed guard
