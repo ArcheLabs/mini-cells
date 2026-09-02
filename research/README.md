@@ -2,7 +2,7 @@
 
 # MiniCells Research
 
-MiniCells now separates the **product architecture** from the stronger **endogenous CLM research hypothesis**.
+MiniCells separates the **product architecture** from the stronger **endogenous CLM research hypothesis**.
 
 The product path is:
 
@@ -25,19 +25,22 @@ Core 009D remains a non-blocking operator-geometry diagnostic.
 
 ### Track B — Constructive CLM Research
 
-This is now the main native-CLM feasibility line.
+This is the main native-CLM feasibility line.
 
-Constructive CLM-001 is formally supported on untouched seeds `90111/90112/90113`: six learned Cells covered six hidden factors, routing recall was 1.0, and late growth stopped after coverage. Its boundary is equally important: every hidden factor first received a clean singleton exposure.
+Two coordinate-formation gaps are now formal parent evidence:
 
-The active question is therefore stronger:
+- **G1a / Constructive CLM-001 — SUPPORTED** on untouched formal seeds `90111/90112/90113`: addressable learned Cells formed in the registered singleton-exposure world.
+- **G1b / Constructive CLM-001B — SUPPORTED** on untouched formal seeds `90211/90212/90213`: six latent Cells were recovered with no singleton training, from twelve additive pair-superposition prototypes, and x-only routing generalized to unseen pairs/triples.
 
-> Can reusable latent Cell coordinates be recovered when **no hidden factor is ever presented alone**?
+The active question is now growth scaling rather than Cell existence:
 
-Current experiment: [Constructive CLM-001B — Latent Coordinate Discovery under Superposition](validations/constructive-clm-001b-latent-superposition/README.md).
+> Does learned Cell state track the amount of reusable latent structure rather than the number of continual-learning transactions over a long stream?
+
+Current experiment: [Constructive CLM-002 — Long-Horizon Structure-Tracking Growth Law](validations/constructive-clm-002-long-horizon-growth-law/README.md).
 
 The canonical reuse/no-repeat policy is frozen in the [CLM Feasibility Evidence Map](validations/CLM_FEASIBILITY_EVIDENCE_MAP.md), with a machine-readable companion at [`validations/clm-feasibility-evidence-map.yaml`](validations/clm-feasibility-evidence-map.yaml).
 
-Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md) for the constructive sequence.
+Read the [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md) for the constructive sequence.
 
 ## Research stages
 
@@ -54,7 +57,8 @@ Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEA
 - Core 006: real pretrained representations contain reusable structure and replay-free certificate writes retain useful plasticity, while semantic/routing address is not a sufficient mitosis boundary.
 - Core 009A/009B-1: a compact foundation write interface exists; carrier-only writes preserve most of the tested causal target gain.
 - Core 009B-2/009C: the tested pretrained carrier-effect representation does not expose the desired compact persistent sparse/local Cell ontology. These are natural-geometry No-Gos, not Constructive-CLM No-Gos.
-- Constructive CLM-001: addressable learned Cell formation is supported in the registered singleton-exposure world; this is now G1a parent evidence rather than the active frontier.
+- Constructive CLM-001: addressable learned Cell formation is supported under the registered singleton scaffold.
+- Constructive CLM-001B: latent Cell discovery is supported under the registered additive pair-superposition scaffold with no singleton training.
 
 ## Research assets
 
@@ -64,4 +68,4 @@ Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEA
 - [Canonical artifacts](../artifacts/experiments/) are immutable scientific evidence once formal runs are published.
 - Machine-readable historical paths/outcomes remain in [`catalog.yaml`](catalog.yaml).
 
-No current repository result establishes general natural-language continual learning, asymptotically sublinear Cell growth, arbitrary latent-source discovery, a fully learned growth policy, or an endogenous LLM-scale CLM. Constructive CLM-001B is deliberately narrower: it removes singleton exposure under a registered additive pair-superposition scaffold before the program moves to long-horizon growth-law validation.
+No current repository result establishes general natural-language continual learning, asymptotically sublinear Cell growth, arbitrary latent-source discovery, a fully learned growth policy, write-certificate integration for the constructive coordinates, or an endogenous LLM-scale CLM. Constructive CLM-002 is deliberately narrower: it measures finite-horizon structure-tracking growth before certificate integration and later scaffold removal.
