@@ -21,8 +21,8 @@ from torch import Tensor
 
 from .native_clm_m2 import sha256_file
 from .native_clm_m3l_gate import (
-    M3LQuerySketchConfig,
     LowRankGaussianSketch,
+    M3LQuerySketchConfig,
     _balanced_concat,
     _collect_domain_queries,
     _cosine_auc,
