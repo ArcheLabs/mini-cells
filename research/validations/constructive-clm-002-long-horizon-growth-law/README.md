@@ -115,7 +115,7 @@ Every formal seed must satisfy:
 
 ## Seed discipline
 
-Development-only seeds have been observed during implementation and are excluded from scientific confirmation:
+Full development runs already observed and permanently excluded:
 
 ```text
 301
@@ -123,7 +123,7 @@ Development-only seeds have been observed during implementation and are excluded
 303
 ```
 
-Untouched formal seeds frozen after development:
+During final implementation review, bootstrap-only diagnostics were also inspected on:
 
 ```text
 90311
@@ -131,7 +131,17 @@ Untouched formal seeds frozen after development:
 90313
 ```
 
-Do not run them through `--seed`. The runner rejects that path.
+Those seeds are therefore **also permanently excluded** even though the complete CLM-002 stream was never run on them.
+
+Untouched formal seeds were frozen only after all of the above observations:
+
+```text
+90411
+90412
+90413
+```
+
+Do not run those seeds through `--seed`. The runner rejects that path.
 
 ## Development run
 
