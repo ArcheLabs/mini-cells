@@ -2,7 +2,7 @@
 
 # Stage 06 — Native CLM
 
-Status: **ACTIVE — LINEAGE-LOCAL FUNCTIONAL ADDRESS DIAGNOSIS**
+Status: **ACTIVE — HISTORICAL ADDRESS-STATE CAPACITY DIAGNOSIS**
 
 Stage 06 moves the formally supported Constructive CLM mechanisms into a real token-predictive model.
 
@@ -19,7 +19,9 @@ Native CLM v0
   M3  global-pool growth-restored continual language     🔴 NOT SUPPORTED
   M3R read-preserving / lineage-isolated growth          🔴 NOT SUPPORTED
       root read ownership was preserved                  🟡 PARTIAL EVIDENCE
-  M3R Address Diagnostic                                 🔵 ACTIVE
+  M3R Address Diagnostic                                 🟢 QUERY GEOMETRY SEPARABLE
+  M3L query-sketch lineage gate                           🔴 NOT FEASIBLE
+  M3L-1 historical address-state capacity                 🔵 ACTIVE
   M4  Cell ontology / specialization analysis            ⚪ BLOCKED
   M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
 ```
@@ -158,39 +160,19 @@ where the child key is the mean query of the pressure window that caused birth.
 
 This is consistent with the earlier Core 006/007 warning that representation/query similarity is not automatically a safe functional mitosis address.
 
-## M3R Address Diagnostic — 🔵 ACTIVE
+## M3R Address Diagnostic — 🟢 QUERY GEOMETRY SEPARABLE
 
-The next stage is deliberately diagnostic, not another formal continual-learning run.
+The completed checkpoint-only diagnostic found 24/24 valid lineage edges. Current cosine addressing had median AUC ~0.5315, while a free affine query probe reached ~0.9623. Query geometry contains the boundary; centroid/cosine decoding does not recover it.
 
-It reuses the already-published M3R lineage checkpoints and the exact pinned M3R A/B/C/D snapshot. No Native CLM parameters are updated and no new formal seeds are consumed.
+## M3L — Replay-Free Query-Sketch Gate — 🔴 NOT FEASIBLE
 
-For every actual M3R `parent -> child` edge, samples are conditioned on reaching that edge's root/ancestor path before the local decision. The diagnostic compares domain A against the child's birth domain using:
+Using the stricter temporal parent-lifetime ownership and sequence-group-heldout split, the offline affine oracle remained separable (median AUC 0.9281). A rank-16 Gaussian historical query sketch recovered median AUC 0.8968, narrowly below the frozen >=0.90 gate while passing every other registered feasibility metric. M3L therefore remains a valid negative mechanism diagnostic.
 
-```text
-current cosine margin
-frozen query q
-Cell write input x
-downstream write-left factor dL/dh_cell_out
-normalized write pair [x, dL/dh_cell_out]
-parent-certificate residual
-```
+## M3L-1 — Historical Address-State Capacity — 🔵 ACTIVE
 
-The registered diagnostic classification is one of:
+M3L-1 keeps the M3L data, edge ownership, splits, oracle and feasibility thresholds fixed and sweeps diagonal/rank-8/16/32/64/128/full-covariance Gaussian historical address states. Rank 16 is an explicit parent-identity anchor and the run is rejected if it does not reproduce M3L within frozen tolerance.
 
-```text
-QUERY_GEOMETRY_SEPARABLE
-WRITE_EFFECT_GEOMETRY_SEPARABLE
-NO_CLEAR_LOCAL_BOUNDARY
-INCONCLUSIVE_COVERAGE
-```
-
-Interpretation:
-
-- query separable -> learn a better lineage-local read gate;
-- query fails but write/effect separates -> separate read and write addressing;
-- neither separates -> investigate a richer learned functional coordinate before another router heuristic.
-
-See [M3R Address Diagnostic protocol](../../validations/native-clm-v0-m3r-address-diagnostic/protocol.json).
+The registered outcome distinguishes a low-rank capacity limit, a full-covariance requirement, or failure of the Gaussian second-order family. No Native CLM parameter is updated and no new formal seed is consumed.
 
 ## Evidence boundary
 

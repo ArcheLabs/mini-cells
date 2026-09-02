@@ -2,7 +2,7 @@
 
 # Stage 06 — Native CLM
 
-状态：**ACTIVE — LINEAGE-LOCAL FUNCTIONAL ADDRESS DIAGNOSIS**
+状态：**ACTIVE — HISTORICAL ADDRESS-STATE CAPACITY DIAGNOSIS**
 
 Stage 06 将 Constructive CLM 已正式支持的机制带入真正的 token-predictive model。
 
@@ -19,7 +19,9 @@ Native CLM v0
   M3  global-pool growth-restored continual language     🔴 NOT SUPPORTED
   M3R read-preserving / lineage-isolated growth          🔴 NOT SUPPORTED
       root read ownership 得到保持                       🟡 PARTIAL EVIDENCE
-  M3R Address Diagnostic                                 🔵 ACTIVE
+  M3R Address Diagnostic                                 🟢 QUERY GEOMETRY SEPARABLE
+  M3L query-sketch lineage gate                           🔴 NOT FEASIBLE
+  M3L-1 historical address-state capacity                 🔵 ACTIVE
   M4  Cell ontology / specialization analysis            ⚪ BLOCKED
   M5  Dense Transformer / static-MoE comparison          ⚪ PLANNED
 ```
@@ -158,39 +160,19 @@ q · k_child > q · k_parent
 
 其中 child key 是导致 birth 的 pressure window mean query。这与 Core 006/007 的早期警告一致：representation/query similarity 并不会自动成为安全的 functional mitosis address。
 
-## M3R Address Diagnostic — 🔵 ACTIVE
+## M3R Address Diagnostic — 🟢 QUERY GEOMETRY SEPARABLE
 
-下一阶段故意设计为 diagnostic，而不是新的 formal continual-learning run。
+已完成的 checkpoint-only diagnostic 在 24/24 个 lineage edges 上获得有效 coverage。当前 cosine addressing 的 median AUC 约 0.5315，而自由 affine query probe 达到约 0.9623。因此 query geometry 中存在 boundary，但 centroid/cosine decoding 无法恢复它。
 
-它复用已经发布的 M3R lineage checkpoints 和完全相同的 pinned A/B/C/D snapshot；不更新任何 Native CLM 参数，也不消耗新的 formal seeds。
+## M3L — Replay-Free Query-Sketch Gate — 🔴 NOT FEASIBLE
 
-对每一个真实 M3R `parent -> child` edge，先限制样本必须已经到达该 edge 的 root/ancestor path，再比较 A 与 child birth domain。注册的特征包括：
+在更严格的 temporal parent-lifetime ownership 与 sequence-group-heldout split 下，offline affine oracle 仍可分（median AUC 0.9281）。rank-16 Gaussian historical query sketch 达到 0.8968，略低于冻结的 >=0.90 gate，同时其它注册 feasibility metrics 全部通过。因此 M3L 保持有效的 negative mechanism diagnostic。
 
-```text
-current cosine margin
-frozen query q
-Cell write input x
-downstream write-left factor dL/dh_cell_out
-normalized write pair [x, dL/dh_cell_out]
-parent-certificate residual
-```
+## M3L-1 — Historical Address-State Capacity — 🔵 ACTIVE
 
-诊断只产生四种分类之一：
+M3L-1 固定 M3L 的数据、edge ownership、split、oracle 与 feasibility thresholds，扫描 diagonal/rank-8/16/32/64/128/full-covariance Gaussian historical address state。rank 16 是显式 parent identity anchor；若不能在冻结 tolerance 内复现 M3L，整个 run 会被拒绝。
 
-```text
-QUERY_GEOMETRY_SEPARABLE
-WRITE_EFFECT_GEOMETRY_SEPARABLE
-NO_CLEAR_LOCAL_BOUNDARY
-INCONCLUSIVE_COVERAGE
-```
-
-解释边界：
-
-- query 可分 -> 下一步训练更好的 lineage-local read gate；
-- query 不可分但 write/effect 可分 -> 下一步拆分 read address 与 write address；
-- 两者都不可分 -> 先研究更丰富的 learned functional coordinate，而不是再加 router heuristic。
-
-详见 [M3R Address Diagnostic protocol](../../validations/native-clm-v0-m3r-address-diagnostic/protocol.json)。
+注册结果用于区分 low-rank capacity limit、full-covariance requirement 或 Gaussian second-order family failure。不更新任何 Native CLM 参数，也不消耗新的 formal seed。
 
 ## Evidence boundary
 

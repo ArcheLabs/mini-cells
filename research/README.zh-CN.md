@@ -36,7 +36,9 @@ MiniCells 明确区分 **产品架构** 与更强的 **内生 / Native CLM 研�
 | 13 | fixed-topology protected Cells 足以完成 replay-free continual language | Stage 06 M2 | 🔴 未支持；protection 有部分因果价值 |
 | 14 | global-pool growth 能恢复 continual-language retention | Stage 06 M3 | 🔴 未支持 |
 | 15 | read-preserving / lineage-isolated growth 能恢复 continual retention | Stage 06 M3R | 🔴 未支持；root read conservation 有部分因果价值 |
-| 16 | lineage-local parent/child functional split 能从 query 或 write/effect geometry 中恢复 | M3R Address Diagnostic | 🔵 active diagnostic |
+| 16 | lineage-local parent/child functional split 能从 query geometry 中恢复 | M3R Address Diagnostic | 🟢 `QUERY_GEOMETRY_SEPARABLE` |
+| 17 | compact replay-free historical query sketch 足以恢复 local affine gate | M3L Query-Sketch Gate | 🔴 `QUERY_SKETCH_GATE_NOT_FEASIBLE`；single-gate near miss |
+| 18 | M3L 缺口主要由 rank/capacity 而非 Gaussian family 限制 | M3L-1 Address-State Capacity | 🔵 active diagnostic |
 
 ## Trained-model evidence
 
@@ -119,38 +121,44 @@ root read ownership 可以守恒
 但 lineage 内 parent/child functional address 尚未解决
 ```
 
-## 当前 blocking diagnostic — M3R Address Diagnostic
+## 已完成的 address diagnostics 与当前 blocker
 
-在开始新的 continual-learning formal run 前，Stage 06 先对已经发布的 M3R lineage checkpoints 做 **checkpoint-only** 诊断。不消耗新的 formal seeds，也不更新任何 Native CLM 参数。
+### M3R Address Diagnostic — 🟢 `QUERY_GEOMETRY_SEPARABLE`
 
-对每一个真实 M3R `parent -> child` edge，样本先被限制为已经到达该 edge 的 immutable root/ancestor path，再比较 A 与 child 的 birth domain。预注册 feature families：
+对 24/24 个 M3R lineage edges 的 checkpoint-only 分析显示：当前 parent/child cosine rule 的 median AUC 约 0.5315，接近随机；但同一 frozen query representation 上的自由 affine probe 达到约 0.9623。functional split 已存在于 query geometry 中，问题在于 centroid/cosine addressing 无法读出它。
 
-```text
-current cosine margin
-frozen query q
-Cell write input x
-downstream write-left factor dL/dh_cell_out
-normalized write pair [x, dL/dh_cell_out]
-parent-certificate residual
-```
+### M3L Query-Sketch Gate — 🔴 `QUERY_SKETCH_GATE_NOT_FEASIBLE`
 
-诊断只产生一个 classification：
+M3L 检验在 gate fitting 中不 replay old token/query、只保存 rank-16 Gaussian historical query sketch 并结合当前 conflict stream，是否足以恢复该 affine boundary。结果是一个冻结的 single-gate negative：
 
 ```text
-QUERY_GEOMETRY_SEPARABLE
-WRITE_EFFECT_GEOMETRY_SEPARABLE
-NO_CLEAR_LOCAL_BOUNDARY
-INCONCLUSIVE_COVERAGE
+valid edges                  24/24
+offline oracle median AUC    0.9281
+rank-16 sketch median AUC    0.8968   (要求 >=0.9000)
+edge-floor fraction          0.7500   PASS
+normalized oracle recovery   0.9356   PASS
+old FPR                      0.1855   PASS
+current TPR                  0.8204   PASS
 ```
 
-它只用于选择下一次**新的 registered experiment** 的架构方向：
+缺口主要集中在第一次 A -> B differentiation；B -> C 与 A+B -> C 明显更强。
 
-- query 可分 -> 学习 lineage-local read gate；
-- query 不可分但 write/effect 可分 -> 拆分 read address 与 write address，引入 write-side conflict controller；
-- 两者都不可分 -> 在再增加 routing heuristic 之前，先寻找更丰富的 learned functional coordinate；
-- eligible samples 不足 -> 修改诊断 coverage，而不是修改 M3R 的正式结论。
+### M3L-1 Historical Address-State Capacity — 🔵 ACTIVE
 
-这个 diagnostic 不能事后改变 M3R threshold，也不能把 M3R 的 NOT_SUPPORTED 改写成 supported。
+在新的 continual-language formal run 之前，M3L-1 固定 M3L 的 exact samples、temporal ownership、sequence-group split、thresholds 与 oracle，只扫描 historical address-state capacity：
+
+```text
+diagonal / rank 0
+rank 8
+rank 16  （必须复现 M3L）
+rank 32
+rank 64
+rank 128
+full dense covariance
+offline linear oracle
+```
+
+诊断区分 `LOW_RANK_CAPACITY_SUFFICIENT`、`FULL_COVARIANCE_REQUIRED` 与 `GAUSSIAN_FAMILY_LIMITED`。它仍是 checkpoint-only，不消耗新 formal seeds，也不能事后改写 M3L/M3R/M3。
 
 ## Stable Stage-06 sequence
 

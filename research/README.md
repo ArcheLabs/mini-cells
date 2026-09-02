@@ -36,7 +36,9 @@ mature pretrained LLM
 | 13 | Fixed-topology protected Cells are sufficient for replay-free continual language | Stage 06 M2 | 🔴 not supported; protection has partial causal value |
 | 14 | Global-pool growth restores continual-language retention | Stage 06 M3 | 🔴 not supported |
 | 15 | Read-preserving / lineage-isolated growth restores continual retention | Stage 06 M3R | 🔴 not supported; root read conservation has partial causal value |
-| 16 | The local parent/child functional split is recoverable from current query or write/effect geometry | M3R Address Diagnostic | 🔵 active diagnostic |
+| 16 | The local parent/child functional split is recoverable from current query geometry | M3R Address Diagnostic | 🟢 `QUERY_GEOMETRY_SEPARABLE` |
+| 17 | A compact replay-free historical query sketch is sufficient to recover the local affine gate | M3L Query-Sketch Gate | 🔴 `QUERY_SKETCH_GATE_NOT_FEASIBLE`; single-gate near miss |
+| 18 | The M3L shortfall is rank/capacity-limited rather than Gaussian-family-limited | M3L-1 Address-State Capacity | 🔵 active diagnostic |
 
 ## Trained-model evidence
 
@@ -119,38 +121,44 @@ root read ownership can be conserved
 but lineage-local parent/child functional address remains unresolved
 ```
 
-## Active blocking diagnostic — M3R Address Diagnostic
+## Completed address diagnostics and current blocker
 
-Before another continual-learning formal run, Stage 06 now performs a **checkpoint-only** diagnostic over the already-published M3R lineage checkpoints. It consumes no new formal seeds and updates no Native CLM parameter.
+### M3R Address Diagnostic — 🟢 `QUERY_GEOMETRY_SEPARABLE`
 
-For every actual M3R `parent -> child` edge, samples are conditioned on reaching that edge's immutable root/ancestor path. The diagnostic compares A with the child's birth domain using pre-registered feature families:
+Checkpoint-only analysis over 24/24 M3R lineage edges found that the current parent/child cosine rule was nearly random (median AUC ~0.5315), while a free affine probe on the same frozen query representation reached median AUC ~0.9623. The functional split is therefore present in query geometry, but is not decoded by centroid/cosine addressing.
 
-```text
-current cosine margin
-frozen query q
-Cell write input x
-downstream write-left factor dL/dh_cell_out
-normalized write pair [x, dL/dh_cell_out]
-parent-certificate residual
-```
+### M3L Query-Sketch Gate — 🔴 `QUERY_SKETCH_GATE_NOT_FEASIBLE`
 
-The registered output is one diagnostic classification:
+M3L tested whether that affine boundary could be recovered without old-token/query replay in gate fitting, using only a rank-16 Gaussian historical query sketch plus the current conflict stream. The result was a frozen single-gate negative:
 
 ```text
-QUERY_GEOMETRY_SEPARABLE
-WRITE_EFFECT_GEOMETRY_SEPARABLE
-NO_CLEAR_LOCAL_BOUNDARY
-INCONCLUSIVE_COVERAGE
+valid edges                  24/24
+offline oracle median AUC    0.9281
+rank-16 sketch median AUC    0.8968   (required >=0.9000)
+edge-floor fraction          0.7500   PASS
+normalized oracle recovery   0.9356   PASS
+old FPR                      0.1855   PASS
+current TPR                  0.8204   PASS
 ```
 
-The classification selects the architecture family for the next **new registered** experiment:
+The miss is concentrated most strongly in first differentiation A -> B; B -> C and A+B -> C are substantially stronger.
 
-- query separable -> learned lineage-local read gate;
-- query fails but write/effect separates -> split read and write addressing and introduce a write-side conflict controller;
-- neither separates -> investigate richer learned functional coordinates before another routing heuristic;
-- insufficient eligible samples -> redesign the diagnostic coverage, not the M3R result.
+### M3L-1 Historical Address-State Capacity — 🔵 ACTIVE
 
-This diagnostic cannot retroactively alter M3R thresholds or its NOT_SUPPORTED decision.
+Before another continual-language formal run, M3L-1 keeps the exact M3L samples, temporal ownership semantics, sequence-group split, thresholds and oracle fixed while sweeping the historical address state:
+
+```text
+diagonal / rank 0
+rank 8
+rank 16  (must reproduce M3L exactly)
+rank 32
+rank 64
+rank 128
+full dense covariance
+offline linear oracle
+```
+
+The diagnostic distinguishes `LOW_RANK_CAPACITY_SUFFICIENT`, `FULL_COVARIANCE_REQUIRED`, and `GAUSSIAN_FAMILY_LIMITED`. It is checkpoint-only, consumes no new formal seeds, and cannot retroactively change M3L/M3R/M3.
 
 ## Stable Stage-06 sequence
 
