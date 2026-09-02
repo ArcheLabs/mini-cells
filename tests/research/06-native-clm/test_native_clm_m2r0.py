@@ -47,7 +47,26 @@ def test_realized_update_metric_detects_certificate_violation() -> None:
         model.cellular.cells[0].weight[0, 0] = 1.0
     rows = measure_realized_update_invariant(model, before, arm="bad", step=1)
     assert len(rows) == 1
+    assert rows[0]["eligible_for_ratio"] is True
     assert rows[0]["violation_ratio"] > 0.1
+
+
+def test_zero_update_is_not_counted_in_ratio_distribution() -> None:
+    model = _model()
+    before = snapshot_cell_weights(model)
+    rows = measure_realized_update_invariant(
+        model,
+        before,
+        arm="zero",
+        step=1,
+        minimum_update_norm=1e-12,
+    )
+    summary = summarize_invariant_rows(rows)
+    assert len(rows) == 1
+    assert rows[0]["eligible_for_ratio"] is False
+    assert summary["certificate_ranked_cell_steps"] == 1
+    assert summary["audited_cell_updates"] == 0
+    assert summary["tiny_or_zero_updates_skipped"] == 1
 
 
 def test_final_update_projection_restores_nullspace_invariant() -> None:
@@ -62,9 +81,6 @@ def test_final_update_projection_restores_nullspace_invariant() -> None:
 
 
 def test_first_adam_step_can_break_projected_gradient_invariant() -> None:
-    # q=[1,2]/sqrt(5); g=[2,-1] is exactly orthogonal to q. Adam's first
-    # elementwise normalization changes the direction to approximately [1,-1],
-    # which is no longer orthogonal. This is the optimizer-mechanics issue R0 audits.
     q = torch.tensor([1.0, 2.0]) / math.sqrt(5.0)
     parameter = torch.nn.Parameter(torch.zeros(2))
     parameter.grad = torch.tensor([2.0, -1.0])
@@ -76,6 +92,18 @@ def test_first_adam_step_can_break_projected_gradient_invariant() -> None:
     assert abs(float(torch.dot(delta, q))) > 1e-5
 
 
+def test_weight_decay_can_break_projected_gradient_invariant() -> None:
+    q = torch.tensor([1.0, 2.0]) / math.sqrt(5.0)
+    parameter = torch.nn.Parameter(torch.tensor([1.0, 0.0]))
+    parameter.grad = torch.tensor([2.0, -1.0])
+    assert abs(float(torch.dot(parameter.grad, q))) < 1e-7
+    optimizer = torch.optim.SGD([parameter], lr=1e-2, momentum=0.0, weight_decay=0.1)
+    before = parameter.detach().clone()
+    optimizer.step()
+    delta = parameter.detach() - before
+    assert abs(float(torch.dot(delta, q))) > 1e-6
+
+
 def _summary(maximum: float, p95: float, n: int = 200) -> dict[str, float | int]:
     return {
         "audited_cell_updates": n,
@@ -84,16 +112,21 @@ def _summary(maximum: float, p95: float, n: int = 200) -> dict[str, float | int]
     }
 
 
-def test_classification_distinguishes_preconditioner_and_decay() -> None:
-    thresholds = M2R0Thresholds()
-    common = {
+def _references() -> dict[str, dict[str, float | int]]:
+    return {
         "sgd_no_decay_grad_projection": _summary(1e-7, 1e-8),
         "adamw_final_update_projection": _summary(1e-7, 1e-8),
     }
+
+
+def test_classification_distinguishes_preconditioner_decay_and_both() -> None:
+    thresholds = M2R0Thresholds()
+
     preconditioner = {
-        **common,
+        **_references(),
         "current_adamw_grad_projection": _summary(0.1, 0.05),
         "adamw_no_decay_grad_projection": _summary(0.08, 0.04),
+        "sgd_with_decay_grad_projection": _summary(1e-7, 1e-8),
     }
     assert (
         classify_optimizer_invariant(preconditioner, thresholds)
@@ -101,27 +134,62 @@ def test_classification_distinguishes_preconditioner_and_decay() -> None:
     )
 
     decay = {
-        **common,
+        **_references(),
         "current_adamw_grad_projection": _summary(0.1, 0.05),
         "adamw_no_decay_grad_projection": _summary(1e-7, 1e-8),
+        "sgd_with_decay_grad_projection": _summary(0.08, 0.04),
     }
     assert (
         classify_optimizer_invariant(decay, thresholds)
         == "WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT"
     )
 
+    both = {
+        **_references(),
+        "current_adamw_grad_projection": _summary(0.1, 0.05),
+        "adamw_no_decay_grad_projection": _summary(0.08, 0.04),
+        "sgd_with_decay_grad_projection": _summary(0.07, 0.03),
+    }
+    assert (
+        classify_optimizer_invariant(both, thresholds)
+        == "BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT"
+    )
 
-def test_summary_reports_distribution() -> None:
+
+def test_classification_requires_reference_coverage() -> None:
+    thresholds = M2R0Thresholds()
+    summaries = {
+        **_references(),
+        "current_adamw_grad_projection": _summary(0.1, 0.05),
+        "adamw_no_decay_grad_projection": _summary(0.08, 0.04),
+        "sgd_with_decay_grad_projection": _summary(0.07, 0.03),
+    }
+    summaries["sgd_no_decay_grad_projection"] = _summary(1e-7, 1e-8, n=8)
+    assert classify_optimizer_invariant(summaries, thresholds) == "INCONCLUSIVE_REFERENCE_FAILURE"
+
+
+def test_summary_reports_distribution_over_eligible_updates_only() -> None:
     rows = [
         {
             "violation_ratio": value,
             "update_norm": 1.0,
             "certificate_rank": 4,
+            "eligible_for_ratio": True,
         }
         for value in (0.0, 0.1, 0.2, 0.3, 0.4)
     ]
+    rows.append(
+        {
+            "violation_ratio": 0.0,
+            "update_norm": 0.0,
+            "certificate_rank": 4,
+            "eligible_for_ratio": False,
+        }
+    )
     summary = summarize_invariant_rows(rows)
+    assert summary["certificate_ranked_cell_steps"] == 6
     assert summary["audited_cell_updates"] == 5
+    assert summary["tiny_or_zero_updates_skipped"] == 1
     assert summary["certificate_rank_min"] == 4
     assert summary["certificate_rank_max"] == 4
     assert abs(float(summary["violation_ratio_median"]) - 0.2) < 1e-12
