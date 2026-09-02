@@ -1,1 +1,143 @@
-{}
+{
+  "schema": "minicells.constructive-clm-003.protocol.v1",
+  "experiment_id": "constructive-clm-003",
+  "title": "Protected Learned/Growing Cells",
+  "status": "PROTOCOL_FROZEN_UNRUN",
+  "scientific_question": "Can learned/growing Cell coordinates from the Constructive CLM line be combined with the already-supported Core-005 replay-free subspace certificate so that continual writes retain historical behavior, preserve new-learning gain, and use bounded route-addressable mitosis instead of replay or destructive overwrite?",
+  "parent_evidence": [
+    {
+      "experiment": "core-validation-005",
+      "outcome": "SUBSPACE_CERTIFIED_MITOSIS_SUPPORTED",
+      "role": "reuse constrained_update/extend_basis certificate mechanism; do not re-prove certificate principle"
+    },
+    {
+      "experiment": "constructive-clm-001b",
+      "outcome": "LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED",
+      "result_commit": "55071bc7fd01e7c61df02846cd8f4205b906814f",
+      "role": "learned latent read coordinates"
+    },
+    {
+      "experiment": "constructive-clm-002",
+      "outcome": "LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED",
+      "result_commit": "243ac29c38f79d0f4c82723f13ecf8e093b6eee1",
+      "protocol_sha256": "eca97a71c5251519b43bda087e69a262241d388215f2da22ce8470db857b6454",
+      "formal_seeds": [90411, 90412, 90413],
+      "role": "reuse learned structural roots and residual/probation growth as parent constructive evidence"
+    }
+  ],
+  "new_integration_variable": "replay-free Cell-local write protection combined with learned hierarchical routing and context-keyed mitosis",
+  "structural_bridge": {
+    "mechanism": "reuse the CLM-002 learner to construct 12 learned root Cells from an initial six-factor 001B bootstrap plus six streaming introductions",
+    "max_transactions": 1024,
+    "initial_factors": 6,
+    "final_root_factors": 12,
+    "context_dim": 48,
+    "effect_dim": 40,
+    "required_final_root_cells": 12,
+    "required_unique_posthoc_factor_alignment": true,
+    "required_mean_root_key_cosine": 0.985,
+    "note": "The 1024-step bridge is an integration precondition, not a new G2 growth-law decision."
+  },
+  "protected_write_world": {
+    "root_count": 12,
+    "functional_modes_per_root": 3,
+    "true_functional_cells": 36,
+    "route_mode_offset": 0.25,
+    "route_context_noise": 0.004,
+    "write_feature_dim": 8,
+    "write_output_dim": 4,
+    "examples_per_write": 16,
+    "acquisition_blocks": [[0, 1], [2, 3]],
+    "acquisition_transactions_per_mode": 2,
+    "acquisition_transactions": 72,
+    "tail_reuse_transactions": 720,
+    "total_write_transactions": 792,
+    "mode_semantics": "mode 0 initially routes to each learned root; modes 1 and 2 are local context perturbations around that root. Conflicting writes on already-protected activation directions require route-addressable mitosis. Mode labels are evaluator-only.",
+    "target_rule": "each root/mode/block owns an independent linear decoder; modes intentionally disagree on the first protected feature block while remaining separately route-identifiable from context"
+  },
+  "learner": {
+    "top_level_router": "x-only cosine selection over immutable learned CLM-002 root anchors",
+    "lineage_router": "x-only cosine selection among the root Cell and any context-keyed children in the selected root lineage",
+    "cell_state": ["route_key", "W", "Q", "birth_step", "usage_count"],
+    "certificate": "Core-005 constrained_update with dW Q = 0; Q is extended only from current committed activations using Core-005 extend_basis",
+    "certificate_feasibility_threshold": 1e-8,
+    "numerical_rank_tolerance": 1e-10,
+    "reuse_residual_threshold": 1e-10,
+    "growth": "when a certificate write is infeasible, certificate_growth spawns a child in the current root lineage with route_key = normalized current context mean, empty W and empty Q; no hidden address or mode label is supplied",
+    "child_execution": "exclusive lineage routing; the selected root/child executes the write operator rather than additive execution across the whole lineage",
+    "hard_cell_cap": null,
+    "cell_deletion": false,
+    "growth_policy_learned": false
+  },
+  "variants": {
+    "unsafe": "current routed Cell always receives an unconstrained least-squares write; no certificate and no mitosis",
+    "certificate_no_growth": "Core-005 certificate accepts only safe writes; infeasible writes are rejected; no mitosis",
+    "certificate_growth": "Core-005 certificate accepts safe writes and spawns context-keyed children on infeasibility; learner retains no historical examples",
+    "replay_growth_oracle": "same routing/growth lifecycle, but recomputes the protected activation span from retained historical activations for the currently routed Cell instead of using Q"
+  },
+  "learner_forbidden_inputs": [
+    "hidden root/factor ID",
+    "functional mode ID",
+    "novelty flag",
+    "correct child address",
+    "historical examples for certificate_growth",
+    "historical labels/targets for certificate_growth",
+    "oracle lineage size",
+    "true functional Cell count"
+  ],
+  "evaluator_only_information": [
+    "root/mode identity for route scoring",
+    "all historical committed contexts/activations/outputs for regression measurement",
+    "true functional Cell count",
+    "full historical activation span for replay_growth_oracle"
+  ],
+  "primary_metrics": [
+    "historical regression MSE",
+    "cumulative positive historical regression",
+    "normalized acquisition gain",
+    "certificate vs replay-oracle safe/grow decision agreement",
+    "learner replay accesses",
+    "old-mode and new-mode route accuracy",
+    "growth rescue rate",
+    "child reuse rate",
+    "root/child lineage size",
+    "tail spawn rate",
+    "final functional-mode MSE",
+    "write-transaction-to-Cell compression"
+  ],
+  "formal_gates": {
+    "structural_bridge_valid": "12 learned roots, 12 unique posthoc factors, mean matched root-key cosine >= 0.985",
+    "pre_protection_root_routing": "all generated mode contexts select their intended learned root at the top level",
+    "unsafe_control_forgets": "unsafe final historical regression MSE >= 1e-4",
+    "no_growth_exposes_stability_plasticity_limit": "certificate_no_growth final historical regression MSE <= 1e-10 and acquisition gain <= 0.50 of replay_growth_oracle",
+    "certificate_growth_zero_replay": "certificate_growth historical-example/label/replay accesses = 0",
+    "certificate_growth_retention": "certificate_growth final historical regression MSE <= 1e-10 and cumulative positive historical regression <= 1e-9",
+    "certificate_growth_plasticity": "certificate_growth acquisition gain >= 0.98 of replay_growth_oracle",
+    "certificate_matches_replay_decisions": "certificate_growth and replay_growth_oracle safe-write/grow decisions agree on >= 0.99 of acquisition transactions",
+    "growth_rescue": "certificate_growth rescues every registered infeasible new-mode acquisition and accepts every registered safe extension",
+    "route_stability": "certificate_growth final exact functional-mode route accuracy >= 0.99 on all 36 modes",
+    "child_reuse": "tail transactions for modes 1/2 route to the already-spawned child >= 0.99 with no additional child creation",
+    "bounded_functional_growth": "certificate_growth final Cell count = true functional Cell count = 36; exactly two children per learned root; no tail spawns",
+    "final_behavior_quality": "certificate_growth final all-mode MSE <= 1e-8 and replay_growth_oracle final all-mode MSE <= 1e-8",
+    "state_compression": "792 write transactions / 36 final Cells >= 20"
+  },
+  "development_only_seeds_observed_and_excluded": [401, 402, 403],
+  "formal_seeds_frozen_after_development": [90511, 90512, 90513],
+  "formal_decision_rule": "SUPPORTED only if every formal seed completes and every registered gate is true on every formal seed",
+  "positive_status": "PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED",
+  "negative_status": "PROTECTED_GROWING_CELL_INTEGRATION_NOT_SUPPORTED",
+  "positive_interpretation": "In the registered controlled integration world, learned structural Cell coordinates can host replay-free Core-005 certificates; certificate saturation can create context-addressable children without historical replay, preserving old behavior and replay-oracle-level plasticity while total Cell state tracks recurring functional modes rather than write transactions.",
+  "explicit_nonclaims": [
+    "re-proof of the Core-005 certificate principle",
+    "arbitrary nonlinear Transformer write protection",
+    "language-scale continual learning",
+    "asymptotic Cell-growth theorem",
+    "fully learned router",
+    "learned/endogenous growth controller",
+    "arbitrary functional-boundary discovery",
+    "multi-Cell simultaneous computation",
+    "foundation-model plasticity",
+    "JAM deployment"
+  ],
+  "next_if_positive": "Constructive CLM-004 model-level multi-Cell computation. Do not create a cosmetic CLM-003B certificate rerun unless a distinct integration failure is identified."
+}
