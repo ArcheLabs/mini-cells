@@ -147,6 +147,8 @@ def _state_sha(model: NativeCLM) -> str:
     for name, tensor in sorted(model.state_dict().items()):
         if name.startswith("cellular.cells.") and name.endswith(".weight"):
             continue
+        if name.endswith("usage_count"):
+            continue
         value = tensor.detach().cpu().contiguous()
         digest.update(name.encode("utf-8"))
         digest.update(str(value.dtype).encode("ascii"))
