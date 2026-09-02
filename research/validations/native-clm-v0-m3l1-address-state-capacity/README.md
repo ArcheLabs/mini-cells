@@ -83,3 +83,5 @@ Likewise, a Gaussian-family-limited result does not negate query separability; i
 Canonical protocol: [`protocol.json`](protocol.json)
 
 Rank-16 identity contract: [`identity.json`](identity.json)
+
+Implementation is validated by a read-only CI workflow; no CI path executes the consumed continual-language formal runners.
