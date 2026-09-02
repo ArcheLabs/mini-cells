@@ -6,6 +6,7 @@ import argparse
 import json
 import subprocess
 import sys
+import time
 from dataclasses import asdict
 from pathlib import Path
 
@@ -48,7 +49,11 @@ def _config_from_protocol(protocol: dict) -> AddressDiagnosticConfig:
 
 
 def _checkpoint_record(checkpoint_manifest: dict, seed: int) -> dict:
-    matches = [record for record in checkpoint_manifest["records"] if int(record["seed"]) == int(seed)]
+    matches = [
+        record
+        for record in checkpoint_manifest["records"]
+        if int(record["seed"]) == int(seed)
+    ]
     if len(matches) != 1:
         raise RuntimeError(f"expected exactly one diagnostic lineage checkpoint for seed {seed}")
     return matches[0]
@@ -79,7 +84,8 @@ def _validate_inputs(protocol: dict, data_dir: Path, checkpoint_dir: Path) -> tu
     expected_parent_data_sha = protocol["parent_m3r"]["data_manifest_sha256"]
     if data_manifest.get("parent_manifest_sha256") != expected_parent_data_sha:
         raise RuntimeError(
-            f"parent data manifest SHA mismatch: {data_manifest.get('parent_manifest_sha256')} != {expected_parent_data_sha}"
+            "parent data manifest SHA mismatch: "
+            f"{data_manifest.get('parent_manifest_sha256')} != {expected_parent_data_sha}"
         )
 
     checkpoint_manifest = _load_json(checkpoint_dir / "manifest.json")
@@ -121,7 +127,11 @@ def _write_results_markdown(result: dict, path: Path) -> None:
             "",
             result["interpretation"],
             "",
-            "Boundary: checkpoint-only offline diagnostic over consumed M3R formal checkpoints; no Native CLM training, routing update, certificate update, growth, or new formal seed consumption occurred.",
+            (
+                "Boundary: checkpoint-only offline diagnostic over consumed M3R formal checkpoints; "
+                "no Native CLM training, routing update, certificate update, growth, or new formal "
+                "seed consumption occurred."
+            ),
         ]
     )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -172,7 +182,11 @@ def _run_parallel(args: argparse.Namespace, seeds: list[int]) -> None:
             if output.exists():
                 try:
                     cached = _load_json(output)
-                    if cached.get("seed") == seed and cached.get("format") == "minicells.native-clm-v0.m3r-address-diagnostic.seed.v1":
+                    if (
+                        cached.get("seed") == seed
+                        and cached.get("format")
+                        == "minicells.native-clm-v0.m3r-address-diagnostic.seed.v1"
+                    ):
                         print(f"Reusing completed diagnostic seed={seed}.", flush=True)
                         continue
                 except (OSError, json.JSONDecodeError):
@@ -202,10 +216,12 @@ def _run_parallel(args: argparse.Namespace, seeds: list[int]) -> None:
                 still_active.append((seed, process, device))
                 continue
             if code != 0:
-                raise RuntimeError(f"diagnostic worker seed={seed} on {device} failed with code {code}")
+                raise RuntimeError(
+                    f"diagnostic worker seed={seed} on {device} failed with code {code}"
+                )
         active = still_active
         if active:
-            active[0][1].wait(timeout=1)
+            time.sleep(0.5)
 
 
 def main() -> int:
@@ -228,7 +244,9 @@ def main() -> int:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     seeds = [73611, 73612, 73613]
     _run_parallel(args, seeds)
-    seed_summaries = [_load_json(args.output_dir / f"seed-{seed}" / "diagnostic.json") for seed in seeds]
+    seed_summaries = [
+        _load_json(args.output_dir / f"seed-{seed}" / "diagnostic.json") for seed in seeds
+    ]
     result = aggregate_diagnostic(
         seed_summaries,
         config=config,
