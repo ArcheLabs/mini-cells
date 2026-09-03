@@ -55,11 +55,44 @@ python scripts/research/run_shadow_cell_validation_001_v2.py \
 The expected smoke marker is `SHADOW_CELL_VALIDATION_001_V2_SMOKE_PASS` and it
 does not emit a scientific conclusion.
 
-For a formal run, provide the canonical checkpoint when available:
+Formal execution is fail-closed. It requires both a canonical accepted
+checkpoint and a JSON dataset matching the registered data contract; there is
+no synthetic fallback in formal mode. The dataset must contain these splits:
+`A_train`, `A_calibration`, `A_eval`, `B_train`, `B_calibration`, `B_eval`,
+`C_train`, `C_eval`, `D_train`, and `D_eval`. Each item uses the checked-in
+`ScoredTokenExample` fields (`example_id`, `address_id`, `tokens`, and
+`target_mask`). A/B train and evaluation addresses must share one complete
+sparse route tuple.
+
+Formal execution is still locked in this commit because the canonical
+checkpoint and formal dataset are external artifacts. Before running any
+formal seed, make a separate pre-formal commit that records their SHA-256
+values in `protocol-lock.json`, sets its status to `FROZEN`, and updates the
+matching SHA fields in `protocol.json`. The runner also checks the protocol
+SHA-256, so any protocol change requires a new lock commit.
+
+The lock can be generated from the exact external files with:
+
+```bash
+python scripts/research/lock_shadow_cell_validation_001_v2.py \
+  --checkpoint /kaggle/input/canonical/checkpoint.pt \
+  --seed-dataset 95311=/kaggle/input/shadow-v2/formal-seed-95311.json \
+  --seed-dataset 95312=/kaggle/input/shadow-v2/formal-seed-95312.json \
+  --seed-dataset 95313=/kaggle/input/shadow-v2/formal-seed-95313.json \
+  --write
+```
+
+Review and commit the resulting protocol/lock change before starting formal
+execution. The dataset lock is per seed input; all three formal dataset files
+must be derived from the same registered dataset release and manifest hash.
+
+After that lock commit, a formal run is:
 
 ```bash
 python scripts/research/run_shadow_cell_validation_001_v2.py \
-  --phase formal --seed 95311 --device cuda --checkpoint /path/to/checkpoint.pt
+  --phase formal --seed 95311 --device cuda \
+  --checkpoint /kaggle/input/canonical/checkpoint.pt \
+  --dataset /kaggle/input/shadow-v2/formal-seed-95311.json
 ```
 
 Use `--preflight-only` to validate the frozen protocol, seed, checkpoint path,

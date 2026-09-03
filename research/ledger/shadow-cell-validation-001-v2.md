@@ -11,4 +11,6 @@ later, before further natural Cell-boundary discovery is attempted.
 
 This entry records registration only. It makes no positive or negative
 scientific claim and preserves the explicit link to the historical v1 path in
-the v2 protocol.
+the v2 protocol. Formal execution is fail-closed until the separate
+`protocol-lock.json` records the exact canonical checkpoint and per-seed data
+SHA-256 values in a reviewed pre-formal commit.

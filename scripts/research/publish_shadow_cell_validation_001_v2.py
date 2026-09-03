@@ -51,12 +51,16 @@ def _git(root: Path, *args: str) -> str:
 
 
 def _run_aggregate(root: Path, source: Path) -> dict:
+    protocol_path = root / "research/validations" / VALIDATION_ID / "protocol.json"
+    protocol_sha = sha256_file(protocol_path)
     subprocess.run(
         [
             sys.executable,
             str(root / AGGREGATOR),
             "--results-root",
             str(source),
+            "--protocol-sha256",
+            protocol_sha,
         ],
         cwd=root,
         check=True,

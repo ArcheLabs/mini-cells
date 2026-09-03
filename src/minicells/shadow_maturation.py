@@ -92,9 +92,10 @@ class InputOnlyShadowGate(nn.Module):
 
     def __init__(self, width: int, *, temperature: float = 4.0) -> None:
         super().__init__()
-        self.key = nn.Parameter(torch.zeros(int(width)))
+        self.key = nn.Parameter(torch.empty(int(width)))
         self.bias = nn.Parameter(torch.zeros(()))
         self.temperature = float(temperature)
+        nn.init.normal_(self.key, mean=0.0, std=0.02)
 
     def forward(self, hidden: torch.Tensor) -> torch.Tensor:
         query = hidden.mean(dim=1)
@@ -213,13 +214,16 @@ class ShadowSidecar(nn.Module):
         maturity: float = 1.0,
         is_new: bool | None = None,
         return_gate: bool = False,
+        gate_override: torch.Tensor | None = None,
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:
         if len(address_ids) != input_ids.size(0):
             raise ValueError("address_ids must align with input batch")
         with torch.no_grad():
             hidden = self.accepted.forward_features(input_ids, address_ids)
             accepted_logits = self.accepted(input_ids, address_ids)
-        gate = self.gate(hidden, address_ids, is_new=is_new)
+        gate = self.gate(hidden, address_ids, is_new=is_new) if gate_override is None else gate_override.to(hidden)
+        if gate.ndim != 1 or gate.size(0) != input_ids.size(0):
+            raise ValueError("gate_override must have shape [batch]")
         contribution = self.shadow(hidden, maturity=float(maturity), gate=gate)
         logits = accepted_logits + F.linear(contribution, self.accepted.token_embedding.weight)
         if return_gate:
@@ -270,6 +274,7 @@ def _mean_nll(
     maturity: float,
     is_new: bool | None,
     batch_size: int,
+    gate_overrides: Mapping[str, float] | None = None,
 ) -> float:
     if not examples:
         return 0.0
@@ -280,13 +285,249 @@ def _mean_nll(
         for start in range(0, len(examples), int(batch_size)):
             batch = examples[start : start + int(batch_size)]
             x, y, mask, addresses = collate_scored(batch, pad_id=tokenizer.pad_id, device=device)
-            logits = sidecar(x, addresses, maturity=maturity, is_new=is_new)
+            override = None
+            if gate_overrides is not None:
+                override = torch.tensor(
+                    [float(gate_overrides[address]) for address in addresses],
+                    dtype=torch.float32,
+                    device=device,
+                )
+            logits = sidecar(x, addresses, maturity=maturity, is_new=is_new, gate_override=override)
             per_token = F.cross_entropy(
                 logits.reshape(-1, logits.size(-1)), y.reshape(-1), reduction="none"
             ).reshape_as(y)
             total += float(per_token[mask].sum().cpu())
             count += int(mask.sum())
     return total / float(max(1, count))
+
+
+def evaluate_sidecar_metrics(
+    sidecar: ShadowSidecar,
+    examples: list[ScoredTokenExample],
+    tokenizer: TokenizerBundle,
+    device: torch.device,
+    *,
+    maturity: float,
+    is_new: bool | None,
+    batch_size: int = 32,
+    gate_overrides: Mapping[str, float] | None = None,
+) -> dict[str, float]:
+    """Evaluate a sidecar with the selected maturity and optional gate values."""
+    if not examples:
+        raise ValueError("cannot evaluate an empty sidecar example set")
+    sidecar.eval()
+    nll_total = 0.0
+    correct = 0
+    tokens = 0
+    with torch.no_grad():
+        for start in range(0, len(examples), int(batch_size)):
+            batch = examples[start : start + int(batch_size)]
+            x, y, mask, addresses = collate_scored(batch, pad_id=tokenizer.pad_id, device=device)
+            override = None
+            if gate_overrides is not None:
+                override = torch.tensor(
+                    [float(gate_overrides[address]) for address in addresses],
+                    dtype=torch.float32,
+                    device=device,
+                )
+            logits = sidecar(
+                x, addresses, maturity=float(maturity), is_new=is_new, gate_override=override
+            )
+            values = F.cross_entropy(
+                logits.reshape(-1, logits.size(-1)), y.reshape(-1), reduction="none"
+            ).reshape_as(y)
+            nll_total += float(values[mask].sum().cpu())
+            correct += int((logits.argmax(dim=-1)[mask] == y[mask]).sum().cpu())
+            tokens += int(mask.sum())
+    return {"nll": nll_total / float(max(1, tokens)), "accuracy": correct / float(max(1, tokens))}
+
+
+def evaluate_model_metrics(
+    model: TinyCLMDecoder | AcceptedModelChain,
+    examples: list[ScoredTokenExample],
+    tokenizer: TokenizerBundle,
+    device: torch.device,
+    *,
+    batch_size: int = 32,
+) -> dict[str, float]:
+    """Return behavioral NLL and answer-token accuracy for an accepted model."""
+    if not examples:
+        raise ValueError("cannot evaluate an empty example set")
+    model.eval()
+    nll_total = 0.0
+    correct = 0
+    tokens = 0
+    with torch.no_grad():
+        for start in range(0, len(examples), int(batch_size)):
+            batch = examples[start : start + int(batch_size)]
+            x, y, mask, addresses = collate_scored(batch, pad_id=tokenizer.pad_id, device=device)
+            logits = model(x, addresses)
+            values = F.cross_entropy(
+                logits.reshape(-1, logits.size(-1)), y.reshape(-1), reduction="none"
+            ).reshape_as(y)
+            nll_total += float(values[mask].sum().cpu())
+            prediction = logits.argmax(dim=-1)
+            correct += int((prediction[mask] == y[mask]).sum().cpu())
+            tokens += int(mask.sum())
+    return {"nll": nll_total / float(max(1, tokens)), "accuracy": correct / float(max(1, tokens))}
+
+
+def interpolate_models(
+    parent: TinyCLMDecoder,
+    direct: TinyCLMDecoder,
+    maturity: float,
+) -> TinyCLMDecoder:
+    """Build the registered Direct-Interp control without mutating either endpoint."""
+    if parent.cfg.to_dict() != direct.cfg.to_dict():
+        raise ValueError("Direct-Interp endpoints must share one model configuration")
+    candidate = TinyCLMDecoder(parent.cfg)
+    parent_state = parent.state_dict()
+    direct_state = direct.state_dict()
+    value = float(maturity)
+    state = {
+        key: parent_state[key].detach().cpu() + value * (
+            direct_state[key].detach().cpu() - parent_state[key].detach().cpu()
+        )
+        for key in parent_state
+    }
+    candidate.load_state_dict(state, strict=True)
+    return candidate
+
+
+def _roc_auc(scores: torch.Tensor, labels: torch.Tensor) -> float:
+    scores = scores.detach().float().cpu()
+    labels = labels.detach().long().cpu()
+    positives = int((labels == 1).sum())
+    negatives = int((labels == 0).sum())
+    if positives == 0 or negatives == 0:
+        return float("nan")
+    order = torch.argsort(scores, descending=True)
+    ordered_labels = labels[order]
+    true_positive = torch.cumsum((ordered_labels == 1).float(), dim=0)
+    false_positive = torch.cumsum((ordered_labels == 0).float(), dim=0)
+    return float((true_positive[ordered_labels == 0] / positives).sum() / negatives)
+
+
+def _gate_features(
+    accepted: nn.Module,
+    examples: list[ScoredTokenExample],
+    tokenizer: TokenizerBundle,
+    device: torch.device,
+    *,
+    batch_size: int,
+) -> torch.Tensor:
+    rows: list[torch.Tensor] = []
+    accepted.eval()
+    with torch.no_grad():
+        for start in range(0, len(examples), int(batch_size)):
+            batch = examples[start : start + int(batch_size)]
+            x, _, _, addresses = collate_scored(batch, pad_id=tokenizer.pad_id, device=device)
+            hidden = accepted.forward_features(x, addresses).mean(dim=1)
+            rows.append(hidden.detach())
+    if not rows:
+        raise ValueError("gate calibration requires examples")
+    return torch.cat(rows, dim=0)
+
+
+def calibrate_input_gate(
+    sidecar: ShadowSidecar,
+    old_calibration: list[ScoredTokenExample],
+    new_calibration: list[ScoredTokenExample],
+    old_eval: list[ScoredTokenExample],
+    new_eval: list[ScoredTokenExample],
+    tokenizer: TokenizerBundle,
+    device: torch.device,
+    *,
+    steps: int = 200,
+    batch_size: int = 128,
+    seed: int = 0,
+    learning_rate: float = 5e-2,
+    weight_decay: float = 1e-4,
+) -> dict[str, Any]:
+    """Fit only the input gate on calibration splits and report held-out AUC."""
+    if sidecar.gate_mode != "input_only":
+        return {"gate_calibration_steps": 0, "gate_calibration_examples": 0, "gate_auc": 1.0}
+    old = _gate_features(sidecar.accepted, old_calibration, tokenizer, device, batch_size=batch_size)
+    new = _gate_features(sidecar.accepted, new_calibration, tokenizer, device, batch_size=batch_size)
+    features = torch.cat([old, new], dim=0)
+    labels = torch.cat([torch.zeros(old.size(0), device=device), torch.ones(new.size(0), device=device)])
+    optimizer = torch.optim.AdamW(sidecar.input_gate.parameters(), lr=float(learning_rate), weight_decay=float(weight_decay))
+    generator = torch.Generator(device="cpu").manual_seed(int(seed))
+    sidecar.input_gate.train()
+    for _ in range(int(steps)):
+        if features.size(0) <= int(batch_size):
+            indices = torch.arange(features.size(0), device=device)
+        else:
+            indices = torch.randperm(features.size(0), generator=generator)[: int(batch_size)].to(device)
+        optimizer.zero_grad(set_to_none=True)
+        logits = sidecar.input_gate(features[indices].unsqueeze(1))
+        loss = F.binary_cross_entropy(logits, labels[indices])
+        loss.backward()
+        optimizer.step()
+    old_eval_features = _gate_features(sidecar.accepted, old_eval, tokenizer, device, batch_size=batch_size)
+    new_eval_features = _gate_features(sidecar.accepted, new_eval, tokenizer, device, batch_size=batch_size)
+    with torch.no_grad():
+        scores = torch.cat([
+            sidecar.input_gate(old_eval_features.unsqueeze(1)),
+            sidecar.input_gate(new_eval_features.unsqueeze(1)),
+        ])
+    eval_labels = torch.cat([
+        torch.zeros(old_eval_features.size(0), device=device),
+        torch.ones(new_eval_features.size(0), device=device),
+    ])
+    return {
+        "gate_calibration_steps": int(steps),
+        "gate_calibration_examples": int(features.size(0)),
+        "gate_auc": _roc_auc(scores, eval_labels),
+    }
+
+
+def build_activation_certificates(
+    model: TinyCLMDecoder,
+    historical_examples: list[ScoredTokenExample],
+    tokenizer: TokenizerBundle,
+    device: torch.device,
+    *,
+    batch_size: int = 32,
+    rank: int = 4,
+) -> dict[int, torch.Tensor]:
+    """Build incoming-activation row-span certificates from retained history."""
+    if not historical_examples:
+        raise ValueError("historical certificate requires examples")
+    captures: dict[str, list[torch.Tensor]] = {}
+    hooks = []
+    for name, module in model.named_modules():
+        if not name.startswith("blocks.") or ".ff.base_cells." not in name:
+            continue
+        if not isinstance(module, nn.Linear):
+            continue
+        hooks.append(module.register_forward_pre_hook(
+            lambda current, inputs, module_name=name: captures.setdefault(module_name, []).append(
+                inputs[0].detach().reshape(-1, inputs[0].size(-1)).cpu()
+            )
+        ))
+    try:
+        with torch.no_grad():
+            for start in range(0, len(historical_examples), int(batch_size)):
+                batch = historical_examples[start : start + int(batch_size)]
+                x, _, _, addresses = collate_scored(batch, pad_id=tokenizer.pad_id, device=device)
+                model.forward_features(x, addresses)
+    finally:
+        for hook in hooks:
+            hook.remove()
+    certificates: dict[int, torch.Tensor] = {}
+    for name, module in model.named_modules():
+        if name not in captures or not isinstance(module, nn.Linear):
+            continue
+        rows = torch.cat(captures[name], dim=0)
+        if rows.numel() == 0:
+            certificates[id(module.weight)] = torch.empty(0, module.weight.size(1))
+            continue
+        max_rank = min(int(rank), rows.size(1), rows.size(0))
+        q, _ = torch.linalg.qr(rows[: max_rank * 4].T.float(), mode="reduced")
+        certificates[id(module.weight)] = q[:, :max_rank].T.contiguous().to(module.weight.dtype)
+        certificates[id(module.bias)] = torch.empty(0, module.bias.numel(), dtype=module.bias.dtype)
+    return certificates
 
 
 def train_shadow(
@@ -308,10 +549,10 @@ def train_shadow(
     sidecar.accepted.eval().requires_grad_(False)
     for parameter in sidecar.parameters():
         parameter.requires_grad_(False)
-    for parameter in sidecar.trainable_parameters():
+    for parameter in sidecar.shadow.parameters():
         parameter.requires_grad_(True)
     optimizer = torch.optim.AdamW(
-        sidecar.trainable_parameters(), lr=float(learning_rate), weight_decay=float(weight_decay)
+        sidecar.shadow.parameters(), lr=float(learning_rate), weight_decay=float(weight_decay)
     )
     generator = torch.Generator(device="cpu").manual_seed(int(seed))
     training_tokens = 0
@@ -356,6 +597,7 @@ def train_corrected_direct(
     certificate_rank: int = 4,
     learning_rate: float = 3e-4,
     weight_decay: float = 0.1,
+    certificates: Mapping[int, torch.Tensor] | None = None,
 ) -> dict[str, Any]:
     """Corrected mature-Cell baseline using projected realized AdamW updates."""
     if not examples:
@@ -392,15 +634,9 @@ def train_corrected_direct(
                 if parameter.grad is None:
                     continue
                 if parameter.ndim == 2:
-                    width = parameter.size(1)
-                    rank = min(int(certificate_rank), width)
-                    random = torch.randn(
-                        width, rank,
-                        generator=torch.Generator(device="cpu").manual_seed(seed + width),
-                        dtype=parameter.dtype,
-                    ).to(parameter.device)
-                    q, _ = torch.linalg.qr(random, mode="reduced")
-                    certificate = q.T
+                    if certificates is None or id(parameter) not in certificates:
+                        raise ValueError("corrected direct requires a historical activation certificate")
+                    certificate = certificates[id(parameter)].to(parameter.device)
                 else:
                     certificate = torch.empty(0, parameter.numel(), device=parameter.device, dtype=parameter.dtype)
                 proposal, state, violation = corrected_adamw_proposal(
@@ -447,18 +683,33 @@ def evaluate_maturity_frontier(
     if baseline_new_nll is None:
         baseline_new_nll = _mean_nll(shadow, new_eval_loader, tokenizer, device,
                                      maturity=0.0, is_new=True, batch_size=batch_size)
+    baseline_new_accuracy = evaluate_sidecar_metrics(
+        shadow, new_eval_loader, tokenizer, device,
+        maturity=0.0, is_new=True, batch_size=batch_size,
+    )["accuracy"]
     frontier: list[dict[str, float]] = []
     for maturity in maturity_grid:
         old_nll = _mean_nll(shadow, old_eval_loader, tokenizer, device,
                             maturity=float(maturity), is_new=False, batch_size=batch_size)
         new_nll = _mean_nll(shadow, new_eval_loader, tokenizer, device,
                             maturity=float(maturity), is_new=True, batch_size=batch_size)
+        old_metrics = evaluate_sidecar_metrics(
+            shadow, old_eval_loader, tokenizer, device,
+            maturity=float(maturity), is_new=False, batch_size=batch_size,
+        )
+        new_metrics = evaluate_sidecar_metrics(
+            shadow, new_eval_loader, tokenizer, device,
+            maturity=float(maturity), is_new=True, batch_size=batch_size,
+        )
         frontier.append({
             "maturity": float(maturity),
             "old_nll": old_nll,
             "new_nll": new_nll,
             "old_regression": max(0.0, old_nll - float(baseline_old_nll)),
             "new_gain": float(baseline_new_nll) - new_nll,
+            "old_accuracy": old_metrics["accuracy"],
+            "new_accuracy": new_metrics["accuracy"],
+            "accuracy_gain": new_metrics["accuracy"] - baseline_new_accuracy,
         })
     return frontier
 
@@ -636,7 +887,18 @@ def copy_on_write_artifact(
         "committed_shadow_state_dict": {
             key: value.detach().cpu().clone() for key, value in sidecar.shadow.state_dict().items()
         },
+        "input_gate_state_dict": {
+            key: value.detach().cpu().clone() for key, value in sidecar.input_gate.state_dict().items()
+        },
+        "gate_mode": sidecar.gate_mode,
         "selected_maturity": selected_maturity,
+        "parent_provenance": {
+            "accepted_type": type(accepted).__name__,
+            "committed_shadow_count": len(getattr(accepted, "committed_shadows", [])),
+            "committed_gate_count": len(getattr(accepted, "committed_gates", [])),
+            "committed_maturities": list(getattr(accepted, "committed_maturities", [])),
+            "committed_gate_modes": list(getattr(accepted, "committed_gate_modes", [])),
+        },
     }
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)

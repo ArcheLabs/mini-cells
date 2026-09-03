@@ -5,7 +5,7 @@
   "name": "Shadow Cell Validation 001 v2: Developmental Maturation under Copy-on-Write Functional Isolation",
   "status": "REGISTERED_NOT_RUN",
   "parent_validation": "research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation/",
-  "parent_validation_status": "historical-v1-reference-not-present-on-this-checkout",
+  "parent_validation_status": "present-and-immutable-on-this-checkout",
   "scientific_question": "Can new capability be learned outside the accepted model, then selectively admitted without directly mutating mature Cells?",
   "hypothesis": "An isolated full-width Shadow Cell with controlled maturity can create a nontrivial plasticity-retention frontier while the accepted model and its read ownership remain immutable.",
   "falsification_rule": "If the Task-ID capacity control fails, or if Shadow Oracle cannot satisfy the registered old-regression and new-gain gates at a nontrivial maturity, classify Shadow maturation as not supported; infrastructure violations classify the run as INVALID.",
@@ -20,13 +20,27 @@
     "shared_dense_layers": {"layers": [1, 2], "ffn_hidden": 768},
     "cell_layers": {"layers": [3, 4], "base_cells_per_layer": 32, "base_cell_hidden": 32, "topk_base": 2},
     "tie_embedding_lm_head": true,
-    "canonical_checkpoint": null
+    "canonical_checkpoint": "external-canonical-accepted-checkpoint",
+    "canonical_checkpoint_sha256": null
   },
+  "formal_dataset": {
+    "format": "minicells.shadow-cell-validation-001-v2.dataset.v1",
+    "required": true,
+    "sha256": {"95311": null, "95312": null, "95313": null},
+    "required_splits": ["A_train", "A_calibration", "A_eval", "B_train", "B_calibration", "B_eval", "C_train", "C_eval", "D_train", "D_eval"],
+    "old_history_for_certificate": "A_train",
+    "gate_calibration_old": "A_calibration",
+    "gate_calibration_new": "B_calibration",
+    "same_parent_requirement": "Every A/B train and evaluation address must have the same complete sparse route tuple."
+  },
+  "training": {"candidate_steps": 100, "batch_size": 8, "learning_rate": 0.0003, "weight_decay": 0.1, "certificate_rank": 4},
+  "gate_calibration": {"steps": 200, "batch_size": 8, "learning_rate": 0.05, "weight_decay": 0.0001},
   "curriculum": ["A", "B", "C", "D"],
   "maturity_grid": [0.0, 0.0625, 0.125, 0.25, 0.5, 0.75, 1.0],
   "formal_seeds": [95311, 95312, 95313],
   "development_seed": 95301,
   "arms": ["corrected_direct", "shadow_full", "shadow_oracle", "shadow_sketch", "task_id_shadow"],
+  "controls": ["direct_interp", "shuffled_gate"],
   "gate_modes": {
     "shadow_full": "input_only",
     "shadow_oracle": "input_only",
@@ -41,9 +55,9 @@
   "raw_replay_to_shadow_optimizer": false,
   "raw_replay_to_candidate_trainer": false,
   "historical_state": {"sketch": "A=E[g^2hh^T], B=E^T E / vocab", "raw_history_retained": false, "rank": "full-width covariance", "update_rule": "streaming summed sufficient statistics"},
-  "thresholds": {"max_old_regression": 0.2, "max_mean_forgetting": 0.15, "min_plasticity_ratio": 0.8, "min_new_gain": 0.01, "m0_logit_tolerance": 0.000001, "realized_update_violation_tolerance": 0.000001, "shadow_sketch_utility_ratio": 0.9, "shadow_sketch_regression_difference": 0.03},
-  "decision_taxonomy": ["SHADOW_MATURATION_SUPPORTED", "SHADOW_MATURATION_ORACLE_ONLY", "SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY", "SHADOW_MATURATION_NOT_SUPPORTED", "INCONCLUSIVE", "INVALID"],
-  "metrics": {"new_gain_definition": "baseline m=0 NLL minus candidate NLL", "old_regression_definition": "max(0, candidate old NLL minus baseline old NLL)", "plasticity_definition": "shadow or protected new-domain gain divided by corrected unsafe reference gain", "required_phases": ["B", "C", "D"]},
-  "validity_requirements": ["protocol hash matches registered protocol", "formal seed is registered", "accepted model hash is unchanged during Shadow training", "m=0 output identity passes", "learner historical replay count is zero", "all required arms complete", "all maturity values evaluated", "results finite", "starting checkpoint hash matches canonical dependency when one is registered"],
-  "notes": ["This validation does not claim autonomous continual learning, a natural Cell ontology, autonomous mitosis, or a zero-replay global-safety theorem.", "A Cell is operationally a versioned candidate functional state; split/mitosis is not required.", "The current checkout has no v1 directory, so parent_validation is an explicit machine-readable historical link rather than a copied or rewritten v1 artifact."]
+  "thresholds": {"minimum_A_accuracy": 0.8, "maximum_A_nll": 1.0, "minimum_ab_shared_parent_fraction": 1.0, "minimum_direct_B_gain_nll": 0.1, "minimum_direct_B_accuracy_gain": 0.05, "minimum_gate_auc": 0.9, "max_old_regression": 0.2, "max_mean_forgetting": 0.15, "min_normalized_new_gain": 0.9, "minimum_accuracy_gain": 0.0, "normalized_gain_epsilon": 0.000001, "m0_logit_tolerance": 0.000001, "realized_update_violation_tolerance": 0.000001, "shadow_sketch_utility_ratio": 0.9, "shadow_sketch_regression_difference": 0.03, "direct_interp_hypervolume_tolerance": 0.000001, "shuffled_gate_advantage": 0.1},
+  "decision_taxonomy": ["SHADOW_MATURATION_SUPPORTED", "SHADOW_MATURATION_ORACLE_ONLY", "SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY", "SHADOW_MATURATION_NOT_SUPPORTED", "INCONCLUSIVE_BASE_CAPABILITY", "INCONCLUSIVE_DIRECT_PLASTICITY", "INCONCLUSIVE_GATE_CAPACITY", "INCONCLUSIVE_PARENT_CONFLICT", "INCONCLUSIVE_IDENTITY_CONTROL", "INCONCLUSIVE", "INVALID"],
+  "metrics": {"new_gain_definition": "baseline m=0 NLL minus candidate NLL", "normalized_new_gain_definition": "candidate new-domain NLL gain divided by the matched corrected Direct-TX new-domain NLL gain for the same phase", "old_regression_definition": "max(0, candidate old NLL minus baseline old NLL)", "plasticity_definition": "normalized NLL gain, with answer accuracy retained as a sanity metric", "direct_interp_definition": "immutable parent plus m times the realized corrected Direct-TX endpoint delta", "shuffled_gate_definition": "same candidate and maturity with gate values deterministically permuted over combined old/new evaluation examples", "required_phases": ["B", "C", "D"]},
+  "validity_requirements": ["protocol hash matches locked protocol", "formal seed is registered", "canonical checkpoint exists and SHA-256 matches lock", "formal dataset exists and SHA-256 matches lock", "base A capability prerequisite passes", "A/B share the same mature Parent route", "accepted model hash is unchanged during Shadow training", "m=0 output identity passes", "learner historical replay count is zero", "gate calibration uses A/B calibration only and passes AUC", "all required arms and controls complete", "all maturity values evaluated", "results finite", "copy-on-write artifact stores gate and parent provenance"],
+  "notes": ["This validation does not claim autonomous continual learning, a natural Cell ontology, autonomous mitosis, or a zero-replay global-safety theorem.", "A Cell is operationally a versioned candidate functional state; split/mitosis is not required.", "The v1 parent directory is present on this branch and is treated as immutable historical evidence.", "Formal execution remains locked until protocol-lock.json records the canonical checkpoint SHA-256 and formal dataset SHA-256."]
 }
