@@ -1,0 +1,38 @@
+{
+  "format": "minicells.shadow-cell-validation-001.implementation.v1",
+  "status": "FROZEN_UNRUN",
+  "model_route_temperature": 0.7,
+  "base_optimizer": {
+    "type": "AdamW",
+    "betas": [0.9, 0.95],
+    "min_lr_ratio": 0.1
+  },
+  "adapt_optimizer": {
+    "type": "AdamW",
+    "betas": [0.9, 0.95],
+    "weight_decay": 0.0,
+    "min_lr_ratio": 0.1
+  },
+  "gate_probe": {
+    "steps": 500,
+    "batch_size": 1024,
+    "lr": 0.05,
+    "weight_decay": 0.0001,
+    "input_standardization": "calibration mean/std",
+    "output": "sigmoid probability"
+  },
+  "evaluation": {
+    "encode_batch_size": 512,
+    "eval_batch_size": 512
+  },
+  "candidate_training": {
+    "precompute_frozen_hidden_states": true,
+    "same_B_batch_schedule_for_direct_and_shadow": true,
+    "answer_position_only_scientific_loss": true
+  },
+  "publication": {
+    "hf_repo": "archelabsxyz/shadow-cell-validation-001",
+    "git_model_files": false,
+    "hf_first": true
+  }
+}

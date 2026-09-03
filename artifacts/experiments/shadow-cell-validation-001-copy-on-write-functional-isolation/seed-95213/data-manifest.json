@@ -1,0 +1,42 @@
+{
+  "context_factor_A": "p < q",
+  "context_factor_B": "p > q",
+  "format": "minicells.shadow-cell-validation-001.data-manifest.v1",
+  "record_template": "p{p:02d}q{q:02d}x{x:02d}y{y:02d}=",
+  "rule_A": "answer = x mod 10",
+  "rule_B": "answer = y mod 10",
+  "seed": 95213,
+  "splits": {
+    "A_calibration": {
+      "domain": "A",
+      "samples": 8000,
+      "sha256": "019fcb60caa5c6be41493e34caa05c430d0c5e095a830e377d23d755fc55ad87"
+    },
+    "A_eval": {
+      "domain": "A",
+      "samples": 10000,
+      "sha256": "aab3d275224332c80ff37285acd8d5f548aa60c6ff717ee16fee38bbc2f32d71"
+    },
+    "A_train": {
+      "domain": "A",
+      "samples": 50000,
+      "sha256": "f2c00df5a3dbd0712f7c44ab470bed3b73e37ed76942d5cda97c32695e91846e"
+    },
+    "B_calibration": {
+      "domain": "B",
+      "samples": 8000,
+      "sha256": "8afd574d65da3d781623d4d32af00e0fc7da55170c5ce9276ea0f69a930e61a1"
+    },
+    "B_eval": {
+      "domain": "B",
+      "samples": 10000,
+      "sha256": "e91557169f74d1237406544f5d6109218991c6a6be6b376ccf2606bf434bd40c"
+    },
+    "B_train": {
+      "domain": "B",
+      "samples": 50000,
+      "sha256": "f6041a540cdc88ecc30e256d3af052abdaff39258e771268c55f1fa71e12b1e9"
+    }
+  },
+  "world": "overlapping-rule-byte-world-v1"
+}

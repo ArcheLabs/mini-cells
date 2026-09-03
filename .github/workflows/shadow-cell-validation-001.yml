@@ -1,0 +1,115 @@
+name: Shadow Cell Validation 001
+
+on:
+  push:
+    branches:
+      - codex/shadow-cell-validation-001
+    paths:
+      - 'src/minicells/shadow_cell_validation_001.py'
+      - 'scripts/research/*shadow_cell_validation_001*'
+      - 'research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation/**'
+      - 'research/notebooks/06-native-clm/shadow-cell-validation-001-copy-on-write-functional-isolation-kaggle.ipynb'
+      - 'research/stages/06-native-clm/SHADOW_CELL_VALIDATION_001.md'
+      - 'tests/research/06-native-clm/test_shadow_cell_validation_001.py'
+      - '.github/workflows/shadow-cell-validation-001.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/shadow_cell_validation_001.py'
+      - 'scripts/research/*shadow_cell_validation_001*'
+      - 'research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation/**'
+      - 'research/notebooks/06-native-clm/shadow-cell-validation-001-copy-on-write-functional-isolation-kaggle.ipynb'
+      - 'research/stages/06-native-clm/SHADOW_CELL_VALIDATION_001.md'
+      - 'tests/research/06-native-clm/test_shadow_cell_validation_001.py'
+      - '.github/workflows/shadow-cell-validation-001.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen protocol
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation')
+          p = json.loads((root / 'protocol.json').read_text())
+          i = json.loads((root / 'implementation.json').read_text())
+          assert p['format'] == 'minicells.shadow-cell-validation-001.protocol.v1'
+          assert p['status'] == 'FROZEN_UNRUN'
+          assert p['scientific_decision'] is False
+          assert p['independent_of_native_clm_m2_chain'] is True
+          assert p['model']['uses_existing_cellular_layer'] is True
+          assert p['model']['d_model'] == 384
+          assert p['model']['shadow_operator_shape'] == [384, 384]
+          assert p['model']['initial_cells'] == 1
+          assert p['model']['active_cells'] == 1
+          assert p['conflict_registration']['structural_parent_conflict'] is True
+          assert p['model']['cellular_layer_index'] == p['model']['n_layers'] - 1
+          assert p['world']['domain_marker_token'] is False
+          assert p['world']['unique_prefixes_across_splits'] is True
+          assert p['B_adaptation']['certificate_projection'] is False
+          assert p['B_adaptation']['historical_replay_in_weight_training'] is False
+          assert p['fresh_evidence']['formal_seeds'] == [95211, 95212, 95213]
+          assert p['maturity_grid'] == [0.0, 0.0625, 0.125, 0.25, 0.5, 0.75, 1.0]
+          assert p['thresholds']['maximum_primary_A_regression'] == 0.10
+          assert p['thresholds']['minimum_primary_B_gain_fraction_of_direct'] == 0.90
+          assert p['thresholds']['minimum_conditional_hypervolume_improvement_vs_direct_interp'] == 0.20
+          assert i['format'] == 'minicells.shadow-cell-validation-001.implementation.v1'
+          assert i['status'] == 'FROZEN_UNRUN'
+          assert i['gate_probe']['steps'] == 500
+          assert i['publication']['hf_first'] is True
+          PY
+      - name: Validate canonical notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('research/notebooks/06-native-clm/shadow-cell-validation-001-copy-on-write-functional-isolation-kaggle.ipynb')
+          notebook = json.loads(path.read_text())
+          assert notebook['nbformat'] == 4
+          assert any('95211' in ''.join(cell.get('source', [])) for cell in notebook['cells'])
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q \
+            src/minicells/shadow_cell_validation_001.py \
+            scripts/research/run_shadow_cell_validation_001.py \
+            scripts/research/run_shadow_cell_validation_001_seed.py \
+            scripts/research/publish_shadow_cell_validation_001.py
+          ruff check \
+            src/minicells/shadow_cell_validation_001.py \
+            scripts/research/run_shadow_cell_validation_001.py \
+            scripts/research/run_shadow_cell_validation_001_seed.py \
+            scripts/research/publish_shadow_cell_validation_001.py \
+            tests/research/06-native-clm/test_shadow_cell_validation_001.py
+      - name: Mechanics smoke
+        run: pytest -q tests/research/06-native-clm/test_shadow_cell_validation_001.py
+      - name: Independent-chain and seed guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('src/minicells/shadow_cell_validation_001.py'),
+              Path('scripts/research/run_shadow_cell_validation_001.py'),
+              Path('scripts/research/run_shadow_cell_validation_001_seed.py'),
+              Path('.github/workflows/shadow-cell-validation-001.yml'),
+          ]
+          text = '\n'.join(path.read_text() for path in files)
+          for forbidden in ('73211', '73411', '73611', '74211'):
+              assert forbidden not in text
+          assert 'project_cell_gradients_' not in text
+          assert 'update_certificates(' not in text
+          assert 'prepare_native_clm_v0_m2' not in text
+          assert 'prepare_native_clm_v0_m3' not in text
+          print('Shadow Cell Validation 001 remains independent of the M2/M3 formal chain.')
+          PY
