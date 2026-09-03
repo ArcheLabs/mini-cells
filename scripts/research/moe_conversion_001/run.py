@@ -50,13 +50,56 @@ def _load_pretrained(model_cls, path: str | Path, *, dtype: torch.dtype, device:
     return model.to(device).eval()
 
 
-def _router_tuple(output: Any) -> tuple[torch.Tensor, ...]:
-    value = getattr(output, "router_logits", None)
-    if value is None:
-        return ()
+def _extract_router_logits(value: Any, num_experts: int) -> torch.Tensor | None:
+    """Find router logits in both legacy and current Granite router return tuples."""
     if isinstance(value, torch.Tensor):
-        return (value,)
-    return tuple(value)
+        if value.is_floating_point() and value.ndim >= 1 and value.shape[-1] == num_experts:
+            return value
+        return None
+    if isinstance(value, (tuple, list)):
+        candidates = [
+            tensor
+            for item in value
+            if (tensor := _extract_router_logits(item, num_experts)) is not None
+        ]
+        if candidates:
+            # Legacy GraniteMoeTopKGating returns logits last; current GraniteMoeTopKRouter
+            # also has exactly one floating output whose final dimension is num_experts.
+            return candidates[-1]
+    return None
+
+
+def _forward_with_router_capture(
+    model,
+    batch: dict[str, torch.Tensor],
+) -> tuple[Any, tuple[tuple[str, torch.Tensor], ...]]:
+    num_experts = int(model.config.num_local_experts)
+    targets = [
+        (name, module)
+        for name, module in model.named_modules()
+        if name.endswith(".block_sparse_moe.router")
+    ]
+    captured: list[tuple[str, torch.Tensor]] = []
+    handles = []
+
+    def make_hook(name: str):
+        def hook(_module, _inputs, output):
+            logits = _extract_router_logits(output, num_experts)
+            if logits is None:
+                raise RuntimeError(f"could not extract Granite router logits from module {name}")
+            captured.append((name, logits.detach().float().cpu()))
+
+        return hook
+
+    for name, module in targets:
+        handles.append(module.register_forward_hook(make_hook(name)))
+    try:
+        output = model(**batch, use_cache=False)
+    finally:
+        for handle in handles:
+            handle.remove()
+
+    return output, tuple(captured)
 
 
 def _capture(
@@ -68,9 +111,8 @@ def _capture(
     captures: list[dict[str, Any]] = []
     with torch.inference_mode():
         for batch in batches:
-            output = model(**batch, use_cache=False, output_router_logits=True)
+            output, routers = _forward_with_router_capture(model, batch)
             logits = output.logits.detach().float().cpu()
-            routers = tuple(t.detach().float().cpu() for t in _router_tuple(output))
             generated = None
             if generate:
                 generated = model.generate(
@@ -111,7 +153,13 @@ def _compare(
 
         if len(left["routers"]) != len(right["routers"]):
             return {"status": "FAIL", "reason": "router layer count mismatch"}
-        for lhs_router, rhs_router in zip(left["routers"], right["routers"], strict=True):
+        for (lhs_name, lhs_router), (rhs_name, rhs_router) in zip(
+            left["routers"], right["routers"], strict=True
+        ):
+            if lhs_name != rhs_name:
+                return {"status": "FAIL", "reason": "router module order/name mismatch"}
+            if lhs_router.shape != rhs_router.shape:
+                return {"status": "FAIL", "reason": f"router shape mismatch at {lhs_name}"}
             router_outputs += 1
             max_router_error = max(
                 max_router_error,
