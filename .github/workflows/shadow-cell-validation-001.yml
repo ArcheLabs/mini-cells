@@ -66,9 +66,9 @@ jobs:
           import json
           from pathlib import Path
           path = Path('research/notebooks/06-native-clm/shadow-cell-validation-001-copy-on-write-functional-isolation-kaggle.ipynb')
-          if path.exists():
-              notebook = json.loads(path.read_text())
-              assert notebook['nbformat'] == 4
+          notebook = json.loads(path.read_text())
+          assert notebook['nbformat'] == 4
+          assert any('95211' in ''.join(cell.get('source', [])) for cell in notebook['cells'])
           PY
       - name: Compile and lint
         run: |
@@ -76,9 +76,12 @@ jobs:
             src/minicells/shadow_cell_validation_001.py \
             scripts/research/run_shadow_cell_validation_001.py \
             scripts/research/run_shadow_cell_validation_001_seed.py \
-            scripts/research/publish_shadow_cell_validation_001.py 2>/dev/null || true
+            scripts/research/publish_shadow_cell_validation_001.py
           ruff check \
             src/minicells/shadow_cell_validation_001.py \
+            scripts/research/run_shadow_cell_validation_001.py \
+            scripts/research/run_shadow_cell_validation_001_seed.py \
+            scripts/research/publish_shadow_cell_validation_001.py \
             tests/research/06-native-clm/test_shadow_cell_validation_001.py
       - name: Mechanics smoke
         run: pytest -q tests/research/06-native-clm/test_shadow_cell_validation_001.py
@@ -88,6 +91,8 @@ jobs:
           from pathlib import Path
           files = [
               Path('src/minicells/shadow_cell_validation_001.py'),
+              Path('scripts/research/run_shadow_cell_validation_001.py'),
+              Path('scripts/research/run_shadow_cell_validation_001_seed.py'),
               Path('.github/workflows/shadow-cell-validation-001.yml'),
           ]
           text = '\n'.join(path.read_text() for path in files)
@@ -95,5 +100,7 @@ jobs:
               assert forbidden not in text
           assert 'project_cell_gradients_' not in text
           assert 'update_certificates(' not in text
+          assert 'prepare_native_clm_v0_m2' not in text
+          assert 'prepare_native_clm_v0_m3' not in text
           print('Shadow Cell Validation 001 remains independent of the M2/M3 formal chain.')
           PY
