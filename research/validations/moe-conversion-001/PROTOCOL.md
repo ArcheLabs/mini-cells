@@ -60,7 +60,7 @@ python scripts/research/moe_conversion_001/run.py \
   --work-dir artifacts/moe-conversion-001-tiny
 ```
 
-Stage A passes only if every gate in Section 7 passes.
+Stage A passes only if every applicable gate in Section 7 passes.
 
 ## 5. Stage B — Granite 3.1 1B-A400M
 
@@ -105,17 +105,18 @@ These addresses are future mutation targets. They do not imply that one expert e
 
 ## 7. Frozen PASS gates
 
-A run is `PASS` only if all of the following hold:
+A run is `PASS` only if all of the following applicable gates hold:
 
 1. **Bundle integrity** — every canonical substrate file matches its recorded size and SHA-256.
 2. **Checkpoint byte identity** — the materialized Hugging Face checkpoint has the same file identities as the source checkpoint.
 3. **Forward logits parity** — maximum absolute source/materialized logit error is at most the configured tolerance.
 4. **Logit decision identity** — source and materialized argmax token decisions are identical.
-5. **Router value parity** — maximum absolute router-logit error is at most the configured tolerance.
-6. **Router top-k identity** — selected expert IDs are identical at every returned MoE layer for every parity prompt.
-7. **Greedy token identity** — for Stage B, the fixed prompts produce identical greedy continuation token IDs.
-8. **Semantic boundary** — the manifest explicitly records `expert_is_cell=false`.
-9. **Addressability** — at least one packed expert logical address is discovered.
+5. **Router observability** — at least one router-logit output is returned and compared; missing router outputs are a hard failure, not a vacuous PASS.
+6. **Router value parity** — maximum absolute router-logit error is at most the configured tolerance.
+7. **Router top-k identity** — selected expert IDs are identical at every returned MoE layer for every parity prompt.
+8. **Greedy token identity** — for Stage B, the fixed prompts produce identical greedy continuation token IDs.
+9. **Semantic boundary** — the manifest explicitly records `expert_is_cell=false`.
+10. **Addressability** — at least one packed expert logical address is discovered.
 
 No gate may be waived after seeing Stage B results. A changed threshold requires a new protocol version.
 
