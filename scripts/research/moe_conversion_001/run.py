@@ -127,6 +127,7 @@ def _compare(
     gates = {
         "logits_within_tolerance": max_logit_error <= tolerance,
         "logit_argmax_identity": bool(logit_argmax_identity),
+        "router_outputs_present": router_outputs > 0,
         "router_within_tolerance": max_router_error <= tolerance,
         "router_topk_identity": bool(router_topk_identity),
         "greedy_token_identity": bool(greedy_identity),
