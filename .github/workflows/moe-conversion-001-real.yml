@@ -1,0 +1,62 @@
+name: CLM MoE Conversion 001 Real
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/moe-conversion-001-real.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  HF_XET_HIGH_PERFORMANCE: "1"
+  TOKENIZERS_PARALLELISM: "false"
+
+jobs:
+  granite-1b-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install CPU research environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e '.[lm,dev]'
+      - name: Record environment
+        run: |
+          python - <<'PY'
+          import platform
+          import torch
+          import transformers
+          import huggingface_hub
+          import safetensors
+          print("python", platform.python_version())
+          print("torch", torch.__version__)
+          print("transformers", transformers.__version__)
+          print("huggingface_hub", huggingface_hub.__version__)
+          print("safetensors", safetensors.__version__)
+          print("cpu_threads", torch.get_num_threads())
+          PY
+      - name: Granite 3.1 1B-A400M formal parity
+        run: |
+          python scripts/research/moe_conversion_001/run.py \
+            --stage real \
+            --model-id ibm-granite/granite-3.1-1b-a400m-base \
+            --device cpu \
+            --dtype bfloat16 \
+            --tolerance 1e-5 \
+            --work-dir artifacts/moe-conversion-001-real
+      - name: Upload formal parity record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moe-conversion-001-real
+          path: |
+            artifacts/moe-conversion-001-real/result.json
+            artifacts/moe-conversion-001-real/clm-bundle/clm_moe_manifest.json
+          if-no-files-found: warn
