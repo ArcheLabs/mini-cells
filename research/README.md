@@ -8,16 +8,17 @@ This tree preserves MiniCells scientific evidence. It is **not** a product roadm
 
 1. [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) — strongest claims currently supported, explicit No-Go claims, and engineering primitives that survive the negative results.
 2. [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) — family-level record of summary-worthy experiments with value, limitation, formal status, known ceiling, what each result does **not** prove, and the engineering primitive obtained.
-3. [`stages/06-native-clm/`](stages/06-native-clm/) — current trained-model Native-CLM sequence and closures.
-4. [`validations/`](validations/) — frozen protocols, formal results and mechanism diagnostics.
-5. [`catalog.yaml`](catalog.yaml) — machine-oriented research catalog.
+3. [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md) — current scientific authority and surviving engineering value of the historical Foundations, Self-Organization, Routing/Growth and CLM-0.4-mini notebook lineages.
+4. [`stages/06-native-clm/`](stages/06-native-clm/) — current trained-model Native-CLM sequence and closures.
+5. [`validations/`](validations/) — frozen protocols, formal results and mechanism diagnostics.
+6. [`catalog.yaml`](catalog.yaml) — machine-oriented research catalog.
 
 ## Repository structure
 
 ```text
 research/
   README.md                 # navigation only
-  audits/                   # cross-experiment claims and capability ceiling
+  audits/                   # cross-experiment claims, historical assets and capability ceiling
   catalog.yaml              # machine-oriented index
   stages/                   # research-stage narratives and closures
   validations/              # frozen protocols/results/diagnostics
@@ -29,7 +30,7 @@ research/
   archive/                  # retired/historical material
 ```
 
-The directory name does not determine scientific strength. A frozen registered result outranks a roadmap, README or later interpretation.
+The directory name does not determine scientific strength. A frozen registered result outranks a roadmap, README, notebook or later interpretation.
 
 ## Current evidence boundary
 
@@ -49,6 +50,21 @@ The optimizer/update audit adds a separate mechanics result: safe-gradient proje
 
 For exact boundaries and source paths, use the audit documents rather than extending this README with another progress table.
 
+## Historical notebooks
+
+The historical notebook tree is retained as a research asset, not as a flat set of equally strong scientific claims.
+
+Current audit classification:
+
+```text
+01-foundations          HISTORICAL EXPLORATORY
+02-self-organization    HISTORICAL MECHANISTIC EVIDENCE
+03-routing-and-growth   ENGINEERING PRECURSOR EVIDENCE
+05-language-validation  RETIRED / SUPERSEDED PROTOCOL LINEAGE
+```
+
+A historical scientific interpretation may be weakened or superseded while its engineering primitive remains useful. The canonical mapping of those two dimensions is [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md).
+
 ## Research vs engineering
 
 MiniCells keeps two tracks separate:
@@ -64,6 +80,7 @@ Engineering may use a Cell as a deliberately chosen unit of model change without
 - Do not upgrade a failed registered decision because a later diagnostic explains the failure.
 - Do not promote synthetic/linear support into Transformer-, language-, asymptotic- or product-level support.
 - Do not infer global model improvement from a local write/retention signal.
+- Do not inherit scientific authority when reusing an old engineering primitive.
 - Preserve historical protocol/result paths; restructure entrypoints only with reference audits and compatibility shims.
 - Every new summary claim must state what it does **not** prove.
 

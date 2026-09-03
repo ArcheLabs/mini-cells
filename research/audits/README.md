@@ -12,6 +12,7 @@ The purpose is deliberately different from a roadmap:
 
 - [`RESEARCH_LEDGER.md`](RESEARCH_LEDGER.md) — family-level ledger of summary-worthy experiments, including value, limitation, formal status, known ceiling, and engineering primitive obtained.
 - [`CLM_CAPABILITY_CEILING.md`](CLM_CAPABILITY_CEILING.md) — conservative capability ceiling as of 2026-09-03.
+- [`HISTORICAL_RESEARCH_ASSET_MAP.md`](HISTORICAL_RESEARCH_ASSET_MAP.md) / [`中文`](HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md) — separates the scientific authority of the historical notebook lineages from the engineering primitives that remain worth reusing, with explicit treatment of Foundations, Self-Organization, Routing/Growth, and CLM-0.4-mini Language Validation.
 
 ## Audit rules
 
@@ -23,6 +24,7 @@ The purpose is deliberately different from a roadmap:
 6. **Engineering utility is separate from scientific support.** A mechanism may be valuable for versioning, rollback, bounded mutation, evaluation, or experimentation even when the stronger continual-learning hypothesis fails.
 7. **No local-to-global promotion.** A local safety or improvement signal is not evidence that the globally evaluated model is better.
 8. **Historical paths are evidence.** Do not move or rewrite published protocol/result paths merely to make the tree prettier; migrations need reference audits and compatibility shims.
+9. **Historical scientific status and engineering reuse are separate axes.** A retired, superseded or negative scientific lineage may still contain a useful primitive, but reuse does not inherit the old scientific claim.
 
 ## Required ledger fields
 
