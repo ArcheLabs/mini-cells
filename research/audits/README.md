@@ -12,7 +12,7 @@ The purpose is deliberately different from a roadmap:
 
 - [`RESEARCH_LEDGER.md`](RESEARCH_LEDGER.md) — family-level ledger of summary-worthy experiments, including value, limitation, formal status, known ceiling, and engineering primitive obtained.
 - [`CLM_CAPABILITY_CEILING.md`](CLM_CAPABILITY_CEILING.md) — conservative capability ceiling as of 2026-09-03.
-- [`HISTORICAL_RESEARCH_ASSET_MAP.md`](HISTORICAL_RESEARCH_ASSET_MAP.md) — separates the scientific authority of the historical notebook lineages from the engineering primitives that remain worth reusing, with explicit treatment of Foundations, Self-Organization, Routing/Growth, and CLM-0.4-mini Language Validation.
+- [`HISTORICAL_RESEARCH_ASSET_MAP.md`](HISTORICAL_RESEARCH_ASSET_MAP.md) / [`中文`](HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md) — separates the scientific authority of the historical notebook lineages from the engineering primitives that remain worth reusing, with explicit treatment of Foundations, Self-Organization, Routing/Growth, and CLM-0.4-mini Language Validation.
 
 ## Audit rules
 
