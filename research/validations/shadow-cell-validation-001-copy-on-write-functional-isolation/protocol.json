@@ -1,0 +1,165 @@
+{
+  "format": "minicells.shadow-cell-validation-001.protocol.v1",
+  "experiment_id": "shadow-cell-validation-001-copy-on-write-functional-isolation",
+  "title": "Shadow Cell Validation 001 — Copy-on-Write Functional Isolation",
+  "status": "FROZEN_UNRUN",
+  "scientific_decision": false,
+  "independent_of_native_clm_m2_chain": true,
+  "scientific_question": "Does isolating new learning in an exact-clone Shadow branch produce a retention-plasticity Pareto frontier that matched direct-write/interpolation controls cannot reach, when a mature Parent is deliberately forced to serve both old and new rules?",
+  "explicit_nonclaims": [
+    "natural Cell discovery",
+    "autonomous mitosis",
+    "replay-free gate learning",
+    "certificate-based write safety",
+    "semantic routing",
+    "production-ready continual learning"
+  ],
+  "world": {
+    "name": "overlapping-rule-byte-world-v1",
+    "tokenization": "UTF-8 bytes",
+    "record_template": "p{p}q{q}x{x}y{y}=",
+    "answer_token": "single ASCII digit appended after the fixed prefix",
+    "context_factor_A": "(p + q) mod 2 == 0",
+    "context_factor_B": "(p + q) mod 2 == 1",
+    "rule_A": "answer = (x + y) mod 10",
+    "rule_B": "answer = (x - y) mod 10",
+    "same_surface_vocabulary": true,
+    "same_prefix_length": true,
+    "same_x_y_marginals": true,
+    "domain_marker_token": false,
+    "train_objective": "causal next-token cross entropy on the answer byte only",
+    "heldout_metric": "answer-token cross entropy and accuracy"
+  },
+  "model": {
+    "family": "NativeCLM",
+    "uses_existing_cellular_layer": true,
+    "vocab_size": 256,
+    "max_seq_len": 10,
+    "d_model": 384,
+    "n_layers": 4,
+    "n_heads": 6,
+    "d_ff": 1024,
+    "dropout": 0.0,
+    "initial_cells": 4,
+    "active_cells": 1,
+    "cellular_layer_index": 1,
+    "certificate_max_rank": 0,
+    "tie_embeddings": true,
+    "shadow_operator_shape": [384, 384]
+  },
+  "fresh_evidence": {
+    "fresh_base_checkpoint_per_seed": true,
+    "reuse_M1_checkpoint": false,
+    "reuse_M2_M3_M3R_M3L_M3W_data": false,
+    "development_seeds": [95101, 95102, 95103],
+    "formal_seeds": [95211, 95212, 95213]
+  },
+  "data_counts_per_seed": {
+    "A_train": 50000,
+    "A_calibration": 8000,
+    "A_eval": 10000,
+    "B_train": 50000,
+    "B_calibration": 8000,
+    "B_eval": 10000
+  },
+  "base_training": {
+    "steps": 3000,
+    "batch_size": 128,
+    "lr": 0.0003,
+    "weight_decay": 0.01,
+    "warmup_steps": 100,
+    "grad_clip": 1.0,
+    "precision": "fp16",
+    "minimum_A_eval_accuracy": 0.95,
+    "maximum_A_eval_nll": 0.20
+  },
+  "conflict_registration": {
+    "parent_selection": "highest A-eval Top-1 usage after base training",
+    "minimum_parent_top1_share_A": 0.80,
+    "minimum_parent_top1_share_B": 0.80,
+    "routing_is_frozen_before_B_adaptation": true,
+    "failure_if_conflict_not_met": "INCONCLUSIVE_PARENT_CONFLICT"
+  },
+  "B_adaptation": {
+    "steps": 1200,
+    "batch_size": 128,
+    "lr": 0.0008,
+    "weight_decay": 0.0,
+    "warmup_steps": 40,
+    "grad_clip": 1.0,
+    "trainable_parameters_direct": "selected Parent operator only",
+    "trainable_parameters_shadow": "exact-clone Shadow operator only",
+    "certificate_projection": false,
+    "historical_replay_in_weight_training": false,
+    "shared_transformer_frozen": true,
+    "global_router_frozen": true,
+    "route_keys_frozen": true,
+    "other_cells_frozen": true,
+    "shadow_training_expression": 1.0
+  },
+  "shadow_definition": {
+    "birth": "W_shadow(0) = W_parent",
+    "lineage_output": "y = W_parent h + a(x) * (W_shadow - W_parent) h",
+    "birth_max_logit_drift": 0.00001,
+    "parent_operator_immutable_during_shadow_training": true
+  },
+  "gate_calibration": {
+    "allowed_for_validation_001": true,
+    "representation": "frozen base model Cell input at the answer-prediction position",
+    "classifier": "linear logistic probe",
+    "training_sets": ["A_calibration", "B_calibration"],
+    "cannot_modify_model": true,
+    "cannot_enter_shadow_weight_training": true,
+    "minimum_gate_AUC": 0.90,
+    "purpose": "oracle-ish upper bound on expression boundary"
+  },
+  "maturity_grid": [0.0, 0.0625, 0.125, 0.25, 0.5, 0.75, 1.0],
+  "matched_controls": {
+    "Direct-TX": "final directly-written Parent candidate with checkpoint/rollback available",
+    "Direct-Interp": "W_parent + m * (W_direct - W_parent)",
+    "Shadow-Immediate": "Shadow candidate expressed with a(x)=1",
+    "Shadow-Global": "Shadow candidate expressed with a(x)=m",
+    "Shadow-Conditional": "Shadow candidate expressed with a(x)=m*g(x)",
+    "Shadow-Conditional-Shuffled": "same Shadow weights and maturity, but gate values are deterministically permuted across heldout examples"
+  },
+  "algebraic_identity_controls": {
+    "direct_candidate_equals_shadow_candidate": "Because both start from identical W_parent, see the same B batches, use the same optimizer hyperparameters, and are the only trainable tensor, their final operator tensors must match within tolerance.",
+    "Direct-Interp_equals_Shadow-Global": "For linear Cell operators, W_parent + m(W_shadow-W_parent) is exactly the same operator as direct interpolation when W_direct=W_shadow.",
+    "Shadow-Immediate_equals_Direct-TX": "At maturity 1 with global expression, both execute the same final operator.",
+    "maximum_operator_identity_relative_error": 0.000001,
+    "maximum_metric_identity_delta": 0.00001
+  },
+  "metrics": {
+    "A_regression": "max(0, (A_nll_candidate - A_nll_base) / A_nll_base)",
+    "B_gain": "max(0, B_nll_base - B_nll_candidate)",
+    "B_gain_fraction_of_direct": "B_gain_candidate / B_gain_DirectTX",
+    "pareto_axes": ["A_regression", "B_gain_fraction_of_direct"],
+    "hypervolume_reference": [1.0, 0.0],
+    "hypervolume_domain": "A_regression clipped to [0,1], B gain fraction clipped to [0,1]"
+  },
+  "thresholds": {
+    "maximum_primary_A_regression": 0.10,
+    "minimum_primary_B_gain_fraction_of_direct": 0.90,
+    "minimum_conditional_hypervolume_improvement_vs_direct_interp": 0.20,
+    "minimum_conditional_hypervolume_improvement_vs_shadow_global": 0.20,
+    "minimum_correct_vs_shuffled_A_regression_advantage": 0.10,
+    "maximum_shuffled_B_gain_fraction_drop": 0.15,
+    "minimum_valid_seed_fraction": 1.0
+  },
+  "registered_classifications": [
+    "INCONCLUSIVE_PARENT_CONFLICT",
+    "INCONCLUSIVE_GATE_CAPACITY",
+    "SHADOW_CELL_NOT_SUPPORTED",
+    "ISOLATED_SHADOW_ADVANTAGE_NOT_SUPPORTED",
+    "SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY",
+    "SHADOW_CELL_CONTROLLED_MATURATION_SUPPORTED"
+  ],
+  "classification_rule": "First require valid mature Parent conflict on every seed and gate AUC >= 0.90. Then require Shadow-Conditional to achieve A regression <=0.10 and >=0.90 of Direct-TX B gain on every seed. If it does not, SHADOW_CELL_NOT_SUPPORTED. If the conditional Pareto hypervolume does not improve by >=20% over Direct-Interp, ISOLATED_SHADOW_ADVANTAGE_NOT_SUPPORTED. If conditional passes but its hypervolume does not improve by >=20% over Shadow-Global or correct-vs-shuffled A-regression advantage is <0.10, SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY. Otherwise SHADOW_CELL_CONTROLLED_MATURATION_SUPPORTED.",
+  "formal_execution_policy": {
+    "freeze_before_formal": true,
+    "development_seeds_may_not_count_as_formal_evidence": true,
+    "formal_seeds_are_untouched_until_canonical_runner": true,
+    "failed_frozen_formal_is_valid_negative": true,
+    "no_threshold_changes_after_formal_results": true
+  }
+}
