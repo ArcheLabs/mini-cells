@@ -16,6 +16,9 @@ from minicells.shadow_cell_validation_001 import (
 DEFAULT_PROTOCOL = Path(
     "research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation/protocol.json"
 )
+DEFAULT_IMPLEMENTATION = Path(
+    "research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation/implementation.json"
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -32,11 +35,17 @@ def main() -> int:
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
+    parser.add_argument("--implementation", type=Path, default=DEFAULT_IMPLEMENTATION)
     args = parser.parse_args()
 
     protocol = json.loads(args.protocol.read_text(encoding="utf-8"))
+    implementation = json.loads(args.implementation.read_text(encoding="utf-8"))
     if protocol.get("format") != "minicells.shadow-cell-validation-001.protocol.v1":
         raise RuntimeError("unexpected Shadow Cell Validation 001 protocol format")
+    if implementation.get("format") != "minicells.shadow-cell-validation-001.implementation.v1":
+        raise RuntimeError("unexpected Shadow Cell Validation 001 implementation format")
+    if implementation.get("status") != "FROZEN_UNRUN":
+        raise RuntimeError("Shadow Cell implementation lock is not frozen/unrun")
     registered = set(protocol["fresh_evidence"]["development_seeds"]) | set(
         protocol["fresh_evidence"]["formal_seeds"]
     )
@@ -45,6 +54,8 @@ def main() -> int:
 
     base = protocol["base_training"]
     adapt = protocol["B_adaptation"]
+    gate = implementation["gate_probe"]
+    evaluation = implementation["evaluation"]
     config = ShadowValidationConfig(
         base_steps=int(base["steps"]),
         base_batch_size=int(base["batch_size"]),
@@ -56,6 +67,12 @@ def main() -> int:
         adapt_lr=float(adapt["lr"]),
         adapt_warmup_steps=int(adapt["warmup_steps"]),
         grad_clip=float(adapt["grad_clip"]),
+        eval_batch_size=int(evaluation["eval_batch_size"]),
+        encode_batch_size=int(evaluation["encode_batch_size"]),
+        gate_steps=int(gate["steps"]),
+        gate_batch_size=int(gate["batch_size"]),
+        gate_lr=float(gate["lr"]),
+        gate_weight_decay=float(gate["weight_decay"]),
         precision=str(base["precision"]),
     )
     result = run_shadow_validation_seed(
@@ -67,9 +84,16 @@ def main() -> int:
         device=args.device,
         config=config,
     )
+    result["protocol_sha256"] = sha256_file(args.protocol)
+    result["implementation_sha256"] = sha256_file(args.implementation)
+    (args.output_dir / "seed-result.json").write_text(
+        json.dumps(result, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     summary = {
         "seed": result["seed"],
-        "protocol_sha256": sha256_file(args.protocol),
+        "protocol_sha256": result["protocol_sha256"],
+        "implementation_sha256": result["implementation_sha256"],
         "base_A_accuracy": result["base_metrics"]["A"]["accuracy"],
         "parent_share_A": result["parent"]["top1_share_A"],
         "parent_share_B": result["parent"]["top1_share_B"],
