@@ -1,15 +1,10 @@
-"""Prepare the pinned KT001 data snapshot with explicit historical-overlap accounting.
+"""Prepare the pinned KT001 data snapshot with explicit overlap accounting.
 
-KT001 should avoid silently reusing the exact first-N slices consumed by the
-M3/M3R/M3L-2 line. The builder therefore prefers records after the historically
-consumed non-empty prefix, then selects with a deterministic salted min-hash.
-
-Some pinned datasets are too small for a fully disjoint same-size replacement
-(Dolly-15k is the obvious case: the prior train+eval prefix already consumed 12k
-of roughly 15k rows). When the post-prefix remainder is mathematically
-insufficient, this builder fills only the unavoidable shortfall from the old
-prefix using the same deterministic min-hash selector and records the exact reuse
-count in the manifest. It never labels such a snapshot fully disjoint.
+The builder prefers records after the first-N prefixes consumed by the earlier
+Native CLM continual-learning line. Selection is deterministic salted min-hash.
+If an exact pinned split cannot supply a same-size disjoint replacement, only the
+unavoidable shortfall is filled from the historical prefix and that reuse is
+recorded explicitly in the manifest.
 """
 
 from __future__ import annotations
@@ -19,9 +14,9 @@ import hashlib
 import heapq
 import json
 import os
+from collections.abc import Callable, Iterable
 from pathlib import Path
-from typing import Any, Callable, Iterable
-
+from typing import Any
 
 FORMAT = "minicells.kt001-data-manifest.v1"
 SELECTOR_SALT = "IRF-CLM-KT001-v1"
@@ -76,24 +71,19 @@ def _dolly(row: dict[str, Any]) -> str:
     return "\n\n".join(pieces)
 
 
-def _identity_digest(
+def _identity_score(
     *,
     repo_id: str,
     split: str,
     config: str | None,
     source_index: int,
     text: str,
-) -> bytes:
+) -> int:
     prefix = "\0".join(
-        (
-            SELECTOR_SALT,
-            repo_id,
-            config or "",
-            split,
-            str(source_index),
-        )
+        (SELECTOR_SALT, repo_id, config or "", split, str(source_index))
     ).encode("utf-8")
-    return hashlib.sha256(prefix + b"\0" + text.encode("utf-8")).digest()
+    digest = hashlib.sha256(prefix + b"\0" + text.encode("utf-8")).digest()
+    return int.from_bytes(digest, "big")
 
 
 def _bounded_push(
@@ -111,11 +101,14 @@ def _bounded_push(
         heapq.heapreplace(heap, item)
 
 
-def _ordered(heap: list[tuple[int, int, str]], *, origin: str) -> list[tuple[int, int, str, str]]:
-    return sorted(
-        [(-negative, source_index, text, origin) for negative, source_index, text in heap],
-        key=lambda item: (item[0], item[1]),
-    )
+def _ordered(
+    heap: list[tuple[int, int, str]], *, origin: str
+) -> list[tuple[int, int, str, str]]:
+    rows = [
+        (-negative_score, source_index, text, origin)
+        for negative_score, source_index, text in heap
+    ]
+    return sorted(rows, key=lambda item: (item[0], item[1]))
 
 
 def _salted_prefer_fresh_select(
@@ -129,38 +122,32 @@ def _salted_prefer_fresh_select(
     count: int,
     fresh_scan_nonempty: int,
 ) -> tuple[list[str], dict[str, Any]]:
-    """Prefer post-prefix records, supplement only an unavoidable shortfall.
-
-    We retain a bounded min-hash sample of the historical prefix while scanning it,
-    but use it only when the pinned stream exhausts before providing ``count``
-    fresh post-prefix rows. If the post-prefix scan reaches ``fresh_scan_nonempty``
-    (which is always >= count), no historical-prefix record can be selected.
-    """
+    """Prefer post-prefix records and reuse only an unavoidable shortfall."""
 
     if count < 1 or fresh_scan_nonempty < count:
         raise ValueError("invalid KT001 min-hash selection budget")
+    if historical_prefix_nonempty < 0:
+        raise ValueError("historical prefix must be non-negative")
 
     old_heap: list[tuple[int, int, str]] = []
     fresh_heap: list[tuple[int, int, str]] = []
     old_seen = 0
     fresh_seen = 0
     last_source_index = -1
-    stream_exhausted = True
+    scan_limit_reached = False
 
     for source_index, row in enumerate(stream):
         last_source_index = source_index
         text = formatter(row).strip()
         if not text:
             continue
-        digest = _identity_digest(
+        score = _identity_score(
             repo_id=repo_id,
             split=split,
             config=config,
             source_index=source_index,
             text=text,
         )
-        score = int.from_bytes(digest, "big")
-
         if old_seen < historical_prefix_nonempty:
             old_seen += 1
             _bounded_push(
@@ -171,9 +158,8 @@ def _salted_prefer_fresh_select(
                 limit=count,
             )
             continue
-
         if fresh_seen >= fresh_scan_nonempty:
-            stream_exhausted = False
+            scan_limit_reached = True
             break
         fresh_seen += 1
         _bounded_push(
@@ -186,55 +172,48 @@ def _salted_prefer_fresh_select(
 
     if old_seen != historical_prefix_nonempty:
         raise RuntimeError(
-            f"KT001 split {repo_id}/{split} ended before historical prefix could be identified: "
+            f"KT001 split {repo_id}/{split} ended before historical prefix was found: "
             f"{old_seen}/{historical_prefix_nonempty}"
         )
 
-    fresh_ordered = _ordered(fresh_heap, origin="post_historical_prefix")
-    old_ordered = _ordered(old_heap, origin="historical_prefix")
-
+    fresh = _ordered(fresh_heap, origin="post_historical_prefix")
+    old = _ordered(old_heap, origin="historical_prefix")
     if fresh_seen >= count:
-        selected = fresh_ordered[:count]
+        selected = fresh[:count]
         historical_reused = 0
     else:
-        # With fresh_scan_nonempty >= count, fresh_seen < count implies the stream
-        # exhausted. Every available post-prefix row is therefore maximally fresh,
-        # and the shortfall is mathematically unavoidable at this target size.
-        if not stream_exhausted:
-            raise RuntimeError("KT001 selector internal fresh-capacity accounting drift")
+        if scan_limit_reached:
+            raise RuntimeError("KT001 fresh-capacity accounting drift")
         shortfall = count - fresh_seen
-        if len(old_ordered) < shortfall:
+        if len(old) < shortfall:
             raise RuntimeError(
-                f"KT001 split {repo_id}/{split} cannot supply target count even with explicit "
-                f"historical-prefix supplementation: fresh={fresh_seen}, old={len(old_ordered)}, "
-                f"required={count}"
+                f"KT001 split {repo_id}/{split} cannot supply {count} rows: "
+                f"fresh={fresh_seen}, historical_available={len(old)}"
             )
-        selected = fresh_ordered + old_ordered[:shortfall]
+        selected = fresh + old[:shortfall]
         selected.sort(key=lambda item: (item[0], item[1]))
         historical_reused = shortfall
 
     if len(selected) != count:
-        raise RuntimeError("KT001 selector failed to produce the registered document count")
+        raise RuntimeError("KT001 selector failed to produce registered document count")
 
     fresh_selected = count - historical_reused
-    return (
-        [text for _, _, text, _ in selected],
-        {
-            "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
-            "salt": SELECTOR_SALT,
-            "historical_prefix_nonempty": int(historical_prefix_nonempty),
-            "historical_prefix_reused": int(historical_reused),
-            "fresh_post_prefix_selected": int(fresh_selected),
-            "fully_disjoint_from_historical_prefix": bool(historical_reused == 0),
-            "post_prefix_nonempty_seen": int(fresh_seen),
-            "fresh_scan_nonempty_limit": int(fresh_scan_nonempty),
-            "stream_exhausted_before_fresh_target": bool(fresh_seen < count),
-            "selected": int(len(selected)),
-            "last_source_index_seen": int(last_source_index),
-            "minimum_selected_hash": f"{selected[0][0]:064x}",
-            "maximum_selected_hash": f"{selected[-1][0]:064x}",
-        },
-    )
+    metadata = {
+        "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+        "salt": SELECTOR_SALT,
+        "historical_prefix_nonempty": historical_prefix_nonempty,
+        "historical_prefix_reused": historical_reused,
+        "fresh_post_prefix_selected": fresh_selected,
+        "fully_disjoint_from_historical_prefix": historical_reused == 0,
+        "post_prefix_nonempty_seen": fresh_seen,
+        "fresh_scan_nonempty_limit": fresh_scan_nonempty,
+        "stream_exhausted_before_fresh_target": fresh_seen < count,
+        "selected": len(selected),
+        "last_source_index_seen": last_source_index,
+        "minimum_selected_hash": f"{selected[0][0]:064x}",
+        "maximum_selected_hash": f"{selected[-1][0]:064x}",
+    }
+    return [text for _, _, text, _ in selected], metadata
 
 
 def _write_texts(path: Path, texts: list[str]) -> dict[str, Any]:
@@ -263,29 +242,49 @@ def _verified_cache(output: Path) -> dict[str, Any] | None:
         return None
     if manifest.get("format") != FORMAT or manifest.get("selector_salt") != SELECTOR_SALT:
         return None
-    if set(manifest.get("dataset_revisions", {})) != set(PINNED):
+    revisions = manifest.get("dataset_revisions", {})
+    if set(revisions) != set(PINNED):
         return None
     for name, pinned in PINNED.items():
-        record = manifest["dataset_revisions"][name]
+        record = revisions[name]
         if record.get("repo_id") != pinned["repo_id"]:
             return None
         if record.get("resolved_revision") != pinned["revision"]:
             return None
     for record in manifest.get("files", {}).values():
         path = output / record["path"]
-        if not path.exists() or path.stat().st_size != int(record["bytes"]):
+        if not path.exists() or path.stat().st_size != record["bytes"]:
             return None
         if _sha256(path) != record["sha256"]:
             return None
     return manifest
 
 
+def _load_stream(
+    *,
+    repo_key: str,
+    split: str,
+    config: str | None,
+    token: str,
+):
+    from datasets import load_dataset
+
+    pinned = PINNED[repo_key]
+    kwargs: dict[str, Any] = {
+        "split": split,
+        "streaming": True,
+        "token": token,
+        "revision": pinned["revision"],
+    }
+    if config is None:
+        return load_dataset(pinned["repo_id"], **kwargs)
+    return load_dataset(pinned["repo_id"], config, **kwargs)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=Path("/kaggle/working/kt001-data"),
+        "--output-dir", type=Path, default=Path("/kaggle/working/kt001-data")
     )
     parser.add_argument("--scan-factor", type=int, default=3)
     parser.add_argument("--token-env", default="HF_TOKEN")
@@ -305,8 +304,6 @@ def main() -> int:
     if not token:
         raise RuntimeError(f"missing environment variable {args.token_env}")
 
-    from datasets import load_dataset
-
     selections: dict[str, dict[str, Any]] = {}
     files: dict[str, dict[str, Any]] = {}
 
@@ -320,18 +317,14 @@ def main() -> int:
         historical_prefix: int,
         config: str | None = None,
     ) -> list[str]:
+        stream = _load_stream(
+            repo_key=repo_key,
+            split=split,
+            config=config,
+            token=token,
+        )
         pinned = PINNED[repo_key]
-        kwargs: dict[str, Any] = {
-            "split": split,
-            "streaming": True,
-            "token": token,
-            "revision": pinned["revision"],
-        }
-        if config is None:
-            stream = load_dataset(pinned["repo_id"], **kwargs)
-        else:
-            stream = load_dataset(pinned["repo_id"], config, **kwargs)
-        texts, selection = _salted_prefer_fresh_select(
+        texts, metadata = _salted_prefer_fresh_select(
             stream,
             formatter,
             repo_id=pinned["repo_id"],
@@ -342,7 +335,7 @@ def main() -> int:
             fresh_scan_nonempty=max(count, count * args.scan_factor),
         )
         selections[name] = {
-            **selection,
+            **metadata,
             "repo_key": repo_key,
             "repo_id": pinned["repo_id"],
             "config": config,
@@ -413,10 +406,6 @@ def main() -> int:
     )
     files["C_eval"] = _write_texts(output / "C-code-eval.txt", c_eval)
 
-    # The previous Native CLM builder used the first 10k Dolly rows for training
-    # and the following 2k for evaluation. Dolly-15k cannot supply a fully disjoint
-    # replacement of the same 12k size, so the selector records the unavoidable
-    # historical-prefix supplementation rather than pretending the set is fresh.
     d_all = select(
         "D_combined",
         repo_key="D",
@@ -429,19 +418,13 @@ def main() -> int:
     d_eval = d_all[10_000:]
     files["D_train"] = _write_texts(output / "D-dolly-train.txt", d_train)
     files["D_eval"] = _write_texts(output / "D-dolly-eval.txt", d_eval)
-    combined_selection = selections.pop("D_combined")
-    selections["D_train"] = {
-        **combined_selection,
-        "selected_from_combined_rank": [0, 10_000],
-    }
-    selections["D_eval"] = {
-        **combined_selection,
-        "selected_from_combined_rank": [10_000, 12_000],
-    }
+    combined = selections.pop("D_combined")
+    selections["D_train"] = {**combined, "selected_from_combined_rank": [0, 10_000]}
+    selections["D_eval"] = {**combined, "selected_from_combined_rank": [10_000, 12_000]}
 
-    total_selected = sum(int(record["documents"]) for record in files.values())
+    total_selected = sum(record["documents"] for record in files.values())
     total_reused = sum(
-        int(record.get("historical_prefix_reused", 0))
+        record.get("historical_prefix_reused", 0)
         for name, record in selections.items()
         if name != "D_eval"
     )
@@ -451,20 +434,19 @@ def main() -> int:
         "stream": ["B", "C", "D"],
         "selector_salt": SELECTOR_SALT,
         "selection_policy": (
-            "prefer deterministic salted min-hash records after the historical first-N prefix; "
-            "if the exact pinned split cannot provide the registered same-size replacement, "
-            "supplement only the unavoidable shortfall from the historical prefix and record it"
+            "prefer deterministic salted min-hash records after historical first-N prefixes; "
+            "supplement only unavoidable shortfalls from those prefixes and record reuse"
         ),
-        "scan_factor": int(args.scan_factor),
+        "scan_factor": args.scan_factor,
         "A_role_after_continual_start": "evaluation_only",
         "learner_replay_bytes": 0,
         "fully_disjoint_from_historical_prefixes": all(
-            bool(record.get("fully_disjoint_from_historical_prefix", False))
+            record.get("fully_disjoint_from_historical_prefix", False)
             for record in selections.values()
         ),
         "historical_prefix_reuse_is_explicit": True,
-        "selected_documents_total": int(total_selected),
-        "historical_prefix_reused_documents_accounted": int(total_reused),
+        "selected_documents_total": total_selected,
+        "historical_prefix_reused_documents_accounted": total_reused,
         "dataset_revisions": {
             key: {
                 "repo_id": value["repo_id"],
