@@ -121,13 +121,14 @@
     "purpose": "oracle-ish upper bound on expression boundary"
   },
   "maturity_grid": [0.0, 0.0625, 0.125, 0.25, 0.5, 0.75, 1.0],
+  "primary_conditional_point_selection": "Among registered maturity values satisfying A_regression <=0.10, choose the point with highest B_gain_fraction_of_direct; tie-break toward lower maturity. If none satisfy retention, primary point is null.",
   "matched_controls": {
     "Direct-TX": "final directly-written Parent candidate with checkpoint/rollback available",
     "Direct-Interp": "W_parent + m * (W_direct - W_parent)",
     "Shadow-Immediate": "Shadow candidate expressed with a(x)=1",
     "Shadow-Global": "Shadow candidate expressed with a(x)=m",
     "Shadow-Conditional": "Shadow candidate expressed with a(x)=m*g(x)",
-    "Shadow-Conditional-Shuffled": "same Shadow weights and maturity, but gate values are deterministically permuted across heldout examples"
+    "Shadow-Conditional-Shuffled": "same Shadow weights and maturity, but gate values are deterministically permuted across the combined A/B heldout set"
   },
   "algebraic_identity_controls": {
     "direct_candidate_equals_shadow_candidate": "Both start from identical W_parent, see identical B minibatches, use identical optimizer hyperparameters/state, and are the only trainable tensor; final operators must match within tolerance.",
@@ -153,6 +154,7 @@
     "minimum_conditional_hypervolume_improvement_vs_shadow_global": 0.20,
     "minimum_correct_vs_shuffled_A_regression_advantage": 0.10,
     "maximum_shuffled_B_gain_fraction_drop": 0.15,
+    "shuffled_B_gain_drop_is_diagnostic_only": true,
     "minimum_valid_seed_fraction": 1.0
   },
   "registered_classifications": [
@@ -166,7 +168,7 @@
     "SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY",
     "SHADOW_CELL_CONTROLLED_MATURATION_SUPPORTED"
   ],
-  "classification_rule": "Require valid base A performance, mature Parent conflict on every seed, Direct-TX B gain >=0.50, gate AUC >=0.90, and all algebraic identity controls. Then require at least one Shadow-Conditional maturity point per seed with A regression <=0.10 and >=0.90 of Direct-TX B gain. If not, SHADOW_CELL_NOT_SUPPORTED. If the conditional Pareto hypervolume does not improve by >=20% over Direct-Interp, ISOLATED_SHADOW_ADVANTAGE_NOT_SUPPORTED. If conditional passes but its hypervolume does not improve by >=20% over Shadow-Global or correct-vs-shuffled A-regression advantage is <0.10, SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY. Otherwise SHADOW_CELL_CONTROLLED_MATURATION_SUPPORTED.",
+  "classification_rule": "Require valid base A performance, mature Parent conflict on every seed, Direct-TX B gain >=0.50, gate AUC >=0.90, and all algebraic identity controls. Then require a primary Shadow-Conditional point on every seed with B_gain_fraction_of_direct >=0.90. If not, SHADOW_CELL_NOT_SUPPORTED. If conditional Pareto hypervolume does not improve by >=20% over Direct-Interp, ISOLATED_SHADOW_ADVANTAGE_NOT_SUPPORTED. If Shadow-Immediate itself satisfies A_regression <=0.10 and B_gain_fraction_of_direct >=0.90 on every seed, or conditional hypervolume does not improve by >=20% over Shadow-Global, or correct-vs-shuffled A-regression advantage at the primary maturity is <0.10 on any seed, SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY. Otherwise SHADOW_CELL_CONTROLLED_MATURATION_SUPPORTED.",
   "formal_execution_policy": {
     "freeze_before_formal": true,
     "development_seeds_may_not_count_as_formal_evidence": true,
