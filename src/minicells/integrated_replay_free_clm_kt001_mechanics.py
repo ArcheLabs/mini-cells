@@ -1,6 +1,6 @@
 """Thin bindings from KT001 to the already-validated Native CLM mechanisms.
 
-No algorithm is duplicated here.  The purpose of this module is to make the
+No algorithm is duplicated here. The purpose of this module is to make the
 integration points explicit and auditable before the five-arm runner exists.
 """
 
@@ -19,6 +19,7 @@ from .native_clm_m3 import GrowthWindow, NativeCLMM3GrowthConfig
 from .native_clm_m3l2 import (
     M3L2AddressConfig,
     OnlineAddressNativeCLM,
+    _commit_nonspawn_windows,
     maybe_spawn_online_address,
     observe_online_queries,
 )
@@ -45,9 +46,9 @@ def finalize_realized_adamw_transaction_(
 ) -> dict[str, Any]:
     """Install and audit the realized Cell update for one optimizer transaction.
 
-    The caller must invoke this immediately after ``optimizer.step()``.  Protected
+    The caller must invoke this immediately after ``optimizer.step()``. Protected
     arms call the canonical R0b final-update projector; unprotected arms leave the
-    realized AdamW delta untouched.  Both paths are audited using the same R0b
+    realized AdamW delta untouched. Both paths are audited using the same R0b
     invariant measurement so the causal difference remains observable.
     """
 
@@ -95,6 +96,32 @@ def observe_historical_address_queries(model: NativeCLM, info: dict[str, Any]) -
     observe_online_queries(require_canonical_online_address_model(model), info)
 
 
+def commit_historical_address_state_(model: NativeCLM) -> dict[str, Any]:
+    """Close the current phase into the canonical persistent M3L-2 sketches.
+
+    M3L-2 keeps current query moments ephemeral until a growth/non-growth boundary.
+    KT001 has explicit phase boundaries, so every address-enabled arm must merge and
+    clear those moments before the next phase calibration begins. The merge itself
+    remains the canonical M3L-2 implementation.
+    """
+
+    address_model = require_canonical_online_address_model(model)
+    before = address_model.address_state_metrics()
+    pending_before = {
+        int(cell_id): int(accumulator.count)
+        for cell_id, accumulator in sorted(address_model.current_moments.items())
+    }
+    _commit_nonspawn_windows(address_model)
+    if any(accumulator.count for accumulator in address_model.current_moments.values()):
+        raise RuntimeError("KT001 phase close left non-empty M3L-2 current moments")
+    after = address_model.address_state_metrics()
+    return {
+        "pending_query_counts_before": pending_before,
+        "address_state_before": before,
+        "address_state_after": after,
+    }
+
+
 def force_shadow_expansion_(
     model: NativeCLM,
     optimizer,
@@ -105,15 +132,15 @@ def force_shadow_expansion_(
 ) -> dict[str, Any]:
     """Force one phase-boundary Shadow birth through the canonical M3L-2 birth path.
 
-    KT001 removes the *whether-to-grow* lifecycle decision from the experiment.  It
-    does not replace M3L-2's birth/read mechanics.  We therefore construct a
+    KT001 removes the *whether-to-grow* lifecycle decision from the experiment. It
+    does not replace M3L-2's birth/read mechanics. We therefore construct a
     deterministic eligibility window, then call ``maybe_spawn_online_address`` to
     perform the actual gate derivation, parent->child spawn, optimizer param-group
     update, address-state transition, and birth-drift audit.
 
     Parent choice is learner-only and deterministic: among lineage leaves with both
     historical state and at least two current queries, choose the largest current
-    query count, breaking ties by the lowest Cell id.  Evaluation metrics never
+    query count, breaking ties by the lowest Cell id. Evaluation metrics never
     participate in this choice.
     """
 
