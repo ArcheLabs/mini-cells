@@ -15,5 +15,13 @@
   "protocol_lock": "research/validations/shadow-cell-validation-001-v2-developmental-maturation/protocol-lock.json",
   "lock_helper": "scripts/research/lock_shadow_cell_validation_001_v2.py",
   "formal_launcher": "python scripts/research/run_shadow_cell_validation_001_v2.py --phase formal --seed 95311 --device cuda --checkpoint /kaggle/input/canonical/checkpoint.pt --dataset /kaggle/input/shadow-v2/formal-seed-95311.json",
-  "publication_branch": "kaggle/shadow-cell-validation-001-v2-results"
+  "publication_branch": "codex/shadow-cell-validation-001-v2-amendment",
+  "implementation_lock_files": [
+    "scripts/research/run_shadow_cell_validation_001_v2.py",
+    "scripts/research/aggregate_shadow_cell_validation_001_v2.py",
+    "scripts/research/publish_shadow_cell_validation_001_v2.py",
+    "scripts/research/report_shadow_cell_validation_001_v2.py",
+    "src/minicells/shadow_maturation.py",
+    "research/validations/shadow-cell-validation-001-v2-developmental-maturation/protocol.json"
+  ]
 }

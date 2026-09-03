@@ -1,6 +1,10 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -24,6 +28,19 @@ from minicells.shadow_maturation import (
     synthetic_examples,
     train_shadow,
 )
+
+
+def _research_module(name: str):
+    root = Path(__file__).resolve().parents[3]
+    research_scripts = str(root / "scripts" / "research")
+    if research_scripts not in sys.path:
+        sys.path.insert(0, research_scripts)
+    path = root / "scripts" / "research" / f"{name}.py"
+    spec = importlib.util.spec_from_file_location(name, path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class Pad:
@@ -133,3 +150,46 @@ def test_formal_seed_enforcement() -> None:
         if 95301 not in formal:
             raise ValueError("development seed cannot enter formal aggregation")
 
+
+def test_registered_taxonomy_is_exact_and_lock_stays_unlocked() -> None:
+    root = Path(__file__).resolve().parents[3]
+    validation = root / "research/validations/shadow-cell-validation-001-v2-developmental-maturation"
+    protocol = json.loads((validation / "protocol.json").read_text())
+    lock = json.loads((validation / "protocol-lock.json").read_text())
+    assert protocol["decision_taxonomy"] == [
+        "INCONCLUSIVE_BASE_CAPABILITY", "INCONCLUSIVE_PARENT_CONFLICT",
+        "INCONCLUSIVE_DIRECT_PLASTICITY", "INCONCLUSIVE_GATE_CAPACITY",
+        "INCONCLUSIVE_IDENTITY_CONTROL", "SHADOW_MATURATION_NOT_SUPPORTED",
+        "ISOLATED_SHADOW_ADVANTAGE_NOT_SUPPORTED",
+        "SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY",
+        "SHADOW_MATURATION_ORACLE_ONLY", "SHADOW_MATURATION_SUPPORTED", "INVALID",
+    ]
+    assert lock["status"] == "UNLOCKED_MISSING_DEPENDENCIES"
+
+
+def test_task_id_gate_uses_explicit_membership_not_address_prefix() -> None:
+    sidecar = ShadowSidecar(model().eval(), gate_mode="task_id", task_id_membership={"opaque-new-id"})
+    hidden = torch.zeros(2, 1, sidecar.accepted.cfg.d_model)
+    values = sidecar.gate(hidden, ["math/looks-old", "opaque-new-id"], is_new=None)
+    assert values.tolist() == [0.0, 1.0]
+
+
+def test_formal_contract_requires_c_and_d_calibration() -> None:
+    runner = _research_module("run_shadow_cell_validation_001_v2")
+    cfg = runner._config(runner._load_protocol(), smoke=True)
+    examples = runner.synthetic_examples(vocab_size=cfg.vocab_size, domain="x", count=1, seed=1)
+    payload = {"format": "minicells.shadow-cell-validation-001-v2.dataset.v1", "seed": 95311, "splits": {key: [examples[0].to_dict()] for key in runner.REQUIRED_SPLITS}}
+    del payload["splits"]["C_calibration"]
+    path = Path("/tmp/shadow-v2-missing-calibration.json")
+    path.write_text(json.dumps(payload))
+    with pytest.raises(Exception, match="missing splits"):
+        runner._formal_examples(path, cfg, 95311)
+
+
+def test_safe_frontier_uses_registered_old_damage_budget() -> None:
+    aggregate = _research_module("aggregate_shadow_cell_validation_001_v2")
+    frontier = [
+        {"maturity": 0.25, "old_regression": 0.19, "new_gain_normalized": 0.91},
+        {"maturity": 1.0, "old_regression": 0.21, "new_gain_normalized": 1.5},
+    ]
+    assert aggregate._safe_gain(frontier, 0.2) == 0.91

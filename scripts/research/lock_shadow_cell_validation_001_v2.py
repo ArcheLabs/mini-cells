@@ -14,6 +14,14 @@ VALIDATION_ID = "shadow-cell-validation-001-v2-developmental-maturation"
 VALIDATION_DIR = ROOT / "research/validations" / VALIDATION_ID
 PROTOCOL = VALIDATION_DIR / "protocol.json"
 LOCK = VALIDATION_DIR / "protocol-lock.json"
+IMPLEMENTATION_FILES = (
+    "scripts/research/run_shadow_cell_validation_001_v2.py",
+    "scripts/research/aggregate_shadow_cell_validation_001_v2.py",
+    "scripts/research/publish_shadow_cell_validation_001_v2.py",
+    "scripts/research/report_shadow_cell_validation_001_v2.py",
+    "src/minicells/shadow_maturation.py",
+    f"research/validations/{VALIDATION_ID}/protocol.json",
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -22,6 +30,15 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def implementation_manifest(protocol_bytes: bytes | None = None) -> tuple[dict[str, str], str]:
+    values = {name: sha256_file(ROOT / name) for name in IMPLEMENTATION_FILES}
+    protocol_name = f"research/validations/{VALIDATION_ID}/protocol.json"
+    if protocol_bytes is not None:
+        values[protocol_name] = hashlib.sha256(protocol_bytes).hexdigest()
+    canonical = json.dumps(values, sort_keys=True, separators=(",", ":")).encode()
+    return values, hashlib.sha256(canonical).hexdigest()
 
 
 def main() -> int:
@@ -49,6 +66,7 @@ def main() -> int:
     protocol["formal_dataset"]["sha256"] = dataset_shas
     protocol_text = json.dumps(protocol, indent=2, sort_keys=False) + "\n"
     protocol_sha = hashlib.sha256(protocol_text.encode("utf-8")).hexdigest()
+    implementation_files, implementation_sha = implementation_manifest(protocol_text.encode("utf-8"))
     lock = {
         "format": "minicells.shadow-cell-validation-001-v2.protocol-lock.v1",
         "validation_id": VALIDATION_ID,
@@ -57,8 +75,10 @@ def main() -> int:
         "canonical_checkpoint_sha256": checkpoint_sha,
         "formal_dataset_sha256": dataset_shas,
         "formal_seeds": [95311, 95312, 95313],
+        "implementation_files": implementation_files,
+        "implementation_manifest_sha256": implementation_sha,
     }
-    print(json.dumps({"protocol_sha256": protocol_sha, "canonical_checkpoint_sha256": checkpoint_sha, "formal_dataset_sha256": dataset_shas, "write": args.write}, indent=2, sort_keys=True))
+    print(json.dumps({"protocol_sha256": protocol_sha, "canonical_checkpoint_sha256": checkpoint_sha, "formal_dataset_sha256": dataset_shas, "implementation_manifest_sha256": implementation_sha, "write": args.write}, indent=2, sort_keys=True))
     if args.write:
         PROTOCOL.write_text(protocol_text, encoding="utf-8")
         LOCK.write_text(json.dumps(lock, indent=2, sort_keys=True) + "\n", encoding="utf-8")

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and aggregate the preregistered formal Shadow v2 seeds."""
-
+"""Fail-closed aggregation for Shadow Cell Validation 001 v2."""
 from __future__ import annotations
 
 import argparse
@@ -8,7 +7,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 FORMAL_SEEDS = (95311, 95312, 95313)
 VALIDATION_ID = "shadow-cell-validation-001-v2-developmental-maturation"
@@ -16,7 +15,40 @@ MATURITY_GRID = (0.0, 0.0625, 0.125, 0.25, 0.5, 0.75, 1.0)
 PHASES = ("B", "C", "D")
 SHADOW_ARMS = ("shadow_full", "shadow_oracle", "shadow_sketch", "task_id_shadow")
 INPUT_ONLY_ARMS = ("shadow_full", "shadow_oracle", "shadow_sketch")
-DEFAULT_PROTOCOL = Path("research/validations") / VALIDATION_ID / "protocol.json"
+TAXONOMY = (
+    "INCONCLUSIVE_BASE_CAPABILITY", "INCONCLUSIVE_PARENT_CONFLICT",
+    "INCONCLUSIVE_DIRECT_PLASTICITY", "INCONCLUSIVE_GATE_CAPACITY",
+    "INCONCLUSIVE_IDENTITY_CONTROL", "SHADOW_MATURATION_NOT_SUPPORTED",
+    "ISOLATED_SHADOW_ADVANTAGE_NOT_SUPPORTED",
+    "SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY",
+    "SHADOW_MATURATION_ORACLE_ONLY", "SHADOW_MATURATION_SUPPORTED", "INVALID",
+)
+ROOT = Path(__file__).resolve().parents[2]
+VALIDATION_DIR = ROOT / "research/validations" / VALIDATION_ID
+DEFAULT_PROTOCOL = VALIDATION_DIR / "protocol.json"
+DEFAULT_LOCK = VALIDATION_DIR / "protocol-lock.json"
+IMPLEMENTATION_FILES = (
+    "scripts/research/run_shadow_cell_validation_001_v2.py",
+    "scripts/research/aggregate_shadow_cell_validation_001_v2.py",
+    "scripts/research/publish_shadow_cell_validation_001_v2.py",
+    "scripts/research/report_shadow_cell_validation_001_v2.py",
+    "src/minicells/shadow_maturation.py",
+    f"research/validations/{VALIDATION_ID}/protocol.json",
+)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def implementation_manifest(root: Path = ROOT) -> tuple[dict[str, str], str]:
+    values = {name: sha256_file(root / name) for name in IMPLEMENTATION_FILES}
+    canonical = json.dumps(values, sort_keys=True, separators=(",", ":")).encode()
+    return values, hashlib.sha256(canonical).hexdigest()
 
 
 def _finite(value: Any) -> bool:
@@ -29,134 +61,182 @@ def _finite(value: Any) -> bool:
     return True
 
 
+def _protocol_and_lock(protocol_path: Path = DEFAULT_PROTOCOL, lock_path: Path = DEFAULT_LOCK) -> tuple[dict[str, Any], dict[str, Any], str]:
+    protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    protocol_sha = sha256_file(protocol_path)
+    if protocol.get("validation_id") != VALIDATION_ID or lock.get("validation_id") != VALIDATION_ID:
+        raise ValueError("validation id mismatch")
+    if lock.get("status") != "FROZEN":
+        raise ValueError("protocol-lock.json is not FROZEN")
+    if lock.get("protocol_sha256") != protocol_sha:
+        raise ValueError("protocol SHA-256 does not match protocol-lock.json")
+    locked_files = lock.get("implementation_files")
+    if not isinstance(locked_files, dict) or set(locked_files) != set(IMPLEMENTATION_FILES):
+        raise ValueError("implementation manifest is missing from protocol-lock.json")
+    actual_files, actual_manifest = implementation_manifest()
+    if locked_files != actual_files or lock.get("implementation_manifest_sha256") != actual_manifest:
+        raise ValueError("implementation manifest does not match protocol-lock.json")
+    if tuple(protocol.get("decision_taxonomy", ())) != TAXONOMY:
+        raise ValueError("protocol decision taxonomy drift")
+    return protocol, lock, protocol_sha
+
+
+def _thresholds(protocol: dict[str, Any]) -> dict[str, float]:
+    values = protocol.get("thresholds")
+    if not isinstance(values, dict):
+        raise ValueError("protocol thresholds are missing")
+    required = ("max_old_regression", "min_normalized_new_gain", "minimum_accuracy_gain",
+                "minimum_shadow_over_interp_gain", "minimum_correct_over_shuffled_gain",
+                "max_mean_forgetting", "shadow_sketch_utility_ratio",
+                "shadow_sketch_regression_difference", "full_oracle_utility_tolerance")
+    if any(key not in values for key in required):
+        raise ValueError("protocol is missing a registered scientific threshold")
+    return {key: float(value) for key, value in values.items() if isinstance(value, (int, float))}
+
+
+def _frontier(row: dict[str, Any]) -> list[dict[str, Any]]:
+    value = row.get("maturity_frontier")
+    return value if isinstance(value, list) else []
+
+
 def _phase_pass(row: dict[str, Any], thresholds: dict[str, float]) -> bool:
-    frontier = row.get("maturity_frontier", [])
+    frontier = _frontier(row)
+    if [float(item.get("maturity", float("nan"))) for item in frontier] != list(MATURITY_GRID):
+        return False
     selected = row.get("selected_maturity")
-    if selected is None or [float(item.get("maturity")) for item in frontier] != list(MATURITY_GRID):
+    if selected is None:
         return False
     point = next((item for item in frontier if float(item.get("maturity")) == float(selected)), None)
-    if point is None:
-        return False
-    return (
-        float(point.get("old_regression", float("inf"))) <= float(thresholds["max_old_regression"])
-        and float(point.get("new_gain_normalized", float("-inf"))) >= float(thresholds["min_normalized_new_gain"])
-        and float(point.get("accuracy_gain", float("-inf"))) >= float(thresholds["minimum_accuracy_gain"])
-    )
+    return point is not None and float(point.get("old_regression", float("inf"))) <= thresholds["max_old_regression"] and float(point.get("new_gain_normalized", float("-inf"))) >= thresholds["min_normalized_new_gain"] and float(point.get("accuracy_gain", float("-inf"))) >= thresholds["minimum_accuracy_gain"]
 
 
-def _hypervolume(frontier: list[dict[str, Any]]) -> float:
-    points = sorted(
-        (max(0.0, float(row["old_regression"])), max(0.0, float(row["new_gain_normalized"])))
-        for row in frontier
-    )
-    best = 0.0
-    area = 0.0
-    previous_x = 0.0
-    for x, y in points:
-        if x > previous_x:
-            area += (x - previous_x) * best
-            previous_x = x
-        best = max(best, y)
-    return area
+def _safe_gain(frontier: Iterable[dict[str, Any]], epsilon: float) -> float:
+    return max((float(row.get("new_gain_normalized", float("-inf"))) for row in frontier if float(row.get("old_regression", float("inf"))) <= epsilon), default=float("-inf"))
+
+
+def _safe_point(frontier: Iterable[dict[str, Any]], epsilon: float) -> dict[str, Any] | None:
+    eligible = [row for row in frontier if float(row.get("old_regression", float("inf"))) <= epsilon]
+    if not eligible:
+        return None
+    return max(eligible, key=lambda row: float(row.get("new_gain_normalized", float("-inf"))))
+
+
+def _arm_pass(result: dict[str, Any], arm: str, thresholds: dict[str, float]) -> bool:
+    return all(_phase_pass(result.get("arms", {}).get(arm, {}).get(phase, {}), thresholds) for phase in PHASES)
 
 
 def _controls_pass(result: dict[str, Any], thresholds: dict[str, float]) -> bool:
-    direct = result.get("controls", {}).get("direct_interp", {})
-    shuffled = result.get("controls", {}).get("shuffled_gate", {})
-    if any(phase not in direct for phase in PHASES):
+    controls = result.get("controls", {})
+    direct = controls.get("direct_interp", {})
+    shuffled = controls.get("shuffled_gate", {})
+    if any(phase not in direct or len(_frontier(direct[phase])) != len(MATURITY_GRID) for phase in PHASES):
         return False
     for arm in INPUT_ONLY_ARMS:
-        if arm not in shuffled:
-            return False
         for phase in PHASES:
-            row = result["arms"][arm][phase]
-            shuffled_row = shuffled[arm].get(phase)
-            if shuffled_row is None or row.get("selected_maturity") is None:
+            correct = result["arms"][arm][phase]
+            shuffled_row = shuffled.get(arm, {}).get(phase, {})
+            if len(_frontier(shuffled_row)) != len(MATURITY_GRID):
                 return False
-            if float(shuffled_row.get("old_regression", 0.0)) - float(row.get("old_regression", 0.0)) < float(thresholds["shuffled_gate_advantage"]):
+            if _safe_gain(_frontier(correct), thresholds["max_old_regression"]) - _safe_gain(_frontier(shuffled_row), thresholds["max_old_regression"]) < thresholds["minimum_correct_over_shuffled_gain"]:
                 return False
     return True
 
 
-def validate_seed(result: dict[str, Any], protocol_sha: str) -> tuple[bool, str | None]:
+def validate_seed(result: dict[str, Any], protocol_sha: str, lock: dict[str, Any] | None = None) -> tuple[bool, str | None]:
     if result.get("validation_id") != VALIDATION_ID:
         return False, "validation_id_mismatch"
-    if int(result.get("seed", -1)) not in FORMAL_SEEDS:
+    seed = int(result.get("seed", -1))
+    if seed not in FORMAL_SEEDS:
         return False, "unregistered_seed"
     if result.get("phase") != "formal" or result.get("protocol_sha256") != protocol_sha:
         return False, "phase_or_protocol_hash_mismatch"
+    if lock is not None:
+        if result.get("implementation_manifest_sha256") != lock.get("implementation_manifest_sha256"):
+            return False, "implementation_manifest_mismatch"
+        if result.get("checkpoint_sha256") != lock.get("canonical_checkpoint_sha256"):
+            return False, "checkpoint_hash_mismatch"
+        expected = lock.get("formal_dataset_sha256", {}).get(str(seed))
+        if result.get("dataset_sha256") != expected:
+            return False, "dataset_hash_mismatch"
     validity = result.get("validity", {})
-    structural = (
-        "formal_seed_registered", "protocol_hash_matches_locked_protocol",
-        "canonical_checkpoint_hash_matches", "formal_dataset_hash_matches",
-        "finite_results",
-    )
-    if any(validity.get(key) is not True for key in structural):
-        return False, "validity_gate_failed"
-    if result.get("status", "").startswith("INCONCLUSIVE_"):
+    for key in ("formal_seed_registered", "protocol_hash_matches_locked_protocol", "canonical_checkpoint_hash_matches", "formal_dataset_hash_matches", "finite_results"):
+        if validity.get(key) is not True:
+            return False, "infrastructure_validity_failed"
+    if not _finite(result):
+        return False, "non_finite_result"
+    prereq = {name for name in TAXONOMY if name.startswith("INCONCLUSIVE_")}
+    if result.get("status") in prereq:
         return True, result["status"]
     if result.get("status") != "COMPLETE":
         return False, "seed_not_complete"
-    required = (
-        "base_capability_passes", "same_mature_parent_passes", "accepted_immutable",
-        "m0_identity_passes", "no_learner_historical_replay", "gate_capacity_passes",
-        "direct_plasticity_passes", "required_arms_completed", "required_controls_completed",
-        "all_maturity_values_evaluated", "copy_on_write_artifacts_complete",
-    )
+    required = ("accepted_immutable", "m0_identity_passes", "no_learner_historical_replay", "gate_capacity_passes", "direct_plasticity_passes", "required_arms_completed", "required_controls_completed", "all_maturity_values_evaluated", "copy_on_write_artifacts_complete", "absolute_retention_passes")
     if any(validity.get(key) is not True for key in required):
-        return False, "validity_gate_failed"
+        return False, "scientific_validity_gate_failed"
+    if any(arm not in result.get("arms", {}) or any(phase not in result["arms"][arm] for phase in PHASES) for arm in SHADOW_ARMS):
+        return False, "required_result_structure_missing"
+    controls = result.get("controls", {})
+    if any(phase not in controls.get("direct_interp", {}) for phase in PHASES) or "shuffled_gate" not in controls:
+        return False, "required_control_structure_missing"
     return True, None
 
 
-def classify(results: list[dict[str, Any]], thresholds: dict[str, float]) -> str:
-    if not all(result["validity"]["base_capability_passes"] for result in results):
-        return "INCONCLUSIVE_BASE_CAPABILITY"
-    if not all(result["validity"]["same_mature_parent_passes"] for result in results):
-        return "INCONCLUSIVE_PARENT_CONFLICT"
-    if not all(result["validity"]["direct_plasticity_passes"] for result in results):
-        return "INCONCLUSIVE_DIRECT_PLASTICITY"
-    if not all(result["validity"]["gate_capacity_passes"] for result in results):
-        return "INCONCLUSIVE_GATE_CAPACITY"
+def classify(results: list[dict[str, Any]], thresholds: dict[str, float] | None = None) -> str:
+    """Apply the frozen all-seed decision precedence."""
+    thresholds = thresholds or {"max_old_regression": 0.2, "min_normalized_new_gain": 0.9, "minimum_accuracy_gain": 0.0, "minimum_shadow_over_interp_gain": 0.1, "minimum_correct_over_shuffled_gain": 0.1, "max_mean_forgetting": 0.15, "shadow_sketch_utility_ratio": 0.9, "shadow_sketch_regression_difference": 0.03, "full_oracle_utility_tolerance": 0.1}
+    prereq = (("INCONCLUSIVE_BASE_CAPABILITY", "base_capability_passes"), ("INCONCLUSIVE_PARENT_CONFLICT", "same_mature_parent_passes"), ("INCONCLUSIVE_DIRECT_PLASTICITY", "direct_plasticity_passes"), ("INCONCLUSIVE_GATE_CAPACITY", "gate_capacity_passes"))
+    for status, key in prereq:
+        if any(result.get("status") == status or not result.get("validity", {}).get(key, True) for result in results):
+            return status
+    if not all(_arm_pass(result, "task_id_shadow", thresholds) for result in results):
+        return "SHADOW_MATURATION_NOT_SUPPORTED"
+    if not all(_arm_pass(result, "shadow_oracle", thresholds) for result in results):
+        return "SHADOW_MATURATION_NOT_SUPPORTED"
+    for result in results:
+        for phase in PHASES:
+            oracle_gain = _safe_gain(_frontier(result["arms"]["shadow_oracle"][phase]), thresholds["max_old_regression"])
+            interp_gain = _safe_gain(_frontier(result["controls"]["direct_interp"][phase]), thresholds["max_old_regression"])
+            if oracle_gain - interp_gain < thresholds["minimum_shadow_over_interp_gain"]:
+                return "ISOLATED_SHADOW_ADVANTAGE_NOT_SUPPORTED"
     if not all(_controls_pass(result, thresholds) for result in results):
         return "INCONCLUSIVE_IDENTITY_CONTROL"
-    arm_passes = {
-        arm: all(_phase_pass(result["arms"][arm][phase], thresholds) for result in results for phase in PHASES)
-        for arm in SHADOW_ARMS
-    }
-    if not arm_passes["task_id_shadow"] or not arm_passes["shadow_oracle"]:
-        return "SHADOW_MATURATION_NOT_SUPPORTED"
-    conditional_hv = [_hypervolume(result["arms"]["shadow_oracle"][phase]["maturity_frontier"]) for result in results for phase in PHASES]
-    interp_hv = [_hypervolume(result["controls"]["direct_interp"][phase]["maturity_frontier"]) for result in results for phase in PHASES]
-    if any(candidate <= baseline + float(thresholds["direct_interp_hypervolume_tolerance"]) for candidate, baseline in zip(conditional_hv, interp_hv)):
-        return "ISOLATED_SHADOW_ADVANTAGE_NOT_SUPPORTED"
-    if arm_passes["shadow_sketch"]:
-        return "SHADOW_MATURATION_SUPPORTED"
-    return "SHADOW_MATURATION_ORACLE_ONLY"
+    full_passes = all(_arm_pass(result, "shadow_full", thresholds) for result in results)
+    full_approx = all(abs(_safe_gain(_frontier(result["arms"]["shadow_full"][phase]), thresholds["max_old_regression"]) - _safe_gain(_frontier(result["arms"]["shadow_oracle"][phase]), thresholds["max_old_regression"])) <= thresholds["full_oracle_utility_tolerance"] for result in results for phase in PHASES)
+    if full_passes and full_approx:
+        return "SHADOW_ISOLATION_SUPPORTED_MATURATION_NOT_NECESSARY"
+    for result in results:
+        for phase in PHASES:
+            oracle = _safe_point(_frontier(result["arms"]["shadow_oracle"][phase]), thresholds["max_old_regression"])
+            sketch = _safe_point(_frontier(result["arms"]["shadow_sketch"][phase]), thresholds["max_old_regression"])
+            if oracle is None or sketch is None:
+                return "SHADOW_MATURATION_ORACLE_ONLY"
+            oracle_gain = _safe_gain(_frontier(result["arms"]["shadow_oracle"][phase]), thresholds["max_old_regression"])
+            sketch_gain = _safe_gain(_frontier(result["arms"]["shadow_sketch"][phase]), thresholds["max_old_regression"])
+            if oracle_gain <= 0.0 or sketch_gain / oracle_gain < thresholds["shadow_sketch_utility_ratio"] or abs(float(sketch["old_regression"]) - float(oracle["old_regression"])) > thresholds["shadow_sketch_regression_difference"]:
+                return "SHADOW_MATURATION_ORACLE_ONLY"
+    return "SHADOW_MATURATION_SUPPORTED"
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--results-root", type=Path, required=True)
-    parser.add_argument("--protocol-sha256")
-    parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
-    parser.add_argument("--thresholds", type=Path)
     args = parser.parse_args()
-    protocol_path = args.protocol
-    protocol_sha = args.protocol_sha256 or hashlib.sha256(protocol_path.read_bytes()).hexdigest()
-    thresholds = {"max_old_regression": 0.2, "min_normalized_new_gain": 0.9, "minimum_accuracy_gain": 0.0, "shuffled_gate_advantage": 0.1, "direct_interp_hypervolume_tolerance": 1e-6}
-    if args.thresholds:
-        thresholds.update(json.loads(args.thresholds.read_text(encoding="utf-8")))
-    paths = [args.results_root / f"seed-{seed}" / "result.json" for seed in FORMAL_SEEDS]
-    if not all(path.is_file() for path in paths):
-        payload = {"status": "INCOMPLETE", "scientific_decision": False, "formal_seeds": list(FORMAL_SEEDS), "missing": [str(path) for path in paths if not path.is_file()], "protocol_sha256": protocol_sha}
-    else:
-        results = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
-        validity = [validate_seed(result, protocol_sha) for result in results]
-        if not all(ok for ok, _ in validity) or not all(_finite(result) for result in results):
-            payload = {"status": "INVALID", "scientific_decision": False, "formal_seeds": list(FORMAL_SEEDS), "protocol_sha256": protocol_sha, "seed_errors": {str(seed): reason for seed, (_, reason) in zip(FORMAL_SEEDS, validity) if reason}}
+    try:
+        protocol, lock, protocol_sha = _protocol_and_lock()
+        thresholds = _thresholds(protocol)
+        paths = [args.results_root / f"seed-{seed}" / "result.json" for seed in FORMAL_SEEDS]
+        if not all(path.is_file() for path in paths):
+            payload = {"status": "FORMAL_INCOMPLETE", "scientific_decision": False, "formal_seeds": list(FORMAL_SEEDS), "completed_seeds": [seed for seed, path in zip(FORMAL_SEEDS, paths) if path.is_file()], "missing_seeds": [seed for seed, path in zip(FORMAL_SEEDS, paths) if not path.is_file()], "protocol_sha256": protocol_sha}
         else:
-            classification = classify(results, thresholds)
-            payload = {"status": classification, "scientific_decision": True, "formal_seeds": list(FORMAL_SEEDS), "protocol_sha256": protocol_sha, "arm_passes": {arm: all(_phase_pass(result["arms"][arm][phase], thresholds) for result in results for phase in PHASES) for arm in SHADOW_ARMS}, "seed_results": results}
+            results = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
+            checks = [validate_seed(result, protocol_sha, lock) for result in results]
+            if not all(ok for ok, _ in checks):
+                payload = {"status": "INVALID", "scientific_decision": False, "formal_seeds": list(FORMAL_SEEDS), "protocol_sha256": protocol_sha, "seed_errors": {str(seed): reason for seed, (_, reason) in zip(FORMAL_SEEDS, checks) if reason}}
+            else:
+                classification = classify(results, thresholds)
+                payload = {"status": classification, "scientific_decision": classification != "INVALID" and not classification.startswith("INCONCLUSIVE_"), "formal_seeds": list(FORMAL_SEEDS), "protocol_sha256": protocol_sha, "implementation_manifest_sha256": lock.get("implementation_manifest_sha256"), "checkpoint_sha256": lock.get("canonical_checkpoint_sha256"), "formal_dataset_sha256": lock.get("formal_dataset_sha256"), "seed_results": results}
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        payload = {"status": "INVALID", "scientific_decision": False, "formal_seeds": list(FORMAL_SEEDS), "error": str(exc)}
     args.results_root.mkdir(parents=True, exist_ok=True)
     (args.results_root / "aggregate.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(payload, indent=2, sort_keys=True))

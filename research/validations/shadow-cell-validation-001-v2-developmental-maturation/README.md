@@ -14,7 +14,8 @@ configuration as the Native substrate for this checkout.
 - a full native-width zero-output operator is trained;
 - the complete preregistered maturity frontier is measured;
 - Shadow Oracle is an architectural upper bound for admission;
-- replay-free Shadow Sketch uses bounded functional sufficient statistics;
+- the Shadow operator learner sees zero historical replay; the bounded
+  functional-sketch selector is an evaluator-side approximation diagnostic;
 - Corrected Direct projects the realized AdamW proposal, including decay;
 - Task-ID Shadow separates isolated capacity from learned input-only routing;
 - accepted transitions are written as copy-on-write artifacts.
@@ -59,10 +60,12 @@ Formal execution is fail-closed. It requires both a canonical accepted
 checkpoint and a JSON dataset matching the registered data contract; there is
 no synthetic fallback in formal mode. The dataset must contain these splits:
 `A_train`, `A_calibration`, `A_eval`, `B_train`, `B_calibration`, `B_eval`,
-`C_train`, `C_eval`, `D_train`, and `D_eval`. Each item uses the checked-in
-`ScoredTokenExample` fields (`example_id`, `address_id`, `tokens`, and
-`target_mask`). A/B train and evaluation addresses must share one complete
-sparse route tuple.
+`C_train`, `C_calibration`, `C_eval`, `D_train`, `D_calibration`, and `D_eval`.
+Each item uses the checked-in `ScoredTokenExample` fields (`example_id`,
+`address_id`, `tokens`, and `target_mask`). Every train, calibration, and
+evaluation split in A/B/C/D must share one complete sparse route tuple. Formal
+Task-ID Shadow uses dataset-derived address membership and does not inspect
+lexical address prefixes.
 
 Formal execution is still locked in this commit because the canonical
 checkpoint and formal dataset are external artifacts. Before running any
@@ -106,16 +109,26 @@ repository Contents read/write permission, then add `--push-results`:
 python scripts/research/run_shadow_cell_validation_001_v2.py \
   --phase formal --seed 95311 --device cuda \
   --checkpoint /kaggle/input/canonical/checkpoint.pt \
+  --dataset /kaggle/input/shadow-v2/formal-seed-95311.json \
   --push-results \
-  --publish-branch kaggle/shadow-cell-validation-001-v2-results
+  --publish-branch codex/shadow-cell-validation-001-v2-amendment
 ```
 
-The publisher verifies the protocol hash, aggregates all completed formal
-seeds, writes provenance and SHA-256 manifests, excludes binary checkpoints
-from Git, commits the curated evidence, and pushes the result branch. Re-run
-the same command for the remaining registered seeds; each completed seed
-updates the same result branch. The token is read only from the environment or
-Kaggle Secret and is never stored in the repository or notebook.
+The publisher verifies the frozen protocol and implementation manifest,
+aggregates all completed formal seeds, writes provenance and SHA-256 manifests,
+excludes binary checkpoints from Git, and appends evidence to the same research
+branch without switching branches. Matching completed seeds are skipped after
+restart; incomplete or failed seeds are retried. The token is read only from
+the environment or Kaggle Secret.
+
+Run the GitHub write preflight once at the start of a Kaggle session:
+
+```bash
+python scripts/research/publish_shadow_cell_validation_001_v2.py \
+  --preflight-only \
+  --branch codex/shadow-cell-validation-001-v2-amendment \
+  --secret-name GITHUB_TOKEN
+```
 
 Figures are generated from result JSON by the runner and can be regenerated with:
 

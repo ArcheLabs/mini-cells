@@ -5,6 +5,8 @@
   "protocol_sha256": null,
   "canonical_checkpoint_sha256": null,
   "formal_dataset_sha256": {"95311": null, "95312": null, "95313": null},
-  "unlock_rule": "Set status to FROZEN only in a separate pre-formal commit after recording the exact SHA-256 values of the canonical accepted checkpoint and formal dataset. The runner refuses formal execution until all three hashes match.",
+  "implementation_files": null,
+  "implementation_manifest_sha256": null,
+  "unlock_rule": "Set status to FROZEN only in a separate pre-formal commit after recording the exact SHA-256 values of the canonical accepted checkpoint, every formal dataset, and the registered implementation manifest. The runner refuses formal execution until all identities match.",
   "formal_seeds": [95311, 95312, 95313]
 }

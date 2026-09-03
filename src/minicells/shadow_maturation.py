@@ -114,6 +114,7 @@ class AcceptedModelChain(nn.Module):
         self.committed_gates = nn.ModuleList()
         self.committed_maturities: list[float] = []
         self.committed_gate_modes: list[GateMode] = []
+        self.committed_task_memberships: list[frozenset[str] | None] = []
 
     @property
     def cfg(self):
@@ -131,24 +132,32 @@ class AcceptedModelChain(nn.Module):
         if mode == "zero":
             return hidden.new_ones(hidden.size(0))
         if mode == "task_id":
-            return hidden.new_tensor([
-                float(str(address).startswith(("math/", "story/", "v2/math/", "v2/story/")))
-                for address in address_ids
-            ])
+            membership = self.committed_task_memberships[index]
+            if membership is None:
+                raise RuntimeError("task-id artifact is missing its explicit membership descriptor")
+            return hidden.new_tensor([float(str(address) in membership) for address in address_ids])
         return self.committed_gates[index](hidden)
 
     def forward(self, input_ids: torch.Tensor, address_ids: list[str]) -> torch.Tensor:
-        with torch.no_grad():
-            hidden = self.forward_features(input_ids, address_ids)
-            logits = F.linear(hidden, self.token_embedding.weight)
-            for index, shadow in enumerate(self.committed_shadows):
-                gate = self._committed_gate(index, hidden, address_ids)
-                contribution = shadow(hidden) * self.committed_maturities[index] * gate[:, None, None]
-                logits = logits + F.linear(contribution, self.token_embedding.weight)
+        # Keep the graph available for a matched temporary Direct candidate.
+        # All committed Shadow parameters remain frozen; only the temporary
+        # mature base Cell parameters are enabled by train_corrected_direct.
+        hidden = self.forward_features(input_ids, address_ids)
+        logits = F.linear(hidden, self.token_embedding.weight)
+        for index, shadow in enumerate(self.committed_shadows):
+            gate = self._committed_gate(index, hidden, address_ids)
+            contribution = shadow(hidden) * self.committed_maturities[index] * gate[:, None, None]
+            logits = logits + F.linear(contribution, self.token_embedding.weight)
         return logits
 
     def base_routes(self, address_id: str | int) -> dict[str, list[int]]:
         return self.base.base_routes(address_id)
+
+    def base_cell_ids(self, address_id: str | int) -> list[str]:
+        return self.base.base_cell_ids(address_id)
+
+    def modules_for_cell_ids(self, cell_ids: Iterable[str]) -> list[nn.Module]:
+        return self.base.modules_for_cell_ids(cell_ids)
 
     def append(self, sidecar: "ShadowSidecar", maturity: float) -> "AcceptedModelChain":
         clone = AcceptedModelChain(self.base)
@@ -156,10 +165,12 @@ class AcceptedModelChain(nn.Module):
         clone.committed_gates.extend([*self.committed_gates])
         clone.committed_maturities = list(self.committed_maturities)
         clone.committed_gate_modes = list(self.committed_gate_modes)
+        clone.committed_task_memberships = list(self.committed_task_memberships)
         clone.committed_shadows.append(sidecar.shadow)
         clone.committed_gates.append(sidecar.input_gate)
         clone.committed_maturities.append(float(maturity))
         clone.committed_gate_modes.append(sidecar.gate_mode)
+        clone.committed_task_memberships.append(sidecar.task_id_membership)
         for parameter in clone.parameters():
             parameter.requires_grad_(False)
         clone.eval()
@@ -175,7 +186,13 @@ class ShadowSidecar(nn.Module):
     a candidate in the accepted global router.
     """
 
-    def __init__(self, accepted: nn.Module, *, gate_mode: GateMode = "input_only") -> None:
+    def __init__(
+        self,
+        accepted: nn.Module,
+        *,
+        gate_mode: GateMode = "input_only",
+        task_id_membership: Iterable[str] | None = None,
+    ) -> None:
         super().__init__()
         self.accepted = accepted
         for parameter in self.accepted.parameters():
@@ -185,6 +202,10 @@ class ShadowSidecar(nn.Module):
         self.shadow = ShadowCell(width)
         self.input_gate = InputOnlyShadowGate(width)
         self.gate_mode: GateMode = gate_mode
+        self.task_id_membership = (
+            frozenset(str(value) for value in task_id_membership)
+            if task_id_membership is not None else None
+        )
         self.new_domain_prefixes: tuple[str, ...] = ("math/", "story/", "v2/math/", "v2/story/")
 
     @property
@@ -198,12 +219,11 @@ class ShadowSidecar(nn.Module):
         if self.gate_mode == "zero":
             return hidden.new_ones(hidden.size(0))
         if self.gate_mode == "task_id":
-            if is_new is not None:
+            if self.task_id_membership is not None:
+                return hidden.new_tensor([float(str(address) in self.task_id_membership) for address in address_ids])
+            if is_new is not None:  # legacy unit-test fallback; formal always supplies membership.
                 return hidden.new_full((hidden.size(0),), float(is_new))
-            return hidden.new_tensor(
-                [float(any(str(address).startswith(prefix) for prefix in self.new_domain_prefixes))
-                 for address in address_ids]
-            )
+            raise RuntimeError("formal task-id Shadow requires an explicit membership descriptor")
         return self.input_gate(hidden)
 
     def forward(
@@ -373,14 +393,15 @@ def evaluate_model_metrics(
 
 
 def interpolate_models(
-    parent: TinyCLMDecoder,
-    direct: TinyCLMDecoder,
+    parent: nn.Module,
+    direct: nn.Module,
     maturity: float,
-) -> TinyCLMDecoder:
+) -> nn.Module:
     """Build the registered Direct-Interp control without mutating either endpoint."""
     if parent.cfg.to_dict() != direct.cfg.to_dict():
         raise ValueError("Direct-Interp endpoints must share one model configuration")
-    candidate = TinyCLMDecoder(parent.cfg)
+    import copy
+    candidate = copy.deepcopy(parent)
     parent_state = parent.state_dict()
     direct_state = direct.state_dict()
     value = float(maturity)
@@ -497,7 +518,7 @@ def build_activation_certificates(
     captures: dict[str, list[torch.Tensor]] = {}
     hooks = []
     for name, module in model.named_modules():
-        if not name.startswith("blocks.") or ".ff.base_cells." not in name:
+        if ".blocks." not in f".{name}" or ".ff.base_cells." not in name:
             continue
         if not isinstance(module, nn.Linear):
             continue
@@ -669,6 +690,7 @@ def evaluate_maturity_frontier(
     baseline_old_nll: float | None = None,
     baseline_new_nll: float | None = None,
     batch_size: int = 32,
+    gate_overrides: Mapping[str, float] | None = None,
 ) -> list[dict[str, float]]:
     """Evaluate every registered maturity without creating learner gradients."""
     if shadow is None:
@@ -679,27 +701,34 @@ def evaluate_maturity_frontier(
     shadow.gate_mode = gate_mode
     if baseline_old_nll is None:
         baseline_old_nll = _mean_nll(shadow, old_eval_loader, tokenizer, device,
-                                     maturity=0.0, is_new=False, batch_size=batch_size)
+                                     maturity=0.0, is_new=False, batch_size=batch_size,
+                                     gate_overrides=gate_overrides)
     if baseline_new_nll is None:
         baseline_new_nll = _mean_nll(shadow, new_eval_loader, tokenizer, device,
-                                     maturity=0.0, is_new=True, batch_size=batch_size)
+                                     maturity=0.0, is_new=True, batch_size=batch_size,
+                                     gate_overrides=gate_overrides)
     baseline_new_accuracy = evaluate_sidecar_metrics(
         shadow, new_eval_loader, tokenizer, device,
         maturity=0.0, is_new=True, batch_size=batch_size,
+        gate_overrides=gate_overrides,
     )["accuracy"]
     frontier: list[dict[str, float]] = []
     for maturity in maturity_grid:
         old_nll = _mean_nll(shadow, old_eval_loader, tokenizer, device,
-                            maturity=float(maturity), is_new=False, batch_size=batch_size)
+                            maturity=float(maturity), is_new=False, batch_size=batch_size,
+                            gate_overrides=gate_overrides)
         new_nll = _mean_nll(shadow, new_eval_loader, tokenizer, device,
-                            maturity=float(maturity), is_new=True, batch_size=batch_size)
+                            maturity=float(maturity), is_new=True, batch_size=batch_size,
+                            gate_overrides=gate_overrides)
         old_metrics = evaluate_sidecar_metrics(
             shadow, old_eval_loader, tokenizer, device,
             maturity=float(maturity), is_new=False, batch_size=batch_size,
+            gate_overrides=gate_overrides,
         )
         new_metrics = evaluate_sidecar_metrics(
             shadow, new_eval_loader, tokenizer, device,
             maturity=float(maturity), is_new=True, batch_size=batch_size,
+            gate_overrides=gate_overrides,
         )
         frontier.append({
             "maturity": float(maturity),
@@ -898,7 +927,15 @@ def copy_on_write_artifact(
             "committed_gate_count": len(getattr(accepted, "committed_gates", [])),
             "committed_maturities": list(getattr(accepted, "committed_maturities", [])),
             "committed_gate_modes": list(getattr(accepted, "committed_gate_modes", [])),
+            "committed_task_memberships": [
+                sorted(values) if values is not None else None
+                for values in getattr(accepted, "committed_task_memberships", [])
+            ],
         },
+        "task_id_membership": (
+            sorted(sidecar.task_id_membership)
+            if sidecar.task_id_membership is not None else None
+        ),
     }
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
