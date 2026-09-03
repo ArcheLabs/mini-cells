@@ -7,6 +7,7 @@ on:
       - 'src/minicells/integrated_replay_free_clm_kt001*.py'
       - 'scripts/research/*integrated_replay_free_clm_kt001*'
       - 'research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001/**'
+      - 'research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb'
       - 'tests/research/06-native-clm/test_integrated_replay_free_clm_kt001.py'
       - '.github/workflows/integrated-replay-free-clm-kill-test-001.yml'
   pull_request:
@@ -14,6 +15,7 @@ on:
       - 'src/minicells/integrated_replay_free_clm_kt001*.py'
       - 'scripts/research/*integrated_replay_free_clm_kt001*'
       - 'research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001/**'
+      - 'research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb'
       - 'tests/research/06-native-clm/test_integrated_replay_free_clm_kt001.py'
       - '.github/workflows/integrated-replay-free-clm-kill-test-001.yml'
 
@@ -54,6 +56,40 @@ jobs:
           assert decision['source_thresholds']['reused']['maximum_full_A_regression'] == 0.20
           assert decision['source_thresholds']['reused']['maximum_full_mean_forgetting'] == 0.15
           assert decision['source_thresholds']['r0b_update_invariant']['maximum_violation_ratio'] == 2e-5
+          PY
+      - name: Validate Kaggle development notebook
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          notebook_path = Path('research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb')
+          notebook = json.loads(notebook_path.read_text())
+          assert notebook['nbformat'] == 4
+          assert notebook['cells'][0]['cell_type'] == 'markdown'
+          code = '\n'.join(
+              ''.join(cell.get('source', []))
+              for cell in notebook['cells']
+              if cell['cell_type'] == 'code'
+          )
+          for required in (
+              'prepare_integrated_replay_free_clm_kt001_data.py',
+              'run_integrated_replay_free_clm_kt001.py',
+              'aggregate_integrated_replay_free_clm_kt001.py',
+              'publish_integrated_replay_free_clm_kt001.py',
+              "BRANCH = 'codex/integrated-replay-free-clm-kill-test-001'",
+          ):
+              assert required in code
+          assert '--formal' not in code
+          formal = json.loads(Path(
+              'research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001/SEEDS.json'
+          ).read_text())['formal']
+          for seed in formal:
+              assert str(seed) not in notebook_path.read_text()
+          for cell in notebook['cells']:
+              if cell['cell_type'] == 'code':
+                  assert cell.get('execution_count') is None
+                  assert cell.get('outputs') == []
           PY
       - name: Compile
         run: |
@@ -98,6 +134,7 @@ jobs:
               Path('scripts/research/run_integrated_replay_free_clm_kt001.py'),
               Path('scripts/research/aggregate_integrated_replay_free_clm_kt001.py'),
               Path('scripts/research/publish_integrated_replay_free_clm_kt001.py'),
+              Path('research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb'),
           ]
           text = '\n'.join(path.read_text() for path in paths)
           for seed in formal:
