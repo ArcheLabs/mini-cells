@@ -1,4 +1,10 @@
-"""Publish one completed KT001 seed durably: HF model artifacts first, then Git evidence."""
+"""Publish KT001 seed evidence durably, including incomplete/failed seeds.
+
+Completed seeds publish five arm summaries plus a seed decision. Incomplete seeds
+may publish any already-produced arm summaries, failure records, phase diagnostics,
+and checkpoints. Partial evidence is explicitly classified as incomplete and is
+never accepted by the formal aggregator.
+"""
 
 from __future__ import annotations
 
@@ -54,23 +60,49 @@ def _seed_mode(seed: int) -> str:
     raise RuntimeError("KT001 publisher refuses unregistered seed")
 
 
-def _verify_seed(seed_dir: Path, seed: int) -> dict[str, Any]:
-    arms = {}
+def _verify_seed_evidence(seed_dir: Path, seed: int) -> dict[str, Any]:
+    completed: dict[str, Any] = {}
+    failures: dict[str, Any] = {}
+    missing: list[str] = []
     for arm in canonical_arm_map():
-        path = seed_dir / arm / "arm-summary.json"
-        if not path.exists():
-            raise FileNotFoundError(path)
-        summary = _load(path)
-        if int(summary.get("seed", -1)) != seed or summary.get("arm") != arm:
-            raise RuntimeError(f"KT001 seed/arm identity mismatch: {path}")
-        arms[arm] = summary
+        arm_dir = seed_dir / arm
+        summary_path = arm_dir / "arm-summary.json"
+        failure_path = arm_dir / "failure.json"
+        if summary_path.exists():
+            summary = _load(summary_path)
+            if int(summary.get("seed", -1)) != seed or summary.get("arm") != arm:
+                raise RuntimeError(f"KT001 seed/arm identity mismatch: {summary_path}")
+            completed[arm] = summary
+        elif failure_path.exists():
+            failure = _load(failure_path)
+            if int(failure.get("seed", -1)) != seed or failure.get("arm") != arm:
+                raise RuntimeError(f"KT001 failure identity mismatch: {failure_path}")
+            failures[arm] = failure
+        else:
+            missing.append(arm)
+
+    if not completed and not failures:
+        raise RuntimeError("KT001 seed directory contains no publishable arm evidence")
+
+    complete = len(completed) == len(canonical_arm_map()) and not failures and not missing
+    decision = None
     decision_path = seed_dir / "seed-decision.json"
-    if not decision_path.exists():
-        raise FileNotFoundError(decision_path)
-    decision = _load(decision_path)
-    if int(decision.get("seed", -1)) != seed:
-        raise RuntimeError("KT001 seed decision identity mismatch")
-    return {"arms": arms, "decision": decision}
+    if complete:
+        if not decision_path.exists():
+            raise FileNotFoundError(decision_path)
+        decision = _load(decision_path)
+        if int(decision.get("seed", -1)) != seed:
+            raise RuntimeError("KT001 seed decision identity mismatch")
+    elif decision_path.exists():
+        raise RuntimeError("incomplete KT001 seed must not already contain a scientific seed decision")
+
+    return {
+        "complete": complete,
+        "completed_arms": sorted(completed),
+        "failed_arms": sorted(failures),
+        "missing_arms": sorted(missing),
+        "decision": decision,
+    }
 
 
 def _model_records(seed_dir: Path, seed: int) -> list[dict[str, Any]]:
@@ -88,8 +120,6 @@ def _model_records(seed_dir: Path, seed: int) -> list[dict[str, Any]]:
                 "uploaded": False,
             }
         )
-    if not records:
-        raise RuntimeError("KT001 seed contains no model checkpoints")
     return records
 
 
@@ -111,6 +141,9 @@ def _publish_hf(
         "files": records,
         "error": None,
     }
+    if not records:
+        result["hf_upload_status"] = "NO_MODEL_ARTIFACTS"
+        return result
     if not token:
         result["hf_upload_status"] = "SKIPPED_MISSING_TOKEN"
         result["error"] = "HF_TOKEN is missing"
@@ -234,14 +267,15 @@ def main() -> int:
 
     mode = _seed_mode(args.seed)
     seed_dir = args.output_dir / f"seed-{args.seed}"
-    _verify_seed(seed_dir, args.seed)
+    evidence = _verify_seed_evidence(seed_dir, args.seed)
 
     if args.data_manifest is not None:
         shutil.copy2(args.data_manifest, seed_dir / "data-manifest.json")
     if args.checkpoint_provenance is not None:
         shutil.copy2(args.checkpoint_provenance, seed_dir / "m1-checkpoint-provenance.json")
 
-    require_hf = bool(args.require_hf_upload or mode == "formal")
+    has_models = any(seed_dir.rglob("*.pt"))
+    require_hf = bool(args.require_hf_upload or (mode == "formal" and has_models))
     model_artifacts = _publish_hf(
         seed_dir=seed_dir,
         seed=args.seed,
@@ -254,7 +288,27 @@ def main() -> int:
         encoding="utf-8",
     )
     if require_hf and model_artifacts["hf_upload_status"] != "PUBLISHED":
-        raise RuntimeError("formal KT001 HF-first durability requirement was not satisfied")
+        raise RuntimeError("KT001 HF-first durability requirement was not satisfied")
+
+    publication_state = {
+        "format": "minicells.kt001-publication-state.v1",
+        "seed": args.seed,
+        "mode": mode,
+        "complete": evidence["complete"],
+        "completed_arms": evidence["completed_arms"],
+        "failed_arms": evidence["failed_arms"],
+        "missing_arms": evidence["missing_arms"],
+        "scientific_aggregation_allowed": bool(evidence["complete"]),
+        "classification": (
+            evidence["decision"]["classification"]
+            if evidence["decision"] is not None
+            else "INCOMPLETE_FAILURE_EVIDENCE"
+        ),
+    }
+    (seed_dir / "publication-state.json").write_text(
+        json.dumps(publication_state, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
     github_token = os.environ.get(args.github_token_env)
     if not github_token:
@@ -268,7 +322,11 @@ def main() -> int:
                 "mode": mode,
                 "branch": args.branch,
                 "commit": commit,
-                "classification": _load(seed_dir / "seed-decision.json")["classification"],
+                "complete": evidence["complete"],
+                "completed_arms": evidence["completed_arms"],
+                "failed_arms": evidence["failed_arms"],
+                "missing_arms": evidence["missing_arms"],
+                "classification": publication_state["classification"],
                 "hf_repo": args.hf_repo,
                 "hf_upload_status": model_artifacts["hf_upload_status"],
                 "hf_revision": model_artifacts["resolved_revision_after_upload"],
