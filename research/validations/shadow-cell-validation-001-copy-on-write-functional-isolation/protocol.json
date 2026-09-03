@@ -44,12 +44,13 @@
     "n_heads": 6,
     "d_ff": 1024,
     "dropout": 0.0,
-    "initial_cells": 4,
+    "initial_cells": 1,
     "active_cells": 1,
     "cellular_layer_index": 3,
     "certificate_max_rank": 0,
     "tie_embeddings": true,
     "shadow_operator_shape": [384, 384],
+    "reason_single_parent": "Validation 001 does not study natural routing or Cell discovery. A single mature Parent makes A/B write conflict structural and removes Cell competition from the causal graph.",
     "reason_cellular_last": "Shadow expression at the answer-prediction position cannot propagate through later attention; the gate is causal and local to the measured prediction."
   },
   "fresh_evidence": {
@@ -79,7 +80,10 @@
     "maximum_A_eval_nll": 0.20
   },
   "conflict_registration": {
-    "parent_selection": "highest A-eval Top-1 usage after base training",
+    "parent_selection": "the only mature base Cell, Cell 0",
+    "structural_parent_conflict": true,
+    "expected_parent_top1_share_A": 1.0,
+    "expected_parent_top1_share_B": 1.0,
     "minimum_parent_top1_share_A": 0.80,
     "minimum_parent_top1_share_B": 0.80,
     "routing_is_frozen_before_B_adaptation": true,
@@ -99,7 +103,7 @@
     "shared_transformer_frozen": true,
     "global_router_frozen": true,
     "route_keys_frozen": true,
-    "other_cells_frozen": true,
+    "other_cells_frozen": "not applicable: the fresh base has one mature Parent Cell",
     "shadow_training_expression": 1.0,
     "matched_batch_order": true,
     "matched_optimizer_initial_state": true
