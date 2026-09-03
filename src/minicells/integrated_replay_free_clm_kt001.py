@@ -1,8 +1,7 @@
 """Frozen causal-arm configuration for Integrated Replay-Free CLM Kill Test 001.
 
-This module intentionally contains no training loop.  It makes the five-arm
-causal matrix machine-readable before the integrated runner is implemented.
-The actual mechanisms remain the canonical repository implementations named by
+This module makes the five-arm causal matrix machine-readable. The actual
+mechanisms remain the canonical repository implementations named by
 ``PROTOCOL.md``; this file must not reimplement or approximate them.
 """
 
@@ -38,9 +37,16 @@ ArmName = Literal[
 
 @dataclass(frozen=True)
 class KT001ArmConfig:
-    """One row of the frozen KT001 five-arm causal matrix."""
+    """One row of the frozen KT001 five-arm causal matrix.
+
+    ``legacy_gradient_projection`` records the M2/M3 certificate-gradient step
+    explicitly. R0b's realized-update projection is an additional transaction
+    invariant and never substitutes for the canonical gradient projection in the
+    protected mechanism family.
+    """
 
     name: ArmName
+    legacy_gradient_projection: bool
     realized_update_write_safety: bool
     historical_address_read: bool
     lineage_shadow_isolation: bool
@@ -49,6 +55,8 @@ class KT001ArmConfig:
     @property
     def mechanisms(self) -> tuple[str, ...]:
         enabled: list[str] = []
+        if self.legacy_gradient_projection:
+            enabled.append("native_clm_m2.certificate_gradient_projection")
         if self.realized_update_write_safety:
             enabled.append(R0B_MECHANISM)
         if self.historical_address_read:
@@ -70,6 +78,7 @@ class KT001ArmConfig:
 CANONICAL_ARMS: tuple[KT001ArmConfig, ...] = (
     KT001ArmConfig(
         name="unsafe",
+        legacy_gradient_projection=False,
         realized_update_write_safety=False,
         historical_address_read=False,
         lineage_shadow_isolation=False,
@@ -77,6 +86,7 @@ CANONICAL_ARMS: tuple[KT001ArmConfig, ...] = (
     ),
     KT001ArmConfig(
         name="write_transaction_only",
+        legacy_gradient_projection=True,
         realized_update_write_safety=True,
         historical_address_read=False,
         lineage_shadow_isolation=False,
@@ -84,6 +94,7 @@ CANONICAL_ARMS: tuple[KT001ArmConfig, ...] = (
     ),
     KT001ArmConfig(
         name="read_history_only",
+        legacy_gradient_projection=True,
         realized_update_write_safety=False,
         historical_address_read=True,
         lineage_shadow_isolation=True,
@@ -91,6 +102,7 @@ CANONICAL_ARMS: tuple[KT001ArmConfig, ...] = (
     ),
     KT001ArmConfig(
         name="full_no_replay",
+        legacy_gradient_projection=True,
         realized_update_write_safety=True,
         historical_address_read=True,
         lineage_shadow_isolation=True,
@@ -98,6 +110,7 @@ CANONICAL_ARMS: tuple[KT001ArmConfig, ...] = (
     ),
     KT001ArmConfig(
         name="matched_replay_oracle",
+        legacy_gradient_projection=True,
         realized_update_write_safety=True,
         historical_address_read=True,
         lineage_shadow_isolation=True,
@@ -125,15 +138,16 @@ def validate_causal_matrix() -> None:
         raise ValueError("KT001 arm set drifted from the frozen five-arm protocol")
 
     expected = {
-        "unsafe": (False, False, False, False),
-        "write_transaction_only": (True, False, False, False),
-        "read_history_only": (False, True, True, False),
-        "full_no_replay": (True, True, True, False),
-        "matched_replay_oracle": (True, True, True, True),
+        "unsafe": (False, False, False, False, False),
+        "write_transaction_only": (True, True, False, False, False),
+        "read_history_only": (True, False, True, True, False),
+        "full_no_replay": (True, True, True, True, False),
+        "matched_replay_oracle": (True, True, True, True, True),
     }
     for name, switches in expected.items():
         arm = arms[name]
         actual = (
+            arm.legacy_gradient_projection,
             arm.realized_update_write_safety,
             arm.historical_address_read,
             arm.lineage_shadow_isolation,
