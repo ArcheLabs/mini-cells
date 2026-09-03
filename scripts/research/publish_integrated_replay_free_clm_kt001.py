@@ -144,21 +144,20 @@ def _publish_hf(
     if not records:
         result["hf_upload_status"] = "NO_MODEL_ARTIFACTS"
         return result
+    if not require_upload:
+        result["hf_upload_status"] = "SKIPPED_OPTIONAL_DEVELOPMENT_UPLOAD"
+        return result
     if not token:
         result["hf_upload_status"] = "SKIPPED_MISSING_TOKEN"
         result["error"] = "HF_TOKEN is missing"
-        if require_upload:
-            raise RuntimeError(result["error"])
-        return result
+        raise RuntimeError(result["error"])
 
     try:
         auth_check(repo_id, repo_type="model", token=token, write=True)
     except HfHubHTTPError as exc:
         result["hf_upload_status"] = "SKIPPED_WRITE_PERMISSION_DENIED"
         result["error"] = f"HF token lacks write permission for {repo_id}"
-        if require_upload:
-            raise RuntimeError(result["error"]) from exc
-        return result
+        raise RuntimeError(result["error"]) from exc
 
     api = HfApi(token=token)
     try:
@@ -185,8 +184,7 @@ def _publish_hf(
     except HfHubHTTPError as exc:
         result["hf_upload_status"] = "FAILED_DURING_UPLOAD"
         result["error"] = str(exc)
-        if require_upload:
-            raise RuntimeError("Hugging Face KT001 artifact upload failed") from exc
+        raise RuntimeError("Hugging Face KT001 artifact upload failed") from exc
     return result
 
 
