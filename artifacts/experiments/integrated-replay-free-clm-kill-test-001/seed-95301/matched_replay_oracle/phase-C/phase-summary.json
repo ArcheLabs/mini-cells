@@ -1,0 +1,177 @@
+{
+  "boundary_checkpoints": {
+    "post_shadow": {
+      "bytes": 51363729,
+      "path": "/kaggle/working/mini-cells/artifacts/experiments/integrated-replay-free-clm-kill-test-001/seed-95301/matched_replay_oracle/phase-C/post-shadow.pt",
+      "sha256": "ffe689efa62c6293f3d324a0589438e8bce111041fb0c551b4ae462de9b576d4",
+      "structural_state": {
+        "address_state": {
+          "bootstrap_access_released": true,
+          "bootstrap_complete": true,
+          "bootstrap_sampled_queries": 327680,
+          "gate_count": 2,
+          "maximum_bytes_per_cell": 52360,
+          "maximum_rank": 32,
+          "sketch_count": 10
+        },
+        "cell_count": 10,
+        "historical_address_read": true,
+        "lineage_direct_children": {
+          "0": 8,
+          "1": 9
+        },
+        "lineage_root_count": 8,
+        "lineage_shadow_isolation": true,
+        "parameter_count": 12450048,
+        "trainable_parameter_count": 1474560
+      }
+    },
+    "pre_shadow": {
+      "bytes": 50616611,
+      "path": "/kaggle/working/mini-cells/artifacts/experiments/integrated-replay-free-clm-kill-test-001/seed-95301/matched_replay_oracle/phase-C/pre-shadow.pt",
+      "sha256": "87bc7c23799ef29035043400f4a521398ada5f70acf608fdde9b7320fa7087a0",
+      "structural_state": {
+        "address_state": {
+          "bootstrap_access_released": true,
+          "bootstrap_complete": true,
+          "bootstrap_sampled_queries": 327680,
+          "gate_count": 1,
+          "maximum_bytes_per_cell": 52360,
+          "maximum_rank": 32,
+          "sketch_count": 9
+        },
+        "cell_count": 9,
+        "historical_address_read": true,
+        "lineage_direct_children": {
+          "0": 8
+        },
+        "lineage_root_count": 8,
+        "lineage_shadow_isolation": true,
+        "parameter_count": 12302208,
+        "trainable_parameter_count": 1327104
+      }
+    }
+  },
+  "cell_count_end": 10,
+  "certificate_additions": 29,
+  "elapsed_seconds": 10.68248724937439,
+  "final_train_loss": 1.8468849658966064,
+  "final_update_projection_retained_ratio_mean": 0.9972431255041775,
+  "gradient_projection_ratio_mean": 0.7572454613643893,
+  "learner_raw_replay": true,
+  "mean_train_loss": 1.999544924199581,
+  "phase": "C",
+  "phase_close_address_state": {
+    "address_state_after": {
+      "bootstrap_access_released": true,
+      "bootstrap_complete": true,
+      "bootstrap_sampled_queries": 327680,
+      "gate_count": 2,
+      "maximum_bytes_per_cell": 52360,
+      "maximum_rank": 32,
+      "sketch_count": 10
+    },
+    "address_state_before": {
+      "bootstrap_access_released": true,
+      "bootstrap_complete": true,
+      "bootstrap_sampled_queries": 327680,
+      "gate_count": 2,
+      "maximum_bytes_per_cell": 52360,
+      "maximum_rank": 32,
+      "sketch_count": 10
+    },
+    "pending_query_counts_before": {
+      "2": 102400,
+      "3": 102400,
+      "4": 102400,
+      "5": 102400,
+      "6": 102400,
+      "7": 102400,
+      "8": 102400,
+      "9": 102400
+    }
+  },
+  "realized_update_projection": true,
+  "shadow_event": {
+    "address_child_bytes": 52360,
+    "address_child_rank": 32,
+    "address_parent_rank": 32,
+    "birth_logits_max_abs_drift": 9.5367431640625e-06,
+    "birth_logits_mse": 1.4498693044762145e-12,
+    "birth_root_prob_max_abs_drift": 0.0,
+    "birth_root_topk_match": 1.0,
+    "child_id": 9,
+    "child_initial_certificate_rank": 0,
+    "estimated_current_gate_activation": 0.8955377400465094,
+    "estimated_old_gate_activation": 0.09999999130862097,
+    "forced_by_protocol": true,
+    "global_step": 400,
+    "inherit_scale": 1.0,
+    "parent_certificate_rank": 64,
+    "parent_id": 1,
+    "parent_projection_ratio": 0.0,
+    "parent_route_hits": 16384,
+    "parent_selection": "max_current_address_queries_then_lowest_cell_id",
+    "pressure_score": 16384.0,
+    "trigger_uses_evaluation_metrics": false,
+    "window_mean_train_loss": 1.0
+  },
+  "steps": 400,
+  "structural_after_shadow": {
+    "address_state": {
+      "bootstrap_access_released": true,
+      "bootstrap_complete": true,
+      "bootstrap_sampled_queries": 327680,
+      "gate_count": 2,
+      "maximum_bytes_per_cell": 52360,
+      "maximum_rank": 32,
+      "sketch_count": 10
+    },
+    "cell_count": 10,
+    "historical_address_read": true,
+    "lineage_direct_children": {
+      "0": 8,
+      "1": 9
+    },
+    "lineage_root_count": 8,
+    "lineage_shadow_isolation": true,
+    "parameter_count": 12450048,
+    "trainable_parameter_count": 1474560
+  },
+  "structural_before_shadow": {
+    "address_state": {
+      "bootstrap_access_released": true,
+      "bootstrap_complete": true,
+      "bootstrap_sampled_queries": 327680,
+      "gate_count": 1,
+      "maximum_bytes_per_cell": 52360,
+      "maximum_rank": 32,
+      "sketch_count": 9
+    },
+    "calibration": {
+      "batches": 64,
+      "parameter_updates": 0,
+      "pending_query_counts": {
+        "1": 16384,
+        "2": 16384,
+        "3": 16384,
+        "4": 16384,
+        "5": 16384,
+        "6": 16384,
+        "7": 16384,
+        "8": 16384
+      },
+      "seed": 95518,
+      "tokens": 262144
+    },
+    "cell_count": 9,
+    "historical_address_read": true,
+    "lineage_direct_children": {
+      "0": 8
+    },
+    "lineage_root_count": 8,
+    "lineage_shadow_isolation": true,
+    "parameter_count": 12302208,
+    "trainable_parameter_count": 1327104
+  }
+}
