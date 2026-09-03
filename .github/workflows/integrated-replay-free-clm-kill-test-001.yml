@@ -143,6 +143,9 @@ jobs:
           for seed in formal:
               pattern = rf'(?<![0-9A-Za-z]){seed}(?![0-9A-Za-z])'
               assert re.search(pattern, text) is None
-          assert 'run_integrated_replay_free_clm_kt001.py --formal' not in text
+          forbidden_formal_invocation = (
+              'run_integrated_replay_free_clm_kt001.py' + ' ' + '--' + 'formal'
+          )
+          assert forbidden_formal_invocation not in text
           print('KT001 CI consumes no formal seed.')
           PY
