@@ -12,6 +12,7 @@ from minicells.shadow_cell_validation_001 import (
     classify_shadow_validation,
     generate_rule_world_split,
     pareto_hypervolume,
+    shadow_model_config,
     train_matched_direct_and_shadow,
     validate_standard_forward_equivalence,
 )
@@ -34,6 +35,14 @@ def _tiny_model() -> NativeCLM:
             tie_embeddings=True,
         )
     )
+
+
+def test_registered_model_has_one_structural_parent() -> None:
+    config = shadow_model_config()
+    assert config.initial_cells == 1
+    assert config.active_cells == 1
+    assert config.cellular_layer_index == config.n_layers - 1
+    assert config.certificate_max_rank == 0
 
 
 def test_rule_world_is_unique_and_uses_overlapping_surface() -> None:
