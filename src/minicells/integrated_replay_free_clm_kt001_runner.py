@@ -3,13 +3,14 @@
 This module composes the frozen KT001 causal switches with the canonical Native
 CLM mechanisms. It deliberately separates *phase execution* from replay-oracle
 batch construction and formal orchestration so each integration layer can be
-reviewed and committed independently.
+reviewed independently.
 """
 
 from __future__ import annotations
 
 from collections.abc import Iterator
 from dataclasses import asdict, dataclass
+import json
 from pathlib import Path
 import random
 import time
@@ -84,6 +85,42 @@ def _seed_everything(seed: int, device: torch.device) -> None:
         torch.cuda.manual_seed_all(seed)
 
 
+def _write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, sort_keys=True, allow_nan=False) + "\n")
+
+
+def _save_boundary_checkpoint(
+    model: NativeCLM,
+    path: Path,
+    *,
+    phase: str,
+    boundary: str,
+    arm: KT001ArmConfig,
+    seed: int,
+) -> dict[str, Any]:
+    """Save the canonical model/address checkpoint at a registered phase boundary."""
+
+    model.save_checkpoint(
+        path,
+        extra={
+            "experiment": "KT001",
+            "phase": phase,
+            "boundary": boundary,
+            "arm": arm.name,
+            "seed": int(seed),
+        },
+    )
+    return {
+        "path": str(path),
+        "sha256": sha256_file(path),
+        "bytes": path.stat().st_size,
+        "structural_state": structural_state_metadata(model, arm=arm),
+    }
+
+
 def load_arm_model(
     checkpoint_path: str | Path,
     *,
@@ -155,8 +192,6 @@ def bootstrap_historical_address_state(
         address_config=address_config,
         sampling_seed=runner_config.bootstrap_sampling_seed,
     )
-    # The canonical M3L-2 patched runner releases its one-shot bootstrap lease
-    # immediately after bootstrap. KT001 performs that lifecycle explicitly.
     model.bootstrap_access_released = True
     return {
         **result,
@@ -205,11 +240,18 @@ def calibrate_current_phase_address(
     model.train(was_training)
     if probe_tokens is None:
         raise RuntimeError("KT001 calibration produced no probe tokens")
+    address_model = model
+    if not isinstance(address_model, OnlineAddressNativeCLM):
+        raise TypeError("KT001 calibration model type drift")
     return {
         "batches": sampled_batches,
         "tokens": sampled_tokens,
         "seed": int(seed),
         "parameter_updates": 0,
+        "pending_query_counts": {
+            str(cell_id): int(accumulator.count)
+            for cell_id, accumulator in sorted(address_model.current_moments.items())
+        },
         "probe_tokens": probe_tokens,
     }
 
@@ -350,6 +392,7 @@ def run_phase(
     seed: int,
     global_step_offset: int,
     batch_iterator: Iterator[tuple[Tensor, Tensor]] | None = None,
+    phase_output_dir: str | Path | None = None,
 ) -> PhaseArtifacts:
     """Prepare, optionally expand, train, and close one continual phase."""
 
@@ -358,6 +401,11 @@ def run_phase(
     shadow_event = None
     structural_before = None
     structural_after = None
+    boundary_checkpoints: dict[str, Any] = {}
+
+    phase_output = Path(phase_output_dir) if phase_output_dir is not None else None
+    if phase_output is not None:
+        phase_output.mkdir(parents=True, exist_ok=True)
 
     if arm.historical_address_read:
         calibration = calibrate_current_phase_address(
@@ -376,6 +424,16 @@ def run_phase(
             **structural_state_metadata(model, arm=arm),
             "calibration": calibration,
         }
+        if phase_output is not None:
+            boundary_checkpoints["pre_shadow"] = _save_boundary_checkpoint(
+                model,
+                phase_output / "pre-shadow.pt",
+                phase=phase,
+                boundary="pre_shadow",
+                arm=arm,
+                seed=seed,
+            )
+
         shadow_event = force_shadow_expansion_(
             model,
             optimizer,
@@ -384,6 +442,15 @@ def run_phase(
             probe_tokens=probe_tokens,
         )
         structural_after = structural_state_metadata(model, arm=arm)
+        if phase_output is not None:
+            boundary_checkpoints["post_shadow"] = _save_boundary_checkpoint(
+                model,
+                phase_output / "post-shadow.pt",
+                phase=phase,
+                boundary="post_shadow",
+                arm=arm,
+                seed=seed,
+            )
 
     iterator = batch_iterator or _current_phase_iterator(
         model,
@@ -410,6 +477,15 @@ def run_phase(
     phase_summary["structural_before_shadow"] = structural_before
     phase_summary["structural_after_shadow"] = structural_after
     phase_summary["phase_close_address_state"] = phase_close
+    phase_summary["boundary_checkpoints"] = boundary_checkpoints
+
+    if phase_output is not None:
+        _write_jsonl(phase_output / "realized-update-invariant.jsonl", invariant_rows)
+        (phase_output / "phase-summary.json").write_text(
+            json.dumps(phase_summary, indent=2, sort_keys=True, allow_nan=False) + "\n",
+            encoding="utf-8",
+        )
+
     return PhaseArtifacts(
         phase=phase,
         phase_summary=phase_summary,
@@ -490,6 +566,7 @@ def run_non_oracle_stream(
             runner_config=runner_config,
             seed=seed + 100 * (index + 1),
             global_step_offset=index * train_config.steps_per_phase,
+            phase_output_dir=output / f"phase-{phase}",
         )
         phase_artifacts.append(artifact)
         all_invariant_rows.extend(artifact.invariant_rows)
@@ -500,6 +577,8 @@ def run_non_oracle_stream(
             config=train_config,
         )
 
+    invariant_path = output / "realized-update-invariant.jsonl"
+    _write_jsonl(invariant_path, all_invariant_rows)
     final_checkpoint = output / "final.pt"
     model.save_checkpoint(
         final_checkpoint,
@@ -532,5 +611,11 @@ def run_non_oracle_stream(
         "final_checkpoint_sha256": sha256_file(final_checkpoint),
         "final_checkpoint_bytes": final_checkpoint.stat().st_size,
         "realized_update_invariant_rows": len(all_invariant_rows),
+        "realized_update_invariant_sha256": sha256_file(invariant_path),
+        "realized_update_invariant_bytes": invariant_path.stat().st_size,
     }
+    (output / "arm-summary-core.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
     return summary
