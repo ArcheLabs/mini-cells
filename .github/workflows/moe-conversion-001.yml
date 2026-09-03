@@ -1,0 +1,45 @@
+name: CLM MoE Conversion 001
+
+on:
+  pull_request:
+    paths:
+      - "src/minicells/moe_conversion.py"
+      - "tests/test_moe_conversion.py"
+      - "scripts/research/moe_conversion_001/**"
+      - "research/validations/moe-conversion-001/**"
+      - ".github/workflows/moe-conversion-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tiny-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install research dependencies
+        run: python -m pip install -e '.[lm,dev]'
+      - name: Unit conversion tests
+        run: python -m pytest -q tests/test_moe_conversion.py
+      - name: Tiny Granite MoE round-trip parity
+        run: |
+          python scripts/research/moe_conversion_001/run.py \
+            --stage tiny \
+            --device cpu \
+            --dtype float32 \
+            --work-dir artifacts/moe-conversion-001-tiny
+      - name: Upload parity record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moe-conversion-001-tiny
+          path: |
+            artifacts/moe-conversion-001-tiny/result.json
+            artifacts/moe-conversion-001-tiny/clm-bundle/clm_moe_manifest.json
+          if-no-files-found: warn
