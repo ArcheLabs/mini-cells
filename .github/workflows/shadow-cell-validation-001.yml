@@ -41,7 +41,9 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          p = json.loads(Path('research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation/protocol.json').read_text())
+          root = Path('research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation')
+          p = json.loads((root / 'protocol.json').read_text())
+          i = json.loads((root / 'implementation.json').read_text())
           assert p['format'] == 'minicells.shadow-cell-validation-001.protocol.v1'
           assert p['status'] == 'FROZEN_UNRUN'
           assert p['scientific_decision'] is False
@@ -49,6 +51,9 @@ jobs:
           assert p['model']['uses_existing_cellular_layer'] is True
           assert p['model']['d_model'] == 384
           assert p['model']['shadow_operator_shape'] == [384, 384]
+          assert p['model']['initial_cells'] == 1
+          assert p['model']['active_cells'] == 1
+          assert p['conflict_registration']['structural_parent_conflict'] is True
           assert p['model']['cellular_layer_index'] == p['model']['n_layers'] - 1
           assert p['world']['domain_marker_token'] is False
           assert p['world']['unique_prefixes_across_splits'] is True
@@ -59,6 +64,10 @@ jobs:
           assert p['thresholds']['maximum_primary_A_regression'] == 0.10
           assert p['thresholds']['minimum_primary_B_gain_fraction_of_direct'] == 0.90
           assert p['thresholds']['minimum_conditional_hypervolume_improvement_vs_direct_interp'] == 0.20
+          assert i['format'] == 'minicells.shadow-cell-validation-001.implementation.v1'
+          assert i['status'] == 'FROZEN_UNRUN'
+          assert i['gate_probe']['steps'] == 500
+          assert i['publication']['hf_first'] is True
           PY
       - name: Validate canonical notebook JSON
         run: |
