@@ -8,16 +8,17 @@
 
 1. [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) — 当前证据允许我们声称的最强能力、明确的 No-Go，以及负结果之后仍然可用于工程的 primitive。
 2. [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) — 对所有有长期总结价值的实验按 family 记录：价值、局限、formal status、能力上限、**它没有证明什么**、以及获得的工程 primitive。
-3. [`stages/06-native-clm/`](stages/06-native-clm/) — 当前 trained-model Native CLM 序列与 closure。
-4. [`validations/`](validations/) — 冻结的 protocol、formal result 与机制诊断。
-5. [`catalog.yaml`](catalog.yaml) — 面向工具的研究目录。
+3. [`audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md) — 重新审计 Foundations、Self-Organization、Routing/Growth、CLM-0.4-mini 等历史 notebook，分别记录它们今天的科学地位和仍可复用的工程资产。
+4. [`stages/06-native-clm/`](stages/06-native-clm/) — 当前 trained-model Native CLM 序列与 closure。
+5. [`validations/`](validations/) — 冻结的 protocol、formal result 与机制诊断。
+6. [`catalog.yaml`](catalog.yaml) — 面向工具的研究目录。
 
 ## 目录结构
 
 ```text
 research/
   README.md                 # 只做导航
-  audits/                   # 跨实验审计与能力上限
+  audits/                   # 跨实验审计、历史资产与能力上限
   catalog.yaml              # machine-oriented index
   stages/                   # 研究阶段叙事与 closure
   validations/              # 冻结 protocol/result/diagnostic
@@ -29,7 +30,7 @@ research/
   archive/                  # 退役/历史材料
 ```
 
-目录名称不决定科学证据强度。冻结的 registered result 优先于 roadmap、README 和任何后续解释。
+目录名称不决定科学证据强度。冻结的 registered result 优先于 roadmap、README、notebook 和任何后续解释。
 
 ## 当前证据边界
 
@@ -49,6 +50,19 @@ Optimizer/update audit 属于另一条 mechanics 结论：只投影安全梯度�
 
 需要查看精确边界与证据路径时，请使用 `audits/`，不要再把新的进度表持续堆进这个 README。
 
+## 历史 notebook 的当前定位
+
+历史 notebook 不再被视为一组同等强度的科学证据。当前审计分类为：
+
+```text
+01-foundations          HISTORICAL EXPLORATORY
+02-self-organization    HISTORICAL MECHANISTIC EVIDENCE
+03-routing-and-growth   ENGINEERING PRECURSOR EVIDENCE
+05-language-validation  RETIRED / SUPERSEDED PROTOCOL LINEAGE
+```
+
+一个旧 scientific interpretation 可以被后续实验削弱或取代，但其中产生的 engineering primitive 仍可能值得保留。两条维度的正式映射见 [`audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md)。
+
 ## Research 与 Engineering 分离
 
 MiniCells 现在明确区分两条线：
@@ -64,6 +78,7 @@ MiniCells 现在明确区分两条线：
 - 后续 diagnostic 可以解释失败，但不能把已经失败的 registered decision 改成成功。
 - synthetic/linear support 不能升级成 Transformer、language、asymptotic 或 product-level support。
 - local write/retention signal 不能直接推出完整模型的 global improvement。
+- 复用历史 engineering primitive 时，不能继承旧 scientific claim 的证据等级。
 - 历史 protocol/result path 属于证据的一部分；重构入口必须先做引用审计并保留 compatibility shim。
 - 每一个新的 summary claim 都必须明确写出：**它没有证明什么。**
 
