@@ -102,7 +102,7 @@ def shadow_model_config() -> NativeCLMConfig:
         n_heads=6,
         d_ff=1024,
         dropout=0.0,
-        initial_cells=4,
+        initial_cells=1,
         active_cells=1,
         cellular_layer_index=3,
         route_temperature=0.7,
@@ -1091,10 +1091,7 @@ def run_shadow_validation_seed(
         )
     )
 
-    base_ok = (
-        base_a["accuracy"] >= 0.95
-        and base_a["nll"] <= 0.20
-    )
+    base_ok = base_a["accuracy"] >= 0.95 and base_a["nll"] <= 0.20
     conflict_ok = parent_share_a >= 0.80 and parent_share_b >= 0.80
     direct_ok = direct_b_gain >= float(thresholds["minimum_direct_B_gain"])
     gate_ok = gate.auc >= 0.90
@@ -1120,9 +1117,7 @@ def run_shadow_validation_seed(
     shuffled_a_advantage = None
     shuffled_b_gain_drop = None
     if primary is not None and primary_shuffled is not None:
-        shuffled_a_advantage = (
-            primary_shuffled["A_regression"] - primary["A_regression"]
-        )
+        shuffled_a_advantage = primary_shuffled["A_regression"] - primary["A_regression"]
         shuffled_b_gain_drop = (
             primary["B_gain_fraction_of_direct"]
             - primary_shuffled["B_gain_fraction_of_direct"]
