@@ -46,16 +46,16 @@ width                 384
 shared blocks         4
 heads                  6
 FFN                    1024
-Cells                  4
+Cells                  1 mature Parent
 active Cells/token     1
 Cell operator          384 x 384
 Cellular Layer         after the final shared block
 certificate rank       0 / disabled
 ```
 
-Placing the Cellular Layer after the final shared block is intentional. Shadow expression at the answer-prediction position cannot flow through later attention, so the validation isolates operator expression rather than introducing a second routing/composition problem.
+The single-Parent topology is deliberate. Validation 001 does **not** test natural routing, Cell discovery or expert competition. A and B are structurally forced through the same mature Parent, so the write conflict is part of the experimental construction rather than a property that must emerge accidentally. Runtime A/B Parent Top-1 shares are still recorded and must exceed the registered 0.80 identity threshold; with one Parent they should be exactly 1.0.
 
-The mature Parent is the Cell with highest A-heldout Top-1 ownership after base training. The registered conflict gate requires the same Parent to own at least 80% of both A and B answer positions after routing is frozen.
+Placing the Cellular Layer after the final shared block is also intentional. Shadow expression at the answer-prediction position cannot flow through later attention, so the validation isolates operator expression rather than introducing a second routing/composition problem.
 
 ## Shadow definition
 
@@ -163,8 +163,8 @@ Before any positive Shadow claim, every formal seed must have:
 ```text
 base A accuracy          >= 0.95
 base A NLL               <= 0.20
-Parent A Top-1 share     >= 0.80
-Parent B Top-1 share     >= 0.80
+Parent A Top-1 share     >= 0.80  (expected 1.0)
+Parent B Top-1 share     >= 0.80  (expected 1.0)
 Direct-TX B gain         >= 0.50
 gate heldout AUC         >= 0.90
 all algebraic identities PASS
