@@ -14,6 +14,7 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import subprocess
 import sys
 import torch
 
@@ -41,6 +42,7 @@ from minicells.shadow_maturation import (  # noqa: E402
     train_corrected_direct,
     train_shadow,
 )
+from publish_shadow_cell_validation_001_v2 import publish_results  # noqa: E402
 
 PROTOCOL_PATH = ROOT / "research/validations/shadow-cell-validation-001-v2-developmental-maturation/protocol.json"
 FORMAL_SEEDS = (95311, 95312, 95313)
@@ -60,6 +62,15 @@ def _load_protocol() -> dict:
 
 def _protocol_sha() -> str:
     return hashlib.sha256(PROTOCOL_PATH.read_bytes()).hexdigest()
+
+
+def _git_revision() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return "unknown"
 
 
 def _assert_seed(protocol: dict, phase: str, seed: int) -> None:
@@ -159,7 +170,8 @@ def run(seed: int, *, phase: str, device_name: str, output: Path, checkpoint: Pa
     result: dict = {
         "validation_id": protocol["validation_id"],
         "protocol_sha256": _protocol_sha(),
-        "implementation_commit": "working-tree",
+        "implementation_commit": _git_revision(),
+        "phase": phase,
         "seed": int(seed), "device": str(device),
         "maturity_grid": list(MATURITY_GRID),
         "status": "SMOKE_ONLY" if smoke else "PARTIAL_RUN",
@@ -282,6 +294,22 @@ def main() -> int:
                         default=ROOT / "results/shadow-cell-validation-001-v2-developmental-maturation")
     parser.add_argument("--steps", type=int)
     parser.add_argument("--preflight-only", action="store_true")
+    parser.add_argument(
+        "--push-results",
+        action="store_true",
+        help="After a formal seed completes, curate and push result artifacts to GitHub.",
+    )
+    parser.add_argument(
+        "--publish-branch",
+        default="kaggle/shadow-cell-validation-001-v2-results",
+        help="Result branch used with --push-results.",
+    )
+    parser.add_argument(
+        "--secret-name",
+        default="GITHUB_TOKEN",
+        help="Environment variable / Kaggle Secret containing the GitHub token.",
+    )
+    parser.add_argument("--kaggle-script-version-id")
     args = parser.parse_args()
     seed = int(args.seed if args.seed is not None else (DEVELOPMENT_SEED if args.phase == "smoke" else FORMAL_SEEDS[0]))
     protocol = _load_protocol()
@@ -304,6 +332,16 @@ def main() -> int:
         return 0
     result = run(seed, phase=args.phase, device_name=args.device, output=args.output,
                  checkpoint=args.checkpoint, steps=args.steps)
+    if args.push_results:
+        if args.phase != "formal":
+            raise SystemExit("--push-results is only allowed for formal runs")
+        publish_results(
+            ROOT,
+            args.output,
+            branch=args.publish_branch,
+            secret_name=args.secret_name,
+            kaggle_script_version_id=args.kaggle_script_version_id,
+        )
     print("SHADOW_CELL_VALIDATION_001_V2_SMOKE_PASS" if args.phase == "smoke" else json.dumps(
         {"status": result["status"], "seed": seed, "protocol_sha256": result["protocol_sha256"]}, indent=2,
     ))

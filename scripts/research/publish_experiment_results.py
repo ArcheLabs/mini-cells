@@ -148,8 +148,14 @@ def repo_root() -> Path:
 
 def validate_origin(root: Path) -> None:
     origin = run_git(root, "remote", "get-url", "origin").stdout.strip()
-    normalized = origin.removesuffix(".git").rstrip("/")
-    if normalized != EXPECTED_ORIGIN:
+    normalized = origin[:-4] if origin.endswith(".git") else origin
+    normalized = normalized.rstrip("/")
+    accepted_origins = {
+        EXPECTED_ORIGIN,
+        f"git@github.com:{REPOSITORY}",
+        f"ssh://git@github.com/{REPOSITORY}",
+    }
+    if normalized not in accepted_origins:
         raise RuntimeError(
             "Refusing authenticated push because origin is not the expected repository: "
             f"{origin!r}"
@@ -290,7 +296,19 @@ def push_results(
     token = load_github_token(secret_name)
     old_remote_sha = remote_branch_sha(root, branch)
     base_sha = run_git(root, "rev-parse", "HEAD").stdout.strip()
-    run_git(root, "switch", "-C", branch, base_sha)
+    # Switching to an existing local result branch can remove tracked artifacts
+    # from the working tree. Keep the freshly curated directory across that
+    # switch so repeated Kaggle seed runs do not publish an empty artifact set.
+    snapshot_root = Path(tempfile.mkdtemp(prefix="minicells-publish-snapshot-"))
+    snapshot_destination = snapshot_root / "destination"
+    shutil.copytree(destination, snapshot_destination)
+    try:
+        run_git(root, "switch", "-C", branch, base_sha)
+        if destination.exists():
+            shutil.rmtree(destination)
+        shutil.copytree(snapshot_destination, destination)
+    finally:
+        shutil.rmtree(snapshot_root, ignore_errors=True)
     relative_destination = destination.relative_to(root).as_posix()
     run_git(root, "add", "--", relative_destination)
     changed = run_git(root, "diff", "--cached", "--quiet", check=False).returncode != 0

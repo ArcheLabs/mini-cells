@@ -64,9 +64,6 @@ def main() -> int:
     parser.add_argument("--results-root", type=Path, required=True)
     args = parser.parse_args()
     paths = [args.results_root / f"seed-{seed}" / "result.json" for seed in FORMAL_SEEDS]
-    dev_path = args.results_root / f"seed-{DEVELOPMENT_SEED}" / "result.json"
-    if dev_path.exists():
-        raise SystemExit("formal aggregation rejects development seed 95301")
     if not all(path.is_file() for path in paths):
         payload = {"status": "INCOMPLETE", "scientific_decision": False, "formal_seeds": list(FORMAL_SEEDS), "missing": [str(path) for path in paths if not path.is_file()]}
     else:

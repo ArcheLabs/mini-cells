@@ -65,6 +65,25 @@ python scripts/research/run_shadow_cell_validation_001_v2.py \
 Use `--preflight-only` to validate the frozen protocol, seed, checkpoint path,
 device, and output directory without training.
 
+To publish the completed formal result to GitHub after each seed, first add a
+Kaggle Secret named `GITHUB_TOKEN` containing a fine-grained token with
+repository Contents read/write permission, then add `--push-results`:
+
+```bash
+python scripts/research/run_shadow_cell_validation_001_v2.py \
+  --phase formal --seed 95311 --device cuda \
+  --checkpoint /kaggle/input/canonical/checkpoint.pt \
+  --push-results \
+  --publish-branch kaggle/shadow-cell-validation-001-v2-results
+```
+
+The publisher verifies the protocol hash, aggregates all completed formal
+seeds, writes provenance and SHA-256 manifests, excludes binary checkpoints
+from Git, commits the curated evidence, and pushes the result branch. Re-run
+the same command for the remaining registered seeds; each completed seed
+updates the same result branch. The token is read only from the environment or
+Kaggle Secret and is never stored in the repository or notebook.
+
 Figures are generated from result JSON by the runner and can be regenerated with:
 
 ```bash
