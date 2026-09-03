@@ -18,6 +18,9 @@ from minicells.shadow_cell_validation_001 import aggregate_shadow_validation
 DEFAULT_PROTOCOL = Path(
     "research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation/protocol.json"
 )
+DEFAULT_IMPLEMENTATION = Path(
+    "research/validations/shadow-cell-validation-001-copy-on-write-functional-isolation/implementation.json"
+)
 DEFAULT_OUTPUT = Path(
     "artifacts/experiments/shadow-cell-validation-001-copy-on-write-functional-isolation"
 )
@@ -37,6 +40,7 @@ def _run_seed_process(
     device: int,
     output_dir: Path,
     protocol: Path,
+    implementation: Path,
 ) -> subprocess.Popen[str]:
     command = [
         sys.executable,
@@ -49,6 +53,8 @@ def _run_seed_process(
         str(output_dir / f"seed-{seed}"),
         "--protocol",
         str(protocol),
+        "--implementation",
+        str(implementation),
     ]
     print("+", " ".join(command), flush=True)
     return subprocess.Popen(command, text=True)
@@ -60,6 +66,7 @@ def _run_parallel(
     devices: list[int],
     output_dir: Path,
     protocol: Path,
+    implementation: Path,
 ) -> None:
     if not devices:
         raise ValueError("at least one CUDA device is required")
@@ -77,6 +84,7 @@ def _run_parallel(
                     device=device,
                     output_dir=output_dir,
                     protocol=protocol,
+                    implementation=implementation,
                 ),
             )
         finished: list[int] = []
@@ -93,7 +101,13 @@ def _run_parallel(
             time.sleep(2.0)
 
 
-def _load_seed_results(output_dir: Path, seeds: list[int]) -> list[dict[str, Any]]:
+def _load_seed_results(
+    output_dir: Path,
+    seeds: list[int],
+    *,
+    protocol_sha256: str,
+    implementation_sha256: str,
+) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
     for seed in seeds:
         path = output_dir / f"seed-{seed}" / "seed-result.json"
@@ -104,6 +118,10 @@ def _load_seed_results(output_dir: Path, seeds: list[int]) -> list[dict[str, Any
             raise RuntimeError(f"unexpected seed result format for {seed}")
         if int(result.get("seed")) != seed:
             raise RuntimeError(f"seed identity mismatch in {path}")
+        if result.get("protocol_sha256") != protocol_sha256:
+            raise RuntimeError(f"protocol identity mismatch in {path}")
+        if result.get("implementation_sha256") != implementation_sha256:
+            raise RuntimeError(f"implementation identity mismatch in {path}")
         results.append(result)
     return results
 
@@ -142,6 +160,7 @@ def _write_summary_markdown(path: Path, aggregate: dict[str, Any]) -> None:
         f"- Scientific decision: `{aggregate['scientific_decision']}`",
         "- Independent of Native CLM M2/M3 conclusion chain: `True`",
         f"- Protocol SHA-256: `{aggregate['protocol_sha256']}`",
+        f"- Implementation SHA-256: `{aggregate['implementation_sha256']}`",
         "",
         "| seed | base A acc | parent A share | parent B share | direct B gain | gate AUC | primary m | primary A damage | primary B gain/direct | HV gain vs direct | shuffled A damage advantage |",
         "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
@@ -183,15 +202,23 @@ def main() -> int:
     parser.add_argument("--phase", choices=("development", "formal"), required=True)
     parser.add_argument("--devices", default="0,1")
     parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
+    parser.add_argument("--implementation", type=Path, default=DEFAULT_IMPLEMENTATION)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--skip-completed", action="store_true")
     args = parser.parse_args()
 
     protocol = json.loads(args.protocol.read_text(encoding="utf-8"))
+    implementation = json.loads(args.implementation.read_text(encoding="utf-8"))
     if protocol.get("format") != "minicells.shadow-cell-validation-001.protocol.v1":
         raise RuntimeError("unexpected protocol format")
     if protocol.get("status") != "FROZEN_UNRUN":
         raise RuntimeError("Shadow Cell Validation 001 protocol is not frozen/unrun")
+    if implementation.get("format") != "minicells.shadow-cell-validation-001.implementation.v1":
+        raise RuntimeError("unexpected implementation format")
+    if implementation.get("status") != "FROZEN_UNRUN":
+        raise RuntimeError("Shadow Cell Validation 001 implementation is not frozen/unrun")
+    protocol_sha = sha256_file(args.protocol)
+    implementation_sha = sha256_file(args.implementation)
     seed_key = "development_seeds" if args.phase == "development" else "formal_seeds"
     seeds = [int(value) for value in protocol["fresh_evidence"][seed_key]]
     devices = [int(value.strip()) for value in args.devices.split(",") if value.strip()]
@@ -210,15 +237,22 @@ def main() -> int:
             devices=devices,
             output_dir=args.output_dir,
             protocol=args.protocol,
+            implementation=args.implementation,
         )
 
-    seed_results = _load_seed_results(args.output_dir, seeds)
+    seed_results = _load_seed_results(
+        args.output_dir,
+        seeds,
+        protocol_sha256=protocol_sha,
+        implementation_sha256=implementation_sha,
+    )
     aggregate = aggregate_shadow_validation(
         seed_results,
         thresholds=protocol["thresholds"],
-        protocol_sha256=sha256_file(args.protocol),
+        protocol_sha256=protocol_sha,
         phase=args.phase,
     )
+    aggregate["implementation_sha256"] = implementation_sha
     decision_path = args.output_dir / "decision.json"
     decision_path.write_text(
         json.dumps(aggregate, indent=2, sort_keys=True) + "\n",
@@ -234,6 +268,7 @@ def main() -> int:
                 "scientific_decision": aggregate["scientific_decision"],
                 "seeds": aggregate["seeds"],
                 "protocol_sha256": aggregate["protocol_sha256"],
+                "implementation_sha256": aggregate["implementation_sha256"],
             },
             indent=2,
         ),
