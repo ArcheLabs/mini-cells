@@ -1,0 +1,265 @@
+{
+  "A_role_after_continual_start": "evaluation_only",
+  "dataset_revisions": {
+    "A": {
+      "repo_id": "roneneldan/TinyStories",
+      "requested_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "resolved_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64"
+    },
+    "B": {
+      "repo_id": "Salesforce/wikitext",
+      "requested_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+      "resolved_revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+    },
+    "C_eval": {
+      "repo_id": "codeparrot/codeparrot-clean-valid",
+      "requested_revision": "4db92d2ec0c1b4c41eeb439cfae16854511d9dcd",
+      "resolved_revision": "4db92d2ec0c1b4c41eeb439cfae16854511d9dcd"
+    },
+    "C_train": {
+      "repo_id": "codeparrot/codeparrot-clean-train",
+      "requested_revision": "3e6ab65f2864931e041f6a82db9b5a6ec2b71ab4",
+      "resolved_revision": "3e6ab65f2864931e041f6a82db9b5a6ec2b71ab4"
+    },
+    "D": {
+      "repo_id": "databricks/databricks-dolly-15k",
+      "requested_revision": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a",
+      "resolved_revision": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a"
+    }
+  },
+  "experiment_id": "integrated-replay-free-clm-kill-test-001",
+  "files": {
+    "A_bootstrap": {
+      "bytes": 9114625,
+      "documents": 10000,
+      "path": "A-tinystories-bootstrap.txt",
+      "sha256": "fe376f9c6202c1c579396174c94f9dd0b70135d86fe9e71554fb8ff47603b577"
+    },
+    "A_eval": {
+      "bytes": 1689682,
+      "documents": 2000,
+      "path": "A-tinystories-eval.txt",
+      "sha256": "3a67e80d21f5b9cb50ab63d58583a309b53d3248110b2d9bb40017b30e597672"
+    },
+    "B_eval": {
+      "bytes": 941611,
+      "documents": 2000,
+      "path": "B-wikitext-eval.txt",
+      "sha256": "e0dd114adffe92eb96b035ef0e9d67adb3eb5347536cbb0d3c5fbe734ef3a451"
+    },
+    "B_train": {
+      "bytes": 9177933,
+      "documents": 20000,
+      "path": "B-wikitext-train.txt",
+      "sha256": "94f6b0f21be54e62abd9edb29c0121550306cd2c68ae8360a6f75e828b3e7a13"
+    },
+    "C_eval": {
+      "bytes": 19208583,
+      "documents": 2000,
+      "path": "C-code-eval.txt",
+      "sha256": "adc496d5ae0a1e6e847d4965798ac95c20e43bb2724ad36cd397873606ecef00"
+    },
+    "C_train": {
+      "bytes": 77707037,
+      "documents": 8000,
+      "path": "C-code-train.txt",
+      "sha256": "6bd1f19b29e342dff87093654593da59f90a7531df83e8fe0dd75c137432ad85"
+    },
+    "D_eval": {
+      "bytes": 1689003,
+      "documents": 2000,
+      "path": "D-dolly-eval.txt",
+      "sha256": "8797823ffaf2ca38ab2da41e14e1b0536419d6916df5869b137d512cb853dba7"
+    },
+    "D_train": {
+      "bytes": 8182104,
+      "documents": 10000,
+      "path": "D-dolly-train.txt",
+      "sha256": "f689381684559d00e032f38ed46ca3fdc68ca192edd384a4ee9782e3e1b677ce"
+    }
+  },
+  "format": "minicells.kt001-data-manifest.v1",
+  "fully_disjoint_from_historical_prefixes": false,
+  "historical_prefix_reuse_is_explicit": true,
+  "historical_prefix_reused_documents_accounted": 26761,
+  "learner_replay_bytes": 0,
+  "scan_factor": 3,
+  "selected_documents_total": 56000,
+  "selection": {
+    "A_bootstrap": {
+      "config": null,
+      "fresh_post_prefix_selected": 10000,
+      "fresh_scan_nonempty_limit": 30000,
+      "fully_disjoint_from_historical_prefix": true,
+      "historical_prefix_nonempty": 10000,
+      "historical_prefix_reused": 0,
+      "last_source_index_seen": 40012,
+      "maximum_selected_hash": "54ea2b31a055552808adf2a5621d35731c9d32cc8e29b9f0fbd7ca5a8c79c4fa",
+      "minimum_selected_hash": "00025612a8295ed9822c4dc55658e315b6236a5f9a8881394d2cc3f1cb0b9499",
+      "post_prefix_nonempty_seen": 30000,
+      "repo_id": "roneneldan/TinyStories",
+      "repo_key": "A",
+      "resolved_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "salt": "IRF-CLM-KT001-v1",
+      "selected": 10000,
+      "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+      "split": "train",
+      "stream_exhausted_before_fresh_target": false
+    },
+    "A_eval": {
+      "config": null,
+      "fresh_post_prefix_selected": 2000,
+      "fresh_scan_nonempty_limit": 6000,
+      "fully_disjoint_from_historical_prefix": true,
+      "historical_prefix_nonempty": 2000,
+      "historical_prefix_reused": 0,
+      "last_source_index_seen": 8000,
+      "maximum_selected_hash": "5528dd3c5f6b02fb5637040b4f924161ea7425aa34d295f153881421922b2b48",
+      "minimum_selected_hash": "000c4088801c62baf01697fdbe0d107252a80a9873f2f988d1a0db32fc6c4f2c",
+      "post_prefix_nonempty_seen": 6000,
+      "repo_id": "roneneldan/TinyStories",
+      "repo_key": "A",
+      "resolved_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "salt": "IRF-CLM-KT001-v1",
+      "selected": 2000,
+      "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+      "split": "validation",
+      "stream_exhausted_before_fresh_target": false
+    },
+    "B_eval": {
+      "config": "wikitext-2-raw-v1",
+      "fresh_post_prefix_selected": 461,
+      "fresh_scan_nonempty_limit": 6000,
+      "fully_disjoint_from_historical_prefix": false,
+      "historical_prefix_nonempty": 2000,
+      "historical_prefix_reused": 1539,
+      "last_source_index_seen": 3759,
+      "maximum_selected_hash": "ffc511522bedd266056add6ee90fa32c8984ae65b14ceec7f648979381323f32",
+      "minimum_selected_hash": "000f5ace0328c13d9930adb763915d81c215f77d0edc17d5a23b84cd32753edb",
+      "post_prefix_nonempty_seen": 461,
+      "repo_id": "Salesforce/wikitext",
+      "repo_key": "B",
+      "resolved_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+      "salt": "IRF-CLM-KT001-v1",
+      "selected": 2000,
+      "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+      "split": "validation",
+      "stream_exhausted_before_fresh_target": true
+    },
+    "B_train": {
+      "config": "wikitext-2-raw-v1",
+      "fresh_post_prefix_selected": 3767,
+      "fresh_scan_nonempty_limit": 60000,
+      "fully_disjoint_from_historical_prefix": false,
+      "historical_prefix_nonempty": 20000,
+      "historical_prefix_reused": 16233,
+      "last_source_index_seen": 36717,
+      "maximum_selected_hash": "ffddb94b979770b28f1da12ec5d6b02df0f554b70b2a5d54273b7781e2ddaae5",
+      "minimum_selected_hash": "00051e4ee75a823a513f00fb9e7c48d5c6552d642f81ca79be663866046fedb4",
+      "post_prefix_nonempty_seen": 3767,
+      "repo_id": "Salesforce/wikitext",
+      "repo_key": "B",
+      "resolved_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+      "salt": "IRF-CLM-KT001-v1",
+      "selected": 20000,
+      "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+      "split": "train",
+      "stream_exhausted_before_fresh_target": true
+    },
+    "C_eval": {
+      "config": null,
+      "fresh_post_prefix_selected": 2000,
+      "fresh_scan_nonempty_limit": 6000,
+      "fully_disjoint_from_historical_prefix": true,
+      "historical_prefix_nonempty": 2000,
+      "historical_prefix_reused": 0,
+      "last_source_index_seen": 8000,
+      "maximum_selected_hash": "54057e6c113c6b4651cac96c628d275d7bf0d795099a59aebe10125139e43368",
+      "minimum_selected_hash": "000a6a28143649e4428998272af2b3960b589bbed93246742e308d12e59882d9",
+      "post_prefix_nonempty_seen": 6000,
+      "repo_id": "codeparrot/codeparrot-clean-valid",
+      "repo_key": "C_eval",
+      "resolved_revision": "4db92d2ec0c1b4c41eeb439cfae16854511d9dcd",
+      "salt": "IRF-CLM-KT001-v1",
+      "selected": 2000,
+      "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+      "split": "train",
+      "stream_exhausted_before_fresh_target": false
+    },
+    "C_train": {
+      "config": null,
+      "fresh_post_prefix_selected": 8000,
+      "fresh_scan_nonempty_limit": 24000,
+      "fully_disjoint_from_historical_prefix": true,
+      "historical_prefix_nonempty": 8000,
+      "historical_prefix_reused": 0,
+      "last_source_index_seen": 32000,
+      "maximum_selected_hash": "5663d5521203068c5fcb9801e38aac9c8674d41be6f4c30a370f7d3b5c777218",
+      "minimum_selected_hash": "000109396d8b4c7d5848bf6065c23b81a2fc2b6b956e158d302250953af92512",
+      "post_prefix_nonempty_seen": 24000,
+      "repo_id": "codeparrot/codeparrot-clean-train",
+      "repo_key": "C_train",
+      "resolved_revision": "3e6ab65f2864931e041f6a82db9b5a6ec2b71ab4",
+      "salt": "IRF-CLM-KT001-v1",
+      "selected": 8000,
+      "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+      "split": "train",
+      "stream_exhausted_before_fresh_target": false
+    },
+    "D_eval": {
+      "config": null,
+      "fresh_post_prefix_selected": 3011,
+      "fresh_scan_nonempty_limit": 36000,
+      "fully_disjoint_from_historical_prefix": false,
+      "historical_prefix_nonempty": 12000,
+      "historical_prefix_reused": 8989,
+      "last_source_index_seen": 15010,
+      "maximum_selected_hash": "fffb83392e1e870e3d80e6c1835b8026eb55929de95aa0d3d12a5cf0e4f016f9",
+      "minimum_selected_hash": "000ee01a411a9283ce166905abed8a0c34b19e312fc45a21bd29c3db5757707c",
+      "post_prefix_nonempty_seen": 3011,
+      "repo_id": "databricks/databricks-dolly-15k",
+      "repo_key": "D",
+      "resolved_revision": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a",
+      "salt": "IRF-CLM-KT001-v1",
+      "selected": 12000,
+      "selected_from_combined_rank": [
+        10000,
+        12000
+      ],
+      "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+      "split": "train",
+      "stream_exhausted_before_fresh_target": true
+    },
+    "D_train": {
+      "config": null,
+      "fresh_post_prefix_selected": 3011,
+      "fresh_scan_nonempty_limit": 36000,
+      "fully_disjoint_from_historical_prefix": false,
+      "historical_prefix_nonempty": 12000,
+      "historical_prefix_reused": 8989,
+      "last_source_index_seen": 15010,
+      "maximum_selected_hash": "fffb83392e1e870e3d80e6c1835b8026eb55929de95aa0d3d12a5cf0e4f016f9",
+      "minimum_selected_hash": "000ee01a411a9283ce166905abed8a0c34b19e312fc45a21bd29c3db5757707c",
+      "post_prefix_nonempty_seen": 3011,
+      "repo_id": "databricks/databricks-dolly-15k",
+      "repo_key": "D",
+      "resolved_revision": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a",
+      "salt": "IRF-CLM-KT001-v1",
+      "selected": 12000,
+      "selected_from_combined_rank": [
+        0,
+        10000
+      ],
+      "selector": "salted_min_hash_prefer_post_prefix_with_explicit_shortfall_reuse",
+      "split": "train",
+      "stream_exhausted_before_fresh_target": true
+    }
+  },
+  "selection_policy": "prefer deterministic salted min-hash records after historical first-N prefixes; supplement only unavoidable shortfalls from those prefixes and record reuse",
+  "selector_salt": "IRF-CLM-KT001-v1",
+  "stream": [
+    "B",
+    "C",
+    "D"
+  ]
+}

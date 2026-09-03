@@ -1,0 +1,51 @@
+{
+  "aggregate_rule": {
+    "INCONCLUSIVE_OR_MIXED": "all other formal outcomes",
+    "NOT_SUPPORTED": "3/3 formal seeds are VALID_FAIL",
+    "SUPPORTED": "3/3 formal seeds are PASS"
+  },
+  "experiment_id": "integrated-replay-free-clm-kill-test-001",
+  "format": "minicells.kt001-decision.v1",
+  "kt001_specific": {
+    "expected_final_cell_count_for_address_arms": 11,
+    "forced_shadow_expansions_per_phase": 1,
+    "formal_negative_requires_valid_seed_failures": 3,
+    "formal_support_requires_seed_passes": 3,
+    "minimum_full_A_retention_advantage_vs_read_history_only": 0.05,
+    "minimum_full_A_retention_advantage_vs_write_transaction_only": 0.05,
+    "minimum_full_geometric_mean_phase_gain_ratio_vs_replay": 0.85,
+    "minimum_full_phase_gain_ratio_vs_replay_each": 0.8,
+    "minimum_unsafe_A_regression": 0.3,
+    "oracle_maximum_A_regression": 0.2,
+    "oracle_maximum_mean_forgetting": 0.15,
+    "oracle_minimum_phase_gain_each_B_C_D": 0.05
+  },
+  "mixed_status": "INTEGRATED_REPLAY_FREE_CLM_EXECUTION_INCONCLUSIVE_OR_MIXED",
+  "negative_status": "INTEGRATED_REPLAY_FREE_CLM_EXECUTION_NOT_SUPPORTED",
+  "per_seed_classification": {
+    "INCONCLUSIVE_MECHANICS": "checkpoint/data/provenance/birth/address/update invariant or zero-replay mechanics fail",
+    "INCONCLUSIVE_ORACLE": "matched replay oracle fails its registered capacity/retention gates",
+    "PASS": "matched replay oracle valid, all mechanics valid, and all FULL scientific gates pass",
+    "VALID_FAIL": "matched replay oracle and mechanics valid, but one or more FULL scientific gates fail"
+  },
+  "positive_status": "INTEGRATED_REPLAY_FREE_CLM_EXECUTION_SUPPORTED",
+  "source_thresholds": {
+    "native_clm_m3l2_protocol": "research/validations/native-clm-v0-m3l2-online-address-state/protocol.json",
+    "r0b_update_invariant": {
+      "maximum_p95_violation_ratio": 5e-06,
+      "maximum_violation_ratio": 2e-05
+    },
+    "reused": {
+      "maximum_active_fraction_vs_dense": 0.3,
+      "maximum_address_state_bytes_per_cell": 52360,
+      "maximum_address_state_rank": 32,
+      "maximum_birth_logits_max_abs_drift": 1e-05,
+      "maximum_birth_logits_mse": 1e-10,
+      "maximum_birth_root_prob_drift": 1e-07,
+      "maximum_full_A_regression": 0.2,
+      "maximum_full_mean_forgetting": 0.15,
+      "minimum_phase_gain_each_B_C_D": 0.05
+    }
+  },
+  "status": "FROZEN_BEFORE_DEVELOPMENT_SCIENTIFIC_RESULT"
+}

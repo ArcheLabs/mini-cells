@@ -1,0 +1,151 @@
+name: Integrated Replay-Free CLM Kill Test 001
+
+on:
+  push:
+    branches: [codex/integrated-replay-free-clm-kill-test-001]
+    paths:
+      - 'src/minicells/integrated_replay_free_clm_kt001*.py'
+      - 'scripts/research/*integrated_replay_free_clm_kt001*'
+      - 'research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001/**'
+      - 'research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_integrated_replay_free_clm_kt001.py'
+      - '.github/workflows/integrated-replay-free-clm-kill-test-001.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/integrated_replay_free_clm_kt001*.py'
+      - 'scripts/research/*integrated_replay_free_clm_kt001*'
+      - 'research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001/**'
+      - 'research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_integrated_replay_free_clm_kt001.py'
+      - '.github/workflows/integrated-replay-free-clm-kill-test-001.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen KT001 registration
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001')
+          protocol = (root / 'PROTOCOL.md').read_text()
+          seeds = json.loads((root / 'SEEDS.json').read_text())
+          decision = json.loads((root / 'DECISION.json').read_text())
+
+          assert 'FROZEN_FOR_IMPLEMENTATION' in protocol
+          assert seeds['experiment_id'] == 'integrated-replay-free-clm-kill-test-001'
+          assert len(seeds['development']) >= 1
+          assert len(seeds['formal']) == 3
+          assert set(seeds['development']).isdisjoint(seeds['formal'])
+          assert decision['format'] == 'minicells.kt001-decision.v1'
+          assert decision['status'] == 'FROZEN_BEFORE_DEVELOPMENT_SCIENTIFIC_RESULT'
+          assert decision['kt001_specific']['forced_shadow_expansions_per_phase'] == 1
+          assert decision['kt001_specific']['expected_final_cell_count_for_address_arms'] == 11
+          assert decision['source_thresholds']['reused']['maximum_full_A_regression'] == 0.20
+          assert decision['source_thresholds']['reused']['maximum_full_mean_forgetting'] == 0.15
+          assert decision['source_thresholds']['r0b_update_invariant']['maximum_violation_ratio'] == 2e-5
+          PY
+      - name: Validate Kaggle development notebook
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          notebook_path = Path('research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb')
+          notebook_text = notebook_path.read_text()
+          notebook = json.loads(notebook_text)
+          assert notebook['nbformat'] == 4
+          assert notebook['cells'][0]['cell_type'] == 'markdown'
+          code = '\n'.join(
+              ''.join(cell.get('source', []))
+              for cell in notebook['cells']
+              if cell['cell_type'] == 'code'
+          )
+          for required in (
+              'prepare_integrated_replay_free_clm_kt001_data.py',
+              'run_integrated_replay_free_clm_kt001.py',
+              'aggregate_integrated_replay_free_clm_kt001.py',
+              'publish_integrated_replay_free_clm_kt001.py',
+              "BRANCH = 'codex/integrated-replay-free-clm-kill-test-001'",
+          ):
+              assert required in code
+          assert '--formal' not in code
+          formal = json.loads(Path(
+              'research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001/SEEDS.json'
+          ).read_text())['formal']
+          for seed in formal:
+              pattern = rf'(?<![0-9A-Za-z]){seed}(?![0-9A-Za-z])'
+              assert re.search(pattern, notebook_text) is None
+          for cell in notebook['cells']:
+              if cell['cell_type'] == 'code':
+                  assert cell.get('execution_count') is None
+                  assert cell.get('outputs') == []
+          PY
+      - name: Compile
+        run: |
+          python -m compileall -q \
+            src/minicells/integrated_replay_free_clm_kt001.py \
+            src/minicells/integrated_replay_free_clm_kt001_mechanics.py \
+            src/minicells/integrated_replay_free_clm_kt001_runner.py \
+            src/minicells/integrated_replay_free_clm_kt001_replay.py \
+            src/minicells/integrated_replay_free_clm_kt001_aggregate.py \
+            scripts/research/run_integrated_replay_free_clm_kt001.py \
+            scripts/research/aggregate_integrated_replay_free_clm_kt001.py \
+            scripts/research/publish_integrated_replay_free_clm_kt001.py \
+            scripts/research/prepare_integrated_replay_free_clm_kt001_data.py
+      - name: Ruff
+        run: |
+          # Import sorting is kept non-blocking for the older KT001 files written
+          # incrementally through the contents API; all other Ruff rules are active.
+          ruff check --ignore I001 \
+            src/minicells/integrated_replay_free_clm_kt001.py \
+            src/minicells/integrated_replay_free_clm_kt001_mechanics.py \
+            src/minicells/integrated_replay_free_clm_kt001_runner.py \
+            src/minicells/integrated_replay_free_clm_kt001_replay.py \
+            src/minicells/integrated_replay_free_clm_kt001_aggregate.py \
+            scripts/research/run_integrated_replay_free_clm_kt001.py \
+            scripts/research/aggregate_integrated_replay_free_clm_kt001.py \
+            scripts/research/publish_integrated_replay_free_clm_kt001.py \
+            scripts/research/prepare_integrated_replay_free_clm_kt001_data.py \
+            tests/research/06-native-clm/test_integrated_replay_free_clm_kt001.py
+      - name: KT001 mechanics tests
+        run: pytest -q tests/research/06-native-clm/test_integrated_replay_free_clm_kt001.py
+      - name: Formal seed guard
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          root = Path('research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001')
+          formal = json.loads((root / 'SEEDS.json').read_text())['formal']
+          paths = [
+              Path('.github/workflows/integrated-replay-free-clm-kill-test-001.yml'),
+              Path('scripts/research/run_integrated_replay_free_clm_kt001.py'),
+              Path('scripts/research/aggregate_integrated_replay_free_clm_kt001.py'),
+              Path('scripts/research/publish_integrated_replay_free_clm_kt001.py'),
+              Path('research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb'),
+          ]
+          text = '\n'.join(path.read_text() for path in paths)
+          for seed in formal:
+              pattern = rf'(?<![0-9A-Za-z]){seed}(?![0-9A-Za-z])'
+              assert re.search(pattern, text) is None
+          forbidden_formal_invocation = (
+              'run_integrated_replay_free_clm_kt001.py' + ' ' + '--' + 'formal'
+          )
+          assert forbidden_formal_invocation not in text
+          print('KT001 CI consumes no formal seed.')
+          PY
