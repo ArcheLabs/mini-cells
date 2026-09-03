@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Run one fresh Shadow Cell Validation 001 seed."""
 
 from __future__ import annotations
