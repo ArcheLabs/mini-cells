@@ -61,10 +61,12 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import re
           from pathlib import Path
 
           notebook_path = Path('research/notebooks/06-native-clm/integrated-replay-free-clm-kill-test-001-kaggle.ipynb')
-          notebook = json.loads(notebook_path.read_text())
+          notebook_text = notebook_path.read_text()
+          notebook = json.loads(notebook_text)
           assert notebook['nbformat'] == 4
           assert notebook['cells'][0]['cell_type'] == 'markdown'
           code = '\n'.join(
@@ -85,7 +87,8 @@ jobs:
               'research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001/SEEDS.json'
           ).read_text())['formal']
           for seed in formal:
-              assert str(seed) not in notebook_path.read_text()
+              pattern = rf'(?<![0-9A-Za-z]){seed}(?![0-9A-Za-z])'
+              assert re.search(pattern, notebook_text) is None
           for cell in notebook['cells']:
               if cell['cell_type'] == 'code':
                   assert cell.get('execution_count') is None
@@ -105,9 +108,8 @@ jobs:
             scripts/research/prepare_integrated_replay_free_clm_kt001_data.py
       - name: Ruff
         run: |
-          # Existing KT001 files were authored incrementally through the GitHub
-          # contents API, so import sorting is intentionally non-blocking here.
-          # All other Ruff correctness/style rules remain active.
+          # Import sorting is kept non-blocking for the older KT001 files written
+          # incrementally through the contents API; all other Ruff rules are active.
           ruff check --ignore I001 \
             src/minicells/integrated_replay_free_clm_kt001.py \
             src/minicells/integrated_replay_free_clm_kt001_mechanics.py \
@@ -125,10 +127,11 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import re
           from pathlib import Path
 
           root = Path('research/experiments/04-continual-learning-core/integrated-replay-free-clm-kill-test-001')
-          formal = [str(seed) for seed in json.loads((root / 'SEEDS.json').read_text())['formal']]
+          formal = json.loads((root / 'SEEDS.json').read_text())['formal']
           paths = [
               Path('.github/workflows/integrated-replay-free-clm-kill-test-001.yml'),
               Path('scripts/research/run_integrated_replay_free_clm_kt001.py'),
@@ -138,7 +141,8 @@ jobs:
           ]
           text = '\n'.join(path.read_text() for path in paths)
           for seed in formal:
-              assert seed not in text
+              pattern = rf'(?<![0-9A-Za-z]){seed}(?![0-9A-Za-z])'
+              assert re.search(pattern, text) is None
           assert 'run_integrated_replay_free_clm_kt001.py --formal' not in text
           print('KT001 CI consumes no formal seed.')
           PY
