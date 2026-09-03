@@ -12,6 +12,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import traceback
 from typing import Any
 
 from minicells.integrated_replay_free_clm_kt001 import (
@@ -213,6 +214,43 @@ def _write_summary(
     )
 
 
+def _write_failure(
+    args: argparse.Namespace,
+    *,
+    seed: int,
+    arm: str,
+    exc: BaseException,
+) -> Path:
+    target = args.output_dir / f"seed-{seed}" / arm
+    target.mkdir(parents=True, exist_ok=True)
+    manifest = args.data_dir / "manifest.json"
+    payload = {
+        "format": "minicells.kt001-failure.v1",
+        "experiment_id": "integrated-replay-free-clm-kill-test-001",
+        "seed": int(seed),
+        "arm": arm,
+        "formal_requested": bool(args.formal),
+        "git_commit_sha": _git_sha(),
+        "protocol_sha256": _sha256(Path(PROTOCOL_PATH)) if Path(PROTOCOL_PATH).exists() else None,
+        "seed_registry_sha256": (
+            _sha256(Path(SEED_REGISTRY_PATH)) if Path(SEED_REGISTRY_PATH).exists() else None
+        ),
+        "data_manifest_sha256": _sha256(manifest) if manifest.exists() else None,
+        "checkpoint_path": str(args.checkpoint),
+        "checkpoint_sha256": _sha256(args.checkpoint) if args.checkpoint.exists() else None,
+        "data_dir": str(args.data_dir),
+        "exception_type": type(exc).__name__,
+        "exception_message": str(exc),
+        "traceback": traceback.format_exc(),
+    }
+    path = target / "failure.json"
+    path.write_text(
+        json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    return path
+
+
 def _run_one(args: argparse.Namespace, *, arm_name: str, seed: int) -> dict[str, Any]:
     registry = _seed_registry()
     _require_seed_mode(seed, formal=args.formal, registry=registry)
@@ -286,7 +324,17 @@ def main() -> int:
 
     arm_names = list(canonical_arm_map()) if args.arm == "all" else [args.arm]
     for arm_name in arm_names:
-        _run_one(args, arm_name=arm_name, seed=int(args.seed))
+        try:
+            _run_one(args, arm_name=arm_name, seed=int(args.seed))
+        except BaseException as exc:
+            failure_path = _write_failure(
+                args,
+                seed=int(args.seed),
+                arm=arm_name,
+                exc=exc,
+            )
+            print(f"KT001 failure evidence written to {failure_path}", flush=True)
+            raise
     return 0
 
 
