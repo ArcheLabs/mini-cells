@@ -1,0 +1,855 @@
+{
+  "checkpoint_arm": "lineage_growth",
+  "checkpoint_sha256": "995d9a46bbd2c5db100a690970f70459868b5f264869feb7f691ecdb23fb3ba4",
+  "edge_count": 8,
+  "edges": [
+    {
+      "birth_domain": "B",
+      "birth_step": 50,
+      "candidates": [
+        {
+          "auc": 0.6079204585057336,
+          "candidate": "rank-0",
+          "current_tpr": 0.7802108526229858,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 3080,
+          "normalized_oracle_excess_recovery": 0.25160056889091814,
+          "old_fpr": 0.6648133397102356,
+          "rank": 0
+        },
+        {
+          "auc": 0.849039228986818,
+          "candidate": "rank-8",
+          "current_tpr": 0.783454954624176,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 15400,
+          "normalized_oracle_excess_recovery": 0.8137332790674275,
+          "old_fpr": 0.24702145159244537,
+          "rank": 8
+        },
+        {
+          "auc": 0.8774864769281611,
+          "candidate": "rank-16",
+          "current_tpr": 0.7623682022094727,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 27720,
+          "normalized_oracle_excess_recovery": 0.8800538253709131,
+          "old_fpr": 0.1715647429227829,
+          "rank": 16
+        },
+        {
+          "auc": 0.8913834986636364,
+          "candidate": "rank-32",
+          "current_tpr": 0.7234387397766113,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 52360,
+          "normalized_oracle_excess_recovery": 0.9124526737722966,
+          "old_fpr": 0.11596505343914032,
+          "rank": 32
+        },
+        {
+          "auc": 0.8988367291591377,
+          "candidate": "rank-64",
+          "current_tpr": 0.6934306621551514,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 101640,
+          "normalized_oracle_excess_recovery": 0.9298287770497269,
+          "old_fpr": 0.09054805338382721,
+          "rank": 64
+        },
+        {
+          "auc": 0.8957723369839347,
+          "candidate": "rank-128",
+          "current_tpr": 0.6350364685058594,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 200200,
+          "normalized_oracle_excess_recovery": 0.9226846004472433,
+          "old_fpr": 0.06354249268770218,
+          "rank": 128
+        },
+        {
+          "auc": 0.9057481993394518,
+          "candidate": "full-covariance",
+          "current_tpr": 0.7599350810050964,
+          "family": "full_covariance_gaussian",
+          "historical_address_state_bytes": 591368,
+          "normalized_oracle_excess_recovery": 0.9459418463724194,
+          "old_fpr": 0.1223193034529686,
+          "rank": null
+        }
+      ],
+      "child_id": 8,
+      "current_cosine_auc": 0.5434207042626423,
+      "current_domain": "B",
+      "current_test_samples": 1233,
+      "current_train_samples": 2863,
+      "offline_oracle_accuracy": 0.8475120663642883,
+      "offline_oracle_auc": 0.9289356696666402,
+      "old_domain_counts": {
+        "A": {
+          "test": 1259,
+          "train": 2837
+        }
+      },
+      "old_domains": [
+        "A"
+      ],
+      "old_test_samples": 1259,
+      "old_train_samples": 2837,
+      "parent_birth_domain": "A",
+      "parent_id": 4,
+      "path_to_parent": [
+        4
+      ],
+      "root_id": 4,
+      "seed": 73611,
+      "transition": "A->B",
+      "valid": true
+    },
+    {
+      "birth_domain": "B",
+      "birth_step": 150,
+      "candidates": [
+        {
+          "auc": 0.5444456702951849,
+          "candidate": "rank-0",
+          "current_tpr": 0.5772727131843567,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 3080,
+          "normalized_oracle_excess_recovery": 0.11698844377330246,
+          "old_fpr": 0.5380259156227112,
+          "rank": 0
+        },
+        {
+          "auc": 0.824694763165637,
+          "candidate": "rank-8",
+          "current_tpr": 0.699999988079071,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 15400,
+          "normalized_oracle_excess_recovery": 0.8546509658153166,
+          "old_fpr": 0.2119741141796112,
+          "rank": 8
+        },
+        {
+          "auc": 0.8357053545160341,
+          "candidate": "rank-16",
+          "current_tpr": 0.7060605883598328,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 27720,
+          "normalized_oracle_excess_recovery": 0.883632685261818,
+          "old_fpr": 0.2006472498178482,
+          "rank": 16
+        },
+        {
+          "auc": 0.8463604491517113,
+          "candidate": "rank-32",
+          "current_tpr": 0.7015151381492615,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 52360,
+          "normalized_oracle_excess_recovery": 0.911678677850216,
+          "old_fpr": 0.16019417345523834,
+          "rank": 32
+        },
+        {
+          "auc": 0.8519644258115132,
+          "candidate": "rank-64",
+          "current_tpr": 0.625,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 101640,
+          "normalized_oracle_excess_recovery": 0.926429282442699,
+          "old_fpr": 0.10113269090652466,
+          "rank": 64
+        },
+        {
+          "auc": 0.8575849514563106,
+          "candidate": "rank-128",
+          "current_tpr": 0.5651515126228333,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 200200,
+          "normalized_oracle_excess_recovery": 0.9412234467337486,
+          "old_fpr": 0.07281553745269775,
+          "rank": 128
+        },
+        {
+          "auc": 0.8657724085515348,
+          "candidate": "full-covariance",
+          "current_tpr": 0.6757575273513794,
+          "family": "full_covariance_gaussian",
+          "historical_address_state_bytes": 591368,
+          "normalized_oracle_excess_recovery": 0.9627742042691733,
+          "old_fpr": 0.12135922908782959,
+          "rank": null
+        }
+      ],
+      "child_id": 9,
+      "current_cosine_auc": 0.4811709326272433,
+      "current_domain": "B",
+      "current_test_samples": 1320,
+      "current_train_samples": 2776,
+      "offline_oracle_accuracy": 0.8012519478797913,
+      "offline_oracle_auc": 0.8799150485436893,
+      "old_domain_counts": {
+        "A": {
+          "test": 1236,
+          "train": 2860
+        }
+      },
+      "old_domains": [
+        "A"
+      ],
+      "old_test_samples": 1236,
+      "old_train_samples": 2860,
+      "parent_birth_domain": "A",
+      "parent_id": 5,
+      "path_to_parent": [
+        5
+      ],
+      "root_id": 5,
+      "seed": 73611,
+      "transition": "A->B",
+      "valid": true
+    },
+    {
+      "birth_domain": "B",
+      "birth_step": 250,
+      "candidates": [
+        {
+          "auc": 0.5444871744303764,
+          "candidate": "rank-0",
+          "current_tpr": 0.4246913492679596,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 3080,
+          "normalized_oracle_excess_recovery": 0.1185897435897436,
+          "old_fpr": 0.3226836919784546,
+          "rank": 0
+        },
+        {
+          "auc": 0.8077886903588004,
+          "candidate": "rank-8",
+          "current_tpr": 0.6946502327919006,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 15400,
+          "normalized_oracle_excess_recovery": 0.820474267849883,
+          "old_fpr": 0.21246005594730377,
+          "rank": 8
+        },
+        {
+          "auc": 0.8156976820626093,
+          "candidate": "rank-16",
+          "current_tpr": 0.6872428059577942,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 27720,
+          "normalized_oracle_excess_recovery": 0.8415573172954256,
+          "old_fpr": 0.19408945739269257,
+          "rank": 16
+        },
+        {
+          "auc": 0.8402089167619874,
+          "candidate": "rank-32",
+          "current_tpr": 0.6691358089447021,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 52360,
+          "normalized_oracle_excess_recovery": 0.9068970713995318,
+          "old_fpr": 0.15335462987422943,
+          "rank": 32
+        },
+        {
+          "auc": 0.8499053366465507,
+          "candidate": "rank-64",
+          "current_tpr": 0.6304526925086975,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 101640,
+          "normalized_oracle_excess_recovery": 0.9327448795054043,
+          "old_fpr": 0.11661341786384583,
+          "rank": 64
+        },
+        {
+          "auc": 0.8570050881552479,
+          "candidate": "rank-128",
+          "current_tpr": 0.5432098507881165,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 200200,
+          "normalized_oracle_excess_recovery": 0.9516707322202128,
+          "old_fpr": 0.0638977587223053,
+          "rank": 128
+        },
+        {
+          "auc": 0.8634382518834063,
+          "candidate": "full-covariance",
+          "current_tpr": 0.6452674865722656,
+          "family": "full_covariance_gaussian",
+          "historical_address_state_bytes": 591368,
+          "normalized_oracle_excess_recovery": 0.9688196576523531,
+          "old_fpr": 0.10143769532442093,
+          "rank": null
+        }
+      ],
+      "child_id": 10,
+      "current_cosine_auc": 0.5088365610907322,
+      "current_domain": "B",
+      "current_test_samples": 1215,
+      "current_train_samples": 2881,
+      "offline_oracle_accuracy": 0.7924605011940002,
+      "offline_oracle_auc": 0.8751350924939849,
+      "old_domain_counts": {
+        "A": {
+          "test": 1252,
+          "train": 2844
+        }
+      },
+      "old_domains": [
+        "A"
+      ],
+      "old_test_samples": 1252,
+      "old_train_samples": 2844,
+      "parent_birth_domain": "A",
+      "parent_id": 2,
+      "path_to_parent": [
+        2
+      ],
+      "root_id": 2,
+      "seed": 73611,
+      "transition": "A->B",
+      "valid": true
+    },
+    {
+      "birth_domain": "B",
+      "birth_step": 350,
+      "candidates": [
+        {
+          "auc": 0.5802275478092471,
+          "candidate": "rank-0",
+          "current_tpr": 0.5127571821212769,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 3080,
+          "normalized_oracle_excess_recovery": 0.20592784551414225,
+          "old_fpr": 0.39764705300331116,
+          "rank": 0
+        },
+        {
+          "auc": 0.8420488985717743,
+          "candidate": "rank-8",
+          "current_tpr": 0.7572016716003418,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 15400,
+          "normalized_oracle_excess_recovery": 0.8779701569696009,
+          "old_fpr": 0.22745098173618317,
+          "rank": 8
+        },
+        {
+          "auc": 0.8454062777374324,
+          "candidate": "rank-16",
+          "current_tpr": 0.7596707940101624,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 27720,
+          "normalized_oracle_excess_recovery": 0.8865878684295333,
+          "old_fpr": 0.21490195393562317,
+          "rank": 16
+        },
+        {
+          "auc": 0.8564357298474945,
+          "candidate": "rank-32",
+          "current_tpr": 0.758847713470459,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 52360,
+          "normalized_oracle_excess_recovery": 0.9148982352829088,
+          "old_fpr": 0.19450980424880981,
+          "rank": 32
+        },
+        {
+          "auc": 0.8747512305333656,
+          "candidate": "rank-64",
+          "current_tpr": 0.7119341492652893,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 101640,
+          "normalized_oracle_excess_recovery": 0.9619104112591947,
+          "old_fpr": 0.1349019557237625,
+          "rank": 64
+        },
+        {
+          "auc": 0.8782002743484225,
+          "candidate": "rank-128",
+          "current_tpr": 0.6320987939834595,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 200200,
+          "normalized_oracle_excess_recovery": 0.9707634072850397,
+          "old_fpr": 0.08784313499927521,
+          "rank": 128
+        },
+        {
+          "auc": 0.8832540950536594,
+          "candidate": "full-covariance",
+          "current_tpr": 0.7193415760993958,
+          "family": "full_covariance_gaussian",
+          "historical_address_state_bytes": 591368,
+          "normalized_oracle_excess_recovery": 0.9837355401479145,
+          "old_fpr": 0.1388235241174698,
+          "rank": null
+        }
+      ],
+      "child_id": 11,
+      "current_cosine_auc": 0.5037979504559025,
+      "current_domain": "B",
+      "current_test_samples": 1215,
+      "current_train_samples": 2881,
+      "offline_oracle_accuracy": 0.8152610659599304,
+      "offline_oracle_auc": 0.8895905753247801,
+      "old_domain_counts": {
+        "A": {
+          "test": 1275,
+          "train": 2821
+        }
+      },
+      "old_domains": [
+        "A"
+      ],
+      "old_test_samples": 1275,
+      "old_train_samples": 2821,
+      "parent_birth_domain": "A",
+      "parent_id": 6,
+      "path_to_parent": [
+        6
+      ],
+      "root_id": 6,
+      "seed": 73611,
+      "transition": "A->B",
+      "valid": true
+    },
+    {
+      "birth_domain": "C",
+      "birth_step": 450,
+      "candidates": [
+        {
+          "auc": 0.8465479825440316,
+          "candidate": "rank-0",
+          "current_tpr": 0.8585329651832581,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 3080,
+          "normalized_oracle_excess_recovery": 0.7100889088896726,
+          "old_fpr": 0.32038065791130066,
+          "rank": 0
+        },
+        {
+          "auc": 0.9726472906684648,
+          "candidate": "rank-8",
+          "current_tpr": 0.953592836856842,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 15400,
+          "normalized_oracle_excess_recovery": 0.9684707914229069,
+          "old_fpr": 0.15939730405807495,
+          "rank": 8
+        },
+        {
+          "auc": 0.980119855451666,
+          "candidate": "rank-16",
+          "current_tpr": 0.9588323831558228,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 27720,
+          "normalized_oracle_excess_recovery": 0.9837823374159256,
+          "old_fpr": 0.13084852695465088,
+          "rank": 16
+        },
+        {
+          "auc": 0.9783515839059391,
+          "candidate": "rank-32",
+          "current_tpr": 0.9513473510742188,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 52360,
+          "normalized_oracle_excess_recovery": 0.9801590873155839,
+          "old_fpr": 0.10705789178609848,
+          "rank": 32
+        },
+        {
+          "auc": 0.9794532663459757,
+          "candidate": "rank-64",
+          "current_tpr": 0.9483533501625061,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 101640,
+          "normalized_oracle_excess_recovery": 0.9824164730779988,
+          "old_fpr": 0.0904044434428215,
+          "rank": 64
+        },
+        {
+          "auc": 0.9787979552394023,
+          "candidate": "rank-128",
+          "current_tpr": 0.9446108341217041,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 200200,
+          "normalized_oracle_excess_recovery": 0.9810737177538038,
+          "old_fpr": 0.08009516447782516,
+          "rank": 128
+        },
+        {
+          "auc": 0.9811491212657951,
+          "candidate": "full-covariance",
+          "current_tpr": 0.9565868377685547,
+          "family": "full_covariance_gaussian",
+          "historical_address_state_bytes": 591368,
+          "normalized_oracle_excess_recovery": 0.985891338984906,
+          "old_fpr": 0.11102299392223358,
+          "rank": null
+        }
+      ],
+      "child_id": 12,
+      "current_cosine_auc": 0.8354112552056869,
+      "current_domain": "C",
+      "current_test_samples": 1336,
+      "current_train_samples": 2760,
+      "offline_oracle_accuracy": 0.9537928104400635,
+      "offline_oracle_auc": 0.9880346365160243,
+      "old_domain_counts": {
+        "B": {
+          "test": 1261,
+          "train": 2835
+        }
+      },
+      "old_domains": [
+        "B"
+      ],
+      "old_test_samples": 1261,
+      "old_train_samples": 2835,
+      "parent_birth_domain": "B",
+      "parent_id": 8,
+      "path_to_parent": [
+        4,
+        8
+      ],
+      "root_id": 4,
+      "seed": 73611,
+      "transition": "B->C",
+      "valid": true
+    },
+    {
+      "birth_domain": "C",
+      "birth_step": 550,
+      "candidates": [
+        {
+          "auc": 0.6494797950507712,
+          "candidate": "rank-0",
+          "current_tpr": 0.5623986721038818,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 3080,
+          "normalized_oracle_excess_recovery": 0.3396458258572714,
+          "old_fpr": 0.37020766735076904,
+          "rank": 0
+        },
+        {
+          "auc": 0.9301513041046805,
+          "candidate": "rank-8",
+          "current_tpr": 0.9149108529090881,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 15400,
+          "normalized_oracle_excess_recovery": 0.9773835646255302,
+          "old_fpr": 0.24041533470153809,
+          "rank": 8
+        },
+        {
+          "auc": 0.9332387466924881,
+          "candidate": "rank-16",
+          "current_tpr": 0.917341947555542,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 27720,
+          "normalized_oracle_excess_recovery": 0.9843988069675915,
+          "old_fpr": 0.20766772329807281,
+          "rank": 16
+        },
+        {
+          "auc": 0.9386909631785254,
+          "candidate": "rank-32",
+          "current_tpr": 0.9043759703636169,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 52360,
+          "normalized_oracle_excess_recovery": 0.9967872543194479,
+          "old_fpr": 0.17811501026153564,
+          "rank": 32
+        },
+        {
+          "auc": 0.9437140445627353,
+          "candidate": "rank-64",
+          "current_tpr": 0.8922204375267029,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 101640,
+          "normalized_oracle_excess_recovery": 1.008200627106779,
+          "old_fpr": 0.11661341786384583,
+          "rank": 64
+        },
+        {
+          "auc": 0.9438839509944542,
+          "candidate": "rank-128",
+          "current_tpr": 0.8776336908340454,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 200200,
+          "normalized_oracle_excess_recovery": 1.0085866860406971,
+          "old_fpr": 0.09305111318826675,
+          "rank": 128
+        },
+        {
+          "auc": 0.9455545357573749,
+          "candidate": "full-covariance",
+          "current_tpr": 0.8962723016738892,
+          "family": "full_covariance_gaussian",
+          "historical_address_state_bytes": 591368,
+          "normalized_oracle_excess_recovery": 1.0123825645490536,
+          "old_fpr": 0.12380191683769226,
+          "rank": null
+        }
+      ],
+      "child_id": 13,
+      "current_cosine_auc": 0.5228590495078215,
+      "current_domain": "C",
+      "current_test_samples": 1234,
+      "current_train_samples": 2862,
+      "offline_oracle_accuracy": 0.8416265249252319,
+      "offline_oracle_auc": 0.9401049083217258,
+      "old_domain_counts": {
+        "A": {
+          "test": 1252,
+          "train": 2844
+        },
+        "B": {
+          "test": 1258,
+          "train": 2838
+        }
+      },
+      "old_domains": [
+        "A",
+        "B"
+      ],
+      "old_test_samples": 2504,
+      "old_train_samples": 5676,
+      "parent_birth_domain": "A",
+      "parent_id": 0,
+      "path_to_parent": [
+        0
+      ],
+      "root_id": 0,
+      "seed": 73611,
+      "transition": "A+B->C",
+      "valid": true
+    },
+    {
+      "birth_domain": "C",
+      "birth_step": 650,
+      "candidates": [
+        {
+          "auc": 0.6271437162922439,
+          "candidate": "rank-0",
+          "current_tpr": 0.5829420685768127,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 3080,
+          "normalized_oracle_excess_recovery": 0.2973411137181837,
+          "old_fpr": 0.38966941833496094,
+          "rank": 0
+        },
+        {
+          "auc": 0.9341837064628358,
+          "candidate": "rank-8",
+          "current_tpr": 0.9154929518699646,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 15400,
+          "normalized_oracle_excess_recovery": 1.0153916418583093,
+          "old_fpr": 0.24462810158729553,
+          "rank": 8
+        },
+        {
+          "auc": 0.9332059390318033,
+          "candidate": "rank-16",
+          "current_tpr": 0.9217527508735657,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 27720,
+          "normalized_oracle_excess_recovery": 1.0131050132668316,
+          "old_fpr": 0.22892561554908752,
+          "rank": 16
+        },
+        {
+          "auc": 0.9456563069879331,
+          "candidate": "rank-32",
+          "current_tpr": 0.928012490272522,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 52360,
+          "normalized_oracle_excess_recovery": 1.0422217197957462,
+          "old_fpr": 0.19586776196956635,
+          "rank": 32
+        },
+        {
+          "auc": 0.9524622020460689,
+          "candidate": "rank-64",
+          "current_tpr": 0.9123630523681641,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 101640,
+          "normalized_oracle_excess_recovery": 1.0581381368665175,
+          "old_fpr": 0.14214876294136047,
+          "rank": 64
+        },
+        {
+          "auc": 0.9530927068379053,
+          "candidate": "rank-128",
+          "current_tpr": 0.8904538154602051,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 200200,
+          "normalized_oracle_excess_recovery": 1.059612649351101,
+          "old_fpr": 0.11115702241659164,
+          "rank": 128
+        },
+        {
+          "auc": 0.9560418525847463,
+          "candidate": "full-covariance",
+          "current_tpr": 0.9186228513717651,
+          "family": "full_covariance_gaussian",
+          "historical_address_state_bytes": 591368,
+          "normalized_oracle_excess_recovery": 1.0665095869777106,
+          "old_fpr": 0.13760331273078918,
+          "rank": null
+        }
+      ],
+      "child_id": 14,
+      "current_cosine_auc": 0.5863671930573339,
+      "current_domain": "C",
+      "current_test_samples": 1278,
+      "current_train_samples": 2818,
+      "offline_oracle_accuracy": 0.8155759572982788,
+      "offline_oracle_auc": 0.9276022064434356,
+      "old_domain_counts": {
+        "A": {
+          "test": 1258,
+          "train": 2838
+        },
+        "B": {
+          "test": 1210,
+          "train": 2886
+        }
+      },
+      "old_domains": [
+        "A",
+        "B"
+      ],
+      "old_test_samples": 2420,
+      "old_train_samples": 5676,
+      "parent_birth_domain": "A",
+      "parent_id": 1,
+      "path_to_parent": [
+        1
+      ],
+      "root_id": 1,
+      "seed": 73611,
+      "transition": "A+B->C",
+      "valid": true
+    },
+    {
+      "birth_domain": "C",
+      "birth_step": 750,
+      "candidates": [
+        {
+          "auc": 0.6479211700317343,
+          "candidate": "rank-0",
+          "current_tpr": 0.7404221892356873,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 3080,
+          "normalized_oracle_excess_recovery": 0.32539151825930285,
+          "old_fpr": 0.554391622543335,
+          "rank": 0
+        },
+        {
+          "auc": 0.9471481610519903,
+          "candidate": "rank-8",
+          "current_tpr": 0.9280688166618347,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 15400,
+          "normalized_oracle_excess_recovery": 0.9836199847550413,
+          "old_fpr": 0.21676068007946014,
+          "rank": 8
+        },
+        {
+          "auc": 0.9441673560188478,
+          "candidate": "rank-16",
+          "current_tpr": 0.9405785799026489,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 27720,
+          "normalized_oracle_excess_recovery": 0.977062920102557,
+          "old_fpr": 0.2336825132369995,
+          "rank": 16
+        },
+        {
+          "auc": 0.9608055245618334,
+          "candidate": "rank-32",
+          "current_tpr": 0.9225957989692688,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 52360,
+          "normalized_oracle_excess_recovery": 1.0136629478206638,
+          "old_fpr": 0.1398066133260727,
+          "rank": 32
+        },
+        {
+          "auc": 0.9666622354919454,
+          "candidate": "rank-64",
+          "current_tpr": 0.9179046154022217,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 101640,
+          "normalized_oracle_excess_recovery": 1.0265463238860786,
+          "old_fpr": 0.10354552417993546,
+          "rank": 64
+        },
+        {
+          "auc": 0.9663217070649096,
+          "candidate": "rank-128",
+          "current_tpr": 0.899139940738678,
+          "family": "low_rank_gaussian",
+          "historical_address_state_bytes": 200200,
+          "normalized_oracle_excess_recovery": 1.0257972420483683,
+          "old_fpr": 0.07937147468328476,
+          "rank": 128
+        },
+        {
+          "auc": 0.9679547314550613,
+          "candidate": "full-covariance",
+          "current_tpr": 0.9210320711135864,
+          "family": "full_covariance_gaussian",
+          "historical_address_state_bytes": 591368,
+          "normalized_oracle_excess_recovery": 1.029389508696556,
+          "old_fpr": 0.10556003451347351,
+          "rank": null
+        }
+      ],
+      "child_id": 15,
+      "current_cosine_auc": 0.5204197351501569,
+      "current_domain": "C",
+      "current_test_samples": 1279,
+      "current_train_samples": 2817,
+      "offline_oracle_accuracy": 0.8356820344924927,
+      "offline_oracle_auc": 0.9545944246581642,
+      "old_domain_counts": {
+        "A": {
+          "test": 1241,
+          "train": 2855
+        },
+        "B": {
+          "test": 1262,
+          "train": 2834
+        }
+      },
+      "old_domains": [
+        "A",
+        "B"
+      ],
+      "old_test_samples": 2482,
+      "old_train_samples": 5668,
+      "parent_birth_domain": "A",
+      "parent_id": 3,
+      "path_to_parent": [
+        3
+      ],
+      "root_id": 3,
+      "seed": 73611,
+      "transition": "A+B->C",
+      "valid": true
+    }
+  ],
+  "format": "minicells.native-clm-v0.m3l1-address-state-capacity.seed.v1",
+  "native_clm_training": false,
+  "new_formal_seeds_consumed": false,
+  "parameter_state_sha256_after": "b76b4d8b9073f8ce95ca0742330cfe1b3fabab34e5c74e1077260e4bf8dabe10",
+  "parameter_state_sha256_before": "b76b4d8b9073f8ce95ca0742330cfe1b3fabab34e5c74e1077260e4bf8dabe10",
+  "seed": 73611,
+  "valid_edge_count": 8,
+  "valid_edge_fraction": 1.0
+}

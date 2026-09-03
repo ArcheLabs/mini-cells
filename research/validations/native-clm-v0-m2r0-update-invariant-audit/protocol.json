@@ -1,0 +1,138 @@
+{
+  "format": "minicells.native-clm-v0.m2r0-update-invariant-audit.protocol.v2",
+  "experiment_id": "native-clm-v0-m2r0-update-invariant-audit",
+  "title": "Native CLM v0 M2-R0 — Protected Update Invariant Audit",
+  "status": "FROZEN_UNRUN",
+  "frozen_before_diagnostic": true,
+  "scientific_decision": false,
+  "native_clm_training_milestone": false,
+  "new_formal_seeds_consumed": false,
+  "scientific_question": "Does the actual Cell parameter update produced by the canonical M2 protected optimizer satisfy the registered certificate nullspace invariant dW Q^T ~= 0, and if not, which optimizer transformation breaks it?",
+  "parent_m2": {
+    "status": "NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED",
+    "formal_seeds_consumed": [73211, 73212, 73213],
+    "protected_A_regression_mean": 0.438682,
+    "protected_mean_forgetting": 0.211502,
+    "unsafe_mean_forgetting": 0.278987,
+    "registered_A_regression_target": 0.20
+  },
+  "later_failure_decomposition_evidence": {
+    "m3w0_classification": "ROOT_WRITE_DOMINANT_TRANSFER_GAP",
+    "m3w0_publish_commit": "7bd8d554fea89fc44ef16287453c97f90a4e3f06",
+    "root_operator_A_damage_fraction_range": [0.9444, 0.9515],
+    "interpretation": "Later routing/growth diagnostics do not replace M2. They motivate returning to the fixed-topology write primitive."
+  },
+  "m1_checkpoint": {
+    "repo_id": "archelabsxyz/native-clm-v0",
+    "filename": "final-model.pt",
+    "sha256": "91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f",
+    "initial_cells": 8,
+    "active_cells": 2,
+    "parameters": 12154368
+  },
+  "data": {
+    "role": "optimizer-mechanics gradient source only; no retention or continual-learning decision",
+    "domain": "B",
+    "repo_id": "Salesforce/wikitext",
+    "resolved_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+    "file": "B-wikitext-train.txt",
+    "sha256": "c7029622b9a1c4b4f249d927b3ab30d4c09ddffe845e031aee3412b4735ca440",
+    "bytes": 9104081,
+    "documents": 20000,
+    "source_builder": "scripts/research/prepare_native_clm_v0_m2r0_data.py",
+    "source_manifest_format": "minicells.native-clm-v0.m2r0-data-manifest.v1",
+    "learner_replay_bytes": 0
+  },
+  "audit": {
+    "audit_seed": 75001,
+    "steps_per_arm": 64,
+    "batch_size": 16,
+    "precision": "fp16",
+    "lr": 0.0008,
+    "lr_schedule": "canonical_M2_warmup_cosine",
+    "registered_m2_steps_per_phase": 400,
+    "warmup_steps": 40,
+    "min_lr_ratio": 0.1,
+    "adam_betas": [0.9, 0.95],
+    "canonical_weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "certificate_updates_during_audit": 0,
+    "shared_router_updates": 0,
+    "growth": false,
+    "same_batches_each_arm": true
+  },
+  "arms": {
+    "current_adamw_grad_projection": {
+      "optimizer": "AdamW",
+      "weight_decay": 0.01,
+      "gradient_projection": true,
+      "actual_update_projection": false,
+      "role": "exact canonical M2 protected optimizer mechanics"
+    },
+    "adamw_no_decay_grad_projection": {
+      "optimizer": "AdamW",
+      "weight_decay": 0.0,
+      "gradient_projection": true,
+      "actual_update_projection": false,
+      "role": "isolates Adam elementwise preconditioning with weight decay removed"
+    },
+    "sgd_no_decay_grad_projection": {
+      "optimizer": "SGD",
+      "momentum": 0.0,
+      "weight_decay": 0.0,
+      "gradient_projection": true,
+      "actual_update_projection": false,
+      "role": "algebraic reference where projected gradient equals actual update direction"
+    },
+    "sgd_with_decay_grad_projection": {
+      "optimizer": "SGD",
+      "momentum": 0.0,
+      "weight_decay": 0.01,
+      "gradient_projection": true,
+      "actual_update_projection": false,
+      "role": "isolates the weight-decay transaction from adaptive preconditioning"
+    },
+    "adamw_final_update_projection": {
+      "optimizer": "AdamW",
+      "weight_decay": 0.01,
+      "gradient_projection": true,
+      "actual_update_projection": true,
+      "role": "candidate mechanics repair: project the complete realized AdamW parameter delta, including preconditioning and decay"
+    }
+  },
+  "invariant": {
+    "per_cell_step": "rho = ||DeltaW Q^T||_F / (||DeltaW||_F + 1e-12)",
+    "certificate_basis_frozen": true,
+    "measure_actual_parameter_delta": true,
+    "minimum_certificate_rank_to_audit": 1,
+    "minimum_update_norm_for_ratio": 1e-12,
+    "zero_or_tiny_updates_excluded_from_ratio_distribution": true
+  },
+  "thresholds": {
+    "minimum_audited_cell_updates_per_arm": 128,
+    "reference_max_violation_ratio": 0.00002,
+    "reference_p95_violation_ratio": 0.000005,
+    "material_violation_ratio": 0.0001
+  },
+  "registered_classifications": [
+    "INCONCLUSIVE_REFERENCE_FAILURE",
+    "CURRENT_UPDATE_INVARIANT_HOLDS",
+    "WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT",
+    "ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT",
+    "BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT",
+    "MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION"
+  ],
+  "classification_rule": "First require sufficient nonzero-update coverage and require both SGD-no-decay and AdamW-final-update-projection references to satisfy the reference max/p95 thresholds. If either reference fails, INCONCLUSIVE_REFERENCE_FAILURE. If canonical AdamW does not materially violate, CURRENT_UPDATE_INVARIANT_HOLDS. Otherwise classify adaptive preconditioning from AdamW-no-decay and weight decay from SGD-with-decay: both bad -> BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT; only AdamW-no-decay bad -> ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT; only SGD-with-decay bad -> WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT; if canonical is bad while neither isolated arm is materially bad -> MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION.",
+  "explicit_nonclaims": [
+    "that repairing the optimizer update invariant is sufficient for continual learning",
+    "that the M1 certificate covers the full old-language functional manifold",
+    "that rank 64 is sufficient",
+    "that growth is necessary or unnecessary",
+    "that any M2 formal decision is retroactively changed"
+  ],
+  "roadmap": {
+    "M2_R0": "audit and repair actual update invariance before changing certificate semantics",
+    "M2_R1": "reconstruct fixed-final-M1 certificates and compare all-active activation SVD / importance-weighted / functional Jacobian-Fisher sketches against held-out old-function drift",
+    "M2_R2": "with frozen router and 8 Cells, rerun replay-free B->C->D continual language using the selected certificate and constrained update mechanism on untouched formal seeds; only a passing end-to-end retention/plasticity result can reopen growth work"
+  }
+}

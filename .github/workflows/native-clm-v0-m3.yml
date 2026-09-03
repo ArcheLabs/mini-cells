@@ -1,0 +1,62 @@
+name: Native CLM v0 M3
+
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m3-growth-restored-continual-language
+    paths:
+      - 'src/minicells/native_clm_m3.py'
+      - 'scripts/research/*native_clm_v0_m3*'
+      - 'research/validations/native-clm-v0-m3-growth-restored-continual-language/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3-growth-restored-continual-language-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3.py'
+      - '.github/workflows/native-clm-v0-m3.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m3.py'
+      - 'scripts/research/*native_clm_v0_m3*'
+      - 'research/validations/native-clm-v0-m3-growth-restored-continual-language/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m3-growth-restored-continual-language-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m3.py'
+      - '.github/workflows/native-clm-v0-m3.yml'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen protocol and notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/native-clm-v0-m3-growth-restored-continual-language/protocol.json').read_text())
+          assert p['frozen_before_formal_run'] is True
+          assert p['formal_seeds'] == [73411, 73412, 73413]
+          assert p['development_seeds'] == [73301, 73302, 73303]
+          assert p['parent_checkpoint']['sha256'] == '91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f'
+          assert p['parent_m2']['formal_seeds_consumed'] == [73211, 73212, 73213]
+          assert p['growth']['oracle_domain_or_novelty_labels_visible_to_growth_controller'] is False
+          json.loads(Path('research/notebooks/06-native-clm/native-clm-v0-m3-growth-restored-continual-language-kaggle.ipynb').read_text())
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q src/minicells/native_clm_m3.py scripts/research/run_native_clm_v0_m3.py scripts/research/prepare_native_clm_v0_m3_data.py scripts/research/publish_native_clm_v0_m3.py
+          ruff check src/minicells/native_clm_m3.py scripts/research/run_native_clm_v0_m3.py scripts/research/prepare_native_clm_v0_m3_data.py scripts/research/publish_native_clm_v0_m3.py tests/research/06-native-clm/test_native_clm_m3.py
+      - name: M3 unit smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m3.py
+      - name: Formal-seed guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          workflow = Path('.github/workflows/native-clm-v0-m3.yml').read_text()
+          forbidden = 'run_native_clm_v0_m3.py' + ' --formal'
+          assert forbidden not in workflow
+          print('CI does not execute formal M3 seeds.')
+          PY

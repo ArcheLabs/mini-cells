@@ -1,0 +1,58 @@
+{
+  "claim_boundary": {
+    "later": [
+      "M2 continual language stream",
+      "M3 autonomous growth",
+      "M4 Cell ontology analysis",
+      "M5 Dense/MoE comparison"
+    ],
+    "m0": "architecture/runtime execution only",
+    "m1": "end-to-end next-token training with learned sparse Cell routing; no continual-learning or autonomous-growth claim"
+  },
+  "data": {
+    "default_dataset_id": "roneneldan/TinyStories",
+    "default_train_docs": 50000,
+    "default_validation_docs": 2000,
+    "tokenizer": "UTF-8 bytes, vocab=256"
+  },
+  "format": "minicells.native-clm-v0.m1-config.v1",
+  "milestone": "M1-next-token-training",
+  "model": {
+    "active_cells": 2,
+    "cell_init_scale": 0.02,
+    "cellular_layer_index": 3,
+    "certificate_max_rank": 64,
+    "d_ff": 1536,
+    "d_model": 384,
+    "dropout": 0.0,
+    "initial_cells": 8,
+    "max_seq_len": 256,
+    "n_heads": 6,
+    "n_layers": 6,
+    "route_temperature": 0.7,
+    "tie_embeddings": true,
+    "vocab_size": 256
+  },
+  "training": {
+    "batch_size": 8,
+    "certificate_update_interval": 50,
+    "checkpoint_interval": 1000,
+    "eval_batches": 20,
+    "eval_interval": 100,
+    "generation_prompt": "Once upon a time",
+    "generation_tokens": 120,
+    "grad_clip": 1.0,
+    "gradient_accumulation_steps": 4,
+    "log_interval": 20,
+    "lr_cells": 0.0008,
+    "lr_router": 0.0004,
+    "lr_shared": 0.0002,
+    "max_steps": 3000,
+    "min_lr_ratio": 0.1,
+    "num_workers": 0,
+    "precision": "fp16",
+    "seed": 72001,
+    "warmup_steps": 200,
+    "weight_decay": 0.1
+  }
+}

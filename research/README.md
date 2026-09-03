@@ -2,65 +2,90 @@
 
 # MiniCells Research
 
-MiniCells now separates the **product architecture** from the stronger **endogenous CLM research hypothesis**.
+This tree preserves MiniCells scientific evidence. It is **not** a product roadmap and it does not assume that the strongest Native-CLM hypothesis is true.
 
-The product path is:
+## Start here
+
+1. [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) — strongest claims currently supported, explicit No-Go claims, and engineering primitives that survive the negative results.
+2. [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) — family-level record of summary-worthy experiments with value, limitation, formal status, known ceiling, what each result does **not** prove, and the engineering primitive obtained.
+3. [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md) — current scientific authority and surviving engineering value of the historical Foundations, Self-Organization, Routing/Growth and CLM-0.4-mini notebook lineages.
+4. [`stages/06-native-clm/`](stages/06-native-clm/) — current trained-model Native-CLM sequence and closures.
+5. [`validations/`](validations/) — frozen protocols, formal results and mechanism diagnostics.
+6. [`catalog.yaml`](catalog.yaml) — machine-oriented research catalog.
+
+## Repository structure
 
 ```text
-pretrained LLM
-  -> external CLM layer
-  -> hybrid CLM
-  -> endogenous/native CLM
+research/
+  README.md                 # navigation only
+  audits/                   # cross-experiment claims, historical assets and capability ceiling
+  catalog.yaml              # machine-oriented index
+  stages/                   # research-stage narratives and closures
+  validations/              # frozen protocols/results/diagnostics
+  experiments/              # historical experiment organization
+  notebooks/                # runnable notebooks / hosted execution entrypoints
+  reports/                  # derived reports
+  releases/                 # research release records
+  previews/                 # preview material
+  archive/                  # retired/historical material
 ```
 
-The external layer may use engineered persistent Cells, sparse routing, replay-free protection, growth, versioning and rollback. Native-CLM research asks whether the coordinate system, read/write alignment and eventually the growth/write controllers can themselves become learned/endogenous.
+The directory name does not determine scientific strength. A frozen registered result outranks a roadmap, README, notebook or later interpretation.
 
-## Current research split
+## Current evidence boundary
 
-### Track A — Foundation Interface Research
+The controlled research stack establishes useful mechanisms: protected local writes, capacity growth, learned sparse coordinates, multi-Cell composition and learned control-plane behavior can all be constructed under registered boundaries. A small Native CLM can also train end-to-end from next-token loss.
 
-Core 006–009 characterize what a mature pretrained LLM already provides as a writable substrate. Current evidence supports useful low-dimensional/factorized write structure and carrier causal sufficiency, but does **not** support treating pretrained semantic/routing addresses or carrier-effect vectors as a ready-made natural Cell ontology.
+The trained-model continual-learning sequence establishes the current ceiling:
 
-Core 009D remains a non-blocking operator-geometry diagnostic.
+```text
+M2   fixed-topology replay-free continual language      NOT SUPPORTED
+M3   global-pool growth-restored continual language     NOT SUPPORTED
+M3R  read-preserving lineage growth                     NOT SUPPORTED
+```
 
-### Track B — Constructive CLM Research
+Protection has partial causal value, new capacity is usable, and preserving read ownership improves a specific M3 failure mode. None of those facts establishes autonomous replay-free continual language learning.
 
-This is now the main native-CLM feasibility line.
+The optimizer/update audit adds a separate mechanics result: safe-gradient projection is not sufficient for canonical AdamW parameter transactions, while projecting/validating the realized update can restore the registered invariant to the numerical floor. This does not change the M2 scientific decision.
 
-The first missing question is not whether growth or replay-free protection work in isolation; those already have repository evidence. It is whether reusable Cell coordinates and matching read keys can **form from continual experience without hidden task/factor labels**.
+For exact boundaries and source paths, use the audit documents rather than extending this README with another progress table.
 
-Current experiment: [Constructive CLM-001 — Learned Coordinate Formation](validations/constructive-clm-001-learned-coordinate-formation/README.md).
+## Historical notebooks
 
-The canonical reuse/no-repeat policy is frozen in the [CLM Feasibility Evidence Map](validations/CLM_FEASIBILITY_EVIDENCE_MAP.md), with a machine-readable companion at [`validations/clm-feasibility-evidence-map.yaml`](validations/clm-feasibility-evidence-map.yaml).
+The historical notebook tree is retained as a research asset, not as a flat set of equally strong scientific claims.
 
-Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md) for the G1–G5 constructive sequence.
+Current audit classification:
+
+```text
+01-foundations          HISTORICAL EXPLORATORY
+02-self-organization    HISTORICAL MECHANISTIC EVIDENCE
+03-routing-and-growth   ENGINEERING PRECURSOR EVIDENCE
+05-language-validation  RETIRED / SUPERSEDED PROTOCOL LINEAGE
+```
+
+A historical scientific interpretation may be weakened or superseded while its engineering primitive remains useful. The canonical mapping of those two dimensions is [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md).
 
 Shadow Cell Validation 001 v2 is registered as a separate, unrun architectural
 test of copy-on-write candidate development and controlled maturation:
 [protocol and implementation](validations/shadow-cell-validation-001-v2-developmental-maturation/README.md).
 
-## Research stages
+## Research vs engineering
 
-1. [Foundations](stages/01-foundations/README.md) — Echo, NCA language dynamics, 1D/2D tissue, settling, and training mechanics.
-2. [Self-Organization](stages/02-self-organization/README.md) — sparse topology, recruitment, differentiation, and trait genesis.
-3. [Routing and Growth](stages/03-routing-and-growth/README.md) — Cells became routed, independently mutable computational state.
-4. [Continual-Learning Core](stages/04-continual-learning-core/README.md) — write-addressability failures, dependency-scoped transactions, growth-restored plasticity, replay-free certificates, real-representation constraints, and foundation-interface geometry.
-5. [Language Validation](stages/05-language-validation/README.md) — historical token-level transfer/scale-readiness work; it no longer blocks the constructive native-CLM line.
+MiniCells keeps two tracks separate:
 
-## Evidence already reused by Constructive CLM
+- **Long-term research:** natural functional boundaries, future-learning sufficient state, autonomous routing/growth, replay-free continual learning, parameter-level sustained plasticity.
+- **Near-term engineering:** explicit modular changes, fork/shadow training, functional regression checks, realized-update validation, append/expand, stage-level global evaluation, versioning and rollback, with consolidation only after a separate acceptance protocol.
 
-- Core 004: growth can restore plasticity in the controlled CLM loop.
-- Core 005: bounded Cell-local subspace state can replace learner-side replay for registered-history protection, saturation detection, and reusable growth in the frozen linear-writable world.
-- Core 006: real pretrained representations contain reusable structure and replay-free certificate writes retain useful plasticity, while semantic/routing address is not a sufficient mitosis boundary.
-- Core 009A/009B-1: a compact foundation write interface exists; carrier-only writes preserve most of the tested causal target gain.
-- Core 009B-2/009C: the tested pretrained carrier-effect representation does not expose the desired compact persistent sparse/local Cell ontology. These are natural-geometry No-Gos, not Constructive-CLM No-Gos.
+Engineering may use a Cell as a deliberately chosen unit of model change without claiming it is a natural knowledge atom.
 
-## Research assets
+## Evidence discipline
 
-- [Experiment implementations](experiments/README.md) are stage-aligned adapters that import reusable code from `src/minicells/`.
-- [Notebook assets](notebooks/README.md) preserve historical experiment IDs and workflows.
-- [Validations](validations/) contain frozen protocols, evidence maps and decision documents.
-- [Canonical artifacts](../artifacts/experiments/) are immutable scientific evidence once formal runs are published.
-- Machine-readable historical paths/outcomes remain in [`catalog.yaml`](catalog.yaml).
+- Do not reuse observed formal seeds as untouched confirmation seeds.
+- Do not upgrade a failed registered decision because a later diagnostic explains the failure.
+- Do not promote synthetic/linear support into Transformer-, language-, asymptotic- or product-level support.
+- Do not infer global model improvement from a local write/retention signal.
+- Do not inherit scientific authority when reusing an old engineering primitive.
+- Preserve historical protocol/result paths; restructure entrypoints only with reference audits and compatibility shims.
+- Every new summary claim must state what it does **not** prove.
 
-No current repository result establishes general natural-language continual learning, asymptotically sublinear Cell growth, a fully learned growth policy, or an endogenous LLM-scale CLM. Constructive CLM-001 is deliberately narrower: it isolates the learned-coordinate/read-key bridge before those later claims are tested.
+The purpose of the research tree is to make future product decisions depend on the accumulated evidence ceiling rather than on the newest mechanism narrative.

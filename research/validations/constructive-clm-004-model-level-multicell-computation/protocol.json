@@ -1,0 +1,120 @@
+{
+  "format": "minicells.constructive-clm-004.protocol.v1",
+  "experiment_id": "constructive-clm-004",
+  "title": "Constructive CLM-004 — Model-Level Multi-Cell Computation",
+  "status": "PROTOCOL_FROZEN_UNRUN",
+  "date_frozen": "2026-09-02",
+  "scientific_question": "Can learned route-addressed Cell operators perform sparse model-level simultaneous and order-sensitive sequential computation on unseen compositions while preserving a replay-free protected-mutation invariant?",
+  "parent_evidence": {
+    "constructive_clm_001_001b": "learned/addressable Cell coordinates",
+    "constructive_clm_002": "structure-tracking Cell growth",
+    "constructive_clm_003": "replay-free protected learned/growing Cells",
+    "core_005": "Cell-local subspace certificate primitives"
+  },
+  "new_integration_variable": [
+    "multiple active learned Cells in one forward execution",
+    "operator-valued Cell state acting on hidden representations",
+    "simultaneous and order-sensitive sequential composition",
+    "sparse Cell execution",
+    "protected mutation measured at full-composition output"
+  ],
+  "not_retesting": [
+    "whether Cell coordinates can form",
+    "whether growth restores plasticity",
+    "whether replay-free certificates work in isolation",
+    "whether long-horizon Cell count tracks reusable structure"
+  ],
+  "world": {
+    "learned_roots": 12,
+    "route_bridge": "Constructive CLM-002/003 structural bridge",
+    "hidden_dim": 16,
+    "operator_type": "learned linear residual operator g_i(h)=W_i h",
+    "true_operator_spectral_norm": 0.4,
+    "operator_acquisition": {
+      "composition_examples_seen": 0,
+      "batches_per_cell": 4,
+      "examples_per_batch": 32,
+      "target_noise_std": 0.002,
+      "route_query_noise_std": 0.01,
+      "learner_state": "Cell-local X^T X and Y^T X sufficient statistics; no raw examples retained"
+    },
+    "evaluation": {
+      "modes": ["simultaneous", "sequential"],
+      "cases_per_mode": 64,
+      "batch_size": 24,
+      "active_cells_per_case": [2, 4],
+      "all_multi_cell_compositions_unseen_during_training": true,
+      "sequential_rule": "h <- h + W_i h in routed order",
+      "simultaneous_rule": "h <- h + sum_i W_i h from the same incoming state"
+    },
+    "protected_mutation_probe": {
+      "history_compositions": 6,
+      "mutation_examples": 6,
+      "certificate": "Core-005 row-span certificate built from current committed incoming states then raw states discarded",
+      "mutation_scope": "one computational Cell",
+      "learner_history_replay_accesses": 0
+    }
+  },
+  "controls": {
+    "single_cell": "execute only the first routed Cell",
+    "wrong_semantics": "use simultaneous execution for sequential target or sequential execution for simultaneous target",
+    "dense_all_cells": "execute every Cell regardless of route",
+    "unsafe_mutation": "fit the same mutation without the Cell-local certificate"
+  },
+  "gates": {
+    "structural_bridge": {
+      "root_cells": 12,
+      "covered_factors": 12,
+      "duplicate_assignments": 0,
+      "minimum_mean_matched_root_key_cosine": 0.985
+    },
+    "operator_acquisition": {
+      "minimum_route_accuracy": 0.99,
+      "maximum_mean_relative_operator_error": 0.01,
+      "maximum_max_relative_operator_error": 0.02,
+      "minimum_pairwise_operator_distance": 0.05,
+      "raw_examples_retained": 0
+    },
+    "composition": {
+      "maximum_simultaneous_mean_mse": 0.0001,
+      "maximum_sequential_mean_mse": 0.0001,
+      "minimum_exact_route_sequence_accuracy": 0.995,
+      "maximum_main_mse_fraction_of_single_cell_baseline": 0.05,
+      "maximum_main_mse_fraction_of_wrong_semantics_baseline": 0.05,
+      "minimum_sequential_true_order_effect_mse": 0.001,
+      "maximum_simultaneous_permutation_mse": 1e-12,
+      "minimum_dense_all_cells_baseline_mse": 0.01,
+      "maximum_main_mse_fraction_of_dense_all_cells_baseline": 0.05
+    },
+    "sparse_compute": {
+      "maximum_cell_execution_fraction_vs_dense": 0.3,
+      "maximum_active_cells": 4
+    },
+    "protected_mutation": {
+      "maximum_safe_historical_composition_mse": 1e-10,
+      "maximum_safe_protected_change": 1e-10,
+      "maximum_safe_fit_error": 1e-10,
+      "maximum_learner_replay_accesses": 0,
+      "maximum_raw_history_retained": 0,
+      "minimum_unsafe_historical_composition_mse": 0.0001,
+      "minimum_unsafe_protected_change": 0.001,
+      "maximum_unrelated_cell_parameter_drift": 1e-15,
+      "maximum_route_key_drift": 1e-15
+    }
+  },
+  "seed_policy": {
+    "development_only": [501, 502, 503],
+    "formal_untouched": [90611, 90612, 90613],
+    "formal_seeds_must_only_be_run_with": "--formal",
+    "ci_must_not_run_formal_seeds": true
+  },
+  "formal_positive_status": "MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED",
+  "formal_negative_status": "MODEL_LEVEL_MULTICELL_COMPUTATION_NOT_SUPPORTED",
+  "interpretation_boundary": [
+    "Positive evidence is for the registered controlled linear-residual operator world.",
+    "The test promotes Cell from memory/write atom to reusable hidden-state computational module.",
+    "It does not establish nonlinear Transformer Cell operators, natural-language generation, learned router creation inside G4, learned growth control, or endogenous architecture.",
+    "Routing-search cost is not claimed to be O(active Cells); the sparse-compute gate measures expensive Cell-operator execution only."
+  ],
+  "next_if_positive": "Constructive CLM-005 — Scaffold Removal / Endogenous Transition"
+}

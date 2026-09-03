@@ -1,13 +1,15 @@
 schema: minicells.clm-feasibility-evidence-map.v1
 status: FROZEN
-version: "1.0"
+version: "1.6"
 frozen_against:
-  branch: main
-  commit: 474f7f1c736a61a433e4d5a01691edc6795177da
+  branch: codex/constructive-clm-005-endogenous-control
+  commit: 452191e85a2fe265966f151503ecf5d2f7070a88
   date: "2026-09-02"
 mission: >-
   Reuse validated MiniCells research components and spend new experiments only on
-  missing integration claims required for constructive/endogenous CLM feasibility.
+  genuinely new integration claims. Constructive CLM G1-G5 are now formally
+  supported under their registered controlled boundaries; the next milestone is
+  Small Native CLM v0 trained-model feasibility.
 evidence_grades:
   A: registered/formal scientific evidence
   B: controlled repeatable mechanism evidence
@@ -18,7 +20,6 @@ items:
     sources: ["experiments-014-024", "experiment-021", "stage-self-organization"]
     grade: B
     disposition: reuse
-    boundary: emergence alone is not validated continual learning
   - id: routed_mutable_cells
     claim: sparse routed independently mutable Cell state is operationally viable
     sources: ["experiments-025-026", "clm-0.1", "clm-0.3"]
@@ -39,7 +40,6 @@ items:
     sources: ["core-validation-006"]
     grade: A
     disposition: reuse
-    boundary: address-based mitosis failed bounded-growth and conflict-relief gates
   - id: semantic_address_boundary
     claim: semantic/routing address is a sufficient functional split boundary
     sources: ["core-validation-006"]
@@ -54,59 +54,131 @@ items:
     disposition: do_not_repeat_near_equivalent_fixed_dictionary_search
   - id: factorized_functional_geometry
     claim: normalized functional writes expose reusable factorized geometry
-    sources:
-      - "core-validation-009a"
-      - "commit:8290d4d674a8ec9ce98d4de129043526841e5f95"
+    sources: ["core-validation-009a"]
     grade: A
     disposition: foundation_interface_evidence
   - id: carrier_causal_sufficiency
     claim: the common right-side carrier preserves most causal write effect
-    sources:
-      - "core-validation-009b1"
-      - "commit:f2691daf5738eac0232866a46d079db3aa61b60a"
+    sources: ["core-validation-009b1", "commit:f2691daf5738eac0232866a46d079db3aa61b60a"]
     grade: A
     disposition: foundation_interface_evidence
-    metrics:
-      carrier_over_full_target_gain: "~0.976-0.982"
   - id: compact_effect_dictionary
     claim: pretrained effect vectors lie in a compact persistent shared subspace
-    sources: ["branch:codex/core-validation-009b2-persistent-effect-geometry"]
+    sources: ["core-validation-009b2"]
     grade: C
     outcome: negative_discovery
     disposition: natural_geometry_no_go_only
   - id: sparse_local_effect_geometry
     claim: pretrained effect vectors expose sparse/local Cell coordinates
-    sources:
-      - "core-validation-009c"
-      - "commit:3a524abd5b29a42c425dddab7df497cbfadfeecd"
+    sources: ["core-validation-009c", "commit:3a524abd5b29a42c425dddab7df497cbfadfeecd"]
     grade: C
     outcome: negative_discovery
     disposition: do_not_repeat
-  - id: compositional_operator_geometry
-    claim: full write operators retain reusable joint structure after carrier-effect reduction fails
-    sources: ["core-validation-009d"]
-    grade: Open
-    disposition: await_result
+  - id: constructive_clm_001
+    claim: reusable learned Cell keys/effects form without task/factor labels when hidden factors receive singleton exposure
+    sources: ["constructive-clm-001"]
+    grade: A
+    outcome: LEARNED_COORDINATE_FORMATION_SUPPORTED
+    disposition: g1a_supported_reuse_do_not_retest
+    formal_seeds: [90111, 90112, 90113]
+  - id: constructive_clm_001b
+    claim: latent Cell keys/effects are recoverable without singleton exposure in the registered additive pair-superposition family
+    sources: ["constructive-clm-001b"]
+    grade: A
+    outcome: LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED
+    disposition: g1b_supported_reuse_do_not_retest
+    protocol_sha256: de234ea4c75773c41012818deaba1d95622737398d5324afb8bfeea5b56063a8
+    formal_seeds: [90211, 90212, 90213]
+  - id: constructive_clm_002
+    claim: on the registered finite horizon, learned Cell count tracks the sublinearly expanding reusable latent vocabulary rather than transaction count
+    sources: ["constructive-clm-002"]
+    grade: A
+    outcome: LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED
+    disposition: g2_supported_reuse_do_not_extend_cosmetically
+    protocol_sha256: eca97a71c5251519b43bda087e69a262241d388215f2da22ce8470db857b6454
+    formal_seeds: [90411, 90412, 90413]
+    boundary: finite-horizon structure-tracking evidence is not an asymptotic K(N)=o(N) theorem
+    metrics:
+      final_cells: [30, 30, 30]
+      final_true_factors: [30, 30, 30]
+      cell_growth_exponent: [0.6631226816, 0.6631226816, 0.6631226816]
+      final_cell_to_transaction_ratio: [0.00732421875, 0.00732421875, 0.00732421875]
+  - id: constructive_clm_003
+    claim: learned/growing Cell coordinates integrate with replay-free Cell-local certificates and context-keyed mitosis without destructive forgetting or transaction-linear protective growth
+    sources:
+      - constructive-clm-003
+      - research/validations/constructive-clm-003-protected-growing-cells/FORMAL_RESULT.md
+    grade: A
+    outcome: PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED
+    disposition: g3_supported_reuse_do_not_retest
+    protocol_sha256: 6122b8a6dd62ac69bc371909fe503c24cea319837b0a5989a4b640492aeeda86
+    formal_seeds: [90511, 90512, 90513]
+    all_registered_gates_passed: true
+    boundary: controlled learned-root plus linear protected-write integration
+  - id: constructive_clm_004
+    claim: learned route-addressed Cell operators compose at model level on held-out simultaneous and order-sensitive sequential executions with sparse active Cell compute and replay-free protected mutation
+    sources:
+      - constructive-clm-004
+      - research/validations/constructive-clm-004-model-level-multicell-computation/FORMAL_RESULT.md
+    grade: A
+    outcome: MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED
+    disposition: g4_supported_reuse_do_not_retest
+    protocol_sha256: 899c466747b5bec28b548fff2fc48173524b4fba7475f59085cb5f7accc75176
+    formal_seeds: [90611, 90612, 90613]
+    all_registered_gates_passed: true
+    registered_gate_count: 17
+    boundary: controlled linear residual operators; not arbitrary nonlinear Transformer Cells
+  - id: constructive_clm_005
+    claim: learned routing and learned write/growth control replace explicit Constructive CLM control-plane scaffolds while preserving protected writes, bounded reusable growth, sparse multi-Cell composition and slow-shared-substrate compatibility
+    sources:
+      - constructive-clm-005
+      - research/validations/constructive-clm-005-scaffold-removal/FORMAL_RESULT.md
+      - artifacts/experiments/constructive-clm-005-scaffold-removal/decision.json
+    grade: A
+    outcome: LEARNED_CONTROL_PLANE_TRANSITION_SUPPORTED
+    disposition: g5_supported_close_constructive_core
+    protocol_sha256: 3188e56af52763d2de75e4d13f25c5cbff2e56b25d5b32520495148e5e65b27d
+    formal_seeds: [90811, 90812, 90813]
+    all_registered_gates_passed: true
+    registered_gate_count: 20
+    metrics:
+      controller_meta_accuracy_router: [1.0, 1.0, 1.0]
+      controller_meta_accuracy_growth: [1.0, 1.0, 1.0]
+      controller_meta_accuracy_write: [1.0, 1.0, 1.0]
+      final_cells: [16, 16, 16]
+      children: [4, 4, 4]
+      final_simultaneous_mse: [0.000001131, 0.000001249, 0.000001263]
+      final_sequential_mse: [0.000001342, 0.000001341, 0.000001706]
+      max_active_compute_fraction: [0.1855, 0.1875, 0.2002]
+    boundary: Core-005 certificate geometry remains fixed; not language-scale or fully learned safety geometry
 open_gaps:
-  - id: G1
-    claim: learned Cell coordinates and read/write alignment form without hidden task/factor labels
+  - id: G1a
     experiment: constructive-clm-001
-    priority: primary
+    status: supported
+  - id: G1b
+    experiment: constructive-clm-001b
+    status: supported
+    boundary: additive pair-superposition scaffold
   - id: G2
-    claim: long-horizon growth becomes sublinear or spawn probability declines materially
     experiment: constructive-clm-002
+    status: supported
+    boundary: finite-horizon scaling evidence is not an asymptotic theorem
   - id: G3
-    claim: learned coordinates integrate with the existing replay-free certificate mechanism
     experiment: constructive-clm-003
+    status: supported
+    boundary: controlled learned-root plus linear protected-write integration
   - id: G4
-    claim: multiple learned Cells compose safely on unseen combinations
     experiment: constructive-clm-004
+    status: supported
+    boundary: controlled linear residual operators
   - id: G5
-    claim: external CLM scaffolding can be removed progressively toward endogenous CLM
     experiment: constructive-clm-005
-native_route_stop_rule:
-  require_repeated_failure_of:
-    - reusable_learned_coordinates
-    - deployable_read_write_alignment
-    - bounded_or_improving_growth
-  natural_geometry_negative_is_not_stop: true
+    status: supported
+    boundary: learned control plane over retained deterministic certificate safety primitives
+constructive_core_status: closed_supported_under_registered_boundaries
+next_research_phase: trained_model_feasibility
+next_milestone: small_native_clm_v0
+no_repeat:
+  - cosmetic_clm_005b_more_cells
+  - cosmetic_clm_005b_longer_horizon
+  - cosmetic_clm_005b_more_repeat_events

@@ -1,0 +1,144 @@
+{
+  "format": "minicells.native-clm-v0.m3-protocol.v1",
+  "title": "Native CLM v0 M3 — Growth-Restored Continual Language",
+  "frozen_before_formal_run": true,
+  "scientific_question": "Starting from the exact M1 checkpoint and a matched zero-replay B->C->D stream, does autonomous context-addressed Cell growth restore old-domain retention beyond an otherwise identical fixed-topology protected control while preserving new-domain plasticity?",
+  "parent_checkpoint": {
+    "repo_id": "archelabsxyz/native-clm-v0",
+    "filename": "final-model.pt",
+    "sha256": "91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f",
+    "parameters": 12154368,
+    "initial_cells": 8,
+    "active_cells": 2
+  },
+  "parent_m2": {
+    "status": "NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED",
+    "formal_seeds_consumed": [73211, 73212, 73213],
+    "protocol_sha256": "4af6bc61355a7fb1aab8f47acb2a68838b430fe3b5474c059c3c3284420e6a00",
+    "data_manifest_sha256": "a9bf79f9a53cd031fa3703322a1ad6ac11d9663c44ce2bc9671da16d0e81ca61",
+    "observed_protected_A_regression_mean": 0.4387,
+    "observed_protected_mean_forgetting": 0.2115,
+    "interpretation": "M2 is the frozen fixed-topology negative baseline. Its original binary artifacts were lost after Kaggle termination and its formal seeds must not be reused as untouched evidence."
+  },
+  "development_seeds": [73301, 73302, 73303],
+  "formal_seeds": [73411, 73412, 73413],
+  "stream": {
+    "order": ["B", "C", "D"],
+    "A": {
+      "dataset": "roneneldan/TinyStories",
+      "role": "evaluation_only_M1_retention_anchor",
+      "documents": 2000
+    },
+    "B": {
+      "dataset": "Salesforce/wikitext",
+      "config": "wikitext-2-raw-v1",
+      "train_documents": 20000,
+      "eval_documents": 2000
+    },
+    "C": {
+      "train_dataset": "codeparrot/codeparrot-clean-train",
+      "eval_dataset": "codeparrot/codeparrot-clean-valid",
+      "train_documents": 8000,
+      "eval_documents": 2000
+    },
+    "D": {
+      "dataset": "databricks/databricks-dolly-15k",
+      "train_documents": 10000,
+      "eval_documents": 2000
+    }
+  },
+  "data_rule": {
+    "dataset_main_revisions_are_resolved_to_exact_hub_commits_before_download": true,
+    "all_local_corpus_files_are_sha256_identified": true,
+    "M3_fixed_and_growth_arms_share_the_exact_same_manifest": true,
+    "learner_replay_bytes": 0,
+    "note": "The original M2 local manifest was lost. M3 therefore performs a new pinned snapshot and includes a matched fixed-topology control in the same formal run instead of treating cross-run M2 numbers as the direct causal comparator."
+  },
+  "training": {
+    "batch_size": 16,
+    "steps_per_phase": 400,
+    "eval_batches": 20,
+    "log_interval": 50,
+    "warmup_steps": 40,
+    "lr_cells": 0.0008,
+    "min_lr_ratio": 0.1,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "certificate_update_interval": 50,
+    "precision": "fp16",
+    "num_workers": 0
+  },
+  "arms": {
+    "fixed_protected": {
+      "growth_enabled": false,
+      "initial_cells": 8,
+      "active_cells": 2,
+      "shared_substrate_frozen": true,
+      "original_router_and_route_keys_frozen": true,
+      "cell_weight_gradients_certificate_projected": true
+    },
+    "growth_protected": {
+      "growth_enabled": true,
+      "initial_cells": 8,
+      "active_cells": 2,
+      "shared_substrate_frozen": true,
+      "original_router_and_route_keys_frozen": true,
+      "cell_weight_gradients_certificate_projected": true,
+      "new_child_route_keys_frozen_after_birth": true
+    }
+  },
+  "growth": {
+    "controller_type": "learner_visible_persistent_pressure_rule",
+    "growth_check_interval": 50,
+    "growth_cooldown_steps": 100,
+    "max_new_cells": 8,
+    "max_final_cells": 16,
+    "min_parent_route_hits_per_window": 512,
+    "min_parent_certificate_rank": 8,
+    "max_projected_to_raw_gradient_ratio": 0.90,
+    "min_window_train_loss": 1.50,
+    "parent_selection": "max route_hits * (1 - projected_to_raw_gradient_ratio)",
+    "child_route_key": "mean normalized frozen-router query of current-window tokens routed top1 to the parent",
+    "child_weight_initialization": "exact parent operator clone",
+    "inherit_scale": 1.0,
+    "child_certificate_initial_rank": 0,
+    "oracle_domain_or_novelty_labels_visible_to_growth_controller": false,
+    "evaluation_metrics_visible_to_growth_controller": false,
+    "phase_name_visible_to_growth_controller": false,
+    "rationale": "A cloned parent preserves the routed function at birth while its empty certificate supplies new protected write capacity. A context-derived frozen child key allows later similar inputs to reuse that capacity without training the shared router."
+  },
+  "thresholds": {
+    "minimum_phase_gain_each_B_C_D": 0.05,
+    "maximum_growth_A_regression": 0.20,
+    "minimum_fixed_A_regression_to_expose_capacity_limit": 0.30,
+    "minimum_A_retention_advantage_vs_fixed": 0.10,
+    "maximum_growth_mean_forgetting": 0.15,
+    "minimum_growth_to_fixed_plasticity_ratio": 0.80,
+    "maximum_active_fraction_vs_dense": 0.30,
+    "minimum_spawned_cells": 1,
+    "maximum_spawned_cells": 8,
+    "minimum_child_reuse_fraction": 0.75,
+    "minimum_child_post_birth_route_hits": 512
+  },
+  "registered_gates": [
+    "exact_same_m1_checkpoint",
+    "matched_seed_and_data_snapshot",
+    "zero_learner_replay",
+    "shared_and_original_router_frozen",
+    "fixed_control_remains_8_cells",
+    "fixed_control_exposes_capacity_limit",
+    "growth_is_learner_visible_only",
+    "growth_occurs_and_is_bounded",
+    "children_are_reused",
+    "sparse_compute_survives_growth",
+    "growth_phase_plasticity",
+    "growth_absolute_A_retention",
+    "growth_A_retention_advantage",
+    "growth_mean_forgetting",
+    "growth_plasticity_preserved"
+  ],
+  "positive_status": "NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_SUPPORTED",
+  "negative_status": "NATIVE_CLM_V0_M3_GROWTH_RESTORED_CONTINUAL_LANGUAGE_NOT_SUPPORTED",
+  "decision_rule": "All registered gates must pass independently on all three untouched formal seeds.",
+  "claim_boundary": "12.15M byte-level Native CLM v0; one Cellular Layer; frozen shared substrate and original read-address geometry; protected Cell-local writes; autonomous context-addressed child creation; B->C->D sequential language stream; zero learner replay. This does not establish learned language-scale growth policy, asymptotic growth law, semantic Cell ontology, multi-layer Cellular blocks, or LLM-scale Native CLM."
+}

@@ -1,0 +1,130 @@
+{
+  "schema": "minicells.constructive-clm-002.protocol.v1",
+  "experiment_id": "constructive-clm-002",
+  "title": "Long-Horizon Structure-Tracking Growth Law",
+  "status": "PROTOCOL_FROZEN_UNRUN",
+  "scientific_question": "Across a long structured continual stream whose reusable latent vocabulary itself grows sublinearly, does learned Cell state track latent structure rather than transaction count while spawn probability declines and retention/composition remain usable?",
+  "parent_evidence": [
+    {
+      "experiment": "constructive-clm-001",
+      "outcome": "LEARNED_COORDINATE_FORMATION_SUPPORTED",
+      "role": "G1a addressable coordinate formation"
+    },
+    {
+      "experiment": "constructive-clm-001b",
+      "outcome": "LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED",
+      "result_commit": "55071bc7fd01e7c61df02846cd8f4205b906814f",
+      "protocol_sha256": "de234ea4c75773c41012818deaba1d95622737398d5324afb8bfeea5b56063a8",
+      "role": "G1b latent pair-superposition bootstrap"
+    }
+  ],
+  "new_integration_variable": "long-horizon streaming growth with a continuously expanding reusable latent vocabulary",
+  "world": {
+    "max_transactions": 4096,
+    "checkpoints": [256, 512, 1024, 2048, 4096],
+    "initial_factors": 6,
+    "max_factors": 30,
+    "context_dim": 48,
+    "effect_dim": 40,
+    "context_common_rho": 0.18,
+    "effect_common_rho": 0.12,
+    "atom_jitter": 0.05,
+    "bootstrap_cycles": 6,
+    "bootstrap_pair_types": 12,
+    "introduction_repeats": 4,
+    "registered_latent_growth_alpha": 0.60,
+    "stabilization_tail": 128,
+    "samples_per_transaction": 16,
+    "train_noise": 0.02,
+    "eval_noise": 0.01,
+    "reuse_transaction_support": [2, 3],
+    "novel_factor_exposure": "four unequal-weight pair mixtures with different already-existing anchors; no novelty/factor label is supplied to the learner"
+  },
+  "learner": {
+    "bootstrap": "reuse Constructive CLM-001B RelationalCellLearner on the initial six-factor mixture block",
+    "hard_cell_cap": null,
+    "inference": "x-only sparse support inference over current Cell keys, support <= 3",
+    "growth_trigger": "context reconstruction MSE > 0.0003",
+    "novelty_proposal": "for several possible known anchors, solve the registered one-missing-unit-key pair geometry from current x/y residuals",
+    "probation": "candidate must recur through at least two distinct anchors before commit",
+    "candidate_similarity_threshold": 0.985,
+    "candidate_confirmations": 2,
+    "candidate_distinct_anchors": 2,
+    "candidate_expiry_transactions": 10,
+    "existing_key_similarity_reject": 0.95,
+    "cell_deletion": false,
+    "cell_update_after_commit": false,
+    "growth_policy_learned": false
+  },
+  "learner_forbidden_inputs": [
+    "hidden factor ID",
+    "novelty flag",
+    "true latent vocabulary size",
+    "introduction schedule",
+    "transaction support labels",
+    "oracle Cell count"
+  ],
+  "posthoc_only_information": [
+    "hidden factor IDs for alignment/route scoring",
+    "true factor count for growth-tracking metrics",
+    "registered introduction times for oracle growth curve"
+  ],
+  "controls_and_references": {
+    "transaction_memory_growth_exponent": 1.0,
+    "oracle_latent_curve": "the true reusable factor count at each registered checkpoint",
+    "anti_cap_guard": "learner has no max_cells parameter and must still create a factor near the end of the stream"
+  },
+  "primary_metrics": [
+    "K(N)",
+    "K(N)/N",
+    "true latent factor count M(N)",
+    "K(N)-M(N)",
+    "finite-horizon log-log Cell growth exponent",
+    "finite-horizon oracle latent growth exponent",
+    "windowed spawn rate",
+    "windowed reuse rate",
+    "Cell birth time/lifetime/usage",
+    "heldout pair/triple MSE and route recall at every checkpoint",
+    "final early-factor retention",
+    "transaction-to-Cell state compression"
+  ],
+  "formal_gates": {
+    "bootstrap_reused_component_valid": "001B bootstrap valid and produces six initial Cells",
+    "no_hard_cell_cap": true,
+    "latent_vocabulary_tracking": "max checkpoint |K-M| <= 1",
+    "final_no_false_or_missed_growth": "K(4096)=M(4096)=30",
+    "sublinear_like_finite_horizon_exponent": "0.40 <= fitted Cell exponent <= 0.80",
+    "growth_exponent_tracks_oracle": "|Cell exponent - oracle latent exponent| <= 0.05",
+    "beats_transaction_memory_growth": "Cell exponent <= 0.85 * 1.0",
+    "state_ratio_declines": "K/N at 4096 <= 0.01 and <= 30% of K/N at N=256",
+    "spawn_rate_declines": "registered window spawn rates are non-increasing up to 15% tolerance",
+    "late_spawn_rate_low": "spawn rate on [2048,4096) <= 0.006",
+    "late_reuse_high": "reuse rate on [2048,4096) >= 0.985",
+    "growth_remains_enabled_late": "last committed Cell occurs after 90% of the 4096-transaction horizon",
+    "coordinate_quality": "final mean matched key cosine >= 0.985, effect cosine >= 0.995, with no duplicate factor assignment",
+    "composition_quality": "final pair/triple MSE <= 0.0005 and route recall >= 0.98",
+    "early_factor_retention": "final evaluation restricted to the first six factors has pair/triple MSE <= 0.0005 and recall >= 0.98",
+    "state_compression": "4096 / final Cell count >= 100"
+  },
+  "observed_and_excluded_seeds": {
+    "full_development": [301, 302, 303],
+    "bootstrap_only_diagnostic": [90311, 90312, 90313]
+  },
+  "formal_seeds_frozen_after_all_development_observation": [90411, 90412, 90413],
+  "formal_decision_rule": "SUPPORTED only if every formal seed completes and every registered gate is true on every formal seed",
+  "positive_status": "LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED",
+  "negative_status": "LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_NOT_SUPPORTED",
+  "positive_interpretation": "On the registered 4096-transaction structured stream, Cell state tracks a sublinearly expanding reusable latent vocabulary, K/N and spawn rate decline, late reuse remains high, and learned coordinates preserve controlled composition/retention.",
+  "explicit_nonclaims": [
+    "asymptotic proof that K(N)=o(N)",
+    "arbitrary novelty process",
+    "arbitrary blind source separation",
+    "nonlinear or unknown mixture law",
+    "learned or endogenous growth policy",
+    "write-safety/certificate integration",
+    "language-model-scale continual learning",
+    "foundation-model plasticity",
+    "JAM deployment"
+  ],
+  "next_if_positive": "Constructive CLM-003 certificate integration; CLM-002 should not be extended indefinitely with cosmetic longer synthetic streams."
+}

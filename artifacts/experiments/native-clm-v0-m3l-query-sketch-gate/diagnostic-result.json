@@ -1,0 +1,152 @@
+{
+  "checkpoint_seeds": [
+    73611,
+    73612,
+    73613
+  ],
+  "classification": "QUERY_SKETCH_GATE_NOT_FEASIBLE",
+  "current_cosine": {
+    "mean": 0.5661776517814129,
+    "median": 0.5227479849185046
+  },
+  "diagnostic_data_manifest": {
+    "dataset_revisions": {
+      "A": {
+        "repo_id": "roneneldan/TinyStories",
+        "requested_revision": "main",
+        "resolved_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64"
+      },
+      "B": {
+        "repo_id": "Salesforce/wikitext",
+        "requested_revision": "main",
+        "resolved_revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+      },
+      "C_eval": {
+        "repo_id": "codeparrot/codeparrot-clean-valid",
+        "requested_revision": "main",
+        "resolved_revision": "4db92d2ec0c1b4c41eeb439cfae16854511d9dcd"
+      },
+      "C_train": {
+        "repo_id": "codeparrot/codeparrot-clean-train",
+        "requested_revision": "main",
+        "resolved_revision": "3e6ab65f2864931e041f6a82db9b5a6ec2b71ab4"
+      },
+      "D": {
+        "repo_id": "databricks/databricks-dolly-15k",
+        "requested_revision": "main",
+        "resolved_revision": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a"
+      }
+    },
+    "exact_parent_snapshot_verified": true,
+    "format": "minicells.native-clm-v0.m3r-address-diagnostic-data.v1",
+    "model_training": false,
+    "parent_files": {
+      "A_eval": {
+        "bytes": 1597917,
+        "documents": 2000,
+        "path": "A-tinystories-eval.txt",
+        "sha256": "761ac42dbee141619216b9b01822db614322a61b1ceb4cc4efdf24a6575a10ba"
+      },
+      "B_eval": {
+        "bytes": 940486,
+        "documents": 2000,
+        "path": "B-wikitext-eval.txt",
+        "sha256": "51d2cc18393d3af84b1ead1dc3bc2e0770fd97a797fb28777f305bc2db9fcf53"
+      },
+      "B_train": {
+        "bytes": 9104081,
+        "documents": 20000,
+        "path": "B-wikitext-train.txt",
+        "sha256": "c7029622b9a1c4b4f249d927b3ab30d4c09ddffe845e031aee3412b4735ca440"
+      },
+      "C_eval": {
+        "bytes": 20007715,
+        "documents": 2000,
+        "path": "C-code-eval.txt",
+        "sha256": "cc21efc44e37d416a9abde9fed2e1791adc0998ac55239f3c349da9f31d3527a"
+      },
+      "C_train": {
+        "bytes": 79462883,
+        "documents": 8000,
+        "path": "C-code-train.txt",
+        "sha256": "1e3f304d029a9fdae1bb992b92cba11a4bd48857e9db48c88d1c8790687f6f51"
+      },
+      "D_eval": {
+        "bytes": 1662127,
+        "documents": 2000,
+        "path": "D-dolly-eval.txt",
+        "sha256": "8136650c3e4ddea5772768a20004dae0613646ac01129011558dec60241efde3"
+      },
+      "D_train": {
+        "bytes": 8051614,
+        "documents": 10000,
+        "path": "D-dolly-train.txt",
+        "sha256": "ea67fa5b44699c651b9db2c019485f61580f6664fbb79e2ebc30263956999af6"
+      }
+    },
+    "parent_manifest_path": "artifacts/experiments/native-clm-v0-m3r-read-preserving-growth/data-manifest.json",
+    "parent_manifest_sha256": "213ddb9d093ea44fd0524e6ba6318f86a61c54270bd5cad6ddeb3233470565b0"
+  },
+  "edge_count": 24,
+  "format": "minicells.native-clm-v0.m3l-query-sketch-gate.aggregate.v1",
+  "interpretation": "The offline edge-local oracle is separable, but the registered compact historical sketch loses too much boundary information; improve the address-state representation before a new continual-language formal run.",
+  "native_clm_training": false,
+  "new_formal_seeds_consumed": false,
+  "offline_oracle": {
+    "fraction_auc_ge_floor": 1.0,
+    "mean": 0.9248451134315819,
+    "median": 0.9280664065071165
+  },
+  "old_raw_query_replay_in_gate_fit": false,
+  "parent_address_diagnostic_commit": "3e96a0a2ffe08430b5b04c58a2a3ffb98e0f3176",
+  "parent_m3r_hf_revision": "a23b521e137a7e44616809895d44d87cc7d6f87f",
+  "protocol": {
+    "batch_size": 8,
+    "diagonal_regularization": 0.0001,
+    "max_batches_per_domain": 64,
+    "max_samples_per_domain_per_edge": 4096,
+    "median_current_tpr_min": 0.7,
+    "median_normalized_oracle_excess_recovery": 0.85,
+    "median_old_fpr_max": 0.2,
+    "minimum_fraction_oracle_edges_above_floor": 0.75,
+    "minimum_fraction_sketch_edges_above_floor": 0.75,
+    "minimum_test_samples_per_side": 256,
+    "minimum_train_samples_per_side": 512,
+    "minimum_valid_edge_fraction": 0.75,
+    "oracle_edge_auc_floor": 0.8,
+    "oracle_learning_rate": 0.05,
+    "oracle_separable_median_auc": 0.85,
+    "oracle_steps": 300,
+    "oracle_weight_decay": 0.0001,
+    "sketch_gate_edge_auc_floor": 0.85,
+    "sketch_gate_median_auc": 0.9,
+    "sketch_rank": 16,
+    "split_seed_base": 73800,
+    "target_sketch_old_fpr": 0.1,
+    "train_group_fraction": 0.7
+  },
+  "scientific_decision": false,
+  "sketch_gate": {
+    "fraction_auc_ge_floor": 0.75,
+    "mean": 0.896721672889611,
+    "median": 0.8968305421556132,
+    "median_current_tpr": 0.8203997910022736,
+    "median_normalized_oracle_excess_recovery": 0.9356483126694585,
+    "median_old_fpr": 0.18546973913908005,
+    "median_sketch_bytes": 27720.0
+  },
+  "thresholds": {
+    "median_current_tpr_min": 0.7,
+    "median_normalized_oracle_excess_recovery": 0.85,
+    "median_old_fpr_max": 0.2,
+    "minimum_fraction_oracle_edges_above_floor": 0.75,
+    "minimum_fraction_sketch_edges_above_floor": 0.75,
+    "minimum_valid_edge_fraction": 0.75,
+    "oracle_edge_auc_floor": 0.8,
+    "oracle_separable_median_auc": 0.85,
+    "sketch_gate_edge_auc_floor": 0.85,
+    "sketch_gate_median_auc": 0.9
+  },
+  "valid_edge_count": 24,
+  "valid_edge_fraction": 1.0
+}

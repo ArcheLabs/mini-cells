@@ -1,0 +1,61 @@
+name: Native CLM v0 M2
+
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m2-continual-language
+    paths:
+      - 'src/minicells/native_clm_m2.py'
+      - 'scripts/research/*native_clm_v0_m2*'
+      - 'scripts/research/fetch_native_clm_v0_m1_checkpoint.py'
+      - 'research/validations/native-clm-v0-m2-continual-language/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m2-continual-language-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m2.py'
+      - '.github/workflows/native-clm-v0-m2.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m2.py'
+      - 'scripts/research/*native_clm_v0_m2*'
+      - 'scripts/research/fetch_native_clm_v0_m1_checkpoint.py'
+      - 'research/validations/native-clm-v0-m2-continual-language/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m2-continual-language-kaggle.ipynb'
+      - 'tests/research/06-native-clm/test_native_clm_m2.py'
+      - '.github/workflows/native-clm-v0-m2.yml'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen protocol and notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/native-clm-v0-m2-continual-language/protocol.json').read_text())
+          assert p['frozen_before_formal_run'] is True
+          assert p['formal_seeds'] == [73211, 73212, 73213]
+          assert p['development_seeds'] == [73101]
+          assert p['parent_checkpoint']['sha256'] == '91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f'
+          json.loads(Path('research/notebooks/06-native-clm/native-clm-v0-m2-continual-language-kaggle.ipynb').read_text())
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q src/minicells/native_clm_m2.py scripts/research/run_native_clm_v0_m2.py scripts/research/prepare_native_clm_v0_m2_data.py scripts/research/fetch_native_clm_v0_m1_checkpoint.py scripts/research/publish_native_clm_v0_m2.py
+          ruff check --diff src/minicells/native_clm_m2.py scripts/research/run_native_clm_v0_m2.py scripts/research/prepare_native_clm_v0_m2_data.py scripts/research/fetch_native_clm_v0_m1_checkpoint.py scripts/research/publish_native_clm_v0_m2.py tests/research/06-native-clm/test_native_clm_m2.py
+      - name: M2 unit smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m2.py
+      - name: Formal-seed guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          workflow = Path('.github/workflows/native-clm-v0-m2.yml').read_text()
+          assert 'run_native_clm_v0_m2.py --formal' not in workflow
+          print('CI does not execute formal M2 seeds.')
+          PY

@@ -1,329 +1,203 @@
 # MiniCells Continual-Learning Research Roadmap
 
-Status: **two-track roadmap; Constructive CLM is the native-CLM main line**  
+Status: **Constructive CLM mechanism-validation sequence closed**  
 Frozen evidence map: [`CLM_FEASIBILITY_EVIDENCE_MAP.md`](CLM_FEASIBILITY_EVIDENCE_MAP.md)  
-Current constructive experiment: **Constructive CLM-001 — Learned Coordinate Formation**  
-Current foundation-interface diagnostic: **Core 009D — Compositional Operator Geometry**
+Next main milestone: **Small Native CLM v0**  
+Foundation-interface diagnostics remain non-blocking background work.
 
 ## Mission
 
-The product path is:
-
-\[
-\boxed{
-\text{pretrained LLM}
-\rightarrow
-\text{external CLM layer}
-\rightarrow
-\text{hybrid CLM}
-\rightarrow
-\text{endogenous/native CLM}
-}
-\]
-
-The research program now separates two questions that were previously mixed together:
-
-1. **Foundation Interface Research** — what writable structure already exists in a mature pretrained LLM and what is the cheapest causal interface for an external CLM layer?
-2. **Constructive CLM Research** — can persistent sparse functional coordinates, read addressability and growth be learned during continual experience even when the pretrained foundation does not already contain a deployable natural Cell ontology?
-
-A negative result in Track A no longer stops Track B.
-
-The canonical evidence-reuse and no-repeat rules are frozen in the CLM Feasibility Evidence Map. New experiments must cite the missing integration claim they test rather than re-proving already-settled components.
-
----
-
-# Track A — Foundation Interface Research
-
-## Purpose
-
-Track A characterizes a mature LLM as a substrate for an external CLM layer. It is not responsible for proving that a native CLM exists naturally inside the checkpoint.
-
-The surviving product-level hypothesis is:
-
-\[
-\boxed{
-\text{slow/frozen foundation}
-+
-\text{persistent mutable modules}
-+
-\text{learned addressability}
-+
-\text{safety certificates}
-+
-\text{adaptive growth}
-}
-\]
-
-## Evidence established
-
-1. Core 005 formally supports replay-free Cell-local subspace certificates and reusable growth in the registered linear-writable world.
-2. Core 006 shows that real Pythia hidden states do not immediately saturate, that functional reuse exists, and that replay-free certificates reduce registered forgetting while retaining roughly 0.84–0.89x replay new-learning gain.
-3. Core 006 also rejects the assumption that routing/semantic address is automatically the correct functional mitosis boundary; address-based splitting produced poor conflict relief and excessive growth.
-4. Core 008 rejects a small fixed shared matrix basis while showing that individual normalized writes are nearly rank-1.
-5. Core 009A formally supports asymmetric factorized functional geometry.
-6. The 009A right-collapse diagnostic shows that the dominant right side is largely a common representation/activation carrier.
-7. Core 009B-1 formally supports carrier causal sufficiency: carrier-only writes retain roughly 97.6–98.2% of full target gain at the locked causal scale, while the residual contributes only a few percent.
-8. Core 009B-2 discovery finds no viable compact persistent global carrier-effect subspace under the frozen model; confirmation is forbidden.
-9. Core 009C discovery finds neither the frozen sparse overcomplete carrier-effect dictionary nor centroid-routed local subspace geometry; confirmation is forbidden.
-
-The resulting interface interpretation is:
-
-\[
-\boxed{
-\text{the pretrained model exposes a simple useful write interface}
-\neq
-\text{the pretrained model exposes a ready-made Cell ontology}
-}
-\]
-
-## Core 009D — Compositional Operator Geometry
-
-009D remains useful and may be completed. It asks whether the **full normalized write operator** retains reusable joint structure that was lost by the carrier projection.
-
-A positive 009D result may improve:
-
-- external CLM write compression;
-- initialization of constructive coordinates;
-- operator-level composition priors;
-- later deployable router design.
-
-A negative 009D result closes the tested natural operator-organization hypothesis only. It does **not** stop Constructive CLM.
-
-## Track-A stop boundary
-
-Do not continue indefinitely searching for near-equivalent hidden natural Cell ontologies. New Track-A work must have a concrete product/interface payoff, such as:
-
-- lower write state;
-- better causal fidelity;
-- cross-model/layer stability;
-- deployable context-to-write prediction;
-- lower inference/write cost.
-
----
-
-# Track B — Constructive CLM Research
-
-## Core question
-
-\[
-\boxed{
-\text{Can continual pressure produce a reusable, addressable, protected and growing functional coordinate system?}
-}
-\]
-
-This track does not require:
-
-\[
-\exists\text{ a natural global Cell partition inside the pretrained LLM}.
-\]
-
-Instead, the system is allowed to **learn the coordinate system itself**.
-
-## Reused mechanism stack
-
-Track B treats the following as reusable components rather than new research questions:
-
 ```text
-sparse routed mutable state
-+
-transactional candidate/commit lifecycle
-+
-growth as a plasticity escape
-+
-replay-free Cell-local protection
-+
-foundation writable interface
+pretrained LLM
+  -> external CLM layer
+  -> hybrid CLM
+  -> endogenous / Native CLM
+  -> Small Native CLM v0 training
 ```
 
-The first missing bridge is:
+Foundation Interface Research asks what useful writable interface already exists in a mature pretrained LLM. Constructive CLM asked whether a persistent sparse coordinate system can be learned, protected, composed and progressively endogenousized even when a checkpoint does not expose a natural Cell ontology.
+
+That constructive mechanism question is now closed positively under the registered controlled boundaries.
+
+## Stable sequence
 
 ```text
-continual pressure
-  -> learned Cell coordinates
-  <-> learned read keys
-  -> reuse before spawn
-  -> bounded long-run growth
+G1a  CLM-001   learned coordinate formation                    🟢 SUPPORTED
+G1b  CLM-001B  latent discovery under superposition            🟢 SUPPORTED
+G2   CLM-002   long-horizon structure-tracking growth          🟢 SUPPORTED
+G3   CLM-003   protected learned/growing Cells                  🟢 SUPPORTED
+G4   CLM-004   model-level multi-Cell computation               🟢 SUPPORTED
+G5   CLM-005   scaffold removal / endogenous transition         🟢 SUPPORTED
+                                                                ↓
+                                                     Small Native CLM v0
 ```
 
-## G1 — Learned coordinate formation and read/write alignment
+Do not extend this sequence with cosmetic synthetic variants. New work must test trained-model feasibility or another genuinely new integration variable.
 
-Current experiment:
+## G1a — Learned coordinate formation
 
-**Constructive CLM-001 — Learned Coordinate Formation**
+`LEARNED_COORDINATE_FORMATION_SUPPORTED` on formal seeds `90111/90112/90113`.
 
-Decision question:
+Boundary: registered singleton-exposure world.
 
-> Can a continual learner form reusable Cell effect coordinates and matching deployable read keys from structured experience without task/factor labels, while growth stops after the reusable factors have been acquired?
+## G1b — Latent discovery under superposition
 
-The first protocol is deliberately controlled and synthetic so it isolates the only new mechanism instead of re-running Pythia geometry, certificates or language modeling.
+`LATENT_COORDINATE_DISCOVERY_UNDER_SUPERPOSITION_SUPPORTED` on formal seeds `90211/90212/90213`.
 
-It includes:
+Boundary: registered additive pair-superposition scaffold; not arbitrary blind source separation.
 
-- hidden reusable functional factors;
-- unlabeled singleton and pairwise compositional transactions;
-- learned Cell read keys and effect values;
-- sparse Top-K execution;
-- residual/confidence-triggered growth;
-- local online reuse updates;
-- shuffled-address causal control;
-- post-hoc coordinate and routing recovery metrics;
-- a late consolidation region in which no new factors exist.
+## G2 — Long-horizon structure-tracking growth
 
-A positive result closes G1 only. It is not a Native CLM proof.
+`LONG_HORIZON_STRUCTURE_TRACKING_GROWTH_SUPPORTED` on formal seeds `90411/90412/90413`.
 
-## G2 — Long-horizon growth law
-
-Open only after G1 positive.
-
-Primary question:
-
-\[
-\boxed{K(N)=o(N)?}
-\]
-
-The first practical standard is weaker but measurable:
-
-\[
-\frac{K(N)}{N}\downarrow,
-\qquad
-P(\text{spawn}\mid t)\downarrow,
-\qquad
-\text{reuse rate}\uparrow.
-\]
-
-Constructive CLM-002 must vary stream length and order and report:
-
-- `K(N)`;
-- `K(N)/N`;
-- late-window spawn probability;
-- Cell lifetime;
-- reuse count distribution;
-- heldout performance as memory grows.
-
-Do not infer asymptotic sublinearity from a short fixed stream.
-
-## G3 — Learned coordinates + existing protection
-
-Open only after G1 positive.
-
-Constructive CLM-003 integrates the learned coordinate/read system with the already-supported Core-005 certificate logic.
-
-This is an **integration** test, not a new certificate-principle test.
-
-Required comparison:
+Registered endpoint:
 
 ```text
-learned coordinates + unsafe writes
-learned coordinates + certificate/no-growth
-learned coordinates + certificate/growth
-replay oracle
+N_final = 4096
+M_final = 30 latent factors
+K_final = 30 Cells
+K/N = 0.00732421875
+finite-horizon fitted exponent = 0.6631226816
 ```
 
-Primary question:
+Boundary: finite-horizon structure-tracking evidence, not an asymptotic theorem.
 
-> Does protection preserve the learned coordinate system without collapsing plasticity or forcing near-linear growth?
-
-## G4 — Multi-Cell composition
-
-Open after G1 and informed by 009D when available.
-
-The model must activate multiple learned Cells on unseen combinations and demonstrate that the combined behavior is not merely nearest-memory retrieval.
-
-Required metrics include:
-
-- unseen combination accuracy/loss;
-- cross-Cell destructive interference;
-- route support recovery;
-- superposition/composition residual;
-- compute versus active Cell count.
-
-Representation-level operator composition from 009D is informative but is not a substitute for model-level Cell composition.
-
-## G5 — External -> endogenous transition
-
-Only after G1–G4 establish a stable constructive core.
-
-Remove scaffolding one component at a time:
+## G3 — Protected learned/growing Cells
 
 ```text
-engineered read-key prototype
-  -> learned router
-  -> learned write controller
-  -> learned growth controller
-  -> slow-plastic foundation
-  -> endogenous cellular model
+PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED
+seeds = 90511 / 90512 / 90513
+protocol = 6122b8a6dd62ac69bc371909fe503c24cea319837b0a5989a4b640492aeeda86
 ```
 
-Each removal is accepted only if it preserves or improves:
+Formal summary: [`constructive-clm-003-protected-growing-cells/FORMAL_RESULT.md`](constructive-clm-003-protected-growing-cells/FORMAL_RESULT.md).
 
-- new learning;
-- old retention;
-- growth efficiency;
-- routing generalization;
-- composition;
-- compute/storage cost.
+Boundary: controlled learned-root + linear protected-write integration.
 
-This creates a continuous product-to-native path rather than a second unrelated model project.
+## G4 — Model-level multi-Cell computation
 
----
+```text
+MODEL_LEVEL_MULTICELL_COMPUTATION_SUPPORTED
+seeds = 90611 / 90612 / 90613
+protocol = 899c466747b5bec28b548fff2fc48173524b4fba7475f59085cb5f7accc75176
+```
 
-# Product Track — External CLM Layer
+The registered result establishes held-out simultaneous composition, order-sensitive sequential composition, sparse Cell-operator execution and replay-free protected one-Cell mutation through full composition output.
 
-Product feasibility is a separate decision from Native CLM feasibility.
+Formal summary: [`constructive-clm-004-model-level-multicell-computation/FORMAL_RESULT.md`](constructive-clm-004-model-level-multicell-computation/FORMAL_RESULT.md).
 
-The first product can remain:
+Boundary: controlled linear residual operators.
 
-\[
-\boxed{
-\text{mature frozen/slow LLM}
+## G5 — Scaffold removal / endogenous transition
+
+Status: **SUPPORTED**.
+
+Formal decision:
+
+```text
+LEARNED_CONTROL_PLANE_TRANSITION_SUPPORTED
+seeds = 90811 / 90812 / 90813
+protocol = 3188e56af52763d2de75e4d13f25c5cbff2e56b25d5b32520495148e5e65b27d
+all 20 registered gates passed on all three seeds
+missing seeds = none
+```
+
+Registered integration:
+
+```text
+persistent protected Cell substrate
 +
-\text{persistent sparse mutable Cells}
+learned pairwise router
 +
-\text{router}
+learned write commit/reject controller
 +
-\text{certificate}
+learned growth/reuse controller
 +
-\text{growth}
+zero learner replay
 +
-\text{version/rollback lifecycle}
-}
-\]
+bounded reusable child growth
++
+held-out simultaneous/sequential composition
++
+safe slow-shared-substrate compatibility
+-> learned control-plane transition
+```
 
-It may use engineered LoRA/rank-1/low-rank Cells and a practical router. Native-CLM research is allowed to fail without invalidating this product.
+Representative formal ranges:
 
-The product benchmark must eventually compare against:
+```text
+router/growth/write held-out meta accuracy = 1.0
+final Cells = 16
+children = 4
+child reuse = 12/12
+final simultaneous MSE = 1.13e-6 .. 1.26e-6
+final sequential MSE   = 1.34e-6 .. 1.71e-6
+max active compute fraction <= 0.2002
+protected history MSE ~ 1e-32
+unsafe reuse history MSE ~ 2.4e-2 .. 3.0e-2
+learner replay accesses = 0
+```
 
-- RAG/external memory;
-- ordinary LoRA/PEFT;
-- continual adapters;
-- replay;
-- adapter banks / MoE-style routing.
+Formal summary: [`constructive-clm-005-scaffold-removal/FORMAL_RESULT.md`](constructive-clm-005-scaffold-removal/FORMAL_RESULT.md).
 
-The differentiating value must include parameterized behavior/skill adaptation, not factual storage alone.
+Boundary: the Core-005 certificate basis and constrained update solver remain fixed safety primitives. This is a learned control-plane result, not fully learned safety geometry, arbitrary nonlinear Transformer Cells, or language-scale continual learning.
 
----
+## Research phase transition
 
-# Experimental discipline
+The central question is no longer:
 
-- Frozen formal seeds are never silently replaced.
-- Discovery/diagnostic results are not promoted to formal confirmation claims.
-- Negative natural-geometry results do not automatically become Native-CLM No-Gos.
-- Hidden semantic/task/factor labels may be used for post-hoc evaluation only unless explicitly registered as learner input.
-- An existing supported mechanism is not re-tested unless a new integration variable is named in advance.
-- Growth evidence must report state growth and reuse, not only task accuracy.
-- Short-stream bounded growth is not described as asymptotically sublinear.
-- Coordinate recovery is not sufficient without deployable read addressability.
-- Read addressability is not sufficient without write safety and long-run growth control.
-- Rank-1-per-write compression is not evidence of cross-write Cell reuse.
-- Pythia-only evidence is not sufficient for product generalization.
-- The formal research stop rule is the one frozen in the CLM Feasibility Evidence Map.
+> Can the CLM mechanism stack be constructed at all?
+
+Under the registered controlled sequence, the answer is now yes.
+
+The active question becomes:
+
+> Can these mechanisms emerge and remain useful inside an actually trained token-predictive model?
+
+That defines **Small Native CLM v0**.
+
+## Small Native CLM v0 — next milestone
+
+The first Native model should be deliberately small. Its job is not benchmark leadership; it is to test whether the constructive mechanisms survive joint training with sequence prediction.
+
+The first protocol should register, before formal runs:
+
+1. a small token-prediction task and fixed tokenizer/data split;
+2. a shared neural substrate plus persistent dynamic Cell state;
+3. learned sparse routing over Cells;
+4. protected or otherwise bounded Cell-local writes;
+5. learned reuse/growth decisions;
+6. multi-Cell composition inside actual forward computation;
+7. continual stream evaluation with retention and new-learning gain;
+8. compute/state growth accounting;
+9. dense/static-model baselines;
+10. anti-degeneracy controls for always-spawn, never-write and dense-all-Cells behavior.
+
+The decisive scientific transition is from a synthetic decomposition supplied by the experimenter to structure learned jointly with prediction.
+
+## Product track
+
+External CLM feasibility remains separate from Native CLM feasibility. The near-term product can continue to use engineered persistent Cells, routing, certificates, growth, versioning and rollback on top of mature LLMs while Native CLM training research proceeds.
+
+## Experimental discipline
+
+- Observed formal seeds are not reused as untouched confirmation seeds.
+- Supported mechanisms are reused rather than re-proved unless a new integration variable is registered.
+- Hidden factor/task/mode labels remain evaluator-only unless explicitly allowed.
+- Natural-geometry negatives do not invalidate Constructive CLM.
+- Finite streams are not described as asymptotic proofs.
+- The deterministic Core-005 certificate should not be neuralized merely for aesthetic purity; replacing it requires a separately justified scientific reason.
+- Do not create CLM-005B by only increasing synthetic horizon, Cell count or repeat count.
 
 ## Immediate order
 
 ```text
-1. Complete/freeze Constructive CLM-001 implementation and formal run.
-2. 009D may proceed in parallel as a non-blocking Foundation Interface diagnostic.
-3. If C-CLM-001 is positive -> C-CLM-002 long-horizon growth.
-4. Then integrate Core-005 protection in C-CLM-003.
-5. Then composition and external->endogenous transition.
+1. G1a / CLM-001  = SUPPORTED
+2. G1b / CLM-001B = SUPPORTED
+3. G2  / CLM-002  = SUPPORTED
+4. G3  / CLM-003  = SUPPORTED
+5. G4  / CLM-004  = SUPPORTED
+6. G5  / CLM-005  = SUPPORTED
+7. Design and train Small Native CLM v0
+8. Only after v0 evidence: scale architecture, language difficulty and horizon
 ```

@@ -1,0 +1,123 @@
+name: Native CLM v0 M2-R0 Update Invariant Audit
+
+# Optimizer-mechanics diagnostic only. No new continual-language formal seeds.
+on:
+  push:
+    branches:
+      - codex/native-clm-v0-m2r0-update-invariant-audit
+    paths:
+      - 'src/minicells/native_clm_m2r0.py'
+      - 'scripts/research/*m2r0*'
+      - 'research/validations/native-clm-v0-m2r0-update-invariant-audit/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m2r0-update-invariant-audit-kaggle.ipynb'
+      - 'research/stages/06-native-clm/M2_REOPENED_ROADMAP*'
+      - 'tests/research/06-native-clm/test_native_clm_m2r0.py'
+      - '.github/workflows/native-clm-v0-m2r0-update-invariant-audit.yml'
+  pull_request:
+    paths:
+      - 'src/minicells/native_clm_m2r0.py'
+      - 'scripts/research/*m2r0*'
+      - 'research/validations/native-clm-v0-m2r0-update-invariant-audit/**'
+      - 'research/notebooks/06-native-clm/native-clm-v0-m2r0-update-invariant-audit-kaggle.ipynb'
+      - 'research/stages/06-native-clm/M2_REOPENED_ROADMAP*'
+      - 'tests/research/06-native-clm/test_native_clm_m2r0.py'
+      - '.github/workflows/native-clm-v0-m2r0-update-invariant-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev,lm]'
+      - name: Validate frozen M2-R0 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/native-clm-v0-m2r0-update-invariant-audit/protocol.json').read_text())
+          assert p['format'] == 'minicells.native-clm-v0.m2r0-update-invariant-audit.protocol.v2'
+          assert p['status'] == 'FROZEN_UNRUN'
+          assert p['scientific_decision'] is False
+          assert p['new_formal_seeds_consumed'] is False
+          assert p['parent_m2']['formal_seeds_consumed'] == [73211, 73212, 73213]
+          assert p['audit']['steps_per_arm'] == 64
+          assert p['audit']['registered_m2_steps_per_phase'] == 400
+          assert p['audit']['warmup_steps'] == 40
+          assert p['audit']['certificate_updates_during_audit'] == 0
+          assert p['data']['source_builder'] == 'scripts/research/prepare_native_clm_v0_m2r0_data.py'
+          assert p['data']['source_manifest_format'] == 'minicells.native-clm-v0.m2r0-data-manifest.v1'
+          assert p['data']['sha256'] == 'c7029622b9a1c4b4f249d927b3ab30d4c09ddffe845e031aee3412b4735ca440'
+          assert p['data']['learner_replay_bytes'] == 0
+          assert tuple(p['arms']) == (
+              'current_adamw_grad_projection',
+              'adamw_no_decay_grad_projection',
+              'sgd_no_decay_grad_projection',
+              'sgd_with_decay_grad_projection',
+              'adamw_final_update_projection',
+          )
+          assert p['arms']['current_adamw_grad_projection']['weight_decay'] == 0.01
+          assert p['arms']['adamw_no_decay_grad_projection']['weight_decay'] == 0.0
+          assert p['arms']['sgd_no_decay_grad_projection']['optimizer'] == 'SGD'
+          assert p['arms']['sgd_with_decay_grad_projection']['weight_decay'] == 0.01
+          assert p['arms']['adamw_final_update_projection']['actual_update_projection'] is True
+          assert p['invariant']['minimum_update_norm_for_ratio'] == 1e-12
+          assert p['thresholds']['material_violation_ratio'] == 0.0001
+          assert p['roadmap']['M2_R0']
+          assert p['roadmap']['M2_R1']
+          assert p['roadmap']['M2_R2']
+          PY
+      - name: Validate canonical notebook JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('research/notebooks/06-native-clm/native-clm-v0-m2r0-update-invariant-audit-kaggle.ipynb')
+          notebook = json.loads(path.read_text())
+          assert notebook['nbformat'] == 4
+          text = path.read_text()
+          assert 'prepare_native_clm_v0_m2r0_data.py' in text
+          assert 'run_native_clm_v0_m2r0.py' in text
+          assert 'publish_native_clm_v0_m2r0.py' in text
+          PY
+      - name: Compile and lint
+        run: |
+          python -m compileall -q \
+            src/minicells/native_clm_m2r0.py \
+            scripts/research/prepare_native_clm_v0_m2r0_data.py \
+            scripts/research/run_native_clm_v0_m2r0.py \
+            scripts/research/publish_native_clm_v0_m2r0.py
+          ruff check \
+            src/minicells/native_clm_m2r0.py \
+            scripts/research/prepare_native_clm_v0_m2r0_data.py \
+            scripts/research/run_native_clm_v0_m2r0.py \
+            scripts/research/publish_native_clm_v0_m2r0.py \
+            tests/research/06-native-clm/test_native_clm_m2r0.py
+      - name: M2-R0 mechanics smoke
+        run: pytest -q tests/research/06-native-clm/test_native_clm_m2r0.py
+      - name: No continual-language formal rerun guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('.github/workflows/native-clm-v0-m2r0-update-invariant-audit.yml'),
+              Path('scripts/research/run_native_clm_v0_m2r0.py'),
+          ]
+          text = '\n'.join(path.read_text() for path in files)
+          forbidden_m2 = 'run_native_clm_v0_' + 'm2.py'
+          forbidden_m3 = 'run_native_clm_v0_' + 'm3.py'
+          forbidden_m3r = 'run_native_clm_v0_' + 'm3r.py'
+          formal_flag = '--' + 'formal'
+          assert forbidden_m2 not in text
+          assert forbidden_m3 not in text
+          assert forbidden_m3r not in text
+          assert formal_flag not in text
+          print('M2-R0 is an optimizer-mechanics diagnostic and consumes no formal seed.')
+          PY

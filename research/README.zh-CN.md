@@ -2,63 +2,84 @@
 
 # MiniCells 研究
 
-MiniCells 现在明确区分 **产品架构** 与更强的 **内生 CLM 研究命题**。
+这个目录用于保存 MiniCells 的科学证据。它**不是产品路线图**，也不预设最强的 Native CLM 命题一定成立。
 
-产品演化路径是：
+## 从这里开始
+
+1. [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) — 当前证据允许我们声称的最强能力、明确的 No-Go，以及负结果之后仍然可用于工程的 primitive。
+2. [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) — 对所有有长期总结价值的实验按 family 记录：价值、局限、formal status、能力上限、**它没有证明什么**、以及获得的工程 primitive。
+3. [`audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md) — 重新审计 Foundations、Self-Organization、Routing/Growth、CLM-0.4-mini 等历史 notebook，分别记录它们今天的科学地位和仍可复用的工程资产。
+4. [`stages/06-native-clm/`](stages/06-native-clm/) — 当前 trained-model Native CLM 序列与 closure。
+5. [`validations/`](validations/) — 冻结的 protocol、formal result 与机制诊断。
+6. [`catalog.yaml`](catalog.yaml) — 面向工具的研究目录。
+
+## 目录结构
 
 ```text
-成熟预训练 LLM
-  -> 外挂 CLM Layer
-  -> Hybrid CLM
-  -> 内生 / Native CLM
+research/
+  README.md                 # 只做导航
+  audits/                   # 跨实验审计、历史资产与能力上限
+  catalog.yaml              # machine-oriented index
+  stages/                   # 研究阶段叙事与 closure
+  validations/              # 冻结 protocol/result/diagnostic
+  experiments/              # 历史实验组织
+  notebooks/                # 可运行 notebook / 托管执行入口
+  reports/                  # 派生报告
+  releases/                 # 研究 release 记录
+  previews/                 # preview 材料
+  archive/                  # 退役/历史材料
 ```
 
-第一代产品可以使用工程化的持久 Cell、稀疏路由、replay-free protection、生长、版本和回滚。Native CLM 研究则进一步追问：Cell 坐标系、read/write 对齐，以及后续的 growth/write controller 是否能够逐渐成为学习结果和模型内生结构。
+目录名称不决定科学证据强度。冻结的 registered result 优先于 roadmap、README、notebook 和任何后续解释。
 
-## 当前研究分流
+## 当前证据边界
 
-### Track A — Foundation Interface Research
+受控研究已经证明若干机制可以被构造出来：protected local write、capacity growth、learned sparse coordinates、multi-Cell composition，以及 learned control plane 都能在各自注册边界内工作；小型 Native CLM 也能从 next-token loss 端到端训练。
 
-Core 006–009 用于刻画成熟预训练 LLM 已经提供了怎样的可写接口。现有结果支持可利用的低维/因子化写结构和 carrier causal sufficiency，但**不支持**把预训练模型已有的语义/路由地址或 carrier-effect 向量直接视为天然 Cell ontology。
+但 trained-model continual-learning 序列给出的当前上限是：
 
-Core 009D 仍可继续，作为非阻塞的 operator-geometry 诊断。
+```text
+M2   fixed-topology replay-free continual language      NOT SUPPORTED
+M3   global-pool growth-restored continual language     NOT SUPPORTED
+M3R  read-preserving lineage growth                     NOT SUPPORTED
+```
 
-### Track B — Constructive CLM Research
+Protection 有部分因果价值，新容量可以被实际使用，read ownership conservation 也改善了 M3 的一个明确 failure mode；这些都不能被升级为“已经实现 autonomous replay-free continual language learning”。
 
-这现在是验证 Native CLM 可行性的主线。
+Optimizer/update audit 属于另一条 mechanics 结论：只投影安全梯度不足以保证 canonical AdamW 的实际参数 transaction 安全，而对 realized update 做投影/验证可以把注册 invariant 恢复到 numerical floor。这个结果不能改写 M2 的历史科学结论。
 
-当前首要缺口已经不是“growth 是否有效”或“certificate 是否能免 replay”——这些问题仓库已有证据。真正缺失的是：
+需要查看精确边界与证据路径时，请使用 `audits/`，不要再把新的进度表持续堆进这个 README。
 
-> **在不向 learner 提供隐藏 task/factor label 的情况下，可复用 Cell 坐标和与之匹配的 read key 能否从持续经验中形成？**
+## 历史 notebook 的当前定位
 
-当前主实验：[Constructive CLM-001 — Learned Coordinate Formation](validations/constructive-clm-001-learned-coordinate-formation/README.md)。
+历史 notebook 不再被视为一组同等强度的科学证据。当前审计分类为：
 
-哪些结论可以直接复用、哪些实验禁止重复，已经冻结在 [CLM Feasibility Evidence Map](validations/CLM_FEASIBILITY_EVIDENCE_MAP.md)；机器可读版本见 [`validations/clm-feasibility-evidence-map.yaml`](validations/clm-feasibility-evidence-map.yaml)。
+```text
+01-foundations          HISTORICAL EXPLORATORY
+02-self-organization    HISTORICAL MECHANISTIC EVIDENCE
+03-routing-and-growth   ENGINEERING PRECURSOR EVIDENCE
+05-language-validation  RETIRED / SUPERSEDED PROTOCOL LINEAGE
+```
 
-G1–G5 的后续路径见更新后的 [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md)。
+一个旧 scientific interpretation 可以被后续实验削弱或取代，但其中产生的 engineering primitive 仍可能值得保留。两条维度的正式映射见 [`audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md)。
 
-## 研究阶段
+## Research 与 Engineering 分离
 
-1. [基础](stages/01-foundations/README.zh-CN.md)：Echo、NCA 语言动力学、1D/2D tissue、settling 与训练机制。
-2. [自组织](stages/02-self-organization/README.zh-CN.md)：稀疏拓扑、招募、分化和 trait genesis。
-3. [路由与生长](stages/03-routing-and-growth/README.zh-CN.md)：Cell 转变为可路由、可独立修改的计算状态。
-4. [持续学习核心](stages/04-continual-learning-core/README.zh-CN.md)：写地址假设失败、依赖域事务、生长恢复可塑性、replay-free certificate、真实表征约束和 Foundation Interface 几何。
-5. [语言级验证](stages/05-language-validation/README.zh-CN.md)：历史 token-level transfer / scale-readiness 工作；它不再阻塞 Constructive Native-CLM 主线。
+MiniCells 现在明确区分两条线：
 
-## Constructive CLM 直接复用的已有证据
+- **长期研究：** natural functional boundary、future-learning sufficient state、autonomous routing/growth、replay-free continual learning、parameter-level sustained plasticity。
+- **近期工程：** explicit modular change、fork/shadow training、functional regression、realized-update validation、append/expand、阶段性全局评估、versioning/rollback；consolidation 必须等独立 acceptance protocol 证明安全后再进入默认路径。
 
-- Core 004：受控 CLM 闭环中，growth 可以恢复 plasticity。
-- Core 005：在冻结的线性可写世界中，有界 Cell-local subspace state 可以替代 learner-side replay，用于已登记历史的保护、饱和检测和可复用生长。
-- Core 006：真实预训练表征中存在可复用结构，replay-free certificate write 能保留有意义的 plasticity；同时 semantic/routing address 不是充分的 mitosis boundary。
-- Core 009A / 009B-1：Foundation 存在较简单的可用写接口；carrier-only write 保留了绝大多数已测试 causal target gain。
-- Core 009B-2 / 009C：当前测试的 pretrained carrier-effect 表示没有暴露出我们需要的 compact persistent sparse/local Cell ontology。这些结论只关闭对应的“天然几何发现”假设，不关闭 Constructive CLM。
+工程系统可以把 Cell 定义为人为选择的“模型变化单元”，而不声称它是自然存在的知识原子。
 
-## 研究资产
+## 证据纪律
 
-- [实验实现](experiments/README.md) 按阶段组织，并复用 `src/minicells/` 中的通用代码。
-- [Notebook 资产](notebooks/README.md) 保留历史实验 ID 和工作流。
-- [Validations](validations/) 保存冻结协议、Evidence Map 和科学决策文档。
-- [规范 artifacts](../artifacts/experiments/) 在正式运行发布后作为不可变科学证据。
-- 历史机器可读路径与结果仍保存在 [`catalog.yaml`](catalog.yaml)。
+- 已观察的 formal seeds 不能重新包装成 untouched confirmation seeds。
+- 后续 diagnostic 可以解释失败，但不能把已经失败的 registered decision 改成成功。
+- synthetic/linear support 不能升级成 Transformer、language、asymptotic 或 product-level support。
+- local write/retention signal 不能直接推出完整模型的 global improvement。
+- 复用历史 engineering primitive 时，不能继承旧 scientific claim 的证据等级。
+- 历史 protocol/result path 属于证据的一部分；重构入口必须先做引用审计并保留 compatibility shim。
+- 每一个新的 summary claim 都必须明确写出：**它没有证明什么。**
 
-当前仓库仍**没有**证明通用自然语言持续学习、渐近次线性 Cell growth、完全 learned growth policy 或 LLM 规模的内生 CLM。Constructive CLM-001 有意更窄：它先单独验证 learned-coordinate / read-key 这座桥，再决定是否进入更长 stream、certificate integration、composition 和 external -> endogenous 演化实验。
+这个研究目录的目标，是让后续产品定位建立在累计证据的能力上限上，而不是建立在最新一次机制叙事上。

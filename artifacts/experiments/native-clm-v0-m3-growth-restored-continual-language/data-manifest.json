@@ -1,0 +1,81 @@
+{
+  "A_role": "evaluation_only_M1_retention",
+  "dataset_revisions": {
+    "A": {
+      "repo_id": "roneneldan/TinyStories",
+      "requested_revision": "main",
+      "resolved_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64"
+    },
+    "B": {
+      "repo_id": "Salesforce/wikitext",
+      "requested_revision": "main",
+      "resolved_revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+    },
+    "C_eval": {
+      "repo_id": "codeparrot/codeparrot-clean-valid",
+      "requested_revision": "main",
+      "resolved_revision": "4db92d2ec0c1b4c41eeb439cfae16854511d9dcd"
+    },
+    "C_train": {
+      "repo_id": "codeparrot/codeparrot-clean-train",
+      "requested_revision": "main",
+      "resolved_revision": "3e6ab65f2864931e041f6a82db9b5a6ec2b71ab4"
+    },
+    "D": {
+      "repo_id": "databricks/databricks-dolly-15k",
+      "requested_revision": "main",
+      "resolved_revision": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a"
+    }
+  },
+  "files": {
+    "A_eval": {
+      "bytes": 1597917,
+      "documents": 2000,
+      "path": "A-tinystories-eval.txt",
+      "sha256": "761ac42dbee141619216b9b01822db614322a61b1ceb4cc4efdf24a6575a10ba"
+    },
+    "B_eval": {
+      "bytes": 940486,
+      "documents": 2000,
+      "path": "B-wikitext-eval.txt",
+      "sha256": "51d2cc18393d3af84b1ead1dc3bc2e0770fd97a797fb28777f305bc2db9fcf53"
+    },
+    "B_train": {
+      "bytes": 9104081,
+      "documents": 20000,
+      "path": "B-wikitext-train.txt",
+      "sha256": "c7029622b9a1c4b4f249d927b3ab30d4c09ddffe845e031aee3412b4735ca440"
+    },
+    "C_eval": {
+      "bytes": 20007715,
+      "documents": 2000,
+      "path": "C-code-eval.txt",
+      "sha256": "cc21efc44e37d416a9abde9fed2e1791adc0998ac55239f3c349da9f31d3527a"
+    },
+    "C_train": {
+      "bytes": 79462883,
+      "documents": 8000,
+      "path": "C-code-train.txt",
+      "sha256": "1e3f304d029a9fdae1bb992b92cba11a4bd48857e9db48c88d1c8790687f6f51"
+    },
+    "D_eval": {
+      "bytes": 1662127,
+      "documents": 2000,
+      "path": "D-dolly-eval.txt",
+      "sha256": "8136650c3e4ddea5772768a20004dae0613646ac01129011558dec60241efde3"
+    },
+    "D_train": {
+      "bytes": 8051614,
+      "documents": 10000,
+      "path": "D-dolly-train.txt",
+      "sha256": "ea67fa5b44699c651b9db2c019485f61580f6664fbb79e2ebc30263956999af6"
+    }
+  },
+  "format": "minicells.native-clm-v0.m3-data-manifest.v1",
+  "learner_replay_bytes": 0,
+  "stream": [
+    "B",
+    "C",
+    "D"
+  ]
+}

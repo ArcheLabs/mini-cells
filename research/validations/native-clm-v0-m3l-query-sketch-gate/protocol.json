@@ -1,0 +1,138 @@
+{
+  "format": "minicells.native-clm-v0.m3l-query-sketch-gate.protocol.v1",
+  "status": "REGISTERED_DIAGNOSTIC_READY",
+  "scientific_decision": false,
+  "mission": "Test whether a lineage-local parent/child gate can be recovered without old-token or old-query replay by combining a compact historical query sketch with current conflict queries, before integrating a learned local gate into another continual-language formal experiment.",
+  "parent_address_diagnostic": {
+    "publish_commit": "3e96a0a2ffe08430b5b04c58a2a3ffb98e0f3176",
+    "result_path": "artifacts/experiments/native-clm-v0-m3r-address-diagnostic/diagnostic-result.json",
+    "classification": "QUERY_GEOMETRY_SEPARABLE",
+    "valid_edges": 24,
+    "edge_count": 24,
+    "current_cosine_median_auc": 0.5315103443717364,
+    "query_median_auc": 0.9623154207151827,
+    "query_fraction_auc_ge_0_8": 1.0
+  },
+  "parent_m3r": {
+    "formal_result_commit": "986b043a5d2f5ee9140cf35b14f68aacc3b7a942",
+    "protocol_sha256": "c3e73545899ccf20f54411df701f22dd64b10cb46ff728e862c2d002a94f8627",
+    "data_manifest_sha256": "213ddb9d093ea44fd0524e6ba6318f86a61c54270bd5cad6ddeb3233470565b0",
+    "formal_seeds": [73611, 73612, 73613],
+    "formal_seeds_are_consumed": true,
+    "hf_repo": "archelabsxyz/native-clm-v0",
+    "hf_revision": "a23b521e137a7e44616809895d44d87cc7d6f87f",
+    "checkpoint_manifest": "artifacts/experiments/native-clm-v0-m3r-read-preserving-growth/model-artifacts.json",
+    "data_manifest": "artifacts/experiments/native-clm-v0-m3r-read-preserving-growth/data-manifest.json"
+  },
+  "learner_boundary": {
+    "native_clm_training": false,
+    "cell_updates": false,
+    "router_updates": false,
+    "certificate_updates": false,
+    "growth": false,
+    "new_formal_seeds": false,
+    "old_raw_tokens_allowed_during_gate_fit": false,
+    "old_raw_query_samples_allowed_during_gate_fit": false,
+    "historical_raw_queries_allowed_only_to_construct_the_registered_sketch_before_gate_fit": true,
+    "heldout_old_queries_allowed_only_for_offline_evaluation": true,
+    "current_conflict_queries_allowed_during_gate_fit": true,
+    "offline_oracle_may_use_raw_old_and_current_train_queries_for_comparison_only": true,
+    "diagnostic_result_must_not_retroactively_modify_M3R": true
+  },
+  "phase_order": ["A", "B", "C", "D"],
+  "ownership_semantics": {
+    "root_parent_birth_domain": "A",
+    "spawned_parent_birth_domain": "the phase in which that parent Cell was itself spawned",
+    "edge_old_domains": "all domains from the parent birth domain, inclusive, up to the child birth domain, exclusive",
+    "edge_current_domain": "the child birth domain",
+    "conditioning": "Samples must reach the edge parent through the frozen root and ancestor lineage decisions before entering the local parent-vs-child diagnostic.",
+    "example_root_to_B": "root4->child8 born in B uses old=A and current=B",
+    "example_B_child_to_C": "child8->child12 born in C uses old=B and current=C"
+  },
+  "sampling": {
+    "max_batches_per_domain": 64,
+    "batch_size": 8,
+    "max_samples_per_domain_per_edge": 4096,
+    "minimum_train_samples_per_side": 512,
+    "minimum_test_samples_per_side": 256,
+    "train_group_fraction": 0.7,
+    "group_unit": "ByteSequenceDataset sequence row; all tokens from one sequence remain in the same train or test split",
+    "split_seed_base": 73800,
+    "old_domain_balancing": "equal cap per old domain before concatenation"
+  },
+  "historical_query_sketch": {
+    "type": "low_rank_gaussian_moments",
+    "rank": 16,
+    "input": "L2-normalized frozen router query q",
+    "stored_fields": [
+      "count",
+      "mean",
+      "top_eigenvectors",
+      "top_eigenvalues",
+      "residual_diagonal_variance"
+    ],
+    "construction": "Fit only on old-domain training groups for the edge, then discard the raw old training queries before gate construction.",
+    "raw_old_query_retention": false,
+    "expected_float32_storage_per_sketch": "count plus approximately d*(rank+2)+rank scalars; for d=384 and rank=16 this is about 27.7 KiB"
+  },
+  "current_query_statistics": {
+    "type": "low_rank_gaussian_moments",
+    "rank": 16,
+    "construction": "Fit from current conflict-domain training groups; these are current-stream observations and are not replay."
+  },
+  "sketch_gate": {
+    "model": "single affine lineage-local gate score(q)=w^T q+b",
+    "estimator": "regularized pooled low-rank Gaussian LDA using only historical sketch moments and current-query moments",
+    "covariance_solver": "Woodbury inverse over diagonal residual covariance plus concatenated old/current low-rank factors",
+    "diagonal_regularization": 0.0001,
+    "class_priors": "equal",
+    "operating_threshold": "calibrate from the historical sketch Gaussian only to a target 10 percent historical false-positive rate",
+    "target_sketch_old_fpr": 0.1,
+    "no_gradient_training": true,
+    "no_old_sample_replay": true
+  },
+  "offline_oracle": {
+    "model": "single linear logistic probe",
+    "purpose": "Upper-bound comparator only; never used by the sketch gate.",
+    "train_inputs": "raw old/current queries from the training sequence groups",
+    "test_inputs": "the same heldout sequence groups used to evaluate the sketch gate",
+    "steps": 300,
+    "learning_rate": 0.05,
+    "weight_decay": 0.0001,
+    "standardize_from_oracle_train_split_only": true
+  },
+  "metrics": [
+    "current_cosine_auc",
+    "offline_oracle_auc",
+    "sketch_gate_auc",
+    "sketch_gate_old_fpr",
+    "sketch_gate_current_tpr",
+    "normalized_oracle_excess_recovery",
+    "sketch_bytes"
+  ],
+  "classification_thresholds": {
+    "minimum_valid_edge_fraction": 0.75,
+    "oracle_separable_median_auc": 0.85,
+    "oracle_edge_auc_floor": 0.8,
+    "minimum_fraction_oracle_edges_above_floor": 0.75,
+    "sketch_gate_median_auc": 0.9,
+    "sketch_gate_edge_auc_floor": 0.85,
+    "minimum_fraction_sketch_edges_above_floor": 0.75,
+    "median_normalized_oracle_excess_recovery": 0.85,
+    "median_old_fpr_max": 0.2,
+    "median_current_tpr_min": 0.7
+  },
+  "classification_order": [
+    "INCONCLUSIVE_COVERAGE",
+    "EDGE_LOCAL_QUERY_GEOMETRY_NOT_SEPARABLE",
+    "QUERY_SKETCH_GATE_FEASIBLE",
+    "QUERY_SKETCH_GATE_NOT_FEASIBLE"
+  ],
+  "classification_rules": {
+    "INCONCLUSIVE_COVERAGE": "valid_edge_fraction < minimum_valid_edge_fraction",
+    "EDGE_LOCAL_QUERY_GEOMETRY_NOT_SEPARABLE": "coverage is sufficient but the offline oracle fails its registered median/fraction separability rule under edge-local temporal ownership semantics",
+    "QUERY_SKETCH_GATE_FEASIBLE": "oracle is separable and the sketch gate satisfies its registered median AUC, edge-floor fraction, normalized oracle recovery, old-FPR and current-TPR thresholds",
+    "QUERY_SKETCH_GATE_NOT_FEASIBLE": "oracle is separable but the registered compact query-sketch gate fails at least one feasibility threshold"
+  },
+  "interpretation_boundary": "This is a mechanism-selection diagnostic, not a continual-language success/failure claim. A positive result licenses implementation of an online sketch-maintaining learned lineage-local gate in a new untouched formal experiment; a negative result does not alter the completed M3R decision."
+}
