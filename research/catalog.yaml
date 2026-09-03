@@ -261,3 +261,19 @@ entries:
     supersedes: clm-0.4-mini-language-validation
     superseded_by: null
     notes: "Task-aligned base data, teacher-forced answer-exact admission, route-balanced evaluation, and diagnostic dense baselines. Seed-independent v2 data identity is locked; development seed 90402 and formal seeds 90411/90412/90413 were unobserved when locked."
+
+  - id: shadow-cell-validation-001-v2-developmental-maturation
+    title: "Shadow Cell Validation 001 v2: Developmental Maturation under Copy-on-Write Functional Isolation"
+    kind: core-validation
+    stage: continual-learning-core
+    outcome: REGISTERED_NOT_RUN
+    scientific_decision: false
+    canonical: true
+    report: research/validations/shadow-cell-validation-001-v2-developmental-maturation/README.md
+    protocol: research/validations/shadow-cell-validation-001-v2-developmental-maturation/protocol.json
+    artifacts: results/shadow-cell-validation-001-v2-developmental-maturation
+    notebook: research/notebooks/04-continual-learning-core/shadow-cell-validation-001-v2.ipynb
+    implementation: research/validations/shadow-cell-validation-001-v2-developmental-maturation/implementation.json
+    supersedes: null
+    superseded_by: null
+    notes: "Registered but unrun. Tests isolated full-width Shadow capacity, maturity frontier selection, replay-free bounded sketch state, and corrected realized-AdamW direct-write protection. Formal seeds are 95311/95312/95313; v1 is linked as an immutable historical parent path."

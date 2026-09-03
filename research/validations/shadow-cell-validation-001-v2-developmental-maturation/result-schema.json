@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "minicells.shadow-cell-validation-001-v2.result",
+  "type": "object",
+  "required": ["validation_id", "protocol_sha256", "seed", "status", "arms", "validity"],
+  "properties": {
+    "validation_id": {"const": "shadow-cell-validation-001-v2-developmental-maturation"},
+    "protocol_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "seed": {"type": "integer"},
+    "status": {"type": "string"},
+    "scientific_decision": {"type": "boolean"},
+    "arms": {"type": "object", "required": ["corrected_direct", "shadow_full", "shadow_oracle", "shadow_sketch", "task_id_shadow"]},
+    "validity": {"type": "object", "required": ["protocol_hash_matches", "required_arms_completed", "all_maturity_values_evaluated"]}
+  }
+}

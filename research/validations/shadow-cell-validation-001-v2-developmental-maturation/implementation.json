@@ -1,0 +1,15 @@
+{
+  "schema": "minicells.shadow-cell-validation.implementation.v2",
+  "validation_id": "shadow-cell-validation-001-v2-developmental-maturation",
+  "protocol": "research/validations/shadow-cell-validation-001-v2-developmental-maturation/protocol.json",
+  "runner": "scripts/research/run_shadow_cell_validation_001_v2.py",
+  "source": ["src/minicells/shadow_maturation.py", "src/minicells/clm04mini/model.py"],
+  "tests": ["tests/research/04-continual-learning-core/test_shadow_cell_validation_001_v2.py"],
+  "figure_generation": "scripts/research/report_shadow_cell_validation_001_v2.py",
+  "aggregation": "scripts/research/aggregate_shadow_cell_validation_001_v2.py",
+  "notebook": "research/notebooks/04-continual-learning-core/shadow-cell-validation-001-v2.ipynb",
+  "result_schema_version": 2,
+  "canonical_native_checkpoint": null,
+  "formal_launcher": "python scripts/research/run_shadow_cell_validation_001_v2.py --phase formal --seed 95311 --device cuda",
+  "publication": "No publisher is registered until a canonical checkpoint and formal output destination are available."
+}

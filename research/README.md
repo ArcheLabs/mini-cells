@@ -35,6 +35,10 @@ The canonical reuse/no-repeat policy is frozen in the [CLM Feasibility Evidence 
 
 Read the updated [Continual-Learning Research Roadmap](validations/CONTINUAL_LEARNING_ROADMAP.md) for the G1–G5 constructive sequence.
 
+Shadow Cell Validation 001 v2 is registered as a separate, unrun architectural
+test of copy-on-write candidate development and controlled maturation:
+[protocol and implementation](validations/shadow-cell-validation-001-v2-developmental-maturation/README.md).
+
 ## Research stages
 
 1. [Foundations](stages/01-foundations/README.md) — Echo, NCA language dynamics, 1D/2D tissue, settling, and training mechanics.
