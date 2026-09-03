@@ -1,6 +1,6 @@
 # Research Script Entrypoints
 
-`script/research` is intentionally treated as an **entrypoint compatibility layer**, not as the canonical home of scientific meaning. Protocols, formal decisions, interpretation boundaries and audit conclusions belong under `research/`.
+`scripts/research` is intentionally treated as an **entrypoint compatibility layer**, not as the canonical home of scientific meaning. Protocols, formal decisions, interpretation boundaries and audit conclusions belong under `research/`.
 
 The directory is currently large because several generations of named runners/reporters/publishers were retained for exact notebook and artifact reproduction. This audit does **not** mass-move those files: published notebooks, commands, manifests and branch artifacts contain literal paths such as `scripts/research/run_core_validation_005.py`.
 
