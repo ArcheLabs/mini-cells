@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from dataclasses import asdict
+import json
 from pathlib import Path
 import random
 from typing import Any
@@ -22,6 +23,7 @@ from .integrated_replay_free_clm_kt001_runner import (
     PHASES,
     KT001RunnerConfig,
     _seed_everything,
+    _write_jsonl,
     bootstrap_historical_address_state,
     load_arm_model,
     run_phase,
@@ -32,13 +34,7 @@ from .native_clm_m3l2 import M3L2AddressConfig
 
 
 class MatchedReplayIterator(Iterator[tuple[Tensor, Tensor]]):
-    """Yield a deterministic 50/50 current/history batch mixture.
-
-    The historical domain is selected uniformly per step using a private seeded
-    RNG. Within each selected domain, the canonical Native CLM shuffled loader is
-    used. This keeps the total optimizer batch size and number of steps matched to
-    zero-replay arms.
-    """
+    """Yield a deterministic 50/50 current/history batch mixture."""
 
     def __init__(
         self,
@@ -192,7 +188,7 @@ def run_replay_oracle_stream(
     }
     phase_summaries: list[dict[str, Any]] = []
     replay_audit: dict[str, Any] = {}
-    invariant_rows = 0
+    all_invariant_rows: list[dict[str, Any]] = []
 
     for index, phase in enumerate(PHASES):
         history_paths = _history_for_phase(
@@ -219,11 +215,12 @@ def run_replay_oracle_stream(
             seed=seed + 100 * (index + 1),
             global_step_offset=index * train_config.steps_per_phase,
             batch_iterator=replay_iterator,
+            phase_output_dir=output / f"phase-{phase}",
         )
         phase_summary = dict(artifact.phase_summary)
         phase_summary["replay"] = replay_iterator.metadata()
         phase_summaries.append(phase_summary)
-        invariant_rows += len(artifact.invariant_rows)
+        all_invariant_rows.extend(artifact.invariant_rows)
         replay_audit[phase] = {
             **_history_file_budget(history_paths),
             **replay_iterator.metadata(),
@@ -235,6 +232,8 @@ def run_replay_oracle_stream(
             config=train_config,
         )
 
+    invariant_path = output / "realized-update-invariant.jsonl"
+    _write_jsonl(invariant_path, all_invariant_rows)
     final_checkpoint = output / "final.pt"
     model.save_checkpoint(
         final_checkpoint,
@@ -271,6 +270,12 @@ def run_replay_oracle_stream(
         "structural_final": structural_state_metadata(model, arm=arm),
         "final_checkpoint_sha256": sha256_file(final_checkpoint),
         "final_checkpoint_bytes": final_checkpoint.stat().st_size,
-        "realized_update_invariant_rows": invariant_rows,
+        "realized_update_invariant_rows": len(all_invariant_rows),
+        "realized_update_invariant_sha256": sha256_file(invariant_path),
+        "realized_update_invariant_bytes": invariant_path.stat().st_size,
     }
+    (output / "arm-summary-core.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
     return summary
