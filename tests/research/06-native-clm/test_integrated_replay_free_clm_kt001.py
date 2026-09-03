@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -42,6 +43,16 @@ def _tiny_config(*, cells: int = 1, active: int = 1) -> NativeCLMConfig:
         certificate_max_rank=2,
         tie_embeddings=False,
     )
+
+
+def _data_builder_module():
+    path = Path("scripts/research/prepare_integrated_replay_free_clm_kt001_data.py")
+    spec = importlib.util.spec_from_file_location("kt001_data_builder", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("unable to load KT001 data builder for mechanics test")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def test_causal_matrix_is_frozen_and_explicit() -> None:
@@ -122,6 +133,47 @@ def test_matched_replay_iterator_is_exactly_half_replay(tmp_path: Path) -> None:
     assert metadata["current_examples"] == metadata["replay_examples"]
     assert metadata["replay_example_fraction"] == 0.5
     assert sum(metadata["historical_domain_steps"].values()) == 10
+
+
+def test_fresh_selector_uses_zero_history_when_post_prefix_is_sufficient() -> None:
+    module = _data_builder_module()
+    rows = [{"text": f"row-{index}"} for index in range(10)]
+    selected, metadata = module._salted_prefer_fresh_select(
+        rows,
+        lambda row: row["text"],
+        repo_id="test/repo",
+        split="train",
+        config=None,
+        historical_prefix_nonempty=2,
+        count=3,
+        fresh_scan_nonempty=3,
+    )
+    assert len(selected) == 3
+    assert metadata["historical_prefix_reused"] == 0
+    assert metadata["fresh_post_prefix_selected"] == 3
+    assert metadata["fully_disjoint_from_historical_prefix"] is True
+
+
+def test_fresh_selector_records_only_unavoidable_history_shortfall() -> None:
+    module = _data_builder_module()
+    # Four historical rows and only two post-prefix rows: a four-document target
+    # mathematically requires exactly two historical-prefix documents.
+    rows = [{"text": f"row-{index}"} for index in range(6)]
+    selected, metadata = module._salted_prefer_fresh_select(
+        rows,
+        lambda row: row["text"],
+        repo_id="test/repo",
+        split="train",
+        config=None,
+        historical_prefix_nonempty=4,
+        count=4,
+        fresh_scan_nonempty=4,
+    )
+    assert len(selected) == 4
+    assert metadata["post_prefix_nonempty_seen"] == 2
+    assert metadata["historical_prefix_reused"] == 2
+    assert metadata["fresh_post_prefix_selected"] == 2
+    assert metadata["fully_disjoint_from_historical_prefix"] is False
 
 
 def test_forced_shadow_birth_uses_canonical_m3l2_path() -> None:
