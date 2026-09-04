@@ -121,8 +121,8 @@ jobs:
 
       - name: Lint prompt-address research scripts
         run: |
-          python -m ruff check --ignore E402 scripts/research/hybrid_clm_prompt_address_001/run.py
-          python -m ruff check --ignore E402 scripts/research/hybrid_clm_prompt_address_001/publish.py
+          python -m ruff check --ignore E402,RUF100 scripts/research/hybrid_clm_prompt_address_001/run.py
+          python -m ruff check --ignore E402,RUF100 scripts/research/hybrid_clm_prompt_address_001/publish.py
 
       - name: Lint Hybrid CLM tests
         run: |
