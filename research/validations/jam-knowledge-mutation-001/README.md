@@ -2,6 +2,8 @@
 
 Status: **PROTOCOL FROZEN — FORMAL GPU RUNS PENDING**
 
+Protocol version: **1.2**.
+
 This is the first release-oriented real-domain mutation in the Safe Model Evolution line.
 
 ## Question
@@ -14,6 +16,7 @@ Can the frozen Granite 3.1 1B-A400M MoE acquire the source-locked `jam-knowledge
 - Revision: `408b6e90baab8cf24f4aa9f8e19703ffa0a53b29`
 - MoE conversion identity: `dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670`
 - JAM dataset content commit: `5016cb36f8eb5ca715b6fd7796384ae5b607bd12`
+- Repaired JAM dataset manifest SHA-256: `d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15`
 - JAM concepts: 180
 - Gray Paper pin: `0.8.0` / `e5375148597a45a99d31c9aa6bce6c7bf3a48998`
 - Formal seeds: `26090711`, `26090712`, `26090713`
@@ -30,7 +33,7 @@ The stale manifest value was:
 
 `16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b`
 
-Only manifest metadata was corrected. No canonical concept, taxonomy, reasoning-holdout or generated-dataset bytes were changed. The repair occurred before any formal GPU seed was opened, so the final protocol hash produced after this repair is the only JAM Knowledge Mutation 001 formal protocol identity.
+Only manifest metadata was corrected. No canonical concept, taxonomy, reasoning-holdout or generated-dataset bytes were changed. Version 1.2 pins the repaired manifest hash directly in `protocol.json`, and the canonical formal runner refuses to start if it differs. The repair and identity pin were completed before any formal GPU seed was opened.
 
 ## Mechanism
 
@@ -92,6 +95,7 @@ The history budget deliberately uses the proven History Compression 001 `full_32
 
 Formal verification additionally fresh-reloads Granite and checks:
 
+- pinned dataset-manifest identity;
 - router top-k identity;
 - artifact reapply parity;
 - subtraction rollback;
