@@ -48,6 +48,14 @@ def _validate_seed_summary(
             f"seed {seed} dataset generator identity mismatch: "
             f"{summary.get('dataset_generator_git_blob_sha')} != {expected_dataset}"
         )
+    expected_implementation = protocol.get("implementation_git_blobs")
+    if not isinstance(expected_implementation, dict) or not expected_implementation:
+        raise RuntimeError("frozen protocol has no implementation_git_blobs map")
+    observed_implementation = summary.get("implementation_git_blobs")
+    if observed_implementation != expected_implementation:
+        raise RuntimeError(
+            f"seed {seed} implementation identity mismatch; refusing mixed formal evidence"
+        )
 
 
 def aggregate() -> dict[str, Any]:
@@ -89,8 +97,10 @@ def aggregate() -> dict[str, Any]:
 
     decision = {
         "experiment": protocol["experiment"],
+        "protocol_version": protocol["protocol_version"],
         "protocol_sha256": protocol_sha256,
         "dataset_generator_git_blob_sha": protocol["dataset"]["generator_git_blob_sha"],
+        "implementation_git_blobs": protocol["implementation_git_blobs"],
         "status": status,
         "scientific_decision": scientific_decision,
         "formal_seeds": formal,
