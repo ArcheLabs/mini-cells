@@ -6,6 +6,7 @@ Scientific authority lives in the matching frozen validation protocol and durabl
 
 Current workflows:
 
+- `hybrid-clm-prompt-address-001/hybrid-clm-prompt-address-001-kaggle.ipynb` — frozen diagnostic of prompt-anchor routing for Granite Hybrid CLM v0.1. It tests held-out address generalization, zero history-anchor false positives, unchanged write-safety gates, and fresh reload. Scientific PASS and FAIL are both published.
 - `clm-conversion-kill-test-001-kaggle.ipynb` — current frozen formal test of whether a mature frozen Granite MoE can grow a zero-init, cross-layer, semantically addressable functional-Cell overlay and preserve local mutation, child growth, branch merge, and rollback. GPU formal seeds are pending.
 - `jam-knowledge-mutation-001-failure-diagnostic-kaggle.ipynb` — completed post-hoc forward-only diagnostic for the repeated JAM001 misconception-gate failure; it reused all nine published mutation artifacts and preserved the upstream formal No-Go.
 - `jam-knowledge-mutation-001-kaggle.ipynb` — completed release-oriented real-domain JAM knowledge acquisition experiment; frozen decision `JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED` (0/3 formal seeds PASS).
