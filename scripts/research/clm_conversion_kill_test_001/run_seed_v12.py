@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import contextlib
-import json
 import random
 import sys
 from pathlib import Path
@@ -241,11 +239,15 @@ def run(seed: int, device: str) -> dict[str, Any]:
         if name != "routing"
     }
     base_choice = {
-        "direct": _choice(model, tokenizer, eval_rows["direct"], PROTOCOLS, protocol, device, None),
+        "direct": _choice(
+            model, tokenizer, eval_rows["direct"], PROTOCOLS, protocol, device, None
+        ),
         "negation": _choice(
             model, tokenizer, eval_rows["negation"], PROTOCOLS, protocol, device, None
         ),
-        "relation": _choice(model, tokenizer, eval_rows["relation"], REGIONS, protocol, device, None),
+        "relation": _choice(
+            model, tokenizer, eval_rows["relation"], REGIONS, protocol, device, None
+        ),
     }
     history_teacher = core._last_logits(model, tokenizer, history, device).detach().cpu()
 
@@ -419,6 +421,9 @@ def run(seed: int, device: str) -> dict[str, Any]:
     parent_beta = core._evaluate(
         model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
     )
+    parent_alpha_choice = _choice(
+        model, tokenizer, growth_rows["alpha"], PROTOCOLS, protocol, device, overlay
+    )
     parent_beta_choice = _choice(
         model, tokenizer, growth_rows["beta_eval"], PROTOCOLS, protocol, device, overlay
     )
@@ -426,6 +431,7 @@ def run(seed: int, device: str) -> dict[str, Any]:
         "alpha_nll_regression": float(
             parent_alpha["mean_reference_nll"] - alpha_base["mean_reference_nll"]
         ),
+        "alpha_choice": parent_alpha_choice,
         "beta_nll_gain": core._nll_gain(beta_base, parent_beta),
         "beta_choice": parent_beta_choice,
     }
@@ -434,6 +440,8 @@ def run(seed: int, device: str) -> dict[str, Any]:
     parent_control["satisfies_registered_conflict_solution"] = bool(
         float(parent_control["alpha_nll_regression"])
         <= float(gates_cfg["maximum_growth_alpha_nll_regression"])
+        and float(parent_alpha_choice["strict_choice_accuracy"])
+        >= float(gates_cfg["minimum_growth_alpha_choice_accuracy"])
         and float(parent_control["beta_nll_gain"])
         >= float(gates_cfg["minimum_growth_beta_nll_gain"])
         and float(parent_beta_choice["strict_choice_accuracy"])
