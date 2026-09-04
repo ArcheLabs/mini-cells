@@ -63,7 +63,12 @@ jobs:
             scripts/research/jam_knowledge_mutation_001/publish.py
       - name: Lint implementation
         run: |
+          # run_seed.py intentionally sets Hugging Face/tokenizer environment
+          # controls before importing torch and its script-local sequence helper.
+          # Keep the I001 exception scoped to that file only; all other Ruff
+          # rules and all other JAM001 files remain strict.
           python -m ruff check --ignore SIM102,S110,BLE001,UP012 \
+            --per-file-ignores 'scripts/research/jam_knowledge_mutation_001/run_seed.py:I001' \
             src/minicells/moe_multicoordinate.py \
             scripts/research/jam_knowledge_mutation_001 \
             tests/test_jam_knowledge_mutation.py
