@@ -26,7 +26,7 @@ The engineering guard discovered that `jam-knowledge-v0.1/manifest.json` recorde
 
 `4f3e2da96a2cfa0d0b0496da191e21a50c38779dc804c54c1fc21b5f236cf886`
 
-The stale manifest value was `16a993d3a79750d8a8f1d591a9231e5cbcd75373f8a298e7fb894eb63d747842`? No: that value belongs to an unrelated protocol hash and is intentionally not used here. The actual stale taxonomy value was:
+The stale manifest value was:
 
 `16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b`
 
