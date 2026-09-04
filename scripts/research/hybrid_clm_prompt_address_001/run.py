@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -101,6 +102,8 @@ def run(*, device: str) -> dict[str, Any]:
     seed = int(protocol["seed"])
     smoke = protocol["smoke"]
     output_dir = RESULTS_ROOT / f"seed-{seed}"
+    if output_dir.exists():
+        shutil.rmtree(output_dir)
     result = run_milestone(
         device=device,
         fact_count=int(smoke["facts"]),
