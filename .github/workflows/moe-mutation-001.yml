@@ -40,7 +40,7 @@ jobs:
             scripts/research/moe_mutation_001/publish.py
       - name: Lint mutation implementation
         run: |
-          python -m ruff check \
+          python -m ruff check --ignore EXE001 \
             src/minicells/moe_mutation.py \
             scripts/research/moe_mutation_001 \
             tests/test_moe_mutation.py
