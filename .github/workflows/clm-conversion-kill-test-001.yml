@@ -39,12 +39,14 @@ jobs:
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
           python -m pip install -e '.[lm,dev]'
 
-      - name: Validate frozen protocol
+      - name: Validate frozen protocol and implementation identity
         run: |
           python -m json.tool research/validations/clm-conversion-kill-test-001/protocol.json >/dev/null
           python - <<'PY'
+          import hashlib
           import json
           from pathlib import Path
+
           p = json.loads(Path('research/validations/clm-conversion-kill-test-001/protocol.json').read_text())
           assert p['status'] == 'PROTOCOL_FROZEN_GPU_PENDING'
           assert p['protocol_version'] == 1.2
@@ -58,6 +60,15 @@ jobs:
           assert p['gates']['minimum_branch_standalone_choice_accuracy'] == 1.0
           assert p['gates']['minimum_branch_merged_choice_accuracy'] == 1.0
           assert len(p['formal_seeds']) == 3
+          blobs = p['implementation_git_blobs']
+          assert 'scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py' in blobs
+          assert 'scripts/research/clm_conversion_kill_test_001/run_seed_v12.py' in blobs
+          assert 'scripts/research/clm_conversion_kill_test_001/semantic_choice.py' in blobs
+          for relative_path, expected in blobs.items():
+              data = Path(relative_path).read_bytes()
+              header = b'blob ' + str(len(data)).encode() + b'\0'
+              observed = hashlib.sha1(header + data).hexdigest()
+              assert observed == expected, (relative_path, observed, expected)
           PY
 
       - name: Compile Conversion 001 implementation
@@ -68,6 +79,7 @@ jobs:
             scripts/research/clm_conversion_kill_test_001/semantic_choice.py \
             scripts/research/clm_conversion_kill_test_001/run_seed.py \
             scripts/research/clm_conversion_kill_test_001/run_seed_v12.py \
+            scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py \
             scripts/research/clm_conversion_kill_test_001/aggregate.py \
             scripts/research/clm_conversion_kill_test_001/publish.py
 
@@ -78,6 +90,7 @@ jobs:
             scripts/research/clm_conversion_kill_test_001/dataset.py \
             scripts/research/clm_conversion_kill_test_001/semantic_choice.py \
             scripts/research/clm_conversion_kill_test_001/run_seed_v12.py \
+            scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py \
             tests/test_functional_cellization.py \
             tests/test_clm_conversion_kill_test_001.py
 
