@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-
 CANDIDATE_CODES = (
     "QX-17",
     "VR-08",
@@ -82,7 +81,6 @@ def evaluation_rows(fact: DemoFact) -> list[dict[str, str]]:
 
 
 def address_positive_prompts(fact: DemoFact) -> list[str]:
-    """Training-only applicability examples; held-out eval paraphrases stay unseen."""
     return [row["question"] for row in training_rows(fact)]
 
 
