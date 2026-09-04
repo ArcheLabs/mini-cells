@@ -1,0 +1,48 @@
+{
+  "claim_if_rejected": "even with explicit frozen-base historical supervision, this protocol did not find a sufficiently local sub-expert writable coordinate; this challenges the current functional-coordinate construction but does not prove that no safe coordinate exists under any representation or optimizer",
+  "claim_if_supported": "under explicit frozen-base historical supervision, a substantially sub-expert aligned parameter coordinate exists that can acquire a new held-out behavior while preserving unseen historical calibration behavior under the frozen protocol",
+  "completed_seeds": [
+    26090511
+  ],
+  "environment_consistent": true,
+  "environment_signatures": {
+    "26090511": {
+      "cuda_device_name": "Tesla T4",
+      "dtype": "torch.float32",
+      "huggingface_hub": "1.11.0",
+      "safetensors": "0.7.0",
+      "torch": "2.10.0+cu128",
+      "transformers": "5.0.0"
+    }
+  },
+  "experiment": "FUNCTIONAL_BOUNDARY_ORACLE_001",
+  "failed_seeds": [],
+  "formal_seeds": [
+    26090511,
+    26090512,
+    26090513
+  ],
+  "missing_seeds": [
+    26090512,
+    26090513
+  ],
+  "not_claimed": [
+    "zero-replay continual learning",
+    "data-free boundary discovery",
+    "autonomous cell discovery",
+    "the selected group is a CLM Cell",
+    "multi-mutation composition",
+    "mergeability",
+    "safe arbitrary model editing",
+    "preservation of the full original Granite training distribution"
+  ],
+  "observed_protocol_hashes": [
+    "14d399d3a79750d8a8f1d591a9231e5cbcd75373f8a298e7fb894eb63d747842"
+  ],
+  "passed_seeds": [
+    26090511
+  ],
+  "protocol_consistent": true,
+  "scientific_decision": null,
+  "status": "FORMAL_SEEDS_INCOMPLETE"
+}
