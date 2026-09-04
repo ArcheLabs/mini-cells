@@ -20,6 +20,7 @@ See:
 | `04-continual-learning-core/` | **FORMAL-EXPERIMENT ORCHESTRATION / HISTORICAL RUNNERS** | exact scientific authority comes from the matching frozen validation/result, not the notebook itself |
 | `05-language-validation/` | **RETIRED / SUPERSEDED PROTOCOL LINEAGE** | keep CLM-0.4-mini protocol/transaction assets; Native Stage 06 supersedes it as the active trained-model scientific path |
 | `06-native-clm/` | **CURRENT TRAINED-MODEL EVIDENCE WORKFLOWS** | consumed formal results remain frozen; diagnostics cannot relabel failed milestones |
+| `07-safe-model-evolution/` | **CURRENT MODEL-EVOLUTION EVIDENCE WORKFLOWS** | real pretrained-model mutation, historical-supervision, compression, composition, and rollback experiments; protocols/results remain the scientific authority |
 
 ## Notebook groups
 
@@ -37,6 +38,12 @@ See:
   - `native-clm-v0-m3r-address-diagnostic-kaggle.ipynb` — completed checkpoint-only lineage-local address diagnostic; canonical classification is `QUERY_GEOMETRY_SEPARABLE` and it performs no Native CLM training or new formal-seed run.
   - `native-clm-v0-m3l-query-sketch-gate-kaggle.ipynb` — completed checkpoint-only M3L mechanism diagnostic; canonical classification is `QUERY_SKETCH_GATE_NOT_FEASIBLE` with rank-16 median AUC 0.8968 against the frozen 0.90 gate.
   - `native-clm-v0-m3l1-address-state-capacity-kaggle.ipynb` — active checkpoint-only M3L-1 capacity/family diagnostic sweeping diagonal, ranks 8/16/32/64/128 and dense full covariance on the exact same M3L lineage samples and oracle.
+- [`07-safe-model-evolution/`](07-safe-model-evolution/): current real-model Safe Model Evolution workflows:
+  - `history-compression-001-kaggle.ipynb` — frozen replay-budget ladder `32 -> 8 -> 2 -> 0` after the supported Functional Boundary Oracle 001 result. Detailed child logs are written to files; notebook stdout remains compact and the final cell renders durable-result visualization.
+
+## Research notebook placement rule
+
+Research experiments must place hosted notebooks under `research/notebooks/<stage>/`. Repository-level `notebooks/` is not the canonical home for new research workflows. Numerical evidence remains under `artifacts/experiments/`; notebooks are orchestration and reproducibility assets, not the source of frozen decisions.
 
 ## Historical reuse rule
 
