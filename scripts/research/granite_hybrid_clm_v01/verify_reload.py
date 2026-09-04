@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import contextlib
 import json
 import os
 import sys
@@ -25,9 +24,9 @@ for path in (SEQUENCE_ROOT, CONVERSION_ROOT, LOCAL_ROOT):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
-import sequence as seq  # noqa: E402
-from dataset import CANDIDATE_CODES, demo_facts, evaluation_rows, update_rows  # noqa: E402
-from semantic_choice import candidate_choice_metrics  # noqa: E402
+import sequence as seq
+from dataset import CANDIDATE_CODES, demo_facts, evaluation_rows, update_rows
+from semantic_choice import candidate_choice_metrics
 
 MODEL_ID = "ibm-granite/granite-3.1-1b-a400m-base"
 MODEL_REVISION = "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
