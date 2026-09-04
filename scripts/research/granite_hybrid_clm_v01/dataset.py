@@ -82,7 +82,8 @@ def evaluation_rows(fact: DemoFact) -> list[dict[str, str]]:
 
 
 def address_positive_prompts(fact: DemoFact) -> list[str]:
-    return [row["question"] for row in training_rows(fact) + evaluation_rows(fact)]
+    """Training-only applicability examples; held-out eval paraphrases stay unseen."""
+    return [row["question"] for row in training_rows(fact)]
 
 
 def address_negative_prompts(
