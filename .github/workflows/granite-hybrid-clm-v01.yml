@@ -108,7 +108,7 @@ jobs:
         run: python -m ruff check --ignore E402,RUF100,SIM117 scripts/research/granite_hybrid_clm_v01/run_milestone.py
 
       - name: Lint Hybrid CLM reload verifier
-        run: python -m ruff check --ignore E402 scripts/research/granite_hybrid_clm_v01/verify_reload.py
+        run: python -m ruff check --ignore E402,RUF100 scripts/research/granite_hybrid_clm_v01/verify_reload.py
 
       - name: Lint Hybrid CLM acceptance validator
         run: python -m ruff check scripts/research/granite_hybrid_clm_v01/validate_result.py
