@@ -1,11 +1,13 @@
 {
   "completed_seeds": [
-    26090441
+    26090441,
+    26090442
   ],
   "dataset_generator_git_blob_sha": "7135392d431f0a7386b823fae8e60390d83e2763",
   "experiment": "CLM_CONVERSION_KILL_TEST_001",
   "failed_seeds": [
-    26090441
+    26090441,
+    26090442
   ],
   "formal_seeds": [
     26090441,
@@ -79,6 +81,63 @@
       "seed": 26090441,
       "semantic_write_choice_accuracy": 1.0,
       "semantic_write_nll_gain": 5.298630267381668,
+      "status": "FAIL"
+    },
+    "26090442": {
+      "dataset_generator_git_blob_sha": "7135392d431f0a7386b823fae8e60390d83e2763",
+      "distinct_primary_cells": 5,
+      "experiment": "CLM_CONVERSION_KILL_TEST_001",
+      "failed_gates": [
+        "branch_merge",
+        "branch_merge_semantic_choice",
+        "branch_standalone_acquisition",
+        "branch_standalone_semantic_choice",
+        "direct_acquisition",
+        "direct_semantic_choice",
+        "growth_alpha_retention",
+        "growth_alpha_semantic_choice",
+        "growth_spawn_invariance",
+        "negation_acquisition",
+        "negation_semantic_choice",
+        "relation_acquisition",
+        "relation_semantic_choice",
+        "route_diversity",
+        "semantic_routing",
+        "unrelated_choice_nonregression",
+        "unrelated_locality"
+      ],
+      "formation_choice_accuracy": {
+        "direct": 0.16666666666666666,
+        "negation": 0.0,
+        "relation": 0.25
+      },
+      "formation_nll_gains": {
+        "direct": 0.004573345184326172,
+        "negation": 0.004820187886556582,
+        "relation": -0.0014563242594407555
+      },
+      "growth_beta_choice_accuracy": 1.0,
+      "growth_beta_nll_gain": 6.095119679247546,
+      "growth_parent_only_solved": false,
+      "implementation_git_blobs": {
+        "scripts/research/clm_conversion_kill_test_001/aggregate.py": "2b42949d021e4b825eea58bb755f7c80cc1705e8",
+        "scripts/research/clm_conversion_kill_test_001/dataset.py": "7135392d431f0a7386b823fae8e60390d83e2763",
+        "scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py": "6cddf370b2e92a59a1f8068fc2010c8ba8e03ad9",
+        "scripts/research/clm_conversion_kill_test_001/run_seed.py": "0ed99ecbda0bae0fb319f0a0c3925af7884c660d",
+        "scripts/research/clm_conversion_kill_test_001/run_seed_v12.py": "f36c6a56dc190e4030e6976a5de2de8b06cf9749",
+        "scripts/research/clm_conversion_kill_test_001/semantic_choice.py": "fc263644c29fd499b08e13d8f5f5633a1c4176bc",
+        "scripts/research/jam_knowledge_mutation_001/sequence.py": "515577df3ebcd83ecfef81189f4d9e8a906be62e",
+        "src/minicells/functional_cellization.py": "ac82d83a5432f56e2790460e00313bc24e66b688"
+      },
+      "mean_route_agreement": 0.4583333333333333,
+      "minimum_branch_merge_retention": -176.82346760946243,
+      "minimum_branch_merged_choice_accuracy": 0.0,
+      "minimum_branch_standalone_choice_accuracy": 0.0,
+      "protocol_sha256": "5edcddc3909cc801245c3985a0910eaf8d5a24cd867140c57436e92c1e85ff69",
+      "protocol_version": 1.2,
+      "seed": 26090442,
+      "semantic_write_choice_accuracy": 1.0,
+      "semantic_write_nll_gain": 4.658219158649445,
       "status": "FAIL"
     }
   },
