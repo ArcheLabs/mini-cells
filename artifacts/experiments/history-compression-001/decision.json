@@ -1,7 +1,8 @@
 {
   "completed_seeds": [
     26090611,
-    26090612
+    26090612,
+    26090613
   ],
   "environment_consistent": true,
   "environment_signatures": {
@@ -20,6 +21,14 @@
       "safetensors": "0.7.0",
       "torch": "2.10.0+cu128",
       "transformers": "5.0.0"
+    },
+    "26090613": {
+      "cuda_device_name": "Tesla T4",
+      "dtype": "torch.float32",
+      "huggingface_hub": "1.11.0",
+      "safetensors": "0.7.0",
+      "torch": "2.10.0+cu128",
+      "transformers": "5.0.0"
     }
   },
   "experiment": "HISTORY_COMPRESSION_001",
@@ -29,10 +38,8 @@
     26090613
   ],
   "malformed_results": [],
-  "minimum_observed_supported_history_prompts": null,
-  "missing_seeds": [
-    26090613
-  ],
+  "minimum_observed_supported_history_prompts": 8,
+  "missing_seeds": [],
   "not_claimed": [
     "general zero-replay continual learning even if zero_0 passes",
     "data-free autonomous Cell discovery",
@@ -52,14 +59,16 @@
       "history_prompt_count": 32,
       "passed_seeds": [
         26090611,
-        26090612
+        26090612,
+        26090613
       ],
-      "supported": false
+      "supported": true
     },
     "tiny_2": {
       "failed_seeds": [
         26090611,
-        26090612
+        26090612,
+        26090613
       ],
       "history_prompt_count": 2,
       "passed_seeds": [],
@@ -71,24 +80,26 @@
       ],
       "history_prompt_count": 8,
       "passed_seeds": [
-        26090611
+        26090611,
+        26090613
       ],
-      "supported": false
+      "supported": true
     },
     "zero_0": {
       "failed_seeds": [
         26090611,
-        26090612
+        26090612,
+        26090613
       ],
       "history_prompt_count": 0,
       "passed_seeds": [],
       "supported": false
     }
   },
-  "positive_control_supported": false,
+  "positive_control_supported": true,
   "protocol_consistent": true,
   "protocol_sha256": "460afd443646b1bb9ca023756916b4266fb4f19faaa57d89506cdbdcb90bbcb0",
-  "scientific_decision": false,
-  "status": "HISTORY_COMPRESSION_INCOMPLETE",
+  "scientific_decision": true,
+  "status": "HISTORY_COMPRESSION_TO_8_SUPPORTED",
   "support_monotone_with_history_budget": true
 }
