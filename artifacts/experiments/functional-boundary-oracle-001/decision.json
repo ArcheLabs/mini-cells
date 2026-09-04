@@ -3,7 +3,8 @@
   "claim_if_supported": "under explicit frozen-base historical supervision, a substantially sub-expert aligned parameter coordinate exists that can acquire a new held-out behavior while preserving unseen historical calibration behavior under the frozen protocol",
   "completed_seeds": [
     26090511,
-    26090512
+    26090512,
+    26090513
   ],
   "environment_consistent": true,
   "environment_signatures": {
@@ -22,6 +23,14 @@
       "safetensors": "0.7.0",
       "torch": "2.10.0+cu128",
       "transformers": "5.0.0"
+    },
+    "26090513": {
+      "cuda_device_name": "Tesla T4",
+      "dtype": "torch.float32",
+      "huggingface_hub": "1.11.0",
+      "safetensors": "0.7.0",
+      "torch": "2.10.0+cu128",
+      "transformers": "5.0.0"
     }
   },
   "experiment": "FUNCTIONAL_BOUNDARY_ORACLE_001",
@@ -31,9 +40,7 @@
     26090512,
     26090513
   ],
-  "missing_seeds": [
-    26090513
-  ],
+  "missing_seeds": [],
   "not_claimed": [
     "zero-replay continual learning",
     "data-free boundary discovery",
@@ -49,7 +56,8 @@
   ],
   "passed_seeds": [
     26090511,
-    26090512
+    26090512,
+    26090513
   ],
   "protocol_consistent": true,
   "scientific_decision": true,
