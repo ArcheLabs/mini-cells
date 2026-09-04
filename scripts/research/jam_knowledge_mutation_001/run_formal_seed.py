@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gc
 import json
 import shutil
 from pathlib import Path
@@ -9,6 +10,25 @@ import sequence as seq
 import torch
 
 from minicells.moe_multicoordinate import apply_mutation_set_
+
+
+def _fresh_model(
+    source_dir: Path,
+    AutoModelForCausalLM,
+    device: str,
+):
+    model = AutoModelForCausalLM.from_pretrained(
+        source_dir, dtype=torch.float32, low_cpu_mem_usage=True
+    ).to(device)
+    model.eval()
+    return model
+
+
+def _release_model(model) -> None:
+    del model
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
 
 def _verify(summary: dict, args) -> dict:
@@ -43,41 +63,39 @@ def _verify(summary: dict, args) -> dict:
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
-    model = AutoModelForCausalLM.from_pretrained(
-        source_dir, dtype=torch.float32, low_cpu_mem_usage=True
-    ).to(args.device)
-    model.eval()
-    parameter_map = dict(model.named_parameters())
-    batch_size = int(protocol["training"]["batch_size"])
-    layer_index = int(protocol["mutation"]["layer_index"])
-    top_k = int(model.config.num_experts_per_tok)
-    base_router = oracle._router_last_logits(
-        model,
-        tokenizer,
-        verification_prompts,
-        device=args.device,
-        batch_size=batch_size,
-        layer_index=layer_index,
-    )
-    base_logits = oracle._next_logits(
-        model,
-        tokenizer,
-        verification_prompts,
-        device=args.device,
-        batch_size=batch_size,
-    )
 
     result_root = (args.result_dir or engine.RESULTS_ROOT / f"seed-{args.seed}").resolve()
     work_root = (args.work_dir or engine.WORK_ROOT / f"seed-{args.seed}").resolve()
     verified: dict[str, dict] = {}
     passing_capacities: list[int] = []
     thresholds = protocol["gates"]
+    batch_size = int(protocol["training"]["batch_size"])
+    layer_index = int(protocol["mutation"]["layer_index"])
 
     for capacity in [int(value) for value in protocol["mutation"]["capacity_ladder"]]:
         capacity_dir = result_root / f"capacity-{capacity}"
         result_path = capacity_dir / "result.json"
         result = engine._load_json(result_path)
         mutation_dir = capacity_dir / "mutation"
+
+        model = _fresh_model(source_dir, AutoModelForCausalLM, args.device)
+        parameter_map = dict(model.named_parameters())
+        top_k = int(model.config.num_experts_per_tok)
+        base_router = oracle._router_last_logits(
+            model,
+            tokenizer,
+            verification_prompts,
+            device=args.device,
+            batch_size=batch_size,
+            layer_index=layer_index,
+        )
+        base_logits = oracle._next_logits(
+            model,
+            tokenizer,
+            verification_prompts,
+            device=args.device,
+            batch_size=batch_size,
+        )
 
         apply_mutation_set_(parameter_map, mutation_dir)
         applied_logits = oracle._next_logits(
@@ -106,16 +124,16 @@ def _verify(summary: dict, args) -> dict:
         artifact_error = float((reapplied_logits - applied_logits).abs().max().item())
 
         materialized_error: float | None = None
+        materialized_dir = work_root / f"materialized-capacity-{capacity}"
         if result["preliminary_status"] == "PASS":
-            materialized_dir = work_root / f"materialized-capacity-{capacity}"
             shutil.rmtree(materialized_dir, ignore_errors=True)
             materialized_dir.mkdir(parents=True, exist_ok=True)
             model.save_pretrained(materialized_dir, safe_serialization=True)
             tokenizer.save_pretrained(materialized_dir)
-            materialized = AutoModelForCausalLM.from_pretrained(
-                materialized_dir, dtype=torch.float32, low_cpu_mem_usage=True
-            ).to(args.device)
-            materialized.eval()
+            _release_model(model)
+            model = None
+
+            materialized = _fresh_model(materialized_dir, AutoModelForCausalLM, args.device)
             materialized_logits = oracle._next_logits(
                 materialized,
                 tokenizer,
@@ -126,12 +144,12 @@ def _verify(summary: dict, args) -> dict:
             materialized_error = float(
                 (materialized_logits - applied_logits).abs().max().item()
             )
-            del materialized
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
+            _release_model(materialized)
             shutil.rmtree(materialized_dir, ignore_errors=True)
-
-        apply_mutation_set_(parameter_map, mutation_dir, scale=-1.0)
+        else:
+            apply_mutation_set_(parameter_map, mutation_dir, scale=-1.0)
+            _release_model(model)
+            model = None
 
         result["metrics"]["target_router_topk_identity"] = router_identity
         result["metrics"]["artifact_reapply_logit_error"] = artifact_error
@@ -145,32 +163,44 @@ def _verify(summary: dict, args) -> dict:
         )
         result["gates"]["materialized_checkpoint_logit_error"] = (
             materialized_error is not None
-            and materialized_error <= float(thresholds["maximum_materialized_checkpoint_logit_error"])
+            and materialized_error
+            <= float(thresholds["maximum_materialized_checkpoint_logit_error"])
         )
         result["formal_verification"] = {
-            "mode": "fresh_base_reload_artifact_reapply_and_temporary_hf_materialization",
+            "mode": "fresh_base_per_capacity_artifact_reapply_and_temporary_hf_materialization",
             "verification_prompt_count": len(verification_prompts),
             "router_topk_identity": router_identity,
             "artifact_reapply_logit_error": artifact_error,
             "materialized_checkpoint_logit_error": materialized_error,
             "fresh_base_rollback_logit_error": formal_rollback_error,
         }
-        result["status"] = "PASS" if all(value is True for value in result["gates"].values()) else "FAIL"
+        result["status"] = (
+            "PASS" if all(value is True for value in result["gates"].values()) else "FAIL"
+        )
         if result["status"] == "PASS":
             passing_capacities.append(capacity)
         engine._write_json(result_path, result)
         verified[str(capacity)] = {
             "status": result["status"],
             "preliminary_status": result["preliminary_status"],
-            "overall_heldout_reference_nll_gain": result["metrics"]["overall_heldout_reference_nll_gain"],
-            "history_evaluation_mean_kl": result["metrics"]["history_evaluation_mean_kl"],
+            "overall_heldout_reference_nll_gain": result["metrics"][
+                "overall_heldout_reference_nll_gain"
+            ],
+            "history_evaluation_mean_kl": result["metrics"][
+                "history_evaluation_mean_kl"
+            ],
             "router_topk_identity": router_identity,
             "artifact_reapply_logit_error": artifact_error,
             "materialized_checkpoint_logit_error": materialized_error,
         }
         engine._progress(
             args.seed,
-            f"formal={result['status']} heldout_gain={result['metrics']['overall_heldout_reference_nll_gain']:.4f} history_kl={result['metrics']['history_evaluation_mean_kl']:.6f} router={router_identity:.4f}",
+            (
+                f"formal={result['status']} "
+                f"heldout_gain={result['metrics']['overall_heldout_reference_nll_gain']:.4f} "
+                f"history_kl={result['metrics']['history_evaluation_mean_kl']:.6f} "
+                f"router={router_identity:.4f}"
+            ),
             capacity=capacity,
         )
 
@@ -178,9 +208,6 @@ def _verify(summary: dict, args) -> dict:
     summary["status"] = "PASS" if passing_capacities else "FAIL"
     summary["selected_capacity"] = min(passing_capacities) if passing_capacities else None
     engine._write_json(result_root / "seed_summary.json", summary)
-    del model
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
     return summary
 
 
@@ -196,7 +223,9 @@ def main() -> int:
         "capacities": {
             key: {
                 "status": value["status"],
-                "heldout_gain": round(float(value["overall_heldout_reference_nll_gain"]), 6),
+                "heldout_gain": round(
+                    float(value["overall_heldout_reference_nll_gain"]), 6
+                ),
                 "history_kl": round(float(value["history_evaluation_mean_kl"]), 8),
                 "router": value["router_topk_identity"],
             }
