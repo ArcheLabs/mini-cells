@@ -37,6 +37,7 @@ jobs:
       - name: Validate frozen upstream artifacts and diagnostic plan
         run: |
           python -m json.tool research/validations/jam-knowledge-mutation-001-failure-diagnostic/diagnostic_plan.json >/dev/null
+          python -c "from pathlib import Path; import yaml; data=yaml.safe_load(Path('research/catalog.yaml').read_text()); assert data['schema'] == 'minicells.research-catalog.v1'; assert any(row.get('id') == 'jam-knowledge-mutation-001-failure-diagnostic' for row in data['entries'])"
           python scripts/research/jam_knowledge_mutation_001_failure_diagnostic/validate_sources.py
 
       - name: Compile diagnostic runners
