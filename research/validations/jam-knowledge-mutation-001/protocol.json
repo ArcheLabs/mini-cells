@@ -3,7 +3,7 @@
   "protocol_version": 1.1,
   "title": "JAM Knowledge Mutation 001 — Release-Oriented Sparse Domain Acquisition",
   "status": "PROTOCOL_FROZEN_GPU_PENDING",
-  "pre_run_amendment": "v1.1 was frozen before any formal GPU seed was opened. It makes answer boundaries explicit and expresses artifact/materialization parity as excess over measured frozen-base forward repeatability, matching the established rollback numerical floor.",
+  "pre_run_amendment": "v1.1 was frozen before any formal GPU seed was opened. It makes answer boundaries explicit and expresses artifact/materialization parity as excess over measured frozen-base forward repeatability, matching the established rollback numerical floor. A pre-formal dataset-manifest integrity repair corrected only the recorded SHA-256 for taxonomy.json; canonical dataset bytes and the registered dataset content commit are unchanged.",
   "scientific_scope": "test whether a frozen Granite MoE can acquire the source-locked JAM Knowledge v0.1 domain through a bounded set of aligned sub-expert mutations while preserving registered non-JAM behavior and exact rollback",
   "base": {
     "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
@@ -15,6 +15,13 @@
     "id": "jam-knowledge-v0.1",
     "repository_commit": "5016cb36f8eb5ca715b6fd7796384ae5b607bd12",
     "manifest_path": "research/datasets/jam-knowledge-v0.1/manifest.json",
+    "manifest_integrity_repair": {
+      "affected_file": "taxonomy.json",
+      "canonical_bytes_changed": false,
+      "original_recorded_sha256": "16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b",
+      "correct_sha256": "4f3e2da96a2cfa0d0b0496da191e21a50c38779dc804c54c1fc21b5f236cf886",
+      "verified_against_repository_commit": "5016cb36f8eb5ca715b6fd7796384ae5b607bd12"
+    },
     "required_manifest_status": "CURATION_COMPLETE_SOURCE_LOCKED",
     "source_pin": "graypaper-0.8.0-e5375148",
     "concept_count": 180,
