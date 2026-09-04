@@ -60,6 +60,7 @@
     "per_seed_pass": "all gates pass",
     "formal_support": "at least 2 of 3 formal seeds pass",
     "formal_reject": "2 or more formal seeds fail",
+    "environment_consistency": "all completed formal seeds must share torch, transformers, huggingface_hub, safetensors, cuda_device_name, and dtype; otherwise no scientific decision is emitted",
     "claim_if_supported": "an unchanged converted Granite MoE substrate supports a first isolated, addressable expert-slice mutation with measurable held-out gain, bounded control drift, unchanged target-layer routing, and exact rollback under this protocol",
     "not_claimed": [
       "multi-mutation composition",
