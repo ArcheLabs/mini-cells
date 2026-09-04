@@ -98,6 +98,30 @@ def validate_payload(
             if merged.remove(artifacts[-2].cell_id) != branch_b:
                 errors.append("manifest rollback after merge failed")
 
+        if milestone.get("checkpoint_reload_required", False):
+            reload_path = result_dir / "reload_verification.json"
+            if not reload_path.exists():
+                errors.append("fresh-runtime reload verification is missing")
+            else:
+                reload_report = _load_json(reload_path)
+                if reload_report.get("status") != "GRANITE_HYBRID_CLM_V01_RELOAD_VERIFIED":
+                    errors.append("fresh-runtime reload verification failed")
+                if int(reload_report.get("loaded_cell_count", -1)) != len(manifest_cells):
+                    errors.append("fresh-runtime reload did not load every manifest Cell")
+                if float(reload_report.get("retention_choice_accuracy", 0.0)) < float(
+                    milestone["minimum_final_semantic_choice_accuracy"]
+                ):
+                    errors.append("fresh-runtime reload retention is below threshold")
+                if milestone.get("contextual_child_required", False):
+                    if float(
+                        reload_report.get("contextual_child_old_choice_accuracy", 0.0)
+                    ) != 1.0:
+                        errors.append("fresh-runtime reload damages parent v1 semantics")
+                    if float(
+                        reload_report.get("contextual_child_new_choice_accuracy", 0.0)
+                    ) != 1.0:
+                        errors.append("fresh-runtime reload lost child v2 semantics")
+
     return errors
 
 
@@ -110,7 +134,11 @@ def main() -> None:
     protocol = _load_json(args.protocol)
     errors = validate_payload(result, protocol, result_dir=args.result_dir)
     payload = {
-        "status": "GRANITE_HYBRID_CLM_V01_MILESTONE_ACCEPTED" if not errors else "GRANITE_HYBRID_CLM_V01_MILESTONE_REJECTED",
+        "status": (
+            "GRANITE_HYBRID_CLM_V01_MILESTONE_ACCEPTED"
+            if not errors
+            else "GRANITE_HYBRID_CLM_V01_MILESTONE_REJECTED"
+        ),
         "errors": errors,
     }
     print(json.dumps(payload, indent=2, sort_keys=True))
