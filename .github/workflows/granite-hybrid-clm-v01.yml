@@ -67,7 +67,8 @@ jobs:
             scripts/research/granite_hybrid_clm_v01/dataset.py \
             scripts/research/granite_hybrid_clm_v01/run_milestone.py \
             scripts/research/granite_hybrid_clm_v01/verify_reload.py \
-            scripts/research/granite_hybrid_clm_v01/validate_result.py
+            scripts/research/granite_hybrid_clm_v01/validate_result.py \
+            scripts/research/granite_hybrid_clm_v01/run_kaggle.py
 
       - name: Lint Hybrid CLM implementation
         run: |
@@ -77,6 +78,7 @@ jobs:
             scripts/research/granite_hybrid_clm_v01/run_milestone.py \
             scripts/research/granite_hybrid_clm_v01/verify_reload.py \
             scripts/research/granite_hybrid_clm_v01/validate_result.py \
+            scripts/research/granite_hybrid_clm_v01/run_kaggle.py \
             tests/test_hybrid_clm.py \
             tests/test_hybrid_clm_artifacts.py \
             tests/test_granite_hybrid_clm_result.py
