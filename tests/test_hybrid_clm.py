@@ -54,12 +54,27 @@ def _overlay(seed: int = 7) -> HybridCellOverlay:
     )
 
 
+def _prompt_positions(hidden: torch.Tensor, anchor: int | None = None) -> torch.Tensor:
+    index = hidden.shape[1] - 1 if anchor is None else int(anchor)
+    return torch.full((hidden.shape[0],), index, dtype=torch.long, device=hidden.device)
+
+
 def _prepare_committed_cell(overlay: HybridCellOverlay, slot: int) -> None:
     with torch.no_grad():
         overlay.gate_bias[slot] = 8.0
         overlay.up[:, slot].normal_(mean=0.0, std=0.05)
     overlay.freeze_address_(slot)
     overlay.commit_cell_(slot)
+
+
+def test_overlay_requires_explicit_prompt_scope() -> None:
+    model = _ToyModel()
+    overlay = _overlay()
+    hidden = torch.randn(1, 4, 8)
+    overlay.allocate_cell()
+    with pytest.raises(HybridCLMError, match="prompt_scope"):
+        with overlay.installed(model):
+            model(hidden)
 
 
 def test_allocation_is_exactly_invisible_to_production() -> None:
@@ -72,7 +87,7 @@ def test_allocation_is_exactly_invisible_to_production() -> None:
     with torch.no_grad():
         overlay.gate_bias[slot] = 10.0
         overlay.up[:, slot].normal_(mean=0.0, std=0.3)
-    with overlay.installed(model):
+    with overlay.prompt_scope(_prompt_positions(hidden)), overlay.installed(model):
         observed = model(hidden)
     assert torch.equal(observed, expected)
 
@@ -96,17 +111,45 @@ def test_shadow_can_exercise_uncommitted_cell_without_production_change() -> Non
     model = _ToyModel()
     overlay = _overlay()
     hidden = torch.randn(1, 4, 8)
+    positions = _prompt_positions(hidden)
     slot = overlay.allocate_cell()
     with torch.no_grad():
         overlay.gate_bias[slot] = 10.0
         overlay.up[:, slot].normal_(mean=0.0, std=0.2)
     production_before = model(hidden)
-    with overlay.installed(model):
+    with overlay.prompt_scope(positions), overlay.installed(model):
         production = model(hidden)
-    with overlay.shadow([slot]), overlay.installed(model):
+    with overlay.shadow([slot]), overlay.prompt_scope(positions), overlay.installed(model):
         shadow = model(hidden)
     assert torch.equal(production, production_before)
     assert not torch.equal(shadow, production)
+
+
+def test_prompt_anchor_fixes_routing_and_blocks_pre_anchor_writes() -> None:
+    torch.manual_seed(31)
+    overlay = _overlay()
+    slot = overlay.allocate_cell()
+    _prepare_committed_cell(overlay, slot)
+    hidden = torch.randn(1, 5, 8)
+    changed_answer = hidden.clone()
+    changed_answer[:, 3:] = torch.randn_like(changed_answer[:, 3:]) * 10.0
+    positions = _prompt_positions(hidden, anchor=2)
+
+    with overlay.prompt_scope(positions):
+        overlay._read(hidden)
+        first_trace = overlay.prompt_gates(positions)
+        first_active = overlay._cached_active.detach().clone()
+        transformed = overlay._transform(hidden, 0)
+    with overlay.prompt_scope(positions):
+        overlay._read(changed_answer)
+        second_trace = overlay.prompt_gates(positions)
+        second_active = overlay._cached_active.detach().clone()
+
+    assert torch.equal(first_trace.probabilities, second_trace.probabilities)
+    assert torch.equal(first_trace.active, second_trace.active)
+    assert torch.equal(first_active, second_active)
+    assert not bool(first_active[:, :2].any())
+    assert torch.equal(transformed[:, :2], hidden[:, :2])
 
 
 def test_commit_and_uncommit_are_exact_lifecycle_switches() -> None:
@@ -114,16 +157,17 @@ def test_commit_and_uncommit_are_exact_lifecycle_switches() -> None:
     model = _ToyModel()
     overlay = _overlay()
     hidden = torch.randn(1, 3, 8)
+    positions = _prompt_positions(hidden)
     slot = overlay.allocate_cell()
     _prepare_committed_cell(overlay, slot)
-    with overlay.installed(model):
+    with overlay.prompt_scope(positions), overlay.installed(model):
         committed = model(hidden).detach().clone()
     overlay.uncommit_cell_(slot)
-    with overlay.installed(model):
+    with overlay.prompt_scope(positions), overlay.installed(model):
         rolled_back = model(hidden).detach().clone()
     assert torch.equal(rolled_back, model(hidden))
     overlay.commit_cell_(slot)
-    with overlay.installed(model):
+    with overlay.prompt_scope(positions), overlay.installed(model):
         reapplied = model(hidden).detach().clone()
     assert torch.equal(reapplied, committed)
 
@@ -133,9 +177,10 @@ def test_child_allocation_is_function_preserving_even_with_inherited_state() -> 
     model = _ToyModel()
     overlay = _overlay()
     hidden = torch.randn(1, 4, 8)
+    positions = _prompt_positions(hidden)
     parent = overlay.allocate_cell()
     _prepare_committed_cell(overlay, parent)
-    with overlay.installed(model):
+    with overlay.prompt_scope(positions), overlay.installed(model):
         before = model(hidden).detach().clone()
     child = overlay.allocate_cell(
         parent_slot=parent,
@@ -143,7 +188,7 @@ def test_child_allocation_is_function_preserving_even_with_inherited_state() -> 
         inherit_transform=True,
     )
     assert int(overlay.parent_slot[child].item()) == parent
-    with overlay.installed(model):
+    with overlay.prompt_scope(positions), overlay.installed(model):
         after = model(hidden).detach().clone()
     assert torch.equal(after, before)
 
