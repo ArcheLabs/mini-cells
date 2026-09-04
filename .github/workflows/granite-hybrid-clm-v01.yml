@@ -1,0 +1,76 @@
+name: Granite Hybrid CLM v0.1 guard
+
+on:
+  push:
+    branches:
+      - codex/granite-hybrid-clm-v0.1
+    paths:
+      - '.github/workflows/granite-hybrid-clm-v01.yml'
+      - 'src/minicells/hybrid_clm.py'
+      - 'scripts/research/granite_hybrid_clm_v01/**'
+      - 'research/validations/granite-hybrid-clm-v0.1/**'
+      - 'tests/test_hybrid_clm.py'
+  pull_request:
+    paths:
+      - '.github/workflows/granite-hybrid-clm-v01.yml'
+      - 'src/minicells/hybrid_clm.py'
+      - 'scripts/research/granite_hybrid_clm_v01/**'
+      - 'research/validations/granite-hybrid-clm-v0.1/**'
+      - 'tests/test_hybrid_clm.py'
+  workflow_dispatch:
+
+jobs:
+  engineering-guard:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install CPU research environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e '.[lm,dev]'
+
+      - name: Validate milestone specification
+        run: |
+          python -m json.tool research/validations/granite-hybrid-clm-v0.1/protocol.json >/dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = json.loads(Path('research/validations/granite-hybrid-clm-v0.1/protocol.json').read_text())
+          assert p['status'] == 'ENGINEERING_MILESTONE_GPU_PENDING'
+          assert p['base']['foundation_trainable'] is False
+          assert p['scope']['legacy_experts_are_native_cells'] is False
+          assert p['scope']['requires_progressive_expert_offload'] is False
+          assert p['scope']['requires_autonomous_cell_discovery'] is False
+          assert p['substrate']['competitive_normalization'] is False
+          assert p['substrate']['shadow_before_commit'] is True
+          assert p['milestone']['controlled_facts'] == 50
+          assert p['milestone']['exact_rollback_required'] is True
+          assert p['milestone']['manifest_fork_merge_required'] is True
+          assert p['milestone']['checkpoint_reload_required'] is True
+          PY
+
+      - name: Compile Hybrid CLM implementation
+        run: |
+          python -m py_compile \
+            src/minicells/hybrid_clm.py \
+            scripts/research/granite_hybrid_clm_v01/dataset.py \
+            scripts/research/granite_hybrid_clm_v01/run_milestone.py
+
+      - name: Lint Hybrid CLM implementation
+        run: |
+          python -m ruff check --extend-select E402 \
+            src/minicells/hybrid_clm.py \
+            scripts/research/granite_hybrid_clm_v01/dataset.py \
+            scripts/research/granite_hybrid_clm_v01/run_milestone.py \
+            tests/test_hybrid_clm.py
+
+      - name: Hybrid lifecycle unit tests
+        run: |
+          python -m pytest -q tests/test_hybrid_clm.py
