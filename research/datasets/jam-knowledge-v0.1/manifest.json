@@ -1,0 +1,31 @@
+{
+  "schema_version": "jam.knowledge.dataset-manifest.v1",
+  "dataset": "jam-knowledge-v0.1",
+  "status": "CURATION_COMPLETE_SOURCE_LOCKED",
+  "language": "en",
+  "concept_count": 180,
+  "category_count": 10,
+  "reasoning_holdout_count": 50,
+  "source_pin": "graypaper-0.8.0-e5375148",
+  "canonical_files": {
+    "concepts/accumulation.jsonl": {"sha256": "e2c0fb3a8c1bfa4c86094b52094440c3142a6c3fe07449cc8d08e70bb3287a5a"},
+    "concepts/authorization.jsonl": {"sha256": "2f71aa39313faa37b4c51a3ad4583d7a5f6401f41b70f7c3dde0fa773186ef6f"},
+    "concepts/block_state.jsonl": {"sha256": "ab7ce02545d51bdc456a1e55e481553c6969ffdac2d0d203fde2e7fc2a4bf964"},
+    "concepts/consensus.jsonl": {"sha256": "5893ce254cdcca6850a8d3c3b53550b0dc3e3f9e04adb5bf1309fbb929b753c0"},
+    "concepts/foundations.jsonl": {"sha256": "83c941c65375932a93298b1c9e3b8eacea78eaa881aa8c5a71895996c2672757"},
+    "concepts/guarantees.jsonl": {"sha256": "e3c0a3f18502f880a2f35cea0010c05745ca96fe6ff19fe20f2a792488c1bb7c"},
+    "concepts/pvm.jsonl": {"sha256": "28933a853b4c390f8ba31cf4a98052d3e70762e80daa387ad2508cba7b59520a"},
+    "concepts/serialization.jsonl": {"sha256": "f79d349116d96b611ae3710d2bad6869553c61f57c1a750fe8cf9a9519dd482a"},
+    "concepts/services.jsonl": {"sha256": "fc2df5331d6b8de7dafcce37e990d58063dc46a8e75b3ba99b7c902e463dcb64"},
+    "concepts/work.jsonl": {"sha256": "1a3b403d902ba8e25679fbb1da32da30b921be885527b6bccc29176c3f664bbe"},
+    "evaluation/reasoning/part-01.jsonl": {"sha256": "4f57ffecab8d1d71eaf2e85b5060de0c481672e9a2c8ab08d047104b2a78d5dc"},
+    "evaluation/reasoning/part-02.jsonl": {"sha256": "88d222ccb02091d48095ab8db4793886b418565283683c4ba95644db623b39d3"},
+    "evaluation/reasoning/part-03.jsonl": {"sha256": "f46ba1459f42f2dbbea57a8f387e1a2ca2efe493c36c9e0097f5e9f91f7bf151"},
+    "evaluation/reasoning/part-04.jsonl": {"sha256": "3ab0a209f071edcc900281765fcd30aa0f1572b1975b407eaafaee27cf5a4827"},
+    "evaluation/reasoning/part-05.jsonl": {"sha256": "d43e6a5980bdf754896def0e5749d4b8dedfa8392b1c88298d630395483ac4dc"},
+    "taxonomy.json": {"sha256": "16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b"}
+  },
+  "generated_policy": "Canonical concepts and reasoning holdout are sharded for review. The build script materializes aggregate concepts.jsonl and derived train/validation/evaluation views under generated/, which is not committed.",
+  "scientific_boundary": "This dataset defines JAM knowledge content and evaluation structure. It does not itself demonstrate that a model learned JAM or preserved base-model capabilities.",
+  "review_boundary": "Source lock and structural validation are complete. Before formal release training, perform a semantic spot audit of high-impact concepts and record the audited commit."
+}

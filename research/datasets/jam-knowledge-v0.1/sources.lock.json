@@ -1,0 +1,25 @@
+{
+  "schema_version": "jam.knowledge.sources.v1",
+  "dataset": "jam-knowledge-v0.1",
+  "locked_at": "2026-09-04",
+  "semantic_authority": "graypaper",
+  "sources": {
+    "graypaper": {
+      "role": "canonical_semantic_source",
+      "repository": "gavofyork/graypaper",
+      "ref": "e5375148597a45a99d31c9aa6bce6c7bf3a48998",
+      "version": "0.8.0",
+      "upstream_branch": "main",
+      "source_pin": "graypaper-0.8.0-e5375148",
+      "notes": "All canonical concept facts in v0.1 are paraphrased against this exact source revision. The upstream source text itself is not vendored into this dataset."
+    },
+    "w3f_jamtestvectors": {
+      "role": "auxiliary_conformance_source",
+      "repository": "w3f/jamtestvectors",
+      "ref": "1dc503af37ae8ecc7b6e24a393f6102801c0c80c",
+      "upstream_branch": "master",
+      "semantic_authority": false,
+      "notes": "Pinned for future implementation/conformance questions. v0.1 concept facts do not treat test-vector contents as a replacement for Gray Paper semantics."
+    }
+  }
+}

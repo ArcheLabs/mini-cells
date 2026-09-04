@@ -74,7 +74,20 @@ def _verify_router(result: dict, args) -> dict:
         json.dumps(result, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(json.dumps(result, indent=2, sort_keys=True))
+    compact = {
+        "experiment": result["experiment"],
+        "seed": result["seed"],
+        "status": result["status"],
+        "heldout_nll_gain": result["metrics"]["heldout_nll_gain"],
+        "history_evaluation_mean_kl": result["metrics"]["history_evaluation_mean_kl"],
+        "history_evaluation_top1_identity": result["metrics"]["history_evaluation_top1_identity"],
+        "target_router_topk_identity": identity,
+        "coordinate": [
+            result["selection"]["selected_score"]["expert_index"],
+            result["selection"]["selected_score"]["group_index"],
+        ],
+    }
+    print(f"[oracle001] {json.dumps(compact, sort_keys=True)}", flush=True)
     return result
 
 

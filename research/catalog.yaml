@@ -5,6 +5,7 @@ stages:
   - routing-and-growth
   - continual-learning-core
   - language-validation
+  - safe-model-evolution
 entries:
   - id: stage-foundations
     title: "Foundations: Echo, NCA Language Dynamics, and Training Mechanics"
@@ -261,3 +262,51 @@ entries:
     supersedes: clm-0.4-mini-language-validation
     superseded_by: null
     notes: "Task-aligned base data, teacher-forced answer-exact admission, route-balanced evaluation, and diagnostic dense baselines. Seed-independent v2 data identity is locked; development seed 90402 and formal seeds 90411/90412/90413 were unobserved when locked."
+
+  - id: stage-safe-model-evolution
+    title: "Safe Model Evolution: Real-Model Writable Coordinates and Composable Mutations"
+    kind: research-stage
+    stage: safe-model-evolution
+    outcome: active
+    scientific_decision: false
+    canonical: true
+    report: research/stages/07-safe-model-evolution/README.md
+    protocol: null
+    artifacts: artifacts/experiments
+    notebook: research/notebooks/07-safe-model-evolution/history-compression-001-kaggle.ipynb
+    implementation: scripts/research
+    supersedes: null
+    superseded_by: null
+    notes: "Current model-level line: immutable MoE substrate -> mutation locality -> history supervision/compression -> future composition and mergeability tests."
+
+  - id: functional-boundary-oracle-001
+    title: Functional Boundary Oracle 001
+    kind: safe-model-evolution-validation
+    stage: safe-model-evolution
+    outcome: FUNCTIONAL_BOUNDARY_ORACLE_SUPPORTED
+    scientific_decision: true
+    canonical: true
+    report: research/validations/functional-boundary-oracle-001/PROTOCOL.md
+    protocol: research/validations/functional-boundary-oracle-001/protocol.json
+    artifacts: artifacts/experiments/functional-boundary-oracle-001
+    notebook: null
+    implementation: scripts/research/functional_boundary_oracle_001
+    supersedes: null
+    superseded_by: history-compression-001
+    notes: "Frozen supported result; 3/3 formal seeds. Historical supervision found a 32-channel aligned sub-expert coordinate that acquired held-out behavior while preserving withheld calibration behavior under the registered protocol."
+
+  - id: history-compression-001
+    title: History Compression 001 — Replay Budget Ladder
+    kind: safe-model-evolution-validation
+    stage: safe-model-evolution
+    outcome: PROTOCOL_FROZEN_UNRUN
+    scientific_decision: false
+    canonical: true
+    report: research/validations/history-compression-001/README.md
+    protocol: research/validations/history-compression-001/protocol.json
+    artifacts: artifacts/experiments/history-compression-001
+    notebook: research/notebooks/07-safe-model-evolution/history-compression-001-kaggle.ipynb
+    implementation: scripts/research/history_compression_001
+    supersedes: functional-boundary-oracle-001
+    superseded_by: null
+    notes: "Formal seeds 26090611/12/13. Learner-visible historical prompt ladder 32 -> 8 -> 2 -> 0; withheld 32-prompt safety evaluation remains fixed."
