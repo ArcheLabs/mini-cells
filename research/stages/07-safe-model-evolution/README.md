@@ -67,7 +67,9 @@ formal answer prefix
 
 It first requires reproduction of the original full misconception NLL, then reports continuous prefix/content/EOS gains and a paired training-style-prefix counterfactual. The original `0.25` threshold is used only as a reference line; no new post-hoc PASS/FAIL gate is introduced.
 
-Current status: **ENGINEERING VALIDATION PENDING — DIAGNOSTIC GPU RUN NOT STARTED**.
+Current status: **ENGINEERING READY — DIAGNOSTIC GPU RUN PENDING**.
+
+Dedicated diagnostic guard has passed source/provenance validation, compilation, lint, and CPU tests. The remaining hosted work is one forward-only diagnostic run; it performs no training.
 
 ## Research discipline
 
