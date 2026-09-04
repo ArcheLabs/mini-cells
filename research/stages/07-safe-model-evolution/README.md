@@ -41,31 +41,42 @@ The result supports substantial compression of learner-visible historical calibr
 
 ### JAM Knowledge Mutation 001
 
-Current frozen release-oriented experiment.
+Frozen formal decision: `JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED` (0/3 formal seeds PASS).
 
-It replaces the synthetic one-token target with `jam-knowledge-v0.1`: 180 source-locked JAM concepts derived from Gray Paper 0.8.0, trained through answer-only multi-token causal LM loss.
-
-The writable footprint is allowed to expand conservatively through a fixed capacity ladder:
+The experiment replaced the synthetic one-token target with `jam-knowledge-v0.1`: 180 source-locked JAM concepts derived from Gray Paper 0.8.0, trained through answer-only multi-token causal LM loss. The writable footprint used the frozen capacity ladder:
 
 ```text
 1 aligned group -> 2 aligned groups -> 4 aligned groups
 ```
 
-Each selected group is 32 of 512 intermediate channels and selected groups must belong to distinct experts. Capacity candidates are trained independently from the same frozen Granite base. The smallest candidate satisfying all JAM heldout, historical safety, router, rollback, artifact-reapply and standard-HF materialization gates is selected.
+All three seeds selected the same ranked writable prefix. Across seeds, capacity growth consistently improved validation and overall JAM heldout NLL while maintaining low registered-history KL, router identity, rollback, and artifact-reapply behavior. The registered failure was reproducible: the misconception reference-answer NLL gain remained below the frozen `0.25` gate for every capacity and seed, while the other JAM family gains and registered safety gates were otherwise stable enough to isolate this bottleneck.
 
-Formal seeds: `26090711`, `26090712`, `26090713`.
+The formal No-Go is preserved. It does not by itself distinguish insufficient sparse knowledge capacity from an evaluation-formulation effect because misconception training and heldout references use different answer prefixes (`No.` versus `The claim is incorrect.`).
 
-Current status: **PROTOCOL FROZEN — FORMAL GPU RUNS PENDING**.
+### JAM Knowledge Mutation 001 Failure Diagnostic
 
-A positive result is only a release-candidate prerequisite. Base-vs-RC general benchmarks and LoRA/PEFT baselines remain required before public model release.
+Current post-hoc diagnostic. It does not retrain the model, alter the canonical dataset, change any formal gate, or revise the frozen JAM001 decision.
+
+The diagnostic re-applies all nine already-published mutation artifacts (`3 seeds × capacities 1/2/4`) and exactly decomposes the original misconception reference-answer token NLL into:
+
+```text
+formal answer prefix
++ canonical JAM content
++ EOS
+```
+
+It first requires reproduction of the original full misconception NLL, then reports continuous prefix/content/EOS gains and a paired training-style-prefix counterfactual. The original `0.25` threshold is used only as a reference line; no new post-hoc PASS/FAIL gate is introduced.
+
+Current status: **ENGINEERING VALIDATION PENDING — DIAGNOSTIC GPU RUN NOT STARTED**.
 
 ## Research discipline
 
 - Protocols and formal seeds are frozen before hosted-GPU execution.
 - Withheld evaluation examples are never learner-visible or used for checkpoint selection.
 - Scientific failures are preserved and published.
+- Post-hoc diagnostics may explain a failure mode but may not rewrite the frozen formal decision.
 - Full logs are durable files; notebook stdout is compact.
 - Numerical evidence lives under `artifacts/experiments/`.
 - Research notebooks live under `research/notebooks/07-safe-model-evolution/`.
 - Visualizations are derived from durable result files and do not replace `result.json` / `decision.json` as scientific authority.
-- Experiment PRs that receive hosted formal result commits must remain open until the intended result commits are durably published.
+- Experiment PRs that receive hosted result commits must remain open until the intended result commits are durably published.
