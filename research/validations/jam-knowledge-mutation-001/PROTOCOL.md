@@ -2,9 +2,12 @@
 
 The machine-readable authority is `protocol.json`.
 
-Protocol version: **1.1**.
+Protocol version: **1.2**.
 
-Version 1.1 was frozen before any formal GPU seed was opened. The pre-run amendment makes answer boundaries explicit and evaluates artifact/materialization parity above the measured frozen-base forward-repeatability floor, matching the numerical treatment already used for rollback.
+All protocol amendments below were completed before any formal GPU seed was opened:
+
+- **v1.1** makes answer boundaries explicit and evaluates artifact/materialization parity above the measured frozen-base forward-repeatability floor, matching the numerical treatment already used for rollback.
+- **v1.2** repairs the stale `taxonomy.json` hash metadata without changing canonical dataset bytes, pins the repaired JAM dataset manifest SHA-256, and requires the formal runner to verify that exact identity before execution.
 
 ## Registered claim
 
@@ -14,11 +17,26 @@ It does not test autonomous Cell discovery, zero-history learning, arbitrary edi
 
 ## Dataset
 
-The experiment consumes the deterministic generated views of dataset commit:
+The canonical JAM content originates from repository commit:
 
 `5016cb36f8eb5ca715b6fd7796384ae5b607bd12`
 
-Expected counts are:
+The corrected, source-locked dataset manifest is frozen by SHA-256:
+
+`d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15`
+
+The manifest correction changed only the recorded hash for `taxonomy.json`:
+
+- stale recorded value: `16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b`
+- actual taxonomy SHA-256: `4f3e2da96a2cfa0d0b0496da191e21a50c38779dc804c54c1fc21b5f236cf886`
+- canonical taxonomy bytes at the original dataset commit are identical to the current bytes.
+
+Formal execution must satisfy both layers of dataset identity:
+
+1. exact repaired manifest SHA-256;
+2. every canonical file must match the SHA-256 recorded inside that manifest.
+
+Expected generated counts are:
 
 | split | rows |
 |---|---:|
