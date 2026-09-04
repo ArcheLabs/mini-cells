@@ -1,0 +1,70 @@
+{
+  "base": {
+    "manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "canonical_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "deltas": {
+    "down": {
+      "l2_norm": 0.19206026196479797,
+      "max_abs": 0.018762625753879547,
+      "shape": [
+        1024,
+        32
+      ]
+    },
+    "gate": {
+      "l2_norm": 0.0803297758102417,
+      "max_abs": 0.02815580740571022,
+      "shape": [
+        32,
+        1024
+      ]
+    },
+    "up": {
+      "l2_norm": 0.07924647629261017,
+      "max_abs": 0.03205827251076698,
+      "shape": [
+        32,
+        1024
+      ]
+    }
+  },
+  "identity_sha256": "4982780c5a06a14a77b9a8c2ad9fcd3d652b860fca1158c6966a63a84cf25d75",
+  "kind": "aligned_intermediate_group_delta",
+  "metadata": {
+    "experiment": "HISTORY_COMPRESSION_001",
+    "history_prompt_count": 0,
+    "mode": "zero_0",
+    "protocol_sha256": "460afd443646b1bb9ca023756916b4266fb4f19faaa57d89506cdbdcb90bbcb0",
+    "seed": 26090612,
+    "target_candidate": " silver",
+    "target_token_id": 39279
+  },
+  "runtime_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "schema_version": "clm.moe-subexpert-mutation.v1",
+  "target": {
+    "channel_end": 160,
+    "channel_start": 128,
+    "expert_fraction": 0.0625,
+    "expert_index": 16,
+    "expert_is_cell": false,
+    "group_index": 4,
+    "group_is_cell": false,
+    "group_size": 32,
+    "intermediate_size": 512,
+    "layer_index": 23
+  },
+  "tensor_file": {
+    "bytes": 393440,
+    "path": "mutation.safetensors",
+    "sha256": "5a1c8eabd0f363559d606d3e892139e1f11d23bef66d5bfa00781f5b7abdeb9c"
+  }
+}
