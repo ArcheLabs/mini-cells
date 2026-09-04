@@ -71,16 +71,30 @@ jobs:
             scripts/research/granite_hybrid_clm_v01/run_kaggle.py \
             scripts/research/granite_hybrid_clm_v01/publish.py
 
-      - name: Lint Hybrid CLM implementation
+      - name: Lint Hybrid CLM core
+        run: python -m ruff check src/minicells/hybrid_clm.py
+
+      - name: Lint Hybrid CLM dataset
+        run: python -m ruff check scripts/research/granite_hybrid_clm_v01/dataset.py
+
+      - name: Lint Hybrid CLM runner
+        run: python -m ruff check --ignore E402 scripts/research/granite_hybrid_clm_v01/run_milestone.py
+
+      - name: Lint Hybrid CLM reload verifier
+        run: python -m ruff check --ignore E402 scripts/research/granite_hybrid_clm_v01/verify_reload.py
+
+      - name: Lint Hybrid CLM acceptance validator
+        run: python -m ruff check scripts/research/granite_hybrid_clm_v01/validate_result.py
+
+      - name: Lint Hybrid CLM Kaggle entrypoint
+        run: python -m ruff check scripts/research/granite_hybrid_clm_v01/run_kaggle.py
+
+      - name: Lint Hybrid CLM publisher
+        run: python -m ruff check --ignore E402 scripts/research/granite_hybrid_clm_v01/publish.py
+
+      - name: Lint Hybrid CLM tests
         run: |
-          python -m ruff check --ignore E402 \
-            src/minicells/hybrid_clm.py \
-            scripts/research/granite_hybrid_clm_v01/dataset.py \
-            scripts/research/granite_hybrid_clm_v01/run_milestone.py \
-            scripts/research/granite_hybrid_clm_v01/verify_reload.py \
-            scripts/research/granite_hybrid_clm_v01/validate_result.py \
-            scripts/research/granite_hybrid_clm_v01/run_kaggle.py \
-            scripts/research/granite_hybrid_clm_v01/publish.py \
+          python -m ruff check \
             tests/test_hybrid_clm.py \
             tests/test_hybrid_clm_artifacts.py \
             tests/test_granite_hybrid_clm_result.py
