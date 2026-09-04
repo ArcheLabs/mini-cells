@@ -12,7 +12,7 @@ RESEARCH_SCRIPTS = ROOT / "scripts" / "research"
 if str(RESEARCH_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(RESEARCH_SCRIPTS))
 
-from aggregate import aggregate
+from aggregate import _sha256, aggregate
 from publish_core_validation_007 import _authenticated_git_env, _check_branch
 from publish_experiment_results import DEFAULT_SECRET_NAME, EXPECTED_ORIGIN, run_git
 
@@ -66,6 +66,17 @@ def _copy_seed(seed: int) -> dict:
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     if int(summary.get("seed", -1)) != seed or summary.get("experiment") != "JAM_KNOWLEDGE_MUTATION_001":
         raise RuntimeError("formal seed identity mismatch")
+
+    protocol_path = VALIDATION / "protocol.json"
+    protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+    protocol_sha = _sha256(protocol_path)
+    if summary.get("protocol_sha256") != protocol_sha:
+        raise RuntimeError(
+            "refusing to publish JAM seed from a different protocol: "
+            f"seed={summary.get('protocol_sha256')} frozen={protocol_sha}"
+        )
+    if summary.get("dataset_manifest_sha256") != protocol["dataset"]["manifest_sha256"]:
+        raise RuntimeError("refusing to publish JAM seed with a different dataset manifest")
     if summary.get("status") not in {"PASS", "FAIL"}:
         raise RuntimeError("seed has not completed fresh-base formal verification")
     if not (source / "coordinate_scores.json").is_file():
@@ -141,6 +152,8 @@ def main() -> int:
                 "seed": args.seed,
                 "seed_status": payload["summary"]["status"],
                 "selected_capacity": payload["summary"].get("selected_capacity"),
+                "protocol_sha256": payload["summary"]["protocol_sha256"],
+                "dataset_manifest_sha256": payload["summary"]["dataset_manifest_sha256"],
                 "aggregate_status": payload["decision"]["status"],
                 "completed_seeds": payload["decision"]["completed_seeds"],
             },
