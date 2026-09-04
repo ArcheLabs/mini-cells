@@ -17,7 +17,7 @@
   },
   "decision": {
     "formal_support": "at least 2 of 3 untouched formal seeds pass",
-    "freeze_rule": "after the first formal seed starts, no scientific gate, threshold, dataset identity, model revision, seed, training rule, or evaluation rule may change",
+    "freeze_rule": "after the first formal seed starts, no scientific gate, threshold, dataset identity, model revision, seed, training rule, evaluation rule, or registered implementation blob may change",
     "not_claimed": [
       "complete Cellization of pre-existing Granite knowledge",
       "natural pretrained Expert or neuron boundaries are Cells",
@@ -55,6 +55,16 @@
     26090442,
     26090443
   ],
+  "implementation_git_blobs": {
+    "scripts/research/clm_conversion_kill_test_001/aggregate.py": "8e43386c749d36272bb103078d1f1fd6b5b16673",
+    "scripts/research/clm_conversion_kill_test_001/dataset.py": "7135392d431f0a7386b823fae8e60390d83e2763",
+    "scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py": "6cddf370b2e92a59a1f8068fc2010c8ba8e03ad9",
+    "scripts/research/clm_conversion_kill_test_001/run_seed.py": "0ed99ecbda0bae0fb319f0a0c3925af7884c660d",
+    "scripts/research/clm_conversion_kill_test_001/run_seed_v12.py": "f36c6a56dc190e4030e6976a5de2de8b06cf9749",
+    "scripts/research/clm_conversion_kill_test_001/semantic_choice.py": "fc263644c29fd499b08e13d8f5f5633a1c4176bc",
+    "scripts/research/jam_knowledge_mutation_001/sequence.py": "515577df3ebcd83ecfef81189f4d9e8a906be62e",
+    "src/minicells/functional_cellization.py": "ac82d83a5432f56e2790460e00313bc24e66b688"
+  },
   "gates": {
     "maximum_compatibility_excess_over_repeatability": 1e-05,
     "maximum_growth_alpha_nll_regression": 0.1,
