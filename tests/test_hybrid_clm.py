@@ -7,8 +7,8 @@ import torch
 from torch import nn
 
 from minicells.hybrid_clm import (
-    HybridCLMError,
     HybridCellOverlay,
+    HybridCLMError,
     HybridManifest,
     mask_address_gradients_,
     mask_transform_gradients_,
@@ -103,9 +103,8 @@ def test_shadow_can_exercise_uncommitted_cell_without_production_change() -> Non
     production_before = model(hidden)
     with overlay.installed(model):
         production = model(hidden)
-    with overlay.shadow([slot]):
-        with overlay.installed(model):
-            shadow = model(hidden)
+    with overlay.shadow([slot]), overlay.installed(model):
+        shadow = model(hidden)
     assert torch.equal(production, production_before)
     assert not torch.equal(shadow, production)
 
