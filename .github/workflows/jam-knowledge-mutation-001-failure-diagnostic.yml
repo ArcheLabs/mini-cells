@@ -1,0 +1,59 @@
+name: JAM Knowledge Mutation 001 failure diagnostic guard
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/jam-knowledge-mutation-001-failure-diagnostic.yml'
+      - 'research/validations/jam-knowledge-mutation-001-failure-diagnostic/**'
+      - 'research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-failure-diagnostic-kaggle.ipynb'
+      - 'scripts/research/jam_knowledge_mutation_001_failure_diagnostic/**'
+      - 'tests/test_jam_knowledge_mutation_failure_diagnostic.py'
+      - 'research/validations/jam-knowledge-mutation-001/**'
+      - 'research/datasets/jam-knowledge-v0.1/**'
+      - 'artifacts/experiments/jam-knowledge-mutation-001/**'
+  workflow_dispatch:
+
+jobs:
+  engineering-guard:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install CPU research environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e '.[lm,dev]'
+
+      - name: Validate frozen upstream artifacts and diagnostic plan
+        run: |
+          python -m json.tool research/validations/jam-knowledge-mutation-001-failure-diagnostic/diagnostic_plan.json >/dev/null
+          python scripts/research/jam_knowledge_mutation_001_failure_diagnostic/validate_sources.py
+
+      - name: Compile diagnostic runners
+        run: |
+          python -m py_compile \
+            scripts/research/jam_knowledge_mutation_001_failure_diagnostic/segmentation.py \
+            scripts/research/jam_knowledge_mutation_001_failure_diagnostic/validate_sources.py \
+            scripts/research/jam_knowledge_mutation_001_failure_diagnostic/run_diagnostic.py \
+            scripts/research/jam_knowledge_mutation_001_failure_diagnostic/publish.py
+
+      - name: Lint diagnostic implementation
+        run: |
+          python -m ruff check --ignore SIM102,S110,BLE001,UP012 \
+            scripts/research/jam_knowledge_mutation_001_failure_diagnostic/segmentation.py \
+            scripts/research/jam_knowledge_mutation_001_failure_diagnostic/validate_sources.py \
+            scripts/research/jam_knowledge_mutation_001_failure_diagnostic/publish.py \
+            tests/test_jam_knowledge_mutation_failure_diagnostic.py
+          python -m ruff check --ignore SIM102,S110,BLE001,UP012,I001 \
+            scripts/research/jam_knowledge_mutation_001_failure_diagnostic/run_diagnostic.py
+
+      - name: Unit tests
+        run: |
+          python -m pytest -q tests/test_jam_knowledge_mutation_failure_diagnostic.py
