@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import importlib.util
 from pathlib import Path
+import importlib.util
 
 
 ROOT = Path(__file__).resolve().parents[1]
