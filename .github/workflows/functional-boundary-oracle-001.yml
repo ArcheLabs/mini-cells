@@ -51,7 +51,8 @@ jobs:
             scripts/research/functional_boundary_oracle_001/run_seed.py \
             scripts/research/functional_boundary_oracle_001/run_formal_seed.py \
             scripts/research/functional_boundary_oracle_001/aggregate.py \
-            scripts/research/functional_boundary_oracle_001/publish.py
+            scripts/research/functional_boundary_oracle_001/publish.py \
+            scripts/research/functional_boundary_oracle_001/kaggle_preflight.py
       - name: Lint implementation
         run: |
           python -m ruff check --ignore SIM102 \
