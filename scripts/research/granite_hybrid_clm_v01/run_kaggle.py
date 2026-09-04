@@ -36,6 +36,24 @@ runpy.run_path(str(script), run_name="__main__")
 """
 
 
+def _load_hf_token() -> None:
+    if os.environ.get("HF_TOKEN"):
+        print("[granite-hybrid-clm-v0.1] hf_token_loaded=True", flush=True)
+        return
+    try:
+        from kaggle_secrets import UserSecretsClient
+
+        token = UserSecretsClient().get_secret("HF_TOKEN")
+    except Exception as exc:
+        raise RuntimeError(
+            "HF_TOKEN is required. Configure it as a Kaggle Secret or environment variable."
+        ) from exc
+    if not token:
+        raise RuntimeError("HF_TOKEN is configured but empty")
+    os.environ["HF_TOKEN"] = token
+    print("[granite-hybrid-clm-v0.1] hf_token_loaded=True", flush=True)
+
+
 def _run(script: Path, *args: str) -> None:
     command = [sys.executable, "-c", _BOOTSTRAP, str(script), *args]
     env = os.environ.copy()
@@ -58,8 +76,14 @@ def _cell_diagnostic(cell: dict[str, Any]) -> dict[str, Any]:
             "passed": address.get("passed"),
             "positive_recall": address.get("positive_recall"),
             "negative_false_positive_rate": address.get("negative_false_positive_rate"),
+            "heldout_positive_recall": address.get("heldout_positive_recall"),
+            "history_false_positive_rate": address.get("history_false_positive_rate"),
             "minimum_positive_probability": address.get("minimum_positive_probability"),
             "maximum_negative_probability": address.get("maximum_negative_probability"),
+            "heldout_minimum_positive_probability": address.get(
+                "heldout_minimum_positive_probability"
+            ),
+            "history_maximum_probability": address.get("history_maximum_probability"),
         }
     transform = cell.get("transform")
     if isinstance(transform, dict):
@@ -71,12 +95,18 @@ def _cell_diagnostic(cell: dict[str, Any]) -> dict[str, Any]:
         }
         if candidates:
             payload["transform_summary"] = {
-                "maximum_nll_gain": max(float(item.get("nll_gain", float("-inf"))) for item in candidates),
-                "minimum_history_kl": min(float(item.get("history_kl", float("inf"))) for item in candidates),
+                "maximum_nll_gain": max(
+                    float(item.get("nll_gain", float("-inf"))) for item in candidates
+                ),
+                "minimum_history_kl": min(
+                    float(item.get("history_kl", float("inf"))) for item in candidates
+                ),
                 "maximum_choice_accuracy": max(
                     float(item.get("choice_accuracy", 0.0)) for item in candidates
                 ),
-                "eligible_steps": [item.get("step") for item in candidates if item.get("eligible")],
+                "eligible_steps": [
+                    item.get("step") for item in candidates if item.get("eligible")
+                ],
             }
     return payload
 
@@ -87,6 +117,7 @@ def main() -> None:
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--seed", type=int, default=26090471)
     args = parser.parse_args()
+    _load_hf_token()
 
     if args.mode == "smoke":
         facts = 3
@@ -125,6 +156,7 @@ def main() -> None:
                     "committed_facts": result["committed_facts"],
                     "retention_choice_accuracy": result["retention_choice_accuracy"],
                     "reload_status": "SKIPPED_RUNNER_NOT_SUPPORTED",
+                    "routing": result.get("routing"),
                     "cells": [_cell_diagnostic(cell) for cell in result.get("cells", [])],
                     "contextual_child": result.get("contextual_child", {}),
                     "output_dir": str(output_dir.relative_to(ROOT)),
