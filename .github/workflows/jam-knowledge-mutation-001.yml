@@ -5,6 +5,7 @@ on:
     paths:
       - "src/minicells/moe_multicoordinate.py"
       - "scripts/research/jam_knowledge_mutation_001/**"
+      - "research/datasets/jam-knowledge-v0.1/manifest.json"
       - "research/validations/jam-knowledge-mutation-001/**"
       - "research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-kaggle.ipynb"
       - "research/stages/07-safe-model-evolution/**"
@@ -33,17 +34,20 @@ jobs:
       - name: Validate source-locked dataset and frozen protocol
         run: |
           python scripts/research/jam_knowledge_v0_1/validate_dataset.py
+          python scripts/research/jam_knowledge_mutation_001/dataset_identity.py
           python -m json.tool research/validations/jam-knowledge-mutation-001/protocol.json >/dev/null
           python - <<'PY'
           import json
           from pathlib import Path
           p = json.loads(Path('research/validations/jam-knowledge-mutation-001/protocol.json').read_text())
+          assert p['protocol_version'] == 1.2
           assert p['status'] == 'PROTOCOL_FROZEN_GPU_PENDING'
           assert p['formal_seeds'] == [26090711, 26090712, 26090713]
           assert p['mutation']['capacity_ladder'] == [1, 2, 4]
           assert p['mutation']['group_size'] == 32
           assert p['mutation']['expected_intermediate_size'] == 512
           assert p['dataset']['concept_count'] == 180
+          assert p['dataset']['manifest_sha256'] == 'd2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15'
           assert p['history']['learner_visible_selection_prompts'] == 32
           assert p['history']['withheld_evaluation_prompts'] == 32
           PY
@@ -51,6 +55,7 @@ jobs:
         run: |
           python -m py_compile \
             src/minicells/moe_multicoordinate.py \
+            scripts/research/jam_knowledge_mutation_001/dataset_identity.py \
             scripts/research/jam_knowledge_mutation_001/sequence.py \
             scripts/research/jam_knowledge_mutation_001/run_seed.py \
             scripts/research/jam_knowledge_mutation_001/run_formal_seed.py \
