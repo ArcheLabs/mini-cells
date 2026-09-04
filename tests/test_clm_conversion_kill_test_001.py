@@ -25,7 +25,7 @@ DATASET = ROOT / "scripts" / "research" / "clm_conversion_kill_test_001" / "data
 def _git_blob_sha(path: Path) -> str:
     data = path.read_bytes()
     header = b"blob " + str(len(data)).encode() + b"\0"
-    return hashlib.sha1(header + data).hexdigest()  # noqa: S324 - Git object identity
+    return hashlib.sha1(header + data).hexdigest()
 
 
 def test_controlled_dataset_has_registered_identity_and_no_question_leakage() -> None:

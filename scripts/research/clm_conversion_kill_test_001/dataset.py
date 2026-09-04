@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
 from dataclasses import dataclass
 
 
@@ -330,7 +329,3 @@ def calibration_prompts() -> tuple[str, ...]:
         "The largest planet in the Solar System is",
         "A byte commonly contains",
     )
-
-
-def all_question_strings(groups: Iterable[Iterable[dict[str, str]]]) -> list[str]:
-    return [row["question"] for group in groups for row in group]
