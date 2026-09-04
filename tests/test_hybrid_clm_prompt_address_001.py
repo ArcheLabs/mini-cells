@@ -31,7 +31,7 @@ def test_prompt_address_protocol_is_frozen_and_preserves_write_gates() -> None:
     protocol = _load(PROTOCOL)
     milestone = _load(MILESTONE_PROTOCOL)
     assert protocol["experiment"] == "HYBRID_CLM_PROMPT_ADDRESS_001"
-    assert protocol["protocol_version"] == 1.0
+    assert protocol["protocol_version"] == 1.1
     assert protocol["status"] == "DIAGNOSTIC_PROTOCOL_FROZEN_GPU_PENDING"
     assert protocol["diagnostic_scope"]["formal_milestone_decision"] is False
     assert protocol["diagnostic_scope"]["thresholds_must_not_be_relaxed_after_gpu_observation"]
@@ -76,4 +76,5 @@ def test_hosted_policy_requires_tokens_and_publishes_failures() -> None:
     assert hosted["require_github_token_for_publish"] is True
     assert protocol["publishing"]["terminal_pass_and_fail_are_published"] is True
     assert protocol["smoke"]["fresh_reload_required_for_pass"] is True
+    assert protocol["smoke"]["clean_seed_workspace_before_run"] is True
     assert protocol["gpu_policy"]["second_gpu_for_smoke"] == "intentionally_unused"
