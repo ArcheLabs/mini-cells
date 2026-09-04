@@ -92,6 +92,9 @@ def run(*, device: str) -> dict[str, Any]:
         raise RuntimeError("unexpected protocol experiment identity")
     if protocol.get("status") != "DIAGNOSTIC_PROTOCOL_FROZEN_GPU_PENDING":
         raise RuntimeError("prompt-address diagnostic protocol is not frozen/pending")
+    hosted = protocol.get("hosted_environment", {})
+    if bool(hosted.get("require_hf_token")) and not os.environ.get("HF_TOKEN"):
+        raise RuntimeError("HF_TOKEN is required by the frozen hosted-run protocol")
     _verify_implementation(protocol)
 
     seed = int(protocol["seed"])
