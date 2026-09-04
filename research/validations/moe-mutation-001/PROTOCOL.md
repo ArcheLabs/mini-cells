@@ -85,6 +85,8 @@ The target-layer routing gate is intentionally strong: the router is evaluated b
 - **REJECTED**: 2 or more formal seeds fail.
 - Otherwise the formal run is incomplete.
 
+All completed formal seeds must also share the same environment signature across `torch`, `transformers`, `huggingface_hub`, `safetensors`, `cuda_device_name`, and `dtype`. If a Kaggle restart changes that signature, aggregation returns `ENVIRONMENT_MISMATCH` and emits no scientific decision until the inconsistent seed is rerun in a matching environment.
+
 A supported result permits only the following narrow claim:
 
 > An unchanged converted Granite MoE substrate supports a first isolated, addressable expert-slice mutation with measurable held-out gain, bounded control drift, unchanged target-layer routing, and exact rollback under the frozen protocol.
