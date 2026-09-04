@@ -15,6 +15,7 @@ from minicells.moe_subexpert import (
     load_group_mutation,
     restore_group_,
     save_group_mutation,
+    validate_group_shapes,
 )
 
 SCHEMA_VERSION = "clm.moe-multicoordinate-mutation.v1"
@@ -32,6 +33,51 @@ def _coordinate_key(target: Mapping[str, Any]) -> tuple[int, int, int]:
         int(target["expert_index"]),
         int(target["group_index"]),
     )
+
+
+def _runtime_tensor_names(
+    parameters: Mapping[str, torch.nn.Parameter],
+    target: Mapping[str, Any],
+) -> tuple[str, str]:
+    has_gate_up = "gate_up_name" in target
+    has_down = "down_name" in target
+    if has_gate_up or has_down:
+        if not (has_gate_up and has_down):
+            raise MoeSubexpertError(
+                "coordinate target must provide both gate_up_name and down_name"
+            )
+        return str(target["gate_up_name"]), str(target["down_name"])
+
+    layer_index = int(target["layer_index"])
+    expert_index = int(target["expert_index"])
+    marker = f"layers.{layer_index}.block_sparse_moe."
+    matches = [
+        (name, parameter)
+        for name, parameter in parameters.items()
+        if marker in name
+        and parameter.ndim == 3
+        and int(parameter.shape[0]) > expert_index
+    ]
+
+    valid: list[tuple[str, str]] = []
+    for gate_up_name, gate_up in matches:
+        for down_name, down in matches:
+            if gate_up_name == down_name:
+                continue
+            try:
+                validate_group_shapes(gate_up, down)
+            except MoeSubexpertError:
+                continue
+            valid.append((gate_up_name, down_name))
+
+    if len(valid) != 1:
+        raise MoeSubexpertError(
+            "coordinate target omits runtime tensor names and Granite packed tensor "
+            f"geometry did not resolve uniquely at layer {layer_index}: "
+            f"matches={[(name, list(parameter.shape)) for name, parameter in matches]}, "
+            f"valid_orientations={len(valid)}"
+        )
+    return valid[0]
 
 
 def validate_coordinate_targets(
@@ -55,11 +101,12 @@ def capture_coordinate_set(
     validate_coordinate_targets(targets)
     captured: list[dict[str, torch.Tensor]] = []
     for target in targets:
+        gate_up_name, down_name = _runtime_tensor_names(parameters, target)
         captured.append(
             capture_group(
                 parameters,
-                gate_up_name=str(target["gate_up_name"]),
-                down_name=str(target["down_name"]),
+                gate_up_name=gate_up_name,
+                down_name=down_name,
                 expert_index=int(target["expert_index"]),
                 group_index=int(target["group_index"]),
                 group_size=int(target["group_size"]),
@@ -77,11 +124,12 @@ def restore_coordinate_set_(
         raise MoeSubexpertError("target/original coordinate count mismatch")
     validate_coordinate_targets(targets)
     for target, original in zip(targets, originals, strict=True):
+        gate_up_name, down_name = _runtime_tensor_names(parameters, target)
         restore_group_(
             parameters,
             original,
-            gate_up_name=str(target["gate_up_name"]),
-            down_name=str(target["down_name"]),
+            gate_up_name=gate_up_name,
+            down_name=down_name,
             expert_index=int(target["expert_index"]),
             group_index=int(target["group_index"]),
             group_size=int(target["group_size"]),
