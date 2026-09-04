@@ -1,0 +1,17 @@
+{
+  "schema_version": "jam.knowledge.dataset-manifest.v1",
+  "dataset": "jam-knowledge-v0.1",
+  "status": "CANONICAL_CONCEPT_REGISTRY_FROZEN",
+  "language": "en",
+  "concept_count": 180,
+  "category_count": 10,
+  "reasoning_holdout_count": 50,
+  "source_pin": "graypaper-0.8.0-e5375148",
+  "canonical_files": {
+    "concepts.jsonl": {"sha256": "c515850c0532afefb470a066a13dbd695885bb38f641e823fb6e5eab41f6eb91"},
+    "evaluation/reasoning.jsonl": {"sha256": "6a55b5c282293d3c97e6e008d0676bfb278a8296e7c78f8086d698c4e7feffb2"},
+    "taxonomy.json": {"sha256": "16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b"}
+  },
+  "generated_policy": "Derived train/validation/factual/relational/misconception JSONL files are materialized deterministically into generated/ and are not canonical source-of-truth files.",
+  "scientific_boundary": "This dataset defines JAM knowledge content and evaluation structure. It does not itself demonstrate that a model learned JAM or preserved base-model capabilities."
+}
