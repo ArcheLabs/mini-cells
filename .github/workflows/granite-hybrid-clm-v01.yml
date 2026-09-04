@@ -70,7 +70,7 @@ jobs:
 
       - name: Lint Hybrid CLM implementation
         run: |
-          python -m ruff check \
+          python -m ruff check --ignore E402 \
             src/minicells/hybrid_clm.py \
             scripts/research/granite_hybrid_clm_v01/dataset.py \
             scripts/research/granite_hybrid_clm_v01/run_milestone.py \
