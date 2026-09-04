@@ -1,0 +1,79 @@
+{
+  "diagnostic_rules": {
+    "dataset_canonical_changes": false,
+    "evaluate_all_formal_seeds_and_capacities": true,
+    "formal_decision_changes": false,
+    "formal_gate_changes": false,
+    "mutation_changes": false,
+    "new_scientific_pass_fail_gate": false,
+    "retraining": false,
+    "checkpoint_selection": false
+  },
+  "interpretation": {
+    "classification_if_all_capacity4_canonical_content_at_or_above_original_threshold_but_content_plus_eos_not_all_above": "NON_CONTENT_TOKENS_DILUTE_ABOVE_THRESHOLD_CANONICAL_CONTENT_AT_CAPACITY4",
+    "classification_if_all_capacity4_canonical_content_below_original_threshold": "CANONICAL_CONTENT_GAIN_ALSO_BELOW_ORIGINAL_THRESHOLD_AT_CAPACITY4",
+    "classification_if_all_capacity4_content_plus_eos_at_or_above_original_threshold_while_full_below": "FORMULATION_PREFIX_DILUTION_SUFFICIENT_TO_EXPLAIN_CAPACITY4_FORMAL_GATE_FAILURE",
+    "classification_is_post_hoc_diagnostic_not_a_replacement_formal_decision": true,
+    "classification_otherwise": "MIXED_CONTENT_AND_FORMULATION_EFFECT_AT_CAPACITY4",
+    "focus_capacity": 4,
+    "use_original_threshold_only_as_reference_line": true
+  },
+  "metrics": {
+    "primary_continuous_outputs": [
+      "full_reference_nll_gain",
+      "prefix_reference_nll_gain",
+      "canonical_content_reference_nll_gain",
+      "content_plus_eos_reference_nll_gain",
+      "eos_reference_nll_gain",
+      "prefix_dilution_vs_content_plus_eos",
+      "training_style_full_reference_nll_gain"
+    ],
+    "report_token_top1_accuracy": true,
+    "reproduce_original_full_misconception_nll": true,
+    "reproduction_absolute_tolerance": 0.0005
+  },
+  "outputs": {
+    "artifact_dir": "artifacts/experiments/jam-knowledge-mutation-001-failure-diagnostic",
+    "files": [
+      "diagnostic.json",
+      "per_row.jsonl"
+    ],
+    "result_dir": "results/jam-knowledge-mutation-001-failure-diagnostic"
+  },
+  "question": "Was the frozen misconception gate failure primarily caused by answer-formulation/prefix dilution, or did canonical JAM content gain itself remain below the original formal threshold?",
+  "schema_version": "jam-knowledge-mutation-001-failure-diagnostic.v1",
+  "segmentation": {
+    "formal_answer_prefix": "The claim is incorrect.",
+    "method": "tokenize the exact full answer once with the pinned fast tokenizer and use character offset_mapping to assign each answer token to prefix or canonical_content; EOS is separate; prompt and padding are excluded",
+    "require_exact_partition_of_original_supervised_tokens": true,
+    "require_no_token_crossing_prefix_boundary": true,
+    "segments": [
+      "prefix",
+      "canonical_content",
+      "eos"
+    ],
+    "separator": " ",
+    "training_style_answer_prefix": "No."
+  },
+  "status": "POST_HOC_DIAGNOSTIC_FROZEN_GPU_PENDING",
+  "title": "JAM Knowledge Mutation 001 Failure Diagnostic",
+  "upstream": {
+    "artifact_merge_main_commit": "762873b525d230fb36acc472b8994bbf7b53525a",
+    "artifact_result_tip_commit": "47e741299311862856aa5d59a5f76891d11eb810",
+    "capacities": [
+      1,
+      2,
+      4
+    ],
+    "dataset_manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+    "formal_decision": "JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED",
+    "formal_misconception_reference_nll_gain_threshold": 0.25,
+    "formal_protocol_sha256": "e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54",
+    "formal_seeds": [
+      26090711,
+      26090712,
+      26090713
+    ]
+  }
+}

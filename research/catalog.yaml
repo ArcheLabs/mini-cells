@@ -273,11 +273,11 @@ entries:
     report: research/stages/07-safe-model-evolution/README.md
     protocol: null
     artifacts: artifacts/experiments
-    notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-kaggle.ipynb
+    notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-failure-diagnostic-kaggle.ipynb
     implementation: scripts/research
     supersedes: null
     superseded_by: null
-    notes: "Current model-level line: immutable MoE substrate -> safe writable coordinate -> history-budget boundary -> real-domain JAM mutation -> release-candidate benchmarking if supported."
+    notes: "Current model-level line: immutable MoE substrate -> safe writable coordinate -> history-budget boundary -> JAM001 formal No-Go -> post-hoc failure diagnostic -> next release-oriented mutation design."
 
   - id: functional-boundary-oracle-001
     title: Functional Boundary Oracle 001
@@ -315,8 +315,8 @@ entries:
     title: JAM Knowledge Mutation 001 — Release-Oriented Sparse Domain Acquisition
     kind: safe-model-evolution-validation
     stage: safe-model-evolution
-    outcome: PROTOCOL_FROZEN_GPU_PENDING
-    scientific_decision: false
+    outcome: JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED
+    scientific_decision: true
     canonical: true
     report: research/validations/jam-knowledge-mutation-001/README.md
     protocol: research/validations/jam-knowledge-mutation-001/protocol.json
@@ -324,5 +324,21 @@ entries:
     notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-kaggle.ipynb
     implementation: scripts/research/jam_knowledge_mutation_001
     supersedes: history-compression-001
+    superseded_by: jam-knowledge-mutation-001-failure-diagnostic
+    notes: "Frozen formal No-Go; 0/3 formal seeds PASS. Across all three seeds, capacity growth improved JAM validation/heldout behavior while registered history safety, router identity, rollback and artifact reapply remained stable; the repeated registered bottleneck was misconception reference-answer NLL gain below 0.25."
+
+  - id: jam-knowledge-mutation-001-failure-diagnostic
+    title: JAM Knowledge Mutation 001 — Failure Diagnostic
+    kind: safe-model-evolution-diagnostic
+    stage: safe-model-evolution
+    outcome: ENGINEERING_READY_DIAGNOSTIC_GPU_PENDING
+    scientific_decision: false
+    canonical: true
+    report: research/validations/jam-knowledge-mutation-001-failure-diagnostic/README.md
+    protocol: research/validations/jam-knowledge-mutation-001-failure-diagnostic/diagnostic_plan.json
+    artifacts: artifacts/experiments/jam-knowledge-mutation-001-failure-diagnostic
+    notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-failure-diagnostic-kaggle.ipynb
+    implementation: scripts/research/jam_knowledge_mutation_001_failure_diagnostic
+    supersedes: jam-knowledge-mutation-001
     superseded_by: null
-    notes: "Formal seeds 26090711/12/13 remain unopened. Uses source-locked JAM Knowledge v0.1, answer-only multi-token causal LM loss, full_32 registered history safety, and independent sparse capacity ladder 1 -> 2 -> 4. The taxonomy manifest-hash repair changed metadata only; canonical dataset bytes are unchanged."
+    notes: "Post-hoc forward-only diagnostic over all nine frozen JAM001 mutation artifacts. It decomposes misconception reference-answer NLL into prefix, canonical-content and EOS contributions and cannot revise the upstream JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED decision."
