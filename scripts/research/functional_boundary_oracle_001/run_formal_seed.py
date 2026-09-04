@@ -6,6 +6,7 @@ from pathlib import Path
 import run_seed as engine
 import torch
 
+from minicells.granite_moe_layout import identify_packed_expert_tensors
 from minicells.moe_subexpert import apply_group_mutation_
 
 
@@ -79,6 +80,11 @@ def _verify_router(result: dict, args) -> dict:
 
 def main() -> int:
     args = engine.parse_args()
+    # Oracle 001 originally reused model.config.intermediate_size to classify
+    # packed expert tensors. Granite's model-level value can differ from the
+    # per-expert width (real layout: input [32,1024,1024], output [32,1024,512]).
+    # Formal execution therefore identifies the two roles from tensor geometry.
+    engine._runtime_packed_parameters = identify_packed_expert_tensors
     result = engine.run(args)
     result = _verify_router(result, args)
     if args.fail_on_scientific_fail and result["status"] != "PASS":
