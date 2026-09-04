@@ -13,10 +13,9 @@ RESEARCH_SCRIPTS = ROOT / "scripts" / "research"
 if str(RESEARCH_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(RESEARCH_SCRIPTS))
 
-from publish_core_validation_007 import _authenticated_git_env, _check_branch  # noqa: E402
-from publish_experiment_results import DEFAULT_SECRET_NAME, EXPECTED_ORIGIN, run_git  # noqa: E402
-
-from aggregate import aggregate  # noqa: E402
+from aggregate import aggregate
+from publish_core_validation_007 import _authenticated_git_env, _check_branch
+from publish_experiment_results import DEFAULT_SECRET_NAME, EXPECTED_ORIGIN, run_git
 
 RESULTS = ROOT / "results" / "moe-mutation-001"
 ARTIFACTS = ROOT / "artifacts" / "experiments" / "moe-mutation-001"
