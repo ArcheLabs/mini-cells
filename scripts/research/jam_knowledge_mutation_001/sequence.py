@@ -24,12 +24,24 @@ def encode_rows(
     sequences: list[list[int]] = []
     labels: list[list[int]] = []
     eos = tokenizer.eos_token_id
+    bos = getattr(tokenizer, "bos_token_id", None)
     if append_eos and eos is None:
         raise RuntimeError("tokenizer has no eos token")
     for row in rows:
         prompt = prompt_for(row, prompt_template)
-        prompt_ids = list(tokenizer(prompt, add_special_tokens=True)["input_ids"])
-        answer_ids = list(tokenizer(str(row["answer"]), add_special_tokens=False)["input_ids"])
+        prompt_ids: list[int] = []
+        if bos is not None:
+            prompt_ids.append(int(bos))
+        prompt_ids.extend(
+            int(value)
+            for value in tokenizer(prompt, add_special_tokens=False)["input_ids"]
+        )
+        answer_ids = [
+            int(value)
+            for value in tokenizer(str(row["answer"]), add_special_tokens=False)[
+                "input_ids"
+            ]
+        ]
         if append_eos:
             answer_ids.append(int(eos))
         available = max_length - len(prompt_ids)
