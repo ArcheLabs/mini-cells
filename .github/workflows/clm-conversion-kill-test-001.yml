@@ -73,7 +73,7 @@ jobs:
 
       - name: Lint Conversion 001 implementation
         run: |
-          python -m ruff check \
+          python -m ruff check --extend-select E402 \
             src/minicells/functional_cellization.py \
             scripts/research/clm_conversion_kill_test_001/dataset.py \
             scripts/research/clm_conversion_kill_test_001/semantic_choice.py \
