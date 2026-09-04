@@ -1,0 +1,127 @@
+{
+  "base": {
+    "foundation_trainable": false,
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "model_type": "granitemoe",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "dataset": {
+    "entities": 12,
+    "generator_path": "scripts/research/clm_conversion_kill_test_001/dataset.py",
+    "generator_sha256": "d381a0a23b234bfc9af7a1fd847b338ad45902c25b6bf84a0922c210ca12ccd1",
+    "principle": "nonce fictional entities and codes are used so acquisition cannot be credited to pretrained world knowledge",
+    "protocol_values": 6,
+    "region_values": 3,
+    "version": "clm-conversion-fictional-knowledge-v1"
+  },
+  "decision": {
+    "formal_support": "at least 2 of 3 untouched formal seeds pass",
+    "not_claimed": [
+      "complete Cellization of pre-existing Granite knowledge",
+      "natural pretrained Expert or neuron boundaries are Cells",
+      "fully learned growth control in a mature LLM",
+      "asymptotically sublinear Cell growth",
+      "superiority to LoRA or routed adapters before matched baselines",
+      "JAM domain acquisition or a public release candidate"
+    ],
+    "per_seed_pass": "every registered core gate passes",
+    "status_if_incomplete": "CLM_CONVERSION_KILL_TEST_001_INCOMPLETE",
+    "status_if_not_supported": "MATURE_MOE_FUNCTIONAL_CELLIZATION_NOT_SUPPORTED",
+    "status_if_supported": "MATURE_MOE_FUNCTIONAL_CELLIZATION_SUPPORTED"
+  },
+  "evaluation": {
+    "batch_size": 4,
+    "branch_merge": "train two rewrites from the same formation snapshot on distinct primary Cells, then merge Cell-scoped states and test retained standalone gain plus exact rollback",
+    "formation_families": [
+      "direct",
+      "negation",
+      "relation"
+    ],
+    "growth": "compare parent-only conflict update with parent+child contextual specialization",
+    "route_views_per_entity": 4,
+    "semantic_write": "rewrite one entity using only its pre-formation primary Cell and test unseen rewrite wording plus unrelated entities"
+  },
+  "experiment": "CLM_CONVERSION_KILL_TEST_001",
+  "followup_boundary": {
+    "if_not_supported": "classify failure by compatibility, formation, routing, local write, growth, or branch composition; do not repair thresholds post-hoc",
+    "if_supported": "freeze a conversion substrate release candidate, then run matched LoRA/static-routed-adapter baselines and only afterward return to JAM domain mutation"
+  },
+  "formal_seeds": [
+    26090441,
+    26090442,
+    26090443
+  ],
+  "gates": {
+    "maximum_compatibility_excess_over_repeatability": 1e-05,
+    "maximum_growth_alpha_nll_regression": 0.1,
+    "maximum_history_kl": 0.02,
+    "maximum_primary_cell_fraction": 0.5,
+    "maximum_unrelated_nll_regression": 0.05,
+    "minimum_branch_merge_retention": 0.8,
+    "minimum_child_beta_route_fraction": 0.5,
+    "minimum_direct_nll_gain": 0.15,
+    "minimum_distinct_primary_cells": 3,
+    "minimum_growth_beta_nll_gain": 0.1,
+    "minimum_mean_route_agreement": 0.75,
+    "minimum_negation_nll_gain": 0.1,
+    "minimum_relation_nll_gain": 0.02,
+    "minimum_semantic_write_nll_gain": 0.15,
+    "require_exact_overlay_rollback": true
+  },
+  "protocol_version": 1.0,
+  "scientific_question": "Can a frozen mature MoE grow persistent, semantically addressable, independently mutable functional Cells without first treating pretrained Expert/channel boundaries as Cells?",
+  "sequence_task": {
+    "answer_policy": "evaluation answers are nonce semantic values, not shared correctness prefixes",
+    "max_sequence_tokens": 64,
+    "prompt_template": "Question: {question}\nAnswer:",
+    "supervision": "answer-token causal NLL only"
+  },
+  "status": "PROTOCOL_FROZEN_GPU_PENDING",
+  "substrate": {
+    "compatibility_invariant": "before Cell learning every residual transform is exactly zero, so the converted path must match foundation output up to measured forward repeatability",
+    "definition": "Cell = shared semantic read key plus reusable low-rank residual transform at multiple later transformer layers",
+    "initial_active_cells": 8,
+    "initialization": "read keys and down factors seeded; all up factors exactly zero",
+    "layer_indices": [
+      7,
+      15,
+      23
+    ],
+    "max_cells": 16,
+    "pretrained_channel_group_is_cell": false,
+    "pretrained_expert_is_cell": false,
+    "rank": 8,
+    "routing_rule": "read once at the first registered layer; reuse the same sparse route at every registered write layer in that forward",
+    "schema": "clm.functional-cell-overlay.v1",
+    "temperature": 0.35,
+    "top_k": 1
+  },
+  "title": "CLM Conversion Kill Test 001 — Mature MoE Functional Cellization",
+  "training": {
+    "formation": {
+      "checkpoint_rule": "best heldout direct NLL gain among candidates satisfying the registered history KL ceiling",
+      "concepts_per_batch": 2,
+      "eval_interval": 20,
+      "history_batch_size": 2,
+      "history_kl_weight": 4.0,
+      "learning_rate": 0.0015,
+      "max_gradient_norm": 1.0,
+      "maximum_history_kl_for_candidate": 0.02,
+      "route_regularization_weight": 0.25,
+      "steps": 160
+    },
+    "growth": {
+      "child_initialization": "copy parent key and transforms so spawning is initially function-preserving, then train child only",
+      "route_learning": "child read key may learn only during conflict specialization",
+      "steps": 64,
+      "trigger": "scaffolded post-hoc conflict trigger; learned growth control is not under test in this experiment"
+    },
+    "local_mutation": {
+      "learning_rate": 0.001,
+      "max_gradient_norm": 1.0,
+      "route_target_weight": 0.5,
+      "rule": "only one registered Cell transform may receive nonzero gradients; read key stays frozen except for a newly spawned child",
+      "steps": 48
+    }
+  }
+}
