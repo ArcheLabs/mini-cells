@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 import subprocess
@@ -23,11 +24,20 @@ from publish_experiment_results import (  # noqa: E402
 RESULTS = ROOT / "results" / "clm-conversion-kill-test-001"
 ARTIFACTS = ROOT / "artifacts" / "experiments" / "clm-conversion-kill-test-001"
 VALIDATION = ROOT / "research" / "validations" / "clm-conversion-kill-test-001"
+PROTOCOL_PATH = VALIDATION / "protocol.json"
 DEFAULT_BRANCH = "codex/clm-conversion-kill-test-001"
 
 
 def _git_output(args: list[str]) -> str:
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def preflight_push(branch: str, secret_name: str) -> None:
@@ -56,12 +66,26 @@ def _copy_seed(seed: int) -> dict:
         raise FileNotFoundError(f"missing completed conversion result for seed {seed}")
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     result = json.loads(result_path.read_text(encoding="utf-8"))
-    if summary.get("experiment") != "CLM_CONVERSION_KILL_TEST_001":
+    protocol = json.loads(PROTOCOL_PATH.read_text(encoding="utf-8"))
+    protocol_sha256 = _sha256(PROTOCOL_PATH)
+    expected_dataset = protocol["dataset"]["generator_git_blob_sha"]
+
+    if summary.get("experiment") != protocol["experiment"]:
         raise RuntimeError("unexpected conversion experiment identity")
     if int(summary.get("seed", -1)) != seed or int(result.get("seed", -1)) != seed:
         raise RuntimeError("conversion seed identity mismatch")
     if summary.get("status") not in {"PASS", "FAIL"}:
         raise RuntimeError("conversion seed is not terminal")
+    for payload_name, payload in (("summary", summary), ("result", result)):
+        if payload.get("protocol_sha256") != protocol_sha256:
+            raise RuntimeError(
+                f"refusing to publish {payload_name} from a different protocol: "
+                f"{payload.get('protocol_sha256')} != {protocol_sha256}"
+            )
+        if payload.get("dataset_generator_git_blob_sha") != expected_dataset:
+            raise RuntimeError(
+                f"refusing to publish {payload_name} from a different dataset generator"
+            )
 
     destination = ARTIFACTS / f"seed-{seed}"
     if destination.exists():

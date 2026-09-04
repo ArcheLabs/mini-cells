@@ -1,14 +1,24 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
 
 
 DATASET_VERSION = "clm-conversion-fictional-knowledge-v1"
 
 ENTITIES = (
-    "Zorven", "Talric", "Mirel", "Kavon", "Nerith", "Velcor",
-    "Praxen", "Sulmar", "Iveron", "Daxil", "Rovek", "Cymra",
+    "Zorven",
+    "Talric",
+    "Mirel",
+    "Kavon",
+    "Nerith",
+    "Velcor",
+    "Praxen",
+    "Sulmar",
+    "Iveron",
+    "Daxil",
+    "Rovek",
+    "Cymra",
 )
 PROTOCOLS = ("QX-17", "LM-42", "VR-08", "PN-63", "TK-51", "HF-29")
 REGIONS = ("Rho-Delta", "Sigma-North", "Tau-Vale")
@@ -100,6 +110,19 @@ def training_rows() -> list[dict[str, str]]:
     return rows
 
 
+def formation_validation() -> list[dict[str, str]]:
+    return [
+        _row(
+            f"validation.{fact.concept_id}",
+            fact.concept_id,
+            f"For validation, report the registry protocol assigned to {fact.subject}.",
+            fact.value,
+            "validation_direct",
+        )
+        for fact in entity_facts()
+    ]
+
+
 def formation_evaluation() -> dict[str, list[dict[str, str]]]:
     direct: list[dict[str, str]] = []
     negation: list[dict[str, str]] = []
@@ -187,7 +210,12 @@ def formation_evaluation() -> dict[str, list[dict[str, str]]]:
     }
 
 
-def rewrite_rows(entity: str, new_protocol: str, *, prefix: str) -> dict[str, list[dict[str, str]]]:
+def rewrite_rows(
+    entity: str,
+    new_protocol: str,
+    *,
+    prefix: str,
+) -> dict[str, list[dict[str, str]]]:
     concept = f"entity.{entity}"
     wrong = next(value for value in PROTOCOLS if value != new_protocol)
     train = [

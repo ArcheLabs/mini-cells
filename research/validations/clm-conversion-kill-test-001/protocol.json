@@ -7,11 +7,12 @@
   },
   "dataset": {
     "entities": 12,
+    "generator_git_blob_sha": "649f8d0eda6344be8ed7b8d0933b8fbec5489066",
     "generator_path": "scripts/research/clm_conversion_kill_test_001/dataset.py",
-    "generator_sha256": "d381a0a23b234bfc9af7a1fd847b338ad45902c25b6bf84a0922c210ca12ccd1",
     "principle": "nonce fictional entities and codes are used so acquisition cannot be credited to pretrained world knowledge",
     "protocol_values": 6,
     "region_values": 3,
+    "validation_rows": 12,
     "version": "clm-conversion-fictional-knowledge-v1"
   },
   "decision": {
@@ -68,7 +69,7 @@
     "minimum_semantic_write_nll_gain": 0.15,
     "require_exact_overlay_rollback": true
   },
-  "protocol_version": 1.0,
+  "protocol_version": 1.1,
   "scientific_question": "Can a frozen mature MoE grow persistent, semantically addressable, independently mutable functional Cells without first treating pretrained Expert/channel boundaries as Cells?",
   "sequence_task": {
     "answer_policy": "evaluation answers are nonce semantic values, not shared correctness prefixes",
@@ -99,7 +100,7 @@
   "title": "CLM Conversion Kill Test 001 — Mature MoE Functional Cellization",
   "training": {
     "formation": {
-      "checkpoint_rule": "best heldout direct NLL gain among candidates satisfying the registered history KL ceiling",
+      "checkpoint_rule": "best validation NLL gain among candidates satisfying the registered history KL ceiling; final direct/negation/relation heldout families are never used for checkpoint selection",
       "concepts_per_batch": 2,
       "eval_interval": 20,
       "history_batch_size": 2,

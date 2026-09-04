@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -15,8 +16,43 @@ def _load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _validate_seed_summary(
+    summary: dict[str, Any],
+    *,
+    seed: int,
+    protocol: dict[str, Any],
+    protocol_sha256: str,
+) -> None:
+    if summary.get("experiment") != protocol["experiment"]:
+        raise RuntimeError(f"seed {seed} experiment identity mismatch")
+    if int(summary.get("seed", -1)) != seed:
+        raise RuntimeError(f"seed {seed} seed identity mismatch")
+    if summary.get("status") not in {"PASS", "FAIL"}:
+        raise RuntimeError(f"seed {seed} is not terminal")
+    if summary.get("protocol_sha256") != protocol_sha256:
+        raise RuntimeError(
+            f"seed {seed} protocol identity mismatch: "
+            f"{summary.get('protocol_sha256')} != {protocol_sha256}"
+        )
+    expected_dataset = protocol["dataset"]["generator_git_blob_sha"]
+    if summary.get("dataset_generator_git_blob_sha") != expected_dataset:
+        raise RuntimeError(
+            f"seed {seed} dataset generator identity mismatch: "
+            f"{summary.get('dataset_generator_git_blob_sha')} != {expected_dataset}"
+        )
+
+
 def aggregate() -> dict[str, Any]:
     protocol = _load(PROTOCOL_PATH)
+    protocol_sha256 = _sha256(PROTOCOL_PATH)
     formal = [int(value) for value in protocol["formal_seeds"]]
     completed: list[int] = []
     passed: list[int] = []
@@ -27,10 +63,12 @@ def aggregate() -> dict[str, Any]:
         if not path.is_file():
             continue
         summary = _load(path)
-        if summary.get("experiment") != protocol["experiment"] or int(summary.get("seed", -1)) != seed:
-            raise RuntimeError(f"seed identity mismatch for {path}")
-        if summary.get("status") not in {"PASS", "FAIL"}:
-            raise RuntimeError(f"seed is not terminal: {path}")
+        _validate_seed_summary(
+            summary,
+            seed=seed,
+            protocol=protocol,
+            protocol_sha256=protocol_sha256,
+        )
         completed.append(seed)
         summaries[str(seed)] = summary
         if summary["status"] == "PASS":
@@ -51,6 +89,8 @@ def aggregate() -> dict[str, Any]:
 
     decision = {
         "experiment": protocol["experiment"],
+        "protocol_sha256": protocol_sha256,
+        "dataset_generator_git_blob_sha": protocol["dataset"]["generator_git_blob_sha"],
         "status": status,
         "scientific_decision": scientific_decision,
         "formal_seeds": formal,

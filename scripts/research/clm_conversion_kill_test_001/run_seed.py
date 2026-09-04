@@ -3,13 +3,14 @@ from __future__ import annotations
 import argparse
 import collections
 import contextlib
+import hashlib
 import json
-import math
 import os
 import random
 import sys
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any
 
 os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
 os.environ.setdefault("TRANSFORMERS_NO_ADVISORY_WARNINGS", "1")
@@ -38,6 +39,7 @@ from dataset import (  # noqa: E402
     contextual_conflict_rows,
     entity_facts,
     formation_evaluation,
+    formation_validation,
     rewrite_rows,
     training_rows,
 )
@@ -45,6 +47,7 @@ from dataset import (  # noqa: E402
 PROTOCOL_PATH = (
     ROOT / "research" / "validations" / "clm-conversion-kill-test-001" / "protocol.json"
 )
+DATASET_PATH = ROOT / "scripts" / "research" / "clm_conversion_kill_test_001" / "dataset.py"
 RESULTS_ROOT = ROOT / "results" / "clm-conversion-kill-test-001"
 
 
@@ -55,6 +58,19 @@ def _load_json(path: Path) -> dict[str, Any]:
 def _write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _git_blob_sha(path: Path) -> str:
+    data = path.read_bytes()
+    return hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
 
 
 def _progress(seed: int, message: str) -> None:
@@ -183,9 +199,7 @@ def _route_regularizer(
     collision_terms: list[torch.Tensor] = []
     for left in range(len(means)):
         for right in range(left + 1, len(means)):
-            collision_terms.append(
-                F.cosine_similarity(means[left], means[right], dim=0)
-            )
+            collision_terms.append(F.cosine_similarity(means[left], means[right], dim=0))
     collision = (
         torch.stack(collision_terms).mean()
         if collision_terms
@@ -224,8 +238,8 @@ def _train_formation(
     protocol: dict[str, Any],
     seed: int,
     device: str,
-    base_direct: dict[str, float],
-    direct_rows: Sequence[dict[str, str]],
+    base_validation: dict[str, float],
+    validation_rows: Sequence[dict[str, str]],
     history_prompts: Sequence[str],
     history_teacher: torch.Tensor,
 ) -> dict[str, Any]:
@@ -270,8 +284,10 @@ def _train_formation(
         optimizer.step()
 
         if step % int(cfg["eval_interval"]) == 0 or step == int(cfg["steps"]):
-            direct = _evaluate(model, tokenizer, direct_rows, protocol, device, overlay)
-            gain = _nll_gain(base_direct, direct)
+            validation = _evaluate(
+                model, tokenizer, validation_rows, protocol, device, overlay
+            )
+            gain = _nll_gain(base_validation, validation)
             hist_kl = _history_kl(
                 model, tokenizer, history_prompts, history_teacher, device, overlay
             )
@@ -279,7 +295,7 @@ def _train_formation(
             candidate_log.append(
                 {
                     "step": step,
-                    "direct_nll_gain": gain,
+                    "validation_nll_gain": gain,
                     "history_kl": hist_kl,
                     "eligible": eligible,
                 }
@@ -292,7 +308,7 @@ def _train_formation(
     overlay.restore_(best)
     return {
         "best_step": best_step,
-        "best_direct_nll_gain": best_gain,
+        "best_validation_nll_gain": best_gain,
         "candidates": candidate_log,
     }
 
@@ -347,9 +363,9 @@ def _routing_metrics(
         "mean_route_agreement": sum(agreement.values()) / max(len(agreement), 1),
         "minimum_route_agreement": min(agreement.values()) if agreement else 0.0,
         "distinct_primary_cells": len(set(entity_modal.values())),
-        "maximum_primary_cell_fraction": max(counts.values()) / max(len(entity_modal), 1)
-        if counts
-        else 1.0,
+        "maximum_primary_cell_fraction": (
+            max(counts.values()) / max(len(entity_modal), 1) if counts else 1.0
+        ),
         "concept_primary_cells": modal,
         "concept_route_agreement": agreement,
     }
@@ -448,274 +464,27 @@ def _metric_dict(value: dict[str, float]) -> dict[str, float]:
     return {key: float(item) for key, item in value.items()}
 
 
-def run(seed: int, device: str) -> dict[str, Any]:
-    protocol = _load_json(PROTOCOL_PATH)
-    if seed not in [int(value) for value in protocol["formal_seeds"]]:
-        raise RuntimeError(f"seed {seed} is not a frozen formal seed")
-    if not torch.cuda.is_available() and device.startswith("cuda"):
-        raise RuntimeError("CUDA device requested but CUDA is unavailable")
-    _seed_everything(seed)
-
-    import transformers
-
-    transformers.logging.set_verbosity_error()
-    model_id = protocol["base"]["model_id"]
-    revision = protocol["base"]["revision"]
-    _progress(seed, f"loading frozen foundation {model_id}@{revision[:12]}")
-    tokenizer = transformers.AutoTokenizer.from_pretrained(model_id, revision=revision)
-    if tokenizer.pad_token_id is None:
-        if tokenizer.eos_token_id is None:
-            raise RuntimeError("tokenizer has neither pad nor eos token")
-        tokenizer.pad_token = tokenizer.eos_token
-    dtype = torch.float16 if device.startswith("cuda") else torch.float32
-    model = transformers.AutoModelForCausalLM.from_pretrained(
-        model_id,
-        revision=revision,
-        dtype=dtype,
-    ).to(device)
-    freeze_foundation_(model)
-    if any(parameter.requires_grad for parameter in model.parameters()):
-        raise RuntimeError("foundation freeze invariant failed")
-
-    substrate = protocol["substrate"]
-    overlay = FunctionalCellOverlay(
-        hidden_size=int(model.config.hidden_size),
-        layer_indices=tuple(int(value) for value in substrate["layer_indices"]),
-        max_cells=int(substrate["max_cells"]),
-        initial_active_cells=int(substrate["initial_active_cells"]),
-        rank=int(substrate["rank"]),
-        temperature=float(substrate["temperature"]),
-        top_k=int(substrate["top_k"]),
-        seed=seed,
-    ).to(device=device, dtype=torch.float32)
-    if not overlay.zero_output_is_exact():
-        raise RuntimeError("overlay must start with exact zero residual output")
-
-    eval_rows = formation_evaluation()
-    history = list(calibration_prompts())
-    base_metrics = {
-        name: _evaluate(model, tokenizer, rows, protocol, device, None)
-        for name, rows in eval_rows.items()
-        if name != "routing"
-    }
-    history_teacher = _last_logits(model, tokenizer, history, device).detach().cpu()
-
-    compatibility_prompts = history[:4]
-    repeated_a = _last_logits(model, tokenizer, compatibility_prompts, device)
-    repeated_b = _last_logits(model, tokenizer, compatibility_prompts, device)
-    converted = _last_logits(model, tokenizer, compatibility_prompts, device, overlay)
-    repeatability = float((repeated_a - repeated_b).abs().max().item())
-    converted_delta = float((repeated_a - converted).abs().max().item())
-    compatibility_excess = max(0.0, converted_delta - repeatability)
-    compatibility = {
-        "foundation_repeatability_max_abs_logit_delta": repeatability,
-        "zero_overlay_max_abs_logit_delta": converted_delta,
-        "excess_over_repeatability": compatibility_excess,
-        "zero_output_exact": overlay.zero_output_is_exact(),
-    }
-    _progress(seed, f"compatibility excess={compatibility_excess:.3e}")
-
-    formation_log = _train_formation(
-        model=model,
-        tokenizer=tokenizer,
-        overlay=overlay,
-        protocol=protocol,
-        seed=seed,
-        device=device,
-        base_direct=base_metrics["direct"],
-        direct_rows=eval_rows["direct"],
-        history_prompts=history,
-        history_teacher=history_teacher,
-    )
-    formation_snapshot = overlay.snapshot()
-    formation_metrics = {
-        name: _evaluate(model, tokenizer, rows, protocol, device, overlay)
-        for name, rows in eval_rows.items()
-        if name != "routing"
-    }
-    formation_gains = {
-        name: _nll_gain(base_metrics[name], formation_metrics[name])
-        for name in ("direct", "negation", "relation")
-    }
-    formation_history_kl = _history_kl(
-        model, tokenizer, history, history_teacher, device, overlay
-    )
-    route_metrics, modal, agreement = _routing_metrics(
-        model,
-        tokenizer,
-        eval_rows["routing"],
-        protocol,
-        device,
-        overlay,
-    )
-    _progress(
-        seed,
-        "formation "
-        f"direct={formation_gains['direct']:.3f} "
-        f"negation={formation_gains['negation']:.3f} "
-        f"relation={formation_gains['relation']:.3f} "
-        f"route={route_metrics['mean_route_agreement']:.3f}",
-    )
-
+def _branch_phase(
+    *,
+    model: Any,
+    tokenizer: Any,
+    overlay: FunctionalCellOverlay,
+    formation_snapshot: dict[str, torch.Tensor],
+    modal: dict[str, int],
+    agreement: dict[str, float],
+    protocol: dict[str, Any],
+    device: str,
+) -> dict[str, Any]:
     local_cfg = protocol["training"]["local_mutation"]
-    local_target = _choose_rewrite_target(
-        model=model,
-        tokenizer=tokenizer,
-        overlay=overlay,
-        modal=modal,
-        agreement=agreement,
-        protocol=protocol,
-        device=device,
-    )
-    local_base = _evaluate(
-        model,
-        tokenizer,
-        local_target["rows"]["evaluation"],
-        protocol,
-        device,
-        overlay,
-    )
-    unrelated_rows = [
-        row
-        for row in eval_rows["direct"]
-        if row["concept_id"] != local_target["concept_id"]
-    ]
-    unrelated_base = _evaluate(
-        model, tokenizer, unrelated_rows, protocol, device, overlay
-    )
-    _train_cell(
-        model=model,
-        tokenizer=tokenizer,
-        overlay=overlay,
-        rows=local_target["rows"]["train"],
-        cell_index=int(local_target["cell"]),
-        protocol=protocol,
-        device=device,
-        steps=int(local_cfg["steps"]),
-        learning_rate=float(local_cfg["learning_rate"]),
-        max_gradient_norm=float(local_cfg["max_gradient_norm"]),
-        learn_key=False,
-    )
-    local_after = _evaluate(
-        model,
-        tokenizer,
-        local_target["rows"]["evaluation"],
-        protocol,
-        device,
-        overlay,
-    )
-    unrelated_after = _evaluate(
-        model, tokenizer, unrelated_rows, protocol, device, overlay
-    )
-    local_result = {
-        "entity": local_target["entity"],
-        "cell": int(local_target["cell"]),
-        "route_agreement": float(local_target["agreement"]),
-        "rewrite_train_target_fraction": float(local_target["train_target_fraction"]),
-        "semantic_write_nll_gain": _nll_gain(local_base, local_after),
-        "unrelated_nll_regression": float(
-            unrelated_after["mean_reference_nll"] - unrelated_base["mean_reference_nll"]
-        ),
-        "before": _metric_dict(local_base),
-        "after": _metric_dict(local_after),
-    }
-    overlay.restore_(formation_snapshot)
-    local_result["rollback_exact"] = _state_equal(formation_snapshot, overlay)
-    _progress(
-        seed,
-        f"local write gain={local_result['semantic_write_nll_gain']:.3f} "
-        f"unrelated_regression={local_result['unrelated_nll_regression']:.3f}",
-    )
-
-    growth_cfg = protocol["training"]["growth"]
-    growth_entity = str(local_target["entity"])
-    growth_parent = int(local_target["cell"])
-    old_protocol = str(local_target["old_protocol"])
-    new_protocol = PROTOCOLS[(PROTOCOLS.index(old_protocol) + 2) % len(PROTOCOLS)]
-    growth_rows = contextual_conflict_rows(growth_entity, old_protocol, new_protocol)
-    alpha_base = _evaluate(
-        model, tokenizer, growth_rows["alpha"], protocol, device, overlay
-    )
-    beta_base = _evaluate(
-        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
-    )
-
-    _train_cell(
-        model=model,
-        tokenizer=tokenizer,
-        overlay=overlay,
-        rows=growth_rows["beta_train"],
-        cell_index=growth_parent,
-        protocol=protocol,
-        device=device,
-        steps=int(growth_cfg["steps"]),
-        learning_rate=float(local_cfg["learning_rate"]),
-        max_gradient_norm=float(local_cfg["max_gradient_norm"]),
-        learn_key=False,
-    )
-    parent_alpha = _evaluate(
-        model, tokenizer, growth_rows["alpha"], protocol, device, overlay
-    )
-    parent_beta = _evaluate(
-        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
-    )
-    parent_control = {
-        "alpha_nll_regression": float(
-            parent_alpha["mean_reference_nll"] - alpha_base["mean_reference_nll"]
-        ),
-        "beta_nll_gain": _nll_gain(beta_base, parent_beta),
-    }
-
-    overlay.restore_(formation_snapshot)
-    child = overlay.spawn_child(growth_parent)
-    spawned_snapshot = overlay.snapshot()
-    _train_cell(
-        model=model,
-        tokenizer=tokenizer,
-        overlay=overlay,
-        rows=growth_rows["beta_train"],
-        cell_index=child,
-        protocol=protocol,
-        device=device,
-        steps=int(growth_cfg["steps"]),
-        learning_rate=float(local_cfg["learning_rate"]),
-        max_gradient_norm=float(local_cfg["max_gradient_norm"]),
-        learn_key=True,
-        route_target_weight=float(local_cfg["route_target_weight"]),
-    )
-    child_alpha = _evaluate(
-        model, tokenizer, growth_rows["alpha"], protocol, device, overlay
-    )
-    child_beta = _evaluate(
-        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
-    )
-    beta_routes = _route_primary_for_rows(
-        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
-    )
-    growth_result = {
-        "entity": growth_entity,
-        "parent_cell": growth_parent,
-        "child_cell": child,
-        "spawn_state_changed_only_by_activation": all(
-            torch.equal(
-                spawned_snapshot[name],
-                overlay_snapshot,
-            )
-            for name, overlay_snapshot in spawned_snapshot.items()
-        ),
-        "parent_only_control": parent_control,
-        "beta_nll_gain": _nll_gain(beta_base, child_beta),
-        "alpha_nll_regression": float(
-            child_alpha["mean_reference_nll"] - alpha_base["mean_reference_nll"]
-        ),
-        "child_beta_route_fraction": sum(value == child for value in beta_routes)
-        / max(len(beta_routes), 1),
-        "alpha_before": _metric_dict(alpha_base),
-        "alpha_after": _metric_dict(child_alpha),
-        "beta_before": _metric_dict(beta_base),
-        "beta_after": _metric_dict(child_beta),
-    }
-    overlay.restore_(formation_snapshot)
+    entity_cells = {int(modal[f"entity.{entity}"]) for entity in ENTITIES}
+    if len(entity_cells) < 2:
+        overlay.restore_(formation_snapshot)
+        return {
+            "branches": [],
+            "minimum_merge_retention": 0.0,
+            "exact_rollback": _state_equal(formation_snapshot, overlay),
+            "skipped_reason": "fewer than two distinct entity primary Cells",
+        }
 
     branch_a = _choose_rewrite_target(
         model=model,
@@ -792,12 +561,296 @@ def run(seed: int, device: str) -> dict[str, Any]:
         retentions.append(retention)
         branch.pop("rows", None)
     overlay.restore_(formation_snapshot)
-    exact_rollback = _state_equal(formation_snapshot, overlay)
-    branch_result = {
+    return {
         "branches": branches,
         "minimum_merge_retention": min(retentions) if retentions else 0.0,
-        "exact_rollback": exact_rollback,
+        "exact_rollback": _state_equal(formation_snapshot, overlay),
     }
+
+
+def run(seed: int, device: str) -> dict[str, Any]:
+    protocol = _load_json(PROTOCOL_PATH)
+    if _git_blob_sha(DATASET_PATH) != protocol["dataset"]["generator_git_blob_sha"]:
+        raise RuntimeError("controlled dataset generator identity mismatch")
+    if seed not in [int(value) for value in protocol["formal_seeds"]]:
+        raise RuntimeError(f"seed {seed} is not a frozen formal seed")
+    if not torch.cuda.is_available() and device.startswith("cuda"):
+        raise RuntimeError("CUDA device requested but CUDA is unavailable")
+    _seed_everything(seed)
+
+    import transformers
+
+    transformers.logging.set_verbosity_error()
+    model_id = protocol["base"]["model_id"]
+    revision = protocol["base"]["revision"]
+    _progress(seed, f"loading frozen foundation {model_id}@{revision[:12]}")
+    tokenizer = transformers.AutoTokenizer.from_pretrained(model_id, revision=revision)
+    if tokenizer.pad_token_id is None:
+        if tokenizer.eos_token_id is None:
+            raise RuntimeError("tokenizer has neither pad nor eos token")
+        tokenizer.pad_token = tokenizer.eos_token
+    dtype = torch.float16 if device.startswith("cuda") else torch.float32
+    model = transformers.AutoModelForCausalLM.from_pretrained(
+        model_id,
+        revision=revision,
+        dtype=dtype,
+    ).to(device)
+    freeze_foundation_(model)
+    if any(parameter.requires_grad for parameter in model.parameters()):
+        raise RuntimeError("foundation freeze invariant failed")
+
+    substrate = protocol["substrate"]
+    overlay = FunctionalCellOverlay(
+        hidden_size=int(model.config.hidden_size),
+        layer_indices=tuple(int(value) for value in substrate["layer_indices"]),
+        max_cells=int(substrate["max_cells"]),
+        initial_active_cells=int(substrate["initial_active_cells"]),
+        rank=int(substrate["rank"]),
+        temperature=float(substrate["temperature"]),
+        top_k=int(substrate["top_k"]),
+        seed=seed,
+    ).to(device=device, dtype=torch.float32)
+    if not overlay.zero_output_is_exact():
+        raise RuntimeError("overlay must start with exact zero residual output")
+
+    validation_rows = formation_validation()
+    eval_rows = formation_evaluation()
+    history = list(calibration_prompts())
+    base_validation = _evaluate(model, tokenizer, validation_rows, protocol, device, None)
+    base_metrics = {
+        name: _evaluate(model, tokenizer, rows, protocol, device, None)
+        for name, rows in eval_rows.items()
+        if name != "routing"
+    }
+    history_teacher = _last_logits(model, tokenizer, history, device).detach().cpu()
+
+    compatibility_prompts = history[:4]
+    repeated_a = _last_logits(model, tokenizer, compatibility_prompts, device)
+    repeated_b = _last_logits(model, tokenizer, compatibility_prompts, device)
+    converted = _last_logits(model, tokenizer, compatibility_prompts, device, overlay)
+    repeatability = float((repeated_a - repeated_b).abs().max().item())
+    converted_delta = float((repeated_a - converted).abs().max().item())
+    compatibility_excess = max(0.0, converted_delta - repeatability)
+    compatibility = {
+        "foundation_repeatability_max_abs_logit_delta": repeatability,
+        "zero_overlay_max_abs_logit_delta": converted_delta,
+        "excess_over_repeatability": compatibility_excess,
+        "zero_output_exact": overlay.zero_output_is_exact(),
+    }
+    _progress(seed, f"compatibility excess={compatibility_excess:.3e}")
+
+    formation_log = _train_formation(
+        model=model,
+        tokenizer=tokenizer,
+        overlay=overlay,
+        protocol=protocol,
+        seed=seed,
+        device=device,
+        base_validation=base_validation,
+        validation_rows=validation_rows,
+        history_prompts=history,
+        history_teacher=history_teacher,
+    )
+    formation_snapshot = overlay.snapshot()
+    selected_validation = _evaluate(
+        model, tokenizer, validation_rows, protocol, device, overlay
+    )
+    formation_metrics = {
+        name: _evaluate(model, tokenizer, rows, protocol, device, overlay)
+        for name, rows in eval_rows.items()
+        if name != "routing"
+    }
+    formation_gains = {
+        name: _nll_gain(base_metrics[name], formation_metrics[name])
+        for name in ("direct", "negation", "relation")
+    }
+    formation_history_kl = _history_kl(
+        model, tokenizer, history, history_teacher, device, overlay
+    )
+    route_metrics, modal, agreement = _routing_metrics(
+        model,
+        tokenizer,
+        eval_rows["routing"],
+        protocol,
+        device,
+        overlay,
+    )
+    _progress(
+        seed,
+        "formation "
+        f"direct={formation_gains['direct']:.3f} "
+        f"negation={formation_gains['negation']:.3f} "
+        f"relation={formation_gains['relation']:.3f} "
+        f"route={route_metrics['mean_route_agreement']:.3f}",
+    )
+
+    local_cfg = protocol["training"]["local_mutation"]
+    local_target = _choose_rewrite_target(
+        model=model,
+        tokenizer=tokenizer,
+        overlay=overlay,
+        modal=modal,
+        agreement=agreement,
+        protocol=protocol,
+        device=device,
+    )
+    local_base = _evaluate(
+        model,
+        tokenizer,
+        local_target["rows"]["evaluation"],
+        protocol,
+        device,
+        overlay,
+    )
+    unrelated_rows = [
+        row
+        for row in eval_rows["direct"]
+        if row["concept_id"] != local_target["concept_id"]
+    ]
+    unrelated_base = _evaluate(model, tokenizer, unrelated_rows, protocol, device, overlay)
+    _train_cell(
+        model=model,
+        tokenizer=tokenizer,
+        overlay=overlay,
+        rows=local_target["rows"]["train"],
+        cell_index=int(local_target["cell"]),
+        protocol=protocol,
+        device=device,
+        steps=int(local_cfg["steps"]),
+        learning_rate=float(local_cfg["learning_rate"]),
+        max_gradient_norm=float(local_cfg["max_gradient_norm"]),
+        learn_key=False,
+    )
+    local_after = _evaluate(
+        model,
+        tokenizer,
+        local_target["rows"]["evaluation"],
+        protocol,
+        device,
+        overlay,
+    )
+    unrelated_after = _evaluate(model, tokenizer, unrelated_rows, protocol, device, overlay)
+    local_result = {
+        "entity": local_target["entity"],
+        "cell": int(local_target["cell"]),
+        "route_agreement": float(local_target["agreement"]),
+        "rewrite_train_target_fraction": float(local_target["train_target_fraction"]),
+        "semantic_write_nll_gain": _nll_gain(local_base, local_after),
+        "unrelated_nll_regression": float(
+            unrelated_after["mean_reference_nll"] - unrelated_base["mean_reference_nll"]
+        ),
+        "before": _metric_dict(local_base),
+        "after": _metric_dict(local_after),
+    }
+    overlay.restore_(formation_snapshot)
+    local_result["rollback_exact"] = _state_equal(formation_snapshot, overlay)
+    _progress(
+        seed,
+        f"local write gain={local_result['semantic_write_nll_gain']:.3f} "
+        f"unrelated_regression={local_result['unrelated_nll_regression']:.3f}",
+    )
+
+    growth_cfg = protocol["training"]["growth"]
+    growth_entity = str(local_target["entity"])
+    growth_parent = int(local_target["cell"])
+    old_protocol = str(local_target["old_protocol"])
+    new_protocol = PROTOCOLS[(PROTOCOLS.index(old_protocol) + 2) % len(PROTOCOLS)]
+    growth_rows = contextual_conflict_rows(growth_entity, old_protocol, new_protocol)
+    alpha_base = _evaluate(model, tokenizer, growth_rows["alpha"], protocol, device, overlay)
+    beta_base = _evaluate(
+        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
+    )
+
+    _train_cell(
+        model=model,
+        tokenizer=tokenizer,
+        overlay=overlay,
+        rows=growth_rows["beta_train"],
+        cell_index=growth_parent,
+        protocol=protocol,
+        device=device,
+        steps=int(growth_cfg["steps"]),
+        learning_rate=float(local_cfg["learning_rate"]),
+        max_gradient_norm=float(local_cfg["max_gradient_norm"]),
+        learn_key=False,
+    )
+    parent_alpha = _evaluate(
+        model, tokenizer, growth_rows["alpha"], protocol, device, overlay
+    )
+    parent_beta = _evaluate(
+        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
+    )
+    parent_control = {
+        "alpha_nll_regression": float(
+            parent_alpha["mean_reference_nll"] - alpha_base["mean_reference_nll"]
+        ),
+        "beta_nll_gain": _nll_gain(beta_base, parent_beta),
+    }
+
+    overlay.restore_(formation_snapshot)
+    child = overlay.spawn_child(growth_parent)
+    alpha_spawned = _evaluate(
+        model, tokenizer, growth_rows["alpha"], protocol, device, overlay
+    )
+    beta_spawned = _evaluate(
+        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
+    )
+    spawn_max_nll_delta = max(
+        abs(alpha_spawned["mean_reference_nll"] - alpha_base["mean_reference_nll"]),
+        abs(beta_spawned["mean_reference_nll"] - beta_base["mean_reference_nll"]),
+    )
+    _train_cell(
+        model=model,
+        tokenizer=tokenizer,
+        overlay=overlay,
+        rows=growth_rows["beta_train"],
+        cell_index=child,
+        protocol=protocol,
+        device=device,
+        steps=int(growth_cfg["steps"]),
+        learning_rate=float(local_cfg["learning_rate"]),
+        max_gradient_norm=float(local_cfg["max_gradient_norm"]),
+        learn_key=True,
+        route_target_weight=float(local_cfg["route_target_weight"]),
+    )
+    child_alpha = _evaluate(
+        model, tokenizer, growth_rows["alpha"], protocol, device, overlay
+    )
+    child_beta = _evaluate(
+        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
+    )
+    beta_routes = _route_primary_for_rows(
+        model, tokenizer, growth_rows["beta_eval"], protocol, device, overlay
+    )
+    growth_result = {
+        "entity": growth_entity,
+        "parent_cell": growth_parent,
+        "child_cell": child,
+        "spawn_max_mean_nll_delta": spawn_max_nll_delta,
+        "parent_only_control": parent_control,
+        "beta_nll_gain": _nll_gain(beta_base, child_beta),
+        "alpha_nll_regression": float(
+            child_alpha["mean_reference_nll"] - alpha_base["mean_reference_nll"]
+        ),
+        "child_beta_route_fraction": sum(value == child for value in beta_routes)
+        / max(len(beta_routes), 1),
+        "alpha_before": _metric_dict(alpha_base),
+        "alpha_after": _metric_dict(child_alpha),
+        "beta_before": _metric_dict(beta_base),
+        "beta_after": _metric_dict(child_beta),
+    }
+    overlay.restore_(formation_snapshot)
+
+    branch_result = _branch_phase(
+        model=model,
+        tokenizer=tokenizer,
+        overlay=overlay,
+        formation_snapshot=formation_snapshot,
+        modal=modal,
+        agreement=agreement,
+        protocol=protocol,
+        device=device,
+    )
 
     gates_cfg = protocol["gates"]
     gates = {
@@ -832,13 +885,18 @@ def run(seed: int, device: str) -> dict[str, Any]:
         and bool(branch_result["exact_rollback"]),
     }
     status = "PASS" if all(gates.values()) else "FAIL"
+    protocol_sha256 = _sha256(PROTOCOL_PATH)
     result = {
         "experiment": protocol["experiment"],
+        "protocol_sha256": protocol_sha256,
+        "dataset_generator_git_blob_sha": protocol["dataset"]["generator_git_blob_sha"],
         "seed": seed,
         "status": status,
         "model_id": model_id,
         "revision": revision,
         "compatibility": compatibility,
+        "base_validation": _metric_dict(base_validation),
+        "selected_validation": _metric_dict(selected_validation),
         "base_metrics": {name: _metric_dict(value) for name, value in base_metrics.items()},
         "formation": {
             "training": formation_log,
@@ -859,6 +917,8 @@ def run(seed: int, device: str) -> dict[str, Any]:
         seed_root / "seed_summary.json",
         {
             "experiment": protocol["experiment"],
+            "protocol_sha256": protocol_sha256,
+            "dataset_generator_git_blob_sha": protocol["dataset"]["generator_git_blob_sha"],
             "seed": seed,
             "status": status,
             "failed_gates": result["failed_gates"],

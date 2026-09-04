@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import contextlib
 import copy
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass
-from typing import Any, Iterator, Sequence
+from typing import Any
 
 import torch
 import torch.nn.functional as F
@@ -242,7 +243,7 @@ class FunctionalCellOverlay(nn.Module):
         return bool(torch.count_nonzero(self.up.detach()).item() == 0)
 
     @contextlib.contextmanager
-    def installed(self, model: nn.Module) -> Iterator["FunctionalCellOverlay"]:
+    def installed(self, model: nn.Module) -> Iterator[FunctionalCellOverlay]:
         if self._installed_handles:
             raise FunctionalCellizationError("overlay hooks are already installed")
         try:
@@ -295,7 +296,7 @@ def mask_cell_gradients_(
     selected = torch.zeros(
         overlay.max_cells, dtype=torch.bool, device=overlay.keys.device
     )
-    selected[list(int(value) for value in cell_indices)] = True
+    selected[[int(value) for value in cell_indices]] = True
     for parameter in (overlay.down, overlay.up):
         if parameter.grad is not None:
             parameter.grad[:, ~selected] = 0

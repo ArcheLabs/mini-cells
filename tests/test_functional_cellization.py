@@ -7,8 +7,8 @@ import torch
 from torch import nn
 
 from minicells.functional_cellization import (
-    FunctionalCellOverlay,
     FunctionalCellizationError,
+    FunctionalCellOverlay,
     disjoint_mutations,
     mask_cell_gradients_,
 )
