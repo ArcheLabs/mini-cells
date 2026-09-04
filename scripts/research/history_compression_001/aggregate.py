@@ -146,7 +146,9 @@ def aggregate() -> dict[str, Any]:
         if full_supported and supported_modes
         else None
     )
-    ascending = sorted(((budgets[mode_id], per_mode[mode_id]["supported"]) for mode_id in mode_ids))
+    ascending = sorted(
+        (budgets[mode_id], per_mode[mode_id]["supported"]) for mode_id in mode_ids
+    )
     seen_supported = False
     monotonic = True
     for _budget, supported in ascending:
