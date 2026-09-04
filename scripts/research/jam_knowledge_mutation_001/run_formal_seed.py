@@ -24,8 +24,7 @@ def _fresh_model(
     return model
 
 
-def _release_model(model) -> None:
-    del model
+def _empty_cuda_cache() -> None:
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -130,8 +129,13 @@ def _verify(summary: dict, args) -> dict:
             materialized_dir.mkdir(parents=True, exist_ok=True)
             model.save_pretrained(materialized_dir, safe_serialization=True)
             tokenizer.save_pretrained(materialized_dir)
-            _release_model(model)
-            model = None
+
+            # `parameter_map` owns references to every parameter; clearing only
+            # the model variable is insufficient to release a T4-sized FP32 model.
+            parameter_map.clear()
+            del parameter_map
+            del model
+            _empty_cuda_cache()
 
             materialized = _fresh_model(materialized_dir, AutoModelForCausalLM, args.device)
             materialized_logits = oracle._next_logits(
@@ -144,12 +148,15 @@ def _verify(summary: dict, args) -> dict:
             materialized_error = float(
                 (materialized_logits - applied_logits).abs().max().item()
             )
-            _release_model(materialized)
+            del materialized
+            _empty_cuda_cache()
             shutil.rmtree(materialized_dir, ignore_errors=True)
         else:
             apply_mutation_set_(parameter_map, mutation_dir, scale=-1.0)
-            _release_model(model)
-            model = None
+            parameter_map.clear()
+            del parameter_map
+            del model
+            _empty_cuda_cache()
 
         result["metrics"]["target_router_topk_identity"] = router_identity
         result["metrics"]["artifact_reapply_logit_error"] = artifact_error
