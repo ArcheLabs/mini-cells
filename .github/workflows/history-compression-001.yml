@@ -1,0 +1,65 @@
+name: History Compression 001 engineering guard
+
+on:
+  pull_request:
+    paths:
+      - "scripts/research/history_compression_001/**"
+      - "research/validations/history-compression-001/**"
+      - "research/notebooks/07-safe-model-evolution/**"
+      - "research/stages/07-safe-model-evolution/**"
+      - "research/notebooks/README.md"
+      - "research/catalog.yaml"
+      - "tests/test_history_compression.py"
+      - ".github/workflows/history-compression-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  engineering-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install CPU research environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e '.[lm,dev]'
+      - name: Validate frozen protocol and notebook placement
+        run: |
+          python -m json.tool research/validations/history-compression-001/protocol.json >/dev/null
+          python -m json.tool research/notebooks/07-safe-model-evolution/history-compression-001-kaggle.ipynb >/dev/null
+          test ! -e notebooks/kaggle/history-compression-001.ipynb
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/validations/history-compression-001/protocol.json').read_text())
+          assert p['formal_seeds'] == [26090611, 26090612, 26090613]
+          assert [m['history_prompt_count'] for m in p['compression_modes']] == [32, 8, 2, 0]
+          assert len(p['history']['selection_prompts']) == 32
+          assert len(p['history']['evaluation_prompts']) == 32
+          assert not (set(p['history']['selection_prompts']) & set(p['history']['evaluation_prompts']))
+          assert p['mutation']['group_size'] == 32
+          assert p['mutation']['expected_intermediate_size'] == 512
+          PY
+      - name: Compile runners
+        run: |
+          python -m py_compile \
+            scripts/research/history_compression_001/run_seed.py \
+            scripts/research/history_compression_001/run_formal_seed.py \
+            scripts/research/history_compression_001/aggregate.py \
+            scripts/research/history_compression_001/publish.py \
+            scripts/research/history_compression_001/visualize.py \
+            scripts/research/history_compression_001/kaggle_preflight.py
+      - name: Lint implementation
+        run: |
+          python -m ruff check --ignore SIM102 \
+            scripts/research/history_compression_001 \
+            tests/test_history_compression.py
+      - name: Unit tests
+        run: python -m pytest -q tests/test_history_compression.py tests/test_granite_moe_layout.py tests/test_moe_subexpert.py
