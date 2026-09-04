@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
+SRC_ROOT = ROOT / "src"
 RUNNER = ROOT / "scripts" / "research" / "granite_hybrid_clm_v01" / "run_milestone.py"
 RELOAD = ROOT / "scripts" / "research" / "granite_hybrid_clm_v01" / "verify_reload.py"
 VALIDATOR = ROOT / "scripts" / "research" / "granite_hybrid_clm_v01" / "validate_result.py"
@@ -14,8 +16,13 @@ VALIDATOR = ROOT / "scripts" / "research" / "granite_hybrid_clm_v01" / "validate
 
 def _run(*args: str) -> None:
     command = [sys.executable, *args]
+    env = os.environ.copy()
+    existing_pythonpath = env.get("PYTHONPATH")
+    env["PYTHONPATH"] = (
+        f"{SRC_ROOT}{os.pathsep}{existing_pythonpath}" if existing_pythonpath else str(SRC_ROOT)
+    )
     print("+", " ".join(command), flush=True)
-    subprocess.run(command, cwd=ROOT, check=True)
+    subprocess.run(command, cwd=ROOT, env=env, check=True)
 
 
 def main() -> None:
