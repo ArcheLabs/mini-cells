@@ -13,12 +13,24 @@ Can the frozen Granite 3.1 1B-A400M MoE acquire the source-locked `jam-knowledge
 - Base: `ibm-granite/granite-3.1-1b-a400m-base`
 - Revision: `408b6e90baab8cf24f4aa9f8e19703ffa0a53b29`
 - MoE conversion identity: `dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670`
-- JAM dataset commit: `5016cb36f8eb5ca715b6fd7796384ae5b607bd12`
+- JAM dataset content commit: `5016cb36f8eb5ca715b6fd7796384ae5b607bd12`
 - JAM concepts: 180
 - Gray Paper pin: `0.8.0` / `e5375148597a45a99d31c9aa6bce6c7bf3a48998`
 - Formal seeds: `26090711`, `26090712`, `26090713`
 
 The dataset semantic review boundary is closed by `DATASET_SEMANTIC_SPOT_AUDIT.md`.
+
+### Pre-formal manifest integrity repair
+
+The engineering guard discovered that `jam-knowledge-v0.1/manifest.json` recorded an incorrect SHA-256 for `taxonomy.json`. The taxonomy bytes at the original dataset commit and on this branch are identical; their actual SHA-256 is:
+
+`4f3e2da96a2cfa0d0b0496da191e21a50c38779dc804c54c1fc21b5f236cf886`
+
+The stale manifest value was `16a993d3a79750d8a8f1d591a9231e5cbcd75373f8a298e7fb894eb63d747842`? No: that value belongs to an unrelated protocol hash and is intentionally not used here. The actual stale taxonomy value was:
+
+`16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b`
+
+Only manifest metadata was corrected. No canonical concept, taxonomy, reasoning-holdout or generated-dataset bytes were changed. The repair occurred before any formal GPU seed was opened, so the final protocol hash produced after this repair is the only JAM Knowledge Mutation 001 formal protocol identity.
 
 ## Mechanism
 
