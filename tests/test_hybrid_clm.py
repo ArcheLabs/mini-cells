@@ -72,9 +72,8 @@ def test_overlay_requires_explicit_prompt_scope() -> None:
     overlay = _overlay()
     hidden = torch.randn(1, 4, 8)
     overlay.allocate_cell()
-    with pytest.raises(HybridCLMError, match="prompt_scope"):
-        with overlay.installed(model):
-            model(hidden)
+    with pytest.raises(HybridCLMError, match="prompt_scope"), overlay.installed(model):
+        model(hidden)
 
 
 def test_allocation_is_exactly_invisible_to_production() -> None:
