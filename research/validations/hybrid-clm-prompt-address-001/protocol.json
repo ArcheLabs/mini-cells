@@ -1,0 +1,74 @@
+{
+  "experiment": "HYBRID_CLM_PROMPT_ADDRESS_001",
+  "protocol_version": 1.0,
+  "status": "DIAGNOSTIC_PROTOCOL_FROZEN_GPU_PENDING",
+  "seed": 26090481,
+  "base": {
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "foundation_trainable": false
+  },
+  "diagnostic_scope": {
+    "question": "Does prompt-anchor address semantics remove the tokenwise-routing safety confound while preserving Hybrid CLM knowledge acquisition?",
+    "formal_milestone_decision": false,
+    "does_not_rewrite": [
+      "CLM_CONVERSION_KILL_TEST_001",
+      "GRANITE_HYBRID_CLM_V0_1"
+    ],
+    "thresholds_must_not_be_relaxed_after_gpu_observation": true
+  },
+  "routing": {
+    "address_scope": "prompt_anchor",
+    "write_scope": "anchor_and_later",
+    "candidate_answer_affects_routing": false,
+    "gate_type": "independent_sigmoid_threshold",
+    "gate_threshold": 0.8,
+    "competitive_normalization": false
+  },
+  "address_gates": {
+    "minimum_train_positive_recall": 1.0,
+    "maximum_train_negative_false_positive_rate": 0.02,
+    "minimum_heldout_positive_recall": 1.0,
+    "maximum_history_anchor_false_positive_rate": 0.0,
+    "heldout_positive_used_for_address_training": false,
+    "history_anchor_used_for_address_training": false
+  },
+  "write_gates": {
+    "maximum_history_kl": 0.02,
+    "minimum_target_nll_gain": 0.5,
+    "minimum_semantic_choice_accuracy": 1.0
+  },
+  "smoke": {
+    "facts": 3,
+    "address_steps": 80,
+    "transform_steps": 12,
+    "fresh_reload_required_for_pass": true
+  },
+  "hosted_environment": {
+    "require_cuda": true,
+    "require_hf_token": true,
+    "require_github_token_for_publish": true,
+    "stdout_policy": "compact",
+    "detailed_logs_are_durable_files": true
+  },
+  "gpu_policy": {
+    "smoke_execution": "single sequential lineage on cuda:0",
+    "second_gpu_for_smoke": "intentionally_unused",
+    "reason": "The three-fact smoke mutates one sequential lineage and is too small to justify model replication or synchronization overhead.",
+    "future_parallelism": "Independent seeds or independent full-run lineages may be dispatched one per GPU."
+  },
+  "publishing": {
+    "terminal_pass_and_fail_are_published": true,
+    "artifact_root": "artifacts/experiments/hybrid-clm-prompt-address-001",
+    "publisher_must_verify_protocol_sha256": true,
+    "publisher_must_verify_implementation_git_blobs": true
+  },
+  "implementation_git_blobs": {
+    "src/minicells/hybrid_clm.py": "ae6421645d31aa4bed60c7e24fc28126fd1a96ee",
+    "scripts/research/granite_hybrid_clm_v01/dataset.py": "204866d28655e6e4d71699fdae396a3e1bd4ec1d",
+    "scripts/research/granite_hybrid_clm_v01/run_milestone.py": "aa4d3ca2018b683e8f0e3ec11dd509f925e6e0c0",
+    "scripts/research/granite_hybrid_clm_v01/verify_reload.py": "a88c74707363d6c7fe40db85a0567f2593adcbdb",
+    "scripts/research/hybrid_clm_prompt_address_001/run.py": "38bbdc0ae601a3aac1505190c13385e834ffde5d",
+    "scripts/research/jam_knowledge_mutation_001/sequence.py": "515577df3ebcd83ecfef81189f4d9e8a906be62e"
+  }
+}
