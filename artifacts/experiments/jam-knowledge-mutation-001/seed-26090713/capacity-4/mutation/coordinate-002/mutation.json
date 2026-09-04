@@ -1,0 +1,69 @@
+{
+  "base": {
+    "manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "canonical_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "deltas": {
+    "down": {
+      "l2_norm": 0.08635348826646805,
+      "max_abs": 0.01425359956920147,
+      "shape": [
+        1024,
+        32
+      ]
+    },
+    "gate": {
+      "l2_norm": 0.0396551750600338,
+      "max_abs": 0.017283793538808823,
+      "shape": [
+        32,
+        1024
+      ]
+    },
+    "up": {
+      "l2_norm": 0.06403389573097229,
+      "max_abs": 0.03205275908112526,
+      "shape": [
+        32,
+        1024
+      ]
+    }
+  },
+  "identity_sha256": "48e5b28ad26e91dfca2620112acfb434d0430cbdc1c9bbb73a2a4adafd886b8f",
+  "kind": "aligned_intermediate_group_delta",
+  "metadata": {
+    "capacity": 4,
+    "coordinate_index": 2,
+    "dataset_manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+    "protocol_sha256": "e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54",
+    "seed": 26090713
+  },
+  "runtime_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "schema_version": "clm.moe-subexpert-mutation.v1",
+  "target": {
+    "channel_end": 288,
+    "channel_start": 256,
+    "expert_fraction": 0.0625,
+    "expert_index": 0,
+    "expert_is_cell": false,
+    "group_index": 8,
+    "group_is_cell": false,
+    "group_size": 32,
+    "intermediate_size": 512,
+    "layer_index": 23
+  },
+  "tensor_file": {
+    "bytes": 393440,
+    "path": "mutation.safetensors",
+    "sha256": "5beb7949b0ae5013ada2f1f29808c7b962e5221fd164399c59ffbf7297487c21"
+  }
+}

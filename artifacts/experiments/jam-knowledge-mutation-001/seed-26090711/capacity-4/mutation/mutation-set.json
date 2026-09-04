@@ -1,0 +1,85 @@
+{
+  "base": {
+    "manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "coordinate_count": 4,
+  "coordinates": [
+    {
+      "identity_sha256": "4cc124da2de01b3c4cd43a5c0539241716d503b405271db0042db6854f051d30",
+      "path": "coordinate-000",
+      "target": {
+        "channel_end": 320,
+        "channel_start": 288,
+        "expert_fraction": 0.0625,
+        "expert_index": 12,
+        "expert_is_cell": false,
+        "group_index": 9,
+        "group_is_cell": false,
+        "group_size": 32,
+        "intermediate_size": 512,
+        "layer_index": 23
+      }
+    },
+    {
+      "identity_sha256": "f404b2754830ad4e21f9e9d3756e351da62c8f4dbf0687ee8579d1044dc62ea7",
+      "path": "coordinate-001",
+      "target": {
+        "channel_end": 480,
+        "channel_start": 448,
+        "expert_fraction": 0.0625,
+        "expert_index": 27,
+        "expert_is_cell": false,
+        "group_index": 14,
+        "group_is_cell": false,
+        "group_size": 32,
+        "intermediate_size": 512,
+        "layer_index": 23
+      }
+    },
+    {
+      "identity_sha256": "e4b3535ed90dd541f191e7402239272fa5f4e5817e448a6da8b49a5fbe3ee23c",
+      "path": "coordinate-002",
+      "target": {
+        "channel_end": 288,
+        "channel_start": 256,
+        "expert_fraction": 0.0625,
+        "expert_index": 0,
+        "expert_is_cell": false,
+        "group_index": 8,
+        "group_is_cell": false,
+        "group_size": 32,
+        "intermediate_size": 512,
+        "layer_index": 23
+      }
+    },
+    {
+      "identity_sha256": "0f56617ef9cd363741610e1ad8a057d704e3e99480ff0703f620cc47c685e0b7",
+      "path": "coordinate-003",
+      "target": {
+        "channel_end": 416,
+        "channel_start": 384,
+        "expert_fraction": 0.0625,
+        "expert_index": 31,
+        "expert_is_cell": false,
+        "group_index": 12,
+        "group_is_cell": false,
+        "group_size": 32,
+        "intermediate_size": 512,
+        "layer_index": 23
+      }
+    }
+  ],
+  "identity_sha256": "54f054ae3681b7028ede0583765562b127893a96f8cf1ff165517fb4b6202d10",
+  "kind": "aligned_intermediate_group_delta_set",
+  "metadata": {
+    "capacity": 4,
+    "dataset_manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+    "protocol_sha256": "e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54",
+    "seed": 26090711
+  },
+  "require_unique_experts": true,
+  "schema_version": "clm.moe-multicoordinate-mutation.v1"
+}

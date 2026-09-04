@@ -1,0 +1,177 @@
+{
+  "base": {
+    "conversion_manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "capacity": 2,
+  "dataset": {
+    "id": "jam-knowledge-v0.1",
+    "manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "source_pin": "graypaper-0.8.0-e5375148"
+  },
+  "evaluation": {
+    "base_heldout": {
+      "factual": {
+        "mean_reference_nll": 4.270910364390649,
+        "mean_sequence_logprob": -4.270910364390649,
+        "perplexity": 71.58677601569778,
+        "reference_answer_token_top1_accuracy": 0.29997936868165875,
+        "supervised_tokens": 4847.0
+      },
+      "misconceptions": {
+        "mean_reference_nll": 3.779509006361252,
+        "mean_sequence_logprob": -3.779509006361252,
+        "perplexity": 43.794533618413126,
+        "reference_answer_token_top1_accuracy": 0.3508879363135334,
+        "supervised_tokens": 1633.0
+      },
+      "reasoning": {
+        "mean_reference_nll": 4.058775516892118,
+        "mean_sequence_logprob": -4.058775516892118,
+        "perplexity": 57.903365958767004,
+        "reference_answer_token_top1_accuracy": 0.30580357142857145,
+        "supervised_tokens": 1792.0
+      },
+      "relational": {
+        "mean_reference_nll": 4.056137241464754,
+        "mean_sequence_logprob": -4.056137241464754,
+        "perplexity": 57.75080227220222,
+        "reference_answer_token_top1_accuracy": 0.35940409683426444,
+        "supervised_tokens": 1074.0
+      }
+    },
+    "base_validation": {
+      "mean_reference_nll": 4.316777943876175,
+      "mean_sequence_logprob": -4.316777943876175,
+      "perplexity": 74.946756183799,
+      "reference_answer_token_top1_accuracy": 0.29791623684753454,
+      "supervised_tokens": 4847.0
+    },
+    "mutated_heldout": {
+      "factual": {
+        "mean_reference_nll": 3.9527027804211583,
+        "mean_sequence_logprob": -3.9527027804211583,
+        "perplexity": 52.075926592993476,
+        "reference_answer_token_top1_accuracy": 0.345780895399216,
+        "supervised_tokens": 4847.0
+      },
+      "misconceptions": {
+        "mean_reference_nll": 3.628993414255716,
+        "mean_sequence_logprob": -3.628993414255716,
+        "perplexity": 37.67487453278235,
+        "reference_answer_token_top1_accuracy": 0.3723208818126148,
+        "supervised_tokens": 1633.0
+      },
+      "reasoning": {
+        "mean_reference_nll": 3.920219716882067,
+        "mean_sequence_logprob": -3.920219716882067,
+        "perplexity": 50.41151982328956,
+        "reference_answer_token_top1_accuracy": 0.34095982142857145,
+        "supervised_tokens": 1792.0
+      },
+      "relational": {
+        "mean_reference_nll": 3.5356194227101416,
+        "mean_sequence_logprob": -3.5356194227101416,
+        "perplexity": 34.31626440577882,
+        "reference_answer_token_top1_accuracy": 0.43575418994413406,
+        "supervised_tokens": 1074.0
+      }
+    },
+    "mutated_validation": {
+      "mean_reference_nll": 4.0061650469988335,
+      "mean_sequence_logprob": -4.0061650469988335,
+      "perplexity": 54.935789907583384,
+      "reference_answer_token_top1_accuracy": 0.3439240767485042,
+      "supervised_tokens": 4847.0
+    }
+  },
+  "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+  "formal_seed": true,
+  "formal_verification": {
+    "artifact_reapply_excess_over_base_repeatability": 0.0,
+    "artifact_reapply_logit_error": 2.86102294921875e-05,
+    "base_forward_repeatability_max_abs": 3.0517578125e-05,
+    "dataset_manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "fresh_base_rollback_logit_error": 4.00543212890625e-05,
+    "materialized_checkpoint_excess_over_base_repeatability": null,
+    "materialized_checkpoint_logit_error": null,
+    "mode": "fresh_base_per_capacity_artifact_reapply_and_temporary_hf_materialization",
+    "router_topk_identity": 1.0,
+    "verification_prompt_count": 48
+  },
+  "gates": {
+    "artifact_reapply_logit_error": true,
+    "conversion_identity": true,
+    "coordinate_count": true,
+    "dataset_identity": true,
+    "exact_weight_rollback": true,
+    "factual_reference_nll_gain": true,
+    "forward_rollback_within_repeatability": true,
+    "history_evaluation_mean_kl": true,
+    "history_evaluation_top1_identity": true,
+    "history_set_disjointness": true,
+    "materialized_checkpoint_logit_error": false,
+    "misconception_reference_nll_gain": false,
+    "nonzero_delta": true,
+    "overall_heldout_reference_nll_gain": true,
+    "per_expert_fraction": true,
+    "reasoning_reference_nll_gain": true,
+    "relational_reference_nll_gain": true,
+    "target_router_topk_identity": true,
+    "unique_experts": true,
+    "validation_reference_nll_gain": true
+  },
+  "metrics": {
+    "artifact_reapply_excess_over_base_repeatability": 0.0,
+    "artifact_reapply_logit_error": 2.86102294921875e-05,
+    "base_forward_repeatability_max_abs": 3.0517578125e-05,
+    "delta_l2_norm": 0.31209345418212714,
+    "exact_weight_rollback": true,
+    "factual_reference_nll_gain": 0.31820758396949067,
+    "formal_fresh_base_rollback_logit_error": 4.00543212890625e-05,
+    "history_evaluation_mean_kl": 0.003980572335422039,
+    "history_evaluation_top1_identity": 1.0,
+    "history_selection_mean_kl": 6.295042112469673e-05,
+    "materialized_checkpoint_excess_over_base_repeatability": null,
+    "materialized_checkpoint_logit_error": null,
+    "misconception_reference_nll_gain": 0.1505155921055361,
+    "overall_heldout_reference_nll_gain": 0.2777094213962039,
+    "reasoning_reference_nll_gain": 0.1385558000100513,
+    "relational_reference_nll_gain": 0.520517818754612,
+    "rollback_excess_over_base_repeatability": 2.86102294921875e-06,
+    "rollback_max_abs_logit_error": 3.337860107421875e-05,
+    "target_router_topk_identity": 1.0,
+    "validation_reference_nll_gain": 0.31061289687734117
+  },
+  "mutation": {
+    "coordinate_count": 2,
+    "identity_sha256": "ed6cdc413924d72c8a1f6e1d4f63660864c6f280ee7f73796e23271d6652de41",
+    "path": "mutation",
+    "schema_version": "clm.moe-multicoordinate-mutation.v1"
+  },
+  "preliminary_status": "FAIL",
+  "protocol_sha256": "e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54",
+  "protocol_version": 1.2,
+  "seed": 26090712,
+  "selection": {
+    "coordinates": [
+      [
+        12,
+        9
+      ],
+      [
+        27,
+        14
+      ]
+    ],
+    "group_size": 32,
+    "layer_index": 23
+  },
+  "status": "FAIL",
+  "training": {
+    "learner_visible_history_prompts": 32,
+    "max_steps": 96,
+    "training_log_file": "training.jsonl"
+  }
+}

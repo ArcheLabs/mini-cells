@@ -1,0 +1,53 @@
+{
+  "base": {
+    "manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "coordinate_count": 2,
+  "coordinates": [
+    {
+      "identity_sha256": "d491e4423bec06a0ca5b1ff175021b60158dc34bce21564986ae140adfe77f3a",
+      "path": "coordinate-000",
+      "target": {
+        "channel_end": 320,
+        "channel_start": 288,
+        "expert_fraction": 0.0625,
+        "expert_index": 12,
+        "expert_is_cell": false,
+        "group_index": 9,
+        "group_is_cell": false,
+        "group_size": 32,
+        "intermediate_size": 512,
+        "layer_index": 23
+      }
+    },
+    {
+      "identity_sha256": "4a817c60015591320d209d0cde3ae8b96dc842be3c55e8f762a25c5c6447475d",
+      "path": "coordinate-001",
+      "target": {
+        "channel_end": 480,
+        "channel_start": 448,
+        "expert_fraction": 0.0625,
+        "expert_index": 27,
+        "expert_is_cell": false,
+        "group_index": 14,
+        "group_is_cell": false,
+        "group_size": 32,
+        "intermediate_size": 512,
+        "layer_index": 23
+      }
+    }
+  ],
+  "identity_sha256": "03c3d75a66993f9c13788fa949c3f67fb2c7ebb15ba02ce78c84a55044e098eb",
+  "kind": "aligned_intermediate_group_delta_set",
+  "metadata": {
+    "capacity": 2,
+    "dataset_manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+    "protocol_sha256": "e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54",
+    "seed": 26090711
+  },
+  "require_unique_experts": true,
+  "schema_version": "clm.moe-multicoordinate-mutation.v1"
+}

@@ -1,0 +1,69 @@
+{
+  "base": {
+    "manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "canonical_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "deltas": {
+    "down": {
+      "l2_norm": 0.2315681427717209,
+      "max_abs": 0.08006169646978378,
+      "shape": [
+        1024,
+        32
+      ]
+    },
+    "gate": {
+      "l2_norm": 0.1518961489200592,
+      "max_abs": 0.05147964507341385,
+      "shape": [
+        32,
+        1024
+      ]
+    },
+    "up": {
+      "l2_norm": 0.11961231380701065,
+      "max_abs": 0.04050265997648239,
+      "shape": [
+        32,
+        1024
+      ]
+    }
+  },
+  "identity_sha256": "4a817c60015591320d209d0cde3ae8b96dc842be3c55e8f762a25c5c6447475d",
+  "kind": "aligned_intermediate_group_delta",
+  "metadata": {
+    "capacity": 2,
+    "coordinate_index": 1,
+    "dataset_manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+    "protocol_sha256": "e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54",
+    "seed": 26090711
+  },
+  "runtime_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "schema_version": "clm.moe-subexpert-mutation.v1",
+  "target": {
+    "channel_end": 480,
+    "channel_start": 448,
+    "expert_fraction": 0.0625,
+    "expert_index": 27,
+    "expert_is_cell": false,
+    "group_index": 14,
+    "group_is_cell": false,
+    "group_size": 32,
+    "intermediate_size": 512,
+    "layer_index": 23
+  },
+  "tensor_file": {
+    "bytes": 393440,
+    "path": "mutation.safetensors",
+    "sha256": "23a2f8697fdc28a33f2879703e9cfe1689143e8637923d214509e24b64ae1d33"
+  }
+}
