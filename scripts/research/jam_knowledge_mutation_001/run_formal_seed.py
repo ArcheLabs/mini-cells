@@ -8,6 +8,7 @@ from pathlib import Path
 import run_seed as engine
 import sequence as seq
 import torch
+from dataset_identity import verify_frozen_dataset_manifest
 
 from minicells.moe_multicoordinate import apply_mutation_set_
 
@@ -32,6 +33,7 @@ def _empty_cuda_cache() -> None:
 
 def _verify(summary: dict, args) -> dict:
     protocol = engine._load_json(engine.PROTOCOL_PATH)
+    pinned_manifest_sha = verify_frozen_dataset_manifest()
     oracle = engine._load_oracle_engine()
     (
         huggingface_hub,
@@ -43,6 +45,8 @@ def _verify(summary: dict, args) -> dict:
     ) = oracle._require_lm_dependencies()
     engine._quiet_libraries(huggingface_hub, transformers)
     dataset_identity = engine._validate_dataset(protocol)
+    if dataset_identity["manifest_sha256"] != pinned_manifest_sha:
+        raise RuntimeError("JAM dataset manifest changed between formal identity checks")
     rows = dataset_identity["rows"]
     task = protocol["sequence_task"]
     history_protocol = engine._load_json(engine.HC_PROTOCOL_PATH)
@@ -192,6 +196,7 @@ def _verify(summary: dict, args) -> dict:
         result["formal_verification"] = {
             "mode": "fresh_base_per_capacity_artifact_reapply_and_temporary_hf_materialization",
             "verification_prompt_count": len(verification_prompts),
+            "dataset_manifest_sha256": pinned_manifest_sha,
             "router_topk_identity": router_identity,
             "base_forward_repeatability_max_abs": repeatability,
             "artifact_reapply_logit_error": artifact_error,
@@ -230,6 +235,7 @@ def _verify(summary: dict, args) -> dict:
             capacity=capacity,
         )
 
+    summary["dataset_manifest_sha256"] = pinned_manifest_sha
     summary["capacities"] = verified
     summary["status"] = "PASS" if passing_capacities else "FAIL"
     summary["selected_capacity"] = min(passing_capacities) if passing_capacities else None
@@ -238,6 +244,9 @@ def _verify(summary: dict, args) -> dict:
 
 
 def main() -> int:
+    # Formal execution refuses to start unless the repaired source-lock manifest
+    # matches the exact SHA-256 frozen into protocol v1.2.
+    verify_frozen_dataset_manifest()
     args = engine.parse_args()
     summary = engine.run(args)
     summary = _verify(summary, args)
@@ -246,6 +255,7 @@ def main() -> int:
         "seed": summary["seed"],
         "status": summary["status"],
         "selected_capacity": summary["selected_capacity"],
+        "dataset_manifest_sha256": summary["dataset_manifest_sha256"],
         "capacities": {
             key: {
                 "status": value["status"],
