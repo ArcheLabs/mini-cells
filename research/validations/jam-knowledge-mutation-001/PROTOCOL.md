@@ -4,6 +4,10 @@ The machine-readable authority is `protocol.json`.
 
 Protocol version: **1.2**.
 
+Frozen `protocol.json` SHA-256:
+
+`e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54`
+
 All protocol amendments below were completed before any formal GPU seed was opened:
 
 - **v1.1** makes answer boundaries explicit and evaluates artifact/materialization parity above the measured frozen-base forward-repeatability floor, matching the numerical treatment already used for rollback.
