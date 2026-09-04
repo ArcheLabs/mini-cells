@@ -23,7 +23,16 @@
     "evaluation/reasoning/part-03.jsonl": {"sha256": "f46ba1459f42f2dbbea57a8f387e1a2ca2efe493c36c9e0097f5e9f91f7bf151"},
     "evaluation/reasoning/part-04.jsonl": {"sha256": "3ab0a209f071edcc900281765fcd30aa0f1572b1975b407eaafaee27cf5a4827"},
     "evaluation/reasoning/part-05.jsonl": {"sha256": "d43e6a5980bdf754896def0e5749d4b8dedfa8392b1c88298d630395483ac4dc"},
-    "taxonomy.json": {"sha256": "16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b"}
+    "taxonomy.json": {"sha256": "4f3e2da96a2cfa0d0b0496da191e21a50c38779dc804c54c1fc21b5f236cf886"}
+  },
+  "integrity_repair": {
+    "kind": "metadata_hash_correction",
+    "affected_file": "taxonomy.json",
+    "canonical_bytes_changed": false,
+    "original_recorded_sha256": "16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b",
+    "correct_sha256": "4f3e2da96a2cfa0d0b0496da191e21a50c38779dc804c54c1fc21b5f236cf886",
+    "verified_against_repository_commit": "5016cb36f8eb5ca715b6fd7796384ae5b607bd12",
+    "reason": "The source-lock validator exposed that the manifest recorded an incorrect taxonomy hash even though taxonomy.json bytes were already identical at the original dataset commit."
   },
   "generated_policy": "Canonical concepts and reasoning holdout are sharded for review. The build script materializes aggregate concepts.jsonl and derived train/validation/evaluation views under generated/, which is not committed.",
   "scientific_boundary": "This dataset defines JAM knowledge content and evaluation structure. It does not itself demonstrate that a model learned JAM or preserved base-model capabilities.",
