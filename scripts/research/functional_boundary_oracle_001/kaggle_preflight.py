@@ -62,11 +62,27 @@ def _matching_processes() -> list[str]:
     return [line for line in result.stdout.splitlines() if any(needle in line for needle in needles)]
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Kaggle preflight for Functional Boundary Oracle 001")
-    parser.add_argument("--minimum-free-mb", type=int, default=12000)
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Kaggle preflight for Functional Boundary Oracle 001"
+    )
+    parser.add_argument(
+        "--minimum-free-mb",
+        "--min-free-mib",
+        dest="minimum_free_mb",
+        type=int,
+        default=12000,
+        help=(
+            "Minimum free GPU memory required before starting a formal seed. "
+            "--min-free-mib is retained as a backwards-compatible alias."
+        ),
+    )
     parser.add_argument("--json-out", type=Path)
-    args = parser.parse_args()
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _build_parser().parse_args(argv)
 
     gpu = _gpu_memory()
     report = {
@@ -79,7 +95,9 @@ def main() -> int:
     print(json.dumps(report, indent=2, sort_keys=True))
     if args.json_out is not None:
         args.json_out.parent.mkdir(parents=True, exist_ok=True)
-        args.json_out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        args.json_out.write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
 
     free_mb = int(gpu["free_mb"])
     if free_mb < args.minimum_free_mb:

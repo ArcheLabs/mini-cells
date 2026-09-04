@@ -10,6 +10,7 @@ on:
       - "notebooks/kaggle/functional-boundary-oracle-001.ipynb"
       - "tests/test_moe_subexpert.py"
       - "tests/test_granite_moe_layout.py"
+      - "tests/test_functional_boundary_oracle_preflight.py"
       - ".github/workflows/functional-boundary-oracle-001.yml"
   workflow_dispatch:
 
@@ -62,9 +63,11 @@ jobs:
             src/minicells/granite_moe_layout.py \
             scripts/research/functional_boundary_oracle_001 \
             tests/test_moe_subexpert.py \
-            tests/test_granite_moe_layout.py
+            tests/test_granite_moe_layout.py \
+            tests/test_functional_boundary_oracle_preflight.py
       - name: Unit tests
         run: |
           python -m pytest -q \
             tests/test_moe_subexpert.py \
-            tests/test_granite_moe_layout.py
+            tests/test_granite_moe_layout.py \
+            tests/test_functional_boundary_oracle_preflight.py
