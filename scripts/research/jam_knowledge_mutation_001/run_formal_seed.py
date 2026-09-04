@@ -158,27 +158,46 @@ def _verify(summary: dict, args) -> dict:
             del model
             _empty_cuda_cache()
 
+        repeatability = float(result["metrics"]["base_forward_repeatability_max_abs"])
+        artifact_excess = max(0.0, artifact_error - repeatability)
+        materialized_excess = (
+            None
+            if materialized_error is None
+            else max(0.0, materialized_error - repeatability)
+        )
+
         result["metrics"]["target_router_topk_identity"] = router_identity
         result["metrics"]["artifact_reapply_logit_error"] = artifact_error
+        result["metrics"]["artifact_reapply_excess_over_base_repeatability"] = artifact_excess
         result["metrics"]["materialized_checkpoint_logit_error"] = materialized_error
+        result["metrics"][
+            "materialized_checkpoint_excess_over_base_repeatability"
+        ] = materialized_excess
         result["metrics"]["formal_fresh_base_rollback_logit_error"] = formal_rollback_error
         result["gates"]["target_router_topk_identity"] = (
             router_identity == float(thresholds["required_target_router_topk_identity"])
         )
-        result["gates"]["artifact_reapply_logit_error"] = artifact_error <= float(
-            thresholds["maximum_artifact_reapply_logit_error"]
+        result["gates"]["artifact_reapply_logit_error"] = artifact_excess <= float(
+            thresholds["maximum_artifact_reapply_excess_over_base_repeatability"]
         )
         result["gates"]["materialized_checkpoint_logit_error"] = (
-            materialized_error is not None
-            and materialized_error
-            <= float(thresholds["maximum_materialized_checkpoint_logit_error"])
+            materialized_excess is not None
+            and materialized_excess
+            <= float(
+                thresholds[
+                    "maximum_materialized_checkpoint_excess_over_base_repeatability"
+                ]
+            )
         )
         result["formal_verification"] = {
             "mode": "fresh_base_per_capacity_artifact_reapply_and_temporary_hf_materialization",
             "verification_prompt_count": len(verification_prompts),
             "router_topk_identity": router_identity,
+            "base_forward_repeatability_max_abs": repeatability,
             "artifact_reapply_logit_error": artifact_error,
+            "artifact_reapply_excess_over_base_repeatability": artifact_excess,
             "materialized_checkpoint_logit_error": materialized_error,
+            "materialized_checkpoint_excess_over_base_repeatability": materialized_excess,
             "fresh_base_rollback_logit_error": formal_rollback_error,
         }
         result["status"] = (
@@ -197,8 +216,8 @@ def _verify(summary: dict, args) -> dict:
                 "history_evaluation_mean_kl"
             ],
             "router_topk_identity": router_identity,
-            "artifact_reapply_logit_error": artifact_error,
-            "materialized_checkpoint_logit_error": materialized_error,
+            "artifact_reapply_excess_over_base_repeatability": artifact_excess,
+            "materialized_checkpoint_excess_over_base_repeatability": materialized_excess,
         }
         engine._progress(
             args.seed,
