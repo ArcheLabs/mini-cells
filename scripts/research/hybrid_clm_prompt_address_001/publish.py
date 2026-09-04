@@ -69,6 +69,10 @@ def preflight_push(branch: str, secret_name: str) -> None:
 
 def _validated_summary(seed: int) -> dict[str, Any]:
     protocol = _load_json(PROTOCOL)
+    if protocol.get("experiment") != "HYBRID_CLM_PROMPT_ADDRESS_001":
+        raise RuntimeError("protocol experiment identity mismatch")
+    if int(protocol.get("seed", -1)) != seed:
+        raise RuntimeError("publisher seed differs from frozen protocol")
     summary_path = RESULTS / f"seed-{seed}" / "seed_summary.json"
     if not summary_path.is_file():
         raise RuntimeError(f"missing terminal seed summary: {summary_path}")
@@ -118,6 +122,7 @@ def _write_decision(summary: dict[str, Any]) -> None:
         "retention_choice_accuracy": summary["retention_choice_accuracy"],
         "contextual_child_status": summary["contextual_child_status"],
         "milestone_result_status": summary["milestone_result_status"],
+        "reload_status": summary["reload_status"],
         "does_not_rewrite_prior_decisions": True,
     }
     _write_json(ARTIFACTS / "decision.json", decision)
