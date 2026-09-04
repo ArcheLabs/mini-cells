@@ -3,9 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import run_seed as engine
 import torch
 
-import run_seed as engine
 from minicells.moe_subexpert import apply_group_mutation_
 
 
