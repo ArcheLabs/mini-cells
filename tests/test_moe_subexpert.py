@@ -5,6 +5,7 @@ import json
 import torch
 
 from minicells.moe_subexpert import (
+    MoeSubexpertError,
     apply_group_mutation_,
     capture_group,
     group_delta,
@@ -137,7 +138,7 @@ def test_manifest_tamper_is_rejected(tmp_path):
 
     try:
         load_group_mutation(root)
-    except Exception as exc:
+    except MoeSubexpertError as exc:
         assert "identity" in str(exc)
     else:
         raise AssertionError("tampered manifest was accepted")
