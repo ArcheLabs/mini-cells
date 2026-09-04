@@ -96,6 +96,12 @@ A semantic-choice row is correct only if the registered reference value has **st
 
 The dataset generator is frozen by its Git blob identity in `protocol.json`. Formal results from a different generator or protocol hash must not be aggregated.
 
+### Formal implementation identity
+
+The formal protocol also registers Git blob identities for the verified entrypoint, v1.2 runner, semantic-choice evaluator, formation helper, sequence helper, functional Cell substrate, dataset generator, and aggregator.
+
+`formal_entrypoint_v12.py` recomputes every registered blob before importing the formal runner. The Kaggle recovery path additionally requires each durable seed artifact to match both the frozen protocol SHA-256 and the registered implementation-blob map. This prevents seeds executed by different code from being mixed into one formal decision.
+
 ## Registered phases
 
 ### P0 — compatibility
@@ -122,7 +128,7 @@ Unseen rewrite wording must improve, the new value must rank first among all six
 
 Create a contextual conflict (`archive Alpha` vs `archive Beta`).
 
-First run a parent-only update. A valid growth demonstration now requires that this parent-only control **cannot simultaneously satisfy** the registered Alpha-retention, Beta-acquisition, and Beta semantic-choice gates.
+First run a parent-only update. A valid growth demonstration requires that this parent-only control **cannot simultaneously satisfy** Alpha NLL retention, Alpha semantic-choice retention, Beta NLL acquisition, and Beta semantic-choice acquisition.
 
 Then restore the formation snapshot, spawn one child from the parent, and train only that child and its read key for the Beta context.
 
@@ -161,7 +167,7 @@ A formal seed fails if any registered gate fails. v1.2 includes:
 - semantic local-write NLL gain + 100% heldout candidate-choice;
 - unrelated NLL locality + candidate-choice non-regression;
 - function-preserving child spawn;
-- growth necessity: parent-only must fail the registered conflict solution;
+- growth necessity: parent-only must fail the complete registered Alpha/Beta conflict solution;
 - Beta acquisition + 100% candidate-choice;
 - Alpha retention + 100% candidate-choice;
 - child routing;
@@ -181,7 +187,7 @@ Formal seeds are:
 26090443
 ```
 
-Once the first formal seed starts, no scientific gate, threshold, dataset identity, model revision, seed, training rule, or evaluation rule may change. Any later engineering repair must preserve the registered scientific semantics and be documented explicitly.
+Once the first formal seed starts, no scientific gate, threshold, dataset identity, model revision, seed, training rule, evaluation rule, or registered implementation blob may change. Any later engineering repair must preserve the registered scientific semantics and be documented explicitly; a repair that changes a registered implementation blob cannot be mixed into the same formal seed set.
 
 ## Interpretation boundary
 
@@ -202,11 +208,13 @@ python -m pytest -q tests/test_functional_cellization.py \
   tests/test_clm_conversion_kill_test_001.py
 ```
 
-Formal hosted-GPU execution under the frozen v1.2 protocol:
+Formal hosted-GPU execution under the frozen v1.2 protocol must use the verified entrypoint:
 
 ```bash
-python scripts/research/clm_conversion_kill_test_001/run_seed_v12.py \
+python scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py \
   --seed 26090441 --device cuda:0
 ```
 
-The Kaggle notebook under `research/notebooks/07-safe-model-evolution/clm-conversion-kill-test-001-kaggle.ipynb` runs all untouched formal seeds and publishes each completed seed immediately. Recovery skips a seed only when its terminal artifact matches the current frozen protocol SHA-256.
+Do not invoke `run_seed_v12.py` directly for formal evidence; the verified entrypoint is what enforces the registered implementation identities and records them into the seed artifacts.
+
+The Kaggle notebook under `research/notebooks/07-safe-model-evolution/clm-conversion-kill-test-001-kaggle.ipynb` runs all untouched formal seeds and publishes each completed seed immediately. Recovery skips a seed only when its terminal artifact matches both the current frozen protocol SHA-256 and the registered implementation Git-blob map.
