@@ -25,6 +25,7 @@ for path in (SRC_ROOT, HYBRID_ROOT):
     sys.path.insert(0, value)
 
 from run_milestone import run as run_milestone  # noqa: E402
+from verify_reload import run as verify_reload  # noqa: E402
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -109,6 +110,11 @@ def run(*, device: str) -> dict[str, Any]:
         output_dir=output_dir,
     )
 
+    reload_status = "SKIPPED_RUNNER_NOT_SUPPORTED"
+    if result.get("status") == "GRANITE_HYBRID_CLM_V01_SUPPORTED":
+        reload_report = verify_reload(result_dir=output_dir, device=device)
+        reload_status = str(reload_report["status"])
+
     cells = list(result.get("cells", []))
     address_passes = sum(bool(cell.get("address", {}).get("passed")) for cell in cells)
     heldout_passes = sum(
@@ -120,7 +126,10 @@ def run(*, device: str) -> dict[str, Any]:
         for cell in cells
     )
     committed = int(result.get("committed_facts", 0))
-    passed = result.get("status") == "GRANITE_HYBRID_CLM_V01_SUPPORTED"
+    passed = (
+        result.get("status") == "GRANITE_HYBRID_CLM_V01_SUPPORTED"
+        and reload_status == "GRANITE_HYBRID_CLM_V01_RELOAD_VERIFIED"
+    )
     summary = {
         "experiment": "HYBRID_CLM_PROMPT_ADDRESS_001",
         "status": "PASS" if passed else "FAIL",
@@ -141,6 +150,7 @@ def run(*, device: str) -> dict[str, Any]:
         "retention_choice_accuracy": float(result.get("retention_choice_accuracy", 0.0)),
         "contextual_child_status": result.get("contextual_child", {}).get("status"),
         "milestone_result_status": result.get("status"),
+        "reload_status": reload_status,
         "environment": _environment(device),
     }
     _write_json(output_dir / "seed_summary.json", summary)
@@ -155,6 +165,7 @@ def run(*, device: str) -> dict[str, Any]:
                     "history_address_passes",
                     "committed_facts",
                     "retention_choice_accuracy",
+                    "reload_status",
                 )
             },
             indent=2,
