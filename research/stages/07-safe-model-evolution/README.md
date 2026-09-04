@@ -9,6 +9,7 @@ The active questions are model-level and operational:
 - can a pretrained model expose a sufficiently local writable coordinate;
 - can new behavior be acquired without unacceptable damage to withheld old behavior;
 - how much historical information is required to discover and protect that coordinate;
+- can a real post-training knowledge domain be acquired as a bounded, verifiable and rollbackable mutation;
 - can independently produced mutations later be composed, verified, rolled back, and merged.
 
 ## Current evidence chain
@@ -29,20 +30,42 @@ This supports existence of a safe sub-expert writable coordinate under historica
 
 ### History Compression 001
 
-Current frozen experiment. It reduces only the learner-visible historical prompt budget while holding the substrate, writable granularity, optimizer family, and withheld safety gates fixed:
+Frozen formal decision: `HISTORY_COMPRESSION_TO_8_SUPPORTED`.
+
+- `full_32`: 3/3 PASS
+- `tiny_8`: 2/3 PASS
+- `tiny_2`: 0/3 PASS
+- `zero_0`: 0/3 PASS
+
+The result supports substantial compression of learner-visible historical calibration under the registered toy-task protocol, but does not support a zero-history claim. Release-oriented work therefore retains the proven `full_32` positive-control history boundary rather than optimizing for the minimum observed budget.
+
+### JAM Knowledge Mutation 001
+
+Current frozen release-oriented experiment.
+
+It replaces the synthetic one-token target with `jam-knowledge-v0.1`: 180 source-locked JAM concepts derived from Gray Paper 0.8.0, trained through answer-only multi-token causal LM loss.
+
+The writable footprint is allowed to expand conservatively through a fixed capacity ladder:
 
 ```text
-full_32 -> tiny_8 -> tiny_2 -> zero_0
+1 aligned group -> 2 aligned groups -> 4 aligned groups
 ```
 
-The goal is to identify the smallest observed historical prompt budget that remains supported. Historical-certificate mechanisms such as Fisher or low-rank gradient sketches are intentionally deferred until this replay-budget boundary is measured.
+Each selected group is 32 of 512 intermediate channels and selected groups must belong to distinct experts. Capacity candidates are trained independently from the same frozen Granite base. The smallest candidate satisfying all JAM heldout, historical safety, router, rollback, artifact-reapply and standard-HF materialization gates is selected.
+
+Formal seeds: `26090711`, `26090712`, `26090713`.
+
+Current status: **PROTOCOL FROZEN — FORMAL GPU RUNS PENDING**.
+
+A positive result is only a release-candidate prerequisite. Base-vs-RC general benchmarks and LoRA/PEFT baselines remain required before public model release.
 
 ## Research discipline
 
 - Protocols and formal seeds are frozen before hosted-GPU execution.
-- Withheld evaluation prompts are never learner-visible.
+- Withheld evaluation examples are never learner-visible or used for checkpoint selection.
 - Scientific failures are preserved and published.
 - Full logs are durable files; notebook stdout is compact.
 - Numerical evidence lives under `artifacts/experiments/`.
 - Research notebooks live under `research/notebooks/07-safe-model-evolution/`.
 - Visualizations are derived from durable result files and do not replace `result.json` / `decision.json` as scientific authority.
+- Experiment PRs that receive hosted formal result commits must remain open until the intended result commits are durably published.

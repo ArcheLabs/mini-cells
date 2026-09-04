@@ -273,11 +273,11 @@ entries:
     report: research/stages/07-safe-model-evolution/README.md
     protocol: null
     artifacts: artifacts/experiments
-    notebook: research/notebooks/07-safe-model-evolution/history-compression-001-kaggle.ipynb
+    notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-kaggle.ipynb
     implementation: scripts/research
     supersedes: null
     superseded_by: null
-    notes: "Current model-level line: immutable MoE substrate -> mutation locality -> history supervision/compression -> future composition and mergeability tests."
+    notes: "Current model-level line: immutable MoE substrate -> safe writable coordinate -> history-budget boundary -> real-domain JAM mutation -> release-candidate benchmarking if supported."
 
   - id: functional-boundary-oracle-001
     title: Functional Boundary Oracle 001
@@ -299,8 +299,8 @@ entries:
     title: History Compression 001 — Replay Budget Ladder
     kind: safe-model-evolution-validation
     stage: safe-model-evolution
-    outcome: PROTOCOL_FROZEN_UNRUN
-    scientific_decision: false
+    outcome: HISTORY_COMPRESSION_TO_8_SUPPORTED
+    scientific_decision: true
     canonical: true
     report: research/validations/history-compression-001/README.md
     protocol: research/validations/history-compression-001/protocol.json
@@ -308,5 +308,21 @@ entries:
     notebook: research/notebooks/07-safe-model-evolution/history-compression-001-kaggle.ipynb
     implementation: scripts/research/history_compression_001
     supersedes: functional-boundary-oracle-001
+    superseded_by: jam-knowledge-mutation-001
+    notes: "Formal decision: full_32 3/3 PASS, tiny_8 2/3 PASS, tiny_2 0/3, zero_0 0/3; minimum observed supported learner-visible history budget is 8 under the frozen protocol."
+
+  - id: jam-knowledge-mutation-001
+    title: JAM Knowledge Mutation 001 — Release-Oriented Sparse Domain Acquisition
+    kind: safe-model-evolution-validation
+    stage: safe-model-evolution
+    outcome: PROTOCOL_FROZEN_GPU_PENDING
+    scientific_decision: false
+    canonical: true
+    report: research/validations/jam-knowledge-mutation-001/README.md
+    protocol: research/validations/jam-knowledge-mutation-001/protocol.json
+    artifacts: artifacts/experiments/jam-knowledge-mutation-001
+    notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-kaggle.ipynb
+    implementation: scripts/research/jam_knowledge_mutation_001
+    supersedes: history-compression-001
     superseded_by: null
-    notes: "Formal seeds 26090611/12/13. Learner-visible historical prompt ladder 32 -> 8 -> 2 -> 0; withheld 32-prompt safety evaluation remains fixed."
+    notes: "Formal seeds 26090711/12/13 remain unopened. Uses source-locked JAM Knowledge v0.1, answer-only multi-token causal LM loss, full_32 registered history safety, and independent sparse capacity ladder 1 -> 2 -> 4. The taxonomy manifest-hash repair changed metadata only; canonical dataset bytes are unchanged."
