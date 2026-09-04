@@ -1,0 +1,81 @@
+{
+  "completed_seeds": [
+    26090611
+  ],
+  "environment_consistent": true,
+  "environment_signatures": {
+    "26090611": {
+      "cuda_device_name": "Tesla T4",
+      "dtype": "torch.float32",
+      "huggingface_hub": "1.11.0",
+      "safetensors": "0.7.0",
+      "torch": "2.10.0+cu128",
+      "transformers": "5.0.0"
+    }
+  },
+  "experiment": "HISTORY_COMPRESSION_001",
+  "formal_seeds": [
+    26090611,
+    26090612,
+    26090613
+  ],
+  "malformed_results": [],
+  "minimum_observed_supported_history_prompts": null,
+  "missing_seeds": [
+    26090612,
+    26090613
+  ],
+  "not_claimed": [
+    "general zero-replay continual learning even if zero_0 passes",
+    "data-free autonomous Cell discovery",
+    "the selected group is a CLM Cell",
+    "compressed Fisher or low-rank historical certificates",
+    "multi-mutation composition",
+    "mergeability",
+    "safe arbitrary model editing",
+    "preservation of the full original Granite training distribution"
+  ],
+  "observed_protocol_hashes": [
+    "460afd443646b1bb9ca023756916b4266fb4f19faaa57d89506cdbdcb90bbcb0"
+  ],
+  "per_mode": {
+    "full_32": {
+      "failed_seeds": [],
+      "history_prompt_count": 32,
+      "passed_seeds": [
+        26090611
+      ],
+      "supported": false
+    },
+    "tiny_2": {
+      "failed_seeds": [
+        26090611
+      ],
+      "history_prompt_count": 2,
+      "passed_seeds": [],
+      "supported": false
+    },
+    "tiny_8": {
+      "failed_seeds": [],
+      "history_prompt_count": 8,
+      "passed_seeds": [
+        26090611
+      ],
+      "supported": false
+    },
+    "zero_0": {
+      "failed_seeds": [
+        26090611
+      ],
+      "history_prompt_count": 0,
+      "passed_seeds": [],
+      "supported": false
+    }
+  },
+  "positive_control_supported": false,
+  "protocol_consistent": true,
+  "protocol_sha256": "460afd443646b1bb9ca023756916b4266fb4f19faaa57d89506cdbdcb90bbcb0",
+  "scientific_decision": false,
+  "status": "HISTORY_COMPRESSION_INCOMPLETE",
+  "support_monotone_with_history_budget": true
+}
