@@ -1,8 +1,9 @@
 {
   "experiment": "JAM_KNOWLEDGE_MUTATION_001",
-  "protocol_version": 1,
+  "protocol_version": 1.1,
   "title": "JAM Knowledge Mutation 001 — Release-Oriented Sparse Domain Acquisition",
   "status": "PROTOCOL_FROZEN_GPU_PENDING",
+  "pre_run_amendment": "v1.1 was frozen before any formal GPU seed was opened. It makes answer boundaries explicit and expresses artifact/materialization parity as excess over measured frozen-base forward repeatability, matching the established rollback numerical floor.",
   "scientific_scope": "test whether a frozen Granite MoE can acquire the source-locked JAM Knowledge v0.1 domain through a bounded set of aligned sub-expert mutations while preserving registered non-JAM behavior and exact rollback",
   "base": {
     "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
@@ -49,6 +50,7 @@
   "sequence_task": {
     "prompt_template": "Question: {question}\nAnswer:",
     "answer_supervision": "teacher-forced causal language modeling over answer tokens only; prompt tokens and padding are masked with label -100",
+    "special_token_boundary": "tokenize prompt and answer without automatic special tokens; prepend BOS when the tokenizer defines one and append exactly one EOS after the supervised answer",
     "max_sequence_tokens": 192,
     "truncate": "right",
     "append_eos_to_answer": true,
@@ -115,8 +117,8 @@
     "require_nonzero_delta": true,
     "require_exact_weight_rollback": true,
     "maximum_forward_rollback_excess_over_base_repeatability": 0.00001,
-    "maximum_artifact_reapply_logit_error": 0.00001,
-    "maximum_materialized_checkpoint_logit_error": 0.00001,
+    "maximum_artifact_reapply_excess_over_base_repeatability": 0.00001,
+    "maximum_materialized_checkpoint_excess_over_base_repeatability": 0.00001,
     "require_conversion_identity": true,
     "require_dataset_identity": true,
     "require_history_set_disjointness": true
