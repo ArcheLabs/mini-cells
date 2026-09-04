@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -13,8 +14,17 @@ def _load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def aggregate(artifacts: Path = ARTIFACTS) -> dict[str, Any]:
     protocol = _load(PROTOCOL)
+    protocol_sha = _sha256(PROTOCOL)
     formal = [int(value) for value in protocol["formal_seeds"]]
     summaries: dict[int, dict[str, Any]] = {}
     malformed: list[int] = []
@@ -24,7 +34,11 @@ def aggregate(artifacts: Path = ARTIFACTS) -> dict[str, Any]:
             continue
         try:
             row = _load(path)
-            if row.get("experiment") != protocol["experiment"] or int(row.get("seed", -1)) != seed:
+            if (
+                row.get("experiment") != protocol["experiment"]
+                or int(row.get("seed", -1)) != seed
+                or row.get("protocol_sha256") != protocol_sha
+            ):
                 malformed.append(seed)
                 continue
             summaries[seed] = row
@@ -51,6 +65,7 @@ def aggregate(artifacts: Path = ARTIFACTS) -> dict[str, Any]:
 
     decision = {
         "experiment": protocol["experiment"],
+        "protocol_sha256": protocol_sha,
         "status": status,
         "scientific_decision": scientific,
         "formal_seeds": formal,
