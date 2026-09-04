@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-
 DATASET_VERSION = "clm-conversion-fictional-knowledge-v1"
 
 ENTITIES = (
