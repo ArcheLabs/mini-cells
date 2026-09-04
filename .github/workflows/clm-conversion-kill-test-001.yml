@@ -47,9 +47,16 @@ jobs:
           from pathlib import Path
           p = json.loads(Path('research/validations/clm-conversion-kill-test-001/protocol.json').read_text())
           assert p['status'] == 'PROTOCOL_FROZEN_GPU_PENDING'
+          assert p['protocol_version'] == 1.2
           assert p['base']['foundation_trainable'] is False
           assert p['substrate']['pretrained_expert_is_cell'] is False
           assert p['substrate']['pretrained_channel_group_is_cell'] is False
+          assert p['sequence_task']['candidate_choice_append_eos'] is False
+          assert p['gates']['require_growth_necessity'] is True
+          assert p['gates']['minimum_semantic_write_choice_accuracy'] == 1.0
+          assert p['gates']['minimum_growth_beta_choice_accuracy'] == 1.0
+          assert p['gates']['minimum_branch_standalone_choice_accuracy'] == 1.0
+          assert p['gates']['minimum_branch_merged_choice_accuracy'] == 1.0
           assert len(p['formal_seeds']) == 3
           PY
 
@@ -58,15 +65,19 @@ jobs:
           python -m py_compile \
             src/minicells/functional_cellization.py \
             scripts/research/clm_conversion_kill_test_001/dataset.py \
+            scripts/research/clm_conversion_kill_test_001/semantic_choice.py \
             scripts/research/clm_conversion_kill_test_001/run_seed.py \
+            scripts/research/clm_conversion_kill_test_001/run_seed_v12.py \
             scripts/research/clm_conversion_kill_test_001/aggregate.py \
             scripts/research/clm_conversion_kill_test_001/publish.py
 
-      - name: Lint core substrate and dataset
+      - name: Lint Conversion 001 implementation
         run: |
           python -m ruff check \
             src/minicells/functional_cellization.py \
             scripts/research/clm_conversion_kill_test_001/dataset.py \
+            scripts/research/clm_conversion_kill_test_001/semantic_choice.py \
+            scripts/research/clm_conversion_kill_test_001/run_seed_v12.py \
             tests/test_functional_cellization.py \
             tests/test_clm_conversion_kill_test_001.py
 
