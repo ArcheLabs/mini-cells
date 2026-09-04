@@ -17,6 +17,7 @@
   },
   "decision": {
     "formal_support": "at least 2 of 3 untouched formal seeds pass",
+    "freeze_rule": "after the first formal seed starts, no scientific gate, threshold, dataset identity, model revision, seed, training rule, or evaluation rule may change",
     "not_claimed": [
       "complete Cellization of pre-existing Granite knowledge",
       "natural pretrained Expert or neuron boundaries are Cells",
@@ -32,19 +33,21 @@
   },
   "evaluation": {
     "batch_size": 4,
-    "branch_merge": "train two rewrites from the same formation snapshot on distinct primary Cells, then merge Cell-scoped states and test retained standalone gain plus exact rollback",
+    "branch_merge": "train two rewrites from the same formation snapshot on distinct primary Cells, require each standalone branch to acquire the semantic mapping, merge Cell-scoped states, then require semantic mapping retention plus exact rollback",
+    "candidate_choice_semantics": "for each heldout question, teacher-force every registered nonce candidate without EOS supervision; the reference mapping is correct only when its answer-token NLL is strictly lower than every incorrect candidate",
     "formation_families": [
       "direct",
       "negation",
       "relation"
     ],
-    "growth": "compare parent-only conflict update with parent+child contextual specialization",
+    "growth": "compare parent-only conflict update with parent+child contextual specialization; growth is supported only if parent-only fails the registered conflict solution while the spawned child satisfies acquisition and retention",
     "route_views_per_entity": 4,
-    "semantic_write": "rewrite one entity using only its pre-formation primary Cell and test unseen rewrite wording plus unrelated entities"
+    "semantic_write": "rewrite one entity using only its pre-formation primary Cell and test unseen rewrite wording, candidate-choice semantics, and unrelated entities",
+    "spawn_invariance": "child spawn must be function-preserving before child specialization, measured by reference NLL and candidate-choice margin invariance"
   },
   "experiment": "CLM_CONVERSION_KILL_TEST_001",
   "followup_boundary": {
-    "if_not_supported": "classify failure by compatibility, formation, routing, local write, growth, or branch composition; do not repair thresholds post-hoc",
+    "if_not_supported": "classify failure by compatibility, formation, semantic choice, routing, local write, growth necessity, branch composition, or rollback; do not repair thresholds post-hoc",
     "if_supported": "freeze a conversion substrate release candidate, then run matched LoRA/static-routed-adapter baselines and only afterward return to JAM domain mutation"
   },
   "formal_seeds": [
@@ -57,22 +60,34 @@
     "maximum_growth_alpha_nll_regression": 0.1,
     "maximum_history_kl": 0.02,
     "maximum_primary_cell_fraction": 0.5,
+    "maximum_spawn_choice_margin_delta": 1e-05,
+    "maximum_spawn_mean_nll_delta": 1e-05,
     "maximum_unrelated_nll_regression": 0.05,
     "minimum_branch_merge_retention": 0.8,
+    "minimum_branch_merged_choice_accuracy": 1.0,
+    "minimum_branch_standalone_choice_accuracy": 1.0,
+    "minimum_branch_standalone_nll_gain": 0.15,
     "minimum_child_beta_route_fraction": 0.5,
+    "minimum_direct_choice_accuracy": 0.75,
     "minimum_direct_nll_gain": 0.15,
     "minimum_distinct_primary_cells": 3,
+    "minimum_growth_beta_choice_accuracy": 1.0,
     "minimum_growth_beta_nll_gain": 0.1,
     "minimum_mean_route_agreement": 0.75,
+    "minimum_negation_choice_accuracy": 0.75,
     "minimum_negation_nll_gain": 0.1,
+    "minimum_relation_choice_accuracy": 0.75,
     "minimum_relation_nll_gain": 0.02,
+    "minimum_semantic_write_choice_accuracy": 1.0,
     "minimum_semantic_write_nll_gain": 0.15,
-    "require_exact_overlay_rollback": true
+    "require_exact_overlay_rollback": true,
+    "require_growth_necessity": true
   },
-  "protocol_version": 1.1,
+  "protocol_version": 1.2,
   "scientific_question": "Can a frozen mature MoE grow persistent, semantically addressable, independently mutable functional Cells without first treating pretrained Expert/channel boundaries as Cells?",
   "sequence_task": {
     "answer_policy": "evaluation answers are nonce semantic values, not shared correctness prefixes",
+    "candidate_choice_append_eos": false,
     "max_sequence_tokens": 64,
     "prompt_template": "Question: {question}\nAnswer:",
     "supervision": "answer-token causal NLL only"
@@ -100,7 +115,7 @@
   "title": "CLM Conversion Kill Test 001 — Mature MoE Functional Cellization",
   "training": {
     "formation": {
-      "checkpoint_rule": "best validation NLL gain among candidates satisfying the registered history KL ceiling; final direct/negation/relation heldout families are never used for checkpoint selection",
+      "checkpoint_rule": "best validation NLL gain among candidates satisfying the registered history KL ceiling; final direct/negation/relation heldout families and all candidate-choice metrics are never used for checkpoint selection",
       "concepts_per_batch": 2,
       "eval_interval": 20,
       "history_batch_size": 2,
