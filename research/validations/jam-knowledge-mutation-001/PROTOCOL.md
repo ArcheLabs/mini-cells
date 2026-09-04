@@ -2,6 +2,10 @@
 
 The machine-readable authority is `protocol.json`.
 
+Protocol version: **1.1**.
+
+Version 1.1 was frozen before any formal GPU seed was opened. The pre-run amendment makes answer boundaries explicit and evaluates artifact/materialization parity above the measured frozen-base forward-repeatability floor, matching the numerical treatment already used for rollback.
+
 ## Registered claim
 
 The experiment asks whether a bounded, sparse, rollbackable mutation can add the frozen JAM Knowledge v0.1 domain to the exact Granite MoE substrate while preserving a registered non-JAM safety set.
@@ -49,7 +53,7 @@ Question: {question}
 Answer:
 ```
 
-The canonical reference answer and EOS token follow the prompt. Only answer/EOS tokens carry labels. Sequences are capped at 192 tokens.
+Prompt and answer are tokenized without automatic special tokens. If the tokenizer defines BOS, one BOS token is prepended. The canonical reference answer follows immediately and exactly one EOS token is appended. Only answer/EOS tokens carry labels. Sequences are capped at 192 tokens.
 
 ## Historical safety
 
@@ -95,10 +99,12 @@ Safety and artifact gates require:
 - distinct selected experts
 - nonzero delta
 - exact parameter rollback
-- forward rollback excess <= 1e-5
-- fresh-base artifact reapply error <= 1e-5
-- temporary standard-HF materialization error <= 1e-5
+- forward rollback excess over measured base repeatability <= 1e-5
+- fresh-base artifact reapply excess over measured base repeatability <= 1e-5
+- temporary standard-HF materialization excess over measured base repeatability <= 1e-5
 - exact registered conversion and dataset identities
+
+Raw parity errors and the measured base repeatability are both retained in the result artifacts; the gate is applied only to the excess above that numerical floor.
 
 ## Decision
 
@@ -110,4 +116,4 @@ Formal seeds are:
 
 For a seed, the smallest capacity satisfying all gates is selected. At least two formal seeds must pass for `JAM_KNOWLEDGE_MUTATION_SUPPORTED`.
 
-Formal failures are durable results and must be published rather than rerun with altered gates. Any protocol amendment requires a new protocol version and fresh formal seeds.
+Formal failures are durable results and must be published rather than rerun with altered gates. Any post-observation protocol amendment requires a new protocol version and fresh formal seeds.
