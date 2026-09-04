@@ -16,6 +16,10 @@ from minicells.moe_subexpert import MoeSubexpertError
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL = ROOT / "research" / "validations" / "jam-knowledge-mutation-001" / "protocol.json"
+DATASET_MANIFEST = ROOT / "research" / "datasets" / "jam-knowledge-v0.1" / "manifest.json"
+DATASET_IDENTITY = (
+    ROOT / "scripts" / "research" / "jam_knowledge_mutation_001" / "dataset_identity.py"
+)
 SEQUENCE = ROOT / "scripts" / "research" / "jam_knowledge_mutation_001" / "sequence.py"
 AGGREGATE = ROOT / "scripts" / "research" / "jam_knowledge_mutation_001" / "aggregate.py"
 
@@ -30,10 +34,15 @@ def _module(path: Path, name: str):
 
 def test_protocol_is_release_bounded_and_source_locked() -> None:
     protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
+    assert protocol["protocol_version"] == 1.2
     assert protocol["status"] == "PROTOCOL_FROZEN_GPU_PENDING"
     assert protocol["formal_seeds"] == [26090711, 26090712, 26090713]
     assert protocol["base"]["revision"] == "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
     assert protocol["dataset"]["repository_commit"] == "5016cb36f8eb5ca715b6fd7796384ae5b607bd12"
+    assert (
+        protocol["dataset"]["manifest_sha256"]
+        == "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15"
+    )
     assert protocol["dataset"]["concept_count"] == 180
     assert protocol["dataset"]["generated_counts"] == {
         "train": 409,
@@ -51,6 +60,19 @@ def test_protocol_is_release_bounded_and_source_locked() -> None:
     assert protocol["history"]["learner_visible_selection_prompts"] == 32
     assert protocol["history"]["withheld_evaluation_prompts"] == 32
     assert protocol["evaluation"]["evaluation_never_used_for_training_or_checkpoint_selection"] is True
+
+
+def test_dataset_manifest_identity_is_protocol_pinned(tmp_path: Path) -> None:
+    identity = _module(DATASET_IDENTITY, "jam_dataset_identity_test")
+    protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
+    assert identity.verify_manifest_identity(protocol, DATASET_MANIFEST) == protocol["dataset"][
+        "manifest_sha256"
+    ]
+
+    tampered = tmp_path / "manifest.json"
+    tampered.write_bytes(DATASET_MANIFEST.read_bytes() + b"\n")
+    with pytest.raises(RuntimeError, match="dataset manifest identity mismatch"):
+        identity.verify_manifest_identity(protocol, tampered)
 
 
 def test_multicoordinate_container_applies_and_rolls_back_exactly(tmp_path: Path) -> None:
@@ -112,6 +134,7 @@ def test_answer_only_encoding_masks_prompt_and_padding() -> None:
 
     class Tokenizer:
         pad_token_id = 0
+        bos_token_id = 1
         eos_token_id = 2
 
         def __call__(self, text, *, add_special_tokens=True):
