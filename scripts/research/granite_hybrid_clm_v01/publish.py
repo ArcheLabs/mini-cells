@@ -13,13 +13,13 @@ for path in (RESEARCH_SCRIPTS, LOCAL_ROOT):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
-from publish_core_validation_007 import _authenticated_git_env, _check_branch  # noqa: E402
-from publish_experiment_results import (  # noqa: E402
+from publish_core_validation_007 import _authenticated_git_env, _check_branch
+from publish_experiment_results import (
     DEFAULT_SECRET_NAME,
     EXPECTED_ORIGIN,
     run_git,
 )
-from validate_result import _load_json, validate_payload  # noqa: E402
+from validate_result import _load_json, validate_payload
 
 RESULTS = ROOT / "results" / "granite-hybrid-clm-v0.1"
 ARTIFACTS = ROOT / "artifacts" / "experiments" / "granite-hybrid-clm-v0.1"
