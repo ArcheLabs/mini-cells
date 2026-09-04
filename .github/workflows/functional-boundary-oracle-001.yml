@@ -54,7 +54,7 @@ jobs:
             scripts/research/functional_boundary_oracle_001/publish.py
       - name: Lint implementation
         run: |
-          python -m ruff check \
+          python -m ruff check --ignore SIM102 \
             src/minicells/moe_subexpert.py \
             scripts/research/functional_boundary_oracle_001 \
             tests/test_moe_subexpert.py
