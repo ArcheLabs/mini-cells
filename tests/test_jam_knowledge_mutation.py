@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -22,6 +23,7 @@ DATASET_IDENTITY = (
 )
 SEQUENCE = ROOT / "scripts" / "research" / "jam_knowledge_mutation_001" / "sequence.py"
 AGGREGATE = ROOT / "scripts" / "research" / "jam_knowledge_mutation_001" / "aggregate.py"
+FROZEN_PROTOCOL_SHA256 = "e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54"
 
 
 def _module(path: Path, name: str):
@@ -32,8 +34,13 @@ def _module(path: Path, name: str):
     return module
 
 
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def test_protocol_is_release_bounded_and_source_locked() -> None:
     protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
+    assert _sha256(PROTOCOL) == FROZEN_PROTOCOL_SHA256
     assert protocol["protocol_version"] == 1.2
     assert protocol["status"] == "PROTOCOL_FROZEN_GPU_PENDING"
     assert protocol["formal_seeds"] == [26090711, 26090712, 26090713]
@@ -156,6 +163,30 @@ def test_answer_only_encoding_masks_prompt_and_padding() -> None:
     assert all(value == -100 for value in labels[:5].tolist())
 
 
+def _write_seed_summary(
+    root: Path,
+    *,
+    seed: int,
+    status: str,
+    capacity: int | None,
+    protocol_sha256: str = FROZEN_PROTOCOL_SHA256,
+) -> None:
+    seed_root = root / f"seed-{seed}"
+    seed_root.mkdir(parents=True)
+    (seed_root / "seed_summary.json").write_text(
+        json.dumps(
+            {
+                "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+                "protocol_sha256": protocol_sha256,
+                "seed": seed,
+                "status": status,
+                "selected_capacity": capacity,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
 def test_aggregate_requires_two_of_three_formal_seeds(tmp_path: Path) -> None:
     aggregate_module = _module(AGGREGATE, "jam_aggregate_test")
     for seed, status, capacity in (
@@ -163,21 +194,29 @@ def test_aggregate_requires_two_of_three_formal_seeds(tmp_path: Path) -> None:
         (26090712, "FAIL", None),
         (26090713, "PASS", 4),
     ):
-        root = tmp_path / f"seed-{seed}"
-        root.mkdir(parents=True)
-        (root / "seed_summary.json").write_text(
-            json.dumps(
-                {
-                    "experiment": "JAM_KNOWLEDGE_MUTATION_001",
-                    "seed": seed,
-                    "status": status,
-                    "selected_capacity": capacity,
-                }
-            ),
-            encoding="utf-8",
-        )
+        _write_seed_summary(tmp_path, seed=seed, status=status, capacity=capacity)
+
     decision = aggregate_module.aggregate(tmp_path)
+    assert decision["protocol_sha256"] == FROZEN_PROTOCOL_SHA256
     assert decision["status"] == "JAM_KNOWLEDGE_MUTATION_SUPPORTED"
     assert decision["scientific_decision"] is True
     assert decision["passed_seeds"] == [26090711, 26090713]
     assert decision["minimum_passing_capacity_observed"] == 2
+
+
+def test_aggregate_rejects_mixed_protocol_seed(tmp_path: Path) -> None:
+    aggregate_module = _module(AGGREGATE, "jam_aggregate_mixed_protocol_test")
+    _write_seed_summary(tmp_path, seed=26090711, status="PASS", capacity=2)
+    _write_seed_summary(tmp_path, seed=26090712, status="PASS", capacity=2)
+    _write_seed_summary(
+        tmp_path,
+        seed=26090713,
+        status="PASS",
+        capacity=2,
+        protocol_sha256="0" * 64,
+    )
+
+    decision = aggregate_module.aggregate(tmp_path)
+    assert decision["status"] == "JAM_KNOWLEDGE_MUTATION_INCOMPLETE"
+    assert decision["scientific_decision"] is False
+    assert decision["malformed_seeds"] == [26090713]
