@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[3]
 SRC_ROOT = ROOT / "src"
@@ -46,6 +47,40 @@ def _run(script: Path, *args: str) -> None:
     subprocess.run(command, cwd=ROOT, env=env, check=True)
 
 
+def _cell_diagnostic(cell: dict[str, Any]) -> dict[str, Any]:
+    payload: dict[str, Any] = {
+        "cell_id": cell.get("cell_id"),
+        "status": cell.get("status"),
+    }
+    address = cell.get("address")
+    if isinstance(address, dict):
+        payload["address"] = {
+            "passed": address.get("passed"),
+            "positive_recall": address.get("positive_recall"),
+            "negative_false_positive_rate": address.get("negative_false_positive_rate"),
+            "minimum_positive_probability": address.get("minimum_positive_probability"),
+            "maximum_negative_probability": address.get("maximum_negative_probability"),
+        }
+    transform = cell.get("transform")
+    if isinstance(transform, dict):
+        candidates = list(transform.get("candidates", []))
+        payload["transform"] = {
+            "passed": transform.get("passed"),
+            "best_nll_gain": transform.get("best_nll_gain"),
+            "candidates": candidates,
+        }
+        if candidates:
+            payload["transform_summary"] = {
+                "maximum_nll_gain": max(float(item.get("nll_gain", float("-inf"))) for item in candidates),
+                "minimum_history_kl": min(float(item.get("history_kl", float("inf"))) for item in candidates),
+                "maximum_choice_accuracy": max(
+                    float(item.get("choice_accuracy", 0.0)) for item in candidates
+                ),
+                "eligible_steps": [item.get("step") for item in candidates if item.get("eligible")],
+            }
+    return payload
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run Granite Hybrid CLM v0.1 on Kaggle")
     parser.add_argument("--mode", choices=("smoke", "full"), default="smoke")
@@ -79,11 +114,31 @@ def main() -> None:
         "--output-dir",
         str(output_dir),
     )
+
+    result = json.loads((output_dir / "result.json").read_text(encoding="utf-8"))
+    if result["status"] != "GRANITE_HYBRID_CLM_V01_SUPPORTED":
+        print(
+            json.dumps(
+                {
+                    "mode": args.mode,
+                    "result_status": result["status"],
+                    "committed_facts": result["committed_facts"],
+                    "retention_choice_accuracy": result["retention_choice_accuracy"],
+                    "reload_status": "SKIPPED_RUNNER_NOT_SUPPORTED",
+                    "cells": [_cell_diagnostic(cell) for cell in result.get("cells", [])],
+                    "contextual_child": result.get("contextual_child", {}),
+                    "output_dir": str(output_dir.relative_to(ROOT)),
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return
+
     _run(RELOAD, "--device", args.device, "--result-dir", str(output_dir))
     if args.mode == "full":
         _run(VALIDATOR, "--result-dir", str(output_dir))
 
-    result = json.loads((output_dir / "result.json").read_text(encoding="utf-8"))
     reload_report = json.loads(
         (output_dir / "reload_verification.json").read_text(encoding="utf-8")
     )
