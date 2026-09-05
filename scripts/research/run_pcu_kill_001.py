@@ -13,6 +13,7 @@ if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.pcu_kill_001.experiment import run_engineering, run_formal_execution  # noqa: E402
+from minicells.pcu_kill_001.model import DependencyUnavailable  # noqa: E402
 from minicells.pcu_kill_001.governance import (  # noqa: E402
     DEVELOPMENT_SEED,
     FORMAL_SEEDS,
@@ -20,6 +21,7 @@ from minicells.pcu_kill_001.governance import (  # noqa: E402
     assert_formal_preflight,
     assert_seed_registry,
     mark_formal_seed,
+    mark_formal_seed_running,
 )
 
 
@@ -50,7 +52,16 @@ def main() -> int:
         seed = DEVELOPMENT_SEED if args.seed is None else args.seed
         if args.out is None:
             args.out = ROOT / "artifacts/research/pcu-kill-001/engineering" / str(seed)
-        result = run_engineering(seed=seed, backend=args.backend, output=args.out, device=args.device)
+        try:
+            result = run_engineering(seed=seed, backend=args.backend, output=args.out, device=args.device)
+        except DependencyUnavailable as exc:
+            result = {
+                "status": "REAL_GRANITE_E0_NOT_RUN",
+                "scientific_evidence": False,
+                "formal_execution_not_started": True,
+                "seed": seed,
+                "reason": f"{type(exc).__name__}: {exc}",
+            }
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0
 
@@ -73,6 +84,7 @@ def main() -> int:
     assert_seed_registry(SEED_REGISTRY)
     output = args.out or ROOT / "artifacts/research/pcu-kill-001/formal" / str(args.seed)
     valid = False
+    mark_formal_seed_running(SEED_REGISTRY, args.seed)
     try:
         result = run_formal_execution(args.seed, args.protocol, output, args.device if args.device != "auto" else "cpu")
         valid = bool(result.get("scientific_evidence") and result.get("g0") and result.get("cache") and result.get("dataset_audit"))

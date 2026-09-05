@@ -18,6 +18,8 @@ from minicells.pcu_kill_001.registry import fork_registry, make_foundation_regis
 from minicells.pcu_kill_001.synthetic import audit_dataset, generate_world
 from minicells.pcu_kill_001.training import fork_expert, fork_initial_delta_norm, foundation_tensor_hashes, selected_delta_parameters
 from minicells.pcu_kill_001.lora import LoRACell, LoRAConfig, choose_matched_rank, lora_parameter_count, merged_effective_deltas
+from minicells.pcu_kill_001.metrics import composition_synergy_same_task, merge_retention
+from minicells.pcu_kill_001.task import build_task_sequences, validate_answer_only_labels
 
 
 def test_cell_partition_covers_all_channels() -> None:
@@ -243,3 +245,26 @@ def test_freeze_consumes_decision_and_rejects_missing_selected_value() -> None:
         broken["selected"] = dict(decision["selected"])
         broken["selected"].pop("learning_rate")
         module._validate_engineering_decision(broken, manifest, decision["source"])
+
+
+class _TaskTokenizer:
+    pad_token_id = 0
+    eos_token_id = 1
+
+    def encode(self, text: str, add_special_tokens: bool = True) -> list[int]:
+        values = [(ord(char) % 90) + 2 for char in text]
+        return ([1] + values) if add_special_tokens else values
+
+
+def test_task_sequences_supervise_all_answer_tokens_only() -> None:
+    samples = [type("Sample", (), {"sample_id": "one", "prompt": "prompt", "answer": "answer"})()]
+    sequences = build_task_sequences(_TaskTokenizer(), samples, "A_train", max_length=32)
+    validate_answer_only_labels(sequences)
+    assert sequences.labels[0, :sequences.prompt_lengths[0]].eq(-100).all()
+    assert sequences.labels[0, sequences.prompt_lengths[0]:].ne(-100).all()
+
+
+def test_retention_and_synergy_use_fail_closed_definitions() -> None:
+    assert merge_retention(0.5, 0.5, 0.9) is None
+    assert merge_retention(0.2, 0.8, 0.8) == 1.0
+    assert abs(composition_synergy_same_task(0.1, 0.4, 0.5, 0.8) - 0.3) < 1e-12

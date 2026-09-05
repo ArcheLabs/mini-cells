@@ -22,6 +22,7 @@ class LoRACell(nn.Module):
     def __init__(self, parent: CellProjection, config: LoRAConfig, trainable: bool = True) -> None:
         super().__init__()
         self.config = config
+        self.start, self.end = parent.start, parent.end
         self.register_buffer("parent_gate_weight", parent.gate_weight.detach().clone())
         self.register_buffer("parent_up_weight", parent.up_weight.detach().clone())
         self.register_buffer("parent_down_weight", parent.down_weight.detach().clone())
@@ -80,11 +81,16 @@ class MatchedLoRAExpert(nn.Module):
     def __init__(self, parent: CellularExpert, selected_indices: Iterable[int], config: LoRAConfig) -> None:
         super().__init__()
         selected = {int(index) for index in selected_indices}
-        self.cells = nn.ModuleList(
-            LoRACell(cell, config, index in selected) if index in selected else CellProjection(
-                _projection_from_cell(cell), 0, cell.end - cell.start
-            ) for index, cell in enumerate(parent.cells)
-        )
+        cells = []
+        for index, cell in enumerate(parent.cells):
+            if index in selected:
+                cells.append(LoRACell(cell, config, True))
+            else:
+                frozen = CellProjection(_projection_from_cell(cell), 0, cell.end - cell.start)
+                for parameter in frozen.parameters():
+                    parameter.requires_grad_(False)
+                cells.append(frozen)
+        self.cells = nn.ModuleList(cells)
         self.activation = parent.activation
         if parent.down_bias is not None:
             self.register_buffer("down_bias", parent.down_bias.detach().clone())
@@ -99,6 +105,48 @@ class MatchedLoRAExpert(nn.Module):
         if self.down_bias is not None:
             output = output + self.down_bias
         return output
+
+
+class MatchedLoRAExperts(nn.Module):
+    """Router-preserving collection of independently trainable LoRA experts."""
+
+    def __init__(self, parent: Any, selected: Mapping[int, Iterable[int]], config: LoRAConfig) -> None:
+        super().__init__()
+        self.parent = parent
+        self.num_experts = parent.num_experts
+        self.hidden_dim = parent.hidden_dim
+        self.intermediate_dim = parent.intermediate_dim
+        self.partition = parent.partition
+        self.cells = nn.ModuleList(
+            MatchedLoRAExpert(expert, selected.get(index, ()), config)
+            for index, expert in enumerate(parent.cells)
+        )
+
+    def forward(self, hidden_states: Tensor, top_k_index: Tensor, top_k_weights: Tensor) -> Tensor:
+        final_hidden_states = torch.zeros_like(hidden_states)
+        expert_mask = F.one_hot(top_k_index, num_classes=self.num_experts).permute(2, 1, 0)
+        expert_hit = torch.greater(expert_mask.sum(dim=(-1, -2)), 0).nonzero()
+        for expert_idx_tensor in expert_hit:
+            expert_idx = int(expert_idx_tensor[0])
+            top_k_pos, token_idx = torch.where(expert_mask[expert_idx])
+            current = self.cells[expert_idx](hidden_states[token_idx])
+            current = current * top_k_weights[token_idx, top_k_pos, None]
+            final_hidden_states.index_add_(0, token_idx, current.to(final_hidden_states.dtype))
+        return final_hidden_states
+
+
+def selected_lora_parameters(module: nn.Module) -> list[nn.Parameter]:
+    # ``MatchedLoRAExperts`` retains the parent expert collection for identity
+    # and runtime provenance.  It is an nn.Module, so an unrestricted
+    # ``module.parameters()`` walk would accidentally optimize the frozen
+    # foundation as well as the adapter factors.
+    return [
+        value
+        for child in module.modules()
+        if isinstance(child, LoRACell)
+        for value in child.parameters()
+        if value.requires_grad and value.ndim > 0
+    ]
 
 
 def _projection_from_cell(cell: CellProjection):

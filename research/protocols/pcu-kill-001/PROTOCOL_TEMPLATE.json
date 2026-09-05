@@ -9,6 +9,7 @@
     "model_repo": "ibm-granite/granite-3.1-1b-a400m-base",
     "model_revision": null,
     "config_sha256": null,
+    "foundation_tensor_sha256": null,
     "weight_file_sha256": [],
     "tokenizer_sha256": [],
     "target_layer": null,
@@ -43,6 +44,23 @@
     "capacity_ladder": [1, 2, 4, 8],
     "selected_k": null,
     "lora_rank": null
+  },
+  "allocation": {
+    "method": "task-conditioned-gradient-l2-per-parameter",
+    "calibration_split": "branch_train",
+    "calibration_sample_rule": "first_64_samples",
+    "tie_break": "cell_id_lexical",
+    "capacity_ladder": [1, 2, 4, 8],
+    "selected_k": null
+  },
+  "evaluation": {
+    "generation": {
+      "do_sample": false,
+      "temperature": null,
+      "top_p": null,
+      "max_new_tokens": 16
+    },
+    "composition_primary": "both_exact"
   },
   "thresholds": {
     "g0_top1_token_agreement": 1.0,

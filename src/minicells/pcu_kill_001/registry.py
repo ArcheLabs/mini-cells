@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import hashlib
 import json
+from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 import torch
@@ -336,6 +337,12 @@ def validate_fork_artifacts(registry: CellRegistry, require_bound: bool = True) 
             raise ValueError(f"fork {record.cell_id} has invalid foundation binding")
         if require_bound and (not record.artifact_path or not record.artifact_sha256):
             raise ValueError(f"fork {record.cell_id} has no bound runtime artifact")
+        if record.artifact_path and record.artifact_sha256:
+            path = Path(record.artifact_path)
+            if not path.is_file():
+                raise ValueError(f"fork {record.cell_id} artifact is missing: {path}")
+            if hashlib.sha256(path.read_bytes()).hexdigest() != record.artifact_sha256:
+                raise ValueError(f"fork {record.cell_id} artifact SHA-256 mismatch")
 
 
 def fork_delta(parent: Mapping[str, Tensor], fork: Mapping[str, Tensor]) -> dict[str, Tensor]:

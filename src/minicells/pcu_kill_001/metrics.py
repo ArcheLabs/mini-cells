@@ -20,9 +20,22 @@ def branch_gain(base: float, branch: float) -> float:
     return float(branch) - float(base)
 
 
-def merge_retention(base: float, branch: float, merged: float) -> float:
+def merge_retention(base: float, branch: float, merged: float) -> float | None:
     denominator = float(branch) - float(base)
-    return 0.0 if denominator <= 0 else (float(merged) - float(base)) / denominator
+    return None if denominator <= 0 else (float(merged) - float(base)) / denominator
+
+
+def retention_or_undefined(base: float, branch: float, merged: float) -> float | None:
+    """Return retention only for a positive branch gain."""
+    denominator = float(branch) - float(base)
+    if denominator <= 0:
+        return None
+    return (float(merged) - float(base)) / denominator
+
+
+def composition_synergy_same_task(base_ab: float, a_ab: float, b_ab: float, ab_ab: float) -> float:
+    """Synergy on T_AB only; direct-task scores never enter this formula."""
+    return float(ab_ab) - max(float(base_ab), float(a_ab), float(b_ab))
 
 
 def composition_synergy(base: float, branch_a: float, branch_b: float, merged: float) -> float:
@@ -40,7 +53,7 @@ class Decision:
     valid_run: bool
     gates: dict[str, bool]
     metrics: dict[str, float]
-    baseline: dict[str, float]
+    baseline: dict[str, float | None]
     reason: str
     schema: str = "minicells.pcu-kill-001.decision.v1"
 
@@ -75,7 +88,7 @@ def decide(
 ) -> Decision:
     values = {key: float(value) for key, value in metrics.items()}
     limits = {**DEFAULT_THRESHOLDS, **(thresholds or {})}
-    base = {key: float(value) for key, value in (baseline or {}).items()}
+    base = {key: (None if value is None else float(value)) for key, value in (baseline or {}).items()}
     if not all(bool(value) for value in validity.values()):
         return Decision("INVALID_FORMAL_RUN", False, False, dict(validity), values, base, "protocol or run validity gate failed")
     g0 = bool(values.get("g0_exact_embedding", 0.0))
@@ -103,7 +116,9 @@ def decide(
             status = "COMPOSITION_TESTBED_INCONCLUSIVE"
             reason = "independent composition failed and joint oracle did not establish capacity"
         return Decision(status, True, True, {"composition": False, "joint_oracle": bool(joint_oracle_pass)}, values, base, reason)
-    lora = base.get("lora_composition_acc", 0.0)
+    lora = base.get("lora_composition_acc")
+    if lora is None:
+        return Decision("PCU_MECHANISM_SUPPORTED_ADVANTAGE_UNPROVEN", True, True, {"composition": True, "lora_distinctiveness": False}, values, base, "matched LoRA baseline metrics were not supplied")
     if lora >= values.get("composition_acc", 0.0):
         return Decision("PCU_MECHANISM_SUPPORTED_ADVANTAGE_UNPROVEN", True, True, {"composition": True, "lora_distinctiveness": False}, values, base, "matched LoRA is as good or better")
     return Decision("PCU_COMPOSABILITY_CONSTRUCTIVE_EVIDENCE", True, True, {"composition": True, "lora_distinctiveness": True}, values, base, "all registered PCU gates passed")

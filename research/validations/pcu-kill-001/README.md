@@ -2,9 +2,10 @@
 
 This validation is the smallest formal-ready test of independently composable
 Cell forks in a pretrained MoE. It cellularizes only the final actual Granite
-MoE block, preserves the original parent-expert router, trains A and B from a
-common frozen foundation, and composes the independently trained Cell
-functions at runtime.
+MoE block, preserves the original parent-expert router, builds separate
+answer-token causal-LM caches for A/B/evaluation, allocates from task-loss
+gradients, trains A and B from a common frozen foundation, and composes the
+independently trained Cell functions at runtime.
 
 The frozen foundation is `ibm-granite/granite-3.1-1b-a400m-base`. The verified
 Granite-MoE implementation stores expert projections as
@@ -51,8 +52,10 @@ them. There is no reset operation after a formal seed is touched.
 Engineering/formal run directories use
 `artifacts/research/pcu-kill-001/<phase>/<seed>/`. The required JSON schemas
 are implemented by the `pcu_kill_001` package: dataset audit, model identity,
-equivalence, cache equivalence, gradient geometry, Cell registry, branch
-manifest, merge manifest, metrics, decision, and provenance.
+task sequence/cache manifests, answer-only labels, equivalence, gradient
+geometry, capacity ladder, exact autoregressive evaluation matrix, Cell
+registry, branch manifest, merge manifest, matched-LoRA baseline, metrics,
+decision, and provenance.
 
 Branch workers store fork-minus-parent tensors. A merge checks foundation and
 protocol hashes, binds each fork to its serialized artifact, and uses
@@ -62,7 +65,9 @@ parent Cells remain independent A/B fork records, and both the registry and
 runtime support A/B/all rollback.
 
 The machine decision schema is
-`minicells.pcu-kill-001.engineering-decision.v2`. Engineering output is
-diagnostic only;
+`minicells.pcu-kill-001.engineering-decision.v3`. Engineering output is
+diagnostic only; its bounded LR discovery and K ladder are persisted, while
+the formal worker reuses the shared task pipeline with the frozen optimizer,
+LR, K, LoRA rank, allocation rule, and deterministic generation policy.
 the formal result wording must respect the decision state and must not claim
 that PCU or CLM has been proven.

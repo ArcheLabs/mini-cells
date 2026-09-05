@@ -36,15 +36,22 @@ REQUIRED_DECISION_GATES = (
     "g0",
     "cache",
     "dataset_audit",
+    "context_oracle",
     "gradient_allocation",
-    "branch_a",
-    "branch_b",
-    "functional_composition",
+    "capacity_ladder",
+    "branch_a_capability",
+    "branch_b_capability",
+    "functional_composition_runtime",
     "functional_rollback",
+    "merge_retention",
+    "anchor_regression",
+    "composition",
+    "lora_training",
     "lora_exact_merge",
     "lora_parameter_match",
     "foundation_immutable",
     "formal_seed_untouched",
+    "artifact_roundtrip",
 )
 REQUIRED_SELECTED = (
     "k",
@@ -53,8 +60,6 @@ REQUIRED_SELECTED = (
     "max_optimizer_steps",
     "lora_rank",
     "max_training_tokens",
-    "cells_a",
-    "cells_b",
 )
 REQUIRED_THRESHOLDS = (
     "g0_top1_token_agreement",
@@ -81,7 +86,7 @@ def _validate_engineering_decision(decision: dict, model_manifest: dict, provena
         raise ProtocolMismatch("engineering decision is for a different experiment or phase")
     if decision.get("scientific_evidence") is not False:
         raise ProtocolMismatch("engineering decision must explicitly declare scientific_evidence=false")
-    if decision.get("formal_ready") is not True:
+    if decision.get("formal_protocol_ready", decision.get("formal_ready")) is not True:
         raise ProtocolMismatch("engineering decision is not formal-ready")
     gates = _required_mapping(decision, "gates")
     missing = [key for key in REQUIRED_DECISION_GATES if gates.get(key) is not True]
@@ -93,11 +98,6 @@ def _validate_engineering_decision(decision: dict, model_manifest: dict, provena
             raise ProtocolMismatch(f"engineering decision has no selected {key}")
     if int(selected["k"]) not in (1, 2, 4, 8):
         raise ProtocolMismatch("selected k is outside the registered capacity ladder")
-    for key in ("cells_a", "cells_b"):
-        if not isinstance(selected[key], list) or len(selected[key]) != int(selected["k"]):
-            raise ProtocolMismatch(f"engineering decision {key} does not match selected k")
-        if len(set(selected[key])) != len(selected[key]):
-            raise ProtocolMismatch(f"engineering decision {key} contains duplicate Cells")
     if float(selected["learning_rate"]) <= 0 or int(selected["max_optimizer_steps"]) <= 0:
         raise ProtocolMismatch("engineering decision contains invalid optimizer settings")
     thresholds = _required_mapping(decision, "thresholds")
@@ -115,13 +115,19 @@ def _validate_engineering_decision(decision: dict, model_manifest: dict, provena
     if source_tree != provenance.get("source_tree"):
         raise ProtocolMismatch("engineering decision was produced from a different source tree")
     foundation = _required_mapping(decision, "foundation")
-    for key in ("model_repo", "model_revision", "config_sha256", "weight_file_sha256", "tokenizer_sha256"):
+    for key in ("model_repo", "model_revision", "config_sha256", "foundation_tensor_sha256", "weight_file_sha256", "tokenizer_sha256"):
         if key not in foundation or foundation[key] in (None, "", []):
             raise ProtocolMismatch(f"engineering decision has no immutable foundation field {key}")
         if foundation[key] != model_manifest.get(key):
             raise ProtocolMismatch(f"engineering decision foundation does not match model manifest: {key}")
     if decision.get("architecture") != model_manifest.get("architecture"):
         raise ProtocolMismatch("engineering decision architecture does not match model manifest")
+    allocation = _required_mapping(decision, "allocation")
+    for key in ("method", "calibration_split", "calibration_sample_rule", "tie_break", "selected_k"):
+        if allocation.get(key) in (None, "", []):
+            raise ProtocolMismatch(f"engineering decision has no frozen allocation field {key}")
+    if int(allocation["selected_k"]) != int(selected["k"]):
+        raise ProtocolMismatch("allocation K does not match selected K")
     budget = _required_mapping(decision, "parameter_budget")
     for key in ("pcu_trainable_parameters", "lora_trainable_parameters", "relative_difference"):
         if key not in budget or budget[key] is None:
@@ -182,6 +188,7 @@ def main() -> int:
         "config_sha256": model_manifest["config_sha256"],
         "weight_file_sha256": model_manifest.get("weight_file_sha256", []),
         "tokenizer_sha256": model_manifest.get("tokenizer_sha256", []),
+        "foundation_tensor_sha256": model_manifest.get("foundation_tensor_sha256"),
         "target_layer": architecture["target_layer"],
         "target_path": architecture["target_path"],
         "hidden_size": architecture["hidden_size"],
@@ -201,6 +208,16 @@ def main() -> int:
         "selected_k": selected["k"],
         "lora_rank": selected["lora_rank"],
     })
+    protocol["allocation"] = dict(decision["allocation"])
+    protocol["evaluation"] = {
+        "generation": {
+            "do_sample": False,
+            "temperature": None,
+            "top_p": None,
+            "max_new_tokens": 16,
+        },
+        "composition_primary": "both_exact",
+    }
     protocol["baseline"] = {"lora_rank": selected["lora_rank"]}
     protocol["thresholds"] = dict(thresholds)
     protocol["engineering_decision"] = {

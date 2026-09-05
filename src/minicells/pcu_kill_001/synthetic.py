@@ -290,3 +290,60 @@ def audit_dataset(world: SyntheticWorld | Mapping[str, Any]) -> DatasetAudit:
     checks["identifier_format_is_opaque"] = all(re.fullmatch(r"[UVW][A-Z2-9]{4}", value) for value in all_identifiers)
     errors = tuple(name for name, passed in checks.items() if not passed)
     return DatasetAudit(bool(checks) and not errors, checks, errors, {name: len(values) for name, values in world.splits.items()})
+
+
+def context_oracle(
+    world: SyntheticWorld | Mapping[str, Any],
+    *,
+    model: Any | None = None,
+    tokenizer: Any | None = None,
+    device: str = "cpu",
+    max_new_tokens: int = 16,
+) -> dict[str, Any]:
+    """Evaluate the two-hop context oracle before any branch mutation.
+
+    The model-backed form is used by engineering/formal workers.  The
+    model-free form is a deterministic reference oracle for dataset tests and
+    records that it is a symbolic capacity check rather than model evidence.
+    """
+    if not isinstance(world, SyntheticWorld):
+        world = _world_from_mapping(world)
+    a = {item.u: item.v for item in world.triples}
+    b = {item.v: item.w for item in world.triples}
+    rows = []
+    for sample in world.splits.get("AB_eval", []):
+        u, expected = sample.identifiers[0], sample.answer.split()
+        relay = a.get(u)
+        terminal = b.get(relay) if relay is not None else None
+        expected_relay, expected_terminal = expected[0], expected[-1]
+        if model is not None or tokenizer is not None:
+            if model is None or tokenizer is None:
+                raise ValueError("context oracle requires both model and tokenizer")
+            from .evaluation import greedy_generate
+            triple = world.triples[int(sample.pair_id)]
+            prompt = (
+                f"Ledger A: {triple.u} maps to {triple.v}.\n"
+                f"Ledger B: {triple.v} maps to {triple.w}.\n"
+                f"Start from {triple.u}. Apply Ledger A, then Ledger B. "
+                "Return relay and terminal."
+            )
+            generated_ids = re.findall(r"[UVW][A-Z2-9]{4}", greedy_generate(model, tokenizer, prompt, device=device, max_new_tokens=max_new_tokens).upper())
+            relay = generated_ids[0] if generated_ids else None
+            terminal = generated_ids[1] if len(generated_ids) > 1 else None
+        rows.append({
+            "sample_id": sample.sample_id,
+            "relay_exact": relay == expected_relay,
+            "terminal_exact": terminal == expected_terminal,
+            "both_exact": relay == expected_relay and terminal == expected_terminal,
+        })
+    accuracy = sum(bool(row["both_exact"]) for row in rows) / max(1, len(rows))
+    return {
+        "schema": "minicells.pcu-kill-001.context-oracle.v1",
+        "accuracy": accuracy,
+        "relay_accuracy": sum(bool(row["relay_exact"]) for row in rows) / max(1, len(rows)),
+        "terminal_accuracy": sum(bool(row["terminal_exact"]) for row in rows) / max(1, len(rows)),
+        "rows": rows,
+        "passed": accuracy >= 0.90,
+        "mode": "model_backed" if model is not None else "symbolic_reference",
+        "scientific_evidence": False,
+    }

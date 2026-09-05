@@ -21,15 +21,19 @@ from .governance import (
     ProtocolMismatch,
     assert_engineering_seed,
     assert_formal_preflight,
+    mark_formal_seed_running,
     git_provenance,
     sha256_file,
 )
 from .registry import CellRecord, CellRegistry, merge_registries, rollback_registry
-from .synthetic import DatasetAudit, SyntheticWorld, audit_dataset, generate_world
+from .synthetic import DatasetAudit, SyntheticWorld, audit_dataset, context_oracle, generate_world
 from .cache import CacheEquivalence, CacheSemanticsInvalid, CachedTailRunner, TailCache, validate_cache_identity
 from .training import ForkedCell, ForkedCellularExpert, ForkedCellularExperts, allocate_topk
 from .composition import ComposedCell, ComposedCellularExpert, ComposedCellularExperts, FunctionalCellDelta, compose_cellular_experts
-from .lora import ComposedLoRACell, LoRAConfig, LoRACell, MatchedLoRAExpert, merge_lora_factors, merged_effective_deltas
+from .lora import ComposedLoRACell, LoRAConfig, LoRACell, MatchedLoRAExpert, MatchedLoRAExperts, merge_lora_factors, merged_effective_deltas
+from .task import IGNORE_INDEX, TailTrainingCache, TaskSequences, answer_token_cross_entropy, build_task_sequences, cache_task_sequences, load_task_cache, save_task_cache, validate_answer_only_labels
+from .task_training import TaskBranchResult, slice_task_cache, task_conditioned_allocation, train_cached_branch, train_cached_lora_branch
+from .evaluation import EvaluationSummary, evaluate_matrix, evaluate_samples, greedy_generate
 
 __all__ = [
     "CellPartition",
@@ -45,6 +49,7 @@ __all__ = [
     "ProtocolMismatch",
     "assert_engineering_seed",
     "assert_formal_preflight",
+    "mark_formal_seed_running",
     "git_provenance",
     "sha256_file",
     "CellRecord",
@@ -55,6 +60,7 @@ __all__ = [
     "SyntheticWorld",
     "audit_dataset",
     "generate_world",
+    "context_oracle",
     "CacheEquivalence",
     "CacheSemanticsInvalid",
     "CachedTailRunner",
@@ -72,7 +78,26 @@ __all__ = [
     "LoRAConfig",
     "LoRACell",
     "MatchedLoRAExpert",
+    "MatchedLoRAExperts",
     "ComposedLoRACell",
     "merge_lora_factors",
     "merged_effective_deltas",
+    "IGNORE_INDEX",
+    "TaskSequences",
+    "TailTrainingCache",
+    "answer_token_cross_entropy",
+    "build_task_sequences",
+    "cache_task_sequences",
+    "save_task_cache",
+    "load_task_cache",
+    "validate_answer_only_labels",
+    "TaskBranchResult",
+    "slice_task_cache",
+    "task_conditioned_allocation",
+    "train_cached_branch",
+    "train_cached_lora_branch",
+    "EvaluationSummary",
+    "evaluate_matrix",
+    "evaluate_samples",
+    "greedy_generate",
 ]

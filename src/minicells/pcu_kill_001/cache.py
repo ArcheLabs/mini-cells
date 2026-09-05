@@ -24,7 +24,12 @@ class TailCache:
     attention_mask: Tensor | None = None
     label_positions: Tensor | None = None
     labels: Tensor | None = None
+    loss_mask: Tensor | None = None
+    top_k_index: Tensor | None = None
+    top_k_weights: Tensor | None = None
     sample_ids: tuple[str, ...] = ()
+    split: str | None = None
+    identity: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -34,7 +39,12 @@ class TailCache:
             "attention_mask": self.attention_mask,
             "label_positions": self.label_positions,
             "labels": self.labels,
+            "loss_mask": self.loss_mask,
+            "top_k_index": self.top_k_index,
+            "top_k_weights": self.top_k_weights,
             "sample_ids": list(self.sample_ids),
+            "split": self.split,
+            "identity": dict(self.identity or {}),
         }
 
 
@@ -106,24 +116,62 @@ class CachedTailRunner:
             state["pre_mlp_residual"] = args[0].detach().clone()
             state["mlp_input"] = output.detach().clone()
 
+        def route_hook(module: nn.Module, args: tuple[Any, ...], output: Any) -> None:
+            value = output[0] if isinstance(output, (tuple, list)) else output
+            if not isinstance(value, Tensor):
+                raise CacheSemanticsInvalid("router hook saw no routing tensor")
+            if value.ndim < 2:
+                raise CacheSemanticsInvalid("router output is not token-by-expert")
+            if value.dtype in (torch.int8, torch.int16, torch.int32, torch.int64) and value.shape[-1] <= 16:
+                state["top_k_index"] = value.detach().clone()
+                if isinstance(output, (tuple, list)) and len(output) > 1 and isinstance(output[1], Tensor):
+                    state["top_k_weights"] = output[1].detach().clone()
+                return
+            probabilities = torch.softmax(value.float(), dim=-1)
+            top_k = int(getattr(module, "top_k", getattr(self.moe, "top_k", 0)))
+            if not top_k:
+                top_k = int(getattr(getattr(self.moe, "config", None), "num_experts_per_tok", 0))
+            if not top_k:
+                raise CacheSemanticsInvalid("cannot infer parent router top-k")
+            weights, indices = torch.topk(probabilities, top_k, dim=-1)
+            state["top_k_index"] = indices.detach().clone()
+            state["top_k_weights"] = (weights / weights.sum(dim=-1, keepdim=True)).detach().clone()
+
         handle = self.post_norm.register_forward_hook(hook)
+        router_handle = self.moe.router.register_forward_hook(route_hook)
         try:
             self.model(input_ids=input_ids, attention_mask=attention_mask, **kwargs)
         finally:
             handle.remove()
-        if set(state) != {"pre_mlp_residual", "mlp_input"}:
+            router_handle.remove()
+        if not {"pre_mlp_residual", "mlp_input"}.issubset(state):
             raise CacheSemanticsInvalid("target block did not produce a complete tail cache")
         return TailCache(
             mlp_input=state["mlp_input"],
             pre_mlp_residual=state["pre_mlp_residual"],
             input_ids=input_ids.detach().clone(),
             attention_mask=attention_mask.detach().clone() if attention_mask is not None else None,
+            top_k_index=state.get("top_k_index"),
+            top_k_weights=state.get("top_k_weights"),
             sample_ids=tuple(sample_ids),
         )
 
     @torch.no_grad()
     def forward(self, cache: TailCache) -> Tensor:
-        moe_output = self.moe(cache.mlp_input)
+        moe_output = self._forward_moe(cache, getattr(self.moe, "experts", self.moe))
+        block_output = cache.pre_mlp_residual + moe_output * self.residual_multiplier
+        return self.lm_head(self.final_norm(block_output))
+
+    def _forward_moe(self, cache: TailCache, experts: nn.Module) -> Tensor:
+        if cache.top_k_index is None or cache.top_k_weights is None:
+            return self.moe(cache.mlp_input)
+        shape = cache.mlp_input.shape
+        hidden = cache.mlp_input.reshape(-1, shape[-1])
+        routed = experts(hidden, cache.top_k_index.reshape(-1, cache.top_k_index.shape[-1]), cache.top_k_weights.reshape(-1, cache.top_k_weights.shape[-1]))
+        return routed.reshape(shape)
+
+    def forward_with_experts(self, cache: TailCache, experts: nn.Module) -> Tensor:
+        moe_output = self._forward_moe(cache, experts)
         block_output = cache.pre_mlp_residual + moe_output * self.residual_multiplier
         return self.lm_head(self.final_norm(block_output))
 
@@ -168,6 +216,12 @@ def save_cache(
         payload = {
             "mlp_input": cache.mlp_input[start:end].cpu(),
             "pre_mlp_residual": cache.pre_mlp_residual[start:end].cpu(),
+            "input_ids": cache.input_ids[start:end].cpu() if cache.input_ids is not None else None,
+            "attention_mask": cache.attention_mask[start:end].cpu() if cache.attention_mask is not None else None,
+            "labels": cache.labels[start:end].cpu() if cache.labels is not None else None,
+            "loss_mask": cache.loss_mask[start:end].cpu() if cache.loss_mask is not None else None,
+            "top_k_index": cache.top_k_index[start:end].cpu() if cache.top_k_index is not None and cache.top_k_index.shape[0] == rows else cache.top_k_index.cpu() if cache.top_k_index is not None else None,
+            "top_k_weights": cache.top_k_weights[start:end].cpu() if cache.top_k_weights is not None and cache.top_k_weights.shape[0] == rows else cache.top_k_weights.cpu() if cache.top_k_weights is not None else None,
         }
         path = directory / f"shard-{index:05d}.pt"
         torch.save(payload, path)
@@ -178,6 +232,8 @@ def save_cache(
         "rows": rows,
         "dtype": str(cache.mlp_input.dtype),
         "sample_ids": list(cache.sample_ids),
+        "split": cache.split,
+        "identity": dict(cache.identity or {}),
         "shards": shards,
     }
     if identity:
@@ -188,10 +244,11 @@ def save_cache(
 
 def validate_cache_identity(manifest: Mapping[str, Any], expected: Mapping[str, Any]) -> None:
     """Validate that a cache belongs to the exact frozen engineering inputs."""
-    required = ("foundation_model", "foundation_revision", "foundation_tensor_sha256", "target_path", "target_layer", "dataset_manifest_sha256", "encoding", "dtype")
-    missing = [key for key in required if manifest.get(key) in (None, "", [])]
+    required = ("foundation_model", "foundation_revision", "foundation_tensor_sha256", "target_path", "target_layer", "dataset_manifest_sha256", "split", "template_version", "encoding_version", "dtype")
+    values = {**dict(manifest), **dict(manifest.get("identity", {}))}
+    missing = [key for key in required if values.get(key) in (None, "", [])]
     if missing:
         raise CacheSemanticsInvalid(f"cache identity is incomplete: {missing}")
-    mismatched = [key for key in expected if manifest.get(key) != expected[key]]
+    mismatched = [key for key in expected if values.get(key) != expected[key]]
     if mismatched:
         raise CacheSemanticsInvalid(f"cache identity mismatch: {mismatched}")

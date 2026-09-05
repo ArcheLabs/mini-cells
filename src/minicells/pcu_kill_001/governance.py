@@ -148,7 +148,7 @@ def mark_formal_seed(path: Path, seed: int, valid: bool) -> None:
     payload = load_seed_registry(path)
     for entry in payload.get("seeds", []):
         if int(entry.get("seed", -1)) == int(seed):
-            if entry.get("state") != "RESERVED_UNTOUCHED":
+            if entry.get("state") != "RUNNING":
                 raise ProtocolMismatch(f"formal seed {seed} is already touched")
             entry["state"] = "TOUCHED_VALID" if valid else "TOUCHED_INVALID"
             entry["touched_at"] = datetime.now(timezone.utc).isoformat()
@@ -195,13 +195,26 @@ def assert_formal_preflight(
     if payload.get("formal_execution", {}).get("formal_execution_not_started") is not True:
         raise ProtocolMismatch("frozen protocol does not prove that formal execution has not started")
     model = payload.get("model", {})
-    for key in ("model_repo", "model_revision", "config_sha256", "weight_file_sha256", "tokenizer_sha256", "target_path"):
+    for key in ("model_repo", "model_revision", "config_sha256", "foundation_tensor_sha256", "weight_file_sha256", "tokenizer_sha256", "target_path"):
         if model.get(key) in (None, "", []):
             raise ProtocolMismatch(f"frozen protocol is missing immutable model field {key}")
     training = payload.get("training", {})
-    for key in ("optimizer", "learning_rate", "max_optimizer_steps", "selected_k", "lora_rank"):
+    for key in ("optimizer", "learning_rate", "max_optimizer_steps", "max_training_tokens", "selected_k", "lora_rank"):
         if training.get(key) in (None, "", 0):
             raise ProtocolMismatch(f"frozen protocol is missing selected training field {key}")
+    allocation = payload.get("allocation", {})
+    for key in ("method", "calibration_split", "calibration_sample_rule", "tie_break", "selected_k"):
+        if allocation.get(key) in (None, "", []):
+            raise ProtocolMismatch(f"frozen protocol is missing allocation field {key}")
+    evaluation = payload.get("evaluation", {}).get("generation", {})
+    if evaluation.get("do_sample") is not False or evaluation.get("max_new_tokens") in (None, 0):
+        raise ProtocolMismatch("frozen protocol has no deterministic generation policy")
+    try:
+        from .experiment import run_formal_execution
+        if not callable(run_formal_execution):
+            raise ProtocolMismatch("formal worker is not callable")
+    except ImportError as exc:
+        raise ProtocolMismatch("formal worker is not importable") from exc
     protocol_sha = verify_protocol_hash(protocol_path, hash_path)
     recorded_commit = payload.get("source_commit")
     if not recorded_commit:
@@ -221,3 +234,17 @@ def assert_formal_preflight(
         "formal_seeds": list(FORMAL_SEEDS),
         "formal_data_generated": False,
     }
+
+
+def mark_formal_seed_running(path: Path, seed: int) -> None:
+    """Transition a reserved seed immediately before actual execution starts."""
+    payload = load_seed_registry(path)
+    for entry in payload.get("seeds", []):
+        if int(entry.get("seed", -1)) == int(seed):
+            if entry.get("state") != "RESERVED_UNTOUCHED":
+                raise ProtocolMismatch(f"formal seed {seed} is already touched")
+            entry["state"] = "RUNNING"
+            entry["started_at"] = datetime.now(timezone.utc).isoformat()
+            path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            return
+    raise ProtocolMismatch(f"formal seed {seed} is not registered")
