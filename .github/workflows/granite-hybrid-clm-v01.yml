@@ -8,19 +8,27 @@ on:
       - '.github/workflows/granite-hybrid-clm-v01.yml'
       - 'src/minicells/hybrid_clm.py'
       - 'scripts/research/granite_hybrid_clm_v01/**'
+      - 'scripts/research/hybrid_clm_prompt_address_001/**'
       - 'research/validations/granite-hybrid-clm-v0.1/**'
+      - 'research/validations/hybrid-clm-prompt-address-001/**'
+      - 'research/notebooks/07-safe-model-evolution/hybrid-clm-prompt-address-001/**'
       - 'tests/test_hybrid_clm.py'
       - 'tests/test_hybrid_clm_artifacts.py'
       - 'tests/test_granite_hybrid_clm_result.py'
+      - 'tests/test_hybrid_clm_prompt_address_001.py'
   pull_request:
     paths:
       - '.github/workflows/granite-hybrid-clm-v01.yml'
       - 'src/minicells/hybrid_clm.py'
       - 'scripts/research/granite_hybrid_clm_v01/**'
+      - 'scripts/research/hybrid_clm_prompt_address_001/**'
       - 'research/validations/granite-hybrid-clm-v0.1/**'
+      - 'research/validations/hybrid-clm-prompt-address-001/**'
+      - 'research/notebooks/07-safe-model-evolution/hybrid-clm-prompt-address-001/**'
       - 'tests/test_hybrid_clm.py'
       - 'tests/test_hybrid_clm_artifacts.py'
       - 'tests/test_granite_hybrid_clm_result.py'
+      - 'tests/test_hybrid_clm_prompt_address_001.py'
   workflow_dispatch:
 
 jobs:
@@ -39,9 +47,11 @@ jobs:
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
           python -m pip install -e '.[lm,dev]'
 
-      - name: Validate milestone specification
+      - name: Validate research specifications
         run: |
           python -m json.tool research/validations/granite-hybrid-clm-v0.1/protocol.json >/dev/null
+          python -m json.tool research/validations/hybrid-clm-prompt-address-001/protocol.json >/dev/null
+          python -m json.tool research/notebooks/07-safe-model-evolution/hybrid-clm-prompt-address-001/hybrid-clm-prompt-address-001-kaggle.ipynb >/dev/null
           python - <<'PY'
           import json
           from pathlib import Path
@@ -52,12 +62,27 @@ jobs:
           assert p['scope']['legacy_experts_are_native_cells'] is False
           assert p['scope']['requires_progressive_expert_offload'] is False
           assert p['scope']['requires_autonomous_cell_discovery'] is False
+          assert p['substrate']['address_scope'] == 'prompt_anchor'
+          assert p['substrate']['write_scope'] == 'anchor_and_later'
+          assert p['substrate']['candidate_answer_affects_routing'] is False
           assert p['substrate']['competitive_normalization'] is False
           assert p['substrate']['shadow_before_commit'] is True
           assert p['milestone']['controlled_facts'] == 50
+          assert p['milestone']['maximum_history_kl_per_commit'] == 0.02
+          assert p['milestone']['minimum_target_nll_gain_per_commit'] == 0.5
           assert p['milestone']['exact_rollback_required'] is True
           assert p['milestone']['manifest_fork_merge_required'] is True
           assert p['milestone']['checkpoint_reload_required'] is True
+
+          d = json.loads(Path('research/validations/hybrid-clm-prompt-address-001/protocol.json').read_text())
+          assert d['status'] == 'DIAGNOSTIC_PROTOCOL_FROZEN_GPU_PENDING'
+          assert d['routing']['address_scope'] == 'prompt_anchor'
+          assert d['address_gates']['minimum_heldout_positive_recall'] == 1.0
+          assert d['address_gates']['maximum_history_anchor_false_positive_rate'] == 0.0
+          assert d['write_gates']['maximum_history_kl'] == 0.02
+          assert d['write_gates']['minimum_target_nll_gain'] == 0.5
+          assert d['write_gates']['minimum_semantic_choice_accuracy'] == 1.0
+          assert d['publishing']['terminal_pass_and_fail_are_published'] is True
           PY
 
       - name: Compile Hybrid CLM implementation
@@ -69,7 +94,9 @@ jobs:
             scripts/research/granite_hybrid_clm_v01/verify_reload.py \
             scripts/research/granite_hybrid_clm_v01/validate_result.py \
             scripts/research/granite_hybrid_clm_v01/run_kaggle.py \
-            scripts/research/granite_hybrid_clm_v01/publish.py
+            scripts/research/granite_hybrid_clm_v01/publish.py \
+            scripts/research/hybrid_clm_prompt_address_001/run.py \
+            scripts/research/hybrid_clm_prompt_address_001/publish.py
 
       - name: Lint Hybrid CLM core
         run: python -m ruff check src/minicells/hybrid_clm.py
@@ -81,7 +108,7 @@ jobs:
         run: python -m ruff check --ignore E402,RUF100,SIM117 scripts/research/granite_hybrid_clm_v01/run_milestone.py
 
       - name: Lint Hybrid CLM reload verifier
-        run: python -m ruff check --ignore E402 scripts/research/granite_hybrid_clm_v01/verify_reload.py
+        run: python -m ruff check --ignore E402,RUF100 scripts/research/granite_hybrid_clm_v01/verify_reload.py
 
       - name: Lint Hybrid CLM acceptance validator
         run: python -m ruff check scripts/research/granite_hybrid_clm_v01/validate_result.py
@@ -92,16 +119,23 @@ jobs:
       - name: Lint Hybrid CLM publisher
         run: python -m ruff check --ignore E402 scripts/research/granite_hybrid_clm_v01/publish.py
 
+      - name: Lint prompt-address research scripts
+        run: |
+          python -m ruff check --ignore E402,RUF100 scripts/research/hybrid_clm_prompt_address_001/run.py
+          python -m ruff check --ignore E402,RUF100 scripts/research/hybrid_clm_prompt_address_001/publish.py
+
       - name: Lint Hybrid CLM tests
         run: |
           python -m ruff check \
             tests/test_hybrid_clm.py \
             tests/test_hybrid_clm_artifacts.py \
-            tests/test_granite_hybrid_clm_result.py
+            tests/test_granite_hybrid_clm_result.py \
+            tests/test_hybrid_clm_prompt_address_001.py
 
       - name: Hybrid lifecycle unit tests
         run: |
           python -m pytest -q \
             tests/test_hybrid_clm.py \
             tests/test_hybrid_clm_artifacts.py \
-            tests/test_granite_hybrid_clm_result.py
+            tests/test_granite_hybrid_clm_result.py \
+            tests/test_hybrid_clm_prompt_address_001.py
