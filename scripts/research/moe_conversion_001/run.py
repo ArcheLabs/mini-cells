@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import gc
 import json
+import os
+import random
 import shutil
 from pathlib import Path
 from typing import Any
@@ -43,10 +45,57 @@ def _dtype(name: str, device: str) -> torch.dtype:
     }[name]
 
 
-def _load_pretrained(model_cls, path: str | Path, *, dtype: torch.dtype, device: str):
-    # torch_dtype remains compatible with the frozen model's Transformers 4.46 baseline and
-    # newer releases (where it may emit only a deprecation warning in favor of dtype).
-    model = model_cls.from_pretrained(path, torch_dtype=dtype, low_cpu_mem_usage=True)
+def _configure_determinism(enabled: bool, seed: int) -> dict[str, Any]:
+    """Configure a deterministic reference path without changing the historical default."""
+    if not enabled:
+        return {
+            "enabled": False,
+            "attention_implementation": None,
+            "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+        }
+
+    # Must be set before the first cuBLAS operation in this child process.
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    torch.use_deterministic_algorithms(True, warn_only=False)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+    if hasattr(torch.backends, "cuda") and hasattr(torch.backends.cuda, "matmul"):
+        torch.backends.cuda.matmul.allow_tf32 = False
+
+    return {
+        "enabled": True,
+        "seed": seed,
+        "attention_implementation": "eager",
+        "deterministic_algorithms": True,
+        "cudnn_benchmark": False,
+        "cudnn_deterministic": True,
+        "allow_tf32": False,
+        "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+    }
+
+
+def _load_pretrained(
+    model_cls,
+    path: str | Path,
+    *,
+    dtype: torch.dtype,
+    device: str,
+    deterministic: bool = False,
+):
+    # torch_dtype remains compatible with the frozen model's Transformers 4.46 baseline.
+    # The deterministic release path also forces eager attention so both checkpoints are
+    # evaluated through one reference implementation rather than backend auto-selection.
+    kwargs: dict[str, Any] = {
+        "torch_dtype": dtype,
+        "low_cpu_mem_usage": True,
+    }
+    if deterministic:
+        kwargs["attn_implementation"] = "eager"
+    model = model_cls.from_pretrained(path, **kwargs)
     return model.to(device).eval()
 
 
@@ -239,7 +288,15 @@ def _real_batches(tokenizer, device: str) -> list[dict[str, torch.Tensor]]:
     ]
 
 
+def _clear_cuda_model(model: Any) -> None:
+    del model
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
+    determinism = _configure_determinism(args.deterministic, args.seed)
     AutoModelForCausalLM, AutoTokenizer, _, GraniteMoeForCausalLM = _require_transformers()
     work = args.work_dir.resolve()
     if work.exists() and args.clean:
@@ -286,8 +343,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise SystemExit("CUDA requested but torch.cuda.is_available() is false")
     dtype = _dtype(args.dtype, device)
     model_class = GraniteMoeForCausalLM if args.stage == "tiny" else AutoModelForCausalLM
+    top_k = int(manifest["config"]["num_experts_per_tok"])
 
-    source_model = _load_pretrained(model_class, source_dir, dtype=dtype, device=device)
+    source_model = _load_pretrained(
+        model_class,
+        source_dir,
+        dtype=dtype,
+        device=device,
+        deterministic=args.deterministic,
+    )
     if args.stage == "tiny":
         source_batches = _tiny_batches(device)
         tokenizer = None
@@ -295,12 +359,47 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         tokenizer = AutoTokenizer.from_pretrained(source_dir)
         source_batches = _real_batches(tokenizer, device)
     source_capture = _capture(source_model, source_batches, generate=args.stage == "real")
-    del source_model
-    gc.collect()
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
 
-    target_model = _load_pretrained(model_class, materialized_dir, dtype=dtype, device=device)
+    controls: dict[str, Any] = {}
+    if args.reload_control:
+        repeat_capture = _capture(source_model, source_batches, generate=args.stage == "real")
+        controls["source_repeat"] = _compare(
+            source_capture,
+            repeat_capture,
+            tolerance=args.tolerance,
+            top_k=top_k,
+        )
+
+    _clear_cuda_model(source_model)
+
+    if args.reload_control:
+        source_reload_model = _load_pretrained(
+            model_class,
+            source_dir,
+            dtype=dtype,
+            device=device,
+            deterministic=args.deterministic,
+        )
+        source_reload_capture = _capture(
+            source_reload_model,
+            source_batches,
+            generate=args.stage == "real",
+        )
+        controls["source_reload"] = _compare(
+            source_capture,
+            source_reload_capture,
+            tolerance=args.tolerance,
+            top_k=top_k,
+        )
+        _clear_cuda_model(source_reload_model)
+
+    target_model = _load_pretrained(
+        model_class,
+        materialized_dir,
+        dtype=dtype,
+        device=device,
+        deterministic=args.deterministic,
+    )
     target_batches = (
         _tiny_batches(device) if args.stage == "tiny" else _real_batches(tokenizer, device)
     )
@@ -309,7 +408,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         source_capture,
         target_capture,
         tolerance=args.tolerance,
-        top_k=int(manifest["config"]["num_experts_per_tok"]),
+        top_k=top_k,
     )
 
     gates = {
@@ -319,6 +418,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "expert_is_not_cell": manifest["conversion"]["expert_is_cell"] is False,
         "expert_addresses_present": len(manifest["expert_addresses"]) > 0,
     }
+    if args.reload_control:
+        gates["source_repeat_parity"] = controls["source_repeat"]["status"] == "PASS"
+        gates["source_reload_parity"] = controls["source_reload"]["status"] == "PASS"
+
     status = "PASS" if all(gates.values()) else "FAIL"
     result = {
         "experiment": "CLM_MOE_CONVERSION_001",
@@ -329,8 +432,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "manifest_identity_sha256": manifest["identity_sha256"],
         "device": device,
         "dtype": str(dtype),
+        "determinism": determinism,
         "gates": gates,
         "bundle": bundle_verification,
+        "controls": controls,
         "forward": comparison,
         "tensor_count": len(manifest["tensors"]),
         "expert_address_count": len(manifest["expert_addresses"]),
@@ -356,6 +461,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tolerance", type=float, default=1e-5)
     parser.add_argument("--seed", type=int, default=26090401)
     parser.add_argument("--copy-mode", choices=("copy", "hardlink"), default="hardlink")
+    parser.add_argument("--deterministic", action="store_true")
+    parser.add_argument("--reload-control", action="store_true")
     parser.add_argument(
         "--work-dir", type=Path, default=Path("artifacts/moe-conversion-001")
     )
