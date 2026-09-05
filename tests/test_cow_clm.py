@@ -149,10 +149,9 @@ def test_activation_is_one_complete_ticket_and_nested_views_are_rejected() -> No
     _model, runtime = _runtime()
     runtime.fork_experts("cell-a", [(0, 1)])
     runtime.fork_experts("cell-b", [(1, 2)])
-    with runtime.activate("cell-a"):
-        with pytest.raises(COWCLMError, match="nested"):
-            with runtime.activate("cell-b"):
-                pass
+    with runtime.activate("cell-a"), pytest.raises(COWCLMError, match="nested"):
+        with runtime.activate("cell-b"):
+            pass
 
 
 def test_artifact_roundtrip_reconstructs_same_cell_view() -> None:
