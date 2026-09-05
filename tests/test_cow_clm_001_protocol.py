@@ -21,7 +21,7 @@ def _git_blob(path: str) -> str:
 def test_cow_clm_001_protocol_identity_is_frozen() -> None:
     protocol = _protocol()
     assert protocol["experiment"] == "COW_CLM_001"
-    assert protocol["protocol_version"] == "1.2"
+    assert protocol["protocol_version"] == "1.3"
     assert protocol["status"] == "FORMAL_PROTOCOL_FROZEN_GPU_PENDING"
     assert protocol["seed"] == 26090511
     assert "before any GPU execution" in protocol["refreeze_note"]
