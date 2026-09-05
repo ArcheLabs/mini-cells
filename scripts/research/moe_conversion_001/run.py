@@ -54,7 +54,6 @@ def _configure_determinism(enabled: bool, seed: int) -> dict[str, Any]:
             "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
         }
 
-    # Must be set before the first cuBLAS operation in this child process.
     os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     random.seed(seed)
     torch.manual_seed(seed)
@@ -86,9 +85,6 @@ def _load_pretrained(
     device: str,
     deterministic: bool = False,
 ):
-    # torch_dtype remains compatible with the frozen model's Transformers 4.46 baseline.
-    # The deterministic release path also forces eager attention so both checkpoints are
-    # evaluated through one reference implementation rather than backend auto-selection.
     kwargs: dict[str, Any] = {
         "torch_dtype": dtype,
         "low_cpu_mem_usage": True,
@@ -112,8 +108,6 @@ def _extract_router_logits(value: Any, num_experts: int) -> torch.Tensor | None:
             if (tensor := _extract_router_logits(item, num_experts)) is not None
         ]
         if candidates:
-            # Legacy GraniteMoeTopKGating returns logits last; current GraniteMoeTopKRouter
-            # also has exactly one floating output whose final dimension is num_experts.
             return candidates[-1]
     return None
 
@@ -288,8 +282,7 @@ def _real_batches(tokenizer, device: str) -> list[dict[str, torch.Tensor]]:
     ]
 
 
-def _clear_cuda_model(model: Any) -> None:
-    del model
+def _clear_cuda_cache() -> None:
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -370,7 +363,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             top_k=top_k,
         )
 
-    _clear_cuda_model(source_model)
+    del source_model
+    _clear_cuda_cache()
 
     if args.reload_control:
         source_reload_model = _load_pretrained(
@@ -391,7 +385,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             tolerance=args.tolerance,
             top_k=top_k,
         )
-        _clear_cuda_model(source_reload_model)
+        del source_reload_model
+        _clear_cuda_cache()
 
     target_model = _load_pretrained(
         model_class,
