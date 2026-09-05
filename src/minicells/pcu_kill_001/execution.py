@@ -9,6 +9,7 @@ A G0 failure is a valid scientific outcome, not an invalid runtime failure.
 from __future__ import annotations
 
 from dataclasses import asdict
+import gc
 import json
 from pathlib import Path
 from typing import Any, Mapping
@@ -98,6 +99,15 @@ def _g0_preflight(
             "g0_exact_embedding": passed,
         },
     }
+
+
+def _release_g0_preflight(preflight: dict[str, Any]) -> None:
+    """Drop the duplicate full models before the shared worker reloads them."""
+    for key in ("tokenizer", "model", "cellular", "inspector"):
+        preflight.pop(key, None)
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
 
 def _write_g0_failure(
@@ -193,9 +203,10 @@ def run_engineering(
             metrics=g0["metrics"],
             device=chosen_device,
         )
-    # The shared implementation rechecks G0 as part of its provenance.  The
-    # preflight above ensures no task work can begin if the first kill gate is
-    # already known to fail.
+    # The shared implementation rechecks G0 as part of its provenance.  Free
+    # the preflight's duplicate models first so the second load does not double
+    # resident GPU memory.
+    _release_g0_preflight(g0)
     return _experiment.run_engineering(seed=seed, backend=backend, output=output, device=chosen_device)
 
 
@@ -241,4 +252,5 @@ def run_formal_execution(
             metrics=g0["metrics"],
             device=chosen_device,
         )
+    _release_g0_preflight(g0)
     return _experiment.run_formal_execution(seed, protocol_path, output, chosen_device)
