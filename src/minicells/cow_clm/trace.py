@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+import contextlib
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass
 from typing import Any
 
 import torch
+from torch import nn
 
 from .runtime import COWCLMError, ExpertSite
 
@@ -22,6 +24,76 @@ class ExpertTraceStat:
             "hits": self.hits,
             "token_share": self.token_share,
         }
+
+
+def _extract_router_logits(module: nn.Module, output: Any) -> torch.Tensor:
+    num_experts = int(getattr(module, "num_experts", 0))
+    if num_experts <= 0:
+        raise COWCLMError("Granite router does not expose a positive num_experts")
+    values = (output,) if isinstance(output, torch.Tensor) else tuple(output or ())
+    matches = [
+        value
+        for value in values
+        if isinstance(value, torch.Tensor)
+        and torch.is_floating_point(value)
+        and value.ndim in (2, 3)
+        and int(value.shape[-1]) == num_experts
+    ]
+    if len(matches) != 1:
+        raise COWCLMError(
+            f"expected exactly one router-logit tensor with width {num_experts}, found {len(matches)}"
+        )
+    return matches[0].detach()
+
+
+@contextlib.contextmanager
+def capture_granite_router_logits(model: nn.Module) -> Iterator[list[torch.Tensor | None]]:
+    """Capture per-layer Granite router logits without requiring top-level model outputs.
+
+    Transformers 5.x Granite MoE blocks consume the router's logits internally and may not
+    propagate them through the CausalLM output. This hook observes the router return value only;
+    returning ``None`` from the hook preserves the original forward output exactly.
+    """
+    backbone = getattr(model, "model", None)
+    layers = getattr(backbone, "layers", None)
+    if layers is None:
+        raise COWCLMError("Granite model.layers not found for router tracing")
+    captured: list[torch.Tensor | None] = [None] * len(layers)
+    handles: list[Any] = []
+
+    for layer_index, layer in enumerate(layers):
+        block = getattr(layer, "block_sparse_moe", None)
+        router = getattr(block, "router", None)
+        if router is None:
+            raise COWCLMError(f"Granite router not found at layer {layer_index}")
+
+        def hook(
+            module: nn.Module,
+            _inputs: tuple[Any, ...],
+            output: Any,
+            *,
+            index: int = layer_index,
+        ) -> None:
+            if captured[index] is not None:
+                raise COWCLMError(f"Granite router at layer {index} ran more than once in one trace scope")
+            captured[index] = _extract_router_logits(module, output)
+
+        handles.append(router.register_forward_hook(hook))
+
+    try:
+        yield captured
+    finally:
+        for handle in handles:
+            handle.remove()
+
+
+def require_captured_router_logits(
+    captured: Sequence[torch.Tensor | None],
+) -> tuple[torch.Tensor, ...]:
+    missing = [index for index, value in enumerate(captured) if value is None]
+    if missing:
+        raise COWCLMError(f"Granite router logits missing for layer {missing[0]}")
+    return tuple(value for value in captured if value is not None)
 
 
 def summarize_router_logits(
