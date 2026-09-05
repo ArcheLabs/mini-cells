@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
-from minicells.pcu_kill_001.experiment import run_engineering, run_formal_execution  # noqa: E402
+from minicells.pcu_kill_001.execution import run_engineering, run_formal_execution  # noqa: E402
 from minicells.pcu_kill_001.model import DependencyUnavailable  # noqa: E402
 from minicells.pcu_kill_001.governance import (  # noqa: E402
     DEVELOPMENT_SEED,
@@ -28,6 +28,24 @@ from minicells.pcu_kill_001.governance import (  # noqa: E402
 PROTOCOL = ROOT / "artifacts/research/pcu-kill-001/frozen/PROTOCOL.json"
 PROTOCOL_SHA = ROOT / "artifacts/research/pcu-kill-001/frozen/PROTOCOL.sha256"
 SEED_REGISTRY = ROOT / "research/formal_seed_registry.json"
+
+_INVALID_FORMAL_STATUSES = {"INVALID_FORMAL_RUN", "FORMAL_EXECUTION_FAILED"}
+
+
+def _formal_run_is_valid(result: dict) -> bool:
+    """Protocol validity is independent of whether the hypothesis passed.
+
+    A scientifically negative but completely executed formal run consumes the
+    seed as TOUCHED_VALID.  TOUCHED_INVALID is reserved for protocol/runtime
+    failures that make the scientific result uninterpretable.
+    """
+    if "valid_formal_run" in result:
+        return bool(result["valid_formal_run"])
+    return bool(
+        result.get("scientific_evidence") is True
+        and result.get("status")
+        and result.get("status") not in _INVALID_FORMAL_STATUSES
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -87,11 +105,11 @@ def main() -> int:
     mark_formal_seed_running(SEED_REGISTRY, args.seed)
     try:
         result = run_formal_execution(args.seed, args.protocol, output, args.device if args.device != "auto" else "cpu")
-        valid = bool(result.get("scientific_evidence") and result.get("g0") and result.get("cache") and result.get("dataset_audit"))
+        valid = _formal_run_is_valid(result)
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if valid else 1
     except (OSError, ValueError, RuntimeError, KeyError) as exc:
-        payload = {"status": "FORMAL_EXECUTION_FAILED", "scientific_evidence": False, "formal_execution_not_started": False, "error": f"{type(exc).__name__}: {exc}"}
+        payload = {"status": "FORMAL_EXECUTION_FAILED", "scientific_evidence": False, "valid_formal_run": False, "formal_execution_not_started": False, "error": f"{type(exc).__name__}: {exc}"}
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
     finally:
