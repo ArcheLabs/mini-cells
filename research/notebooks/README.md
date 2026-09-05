@@ -21,6 +21,7 @@ See:
 | `05-language-validation/` | **RETIRED / SUPERSEDED PROTOCOL LINEAGE** | keep CLM-0.4-mini protocol/transaction assets; Native Stage 06 supersedes it as the active trained-model scientific path |
 | `06-native-clm/` | **CURRENT TRAINED-MODEL EVIDENCE WORKFLOWS** | consumed formal results remain frozen; diagnostics cannot relabel failed milestones |
 | `07-safe-model-evolution/` | **CURRENT MODEL-EVOLUTION EVIDENCE WORKFLOWS** | real pretrained-model mutation, historical-supervision, compression, composition, and rollback experiments; protocols/results remain the scientific authority |
+| `08-pretrained-model-lift/` | **RELEASE ENGINEERING / PRETRAINED CLM LIFT** | preserve upstream execution semantics, record conversion/parity evidence, and publish verifiable CLM bundles; a release PASS is not evidence that Experts are Cells or that safe evolution is solved |
 
 ## Notebook groups
 
@@ -40,10 +41,12 @@ See:
   - `native-clm-v0-m3l1-address-state-capacity-kaggle.ipynb` — active checkpoint-only M3L-1 capacity/family diagnostic sweeping diagonal, ranks 8/16/32/64/128 and dense full covariance on the exact same M3L lineage samples and oracle.
 - [`07-safe-model-evolution/`](07-safe-model-evolution/): current real-model Safe Model Evolution workflows:
   - `history-compression-001-kaggle.ipynb` — frozen replay-budget ladder `32 -> 8 -> 2 -> 0` after the supported Functional Boundary Oracle 001 result. Detailed child logs are written to files; notebook stdout remains compact and the final cell renders durable-result visualization.
+- [`08-pretrained-model-lift/`](08-pretrained-model-lift/): pretrained-model-to-CLM release workflows:
+  - `granite-clm-preview-3b-release-kaggle.ipynb` — resolves and pins Granite 3.1 3B-A800M, reuses the validated lossless MoE conversion/parity runner, records release metrics/provenance, publishes the verified bundle to Hugging Face, and pushes only lightweight evidence back to GitHub.
 
 ## Research notebook placement rule
 
-Research experiments must place hosted notebooks under `research/notebooks/<stage>/`. Repository-level `notebooks/` is not the canonical home for new research workflows. Numerical evidence remains under `artifacts/experiments/`; notebooks are orchestration and reproducibility assets, not the source of frozen decisions.
+Research experiments must place hosted notebooks under `research/notebooks/<stage>/`. Repository-level `notebooks/` is not the canonical home for new research workflows. Numerical experimental evidence remains under `artifacts/experiments/`; release-engineering evidence belongs under `artifacts/releases/`. Notebooks are orchestration and reproducibility assets, not the source of frozen decisions.
 
 ## Historical reuse rule
 

@@ -1,0 +1,115 @@
+{
+  "controls": {
+    "source_reload": {
+      "gates": {
+        "greedy_token_identity": true,
+        "logit_argmax_identity": true,
+        "logits_within_tolerance": true,
+        "router_outputs_present": true,
+        "router_topk_identity": true,
+        "router_within_tolerance": true
+      },
+      "max_abs_logit_error": 0.0,
+      "max_abs_router_error": 0.0,
+      "router_outputs_compared": 96,
+      "status": "PASS",
+      "tolerance": 1e-05
+    },
+    "source_repeat": {
+      "gates": {
+        "greedy_token_identity": true,
+        "logit_argmax_identity": true,
+        "logits_within_tolerance": true,
+        "router_outputs_present": true,
+        "router_topk_identity": true,
+        "router_within_tolerance": true
+      },
+      "max_abs_logit_error": 0.0,
+      "max_abs_router_error": 0.0,
+      "router_outputs_compared": 96,
+      "status": "PASS",
+      "tolerance": 1e-05
+    }
+  },
+  "conversion": {
+    "execution_semantics": "preserve_hf_moe",
+    "expert_address_count": 2560,
+    "kind": "substrate_wrap",
+    "manifest_identity_sha256": "6e52357f49d578420f43fabe1e6f6da51788dda680ab1ad9e1e50f3bf747117f",
+    "schema_version": "clm.moe-substrate.v1",
+    "tensor_count": 290
+  },
+  "determinism": {
+    "allow_tf32": false,
+    "attention_implementation": "eager",
+    "cublas_workspace_config": ":4096:8",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "enabled": true,
+    "seed": 26090401
+  },
+  "environment": {
+    "accelerate_version": "1.13.0",
+    "cuda_available": true,
+    "cuda_device_count": 2,
+    "cuda_devices": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "device": "cuda:0",
+    "dtype": "torch.float16",
+    "execution_policy": "single_gpu_deterministic_reference_parity",
+    "gpu_name": "Tesla T4",
+    "huggingface_hub_version": "0.36.2",
+    "python": "3.12.13",
+    "requested_device": "cuda:0",
+    "torch_version": "2.10.0+cu128",
+    "transformers_version": "4.46.0"
+  },
+  "gates": {
+    "bundle_integrity": true,
+    "checkpoint_byte_identity": true,
+    "expert_addresses_present": true,
+    "expert_is_not_cell": true,
+    "forward_parity": true,
+    "source_reload_parity": true,
+    "source_repeat_parity": true
+  },
+  "model": {
+    "architectures": [
+      "GraniteMoeForCausalLM"
+    ],
+    "hidden_size": 1536,
+    "intermediate_size": 512,
+    "model_type": "granitemoe",
+    "num_experts_per_tok": 8,
+    "num_hidden_layers": 32,
+    "num_local_experts": 40
+  },
+  "parity": {
+    "gates": {
+      "greedy_token_identity": true,
+      "logit_argmax_identity": true,
+      "logits_within_tolerance": true,
+      "router_outputs_present": true,
+      "router_topk_identity": true,
+      "router_within_tolerance": true
+    },
+    "max_abs_logit_error": 0.0,
+    "max_abs_router_error": 0.0,
+    "router_outputs_compared": 96,
+    "status": "PASS",
+    "tolerance": 1e-05
+  },
+  "release": "Granite-CLM-Preview-3B",
+  "runtime": {
+    "runner_seconds": 232.63190232899998
+  },
+  "status": "PASS",
+  "storage": {
+    "safetensors_bytes": 6597612952,
+    "snapshot_bytes": 6599724398,
+    "source_file_count": 10
+  }
+}
