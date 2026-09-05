@@ -1,0 +1,87 @@
+{
+  "experiment": "COW_CLM_001",
+  "title": "COW-CLM-001: Minimal Functional Fork",
+  "protocol_version": "1.0",
+  "status": "FORMAL_PROTOCOL_FROZEN_GPU_PENDING",
+  "seed": 26090511,
+  "question": "How much of a mature frozen Granite MoE must become private through copy-on-write expert slices for a real functional mutation to be learned while the parent remains immutable and exactly recoverable?",
+  "foundation": {
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "trainable": false
+  },
+  "cell_semantics": {
+    "parent": "immutable Granite root",
+    "activation": "one explicit execution ticket selects one complete Cell view",
+    "write": "zero-init copy-on-write deltas over selected fused expert slices",
+    "canonical_composition": "inheritance/substitution, never additive sibling merge",
+    "deeper_lineage": "out of scope until COW-CLM-002",
+    "learned_routing": "out of scope; COW-CLM-001 uses oracle Cell activation"
+  },
+  "capacity_sites": [1, 2, 4, 8],
+  "site_selection": {
+    "source": "training rows only",
+    "method": "rank actual frozen Granite top-k router activations by hit count",
+    "heldout_used_for_selection": false
+  },
+  "training": {
+    "steps": 60,
+    "batch_size": 4,
+    "trace_batch_size": 8,
+    "learning_rate": 0.002,
+    "optimizer": "AdamW",
+    "weight_decay": 0.0,
+    "gradient_clip_norm": 1.0,
+    "foundation_optimizer_membership": false
+  },
+  "tracks": {
+    "knowledge": {
+      "facts": 8,
+      "training_paraphrases_per_fact": 3,
+      "heldout_paraphrases_per_fact": 2,
+      "minimum_choice_accuracy": 1.0
+    },
+    "capability": {
+      "task": "invented ZOR(a,b)=(2a+3b) mod 10 mapping with deterministic heldout operand pairs",
+      "heldout_exact_pairs_used_for_training": false,
+      "minimum_choice_accuracy": 0.8
+    }
+  },
+  "structural_gates": {
+    "empty_or_zero_delta_birth": true,
+    "parent_parameters_require_grad": false,
+    "parent_parameter_identity_and_version_unchanged_after_training": true,
+    "inactive_parent_view_restored_after_Cell_scope": true,
+    "fresh_reload_required_for_positive_track": true
+  },
+  "decision": {
+    "supported_status": "COW_MINIMAL_FUNCTIONAL_FORK_SUPPORTED",
+    "not_yet_supported_status": "COW_MINIMAL_FUNCTIONAL_FORK_NOT_YET_SUPPORTED",
+    "pass_requires": "both knowledge and capability tracks have at least one passing capacity in [1,2,4,8] and the minimum passing artifacts verify in fresh model runtimes",
+    "private_fraction_threshold": null,
+    "private_fraction_policy": "report the minimum measured fraction; do not post-hoc add an economic threshold to this protocol"
+  },
+  "hosted_environment": {
+    "require_cuda": true,
+    "require_hf_token": true,
+    "require_github_token_for_publish": true,
+    "dual_gpu_policy": "knowledge and capability are independent root forks and may run concurrently on cuda:0/cuda:1; one GPU sequential execution remains canonical-valid"
+  },
+  "implementation_git_blobs": {
+    "src/minicells/cow_clm/runtime.py": "4e1ec23d0f06c788277330524e38e1a978be9a22",
+    "src/minicells/cow_clm/artifact.py": "32686f687a808add75844305c0396144331ea948",
+    "src/minicells/cow_clm/trace.py": "cf0123058817de3505bea4f35275e6ef3eccaa98",
+    "scripts/research/cow_clm_001/dataset.py": "745ed354a104ef6b9c099597eb285b0534ffab33",
+    "scripts/research/cow_clm_001/run.py": "5357f360c369565493c72c8b12138c53c4d7158a",
+    "scripts/research/cow_clm_001/verify_reload.py": "b0f0dc6f19a761c250470f22580cf2680608975c",
+    "scripts/research/cow_clm_001/run_frozen.py": "e4f22a6eac82832257a37dfa8884a865b5fe02ad",
+    "scripts/research/jam_knowledge_mutation_001/sequence.py": "515577df3ebcd83ecfef81189f4d9e8a906be62e"
+  },
+  "nonclaims": [
+    "COW-CLM-001 does not claim existing Granite experts are Cells.",
+    "COW-CLM-001 does not claim arbitrary sibling Cells compose without reconciliation.",
+    "COW-CLM-001 does not claim expert-only COW is sufficient for all future capabilities.",
+    "COW-CLM-001 does not claim autonomous natural-language Cell routing.",
+    "COW-CLM-001 does not rewrite CLM_CONVERSION_KILL_TEST_001, GRANITE_HYBRID_CLM_V0_1, or HYBRID_CLM_PROMPT_ADDRESS_001."
+  ]
+}
