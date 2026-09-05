@@ -5,8 +5,8 @@ This release wrapper intentionally reuses the already-validated
 `scripts/research/moe_conversion_001/run.py` real-model parity runner. It does
 not introduce a second conversion implementation.
 
-The 3B release is pinned to the Transformers loader generation used by the
-validated Granite MoE conversion path. The release deliberately uses a single
+The 3B release is pinned to the Transformers generation recorded by the
+Granite 3.1 3B-A800M checkpoint itself. The release deliberately uses a single
 GPU when CUDA is requested: the 3B FP16 model fits on one T4-class GPU, while
 the parity workload is dominated by checkpoint materialization, hashing, and
 small deterministic inference batches rather than data-parallel throughput.
@@ -32,13 +32,33 @@ DEFAULT_HF_REPO = "archelabs-org/native-clm-v0"
 DEFAULT_HF_SUBDIR = "granite-clm-preview-3b"
 DEFAULT_OUTPUT = Path("artifacts/releases/granite-clm-preview-3b")
 RUNNER = Path("scripts/research/moe_conversion_001/run.py")
-REQUIRED_TRANSFORMERS_VERSION = "4.46.3"
+REQUIRED_TRANSFORMERS_VERSION = "4.47.0"
 EXECUTION_POLICY = "single_gpu_parity"
 
 
-def _run(command: list[str]) -> None:
+def _run(command: list[str], *, log_path: Path | None = None) -> None:
     print("+", " ".join(map(str, command)))
-    subprocess.run(list(map(str, command)), check=True)
+    if log_path is None:
+        subprocess.run(list(map(str, command)), check=True)
+        return
+
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    with log_path.open("w", encoding="utf-8") as handle:
+        process = subprocess.Popen(
+            list(map(str, command)),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        assert process.stdout is not None
+        for line in process.stdout:
+            print(line, end="")
+            handle.write(line)
+            handle.flush()
+        returncode = process.wait()
+    if returncode:
+        raise subprocess.CalledProcessError(returncode, command)
 
 
 def _git_head() -> str | None:
@@ -278,7 +298,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         command.append("--no-clean")
 
     started = time.perf_counter()
-    _run(command)
+    runner_log = output / "runner.log"
+    try:
+        _run(command, log_path=runner_log)
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError(
+            f"3B conversion/parity runner exited with {exc.returncode}. "
+            f"Full child stdout/stderr is preserved at {runner_log}."
+        ) from exc
     runner_seconds = time.perf_counter() - started
 
     runner_result = _read_json(work / "result.json")
