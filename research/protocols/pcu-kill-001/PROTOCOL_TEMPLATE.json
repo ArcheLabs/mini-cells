@@ -29,10 +29,11 @@
     "router": "INHERITED_PARENT"
   },
   "synthetic_world": {
-    "generator": "pcu-kill-001-world-v1",
+    "generator": "pcu-kill-001-world-v2",
     "count": 128,
     "training_tokens_per_branch_max": 500000,
     "train_templates": "fixed-and-disjoint-from-test",
+    "train_target_visibility": "answer_identifier_absent_from_prompt",
     "formal_dataset_generation": "on-run-only"
   },
   "training": {
