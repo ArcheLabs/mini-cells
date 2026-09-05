@@ -1,0 +1,99 @@
+name: COW CLM 001 guard
+
+on:
+  push:
+    branches:
+      - codex/cow-clm-001-minimal-functional-fork
+    paths:
+      - '.github/workflows/cow-clm-001.yml'
+      - 'src/minicells/cow_clm/**'
+      - 'scripts/research/cow_clm_001/**'
+      - 'research/validations/cow-clm-001/**'
+      - 'research/notebooks/07-safe-model-evolution/cow-clm-001/**'
+      - 'research/notebooks/07-safe-model-evolution/README.md'
+      - 'tests/test_cow_clm.py'
+      - 'tests/test_cow_clm_001_protocol.py'
+  pull_request:
+    paths:
+      - '.github/workflows/cow-clm-001.yml'
+      - 'src/minicells/cow_clm/**'
+      - 'scripts/research/cow_clm_001/**'
+      - 'research/validations/cow-clm-001/**'
+      - 'research/notebooks/07-safe-model-evolution/cow-clm-001/**'
+      - 'research/notebooks/07-safe-model-evolution/README.md'
+      - 'tests/test_cow_clm.py'
+      - 'tests/test_cow_clm_001_protocol.py'
+  workflow_dispatch:
+
+jobs:
+  engineering-guard:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install CPU research environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e '.[lm,dev]'
+
+      - name: Validate frozen protocol and notebook JSON
+        run: |
+          python -m json.tool research/validations/cow-clm-001/protocol.json >/dev/null
+          if [ -f research/notebooks/07-safe-model-evolution/cow-clm-001/cow-clm-001-kaggle.ipynb ]; then
+            python -m json.tool research/notebooks/07-safe-model-evolution/cow-clm-001/cow-clm-001-kaggle.ipynb >/dev/null
+          fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = json.loads(Path('research/validations/cow-clm-001/protocol.json').read_text())
+          assert p['experiment'] == 'COW_CLM_001'
+          assert p['protocol_version'] == '1.1'
+          assert p['status'] == 'FORMAL_PROTOCOL_FROZEN_GPU_PENDING'
+          assert p['capacity_sites'] == [1, 2, 4, 8]
+          assert p['cell_semantics']['private_delta_dtype'] == 'fp32 with cast to parent dtype at execution'
+          assert p['cell_semantics']['learned_routing'].endswith('oracle Cell activation')
+          assert p['cell_semantics']['deeper_lineage'] == 'out of scope until COW-CLM-002'
+          assert p['decision']['private_fraction_threshold'] is None
+          assert p['tracks']['knowledge']['minimum_choice_accuracy'] == 1.0
+          assert p['tracks']['capability']['minimum_choice_accuracy'] == 0.8
+          PY
+
+      - name: Compile COW CLM implementation
+        run: |
+          python -m py_compile \
+            src/minicells/cow_clm/__init__.py \
+            src/minicells/cow_clm/runtime.py \
+            src/minicells/cow_clm/artifact.py \
+            src/minicells/cow_clm/trace.py \
+            scripts/research/cow_clm_001/dataset.py \
+            scripts/research/cow_clm_001/run.py \
+            scripts/research/cow_clm_001/verify_reload.py \
+            scripts/research/cow_clm_001/run_frozen.py \
+            scripts/research/cow_clm_001/publish.py \
+            tests/test_cow_clm.py \
+            tests/test_cow_clm_001_protocol.py
+
+      - name: Lint COW CLM core
+        run: python -m ruff check src/minicells/cow_clm
+
+      - name: Lint COW CLM research scripts
+        run: |
+          python -m ruff check scripts/research/cow_clm_001/dataset.py
+          python -m ruff check --ignore E402,RUF100 scripts/research/cow_clm_001/run.py
+          python -m ruff check --ignore E402,RUF100 scripts/research/cow_clm_001/verify_reload.py
+          python -m ruff check scripts/research/cow_clm_001/run_frozen.py
+          python -m ruff check --ignore E402 scripts/research/cow_clm_001/publish.py
+
+      - name: Lint COW CLM tests
+        run: |
+          python -m ruff check tests/test_cow_clm.py tests/test_cow_clm_001_protocol.py
+
+      - name: COW lifecycle and protocol tests
+        run: |
+          python -m pytest -q tests/test_cow_clm.py tests/test_cow_clm_001_protocol.py
