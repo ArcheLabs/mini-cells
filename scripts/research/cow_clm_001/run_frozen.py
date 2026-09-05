@@ -63,6 +63,7 @@ def _run_logged(command: list[str], log_path: Path) -> None:
 
 
 def _launch_pair(commands: dict[str, list[str]], log_root: Path) -> None:
+    log_root.mkdir(parents=True, exist_ok=True)
     processes: dict[str, tuple[subprocess.Popen[str], Any]] = {}
     for name, command in commands.items():
         path = log_root / f"{name}.log"
