@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 from scripts.research.cow_clm_001.dataset import capability_rows, knowledge_rows
+from scripts.research.cow_clm_001.run_frozen import _launch_pair
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL_PATH = ROOT / "research" / "validations" / "cow-clm-001" / "protocol.json"
@@ -21,10 +23,11 @@ def _git_blob(path: str) -> str:
 def test_cow_clm_001_protocol_identity_is_frozen() -> None:
     protocol = _protocol()
     assert protocol["experiment"] == "COW_CLM_001"
-    assert protocol["protocol_version"] == "1.3"
+    assert protocol["protocol_version"] == "1.4"
     assert protocol["status"] == "FORMAL_PROTOCOL_FROZEN_GPU_PENDING"
     assert protocol["seed"] == 26090511
-    assert "before any GPU execution" in protocol["refreeze_note"]
+    assert "before launching any knowledge/capability scientific subprocess" in protocol["refreeze_note"]
+    assert "producing any model output" in protocol["refreeze_note"]
 
 
 def test_cow_clm_001_capacity_and_decision_are_not_posthoc_economic_gates() -> None:
@@ -84,6 +87,12 @@ def test_capability_exact_operand_pairs_are_disjoint_between_train_and_heldout()
     train_questions = {row["question"] for row in rows["train"]}
     eval_questions = {row["question"] for row in rows["evaluation"]}
     assert train_questions.isdisjoint(eval_questions)
+
+
+def test_parallel_launcher_creates_missing_log_directory(tmp_path: Path) -> None:
+    log_root = tmp_path / "missing" / "logs"
+    _launch_pair({"probe": [sys.executable, "-c", "print('ok')"]}, log_root)
+    assert (log_root / "probe.log").read_text(encoding="utf-8").strip() == "ok"
 
 
 def test_registered_implementation_blobs_match_frozen_protocol() -> None:
