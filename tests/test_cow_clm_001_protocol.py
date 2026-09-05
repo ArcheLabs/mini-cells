@@ -23,11 +23,14 @@ def _git_blob(path: str) -> str:
 def test_cow_clm_001_protocol_identity_is_frozen() -> None:
     protocol = _protocol()
     assert protocol["experiment"] == "COW_CLM_001"
-    assert protocol["protocol_version"] == "1.4"
+    assert protocol["protocol_version"] == "1.5"
     assert protocol["status"] == "FORMAL_PROTOCOL_FROZEN_GPU_PENDING"
     assert protocol["seed"] == 26090511
-    assert "before launching any knowledge/capability scientific subprocess" in protocol["refreeze_note"]
-    assert "producing any model output" in protocol["refreeze_note"]
+    note = protocol["refreeze_note"]
+    assert "aborted v1.4 Kaggle compatibility run" in note
+    assert "No Cell was forked" in note
+    assert "no private parameter was trained" in note
+    assert "no baseline or router metric value was printed or inspected" in note
 
 
 def test_cow_clm_001_capacity_and_decision_are_not_posthoc_economic_gates() -> None:
@@ -45,6 +48,14 @@ def test_cow_clm_001_keeps_routing_and_lineage_out_of_scope() -> None:
     assert semantics["deeper_lineage"] == "out of scope until COW-CLM-002"
     assert semantics["canonical_composition"] == "inheritance/substitution, never additive sibling merge"
     assert semantics["private_delta_dtype"] == "fp32 with cast to parent dtype at execution"
+
+
+def test_cow_clm_001_router_observation_is_read_only_and_environment_is_pinned() -> None:
+    protocol = _protocol()
+    observation = protocol["site_selection"]["router_observation"]
+    assert "read-only forward hooks" in observation
+    assert "do not replace or modify router outputs" in observation
+    assert protocol["hosted_environment"]["transformers_version"] == "5.16.1"
 
 
 def test_cow_clm_001_structural_gates_are_architectural_not_kl_thresholds() -> None:
