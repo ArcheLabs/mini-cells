@@ -12,8 +12,8 @@ from .trace import ExpertTraceStat, summarize_router_logits, top_expert_sites
 
 __all__ = [
     "COWCLMError",
-    "COWRuntime",
     "COWCellArtifact",
+    "COWRuntime",
     "ExpertSite",
     "ExpertTraceStat",
     "apply_cell_artifact",
