@@ -1,10 +1,10 @@
 {
   "experiment": "COW_CLM_001",
   "title": "COW-CLM-001: Minimal Functional Fork",
-  "protocol_version": "1.2",
+  "protocol_version": "1.3",
   "status": "FORMAL_PROTOCOL_FROZEN_GPU_PENDING",
   "seed": 26090511,
-  "refreeze_note": "v1.2 was frozen before any GPU execution; relative to v1.1 it only applies Ruff-required source-style fixes to registered runtime/trace files. No data, seed, capacity, optimizer, threshold, or scientific decision rule changed.",
+  "refreeze_note": "v1.3 was frozen before any GPU execution; relative to v1.2 it only applies Ruff-required import organization to the registered run.py file. No data, seed, capacity, optimizer, threshold, runtime semantics, or scientific decision rule changed.",
   "question": "How much of a mature frozen Granite MoE must become private through copy-on-write expert slices for a real functional mutation to be learned while the parent remains immutable and exactly recoverable?",
   "foundation": {
     "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
@@ -74,7 +74,7 @@
     "src/minicells/cow_clm/artifact.py": "32686f687a808add75844305c0396144331ea948",
     "src/minicells/cow_clm/trace.py": "0596f16ccfc922caebf65418fc62eb472f4b18c2",
     "scripts/research/cow_clm_001/dataset.py": "745ed354a104ef6b9c099597eb285b0534ffab33",
-    "scripts/research/cow_clm_001/run.py": "5357f360c369565493c72c8b12138c53c4d7158a",
+    "scripts/research/cow_clm_001/run.py": "8834afb8addb3cb9f29270d90043ec422d335c28",
     "scripts/research/cow_clm_001/verify_reload.py": "b0f0dc6f19a761c250470f22580cf2680608975c",
     "scripts/research/cow_clm_001/run_frozen.py": "e4f22a6eac82832257a37dfa8884a865b5fe02ad",
     "scripts/research/jam_knowledge_mutation_001/sequence.py": "515577df3ebcd83ecfef81189f4d9e8a906be62e"
