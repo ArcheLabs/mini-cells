@@ -1,10 +1,10 @@
 {
   "experiment": "COW_CLM_001",
   "title": "COW-CLM-001: Minimal Functional Fork",
-  "protocol_version": "1.4",
+  "protocol_version": "1.5",
   "status": "FORMAL_PROTOCOL_FROZEN_GPU_PENDING",
   "seed": 26090511,
-  "refreeze_note": "v1.4 was frozen after one Kaggle orchestration attempt failed before launching any knowledge/capability scientific subprocess or producing any model output; relative to v1.3 it only creates the missing parallel log directory in registered run_frozen.py before opening track log files. No data, seed, capacity, optimizer, threshold, model/runtime semantics, site selection, or scientific decision rule changed.",
+  "refreeze_note": "v1.5 follows an aborted v1.4 Kaggle compatibility run in which both tracks loaded the frozen Granite foundation and computed in-memory baseline candidate scores, then failed while requesting router logits from the top-level CausalLM output. No Cell was forked, no private parameter was trained, no capacity result/result.json/summary was written, and no baseline or router metric value was printed or inspected. Relative to v1.4, v1.5 changes only router-logit observation transport: read the existing return value of each frozen Granite block_sparse_moe.router through read-only forward hooks because Transformers 5.16.1 GraniteMoeMoE consumes and discards that value before the top-level output. It also pins the hosted Transformers version to 5.16.1 for reproducibility. No data, seed, capacity ladder, optimizer, threshold, Cell/model runtime semantics, site-ranking rule, or scientific decision rule changed.",
   "question": "How much of a mature frozen Granite MoE must become private through copy-on-write expert slices for a real functional mutation to be learned while the parent remains immutable and exactly recoverable?",
   "foundation": {
     "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
@@ -24,6 +24,7 @@
   "site_selection": {
     "source": "training rows only",
     "method": "rank actual frozen Granite top-k router activations by hit count",
+    "router_observation": "read-only forward hooks capture the existing router-logit return tensor at model.layers[*].block_sparse_moe.router; hooks do not replace or modify router outputs",
     "heldout_used_for_selection": false
   },
   "training": {
@@ -67,14 +68,15 @@
     "require_cuda": true,
     "require_hf_token": true,
     "require_github_token_for_publish": true,
+    "transformers_version": "5.16.1",
     "dual_gpu_policy": "knowledge and capability are independent root forks and may run concurrently on cuda:0/cuda:1; one GPU sequential execution remains canonical-valid"
   },
   "implementation_git_blobs": {
     "src/minicells/cow_clm/runtime.py": "a619d753b0b447c998875214b918fb4cd4bf1726",
     "src/minicells/cow_clm/artifact.py": "32686f687a808add75844305c0396144331ea948",
-    "src/minicells/cow_clm/trace.py": "0596f16ccfc922caebf65418fc62eb472f4b18c2",
+    "src/minicells/cow_clm/trace.py": "c0525caf9f2c1d9a4cdac3c0b096abaf9f0bdc8f",
     "scripts/research/cow_clm_001/dataset.py": "745ed354a104ef6b9c099597eb285b0534ffab33",
-    "scripts/research/cow_clm_001/run.py": "8834afb8addb3cb9f29270d90043ec422d335c28",
+    "scripts/research/cow_clm_001/run.py": "963f40cb5bae8efffd8be302114b5cd2136f49dc",
     "scripts/research/cow_clm_001/verify_reload.py": "b0f0dc6f19a761c250470f22580cf2680608975c",
     "scripts/research/cow_clm_001/run_frozen.py": "4e233c1a9aca8ddccd0a33045b946430106a0c25",
     "scripts/research/jam_knowledge_mutation_001/sequence.py": "515577df3ebcd83ecfef81189f4d9e8a906be62e"
