@@ -7,14 +7,20 @@ import os
 import random
 import sys
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 import torch
 import torch.nn.functional as F
 
-from minicells.cow_clm import COWRuntime, ExpertSite, export_cell, save_cell_artifact
-from minicells.cow_clm import summarize_router_logits
+from minicells.cow_clm import (
+    COWRuntime,
+    ExpertSite,
+    export_cell,
+    save_cell_artifact,
+    summarize_router_logits,
+)
 
 ROOT = Path(__file__).resolve().parents[3]
 LOCAL_ROOT = Path(__file__).resolve().parent
@@ -24,8 +30,8 @@ for path in (LOCAL_ROOT, SEQUENCE_ROOT):
     if value not in sys.path:
         sys.path.insert(0, value)
 
-from dataset import track_candidates, track_rows  # noqa: E402
 import sequence as seq  # noqa: E402
+from dataset import track_candidates, track_rows  # noqa: E402
 
 MODEL_ID = "ibm-granite/granite-3.1-1b-a400m-base"
 MODEL_REVISION = "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
