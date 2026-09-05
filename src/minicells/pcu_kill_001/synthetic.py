@@ -9,9 +9,13 @@ import re
 from typing import Any, Iterable, Mapping
 
 
+# Training prompts intentionally exclude the answer identifier.  The answer is
+# appended exactly once by task.build_task_sequences and is the only supervised
+# completion.  Including V/W here would reduce the experiment to copying a
+# target that is already visible in context.
 TRAIN_TEMPLATES = {
-    "A": "Under Ledger A, {u} maps to {v}.",
-    "B": "Under Ledger B, {v} maps to {w}.",
+    "A": "Under Ledger A, resolve {u}. Relay identifier:",
+    "B": "Under Ledger B, resolve {v}. Terminal identifier:",
 }
 EVAL_TEMPLATES = {
     "A": "Resolve {u} through rule A. Return only the relay identifier.",
@@ -71,7 +75,7 @@ class SyntheticWorld:
     seed: int
     triples: list[SyntheticTriple]
     splits: dict[str, list[SyntheticSample]]
-    generator_version: str = "pcu-kill-001-world-v1"
+    generator_version: str = "pcu-kill-001-world-v2"
 
     def all_samples(self) -> list[SyntheticSample]:
         return [sample for values in self.splits.values() for sample in values]
@@ -173,12 +177,12 @@ def generate_world(seed: int, count: int = 128, tokenizer: Any | None = None) ->
     for triple in triples:
         a_train.append(_sample(
             f"A-train-{triple.index:04d}", "A_train",
-            TRAIN_TEMPLATES["A"].format(u=triple.u, v=triple.v), triple.v, "A",
+            TRAIN_TEMPLATES["A"].format(u=triple.u), triple.v, "A",
             (triple.u, triple.v), triple.u_token_ids + triple.v_token_ids, triple.index,
         ))
         b_train.append(_sample(
             f"B-train-{triple.index:04d}", "B_train",
-            TRAIN_TEMPLATES["B"].format(v=triple.v, w=triple.w), triple.w, "B",
+            TRAIN_TEMPLATES["B"].format(v=triple.v), triple.w, "B",
             (triple.v, triple.w), triple.v_token_ids + triple.w_token_ids, triple.index,
         ))
         a_eval.append(_sample(
@@ -245,7 +249,7 @@ def _world_from_mapping(value: Mapping[str, Any]) -> SyntheticWorld:
             token_ids=tuple(item.get("token_ids", [])), pair_id=item.get("pair_id"),
         ) for item in values]
     return SyntheticWorld(seed=int(value["seed"]), triples=triples, splits=splits,
-                          generator_version=str(value.get("generator_version", "")))
+                          generator_version=str(value.get("generator_version", "pcu-kill-001-world-v2")))
 
 
 def audit_dataset(world: SyntheticWorld | Mapping[str, Any]) -> DatasetAudit:
@@ -260,11 +264,14 @@ def audit_dataset(world: SyntheticWorld | Mapping[str, Any]) -> DatasetAudit:
     eval_samples = world.splits.get("A_eval", []) + world.splits.get("B_eval", []) + world.splits.get("AB_eval", [])
     train_samples = a_train + b_train
     checks: dict[str, bool] = {}
+
     def text(item: SyntheticSample) -> str:
         return f"{item.prompt} {item.answer}"
 
     checks["A_contains_no_W"] = all(not any(value in text(item) for value in ws) for item in a_train)
     checks["B_contains_no_U"] = all(not any(value in text(item) for value in us) for item in b_train)
+    checks["A_answer_absent_from_prompt"] = all(item.answer not in item.prompt for item in a_train)
+    checks["B_answer_absent_from_prompt"] = all(item.answer not in item.prompt for item in b_train)
     checks["no_UW_training_pair"] = all(
         not any(value in text(item) for value in us) or not any(value in text(item) for value in ws)
         for item in train_samples
