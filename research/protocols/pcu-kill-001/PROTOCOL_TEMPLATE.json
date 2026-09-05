@@ -1,0 +1,66 @@
+{
+  "schema": "minicells.pcu-kill-001.protocol.v1",
+  "experiment": "PCU-KILL-001",
+  "status": "REGISTERED_NOT_RUN",
+  "source_ref": null,
+  "source_commit": null,
+  "source_tree": null,
+  "model": {
+    "model_repo": "ibm-granite/granite-3.1-1b-a400m-base",
+    "model_revision": null,
+    "config_sha256": null,
+    "weight_file_sha256": [],
+    "tokenizer_sha256": [],
+    "target_layer": null,
+    "target_path": null,
+    "hidden_size": 1024,
+    "intermediate_size": 512,
+    "local_experts": 32,
+    "experts_per_token": 8,
+    "cells_per_expert": 4,
+    "cell_width": 128,
+    "fused_projection_order": "gate_up"
+  },
+  "cell_partition": {
+    "kind": "contiguous",
+    "ranges": [[0, 128], [128, 256], [256, 384], [384, 512]],
+    "logical_cells": 128,
+    "router": "INHERITED_PARENT"
+  },
+  "synthetic_world": {
+    "generator": "pcu-kill-001-world-v1",
+    "count": 128,
+    "training_tokens_per_branch_max": 500000,
+    "train_templates": "fixed-and-disjoint-from-test",
+    "formal_dataset_generation": "on-run-only"
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": null,
+    "max_optimizer_steps": null,
+    "loss": "answer-token-cross-entropy-only",
+    "capacity_ladder": [1, 2, 4, 8],
+    "selected_k": null,
+    "lora_rank": null
+  },
+  "thresholds": {
+    "g0_top1_token_agreement": 1.0,
+    "cache_top1_token_agreement": 1.0,
+    "context_oracle_accuracy": 0.9,
+    "direct_accuracy": 0.8,
+    "merge_retention": 0.9,
+    "composition_accuracy": 0.5,
+    "composition_synergy": 0.3,
+    "anchor_regression": 0.01,
+    "matched_lora_parameter_tolerance": 0.1
+  },
+  "seeds": {
+    "engineering": [26090501],
+    "formal": [26090511, 26090512, 26090513]
+  },
+  "formal_execution": {
+    "formal_seeds_executed": [],
+    "scientific_evidence": false,
+    "formal_execution_not_started": true
+  }
+}
