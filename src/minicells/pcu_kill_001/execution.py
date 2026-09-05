@@ -110,6 +110,28 @@ def _release_g0_preflight(preflight: dict[str, Any]) -> None:
         torch.cuda.empty_cache()
 
 
+def _run_engineering_pinned_revision(
+    *,
+    seed: int,
+    backend: str,
+    output: Path,
+    device: str,
+    revision: str,
+) -> dict[str, Any]:
+    """Force the shared E0 loader to reuse the G0-resolved immutable revision."""
+    original_loader = _experiment.load_granite
+
+    def pinned_loader(model_id: str = MODEL_ID, revision: str | None = None, device: str = "cpu", local_files_only: bool = False):
+        return original_loader(model_id, revision=str(revision_value), device=device, local_files_only=local_files_only)
+
+    revision_value = str(revision)
+    _experiment.load_granite = pinned_loader
+    try:
+        return _experiment.run_engineering(seed=seed, backend=backend, output=output, device=device)
+    finally:
+        _experiment.load_granite = original_loader
+
+
 def _write_g0_failure(
     output: Path,
     *,
@@ -203,11 +225,19 @@ def run_engineering(
             metrics=g0["metrics"],
             device=chosen_device,
         )
+    resolved_revision = str(g0["manifest"]["model_revision"])
     # The shared implementation rechecks G0 as part of its provenance.  Free
     # the preflight's duplicate models first so the second load does not double
-    # resident GPU memory.
+    # resident GPU memory, then force that second load to the exact revision
+    # that passed the preflight.
     _release_g0_preflight(g0)
-    return _experiment.run_engineering(seed=seed, backend=backend, output=output, device=chosen_device)
+    return _run_engineering_pinned_revision(
+        seed=seed,
+        backend=backend,
+        output=output,
+        device=chosen_device,
+        revision=resolved_revision,
+    )
 
 
 def run_formal_execution(
