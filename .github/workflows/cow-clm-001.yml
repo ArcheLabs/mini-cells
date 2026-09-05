@@ -53,7 +53,7 @@ jobs:
 
           p = json.loads(Path('research/validations/cow-clm-001/protocol.json').read_text())
           assert p['experiment'] == 'COW_CLM_001'
-          assert p['protocol_version'] == '1.1'
+          assert p['protocol_version'] == '1.2'
           assert p['status'] == 'FORMAL_PROTOCOL_FROZEN_GPU_PENDING'
           assert p['capacity_sites'] == [1, 2, 4, 8]
           assert p['cell_semantics']['private_delta_dtype'] == 'fp32 with cast to parent dtype at execution'
