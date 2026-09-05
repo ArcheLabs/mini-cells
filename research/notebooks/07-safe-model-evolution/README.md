@@ -6,7 +6,8 @@ Scientific authority lives in the matching frozen validation protocol and durabl
 
 Current workflows:
 
-- `hybrid-clm-prompt-address-001/hybrid-clm-prompt-address-001-kaggle.ipynb` — frozen diagnostic of prompt-anchor routing for Granite Hybrid CLM v0.1. It tests held-out address generalization, zero history-anchor false positives, unchanged write-safety gates, and fresh reload. Scientific PASS and FAIL are both published.
+- `cow-clm-001/cow-clm-001-kaggle.ipynb` — frozen `COW-CLM-001` Minimal Functional Fork test for Persistent Copy-on-Write Lineage CLM. It keeps the pinned Granite root immutable, traces real training-row expert usage, trains zero-init private expert-slice COW Cells over a `1 -> 2 -> 4 -> 8` capacity ladder on both knowledge and held-out-composition capability tracks, requires fresh reload for positive results, and publishes terminal PASS and FAIL artifacts.
+- `hybrid-clm-prompt-address-001/hybrid-clm-prompt-address-001-kaggle.ipynb` — completed frozen diagnostic of prompt-anchor routing for Granite Hybrid CLM v0.1. The durable result is `PROMPT_SCOPED_HYBRID_SMOKE_NOT_YET_SUPPORTED`: training addresses fit but failed held-out paraphrase and history-address gates before write training.
 - `clm-conversion-kill-test-001-kaggle.ipynb` — current frozen formal test of whether a mature frozen Granite MoE can grow a zero-init, cross-layer, semantically addressable functional-Cell overlay and preserve local mutation, child growth, branch merge, and rollback. GPU formal seeds are pending.
 - `jam-knowledge-mutation-001-failure-diagnostic-kaggle.ipynb` — completed post-hoc forward-only diagnostic for the repeated JAM001 misconception-gate failure; it reused all nine published mutation artifacts and preserved the upstream formal No-Go.
 - `jam-knowledge-mutation-001-kaggle.ipynb` — completed release-oriented real-domain JAM knowledge acquisition experiment; frozen decision `JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED` (0/3 formal seeds PASS).
@@ -18,7 +19,9 @@ Related evidence:
 - History Compression 001 — `HISTORY_COMPRESSION_TO_8_SUPPORTED`; `full_32` 3/3, `tiny_8` 2/3, `tiny_2` and `zero_0` 0/3.
 - JAM Knowledge Mutation 001 — `JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED`, 0/3 formal seeds.
 - JAM Knowledge Mutation 001 Failure Diagnostic — `CANONICAL_CONTENT_GAIN_ALSO_BELOW_ORIGINAL_THRESHOLD_AT_CAPACITY4`; the prefix-dilution rescue hypothesis was rejected and fixed sparse mutation was shown to favor cheap output/template behavior over canonical semantic content.
+- Hybrid CLM Prompt Address 001 — `PROMPT_SCOPED_HYBRID_SMOKE_NOT_YET_SUPPORTED`; 0/3 Cells passed held-out/history address validation, so transform/write was not reached.
 - CLM Conversion Kill Test 001 — protocol frozen; no scientific decision until all three untouched formal seeds are durably published.
+- COW-CLM-001 — protocol v1.1 frozen; no scientific decision until frozen seed `26090511` is durably published.
 
 Rules for this group:
 
