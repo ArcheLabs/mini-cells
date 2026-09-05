@@ -27,7 +27,7 @@ class ExpertSite:
         return {"layer": int(self.layer), "expert": int(self.expert)}
 
     @classmethod
-    def from_dict(cls, payload: dict[str, Any]) -> "ExpertSite":
+    def from_dict(cls, payload: dict[str, Any]) -> ExpertSite:
         return cls(layer=int(payload["layer"]), expert=int(payload["expert"]))
 
 
