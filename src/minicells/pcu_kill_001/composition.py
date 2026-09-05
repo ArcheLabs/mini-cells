@@ -1,10 +1,15 @@
 """Functional PCU composition over an immutable Cellular foundation.
 
 The important distinction in this module is between *parameter* composition
-and *function* composition.  A fork contains a complete Cell function whose
+and *function* composition.  A PCU fork contains a complete Cell function whose
 non-linearity has already been applied.  Consequently an overlap is composed
 as ``C0(x) + (CA(x) - C0(x)) + (CB(x) - C0(x))`` rather than by adding the
 three SwiGLU parameter tensors and evaluating one new non-linearity.
+
+The matched LoRA baseline is intentionally different: independently trained
+LoRA weight deltas are added exactly and then one SwiGLU function is evaluated.
+``compose_cellular_experts`` detects LoRA branch experts and dispatches to that
+exact-weight runtime so baseline metrics match the audited merge semantics.
 """
 
 from __future__ import annotations
@@ -91,12 +96,7 @@ class ComposedCellularExpert(nn.Module):
 
 
 class ComposedCellularExperts(nn.Module):
-    """Router-facing functional composition with explicit rollback support.
-
-    ``branches`` maps a branch label (``A``/``B``/``JOINT``) to its forked
-    expert modules.  The parent router and all routing coefficients are copied
-    by reference and are never recomputed by this wrapper.
-    """
+    """Router-facing functional PCU composition with explicit rollback support."""
 
     def __init__(
         self,
@@ -159,8 +159,6 @@ class ComposedCellularExperts(nn.Module):
             active = tuple(item for item in self.active_branches if item != branch)
         if branch != "all" and len(active) == len(self.active_branches):
             raise ValueError(f"branch is not active: {branch}")
-        # The original fork modules are retained in the private maps so that
-        # rollback is still a functional reconstruction, not parameter reset.
         return ComposedCellularExperts(self.parent, self._branches, active)
 
     @classmethod
@@ -173,10 +171,41 @@ class ComposedCellularExperts(nn.Module):
         return cls(parent, branches, active_branches)
 
 
+def _branch_family(
+    branches: Mapping[str, Mapping[int, nn.Module]],
+    active_branches: tuple[str, ...],
+) -> str:
+    """Return ``pcu`` or ``lora`` and reject mixed scientific semantics."""
+    from .lora import MatchedLoRAExpert
+
+    saw_pcu = False
+    saw_lora = False
+    for branch in active_branches:
+        for expert in branches.get(branch, {}).values():
+            if isinstance(expert, MatchedLoRAExpert):
+                saw_lora = True
+            elif isinstance(expert, ForkedCellularExpert):
+                saw_pcu = True
+            else:
+                raise TypeError(f"unsupported branch expert type: {type(expert).__name__}")
+    if saw_pcu and saw_lora:
+        raise TypeError("PCU and LoRA branches cannot be composed in one runtime")
+    return "lora" if saw_lora else "pcu"
+
+
 def compose_cellular_experts(
     parent: CellularExperts,
-    branches: Mapping[str, Mapping[int, ForkedCellularExpert]],
+    branches: Mapping[str, Mapping[int, nn.Module]],
     active_branches: Iterable[str] = ("A", "B"),
-) -> ComposedCellularExperts:
-    """Build a functional runtime from independently trained branch forks."""
-    return ComposedCellularExperts.from_branches(parent, branches, active_branches)
+) -> nn.Module:
+    """Build the scientifically registered composition for the branch family.
+
+    PCU: ``C0 + (CA-C0) + (CB-C0)`` in function space.
+    LoRA: ``W0 + dWA + dWB`` in weight space, followed by one SwiGLU forward.
+    """
+    active = tuple(str(value) for value in active_branches)
+    if _branch_family(branches, active) == "lora":
+        from .lora_merge import ExactMergedLoRAExperts
+
+        return ExactMergedLoRAExperts(parent, branches, active)
+    return ComposedCellularExperts.from_branches(parent, branches, active)
