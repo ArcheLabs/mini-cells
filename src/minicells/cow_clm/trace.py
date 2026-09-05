@@ -47,6 +47,9 @@ def summarize_router_logits(
             flat = flat[valid]
         elif values.ndim == 2:
             flat = values
+            if attention_mask is not None and flat.shape[0] == attention_mask.numel():
+                valid = attention_mask.to(device=values.device, dtype=torch.bool).reshape(-1)
+                flat = flat[valid]
         else:
             raise COWCLMError("router logits must be rank 2 or 3")
         if flat.shape[0] == 0:
