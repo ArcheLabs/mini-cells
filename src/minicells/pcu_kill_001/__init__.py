@@ -34,6 +34,17 @@ from .lora import ComposedLoRACell, LoRAConfig, LoRACell, MatchedLoRAExpert, Mat
 from .task import IGNORE_INDEX, TailTrainingCache, TaskSequences, answer_token_cross_entropy, build_task_sequences, cache_task_sequences, load_task_cache, save_task_cache, validate_answer_only_labels
 from .task_training import TaskBranchResult, slice_task_cache, task_conditioned_allocation, train_cached_branch, train_cached_lora_branch
 from .evaluation import EvaluationSummary, evaluate_matrix, evaluate_samples, greedy_generate
+from .overlay import ExpertsOverlayModel, model_with_experts_overlay
+
+# The scientific pipeline historically deep-copied the entire foundation for
+# every A/B/AB/LoRA evaluation state.  All states differ only in the final MoE
+# expert runtime, so make the resource-bounded overlay the package default.
+# The swap is restored in a finally block on every forward and does not mutate
+# foundation weights or routing state.
+from . import experiment as _experiment
+
+_experiment._model_with_experts = model_with_experts_overlay
+
 
 __all__ = [
     "CellPartition",
@@ -100,4 +111,6 @@ __all__ = [
     "evaluate_matrix",
     "evaluate_samples",
     "greedy_generate",
+    "ExpertsOverlayModel",
+    "model_with_experts_overlay",
 ]
