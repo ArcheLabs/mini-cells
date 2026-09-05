@@ -21,6 +21,7 @@ from minicells.cow_clm import (
     save_cell_artifact,
     summarize_router_logits,
 )
+from minicells.cow_clm.trace import capture_granite_router_logits, require_captured_router_logits
 
 ROOT = Path(__file__).resolve().parents[3]
 LOCAL_ROOT = Path(__file__).resolve().parent
@@ -35,6 +36,7 @@ from dataset import track_candidates, track_rows  # noqa: E402
 
 MODEL_ID = "ibm-granite/granite-3.1-1b-a400m-base"
 MODEL_REVISION = "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+TRANSFORMERS_VERSION = "5.16.1"
 PROMPT_TEMPLATE = "Question: {question}\nAnswer:"
 MAX_LENGTH = 96
 RESULTS_ROOT = ROOT / "results" / "cow-clm-001"
@@ -63,6 +65,11 @@ def _protocol_sha256(path: Path) -> str:
 def _load_model(device: str) -> tuple[Any, Any]:
     import transformers
 
+    if transformers.__version__ != TRANSFORMERS_VERSION:
+        raise RuntimeError(
+            f"COW-CLM-001 requires transformers=={TRANSFORMERS_VERSION}, "
+            f"found {transformers.__version__}"
+        )
     token = os.environ.get("HF_TOKEN") or None
     if token is None:
         raise RuntimeError("HF_TOKEN is required for frozen COW-CLM hosted runs")
@@ -195,15 +202,13 @@ def _trace_training_sites(
     aggregated: dict[ExpertSite, int] = defaultdict(int)
     for start in range(0, len(rows), batch_size):
         batch = _encode(tokenizer, rows[start : start + batch_size], device)
-        output = model(
-            input_ids=batch["input_ids"],
-            attention_mask=batch["attention_mask"],
-            output_router_logits=True,
-            use_cache=False,
-        )
-        router_logits = getattr(output, "router_logits", None)
-        if not router_logits:
-            raise RuntimeError("Granite did not return router_logits with output_router_logits=True")
+        with capture_granite_router_logits(model) as captured:
+            model(
+                input_ids=batch["input_ids"],
+                attention_mask=batch["attention_mask"],
+                use_cache=False,
+            )
+        router_logits = require_captured_router_logits(captured)
         for stat in summarize_router_logits(
             router_logits,
             top_k=top_k,
