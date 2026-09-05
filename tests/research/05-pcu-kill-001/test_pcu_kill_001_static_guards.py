@@ -31,13 +31,16 @@ def test_capacity_ladder_selects_first_passing_k_under_bounded_search() -> None:
 
 def test_g0_guard_precedes_shared_engineering_pipeline() -> None:
     source = inspect.getsource(execution.run_engineering)
-    assert source.index("_g0_preflight") < source.index("_experiment.run_engineering", source.index("_g0_preflight"))
+    g0_position = source.index("_g0_preflight")
+    delegate_position = source.index("_run_engineering_pinned_revision")
+    assert g0_position < delegate_position
     assert 'if not g0["passed"]' in source
     assert "_write_g0_failure" in source
+    assert "resolved_revision" in source
 
 
 def test_g0_guard_precedes_shared_formal_pipeline() -> None:
     source = inspect.getsource(execution.run_formal_execution)
     assert source.index("_g0_preflight") < source.index("_experiment.run_formal_execution")
     assert 'if not g0["passed"]' in source
-    assert "valid_formal_run" not in source or "_write_g0_failure" in source
+    assert "_write_g0_failure" in source
