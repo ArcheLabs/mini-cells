@@ -6,10 +6,11 @@ This stage treats CLM as a substrate for controlled model evolution rather than 
 
 The active questions are model-level and operational:
 
-- can a pretrained model expose a sufficiently local writable coordinate;
+- can a pretrained model expose or host a sufficiently local writable coordinate;
 - can new behavior be acquired without unacceptable damage to withheld old behavior;
 - how much historical information is required to discover and protect that coordinate;
 - can a real post-training knowledge domain be acquired as a bounded, verifiable and rollbackable mutation;
+- can a mature model grow new semantically addressable functional Cells rather than treating pretrained Expert/channel boundaries as Cells;
 - can independently produced mutations later be composed, verified, rolled back, and merged.
 
 ## Current evidence chain
@@ -49,32 +50,54 @@ The experiment replaced the synthetic one-token target with `jam-knowledge-v0.1`
 1 aligned group -> 2 aligned groups -> 4 aligned groups
 ```
 
-All three seeds selected the same ranked writable prefix. Across seeds, capacity growth consistently improved validation and overall JAM heldout NLL while maintaining low registered-history KL, router identity, rollback, and artifact-reapply behavior. The registered failure was reproducible: the misconception reference-answer NLL gain remained below the frozen `0.25` gate for every capacity and seed, while the other JAM family gains and registered safety gates were otherwise stable enough to isolate this bottleneck.
-
-The formal No-Go is preserved. It does not by itself distinguish insufficient sparse knowledge capacity from an evaluation-formulation effect because misconception training and heldout references use different answer prefixes (`No.` versus `The claim is incorrect.`).
+All three seeds selected the same ranked writable prefix. Across seeds, capacity growth consistently improved validation and overall JAM heldout NLL while maintaining low registered-history KL, router identity, rollback, and artifact-reapply behavior. The registered failure was reproducible: the misconception reference-answer NLL gain remained below the frozen `0.25` gate for every capacity and seed.
 
 ### JAM Knowledge Mutation 001 Failure Diagnostic
 
-Current post-hoc diagnostic. It does not retrain the model, alter the canonical dataset, change any formal gate, or revise the frozen JAM001 decision.
+The forward-only post-hoc diagnostic is complete. It preserved the frozen JAM001 No-Go and decomposed all nine published mutations (`3 seeds × capacities 1/2/4`) into formal prefix, canonical JAM content, and EOS contributions.
 
-The diagnostic re-applies all nine already-published mutation artifacts (`3 seeds × capacities 1/2/4`) and exactly decomposes the original misconception reference-answer token NLL into:
+Classification:
+
+`CANONICAL_CONTENT_GAIN_ALSO_BELOW_ORIGINAL_THRESHOLD_AT_CAPACITY4`
+
+The original prefix-dilution hypothesis was rejected. At capacity 4, the answer prefix and EOS contributed positive gain while canonical JAM content had negative mean NLL gain. A training-style `No.` reference could exceed the old full-answer threshold even though canonical content still worsened. The correct interpretation is therefore not that the write channel is inert, but that the fixed sparse pretrained coordinate preferentially learns cheap output/template behavior rather than a persistent semantic write address.
+
+This diagnostic, combined with Core 002/009C and the positive Constructive CLM formation/growth/composition results, motivates a missing intermediate stage: functional Cell formation on top of a mature frozen model.
+
+### CLM Conversion Kill Test 001 — Mature MoE Functional Cellization
+
+Current protocol status: **PROTOCOL FROZEN — GPU FORMAL EXECUTION PENDING**.
+
+Foundation:
+
+- `ibm-granite/granite-3.1-1b-a400m-base`
+- revision `408b6e90baab8cf24f4aa9f8e19703ffa0a53b29`
+- foundation parameters remain frozen.
+
+Conversion 001 does not search for a pretrained Expert/channel Cell. It installs a zero-output plastic overlay whose Cell is:
 
 ```text
-formal answer prefix
-+ canonical JAM content
-+ EOS
+semantic read key
++ cross-layer low-rank residual transform
++ independently mutable state
 ```
 
-It first requires reproduction of the original full misconception NLL, then reports continuous prefix/content/EOS gains and a paired training-style-prefix counterfactual. The original `0.25` threshold is used only as a reference line; no new post-hoc PASS/FAIL gate is introduced.
+The registered write sites are layers `7 / 15 / 23`; routing is read once and reused across sites in the same forward pass. Zero initialization makes installation a compatibility shell before Cell learning.
 
-Current status: **ENGINEERING READY — DIAGNOSTIC GPU RUN PENDING**.
+The controlled world uses fictional entities and nonce protocol/region codes. Training, checkpoint validation, and final heldout direct/negation/relation/routing families are separate. The experiment then tests:
 
-Dedicated diagnostic guard has passed source/provenance validation, compilation, lint, and CPU tests. The remaining hosted work is one forward-only diagnostic run; it performs no training.
+1. zero-init foundation compatibility;
+2. functional Cell formation and cross-paraphrase routing persistence;
+3. one-Cell semantic rewrite with unrelated-knowledge locality;
+4. parent-to-child contextual growth under conflict;
+5. two disjoint branch mutations, merge retention, and exact rollback.
+
+Formal support requires at least 2 of 3 untouched seeds to pass every registered gate. A PASS would establish only the registered mature-MoE mechanism bridge; matched LoRA/static-routed-adapter baselines remain a required follow-up before any independent CLM advantage is claimed.
 
 ## Research discipline
 
 - Protocols and formal seeds are frozen before hosted-GPU execution.
-- Withheld evaluation examples are never learner-visible or used for checkpoint selection.
+- Training, checkpoint-validation, and final heldout examples are separated when checkpoint selection is part of the protocol.
 - Scientific failures are preserved and published.
 - Post-hoc diagnostics may explain a failure mode but may not rewrite the frozen formal decision.
 - Full logs are durable files; notebook stdout is compact.
