@@ -308,7 +308,14 @@ def bind_fork_artifact(
     artifact_path: str,
     artifact_sha256: str,
 ) -> CellRegistry:
-    """Bind every selected fork to the exact serialized runtime artifact."""
+    """Bind every selected fork to the exact serialized runtime artifact.
+
+    For fork records ``weight_hash`` is deliberately content-addressed to the
+    serialized delta artifact.  This makes the registry's runtime weight
+    identity independently re-checkable after process restart instead of
+    depending on an in-memory module hash that cannot be reconstructed from
+    the branch artifact alone.
+    """
     if branch not in {"A", "B", "JOINT"}:
         raise ValueError("branch must be A, B, or JOINT")
     if not artifact_path or not artifact_sha256:
@@ -325,6 +332,8 @@ def bind_fork_artifact(
             raise ValueError(f"fork {record.cell_id} has a mismatched foundation hash")
         record.artifact_path = str(artifact_path)
         record.artifact_sha256 = str(artifact_sha256)
+        record.weight_hash = str(artifact_sha256)
+        record.provenance["weight_hash_kind"] = "artifact_sha256"
     return result
 
 
@@ -341,8 +350,13 @@ def validate_fork_artifacts(registry: CellRegistry, require_bound: bool = True) 
             path = Path(record.artifact_path)
             if not path.is_file():
                 raise ValueError(f"fork {record.cell_id} artifact is missing: {path}")
-            if hashlib.sha256(path.read_bytes()).hexdigest() != record.artifact_sha256:
+            actual_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+            if actual_sha256 != record.artifact_sha256:
                 raise ValueError(f"fork {record.cell_id} artifact SHA-256 mismatch")
+            if record.provenance.get("weight_hash_kind") != "artifact_sha256":
+                raise ValueError(f"fork {record.cell_id} has no reproducible weight hash kind")
+            if record.weight_hash != actual_sha256:
+                raise ValueError(f"fork {record.cell_id} weight hash does not match runtime artifact")
 
 
 def fork_delta(parent: Mapping[str, Tensor], fork: Mapping[str, Tensor]) -> dict[str, Tensor]:
