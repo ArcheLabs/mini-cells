@@ -1,7 +1,7 @@
 {
   "experiment": "COW_CLM_001",
   "title": "COW-CLM-001: Minimal Functional Fork",
-  "protocol_version": "1.0",
+  "protocol_version": "1.1",
   "status": "FORMAL_PROTOCOL_FROZEN_GPU_PENDING",
   "seed": 26090511,
   "question": "How much of a mature frozen Granite MoE must become private through copy-on-write expert slices for a real functional mutation to be learned while the parent remains immutable and exactly recoverable?",
@@ -14,6 +14,7 @@
     "parent": "immutable Granite root",
     "activation": "one explicit execution ticket selects one complete Cell view",
     "write": "zero-init copy-on-write deltas over selected fused expert slices",
+    "private_delta_dtype": "fp32 with cast to parent dtype at execution",
     "canonical_composition": "inheritance/substitution, never additive sibling merge",
     "deeper_lineage": "out of scope until COW-CLM-002",
     "learned_routing": "out of scope; COW-CLM-001 uses oracle Cell activation"
@@ -68,7 +69,7 @@
     "dual_gpu_policy": "knowledge and capability are independent root forks and may run concurrently on cuda:0/cuda:1; one GPU sequential execution remains canonical-valid"
   },
   "implementation_git_blobs": {
-    "src/minicells/cow_clm/runtime.py": "4e1ec23d0f06c788277330524e38e1a978be9a22",
+    "src/minicells/cow_clm/runtime.py": "c00ce3196c60945ce6a45d176d8273e7f87c88c5",
     "src/minicells/cow_clm/artifact.py": "32686f687a808add75844305c0396144331ea948",
     "src/minicells/cow_clm/trace.py": "cf0123058817de3505bea4f35275e6ef3eccaa98",
     "scripts/research/cow_clm_001/dataset.py": "745ed354a104ef6b9c099597eb285b0534ffab33",
