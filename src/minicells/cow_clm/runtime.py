@@ -46,10 +46,13 @@ class ExpertSliceDelta(nn.Module):
         if min(ids) < 0 or max(ids) >= int(base.shape[0]):
             raise COWCLMError("expert index is outside fused expert tensor")
         self.register_buffer("expert_ids", torch.tensor(ids, dtype=torch.long))
+        private_dtype = (
+            torch.float32 if base.dtype in (torch.float16, torch.bfloat16) else base.dtype
+        )
         self.delta = nn.Parameter(
             torch.zeros(
                 (len(ids), *base.shape[1:]),
-                dtype=base.dtype,
+                dtype=private_dtype,
                 device=base.device,
             )
         )
@@ -270,10 +273,6 @@ class COWRuntime:
                 expert_sites=sites,
             )
         )
-        # PyTorch parametrization registration may advance the shared Parameter version
-        # counter even though the parent tensor values are untouched. Fork construction
-        # occurs before optimization and zero-delta birth is verified separately, so the
-        # immutability guard is sealed again here and then detects any training-time write.
         self._refresh_foundation_guard()
         return cell
 
