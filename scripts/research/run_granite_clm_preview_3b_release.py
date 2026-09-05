@@ -6,10 +6,10 @@ This release wrapper intentionally reuses the already-validated
 not introduce a second conversion implementation.
 
 The 3B release is pinned to the Transformers generation recorded by the
-frozen Granite 3.1 3B-A800M checkpoint itself. The release deliberately uses a
-single GPU when CUDA is requested: the 3B FP16 model fits on one T4-class GPU,
-while the parity workload is dominated by checkpoint materialization, hashing,
-and small deterministic inference batches rather than data-parallel throughput.
+Granite 3.1 3B-A800M checkpoint itself. The release deliberately uses a single
+GPU when CUDA is requested. Forward equivalence is evaluated through a
+single-GPU deterministic reference path with source-repeat and source-reload
+controls before the materialized CLM checkpoint is accepted.
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ DEFAULT_HF_SUBDIR = "granite-clm-preview-3b"
 DEFAULT_OUTPUT = Path("artifacts/releases/granite-clm-preview-3b")
 RUNNER = Path("scripts/research/moe_conversion_001/run.py")
 REQUIRED_TRANSFORMERS_VERSION = "4.46.0"
-EXECUTION_POLICY = "single_gpu_parity"
+EXECUTION_POLICY = "single_gpu_deterministic_reference_parity"
 
 
 def _run(command: list[str], *, log_path: Path | None = None) -> None:
@@ -132,6 +132,9 @@ def _write_release_docs(
 ) -> None:
     parity = metrics["parity"]
     gates = metrics["gates"]
+    controls = metrics.get("controls", {})
+    repeat_status = controls.get("source_repeat", {}).get("status", "NOT_RUN")
+    reload_status = controls.get("source_reload", {}).get("status", "NOT_RUN")
     publish_line = (
         f"Published to `{provenance['hf_target']}`."
         if published
@@ -166,11 +169,19 @@ def _write_release_docs(
         f"- Execution policy: `{metrics['environment']['execution_policy']}`",
         f"- Requested device: `{metrics['environment']['device']}`",
         f"- Visible CUDA devices: **{metrics['environment']['cuda_device_count']}**",
+        "- Deterministic algorithms: **enabled**",
+        "- Attention reference backend: `eager`",
         "",
         "The release intentionally uses a single GPU even when two GPUs are visible.",
-        "The 3B FP16 checkpoint fits on one T4-class GPU, and this parity workload is",
-        "primarily checkpoint-loading/hashing plus small deterministic inference batches;",
-        "multi-GPU model sharding is therefore kept out of the validated release path.",
+        "Granite 4.46 uses CUDA `index_add` in its MoE expert accumulation path, so",
+        "ordinary FP16 CUDA inference is not used as a bitwise-equivalence oracle.",
+        "Instead the release uses a deterministic reference path and first proves that",
+        "the source checkpoint reproduces itself before comparing it with the CLM bundle.",
+        "",
+        "## Baseline controls",
+        "",
+        f"- Same loaded source, repeated forward: **{repeat_status}**",
+        f"- Source checkpoint after independent reload: **{reload_status}**",
         "",
         "## Release gates",
         "",
@@ -207,7 +218,12 @@ def _write_release_docs(
         f"- Tensor records: **{metrics['conversion']['tensor_count']}**",
         f"- Expert address records: **{metrics['conversion']['expert_address_count']}**",
         "",
-        "## Parity",
+        "## Deterministic baseline controls",
+        "",
+        f"- Same-instance repeat parity: **{repeat_status}**",
+        f"- Independent source reload parity: **{reload_status}**",
+        "",
+        "## CLM materialized parity",
         "",
         f"- Max absolute logit error: `{parity['max_abs_logit_error']}`",
         f"- Max absolute router error: `{parity['max_abs_router_error']}`",
@@ -289,6 +305,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         args.copy_mode,
         "--work-dir",
         work,
+        "--deterministic",
+        "--reload-control",
     ]
     if args.revision:
         command.extend(["--revision", args.revision])
@@ -315,6 +333,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     bundle = work / "clm-bundle"
     manifest = _read_json(bundle / "clm_moe_manifest.json")
     parity = runner_result["forward"]
+    controls = runner_result.get("controls", {})
     gates = runner_result["gates"]
     safetensors_bytes = sum(
         int(item["bytes"])
@@ -341,6 +360,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "expert_address_count": runner_result["expert_address_count"],
             "manifest_identity_sha256": runner_result["manifest_identity_sha256"],
         },
+        "controls": controls,
+        "determinism": runner_result.get("determinism", {}),
         "parity": parity,
         "environment": {
             **release_environment,
@@ -368,6 +389,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "transformers_version": REQUIRED_TRANSFORMERS_VERSION,
             "execution_policy": EXECUTION_POLICY,
             "multi_gpu_sharding": False,
+            "deterministic_algorithms": True,
+            "attention_implementation": "eager",
+            "source_repeat_control": True,
+            "source_reload_control": True,
         },
         "claim_boundary": {
             "preserves_pretrained_behavior": True,
