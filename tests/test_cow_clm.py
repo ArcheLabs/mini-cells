@@ -19,6 +19,7 @@ from minicells.cow_clm import (
     summarize_router_logits,
     top_expert_sites,
 )
+from minicells.cow_clm.trace import capture_granite_router_logits, require_captured_router_logits
 
 
 class _ToyExperts(nn.Module):
@@ -77,6 +78,57 @@ class _ToyModel(nn.Module):
     def __init__(self) -> None:
         super().__init__()
         self.model = _ToyBackbone()
+
+    def forward(self, hidden: torch.Tensor) -> torch.Tensor:
+        for layer in self.model.layers:
+            hidden = layer(hidden)
+        return hidden
+
+
+class _TraceRouter(nn.Module):
+    def __init__(self, width: int = 4, experts: int = 4, top_k: int = 2) -> None:
+        super().__init__()
+        self.num_experts = experts
+        self.top_k = top_k
+        self.weight = nn.Parameter(torch.randn(experts, width))
+
+    def forward(self, hidden: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        logits = F.linear(hidden, self.weight).float()
+        top_logits, top_index = logits.topk(self.top_k, dim=-1)
+        top_weights = torch.softmax(top_logits, dim=-1).type_as(hidden)
+        return top_index, top_weights, logits
+
+
+class _TraceMoE(nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
+        self.router = _TraceRouter()
+
+    def forward(self, hidden: torch.Tensor) -> torch.Tensor:
+        flat = hidden.reshape(-1, hidden.shape[-1])
+        _top_index, _top_weights, _router_logits = self.router(flat)
+        return hidden
+
+
+class _TraceLayer(nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
+        self.block_sparse_moe = _TraceMoE()
+
+    def forward(self, hidden: torch.Tensor) -> torch.Tensor:
+        return self.block_sparse_moe(hidden)
+
+
+class _TraceBackbone(nn.Module):
+    def __init__(self, layers: int = 2) -> None:
+        super().__init__()
+        self.layers = nn.ModuleList([_TraceLayer() for _ in range(layers)])
+
+
+class _TraceModel(nn.Module):
+    def __init__(self, layers: int = 2) -> None:
+        super().__init__()
+        self.model = _TraceBackbone(layers)
 
     def forward(self, hidden: torch.Tensor) -> torch.Tensor:
         for layer in self.model.layers:
@@ -201,6 +253,23 @@ def test_v01_rejects_deeper_lineage_instead_of_inventing_merge_semantics() -> No
     runtime.fork_experts("cell-a", [(0, 1)])
     with pytest.raises(COWCLMError, match="direct forks"):
         runtime.fork_experts("cell-b", [(1, 2)], parent_id="cell-a")
+
+
+def test_router_hook_captures_logits_even_when_moe_discards_them() -> None:
+    torch.manual_seed(9)
+    model = _TraceModel(layers=2)
+    hidden = torch.randn(2, 3, 4)
+    expected = F.linear(
+        hidden.reshape(-1, hidden.shape[-1]),
+        model.model.layers[0].block_sparse_moe.router.weight,
+    ).float()
+    with capture_granite_router_logits(model) as captured:
+        observed_output = model(hidden)
+    logits = require_captured_router_logits(captured)
+    assert torch.equal(observed_output, hidden)
+    assert len(logits) == 2
+    assert torch.equal(logits[0], expected)
+    assert tuple(logits[0].shape) == (6, 4)
 
 
 def test_router_trace_ranks_real_topk_activation_sites() -> None:
