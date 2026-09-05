@@ -6,10 +6,10 @@ This release wrapper intentionally reuses the already-validated
 not introduce a second conversion implementation.
 
 The 3B release is pinned to the Transformers generation recorded by the
-Granite 3.1 3B-A800M checkpoint itself. The release deliberately uses a single
-GPU when CUDA is requested: the 3B FP16 model fits on one T4-class GPU, while
-the parity workload is dominated by checkpoint materialization, hashing, and
-small deterministic inference batches rather than data-parallel throughput.
+frozen Granite 3.1 3B-A800M checkpoint itself. The release deliberately uses a
+single GPU when CUDA is requested: the 3B FP16 model fits on one T4-class GPU,
+while the parity workload is dominated by checkpoint materialization, hashing,
+and small deterministic inference batches rather than data-parallel throughput.
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ DEFAULT_HF_REPO = "archelabs-org/native-clm-v0"
 DEFAULT_HF_SUBDIR = "granite-clm-preview-3b"
 DEFAULT_OUTPUT = Path("artifacts/releases/granite-clm-preview-3b")
 RUNNER = Path("scripts/research/moe_conversion_001/run.py")
-REQUIRED_TRANSFORMERS_VERSION = "4.47.0"
+REQUIRED_TRANSFORMERS_VERSION = "4.46.0"
 EXECUTION_POLICY = "single_gpu_parity"
 
 
@@ -399,7 +399,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         _write_json(output / "hf_publish.json", hf_publish)
         _write_release_docs(output, metrics=metrics, provenance=provenance, published=True)
 
-        # Refresh small release metadata after capturing the first HF commit receipt.
         from huggingface_hub import HfApi
 
         api = HfApi(token=token)
