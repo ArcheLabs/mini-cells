@@ -12,6 +12,7 @@ import torch
 from torch import nn
 
 from .cellular import GraniteArchitectureInspector, UnsupportedFoundationArchitecture, patch_moe_block
+from .registry import module_tensor_hash
 
 
 MODEL_ID = "ibm-granite/granite-3.1-1b-a400m-base"
@@ -49,11 +50,14 @@ def load_granite(model_id: str = MODEL_ID, revision: str | None = None, device: 
             resolved_revision = HfApi().model_info(model_id).sha
         source = snapshot_download(model_id, revision=resolved_revision, local_files_only=local_files_only)
         kwargs = {"local_files_only": True}
-    except Exception:
-        # A formal freeze cannot proceed without resolved_revision and local
-        # hashes, but the error remains useful during engineering diagnostics.
-        if resolved_revision:
-            kwargs["revision"] = resolved_revision
+    except Exception as exc:
+        # Never silently fall back to a moving main branch.  A formal freeze
+        # requires a concrete Hub commit and local files to hash.
+        if not resolved_revision:
+            raise DependencyUnavailable(
+                f"could not resolve an immutable Granite revision for {model_id}"
+            ) from exc
+        kwargs["revision"] = resolved_revision
     tokenizer = AutoTokenizer.from_pretrained(source, **kwargs)
     model = AutoModelForCausalLM.from_pretrained(source, torch_dtype=torch.float32, **kwargs)
     model.to(torch.device(device)).eval()
@@ -72,6 +76,7 @@ def model_identity_manifest(model_id: str, revision: str | None, model: nn.Modul
         "config_sha256": _config_hash(config),
         "weight_file_sha256": [],
         "tokenizer_sha256": [],
+        "foundation_tensor_sha256": module_tensor_hash(model),
     }
     source = source_root or getattr(config, "_name_or_path", None) or getattr(model, "name_or_path", None)
     if source and Path(str(source)).is_dir():

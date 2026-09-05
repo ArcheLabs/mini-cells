@@ -176,6 +176,7 @@ def assert_foundation_unchanged(before: Mapping[str, str], module: nn.Module) ->
 
 @dataclass(frozen=True)
 class BranchTrainingConfig:
+    optimizer: str = "AdamW"
     learning_rate: float = 1e-3
     max_optimizer_steps: int = 128
     max_training_tokens: int = 500_000

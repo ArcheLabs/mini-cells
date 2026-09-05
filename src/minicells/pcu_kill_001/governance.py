@@ -174,7 +174,7 @@ def verify_protocol_hash(protocol_path: Path, hash_path: Path) -> str:
     expected = hash_path.read_text(encoding="utf-8").strip()
     actual = sha256_file(protocol_path)
     if expected != actual:
-        raise ProtocolMismatch("FROZEN_PROTOCOL.sha256 does not match FROZEN_PROTOCOL.json")
+        raise ProtocolMismatch("PROTOCOL.sha256 does not match PROTOCOL.json")
     return actual
 
 
@@ -192,6 +192,16 @@ def assert_formal_preflight(
     payload = json.loads(protocol_path.read_text(encoding="utf-8"))
     if payload.get("status") != "FROZEN_BEFORE_FORMAL":
         raise ProtocolMismatch("protocol is not frozen")
+    if payload.get("formal_execution", {}).get("formal_execution_not_started") is not True:
+        raise ProtocolMismatch("frozen protocol does not prove that formal execution has not started")
+    model = payload.get("model", {})
+    for key in ("model_repo", "model_revision", "config_sha256", "weight_file_sha256", "tokenizer_sha256", "target_path"):
+        if model.get(key) in (None, "", []):
+            raise ProtocolMismatch(f"frozen protocol is missing immutable model field {key}")
+    training = payload.get("training", {})
+    for key in ("optimizer", "learning_rate", "max_optimizer_steps", "selected_k", "lora_rank"):
+        if training.get(key) in (None, "", 0):
+            raise ProtocolMismatch(f"frozen protocol is missing selected training field {key}")
     protocol_sha = verify_protocol_hash(protocol_path, hash_path)
     recorded_commit = payload.get("source_commit")
     if not recorded_commit:

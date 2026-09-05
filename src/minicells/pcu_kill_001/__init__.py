@@ -26,8 +26,10 @@ from .governance import (
 )
 from .registry import CellRecord, CellRegistry, merge_registries, rollback_registry
 from .synthetic import DatasetAudit, SyntheticWorld, audit_dataset, generate_world
-from .cache import CacheEquivalence, CacheSemanticsInvalid, CachedTailRunner, TailCache
+from .cache import CacheEquivalence, CacheSemanticsInvalid, CachedTailRunner, TailCache, validate_cache_identity
 from .training import ForkedCell, ForkedCellularExpert, ForkedCellularExperts, allocate_topk
+from .composition import ComposedCell, ComposedCellularExpert, ComposedCellularExperts, FunctionalCellDelta, compose_cellular_experts
+from .lora import ComposedLoRACell, LoRAConfig, LoRACell, MatchedLoRAExpert, merge_lora_factors, merged_effective_deltas
 
 __all__ = [
     "CellPartition",
@@ -57,8 +59,20 @@ __all__ = [
     "CacheSemanticsInvalid",
     "CachedTailRunner",
     "TailCache",
+    "validate_cache_identity",
     "ForkedCell",
     "ForkedCellularExpert",
     "ForkedCellularExperts",
     "allocate_topk",
+    "FunctionalCellDelta",
+    "ComposedCell",
+    "ComposedCellularExpert",
+    "ComposedCellularExperts",
+    "compose_cellular_experts",
+    "LoRAConfig",
+    "LoRACell",
+    "MatchedLoRAExpert",
+    "ComposedLoRACell",
+    "merge_lora_factors",
+    "merged_effective_deltas",
 ]

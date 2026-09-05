@@ -56,7 +56,7 @@ def verify_expert_algebra(experts: nn.Module, expert_index: int, partition: Cell
     projections = extract_expert_projections(experts, expert_index)
     partition = partition or CellPartition(projections.intermediate_size, 4)
     generator = torch.Generator(device="cpu").manual_seed(int(seed) + int(expert_index))
-    hidden = torch.randn(vectors, projections.hidden_size, generator=generator, dtype=torch.float32)
+    hidden = torch.randn(vectors, projections.hidden_size, generator=generator, dtype=torch.float32).to(projections.gate_weight.device)
     reference = _expert_formula(
         ExpertProjections(
             projections.gate_weight.float(), projections.up_weight.float(), projections.down_weight.float(),

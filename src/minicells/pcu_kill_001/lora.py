@@ -1,9 +1,9 @@
-"""Parameter-matched LoRA control on the same parent experts."""
+"""Parameter-matched LoRA controls with exact factor composition."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 
 import torch
 from torch import Tensor, nn
@@ -51,6 +51,29 @@ class LoRACell(nn.Module):
             "up_a": self.up_a.detach().clone(), "up_b": self.up_b.detach().clone(),
             "down_a": self.down_a.detach().clone(), "down_b": self.down_b.detach().clone(),
         }
+
+    def effective_deltas(self) -> dict[str, Tensor]:
+        """Return the actual ``Delta W`` matrices applied by this adapter."""
+        return {
+            "gate": (self.gate_b @ self.gate_a) * self.scale,
+            "up": (self.up_b @ self.up_a) * self.scale,
+            "down": (self.down_b @ self.down_a) * self.scale,
+        }
+
+
+class ComposedLoRACell(nn.Module):
+    """Functionally compose two trained LoRA Cells without cross terms."""
+
+    def __init__(self, parent: CellProjection, adapters: Iterable[LoRACell]) -> None:
+        super().__init__()
+        self.parent = parent
+        self.adapters = nn.ModuleList(adapters)
+
+    def forward(self, hidden_states: Tensor, activation: Any = F.silu) -> Tensor:
+        value = self.parent(hidden_states, activation)
+        for adapter in self.adapters:
+            value = value + adapter(hidden_states, activation) - self.parent(hidden_states, activation)
+        return value
 
 
 class MatchedLoRAExpert(nn.Module):
@@ -105,8 +128,60 @@ def choose_matched_rank(target_parameters: int, hidden_size: int, cell_width: in
     return min(valid, key=lambda rank: abs(lora_parameter_count(hidden_size, cell_width, selected_cells, rank) - target_parameters))
 
 
+def merge_lora_factors(
+    branch_a: Mapping[str, Tensor],
+    branch_b: Mapping[str, Tensor],
+    *,
+    scale_a: float = 1.0,
+    scale_b: float = 1.0,
+) -> dict[str, Tensor]:
+    """Rank-concatenate two LoRA states so ``B@A`` is exactly additive.
+
+    The factors are stored as ``A[r, in]`` and ``B[out, r]``.  Scaling the
+    right factors before concatenation gives ``B_merged @ A_merged =
+    scale_a*(B_a@A_a) + scale_b*(B_b@A_b)``.  In particular, this never uses
+    the invalid ``(B_a+B_b) @ (A_a+A_b)`` construction, which creates cross
+    terms.
+    """
+    prefixes = ("gate", "up", "down")
+    expected = {f"{prefix}_{suffix}" for prefix in prefixes for suffix in ("a", "b")}
+    if set(branch_a) != expected or set(branch_b) != expected:
+        raise ValueError("LoRA branches do not share the expected factor schema")
+    result: dict[str, Tensor] = {}
+    for prefix in prefixes:
+        left_a, left_b = branch_a[f"{prefix}_a"], branch_b[f"{prefix}_a"]
+        right_a, right_b = branch_a[f"{prefix}_b"], branch_b[f"{prefix}_b"]
+        if left_a.shape[1:] != left_b.shape[1:] or right_a.shape[:1] != right_b.shape[:1]:
+            raise ValueError(f"LoRA branches have incompatible {prefix} factor shapes")
+        if left_a.shape[0] != right_a.shape[1] or left_b.shape[0] != right_b.shape[1]:
+            raise ValueError(f"LoRA {prefix} factors are not matrix-compatible")
+        result[f"{prefix}_a"] = torch.cat((left_a, left_b), dim=0)
+        result[f"{prefix}_b"] = torch.cat((right_a * float(scale_a), right_b * float(scale_b)), dim=1)
+    return result
+
+
+def merged_effective_deltas(
+    branch_a: Mapping[str, Tensor],
+    branch_b: Mapping[str, Tensor],
+    *,
+    scale_a: float = 1.0,
+    scale_b: float = 1.0,
+) -> dict[str, Tensor]:
+    """Compute merged matrices directly; useful for an exact numeric audit."""
+    state = merge_lora_factors(branch_a, branch_b, scale_a=scale_a, scale_b=scale_b)
+    return {
+        prefix: state[f"{prefix}_b"] @ state[f"{prefix}_a"]
+        for prefix in ("gate", "up", "down")
+    }
+
+
 def merge_lora_state(base: dict[str, Tensor], branch_a: dict[str, Tensor], branch_b: dict[str, Tensor]) -> dict[str, Tensor]:
+    """Backward-compatible exact merge for the historical state API.
+
+    ``base`` is accepted to keep callers honest about a common parent schema;
+    LoRA factor tensors themselves are branch-local and must be concatenated,
+    not added element-wise.
+    """
     if set(base) != set(branch_a) or set(base) != set(branch_b):
         raise ValueError("LoRA branches do not share a parameter schema")
-    # Add deltas relative to the common zero-initialized fork, never average.
-    return {key: base[key] + (branch_a[key] - base[key]) + (branch_b[key] - base[key]) for key in base}
+    return merge_lora_factors(branch_a, branch_b)

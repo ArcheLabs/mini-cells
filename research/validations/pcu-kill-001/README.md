@@ -3,7 +3,8 @@
 This validation is the smallest formal-ready test of independently composable
 Cell forks in a pretrained MoE. It cellularizes only the final actual Granite
 MoE block, preserves the original parent-expert router, trains A and B from a
-common frozen foundation, and merges only registry/file deltas.
+common frozen foundation, and composes the independently trained Cell
+functions at runtime.
 
 The frozen foundation is `ibm-granite/granite-3.1-1b-a400m-base`. The verified
 Granite-MoE implementation stores expert projections as
@@ -31,10 +32,10 @@ target architecture, K, optimizer, and thresholds, freeze the protocol:
 python scripts/research/freeze_pcu_kill_001.py \
   --branch codex/pcu-composability-kill-001 \
   --model-manifest <engineering MODEL_MANIFEST.json> \
-  --engineering-summary <engineering summary.json>
+  --engineering-decision <ENGINEERING_DECISION.json>
 ```
 
-Then commit the frozen protocol and run only the non-consuming preflight:
+Then commit the frozen directory and run only the non-consuming preflight:
 
 ```bash
 python scripts/research/run_pcu_kill_001.py \
@@ -54,11 +55,14 @@ equivalence, cache equivalence, gradient geometry, Cell registry, branch
 manifest, merge manifest, metrics, decision, and provenance.
 
 Branch workers store fork-minus-parent tensors. A merge checks foundation and
-protocol hashes and performs a deterministic registry union. It never averages
-weights. Overlapping parent Cells remain independent A/B fork records, and
-rollback removes only the requested branch.
+protocol hashes, binds each fork to its serialized artifact, and uses
+`compose_cellular_experts` for the functional delta sum. It never averages
+weights or evaluates one nonlinear SwiGLU from summed parameters. Overlapping
+parent Cells remain independent A/B fork records, and both the registry and
+runtime support A/B/all rollback.
 
 The machine decision schema is
-`minicells.pcu-kill-001.decision.v1`. Engineering output is diagnostic only;
+`minicells.pcu-kill-001.engineering-decision.v2`. Engineering output is
+diagnostic only;
 the formal result wording must respect the decision state and must not claim
 that PCU or CLM has been proven.

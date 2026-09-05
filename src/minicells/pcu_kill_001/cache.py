@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 import torch
 from torch import Tensor, nn
@@ -151,7 +151,12 @@ class CachedTailRunner:
         return result
 
 
-def save_cache(cache: TailCache, directory: Path, shard_rows: int = 128) -> dict[str, Any]:
+def save_cache(
+    cache: TailCache,
+    directory: Path,
+    shard_rows: int = 128,
+    identity: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Save CPU shards and a manifest; branches never need the whole cache on GPU."""
     if shard_rows <= 0:
         raise ValueError("shard_rows must be positive")
@@ -169,11 +174,24 @@ def save_cache(cache: TailCache, directory: Path, shard_rows: int = 128) -> dict
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         shards.append({"path": path.name, "start": start, "end": end, "sha256": digest})
     manifest = {
-        "schema": "minicells.pcu-kill-001.cache.v1",
+        "schema": "minicells.pcu-kill-001.cache.v2",
         "rows": rows,
         "dtype": str(cache.mlp_input.dtype),
         "sample_ids": list(cache.sample_ids),
         "shards": shards,
     }
+    if identity:
+        manifest.update(dict(identity))
     (directory / "CACHE_MANIFEST.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return manifest
+
+
+def validate_cache_identity(manifest: Mapping[str, Any], expected: Mapping[str, Any]) -> None:
+    """Validate that a cache belongs to the exact frozen engineering inputs."""
+    required = ("foundation_model", "foundation_revision", "foundation_tensor_sha256", "target_path", "target_layer", "dataset_manifest_sha256", "encoding", "dtype")
+    missing = [key for key in required if manifest.get(key) in (None, "", [])]
+    if missing:
+        raise CacheSemanticsInvalid(f"cache identity is incomplete: {missing}")
+    mismatched = [key for key in expected if manifest.get(key) != expected[key]]
+    if mismatched:
+        raise CacheSemanticsInvalid(f"cache identity mismatch: {mismatched}")

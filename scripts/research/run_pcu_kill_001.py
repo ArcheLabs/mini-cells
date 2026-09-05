@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
-from minicells.pcu_kill_001.experiment import run_engineering  # noqa: E402
+from minicells.pcu_kill_001.experiment import run_engineering, run_formal_execution  # noqa: E402
 from minicells.pcu_kill_001.governance import (  # noqa: E402
     DEVELOPMENT_SEED,
     FORMAL_SEEDS,
@@ -23,8 +23,8 @@ from minicells.pcu_kill_001.governance import (  # noqa: E402
 )
 
 
-PROTOCOL = ROOT / "research/protocols/pcu-kill-001/FROZEN_PROTOCOL.json"
-PROTOCOL_SHA = ROOT / "research/protocols/pcu-kill-001/FROZEN_PROTOCOL.sha256"
+PROTOCOL = ROOT / "artifacts/research/pcu-kill-001/frozen/PROTOCOL.json"
+PROTOCOL_SHA = ROOT / "artifacts/research/pcu-kill-001/frozen/PROTOCOL.sha256"
 SEED_REGISTRY = ROOT / "research/formal_seed_registry.json"
 
 
@@ -71,7 +71,19 @@ def main() -> int:
         raise SystemExit("formal seed execution requires explicit --execute-formal authorization")
     assert_formal_preflight(ROOT, args.protocol, args.protocol_sha, SEED_REGISTRY)
     assert_seed_registry(SEED_REGISTRY)
-    raise RuntimeError("formal execution worker is intentionally not invoked by the implementation task")
+    output = args.out or ROOT / "artifacts/research/pcu-kill-001/formal" / str(args.seed)
+    valid = False
+    try:
+        result = run_formal_execution(args.seed, args.protocol, output, args.device if args.device != "auto" else "cpu")
+        valid = bool(result.get("scientific_evidence") and result.get("g0") and result.get("cache") and result.get("dataset_audit"))
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0 if valid else 1
+    except (OSError, ValueError, RuntimeError, KeyError) as exc:
+        payload = {"status": "FORMAL_EXECUTION_FAILED", "scientific_evidence": False, "formal_execution_not_started": False, "error": f"{type(exc).__name__}: {exc}"}
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
+    finally:
+        mark_formal_seed(SEED_REGISTRY, args.seed, valid=valid)
 
 
 if __name__ == "__main__":

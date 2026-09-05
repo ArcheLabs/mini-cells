@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic CPU-only registry union for two PCU branch artifacts."""
+"""Assemble two PCU branch artifacts for functional runtime composition."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
-from minicells.pcu_kill_001.registry import CellRegistry, merge_registries  # noqa: E402
+from minicells.pcu_kill_001.registry import CellRegistry, merge_registries, validate_fork_artifacts  # noqa: E402
 
 
 def _registry_path(value: Path) -> Path:
@@ -28,11 +28,13 @@ def main() -> int:
     base = CellRegistry.load(str(_registry_path(args.base)))
     branch_a = CellRegistry.load(str(_registry_path(args.branch_a)))
     branch_b = CellRegistry.load(str(_registry_path(args.branch_b)))
+    validate_fork_artifacts(branch_a)
+    validate_fork_artifacts(branch_b)
     merged = merge_registries(base, branch_a, branch_b)
     args.output.mkdir(parents=True, exist_ok=True)
     merged.save(str(args.output / "CELL_REGISTRY.json"))
     (args.output / "MERGE_MANIFEST.json").write_text(
-        '{\n  "schema": "minicells.pcu-kill-001.merge-manifest.v1",\n  "operation": "registry_union_only",\n  "tensor_averaging": false,\n  "registry_sha256": "' + merged.content_hash() + '"\n}\n',
+        '{\n  "schema": "minicells.pcu-kill-001.merge-manifest.v2",\n  "operation": "functional_cell_delta_sum",\n  "runtime": "compose_cellular_experts",\n  "tensor_averaging": false,\n  "artifact_bindings_validated": true,\n  "registry_sha256": "' + merged.content_hash() + '"\n}\n',
         encoding="utf-8",
     )
     print(merged.content_hash())

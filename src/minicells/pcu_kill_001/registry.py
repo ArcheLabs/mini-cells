@@ -49,6 +49,8 @@ class CellRecord:
     routing_mode: str = "INHERITED_PARENT"
     branch: str | None = None
     provenance: dict[str, Any] = field(default_factory=dict)
+    artifact_path: str | None = None
+    artifact_sha256: str | None = None
 
     def __post_init__(self) -> None:
         if self.state not in {"FOUNDATION", "FORKED"}:
@@ -59,6 +61,8 @@ class CellRecord:
             raise ValueError("foundation Cell generation must be zero")
         if self.state == "FORKED" and (not self.parents or self.generation < 1 or not self.branch):
             raise ValueError("forked Cell needs parent, generation, and branch")
+        if self.state == "FORKED" and self.branch not in {"A", "B", "JOINT"}:
+            raise ValueError("forked Cell has an unknown branch")
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -78,6 +82,8 @@ class CellRecord:
             "routing_mode": self.routing_mode,
             "branch": self.branch,
             "provenance": dict(self.provenance),
+            "artifact_path": self.artifact_path,
+            "artifact_sha256": self.artifact_sha256,
         }
 
     @classmethod
@@ -99,6 +105,8 @@ class CellRecord:
             routing_mode=str(value.get("routing_mode", "INHERITED_PARENT")),
             branch=str(value["branch"]) if value.get("branch") is not None else None,
             provenance=dict(value.get("provenance", {})),
+            artifact_path=str(value["artifact_path"]) if value.get("artifact_path") is not None else None,
+            artifact_sha256=str(value["artifact_sha256"]) if value.get("artifact_sha256") is not None else None,
         )
 
 
@@ -240,7 +248,14 @@ def fork_registry(base: CellRegistry, selected: Iterable[str], branch: str) -> C
             generation=parent.generation + 1,
             weight_hash=parent.weight_hash,
             branch=branch,
-            provenance={"fork_initial_delta": "zero", "parent_cell_id": parent.cell_id},
+            provenance={
+                "fork_initial_delta": "zero",
+                "parent_cell_id": parent.cell_id,
+                "foundation_model": base.foundation_model,
+                "foundation_revision": base.foundation_revision,
+                "foundation_hash": base.foundation_hash,
+                "protocol_sha256": base.protocol_sha256,
+            },
         )
     return result
 
@@ -275,13 +290,52 @@ def merge_registries(base: CellRegistry, branch_a: CellRegistry, branch_b: CellR
 
 def rollback_registry(merged: CellRegistry, branch: str) -> CellRegistry:
     """Remove only one branch's fork records, preserving parent and other branch."""
-    if branch not in {"A", "B", "JOINT"}:
+    if branch not in {"A", "B", "JOINT", "all"}:
         raise ValueError("branch must be A, B, or JOINT")
     result = merged.copy()
     result.records = {
-        key: value for key, value in result.records.items() if value.branch != branch
+        key: value
+        for key, value in result.records.items()
+        if value.state == "FOUNDATION" or (branch != "all" and value.branch != branch)
     }
     return result
+
+
+def bind_fork_artifact(
+    registry: CellRegistry,
+    branch: str,
+    artifact_path: str,
+    artifact_sha256: str,
+) -> CellRegistry:
+    """Bind every selected fork to the exact serialized runtime artifact."""
+    if branch not in {"A", "B", "JOINT"}:
+        raise ValueError("branch must be A, B, or JOINT")
+    if not artifact_path or not artifact_sha256:
+        raise ValueError("fork artifact path and SHA-256 are required")
+    result = registry.copy()
+    records = [record for record in result.fork_records if record.branch == branch]
+    if not records:
+        raise ValueError(f"registry has no fork records for branch {branch}")
+    for record in records:
+        parent_id = record.parents[0] if record.parents else ""
+        if record.provenance.get("parent_cell_id") != parent_id:
+            raise ValueError(f"fork {record.cell_id} is not bound to its declared parent")
+        if record.foundation_weight_hash != result.foundation_hash:
+            raise ValueError(f"fork {record.cell_id} has a mismatched foundation hash")
+        record.artifact_path = str(artifact_path)
+        record.artifact_sha256 = str(artifact_sha256)
+    return result
+
+
+def validate_fork_artifacts(registry: CellRegistry, require_bound: bool = True) -> None:
+    """Fail closed when a registry record cannot identify its runtime fork."""
+    for record in registry.fork_records:
+        if not record.parents or record.provenance.get("parent_cell_id") != record.parents[0]:
+            raise ValueError(f"fork {record.cell_id} has invalid parent binding")
+        if record.provenance.get("foundation_hash", registry.foundation_hash) != registry.foundation_hash:
+            raise ValueError(f"fork {record.cell_id} has invalid foundation binding")
+        if require_bound and (not record.artifact_path or not record.artifact_sha256):
+            raise ValueError(f"fork {record.cell_id} has no bound runtime artifact")
 
 
 def fork_delta(parent: Mapping[str, Tensor], fork: Mapping[str, Tensor]) -> dict[str, Tensor]:
