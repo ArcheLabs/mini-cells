@@ -4,6 +4,12 @@
 This release wrapper intentionally reuses the already-validated
 `scripts/research/moe_conversion_001/run.py` real-model parity runner. It does
 not introduce a second conversion implementation.
+
+The 3B release is pinned to the Transformers loader generation used by the
+validated Granite MoE conversion path. The release deliberately uses a single
+GPU when CUDA is requested: the 3B FP16 model fits on one T4-class GPU, while
+the parity workload is dominated by checkpoint materialization, hashing, and
+small deterministic inference batches rather than data-parallel throughput.
 """
 
 from __future__ import annotations
@@ -26,6 +32,8 @@ DEFAULT_HF_REPO = "archelabs-org/native-clm-v0"
 DEFAULT_HF_SUBDIR = "granite-clm-preview-3b"
 DEFAULT_OUTPUT = Path("artifacts/releases/granite-clm-preview-3b")
 RUNNER = Path("scripts/research/moe_conversion_001/run.py")
+REQUIRED_TRANSFORMERS_VERSION = "4.46.3"
+EXECUTION_POLICY = "single_gpu_parity"
 
 
 def _run(command: list[str]) -> None:
@@ -47,6 +55,44 @@ def _version(package: str) -> str | None:
         return version(package)
     except Exception:
         return None
+
+
+def _require_release_environment(args: argparse.Namespace) -> dict[str, Any]:
+    transformers_version = _version("transformers")
+    if transformers_version != REQUIRED_TRANSFORMERS_VERSION:
+        raise RuntimeError(
+            "Granite-CLM-Preview-3B release requires "
+            f"transformers=={REQUIRED_TRANSFORMERS_VERSION}; got {transformers_version!r}. "
+            "Use the canonical Kaggle notebook or install the pinned release stack first."
+        )
+
+    cuda_devices = [
+        torch.cuda.get_device_name(index) for index in range(torch.cuda.device_count())
+    ]
+    if args.device.startswith("cuda"):
+        if not torch.cuda.is_available():
+            raise RuntimeError("CUDA requested but torch.cuda.is_available() is false")
+        if args.device not in {"cuda", "cuda:0"}:
+            raise RuntimeError(
+                "Granite-CLM-Preview-3B release intentionally uses one GPU. "
+                "Use --device cuda:0 (or cuda). Multi-GPU sharding is not part of the "
+                "validated release path."
+            )
+
+    environment = {
+        "execution_policy": EXECUTION_POLICY,
+        "requested_device": args.device,
+        "cuda_available": torch.cuda.is_available(),
+        "cuda_device_count": torch.cuda.device_count(),
+        "cuda_devices": cuda_devices,
+        "torch_version": torch.__version__,
+        "transformers_version": transformers_version,
+        "huggingface_hub_version": _version("huggingface_hub"),
+        "accelerate_version": _version("accelerate"),
+        "python": sys.version.split()[0],
+    }
+    print(json.dumps({"release_environment": environment}, indent=2, sort_keys=True))
+    return environment
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -93,6 +139,18 @@ def _write_release_docs(
         f"- Upstream model: `{provenance['source']['model_id']}`",
         f"- Upstream revision: `{provenance['source']['revision']}`",
         f"- CLM manifest identity: `{provenance['manifest_identity_sha256']}`",
+        "",
+        "## Release environment",
+        "",
+        f"- Transformers: `{metrics['environment']['transformers_version']}` (pinned)",
+        f"- Execution policy: `{metrics['environment']['execution_policy']}`",
+        f"- Requested device: `{metrics['environment']['device']}`",
+        f"- Visible CUDA devices: **{metrics['environment']['cuda_device_count']}**",
+        "",
+        "The release intentionally uses a single GPU even when two GPUs are visible.",
+        "The 3B FP16 checkpoint fits on one T4-class GPU, and this parity workload is",
+        "primarily checkpoint-loading/hashing plus small deterministic inference batches;",
+        "multi-GPU model sharding is therefore kept out of the validated release path.",
         "",
         "## Release gates",
         "",
@@ -142,6 +200,9 @@ def _write_release_docs(
         "",
         f"- Device: `{metrics['environment']['device']}`",
         f"- GPU: `{metrics['environment']['gpu_name']}`",
+        f"- Visible CUDA devices: **{metrics['environment']['cuda_device_count']}**",
+        f"- Execution policy: `{metrics['environment']['execution_policy']}`",
+        f"- Transformers: `{metrics['environment']['transformers_version']}`",
         f"- Dtype: `{metrics['environment']['dtype']}`",
         f"- End-to-end conversion/parity seconds: `{metrics['runtime']['runner_seconds']:.3f}`",
         "",
@@ -182,6 +243,8 @@ def _publish_bundle(bundle: Path, *, repo_id: str, subdir: str, token: str) -> d
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
+    release_environment = _require_release_environment(args)
+
     output = args.output_dir.resolve()
     work = args.work_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -253,13 +316,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         },
         "parity": parity,
         "environment": {
+            **release_environment,
             "device": runner_result["device"],
             "dtype": runner_result["dtype"],
-            "gpu_name": torch.cuda.get_device_name(0) if args.device.startswith("cuda") else None,
-            "torch_version": torch.__version__,
-            "transformers_version": _version("transformers"),
-            "huggingface_hub_version": _version("huggingface_hub"),
-            "python": sys.version.split()[0],
+            "gpu_name": (
+                torch.cuda.get_device_name(0) if args.device.startswith("cuda") else None
+            ),
         },
         "runtime": {"runner_seconds": runner_seconds},
     }
@@ -275,6 +337,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "hf_target": f"{args.hf_repo}/{args.hf_subdir}",
         "manifest_identity_sha256": runner_result["manifest_identity_sha256"],
         "conversion_contract": manifest["conversion"],
+        "release_environment_contract": {
+            "transformers_version": REQUIRED_TRANSFORMERS_VERSION,
+            "execution_policy": EXECUTION_POLICY,
+            "multi_gpu_sharding": False,
+        },
         "claim_boundary": {
             "preserves_pretrained_behavior": True,
             "expert_addresses_are_mutation_coordinates": True,
@@ -350,7 +417,7 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=Path(os.environ.get("MINICELLS_RELEASE_WORK_DIR", "/tmp/granite-clm-preview-3b")),
     )
-    parser.add_argument("--device", default="cuda")
+    parser.add_argument("--device", default="cuda:0")
     parser.add_argument(
         "--dtype", choices=("auto", "float32", "float16", "bfloat16"), default="float16"
     )
