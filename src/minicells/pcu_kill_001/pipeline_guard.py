@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from typing import Any, Callable
 
+from .dual_oracle import DualGPUContextOracle
 from .engineering_accel import maybe_engineering_acceleration
 from .governance import git_provenance, write_json
 from .synthetic import POSITIVE_CONTROL_VERSION
@@ -144,8 +145,22 @@ def _run_with_optional_engineering_acceleration(experiment_module: Any, current:
     )
     if accelerator is None:
         return current(**kwargs)
-    with accelerator:
-        return current(**kwargs)
+
+    original_oracle = experiment_module.context_oracle
+    experiment_module.context_oracle = DualGPUContextOracle(
+        original_oracle,
+        primary_model=kwargs["original"],
+        primary_tokenizer=kwargs["tokenizer"],
+        model_repo=str(manifest["model_repo"]),
+        model_revision=str(manifest["model_revision"]),
+        foundation_hash=str(manifest["foundation_tensor_sha256"]),
+        inspector=kwargs["inspector"],
+    )
+    try:
+        with accelerator:
+            return current(**kwargs)
+    finally:
+        experiment_module.context_oracle = original_oracle
 
 
 def install_pipeline_guard(experiment_module: Any) -> Callable[..., Any]:
