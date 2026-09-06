@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
 import torch
 
 from minicells.pcu_kill_001.cellular import GraniteArchitectureInspector
@@ -25,6 +26,10 @@ class _RankingTokenizer:
 
     def encode(self, text: str, add_special_tokens: bool = True) -> list[int]:
         if add_special_tokens:
+            if text.endswith(" RIGHT"):
+                return [2, 5]
+            if text.endswith(" WRONG"):
+                return [2, 6]
             return [2]
         return {"RIGHT": [5], "WRONG": [6]}[text]
 
@@ -37,7 +42,7 @@ class _RankingModel:
         return type("Output", (), {"logits": logits})()
 
 
-def test_teacher_forced_candidate_ranking_uses_causal_logits_not_generation() -> None:
+def test_teacher_forced_candidate_ranking_uses_exact_full_string_boundary() -> None:
     scores = _teacher_forced_candidate_scores(
         _RankingModel(),
         _RankingTokenizer(),
@@ -46,6 +51,17 @@ def test_teacher_forced_candidate_ranking_uses_causal_logits_not_generation() ->
         device="cpu",
     )
     assert scores[1] > scores[0]
+
+
+def test_teacher_forced_candidate_ranking_rejects_trailing_space_prompt() -> None:
+    with pytest.raises(ValueError, match="must not end in whitespace"):
+        _teacher_forced_candidate_scores(
+            _RankingModel(),
+            _RankingTokenizer(),
+            "prompt ",
+            ("WRONG", "RIGHT"),
+            device="cpu",
+        )
 
 
 def test_candidate_pool_is_deterministic_contains_correct_and_has_no_position_bias() -> None:
