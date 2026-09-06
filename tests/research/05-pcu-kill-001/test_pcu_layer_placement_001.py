@@ -15,7 +15,7 @@ def test_layer_target_rule_selects_depth_fraction_probes() -> None:
 def test_layer_target_rule_uses_nearest_available_sparse_layers() -> None:
     targets = layer_placement.choose_layer_targets((1, 5, 9, 13, 17, 21, 23))
     assert targets["late_baseline"] == 23
-    assert targets["early"] == 9
+    assert targets["early"] == 5  # target 7 is tied; deterministic tie-break picks lower layer
     assert targets["mid"] == 13
     assert len(set(targets.values())) == 3
 
@@ -27,6 +27,8 @@ def test_diagnostic_holds_training_variables_fixed() -> None:
     assert layer_placement.MAX_OPTIMIZER_STEPS == 128
     assert layer_placement.MAX_TRAINING_TOKENS == 500_000
     assert layer_placement.BATCH_SIZE == 8
+    assert layer_placement.CALIBRATION_ROWS == 64
+    assert layer_placement.CALIBRATION_BATCH_SIZE == 8
     assert layer_placement.DIRECT_CAPABILITY_FLOOR == 0.80
 
 
@@ -34,7 +36,8 @@ def test_diagnostic_is_a_only_and_reuses_published_late_baseline() -> None:
     source = inspect.getsource(layer_placement.run_layer_placement_diagnostic)
     assert '"task": "A_only_U_to_V"' in source
     assert '"source": "published_PCU_KILL_001_E0"' in source
-    assert 'jobs = (("early", early, devices[0]), ("mid", mid, devices[1]))' in source
+    assert '"early": (early, devices[0])' in source
+    assert '"mid": (mid, devices[1])' in source
     assert "late_baseline" in source
 
 
@@ -44,7 +47,8 @@ def test_full_model_training_still_uses_answer_token_ce_and_adamw() -> None:
     allocation_source = inspect.getsource(layer_placement.full_model_task_conditioned_allocation)
     assert "answer_token_cross_entropy" in loss_source
     assert "torch.optim.AdamW" in train_source
-    assert "calibration_rows" in allocation_source
+    assert "supervised_total" in allocation_source
+    assert "calibration_batch_size" in allocation_source
     assert "allocate_topk" in allocation_source
 
 
