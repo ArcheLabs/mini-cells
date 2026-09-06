@@ -1,16 +1,16 @@
 """Final engineering diagnostic for PCU local-Cell association learning.
 
-PCU-OBJECTIVE-ALIGNMENT-001 freezes the best permissive locality condition from
-PCU-LOCALITY-WIDTH-001 (L7, exact published K=64 Cell set, AdamW, LR=1e-3,
-128 optimizer steps, effective batch=8, engineering seed 26090501, A-only
-synthetic world) and changes exactly one scientific variable: the training
-objective.
+PCU-OBJECTIVE-ALIGNMENT-001 freezes the most permissive completed locality
+condition from PCU-LOCALITY-WIDTH-001 (L7, the exact published K=64 Cell set,
+AdamW, LR=1e-3, 128 optimizer steps, effective batch=8, engineering seed
+26090501, A-only synthetic world) and changes exactly one scientific variable:
+the training objective.
 
-The original answer-token causal CE is replaced by a differentiable 16-way
-candidate-ranking objective using the exact completion-token mean log-
-likelihood semantics already used by context-oracle v2.  The correct V and 15
+The answer-token causal CE objective is replaced by a differentiable 16-way
+candidate-ranking objective using the exact context-oracle-v2 scoring rule:
+mean log-likelihood over the completion tokens.  The correct V and 15
 deterministic V-domain distractors are scored from the unchanged A_train prompt;
-no answer is inserted into the prompt.
+the answer is never inserted into the prompt.
 
 This is engineering-only evidence.  It does not modify the frozen/formal
 PCU-KILL-001 protocol and never consumes formal seeds.
@@ -46,7 +46,6 @@ from .synthetic import (
     POSITIVE_CONTROL_CANDIDATES,
     _candidate_pool,
     _completion_encoding,
-    _rank_candidate,
     audit_dataset,
     generate_world,
 )
@@ -83,6 +82,10 @@ class RankingSummary:
         }
 
 
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parents[3]
+
+
 def _load_locality_baseline(root: Path) -> dict[str, Any]:
     root = Path(root)
     for name in ("RUN_IDENTITY.json", "DESIGN.json", "DECISION.json", "WIDTH_064.json"):
@@ -102,9 +105,7 @@ def _load_locality_baseline(root: Path) -> dict[str, Any]:
     if decision.get("valid_run") is not True or decision.get("formal_execution_not_started") is not True:
         raise RuntimeError("locality-width baseline is not valid pre-formal evidence")
     if decision.get("status") != "LOCALITY_WIDTH_IMPROVES_BUT_DOES_NOT_RESCUE":
-        raise RuntimeError(
-            "objective-alignment expects the completed locality-width non-rescue result"
-        )
+        raise RuntimeError("objective-alignment expects the completed locality-width non-rescue result")
     if int(width.get("identity", {}).get("target_layer", -1)) != TARGET_LAYER:
         raise RuntimeError("locality-width baseline target layer changed")
     if int(width.get("identity", {}).get("selected_k", -1)) != TARGET_K:
@@ -123,11 +124,9 @@ def _load_locality_baseline(root: Path) -> dict[str, Any]:
     if width.get("formal_execution_not_started") is not True:
         raise RuntimeError("K64 baseline crossed formal boundary")
 
-    # The WIDTH result identity binds the foundation/dataset; the L7 layer
-    # baseline carries the full foundation manifest needed for exact reload.
     layer_root = Path(str(design.get("baseline", {}).get("artifact", "")))
     if not layer_root.is_absolute():
-        layer_root = Path.cwd() / layer_root
+        layer_root = _repo_root() / layer_root
     layer_path = layer_root / "LAYER_07.json"
     if not layer_path.is_file():
         raise RuntimeError(f"objective-alignment cannot resolve L7 foundation baseline: {layer_path}")
@@ -156,15 +155,13 @@ def _load_locality_baseline(root: Path) -> dict[str, Any]:
     }
 
 
-def _candidate_scores_tensor(
-    model: nn.Module,
+def _prepare_candidate_batch(
     tokenizer: Any,
     prompt: str,
     candidates: Sequence[str],
     *,
     device: str,
-) -> Tensor:
-    """Differentiable oracle-v2 candidate scores: mean completion log-likelihood."""
+) -> tuple[Tensor, Tensor, list[list[int]], int]:
     encoded = [_completion_encoding(tokenizer, prompt, str(candidate)) for candidate in candidates]
     full = [item[0] for item in encoded]
     completion_ids = [item[1] for item in encoded]
@@ -183,8 +180,22 @@ def _candidate_scores_tensor(
     for row, values in enumerate(full):
         input_ids[row, : len(values)] = torch.tensor(values, dtype=torch.long, device=device)
         attention[row, : len(values)] = 1
+    return input_ids, attention, completion_ids, prompt_length
 
-    output = model(input_ids=input_ids, attention_mask=attention)
+
+def _candidate_scores_tensor(
+    model: nn.Module,
+    tokenizer: Any,
+    prompt: str,
+    candidates: Sequence[str],
+    *,
+    device: str,
+) -> tuple[Tensor, list[list[int]]]:
+    """Differentiable oracle-v2 scores: mean exact-completion-token log-likelihood."""
+    input_ids, attention, completion_ids, prompt_length = _prepare_candidate_batch(
+        tokenizer, prompt, candidates, device=device
+    )
+    output = model(input_ids=input_ids, attention_mask=attention, use_cache=False)
     logits = getattr(output, "logits", output)
     if isinstance(logits, (tuple, list)):
         logits = logits[0]
@@ -203,7 +214,28 @@ def _candidate_scores_tensor(
         if not torch.isfinite(values).all():
             raise RuntimeError("non-finite differentiable ranking candidate score")
         scores.append(values.mean())
-    return torch.stack(scores)
+    return torch.stack(scores), completion_ids
+
+
+def _ranking_diagnostic(
+    candidates: Sequence[str],
+    correct: str,
+    scores: Tensor,
+) -> dict[str, Any]:
+    values = [float(value) for value in scores.detach().cpu()]
+    ranked = sorted(zip((str(value) for value in candidates), values), key=lambda row: (-row[1], row[0]))
+    winner = ranked[0][0]
+    correct_rank = next(index + 1 for index, row in enumerate(ranked) if row[0] == str(correct))
+    correct_score = next(row[1] for row in ranked if row[0] == str(correct))
+    best_wrong = max(row[1] for row in ranked if row[0] != str(correct))
+    return {
+        "correct": str(correct),
+        "winner": winner,
+        "correct_rank": int(correct_rank),
+        "correct_score": float(correct_score),
+        "correct_margin": float(correct_score - best_wrong),
+        "exact": winner == str(correct),
+    }
 
 
 def _ranking_loss_for_sample(
@@ -213,7 +245,7 @@ def _ranking_loss_for_sample(
     candidate_universe: Sequence[str],
     *,
     device: str,
-) -> tuple[Tensor, dict[str, Any]]:
+) -> tuple[Tensor, dict[str, Any], int, int]:
     candidates = _candidate_pool(
         candidate_universe,
         str(sample.answer),
@@ -223,28 +255,20 @@ def _ranking_loss_for_sample(
     if len(candidates) != CANDIDATE_POOL_SIZE:
         raise RuntimeError("objective-alignment requires exactly 16 candidates")
     correct_index = candidates.index(str(sample.answer))
-    scores = _candidate_scores_tensor(
-        model,
-        tokenizer,
-        str(sample.prompt),
-        candidates,
-        device=device,
+    scores, completion_ids = _candidate_scores_tensor(
+        model, tokenizer, str(sample.prompt), candidates, device=device
     )
-    scaled = scores / float(RANKING_TEMPERATURE)
     target = torch.tensor([correct_index], dtype=torch.long, device=device)
-    loss = F.cross_entropy(scaled.unsqueeze(0), target)
-    order = torch.argsort(scores.detach(), descending=True)
-    rank = int((order == correct_index).nonzero(as_tuple=False)[0, 0]) + 1
-    best_wrong = torch.max(torch.cat((scores[:correct_index], scores[correct_index + 1 :])))
-    margin = float((scores[correct_index] - best_wrong).detach())
-    return loss, {
+    loss = F.cross_entropy((scores / float(RANKING_TEMPERATURE)).unsqueeze(0), target)
+    diagnostic = _ranking_diagnostic(candidates, str(sample.answer), scores)
+    diagnostic.update({
         "sample_id": str(sample.sample_id),
-        "correct": str(sample.answer),
         "correct_index": int(correct_index),
-        "correct_rank": rank,
-        "correct_margin": margin,
         "candidate_count": len(candidates),
-    }
+    })
+    correct_tokens = len(completion_ids[correct_index])
+    candidate_tokens = sum(len(value) for value in completion_ids)
+    return loss, diagnostic, correct_tokens, candidate_tokens
 
 
 def _train_ranking_branch(
@@ -259,17 +283,14 @@ def _train_ranking_branch(
     device: str,
     config: BranchTrainingConfig,
 ) -> tuple[ForkedCellularExperts, dict[str, Any]]:
-    """Train K64 using exact 16-way ranking, effective batch=8.
+    """Train K64 with exact 16-way ranking and an effective batch of eight.
 
-    One training sample (16 candidate sequences) is materialized at a time to
-    bound T4 activation memory.  Eight sample losses are each scaled by 1/8 and
-    accumulated before one optimizer.step(), so this is exactly the mean
-    ranking loss for the frozen effective batch of eight samples.
+    One sample (16 candidate sequences) is materialized at a time. Eight sample
+    losses are scaled by 1/8 and accumulated before one optimizer.step(), which
+    is exactly the mean ranking loss of the unchanged effective batch=8 while
+    bounding T4 activation memory.
     """
-    runtime = ForkedCellularExperts(
-        parent_experts,
-        _selected_map(selected_cells, TARGET_LAYER),
-    ).to(device)
+    runtime = ForkedCellularExperts(parent_experts, _selected_map(selected_cells, TARGET_LAYER)).to(device)
     parameters = selected_delta_parameters(runtime)
     if not parameters:
         raise RuntimeError("objective-alignment branch has no trainable Cell deltas")
@@ -300,29 +321,16 @@ def _train_ranking_branch(
         batch_candidate_tokens = 0
 
         for sample in batch:
-            candidates = _candidate_pool(
-                candidate_universe,
-                str(sample.answer),
-                str(sample.sample_id),
-                size=CANDIDATE_POOL_SIZE,
-            )
-            for candidate in candidates:
-                _, completion = _completion_encoding(tokenizer, str(sample.prompt), str(candidate))
-                batch_candidate_tokens += len(completion)
-                if str(candidate) == str(sample.answer):
-                    batch_correct_tokens += len(completion)
-            loss, diagnostic = _ranking_loss_for_sample(
-                model,
-                tokenizer,
-                sample,
-                candidate_universe,
-                device=device,
+            loss, diagnostic, correct_tokens, candidate_tokens = _ranking_loss_for_sample(
+                model, tokenizer, sample, candidate_universe, device=device
             )
             if not torch.isfinite(loss):
                 raise RuntimeError("non-finite objective-alignment ranking loss")
             (loss / float(config.batch_size)).backward()
             batch_losses.append(float(loss.detach()))
-            batch_exact += int(diagnostic["correct_rank"] == 1)
+            batch_exact += int(bool(diagnostic["exact"]))
+            batch_correct_tokens += int(correct_tokens)
+            batch_candidate_tokens += int(candidate_tokens)
 
         if correct_completion_tokens + batch_correct_tokens > int(config.max_training_tokens):
             raise RuntimeError("objective-alignment unexpectedly hit the inherited token budget")
@@ -355,6 +363,7 @@ def _train_ranking_branch(
         "candidate_pool_size": CANDIDATE_POOL_SIZE,
         "ranking_temperature": RANKING_TEMPERATURE,
         "sample_microbatch": RANKING_SAMPLE_MICROBATCH,
+        "use_cache": False,
         "final_loss": final_loss,
         "final_batch_ranking_accuracy": final_batch_ranking_accuracy,
         "selected_cells": list(selected_cells),
@@ -377,40 +386,13 @@ def evaluate_candidate_ranking(
             str(sample.sample_id),
             size=CANDIDATE_POOL_SIZE,
         )
-        ranked = _rank_candidate(
-            model,
-            tokenizer,
-            str(sample.prompt),
-            candidates,
-            str(sample.answer),
-            device=device,
-        )
-        correct_score = float(ranked["correct_score"])
-        wrong_scores = []
-        # _rank_candidate intentionally exposes only aggregate ranking fields.
-        # winner_margin is not the correct-vs-best-wrong margin when correct is
-        # not rank 1, so recompute exact candidate scores only for diagnostics.
         with torch.inference_mode():
-            scores = _candidate_scores_tensor(
-                model,
-                tokenizer,
-                str(sample.prompt),
-                candidates,
-                device=device,
-            ).detach().cpu().tolist()
-        for candidate, score in zip(candidates, scores):
-            if str(candidate) != str(sample.answer):
-                wrong_scores.append(float(score))
-        margin = correct_score - max(wrong_scores)
-        rows.append({
-            "sample_id": str(sample.sample_id),
-            "correct": str(sample.answer),
-            "winner": str(ranked["winner"]),
-            "correct_rank": int(ranked["correct_rank"]),
-            "correct_score": correct_score,
-            "correct_margin": float(margin),
-            "exact": bool(ranked["exact"]),
-        })
+            scores, _ = _candidate_scores_tensor(
+                model, tokenizer, str(sample.prompt), candidates, device=device
+            )
+        row = _ranking_diagnostic(candidates, str(sample.answer), scores)
+        row["sample_id"] = str(sample.sample_id)
+        rows.append(row)
     n = max(1, len(rows))
     return RankingSummary(
         accuracy=sum(bool(row["exact"]) for row in rows) / n,
@@ -454,7 +436,7 @@ def run_objective_alignment_diagnostic(
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     baseline = _load_locality_baseline(Path(baseline_root))
-    source = git_provenance(Path(__file__).resolve().parents[3])
+    source = git_provenance(_repo_root())
     if source.get("source_dirty") is not False:
         raise RuntimeError("objective-alignment diagnostic requires a clean source tree")
 
@@ -487,6 +469,12 @@ def run_objective_alignment_diagnostic(
             "candidate_score": "mean exact-completion-token log-likelihood",
             "ranking_temperature": RANKING_TEMPERATURE,
             "prompt": "unchanged A_train prompt; answer absent from prompt",
+        },
+        "execution": {
+            "sample_microbatch": RANKING_SAMPLE_MICROBATCH,
+            "effective_batch_size": BATCH_SIZE,
+            "gradient_accumulation_semantics": "mean of eight sample-ranking losses before one optimizer step",
+            "use_cache_during_training": False,
         },
         "secondary_evaluation": {
             "A_train_candidate_ranking": True,
@@ -590,6 +578,15 @@ def run_objective_alignment_diagnostic(
             eval_ranking_accuracy=float(eval_ranking.accuracy),
             ce_baseline_accuracy=float(baseline["ce_direct_accuracy"]),
         )
+        interpretation = (
+            "aligned ranking objective rescues the inherited direct-capability gate"
+            if status == "OBJECTIVE_ALIGNMENT_RESCUES_LOCAL_CELL_MUTATION"
+            else "association is learned under constrained ranking but greedy generation remains unresolved"
+            if status == "ASSOCIATION_LEARNED_GENERATION_UNRESOLVED"
+            else "aligned ranking objective improves direct behavior but does not rescue local Cell mutation"
+            if status == "OBJECTIVE_ALIGNMENT_IMPROVES_BUT_DOES_NOT_RESCUE"
+            else "aligned ranking objective does not rescue or improve the permissive L7/K64 local mutation condition"
+        )
         result = {
             "schema": "minicells.pcu-objective-alignment-001.result.v1",
             "experiment": EXPERIMENT_ID,
@@ -620,15 +617,7 @@ def run_objective_alignment_diagnostic(
             "direct_accuracy": float(direct.exact),
             "direct_capability_floor": DIRECT_CAPABILITY_FLOOR,
             "direct_passes": bool(direct.exact >= DIRECT_CAPABILITY_FLOOR),
-            "interpretation": (
-                "aligned ranking objective rescues the inherited direct-capability gate"
-                if status == "OBJECTIVE_ALIGNMENT_RESCUES_LOCAL_CELL_MUTATION"
-                else "association is learned under constrained ranking but greedy generation remains unresolved"
-                if status == "ASSOCIATION_LEARNED_GENERATION_UNRESOLVED"
-                else "aligned ranking objective improves direct behavior but does not rescue local Cell mutation"
-                if status == "OBJECTIVE_ALIGNMENT_IMPROVES_BUT_DOES_NOT_RESCUE"
-                else "aligned ranking objective does not rescue or improve the permissive L7/K64 local mutation condition"
-            ),
+            "interpretation": interpretation,
         }
         write_json(output / "RESULT.json", result)
         write_json(output / "DECISION.json", {
@@ -648,14 +637,17 @@ def run_objective_alignment_diagnostic(
             "selected_k": TARGET_K,
             "selected_cells_exact_baseline_match": True,
             "source": source,
-            "interpretation": result["interpretation"],
+            "interpretation": interpretation,
         })
         return result
     finally:
         del model
         del tokenizer
         if torch.cuda.is_available():
-            torch.cuda.empty_cache()
+            try:
+                torch.cuda.empty_cache()
+            except torch.AcceleratorError:
+                pass
 
 
 __all__ = [
