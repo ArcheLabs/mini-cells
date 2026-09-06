@@ -345,6 +345,28 @@ def _encode_ids(tokenizer: Any, text: str, add_special_tokens: bool) -> list[int
     return [int(item) for item in value]
 
 
+def _completion_encoding(tokenizer: Any, prompt: str, candidate: str) -> tuple[list[int], list[int]]:
+    """Encode the exact prompt+completion string and isolate completion tokens.
+
+    BPE tokenization can change at whitespace boundaries. We therefore never
+    concatenate separately-tokenized candidate IDs. The prompt deliberately
+    ends in punctuation, the completion begins with one space, and the full
+    encoding must preserve the prompt encoding as an exact prefix.
+    """
+    if prompt != prompt.rstrip():
+        raise ValueError("positive-control prompt must not end in whitespace")
+    prompt_ids = _encode_ids(tokenizer, prompt, add_special_tokens=True)
+    full_ids = _encode_ids(tokenizer, prompt + " " + str(candidate), add_special_tokens=True)
+    if not prompt_ids:
+        raise ValueError("positive-control prompt encoded to zero tokens")
+    if full_ids[: len(prompt_ids)] != prompt_ids:
+        raise RuntimeError("positive-control tokenizer boundary is not prefix-stable")
+    completion_ids = full_ids[len(prompt_ids):]
+    if not completion_ids:
+        raise ValueError("positive-control completion encoded to zero tokens")
+    return full_ids, completion_ids
+
+
 def _candidate_pool(
     values: Sequence[str],
     correct: str,
@@ -373,29 +395,21 @@ def _teacher_forced_candidate_scores(
     *,
     device: str,
 ) -> list[float]:
-    """Mean answer-token log-likelihood for a small constrained candidate set.
-
-    This deliberately avoids requiring a base checkpoint to follow a natural-
-    language formatting instruction. The answer tokens are still scored by the
-    real causal LM, under the exact explicit mapping context.
-    """
+    """Mean exact-completion-token log-likelihood for constrained candidates."""
     import torch
 
-    prompt_ids = _encode_ids(tokenizer, prompt, add_special_tokens=True)
-    if not prompt_ids:
-        raise ValueError("positive-control prompt encoded to zero tokens")
-    candidate_ids = [
-        _encode_ids(tokenizer, str(candidate), add_special_tokens=False)
-        for candidate in candidates
-    ]
-    if any(not value for value in candidate_ids):
-        raise ValueError("positive-control candidate encoded to zero tokens")
+    encoded = [_completion_encoding(tokenizer, prompt, str(candidate)) for candidate in candidates]
+    full = [item[0] for item in encoded]
+    completion_ids = [item[1] for item in encoded]
+    prompt_length = len(full[0]) - len(completion_ids[0])
+    if any(len(full_ids) - len(answer_ids) != prompt_length for full_ids, answer_ids in encoded):
+        raise RuntimeError("positive-control candidates do not share one prompt-token boundary")
+
     pad_id = getattr(tokenizer, "pad_token_id", None)
     if pad_id is None:
         pad_id = getattr(tokenizer, "eos_token_id", None)
     if pad_id is None:
         pad_id = 0
-    full = [prompt_ids + value for value in candidate_ids]
     width = max(len(value) for value in full)
     input_ids = torch.full((len(full), width), int(pad_id), dtype=torch.long, device=device)
     attention = torch.zeros((len(full), width), dtype=torch.long, device=device)
@@ -411,15 +425,17 @@ def _teacher_forced_candidate_scores(
             raise RuntimeError("positive-control model output has no logits tensor")
         log_probs = torch.log_softmax(logits.float(), dim=-1)
     scores: list[float] = []
-    start = len(prompt_ids)
-    for row, answer_ids in enumerate(candidate_ids):
-        positions = torch.arange(start - 1, start + len(answer_ids) - 1, device=device)
+    for row, answer_ids in enumerate(completion_ids):
+        positions = torch.arange(
+            prompt_length - 1,
+            prompt_length + len(answer_ids) - 1,
+            device=device,
+        )
         targets = torch.tensor(answer_ids, dtype=torch.long, device=device)
         values = log_probs[row, positions, targets]
-        score = float(values.mean())
         if not torch.isfinite(values).all():
             raise RuntimeError("non-finite positive-control candidate score")
-        scores.append(score)
+        scores.append(float(values.mean()))
     return scores
 
 
@@ -559,15 +575,15 @@ def context_oracle(
         triple = world.triples[int(sample.pair_id)]
         prompt_a = (
             f"Mapping record:\n{triple.u} -> {triple.v}\n"
-            f"Query:\n{triple.u} ->\nAnswer: "
+            f"Query:\n{triple.u} ->\nAnswer:"
         )
         prompt_b = (
             f"Mapping record:\n{triple.v} -> {triple.w}\n"
-            f"Query:\n{triple.v} ->\nAnswer: "
+            f"Query:\n{triple.v} ->\nAnswer:"
         )
         prompt_ab = (
             f"Mapping records:\n{triple.u} -> {triple.v}\n{triple.v} -> {triple.w}\n"
-            f"Query path:\n{triple.u} ->\nRelay and terminal: "
+            f"Query path:\n{triple.u} ->\nRelay and terminal:"
         )
         a_candidates = _candidate_pool(vs, triple.v, f"{sample.sample_id}:A")
         b_candidates = _candidate_pool(ws, triple.w, f"{sample.sample_id}:B")
