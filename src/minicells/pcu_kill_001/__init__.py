@@ -45,6 +45,28 @@ from . import experiment as _experiment
 
 _experiment._model_with_experts = model_with_experts_overlay
 
+# Granite E0/formal execution must also avoid materializing a second complete
+# 1.3B FP32 foundation.  Install the single-foundation runtime after experiment
+# is fully imported, then patch execution's fail-fast G0 entry point.  The
+# scientific protocol is unchanged; only resident model layout and inference
+# graph retention differ.
+from .resource_runtime import (
+    cellularize_in_place,
+    full_moe_overlay_equivalence,
+    g0_preflight as _resource_g0_preflight,
+    inference_logits,
+    run_formal_execution as _resource_formal_execution,
+    run_granite_engineering as _resource_granite_engineering,
+)
+
+_experiment._logits = inference_logits
+_experiment._run_granite_engineering = _resource_granite_engineering
+_experiment.run_formal_execution = _resource_formal_execution
+
+from . import execution as _execution
+
+_execution._g0_preflight = _resource_g0_preflight
+
 
 __all__ = [
     "CellPartition",
@@ -113,4 +135,7 @@ __all__ = [
     "greedy_generate",
     "ExpertsOverlayModel",
     "model_with_experts_overlay",
+    "cellularize_in_place",
+    "full_moe_overlay_equivalence",
+    "inference_logits",
 ]
