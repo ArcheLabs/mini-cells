@@ -3,11 +3,27 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+import json
 from pathlib import Path
 from typing import Any, Callable
 
 from .governance import git_provenance, write_json
 from .synthetic import POSITIVE_CONTROL_VERSION
+
+
+REGISTERED_THRESHOLDS = {
+    "g0_top1_token_agreement": 1.0,
+    "cache_top1_token_agreement": 1.0,
+    "context_oracle_accuracy": 0.90,
+    "context_oracle_retrieval_accuracy": 0.90,
+    "context_oracle_composition_accuracy": 0.90,
+    "direct_accuracy": 0.80,
+    "merge_retention": 0.90,
+    "composition_accuracy": 0.50,
+    "composition_synergy": 0.30,
+    "anchor_regression": 0.01,
+    "matched_lora_parameter_tolerance": 0.10,
+}
 
 
 def _equivalence_payload(kwargs: dict[str, Any]) -> dict[str, Any]:
@@ -70,6 +86,46 @@ def persist_pre_science_evidence(**kwargs: Any) -> None:
     write_json(output / "CACHE_EQUIVALENCE.json", cache_gate.to_dict())
 
 
+def _augment_decision_with_oracle_v2(output: Path) -> None:
+    oracle_path = output / "CONTEXT_ORACLE.json"
+    if not oracle_path.is_file():
+        return
+    oracle = json.loads(oracle_path.read_text(encoding="utf-8"))
+    for name in ("DECISION.json", "ENGINEERING_DECISION.json"):
+        path = output / name
+        if not path.is_file():
+            continue
+        decision = json.loads(path.read_text(encoding="utf-8"))
+        metrics = dict(decision.get("metrics", {}))
+        metrics.update({
+            "context_oracle_accuracy": float(oracle.get("accuracy", 0.0)),
+            "context_oracle_retrieval_a_accuracy": float(oracle.get("retrieval_a_accuracy", 0.0)),
+            "context_oracle_retrieval_b_accuracy": float(oracle.get("retrieval_b_accuracy", 0.0)),
+            "context_oracle_composition_accuracy": float(oracle.get("composition_accuracy", 0.0)),
+        })
+        diagnostic = oracle.get("free_generation_diagnostic") or {}
+        if diagnostic:
+            metrics["context_oracle_free_generation_diagnostic_accuracy"] = float(
+                diagnostic.get("accuracy", 0.0)
+            )
+        thresholds = dict(decision.get("thresholds", {}))
+        for key, value in REGISTERED_THRESHOLDS.items():
+            thresholds.setdefault(key, value)
+        decision["metrics"] = metrics
+        decision["thresholds"] = thresholds
+        decision["positive_control"] = {
+            "version": oracle.get("positive_control_version"),
+            "mode": oracle.get("mode"),
+            "candidate_pool_size": oracle.get("candidate_pool_size"),
+            "passed": oracle.get("passed"),
+            "retrieval_a_accuracy": oracle.get("retrieval_a_accuracy"),
+            "retrieval_b_accuracy": oracle.get("retrieval_b_accuracy"),
+            "composition_accuracy": oracle.get("composition_accuracy"),
+            "free_generation_gate": False,
+        }
+        write_json(path, decision)
+
+
 def install_pipeline_guard(experiment_module: Any) -> Callable[..., Any]:
     """Wrap the shared worker once, preserving all scientific behavior."""
     current = experiment_module._run_shared_scientific_pipeline
@@ -78,7 +134,9 @@ def install_pipeline_guard(experiment_module: Any) -> Callable[..., Any]:
 
     def guarded_shared_pipeline(**kwargs: Any) -> Any:
         persist_pre_science_evidence(**kwargs)
-        return current(**kwargs)
+        result = current(**kwargs)
+        _augment_decision_with_oracle_v2(Path(kwargs["output"]))
+        return result
 
     guarded_shared_pipeline._pcu_fail_fast_audit_guard = True  # type: ignore[attr-defined]
     guarded_shared_pipeline._pcu_original_pipeline = current  # type: ignore[attr-defined]
