@@ -4,22 +4,22 @@ PCU-CROSS-LAYER-READOUT-001 asks whether the already demonstrated L7
 association state becomes a usable autoregressive capability when one small late
 readout footprint is added.
 
-The experiment keeps the published L7/K64 hybrid mutation unchanged. It replays
-that mutation exactly, freezes every L7 delta, then allocates K=16 L23 Cells
-with the existing first-64 A_train answer-token-CE gradient geometry and trains
-only those L23 deltas with the original answer-token CE for 128 steps.
+The published L7/K64 hybrid mutation is replayed exactly and then frozen. K=16
+L23 Cells are allocated with the existing first-64 A_train answer-token-CE
+gradient geometry under that frozen-L7 state, and only those L23 deltas are
+trained with the original answer-token CE for 128 steps.
 
-A required L23-only control reloads the untouched foundation and trains the exact
-same selected L23 Cell IDs with the exact same CE objective/budget. This makes
-three causally interpretable conditions:
+A matched-footprint L23-only control reloads the untouched foundation and trains
+the exact same selected L23 Cell IDs with the exact same objective/budget. Thus
+the experiment compares:
 
     published L7-only hybrid
-    foundation + L23-only readout control
-    frozen L7 hybrid + L23 readout
+    foundation + same L23 readout footprint
+    frozen L7 hybrid + L23 readout footprint
 
-The late Cell set is allocated once under the frozen-L7 state and reused without
-reallocation in the L23-only control. Engineering-only evidence; formal
-PCU-KILL-001 seeds are never consumed.
+The L23-only arm is a matched-footprint control, not an independently optimized
+upper bound for all possible L23-only allocations. Engineering-only evidence;
+formal PCU-KILL-001 seeds are never consumed.
 """
 
 from __future__ import annotations
@@ -37,7 +37,6 @@ from .cellular import CellPartition, extract_expert_projections, patch_moe_block
 from .evaluation import evaluate_samples
 from .governance import git_provenance, write_json
 from .hybrid_objective import (
-    CE_WEIGHT,
     OBJECTIVE_BASELINE_ROOT,
     _load_baselines,
     _train_hybrid_branch,
@@ -61,7 +60,7 @@ from .objective_alignment import ASSOCIATION_FLOOR, evaluate_candidate_ranking
 from .readout_localization import gold_prefix_token_readout
 from .synthetic import audit_dataset, generate_world
 from .task import build_task_sequences, validate_answer_only_labels
-from .training import BranchTrainingConfig
+from .training import Allocation, BranchTrainingConfig
 
 
 EXPERIMENT_ID = "PCU-CROSS-LAYER-READOUT-001"
@@ -128,10 +127,7 @@ def _assert_hybrid_core_unchanged() -> None:
         raise RuntimeError("hybrid scientific source is not an ancestor of HEAD")
 
 
-def _load_published_baselines(
-    hybrid_root: Path,
-    readout_root: Path,
-) -> PublishedBaselines:
+def _load_published_baselines(hybrid_root: Path, readout_root: Path) -> PublishedBaselines:
     hybrid_root = Path(hybrid_root)
     readout_root = Path(readout_root)
     for root, names in (
@@ -194,10 +190,17 @@ def _freeze_l7_runtime(model: nn.Module, runtime: nn.Module) -> None:
         raise RuntimeError(f"L7 freeze failed: {unexpected[:8]}")
 
 
+def _gradient_mass_at_k(allocation: Allocation, k: int) -> float:
+    ordered = sorted(allocation.scores, key=lambda key: (-allocation.scores[key], key))
+    total = sum(float(value) for value in allocation.scores.values())
+    if total <= 0.0:
+        return 0.0
+    return sum(float(allocation.scores[key]) for key in ordered[: int(k)]) / total
+
+
 def _evaluate_arm(
     model: nn.Module,
     tokenizer: Any,
-    train_samples: Sequence[Any],
     eval_samples: Sequence[Any],
     candidate_universe: Sequence[str],
     *,
@@ -230,19 +233,15 @@ def _evaluate_arm(
     }
 
 
-def _classify(
-    *,
-    l7_direct: float,
-    l23_only_direct: float,
-    cross_direct: float,
-    cross_ranking: float,
-) -> str:
+def _classify(*, l7_direct: float, l23_only_direct: float, cross_direct: float, cross_ranking: float) -> str:
     cross_direct_pass = cross_direct >= DIRECT_CAPABILITY_FLOOR
     cross_ranking_pass = cross_ranking >= ASSOCIATION_FLOOR
     l23_only_pass = l23_only_direct >= DIRECT_CAPABILITY_FLOOR
     synergy = cross_direct - max(l7_direct, l23_only_direct)
-    if cross_direct_pass and cross_ranking_pass and not l23_only_pass and synergy >= SYNERGY_FLOOR:
-        return "SPARSE_CROSS_LAYER_READOUT_RESCUE_SUPPORTED"
+    if cross_direct_pass and cross_ranking_pass and not l23_only_pass:
+        if synergy >= SYNERGY_FLOOR:
+            return "SPARSE_CROSS_LAYER_READOUT_RESCUE_SUPPORTED"
+        return "CROSS_LAYER_READOUT_RESCUE_WITH_WEAK_SYNERGY"
     if l23_only_pass:
         return "L23_ONLY_READOUT_SUFFICIENT_CROSS_LAYER_NOT_REQUIRED"
     if cross_direct_pass and not cross_ranking_pass:
@@ -267,8 +266,7 @@ def _train_l23_only_control(
     try:
         _validate_foundation_manifest(manifest, baseline.foundation)
         model.requires_grad_(False)
-        path = f"model.layers.{READOUT_LAYER}.block_sparse_moe"
-        block23 = target_module(model, path)
+        block23 = target_module(model, f"model.layers.{READOUT_LAYER}.block_sparse_moe")
         projection23 = extract_expert_projections(block23.experts, 0)
         cellular23 = patch_moe_block(block23, CellPartition(projection23.intermediate_size, 4))
         model.requires_grad_(False)
@@ -306,14 +304,14 @@ def _train_l23_only_control(
         metrics = _evaluate_arm(
             model,
             tokenizer,
-            train_samples,
             eval_samples,
             tuple(item.v for item in world.triples),
             device=device,
         )
         return {
             "schema": "minicells.pcu-cross-layer-readout-001.arm.v1",
-            "arm": "foundation_plus_l23_only",
+            "arm": "foundation_plus_l23_only_matched_footprint",
+            "control_scope": "matched_footprint_not_independently_optimized_L23_upper_bound",
             "selected_l23": list(selected_l23),
             "training": training,
             "metrics": metrics,
@@ -322,7 +320,10 @@ def _train_l23_only_control(
         del model
         del tokenizer
         if torch.cuda.is_available():
-            torch.cuda.empty_cache()
+            try:
+                torch.cuda.empty_cache()
+            except torch.AcceleratorError:
+                pass
 
 
 def run_cross_layer_readout_diagnostic(
@@ -383,14 +384,15 @@ def run_cross_layer_readout_diagnostic(
         },
         "required_arms": [
             "published_L7_only",
-            "foundation_plus_same_L23_only",
+            "foundation_plus_same_L23_only_matched_footprint",
             "frozen_L7_plus_L23",
         ],
+        "control_limit": "L23_only_uses_cross_layer_selected_cells_and_is_not_an_independently_optimized_capacity_upper_bound",
         "success_gate": {
             "cross_layer_ranking_min": ASSOCIATION_FLOOR,
             "cross_layer_direct_min": DIRECT_CAPABILITY_FLOOR,
             "l23_only_direct_must_be_below": DIRECT_CAPABILITY_FLOOR,
-            "direct_synergy_over_best_control_min": SYNERGY_FLOOR,
+            "strong_support_direct_synergy_over_best_control_min": SYNERGY_FLOOR,
         },
         "published_L7_baseline": published.to_dict(),
         "formal_execution_not_started": True,
@@ -417,8 +419,7 @@ def run_cross_layer_readout_diagnostic(
     try:
         _validate_foundation_manifest(manifest, baseline.foundation)
         model.requires_grad_(False)
-        path7 = f"model.layers.{ASSOCIATION_LAYER}.block_sparse_moe"
-        block7 = target_module(model, path7)
+        block7 = target_module(model, f"model.layers.{ASSOCIATION_LAYER}.block_sparse_moe")
         projection7 = extract_expert_projections(block7.experts, 0)
         cellular7 = patch_moe_block(block7, CellPartition(projection7.intermediate_size, 4))
         model.requires_grad_(False)
@@ -434,7 +435,7 @@ def run_cross_layer_readout_diagnostic(
         train_sequences = build_task_sequences(tokenizer, train_samples, "A_train", max_length=128)
         validate_answer_only_labels(train_sequences)
 
-        hybrid_config = BranchTrainingConfig(
+        config = BranchTrainingConfig(
             optimizer="AdamW",
             learning_rate=LEARNING_RATE,
             max_optimizer_steps=MAX_OPTIMIZER_STEPS,
@@ -451,7 +452,7 @@ def run_cross_layer_readout_diagnostic(
             train_samples,
             published.selected_l7,
             device=device,
-            config=hybrid_config,
+            config=config,
         )
         _assert_only_selected_deltas_trainable(model, runtime7)
         l7_ranking = evaluate_candidate_ranking(
@@ -472,8 +473,7 @@ def run_cross_layer_readout_diagnostic(
             raise RuntimeError("L7_HYBRID_REPRODUCTION_MISMATCH direct")
         _freeze_l7_runtime(model, runtime7)
 
-        path23 = f"model.layers.{READOUT_LAYER}.block_sparse_moe"
-        block23 = target_module(model, path23)
+        block23 = target_module(model, f"model.layers.{READOUT_LAYER}.block_sparse_moe")
         projection23 = extract_expert_projections(block23.experts, 0)
         cellular23 = patch_moe_block(block23, CellPartition(projection23.intermediate_size, 4))
         model.requires_grad_(False)
@@ -492,16 +492,9 @@ def run_cross_layer_readout_diagnostic(
         selected_l23 = tuple(allocation.selected[:READOUT_K])
         if len(selected_l23) != READOUT_K:
             raise RuntimeError("L23 allocation did not produce exact K16")
+        gradient_mass_at_k = _gradient_mass_at_k(allocation, READOUT_K)
 
         print(f"[pcu-cross-layer] training frozen-L7 + L23/K{READOUT_K} readout", flush=True)
-        readout_config = BranchTrainingConfig(
-            optimizer="AdamW",
-            learning_rate=LEARNING_RATE,
-            max_optimizer_steps=MAX_OPTIMIZER_STEPS,
-            max_training_tokens=MAX_TRAINING_TOKENS,
-            batch_size=BATCH_SIZE,
-            seed=ENGINEERING_SEED,
-        )
         runtime23, cross_training = _train_full_model_branch(
             model,
             block23,
@@ -510,18 +503,13 @@ def run_cross_layer_readout_diagnostic(
             selected_l23,
             layer=READOUT_LAYER,
             device=device,
-            config=readout_config,
+            config=config,
         )
         _assert_only_selected_deltas_trainable(model, runtime23)
         if tuple(cross_training["selected_cells"]) != selected_l23:
             raise RuntimeError("CROSS_LAYER_L23_ALLOCATION_DRIFT")
         cross_metrics = _evaluate_arm(
-            model,
-            tokenizer,
-            train_samples,
-            eval_samples,
-            candidate_universe,
-            device=device,
+            model, tokenizer, eval_samples, candidate_universe, device=device
         )
         cross_arm = {
             "schema": "minicells.pcu-cross-layer-readout-001.arm.v1",
@@ -534,7 +522,10 @@ def run_cross_layer_readout_diagnostic(
         del model
         del tokenizer
         if torch.cuda.is_available():
-            torch.cuda.empty_cache()
+            try:
+                torch.cuda.empty_cache()
+            except torch.AcceleratorError:
+                pass
 
     print("[pcu-cross-layer] running exact same L23 footprint without L7 mutation", flush=True)
     l23_only = _train_l23_only_control(
@@ -564,8 +555,8 @@ def run_cross_layer_readout_diagnostic(
         "calibration_execution": f"weighted_microbatch_{CALIBRATION_BATCH_SIZE}",
         "selected_k": READOUT_K,
         "selected": list(selected_l23),
-        "topk_mass": {str(key): value for key, value in allocation.topk_mass.items()},
-        "gradient_mass_at_k": float(allocation.topk_mass.get(READOUT_K, 0.0)),
+        "topk_mass_registered_by_shared_helper": {str(key): value for key, value in allocation.topk_mass.items()},
+        "gradient_mass_at_k": gradient_mass_at_k,
         "effective_count": float(allocation.effective_count),
     }
     result = {
@@ -598,6 +589,7 @@ def run_cross_layer_readout_diagnostic(
             "direct_synergy_floor": SYNERGY_FLOOR,
             "association_floor": ASSOCIATION_FLOOR,
             "direct_capability_floor": DIRECT_CAPABILITY_FLOOR,
+            "l23_only_control_scope": "matched_footprint_not_independently_optimized_capacity_upper_bound",
         },
     }
     write_json(output / "RESULT.json", result)
@@ -616,6 +608,7 @@ def run_cross_layer_readout_diagnostic(
         "readout_objective": READOUT_OBJECTIVE,
         "l7_reproduction_exact": True,
         "l23_selected_once_and_reused": True,
+        "l23_only_control_scope": "matched_footprint_not_independently_optimized_capacity_upper_bound",
         "l7_only_direct_accuracy": published.l7_direct_accuracy,
         "l23_only_direct_accuracy": l23_direct,
         "cross_layer_direct_accuracy": cross_direct,
@@ -627,8 +620,8 @@ def run_cross_layer_readout_diagnostic(
         "association_floor": ASSOCIATION_FLOOR,
         "direct_capability_floor": DIRECT_CAPABILITY_FLOOR,
         "selected_l23": list(selected_l23),
-        "l23_gradient_mass_at_k": allocation_payload["gradient_mass_at_k"],
-        "l23_effective_count": allocation_payload["effective_count"],
+        "l23_gradient_mass_at_k": gradient_mass_at_k,
+        "l23_effective_count": float(allocation.effective_count),
         "source": source,
     }
     write_json(output / "DECISION.json", decision)
@@ -645,5 +638,6 @@ __all__ = [
     "SYNERGY_FLOOR",
     "DEFAULT_OUTPUT",
     "_classify",
+    "_gradient_mass_at_k",
     "run_cross_layer_readout_diagnostic",
 ]
