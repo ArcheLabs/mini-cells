@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from typing import Any, Callable
 
+from .engineering_accel import maybe_engineering_acceleration
 from .governance import git_provenance, write_json
 from .synthetic import POSITIVE_CONTROL_VERSION
 
@@ -126,6 +127,27 @@ def _augment_decision_with_oracle_v2(output: Path) -> None:
         write_json(path, decision)
 
 
+def _run_with_optional_engineering_acceleration(experiment_module: Any, current: Callable[..., Any], kwargs: dict[str, Any]) -> Any:
+    if str(kwargs.get("phase")) != "engineering":
+        return current(**kwargs)
+    manifest = dict(kwargs["manifest"])
+    accelerator = maybe_engineering_acceleration(
+        experiment_module,
+        primary_original=kwargs["original"],
+        primary_tokenizer=kwargs["tokenizer"],
+        world=kwargs["world"],
+        model_repo=str(manifest["model_repo"]),
+        model_revision=str(manifest["model_revision"]),
+        foundation_hash=str(manifest["foundation_tensor_sha256"]),
+        inspector=kwargs["inspector"],
+        output=Path(kwargs["output"]),
+    )
+    if accelerator is None:
+        return current(**kwargs)
+    with accelerator:
+        return current(**kwargs)
+
+
 def install_pipeline_guard(experiment_module: Any) -> Callable[..., Any]:
     """Wrap the shared worker once, preserving all scientific behavior."""
     current = experiment_module._run_shared_scientific_pipeline
@@ -134,7 +156,7 @@ def install_pipeline_guard(experiment_module: Any) -> Callable[..., Any]:
 
     def guarded_shared_pipeline(**kwargs: Any) -> Any:
         persist_pre_science_evidence(**kwargs)
-        result = current(**kwargs)
+        result = _run_with_optional_engineering_acceleration(experiment_module, current, kwargs)
         _augment_decision_with_oracle_v2(Path(kwargs["output"]))
         return result
 
