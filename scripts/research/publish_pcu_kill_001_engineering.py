@@ -47,23 +47,37 @@ def validate_engineering_evidence() -> dict:
     run_manifest_path = OUTPUT / "RUN_MANIFEST.json"
     if not decision_path.is_file():
         raise RuntimeError("ENGINEERING_DECISION.json is required before publication")
-    if not run_manifest_path.is_file():
-        raise RuntimeError("RUN_MANIFEST.json is required before publication")
 
     decision = json.loads(decision_path.read_text(encoding="utf-8"))
-    manifest = json.loads(run_manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("phase") != "engineering":
-        raise RuntimeError("refusing to publish a non-engineering run")
-    if int(manifest.get("seed", -1)) != ENGINEERING_SEED:
-        raise RuntimeError("refusing to publish an unexpected engineering seed")
-    if manifest.get("backend") != "granite":
-        raise RuntimeError("refusing to publish a non-Granite PCU E0 run")
+    if decision.get("phase") != "engineering":
+        raise RuntimeError("refusing to publish a non-engineering decision")
     if decision.get("scientific_evidence") is not False:
         raise RuntimeError("engineering evidence must not be labelled scientific/formal evidence")
     if decision.get("formal_execution_not_started") is not True:
         raise RuntimeError("formal execution boundary was not preserved")
+    if decision.get("valid_run") is not True:
+        raise RuntimeError("refusing to publish an invalid engineering run")
     if decision.get("status") in {None, "REAL_GRANITE_E0_NOT_RUN", "FORMAL_EXECUTION_FAILED"}:
-        raise RuntimeError(f"engineering run did not produce an interpretable E0 result: {decision.get('status')}")
+        raise RuntimeError(
+            f"engineering run did not produce an interpretable E0 result: {decision.get('status')}"
+        )
+
+    # Full runs carry RUN_MANIFEST.json. Early scientific kill gates (for
+    # example context-oracle or K-ladder failure) may terminate before that
+    # late artifact is emitted; those are still valid engineering evidence.
+    if run_manifest_path.is_file():
+        manifest = json.loads(run_manifest_path.read_text(encoding="utf-8"))
+        if manifest.get("phase") != "engineering":
+            raise RuntimeError("refusing to publish a non-engineering run manifest")
+        if int(manifest.get("seed", -1)) != ENGINEERING_SEED:
+            raise RuntimeError("refusing to publish an unexpected engineering seed")
+        if manifest.get("backend") != "granite":
+            raise RuntimeError("refusing to publish a non-Granite PCU E0 run")
+    else:
+        foundation = decision.get("foundation", {})
+        if foundation.get("model_repo") != "ibm-granite/granite-3.1-1b-a400m-base":
+            raise RuntimeError("early-kill decision is not bound to the registered Granite foundation")
+
     return decision
 
 
