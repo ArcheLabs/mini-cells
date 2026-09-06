@@ -1,0 +1,33 @@
+{
+  "capacity_trial_checkpointing": true,
+  "dual_gpu": true,
+  "generation": {
+    "batch_size": 16,
+    "method": "hf_generate_greedy",
+    "use_cache": true
+  },
+  "identity": {
+    "architecture": {
+      "cells": 4,
+      "experts_per_token": 8,
+      "fused_order": "gate_up",
+      "fused_projection": true,
+      "hidden_size": 1024,
+      "intermediate_size": 512,
+      "local_experts": 32,
+      "target_layer": 23,
+      "target_path": "model.layers.23.block_sparse_moe"
+    },
+    "dataset_manifest_sha256": "ce408e9b78d1670929bb376cf1f0145d6b4f0b52f42ffc3055ef8bfef407495f",
+    "foundation_tensor_sha256": "0d5afdda01be7ee6400ab8e8df21f2d358328a567a4d492a227063a6567ec820",
+    "model_repo": "ibm-granite/granite-3.1-1b-a400m-base",
+    "model_revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "positive_control_version": "pcu-kill-001-context-oracle-v2",
+    "source_commit": "9d4bf4fb36b02da4aca0e33cdc27b959138328f8",
+    "source_tree": "10cf79254ce42d689445420beaeb9d018edb39f4"
+  },
+  "primary_device": "cuda:0",
+  "schema": "minicells.pcu-kill-001.engineering-acceleration.v1",
+  "scientific_semantics_changed": false,
+  "secondary_device": "cuda:1"
+}

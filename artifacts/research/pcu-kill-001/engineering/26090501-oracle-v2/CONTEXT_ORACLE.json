@@ -1,0 +1,4841 @@
+{
+  "accuracy": 1.0,
+  "candidate_pool_size": 16,
+  "composition_accuracy": 1.0,
+  "execution_schedule": "dual_gpu_sample_partition",
+  "free_generation_diagnostic": {
+    "accuracy": 0.0,
+    "gate": false,
+    "rows": [
+      {
+        "both_exact": false,
+        "expected_relay": "V7AC7",
+        "expected_terminal": "WQJD8",
+        "generated_identifiers": [],
+        "generated_text": "The above is a simple example. In fact, the above is a",
+        "relay_exact": false,
+        "sample_id": "AB-eval-0000",
+        "terminal_exact": false
+      },
+      {
+        "both_exact": false,
+        "expected_relay": "VNSC2",
+        "expected_terminal": "WG576",
+        "generated_identifiers": [],
+        "generated_text": "The above is a simple example. In fact, the above is a",
+        "relay_exact": false,
+        "sample_id": "AB-eval-0001",
+        "terminal_exact": false
+      },
+      {
+        "both_exact": false,
+        "expected_relay": "VGDVP",
+        "expected_terminal": "WKDDC",
+        "generated_identifiers": [],
+        "generated_text": "The above is a simple example. In fact, the above is a",
+        "relay_exact": false,
+        "sample_id": "AB-eval-0002",
+        "terminal_exact": false
+      },
+      {
+        "both_exact": false,
+        "expected_relay": "V58XF",
+        "expected_terminal": "WPASE",
+        "generated_identifiers": [],
+        "generated_text": "The terminal is not connected to the network.\nThe terminal is connected to",
+        "relay_exact": false,
+        "sample_id": "AB-eval-0003",
+        "terminal_exact": false
+      },
+      {
+        "both_exact": false,
+        "expected_relay": "V8AGY",
+        "expected_terminal": "WUZTT",
+        "generated_identifiers": [],
+        "generated_text": "The above example is a simple case. In a real case, the",
+        "relay_exact": false,
+        "sample_id": "AB-eval-0004",
+        "terminal_exact": false
+      },
+      {
+        "both_exact": false,
+        "expected_relay": "VCFD9",
+        "expected_terminal": "W9UE3",
+        "generated_identifiers": [],
+        "generated_text": "The above is a simple example. In fact, the above is a",
+        "relay_exact": false,
+        "sample_id": "AB-eval-0005",
+        "terminal_exact": false
+      },
+      {
+        "both_exact": false,
+        "expected_relay": "VKRQW",
+        "expected_terminal": "WB26R",
+        "generated_identifiers": [],
+        "generated_text": "The above is a simple example. In fact, the above is a",
+        "relay_exact": false,
+        "sample_id": "AB-eval-0006",
+        "terminal_exact": false
+      },
+      {
+        "both_exact": false,
+        "expected_relay": "VGRCU",
+        "expected_terminal": "WHR7A",
+        "generated_identifiers": [],
+        "generated_text": "The above is a simple example. In fact, the above is a",
+        "relay_exact": false,
+        "sample_id": "AB-eval-0007",
+        "terminal_exact": false
+      }
+    ],
+    "sample_count": 8
+  },
+  "mode": "model_backed_teacher_forced_candidate_ranking",
+  "passed": true,
+  "positive_control_version": "pcu-kill-001-context-oracle-v2",
+  "relay_accuracy": 1.0,
+  "retrieval_a_accuracy": 1.0,
+  "retrieval_b_accuracy": 1.0,
+  "rows": [
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V7AC7 WQJD8",
+        "correct_rank": 1,
+        "correct_score": -1.4763989448547363,
+        "exact": true,
+        "winner": "V7AC7 WQJD8",
+        "winner_margin": 3.883427143096924,
+        "winner_score": -1.4763989448547363
+      },
+      "expected_relay": "V7AC7",
+      "expected_terminal": "WQJD8",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V7AC7",
+        "correct_rank": 1,
+        "correct_score": -0.7599852681159973,
+        "exact": true,
+        "winner": "V7AC7",
+        "winner_margin": 3.737525165081024,
+        "winner_score": -0.7599852681159973
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WQJD8",
+        "correct_rank": 1,
+        "correct_score": -0.7376466393470764,
+        "exact": true,
+        "winner": "WQJD8",
+        "winner_margin": 4.572166860103607,
+        "winner_score": -0.7376466393470764
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0000",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VNSC2 WG576",
+        "correct_rank": 1,
+        "correct_score": -1.2546764612197876,
+        "exact": true,
+        "winner": "VNSC2 WG576",
+        "winner_margin": 4.8233078718185425,
+        "winner_score": -1.2546764612197876
+      },
+      "expected_relay": "VNSC2",
+      "expected_terminal": "WG576",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VNSC2",
+        "correct_rank": 1,
+        "correct_score": -0.6802358627319336,
+        "exact": true,
+        "winner": "VNSC2",
+        "winner_margin": 3.224806308746338,
+        "winner_score": -0.6802358627319336
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WG576",
+        "correct_rank": 1,
+        "correct_score": -0.637395441532135,
+        "exact": true,
+        "winner": "WG576",
+        "winner_margin": 4.57207053899765,
+        "winner_score": -0.637395441532135
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0001",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VGDVP WKDDC",
+        "correct_rank": 1,
+        "correct_score": -1.9780324697494507,
+        "exact": true,
+        "winner": "VGDVP WKDDC",
+        "winner_margin": 3.9023438692092896,
+        "winner_score": -1.9780324697494507
+      },
+      "expected_relay": "VGDVP",
+      "expected_terminal": "WKDDC",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VGDVP",
+        "correct_rank": 1,
+        "correct_score": -1.0188071727752686,
+        "exact": true,
+        "winner": "VGDVP",
+        "winner_margin": 3.8231475353240967,
+        "winner_score": -1.0188071727752686
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WKDDC",
+        "correct_rank": 1,
+        "correct_score": -0.8012356758117676,
+        "exact": true,
+        "winner": "WKDDC",
+        "winner_margin": 4.193912982940674,
+        "winner_score": -0.8012356758117676
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0002",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V58XF WPASE",
+        "correct_rank": 1,
+        "correct_score": -2.516714572906494,
+        "exact": true,
+        "winner": "V58XF WPASE",
+        "winner_margin": 2.26031494140625,
+        "winner_score": -2.516714572906494
+      },
+      "expected_relay": "V58XF",
+      "expected_terminal": "WPASE",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V58XF",
+        "correct_rank": 1,
+        "correct_score": -0.7608963251113892,
+        "exact": true,
+        "winner": "V58XF",
+        "winner_margin": 4.068260550498962,
+        "winner_score": -0.7608963251113892
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WPASE",
+        "correct_rank": 1,
+        "correct_score": -1.5425353050231934,
+        "exact": true,
+        "winner": "WPASE",
+        "winner_margin": 3.3415918350219727,
+        "winner_score": -1.5425353050231934
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0003",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V8AGY WUZTT",
+        "correct_rank": 1,
+        "correct_score": -1.7073614597320557,
+        "exact": true,
+        "winner": "V8AGY WUZTT",
+        "winner_margin": 4.194899797439575,
+        "winner_score": -1.7073614597320557
+      },
+      "expected_relay": "V8AGY",
+      "expected_terminal": "WUZTT",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V8AGY",
+        "correct_rank": 1,
+        "correct_score": -0.7792254686355591,
+        "exact": true,
+        "winner": "V8AGY",
+        "winner_margin": 4.263266444206238,
+        "winner_score": -0.7792254686355591
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WUZTT",
+        "correct_rank": 1,
+        "correct_score": -0.8550454378128052,
+        "exact": true,
+        "winner": "WUZTT",
+        "winner_margin": 4.182608962059021,
+        "winner_score": -0.8550454378128052
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0004",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VCFD9 W9UE3",
+        "correct_rank": 1,
+        "correct_score": -1.6235101222991943,
+        "exact": true,
+        "winner": "VCFD9 W9UE3",
+        "winner_margin": 4.267342805862427,
+        "winner_score": -1.6235101222991943
+      },
+      "expected_relay": "VCFD9",
+      "expected_terminal": "W9UE3",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VCFD9",
+        "correct_rank": 1,
+        "correct_score": -0.776347815990448,
+        "exact": true,
+        "winner": "VCFD9",
+        "winner_margin": 4.44770222902298,
+        "winner_score": -0.776347815990448
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W9UE3",
+        "correct_rank": 1,
+        "correct_score": -0.6489166617393494,
+        "exact": true,
+        "winner": "W9UE3",
+        "winner_margin": 3.9716973900794983,
+        "winner_score": -0.6489166617393494
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0005",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VKRQW WB26R",
+        "correct_rank": 1,
+        "correct_score": -1.540440320968628,
+        "exact": true,
+        "winner": "VKRQW WB26R",
+        "winner_margin": 4.137859582901001,
+        "winner_score": -1.540440320968628
+      },
+      "expected_relay": "VKRQW",
+      "expected_terminal": "WB26R",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VKRQW",
+        "correct_rank": 1,
+        "correct_score": -0.6783761382102966,
+        "exact": true,
+        "winner": "VKRQW",
+        "winner_margin": 4.302715361118317,
+        "winner_score": -0.6783761382102966
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WB26R",
+        "correct_rank": 1,
+        "correct_score": -0.5733906626701355,
+        "exact": true,
+        "winner": "WB26R",
+        "winner_margin": 4.368888676166534,
+        "winner_score": -0.5733906626701355
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0006",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VGRCU WHR7A",
+        "correct_rank": 1,
+        "correct_score": -1.566159725189209,
+        "exact": true,
+        "winner": "VGRCU WHR7A",
+        "winner_margin": 3.507359504699707,
+        "winner_score": -1.566159725189209
+      },
+      "expected_relay": "VGRCU",
+      "expected_terminal": "WHR7A",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VGRCU",
+        "correct_rank": 1,
+        "correct_score": -1.1897506713867188,
+        "exact": true,
+        "winner": "VGRCU",
+        "winner_margin": 4.321413993835449,
+        "winner_score": -1.1897506713867188
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WHR7A",
+        "correct_rank": 1,
+        "correct_score": -0.7350274920463562,
+        "exact": true,
+        "winner": "WHR7A",
+        "winner_margin": 3.873856842517853,
+        "winner_score": -0.7350274920463562
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0007",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VENZV WWQA4",
+        "correct_rank": 1,
+        "correct_score": -1.41709303855896,
+        "exact": true,
+        "winner": "VENZV WWQA4",
+        "winner_margin": 4.2154200077056885,
+        "winner_score": -1.41709303855896
+      },
+      "expected_relay": "VENZV",
+      "expected_terminal": "WWQA4",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VENZV",
+        "correct_rank": 1,
+        "correct_score": -0.9477953314781189,
+        "exact": true,
+        "winner": "VENZV",
+        "winner_margin": 4.689472258090973,
+        "winner_score": -0.9477953314781189
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WWQA4",
+        "correct_rank": 1,
+        "correct_score": -0.7789207696914673,
+        "exact": true,
+        "winner": "WWQA4",
+        "winner_margin": 4.164083361625671,
+        "winner_score": -0.7789207696914673
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0008",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VNP8N WJX8C",
+        "correct_rank": 1,
+        "correct_score": -1.8660396337509155,
+        "exact": true,
+        "winner": "VNP8N WJX8C",
+        "winner_margin": 3.2124162912368774,
+        "winner_score": -1.8660396337509155
+      },
+      "expected_relay": "VNP8N",
+      "expected_terminal": "WJX8C",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VNP8N",
+        "correct_rank": 1,
+        "correct_score": -0.7662196755409241,
+        "exact": true,
+        "winner": "VNP8N",
+        "winner_margin": 3.361198842525482,
+        "winner_score": -0.7662196755409241
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WJX8C",
+        "correct_rank": 1,
+        "correct_score": -0.9844058752059937,
+        "exact": true,
+        "winner": "WJX8C",
+        "winner_margin": 2.83189857006073,
+        "winner_score": -0.9844058752059937
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0009",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VXWA3 WCAHL",
+        "correct_rank": 1,
+        "correct_score": -1.795369267463684,
+        "exact": true,
+        "winner": "VXWA3 WCAHL",
+        "winner_margin": 4.085986971855164,
+        "winner_score": -1.795369267463684
+      },
+      "expected_relay": "VXWA3",
+      "expected_terminal": "WCAHL",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VXWA3",
+        "correct_rank": 1,
+        "correct_score": -0.7027228474617004,
+        "exact": true,
+        "winner": "VXWA3",
+        "winner_margin": 3.444326102733612,
+        "winner_score": -0.7027228474617004
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WCAHL",
+        "correct_rank": 1,
+        "correct_score": -0.8437361121177673,
+        "exact": true,
+        "winner": "WCAHL",
+        "winner_margin": 4.146593153476715,
+        "winner_score": -0.8437361121177673
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0010",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VT5BG WJ67D",
+        "correct_rank": 1,
+        "correct_score": -2.2248148918151855,
+        "exact": true,
+        "winner": "VT5BG WJ67D",
+        "winner_margin": 2.525648593902588,
+        "winner_score": -2.2248148918151855
+      },
+      "expected_relay": "VT5BG",
+      "expected_terminal": "WJ67D",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VT5BG",
+        "correct_rank": 1,
+        "correct_score": -0.8330315351486206,
+        "exact": true,
+        "winner": "VT5BG",
+        "winner_margin": 3.082760453224182,
+        "winner_score": -0.8330315351486206
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WJ67D",
+        "correct_rank": 1,
+        "correct_score": -0.6403257250785828,
+        "exact": true,
+        "winner": "WJ67D",
+        "winner_margin": 3.8479841351509094,
+        "winner_score": -0.6403257250785828
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0011",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VXQ5P WUBT5",
+        "correct_rank": 1,
+        "correct_score": -1.6104350090026855,
+        "exact": true,
+        "winner": "VXQ5P WUBT5",
+        "winner_margin": 3.948235034942627,
+        "winner_score": -1.6104350090026855
+      },
+      "expected_relay": "VXQ5P",
+      "expected_terminal": "WUBT5",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VXQ5P",
+        "correct_rank": 1,
+        "correct_score": -1.0797704458236694,
+        "exact": true,
+        "winner": "VXQ5P",
+        "winner_margin": 2.5549062490463257,
+        "winner_score": -1.0797704458236694
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WUBT5",
+        "correct_rank": 1,
+        "correct_score": -0.8866006135940552,
+        "exact": true,
+        "winner": "WUBT5",
+        "winner_margin": 3.7438544034957886,
+        "winner_score": -0.8866006135940552
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0012",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VX5BY WFSJE",
+        "correct_rank": 1,
+        "correct_score": -1.684736728668213,
+        "exact": true,
+        "winner": "VX5BY WFSJE",
+        "winner_margin": 4.3708930015563965,
+        "winner_score": -1.684736728668213
+      },
+      "expected_relay": "VX5BY",
+      "expected_terminal": "WFSJE",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VX5BY",
+        "correct_rank": 1,
+        "correct_score": -0.6313558220863342,
+        "exact": true,
+        "winner": "VX5BY",
+        "winner_margin": 3.6546029448509216,
+        "winner_score": -0.6313558220863342
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WFSJE",
+        "correct_rank": 1,
+        "correct_score": -0.8621833324432373,
+        "exact": true,
+        "winner": "WFSJE",
+        "winner_margin": 4.19916844367981,
+        "winner_score": -0.8621833324432373
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0013",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VN3BL WF8H8",
+        "correct_rank": 1,
+        "correct_score": -1.2498916387557983,
+        "exact": true,
+        "winner": "VN3BL WF8H8",
+        "winner_margin": 3.9723626375198364,
+        "winner_score": -1.2498916387557983
+      },
+      "expected_relay": "VN3BL",
+      "expected_terminal": "WF8H8",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VN3BL",
+        "correct_rank": 1,
+        "correct_score": -0.7782202959060669,
+        "exact": true,
+        "winner": "VN3BL",
+        "winner_margin": 2.885414958000183,
+        "winner_score": -0.7782202959060669
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WF8H8",
+        "correct_rank": 1,
+        "correct_score": -0.5105364322662354,
+        "exact": true,
+        "winner": "WF8H8",
+        "winner_margin": 4.4276816844940186,
+        "winner_score": -0.5105364322662354
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0014",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VQDCR W5CKA",
+        "correct_rank": 1,
+        "correct_score": -1.674125075340271,
+        "exact": true,
+        "winner": "VQDCR W5CKA",
+        "winner_margin": 4.034475922584534,
+        "winner_score": -1.674125075340271
+      },
+      "expected_relay": "VQDCR",
+      "expected_terminal": "W5CKA",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VQDCR",
+        "correct_rank": 1,
+        "correct_score": -1.0923099517822266,
+        "exact": true,
+        "winner": "VQDCR",
+        "winner_margin": 4.709757328033447,
+        "winner_score": -1.0923099517822266
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W5CKA",
+        "correct_rank": 1,
+        "correct_score": -0.9899435639381409,
+        "exact": true,
+        "winner": "W5CKA",
+        "winner_margin": 4.072251737117767,
+        "winner_score": -0.9899435639381409
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0015",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRXNB WME5L",
+        "correct_rank": 1,
+        "correct_score": -1.7385802268981934,
+        "exact": true,
+        "winner": "VRXNB WME5L",
+        "winner_margin": 3.4740281105041504,
+        "winner_score": -1.7385802268981934
+      },
+      "expected_relay": "VRXNB",
+      "expected_terminal": "WME5L",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRXNB",
+        "correct_rank": 1,
+        "correct_score": -0.8724204897880554,
+        "exact": true,
+        "winner": "VRXNB",
+        "winner_margin": 3.913378059864044,
+        "winner_score": -0.8724204897880554
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WME5L",
+        "correct_rank": 1,
+        "correct_score": -0.70604407787323,
+        "exact": true,
+        "winner": "WME5L",
+        "winner_margin": 3.985552430152893,
+        "winner_score": -0.70604407787323
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0016",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VS7MA WYCSP",
+        "correct_rank": 1,
+        "correct_score": -1.8007930517196655,
+        "exact": true,
+        "winner": "VS7MA WYCSP",
+        "winner_margin": 3.356186032295227,
+        "winner_score": -1.8007930517196655
+      },
+      "expected_relay": "VS7MA",
+      "expected_terminal": "WYCSP",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VS7MA",
+        "correct_rank": 1,
+        "correct_score": -0.8849492073059082,
+        "exact": true,
+        "winner": "VS7MA",
+        "winner_margin": 4.321172714233398,
+        "winner_score": -0.8849492073059082
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WYCSP",
+        "correct_rank": 1,
+        "correct_score": -0.7291631698608398,
+        "exact": true,
+        "winner": "WYCSP",
+        "winner_margin": 3.753551959991455,
+        "winner_score": -0.7291631698608398
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0017",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V37BE W4JUD",
+        "correct_rank": 1,
+        "correct_score": -1.5885432958602905,
+        "exact": true,
+        "winner": "V37BE W4JUD",
+        "winner_margin": 3.865442395210266,
+        "winner_score": -1.5885432958602905
+      },
+      "expected_relay": "V37BE",
+      "expected_terminal": "W4JUD",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V37BE",
+        "correct_rank": 1,
+        "correct_score": -0.7786501049995422,
+        "exact": true,
+        "winner": "V37BE",
+        "winner_margin": 3.990155875682831,
+        "winner_score": -0.7786501049995422
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W4JUD",
+        "correct_rank": 1,
+        "correct_score": -0.7364120483398438,
+        "exact": true,
+        "winner": "W4JUD",
+        "winner_margin": 4.434246063232422,
+        "winner_score": -0.7364120483398438
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0018",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRYKF WA4QQ",
+        "correct_rank": 1,
+        "correct_score": -2.577572822570801,
+        "exact": true,
+        "winner": "VRYKF WA4QQ",
+        "winner_margin": 3.061351776123047,
+        "winner_score": -2.577572822570801
+      },
+      "expected_relay": "VRYKF",
+      "expected_terminal": "WA4QQ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRYKF",
+        "correct_rank": 1,
+        "correct_score": -0.6176538467407227,
+        "exact": true,
+        "winner": "VRYKF",
+        "winner_margin": 4.556459426879883,
+        "winner_score": -0.6176538467407227
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WA4QQ",
+        "correct_rank": 1,
+        "correct_score": -0.559661328792572,
+        "exact": true,
+        "winner": "WA4QQ",
+        "winner_margin": 3.6786966919898987,
+        "winner_score": -0.559661328792572
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0019",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VMZ6K W8RY4",
+        "correct_rank": 1,
+        "correct_score": -1.4392648935317993,
+        "exact": true,
+        "winner": "VMZ6K W8RY4",
+        "winner_margin": 3.5664480924606323,
+        "winner_score": -1.4392648935317993
+      },
+      "expected_relay": "VMZ6K",
+      "expected_terminal": "W8RY4",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VMZ6K",
+        "correct_rank": 1,
+        "correct_score": -0.6158736348152161,
+        "exact": true,
+        "winner": "VMZ6K",
+        "winner_margin": 3.3701595664024353,
+        "winner_score": -0.6158736348152161
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W8RY4",
+        "correct_rank": 1,
+        "correct_score": -0.779376745223999,
+        "exact": true,
+        "winner": "W8RY4",
+        "winner_margin": 3.5745136737823486,
+        "winner_score": -0.779376745223999
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0020",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRTX4 W6KEW",
+        "correct_rank": 1,
+        "correct_score": -1.5891907215118408,
+        "exact": true,
+        "winner": "VRTX4 W6KEW",
+        "winner_margin": 3.9260027408599854,
+        "winner_score": -1.5891907215118408
+      },
+      "expected_relay": "VRTX4",
+      "expected_terminal": "W6KEW",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRTX4",
+        "correct_rank": 1,
+        "correct_score": -0.9154963493347168,
+        "exact": true,
+        "winner": "VRTX4",
+        "winner_margin": 4.726409435272217,
+        "winner_score": -0.9154963493347168
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W6KEW",
+        "correct_rank": 1,
+        "correct_score": -0.9841514825820923,
+        "exact": true,
+        "winner": "W6KEW",
+        "winner_margin": 3.6544007062911987,
+        "winner_score": -0.9841514825820923
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0021",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VHY3E WAYGF",
+        "correct_rank": 1,
+        "correct_score": -2.325305461883545,
+        "exact": true,
+        "winner": "VHY3E WAYGF",
+        "winner_margin": 2.3355445861816406,
+        "winner_score": -2.325305461883545
+      },
+      "expected_relay": "VHY3E",
+      "expected_terminal": "WAYGF",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VHY3E",
+        "correct_rank": 1,
+        "correct_score": -0.8049337267875671,
+        "exact": true,
+        "winner": "VHY3E",
+        "winner_margin": 3.6566928029060364,
+        "winner_score": -0.8049337267875671
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WAYGF",
+        "correct_rank": 1,
+        "correct_score": -1.534029483795166,
+        "exact": true,
+        "winner": "WAYGF",
+        "winner_margin": 3.0898070335388184,
+        "winner_score": -1.534029483795166
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0022",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VK7BB WYNXR",
+        "correct_rank": 1,
+        "correct_score": -2.2015740871429443,
+        "exact": true,
+        "winner": "VK7BB WYNXR",
+        "winner_margin": 3.61010479927063,
+        "winner_score": -2.2015740871429443
+      },
+      "expected_relay": "VK7BB",
+      "expected_terminal": "WYNXR",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VK7BB",
+        "correct_rank": 1,
+        "correct_score": -1.3143330812454224,
+        "exact": true,
+        "winner": "VK7BB",
+        "winner_margin": 3.8617881536483765,
+        "winner_score": -1.3143330812454224
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WYNXR",
+        "correct_rank": 1,
+        "correct_score": -0.966472864151001,
+        "exact": true,
+        "winner": "WYNXR",
+        "winner_margin": 3.9832656383514404,
+        "winner_score": -0.966472864151001
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0023",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VZUCB W58HT",
+        "correct_rank": 1,
+        "correct_score": -1.6886008977890015,
+        "exact": true,
+        "winner": "VZUCB W58HT",
+        "winner_margin": 3.707278847694397,
+        "winner_score": -1.6886008977890015
+      },
+      "expected_relay": "VZUCB",
+      "expected_terminal": "W58HT",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VZUCB",
+        "correct_rank": 1,
+        "correct_score": -0.8974186182022095,
+        "exact": true,
+        "winner": "VZUCB",
+        "winner_margin": 4.211596846580505,
+        "winner_score": -0.8974186182022095
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W58HT",
+        "correct_rank": 1,
+        "correct_score": -0.7652454972267151,
+        "exact": true,
+        "winner": "W58HT",
+        "winner_margin": 4.1240028738975525,
+        "winner_score": -0.7652454972267151
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0024",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VB54B WC8XN",
+        "correct_rank": 1,
+        "correct_score": -2.290750026702881,
+        "exact": true,
+        "winner": "VB54B WC8XN",
+        "winner_margin": 2.919351100921631,
+        "winner_score": -2.290750026702881
+      },
+      "expected_relay": "VB54B",
+      "expected_terminal": "WC8XN",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VB54B",
+        "correct_rank": 1,
+        "correct_score": -0.5973138213157654,
+        "exact": true,
+        "winner": "VB54B",
+        "winner_margin": 4.62280946969986,
+        "winner_score": -0.5973138213157654
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WC8XN",
+        "correct_rank": 1,
+        "correct_score": -0.8776160478591919,
+        "exact": true,
+        "winner": "WC8XN",
+        "winner_margin": 3.7566484212875366,
+        "winner_score": -0.8776160478591919
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0025",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VDK9Q WTYS8",
+        "correct_rank": 1,
+        "correct_score": -1.5166152715682983,
+        "exact": true,
+        "winner": "VDK9Q WTYS8",
+        "winner_margin": 3.3105942010879517,
+        "winner_score": -1.5166152715682983
+      },
+      "expected_relay": "VDK9Q",
+      "expected_terminal": "WTYS8",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VDK9Q",
+        "correct_rank": 1,
+        "correct_score": -0.7318540215492249,
+        "exact": true,
+        "winner": "VDK9Q",
+        "winner_margin": 4.185349404811859,
+        "winner_score": -0.7318540215492249
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WTYS8",
+        "correct_rank": 1,
+        "correct_score": -0.8070995211601257,
+        "exact": true,
+        "winner": "WTYS8",
+        "winner_margin": 4.513852417469025,
+        "winner_score": -0.8070995211601257
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0026",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VY5ME WHT8L",
+        "correct_rank": 1,
+        "correct_score": -1.3642770051956177,
+        "exact": true,
+        "winner": "VY5ME WHT8L",
+        "winner_margin": 3.8364423513412476,
+        "winner_score": -1.3642770051956177
+      },
+      "expected_relay": "VY5ME",
+      "expected_terminal": "WHT8L",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VY5ME",
+        "correct_rank": 1,
+        "correct_score": -0.7982224225997925,
+        "exact": true,
+        "winner": "VY5ME",
+        "winner_margin": 3.785422921180725,
+        "winner_score": -0.7982224225997925
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WHT8L",
+        "correct_rank": 1,
+        "correct_score": -0.712488055229187,
+        "exact": true,
+        "winner": "WHT8L",
+        "winner_margin": 4.721917271614075,
+        "winner_score": -0.712488055229187
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0027",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VUL64 W5KBW",
+        "correct_rank": 1,
+        "correct_score": -1.3771923780441284,
+        "exact": true,
+        "winner": "VUL64 W5KBW",
+        "winner_margin": 4.540408253669739,
+        "winner_score": -1.3771923780441284
+      },
+      "expected_relay": "VUL64",
+      "expected_terminal": "W5KBW",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VUL64",
+        "correct_rank": 1,
+        "correct_score": -0.7907285690307617,
+        "exact": true,
+        "winner": "VUL64",
+        "winner_margin": 4.516457557678223,
+        "winner_score": -0.7907285690307617
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W5KBW",
+        "correct_rank": 1,
+        "correct_score": -0.8192607760429382,
+        "exact": true,
+        "winner": "W5KBW",
+        "winner_margin": 4.015742123126984,
+        "winner_score": -0.8192607760429382
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0028",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VW2JG WPDLS",
+        "correct_rank": 1,
+        "correct_score": -1.6742966175079346,
+        "exact": true,
+        "winner": "VW2JG WPDLS",
+        "winner_margin": 4.0892064571380615,
+        "winner_score": -1.6742966175079346
+      },
+      "expected_relay": "VW2JG",
+      "expected_terminal": "WPDLS",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VW2JG",
+        "correct_rank": 1,
+        "correct_score": -0.6018151044845581,
+        "exact": true,
+        "winner": "VW2JG",
+        "winner_margin": 3.2354968786239624,
+        "winner_score": -0.6018151044845581
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WPDLS",
+        "correct_rank": 1,
+        "correct_score": -0.7350760698318481,
+        "exact": true,
+        "winner": "WPDLS",
+        "winner_margin": 3.77168071269989,
+        "winner_score": -0.7350760698318481
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0029",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VNX7C WMBXY",
+        "correct_rank": 1,
+        "correct_score": -1.795830488204956,
+        "exact": true,
+        "winner": "VNX7C WMBXY",
+        "winner_margin": 4.6334192752838135,
+        "winner_score": -1.795830488204956
+      },
+      "expected_relay": "VNX7C",
+      "expected_terminal": "WMBXY",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VNX7C",
+        "correct_rank": 1,
+        "correct_score": -0.9047703146934509,
+        "exact": true,
+        "winner": "VNX7C",
+        "winner_margin": 4.556163847446442,
+        "winner_score": -0.9047703146934509
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WMBXY",
+        "correct_rank": 1,
+        "correct_score": -1.046318531036377,
+        "exact": true,
+        "winner": "WMBXY",
+        "winner_margin": 4.498790740966797,
+        "winner_score": -1.046318531036377
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0030",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VC6LC WU2QF",
+        "correct_rank": 1,
+        "correct_score": -1.6727547645568848,
+        "exact": true,
+        "winner": "VC6LC WU2QF",
+        "winner_margin": 3.200822353363037,
+        "winner_score": -1.6727547645568848
+      },
+      "expected_relay": "VC6LC",
+      "expected_terminal": "WU2QF",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VC6LC",
+        "correct_rank": 1,
+        "correct_score": -0.9856051802635193,
+        "exact": true,
+        "winner": "VC6LC",
+        "winner_margin": 3.5188894867897034,
+        "winner_score": -0.9856051802635193
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WU2QF",
+        "correct_rank": 1,
+        "correct_score": -0.6146871447563171,
+        "exact": true,
+        "winner": "WU2QF",
+        "winner_margin": 3.1290095448493958,
+        "winner_score": -0.6146871447563171
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0031",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VJYL6 W5AN6",
+        "correct_rank": 1,
+        "correct_score": -1.4555888175964355,
+        "exact": true,
+        "winner": "VJYL6 W5AN6",
+        "winner_margin": 4.153742790222168,
+        "winner_score": -1.4555888175964355
+      },
+      "expected_relay": "VJYL6",
+      "expected_terminal": "W5AN6",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VJYL6",
+        "correct_rank": 1,
+        "correct_score": -0.6773341298103333,
+        "exact": true,
+        "winner": "VJYL6",
+        "winner_margin": 3.7739102244377136,
+        "winner_score": -0.6773341298103333
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W5AN6",
+        "correct_rank": 1,
+        "correct_score": -0.6057881712913513,
+        "exact": true,
+        "winner": "W5AN6",
+        "winner_margin": 4.048749029636383,
+        "winner_score": -0.6057881712913513
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0032",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V2ZHW W96EH",
+        "correct_rank": 1,
+        "correct_score": -1.5993695259094238,
+        "exact": true,
+        "winner": "V2ZHW W96EH",
+        "winner_margin": 3.7232985496520996,
+        "winner_score": -1.5993695259094238
+      },
+      "expected_relay": "V2ZHW",
+      "expected_terminal": "W96EH",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V2ZHW",
+        "correct_rank": 1,
+        "correct_score": -0.7347213625907898,
+        "exact": true,
+        "winner": "V2ZHW",
+        "winner_margin": 4.117453396320343,
+        "winner_score": -0.7347213625907898
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W96EH",
+        "correct_rank": 1,
+        "correct_score": -0.6837356686592102,
+        "exact": true,
+        "winner": "W96EH",
+        "winner_margin": 3.834700286388397,
+        "winner_score": -0.6837356686592102
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0033",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VD6WT WA5K6",
+        "correct_rank": 1,
+        "correct_score": -1.4207574129104614,
+        "exact": true,
+        "winner": "VD6WT WA5K6",
+        "winner_margin": 3.263062357902527,
+        "winner_score": -1.4207574129104614
+      },
+      "expected_relay": "VD6WT",
+      "expected_terminal": "WA5K6",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VD6WT",
+        "correct_rank": 1,
+        "correct_score": -0.7862414121627808,
+        "exact": true,
+        "winner": "VD6WT",
+        "winner_margin": 4.443296551704407,
+        "winner_score": -0.7862414121627808
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WA5K6",
+        "correct_rank": 1,
+        "correct_score": -0.37987247109413147,
+        "exact": true,
+        "winner": "WA5K6",
+        "winner_margin": 4.358540862798691,
+        "winner_score": -0.37987247109413147
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0034",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VJPKP W96TE",
+        "correct_rank": 1,
+        "correct_score": -1.4576750993728638,
+        "exact": true,
+        "winner": "VJPKP W96TE",
+        "winner_margin": 4.4932907819747925,
+        "winner_score": -1.4576750993728638
+      },
+      "expected_relay": "VJPKP",
+      "expected_terminal": "W96TE",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VJPKP",
+        "correct_rank": 1,
+        "correct_score": -0.8232548832893372,
+        "exact": true,
+        "winner": "VJPKP",
+        "winner_margin": 3.5596086382865906,
+        "winner_score": -0.8232548832893372
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W96TE",
+        "correct_rank": 1,
+        "correct_score": -0.8093883395195007,
+        "exact": true,
+        "winner": "W96TE",
+        "winner_margin": 3.6171496510505676,
+        "winner_score": -0.8093883395195007
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0035",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VZXUG WUUZT",
+        "correct_rank": 1,
+        "correct_score": -1.9280799627304077,
+        "exact": true,
+        "winner": "VZXUG WUUZT",
+        "winner_margin": 3.8365312814712524,
+        "winner_score": -1.9280799627304077
+      },
+      "expected_relay": "VZXUG",
+      "expected_terminal": "WUUZT",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VZXUG",
+        "correct_rank": 1,
+        "correct_score": -0.8697938919067383,
+        "exact": true,
+        "winner": "VZXUG",
+        "winner_margin": 3.636786460876465,
+        "winner_score": -0.8697938919067383
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WUUZT",
+        "correct_rank": 1,
+        "correct_score": -0.7624616622924805,
+        "exact": true,
+        "winner": "WUUZT",
+        "winner_margin": 5.371328830718994,
+        "winner_score": -0.7624616622924805
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0036",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRUG5 WEDK7",
+        "correct_rank": 1,
+        "correct_score": -1.6395787000656128,
+        "exact": true,
+        "winner": "VRUG5 WEDK7",
+        "winner_margin": 3.3599430322647095,
+        "winner_score": -1.6395787000656128
+      },
+      "expected_relay": "VRUG5",
+      "expected_terminal": "WEDK7",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRUG5",
+        "correct_rank": 1,
+        "correct_score": -1.0024745464324951,
+        "exact": true,
+        "winner": "VRUG5",
+        "winner_margin": 4.032536745071411,
+        "winner_score": -1.0024745464324951
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WEDK7",
+        "correct_rank": 1,
+        "correct_score": -0.6556125283241272,
+        "exact": true,
+        "winner": "WEDK7",
+        "winner_margin": 4.574319303035736,
+        "winner_score": -0.6556125283241272
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0037",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VCJFB WJMET",
+        "correct_rank": 1,
+        "correct_score": -3.202618360519409,
+        "exact": true,
+        "winner": "VCJFB WJMET",
+        "winner_margin": 2.323293924331665,
+        "winner_score": -3.202618360519409
+      },
+      "expected_relay": "VCJFB",
+      "expected_terminal": "WJMET",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VCJFB",
+        "correct_rank": 1,
+        "correct_score": -1.016278862953186,
+        "exact": true,
+        "winner": "VCJFB",
+        "winner_margin": 3.0996121168136597,
+        "winner_score": -1.016278862953186
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WJMET",
+        "correct_rank": 1,
+        "correct_score": -1.414931058883667,
+        "exact": true,
+        "winner": "WJMET",
+        "winner_margin": 3.0156447887420654,
+        "winner_score": -1.414931058883667
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0038",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VV353 W35ZL",
+        "correct_rank": 1,
+        "correct_score": -1.3074254989624023,
+        "exact": true,
+        "winner": "VV353 W35ZL",
+        "winner_margin": 4.521833419799805,
+        "winner_score": -1.3074254989624023
+      },
+      "expected_relay": "VV353",
+      "expected_terminal": "W35ZL",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VV353",
+        "correct_rank": 1,
+        "correct_score": -0.6646555662155151,
+        "exact": true,
+        "winner": "VV353",
+        "winner_margin": 5.31859028339386,
+        "winner_score": -0.6646555662155151
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W35ZL",
+        "correct_rank": 1,
+        "correct_score": -0.7445321083068848,
+        "exact": true,
+        "winner": "W35ZL",
+        "winner_margin": 3.5943288803100586,
+        "winner_score": -0.7445321083068848
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0039",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRSDJ WD8QP",
+        "correct_rank": 1,
+        "correct_score": -1.538509726524353,
+        "exact": true,
+        "winner": "VRSDJ WD8QP",
+        "winner_margin": 4.176068425178528,
+        "winner_score": -1.538509726524353
+      },
+      "expected_relay": "VRSDJ",
+      "expected_terminal": "WD8QP",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRSDJ",
+        "correct_rank": 1,
+        "correct_score": -0.5271074771881104,
+        "exact": true,
+        "winner": "VRSDJ",
+        "winner_margin": 5.008850812911987,
+        "winner_score": -0.5271074771881104
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WD8QP",
+        "correct_rank": 1,
+        "correct_score": -0.8279381990432739,
+        "exact": true,
+        "winner": "WD8QP",
+        "winner_margin": 4.836915850639343,
+        "winner_score": -0.8279381990432739
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0040",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VSWXU WKA62",
+        "correct_rank": 1,
+        "correct_score": -1.4812865257263184,
+        "exact": true,
+        "winner": "VSWXU WKA62",
+        "winner_margin": 4.004024028778076,
+        "winner_score": -1.4812865257263184
+      },
+      "expected_relay": "VSWXU",
+      "expected_terminal": "WKA62",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VSWXU",
+        "correct_rank": 1,
+        "correct_score": -0.8056461215019226,
+        "exact": true,
+        "winner": "VSWXU",
+        "winner_margin": 4.51910001039505,
+        "winner_score": -0.8056461215019226
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WKA62",
+        "correct_rank": 1,
+        "correct_score": -0.7501734495162964,
+        "exact": true,
+        "winner": "WKA62",
+        "winner_margin": 3.683203339576721,
+        "winner_score": -0.7501734495162964
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0041",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VTAHA W76MU",
+        "correct_rank": 1,
+        "correct_score": -1.7088983058929443,
+        "exact": true,
+        "winner": "VTAHA W76MU",
+        "winner_margin": 4.384050607681274,
+        "winner_score": -1.7088983058929443
+      },
+      "expected_relay": "VTAHA",
+      "expected_terminal": "W76MU",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VTAHA",
+        "correct_rank": 1,
+        "correct_score": -0.9745321273803711,
+        "exact": true,
+        "winner": "VTAHA",
+        "winner_margin": 4.120394229888916,
+        "winner_score": -0.9745321273803711
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W76MU",
+        "correct_rank": 1,
+        "correct_score": -0.8420130610466003,
+        "exact": true,
+        "winner": "W76MU",
+        "winner_margin": 4.063556015491486,
+        "winner_score": -0.8420130610466003
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0042",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VDJVV WXENX",
+        "correct_rank": 1,
+        "correct_score": -1.6746081113815308,
+        "exact": true,
+        "winner": "VDJVV WXENX",
+        "winner_margin": 3.708027958869934,
+        "winner_score": -1.6746081113815308
+      },
+      "expected_relay": "VDJVV",
+      "expected_terminal": "WXENX",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VDJVV",
+        "correct_rank": 1,
+        "correct_score": -1.1259136199951172,
+        "exact": true,
+        "winner": "VDJVV",
+        "winner_margin": 4.559383392333984,
+        "winner_score": -1.1259136199951172
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WXENX",
+        "correct_rank": 1,
+        "correct_score": -0.69347083568573,
+        "exact": true,
+        "winner": "WXENX",
+        "winner_margin": 5.105268597602844,
+        "winner_score": -0.69347083568573
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0043",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VENAF WPDVT",
+        "correct_rank": 1,
+        "correct_score": -2.010162115097046,
+        "exact": true,
+        "winner": "VENAF WPDVT",
+        "winner_margin": 3.37382435798645,
+        "winner_score": -2.010162115097046
+      },
+      "expected_relay": "VENAF",
+      "expected_terminal": "WPDVT",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VENAF",
+        "correct_rank": 1,
+        "correct_score": -1.385920763015747,
+        "exact": true,
+        "winner": "VENAF",
+        "winner_margin": 4.636523962020874,
+        "winner_score": -1.385920763015747
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WPDVT",
+        "correct_rank": 1,
+        "correct_score": -0.9384609460830688,
+        "exact": true,
+        "winner": "WPDVT",
+        "winner_margin": 3.9521983861923218,
+        "winner_score": -0.9384609460830688
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0044",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VSL83 WXW2V",
+        "correct_rank": 1,
+        "correct_score": -1.2358895540237427,
+        "exact": true,
+        "winner": "VSL83 WXW2V",
+        "winner_margin": 3.634719729423523,
+        "winner_score": -1.2358895540237427
+      },
+      "expected_relay": "VSL83",
+      "expected_terminal": "WXW2V",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VSL83",
+        "correct_rank": 1,
+        "correct_score": -0.9312236905097961,
+        "exact": true,
+        "winner": "VSL83",
+        "winner_margin": 4.640009105205536,
+        "winner_score": -0.9312236905097961
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WXW2V",
+        "correct_rank": 1,
+        "correct_score": -0.52353835105896,
+        "exact": true,
+        "winner": "WXW2V",
+        "winner_margin": 4.341723680496216,
+        "winner_score": -0.52353835105896
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0045",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VPN7J WKGKY",
+        "correct_rank": 1,
+        "correct_score": -2.1506052017211914,
+        "exact": true,
+        "winner": "VPN7J WKGKY",
+        "winner_margin": 3.53072452545166,
+        "winner_score": -2.1506052017211914
+      },
+      "expected_relay": "VPN7J",
+      "expected_terminal": "WKGKY",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VPN7J",
+        "correct_rank": 1,
+        "correct_score": -0.8428158164024353,
+        "exact": true,
+        "winner": "VPN7J",
+        "winner_margin": 4.425035059452057,
+        "winner_score": -0.8428158164024353
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WKGKY",
+        "correct_rank": 1,
+        "correct_score": -1.1173737049102783,
+        "exact": true,
+        "winner": "WKGKY",
+        "winner_margin": 4.119920492172241,
+        "winner_score": -1.1173737049102783
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0046",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VTBUS W4FFM",
+        "correct_rank": 1,
+        "correct_score": -1.9596383571624756,
+        "exact": true,
+        "winner": "VTBUS W4FFM",
+        "winner_margin": 2.704829454421997,
+        "winner_score": -1.9596383571624756
+      },
+      "expected_relay": "VTBUS",
+      "expected_terminal": "W4FFM",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VTBUS",
+        "correct_rank": 1,
+        "correct_score": -1.055944561958313,
+        "exact": true,
+        "winner": "VTBUS",
+        "winner_margin": 3.6532548666000366,
+        "winner_score": -1.055944561958313
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W4FFM",
+        "correct_rank": 1,
+        "correct_score": -0.6554555296897888,
+        "exact": true,
+        "winner": "W4FFM",
+        "winner_margin": 3.75673109292984,
+        "winner_score": -0.6554555296897888
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0047",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V6BL8 WJNDJ",
+        "correct_rank": 1,
+        "correct_score": -2.073948860168457,
+        "exact": true,
+        "winner": "V6BL8 WJNDJ",
+        "winner_margin": 3.38084077835083,
+        "winner_score": -2.073948860168457
+      },
+      "expected_relay": "V6BL8",
+      "expected_terminal": "WJNDJ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V6BL8",
+        "correct_rank": 1,
+        "correct_score": -0.6942522525787354,
+        "exact": true,
+        "winner": "V6BL8",
+        "winner_margin": 4.157097101211548,
+        "winner_score": -0.6942522525787354
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WJNDJ",
+        "correct_rank": 1,
+        "correct_score": -1.270817518234253,
+        "exact": true,
+        "winner": "WJNDJ",
+        "winner_margin": 3.604865312576294,
+        "winner_score": -1.270817518234253
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0048",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V9YXW W77XJ",
+        "correct_rank": 1,
+        "correct_score": -1.5134004354476929,
+        "exact": true,
+        "winner": "V9YXW W77XJ",
+        "winner_margin": 3.351056694984436,
+        "winner_score": -1.5134004354476929
+      },
+      "expected_relay": "V9YXW",
+      "expected_terminal": "W77XJ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V9YXW",
+        "correct_rank": 1,
+        "correct_score": -0.7253144979476929,
+        "exact": true,
+        "winner": "V9YXW",
+        "winner_margin": 3.637332558631897,
+        "winner_score": -0.7253144979476929
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W77XJ",
+        "correct_rank": 1,
+        "correct_score": -0.7015196681022644,
+        "exact": true,
+        "winner": "W77XJ",
+        "winner_margin": 4.432543098926544,
+        "winner_score": -0.7015196681022644
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0049",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VN95B WAFRB",
+        "correct_rank": 1,
+        "correct_score": -1.5009448528289795,
+        "exact": true,
+        "winner": "VN95B WAFRB",
+        "winner_margin": 3.3586056232452393,
+        "winner_score": -1.5009448528289795
+      },
+      "expected_relay": "VN95B",
+      "expected_terminal": "WAFRB",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VN95B",
+        "correct_rank": 1,
+        "correct_score": -0.5703954100608826,
+        "exact": true,
+        "winner": "VN95B",
+        "winner_margin": 3.9188600182533264,
+        "winner_score": -0.5703954100608826
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WAFRB",
+        "correct_rank": 1,
+        "correct_score": -0.38548311591148376,
+        "exact": true,
+        "winner": "WAFRB",
+        "winner_margin": 4.235112339258194,
+        "winner_score": -0.38548311591148376
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0050",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VT5E3 WVAFN",
+        "correct_rank": 1,
+        "correct_score": -1.3653764724731445,
+        "exact": true,
+        "winner": "VT5E3 WVAFN",
+        "winner_margin": 4.520233154296875,
+        "winner_score": -1.3653764724731445
+      },
+      "expected_relay": "VT5E3",
+      "expected_terminal": "WVAFN",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VT5E3",
+        "correct_rank": 1,
+        "correct_score": -0.6581128239631653,
+        "exact": true,
+        "winner": "VT5E3",
+        "winner_margin": 3.606545627117157,
+        "winner_score": -0.6581128239631653
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WVAFN",
+        "correct_rank": 1,
+        "correct_score": -0.666790246963501,
+        "exact": true,
+        "winner": "WVAFN",
+        "winner_margin": 3.2409162521362305,
+        "winner_score": -0.666790246963501
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0051",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VWJ4T WWZFY",
+        "correct_rank": 1,
+        "correct_score": -1.4945390224456787,
+        "exact": true,
+        "winner": "VWJ4T WWZFY",
+        "winner_margin": 3.664447546005249,
+        "winner_score": -1.4945390224456787
+      },
+      "expected_relay": "VWJ4T",
+      "expected_terminal": "WWZFY",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VWJ4T",
+        "correct_rank": 1,
+        "correct_score": -0.7356876134872437,
+        "exact": true,
+        "winner": "VWJ4T",
+        "winner_margin": 4.10798180103302,
+        "winner_score": -0.7356876134872437
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WWZFY",
+        "correct_rank": 1,
+        "correct_score": -0.6689919233322144,
+        "exact": true,
+        "winner": "WWZFY",
+        "winner_margin": 3.913797974586487,
+        "winner_score": -0.6689919233322144
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0052",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VWMVN WUNSC",
+        "correct_rank": 1,
+        "correct_score": -2.012671947479248,
+        "exact": true,
+        "winner": "VWMVN WUNSC",
+        "winner_margin": 3.1440038681030273,
+        "winner_score": -2.012671947479248
+      },
+      "expected_relay": "VWMVN",
+      "expected_terminal": "WUNSC",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VWMVN",
+        "correct_rank": 1,
+        "correct_score": -0.8299411535263062,
+        "exact": true,
+        "winner": "VWMVN",
+        "winner_margin": 3.6369982957839966,
+        "winner_score": -0.8299411535263062
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WUNSC",
+        "correct_rank": 1,
+        "correct_score": -0.8725475072860718,
+        "exact": true,
+        "winner": "WUNSC",
+        "winner_margin": 4.693373322486877,
+        "winner_score": -0.8725475072860718
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0053",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VA5ED WUNN4",
+        "correct_rank": 1,
+        "correct_score": -1.6669633388519287,
+        "exact": true,
+        "winner": "VA5ED WUNN4",
+        "winner_margin": 3.8324649333953857,
+        "winner_score": -1.6669633388519287
+      },
+      "expected_relay": "VA5ED",
+      "expected_terminal": "WUNN4",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VA5ED",
+        "correct_rank": 1,
+        "correct_score": -1.0843132734298706,
+        "exact": true,
+        "winner": "VA5ED",
+        "winner_margin": 3.1582752466201782,
+        "winner_score": -1.0843132734298706
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WUNN4",
+        "correct_rank": 1,
+        "correct_score": -0.6527398228645325,
+        "exact": true,
+        "winner": "WUNN4",
+        "winner_margin": 4.610372245311737,
+        "winner_score": -0.6527398228645325
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0054",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VHLDP WRP9S",
+        "correct_rank": 1,
+        "correct_score": -1.496090292930603,
+        "exact": true,
+        "winner": "VHLDP WRP9S",
+        "winner_margin": 3.469019055366516,
+        "winner_score": -1.496090292930603
+      },
+      "expected_relay": "VHLDP",
+      "expected_terminal": "WRP9S",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VHLDP",
+        "correct_rank": 1,
+        "correct_score": -0.7783504724502563,
+        "exact": true,
+        "winner": "VHLDP",
+        "winner_margin": 3.867130160331726,
+        "winner_score": -0.7783504724502563
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WRP9S",
+        "correct_rank": 1,
+        "correct_score": -0.831218421459198,
+        "exact": true,
+        "winner": "WRP9S",
+        "winner_margin": 3.7867372632026672,
+        "winner_score": -0.831218421459198
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0055",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VQRXH WUQLC",
+        "correct_rank": 1,
+        "correct_score": -1.4736589193344116,
+        "exact": true,
+        "winner": "VQRXH WUQLC",
+        "winner_margin": 4.01287043094635,
+        "winner_score": -1.4736589193344116
+      },
+      "expected_relay": "VQRXH",
+      "expected_terminal": "WUQLC",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VQRXH",
+        "correct_rank": 1,
+        "correct_score": -0.8656677603721619,
+        "exact": true,
+        "winner": "VQRXH",
+        "winner_margin": 3.3145857453346252,
+        "winner_score": -0.8656677603721619
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WUQLC",
+        "correct_rank": 1,
+        "correct_score": -0.6635454893112183,
+        "exact": true,
+        "winner": "WUQLC",
+        "winner_margin": 4.266027569770813,
+        "winner_score": -0.6635454893112183
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0056",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VM95T WPKE8",
+        "correct_rank": 1,
+        "correct_score": -2.0673751831054688,
+        "exact": true,
+        "winner": "VM95T WPKE8",
+        "winner_margin": 3.845175266265869,
+        "winner_score": -2.0673751831054688
+      },
+      "expected_relay": "VM95T",
+      "expected_terminal": "WPKE8",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VM95T",
+        "correct_rank": 1,
+        "correct_score": -0.6320824027061462,
+        "exact": true,
+        "winner": "VM95T",
+        "winner_margin": 3.231387436389923,
+        "winner_score": -0.6320824027061462
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WPKE8",
+        "correct_rank": 1,
+        "correct_score": -1.4845607280731201,
+        "exact": true,
+        "winner": "WPKE8",
+        "winner_margin": 3.6123898029327393,
+        "winner_score": -1.4845607280731201
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0057",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRCQ4 W8JE9",
+        "correct_rank": 1,
+        "correct_score": -1.4415448904037476,
+        "exact": true,
+        "winner": "VRCQ4 W8JE9",
+        "winner_margin": 3.4905720949172974,
+        "winner_score": -1.4415448904037476
+      },
+      "expected_relay": "VRCQ4",
+      "expected_terminal": "W8JE9",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRCQ4",
+        "correct_rank": 1,
+        "correct_score": -0.6875778436660767,
+        "exact": true,
+        "winner": "VRCQ4",
+        "winner_margin": 3.59455668926239,
+        "winner_score": -0.6875778436660767
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W8JE9",
+        "correct_rank": 1,
+        "correct_score": -0.7364464998245239,
+        "exact": true,
+        "winner": "W8JE9",
+        "winner_margin": 3.891870856285095,
+        "winner_score": -0.7364464998245239
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0058",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VYZ3M WPUCZ",
+        "correct_rank": 1,
+        "correct_score": -1.8467919826507568,
+        "exact": true,
+        "winner": "VYZ3M WPUCZ",
+        "winner_margin": 3.849536180496216,
+        "winner_score": -1.8467919826507568
+      },
+      "expected_relay": "VYZ3M",
+      "expected_terminal": "WPUCZ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VYZ3M",
+        "correct_rank": 1,
+        "correct_score": -0.7785528898239136,
+        "exact": true,
+        "winner": "VYZ3M",
+        "winner_margin": 3.8209067583084106,
+        "winner_score": -0.7785528898239136
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WPUCZ",
+        "correct_rank": 1,
+        "correct_score": -0.9777132868766785,
+        "exact": true,
+        "winner": "WPUCZ",
+        "winner_margin": 2.994117558002472,
+        "winner_score": -0.9777132868766785
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0059",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VR59Q WYQDQ",
+        "correct_rank": 1,
+        "correct_score": -1.7547006607055664,
+        "exact": true,
+        "winner": "VR59Q WYQDQ",
+        "winner_margin": 3.0301246643066406,
+        "winner_score": -1.7547006607055664
+      },
+      "expected_relay": "VR59Q",
+      "expected_terminal": "WYQDQ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VR59Q",
+        "correct_rank": 1,
+        "correct_score": -0.6239801049232483,
+        "exact": true,
+        "winner": "VR59Q",
+        "winner_margin": 3.708019196987152,
+        "winner_score": -0.6239801049232483
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WYQDQ",
+        "correct_rank": 1,
+        "correct_score": -0.9481903910636902,
+        "exact": true,
+        "winner": "WYQDQ",
+        "winner_margin": 4.824945271015167,
+        "winner_score": -0.9481903910636902
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0060",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VNS8U WKQEB",
+        "correct_rank": 1,
+        "correct_score": -1.551641821861267,
+        "exact": true,
+        "winner": "VNS8U WKQEB",
+        "winner_margin": 4.02621328830719,
+        "winner_score": -1.551641821861267
+      },
+      "expected_relay": "VNS8U",
+      "expected_terminal": "WKQEB",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VNS8U",
+        "correct_rank": 1,
+        "correct_score": -0.7237913608551025,
+        "exact": true,
+        "winner": "VNS8U",
+        "winner_margin": 3.065978527069092,
+        "winner_score": -0.7237913608551025
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WKQEB",
+        "correct_rank": 1,
+        "correct_score": -0.9419101476669312,
+        "exact": true,
+        "winner": "WKQEB",
+        "winner_margin": 3.787418484687805,
+        "winner_score": -0.9419101476669312
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0061",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VYBD6 WYUF5",
+        "correct_rank": 1,
+        "correct_score": -1.379521369934082,
+        "exact": true,
+        "winner": "VYBD6 WYUF5",
+        "winner_margin": 3.7174506187438965,
+        "winner_score": -1.379521369934082
+      },
+      "expected_relay": "VYBD6",
+      "expected_terminal": "WYUF5",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VYBD6",
+        "correct_rank": 1,
+        "correct_score": -0.7571066617965698,
+        "exact": true,
+        "winner": "VYBD6",
+        "winner_margin": 3.9658862352371216,
+        "winner_score": -0.7571066617965698
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WYUF5",
+        "correct_rank": 1,
+        "correct_score": -0.6598355770111084,
+        "exact": true,
+        "winner": "WYUF5",
+        "winner_margin": 4.5684263706207275,
+        "winner_score": -0.6598355770111084
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0062",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V98AB WRY5A",
+        "correct_rank": 1,
+        "correct_score": -1.7865585088729858,
+        "exact": true,
+        "winner": "V98AB WRY5A",
+        "winner_margin": 3.8245970010757446,
+        "winner_score": -1.7865585088729858
+      },
+      "expected_relay": "V98AB",
+      "expected_terminal": "WRY5A",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V98AB",
+        "correct_rank": 1,
+        "correct_score": -0.762204647064209,
+        "exact": true,
+        "winner": "V98AB",
+        "winner_margin": 4.2400031089782715,
+        "winner_score": -0.762204647064209
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WRY5A",
+        "correct_rank": 1,
+        "correct_score": -0.49849411845207214,
+        "exact": true,
+        "winner": "WRY5A",
+        "winner_margin": 4.7563290894031525,
+        "winner_score": -0.49849411845207214
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0063",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V8UX2 WGDUD",
+        "correct_rank": 1,
+        "correct_score": -1.7413220405578613,
+        "exact": true,
+        "winner": "V8UX2 WGDUD",
+        "winner_margin": 3.0707173347473145,
+        "winner_score": -1.7413220405578613
+      },
+      "expected_relay": "V8UX2",
+      "expected_terminal": "WGDUD",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V8UX2",
+        "correct_rank": 1,
+        "correct_score": -0.6635401844978333,
+        "exact": true,
+        "winner": "V8UX2",
+        "winner_margin": 4.047812640666962,
+        "winner_score": -0.6635401844978333
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WGDUD",
+        "correct_rank": 1,
+        "correct_score": -0.9406940340995789,
+        "exact": true,
+        "winner": "WGDUD",
+        "winner_margin": 4.0817301869392395,
+        "winner_score": -0.9406940340995789
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0064",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VW93R W9CSG",
+        "correct_rank": 1,
+        "correct_score": -1.3973896503448486,
+        "exact": true,
+        "winner": "VW93R W9CSG",
+        "winner_margin": 3.8339898586273193,
+        "winner_score": -1.3973896503448486
+      },
+      "expected_relay": "VW93R",
+      "expected_terminal": "W9CSG",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VW93R",
+        "correct_rank": 1,
+        "correct_score": -0.5695053935050964,
+        "exact": true,
+        "winner": "VW93R",
+        "winner_margin": 3.4625008702278137,
+        "winner_score": -0.5695053935050964
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W9CSG",
+        "correct_rank": 1,
+        "correct_score": -0.7480762600898743,
+        "exact": true,
+        "winner": "W9CSG",
+        "winner_margin": 3.8951794505119324,
+        "winner_score": -0.7480762600898743
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0065",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRDLJ WPC88",
+        "correct_rank": 1,
+        "correct_score": -1.7388845682144165,
+        "exact": true,
+        "winner": "VRDLJ WPC88",
+        "winner_margin": 4.79811418056488,
+        "winner_score": -1.7388845682144165
+      },
+      "expected_relay": "VRDLJ",
+      "expected_terminal": "WPC88",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRDLJ",
+        "correct_rank": 1,
+        "correct_score": -0.6938767433166504,
+        "exact": true,
+        "winner": "VRDLJ",
+        "winner_margin": 4.824805736541748,
+        "winner_score": -0.6938767433166504
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WPC88",
+        "correct_rank": 1,
+        "correct_score": -0.688770055770874,
+        "exact": true,
+        "winner": "WPC88",
+        "winner_margin": 4.34229302406311,
+        "winner_score": -0.688770055770874
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0066",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VQ7TY WP28P",
+        "correct_rank": 1,
+        "correct_score": -1.674924612045288,
+        "exact": true,
+        "winner": "VQ7TY WP28P",
+        "winner_margin": 3.7545149326324463,
+        "winner_score": -1.674924612045288
+      },
+      "expected_relay": "VQ7TY",
+      "expected_terminal": "WP28P",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VQ7TY",
+        "correct_rank": 1,
+        "correct_score": -0.7956169843673706,
+        "exact": true,
+        "winner": "VQ7TY",
+        "winner_margin": 3.471603512763977,
+        "winner_score": -0.7956169843673706
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WP28P",
+        "correct_rank": 1,
+        "correct_score": -0.5623267889022827,
+        "exact": true,
+        "winner": "WP28P",
+        "winner_margin": 3.5787216424942017,
+        "winner_score": -0.5623267889022827
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0067",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VPLT3 WYZRB",
+        "correct_rank": 1,
+        "correct_score": -1.7067787647247314,
+        "exact": true,
+        "winner": "VPLT3 WYZRB",
+        "winner_margin": 3.44785475730896,
+        "winner_score": -1.7067787647247314
+      },
+      "expected_relay": "VPLT3",
+      "expected_terminal": "WYZRB",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VPLT3",
+        "correct_rank": 1,
+        "correct_score": -0.6708964109420776,
+        "exact": true,
+        "winner": "VPLT3",
+        "winner_margin": 4.665441155433655,
+        "winner_score": -0.6708964109420776
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WYZRB",
+        "correct_rank": 1,
+        "correct_score": -0.9100012183189392,
+        "exact": true,
+        "winner": "WYZRB",
+        "winner_margin": 4.201698362827301,
+        "winner_score": -0.9100012183189392
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0068",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VWPQZ WRHMA",
+        "correct_rank": 1,
+        "correct_score": -1.7789415121078491,
+        "exact": true,
+        "winner": "VWPQZ WRHMA",
+        "winner_margin": 3.5959168672561646,
+        "winner_score": -1.7789415121078491
+      },
+      "expected_relay": "VWPQZ",
+      "expected_terminal": "WRHMA",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VWPQZ",
+        "correct_rank": 1,
+        "correct_score": -0.8505628705024719,
+        "exact": true,
+        "winner": "VWPQZ",
+        "winner_margin": 3.5493223071098328,
+        "winner_score": -0.8505628705024719
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WRHMA",
+        "correct_rank": 1,
+        "correct_score": -0.4892134666442871,
+        "exact": true,
+        "winner": "WRHMA",
+        "winner_margin": 4.647335052490234,
+        "winner_score": -0.4892134666442871
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0069",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V7JHQ WHF3J",
+        "correct_rank": 1,
+        "correct_score": -1.8940534591674805,
+        "exact": true,
+        "winner": "V7JHQ WHF3J",
+        "winner_margin": 3.6235246658325195,
+        "winner_score": -1.8940534591674805
+      },
+      "expected_relay": "V7JHQ",
+      "expected_terminal": "WHF3J",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V7JHQ",
+        "correct_rank": 1,
+        "correct_score": -0.8082250952720642,
+        "exact": true,
+        "winner": "V7JHQ",
+        "winner_margin": 4.276526033878326,
+        "winner_score": -0.8082250952720642
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WHF3J",
+        "correct_rank": 1,
+        "correct_score": -0.6796055436134338,
+        "exact": true,
+        "winner": "WHF3J",
+        "winner_margin": 4.248033940792084,
+        "winner_score": -0.6796055436134338
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0070",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VAPFB WAFBF",
+        "correct_rank": 1,
+        "correct_score": -1.9151201248168945,
+        "exact": true,
+        "winner": "VAPFB WAFBF",
+        "winner_margin": 3.295879364013672,
+        "winner_score": -1.9151201248168945
+      },
+      "expected_relay": "VAPFB",
+      "expected_terminal": "WAFBF",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VAPFB",
+        "correct_rank": 1,
+        "correct_score": -0.962303876876831,
+        "exact": true,
+        "winner": "VAPFB",
+        "winner_margin": 3.2251675128936768,
+        "winner_score": -0.962303876876831
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WAFBF",
+        "correct_rank": 1,
+        "correct_score": -0.8584010004997253,
+        "exact": true,
+        "winner": "WAFBF",
+        "winner_margin": 5.334820568561554,
+        "winner_score": -0.8584010004997253
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0071",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V46SM WEAKH",
+        "correct_rank": 1,
+        "correct_score": -2.333840847015381,
+        "exact": true,
+        "winner": "V46SM WEAKH",
+        "winner_margin": 2.7451634407043457,
+        "winner_score": -2.333840847015381
+      },
+      "expected_relay": "V46SM",
+      "expected_terminal": "WEAKH",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V46SM",
+        "correct_rank": 1,
+        "correct_score": -0.8569267988204956,
+        "exact": true,
+        "winner": "V46SM",
+        "winner_margin": 4.605511784553528,
+        "winner_score": -0.8569267988204956
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WEAKH",
+        "correct_rank": 1,
+        "correct_score": -1.1599677801132202,
+        "exact": true,
+        "winner": "WEAKH",
+        "winner_margin": 3.928467869758606,
+        "winner_score": -1.1599677801132202
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0072",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VYCMX WRXMZ",
+        "correct_rank": 1,
+        "correct_score": -1.5415982007980347,
+        "exact": true,
+        "winner": "VYCMX WRXMZ",
+        "winner_margin": 3.988731026649475,
+        "winner_score": -1.5415982007980347
+      },
+      "expected_relay": "VYCMX",
+      "expected_terminal": "WRXMZ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VYCMX",
+        "correct_rank": 1,
+        "correct_score": -0.6927357316017151,
+        "exact": true,
+        "winner": "VYCMX",
+        "winner_margin": 3.9437102675437927,
+        "winner_score": -0.6927357316017151
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WRXMZ",
+        "correct_rank": 1,
+        "correct_score": -0.8013109564781189,
+        "exact": true,
+        "winner": "WRXMZ",
+        "winner_margin": 4.513823091983795,
+        "winner_score": -0.8013109564781189
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0073",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VMH8S W3RX8",
+        "correct_rank": 1,
+        "correct_score": -1.4999165534973145,
+        "exact": true,
+        "winner": "VMH8S W3RX8",
+        "winner_margin": 4.471486568450928,
+        "winner_score": -1.4999165534973145
+      },
+      "expected_relay": "VMH8S",
+      "expected_terminal": "W3RX8",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VMH8S",
+        "correct_rank": 1,
+        "correct_score": -0.6327426433563232,
+        "exact": true,
+        "winner": "VMH8S",
+        "winner_margin": 4.224012613296509,
+        "winner_score": -0.6327426433563232
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W3RX8",
+        "correct_rank": 1,
+        "correct_score": -0.729057252407074,
+        "exact": true,
+        "winner": "W3RX8",
+        "winner_margin": 3.9434972405433655,
+        "winner_score": -0.729057252407074
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0074",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VCB2N WTM3M",
+        "correct_rank": 1,
+        "correct_score": -1.4619983434677124,
+        "exact": true,
+        "winner": "VCB2N WTM3M",
+        "winner_margin": 3.2695146799087524,
+        "winner_score": -1.4619983434677124
+      },
+      "expected_relay": "VCB2N",
+      "expected_terminal": "WTM3M",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VCB2N",
+        "correct_rank": 1,
+        "correct_score": -0.7340396642684937,
+        "exact": true,
+        "winner": "VCB2N",
+        "winner_margin": 3.9846826791763306,
+        "winner_score": -0.7340396642684937
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WTM3M",
+        "correct_rank": 1,
+        "correct_score": -0.7401595711708069,
+        "exact": true,
+        "winner": "WTM3M",
+        "winner_margin": 4.406237065792084,
+        "winner_score": -0.7401595711708069
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0075",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VZMVQ WV2LJ",
+        "correct_rank": 1,
+        "correct_score": -1.2281004190444946,
+        "exact": true,
+        "winner": "VZMVQ WV2LJ",
+        "winner_margin": 3.4924219846725464,
+        "winner_score": -1.2281004190444946
+      },
+      "expected_relay": "VZMVQ",
+      "expected_terminal": "WV2LJ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VZMVQ",
+        "correct_rank": 1,
+        "correct_score": -0.6832423210144043,
+        "exact": true,
+        "winner": "VZMVQ",
+        "winner_margin": 4.36559534072876,
+        "winner_score": -0.6832423210144043
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WV2LJ",
+        "correct_rank": 1,
+        "correct_score": -0.556548535823822,
+        "exact": true,
+        "winner": "WV2LJ",
+        "winner_margin": 4.87859970331192,
+        "winner_score": -0.556548535823822
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0076",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V62FX WGZS8",
+        "correct_rank": 1,
+        "correct_score": -1.520785927772522,
+        "exact": true,
+        "winner": "V62FX WGZS8",
+        "winner_margin": 3.9509838819503784,
+        "winner_score": -1.520785927772522
+      },
+      "expected_relay": "V62FX",
+      "expected_terminal": "WGZS8",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V62FX",
+        "correct_rank": 1,
+        "correct_score": -0.7617003321647644,
+        "exact": true,
+        "winner": "V62FX",
+        "winner_margin": 4.019307911396027,
+        "winner_score": -0.7617003321647644
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WGZS8",
+        "correct_rank": 1,
+        "correct_score": -0.6364898085594177,
+        "exact": true,
+        "winner": "WGZS8",
+        "winner_margin": 3.622629702091217,
+        "winner_score": -0.6364898085594177
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0077",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VVNCC WPSRF",
+        "correct_rank": 1,
+        "correct_score": -2.039332389831543,
+        "exact": true,
+        "winner": "VVNCC WPSRF",
+        "winner_margin": 3.032095432281494,
+        "winner_score": -2.039332389831543
+      },
+      "expected_relay": "VVNCC",
+      "expected_terminal": "WPSRF",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VVNCC",
+        "correct_rank": 1,
+        "correct_score": -0.9361986517906189,
+        "exact": true,
+        "winner": "VVNCC",
+        "winner_margin": 4.211543619632721,
+        "winner_score": -0.9361986517906189
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WPSRF",
+        "correct_rank": 1,
+        "correct_score": -0.8847862482070923,
+        "exact": true,
+        "winner": "WPSRF",
+        "winner_margin": 4.270950198173523,
+        "winner_score": -0.8847862482070923
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0078",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VSQUG WKVVE",
+        "correct_rank": 1,
+        "correct_score": -1.9318857192993164,
+        "exact": true,
+        "winner": "VSQUG WKVVE",
+        "winner_margin": 3.103303909301758,
+        "winner_score": -1.9318857192993164
+      },
+      "expected_relay": "VSQUG",
+      "expected_terminal": "WKVVE",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VSQUG",
+        "correct_rank": 1,
+        "correct_score": -1.1801741123199463,
+        "exact": true,
+        "winner": "VSQUG",
+        "winner_margin": 3.9644458293914795,
+        "winner_score": -1.1801741123199463
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WKVVE",
+        "correct_rank": 1,
+        "correct_score": -0.9930951595306396,
+        "exact": true,
+        "winner": "WKVVE",
+        "winner_margin": 4.778162240982056,
+        "winner_score": -0.9930951595306396
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0079",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VAFV5 W8XKF",
+        "correct_rank": 1,
+        "correct_score": -1.4988787174224854,
+        "exact": true,
+        "winner": "VAFV5 W8XKF",
+        "winner_margin": 4.354119062423706,
+        "winner_score": -1.4988787174224854
+      },
+      "expected_relay": "VAFV5",
+      "expected_terminal": "W8XKF",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VAFV5",
+        "correct_rank": 1,
+        "correct_score": -0.6418063640594482,
+        "exact": true,
+        "winner": "VAFV5",
+        "winner_margin": 4.328279733657837,
+        "winner_score": -0.6418063640594482
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W8XKF",
+        "correct_rank": 1,
+        "correct_score": -0.715147852897644,
+        "exact": true,
+        "winner": "W8XKF",
+        "winner_margin": 4.236160397529602,
+        "winner_score": -0.715147852897644
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0080",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VTYXX WHYK7",
+        "correct_rank": 1,
+        "correct_score": -2.567154884338379,
+        "exact": true,
+        "winner": "VTYXX WHYK7",
+        "winner_margin": 3.560831069946289,
+        "winner_score": -2.567154884338379
+      },
+      "expected_relay": "VTYXX",
+      "expected_terminal": "WHYK7",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VTYXX",
+        "correct_rank": 1,
+        "correct_score": -1.4127339124679565,
+        "exact": true,
+        "winner": "VTYXX",
+        "winner_margin": 3.869040608406067,
+        "winner_score": -1.4127339124679565
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WHYK7",
+        "correct_rank": 1,
+        "correct_score": -1.0863096714019775,
+        "exact": true,
+        "winner": "WHYK7",
+        "winner_margin": 4.049264192581177,
+        "winner_score": -1.0863096714019775
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0081",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V5CCU WTR6M",
+        "correct_rank": 1,
+        "correct_score": -1.5062744617462158,
+        "exact": true,
+        "winner": "V5CCU WTR6M",
+        "winner_margin": 4.075961351394653,
+        "winner_score": -1.5062744617462158
+      },
+      "expected_relay": "V5CCU",
+      "expected_terminal": "WTR6M",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V5CCU",
+        "correct_rank": 1,
+        "correct_score": -0.6910607814788818,
+        "exact": true,
+        "winner": "V5CCU",
+        "winner_margin": 4.418425798416138,
+        "winner_score": -0.6910607814788818
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WTR6M",
+        "correct_rank": 1,
+        "correct_score": -0.866809070110321,
+        "exact": true,
+        "winner": "WTR6M",
+        "winner_margin": 5.259687721729279,
+        "winner_score": -0.866809070110321
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0082",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VB6ST WF7NT",
+        "correct_rank": 1,
+        "correct_score": -1.9146018028259277,
+        "exact": true,
+        "winner": "VB6ST WF7NT",
+        "winner_margin": 3.8144335746765137,
+        "winner_score": -1.9146018028259277
+      },
+      "expected_relay": "VB6ST",
+      "expected_terminal": "WF7NT",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VB6ST",
+        "correct_rank": 1,
+        "correct_score": -0.862788200378418,
+        "exact": true,
+        "winner": "VB6ST",
+        "winner_margin": 3.068251371383667,
+        "winner_score": -0.862788200378418
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WF7NT",
+        "correct_rank": 1,
+        "correct_score": -0.7911796569824219,
+        "exact": true,
+        "winner": "WF7NT",
+        "winner_margin": 3.3173413276672363,
+        "winner_score": -0.7911796569824219
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0083",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VMMRS WKJHM",
+        "correct_rank": 1,
+        "correct_score": -1.8766858577728271,
+        "exact": true,
+        "winner": "VMMRS WKJHM",
+        "winner_margin": 3.7694876194000244,
+        "winner_score": -1.8766858577728271
+      },
+      "expected_relay": "VMMRS",
+      "expected_terminal": "WKJHM",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VMMRS",
+        "correct_rank": 1,
+        "correct_score": -0.9300200343132019,
+        "exact": true,
+        "winner": "VMMRS",
+        "winner_margin": 3.9082053303718567,
+        "winner_score": -0.9300200343132019
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WKJHM",
+        "correct_rank": 1,
+        "correct_score": -0.8029307723045349,
+        "exact": true,
+        "winner": "WKJHM",
+        "winner_margin": 3.928143084049225,
+        "winner_score": -0.8029307723045349
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0084",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VT4KX WBHFG",
+        "correct_rank": 1,
+        "correct_score": -1.694181203842163,
+        "exact": true,
+        "winner": "VT4KX WBHFG",
+        "winner_margin": 3.2964560985565186,
+        "winner_score": -1.694181203842163
+      },
+      "expected_relay": "VT4KX",
+      "expected_terminal": "WBHFG",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VT4KX",
+        "correct_rank": 1,
+        "correct_score": -0.715305745601654,
+        "exact": true,
+        "winner": "VT4KX",
+        "winner_margin": 3.6518641114234924,
+        "winner_score": -0.715305745601654
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WBHFG",
+        "correct_rank": 1,
+        "correct_score": -0.9122433662414551,
+        "exact": true,
+        "winner": "WBHFG",
+        "winner_margin": 4.152754306793213,
+        "winner_score": -0.9122433662414551
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0085",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VGBTA WCYRG",
+        "correct_rank": 1,
+        "correct_score": -1.8553471565246582,
+        "exact": true,
+        "winner": "VGBTA WCYRG",
+        "winner_margin": 3.741220474243164,
+        "winner_score": -1.8553471565246582
+      },
+      "expected_relay": "VGBTA",
+      "expected_terminal": "WCYRG",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VGBTA",
+        "correct_rank": 1,
+        "correct_score": -1.060469150543213,
+        "exact": true,
+        "winner": "VGBTA",
+        "winner_margin": 4.633368015289307,
+        "winner_score": -1.060469150543213
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WCYRG",
+        "correct_rank": 1,
+        "correct_score": -0.8213219046592712,
+        "exact": true,
+        "winner": "WCYRG",
+        "winner_margin": 4.298412382602692,
+        "winner_score": -0.8213219046592712
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0086",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VN946 WF55N",
+        "correct_rank": 1,
+        "correct_score": -1.2306759357452393,
+        "exact": true,
+        "winner": "VN946 WF55N",
+        "winner_margin": 3.580190896987915,
+        "winner_score": -1.2306759357452393
+      },
+      "expected_relay": "VN946",
+      "expected_terminal": "WF55N",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VN946",
+        "correct_rank": 1,
+        "correct_score": -0.5320847034454346,
+        "exact": true,
+        "winner": "VN946",
+        "winner_margin": 2.9890835285186768,
+        "winner_score": -0.5320847034454346
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WF55N",
+        "correct_rank": 1,
+        "correct_score": -0.5419389009475708,
+        "exact": true,
+        "winner": "WF55N",
+        "winner_margin": 5.4942649602890015,
+        "winner_score": -0.5419389009475708
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0087",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VCXUL WEB4M",
+        "correct_rank": 1,
+        "correct_score": -2.501786470413208,
+        "exact": true,
+        "winner": "VCXUL WEB4M",
+        "winner_margin": 2.951697587966919,
+        "winner_score": -2.501786470413208
+      },
+      "expected_relay": "VCXUL",
+      "expected_terminal": "WEB4M",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VCXUL",
+        "correct_rank": 1,
+        "correct_score": -0.9302479028701782,
+        "exact": true,
+        "winner": "VCXUL",
+        "winner_margin": 3.9326895475387573,
+        "winner_score": -0.9302479028701782
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WEB4M",
+        "correct_rank": 1,
+        "correct_score": -1.3201719522476196,
+        "exact": true,
+        "winner": "WEB4M",
+        "winner_margin": 4.031969904899597,
+        "winner_score": -1.3201719522476196
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0088",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VMQ7P WA7MN",
+        "correct_rank": 1,
+        "correct_score": -2.17510986328125,
+        "exact": true,
+        "winner": "VMQ7P WA7MN",
+        "winner_margin": 2.3028573989868164,
+        "winner_score": -2.17510986328125
+      },
+      "expected_relay": "VMQ7P",
+      "expected_terminal": "WA7MN",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VMQ7P",
+        "correct_rank": 1,
+        "correct_score": -0.6628925204277039,
+        "exact": true,
+        "winner": "VMQ7P",
+        "winner_margin": 3.656572639942169,
+        "winner_score": -0.6628925204277039
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WA7MN",
+        "correct_rank": 1,
+        "correct_score": -0.5765622854232788,
+        "exact": true,
+        "winner": "WA7MN",
+        "winner_margin": 3.802545666694641,
+        "winner_score": -0.5765622854232788
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0089",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V6UD2 WWF37",
+        "correct_rank": 1,
+        "correct_score": -1.5582443475723267,
+        "exact": true,
+        "winner": "V6UD2 WWF37",
+        "winner_margin": 4.039237380027771,
+        "winner_score": -1.5582443475723267
+      },
+      "expected_relay": "V6UD2",
+      "expected_terminal": "WWF37",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V6UD2",
+        "correct_rank": 1,
+        "correct_score": -1.0068477392196655,
+        "exact": true,
+        "winner": "V6UD2",
+        "winner_margin": 3.108404278755188,
+        "winner_score": -1.0068477392196655
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WWF37",
+        "correct_rank": 1,
+        "correct_score": -0.804003119468689,
+        "exact": true,
+        "winner": "WWF37",
+        "winner_margin": 3.9481879472732544,
+        "winner_score": -0.804003119468689
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0090",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V2QPE WRD2N",
+        "correct_rank": 1,
+        "correct_score": -1.5612578392028809,
+        "exact": true,
+        "winner": "V2QPE WRD2N",
+        "winner_margin": 3.9061408042907715,
+        "winner_score": -1.5612578392028809
+      },
+      "expected_relay": "V2QPE",
+      "expected_terminal": "WRD2N",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V2QPE",
+        "correct_rank": 1,
+        "correct_score": -0.7674530148506165,
+        "exact": true,
+        "winner": "V2QPE",
+        "winner_margin": 4.080439269542694,
+        "winner_score": -0.7674530148506165
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WRD2N",
+        "correct_rank": 1,
+        "correct_score": -0.6943956017494202,
+        "exact": true,
+        "winner": "WRD2N",
+        "winner_margin": 4.288754403591156,
+        "winner_score": -0.6943956017494202
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0091",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VMVCJ W9SPS",
+        "correct_rank": 1,
+        "correct_score": -1.5338369607925415,
+        "exact": true,
+        "winner": "VMVCJ W9SPS",
+        "winner_margin": 3.909626841545105,
+        "winner_score": -1.5338369607925415
+      },
+      "expected_relay": "VMVCJ",
+      "expected_terminal": "W9SPS",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VMVCJ",
+        "correct_rank": 1,
+        "correct_score": -0.7340748310089111,
+        "exact": true,
+        "winner": "VMVCJ",
+        "winner_margin": 4.287041425704956,
+        "winner_score": -0.7340748310089111
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W9SPS",
+        "correct_rank": 1,
+        "correct_score": -0.6349862813949585,
+        "exact": true,
+        "winner": "W9SPS",
+        "winner_margin": 4.015154480934143,
+        "winner_score": -0.6349862813949585
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0092",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VGVV5 WCQT4",
+        "correct_rank": 1,
+        "correct_score": -1.7983726263046265,
+        "exact": true,
+        "winner": "VGVV5 WCQT4",
+        "winner_margin": 3.617690682411194,
+        "winner_score": -1.7983726263046265
+      },
+      "expected_relay": "VGVV5",
+      "expected_terminal": "WCQT4",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VGVV5",
+        "correct_rank": 1,
+        "correct_score": -0.6905876398086548,
+        "exact": true,
+        "winner": "VGVV5",
+        "winner_margin": 3.770177721977234,
+        "winner_score": -0.6905876398086548
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WCQT4",
+        "correct_rank": 1,
+        "correct_score": -0.9119433164596558,
+        "exact": true,
+        "winner": "WCQT4",
+        "winner_margin": 3.6667758226394653,
+        "winner_score": -0.9119433164596558
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0093",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VP5MR WNNGC",
+        "correct_rank": 1,
+        "correct_score": -1.7534887790679932,
+        "exact": true,
+        "winner": "VP5MR WNNGC",
+        "winner_margin": 4.597805738449097,
+        "winner_score": -1.7534887790679932
+      },
+      "expected_relay": "VP5MR",
+      "expected_terminal": "WNNGC",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VP5MR",
+        "correct_rank": 1,
+        "correct_score": -0.6977993249893188,
+        "exact": true,
+        "winner": "VP5MR",
+        "winner_margin": 3.499233603477478,
+        "winner_score": -0.6977993249893188
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WNNGC",
+        "correct_rank": 1,
+        "correct_score": -0.9935141801834106,
+        "exact": true,
+        "winner": "WNNGC",
+        "winner_margin": 4.082781672477722,
+        "winner_score": -0.9935141801834106
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0094",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VE4L7 WZ9Q7",
+        "correct_rank": 1,
+        "correct_score": -1.0540813207626343,
+        "exact": true,
+        "winner": "VE4L7 WZ9Q7",
+        "winner_margin": 4.232030987739563,
+        "winner_score": -1.0540813207626343
+      },
+      "expected_relay": "VE4L7",
+      "expected_terminal": "WZ9Q7",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VE4L7",
+        "correct_rank": 1,
+        "correct_score": -0.6390783190727234,
+        "exact": true,
+        "winner": "VE4L7",
+        "winner_margin": 3.9374378323554993,
+        "winner_score": -0.6390783190727234
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WZ9Q7",
+        "correct_rank": 1,
+        "correct_score": -0.5667681097984314,
+        "exact": true,
+        "winner": "WZ9Q7",
+        "winner_margin": 3.7022672295570374,
+        "winner_score": -0.5667681097984314
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0095",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VAKZU WFMG5",
+        "correct_rank": 1,
+        "correct_score": -1.786241888999939,
+        "exact": true,
+        "winner": "VAKZU WFMG5",
+        "winner_margin": 3.538115620613098,
+        "winner_score": -1.786241888999939
+      },
+      "expected_relay": "VAKZU",
+      "expected_terminal": "WFMG5",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VAKZU",
+        "correct_rank": 1,
+        "correct_score": -0.874637246131897,
+        "exact": true,
+        "winner": "VAKZU",
+        "winner_margin": 4.099083304405212,
+        "winner_score": -0.874637246131897
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WFMG5",
+        "correct_rank": 1,
+        "correct_score": -0.6839900016784668,
+        "exact": true,
+        "winner": "WFMG5",
+        "winner_margin": 4.298813819885254,
+        "winner_score": -0.6839900016784668
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0096",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VG94T WYPJV",
+        "correct_rank": 1,
+        "correct_score": -1.461987853050232,
+        "exact": true,
+        "winner": "VG94T WYPJV",
+        "winner_margin": 3.981864094734192,
+        "winner_score": -1.461987853050232
+      },
+      "expected_relay": "VG94T",
+      "expected_terminal": "WYPJV",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VG94T",
+        "correct_rank": 1,
+        "correct_score": -0.7876641154289246,
+        "exact": true,
+        "winner": "VG94T",
+        "winner_margin": 4.35644656419754,
+        "winner_score": -0.7876641154289246
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WYPJV",
+        "correct_rank": 1,
+        "correct_score": -0.8288934230804443,
+        "exact": true,
+        "winner": "WYPJV",
+        "winner_margin": 3.6860134601593018,
+        "winner_score": -0.8288934230804443
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0097",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VB28N WY9FA",
+        "correct_rank": 1,
+        "correct_score": -1.6239863634109497,
+        "exact": true,
+        "winner": "VB28N WY9FA",
+        "winner_margin": 3.9129961729049683,
+        "winner_score": -1.6239863634109497
+      },
+      "expected_relay": "VB28N",
+      "expected_terminal": "WY9FA",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VB28N",
+        "correct_rank": 1,
+        "correct_score": -0.5639368295669556,
+        "exact": true,
+        "winner": "VB28N",
+        "winner_margin": 3.9869011640548706,
+        "winner_score": -0.5639368295669556
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WY9FA",
+        "correct_rank": 1,
+        "correct_score": -0.674338698387146,
+        "exact": true,
+        "winner": "WY9FA",
+        "winner_margin": 3.8543511629104614,
+        "winner_score": -0.674338698387146
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0098",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VUL3A WGMEX",
+        "correct_rank": 1,
+        "correct_score": -1.5582228899002075,
+        "exact": true,
+        "winner": "VUL3A WGMEX",
+        "winner_margin": 4.023037791252136,
+        "winner_score": -1.5582228899002075
+      },
+      "expected_relay": "VUL3A",
+      "expected_terminal": "WGMEX",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VUL3A",
+        "correct_rank": 1,
+        "correct_score": -0.8711989521980286,
+        "exact": true,
+        "winner": "VUL3A",
+        "winner_margin": 3.9903756976127625,
+        "winner_score": -0.8711989521980286
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WGMEX",
+        "correct_rank": 1,
+        "correct_score": -0.8379078507423401,
+        "exact": true,
+        "winner": "WGMEX",
+        "winner_margin": 3.905608117580414,
+        "winner_score": -0.8379078507423401
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0099",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V3YQC WA2H3",
+        "correct_rank": 1,
+        "correct_score": -1.6661608219146729,
+        "exact": true,
+        "winner": "V3YQC WA2H3",
+        "winner_margin": 3.7705295085906982,
+        "winner_score": -1.6661608219146729
+      },
+      "expected_relay": "V3YQC",
+      "expected_terminal": "WA2H3",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V3YQC",
+        "correct_rank": 1,
+        "correct_score": -0.8034419417381287,
+        "exact": true,
+        "winner": "V3YQC",
+        "winner_margin": 3.919171392917633,
+        "winner_score": -0.8034419417381287
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WA2H3",
+        "correct_rank": 1,
+        "correct_score": -0.300320029258728,
+        "exact": true,
+        "winner": "WA2H3",
+        "winner_margin": 4.086518883705139,
+        "winner_score": -0.300320029258728
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0100",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VM95E WMKQJ",
+        "correct_rank": 1,
+        "correct_score": -1.3803133964538574,
+        "exact": true,
+        "winner": "VM95E WMKQJ",
+        "winner_margin": 4.09562873840332,
+        "winner_score": -1.3803133964538574
+      },
+      "expected_relay": "VM95E",
+      "expected_terminal": "WMKQJ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VM95E",
+        "correct_rank": 1,
+        "correct_score": -0.5279132723808289,
+        "exact": true,
+        "winner": "VM95E",
+        "winner_margin": 4.372745335102081,
+        "winner_score": -0.5279132723808289
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WMKQJ",
+        "correct_rank": 1,
+        "correct_score": -0.7660029530525208,
+        "exact": true,
+        "winner": "WMKQJ",
+        "winner_margin": 4.054047763347626,
+        "winner_score": -0.7660029530525208
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0101",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VSVKD W35DA",
+        "correct_rank": 1,
+        "correct_score": -1.8571507930755615,
+        "exact": true,
+        "winner": "VSVKD W35DA",
+        "winner_margin": 3.5359575748443604,
+        "winner_score": -1.8571507930755615
+      },
+      "expected_relay": "VSVKD",
+      "expected_terminal": "W35DA",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VSVKD",
+        "correct_rank": 1,
+        "correct_score": -0.9314582347869873,
+        "exact": true,
+        "winner": "VSVKD",
+        "winner_margin": 4.131044149398804,
+        "winner_score": -0.9314582347869873
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W35DA",
+        "correct_rank": 1,
+        "correct_score": -0.838628351688385,
+        "exact": true,
+        "winner": "W35DA",
+        "winner_margin": 4.149042546749115,
+        "winner_score": -0.838628351688385
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0102",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V4QMF WF6ET",
+        "correct_rank": 1,
+        "correct_score": -1.6040828227996826,
+        "exact": true,
+        "winner": "V4QMF WF6ET",
+        "winner_margin": 3.836627244949341,
+        "winner_score": -1.6040828227996826
+      },
+      "expected_relay": "V4QMF",
+      "expected_terminal": "WF6ET",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V4QMF",
+        "correct_rank": 1,
+        "correct_score": -0.9604811668395996,
+        "exact": true,
+        "winner": "V4QMF",
+        "winner_margin": 3.8275108337402344,
+        "winner_score": -0.9604811668395996
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WF6ET",
+        "correct_rank": 1,
+        "correct_score": -0.7602489590644836,
+        "exact": true,
+        "winner": "WF6ET",
+        "winner_margin": 4.3747846484184265,
+        "winner_score": -0.7602489590644836
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0103",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VWUUF WRZ9T",
+        "correct_rank": 1,
+        "correct_score": -1.786057710647583,
+        "exact": true,
+        "winner": "VWUUF WRZ9T",
+        "winner_margin": 3.579028367996216,
+        "winner_score": -1.786057710647583
+      },
+      "expected_relay": "VWUUF",
+      "expected_terminal": "WRZ9T",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VWUUF",
+        "correct_rank": 1,
+        "correct_score": -0.6458871364593506,
+        "exact": true,
+        "winner": "VWUUF",
+        "winner_margin": 4.1751039028167725,
+        "winner_score": -0.6458871364593506
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WRZ9T",
+        "correct_rank": 1,
+        "correct_score": -0.3873748183250427,
+        "exact": true,
+        "winner": "WRZ9T",
+        "winner_margin": 4.143652021884918,
+        "winner_score": -0.3873748183250427
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0104",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VXHPH W3VGM",
+        "correct_rank": 1,
+        "correct_score": -1.6004260778427124,
+        "exact": true,
+        "winner": "VXHPH W3VGM",
+        "winner_margin": 3.5434809923171997,
+        "winner_score": -1.6004260778427124
+      },
+      "expected_relay": "VXHPH",
+      "expected_terminal": "W3VGM",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VXHPH",
+        "correct_rank": 1,
+        "correct_score": -0.7640699148178101,
+        "exact": true,
+        "winner": "VXHPH",
+        "winner_margin": 4.635388493537903,
+        "winner_score": -0.7640699148178101
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W3VGM",
+        "correct_rank": 1,
+        "correct_score": -0.6797969937324524,
+        "exact": true,
+        "winner": "W3VGM",
+        "winner_margin": 3.9904515147209167,
+        "winner_score": -0.6797969937324524
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0105",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VS8TT WMGT9",
+        "correct_rank": 1,
+        "correct_score": -2.683887481689453,
+        "exact": true,
+        "winner": "VS8TT WMGT9",
+        "winner_margin": 2.683713912963867,
+        "winner_score": -2.683887481689453
+      },
+      "expected_relay": "VS8TT",
+      "expected_terminal": "WMGT9",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VS8TT",
+        "correct_rank": 1,
+        "correct_score": -0.7796792387962341,
+        "exact": true,
+        "winner": "VS8TT",
+        "winner_margin": 4.376835405826569,
+        "winner_score": -0.7796792387962341
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WMGT9",
+        "correct_rank": 1,
+        "correct_score": -0.8179570436477661,
+        "exact": true,
+        "winner": "WMGT9",
+        "winner_margin": 4.22734010219574,
+        "winner_score": -0.8179570436477661
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0106",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VUPZ6 WCVGM",
+        "correct_rank": 1,
+        "correct_score": -1.6195212602615356,
+        "exact": true,
+        "winner": "VUPZ6 WCVGM",
+        "winner_margin": 3.5872386693954468,
+        "winner_score": -1.6195212602615356
+      },
+      "expected_relay": "VUPZ6",
+      "expected_terminal": "WCVGM",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VUPZ6",
+        "correct_rank": 1,
+        "correct_score": -0.8271021246910095,
+        "exact": true,
+        "winner": "VUPZ6",
+        "winner_margin": 3.1662991642951965,
+        "winner_score": -0.8271021246910095
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WCVGM",
+        "correct_rank": 1,
+        "correct_score": -0.9868523478507996,
+        "exact": true,
+        "winner": "WCVGM",
+        "winner_margin": 3.82814484834671,
+        "winner_score": -0.9868523478507996
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0107",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRK7F WJXQU",
+        "correct_rank": 1,
+        "correct_score": -2.3056445121765137,
+        "exact": true,
+        "winner": "VRK7F WJXQU",
+        "winner_margin": 2.7144317626953125,
+        "winner_score": -2.3056445121765137
+      },
+      "expected_relay": "VRK7F",
+      "expected_terminal": "WJXQU",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRK7F",
+        "correct_rank": 1,
+        "correct_score": -0.5615828037261963,
+        "exact": true,
+        "winner": "VRK7F",
+        "winner_margin": 3.826253652572632,
+        "winner_score": -0.5615828037261963
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WJXQU",
+        "correct_rank": 1,
+        "correct_score": -1.196136236190796,
+        "exact": true,
+        "winner": "WJXQU",
+        "winner_margin": 3.92915940284729,
+        "winner_score": -1.196136236190796
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0108",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VEKMM WWZ2L",
+        "correct_rank": 1,
+        "correct_score": -1.6627260446548462,
+        "exact": true,
+        "winner": "VEKMM WWZ2L",
+        "winner_margin": 3.8708218336105347,
+        "winner_score": -1.6627260446548462
+      },
+      "expected_relay": "VEKMM",
+      "expected_terminal": "WWZ2L",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VEKMM",
+        "correct_rank": 1,
+        "correct_score": -0.9011967182159424,
+        "exact": true,
+        "winner": "VEKMM",
+        "winner_margin": 5.1992433071136475,
+        "winner_score": -0.9011967182159424
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WWZ2L",
+        "correct_rank": 1,
+        "correct_score": -0.6043903827667236,
+        "exact": true,
+        "winner": "WWZ2L",
+        "winner_margin": 4.224322557449341,
+        "winner_score": -0.6043903827667236
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0109",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VP4RJ WMFT9",
+        "correct_rank": 1,
+        "correct_score": -1.779268741607666,
+        "exact": true,
+        "winner": "VP4RJ WMFT9",
+        "winner_margin": 2.56998348236084,
+        "winner_score": -1.779268741607666
+      },
+      "expected_relay": "VP4RJ",
+      "expected_terminal": "WMFT9",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VP4RJ",
+        "correct_rank": 1,
+        "correct_score": -0.5555275678634644,
+        "exact": true,
+        "winner": "VP4RJ",
+        "winner_margin": 3.5155974626541138,
+        "winner_score": -0.5555275678634644
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WMFT9",
+        "correct_rank": 1,
+        "correct_score": -0.7975229620933533,
+        "exact": true,
+        "winner": "WMFT9",
+        "winner_margin": 3.553096830844879,
+        "winner_score": -0.7975229620933533
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0110",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VQ6M7 W3LT8",
+        "correct_rank": 1,
+        "correct_score": -1.2681450843811035,
+        "exact": true,
+        "winner": "VQ6M7 W3LT8",
+        "winner_margin": 4.00272798538208,
+        "winner_score": -1.2681450843811035
+      },
+      "expected_relay": "VQ6M7",
+      "expected_terminal": "W3LT8",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VQ6M7",
+        "correct_rank": 1,
+        "correct_score": -0.5466391444206238,
+        "exact": true,
+        "winner": "VQ6M7",
+        "winner_margin": 3.6345375180244446,
+        "winner_score": -0.5466391444206238
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W3LT8",
+        "correct_rank": 1,
+        "correct_score": -0.7479809522628784,
+        "exact": true,
+        "winner": "W3LT8",
+        "winner_margin": 3.935015320777893,
+        "winner_score": -0.7479809522628784
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0111",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VRVGE WK5MK",
+        "correct_rank": 1,
+        "correct_score": -1.7021106481552124,
+        "exact": true,
+        "winner": "VRVGE WK5MK",
+        "winner_margin": 3.234552502632141,
+        "winner_score": -1.7021106481552124
+      },
+      "expected_relay": "VRVGE",
+      "expected_terminal": "WK5MK",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VRVGE",
+        "correct_rank": 1,
+        "correct_score": -0.6903653144836426,
+        "exact": true,
+        "winner": "VRVGE",
+        "winner_margin": 3.5555949211120605,
+        "winner_score": -0.6903653144836426
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WK5MK",
+        "correct_rank": 1,
+        "correct_score": -0.7299099564552307,
+        "exact": true,
+        "winner": "WK5MK",
+        "winner_margin": 3.7344316840171814,
+        "winner_score": -0.7299099564552307
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0112",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VHPBL WXD2Q",
+        "correct_rank": 1,
+        "correct_score": -1.8974449634552002,
+        "exact": true,
+        "winner": "VHPBL WXD2Q",
+        "winner_margin": 3.5566508769989014,
+        "winner_score": -1.8974449634552002
+      },
+      "expected_relay": "VHPBL",
+      "expected_terminal": "WXD2Q",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VHPBL",
+        "correct_rank": 1,
+        "correct_score": -0.9861341714859009,
+        "exact": true,
+        "winner": "VHPBL",
+        "winner_margin": 3.751778483390808,
+        "winner_score": -0.9861341714859009
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WXD2Q",
+        "correct_rank": 1,
+        "correct_score": -0.8620262742042542,
+        "exact": true,
+        "winner": "WXD2Q",
+        "winner_margin": 4.789416253566742,
+        "winner_score": -0.8620262742042542
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0113",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VPMRB WLJHV",
+        "correct_rank": 1,
+        "correct_score": -1.5544545650482178,
+        "exact": true,
+        "winner": "VPMRB WLJHV",
+        "winner_margin": 4.268765687942505,
+        "winner_score": -1.5544545650482178
+      },
+      "expected_relay": "VPMRB",
+      "expected_terminal": "WLJHV",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VPMRB",
+        "correct_rank": 1,
+        "correct_score": -1.053656816482544,
+        "exact": true,
+        "winner": "VPMRB",
+        "winner_margin": 4.048135995864868,
+        "winner_score": -1.053656816482544
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WLJHV",
+        "correct_rank": 1,
+        "correct_score": -0.7203884720802307,
+        "exact": true,
+        "winner": "WLJHV",
+        "winner_margin": 3.7026247382164,
+        "winner_score": -0.7203884720802307
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0114",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VWBQ4 WTAZZ",
+        "correct_rank": 1,
+        "correct_score": -1.6363117694854736,
+        "exact": true,
+        "winner": "VWBQ4 WTAZZ",
+        "winner_margin": 3.8381779193878174,
+        "winner_score": -1.6363117694854736
+      },
+      "expected_relay": "VWBQ4",
+      "expected_terminal": "WTAZZ",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VWBQ4",
+        "correct_rank": 1,
+        "correct_score": -0.741668164730072,
+        "exact": true,
+        "winner": "VWBQ4",
+        "winner_margin": 3.3805118203163147,
+        "winner_score": -0.741668164730072
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WTAZZ",
+        "correct_rank": 1,
+        "correct_score": -0.9034018516540527,
+        "exact": true,
+        "winner": "WTAZZ",
+        "winner_margin": 4.929333209991455,
+        "winner_score": -0.9034018516540527
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0115",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VBFGJ W9ZZF",
+        "correct_rank": 1,
+        "correct_score": -1.5967596769332886,
+        "exact": true,
+        "winner": "VBFGJ W9ZZF",
+        "winner_margin": 4.029718995094299,
+        "winner_score": -1.5967596769332886
+      },
+      "expected_relay": "VBFGJ",
+      "expected_terminal": "W9ZZF",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VBFGJ",
+        "correct_rank": 1,
+        "correct_score": -0.9664808511734009,
+        "exact": true,
+        "winner": "VBFGJ",
+        "winner_margin": 4.451557040214539,
+        "winner_score": -0.9664808511734009
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W9ZZF",
+        "correct_rank": 1,
+        "correct_score": -0.6944501996040344,
+        "exact": true,
+        "winner": "W9ZZF",
+        "winner_margin": 3.444060981273651,
+        "winner_score": -0.6944501996040344
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0116",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V3DXW WA6T4",
+        "correct_rank": 1,
+        "correct_score": -1.7397328615188599,
+        "exact": true,
+        "winner": "V3DXW WA6T4",
+        "winner_margin": 3.4699896574020386,
+        "winner_score": -1.7397328615188599
+      },
+      "expected_relay": "V3DXW",
+      "expected_terminal": "WA6T4",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V3DXW",
+        "correct_rank": 1,
+        "correct_score": -0.8061367869377136,
+        "exact": true,
+        "winner": "V3DXW",
+        "winner_margin": 3.990497410297394,
+        "winner_score": -0.8061367869377136
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WA6T4",
+        "correct_rank": 1,
+        "correct_score": -0.6339237093925476,
+        "exact": true,
+        "winner": "WA6T4",
+        "winner_margin": 3.8618581891059875,
+        "winner_score": -0.6339237093925476
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0117",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VFXPY WJKPY",
+        "correct_rank": 1,
+        "correct_score": -2.169248104095459,
+        "exact": true,
+        "winner": "VFXPY WJKPY",
+        "winner_margin": 3.9524712562561035,
+        "winner_score": -2.169248104095459
+      },
+      "expected_relay": "VFXPY",
+      "expected_terminal": "WJKPY",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VFXPY",
+        "correct_rank": 1,
+        "correct_score": -1.0196104049682617,
+        "exact": true,
+        "winner": "VFXPY",
+        "winner_margin": 4.491488456726074,
+        "winner_score": -1.0196104049682617
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WJKPY",
+        "correct_rank": 1,
+        "correct_score": -0.773849368095398,
+        "exact": true,
+        "winner": "WJKPY",
+        "winner_margin": 4.47708523273468,
+        "winner_score": -0.773849368095398
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0118",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VLW9W WKGAE",
+        "correct_rank": 1,
+        "correct_score": -1.772591233253479,
+        "exact": true,
+        "winner": "VLW9W WKGAE",
+        "winner_margin": 3.152048945426941,
+        "winner_score": -1.772591233253479
+      },
+      "expected_relay": "VLW9W",
+      "expected_terminal": "WKGAE",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VLW9W",
+        "correct_rank": 1,
+        "correct_score": -0.7237449884414673,
+        "exact": true,
+        "winner": "VLW9W",
+        "winner_margin": 3.686259150505066,
+        "winner_score": -0.7237449884414673
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WKGAE",
+        "correct_rank": 1,
+        "correct_score": -0.92377769947052,
+        "exact": true,
+        "winner": "WKGAE",
+        "winner_margin": 4.244343161582947,
+        "winner_score": -0.92377769947052
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0119",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VH66F W6CKA",
+        "correct_rank": 1,
+        "correct_score": -1.2978793382644653,
+        "exact": true,
+        "winner": "VH66F W6CKA",
+        "winner_margin": 4.68429696559906,
+        "winner_score": -1.2978793382644653
+      },
+      "expected_relay": "VH66F",
+      "expected_terminal": "W6CKA",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VH66F",
+        "correct_rank": 1,
+        "correct_score": -0.6256577372550964,
+        "exact": true,
+        "winner": "VH66F",
+        "winner_margin": 4.0647857785224915,
+        "winner_score": -0.6256577372550964
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W6CKA",
+        "correct_rank": 1,
+        "correct_score": -0.824919581413269,
+        "exact": true,
+        "winner": "W6CKA",
+        "winner_margin": 3.6336337327957153,
+        "winner_score": -0.824919581413269
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0120",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VJZXH WDXGW",
+        "correct_rank": 1,
+        "correct_score": -1.59852933883667,
+        "exact": true,
+        "winner": "VJZXH WDXGW",
+        "winner_margin": 3.1359310150146484,
+        "winner_score": -1.59852933883667
+      },
+      "expected_relay": "VJZXH",
+      "expected_terminal": "WDXGW",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VJZXH",
+        "correct_rank": 1,
+        "correct_score": -0.8327346444129944,
+        "exact": true,
+        "winner": "VJZXH",
+        "winner_margin": 3.3378257155418396,
+        "winner_score": -0.8327346444129944
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WDXGW",
+        "correct_rank": 1,
+        "correct_score": -0.9108788371086121,
+        "exact": true,
+        "winner": "WDXGW",
+        "winner_margin": 4.21415501832962,
+        "winner_score": -0.9108788371086121
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0121",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VX3VA W6KKL",
+        "correct_rank": 1,
+        "correct_score": -1.2759228944778442,
+        "exact": true,
+        "winner": "VX3VA W6KKL",
+        "winner_margin": 4.318182826042175,
+        "winner_score": -1.2759228944778442
+      },
+      "expected_relay": "VX3VA",
+      "expected_terminal": "W6KKL",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VX3VA",
+        "correct_rank": 1,
+        "correct_score": -0.6922709941864014,
+        "exact": true,
+        "winner": "VX3VA",
+        "winner_margin": 4.757103204727173,
+        "winner_score": -0.6922709941864014
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W6KKL",
+        "correct_rank": 1,
+        "correct_score": -0.7780148386955261,
+        "exact": true,
+        "winner": "W6KKL",
+        "winner_margin": 4.40301638841629,
+        "winner_score": -0.7780148386955261
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0122",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VARQT W39PT",
+        "correct_rank": 1,
+        "correct_score": -2.2668557167053223,
+        "exact": true,
+        "winner": "VARQT W39PT",
+        "winner_margin": 2.7074708938598633,
+        "winner_score": -2.2668557167053223
+      },
+      "expected_relay": "VARQT",
+      "expected_terminal": "W39PT",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VARQT",
+        "correct_rank": 1,
+        "correct_score": -1.3590054512023926,
+        "exact": true,
+        "winner": "VARQT",
+        "winner_margin": 3.112696647644043,
+        "winner_score": -1.3590054512023926
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W39PT",
+        "correct_rank": 1,
+        "correct_score": -0.8133420348167419,
+        "exact": true,
+        "winner": "W39PT",
+        "winner_margin": 3.914337694644928,
+        "winner_score": -0.8133420348167419
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0123",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "V33EQ W5VJ4",
+        "correct_rank": 1,
+        "correct_score": -1.4767515659332275,
+        "exact": true,
+        "winner": "V33EQ W5VJ4",
+        "winner_margin": 3.5126078128814697,
+        "winner_score": -1.4767515659332275
+      },
+      "expected_relay": "V33EQ",
+      "expected_terminal": "W5VJ4",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "V33EQ",
+        "correct_rank": 1,
+        "correct_score": -0.6708196401596069,
+        "exact": true,
+        "winner": "V33EQ",
+        "winner_margin": 3.6810280084609985,
+        "winner_score": -0.6708196401596069
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W5VJ4",
+        "correct_rank": 1,
+        "correct_score": -0.6970335841178894,
+        "exact": true,
+        "winner": "W5VJ4",
+        "winner_margin": 3.8853638768196106,
+        "winner_score": -0.6970335841178894
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0124",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VPNLF WJW7E",
+        "correct_rank": 1,
+        "correct_score": -3.2953619956970215,
+        "exact": true,
+        "winner": "VPNLF WJW7E",
+        "winner_margin": 1.620924949645996,
+        "winner_score": -3.2953619956970215
+      },
+      "expected_relay": "VPNLF",
+      "expected_terminal": "WJW7E",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VPNLF",
+        "correct_rank": 1,
+        "correct_score": -1.372694969177246,
+        "exact": true,
+        "winner": "VPNLF",
+        "winner_margin": 3.1935982704162598,
+        "winner_score": -1.372694969177246
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "WJW7E",
+        "correct_rank": 1,
+        "correct_score": -0.8670193552970886,
+        "exact": true,
+        "winner": "WJW7E",
+        "winner_margin": 3.5575621724128723,
+        "winner_score": -0.8670193552970886
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0125",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VWW7D W4SSW",
+        "correct_rank": 1,
+        "correct_score": -1.3833459615707397,
+        "exact": true,
+        "winner": "VWW7D W4SSW",
+        "winner_margin": 3.171467900276184,
+        "winner_score": -1.3833459615707397
+      },
+      "expected_relay": "VWW7D",
+      "expected_terminal": "W4SSW",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VWW7D",
+        "correct_rank": 1,
+        "correct_score": -0.6877794861793518,
+        "exact": true,
+        "winner": "VWW7D",
+        "winner_margin": 3.984794557094574,
+        "winner_score": -0.6877794861793518
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W4SSW",
+        "correct_rank": 1,
+        "correct_score": -0.6796045899391174,
+        "exact": true,
+        "winner": "W4SSW",
+        "winner_margin": 3.2807347178459167,
+        "winner_score": -0.6796045899391174
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0126",
+      "terminal_exact": true
+    },
+    {
+      "both_exact": true,
+      "composition": {
+        "correct": "VZW5U W3JEK",
+        "correct_rank": 1,
+        "correct_score": -1.4398505687713623,
+        "exact": true,
+        "winner": "VZW5U W3JEK",
+        "winner_margin": 3.9349801540374756,
+        "winner_score": -1.4398505687713623
+      },
+      "expected_relay": "VZW5U",
+      "expected_terminal": "W3JEK",
+      "relay_exact": true,
+      "retrieval_a": {
+        "correct": "VZW5U",
+        "correct_rank": 1,
+        "correct_score": -0.7304366827011108,
+        "exact": true,
+        "winner": "VZW5U",
+        "winner_margin": 3.5411664247512817,
+        "winner_score": -0.7304366827011108
+      },
+      "retrieval_a_exact": true,
+      "retrieval_b": {
+        "correct": "W3JEK",
+        "correct_rank": 1,
+        "correct_score": -0.948794424533844,
+        "exact": true,
+        "winner": "W3JEK",
+        "winner_margin": 4.293775022029877,
+        "winner_score": -0.948794424533844
+      },
+      "retrieval_b_exact": true,
+      "sample_id": "AB-eval-0127",
+      "terminal_exact": true
+    }
+  ],
+  "schema": "minicells.pcu-kill-001.context-oracle.v2",
+  "scientific_evidence": false,
+  "terminal_accuracy": 1.0,
+  "threshold": 0.9
+}

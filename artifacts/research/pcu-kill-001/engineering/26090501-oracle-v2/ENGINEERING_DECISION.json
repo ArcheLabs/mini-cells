@@ -1,0 +1,474 @@
+{
+  "allocation": {
+    "calibration_sample_rule": "first_64_samples",
+    "calibration_split": "branch_train",
+    "capacity_ladder": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "method": "task-conditioned-gradient-l2-per-parameter",
+    "tie_break": "cell_id_lexical"
+  },
+  "architecture": {
+    "cells": 4,
+    "experts_per_token": 8,
+    "fused_order": "gate_up",
+    "fused_projection": true,
+    "hidden_size": 1024,
+    "intermediate_size": 512,
+    "local_experts": 32,
+    "target_layer": 23,
+    "target_path": "model.layers.23.block_sparse_moe"
+  },
+  "candidates": [
+    {
+      "capacity": {
+        "1": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1"
+          ],
+          "cells_b": [
+            "L23:E16:C1"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "2": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "4": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E16:C0",
+            "L23:E30:C2"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E30:C2",
+            "L23:E30:C0"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "8": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E16:C0",
+            "L23:E30:C2",
+            "L23:E30:C0",
+            "L23:E27:C3",
+            "L23:E16:C3",
+            "L23:E27:C0"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E30:C2",
+            "L23:E30:C0",
+            "L23:E27:C3",
+            "L23:E16:C0",
+            "L23:E27:C0",
+            "L23:E16:C3"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        }
+      },
+      "learning_rate": 0.0001
+    },
+    {
+      "capacity": {
+        "1": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1"
+          ],
+          "cells_b": [
+            "L23:E16:C1"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "2": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "4": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E16:C0",
+            "L23:E30:C2"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E30:C2",
+            "L23:E30:C0"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "8": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E16:C0",
+            "L23:E30:C2",
+            "L23:E30:C0",
+            "L23:E27:C3",
+            "L23:E16:C3",
+            "L23:E27:C0"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E30:C2",
+            "L23:E30:C0",
+            "L23:E27:C3",
+            "L23:E16:C0",
+            "L23:E27:C0",
+            "L23:E16:C3"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        }
+      },
+      "learning_rate": 0.0003
+    },
+    {
+      "capacity": {
+        "1": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1"
+          ],
+          "cells_b": [
+            "L23:E16:C1"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "2": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "4": {
+          "acc_a": 0.0,
+          "acc_b": 0.0,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E16:C0",
+            "L23:E30:C2"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E30:C2",
+            "L23:E30:C0"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        },
+        "8": {
+          "acc_a": 0.015625,
+          "acc_b": 0.0078125,
+          "cells_a": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E16:C0",
+            "L23:E30:C2",
+            "L23:E30:C0",
+            "L23:E27:C3",
+            "L23:E16:C3",
+            "L23:E27:C0"
+          ],
+          "cells_b": [
+            "L23:E16:C1",
+            "L23:E27:C1",
+            "L23:E30:C2",
+            "L23:E30:C0",
+            "L23:E27:C3",
+            "L23:E16:C0",
+            "L23:E27:C0",
+            "L23:E16:C3"
+          ],
+          "passes": false,
+          "training_steps_a": 128,
+          "training_steps_b": 128,
+          "training_tokens_a": 3536,
+          "training_tokens_b": 3568
+        }
+      },
+      "learning_rate": 0.001
+    }
+  ],
+  "capacity_ladder": {
+    "1": {
+      "acc_a": 0.0,
+      "acc_b": 0.0,
+      "cells_a": [
+        "L23:E16:C1"
+      ],
+      "cells_b": [
+        "L23:E16:C1"
+      ],
+      "passes": false,
+      "training_steps_a": 128,
+      "training_steps_b": 128,
+      "training_tokens_a": 3536,
+      "training_tokens_b": 3568
+    },
+    "2": {
+      "acc_a": 0.0,
+      "acc_b": 0.0,
+      "cells_a": [
+        "L23:E16:C1",
+        "L23:E27:C1"
+      ],
+      "cells_b": [
+        "L23:E16:C1",
+        "L23:E27:C1"
+      ],
+      "passes": false,
+      "training_steps_a": 128,
+      "training_steps_b": 128,
+      "training_tokens_a": 3536,
+      "training_tokens_b": 3568
+    },
+    "4": {
+      "acc_a": 0.0,
+      "acc_b": 0.0,
+      "cells_a": [
+        "L23:E16:C1",
+        "L23:E27:C1",
+        "L23:E16:C0",
+        "L23:E30:C2"
+      ],
+      "cells_b": [
+        "L23:E16:C1",
+        "L23:E27:C1",
+        "L23:E30:C2",
+        "L23:E30:C0"
+      ],
+      "passes": false,
+      "training_steps_a": 128,
+      "training_steps_b": 128,
+      "training_tokens_a": 3536,
+      "training_tokens_b": 3568
+    },
+    "8": {
+      "acc_a": 0.015625,
+      "acc_b": 0.0078125,
+      "cells_a": [
+        "L23:E16:C1",
+        "L23:E27:C1",
+        "L23:E16:C0",
+        "L23:E30:C2",
+        "L23:E30:C0",
+        "L23:E27:C3",
+        "L23:E16:C3",
+        "L23:E27:C0"
+      ],
+      "cells_b": [
+        "L23:E16:C1",
+        "L23:E27:C1",
+        "L23:E30:C2",
+        "L23:E30:C0",
+        "L23:E27:C3",
+        "L23:E16:C0",
+        "L23:E27:C0",
+        "L23:E16:C3"
+      ],
+      "passes": false,
+      "training_steps_a": 128,
+      "training_steps_b": 128,
+      "training_tokens_a": 3536,
+      "training_tokens_b": 3568
+    }
+  },
+  "experiment": "PCU-KILL-001",
+  "formal_execution_not_started": true,
+  "formal_protocol_ready": false,
+  "formal_ready": false,
+  "foundation": {
+    "architecture": {
+      "cells": 4,
+      "experts_per_token": 8,
+      "fused_order": "gate_up",
+      "fused_projection": true,
+      "hidden_size": 1024,
+      "intermediate_size": 512,
+      "local_experts": 32,
+      "target_layer": 23,
+      "target_path": "model.layers.23.block_sparse_moe"
+    },
+    "config_sha256": "873181f871fd23e79662df00cf3b69b294a205cb6e05ded8360f837da443c8e2",
+    "execution_memory_model": "single_full_foundation_plus_expert_overlay",
+    "foundation_tensor_sha256": "0d5afdda01be7ee6400ab8e8df21f2d358328a567a4d492a227063a6567ec820",
+    "model_repo": "ibm-granite/granite-3.1-1b-a400m-base",
+    "model_revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "schema": "minicells.pcu-kill-001.model-manifest.v1",
+    "tokenizer_sha256": [
+      {
+        "file": "tokenizer.json",
+        "sha256": "d3b4df07a0ce3940b15c77e2ea17ab5627ca0c4bf982d2eb37966aea0a81c918"
+      },
+      {
+        "file": "tokenizer_config.json",
+        "sha256": "0764d3ae3830187f63cfe568c754d99900fed85fc9d071e6cfe2add9f555b6bb"
+      },
+      {
+        "file": "special_tokens_map.json",
+        "sha256": "2f2bba45146f073a7b8a097cb6133a6b4b66d5751e73f2a2aca81083288813e9"
+      }
+    ],
+    "weight_file_sha256": [
+      {
+        "file": "model-00001-of-00002.safetensors",
+        "sha256": "6933b6375074dc6cc4c0b98c9e126cd5fc899ef0cd80db0a932a232c6393c9cd"
+      },
+      {
+        "file": "model-00002-of-00002.safetensors",
+        "sha256": "271870f88e36f28ca87e86e11fa971b0b3e268fb9ac4495d42c66fdd1bc9d060"
+      }
+    ]
+  },
+  "gates": {
+    "cache": true,
+    "capacity_ladder": false,
+    "context_oracle": true,
+    "dataset_audit": true,
+    "formal_seed_untouched": true,
+    "g0": true,
+    "gradient_allocation": true
+  },
+  "metrics": {
+    "base_a": 0.0,
+    "base_b": 0.0,
+    "context_oracle_accuracy": 1.0,
+    "context_oracle_composition_accuracy": 1.0,
+    "context_oracle_free_generation_diagnostic_accuracy": 0.0,
+    "context_oracle_retrieval_a_accuracy": 1.0,
+    "context_oracle_retrieval_b_accuracy": 1.0
+  },
+  "phase": "engineering",
+  "positive_control": {
+    "candidate_pool_size": 16,
+    "composition_accuracy": 1.0,
+    "free_generation_gate": false,
+    "mode": "model_backed_teacher_forced_candidate_ranking",
+    "passed": true,
+    "retrieval_a_accuracy": 1.0,
+    "retrieval_b_accuracy": 1.0,
+    "version": "pcu-kill-001-context-oracle-v2"
+  },
+  "reason": "no registered K reached direct A/B exact capability threshold",
+  "schema": "minicells.pcu-kill-001.engineering-decision.v3",
+  "scientific_evidence": false,
+  "source": {
+    "generated_artifact_status_porcelain": "?? artifacts/research/pcu-kill-001/engineering/26090501-oracle-v2/",
+    "source_commit": "9d4bf4fb36b02da4aca0e33cdc27b959138328f8",
+    "source_dirty": false,
+    "source_ref": "codex/pcu-composability-kill-001",
+    "source_tree": "10cf79254ce42d689445420beaeb9d018edb39f4",
+    "status_porcelain": ""
+  },
+  "status": "LOCAL_CELL_MUTATION_UNSUPPORTED",
+  "thresholds": {
+    "anchor_regression": 0.01,
+    "cache_top1_token_agreement": 1.0,
+    "composition_accuracy": 0.5,
+    "composition_synergy": 0.3,
+    "context_oracle_accuracy": 0.9,
+    "context_oracle_composition_accuracy": 0.9,
+    "context_oracle_retrieval_accuracy": 0.9,
+    "direct_accuracy": 0.8,
+    "g0_top1_token_agreement": 1.0,
+    "matched_lora_parameter_tolerance": 0.1,
+    "merge_retention": 0.9
+  },
+  "valid_run": true
+}
