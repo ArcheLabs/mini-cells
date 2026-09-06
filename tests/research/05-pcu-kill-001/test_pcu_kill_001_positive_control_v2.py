@@ -8,6 +8,7 @@ import pytest
 import torch
 
 from minicells.pcu_kill_001.cellular import GraniteArchitectureInspector
+from minicells.pcu_kill_001.dual_oracle import _positive_control_prompts
 from minicells.pcu_kill_001.governance import _split_source_and_generated_status
 from minicells.pcu_kill_001.pipeline_guard import persist_pre_science_evidence
 from minicells.pcu_kill_001.synthetic import (
@@ -62,6 +63,25 @@ def test_teacher_forced_candidate_ranking_rejects_trailing_space_prompt() -> Non
             ("WRONG", "RIGHT"),
             device="cpu",
         )
+
+
+def test_dual_oracle_prompts_match_canonical_boundary_contract() -> None:
+    world = generate_world(26090501, 1)
+    triple = world.triples[0]
+    prompt_a, prompt_b, prompt_ab = _positive_control_prompts(triple)
+    assert prompt_a == (
+        f"Mapping record:\n{triple.u} -> {triple.v}\n"
+        f"Query:\n{triple.u} ->\nAnswer:"
+    )
+    assert prompt_b == (
+        f"Mapping record:\n{triple.v} -> {triple.w}\n"
+        f"Query:\n{triple.v} ->\nAnswer:"
+    )
+    assert prompt_ab == (
+        f"Mapping records:\n{triple.u} -> {triple.v}\n{triple.v} -> {triple.w}\n"
+        f"Query path:\n{triple.u} ->\nRelay and terminal:"
+    )
+    assert all(prompt == prompt.rstrip() for prompt in (prompt_a, prompt_b, prompt_ab))
 
 
 def test_candidate_pool_is_deterministic_contains_correct_and_has_no_position_bias() -> None:
