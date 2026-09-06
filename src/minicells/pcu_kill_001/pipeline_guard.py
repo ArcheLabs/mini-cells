@@ -9,6 +9,7 @@ from typing import Any, Callable
 
 from .dual_oracle import DualGPUContextOracle
 from .engineering_accel import maybe_engineering_acceleration
+from .evaluation import evaluate_samples as fast_evaluate_samples, greedy_generate
 from .governance import git_provenance, write_json
 from .synthetic import POSITIVE_CONTROL_VERSION
 
@@ -88,6 +89,57 @@ def persist_pre_science_evidence(**kwargs: Any) -> None:
     write_json(output / "CACHE_EQUIVALENCE.json", cache_gate.to_dict())
 
 
+def _verify_generation_acceleration(kwargs: dict[str, Any]) -> None:
+    """Prove HF batched/KV greedy output matches the original stepwise decoder."""
+    if str(kwargs.get("phase")) != "engineering":
+        return
+    samples = list(kwargs["world"].splits.get("A_eval", ()))[:8]
+    if not samples:
+        raise RuntimeError("GENERATION_ACCELERATION_SEMANTICS_INVALID: no A_eval probes")
+    model = kwargs["original"]
+    tokenizer = kwargs["tokenizer"]
+    device = kwargs["device"]
+    max_new_tokens = 16
+    fast = fast_evaluate_samples(
+        model,
+        tokenizer,
+        samples,
+        split="A_eval",
+        device=device,
+        max_new_tokens=max_new_tokens,
+        batch_size=8,
+    )
+    rows = []
+    passed = True
+    for sample, fast_row in zip(samples, fast.rows):
+        reference = greedy_generate(
+            model,
+            tokenizer,
+            str(sample.prompt),
+            device=device,
+            max_new_tokens=max_new_tokens,
+        )
+        same = str(fast_row.generated) == str(reference)
+        passed = passed and same
+        rows.append({
+            "sample_id": str(sample.sample_id),
+            "fast_generated": str(fast_row.generated),
+            "reference_generated": str(reference),
+            "exact_match": same,
+        })
+    write_json(Path(kwargs["output"]) / "GENERATION_ACCELERATION_EQUIVALENCE.json", {
+        "schema": "minicells.pcu-kill-001.generation-acceleration-equivalence.v1",
+        "method_a": "hf_generate_batched_greedy_use_cache_true",
+        "method_b": "reference_stepwise_greedy_no_cache",
+        "sample_count": len(rows),
+        "passed": passed,
+        "rows": rows,
+        "scientific_evidence": False,
+    })
+    if not passed:
+        raise RuntimeError("GENERATION_ACCELERATION_SEMANTICS_INVALID")
+
+
 def _augment_decision_with_oracle_v2(output: Path) -> None:
     oracle_path = output / "CONTEXT_ORACLE.json"
     if not oracle_path.is_file():
@@ -131,6 +183,7 @@ def _augment_decision_with_oracle_v2(output: Path) -> None:
 def _run_with_optional_engineering_acceleration(experiment_module: Any, current: Callable[..., Any], kwargs: dict[str, Any]) -> Any:
     if str(kwargs.get("phase")) != "engineering":
         return current(**kwargs)
+    _verify_generation_acceleration(kwargs)
     manifest = dict(kwargs["manifest"])
     accelerator = maybe_engineering_acceleration(
         experiment_module,
