@@ -1,0 +1,87 @@
+{
+  "causal_question": "does_joint_L15_L23_optimization_outperform_identical_sequential_depth3_cells",
+  "experiment": "PCU-JOINT-CROSS-LAYER-001",
+  "formal_execution_not_started": true,
+  "phase": "engineering_diagnostic",
+  "primary_arm": "joint128_per_parameter_update_matched",
+  "published_depth3": {
+    "dataset_manifest_sha256": "ce408e9b78d1670929bb376cf1f0145d6b4f0b52f42ffc3055ef8bfef407495f",
+    "selected_l15": [
+      "L15:E10:C0",
+      "L15:E10:C1",
+      "L15:E10:C2",
+      "L15:E10:C3",
+      "L15:E28:C0",
+      "L15:E9:C1",
+      "L15:E28:C2",
+      "L15:E28:C1",
+      "L15:E9:C3",
+      "L15:E9:C0",
+      "L15:E28:C3",
+      "L15:E9:C2",
+      "L15:E18:C0",
+      "L15:E31:C3",
+      "L15:E8:C1",
+      "L15:E19:C3"
+    ],
+    "selected_l23": [
+      "L23:E20:C1",
+      "L23:E20:C0",
+      "L23:E20:C2",
+      "L23:E20:C3",
+      "L23:E4:C1",
+      "L23:E4:C0",
+      "L23:E30:C2",
+      "L23:E4:C3",
+      "L23:E4:C2",
+      "L23:E30:C0",
+      "L23:E9:C2",
+      "L23:E30:C3",
+      "L23:E30:C1",
+      "L23:E9:C0",
+      "L23:E9:C1",
+      "L23:E9:C3"
+    ],
+    "sequential_metrics": {
+      "direct_accuracy": 0.140625,
+      "first_token_top1_accuracy": 0.6328125,
+      "later_token_top1_accuracy": 0.5764331210191083,
+      "ranking_eval_accuracy": 0.7890625
+    },
+    "source_commit": "81676bb6a50a0efa4b26f6fbe7948bc6274e530d",
+    "source_tree": "ec4423ec4c3dfdfc1ae34490a31225e357b72006"
+  },
+  "schema": "minicells.pcu-joint-cross-layer-001.result.v1",
+  "scientific_evidence": false,
+  "secondary_arm": "joint256_extra_joint_updates_diagnostic",
+  "seed": 26090501,
+  "status": "JOINT_COORDINATION_IMPROVES_BUT_DOES_NOT_RESCUE",
+  "summary": {
+    "joint128": {
+      "direct_accuracy": 0.15625,
+      "first_token_top1_accuracy": 0.6015625,
+      "later_token_top1_accuracy": 0.589171974522293,
+      "ranking_eval_accuracy": 0.8359375,
+      "sequence_all_tokens_top1_accuracy": 0.15625
+    },
+    "joint256": {
+      "direct_accuracy": 0.0546875,
+      "first_token_top1_accuracy": 0.5234375,
+      "later_token_top1_accuracy": 0.49044585987261147,
+      "ranking_eval_accuracy": 0.765625,
+      "sequence_all_tokens_top1_accuracy": 0.0546875
+    },
+    "sequential_depth3": {
+      "direct_accuracy": 0.140625,
+      "first_token_top1_accuracy": 0.6328125,
+      "later_token_top1_accuracy": 0.5764331210191083,
+      "ranking_eval_accuracy": 0.7890625,
+      "training_mode": "L15_128_then_freeze_then_L23_128"
+    }
+  },
+  "valid_run": true,
+  "worker_files_external": {
+    "joint128": "/kaggle/working/pcu-joint-cross-layer-001-workers/JOINT_128.json",
+    "joint256": "/kaggle/working/pcu-joint-cross-layer-001-workers/JOINT_256.json"
+  }
+}

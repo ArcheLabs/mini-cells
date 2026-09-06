@@ -1,0 +1,34 @@
+{
+  "arms": {
+    "joint128_primary": "L15_and_L23_jointly_trainable_for_128_steps_per_parameter_update_matched",
+    "joint256_secondary": "L15_and_L23_jointly_trainable_for_256_steps_extra_joint_updates_diagnostic",
+    "sequential_control": "published_L15_128_freeze_then_L23_128"
+  },
+  "causal_variable": "joint_vs_sequential_optimization_of_exact_same_L15_L23_cells",
+  "dual_gpu_execution": {
+    "cuda:0": "joint128_primary",
+    "cuda:1": "joint256_secondary",
+    "process_isolation": true,
+    "required": true
+  },
+  "experiment": "PCU-JOINT-CROSS-LAYER-001",
+  "fixed": {
+    "association_layer": 7,
+    "association_state": "exact_published_L7_K64_hybrid_replay_then_frozen",
+    "batch_size": 8,
+    "cell_identity": "exact_published_depth3_cells_no_reallocation",
+    "learning_rate": 0.001,
+    "objective": "answer-token-causal-cross-entropy",
+    "optimizer": "AdamW",
+    "readout_k": 16,
+    "readout_layer": 23,
+    "transport_k": 16,
+    "transport_layer": 15
+  },
+  "formal_execution_not_started": true,
+  "phase": "engineering_diagnostic",
+  "primary_scientific_decision_arm": "joint128_primary",
+  "schema": "minicells.pcu-joint-cross-layer-001.design.v1",
+  "scientific_evidence": false,
+  "seed": 26090501
+}
