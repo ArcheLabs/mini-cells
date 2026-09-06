@@ -64,6 +64,11 @@ def validate_engineering_evidence(output: Path) -> dict:
         raise RuntimeError("run does not use the registered context-oracle v2")
     if identity.get("formal_execution_not_started") is not True:
         raise RuntimeError("run identity crossed the formal execution boundary")
+    source = identity.get("source")
+    if not isinstance(source, dict) or source.get("source_dirty") is not False:
+        raise RuntimeError("refusing to publish engineering evidence produced from a dirty source tree")
+    if not source.get("source_commit") or not source.get("source_tree"):
+        raise RuntimeError("run identity is missing immutable source commit/tree provenance")
 
     decision = json.loads(decision_path.read_text(encoding="utf-8"))
     if decision.get("phase") != "engineering":
