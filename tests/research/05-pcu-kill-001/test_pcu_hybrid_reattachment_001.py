@@ -45,7 +45,7 @@ def test_classifier_requires_causal_gain_equivalence_reversibility_and_locality(
         equivalence_max_abs=0.0,
         off_equivalence_max_abs=0.0,
         restoration_max_abs=0.0,
-        ranking_on=0.84,
+        ranking_on=0.82,
         ranking_off=0.06,
         margin_gain=1.0,
         control_nll_increase=0.01,
@@ -57,8 +57,8 @@ def test_classifier_requires_causal_gain_equivalence_reversibility_and_locality(
         equivalence_max_abs=0.0,
         off_equivalence_max_abs=0.0,
         restoration_max_abs=0.0,
-        ranking_on=0.84,
-        ranking_off=0.84,
+        ranking_on=0.82,
+        ranking_off=0.82,
         margin_gain=0.0,
         control_nll_increase=0.0,
     )
@@ -69,7 +69,7 @@ def test_classifier_requires_causal_gain_equivalence_reversibility_and_locality(
         equivalence_max_abs=experiment.EQUIVALENCE_MAX_ABS_LOGIT_DIFF * 2,
         off_equivalence_max_abs=0.0,
         restoration_max_abs=0.0,
-        ranking_on=0.84,
+        ranking_on=0.82,
         ranking_off=0.06,
         margin_gain=1.0,
         control_nll_increase=0.0,
@@ -77,16 +77,25 @@ def test_classifier_requires_causal_gain_equivalence_reversibility_and_locality(
     assert bad_equivalence == "ZERO_STATE_EQUIVALENCE_FAILED"
 
 
-def test_experiment_reuses_exact_published_mutation_path_without_new_bridge() -> None:
+def test_experiment_reuses_exact_ranking_only_k64_without_new_bridge() -> None:
     source = inspect.getsource(experiment.run_hybrid_reattachment_diagnostic)
     module = inspect.getsource(experiment)
     assert "_load_baselines" in source
-    assert "_train_hybrid_branch" in source
+    assert "_train_ranking_branch" in source
     assert "baseline.selected_cells" in source
     assert "temporarily_zero_cell_deltas(runtime)" in source
+    assert '"objective": "16-way-candidate-ranking-only"' in source
+    assert '"ce_readout_regularizer": False' in source
     assert '"new_bridge": False' in source
+    assert "_train_hybrid_branch" not in module
     assert "allocate_topk" not in module
     assert "full_model_task_conditioned_allocation" not in module
+
+
+def test_source_is_the_association_learned_generation_unresolved_artifact() -> None:
+    assert experiment.PUBLISHED_SOURCE_ROOT == experiment.OBJECTIVE_BASELINE_ROOT
+    assert experiment.EXPECTED_PUBLISHED_RANKING_ACCURACY == 0.8203125
+    assert experiment.EXPECTED_PUBLISHED_DIRECT_ACCURACY == 0.0
 
 
 def test_success_is_not_cell_alone_takeover_and_formal_is_not_claimed() -> None:
