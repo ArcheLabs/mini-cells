@@ -1,18 +1,16 @@
 """Protocol-v3 causal reattachment and amplitude-sweep experiment.
 
-This module amends PCU-HYBRID-REATTACHMENT-001 after the first engineering
-execution on source commit cadaf6c397000c55deb35db67a3b266003cb3004.
-The v2 execution compared untouched fused Granite against a cellularized graph
-under the zero-state gate. That comparison is still recorded, but it is a G0
-numerical-representation diagnostic because cellularization changes floating
-point reduction order. Protocol v3 keeps every numeric threshold unchanged and
-moves the strict zero-state gate to the matched cellular graph:
-PARENT_ZERO_DELTA <-> CELL_OFF.
+Protocol v3 is a post-observation amendment to PCU-HYBRID-REATTACHMENT-001.
+The first engineering execution on source commit
+cadaf6c397000c55deb35db67a3b266003cb3004 compared untouched fused Granite
+against a cellularized graph under the strict zero-state gate. Cellularization
+changes floating-point reduction order, so v3 keeps that native->cellular
+comparison as a G0 numerical diagnostic and applies the unchanged 1e-5 gate to
+the matched cellular path PARENT_ZERO_DELTA <-> CELL_OFF.
 
-The primary arm replays the exact published PCU-OBJECTIVE-ALIGNMENT-001
-ranking-only L7/K64 mutation and tests causal ON/OFF consumption by frozen
-Granite. A second, independently reconstructed GPU arm performs the predeclared
-alpha sweep without any additional training or learned bridge.
+GPU0 executes the corrected causal ON/OFF arm. GPU1 independently reconstructs
+the same published ranking-only L7/K64 mutation and evaluates a frozen alpha
+sweep without any additional training, bridge, readout, or router.
 
 Engineering evidence only. Formal PCU seeds remain RESERVED_UNTOUCHED.
 """
@@ -38,7 +36,6 @@ from .governance import git_provenance, write_json
 from .hybrid_objective import OBJECTIVE_BASELINE_ROOT, _load_baselines
 from .hybrid_reattachment import (
     AnswerMetrics,
-    LogitDiff,
     _capture_logits,
     _load_published_source,
     compare_logits,
@@ -55,12 +52,10 @@ from .layer_placement import (
     _assert_only_selected_deltas_trainable,
     _validate_foundation_manifest,
 )
-from .locality_width import ENGINEERING_SEED, TARGET_LAYER
+from .locality_width import ENGINEERING_SEED
 from .model import load_granite, target_module
 from .objective_alignment import (
     ASSOCIATION_FLOOR,
-    CANDIDATE_POOL_SIZE,
-    RANKING_TEMPERATURE,
     _train_ranking_branch,
     evaluate_candidate_ranking,
 )
@@ -81,8 +76,7 @@ FIRST_ENGINEERING_SOURCE_COMMIT = "cadaf6c397000c55deb35db67a3b266003cb3004"
 EXPECTED_PUBLISHED_RANKING_ACCURACY = 0.8203125
 EXPECTED_PUBLISHED_DIRECT_ACCURACY = 0.0
 
-# All thresholds were frozen before protocol-v3 execution. None were relaxed
-# after observing the v2 run.
+# Frozen before protocol-v3 GPU execution. None were relaxed after v2.
 EQUIVALENCE_MAX_ABS_LOGIT_DIFF = 1e-5
 RESTORATION_MAX_ABS_LOGIT_DIFF = 1e-5
 MIN_CAUSAL_RANKING_GAIN = 0.50
@@ -292,7 +286,7 @@ def classify_primary_v3(
     margin_gain: float,
     control_nll_increase: float,
 ) -> str:
-    """Primary engineering classifier. Native G0 drift is intentionally non-gating."""
+    """Engineering classifier. Native G0 drift is intentionally non-gating."""
     if not replay_matches:
         return "REPLAY_DID_NOT_MATCH_PUBLISHED_MUTATION"
     if same_graph_equivalence_max_abs > EQUIVALENCE_MAX_ABS_LOGIT_DIFF:
@@ -331,7 +325,11 @@ def run_primary_arm(*, output: Path, device: str = "cuda:0") -> dict[str, Any]:
         on_a_answer = evaluate_answer_metrics(state.model, state.a_sequences, device=device)
         on_b_answer = evaluate_answer_metrics(state.model, state.b_sequences, device=device)
         on_ranking = evaluate_candidate_ranking(
-            state.model, state.tokenizer, state.a_eval, state.candidate_universe, device=device
+            state.model,
+            state.tokenizer,
+            state.a_eval,
+            state.candidate_universe,
+            device=device,
         )
         on_direct = evaluate_samples(
             state.model,
@@ -349,7 +347,11 @@ def run_primary_arm(*, output: Path, device: str = "cuda:0") -> dict[str, Any]:
             off_a_answer = evaluate_answer_metrics(state.model, state.a_sequences, device=device)
             off_b_answer = evaluate_answer_metrics(state.model, state.b_sequences, device=device)
             off_ranking = evaluate_candidate_ranking(
-                state.model, state.tokenizer, state.a_eval, state.candidate_universe, device=device
+                state.model,
+                state.tokenizer,
+                state.a_eval,
+                state.candidate_universe,
+                device=device,
             )
             off_direct = evaluate_samples(
                 state.model,
@@ -367,12 +369,10 @@ def run_primary_arm(*, output: Path, device: str = "cuda:0") -> dict[str, Any]:
         parent_hash_after = frozen_parent_sha256(state.runtime)
 
         diffs = {
-            # Native -> cellular is retained as a non-gating numerical diagnostic.
             "base_vs_parent_A": compare_logits(state.base_a_logits, state.parent_a_logits),
             "base_vs_parent_B": compare_logits(state.base_b_logits, state.parent_b_logits),
             "base_vs_off_A": compare_logits(state.base_a_logits, off_a_logits),
             "base_vs_off_B": compare_logits(state.base_b_logits, off_b_logits),
-            # Protocol-v3 zero-state gate: matched cellular computation.
             "parent_vs_off_A": compare_logits(state.parent_a_logits, off_a_logits),
             "parent_vs_off_B": compare_logits(state.parent_b_logits, off_b_logits),
             "on_vs_off_A": compare_logits(on_a_logits, off_a_logits),
@@ -515,7 +515,12 @@ def run_primary_arm(*, output: Path, device: str = "cuda:0") -> dict[str, Any]:
         return result
 
 
-def classify_sweep(rows: list[dict[str, Any]], *, replay_matches: bool, restoration_exact: bool) -> str:
+def classify_sweep(
+    rows: list[dict[str, Any]],
+    *,
+    replay_matches: bool,
+    restoration_exact: bool,
+) -> str:
     if not replay_matches:
         return "AMPLITUDE_SWEEP_REPLAY_DID_NOT_MATCH"
     if not restoration_exact:
@@ -555,6 +560,7 @@ def run_amplitude_sweep_arm(*, output: Path, device: str = "cuda:1") -> dict[str
                     "A_mean_target_margin": float(a_answer.mean_target_margin),
                     "B_answer_nll": float(b_answer.answer_nll),
                 })
+
         restoration_exact = delta_sha256(state.runtime) == state.trained_delta_hash
         zero = rows[0]
         for row in rows:
@@ -673,12 +679,22 @@ def _same_source(left: dict[str, Any], right: dict[str, Any]) -> bool:
     )
 
 
-def render_visualizations(primary: dict[str, Any], sweep: dict[str, Any], output: Path) -> list[str]:
+def render_visualizations(
+    primary: dict[str, Any],
+    sweep: dict[str, Any],
+    output: Path,
+) -> list[str]:
     output = Path(output)
     files: list[str] = []
     diffs = primary["logit_differences"]
 
-    labels = ["Native→parent A", "Native→parent B", "Parent→off A", "Parent→off B", "On→restored A"]
+    labels = [
+        "Native→parent A",
+        "Native→parent B",
+        "Parent→off A",
+        "Parent→off B",
+        "On→restored A",
+    ]
     values = [
         float(diffs["base_vs_parent_A"]["max_abs"]),
         float(diffs["base_vs_parent_B"]["max_abs"]),
@@ -702,7 +718,10 @@ def render_visualizations(primary: dict[str, Any], sweep: dict[str, Any], output
 
     causal = primary["causal_effect"]
     fig, ax = plt.subplots(figsize=(6.5, 4.5))
-    ax.bar(["CELL_OFF", "CELL_ON"], [float(causal["ranking_off"]), float(causal["ranking_on"])])
+    ax.bar(
+        ["CELL_OFF", "CELL_ON"],
+        [float(causal["ranking_off"]), float(causal["ranking_on"])],
+    )
     ax.axhline(ASSOCIATION_FLOOR, linestyle="--", label="Association floor 0.80")
     ax.set_ylim(0.0, 1.0)
     ax.set_ylabel("A_eval 16-way ranking accuracy")
@@ -728,9 +747,9 @@ def render_visualizations(primary: dict[str, Any], sweep: dict[str, Any], output
     second.plot(alphas, harms, marker="s", label="B NLL increase")
     second.axhline(MAX_CONTROL_ANSWER_NLL_INCREASE, linestyle=":", label="Locality ceiling")
     second.set_ylabel("B-control answer NLL increase vs α=0")
-    lines, labels_left = ax.get_legend_handles_labels()
-    lines2, labels_right = second.get_legend_handles_labels()
-    ax.legend(lines + lines2, labels_left + labels_right, loc="best")
+    left_lines, left_labels = ax.get_legend_handles_labels()
+    right_lines, right_labels = second.get_legend_handles_labels()
+    ax.legend(left_lines + right_lines, left_labels + right_labels, loc="best")
     ax.set_title("Amplitude sweep: association–locality trade-off")
     fig.tight_layout()
     path = output / "alpha_sweep_tradeoff.png"
@@ -740,8 +759,13 @@ def render_visualizations(primary: dict[str, Any], sweep: dict[str, Any], output
 
     fig, ax = plt.subplots(figsize=(6.5, 5.0))
     ax.scatter(harms, rankings)
-    for alpha, x, y in zip(alphas, harms, rankings):
-        ax.annotate(f"α={alpha:g}", (x, y), xytext=(4, 4), textcoords="offset points")
+    for alpha, x_value, y_value in zip(alphas, harms, rankings):
+        ax.annotate(
+            f"α={alpha:g}",
+            (x_value, y_value),
+            xytext=(4, 4),
+            textcoords="offset points",
+        )
     ax.axvline(MAX_CONTROL_ANSWER_NLL_INCREASE, linestyle="--", label="Locality ceiling")
     ax.axhline(ASSOCIATION_FLOOR, linestyle=":", label="Association floor")
     ax.set_xlabel("B-control answer NLL increase vs α=0")
@@ -756,12 +780,26 @@ def render_visualizations(primary: dict[str, Any], sweep: dict[str, Any], output
     return files
 
 
-def aggregate_dual_gpu(*, primary_root: Path, sweep_root: Path, output: Path, source: dict[str, Any]) -> dict[str, Any]:
-    primary_root, sweep_root, output = Path(primary_root), Path(sweep_root), Path(output)
+def aggregate_dual_gpu(
+    *,
+    primary_root: Path,
+    sweep_root: Path,
+    output: Path,
+    source: dict[str, Any],
+) -> dict[str, Any]:
+    primary_root = Path(primary_root)
+    sweep_root = Path(sweep_root)
+    output = Path(output)
     primary = json.loads((primary_root / "PRIMARY_RESULT.json").read_text(encoding="utf-8"))
-    primary_decision = json.loads((primary_root / "PRIMARY_DECISION.json").read_text(encoding="utf-8"))
+    primary_decision = json.loads(
+        (primary_root / "PRIMARY_DECISION.json").read_text(encoding="utf-8")
+    )
     sweep = json.loads((sweep_root / "SWEEP_RESULT.json").read_text(encoding="utf-8"))
-    sweep_decision = json.loads((sweep_root / "SWEEP_DECISION.json").read_text(encoding="utf-8"))
+    sweep_decision = json.loads(
+        (sweep_root / "SWEEP_DECISION.json").read_text(encoding="utf-8")
+    )
+    if sweep_decision.get("status") != sweep.get("status"):
+        raise RuntimeError("sweep result/decision status mismatch")
     if not _same_source(primary["source"], sweep["source"]):
         raise RuntimeError("dual-GPU worker source provenance differs")
     if not _same_source(primary["source"], source):
@@ -785,7 +823,9 @@ def aggregate_dual_gpu(*, primary_root: Path, sweep_root: Path, output: Path, so
         and primary_decision["causal_ranking_gain_passes"]
         and primary_decision["causal_margin_gain_passes"]
     )
-    sweep_rescues_locality = sweep["status"] == "AMPLITUDE_SWEEP_FINDS_LOCALITY_COMPATIBLE_POINT"
+    sweep_rescues_locality = (
+        sweep["status"] == "AMPLITUDE_SWEEP_FINDS_LOCALITY_COMPATIBLE_POINT"
+    )
     if not bool(primary["valid_run"] and sweep["valid_run"]):
         combined_status = "DUAL_GPU_PROTOCOL_INVALID"
     elif not primary_protocol_pass:
@@ -813,7 +853,10 @@ def aggregate_dual_gpu(*, primary_root: Path, sweep_root: Path, output: Path, so
         "primary_equivalence": primary["equivalence"],
         "selected_locality_compatible_point": sweep["selected_locality_compatible_point"],
         "alpha_grid": sweep["alpha_grid"],
-        "dual_gpu_execution": {"cuda:0": "primary_causal_reattachment", "cuda:1": "amplitude_sweep"},
+        "dual_gpu_execution": {
+            "cuda:0": "primary_causal_reattachment",
+            "cuda:1": "amplitude_sweep",
+        },
     }
     decision = {
         "schema": "minicells.pcu-hybrid-reattachment-001.decision.v3",
@@ -857,9 +900,9 @@ def aggregate_dual_gpu(*, primary_root: Path, sweep_root: Path, output: Path, so
 
 Status: `{combined_status}`
 
-This run keeps the original thresholds unchanged. The strict zero-state gate is
-applied to `PARENT_ZERO_DELTA ↔ CELL_OFF`, which shares the cellular computation
-path. Native Granite ↔ cellularized Granite remains a G0 numerical diagnostic.
+This run keeps all v2 numeric thresholds unchanged. The strict zero-state gate
+is applied to `PARENT_ZERO_DELTA ↔ CELL_OFF`; native Granite ↔ cellularized
+Granite remains a G0 numerical diagnostic.
 
 ## Primary causal arm
 
@@ -877,7 +920,7 @@ path. Native Granite ↔ cellularized Granite remains a G0 numerical diagnostic.
 - Grid: {', '.join(str(value) for value in sweep['alpha_grid'])}
 - Status: `{sweep['status']}`
 - Selected locality-compatible point: `{sweep['selected_locality_compatible_point']}`
-- No additional training, bridge, or router was introduced.
+- No additional training, bridge, readout, or router was introduced.
 
 ## Visualizations
 
