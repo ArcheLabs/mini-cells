@@ -131,6 +131,15 @@ def test_pipeline_guard_installs_acceleration_only_for_engineering() -> None:
     assert 'kwargs.get("phase")' in source
     assert '!= "engineering"' in source
     assert "maybe_engineering_acceleration" in source
+    assert "DualGPUContextOracle" in source
+
+
+def test_generation_acceleration_has_fail_closed_equivalence_gate() -> None:
+    source = inspect.getsource(pipeline_guard._verify_generation_acceleration)
+    assert "fast_evaluate_samples" in source
+    assert "greedy_generate" in source
+    assert "GENERATION_ACCELERATION_SEMANTICS_INVALID" in source
+    assert "exact_match" in source
 
 
 def test_formal_scientific_worker_does_not_import_engineering_accelerator_directly() -> None:
