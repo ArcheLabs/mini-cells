@@ -5,6 +5,7 @@ from __future__ import annotations
 import inspect
 
 from minicells.pcu_kill_001 import cross_layer_readout
+from minicells.pcu_kill_001.training import Allocation
 
 
 def test_cross_layer_design_is_minimal_and_fixed() -> None:
@@ -43,12 +44,11 @@ def test_l23_is_allocated_once_under_frozen_l7_state() -> None:
 def test_same_l23_cells_are_reused_in_control_and_cross_layer_arm() -> None:
     source = inspect.getsource(cross_layer_readout.run_cross_layer_readout_diagnostic)
     control = inspect.getsource(cross_layer_readout._train_l23_only_control)
-    assert "selected_l23," in source
     assert "selected_l23=selected_l23" in source
     assert "tuple(l23_only[\"selected_l23\"]) != selected_l23" in source
-    assert "selected_l23," in control
     assert "L23_ONLY_CONTROL_ALLOCATION_DRIFT" in control
     assert "full_model_task_conditioned_allocation" not in control
+    assert "matched_footprint_not_independently_optimized_L23_upper_bound" in control
 
 
 def test_only_l23_deltas_are_trainable_after_l7_freeze() -> None:
@@ -58,7 +58,17 @@ def test_only_l23_deltas_are_trainable_after_l7_freeze() -> None:
     assert "_assert_only_selected_deltas_trainable(model, runtime23)" in control
 
 
-def test_cross_layer_success_requires_both_native_readout_and_association() -> None:
+def test_k16_gradient_mass_is_computed_from_full_score_map() -> None:
+    allocation = Allocation(
+        scores={"a": 4.0, "b": 3.0, "c": 2.0, "d": 1.0},
+        selected=("a", "b", "c", "d"),
+        topk_mass={1: 0.4, 2: 0.7},
+        effective_count=3.0,
+    )
+    assert abs(cross_layer_readout._gradient_mass_at_k(allocation, 3) - 0.9) < 1e-12
+
+
+def test_cross_layer_decision_taxonomy_is_strict() -> None:
     classify = cross_layer_readout._classify
     assert classify(
         l7_direct=0.03,
@@ -66,6 +76,12 @@ def test_cross_layer_success_requires_both_native_readout_and_association() -> N
         cross_direct=0.85,
         cross_ranking=0.85,
     ) == "SPARSE_CROSS_LAYER_READOUT_RESCUE_SUPPORTED"
+    assert classify(
+        l7_direct=0.03,
+        l23_only_direct=0.60,
+        cross_direct=0.85,
+        cross_ranking=0.85,
+    ) == "CROSS_LAYER_READOUT_RESCUE_WITH_WEAK_SYNERGY"
     assert classify(
         l7_direct=0.03,
         l23_only_direct=0.85,
