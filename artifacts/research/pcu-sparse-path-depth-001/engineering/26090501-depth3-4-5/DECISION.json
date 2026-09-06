@@ -1,0 +1,83 @@
+{
+  "association_floor": 0.8,
+  "best_depth": 3,
+  "best_direct_accuracy": 0.140625,
+  "depths": {
+    "3": {
+      "direct_accuracy": 0.140625,
+      "first_token_top1_accuracy": 0.6328125,
+      "later_token_top1_accuracy": 0.5764331210191083,
+      "layers": [
+        7,
+        15,
+        23
+      ],
+      "ranking_eval_accuracy": 0.7890625,
+      "sequence_all_tokens_top1_accuracy": 0.140625,
+      "transport_k": [
+        16
+      ],
+      "transport_steps": [
+        128
+      ]
+    },
+    "4": {
+      "direct_accuracy": 0.09375,
+      "first_token_top1_accuracy": 0.5546875,
+      "later_token_top1_accuracy": 0.4872611464968153,
+      "layers": [
+        7,
+        11,
+        15,
+        23
+      ],
+      "ranking_eval_accuracy": 0.75,
+      "sequence_all_tokens_top1_accuracy": 0.09375,
+      "transport_k": [
+        8,
+        8
+      ],
+      "transport_steps": [
+        64,
+        64
+      ]
+    },
+    "5": {
+      "direct_accuracy": 0.09375,
+      "first_token_top1_accuracy": 0.328125,
+      "later_token_top1_accuracy": 0.5859872611464968,
+      "layers": [
+        7,
+        11,
+        15,
+        19,
+        23
+      ],
+      "ranking_eval_accuracy": 0.8125,
+      "sequence_all_tokens_top1_accuracy": 0.09375,
+      "transport_k": [
+        6,
+        5,
+        5
+      ],
+      "transport_steps": [
+        43,
+        43,
+        42
+      ]
+    }
+  },
+  "direct_capability_floor": 0.8,
+  "dual_gpu_execution_required": true,
+  "experiment": "PCU-SPARSE-PATH-DEPTH-001",
+  "formal_execution_not_started": true,
+  "nested_topologies": true,
+  "phase": "engineering_diagnostic",
+  "schema": "minicells.pcu-sparse-path-depth-001.decision.v1",
+  "scientific_evidence": false,
+  "seed": 26090501,
+  "status": "DEEPER_SPARSE_PATH_DID_NOT_IMPROVE",
+  "total_added_k_each": 32,
+  "total_added_steps_each": 256,
+  "valid_run": true
+}
