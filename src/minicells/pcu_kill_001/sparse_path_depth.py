@@ -137,13 +137,7 @@ def _nearest_available(values: Sequence[int], target: float, forbidden: set[int]
 
 
 def choose_nested_topologies(available_layers: Sequence[int]) -> dict[int, TopologySpec]:
-    """Choose nested 3/4/5-layer paths from actual MoE layers.
-
-    Anchors L7 and L23 are mandatory because they are the experimentally fixed
-    association/readout endpoints. Interior layers are selected by recursively
-    bisecting the largest remaining depth interval. On canonical Granite this
-    yields L15, then L11, then L19.
-    """
+    """Choose nested 3/4/5-layer paths from actual MoE layers."""
     available = tuple(sorted({int(value) for value in available_layers}))
     if ASSOCIATION_LAYER not in available or READOUT_LAYER not in available:
         raise RuntimeError("sparse path requires MoE endpoints L7 and L23")
@@ -152,16 +146,8 @@ def choose_nested_topologies(available_layers: Sequence[int]) -> dict[int, Topol
         raise RuntimeError("sparse path depth-5 requires at least three interior MoE layers")
 
     midpoint = _nearest_available(between, (ASSOCIATION_LAYER + READOUT_LAYER) / 2.0, set())
-    lower = _nearest_available(
-        between,
-        (ASSOCIATION_LAYER + midpoint) / 2.0,
-        {midpoint},
-    )
-    upper = _nearest_available(
-        between,
-        (midpoint + READOUT_LAYER) / 2.0,
-        {midpoint, lower},
-    )
+    lower = _nearest_available(between, (ASSOCIATION_LAYER + midpoint) / 2.0, {midpoint})
+    upper = _nearest_available(between, (midpoint + READOUT_LAYER) / 2.0, {midpoint, lower})
 
     layer_sets = {
         3: (ASSOCIATION_LAYER, midpoint, READOUT_LAYER),
@@ -399,10 +385,7 @@ def run_topology(
 
         stages: list[dict[str, Any]] = []
         for layer, k, steps in zip(spec.transport_layers, spec.transport_k, spec.transport_steps):
-            print(
-                f"[pcu-path-depth{depth}] transport L{layer}/K{k} steps={steps}",
-                flush=True,
-            )
+            print(f"[pcu-path-depth{depth}] transport L{layer}/K{k} steps={steps}", flush=True)
             stages.append(
                 _train_one_added_layer(
                     model,
@@ -415,10 +398,7 @@ def run_topology(
                 )
             )
 
-        print(
-            f"[pcu-path-depth{depth}] readout L{READOUT_LAYER}/K{READOUT_K} steps={READOUT_STEPS}",
-            flush=True,
-        )
+        print(f"[pcu-path-depth{depth}] readout L{READOUT_LAYER}/K{READOUT_K} steps={READOUT_STEPS}", flush=True)
         stages.append(
             _train_one_added_layer(
                 model,
@@ -544,6 +524,8 @@ def aggregate_depth_sweep(
     best_depth = max(DEPTHS, key=lambda value: float(summary[str(value)]["direct_accuracy"]))
     output_root = Path(output_root)
     output_root.mkdir(parents=True, exist_ok=True)
+    for depth in DEPTHS:
+        write_json(output_root / f"DEPTH_{depth}.json", results[depth])
     result = {
         "schema": "minicells.pcu-sparse-path-depth-001.result.v1",
         "experiment": EXPERIMENT_ID,
@@ -570,7 +552,7 @@ def aggregate_depth_sweep(
         "depths": summary,
         "best_depth": int(best_depth),
         "best_direct_accuracy": float(summary[str(best_depth)]["direct_accuracy"]),
-        "worker_files": {str(depth): str(worker_files[depth]) for depth in DEPTHS},
+        "worker_files_external": {str(depth): str(worker_files[depth]) for depth in DEPTHS},
     }
     write_json(output_root / "RESULT.json", result)
     write_json(output_root / "DECISION.json", {
