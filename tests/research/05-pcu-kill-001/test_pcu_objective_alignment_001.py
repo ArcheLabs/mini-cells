@@ -65,7 +65,13 @@ def test_final_experiment_reuses_exact_k64_cells_and_never_reallocates() -> None
     assert '"target_layer": TARGET_LAYER' in source
     assert '"selected_k": TARGET_K' in source
     assert '"selected_cells": list(baseline["selected"])' in source
-    assert 'baseline["selected"]' in training
+    # The diagnostic owns the frozen baseline binding; the helper must only
+    # consume the already-selected Cell list and must never allocate again.
+    assert 'baseline["selected"],' in source
+    assert "selected_cells: Sequence[str]" in training
+    assert "_selected_map(selected_cells, TARGET_LAYER)" in training
+    assert "full_model_task_conditioned_allocation" not in training
+    assert "allocate_topk" not in training
     assert "full_model_task_conditioned_allocation" not in module
     assert "allocate_topk" not in module
     assert "OBJECTIVE_ALIGNMENT_ALLOCATION_DRIFT" in source
