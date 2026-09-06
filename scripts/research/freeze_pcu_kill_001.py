@@ -18,10 +18,10 @@ from minicells.pcu_kill_001.governance import (  # noqa: E402
     assert_seed_registry,
     git_provenance,
     sha256_file,
-    verify_protocol_hash,
     write_json,
     write_protocol_hash,
 )
+from minicells.pcu_kill_001.synthetic import POSITIVE_CONTROL_VERSION  # noqa: E402
 
 
 BRANCH = "codex/pcu-composability-kill-001"
@@ -65,6 +65,8 @@ REQUIRED_THRESHOLDS = (
     "g0_top1_token_agreement",
     "cache_top1_token_agreement",
     "context_oracle_accuracy",
+    "context_oracle_retrieval_accuracy",
+    "context_oracle_composition_accuracy",
     "direct_accuracy",
     "merge_retention",
     "composition_accuracy",
@@ -81,7 +83,11 @@ def _required_mapping(payload: dict, key: str) -> dict:
     return value
 
 
-def _validate_engineering_decision(decision: dict, model_manifest: dict, provenance: dict) -> tuple[dict, dict, dict]:
+def _validate_engineering_decision(
+    decision: dict,
+    model_manifest: dict,
+    provenance: dict,
+) -> tuple[dict, dict, dict]:
     if decision.get("experiment") != "PCU-KILL-001" or decision.get("phase") != "engineering":
         raise ProtocolMismatch("engineering decision is for a different experiment or phase")
     if decision.get("scientific_evidence") is not False:
@@ -92,6 +98,14 @@ def _validate_engineering_decision(decision: dict, model_manifest: dict, provena
     missing = [key for key in REQUIRED_DECISION_GATES if gates.get(key) is not True]
     if missing:
         raise ProtocolMismatch(f"engineering decision gates failed or are missing: {missing}")
+    positive_control = _required_mapping(decision, "positive_control")
+    if positive_control.get("version") != POSITIVE_CONTROL_VERSION:
+        raise ProtocolMismatch("engineering decision does not use the registered context-oracle v2")
+    if positive_control.get("passed") is not True:
+        raise ProtocolMismatch("engineering positive control did not pass")
+    if positive_control.get("free_generation_gate") is not False:
+        raise ProtocolMismatch("free generation must remain diagnostic-only for the base model")
+
     selected = _required_mapping(decision, "selected")
     for key in REQUIRED_SELECTED:
         if key not in selected or selected[key] in (None, "", 0):
@@ -100,6 +114,7 @@ def _validate_engineering_decision(decision: dict, model_manifest: dict, provena
         raise ProtocolMismatch("selected k is outside the registered capacity ladder")
     if float(selected["learning_rate"]) <= 0 or int(selected["max_optimizer_steps"]) <= 0:
         raise ProtocolMismatch("engineering decision contains invalid optimizer settings")
+
     thresholds = _required_mapping(decision, "thresholds")
     for key in REQUIRED_THRESHOLDS:
         if key not in thresholds or thresholds[key] is None:
@@ -114,14 +129,23 @@ def _validate_engineering_decision(decision: dict, model_manifest: dict, provena
         raise ProtocolMismatch("engineering decision was produced from a different source commit")
     if source_tree != provenance.get("source_tree"):
         raise ProtocolMismatch("engineering decision was produced from a different source tree")
+
     foundation = _required_mapping(decision, "foundation")
-    for key in ("model_repo", "model_revision", "config_sha256", "foundation_tensor_sha256", "weight_file_sha256", "tokenizer_sha256"):
+    for key in (
+        "model_repo",
+        "model_revision",
+        "config_sha256",
+        "foundation_tensor_sha256",
+        "weight_file_sha256",
+        "tokenizer_sha256",
+    ):
         if key not in foundation or foundation[key] in (None, "", []):
             raise ProtocolMismatch(f"engineering decision has no immutable foundation field {key}")
         if foundation[key] != model_manifest.get(key):
             raise ProtocolMismatch(f"engineering decision foundation does not match model manifest: {key}")
     if decision.get("architecture") != model_manifest.get("architecture"):
         raise ProtocolMismatch("engineering decision architecture does not match model manifest")
+
     allocation = _required_mapping(decision, "allocation")
     for key in ("method", "calibration_split", "calibration_sample_rule", "tie_break", "selected_k"):
         if allocation.get(key) in (None, "", []):
@@ -143,6 +167,7 @@ def main() -> int:
     parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
     parser.add_argument("--hash-path", type=Path, default=DEFAULT_HASH)
     args = parser.parse_args()
+
     provenance = git_provenance(ROOT)
     if args.branch != BRANCH:
         raise ProtocolMismatch(f"freeze requires branch {BRANCH}")
@@ -153,6 +178,7 @@ def main() -> int:
     if not provenance.get("source_commit") or not provenance.get("source_tree"):
         raise ProtocolMismatch("cannot record immutable git provenance")
     assert_seed_registry(SEED_REGISTRY)
+
     model_manifest = json.loads(args.model_manifest.read_text(encoding="utf-8"))
     if model_manifest.get("model_repo") != "ibm-granite/granite-3.1-1b-a400m-base":
         raise ProtocolMismatch("freeze requires the registered Granite foundation")
@@ -172,6 +198,7 @@ def main() -> int:
         or architecture.get("fused_order") != "gate_up"
     ):
         raise ProtocolMismatch("model manifest does not satisfy the registered Granite invariants")
+
     decision = json.loads(args.engineering_decision.read_text(encoding="utf-8"))
     gates, selected, thresholds = _validate_engineering_decision(decision, model_manifest, provenance)
     protocol = json.loads(TEMPLATE.read_text(encoding="utf-8"))
@@ -209,6 +236,8 @@ def main() -> int:
         "lora_rank": selected["lora_rank"],
     })
     protocol["allocation"] = dict(decision["allocation"])
+    # Preserve the registered base-model positive-control method from the template.
+    positive_control = dict(protocol.get("evaluation", {}).get("positive_control", {}))
     protocol["evaluation"] = {
         "generation": {
             "do_sample": False,
@@ -216,6 +245,7 @@ def main() -> int:
             "top_p": None,
             "max_new_tokens": 16,
         },
+        "positive_control": positive_control,
         "composition_primary": "both_exact",
     }
     protocol["baseline"] = {"lora_rank": selected["lora_rank"]}
@@ -225,8 +255,13 @@ def main() -> int:
         "sha256": sha256_file(args.engineering_decision),
         "gates": dict(gates),
         "selected": dict(selected),
+        "positive_control": dict(decision["positive_control"]),
     }
-    protocol["formal_execution"] = {"formal_seeds_executed": [], "scientific_evidence": False, "formal_execution_not_started": True}
+    protocol["formal_execution"] = {
+        "formal_seeds_executed": [],
+        "scientific_evidence": False,
+        "formal_execution_not_started": True,
+    }
     write_json(args.protocol, protocol)
     digest = write_protocol_hash(args.protocol, args.hash_path)
     frozen_dir = args.protocol.parent
@@ -239,9 +274,15 @@ def main() -> int:
         "model_manifest_sha256": sha256_file(args.model_manifest),
         "engineering_decision_sha256": sha256_file(args.engineering_decision),
         "protocol_sha256": digest,
+        "positive_control_version": POSITIVE_CONTROL_VERSION,
         "formal_execution_not_started": True,
     })
-    print(json.dumps({"status": "FROZEN_BEFORE_FORMAL", "protocol_sha256": digest, "formal_seeds": list(FORMAL_SEEDS)}, indent=2, sort_keys=True))
+    print(json.dumps({
+        "status": "FROZEN_BEFORE_FORMAL",
+        "protocol_sha256": digest,
+        "formal_seeds": list(FORMAL_SEEDS),
+        "positive_control_version": POSITIVE_CONTROL_VERSION,
+    }, indent=2, sort_keys=True))
     return 0
 
 
