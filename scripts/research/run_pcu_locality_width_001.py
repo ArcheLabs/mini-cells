@@ -11,7 +11,9 @@ from minicells.pcu_kill_001.locality_width import (
     DEFAULT_OUTPUT,
     ENGINEERING_SEED,
     LAYER_BASELINE_ROOT,
-    run_locality_width_diagnostic,
+)
+from minicells.pcu_kill_001.locality_width_isolated import (
+    run_locality_width_diagnostic_isolated,
 )
 
 
@@ -23,7 +25,7 @@ def main() -> int:
     parser.add_argument("--device0", default="cuda:0")
     parser.add_argument("--device1", default="cuda:1")
     args = parser.parse_args()
-    decision = run_locality_width_diagnostic(
+    decision = run_locality_width_diagnostic_isolated(
         output=args.out,
         baseline_root=args.baseline,
         devices=(args.device0, args.device1),
