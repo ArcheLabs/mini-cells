@@ -1,0 +1,1255 @@
+{
+  "allocation": {
+    "calibration_execution": "weighted_microbatch_8",
+    "calibration_sample_rule": "first_64_samples",
+    "calibration_split": "A_train",
+    "effective_count": 13.895783895420504,
+    "method": "task-conditioned-gradient-l2-per-parameter",
+    "selected": [
+      "L15:E29:C2",
+      "L15:E23:C0",
+      "L15:E29:C1",
+      "L15:E29:C0",
+      "L15:E10:C0",
+      "L15:E10:C2",
+      "L15:E16:C2",
+      "L15:E10:C3"
+    ],
+    "selected_k": 8,
+    "topk_mass": {
+      "1": 0.23098282516943353,
+      "2": 0.29263894606352964,
+      "4": 0.3716732962544278,
+      "8": 0.49987858693534437
+    }
+  },
+  "capability_floor": 0.8,
+  "dataset_manifest_sha256": "ce408e9b78d1670929bb376cf1f0145d6b4f0b52f42ffc3055ef8bfef407495f",
+  "device": "cuda:1",
+  "direct_accuracy": 0.03125,
+  "evaluation": {
+    "both_exact": null,
+    "exact": 0.03125,
+    "relay_exact": null,
+    "rows": [
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V7AC7",
+        "generated": "VSLQ7N76Q7W7F7T75",
+        "relay_exact": null,
+        "sample_id": "A-eval-0000",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VNSC2",
+        "generated": "V3Q3QW37W7W7Z4T3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0001",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VGDVP",
+        "generated": "V3QHWYU6L6K7K6F3W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0002",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V58XF",
+        "generated": "V3QHWWW4U2T2T3T3E",
+        "relay_exact": null,
+        "sample_id": "A-eval-0003",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V8AGY",
+        "generated": "V3QHWUW6L2M3M2N46",
+        "relay_exact": null,
+        "sample_id": "A-eval-0004",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VCFD9",
+        "generated": "VSLQZ2N6T3T7F66W7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0005",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VKRQW",
+        "generated": "VSLQZ2QW3Q3W2WULQZ",
+        "relay_exact": null,
+        "sample_id": "A-eval-0006",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VGRCU",
+        "generated": "V3DXWQ6M3Q6N2QF3X",
+        "relay_exact": null,
+        "sample_id": "A-eval-0007",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VENZV",
+        "generated": "V2QHWYU6L6Q2FHQW6U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0008",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VNP8N",
+        "generated": "V3Q3QW37Q7F37F73",
+        "relay_exact": null,
+        "sample_id": "A-eval-0009",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "VXWA3",
+        "generated": "VXWA3T7M7T7F6W77F6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0010",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VT5BG",
+        "generated": "V3DXW6W7W75W7W55W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0011",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VXQ5P",
+        "generated": "V3Q3QW2Q37Q2Q3XW",
+        "relay_exact": null,
+        "sample_id": "A-eval-0012",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VX5BY",
+        "generated": "V2QHWQ6UW6U6Q6FUF5",
+        "relay_exact": null,
+        "sample_id": "A-eval-0013",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VN3BL",
+        "generated": "V3QHWUW6L7M7T7N2Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0014",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VQDCR",
+        "generated": "V3QHWYW3UW7D9QZ2Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0015",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRXNB",
+        "generated": "V3QHWYW6LQZ6M7Q6W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0016",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VS7MA",
+        "generated": "VSLQZ6M7666666666",
+        "relay_exact": null,
+        "sample_id": "A-eval-0017",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V37BE",
+        "generated": "V37EQW6U2U2N4T25WA",
+        "relay_exact": null,
+        "sample_id": "A-eval-0018",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRYKF",
+        "generated": "VSLQZ2N3K6T7QZ6F6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0019",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMZ6K",
+        "generated": "V2QZ2N2Q2W2W2W2W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0020",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRTX4",
+        "generated": "V3QHWW6N2N2N25WA2N",
+        "relay_exact": null,
+        "sample_id": "A-eval-0021",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VHY3E",
+        "generated": "V3Q3YW6L63F6U6U6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0022",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VK7BB",
+        "generated": "V3Q3QW2L73U7F6U2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0023",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VZUCB",
+        "generated": "VMMQZ4QW6L7M66W66",
+        "relay_exact": null,
+        "sample_id": "A-eval-0024",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VB54B",
+        "generated": "VSL8U7U6L7F6U7F7F",
+        "relay_exact": null,
+        "sample_id": "A-eval-0025",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VDK9Q",
+        "generated": "VGVV5Q7Q9Q7Q9Q9Q9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0026",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VY5ME",
+        "generated": "V3Q3QW7W73W7W7W7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0027",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VUL64",
+        "generated": "V3DXW6W2W2W2W7W7W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0028",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VW2JG",
+        "generated": "V3Q8S2S2S2W2W2W2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0029",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VNX7C",
+        "generated": "V3QW2N66Q6M7N753",
+        "relay_exact": null,
+        "sample_id": "A-eval-0030",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VC6LC",
+        "generated": "VSLQZW66WMQ6F662QW",
+        "relay_exact": null,
+        "sample_id": "A-eval-0031",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VJYL6",
+        "generated": "VMMRS4S1S2S2SMR7S2SM",
+        "relay_exact": null,
+        "sample_id": "A-eval-0032",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V2ZHW",
+        "generated": "V3Q7M7N2Q7U2N253",
+        "relay_exact": null,
+        "sample_id": "A-eval-0033",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VD6WT",
+        "generated": "V3Q3T7M3T2N2T7F3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0034",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VJPKP",
+        "generated": "VSL8SM4U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0035",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VZXUG",
+        "generated": "V37EQW7U6U6U64W24",
+        "relay_exact": null,
+        "sample_id": "A-eval-0036",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRUG5",
+        "generated": "V3QHWFU6L73QW7U6U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0037",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VCJFB",
+        "generated": "V3QHWWW7M3K7M7F64",
+        "relay_exact": null,
+        "sample_id": "A-eval-0038",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VV353",
+        "generated": "V3Q3335555555555",
+        "relay_exact": null,
+        "sample_id": "A-eval-0039",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRSDJ",
+        "generated": "VSLQZ2N3K3F666666",
+        "relay_exact": null,
+        "sample_id": "A-eval-0040",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VSWXU",
+        "generated": "VSLQ8K7P3K7P7T7F3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0041",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VTAHA",
+        "generated": "V3QHWYUW6L7U6U7F6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0042",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VDJVV",
+        "generated": "V3QHWUW6L73QZ2QFHQ",
+        "relay_exact": null,
+        "sample_id": "A-eval-0043",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VENAF",
+        "generated": "V3QHWYUW6L7M7F6L7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0044",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VSL83",
+        "generated": "V3Q3Q7P3Q7Q7P7Z3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0045",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VPN7J",
+        "generated": "V3Q7N7N6Q7F7T3E7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0046",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VTBUS",
+        "generated": "VSLQZ2N3Q3QW7P7N7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0047",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V6BL8",
+        "generated": "V3QHWY6U7L7M7F65W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0048",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V9YXW",
+        "generated": "V3QHWYUW6L7K7F66U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0049",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VN95B",
+        "generated": "V3Q3QW2Q37P2Q3FHQ",
+        "relay_exact": null,
+        "sample_id": "A-eval-0050",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VT5E3",
+        "generated": "VSLQZ2QW3T3T3T3Q3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0051",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "VWJ4T",
+        "generated": "VWJ4T6T6T8WAU6T8WB2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0052",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWMVN",
+        "generated": "V3QHWY6M36M7M766F",
+        "relay_exact": null,
+        "sample_id": "A-eval-0053",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VA5ED",
+        "generated": "V3QHQW6L7Q7N75QZ2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0054",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VHLDP",
+        "generated": "V3QHWYW6L7M7N2N46",
+        "relay_exact": null,
+        "sample_id": "A-eval-0055",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VQRXH",
+        "generated": "VSLQZW6L7M7K7F67F",
+        "relay_exact": null,
+        "sample_id": "A-eval-0056",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VM95T",
+        "generated": "V37SMUP1A7N7N6Q7F",
+        "relay_exact": null,
+        "sample_id": "A-eval-0057",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRCQ4",
+        "generated": "V3Q3QW2L37Q7W7F2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0058",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VYZ3M",
+        "generated": "VMMRS4L2QW3Q3FHQW73",
+        "relay_exact": null,
+        "sample_id": "A-eval-0059",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VR59Q",
+        "generated": "V3QHWYU6L66W7W75Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0060",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VNS8U",
+        "generated": "V3QHWY6UW6U66W7F6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0061",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VYBD6",
+        "generated": "V3QHWW6L7K7F6W77F",
+        "relay_exact": null,
+        "sample_id": "A-eval-0062",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V98AB",
+        "generated": "V3QW2N36SMU5T2FHQU",
+        "relay_exact": null,
+        "sample_id": "A-eval-0063",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V8UX2",
+        "generated": "V3QHWW4N2N2M2N25WA",
+        "relay_exact": null,
+        "sample_id": "A-eval-0064",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VW93R",
+        "generated": "V2QPEQW6L7Q6W7F66",
+        "relay_exact": null,
+        "sample_id": "A-eval-0065",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRDLJ",
+        "generated": "VMMQ7F2N2QW6T7C7W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0066",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VQ7TY",
+        "generated": "V3QHQW66Q7W73Q7FHQ",
+        "relay_exact": null,
+        "sample_id": "A-eval-0067",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VPLT3",
+        "generated": "V3QHWYUW6L7K7F6W6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0068",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWPQZ",
+        "generated": "V3Q3QW2QZ3Z4QZ4Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0069",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V7JHQ",
+        "generated": "V3QHWY6M3K7M7K7F6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0070",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VAPFB",
+        "generated": "V3QHWW4N46W7W746F",
+        "relay_exact": null,
+        "sample_id": "A-eval-0071",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V46SM",
+        "generated": "V3Q3QW2L73Q7F2N2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0072",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VYCMX",
+        "generated": "V3Q3QW4Q7Q7Q4Q4Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0073",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMH8S",
+        "generated": "V3QW2S2S2W2W2W2W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0074",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VCB2N",
+        "generated": "V38EQW6UW6U6U664Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0075",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VZMVQ",
+        "generated": "V3QHWY6T3K6W7W7F4",
+        "relay_exact": null,
+        "sample_id": "A-eval-0076",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V62FX",
+        "generated": "V3Q8S2S2S8S2W2W2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0077",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VVNCC",
+        "generated": "V3QHWYWP6N6M2N253",
+        "relay_exact": null,
+        "sample_id": "A-eval-0078",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VSQUG",
+        "generated": "VSLQZ4M3Q4F6N2QZ6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0079",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VAFV5",
+        "generated": "V3QHWYUW6L7M7W66W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0080",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VTYXX",
+        "generated": "VMMRSQF3L7Q7P3Q7F3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0081",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V5CCU",
+        "generated": "V37EQW7U3U6T7M353",
+        "relay_exact": null,
+        "sample_id": "A-eval-0082",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VB6ST",
+        "generated": "VSLQZ3M3F3F3W3Z37",
+        "relay_exact": null,
+        "sample_id": "A-eval-0083",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMMRS",
+        "generated": "V3QHWYW6L7N7M7F6N",
+        "relay_exact": null,
+        "sample_id": "A-eval-0084",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VT4KX",
+        "generated": "VMMRS4L2Q3Q4Q2QW3Z",
+        "relay_exact": null,
+        "sample_id": "A-eval-0085",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VGBTA",
+        "generated": "VSLQZ2N3K3QW3W7W7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0086",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VN946",
+        "generated": "V3QHWY6U2L6U6U664",
+        "relay_exact": null,
+        "sample_id": "A-eval-0087",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VCXUL",
+        "generated": "V2QHWYW6L6M2N4T3Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0088",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMQ7P",
+        "generated": "V3Q7PQ7Q7F7N75Q7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0089",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V6UD2",
+        "generated": "V3QW2L7L64UW7F64",
+        "relay_exact": null,
+        "sample_id": "A-eval-0090",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V2QPE",
+        "generated": "V3Q3QW2QZ3Z3QZ3Z",
+        "relay_exact": null,
+        "sample_id": "A-eval-0091",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMVCJ",
+        "generated": "V3QHWYF6L66W7UW66",
+        "relay_exact": null,
+        "sample_id": "A-eval-0092",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VGVV5",
+        "generated": "V3QHWY6M36M7N664Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0093",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VP5MR",
+        "generated": "VSLQZ2C4L7C7W7W7F",
+        "relay_exact": null,
+        "sample_id": "A-eval-0094",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VE4L7",
+        "generated": "V3Q3QW3D9D9D9D9Z",
+        "relay_exact": null,
+        "sample_id": "A-eval-0095",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VAKZU",
+        "generated": "V3DXW4D8D9D9D9D9D",
+        "relay_exact": null,
+        "sample_id": "A-eval-0096",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VG94T",
+        "generated": "V3Q3QW37Q7W73Q7F",
+        "relay_exact": null,
+        "sample_id": "A-eval-0097",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VB28N",
+        "generated": "V3Q3QW2Q7Q7P7T2Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0098",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VUL3A",
+        "generated": "V3QHWUW6L73QW7F6U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0099",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V3YQC",
+        "generated": "V3QHWU6T3M3E7U6U6",
+        "relay_exact": null,
+        "sample_id": "A-eval-0100",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VM95E",
+        "generated": "V3QHWF6U6U66W66F8",
+        "relay_exact": null,
+        "sample_id": "A-eval-0101",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VSVKD",
+        "generated": "V3Q3P7N2K7P7F7N7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0102",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V4QMF",
+        "generated": "V3QHWY6M3W7UW7N2Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0103",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWUUF",
+        "generated": "VMMQZ6M6W6W7W7F65",
+        "relay_exact": null,
+        "sample_id": "A-eval-0104",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VXHPH",
+        "generated": "V3QHWWF6L7Q7F6UW7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0105",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VS8TT",
+        "generated": "V3QHWY6U2U6U6U65W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0106",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VUPZ6",
+        "generated": "VMMRSQF4L7M6L7F65W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0107",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRK7F",
+        "generated": "V3QHWY6U6L76W7F6W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0108",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VEKMM",
+        "generated": "VSLQZUW7W7W7F4444",
+        "relay_exact": null,
+        "sample_id": "A-eval-0109",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VP4RJ",
+        "generated": "V3QHWY6M36Q2W6W64",
+        "relay_exact": null,
+        "sample_id": "A-eval-0110",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VQ6M7",
+        "generated": "V3Q3QW2W3Z3Z3Z3Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0111",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRVGE",
+        "generated": "V3QHWYW6T3T3T3T3A",
+        "relay_exact": null,
+        "sample_id": "A-eval-0112",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VHPBL",
+        "generated": "VSLQZUW6L73QF6U6U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0113",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "VPMRB",
+        "generated": "VPMRB2L\nV2QPEUH2UW2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0114",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWBQ4",
+        "generated": "V3QW2S2S8U2W2W2W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0115",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VBFGJ",
+        "generated": "VMMRB66QW6W6W7Z6W7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0116",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "V3DXW",
+        "generated": "V3DXW2T3DXW2W7W7N2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0117",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VFXPY",
+        "generated": "VSL8U7U76W7U7F6U7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0118",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VLW9W",
+        "generated": "V3Q3WW3W7W7W7W7W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0119",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VH66F",
+        "generated": "V3QHWW6UW6U6U6U55",
+        "relay_exact": null,
+        "sample_id": "A-eval-0120",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VJZXH",
+        "generated": "V38EQW7U6U6U6U65Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0121",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VX3VA",
+        "generated": "V2QPEYUW6L7Q6W7W7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0122",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VARQT",
+        "generated": "V3Q3QW2Q8SMYFU6T2",
+        "relay_exact": null,
+        "sample_id": "A-eval-0123",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V33EQ",
+        "generated": "V3QHWQ4N2Q2N4T233",
+        "relay_exact": null,
+        "sample_id": "A-eval-0124",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VPNLF",
+        "generated": "V3QHWYUW6L6W2WW4U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0125",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWW7D",
+        "generated": "V3QHWW7W7W7W7W75W",
+        "relay_exact": null,
+        "sample_id": "A-eval-0126",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VZW5U",
+        "generated": "V3QHWYF6U6U66W667",
+        "relay_exact": null,
+        "sample_id": "A-eval-0127",
+        "terminal_exact": null
+      }
+    ],
+    "split": "A_eval",
+    "terminal_exact": null
+  },
+  "experiment": "PCU-LAYER-PLACEMENT-001",
+  "foundation": {
+    "config_sha256": "873181f871fd23e79662df00cf3b69b294a205cb6e05ded8360f837da443c8e2",
+    "foundation_tensor_sha256": "0d5afdda01be7ee6400ab8e8df21f2d358328a567a4d492a227063a6567ec820",
+    "model_repo": "ibm-granite/granite-3.1-1b-a400m-base",
+    "model_revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "schema": "minicells.pcu-kill-001.model-manifest.v1",
+    "tokenizer_sha256": [
+      {
+        "file": "tokenizer.json",
+        "sha256": "d3b4df07a0ce3940b15c77e2ea17ab5627ca0c4bf982d2eb37966aea0a81c918"
+      },
+      {
+        "file": "tokenizer_config.json",
+        "sha256": "0764d3ae3830187f63cfe568c754d99900fed85fc9d071e6cfe2add9f555b6bb"
+      },
+      {
+        "file": "special_tokens_map.json",
+        "sha256": "2f2bba45146f073a7b8a097cb6133a6b4b66d5751e73f2a2aca81083288813e9"
+      }
+    ],
+    "weight_file_sha256": [
+      {
+        "file": "model-00001-of-00002.safetensors",
+        "sha256": "6933b6375074dc6cc4c0b98c9e126cd5fc899ef0cd80db0a932a232c6393c9cd"
+      },
+      {
+        "file": "model-00002-of-00002.safetensors",
+        "sha256": "271870f88e36f28ca87e86e11fa971b0b3e268fb9ac4495d42c66fdd1bc9d060"
+      }
+    ]
+  },
+  "layer": 15,
+  "passes": false,
+  "schema": "minicells.pcu-layer-placement-001.layer-result.v1",
+  "source": {
+    "generated_artifact_status_porcelain": "",
+    "source_commit": "7e73f59875804d39c2b39cf6316dbb3c713fb947",
+    "source_dirty": false,
+    "source_ref": "codex/pcu-composability-kill-001",
+    "source_tree": "c18c5ec039dab4102aef2d870e52e37d8a2e4014",
+    "status_porcelain": ""
+  },
+  "target_path": "model.layers.15.block_sparse_moe",
+  "training": {
+    "batch_size": 8,
+    "final_loss": 1.9398572444915771,
+    "learning_rate": 0.001,
+    "max_optimizer_steps": 128,
+    "max_training_tokens": 500000,
+    "optimizer": "AdamW",
+    "selected_cells": [
+      "L15:E29:C2",
+      "L15:E23:C0",
+      "L15:E29:C1",
+      "L15:E29:C0",
+      "L15:E10:C0",
+      "L15:E10:C2",
+      "L15:E16:C2",
+      "L15:E10:C3"
+    ],
+    "training_steps": 128,
+    "training_tokens": 3536
+  }
+}

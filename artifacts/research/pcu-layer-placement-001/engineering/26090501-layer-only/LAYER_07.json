@@ -1,0 +1,1255 @@
+{
+  "allocation": {
+    "calibration_execution": "weighted_microbatch_8",
+    "calibration_sample_rule": "first_64_samples",
+    "calibration_split": "A_train",
+    "effective_count": 37.67678483277771,
+    "method": "task-conditioned-gradient-l2-per-parameter",
+    "selected": [
+      "L7:E31:C0",
+      "L7:E31:C3",
+      "L7:E13:C3",
+      "L7:E31:C1",
+      "L7:E17:C0",
+      "L7:E17:C3",
+      "L7:E31:C2",
+      "L7:E17:C2"
+    ],
+    "selected_k": 8,
+    "topk_mass": {
+      "1": 0.06040171483307234,
+      "2": 0.11818634450170637,
+      "4": 0.2200941211664054,
+      "8": 0.3641223966317208
+    }
+  },
+  "capability_floor": 0.8,
+  "dataset_manifest_sha256": "ce408e9b78d1670929bb376cf1f0145d6b4f0b52f42ffc3055ef8bfef407495f",
+  "device": "cuda:0",
+  "direct_accuracy": 0.046875,
+  "evaluation": {
+    "both_exact": null,
+    "exact": 0.046875,
+    "relay_exact": null,
+    "rows": [
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V7AC7",
+        "generated": "VSL9U9U9YC5pQIBFCC7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0000",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VNSC2",
+        "generated": "V98.\nV98 - A:V98 - B",
+        "relay_exact": null,
+        "sample_id": "A-eval-0001",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VGDVP",
+        "generated": "VRSDJ9UJ U949 through V949 through",
+        "relay_exact": null,
+        "sample_id": "A-eval-0002",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V58XF",
+        "generated": "VJ9U 9V9SWl9999999",
+        "relay_exact": null,
+        "sample_id": "A-eval-0003",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V8AGY",
+        "generated": "V98 through V3QPEH V98 through V3Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0004",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VCFD9",
+        "generated": "VSL9U 9V99 through V32 through V3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0005",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VKRQW",
+        "generated": "VRSDJ9P7p7g/VQRUH7K7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0006",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VGRCU",
+        "generated": "V3QPEH9K/U5NLEKTAGL7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0007",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VENZV",
+        "generated": "V3QPEH7P7p9w==VXHCRF",
+        "relay_exact": null,
+        "sample_id": "A-eval-0008",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VNP8N",
+        "generated": "VNP8P /<V98ABQ=V98B",
+        "relay_exact": null,
+        "sample_id": "A-eval-0009",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VXWA3",
+        "generated": "V8JAQ==V9JHQKZ4UVCXU",
+        "relay_exact": null,
+        "sample_id": "A-eval-0010",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VT5BG",
+        "generated": "V98.V3QPEH9KQhv97+",
+        "relay_exact": null,
+        "sample_id": "A-eval-0011",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VXQ5P",
+        "generated": "VYZ4P7P7p99999999",
+        "relay_exact": null,
+        "sample_id": "A-eval-0012",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VX5BY",
+        "generated": "V98.\nV3QPEH7P7p9w",
+        "relay_exact": null,
+        "sample_id": "A-eval-0013",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VN3BL",
+        "generated": "V98 through VFXPY8P P98 through VFXPY",
+        "relay_exact": null,
+        "sample_id": "A-eval-0014",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VQDCR",
+        "generated": "V82CD9 through V3QPEH through V3QPE",
+        "relay_exact": null,
+        "sample_id": "A-eval-0015",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRXNB",
+        "generated": "VRXNR9U9U9Q 9N9VZ4",
+        "relay_exact": null,
+        "sample_id": "A-eval-0016",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VS7MA",
+        "generated": "VSL9U9W96+V97+V97",
+        "relay_exact": null,
+        "sample_id": "A-eval-0017",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V37BE",
+        "generated": "V3QPEH7P\nV3+V3R7p",
+        "relay_exact": null,
+        "sample_id": "A-eval-0018",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRYKF",
+        "generated": "VMMRSQ VJF9U9YC5+LVR",
+        "relay_exact": null,
+        "sample_id": "A-eval-0019",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMZ6K",
+        "generated": "VSL84B7KQPEH UQZHG9 through",
+        "relay_exact": null,
+        "sample_id": "A-eval-0020",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRTX4",
+        "generated": "V98.\nV3QPEH7P7p9Y",
+        "relay_exact": null,
+        "sample_id": "A-eval-0021",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VHY3E",
+        "generated": "V98 through UZSW7uvcg9w?V9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0022",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VK7BB",
+        "generated": "VRSDJ9PK7p7E7P7a97",
+        "relay_exact": null,
+        "sample_id": "A-eval-0023",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VZUCB",
+        "generated": "V98.\n- V3QPEH7P K3AA",
+        "relay_exact": null,
+        "sample_id": "A-eval-0024",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VB54B",
+        "generated": "VSL9U9W K+L+V3QAC7Y",
+        "relay_exact": null,
+        "sample_id": "A-eval-0025",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VDK9Q",
+        "generated": "V98.\n- V3QPEH9K Q9g",
+        "relay_exact": null,
+        "sample_id": "A-eval-0026",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VY5ME",
+        "generated": "V98ACQ5P7pVC79V59d",
+        "relay_exact": null,
+        "sample_id": "A-eval-0027",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VUL64",
+        "generated": "V3QPEH V98. through U34EVF7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0028",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VW2JG",
+        "generated": "V3QPEH7KQ4T 5P4 5",
+        "relay_exact": null,
+        "sample_id": "A-eval-0029",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VNX7C",
+        "generated": "NXNXNXNXNXNXNXNXNXNXNXNXNXNXNXNX",
+        "relay_exact": null,
+        "sample_id": "A-eval-0030",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VC6LC",
+        "generated": "VMMRSQG7P\nV3QCAFV4U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0031",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VJYL6",
+        "generated": "VUPZ6P9U5U5P8U5E7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0032",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V2ZHW",
+        "generated": "VSL9U9U9U99999999",
+        "relay_exact": null,
+        "sample_id": "A-eval-0033",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VD6WT",
+        "generated": "V58EQPDUF9UVCXU9UVCX",
+        "relay_exact": null,
+        "sample_id": "A-eval-0034",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VJPKP",
+        "generated": "VUPZ6P7p7+U9JCBH7+",
+        "relay_exact": null,
+        "sample_id": "A-eval-0035",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VZXUG",
+        "generated": "V3QPEH9K Q9JHQ G9uY3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0036",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRUG5",
+        "generated": "V8AG7P\nV3QHOH\nV3+V",
+        "relay_exact": null,
+        "sample_id": "A-eval-0037",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VCJFB",
+        "generated": "V8JGUCU5U6u9+UXp7w",
+        "relay_exact": null,
+        "sample_id": "A-eval-0038",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VV353",
+        "generated": "V3QPEP7P7p9w==to9H9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0039",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "VRSDJ",
+        "generated": "VRSDJ 9V56 9V56 9V",
+        "relay_exact": null,
+        "sample_id": "A-eval-0040",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VSWXU",
+        "generated": "VUPZ6P9H U94a/V94a",
+        "relay_exact": null,
+        "sample_id": "A-eval-0041",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "VTAHA",
+        "generated": "VTAHAJP7P7p9U9U9Q",
+        "relay_exact": null,
+        "sample_id": "A-eval-0042",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VDJVV",
+        "generated": "V98ABQ5P7p+UXbFGGV4",
+        "relay_exact": null,
+        "sample_id": "A-eval-0043",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VENAF",
+        "generated": "V3QPEH V98 through V99 through V97",
+        "relay_exact": null,
+        "sample_id": "A-eval-0044",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VSL83",
+        "generated": "VARQ5P7P7V9W99999",
+        "relay_exact": null,
+        "sample_id": "A-eval-0045",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VPN7J",
+        "generated": "V98.\n- The V3QPEH U3A8",
+        "relay_exact": null,
+        "sample_id": "A-eval-0046",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VTBUS",
+        "generated": "V3QPEH7P7p7kvc+tVA+",
+        "relay_exact": null,
+        "sample_id": "A-eval-0047",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V6BL8",
+        "generated": "V8UD9P P999 through V999 through V",
+        "relay_exact": null,
+        "sample_id": "A-eval-0048",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V9YXW",
+        "generated": "V3QPEH7P7p9w==VS90d",
+        "relay_exact": null,
+        "sample_id": "A-eval-0049",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VN95B",
+        "generated": "V98 through VFXPYU9Y9W9B99",
+        "relay_exact": null,
+        "sample_id": "A-eval-0050",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VT5E3",
+        "generated": "VRSDJ9P7p7A7A99999",
+        "relay_exact": null,
+        "sample_id": "A-eval-0051",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWJ4T",
+        "generated": "VRSDJ9W9U9V9V9V9V9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0052",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWMVN",
+        "generated": "VN94B7P7P7T+VN94B7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0053",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VA5ED",
+        "generated": "VRSDJ9U9U9YC97a9w==",
+        "relay_exact": null,
+        "sample_id": "A-eval-0054",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VHLDP",
+        "generated": "V98.V3QPEH7PDBd9w==",
+        "relay_exact": null,
+        "sample_id": "A-eval-0055",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VQRXH",
+        "generated": "V8AC7P7p9W969V4T4",
+        "relay_exact": null,
+        "sample_id": "A-eval-0056",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VM95T",
+        "generated": "V8UX7P PWVgU9U\n- UQDU",
+        "relay_exact": null,
+        "sample_id": "A-eval-0057",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRCQ4",
+        "generated": "V98.\nV3QPEH V98.\nV",
+        "relay_exact": null,
+        "sample_id": "A-eval-0058",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VYZ3M",
+        "generated": "V98ABK5U9UHMr9w9w9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0059",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VR59Q",
+        "generated": "V98.\n- The V3QPEP7P7p",
+        "relay_exact": null,
+        "sample_id": "A-eval-0060",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VNS8U",
+        "generated": "V98 through U34 through V34 through V34 through",
+        "relay_exact": null,
+        "sample_id": "A-eval-0061",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VYBD6",
+        "generated": "V98.V98U9W9Y99.V",
+        "relay_exact": null,
+        "sample_id": "A-eval-0062",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "V98AB",
+        "generated": "V98ABQ5P7p7A9Yb97",
+        "relay_exact": null,
+        "sample_id": "A-eval-0063",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V8UX2",
+        "generated": "V3QPEH9KQ V3+V9UVC",
+        "relay_exact": null,
+        "sample_id": "A-eval-0064",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VW93R",
+        "generated": "VWUUFV5PKQDAKQZ4T+T",
+        "relay_exact": null,
+        "sample_id": "A-eval-0065",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRDLJ",
+        "generated": "V3QPEH7Q VJcU9TUH7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0066",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "VQ7TY",
+        "generated": "VQ7TYC7KQIBF6T0R+Lh",
+        "relay_exact": null,
+        "sample_id": "A-eval-0067",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VPLT3",
+        "generated": "VQRFP9U9U9V9V99V99",
+        "relay_exact": null,
+        "sample_id": "A-eval-0068",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWPQZ",
+        "generated": "VRSDJ9PK7p7p7A7A7A",
+        "relay_exact": null,
+        "sample_id": "A-eval-0069",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V7JHQ",
+        "generated": "V3QPEH7P7p9w==UIR9U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0070",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VAPFB",
+        "generated": "VSL94B7E7+U949+V9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0071",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V46SM",
+        "generated": "V4QPEH7P7p9gQ+9zO",
+        "relay_exact": null,
+        "sample_id": "A-eval-0072",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VYCMX",
+        "generated": "VMMRSQD9WK7BW4T+T3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0073",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMH8S",
+        "generated": "V3QPEH9W K9U7Y9+T4",
+        "relay_exact": null,
+        "sample_id": "A-eval-0074",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VCB2N",
+        "generated": "V98 through VFXPY8P PF7P through VFXPU",
+        "relay_exact": null,
+        "sample_id": "A-eval-0075",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VZMVQ",
+        "generated": "V3QPEH7P Z34+4+4+4",
+        "relay_exact": null,
+        "sample_id": "A-eval-0076",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V62FX",
+        "generated": "V8JHQKZHQKQWDBBVRQWDB",
+        "relay_exact": null,
+        "sample_id": "A-eval-0077",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VVNCC",
+        "generated": "V8UX7P7pUQcUHMt4T+b",
+        "relay_exact": null,
+        "sample_id": "A-eval-0078",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VSQUG",
+        "generated": "VSL9U through VSL9U9Y9 through VSL9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0079",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VAFV5",
+        "generated": "VSL9U9W96+V97!\n- The",
+        "relay_exact": null,
+        "sample_id": "A-eval-0080",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VTYXX",
+        "generated": "VB54B7.\n- Create a new V58 using the",
+        "relay_exact": null,
+        "sample_id": "A-eval-0081",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V5CCU",
+        "generated": "V3QPEH9KQHUH U9g/V9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0082",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VB6ST",
+        "generated": "V8JHQKQ5UVCYHFLBGHOOZ",
+        "relay_exact": null,
+        "sample_id": "A-eval-0083",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMMRS",
+        "generated": "V3QPEH7P7p+UHgBTtT+",
+        "relay_exact": null,
+        "sample_id": "A-eval-0084",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VT4KX",
+        "generated": "V3QPEH V98 through V3+V97 through",
+        "relay_exact": null,
+        "sample_id": "A-eval-0085",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VGBTA",
+        "generated": "V8JHQKQGJH7I+UW4+U",
+        "relay_exact": null,
+        "sample_id": "A-eval-0086",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VN946",
+        "generated": "VRSDJ9PKP7p7A7A999",
+        "relay_exact": null,
+        "sample_id": "A-eval-0087",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VCXUL",
+        "generated": "V3QPEH7P7p9w==UXfXU",
+        "relay_exact": null,
+        "sample_id": "A-eval-0088",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "VMQ7P",
+        "generated": "VMQ7P through VQR7U through VQ7V5",
+        "relay_exact": null,
+        "sample_id": "A-eval-0089",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V6UD2",
+        "generated": "VYZ7P7pU9U+b+0+0+",
+        "relay_exact": null,
+        "sample_id": "A-eval-0090",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V2QPE",
+        "generated": "V3QPEH7P7p9w==U2TLL",
+        "relay_exact": null,
+        "sample_id": "A-eval-0091",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VMVCJ",
+        "generated": "VMQ7P through V98 through VFXPCQ7P9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0092",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VGVV5",
+        "generated": "V8UD2P through VFXPYU9P7p9w",
+        "relay_exact": null,
+        "sample_id": "A-eval-0093",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VP5MR",
+        "generated": "VRSDJ9P7p/U5BMQcV4T",
+        "relay_exact": null,
+        "sample_id": "A-eval-0094",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VE4L7",
+        "generated": "V98.\nV3QPEH7P K+L,",
+        "relay_exact": null,
+        "sample_id": "A-eval-0095",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VAKZU",
+        "generated": "V8AG7P K9t7A7+b3+b",
+        "relay_exact": null,
+        "sample_id": "A-eval-0096",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VG94T",
+        "generated": "V98 through V3QPEH7P7p9W9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0097",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VB28N",
+        "generated": "VSL9U9U9V9YC59666",
+        "relay_exact": null,
+        "sample_id": "A-eval-0098",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VUL3A",
+        "generated": "VRSDJ9PK7P/VJcUHGKQHM",
+        "relay_exact": null,
+        "sample_id": "A-eval-0099",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V3YQC",
+        "generated": "V3QPEH7P7p9w===>=>=>=>",
+        "relay_exact": null,
+        "sample_id": "A-eval-0100",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VM95E",
+        "generated": "V8AG7P K9t7A7+b3+b",
+        "relay_exact": null,
+        "sample_id": "A-eval-0101",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VSVKD",
+        "generated": "VRSDJ.V3QPEH7P7p9w==",
+        "relay_exact": null,
+        "sample_id": "A-eval-0102",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V4QMF",
+        "generated": "V98.V3QPEH7P V98.V",
+        "relay_exact": null,
+        "sample_id": "A-eval-0103",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWUUF",
+        "generated": "V98.\n- The V3QPEH7P7p",
+        "relay_exact": null,
+        "sample_id": "A-eval-0104",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VXHPH",
+        "generated": "V3QPEH9UVCYH7u8A9w",
+        "relay_exact": null,
+        "sample_id": "A-eval-0105",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VS8TT",
+        "generated": "VB28S7 through V3QPEH V98 through V",
+        "relay_exact": null,
+        "sample_id": "A-eval-0106",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VUPZ6",
+        "generated": "V3QPEH7P7p9w===>=>=>=>",
+        "relay_exact": null,
+        "sample_id": "A-eval-0107",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRK7F",
+        "generated": "V98ABK7P7p9w===>=>=>=>",
+        "relay_exact": null,
+        "sample_id": "A-eval-0108",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VEKMM",
+        "generated": "VSL9QK7P ...V99 throughQ9J4",
+        "relay_exact": null,
+        "sample_id": "A-eval-0109",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VP4RJ",
+        "generated": "V3QPEH9KQ5T J99 through V3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0110",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VQ6M7",
+        "generated": "V3QPEH7P7p9w===>=>=>=>",
+        "relay_exact": null,
+        "sample_id": "A-eval-0111",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VRVGE",
+        "generated": "V3QPEH9KQHHFV4T+T3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0112",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VHPBL",
+        "generated": "VONQ5P7P7p9w9w9w9",
+        "relay_exact": null,
+        "sample_id": "A-eval-0113",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VPMRB",
+        "generated": "VMMRSQ?\nV3QPEH9YLFc7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0114",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWBQ4",
+        "generated": "V88 through VFXPY9U9W5KQ===>",
+        "relay_exact": null,
+        "sample_id": "A-eval-0115",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VBFGJ",
+        "generated": "VMMRSQD9U9U5Q 9999",
+        "relay_exact": null,
+        "sample_id": "A-eval-0116",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V3DXW",
+        "generated": "V3QPEH V38+V3+V3+V",
+        "relay_exact": null,
+        "sample_id": "A-eval-0117",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": true,
+        "expected": "VFXPY",
+        "generated": "VFXPYPU9U K9U KDFXU9Y",
+        "relay_exact": null,
+        "sample_id": "A-eval-0118",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VLW9W",
+        "generated": "VRSDJ9U9U9 throughQZ6BMQKQ",
+        "relay_exact": null,
+        "sample_id": "A-eval-0119",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VH66F",
+        "generated": "V8J through V3QPEH through V3Q7P through",
+        "relay_exact": null,
+        "sample_id": "A-eval-0120",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VJZXH",
+        "generated": "V3QPEH7P7p9w==VJcUlh",
+        "relay_exact": null,
+        "sample_id": "A-eval-0121",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VX3VA",
+        "generated": "V98 through VFXPY8P P99 through VFXPE",
+        "relay_exact": null,
+        "sample_id": "A-eval-0122",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VARQT",
+        "generated": "VRSDJ9P7p/VRVGEcUHMt7",
+        "relay_exact": null,
+        "sample_id": "A-eval-0123",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "V33EQ",
+        "generated": "V98W9+V97N+V97N+",
+        "relay_exact": null,
+        "sample_id": "A-eval-0124",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VPNLF",
+        "generated": "V98ABQ5P7p7E7+t8A",
+        "relay_exact": null,
+        "sample_id": "A-eval-0125",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VWW7D",
+        "generated": "V98.V3QPEH9Y97+V3",
+        "relay_exact": null,
+        "sample_id": "A-eval-0126",
+        "terminal_exact": null
+      },
+      {
+        "both_exact": null,
+        "exact": false,
+        "expected": "VZW5U",
+        "generated": "V8UX7P K+L+V+V+V+V",
+        "relay_exact": null,
+        "sample_id": "A-eval-0127",
+        "terminal_exact": null
+      }
+    ],
+    "split": "A_eval",
+    "terminal_exact": null
+  },
+  "experiment": "PCU-LAYER-PLACEMENT-001",
+  "foundation": {
+    "config_sha256": "873181f871fd23e79662df00cf3b69b294a205cb6e05ded8360f837da443c8e2",
+    "foundation_tensor_sha256": "0d5afdda01be7ee6400ab8e8df21f2d358328a567a4d492a227063a6567ec820",
+    "model_repo": "ibm-granite/granite-3.1-1b-a400m-base",
+    "model_revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "schema": "minicells.pcu-kill-001.model-manifest.v1",
+    "tokenizer_sha256": [
+      {
+        "file": "tokenizer.json",
+        "sha256": "d3b4df07a0ce3940b15c77e2ea17ab5627ca0c4bf982d2eb37966aea0a81c918"
+      },
+      {
+        "file": "tokenizer_config.json",
+        "sha256": "0764d3ae3830187f63cfe568c754d99900fed85fc9d071e6cfe2add9f555b6bb"
+      },
+      {
+        "file": "special_tokens_map.json",
+        "sha256": "2f2bba45146f073a7b8a097cb6133a6b4b66d5751e73f2a2aca81083288813e9"
+      }
+    ],
+    "weight_file_sha256": [
+      {
+        "file": "model-00001-of-00002.safetensors",
+        "sha256": "6933b6375074dc6cc4c0b98c9e126cd5fc899ef0cd80db0a932a232c6393c9cd"
+      },
+      {
+        "file": "model-00002-of-00002.safetensors",
+        "sha256": "271870f88e36f28ca87e86e11fa971b0b3e268fb9ac4495d42c66fdd1bc9d060"
+      }
+    ]
+  },
+  "layer": 7,
+  "passes": false,
+  "schema": "minicells.pcu-layer-placement-001.layer-result.v1",
+  "source": {
+    "generated_artifact_status_porcelain": "",
+    "source_commit": "7e73f59875804d39c2b39cf6316dbb3c713fb947",
+    "source_dirty": false,
+    "source_ref": "codex/pcu-composability-kill-001",
+    "source_tree": "c18c5ec039dab4102aef2d870e52e37d8a2e4014",
+    "status_porcelain": ""
+  },
+  "target_path": "model.layers.7.block_sparse_moe",
+  "training": {
+    "batch_size": 8,
+    "final_loss": 1.8747984170913696,
+    "learning_rate": 0.001,
+    "max_optimizer_steps": 128,
+    "max_training_tokens": 500000,
+    "optimizer": "AdamW",
+    "selected_cells": [
+      "L7:E31:C0",
+      "L7:E31:C3",
+      "L7:E13:C3",
+      "L7:E31:C1",
+      "L7:E17:C0",
+      "L7:E17:C3",
+      "L7:E31:C2",
+      "L7:E17:C2"
+    ],
+    "training_steps": 128,
+    "training_tokens": 3536
+  }
+}

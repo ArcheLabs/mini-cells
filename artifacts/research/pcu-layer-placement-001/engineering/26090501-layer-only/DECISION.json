@@ -1,0 +1,51 @@
+{
+  "best": {
+    "condition": "early",
+    "direct_accuracy": 0.046875,
+    "layer": 7
+  },
+  "capability_floor": 0.8,
+  "comparison": {
+    "early": {
+      "direct_accuracy": 0.046875,
+      "layer": 7
+    },
+    "late_baseline": {
+      "direct_accuracy": 0.015625,
+      "layer": 23,
+      "selected_cells": [
+        "L23:E16:C1",
+        "L23:E27:C1",
+        "L23:E16:C0",
+        "L23:E30:C2",
+        "L23:E30:C0",
+        "L23:E27:C3",
+        "L23:E16:C3",
+        "L23:E27:C0"
+      ],
+      "training_steps": 128,
+      "training_tokens": 3536
+    },
+    "mid": {
+      "direct_accuracy": 0.03125,
+      "layer": 15
+    }
+  },
+  "experiment": "PCU-LAYER-PLACEMENT-001",
+  "formal_execution_not_started": true,
+  "interpretation": "changing only Cell layer placement did not reach the inherited direct-capability floor",
+  "phase": "engineering_diagnostic",
+  "rescued": false,
+  "schema": "minicells.pcu-layer-placement-001.decision.v1",
+  "scientific_evidence": false,
+  "source": {
+    "generated_artifact_status_porcelain": "",
+    "source_commit": "7e73f59875804d39c2b39cf6316dbb3c713fb947",
+    "source_dirty": false,
+    "source_ref": "codex/pcu-composability-kill-001",
+    "source_tree": "c18c5ec039dab4102aef2d870e52e37d8a2e4014",
+    "status_porcelain": ""
+  },
+  "status": "LAYER_PLACEMENT_DID_NOT_RESCUE",
+  "valid_run": true
+}
