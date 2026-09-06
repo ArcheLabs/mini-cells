@@ -1,25 +1,18 @@
-"""Causal reattachment diagnostic for an already-learned PCU mutation.
+"""Causal reattachment diagnostic for the ranking-only PCU mutation.
 
-PCU-HYBRID-REATTACHMENT-001 asks a narrower question than autonomous
-readout/takeover studies:
+PCU-HYBRID-REATTACHMENT-001 asks whether the mature frozen Granite model can
+*consume* an already-learned PCU mutation.  It deliberately does not ask the
+Cell to become an autonomous language model.
 
-    Can the frozen mature Granite model causally consume a PCU Cell mutation
-    when that mutation is present in the exact native MoE path where it was
-    trained?
+The primary source mutation is the exact published PCU-OBJECTIVE-ALIGNMENT-001
+L7/K64 ranking-only state: A_eval association ranking 0.8203125 while greedy
+generation is 0.0.  The historical artifact did not publish restorable delta
+weights, so the exact pinned training protocol is deterministically replayed.
+No CE/readout regularizer is added.
 
-The experiment replays the published PCU-HYBRID-OBJECTIVE-001 L7/K64 state and
-then evaluates the *same memory-resident model* in four counterfactual states:
-
-    BASE      original Granite before cellularization
-    PARENT    function-preserving cellularized Granite with zero Cell deltas
-    ON        trained PCU deltas enabled in the native Granite MoE path
-    OFF       the same trained model with every Cell delta temporarily zeroed
-    RESTORED  the same deltas restored byte-for-byte after OFF
-
-No new router, bridge, readout head, allocation, or foundation parameter is
-introduced.  Cell-alone generation is not a success criterion.
-
-Engineering diagnostic only. Formal PCU seeds remain untouched.
+The same memory-resident model is then measured with the mutation ON, with only
+its delta tensors zeroed (OFF), and after byte-exact restoration (RESTORED).
+Engineering evidence only; formal PCU seeds remain untouched.
 """
 
 from __future__ import annotations
@@ -29,7 +22,7 @@ from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Iterable, Iterator, Mapping, Sequence
+from typing import Any, Iterator
 
 import torch
 from torch import Tensor, nn
@@ -38,13 +31,7 @@ from torch.nn import functional as F
 from .cellular import CellPartition, extract_expert_projections, patch_moe_block
 from .evaluation import evaluate_samples
 from .governance import git_provenance, write_json
-from .hybrid_objective import (
-    CE_WEIGHT,
-    OBJECTIVE_BASELINE_ROOT,
-    TARGET_K,
-    _load_baselines,
-    _train_hybrid_branch,
-)
+from .hybrid_objective import OBJECTIVE_BASELINE_ROOT, _load_baselines
 from .layer_placement import (
     BATCH_SIZE,
     LEARNING_RATE,
@@ -57,26 +44,26 @@ from .locality_width import ENGINEERING_SEED, TARGET_LAYER
 from .model import load_granite, target_module
 from .objective_alignment import (
     ASSOCIATION_FLOOR,
+    CANDIDATE_POOL_SIZE,
+    RANKING_TEMPERATURE,
+    _train_ranking_branch,
     evaluate_candidate_ranking,
 )
 from .synthetic import audit_dataset, generate_world
 from .task import IGNORE_INDEX, TaskSequences, build_task_sequences, validate_answer_only_labels
-from .training import BranchTrainingConfig, ForkedCellularExperts
+from .training import BranchTrainingConfig
 
 
 EXPERIMENT_ID = "PCU-HYBRID-REATTACHMENT-001"
-PUBLISHED_HYBRID_ROOT = Path(
-    "artifacts/research/pcu-hybrid-objective-001/engineering/26090501-l7-k64-rank-plus-ce025"
-)
+TARGET_K = 64
+PUBLISHED_SOURCE_ROOT = OBJECTIVE_BASELINE_ROOT
 DEFAULT_OUTPUT = Path(
-    "artifacts/research/pcu-hybrid-reattachment-001/engineering/26090501-l7-k64-causal-reattach"
+    "artifacts/research/pcu-hybrid-reattachment-001/engineering/26090501-l7-k64-ranking-causal-reattach"
 )
-EXPECTED_PUBLISHED_RANKING_ACCURACY = 0.8359375
-EXPECTED_PUBLISHED_DIRECT_ACCURACY = 0.03125
+EXPECTED_PUBLISHED_RANKING_ACCURACY = 0.8203125
+EXPECTED_PUBLISHED_DIRECT_ACCURACY = 0.0
 
-# These gates are frozen before a real reattachment run.  They deliberately ask
-# for a large causal effect because the published mutation already has >0.8
-# association ranking; this is not a search for a marginal p-hacked gain.
+# Frozen before the first real GPU run.
 EQUIVALENCE_MAX_ABS_LOGIT_DIFF = 1e-5
 RESTORATION_MAX_ABS_LOGIT_DIFF = 1e-5
 MIN_CAUSAL_RANKING_GAIN = 0.50
@@ -134,8 +121,7 @@ def _delta_parameters(runtime: nn.Module) -> list[tuple[str, nn.Parameter]]:
 
 
 def _tensor_bytes(value: Tensor) -> bytes:
-    raw = value.detach().contiguous().view(torch.uint8).cpu()
-    return raw.numpy().tobytes()
+    return value.detach().contiguous().view(torch.uint8).cpu().numpy().tobytes()
 
 
 def delta_sha256(runtime: nn.Module) -> str:
@@ -149,7 +135,6 @@ def delta_sha256(runtime: nn.Module) -> str:
 
 
 def frozen_parent_sha256(runtime: nn.Module) -> str:
-    """Hash fork parent buffers, excluding mutable deltas."""
     digest = hashlib.sha256()
     found = False
     for name, value in sorted(runtime.named_buffers(), key=lambda item: item[0]):
@@ -167,12 +152,7 @@ def frozen_parent_sha256(runtime: nn.Module) -> str:
 
 @contextmanager
 def temporarily_zero_cell_deltas(runtime: nn.Module) -> Iterator[dict[str, str]]:
-    """Disable the learned mutation exactly, then restore it byte-for-byte.
-
-    This is the causal intervention.  Router decisions, Granite weights, Cell
-    allocation and all other model state stay fixed.  The context yields the
-    trained-delta digest and verifies restoration on exit.
-    """
+    """Make the exact causal intervention and restore deltas byte-for-byte."""
     parameters = _delta_parameters(runtime)
     snapshots = [(name, parameter, parameter.detach().clone()) for name, parameter in parameters]
     before = delta_sha256(runtime)
@@ -186,8 +166,7 @@ def temporarily_zero_cell_deltas(runtime: nn.Module) -> Iterator[dict[str, str]]
         with torch.no_grad():
             for _, parameter, snapshot in snapshots:
                 parameter.copy_(snapshot)
-        after = delta_sha256(runtime)
-        if after != before:
+        if delta_sha256(runtime) != before:
             raise RuntimeError("CELL_DELTA_RESTORATION_MISMATCH")
 
 
@@ -236,7 +215,7 @@ def evaluate_answer_metrics(
     device: str,
     batch_size: int = EVAL_BATCH_SIZE,
 ) -> AnswerMetrics:
-    """Measure final-model answer-token readout without free-generation noise."""
+    """Teacher-forced final-Granite readout on answer positions only."""
     validate_answer_only_labels(sequences)
     was_training = model.training
     model.eval()
@@ -268,9 +247,7 @@ def evaluate_answer_metrics(
                 target_logits = active_logits.gather(1, targets.unsqueeze(1)).squeeze(1)
                 top2_values, top2_indices = active_logits.topk(k=2, dim=-1)
                 competitors = torch.where(
-                    top2_indices[:, 0].eq(targets),
-                    top2_values[:, 1],
-                    top2_values[:, 0],
+                    top2_indices[:, 0].eq(targets), top2_values[:, 1], top2_values[:, 0]
                 )
                 losses = F.cross_entropy(active_logits, targets, reduction="none")
                 total_tokens += int(targets.numel())
@@ -291,25 +268,25 @@ def evaluate_answer_metrics(
     )
 
 
-def _load_published_hybrid(root: Path) -> dict[str, Any]:
+def _load_published_source(root: Path) -> dict[str, Any]:
     decision_path = Path(root) / "DECISION.json"
     result_path = Path(root) / "RESULT.json"
     if not decision_path.is_file() or not result_path.is_file():
-        raise RuntimeError(f"missing published hybrid-objective artifact under {root}")
+        raise RuntimeError(f"missing objective-alignment source under {root}")
     decision = json.loads(decision_path.read_text(encoding="utf-8"))
     result = json.loads(result_path.read_text(encoding="utf-8"))
-    if decision.get("experiment") != "PCU-HYBRID-OBJECTIVE-001":
+    if decision.get("experiment") != "PCU-OBJECTIVE-ALIGNMENT-001":
         raise RuntimeError("reattachment source has wrong experiment identity")
-    if decision.get("status") != "HYBRID_OBJECTIVE_PRESERVES_ASSOCIATION_GENERATION_UNRESOLVED":
-        raise RuntimeError("reattachment requires the published association-preserved hybrid result")
+    if decision.get("status") != "ASSOCIATION_LEARNED_GENERATION_UNRESOLVED":
+        raise RuntimeError("reattachment requires the association-learned/generation-unresolved source")
     if decision.get("valid_run") is not True or decision.get("formal_execution_not_started") is not True:
-        raise RuntimeError("published hybrid source is invalid or crossed the formal boundary")
+        raise RuntimeError("objective-alignment source is invalid or crossed the formal boundary")
     if int(decision.get("selected_k", -1)) != TARGET_K:
-        raise RuntimeError("published hybrid source K changed")
+        raise RuntimeError("objective-alignment source K changed")
     if abs(float(decision.get("ranking_eval_accuracy", -1)) - EXPECTED_PUBLISHED_RANKING_ACCURACY) > 1e-12:
-        raise RuntimeError("published hybrid ranking result changed")
+        raise RuntimeError("published objective-alignment ranking result changed")
     if abs(float(decision.get("direct_accuracy", -1)) - EXPECTED_PUBLISHED_DIRECT_ACCURACY) > 1e-12:
-        raise RuntimeError("published hybrid direct result changed")
+        raise RuntimeError("published objective-alignment direct result changed")
     return {"decision": decision, "result": result, "root": str(root)}
 
 
@@ -324,7 +301,7 @@ def classify_reattachment(
     margin_gain: float,
     control_nll_increase: float,
 ) -> str:
-    """Predeclared engineering classifier; never emits a formal scientific PASS."""
+    """Engineering classifier; it intentionally cannot emit a formal PASS."""
     if not replay_matches:
         return "REPLAY_DID_NOT_MATCH_PUBLISHED_MUTATION"
     if equivalence_max_abs > EQUIVALENCE_MAX_ABS_LOGIT_DIFF:
@@ -349,15 +326,13 @@ def classify_reattachment(
 def run_hybrid_reattachment_diagnostic(
     *,
     output: Path = DEFAULT_OUTPUT,
-    objective_baseline_root: Path = OBJECTIVE_BASELINE_ROOT,
-    published_hybrid_root: Path = PUBLISHED_HYBRID_ROOT,
+    source_root: Path = PUBLISHED_SOURCE_ROOT,
     device: str = "cuda:0",
     seed: int = ENGINEERING_SEED,
     run_direct_generation: bool = True,
 ) -> dict[str, Any]:
-    """Replay the published mutation and isolate its causal final-model effect."""
     if int(seed) != ENGINEERING_SEED:
-        raise ValueError("PCU-HYBRID-REATTACHMENT-001 engineering runner may not consume formal seeds")
+        raise ValueError("engineering runner may not consume formal PCU seeds")
     parsed = torch.device(str(device))
     if parsed.type != "cuda" or parsed.index is None:
         raise ValueError("reattachment diagnostic requires an explicit CUDA device")
@@ -367,27 +342,29 @@ def run_hybrid_reattachment_diagnostic(
 
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
-    baseline = _load_baselines(Path(objective_baseline_root))
-    published = _load_published_hybrid(Path(published_hybrid_root))
+    baseline = _load_baselines(Path(source_root))
+    published = _load_published_source(Path(source_root))
     source = git_provenance(_repo_root())
     if source.get("source_dirty") is not False:
         raise RuntimeError("reattachment diagnostic requires a clean source tree")
 
     design = {
-        "schema": "minicells.pcu-hybrid-reattachment-001.design.v1",
+        "schema": "minicells.pcu-hybrid-reattachment-001.design.v2",
         "experiment": EXPERIMENT_ID,
         "phase": "engineering_diagnostic",
         "seed": ENGINEERING_SEED,
         "causal_question": "can_frozen_Granite_consume_an_already_learned_PCU_mutation",
         "causal_variable": "exact_same_trained_Cell_deltas_ON_vs_temporarily_zeroed_OFF",
         "source_mutation": {
-            "experiment": "PCU-HYBRID-OBJECTIVE-001",
-            "artifact": str(published_hybrid_root),
+            "experiment": "PCU-OBJECTIVE-ALIGNMENT-001",
+            "artifact": str(source_root),
             "reconstruction": "deterministic_exact_protocol_replay_weights_were_not_published",
             "target_layer": TARGET_LAYER,
             "selected_k": TARGET_K,
             "selected_cells": list(baseline.selected_cells),
-            "objective": f"ranking_plus_{CE_WEIGHT:g}_answer_token_CE",
+            "objective": "16-way-candidate-ranking-only",
+            "published_ranking_eval_accuracy": EXPECTED_PUBLISHED_RANKING_ACCURACY,
+            "published_greedy_direct_accuracy": EXPECTED_PUBLISHED_DIRECT_ACCURACY,
         },
         "fixed": {
             "foundation": dict(baseline.foundation),
@@ -397,12 +374,15 @@ def run_hybrid_reattachment_diagnostic(
             "new_bridge": False,
             "new_readout": False,
             "new_allocation": False,
+            "ce_readout_regularizer": False,
             "foundation_trainable": False,
             "optimizer": "AdamW",
             "learning_rate": LEARNING_RATE,
             "max_optimizer_steps": MAX_OPTIMIZER_STEPS,
             "max_training_tokens": MAX_TRAINING_TOKENS,
             "batch_size": BATCH_SIZE,
+            "candidate_pool_size": CANDIDATE_POOL_SIZE,
+            "ranking_temperature": RANKING_TEMPERATURE,
         },
         "states": ["BASE", "PARENT_ZERO_DELTA", "CELL_ON", "CELL_OFF", "CELL_RESTORED"],
         "primary_gates": {
@@ -419,13 +399,13 @@ def run_hybrid_reattachment_diagnostic(
     }
     write_json(output / "DESIGN.json", design)
     write_json(output / "RUN_IDENTITY.json", {
-        "schema": "minicells.pcu-hybrid-reattachment-001.run-identity.v1",
+        "schema": "minicells.pcu-hybrid-reattachment-001.run-identity.v2",
         "experiment": EXPERIMENT_ID,
         "phase": "engineering_diagnostic",
         "seed": ENGINEERING_SEED,
         "run_id": output.name,
         "source": source,
-        "source_mutation_artifact": str(published_hybrid_root),
+        "source_mutation_artifact": str(source_root),
         "formal_execution_not_started": True,
         "scientific_evidence": False,
     })
@@ -439,7 +419,6 @@ def run_hybrid_reattachment_diagnostic(
         _validate_foundation_manifest(manifest, baseline.foundation)
         model.requires_grad_(False)
         model.eval()
-
         world = generate_world(ENGINEERING_SEED, count=128, tokenizer=tokenizer)
         audit = audit_dataset(world)
         if not audit.passed:
@@ -453,13 +432,13 @@ def run_hybrid_reattachment_diagnostic(
         b_sequences = build_task_sequences(tokenizer, b_eval, "B_eval", max_length=128)
         candidate_universe = tuple(item.v for item in world.triples)
 
-        # BASE: untouched pretrained Granite.
+        # BASE: untouched mature Granite.
         base_a_logits = _capture_logits(model, a_sequences, device=str(device))
         base_b_logits = _capture_logits(model, b_sequences, device=str(device))
         base_a_answer = evaluate_answer_metrics(model, a_sequences, device=str(device))
         base_b_answer = evaluate_answer_metrics(model, b_sequences, device=str(device))
 
-        # PARENT: function-preserving cellularization, still zero mutation.
+        # PARENT_ZERO_DELTA: G0 cellularization, no learned mutation.
         block = target_module(model, baseline.target_path)
         projection = extract_expert_projections(block.experts, 0)
         cellular_experts = patch_moe_block(block, CellPartition(projection.intermediate_size, 4))
@@ -470,6 +449,7 @@ def run_hybrid_reattachment_diagnostic(
         base_parent_a = compare_logits(base_a_logits, parent_a_logits)
         base_parent_b = compare_logits(base_b_logits, parent_b_logits)
 
+        # Reconstruct the exact ranking-only mutation.  No CE/readout term.
         config = BranchTrainingConfig(
             optimizer="AdamW",
             learning_rate=LEARNING_RATE,
@@ -478,13 +458,14 @@ def run_hybrid_reattachment_diagnostic(
             batch_size=BATCH_SIZE,
             seed=ENGINEERING_SEED,
         )
-        print("[pcu-reattach] replaying published L7/K64 mutation", flush=True)
-        runtime, training = _train_hybrid_branch(
+        print("[pcu-reattach] replaying published ranking-only L7/K64 mutation", flush=True)
+        runtime, training = _train_ranking_branch(
             model,
             block,
             cellular_experts,
             tokenizer,
             train_samples,
+            candidate_universe,
             baseline.selected_cells,
             device=str(device),
             config=config,
@@ -495,7 +476,7 @@ def run_hybrid_reattachment_diagnostic(
         parent_hash_before = frozen_parent_sha256(runtime)
         trained_delta_hash = delta_sha256(runtime)
 
-        # CELL ON: evaluate final Granite output with learned mutation active.
+        # CELL_ON.
         model.eval()
         on_a_logits = _capture_logits(model, a_sequences, device=str(device))
         on_b_logits = _capture_logits(model, b_sequences, device=str(device))
@@ -511,7 +492,7 @@ def run_hybrid_reattachment_diagnostic(
                 max_new_tokens=16, batch_size=16,
             )
 
-        # CELL OFF: exact intervention on mutable delta only.
+        # CELL_OFF: zero only mutable deltas, leaving router/base/tail identical.
         with temporarily_zero_cell_deltas(runtime) as intervention:
             off_a_logits = _capture_logits(model, a_sequences, device=str(device))
             off_b_logits = _capture_logits(model, b_sequences, device=str(device))
@@ -527,7 +508,7 @@ def run_hybrid_reattachment_diagnostic(
                     max_new_tokens=16, batch_size=16,
                 )
 
-        # RESTORED: prove the intervention was reversible, not a second model.
+        # CELL_RESTORED.
         restored_delta_hash = delta_sha256(runtime)
         restored_a_logits = _capture_logits(model, a_sequences, device=str(device))
         restored_a_answer = evaluate_answer_metrics(model, a_sequences, device=str(device))
@@ -568,9 +549,8 @@ def run_hybrid_reattachment_diagnostic(
             margin_gain=margin_gain,
             control_nll_increase=control_nll_increase,
         )
-
         result = {
-            "schema": "minicells.pcu-hybrid-reattachment-001.result.v1",
+            "schema": "minicells.pcu-hybrid-reattachment-001.result.v2",
             "experiment": EXPERIMENT_ID,
             "phase": "engineering_diagnostic",
             "status": status,
@@ -580,6 +560,11 @@ def run_hybrid_reattachment_diagnostic(
             "source": source,
             "foundation": dict(manifest),
             "dataset_manifest_sha256": world.manifest_sha256(),
+            "source_mutation": {
+                "experiment": "PCU-OBJECTIVE-ALIGNMENT-001",
+                "artifact": published["root"],
+                "objective": "ranking_only",
+            },
             "selected_k": TARGET_K,
             "selected_cells": list(baseline.selected_cells),
             "training": training,
@@ -616,10 +601,7 @@ def run_hybrid_reattachment_diagnostic(
                     if on_direct is not None and off_direct is not None else None
                 ),
             },
-            "ranking": {
-                "on": on_ranking.to_dict(),
-                "off": off_ranking.to_dict(),
-            },
+            "ranking": {"on": on_ranking.to_dict(), "off": off_ranking.to_dict()},
             "direct_generation": {
                 "enabled": bool(run_direct_generation),
                 "on": on_direct.to_dict() if on_direct is not None else None,
@@ -627,7 +609,6 @@ def run_hybrid_reattachment_diagnostic(
                 "primary_success_metric": False,
             },
             "published_replay": {
-                "artifact": published["root"],
                 "expected_ranking_accuracy": EXPECTED_PUBLISHED_RANKING_ACCURACY,
                 "observed_ranking_accuracy": float(on_ranking.accuracy),
                 "ranking_matches": replay_ranking_matches,
@@ -638,7 +619,7 @@ def run_hybrid_reattachment_diagnostic(
             },
         }
         decision = {
-            "schema": "minicells.pcu-hybrid-reattachment-001.decision.v1",
+            "schema": "minicells.pcu-hybrid-reattachment-001.decision.v2",
             "experiment": EXPERIMENT_ID,
             "phase": "engineering_diagnostic",
             "status": status,
@@ -646,7 +627,7 @@ def run_hybrid_reattachment_diagnostic(
             "scientific_evidence": False,
             "formal_execution_not_started": True,
             "formal_decision": "RESERVED_UNRUN",
-            "causal_question": design["causal_question"],
+            "source_mutation": "PCU-OBJECTIVE-ALIGNMENT-001/ranking-only/L7/K64",
             "zero_state_equivalence_passes": max(base_parent_a.max_abs, base_parent_b.max_abs) <= EQUIVALENCE_MAX_ABS_LOGIT_DIFF,
             "off_state_equivalence_passes": max(diffs["base_vs_off_A"].max_abs, diffs["base_vs_off_B"].max_abs) <= EQUIVALENCE_MAX_ABS_LOGIT_DIFF,
             "reversibility_passes": diffs["on_vs_restored_A"].max_abs <= RESTORATION_MAX_ABS_LOGIT_DIFF,
@@ -662,6 +643,7 @@ def run_hybrid_reattachment_diagnostic(
             "B_control_answer_nll_increase": control_nll_increase,
             "cell_alone_takeover_required": False,
             "new_bridge_used": False,
+            "ce_readout_regularizer_used": False,
             "source": source,
         }
         write_json(output / "RESULT.json", result)
@@ -680,7 +662,7 @@ def run_hybrid_reattachment_diagnostic(
 __all__ = [
     "EXPERIMENT_ID",
     "DEFAULT_OUTPUT",
-    "PUBLISHED_HYBRID_ROOT",
+    "PUBLISHED_SOURCE_ROOT",
     "EQUIVALENCE_MAX_ABS_LOGIT_DIFF",
     "RESTORATION_MAX_ABS_LOGIT_DIFF",
     "MIN_CAUSAL_RANKING_GAIN",
