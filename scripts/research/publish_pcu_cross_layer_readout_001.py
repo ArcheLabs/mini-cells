@@ -17,7 +17,10 @@ READOUT = Path("artifacts/research/pcu-readout-localization-001/engineering/2609
 SEED_REGISTRY = Path("research/formal_seed_registry.json")
 FORMAL_REGISTRY_SHA = "71a3015a7d54e795538b3aa6750860f0b9168cb3"
 FORMAL_SEEDS = (26090511, 26090512, 26090513)
-MATCHED_CONTROL_SCOPE = "matched_footprint_not_independently_optimized_capacity_upper_bound"
+MATCHED_CONTROL_SCOPES = {
+    "matched_footprint_not_independently_optimized_capacity_upper_bound",
+    "matched_footprint_not_independently_optimized_L23_upper_bound",
+}
 VALID_STATUSES = {
     "SPARSE_CROSS_LAYER_READOUT_RESCUE_SUPPORTED",
     "CROSS_LAYER_READOUT_RESCUE_WITH_WEAK_SYNERGY",
@@ -38,6 +41,11 @@ def load_json(path: Path) -> dict:
     if not path.is_file():
         raise RuntimeError(f"missing required artifact: {path}")
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _assert_matched_control_scope(value: object, *, label: str) -> None:
+    if str(value) not in MATCHED_CONTROL_SCOPES:
+        raise RuntimeError(f"{label} overstates the matched-footprint control scope: {value!r}")
 
 
 def assert_formal_seeds_untouched() -> None:
@@ -137,12 +145,10 @@ def validate_final(prereq: dict) -> dict:
         raise RuntimeError("cross-layer arm did not use registered L23 cells")
     if list(control.get("selected_l23", [])) != selected_l23:
         raise RuntimeError("L23-only matched-footprint control changed cells")
-    if control.get("control_scope") != MATCHED_CONTROL_SCOPE:
-        raise RuntimeError("L23-only control was mislabeled as a capacity upper bound")
+    _assert_matched_control_scope(control.get("control_scope"), label="L23-only control")
     if decision.get("l23_selected_once_and_reused") is not True:
         raise RuntimeError("decision did not certify matched L23 footprint")
-    if decision.get("l23_only_control_scope") != MATCHED_CONTROL_SCOPE:
-        raise RuntimeError("decision did not preserve matched-control limitation")
+    _assert_matched_control_scope(decision.get("l23_only_control_scope"), label="decision")
     if list(decision.get("selected_l23", [])) != selected_l23:
         raise RuntimeError("decision L23 Cell identity differs")
 
@@ -157,8 +163,7 @@ def validate_final(prereq: dict) -> dict:
         raise RuntimeError("comparison L7 baseline changed")
     if abs(float(comparison.get("direct_synergy_floor", -1)) - 0.30) > 1e-12:
         raise RuntimeError("cross-layer synergy floor changed")
-    if comparison.get("l23_only_control_scope") != MATCHED_CONTROL_SCOPE:
-        raise RuntimeError("comparison overstates L23-only control scope")
+    _assert_matched_control_scope(comparison.get("l23_only_control_scope"), label="comparison")
     return decision
 
 
