@@ -235,6 +235,11 @@ def test_freeze_consumes_decision_and_rejects_missing_selected_value() -> None:
         "scientific_evidence": False,
         "formal_ready": True,
         "gates": {key: True for key in module.REQUIRED_DECISION_GATES},
+        "positive_control": {
+            "version": "pcu-kill-001-context-oracle-v2",
+            "passed": True,
+            "free_generation_gate": False,
+        },
         "selected": {"k": 1, "cells_a": ["L0:E0:C0"], "cells_b": ["L0:E0:C1"], "optimizer": "AdamW", "learning_rate": 1e-3, "max_optimizer_steps": 8, "lora_rank": 2, "max_training_tokens": 128},
         "thresholds": {key: 1.0 for key in module.REQUIRED_THRESHOLDS},
         "foundation": manifest,
