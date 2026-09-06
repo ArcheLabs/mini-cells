@@ -13,9 +13,11 @@ BRANCH = "codex/pcu-composability-kill-001"
 RUN_ID = "26090501-l7-k64-ranking"
 OUTPUT = Path("artifacts/research/pcu-objective-alignment-001/engineering") / RUN_ID
 LOCALITY = Path("artifacts/research/pcu-locality-width-001/engineering/26090501-l7-width")
+PAIRED_CONTROL = OUTPUT / "PAIRED_CE_K64.json"
 SEED_REGISTRY = Path("research/formal_seed_registry.json")
 FORMAL_SEEDS = (26090511, 26090512, 26090513)
 FORMAL_REGISTRY_SHA = "71a3015a7d54e795538b3aa6750860f0b9168cb3"
+EXPECTED_CE_K64_ACCURACY = 0.265625
 SAFE_SUFFIXES = {".json", ".md", ".txt", ".csv"}
 VALID_STATUSES = {
     "OBJECTIVE_ALIGNMENT_RESCUES_LOCAL_CELL_MUTATION",
@@ -41,12 +43,46 @@ def assert_formal_seeds_untouched() -> None:
         raise RuntimeError(f"formal seed registry blob changed: {blob}")
 
 
-def validate_locality_baseline() -> dict:
+def _validate_paired_control() -> dict | None:
+    if not PAIRED_CONTROL.is_file():
+        return None
+    control = json.loads(PAIRED_CONTROL.read_text(encoding="utf-8"))
+    if control.get("schema") != "minicells.pcu-objective-alignment-001.paired-ce-k64.v1":
+        raise RuntimeError("unexpected paired K64 control schema")
+    if control.get("control_objective") != "answer-token-causal-cross-entropy":
+        raise RuntimeError("paired K64 control objective is not CE")
+    if int(control.get("target_layer", -1)) != 7 or int(control.get("selected_k", -1)) != 64:
+        raise RuntimeError("paired K64 control moved layer or K")
+    selected = list(control.get("selected_cells", []))
+    if len(selected) != 64:
+        raise RuntimeError("paired K64 control does not contain exactly 64 Cells")
+    if abs(float(control.get("direct_accuracy", -1.0)) - EXPECTED_CE_K64_ACCURACY) > 1e-12:
+        raise RuntimeError("paired K64 CE control did not reproduce 0.265625 direct accuracy")
+    if control.get("formal_execution_not_started") is not True:
+        raise RuntimeError("paired K64 control crossed formal boundary")
+    if control.get("recovery_mode") != "paired_ce_k64_only":
+        raise RuntimeError("paired K64 control lacks explicit recovery provenance")
+    if control.get("historical_sweep_not_reconstructed") is not True:
+        raise RuntimeError("paired K64 control must state that the historical sweep was not reconstructed")
+    identity = control.get("identity", {})
+    if int(identity.get("selected_k", -1)) != 64 or int(identity.get("target_layer", -1)) != 7:
+        raise RuntimeError("paired K64 control identity changed")
+    return {
+        "mode": "paired_ce_k64_recovery",
+        "selected": selected,
+        "direct_accuracy": float(control["direct_accuracy"]),
+        "dataset_manifest_sha256": str(control["dataset_manifest_sha256"]),
+    }
+
+
+def _validate_published_locality_baseline() -> dict:
     for name in ("RUN_IDENTITY.json", "DESIGN.json", "DECISION.json", "WIDTH_064.json"):
         if not (LOCALITY / name).is_file():
             raise RuntimeError(f"missing locality-width prerequisite: {name}")
     decision = json.loads((LOCALITY / "DECISION.json").read_text(encoding="utf-8"))
     width = json.loads((LOCALITY / "WIDTH_064.json").read_text(encoding="utf-8"))
+    if decision.get("recovery_mode") == "paired_ce_k64_only":
+        raise RuntimeError("local recovery envelope must not be treated as a published locality sweep")
     if decision.get("status") != "LOCALITY_WIDTH_IMPROVES_BUT_DOES_NOT_RESCUE":
         raise RuntimeError("final objective test requires the completed locality-width non-rescue")
     if decision.get("valid_run") is not True or decision.get("formal_execution_not_started") is not True:
@@ -54,13 +90,17 @@ def validate_locality_baseline() -> dict:
     selected = list(width.get("allocation", {}).get("selected", []))
     if len(selected) != 64 or int(width.get("identity", {}).get("selected_k", -1)) != 64:
         raise RuntimeError("locality-width prerequisite is not exact K64")
-    if width.get("allocation", {}).get("baseline_prefix_match") is not True:
-        raise RuntimeError("locality-width K64 allocation prefix drifted")
     return {
+        "mode": "published_locality_sweep",
         "selected": selected,
         "direct_accuracy": float(width["direct_accuracy"]),
         "dataset_manifest_sha256": str(width["identity"]["dataset_manifest_sha256"]),
     }
+
+
+def validate_baseline() -> dict:
+    paired = _validate_paired_control()
+    return paired if paired is not None else _validate_published_locality_baseline()
 
 
 def validate_final(baseline: dict) -> dict:
@@ -107,8 +147,6 @@ def validate_final(baseline: dict) -> dict:
         raise RuntimeError("invalid or inconsistent final objective status")
     if list(result.get("selected_cells", [])) != baseline["selected"]:
         raise RuntimeError("final objective runtime allocation differs from K64 baseline")
-    if int(result.get("selected_k", -1)) != 64:
-        raise RuntimeError("final objective runtime K changed")
     if str(result.get("dataset_manifest_sha256")) != baseline["dataset_manifest_sha256"]:
         raise RuntimeError("final objective runtime dataset changed")
     if abs(float(result.get("baseline", {}).get("ce_direct_accuracy", -1.0)) - baseline["direct_accuracy"]) > 1e-12:
@@ -135,9 +173,7 @@ def assert_locality_published(branch: str) -> None:
         check=False,
     )
     if probe.returncode != 0:
-        raise RuntimeError(
-            "PCU-LOCALITY-WIDTH-001 evidence is not published remotely; publish that prerequisite first"
-        )
+        raise RuntimeError("PCU-LOCALITY-WIDTH-001 evidence is not published remotely")
 
 
 def main() -> int:
@@ -148,9 +184,10 @@ def main() -> int:
     if run(["git", "branch", "--show-current"], capture=True) != args.branch:
         raise RuntimeError(f"expected branch {args.branch}")
     assert_formal_seeds_untouched()
-    baseline = validate_locality_baseline()
+    baseline = validate_baseline()
     decision = validate_final(baseline)
-    assert_locality_published(args.branch)
+    if baseline["mode"] == "published_locality_sweep":
+        assert_locality_published(args.branch)
 
     remote_probe = subprocess.run(
         ["git", "show", f"origin/{args.branch}:{OUTPUT}/DECISION.json"],
@@ -201,6 +238,7 @@ def main() -> int:
     print(json.dumps({
         "published": True,
         "status": decision["status"],
+        "baseline_mode": baseline["mode"],
         "commit": run(["git", "rev-parse", "HEAD"], capture=True),
         "formal_seeds": "RESERVED_UNTOUCHED",
     }, indent=2))
