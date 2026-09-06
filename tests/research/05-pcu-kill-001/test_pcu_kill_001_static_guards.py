@@ -13,6 +13,14 @@ from minicells.pcu_kill_001 import execution
 from minicells.pcu_kill_001.task_training import task_conditioned_allocation
 
 
+def _scientific_pipeline_source() -> str:
+    """Inspect the scientific worker beneath any audit-only runtime wrapper."""
+    pipeline = experiment._run_shared_scientific_pipeline
+    while hasattr(pipeline, "_pcu_original_pipeline"):
+        pipeline = pipeline._pcu_original_pipeline
+    return inspect.getsource(pipeline)
+
+
 def test_scientific_allocation_uses_task_ce_not_random_hidden_energy() -> None:
     source = inspect.getsource(task_conditioned_allocation)
     assert "cached_task_loss" in source
@@ -21,7 +29,7 @@ def test_scientific_allocation_uses_task_ce_not_random_hidden_energy() -> None:
 
 
 def test_capacity_ladder_selects_first_passing_k_under_bounded_search() -> None:
-    source = inspect.getsource(experiment._run_shared_scientific_pipeline)
+    source = _scientific_pipeline_source()
     assert "for k in k_values" in source
     assert 'row["passes"] and selected_k is None' in source
     assert 'direct_a.exact >= 0.80 and direct_b.exact >= 0.80' in source
