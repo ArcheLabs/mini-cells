@@ -80,8 +80,25 @@ def verify_real_expert_activations(experts: nn.Module, expert_index: int, activa
 
 @torch.no_grad()
 def verify_full_moe(original: nn.Module, cellular: nn.Module, layer_input: Tensor, tolerance: float = 2e-5) -> EquivalenceMetrics:
-    reference = original(layer_input)
-    candidate = cellular(layer_input)
+    """Verify the complete router+expert MoE block using its sequence contract.
+
+    Granite's MoE block accepts ``[batch, sequence, hidden]`` and performs the
+    token flattening internally before routing.  Expert-level verification is
+    intentionally 2-D, but a synthetic full-MoE probe is often convenient as
+    ``[tokens, hidden]``.  Promote that probe to a single sequence here rather
+    than bypassing the real block contract.
+    """
+    if layer_input.ndim == 2:
+        block_input = layer_input.unsqueeze(0)
+    elif layer_input.ndim == 3:
+        block_input = layer_input
+    else:
+        raise ValueError(
+            "full MoE verification requires [tokens, hidden] or "
+            "[batch, sequence, hidden] input"
+        )
+    reference = original(block_input)
+    candidate = cellular(block_input)
     if isinstance(reference, tuple):
         reference = reference[0]
     if isinstance(candidate, tuple):
