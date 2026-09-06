@@ -51,6 +51,7 @@ def assert_clean_source() -> dict[str, str | bool]:
         "source_tree": git("rev-parse", "HEAD^{tree}"),
         "source_dirty": False,
         "status_porcelain": "",
+        "generated_artifact_status_porcelain": "",
     }
 
 
