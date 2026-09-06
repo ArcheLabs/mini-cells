@@ -26,6 +26,30 @@ from .synthetic import (
 )
 
 
+def _positive_control_prompts(triple: Any) -> tuple[str, str, str]:
+    """Return the exact prompt strings used by canonical context_oracle v2.
+
+    These prompts must end in punctuation, never whitespace.  The candidate
+    scorer appends exactly one leading space to the completion so BPE boundary
+    semantics remain prefix-stable.
+    """
+    prompt_a = (
+        f"Mapping record:\n{triple.u} -> {triple.v}\n"
+        f"Query:\n{triple.u} ->\nAnswer:"
+    )
+    prompt_b = (
+        f"Mapping record:\n{triple.v} -> {triple.w}\n"
+        f"Query:\n{triple.v} ->\nAnswer:"
+    )
+    prompt_ab = (
+        f"Mapping records:\n{triple.u} -> {triple.v}\n{triple.v} -> {triple.w}\n"
+        f"Query path:\n{triple.u} ->\nRelay and terminal:"
+    )
+    if any(prompt != prompt.rstrip() for prompt in (prompt_a, prompt_b, prompt_ab)):
+        raise RuntimeError("dual-oracle positive-control prompt ended in whitespace")
+    return prompt_a, prompt_b, prompt_ab
+
+
 class DualGPUContextOracle:
     def __init__(
         self,
@@ -65,18 +89,7 @@ class DualGPUContextOracle:
         rows: list[dict[str, Any]] = []
         for sample in samples:
             triple = world.triples[int(sample.pair_id)]
-            prompt_a = (
-                f"Mapping record:\n{triple.u} -> {triple.v}\n"
-                f"Query:\n{triple.u} ->\nAnswer: "
-            )
-            prompt_b = (
-                f"Mapping record:\n{triple.v} -> {triple.w}\n"
-                f"Query:\n{triple.v} ->\nAnswer: "
-            )
-            prompt_ab = (
-                f"Mapping records:\n{triple.u} -> {triple.v}\n{triple.v} -> {triple.w}\n"
-                f"Query path:\n{triple.u} ->\nRelay and terminal: "
-            )
+            prompt_a, prompt_b, prompt_ab = _positive_control_prompts(triple)
             a_candidates = _candidate_pool(vs, triple.v, f"{sample.sample_id}:A")
             b_candidates = _candidate_pool(ws, triple.w, f"{sample.sample_id}:B")
             pair_correct = f"{triple.v} {triple.w}"
