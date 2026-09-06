@@ -61,12 +61,26 @@
       "top_p": null,
       "max_new_tokens": 16
     },
+    "positive_control": {
+      "version": "pcu-kill-001-context-oracle-v2",
+      "method": "teacher-forced-candidate-ranking",
+      "candidate_pool_size": 16,
+      "controls": [
+        "explicit-A-retrieval",
+        "explicit-B-retrieval",
+        "explicit-two-hop-relay-terminal-composition"
+      ],
+      "pass_rule": "all-three-accuracies-at-least-0.90",
+      "free_generation": "diagnostic-only-first-8-samples"
+    },
     "composition_primary": "both_exact"
   },
   "thresholds": {
     "g0_top1_token_agreement": 1.0,
     "cache_top1_token_agreement": 1.0,
     "context_oracle_accuracy": 0.9,
+    "context_oracle_retrieval_accuracy": 0.9,
+    "context_oracle_composition_accuracy": 0.9,
     "direct_accuracy": 0.8,
     "merge_retention": 0.9,
     "composition_accuracy": 0.5,
