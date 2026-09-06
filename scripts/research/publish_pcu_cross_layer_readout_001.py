@@ -17,8 +17,10 @@ READOUT = Path("artifacts/research/pcu-readout-localization-001/engineering/2609
 SEED_REGISTRY = Path("research/formal_seed_registry.json")
 FORMAL_REGISTRY_SHA = "71a3015a7d54e795538b3aa6750860f0b9168cb3"
 FORMAL_SEEDS = (26090511, 26090512, 26090513)
+MATCHED_CONTROL_SCOPE = "matched_footprint_not_independently_optimized_capacity_upper_bound"
 VALID_STATUSES = {
     "SPARSE_CROSS_LAYER_READOUT_RESCUE_SUPPORTED",
+    "CROSS_LAYER_READOUT_RESCUE_WITH_WEAK_SYNERGY",
     "L23_ONLY_READOUT_SUFFICIENT_CROSS_LAYER_NOT_REQUIRED",
     "CROSS_LAYER_GENERATION_RESCUE_ASSOCIATION_REGRESSED",
     "CROSS_LAYER_READOUT_IMPROVES_BUT_DOES_NOT_RESCUE",
@@ -89,6 +91,8 @@ def validate_final(prereq: dict) -> dict:
 
     if design.get("causal_question") != "does_a_minimal_late_readout_footprint_rescue_frozen_L7_association":
         raise RuntimeError("cross-layer causal question changed")
+    if design.get("control_limit") != "L23_only_uses_cross_layer_selected_cells_and_is_not_an_independently_optimized_capacity_upper_bound":
+        raise RuntimeError("cross-layer matched-control limitation was removed")
     association = design.get("association_state", {})
     readout = design.get("readout_state", {})
     if int(association.get("layer", -1)) != 7 or int(association.get("selected_k", -1)) != 64:
@@ -121,14 +125,24 @@ def validate_final(prereq: dict) -> dict:
         raise RuntimeError("cross-layer L23 allocation is not exact K16")
     if allocation.get("state") != "frozen_L7_hybrid":
         raise RuntimeError("L23 allocation was not measured under frozen L7 state")
+    gradient_mass = float(allocation.get("gradient_mass_at_k", -1))
+    if not (0.0 < gradient_mass <= 1.0):
+        raise RuntimeError("cross-layer L23 K16 gradient mass is invalid")
+    if float(allocation.get("effective_count", -1)) <= 0.0:
+        raise RuntimeError("cross-layer L23 effective count is invalid")
+
     cross = result.get("cross_layer_arm", {})
     control = result.get("l23_only_control", {})
     if list(cross.get("selected_l23", [])) != selected_l23:
         raise RuntimeError("cross-layer arm did not use registered L23 cells")
     if list(control.get("selected_l23", [])) != selected_l23:
         raise RuntimeError("L23-only matched-footprint control changed cells")
+    if control.get("control_scope") != MATCHED_CONTROL_SCOPE:
+        raise RuntimeError("L23-only control was mislabeled as a capacity upper bound")
     if decision.get("l23_selected_once_and_reused") is not True:
         raise RuntimeError("decision did not certify matched L23 footprint")
+    if decision.get("l23_only_control_scope") != MATCHED_CONTROL_SCOPE:
+        raise RuntimeError("decision did not preserve matched-control limitation")
     if list(decision.get("selected_l23", [])) != selected_l23:
         raise RuntimeError("decision L23 Cell identity differs")
 
@@ -143,6 +157,8 @@ def validate_final(prereq: dict) -> dict:
         raise RuntimeError("comparison L7 baseline changed")
     if abs(float(comparison.get("direct_synergy_floor", -1)) - 0.30) > 1e-12:
         raise RuntimeError("cross-layer synergy floor changed")
+    if comparison.get("l23_only_control_scope") != MATCHED_CONTROL_SCOPE:
+        raise RuntimeError("comparison overstates L23-only control scope")
     return decision
 
 
