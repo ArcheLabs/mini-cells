@@ -1,19 +1,18 @@
 """Engineering-only layer placement diagnostic for PCU-KILL-001.
 
 PCU-LAYER-PLACEMENT-001 changes exactly one causal variable relative to the
-published E0 failure: the decoder layer that owns the mutated Cells.  The
-training objective, optimizer, learning rate, K, batch size, step budget,
-dataset, seed, Cell parameterization, inherited parent routing, and direct
-A-evaluation are held fixed.
+published E0 failure: the decoder layer that owns the mutated Cells. The
+objective, optimizer, learning rate, K, batch size, step budget, dataset, seed,
+Cell parameterization, inherited parent routing, and direct A-evaluation remain
+fixed. The published L23 result is reused; only early/mid A branches are new.
 
-The published L23 result is reused.  Two additional A-only branches are run at
-deterministically selected early/mid MoE layers.  This module is diagnostic
-only and never touches formal seeds or the frozen/formal PCU protocol.
+This diagnostic is not part of the frozen/formal PCU protocol and never consumes
+formal seeds.
 """
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 import json
 from pathlib import Path
@@ -26,10 +25,22 @@ from torch import Tensor, nn
 from .cellular import CellPartition, extract_expert_projections, patch_moe_block
 from .evaluation import evaluate_samples
 from .governance import git_provenance, write_json
-from .model import MODEL_ID, load_granite, target_module
+from .model import load_granite, target_module
 from .synthetic import audit_dataset, generate_world
-from .task import TaskSequences, answer_token_cross_entropy, build_task_sequences, validate_answer_only_labels
-from .training import Allocation, BranchTrainingConfig, ForkedCellularExperts, allocate_topk, selected_delta_parameters
+from .task import (
+    IGNORE_INDEX,
+    TaskSequences,
+    answer_token_cross_entropy,
+    build_task_sequences,
+    validate_answer_only_labels,
+)
+from .training import (
+    Allocation,
+    BranchTrainingConfig,
+    ForkedCellularExperts,
+    allocate_topk,
+    selected_delta_parameters,
+)
 
 
 EXPERIMENT_ID = "PCU-LAYER-PLACEMENT-001"
@@ -39,6 +50,8 @@ LEARNING_RATE = 1e-3
 MAX_OPTIMIZER_STEPS = 128
 MAX_TRAINING_TOKENS = 500_000
 BATCH_SIZE = 8
+CALIBRATION_ROWS = 64
+CALIBRATION_BATCH_SIZE = 8
 DIRECT_CAPABILITY_FLOOR = 0.80
 BASELINE_ROOT = Path("artifacts/research/pcu-kill-001/engineering/26090501-oracle-v2")
 DEFAULT_OUTPUT = Path("artifacts/research/pcu-layer-placement-001/engineering/26090501-layer-only")
@@ -70,16 +83,10 @@ def discover_moe_layers(model: nn.Module) -> tuple[MoeLayer, ...]:
         try:
             projection = extract_expert_projections(experts, 0)
             count = int(getattr(experts, "num_experts"))
-        except Exception:
+        except (AttributeError, TypeError, RuntimeError, ValueError):
             continue
         layer = numbers[-1]
-        candidate = MoeLayer(
-            layer=layer,
-            path=name,
-            hidden_size=projection.hidden_size,
-            intermediate_size=projection.intermediate_size,
-            local_experts=count,
-        )
+        candidate = MoeLayer(layer, name, projection.hidden_size, projection.intermediate_size, count)
         previous = found.get(layer)
         if previous is not None and previous.path != candidate.path:
             raise RuntimeError(f"multiple MoE blocks resolved for decoder layer {layer}")
@@ -143,11 +150,20 @@ def full_model_task_conditioned_allocation(
     sequences: TaskSequences,
     *,
     layer: int,
-    calibration_rows: int = 64,
+    calibration_rows: int = CALIBRATION_ROWS,
+    calibration_batch_size: int = CALIBRATION_BATCH_SIZE,
     device: str,
 ) -> Allocation:
-    """Apply the same answer-token CE gradient score at an arbitrary MoE layer."""
+    """Score Cells at any layer with the same 64-row answer-token CE gradient.
+
+    The cached L23 implementation evaluates all 64 rows at once. Earlier layers
+    use weighted microbatch accumulation to avoid T4 activation OOM. Because
+    each microbatch CE is weighted by its supervised-token count, the accumulated
+    gradient is the gradient of the same global mean answer-token CE.
+    """
     rows = min(int(calibration_rows), int(sequences.input_ids.shape[0]))
+    if rows <= 0 or calibration_batch_size <= 0:
+        raise ValueError("invalid layer-placement calibration shape")
     all_cells = {
         expert: tuple(range(int(parent_experts.partition.cells)))
         for expert in range(int(parent_experts.num_experts))
@@ -156,17 +172,24 @@ def full_model_task_conditioned_allocation(
     resident = block.experts
     block.experts = probe
     try:
-        input_ids, attention, labels, _ = _slice_sequences(sequences, 0, rows)
         probe.zero_grad(set_to_none=True)
-        loss = _full_task_loss(
-            model,
-            input_ids.to(device),
-            attention.to(device),
-            labels.to(device),
-        )
-        if not torch.isfinite(loss):
-            raise RuntimeError("non-finite layer-placement allocation loss")
-        loss.backward()
+        supervised_total = int(sequences.labels[:rows, 1:].ne(IGNORE_INDEX).sum())
+        if supervised_total <= 0:
+            raise RuntimeError("layer-placement calibration has no supervised answer tokens")
+        for start in range(0, rows, int(calibration_batch_size)):
+            end = min(rows, start + int(calibration_batch_size))
+            input_ids, attention, labels, _ = _slice_sequences(sequences, start, end)
+            supervised = int(labels[:, 1:].ne(IGNORE_INDEX).sum())
+            loss = _full_task_loss(
+                model,
+                input_ids.to(device),
+                attention.to(device),
+                labels.to(device),
+            )
+            if not torch.isfinite(loss):
+                raise RuntimeError("non-finite layer-placement allocation loss")
+            (loss * (float(supervised) / float(supervised_total))).backward()
+
         scores: dict[str, float] = {}
         for expert_index, expert in enumerate(probe.cells):
             for cell_index, cell in enumerate(expert.cells):
@@ -234,6 +257,8 @@ def _train_full_model_branch(
             tokens += batch_tokens
             final_loss = float(loss.detach())
             progressed = True
+            if steps % 32 == 0 or steps == int(config.max_optimizer_steps):
+                print(f"[pcu-layer-placement] L{layer} step={steps} loss={final_loss:.6f} tokens={tokens}", flush=True)
             if steps >= int(config.max_optimizer_steps):
                 break
         if not progressed:
@@ -266,6 +291,19 @@ def _validate_foundation_manifest(actual: Mapping[str, Any], expected: Mapping[s
             raise RuntimeError(f"layer-placement foundation identity mismatch: {key}")
 
 
+def _assert_only_selected_deltas_trainable(model: nn.Module, runtime: nn.Module) -> None:
+    allowed = {id(parameter) for parameter in selected_delta_parameters(runtime)}
+    unexpected = [
+        name
+        for name, parameter in model.named_parameters()
+        if parameter.requires_grad and id(parameter) not in allowed
+    ]
+    if unexpected:
+        raise RuntimeError(f"non-Cell parameter unexpectedly became trainable: {unexpected[:8]}")
+    if not allowed:
+        raise RuntimeError("selected Cell delta identity set is empty")
+
+
 def _run_one_layer(
     *,
     layer: int,
@@ -274,7 +312,9 @@ def _run_one_layer(
     expected_foundation: Mapping[str, Any],
     expected_dataset_sha256: str,
     seed: int,
+    source: Mapping[str, Any],
 ) -> dict[str, Any]:
+    print(f"[pcu-layer-placement] loading L{layer} on {device}", flush=True)
     tokenizer, model, manifest = load_granite(
         str(expected_foundation["model_repo"]),
         revision=str(expected_foundation["model_revision"]),
@@ -284,8 +324,7 @@ def _run_one_layer(
         _validate_foundation_manifest(manifest, expected_foundation)
         model.requires_grad_(False)
         block = target_module(model, path)
-        original_experts = block.experts
-        projection = extract_expert_projections(original_experts, 0)
+        projection = extract_expert_projections(block.experts, 0)
         partition = CellPartition(projection.intermediate_size, 4)
         cellular_experts = patch_moe_block(block, partition)
         model.requires_grad_(False)
@@ -300,13 +339,15 @@ def _run_one_layer(
         train = build_task_sequences(tokenizer, world.splits["A_train"], "A_train", max_length=128)
         validate_answer_only_labels(train)
 
+        print(f"[pcu-layer-placement] allocating L{layer}", flush=True)
         allocation = full_model_task_conditioned_allocation(
             model,
             block,
             cellular_experts,
             train,
             layer=layer,
-            calibration_rows=64,
+            calibration_rows=CALIBRATION_ROWS,
+            calibration_batch_size=CALIBRATION_BATCH_SIZE,
             device=device,
         )
         selected = tuple(allocation.selected[:K])
@@ -318,6 +359,7 @@ def _run_one_layer(
             batch_size=BATCH_SIZE,
             seed=seed,
         )
+        print(f"[pcu-layer-placement] training L{layer} selected={list(selected)}", flush=True)
         runtime, training = _train_full_model_branch(
             model,
             block,
@@ -328,6 +370,8 @@ def _run_one_layer(
             device=device,
             config=config,
         )
+        _assert_only_selected_deltas_trainable(model, runtime)
+        print(f"[pcu-layer-placement] evaluating L{layer}", flush=True)
         evaluation = evaluate_samples(
             model,
             tokenizer,
@@ -337,21 +381,20 @@ def _run_one_layer(
             max_new_tokens=16,
             batch_size=16,
         )
-        # The original raw experts and the exact cellular parent remain frozen;
-        # only runtime deltas were handed to AdamW.
-        if any(parameter.requires_grad for parameter in model.parameters() if parameter not in set(parameters := selected_delta_parameters(runtime))):
-            raise RuntimeError("non-Cell parameter unexpectedly became trainable")
         return {
             "schema": "minicells.pcu-layer-placement-001.layer-result.v1",
             "experiment": EXPERIMENT_ID,
             "layer": int(layer),
             "target_path": path,
             "device": device,
+            "source": dict(source),
+            "foundation": dict(manifest),
             "dataset_manifest_sha256": world.manifest_sha256(),
             "allocation": {
                 "method": "task-conditioned-gradient-l2-per-parameter",
                 "calibration_split": "A_train",
                 "calibration_sample_rule": "first_64_samples",
+                "calibration_execution": f"weighted_microbatch_{CALIBRATION_BATCH_SIZE}",
                 "selected_k": K,
                 "selected": list(selected),
                 "topk_mass": {str(key): value for key, value in allocation.topk_mass.items()},
@@ -388,12 +431,9 @@ def _load_baseline(root: Path) -> dict[str, Any]:
             break
     if not isinstance(target_row, Mapping):
         raise RuntimeError("published baseline has no lr=1e-3/K=8 capacity row")
-    foundation = dict(decision["foundation"])
-    dataset_sha = str(acceleration["identity"]["dataset_manifest_sha256"])
     return {
-        "decision": decision,
-        "foundation": foundation,
-        "dataset_manifest_sha256": dataset_sha,
+        "foundation": dict(decision["foundation"]),
+        "dataset_manifest_sha256": str(acceleration["identity"]["dataset_manifest_sha256"]),
         "late_layer": int(decision["architecture"]["target_layer"]),
         "late_target_path": str(decision["architecture"]["target_path"]),
         "direct_accuracy": float(target_row["acc_a"]),
@@ -402,6 +442,32 @@ def _load_baseline(root: Path) -> dict[str, Any]:
         "training_tokens": int(target_row["training_tokens_a"]),
         "source": identity.get("source", {}),
     }
+
+
+def _load_resumable_layer_result(
+    path: Path,
+    *,
+    layer: int,
+    target_path: str,
+    dataset_sha256: str,
+    source: Mapping[str, Any],
+) -> dict[str, Any] | None:
+    if not path.is_file():
+        return None
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    valid = (
+        payload.get("schema") == "minicells.pcu-layer-placement-001.layer-result.v1"
+        and int(payload.get("layer", -1)) == int(layer)
+        and payload.get("target_path") == target_path
+        and payload.get("dataset_manifest_sha256") == dataset_sha256
+        and payload.get("source") == dict(source)
+        and int(payload.get("training", {}).get("training_steps", -1)) == MAX_OPTIMIZER_STEPS
+        and int(payload.get("allocation", {}).get("selected_k", -1)) == K
+        and float(payload.get("training", {}).get("learning_rate", -1.0)) == LEARNING_RATE
+    )
+    if not valid:
+        raise RuntimeError(f"stale or incompatible layer-placement checkpoint: {path}")
+    return payload
 
 
 def run_layer_placement_diagnostic(
@@ -422,8 +488,6 @@ def run_layer_placement_diagnostic(
     output.mkdir(parents=True, exist_ok=True)
     baseline = _load_baseline(Path(baseline_root))
 
-    # Discover the exact MoE topology from the same pinned checkpoint before
-    # launching two independent layer workers.
     tokenizer, probe_model, probe_manifest = load_granite(
         str(baseline["foundation"]["model_repo"]),
         revision=str(baseline["foundation"]["model_revision"]),
@@ -463,6 +527,7 @@ def run_layer_placement_diagnostic(
             "max_training_tokens": MAX_TRAINING_TOKENS,
             "batch_size": BATCH_SIZE,
             "allocation": "task-conditioned-gradient-l2-per-parameter:first_64_A_train",
+            "allocation_execution": f"weighted_microbatch_{CALIBRATION_BATCH_SIZE}",
             "routing": "inherited_parent_router",
             "evaluation": "A_eval_greedy_exact",
             "capability_floor": DIRECT_CAPABILITY_FLOOR,
@@ -494,11 +559,24 @@ def run_layer_placement_diagnostic(
         "formal_execution_not_started": True,
     })
 
-    jobs = (("early", early, devices[0]), ("mid", mid, devices[1]))
+    jobs = {"early": (early, devices[0]), "mid": (mid, devices[1])}
     results: dict[str, dict[str, Any]] = {}
+    pending: dict[Any, str] = {}
     with ThreadPoolExecutor(max_workers=2) as pool:
-        futures = {
-            name: pool.submit(
+        for name, (item, device) in jobs.items():
+            result_path = output / f"LAYER_{item.layer:02d}.json"
+            resumed = _load_resumable_layer_result(
+                result_path,
+                layer=item.layer,
+                target_path=item.path,
+                dataset_sha256=baseline["dataset_manifest_sha256"],
+                source=source,
+            )
+            if resumed is not None:
+                print(f"[pcu-layer-placement] resume L{item.layer} from {result_path}", flush=True)
+                results[name] = resumed
+                continue
+            future = pool.submit(
                 _run_one_layer,
                 layer=item.layer,
                 path=item.path,
@@ -506,13 +584,16 @@ def run_layer_placement_diagnostic(
                 expected_foundation=baseline["foundation"],
                 expected_dataset_sha256=baseline["dataset_manifest_sha256"],
                 seed=seed,
+                source=source,
             )
-            for name, item, device in jobs
-        }
-        for name, future in futures.items():
+            pending[future] = name
+        for future in as_completed(pending):
+            name = pending[future]
             results[name] = future.result()
             write_json(output / f"LAYER_{results[name]['layer']:02d}.json", results[name])
 
+    if set(results) != {"early", "mid"}:
+        raise RuntimeError("layer-placement diagnostic did not complete both new layer probes")
     comparison = {
         "late_baseline": {
             "layer": baseline["late_layer"],
@@ -525,7 +606,7 @@ def run_layer_placement_diagnostic(
         "mid": {"layer": results["mid"]["layer"], "direct_accuracy": results["mid"]["direct_accuracy"]},
     }
     best_name, best = max(
-        ((name, row) for name, row in comparison.items()),
+        comparison.items(),
         key=lambda item: float(item[1]["direct_accuracy"]),
     )
     rescued = bool(float(best["direct_accuracy"]) >= DIRECT_CAPABILITY_FLOOR and best_name != "late_baseline")
