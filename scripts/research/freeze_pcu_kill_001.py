@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -30,6 +31,7 @@ FROZEN_DIR = ROOT / "artifacts/research/pcu-kill-001/frozen"
 DEFAULT_PROTOCOL = FROZEN_DIR / "PROTOCOL.json"
 DEFAULT_HASH = FROZEN_DIR / "PROTOCOL.sha256"
 SEED_REGISTRY = ROOT / "research/formal_seed_registry.json"
+ENGINEERING_EVIDENCE_PREFIX = "artifacts/research/pcu-kill-001/engineering/"
 
 
 REQUIRED_DECISION_GATES = (
@@ -83,6 +85,67 @@ def _required_mapping(payload: dict, key: str) -> dict:
     return value
 
 
+def _git(*args: str, check: bool = True) -> str:
+    result = subprocess.run(
+        ["git", *args],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=check,
+    )
+    return result.stdout.strip()
+
+
+def _validate_engineering_source_snapshot(decision_source: dict, provenance: dict) -> None:
+    """Accept the run source commit or a descendant containing evidence only.
+
+    An E0 decision is produced before its artifacts are committed. Publishing
+    that evidence necessarily advances HEAD by one or more commits. Freeze may
+    therefore run on a descendant, but every path changed since the recorded
+    run source must remain under the engineering-evidence prefix. Any source,
+    protocol, notebook, script, or test change after the E0 run invalidates the
+    freeze candidate and requires a new engineering run.
+    """
+    source_ref = decision_source.get("source_ref")
+    if source_ref is not None and source_ref != provenance.get("source_ref"):
+        raise ProtocolMismatch("engineering decision was produced on a different source ref")
+    source_commit = decision_source.get("source_commit", decision_source.get("commit"))
+    source_tree = decision_source.get("source_tree", decision_source.get("tree"))
+    current_commit = provenance.get("source_commit")
+    if not source_commit or not source_tree or not current_commit:
+        raise ProtocolMismatch("engineering decision has incomplete source provenance")
+
+    try:
+        recorded_tree = _git("rev-parse", f"{source_commit}^{{tree}}")
+    except subprocess.CalledProcessError as exc:
+        raise ProtocolMismatch("engineering source commit is not present in the repository") from exc
+    if recorded_tree != source_tree:
+        raise ProtocolMismatch("engineering decision source tree does not match its source commit")
+    if source_commit == current_commit:
+        return
+
+    ancestor = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", str(source_commit), str(current_commit)],
+        cwd=ROOT,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    if ancestor.returncode != 0:
+        raise ProtocolMismatch("current HEAD is not descended from the engineering source commit")
+    changed = [
+        line.strip()
+        for line in _git("diff", "--name-only", f"{source_commit}..{current_commit}").splitlines()
+        if line.strip()
+    ]
+    unexpected = [path for path in changed if not path.startswith(ENGINEERING_EVIDENCE_PREFIX)]
+    if unexpected:
+        raise ProtocolMismatch(
+            "source/protocol changed after engineering run; new E0 required: "
+            + ", ".join(unexpected[:12])
+        )
+
+
 def _validate_engineering_decision(
     decision: dict,
     model_manifest: dict,
@@ -120,15 +183,7 @@ def _validate_engineering_decision(
         if key not in thresholds or thresholds[key] is None:
             raise ProtocolMismatch(f"engineering decision has no selected threshold {key}")
     decision_source = _required_mapping(decision, "source")
-    source_ref = decision_source.get("source_ref")
-    if source_ref is not None and source_ref != provenance.get("source_ref"):
-        raise ProtocolMismatch("engineering decision was produced on a different source ref")
-    source_commit = decision_source.get("source_commit", decision_source.get("commit"))
-    source_tree = decision_source.get("source_tree", decision_source.get("tree"))
-    if source_commit != provenance.get("source_commit"):
-        raise ProtocolMismatch("engineering decision was produced from a different source commit")
-    if source_tree != provenance.get("source_tree"):
-        raise ProtocolMismatch("engineering decision was produced from a different source tree")
+    _validate_engineering_source_snapshot(decision_source, provenance)
 
     foundation = _required_mapping(decision, "foundation")
     for key in (
@@ -236,7 +291,6 @@ def main() -> int:
         "lora_rank": selected["lora_rank"],
     })
     protocol["allocation"] = dict(decision["allocation"])
-    # Preserve the registered base-model positive-control method from the template.
     positive_control = dict(protocol.get("evaluation", {}).get("positive_control", {}))
     protocol["evaluation"] = {
         "generation": {
