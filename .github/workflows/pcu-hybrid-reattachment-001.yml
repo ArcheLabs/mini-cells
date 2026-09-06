@@ -9,7 +9,7 @@ on:
 jobs:
   static-and-unit:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -18,15 +18,26 @@ jobs:
           cache: pip
       - name: Install
         run: python -m pip install -e ".[dev]"
-      - name: Reattachment unit guards
+      - name: Reattachment v3 unit guards
         run: pytest -q tests/research/05-pcu-kill-001/test_pcu_hybrid_reattachment_001.py
-      - name: Compile runner and implementation
-        run: python -m py_compile src/minicells/pcu_kill_001/hybrid_reattachment.py scripts/research/run_pcu_hybrid_reattachment_001.py
+      - name: Compile v2/v3 implementation, runner and publisher
+        run: >-
+          python -m py_compile
+          src/minicells/pcu_kill_001/hybrid_reattachment.py
+          src/minicells/pcu_kill_001/hybrid_reattachment_v3.py
+          scripts/research/run_pcu_hybrid_reattachment_001.py
+          scripts/research/publish_pcu_hybrid_reattachment_001.py
       - name: Validate Kaggle notebook JSON
         run: python -m json.tool research/notebooks/08-pretrained-model-lift/pcu-hybrid-reattachment-001-kaggle.ipynb >/dev/null
+      - name: Verify protocol document contains frozen amendment semantics
+        run: |
+          grep -q 'thresholds_changed' scripts/research/publish_pcu_hybrid_reattachment_001.py
+          grep -q 'PARENT_ZERO_DELTA' research/experiments/05-pcu-kill-001/PCU_HYBRID_REATTACHMENT_001.md
+          grep -q 'RESERVED_UNTOUCHED' research/experiments/05-pcu-kill-001/PCU_HYBRID_REATTACHMENT_001.md
       - name: Semantic Ruff checks
         run: >-
           ruff check --select F,E9
-          src/minicells/pcu_kill_001/hybrid_reattachment.py
+          src/minicells/pcu_kill_001/hybrid_reattachment_v3.py
           scripts/research/run_pcu_hybrid_reattachment_001.py
+          scripts/research/publish_pcu_hybrid_reattachment_001.py
           tests/research/05-pcu-kill-001/test_pcu_hybrid_reattachment_001.py

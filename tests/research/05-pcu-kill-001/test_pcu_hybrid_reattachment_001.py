@@ -1,13 +1,14 @@
-"""Static/unit guards for PCU-HYBRID-REATTACHMENT-001."""
+"""Static/unit guards for PCU-HYBRID-REATTACHMENT-001 protocol v3."""
 
 from __future__ import annotations
 
 import inspect
+from pathlib import Path
 
 import torch
 from torch import nn
 
-from minicells.pcu_kill_001 import hybrid_reattachment as experiment
+from minicells.pcu_kill_001 import hybrid_reattachment_v3 as experiment
 
 
 class _ToyRuntime(nn.Module):
@@ -17,33 +18,23 @@ class _ToyRuntime(nn.Module):
         self.register_buffer("parent_weight", torch.tensor([5.0, 7.0, 11.0]))
 
 
-def test_delta_intervention_is_exact_and_reversible() -> None:
+def test_alpha_intervention_scales_only_delta_and_restores_exactly() -> None:
     runtime = _ToyRuntime()
     before = runtime.delta_weight.detach().clone()
-    before_sha = experiment.delta_sha256(runtime)
-    with experiment.temporarily_zero_cell_deltas(runtime) as identity:
-        assert torch.count_nonzero(runtime.delta_weight) == 0
-        assert identity["trained_sha256"] == before_sha
-        assert identity["zero_sha256"] != before_sha
+    with experiment.temporarily_scale_cell_deltas(runtime, 0.25) as identity:
+        assert torch.equal(runtime.delta_weight, before * 0.25)
+        assert identity["alpha"] == 0.25
+        assert identity["scaled_sha256"] != identity["trained_sha256"]
     assert torch.equal(runtime.delta_weight, before)
-    assert experiment.delta_sha256(runtime) == before_sha
 
 
-def test_logit_diff_is_strict_and_shape_checked() -> None:
-    left = torch.tensor([[[1.0, 2.0], [3.0, 4.0]]])
-    right = left.clone()
-    right[0, 1, 0] += 0.25
-    diff = experiment.compare_logits(left, right)
-    assert diff.max_abs == 0.25
-    assert diff.mean_abs == 0.0625
-    assert diff.elements == 4
-
-
-def test_classifier_requires_causal_gain_equivalence_reversibility_and_locality() -> None:
-    supported = experiment.classify_reattachment(
+def test_primary_classifier_uses_same_graph_gate_not_native_g0_drift() -> None:
+    signature = inspect.signature(experiment.classify_primary_v3)
+    assert "same_graph_equivalence_max_abs" in signature.parameters
+    assert "native_g0" not in signature.parameters
+    supported = experiment.classify_primary_v3(
         replay_matches=True,
-        equivalence_max_abs=0.0,
-        off_equivalence_max_abs=0.0,
+        same_graph_equivalence_max_abs=0.0,
         restoration_max_abs=0.0,
         ranking_on=0.82,
         ranking_off=0.06,
@@ -52,66 +43,98 @@ def test_classifier_requires_causal_gain_equivalence_reversibility_and_locality(
     )
     assert supported == "ENGINEERING_SIGNAL_HYBRID_REATTACHMENT_SUPPORTED"
 
-    no_gain = experiment.classify_reattachment(
-        replay_matches=True,
-        equivalence_max_abs=0.0,
-        off_equivalence_max_abs=0.0,
-        restoration_max_abs=0.0,
-        ranking_on=0.82,
-        ranking_off=0.82,
-        margin_gain=0.0,
-        control_nll_increase=0.0,
-    )
-    assert no_gain == "NO_CAUSAL_EXPRESSION_ENGINEERING"
 
-    bad_equivalence = experiment.classify_reattachment(
+def test_primary_classifier_reports_locality_failure_without_erasing_causal_support() -> None:
+    status = experiment.classify_primary_v3(
         replay_matches=True,
-        equivalence_max_abs=experiment.EQUIVALENCE_MAX_ABS_LOGIT_DIFF * 2,
-        off_equivalence_max_abs=0.0,
+        same_graph_equivalence_max_abs=0.0,
+        restoration_max_abs=0.0,
+        ranking_on=0.8203125,
+        ranking_off=0.0625,
+        margin_gain=3.18,
+        control_nll_increase=0.319,
+    )
+    assert status == "CAUSAL_HYBRID_CONSUMPTION_SUPPORTED_LOCALITY_FAILED"
+
+
+def test_same_graph_and_restoration_fail_closed() -> None:
+    bad_equivalence = experiment.classify_primary_v3(
+        replay_matches=True,
+        same_graph_equivalence_max_abs=experiment.EQUIVALENCE_MAX_ABS_LOGIT_DIFF * 2,
         restoration_max_abs=0.0,
         ranking_on=0.82,
         ranking_off=0.06,
         margin_gain=1.0,
         control_nll_increase=0.0,
     )
-    assert bad_equivalence == "ZERO_STATE_EQUIVALENCE_FAILED"
+    assert bad_equivalence == "SAME_GRAPH_ZERO_STATE_EQUIVALENCE_FAILED"
+    bad_restore = experiment.classify_primary_v3(
+        replay_matches=True,
+        same_graph_equivalence_max_abs=0.0,
+        restoration_max_abs=experiment.RESTORATION_MAX_ABS_LOGIT_DIFF * 2,
+        ranking_on=0.82,
+        ranking_off=0.06,
+        margin_gain=1.0,
+        control_nll_increase=0.0,
+    )
+    assert bad_restore == "REVERSIBILITY_FAILED"
 
 
-def test_experiment_reuses_exact_ranking_only_k64_without_new_bridge() -> None:
-    source = inspect.getsource(experiment.run_hybrid_reattachment_diagnostic)
+def test_amplitude_grid_and_thresholds_are_frozen() -> None:
+    assert experiment.PROTOCOL_VERSION == 3
+    assert experiment.ALPHA_SWEEP == (0.0, 0.125, 0.25, 0.5, 0.75, 1.0)
+    assert experiment.EQUIVALENCE_MAX_ABS_LOGIT_DIFF == 1e-5
+    assert experiment.RESTORATION_MAX_ABS_LOGIT_DIFF == 1e-5
+    assert experiment.ASSOCIATION_FLOOR == 0.80
+    assert experiment.MIN_CAUSAL_RANKING_GAIN == 0.50
+    assert experiment.MAX_CONTROL_ANSWER_NLL_INCREASE == 0.10
+
+
+def test_sweep_classifier_requires_positive_alpha_joint_pass() -> None:
+    rows = [
+        {"alpha": 0.0, "joint_pass": False},
+        {"alpha": 0.5, "joint_pass": True},
+        {"alpha": 1.0, "joint_pass": False},
+    ]
+    assert experiment.classify_sweep(
+        rows, replay_matches=True, restoration_exact=True
+    ) == "AMPLITUDE_SWEEP_FINDS_LOCALITY_COMPATIBLE_POINT"
+    rows[1]["joint_pass"] = False
+    assert experiment.classify_sweep(
+        rows, replay_matches=True, restoration_exact=True
+    ) == "AMPLITUDE_SWEEP_NO_LOCALITY_COMPATIBLE_POINT"
+
+
+def test_v3_reuses_ranking_only_mutation_without_bridge_router_or_extra_sweep_training() -> None:
+    primary = inspect.getsource(experiment.run_primary_arm)
+    sweep = inspect.getsource(experiment.run_amplitude_sweep_arm)
+    replay = inspect.getsource(experiment.replay_published_mutation)
+    assert "_train_ranking_branch" in replay
+    assert "baseline.selected_cells" in replay
+    assert "temporarily_zero_cell_deltas" in primary
+    assert "temporarily_scale_cell_deltas" in sweep
+    assert '"additional_training_after_replay": False' in sweep
     module = inspect.getsource(experiment)
-    assert "_load_baselines" in source
-    assert "_train_ranking_branch" in source
-    assert "baseline.selected_cells" in source
-    assert "temporarily_zero_cell_deltas(runtime)" in source
-    assert '"objective": "16-way-candidate-ranking-only"' in source
-    assert '"ce_readout_regularizer": False' in source
-    assert '"new_bridge": False' in source
     assert "_train_hybrid_branch" not in module
     assert "allocate_topk" not in module
     assert "full_model_task_conditioned_allocation" not in module
 
 
-def test_source_is_the_association_learned_generation_unresolved_artifact() -> None:
-    assert experiment.PUBLISHED_SOURCE_ROOT == experiment.OBJECTIVE_BASELINE_ROOT
-    assert experiment.EXPECTED_PUBLISHED_RANKING_ACCURACY == 0.8203125
-    assert experiment.EXPECTED_PUBLISHED_DIRECT_ACCURACY == 0.0
+def test_v3_explicitly_records_native_g0_as_non_gating_diagnostic() -> None:
+    source = inspect.getsource(experiment.run_primary_arm)
+    assert '"native_G0_is_diagnostic_only": True' in source
+    assert '"gate_definition": "PARENT_ZERO_DELTA_vs_CELL_OFF_same_cellular_graph"' in source
+    assert "parent_vs_off_A" in source
+    assert "parent_vs_off_B" in source
 
 
-def test_success_is_not_cell_alone_takeover_and_formal_is_not_claimed() -> None:
-    source = inspect.getsource(experiment.run_hybrid_reattachment_diagnostic)
-    assert '"cell_alone_takeover_required": False' in source
-    assert '"scientific_evidence": False' in source
-    assert '"formal_execution_not_started": True' in source
-    assert '"formal_decision": "RESERVED_UNRUN"' in source
-
-
-def test_primary_thresholds_are_predeclared_and_strong() -> None:
-    assert experiment.TARGET_LAYER == 7
-    assert experiment.TARGET_K == 64
-    assert experiment.ENGINEERING_SEED == 26090501
-    assert experiment.ASSOCIATION_FLOOR == 0.80
-    assert experiment.MIN_CAUSAL_RANKING_GAIN == 0.50
-    assert experiment.EQUIVALENCE_MAX_ABS_LOGIT_DIFF == 1e-5
-    assert experiment.RESTORATION_MAX_ABS_LOGIT_DIFF == 1e-5
-    assert experiment.MAX_CONTROL_ANSWER_NLL_INCREASE == 0.10
+def test_dual_gpu_runner_and_publisher_guards_exist() -> None:
+    root = Path(__file__).resolve().parents[3]
+    runner = (root / "scripts/research/run_pcu_hybrid_reattachment_001.py").read_text(encoding="utf-8")
+    publisher = (root / "scripts/research/publish_pcu_hybrid_reattachment_001.py").read_text(encoding="utf-8")
+    assert "torch.cuda.device_count() < 2" in runner
+    assert '"cuda:0": "primary_causal_reattachment"' in runner
+    assert '"cuda:1": "amplitude_sweep"' in runner
+    assert "RESERVED_UNTOUCHED" in publisher
+    assert '".png"' in publisher
+    assert "thresholds_changed" in publisher
