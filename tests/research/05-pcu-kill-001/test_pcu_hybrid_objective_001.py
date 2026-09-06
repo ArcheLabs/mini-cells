@@ -27,9 +27,8 @@ def test_hybrid_uses_original_ce_not_ranking_score_proxy() -> None:
     ranking = inspect.getsource(hybrid_objective._hybrid_ranking_loss_for_sample)
     assert "build_task_sequences" in source
     assert "answer_token_cross_entropy" in source
-    assert "float(CE_WEIGHT) * ce_loss" in source
-    assert "loss / float(config.batch_size)" not in source  # no ambiguous generic loss variable
-    assert "rank_loss / float(config.batch_size)" in source
+    assert "(float(CE_WEIGHT) * ce_loss).backward()" in source
+    assert "(rank_loss / float(config.batch_size)).backward()" in source
     assert "_candidate_scores_tensor" in ranking
     assert "CE regularizer is intentionally not derived from these scores" in ranking
 
