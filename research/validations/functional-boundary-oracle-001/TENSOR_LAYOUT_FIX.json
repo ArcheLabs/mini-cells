@@ -1,0 +1,10 @@
+{
+  "classification": "engineering_repair",
+  "formal_seed": 26090511,
+  "scientific_result": null,
+  "root_cause": "model-level intermediate_size was incorrectly used as per-expert intermediate width",
+  "observed_input_shape": [32, 1024, 1024],
+  "observed_output_shape": [32, 1024, 512],
+  "expert_intermediate_width": 512,
+  "protocol_changed": false
+}

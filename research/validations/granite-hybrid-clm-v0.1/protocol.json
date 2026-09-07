@@ -1,0 +1,52 @@
+{
+  "experiment": "GRANITE_HYBRID_CLM_V0_1",
+  "status": "ENGINEERING_MILESTONE_GPU_PENDING",
+  "base": {
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "foundation_trainable": false
+  },
+  "scope": {
+    "goal": "usable 1B-class Hybrid CLM without full post-hoc MoE cellization",
+    "legacy_experts_are_native_cells": false,
+    "requires_progressive_expert_offload": false,
+    "requires_autonomous_cell_discovery": false,
+    "mutation_packet_allocates_cell_explicitly": true
+  },
+  "substrate": {
+    "read_layer_index": 18,
+    "write_layer_indices": [20, 22],
+    "rank": 16,
+    "gate_type": "independent_sigmoid_threshold",
+    "gate_threshold": 0.8,
+    "competitive_normalization": false,
+    "allocation_changes_production_function": false,
+    "shadow_before_commit": true
+  },
+  "lifecycle": [
+    "allocate",
+    "train_address",
+    "freeze_address",
+    "shadow_train_transform",
+    "safety_check",
+    "commit",
+    "uncommit_or_reapply"
+  ],
+  "milestone": {
+    "controlled_facts": 50,
+    "minimum_committed_facts": 50,
+    "minimum_final_semantic_choice_accuracy": 0.98,
+    "maximum_history_kl_per_commit": 0.02,
+    "minimum_target_nll_gain_per_commit": 0.5,
+    "contextual_child_required": true,
+    "exact_rollback_required": true,
+    "manifest_fork_merge_required": true,
+    "checkpoint_reload_required": true
+  },
+  "non_claims": [
+    "This does not claim that Granite legacy experts have been converted into native Cells.",
+    "This does not claim autonomous semantic Cell discovery.",
+    "This does not establish progressive expert offloading.",
+    "This is an engineering milestone, not a frozen scientific kill test."
+  ]
+}

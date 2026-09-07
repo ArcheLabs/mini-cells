@@ -1,0 +1,148 @@
+{
+  "base": {
+    "conversion_manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "environment": {
+    "cuda_device_name": "Tesla T4",
+    "device": "cuda:0",
+    "dtype": "torch.float32",
+    "huggingface_hub": "1.11.0",
+    "python": "3.12.13",
+    "safetensors": "0.7.0",
+    "torch": "2.10.0+cu128",
+    "transformers": "5.0.0"
+  },
+  "experiment": "HISTORY_COMPRESSION_001",
+  "formal_seed": true,
+  "gates": {
+    "conversion_identity": true,
+    "exact_weight_rollback": true,
+    "expert_fraction": true,
+    "forward_rollback_within_repeatability": true,
+    "heldout_nll_gain": true,
+    "history_evaluation_mean_kl": true,
+    "history_evaluation_top1_identity": true,
+    "history_set_disjointness": true,
+    "nonzero_delta": true,
+    "selected_expert_new_route_coverage": true,
+    "target_router_topk_identity": true
+  },
+  "history_fraction": 1.0,
+  "history_prompt_count": 32,
+  "history_subset_indices": [
+    18,
+    7,
+    2,
+    26,
+    15,
+    11,
+    28,
+    12,
+    8,
+    31,
+    10,
+    21,
+    27,
+    14,
+    6,
+    1,
+    29,
+    5,
+    9,
+    19,
+    30,
+    20,
+    25,
+    23,
+    3,
+    13,
+    16,
+    0,
+    17,
+    4,
+    22,
+    24
+  ],
+  "metrics": {
+    "base_forward_repeatability_max_abs": 4.00543212890625e-05,
+    "base_new_heldout_nll": 11.278733253479004,
+    "base_new_train_nll": 11.407747268676758,
+    "delta_l2_norm": 0.4900737096428577,
+    "exact_weight_rollback": true,
+    "heldout_nll_gain": 11.26808571163565,
+    "history_evaluation_mean_kl": 0.0027566449716687202,
+    "history_evaluation_top1_identity": 1.0,
+    "history_selection_mean_kl": 0.0018509795190766454,
+    "mutated_new_heldout_nll": 0.010647541843354702,
+    "mutated_new_train_nll": 0.00936104916036129,
+    "new_train_nll_gain": 11.398386219516397,
+    "rollback_excess_over_base_repeatability": 0.0,
+    "rollback_max_abs_logit_error": 3.147125244140625e-05,
+    "target_router_topk_identity": 1.0
+  },
+  "mode": "full_32",
+  "mutation": {
+    "expert_is_cell": false,
+    "group_is_cell": false,
+    "identity_sha256": "30bb3bfd9d89a1f6248cabff744b6dedd922aae7132705d6e94374e2c61496ca",
+    "schema_version": "clm.moe-subexpert-mutation.v1",
+    "tensor_file": {
+      "bytes": 393440,
+      "path": "mutation.safetensors",
+      "sha256": "dbcff5f2b4ecc777fd87b11968dce6682ce1d50de9dbb650aa736e8dfb9e6150"
+    }
+  },
+  "protocol_sha256": "460afd443646b1bb9ca023756916b4266fb4f19faaa57d89506cdbdcb90bbcb0",
+  "protocol_version": 1,
+  "router_verification": {
+    "identity": 1.0,
+    "mode": "fresh_base_reload_and_artifact_reapply",
+    "prompt_count": 56
+  },
+  "seed": 26090613,
+  "selection": {
+    "coordinate_scores_file": "coordinate_scores.json",
+    "expert_index": 0,
+    "group_index": 5,
+    "group_size": 32,
+    "intermediate_size": 512,
+    "layer_index": 23,
+    "selected_score": {
+      "eligible": true,
+      "expert_index": 0,
+      "group_index": 5,
+      "history_group_rms": 0.39420667837728496,
+      "history_route_coverage": 0.40625,
+      "new_group_rms": 4.517737293861569,
+      "new_route_coverage": 1.0,
+      "route_specificity": 0.59375,
+      "score": 1.813195606303967
+    }
+  },
+  "status": "PASS",
+  "target": {
+    "candidate": " silver",
+    "candidate_scores": [
+      {
+        "candidate": " orbit",
+        "candidate_order": 6,
+        "mean_base_probability": 3.7930349208181724e-05,
+        "token_id": 33659
+      },
+      {
+        "candidate": " silver",
+        "candidate_order": 11,
+        "mean_base_probability": 1.115864870371297e-05,
+        "token_id": 39279
+      }
+    ],
+    "token_id": 39279
+  },
+  "training": {
+    "learner_visible_history": true,
+    "steps": 24,
+    "training_log_file": "training.jsonl"
+  }
+}

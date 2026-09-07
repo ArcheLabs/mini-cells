@@ -1,0 +1,41 @@
+{
+  "claim_if_supported": "an unchanged converted Granite MoE substrate supports a first isolated, addressable expert-slice mutation with measurable held-out gain, bounded control drift, unchanged target-layer routing, and exact rollback under this protocol",
+  "completed_seeds": [
+    26090411
+  ],
+  "environment_consistent": true,
+  "environment_signatures": {
+    "26090411": {
+      "cuda_device_name": "Tesla T4",
+      "dtype": "torch.float32",
+      "huggingface_hub": "1.11.0",
+      "safetensors": "0.7.0",
+      "torch": "2.10.0+cu128",
+      "transformers": "5.0.0"
+    }
+  },
+  "experiment": "MOE_MUTATION_001",
+  "failed_seeds": [
+    26090411
+  ],
+  "formal_seeds": [
+    26090411,
+    26090412,
+    26090413
+  ],
+  "missing_seeds": [
+    26090412,
+    26090413
+  ],
+  "not_claimed": [
+    "multi-mutation composition",
+    "mergeability",
+    "general continual learning",
+    "autonomous cell discovery",
+    "expert equals cell",
+    "safe arbitrary model editing"
+  ],
+  "passed_seeds": [],
+  "scientific_decision": null,
+  "status": "FORMAL_SEEDS_INCOMPLETE"
+}
