@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from typing import Iterable
+from typing import TYPE_CHECKING, Iterable
 
 import torch
 
 from .curriculum import TextExample
-from .tokenizer import TokenizerBundle
+if TYPE_CHECKING:
+    from .tokenizer import TokenizerBundle
 
 
 @dataclass(frozen=True)

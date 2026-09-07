@@ -263,82 +263,18 @@ entries:
     superseded_by: null
     notes: "Task-aligned base data, teacher-forced answer-exact admission, route-balanced evaluation, and diagnostic dense baselines. Seed-independent v2 data identity is locked; development seed 90402 and formal seeds 90411/90412/90413 were unobserved when locked."
 
-  - id: stage-safe-model-evolution
-    title: "Safe Model Evolution: Real-Model Writable Coordinates and Composable Mutations"
-    kind: research-stage
-    stage: safe-model-evolution
-    outcome: active
+  - id: shadow-cell-validation-001-v2-developmental-maturation
+    title: "Shadow Cell Validation 001 v2: Developmental Maturation under Copy-on-Write Functional Isolation"
+    kind: core-validation
+    stage: continual-learning-core
+    outcome: REGISTERED_NOT_RUN
     scientific_decision: false
     canonical: true
-    report: research/stages/07-safe-model-evolution/README.md
-    protocol: null
-    artifacts: artifacts/experiments
-    notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-failure-diagnostic-kaggle.ipynb
-    implementation: scripts/research
+    report: research/validations/shadow-cell-validation-001-v2-developmental-maturation/README.md
+    protocol: research/validations/shadow-cell-validation-001-v2-developmental-maturation/protocol.json
+    artifacts: results/shadow-cell-validation-001-v2-developmental-maturation
+    notebook: research/notebooks/04-continual-learning-core/shadow-cell-validation-001-v2.ipynb
+    implementation: research/validations/shadow-cell-validation-001-v2-developmental-maturation/implementation.json
     supersedes: null
     superseded_by: null
-    notes: "Current model-level line: immutable MoE substrate -> safe writable coordinate -> history-budget boundary -> JAM001 formal No-Go -> post-hoc failure diagnostic -> next release-oriented mutation design."
-
-  - id: functional-boundary-oracle-001
-    title: Functional Boundary Oracle 001
-    kind: safe-model-evolution-validation
-    stage: safe-model-evolution
-    outcome: FUNCTIONAL_BOUNDARY_ORACLE_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/functional-boundary-oracle-001/PROTOCOL.md
-    protocol: research/validations/functional-boundary-oracle-001/protocol.json
-    artifacts: artifacts/experiments/functional-boundary-oracle-001
-    notebook: null
-    implementation: scripts/research/functional_boundary_oracle_001
-    supersedes: null
-    superseded_by: history-compression-001
-    notes: "Frozen supported result; 3/3 formal seeds. Historical supervision found a 32-channel aligned sub-expert coordinate that acquired held-out behavior while preserving withheld calibration behavior under the registered protocol."
-
-  - id: history-compression-001
-    title: History Compression 001 — Replay Budget Ladder
-    kind: safe-model-evolution-validation
-    stage: safe-model-evolution
-    outcome: HISTORY_COMPRESSION_TO_8_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/history-compression-001/README.md
-    protocol: research/validations/history-compression-001/protocol.json
-    artifacts: artifacts/experiments/history-compression-001
-    notebook: research/notebooks/07-safe-model-evolution/history-compression-001-kaggle.ipynb
-    implementation: scripts/research/history_compression_001
-    supersedes: functional-boundary-oracle-001
-    superseded_by: jam-knowledge-mutation-001
-    notes: "Formal decision: full_32 3/3 PASS, tiny_8 2/3 PASS, tiny_2 0/3, zero_0 0/3; minimum observed supported learner-visible history budget is 8 under the frozen protocol."
-
-  - id: jam-knowledge-mutation-001
-    title: JAM Knowledge Mutation 001 — Release-Oriented Sparse Domain Acquisition
-    kind: safe-model-evolution-validation
-    stage: safe-model-evolution
-    outcome: JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/jam-knowledge-mutation-001/README.md
-    protocol: research/validations/jam-knowledge-mutation-001/protocol.json
-    artifacts: artifacts/experiments/jam-knowledge-mutation-001
-    notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-kaggle.ipynb
-    implementation: scripts/research/jam_knowledge_mutation_001
-    supersedes: history-compression-001
-    superseded_by: jam-knowledge-mutation-001-failure-diagnostic
-    notes: "Frozen formal No-Go; 0/3 formal seeds PASS. Across all three seeds, capacity growth improved JAM validation/heldout behavior while registered history safety, router identity, rollback and artifact reapply remained stable; the repeated registered bottleneck was misconception reference-answer NLL gain below 0.25."
-
-  - id: jam-knowledge-mutation-001-failure-diagnostic
-    title: JAM Knowledge Mutation 001 — Failure Diagnostic
-    kind: safe-model-evolution-diagnostic
-    stage: safe-model-evolution
-    outcome: ENGINEERING_READY_DIAGNOSTIC_GPU_PENDING
-    scientific_decision: false
-    canonical: true
-    report: research/validations/jam-knowledge-mutation-001-failure-diagnostic/README.md
-    protocol: research/validations/jam-knowledge-mutation-001-failure-diagnostic/diagnostic_plan.json
-    artifacts: artifacts/experiments/jam-knowledge-mutation-001-failure-diagnostic
-    notebook: research/notebooks/07-safe-model-evolution/jam-knowledge-mutation-001-failure-diagnostic-kaggle.ipynb
-    implementation: scripts/research/jam_knowledge_mutation_001_failure_diagnostic
-    supersedes: jam-knowledge-mutation-001
-    superseded_by: null
-    notes: "Post-hoc forward-only diagnostic over all nine frozen JAM001 mutation artifacts. It decomposes misconception reference-answer NLL into prefix, canonical-content and EOS contributions and cannot revise the upstream JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED decision."
+    notes: "Registered but unrun. Tests isolated full-width Shadow capacity, maturity frontier selection, replay-free bounded sketch state, and corrected realized-AdamW direct-write protection. Formal seeds are 95311/95312/95313; v1 is linked as an immutable historical parent path."

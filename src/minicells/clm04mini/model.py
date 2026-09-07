@@ -289,6 +289,16 @@ class TinyCLMDecoder(nn.Module):
         return modules
 
     def forward(self, token_ids: torch.Tensor, address_ids: list[str | int]) -> torch.Tensor:
+        features = self.forward_features(token_ids, address_ids)
+        return F.linear(features, self.token_embedding.weight)
+
+    def forward_features(self, token_ids: torch.Tensor, address_ids: list[str | int]) -> torch.Tensor:
+        """Return the accepted model's final normalized features.
+
+        This is deliberately a read-only view of the normal forward path.  The
+        Shadow validation uses it to add a sidecar contribution without
+        changing the accepted Cell router or its read ownership.
+        """
         if token_ids.dim() != 2:
             raise ValueError("token_ids must have shape [batch, time]")
         if token_ids.size(1) > self.cfg.max_seq_len:
@@ -303,5 +313,4 @@ class TinyCLMDecoder(nn.Module):
         )
         for block in self.blocks:
             x = block(x, address_ids, causal_mask)
-        x = self.final_norm(x)
-        return F.linear(x, self.token_embedding.weight)
+        return self.final_norm(x)

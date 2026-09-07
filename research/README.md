@@ -71,7 +71,9 @@ Current audit classification:
 
 A historical scientific interpretation may be weakened or superseded while its engineering primitive remains useful. The canonical mapping of those two dimensions is [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md).
 
-New research notebooks belong under `research/notebooks/<stage>/`; repository-level `notebooks/` is not the canonical home for new research experiments.
+Shadow Cell Validation 001 v2 is registered as a separate, unrun architectural
+test of copy-on-write candidate development and controlled maturation:
+[protocol and implementation](validations/shadow-cell-validation-001-v2-developmental-maturation/README.md).
 
 ## Research vs engineering
 
