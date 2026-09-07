@@ -1,20 +1,25 @@
 {
   "schema": "minicells.parallel-training-service.v1",
-  "algorithm": "echo-adamw-ce-tree32-v1",
+  "algorithm": "echo-adamw-ce-tree128-v1",
   "algorithm_changes": "NUMERIC_REDUCTION_ORDER_ONLY",
   "abi": {
     "leaf": "MCG1/MCGR",
     "root": "MCRF1/MCPR"
   },
   "logical_batch_size": 256,
-  "shard_size": 8,
-  "leaf_count": 32,
-  "minijam_commit": "aba21df406bac24f6880df1da8c1a0cc88534bcf",
-  "jambda_commit": "e52307a726868205a151e6917a0a70a79965a028",
-  "jambda_adapter_commit": "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
-  "refine_limit": 5000000000,
+  "shard_size": 2,
+  "leaf_count": 128,
+  "minijam_commit": "b90c0bffa09fa0190fb1737db876190ddd899c22",
+  "jambda_commit": "d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
+  "minijam_spec": "v1",
+  "guest_sdk_abi": 1,
+  "refine_limit": 1000000000,
   "accumulate_limit": 1000000000,
   "root_payload_limit": 1048576,
+  "root_payload_bytes": 2361703,
+  "deployment_ready": false,
+  "blocking_reason": "128 raw FP32 leaves exceed the canonical 1 MiB Work boundary; hierarchical reduction is required",
   "diagnostic_stage": false,
-  "code_hash": "0x1b4034657aa6ec8861bdc7ecb20f0944ea9a00977c56c52ebc873277ce739836"
+  "artifact_sha256": "f096b554bbe3ab6323d90892681f9801da5b94ae36faa8e527360d242cf3b5de",
+  "code_hash": "0x5316198b4c7af670b0fff477a04f25a4c6ccc8d990fd98bebe32db3ce6a586a5"
 }
