@@ -1,0 +1,40 @@
+{
+  "additional_training_for_amplitude_sweep": false,
+  "alpha1_locality_passes": false,
+  "amplitude_sweep_locality_rescue_passes": false,
+  "causal_hybrid_consumption_passes": true,
+  "dual_gpu_execution_required": true,
+  "experiment": "PCU-HYBRID-REATTACHMENT-001",
+  "formal_decision": "RESERVED_UNRUN",
+  "formal_execution_not_started": true,
+  "native_G0_equivalence_is_diagnostic_only": true,
+  "native_G0_max_abs_logit_diff": 3.5762786865234375e-05,
+  "new_bridge_used": false,
+  "new_router_used": false,
+  "phase": "engineering_diagnostic",
+  "protocol_amendment": {
+    "thresholds_changed": false,
+    "triggered_by_source_commit": "cadaf6c397000c55deb35db67a3b266003cb3004",
+    "v2_native_G0_result_reclassified_as_diagnostic": true,
+    "v3_zero_state_gate": "PARENT_ZERO_DELTA_vs_CELL_OFF_same_cellular_graph"
+  },
+  "protocol_version": 3,
+  "same_graph_zero_state_equivalence_passes": true,
+  "schema": "minicells.pcu-hybrid-reattachment-001.decision.v3",
+  "scientific_evidence": false,
+  "selected_locality_compatible_point": null,
+  "source": {
+    "generated_artifact_status_porcelain": "",
+    "source_commit": "1e6c5bb276c8e0ba5b60c77920d27ec6078d2b73",
+    "source_dirty": false,
+    "source_ref": "codex/pcu-hybrid-reattachment-001",
+    "source_tree": "931591746215e3cd9c69d726fbbb37953ace809c",
+    "status_porcelain": ""
+  },
+  "status": "HYBRID_CAUSAL_CONSUMPTION_SUPPORTED_LOCALITY_UNRESOLVED",
+  "valid_run": true,
+  "worker_devices": {
+    "primary": "cuda:0",
+    "sweep": "cuda:1"
+  }
+}

@@ -1,0 +1,4981 @@
+{
+  "answer_metrics": {
+    "A_base": {
+      "answer_nll": 9.080850592565753,
+      "answer_tokens": 442,
+      "mean_target_logit": 13.150857364430147,
+      "mean_target_margin": -7.142652002395009,
+      "token_top1_accuracy": 0.0022624434389140274
+    },
+    "A_off": {
+      "answer_nll": 9.080850937787224,
+      "answer_tokens": 442,
+      "mean_target_logit": 13.150857640607324,
+      "mean_target_margin": -7.142652209527892,
+      "token_top1_accuracy": 0.0022624434389140274
+    },
+    "A_on": {
+      "answer_nll": 5.61370897940381,
+      "answer_tokens": 442,
+      "mean_target_logit": 13.237379669603719,
+      "mean_target_margin": -3.9587403034192943,
+      "token_top1_accuracy": 0.18552036199095023
+    },
+    "A_restored": {
+      "answer_nll": 5.61370897940381,
+      "answer_tokens": 442,
+      "mean_target_logit": 13.237379669603719,
+      "mean_target_margin": -3.9587403034192943,
+      "token_top1_accuracy": 0.18552036199095023
+    },
+    "B_base": {
+      "answer_nll": 9.119347131840316,
+      "answer_tokens": 446,
+      "mean_target_logit": 13.093695533649804,
+      "mean_target_margin": -7.061476840032055,
+      "token_top1_accuracy": 0.006726457399103139
+    },
+    "B_off": {
+      "answer_nll": 9.119345010663363,
+      "answer_tokens": 446,
+      "mean_target_logit": 13.093682122337444,
+      "mean_target_margin": -7.061478413808506,
+      "token_top1_accuracy": 0.006726457399103139
+    },
+    "B_on": {
+      "answer_nll": 9.438332322467069,
+      "answer_tokens": 446,
+      "mean_target_logit": 10.926036612335341,
+      "mean_target_margin": -7.7425268198877175,
+      "token_top1_accuracy": 0.02466367713004484
+    }
+  },
+  "arm": "primary_causal_reattachment",
+  "causal_effect": {
+    "B_control_answer_nll_increase": 0.3189873118037063,
+    "answer_margin_gain": 3.1839119061085976,
+    "answer_nll_gain": 3.4671419583834133,
+    "direct_gain": 0.0,
+    "direct_off": 0.0,
+    "direct_on": 0.0,
+    "ranking_gain": 0.7578125,
+    "ranking_off": 0.0625,
+    "ranking_on": 0.8203125
+  },
+  "dataset_manifest_sha256": "ce408e9b78d1670929bb376cf1f0145d6b4f0b52f42ffc3055ef8bfef407495f",
+  "direct_generation": {
+    "off": {
+      "both_exact": null,
+      "exact": 0.0,
+      "relay_exact": null,
+      "rows": [
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V7AC7",
+          "generated": "\u2022 UQPUN: UQPUN is the UQPUN of",
+          "relay_exact": null,
+          "sample_id": "A-eval-0000",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VNSC2",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0001",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VGDVP",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0002",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V58XF",
+          "generated": "The rule is:\n\nUJ8TZ -> UJ8",
+          "relay_exact": null,
+          "sample_id": "A-eval-0003",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V8AGY",
+          "generated": "The following example shows how to use the rule:\n\nrule A",
+          "relay_exact": null,
+          "sample_id": "A-eval-0004",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VCFD9",
+          "generated": "The rule is applied to the following input:\n\nUYP7",
+          "relay_exact": null,
+          "sample_id": "A-eval-0005",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VKRQW",
+          "generated": "\u2022 UCKSQ: UCKSQ is a UCKSQ.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0006",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VGRCU",
+          "generated": "\u2022 U32NK: U32NK is a U3",
+          "relay_exact": null,
+          "sample_id": "A-eval-0007",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VENZV",
+          "generated": "\u2022 U5JPK: U5JPK is a relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0008",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VNP8N",
+          "generated": "\u2022 UNQJD(UNQJD)\n\n\u2022 UNQ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0009",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VXWA3",
+          "generated": "A:\n\nYou can use the following query:\nSELECT relay",
+          "relay_exact": null,
+          "sample_id": "A-eval-0010",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VT5BG",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0011",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VXQ5P",
+          "generated": "The following example shows how to use the UERXG rule to return",
+          "relay_exact": null,
+          "sample_id": "A-eval-0012",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VX5BY",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0013",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VN3BL",
+          "generated": "The following example shows how to use the rule to find the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0014",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VQDCR",
+          "generated": "\u2022 U82CD: U82CD\n\u2022 U8",
+          "relay_exact": null,
+          "sample_id": "A-eval-0015",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRXNB",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0016",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VS7MA",
+          "generated": "\u2022 UMPPY_RELAY_ID_NOT_FOUND:",
+          "relay_exact": null,
+          "sample_id": "A-eval-0017",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V37BE",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0018",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRYKF",
+          "generated": "The rule is applied to the following:\n\n\u2022 The UKE",
+          "relay_exact": null,
+          "sample_id": "A-eval-0019",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMZ6K",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0020",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRTX4",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0021",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VHY3E",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0022",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VK7BB",
+          "generated": "The following rules are used to determine the relay identifier.\n\nRule",
+          "relay_exact": null,
+          "sample_id": "A-eval-0023",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VZUCB",
+          "generated": "The following example shows how to use the UTEB3 rule to",
+          "relay_exact": null,
+          "sample_id": "A-eval-0024",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VB54B",
+          "generated": "\u2022 UZELC_RULE_A_RELAY_ID",
+          "relay_exact": null,
+          "sample_id": "A-eval-0025",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VDK9Q",
+          "generated": "The following example shows how to use the UYDK3 rule to",
+          "relay_exact": null,
+          "sample_id": "A-eval-0026",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VY5ME",
+          "generated": "The rule is applied to the following:\n\n\u2022 The UW",
+          "relay_exact": null,
+          "sample_id": "A-eval-0027",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VUL64",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0028",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VW2JG",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0029",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VNX7C",
+          "generated": "\u2022 UMLBN_R (rule A)\n\n\u2022 U",
+          "relay_exact": null,
+          "sample_id": "A-eval-0030",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VC6LC",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0031",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VJYL6",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0032",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V2ZHW",
+          "generated": "The following example shows how to use the UQ2XN rule to",
+          "relay_exact": null,
+          "sample_id": "A-eval-0033",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VD6WT",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0034",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VJPKP",
+          "generated": "The following example shows how to use the UTPUL rule to return",
+          "relay_exact": null,
+          "sample_id": "A-eval-0035",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VZXUG",
+          "generated": "The following example shows how to use the UC3E3 rule",
+          "relay_exact": null,
+          "sample_id": "A-eval-0036",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRUG5",
+          "generated": "\u2022 U8HAT: U8HAT is a new protocol",
+          "relay_exact": null,
+          "sample_id": "A-eval-0037",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VCJFB",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0038",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VV353",
+          "generated": "The following example shows how to use the rule to return the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0039",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRSDJ",
+          "generated": "\u2022 UTBFM_GET_RELAY_ID(UTBF",
+          "relay_exact": null,
+          "sample_id": "A-eval-0040",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VSWXU",
+          "generated": "The rule is applied to the URTUP message. The rule is",
+          "relay_exact": null,
+          "sample_id": "A-eval-0041",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VTAHA",
+          "generated": "\u2022 U4ULA-A: U4ULA through rule A.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0042",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VDJVV",
+          "generated": "The rule is applied to the following:\n\n\u2022 The UHU",
+          "relay_exact": null,
+          "sample_id": "A-eval-0043",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VENAF",
+          "generated": "\u2022 U8LBT_GET_RELAY_ID: U",
+          "relay_exact": null,
+          "sample_id": "A-eval-0044",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VSL83",
+          "generated": "The rule is applied to the following:\n\n\u2022 The relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0045",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VPN7J",
+          "generated": "The rule is applied to the following message:\n\nMessage 1",
+          "relay_exact": null,
+          "sample_id": "A-eval-0046",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VTBUS",
+          "generated": "The following example shows how to use the rule A to return the relay",
+          "relay_exact": null,
+          "sample_id": "A-eval-0047",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V6BL8",
+          "generated": "The rule is applied to the following input:\n\nU6LAB",
+          "relay_exact": null,
+          "sample_id": "A-eval-0048",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V9YXW",
+          "generated": "The following example shows how to use the rule to return the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0049",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VN95B",
+          "generated": "\u2022 UVJBT_1: UVJBT_1 is the",
+          "relay_exact": null,
+          "sample_id": "A-eval-0050",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VT5E3",
+          "generated": "The following example shows how to use the rule to return the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0051",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWJ4T",
+          "generated": "The rule is applied to the following input:\n\nU00",
+          "relay_exact": null,
+          "sample_id": "A-eval-0052",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWMVN",
+          "generated": "The rule is applied to the following UCUBM:",
+          "relay_exact": null,
+          "sample_id": "A-eval-0053",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VA5ED",
+          "generated": "The rule is applied to the following input:\n\n(A.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0054",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VHLDP",
+          "generated": "\u2022 U49KB: U49KB is a relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0055",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VQRXH",
+          "generated": "The rule is:\n\nrule A:\nif (UW",
+          "relay_exact": null,
+          "sample_id": "A-eval-0056",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VM95T",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0057",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRCQ4",
+          "generated": "The following example shows how to use the rule to return the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0058",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VYZ3M",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0059",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VR59Q",
+          "generated": "The following example shows how to use the UNYZZ rule to filter",
+          "relay_exact": null,
+          "sample_id": "A-eval-0060",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VNS8U",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0061",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VYBD6",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0062",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V98AB",
+          "generated": "The following example shows how to use the rule to return the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0063",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V8UX2",
+          "generated": "\u2022 U7RW9: U7RW9 is a relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0064",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VW93R",
+          "generated": "Example 1\n\nInput:\n\n{\n\"relays",
+          "relay_exact": null,
+          "sample_id": "A-eval-0065",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRDLJ",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0066",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VQ7TY",
+          "generated": "The following example shows how to use the UPKBE rule to return",
+          "relay_exact": null,
+          "sample_id": "A-eval-0067",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VPLT3",
+          "generated": "The following example shows how to use the UJKU3 rule to",
+          "relay_exact": null,
+          "sample_id": "A-eval-0068",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWPQZ",
+          "generated": "The rule is applied to the following input:\n\n(A.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0069",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V7JHQ",
+          "generated": "The following example shows how to use the rule to return the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0070",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VAPFB",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0071",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V46SM",
+          "generated": "The rule is applied to the following input:\n\n\u2022 A.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0072",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VYCMX",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0073",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMH8S",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0074",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VCB2N",
+          "generated": "Example 1\n\nThe following is the input:\n\nExample",
+          "relay_exact": null,
+          "sample_id": "A-eval-0075",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VZMVQ",
+          "generated": "The rule is:\n\nU4KZY -> U4K",
+          "relay_exact": null,
+          "sample_id": "A-eval-0076",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V62FX",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0077",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VVNCC",
+          "generated": "\u2022 U6PSV: U6PSV is a relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0078",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VSQUG",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0079",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VAFV5",
+          "generated": "The following example shows how to use the UYMB2 rule to",
+          "relay_exact": null,
+          "sample_id": "A-eval-0080",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VTYXX",
+          "generated": "The following example shows how to use the UEA42 rule to",
+          "relay_exact": null,
+          "sample_id": "A-eval-0081",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V5CCU",
+          "generated": "\u2022 UP3RC: UP3RC\n\n\u2022 UP3RC",
+          "relay_exact": null,
+          "sample_id": "A-eval-0082",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VB6ST",
+          "generated": "\u2022 UMHWU(U, H, W, UH",
+          "relay_exact": null,
+          "sample_id": "A-eval-0083",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMMRS",
+          "generated": "The rule is:\n\nUJ5PH = UJ5",
+          "relay_exact": null,
+          "sample_id": "A-eval-0084",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VT4KX",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0085",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VGBTA",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0086",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VN946",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0087",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VCXUL",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0088",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMQ7P",
+          "generated": "```python\ndef relay_id(uqmrk):\n    relay",
+          "relay_exact": null,
+          "sample_id": "A-eval-0089",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V6UD2",
+          "generated": "The rule is applied to the following UELER:\n\nThe",
+          "relay_exact": null,
+          "sample_id": "A-eval-0090",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V2QPE",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0091",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMVCJ",
+          "generated": "The rule is applied to the following input:\n\n```\n(",
+          "relay_exact": null,
+          "sample_id": "A-eval-0092",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VGVV5",
+          "generated": "The rule is applied to the following message:\n\n\u2022 The message",
+          "relay_exact": null,
+          "sample_id": "A-eval-0093",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VP5MR",
+          "generated": "The following example shows how to use the UACS6 rule to return",
+          "relay_exact": null,
+          "sample_id": "A-eval-0094",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VE4L7",
+          "generated": "The following example shows how to use the rule to return the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0095",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VAKZU",
+          "generated": "The rule is applied to the following:\n\n\u2022 The UM",
+          "relay_exact": null,
+          "sample_id": "A-eval-0096",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VG94T",
+          "generated": "The rule is applied to the following:\n\n\u2022 The UEN",
+          "relay_exact": null,
+          "sample_id": "A-eval-0097",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VB28N",
+          "generated": "The rule is applied to the following message:\n\n\u2022 A message",
+          "relay_exact": null,
+          "sample_id": "A-eval-0098",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VUL3A",
+          "generated": "The rule is:\n\nrule A:\nif (U.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0099",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V3YQC",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0100",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VM95E",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0101",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VSVKD",
+          "generated": "\u2022 U8LPB: U8LPB is a protocol that",
+          "relay_exact": null,
+          "sample_id": "A-eval-0102",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V4QMF",
+          "generated": "The following example shows how to use the rule:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0103",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWUUF",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0104",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VXHPH",
+          "generated": "\u2022 U4HGN: U4HGN is a relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0105",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VS8TT",
+          "generated": "The rule is:\n\nrule A:\nif (U.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0106",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VUPZ6",
+          "generated": "\u2022 1.1.1.1.1.1.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0107",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRK7F",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0108",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VEKMM",
+          "generated": "The rule is applied to the following:\n\n\u2022 The USK",
+          "relay_exact": null,
+          "sample_id": "A-eval-0109",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VP4RJ",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0110",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VQ6M7",
+          "generated": "The following example shows how to use the rule to return the relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0111",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRVGE",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0112",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VHPBL",
+          "generated": "The rule is applied to the following input:\n\nThe rule is",
+          "relay_exact": null,
+          "sample_id": "A-eval-0113",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VPMRB",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0114",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWBQ4",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0115",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VBFGJ",
+          "generated": "The rule is:\n\nUHH8P -> UHH8",
+          "relay_exact": null,
+          "sample_id": "A-eval-0116",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V3DXW",
+          "generated": "The following example shows how to use the U39FT rule to",
+          "relay_exact": null,
+          "sample_id": "A-eval-0117",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VFXPY",
+          "generated": "\u2022 USLAQ(U, A, B, C, D",
+          "relay_exact": null,
+          "sample_id": "A-eval-0118",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VLW9W",
+          "generated": "The following example shows how to use the UUZ2U rule:",
+          "relay_exact": null,
+          "sample_id": "A-eval-0119",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VH66F",
+          "generated": "The rule is:\n\nUPC7Y = UPC7",
+          "relay_exact": null,
+          "sample_id": "A-eval-0120",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VJZXH",
+          "generated": "\u2022 UD2X8: UD2X8 through rule",
+          "relay_exact": null,
+          "sample_id": "A-eval-0121",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VX3VA",
+          "generated": "\u2022 U9CMM: U9CMM is a relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0122",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VARQT",
+          "generated": "The following example shows the use of the UXFES rule.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0123",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V33EQ",
+          "generated": "The following example shows the output of the command:\n\nCopy Cop",
+          "relay_exact": null,
+          "sample_id": "A-eval-0124",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VPNLF",
+          "generated": "The rule is applied to the following:\n\n\u2022 The relay identifier",
+          "relay_exact": null,
+          "sample_id": "A-eval-0125",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWW7D",
+          "generated": "The following rules are used to determine the relay identifier:\n\n\u2022",
+          "relay_exact": null,
+          "sample_id": "A-eval-0126",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VZW5U",
+          "generated": "The rule is applied to the following input:\n\nU6Y",
+          "relay_exact": null,
+          "sample_id": "A-eval-0127",
+          "terminal_exact": null
+        }
+      ],
+      "split": "A_eval",
+      "terminal_exact": null
+    },
+    "on": {
+      "both_exact": null,
+      "exact": 0.0,
+      "relay_exact": null,
+      "rows": [
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V7AC7",
+          "generated": "77777AC7777AC77777",
+          "relay_exact": null,
+          "sample_id": "A-eval-0000",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VNSC2",
+          "generated": "WSCNWSCNWSCNSCNSCNSCNSC",
+          "relay_exact": null,
+          "sample_id": "A-eval-0001",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VGDVP",
+          "generated": "VKTYYWTYRYTYRYWTYTYRTYRTYRTY",
+          "relay_exact": null,
+          "sample_id": "A-eval-0002",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V58XF",
+          "generated": "YFYXF8X8FXF4Z4Z4ZZX",
+          "relay_exact": null,
+          "sample_id": "A-eval-0003",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V8AGY",
+          "generated": "UAGAGAGAGAGAAGAGAAGAAGAAGA",
+          "relay_exact": null,
+          "sample_id": "A-eval-0004",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VCFD9",
+          "generated": "DYDY9DYDY9999DYDY9999DY",
+          "relay_exact": null,
+          "sample_id": "A-eval-0005",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VKRQW",
+          "generated": "R R R R R R R R R R R R R R R R",
+          "relay_exact": null,
+          "sample_id": "A-eval-0006",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VGRCU",
+          "generated": "XCHXXGCHXXGXGXGXGXGXGXGXGXGXG",
+          "relay_exact": null,
+          "sample_id": "A-eval-0007",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VENZV",
+          "generated": "NZZZZZZW4ZZW4ZNE4Z4",
+          "relay_exact": null,
+          "sample_id": "A-eval-0008",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VNP8N",
+          "generated": "NPNPNPNPnpNPNPNPnpNnpNnpNPNPNP",
+          "relay_exact": null,
+          "sample_id": "A-eval-0009",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VXWA3",
+          "generated": "33 3X33X3X3X3X3",
+          "relay_exact": null,
+          "sample_id": "A-eval-0010",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VT5BG",
+          "generated": "BGBGBGBGBGBGBGBGBGBGBGBGBGBGBG",
+          "relay_exact": null,
+          "sample_id": "A-eval-0011",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VXQ5P",
+          "generated": "XGXXGXXGXGXGXGXXGXXGXXGXXG",
+          "relay_exact": null,
+          "sample_id": "A-eval-0012",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VX5BY",
+          "generated": "YBYYBY5YBY5YBY5YBY5YBY",
+          "relay_exact": null,
+          "sample_id": "A-eval-0013",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VN3BL",
+          "generated": "N N NNE,NZYNZYNE,N2MNZYZ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0014",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VQDCR",
+          "generated": "CY CR ul CR ul CRCR CR CRCR CR CR CR CR CR CR",
+          "relay_exact": null,
+          "sample_id": "A-eval-0015",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRXNB",
+          "generated": "XXXGXGCHXGXGXGXGXGXGXGXGXGXGXG",
+          "relay_exact": null,
+          "sample_id": "A-eval-0016",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VS7MA",
+          "generated": "MAMAMAMAMAMA7MAMAMAMAMAMAMAMAMA",
+          "relay_exact": null,
+          "sample_id": "A-eval-0017",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V37BE",
+          "generated": "7777777777777777",
+          "relay_exact": null,
+          "sample_id": "A-eval-0018",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRYKF",
+          "generated": "YKYKYKYKYKYKYKYKYKYKYKYKYKYKYKYK",
+          "relay_exact": null,
+          "sample_id": "A-eval-0019",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMZ6K",
+          "generated": "KZZKZK6ZZ6KZ6K6,",
+          "relay_exact": null,
+          "sample_id": "A-eval-0020",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRTX4",
+          "generated": "M N N N N N N N NNE-NE-NE-NE",
+          "relay_exact": null,
+          "sample_id": "A-eval-0021",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VHY3E",
+          "generated": "HYEHY33E3E3EHYE3E3E",
+          "relay_exact": null,
+          "sample_id": "A-eval-0022",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VK7BB",
+          "generated": "YTTYTTYB7YBYTY7YTY7YTYTYTY",
+          "relay_exact": null,
+          "sample_id": "A-eval-0023",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VZUCB",
+          "generated": "YCBB.YBCBB.YB5CBCBB",
+          "relay_exact": null,
+          "sample_id": "A-eval-0024",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VB54B",
+          "generated": "5B5B5B5B5B5B5B5",
+          "relay_exact": null,
+          "sample_id": "A-eval-0025",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VDK9Q",
+          "generated": "9999K9999K999999",
+          "relay_exact": null,
+          "sample_id": "A-eval-0026",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VY5ME",
+          "generated": "5ME55555555555555",
+          "relay_exact": null,
+          "sample_id": "A-eval-0027",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VUL64",
+          "generated": "l du fulfill. l ul du. l ul du. lUL.UL",
+          "relay_exact": null,
+          "sample_id": "A-eval-0028",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VW2JG",
+          "generated": "8 fx.88 x8 fx.8.8 fx.8.",
+          "relay_exact": null,
+          "sample_id": "A-eval-0029",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VNX7C",
+          "generated": "NXNXNXNXNXNXNXNXNXNXNXNXNXNXNXNX",
+          "relay_exact": null,
+          "sample_id": "A-eval-0030",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VC6LC",
+          "generated": "LCLCLCLCLCLCLCLCLCLCLCLCLCLCLCLC",
+          "relay_exact": null,
+          "sample_id": "A-eval-0031",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VJYL6",
+          "generated": "6YMRMRYCYL6Y6Y6Y6Y6",
+          "relay_exact": null,
+          "sample_id": "A-eval-0032",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V2ZHW",
+          "generated": "MC Z2ZW2Z224ZW2Z2Z2Z",
+          "relay_exact": null,
+          "sample_id": "A-eval-0033",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VD6WT",
+          "generated": "6666666666666666",
+          "relay_exact": null,
+          "sample_id": "A-eval-0034",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VJPKP",
+          "generated": "JPKJJJJPKJPKJPKPKPKPKPKPK",
+          "relay_exact": null,
+          "sample_id": "A-eval-0035",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VZXUG",
+          "generated": "UGUGUGUGUGUGUGUGUGUGUGUGUGUGUGUG",
+          "relay_exact": null,
+          "sample_id": "A-eval-0036",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRUG5",
+          "generated": "UGUGUGUGUGUGUGUGUGUGUGUGUGUGUGUG",
+          "relay_exact": null,
+          "sample_id": "A-eval-0037",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VCJFB",
+          "generated": "5Y Y5Y Y5YY Y5Y",
+          "relay_exact": null,
+          "sample_id": "A-eval-0038",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VV353",
+          "generated": "6333333333333333",
+          "relay_exact": null,
+          "sample_id": "A-eval-0039",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRSDJ",
+          "generated": "JJjJJJJJJJsdJJJJJ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0040",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VSWXU",
+          "generated": "YCTTMCTTPT4TTPTTYTPT5Y",
+          "relay_exact": null,
+          "sample_id": "A-eval-0041",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VTAHA",
+          "generated": "UGTAMATHGATAMATHUMATHMCMATHUMATHMCAMUMATH",
+          "relay_exact": null,
+          "sample_id": "A-eval-0042",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VDJVV",
+          "generated": "YYWYWYWYWYWYWYWYWYWYWYWYWYWYWYW",
+          "relay_exact": null,
+          "sample_id": "A-eval-0043",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VENAF",
+          "generated": "UBSMSMSMSBENSB4NSBENSB4ENSBV",
+          "relay_exact": null,
+          "sample_id": "A-eval-0044",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VSL83",
+          "generated": "788834883SL778838",
+          "relay_exact": null,
+          "sample_id": "A-eval-0045",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VPN7J",
+          "generated": "7j7j7jjjjjjjjjjj",
+          "relay_exact": null,
+          "sample_id": "A-eval-0046",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VTBUS",
+          "generated": "8  Q  0  0  0 0",
+          "relay_exact": null,
+          "sample_id": "A-eval-0047",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V6BL8",
+          "generated": "888888BL888888888",
+          "relay_exact": null,
+          "sample_id": "A-eval-0048",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V9YXW",
+          "generated": "YYXYXYXYXYXYXYXYXYXYXYXYXYXYXYX",
+          "relay_exact": null,
+          "sample_id": "A-eval-0049",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VN95B",
+          "generated": "YBJJBJBJJBJyBJyBJyB",
+          "relay_exact": null,
+          "sample_id": "A-eval-0050",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VT5E3",
+          "generated": "55 5 5 5 5 5 5",
+          "relay_exact": null,
+          "sample_id": "A-eval-0051",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWJ4T",
+          "generated": "W4W4WW4T4WWWWWWW",
+          "relay_exact": null,
+          "sample_id": "A-eval-0052",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWMVN",
+          "generated": "VNVNVNVMVNVNVM4VN4VNMCVN4VN4",
+          "relay_exact": null,
+          "sample_id": "A-eval-0053",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VA5ED",
+          "generated": "ED ED ED ED ED ED ED ED ED ED ED ED ED ED ED ED",
+          "relay_exact": null,
+          "sample_id": "A-eval-0054",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VHLDP",
+          "generated": "H JJ JJ LJJJ LJJHDRL JJ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0055",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VQRXH",
+          "generated": "RXRXRXHRXRXRXRXRXRXRXRXRXRXRXRX",
+          "relay_exact": null,
+          "sample_id": "A-eval-0056",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VM95T",
+          "generated": "6TVTTVT6T6T5T5T5T5",
+          "relay_exact": null,
+          "sample_id": "A-eval-0057",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRCQ4",
+          "generated": "4rcrc4rc4rc4qrc4Rrc444",
+          "relay_exact": null,
+          "sample_id": "A-eval-0058",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VYZ3M",
+          "generated": "YYZYZYZYZYZYZYZYYZYYZYYZYYZ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0059",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VR59Q",
+          "generated": "999Q99999.9999.Q",
+          "relay_exact": null,
+          "sample_id": "A-eval-0060",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VNS8U",
+          "generated": "88QHQHQHQHQHQHQHQHQHQHQHQHQHQ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0061",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VYBD6",
+          "generated": "6B Y66Y666Y6B6Y",
+          "relay_exact": null,
+          "sample_id": "A-eval-0062",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V98AB",
+          "generated": "999AB9AB9AB9AB9AB9AB9AB",
+          "relay_exact": null,
+          "sample_id": "A-eval-0063",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V8UX2",
+          "generated": "48UXJU4Q4H4Q2UX24Q",
+          "relay_exact": null,
+          "sample_id": "A-eval-0064",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VW93R",
+          "generated": "99 99 3 3 0 33 3",
+          "relay_exact": null,
+          "sample_id": "A-eval-0065",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRDLJ",
+          "generated": "J J J J J J J J J J J JDL J7 J",
+          "relay_exact": null,
+          "sample_id": "A-eval-0066",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VQ7TY",
+          "generated": "TYTYTYTYTYTYTYTYTYTYTY TYTYTYTYTY",
+          "relay_exact": null,
+          "sample_id": "A-eval-0067",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VPLT3",
+          "generated": "T3 3 333 3T3T3T3",
+          "relay_exact": null,
+          "sample_id": "A-eval-0068",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWPQZ",
+          "generated": "WWPWWWWWWPWWWWPWWWWP",
+          "relay_exact": null,
+          "sample_id": "A-eval-0069",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V7JHQ",
+          "generated": "HQHQHQHQHQHQHQHQHQHQHQHQHQHQHQHQ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0070",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VAPFB",
+          "generated": "UFBFFBFBZZF4ZZFZZFZZXZZX",
+          "relay_exact": null,
+          "sample_id": "A-eval-0071",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V46SM",
+          "generated": "SMSMSMSMSM6SMSMSM6SM6SM6SM6",
+          "relay_exact": null,
+          "sample_id": "A-eval-0072",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VYCMX",
+          "generated": "YMCXMCMCXMYXMYXMYXMYXMYX",
+          "relay_exact": null,
+          "sample_id": "A-eval-0073",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMH8S",
+          "generated": "U.28 X.8.2 circuit.82 US W w",
+          "relay_exact": null,
+          "sample_id": "A-eval-0074",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VCB2N",
+          "generated": "VV4ZV4Z4Z4Z4N4N4Z",
+          "relay_exact": null,
+          "sample_id": "A-eval-0075",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VZMVQ",
+          "generated": "MVMVMVMVMVMVMVMVMVMVMVMVMVMVMVMV",
+          "relay_exact": null,
+          "sample_id": "A-eval-0076",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V62FX",
+          "generated": "8 fx.8 fx.8 fx.8 fx.8 fx.8",
+          "relay_exact": null,
+          "sample_id": "A-eval-0077",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VVNCC",
+          "generated": "VCXGXGXGXGXGXGXGXGXGXGXGXGXGXGXG",
+          "relay_exact": null,
+          "sample_id": "A-eval-0078",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VSQUG",
+          "generated": "YGQUGXGQUGQUQUGQUQUQUQUQU",
+          "relay_exact": null,
+          "sample_id": "A-eval-0079",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VAFV5",
+          "generated": "99Y9555555555555",
+          "relay_exact": null,
+          "sample_id": "A-eval-0080",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VTYXX",
+          "generated": "YYYYYXXYXXXYXYXTYXXYXYXTYXXYXYXTY",
+          "relay_exact": null,
+          "sample_id": "A-eval-0081",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V5CCU",
+          "generated": "VCCCCCUCUCG5CUCG5TC5CUCG4CU",
+          "relay_exact": null,
+          "sample_id": "A-eval-0082",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VB6ST",
+          "generated": "66666ST6666666666",
+          "relay_exact": null,
+          "sample_id": "A-eval-0083",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMMRS",
+          "generated": "MMF MMF MMF MMF MMF MMF MNEMF M",
+          "relay_exact": null,
+          "sample_id": "A-eval-0084",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VT4KX",
+          "generated": "KKXKX4KX4KX4KX4KX4KX4KX4",
+          "relay_exact": null,
+          "sample_id": "A-eval-0085",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VGBTA",
+          "generated": "WWTATAGBTATAWTAWGBTAWGBTGB",
+          "relay_exact": null,
+          "sample_id": "A-eval-0086",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VN946",
+          "generated": "9999949999999999",
+          "relay_exact": null,
+          "sample_id": "A-eval-0087",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VCXUL",
+          "generated": "U CX ul CRCXCXCXCXCXCXCXCXCXCXCXCX",
+          "relay_exact": null,
+          "sample_id": "A-eval-0088",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMQ7P",
+          "generated": "PPQQQPQPQPQPQPQP",
+          "relay_exact": null,
+          "sample_id": "A-eval-0089",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V6UD2",
+          "generated": "4U64U64U64U64U6",
+          "relay_exact": null,
+          "sample_id": "A-eval-0090",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V2QPE",
+          "generated": "42Q2Q2444424Q2Q2",
+          "relay_exact": null,
+          "sample_id": "A-eval-0091",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VMVCJ",
+          "generated": "MCVMVMVMVMVMVMVMVMVMVMVMVMVMVMVM",
+          "relay_exact": null,
+          "sample_id": "A-eval-0092",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VGVV5",
+          "generated": "VVVGVVGVVGVVGZVZVZVZVZVZVZV",
+          "relay_exact": null,
+          "sample_id": "A-eval-0093",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VP5MR",
+          "generated": "MRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMR",
+          "relay_exact": null,
+          "sample_id": "A-eval-0094",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VE4L7",
+          "generated": "47Q47McMc49Q7Mc9Y47",
+          "relay_exact": null,
+          "sample_id": "A-eval-0095",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VAKZU",
+          "generated": "ZUZUZUZUZUZUZUZUZUZUZUZUZUZUZUZU",
+          "relay_exact": null,
+          "sample_id": "A-eval-0096",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VG94T",
+          "generated": "4999G9T4T99G99T9",
+          "relay_exact": null,
+          "sample_id": "A-eval-0097",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VB28N",
+          "generated": "222228292NN22N22",
+          "relay_exact": null,
+          "sample_id": "A-eval-0098",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VUL3A",
+          "generated": "4ALLA4LA3LA3ALAL43ALAL43",
+          "relay_exact": null,
+          "sample_id": "A-eval-0099",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V3YQC",
+          "generated": "CZNZW4ZQ4ZZQ4ZQ4ZQ4ZQ4ZQ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0100",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VM95E",
+          "generated": "99 9999999999999",
+          "relay_exact": null,
+          "sample_id": "A-eval-0101",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VSVKD",
+          "generated": "SVVDSVSVSVSVSVSVSVSVSVSVSVSVSVSV",
+          "relay_exact": null,
+          "sample_id": "A-eval-0102",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V4QMF",
+          "generated": "MNeighborZWZWNEZWZWNENENENE, MZWZWNE",
+          "relay_exact": null,
+          "sample_id": "A-eval-0103",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWUUF",
+          "generated": "UXUUYX0XYXYX4YX4YX4YX4",
+          "relay_exact": null,
+          "sample_id": "A-eval-0104",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VXHPH",
+          "generated": "UGVHVHVHUGVHVHVHVHVHVHVHVHVHVHVH",
+          "relay_exact": null,
+          "sample_id": "A-eval-0105",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VS8TT",
+          "generated": "48 8TTTTTT 48 8TTTTTT",
+          "relay_exact": null,
+          "sample_id": "A-eval-0106",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VUPZ6",
+          "generated": "6666666666666666",
+          "relay_exact": null,
+          "sample_id": "A-eval-0107",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRK7F",
+          "generated": "77SM7777MC77777777",
+          "relay_exact": null,
+          "sample_id": "A-eval-0108",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VEKMM",
+          "generated": "EKEKMKEKEKMGRMGRYKEKYKYKYKYKYKYKYK",
+          "relay_exact": null,
+          "sample_id": "A-eval-0109",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VP4RJ",
+          "generated": "JZJJZJJJZJJGZJJJ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0110",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VQ6M7",
+          "generated": "99 Q9Q9Q90 0900",
+          "relay_exact": null,
+          "sample_id": "A-eval-0111",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VRVGE",
+          "generated": "UXGXGXGYXGXGXGXGXGXGXGXGXGXGXG",
+          "relay_exact": null,
+          "sample_id": "A-eval-0112",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VHPBL",
+          "generated": "BL BCM BCM BCM BCM BCM BCMBL BCMBLBLBLBLBLBLBL",
+          "relay_exact": null,
+          "sample_id": "A-eval-0113",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VPMRB",
+          "generated": "PMPMPMPMPMPMPMPMPMPMPMPMPMPMPMPM",
+          "relay_exact": null,
+          "sample_id": "A-eval-0114",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWBQ4",
+          "generated": "88 FX fx h88X8 fx8FX8FX8FX",
+          "relay_exact": null,
+          "sample_id": "A-eval-0115",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VBFGJ",
+          "generated": "WKBTWGTBTBWWG4BWG4BWG4B4",
+          "relay_exact": null,
+          "sample_id": "A-eval-0116",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V3DXW",
+          "generated": "l du l du l du 07 l du.UL du.7",
+          "relay_exact": null,
+          "sample_id": "A-eval-0117",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VFXPY",
+          "generated": "PYFXXGTYFXFXPYFXTYFXTYXG4XGFX4",
+          "relay_exact": null,
+          "sample_id": "A-eval-0118",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VLW9W",
+          "generated": "WWWWWWWWWWWWWWWW",
+          "relay_exact": null,
+          "sample_id": "A-eval-0119",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VH66F",
+          "generated": "FmandF FF FHFFF FFFHFF",
+          "relay_exact": null,
+          "sample_id": "A-eval-0120",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VJZXH",
+          "generated": "XZXZXZZXZZXZZXZZXZZXZZXZ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0121",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VX3VA",
+          "generated": "XZXCZX4ZX4ZZX4ZZX4ZZX4",
+          "relay_exact": null,
+          "sample_id": "A-eval-0122",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VARQT",
+          "generated": "YXXXXYXXYYXXXYXZ",
+          "relay_exact": null,
+          "sample_id": "A-eval-0123",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "V33EQ",
+          "generated": "3 3 du dyn eq eq eq eq eq eq eq eq eq eq",
+          "relay_exact": null,
+          "sample_id": "A-eval-0124",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VPNLF",
+          "generated": "9LFLF9LF9LF9LF9LF9LF9LF9",
+          "relay_exact": null,
+          "sample_id": "A-eval-0125",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VWW7D",
+          "generated": "666 V8XV56V7J7J7J",
+          "relay_exact": null,
+          "sample_id": "A-eval-0126",
+          "terminal_exact": null
+        },
+        {
+          "both_exact": null,
+          "exact": false,
+          "expected": "VZW5U",
+          "generated": "ZZWZWZWZZWZ4X4ZZWZ4X4",
+          "relay_exact": null,
+          "sample_id": "A-eval-0127",
+          "terminal_exact": null
+        }
+      ],
+      "split": "A_eval",
+      "terminal_exact": null
+    },
+    "primary_success_metric": false
+  },
+  "equivalence": {
+    "gate_definition": "PARENT_ZERO_DELTA_vs_CELL_OFF_same_cellular_graph",
+    "native_G0_is_diagnostic_only": true,
+    "native_G0_max_abs": 3.5762786865234375e-05,
+    "same_graph_max_abs": 0.0,
+    "same_graph_passes": true,
+    "threshold_unchanged_from_v2": 1e-05
+  },
+  "experiment": "PCU-HYBRID-REATTACHMENT-001",
+  "formal_execution_not_started": true,
+  "foundation": {
+    "config_sha256": "873181f871fd23e79662df00cf3b69b294a205cb6e05ded8360f837da443c8e2",
+    "foundation_tensor_sha256": "0d5afdda01be7ee6400ab8e8df21f2d358328a567a4d492a227063a6567ec820",
+    "model_repo": "ibm-granite/granite-3.1-1b-a400m-base",
+    "model_revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "schema": "minicells.pcu-kill-001.model-manifest.v1",
+    "tokenizer_sha256": [
+      {
+        "file": "tokenizer.json",
+        "sha256": "d3b4df07a0ce3940b15c77e2ea17ab5627ca0c4bf982d2eb37966aea0a81c918"
+      },
+      {
+        "file": "tokenizer_config.json",
+        "sha256": "0764d3ae3830187f63cfe568c754d99900fed85fc9d071e6cfe2add9f555b6bb"
+      },
+      {
+        "file": "special_tokens_map.json",
+        "sha256": "2f2bba45146f073a7b8a097cb6133a6b4b66d5751e73f2a2aca81083288813e9"
+      }
+    ],
+    "weight_file_sha256": [
+      {
+        "file": "model-00001-of-00002.safetensors",
+        "sha256": "6933b6375074dc6cc4c0b98c9e126cd5fc899ef0cd80db0a932a232c6393c9cd"
+      },
+      {
+        "file": "model-00002-of-00002.safetensors",
+        "sha256": "271870f88e36f28ca87e86e11fa971b0b3e268fb9ac4495d42c66fdd1bc9d060"
+      }
+    ]
+  },
+  "logit_differences": {
+    "base_vs_off_A": {
+      "elements": 7864320,
+      "max_abs": 3.5762786865234375e-05,
+      "mean_abs": 3.1494564609602094e-06
+    },
+    "base_vs_off_B": {
+      "elements": 7864320,
+      "max_abs": 3.147125244140625e-05,
+      "mean_abs": 2.832330437740893e-06
+    },
+    "base_vs_parent_A": {
+      "elements": 7864320,
+      "max_abs": 3.5762786865234375e-05,
+      "mean_abs": 3.1494564609602094e-06
+    },
+    "base_vs_parent_B": {
+      "elements": 7864320,
+      "max_abs": 3.147125244140625e-05,
+      "mean_abs": 2.832330437740893e-06
+    },
+    "on_vs_off_A": {
+      "elements": 7864320,
+      "max_abs": 31.396488189697266,
+      "mean_abs": 6.434010028839111
+    },
+    "on_vs_off_B": {
+      "elements": 7864320,
+      "max_abs": 44.19221878051758,
+      "mean_abs": 4.20639181137085
+    },
+    "on_vs_restored_A": {
+      "elements": 7864320,
+      "max_abs": 0.0,
+      "mean_abs": 0.0
+    },
+    "parent_vs_off_A": {
+      "elements": 7864320,
+      "max_abs": 0.0,
+      "mean_abs": 0.0
+    },
+    "parent_vs_off_B": {
+      "elements": 7864320,
+      "max_abs": 0.0,
+      "mean_abs": 0.0
+    }
+  },
+  "mutation": {
+    "frozen_parent_sha256_after": "0f3b58fd7b9b43b52e33d6f2b8d88ae62f83b262fdc73913dde4707559ea1e66",
+    "frozen_parent_sha256_before": "0f3b58fd7b9b43b52e33d6f2b8d88ae62f83b262fdc73913dde4707559ea1e66",
+    "parent_unchanged": true,
+    "restoration_exact": true,
+    "restored_delta_sha256": "3b7794daf4dcab2ea366a46b5f3fcb82443b45d9ed82ff1b8dd66f94e7fa4850",
+    "trained_delta_sha256": "3b7794daf4dcab2ea366a46b5f3fcb82443b45d9ed82ff1b8dd66f94e7fa4850",
+    "zero_intervention_sha256": "cfe9102f4d5f18be93f8571f4e397694bc958304fbeb0c81eb717410de082566"
+  },
+  "phase": "engineering_diagnostic",
+  "protocol_version": 3,
+  "published_replay": {
+    "direct_matches": true,
+    "expected_direct_accuracy": 0.0,
+    "expected_ranking_accuracy": 0.8203125,
+    "observed_direct_accuracy": 0.0,
+    "observed_ranking_accuracy": 0.8203125,
+    "ranking_matches": true,
+    "replay_matches": true
+  },
+  "ranking": {
+    "off": {
+      "accuracy": 0.0625,
+      "mean_correct_margin": -1.9352210722863674,
+      "mean_correct_rank": 8.15625,
+      "rows": [
+        {
+          "correct": "V7AC7",
+          "correct_margin": -1.4647059440612793,
+          "correct_rank": 10,
+          "correct_score": -7.389645576477051,
+          "exact": false,
+          "sample_id": "A-eval-0000",
+          "winner": "VH66F"
+        },
+        {
+          "correct": "VNSC2",
+          "correct_margin": -1.2749366760253906,
+          "correct_rank": 4,
+          "correct_score": -6.140106678009033,
+          "exact": false,
+          "sample_id": "A-eval-0001",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VGDVP",
+          "correct_margin": -2.3581109046936035,
+          "correct_rank": 13,
+          "correct_score": -9.023208618164062,
+          "exact": false,
+          "sample_id": "A-eval-0002",
+          "winner": "VENAF"
+        },
+        {
+          "correct": "V58XF",
+          "correct_margin": -2.757925510406494,
+          "correct_rank": 10,
+          "correct_score": -7.51582145690918,
+          "exact": false,
+          "sample_id": "A-eval-0003",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "V8AGY",
+          "correct_margin": -1.601797103881836,
+          "correct_rank": 9,
+          "correct_score": -7.723275661468506,
+          "exact": false,
+          "sample_id": "A-eval-0004",
+          "winner": "VW93R"
+        },
+        {
+          "correct": "VCFD9",
+          "correct_margin": -1.3943161964416504,
+          "correct_rank": 3,
+          "correct_score": -6.2999138832092285,
+          "exact": false,
+          "sample_id": "A-eval-0005",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VKRQW",
+          "correct_margin": -2.796053886413574,
+          "correct_rank": 13,
+          "correct_score": -9.022430419921875,
+          "exact": false,
+          "sample_id": "A-eval-0006",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VGRCU",
+          "correct_margin": -3.104434013366699,
+          "correct_rank": 12,
+          "correct_score": -9.410506248474121,
+          "exact": false,
+          "sample_id": "A-eval-0007",
+          "winner": "V33EQ"
+        },
+        {
+          "correct": "VENZV",
+          "correct_margin": -2.5322914123535156,
+          "correct_rank": 12,
+          "correct_score": -8.218790054321289,
+          "exact": false,
+          "sample_id": "A-eval-0008",
+          "winner": "VW93R"
+        },
+        {
+          "correct": "VNP8N",
+          "correct_margin": -1.170499324798584,
+          "correct_rank": 9,
+          "correct_score": -7.952588081359863,
+          "exact": false,
+          "sample_id": "A-eval-0009",
+          "winner": "V8UX2"
+        },
+        {
+          "correct": "VXWA3",
+          "correct_margin": -0.5126357078552246,
+          "correct_rank": 5,
+          "correct_score": -7.180871486663818,
+          "exact": false,
+          "sample_id": "A-eval-0010",
+          "winner": "VB54B"
+        },
+        {
+          "correct": "VT5BG",
+          "correct_margin": -3.4737372398376465,
+          "correct_rank": 12,
+          "correct_score": -9.704512596130371,
+          "exact": false,
+          "sample_id": "A-eval-0011",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VXQ5P",
+          "correct_margin": -1.8606376647949219,
+          "correct_rank": 13,
+          "correct_score": -8.702849388122559,
+          "exact": false,
+          "sample_id": "A-eval-0012",
+          "winner": "VRCQ4"
+        },
+        {
+          "correct": "VX5BY",
+          "correct_margin": -0.891789436340332,
+          "correct_rank": 9,
+          "correct_score": -7.436509132385254,
+          "exact": false,
+          "sample_id": "A-eval-0013",
+          "winner": "VPLT3"
+        },
+        {
+          "correct": "VN3BL",
+          "correct_margin": -0.5330042839050293,
+          "correct_rank": 8,
+          "correct_score": -7.355641841888428,
+          "exact": false,
+          "sample_id": "A-eval-0014",
+          "winner": "VB28N"
+        },
+        {
+          "correct": "VQDCR",
+          "correct_margin": -3.3530220985412598,
+          "correct_rank": 15,
+          "correct_score": -9.562682151794434,
+          "exact": false,
+          "sample_id": "A-eval-0015",
+          "winner": "VG94T"
+        },
+        {
+          "correct": "VRXNB",
+          "correct_margin": -4.255095481872559,
+          "correct_rank": 11,
+          "correct_score": -9.202030181884766,
+          "exact": false,
+          "sample_id": "A-eval-0016",
+          "winner": "VV353"
+        },
+        {
+          "correct": "VS7MA",
+          "correct_margin": -3.9230618476867676,
+          "correct_rank": 12,
+          "correct_score": -9.958627700805664,
+          "exact": false,
+          "sample_id": "A-eval-0017",
+          "winner": "VE4L7"
+        },
+        {
+          "correct": "V37BE",
+          "correct_margin": -1.7711591720581055,
+          "correct_rank": 5,
+          "correct_score": -7.032565116882324,
+          "exact": false,
+          "sample_id": "A-eval-0018",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "VRYKF",
+          "correct_margin": -1.8270716667175293,
+          "correct_rank": 11,
+          "correct_score": -8.829708099365234,
+          "exact": false,
+          "sample_id": "A-eval-0019",
+          "winner": "V6UD2"
+        },
+        {
+          "correct": "VMZ6K",
+          "correct_margin": -0.5120382308959961,
+          "correct_rank": 5,
+          "correct_score": -6.850914001464844,
+          "exact": false,
+          "sample_id": "A-eval-0020",
+          "winner": "VNSC2"
+        },
+        {
+          "correct": "VRTX4",
+          "correct_margin": -1.5062193870544434,
+          "correct_rank": 8,
+          "correct_score": -7.956846237182617,
+          "exact": false,
+          "sample_id": "A-eval-0021",
+          "winner": "VUPZ6"
+        },
+        {
+          "correct": "VHY3E",
+          "correct_margin": -1.31640625,
+          "correct_rank": 7,
+          "correct_score": -6.83284854888916,
+          "exact": false,
+          "sample_id": "A-eval-0022",
+          "winner": "VW93R"
+        },
+        {
+          "correct": "VK7BB",
+          "correct_margin": -3.4611191749572754,
+          "correct_rank": 15,
+          "correct_score": -8.86828327178955,
+          "exact": false,
+          "sample_id": "A-eval-0023",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VZUCB",
+          "correct_margin": -3.773488998413086,
+          "correct_rank": 15,
+          "correct_score": -8.693582534790039,
+          "exact": false,
+          "sample_id": "A-eval-0024",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VB54B",
+          "correct_margin": -0.8142304420471191,
+          "correct_rank": 4,
+          "correct_score": -6.72592830657959,
+          "exact": false,
+          "sample_id": "A-eval-0025",
+          "winner": "VH66F"
+        },
+        {
+          "correct": "VDK9Q",
+          "correct_margin": -1.9967608451843262,
+          "correct_rank": 5,
+          "correct_score": -7.990907192230225,
+          "exact": false,
+          "sample_id": "A-eval-0026",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VY5ME",
+          "correct_margin": -1.9004359245300293,
+          "correct_rank": 8,
+          "correct_score": -7.734594345092773,
+          "exact": false,
+          "sample_id": "A-eval-0027",
+          "winner": "VSWXU"
+        },
+        {
+          "correct": "VUL64",
+          "correct_margin": 0.23215293884277344,
+          "correct_rank": 1,
+          "correct_score": -5.594555854797363,
+          "exact": true,
+          "sample_id": "A-eval-0028",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VW2JG",
+          "correct_margin": -0.729332447052002,
+          "correct_rank": 4,
+          "correct_score": -6.304576396942139,
+          "exact": false,
+          "sample_id": "A-eval-0029",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "VNX7C",
+          "correct_margin": -0.746798038482666,
+          "correct_rank": 6,
+          "correct_score": -7.6530442237854,
+          "exact": false,
+          "sample_id": "A-eval-0030",
+          "winner": "VNS8U"
+        },
+        {
+          "correct": "VC6LC",
+          "correct_margin": -2.5330634117126465,
+          "correct_rank": 15,
+          "correct_score": -9.603910446166992,
+          "exact": false,
+          "sample_id": "A-eval-0031",
+          "winner": "VZW5U"
+        },
+        {
+          "correct": "VJYL6",
+          "correct_margin": -2.6451783180236816,
+          "correct_rank": 8,
+          "correct_score": -8.073577880859375,
+          "exact": false,
+          "sample_id": "A-eval-0032",
+          "winner": "VV353"
+        },
+        {
+          "correct": "V2ZHW",
+          "correct_margin": -2.347041606903076,
+          "correct_rank": 9,
+          "correct_score": -7.4310407638549805,
+          "exact": false,
+          "sample_id": "A-eval-0033",
+          "winner": "VV353"
+        },
+        {
+          "correct": "VD6WT",
+          "correct_margin": -0.8260383605957031,
+          "correct_rank": 6,
+          "correct_score": -7.507421493530273,
+          "exact": false,
+          "sample_id": "A-eval-0034",
+          "winner": "VM95T"
+        },
+        {
+          "correct": "VJPKP",
+          "correct_margin": -1.2048912048339844,
+          "correct_rank": 5,
+          "correct_score": -7.39315938949585,
+          "exact": false,
+          "sample_id": "A-eval-0035",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VZXUG",
+          "correct_margin": -4.315171718597412,
+          "correct_rank": 15,
+          "correct_score": -10.151324272155762,
+          "exact": false,
+          "sample_id": "A-eval-0036",
+          "winner": "VH66F"
+        },
+        {
+          "correct": "VRUG5",
+          "correct_margin": -2.725947856903076,
+          "correct_rank": 9,
+          "correct_score": -8.61859130859375,
+          "exact": false,
+          "sample_id": "A-eval-0037",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VCJFB",
+          "correct_margin": -3.7982068061828613,
+          "correct_rank": 16,
+          "correct_score": -9.813240051269531,
+          "exact": false,
+          "sample_id": "A-eval-0038",
+          "winner": "VG94T"
+        },
+        {
+          "correct": "VV353",
+          "correct_margin": 0.427645206451416,
+          "correct_rank": 1,
+          "correct_score": -5.478608131408691,
+          "exact": true,
+          "sample_id": "A-eval-0039",
+          "winner": "VV353"
+        },
+        {
+          "correct": "VRSDJ",
+          "correct_margin": -2.88545560836792,
+          "correct_rank": 13,
+          "correct_score": -8.8652925491333,
+          "exact": false,
+          "sample_id": "A-eval-0040",
+          "winner": "VH66F"
+        },
+        {
+          "correct": "VSWXU",
+          "correct_margin": -0.4357156753540039,
+          "correct_rank": 2,
+          "correct_score": -6.98130464553833,
+          "exact": false,
+          "sample_id": "A-eval-0041",
+          "winner": "VW2JG"
+        },
+        {
+          "correct": "VTAHA",
+          "correct_margin": -2.8808693885803223,
+          "correct_rank": 8,
+          "correct_score": -8.17180061340332,
+          "exact": false,
+          "sample_id": "A-eval-0042",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "VDJVV",
+          "correct_margin": -3.0824928283691406,
+          "correct_rank": 13,
+          "correct_score": -9.348430633544922,
+          "exact": false,
+          "sample_id": "A-eval-0043",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VENAF",
+          "correct_margin": -1.5711150169372559,
+          "correct_rank": 5,
+          "correct_score": -7.358466148376465,
+          "exact": false,
+          "sample_id": "A-eval-0044",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VSL83",
+          "correct_margin": -1.3151817321777344,
+          "correct_rank": 2,
+          "correct_score": -6.482174396514893,
+          "exact": false,
+          "sample_id": "A-eval-0045",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "VPN7J",
+          "correct_margin": -4.216189384460449,
+          "correct_rank": 16,
+          "correct_score": -9.85968017578125,
+          "exact": false,
+          "sample_id": "A-eval-0046",
+          "winner": "VE4L7"
+        },
+        {
+          "correct": "VTBUS",
+          "correct_margin": -6.55014181137085,
+          "correct_rank": 16,
+          "correct_score": -11.464271545410156,
+          "exact": false,
+          "sample_id": "A-eval-0047",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "V6BL8",
+          "correct_margin": 0.10787630081176758,
+          "correct_rank": 1,
+          "correct_score": -5.984219074249268,
+          "exact": true,
+          "sample_id": "A-eval-0048",
+          "winner": "V6BL8"
+        },
+        {
+          "correct": "V9YXW",
+          "correct_margin": -2.9723458290100098,
+          "correct_rank": 10,
+          "correct_score": -7.883708953857422,
+          "exact": false,
+          "sample_id": "A-eval-0049",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VN95B",
+          "correct_margin": 0.2836599349975586,
+          "correct_rank": 1,
+          "correct_score": -5.493627071380615,
+          "exact": true,
+          "sample_id": "A-eval-0050",
+          "winner": "VN95B"
+        },
+        {
+          "correct": "VT5E3",
+          "correct_margin": -1.9523506164550781,
+          "correct_rank": 6,
+          "correct_score": -7.185666561126709,
+          "exact": false,
+          "sample_id": "A-eval-0051",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VWJ4T",
+          "correct_margin": -2.2129955291748047,
+          "correct_rank": 10,
+          "correct_score": -7.167459964752197,
+          "exact": false,
+          "sample_id": "A-eval-0052",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VWMVN",
+          "correct_margin": -3.3480777740478516,
+          "correct_rank": 13,
+          "correct_score": -10.411847114562988,
+          "exact": false,
+          "sample_id": "A-eval-0053",
+          "winner": "VHLDP"
+        },
+        {
+          "correct": "VA5ED",
+          "correct_margin": -3.851748466491699,
+          "correct_rank": 13,
+          "correct_score": -8.760489463806152,
+          "exact": false,
+          "sample_id": "A-eval-0054",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VHLDP",
+          "correct_margin": -1.1600713729858398,
+          "correct_rank": 5,
+          "correct_score": -6.778329372406006,
+          "exact": false,
+          "sample_id": "A-eval-0055",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VQRXH",
+          "correct_margin": -1.0130667686462402,
+          "correct_rank": 10,
+          "correct_score": -7.446611404418945,
+          "exact": false,
+          "sample_id": "A-eval-0056",
+          "winner": "VUL3A"
+        },
+        {
+          "correct": "VM95T",
+          "correct_margin": -1.4685025215148926,
+          "correct_rank": 4,
+          "correct_score": -6.471310615539551,
+          "exact": false,
+          "sample_id": "A-eval-0057",
+          "winner": "V8UX2"
+        },
+        {
+          "correct": "VRCQ4",
+          "correct_margin": -0.7573518753051758,
+          "correct_rank": 4,
+          "correct_score": -6.666749000549316,
+          "exact": false,
+          "sample_id": "A-eval-0058",
+          "winner": "VH66F"
+        },
+        {
+          "correct": "VYZ3M",
+          "correct_margin": -2.199556350708008,
+          "correct_rank": 11,
+          "correct_score": -7.477744102478027,
+          "exact": false,
+          "sample_id": "A-eval-0059",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "VR59Q",
+          "correct_margin": -1.7909579277038574,
+          "correct_rank": 7,
+          "correct_score": -7.847984313964844,
+          "exact": false,
+          "sample_id": "A-eval-0060",
+          "winner": "VE4L7"
+        },
+        {
+          "correct": "VNS8U",
+          "correct_margin": -1.5207619667053223,
+          "correct_rank": 5,
+          "correct_score": -6.780174255371094,
+          "exact": false,
+          "sample_id": "A-eval-0061",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "VYBD6",
+          "correct_margin": -1.9610910415649414,
+          "correct_rank": 8,
+          "correct_score": -6.688103199005127,
+          "exact": false,
+          "sample_id": "A-eval-0062",
+          "winner": "VN946"
+        },
+        {
+          "correct": "V98AB",
+          "correct_margin": -2.037374973297119,
+          "correct_rank": 7,
+          "correct_score": -7.194334983825684,
+          "exact": false,
+          "sample_id": "A-eval-0063",
+          "winner": "VN946"
+        },
+        {
+          "correct": "V8UX2",
+          "correct_margin": -0.5491490364074707,
+          "correct_rank": 3,
+          "correct_score": -5.622350692749023,
+          "exact": false,
+          "sample_id": "A-eval-0064",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "VW93R",
+          "correct_margin": -0.21153879165649414,
+          "correct_rank": 2,
+          "correct_score": -6.210279941558838,
+          "exact": false,
+          "sample_id": "A-eval-0065",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VRDLJ",
+          "correct_margin": -4.3746490478515625,
+          "correct_rank": 12,
+          "correct_score": -9.25905990600586,
+          "exact": false,
+          "sample_id": "A-eval-0066",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VQ7TY",
+          "correct_margin": -1.1467761993408203,
+          "correct_rank": 5,
+          "correct_score": -7.9582929611206055,
+          "exact": false,
+          "sample_id": "A-eval-0067",
+          "winner": "VCB2N"
+        },
+        {
+          "correct": "VPLT3",
+          "correct_margin": -0.49323129653930664,
+          "correct_rank": 4,
+          "correct_score": -6.084038734436035,
+          "exact": false,
+          "sample_id": "A-eval-0068",
+          "winner": "VN95B"
+        },
+        {
+          "correct": "VWPQZ",
+          "correct_margin": -0.3240480422973633,
+          "correct_rank": 3,
+          "correct_score": -7.438508033752441,
+          "exact": false,
+          "sample_id": "A-eval-0069",
+          "winner": "VNS8U"
+        },
+        {
+          "correct": "V7JHQ",
+          "correct_margin": -2.0749082565307617,
+          "correct_rank": 10,
+          "correct_score": -7.9440813064575195,
+          "exact": false,
+          "sample_id": "A-eval-0070",
+          "winner": "VW93R"
+        },
+        {
+          "correct": "VAPFB",
+          "correct_margin": -3.5653023719787598,
+          "correct_rank": 13,
+          "correct_score": -8.877756118774414,
+          "exact": false,
+          "sample_id": "A-eval-0071",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "V46SM",
+          "correct_margin": -1.023892879486084,
+          "correct_rank": 4,
+          "correct_score": -7.167706489562988,
+          "exact": false,
+          "sample_id": "A-eval-0072",
+          "winner": "VW93R"
+        },
+        {
+          "correct": "VYCMX",
+          "correct_margin": -1.893056869506836,
+          "correct_rank": 8,
+          "correct_score": -7.236253261566162,
+          "exact": false,
+          "sample_id": "A-eval-0073",
+          "winner": "VV353"
+        },
+        {
+          "correct": "VMH8S",
+          "correct_margin": -0.6316046714782715,
+          "correct_rank": 3,
+          "correct_score": -7.143667221069336,
+          "exact": false,
+          "sample_id": "A-eval-0074",
+          "winner": "VB54B"
+        },
+        {
+          "correct": "VCB2N",
+          "correct_margin": -0.6708974838256836,
+          "correct_rank": 5,
+          "correct_score": -6.934998512268066,
+          "exact": false,
+          "sample_id": "A-eval-0075",
+          "winner": "V98AB"
+        },
+        {
+          "correct": "VZMVQ",
+          "correct_margin": -0.5826387405395508,
+          "correct_rank": 6,
+          "correct_score": -6.723294734954834,
+          "exact": false,
+          "sample_id": "A-eval-0076",
+          "winner": "V6UD2"
+        },
+        {
+          "correct": "V62FX",
+          "correct_margin": -1.7754850387573242,
+          "correct_rank": 10,
+          "correct_score": -7.647030353546143,
+          "exact": false,
+          "sample_id": "A-eval-0077",
+          "winner": "VH66F"
+        },
+        {
+          "correct": "VVNCC",
+          "correct_margin": -2.52280330657959,
+          "correct_rank": 12,
+          "correct_score": -8.585275650024414,
+          "exact": false,
+          "sample_id": "A-eval-0078",
+          "winner": "V7AC7"
+        },
+        {
+          "correct": "VSQUG",
+          "correct_margin": -3.6491880416870117,
+          "correct_rank": 14,
+          "correct_score": -8.723461151123047,
+          "exact": false,
+          "sample_id": "A-eval-0079",
+          "winner": "VV353"
+        },
+        {
+          "correct": "VAFV5",
+          "correct_margin": -0.031890869140625,
+          "correct_rank": 2,
+          "correct_score": -6.665904998779297,
+          "exact": false,
+          "sample_id": "A-eval-0080",
+          "winner": "VGVV5"
+        },
+        {
+          "correct": "VTYXX",
+          "correct_margin": -3.288477897644043,
+          "correct_rank": 14,
+          "correct_score": -9.383544921875,
+          "exact": false,
+          "sample_id": "A-eval-0081",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "V5CCU",
+          "correct_margin": -0.27678823471069336,
+          "correct_rank": 2,
+          "correct_score": -6.704132556915283,
+          "exact": false,
+          "sample_id": "A-eval-0082",
+          "winner": "VPLT3"
+        },
+        {
+          "correct": "VB6ST",
+          "correct_margin": -2.157137393951416,
+          "correct_rank": 11,
+          "correct_score": -8.674396514892578,
+          "exact": false,
+          "sample_id": "A-eval-0083",
+          "winner": "VW2JG"
+        },
+        {
+          "correct": "VMMRS",
+          "correct_margin": -2.400491237640381,
+          "correct_rank": 10,
+          "correct_score": -7.7192535400390625,
+          "exact": false,
+          "sample_id": "A-eval-0084",
+          "winner": "VW2JG"
+        },
+        {
+          "correct": "VT4KX",
+          "correct_margin": -4.508902072906494,
+          "correct_rank": 14,
+          "correct_score": -9.529434204101562,
+          "exact": false,
+          "sample_id": "A-eval-0085",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VGBTA",
+          "correct_margin": -3.2932305335998535,
+          "correct_rank": 12,
+          "correct_score": -9.054447174072266,
+          "exact": false,
+          "sample_id": "A-eval-0086",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VN946",
+          "correct_margin": 1.078691005706787,
+          "correct_rank": 1,
+          "correct_score": -5.012518405914307,
+          "exact": true,
+          "sample_id": "A-eval-0087",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VCXUL",
+          "correct_margin": -2.6090526580810547,
+          "correct_rank": 12,
+          "correct_score": -8.919113159179688,
+          "exact": false,
+          "sample_id": "A-eval-0088",
+          "winner": "V58XF"
+        },
+        {
+          "correct": "VMQ7P",
+          "correct_margin": -1.0711421966552734,
+          "correct_rank": 5,
+          "correct_score": -7.129021644592285,
+          "exact": false,
+          "sample_id": "A-eval-0089",
+          "winner": "VE4L7"
+        },
+        {
+          "correct": "V6UD2",
+          "correct_margin": -0.7893943786621094,
+          "correct_rank": 4,
+          "correct_score": -7.188443660736084,
+          "exact": false,
+          "sample_id": "A-eval-0090",
+          "winner": "VG94T"
+        },
+        {
+          "correct": "V2QPE",
+          "correct_margin": -0.04662132263183594,
+          "correct_rank": 2,
+          "correct_score": -7.156246185302734,
+          "exact": false,
+          "sample_id": "A-eval-0091",
+          "winner": "V37BE"
+        },
+        {
+          "correct": "VMVCJ",
+          "correct_margin": -3.5703816413879395,
+          "correct_rank": 14,
+          "correct_score": -9.64554214477539,
+          "exact": false,
+          "sample_id": "A-eval-0092",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VGVV5",
+          "correct_margin": -0.8668951988220215,
+          "correct_rank": 3,
+          "correct_score": -6.890997886657715,
+          "exact": false,
+          "sample_id": "A-eval-0093",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VP5MR",
+          "correct_margin": -1.1177349090576172,
+          "correct_rank": 6,
+          "correct_score": -6.962892055511475,
+          "exact": false,
+          "sample_id": "A-eval-0094",
+          "winner": "VP4RJ"
+        },
+        {
+          "correct": "VE4L7",
+          "correct_margin": 1.0085983276367188,
+          "correct_rank": 1,
+          "correct_score": -6.117650985717773,
+          "exact": true,
+          "sample_id": "A-eval-0095",
+          "winner": "VE4L7"
+        },
+        {
+          "correct": "VAKZU",
+          "correct_margin": -3.0500359535217285,
+          "correct_rank": 13,
+          "correct_score": -9.101579666137695,
+          "exact": false,
+          "sample_id": "A-eval-0096",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VG94T",
+          "correct_margin": -0.10657882690429688,
+          "correct_rank": 2,
+          "correct_score": -6.3659257888793945,
+          "exact": false,
+          "sample_id": "A-eval-0097",
+          "winner": "VENAF"
+        },
+        {
+          "correct": "VB28N",
+          "correct_margin": -0.4180750846862793,
+          "correct_rank": 4,
+          "correct_score": -7.063105583190918,
+          "exact": false,
+          "sample_id": "A-eval-0098",
+          "winner": "VP5MR"
+        },
+        {
+          "correct": "VUL3A",
+          "correct_margin": -1.1935019493103027,
+          "correct_rank": 3,
+          "correct_score": -6.104861259460449,
+          "exact": false,
+          "sample_id": "A-eval-0099",
+          "winner": "VN946"
+        },
+        {
+          "correct": "V3YQC",
+          "correct_margin": -2.231088638305664,
+          "correct_rank": 10,
+          "correct_score": -7.823598861694336,
+          "exact": false,
+          "sample_id": "A-eval-0100",
+          "winner": "VN95B"
+        },
+        {
+          "correct": "VM95E",
+          "correct_margin": -0.27717018127441406,
+          "correct_rank": 2,
+          "correct_score": -6.066974639892578,
+          "exact": false,
+          "sample_id": "A-eval-0101",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VSVKD",
+          "correct_margin": -4.428465366363525,
+          "correct_rank": 14,
+          "correct_score": -10.004257202148438,
+          "exact": false,
+          "sample_id": "A-eval-0102",
+          "winner": "VV353"
+        },
+        {
+          "correct": "V4QMF",
+          "correct_margin": -0.8529105186462402,
+          "correct_rank": 8,
+          "correct_score": -7.1360368728637695,
+          "exact": false,
+          "sample_id": "A-eval-0103",
+          "winner": "VM95E"
+        },
+        {
+          "correct": "VWUUF",
+          "correct_margin": -0.6076269149780273,
+          "correct_rank": 4,
+          "correct_score": -7.342704772949219,
+          "exact": false,
+          "sample_id": "A-eval-0104",
+          "winner": "VGVV5"
+        },
+        {
+          "correct": "VXHPH",
+          "correct_margin": -1.354433536529541,
+          "correct_rank": 7,
+          "correct_score": -7.353013515472412,
+          "exact": false,
+          "sample_id": "A-eval-0105",
+          "winner": "VG94T"
+        },
+        {
+          "correct": "VS8TT",
+          "correct_margin": -3.7545595169067383,
+          "correct_rank": 14,
+          "correct_score": -9.62057113647461,
+          "exact": false,
+          "sample_id": "A-eval-0106",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VUPZ6",
+          "correct_margin": -0.956634521484375,
+          "correct_rank": 7,
+          "correct_score": -7.5872416496276855,
+          "exact": false,
+          "sample_id": "A-eval-0107",
+          "winner": "VSL83"
+        },
+        {
+          "correct": "VRK7F",
+          "correct_margin": -2.157691478729248,
+          "correct_rank": 7,
+          "correct_score": -7.138406753540039,
+          "exact": false,
+          "sample_id": "A-eval-0108",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VEKMM",
+          "correct_margin": -2.33254337310791,
+          "correct_rank": 14,
+          "correct_score": -8.334640502929688,
+          "exact": false,
+          "sample_id": "A-eval-0109",
+          "winner": "VE4L7"
+        },
+        {
+          "correct": "VP4RJ",
+          "correct_margin": -0.20715093612670898,
+          "correct_rank": 2,
+          "correct_score": -5.077775001525879,
+          "exact": false,
+          "sample_id": "A-eval-0110",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VQ6M7",
+          "correct_margin": 0.04862070083618164,
+          "correct_rank": 1,
+          "correct_score": -6.214047908782959,
+          "exact": true,
+          "sample_id": "A-eval-0111",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VRVGE",
+          "correct_margin": -3.3878135681152344,
+          "correct_rank": 13,
+          "correct_score": -8.937442779541016,
+          "exact": false,
+          "sample_id": "A-eval-0112",
+          "winner": "VN95B"
+        },
+        {
+          "correct": "VHPBL",
+          "correct_margin": -2.326683521270752,
+          "correct_rank": 14,
+          "correct_score": -9.320921897888184,
+          "exact": false,
+          "sample_id": "A-eval-0113",
+          "winner": "VB28N"
+        },
+        {
+          "correct": "VPMRB",
+          "correct_margin": -3.507939338684082,
+          "correct_rank": 15,
+          "correct_score": -8.490489959716797,
+          "exact": false,
+          "sample_id": "A-eval-0114",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VWBQ4",
+          "correct_margin": -2.4042468070983887,
+          "correct_rank": 7,
+          "correct_score": -7.540450572967529,
+          "exact": false,
+          "sample_id": "A-eval-0115",
+          "winner": "VV353"
+        },
+        {
+          "correct": "VBFGJ",
+          "correct_margin": -3.805954933166504,
+          "correct_rank": 15,
+          "correct_score": -10.506634712219238,
+          "exact": false,
+          "sample_id": "A-eval-0116",
+          "winner": "VMZ6K"
+        },
+        {
+          "correct": "V3DXW",
+          "correct_margin": -1.1719369888305664,
+          "correct_rank": 6,
+          "correct_score": -6.735297203063965,
+          "exact": false,
+          "sample_id": "A-eval-0117",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VFXPY",
+          "correct_margin": -3.5835165977478027,
+          "correct_rank": 12,
+          "correct_score": -8.653488159179688,
+          "exact": false,
+          "sample_id": "A-eval-0118",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VLW9W",
+          "correct_margin": -1.1269969940185547,
+          "correct_rank": 3,
+          "correct_score": -6.815426826477051,
+          "exact": false,
+          "sample_id": "A-eval-0119",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VH66F",
+          "correct_margin": 0.3242206573486328,
+          "correct_rank": 1,
+          "correct_score": -5.749415874481201,
+          "exact": true,
+          "sample_id": "A-eval-0120",
+          "winner": "VH66F"
+        },
+        {
+          "correct": "VJZXH",
+          "correct_margin": -1.7446670532226562,
+          "correct_rank": 9,
+          "correct_score": -7.86328125,
+          "exact": false,
+          "sample_id": "A-eval-0121",
+          "winner": "VW2JG"
+        },
+        {
+          "correct": "VX3VA",
+          "correct_margin": -1.0851693153381348,
+          "correct_rank": 6,
+          "correct_score": -7.148405075073242,
+          "exact": false,
+          "sample_id": "A-eval-0122",
+          "winner": "VG94T"
+        },
+        {
+          "correct": "VARQT",
+          "correct_margin": -6.682458877563477,
+          "correct_rank": 16,
+          "correct_score": -12.99087142944336,
+          "exact": false,
+          "sample_id": "A-eval-0123",
+          "winner": "VPLT3"
+        },
+        {
+          "correct": "V33EQ",
+          "correct_margin": -1.7028608322143555,
+          "correct_rank": 3,
+          "correct_score": -6.486766815185547,
+          "exact": false,
+          "sample_id": "A-eval-0124",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VPNLF",
+          "correct_margin": -7.094058036804199,
+          "correct_rank": 16,
+          "correct_score": -13.611209869384766,
+          "exact": false,
+          "sample_id": "A-eval-0125",
+          "winner": "VW2JG"
+        },
+        {
+          "correct": "VWW7D",
+          "correct_margin": -2.660412311553955,
+          "correct_rank": 10,
+          "correct_score": -7.4958038330078125,
+          "exact": false,
+          "sample_id": "A-eval-0126",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VZW5U",
+          "correct_margin": -2.2972006797790527,
+          "correct_rank": 11,
+          "correct_score": -7.186010837554932,
+          "exact": false,
+          "sample_id": "A-eval-0127",
+          "winner": "VN946"
+        }
+      ]
+    },
+    "on": {
+      "accuracy": 0.8203125,
+      "mean_correct_margin": 2.1629036962985992,
+      "mean_correct_rank": 1.5390625,
+      "rows": [
+        {
+          "correct": "V7AC7",
+          "correct_margin": 5.932863235473633,
+          "correct_rank": 1,
+          "correct_score": -3.960577964782715,
+          "exact": true,
+          "sample_id": "A-eval-0000",
+          "winner": "V7AC7"
+        },
+        {
+          "correct": "VNSC2",
+          "correct_margin": 2.8213181495666504,
+          "correct_rank": 1,
+          "correct_score": -4.209643363952637,
+          "exact": true,
+          "sample_id": "A-eval-0001",
+          "winner": "VNSC2"
+        },
+        {
+          "correct": "VGDVP",
+          "correct_margin": -6.100772857666016,
+          "correct_rank": 14,
+          "correct_score": -13.684804916381836,
+          "exact": false,
+          "sample_id": "A-eval-0002",
+          "winner": "V9YXW"
+        },
+        {
+          "correct": "V58XF",
+          "correct_margin": -0.5734043121337891,
+          "correct_rank": 2,
+          "correct_score": -5.321859359741211,
+          "exact": false,
+          "sample_id": "A-eval-0003",
+          "winner": "V8AGY"
+        },
+        {
+          "correct": "V8AGY",
+          "correct_margin": 6.964743137359619,
+          "correct_rank": 1,
+          "correct_score": -1.5701861381530762,
+          "exact": true,
+          "sample_id": "A-eval-0004",
+          "winner": "V8AGY"
+        },
+        {
+          "correct": "VCFD9",
+          "correct_margin": 2.2901477813720703,
+          "correct_rank": 1,
+          "correct_score": -5.185022354125977,
+          "exact": true,
+          "sample_id": "A-eval-0005",
+          "winner": "VCFD9"
+        },
+        {
+          "correct": "VKRQW",
+          "correct_margin": 6.661981582641602,
+          "correct_rank": 1,
+          "correct_score": -3.2517261505126953,
+          "exact": true,
+          "sample_id": "A-eval-0006",
+          "winner": "VKRQW"
+        },
+        {
+          "correct": "VGRCU",
+          "correct_margin": -2.780914306640625,
+          "correct_rank": 3,
+          "correct_score": -7.407166481018066,
+          "exact": false,
+          "sample_id": "A-eval-0007",
+          "winner": "VYCMX"
+        },
+        {
+          "correct": "VENZV",
+          "correct_margin": 1.3533172607421875,
+          "correct_rank": 1,
+          "correct_score": -5.9924163818359375,
+          "exact": true,
+          "sample_id": "A-eval-0008",
+          "winner": "VENZV"
+        },
+        {
+          "correct": "VNP8N",
+          "correct_margin": 5.826582908630371,
+          "correct_rank": 1,
+          "correct_score": -6.429871559143066,
+          "exact": true,
+          "sample_id": "A-eval-0009",
+          "winner": "VNP8N"
+        },
+        {
+          "correct": "VXWA3",
+          "correct_margin": 4.630001068115234,
+          "correct_rank": 1,
+          "correct_score": -4.649532318115234,
+          "exact": true,
+          "sample_id": "A-eval-0010",
+          "winner": "VXWA3"
+        },
+        {
+          "correct": "VT5BG",
+          "correct_margin": 1.9111275672912598,
+          "correct_rank": 1,
+          "correct_score": -3.7887682914733887,
+          "exact": true,
+          "sample_id": "A-eval-0011",
+          "winner": "VT5BG"
+        },
+        {
+          "correct": "VXQ5P",
+          "correct_margin": 3.2078709602355957,
+          "correct_rank": 1,
+          "correct_score": -5.845569133758545,
+          "exact": true,
+          "sample_id": "A-eval-0012",
+          "winner": "VXQ5P"
+        },
+        {
+          "correct": "VX5BY",
+          "correct_margin": 3.757930278778076,
+          "correct_rank": 1,
+          "correct_score": -4.737186908721924,
+          "exact": true,
+          "sample_id": "A-eval-0013",
+          "winner": "VX5BY"
+        },
+        {
+          "correct": "VN3BL",
+          "correct_margin": 1.6825628280639648,
+          "correct_rank": 1,
+          "correct_score": -5.770432472229004,
+          "exact": true,
+          "sample_id": "A-eval-0014",
+          "winner": "VN3BL"
+        },
+        {
+          "correct": "VQDCR",
+          "correct_margin": 4.230915069580078,
+          "correct_rank": 1,
+          "correct_score": -6.583837509155273,
+          "exact": true,
+          "sample_id": "A-eval-0015",
+          "winner": "VQDCR"
+        },
+        {
+          "correct": "VRXNB",
+          "correct_margin": 0.9833250045776367,
+          "correct_rank": 1,
+          "correct_score": -9.052169799804688,
+          "exact": true,
+          "sample_id": "A-eval-0016",
+          "winner": "VRXNB"
+        },
+        {
+          "correct": "VS7MA",
+          "correct_margin": 4.2788543701171875,
+          "correct_rank": 1,
+          "correct_score": -5.165322303771973,
+          "exact": true,
+          "sample_id": "A-eval-0017",
+          "winner": "VS7MA"
+        },
+        {
+          "correct": "V37BE",
+          "correct_margin": 0.30222558975219727,
+          "correct_rank": 1,
+          "correct_score": -5.148836612701416,
+          "exact": true,
+          "sample_id": "A-eval-0018",
+          "winner": "V37BE"
+        },
+        {
+          "correct": "VRYKF",
+          "correct_margin": 5.183664321899414,
+          "correct_rank": 1,
+          "correct_score": -4.4411468505859375,
+          "exact": true,
+          "sample_id": "A-eval-0019",
+          "winner": "VRYKF"
+        },
+        {
+          "correct": "VMZ6K",
+          "correct_margin": 3.1120078563690186,
+          "correct_rank": 1,
+          "correct_score": -3.9422309398651123,
+          "exact": true,
+          "sample_id": "A-eval-0020",
+          "winner": "VMZ6K"
+        },
+        {
+          "correct": "VRTX4",
+          "correct_margin": -0.3199343681335449,
+          "correct_rank": 2,
+          "correct_score": -6.048671245574951,
+          "exact": false,
+          "sample_id": "A-eval-0021",
+          "winner": "V4QMF"
+        },
+        {
+          "correct": "VHY3E",
+          "correct_margin": 4.721526622772217,
+          "correct_rank": 1,
+          "correct_score": -3.6068167686462402,
+          "exact": true,
+          "sample_id": "A-eval-0022",
+          "winner": "VHY3E"
+        },
+        {
+          "correct": "VK7BB",
+          "correct_margin": -0.5567646026611328,
+          "correct_rank": 2,
+          "correct_score": -6.329497814178467,
+          "exact": false,
+          "sample_id": "A-eval-0023",
+          "winner": "VN95B"
+        },
+        {
+          "correct": "VZUCB",
+          "correct_margin": -2.187197208404541,
+          "correct_rank": 4,
+          "correct_score": -7.515224456787109,
+          "exact": false,
+          "sample_id": "A-eval-0024",
+          "winner": "VN95B"
+        },
+        {
+          "correct": "VB54B",
+          "correct_margin": 2.1038131713867188,
+          "correct_rank": 1,
+          "correct_score": -5.179454803466797,
+          "exact": true,
+          "sample_id": "A-eval-0025",
+          "winner": "VB54B"
+        },
+        {
+          "correct": "VDK9Q",
+          "correct_margin": 8.147913694381714,
+          "correct_rank": 1,
+          "correct_score": -3.7992327213287354,
+          "exact": true,
+          "sample_id": "A-eval-0026",
+          "winner": "VDK9Q"
+        },
+        {
+          "correct": "VY5ME",
+          "correct_margin": 4.096567153930664,
+          "correct_rank": 1,
+          "correct_score": -3.2613391876220703,
+          "exact": true,
+          "sample_id": "A-eval-0027",
+          "winner": "VY5ME"
+        },
+        {
+          "correct": "VUL64",
+          "correct_margin": 2.218395233154297,
+          "correct_rank": 1,
+          "correct_score": -5.495405197143555,
+          "exact": true,
+          "sample_id": "A-eval-0028",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VW2JG",
+          "correct_margin": -1.9566326141357422,
+          "correct_rank": 5,
+          "correct_score": -11.802513122558594,
+          "exact": false,
+          "sample_id": "A-eval-0029",
+          "winner": "VNSC2"
+        },
+        {
+          "correct": "VNX7C",
+          "correct_margin": 1.8080048561096191,
+          "correct_rank": 1,
+          "correct_score": -4.843782901763916,
+          "exact": true,
+          "sample_id": "A-eval-0030",
+          "winner": "VNX7C"
+        },
+        {
+          "correct": "VC6LC",
+          "correct_margin": 3.7952065467834473,
+          "correct_rank": 1,
+          "correct_score": -6.0710768699646,
+          "exact": true,
+          "sample_id": "A-eval-0031",
+          "winner": "VC6LC"
+        },
+        {
+          "correct": "VJYL6",
+          "correct_margin": -2.630387783050537,
+          "correct_rank": 2,
+          "correct_score": -6.891617298126221,
+          "exact": false,
+          "sample_id": "A-eval-0032",
+          "winner": "VQ7TY"
+        },
+        {
+          "correct": "V2ZHW",
+          "correct_margin": 2.7594447135925293,
+          "correct_rank": 1,
+          "correct_score": -4.073497772216797,
+          "exact": true,
+          "sample_id": "A-eval-0033",
+          "winner": "V2ZHW"
+        },
+        {
+          "correct": "VD6WT",
+          "correct_margin": 0.8090691566467285,
+          "correct_rank": 1,
+          "correct_score": -4.758009910583496,
+          "exact": true,
+          "sample_id": "A-eval-0034",
+          "winner": "VD6WT"
+        },
+        {
+          "correct": "VJPKP",
+          "correct_margin": 4.803426742553711,
+          "correct_rank": 1,
+          "correct_score": -4.875997543334961,
+          "exact": true,
+          "sample_id": "A-eval-0035",
+          "winner": "VJPKP"
+        },
+        {
+          "correct": "VZXUG",
+          "correct_margin": 7.447967529296875,
+          "correct_rank": 1,
+          "correct_score": -4.382665634155273,
+          "exact": true,
+          "sample_id": "A-eval-0036",
+          "winner": "VZXUG"
+        },
+        {
+          "correct": "VRUG5",
+          "correct_margin": 2.1239733695983887,
+          "correct_rank": 1,
+          "correct_score": -4.405060291290283,
+          "exact": true,
+          "sample_id": "A-eval-0037",
+          "winner": "VRUG5"
+        },
+        {
+          "correct": "VCJFB",
+          "correct_margin": -1.919229507446289,
+          "correct_rank": 5,
+          "correct_score": -7.880947113037109,
+          "exact": false,
+          "sample_id": "A-eval-0038",
+          "winner": "V58XF"
+        },
+        {
+          "correct": "VV353",
+          "correct_margin": 1.280076026916504,
+          "correct_rank": 1,
+          "correct_score": -4.766199588775635,
+          "exact": true,
+          "sample_id": "A-eval-0039",
+          "winner": "VV353"
+        },
+        {
+          "correct": "VRSDJ",
+          "correct_margin": 3.7557358741760254,
+          "correct_rank": 1,
+          "correct_score": -4.927513599395752,
+          "exact": true,
+          "sample_id": "A-eval-0040",
+          "winner": "VRSDJ"
+        },
+        {
+          "correct": "VSWXU",
+          "correct_margin": -0.9211311340332031,
+          "correct_rank": 3,
+          "correct_score": -9.287616729736328,
+          "exact": false,
+          "sample_id": "A-eval-0041",
+          "winner": "VCB2N"
+        },
+        {
+          "correct": "VTAHA",
+          "correct_margin": 2.00254487991333,
+          "correct_rank": 1,
+          "correct_score": -5.343968868255615,
+          "exact": true,
+          "sample_id": "A-eval-0042",
+          "winner": "VTAHA"
+        },
+        {
+          "correct": "VDJVV",
+          "correct_margin": 0.400118350982666,
+          "correct_rank": 1,
+          "correct_score": -6.716773986816406,
+          "exact": true,
+          "sample_id": "A-eval-0043",
+          "winner": "VDJVV"
+        },
+        {
+          "correct": "VENAF",
+          "correct_margin": 0.03293275833129883,
+          "correct_rank": 1,
+          "correct_score": -7.404365539550781,
+          "exact": true,
+          "sample_id": "A-eval-0044",
+          "winner": "VENAF"
+        },
+        {
+          "correct": "VSL83",
+          "correct_margin": 1.7943105697631836,
+          "correct_rank": 1,
+          "correct_score": -7.669403076171875,
+          "exact": true,
+          "sample_id": "A-eval-0045",
+          "winner": "VSL83"
+        },
+        {
+          "correct": "VPN7J",
+          "correct_margin": 1.606616497039795,
+          "correct_rank": 1,
+          "correct_score": -6.107265472412109,
+          "exact": true,
+          "sample_id": "A-eval-0046",
+          "winner": "VPN7J"
+        },
+        {
+          "correct": "VTBUS",
+          "correct_margin": -1.8891782760620117,
+          "correct_rank": 5,
+          "correct_score": -10.470760345458984,
+          "exact": false,
+          "sample_id": "A-eval-0047",
+          "winner": "VB28N"
+        },
+        {
+          "correct": "V6BL8",
+          "correct_margin": 4.699499130249023,
+          "correct_rank": 1,
+          "correct_score": -4.972222328186035,
+          "exact": true,
+          "sample_id": "A-eval-0048",
+          "winner": "V6BL8"
+        },
+        {
+          "correct": "V9YXW",
+          "correct_margin": 3.2327017784118652,
+          "correct_rank": 1,
+          "correct_score": -5.709197521209717,
+          "exact": true,
+          "sample_id": "A-eval-0049",
+          "winner": "V9YXW"
+        },
+        {
+          "correct": "VN95B",
+          "correct_margin": 3.7834625244140625,
+          "correct_rank": 1,
+          "correct_score": -4.551795959472656,
+          "exact": true,
+          "sample_id": "A-eval-0050",
+          "winner": "VN95B"
+        },
+        {
+          "correct": "VT5E3",
+          "correct_margin": 3.363262176513672,
+          "correct_rank": 1,
+          "correct_score": -6.561361312866211,
+          "exact": true,
+          "sample_id": "A-eval-0051",
+          "winner": "VT5E3"
+        },
+        {
+          "correct": "VWJ4T",
+          "correct_margin": 2.837433338165283,
+          "correct_rank": 1,
+          "correct_score": -4.637146949768066,
+          "exact": true,
+          "sample_id": "A-eval-0052",
+          "winner": "VWJ4T"
+        },
+        {
+          "correct": "VWMVN",
+          "correct_margin": 6.004298448562622,
+          "correct_rank": 1,
+          "correct_score": -2.717414617538452,
+          "exact": true,
+          "sample_id": "A-eval-0053",
+          "winner": "VWMVN"
+        },
+        {
+          "correct": "VA5ED",
+          "correct_margin": 2.4910402297973633,
+          "correct_rank": 1,
+          "correct_score": -8.047892570495605,
+          "exact": true,
+          "sample_id": "A-eval-0054",
+          "winner": "VA5ED"
+        },
+        {
+          "correct": "VHLDP",
+          "correct_margin": 0.11854696273803711,
+          "correct_rank": 1,
+          "correct_score": -7.915377140045166,
+          "exact": true,
+          "sample_id": "A-eval-0055",
+          "winner": "VHLDP"
+        },
+        {
+          "correct": "VQRXH",
+          "correct_margin": 3.2365360260009766,
+          "correct_rank": 1,
+          "correct_score": -3.4301295280456543,
+          "exact": true,
+          "sample_id": "A-eval-0056",
+          "winner": "VQRXH"
+        },
+        {
+          "correct": "VM95T",
+          "correct_margin": 0.43933963775634766,
+          "correct_rank": 1,
+          "correct_score": -4.9719038009643555,
+          "exact": true,
+          "sample_id": "A-eval-0057",
+          "winner": "VM95T"
+        },
+        {
+          "correct": "VRCQ4",
+          "correct_margin": 3.4764628410339355,
+          "correct_rank": 1,
+          "correct_score": -4.666779041290283,
+          "exact": true,
+          "sample_id": "A-eval-0058",
+          "winner": "VRCQ4"
+        },
+        {
+          "correct": "VYZ3M",
+          "correct_margin": 2.290870189666748,
+          "correct_rank": 1,
+          "correct_score": -5.83228063583374,
+          "exact": true,
+          "sample_id": "A-eval-0059",
+          "winner": "VYZ3M"
+        },
+        {
+          "correct": "VR59Q",
+          "correct_margin": 2.131741523742676,
+          "correct_rank": 1,
+          "correct_score": -4.675342082977295,
+          "exact": true,
+          "sample_id": "A-eval-0060",
+          "winner": "VR59Q"
+        },
+        {
+          "correct": "VNS8U",
+          "correct_margin": 3.374511957168579,
+          "correct_rank": 1,
+          "correct_score": -3.1858246326446533,
+          "exact": true,
+          "sample_id": "A-eval-0061",
+          "winner": "VNS8U"
+        },
+        {
+          "correct": "VYBD6",
+          "correct_margin": 2.246373414993286,
+          "correct_rank": 1,
+          "correct_score": -3.6672232151031494,
+          "exact": true,
+          "sample_id": "A-eval-0062",
+          "winner": "VYBD6"
+        },
+        {
+          "correct": "V98AB",
+          "correct_margin": 3.233819007873535,
+          "correct_rank": 1,
+          "correct_score": -3.249612331390381,
+          "exact": true,
+          "sample_id": "A-eval-0063",
+          "winner": "V98AB"
+        },
+        {
+          "correct": "V8UX2",
+          "correct_margin": -0.5567302703857422,
+          "correct_rank": 2,
+          "correct_score": -5.9917731285095215,
+          "exact": false,
+          "sample_id": "A-eval-0064",
+          "winner": "VWUUF"
+        },
+        {
+          "correct": "VW93R",
+          "correct_margin": 2.260662078857422,
+          "correct_rank": 1,
+          "correct_score": -3.701042652130127,
+          "exact": true,
+          "sample_id": "A-eval-0065",
+          "winner": "VW93R"
+        },
+        {
+          "correct": "VRDLJ",
+          "correct_margin": 3.74436616897583,
+          "correct_rank": 1,
+          "correct_score": -5.261031627655029,
+          "exact": true,
+          "sample_id": "A-eval-0066",
+          "winner": "VRDLJ"
+        },
+        {
+          "correct": "VQ7TY",
+          "correct_margin": 6.798266887664795,
+          "correct_rank": 1,
+          "correct_score": -3.808943271636963,
+          "exact": true,
+          "sample_id": "A-eval-0067",
+          "winner": "VQ7TY"
+        },
+        {
+          "correct": "VPLT3",
+          "correct_margin": 0.38552284240722656,
+          "correct_rank": 1,
+          "correct_score": -4.9893293380737305,
+          "exact": true,
+          "sample_id": "A-eval-0068",
+          "winner": "VPLT3"
+        },
+        {
+          "correct": "VWPQZ",
+          "correct_margin": 5.45359468460083,
+          "correct_rank": 1,
+          "correct_score": -4.5955939292907715,
+          "exact": true,
+          "sample_id": "A-eval-0069",
+          "winner": "VWPQZ"
+        },
+        {
+          "correct": "V7JHQ",
+          "correct_margin": 3.428495407104492,
+          "correct_rank": 1,
+          "correct_score": -4.733177185058594,
+          "exact": true,
+          "sample_id": "A-eval-0070",
+          "winner": "V7JHQ"
+        },
+        {
+          "correct": "VAPFB",
+          "correct_margin": -0.05440187454223633,
+          "correct_rank": 2,
+          "correct_score": -4.967617511749268,
+          "exact": false,
+          "sample_id": "A-eval-0071",
+          "winner": "VNS8U"
+        },
+        {
+          "correct": "V46SM",
+          "correct_margin": 4.738746643066406,
+          "correct_rank": 1,
+          "correct_score": -4.750310897827148,
+          "exact": true,
+          "sample_id": "A-eval-0072",
+          "winner": "V46SM"
+        },
+        {
+          "correct": "VYCMX",
+          "correct_margin": 4.961981773376465,
+          "correct_rank": 1,
+          "correct_score": -3.9472713470458984,
+          "exact": true,
+          "sample_id": "A-eval-0073",
+          "winner": "VYCMX"
+        },
+        {
+          "correct": "VMH8S",
+          "correct_margin": -2.4967150688171387,
+          "correct_rank": 2,
+          "correct_score": -9.096979141235352,
+          "exact": false,
+          "sample_id": "A-eval-0074",
+          "winner": "V8UX2"
+        },
+        {
+          "correct": "VCB2N",
+          "correct_margin": 4.655566692352295,
+          "correct_rank": 1,
+          "correct_score": -5.2163472175598145,
+          "exact": true,
+          "sample_id": "A-eval-0075",
+          "winner": "VCB2N"
+        },
+        {
+          "correct": "VZMVQ",
+          "correct_margin": 3.7747082710266113,
+          "correct_rank": 1,
+          "correct_score": -2.9104161262512207,
+          "exact": true,
+          "sample_id": "A-eval-0076",
+          "winner": "VZMVQ"
+        },
+        {
+          "correct": "V62FX",
+          "correct_margin": 2.8150768280029297,
+          "correct_rank": 1,
+          "correct_score": -6.266696929931641,
+          "exact": true,
+          "sample_id": "A-eval-0077",
+          "winner": "V62FX"
+        },
+        {
+          "correct": "VVNCC",
+          "correct_margin": 1.9057517051696777,
+          "correct_rank": 1,
+          "correct_score": -5.315572261810303,
+          "exact": true,
+          "sample_id": "A-eval-0078",
+          "winner": "VVNCC"
+        },
+        {
+          "correct": "VSQUG",
+          "correct_margin": 4.177640914916992,
+          "correct_rank": 1,
+          "correct_score": -5.728029251098633,
+          "exact": true,
+          "sample_id": "A-eval-0079",
+          "winner": "VSQUG"
+        },
+        {
+          "correct": "VAFV5",
+          "correct_margin": 1.3029913902282715,
+          "correct_rank": 1,
+          "correct_score": -5.016647815704346,
+          "exact": true,
+          "sample_id": "A-eval-0080",
+          "winner": "VAFV5"
+        },
+        {
+          "correct": "VTYXX",
+          "correct_margin": 1.4961981773376465,
+          "correct_rank": 1,
+          "correct_score": -4.550704002380371,
+          "exact": true,
+          "sample_id": "A-eval-0081",
+          "winner": "VTYXX"
+        },
+        {
+          "correct": "V5CCU",
+          "correct_margin": 4.8490378856658936,
+          "correct_rank": 1,
+          "correct_score": -3.1497833728790283,
+          "exact": true,
+          "sample_id": "A-eval-0082",
+          "winner": "V5CCU"
+        },
+        {
+          "correct": "VB6ST",
+          "correct_margin": 2.5453391075134277,
+          "correct_rank": 1,
+          "correct_score": -4.52173376083374,
+          "exact": true,
+          "sample_id": "A-eval-0083",
+          "winner": "VB6ST"
+        },
+        {
+          "correct": "VMMRS",
+          "correct_margin": -1.5535798072814941,
+          "correct_rank": 2,
+          "correct_score": -6.155961513519287,
+          "exact": false,
+          "sample_id": "A-eval-0084",
+          "winner": "V4QMF"
+        },
+        {
+          "correct": "VT4KX",
+          "correct_margin": 1.5274171829223633,
+          "correct_rank": 1,
+          "correct_score": -3.6870369911193848,
+          "exact": true,
+          "sample_id": "A-eval-0085",
+          "winner": "VT4KX"
+        },
+        {
+          "correct": "VGBTA",
+          "correct_margin": 0.3558840751647949,
+          "correct_rank": 1,
+          "correct_score": -4.766734600067139,
+          "exact": true,
+          "sample_id": "A-eval-0086",
+          "winner": "VGBTA"
+        },
+        {
+          "correct": "VN946",
+          "correct_margin": 2.322406768798828,
+          "correct_rank": 1,
+          "correct_score": -5.042333126068115,
+          "exact": true,
+          "sample_id": "A-eval-0087",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VCXUL",
+          "correct_margin": 3.1702256202697754,
+          "correct_rank": 1,
+          "correct_score": -5.8749003410339355,
+          "exact": true,
+          "sample_id": "A-eval-0088",
+          "winner": "VCXUL"
+        },
+        {
+          "correct": "VMQ7P",
+          "correct_margin": 4.475297451019287,
+          "correct_rank": 1,
+          "correct_score": -4.057230472564697,
+          "exact": true,
+          "sample_id": "A-eval-0089",
+          "winner": "VMQ7P"
+        },
+        {
+          "correct": "V6UD2",
+          "correct_margin": 2.1580286026000977,
+          "correct_rank": 1,
+          "correct_score": -4.881117820739746,
+          "exact": true,
+          "sample_id": "A-eval-0090",
+          "winner": "V6UD2"
+        },
+        {
+          "correct": "V2QPE",
+          "correct_margin": 1.3709650039672852,
+          "correct_rank": 1,
+          "correct_score": -4.889703273773193,
+          "exact": true,
+          "sample_id": "A-eval-0091",
+          "winner": "V2QPE"
+        },
+        {
+          "correct": "VMVCJ",
+          "correct_margin": 0.16540098190307617,
+          "correct_rank": 1,
+          "correct_score": -4.657932281494141,
+          "exact": true,
+          "sample_id": "A-eval-0092",
+          "winner": "VMVCJ"
+        },
+        {
+          "correct": "VGVV5",
+          "correct_margin": 2.4514894485473633,
+          "correct_rank": 1,
+          "correct_score": -3.4727768898010254,
+          "exact": true,
+          "sample_id": "A-eval-0093",
+          "winner": "VGVV5"
+        },
+        {
+          "correct": "VP5MR",
+          "correct_margin": 4.611293792724609,
+          "correct_rank": 1,
+          "correct_score": -6.184082984924316,
+          "exact": true,
+          "sample_id": "A-eval-0094",
+          "winner": "VP5MR"
+        },
+        {
+          "correct": "VE4L7",
+          "correct_margin": 3.2278900146484375,
+          "correct_rank": 1,
+          "correct_score": -4.853066444396973,
+          "exact": true,
+          "sample_id": "A-eval-0095",
+          "winner": "VE4L7"
+        },
+        {
+          "correct": "VAKZU",
+          "correct_margin": 3.477166175842285,
+          "correct_rank": 1,
+          "correct_score": -4.713944435119629,
+          "exact": true,
+          "sample_id": "A-eval-0096",
+          "winner": "VAKZU"
+        },
+        {
+          "correct": "VG94T",
+          "correct_margin": 5.0987865924835205,
+          "correct_rank": 1,
+          "correct_score": -3.8784444332122803,
+          "exact": true,
+          "sample_id": "A-eval-0097",
+          "winner": "VG94T"
+        },
+        {
+          "correct": "VB28N",
+          "correct_margin": 3.220775604248047,
+          "correct_rank": 1,
+          "correct_score": -4.067586898803711,
+          "exact": true,
+          "sample_id": "A-eval-0098",
+          "winner": "VB28N"
+        },
+        {
+          "correct": "VUL3A",
+          "correct_margin": 2.259796619415283,
+          "correct_rank": 1,
+          "correct_score": -4.38569450378418,
+          "exact": true,
+          "sample_id": "A-eval-0099",
+          "winner": "VUL3A"
+        },
+        {
+          "correct": "V3YQC",
+          "correct_margin": 2.1407651901245117,
+          "correct_rank": 1,
+          "correct_score": -4.6544647216796875,
+          "exact": true,
+          "sample_id": "A-eval-0100",
+          "winner": "V3YQC"
+        },
+        {
+          "correct": "VM95E",
+          "correct_margin": 1.7639656066894531,
+          "correct_rank": 1,
+          "correct_score": -7.88392448425293,
+          "exact": true,
+          "sample_id": "A-eval-0101",
+          "winner": "VM95E"
+        },
+        {
+          "correct": "VSVKD",
+          "correct_margin": 5.943476676940918,
+          "correct_rank": 1,
+          "correct_score": -4.177496910095215,
+          "exact": true,
+          "sample_id": "A-eval-0102",
+          "winner": "VSVKD"
+        },
+        {
+          "correct": "V4QMF",
+          "correct_margin": 2.4062981605529785,
+          "correct_rank": 1,
+          "correct_score": -4.864547252655029,
+          "exact": true,
+          "sample_id": "A-eval-0103",
+          "winner": "V4QMF"
+        },
+        {
+          "correct": "VWUUF",
+          "correct_margin": 3.164515495300293,
+          "correct_rank": 1,
+          "correct_score": -3.816267490386963,
+          "exact": true,
+          "sample_id": "A-eval-0104",
+          "winner": "VWUUF"
+        },
+        {
+          "correct": "VXHPH",
+          "correct_margin": 0.5097379684448242,
+          "correct_rank": 1,
+          "correct_score": -7.7404985427856445,
+          "exact": true,
+          "sample_id": "A-eval-0105",
+          "winner": "VXHPH"
+        },
+        {
+          "correct": "VS8TT",
+          "correct_margin": 5.9306700229644775,
+          "correct_rank": 1,
+          "correct_score": -3.344785451889038,
+          "exact": true,
+          "sample_id": "A-eval-0106",
+          "winner": "VS8TT"
+        },
+        {
+          "correct": "VUPZ6",
+          "correct_margin": 4.830997705459595,
+          "correct_rank": 1,
+          "correct_score": -2.189476728439331,
+          "exact": true,
+          "sample_id": "A-eval-0107",
+          "winner": "VUPZ6"
+        },
+        {
+          "correct": "VRK7F",
+          "correct_margin": 1.2917990684509277,
+          "correct_rank": 1,
+          "correct_score": -6.304470062255859,
+          "exact": true,
+          "sample_id": "A-eval-0108",
+          "winner": "VRK7F"
+        },
+        {
+          "correct": "VEKMM",
+          "correct_margin": 3.183471202850342,
+          "correct_rank": 1,
+          "correct_score": -6.088038921356201,
+          "exact": true,
+          "sample_id": "A-eval-0109",
+          "winner": "VEKMM"
+        },
+        {
+          "correct": "VP4RJ",
+          "correct_margin": -2.1631722450256348,
+          "correct_rank": 2,
+          "correct_score": -7.713290691375732,
+          "exact": false,
+          "sample_id": "A-eval-0110",
+          "winner": "V8AGY"
+        },
+        {
+          "correct": "VQ6M7",
+          "correct_margin": 2.510484457015991,
+          "correct_rank": 1,
+          "correct_score": -3.69553542137146,
+          "exact": true,
+          "sample_id": "A-eval-0111",
+          "winner": "VQ6M7"
+        },
+        {
+          "correct": "VRVGE",
+          "correct_margin": 0.8942365646362305,
+          "correct_rank": 1,
+          "correct_score": -7.706183433532715,
+          "exact": true,
+          "sample_id": "A-eval-0112",
+          "winner": "VRVGE"
+        },
+        {
+          "correct": "VHPBL",
+          "correct_margin": 2.7771100997924805,
+          "correct_rank": 1,
+          "correct_score": -5.218537330627441,
+          "exact": true,
+          "sample_id": "A-eval-0113",
+          "winner": "VHPBL"
+        },
+        {
+          "correct": "VPMRB",
+          "correct_margin": 3.826016902923584,
+          "correct_rank": 1,
+          "correct_score": -6.372233867645264,
+          "exact": true,
+          "sample_id": "A-eval-0114",
+          "winner": "VPMRB"
+        },
+        {
+          "correct": "VWBQ4",
+          "correct_margin": -3.9038772583007812,
+          "correct_rank": 9,
+          "correct_score": -12.995405197143555,
+          "exact": false,
+          "sample_id": "A-eval-0115",
+          "winner": "VNP8N"
+        },
+        {
+          "correct": "VBFGJ",
+          "correct_margin": -1.7208948135375977,
+          "correct_rank": 3,
+          "correct_score": -7.585967063903809,
+          "exact": false,
+          "sample_id": "A-eval-0116",
+          "winner": "VLW9W"
+        },
+        {
+          "correct": "V3DXW",
+          "correct_margin": -3.2692089080810547,
+          "correct_rank": 5,
+          "correct_score": -10.772079467773438,
+          "exact": false,
+          "sample_id": "A-eval-0117",
+          "winner": "VUL64"
+        },
+        {
+          "correct": "VFXPY",
+          "correct_margin": 0.6099905967712402,
+          "correct_rank": 1,
+          "correct_score": -5.716193199157715,
+          "exact": true,
+          "sample_id": "A-eval-0118",
+          "winner": "VFXPY"
+        },
+        {
+          "correct": "VLW9W",
+          "correct_margin": 4.311477184295654,
+          "correct_rank": 1,
+          "correct_score": -4.520572185516357,
+          "exact": true,
+          "sample_id": "A-eval-0119",
+          "winner": "VLW9W"
+        },
+        {
+          "correct": "VH66F",
+          "correct_margin": 4.209278583526611,
+          "correct_rank": 1,
+          "correct_score": -4.229335308074951,
+          "exact": true,
+          "sample_id": "A-eval-0120",
+          "winner": "VH66F"
+        },
+        {
+          "correct": "VJZXH",
+          "correct_margin": 2.193661689758301,
+          "correct_rank": 1,
+          "correct_score": -5.832662582397461,
+          "exact": true,
+          "sample_id": "A-eval-0121",
+          "winner": "VJZXH"
+        },
+        {
+          "correct": "VX3VA",
+          "correct_margin": -1.4066877365112305,
+          "correct_rank": 2,
+          "correct_score": -5.713834762573242,
+          "exact": false,
+          "sample_id": "A-eval-0122",
+          "winner": "VUPZ6"
+        },
+        {
+          "correct": "VARQT",
+          "correct_margin": -6.568299293518066,
+          "correct_rank": 6,
+          "correct_score": -11.806577682495117,
+          "exact": false,
+          "sample_id": "A-eval-0123",
+          "winner": "VYCMX"
+        },
+        {
+          "correct": "V33EQ",
+          "correct_margin": -1.374598503112793,
+          "correct_rank": 2,
+          "correct_score": -8.220565795898438,
+          "exact": false,
+          "sample_id": "A-eval-0124",
+          "winner": "VV353"
+        },
+        {
+          "correct": "VPNLF",
+          "correct_margin": 3.021409511566162,
+          "correct_rank": 1,
+          "correct_score": -5.672430515289307,
+          "exact": true,
+          "sample_id": "A-eval-0125",
+          "winner": "VPNLF"
+        },
+        {
+          "correct": "VWW7D",
+          "correct_margin": -1.856546401977539,
+          "correct_rank": 8,
+          "correct_score": -9.62955379486084,
+          "exact": false,
+          "sample_id": "A-eval-0126",
+          "winner": "VN946"
+        },
+        {
+          "correct": "VZW5U",
+          "correct_margin": 3.106816291809082,
+          "correct_rank": 1,
+          "correct_score": -5.0827531814575195,
+          "exact": true,
+          "sample_id": "A-eval-0127",
+          "winner": "VZW5U"
+        }
+      ]
+    }
+  },
+  "schema": "minicells.pcu-hybrid-reattachment-001.primary.v3",
+  "scientific_evidence": false,
+  "selected_cells": [
+    "L7:E31:C0",
+    "L7:E31:C3",
+    "L7:E13:C3",
+    "L7:E31:C1",
+    "L7:E17:C0",
+    "L7:E17:C3",
+    "L7:E31:C2",
+    "L7:E17:C2",
+    "L7:E5:C1",
+    "L7:E5:C3",
+    "L7:E5:C2",
+    "L7:E8:C2",
+    "L7:E8:C1",
+    "L7:E4:C2",
+    "L7:E16:C1",
+    "L7:E13:C0",
+    "L7:E4:C1",
+    "L7:E25:C2",
+    "L7:E8:C0",
+    "L7:E17:C1",
+    "L7:E5:C0",
+    "L7:E13:C1",
+    "L7:E8:C3",
+    "L7:E13:C2",
+    "L7:E25:C3",
+    "L7:E4:C3",
+    "L7:E3:C0",
+    "L7:E3:C2",
+    "L7:E4:C0",
+    "L7:E3:C1",
+    "L7:E25:C1",
+    "L7:E25:C0",
+    "L7:E11:C2",
+    "L7:E11:C0",
+    "L7:E16:C2",
+    "L7:E11:C3",
+    "L7:E3:C3",
+    "L7:E14:C1",
+    "L7:E20:C0",
+    "L7:E20:C1",
+    "L7:E20:C3",
+    "L7:E11:C1",
+    "L7:E28:C3",
+    "L7:E16:C3",
+    "L7:E16:C0",
+    "L7:E29:C3",
+    "L7:E20:C2",
+    "L7:E28:C1",
+    "L7:E28:C0",
+    "L7:E14:C0",
+    "L7:E14:C2",
+    "L7:E14:C3",
+    "L7:E28:C2",
+    "L7:E30:C2",
+    "L7:E29:C1",
+    "L7:E29:C2",
+    "L7:E29:C0",
+    "L7:E1:C1",
+    "L7:E30:C1",
+    "L7:E1:C2",
+    "L7:E19:C1",
+    "L7:E1:C0",
+    "L7:E19:C3",
+    "L7:E30:C3"
+  ],
+  "selected_k": 64,
+  "source": {
+    "generated_artifact_status_porcelain": "",
+    "source_commit": "1e6c5bb276c8e0ba5b60c77920d27ec6078d2b73",
+    "source_dirty": false,
+    "source_ref": "codex/pcu-hybrid-reattachment-001",
+    "source_tree": "931591746215e3cd9c69d726fbbb37953ace809c",
+    "status_porcelain": ""
+  },
+  "status": "CAUSAL_HYBRID_CONSUMPTION_SUPPORTED_LOCALITY_FAILED",
+  "training": {
+    "batch_size": 8,
+    "candidate_compute_completion_tokens": 60536,
+    "candidate_pool_size": 16,
+    "final_batch_ranking_accuracy": 1.0,
+    "final_loss": 0.050132254196796566,
+    "learning_rate": 0.001,
+    "max_optimizer_steps": 128,
+    "max_training_tokens": 500000,
+    "objective": "16-way-candidate-ranking-cross-entropy-over-mean-completion-loglikelihood",
+    "optimizer": "AdamW",
+    "ranking_temperature": 1.0,
+    "sample_microbatch": 1,
+    "selected_cells": [
+      "L7:E31:C0",
+      "L7:E31:C3",
+      "L7:E13:C3",
+      "L7:E31:C1",
+      "L7:E17:C0",
+      "L7:E17:C3",
+      "L7:E31:C2",
+      "L7:E17:C2",
+      "L7:E5:C1",
+      "L7:E5:C3",
+      "L7:E5:C2",
+      "L7:E8:C2",
+      "L7:E8:C1",
+      "L7:E4:C2",
+      "L7:E16:C1",
+      "L7:E13:C0",
+      "L7:E4:C1",
+      "L7:E25:C2",
+      "L7:E8:C0",
+      "L7:E17:C1",
+      "L7:E5:C0",
+      "L7:E13:C1",
+      "L7:E8:C3",
+      "L7:E13:C2",
+      "L7:E25:C3",
+      "L7:E4:C3",
+      "L7:E3:C0",
+      "L7:E3:C2",
+      "L7:E4:C0",
+      "L7:E3:C1",
+      "L7:E25:C1",
+      "L7:E25:C0",
+      "L7:E11:C2",
+      "L7:E11:C0",
+      "L7:E16:C2",
+      "L7:E11:C3",
+      "L7:E3:C3",
+      "L7:E14:C1",
+      "L7:E20:C0",
+      "L7:E20:C1",
+      "L7:E20:C3",
+      "L7:E11:C1",
+      "L7:E28:C3",
+      "L7:E16:C3",
+      "L7:E16:C0",
+      "L7:E29:C3",
+      "L7:E20:C2",
+      "L7:E28:C1",
+      "L7:E28:C0",
+      "L7:E14:C0",
+      "L7:E14:C2",
+      "L7:E14:C3",
+      "L7:E28:C2",
+      "L7:E30:C2",
+      "L7:E29:C1",
+      "L7:E29:C2",
+      "L7:E29:C0",
+      "L7:E1:C1",
+      "L7:E30:C1",
+      "L7:E1:C2",
+      "L7:E19:C1",
+      "L7:E1:C0",
+      "L7:E19:C3",
+      "L7:E30:C3"
+    ],
+    "training_steps": 128,
+    "training_tokens": 3784,
+    "use_cache": false
+  },
+  "valid_run": true
+}
