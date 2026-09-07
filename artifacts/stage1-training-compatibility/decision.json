@@ -1,0 +1,25 @@
+{
+  "schema": "minicells.stage1-training-compatibility.v1",
+  "status": "FAIL",
+  "stage": "root_work_package",
+  "reason": "128 raw FP32 leaf records require 2361703 bytes, exceeding the canonical 1048576-byte Work boundary",
+  "mini_jam_commit": "b90c0bffa09fa0190fb1737db876190ddd899c22",
+  "jambda_commit": "d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
+  "minijam_spec": "v1",
+  "logical_batch_size": 256,
+  "shard_size": 2,
+  "leaf_count": 128,
+  "gates": {
+    "dependency_alignment": true,
+    "clean_bootstrap": false,
+    "guest_build": true,
+    "native_sharded_tests": true,
+    "root_work_package_under_limit": false,
+    "pvm_parity": false,
+    "leaf_max_under_1b": false,
+    "service_creation_finalized": false,
+    "training_step_finalized": false,
+    "canonical_state_updated": false,
+    "restart_persistence": false
+  }
+}

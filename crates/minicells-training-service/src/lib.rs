@@ -4,7 +4,7 @@ use minicells_training_ref::{
     accumulate_batch_gradients, diagnostic_sample_backward, diagnostic_sample_forward,
     finalize_adamw_step, train_step_with_accumulator, GradientAccumulator, TrainingBatch,
     PartialGradientV1, TrainingState, TrainingWorkspace, PARAMETER_COUNT,
-    PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE, reduce_32_leaves_in_place_ref, compute_gradient_leaf,
+    PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE, reduce_parallel_leaves_in_place_ref, compute_gradient_leaf,
 };
 
 #[cfg(not(feature = "tree"))]
@@ -180,7 +180,8 @@ fn tree_root(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
     for value in &mut state.adam_v { *value = match tree_f32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) }; }
     state.step = state_step;
     let leaves = unsafe { &mut *core::ptr::addr_of_mut!(TREE_LEAVES) };
-    let mut seen = 0u32;
+    let mut seen = [false; PARALLEL_LEAF_COUNT];
+    let mut seen_count = 0usize;
     const RECORD_BYTES: usize = 4 + 2 + 32 + 8 + 32 + 32 + 6 + 4 + 4 + 2 + MODEL_BYTES;
     for _ in 0..PARALLEL_LEAF_COUNT {
         let record = match take(raw, &mut cursor, RECORD_BYTES) { Some(v) => v, None => return tree_fail(output) };
@@ -195,8 +196,9 @@ fn tree_root(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
         let sample_start = u16::from_le_bytes(record[rc..rc + 2].try_into().unwrap()) as usize; rc += 2;
         let sample_end = u16::from_le_bytes(record[rc..rc + 2].try_into().unwrap()) as usize; rc += 2;
         if leaf_index >= PARALLEL_LEAF_COUNT || sample_start != leaf_index * PARALLEL_SHARD_SIZE || sample_end != sample_start + PARALLEL_SHARD_SIZE { return tree_fail(output); }
-        if seen & (1u32 << leaf_index) != 0 { return tree_fail(output); }
-        seen |= 1u32 << leaf_index;
+        if seen[leaf_index] { return tree_fail(output); }
+        seen[leaf_index] = true;
+        seen_count += 1;
         let leaf = &mut leaves[leaf_index];
         leaf.loss_sum = f32::from_le_bytes(record[rc..rc + 4].try_into().unwrap()); rc += 4;
         leaf.token_count = u32::from_le_bytes(record[rc..rc + 4].try_into().unwrap()); rc += 4;
@@ -204,9 +206,9 @@ fn tree_root(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
         if leaf.processed_samples != PARALLEL_SHARD_SIZE as u16 { return tree_fail(output); }
         for value in &mut leaf.gradient { *value = f32::from_le_bytes(record[rc..rc + 4].try_into().unwrap()); rc += 4; }
     }
-    if seen != u32::MAX { return tree_fail(output); }
+    if seen_count != PARALLEL_LEAF_COUNT { return tree_fail(output); }
     let scratch = unsafe { &mut *core::ptr::addr_of_mut!(ACCUMULATOR) };
-    let root = reduce_32_leaves_in_place_ref(leaves);
+    let root = reduce_parallel_leaves_in_place_ref(leaves);
     scratch.gradient = root.gradient; scratch.loss_sum = root.loss_sum; scratch.token_count = root.token_count;
     let report = finalize_adamw_step(state, scratch);
     let output = unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) };

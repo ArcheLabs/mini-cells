@@ -1,0 +1,24 @@
+name: MiniCells x pinned MiniJAM Stage-1
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce application-neutral Stage-1 boundary
+        run: ./tools/check_stage1_boundary.sh
+  pinned-dependency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bootstrap pinned MiniJAM
+        run: ./tools/bootstrap_deps.sh
+      - name: Test public PVM and training boundaries
+        run: cargo test --offline -p minicells-pvm -p minicells-training-ref
+        env:
+          RUST_MIN_STACK: 16777216
