@@ -25,7 +25,11 @@ elif [[ -n "${MINIJAM_CLIENT_REF:-}" && "${RESOLVED_MINIJAM_REF}" != "$(git -C "
   echo "MINIJAM_CLIENT_DIR does not match requested MINIJAM_CLIENT_REF" >&2
   exit 1
 fi
-git -C "${CLIENT}" submodule update --init external/jambda >&2
+# MiniJAM records Jambda with an SSH URL, while CI only needs a public,
+# read-only checkout of the pinned gitlink.  Rewrite the transport and avoid
+# recursively fetching Jambda's unrelated conformance/test-vector modules.
+git -C "${CLIENT}" -c url."https://github.com/".insteadOf="git@github.com:" \
+  submodule update --init --depth=1 external/jambda >&2
 RECORDED_JAMBDA_REF="$(git -C "${CLIENT}" ls-tree HEAD external/jambda | awk '{print $3}')"
 JAMBDA="${CLIENT}/external/jambda"
 RESOLVED_JAMBDA_REF="$(git -C "${JAMBDA}" rev-parse HEAD)"

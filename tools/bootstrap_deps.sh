@@ -10,13 +10,20 @@ if [[ -e "${CLIENT}" && ! -f "${CLIENT}/Cargo.toml" ]]; then
   exit 1
 fi
 if [[ ! -e "${CLIENT}" ]]; then
-  git clone --recurse-submodules https://github.com/ArcheLabs/minijam-client.git "${CLIENT}"
+  # Do not recursively clone MiniJAM's development/test-vector submodules.
+  # Stage-1 only needs the authoritative Jambda gitlink below; recursively
+  # cloning it also pulls large nested repositories and makes CI dependent on
+  # their availability (and on the upstream SSH URL).
+  git clone https://github.com/ArcheLabs/minijam-client.git "${CLIENT}"
 fi
 if ! git -C "${CLIENT}" cat-file -e "${MINIJAM_CLIENT_REF}^{commit}" 2>/dev/null; then
   git -C "${CLIENT}" fetch --quiet origin "${MINIJAM_CLIENT_REF}"
 fi
 git -C "${CLIENT}" checkout --quiet "${MINIJAM_CLIENT_REF}"
-git -C "${CLIENT}" submodule update --init external/jambda
+# The MiniJAM repository records Jambda with an SSH URL.  CI has no SSH
+# credentials, so rewrite that transport for this read-only, pinned checkout.
+git -C "${CLIENT}" -c url."https://github.com/".insteadOf="git@github.com:" \
+  submodule update --init --depth=1 external/jambda
 JAMBDA="${CLIENT}/external/jambda"
 resolved_jambda="$(git -C "${JAMBDA}" rev-parse HEAD)"
 recorded_jambda="$(git -C "${CLIENT}" ls-tree HEAD external/jambda | awk '{print $3}')"
