@@ -19,7 +19,7 @@ def read_exact(path: Path, size: int) -> bytes:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--fixture", type=Path, default=Path("fixtures/training-fidelity-v1"))
+    parser.add_argument("--fixture", type=Path, default=Path("tests/fixtures/training-fidelity-v1"))
     parser.add_argument("--step", type=int, default=1)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()

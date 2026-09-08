@@ -4,7 +4,7 @@ import argparse, struct
 from pathlib import Path
 
 def main():
-    p = argparse.ArgumentParser(); p.add_argument("--fixture", type=Path, default=Path("fixtures/training-fidelity-v1")); p.add_argument("--samples", type=int, default=16); p.add_argument("--format", choices=("subset", "mca", "full"), default="subset"); p.add_argument("--output", type=Path, required=True); a = p.parse_args()
+    p = argparse.ArgumentParser(); p.add_argument("--fixture", type=Path, default=Path("tests/fixtures/training-fidelity-v1")); p.add_argument("--samples", type=int, default=16); p.add_argument("--format", choices=("subset", "mca", "full"), default="subset"); p.add_argument("--output", type=Path, required=True); a = p.parse_args()
     if not 1 <= a.samples <= 256: raise SystemExit("samples must be 1..=256")
     initial = (a.fixture / "initial-weights-f32.bin").read_bytes()
     batch = (a.fixture / "batch-000001.bin").read_bytes()

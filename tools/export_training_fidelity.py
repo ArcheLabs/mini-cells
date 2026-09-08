@@ -88,7 +88,7 @@ def optimizer_state(optimizer, name: str) -> np.ndarray:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default=str(ROOT / "configs/echo-v0.yaml"))
-    parser.add_argument("--output", default=str(ROOT / "fixtures/training-fidelity-v1"))
+    parser.add_argument("--output", default=str(ROOT / "tests/fixtures/training-fidelity-v1"))
     parser.add_argument("--steps", type=int, default=5000)
     parser.add_argument("--device", default="cpu", help="torch device (cpu or cuda) for local reference runs")
     args = parser.parse_args()

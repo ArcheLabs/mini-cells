@@ -108,7 +108,7 @@ struct GateArgs {
 
 #[derive(Args)]
 struct FidelityNativeArgs {
-    #[arg(long, default_value = "fixtures/training-fidelity-v1")]
+    #[arg(long, default_value = "tests/fixtures/training-fidelity-v1")]
     fixture: PathBuf,
     #[arg(long, default_value = ".local/runs/fidelity-native")]
     output: PathBuf,
@@ -118,7 +118,7 @@ struct FidelityNativeArgs {
 
 #[derive(Args)]
 struct ParallelNativeArgs {
-    #[arg(long, default_value = "fixtures/training-fidelity-v1")]
+    #[arg(long, default_value = "tests/fixtures/training-fidelity-v1")]
     fixture: PathBuf,
     #[arg(long, default_value = ".local/runs/parallel-native")]
     output: PathBuf,
@@ -152,7 +152,7 @@ struct PvmGasArgs {
 struct PvmParityArgs {
     #[arg(long, default_value = "service/artifacts/training-fidelity.blob")]
     artifact: PathBuf,
-    #[arg(long, default_value = "fixtures/training-fidelity-v1")]
+    #[arg(long, default_value = "tests/fixtures/training-fidelity-v1")]
     fixture: PathBuf,
     #[arg(long, default_value_t = 16)]
     samples: usize,
@@ -179,7 +179,7 @@ struct HierarchicalPvmArgs {
     reducer_artifact: PathBuf,
     #[arg(long, default_value = "service/artifacts/minicells-training-finalizer-v2.blob")]
     finalizer_artifact: PathBuf,
-    #[arg(long, default_value = "fixtures/training-fidelity-v1")]
+    #[arg(long, default_value = "tests/fixtures/training-fidelity-v1")]
     fixture: PathBuf,
     #[arg(long, default_value_t = 1_000_000_000)]
     gas_limit: u64,
