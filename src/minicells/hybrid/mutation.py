@@ -9,7 +9,7 @@ from typing import Any, Mapping
 
 import torch
 
-from .errors import ArtifactValidationError, MutationLifecycleError
+from .errors import ArtifactValidationError
 from .inspector import CellPlacement, ModelInspection
 from .serialization import load_artifact, save_artifact
 

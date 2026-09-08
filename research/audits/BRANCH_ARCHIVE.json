@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "generated_from": "codex/hybrid-clm-release-preparation-v0.1",
+  "generated_at_commit": "0fbfb74",
   "policy": "archive evidence before deletion; branch names are not scientific identity",
   "branches": [
     {"branch": "main", "head": "7c99ef3f4aedb8d561cf9600ea5d79da1eb99b99", "category": "protected", "status": "active_default", "canonical_paths": ["research/", "artifacts/"], "open_pr": null, "safe_to_delete": false, "notes": "default integration branch"},
-    {"branch": "codex/hybrid-clm-release-preparation-v0.1", "head": "a683c8a8fbeb0dc130457011adf8376af6c34090", "category": "active", "status": "in_progress", "canonical_paths": ["src/minicells/hybrid/", "docs/hybrid-clm/", "research/stages/08-hybrid-clm/"], "open_pr": null, "safe_to_delete": false, "notes": "current release-preparation line"},
+    {"branch": "codex/hybrid-clm-release-preparation-v0.1", "head": "0fbfb74", "category": "active", "status": "in_progress", "canonical_paths": ["src/minicells/hybrid/", "docs/hybrid-clm/", "research/stages/08-hybrid-clm/"], "open_pr": null, "safe_to_delete": false, "notes": "current release-preparation line; inventory captured before final report commit"},
     {"branch": "codex/minicells-stage1-training-compatibility", "head": "a683c8a8fbeb0dc130457011adf8376af6c34090", "category": "active", "status": "engineering_complete", "canonical_paths": ["artifacts/stage1-training-compatibility/", "docs/minijam-stage1-compatibility.md"], "open_pr": null, "safe_to_delete": false, "notes": "Stage-1 evidence branch; keep reachable until merged"},
     {"branch": "codex/pcu-composability-kill-001", "head": "75fda386084acea051cf41bef66360d2af5a3fa5", "category": "research", "status": "active_or_historical", "canonical_paths": ["research/validations/pcu-kill-001/", "src/minicells/pcu_kill_001/"], "open_pr": null, "safe_to_delete": false, "notes": "scientific protocol lineage; preserve"},
     {"branch": "codex/clm-0.3-progressive-growth", "head": "4354183ec6bccb9d78e48a202c2f1c0a5e0e0b5d", "category": "research", "status": "historical_candidate", "canonical_paths": ["research/", "artifacts/"], "open_pr": null, "safe_to_delete": false, "notes": "requires reachability and result-only-on-branch audit"},
