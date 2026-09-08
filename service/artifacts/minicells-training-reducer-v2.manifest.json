@@ -1,0 +1,27 @@
+{
+  "schema": "minicells.parallel-training-reducer-service.v2",
+  "algorithm": "echo-adamw-ce-hierarchical-tree128-v2",
+  "role": "group_reducer",
+  "abi": {
+    "input": "MCR2",
+    "output": "MCGR2"
+  },
+  "logical_batch_size": 256,
+  "shard_size": 2,
+  "leaf_count": 128,
+  "group_count": 4,
+  "leaves_per_group": 32,
+  "group_leaf_ranges": [[0, 32], [32, 64], [64, 96], [96, 128]],
+  "group_sample_ranges": [[0, 64], [64, 128], [128, 192], [192, 256]],
+  "minijam_commit": "b90c0bffa09fa0190fb1737db876190ddd899c22",
+  "jambda_commit": "d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
+  "minijam_spec": "v1",
+  "guest_sdk_abi": 1,
+  "refine_limit": 1000000000,
+  "accumulate_limit": 1000000000,
+  "work_payload_fixture_max": 578400,
+  "work_limit": 1048576,
+  "artifact_sha256": "3886b83e4ba2b47bee7a126d30945b7e9dabe2b7ef60e9bdbf021ce7330432e5",
+  "code_hash": "0xf28e376e8594b0c6e1da72aafe284ff4ab13d01f19b73b602847c7aeda56acc1",
+  "deployment_ready": true
+}

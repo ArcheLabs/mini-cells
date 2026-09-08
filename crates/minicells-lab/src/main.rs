@@ -12,9 +12,10 @@ use minicells_sim::trainer::{
 };
 use minicells_training_ref::{
     accumulate_batch_gradients, compute_gradient_leaf, evaluate_batch_report, finalize_adamw_step,
-    reduce_partial_gradients, train_step_with_gradient, GradientAccumulator, PartialGradientV1,
-    TrainStepReport, TrainingBatch, TrainingState, TrainingWorkspace, LOGICAL_BATCH_SIZE,
-    PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE, PARAMETER_COUNT,
+    reduce_four_groups_in_place, reduce_group_in_place_ref, reduce_partial_gradients,
+    train_step_with_gradient, GradientAccumulator, PartialGradientV1, TrainStepReport,
+    TrainingBatch, TrainingState, TrainingWorkspace, LOGICAL_BATCH_SIZE, PARALLEL_GROUP_COUNT,
+    PARALLEL_LEAF_COUNT, PARALLEL_LEAVES_PER_GROUP, PARALLEL_SHARD_SIZE, PARAMETER_COUNT,
 };
 use std::path::PathBuf;
 
@@ -49,6 +50,7 @@ enum Command {
     FidelityNative(FidelityNativeArgs),
     ParallelNative(ParallelNativeArgs),
     PvmParity(PvmParityArgs),
+    HierarchicalPvm(HierarchicalPvmArgs),
     PvmGas(PvmGasArgs),
 }
 
@@ -164,6 +166,25 @@ struct PvmParityArgs {
     /// Also execute the experimental multi-Refine round trip (costly).
     #[arg(long, default_value_t = false)]
     multi_refine: bool,
+}
+
+#[derive(Args)]
+struct HierarchicalPvmArgs {
+    /// Use Native leaf records to isolate reducer/finalizer diagnostics.
+    #[arg(long, default_value_t = false)]
+    native_leaves: bool,
+    #[arg(long, default_value = "service/artifacts/minicells-training-leaf-v1.blob")]
+    leaf_artifact: PathBuf,
+    #[arg(long, default_value = "service/artifacts/minicells-training-reducer-v2.blob")]
+    reducer_artifact: PathBuf,
+    #[arg(long, default_value = "service/artifacts/minicells-training-finalizer-v2.blob")]
+    finalizer_artifact: PathBuf,
+    #[arg(long, default_value = "fixtures/training-fidelity-v1")]
+    fixture: PathBuf,
+    #[arg(long, default_value_t = 1_000_000_000)]
+    gas_limit: u64,
+    #[arg(long, default_value = "artifacts/stage1-training-compatibility/hierarchical-pvm.json")]
+    output: PathBuf,
 }
 
 fn dataset_root(path: &Option<PathBuf>) -> Result<String, Box<dyn std::error::Error>> {
@@ -1050,6 +1071,183 @@ fn run_pvm_parity(args: PvmParityArgs) -> Result<(), Box<dyn std::error::Error>>
     Ok(())
 }
 
+fn run_hierarchical_pvm(args: HierarchicalPvmArgs) -> Result<(), Box<dyn std::error::Error>> {
+    let initial = read_f32_array(&args.fixture.join("initial-weights-f32.bin"))?;
+    if initial.len() != PARAMETER_COUNT { return Err("initial weight fixture length mismatch".into()); }
+    let mut weights = [0.0f32; PARAMETER_COUNT];
+    weights.copy_from_slice(&initial);
+    let batch = load_fidelity_batch(&args.fixture.join("batch-000001.bin"))?;
+    if batch.size as usize != LOGICAL_BATCH_SIZE { return Err("hierarchical runner requires batch 256".into()); }
+    let job = [1u8; 32];
+    let generation = 0u64;
+    let step = 0u64;
+    let model = [2u8; 32];
+    let optimizer = [3u8; 32];
+    let batch_commitment = [4u8; 32];
+    let identity = |payload: &mut Vec<u8>| {
+        payload.extend_from_slice(&2u16.to_le_bytes());
+        payload.extend_from_slice(&job);
+        payload.extend_from_slice(&generation.to_le_bytes());
+        payload.extend_from_slice(&step.to_le_bytes());
+        payload.extend_from_slice(&model);
+        payload.extend_from_slice(&optimizer);
+        payload.extend_from_slice(&batch_commitment);
+    };
+
+    let mut native_state = TrainingState::from_weights(weights);
+    let mut native_workspace = TrainingWorkspace::new();
+    let mut native_leaves = vec![PartialGradientV1::new(); PARALLEL_LEAF_COUNT];
+    for leaf_index in 0..PARALLEL_LEAF_COUNT {
+        let start = leaf_index * PARALLEL_SHARD_SIZE;
+        let mut shard = TrainingBatch::empty();
+        shard.size = PARALLEL_SHARD_SIZE as u16;
+        for row in 0..PARALLEL_SHARD_SIZE {
+            shard.ids[row] = batch.ids[start + row];
+            shard.lengths[row] = batch.lengths[start + row];
+        }
+        compute_gradient_leaf(&native_state, &shard, &mut native_workspace, &mut native_leaves[leaf_index]);
+    }
+    let mut reduction_leaves = native_leaves.clone();
+    let mut native_groups = [const { PartialGradientV1::new() }; PARALLEL_GROUP_COUNT];
+    for (group_index, group) in native_groups.iter_mut().enumerate() {
+        let start = group_index * PARALLEL_LEAVES_PER_GROUP;
+        *group = *reduce_group_in_place_ref(&mut reduction_leaves[start..start + PARALLEL_LEAVES_PER_GROUP]);
+    }
+    let native_root = *reduce_four_groups_in_place(&mut native_groups);
+    let mut native_accumulator = GradientAccumulator {
+        gradient: native_root.gradient,
+        loss_sum: native_root.loss_sum,
+        token_count: native_root.token_count,
+    };
+    let native_report = finalize_adamw_step(&mut native_state, &mut native_accumulator);
+
+    let mut monolithic_state = TrainingState::from_weights(weights);
+    let mut monolithic_gradient = [0.0f32; PARAMETER_COUNT];
+    let monolithic_report = train_step_with_gradient(&mut monolithic_state, &batch, &mut monolithic_gradient);
+
+    let mut leaf_outputs = Vec::with_capacity(PARALLEL_LEAF_COUNT);
+    let mut leaf_gas = Vec::with_capacity(PARALLEL_LEAF_COUNT);
+    let mut leaf_payload_max = 0usize;
+    for leaf_index in 0..PARALLEL_LEAF_COUNT {
+        let start = leaf_index * PARALLEL_SHARD_SIZE;
+        let mut payload = b"MCG1".to_vec();
+        identity(&mut payload);
+        payload.extend_from_slice(&(leaf_index as u16).to_le_bytes());
+        payload.extend_from_slice(&(start as u16).to_le_bytes());
+        payload.extend_from_slice(&((start + PARALLEL_SHARD_SIZE) as u16).to_le_bytes());
+        payload.extend_from_slice(&f32_bytes(&weights));
+        for row in start..start + PARALLEL_SHARD_SIZE { payload.extend_from_slice(&batch.ids[row]); }
+        payload.extend_from_slice(&batch.lengths[start..start + PARALLEL_SHARD_SIZE]);
+        leaf_payload_max = leaf_payload_max.max(payload.len());
+        if args.native_leaves {
+            let leaf = &native_leaves[leaf_index];
+            let mut record = b"MCGR".to_vec();
+            identity(&mut record);
+            record.extend_from_slice(&(leaf_index as u16).to_le_bytes());
+            record.extend_from_slice(&(start as u16).to_le_bytes());
+            record.extend_from_slice(&((start + PARALLEL_SHARD_SIZE) as u16).to_le_bytes());
+            record.extend_from_slice(&leaf.loss_sum.to_le_bytes());
+            record.extend_from_slice(&leaf.token_count.to_le_bytes());
+            record.extend_from_slice(&leaf.processed_samples.to_le_bytes());
+            record.extend_from_slice(&f32_bytes(&leaf.gradient));
+            leaf_outputs.push(record);
+            leaf_gas.push(0);
+        } else {
+            let mut harness = DirectPvmHarness::load(&args.leaf_artifact, args.gas_limit,
+                "b90c0bffa09fa0190fb1737db876190ddd899c22", "d33e0abf8116b23bbc551c6a8d7075eacb2994ce")?;
+            let execution = harness.execute_refine_measured(&payload)
+                .map_err(|error| format!("leaf {leaf_index} execution failed: {error}"))?;
+            if execution.output.get(..4) != Some(b"MCGR") { return Err(format!("leaf {leaf_index} returned invalid MCGR").into()); }
+            leaf_gas.push(execution.gas_used);
+            leaf_outputs.push(execution.output);
+        }
+        if (leaf_index + 1) % 16 == 0 {
+            eprintln!("hierarchical PVM leaves: {}/{}", leaf_index + 1, PARALLEL_LEAF_COUNT);
+        }
+    }
+
+    let mut group_outputs = Vec::with_capacity(PARALLEL_GROUP_COUNT);
+    let mut group_gas = Vec::with_capacity(PARALLEL_GROUP_COUNT);
+    let mut group_payload_max = 0usize;
+    for group_index in 0..PARALLEL_GROUP_COUNT {
+        let leaf_start = group_index * PARALLEL_LEAVES_PER_GROUP;
+        let leaf_end = leaf_start + PARALLEL_LEAVES_PER_GROUP;
+        let mut payload = b"MCR2".to_vec();
+        identity(&mut payload);
+        for value in [group_index, leaf_start, leaf_end, leaf_start * PARALLEL_SHARD_SIZE, leaf_end * PARALLEL_SHARD_SIZE] {
+            payload.extend_from_slice(&(value as u16).to_le_bytes());
+        }
+        for record in &leaf_outputs[leaf_start..leaf_end] { payload.extend_from_slice(record); }
+        group_payload_max = group_payload_max.max(payload.len());
+        let mut harness = DirectPvmHarness::load(&args.reducer_artifact, args.gas_limit,
+            "b90c0bffa09fa0190fb1737db876190ddd899c22", "d33e0abf8116b23bbc551c6a8d7075eacb2994ce")?;
+        let execution = harness.execute_refine_measured(&payload)
+            .map_err(|error| format!("group {group_index} execution failed: {error}"))?;
+        if execution.output.get(..5) != Some(b"MCGR2") {
+            return Err(format!("group {group_index} returned invalid MCGR2: {}", hex::encode(&execution.output)).into());
+        }
+        group_gas.push(execution.gas_used);
+        group_outputs.push(execution.output);
+        eprintln!("hierarchical PVM reducers: {}/{}", group_index + 1, PARALLEL_GROUP_COUNT);
+    }
+
+    let mut final_payload = b"MCF2".to_vec();
+    identity(&mut final_payload);
+    final_payload.extend_from_slice(&step.to_le_bytes());
+    final_payload.extend_from_slice(&f32_bytes(&weights));
+    final_payload.extend_from_slice(&vec![0u8; PARAMETER_COUNT * 8]);
+    for record in &group_outputs { final_payload.extend_from_slice(record); }
+    let final_payload_bytes = final_payload.len();
+    let mut harness = DirectPvmHarness::load(&args.finalizer_artifact, args.gas_limit,
+        "b90c0bffa09fa0190fb1737db876190ddd899c22", "d33e0abf8116b23bbc551c6a8d7075eacb2994ce")?;
+    let final_execution = harness.execute_refine_measured(&final_payload)
+        .map_err(|error| format!("finalizer execution failed: {error}"))?;
+    let expected_len = 24 + PARAMETER_COUNT * 12;
+    if final_execution.output.len() != expected_len || final_execution.output.get(..4) != Some(b"MCPR") {
+        return Err("finalizer returned invalid MCPR".into());
+    }
+    let native_weights = f32_bytes(&native_state.weights);
+    let native_m = f32_bytes(&native_state.adam_m);
+    let native_v = f32_bytes(&native_state.adam_v);
+    let model_bytes = PARAMETER_COUNT * 4;
+    let pvm_bit_exact = final_execution.output[24..24 + model_bytes] == native_weights
+        && final_execution.output[24 + model_bytes..24 + model_bytes * 2] == native_m
+        && final_execution.output[24 + model_bytes * 2..24 + model_bytes * 3] == native_v
+        && final_execution.output[4..8] == native_report.loss.to_le_bytes()
+        && final_execution.output[8..12] == native_report.grad_norm.to_le_bytes()
+        && final_execution.output[12..16] == native_report.token_count.to_le_bytes()
+        && final_execution.output[16..24] == native_state.step.to_le_bytes();
+    let max_weight_delta = native_state.weights.iter().zip(monolithic_state.weights.iter())
+        .map(|(a,b)| (a-b).abs()).fold(0.0f32, f32::max);
+    let max_optimizer_delta = native_state.adam_m.iter().zip(monolithic_state.adam_m.iter())
+        .chain(native_state.adam_v.iter().zip(monolithic_state.adam_v.iter()))
+        .map(|(a,b)| (a-b).abs()).fold(0.0f32, f32::max);
+    leaf_gas.sort_unstable();
+    group_gas.sort_unstable();
+    let percentile = |values: &[u64], pct: usize| values[((values.len() * pct).saturating_sub(1) / 100).min(values.len() - 1)];
+    let transport_pass = leaf_payload_max < 1_048_576 && group_payload_max < 1_048_576 && final_payload_bytes < 1_048_576;
+    let gas_pass = *leaf_gas.last().unwrap() < 1_000_000_000
+        && *group_gas.last().unwrap() < 1_000_000_000 && final_execution.gas_used < 1_000_000_000;
+    let report = serde_json::json!({
+        "schema":"minicells.hierarchical-pvm-parity.v2",
+        "status":if pvm_bit_exact && transport_pass && gas_pass {"PASS"} else {"FAIL"},
+        "minijam_commit":"b90c0bffa09fa0190fb1737db876190ddd899c22",
+        "jambda_commit":"d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
+        "native_leaves":args.native_leaves,
+        "artifacts":{"leaf":args.leaf_artifact,"reducer":args.reducer_artifact,"finalizer":args.finalizer_artifact},
+        "topology":{"logical_batch_size":256,"leaf_size":2,"leaf_count":128,"groups":4,"leaves_per_group":32},
+        "hierarchical_vs_flat_tree128_bit_exact":pvm_bit_exact,
+        "monolithic_comparison":{"loss_delta":(native_report.loss-monolithic_report.loss).abs(),"max_weight_absolute_error":max_weight_delta,"max_optimizer_state_absolute_error":max_optimizer_delta},
+        "work_bytes":{"leaf_max":leaf_payload_max,"group_max":group_payload_max,"finalizer":final_payload_bytes,"limit":1048576,"pass":transport_pass},
+        "gas":{"leaf":{"min":leaf_gas[0],"p95":percentile(&leaf_gas,95),"p99":percentile(&leaf_gas,99),"max":leaf_gas[leaf_gas.len()-1]},"reducer":{"min":group_gas[0],"p95":percentile(&group_gas,95),"max":group_gas[group_gas.len()-1]},"finalizer":final_execution.gas_used,"limit":1000000000,"pass":gas_pass}
+    });
+    if let Some(parent) = args.output.parent() { std::fs::create_dir_all(parent)?; }
+    std::fs::write(&args.output, serde_json::to_vec_pretty(&report)?)?;
+    println!("{}", serde_json::to_string_pretty(&report)?);
+    if report["status"] != "PASS" { return Err("hierarchical PVM gate failed".into()); }
+    Ok(())
+}
+
 fn run_pvm_gas(args: PvmGasArgs) -> Result<(), Box<dyn std::error::Error>> {
     let mut harness = DirectPvmHarness::load(
         &args.artifact,
@@ -1446,6 +1644,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::FidelityNative(args) => run_fidelity_native(args)?,
         Command::ParallelNative(args) => run_parallel_native(args)?,
         Command::PvmParity(args) => run_pvm_parity(args)?,
+        Command::HierarchicalPvm(args) => run_hierarchical_pvm(args)?,
         Command::PvmGas(args) => run_pvm_gas(args)?,
         Command::Resume(args) => train(
             TrainArgs {

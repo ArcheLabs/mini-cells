@@ -1,18 +1,23 @@
 {
-  "schema": "minicells.parallel-training-leaf-service.v1",
-  "algorithm": "echo-adamw-ce-tree32-v1",
+  "schema": "minicells.parallel-training-leaf-service.v2",
+  "algorithm": "echo-adamw-ce-hierarchical-tree128-v2",
+  "algorithm_changes": "EXECUTION_DECOMPOSITION_ONLY",
+  "role": "leaf_compute",
   "abi": {
-    "input": "MCG1",
-    "output": "MCGR"
+    "input": "MCG1/v2",
+    "output": "MCGR/v2"
   },
   "logical_batch_size": 256,
-  "shard_size": 8,
-  "leaf_count": 32,
-  "minijam_commit": "511b4357245db194678537e1b3ac111c38507278",
-  "jambda_commit": "e52307a726868205a151e6917a0a70a79965a028",
-  "jambda_adapter_commit": "f74de5325e0fe566b5b7e3f8eb4851173a937d76",
-  "refine_limit": 5000000000,
+  "shard_size": 2,
+  "leaf_count": 128,
+  "minijam_commit": "b90c0bffa09fa0190fb1737db876190ddd899c22",
+  "jambda_commit": "d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
+  "minijam_spec": "v1",
+  "guest_sdk_abi": 1,
+  "refine_limit": 1000000000,
   "accumulate_limit": 1000000000,
+  "deployment_ready": true,
   "diagnostic_stage": false,
-  "code_hash": "0x6cadeb72527c3674e5b8b371c4a39df5a1c8462ed37e140e326244fb1287a985"
+  "artifact_sha256": "f68537b86ca29e78ab58b8e15b0b159c0a2675a8b0b6d9dd95aec1e1e11e3fdf",
+  "code_hash": "0x3255dc490e006502ea018cc25ababa077ffae4e4c207d77b98d8af1d14e091df"
 }

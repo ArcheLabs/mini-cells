@@ -1,0 +1,15 @@
+{
+  "schema": "minicells.stage1-training-fresh-chain.v2",
+  "status": "BLOCKED_ENVIRONMENT",
+  "service_creation": "NOT_RUN",
+  "training_step": "NOT_RUN",
+  "restart_persistence": "NOT_RUN",
+  "reason": "No exact runnable fresh Stage-1 chain and matching deployment credentials are available in this workspace. Cached or unverifiable images are not accepted as evidence.",
+  "required_inputs": [
+    "pinned MiniJAM/Jambda release image or locally built exact image",
+    "fresh Stage-1 chain-spec/genesis",
+    "service-creation signer and Work-ingress relayer",
+    "registered worker credentials"
+  ],
+  "historical_probe": "artifacts/parallel-training-v1/fresh-chain/decision.json"
+}

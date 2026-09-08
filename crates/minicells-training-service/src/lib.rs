@@ -2,9 +2,10 @@
 
 use minicells_training_ref::{
     accumulate_batch_gradients, diagnostic_sample_backward, diagnostic_sample_forward,
-    finalize_adamw_step, train_step_with_accumulator, GradientAccumulator, TrainingBatch,
-    PartialGradientV1, TrainingState, TrainingWorkspace, PARAMETER_COUNT,
-    PARALLEL_LEAF_COUNT, PARALLEL_SHARD_SIZE, reduce_parallel_leaves_in_place_ref, compute_gradient_leaf,
+    compute_gradient_leaf, finalize_adamw_step, reduce_four_groups_in_place,
+    reduce_group_in_place_ref, train_step_with_accumulator, GradientAccumulator, PartialGradientV1,
+    TrainingBatch, TrainingState, TrainingWorkspace, PARAMETER_COUNT, PARALLEL_GROUP_COUNT,
+    PARALLEL_LEAF_COUNT, PARALLEL_LEAVES_PER_GROUP, PARALLEL_SHARD_SIZE,
 };
 
 #[cfg(not(feature = "tree"))]
@@ -19,7 +20,11 @@ const DIAGNOSTIC_HEADER: usize = 5;
 const PAYLOAD_CAPACITY: usize = STATE_BYTES + DIAGNOSTIC_HEADER + 2 + 8 + MODEL_BYTES;
 #[cfg(all(feature = "tree", feature = "tree_leaf_only"))]
 const PAYLOAD_CAPACITY: usize = 32_768;
-#[cfg(all(feature = "tree", not(feature = "tree_leaf_only")))]
+#[cfg(all(feature = "tree", feature = "tree_reducer_only"))]
+const PAYLOAD_CAPACITY: usize = 580_000;
+#[cfg(all(feature = "tree", feature = "tree_finalizer_only"))]
+const PAYLOAD_CAPACITY: usize = 150_000;
+#[cfg(all(feature = "tree", not(any(feature = "tree_leaf_only", feature = "tree_reducer_only", feature = "tree_finalizer_only"))))]
 const PAYLOAD_CAPACITY: usize = 900_000;
 
 extern "C" {
@@ -30,14 +35,18 @@ static mut INPUT: [u8; PAYLOAD_CAPACITY] = [0; PAYLOAD_CAPACITY];
 static mut OUTPUT: [u8; OUTPUT_CAPACITY] = [0; OUTPUT_CAPACITY];
 // Keep optimizer state in static data rather than copying it onto the small
 // PVM call stack.
+#[cfg(not(feature = "tree_reducer_only"))]
 static mut STATE: TrainingState = TrainingState::from_weights([0.0; PARAMETER_COUNT]);
+#[cfg(not(any(feature = "tree_reducer_only", feature = "tree_finalizer_only")))]
 static mut BATCH: TrainingBatch = TrainingBatch::empty();
+#[cfg(not(any(feature = "tree_reducer_only", feature = "tree_finalizer_only")))]
 static mut WORKSPACE: TrainingWorkspace = TrainingWorkspace::new();
+#[cfg(not(feature = "tree_reducer_only"))]
 static mut ACCUMULATOR: GradientAccumulator = GradientAccumulator::new();
-#[cfg(all(feature = "tree", not(feature = "tree_leaf_only")))]
-static mut TREE_LEAVES: [PartialGradientV1; PARALLEL_LEAF_COUNT] =
-    [const { PartialGradientV1::new() }; PARALLEL_LEAF_COUNT];
-#[cfg(feature = "tree")]
+#[cfg(all(feature = "tree", not(any(feature = "tree_leaf_only", feature = "tree_reducer_only"))))]
+static mut TREE_GROUPS: [PartialGradientV1; PARALLEL_GROUP_COUNT] =
+    [const { PartialGradientV1::new() }; PARALLEL_GROUP_COUNT];
+#[cfg(all(feature = "tree", not(any(feature = "tree_reducer_only", feature = "tree_finalizer_only"))))]
 static mut TREE_LEAF_OUTPUT: PartialGradientV1 = PartialGradientV1::new();
 
 #[repr(C)]
@@ -108,15 +117,16 @@ fn tree_fail(output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
     RefineOutput { data: output.as_ptr(), size: 4 }
 }
 
-#[cfg(feature = "tree")]
+#[cfg(all(feature = "tree", not(any(feature = "tree_reducer_only", feature = "tree_finalizer_only"))))]
 fn tree_leaf(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
-    // MCG1: magic, version, job, step, model/batch commitments, range,
-    // frozen weights, eight fixed-width ids and lengths.
+    // MCG1/v2: immutable full identity, exact range, frozen weights and two samples.
     let mut cursor = 4usize;
-    let version = match tree_u16(raw, &mut cursor) { Some(v) if v == 1 => v, _ => return tree_fail(output) };
+    let version = match tree_u16(raw, &mut cursor) { Some(v) if v == 2 => v, _ => return tree_fail(output) };
     let job = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let generation = match tree_u64(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
     let step = match tree_u64(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
     let model = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let optimizer = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
     let batch_commitment = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
     let leaf_index = match tree_u16(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
     let sample_start = match tree_u16(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
@@ -147,8 +157,10 @@ fn tree_leaf(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
     output[out..out + 4].copy_from_slice(b"MCGR"); out += 4;
     output[out..out + 2].copy_from_slice(&version.to_le_bytes()); out += 2;
     output[out..out + 32].copy_from_slice(&job); out += 32;
+    output[out..out + 8].copy_from_slice(&generation.to_le_bytes()); out += 8;
     output[out..out + 8].copy_from_slice(&step.to_le_bytes()); out += 8;
     output[out..out + 32].copy_from_slice(&model); out += 32;
+    output[out..out + 32].copy_from_slice(&optimizer); out += 32;
     output[out..out + 32].copy_from_slice(&batch_commitment); out += 32;
     output[out..out + 2].copy_from_slice(&leaf_index.to_le_bytes()); out += 2;
     output[out..out + 2].copy_from_slice(&sample_start.to_le_bytes()); out += 2;
@@ -160,7 +172,7 @@ fn tree_leaf(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
     RefineOutput { data: output.as_ptr(), size: out }
 }
 
-#[cfg(all(feature = "tree", not(feature = "tree_leaf_only")))]
+#[cfg(any())]
 fn tree_root(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
     // MCRF1 carries all job metadata, the frozen optimizer state, and the 32
     // immutable MCGR records.  Records may be supplied in any order; they are
@@ -225,6 +237,183 @@ fn tree_root(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
     RefineOutput { data: output.as_ptr(), size: out }
 }
 
+#[cfg(all(feature = "tree", not(any(feature = "tree_leaf_only", feature = "tree_finalizer_only"))))]
+fn tree_group(raw: &mut [u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
+    let mut cursor = 4usize;
+    let version = match tree_u16(raw, &mut cursor) { Some(2) => 2u16, _ => return tree_fail(output) };
+    let job = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let generation = match tree_u64(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let step = match tree_u64(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let model = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let optimizer = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let batch = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let group_index = match tree_u16(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let leaf_start = match tree_u16(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let leaf_end = match tree_u16(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let sample_start = match tree_u16(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let sample_end = match tree_u16(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let expected_leaf_start = group_index as usize * PARALLEL_LEAVES_PER_GROUP;
+    let expected_leaf_end = expected_leaf_start + PARALLEL_LEAVES_PER_GROUP;
+    if group_index as usize >= PARALLEL_GROUP_COUNT
+        || leaf_start as usize != expected_leaf_start
+        || leaf_end as usize != expected_leaf_end
+        || sample_start as usize != expected_leaf_start * PARALLEL_SHARD_SIZE
+        || sample_end as usize != expected_leaf_end * PARALLEL_SHARD_SIZE
+    {
+        return tree_fail(output);
+    }
+    const LEAF_RECORD_BYTES: usize = 4 + 2 + 32 + 8 + 8 + 32 + 32 + 32 + 6 + 4 + 4 + 2 + MODEL_BYTES;
+    for ordinal in 0..PARALLEL_LEAVES_PER_GROUP {
+        let record = match take(raw, &mut cursor, LEAF_RECORD_BYTES) { Some(v) => v, None => return tree_fail(output) };
+        let mut rc = 0usize;
+        if record.get(..4) != Some(b"MCGR") { return tree_fail(output); } rc += 4;
+        if tree_u16(record, &mut rc) != Some(version) { return tree_fail(output); }
+        if tree_array32(record, &mut rc) != Some(job) { return tree_fail(output); }
+        if tree_u64(record, &mut rc) != Some(generation) || tree_u64(record, &mut rc) != Some(step) { return tree_fail(output); }
+        if tree_array32(record, &mut rc) != Some(model)
+            || tree_array32(record, &mut rc) != Some(optimizer)
+            || tree_array32(record, &mut rc) != Some(batch)
+        { return tree_fail(output); }
+        let leaf_index = match tree_u16(record, &mut rc) { Some(v) => v as usize, None => return tree_fail(output) };
+        let leaf_sample_start = match tree_u16(record, &mut rc) { Some(v) => v as usize, None => return tree_fail(output) };
+        let leaf_sample_end = match tree_u16(record, &mut rc) { Some(v) => v as usize, None => return tree_fail(output) };
+        if leaf_index != expected_leaf_start + ordinal
+            || leaf_sample_start != leaf_index * PARALLEL_SHARD_SIZE
+            || leaf_sample_end != (leaf_index + 1) * PARALLEL_SHARD_SIZE
+        { return tree_fail(output); }
+        if tree_f32(record, &mut rc).is_none() { return tree_fail(output); }
+        if take(record, &mut rc, 4).is_none() { return tree_fail(output); }
+        if tree_u16(record, &mut rc) != Some(PARALLEL_SHARD_SIZE as u16) { return tree_fail(output); }
+        if take(record, &mut rc, MODEL_BYTES).is_none() { return tree_fail(output); }
+        if rc != record.len() { return tree_fail(output); }
+    }
+    if cursor != raw.len() { return tree_fail(output); }
+    const RECORDS_OFFSET: usize = 4 + 2 + 32 + 8 + 8 + 32 + 32 + 32 + 10;
+    const LOSS_OFFSET: usize = 4 + 2 + 32 + 8 + 8 + 32 + 32 + 32 + 6;
+    const TOKEN_OFFSET: usize = LOSS_OFFSET + 4;
+    const SAMPLES_OFFSET: usize = TOKEN_OFFSET + 4;
+    const GRADIENT_OFFSET: usize = SAMPLES_OFFSET + 2;
+    let mut stride = 1usize;
+    while stride < PARALLEL_LEAVES_PER_GROUP {
+        let mut left_index = 0usize;
+        while left_index < PARALLEL_LEAVES_PER_GROUP {
+            let left = RECORDS_OFFSET + left_index * LEAF_RECORD_BYTES;
+            let right = RECORDS_OFFSET + (left_index + stride) * LEAF_RECORD_BYTES;
+            let left_loss = f32::from_le_bytes(raw[left + LOSS_OFFSET..left + LOSS_OFFSET + 4].try_into().unwrap());
+            let right_loss = f32::from_le_bytes(raw[right + LOSS_OFFSET..right + LOSS_OFFSET + 4].try_into().unwrap());
+            raw[left + LOSS_OFFSET..left + LOSS_OFFSET + 4].copy_from_slice(&(left_loss + right_loss).to_le_bytes());
+            let left_tokens = u32::from_le_bytes(raw[left + TOKEN_OFFSET..left + TOKEN_OFFSET + 4].try_into().unwrap());
+            let right_tokens = u32::from_le_bytes(raw[right + TOKEN_OFFSET..right + TOKEN_OFFSET + 4].try_into().unwrap());
+            raw[left + TOKEN_OFFSET..left + TOKEN_OFFSET + 4].copy_from_slice(&(left_tokens + right_tokens).to_le_bytes());
+            let left_samples = u16::from_le_bytes(raw[left + SAMPLES_OFFSET..left + SAMPLES_OFFSET + 2].try_into().unwrap());
+            let right_samples = u16::from_le_bytes(raw[right + SAMPLES_OFFSET..right + SAMPLES_OFFSET + 2].try_into().unwrap());
+            raw[left + SAMPLES_OFFSET..left + SAMPLES_OFFSET + 2].copy_from_slice(&(left_samples + right_samples).to_le_bytes());
+            for parameter in 0..PARAMETER_COUNT {
+                let lo = left + GRADIENT_OFFSET + parameter * 4;
+                let ro = right + GRADIENT_OFFSET + parameter * 4;
+                let lhs = f32::from_le_bytes(raw[lo..lo + 4].try_into().unwrap());
+                let rhs = f32::from_le_bytes(raw[ro..ro + 4].try_into().unwrap());
+                raw[lo..lo + 4].copy_from_slice(&(lhs + rhs).to_le_bytes());
+            }
+            left_index += stride * 2;
+        }
+        stride *= 2;
+    }
+    let root = RECORDS_OFFSET;
+    let mut out = 0usize;
+    output[out..out + 5].copy_from_slice(b"MCGR2"); out += 5;
+    output[out..out + 2].copy_from_slice(&version.to_le_bytes()); out += 2;
+    output[out..out + 32].copy_from_slice(&job); out += 32;
+    output[out..out + 8].copy_from_slice(&generation.to_le_bytes()); out += 8;
+    output[out..out + 8].copy_from_slice(&step.to_le_bytes()); out += 8;
+    output[out..out + 32].copy_from_slice(&model); out += 32;
+    output[out..out + 32].copy_from_slice(&optimizer); out += 32;
+    output[out..out + 32].copy_from_slice(&batch); out += 32;
+    for value in [group_index, leaf_start, leaf_end, sample_start, sample_end] {
+        output[out..out + 2].copy_from_slice(&value.to_le_bytes()); out += 2;
+    }
+    output[out..out + 4].copy_from_slice(&raw[root + LOSS_OFFSET..root + LOSS_OFFSET + 4]); out += 4;
+    output[out..out + 4].copy_from_slice(&raw[root + TOKEN_OFFSET..root + TOKEN_OFFSET + 4]); out += 4;
+    output[out..out + 2].copy_from_slice(&raw[root + SAMPLES_OFFSET..root + SAMPLES_OFFSET + 2]); out += 2;
+    output[out..out + MODEL_BYTES].copy_from_slice(&raw[root + GRADIENT_OFFSET..root + GRADIENT_OFFSET + MODEL_BYTES]); out += MODEL_BYTES;
+    RefineOutput { data: output.as_ptr(), size: out }
+}
+
+#[cfg(all(feature = "tree", not(any(feature = "tree_leaf_only", feature = "tree_reducer_only"))))]
+fn tree_finalizer(raw: &[u8], output: &mut [u8; OUTPUT_CAPACITY]) -> RefineOutput {
+    let mut cursor = 4usize;
+    let version = match tree_u16(raw, &mut cursor) { Some(2) => 2u16, _ => return tree_fail(output) };
+    let job = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let generation = match tree_u64(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let step = match tree_u64(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let model = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let optimizer = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let batch = match tree_array32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) };
+    let state_step = match tree_u64(raw, &mut cursor) { Some(v) if v == step => v, _ => return tree_fail(output) };
+    let state = unsafe { &mut *core::ptr::addr_of_mut!(STATE) };
+    for value in &mut state.weights { *value = match tree_f32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) }; }
+    for value in &mut state.adam_m { *value = match tree_f32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) }; }
+    for value in &mut state.adam_v { *value = match tree_f32(raw, &mut cursor) { Some(v) => v, None => return tree_fail(output) }; }
+    state.step = state_step;
+    const GROUP_RECORD_BYTES: usize = 5 + 2 + 32 + 8 + 8 + 32 + 32 + 32 + 10 + 4 + 4 + 2 + MODEL_BYTES;
+    let groups = unsafe { &mut *core::ptr::addr_of_mut!(TREE_GROUPS) };
+    let mut seen = [false; PARALLEL_GROUP_COUNT];
+    for _ in 0..PARALLEL_GROUP_COUNT {
+        let record = match take(raw, &mut cursor, GROUP_RECORD_BYTES) { Some(v) => v, None => return tree_fail(output) };
+        let mut rc = 0usize;
+        if record.get(..5) != Some(b"MCGR2") { return tree_fail(output); } rc += 5;
+        if tree_u16(record, &mut rc) != Some(version)
+            || tree_array32(record, &mut rc) != Some(job)
+            || tree_u64(record, &mut rc) != Some(generation)
+            || tree_u64(record, &mut rc) != Some(step)
+            || tree_array32(record, &mut rc) != Some(model)
+            || tree_array32(record, &mut rc) != Some(optimizer)
+            || tree_array32(record, &mut rc) != Some(batch)
+        { return tree_fail(output); }
+        let group_index = match tree_u16(record, &mut rc) { Some(v) => v as usize, None => return tree_fail(output) };
+        let leaf_start = match tree_u16(record, &mut rc) { Some(v) => v as usize, None => return tree_fail(output) };
+        let leaf_end = match tree_u16(record, &mut rc) { Some(v) => v as usize, None => return tree_fail(output) };
+        let sample_start = match tree_u16(record, &mut rc) { Some(v) => v as usize, None => return tree_fail(output) };
+        let sample_end = match tree_u16(record, &mut rc) { Some(v) => v as usize, None => return tree_fail(output) };
+        let expected_leaf_start = group_index * PARALLEL_LEAVES_PER_GROUP;
+        let expected_leaf_end = expected_leaf_start + PARALLEL_LEAVES_PER_GROUP;
+        if group_index >= PARALLEL_GROUP_COUNT || seen[group_index]
+            || leaf_start != expected_leaf_start || leaf_end != expected_leaf_end
+            || sample_start != expected_leaf_start * PARALLEL_SHARD_SIZE
+            || sample_end != expected_leaf_end * PARALLEL_SHARD_SIZE
+        { return tree_fail(output); }
+        seen[group_index] = true;
+        let group = &mut groups[group_index];
+        group.loss_sum = match tree_f32(record, &mut rc) { Some(v) => v, None => return tree_fail(output) };
+        group.token_count = match take(record, &mut rc, 4) { Some(v) => u32::from_le_bytes(v.try_into().unwrap()), None => return tree_fail(output) };
+        group.processed_samples = match tree_u16(record, &mut rc) {
+            Some(v) if v == (PARALLEL_LEAVES_PER_GROUP * PARALLEL_SHARD_SIZE) as u16 => v,
+            _ => return tree_fail(output),
+        };
+        for value in &mut group.gradient {
+            *value = match tree_f32(record, &mut rc) { Some(v) => v, None => return tree_fail(output) };
+        }
+        if rc != record.len() { return tree_fail(output); }
+    }
+    if cursor != raw.len() || seen.iter().any(|item| !item) { return tree_fail(output); }
+    let root = *reduce_four_groups_in_place(groups);
+    let accumulator = unsafe { &mut *core::ptr::addr_of_mut!(ACCUMULATOR) };
+    accumulator.gradient = root.gradient;
+    accumulator.loss_sum = root.loss_sum;
+    accumulator.token_count = root.token_count;
+    let report = finalize_adamw_step(state, accumulator);
+    output[..4].copy_from_slice(b"MCPR");
+    output[4..8].copy_from_slice(&report.loss.to_le_bytes());
+    output[8..12].copy_from_slice(&report.grad_norm.to_le_bytes());
+    output[12..16].copy_from_slice(&report.token_count.to_le_bytes());
+    output[16..24].copy_from_slice(&state.step.to_le_bytes());
+    let mut out = 24usize;
+    for value in &state.weights { output[out..out + 4].copy_from_slice(&value.to_le_bytes()); out += 4; }
+    for value in &state.adam_m { output[out..out + 4].copy_from_slice(&value.to_le_bytes()); out += 4; }
+    for value in &state.adam_v { output[out..out + 4].copy_from_slice(&value.to_le_bytes()); out += 4; }
+    RefineOutput { data: output.as_ptr(), size: out }
+}
+
 #[no_mangle]
 pub extern "C" fn minijam_refine() -> RefineOutput {
     let mut size = 0usize;
@@ -233,19 +422,26 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
         if minijam_payload(ptr, PAYLOAD_CAPACITY, &mut size) != 0 {
             return fail(&mut *core::ptr::addr_of_mut!(OUTPUT));
         }
-        core::slice::from_raw_parts(ptr, size)
+        core::slice::from_raw_parts_mut(ptr, size)
     };
     #[cfg(feature = "tree")]
     {
+        #[cfg(not(any(feature = "tree_reducer_only", feature = "tree_finalizer_only")))]
         if raw.get(..4) == Some(b"MCG1") {
             return tree_leaf(raw, unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) });
         }
-        #[cfg(not(feature = "tree_leaf_only"))]
-        if raw.get(..5) == Some(b"MCRF1") {
-            return tree_root(raw, unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) });
+        #[cfg(not(any(feature = "tree_leaf_only", feature = "tree_finalizer_only")))]
+        if raw.get(..4) == Some(b"MCR2") {
+            return tree_group(raw, unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) });
+        }
+        #[cfg(not(any(feature = "tree_leaf_only", feature = "tree_reducer_only")))]
+        if raw.get(..4) == Some(b"MCF2") {
+            return tree_finalizer(raw, unsafe { &mut *core::ptr::addr_of_mut!(OUTPUT) });
         }
         return unsafe { tree_fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
     }
+    #[cfg(not(feature = "tree"))]
+    {
     #[cfg(feature = "production")]
     if raw.first().copied() == Some(b'M') && raw.get(1..4) == Some(b"CD1") {
         return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
@@ -261,7 +457,7 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
             }
             (Some(stage), &raw[DIAGNOSTIC_HEADER..])
         } else {
-            (None, raw)
+            (None, &*raw)
         };
     if input.len() < HEADER + MODEL_BYTES * 3 {
         return unsafe { fail(&mut *core::ptr::addr_of_mut!(OUTPUT)) };
@@ -382,6 +578,7 @@ pub extern "C" fn minijam_refine() -> RefineOutput {
     RefineOutput {
         data: output.as_ptr(),
         size: 20,
+    }
     }
 }
 

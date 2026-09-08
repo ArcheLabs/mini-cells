@@ -1,0 +1,49 @@
+{
+  "artifacts": {
+    "finalizer": "service/artifacts/minicells-training-finalizer-v2.blob",
+    "leaf": "service/artifacts/minicells-training-leaf-v1.blob",
+    "reducer": "service/artifacts/minicells-training-reducer-v2.blob"
+  },
+  "gas": {
+    "finalizer": 11985063,
+    "leaf": {
+      "max": 581194702,
+      "min": 503092622,
+      "p95": 571683977,
+      "p99": 576446832
+    },
+    "limit": 1000000000,
+    "pass": true,
+    "reducer": {
+      "max": 13908329,
+      "min": 13850410,
+      "p95": 13908329
+    }
+  },
+  "hierarchical_vs_flat_tree128_bit_exact": true,
+  "bit_exact_fields": ["loss", "grad_norm", "token_count", "optimizer_step", "weights", "adam_m", "adam_v"],
+  "jambda_commit": "d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
+  "minijam_commit": "b90c0bffa09fa0190fb1737db876190ddd899c22",
+  "monolithic_comparison": {
+    "loss_delta": 1.430511474609375e-6,
+    "max_optimizer_state_absolute_error": 3.259629011154175e-8,
+    "max_weight_absolute_error": 5.960464477539063e-8
+  },
+  "schema": "minicells.hierarchical-pvm-parity.v2",
+  "status": "PASS",
+  "native_leaves": false,
+  "topology": {
+    "groups": 4,
+    "leaf_count": 128,
+    "leaf_size": 2,
+    "leaves_per_group": 32,
+    "logical_batch_size": 256
+  },
+  "work_bytes": {
+    "finalizer": 126170,
+    "group_max": 578400,
+    "leaf_max": 18190,
+    "limit": 1048576,
+    "pass": true
+  }
+}

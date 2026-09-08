@@ -23,6 +23,40 @@ pub const LOGICAL_BATCH_SIZE: usize = 256;
 /// Stage-1 execution decomposition: two ordered samples per Refine leaf.
 pub const PARALLEL_SHARD_SIZE: usize = 2;
 pub const PARALLEL_LEAF_COUNT: usize = LOGICAL_BATCH_SIZE / PARALLEL_SHARD_SIZE;
+pub const PARALLEL_GROUP_COUNT: usize = 4;
+pub const PARALLEL_LEAVES_PER_GROUP: usize = PARALLEL_LEAF_COUNT / PARALLEL_GROUP_COUNT;
+pub const PARALLEL_GROUP_LEAF_RANGES: [(u16, u16); PARALLEL_GROUP_COUNT] =
+    [
+        (0, PARALLEL_LEAVES_PER_GROUP as u16),
+        (
+            PARALLEL_LEAVES_PER_GROUP as u16,
+            (2 * PARALLEL_LEAVES_PER_GROUP) as u16,
+        ),
+        (
+            (2 * PARALLEL_LEAVES_PER_GROUP) as u16,
+            (3 * PARALLEL_LEAVES_PER_GROUP) as u16,
+        ),
+        (
+            (3 * PARALLEL_LEAVES_PER_GROUP) as u16,
+            PARALLEL_LEAF_COUNT as u16,
+        ),
+    ];
+pub const PARALLEL_GROUP_SAMPLE_RANGES: [(u16, u16); PARALLEL_GROUP_COUNT] =
+    [
+        (0, (PARALLEL_LEAVES_PER_GROUP * PARALLEL_SHARD_SIZE) as u16),
+        (
+            (PARALLEL_LEAVES_PER_GROUP * PARALLEL_SHARD_SIZE) as u16,
+            (2 * PARALLEL_LEAVES_PER_GROUP * PARALLEL_SHARD_SIZE) as u16,
+        ),
+        (
+            (2 * PARALLEL_LEAVES_PER_GROUP * PARALLEL_SHARD_SIZE) as u16,
+            (3 * PARALLEL_LEAVES_PER_GROUP * PARALLEL_SHARD_SIZE) as u16,
+        ),
+        (
+            (3 * PARALLEL_LEAVES_PER_GROUP * PARALLEL_SHARD_SIZE) as u16,
+            LOGICAL_BATCH_SIZE as u16,
+        ),
+    ];
 
 pub const EMBEDDING_OFFSET: usize = 0;
 pub const UPDATE_IN_WEIGHT_OFFSET: usize = 352;
@@ -180,6 +214,189 @@ impl ParallelTrainingJobV1 {
     pub fn complete(&mut self) -> Result<(), ParallelJobErrorV1> {
         if self.status != ParallelJobStatusV1::Finalizing { return Err(ParallelJobErrorV1::InvalidStatus); }
         self.status = ParallelJobStatusV1::Complete;
+        Ok(())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ParallelJobStatusV2 {
+    LeavesReady,
+    LeavesRunning,
+    GroupsReady,
+    GroupsReducing,
+    FinalizerReady,
+    Finalizing,
+    Complete,
+    Failed,
+}
+
+#[derive(Clone, Copy)]
+pub struct ParallelTrainingJobV2 {
+    pub job_id: [u8; 32],
+    pub generation: u64,
+    pub optimizer_step: u64,
+    pub model_commitment: [u8; 32],
+    pub optimizer_commitment: [u8; 32],
+    pub batch_commitment: [u8; 32],
+    pub logical_batch_size: u16,
+    pub shard_size: u16,
+    pub leaf_count: u16,
+    pub status: ParallelJobStatusV2,
+    pub leaf_commitments: [Option<[u8; 32]>; PARALLEL_LEAF_COUNT],
+    pub group_commitments: [Option<[u8; 32]>; PARALLEL_GROUP_COUNT],
+    pub group_leaf_ranges: [(u16, u16); PARALLEL_GROUP_COUNT],
+    pub group_sample_ranges: [(u16, u16); PARALLEL_GROUP_COUNT],
+}
+
+impl ParallelTrainingJobV2 {
+    pub const fn new(
+        job_id: [u8; 32],
+        generation: u64,
+        optimizer_step: u64,
+        model_commitment: [u8; 32],
+        optimizer_commitment: [u8; 32],
+        batch_commitment: [u8; 32],
+    ) -> Self {
+        Self {
+            job_id,
+            generation,
+            optimizer_step,
+            model_commitment,
+            optimizer_commitment,
+            batch_commitment,
+            logical_batch_size: LOGICAL_BATCH_SIZE as u16,
+            shard_size: PARALLEL_SHARD_SIZE as u16,
+            leaf_count: PARALLEL_LEAF_COUNT as u16,
+            status: ParallelJobStatusV2::LeavesReady,
+            leaf_commitments: [None; PARALLEL_LEAF_COUNT],
+            group_commitments: [None; PARALLEL_GROUP_COUNT],
+            group_leaf_ranges: PARALLEL_GROUP_LEAF_RANGES,
+            group_sample_ranges: PARALLEL_GROUP_SAMPLE_RANGES,
+        }
+    }
+
+    pub fn accept_leaf(
+        &mut self,
+        job_id: [u8; 32],
+        generation: u64,
+        optimizer_step: u64,
+        model_commitment: [u8; 32],
+        optimizer_commitment: [u8; 32],
+        batch_commitment: [u8; 32],
+        leaf_index: u16,
+        sample_start: u16,
+        sample_end: u16,
+        commitment: [u8; 32],
+    ) -> Result<(), ParallelJobErrorV1> {
+        if !matches!(self.status, ParallelJobStatusV2::LeavesReady | ParallelJobStatusV2::LeavesRunning) {
+            return Err(ParallelJobErrorV1::InvalidStatus);
+        }
+        self.check_identity(job_id, generation, optimizer_step, model_commitment, optimizer_commitment, batch_commitment)?;
+        let index = leaf_index as usize;
+        if index >= PARALLEL_LEAF_COUNT {
+            return Err(ParallelJobErrorV1::WrongLeaf);
+        }
+        if sample_start != leaf_index * self.shard_size
+            || sample_end != sample_start + self.shard_size
+        {
+            return Err(ParallelJobErrorV1::WrongRange);
+        }
+        if let Some(existing) = self.leaf_commitments[index] {
+            return if existing == commitment {
+                Err(ParallelJobErrorV1::DuplicateLeaf)
+            } else {
+                Err(ParallelJobErrorV1::ConflictingLeaf)
+            };
+        }
+        self.leaf_commitments[index] = Some(commitment);
+        self.status = ParallelJobStatusV2::LeavesRunning;
+        if self.leaf_commitments.iter().all(Option::is_some) {
+            self.status = ParallelJobStatusV2::GroupsReady;
+        }
+        Ok(())
+    }
+
+    pub fn accept_group(
+        &mut self,
+        job_id: [u8; 32],
+        generation: u64,
+        optimizer_step: u64,
+        model_commitment: [u8; 32],
+        optimizer_commitment: [u8; 32],
+        batch_commitment: [u8; 32],
+        group_index: u16,
+        leaf_start: u16,
+        leaf_end: u16,
+        sample_start: u16,
+        sample_end: u16,
+        commitment: [u8; 32],
+    ) -> Result<(), ParallelJobErrorV1> {
+        if !matches!(self.status, ParallelJobStatusV2::GroupsReady | ParallelJobStatusV2::GroupsReducing) {
+            return Err(ParallelJobErrorV1::InvalidStatus);
+        }
+        self.check_identity(job_id, generation, optimizer_step, model_commitment, optimizer_commitment, batch_commitment)?;
+        let group = group_index as usize;
+        if group >= PARALLEL_GROUP_COUNT {
+            return Err(ParallelJobErrorV1::WrongLeaf);
+        }
+        let (expected_leaf_start, expected_leaf_end) = self.group_leaf_ranges[group];
+        let (expected_sample_start, expected_sample_end) = self.group_sample_ranges[group];
+        if leaf_start != expected_leaf_start
+            || leaf_end != expected_leaf_end
+            || sample_start != expected_sample_start
+            || sample_end != expected_sample_end
+        {
+            return Err(ParallelJobErrorV1::WrongRange);
+        }
+        if let Some(existing) = self.group_commitments[group] {
+            return if existing == commitment {
+                Err(ParallelJobErrorV1::DuplicateLeaf)
+            } else {
+                Err(ParallelJobErrorV1::ConflictingLeaf)
+            };
+        }
+        self.group_commitments[group] = Some(commitment);
+        self.status = ParallelJobStatusV2::GroupsReducing;
+        if self.group_commitments.iter().all(Option::is_some) {
+            self.status = ParallelJobStatusV2::FinalizerReady;
+        }
+        Ok(())
+    }
+
+    pub fn begin_finalize(&mut self, current_model_commitment: [u8; 32]) -> Result<(), ParallelJobErrorV1> {
+        if self.status != ParallelJobStatusV2::FinalizerReady {
+            return Err(ParallelJobErrorV1::InvalidStatus);
+        }
+        if current_model_commitment != self.model_commitment {
+            self.status = ParallelJobStatusV2::Failed;
+            return Err(ParallelJobErrorV1::StaleRoot);
+        }
+        self.status = ParallelJobStatusV2::Finalizing;
+        Ok(())
+    }
+
+    pub fn complete(&mut self) -> Result<(), ParallelJobErrorV1> {
+        if self.status != ParallelJobStatusV2::Finalizing {
+            return Err(ParallelJobErrorV1::InvalidStatus);
+        }
+        self.status = ParallelJobStatusV2::Complete;
+        Ok(())
+    }
+
+    fn check_identity(
+        &self,
+        job_id: [u8; 32],
+        generation: u64,
+        optimizer_step: u64,
+        model_commitment: [u8; 32],
+        optimizer_commitment: [u8; 32],
+        batch_commitment: [u8; 32],
+    ) -> Result<(), ParallelJobErrorV1> {
+        if job_id != self.job_id { return Err(ParallelJobErrorV1::WrongJob); }
+        if generation != self.generation || optimizer_step != self.optimizer_step { return Err(ParallelJobErrorV1::WrongStep); }
+        if model_commitment != self.model_commitment { return Err(ParallelJobErrorV1::WrongModel); }
+        if optimizer_commitment != self.optimizer_commitment { return Err(ParallelJobErrorV1::WrongOptimizer); }
+        if batch_commitment != self.batch_commitment { return Err(ParallelJobErrorV1::WrongBatch); }
         Ok(())
     }
 }
@@ -822,6 +1039,50 @@ pub fn reduce_parallel_leaves_in_place_ref(
     &leaves[0]
 }
 
+/// Reduce one canonical 32-leaf subtree. The resulting association is exactly
+/// the corresponding subtree of the frozen 128-leaf balanced reduction.
+pub fn reduce_group_in_place_ref(leaves: &mut [PartialGradientV1]) -> &PartialGradientV1 {
+    assert_eq!(leaves.len(), PARALLEL_LEAVES_PER_GROUP);
+    let mut stride = 1usize;
+    while stride < PARALLEL_LEAVES_PER_GROUP {
+        let mut left_index = 0usize;
+        while left_index < PARALLEL_LEAVES_PER_GROUP {
+            let right_index = left_index + stride;
+            let (before_right, at_right) = leaves.split_at_mut(right_index);
+            let left = &mut before_right[left_index];
+            let right = &at_right[0];
+            for parameter in 0..PARAMETER_COUNT {
+                left.gradient[parameter] += right.gradient[parameter];
+            }
+            left.loss_sum += right.loss_sum;
+            left.token_count += right.token_count;
+            left.processed_samples += right.processed_samples;
+            left_index += stride * 2;
+        }
+        stride *= 2;
+    }
+    &leaves[0]
+}
+
+/// Complete the top two levels of the same frozen balanced tree.
+pub fn reduce_four_groups_in_place(groups: &mut [PartialGradientV1; PARALLEL_GROUP_COUNT]) -> &PartialGradientV1 {
+    for parameter in 0..PARAMETER_COUNT {
+        groups[0].gradient[parameter] += groups[1].gradient[parameter];
+        groups[2].gradient[parameter] += groups[3].gradient[parameter];
+        groups[0].gradient[parameter] += groups[2].gradient[parameter];
+    }
+    groups[0].loss_sum += groups[1].loss_sum;
+    groups[2].loss_sum += groups[3].loss_sum;
+    groups[0].loss_sum += groups[2].loss_sum;
+    groups[0].token_count += groups[1].token_count;
+    groups[2].token_count += groups[3].token_count;
+    groups[0].token_count += groups[2].token_count;
+    groups[0].processed_samples += groups[1].processed_samples;
+    groups[2].processed_samples += groups[3].processed_samples;
+    groups[0].processed_samples += groups[2].processed_samples;
+    &groups[0]
+}
+
 /// Slice form of the fixed pairwise reduction, useful to executors that keep
 /// leaf storage in a heap-backed arena.  The caller still supplies leaves in
 /// canonical index order; completion order is never observed here.
@@ -1152,6 +1413,38 @@ mod tests {
     }
 
     #[test]
+    fn hierarchical_reduction_is_bit_exact_with_tree128() {
+        let make_leaves = || {
+            let mut leaves = std::vec![PartialGradientV1::new(); PARALLEL_LEAF_COUNT];
+            for (index, leaf) in leaves.iter_mut().enumerate() {
+                leaf.loss_sum = (index as f32 + 0.25) * 0.03125;
+                leaf.token_count = index as u32 + 3;
+                leaf.processed_samples = PARALLEL_SHARD_SIZE as u16;
+                for parameter in 0..PARAMETER_COUNT {
+                    leaf.gradient[parameter] =
+                        (index as f32 + 1.0) * 0.0001 + parameter as f32 * 0.0000001;
+                }
+            }
+            leaves
+        };
+        let mut direct = make_leaves();
+        let expected = *reduce_parallel_leaves_in_place_ref(&mut direct);
+        let mut hierarchical = make_leaves();
+        let mut groups = [const { PartialGradientV1::new() }; PARALLEL_GROUP_COUNT];
+        for (group_index, group) in groups.iter_mut().enumerate() {
+            let start = group_index * PARALLEL_LEAVES_PER_GROUP;
+            *group = *reduce_group_in_place_ref(
+                &mut hierarchical[start..start + PARALLEL_LEAVES_PER_GROUP],
+            );
+        }
+        let actual = reduce_four_groups_in_place(&mut groups);
+        assert_eq!(actual.gradient, expected.gradient);
+        assert_eq!(actual.loss_sum.to_bits(), expected.loss_sum.to_bits());
+        assert_eq!(actual.token_count, expected.token_count);
+        assert_eq!(actual.processed_samples, expected.processed_samples);
+    }
+
+    #[test]
     fn in_place_tree128_matches_canonical_native_leaves() {
         let mut batch = TrainingBatch::empty();
         batch.size = LOGICAL_BATCH_SIZE as u16;
@@ -1213,6 +1506,49 @@ mod tests {
         }
         assert_eq!(job.mark_root_ready(), Ok(()));
         assert_eq!(job.begin_finalize([2; 32]), Ok(()));
+        assert_eq!(job.complete(), Ok(()));
+        assert_eq!(job.complete(), Err(ParallelJobErrorV1::InvalidStatus));
+    }
+
+    #[test]
+    fn parallel_job_v2_tracks_groups_and_exact_ranges() {
+        let ids = ([1; 32], 4, 7, [2; 32], [3; 32], [4; 32]);
+        let mut job = ParallelTrainingJobV2::new(ids.0, ids.1, ids.2, ids.3, ids.4, ids.5);
+        assert_eq!(job.logical_batch_size, 256);
+        assert_eq!(job.shard_size, 2);
+        assert_eq!(job.leaf_count, 128);
+        assert_eq!(job.group_leaf_ranges, PARALLEL_GROUP_LEAF_RANGES);
+        assert_eq!(job.group_sample_ranges, PARALLEL_GROUP_SAMPLE_RANGES);
+        for index in (0..PARALLEL_LEAF_COUNT as u16).rev() {
+            let start = index * PARALLEL_SHARD_SIZE as u16;
+            assert_eq!(
+                job.accept_leaf(
+                    ids.0, ids.1, ids.2, ids.3, ids.4, ids.5, index, start,
+                    start + PARALLEL_SHARD_SIZE as u16, [index as u8; 32]
+                ),
+                Ok(())
+            );
+        }
+        assert_eq!(job.status, ParallelJobStatusV2::GroupsReady);
+        assert_eq!(
+            job.accept_group(ids.0, ids.1, ids.2, ids.3, ids.4, ids.5, 0, 1, 33, 2, 66, [8; 32]),
+            Err(ParallelJobErrorV1::WrongRange)
+        );
+        for group in 0..PARALLEL_GROUP_COUNT as u16 {
+            let leaf_start = group * PARALLEL_LEAVES_PER_GROUP as u16;
+            let leaf_end = leaf_start + PARALLEL_LEAVES_PER_GROUP as u16;
+            let sample_start = leaf_start * PARALLEL_SHARD_SIZE as u16;
+            let sample_end = leaf_end * PARALLEL_SHARD_SIZE as u16;
+            assert_eq!(
+                job.accept_group(
+                    ids.0, ids.1, ids.2, ids.3, ids.4, ids.5, group, leaf_start,
+                    leaf_end, sample_start, sample_end, [group as u8; 32]
+                ),
+                Ok(())
+            );
+        }
+        assert_eq!(job.status, ParallelJobStatusV2::FinalizerReady);
+        assert_eq!(job.begin_finalize(ids.3), Ok(()));
         assert_eq!(job.complete(), Ok(()));
         assert_eq!(job.complete(), Err(ParallelJobErrorV1::InvalidStatus));
     }

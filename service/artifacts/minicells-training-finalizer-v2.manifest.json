@@ -1,0 +1,27 @@
+{
+  "schema": "minicells.parallel-training-finalizer-service.v2",
+  "algorithm": "echo-adamw-ce-hierarchical-tree128-v2",
+  "role": "finalizer",
+  "abi": {
+    "input": "MCF2",
+    "output": "MCPR"
+  },
+  "logical_batch_size": 256,
+  "shard_size": 2,
+  "leaf_count": 128,
+  "group_count": 4,
+  "leaves_per_group": 32,
+  "group_leaf_ranges": [[0, 32], [32, 64], [64, 96], [96, 128]],
+  "group_sample_ranges": [[0, 64], [64, 128], [128, 192], [192, 256]],
+  "minijam_commit": "b90c0bffa09fa0190fb1737db876190ddd899c22",
+  "jambda_commit": "d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
+  "minijam_spec": "v1",
+  "guest_sdk_abi": 1,
+  "refine_limit": 1000000000,
+  "accumulate_limit": 1000000000,
+  "work_payload_fixture_max": 126170,
+  "work_limit": 1048576,
+  "artifact_sha256": "ba30ef635845e7006c3992a179d7b8f972af592de02fdebe554fc4494f02531b",
+  "code_hash": "0x9b4c52b86f29dc548144e0ced012905074b816f0e62a3c0dfe49b3aa9b413f49",
+  "deployment_ready": true
+}

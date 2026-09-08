@@ -1,8 +1,15 @@
 {
-  "schema": "minicells.stage1-build.v1",
-  "status": "ENGINEERING_PASS",
+  "schema": "minicells.stage1-build.v2",
+  "status": "HIERARCHICAL_ARTIFACTS_BUILT",
   "parallel_training_guest_built": true,
-  "artifact_sha256": "f096b554bbe3ab6323d90892681f9801da5b94ae36faa8e527360d242cf3b5de",
+  "hierarchical_roles": ["leaf", "reducer", "finalizer"],
+  "manifest": "service/artifacts/minicells-training-hierarchical-v2.manifest.json",
+  "artifact_sha256": {
+    "leaf": "f68537b86ca29e78ab58b8e15b0b159c0a2675a8b0b6d9dd95aec1e1e11e3fdf",
+    "reducer": "3886b83e4ba2b47bee7a126d30945b7e9dabe2b7ef60e9bdbf021ce7330432e5",
+    "finalizer": "ba30ef635845e7006c3992a179d7b8f972af592de02fdebe554fc4494f02531b"
+  },
   "source_dirty": true,
-  "deployment_ready": false
+  "deployment_ready": true,
+  "chain_deployment_verified": false
 }

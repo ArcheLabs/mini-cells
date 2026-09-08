@@ -1,0 +1,42 @@
+{
+  "schema": "minicells.parallel-training-service.v2",
+  "algorithm": "echo-adamw-ce-hierarchical-tree128-v2",
+  "algorithm_changes": "EXECUTION_DECOMPOSITION_ONLY",
+  "abi": {
+    "leaf": "MCG1/v2 -> MCGR/v2",
+    "reducer": "MCR2 -> MCGR2",
+    "finalizer": "MCF2 -> MCPR"
+  },
+  "logical_batch_size": 256,
+  "shard_size": 2,
+  "leaf_count": 128,
+  "minijam_commit": "b90c0bffa09fa0190fb1737db876190ddd899c22",
+  "jambda_commit": "d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
+  "minijam_spec": "v1",
+  "guest_sdk_abi": 1,
+  "refine_limit": 1000000000,
+  "accumulate_limit": 1000000000,
+  "root_payload_limit": 1048576,
+  "group_count": 4,
+  "leaves_per_group": 32,
+  "group_leaf_ranges": [[0, 32], [32, 64], [64, 96], [96, 128]],
+  "group_sample_ranges": [[0, 64], [64, 128], [128, 192], [192, 256]],
+  "work_bytes": {
+    "leaf_fixture_max": 18190,
+    "group_fixture_max": 578400,
+    "finalizer_fixture": 126170,
+    "limit": 1048576
+  },
+  "deployment_ready": true,
+  "diagnostic_stage": false,
+  "artifacts": {
+    "leaf_sha256": "f68537b86ca29e78ab58b8e15b0b159c0a2675a8b0b6d9dd95aec1e1e11e3fdf",
+    "reducer_sha256": "3886b83e4ba2b47bee7a126d30945b7e9dabe2b7ef60e9bdbf021ce7330432e5",
+    "finalizer_sha256": "ba30ef635845e7006c3992a179d7b8f972af592de02fdebe554fc4494f02531b"
+  },
+  "code_hashes": {
+    "leaf": "0x3255dc490e006502ea018cc25ababa077ffae4e4c207d77b98d8af1d14e091df",
+    "reducer": "0xf28e376e8594b0c6e1da72aafe284ff4ab13d01f19b73b602847c7aeda56acc1",
+    "finalizer": "0x9b4c52b86f29dc548144e0ced012905074b816f0e62a3c0dfe49b3aa9b413f49"
+  }
+}
