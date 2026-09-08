@@ -1,0 +1,68 @@
+{
+  "base": {
+    "manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "canonical_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "deltas": {
+    "down": {
+      "l2_norm": 0.4068094789981842,
+      "max_abs": 0.04355355352163315,
+      "shape": [
+        1024,
+        32
+      ]
+    },
+    "gate": {
+      "l2_norm": 0.1930871605873108,
+      "max_abs": 0.05748985707759857,
+      "shape": [
+        32,
+        1024
+      ]
+    },
+    "up": {
+      "l2_norm": 0.1897904872894287,
+      "max_abs": 0.06791307032108307,
+      "shape": [
+        32,
+        1024
+      ]
+    }
+  },
+  "identity_sha256": "725d41c48a93e8645a03a8dd48b43531ec5cdd7dc9b691feae4c556723ba7cd1",
+  "kind": "aligned_intermediate_group_delta",
+  "metadata": {
+    "experiment": "FUNCTIONAL_BOUNDARY_ORACLE_001",
+    "protocol_sha256": "14d399d3a79750d8a8f1d591a9231e5cbcd75373f8a298e7fb894eb63d747842",
+    "seed": 26090511,
+    "target_candidate": " silver",
+    "target_token_id": 39279
+  },
+  "runtime_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "schema_version": "clm.moe-subexpert-mutation.v1",
+  "target": {
+    "channel_end": 192,
+    "channel_start": 160,
+    "expert_fraction": 0.0625,
+    "expert_index": 0,
+    "expert_is_cell": false,
+    "group_index": 5,
+    "group_is_cell": false,
+    "group_size": 32,
+    "intermediate_size": 512,
+    "layer_index": 23
+  },
+  "tensor_file": {
+    "bytes": 393440,
+    "path": "mutation.safetensors",
+    "sha256": "3d377dd5bd8f894f7bb63a864430c9eca6afd43b7593ff887cb81dcb6f55b818"
+  }
+}

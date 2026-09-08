@@ -1,0 +1,163 @@
+{
+  "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+  "protocol_version": 1.2,
+  "title": "JAM Knowledge Mutation 001 — Release-Oriented Sparse Domain Acquisition",
+  "status": "PROTOCOL_FROZEN_GPU_PENDING",
+  "pre_run_amendments": [
+    "v1.1 was frozen before any formal GPU seed was opened. It makes answer boundaries explicit and expresses artifact/materialization parity as excess over measured frozen-base forward repeatability, matching the established rollback numerical floor.",
+    "v1.2 was frozen before any formal GPU seed was opened. It corrects the stale taxonomy.json SHA-256 metadata in the dataset manifest without changing canonical dataset bytes, pins the repaired manifest SHA-256 in this protocol, and requires the formal runner to verify that identity before execution."
+  ],
+  "scientific_scope": "test whether a frozen Granite MoE can acquire the source-locked JAM Knowledge v0.1 domain through a bounded set of aligned sub-expert mutations while preserving registered non-JAM behavior and exact rollback",
+  "base": {
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "conversion_manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_type": "granitemoe"
+  },
+  "dataset": {
+    "id": "jam-knowledge-v0.1",
+    "repository_commit": "5016cb36f8eb5ca715b6fd7796384ae5b607bd12",
+    "manifest_path": "research/datasets/jam-knowledge-v0.1/manifest.json",
+    "manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "manifest_integrity_repair": {
+      "affected_file": "taxonomy.json",
+      "canonical_bytes_changed": false,
+      "original_recorded_sha256": "16a993d3eaa66da35c5c3e4bc6b6e8daa1f2dc59a3015d2089edf779199af51b",
+      "correct_sha256": "4f3e2da96a2cfa0d0b0496da191e21a50c38779dc804c54c1fc21b5f236cf886",
+      "verified_against_repository_commit": "5016cb36f8eb5ca715b6fd7796384ae5b607bd12"
+    },
+    "required_manifest_status": "CURATION_COMPLETE_SOURCE_LOCKED",
+    "source_pin": "graypaper-0.8.0-e5375148",
+    "concept_count": 180,
+    "generated_counts": {
+      "train": 409,
+      "validation": 180,
+      "factual": 180,
+      "relational": 66,
+      "misconceptions": 49,
+      "reasoning": 50
+    },
+    "build_script": "scripts/research/jam_knowledge_v0_1/build_dataset.py",
+    "selection_examples": 64,
+    "selection_rule": "sort training rows by sha256(id) and use the first 64 only for coordinate ranking; all 409 training rows remain eligible for training"
+  },
+  "formal_seeds": [26090711, 26090712, 26090713],
+  "mutation": {
+    "layer_index": 23,
+    "group_size": 32,
+    "expected_intermediate_size": 512,
+    "groups_per_expert": 16,
+    "capacity_ladder": [1, 2, 4],
+    "maximum_coordinate_count": 4,
+    "require_unique_experts": true,
+    "expert_is_cell": false,
+    "group_is_cell": false,
+    "router_trainable": false,
+    "other_parameters_trainable": false,
+    "container_schema": "clm.moe-multicoordinate-mutation.v1",
+    "coordinate_schema": "clm.moe-subexpert-mutation.v1",
+    "capacity_rule": "rank four coordinates once on the frozen base, then independently train fresh-base prefixes of size 1, 2 and 4; select the smallest prefix satisfying every formal gate"
+  },
+  "sequence_task": {
+    "prompt_template": "Question: {question}\nAnswer:",
+    "answer_supervision": "teacher-forced causal language modeling over answer tokens only; prompt tokens and padding are masked with label -100",
+    "special_token_boundary": "tokenize prompt and answer without automatic special tokens; prepend BOS when the tokenizer defines one and append exactly one EOS after the supervised answer",
+    "max_sequence_tokens": 192,
+    "truncate": "right",
+    "append_eos_to_answer": true,
+    "primary_metric": "mean reference-answer token NLL",
+    "diagnostic_metrics": ["reference_answer_token_top1_accuracy", "mean_sequence_logprob_gain"]
+  },
+  "history": {
+    "source": "History Compression 001 full_32 positive-control prompt sets",
+    "learner_visible_selection_prompts": 32,
+    "withheld_evaluation_prompts": 32,
+    "supervision": "frozen-base last-token full-logit KL on the learner-visible 32-prompt set",
+    "evaluation": "withheld 32-prompt mean KL and top-1 identity",
+    "require_disjoint_prompt_sets": true,
+    "evaluation_never_learner_visible": true,
+    "reason_for_budget": "full_32 was supported in 3/3 History Compression 001 formal seeds; the release-oriented experiment does not use the observed minimum budget of 8"
+  },
+  "coordinate_selection": {
+    "new_signal": "mean squared gradient of JAM answer-token causal NLL on the deterministic 64-row selection subset",
+    "history_importance": "mean squared gradient of frozen-base top-1 NLL on all 32 learner-visible historical prompts",
+    "route_specificity": "JAM prompt expert top-k coverage minus historical prompt expert top-k coverage",
+    "score": "0.5 * log((jam_group_rms + 1e-12) / (history_group_rms + 1e-12)) + route_specificity",
+    "minimum_jam_route_coverage": 0.25,
+    "unique_expert_filter": true,
+    "tie_break": "higher score, then lower expert index, then lower group index"
+  },
+  "training": {
+    "dtype": "float32",
+    "batch_size": 4,
+    "history_batch_size": 4,
+    "max_steps_per_capacity": 96,
+    "learning_rate": 0.01,
+    "max_selected_gradient_norm": 1.0,
+    "history_kl_weight": 12.0,
+    "candidate_eval_interval": 12,
+    "maximum_history_selection_kl_for_candidate": 0.05,
+    "optimizer": "manual masked SGD over the selected aligned groups only",
+    "batch_order": "seeded deterministic shuffle of all 409 training rows; reshuffle on exhaustion",
+    "checkpoint_rule": "among evaluated checkpoints satisfying learner-visible history KL <= 0.05, choose maximum validation reference-NLL gain; ties choose lower step"
+  },
+  "evaluation": {
+    "validation_examples": 180,
+    "heldout_families": {
+      "factual": 180,
+      "relational": 66,
+      "misconceptions": 49,
+      "reasoning": 50
+    },
+    "evaluation_never_used_for_training_or_checkpoint_selection": true,
+    "base_and_mutated_use_identical_tokenization": true
+  },
+  "gates": {
+    "minimum_validation_reference_nll_gain": 0.25,
+    "minimum_factual_reference_nll_gain": 0.25,
+    "minimum_relational_reference_nll_gain": 0.15,
+    "minimum_misconception_reference_nll_gain": 0.25,
+    "minimum_reasoning_reference_nll_gain": 0.10,
+    "minimum_overall_heldout_reference_nll_gain": 0.20,
+    "maximum_history_evaluation_mean_kl": 0.05,
+    "minimum_history_evaluation_top1_identity": 0.96875,
+    "required_target_router_topk_identity": 1.0,
+    "maximum_coordinate_count": 4,
+    "maximum_per_expert_fraction": 0.0625,
+    "require_unique_experts": true,
+    "require_nonzero_delta": true,
+    "require_exact_weight_rollback": true,
+    "maximum_forward_rollback_excess_over_base_repeatability": 0.00001,
+    "maximum_artifact_reapply_excess_over_base_repeatability": 0.00001,
+    "maximum_materialized_checkpoint_excess_over_base_repeatability": 0.00001,
+    "require_conversion_identity": true,
+    "require_dataset_identity": true,
+    "require_history_set_disjointness": true
+  },
+  "decision": {
+    "per_capacity_seed_pass": "all registered gates pass for that capacity and seed",
+    "per_seed_pass": "at least one capacity passes; select the smallest passing capacity",
+    "formal_support": "at least 2 of 3 formal seeds pass",
+    "status_if_supported": "JAM_KNOWLEDGE_MUTATION_SUPPORTED",
+    "status_if_not_supported": "JAM_KNOWLEDGE_MUTATION_NOT_SUPPORTED",
+    "status_if_incomplete": "JAM_KNOWLEDGE_MUTATION_INCOMPLETE",
+    "not_claimed": [
+      "complete mastery of the JAM Gray Paper",
+      "preservation of the full original Granite training distribution",
+      "zero-replay continual learning",
+      "autonomous Cell discovery",
+      "the selected groups are natural knowledge atoms",
+      "multi-mutation composition or mergeability",
+      "general superiority to LoRA or PEFT before release-candidate baselines are run"
+    ]
+  },
+  "release_boundary": {
+    "formal_pass_is_necessary_not_sufficient": true,
+    "after_formal_support": "freeze one release-candidate mutation, materialize a standard Hugging Face checkpoint, then run the unified base-vs-RC benchmark and LoRA/PEFT baselines before public release"
+  },
+  "logging": {
+    "console_policy": "compact stage summaries only",
+    "durable_detail": ["coordinate_scores.json", "training.jsonl", "result.json", "mutation-set.json", "evaluation.json"],
+    "suppress_huggingface_progress_bars": true
+  }
+}

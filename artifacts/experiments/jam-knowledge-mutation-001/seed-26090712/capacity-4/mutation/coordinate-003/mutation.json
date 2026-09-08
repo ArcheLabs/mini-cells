@@ -1,0 +1,69 @@
+{
+  "base": {
+    "manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "canonical_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "deltas": {
+    "down": {
+      "l2_norm": 0.04256459325551987,
+      "max_abs": 0.00646610464900732,
+      "shape": [
+        1024,
+        32
+      ]
+    },
+    "gate": {
+      "l2_norm": 0.09018021821975708,
+      "max_abs": 0.03467685729265213,
+      "shape": [
+        32,
+        1024
+      ]
+    },
+    "up": {
+      "l2_norm": 0.05401812866330147,
+      "max_abs": 0.011373057961463928,
+      "shape": [
+        32,
+        1024
+      ]
+    }
+  },
+  "identity_sha256": "5b8e0f9109f743b707c5b7189d8bd1325a6644323a0e76faf5bb7c722bf2a0c7",
+  "kind": "aligned_intermediate_group_delta",
+  "metadata": {
+    "capacity": 4,
+    "coordinate_index": 3,
+    "dataset_manifest_sha256": "d2925ef66c3a7775e5485acea0be40bdd7887e22b89e7b809cb0c07f8102be15",
+    "experiment": "JAM_KNOWLEDGE_MUTATION_001",
+    "protocol_sha256": "e934be45009d9025adf3b48ee2551f55a7099281196265b478e503d746559a54",
+    "seed": 26090712
+  },
+  "runtime_tensors": {
+    "down": "model.layers.23.block_sparse_moe.output_linear.weight",
+    "gate_up": "model.layers.23.block_sparse_moe.input_linear.weight"
+  },
+  "schema_version": "clm.moe-subexpert-mutation.v1",
+  "target": {
+    "channel_end": 416,
+    "channel_start": 384,
+    "expert_fraction": 0.0625,
+    "expert_index": 31,
+    "expert_is_cell": false,
+    "group_index": 12,
+    "group_is_cell": false,
+    "group_size": 32,
+    "intermediate_size": 512,
+    "layer_index": 23
+  },
+  "tensor_file": {
+    "bytes": 393440,
+    "path": "mutation.safetensors",
+    "sha256": "2dc395d570eaf26289d3c4b30e82781b6e46a6b52ca9303dd0cf90aeb7136506"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "experiment_id": "integrated-replay-free-clm-kill-test-001",
+  "registry_version": 1,
+  "status": "frozen_for_implementation",
+  "development": [
+    95301
+  ],
+  "formal": [
+    95311,
+    95312,
+    95313
+  ],
+  "policy": {
+    "formal_seed_use": "formal_execution_only",
+    "forbidden_contexts": [
+      "unit_test",
+      "smoke_test",
+      "debug",
+      "development",
+      "threshold_selection",
+      "protocol_tuning"
+    ],
+    "accidental_preseal_execution": "invalidate_and_replace_formal_registry_before_scientific_execution"
+  },
+  "notes": [
+    "Development and formal seed sets are disjoint.",
+    "The deprecated 754xx/755xx seed values are not part of KT001.",
+    "Formal seeds MUST remain unexecuted until the implementation, guards, publisher, decision rule, and protocol hashes are sealed."
+  ]
+}

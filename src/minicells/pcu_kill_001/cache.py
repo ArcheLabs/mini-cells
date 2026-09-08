@@ -105,6 +105,12 @@ class CachedTailRunner:
         self.target, self.post_norm, self.moe, self.final_norm = _target_parts(model, target_layer_path)
         self.lm_head = getattr(model, "lm_head")
         self.residual_multiplier = float(getattr(self.target, "residual_multiplier", 1.0))
+        config = getattr(model, "config", None)
+        self.logits_scaling = float(
+            getattr(model, "logits_scaling", getattr(config, "logits_scaling", 1.0))
+        )
+        if self.logits_scaling <= 0.0:
+            raise CacheSemanticsInvalid("logits_scaling must be positive")
 
     @torch.no_grad()
     def capture(self, input_ids: Tensor, attention_mask: Tensor | None = None, sample_ids: tuple[str, ...] = (), **kwargs: Any) -> TailCache:
@@ -156,11 +162,17 @@ class CachedTailRunner:
             sample_ids=tuple(sample_ids),
         )
 
+    def _project_logits(self, block_output: Tensor) -> Tensor:
+        # GraniteMoeForCausalLM applies ``lm_head(hidden) / logits_scaling``.
+        # Cached-tail training and verification must preserve that exact
+        # CausalLM output contract rather than stopping at the raw LM head.
+        return self.lm_head(self.final_norm(block_output)) / self.logits_scaling
+
     @torch.no_grad()
     def forward(self, cache: TailCache) -> Tensor:
         moe_output = self._forward_moe(cache, getattr(self.moe, "experts", self.moe))
         block_output = cache.pre_mlp_residual + moe_output * self.residual_multiplier
-        return self.lm_head(self.final_norm(block_output))
+        return self._project_logits(block_output)
 
     def _forward_moe(self, cache: TailCache, experts: nn.Module) -> Tensor:
         if cache.top_k_index is None or cache.top_k_weights is None:
@@ -173,7 +185,7 @@ class CachedTailRunner:
     def forward_with_experts(self, cache: TailCache, experts: nn.Module) -> Tensor:
         moe_output = self._forward_moe(cache, experts)
         block_output = cache.pre_mlp_residual + moe_output * self.residual_multiplier
-        return self.lm_head(self.final_norm(block_output))
+        return self._project_logits(block_output)
 
     @torch.no_grad()
     def verify(self, cache: TailCache, full_logits: Tensor | None = None, tolerance: float = 1e-5) -> CacheEquivalence:

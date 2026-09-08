@@ -1,0 +1,121 @@
+{
+  "after": {
+    "base": {
+      "active_fraction_vs_dense": 0.25,
+      "loss": 0.8761347025632858,
+      "perplexity": 2.4015988488322826,
+      "route_entropy": 0.583921280503273
+    },
+    "factual": {
+      "answer_nll": 0.12440582982760043,
+      "answer_perplexity": 1.132475370037845,
+      "answer_token_accuracy": 0.9722840880970057,
+      "answer_tokens": 24246,
+      "rows": 180,
+      "teacher_forced_exact_rate": 0.011111111111111112,
+      "teacher_forced_exact_rows": 2
+    },
+    "misconceptions": {
+      "answer_nll": 0.61355910041841,
+      "answer_perplexity": 1.846993349336788,
+      "answer_token_accuracy": 0.8613269575612672,
+      "answer_tokens": 6692,
+      "rows": 49,
+      "teacher_forced_exact_rate": 0.0,
+      "teacher_forced_exact_rows": 0
+    },
+    "reasoning": {
+      "answer_nll": 1.6049378304987851,
+      "answer_perplexity": 4.977550141310696,
+      "answer_token_accuracy": 0.6345576675718165,
+      "answer_tokens": 6997,
+      "rows": 50,
+      "teacher_forced_exact_rate": 0.0,
+      "teacher_forced_exact_rows": 0
+    },
+    "relational": {
+      "answer_nll": 1.425985902076586,
+      "answer_perplexity": 4.161959104826522,
+      "answer_token_accuracy": 0.7014669460849685,
+      "answer_tokens": 5249,
+      "rows": 66,
+      "teacher_forced_exact_rate": 0.0,
+      "teacher_forced_exact_rows": 0
+    },
+    "validation": {
+      "answer_nll": 0.1426425420514512,
+      "answer_perplexity": 1.1533174654787417,
+      "answer_token_accuracy": 0.9675544195250659,
+      "answer_tokens": 24256,
+      "rows": 180,
+      "teacher_forced_exact_rate": 0.005555555555555556,
+      "teacher_forced_exact_rows": 1
+    }
+  },
+  "before": {
+    "base": {
+      "active_fraction_vs_dense": 0.25,
+      "loss": 0.7977711319923401,
+      "perplexity": 2.2205860154920196,
+      "route_entropy": 0.5742198884487152
+    },
+    "factual": {
+      "answer_nll": 2.5650004124391654,
+      "answer_perplexity": 13.00066373165243,
+      "answer_token_accuracy": 0.3580384393301988,
+      "answer_tokens": 24246,
+      "rows": 180,
+      "teacher_forced_exact_rate": 0.0,
+      "teacher_forced_exact_rows": 0
+    },
+    "misconceptions": {
+      "answer_nll": 2.6560445307830247,
+      "answer_perplexity": 14.239852257906966,
+      "answer_token_accuracy": 0.350418410041841,
+      "answer_tokens": 6692,
+      "rows": 49,
+      "teacher_forced_exact_rate": 0.0,
+      "teacher_forced_exact_rows": 0
+    },
+    "reasoning": {
+      "answer_nll": 2.436830070030013,
+      "answer_perplexity": 11.436729589409959,
+      "answer_token_accuracy": 0.3917393168500786,
+      "answer_tokens": 6997,
+      "rows": 50,
+      "teacher_forced_exact_rate": 0.0,
+      "teacher_forced_exact_rows": 0
+    },
+    "relational": {
+      "answer_nll": 2.6341684130310536,
+      "answer_perplexity": 13.93172220603587,
+      "answer_token_accuracy": 0.3553057725281006,
+      "answer_tokens": 5249,
+      "rows": 66,
+      "teacher_forced_exact_rate": 0.0,
+      "teacher_forced_exact_rows": 0
+    },
+    "validation": {
+      "answer_nll": 2.5742908970976255,
+      "answer_perplexity": 13.122009003990648,
+      "answer_token_accuracy": 0.35933377308707126,
+      "answer_tokens": 24256,
+      "rows": 180,
+      "teacher_forced_exact_rate": 0.0,
+      "teacher_forced_exact_rows": 0
+    }
+  },
+  "claim": "Native CLM v0 can acquire bounded JAM knowledge after initial training.",
+  "delta": {
+    "base_perplexity": 0.18101283334026297,
+    "reasoning_answer_nll": -0.8318922395312278,
+    "validation_answer_nll": -2.4316483550461743
+  },
+  "format": "minicells.native-clm-jam-demo.benchmarks.v1",
+  "nonclaims": [
+    "replay-free continual learning is solved",
+    "JAM semantic reasoning is generally solved",
+    "Cell-specific mechanisms are superior to ordinary fine-tuning"
+  ],
+  "scientific_decision": false
+}

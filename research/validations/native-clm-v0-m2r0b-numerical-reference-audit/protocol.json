@@ -1,0 +1,150 @@
+{
+  "format": "minicells.native-clm-v0.m2r0b-numerical-reference-audit.protocol.v1",
+  "experiment_id": "native-clm-v0-m2r0b-numerical-reference-audit",
+  "title": "Native CLM v0 M2-R0b — Numerical Reference Audit",
+  "status": "FROZEN_UNRUN",
+  "frozen_before_diagnostic": true,
+  "scientific_decision": false,
+  "native_clm_training_milestone": false,
+  "new_formal_seeds_consumed": false,
+  "scientific_question": "Was the M2-R0 SGD/no-decay reference failure caused by finite-precision parameter-transaction roundoff rather than a structural violation of the certificate nullspace, and does final realized-update projection reduce committed violation to the same machine floor?",
+  "parent_r0": {
+    "branch": "codex/native-clm-v0-m2r0-update-invariant-audit",
+    "publish_commit": "c1f9e132b026efe24a0238e6ea333bdd2ae5fbdb",
+    "protocol_sha256": "96d435f49f35e8f4baa28a4bb4c2b9aad37048d4b7565558434d0aa6aca487aa",
+    "classification": "INCONCLUSIVE_REFERENCE_FAILURE",
+    "scientific_decision": false,
+    "new_formal_seeds_consumed": false,
+    "observed": {
+      "sgd_no_decay_violation_p95": 0.01531454215578215,
+      "sgd_no_decay_violation_max": 0.0902347360932367,
+      "adamw_final_update_projection_violation_p95": 0.000005436547412073904,
+      "adamw_final_update_projection_violation_max": 0.00001532595192860867
+    }
+  },
+  "parent_m2": {
+    "status": "NATIVE_CLM_V0_M2_REPLAY_FREE_CONTINUAL_LANGUAGE_NOT_SUPPORTED",
+    "formal_seeds_consumed": [73211, 73212, 73213],
+    "formal_seeds_forbidden_in_r0b": true
+  },
+  "m1_checkpoint": {
+    "repo_id": "archelabsxyz/native-clm-v0",
+    "filename": "final-model.pt",
+    "sha256": "91cc66f744c97e50105acbb7cdc328a95cb87a32c49baf5b0d6e462d4d4c4c7f",
+    "initial_cells": 8,
+    "active_cells": 2,
+    "parameters": 12154368
+  },
+  "data": {
+    "role": "optimizer-mechanics gradient source only; no retention or continual-learning decision",
+    "domain": "B",
+    "repo_id": "Salesforce/wikitext",
+    "resolved_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+    "file": "B-wikitext-train.txt",
+    "sha256": "c7029622b9a1c4b4f249d927b3ab30d4c09ddffe845e031aee3412b4735ca440",
+    "bytes": 9104081,
+    "documents": 20000,
+    "source_builder": "scripts/research/prepare_native_clm_v0_m2r0_data.py",
+    "source_manifest_format": "minicells.native-clm-v0.m2r0-data-manifest.v1",
+    "learner_replay_bytes": 0
+  },
+  "audit": {
+    "audit_seed": 75001,
+    "steps_per_arm": 64,
+    "batch_size": 16,
+    "precision": "fp16",
+    "lr": 0.0008,
+    "lr_schedule": "canonical_M2_warmup_cosine",
+    "registered_m2_steps_per_phase": 400,
+    "warmup_steps": 40,
+    "min_lr_ratio": 0.1,
+    "adam_betas": [0.9, 0.95],
+    "canonical_weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "certificate_updates_during_audit": 0,
+    "shared_router_updates": 0,
+    "growth": false,
+    "same_batches_each_arm": true
+  },
+  "arms": {
+    "current_adamw_grad_projection": {
+      "optimizer": "AdamW",
+      "weight_decay": 0.01,
+      "gradient_projection": true,
+      "actual_update_projection": false
+    },
+    "adamw_no_decay_grad_projection": {
+      "optimizer": "AdamW",
+      "weight_decay": 0.0,
+      "gradient_projection": true,
+      "actual_update_projection": false
+    },
+    "sgd_no_decay_grad_projection": {
+      "optimizer": "SGD",
+      "momentum": 0.0,
+      "weight_decay": 0.0,
+      "gradient_projection": true,
+      "actual_update_projection": false,
+      "role": "algebraic numerical reference"
+    },
+    "sgd_with_decay_grad_projection": {
+      "optimizer": "SGD",
+      "momentum": 0.0,
+      "weight_decay": 0.01,
+      "gradient_projection": true,
+      "actual_update_projection": false
+    },
+    "adamw_final_update_projection": {
+      "optimizer": "AdamW",
+      "weight_decay": 0.01,
+      "gradient_projection": true,
+      "actual_update_projection": true,
+      "role": "repaired-transaction numerical reference"
+    }
+  },
+  "measurement": {
+    "layers": [
+      "gradient_analytic_update_minus_lr_times_projected_clipped_gradient",
+      "gradient_safe_fp64_projection",
+      "gradient_safe_parameter_dtype_commit",
+      "optimizer_raw_realized_update",
+      "matched_safe_fp64_projection_of_optimizer_update",
+      "matched_safe_parameter_dtype_commit",
+      "actually_committed_update_after_optional_final_projection"
+    ],
+    "certificate_span_reference": "fp64 QR orthonormalization of the frozen stored certificate rows; span unchanged",
+    "machine_floor_envelope": "max(empirical matched-safe float-commit residual, roundoff_bound_multiplier * finfo(parameter_dtype).eps * (||W||_F + ||Delta_safe||_F), 1e-30)",
+    "excess_factor": "committed_violation_norm / machine_floor_envelope",
+    "minimum_update_norm_for_ratio": 1e-12
+  },
+  "thresholds": {
+    "minimum_audited_cell_updates_per_arm": 128,
+    "roundoff_bound_multiplier": 8.0,
+    "reference_floor_excess_p95_max": 2.0,
+    "reference_floor_excess_max_max": 4.0,
+    "ideal_projection_rho_max": 1e-10,
+    "material_floor_excess_p95_min": 16.0,
+    "material_violation_rho_p95_min": 0.0001
+  },
+  "registered_classifications": [
+    "INCONCLUSIVE_SGD_NUMERICAL_REFERENCE_FAILURE",
+    "INCONCLUSIVE_FINAL_PROJECTION_NUMERICAL_REFERENCE_FAILURE",
+    "R0_REFERENCE_FAILURE_EXPLAINED_BY_PARAMETER_TRANSACTION_ROUNDOFF"
+  ],
+  "registered_mechanics_diagnoses": [
+    "CURRENT_UPDATE_INVARIANT_HOLDS_AFTER_NUMERICAL_CONTROL",
+    "WEIGHT_DECAY_BREAKS_UPDATE_INVARIANT",
+    "ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT",
+    "BOTH_PRECONDITIONER_AND_WEIGHT_DECAY_BREAK_UPDATE_INVARIANT",
+    "MIXED_OR_INTERACTION_UPDATE_INVARIANT_VIOLATION"
+  ],
+  "decision_rule": "First require both frozen numerical references (SGD/no-decay and AdamW/final-update-projection) to have sufficient nonzero coverage, fp64 ideal projection rho at or below the frozen ideal threshold, and committed residual no more than the frozen machine-floor excess thresholds. Only if both references pass may M2-R0 be considered numerically closed. Structural optimizer-mechanics diagnosis then requires both a large excess-over-floor p95 and the pre-registered material rho p95; no threshold is changed after observing R0b.",
+  "m2_r1_unblock_rule": "M2-R1 is unblocked iff classification is R0_REFERENCE_FAILURE_EXPLAINED_BY_PARAMETER_TRANSACTION_ROUNDOFF. This is an engineering/measurement gate only, not a continual-learning scientific success.",
+  "explicit_nonclaims": [
+    "that M2 continual learning passed",
+    "that the M1 certificate covers the full old-language functional manifold",
+    "that final-update projection is sufficient for continual learning",
+    "that growth is necessary or unnecessary",
+    "that any historical M2 or M2-R0 decision is retroactively changed"
+  ]
+}

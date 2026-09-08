@@ -26,7 +26,14 @@ from .governance import (
     sha256_file,
 )
 from .registry import CellRecord, CellRegistry, merge_registries, rollback_registry
-from .synthetic import DatasetAudit, SyntheticWorld, audit_dataset, context_oracle, generate_world
+from .synthetic import (
+    DatasetAudit,
+    SyntheticWorld,
+    POSITIVE_CONTROL_VERSION,
+    audit_dataset,
+    context_oracle,
+    generate_world,
+)
 from .cache import CacheEquivalence, CacheSemanticsInvalid, CachedTailRunner, TailCache, validate_cache_identity
 from .training import ForkedCell, ForkedCellularExpert, ForkedCellularExperts, allocate_topk
 from .composition import ComposedCell, ComposedCellularExpert, ComposedCellularExperts, FunctionalCellDelta, compose_cellular_experts
@@ -37,13 +44,41 @@ from .evaluation import EvaluationSummary, evaluate_matrix, evaluate_samples, gr
 from .overlay import ExpertsOverlayModel, model_with_experts_overlay
 
 # The scientific pipeline historically deep-copied the entire foundation for
-# every A/B/AB/LoRA evaluation state.  All states differ only in the final MoE
+# every A/B/AB/LoRA evaluation state. All states differ only in the final MoE
 # expert runtime, so make the resource-bounded overlay the package default.
 # The swap is restored in a finally block on every forward and does not mutate
 # foundation weights or routing state.
 from . import experiment as _experiment
 
 _experiment._model_with_experts = model_with_experts_overlay
+
+# Persist G0/cache/model/dataset identity before any context-oracle or capacity
+# early exit. This changes only audit timing, never the scientific worker.
+from .pipeline_guard import install_pipeline_guard, persist_pre_science_evidence
+
+install_pipeline_guard(_experiment)
+
+# Granite E0/formal execution must also avoid materializing a second complete
+# 1.3B FP32 foundation. Install the single-foundation runtime after experiment
+# is fully imported, then patch execution's fail-fast G0 entry point. The
+# scientific protocol is unchanged; only resident model layout and inference
+# graph retention differ.
+from .resource_runtime import (
+    cellularize_in_place,
+    full_moe_overlay_equivalence,
+    g0_preflight as _resource_g0_preflight,
+    inference_logits,
+    run_formal_execution as _resource_formal_execution,
+    run_granite_engineering as _resource_granite_engineering,
+)
+
+_experiment._logits = inference_logits
+_experiment._run_granite_engineering = _resource_granite_engineering
+_experiment.run_formal_execution = _resource_formal_execution
+
+from . import execution as _execution
+
+_execution._g0_preflight = _resource_g0_preflight
 
 
 __all__ = [
@@ -69,6 +104,7 @@ __all__ = [
     "rollback_registry",
     "DatasetAudit",
     "SyntheticWorld",
+    "POSITIVE_CONTROL_VERSION",
     "audit_dataset",
     "generate_world",
     "context_oracle",
@@ -113,4 +149,9 @@ __all__ = [
     "greedy_generate",
     "ExpertsOverlayModel",
     "model_with_experts_overlay",
+    "cellularize_in_place",
+    "full_moe_overlay_equivalence",
+    "inference_logits",
+    "install_pipeline_guard",
+    "persist_pre_science_evidence",
 ]

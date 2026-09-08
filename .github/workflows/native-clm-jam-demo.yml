@@ -1,0 +1,55 @@
+name: Native CLM JAM Demo
+
+on:
+  pull_request:
+    paths:
+      - "scripts/research/run_native_clm_jam_demo.py"
+      - "scripts/research/publish_native_clm_jam_demo.py"
+      - "research/notebooks/06-native-clm/native-clm-jam-demo-kaggle.ipynb"
+      - "research/stages/06-native-clm/JAM_DEMO.md"
+      - "research/datasets/jam-knowledge-v0.1/**"
+      - "scripts/research/jam_knowledge_v0_1/**"
+      - "tests/research/06-native-clm/test_native_clm_jam_demo.py"
+      - ".github/workflows/native-clm-jam-demo.yml"
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: python -m pip install -e ".[dev,lm]"
+
+      - name: Validate notebook JSON
+        run: python -m json.tool research/notebooks/06-native-clm/native-clm-jam-demo-kaggle.ipynb >/dev/null
+
+      - name: Compile and lint
+        run: |
+          python -m py_compile \
+            scripts/research/run_native_clm_jam_demo.py \
+            scripts/research/publish_native_clm_jam_demo.py \
+            tests/research/06-native-clm/test_native_clm_jam_demo.py
+          ruff check --select F,E9 \
+            scripts/research/run_native_clm_jam_demo.py \
+            scripts/research/publish_native_clm_jam_demo.py \
+            tests/research/06-native-clm/test_native_clm_jam_demo.py
+
+      - name: Validate JAM dataset
+        run: |
+          python scripts/research/jam_knowledge_v0_1/build_dataset.py
+          python scripts/research/jam_knowledge_v0_1/validate_dataset.py
+
+      - name: CPU helper tests
+        run: pytest -q tests/research/06-native-clm/test_native_clm_jam_demo.py
+
+      - name: CLI smoke
+        run: |
+          python scripts/research/run_native_clm_jam_demo.py --help >/dev/null
+          python scripts/research/publish_native_clm_jam_demo.py --help >/dev/null

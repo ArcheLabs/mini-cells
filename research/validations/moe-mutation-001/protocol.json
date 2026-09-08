@@ -1,0 +1,74 @@
+{
+  "experiment": "MOE_MUTATION_001",
+  "protocol_version": 1,
+  "scientific_scope": "single addressable expert-slice mutation on an unchanged Granite MoE CLM substrate",
+  "base": {
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "conversion_manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_type": "granitemoe"
+  },
+  "formal_seeds": [26090411, 26090412, 26090413],
+  "mutation": {
+    "layer_index": 23,
+    "target_selection": "highest last-token top-k routing count on training prompts; ties choose lowest expert index",
+    "tensor_selection": "the two packed expert tensors at the target layer, mapped to canonical conversion addresses by exact slice shape",
+    "expert_is_cell": false,
+    "router_trainable": false,
+    "other_parameters_trainable": false
+  },
+  "dataset": {
+    "train_examples": 24,
+    "heldout_examples": 8,
+    "control_examples": 8,
+    "target_token_selection": "among the frozen candidate words that tokenize to one token, choose the token with lowest mean base probability on training prompts; ties choose candidate order",
+    "target_candidates": [" violet", " quartz", " saffron", " cobalt", " cedar", " maple", " orbit", " lantern", " marble", " willow", " amber", " silver"],
+    "train_template": "CLM mutation calibration record A-{seed_mod}-{index:02d} resolves to",
+    "heldout_template": "CLM mutation calibration record A-{seed_mod}-{index:02d} resolves to",
+    "control_prompts": [
+      "The capital of France is",
+      "Write a Python function that adds two integers:",
+      "If 17 is multiplied by 6, the result is",
+      "Water freezes at",
+      "The opposite of hot is",
+      "A triangle has",
+      "The largest planet in the Solar System is",
+      "In one sentence, explain photosynthesis:"
+    ]
+  },
+  "training": {
+    "dtype": "float32",
+    "steps": 40,
+    "batch_size": 4,
+    "learning_rate": 0.05,
+    "max_slice_grad_norm": 1.0,
+    "weight_decay": 0.0,
+    "optimizer": "manual masked SGD on selected expert slices only"
+  },
+  "gates": {
+    "minimum_train_nll_gain": 0.2,
+    "minimum_heldout_nll_gain": 0.1,
+    "maximum_control_mean_kl": 0.05,
+    "minimum_control_top1_identity": 0.875,
+    "required_target_router_topk_identity": 1.0,
+    "maximum_rollback_logit_error": 1e-6,
+    "require_nonzero_delta": true,
+    "require_exact_two_addresses": true,
+    "require_conversion_identity": true
+  },
+  "decision": {
+    "per_seed_pass": "all gates pass",
+    "formal_support": "at least 2 of 3 formal seeds pass",
+    "formal_reject": "2 or more formal seeds fail",
+    "environment_consistency": "all completed formal seeds must share torch, transformers, huggingface_hub, safetensors, cuda_device_name, and dtype; otherwise no scientific decision is emitted",
+    "claim_if_supported": "an unchanged converted Granite MoE substrate supports a first isolated, addressable expert-slice mutation with measurable held-out gain, bounded control drift, unchanged target-layer routing, and exact rollback under this protocol",
+    "not_claimed": [
+      "multi-mutation composition",
+      "mergeability",
+      "general continual learning",
+      "autonomous cell discovery",
+      "expert equals cell",
+      "safe arbitrary model editing"
+    ]
+  }
+}
