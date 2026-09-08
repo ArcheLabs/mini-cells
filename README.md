@@ -2,94 +2,71 @@
 
 # MiniCells
 
-MiniCells remains a research project. Any future MiniJAM-native production
-integration must use the application-neutral Stage-1 node, Formal Work,
-state, and Service-lifecycle interfaces; Playground is a legacy Stage-0
-product and is not an integration boundary.
+MiniCells explores whether pretrained language models can be transformed into
+Cellular Language Models through independently manageable neural Cells.
 
-MiniCells is a research project exploring Cellular Language Models (CLMs): sparse networks of independently mutable and verifiable neural Cells that can learn locally, reject unsafe updates, and grow when existing Cells can no longer absorb new learning safely.
+**HybridCLM is the current bridge:** a pretrained MoE remains the mature
+computational substrate while trainable, reversible Cell mutations are attached
+inside the model. The long-term objective is progressive dependency withdrawal
+from the original model toward a standalone CLM. HybridCLM may also become a
+modular post-training mechanism if controlled comparisons show a genuine
+advantage over established PEFT methods.
 
-## What MiniCells is
+This repository ships the public HybridCLM toolkit and preserves the historical
+MiniCells research record. It does not claim that MoE → standalone CLM,
+continual learning, catastrophic-forgetting control, or HybridCLM superiority
+to LoRA has been solved.
 
-MiniCells studies whether model state can be divided into routed computational units whose updates have explicit dependency and transaction boundaries. The current operational definition is:
+## Engineering Evidence · Formal Validation Pending
 
-$$\boxed{\text{Cell}=\text{independently routable}+\text{independently mutable}+\text{independently verifiable model state}}$$
+PCU Hybrid Reattachment 001 v3 currently records:
 
-NCA supplied the original local-state, local-interaction, growth, and self-organization perspective. The current CLM does not require a literal 2D grid; a sparse, dynamic Cell graph is the more general abstraction.
+- same-cellular zero-state equivalence passed;
+- Cell OFF ranking 6.25%, Cell ON ranking 82.03%;
+- causal hybrid consumption and exact restoration supported;
+- the alpha=1 locality threshold failed;
+- a coarse amplitude sweep found no pre-registered jointly passing point;
+- formal validation has not run.
 
-## Why Cells
+These are engineering boundaries, not a formal HybridCLM result.
 
-Traditional mixture-of-experts routing primarily provides sparse compute. CLM also uses stable sparse routing as a dependency index: it identifies which historical computations must be checked when a Cell changes. Growth adds independently mutable state instead of forcing old state to absorb incompatible learning.
+## Public API
 
-## Current Research Status
+```python
+from minicells import CellMutation, CellPlacement, HybridCLM
 
-| Layer | Status |
-|---|---|
-| Cellular/NCA language dynamics | Historical experimental support |
-| Sparse routed Cells | Experimental support |
-| Dependency-scoped regression safety | Supported in a controlled synthetic setting |
-| Transactional rollback | Supported as a safety mechanism |
-| Growth-restored plasticity | **Supported — Core Validation 004, 3/3 seeds** |
-| Natural-language continual learning | **Not yet validated** |
-| 5–10M CLM-0.4 pilot | Next |
-| 30–50M formal CLM-0.4 model | Planned after pilot |
-| Distributed JAM-native CLM | Future work |
-
-## CLM Core Loop
-
-```mermaid
-stateDiagram-v2
-    [*] --> Route
-    Route --> LearnExisting
-    LearnExisting --> ValidateDependencies
-    ValidateDependencies --> Commit: safe
-    ValidateDependencies --> Rollback: unsafe
-    Rollback --> SpawnCell
-    SpawnCell --> TrainNewCell
-    TrainNewCell --> ValidateGrowth
-    ValidateGrowth --> Commit: safe
-    ValidateGrowth --> Rollback: unsafe
-    Commit --> [*]
+hybrid = HybridCLM.from_pretrained(
+    "ibm-granite/granite-3.1-1b-a400m-base",
+    revision="<immutable-hub-commit>",
+)
+hybrid.cellularize(CellPlacement(layer=7, experts="all"))
+mutation = CellMutation.from_pretrained("<mutation-artifact>")
+hybrid.attach(mutation)
+hybrid.set_alpha(mutation, 0.75)
 ```
 
-$$\boxed{\mathrm{CLM}=\mathrm{Sparse\ Routing}+\mathrm{Dependency\ Validation}+\mathrm{Transactional\ Learning}+\mathrm{Adaptive\ Cell\ Growth}}$$
+Install the optional Granite/Hugging Face integration with
+`pip install "mini-cells[hybrid]"`. v0.1 supports explicit placement,
+inspection, safe safetensors mutation artifacts, attach/detach, alpha scaling,
+zero-state diagnostics, and rollback reporting. Only the tested Granite MoE
+backend is supported; unknown architectures fail closed.
 
-## Experimental Evidence
+## Repository map
 
-Core Validation 002, 002B, and 002C rejected precise single-address, sparse-assembly, and oracle sparse-assembly writing as prerequisites. Core Validation 003 showed that dependency-scoped validation could reject unsafe candidates, but its official result remained a No-Go because rejection alone provided insufficient plasticity. Core Validation 004 added transactional growth and passed all registered formal seeds (`80411`, `80412`, `80413`).
+- [`src/minicells/hybrid/`](src/minicells/hybrid/): public HybridCLM API.
+- [`docs/hybrid-clm/`](docs/hybrid-clm/): API, artifact, placement, safety, and status docs.
+- [`research/stages/08-hybrid-clm/`](research/stages/08-hybrid-clm/): current research boundary and roadmap.
+- [`research/`](research/README.md): historical protocols, reports, and evidence catalog.
+- [`artifacts/`](artifacts/): durable evidence and release assets.
+- [`tests/`](tests/): unit, integration, research, and public fixtures.
+- [`docs/integrations/minijam.md`](docs/integrations/minijam.md): MiniCells/MiniJAM ownership boundary.
 
-The core CLM learning loop has been experimentally validated in a **controlled synthetic setting**. See the [final mechanism report](research/reports/clm-core-mechanism-0.4.md) and [canonical artifacts](artifacts/experiments/).
+## Research status and non-goals
 
-## What Has Been Validated
-
-- Stable routing can scope affected historical computations under the registered synthetic conditions.
-- Unsafe local candidates can be rolled back without false-safe or structural escape events in Core Validations 003/004.
-- Growth can recover plasticity after an existing-Cell transaction is rejected; Core Validation 004 passed 3/3 seeds.
-
-## What Has NOT Been Validated
-
-MiniCells has not demonstrated general natural-language continual learning, solved catastrophic forgetting, established indefinitely bounded growth, or proven the mechanism at LLM scale. Core Validation 004 is not a production-readiness claim.
-
-## Repository Structure
-
-- [`research/`](research/README.md): four-stage history, catalog, final reports, protocols, and historical sources.
-- [`artifacts/experiments/`](artifacts/experiments/): immutable canonical experimental evidence.
-- [`src/minicells/`](src/minicells/): research implementation package.
-- [`research/notebooks/`](research/notebooks/): experiment notebooks at stable historical paths.
-- [`scripts/`](scripts/): experiment, reporting, and integrity utilities.
-- [`tests/`](tests/): automated checks.
-
-## Reproduce Research
-
-Install the project dependencies, then run `python -m pytest -q` and `./tools/test_all.sh`. Each formal validation links its frozen protocol, notebook, and canonical artifact directory through [`research/catalog.yaml`](research/catalog.yaml). Do not regenerate formal result artifacts for documentation changes.
-
-## MiniJAM / JAM Integration
-
-Candidate update, validation, commit/rollback, and model-state transition map naturally to JAM-style deterministic transitions. The CLM mechanism was validated off-chain in controlled research experiments. JAM/MiniJAM is the intended distributed execution and state-transition environment, not part of the Core Validation 004 scientific result.
-
-## Roadmap to CLM-0.4
-
-The next step is a 5–10M-parameter controlled math-and-story language pilot covering the complete continual-learning lifecycle. A 30–50M formal release candidate follows only after a pilot Go. This repository freeze defines the baseline; it does not implement that training.
+Automatic optimal placement, generic MoE support, standalone conversion, new
+router training, formal HybridCLM execution, LoRA superiority, production JAM
+execution, and a general continual-learning solution are explicitly out of
+scope for this prerelease.
 
 ## License
 

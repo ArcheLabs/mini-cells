@@ -15,14 +15,17 @@ import hashlib, json, os, pathlib
 root = pathlib.Path("service/artifacts")
 blob = root.joinpath("minicells-training-leaf-v1.blob").read_bytes()
 manifest = {
-    "schema": "minicells.parallel-training-leaf-service.v1",
-    "algorithm": "echo-adamw-ce-tree128-v1",
-    "abi": {"input": "MCG1", "output": "MCGR"},
+    "schema": "minicells.parallel-training-leaf-service.v2",
+    "algorithm": "echo-adamw-ce-hierarchical-tree128-v2",
+    "algorithm_changes": "EXECUTION_DECOMPOSITION_ONLY",
+    "role": "leaf_compute",
+    "abi": {"input": "MCG1/v2", "output": "MCGR/v2"},
     "logical_batch_size": 256, "shard_size": 2, "leaf_count": 128,
     "minijam_commit": os.environ["MINICELLS_RESOLVED_MINIJAM"],
     "jambda_commit": os.environ["MINICELLS_RESOLVED_JAMBDA"],
     "minijam_spec": "v1", "guest_sdk_abi": 1,
     "refine_limit": 1000000000, "accumulate_limit": 1000000000,
+    "deployment_ready": True,
     "diagnostic_stage": False,
     "artifact_sha256": hashlib.sha256(blob).hexdigest(),
     "code_hash": "0x" + hashlib.blake2b(blob, digest_size=32).hexdigest(),

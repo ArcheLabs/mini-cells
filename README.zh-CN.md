@@ -2,61 +2,66 @@
 
 # MiniCells
 
-MiniCells 是一个 Cellular Language Model（CLM，细胞语言模型）研究项目。CLM 将模型组织为稀疏激活、可独立更新和验证的神经 Cell；模型可以局部学习，在更新破坏既有行为时拒绝提交，并在现有 Cell 无法安全吸收新知识时生长新的 Cell。
+MiniCells 研究能否通过可独立管理的神经 Cell，把预训练语言模型逐步转化
+为 Cellular Language Model（CLM，细胞语言模型）。
 
-## MiniCells 是什么
+**HybridCLM 是当前桥梁：** 预训练 MoE 继续作为成熟的计算基底，在模型内部
+挂接可训练、可逆的 Cell mutation。长期目标是逐步减少对原始模型的依赖，
+走向独立 CLM；如果受控比较显示出真正优势，HybridCLM 也可能成为模块化的
+后训练/模型演化机制。
 
-MiniCells 研究能否把模型状态划分为具有明确依赖边界和事务边界的路由计算单元：
+本仓库发布 HybridCLM 工具包，同时保留历史 MiniCells 科研记录。这里没有
+声称“MoE → 独立 CLM”、持续学习、灾难性遗忘控制或 HybridCLM 优于 LoRA
+已经解决。
 
-$$\boxed{\text{Cell}=\text{可独立路由}+\text{可独立修改}+\text{可独立验证的模型状态}}$$
+## 工程证据 · 正式验证尚未开始
 
-NCA 提供了局部状态、局部交互、生长和自组织的原始视角。当前 CLM 不要求字面意义上的二维网格；稀疏动态 Cell 图是更一般的抽象。
+PCU Hybrid Reattachment 001 v3 当前记录：
 
-## 为什么使用 Cell
+- 同 cellular zero-state 等价性通过；
+- Cell OFF ranking 6.25%，Cell ON ranking 82.03%；
+- 支持因果 hybrid consumption 与精确恢复；
+- alpha=1 locality threshold 失败；
+- 粗粒度 amplitude sweep 未找到预注册的联合通过点；
+- 正式验证尚未运行。
 
-传统 MoE 主要提供稀疏计算；CLM 还把稳定稀疏路由用作依赖索引，以确定 Cell 更新后必须复查哪些历史计算。生长会增加可独立修改的新状态，而不是迫使旧状态吸收不兼容的学习。
+这些是工程边界，不是正式 HybridCLM 结论。
 
-## 当前研究状态
+## 公共 API
 
-| 层次 | 状态 |
-|---|---|
-| Cellular/NCA 语言动力学 | 历史实验支持 |
-| 稀疏路由 Cell | 实验支持 |
-| 依赖域回归安全 | 受控合成环境中得到支持 |
-| 事务回滚 | 作为安全机制得到支持 |
-| 生长恢复可塑性 | **支持——Core Validation 004，3/3 seeds** |
-| 自然语言持续学习 | **尚未验证** |
-| 5–10M CLM-0.4 pilot | 下一步 |
-| 30–50M 正式 CLM-0.4 模型 | pilot 通过后计划 |
-| JAM 原生分布式 CLM | 未来工作 |
+```python
+from minicells import CellMutation, CellPlacement, HybridCLM
 
-## CLM 核心闭环
+hybrid = HybridCLM.from_pretrained(
+    "ibm-granite/granite-3.1-1b-a400m-base",
+    revision="<不可变的 Hub commit>",
+)
+hybrid.cellularize(CellPlacement(layer=7, experts="all"))
+mutation = CellMutation.from_pretrained("<mutation-artifact>")
+hybrid.attach(mutation)
+hybrid.set_alpha(mutation, 0.75)
+```
 
-$$\boxed{\mathrm{CLM}=\text{稀疏路由}+\text{依赖验证}+\text{事务学习}+\text{自适应 Cell 生长}}$$
+使用 `pip install "mini-cells[hybrid]"` 安装 Granite/Hugging Face 可选依赖。
+v0.1 支持显式 placement、结构检查、安全 safetensors mutation、attach/detach、
+alpha 缩放、zero-state 诊断和回滚报告。当前只支持经过测试的 Granite MoE；
+未知架构会 fail closed。
 
-路由后先尝试更新已有 Cell；若依赖域验证安全则提交，否则回滚并尝试生成、训练和验证新 Cell，最后原子提交或回滚。
+## 仓库导航
 
-## 实验证据
+- [`src/minicells/hybrid/`](src/minicells/hybrid/)：公共 HybridCLM API。
+- [`docs/hybrid-clm/`](docs/hybrid-clm/)：API、artifact、placement、安全和状态文档。
+- [`research/stages/08-hybrid-clm/`](research/stages/08-hybrid-clm/)：当前科研边界与路线图。
+- [`research/`](research/README.zh-CN.md)：历史协议、报告和证据目录。
+- [`artifacts/`](artifacts/)：持久证据与发布资产。
+- [`tests/`](tests/)：单元、集成、科研测试和公共 fixtures。
+- [`docs/integrations/minijam.md`](docs/integrations/minijam.md)：MiniCells/MiniJAM 边界。
 
-Core Validation 002、002B、002C 分别否定了精确单地址、稀疏组装和 oracle 稀疏组装写入作为前提。003 表明依赖域验证可以拒绝不安全候选，但仅靠拒绝不能提供足够可塑性，因此官方结论仍为 No-Go。004 加入事务式生长，并通过全部正式 seeds：`80411`、`80412`、`80413`。
+## 科研状态与非目标
 
-**CLM 核心学习闭环已在受控合成环境中完成实验验证。**详见[最终机制报告](research/reports/clm-core-mechanism-0.4.zh-CN.md)与[规范实验产物](artifacts/experiments/)。
-
-## 已验证与未验证
-
-已支持：稳定路由下的历史依赖范围、安全回滚，以及被拒已有 Cell 更新后的生长恢复可塑性。尚未证明：通用自然语言持续学习、彻底解决灾难性遗忘、无限期有界生长或 LLM 规模有效性。
-
-## 仓库结构与复现
-
-- [`research/`](research/README.zh-CN.md)：四阶段历史、目录、报告、协议和历史来源。
-- [`artifacts/experiments/`](artifacts/experiments/)：不可变的规范实验证据。
-- [`src/minicells/`](src/minicells/)：研究实现；[`research/notebooks/`](research/notebooks/)：保持稳定路径的 notebooks。
-
-运行 `python -m pytest -q` 与 `./tools/test_all.sh`。协议、notebook 和 artifact 索引见 [`research/catalog.yaml`](research/catalog.yaml)。文档整理不应重新生成正式结果。
-
-## MiniJAM / JAM 与 CLM-0.4
-
-候选更新、验证、提交/回滚和状态迁移适合映射为 JAM 风格的确定性状态迁移，但 004 是链下受控研究结果；JAM/MiniJAM 是目标执行环境，不是 004 结论的一部分。下一步是 5–10M 参数的数学+故事 pilot；通过后才考虑 30–50M 正式候选。本次整理不实现训练。
+自动最优 placement、通用 MoE 支持、独立转换、新 router 训练、正式
+HybridCLM 执行、LoRA 优越性、生产 JAM 执行和通用持续学习方案，均不属于
+此次 prerelease 范围。
 
 ## 许可证
 

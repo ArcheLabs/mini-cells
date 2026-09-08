@@ -1,0 +1,15 @@
+{
+  "schema": "minicells.stage1-training-native-parity.v2",
+  "status": "PASS",
+  "topology": {
+    "logical_batch_size": 256,
+    "shard_size": 2,
+    "leaf_count": 128,
+    "group_count": 4,
+    "leaves_per_group": 32
+  },
+  "oracle": "balanced FP32 tree over 128 leaves",
+  "hierarchical_vs_flat_tree128_bit_exact": true,
+  "invariant": "group0..3 are contiguous 32-leaf subtrees; finalizer combines group0+group1 and group2+group3, then the two roots",
+  "source": "crates/minicells-training-ref hierarchical_reduction_is_bit_exact_with_tree128"
+}

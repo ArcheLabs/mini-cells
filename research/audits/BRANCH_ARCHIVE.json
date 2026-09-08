@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_from": "codex/hybrid-clm-release-preparation-v0.1",
+  "generated_at_commit": "0fbfb74",
+  "policy": "archive evidence before deletion; branch names are not scientific identity",
+  "branches": [
+    {"branch": "main", "head": "7c99ef3f4aedb8d561cf9600ea5d79da1eb99b99", "category": "protected", "status": "active_default", "canonical_paths": ["research/", "artifacts/"], "open_pr": null, "safe_to_delete": false, "notes": "default integration branch"},
+    {"branch": "codex/hybrid-clm-release-preparation-v0.1", "head": "0fbfb74", "category": "active", "status": "in_progress", "canonical_paths": ["src/minicells/hybrid/", "docs/hybrid-clm/", "research/stages/08-hybrid-clm/"], "open_pr": null, "safe_to_delete": false, "notes": "current release-preparation line; inventory captured before final report commit"},
+    {"branch": "codex/minicells-stage1-training-compatibility", "head": "a683c8a8fbeb0dc130457011adf8376af6c34090", "category": "active", "status": "engineering_complete", "canonical_paths": ["artifacts/stage1-training-compatibility/", "docs/minijam-stage1-compatibility.md"], "open_pr": null, "safe_to_delete": false, "notes": "Stage-1 evidence branch; keep reachable until merged"},
+    {"branch": "codex/pcu-composability-kill-001", "head": "75fda386084acea051cf41bef66360d2af5a3fa5", "category": "research", "status": "active_or_historical", "canonical_paths": ["research/validations/pcu-kill-001/", "src/minicells/pcu_kill_001/"], "open_pr": null, "safe_to_delete": false, "notes": "scientific protocol lineage; preserve"},
+    {"branch": "codex/clm-0.3-progressive-growth", "head": "4354183ec6bccb9d78e48a202c2f1c0a5e0e0b5d", "category": "research", "status": "historical_candidate", "canonical_paths": ["research/", "artifacts/"], "open_pr": null, "safe_to_delete": false, "notes": "requires reachability and result-only-on-branch audit"},
+    {"branch": "codex/constructive-clm-001-learned-coordinate-formation", "head": "6f5c7d413ced2cb8e176e84a400659dd49c61c6c", "category": "research", "status": "historical_candidate", "canonical_paths": ["research/", "artifacts/"], "open_pr": null, "safe_to_delete": false, "notes": "requires reachability audit"},
+    {"branch": "codex/minijam-spec-consolidation", "head": "867b856f6be2b08c5c257120a16cdd8ed22b6f0f", "category": "engineering", "status": "historical_candidate", "canonical_paths": ["docs/", "artifacts/"], "open_pr": null, "safe_to_delete": false, "notes": "MiniJAM integration history; do not delete before merge review"},
+    {"branch": "codex/minijam-spec-consolidation-old", "head": "d7dd06f3348c0e2a488dfbdfb3ad1b8d0c06c171", "category": "superseded_engineering", "status": "candidate_for_review", "canonical_paths": ["docs/", "artifacts/"], "open_pr": null, "safe_to_delete": false, "notes": "older consolidation line; deletion requires all six safety checks"},
+    {"branch": "codex/pre-0.4-repository-architecture", "head": "454cc895a89e63b4804a33e133f9ca6f95d8c698", "category": "historical", "status": "candidate_for_review", "canonical_paths": ["research/", "docs/"], "open_pr": null, "safe_to_delete": false, "notes": "source commits must remain reachable"},
+    {"branch": "codex/research-consolidation-0.4", "head": "16b0b40eba66e6a1bd271e21828bb426dbdf96d0", "category": "historical", "status": "candidate_for_review", "canonical_paths": ["research/"], "open_pr": null, "safe_to_delete": false, "notes": "source commits must remain reachable"},
+    {"branch": "codex/shadow-cell-validation-001-v2-amendment", "head": "f1b7e780294d3d5e33428748d37a72ffe7f1e052", "category": "research", "status": "registered_unrun", "canonical_paths": ["research/validations/shadow-cell-validation-001-v2-developmental-maturation/"], "open_pr": null, "safe_to_delete": false, "notes": "registered protocol lineage; preserve"}
+  ],
+  "safe_to_delete_definition": [
+    "no open PR depends on the branch",
+    "important source commits remain reachable through main, a tag, or documented SHA",
+    "published artifact provenance contains the original source SHA",
+    "no supported notebook hardcodes the branch",
+    "no workflow requires the branch",
+    "no unmerged scientific result exists only on the branch"
+  ],
+  "deletions_performed": []
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "minicells.stage1-training-capacity.v2",
+  "topology": {
+    "logical_batch_size": 256,
+    "shard_size": 2,
+    "leaf_count": 128,
+    "group_count": 4,
+    "leaves_per_group": 32
+  },
+  "work_limit_bytes": 1048576,
+  "measured_work_bytes": {
+    "leaf_max": 18190,
+    "group_max": 578400,
+    "finalizer": 126170,
+    "all_under_limit": true
+  },
+  "measured_gas": {
+    "limit": 1000000000,
+    "leaf": {
+      "min": 503092622,
+      "p95": 571683977,
+      "p99": 576446832,
+      "max": 581194702,
+      "under_limit": true
+    },
+    "reducer": {
+      "min": 13850410,
+      "p95": 13908329,
+      "max": 13908329,
+      "under_limit": true
+    },
+    "finalizer": 11985063,
+    "finalizer_under_limit": true
+  },
+  "source": "hierarchical-pvm.json"
+}

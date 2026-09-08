@@ -9,8 +9,8 @@
 1. [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) — 当前证据允许我们声称的最强能力、明确的 No-Go，以及负结果之后仍然可用于工程的 primitive。
 2. [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) — 对所有有长期总结价值的实验按 family 记录：价值、局限、formal status、能力上限、**它没有证明什么**、以及获得的工程 primitive。
 3. [`audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md) — 重新审计 Foundations、Self-Organization、Routing/Growth、CLM-0.4-mini 等历史 notebook，分别记录它们今天的科学地位和仍可复用的工程资产。
-4. [`stages/06-native-clm/`](stages/06-native-clm/) — trained-model Native CLM 序列与 closure。
-5. [`stages/07-safe-model-evolution/`](stages/07-safe-model-evolution/) — 当前真实预训练模型上的 mutation locality、历史监督、history compression，以及后续 composition/mergeability 研究线。
+4. [`stages/06-native-clm/`](stages/06-native-clm/) — 当前 trained-model Native CLM 序列与 closure。
+5. [`stages/08-hybrid-clm/`](stages/08-hybrid-clm/) — 当前 HybridCLM 工程边界与路线图。
 6. [`validations/`](validations/) — 冻结的 protocol、formal result 与机制诊断。
 7. [`catalog.yaml`](catalog.yaml) — 面向工具的研究目录。
 
@@ -30,6 +30,9 @@ research/
   previews/                 # preview 材料
   archive/                  # 退役/历史材料
 ```
+
+Stage 08 是当前面向产品的桥梁；Native CLM 与 CLM-0.4 历史线仍是科研记录，
+不是当前 release 承诺。
 
 目录名称不决定科学证据强度。冻结的 registered result 优先于 roadmap、README、notebook 和任何后续解释。
 

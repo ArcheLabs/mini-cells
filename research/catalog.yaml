@@ -5,7 +5,7 @@ stages:
   - routing-and-growth
   - continual-learning-core
   - language-validation
-  - safe-model-evolution
+  - hybrid-clm
 entries:
   - id: stage-foundations
     title: "Foundations: Echo, NCA Language Dynamics, and Training Mechanics"
@@ -278,3 +278,19 @@ entries:
     supersedes: null
     superseded_by: null
     notes: "Registered but unrun. Tests isolated full-width Shadow capacity, maturity frontier selection, replay-free bounded sketch state, and corrected realized-AdamW direct-write protection. Formal seeds are 95311/95312/95313; v1 is linked as an immutable historical parent path."
+
+  - id: stage-hybrid-clm
+    title: "HybridCLM: Reversible Cell Mutations on a Pretrained MoE"
+    kind: research-stage
+    stage: hybrid-clm
+    outcome: ENGINEERING_EVIDENCE_FORMAL_VALIDATION_PENDING
+    scientific_decision: false
+    canonical: true
+    report: research/stages/08-hybrid-clm/README.md
+    protocol: null
+    artifacts: artifacts/releases/hybrid-clm-v0.1
+    notebook: notebooks/kaggle/hybrid_clm_quickstart.ipynb
+    implementation: src/minicells/hybrid
+    supersedes: stage-language-validation
+    superseded_by: null
+    notes: "Public API and Granite backend are engineering deliverables. PCU Hybrid Reattachment 001 v3 remains an engineering boundary; formal HybridCLM execution has not started."

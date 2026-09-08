@@ -1,8 +1,9 @@
 {
-  "schema": "minicells.stage1-training-compatibility.v1",
-  "status": "FAIL",
-  "stage": "root_work_package",
-  "reason": "128 raw FP32 leaf records require 2361703 bytes, exceeding the canonical 1048576-byte Work boundary",
+  "schema": "minicells.stage1-training-compatibility.v2",
+  "status": "BLOCKED_FRESH_CHAIN",
+  "stage": "fresh_chain_e2e",
+  "protocol": "echo-adamw-ce-hierarchical-tree128-v2",
+  "reason": "Hierarchical leaf/group/finalizer parity and local capacity gates pass; fresh Stage-1 chain service creation, training finalization, canonical state update, and restart persistence still require an exact runnable chain environment and credentials",
   "mini_jam_commit": "b90c0bffa09fa0190fb1737db876190ddd899c22",
   "jambda_commit": "d33e0abf8116b23bbc551c6a8d7075eacb2994ce",
   "minijam_spec": "v1",
@@ -11,15 +12,23 @@
   "leaf_count": 128,
   "gates": {
     "dependency_alignment": true,
-    "clean_bootstrap": false,
+    "clean_bootstrap": true,
     "guest_build": true,
-    "native_sharded_tests": true,
-    "root_work_package_under_limit": false,
-    "pvm_parity": false,
-    "leaf_max_under_1b": false,
+    "native_hierarchical_bit_exact": true,
+    "pvm_hierarchical_bit_exact": true,
+    "leaf_work_under_1m": true,
+    "group_work_under_1m": true,
+    "finalizer_work_under_1m": true,
+    "leaf_max_under_1b": true,
+    "reducer_max_under_1b": true,
+    "finalizer_under_1b": true,
+    "hierarchical_work_packages_under_limit": true,
+    "legacy_single_root_work_package_under_limit": false,
+    "pvm_parity": true,
     "service_creation_finalized": false,
     "training_step_finalized": false,
     "canonical_state_updated": false,
-    "restart_persistence": false
+    "restart_persistence": false,
+    "fresh_chain_e2e": false
   }
 }

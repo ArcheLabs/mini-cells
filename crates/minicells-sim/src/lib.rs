@@ -159,7 +159,7 @@ mod tests {
             minicells_protocol::InferenceV1::decode(host.storage.get(key.as_slice()).unwrap())
                 .unwrap();
         let fixture: serde_json::Value =
-            serde_json::from_str(include_str!("../../../fixtures/v1/fixed-parity.json")).unwrap();
+            serde_json::from_str(include_str!("../../../tests/fixtures/v1/fixed-parity.json")).unwrap();
         assert_eq!(
             &record.output[..record.output_len as usize],
             fixture["prediction"].as_str().unwrap().as_bytes()
@@ -169,7 +169,7 @@ mod tests {
     fn golden_generation_vector_matches() {
         let (_, actual, _) = run_generation_zero();
         let expected: GenerationVector =
-            serde_json::from_str(include_str!("../../../fixtures/v1/generation-0.json")).unwrap();
+            serde_json::from_str(include_str!("../../../tests/fixtures/v1/generation-0.json")).unwrap();
         assert_eq!(actual, expected);
     }
 }

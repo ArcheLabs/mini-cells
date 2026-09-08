@@ -26,7 +26,7 @@ from minicells.pcu_kill_001.synthetic import POSITIVE_CONTROL_VERSION  # noqa: E
 
 
 BRANCH = "codex/pcu-composability-kill-001"
-TEMPLATE = ROOT / "research/protocols/pcu-kill-001/PROTOCOL_TEMPLATE.json"
+TEMPLATE = ROOT / "research/validations/pcu-kill-001/PROTOCOL_TEMPLATE.json"
 FROZEN_DIR = ROOT / "artifacts/research/pcu-kill-001/frozen"
 DEFAULT_PROTOCOL = FROZEN_DIR / "PROTOCOL.json"
 DEFAULT_HASH = FROZEN_DIR / "PROTOCOL.sha256"

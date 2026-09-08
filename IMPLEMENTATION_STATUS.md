@@ -1,4 +1,25 @@
-# MINI Cells V0.2 implementation status
+# MiniCells 0.2.0a1 implementation status
+
+## Current release target: HybridCLM toolkit
+
+The current public software target is the HybridCLM toolkit: an explicit,
+provenance-checked API for inspecting supported Granite MoE models,
+cellularizing selected expert locations, attaching/detaching reversible Cell
+mutations, scaling expression with alpha, and checking zero-state/restoration.
+Its status is **Engineering Evidence · Formal Validation Pending**.
+
+The scientific tracks remain distinct:
+
+| Track | Current status |
+|---|---|
+| HybridCLM toolkit | v0.2.0a1 prerelease; Granite backend supported |
+| PCU Hybrid Reattachment evidence | engineering evidence; locality unresolved at alpha=1 |
+| Formal HybridCLM validation | not started |
+| Historical Native CLM | preserved research record; not the current release target |
+| MiniJAM integration | Stage-1 compatibility engineering; separate from scientific claims |
+
+See [`docs/hybrid-clm/`](docs/hybrid-clm/) and
+[`research/stages/08-hybrid-clm/`](research/stages/08-hybrid-clm/).
 
 Compatibility target: JAM semantics 0.7.2; MiniJAM
 `5947c50699863948c51028bc346980481d839884`; Jambda runtime pin

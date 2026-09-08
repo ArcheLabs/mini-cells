@@ -9,8 +9,8 @@ This tree preserves MiniCells scientific evidence. It is **not** a product roadm
 1. [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) — strongest claims currently supported, explicit No-Go claims, and engineering primitives that survive the negative results.
 2. [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) — family-level record of summary-worthy experiments with value, limitation, formal status, known ceiling, what each result does **not** prove, and the engineering primitive obtained.
 3. [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md) — current scientific authority and surviving engineering value of the historical Foundations, Self-Organization, Routing/Growth and CLM-0.4-mini notebook lineages.
-4. [`stages/06-native-clm/`](stages/06-native-clm/) — trained-model Native-CLM sequence and closures.
-5. [`stages/07-safe-model-evolution/`](stages/07-safe-model-evolution/) — current real-model mutation, locality, historical-supervision, compression and future composition line.
+4. [`stages/06-native-clm/`](stages/06-native-clm/) — current trained-model Native-CLM sequence and closures.
+5. [`stages/08-hybrid-clm/`](stages/08-hybrid-clm/) — current HybridCLM engineering boundary and roadmap.
 6. [`validations/`](validations/) — frozen protocols, formal results and mechanism diagnostics.
 7. [`catalog.yaml`](catalog.yaml) — machine-oriented research catalog.
 
@@ -30,6 +30,9 @@ research/
   previews/                 # preview material
   archive/                  # retired/historical material
 ```
+
+Stage 08 is the current product-facing bridge, while the historical Native CLM
+and CLM-0.4 lines remain scientific records rather than release promises.
 
 The directory name does not determine scientific strength. A frozen registered result outranks a roadmap, README, notebook or later interpretation.
 

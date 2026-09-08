@@ -17,9 +17,25 @@ Scientific experiment history is maintained under [`research/`](../research/READ
 
 ## MiniJAM Integration
 
-- [Overview](minijam/overview.md)
+- [MiniCells ↔ MiniJAM boundary](integrations/minijam.md)
+- [MiniJAM overview](minijam/overview.md)
 - [Direct execution](minijam/direct-execution.md)
 - [Keeper](minijam/keeper.md)
+
+MiniCells owns the integration contract and Cell artifacts. Canonical MiniJAM
+protocol, RPC, deployment, and ecosystem documentation remains at
+[`docs.minijam.xyz`](https://docs.minijam.xyz/).
+
+## HybridCLM
+
+- [Overview](hybrid-clm/overview.md)
+- [Quickstart](hybrid-clm/quickstart.md)
+- [Model support](hybrid-clm/model-support.md)
+- [Cell placement](hybrid-clm/cell-placement.md)
+- [Mutation format](hybrid-clm/mutation-format.md)
+- [Alpha control](hybrid-clm/alpha-control.md)
+- [Provenance and safety](hybrid-clm/provenance-and-safety.md)
+- [Research status](hybrid-clm/research-status.md)
 
 ## Deployment
 
