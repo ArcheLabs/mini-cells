@@ -19,13 +19,26 @@
     "rank": 16,
     "gate_type": "independent_sigmoid_threshold",
     "gate_threshold": 0.8,
+    "address_scope": "prompt_anchor",
+    "write_scope": "anchor_and_later",
+    "candidate_answer_affects_routing": false,
     "competitive_normalization": false,
     "allocation_changes_production_function": false,
     "shadow_before_commit": true
   },
+  "address_safety": {
+    "minimum_train_positive_recall": 1.0,
+    "maximum_train_negative_false_positive_rate": 0.02,
+    "minimum_heldout_positive_recall": 1.0,
+    "maximum_history_anchor_false_positive_rate": 0.0,
+    "heldout_positive_used_for_address_training": false,
+    "history_anchor_used_for_address_training": false
+  },
   "lifecycle": [
     "allocate",
     "train_address",
+    "validate_heldout_address",
+    "validate_history_anchor_address",
     "freeze_address",
     "shadow_train_transform",
     "safety_check",

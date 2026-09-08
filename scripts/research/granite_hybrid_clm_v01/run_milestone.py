@@ -3,10 +3,11 @@ from __future__ import annotations
 import argparse
 import contextlib
 import json
+import math
 import os
 import random
 import sys
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -28,11 +29,13 @@ from minicells.hybrid_clm import (
 )
 
 ROOT = Path(__file__).resolve().parents[3]
+LOCAL_ROOT = Path(__file__).resolve().parent
 SEQUENCE_ROOT = ROOT / "scripts" / "research" / "jam_knowledge_mutation_001"
-CONVERSION_ROOT = ROOT / "scripts" / "research" / "clm_conversion_kill_test_001"
-for path in (SEQUENCE_ROOT, CONVERSION_ROOT, Path(__file__).resolve().parent):
-    if str(path) not in sys.path:
-        sys.path.insert(0, str(path))
+for path in (SEQUENCE_ROOT, LOCAL_ROOT):
+    value = str(path)
+    if value in sys.path:
+        sys.path.remove(value)
+    sys.path.insert(0, value)
 
 import sequence as seq  # noqa: E402
 from dataset import (  # noqa: E402
@@ -46,20 +49,13 @@ from dataset import (  # noqa: E402
     training_rows,
     update_rows,
 )
-from semantic_choice import candidate_choice_metrics  # noqa: E402
 
 MODEL_ID = "ibm-granite/granite-3.1-1b-a400m-base"
 MODEL_REVISION = "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
 PROMPT_TEMPLATE = "Question: {question}\nAnswer:"
 RESULTS_ROOT = ROOT / "results" / "granite-hybrid-clm-v0.1"
-
-PROTOCOL: dict[str, Any] = {
-    "sequence_task": {
-        "prompt_template": PROMPT_TEMPLATE,
-        "max_sequence_tokens": 96,
-    },
-    "evaluation": {"batch_size": 8},
-}
+MAX_LENGTH = 96
+EVAL_BATCH_SIZE = 8
 
 
 def _write_json(path: Path, payload: Any) -> None:
@@ -88,19 +84,32 @@ def _prompt_batch(tokenizer: Any, prompts: Sequence[str], device: str) -> dict[s
     return {name: value.to(device) for name, value in batch.items()}
 
 
-def _overlay_context(
+def _prompt_positions_from_labels(labels: torch.Tensor) -> torch.Tensor:
+    supervised = labels.ne(-100)
+    if not bool(supervised.any(dim=1).all()):
+        raise RuntimeError("every row must contain a supervised answer token")
+    first_supervised = supervised.to(dtype=torch.int64).argmax(dim=1)
+    if bool((first_supervised <= 0).any()):
+        raise RuntimeError("answer supervision starts before a prompt anchor exists")
+    return first_supervised - 1
+
+
+@contextlib.contextmanager
+def _overlay_forward(
     overlay: HybridCellOverlay | None,
+    model: Any,
+    positions: torch.Tensor,
     shadow_slots: Sequence[int] = (),
-) -> contextlib.AbstractContextManager[Any]:
+) -> Iterator[None]:
     if overlay is None:
-        return contextlib.nullcontext()
-
-    @contextlib.contextmanager
-    def combined() -> Any:
-        with overlay.shadow(shadow_slots):
-            yield
-
-    return combined()
+        yield
+        return
+    with (
+        overlay.shadow(shadow_slots),
+        overlay.prompt_scope(positions),
+        overlay.installed(model),
+    ):
+        yield
 
 
 def _last_logits(
@@ -112,11 +121,9 @@ def _last_logits(
     shadow_slots: Sequence[int] = (),
 ) -> torch.Tensor:
     batch = _prompt_batch(tokenizer, prompts, device)
-    with _overlay_context(overlay, shadow_slots):
-        cm = overlay.installed(model) if overlay is not None else contextlib.nullcontext()
-        with cm:
-            output = model(**batch, use_cache=False)
     positions = batch["attention_mask"].sum(dim=1) - 1
+    with _overlay_forward(overlay, model, positions, shadow_slots):
+        output = model(**batch, use_cache=False)
     rows = torch.arange(len(prompts), device=device)
     return output.logits[rows, positions].float()
 
@@ -130,14 +137,7 @@ def _history_kl(
     overlay: HybridCellOverlay,
     shadow_slots: Sequence[int] = (),
 ) -> float:
-    current = _last_logits(
-        model,
-        tokenizer,
-        prompts,
-        device,
-        overlay,
-        shadow_slots,
-    )
+    current = _last_logits(model, tokenizer, prompts, device, overlay, shadow_slots)
     return float(
         F.kl_div(
             F.log_softmax(current, dim=-1),
@@ -155,20 +155,82 @@ def _evaluate_rows(
     overlay: HybridCellOverlay | None,
     shadow_slots: Sequence[int] = (),
 ) -> dict[str, float]:
-    with _overlay_context(overlay, shadow_slots):
-        cm = overlay.installed(model) if overlay is not None else contextlib.nullcontext()
-        with cm:
-            return seq.evaluate_rows(
-                model,
-                tokenizer,
-                rows,
-                prompt_template=PROMPT_TEMPLATE,
-                max_length=96,
-                device=device,
-                batch_size=8,
+    total_nll = 0.0
+    total_tokens = 0
+    total_correct = 0
+    for start in range(0, len(rows), EVAL_BATCH_SIZE):
+        chunk = rows[start : start + EVAL_BATCH_SIZE]
+        batch = seq.encode_rows(
+            tokenizer,
+            chunk,
+            prompt_template=PROMPT_TEMPLATE,
+            max_length=MAX_LENGTH,
+            device=device,
+        )
+        positions = _prompt_positions_from_labels(batch["labels"])
+        with _overlay_forward(overlay, model, positions, shadow_slots):
+            output = model(
+                input_ids=batch["input_ids"],
+                attention_mask=batch["attention_mask"],
+                use_cache=False,
             )
+        loss, count, correct = seq.answer_loss_from_logits(output.logits, batch["labels"])
+        total_nll += float(loss.item()) * count
+        total_tokens += count
+        total_correct += correct
+    mean_nll = total_nll / max(total_tokens, 1)
+    return {
+        "mean_reference_nll": mean_nll,
+        "reference_answer_token_top1_accuracy": total_correct / max(total_tokens, 1),
+        "supervised_tokens": float(total_tokens),
+        "mean_sequence_logprob": -mean_nll,
+        "perplexity": math.exp(min(mean_nll, 20.0)),
+    }
 
 
+def _summarize_candidate_scores(
+    rows: Sequence[dict[str, str]],
+    score_rows: Sequence[Sequence[float]],
+) -> dict[str, Any]:
+    details: list[dict[str, Any]] = []
+    margins: list[float] = []
+    correct_nlls: list[float] = []
+    strict_correct = 0
+    candidates = list(CANDIDATE_CODES)
+    for row, scores in zip(rows, score_rows, strict=True):
+        values = [float(value) for value in scores]
+        answer = str(row["answer"])
+        correct_index = candidates.index(answer)
+        correct_nll = values[correct_index]
+        incorrect = [value for index, value in enumerate(values) if index != correct_index]
+        best_incorrect_nll = min(incorrect)
+        margin = best_incorrect_nll - correct_nll
+        predicted_index = min(range(len(values)), key=values.__getitem__)
+        passed = margin > 0.0
+        strict_correct += int(passed)
+        margins.append(margin)
+        correct_nlls.append(correct_nll)
+        details.append(
+            {
+                "row_id": str(row["id"]),
+                "reference": answer,
+                "predicted": candidates[predicted_index],
+                "strict_correct": passed,
+                "correct_candidate_nll": correct_nll,
+                "best_incorrect_candidate_nll": best_incorrect_nll,
+                "margin": margin,
+            }
+        )
+    return {
+        "strict_choice_accuracy": strict_correct / len(rows),
+        "mean_correct_candidate_nll": sum(correct_nlls) / len(correct_nlls),
+        "mean_choice_margin": sum(margins) / len(margins),
+        "minimum_choice_margin": min(margins),
+        "rows": details,
+    }
+
+
+@torch.no_grad()
 def _candidate_choice(
     model: Any,
     tokenizer: Any,
@@ -177,17 +239,48 @@ def _candidate_choice(
     overlay: HybridCellOverlay | None,
     shadow_slots: Sequence[int] = (),
 ) -> dict[str, Any]:
-    with _overlay_context(overlay, shadow_slots):
-        return candidate_choice_metrics(
-            model,
+    expanded: list[dict[str, str]] = []
+    for row in rows:
+        for candidate in CANDIDATE_CODES:
+            candidate_row = dict(row)
+            candidate_row["id"] = f"{row['id']}.candidate.{candidate}"
+            candidate_row["answer"] = candidate
+            expanded.append(candidate_row)
+
+    flat_scores: list[float] = []
+    for start in range(0, len(expanded), EVAL_BATCH_SIZE):
+        chunk = expanded[start : start + EVAL_BATCH_SIZE]
+        batch = seq.encode_rows(
             tokenizer,
-            rows,
-            CANDIDATE_CODES,
-            protocol=PROTOCOL,
+            chunk,
+            prompt_template=PROMPT_TEMPLATE,
+            max_length=MAX_LENGTH,
             device=device,
-            overlay=overlay,
-            sequence_module=seq,
+            append_eos=False,
         )
+        positions = _prompt_positions_from_labels(batch["labels"])
+        with _overlay_forward(overlay, model, positions, shadow_slots):
+            output = model(
+                input_ids=batch["input_ids"],
+                attention_mask=batch["attention_mask"],
+                use_cache=False,
+            )
+        shift_logits = output.logits[:, :-1].float().contiguous()
+        shift_labels = batch["labels"][:, 1:].contiguous()
+        mask = shift_labels.ne(-100)
+        losses = F.cross_entropy(
+            shift_logits.reshape(-1, shift_logits.shape[-1]),
+            shift_labels.reshape(-1),
+            ignore_index=-100,
+            reduction="none",
+        ).reshape(shift_labels.shape)
+        token_counts = mask.sum(dim=1).clamp_min(1)
+        per_sequence = (losses * mask).sum(dim=1) / token_counts
+        flat_scores.extend(float(value) for value in per_sequence.cpu().tolist())
+
+    width = len(CANDIDATE_CODES)
+    score_rows = [flat_scores[start : start + width] for start in range(0, len(flat_scores), width)]
+    return _summarize_candidate_scores(rows, score_rows)
 
 
 def _extract_read_features(
@@ -220,12 +313,25 @@ def _extract_read_features(
     return captured[0][rows, positions].float()
 
 
+def _probability_metrics(
+    overlay: HybridCellOverlay,
+    slot: int,
+    features: torch.Tensor,
+) -> tuple[float, float, float]:
+    with torch.no_grad():
+        probabilities = overlay.address_probability_for_features(features, slot)
+    active_rate = float((probabilities >= overlay.gate_threshold).float().mean().item())
+    return active_rate, float(probabilities.min().item()), float(probabilities.max().item())
+
+
 def _train_address(
     overlay: HybridCellOverlay,
     slot: int,
     positive: torch.Tensor,
     negative: torch.Tensor,
     *,
+    heldout_positive: torch.Tensor,
+    history_negative: torch.Tensor,
     steps: int,
     learning_rate: float,
 ) -> dict[str, float | bool]:
@@ -245,18 +351,26 @@ def _train_address(
         mask_address_gradients_(overlay, slot)
         optimizer.step()
 
-    with torch.no_grad():
-        positive_prob = overlay.address_probability_for_features(positive, slot)
-        negative_prob = overlay.address_probability_for_features(negative, slot)
-    threshold = overlay.gate_threshold
-    positive_recall = float((positive_prob >= threshold).float().mean().item())
-    negative_false_positive = float((negative_prob >= threshold).float().mean().item())
+    positive_recall, minimum_positive, _ = _probability_metrics(overlay, slot, positive)
+    negative_fpr, _, maximum_negative = _probability_metrics(overlay, slot, negative)
+    heldout_recall, heldout_minimum, _ = _probability_metrics(overlay, slot, heldout_positive)
+    history_fpr, _, history_maximum = _probability_metrics(overlay, slot, history_negative)
+    passed = (
+        positive_recall == 1.0
+        and negative_fpr <= 0.02
+        and heldout_recall == 1.0
+        and history_fpr == 0.0
+    )
     return {
         "positive_recall": positive_recall,
-        "negative_false_positive_rate": negative_false_positive,
-        "minimum_positive_probability": float(positive_prob.min().item()),
-        "maximum_negative_probability": float(negative_prob.max().item()),
-        "passed": positive_recall == 1.0 and negative_false_positive <= 0.02,
+        "negative_false_positive_rate": negative_fpr,
+        "minimum_positive_probability": minimum_positive,
+        "maximum_negative_probability": maximum_negative,
+        "heldout_positive_recall": heldout_recall,
+        "heldout_minimum_positive_probability": heldout_minimum,
+        "history_false_positive_rate": history_fpr,
+        "history_maximum_probability": history_maximum,
+        "passed": passed,
     }
 
 
@@ -272,16 +386,16 @@ def _answer_loss(
         tokenizer,
         rows,
         prompt_template=PROMPT_TEMPLATE,
-        max_length=96,
+        max_length=MAX_LENGTH,
         device=device,
     )
-    with overlay.shadow([slot]):
-        with overlay.installed(model):
-            output = model(
-                input_ids=batch["input_ids"],
-                attention_mask=batch["attention_mask"],
-                use_cache=False,
-            )
+    positions = _prompt_positions_from_labels(batch["labels"])
+    with _overlay_forward(overlay, model, positions, [slot]):
+        output = model(
+            input_ids=batch["input_ids"],
+            attention_mask=batch["attention_mask"],
+            use_cache=False,
+        )
     loss, _count, _correct = seq.answer_loss_from_logits(output.logits, batch["labels"])
     return loss
 
@@ -410,8 +524,20 @@ def _history_questions(committed_facts: Sequence[DemoFact]) -> list[str]:
     return [PROMPT_TEMPLATE.format(question=value) for value in prompts]
 
 
-def _manifest_payload(manifest: HybridManifest) -> dict[str, Any]:
-    return manifest.as_dict()
+def _features_for_questions(
+    model: Any,
+    tokenizer: Any,
+    questions: Sequence[str],
+    overlay: HybridCellOverlay,
+    device: str,
+) -> torch.Tensor:
+    return _extract_read_features(
+        model,
+        tokenizer,
+        [PROMPT_TEMPLATE.format(question=value) for value in questions],
+        read_layer_index=overlay.read_layer_index,
+        device=device,
+    )
 
 
 def _train_one_fact(
@@ -437,25 +563,15 @@ def _train_one_fact(
         all_facts,
         count=min(49, len(all_facts) - 1),
     )
-    positive_features = _extract_read_features(
-        model,
-        tokenizer,
-        [PROMPT_TEMPLATE.format(question=value) for value in positives],
-        read_layer_index=overlay.read_layer_index,
-        device=device,
-    )
-    negative_features = _extract_read_features(
-        model,
-        tokenizer,
-        [PROMPT_TEMPLATE.format(question=value) for value in negatives],
-        read_layer_index=overlay.read_layer_index,
-        device=device,
-    )
+    heldout = [row["question"] for row in evaluation_rows(fact)]
+    history = list(general_history_prompts())
     address = _train_address(
         overlay,
         slot,
-        positive_features,
-        negative_features,
+        _features_for_questions(model, tokenizer, positives, overlay, device),
+        _features_for_questions(model, tokenizer, negatives, overlay, device),
+        heldout_positive=_features_for_questions(model, tokenizer, heldout, overlay, device),
+        history_negative=_features_for_questions(model, tokenizer, history, overlay, device),
         steps=address_steps,
         learning_rate=0.08,
     )
@@ -469,13 +585,7 @@ def _train_one_fact(
     overlay.freeze_address_(slot)
 
     history_prompts = _history_questions(committed_facts)
-    history_teacher = _last_logits(
-        model,
-        tokenizer,
-        history_prompts,
-        device,
-        overlay,
-    ).detach().cpu()
+    history_teacher = _last_logits(model, tokenizer, history_prompts, device, overlay).detach().cpu()
     transform = _train_transform(
         model=model,
         tokenizer=tokenizer,
@@ -507,14 +617,7 @@ def _train_one_fact(
     save_cell_artifact(output_dir / "cells" / f"{cell_id}.pt", artifact)
     manifest = manifest.add(artifact)
     committed_facts.append(fact)
-
-    production_choice = _candidate_choice(
-        model,
-        tokenizer,
-        evaluation_rows(fact),
-        device,
-        overlay,
-    )
+    production_choice = _candidate_choice(model, tokenizer, evaluation_rows(fact), device, overlay)
     return manifest, {
         "cell_id": cell_id,
         "slot": slot,
@@ -540,27 +643,21 @@ def _contextual_child_demo(
     new_value = CANDIDATE_CODES[(CANDIDATE_CODES.index(parent_fact.value) + 3) % len(CANDIDATE_CODES)]
     rows = update_rows(parent_fact, new_value, "v2")
     child = overlay.allocate_cell(parent_slot=parent_slot)
-    positives = [item["question"] for item in rows["train"] + rows["evaluation"]]
-    negatives = [item["question"] for item in evaluation_rows(parent_fact)]
-    positive_features = _extract_read_features(
-        model,
-        tokenizer,
-        [PROMPT_TEMPLATE.format(question=value) for value in positives],
-        read_layer_index=overlay.read_layer_index,
-        device=device,
-    )
-    negative_features = _extract_read_features(
-        model,
-        tokenizer,
-        [PROMPT_TEMPLATE.format(question=value) for value in negatives],
-        read_layer_index=overlay.read_layer_index,
-        device=device,
-    )
+    train_positive = [item["question"] for item in rows["train"]]
+    train_negative = [item["question"] for item in evaluation_rows(parent_fact)]
+    heldout_positive = [item["question"] for item in rows["evaluation"]]
+    history_negative = [*general_history_prompts(), *train_negative]
     address = _train_address(
         overlay,
         child,
-        positive_features,
-        negative_features,
+        _features_for_questions(model, tokenizer, train_positive, overlay, device),
+        _features_for_questions(model, tokenizer, train_negative, overlay, device),
+        heldout_positive=_features_for_questions(
+            model, tokenizer, heldout_positive, overlay, device
+        ),
+        history_negative=_features_for_questions(
+            model, tokenizer, history_negative, overlay, device
+        ),
         steps=240,
         learning_rate=0.08,
     )
@@ -568,10 +665,7 @@ def _contextual_child_demo(
         return manifest, {"status": "ADDRESS_FAIL", "address": address}
     overlay.freeze_address_(child)
 
-    history_prompts = [
-        PROMPT_TEMPLATE.format(question=item["question"])
-        for item in evaluation_rows(parent_fact)
-    ]
+    history_prompts = [PROMPT_TEMPLATE.format(question=value) for value in train_negative]
     teacher = _last_logits(model, tokenizer, history_prompts, device, overlay).detach().cpu()
     transform = _train_transform(
         model=model,
@@ -601,28 +695,10 @@ def _contextual_child_demo(
     )
     save_cell_artifact(output_dir / "cells" / f"{artifact.cell_id}.pt", artifact)
     manifest = manifest.add(artifact)
-    old_choice = _candidate_choice(
-        model,
-        tokenizer,
-        evaluation_rows(parent_fact),
-        device,
-        overlay,
-    )
-    new_choice = _candidate_choice(
-        model,
-        tokenizer,
-        rows["evaluation"],
-        device,
-        overlay,
-    )
+    old_choice = _candidate_choice(model, tokenizer, evaluation_rows(parent_fact), device, overlay)
+    new_choice = _candidate_choice(model, tokenizer, rows["evaluation"], device, overlay)
     overlay.uncommit_cell_(child)
-    rollback_choice = _candidate_choice(
-        model,
-        tokenizer,
-        evaluation_rows(parent_fact),
-        device,
-        overlay,
-    )
+    rollback_choice = _candidate_choice(model, tokenizer, evaluation_rows(parent_fact), device, overlay)
     overlay.commit_cell_(child)
     return manifest, {
         "status": "COMMITTED",
@@ -652,7 +728,10 @@ def run(
     import transformers
 
     transformers.logging.set_verbosity_error()
-    tokenizer = transformers.AutoTokenizer.from_pretrained(MODEL_ID, revision=MODEL_REVISION)
+    hub_token = os.environ.get("HF_TOKEN") or None
+    tokenizer = transformers.AutoTokenizer.from_pretrained(
+        MODEL_ID, revision=MODEL_REVISION, token=hub_token
+    )
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
     dtype = torch.float16 if device.startswith("cuda") else torch.float32
@@ -660,6 +739,7 @@ def run(
         MODEL_ID,
         revision=MODEL_REVISION,
         dtype=dtype,
+        token=hub_token,
     ).to(device)
     freeze_foundation_(model)
 
@@ -674,7 +754,9 @@ def run(
         seed=seed,
     ).to(device=device, dtype=torch.float32)
 
-    baseline_prompts = [PROMPT_TEMPLATE.format(question=value) for value in general_history_prompts()[:4]]
+    baseline_prompts = [
+        PROMPT_TEMPLATE.format(question=value) for value in general_history_prompts()[:4]
+    ]
     base_logits = _last_logits(model, tokenizer, baseline_prompts, device)
     converted_logits = _last_logits(model, tokenizer, baseline_prompts, device, overlay)
     compatibility_delta = float((base_logits - converted_logits).abs().max().item())
@@ -705,7 +787,16 @@ def run(
         cell_results.append(result)
         if result["status"] == "COMMITTED":
             cell_slots[result["cell_id"]] = int(result["slot"])
-        _write_json(output_dir / "progress.json", {"cells": cell_results, "manifest": manifest.as_dict()})
+        address = result.get("address", {})
+        _progress(
+            f"{result.get('cell_id', fact.concept_id)} -> {result['status']} "
+            f"heldout={address.get('heldout_positive_recall')} "
+            f"history_fpr={address.get('history_false_positive_rate')}"
+        )
+        _write_json(
+            output_dir / "progress.json",
+            {"cells": cell_results, "manifest": manifest.as_dict()},
+        )
 
     retained_rows = [row for fact in committed_facts for row in evaluation_rows(fact)]
     retention_choice = (
@@ -715,7 +806,7 @@ def run(
     )
 
     child_result: dict[str, Any] = {"status": "SKIPPED"}
-    if len(committed_facts) >= 1:
+    if committed_facts:
         parent = committed_facts[0]
         parent_slot = cell_slots[f"fact-{parent.index:03d}"]
         manifest, child_result = _contextual_child_demo(
@@ -730,27 +821,38 @@ def run(
         )
 
     committed = sum(result["status"] == "COMMITTED" for result in cell_results)
-    status = "GRANITE_HYBRID_CLM_V01_SUPPORTED" if (
-        compatibility_delta == 0.0
+    status = (
+        "GRANITE_HYBRID_CLM_V01_SUPPORTED"
+        if compatibility_delta == 0.0
         and committed == fact_count
         and float(retention_choice["strict_choice_accuracy"]) >= 0.98
         and child_result.get("status") == "COMMITTED"
         and float(child_result.get("new_choice_accuracy", 0.0)) == 1.0
         and float(child_result.get("rollback_old_choice_accuracy", 0.0)) == 1.0
-    ) else "GRANITE_HYBRID_CLM_V01_NOT_YET_SUPPORTED"
+        else "GRANITE_HYBRID_CLM_V01_NOT_YET_SUPPORTED"
+    )
 
     result = {
         "experiment": "GRANITE_HYBRID_CLM_V0_1",
         "status": status,
         "seed": seed,
-        "foundation": {"model_id": MODEL_ID, "revision": MODEL_REVISION, "trainable": False},
+        "foundation": {
+            "model_id": MODEL_ID,
+            "revision": MODEL_REVISION,
+            "trainable": False,
+        },
+        "routing": {
+            "mode": "prompt_anchor",
+            "write_scope": "anchor_and_later",
+            "candidate_answer_affects_routing": False,
+        },
         "compatibility_max_abs_logit_delta": compatibility_delta,
         "requested_facts": fact_count,
         "committed_facts": committed,
         "retention_choice_accuracy": float(retention_choice["strict_choice_accuracy"]),
         "cells": cell_results,
         "contextual_child": child_result,
-        "manifest": _manifest_payload(manifest),
+        "manifest": manifest.as_dict(),
     }
     _write_json(output_dir / "result.json", result)
     _write_json(output_dir / "manifest.json", manifest.as_dict())
@@ -774,7 +876,15 @@ def main() -> None:
         transform_steps=args.transform_steps,
         output_dir=args.output_dir,
     )
-    print(json.dumps({key: result[key] for key in ("status", "committed_facts", "retention_choice_accuracy")}, indent=2))
+    print(
+        json.dumps(
+            {
+                key: result[key]
+                for key in ("status", "committed_facts", "retention_choice_accuracy")
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

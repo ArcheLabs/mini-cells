@@ -17,24 +17,18 @@ os.environ.setdefault("TRANSFORMERS_NO_ADVISORY_WARNINGS", "1")
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 ROOT = Path(__file__).resolve().parents[3]
-SEQUENCE_ROOT = ROOT / "scripts" / "research" / "jam_knowledge_mutation_001"
-CONVERSION_ROOT = ROOT / "scripts" / "research" / "clm_conversion_kill_test_001"
 LOCAL_ROOT = Path(__file__).resolve().parent
-for path in (SEQUENCE_ROOT, CONVERSION_ROOT, LOCAL_ROOT):
-    if str(path) not in sys.path:
-        sys.path.insert(0, str(path))
+value = str(LOCAL_ROOT)
+if value in sys.path:
+    sys.path.remove(value)
+sys.path.insert(0, value)
 
-import sequence as seq
-from dataset import CANDIDATE_CODES, demo_facts, evaluation_rows, update_rows
-from semantic_choice import candidate_choice_metrics
-
-MODEL_ID = "ibm-granite/granite-3.1-1b-a400m-base"
-MODEL_REVISION = "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
-PROMPT_TEMPLATE = "Question: {question}\nAnswer:"
-PROTOCOL: dict[str, Any] = {
-    "sequence_task": {"prompt_template": PROMPT_TEMPLATE, "max_sequence_tokens": 96},
-    "evaluation": {"batch_size": 8},
-}
+from dataset import CANDIDATE_CODES, demo_facts, evaluation_rows, update_rows  # noqa: E402
+from run_milestone import (  # noqa: E402
+    MODEL_ID,
+    MODEL_REVISION,
+    _candidate_choice,
+)
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -45,35 +39,30 @@ def _write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def _candidate_choice(
-    model: Any,
-    tokenizer: Any,
-    rows: list[dict[str, str]],
-    device: str,
-    overlay: HybridCellOverlay,
-) -> dict[str, Any]:
-    return candidate_choice_metrics(
-        model,
-        tokenizer,
-        rows,
-        CANDIDATE_CODES,
-        protocol=PROTOCOL,
-        device=device,
-        overlay=overlay,
-        sequence_module=seq,
-    )
-
-
 def run(*, result_dir: Path, device: str) -> dict[str, Any]:
     result = _load_json(result_dir / "result.json")
     manifest = _load_json(result_dir / "manifest.json")
-    if manifest["foundation_model_id"] != MODEL_ID or manifest["foundation_revision"] != MODEL_REVISION:
+    if (
+        manifest["foundation_model_id"] != MODEL_ID
+        or manifest["foundation_revision"] != MODEL_REVISION
+    ):
         raise RuntimeError("manifest foundation identity mismatch")
+    if result.get("routing", {}).get("mode") != "prompt_anchor":
+        raise RuntimeError("result was not produced with prompt-scoped routing")
+
+    fact_count = int(result["committed_facts"])
+    if fact_count <= 0:
+        raise RuntimeError("reload verification requires at least one committed fact")
 
     import transformers
 
     transformers.logging.set_verbosity_error()
-    tokenizer = transformers.AutoTokenizer.from_pretrained(MODEL_ID, revision=MODEL_REVISION)
+    hub_token = os.environ.get("HF_TOKEN") or None
+    tokenizer = transformers.AutoTokenizer.from_pretrained(
+        MODEL_ID,
+        revision=MODEL_REVISION,
+        token=hub_token,
+    )
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
     dtype = torch.float16 if device.startswith("cuda") else torch.float32
@@ -81,6 +70,7 @@ def run(*, result_dir: Path, device: str) -> dict[str, Any]:
         MODEL_ID,
         revision=MODEL_REVISION,
         dtype=dtype,
+        token=hub_token,
     ).to(device)
     freeze_foundation_(model)
 
@@ -107,7 +97,6 @@ def run(*, result_dir: Path, device: str) -> dict[str, Any]:
         if artifact.parent_id is not None:
             child_artifact = artifact
 
-    fact_count = int(result["committed_facts"])
     facts = demo_facts(fact_count)
     retained_rows = [row for fact in facts for row in evaluation_rows(fact)]
     retention = _candidate_choice(model, tokenizer, retained_rows, device, overlay)
@@ -117,20 +106,37 @@ def run(*, result_dir: Path, device: str) -> dict[str, Any]:
     if child_artifact is not None:
         parent_index = int(child_artifact.parent_id.split("-")[-1])
         parent = next(fact for fact in facts if fact.index == parent_index)
-        new_value = CANDIDATE_CODES[(CANDIDATE_CODES.index(parent.value) + 3) % len(CANDIDATE_CODES)]
+        new_value = CANDIDATE_CODES[
+            (CANDIDATE_CODES.index(parent.value) + 3) % len(CANDIDATE_CODES)
+        ]
         new_rows = update_rows(parent, new_value, "v2")["evaluation"]
         child_old_accuracy = float(
-            _candidate_choice(model, tokenizer, evaluation_rows(parent), device, overlay)[
-                "strict_choice_accuracy"
-            ]
+            _candidate_choice(
+                model,
+                tokenizer,
+                evaluation_rows(parent),
+                device,
+                overlay,
+            )["strict_choice_accuracy"]
         )
         child_new_accuracy = float(
-            _candidate_choice(model, tokenizer, new_rows, device, overlay)["strict_choice_accuracy"]
+            _candidate_choice(model, tokenizer, new_rows, device, overlay)[
+                "strict_choice_accuracy"
+            ]
         )
 
     report = {
         "experiment": "GRANITE_HYBRID_CLM_V0_1_RELOAD",
-        "foundation": {"model_id": MODEL_ID, "revision": MODEL_REVISION, "trainable": False},
+        "foundation": {
+            "model_id": MODEL_ID,
+            "revision": MODEL_REVISION,
+            "trainable": False,
+        },
+        "routing": {
+            "mode": "prompt_anchor",
+            "write_scope": "anchor_and_later",
+            "candidate_answer_affects_routing": False,
+        },
         "loaded_cells": loaded,
         "loaded_cell_count": len(loaded),
         "retention_choice_accuracy": float(retention["strict_choice_accuracy"]),
@@ -140,7 +146,10 @@ def run(*, result_dir: Path, device: str) -> dict[str, Any]:
     report["status"] = (
         "GRANITE_HYBRID_CLM_V01_RELOAD_VERIFIED"
         if report["retention_choice_accuracy"] >= 0.98
-        and (child_artifact is None or (child_old_accuracy == 1.0 and child_new_accuracy == 1.0))
+        and (
+            child_artifact is None
+            or (child_old_accuracy == 1.0 and child_new_accuracy == 1.0)
+        )
         else "GRANITE_HYBRID_CLM_V01_RELOAD_FAILED"
     )
     _write_json(result_dir / "reload_verification.json", report)
@@ -148,8 +157,14 @@ def run(*, result_dir: Path, device: str) -> dict[str, Any]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Verify a fresh reload of Granite Hybrid CLM v0.1")
-    parser.add_argument("--result-dir", type=Path, default=ROOT / "results" / "granite-hybrid-clm-v0.1")
+    parser = argparse.ArgumentParser(
+        description="Verify a fresh reload of Granite Hybrid CLM v0.1"
+    )
+    parser.add_argument(
+        "--result-dir",
+        type=Path,
+        default=ROOT / "results" / "granite-hybrid-clm-v0.1",
+    )
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
     report = run(result_dir=args.result_dir, device=args.device)

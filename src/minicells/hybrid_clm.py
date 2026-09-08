@@ -111,12 +111,11 @@ def _clone_tensor_dict(state: dict[str, torch.Tensor]) -> dict[str, torch.Tensor
 class HybridCellOverlay(nn.Module):
     """A non-competitive, commit-gated CLM evolution layer over a frozen model.
 
-    Cells are allocated explicitly. Their address gates are independent sigmoid
-    predicates rather than a normalized competition. Allocation never changes
-    production behavior because only committed cells contribute. A newly
-    allocated cell can be exercised under ``shadow`` while remaining invisible
-    to production. The read site precedes all write sites, so committed cells do
-    not perturb the representation used by later address predicates.
+    Address predicates are evaluated once from an explicit prompt-anchor hidden
+    state. The resulting applicability decision is then held fixed for the
+    sequence and can affect only the anchor position and positions after it.
+    This prevents answer/candidate tokens from changing routing and makes the
+    runtime semantics match prompt-level address training.
     """
 
     def __init__(
@@ -165,9 +164,7 @@ class HybridCellOverlay(nn.Module):
         self.gate_weight = nn.Parameter(gate_weight)
         self.gate_bias = nn.Parameter(torch.full((max_cells,), -4.0))
         self.down = nn.Parameter(down)
-        self.up = nn.Parameter(
-            torch.zeros(len(writes), max_cells, rank, hidden_size)
-        )
+        self.up = nn.Parameter(torch.zeros(len(writes), max_cells, rank, hidden_size))
 
         self.register_buffer("allocated_mask", torch.zeros(max_cells, dtype=torch.bool))
         self.register_buffer("committed_mask", torch.zeros(max_cells, dtype=torch.bool))
@@ -177,6 +174,7 @@ class HybridCellOverlay(nn.Module):
         self._cached_probabilities: torch.Tensor | None = None
         self._cached_active: torch.Tensor | None = None
         self._shadow_mask = torch.zeros(max_cells, dtype=torch.bool)
+        self._prompt_positions: torch.Tensor | None = None
         self._installed_handles: list[Any] = []
 
     def next_free_slot(self) -> int:
@@ -257,12 +255,31 @@ class HybridCellOverlay(nn.Module):
         committed = self.committed_mask.to(device=device)
         return committed | shadow
 
+    def _validated_prompt_positions(self, hidden: torch.Tensor) -> torch.Tensor:
+        if self._prompt_positions is None:
+            raise HybridCLMError("prompt_scope(anchor_positions) is required for overlay execution")
+        positions = self._prompt_positions.to(device=hidden.device, dtype=torch.long)
+        if positions.ndim != 1 or positions.numel() != hidden.shape[0]:
+            raise HybridCLMError("prompt anchor positions do not match batch size")
+        if bool((positions < 0).any()) or bool((positions >= hidden.shape[1]).any()):
+            raise HybridCLMError("prompt anchor position is outside sequence bounds")
+        return positions
+
     def _read(self, hidden: torch.Tensor) -> None:
-        probabilities = self.address_probabilities(hidden)
-        hard = probabilities >= self.gate_threshold
-        runtime = self._runtime_mask(hidden.device).view(1, 1, -1)
-        self._cached_probabilities = probabilities
-        self._cached_active = hard & runtime
+        positions = self._validated_prompt_positions(hidden)
+        rows = torch.arange(hidden.shape[0], device=hidden.device)
+        anchor_hidden = hidden[rows, positions]
+        anchor_probabilities = self.address_probabilities(anchor_hidden)
+        anchor_active = anchor_probabilities >= self.gate_threshold
+        runtime = self._runtime_mask(hidden.device).view(1, -1)
+        anchor_active = anchor_active & runtime
+
+        sequence_positions = torch.arange(hidden.shape[1], device=hidden.device)
+        at_or_after_anchor = sequence_positions.view(1, -1, 1) >= positions.view(-1, 1, 1)
+        self._cached_probabilities = anchor_probabilities[:, None, :].expand(
+            -1, hidden.shape[1], -1
+        )
+        self._cached_active = anchor_active[:, None, :] & at_or_after_anchor
 
     def _transform(self, hidden: torch.Tensor, site: int) -> torch.Tensor:
         if self._cached_active is None or self._cached_probabilities is None:
@@ -279,6 +296,7 @@ class HybridCellOverlay(nn.Module):
     def prompt_gates(self, positions: torch.Tensor) -> HybridGateTrace:
         if self._cached_probabilities is None or self._cached_active is None:
             raise HybridCLMError("no Hybrid CLM gate trace is available")
+        positions = positions.to(device=self._cached_probabilities.device, dtype=torch.long)
         if positions.ndim != 1 or positions.numel() != self._cached_probabilities.shape[0]:
             raise HybridCLMError("prompt positions do not match gate batch")
         rows = torch.arange(positions.numel(), device=positions.device)
@@ -286,6 +304,18 @@ class HybridCellOverlay(nn.Module):
             probabilities=self._cached_probabilities[rows, positions],
             active=self._cached_active[rows, positions],
         )
+
+    @contextlib.contextmanager
+    def prompt_scope(self, anchor_positions: torch.Tensor) -> Iterator[HybridCellOverlay]:
+        if anchor_positions.ndim != 1:
+            raise HybridCLMError("prompt anchor positions must be one-dimensional")
+        previous = self._prompt_positions
+        self._prompt_positions = anchor_positions.detach().clone()
+        try:
+            yield self
+        finally:
+            self._prompt_positions = previous
+            self.clear_forward_cache()
 
     @contextlib.contextmanager
     def shadow(self, slots: Sequence[int]) -> Iterator[HybridCellOverlay]:
@@ -343,12 +373,8 @@ class HybridCellOverlay(nn.Module):
         self.gate_bias[slot].copy_(
             artifact.state["gate_bias"].to(device=device, dtype=self.gate_bias.dtype).reshape(())
         )
-        self.down[:, slot].copy_(
-            artifact.state["down"].to(device=device, dtype=self.down.dtype)
-        )
-        self.up[:, slot].copy_(
-            artifact.state["up"].to(device=device, dtype=self.up.dtype)
-        )
+        self.down[:, slot].copy_(artifact.state["down"].to(device=device, dtype=self.down.dtype))
+        self.up[:, slot].copy_(artifact.state["up"].to(device=device, dtype=self.up.dtype))
         self.address_frozen_mask[slot] = bool(artifact.address_frozen)
         if commit:
             self.commit_cell_(slot)
