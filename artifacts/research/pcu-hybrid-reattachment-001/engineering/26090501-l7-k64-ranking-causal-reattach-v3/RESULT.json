@@ -1,0 +1,58 @@
+{
+  "alpha_grid": [
+    0.0,
+    0.125,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "dual_gpu_execution": {
+    "cuda:0": "primary_causal_reattachment",
+    "cuda:1": "amplitude_sweep"
+  },
+  "experiment": "PCU-HYBRID-REATTACHMENT-001",
+  "formal_execution_not_started": true,
+  "phase": "engineering_diagnostic",
+  "primary_causal_effect": {
+    "B_control_answer_nll_increase": 0.3189873118037063,
+    "answer_margin_gain": 3.1839119061085976,
+    "answer_nll_gain": 3.4671419583834133,
+    "direct_gain": 0.0,
+    "direct_off": 0.0,
+    "direct_on": 0.0,
+    "ranking_gain": 0.7578125,
+    "ranking_off": 0.0625,
+    "ranking_on": 0.8203125
+  },
+  "primary_equivalence": {
+    "gate_definition": "PARENT_ZERO_DELTA_vs_CELL_OFF_same_cellular_graph",
+    "native_G0_is_diagnostic_only": true,
+    "native_G0_max_abs": 3.5762786865234375e-05,
+    "same_graph_max_abs": 0.0,
+    "same_graph_passes": true,
+    "threshold_unchanged_from_v2": 1e-05
+  },
+  "primary_status": "CAUSAL_HYBRID_CONSUMPTION_SUPPORTED_LOCALITY_FAILED",
+  "protocol_version": 3,
+  "schema": "minicells.pcu-hybrid-reattachment-001.result.v3",
+  "scientific_evidence": false,
+  "selected_locality_compatible_point": null,
+  "source": {
+    "generated_artifact_status_porcelain": "",
+    "source_commit": "1e6c5bb276c8e0ba5b60c77920d27ec6078d2b73",
+    "source_dirty": false,
+    "source_ref": "codex/pcu-hybrid-reattachment-001",
+    "source_tree": "931591746215e3cd9c69d726fbbb37953ace809c",
+    "status_porcelain": ""
+  },
+  "status": "HYBRID_CAUSAL_CONSUMPTION_SUPPORTED_LOCALITY_UNRESOLVED",
+  "sweep_status": "AMPLITUDE_SWEEP_NO_LOCALITY_COMPATIBLE_POINT",
+  "valid_run": true,
+  "visualizations": [
+    "equivalence_diffs.png",
+    "causal_ranking_on_off.png",
+    "alpha_sweep_tradeoff.png",
+    "association_locality_pareto.png"
+  ]
+}

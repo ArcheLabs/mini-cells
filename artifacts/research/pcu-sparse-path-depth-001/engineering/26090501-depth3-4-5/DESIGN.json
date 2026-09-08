@@ -1,0 +1,64 @@
+{
+  "causal_question": "does_distributing_fixed_transport_readout_budget_across_more_nested_layers_improve_native_generation",
+  "changed": {
+    "nested_topologies": {
+      "3": [
+        7,
+        15,
+        23
+      ],
+      "4": [
+        7,
+        11,
+        15,
+        23
+      ],
+      "5": [
+        7,
+        11,
+        15,
+        19,
+        23
+      ]
+    },
+    "path_depths": [
+      3,
+      4,
+      5
+    ],
+    "transport_budget_split_evenly_across_transport_layers": true
+  },
+  "execution": {
+    "process_isolation": true,
+    "requires_two_gpus": true,
+    "wave1": {
+      "depth3": "cuda:0",
+      "depth4": "cuda:1"
+    },
+    "wave2": {
+      "depth5": "cuda:0"
+    },
+    "worker_evidence_generated_outside_repo_then_aggregated": true
+  },
+  "experiment": "PCU-SPARSE-PATH-DEPTH-001",
+  "fixed": {
+    "allocation": "first64_A_train_answer_CE_gradient_under_preceding_frozen_path",
+    "association_state": "exact_published_L7_K64_hybrid_replay_then_frozen",
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "objective_for_added_layers": "answer-token-causal-cross-entropy",
+    "optimizer": "AdamW",
+    "readout_k": 16,
+    "readout_layer": 23,
+    "readout_steps": 128,
+    "total_added_k_each": 32,
+    "total_added_steps_each": 256,
+    "transport_k_total": 16,
+    "transport_steps_total": 128
+  },
+  "formal_execution_not_started": true,
+  "phase": "engineering_diagnostic",
+  "schema": "minicells.pcu-sparse-path-depth-001.design.v1",
+  "scientific_evidence": false,
+  "seed": 26090501
+}

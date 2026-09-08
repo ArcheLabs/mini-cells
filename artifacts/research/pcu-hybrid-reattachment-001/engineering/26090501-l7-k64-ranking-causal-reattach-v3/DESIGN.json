@@ -1,0 +1,56 @@
+{
+  "amplitude_sweep_arm": {
+    "additional_training_after_exact_replay": false,
+    "alpha_grid": [
+      0.0,
+      0.125,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "gpu": "cuda:1",
+    "selection_rule": "highest_A_ranking_then_lowest_B_harm_then_lowest_alpha_among_joint_passes"
+  },
+  "causal_question": "can_frozen_Granite_consume_an_already_learned_PCU_mutation",
+  "dual_gpu_execution": {
+    "cuda:0": "primary_causal_reattachment",
+    "cuda:1": "amplitude_sweep",
+    "process_isolation": true,
+    "required": true
+  },
+  "experiment": "PCU-HYBRID-REATTACHMENT-001",
+  "formal_execution_not_started": true,
+  "phase": "engineering_diagnostic",
+  "primary_arm": {
+    "cell_alone_takeover_required": false,
+    "gpu": "cuda:0",
+    "new_bridge": false,
+    "new_router": false,
+    "source_mutation": "PCU-OBJECTIVE-ALIGNMENT-001/ranking-only/L7/K64",
+    "states": [
+      "BASE",
+      "PARENT_ZERO_DELTA",
+      "CELL_ON",
+      "CELL_OFF",
+      "CELL_RESTORED"
+    ]
+  },
+  "protocol_amendment": {
+    "native_G0_comparison": "retained_as_non_gating_numerical_diagnostic",
+    "reason": "v2_zero_state_gate_compared_native_fused_vs_cellularized_reduction_graphs",
+    "strict_zero_state_gate": "PARENT_ZERO_DELTA_vs_CELL_OFF_same_cellular_graph",
+    "thresholds_changed": false,
+    "triggered_by_first_engineering_source_commit": "cadaf6c397000c55deb35db67a3b266003cb3004"
+  },
+  "protocol_version": 3,
+  "schema": "minicells.pcu-hybrid-reattachment-001.design.v3",
+  "scientific_evidence": false,
+  "thresholds": {
+    "association_floor": 0.8,
+    "maximum_B_control_answer_nll_increase": 0.1,
+    "minimum_causal_ranking_gain": 0.5,
+    "restoration_max_abs_logit_diff": 1e-05,
+    "same_graph_equivalence_max_abs_logit_diff": 1e-05
+  }
+}

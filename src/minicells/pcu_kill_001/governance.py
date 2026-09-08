@@ -52,15 +52,45 @@ def _is_ancestor(root: Path, ancestor: str, descendant: str = "HEAD") -> bool:
         return False
 
 
+def _status_path(line: str) -> str:
+    """Extract the path portion from one porcelain-v1 status line."""
+    value = line[3:] if len(line) >= 3 else line
+    if " -> " in value:
+        value = value.split(" -> ", 1)[1]
+    return value.strip().strip('"')
+
+
+def _split_source_and_generated_status(status: str | None) -> tuple[str, str]:
+    """Do not let generated research evidence make the source tree dirty.
+
+    Provenance is intended to answer whether the code/protocol source changed.
+    Files under ``artifacts/research/`` are run outputs, not source. We retain
+    their porcelain rows separately so the distinction remains auditable.
+    """
+    source_rows: list[str] = []
+    generated_rows: list[str] = []
+    for line in (status or "").splitlines():
+        if not line:
+            continue
+        path = _status_path(line)
+        if path == "artifacts/research" or path.startswith("artifacts/research/"):
+            generated_rows.append(line)
+        else:
+            source_rows.append(line)
+    return "\n".join(source_rows), "\n".join(generated_rows)
+
+
 def git_provenance(root: Path) -> dict[str, Any]:
-    status = _git(root, "status", "--porcelain=v1")
+    raw_status = _git(root, "status", "--porcelain=v1")
+    source_status, generated_status = _split_source_and_generated_status(raw_status)
     return {
         "source_ref": _git(root, "symbolic-ref", "--short", "-q", "HEAD")
         or _git(root, "rev-parse", "--short", "HEAD"),
         "source_commit": _git(root, "rev-parse", "HEAD"),
         "source_tree": _git(root, "rev-parse", "HEAD^{tree}"),
-        "source_dirty": bool(status),
-        "status_porcelain": status or "",
+        "source_dirty": bool(source_status),
+        "status_porcelain": source_status,
+        "generated_artifact_status_porcelain": generated_status,
     }
 
 
@@ -221,8 +251,8 @@ def assert_formal_preflight(
         raise ProtocolMismatch("protocol has no frozen source commit")
     if expected_source_commit is not None and recorded_commit != expected_source_commit:
         raise ProtocolMismatch("source commit does not match requested frozen commit")
-    # The protocol is committed after freeze metadata is written.  Accept a
-    # descendant containing that protocol, but never accept a dirty tree.
+    # The protocol is committed after freeze metadata is written. Accept a
+    # descendant containing that protocol, but never accept a dirty source tree.
     if provenance.get("source_commit") and not _is_ancestor(root, str(recorded_commit), "HEAD"):
         raise ProtocolMismatch("current source is not descended from frozen source commit")
     assert_seed_registry(seed_registry_path)

@@ -1,0 +1,101 @@
+name: CLM Conversion Kill Test 001 guard
+
+on:
+  push:
+    branches:
+      - codex/clm-conversion-kill-test-001
+    paths:
+      - '.github/workflows/clm-conversion-kill-test-001.yml'
+      - 'src/minicells/functional_cellization.py'
+      - 'scripts/research/clm_conversion_kill_test_001/**'
+      - 'research/validations/clm-conversion-kill-test-001/**'
+      - 'research/notebooks/07-safe-model-evolution/clm-conversion-kill-test-001-kaggle.ipynb'
+      - 'tests/test_functional_cellization.py'
+      - 'tests/test_clm_conversion_kill_test_001.py'
+  pull_request:
+    paths:
+      - '.github/workflows/clm-conversion-kill-test-001.yml'
+      - 'src/minicells/functional_cellization.py'
+      - 'scripts/research/clm_conversion_kill_test_001/**'
+      - 'research/validations/clm-conversion-kill-test-001/**'
+      - 'research/notebooks/07-safe-model-evolution/clm-conversion-kill-test-001-kaggle.ipynb'
+      - 'tests/test_functional_cellization.py'
+      - 'tests/test_clm_conversion_kill_test_001.py'
+  workflow_dispatch:
+
+jobs:
+  engineering-guard:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install CPU research environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e '.[lm,dev]'
+
+      - name: Validate frozen protocol and implementation identity
+        run: |
+          python -m json.tool research/validations/clm-conversion-kill-test-001/protocol.json >/dev/null
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          p = json.loads(Path('research/validations/clm-conversion-kill-test-001/protocol.json').read_text())
+          assert p['status'] == 'PROTOCOL_FROZEN_GPU_PENDING'
+          assert p['protocol_version'] == 1.2
+          assert p['base']['foundation_trainable'] is False
+          assert p['substrate']['pretrained_expert_is_cell'] is False
+          assert p['substrate']['pretrained_channel_group_is_cell'] is False
+          assert p['sequence_task']['candidate_choice_append_eos'] is False
+          assert p['gates']['require_growth_necessity'] is True
+          assert p['gates']['minimum_semantic_write_choice_accuracy'] == 1.0
+          assert p['gates']['minimum_growth_beta_choice_accuracy'] == 1.0
+          assert p['gates']['minimum_branch_standalone_choice_accuracy'] == 1.0
+          assert p['gates']['minimum_branch_merged_choice_accuracy'] == 1.0
+          assert len(p['formal_seeds']) == 3
+          blobs = p['implementation_git_blobs']
+          assert 'scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py' in blobs
+          assert 'scripts/research/clm_conversion_kill_test_001/run_seed_v12.py' in blobs
+          assert 'scripts/research/clm_conversion_kill_test_001/semantic_choice.py' in blobs
+          for relative_path, expected in blobs.items():
+              data = Path(relative_path).read_bytes()
+              header = b'blob ' + str(len(data)).encode() + b'\0'
+              observed = hashlib.sha1(header + data).hexdigest()
+              assert observed == expected, (relative_path, observed, expected)
+          PY
+
+      - name: Compile Conversion 001 implementation
+        run: |
+          python -m py_compile \
+            src/minicells/functional_cellization.py \
+            scripts/research/clm_conversion_kill_test_001/dataset.py \
+            scripts/research/clm_conversion_kill_test_001/semantic_choice.py \
+            scripts/research/clm_conversion_kill_test_001/run_seed.py \
+            scripts/research/clm_conversion_kill_test_001/run_seed_v12.py \
+            scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py \
+            scripts/research/clm_conversion_kill_test_001/aggregate.py \
+            scripts/research/clm_conversion_kill_test_001/publish.py
+
+      - name: Lint Conversion 001 implementation
+        run: |
+          python -m ruff check --extend-select E402 \
+            src/minicells/functional_cellization.py \
+            scripts/research/clm_conversion_kill_test_001/dataset.py \
+            scripts/research/clm_conversion_kill_test_001/semantic_choice.py \
+            scripts/research/clm_conversion_kill_test_001/run_seed_v12.py \
+            scripts/research/clm_conversion_kill_test_001/formal_entrypoint_v12.py \
+            tests/test_functional_cellization.py \
+            tests/test_clm_conversion_kill_test_001.py
+
+      - name: Unit tests
+        run: |
+          python -m pytest -q \
+            tests/test_functional_cellization.py \
+            tests/test_clm_conversion_kill_test_001.py

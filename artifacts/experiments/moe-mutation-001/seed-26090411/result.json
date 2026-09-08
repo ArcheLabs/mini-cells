@@ -1,0 +1,129 @@
+{
+  "base": {
+    "conversion_manifest_identity_sha256": "dd2b9c750567ff73b1d48e39eb7d1e1213eea9116a68c5164d023420f5a4d670",
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "environment": {
+    "cuda_device_name": "Tesla T4",
+    "device": "cuda:0",
+    "dtype": "torch.float32",
+    "huggingface_hub": "1.11.0",
+    "python": "3.12.13",
+    "safetensors": "0.7.0",
+    "torch": "2.10.0+cu128",
+    "transformers": "5.0.0"
+  },
+  "experiment": "MOE_MUTATION_001",
+  "formal_seed": true,
+  "gates": {
+    "control_mean_kl": false,
+    "control_top1_identity": false,
+    "conversion_identity": true,
+    "exact_two_addresses": true,
+    "heldout_nll_gain": true,
+    "nonzero_delta": true,
+    "rollback": false,
+    "target_router_topk_identity": true,
+    "train_nll_gain": true
+  },
+  "metrics": {
+    "base": {
+      "heldout_nll": 12.166173934936523,
+      "heldout_target_top1_rate": 0.0,
+      "train_nll": 12.184693336486816,
+      "train_target_top1_rate": 0.0
+    },
+    "control_mean_kl_base_to_mutated": 0.27040523290634155,
+    "control_top1_identity": 0.75,
+    "delta_l2_norm": 0.38037261179081205,
+    "heldout_nll_gain": 12.16596107960504,
+    "mutated": {
+      "heldout_nll": 0.00021285533148329705,
+      "heldout_target_top1_rate": 1.0,
+      "train_nll": 0.00021632149582728744,
+      "train_target_top1_rate": 1.0
+    },
+    "rollback_max_abs_logit_error": 2.6702880859375e-05,
+    "target_router_topk_identity": 1.0,
+    "train_nll_gain": 12.18447701499099
+  },
+  "mutation": {
+    "expert_is_cell": false,
+    "identity_sha256": "57684a8fd50b47251d4ce2a310adf89673743488a87623d6d5b4ffc52939ee14",
+    "schema_version": "clm.moe-mutation.v1",
+    "tensor_file": {
+      "bytes": 6291624,
+      "path": "mutation.safetensors",
+      "sha256": "6df51b248ef27fe1f2cc0e769c1b9e58c7835db3580fc1fd0f2f6e584ea7976e"
+    }
+  },
+  "protocol_sha256": "1139e25d9536cee35e3e99660abae3a516895dd472b35010b365a930f0acc8ee",
+  "protocol_version": 1,
+  "seed": 26090411,
+  "selection": {
+    "canonical_addresses": [
+      "model.layers.23.block_sparse_moe.input_linear.weight::expert[0]",
+      "model.layers.23.block_sparse_moe.output_linear.weight::expert[0]"
+    ],
+    "expert_index": 0,
+    "layer_index": 23,
+    "routing_counts": [
+      24,
+      0,
+      24,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      7,
+      0,
+      0,
+      0,
+      0,
+      0,
+      24,
+      0,
+      24,
+      0,
+      0,
+      0,
+      0,
+      0,
+      17,
+      0,
+      0,
+      24,
+      0,
+      0,
+      24,
+      24
+    ],
+    "runtime_to_canonical_tensor": {
+      "model.layers.23.block_sparse_moe.input_linear.weight": "model.layers.23.block_sparse_moe.input_linear.weight",
+      "model.layers.23.block_sparse_moe.output_linear.weight": "model.layers.23.block_sparse_moe.output_linear.weight"
+    },
+    "selected_expert_train_coverage": 1.0,
+    "target_candidate": " silver",
+    "target_candidate_scores": [
+      {
+        "candidate": " orbit",
+        "candidate_order": 6,
+        "mean_base_probability": 1.1596420335990842e-05,
+        "token_id": 33659
+      },
+      {
+        "candidate": " silver",
+        "candidate_order": 11,
+        "mean_base_probability": 5.111057816975517e-06,
+        "token_id": 39279
+      }
+    ],
+    "target_token_decoded": " silver",
+    "target_token_id": 39279
+  },
+  "status": "FAIL"
+}

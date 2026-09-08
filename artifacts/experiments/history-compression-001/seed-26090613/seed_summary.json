@@ -1,0 +1,58 @@
+{
+  "environment": {
+    "cuda_device_name": "Tesla T4",
+    "device": "cuda:0",
+    "dtype": "torch.float32",
+    "huggingface_hub": "1.11.0",
+    "python": "3.12.13",
+    "safetensors": "0.7.0",
+    "torch": "2.10.0+cu128",
+    "transformers": "5.0.0"
+  },
+  "experiment": "HISTORY_COMPRESSION_001",
+  "formal_seed": true,
+  "modes": {
+    "full_32": {
+      "expert_index": 0,
+      "group_index": 5,
+      "heldout_nll_gain": 11.26808571163565,
+      "history_evaluation_mean_kl": 0.0027566449716687202,
+      "history_evaluation_top1_identity": 1.0,
+      "history_prompt_count": 32,
+      "status": "PASS",
+      "target_router_topk_identity": 1.0
+    },
+    "tiny_2": {
+      "expert_index": 30,
+      "group_index": 2,
+      "heldout_nll_gain": 11.27799211407546,
+      "history_evaluation_mean_kl": 0.29641732573509216,
+      "history_evaluation_top1_identity": 0.8125,
+      "history_prompt_count": 2,
+      "status": "FAIL",
+      "target_router_topk_identity": 1.0
+    },
+    "tiny_8": {
+      "expert_index": 24,
+      "group_index": 6,
+      "heldout_nll_gain": 11.277032089070417,
+      "history_evaluation_mean_kl": 0.00289463484659791,
+      "history_evaluation_top1_identity": 1.0,
+      "history_prompt_count": 8,
+      "status": "PASS",
+      "target_router_topk_identity": 1.0
+    },
+    "zero_0": {
+      "expert_index": 16,
+      "group_index": 4,
+      "heldout_nll_gain": 11.278471548866946,
+      "history_evaluation_mean_kl": 1.9329761266708374,
+      "history_evaluation_top1_identity": 0.34375,
+      "history_prompt_count": 0,
+      "status": "FAIL",
+      "target_router_topk_identity": 1.0
+    }
+  },
+  "protocol_sha256": "460afd443646b1bb9ca023756916b4266fb4f19faaa57d89506cdbdcb90bbcb0",
+  "seed": 26090613
+}

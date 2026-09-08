@@ -1,0 +1,42 @@
+{
+  "does_not_rewrite_prior_decisions": true,
+  "experiment": "COW_CLM_001",
+  "hf_token_loaded": true,
+  "implementation_git_blobs": {
+    "scripts/research/cow_clm_001/dataset.py": "745ed354a104ef6b9c099597eb285b0534ffab33",
+    "scripts/research/cow_clm_001/run.py": "963f40cb5bae8efffd8be302114b5cd2136f49dc",
+    "scripts/research/cow_clm_001/run_frozen.py": "4e233c1a9aca8ddccd0a33045b946430106a0c25",
+    "scripts/research/cow_clm_001/verify_reload.py": "b0f0dc6f19a761c250470f22580cf2680608975c",
+    "scripts/research/jam_knowledge_mutation_001/sequence.py": "515577df3ebcd83ecfef81189f4d9e8a906be62e",
+    "src/minicells/cow_clm/artifact.py": "32686f687a808add75844305c0396144331ea948",
+    "src/minicells/cow_clm/runtime.py": "a619d753b0b447c998875214b918fb4cd4bf1726",
+    "src/minicells/cow_clm/trace.py": "c0525caf9f2c1d9a4cdac3c0b096abaf9f0bdc8f"
+  },
+  "nonclaims": [
+    "COW-CLM-001 does not claim existing Granite experts are Cells.",
+    "COW-CLM-001 does not claim arbitrary sibling Cells compose without reconciliation.",
+    "COW-CLM-001 does not claim expert-only COW is sufficient for all future capabilities.",
+    "COW-CLM-001 does not claim autonomous natural-language Cell routing.",
+    "COW-CLM-001 does not rewrite CLM_CONVERSION_KILL_TEST_001, GRANITE_HYBRID_CLM_V0_1, or HYBRID_CLM_PROMPT_ADDRESS_001."
+  ],
+  "protocol_sha256": "4568d2f738f21c70d552383750f344f3fe2d0766f721f385ea494660ccb8789e",
+  "scientific_status": "COW_MINIMAL_FUNCTIONAL_FORK_NOT_YET_SUPPORTED",
+  "seed": 26090511,
+  "status": "FAIL",
+  "tracks": {
+    "capability": {
+      "minimum_private_fraction": null,
+      "minimum_supported_capacity": null,
+      "reload_status": "SKIPPED_NO_PASSING_CAPACITY",
+      "status": "FAIL",
+      "supported": false
+    },
+    "knowledge": {
+      "minimum_private_fraction": null,
+      "minimum_supported_capacity": null,
+      "reload_status": "SKIPPED_NO_PASSING_CAPACITY",
+      "status": "FAIL",
+      "supported": false
+    }
+  }
+}

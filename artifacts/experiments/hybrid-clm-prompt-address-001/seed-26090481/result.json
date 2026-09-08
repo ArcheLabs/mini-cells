@@ -1,0 +1,77 @@
+{
+  "cells": [
+    {
+      "address": {
+        "heldout_minimum_positive_probability": 0.055853746831417084,
+        "heldout_positive_recall": 0.0,
+        "history_false_positive_rate": 0.1666666716337204,
+        "history_maximum_probability": 0.9764707088470459,
+        "maximum_negative_probability": 0.033371854573488235,
+        "minimum_positive_probability": 0.9275712966918945,
+        "negative_false_positive_rate": 0.0,
+        "passed": false,
+        "positive_recall": 1.0
+      },
+      "cell_id": "fact-001",
+      "slot": 0,
+      "status": "ADDRESS_FAIL"
+    },
+    {
+      "address": {
+        "heldout_minimum_positive_probability": 0.033632345497608185,
+        "heldout_positive_recall": 0.0,
+        "history_false_positive_rate": 0.25,
+        "history_maximum_probability": 0.9981745481491089,
+        "maximum_negative_probability": 0.04401881992816925,
+        "minimum_positive_probability": 0.9208695888519287,
+        "negative_false_positive_rate": 0.0,
+        "passed": false,
+        "positive_recall": 1.0
+      },
+      "cell_id": "fact-002",
+      "slot": 1,
+      "status": "ADDRESS_FAIL"
+    },
+    {
+      "address": {
+        "heldout_minimum_positive_probability": 0.035687703639268875,
+        "heldout_positive_recall": 0.0,
+        "history_false_positive_rate": 0.1666666716337204,
+        "history_maximum_probability": 0.9812377095222473,
+        "maximum_negative_probability": 0.04733821749687195,
+        "minimum_positive_probability": 0.916817843914032,
+        "negative_false_positive_rate": 0.0,
+        "passed": false,
+        "positive_recall": 1.0
+      },
+      "cell_id": "fact-003",
+      "slot": 2,
+      "status": "ADDRESS_FAIL"
+    }
+  ],
+  "committed_facts": 0,
+  "compatibility_max_abs_logit_delta": 1.306640625,
+  "contextual_child": {
+    "status": "SKIPPED"
+  },
+  "experiment": "GRANITE_HYBRID_CLM_V0_1",
+  "foundation": {
+    "model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "trainable": false
+  },
+  "manifest": {
+    "cells": [],
+    "foundation_model_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "foundation_revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "requested_facts": 3,
+  "retention_choice_accuracy": 0.0,
+  "routing": {
+    "candidate_answer_affects_routing": false,
+    "mode": "prompt_anchor",
+    "write_scope": "anchor_and_later"
+  },
+  "seed": 26090481,
+  "status": "GRANITE_HYBRID_CLM_V01_NOT_YET_SUPPORTED"
+}
