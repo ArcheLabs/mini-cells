@@ -2,8 +2,19 @@
 
 from .config import load_config
 from .vocab import CharVocab
+from .hybrid import CellMutation, CellPlacement, HybridCLM, ModelInspection
 
-__all__ = ["CLM", "GenerationResult", "CharVocab", "EchoModel", "load_config"]
+__all__ = [
+    "CLM",
+    "GenerationResult",
+    "CharVocab",
+    "EchoModel",
+    "HybridCLM",
+    "CellMutation",
+    "CellPlacement",
+    "ModelInspection",
+    "load_config",
+]
 
 
 def __getattr__(name):
