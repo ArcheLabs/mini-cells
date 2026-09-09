@@ -14,12 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Build distributions
         run: |
-          python -m pip install --upgrade build twine
+          python scripts/release/check_release_identity.py --tag "${GITHUB_REF_NAME}" --release-config artifacts/releases/hybrid-clm-v0.1/release-config.json
+          python -m pip install --upgrade "build>=1.2,<2" "twine>=5.0,<7"
           python -m build --sdist --wheel --outdir dist
           python -m twine check dist/*
       - name: Clean-wheel install smoke test
@@ -27,7 +30,13 @@ jobs:
           python -m venv "${RUNNER_TEMP}/minicells-release-smoke"
           "${RUNNER_TEMP}/minicells-release-smoke/bin/python" -m pip install dist/*.whl
           "${RUNNER_TEMP}/minicells-release-smoke/bin/python" - <<'PY'
+          from importlib.metadata import distribution
           from minicells import CellMutation, CellPlacement, HybridCLM, ModelInspection
+
+          metadata = distribution('mini-cells').metadata
+          assert metadata['Name'] == 'mini-cells'
+          assert metadata['License-Expression'] == 'Apache-2.0'
+          assert metadata['License-File'] == 'LICENSE'
           assert all((CellMutation, CellPlacement, HybridCLM, ModelInspection))
           print('release wheel install and public API import: PASS')
           PY
@@ -53,5 +62,34 @@ jobs:
         with:
           name: minicells-distributions
           path: dist
+      - name: Inspect distributions
+        run: ls -l dist
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: minicells-distributions
+          path: dist
+      - name: Render release notes
+        run: python scripts/release/render_release_notes.py --release-config artifacts/releases/hybrid-clm-v0.1/release-config.json --output RELEASE_NOTES.md
+      - name: Create GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --verify-tag \
+            --prerelease \
+            --title "MiniCells ${GITHUB_REF_NAME} — HybridCLM Research Preview" \
+            --notes-file RELEASE_NOTES.md \
+            dist/*

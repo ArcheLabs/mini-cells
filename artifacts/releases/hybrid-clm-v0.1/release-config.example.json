@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "package": {
+    "name": "mini-cells",
+    "version": "0.2.0a1",
+    "tag": "v0.2.0a1",
+    "release_title": "MiniCells v0.2.0a1 — HybridCLM Research Preview"
+  },
+  "source": {
+    "repository": "ArcheLabs/mini-cells",
+    "commit": "<IMMUTABLE_RELEASE_COMMIT>"
+  },
+  "foundation": {
+    "repo_id": "ibm-granite/granite-3.1-1b-a400m-base",
+    "revision": "408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
+  },
+  "mutation": {
+    "experiment": "PCU-HYBRID-REATTACHMENT-001",
+    "engineering_seed": 26090501,
+    "layer": 7,
+    "cell_budget": 64,
+    "default_alpha": 1.0,
+    "artifact_origin": "exact_saved_delta",
+    "source_artifact": null
+  },
+  "formal": {
+    "execution_started": false,
+    "forbidden_seeds": [26090511, 26090512, 26090513]
+  },
+  "expected_metrics": {
+    "ranking_off": 0.0625,
+    "ranking_on": 0.8203125,
+    "ranking_gain": 0.7578125,
+    "answer_margin_gain": 3.1839119061085976,
+    "answer_nll_gain": 3.4671419583834133,
+    "b_control_answer_nll_increase": 0.3189873118037063
+  },
+  "evidence": {
+    "result": "artifacts/research/pcu-hybrid-reattachment-001/engineering/26090501-l7-k64-ranking-causal-reattach-v3/RESULT.json",
+    "primary_result": "artifacts/research/pcu-hybrid-reattachment-001/engineering/26090501-l7-k64-ranking-causal-reattach-v3/PRIMARY_RESULT.json",
+    "run_identity": "artifacts/research/pcu-hybrid-reattachment-001/engineering/26090501-l7-k64-ranking-causal-reattach-v3/RUN_IDENTITY.json"
+  },
+  "publication": {
+    "hf_namespace": "archelabs-org",
+    "model_repo": "granite-3.1-1b-hybrid-cell-l7-k64",
+    "space_repo": "MiniCells-HybridCLM",
+    "collection_title": "MiniCells — Hybrid CLM"
+  }
+}

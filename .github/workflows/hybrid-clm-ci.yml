@@ -24,9 +24,9 @@ jobs:
       - name: Compile and lint public API
         run: |
           python -m compileall -q src/minicells/hybrid examples/hybrid_clm
-          ruff check src/minicells/hybrid tests/unit/hybrid tests/integration/hybrid examples/hybrid_clm
+          ruff check src/minicells/hybrid tests/unit/hybrid tests/integration/hybrid tests/unit/release examples/hybrid_clm
       - name: HybridCLM tests
-        run: pytest -q tests/unit/hybrid tests/integration/hybrid
+        run: pytest -q tests/unit/hybrid tests/integration/hybrid tests/unit/release
       - name: Validate artifact schemas and research provenance
         run: |
           python - <<'PY'
@@ -43,6 +43,7 @@ jobs:
           PY
       - name: Validate notebooks and formal seed guard
         run: |
+          python tools/check_release_notebook.py notebooks/kaggle/hybrid_clm_release_v0_2_0a1.ipynb
           python - <<'PY'
           import hashlib, json
           from pathlib import Path

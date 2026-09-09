@@ -4,27 +4,30 @@ Kaggle is the primary hosted GPU execution environment for experiments that are 
 
 ## Required secrets
 
-Formal publishing uses the existing repository publisher path and expects:
+HybridCLM publication uses only:
 
-- `GITHUB_TOKEN` — GitHub token with write access to `ArcheLabs/mini-cells`.
-- `HF_TOKEN` — optional for public Hugging Face models, recommended to avoid anonymous rate limits.
+- `HF_TOKEN` — a fine-grained Hugging Face write token for the configured Model,
+  Space, and Collection.
+
+The notebook does not create tags, GitHub releases, or write to the repository.
+GitHub/PyPI software release is handled independently by the tag-driven
+`release.yml` workflow.
 
 Secrets are read through Kaggle's `UserSecretsClient`; they must never be written into notebook cells, logs, or committed files.
 
-## Formal execution rules
+## Engineering publication rules
 
 1. Start from a fresh Kaggle session when possible.
-2. Clone the exact experiment branch.
-3. Run GitHub write preflight **before GPU work**.
+2. Clone the exact immutable release tag.
+3. Validate the release identity and formal seed guard **before GPU work**.
 4. Confirm CUDA and record the GPU model.
 5. Invoke only the canonical runner under `scripts/research/`.
-6. Run one formal seed at a time.
-7. Publish that seed immediately after it produces `result.json`, even when the scientific status is `FAIL`.
-8. On restart, skip seeds already present under `artifacts/experiments/<experiment>/seed-*` on the remote branch.
-9. Never wait for all seeds before publishing.
+6. Export and validate the engineering Cell mutation before any Hugging Face upload.
+7. Never execute formal seeds or change `research/formal_seed_registry.json`.
 
-## Current formal launcher
+## Current launchers
 
-- `moe-mutation-001.ipynb` — Granite 3.1 1B-A400M first isolated CLM mutation test.
+- `hybrid_clm_release_v0_2_0a1.ipynb` — immutable HybridCLM publication launcher.
+- `moe-mutation-001.ipynb` — historical experiment launcher.
 
 The notebook intentionally uses one CUDA device even if Kaggle assigns two GPUs. Multi-GPU execution would change the execution path and is outside the frozen Mutation 001 protocol.

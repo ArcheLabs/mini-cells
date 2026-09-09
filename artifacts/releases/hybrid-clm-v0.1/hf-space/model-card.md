@@ -36,13 +36,12 @@ standalone CLM conversion, superiority to LoRA, or solved locality.
 from minicells import CellMutation, HybridCLM
 
 hybrid = HybridCLM.from_pretrained(
-    "ibm-granite/granite-3.1-1b-a400m-base",
-    revision="408b6e90baab8cf24f4aa9f8e19703ffa0a53b29",
+    "ibm-granite/granite-3.1-1b-a400m-base", revision="408b6e90baab8cf24f4aa9f8e19703ffa0a53b29"
 )
 mutation = CellMutation.from_pretrained("<HF_MODEL_REPO>")
 hybrid.cellularize(mutation.placements)
 hybrid.attach(mutation).set_alpha(mutation, 1.0)
 ```
 
-License relationship: MiniCells is Apache-2.0; the foundation model remains
-under its own upstream license.
+License relationship: MiniCells is Apache-2.0; the foundation model
+remains under its own upstream license.

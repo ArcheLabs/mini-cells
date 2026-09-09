@@ -27,9 +27,9 @@ minicells-clm = "minicells.cli:main"
 minicells = "minicells.hybrid_cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff==0.16.6", "build>=1.2", "twine>=5.0"]
-lm = ["datasets>=2.18", "transformers>=4.40,<5", "huggingface_hub>=0.23"]
-hybrid = ["transformers>=4.40,<5", "huggingface_hub>=0.23", "safetensors>=0.4"]
+dev = ["pytest", "ruff==0.16.6", "build>=1.2,<2", "twine>=5.0,<7"]
+lm = ["datasets>=2.18,<4", "transformers>=4.40,<5", "huggingface_hub>=0.23,<2"]
+hybrid = ["transformers>=4.40,<5", "huggingface_hub>=0.23,<2", "safetensors>=0.4,<1"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
