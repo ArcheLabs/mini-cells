@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# LEGACY / DEVELOPMENT ONLY. Normal MiniCells CI uses the public contract
+# fixture and never clones MiniJAM or its internal Jambda source. Keep this
+# helper for local source-level development until the OCI integration image
+# is available.
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 DEPS="${ROOT}/.deps"
 mkdir -p "${DEPS}"
 CLIENT="${DEPS}/minijam-client"
-MINIJAM_CLIENT_REF="${MINIJAM_CLIENT_REF:-$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["commit"])' "${ROOT}/configs/dependencies.json")}"
+SOURCE_LOCK="${ROOT}/tools/legacy/minijam-source-dev.json"
+MINIJAM_CLIENT_REF="${MINIJAM_CLIENT_REF:-$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["commit"])' "${SOURCE_LOCK}")}"
 if [[ -e "${CLIENT}" && ! -f "${CLIENT}/Cargo.toml" ]]; then
   echo "refusing to use ${CLIENT}: expected a MiniJAM checkout" >&2
   exit 1

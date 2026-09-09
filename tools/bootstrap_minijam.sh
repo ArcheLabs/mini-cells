@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# LEGACY / DEVELOPMENT ONLY. Public CI must use the Stage-1 contract and
+# must not clone MiniJAM or its internal Jambda source tree.
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
-LOCK="${ROOT}/configs/dependencies.json"
-PINNED_REF="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["commit"])' "${LOCK}")"
-PINNED_JAMBDA_REF="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["jambda_commit"])' "${LOCK}")"
+SOURCE_LOCK="${ROOT}/tools/legacy/minijam-source-dev.json"
+PINNED_REF="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["commit"])' "${SOURCE_LOCK}")"
 if [[ -n "${MINIJAM_CLIENT_DIR:-}" ]]; then
   CLIENT="${MINIJAM_CLIENT_DIR}"
 else
@@ -37,10 +38,6 @@ printf 'MiniJAM resolved at %s\n' "${RESOLVED_MINIJAM_REF}" >&2
 printf 'Jambda resolved at authoritative gitlink %s\n' "${RESOLVED_JAMBDA_REF}" >&2
 if [[ "${RECORDED_JAMBDA_REF}" != "${RESOLVED_JAMBDA_REF}" ]]; then
   echo "Jambda checkout does not match MiniJAM gitlink" >&2
-  exit 1
-fi
-if [[ -z "${MINIJAM_CLIENT_REF:-}" && "${RESOLVED_MINIJAM_REF}" == "${PINNED_REF}" && "${RECORDED_JAMBDA_REF}" != "${PINNED_JAMBDA_REF}" ]]; then
-  echo "dependency lock Jambda commit does not match pinned MiniJAM gitlink" >&2
   exit 1
 fi
 printf '%s\n' "$(cd "${CLIENT}" && pwd -P)"

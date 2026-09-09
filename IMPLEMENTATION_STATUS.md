@@ -21,11 +21,8 @@ The scientific tracks remain distinct:
 See [`docs/hybrid-clm/`](docs/hybrid-clm/) and
 [`research/stages/08-hybrid-clm/`](research/stages/08-hybrid-clm/).
 
-Compatibility target: JAM semantics 0.7.2; MiniJAM
-`5947c50699863948c51028bc346980481d839884`; Jambda runtime pin
-`e52307a726868205a151e6917a0a70a79965a028`, standalone adapter
-`f74de5325e0fe566b5b7e3f8eb4851173a937d76`; JamScript
-`79347ca2435ca21a08cbd257bc9c3dce8ed77f4b`. The machine-readable source of
+Compatibility target: JAM semantics 0.7.2 and the public MiniJAM Stage-1
+contract `minijam-stage1/v1` (guest SDK ABI 1). The machine-readable source of
 truth is [`artifacts/implementation-status.json`](artifacts/implementation-status.json).
 
 | Area | Status | Evidence |
@@ -37,7 +34,7 @@ truth is [`artifacts/implementation-status.json`](artifacts/implementation-statu
 | Browser local inference | PASS | `minicells-wasm` is a bounded raw ABI over `minicells-core`; release wasm32 artifact is built and copied by `npm run build`; Vitest loads the real artifact and verifies deterministic inference, hash/length/vocabulary rejection. |
 | Wallet web flow | PASS_CODE_PATH | Polkadot extension `web3Enable`/`web3Accounts`/`signRaw` challenge flow, credentialed fetches, in-memory model cache, model refresh/stale display, SSE event consumption, logout, and no normal-user training controls are implemented. |
 | PVM verification inference | PASS_CODE_PATH | `/v1/verify/infer` waits for a finalized inference-ring record matching the submitted request ID instead of treating an execution receipt as completion. |
-| Dependency portability | PASS | Absolute MiniJAM Cargo paths were removed. `tools/bootstrap_deps.sh` pins repository-relative `.deps` sources and exact MiniJAM/Jambda refs; `.deps` is ignored and never committed. |
+| Dependency portability | PASS | Routine CI is source-free: it validates the public Stage-1 contract without cloning MiniJAM or Jambda. Source-level bootstrap helpers remain legacy development tools under `.deps/`. |
 | Artifacts/refs | PASS | Service ELF/blob/PolkaVM artifacts rebuilt; manifest records actual dependency refs, toolchain, target hash, and WASM artifact provenance. |
 | Artifact provenance ledger | PASS | `tools/build_service.sh` now refuses dirty reproducibility builds unless explicitly opted in, captures source ref/tree/dirty identity, records JamScript as unused, and generates a clean non-sticky manifest. Stale-field and dependency-ref tests pass. |
 | Historical deployment evidence | PASS_CODE_PATH | Prior block-8/`0x3748…` attempt is preserved under `artifacts/deployments/`; generated artifact manifests no longer carry mutable deployment history. |
