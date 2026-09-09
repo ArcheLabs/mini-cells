@@ -22,6 +22,15 @@ jobs:
           python -m pip install --upgrade build twine
           python -m build --sdist --wheel --outdir dist
           python -m twine check dist/*
+      - name: Clean-wheel install smoke test
+        run: |
+          python -m venv "${RUNNER_TEMP}/minicells-release-smoke"
+          "${RUNNER_TEMP}/minicells-release-smoke/bin/python" -m pip install dist/*.whl
+          "${RUNNER_TEMP}/minicells-release-smoke/bin/python" - <<'PY'
+          from minicells import CellMutation, CellPlacement, HybridCLM, ModelInspection
+          assert all((CellMutation, CellPlacement, HybridCLM, ModelInspection))
+          print('release wheel install and public API import: PASS')
+          PY
       - name: Upload distributions
         uses: actions/upload-artifact@v4
         with:

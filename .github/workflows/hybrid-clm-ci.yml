@@ -56,15 +56,21 @@ jobs:
           print('formal seeds remain reserved; CI does not execute research runners')
           PY
       - name: Build wheel and source distribution
-        run: python -m build --sdist --wheel --outdir dist
+        run: |
+          python -m build --sdist --wheel --outdir dist
+          python -m twine check dist/*
       - name: Clean-wheel smoke test
         run: |
-          python -m venv --clear "${RUNNER_TEMP}/minicells-wheel-smoke"
+          python -m venv --system-site-packages --clear "${RUNNER_TEMP}/minicells-wheel-smoke"
           "${RUNNER_TEMP}/minicells-wheel-smoke/bin/python" -m pip install --no-deps dist/*.whl
           "${RUNNER_TEMP}/minicells-wheel-smoke/bin/python" - <<'PY'
           from importlib.metadata import distribution
+          from minicells import CellMutation, CellPlacement, HybridCLM, ModelInspection
+
           metadata = distribution('mini-cells').metadata
           assert metadata['Name'] == 'mini-cells'
           assert metadata['License-Expression'] == 'Apache-2.0'
-          print('clean wheel metadata: PASS')
+          assert metadata['License-File'] == 'LICENSE'
+          assert all((CellMutation, CellPlacement, HybridCLM, ModelInspection))
+          print('clean wheel install and public API import: PASS')
           PY
