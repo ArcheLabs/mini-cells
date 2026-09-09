@@ -64,7 +64,7 @@ weights are safetensors-only; arbitrary pickle deserialization is not used.
   (Python 3.8 incompatibilities in older research modules, missing
   `tokenizers`, and a broken auto-loaded web3 pytest plugin). No formal runner
   was invoked.
-- `.github/workflows/hybrid-clm-release.yml` adds Python 3.11 install, ruff,
+- `.github/workflows/hybrid-clm-ci.yml` adds Python 3.11 install, ruff,
   focused tests, notebook JSON checks, and formal-seed integrity checks. It
   does not publish automatically.
 

@@ -1,0 +1,70 @@
+name: HybridCLM CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install package and test dependencies
+        run: python -m pip install -e ".[dev,hybrid]"
+      - name: Compile and lint public API
+        run: |
+          python -m compileall -q src/minicells/hybrid examples/hybrid_clm
+          ruff check src/minicells/hybrid tests/unit/hybrid tests/integration/hybrid examples/hybrid_clm
+      - name: HybridCLM tests
+        run: pytest -q tests/unit/hybrid tests/integration/hybrid
+      - name: Validate artifact schemas and research provenance
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          roots = (Path('artifacts/releases/hybrid-clm-v0.1'), Path('research/validations'))
+          paths = [path for root in roots for path in root.rglob('*.json')]
+          for path in paths:
+              json.loads(path.read_text(encoding='utf-8'))
+          release = json.loads(Path('artifacts/releases/hybrid-clm-v0.1/space-data.json').read_text())
+          assert release['schema_version'] == 1
+          assert release['formal_execution_started'] is False
+          print(f'validated {len(paths)} JSON artifacts')
+          PY
+      - name: Validate notebooks and formal seed guard
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          for path in Path('notebooks').glob('**/hybrid_clm_*.ipynb'):
+              json.loads(path.read_text())
+          registry = Path('research/formal_seed_registry.json')
+          expected = 'd86da9656ef18c75bab8fa41a9053a68cf4dbb64fbba1a93c80850c29b42e06a'
+          assert hashlib.sha256(registry.read_bytes()).hexdigest() == expected
+          workflow = Path('.github/workflows/hybrid-clm-ci.yml').read_text()
+          assert 'formal' not in workflow.lower() or 'formal seed guard' in workflow.lower()
+          print('formal seeds remain reserved; CI does not execute research runners')
+          PY
+      - name: Build wheel and source distribution
+        run: python -m build --sdist --wheel --outdir dist
+      - name: Clean-wheel smoke test
+        run: |
+          python -m venv --clear "${RUNNER_TEMP}/minicells-wheel-smoke"
+          "${RUNNER_TEMP}/minicells-wheel-smoke/bin/python" -m pip install --no-deps dist/*.whl
+          "${RUNNER_TEMP}/minicells-wheel-smoke/bin/python" - <<'PY'
+          from importlib.metadata import distribution
+          metadata = distribution('mini-cells').metadata
+          assert metadata['Name'] == 'mini-cells'
+          assert metadata['License-Expression'] == 'Apache-2.0'
+          print('clean wheel metadata: PASS')
+          PY
