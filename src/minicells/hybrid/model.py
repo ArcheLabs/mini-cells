@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import contextlib
+from collections.abc import Iterator, Sequence
 from copy import deepcopy
 import math
-from collections.abc import Iterator, Sequence
 from typing import Any
 
 import torch
@@ -42,8 +42,25 @@ class HybridCLM:
         # twice merely to support the zero-state diagnostic.
         self._foundation_model = model
         self.model = deepcopy(model) if clone else model
-        self.base_model = base_model or getattr(model, "name_or_path", None) or getattr(getattr(model, "config", None), "_name_or_path", None)
-        self.base_revision = base_revision or getattr(getattr(model, "config", None), "_commit_hash", None)
+        try:
+            model_name = model.name_or_path
+        except AttributeError:
+            model_name = None
+        try:
+            config = model.config
+        except AttributeError:
+            config = None
+        if model_name is None and config is not None:
+            try:
+                model_name = config._name_or_path
+            except AttributeError:
+                model_name = None
+        self.base_model = base_model or model_name
+        try:
+            model_revision = config._commit_hash if config is not None else None
+        except AttributeError:
+            model_revision = None
+        self.base_revision = base_revision or model_revision
         self._inspection = self.backend.inspect(self.model)
         self._placements: tuple[CellPlacement, ...] = ()
         self._baseline_state: dict[str, torch.Tensor] | None = None
@@ -73,7 +90,7 @@ class HybridCLM:
         revision: str | None = None,
         device: str = "cpu",
         local_files_only: bool = False,
-    ) -> "HybridCLM":
+    ) -> HybridCLM:
         _tokenizer, model, manifest = cls._load_pretrained(model_id, revision, device, local_files_only)
         return cls(
             model,
@@ -105,7 +122,7 @@ class HybridCLM:
             raise TypeError("inspect requires a model")
         return BackendRegistry.resolve(candidate).inspect(candidate)
 
-    def cellularize(self, placements: Sequence[CellPlacement] | CellPlacement) -> "HybridCLM":
+    def cellularize(self, placements: Sequence[CellPlacement] | CellPlacement) -> HybridCLM:
         requested = normalize_placements(placements)
         resolved = tuple(self.backend.resolve_placement(self.model, placement) for placement in requested)
         self.model = self.backend.cellularize(self.model, resolved)
@@ -115,7 +132,7 @@ class HybridCLM:
         }
         return self
 
-    def attach(self, mutation: CellMutation) -> "HybridCLM":
+    def attach(self, mutation: CellMutation) -> HybridCLM:
         if not isinstance(mutation, CellMutation):
             raise TypeError("attach expects a CellMutation")
         if not self._placements:
@@ -143,14 +160,14 @@ class HybridCLM:
         self._attached[key] = {"mutation": mutation, "alpha": mutation.default_alpha, "originals": originals}
         return self
 
-    def detach(self, mutation: CellMutation) -> "HybridCLM":
+    def detach(self, mutation: CellMutation) -> HybridCLM:
         record = self._attached.pop(id(mutation), None)
         if record is None:
             raise MutationLifecycleError("mutation is not attached")
         self._restore_targets(record["originals"])
         return self
 
-    def set_alpha(self, mutation: CellMutation, alpha: float) -> "HybridCLM":
+    def set_alpha(self, mutation: CellMutation, alpha: float) -> HybridCLM:
         value = float(alpha)
         if not math.isfinite(value):
             raise ValueError("alpha must be finite")
@@ -230,7 +247,7 @@ class HybridCLM:
         return RestorationReport(max_abs, mean_abs, max_abs <= float(tolerance), float(tolerance))
 
     @contextlib.contextmanager
-    def mutation_enabled(self, mutation: CellMutation, *, alpha: float | None = None) -> Iterator["HybridCLM"]:
+    def mutation_enabled(self, mutation: CellMutation, *, alpha: float | None = None) -> Iterator[HybridCLM]:
         was_attached = id(mutation) in self._attached
         previous_alpha = float(self._attached[id(mutation)]["alpha"]) if was_attached else None
         if not was_attached:

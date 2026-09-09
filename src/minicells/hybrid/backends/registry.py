@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Any, Type
+from typing import Any, ClassVar
 
 from ..errors import UnsupportedArchitectureError
 from .base import HybridBackend
 
 
 class BackendRegistry:
-    _backend_types: list[type[HybridBackend]] = []
+    _backend_types: ClassVar[list[type[HybridBackend]]] = []
 
     @classmethod
     def register(cls, backend: type[HybridBackend] | HybridBackend) -> type[HybridBackend] | HybridBackend:
@@ -31,10 +31,16 @@ class BackendRegistry:
             except (AttributeError, TypeError, ValueError, RuntimeError):
                 continue
             return backend
-        architecture = getattr(getattr(model, "config", None), "model_type", type(model).__name__)
+        try:
+            config = model.config
+        except AttributeError:
+            config = None
+        try:
+            architecture = config.model_type if config is not None else type(model).__name__
+        except AttributeError:
+            architecture = type(model).__name__
         raise UnsupportedArchitectureError(f"no tested HybridCLM backend for architecture {architecture!r}")
 
     @classmethod
     def registered(cls) -> tuple[type[HybridBackend], ...]:
         return tuple(cls._backend_types)
-

@@ -9,7 +9,10 @@ import torch
 
 
 def _logits(output: Any) -> torch.Tensor:
-    value = getattr(output, "logits", output)
+    try:
+        value = output.logits
+    except AttributeError:
+        value = output
     if isinstance(value, (tuple, list)):
         value = value[0]
     if not isinstance(value, torch.Tensor):

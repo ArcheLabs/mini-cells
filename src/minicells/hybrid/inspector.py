@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import hashlib
 import json
-from typing import Any, Iterable
+from collections.abc import Iterable
+from dataclasses import dataclass, field
+from typing import Any
 
 from .errors import PlacementError
 
@@ -75,7 +76,7 @@ class CellPlacement:
     as_dict = to_dict
 
     @classmethod
-    def from_dict(cls, value: dict[str, Any]) -> "CellPlacement":
+    def from_dict(cls, value: dict[str, Any]) -> CellPlacement:
         if not isinstance(value, dict):
             raise PlacementError("placement must be an object")
         experts = value.get("expert_ids", value.get("experts", "all"))
@@ -136,7 +137,7 @@ class ModelInspection:
         """Single-target convenience for callers inspecting one-layer models."""
         if not self.module_signatures:
             return ""
-        return self.module_signatures[sorted(self.module_signatures)[-1]]
+        return self.module_signatures[max(self.module_signatures)]
 
 
 def normalize_placements(placements: Iterable[CellPlacement] | CellPlacement) -> tuple[CellPlacement, ...]:
@@ -159,7 +160,10 @@ def normalize_placements(placements: Iterable[CellPlacement] | CellPlacement) ->
 
 def architecture_signature(model: Any) -> str:
     """Hash stable config attributes without depending on repository strings."""
-    config = getattr(model, "config", None)
+    try:
+        config = model.config
+    except AttributeError:
+        config = None
     if config is None:
         payload: Any = {"class": type(model).__qualname__}
     elif hasattr(config, "to_dict"):
