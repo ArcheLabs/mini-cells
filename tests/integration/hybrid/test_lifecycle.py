@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import torch
 import pytest
+import torch
 
 from minicells import CellMutation, CellPlacement, HybridCLM
 from minicells.pcu_kill_001.backends import make_toy_model
