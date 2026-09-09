@@ -1,0 +1,763 @@
+{
+  "carrier_norm": 1.0,
+  "data_manifest_sha256": "d098f9172083b8de9f825b66de5277dde5b6ea0581b3a950b8f76e4f443546cc",
+  "dense_56x8": {
+    "eval": {
+      "count": 56,
+      "mean_frobenius_residual": 0.32252130988298805,
+      "mean_local_action_residual": 0.30279464849946697,
+      "median_frobenius_residual": 0.3212998741746581,
+      "median_local_action_residual": 0.3009142160645012,
+      "p90_frobenius_residual": 0.42401753618367105,
+      "p90_local_action_residual": 0.41196336590522914
+    },
+    "train": {
+      "count": 224,
+      "mean_frobenius_residual": 0.210974954037906,
+      "mean_local_action_residual": 0.1768226888134725,
+      "median_frobenius_residual": 0.2085842901918813,
+      "median_local_action_residual": 0.174404843446991,
+      "p90_frobenius_residual": 0.2575782936688722,
+      "p90_local_action_residual": 0.22794983649599213
+    }
+  },
+  "device": "cuda",
+  "elapsed_seconds": 53.10937833786011,
+  "eval_count": 56,
+  "experiment_id": "core-validation-009d",
+  "factor_spectra": {
+    "left": {
+      "curve": [
+        {
+          "cumulative_energy": 0.04549625131311736,
+          "dimension": 1
+        },
+        {
+          "cumulative_energy": 0.08965778823341614,
+          "dimension": 2
+        },
+        {
+          "cumulative_energy": 0.1667091871734937,
+          "dimension": 4
+        },
+        {
+          "cumulative_energy": 0.29088003766387444,
+          "dimension": 8
+        },
+        {
+          "cumulative_energy": 0.48790154495334637,
+          "dimension": 16
+        },
+        {
+          "cumulative_energy": 0.6378965221339159,
+          "dimension": 24
+        },
+        {
+          "cumulative_energy": 0.7569724006665991,
+          "dimension": 32
+        },
+        {
+          "cumulative_energy": 0.8477472248920316,
+          "dimension": 40
+        },
+        {
+          "cumulative_energy": 0.9163779645412117,
+          "dimension": 48
+        },
+        {
+          "cumulative_energy": 0.9670829952123683,
+          "dimension": 56
+        },
+        {
+          "cumulative_energy": 0.9999999999999998,
+          "dimension": 64
+        }
+      ],
+      "dimension_at_energy": {
+        "0.5": 17,
+        "0.75": 32,
+        "0.9": 46,
+        "0.95": 53
+      },
+      "participation_rank": 44.57442273769358
+    },
+    "right": {
+      "curve": [
+        {
+          "cumulative_energy": 0.9903625995237754,
+          "dimension": 1
+        },
+        {
+          "cumulative_energy": 0.9962886563790916,
+          "dimension": 2
+        },
+        {
+          "cumulative_energy": 0.9972014108854493,
+          "dimension": 4
+        },
+        {
+          "cumulative_energy": 0.9978620810234761,
+          "dimension": 8
+        },
+        {
+          "cumulative_energy": 0.998633273712634,
+          "dimension": 16
+        },
+        {
+          "cumulative_energy": 0.9990969985121406,
+          "dimension": 24
+        },
+        {
+          "cumulative_energy": 0.9994222047006717,
+          "dimension": 32
+        },
+        {
+          "cumulative_energy": 0.9996491896598871,
+          "dimension": 40
+        },
+        {
+          "cumulative_energy": 0.9998144004335249,
+          "dimension": 48
+        },
+        {
+          "cumulative_energy": 0.9999295719842735,
+          "dimension": 56
+        },
+        {
+          "cumulative_energy": 0.9999999999999999,
+          "dimension": 64
+        }
+      ],
+      "dimension_at_energy": {
+        "0.5": 1,
+        "0.75": 1,
+        "0.9": 1,
+        "0.95": 1
+      },
+      "participation_rank": 1.0195197888802152
+    }
+  },
+  "format": "minicells.core-validation.compositional-operator-geometry-discovery-seed.v1",
+  "per_write_rank1_oracle": {
+    "eval": {
+      "count": 56,
+      "mean_frobenius_residual": 0.11379826332284057,
+      "mean_local_action_residual": 0.004681464705426465,
+      "median_frobenius_residual": 0.1075856555442747,
+      "median_local_action_residual": 0.002811443446018077,
+      "p90_frobenius_residual": 0.14697555855692948,
+      "p90_local_action_residual": 0.004813135501348928
+    },
+    "train": {
+      "count": 224,
+      "mean_frobenius_residual": 0.1151905246038896,
+      "mean_local_action_residual": 0.0036849319090893036,
+      "median_frobenius_residual": 0.11099144238432365,
+      "median_local_action_residual": 0.003011423467953608,
+      "p90_frobenius_residual": 0.13911314623122578,
+      "p90_local_action_residual": 0.004763489008397901
+    }
+  },
+  "phase": "discovery",
+  "protocol_sha256": "51a5d961a4d31afc238d905579c385bec57bcca3ae2d5aefc67370b74c4552b9",
+  "protocol_version": "1.0-frozen",
+  "rank1_core_56x8": {
+    "eval": {
+      "count": 56,
+      "mean_frobenius_residual": 0.32764076983981166,
+      "mean_local_action_residual": 0.3029930586817661,
+      "median_frobenius_residual": 0.3237053769884287,
+      "median_local_action_residual": 0.3010930275565666,
+      "p90_frobenius_residual": 0.42604130085519587,
+      "p90_local_action_residual": 0.411972142350941
+    },
+    "train": {
+      "count": 224,
+      "mean_frobenius_residual": 0.2176528658539892,
+      "mean_local_action_residual": 0.1768564395976965,
+      "median_frobenius_residual": 0.2144674025411105,
+      "median_local_action_residual": 0.17441074519766792,
+      "p90_frobenius_residual": 0.262115782116463,
+      "p90_local_action_residual": 0.22795551797143832
+    }
+  },
+  "rank1_core_guard": {
+    "checks": {
+      "absolute_action": true,
+      "action_excess": true,
+      "frobenius_excess": true
+    },
+    "eval_median_frobenius_excess_over_dense_56x8": 0.0024055028137706103,
+    "eval_median_local_action_excess_over_dense_56x8": 0.00017881149206538938,
+    "pass": true
+  },
+  "right_conditioned": {
+    "checks": {
+      "beats_mean_left": false,
+      "beats_permuted_ridge": false,
+      "eval_median_action": false,
+      "eval_median_frobenius": false,
+      "eval_p90_action": false,
+      "generalization_gap": true,
+      "left_factor_cosine": false
+    },
+    "eval": {
+      "count": 56,
+      "mean_frobenius_residual": 1.020613702547114,
+      "mean_local_action_residual": 1.0212247187564347,
+      "median_frobenius_residual": 1.016340426385537,
+      "median_local_action_residual": 1.016613129772482,
+      "p90_frobenius_residual": 1.0614008189753765,
+      "p90_local_action_residual": 1.0621691680684162
+    },
+    "eval_median_left_factor_cosine": 0.0153664847065237,
+    "family": "right_conditioned",
+    "mean_left_eval": {
+      "count": 56,
+      "mean_frobenius_residual": 0.9989021346121951,
+      "mean_local_action_residual": 0.9988880533445439,
+      "median_frobenius_residual": 0.9982263712663623,
+      "median_local_action_residual": 0.9981736654770066,
+      "p90_frobenius_residual": 1.0138999194761553,
+      "p90_local_action_residual": 1.0142440233767016
+    },
+    "nearest_right_eval": {
+      "count": 56,
+      "mean_frobenius_residual": 1.385658004849265,
+      "mean_local_action_residual": 1.3899891223828125,
+      "median_frobenius_residual": 1.4032026450390294,
+      "median_local_action_residual": 1.405810502762249,
+      "p90_frobenius_residual": 1.4984572963393428,
+      "p90_local_action_residual": 1.5021203450452683
+    },
+    "permuted_ridge_eval": {
+      "count": 56,
+      "mean_frobenius_residual": 1.014172688236141,
+      "mean_local_action_residual": 1.0147789744022784,
+      "median_frobenius_residual": 1.009889088357491,
+      "median_local_action_residual": 1.009974224712066,
+      "p90_frobenius_residual": 1.0338113138708886,
+      "p90_local_action_residual": 1.0347343374801996
+    },
+    "permuted_selected_ridge_lambda": 1.0,
+    "relative_median_action_improvement_over_mean_left": -0.01847320254303008,
+    "relative_median_action_improvement_over_permuted_ridge": -0.006573341079381286,
+    "selected_ridge_lambda": 1.0,
+    "train_eval_median_action_gap": 0.00812454847490951,
+    "train_oof": {
+      "count": 224,
+      "mean_frobenius_residual": 1.0117074019742816,
+      "mean_local_action_residual": 1.0120437802004445,
+      "median_frobenius_residual": 1.008339447338962,
+      "median_local_action_residual": 1.0084885812975726,
+      "p90_frobenius_residual": 1.0520004474928297,
+      "p90_local_action_residual": 1.052678848337882
+    },
+    "viable": false
+  },
+  "scientific_decision": false,
+  "seed": 81302,
+  "sparse_tensor_configs": [
+    {
+      "active_coordinates": 1,
+      "active_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9805268812376998,
+        "mean_local_action_residual": 0.9801988956086475,
+        "median_frobenius_residual": 0.9924984181122343,
+        "median_local_action_residual": 0.992330708484404,
+        "p90_frobenius_residual": 0.9998293011348575,
+        "p90_local_action_residual": 0.9998245296089617
+      },
+      "checks": {
+        "beats_rotated_null": false,
+        "beats_storage_matched_pca": false,
+        "complexity": true,
+        "eval_median_action": false,
+        "eval_median_frobenius": false,
+        "eval_p90_action": false,
+        "generalization_gap": true
+      },
+      "description_bits": {
+        "support_bits": 9,
+        "with_fp16_coefficients": 25,
+        "with_fp32_coefficients": 41
+      },
+      "dictionary_size": 448,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9378513876309972,
+        "mean_local_action_residual": 0.9364715731712112,
+        "median_frobenius_residual": 0.9400397975892271,
+        "median_local_action_residual": 0.9387977233268903,
+        "p90_frobenius_residual": 0.9593995153655057,
+        "p90_local_action_residual": 0.9588007552454074
+      },
+      "family": "sparse_tensor",
+      "relative_median_action_improvement_over_active_matched_vector_pca": 0.05394671826620697,
+      "relative_median_action_improvement_over_rotated_null": 0.024317786187126936,
+      "relative_median_action_improvement_over_storage_matched_vector_pca": 0.05394671826620697,
+      "rotated_null_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9712603744302246,
+        "mean_local_action_residual": 0.958357669884351,
+        "median_frobenius_residual": 0.9742405530740401,
+        "median_local_action_residual": 0.9621962049079057,
+        "p90_frobenius_residual": 0.9800661735064559,
+        "p90_local_action_residual": 0.9714991742343277
+      },
+      "shared_parameter_count": 4096,
+      "storage_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9805268812376998,
+        "mean_local_action_residual": 0.9801988956086475,
+        "median_frobenius_residual": 0.9924984181122343,
+        "median_local_action_residual": 0.992330708484404,
+        "p90_frobenius_residual": 0.9998293011348575,
+        "p90_local_action_residual": 0.9998245296089617
+      },
+      "train": {
+        "count": 224,
+        "mean_frobenius_residual": 0.9269055898538593,
+        "mean_local_action_residual": 0.9253528077140755,
+        "median_frobenius_residual": 0.9309706418350097,
+        "median_local_action_residual": 0.9300015244636388,
+        "p90_frobenius_residual": 0.9531927916245317,
+        "p90_local_action_residual": 0.9508588335095046
+      },
+      "train_eval_median_action_gap": 0.008796198863251448,
+      "viable": false
+    },
+    {
+      "active_coordinates": 2,
+      "active_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9598785033621896,
+        "mean_local_action_residual": 0.9589714577597777,
+        "median_frobenius_residual": 0.9705666425030337,
+        "median_local_action_residual": 0.9701480915849428,
+        "p90_frobenius_residual": 0.993944738786237,
+        "p90_local_action_residual": 0.9938138270908793
+      },
+      "checks": {
+        "beats_rotated_null": false,
+        "beats_storage_matched_pca": false,
+        "complexity": true,
+        "eval_median_action": false,
+        "eval_median_frobenius": false,
+        "eval_p90_action": false,
+        "generalization_gap": true
+      },
+      "description_bits": {
+        "support_bits": 18,
+        "with_fp16_coefficients": 50,
+        "with_fp32_coefficients": 82
+      },
+      "dictionary_size": 448,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.8925047167214284,
+        "mean_local_action_residual": 0.8901766811067463,
+        "median_frobenius_residual": 0.8924850263735551,
+        "median_local_action_residual": 0.8905994769330585,
+        "p90_frobenius_residual": 0.9269677856673719,
+        "p90_local_action_residual": 0.9205261275012064
+      },
+      "family": "sparse_tensor",
+      "relative_median_action_improvement_over_active_matched_vector_pca": 0.08199636255731296,
+      "relative_median_action_improvement_over_rotated_null": 0.04040386531869279,
+      "relative_median_action_improvement_over_storage_matched_vector_pca": 0.10251746789809671,
+      "rotated_null_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9480058274046677,
+        "mean_local_action_residual": 0.9242151796400011,
+        "median_frobenius_residual": 0.9514420134113749,
+        "median_local_action_residual": 0.9280982329392529,
+        "p90_frobenius_residual": 0.9627006606178263,
+        "p90_local_action_residual": 0.9464004210159278
+      },
+      "shared_parameter_count": 4096,
+      "storage_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9805268812376998,
+        "mean_local_action_residual": 0.9801988956086475,
+        "median_frobenius_residual": 0.9924984181122343,
+        "median_local_action_residual": 0.992330708484404,
+        "p90_frobenius_residual": 0.9998293011348575,
+        "p90_local_action_residual": 0.9998245296089617
+      },
+      "train": {
+        "count": 224,
+        "mean_frobenius_residual": 0.8728823130607629,
+        "mean_local_action_residual": 0.8702052043124093,
+        "median_frobenius_residual": 0.8754906351537864,
+        "median_local_action_residual": 0.8732402419530252,
+        "p90_frobenius_residual": 0.9103077102077403,
+        "p90_local_action_residual": 0.9075641460134872
+      },
+      "train_eval_median_action_gap": 0.017359234980033333,
+      "viable": false
+    },
+    {
+      "active_coordinates": 4,
+      "active_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9296374223398013,
+        "mean_local_action_residual": 0.9280461199742905,
+        "median_frobenius_residual": 0.9348152708025692,
+        "median_local_action_residual": 0.9335490236124211,
+        "p90_frobenius_residual": 0.9768415692336496,
+        "p90_local_action_residual": 0.9763737338070051
+      },
+      "checks": {
+        "beats_rotated_null": false,
+        "beats_storage_matched_pca": false,
+        "complexity": true,
+        "eval_median_action": false,
+        "eval_median_frobenius": false,
+        "eval_p90_action": false,
+        "generalization_gap": true
+      },
+      "description_bits": {
+        "support_bits": 36,
+        "with_fp16_coefficients": 100,
+        "with_fp32_coefficients": 164
+      },
+      "dictionary_size": 448,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.820328790981699,
+        "mean_local_action_residual": 0.8163621336200915,
+        "median_frobenius_residual": 0.8201790963148712,
+        "median_local_action_residual": 0.817354421476186,
+        "p90_frobenius_residual": 0.8619338543410133,
+        "p90_local_action_residual": 0.8590958765807876
+      },
+      "family": "sparse_tensor",
+      "relative_median_action_improvement_over_active_matched_vector_pca": 0.1244654530156472,
+      "relative_median_action_improvement_over_rotated_null": 0.06299746801131619,
+      "relative_median_action_improvement_over_storage_matched_vector_pca": 0.17632860246304471,
+      "rotated_null_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.909328957614471,
+        "mean_local_action_residual": 0.8688743676458953,
+        "median_frobenius_residual": 0.9144051406214845,
+        "median_local_action_residual": 0.8723075910386731,
+        "p90_frobenius_residual": 0.9318657129823775,
+        "p90_local_action_residual": 0.9000340791084256
+      },
+      "shared_parameter_count": 4096,
+      "storage_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9805268812376998,
+        "mean_local_action_residual": 0.9801988956086475,
+        "median_frobenius_residual": 0.9924984181122343,
+        "median_local_action_residual": 0.992330708484404,
+        "p90_frobenius_residual": 0.9998293011348575,
+        "p90_local_action_residual": 0.9998245296089617
+      },
+      "train": {
+        "count": 224,
+        "mean_frobenius_residual": 0.7890085347925346,
+        "mean_local_action_residual": 0.7845207199461176,
+        "median_frobenius_residual": 0.7878661415105206,
+        "median_local_action_residual": 0.7837990877258001,
+        "p90_frobenius_residual": 0.8375535816587973,
+        "p90_local_action_residual": 0.834099699844585
+      },
+      "train_eval_median_action_gap": 0.033555333750385885,
+      "viable": false
+    },
+    {
+      "active_coordinates": 8,
+      "active_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.8893900364200583,
+        "mean_local_action_residual": 0.886519070379489,
+        "median_frobenius_residual": 0.8904962130991663,
+        "median_local_action_residual": 0.8878726238881165,
+        "p90_frobenius_residual": 0.9497831036851361,
+        "p90_local_action_residual": 0.9490438318668605
+      },
+      "checks": {
+        "beats_rotated_null": false,
+        "beats_storage_matched_pca": true,
+        "complexity": true,
+        "eval_median_action": false,
+        "eval_median_frobenius": false,
+        "eval_p90_action": false,
+        "generalization_gap": true
+      },
+      "description_bits": {
+        "support_bits": 72,
+        "with_fp16_coefficients": 200,
+        "with_fp32_coefficients": 328
+      },
+      "dictionary_size": 448,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.7113090156392043,
+        "mean_local_action_residual": 0.7043498832996559,
+        "median_frobenius_residual": 0.7121767896562965,
+        "median_local_action_residual": 0.708850238363432,
+        "p90_frobenius_residual": 0.7633657453394825,
+        "p90_local_action_residual": 0.7563401377930882
+      },
+      "family": "sparse_tensor",
+      "relative_median_action_improvement_over_active_matched_vector_pca": 0.20163070772553032,
+      "relative_median_action_improvement_over_rotated_null": 0.1006564556002225,
+      "relative_median_action_improvement_over_storage_matched_vector_pca": 0.2856713671130206,
+      "rotated_null_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.8498432370054002,
+        "mean_local_action_residual": 0.7852557566514319,
+        "median_frobenius_residual": 0.8515589791414784,
+        "median_local_action_residual": 0.7881862751753215,
+        "p90_frobenius_residual": 0.8775960485552171,
+        "p90_local_action_residual": 0.8170566089812707
+      },
+      "shared_parameter_count": 4096,
+      "storage_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9805268812376998,
+        "mean_local_action_residual": 0.9801988956086475,
+        "median_frobenius_residual": 0.9924984181122343,
+        "median_local_action_residual": 0.992330708484404,
+        "p90_frobenius_residual": 0.9998293011348575,
+        "p90_local_action_residual": 0.9998245296089617
+      },
+      "train": {
+        "count": 224,
+        "mean_frobenius_residual": 0.6635204823000215,
+        "mean_local_action_residual": 0.655736342836892,
+        "median_frobenius_residual": 0.6636274693816031,
+        "median_local_action_residual": 0.6569361400795959,
+        "p90_frobenius_residual": 0.7192585126383751,
+        "p90_local_action_residual": 0.7157267398510133
+      },
+      "train_eval_median_action_gap": 0.051914098283836085,
+      "viable": false
+    },
+    {
+      "active_coordinates": 16,
+      "active_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.8101636666817917,
+        "mean_local_action_residual": 0.805169751583024,
+        "median_frobenius_residual": 0.8149650085197497,
+        "median_local_action_residual": 0.8065834458598227,
+        "p90_frobenius_residual": 0.8729142333331825,
+        "p90_local_action_residual": 0.8701731947552586
+      },
+      "checks": {
+        "beats_rotated_null": true,
+        "beats_storage_matched_pca": true,
+        "complexity": true,
+        "eval_median_action": false,
+        "eval_median_frobenius": false,
+        "eval_p90_action": true,
+        "generalization_gap": true
+      },
+      "description_bits": {
+        "support_bits": 144,
+        "with_fp16_coefficients": 400,
+        "with_fp32_coefficients": 656
+      },
+      "dictionary_size": 448,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.5572570327893366,
+        "mean_local_action_residual": 0.545534598622955,
+        "median_frobenius_residual": 0.5508298899188605,
+        "median_local_action_residual": 0.5401420675920573,
+        "p90_frobenius_residual": 0.6248456031236097,
+        "p90_local_action_residual": 0.6126047867977255
+      },
+      "family": "sparse_tensor",
+      "relative_median_action_improvement_over_active_matched_vector_pca": 0.33033330851929066,
+      "relative_median_action_improvement_over_rotated_null": 0.19610124950619984,
+      "relative_median_action_improvement_over_storage_matched_vector_pca": 0.4556834098009308,
+      "rotated_null_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.7636173608714546,
+        "mean_local_action_residual": 0.6739372801497738,
+        "median_frobenius_residual": 0.7670094622771684,
+        "median_local_action_residual": 0.6719031062808238,
+        "p90_frobenius_residual": 0.8001607489915009,
+        "p90_local_action_residual": 0.7121531575615858
+      },
+      "shared_parameter_count": 4096,
+      "storage_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9805268812376998,
+        "mean_local_action_residual": 0.9801988956086475,
+        "median_frobenius_residual": 0.9924984181122343,
+        "median_local_action_residual": 0.992330708484404,
+        "p90_frobenius_residual": 0.9998293011348575,
+        "p90_local_action_residual": 0.9998245296089617
+      },
+      "train": {
+        "count": 224,
+        "mean_frobenius_residual": 0.4908204490803381,
+        "mean_local_action_residual": 0.47664816215171896,
+        "median_frobenius_residual": 0.4909857250891593,
+        "median_local_action_residual": 0.4749994156205327,
+        "p90_frobenius_residual": 0.545792100784729,
+        "p90_local_action_residual": 0.5326575623770277
+      },
+      "train_eval_median_action_gap": 0.06514265197152458,
+      "viable": false
+    },
+    {
+      "active_coordinates": 32,
+      "active_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.6596130205208317,
+        "mean_local_action_residual": 0.6493613579058952,
+        "median_frobenius_residual": 0.6574299240171227,
+        "median_local_action_residual": 0.6488263969785888,
+        "p90_frobenius_residual": 0.7532878227620078,
+        "p90_local_action_residual": 0.7258314921478819
+      },
+      "checks": {
+        "beats_rotated_null": true,
+        "beats_storage_matched_pca": true,
+        "complexity": false,
+        "eval_median_action": true,
+        "eval_median_frobenius": true,
+        "eval_p90_action": true,
+        "generalization_gap": true
+      },
+      "description_bits": {
+        "support_bits": 288,
+        "with_fp16_coefficients": 800,
+        "with_fp32_coefficients": 1312
+      },
+      "dictionary_size": 448,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.38504667125229924,
+        "mean_local_action_residual": 0.3644004865634907,
+        "median_frobenius_residual": 0.38457421489278265,
+        "median_local_action_residual": 0.36940428179619,
+        "p90_frobenius_residual": 0.47378609320582127,
+        "p90_local_action_residual": 0.45825255667684267
+      },
+      "family": "sparse_tensor",
+      "relative_median_action_improvement_over_active_matched_vector_pca": 0.430657748333904,
+      "relative_median_action_improvement_over_rotated_null": 0.3089216775560894,
+      "relative_median_action_improvement_over_storage_matched_vector_pca": 0.6277407535232034,
+      "rotated_null_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.6461395123784703,
+        "mean_local_action_residual": 0.5395082665491747,
+        "median_frobenius_residual": 0.6486898864409119,
+        "median_local_action_residual": 0.5345331633176378,
+        "p90_frobenius_residual": 0.693284100591202,
+        "p90_local_action_residual": 0.5967736613982869
+      },
+      "shared_parameter_count": 4096,
+      "storage_matched_vector_pca_eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9805268812376998,
+        "mean_local_action_residual": 0.9801988956086475,
+        "median_frobenius_residual": 0.9924984181122343,
+        "median_local_action_residual": 0.992330708484404,
+        "p90_frobenius_residual": 0.9998293011348575,
+        "p90_local_action_residual": 0.9998245296089617
+      },
+      "train": {
+        "count": 224,
+        "mean_frobenius_residual": 0.29413971356015206,
+        "mean_local_action_residual": 0.2646647003778075,
+        "median_frobenius_residual": 0.29309518546538765,
+        "median_local_action_residual": 0.26094937931983364,
+        "p90_frobenius_residual": 0.33469050298848496,
+        "p90_local_action_residual": 0.310341454656497
+      },
+      "train_eval_median_action_gap": 0.10845490247635636,
+      "viable": false
+    }
+  ],
+  "train_count": 224,
+  "vectorized_pca": [
+    {
+      "dimension": 1,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9805268812376998,
+        "mean_local_action_residual": 0.9801988956086475,
+        "median_frobenius_residual": 0.9924984181122343,
+        "median_local_action_residual": 0.992330708484404,
+        "p90_frobenius_residual": 0.9998293011348575,
+        "p90_local_action_residual": 0.9998245296089617
+      },
+      "shared_parameter_count": 4096
+    },
+    {
+      "dimension": 2,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9598785033621896,
+        "mean_local_action_residual": 0.9589714577597777,
+        "median_frobenius_residual": 0.9705666425030337,
+        "median_local_action_residual": 0.9701480915849428,
+        "p90_frobenius_residual": 0.993944738786237,
+        "p90_local_action_residual": 0.9938138270908793
+      },
+      "shared_parameter_count": 8192
+    },
+    {
+      "dimension": 4,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.9296374223398013,
+        "mean_local_action_residual": 0.9280461199742905,
+        "median_frobenius_residual": 0.9348152708025692,
+        "median_local_action_residual": 0.9335490236124211,
+        "p90_frobenius_residual": 0.9768415692336496,
+        "p90_local_action_residual": 0.9763737338070051
+      },
+      "shared_parameter_count": 16384
+    },
+    {
+      "dimension": 8,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.8893900364200583,
+        "mean_local_action_residual": 0.886519070379489,
+        "median_frobenius_residual": 0.8904962130991663,
+        "median_local_action_residual": 0.8878726238881165,
+        "p90_frobenius_residual": 0.9497831036851361,
+        "p90_local_action_residual": 0.9490438318668605
+      },
+      "shared_parameter_count": 32768
+    },
+    {
+      "dimension": 16,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.8101636666817917,
+        "mean_local_action_residual": 0.805169751583024,
+        "median_frobenius_residual": 0.8149650085197497,
+        "median_local_action_residual": 0.8065834458598227,
+        "p90_frobenius_residual": 0.8729142333331825,
+        "p90_local_action_residual": 0.8701731947552586
+      },
+      "shared_parameter_count": 65536
+    },
+    {
+      "dimension": 32,
+      "eval": {
+        "count": 56,
+        "mean_frobenius_residual": 0.6596130205208317,
+        "mean_local_action_residual": 0.6493613579058952,
+        "median_frobenius_residual": 0.6574299240171227,
+        "median_local_action_residual": 0.6488263969785888,
+        "p90_frobenius_residual": 0.7532878227620078,
+        "p90_local_action_residual": 0.7258314921478819
+      },
+      "shared_parameter_count": 131072
+    }
+  ]
+}
