@@ -53,6 +53,7 @@ alpha 缩放、zero-state 诊断和回滚报告。当前只支持经过测试的
 - [`docs/hybrid-clm/`](docs/hybrid-clm/)：API、artifact、placement、安全和状态文档。
 - [`research/stages/08-hybrid-clm/`](research/stages/08-hybrid-clm/)：当前科研边界与路线图。
 - [`research/`](research/README.zh-CN.md)：历史协议、报告和证据目录。
+- [`research/archive/github-workflows/`](research/archive/github-workflows/)：归档的一次性科研 workflow（不再是活动 Actions）。
 - [`artifacts/`](artifacts/)：持久证据与发布资产。
 - [`tests/`](tests/)：单元、集成、科研测试和公共 fixtures。
 - [`docs/integrations/minijam.md`](docs/integrations/minijam.md)：MiniCells/MiniJAM 边界。

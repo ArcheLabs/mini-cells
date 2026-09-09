@@ -57,6 +57,7 @@ backend is supported; unknown architectures fail closed.
 - [`docs/hybrid-clm/`](docs/hybrid-clm/): API, artifact, placement, safety, and status docs.
 - [`research/stages/08-hybrid-clm/`](research/stages/08-hybrid-clm/): current research boundary and roadmap.
 - [`research/`](research/README.md): historical protocols, reports, and evidence catalog.
+- [`research/archive/github-workflows/`](research/archive/github-workflows/): archived one-shot research workflows (not active Actions).
 - [`artifacts/`](artifacts/): durable evidence and release assets.
 - [`tests/`](tests/): unit, integration, research, and public fixtures.
 - [`docs/integrations/minijam.md`](docs/integrations/minijam.md): MiniCells/MiniJAM ownership boundary.

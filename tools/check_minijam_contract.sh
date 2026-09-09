@@ -50,7 +50,7 @@ assert contract["training_abi"] == {
 
 for workflow_path in (
     Path(".github/workflows/minijam-stage1-compatibility.yml"),
-    Path(".github/workflows/hybrid-clm-release.yml"),
+    Path(".github/workflows/hybrid-clm-ci.yml"),
 ):
     workflow = workflow_path.read_text()
     assert "bootstrap_deps.sh" not in workflow
