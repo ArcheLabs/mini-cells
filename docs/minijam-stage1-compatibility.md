@@ -7,8 +7,8 @@ Stage-1 chain and restart persistence is recorded.
 
 | Property | Value |
 | --- | --- |
-| MiniJAM commit | `b90c0bffa09fa0190fb1737db876190ddd899c22` |
-| Jambda gitlink | `d33e0abf8116b23bbc551c6a8d7075eacb2994ce` |
+| Stage-1 contract | [`configs/minijam-stage1-contract-v1.json`](../configs/minijam-stage1-contract-v1.json) |
+| Contract identity | `minijam-stage1/v1`, SHA-256 recorded in [`configs/dependencies.json`](../configs/dependencies.json) |
 | MiniJamSpec | v1 |
 | Guest SDK ABI | 1 |
 | Logical batch | 256 samples |
@@ -19,8 +19,9 @@ Stage-1 chain and restart persistence is recorded.
 | Work boundary | 1,048,576 bytes |
 | Fresh-chain E2E | BLOCKED — exact runnable chain/credentials are unavailable |
 
-MiniCells consumes the public `minijam-pvm-executor`; the dependency lock is
-`configs/dependencies.json`, and MiniJAM's own Jambda gitlink is authoritative.
+MiniCells consumes the public `minijam-pvm-executor` contract. The dependency
+lock contains only the public Stage-1 contract/ABI identity. MiniJAM source and
+its internal Jambda implementation are not MiniCells CI dependencies.
 
 ## V2 execution protocol
 
@@ -60,6 +61,7 @@ deployment path.
 
 `artifacts/stage1-training-compatibility/decision.json` deliberately reports
 `BLOCKED_FRESH_CHAIN`, not PASS. A PASS requires all of the following on a
-fresh chain using the pinned MiniJAM/Jambda pair: service creation finalized,
-one complete hierarchical training step, canonical state update, and restart
-persistence. No cached or unverifiable image is accepted as chain evidence.
+fresh chain using a released, digest-pinned MiniJAM OCI image: service
+creation finalized, one complete hierarchical training step, canonical state
+update, and restart persistence. No cached or unverifiable image is accepted
+as chain evidence.

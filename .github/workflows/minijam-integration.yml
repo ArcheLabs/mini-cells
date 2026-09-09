@@ -1,0 +1,32 @@
+name: MiniCells x MiniJAM integration (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: OCI image for a released MiniJAM Stage-1 runtime (prefer a digest)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  runtime-image:
+    runs-on: ubuntu-latest
+    env:
+      MINIJAM_IMAGE: ${{ inputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require a digest-pinned runtime image
+        run: |
+          case "${MINIJAM_IMAGE}" in
+            *@sha256:*) ;;
+            *) echo "MiniJAM integration requires an OCI digest (image@sha256:...)" >&2; exit 1 ;;
+          esac
+      - name: Pull released MiniJAM runtime
+        run: docker pull "${MINIJAM_IMAGE}"
+      - name: Record integration handoff
+        run: |
+          echo "Pulled ${MINIJAM_IMAGE}."
+          echo "The Stage-1 RPC/deployment harness will be enabled when the published MiniJAM image contract is available."

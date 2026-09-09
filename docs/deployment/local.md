@@ -8,8 +8,9 @@ export MINICELLS_RPC_URL=ws://127.0.0.1:9944
 # The --dev genesis ingress relayer is the 0x92…92 seed below.
 export MINICELLS_KEEPER_SIGNER_URI=0x9292929292929292929292929292929292929292929292929292929292929292
 export MINICELLS_BULLETIN_DIR=.local/minicells-bulletin
-# The default is pinned to the released MiniJAM commit carrying ownerless
-# System ABI V2; override only when validating another release candidate.
+# Source-level MiniJAM bootstrap is a legacy development path. It is not used
+# by MiniCells CI or the HybridCLM release gate; override only when validating
+# a local MiniJAM source candidate.
 ./tools/bootstrap_deps.sh
 cargo run --offline -p minicells-cli -- deploy service/artifacts/service.blob
 # Copy the receipt-derived Service ID printed by the command.

@@ -10,4 +10,8 @@ python3 tools/generate_runtime_config.py
 
 The script builds `minicells-service` as a `no_std` PIC `cdylib` with `-Z build-std=core`, compiles the current MiniJAM SDK C objects into a PIC archive, links with `rust-lld`, and invokes MiniJAM's pinned `polkavm-to-jam` converter. Outputs are `service.elf`, `service.blob`, `service.polkavm`, `service.pvm`, and `manifest.json` under `service/artifacts`.
 
-The manifest records the toolchain, target hash, MiniJAM/Jambda/converter refs, genesis/model format, code hash, and artifact size. `MINIJAM_CLIENT` may point `tools/bootstrap_minijam.sh` at another compatible checkout.
+The manifest records the toolchain, target hash, converter ref, genesis/model
+format, code hash, and artifact size. This source-level build path is a legacy
+development tool; normal CI validates the public Stage-1 contract and does not
+clone MiniJAM or Jambda. `MINIJAM_CLIENT` may point `tools/bootstrap_minijam.sh`
+at another compatible checkout when developing locally.

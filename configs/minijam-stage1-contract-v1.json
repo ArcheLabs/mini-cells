@@ -1,0 +1,23 @@
+{
+  "schema": "minicells.minijam-stage1-contract.v1",
+  "contract_id": "minijam-stage1",
+  "contract_version": "v1",
+  "minijam_spec": "v1",
+  "guest_sdk_abi": 1,
+  "interfaces": {
+    "pvm_executor": "minijam-pvm-executor",
+    "work_rpc": "work",
+    "state_rpc": "state",
+    "service_lifecycle": "service"
+  },
+  "limits": {
+    "refine_gas": 1000000000,
+    "accumulate_gas": 1000000000,
+    "work_payload_bytes": 1048576
+  },
+  "training_abi": {
+    "leaf": {"input": "MCG1/v2", "output": "MCGR/v2"},
+    "reducer": {"input": "MCR2", "output": "MCGR2"},
+    "finalizer": {"input": "MCF2", "output": "MCPR"}
+  }
+}
