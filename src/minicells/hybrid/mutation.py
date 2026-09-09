@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import math
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 import torch
 
@@ -56,7 +57,7 @@ class CellMutation:
         self.source_path = Path(source_path).resolve() if source_path else None
 
     @classmethod
-    def from_pretrained(cls, path_or_repo: str | Path, *, revision: str | None = None) -> "CellMutation":
+    def from_pretrained(cls, path_or_repo: str | Path, *, revision: str | None = None) -> CellMutation:
         path = Path(path_or_repo).expanduser()
         if not path.is_dir():
             try:
@@ -123,7 +124,7 @@ class CellMutation:
         self.source_path = root
         return root
 
-    def set_alpha(self, alpha: float) -> "CellMutation":
+    def set_alpha(self, alpha: float) -> CellMutation:
         value = float(alpha)
         if not math.isfinite(value):
             raise ValueError("alpha must be finite")
@@ -150,10 +151,27 @@ class CellMutation:
 
             inspection = BackendRegistry.resolve(model).inspect(model)
         failures: list[str] = []
-        expected_model = base_model or getattr(model, "name_or_path", None) or getattr(getattr(model, "config", None), "_name_or_path", None)
+        try:
+            model_name = model.name_or_path
+        except AttributeError:
+            model_name = None
+        try:
+            config = model.config
+        except AttributeError:
+            config = None
+        if model_name is None and config is not None:
+            try:
+                model_name = config._name_or_path
+            except AttributeError:
+                model_name = None
+        expected_model = base_model or model_name
         if self.base_model and expected_model and self.base_model != expected_model:
             failures.append(f"base model mismatch ({expected_model!r} != {self.base_model!r})")
-        expected_revision = base_revision or getattr(getattr(model, "config", None), "_commit_hash", None)
+        try:
+            model_revision = config._commit_hash if config is not None else None
+        except AttributeError:
+            model_revision = None
+        expected_revision = base_revision or model_revision
         if self.base_revision and expected_revision and self.base_revision != expected_revision:
             failures.append(f"base revision mismatch ({expected_revision!r} != {self.base_revision!r})")
         if self.architecture and self.architecture != inspection.architecture:
@@ -174,7 +192,7 @@ class CellMutation:
             index = target.get("index")
             try:
                 shape = tuple(parameter.shape) if index is None else tuple(parameter[int(index)].shape)
-            except (IndexError, TypeError, ValueError) as exc:
+            except (IndexError, TypeError, ValueError):
                 failures.append(f"invalid target index for {name!r}")
                 continue
             if shape != tuple(self.tensors[key].shape):

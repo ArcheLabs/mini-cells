@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from ..inspector import CellPlacement, ModelInspection
 
@@ -38,4 +39,3 @@ class HybridBackend(ABC):
     def verify_zero_state(self, model: Any, placement: CellPlacement | None = None) -> Any:
         del model, placement
         return None
-

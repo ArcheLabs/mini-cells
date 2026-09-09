@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 import torch
 
@@ -116,4 +117,3 @@ def load_artifact(directory: str | Path) -> tuple[dict[str, Any], dict[str, Any]
         if list(tensor.shape) != list(record.get("shape", [])):
             raise ArtifactValidationError(f"tensor shape mismatch for {record['key']}")
     return config, manifest, tensors, provenance, evaluation
-
