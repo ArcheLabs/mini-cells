@@ -4,7 +4,11 @@ import pytest
 import torch
 
 from minicells import CellMutation, CellPlacement, HybridCLM, ModelInspection
-from minicells.hybrid.errors import ArtifactValidationError, PlacementError, UnsupportedArchitectureError
+from minicells.hybrid.errors import (
+    ArtifactValidationError,
+    PlacementError,
+    UnsupportedArchitectureError,
+)
 from minicells.pcu_kill_001.backends import make_toy_model
 
 

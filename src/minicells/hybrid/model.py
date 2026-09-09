@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import contextlib
+import math
 from collections.abc import Iterator, Sequence
 from copy import deepcopy
-import math
 from typing import Any
 
 import torch
