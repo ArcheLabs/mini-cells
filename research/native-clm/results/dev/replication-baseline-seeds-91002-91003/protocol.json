@@ -1,0 +1,95 @@
+{
+  "candidate_parameters": {
+    "M4-c1-modernized": {
+      "id": "M4",
+      "over_t1": 0.9915737455651292,
+      "parameters": 1878120,
+      "relative_error": 0.008426254434870772
+    },
+    "T1-modern-transformer": {
+      "id": "T1",
+      "over_t1": 1.0,
+      "parameters": 1894080,
+      "relative_error": 0.0
+    },
+    "T1_anchor": 1894080,
+    "X3-n1-swiglu-rope": {
+      "id": "X3",
+      "over_t1": 0.9997127893225207,
+      "parameters": 1893536,
+      "relative_error": 0.0002872106774792771
+    },
+    "X4-n1-swiglu-rope-rmsnorm": {
+      "id": "X4",
+      "over_t1": 0.9999113025848961,
+      "parameters": 1893912,
+      "relative_error": 8.869741510386664e-05
+    },
+    "seeds": [
+      91002,
+      91003
+    ],
+    "tolerance": 0.01
+  },
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "decision_rule": "Freeze architecture; retrain T1/M4/X3/X4 on 91002 and 91003; use same-seed paired deltas vs T1; report compute separately; do not consume 91101-91103.",
+  "environment_before_launch": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 2,
+    "gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "format": "minicells.native-clm-replication.v1",
+  "model_ids": {
+    "M4-c1-modernized": "M4",
+    "T1-modern-transformer": "T1",
+    "X3-n1-swiglu-rope": "X3",
+    "X4-n1-swiglu-rope-rmsnorm": "X4"
+  },
+  "models": [
+    "T1-modern-transformer",
+    "M4-c1-modernized",
+    "X3-n1-swiglu-rope",
+    "X4-n1-swiglu-rope-rmsnorm"
+  ],
+  "phase": "cross-seed-development-replication",
+  "profile": {
+    "checkpoints": [
+      1000000,
+      2500000,
+      5000000,
+      7500000,
+      10000000
+    ],
+    "name": "baseline",
+    "target_tokens": 10000000,
+    "train_stream_tokens": 12000000,
+    "validation_stream_tokens": 1000000,
+    "warmup_steps": 1000
+  },
+  "seeds": [
+    91002,
+    91003
+  ]
+}

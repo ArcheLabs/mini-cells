@@ -1,0 +1,82 @@
+{
+  "leaderboard": [
+    {
+      "id": "T1",
+      "inference_flops_per_token_estimate": 3978240.0,
+      "log_token_nll_auc": 6.980328644724584,
+      "log_token_nll_auc_mean": 3.0315182122750897,
+      "model": "T1-modern-transformer",
+      "parameter_ratio_to_t1": 1.0,
+      "parameters": 1894080,
+      "peak_vram_bytes": 112862720,
+      "ppl_delta_vs_same_seed_t1": 0.0,
+      "ppl_ratio_vs_same_seed_t1": 1.0,
+      "seed": 91003,
+      "tokens_per_second": 46374.46300600593,
+      "train_flops_estimate": 119347200000000.0,
+      "train_flops_ratio_vs_same_seed_t1": 1.0,
+      "validation_nll_10m": 2.497697025537491,
+      "validation_ppl_10m": 12.15447026953061
+    },
+    {
+      "id": "M4",
+      "inference_flops_per_token_estimate": 12978942.464,
+      "log_token_nll_auc": 6.994612569895203,
+      "log_token_nll_auc_mean": 3.0377216421566087,
+      "model": "M4-c1-modernized",
+      "parameter_ratio_to_t1": 0.9915737455651292,
+      "parameters": 1878120,
+      "peak_vram_bytes": 245221376,
+      "ppl_delta_vs_same_seed_t1": -0.09518841972650804,
+      "ppl_ratio_vs_same_seed_t1": 0.9921684435754365,
+      "seed": 91003,
+      "tokens_per_second": 15097.595254841957,
+      "train_flops_estimate": 389368273920000.0,
+      "train_flops_ratio_vs_same_seed_t1": 3.2624835263835266,
+      "validation_nll_10m": 2.4898346414168677,
+      "validation_ppl_10m": 12.059281849804101
+    },
+    {
+      "id": "X3",
+      "inference_flops_per_token_estimate": 13096254.464,
+      "log_token_nll_auc": 6.93332972890905,
+      "log_token_nll_auc_mean": 3.011106842480968,
+      "model": "X3-n1-swiglu-rope",
+      "parameter_ratio_to_t1": 0.9997127893225207,
+      "parameters": 1893536,
+      "peak_vram_bytes": 228392448,
+      "ppl_delta_vs_same_seed_t1": -0.2275820619398523,
+      "ppl_ratio_vs_same_seed_t1": 0.9812758551468619,
+      "seed": 91003,
+      "tokens_per_second": 18644.9691989658,
+      "train_flops_estimate": 392887633920000.0,
+      "train_flops_ratio_vs_same_seed_t1": 3.2919719433719434,
+      "validation_nll_10m": 2.478795364499092,
+      "validation_ppl_10m": 11.926888207590757
+    },
+    {
+      "id": "X4",
+      "inference_flops_per_token_estimate": 13109790.464,
+      "log_token_nll_auc": 6.963737186676749,
+      "log_token_nll_auc_mean": 3.0243126335981856,
+      "model": "X4-n1-swiglu-rope-rmsnorm",
+      "parameter_ratio_to_t1": 0.9999113025848961,
+      "parameters": 1893912,
+      "peak_vram_bytes": 247104512,
+      "ppl_delta_vs_same_seed_t1": -0.17855258906546467,
+      "ppl_ratio_vs_same_seed_t1": 0.985309718555726,
+      "seed": 91003,
+      "tokens_per_second": 16322.71672865382,
+      "train_flops_estimate": 393293713920000.0,
+      "train_flops_ratio_vs_same_seed_t1": 3.295374453024453,
+      "validation_nll_10m": 2.482897773385048,
+      "validation_ppl_10m": 11.975917680465145
+    }
+  ],
+  "seed": 91003,
+  "visualizations": {
+    "final_ppl": "replication-seed-91003-final-ppl.svg",
+    "learning_curves": "replication-seed-91003-learning-curves.svg",
+    "quality_compute": "replication-seed-91003-quality-compute.svg"
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "checkpoints": [
+    {
+      "consumed_tokens": 1000000.0,
+      "elapsed_seconds": 56.02815918300007,
+      "grad_norm": 2.8000926971435547,
+      "learning_rate": 0.0003,
+      "model": "X3-n1-swiglu-rope",
+      "parameters": 1893536.0,
+      "peak_vram_bytes": 228392448.0,
+      "step": 1000.0,
+      "tokens_per_second": 17848.168038749656,
+      "train_loss": 4.015664100646973,
+      "validation_nll": 3.9401448716719947,
+      "validation_ppl": 51.426050938876706,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 2500000.0,
+      "elapsed_seconds": 136.11190334499997,
+      "grad_norm": 2.3974337577819824,
+      "learning_rate": 0.0002799038105676658,
+      "model": "X3-n1-swiglu-rope",
+      "parameters": 1893536.0,
+      "peak_vram_bytes": 228392448.0,
+      "step": 2500.0,
+      "tokens_per_second": 18367.240032367357,
+      "train_loss": 3.1758530139923096,
+      "validation_nll": 3.0574555695056915,
+      "validation_ppl": 21.27335965534921,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 5000000.0,
+      "elapsed_seconds": 267.8948415890002,
+      "grad_norm": 2.410522937774658,
+      "learning_rate": 0.00017604722665003956,
+      "model": "X3-n1-swiglu-rope",
+      "parameters": 1893536.0,
+      "peak_vram_bytes": 228392448.0,
+      "step": 5000.0,
+      "tokens_per_second": 18664.039853633753,
+      "train_loss": 2.5667569637298584,
+      "validation_nll": 2.6711998879909515,
+      "validation_ppl": 14.45730593742285,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 7500000.0,
+      "elapsed_seconds": 402.28234372500015,
+      "grad_norm": 3.0386264324188232,
+      "learning_rate": 5.358185854701909e-05,
+      "model": "X3-n1-swiglu-rope",
+      "parameters": 1893536.0,
+      "peak_vram_bytes": 228392448.0,
+      "step": 7500.0,
+      "tokens_per_second": 18643.622115135615,
+      "train_loss": 2.5306315422058105,
+      "validation_nll": 2.510280559460322,
+      "validation_ppl": 12.308382809375518,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 10000000.0,
+      "elapsed_seconds": 536.665866004,
+      "grad_norm": 2.613865375518799,
+      "learning_rate": 0.0,
+      "model": "X3-n1-swiglu-rope",
+      "parameters": 1893536.0,
+      "peak_vram_bytes": 228392448.0,
+      "step": 10000.0,
+      "tokens_per_second": 18633.5681724268,
+      "train_loss": 2.336042642593384,
+      "validation_nll": 2.471179927388827,
+      "validation_ppl": 11.836404713501937,
+      "validation_tokens": 49152.0
+    }
+  ],
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 536.718507693,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 536.665866004,
+    "grad_norm": 2.613865375518799,
+    "learning_rate": 0.0,
+    "model": "X3-n1-swiglu-rope",
+    "parameters": 1893536,
+    "peak_vram_bytes": 228392448,
+    "step": 10000,
+    "tokens_per_second": 18633.5681724268,
+    "train_loss": 2.336042642593384,
+    "validation_nll": 2.471179927388827,
+    "validation_ppl": 11.836404713501937,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy analytic estimate; multiply-add=2 FLOPs; training\u22483x forward",
+    "inference_forward_flops_per_token": 13096254.464,
+    "train_flops_estimate": 392887633920000.0
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "X3-n1-swiglu-rope",
+  "model_config": {
+    "activation": "SwiGLU",
+    "context_length": 128,
+    "factor": "N1+SwiGLU+RoPE",
+    "ffn_dim": 638,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "learned_position_embedding": false,
+    "name": "X3-n1-swiglu-rope",
+    "normalization": "LayerNorm",
+    "parent_modernization": "M-series",
+    "parent_native": "N1-residual-only",
+    "position": "RoPE",
+    "residual_alpha": 0.11920292202211755,
+    "search_phase": "C-winner-cross-over",
+    "update": "fixed-scaled-residual",
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "parameter_ratio_to_t1": 0.9997127893225207,
+  "parameters": 1893536,
+  "peak_vram_bytes": 228392448,
+  "profile": "baseline",
+  "replication_id": "X3",
+  "replication_seed": 91002,
+  "seed": 91002,
+  "validation_log_token_nll_auc": {
+    "auc": 6.958312107426177,
+    "mean_nll": 3.0219565516157743
+  }
+}
