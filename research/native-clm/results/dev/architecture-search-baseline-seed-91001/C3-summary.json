@@ -1,0 +1,167 @@
+{
+  "checkpoints": [
+    {
+      "consumed_tokens": 1000000.0,
+      "elapsed_seconds": 40.73996641400004,
+      "grad_norm": 2.231060743331909,
+      "learning_rate": 0.0003,
+      "model": "C3-progressive-receptive-field",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 266034176.0,
+      "step": 1000.0,
+      "tokens_per_second": 24545.921070184195,
+      "train_loss": 4.2043280601501465,
+      "validation_nll": 4.238570183515549,
+      "validation_ppl": 69.30868226208851,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 2500000.0,
+      "elapsed_seconds": 101.86814046999996,
+      "grad_norm": 1.8480262756347656,
+      "learning_rate": 0.0002799038105676658,
+      "model": "C3-progressive-receptive-field",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 266034176.0,
+      "step": 2500.0,
+      "tokens_per_second": 24541.52975076881,
+      "train_loss": 3.633026361465454,
+      "validation_nll": 3.5177175303300223,
+      "validation_ppl": 33.70740446647134,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 5000000.0,
+      "elapsed_seconds": 201.59321221300002,
+      "grad_norm": 2.3684446811676025,
+      "learning_rate": 0.00017604722665003956,
+      "model": "C3-progressive-receptive-field",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 266034176.0,
+      "step": 5000.0,
+      "tokens_per_second": 24802.422388691757,
+      "train_loss": 2.8626532554626465,
+      "validation_nll": 3.107849806547165,
+      "validation_ppl": 22.372886610706676,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 7500000.0,
+      "elapsed_seconds": 302.523492027,
+      "grad_norm": 2.737607002258301,
+      "learning_rate": 5.358185854701909e-05,
+      "model": "C3-progressive-receptive-field",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 266034176.0,
+      "step": 7500.0,
+      "tokens_per_second": 24791.463134805515,
+      "train_loss": 2.9405620098114014,
+      "validation_nll": 2.9306889126698175,
+      "validation_ppl": 18.740536643691396,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 10000000.0,
+      "elapsed_seconds": 398.99776926100003,
+      "grad_norm": 2.6987152099609375,
+      "learning_rate": 0.0,
+      "model": "C3-progressive-receptive-field",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 266034176.0,
+      "step": 10000.0,
+      "tokens_per_second": 25062.79676330373,
+      "train_loss": 3.021822214126587,
+      "validation_nll": 2.8821606834729514,
+      "validation_ppl": 17.852805798659638,
+      "validation_tokens": 49152.0
+    }
+  ],
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 399.0521612760001,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 398.99776926100003,
+    "grad_norm": 2.6987152099609375,
+    "learning_rate": 0.0,
+    "model": "C3-progressive-receptive-field",
+    "parameters": 1899576,
+    "peak_vram_bytes": 266034176,
+    "step": 10000,
+    "tokens_per_second": 25062.79676330373,
+    "train_loss": 3.021822214126587,
+    "validation_nll": 2.8821606834729514,
+    "validation_ppl": 17.852805798659638,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy; multiply-add=2; training\u22483x forward",
+    "inference_forward_flops_per_token": 13186365.696,
+    "train_flops_estimate": 395590970880000.0
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "C3-progressive-receptive-field",
+  "model_config": {
+    "context_length": 128,
+    "factor": "receptive_field_schedule",
+    "name": "C3-progressive-receptive-field",
+    "schedule": [
+      [
+        8,
+        16,
+        32,
+        64
+      ],
+      [
+        16,
+        32,
+        64,
+        128
+      ],
+      [
+        32,
+        64,
+        128,
+        128
+      ]
+    ],
+    "search_phase": "A-single-factor",
+    "update": "C0_GRU",
+    "vocab_size": 2048
+  },
+  "parameter_ratio_to_t1": 1.0029016725798277,
+  "parameters": 1899576,
+  "peak_vram_bytes": 266034176,
+  "profile": "baseline",
+  "seed": 91001,
+  "validation_log_token_nll_auc": {
+    "auc": 7.910088619192036,
+    "mean_nll": 3.4353078386808122
+  }
+}
