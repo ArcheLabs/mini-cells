@@ -1,0 +1,281 @@
+{
+  "candidate_configs": {
+    "M1-c1-rmsnorm": {
+      "activation": "GELU",
+      "factor": "normalization",
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "name": "M1-c1-rmsnorm",
+      "normalization": "RMSNorm",
+      "parent": "C1-residual-gated-update",
+      "position": "learned-absolute",
+      "search_phase": "B-two-track",
+      "track": "modernization",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "M2-c1-swiglu": {
+      "activation": "SwiGLU",
+      "factor": "activation",
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "name": "M2-c1-swiglu",
+      "normalization": "LayerNorm",
+      "parent": "C1-residual-gated-update",
+      "position": "learned-absolute",
+      "search_phase": "B-two-track",
+      "swiglu_hidden": 504,
+      "track": "modernization",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "M3-c1-rope": {
+      "activation": "GELU",
+      "factor": "position",
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "learned_position_embedding": false,
+      "name": "M3-c1-rope",
+      "normalization": "LayerNorm",
+      "parent": "C1-residual-gated-update",
+      "position": "RoPE",
+      "search_phase": "B-two-track",
+      "track": "modernization",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "M4-c1-modernized": {
+      "activation": "SwiGLU",
+      "factor": "combined-modernization",
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "learned_position_embedding": false,
+      "name": "M4-c1-modernized",
+      "normalization": "RMSNorm",
+      "parent": "C1-residual-gated-update",
+      "position": "RoPE",
+      "search_phase": "B-two-track",
+      "swiglu_hidden": 504,
+      "track": "modernization",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "N1-residual-only": {
+      "factor": "gate-ablation",
+      "ffn_dim": 932,
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "name": "N1-residual-only",
+      "parent": "C1-residual-gated-update",
+      "residual_alpha": 0.11920292202211755,
+      "search_phase": "B-two-track",
+      "track": "native",
+      "update": "fixed-scaled-residual",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "N2-dual-gate-aru": {
+      "factor": "dual-gate-aru",
+      "gate_rank": 94,
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "name": "N2-dual-gate-aru",
+      "parent": "C1-residual-gated-update",
+      "retain_bias": 6.0,
+      "search_phase": "B-two-track",
+      "track": "native",
+      "update": "retain*state+write*proposal",
+      "windows": [
+        8,
+        32,
+        128
+      ],
+      "write_bias": -2.0
+    },
+    "N3-step-conditioned-write": {
+      "factor": "recurrent-step-conditioned-write",
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "name": "N3-step-conditioned-write",
+      "parent": "C1-residual-gated-update",
+      "search_phase": "B-two-track",
+      "step_gate_bias_initial": 0.0,
+      "track": "native",
+      "update": "C1+per-step-gate-bias",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "N4-adaptive-communication": {
+      "communication": "state-conditioned-soft-gate",
+      "communication_bias": 6.0,
+      "factor": "adaptive-communication",
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "name": "N4-adaptive-communication",
+      "parent": "C1-residual-gated-update",
+      "realized_compute_reduction_claim": false,
+      "search_phase": "B-two-track",
+      "track": "native",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    }
+  },
+  "candidate_parameters": {
+    "M1-c1-rmsnorm": {
+      "over_t1": 1.0033852846764657,
+      "parameters": 1900492,
+      "relative_error": 0.003385284676465705
+    },
+    "M2-c1-swiglu": {
+      "over_t1": 1.0049733907754688,
+      "parameters": 1903500,
+      "relative_error": 0.004973390775468767
+    },
+    "M3-c1-rope": {
+      "over_t1": 0.9913752323027538,
+      "parameters": 1877744,
+      "relative_error": 0.008624767697246183
+    },
+    "M4-c1-modernized": {
+      "over_t1": 0.9915737455651292,
+      "parameters": 1878120,
+      "relative_error": 0.008426254434870772
+    },
+    "N1-residual-only": {
+      "over_t1": 0.9993030917384693,
+      "parameters": 1892760,
+      "relative_error": 0.0006969082615306821
+    },
+    "N2-dual-gate-aru": {
+      "over_t1": 1.0043778509883425,
+      "parameters": 1902372,
+      "relative_error": 0.004377850988342535
+    },
+    "N3-step-conditioned-write": {
+      "over_t1": 1.0052711606690319,
+      "parameters": 1904064,
+      "relative_error": 0.005271160669031882
+    },
+    "N4-adaptive-communication": {
+      "over_t1": 1.004379434870755,
+      "parameters": 1902375,
+      "relative_error": 0.0043794348707550945
+    },
+    "T1_anchor": 1894080,
+    "tolerance": 0.01
+  },
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "decision_rule": "C1 is the parent anchor. M-series measures transferable modern-LM components; N-series measures CLM-native mechanisms. Rank 10M PPL and log-token NLL AUC; report compute separately; do not consume held-back seeds before interpretation.",
+  "environment_before_launch": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 2,
+    "gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "format": "minicells.native-clm-phase-b.v1",
+  "models": [
+    "M1-c1-rmsnorm",
+    "M2-c1-swiglu",
+    "M3-c1-rope",
+    "M4-c1-modernized",
+    "N1-residual-only",
+    "N2-dual-gate-aru",
+    "N3-step-conditioned-write",
+    "N4-adaptive-communication"
+  ],
+  "modernization_models": [
+    "M1-c1-rmsnorm",
+    "M2-c1-swiglu",
+    "M3-c1-rope",
+    "M4-c1-modernized"
+  ],
+  "native_models": [
+    "N1-residual-only",
+    "N2-dual-gate-aru",
+    "N3-step-conditioned-write",
+    "N4-adaptive-communication"
+  ],
+  "phase": "B-two-track",
+  "profile": {
+    "checkpoints": [
+      1000000,
+      2500000,
+      5000000,
+      7500000,
+      10000000
+    ],
+    "name": "baseline",
+    "target_tokens": 10000000,
+    "train_stream_tokens": 12000000,
+    "validation_stream_tokens": 1000000,
+    "warmup_steps": 1000
+  },
+  "seed": 91001,
+  "track_request": "all"
+}

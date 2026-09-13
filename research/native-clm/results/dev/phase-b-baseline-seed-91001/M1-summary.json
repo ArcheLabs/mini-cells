@@ -1,0 +1,162 @@
+{
+  "checkpoints": [
+    {
+      "consumed_tokens": 1000000.0,
+      "elapsed_seconds": 48.79895095099994,
+      "grad_norm": 2.1227824687957764,
+      "learning_rate": 0.0003,
+      "model": "M1-c1-rmsnorm",
+      "parameters": 1900492.0,
+      "peak_vram_bytes": 233069568.0,
+      "step": 1000.0,
+      "tokens_per_second": 20492.243798521842,
+      "train_loss": 4.0299458503723145,
+      "validation_nll": 4.111672505736351,
+      "validation_ppl": 61.04873659428988,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 2500000.0,
+      "elapsed_seconds": 121.470727205,
+      "grad_norm": 2.1114449501037598,
+      "learning_rate": 0.0002799038105676658,
+      "model": "M1-c1-rmsnorm",
+      "parameters": 1900492.0,
+      "peak_vram_bytes": 233069568.0,
+      "step": 2500.0,
+      "tokens_per_second": 20581.090255439703,
+      "train_loss": 3.490907907485962,
+      "validation_nll": 3.3469278067350388,
+      "validation_ppl": 28.41530210948689,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 5000000.0,
+      "elapsed_seconds": 240.35978039299994,
+      "grad_norm": 2.44970965385437,
+      "learning_rate": 0.00017604722665003956,
+      "model": "M1-c1-rmsnorm",
+      "parameters": 1900492.0,
+      "peak_vram_bytes": 233069568.0,
+      "step": 5000.0,
+      "tokens_per_second": 20802.14914419025,
+      "train_loss": 2.643721580505371,
+      "validation_nll": 2.9300881822903952,
+      "validation_ppl": 18.729282014840045,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 7500000.0,
+      "elapsed_seconds": 358.71330481199993,
+      "grad_norm": 2.623230457305908,
+      "learning_rate": 5.358185854701909e-05,
+      "model": "M1-c1-rmsnorm",
+      "parameters": 1900492.0,
+      "peak_vram_bytes": 233069568.0,
+      "step": 7500.0,
+      "tokens_per_second": 20908.061951955522,
+      "train_loss": 2.7116239070892334,
+      "validation_nll": 2.745900789896647,
+      "validation_ppl": 15.578640695794897,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 10000000.0,
+      "elapsed_seconds": 476.38576363599987,
+      "grad_norm": 2.717128038406372,
+      "learning_rate": 0.0,
+      "model": "M1-c1-rmsnorm",
+      "parameters": 1900492.0,
+      "peak_vram_bytes": 233069568.0,
+      "step": 10000.0,
+      "tokens_per_second": 20991.391354089392,
+      "train_loss": 2.852039337158203,
+      "validation_nll": 2.696460723876953,
+      "validation_ppl": 14.827161331108165,
+      "validation_tokens": 49152.0
+    }
+  ],
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 476.442857366,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 476.38576363599987,
+    "grad_norm": 2.717128038406372,
+    "learning_rate": 0.0,
+    "model": "M1-c1-rmsnorm",
+    "parameters": 1900492,
+    "peak_vram_bytes": 233069568,
+    "step": 10000,
+    "tokens_per_second": 20991.391354089392,
+    "train_loss": 2.852039337158203,
+    "validation_nll": 2.696460723876953,
+    "validation_ppl": 14.827161331108165,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy; multiply-add=2; training\u22483x forward; RoPE/norm/elementwise gates omitted; N4 soft communication does not skip attention",
+    "inference_forward_flops_per_token": 12942846.464,
+    "train_flops_estimate": 388285393920000.0
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "M1-c1-rmsnorm",
+  "model_config": {
+    "activation": "GELU",
+    "context_length": 128,
+    "factor": "normalization",
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "name": "M1-c1-rmsnorm",
+    "normalization": "RMSNorm",
+    "parent": "C1-residual-gated-update",
+    "position": "learned-absolute",
+    "search_phase": "B-two-track",
+    "track": "modernization",
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "parameter_ratio_to_t1": 1.0033852846764657,
+  "parameters": 1900492,
+  "peak_vram_bytes": 233069568,
+  "profile": "baseline",
+  "seed": 91001,
+  "track": "modernization",
+  "validation_log_token_nll_auc": {
+    "auc": 7.526113797868333,
+    "mean_nll": 3.268549692590141
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "checkpoints": [
+    {
+      "consumed_tokens": 1000000.0,
+      "elapsed_seconds": 69.88031969300005,
+      "grad_norm": 2.9190125465393066,
+      "learning_rate": 0.0003,
+      "model": "M4-c1-modernized",
+      "parameters": 1878120.0,
+      "peak_vram_bytes": 245221376.0,
+      "step": 1000.0,
+      "tokens_per_second": 14310.180668795232,
+      "train_loss": 3.9419820308685303,
+      "validation_nll": 3.9471868872642517,
+      "validation_ppl": 51.78947209833601,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 2500000.0,
+      "elapsed_seconds": 172.93342199400013,
+      "grad_norm": 2.3532209396362305,
+      "learning_rate": 0.0002799038105676658,
+      "model": "M4-c1-modernized",
+      "parameters": 1878120.0,
+      "peak_vram_bytes": 245221376.0,
+      "step": 2500.0,
+      "tokens_per_second": 14456.430522069568,
+      "train_loss": 3.1834678649902344,
+      "validation_nll": 3.0583916753530502,
+      "validation_ppl": 21.29328309548505,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 5000000.0,
+      "elapsed_seconds": 338.1137191590001,
+      "grad_norm": 2.462291955947876,
+      "learning_rate": 0.00017604722665003956,
+      "model": "M4-c1-modernized",
+      "parameters": 1878120.0,
+      "peak_vram_bytes": 245221376.0,
+      "step": 5000.0,
+      "tokens_per_second": 14787.924052406519,
+      "train_loss": 2.393033742904663,
+      "validation_nll": 2.6811991731325784,
+      "validation_ppl": 14.602593838890678,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 7500000.0,
+      "elapsed_seconds": 501.9925198210001,
+      "grad_norm": 2.6276516914367676,
+      "learning_rate": 5.358185854701909e-05,
+      "model": "M4-c1-modernized",
+      "parameters": 1878120.0,
+      "peak_vram_bytes": 245221376.0,
+      "step": 7500.0,
+      "tokens_per_second": 14940.461667983302,
+      "train_loss": 2.501769781112671,
+      "validation_nll": 2.5299193213383355,
+      "validation_ppl": 12.552493377448506,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 10000000.0,
+      "elapsed_seconds": 663.9850253080001,
+      "grad_norm": 2.8806376457214355,
+      "learning_rate": 0.0,
+      "model": "M4-c1-modernized",
+      "parameters": 1878120.0,
+      "peak_vram_bytes": 245221376.0,
+      "step": 10000.0,
+      "tokens_per_second": 15060.580613789203,
+      "train_loss": 2.6529335975646973,
+      "validation_nll": 2.48718531926473,
+      "validation_ppl": 12.027375211404976,
+      "validation_tokens": 49152.0
+    }
+  ],
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 664.0372910430001,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 663.9850253080001,
+    "grad_norm": 2.8806376457214355,
+    "learning_rate": 0.0,
+    "model": "M4-c1-modernized",
+    "parameters": 1878120,
+    "peak_vram_bytes": 245221376,
+    "step": 10000,
+    "tokens_per_second": 15060.580613789203,
+    "train_loss": 2.6529335975646973,
+    "validation_nll": 2.48718531926473,
+    "validation_ppl": 12.027375211404976,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy; multiply-add=2; training\u22483x forward; RoPE/norm/elementwise gates omitted; N4 soft communication does not skip attention",
+    "inference_forward_flops_per_token": 12978942.464,
+    "train_flops_estimate": 389368273920000.0
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "M4-c1-modernized",
+  "model_config": {
+    "activation": "SwiGLU",
+    "context_length": 128,
+    "factor": "combined-modernization",
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "learned_position_embedding": false,
+    "name": "M4-c1-modernized",
+    "normalization": "RMSNorm",
+    "parent": "C1-residual-gated-update",
+    "position": "RoPE",
+    "search_phase": "B-two-track",
+    "swiglu_hidden": 504,
+    "track": "modernization",
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "parameter_ratio_to_t1": 0.9915737455651292,
+  "parameters": 1878120,
+  "peak_vram_bytes": 245221376,
+  "profile": "baseline",
+  "seed": 91001,
+  "track": "modernization",
+  "validation_log_token_nll_auc": {
+    "auc": 6.976892853489613,
+    "mean_nll": 3.03002606710077
+  }
+}
