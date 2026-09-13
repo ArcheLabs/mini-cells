@@ -1,0 +1,13 @@
+{
+  "files": {
+    "final_ppl": "phase-c-final-ppl.svg",
+    "learning_curves": "phase-c-learning-curves.svg",
+    "quality_compute": "phase-c-quality-compute.svg"
+  },
+  "format": "minicells.native-clm-phase-c-visualizations.v1",
+  "notes": {
+    "final_ppl": "10M validation PPL; lower is better; zero-based bars.",
+    "learning_curves": "Validation NLL at frozen checkpoints; logarithmic token x-axis.",
+    "quality_compute": "Estimated training FLOPs normalized to T1 versus final validation PPL; lower-left is better."
+  }
+}

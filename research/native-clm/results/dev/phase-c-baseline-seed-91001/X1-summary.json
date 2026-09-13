@@ -1,0 +1,165 @@
+{
+  "checkpoints": [
+    {
+      "consumed_tokens": 1000000.0,
+      "elapsed_seconds": 34.89104463499996,
+      "grad_norm": 1.9017043113708496,
+      "learning_rate": 0.0003,
+      "model": "X1-n1-swiglu",
+      "parameters": 1893912.0,
+      "peak_vram_bytes": 227498496.0,
+      "step": 1000.0,
+      "tokens_per_second": 28660.649472124962,
+      "train_loss": 4.011697769165039,
+      "validation_nll": 4.074436783790588,
+      "validation_ppl": 58.81734437605025,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 2500000.0,
+      "elapsed_seconds": 84.76433697799996,
+      "grad_norm": 2.180929660797119,
+      "learning_rate": 0.0002799038105676658,
+      "model": "X1-n1-swiglu",
+      "parameters": 1893912.0,
+      "peak_vram_bytes": 227498496.0,
+      "step": 2500.0,
+      "tokens_per_second": 29493.535714776594,
+      "train_loss": 3.35884428024292,
+      "validation_nll": 3.2180631309747696,
+      "validation_ppl": 24.979690906320226,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 5000000.0,
+      "elapsed_seconds": 167.553147121,
+      "grad_norm": 2.505998373031616,
+      "learning_rate": 0.00017604722665003956,
+      "model": "X1-n1-swiglu",
+      "parameters": 1893912.0,
+      "peak_vram_bytes": 227498496.0,
+      "step": 5000.0,
+      "tokens_per_second": 29841.27774328945,
+      "train_loss": 2.500112771987915,
+      "validation_nll": 2.811403955022494,
+      "validation_ppl": 16.6332541743761,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 7500000.0,
+      "elapsed_seconds": 250.88248441999997,
+      "grad_norm": 2.610339879989624,
+      "learning_rate": 5.358185854701909e-05,
+      "model": "X1-n1-swiglu",
+      "parameters": 1893912.0,
+      "peak_vram_bytes": 227498496.0,
+      "step": 7500.0,
+      "tokens_per_second": 29894.47436850283,
+      "train_loss": 2.588038921356201,
+      "validation_nll": 2.631795510649681,
+      "validation_ppl": 13.898702780666536,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 10000000.0,
+      "elapsed_seconds": 333.813499856,
+      "grad_norm": 2.7452480792999268,
+      "learning_rate": 0.0,
+      "model": "X1-n1-swiglu",
+      "parameters": 1893912.0,
+      "peak_vram_bytes": 227498496.0,
+      "step": 10000.0,
+      "tokens_per_second": 29956.847174586364,
+      "train_loss": 2.7061996459960938,
+      "validation_nll": 2.586960772673289,
+      "validation_ppl": 13.289320897661943,
+      "validation_tokens": 49152.0
+    }
+  ],
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 333.86394377399995,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 333.813499856,
+    "grad_norm": 2.7452480792999268,
+    "learning_rate": 0.0,
+    "model": "X1-n1-swiglu",
+    "parameters": 1893912,
+    "peak_vram_bytes": 227498496,
+    "step": 10000,
+    "tokens_per_second": 29956.847174586364,
+    "train_loss": 2.7061996459960938,
+    "validation_nll": 2.586960772673289,
+    "validation_ppl": 13.289320897661943,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy analytic estimate; multiply-add=2 FLOPs; training\u22483x forward",
+    "inference_forward_flops_per_token": 12906750.464,
+    "train_flops_estimate": 387202513920000.0
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "X1-n1-swiglu",
+  "model_config": {
+    "activation": "SwiGLU",
+    "context_length": 128,
+    "factor": "N1+SwiGLU",
+    "ffn_dim": 624,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "name": "X1-n1-swiglu",
+    "normalization": "LayerNorm",
+    "parent_modernization": "M-series",
+    "parent_native": "N1-residual-only",
+    "position": "learned-absolute",
+    "residual_alpha": 0.11920292202211755,
+    "search_phase": "C-winner-cross-over",
+    "update": "fixed-scaled-residual",
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "parameter_ratio_to_t1": 0.9999113025848961,
+  "parameters": 1893912,
+  "peak_vram_bytes": 227498496,
+  "profile": "baseline",
+  "seed": 91001,
+  "track": "cross-over",
+  "validation_log_token_nll_auc": {
+    "auc": 7.28486413902037,
+    "mean_nll": 3.1637762969914287
+  }
+}
