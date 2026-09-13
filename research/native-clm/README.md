@@ -1,202 +1,233 @@
 # Native CLM Architecture Lab
 
-`research/native-clm/` is the long-lived architecture laboratory for **native cellular language models**. The immediate goal is not to train one CLM for as long as possible. It is to use a small, fixed budget to discover better CLM architecture choices before scaling them.
+`research/native-clm/` is the long-lived architecture laboratory for native cellular language models. The immediate objective is architecture discovery under a fixed small budget, not long-run convergence of one model.
 
 The canonical working surface remains one living notebook:
 
 - `native_clm_lab.ipynb`
 
-Execution code lives beside it:
+Execution code:
 
-- `native_clm_runtime.py` — frozen C0/T1 data, model, training and evaluation primitives;
+- `native_clm_runtime.py` — frozen data/training/evaluation primitives and C0/T1 anchors;
 - `run_native_clm.py` — historical C0/T1 baseline runner;
-- `native_clm_candidates.py` — Phase-A single-factor C1–C4 candidates;
-- `run_native_clm_search.py` — resumable candidate sweep, dual-GPU scheduling and leaderboard generation.
+- `native_clm_candidates.py` / `run_native_clm_search.py` — completed Phase-A C1–C4 search;
+- `native_clm_phase_b.py` / `run_native_clm_phase_b.py` — Phase-B modernization/native two-track search.
 
-## Research question
+## Frozen protocol
 
-Primary question:
+Unless a run is explicitly marked smoke/debug, architecture search uses:
 
-> Under a fixed ~2M-parameter / 10M-token search budget, which Native CLM architectural choices improve next-token prediction relative to the frozen C0 anchor?
+- TinyStories `roneneldan/TinyStories` at immutable revision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`;
+- deterministic ByteLevel BPE, vocab 2,048;
+- context 128, train sequence 125, batch 8 = exactly 1,000 consumed tokens/step;
+- AdamW `(0.9, 0.95)`, weight decay `0.1`, base LR `3e-4`, warmup + cosine;
+- gradient clipping `1.0`, CUDA FP16 + GradScaler;
+- development seed `91001` for architecture discovery;
+- 10M train tokens/candidate;
+- approximately 1.9M parameters, within 1% of T1;
+- fixed validation samples and the same deterministic training-batch schedule for a given seed.
 
-The search distinguishes quality/parameter, quality/training-compute and quality/inference-compute. Equal parameters do not imply equal FLOPs, so compute, throughput and VRAM are reported separately rather than collapsed into one score.
+Held-back development seeds `91002–91003` and confirmation seeds `91101–91103` are not consumed until an interpretation and candidate are worth confirming.
 
-## Frozen anchors
+## Frozen anchors and Phase-A result
 
-The first real accelerator development run is immutable evidence under:
+Immutable evidence:
 
 ```text
 research/native-clm/results/dev/baseline-seed-91001/
+research/native-clm/results/dev/architecture-search-baseline-seed-91001/
 ```
 
-At 10M TinyStories training tokens:
+At 10M tokens:
 
-- **C0 historical scaled CLM**: 1,899,576 params, PPL `16.8387103`;
-- **T1 modern Transformer**: 1,894,080 params, PPL `12.1907091`;
-- C0/T1 PPL ratio: `1.3812741`;
-- estimated C0/T1 training-FLOP ratio: `3.3046`.
+| model | role | PPL | interpretation |
+|---|---|---:|---|
+| T1 | modern Transformer anchor | 12.1907 | RMSNorm + RoPE + SwiGLU + GQA |
+| C0 | historical CLM anchor | 16.8387 | LayerNorm + GELU + learned positions + GRU update |
+| C1 | residual gated CLM | 14.8185 | clear Phase-A quality win |
+| C2 | shared-wide phase Cell | 15.1677 | quality gain but very high compute |
+| C3 | progressive receptive field | 17.8528 | rejected |
+| C4 | sparse communication | 17.6817 | efficiency signal, quality regression |
 
-These measurements are anchors. Phase A does **not** retrain T1 and does not spend additional development or confirmation seeds merely to reproduce the known 10M gap.
+C1 is the parent for Phase B. It improved both final PPL and log-token NLL AUC, so the result is not a last-checkpoint accident. The principal Phase-A design lesson is that an identity-preserving write path is better than C0's GRU state replacement at this scale/budget.
 
-## Frozen data and optimization protocol
+## Why Phase B has two tracks
 
-All Phase-A candidates use the same protocol as the anchor:
+T1 is already a modernized decoder, while C1 still uses older generic LM components. We therefore separate two questions:
 
-- dataset: `roneneldan/TinyStories`;
-- immutable revision: `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`;
-- deterministic ByteLevel BPE trained on the first 20,000 pinned training stories;
-- vocabulary 2,048;
-- context 128;
-- train sequence length 125;
-- batch 8 = exactly 1,000 consumed tokens/optimizer step;
-- AdamW, betas `(0.9, 0.95)`, weight decay `0.1`;
-- LR `3e-4`, warmup then cosine decay;
-- gradient clipping `1.0`;
-- FP16 autocast + GradScaler on CUDA;
-- identical deterministic training-batch schedule for the same seed;
-- identical fixed validation examples for the same seed.
+1. **M-series — transferable modern LM technology:** how much of the remaining gap can be closed by components that are not CLM-specific?
+2. **N-series — Native CLM structure:** what improvements come from recurrence, state update and communication mechanisms that do not exist in an ordinary feed-forward decoder?
 
-Architecture-search decision budget:
+Conceptually:
 
 ```text
-profile = baseline
-seed    = 91001
-tokens  = 10,000,000 / candidate
-params  = within 1% of frozen T1
+Native CLM quality = generic modern LM technology + CLM-native mechanisms
 ```
 
-Untouched confirmation seeds `91101–91103` are not consumed during Phase A. Development seeds `91002–91003` are also held back until a candidate first demonstrates a causal single-factor improvement on `91001`.
+Do not conflate an M-series gain with evidence for a novel cellular mechanism, and do not deny a useful generic modernization merely because it also benefits Transformers.
 
-## Phase A: orthogonal architecture search
+## M-series: modernization controls
 
-Phase A changes one factor at a time.
+All M-series candidates keep C1's three independent recurrent stages, local windows `(8, 32, 128)`, four updates/stage and residual write gate. Only the stated generic LM component changes.
 
-### C1 — residual gated update
+### M1 — C1 + RMSNorm
 
-Question: is C0's GRU state replacement harming recurrent optimization?
-
-C1 replaces the GRU update with an identity-preserving write:
+Single-factor normalization control:
 
 ```text
-proposal = attention_delta + ffn_delta
-gate     = sigmoid(W[state, proposal] + b)
-state'   = state + gate * proposal
+LayerNorm -> RMSNorm
 ```
 
-The gate starts with bias `-2`, roughly mirroring C0's `+2` carry bias while preserving a direct identity path. Width is increased only enough to keep the total parameter count matched.
+Everything else remains C1.
 
-- dim 188, heads 4, FFN 752;
-- params: **1,901,808** (`1.00408×` T1).
+### M2 — C1 + SwiGLU
 
-### C2 — shared-wide phase Cell
-
-Question: should cross-phase parameter sharing be exchanged for a wider recurrent Cell?
-
-C2 uses one Cell for all 12 recurrent steps instead of three independent stage parameter sets. It retains the historical `8×4 → 32×4 → 128×4` communication pattern and GRU update, adds learned step embeddings plus zero-initialized three-phase affine modulation, and spends the saved parameters on width.
-
-- dim 270, heads 6, FFN 1080;
-- params: **1,909,170** (`1.00797×` T1).
-
-C2 has materially higher FLOPs; it is explicitly a quality/parameter experiment, not a compute win claim.
-
-### C3 — progressive receptive-field schedule
-
-Question: is the fixed `8×4 → 32×4 → 128×4` schedule optimal?
-
-C3 retains C0 dimensions, GRU update, stage parameterization and total parameter count. Only the per-step windows change:
+Single-factor activation/FFN control:
 
 ```text
-stage 1: 8, 16, 32, 64
-stage 2: 16, 32, 64, 128
-stage 3: 32, 64, 128, 128
+GELU MLP -> SwiGLU
 ```
 
-- params: **1,899,576** (identical to C0).
+SwiGLU hidden width is parameter-matched rather than copied from T1 blindly.
 
-### C4 — sparse communication
+### M3 — C1 + RoPE
 
-Question: must every recurrent compute step perform attention communication?
+Single-factor position control:
 
-C4 keeps C0's parameters and GRU/FFN update, but performs attention only on recurrent steps 1 and 4 inside each four-step stage. Intermediate steps are computation-only.
+```text
+learned absolute position embedding -> RoPE on local q/k
+```
 
-- params: **1,899,576** (identical to C0);
-- estimated forward cost is lower than C0 because six of twelve attention calls are removed.
+The learned position table is removed. One unmatched odd head dimension is left unrotated by the existing RoPE primitive; attention projections and local causal windows are unchanged.
+
+### M4 — modernized C1
+
+Combination test after the three single-factor controls:
+
+```text
+C1 + RMSNorm + SwiGLU + RoPE
+```
+
+M4 answers how competitive C1 becomes after receiving the same class of mature generic LM components. It is not used to infer which component caused a gain; M1–M3 provide that attribution.
+
+GQA is intentionally not included in this first modernization group. At this scale it is primarily an attention/KV efficiency intervention and changes the local recurrent attention parameterization. It can be tested separately after the quality effects above are understood.
+
+## N-series: Native CLM structural optimization
+
+All N-series candidates retain C1's older generic LM components so that changes are attributable to CLM-native mechanisms rather than modernization.
+
+### N1 — residual-only gate ablation
+
+Tests whether C1 wins because of the identity residual path alone or because the learned gate is important:
+
+```text
+state' = state + alpha * proposal
+alpha = sigmoid(-2)
+```
+
+The fixed alpha matches C1's initial write magnitude. Parameters released by removing the gate are spent on active FFN capacity, not inert padding parameters.
+
+### N2 — dual-gate ARU
+
+Separates retention and writing:
+
+```text
+retain, write = gates(state, proposal)
+state' = retain * state + write * proposal
+```
+
+A low-rank two-output gate keeps the total parameter budget matched. Initialization strongly preserves identity (`retain bias +6`) while keeping writes conservative (`write bias -2`).
+
+### N3 — recurrent-step-conditioned write
+
+Keeps C1's gate but adds a learned per-recurrent-step write bias:
+
+```text
+gate_logits' = gate_logits + step_gate_bias[step]
+```
+
+The new bias starts at zero, so the initial function is C1. This directly tests whether different recurrent phases should learn different write intensity.
+
+### N4 — adaptive communication
+
+Adds a state-conditioned soft communication gate to attention output before the C1 update:
+
+```text
+strength = sigmoid(g(state))
+attention_delta' = strength * attention_delta
+```
+
+The gate starts near one. This experiment tests representational value of adaptive communication. It does **not** skip the attention kernel, so it must not be reported as a realized FLOP saving. A later hard-routing experiment would be required for that claim.
 
 ## Evaluation
 
-Every candidate is evaluated at the same checkpoints:
+Every Phase-B candidate is evaluated at:
 
 ```text
 1M, 2.5M, 5M, 7.5M, 10M tokens
 ```
 
-Two quality statistics are primary:
+Primary quality signals:
 
-1. final validation PPL at 10M;
-2. validation-NLL area under the curve over **log training tokens**.
+1. validation PPL at 10M;
+2. validation NLL AUC over log training tokens;
+3. normalized mean NLL over that log-token interval.
 
-The runner records both raw AUC and the log-width-normalized mean NLL. The latter captures learning efficiency across the fixed budget rather than only the last checkpoint.
+Also reported separately:
 
-Also reported independently:
-
-- exact parameter count and T1 ratio;
-- estimated training FLOPs;
-- estimated inference FLOPs/token;
+- exact parameter count and ratio to T1;
+- PPL ratio to C1 and T1;
+- estimated training/inference FLOPs;
 - measured tokens/s;
-- elapsed time;
 - peak VRAM.
 
-Do not combine these into an arbitrary composite score.
+No arbitrary composite score is used.
 
-## Dual-GPU search
+## Dual-GPU Phase-B execution
 
-`run_native_clm_search.py sweep` treats GPUs as independent workers. On a two-T4 Kaggle machine:
+`run_native_clm_phase_b.py sweep` treats each GPU as an independent complete-model worker. With two GPUs and the default eight candidates:
 
 ```text
-round 1: GPU0=C1, GPU1=C2
-round 2: GPU0=C3, GPU1=C4
+round 1: M1 / M2
+round 2: M3 / M4
+round 3: N1 / N2
+round 4: N3 / N4
 ```
 
-T1 is never retrained. C0/T1 metrics and curves are loaded from the immutable `baseline-seed-91001` evidence and inserted into the generated architecture leaderboard.
-
-The runner supports resume. Large token caches, optimizer states and checkpoints remain under `/kaggle/working/native-clm`; only small evidence is copied back into Git.
+The runner supports `--track modernization` and `--track native` for separate group execution, or `--track all` for the full experiment. C0, T1 and C1 are never retrained; their immutable evidence is inserted into the Phase-B leaderboard.
 
 ## Decision rule
 
-Phase A is deliberately causal:
+Phase B remains a development-seed architecture search:
 
 ```text
 C0/T1 frozen anchors
-    ↓
-C1, C2, C3, C4 single-factor runs on seed 91001
-    ↓
-identify real wins in 10M PPL and/or log-token NLL AUC
-    ↓
-only then combine winning mechanisms
-    ↓
-only promising combined candidates receive additional development seeds
-    ↓
-confirmation seeds remain untouched until interpretation is frozen
+       ↓
+C1 frozen Phase-A parent
+       ↓
+M1 M2 M3          N1 N2 N3 N4
+       \            /
+        M4 combination
+             ↓
+attribute generic-modernization gains separately from native-CLM gains
+             ↓
+only then combine proven mechanisms
+             ↓
+held-back development seeds -> frozen interpretation -> confirmation seeds
 ```
 
-A candidate that merely changes compute without improving quality is still informative, but is not promoted as a better CLM architecture. A candidate that improves PPL while greatly increasing compute is a quality/parameter result and must be labelled as such.
+A candidate is a quality improvement only if its PPL and learning-curve evidence support the claim. Compute/throughput/VRAM changes remain separate dimensions.
 
 ## Evidence policy
 
-The notebook is mutable; evidence is additive.
-
-Frozen baseline development evidence:
+The notebook is mutable; evidence is additive and existing records are never rewritten.
 
 ```text
 research/native-clm/results/dev/baseline-seed-91001/
-```
-
-Phase-A evidence:
-
-```text
 research/native-clm/results/dev/architecture-search-baseline-seed-91001/
+research/native-clm/results/dev/phase-b-baseline-seed-91001/
 ```
 
-Promoted results later use immutable `NCLM-XXX/` directories. Existing run records are never overwritten to fit a later interpretation.
+Promoted results later use immutable `NCLM-XXX/` directories.
 
-This phase still excludes continual learning, growth/mitosis, replay-free writes, rollback, MoE conversion and JAM execution/consensus concerns. Those mechanisms return only after the static Native CLM architecture is competitive.
+This architecture program still excludes continual learning, growth/mitosis, replay-free writes, rollback, MoE conversion and JAM execution/consensus constraints. Those mechanisms return only after the static Native CLM architecture is competitive.
