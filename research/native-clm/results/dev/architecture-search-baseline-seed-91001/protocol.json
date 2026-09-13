@@ -1,0 +1,149 @@
+{
+  "candidate_configs": {
+    "C1-residual-gated-update": {
+      "dim": 188,
+      "factor": "state_update",
+      "ffn": 752,
+      "gate_bias": -2.0,
+      "heads": 4,
+      "update": "identity+sigmoid_write"
+    },
+    "C2-shared-wide-phase": {
+      "dim": 270,
+      "factor": "cross_phase_sharing",
+      "ffn": 1080,
+      "heads": 6,
+      "phase_film": true,
+      "shared_steps": 12,
+      "windows": [
+        8,
+        8,
+        8,
+        8,
+        32,
+        32,
+        32,
+        32,
+        128,
+        128,
+        128,
+        128
+      ]
+    },
+    "C3-progressive-receptive-field": {
+      "factor": "receptive_field_schedule",
+      "schedule": [
+        [
+          8,
+          16,
+          32,
+          64
+        ],
+        [
+          16,
+          32,
+          64,
+          128
+        ],
+        [
+          32,
+          64,
+          128,
+          128
+        ]
+      ],
+      "update": "C0_GRU"
+    },
+    "C4-sparse-communication": {
+      "communicate": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "factor": "communication_frequency",
+      "update": "C0_GRU",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    }
+  },
+  "candidate_parameters": {
+    "C1-residual-gated-update": {
+      "over_t1": 1.0040800810947794,
+      "parameters": 1901808,
+      "relative_error": 0.00408008109477942
+    },
+    "C2-shared-wide-phase": {
+      "over_t1": 1.0079669285352255,
+      "parameters": 1909170,
+      "relative_error": 0.007966928535225515
+    },
+    "C3-progressive-receptive-field": {
+      "over_t1": 1.0029016725798277,
+      "parameters": 1899576,
+      "relative_error": 0.002901672579827652
+    },
+    "C4-sparse-communication": {
+      "over_t1": 1.0029016725798277,
+      "parameters": 1899576,
+      "relative_error": 0.002901672579827652
+    },
+    "T1_anchor": 1894080,
+    "tolerance": 0.01
+  },
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "decision_rule": "rank 10M PPL and log-token NLL AUC; report compute separately; combine only causal single-factor wins",
+  "environment_before_launch": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 2,
+    "gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "format": "minicells.native-clm-architecture-search.v1",
+  "models": [
+    "C1-residual-gated-update",
+    "C2-shared-wide-phase",
+    "C3-progressive-receptive-field",
+    "C4-sparse-communication"
+  ],
+  "phase": "A-single-factor",
+  "profile": {
+    "checkpoints": [
+      1000000,
+      2500000,
+      5000000,
+      7500000,
+      10000000
+    ],
+    "name": "baseline",
+    "target_tokens": 10000000,
+    "train_stream_tokens": 12000000,
+    "validation_stream_tokens": 1000000,
+    "warmup_steps": 1000
+  },
+  "seed": 91001
+}

@@ -1,0 +1,158 @@
+{
+  "checkpoints": [
+    {
+      "consumed_tokens": 1000000.0,
+      "elapsed_seconds": 29.488791085999992,
+      "grad_norm": 2.127392292022705,
+      "learning_rate": 0.0003,
+      "model": "C4-sparse-communication",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 218065408.0,
+      "step": 1000.0,
+      "tokens_per_second": 33911.19008858783,
+      "train_loss": 4.188905239105225,
+      "validation_nll": 4.214895541469256,
+      "validation_ppl": 67.68709500713753,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 2500000.0,
+      "elapsed_seconds": 73.386852073,
+      "grad_norm": 1.8860009908676147,
+      "learning_rate": 0.0002799038105676658,
+      "model": "C4-sparse-communication",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 218065408.0,
+      "step": 2500.0,
+      "tokens_per_second": 34066.047655418966,
+      "train_loss": 3.6095218658447266,
+      "validation_nll": 3.4761372903982797,
+      "validation_ppl": 32.334581442292574,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 5000000.0,
+      "elapsed_seconds": 146.2639350249999,
+      "grad_norm": 2.3891446590423584,
+      "learning_rate": 0.00017604722665003956,
+      "model": "C4-sparse-communication",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 218065408.0,
+      "step": 5000.0,
+      "tokens_per_second": 34184.776986516765,
+      "train_loss": 2.833430528640747,
+      "validation_nll": 3.0876383086045585,
+      "validation_ppl": 21.925236141114542,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 7500000.0,
+      "elapsed_seconds": 218.501259838,
+      "grad_norm": 2.4240312576293945,
+      "learning_rate": 5.358185854701909e-05,
+      "model": "C4-sparse-communication",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 218065408.0,
+      "step": 7500.0,
+      "tokens_per_second": 34324.744880467086,
+      "train_loss": 2.887317419052124,
+      "validation_nll": 2.916606898109118,
+      "validation_ppl": 18.478481595813367,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 10000000.0,
+      "elapsed_seconds": 291.737483506,
+      "grad_norm": 2.5946545600891113,
+      "learning_rate": 0.0,
+      "model": "C4-sparse-communication",
+      "parameters": 1899576.0,
+      "peak_vram_bytes": 218065408.0,
+      "step": 10000.0,
+      "tokens_per_second": 34277.39171471374,
+      "train_loss": 3.003340721130371,
+      "validation_nll": 2.872528145710627,
+      "validation_ppl": 17.68166356295982,
+      "validation_tokens": 49152.0
+    }
+  ],
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 291.7945268819999,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 291.737483506,
+    "grad_norm": 2.5946545600891113,
+    "learning_rate": 0.0,
+    "model": "C4-sparse-communication",
+    "parameters": 1899576,
+    "peak_vram_bytes": 218065408,
+    "step": 10000,
+    "tokens_per_second": 34277.39171471374,
+    "train_loss": 3.003340721130371,
+    "validation_nll": 2.872528145710627,
+    "validation_ppl": 17.68166356295982,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy; multiply-add=2; training\u22483x forward",
+    "inference_forward_flops_per_token": 11658941.952,
+    "train_flops_estimate": 349768258560000.0
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "C4-sparse-communication",
+  "model_config": {
+    "communicate": [
+      true,
+      false,
+      false,
+      true
+    ],
+    "context_length": 128,
+    "factor": "communication_frequency",
+    "name": "C4-sparse-communication",
+    "search_phase": "A-single-factor",
+    "update": "C0_GRU",
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "parameter_ratio_to_t1": 1.0029016725798277,
+  "parameters": 1899576,
+  "peak_vram_bytes": 218065408,
+  "profile": "baseline",
+  "seed": 91001,
+  "validation_log_token_nll_auc": {
+    "auc": 7.8484134758072175,
+    "mean_nll": 3.408522664238194
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "checkpoints": [
+    {
+      "consumed_tokens": 1000000.0,
+      "elapsed_seconds": 43.61705464099998,
+      "grad_norm": 2.079681634902954,
+      "learning_rate": 0.0003,
+      "model": "C1-residual-gated-update",
+      "parameters": 1901808.0,
+      "peak_vram_bytes": 214390272.0,
+      "step": 1000.0,
+      "tokens_per_second": 22926.811730657326,
+      "train_loss": 4.0318803787231445,
+      "validation_nll": 4.1048465222120285,
+      "validation_ppl": 60.63343794751278,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 2500000.0,
+      "elapsed_seconds": 104.911613208,
+      "grad_norm": 2.1350367069244385,
+      "learning_rate": 0.0002799038105676658,
+      "model": "C1-residual-gated-update",
+      "parameters": 1901808.0,
+      "peak_vram_bytes": 214390272.0,
+      "step": 2500.0,
+      "tokens_per_second": 23829.583051434416,
+      "train_loss": 3.4781932830810547,
+      "validation_nll": 3.3431127220392227,
+      "validation_ppl": 28.30710185308983,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 5000000.0,
+      "elapsed_seconds": 206.51257247300003,
+      "grad_norm": 2.5673913955688477,
+      "learning_rate": 0.00017604722665003956,
+      "model": "C1-residual-gated-update",
+      "parameters": 1901808.0,
+      "peak_vram_bytes": 214390272.0,
+      "step": 5000.0,
+      "tokens_per_second": 24211.60096997829,
+      "train_loss": 2.657073736190796,
+      "validation_nll": 2.928307776649793,
+      "validation_ppl": 18.69596596234085,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 7500000.0,
+      "elapsed_seconds": 308.06629895199995,
+      "grad_norm": 2.6700706481933594,
+      "learning_rate": 5.358185854701909e-05,
+      "model": "C1-residual-gated-update",
+      "parameters": 1901808.0,
+      "peak_vram_bytes": 214390272.0,
+      "step": 7500.0,
+      "tokens_per_second": 24345.408847102033,
+      "train_loss": 2.7215116024017334,
+      "validation_nll": 2.7441255946954093,
+      "validation_ppl": 15.551010099696782,
+      "validation_tokens": 49152.0
+    },
+    {
+      "consumed_tokens": 10000000.0,
+      "elapsed_seconds": 409.964463395,
+      "grad_norm": 2.6898465156555176,
+      "learning_rate": 0.0,
+      "model": "C1-residual-gated-update",
+      "parameters": 1901808.0,
+      "peak_vram_bytes": 214390272.0,
+      "step": 10000.0,
+      "tokens_per_second": 24392.358101450904,
+      "train_loss": 2.839773416519165,
+      "validation_nll": 2.695878033836683,
+      "validation_ppl": 14.818524208502085,
+      "validation_tokens": 49152.0
+    }
+  ],
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 410.01727698199994,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 409.964463395,
+    "grad_norm": 2.6898465156555176,
+    "learning_rate": 0.0,
+    "model": "C1-residual-gated-update",
+    "parameters": 1901808,
+    "peak_vram_bytes": 214390272,
+    "step": 10000,
+    "tokens_per_second": 24392.358101450904,
+    "train_loss": 2.839773416519165,
+    "validation_nll": 2.695878033836683,
+    "validation_ppl": 14.818524208502085,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy; multiply-add=2; training\u22483x forward",
+    "inference_forward_flops_per_token": 12942846.464,
+    "train_flops_estimate": 388285393920000.0
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "C1-residual-gated-update",
+  "model_config": {
+    "context_length": 128,
+    "dim": 188,
+    "factor": "state_update",
+    "ffn": 752,
+    "gate_bias": -2.0,
+    "heads": 4,
+    "name": "C1-residual-gated-update",
+    "search_phase": "A-single-factor",
+    "update": "identity+sigmoid_write",
+    "vocab_size": 2048
+  },
+  "parameter_ratio_to_t1": 1.0040800810947794,
+  "parameters": 1901808,
+  "peak_vram_bytes": 214390272,
+  "profile": "baseline",
+  "seed": 91001,
+  "validation_log_token_nll_auc": {
+    "auc": 7.518239395903083,
+    "mean_nll": 3.265129883268345
+  }
+}
