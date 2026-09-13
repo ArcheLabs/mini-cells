@@ -28,12 +28,15 @@ def _write(path: Path, body: str) -> None:
 
 
 def _svg_start(width: int, height: int, title: str, subtitle: str) -> list[str]:
+    # Keep a stable project identifier in every evidence SVG, including future
+    # plots whose local metric title does not explicitly mention Native CLM.
+    display_title = title if "Native CLM" in title else f"Native CLM — {title}"
     return [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
-        f'<title id="title">{_esc(title)}</title>',
+        f'<title id="title">{_esc(display_title)}</title>',
         f'<desc id="desc">{_esc(subtitle)}</desc>',
         '<rect width="100%" height="100%" fill="white"/>',
-        f'<text x="40" y="38" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#111827">{_esc(title)}</text>',
+        f'<text x="40" y="38" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#111827">{_esc(display_title)}</text>',
         f'<text x="40" y="62" font-family="system-ui,sans-serif" font-size="13" fill="#6b7280">{_esc(subtitle)}</text>',
     ]
 
