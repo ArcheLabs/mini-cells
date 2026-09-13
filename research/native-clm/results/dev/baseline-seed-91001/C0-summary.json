@@ -1,0 +1,80 @@
+{
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 380.13969634800003,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 380.086426886,
+    "grad_norm": 2.8495728969573975,
+    "learning_rate": 0.0,
+    "model": "C0-historical-scaled",
+    "parameters": 1899576,
+    "peak_vram_bytes": 266034176,
+    "step": 10000,
+    "tokens_per_second": 26309.80559324029,
+    "train_loss": 2.950944423675537,
+    "validation_nll": 2.8236804207166037,
+    "validation_ppl": 16.838710305825046,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy analytic estimate; multiply-add=2 FLOPs; training\u22483x forward",
+    "inference_forward_flops_per_token": 13146491.904,
+    "train_flops_estimate": 394394757119999.94
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "C0-historical-scaled",
+  "model_config": {
+    "context_length": 128,
+    "dim": 168,
+    "ffn_dim": 672,
+    "gru_carry_bias": 2.0,
+    "heads": 8,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "name": "C0-historical-scaled",
+    "normalization": "LayerNorm",
+    "provenance": "scaled reconstruction of Experiment 007",
+    "step_embedding": true,
+    "tied_embeddings": true,
+    "vocab_size": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "parameters": 1899576,
+  "peak_vram_bytes": 266034176,
+  "profile": "baseline",
+  "seed": 91001
+}

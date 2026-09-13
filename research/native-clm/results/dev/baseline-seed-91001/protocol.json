@@ -1,0 +1,52 @@
+{
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "environment_before_launch": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 2,
+    "gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "format": "minicells.native-clm-protocol.v1",
+  "parameter_summary": {
+    "C0-historical-scaled": 1899576,
+    "T1-modern-transformer": 1894080,
+    "c0_over_t1": 1.0029016725798277,
+    "relative_error": 0.002901672579827652
+  },
+  "profile": {
+    "checkpoints": [
+      1000000,
+      2500000,
+      5000000,
+      7500000,
+      10000000
+    ],
+    "name": "baseline",
+    "target_tokens": 10000000,
+    "train_stream_tokens": 12000000,
+    "validation_stream_tokens": 1000000,
+    "warmup_steps": 1000
+  },
+  "seed": 91001
+}

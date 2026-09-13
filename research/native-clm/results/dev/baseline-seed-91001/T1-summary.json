@@ -1,0 +1,71 @@
+{
+  "consumed_tokens": 10000000,
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "elapsed_seconds": 206.03570807799997,
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 1,
+    "gpus": [
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "final": {
+    "consumed_tokens": 10000000,
+    "elapsed_seconds": 205.98446828199997,
+    "grad_norm": 2.7467057704925537,
+    "learning_rate": 0.0,
+    "model": "T1-modern-transformer",
+    "parameters": 1894080,
+    "peak_vram_bytes": 112862720,
+    "step": 10000,
+    "tokens_per_second": 48547.34962982572,
+    "train_loss": 2.6253550052642822,
+    "validation_nll": 2.5006741086641946,
+    "validation_ppl": 12.190709054055592,
+    "validation_tokens": 49152
+  },
+  "flops": {
+    "convention": "matmul-heavy analytic estimate; multiply-add=2 FLOPs; training\u22483x forward",
+    "inference_forward_flops_per_token": 3978240.0,
+    "train_flops_estimate": 119347200000000.0
+  },
+  "format": "minicells.native-clm-worker.v1",
+  "model": "T1-modern-transformer",
+  "model_config": {
+    "activation": "SwiGLU",
+    "context_length": 128,
+    "dim": 192,
+    "ffn_dim": 480,
+    "heads": 6,
+    "kv_heads": 2,
+    "layers": 4,
+    "name": "T1-modern-transformer",
+    "normalization": "RMSNorm",
+    "position": "RoPE",
+    "tied_embeddings": true,
+    "vocab_size": 2048
+  },
+  "parameters": 1894080,
+  "peak_vram_bytes": 112862720,
+  "profile": "baseline",
+  "seed": 91001
+}
