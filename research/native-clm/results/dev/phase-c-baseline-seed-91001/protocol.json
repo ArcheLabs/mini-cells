@@ -1,0 +1,175 @@
+{
+  "candidate_configs": {
+    "X1-n1-swiglu": {
+      "activation": "SwiGLU",
+      "factor": "N1+SwiGLU",
+      "ffn_dim": 624,
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "name": "X1-n1-swiglu",
+      "normalization": "LayerNorm",
+      "parent_modernization": "M-series",
+      "parent_native": "N1-residual-only",
+      "position": "learned-absolute",
+      "residual_alpha": 0.11920292202211755,
+      "search_phase": "C-winner-cross-over",
+      "update": "fixed-scaled-residual",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "X2-n1-rope": {
+      "activation": "GELU",
+      "factor": "N1+RoPE",
+      "ffn_dim": 954,
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "learned_position_embedding": false,
+      "name": "X2-n1-rope",
+      "normalization": "LayerNorm",
+      "parent_modernization": "M-series",
+      "parent_native": "N1-residual-only",
+      "position": "RoPE",
+      "residual_alpha": 0.11920292202211755,
+      "search_phase": "C-winner-cross-over",
+      "update": "fixed-scaled-residual",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "X3-n1-swiglu-rope": {
+      "activation": "SwiGLU",
+      "factor": "N1+SwiGLU+RoPE",
+      "ffn_dim": 638,
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "learned_position_embedding": false,
+      "name": "X3-n1-swiglu-rope",
+      "normalization": "LayerNorm",
+      "parent_modernization": "M-series",
+      "parent_native": "N1-residual-only",
+      "position": "RoPE",
+      "residual_alpha": 0.11920292202211755,
+      "search_phase": "C-winner-cross-over",
+      "update": "fixed-scaled-residual",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    },
+    "X4-n1-swiglu-rope-rmsnorm": {
+      "activation": "SwiGLU",
+      "factor": "N1+SwiGLU+RoPE+RMSNorm",
+      "ffn_dim": 639,
+      "iterations": [
+        4,
+        4,
+        4
+      ],
+      "learned_position_embedding": false,
+      "name": "X4-n1-swiglu-rope-rmsnorm",
+      "normalization": "RMSNorm",
+      "parent_modernization": "M-series",
+      "parent_native": "N1-residual-only",
+      "position": "RoPE",
+      "residual_alpha": 0.11920292202211755,
+      "search_phase": "C-winner-cross-over",
+      "update": "fixed-scaled-residual",
+      "windows": [
+        8,
+        32,
+        128
+      ]
+    }
+  },
+  "candidate_parameters": {
+    "T1_anchor": 1894080,
+    "X1-n1-swiglu": {
+      "over_t1": 0.9999113025848961,
+      "parameters": 1893912,
+      "relative_error": 8.869741510386664e-05
+    },
+    "X2-n1-rope": {
+      "over_t1": 0.9997349636762967,
+      "parameters": 1893578,
+      "relative_error": 0.0002650363237033382
+    },
+    "X3-n1-swiglu-rope": {
+      "over_t1": 0.9997127893225207,
+      "parameters": 1893536,
+      "relative_error": 0.0002872106774792771
+    },
+    "X4-n1-swiglu-rope-rmsnorm": {
+      "over_t1": 0.9999113025848961,
+      "parameters": 1893912,
+      "relative_error": 8.869741510386664e-05
+    },
+    "tolerance": 0.01
+  },
+  "corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "decision_rule": "Cross only evidenced winners: N1 residual refinement with SwiGLU/RoPE, and use X4 solely to re-test RMSNorm in the combined state. Rank quality by 10M PPL and log-token NLL AUC; compute remains separate.",
+  "environment_before_launch": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 2,
+    "gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128"
+  },
+  "format": "minicells.native-clm-phase-c.v1",
+  "models": [
+    "X1-n1-swiglu",
+    "X2-n1-rope",
+    "X3-n1-swiglu-rope",
+    "X4-n1-swiglu-rope-rmsnorm"
+  ],
+  "phase": "C-winner-cross-over",
+  "profile": {
+    "checkpoints": [
+      1000000,
+      2500000,
+      5000000,
+      7500000,
+      10000000
+    ],
+    "name": "baseline",
+    "target_tokens": 10000000,
+    "train_stream_tokens": 12000000,
+    "validation_stream_tokens": 1000000,
+    "warmup_steps": 1000
+  },
+  "seed": 91001
+}
