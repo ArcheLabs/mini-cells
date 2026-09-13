@@ -12,6 +12,12 @@ import torch
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
+import native_clm_runtime as runtime
+
+# Verified immutable TinyStories commit. The previous value expanded the correct
+# short SHA f54c09f with an incorrect suffix.
+runtime.DATASET_REVISION = "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64"
+
 from native_clm_runtime import (
     C0_NAME,
     MODEL_NAMES,
