@@ -1,196 +1,202 @@
 # Native CLM Architecture Lab
 
-`research/native-clm/` is the long-lived architecture laboratory for **native cellular language models**.
+`research/native-clm/` is the long-lived architecture laboratory for **native cellular language models**. The immediate goal is not to train one CLM for as long as possible. It is to use a small, fixed budget to discover better CLM architecture choices before scaling them.
 
-The purpose of this research is deliberately narrower than the continual-learning program:
-
-> Find the best next-token-prediction architecture for a native CLM before adding growth, mitosis, online writes, rollback, replay-free learning, JAM integration, or on-chain constraints.
-
-The canonical working surface is a single living notebook:
+The canonical working surface remains one living notebook:
 
 - `native_clm_lab.ipynb`
 
-Execution infrastructure shared by that notebook lives beside it:
+Execution code lives beside it:
 
-- `native_clm_runtime.py` — frozen data/model/training/evaluation primitives;
-- `run_native_clm.py` — resumable single-model worker and paired one/two-GPU launcher.
-
-The notebook may evolve as new architecture ideas are added. Completed run records must not be rewritten. Each promoted run is identified as `NCLM-XXX` and its immutable metrics/configuration is exported under `results/` before a later notebook change supersedes the working candidate.
+- `native_clm_runtime.py` — frozen C0/T1 data, model, training and evaluation primitives;
+- `run_native_clm.py` — historical C0/T1 baseline runner;
+- `native_clm_candidates.py` — Phase-A single-factor C1–C4 candidates;
+- `run_native_clm_search.py` — resumable candidate sweep, dual-GPU scheduling and leaderboard generation.
 
 ## Research question
 
 Primary question:
 
-> Can a parameter-matched native CLM outperform a modern small Transformer on next-token prediction?
+> Under a fixed ~2M-parameter / 10M-token search budget, which Native CLM architectural choices improve next-token prediction relative to the frozen C0 anchor?
 
-The initial scale is approximately 2M parameters because it is intended for fast architecture search. Candidates that survive this stage should be re-tested at approximately 8M, 30M, and then larger scales.
+The search distinguishes quality/parameter, quality/training-compute and quality/inference-compute. Equal parameters do not imply equal FLOPs, so compute, throughput and VRAM are reported separately rather than collapsed into one score.
 
-The comparison distinguishes three claims:
+## Frozen anchors
 
-1. **quality / parameter** — same train tokens and approximately the same parameter count;
-2. **quality / training compute** — approximately the same total training FLOPs;
-3. **quality / inference compute** — account for recurrent CLM steps rather than treating recurrence as free depth.
+The first real accelerator development run is immutable evidence under:
 
-A win in (1) must not be reported as a win in (2) or (3).
+```text
+research/native-clm/results/dev/baseline-seed-91001/
+```
 
-## Frozen initial baselines
+At 10M TinyStories training tokens:
 
-### C0 — historical Native CLM, scaled to ~2M
+- **C0 historical scaled CLM**: 1,899,576 params, PPL `16.8387103`;
+- **T1 modern Transformer**: 1,894,080 params, PPL `12.1907091`;
+- C0/T1 PPL ratio: `1.3812741`;
+- estimated C0/T1 training-FLOP ratio: `3.3046`.
 
-C0 is a scaled reconstruction of the architecture used by MiniCells Experiment 007, not the earlier moving-average engineering scaffold.
+These measurements are anchors. Phase A does **not** retrain T1 and does not spend additional development or confirmation seeds merely to reproduce the known 10M gap.
 
-The historical structure is retained:
+## Frozen data and optimization protocol
 
-- three independent NCA stages;
-- local causal self-attention in each stage;
-- GELU FFN;
-- `GRUCell` recurrent update;
-- learned per-step embeddings;
-- four recurrent iterations per stage;
-- hierarchical windows `(8, 32, 128)`;
-- LayerNorm;
-- GRU carry/update bias `+2`;
-- tied token embedding / LM head.
-
-The historical 30M model used `d=720`, `FFN=2880`, eight heads. The ~2M baseline uses `d=168`, `FFN=672`, eight heads, preserving the 4× FFN ratio while parameter-matching T1.
-
-Current trainable parameters with vocabulary 2,048:
-
-- C0: **1,899,576**
-- T1: **1,894,080**
-- C0/T1: **1.002902×** (about 0.29% mismatch)
-
-### T1 — modern ~2M decoder Transformer
-
-T1 uses:
-
-- four decoder blocks;
-- `d_model=192`;
-- six query heads / two KV heads (GQA);
-- RMSNorm;
-- RoPE;
-- SwiGLU with FFN width 480;
-- pre-norm residual blocks;
-- tied token embedding / LM head.
-
-T1 is the modern architecture baseline, not a claim that this one 2M configuration is globally optimal.
-
-## Frozen data and training protocol
-
-The training runtime pins:
+All Phase-A candidates use the same protocol as the anchor:
 
 - dataset: `roneneldan/TinyStories`;
-- revision: `f54c09fd23315a6f9c86f9e14f9f4f06615b22e3`;
-- tokenizer: deterministic ByteLevel BPE trained from the first 20,000 pinned training stories;
-- vocabulary: 2,048 including `<pad>`, `<unk>`, `<bos>`, `<eos>`;
-- context: 128;
-- training sequence length: 125;
-- batch size: 8, therefore exactly 1,000 consumed training tokens per optimizer step;
-- optimizer: AdamW, betas `(0.9, 0.95)`, weight decay `0.1`;
-- base LR: `3e-4`, linear warmup then cosine decay;
-- gradient clipping: `1.0`;
-- CUDA precision: FP16 autocast + GradScaler;
-- validation: identical fixed examples for C0 and T1 within each seed;
-- C0 and T1 use the same deterministic batch schedule within a paired seed.
+- immutable revision: `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`;
+- deterministic ByteLevel BPE trained on the first 20,000 pinned training stories;
+- vocabulary 2,048;
+- context 128;
+- train sequence length 125;
+- batch 8 = exactly 1,000 consumed tokens/optimizer step;
+- AdamW, betas `(0.9, 0.95)`, weight decay `0.1`;
+- LR `3e-4`, warmup then cosine decay;
+- gradient clipping `1.0`;
+- FP16 autocast + GradScaler on CUDA;
+- identical deterministic training-batch schedule for the same seed;
+- identical fixed validation examples for the same seed.
 
-Profiles:
+Architecture-search decision budget:
 
-| profile | tokens/model | train stream | validation stream | purpose |
-|---|---:|---:|---:|---|
-| `smoke` | 100K | 200K | 50K | plumbing only |
-| `dev` | 1M | 1.2M | 250K | fast architecture development |
-| `baseline` | 10M | 12M | 1M | baseline decision runs |
+```text
+profile = baseline
+seed    = 91001
+tokens  = 10,000,000 / candidate
+params  = within 1% of frozen T1
+```
 
-Development seeds are `91001–91003`. Untouched confirmation seeds are `91101–91103`.
+Untouched confirmation seeds `91101–91103` are not consumed during Phase A. Development seeds `91002–91003` are also held back until a candidate first demonstrates a causal single-factor improvement on `91001`.
 
-## Dual-GPU execution
+## Phase A: orthogonal architecture search
 
-For two visible GPUs the paired runner follows the useful pattern from Experiment 007: it trains **one complete model per GPU concurrently** rather than applying DataParallel to a ~2M model.
+Phase A changes one factor at a time.
 
-- GPU 0: C0
-- GPU 1: T1
+### C1 — residual gated update
 
-With one GPU the models run sequentially. CPU is rejected for normal training and is available only through an explicit debug flag.
+Question: is C0's GRU state replacement harming recurrent optimization?
 
-Large token caches, Hugging Face caches, optimizer states and resume checkpoints are written under `/kaggle/working/native-clm` on Kaggle. They are not committed to Git.
+C1 replaces the GRU update with an identity-preserving write:
 
-The notebook reads `HF_TOKEN` and `GITHUB_TOKEN` from environment variables or Kaggle Secrets without printing their values. The TinyStories dataset is public, so `HF_TOKEN` is optional for correctness but is reused when available.
+```text
+proposal = attention_delta + ffn_delta
+gate     = sigmoid(W[state, proposal] + b)
+state'   = state + gate * proposal
+```
 
-## Compute accounting
+The gate starts with bias `-2`, roughly mirroring C0's `+2` carry bias while preserving a direct identity path. Width is increased only enough to keep the total parameter count matched.
 
-Every paired result reports:
+- dim 188, heads 4, FFN 752;
+- params: **1,901,808** (`1.00408×` T1).
 
-- exact parameter count;
-- validation NLL and PPL;
-- consumed training tokens;
-- analytical forward FLOPs/token;
-- estimated training FLOPs (`~3 × forward`, explicitly labelled as an estimate);
+### C2 — shared-wide phase Cell
+
+Question: should cross-phase parameter sharing be exchanged for a wider recurrent Cell?
+
+C2 uses one Cell for all 12 recurrent steps instead of three independent stage parameter sets. It retains the historical `8×4 → 32×4 → 128×4` communication pattern and GRU update, adds learned step embeddings plus zero-initialized three-phase affine modulation, and spends the saved parameters on width.
+
+- dim 270, heads 6, FFN 1080;
+- params: **1,909,170** (`1.00797×` T1).
+
+C2 has materially higher FLOPs; it is explicitly a quality/parameter experiment, not a compute win claim.
+
+### C3 — progressive receptive-field schedule
+
+Question: is the fixed `8×4 → 32×4 → 128×4` schedule optimal?
+
+C3 retains C0 dimensions, GRU update, stage parameterization and total parameter count. Only the per-step windows change:
+
+```text
+stage 1: 8, 16, 32, 64
+stage 2: 16, 32, 64, 128
+stage 3: 32, 64, 128, 128
+```
+
+- params: **1,899,576** (identical to C0).
+
+### C4 — sparse communication
+
+Question: must every recurrent compute step perform attention communication?
+
+C4 keeps C0's parameters and GRU/FFN update, but performs attention only on recurrent steps 1 and 4 inside each four-step stage. Intermediate steps are computation-only.
+
+- params: **1,899,576** (identical to C0);
+- estimated forward cost is lower than C0 because six of twelve attention calls are removed.
+
+## Evaluation
+
+Every candidate is evaluated at the same checkpoints:
+
+```text
+1M, 2.5M, 5M, 7.5M, 10M tokens
+```
+
+Two quality statistics are primary:
+
+1. final validation PPL at 10M;
+2. validation-NLL area under the curve over **log training tokens**.
+
+The runner records both raw AUC and the log-width-normalized mean NLL. The latter captures learning efficiency across the fixed budget rather than only the last checkpoint.
+
+Also reported independently:
+
+- exact parameter count and T1 ratio;
+- estimated training FLOPs;
+- estimated inference FLOPs/token;
 - measured tokens/s;
 - elapsed time;
 - peak VRAM.
 
-The initial C0 recurrence executes materially more compute than T1 at equal parameter/token budget. Therefore the first baseline can support a **quality/parameter** statement only; it cannot establish a quality/compute win.
+Do not combine these into an arbitrary composite score.
 
-The FLOP estimator counts the intended local-attention algorithm. Wall-clock throughput is retained because the current masked SDPA implementation may not realize ideal sparse-local attention cost on every backend.
+## Dual-GPU search
 
-## Running the baseline
-
-Open `native_clm_lab.ipynb` and run all cells. Its default configuration is a real `baseline` development run at seed `91001`, i.e. 10M tokens per model.
-
-The notebook:
-
-1. finds or clones `research/native-clm-lab`;
-2. installs the repository's existing `.[lm]` dependencies;
-3. reuses Kaggle/Hugging Face cache conventions and secrets;
-4. audits parameter/FLOP budgets;
-5. prepares the pinned tokenizer/corpus with hashes;
-6. launches C0 and T1 concurrently when two GPUs are available;
-7. resumes from compatible checkpoints after interruption;
-8. prints a paired leaderboard;
-9. copies only small development evidence into `research/native-clm/results/dev/`;
-10. optionally commits/pushes development evidence to the same branch when `GITHUB_TOKEN` is available.
-
-Confirmation results are deliberately excluded from the convenience auto-push path and are reviewed before promotion.
-
-## Historical evidence boundary
-
-Existing MiniCells work contains strong evidence about **continual-learning mechanisms**, but much less direct evidence about static native-CLM architecture quality.
-
-Results such as growth-restored plasticity, replay-free/subspace-certified mitosis, routing/growth engineering, functional-boundary experiments and CLM-0.4 continual-learning validation constrain this search but are not PPL architecture wins.
-
-In particular, real-representation work warns against assuming that address-based specialization is equivalent to functional specialization.
-
-## Living notebook, immutable evidence
-
-`native_clm_lab.ipynb` is intentionally mutable. It is the current laboratory, not an immutable scientific artifact.
-
-Development evidence is additive under:
+`run_native_clm_search.py sweep` treats GPUs as independent workers. On a two-T4 Kaggle machine:
 
 ```text
-research/native-clm/results/dev/<profile>-seed-<seed>/
+round 1: GPU0=C1, GPU1=C2
+round 2: GPU0=C3, GPU1=C4
 ```
 
-Promoted runs are immutable:
+T1 is never retrained. C0/T1 metrics and curves are loaded from the immutable `baseline-seed-91001` evidence and inserted into the generated architecture leaderboard.
+
+The runner supports resume. Large token caches, optimizer states and checkpoints remain under `/kaggle/working/native-clm`; only small evidence is copied back into Git.
+
+## Decision rule
+
+Phase A is deliberately causal:
 
 ```text
-research/native-clm/results/
-  NCLM-001/
-    config.json
-    metrics.json
-    environment.json
-    README.md
+C0/T1 frozen anchors
+    ↓
+C1, C2, C3, C4 single-factor runs on seed 91001
+    ↓
+identify real wins in 10M PPL and/or log-token NLL AUC
+    ↓
+only then combine winning mechanisms
+    ↓
+only promising combined candidates receive additional development seeds
+    ↓
+confirmation seeds remain untouched until interpretation is frozen
 ```
 
-A later experiment may supersede the interpretation of an older run, but must not overwrite its recorded configuration or metrics.
+A candidate that merely changes compute without improving quality is still informative, but is not promoted as a better CLM architecture. A candidate that improves PPL while greatly increasing compute is a quality/parameter result and must be labelled as such.
 
-## Initial optimization order
+## Evidence policy
 
-Do not start architecture search from one seed. First complete the frozen baseline development and confirmation sets. Then change one architectural factor at a time:
+The notebook is mutable; evidence is additive.
 
-1. `C1`: gated/update dynamics;
-2. `C2`: phase/step-conditioned recurrence;
-3. `C3`: small phase-specific modulation while retaining shared recurrent parameters;
-4. `C4`: receptive-field schedule;
-5. later: dual state, adaptive recurrence, compute/communication separation, functional Cell specialization.
+Frozen baseline development evidence:
 
-The initial Native CLM lab does not validate continual learning, Cell growth/mitosis, transaction rollback, replay-free safety, MoE-to-CLM conversion, or JAM execution/consensus constraints. Those mechanisms can be reintroduced after a strong static Native CLM is established.
+```text
+research/native-clm/results/dev/baseline-seed-91001/
+```
+
+Phase-A evidence:
+
+```text
+research/native-clm/results/dev/architecture-search-baseline-seed-91001/
+```
+
+Promoted results later use immutable `NCLM-XXX/` directories. Existing run records are never overwritten to fit a later interpretation.
+
+This phase still excludes continual learning, growth/mitosis, replay-free writes, rollback, MoE conversion and JAM execution/consensus concerns. Those mechanisms return only after the static Native CLM architecture is competitive.

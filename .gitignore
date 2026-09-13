@@ -3,8 +3,11 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .venv/
-# Transient local run output; durable evidence belongs under artifacts/.
+# Transient local run output; durable evidence belongs under artifacts/ by default.
 results/
+# Native CLM is a long-lived research lab whose reviewed small evidence is intentionally versioned beside its notebook.
+!research/native-clm/results/
+!research/native-clm/results/**
 *.egg-info/
 target/
 .deps/
