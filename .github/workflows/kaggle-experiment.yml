@@ -1,0 +1,130 @@
+name: Kaggle Experiment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "experiments/**"
+      - "kaggle/**"
+      - ".github/workflows/kaggle-experiment.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kaggle-experiment-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  kaggle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+      KERNEL_SLUG: minicells-pipeline-smoke
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check kaggle
+
+      - name: Validate credentials and prepare kernel metadata
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          token = os.environ.get("KAGGLE_API_TOKEN", "").strip()
+          username = os.environ.get("KAGGLE_USERNAME", "").strip()
+          if not token:
+              raise SystemExit("Missing Actions secret: KAGGLE_API_TOKEN")
+          if not username or "/" in username:
+              raise SystemExit(
+                  "Set the Actions repository variable KAGGLE_USERNAME to your Kaggle username."
+              )
+
+          metadata_path = Path("kaggle/kernel-metadata.json")
+          metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+          _, kernel_slug = metadata["id"].split("/", maxsplit=1)
+          metadata["id"] = f"{username}/{kernel_slug}"
+          metadata_path.write_text(
+              json.dumps(metadata, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Push and run Kaggle kernel
+        run: kaggle kernels push --path kaggle --timeout 600
+
+      - name: Wait for Kaggle run
+        shell: bash
+        run: |
+          set -euo pipefail
+          kernel_id="${KAGGLE_USERNAME}/${KERNEL_SLUG}"
+          for attempt in $(seq 1 60); do
+            if ! status="$(kaggle kernels status "$kernel_id" 2>&1)"; then
+              printf '%s\n' "$status"
+              exit 1
+            fi
+            printf 'Kaggle status check %s/60: %s\n' "$attempt" "$status"
+            normalized="$(printf '%s' "$status" | tr '[:upper:]' '[:lower:]')"
+            if printf '%s' "$normalized" | grep -Eq '(^|[^a-z])(complete|completed|success)([^a-z]|$)'; then
+              exit 0
+            fi
+            if printf '%s' "$normalized" | grep -Eq '(^|[^a-z])(error|errored|failed|failure)([^a-z]|$)'; then
+              kaggle kernels logs "$kernel_id" || true
+              exit 1
+            fi
+            sleep 30
+          done
+          echo "Kaggle run did not finish within 30 minutes."
+          kaggle kernels logs "$kernel_id" || true
+          exit 1
+
+      - name: Download Kaggle outputs and add run provenance
+        run: |
+          set -euo pipefail
+          mkdir -p kaggle-output
+          kaggle kernels output "${KAGGLE_USERNAME}/${KERNEL_SLUG}" --path kaggle-output
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          context = {
+              "repository": os.environ["GITHUB_REPOSITORY"],
+              "commit": os.environ["GITHUB_SHA"],
+              "ref": os.environ["GITHUB_REF"],
+              "workflow_run": os.environ["GITHUB_SERVER_URL"]
+              + "/"
+              + os.environ["GITHUB_REPOSITORY"]
+              + "/actions/runs/"
+              + os.environ["GITHUB_RUN_ID"],
+              "kaggle_kernel": os.environ["KAGGLE_USERNAME"]
+              + "/"
+              + os.environ["KERNEL_SLUG"],
+          }
+          Path("kaggle-output/github-context.json").write_text(
+              json.dumps(context, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Store Kaggle results as a GitHub Actions artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaggle-experiment-${{ github.run_id }}
+          path: kaggle-output/
+          if-no-files-found: error
+          retention-days: 30
