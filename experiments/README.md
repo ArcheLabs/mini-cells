@@ -22,12 +22,12 @@ Actions artifact named `kaggle-experiment-<run id>`.
 In **Settings → Secrets and variables → Actions**:
 
 1. Add the secret `KAGGLE_API_TOKEN` with an API token from your Kaggle account.
-2. Add the repository variable `KAGGLE_USERNAME` with the account slug that
-   owns the kernel.
 
-The kernel is private by default. The first successful push creates the kernel
-`<KAGGLE_USERNAME>/minicells-pipeline-smoke`; later workflow runs update it.
-Your Kaggle account must have GPU access and available accelerator quota.
+The kernel owner and slug are read from `kaggle/kernel-metadata.json`, currently
+set to `archelabs/minicells-pipeline-smoke` as in the initial experiment plan.
+If your Kaggle username differs, change the owner prefix in that file before
+merging. The kernel is private by default; later workflow runs update it. Your
+Kaggle account must have GPU access and available accelerator quota.
 
 Kaggle credentials belong in Actions secrets or local user configuration only.
 Do not commit `kaggle.json`, API tokens, or `.env` files.
@@ -35,8 +35,8 @@ Do not commit `kaggle.json`, API tokens, or `.env` files.
 ## Local use
 
 The Kaggle CLI reads `KAGGLE_API_TOKEN` directly for non-interactive
-authentication. To push manually, set that variable in your shell, replace the
-owner in `kaggle/kernel-metadata.json` with your Kaggle username, then run:
+authentication. To push manually, set that variable in your shell and ensure the owner in
+`kaggle/kernel-metadata.json` matches your Kaggle username, then run:
 
 ```sh
 python -m pip install kaggle

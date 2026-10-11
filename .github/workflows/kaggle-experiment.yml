@@ -23,8 +23,6 @@ jobs:
     timeout-minutes: 90
     env:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
-      KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
-      KERNEL_SLUG: minicells-pipeline-smoke
 
     steps:
       - name: Check out repository
@@ -38,30 +36,27 @@ jobs:
       - name: Install Kaggle CLI
         run: python -m pip install --disable-pip-version-check kaggle
 
-      - name: Validate credentials and prepare kernel metadata
+      - name: Validate token and load Kaggle kernel id
         run: |
           python - <<'PY'
           import json
           import os
+          import re
           from pathlib import Path
 
           token = os.environ.get("KAGGLE_API_TOKEN", "").strip()
-          username = os.environ.get("KAGGLE_USERNAME", "").strip()
           if not token:
               raise SystemExit("Missing Actions secret: KAGGLE_API_TOKEN")
-          if not username or "/" in username:
-              raise SystemExit(
-                  "Set the Actions repository variable KAGGLE_USERNAME to your Kaggle username."
-              )
 
           metadata_path = Path("kaggle/kernel-metadata.json")
           metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-          _, kernel_slug = metadata["id"].split("/", maxsplit=1)
-          metadata["id"] = f"{username}/{kernel_slug}"
-          metadata_path.write_text(
-              json.dumps(metadata, indent=2) + "\n",
-              encoding="utf-8",
-          )
+          kernel_id = metadata.get("id", "").strip()
+          if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", kernel_id):
+              raise SystemExit(
+                  "Set a valid owner/kernel-slug in kaggle/kernel-metadata.json."
+              )
+          with Path(os.environ["GITHUB_ENV"]).open("a", encoding="utf-8") as env_file:
+              env_file.write(f"KAGGLE_KERNEL_ID={kernel_id}\n")
           PY
 
       - name: Push and run Kaggle kernel
@@ -71,7 +66,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          kernel_id="${KAGGLE_USERNAME}/${KERNEL_SLUG}"
+          kernel_id="$KAGGLE_KERNEL_ID"
           for attempt in $(seq 1 60); do
             if ! status="$(kaggle kernels status "$kernel_id" 2>&1)"; then
               printf '%s\n' "$status"
@@ -96,7 +91,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p kaggle-output
-          kaggle kernels output "${KAGGLE_USERNAME}/${KERNEL_SLUG}" --path kaggle-output
+          kaggle kernels output "$KAGGLE_KERNEL_ID" --path kaggle-output
           python - <<'PY'
           import json
           import os
@@ -111,9 +106,7 @@ jobs:
               + os.environ["GITHUB_REPOSITORY"]
               + "/actions/runs/"
               + os.environ["GITHUB_RUN_ID"],
-              "kaggle_kernel": os.environ["KAGGLE_USERNAME"]
-              + "/"
-              + os.environ["KERNEL_SLUG"],
+              "kaggle_kernel": os.environ["KAGGLE_KERNEL_ID"],
           }
           Path("kaggle-output/github-context.json").write_text(
               json.dumps(context, indent=2) + "\n",
