@@ -15,3 +15,10 @@ target/
 apps/web/node_modules/
 apps/web/dist/
 apps/web/tsconfig.tsbuildinfo
+# Kaggle credentials and generated workflow downloads must stay out of Git.
+.kaggle/
+kaggle.json
+.env
+.env.*
+!.env.example
+kaggle-output/
