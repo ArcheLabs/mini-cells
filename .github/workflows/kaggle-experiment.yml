@@ -36,37 +36,62 @@ jobs:
       - name: Install Kaggle CLI
         run: python -m pip install --disable-pip-version-check kaggle
 
-      - name: Validate token and load Kaggle kernel id
+      - name: Push kernel and capture its actual run reference
         run: |
           python - <<'PY'
           import json
           import os
           import re
           from pathlib import Path
+          from urllib.parse import urlsplit
 
-          token = os.environ.get("KAGGLE_API_TOKEN", "").strip()
-          if not token:
+          if not os.environ.get("KAGGLE_API_TOKEN", "").strip():
               raise SystemExit("Missing Actions secret: KAGGLE_API_TOKEN")
 
-          metadata_path = Path("kaggle/kernel-metadata.json")
-          metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-          kernel_id = metadata.get("id", "").strip()
-          if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", kernel_id):
-              raise SystemExit(
-                  "Set a valid owner/kernel-slug in kaggle/kernel-metadata.json."
-              )
+          from kaggle.api.kaggle_api_extended import KaggleApi
+          from slugify import slugify
+
+          metadata = json.loads(Path("kaggle/kernel-metadata.json").read_text(encoding="utf-8"))
+          requested_id = metadata.get("id", "").strip()
+          if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", requested_id):
+              raise SystemExit("Set a valid owner/kernel-slug in kaggle/kernel-metadata.json.")
+          owner, requested_slug = requested_id.split("/")
+          if slugify(metadata.get("title", "")) != requested_slug:
+              raise SystemExit("Kernel title must resolve to the slug in metadata id.")
+
+          api = KaggleApi()
+          api.authenticate()
+          result = api.kernels_push("kaggle", timeout=600)
+          if result is None or result.error:
+              raise SystemExit("Kaggle push failed: " + (result.error if result else "empty response"))
+
+          url = result.url or ""
+          parsed = urlsplit(url)
+          match = re.fullmatch(
+              r"/(?:code/)?([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)/?", parsed.path
+          )
+          if parsed.scheme != "https" or parsed.hostname not in {"www.kaggle.com", "kaggle.com"} or not match:
+              raise SystemExit("Kaggle push returned an invalid kernel URL.")
+          kernel_id = match.group(1)
+          if kernel_id.split("/")[0] != owner:
+              raise SystemExit("Kaggle push returned a different kernel owner.")
+          version = result.versionNumber
+          if not isinstance(version, int) or isinstance(version, bool) or version < 1:
+              raise SystemExit("Kaggle push did not return a valid version number.")
+          kernel_ref = f"{kernel_id}/{version}"
+          print(f"Kaggle pushed version {version}: {url}", flush=True)
+          if kernel_id != requested_id:
+              print(f"Kaggle resolved {requested_id} to {kernel_id}; using the returned URL.")
           with Path(os.environ["GITHUB_ENV"]).open("a", encoding="utf-8") as env_file:
               env_file.write(f"KAGGLE_KERNEL_ID={kernel_id}\n")
+              env_file.write(f"KAGGLE_KERNEL_REF={kernel_ref}\n")
           PY
-
-      - name: Push and run Kaggle kernel
-        run: kaggle kernels push --path kaggle --timeout 600
 
       - name: Wait for Kaggle run
         shell: bash
         run: |
           set -euo pipefail
-          kernel_id="$KAGGLE_KERNEL_ID"
+          kernel_id="$KAGGLE_KERNEL_REF"
           for attempt in $(seq 1 60); do
             if ! status="$(kaggle kernels status "$kernel_id" 2>&1)"; then
               printf '%s\n' "$status"
@@ -91,7 +116,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p kaggle-output
-          kaggle kernels output "$KAGGLE_KERNEL_ID" --path kaggle-output
+          kaggle kernels output "$KAGGLE_KERNEL_REF" --path kaggle-output
           python - <<'PY'
           import json
           import os
@@ -107,6 +132,7 @@ jobs:
               + "/actions/runs/"
               + os.environ["GITHUB_RUN_ID"],
               "kaggle_kernel": os.environ["KAGGLE_KERNEL_ID"],
+              "kaggle_kernel_ref": os.environ["KAGGLE_KERNEL_REF"],
           }
           Path("kaggle-output/github-context.json").write_text(
               json.dumps(context, indent=2) + "\n",

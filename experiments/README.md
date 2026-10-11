@@ -26,7 +26,19 @@ In **Settings → Secrets and variables → Actions**:
 The kernel owner and slug are set to
 `bingjiangli/minicells-pipeline-smoke`, matching the Kaggle account used for
 this repository. The kernel is private by default; later workflow runs update
-it. Your Kaggle account must have GPU access and available accelerator quota.
+it. The title must resolve to the slug: "MiniCells Pipeline Smoke" becomes
+`minicells-pipeline-smoke`. The workflow checks the API push response, then
+uses the returned URL and version for status and output requests, so it follows
+the submitted version even if Kaggle resolves a different slug.
+
+A status permission error alone does not prove that the token is invalid:
+the CLI uses the same message for inaccessible and incorrect kernel references.
+Check the actual URL printed by the push step. If that URL is still inaccessible,
+confirm that the token belongs to the owner of that kernel.
+See the official [authentication guide](https://github.com/Kaggle/kaggle-cli/blob/main/docs/README.md#authentication)
+and [kernel metadata guide](https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels_metadata.md).
+
+Your Kaggle account must have GPU access and available accelerator quota.
 
 Kaggle credentials belong in Actions secrets or local user configuration only.
 Do not commit `kaggle.json`, API tokens, or `.env` files.
