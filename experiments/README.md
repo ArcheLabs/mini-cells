@@ -56,13 +56,20 @@ python -m experiments.runners.train --output experiment-output
 
 ## GPU budget and evidence
 
-Each model has a 75-minute wall-clock budget, including initialization,
-evaluation and intermediate checkpoints. The runner caps its whole session at
-170 minutes and reserves checkpoint time. Kaggle's server timeout is three
-hours, including setup; these are ceilings, not measured runtime estimates.
-This ceiling is 10% of the stated 30-hour weekly allowance under single-session
-accounting. The script uses CUDA device 0; it does not distribute training to
-the second T4. Kaggle's own quota display determines the charged time.
+The two models train concurrently in independent processes: Fixed on physical
+GPU 0, Global Router on physical GPU 1. Each worker sees one GPU through
+`CUDA_VISIBLE_DEVICES` and uses local `cuda:0`. This uses both T4s for independent
+experiments rather than splitting one model with DDP. Data and tokenizer are
+prepared once; workers share identical memory-mapped token arrays and sampling
+schedules. A single-GPU session is rejected instead of silently running the
+pair sequentially.
+
+Each model has at most 45 minutes for initialization, training, evaluation and
+intermediate checkpoints. The whole runner has a shared 55-minute deadline
+starting before dependency setup, with two minutes reserved for checkpoint
+saving. The server's hard session timeout is one hour. Setup time reduces the
+training window for both workers. These are ceilings, not runtime promises;
+Kaggle's quota display determines the actual charge for the dual-GPU session.
 
 If either model fails or runs out of time, outputs are preserved and
 `comparable_at_full_budget` is false. Such a run must not be reported as a

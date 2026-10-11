@@ -13,7 +13,7 @@ concurrency:
 jobs:
   kaggle:
     runs-on: ubuntu-latest
-    timeout-minutes: 210
+    timeout-minutes: 90
     env:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
 
@@ -81,7 +81,7 @@ jobs:
 
           api = KaggleApi()
           api.authenticate()
-          result = api.kernels_push("kaggle", timeout=10800)
+          result = api.kernels_push("kaggle", timeout=3600)
           if result is None or result.error:
               raise SystemExit("Kaggle push failed: " + (result.error if result else "empty response"))
 
@@ -112,12 +112,12 @@ jobs:
         run: |
           set -euo pipefail
           kernel_id="$KAGGLE_KERNEL_REF"
-          for attempt in $(seq 1 400); do
+          for attempt in $(seq 1 160); do
             if ! status="$(kaggle kernels status "$kernel_id" 2>&1)"; then
               printf '%s\n' "$status"
               exit 1
             fi
-            printf 'Kaggle status check %s/400: %s\n' "$attempt" "$status"
+            printf 'Kaggle status check %s/160: %s\n' "$attempt" "$status"
             normalized="$(printf '%s' "$status" | tr '[:upper:]' '[:lower:]')"
             if printf '%s' "$normalized" | grep -Eq '(^|[^a-z])(complete|completed|success)([^a-z]|$)'; then
               exit 0
@@ -128,7 +128,7 @@ jobs:
             fi
             sleep 30
           done
-          echo "Kaggle run did not finish within 200 minutes."
+          echo "Kaggle run did not finish within 80 minutes including queue and output processing."
           kaggle kernels logs "$kernel_id" || true
           exit 1
 

@@ -10,6 +10,9 @@ import math
 import os
 import platform
 import random
+import subprocess
+import sys
+import tempfile
 import time
 import traceback
 from pathlib import Path
@@ -220,6 +223,7 @@ def train_one(kind, config, data, output, session_deadline):
         write_json(directory / 'learning_curve.json', curves)
         write_json(directory / 'routing_stats.json', routing)
         metrics.update({'model': kind, 'status': status, 'steps': completed_steps,
+            'physical_gpu_index': os.environ.get('CUDA_VISIBLE_DEVICES', 'unassigned'),
             'train_tokens': completed_steps * tokens_per_step,
             'train_seconds': train_seconds,
             'tokens_per_sec': completed_steps * tokens_per_step / train_seconds if train_seconds else None,
@@ -238,6 +242,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', default='experiments/configs/routing/experiment-001.json')
     parser.add_argument('--output', default='experiment-output')
+    parser.add_argument('--worker', choices=['fixed', 'global-router'])
+    parser.add_argument('--data')
+    parser.add_argument('--deadline', type=float)
     args = parser.parse_args()
     config = json.loads(Path(args.config).read_text(encoding='utf-8'))
     if config['train_tokens'] % (config['batch_size'] * config['sequence_length']):
@@ -256,6 +263,13 @@ def main():
     if not torch.cuda.is_available():
         raise RuntimeError('Experiment 001 requires CUDA')
     output = Path(args.output)
+    if args.worker:
+        data = {split: np.load(Path(args.data) / (split + '.npy'), mmap_mode='r')
+                for split in ('train', 'validation')}
+        train_one(args.worker, config, data, output, args.deadline)
+        return
+    if torch.cuda.device_count() < 2:
+        raise RuntimeError('Experiment 001 requires two GPUs for the one-hour parallel budget')
     output.mkdir(parents=True, exist_ok=False)
     session_started = float(os.environ.get('EXPERIMENT_STARTED_AT', time.time()))
     deadline = session_started + config['session_budget_seconds']
@@ -265,17 +279,53 @@ def main():
         'torch': torch.__version__, 'python': platform.python_version(),
         'dependencies': {name: importlib.metadata.version(name)
                          for name in ('numpy', 'datasets', 'tokenizers')},
-        'gpu': torch.cuda.get_device_name(0), 'precision': 'FP16 with GradScaler',
+        'gpus': [torch.cuda.get_device_name(index) for index in (0, 1)],
+        'execution': 'one independent model process per GPU, concurrently; not DDP',
+        'precision': 'FP16 with GradScaler',
         'started_at_unix': session_started,
         'interpretation': 'capacity matched dense vs sparse FFN; compute is deliberately unequal; one development seed'}
     write_json(output / 'experiment.json', {**provenance, 'status': 'running'})
     results = []
     try:
         data = prepare_data(config, output, deadline - 120)
-        for kind in config['models']:
-            if time.time() >= deadline - 120:
-                break
-            results.append(train_one(kind, config, data, output, deadline))
+        with tempfile.TemporaryDirectory(prefix='minicells-data-') as cache:
+            for split, tokens in data.items():
+                np.save(Path(cache) / (split + '.npy'), tokens)
+            del data
+            workers = []
+            try:
+                for gpu, kind in enumerate(config['models']):
+                    environment = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu))
+                    log = (output / (kind + '-worker.log')).open('w', encoding='utf-8')
+                    command = [sys.executable, '-m', 'experiments.runners.train',
+                        '--config', str(Path(args.config).resolve()), '--output', str(output.resolve()),
+                        '--worker', kind, '--data', cache, '--deadline', str(deadline)]
+                    process = subprocess.Popen(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
+                    workers.append((kind, process, log))
+                while any(process.poll() is None for _, process, _ in workers):
+                    if time.time() >= deadline:
+                        break
+                    time.sleep(2)
+            finally:
+                for kind, process, log in workers:
+                    if process.poll() is None:
+                        process.terminate()
+                        try:
+                            process.wait(timeout=10)
+                        except subprocess.TimeoutExpired:
+                            process.kill()
+                            process.wait()
+                    log.close()
+                    report = output / kind / 'metrics.json'
+                    if report.is_file():
+                        metrics = json.loads(report.read_text(encoding='utf-8'))
+                        if process.returncode != 0:
+                            metrics['status'] = 'failed'
+                        results.append(metrics)
+                    else:
+                        results.append({'model': kind, 'status': 'failed',
+                            'reason': 'Worker exited or reached session deadline before saving metrics',
+                            'worker_exit_code': process.returncode})
     except Exception:
         (output / 'error.txt').write_text(traceback.format_exc(), encoding='utf-8')
     complete = len(results) == len(config['models']) and all(row['status'] == 'completed' for row in results)
