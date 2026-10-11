@@ -23,11 +23,10 @@ In **Settings → Secrets and variables → Actions**:
 
 1. Add the secret `KAGGLE_API_TOKEN` with an API token from your Kaggle account.
 
-The kernel owner and slug are read from `kaggle/kernel-metadata.json`, currently
-set to `archelabs/minicells-pipeline-smoke` as in the initial experiment plan.
-If your Kaggle username differs, change the owner prefix in that file before
-merging. The kernel is private by default; later workflow runs update it. Your
-Kaggle account must have GPU access and available accelerator quota.
+The kernel owner and slug are set to
+`bingjiangli/minicells-pipeline-smoke`, matching the Kaggle account used for
+this repository. The kernel is private by default; later workflow runs update
+it. Your Kaggle account must have GPU access and available accelerator quota.
 
 Kaggle credentials belong in Actions secrets or local user configuration only.
 Do not commit `kaggle.json`, API tokens, or `.env` files.
