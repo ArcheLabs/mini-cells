@@ -3,7 +3,7 @@ import math
 
 
 def stage(step, total_steps, kind):
-    if kind != 'hard-cell':
+    if kind not in {'hard-cell', 'graph-cell'}:
         return 'soft' if kind == 'soft-cell' else 'native', 1.0
     warmup, anneal = total_steps // 4, total_steps // 2
     if step <= warmup:

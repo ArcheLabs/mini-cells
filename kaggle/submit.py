@@ -14,12 +14,16 @@ sys.path.insert(0, str(ROOT / 'src'))
 from minicells.research.config import digest, dump, load_definition
 
 
-def prepare(commit, seed, destination, definition, input_reference):
+def prepare(commit, seed, destination, definition, input_reference, session=None):
     if not re.fullmatch('[0-9a-f]{40}', commit):
         raise ValueError('A full source SHA is required')
     descriptor, config, protocol = load_definition(definition)
-    if descriptor['runtime'] != 'routing-003' or seed not in config['seeds']:
-        raise ValueError('Only registered 003 development runs are enabled; 004 remains planned')
+    if descriptor['runtime'] not in {'routing-003','routing-004'} or seed not in config['seeds']:
+        raise ValueError('Only registered 003/004 seeds are enabled')
+    if descriptor['runtime'] == 'routing-004' and session not in config['sessions']:
+        raise ValueError('004 requires reference or graph session')
+    if descriptor['runtime'] == 'routing-003' and session is not None:
+        raise ValueError('003 does not take a session selector')
     reference = json.loads(Path(input_reference).read_text())
     checksum = reference['assets_manifest_sha256']
     if not re.fullmatch('[0-9a-f]{64}', checksum) or reference.get('immutable_snapshot') is not True:
@@ -49,13 +53,13 @@ def prepare(commit, seed, destination, definition, input_reference):
     definition_relative = str(Path(definition).resolve().relative_to(ROOT))
     notebook = json.loads((Path(definition).resolve().parent / 'notebook.ipynb').read_text())
     replacements.update({'__OFFLINE_BOOTSTRAP__': code, '__CONFIG_PATH__': descriptor['config'],
-                         '__DEFINITION_PATH__': definition_relative})
+                         '__DEFINITION_PATH__': definition_relative, '__SESSION__':session or ''})
     script = []
     for cell in notebook['cells']:
         text = ''.join(cell['source'])
         # Bootstrap already contains the source payload; replace the marker first.
         text = text.replace('__OFFLINE_BOOTSTRAP__', code)
-        for marker in ('__CONFIG_PATH__', '__DEFINITION_PATH__'):
+        for marker in ('__CONFIG_PATH__', '__DEFINITION_PATH__', '__SESSION__'):
             text = text.replace(marker, replacements[marker])
         cell['source'] = text.splitlines(keepends=True)
         script.append(text if cell['cell_type'] == 'code' else '\n'.join('# ' + line for line in text.splitlines()))
@@ -65,7 +69,7 @@ def prepare(commit, seed, destination, definition, input_reference):
     metadata=json.loads((ROOT / 'kaggle/metadata/kernel-metadata.json').read_text())
     metadata['dataset_sources']=[dataset_id]
     dump(destination / 'kernel-metadata.json', metadata)
-    dump(destination / 'preparation.json', {'experiment':descriptor['id'], 'source_commit':commit,'seed':seed,
+    dump(destination / 'preparation.json', {'experiment':descriptor['id'], 'source_commit':commit,'seed':seed,'session':session,
          'definition_sha256':digest(definition), 'config_sha256':digest(ROOT / descriptor['config']),
          'protocol_sha256':digest(protocol), 'assets_manifest_sha256':checksum,'dataset_id':dataset_id,
          'payload_sha256':source_sha,'notebook_sha256':digest(destination / 'experiment.ipynb'),
@@ -82,8 +86,9 @@ def main():
     parser.add_argument('--input-reference',required=True)
     parser.add_argument('--output',required=True)
     parser.add_argument('--push',action='store_true')
+    parser.add_argument('--session',choices=['reference','graph'])
     args=parser.parse_args()
-    destination=prepare(args.commit,args.seed,args.output,args.definition,args.input_reference)
+    destination=prepare(args.commit,args.seed,args.output,args.definition,args.input_reference,args.session)
     if args.push:
         from kaggle.api.kaggle_api_extended import KaggleApi
         api=KaggleApi();api.authenticate()

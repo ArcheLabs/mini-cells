@@ -16,6 +16,11 @@ class HardCellTransition(CellInternalRouter):
         self.temperature = 2.0
         self.mode = 'soft'
 
+    def reset_stats(self):
+        super().reset_stats()
+        if hasattr(self, 'graph_evidence'):
+            del self.graph_evidence
+
     def _soft(self, x):
         # Same conditional-mean relaxation as 002, with scheduled temperature.
         # Diagnostic scalar conversions are kept out of timed inference.
@@ -87,9 +92,9 @@ class HardCellTransition(CellInternalRouter):
         observed = self.training or self.collect_stats
         if self.collect_stats:
             usage = x.new_zeros(experts, dtype=torch.float32)
-            paths = torch.full((min(n, self.sample_limit), self.max_hops), -1,
+            paths = torch.full((n if getattr(self, 'graph_evidence_enabled', False) else min(n, self.sample_limit), self.max_hops), -1,
                                device=x.device, dtype=torch.long)
-            stop_hop = torch.full((min(n, self.sample_limit),), -1,
+            stop_hop = torch.full((paths.shape[0],), -1,
                                   device=x.device, dtype=torch.long)
             learned = x.new_zeros((), dtype=torch.float32)
             histogram = x.new_zeros(self.max_hops, dtype=torch.float32)
@@ -154,6 +159,12 @@ class HardCellTransition(CellInternalRouter):
             self.stop_sum += float(learned)
             self.forced_sum += n - float(learned)
             self.histogram = [a + b for a, b in zip(self.histogram, histogram.cpu().tolist())]
+            if getattr(self, 'graph_evidence_enabled', False):
+                from minicells.routing.graph_evidence import GraphEvidence
+                if not hasattr(self, 'graph_evidence'):
+                    self.graph_evidence = GraphEvidence(experts)
+                self.graph_evidence.add(paths.cpu().tolist(), stop_hop.cpu().tolist(),
+                                        getattr(self, 'routing_token_ids', None))
             remaining = self.sample_limit - len(self.samples)
             for row, ended in zip(paths[:remaining].cpu().tolist(), stop_hop[:remaining].cpu().tolist()):
                 path = [cell for cell in row if cell >= 0]
@@ -178,7 +189,8 @@ class HardCellTransition(CellInternalRouter):
         if not self.token_count:
             raise RuntimeError('Missing hard routing evidence')
         counts = self.usage.cpu().tolist()
-        return {'mode': 'hard', 'validation_tokens': self.token_count,
+        return {**(self.graph_evidence.stats() if hasattr(self, 'graph_evidence') else {}),
+                'mode': 'hard', 'validation_tokens': self.token_count,
                 'assignments': counts, 'utilization': [value / sum(counts) for value in counts],
                 'expected_path_length': self.path_sum / self.token_count,
                 'executed_cell_visits_per_token': self.executed_sum / self.token_count,
