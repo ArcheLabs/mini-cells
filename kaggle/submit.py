@@ -1,8 +1,9 @@
-"""Prepare a Notebook First bundle; optionally update the existing Kaggle script.
+"""Prepare a bundle for the existing Kaggle kernel and optional API submission.
 
-Existing kernel type and id are retained. Public kernels_push cannot attach
-runtime Secrets; use the original authorized editor if an API run cannot read
-them. Tokens are never serialized in the bundle.
+The existing kernel id and type are retained. Kaggle reads GITHUB_TOKEN at
+runtime for the existing GitHub publication path. HF_TOKEN is attempted when
+available but is optional for the public, pinned TinyStories dataset. Tokens
+are never serialized in the bundle.
 """
 from __future__ import annotations
 import argparse
@@ -41,8 +42,10 @@ def prepare(commit, seed, destination):
         'notebook_sha256': hashlib.sha256((destination / 'experiment.ipynb').read_bytes()).hexdigest(),
         'launcher_sha256': hashlib.sha256((destination / 'experiment.py').read_bytes()).hexdigest(),
         'server_timeout_seconds': 3600, 'application_timeout_seconds': 3300,
-        'runtime_secret_labels': ['HF_TOKEN', 'GITHUB_TOKEN'],
-        'secret_scope': 'existing original editor authorization; public push cannot attach secret labels'}, indent=2) + '\n')
+        'required_runtime_secret_labels': ['GITHUB_TOKEN'],
+        'optional_runtime_secret_labels': ['HF_TOKEN'],
+        'secret_scope': 'GITHUB_TOKEN enables the existing Kaggle-to-GitHub publisher; '
+                        'HF_TOKEN is optional for public pinned TinyStories'}, indent=2) + '\n')
     return destination
 
 
