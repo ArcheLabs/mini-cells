@@ -53,12 +53,14 @@ orchestration one minute, publication three minutes: **55-minute application
 cap**, 60-minute server timeout. This is a hard budget, not a runtime estimate.
 An unfinished arm remains incomplete; its token budget is never silently reduced.
 
-Use manual workflow **Experiment Notebook Preparation**, select seed 42 first.
-Download the prepared notebook/script. Run the prepared code in the existing
-`bingjiangli/minicells` editor with HF_TOKEN and GITHUB_TOKEN enabled.
-API submission is optional because API login does not authorize runtime Secrets.
-The existing kernel remains script type; the script is exported from the
-canonical notebook so its identity/type is preserved and no new notebook is made.
+Use the existing **Kaggle Experiment** workflow and select Experiment 003 with
+one registered development seed. It updates and runs the existing
+`bingjiangli/minicells` script kernel; it does not create another notebook.
+Inside Kaggle, the launcher uses the existing `GITHUB_TOKEN` secret for the
+repository preflight and result push. It also uses `HF_TOKEN` when available;
+if that optional secret cannot be read, the pinned public TinyStories dataset
+is fetched anonymously. The canonical notebook remains the source of the
+uploaded script.
 
 ## Evidence
 
@@ -69,10 +71,10 @@ hard paths; soft path lengths represent probability mass, not sampled trajectori
 Training loss/PPL in per-step logs are training batch statistics; validation is
 separate. Fixed entropy is zero by definition.
 
-GitHub write preflight occurs before GPU work. Use a GitHub PAT owned/authorized
-for ArcheLabs/mini-cells with **Contents read/write** and automatically granted
-Metadata read. Checkpoints stay in Kaggle outputs; small immutable evidence and
-checkpoint hashes are published to `results/routing-003-<source SHA prefix>` under
+The existing Kaggle publisher performs the GitHub write preflight before GPU work.
+Its `GITHUB_TOKEN` secret must be a GitHub PAT authorized for ArcheLabs/mini-cells
+with **Contents read/write** and automatically granted Metadata read. Checkpoints
+stay in Kaggle outputs; small immutable evidence and checkpoint hashes are published to `results/routing-003-<source SHA prefix>` under
 `artifacts/experiments/003-hard-cell-transition/<full SHA>/seed-<seed>`.
 Failed publication preserves files in Kaggle outputs. No seed directory is overwritten.
 
