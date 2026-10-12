@@ -6,10 +6,10 @@ on:
       experiment:
         description: Experiment family
         type: choice
-        options: ["002", "001"]
-        default: "002"
+        options: ["003", "002", "001"]
+        default: "003"
       seed:
-        description: One Experiment 002 development seed per session (ignored for 001)
+        description: One Experiment 002/003 development seed per session (ignored for 001)
         type: choice
         options: ["42", "123", "456"]
         default: "42"
@@ -42,6 +42,20 @@ jobs:
 
       - name: Install Kaggle CLI
         run: python -m pip install --disable-pip-version-check kaggle
+
+      - name: Prepare Experiment 003 canonical notebook and exact-commit launcher
+        if: ${{ inputs.experiment == '003' }}
+        run: |
+          python kaggle/submit.py --commit "$GITHUB_SHA" --seed "$EXPERIMENT_SEED" --output prepared-notebook
+          cp prepared-notebook/experiment.py kaggle/experiment.py
+          cp prepared-notebook/kernel-metadata.json kaggle/kernel-metadata.json
+
+      - name: Preserve prepared Experiment 003 notebook
+        if: ${{ inputs.experiment == '003' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: experiment-003-seed-${{ inputs.seed }}-notebook-${{ github.sha }}
+          path: prepared-notebook/
 
       - name: Prepare Experiment 002 exact-commit launcher
         if: ${{ inputs.experiment == '002' }}
@@ -201,13 +215,14 @@ jobs:
           import os
           from pathlib import Path
 
-          if os.environ["EXPERIMENT_FAMILY"] == "002":
+          family = os.environ["EXPERIMENT_FAMILY"]
+          if family in {"002", "003"}:
               decisions = list(Path("kaggle-output").rglob("decision.json"))
               if len(decisions) != 1:
-                  raise SystemExit("Missing Experiment 002 seed decision.")
+                  raise SystemExit(f"Missing Experiment {family} seed decision.")
               decision = json.loads(decisions[0].read_text(encoding="utf-8"))
               if decision.get("scientific_decision") is not False:
-                  raise SystemExit("Experiment 002 must remain a development record.")
+                  raise SystemExit(f"Experiment {family} must remain a development record.")
               if decision.get("status") == "DEVELOPMENT_INCOMPLETE":
                   raise SystemExit("Seed was published as incomplete; inspect the preserved evidence.")
               if not decision.get("comparable_at_full_budget"):
@@ -237,6 +252,8 @@ jobs:
             kaggle-output/**/*.csv
             kaggle-output/**/*.txt
             kaggle-output/**/*.log
+            kaggle-output/**/*.md
+            kaggle-output/**/*.png
           if-no-files-found: error
           retention-days: 30
 
