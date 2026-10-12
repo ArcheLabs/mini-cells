@@ -30,16 +30,20 @@ def write_json(path, value):
     temporary.replace(path)
 
 
-def prepare_data(config, output, deadline):
+def prepare_data(config, output, deadline, *, validation_prefix_count=0):
     from datasets import load_dataset
     from tokenizers import Tokenizer, models, pre_tokenizers, decoders, trainers
 
     records = {}
     fingerprints = {}
+    validation_prefix_hash = None
+    validation_suffix_hash = None
     for split, count in [('train', config['train_stories']), ('validation', config['validation_stories'])]:
         dataset = load_dataset(config['dataset'], revision=config['dataset_revision'],
                                split=split, streaming=True)
         texts, digest = [], hashlib.sha256()
+        prefix_digest = hashlib.sha256() if split == 'validation' and validation_prefix_count else None
+        suffix_digest = hashlib.sha256() if split == 'validation' and validation_prefix_count else None
         for row in dataset:
             if time.time() >= deadline:
                 raise TimeoutError('Data preparation exceeded the session budget')
@@ -48,11 +52,21 @@ def prepare_data(config, output, deadline):
             encoded = text.encode('utf-8')
             digest.update(len(encoded).to_bytes(8, 'little'))
             digest.update(encoded)
+            if prefix_digest is not None:
+                (prefix_digest if len(texts) <= validation_prefix_count else suffix_digest).update(
+                    len(encoded).to_bytes(8, 'little')
+                )
+                (prefix_digest if len(texts) <= validation_prefix_count else suffix_digest).update(encoded)
             if len(texts) == count:
                 break
         if len(texts) != count:
             raise RuntimeError(f'Insufficient {split} stories')
         records[split], fingerprints[split] = texts, digest.hexdigest()
+        if prefix_digest is not None:
+            if validation_prefix_count >= len(texts):
+                raise ValueError('validation_prefix_count must be smaller than validation story count')
+            validation_prefix_hash = prefix_digest.hexdigest()
+            validation_suffix_hash = suffix_digest.hexdigest()
     tokenizer = Tokenizer(models.BPE(unk_token='<unk>'))
     tokenizer.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)
     tokenizer.decoder = decoders.ByteLevel()
@@ -73,7 +87,7 @@ def prepare_data(config, output, deadline):
         arrays[split] = np.asarray(ids, dtype=np.int32)
         if len(ids) < config['sequence_length'] + 1:
             raise RuntimeError(f'Insufficient {split} tokens')
-    write_json(output / 'data.json', {
+    data_record = {
         'dataset': config['dataset'], 'revision': config['dataset_revision'],
         'story_counts': {key: len(value) for key, value in records.items()},
         'text_sha256': fingerprints,
@@ -83,7 +97,12 @@ def prepare_data(config, output, deadline):
         'tokenizer_vocab_size': tokenizer.get_vocab_size(),
         'sampling': 'same seeded random windows with replacement for both models; EOS between stories',
         'tokenizer_training_split': 'train only',
-    })
+    }
+    if validation_prefix_hash is not None:
+        data_record['validation_prefix_story_count'] = int(validation_prefix_count)
+        data_record['validation_prefix_text_sha256'] = validation_prefix_hash
+        data_record['validation_suffix_text_sha256'] = validation_suffix_hash
+    write_json(output / 'data.json', data_record)
     return arrays
 
 

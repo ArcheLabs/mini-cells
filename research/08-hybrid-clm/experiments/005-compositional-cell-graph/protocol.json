@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "experiment_id": "005-compositional-cell-graph",
+  "status": "PROPOSED_NOT_REGISTERED",
+  "scientific_decision": false,
+  "source_proposal": "PROTOCOL_DRAFT.md",
+  "arms": {
+    "M0": "8-expert top-2 MoE, hidden width 1024",
+    "P0": "32-cell parallel top-4, hidden width 256",
+    "S0": "32-cell state-aware flat sequential routing, four hard visits",
+    "R0": "32-cell fixed random graph, out-degree 8, four hard visits",
+    "G0": "32-cell learned sparse graph, out-degree 8, four hard visits",
+    "G0-no-edge": "post-hoc graph perturbation of the same G0 checkpoint; no retraining"
+  },
+  "common": {
+    "layers": 6,
+    "width": 512,
+    "heads": 8,
+    "sequence_length": 125,
+    "vocab_size": 8192,
+    "ffn_parameters_per_layer": 8388608,
+    "train_tokens_per_arm": 10000000,
+    "train_steps": 5000,
+    "batch_size": 16,
+    "heldout_validation_tokens": 32000,
+    "cell_visits_per_sequential_block": 4,
+    "stop_enabled": false,
+    "residual_scale_proposal": 0.25,
+    "top2_backup_gradient": true,
+    "manual_execution": true
+  },
+  "decision_boundaries": {
+    "b1": "S0 versus P0 under matched cell capacity, visits, data and training-token budget",
+    "b2_primary": "G0 versus R0, then separately versus the strong S0 baseline",
+    "system": "G0 versus M0 on held-out PPL, unique touched weights, whole-model observed GEMM FLOPs and actual batch-1 KV-cache decode latency",
+    "no_edge_claim": "G0-no-edge is a post-hoc mechanism diagnostic, not an independent trained arm"
+  },
+  "gates": {
+    "b1_ppl_relative_improvement_min": 0.01,
+    "b2_vs_r0_ppl_relative_improvement_min": 0.01,
+    "b2_direction_each_confirmation_seed": "G0 better than R0",
+    "system_ppl_ratio_max": 1.03,
+    "system_unique_weight_ratio_max": 0.75,
+    "system_gemm_flops_ratio_max": 0.8,
+    "system_decode_p50_ratio_max": 1.0,
+    "parameter_tolerance_fraction": 0.01,
+    "confirmation_seeds_required": 3
+  },
+  "bootstrap_replicates": 5000,
+  "b2_strong_flat_matching_rule": null,
+  "b2_graph_diagnostics_rule": null,
+  "system_runtime_rule": null,
+  "not_registered_because": [
+    "no collision-free development/confirmation seed matrix has been registered",
+    "the independent held-out data slice and its content hash are not yet frozen",
+    "edge-refresh candidate sampling and matched-compute controls remain unspecified",
+    "the bootstrap and decode measurement procedures remain proposals"
+  ]
+}
