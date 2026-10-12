@@ -103,4 +103,4 @@ The purpose of the research tree is to make future product decisions depend on t
 
 ## Routing study execution
 
-[Pipeline v2](reports/PIPELINE_V2.md) organizes routing studies 001–004 under [experiments/](experiments/) with [registry.yaml](registry.yaml), immutable Dataset inputs and Actions-side result collection. The frozen historical evidence paths retain scientific authority; 003 seed42 is incomplete and 004 is planned.
+[Pipeline v2](reports/PIPELINE_V2.md) organizes routing studies 001–004 under [experiments/](experiments/) with [registry.yaml](registry.yaml). Experiment 004's canonical manual execution entrypoint is the [learned Cell Graph notebook](notebooks/03-routing-and-growth/experiment-004-learned-cell-graph-kaggle.ipynb); the frozen historical evidence paths retain scientific authority. Experiment 003 seed42 remains incomplete and Experiment 004 remains registered/unrun until evidence is returned.

@@ -1,4 +1,4 @@
-"""Actions-side verification and immutable evidence archive; no checkpoints in Git."""
+"""Verify returned run evidence and create an immutable archive; no checkpoints in Git."""
 import argparse
 import json
 import shutil
@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'src'))
 from minicells.research.config import digest, dump
 
 
-def collect(download, preparation, archive, kernel_ref, workflow_url):
+def collect(download, preparation, archive, kernel_ref, workflow_url='', collection='Actions', notebook_url=''):
     download = Path(download).resolve()
     preparation = json.loads(Path(preparation).read_text())
     matches = list(download.rglob('evidence-manifest.json'))
@@ -50,8 +50,13 @@ def collect(download, preparation, archive, kernel_ref, workflow_url):
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(file, dest)
     shutil.copyfile(matches[0], target / 'evidence-manifest.json')
-    dump(target / 'github-context.json', {'kernel_ref': kernel_ref, 'workflow_url': workflow_url,
-                                         'source_commit': preparation['source_commit'], 'collection': 'Actions'})
+    context = {'kernel_ref': kernel_ref, 'source_commit': preparation['source_commit'],
+               'collection': collection}
+    if workflow_url:
+        context['workflow_url'] = workflow_url
+    if notebook_url:
+        context['notebook_url'] = notebook_url
+    dump(target / 'github-context.json', context)
     # Preserve original hashed plots; any host regeneration has its own derived directory.
     decision = json.loads((target / 'decision.json').read_text())
     registry_path = ROOT / 'research/registry.yaml'
@@ -76,9 +81,12 @@ def main():
     parser.add_argument('--preparation', required=True)
     parser.add_argument('--archive', default='research/artifacts')
     parser.add_argument('--kernel-ref', required=True)
-    parser.add_argument('--workflow-url', required=True)
+    parser.add_argument('--workflow-url', default='')
+    parser.add_argument('--collection', choices=('Actions', 'manual-notebook'), default='Actions')
+    parser.add_argument('--notebook-url', default='')
     args = parser.parse_args()
-    collect(args.download, args.preparation, args.archive, args.kernel_ref, args.workflow_url)
+    collect(args.download, args.preparation, args.archive, args.kernel_ref, args.workflow_url,
+            args.collection, args.notebook_url)
 
 
 if __name__ == '__main__':

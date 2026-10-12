@@ -166,7 +166,7 @@ def preflight_push(branch: str, secret_name: str) -> None:
     print(f"GitHub write preflight passed for {branch} using Kaggle Secret {secret_name}")
 
 
-def _push(branch: str, secret_name: str) -> None:
+def push_branch(branch: str, secret_name: str = DEFAULT_SECRET_NAME) -> None:
     _check_branch(branch)
     with _authenticated_git_env(secret_name) as env:
         result = run_git(
@@ -186,7 +186,12 @@ def _push(branch: str, secret_name: str) -> None:
         print(result.stdout.strip())
     if result.stderr.strip():
         print(result.stderr.strip())
-    print(f"pushed Core 007 results to {branch}")
+    print(f"pushed results to {branch}")
+
+
+def _push(branch: str, secret_name: str) -> None:
+    """Backward-compatible name used by existing research publishers."""
+    push_branch(branch, secret_name)
 
 
 def parse_args() -> argparse.Namespace:
