@@ -18,18 +18,27 @@
 
 ```text
 research/
-  README.md                 # 只做导航
-  audits/                   # 跨实验审计、历史资产与能力上限
-  catalog.yaml              # machine-oriented index
-  stages/                   # 研究阶段叙事与 closure
-  validations/              # 冻结 protocol/result/diagnostic
-  experiments/              # 历史实验组织
-  notebooks/                # 可运行 notebook / 托管执行入口
-  reports/                  # 派生报告
-  releases/                 # 研究 release 记录
-  previews/                 # preview 材料
-  archive/                  # 退役/历史材料
+  01-foundations/            # 项目优先目录（迁移脚手架）
+  02-self-organization/
+  03-routing-and-growth/
+  04-continual-learning/
+  05-language-validation/
+  06-native-clm/
+  07-safe-model-evolution/
+  08-hybrid-clm/
+  audits/                    # 跨项目主张与证据上限
+  catalog.yaml               # 面向工具的导航索引
+  MIGRATION_MAP.md           # 旧路径映射与迁移约束
+  ...                        # 迁移期间保留的冻结旧路径
+
+shared/                      # 仅放跨研究项目实现
+  python/ scripts/ kaggle/ visualization/ evaluation/
 ```
+
+仓库正从“按资产类型组织”迁移到“按研究项目组织”。八个项目根目录和
+顶层 `shared/` 已建立；每个项目的引用审计与兼容路径完成前，现有 protocol、
+运行归档、notebook 和实现仍保留在当前权威路径。具体映射见
+[`MIGRATION_MAP.md`](MIGRATION_MAP.md)。
 
 Stage 08 是当前面向产品的桥梁；Native CLM 与 CLM-0.4 历史线仍是科研记录，
 不是当前 release 承诺。
@@ -91,8 +100,18 @@ MiniCells 现在明确区分两条线：
 - local write/retention signal 不能直接推出完整模型的 global improvement。
 - 复用历史 engineering primitive 时，不能继承旧 scientific claim 的证据等级。
 - 历史 protocol/result path 属于证据的一部分；重构入口必须先做引用审计并保留 compatibility shim。
+- 每个实验必须归属一个研究项目。跨项目索引可以留在 `research/` 根目录，但实验逻辑不能搬进全研究共享目录。
+- 只有确认至少两个研究项目复用某组件后，才将它放入顶层 `shared/`；项目专属逻辑留在项目内部。
 - 每一个新的 summary claim 都必须明确写出：**它没有证明什么。**
 - 详细运行日志与结果数据应持久化，但 hosted notebook 的 stdout 必须保持精简，避免页面因日志量失去可用性。
 - 可视化只是 durable result 的派生视图；`result.json`、`decision.json` 与 frozen protocol 才是科学权威。
 
 这个研究目录的目标，是让后续产品定位建立在累计证据的能力上限上，而不是建立在最新一次机制叙事上。
+
+## 项目优先结构迁移
+
+研究目录正从按资产类型转为按研究项目组织。八个项目入口和顶层 `shared/`
+已经建立；冻结协议、运行归档、notebook 和实现会在逐项目引用审计与兼容路径
+准备好之后再迁移。Experiment 004 seed 42 的 reference 和 graph 均已归档，但记录的
+source commit 不同，矩阵聚合仍为 `DEVELOPMENT_INCOMPLETE`。迁移期间保留各自的归档
+与 source identity。当前迁移约束见 [`MIGRATION_MAP.md`](MIGRATION_MAP.md)。
