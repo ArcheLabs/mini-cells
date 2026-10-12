@@ -62,6 +62,10 @@ development result, not scientific confirmation.
 
 ## Running and reporting
 
+All experiment families reuse `https://www.kaggle.com/code/bingjiangli/minicells`
+with title `MiniCells`, preserving the notebook's existing `HF_TOKEN` and
+`GITHUB_TOKEN` secret permissions. Do not create a new notebook per experiment.
+
 Use the repository's **Kaggle Experiment** manual GitHub Actions workflow. Choose
 Experiment 002 and one of the three seeds. The workflow pins the source commit, verifies
 the returned Kaggle kernel/version reference, and leaves both metrics and checkpoint
