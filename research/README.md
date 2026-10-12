@@ -18,18 +18,28 @@ This tree preserves MiniCells scientific evidence. It is **not** a product roadm
 
 ```text
 research/
-  README.md                 # navigation only
-  audits/                   # cross-experiment claims, historical assets and capability ceiling
-  catalog.yaml              # machine-oriented index
-  stages/                   # research-stage narratives and closures
-  validations/              # frozen protocols/results/diagnostics
-  experiments/              # historical experiment organization
-  notebooks/                # runnable notebooks / hosted execution entrypoints
-  reports/                  # derived reports
-  releases/                 # research release records
-  previews/                 # preview material
-  archive/                  # retired/historical material
+  01-foundations/            # project-first home (migration scaffold)
+  02-self-organization/
+  03-routing-and-growth/
+  04-continual-learning/
+  05-language-validation/
+  06-native-clm/
+  07-safe-model-evolution/
+  08-hybrid-clm/
+  audits/                    # cross-project claims and evidence ceilings
+  catalog.yaml               # machine-oriented navigation index
+  MIGRATION_MAP.md           # old-to-new paths and migration guardrails
+  ...                        # frozen legacy paths retained during migration
+
+shared/                      # cross-project implementation only
+  python/ scripts/ kaggle/ visualization/ evaluation/
 ```
+
+The repository is migrating from asset-type folders to research-project
+folders. The eight project roots and root-level `shared/` tree are scaffolded;
+existing protocols, run archives, notebooks and implementations remain at
+their current canonical paths until each project's reference audit and
+compatibility path are ready. See [`MIGRATION_MAP.md`](MIGRATION_MAP.md).
 
 Stage 08 is the current product-facing bridge, while the historical Native CLM
 and CLM-0.4 lines remain scientific records rather than release promises.
@@ -95,6 +105,8 @@ Engineering may use a Cell as a deliberately chosen unit of model change without
 - Do not infer global model improvement from a local write/retention signal.
 - Do not inherit scientific authority when reusing an old engineering primitive.
 - Preserve historical protocol/result paths; restructure entrypoints only with reference audits and compatibility shims.
+- Give each experiment one owning research project. Cross-project indexes may remain at `research/`, but experiment logic must not be moved into a generic research-wide shared directory.
+- Put a component under root `shared/` only after confirming that at least two research projects use it; project-specific logic stays with its project.
 - Every new summary claim must state what it does **not** prove.
 - Keep detailed run logs and result data durable, but keep hosted notebook stdout compact enough to remain usable.
 - Treat visualizations as derived views; `result.json`, `decision.json`, and frozen protocols remain authoritative.
@@ -103,4 +115,4 @@ The purpose of the research tree is to make future product decisions depend on t
 
 ## Routing study execution
 
-[Pipeline v2](reports/PIPELINE_V2.md) organizes routing studies 001–004 under [experiments/](experiments/) with [registry.yaml](registry.yaml). Experiment 004's canonical manual execution entrypoint is the [learned Cell Graph notebook](notebooks/03-routing-and-growth/experiment-004-learned-cell-graph-kaggle.ipynb); the frozen historical evidence paths retain scientific authority. Experiment 003 seed42 remains incomplete and Experiment 004 remains registered/unrun until evidence is returned.
+[Pipeline v2](reports/PIPELINE_V2.md) and [registry.yaml](registry.yaml) index routing studies 001–004. Experiment 004's canonical manual entrypoint remains the [learned Cell Graph notebook](notebooks/03-routing-and-growth/experiment-004-learned-cell-graph-kaggle.ipynb). Seed 42's `reference` and `graph` sessions are archived under [`research/artifacts/004-cell-graph/`](artifacts/004-cell-graph/); their records contain different source commit IDs, and matrix aggregation remains `DEVELOPMENT_INCOMPLETE`. Preserve each archive and its recorded source identity during this migration.
