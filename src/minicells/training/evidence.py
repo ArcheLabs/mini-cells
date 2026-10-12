@@ -51,15 +51,19 @@ def assess(model, data, config, directory, deadline):
             torch.cuda.synchronize()
         events = [event for event in captured.events()
                   if event.device_type == torch.autograd.DeviceType.CUDA]
+        kernels = [event for event in events
+                   if not any(label in event.name.lower() for label in ('memcpy', 'memset', '[memory]'))]
     latency = sum(times) / len(times)
     result = {**quality, **counter.metrics(quality['validation_tokens']),
               'inference_latency_seconds_per_batch': latency,
               'inference_tokens_per_sec': x.numel() / latency,
-              'cuda_kernel_time_us_per_validation_batch': sum(event.device_time_total for event in events) / len(starts),
+              'cuda_kernel_time_us_per_validation_batch': sum(event.device_time_total for event in kernels) / len(starts),
+              'cuda_activity_time_us_per_validation_batch': sum(event.device_time_total for event in events) / len(starts),
               'cuda_activity_events_per_validation_batch': len(events) / len(starts),
               'timing_scope': 'FP16 forward on identical resident batch, synchronized host latency; '
                               'profiling and transfer excluded; two independent GPU workers may share CPU',
-              'profile_scope': 'summed CUDA activity durations from instrumented validation; '
+              'profile_scope': 'summed CUDA event durations from instrumented validation; kernel time excludes '
+                               'named memcpy/memset/memory activities; total activity reported separately; '
                                'not uninstrumented end-to-end latency',
               'peak_gpu_bytes': torch.cuda.max_memory_allocated()}
     write_json(directory / 'evaluation.json', result)
