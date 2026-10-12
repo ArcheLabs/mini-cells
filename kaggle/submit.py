@@ -1,74 +1,100 @@
-"""Prepare a bundle for the existing Kaggle kernel and optional API submission.
-
-The existing kernel id and type are retained. Kaggle reads GITHUB_TOKEN at
-runtime for the existing GitHub publication path. HF_TOKEN is attempted when
-available but is optional for the public, pinned TinyStories dataset. Tokens
-are never serialized in the bundle.
-"""
+"""Prepare the original MiniCells kernel with embedded source and fixed inputs."""
 from __future__ import annotations
 import argparse
+import base64
 import hashlib
+import io
 import json
+import re
+import sys
+import zipfile
 from pathlib import Path
-
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'src'))
+from minicells.research.config import digest, dump, load_definition
 
 
-def prepare(commit, seed, destination):
-    if len(commit) != 40 or any(char not in '0123456789abcdef' for char in commit):
+def prepare(commit, seed, destination, definition, input_reference):
+    if not re.fullmatch('[0-9a-f]{40}', commit):
         raise ValueError('A full source SHA is required')
-    if seed not in (42, 123, 456):
-        raise ValueError('Choose registered development seed 42, 123 or 456')
-    destination = Path(destination)
-    destination.mkdir(parents=True, exist_ok=False)
-    path = ROOT / 'experiments/003-hard-cell-transition/notebooks/experiment.ipynb'
-    notebook = json.loads(path.read_text())
+    descriptor, config, protocol = load_definition(definition)
+    if descriptor['runtime'] != 'routing-003' or seed not in config['seeds']:
+        raise ValueError('Only registered 003 development runs are enabled; 004 remains planned')
+    reference = json.loads(Path(input_reference).read_text())
+    checksum = reference['assets_manifest_sha256']
+    if not re.fullmatch('[0-9a-f]{64}', checksum) or reference.get('immutable_snapshot') is not True:
+        raise ValueError('Expected an immutable input snapshot manifest')
+    dataset_id = reference['dataset_id']
+    if not re.fullmatch(r'[A-Za-z0-9_.-]+/minicells-assets-[0-9a-f]{20}', dataset_id):
+        raise ValueError('Unexpected Dataset identity')
+    destination = Path(destination);destination.mkdir(parents=True, exist_ok=False)
+    buffer = io.BytesIO()
+    files = set(ROOT.glob('src/**/*.py')) | set(ROOT.glob('experiments/**/*.py'))
+    files.update([Path(definition).resolve(), ROOT / descriptor['config'], protocol])
+    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as archive:
+        for path in sorted(files):
+            if not path.is_relative_to(ROOT):
+                raise ValueError('Bundle paths must belong to the repository')
+            info = zipfile.ZipInfo(str(path.relative_to(ROOT)), date_time=(2020,1,1,0,0,0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            archive.writestr(info, path.read_bytes())
+    payload = buffer.getvalue()
+    source_sha = hashlib.sha256(payload).hexdigest()
+    code = (ROOT / 'kaggle/templates/offline_bootstrap.py').read_text()
+    replacements = {'__SOURCE_COMMIT__':commit, '__SEED__':str(seed), '__ASSET_SHA256__':checksum,
+                    '__PAYLOAD_SHA256__':source_sha, '__SOURCE_PAYLOAD__':base64.b64encode(payload).decode(),
+                    '__EXPERIMENT_ID__':descriptor['id']}
+    for key,value in replacements.items():
+        code = code.replace(key,value)
+    definition_relative = str(Path(definition).resolve().relative_to(ROOT))
+    notebook = json.loads((Path(definition).resolve().parent / 'notebook.ipynb').read_text())
+    replacements.update({'__OFFLINE_BOOTSTRAP__': code, '__CONFIG_PATH__': descriptor['config'],
+                         '__DEFINITION_PATH__': definition_relative})
     script = []
     for cell in notebook['cells']:
         text = ''.join(cell['source'])
-        text = text.replace('__EXPERIMENT_COMMIT__', commit).replace('__EXPERIMENT_SEED__', str(seed))
+        # Bootstrap already contains the source payload; replace the marker first.
+        text = text.replace('__OFFLINE_BOOTSTRAP__', code)
+        for marker in ('__CONFIG_PATH__', '__DEFINITION_PATH__'):
+            text = text.replace(marker, replacements[marker])
         cell['source'] = text.splitlines(keepends=True)
-        if cell['cell_type'] == 'code':
-            script.append(text)
-        else:
-            script.append('\n'.join('# ' + line for line in text.splitlines()))
-    (destination / 'experiment.ipynb').write_text(json.dumps(notebook, indent=2) + '\n')
-    (destination / 'experiment.py').write_text('\n\n'.join(script) + '\n')
-    metadata = json.loads((ROOT / 'kaggle/kernel-metadata.json').read_text())
-    metadata.update(id='bingjiangli/minicells', title='MiniCells', code_file='experiment.py', kernel_type='script')
-    (destination / 'kernel-metadata.json').write_text(json.dumps(metadata, indent=2) + '\n')
-    (destination / 'preparation.json').write_text(json.dumps({
-        'source_commit': commit, 'seed': seed, 'kernel_id': metadata['id'],
-        'notebook_sha256': hashlib.sha256((destination / 'experiment.ipynb').read_bytes()).hexdigest(),
-        'launcher_sha256': hashlib.sha256((destination / 'experiment.py').read_bytes()).hexdigest(),
-        'server_timeout_seconds': 3600, 'application_timeout_seconds': 3300,
-        'required_runtime_secret_labels': ['GITHUB_TOKEN'],
-        'optional_runtime_secret_labels': ['HF_TOKEN'],
-        'secret_scope': 'GITHUB_TOKEN enables the existing Kaggle-to-GitHub publisher; '
-                        'HF_TOKEN is optional for public pinned TinyStories'}, indent=2) + '\n')
+        script.append(text if cell['cell_type'] == 'code' else '\n'.join('# ' + line for line in text.splitlines()))
+    notebook['metadata']['pipeline_template'] = False
+    dump(destination / 'experiment.ipynb', notebook)
+    (destination / 'experiment.py').write_text('\n\n'.join(script)+'\n')
+    metadata=json.loads((ROOT / 'kaggle/metadata/kernel-metadata.json').read_text())
+    metadata['dataset_sources']=[dataset_id]
+    dump(destination / 'kernel-metadata.json', metadata)
+    dump(destination / 'preparation.json', {'experiment':descriptor['id'], 'source_commit':commit,'seed':seed,
+         'definition_sha256':digest(definition), 'config_sha256':digest(ROOT / descriptor['config']),
+         'protocol_sha256':digest(protocol), 'assets_manifest_sha256':checksum,'dataset_id':dataset_id,
+         'payload_sha256':source_sha,'notebook_sha256':digest(destination / 'experiment.ipynb'),
+         'kernel_id':'bingjiangli/minicells','application_timeout_seconds':3300,'server_timeout_seconds':3600,
+         'runtime_secret_labels':[], 'scientific_decision':False})
     return destination
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--commit', required=True)
-    parser.add_argument('--seed', type=int, required=True, choices=[42, 123, 456])
-    parser.add_argument('--output', required=True)
-    parser.add_argument('--push', action='store_true', help='Explicitly update and run the original Kaggle kernel')
-    args = parser.parse_args()
-    directory = prepare(args.commit, args.seed, args.output)
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--commit',required=True)
+    parser.add_argument('--seed',type=int,required=True)
+    parser.add_argument('--definition',default=str(ROOT / 'research/experiments/003-hard-cell-transition/experiment.yaml'))
+    parser.add_argument('--input-reference',required=True)
+    parser.add_argument('--output',required=True)
+    parser.add_argument('--push',action='store_true')
+    args=parser.parse_args()
+    destination=prepare(args.commit,args.seed,args.output,args.definition,args.input_reference)
     if args.push:
         from kaggle.api.kaggle_api_extended import KaggleApi
-        api = KaggleApi()
-        api.authenticate()
-        result = api.kernels_push(str(directory), timeout=3600)
-        # Server-returned identity/version, never inferred from title or leaderboard.
+        api=KaggleApi();api.authenticate()
+        result=api.kernels_push(str(destination),timeout=3600)
         if result is None or result.error:
-            raise RuntimeError('Kaggle push failed: ' + (result.error if result else 'empty response'))
-        print(json.dumps({'url': result.url, 'version': result.versionNumber}, default=str))
+            raise RuntimeError('Kaggle push failed: '+str(result.error if result else 'empty response'))
+        dump(destination / 'push.json', {'url':result.url,'version':result.versionNumber})
+        print(json.dumps({'url':result.url,'version':result.versionNumber}))
     else:
-        print('Prepared exact-commit notebook and compatible script for bingjiangli/minicells.')
+        print('Prepared offline notebook and script for the original bingjiangli/minicells kernel.')
 
 
-if __name__ == '__main__':
+if __name__=='__main__':
     main()

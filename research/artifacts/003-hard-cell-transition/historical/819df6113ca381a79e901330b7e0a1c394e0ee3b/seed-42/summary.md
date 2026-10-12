@@ -1,0 +1,50 @@
+# Research run summary
+
+Status: **DEVELOPMENT_INCOMPLETE**
+
+| Model | Tokens | Final PPL | Matmul FLOPs/token (scope) | Latency ms |
+|---|---:|---:|---:|---:|
+| fixed-cell | 8904000 | missing | missing | missing |
+| global-router | 8446000 | missing | missing | missing |
+| soft-cell | 10000000 | 12.18219189302685 | 338020352.0 (measured) | 93.03747474998545 |
+| hard-cell | 10000000 | 14.824803405492208 | 43833797.952 (measured) | 62.44784659998004 |
+
+Frozen decision: `{"status": "DEVELOPMENT_INCOMPLETE", "scientific_decision": false, "gates": null}`
+
+Derived view only; unavailable measurements remain unavailable. Training PPL and validation PPL are distinct.
+GEMM FLOPs exclude non-matmul costs; latency scope follows the source evidence.
+Soft depth is expected probability mass; hard depth is actual executed visits.
+Single development seeds do not establish general CLM/MoE superiority.
+Unavailable plots: none
+
+## Input and execution provenance
+```json
+{
+  "source_commit": "819df6113ca381a79e901330b7e0a1c394e0ee3b",
+  "seed": 42,
+  "scientific_decision": false,
+  "config_sha256": "1cef2db9c148a606e017748911b5bbb6019871fb2b2fc4cf7f2e01370fc1cd79",
+  "protocol_sha256": "b2c0bfedc978b62e686e22b0a01c8318bcd6e52b3b0029dc023803b1830bf85d",
+  "torch": "2.10.0+cu128",
+  "python": "3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]",
+  "capacities": {
+    "fixed-cell": 60894720,
+    "global-router": 60919296,
+    "soft-cell": 61115904,
+    "hard-cell": 61115904
+  },
+  "attention_backend": "SDPA math in every arm and measurement",
+  "dependencies": {
+    "numpy": "2.0.2",
+    "datasets": "4.0.0",
+    "tokenizers": "0.21.4"
+  },
+  "execution": "two independent T4 workers, one long + one short arm per GPU; no DDP",
+  "gpus": [
+    "Tesla T4",
+    "Tesla T4"
+  ],
+  "status": "DEVELOPMENT_INCOMPLETE",
+  "elapsed_seconds": 2065.372030735016
+}
+```

@@ -1,0 +1,58 @@
+{
+  "experiments": [
+    {
+      "id": "001",
+      "name": "global-router",
+      "status": "completed_development",
+      "directory": "research/experiments/001-global-router",
+      "historical_entry": "experiments.common.train",
+      "note": "single development comparison; no confirmation claim"
+    },
+    {
+      "id": "002",
+      "name": "cell-internal-router",
+      "status": "development_incomplete",
+      "directory": "research/experiments/002-cell-internal-router",
+      "historical_entry": "experiments.cell_internal_routing_002.train",
+      "completed_development_seeds": [
+        42
+      ],
+      "missing_development_seeds": [
+        123,
+        456
+      ],
+      "result_branch": "results/routing-002-3c19e9ca5dfc",
+      "decision": "DEVELOPMENT_NOT_SUPPORTED for observed seed 42"
+    },
+    {
+      "id": "003",
+      "name": "hard-cell-transition",
+      "status": "development_incomplete",
+      "directory": "research/experiments/003-hard-cell-transition",
+      "entry": "minicells.training.runner",
+      "development_seeds": [
+        42,
+        123,
+        456
+      ],
+      "observed_development_seeds": [
+        42
+      ],
+      "missing_development_seeds": [
+        123,
+        456
+      ],
+      "decision": "DEVELOPMENT_INCOMPLETE",
+      "result_source_commit": "819df6113ca381a79e901330b7e0a1c394e0ee3b"
+    },
+    {
+      "id": "004",
+      "name": "cell-graph",
+      "status": "planned",
+      "directory": "research/experiments/004-cell-graph",
+      "scientific_decision": false,
+      "note": "No registered model, seed matrix, gates or execution budget yet"
+    }
+  ],
+  "schema_version": 2
+}

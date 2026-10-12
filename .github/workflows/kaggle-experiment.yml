@@ -1,267 +1,169 @@
 name: Kaggle Experiment
 
 on:
+  workflow_call:
+    inputs:
+      experiment:
+        type: string
+        default: "003"
+      seed:
+        type: string
+        default: "123"
+      execute:
+        type: boolean
+        default: false
+    secrets:
+      KAGGLE_API_TOKEN:
+        required: false
   workflow_dispatch:
     inputs:
       experiment:
-        description: Experiment family
+        description: Registered execution or historical notebook preparation
         type: choice
-        options: ["003", "002", "001"]
+        options: ["003", "002", "001", "004"]
         default: "003"
       seed:
-        description: One Experiment 002/003 development seed per session (ignored for 001)
+        description: Development seed; observed seeds remain development evidence
         type: choice
         options: ["42", "123", "456"]
-        default: "42"
+        default: "123"
+      execute:
+        description: Start the registered GPU run; false prepares an offline notebook only
+        type: boolean
+        default: false
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 concurrency:
   group: kaggle-experiment
   cancel-in-progress: false
 
 jobs:
-  kaggle:
+  research:
     runs-on: ubuntu-latest
-    # This job waits on Kaggle queues/output; the separate Kaggle training deadline is 55 minutes.
-    timeout-minutes: 90
+    timeout-minutes: 115
     env:
-      EXPERIMENT_FAMILY: ${{ inputs.experiment }}
-      EXPERIMENT_SEED: ${{ inputs.seed }}
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
-
+      PYTHONPATH: src:.
+      EXPERIMENT: ${{ inputs.experiment }}
+      SEED: ${{ inputs.seed }}
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      - name: Install Kaggle CLI
-        run: python -m pip install --disable-pip-version-check kaggle
-
-      - name: Prepare Experiment 003 canonical notebook and exact-commit launcher
+      - name: Resolve research definition
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          entries = json.loads(Path('research/registry.yaml').read_text())['experiments']
+          entry = next(item for item in entries if item['id'] == os.environ['EXPERIMENT'])
+          definition = Path(entry['directory']) / 'experiment.yaml'
+          if entry['status'] == 'planned':
+              raise SystemExit('Experiment 004 is planned. Register its scientific protocol before execution.')
+          with Path(os.environ['GITHUB_ENV']).open('a') as handle:
+              handle.write('DEFINITION=' + str(definition) + '\n')
+          PY
+      - name: Preserve historical notebooks
+        if: ${{ inputs.experiment != '003' }}
+        run: |
+          python - <<'PY'
+          import json, os, shutil
+          from pathlib import Path
+          definition = Path(os.environ['DEFINITION'])
+          Path('prepared-notebook').mkdir()
+          for name in ('notebook.ipynb', 'experiment.yaml', 'README.md', 'analysis.md'):
+              shutil.copyfile(definition.parent / name, Path('prepared-notebook') / name)
+          if '${{ inputs.execute }}' == 'true':
+              raise SystemExit('Historical 001/002 are archive records; use their original frozen launcher for explicit reproduction.')
+          PY
+      - name: Install pinned CPU preparation dependencies
         if: ${{ inputs.experiment == '003' }}
         run: |
-          python kaggle/submit.py --commit "$GITHUB_SHA" --seed "$EXPERIMENT_SEED" --output prepared-notebook
-          cp prepared-notebook/experiment.py kaggle/experiment.py
-          cp prepared-notebook/kernel-metadata.json kaggle/kernel-metadata.json
-
-      - name: Preserve prepared Experiment 003 notebook
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install 'kaggle==2.2.4' 'numpy==2.0.2' 'datasets==4.0.0' 'tokenizers==0.21.4' 'matplotlib==3.10.6'
+      - name: Prepare fixed assets on CPU
         if: ${{ inputs.experiment == '003' }}
+        run: python kaggle/prepare_assets.py --definition "$DEFINITION" --output prepared-assets
+      - name: Upload immutable Dataset before GPU work
+        if: ${{ inputs.experiment == '003' && inputs.execute }}
+        run: python kaggle/upload_assets.py prepared-assets
+      - name: Prepare notebook with embedded source and fixed Dataset
+        if: ${{ inputs.experiment == '003' }}
+        run: python kaggle/submit.py --commit "$GITHUB_SHA" --seed "$SEED" --definition "$DEFINITION" --input-reference prepared-assets/input-reference.json --output prepared-notebook
+      - name: Preserve notebook and source identity
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: experiment-003-seed-${{ inputs.seed }}-notebook-${{ github.sha }}
-          path: prepared-notebook/
-
-      - name: Prepare Experiment 002 exact-commit launcher
-        if: ${{ inputs.experiment == '002' }}
-        run: |
-          python - <<'PY'
-          import os
-          import shutil
-          from pathlib import Path
-          path = Path("kaggle/run_experiment_002.py")
-          content = path.read_text(encoding="utf-8")
-          content = content.replace("__EXPERIMENT_COMMIT__", os.environ["GITHUB_SHA"])
-          content = content.replace("__EXPERIMENT_SEED__", os.environ["EXPERIMENT_SEED"])
-          path.write_text(content, encoding="utf-8")
-          shutil.copyfile("kaggle/kernel-metadata-002.json", "kaggle/kernel-metadata.json")
-          PY
-
-      - name: Package Experiment 001 source from this commit
-        if: ${{ inputs.experiment == '001' }}
-        run: |
-          python - <<'PY'
-          import base64
-          import io
-          import os
-          import zipfile
-          from pathlib import Path
-
-          files = [
-              "experiments/configs/routing/experiment-001.json",
-              "experiments/runners/models.py",
-              "experiments/runners/train.py",
-              "experiments/common/__init__.py",
-              "experiments/common/models.py",
-              "experiments/common/train.py",
-          ]
-          buffer = io.BytesIO()
-          with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
-              archive.writestr("experiments/__init__.py", "")
-              archive.writestr("experiments/runners/__init__.py", "")
-              for name in files:
-                  archive.write(name, name)
-          script_path = Path("kaggle/run_experiment.py")
-          script = script_path.read_text(encoding="utf-8")
-          script = script.replace("__EXPERIMENT_PAYLOAD__", base64.b64encode(buffer.getvalue()).decode("ascii"))
-          script = script.replace("__EXPERIMENT_COMMIT__", os.environ["GITHUB_SHA"])
-          script_path.write_text(script, encoding="utf-8")
-          PY
-
-      - name: Push kernel and capture its actual run reference
-        run: |
-          python - <<'PY'
-          import json
-          import os
-          import re
-          from pathlib import Path
-          from urllib.parse import urlsplit
-
-          if not os.environ.get("KAGGLE_API_TOKEN", "").strip():
-              raise SystemExit("Missing Actions secret: KAGGLE_API_TOKEN")
-
-          from kaggle.api.kaggle_api_extended import KaggleApi
-          from slugify import slugify
-
-          metadata = json.loads(Path("kaggle/kernel-metadata.json").read_text(encoding="utf-8"))
-          requested_id = metadata.get("id", "").strip()
-          if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", requested_id):
-              raise SystemExit("Set a valid owner/kernel-slug in kaggle/kernel-metadata.json.")
-          owner, requested_slug = requested_id.split("/")
-          if slugify(metadata.get("title", "")) != requested_slug:
-              raise SystemExit("Kernel title must resolve to the slug in metadata id.")
-
-          api = KaggleApi()
-          api.authenticate()
-          result = api.kernels_push("kaggle", timeout=3600)
-          if result is None or result.error:
-              raise SystemExit("Kaggle push failed: " + (result.error if result else "empty response"))
-
-          url = result.url or ""
-          parsed = urlsplit(url)
-          match = re.fullmatch(
-              r"/(?:code/)?([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)/?", parsed.path
-          )
-          if parsed.scheme != "https" or parsed.hostname not in {"www.kaggle.com", "kaggle.com"} or not match:
-              raise SystemExit("Kaggle push returned an invalid kernel URL.")
-          kernel_id = match.group(1)
-          if kernel_id.split("/")[0] != owner:
-              raise SystemExit("Kaggle push returned a different kernel owner.")
-          version = result.versionNumber
-          if not isinstance(version, int) or isinstance(version, bool) or version < 1:
-              raise SystemExit("Kaggle push did not return a valid version number.")
-          kernel_ref = f"{kernel_id}/{version}"
-          print(f"Kaggle pushed version {version}: {url}", flush=True)
-          if kernel_id != requested_id:
-              print(f"Kaggle resolved {requested_id} to {kernel_id}; using the returned URL.")
-          with Path(os.environ["GITHUB_ENV"]).open("a", encoding="utf-8") as env_file:
-              env_file.write(f"KAGGLE_KERNEL_ID={kernel_id}\n")
-              env_file.write(f"KAGGLE_KERNEL_REF={kernel_ref}\n")
-          PY
-
-      - name: Wait for Kaggle run
-        shell: bash
-        run: |
-          set -euo pipefail
-          kernel_id="$KAGGLE_KERNEL_REF"
-          for attempt in $(seq 1 160); do
-            if ! status="$(kaggle kernels status "$kernel_id" 2>&1)"; then
-              printf '%s\n' "$status"
-              exit 1
-            fi
-            printf 'Kaggle status check %s/160: %s\n' "$attempt" "$status"
-            normalized="$(printf '%s' "$status" | tr '[:upper:]' '[:lower:]')"
-            if printf '%s' "$normalized" | grep -Eq '(^|[^a-z])(complete|completed|success)([^a-z]|$)'; then
-              exit 0
-            fi
-            if printf '%s' "$normalized" | grep -Eq '(^|[^a-z])(error|errored|failed|failure)([^a-z]|$)'; then
-              kaggle kernels logs "$kernel_id" || true
-              exit 1
-            fi
-            sleep 30
-          done
-          echo "Kaggle run did not finish within 80 minutes including queue and output processing."
-          kaggle kernels logs "$kernel_id" || true
-          exit 1
-
-      - name: Download Kaggle outputs and add run provenance
-        if: ${{ always() && env.KAGGLE_KERNEL_REF != '' }}
-        run: |
-          set -euo pipefail
-          mkdir -p kaggle-output
-          kaggle kernels output "$KAGGLE_KERNEL_REF" --path kaggle-output
-          python - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-
-          context = {
-              "repository": os.environ["GITHUB_REPOSITORY"],
-              "commit": os.environ["GITHUB_SHA"],
-              "ref": os.environ["GITHUB_REF"],
-              "workflow_run": os.environ["GITHUB_SERVER_URL"]
-              + "/"
-              + os.environ["GITHUB_REPOSITORY"]
-              + "/actions/runs/"
-              + os.environ["GITHUB_RUN_ID"],
-              "kaggle_kernel": os.environ["KAGGLE_KERNEL_ID"],
-              "kaggle_kernel_ref": os.environ["KAGGLE_KERNEL_REF"],
-          }
-          Path("kaggle-output/github-context.json").write_text(
-              json.dumps(context, indent=2) + "\n",
-              encoding="utf-8",
-          )
-          PY
-
-      - name: Verify the registered comparison and publication completed
-        run: |
-          python - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-
-          family = os.environ["EXPERIMENT_FAMILY"]
-          if family in {"002", "003"}:
-              decisions = list(Path("kaggle-output").rglob("decision.json"))
-              if len(decisions) != 1:
-                  raise SystemExit(f"Missing Experiment {family} seed decision.")
-              decision = json.loads(decisions[0].read_text(encoding="utf-8"))
-              if decision.get("scientific_decision") is not False:
-                  raise SystemExit(f"Experiment {family} must remain a development record.")
-              if decision.get("status") == "DEVELOPMENT_INCOMPLETE":
-                  raise SystemExit("Seed was published as incomplete; inspect the preserved evidence.")
-              if not decision.get("comparable_at_full_budget"):
-                  raise SystemExit("Seed did not complete its registered token budget.")
-              publications = list(Path("kaggle-output").rglob("publication.json"))
-              if len(publications) != 1:
-                  raise SystemExit("Missing GitHub seed publication evidence.")
-              publication = json.loads(publications[0].read_text(encoding="utf-8"))
-              if publication.get("status") not in {"published", "already_published"}:
-                  raise SystemExit("GitHub return failed; evidence remains in Kaggle outputs.")
-          else:
-              reports = list(Path("kaggle-output").rglob("metrics.json"))
-              completed = [json.loads(path.read_text(encoding="utf-8"))
-                           for path in reports if path.parent.name == "results"]
-              if len(completed) != 1 or not completed[0].get("comparable_at_full_budget"):
-                  raise SystemExit("Experiment 001 is incomplete; inspect the preserved evidence.")
-          PY
-
-      - name: Store Kaggle results as a GitHub Actions artifact
-        if: ${{ always() && env.KAGGLE_KERNEL_REF != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: experiment-${{ inputs.experiment }}-seed-${{ inputs.seed }}-evidence-${{ github.run_id }}
+          name: research-${{ inputs.experiment }}-seed-${{ inputs.seed }}-preparation-${{ github.run_id }}
           path: |
+            prepared-notebook/
+            prepared-assets/input-reference.json
+            prepared-assets/assets-manifest.json
+            prepared-assets/train.npy
+            prepared-assets/validation.npy
+            prepared-assets/tokenizer.json
+            prepared-assets/data.json
+            prepared-assets/dataset-metadata.json
+          if-no-files-found: warn
+      - name: Run original Kaggle kernel and download its exact version
+        id: gpu
+        if: ${{ inputs.experiment == '003' && inputs.execute }}
+        run: python kaggle/run_remote.py --prepared prepared-notebook --output kaggle-output
+      - name: Verify returned evidence and archive incomplete results too
+        id: collect
+        if: ${{ always() && inputs.experiment == '003' && inputs.execute && steps.gpu.outcome != 'skipped' }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          push = Path('prepared-notebook/push.json')
+          if not push.exists():
+              raise SystemExit('No pushed version exists; inspect preparation failure.')
+          with Path(os.environ['GITHUB_ENV']).open('a') as handle:
+              handle.write('KAGGLE_KERNEL_REF=' + json.loads(push.read_text())['kernel_ref'] + '\n')
+          PY
+          python kaggle/collect.py --download kaggle-output --preparation prepared-notebook/preparation.json --kernel-ref "$(python -c 'import json; print(json.load(open("prepared-notebook/push.json"))["kernel_ref"])')" --workflow-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+      - name: Preserve returned outputs
+        if: ${{ always() && inputs.execute }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-${{ inputs.experiment }}-seed-${{ inputs.seed }}-evidence-${{ github.run_id }}
+          path: |
+            research/artifacts/${{ inputs.experiment }}-*/
             kaggle-output/**/*.json
             kaggle-output/**/*.jsonl
-            kaggle-output/**/*.csv
+            kaggle-output/**/*.md
             kaggle-output/**/*.txt
             kaggle-output/**/*.log
-            kaggle-output/**/*.md
             kaggle-output/**/*.png
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Preserve model checkpoints separately
-        if: ${{ always() && env.KAGGLE_KERNEL_REF != '' }}
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Preserve checkpoints separately from Git
+        if: ${{ always() && inputs.execute }}
         uses: actions/upload-artifact@v4
         with:
-          name: experiment-${{ inputs.experiment }}-seed-${{ inputs.seed }}-checkpoints-${{ github.run_id }}
+          name: research-${{ inputs.experiment }}-seed-${{ inputs.seed }}-checkpoints-${{ github.run_id }}
           path: kaggle-output/**/*.pt
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 30
+      - name: Publish verified research archive as a pull request
+        if: ${{ always() && steps.collect.outcome == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="results/pipeline-v2-$GITHUB_RUN_ID"
+          git switch -c "$branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/artifacts research/registry.yaml
+          git commit -m "research: archive pipeline v2 experiment $EXPERIMENT seed $SEED"
+          git push origin "$branch"
+          python - <<'PY'
+          from pathlib import Path
+          Path('archive-pr.md').write_text('Verified source/config/protocol/input and result hashes. Includes incomplete or negative development evidence. Frozen decision retained. Checkpoints are stored separately.\n')
+          PY
+          gh pr create --base main --head "$branch" --title "research: pipeline v2 experiment $EXPERIMENT seed $SEED" --body-file archive-pr.md

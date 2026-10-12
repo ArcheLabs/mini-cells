@@ -100,3 +100,7 @@ Engineering may use a Cell as a deliberately chosen unit of model change without
 - Treat visualizations as derived views; `result.json`, `decision.json`, and frozen protocols remain authoritative.
 
 The purpose of the research tree is to make future product decisions depend on the accumulated evidence ceiling rather than on the newest mechanism narrative.
+
+## Routing study execution
+
+[Pipeline v2](reports/PIPELINE_V2.md) organizes routing studies 001–004 under [experiments/](experiments/) with [registry.yaml](registry.yaml), immutable Dataset inputs and Actions-side result collection. The frozen historical evidence paths retain scientific authority; 003 seed42 is incomplete and 004 is planned.

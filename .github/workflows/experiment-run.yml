@@ -3,47 +3,22 @@ on:
   workflow_dispatch:
     inputs:
       seed:
-        description: One Experiment 003 development seed per session
+        description: Experiment 003 development seed
         type: choice
         options: ['42', '123', '456']
-        default: '42'
+        default: '123'
       submit:
-        description: Update and run the existing Kaggle kernel (requires runtime Secrets authorization)
+        description: Run the original Kaggle kernel with fixed Dataset inputs
         type: boolean
         default: false
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Prepare canonical notebook and script backend
-        env:
-          SOURCE_SHA: ${{ github.sha }}
-          DEVELOPMENT_SEED: ${{ inputs.seed }}
-        run: python kaggle/submit.py --commit "$SOURCE_SHA" --seed "$DEVELOPMENT_SEED" --output prepared-notebook
-      - uses: actions/upload-artifact@v4
-        with:
-          name: experiment-003-seed-${{ inputs.seed }}-${{ github.sha }}
-          path: prepared-notebook/
-      - name: Submit to the original notebook
-        if: ${{ inputs.submit }}
-        env:
-          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
-        run: |
-          test -n "$KAGGLE_API_TOKEN" || { echo "Missing KAGGLE_API_TOKEN"; exit 1; }
-          python -m pip install kaggle
-          python - <<'PY'
-          from kaggle.api.kaggle_api_extended import KaggleApi
-          api = KaggleApi()
-          api.authenticate()
-          result = api.kernels_push('prepared-notebook', timeout=3600)
-          if result is None or result.error:
-              raise SystemExit('Kaggle push failed: ' + (result.error if result else 'empty response'))
-          print('Kaggle pushed version', result.versionNumber, result.url)
-          PY
+  pipeline:
+    uses: ./.github/workflows/kaggle-experiment.yml
+    with:
+      experiment: '003'
+      seed: ${{ inputs.seed }}
+      execute: ${{ inputs.submit }}
+    secrets: inherit
