@@ -73,3 +73,7 @@ scope for this prerelease.
 ## License
 
 See [LICENSE](LICENSE).
+
+## Routing research pipeline v2
+
+See [the research registry](research/registry.yaml), [experiment definitions](research/experiments/003-hard-cell-transition/README.md), and [the offline Kaggle workflow](research/reports/PIPELINE_V2.md).

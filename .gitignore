@@ -27,3 +27,8 @@ experiments/00*-*/outputs/**
 !experiments/00*-*/outputs/**/.gitkeep
 experiments/00*-*/checkpoints/**
 !experiments/00*-*/checkpoints/.gitkeep
+# Pipeline v2 transient packages and per-experiment scratch outputs.
+prepared-assets/
+research/experiments/00*-*/outputs/**
+!research/experiments/00*-*/outputs/.gitkeep
+research/artifacts/**/*.pt

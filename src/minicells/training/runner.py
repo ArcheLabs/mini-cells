@@ -122,7 +122,14 @@ def train_arm(kind, config, data, output, deadline):
                 row = {'step': step, 'tokens': step * tokens_per_step, 'loss': float(nll.detach()),
                        'ppl': math.exp(min(float(nll.detach()), 80)), 'stage': phase, 'temperature': temperature,
                        'path_length': float(torch.stack(paths).mean()) if paths else (4 if kind == 'fixed-cell' else 1),
-                       'entropy': float(torch.stack(entropy).mean()) if entropy else 0.0,
+                       'entropy': float(torch.stack(entropy).mean()) if entropy else None,
+                       'route_entropy': float(torch.stack(entropy).mean()) if entropy else None,
+                       'lr': optimizer.param_groups[0]['lr'],
+                       'active_cells': (float(torch.stack(paths).mean()) if kind == 'hard-cell' and phase == 'hard' and paths
+                                        else 1 + config['experts'] * (config['max_hops'] - 1)
+                                        if kind in {'soft-cell', 'hard-cell'} else config['top_k'] if kind == 'global-router'
+                                        else 4 if kind == 'fixed-cell' else None),
+                       'active_cells_scope': 'executed Cell visits per FFN; global parallel top-k selections',
                        'tokens_sec': tokens_per_step / seconds, 'gpu_memory': torch.cuda.memory_allocated(),
                        'path_scope': 'per FFN; soft expected depth, hard executed depth, global one top-k dispatch',
                        'throughput_scope': 'forward/backward/optimizer/retries only; transfer and logging excluded'}
@@ -177,6 +184,19 @@ def schedule(config, cache, output, deadline):
                     log.close()
                     del running[gpu]
             if time.time() >= sample_at:
+                # Stream compact status into the Notebook while workers retain full JSONL.
+                for kind, _, _ in running.values():
+                    path = output / kind / 'logs.jsonl'
+                    if path.exists() and path.stat().st_size:
+                        with path.open('rb') as stream:
+                            stream.seek(max(0, path.stat().st_size - 8192))
+                            lines = stream.read().decode('utf-8', errors='ignore').splitlines()
+                        try:
+                            row = json.loads(lines[-1])
+                            print(json.dumps({'model': kind, **{key: row.get(key) for key in
+                                ('step', 'tokens', 'loss', 'ppl', 'lr', 'tokens_sec', 'gpu_memory', 'stage')}}), flush=True)
+                        except (IndexError, ValueError):
+                            pass
                 try:
                     rows = subprocess.check_output(['nvidia-smi', '--query-gpu=index,utilization.gpu,memory.used',
                         '--format=csv,noheader,nounits'], text=True, timeout=5)

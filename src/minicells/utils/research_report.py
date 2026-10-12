@@ -2,13 +2,14 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from experiments.common.train import write_json
 
 ROOT = Path(__file__).resolve().parents[3]
 EXPERIMENT = ROOT / 'experiments/003-hard-cell-transition'
-CONFIG = EXPERIMENT / 'config.yaml'
-PROTOCOL = EXPERIMENT / 'protocol.json'
+CONFIG = Path(os.environ.get('MINICELLS_RESEARCH_CONFIG', EXPERIMENT / 'config.yaml'))
+PROTOCOL = Path(os.environ.get('MINICELLS_RESEARCH_PROTOCOL', EXPERIMENT / 'protocol.json'))
 
 
 def decide(rows, config):
