@@ -1,0 +1,170 @@
+{
+  "status": "collected",
+  "model": "global-router",
+  "mode": "native",
+  "layers": [
+    {
+      "layer": 0,
+      "assignments": [
+        6865,
+        3962,
+        3519,
+        4969,
+        7787,
+        2528,
+        31985,
+        2385
+      ],
+      "utilization": [
+        0.107265625,
+        0.06190625,
+        0.054984375,
+        0.077640625,
+        0.121671875,
+        0.0395,
+        0.499765625,
+        0.037265625
+      ],
+      "routing_entropy_nats": 1.8477359619140625,
+      "active_cells_per_token": 2,
+      "path_length": 1,
+      "path_length_definition": "one parallel selection per FFN; not a sequential cell path"
+    },
+    {
+      "layer": 1,
+      "assignments": [
+        5843,
+        17987,
+        5960,
+        6847,
+        6952,
+        4321,
+        7817,
+        8273
+      ],
+      "utilization": [
+        0.091296875,
+        0.281046875,
+        0.093125,
+        0.106984375,
+        0.108625,
+        0.067515625,
+        0.122140625,
+        0.129265625
+      ],
+      "routing_entropy_nats": 1.1568958740234374,
+      "active_cells_per_token": 2,
+      "path_length": 1,
+      "path_length_definition": "one parallel selection per FFN; not a sequential cell path"
+    },
+    {
+      "layer": 2,
+      "assignments": [
+        6980,
+        8832,
+        7784,
+        5680,
+        7684,
+        8208,
+        13545,
+        5287
+      ],
+      "utilization": [
+        0.1090625,
+        0.138,
+        0.121625,
+        0.08875,
+        0.1200625,
+        0.12825,
+        0.211640625,
+        0.082609375
+      ],
+      "routing_entropy_nats": 0.97827734375,
+      "active_cells_per_token": 2,
+      "path_length": 1,
+      "path_length_definition": "one parallel selection per FFN; not a sequential cell path"
+    },
+    {
+      "layer": 3,
+      "assignments": [
+        11376,
+        5372,
+        9526,
+        9159,
+        9256,
+        5668,
+        6358,
+        7285
+      ],
+      "utilization": [
+        0.17775,
+        0.0839375,
+        0.14884375,
+        0.143109375,
+        0.144625,
+        0.0885625,
+        0.09934375,
+        0.113828125
+      ],
+      "routing_entropy_nats": 0.9011892700195312,
+      "active_cells_per_token": 2,
+      "path_length": 1,
+      "path_length_definition": "one parallel selection per FFN; not a sequential cell path"
+    },
+    {
+      "layer": 4,
+      "assignments": [
+        8961,
+        13094,
+        10543,
+        5317,
+        6961,
+        5649,
+        8587,
+        4888
+      ],
+      "utilization": [
+        0.140015625,
+        0.20459375,
+        0.164734375,
+        0.083078125,
+        0.108765625,
+        0.088265625,
+        0.134171875,
+        0.076375
+      ],
+      "routing_entropy_nats": 1.0079395751953124,
+      "active_cells_per_token": 2,
+      "path_length": 1,
+      "path_length_definition": "one parallel selection per FFN; not a sequential cell path"
+    },
+    {
+      "layer": 5,
+      "assignments": [
+        10086,
+        6402,
+        6686,
+        3330,
+        15105,
+        6026,
+        7089,
+        9276
+      ],
+      "utilization": [
+        0.15759375,
+        0.10003125,
+        0.10446875,
+        0.05203125,
+        0.236015625,
+        0.09415625,
+        0.110765625,
+        0.1449375
+      ],
+      "routing_entropy_nats": 1.377797119140625,
+      "active_cells_per_token": 2,
+      "path_length": 1,
+      "path_length_definition": "one parallel selection per FFN; not a sequential cell path"
+    }
+  ],
+  "checkpoint_step": 5000
+}

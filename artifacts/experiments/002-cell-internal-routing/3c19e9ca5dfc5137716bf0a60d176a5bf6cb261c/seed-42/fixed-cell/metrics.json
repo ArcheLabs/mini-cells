@@ -1,0 +1,26 @@
+{
+  "params": 60894720,
+  "activated_params_per_token_estimate": 60894720,
+  "forward_flops_per_token_estimate": 123170816,
+  "flops_estimate_scope": "matmuls only; includes repeated soft Cell and router execution, excludes dispatch/norms/softmax",
+  "fixed_path_length": 4,
+  "soft_executed_cell_visits_per_layer": null,
+  "model": "fixed-cell",
+  "status": "completed",
+  "steps": 5000,
+  "physical_gpu_index": "1",
+  "train_tokens": 10000000,
+  "train_seconds": 408.85784126100276,
+  "tokens_per_sec": 24458.37890538657,
+  "throughput_scope": "forward/backward/optimizer only; excludes data transfer, validation and saving",
+  "elapsed_seconds": 426.0874903202057,
+  "peak_gpu_bytes": 1693104640,
+  "last_validation": {
+    "step": 5000,
+    "train_tokens": 10000000,
+    "validation_loss": 2.508766680955887,
+    "perplexity": 12.289763510450271,
+    "validation_tokens": 32000
+  },
+  "checkpoint_sha256": "05ae9e5c58cf6ac95b67b92b338cbade95b7aaac764d85f3ba506e53cb8b3fae"
+}

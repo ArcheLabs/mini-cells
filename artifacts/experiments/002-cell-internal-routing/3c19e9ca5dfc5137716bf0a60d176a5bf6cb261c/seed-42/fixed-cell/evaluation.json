@@ -1,0 +1,29 @@
+{
+  "native": {
+    "model": "fixed-cell",
+    "mode": "native",
+    "train_tokens": 10000000,
+    "training_tokens_per_sec": 24458.37890538657,
+    "checkpoint_step": 5000,
+    "validation_loss": 2.508766680955887,
+    "perplexity": 12.289763510450271,
+    "validation_tokens": 32000,
+    "params": 60894720,
+    "activated_params_per_token_estimate": 60894720,
+    "forward_flops_per_token_estimate": 123170816,
+    "flops_estimate_scope": "matmuls only; includes repeated soft Cell and router execution, excludes dispatch/norms/softmax",
+    "fixed_path_length": 4,
+    "soft_executed_cell_visits_per_layer": null,
+    "inference_tokens_per_sec": 98517.45515015839,
+    "inference_latency_seconds_per_batch": 0.020300971000028766,
+    "inference_peak_gpu_bytes": 437796864,
+    "benchmark_batches": 20,
+    "benchmark_tokens_per_batch": 2000,
+    "benchmark_scope": "FP16 no-grad forward on a resident batch; synchronization included, transfer/saving excluded",
+    "profile": {
+      "status": "measured",
+      "cuda_activity_events_per_batch": 257.0,
+      "scope": "CUDA activity events, includes runtime kernels; excluded from timing"
+    }
+  }
+}
