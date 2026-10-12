@@ -59,3 +59,21 @@ PYTHONPATH=src:. python -m minicells.research.graph_report \
 ```
 
 Collection updates this derived matrix automatically. Missing sessions or failed checks produce `DEVELOPMENT_INCOMPLETE`. All three supported paired development seeds yield `DEVELOPMENT_SUPPORTED`, never a formal confirmation. Historical 001–003 protocols and decisions retain their authority; the new hard baseline is a registered reproduction under 004, not a rewrite of 003.
+
+
+## Recover an archived session after the old setup-timeout error
+
+`DEVELOPMENT_SESSION_COMPLETED` means the selected reference or graph session completed. `scientific_decision: false` and `gates: null` are expected until both sessions for all three seeds exist. An archive path confirms local collection; a successful final push is needed for GitHub publication.
+
+If the old notebook printed its archive path and then raised `Notebook setup exceeded 300 seconds`, keep the Kaggle kernel and working directory. In a new cell run:
+
+```python
+from functools import partial
+from publish_experiment_results import run_git as existing_git
+run_git = partial(existing_git, ROOT)
+ALREADY_ARCHIVED = ARCHIVE_TARGET.exists()
+```
+
+Then rerun only the archive/commit cell and the final push cell. This reuses the historical Git helper, verifies the existing archive and publishes it without rerunning setup, data preparation or training. A push failure leaves the local commit available; retry only the final push cell. For the observed seed 42 reference run, preserve source `7c1d8b23adaf047195d38a6827f46f3e97ae1faa` and branch `results/cell-graph-7c1d8b23adaf` for its remaining paired matrix sessions.
+
+The corrected notebook limits `run_setup_git` to setup. Publication imports `publish_experiment_results.run_git`; retrying the archive/commit cell checks the directory on disk instead of the pre-training `ALREADY_ARCHIVED` snapshot. The registered GPU queues remain part of the frozen protocol for this existing cohort. Changing their allocation requires a separate registered revision; archived observations must retain their original source and protocol identity.
