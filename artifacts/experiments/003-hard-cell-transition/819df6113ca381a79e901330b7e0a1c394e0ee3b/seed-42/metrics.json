@@ -1,0 +1,100 @@
+{
+  "models": [
+    {
+      "model": "fixed-cell",
+      "seed": 42,
+      "status": "incomplete",
+      "physical_gpu_index": "0",
+      "params": 60894720,
+      "steps": 4452,
+      "train_tokens": 8904000,
+      "train_seconds": 414.11959649202186,
+      "tokens_per_sec": 21501.035148843865,
+      "checkpoint_sha256": "0830eb16042710cfab71f84b390c233d1fbbd7a069739632a17361206d3db3d9",
+      "elapsed_seconds": 422.9276077747345
+    },
+    {
+      "model": "global-router",
+      "seed": 42,
+      "status": "incomplete",
+      "physical_gpu_index": "1",
+      "params": 60919296,
+      "steps": 4223,
+      "train_tokens": 8446000,
+      "train_seconds": 413.1755061749775,
+      "tokens_per_sec": 20441.676415404854,
+      "checkpoint_sha256": "f4fc7d59d6bce6e77d1d36580c3c89d4293b8302ea3f6478805cb1fb4039a56c",
+      "elapsed_seconds": 423.40596103668213
+    },
+    {
+      "model": "soft-cell",
+      "seed": 42,
+      "status": "completed",
+      "physical_gpu_index": "0",
+      "params": 61115904,
+      "steps": 5000,
+      "train_tokens": 10000000,
+      "train_seconds": 1494.9421068909933,
+      "tokens_per_sec": 6689.222247406515,
+      "checkpoint_sha256": "284d54847d283ce4ab36fc06e6147275f098e032be6674680bfc6f173ea462d7",
+      "evaluation": {
+        "validation_loss": 2.4999752044677734,
+        "perplexity": 12.18219189302685,
+        "validation_tokens": 32000,
+        "executed_gemm_flops_per_token": 338020352.0,
+        "observed_gemm_calls": {
+          "aten.mm.default": 6640,
+          "aten.bmm.default": 192
+        },
+        "uncovered_attention_calls": {},
+        "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+        "inference_latency_seconds_per_batch": 0.09303747474998544,
+        "inference_tokens_per_sec": 21496.714150663393,
+        "cuda_kernel_time_us_per_validation_batch": 77653.60993750207,
+        "cuda_activity_time_us_per_validation_batch": 77656.17793750206,
+        "cuda_activity_events_per_validation_batch": 3228.0,
+        "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+        "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+        "peak_gpu_bytes": 3833828864
+      },
+      "elapsed_seconds": 1553.7671551704407
+    },
+    {
+      "model": "hard-cell",
+      "seed": 42,
+      "status": "completed",
+      "physical_gpu_index": "1",
+      "params": 61115904,
+      "steps": 5000,
+      "train_tokens": 10000000,
+      "train_seconds": 1420.7216032930066,
+      "tokens_per_sec": 7038.676667421394,
+      "checkpoint_sha256": "eef8396060c8d859d5d93286179720f8520c7c3e31c1066a6dc6fbbb0e774ea2",
+      "evaluation": {
+        "validation_loss": 2.696301683783531,
+        "perplexity": 14.824803405492208,
+        "validation_tokens": 32000,
+        "executed_gemm_flops_per_token": 43833797.952,
+        "observed_gemm_calls": {
+          "aten.mm.default": 5478,
+          "aten.bmm.default": 192
+        },
+        "uncovered_attention_calls": {},
+        "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+        "inference_latency_seconds_per_batch": 0.06244784659998004,
+        "inference_tokens_per_sec": 32026.724841471783,
+        "cuda_kernel_time_us_per_validation_batch": 26426.981312497956,
+        "cuda_activity_time_us_per_validation_batch": 31107.040124997802,
+        "cuda_activity_events_per_validation_batch": 3471.875,
+        "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+        "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+        "peak_gpu_bytes": 3833828864
+      },
+      "elapsed_seconds": 1479.2221496105194
+    }
+  ],
+  "status": "DEVELOPMENT_INCOMPLETE",
+  "comparable_at_full_budget": false,
+  "scientific_decision": false,
+  "gates": null
+}
