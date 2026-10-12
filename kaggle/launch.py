@@ -20,17 +20,43 @@ def prepare_source(commit, seed):
     os.environ.update(EXPERIMENT_STARTED_AT=str(started), EXPERIMENT_COMMIT=commit,
                       TOKENIZERS_PARALLELISM='false', HF_HUB_DISABLE_PROGRESS_BARS='1')
     from kaggle_secrets import UserSecretsClient
-    secrets = UserSecretsClient()
-    for name in ('HF_TOKEN', 'GITHUB_TOKEN'):
+    try:
+        secrets = UserSecretsClient()
+    except Exception as exc:
+        secrets = None
+        secrets_error = exc
+    else:
+        secrets_error = None
+
+    hf_token = os.environ.get('HF_TOKEN', '').strip()
+    if not hf_token and secrets is not None:
         try:
-            token = os.environ.get(name, '').strip() or secrets.get_secret(name).strip()
+            hf_token = secrets.get_secret('HF_TOKEN').strip()
         except Exception as exc:
-            raise RuntimeError('Cannot read Kaggle Secret ' + name + '. Open the original '
-                'bingjiangli/minicells editor, enable this existing secret, and run there. '
-                'API authentication does not grant runtime secret access.') from exc
-        if not token:
-            raise RuntimeError('Empty Kaggle Secret: ' + name)
-        os.environ[name] = token
+            # TinyStories is public; a missing or inaccessible token need not stop this run.
+            print('Optional Kaggle Secret HF_TOKEN unavailable (' + type(exc).__name__ +
+                  '); continuing with anonymous access to the public dataset.', flush=True)
+    if hf_token:
+        os.environ['HF_TOKEN'] = hf_token
+    else:
+        os.environ.pop('HF_TOKEN', None)
+        if secrets_error is not None:
+            print('Kaggle Secrets client unavailable for optional HF_TOKEN (' +
+                  type(secrets_error).__name__ + '); using anonymous dataset access.', flush=True)
+
+    github_token = os.environ.get('GITHUB_TOKEN', '').strip()
+    if not github_token:
+        if secrets is None:
+            raise RuntimeError('Required Kaggle Secret GITHUB_TOKEN is unavailable; '
+                               'the existing GitHub preflight/publisher cannot run.') from secrets_error
+        try:
+            github_token = secrets.get_secret('GITHUB_TOKEN').strip()
+        except Exception as exc:
+            raise RuntimeError('Required Kaggle Secret GITHUB_TOKEN is unavailable; '
+                               'the existing GitHub preflight/publisher cannot run.') from exc
+    if not github_token:
+        raise RuntimeError('Required Kaggle Secret GITHUB_TOKEN is empty.')
+    os.environ['GITHUB_TOKEN'] = github_token
     source = Path('/kaggle/working/experiment-source')
     source.mkdir(exist_ok=False)
     def git(*args, check=True):
