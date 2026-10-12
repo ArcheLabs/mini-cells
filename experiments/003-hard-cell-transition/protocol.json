@@ -1,0 +1,60 @@
+{
+  "experiment_id": "003-hard-cell-transition",
+  "version": "1.0",
+  "status": "registered_unrun",
+  "scientific_decision": false,
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "seed_scope": "paired development seeds; previously observed 001/002 seeds are not untouched confirmation",
+  "train_tokens_per_arm": 10000000,
+  "models": [
+    "fixed-cell",
+    "global-router",
+    "soft-cell",
+    "hard-cell"
+  ],
+  "capacity_tolerance_fraction": 0.01,
+  "schedule": {
+    "warmup_token_fraction": 0.25,
+    "anneal_token_fraction": 0.25,
+    "hard_token_fraction": 0.5,
+    "temperature_start": 2.0,
+    "temperature_end": 0.1,
+    "anneal": "geometric, inclusive endpoints; soft forward until step 2500",
+    "hard": "selected-only argmax; selected-value probability straight-through gate; biased estimator, no unselected Cell gradients"
+  },
+  "session_seconds": 3300,
+  "server_seconds": 3600,
+  "data_seconds": 660,
+  "gpu_schedule_seconds": 2400,
+  "orchestration_seconds": 60,
+  "publication_seconds": 180,
+  "long_arm_seconds": 1800,
+  "baseline_seconds": 600,
+  "evaluation_reserved_per_arm_seconds": 180,
+  "execution": "two T4, independent arms; soft+fixed on one GPU, hard+global on the other; alternate placement per seed",
+  "quality": "same tokenizer/train windows/validation windows and 10M tokens each; FP16 GradScaler; no budget truncation interpreted as success",
+  "measurement": {
+    "flops": "Observe actual aten.mm/addmm/bmm shapes for all paired validation windows, 2 FLOPs/MAC; SDPA math backend used for all arms in training/evaluation/benchmark so attention GEMMs are counted; excludes non-matmul/backward, not total hardware FLOPs; uncovered fused attention invalidates gates",
+    "latency": "resident identical first validation batch, five warmups + twenty synchronized host measurements; no profiler during timing",
+    "kernel_time": "sum CUDA activity durations across paired validation, isolated from timing; instrumentation overhead and kernel overlap affect interpretation"
+  },
+  "gates": {
+    "minimum": "abs(hard_ppl/soft_ppl-1)<=0.01 AND hard observed GEMM FLOPs < soft",
+    "strong": "hard_ppl <= global_ppl*1.01 AND hard latency <= fixed latency",
+    "exploratory_signal": "abs(hard_ppl/fixed_ppl-1)<=0.01 AND hard observed GEMM FLOPs < 0.30*fixed AND hard latency < fixed"
+  },
+  "decision": "minimum controls development status, all other gates reported separately; all three paired seeds must complete and pass individually for matrix support; scientific_decision always false",
+  "claims": "architecture-specific TinyStories development; never general superiority over MoE/Transformer or proof of CLM",
+  "failure_policy": "save partial evidence/checkpoints where time allows; incomplete/failed arms and unavailable measurements cannot pass; immutable observed seeds, no overwrite",
+  "attention_backend": "SDPA math for every arm, not a fused-attention production benchmark",
+  "dependencies": {
+    "datasets": "4.0.0",
+    "tokenizers": "0.21.4",
+    "matplotlib": "3.10.6",
+    "torch": "Kaggle platform version recorded, all arms identical"
+  }
+}

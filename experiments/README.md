@@ -1,5 +1,11 @@
 # Experimental Language Models
 
+The experiment catalog is now `registry.yaml`. Notebook First entries are in
+`001-global-router/`, `002-cell-internal-router/`, and `003-hard-cell-transition/`.
+See `docs/experiments.md` for preparation, original Kaggle notebook reuse,
+runtime Secrets and immutable result publication. Historical paths below
+remain compatibility sources; they are not moved or rewritten.
+
 The reusable capacity matched language model and training primitives live in `common/`.
 Experiment 001's published `runners/` imports and config remain stable compatibility
 paths. New protocols, model variants, evaluation and evidence for the Cell Internal

@@ -22,3 +22,8 @@ kaggle.json
 .env.*
 !.env.example
 kaggle-output/
+prepared-notebook/
+experiments/00*-*/outputs/**
+!experiments/00*-*/outputs/**/.gitkeep
+experiments/00*-*/checkpoints/**
+!experiments/00*-*/checkpoints/.gitkeep
