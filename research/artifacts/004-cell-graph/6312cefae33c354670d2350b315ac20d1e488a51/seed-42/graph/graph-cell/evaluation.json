@@ -1,0 +1,20 @@
+{
+  "validation_loss": 2.570364683866501,
+  "perplexity": 13.070590205256561,
+  "validation_tokens": 32000,
+  "executed_gemm_flops_per_token": 55557695.072,
+  "observed_gemm_calls": {
+    "aten.mm.default": 6454,
+    "aten.bmm.default": 192
+  },
+  "uncovered_attention_calls": {},
+  "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+  "inference_latency_seconds_per_batch": 0.0780375972499769,
+  "inference_tokens_per_sec": 25628.67221031196,
+  "cuda_kernel_time_us_per_validation_batch": 31531.95137500158,
+  "cuda_activity_time_us_per_validation_batch": 37130.418937502596,
+  "cuda_activity_events_per_validation_batch": 3918.625,
+  "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+  "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+  "peak_gpu_bytes": 3833854464
+}
