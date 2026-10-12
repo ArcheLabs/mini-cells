@@ -11,14 +11,16 @@ DATA_KEYS = ('dataset', 'dataset_revision', 'train_stories', 'validation_stories
              'tokenizer_stories', 'vocab_size', 'sequence_length')
 
 
-def prepare(definition, destination):
+def prepare(definition, destination, timeout_seconds=3600):
     import numpy as np
     from experiments.common.train import prepare_data
     _, config, _ = load_definition(definition)
+    if timeout_seconds <= 0:
+        raise TimeoutError('No CPU time remains for preparing the pinned inputs')
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=False)
     # Reuse the exact train-only tokenizer and pinned corpus implementation.
-    arrays = prepare_data(config, destination, time.time() + 3600)
+    arrays = prepare_data(config, destination, time.time() + timeout_seconds)
     for split, array in arrays.items():
         np.save(destination / (split + '.npy'), array)
     identity = {key: config[key] for key in DATA_KEYS}
@@ -62,8 +64,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--definition', required=True)
     parser.add_argument('--output', required=True)
+    parser.add_argument('--budget-seconds', type=int, default=3600)
     args = parser.parse_args()
-    prepare(args.definition, args.output)
+    prepare(args.definition, args.output, args.budget_seconds)
     print(json.dumps({'assets_manifest_sha256': digest(Path(args.output) / 'assets-manifest.json')}))
 
 

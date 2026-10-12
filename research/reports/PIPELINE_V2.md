@@ -1,5 +1,7 @@
 # MiniCells Research Pipeline v2
 
+> **Experiment 004 execution update:** the Actions/Dataset-upload route described below is historical for E004. Use the canonical [manual Kaggle notebook](../notebooks/03-routing-and-growth/experiment-004-learned-cell-graph-kaggle.ipynb) in the existing `bingjiangli/minicells` notebook. It uses the in-notebook secret path, the offline runtime and the append-only GitHub publisher; it does not call Kaggle notebook-push or Dataset-upload APIs. The frozen E004 protocol and result-identity rules remain in force.
+
 ## Execution contract
 
 1. Define the experiment under `research/experiments/<id>/experiment.yaml`; numerical configurations live under `research/configs/`.

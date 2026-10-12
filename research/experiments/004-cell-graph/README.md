@@ -20,13 +20,15 @@ The prior contains eight destinations plus STOP. It is not an external global ro
 
 Hard inference disables backups. Training Cell visits and throughput are recorded separately; inference FLOP savings must never imply equal training savings. Comparison with 003 is a joint prior + gradient change; it does not isolate topology's causal effect.
 
-## Session plan: choose 004 in Kaggle Experiment
+## Manual Kaggle notebook
 
-Use the original **bingjiangli/minicells** notebook through Pipeline v2. Choose **004**, seed group **1/2/3**, session **reference/graph**, and enable **execute**. Group 1 uses seed 42, group 2 uses 43, group 3 uses 44. The default is 004/group 1/reference. No source or Dataset hash needs to be entered.
+Use the single canonical entrypoint at [`research/notebooks/03-routing-and-growth/experiment-004-learned-cell-graph-kaggle.ipynb`](../../notebooks/03-routing-and-growth/experiment-004-learned-cell-graph-kaggle.ipynb) in the existing Kaggle notebook [bingjiangli/minicells](https://www.kaggle.com/code/bingjiangli/minicells). Copy/import its cells into that notebook; do not create a new Kaggle notebook for each experiment. The workflow does not call Kaggle notebook-push or Dataset-upload APIs.
 
-Actions automatically remembers the first successfully uploaded Dataset and source commit in a code-keyed cache, reusing both across the matrix. Result PR merges do not change the code key. A change to the experiment code/protocol creates a new input cache and source identity; it never joins different source versions into one matrix. Cache misses prepare a new hash-checked snapshot; incompatible identities remain separate. Results accumulate on a source-specific branch and one result PR. Runtime reads mounted assets and embedded source; GitHub and HF credentials stay outside the GPU runtime.
+Each run selects one `SEED` (42, 43, or 44) and one `SESSION` (`reference` or `graph`). Run all cells. For the first session, `SOURCE_COMMIT` may be `main`; copy the printed full SHA into the cell for the paired session and keep that SHA for all six sessions. The notebook reuses the registered CPU data-preparation, offline dual-T4 runtime, evidence collector, and existing Kaggle Secret GitHub publisher. It checks GitHub write access before GPU work and pushes verified results to `results/cell-graph-<source-sha>` with a normal append-only push.
 
-For **each seed 42, 43, 44**, run these two sessions from the **same source commit** and immutable Dataset:
+The notebook reads `GITHUB_TOKEN` through Kaggle's existing `UserSecretsClient` path. `HF_TOKEN` is optional for this public, pinned dataset. Setup is limited to 300 seconds and fails before GPU work if setup plus the 3,300-second application cap would exceed the one-hour Kaggle session. A failed GitHub push can be retried from the notebook's final cell without rerunning training.
+
+For **each seed 42, 43, 44**, run these two sessions from the **same source commit** and hash-verified prepared inputs:
 
 | Session input | GPU queue A | GPU queue B | Maximum worker budgets |
 |---|---|---|---|
