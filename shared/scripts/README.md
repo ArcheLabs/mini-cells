@@ -1,5 +1,3 @@
-# Shared research scripts
+# Shared scripts
 
-Only add reusable helpers called by multiple research projects. Project
-launchers and scientific aggregation logic belong to their owning project;
-repository-wide CI and release commands remain under the top-level `scripts/`.
+The cross-project run, report and publish dispatchers live in [`research/`](research/). Their registry points to the canonical runner files inside each owning project. Experiment-specific implementations remain project-owned.

@@ -1,0 +1,339 @@
+"""Run Native CLM v0 M2 protected-vs-unsafe continual-language validation.
+
+On a two-GPU Kaggle host the parent process assigns the protected arm to GPU0 and the
+unsafe arm to GPU1. The two independent 12.15M models run concurrently; no DDP
+synchronization is needed because the causal control is the second workload.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+from minicells.native_clm_m2 import (
+    NativeCLMM2Config,
+    aggregate_formal,
+    compare_arms,
+    run_arm,
+)
+
+
+DEFAULT_PROTOCOL = Path(
+    "research/validations/native-clm-v0-m2-continual-language/protocol.json"
+)
+DEFAULT_OUTPUT = Path("artifacts/experiments/native-clm-v0-m2-continual-language")
+
+
+def _load_protocol(path: Path) -> tuple[dict, str]:
+    raw = path.read_bytes()
+    protocol = json.loads(raw)
+    if protocol.get("format") != "minicells.native-clm-v0.m2-protocol.v1":
+        raise RuntimeError("unexpected M2 protocol format")
+    return protocol, hashlib.sha256(raw).hexdigest()
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _validate_data_manifest(data_dir: Path, protocol: dict) -> str:
+    manifest_path = data_dir / "manifest.json"
+    if not manifest_path.exists():
+        raise FileNotFoundError(manifest_path)
+    raw = manifest_path.read_bytes()
+    manifest = json.loads(raw)
+    if manifest.get("format") != "minicells.native-clm-v0.m2-data-manifest.v1":
+        raise RuntimeError("unexpected M2 data manifest format")
+    if manifest.get("stream") != ["B", "C", "D"]:
+        raise RuntimeError("unexpected M2 data stream order")
+    if manifest.get("learner_replay_bytes") != 0:
+        raise RuntimeError("M2 data manifest does not declare zero learner replay")
+
+    expected_docs = {
+        "A_eval": int(protocol["stream"]["A"]["documents"]),
+        "B_train": int(protocol["stream"]["B"]["train_documents"]),
+        "B_eval": int(protocol["stream"]["B"]["eval_documents"]),
+        "C_train": int(protocol["stream"]["C"]["train_documents"]),
+        "C_eval": int(protocol["stream"]["C"]["eval_documents"]),
+        "D_train": int(protocol["stream"]["D"]["train_documents"]),
+        "D_eval": int(protocol["stream"]["D"]["eval_documents"]),
+    }
+    files = manifest.get("files", {})
+    if set(files) != set(expected_docs):
+        raise RuntimeError("M2 data manifest has an unexpected file set")
+    for name, expected_count in expected_docs.items():
+        record = files[name]
+        if int(record["documents"]) != expected_count:
+            raise RuntimeError(
+                f"M2 data document count mismatch for {name}: "
+                f"expected {expected_count}, got {record['documents']}"
+            )
+        path = data_dir / record["path"]
+        if not path.exists() or path.stat().st_size != int(record["bytes"]):
+            raise RuntimeError(f"M2 data file size mismatch for {name}")
+        actual_sha = _sha256(path)
+        if actual_sha != record["sha256"]:
+            raise RuntimeError(f"M2 data SHA mismatch for {name}")
+
+    revisions = manifest.get("dataset_revisions", {})
+    expected_revision_keys = {"A", "B", "C_train", "C_eval", "D"}
+    if set(revisions) != expected_revision_keys:
+        raise RuntimeError("M2 data manifest lacks exact dataset revisions")
+    for name, record in revisions.items():
+        if not record.get("repo_id") or not record.get("resolved_revision"):
+            raise RuntimeError(f"M2 data revision is incomplete for {name}")
+
+    return hashlib.sha256(raw).hexdigest()
+
+
+def _paths(data_dir: Path):
+    train = {
+        "B": data_dir / "B-wikitext-train.txt",
+        "C": data_dir / "C-code-train.txt",
+        "D": data_dir / "D-dolly-train.txt",
+    }
+    evaluation = {
+        "A": data_dir / "A-tinystories-eval.txt",
+        "B": data_dir / "B-wikitext-eval.txt",
+        "C": data_dir / "C-code-eval.txt",
+        "D": data_dir / "D-dolly-eval.txt",
+    }
+    missing = [str(path) for path in [*train.values(), *evaluation.values()] if not path.exists()]
+    if missing:
+        raise FileNotFoundError("missing M2 data files: " + ", ".join(missing))
+    return train, evaluation
+
+
+def _run_worker(args, protocol: dict) -> int:
+    train, evaluation = _paths(args.data_dir)
+    config = NativeCLMM2Config(**protocol["training"])
+    summary = run_arm(
+        checkpoint_path=args.checkpoint,
+        expected_checkpoint_sha256=protocol["parent_checkpoint"]["sha256"],
+        train_paths=train,
+        eval_paths=evaluation,
+        output_dir=args.output_dir / f"seed-{args.seed}" / args.arm,
+        arm=args.arm,
+        seed=args.seed,
+        config=config,
+        device=args.device,
+    )
+    print(
+        json.dumps(
+            {
+                "arm": summary["arm"],
+                "seed": summary["seed"],
+                "final_checkpoint_sha256": summary["final_checkpoint_sha256"],
+                "shared_and_router_frozen": summary["shared_and_router_frozen"],
+            },
+            indent=2,
+        ),
+        flush=True,
+    )
+    return 0
+
+
+def _arm_command(args, seed: int, arm: str, device: str) -> tuple[list[str], dict[str, str]]:
+    command = [
+        sys.executable,
+        str(Path(__file__).resolve()),
+        "--worker",
+        "--arm",
+        arm,
+        "--seed",
+        str(seed),
+        "--checkpoint",
+        str(args.checkpoint),
+        "--data-dir",
+        str(args.data_dir),
+        "--output-dir",
+        str(args.output_dir),
+        "--protocol",
+        str(args.protocol),
+        "--device",
+        "cuda" if device != "cpu" else "cpu",
+    ]
+    env = os.environ.copy()
+    if device != "cpu":
+        env["CUDA_VISIBLE_DEVICES"] = device
+    return command, env
+
+
+def _run_seed_pair(
+    args,
+    protocol: dict,
+    seed: int,
+    devices: tuple[str, str],
+    *,
+    protocol_sha256: str,
+    data_manifest_sha256: str,
+) -> dict:
+    seed_dir = args.output_dir / f"seed-{seed}"
+    completed_summary = seed_dir / "seed-summary.json"
+    protected_summary = seed_dir / "protected/arm-summary.json"
+    unsafe_summary = seed_dir / "unsafe/arm-summary.json"
+    if completed_summary.exists() and protected_summary.exists() and unsafe_summary.exists():
+        cached = json.loads(completed_summary.read_text(encoding="utf-8"))
+        if cached.get("protocol_sha256") != protocol_sha256:
+            raise RuntimeError(f"seed {seed} cache belongs to a different M2 protocol")
+        if cached.get("data_manifest_sha256") != data_manifest_sha256:
+            raise RuntimeError(f"seed {seed} cache belongs to different M2 data")
+        print(f"[M2 seed={seed}] reusing verified completed seed artifacts", flush=True)
+        return cached
+
+    print(
+        f"\n[M2 seed={seed}] GPU/worker 0 = protected ({devices[0]}), "
+        f"GPU/worker 1 = unsafe ({devices[1]})",
+        flush=True,
+    )
+    protected_cmd, protected_env = _arm_command(args, seed, "protected", devices[0])
+    unsafe_cmd, unsafe_env = _arm_command(args, seed, "unsafe", devices[1])
+    protected_proc = subprocess.Popen(protected_cmd, env=protected_env)
+    unsafe_proc = subprocess.Popen(unsafe_cmd, env=unsafe_env)
+    p_rc = protected_proc.wait()
+    u_rc = unsafe_proc.wait()
+    if p_rc != 0 or u_rc != 0:
+        raise RuntimeError(f"M2 seed {seed} arm failure: protected={p_rc}, unsafe={u_rc}")
+
+    protected = json.loads(protected_summary.read_text(encoding="utf-8"))
+    unsafe = json.loads(unsafe_summary.read_text(encoding="utf-8"))
+    result = compare_arms(protected, unsafe, thresholds=protocol["thresholds"])
+    result["protocol_sha256"] = protocol_sha256
+    result["data_manifest_sha256"] = data_manifest_sha256
+    completed_summary.write_text(
+        json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(
+        json.dumps(
+            {
+                "seed": seed,
+                "pass": result["pass"],
+                "protected_mean_forgetting": result["protected_mean_forgetting"],
+                "unsafe_mean_forgetting": result["unsafe_mean_forgetting"],
+                "retention_advantage": result["retention_advantage"],
+                "protected_mean_plasticity": result["protected_mean_plasticity"],
+            },
+            indent=2,
+        ),
+        flush=True,
+    )
+    return result
+
+
+def _write_formal_artifacts(output: Path, decision: dict) -> None:
+    output.mkdir(parents=True, exist_ok=True)
+    (output / "decision.json").write_text(
+        json.dumps(decision, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    with (output / "gate-summary.csv").open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["seed", "gate", "pass"])
+        for seed_result in decision["seed_results"]:
+            for gate, passed in seed_result["gates"].items():
+                writer.writerow([seed_result["seed"], gate, int(bool(passed))])
+
+    rows = []
+    for result in decision["seed_results"]:
+        rows.append(
+            "| {seed} | {pp:.4f} | {up:.4f} | {pf:.4f} | {uf:.4f} | {adv:.4f} | {ok} |".format(
+                seed=result["seed"],
+                pp=result["protected_mean_plasticity"],
+                up=result["unsafe_mean_plasticity"],
+                pf=result["protected_mean_forgetting"],
+                uf=result["unsafe_mean_forgetting"],
+                adv=result["retention_advantage"],
+                ok="PASS" if result["pass"] else "FAIL",
+            )
+        )
+    results_md = """# Native CLM v0 M2 — Continual Language Stream\n\n"""
+    results_md += f"- Status: `{decision['status']}`\n"
+    results_md += f"- Scientific decision: `{decision['scientific_decision']}`\n"
+    results_md += f"- Protocol SHA-256: `{decision['protocol_sha256']}`\n"
+    results_md += f"- Data manifest SHA-256: `{decision['data_manifest_sha256']}`\n"
+    results_md += f"- Formal seeds: `{decision['formal_seeds']}`\n"
+    results_md += "- Learner replay: `0 bytes`\n"
+    results_md += "- Topology: `8 Cells / 2 active / growth disabled`\n"
+    results_md += "- Control: `protected certificate projection` vs `unsafe identical Cell-local writes`\n\n"
+    results_md += "| seed | protected plasticity | unsafe plasticity | protected forgetting | unsafe forgetting | retention advantage | result |\n"
+    results_md += "|---:|---:|---:|---:|---:|---:|---|\n"
+    results_md += "\n".join(rows) + "\n\n"
+    results_md += "Boundary: shared substrate and router are frozen from M1; M2 does not test autonomous growth or router continual adaptation.\n"
+    (output / "RESULTS.md").write_text(results_md, encoding="utf-8")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
+    parser.add_argument("--checkpoint", type=Path, required=True)
+    parser.add_argument("--data-dir", type=Path, required=True)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--formal", action="store_true")
+    parser.add_argument("--seed", type=int)
+    parser.add_argument("--devices", default="0,1")
+    parser.add_argument("--worker", action="store_true")
+    parser.add_argument("--arm", choices=["protected", "unsafe"])
+    parser.add_argument("--device", default="cuda")
+    args = parser.parse_args()
+
+    protocol, protocol_sha = _load_protocol(args.protocol)
+    if args.worker:
+        if args.arm is None or args.seed is None:
+            parser.error("--worker requires --arm and --seed")
+        return _run_worker(args, protocol)
+
+    data_manifest_sha = _validate_data_manifest(args.data_dir, protocol)
+    print(f"Verified M2 data manifest SHA-256: {data_manifest_sha}", flush=True)
+
+    devices = tuple(part.strip() for part in args.devices.split(","))
+    if len(devices) != 2:
+        raise ValueError("--devices must name exactly two workers, e.g. 0,1")
+
+    if args.formal:
+        seeds = [int(seed) for seed in protocol["formal_seeds"]]
+    elif args.seed is not None:
+        if args.seed in protocol["formal_seeds"]:
+            raise RuntimeError("refusing to touch a formal seed outside --formal")
+        seeds = [args.seed]
+    else:
+        parser.error("choose --formal or --seed <development-seed>")
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    seed_results = [
+        _run_seed_pair(
+            args,
+            protocol,
+            seed,
+            devices,
+            protocol_sha256=protocol_sha,
+            data_manifest_sha256=data_manifest_sha,
+        )
+        for seed in seeds
+    ]
+
+    if args.formal:
+        decision = aggregate_formal(
+            seed_results,
+            protocol_sha256=protocol_sha,
+            formal_seeds=seeds,
+        )
+        decision["data_manifest_sha256"] = data_manifest_sha
+        _write_formal_artifacts(args.output_dir, decision)
+        print(json.dumps(decision, indent=2), flush=True)
+        return 0 if decision["scientific_decision"] else 2
+
+    print(json.dumps(seed_results[0], indent=2), flush=True)
+    return 0 if seed_results[0]["pass"] else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

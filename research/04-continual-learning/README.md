@@ -1,13 +1,18 @@
-# 04 — Continual Learning
+# 04-continual-learning
 
-**Purpose:** core continual-learning mechanisms, formal validations and
-their experiment runners.
+**Research scope:** Continual-learning mechanisms and Core validations.
 
-This is the project-first landing page for the continual-learning core. Frozen
-protocols, decisions and result files remain canonical at their current paths
-during Phase 1. See [`../MIGRATION_MAP.md`](../MIGRATION_MAP.md).
+## Research question
 
-Current source families include `../experiments/04-continual-learning-core/`,
-`../notebooks/04-continual-learning-core/`, `../validations/core-*`, and
-matching `artifacts/experiments/` records. Cross-validation conclusions and
-negative results remain governed by the research ledger and capability audit.
+Which mechanisms can support bounded, protected continual learning, and where does transfer fail?
+
+## Contents
+
+- [Hypothesis and stage context](hypothesis/README.md)
+- [Experiment index](experiments/README.md)
+- [Project conclusion](conclusion.md)
+- [Project-owned research runners](scripts/)
+
+## Evidence discipline
+
+Frozen protocols, decisions, source identities and run bytes are preserved. Historical path shims point to these canonical project files. Scientific status comes from registered protocols and result decisions, not from folder names or notebook narratives. See the [research-wide governance and audits](../README.md).

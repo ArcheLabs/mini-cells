@@ -56,7 +56,7 @@ backend is supported; unknown architectures fail closed.
 - [`src/minicells/hybrid/`](src/minicells/hybrid/): public HybridCLM API.
 - [`docs/hybrid-clm/`](docs/hybrid-clm/): API, artifact, placement, safety, and status docs.
 - [`experiments/`](experiments/README.md): isolated research experiment pipeline.
-- [`research/stages/08-hybrid-clm/`](research/stages/08-hybrid-clm/): current research boundary and roadmap.
+- [`research/08-hybrid-clm/hypothesis/`](research/08-hybrid-clm/hypothesis/): current research boundary and roadmap.
 - [`research/01-foundations/`–`research/08-hybrid-clm/`](research/MIGRATION_MAP.md): project-first research layout and migration status.
 - [`research/`](research/README.md): research navigation, protocols, reports, and evidence catalog.
 - [`research/archive/github-workflows/`](research/archive/github-workflows/): archived one-shot research workflows (not active Actions).
@@ -77,4 +77,4 @@ See [LICENSE](LICENSE).
 
 ## Routing research pipeline v2
 
-See [the research registry](research/registry.yaml), [experiment definitions](research/experiments/003-hard-cell-transition/README.md), and [the offline Kaggle workflow](research/reports/PIPELINE_V2.md).
+See [the research registry](research/registry.yaml), [experiment definitions](research/08-hybrid-clm/experiments/003-hard-cell-transition/README.md), and [the offline Kaggle workflow](research/reports/PIPELINE_V2.md).

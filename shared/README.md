@@ -1,12 +1,3 @@
 # Shared research components
 
-This directory contains implementation components with audited consumers in
-multiple research projects. It is not a home for uncategorized files or for
-experiment hypotheses, protocols, configurations, notebook workflows,
-interpretation or results.
-
-Before adding or moving a component here, record at least two project
-consumers, preserve its existing import/API path where needed, and keep its
-scientific behavior owned by the applicable experiment protocol. Product code
-remains under `src/`; project-specific research code stays with its project;
-repository-wide CI and release commands stay under top-level `scripts/`.
+This directory holds utilities used by multiple research projects. Project-specific runtime code belongs with its owning project. The research dispatcher is shared by project runner entrypoints; project-specific scripts are indexed in each project’s `scripts/README.md`. Add category directories only when they contain a real audited component.

@@ -1,14 +1,18 @@
-# 03 — Routing and Growth
+# 03-routing-and-growth
 
-**Purpose:** the historical routing/growth lineage, including experiments
-025/026 and their engineering precursors.
+**Research scope:** Sparse routing, growth, mitosis and granularity.
 
-This project-first landing page does not copy or move frozen source material.
-See [`../MIGRATION_MAP.md`](../MIGRATION_MAP.md) for the transition map.
+## Research question
 
-Current source families: `../stages/03-routing-and-growth/`,
-`../experiments/03-routing-and-growth/`,
-`../notebooks/03-routing-and-growth/`, and matching validation and artifact
-references. The separately registered 001–004 routing comparison series is
-assigned to the HybridCLM project as specified in the ownership map; retain
-its current paths until execution and reference audits permit migration.
+Can cells be routed, grown and specialized while preserving useful computation?
+
+## Contents
+
+- [Hypothesis and stage context](hypothesis/README.md)
+- [Experiment index](experiments/README.md)
+- [Project conclusion](conclusion.md)
+- [Project-owned research runners](scripts/)
+
+## Evidence discipline
+
+Frozen protocols, decisions, source identities and run bytes are preserved. Historical path shims point to these canonical project files. Scientific status comes from registered protocols and result decisions, not from folder names or notebook narratives. See the [research-wide governance and audits](../README.md).

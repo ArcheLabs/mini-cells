@@ -68,7 +68,7 @@ jobs:
         id: input_cache
         with:
           path: .research-input-state/
-          key: research-input-v1-${{ inputs.experiment }}-${{ hashFiles('src/**/*.py', 'experiments/**/*.py', 'kaggle/**/*.py', 'research/configs/*.yaml', 'research/experiments/**/protocol.json') }}
+          key: research-input-v1-${{ inputs.experiment }}-${{ hashFiles('src/**/*.py', 'experiments/**/*.py', 'research/08-hybrid-clm/experiments/**/*.py', 'kaggle/**/*.py', 'research/08-hybrid-clm/experiments/*/config/*.yaml', 'research/08-hybrid-clm/experiments/*/protocol.json') }}
       - name: Select experiment and seed group
         run: python kaggle/session.py select --experiment "$EXPERIMENT" --group "$SEED_GROUP"
       - uses: actions/checkout@v4

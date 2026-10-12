@@ -4,7 +4,7 @@
       "id": "001",
       "name": "global-router",
       "status": "completed_development",
-      "directory": "research/experiments/001-global-router",
+      "directory": "research/08-hybrid-clm/experiments/001-global-router",
       "historical_entry": "experiments.common.train",
       "note": "single development comparison; no confirmation claim"
     },
@@ -12,7 +12,7 @@
       "id": "002",
       "name": "cell-internal-router",
       "status": "development_incomplete",
-      "directory": "research/experiments/002-cell-internal-router",
+      "directory": "research/08-hybrid-clm/experiments/002-cell-internal-router",
       "historical_entry": "experiments.cell_internal_routing_002.train",
       "completed_development_seeds": [
         42
@@ -28,7 +28,7 @@
       "id": "003",
       "name": "hard-cell-transition",
       "status": "development_incomplete",
-      "directory": "research/experiments/003-hard-cell-transition",
+      "directory": "research/08-hybrid-clm/experiments/003-hard-cell-transition",
       "entry": "minicells.training.runner",
       "development_seeds": [
         42,
@@ -49,7 +49,7 @@
       "id": "004",
       "name": "cell-graph",
       "status": "development_observed",
-      "directory": "research/experiments/004-cell-graph",
+      "directory": "research/08-hybrid-clm/experiments/004-cell-graph",
       "scientific_decision": false,
       "note": "Five paired full-budget arms; two sessions per development seed. Seed 42 reference and graph archives exist under different recorded source commits; matrix aggregation remains DEVELOPMENT_INCOMPLETE. No scientific decision yet.",
       "development_seeds": [
@@ -68,7 +68,7 @@
           "session": "reference",
           "status": "DEVELOPMENT_SESSION_COMPLETED",
           "scientific_decision": false,
-          "archive": "research/artifacts/004-cell-graph/a59402238b686ff4981786f307d4a3f110698d61/seed-42/reference"
+          "archive": "research/08-hybrid-clm/experiments/004-cell-graph/artifacts/a59402238b686ff4981786f307d4a3f110698d61/seed-42/reference"
         },
         {
           "source_commit": "6312cefae33c354670d2350b315ac20d1e488a51",
@@ -76,7 +76,7 @@
           "session": "graph",
           "status": "DEVELOPMENT_SESSION_COMPLETED",
           "scientific_decision": false,
-          "archive": "research/artifacts/004-cell-graph/6312cefae33c354670d2350b315ac20d1e488a51/seed-42/graph"
+          "archive": "research/08-hybrid-clm/experiments/004-cell-graph/artifacts/6312cefae33c354670d2350b315ac20d1e488a51/seed-42/graph"
         }
       ],
       "matrix_status": "DEVELOPMENT_INCOMPLETE"
