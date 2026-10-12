@@ -1,0 +1,23 @@
+name: Research Notebook CI
+
+on:
+  push:
+    branches: [main, codex/fix-004-publication-recovery]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  manual-notebook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check changed runtime modules
+        run: python -m compileall -q src/minicells/runtime/research.py src/minicells/training/runner.py src/minicells/research/assets.py
+      - name: Verify notebook publication and recovery using local Git
+        run: python tests/research/03-routing-and-growth/test_cell_graph_manual_publication.py
