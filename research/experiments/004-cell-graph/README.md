@@ -22,7 +22,9 @@ Hard inference disables backups. Training Cell visits and throughput are recorde
 
 ## Session plan: choose 004 in Kaggle Experiment
 
-Use the original **bingjiangli/minicells** notebook through Pipeline v2. Set the new **source_commit** input to the same full 40-character implementation SHA for all six sessions. Leave it blank only for a first preparation. Copy the first preparation’s **assets_manifest_sha256** into the same-named workflow input for all subsequent sessions; this reuses the exact Dataset without rebuilding/tokenizing. Results accumulate on one source-specific branch and one result PR, so later sessions can analyze earlier unmerged evidence. Runtime reads mounted, hash-verified assets and embedded source; GitHub and HF credentials stay outside the GPU runtime.
+Use the original **bingjiangli/minicells** notebook through Pipeline v2. Choose **004**, seed group **1/2/3**, session **reference/graph**, and enable **execute**. Group 1 uses seed 42, group 2 uses 43, group 3 uses 44. The default is 004/group 1/reference. No source or Dataset hash needs to be entered.
+
+Actions automatically remembers the first successfully uploaded Dataset and source commit in a code-keyed cache, reusing both across the matrix. Result PR merges do not change the code key. A change to the experiment code/protocol creates a new input cache and source identity; it never joins different source versions into one matrix. Cache misses prepare a new hash-checked snapshot; incompatible identities remain separate. Results accumulate on a source-specific branch and one result PR. Runtime reads mounted assets and embedded source; GitHub and HF credentials stay outside the GPU runtime.
 
 For **each seed 42, 43, 44**, run these two sessions from the **same source commit** and immutable Dataset:
 

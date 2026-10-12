@@ -14,9 +14,9 @@
 
 The existing Actions `KAGGLE_API_TOKEN` must belong to the account allowed to update `bingjiangli/minicells` and create its private input Datasets. Runtime Kaggle Secrets are no longer required. GitHub publication uses the workflow's built-in token with `contents: write` and `pull-requests: write`; repository settings must allow Actions to create PRs. If publication fails, retained Actions artifacts still contain the evidence.
 
-Choose **Kaggle Experiment**: 003, development seed, `execute=false` to prepare; `execute=true` explicitly starts the GPU job. Preparation-only jobs produce the notebook and manifest, but do not upload a Dataset or consume GPU hours. Their CPU-prepared arrays are retained as an artifact for subsequent manual upload. The offline notebook needs the matching Dataset attached before manual execution.
+Choose **Kaggle Experiment**: experiment 004 (default) or 003, seed group 1/2/3, `execute=false` to prepare; `execute=true` explicitly starts the GPU job. Preparation-only jobs produce the notebook and manifest, but do not upload a Dataset or consume GPU hours. Their CPU-prepared arrays are retained as an artifact for subsequent manual upload. The offline notebook needs the matching Dataset attached before manual execution.
 
-001 and 002 choices export archived notebooks/definitions. They preserve historical entrypoints and are not silently rerun through a changed protocol. 004 executes the registered reference/graph sessions for development seeds 42, 43, 44. Use the same source_commit and assets_manifest_sha256 for the full matrix; see its experiment README.
+001 and 002 remain historical notebooks/definitions at their existing paths. The ordinary Actions form offers the active 003/004 experiments. Historical entrypoints remain available for explicit reproduction. 004 executes the registered reference/graph sessions for development seeds 42, 43, 44. Select seed group 1/2/3 and reference/graph. Actions automatically pins and reuses source/data identities through a code-keyed input cache; no manual hashes are required. See its experiment README.
 
 ## Research authority and migration
 

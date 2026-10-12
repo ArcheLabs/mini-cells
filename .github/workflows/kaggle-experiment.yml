@@ -8,13 +8,7 @@ on:
         default: "003"
       seed:
         type: string
-        default: "123"
-      assets_manifest_sha256:
-        type: string
-        default: ""
-      source_commit:
-        type: string
-        default: ""
+        default: "42"
       session:
         type: string
         default: "reference"
@@ -27,25 +21,15 @@ on:
   workflow_dispatch:
     inputs:
       experiment:
-        description: Registered execution or historical notebook preparation
+        description: Experiment
         type: choice
-        options: ["003", "002", "001", "004"]
-        default: "003"
+        options: ["004", "003"]
+        default: "004"
       seed:
-        description: Development seed; observed seeds remain development evidence
+        description: "Seed group: 004 uses 42/43/44; 003 uses 42/123/456"
         type: choice
-        options: ["42", "43", "44", "123", "456"]
-        default: "123"
-      assets_manifest_sha256:
-        description: "Reuse the first session Dataset manifest SHA for the entire paired matrix"
-        type: string
-        required: false
-        default: ""
-      source_commit:
-        description: "Same full source SHA for every 004 session/seed; blank uses workflow commit"
-        type: string
-        required: false
-        default: ""
+        options: ["1", "2", "3"]
+        default: "1"
       session:
         description: "004 only: reference (soft/fixed/global) or graph (graph/hard); run both per seed"
         type: choice
@@ -72,52 +56,27 @@ jobs:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
       PYTHONPATH: src:.
       EXPERIMENT: ${{ inputs.experiment }}
-      SEED: ${{ inputs.seed }}
+      SEED_GROUP: ${{ inputs.seed }}
       SESSION: ${{ inputs.session }}
-      ASSETS_MANIFEST: ${{ inputs.assets_manifest_sha256 }}
-      REQUESTED_SOURCE: ${{ inputs.source_commit || github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Validate pinned source identity
-        run: |
-          python - <<'PY'
-          import os, re
-          if not re.fullmatch('[0-9a-f]{40}', os.environ['REQUESTED_SOURCE']):
-              raise SystemExit('source_commit must be a full lowercase Git SHA')
-          if os.environ['ASSETS_MANIFEST'] and not re.fullmatch('[0-9a-f]{64}', os.environ['ASSETS_MANIFEST']):
-              raise SystemExit('assets_manifest_sha256 must be a full lowercase SHA256')
-          PY
+      - uses: actions/cache/restore@v4
+        if: ${{ inputs.experiment == '003' || inputs.experiment == '004' }}
+        id: input_cache
+        with:
+          path: .research-input-state/
+          key: research-input-v1-${{ inputs.experiment }}-${{ hashFiles('src/**/*.py', 'experiments/**/*.py', 'kaggle/**/*.py', 'research/configs/*.yaml', 'research/experiments/**/protocol.json') }}
+      - name: Select experiment and seed group
+        run: python kaggle/session.py select --experiment "$EXPERIMENT" --group "$SEED_GROUP"
       - uses: actions/checkout@v4
         if: ${{ inputs.experiment == '003' || inputs.experiment == '004' }}
         with:
-          ref: ${{ inputs.source_commit || github.sha }}
+          ref: ${{ env.SOURCE_SHA }}
           path: experiment-source
           persist-credentials: false
-      - name: Record actual source commit
-        if: ${{ inputs.experiment == '003' || inputs.experiment == '004' }}
-        run: |
-          source_sha="$(git -C experiment-source rev-parse HEAD)"
-          echo "SOURCE_SHA=$source_sha" >> "$GITHUB_ENV"
-      - name: Resolve research definition
-        run: |
-          python - <<'PY'
-          import json, os
-          from pathlib import Path
-          entries = json.loads(Path('research/registry.yaml').read_text())['experiments']
-          entry = next(item for item in entries if item['id'] == os.environ['EXPERIMENT'])
-          definition = Path(entry['directory']) / 'experiment.yaml'
-          if entry['status'] == 'planned':
-              raise SystemExit('Experiment 004 is planned. Register its scientific protocol before execution.')
-          if os.environ['EXPERIMENT'] in ('003','004'):
-              config = json.loads(Path(json.loads(definition.read_text())['config']).read_text())
-              if int(os.environ['SEED']) not in config['seeds']:
-                  raise SystemExit('Seed outside registered experiment matrix')
-          with Path(os.environ['GITHUB_ENV']).open('a') as handle:
-              handle.write('DEFINITION=' + str(definition) + '\n')
-          PY
       - name: Preserve historical notebooks
         if: ${{ inputs.experiment != '003' && inputs.experiment != '004' }}
         run: |
@@ -137,23 +96,24 @@ jobs:
           python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
           python -m pip install 'kaggle==2.2.4' 'numpy==2.0.2' 'datasets==4.0.0' 'tokenizers==0.21.4' 'matplotlib==3.10.6'
       - name: Prepare fixed assets on CPU
-        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.assets_manifest_sha256 == '' }}
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && env.REUSE_INPUT != 'true' }}
         working-directory: experiment-source
         run: python kaggle/prepare_assets.py --definition "$DEFINITION" --output ../prepared-assets
-      - name: Reuse the exact existing immutable Dataset
-        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.assets_manifest_sha256 != '' }}
-        run: |
-          python - <<'PY'
-          import json, os
-          from pathlib import Path
-          checksum = os.environ['ASSETS_MANIFEST']
-          Path('prepared-assets').mkdir()
-          Path('prepared-assets/input-reference.json').write_text(json.dumps({'dataset_id':'bingjiangli/minicells-assets-'+checksum[:20], 'assets_manifest_sha256':checksum, 'immutable_snapshot':True})+'\n')
-          PY
+      - name: Reuse prepared data automatically
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && env.REUSE_INPUT == 'true' }}
+        run: python kaggle/session.py reuse
       - name: Upload immutable Dataset before GPU work
-        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && inputs.assets_manifest_sha256 == '' }}
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && env.REUSE_INPUT != 'true' }}
         working-directory: experiment-source
         run: python kaggle/upload_assets.py ../prepared-assets
+      - name: Remember uploaded data and source automatically
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && env.REUSE_INPUT != 'true' }}
+        run: python kaggle/session.py remember
+      - uses: actions/cache/save@v4
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && env.REUSE_INPUT != 'true' }}
+        with:
+          path: .research-input-state/
+          key: ${{ steps.input_cache.outputs.cache-primary-key }}
       - name: Prepare notebook with embedded source and fixed Dataset
         working-directory: experiment-source
         if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') }}
@@ -165,7 +125,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: research-${{ inputs.experiment }}-seed-${{ inputs.seed }}-preparation-${{ github.run_id }}
+          name: research-${{ inputs.experiment }}-seed-${{ env.SEED }}-preparation-${{ github.run_id }}
           path: |
             prepared-notebook/
             prepared-assets/input-reference.json
@@ -212,7 +172,7 @@ jobs:
         if: ${{ always() && inputs.execute }}
         uses: actions/upload-artifact@v4
         with:
-          name: research-${{ inputs.experiment }}-seed-${{ inputs.seed }}-evidence-${{ github.run_id }}
+          name: research-${{ inputs.experiment }}-seed-${{ env.SEED }}-evidence-${{ github.run_id }}
           path: |
             research/artifacts/${{ inputs.experiment }}-*/
             kaggle-output/**/*.json
@@ -227,7 +187,7 @@ jobs:
         if: ${{ always() && inputs.execute }}
         uses: actions/upload-artifact@v4
         with:
-          name: research-${{ inputs.experiment }}-seed-${{ inputs.seed }}-checkpoints-${{ github.run_id }}
+          name: research-${{ inputs.experiment }}-seed-${{ env.SEED }}-checkpoints-${{ github.run_id }}
           path: kaggle-output/**/*.pt
           if-no-files-found: warn
           retention-days: 30
