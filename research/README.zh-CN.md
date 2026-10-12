@@ -1,117 +1,32 @@
-[English](README.md) | 中文
+[English](README.md) | [中文](README.zh-CN.md)
 
-# MiniCells 研究
+# MiniCells 研究项目
 
-这个目录用于保存 MiniCells 的科学证据。它**不是产品路线图**，也不预设最强的 Native CLM 命题一定成立。
+研究资料按项目组织。进入对应项目目录，即可查阅研究问题、实验单元、Notebook、实现代码、报告和已有证据。
 
-## 从这里开始
+## 研究项目
 
-1. [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) — 当前证据允许我们声称的最强能力、明确的 No-Go，以及负结果之后仍然可用于工程的 primitive。
-2. [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) — 对所有有长期总结价值的实验按 family 记录：价值、局限、formal status、能力上限、**它没有证明什么**、以及获得的工程 primitive。
-3. [`audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md) — 重新审计 Foundations、Self-Organization、Routing/Growth、CLM-0.4-mini 等历史 notebook，分别记录它们今天的科学地位和仍可复用的工程资产。
-4. [`stages/06-native-clm/`](stages/06-native-clm/) — 当前 trained-model Native CLM 序列与 closure。
-5. [`stages/08-hybrid-clm/`](stages/08-hybrid-clm/) — 当前 HybridCLM 工程边界与路线图。
-6. [`validations/`](validations/) — 冻结的 protocol、formal result 与机制诊断。
-7. [`catalog.yaml`](catalog.yaml) — 面向工具的研究目录。
+| 项目 | 范围 |
+|---|---|
+| [`01-foundations/`](01-foundations/README.md) | 早期语言动力学与训练可行性 |
+| [`02-self-organization/`](02-self-organization/README.md) | 组织形成、招募、分化与特征生成 |
+| [`03-routing-and-growth/`](03-routing-and-growth/README.md) | 路由、增长与粒度 |
+| [`04-continual-learning/`](04-continual-learning/README.md) | 持续学习核心机制 |
+| [`05-language-validation/`](05-language-validation/README.md) | 已退役的 CLM-0.4 语言验证线 |
+| [`06-native-clm/`](06-native-clm/README.md) | 原生语言模型训练与持续学习测试 |
+| [`07-safe-model-evolution/`](07-safe-model-evolution/README.md) | 预训练模型的安全演化 |
+| [`08-hybrid-clm/`](08-hybrid-clm/README.md) | HybridCLM 及其关联路由实验 |
 
-## 目录结构
+## 跨项目研究治理
 
-```text
-research/
-  01-foundations/            # 项目优先目录（迁移脚手架）
-  02-self-organization/
-  03-routing-and-growth/
-  04-continual-learning/
-  05-language-validation/
-  06-native-clm/
-  07-safe-model-evolution/
-  08-hybrid-clm/
-  audits/                    # 跨项目主张与证据上限
-  catalog.yaml               # 面向工具的导航索引
-  MIGRATION_MAP.md           # 旧路径映射与迁移约束
-  ...                        # 迁移期间保留的冻结旧路径
+- [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md)：当前证据支持的结论及明确的 No-Go 边界。
+- [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md)：实验结果、限制与工程价值记录。
+- [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md)：历史研究线的证据定位。
+- [`catalog.yaml`](catalog.yaml) 和 [`registry.yaml`](registry.yaml)：机器可读索引。
+- [`MIGRATION_MAP.md`](MIGRATION_MAP.md)：项目归属和旧路径兼容映射。
 
-shared/                      # 仅放跨研究项目实现
-  python/ scripts/ kaggle/ visualization/ evaluation/
-```
+## 研究纪律
 
-仓库正从“按资产类型组织”迁移到“按研究项目组织”。八个项目根目录和
-顶层 `shared/` 已建立；每个项目的引用审计与兼容路径完成前，现有 protocol、
-运行归档、notebook 和实现仍保留在当前权威路径。具体映射见
-[`MIGRATION_MAP.md`](MIGRATION_MAP.md)。
+冻结协议与正式决策具有权威性。后续解释不能把失败决策升级；有用的机制也不能证明模型级或语言级持续学习。保留每次运行的 source commit 与身份；路径迁移前核对引用并保留兼容入口；每项实验只归属一个研究项目。
 
-Stage 08 是当前面向产品的桥梁；Native CLM 与 CLM-0.4 历史线仍是科研记录，
-不是当前 release 承诺。
-
-目录名称不决定科学证据强度。冻结的 registered result 优先于 roadmap、README、notebook 和任何后续解释。
-
-## 当前证据边界
-
-受控研究已经证明若干机制可以被构造出来：protected local write、capacity growth、learned sparse coordinates、multi-Cell composition，以及 learned control plane 都能在各自注册边界内工作；小型 Native CLM 也能从 next-token loss 端到端训练。
-
-但 trained-model continual-learning 序列给出的一个重要负面上限是：
-
-```text
-M2   fixed-topology replay-free continual language      NOT SUPPORTED
-M3   global-pool growth-restored continual language     NOT SUPPORTED
-M3R  read-preserving lineage growth                     NOT SUPPORTED
-```
-
-Protection 有部分因果价值，新容量可以被实际使用，read ownership conservation 也改善了 M3 的一个明确 failure mode；这些都不能被升级为“已经实现 autonomous replay-free continual language learning”。
-
-Safe Model Evolution 研究线问的是更窄的模型级问题。Functional Boundary Oracle 001 已得到冻结的正结果：在明确 frozen-base 历史监督下，一个 32-channel aligned sub-expert coordinate 在 3/3 formal seeds 中都获得了新的 held-out 行为，同时保持 withheld 历史 calibration 行为。它支持“在注册的历史监督边界下存在安全局部 writable coordinate”，但**没有**证明 zero replay、autonomous Cell discovery、composition、mergeability，也没有证明完整 Granite 训练分布被保持。
-
-History Compression 001 是下一项冻结实验，只压缩 learner-visible 历史 calibration prompt 数量：`32 -> 8 -> 2 -> 0`；substrate、writable granularity、optimizer family 与 withheld safety gates 保持不变。
-
-Optimizer/update audit 属于另一条 mechanics 结论：只投影安全梯度不足以保证 canonical AdamW 的实际参数 transaction 安全，而对 realized update 做投影/验证可以把注册 invariant 恢复到 numerical floor。这个结果不能改写 M2 的历史科学结论。
-
-需要查看精确边界与证据路径时，请使用 `audits/` 和冻结 validation，不要再把新的进度表持续堆进这个 README。
-
-## 历史 notebook 的当前定位
-
-历史 notebook 不再被视为一组同等强度的科学证据。当前审计分类为：
-
-```text
-01-foundations          HISTORICAL EXPLORATORY
-02-self-organization    HISTORICAL MECHANISTIC EVIDENCE
-03-routing-and-growth   ENGINEERING PRECURSOR EVIDENCE
-05-language-validation  RETIRED / SUPERSEDED PROTOCOL LINEAGE
-07-safe-model-evolution CURRENT MODEL-EVOLUTION EVIDENCE WORKFLOWS
-```
-
-一个旧 scientific interpretation 可以被后续实验削弱或取代，但其中产生的 engineering primitive 仍可能值得保留。两条维度的正式映射见 [`audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.zh-CN.md)。
-
-新的 research notebook 必须放在 `research/notebooks/<stage>/` 下；仓库外层 `notebooks/` 不再作为新增研究实验的 canonical 位置。
-
-## Research 与 Engineering 分离
-
-MiniCells 现在明确区分两条线：
-
-- **长期研究：** natural functional boundary、future-learning sufficient state、autonomous routing/growth、replay-free continual learning、parameter-level sustained plasticity。
-- **近期工程：** explicit modular change、fork/shadow training、functional regression、realized-update validation、append/expand、阶段性全局评估、versioning/rollback；consolidation 必须等独立 acceptance protocol 证明安全后再进入默认路径。
-
-工程系统可以把 Cell 定义为人为选择的“模型变化单元”，而不声称它是自然存在的知识原子。
-
-## 证据纪律
-
-- 已观察的 formal seeds 不能重新包装成 untouched confirmation seeds。
-- 后续 diagnostic 可以解释失败，但不能把已经失败的 registered decision 改成成功。
-- synthetic/linear support 不能升级成 Transformer、language、asymptotic 或 product-level support。
-- local write/retention signal 不能直接推出完整模型的 global improvement。
-- 复用历史 engineering primitive 时，不能继承旧 scientific claim 的证据等级。
-- 历史 protocol/result path 属于证据的一部分；重构入口必须先做引用审计并保留 compatibility shim。
-- 每个实验必须归属一个研究项目。跨项目索引可以留在 `research/` 根目录，但实验逻辑不能搬进全研究共享目录。
-- 只有确认至少两个研究项目复用某组件后，才将它放入顶层 `shared/`；项目专属逻辑留在项目内部。
-- 每一个新的 summary claim 都必须明确写出：**它没有证明什么。**
-- 详细运行日志与结果数据应持久化，但 hosted notebook 的 stdout 必须保持精简，避免页面因日志量失去可用性。
-- 可视化只是 durable result 的派生视图；`result.json`、`decision.json` 与 frozen protocol 才是科学权威。
-
-这个研究目录的目标，是让后续产品定位建立在累计证据的能力上限上，而不是建立在最新一次机制叙事上。
-
-## 项目优先结构迁移
-
-研究目录正从按资产类型转为按研究项目组织。八个项目入口和顶层 `shared/`
-已经建立；冻结协议、运行归档、notebook 和实现会在逐项目引用审计与兼容路径
-准备好之后再迁移。Experiment 004 seed 42 的 reference 和 graph 均已归档，但记录的
-source commit 不同，矩阵聚合仍为 `DEVELOPMENT_INCOMPLETE`。迁移期间保留各自的归档
-与 source identity。当前迁移约束见 [`MIGRATION_MAP.md`](MIGRATION_MAP.md)。
+Experiment 004 的手动入口现为 [`08-hybrid-clm/experiments/004-cell-graph/notebook.ipynb`](08-hybrid-clm/experiments/004-cell-graph/notebook.ipynb)。Seed 42 的 `reference` 与 `graph` 归档仍保留各自记录的 source commit，矩阵汇总仍为 `DEVELOPMENT_INCOMPLETE`。

@@ -1,13 +1,19 @@
-# 06 — Native CLM
+# 06-native-clm
 
-**Purpose:** Native CLM training, continual-language tests and diagnostics.
+**Research scope:** Trainable Native CLM and continual-language tests.
 
-This is the project-first landing page for the Native CLM line. Existing
-registrations, result paths, notebooks and scripts remain canonical during
-Phase 1; directory placement does not imply scientific status. See
-[`../MIGRATION_MAP.md`](../MIGRATION_MAP.md).
+## Research question
 
-Current source families: `../stages/06-native-clm/`, `../native-clm/`,
-`../notebooks/06-native-clm/`, `../validations/native-clm-*`, and matching
-scripts and durable artifacts. Frozen decisions and their explicit negative
-ceilings remain unchanged.
+Can a native cellular language model train from next-token loss and support replay-free continual language learning?
+
+## Contents
+
+- [Hypothesis and stage context](hypothesis/README.md)
+- [Experiment index](experiments/README.md)
+- [Project conclusion](conclusion.md)
+- [Project-owned research runners](scripts/)
+- [Cross-experiment analysis](analysis/)
+
+## Evidence discipline
+
+Frozen protocols, decisions, source identities and run bytes are preserved. Historical path shims point to these canonical project files. Scientific status comes from registered protocols and result decisions, not from folder names or notebook narratives. See the [research-wide governance and audits](../README.md).

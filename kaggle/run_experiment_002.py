@@ -39,11 +39,17 @@ def main():
     git('config', 'remote.origin.partialclonefilter', 'blob:none')
     git('sparse-checkout', 'init', '--no-cone')
     git('sparse-checkout', 'set', '--no-cone', '/experiments/__init__.py',
-        '/experiments/common/', '/experiments/cell_internal_routing_002/',
+        '/experiments/cell_internal_routing_002/', '/experiments/common/',
         '/scripts/research/publish_experiment_results.py',
         '/scripts/research/publish_core_validation_007.py',
         '/research/validations/routing-002-cell-internal-routing/',
-        '/artifacts/experiments/002-cell-internal-routing/')
+        '/artifacts/experiments/002-cell-internal-routing/',
+        '/research/08-hybrid-clm/experiments/002-cell-internal-router/',
+        '/research/08-hybrid-clm/experiments/_shared/',
+        '/research/08-hybrid-clm/scripts/research/publish_experiment_results.py',
+        '/research/04-continual-learning/scripts/research/publish_core_validation_007.py',
+        '/research/08-hybrid-clm/experiments/002-cell-internal-router/validation/',
+        '/research/08-hybrid-clm/experiments/002-cell-internal-router/artifacts/')
     git('fetch', '--depth=1', '--filter=blob:none', 'origin', COMMIT)
     branch = 'results/routing-002-' + COMMIT[:12]
     remote = git('ls-remote', '--exit-code', '--heads', 'origin', branch, check=False)

@@ -67,9 +67,15 @@ def prepare_source(commit, seed):
     git('remote', 'add', 'origin', 'https://github.com/ArcheLabs/mini-cells.git')
     git('sparse-checkout', 'init', '--no-cone')
     git('sparse-checkout', 'set', '--no-cone', '/src/minicells/', '/experiments/__init__.py',
-        '/experiments/common/', '/experiments/cell_internal_routing_002/',
-        '/experiments/003-hard-cell-transition/', '/scripts/research/publish_experiment_results.py',
-        '/scripts/research/publish_core_validation_007.py', '/artifacts/experiments/003-hard-cell-transition/')
+        '/experiments/003-hard-cell-transition/',
+        '/scripts/research/publish_experiment_results.py',
+        '/research/08-hybrid-clm/experiments/003-hard-cell-transition/',
+        '/research/08-hybrid-clm/experiments/_shared/',
+        '/research/08-hybrid-clm/scripts/research/publish_experiment_results.py',
+        '/research/04-continual-learning/scripts/research/publish_core_validation_007.py',
+        '/scripts/research/publish_core_validation_007.py',
+        '/artifacts/experiments/003-hard-cell-transition/',
+        '/research/08-hybrid-clm/experiments/003-hard-cell-transition/artifacts/')
     git('fetch', '--depth=1', '--filter=blob:none', 'origin', commit)
     branch = 'results/routing-003-' + commit[:12]
     remote = git('ls-remote', '--exit-code', '--heads', 'origin', branch, check=False)

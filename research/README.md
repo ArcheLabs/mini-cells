@@ -2,117 +2,31 @@
 
 # MiniCells Research
 
-This tree preserves MiniCells scientific evidence. It is **not** a product roadmap and it does not assume that the strongest Native-CLM hypothesis is true.
+This directory is organized by research project. Start from one of the eight project folders to find its hypothesis, experiment units, notebooks, implementation, reports and available evidence.
 
-## Start here
+## Projects
 
-1. [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) — strongest claims currently supported, explicit No-Go claims, and engineering primitives that survive the negative results.
-2. [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) — family-level record of summary-worthy experiments with value, limitation, formal status, known ceiling, what each result does **not** prove, and the engineering primitive obtained.
-3. [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md) — current scientific authority and surviving engineering value of the historical Foundations, Self-Organization, Routing/Growth and CLM-0.4-mini notebook lineages.
-4. [`stages/06-native-clm/`](stages/06-native-clm/) — current trained-model Native-CLM sequence and closures.
-5. [`stages/08-hybrid-clm/`](stages/08-hybrid-clm/) — current HybridCLM engineering boundary and roadmap.
-6. [`validations/`](validations/) — frozen protocols, formal results and mechanism diagnostics.
-7. [`catalog.yaml`](catalog.yaml) — machine-oriented research catalog.
+| Project | Scope |
+|---|---|
+| [`01-foundations/`](01-foundations/README.md) | Early language dynamics and training feasibility |
+| [`02-self-organization/`](02-self-organization/README.md) | Tissue formation, recruitment and trait genesis |
+| [`03-routing-and-growth/`](03-routing-and-growth/README.md) | Routing, growth and granularity |
+| [`04-continual-learning/`](04-continual-learning/README.md) | Core continual-learning mechanisms |
+| [`05-language-validation/`](05-language-validation/README.md) | Retired CLM-0.4 language-validation lineage |
+| [`06-native-clm/`](06-native-clm/README.md) | Native language-model training and continual-learning tests |
+| [`07-safe-model-evolution/`](07-safe-model-evolution/README.md) | Safe evolution of pretrained models |
+| [`08-hybrid-clm/`](08-hybrid-clm/README.md) | HybridCLM and its linked routing experiments |
 
-## Repository structure
+## Cross-project governance
 
-```text
-research/
-  01-foundations/            # project-first home (migration scaffold)
-  02-self-organization/
-  03-routing-and-growth/
-  04-continual-learning/
-  05-language-validation/
-  06-native-clm/
-  07-safe-model-evolution/
-  08-hybrid-clm/
-  audits/                    # cross-project claims and evidence ceilings
-  catalog.yaml               # machine-oriented navigation index
-  MIGRATION_MAP.md           # old-to-new paths and migration guardrails
-  ...                        # frozen legacy paths retained during migration
-
-shared/                      # cross-project implementation only
-  python/ scripts/ kaggle/ visualization/ evaluation/
-```
-
-The repository is migrating from asset-type folders to research-project
-folders. The eight project roots and root-level `shared/` tree are scaffolded;
-existing protocols, run archives, notebooks and implementations remain at
-their current canonical paths until each project's reference audit and
-compatibility path are ready. See [`MIGRATION_MAP.md`](MIGRATION_MAP.md).
-
-Stage 08 is the current product-facing bridge, while the historical Native CLM
-and CLM-0.4 lines remain scientific records rather than release promises.
-
-The directory name does not determine scientific strength. A frozen registered result outranks a roadmap, README, notebook or later interpretation.
-
-## Current evidence boundary
-
-The controlled research stack establishes useful mechanisms: protected local writes, capacity growth, learned sparse coordinates, multi-Cell composition and learned control-plane behavior can all be constructed under registered boundaries. A small Native CLM can also train end-to-end from next-token loss.
-
-The trained-model continual-learning sequence establishes an important negative ceiling:
-
-```text
-M2   fixed-topology replay-free continual language      NOT SUPPORTED
-M3   global-pool growth-restored continual language     NOT SUPPORTED
-M3R  read-preserving lineage growth                     NOT SUPPORTED
-```
-
-Protection has partial causal value, new capacity is usable, and preserving read ownership improves a specific M3 failure mode. None of those facts establishes autonomous replay-free continual language learning.
-
-The Safe Model Evolution line asks a narrower model-level question. Functional Boundary Oracle 001 is a frozen positive result: under explicit frozen-base historical supervision, a 32-channel aligned sub-expert coordinate acquired a held-out behavior while preserving withheld historical calibration behavior in 3/3 formal seeds. That supports existence of a safe local writable coordinate under the registered supervision boundary; it does **not** establish zero replay, autonomous Cell discovery, composition, mergeability, or preservation of the full Granite training distribution.
-
-History Compression 001 is the next frozen test and reduces only learner-visible historical calibration prompts `32 -> 8 -> 2 -> 0` while keeping the substrate, writable granularity, optimizer family and withheld safety gates fixed.
-
-The optimizer/update audit adds a separate mechanics result: safe-gradient projection is not sufficient for canonical AdamW parameter transactions, while projecting/validating the realized update can restore the registered invariant to the numerical floor. This does not change the M2 scientific decision.
-
-For exact boundaries and source paths, use the audit documents and frozen validations rather than extending this README with another progress table.
-
-## Historical notebooks
-
-The historical notebook tree is retained as a research asset, not as a flat set of equally strong scientific claims.
-
-Current audit classification:
-
-```text
-01-foundations          HISTORICAL EXPLORATORY
-02-self-organization    HISTORICAL MECHANISTIC EVIDENCE
-03-routing-and-growth   ENGINEERING PRECURSOR EVIDENCE
-05-language-validation  RETIRED / SUPERSEDED PROTOCOL LINEAGE
-07-safe-model-evolution CURRENT MODEL-EVOLUTION EVIDENCE WORKFLOWS
-```
-
-A historical scientific interpretation may be weakened or superseded while its engineering primitive remains useful. The canonical mapping of those two dimensions is [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md).
-
-Shadow Cell Validation 001 v2 is registered as a separate, unrun architectural
-test of copy-on-write candidate development and controlled maturation:
-[protocol and implementation](validations/shadow-cell-validation-001-v2-developmental-maturation/README.md).
-
-## Research vs engineering
-
-MiniCells keeps two tracks separate:
-
-- **Long-term research:** natural functional boundaries, future-learning sufficient state, autonomous routing/growth, replay-free continual learning, parameter-level sustained plasticity.
-- **Near-term engineering:** explicit modular changes, fork/shadow training, functional regression checks, realized-update validation, append/expand, stage-level global evaluation, versioning and rollback, with consolidation only after a separate acceptance protocol.
-
-Engineering may use a Cell as a deliberately chosen unit of model change without claiming it is a natural knowledge atom.
+- [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) records supported claims and explicit No-Go boundaries.
+- [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) preserves family-level outcomes, limitations and engineering value.
+- [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md) explains the status of historical research lines.
+- [`catalog.yaml`](catalog.yaml) and [`registry.yaml`](registry.yaml) provide machine-readable indexes.
+- [`MIGRATION_MAP.md`](MIGRATION_MAP.md) records project ownership and compatibility paths.
 
 ## Evidence discipline
 
-- Do not reuse observed formal seeds as untouched confirmation seeds.
-- Do not upgrade a failed registered decision because a later diagnostic explains the failure.
-- Do not promote synthetic/linear support into Transformer-, language-, asymptotic- or product-level support.
-- Do not infer global model improvement from a local write/retention signal.
-- Do not inherit scientific authority when reusing an old engineering primitive.
-- Preserve historical protocol/result paths; restructure entrypoints only with reference audits and compatibility shims.
-- Give each experiment one owning research project. Cross-project indexes may remain at `research/`, but experiment logic must not be moved into a generic research-wide shared directory.
-- Put a component under root `shared/` only after confirming that at least two research projects use it; project-specific logic stays with its project.
-- Every new summary claim must state what it does **not** prove.
-- Keep detailed run logs and result data durable, but keep hosted notebook stdout compact enough to remain usable.
-- Treat visualizations as derived views; `result.json`, `decision.json`, and frozen protocols remain authoritative.
+Frozen protocols and decisions remain authoritative. A later explanation does not promote a failed decision; a useful mechanism does not prove model-level or language-level continual learning. Keep distinct source commits and run identities intact. Move paths only with reference audits and compatibility links, and keep each experiment under one project owner.
 
-The purpose of the research tree is to make future product decisions depend on the accumulated evidence ceiling rather than on the newest mechanism narrative.
-
-## Routing study execution
-
-[Pipeline v2](reports/PIPELINE_V2.md) and [registry.yaml](registry.yaml) index routing studies 001–004. Experiment 004's canonical manual entrypoint remains the [learned Cell Graph notebook](notebooks/03-routing-and-growth/experiment-004-learned-cell-graph-kaggle.ipynb). Seed 42's `reference` and `graph` sessions are archived under [`research/artifacts/004-cell-graph/`](artifacts/004-cell-graph/); their records contain different source commit IDs, and matrix aggregation remains `DEVELOPMENT_INCOMPLETE`. Preserve each archive and its recorded source identity during this migration.
+Experiment 004's manual entrypoint is now [`08-hybrid-clm/experiments/004-cell-graph/notebook.ipynb`](08-hybrid-clm/experiments/004-cell-graph/notebook.ipynb). Seed-42 `reference` and `graph` archives remain distinct under their recorded source commits; matrix aggregation remains `DEVELOPMENT_INCOMPLETE`.

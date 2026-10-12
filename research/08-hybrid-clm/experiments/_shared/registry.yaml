@@ -1,0 +1,42 @@
+{
+  "experiments": [
+    {
+      "id": "001",
+      "name": "global-router",
+      "status": "completed_development",
+      "directory": "001-global-router",
+      "historical_entry": "experiments.common.train",
+      "note": "single development comparison; no confirmation claim"
+    },
+    {
+      "id": "002",
+      "name": "cell-internal-router",
+      "status": "development_incomplete",
+      "directory": "002-cell-internal-router",
+      "historical_entry": "experiments.cell_internal_routing_002.train",
+      "completed_development_seeds": [
+        42
+      ],
+      "missing_development_seeds": [
+        123,
+        456
+      ],
+      "result_branch": "results/routing-002-3c19e9ca5dfc",
+      "decision": "DEVELOPMENT_NOT_SUPPORTED for observed seed 42"
+    },
+    {
+      "id": "003",
+      "name": "hard-cell-transition",
+      "status": "registered_unrun",
+      "directory": "003-hard-cell-transition",
+      "entry": "minicells.training.runner",
+      "development_seeds": [
+        42,
+        123,
+        456
+      ]
+    }
+  ],
+  "canonical_registry": "research/registry.yaml",
+  "scope": "historical routing-study index; current status is in canonical registry"
+}

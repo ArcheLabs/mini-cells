@@ -1,13 +1,18 @@
-# 02 — Self-Organization
+# 02-self-organization
 
-**Purpose:** tissue formation, recruitment, differentiation and trait genesis.
+**Research scope:** Tissue formation, recruitment, differentiation and trait genesis.
 
-This is the project-first landing page for the Self-Organization research
-line. Existing stage notes, experiment records, notebooks, protocols and
-artifacts remain canonical during Phase 1; they are not duplicated here. See
-[`../MIGRATION_MAP.md`](../MIGRATION_MAP.md) before moving any source.
+## Research question
 
-Current source families: `../stages/02-self-organization/`,
-`../experiments/02-self-organization/`, `../notebooks/02-self-organization/`,
-and matching validations and durable artifacts. The historical evidence map
-continues to define what these experiments support.
+Can useful functional organization emerge rather than be fully hand-designed?
+
+## Contents
+
+- [Hypothesis and stage context](hypothesis/README.md)
+- [Experiment index](experiments/README.md)
+- [Project conclusion](conclusion.md)
+- [Project-owned research runners](scripts/)
+
+## Evidence discipline
+
+Frozen protocols, decisions, source identities and run bytes are preserved. Historical path shims point to these canonical project files. Scientific status comes from registered protocols and result decisions, not from folder names or notebook narratives. See the [research-wide governance and audits](../README.md).

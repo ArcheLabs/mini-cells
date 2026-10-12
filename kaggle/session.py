@@ -17,7 +17,8 @@ def emit(values):
 
 
 def select(experiment, group):
-    definition = Path('research/experiments') / DIRECTORIES[experiment] / 'experiment.yaml'
+    definition = (Path('research/08-hybrid-clm/experiments') /
+                  DIRECTORIES[experiment] / 'experiment.yaml')
     descriptor = json.loads((ROOT / definition).read_text())
     config = json.loads((ROOT / descriptor['config']).read_text())
     seeds = config.get('seeds', [config.get('seed',42)])

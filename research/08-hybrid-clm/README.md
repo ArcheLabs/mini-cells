@@ -1,18 +1,19 @@
-# 08 — HybridCLM
+# 08-hybrid-clm
 
-**Purpose:** HybridCLM research and its linked routing experiment series.
+**Research scope:** HybridCLM and its linked routing-experiment series.
 
-The project owns its research question, experiments, execution entrypoints,
-analysis and conclusions. Experiments 001–004 are assigned here in the
-project-first ownership map as routing precursors. That ownership does not mean
-they tested HybridCLM or establish a HybridCLM regression/result. During Phase
-1 their definitions, configurations, implementation, notebook and result
-archive remain at their existing canonical paths; this README is the
-navigation entrypoint, not a duplicate. See
-[`../MIGRATION_MAP.md`](../MIGRATION_MAP.md).
+## Research question
 
-The HybridCLM engineering boundary and current evidence are documented at
-`../stages/08-hybrid-clm/`. Experiment 004 is a paired development matrix:
-preserve the seed-42 reference archive and its exact source identity when
-running the remaining sessions. Directory placement does not change any
-experiment's scientific status.
+What engineering and research boundaries hold for HybridCLM and its routing precursors?
+
+## Contents
+
+- [Hypothesis and stage context](hypothesis/README.md)
+- [Experiment index](experiments/README.md)
+- [Project conclusion](conclusion.md)
+- [Project-owned research runners](scripts/)
+- [Reports and analysis](reports/)
+
+## Evidence discipline
+
+Frozen protocols, decisions, source identities and run bytes are preserved. Historical path shims point to these canonical project files. Scientific status comes from registered protocols and result decisions, not from folder names or notebook narratives. See the [research-wide governance and audits](../README.md).

@@ -1,296 +1,312 @@
 schema: minicells.research-catalog.v1
 stages:
-  - foundations
-  - self-organization
-  - routing-and-growth
-  - continual-learning-core
-  - language-validation
-  - hybrid-clm
+- foundations
+- self-organization
+- routing-and-growth
+- continual-learning-core
+- language-validation
+- native-clm
+- safe-model-evolution
+- hybrid-clm
 entries:
-  - id: stage-foundations
-    title: "Foundations: Echo, NCA Language Dynamics, and Training Mechanics"
-    kind: research-stage
-    stage: foundations
-    outcome: historical
-    scientific_decision: false
-    canonical: true
-    report: research/stages/01-foundations/README.md
-    protocol: null
-    artifacts: artifacts/experiments
-    notebook: research/notebooks/01-foundations/experiment-001-echo.ipynb
-    implementation: src/minicells
-    supersedes: null
-    superseded_by: stage-self-organization
-    notes: "Experiments roughly 001–013; individual historical outcomes remain in canonical artifacts."
-
-  - id: stage-self-organization
-    title: "Self-Organization: Tissue Formation, Recruitment, Differentiation, and Trait Genesis"
-    kind: research-stage
-    stage: self-organization
-    outcome: historical
-    scientific_decision: false
-    canonical: true
-    report: research/stages/02-self-organization/README.md
-    protocol: null
-    artifacts: artifacts/experiments
-    notebook: research/notebooks/02-self-organization/experiment-014-multiseed-core-recipe.ipynb
-    implementation: src/minicells
-    supersedes: stage-foundations
-    superseded_by: stage-routing-and-growth
-    notes: "Experiments roughly 014–024; emergence is not classified as validated continual learning."
-
-  - id: stage-routing-and-growth
-    title: "Sparse Routing and Growth: From Cellular Dynamics to Independently Mutable Cells"
-    kind: research-stage
-    stage: routing-and-growth
-    outcome: historical
-    scientific_decision: false
-    canonical: true
-    report: research/stages/03-routing-and-growth/README.md
-    protocol: null
-    artifacts: artifacts/experiments
-    notebook: research/notebooks/03-routing-and-growth/experiment-025-story-math-growth.ipynb
-    implementation: src/minicells
-    supersedes: stage-self-organization
-    superseded_by: stage-continual-learning-core
-    notes: "Covers experiments 025/026 and CLM routing, growth, mitosis, and sparse-runtime studies."
-
-  - id: core-validation-001
-    title: Knowledge Subsumption
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: KNOWLEDGE_SUBSUMPTION_NOT_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-001-knowledge-subsumption/README.md
-    protocol: research/validations/core-001-knowledge-subsumption/protocol.json
-    artifacts: artifacts/experiments/core-validation-001-knowledge-subsumption
-    notebook: research/notebooks/04-continual-learning-core/core-validation-001-knowledge-subsumption.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-001
-    supersedes: null
-    superseded_by: core-validation-001b
-    notes: "Outcome copied from canonical decision.json status."
-
-  - id: core-validation-001b
-    title: Residual Memorization
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: NO_MATERIAL_RESIDUAL_MEMORIZATION_DETECTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-001b-residual-memorization/README.md
-    protocol: research/validations/core-001b-residual-memorization/protocol.json
-    artifacts: artifacts/experiments/core-validation-001b-residual-memorization
-    notebook: research/notebooks/04-continual-learning-core/core-validation-001b-residual-memorization.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-001b
-    supersedes: core-validation-001
-    superseded_by: null
-    notes: "Outcome copied from canonical decision.json status."
-
-  - id: core-validation-002
-    title: Write Addressability
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: WRITE_ADDRESSABILITY_NOT_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-002-write-addressability/README.md
-    protocol: research/validations/core-002-write-addressability/protocol.json
-    artifacts: artifacts/experiments/core-validation-002-write-addressability
-    notebook: research/notebooks/04-continual-learning-core/core-validation-002-write-addressability.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-002
-    supersedes: null
-    superseded_by: core-validation-002b
-    notes: "Frozen No-Go; locality did not provide adequate update fidelity."
-
-  - id: core-validation-002b
-    title: Sparse Write Assembly
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-002b-sparse-write-assembly/README.md
-    protocol: research/validations/core-002b-sparse-write-assembly/protocol.json
-    artifacts: artifacts/experiments/core-validation-002b-sparse-write-assembly
-    notebook: research/notebooks/04-continual-learning-core/core-validation-002b-sparse-write-assembly.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-002b
-    supersedes: core-validation-002
-    superseded_by: core-validation-002c
-    notes: "Frozen No-Go; wider sparse assemblies did not rescue addressable writing."
-
-  - id: core-validation-002c
-    title: Oracle Tomography
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: ORACLE_SPARSE_ASSEMBLY_NOT_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-002c-oracle-tomography/README.md
-    protocol: research/validations/core-002c-oracle-tomography/protocol.json
-    artifacts: artifacts/experiments/core-validation-002c-oracle-tomography
-    notebook: research/notebooks/04-continual-learning-core/core-validation-002c-oracle-tomography.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-002c
-    supersedes: core-validation-002b
-    superseded_by: core-validation-003
-    notes: "Frozen No-Go; does not imply that the representation contains no useful information."
-
-  - id: core-validation-003
-    title: Dependency-Scoped Transactional Learning
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-003-dependency-scoped-transactional-learning/README.md
-    protocol: research/validations/core-003-dependency-scoped-transactional-learning/protocol.json
-    artifacts: artifacts/experiments/core-validation-003-dependency-scoped-transactional-learning
-    notebook: research/notebooks/04-continual-learning-core/core-validation-003-dependency-scoped-transactional-learning.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-003
-    supersedes: core-validation-002c
-    superseded_by: core-validation-004
-    notes: "Frozen overall No-Go; gate-level summaries support mechanistic safety interpretation under registered conditions."
-
-  - id: core-validation-004
-    title: Growth-Restored Plasticity
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: GROWTH_RESTORED_PLASTICITY_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-004-growth-restored-plasticity/README.md
-    protocol: research/validations/core-004-growth-restored-plasticity/protocol.json
-    artifacts: artifacts/experiments/core-validation-004-growth-restored-plasticity
-    notebook: research/notebooks/04-continual-learning-core/core-validation-004-growth-restored-plasticity.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-004
-    supersedes: core-validation-003
-    superseded_by: core-validation-005
-    notes: "Frozen supported result remains unchanged; 005 replaces its learner-visible old-probe safety oracle with a bounded subspace certificate."
-
-  - id: core-validation-005
-    title: Replay-Free Subspace-Certified Mitosis
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: SUBSPACE_CERTIFIED_MITOSIS_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-005-subspace-certified-mitosis/README.md
-    protocol: research/validations/core-005-subspace-certified-mitosis/protocol.json
-    artifacts: artifacts/experiments/core-validation-005-subspace-certified-mitosis
-    notebook: research/notebooks/04-continual-learning-core/core-validation-005-subspace-certified-mitosis.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-005
-    supersedes: core-validation-004
-    superseded_by: core-validation-006
-    notes: "Frozen positive result; 3/3 seeds. In the registered linear-writable, fixed-feature, explicit-routing world, Cell-local Q replaced learner-side historical replay for exact registered-history protection, saturation detection, and bounded reusable growth."
-
-  - id: core-validation-006
-    title: Real-Representation Continual Plasticity
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: REAL_REPRESENTATION_CONTINUAL_PLASTICITY_NOT_SUPPORTED
-    scientific_decision: true
-    canonical: true
-    report: research/validations/core-006-real-representation-continual-plasticity/README.md
-    protocol: research/validations/core-006-real-representation-continual-plasticity/protocol.json
-    artifacts: artifacts/experiments/core-validation-006-real-representation-continual-plasticity
-    notebook: research/notebooks/04-continual-learning-core/core-validation-006-real-representation-continual-plasticity.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-006
-    supersedes: core-validation-005
-    superseded_by: core-validation-007
-    notes: "Frozen formal No-Go; 0/3 seeds. Real Pythia hidden states showed reusable low-dimensional geometry and replay-free certificates reduced registered forgetting while retaining 0.84–0.89x replay gain, but address-based dependency-partitioned mitosis failed to reduce functional conflict and spawned 65.6–68.8% of addresses. Canonical decision/gate summary were recovered after the Kaggle session closed; missing raw/detail artifacts are explicitly documented."
-
-  - id: core-validation-007
-    title: Functional Boundary Discovery
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: CONFIRMATION_V2_PROTOCOL_FROZEN_UNRUN
-    scientific_decision: false
-    canonical: true
-    report: research/validations/core-007-functional-boundary-discovery/README.md
-    protocol: research/validations/core-007-functional-boundary-discovery/protocol.json
-    artifacts: artifacts/experiments/core-validation-007-functional-boundary-discovery
-    notebook: research/notebooks/04-continual-learning-core/core-validation-007-functional-boundary-discovery.ipynb
-    implementation: research/experiments/04-continual-learning-core/core-validation-007
-    supersedes: core-validation-006
-    superseded_by: null
-    notes: "Discovery 80701/80702 is complete and frozen with interference_cut selected. The original confirmation set 80711/80712/80713 is retired after an infrastructure interruption exposed 80711 and started 80712 without durable per-seed checkpoints. Infrastructure-only amendment v1.1 freezes untouched confirmation seeds 80721/80722/80723; winner, model, data, baselines, mechanism and gates are unchanged. Confirmation is now seed-isolated, resumable and published after every seed through the established Kaggle GITHUB_TOKEN/GIT_ASKPASS path."
-
-  - id: stage-language-validation
-    title: "Language Validation: Token-Level Transfer and Scale Readiness"
-    kind: research-stage
-    stage: language-validation
-    outcome: active
-    scientific_decision: false
-    canonical: true
-    report: research/stages/05-language-validation/README.md
-    protocol: null
-    artifacts: null
-    notebook: null
-    implementation: null
-    supersedes: stage-continual-learning-core
-    superseded_by: null
-    notes: "Current stage begins after the controlled synthetic CLM core-loop freeze and tests token-level transfer before 30–50M scaling."
-
-  - id: clm-0.4-mini-language-validation
-    title: CLM-0.4-mini Token-Level Continual-Learning Validation
-    kind: language-validation
-    stage: language-validation
-    outcome: CALIBRATION_BASE_PREREQUISITES_FAILED
-    scientific_decision: false
-    canonical: true
-    report: research/validations/clm-0.4-mini-language-validation/README.md
-    protocol: research/validations/clm-0.4-mini-language-validation/protocol.json
-    artifacts: null
-    notebook: research/notebooks/05-language-validation/clm-0.4-mini-m1-calibration.ipynb
-    implementation: research/experiments/05-language-validation/clm-0.4-mini
-    supersedes: core-validation-004
-    superseded_by: clm-0.4-mini-m1-v2-language-validation
-    notes: "M1-v1 development seed 90401 failed base prerequisites before candidate search; formal seeds remained unopened. Preserved as historical development evidence."
-
-  - id: clm-0.4-mini-m1-v2-language-validation
-    title: CLM-0.4-mini M1-v2 Aligned Token-Level Continual-Learning Validation
-    kind: language-validation
-    stage: language-validation
-    outcome: PROTOCOL_FROZEN_DATA_LOCKED
-    scientific_decision: false
-    canonical: true
-    report: research/validations/clm-0.4-mini-m1-v2-language-validation/README.md
-    protocol: research/validations/clm-0.4-mini-m1-v2-language-validation/protocol.json
-    artifacts: null
-    notebook: research/notebooks/05-language-validation/clm-0.4-mini-m1-v2-calibration.ipynb
-    implementation: research/experiments/05-language-validation/clm-0.4-mini-m1-v2
-    supersedes: clm-0.4-mini-language-validation
-    superseded_by: null
-    notes: "Task-aligned base data, teacher-forced answer-exact admission, route-balanced evaluation, and diagnostic dense baselines. Seed-independent v2 data identity is locked; development seed 90402 and formal seeds 90411/90412/90413 were unobserved when locked."
-
-  - id: shadow-cell-validation-001-v2-developmental-maturation
-    title: "Shadow Cell Validation 001 v2: Developmental Maturation under Copy-on-Write Functional Isolation"
-    kind: core-validation
-    stage: continual-learning-core
-    outcome: REGISTERED_NOT_RUN
-    scientific_decision: false
-    canonical: true
-    report: research/validations/shadow-cell-validation-001-v2-developmental-maturation/README.md
-    protocol: research/validations/shadow-cell-validation-001-v2-developmental-maturation/protocol.json
-    artifacts: results/shadow-cell-validation-001-v2-developmental-maturation
-    notebook: research/notebooks/04-continual-learning-core/shadow-cell-validation-001-v2.ipynb
-    implementation: research/validations/shadow-cell-validation-001-v2-developmental-maturation/implementation.json
-    supersedes: null
-    superseded_by: null
-    notes: "Registered but unrun. Tests isolated full-width Shadow capacity, maturity frontier selection, replay-free bounded sketch state, and corrected realized-AdamW direct-write protection. Formal seeds are 95311/95312/95313; v1 is linked as an immutable historical parent path."
-
-  - id: stage-hybrid-clm
-    title: "HybridCLM: Reversible Cell Mutations on a Pretrained MoE"
-    kind: research-stage
-    stage: hybrid-clm
-    outcome: ENGINEERING_EVIDENCE_FORMAL_VALIDATION_PENDING
-    scientific_decision: false
-    canonical: true
-    report: research/stages/08-hybrid-clm/README.md
-    protocol: null
-    artifacts: artifacts/releases/hybrid-clm-v0.1
-    notebook: notebooks/kaggle/hybrid_clm_quickstart.ipynb
-    implementation: src/minicells/hybrid
-    supersedes: stage-language-validation
-    superseded_by: null
-    notes: "Public API and Granite backend are engineering deliverables. PCU Hybrid Reattachment 001 v3 remains an engineering boundary; formal HybridCLM execution has not started."
+- id: stage-foundations
+  title: 'Foundations: Echo, NCA Language Dynamics, and Training Mechanics'
+  kind: research-stage
+  stage: foundations
+  outcome: historical
+  scientific_decision: false
+  canonical: true
+  report: research/01-foundations/hypothesis/README.md
+  protocol: null
+  artifacts: research/01-foundations/experiments
+  notebook: research/01-foundations/experiments/001-echo/notebook.ipynb
+  implementation: src/minicells
+  supersedes: null
+  superseded_by: stage-self-organization
+  notes: Experiments roughly 001–013; individual historical outcomes remain in canonical
+    artifacts.
+- id: stage-self-organization
+  title: 'Self-Organization: Tissue Formation, Recruitment, Differentiation, and Trait
+    Genesis'
+  kind: research-stage
+  stage: self-organization
+  outcome: historical
+  scientific_decision: false
+  canonical: true
+  report: research/02-self-organization/hypothesis/README.md
+  protocol: null
+  artifacts: research/02-self-organization/experiments
+  notebook: research/02-self-organization/experiments/014-multiseed-core-recipe/notebook.ipynb
+  implementation: src/minicells
+  supersedes: stage-foundations
+  superseded_by: stage-routing-and-growth
+  notes: Experiments roughly 014–024; emergence is not classified as validated continual
+    learning.
+- id: stage-routing-and-growth
+  title: 'Sparse Routing and Growth: From Cellular Dynamics to Independently Mutable
+    Cells'
+  kind: research-stage
+  stage: routing-and-growth
+  outcome: historical
+  scientific_decision: false
+  canonical: true
+  report: research/03-routing-and-growth/hypothesis/README.md
+  protocol: null
+  artifacts: research/03-routing-and-growth/experiments
+  notebook: research/03-routing-and-growth/experiments/025-story-math-growth/notebook.ipynb
+  implementation: src/minicells
+  supersedes: stage-self-organization
+  superseded_by: stage-continual-learning-core
+  notes: Covers experiments 025/026 and CLM routing, growth, mitosis, and sparse-runtime
+    studies.
+- id: core-validation-001
+  title: Knowledge Subsumption
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: KNOWLEDGE_SUBSUMPTION_NOT_SUPPORTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-001-knowledge-subsumption/validation/core-001-knowledge-subsumption/README.md
+  protocol: research/04-continual-learning/experiments/core-001-knowledge-subsumption/validation/core-001-knowledge-subsumption/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-001-knowledge-subsumption/artifacts
+  notebook: research/04-continual-learning/experiments/core-001-knowledge-subsumption/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-001-knowledge-subsumption/implementation/adapter
+  supersedes: null
+  superseded_by: core-validation-001b
+  notes: Outcome copied from canonical decision.json status.
+- id: core-validation-001b
+  title: Residual Memorization
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: NO_MATERIAL_RESIDUAL_MEMORIZATION_DETECTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-001b-residual-memorization/validation/core-001b-residual-memorization/README.md
+  protocol: research/04-continual-learning/experiments/core-001b-residual-memorization/validation/core-001b-residual-memorization/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-001b-residual-memorization/artifacts
+  notebook: research/04-continual-learning/experiments/core-001b-residual-memorization/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-001b-residual-memorization/implementation/adapter
+  supersedes: core-validation-001
+  superseded_by: null
+  notes: Outcome copied from canonical decision.json status.
+- id: core-validation-002
+  title: Write Addressability
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: WRITE_ADDRESSABILITY_NOT_SUPPORTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-002-write-addressability/validation/core-002-write-addressability/README.md
+  protocol: research/04-continual-learning/experiments/core-002-write-addressability/validation/core-002-write-addressability/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-002-write-addressability/artifacts
+  notebook: research/04-continual-learning/experiments/core-002-write-addressability/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-002-write-addressability/implementation/adapter
+  supersedes: null
+  superseded_by: core-validation-002b
+  notes: Frozen No-Go; locality did not provide adequate update fidelity.
+- id: core-validation-002b
+  title: Sparse Write Assembly
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: SPARSE_WRITE_ASSEMBLY_NOT_SUPPORTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-002b-sparse-write-assembly/validation/core-002b-sparse-write-assembly/README.md
+  protocol: research/04-continual-learning/experiments/core-002b-sparse-write-assembly/validation/core-002b-sparse-write-assembly/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-002b-sparse-write-assembly/artifacts
+  notebook: research/04-continual-learning/experiments/core-002b-sparse-write-assembly/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-002b-sparse-write-assembly/implementation/adapter
+  supersedes: core-validation-002
+  superseded_by: core-validation-002c
+  notes: Frozen No-Go; wider sparse assemblies did not rescue addressable writing.
+- id: core-validation-002c
+  title: Oracle Tomography
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: ORACLE_SPARSE_ASSEMBLY_NOT_SUPPORTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-002c-oracle-tomography/validation/core-002c-oracle-tomography/README.md
+  protocol: research/04-continual-learning/experiments/core-002c-oracle-tomography/validation/core-002c-oracle-tomography/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-002c-oracle-tomography/artifacts
+  notebook: research/04-continual-learning/experiments/core-002c-oracle-tomography/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-002c-oracle-tomography/implementation/adapter
+  supersedes: core-validation-002b
+  superseded_by: core-validation-003
+  notes: Frozen No-Go; does not imply that the representation contains no useful information.
+- id: core-validation-003
+  title: Dependency-Scoped Transactional Learning
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: DEPENDENCY_SCOPED_TRANSACTIONAL_LEARNING_NOT_SUPPORTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-003-dependency-scoped-transactional-learning/validation/core-003-dependency-scoped-transactional-learning/README.md
+  protocol: research/04-continual-learning/experiments/core-003-dependency-scoped-transactional-learning/validation/core-003-dependency-scoped-transactional-learning/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-003-dependency-scoped-transactional-learning/artifacts
+  notebook: research/04-continual-learning/experiments/core-003-dependency-scoped-transactional-learning/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-003-dependency-scoped-transactional-learning/implementation/adapter
+  supersedes: core-validation-002c
+  superseded_by: core-validation-004
+  notes: Frozen overall No-Go; gate-level summaries support mechanistic safety interpretation
+    under registered conditions.
+- id: core-validation-004
+  title: Growth-Restored Plasticity
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: GROWTH_RESTORED_PLASTICITY_SUPPORTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-004-growth-restored-plasticity/validation/core-004-growth-restored-plasticity/README.md
+  protocol: research/04-continual-learning/experiments/core-004-growth-restored-plasticity/validation/core-004-growth-restored-plasticity/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-004-growth-restored-plasticity/artifacts
+  notebook: research/04-continual-learning/experiments/core-004-growth-restored-plasticity/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-004-growth-restored-plasticity/implementation/adapter
+  supersedes: core-validation-003
+  superseded_by: core-validation-005
+  notes: Frozen supported result remains unchanged; 005 replaces its learner-visible
+    old-probe safety oracle with a bounded subspace certificate.
+- id: core-validation-005
+  title: Replay-Free Subspace-Certified Mitosis
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: SUBSPACE_CERTIFIED_MITOSIS_SUPPORTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-005-subspace-certified-mitosis/validation/core-005-subspace-certified-mitosis/README.md
+  protocol: research/04-continual-learning/experiments/core-005-subspace-certified-mitosis/validation/core-005-subspace-certified-mitosis/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-005-subspace-certified-mitosis/artifacts
+  notebook: research/04-continual-learning/experiments/core-005-subspace-certified-mitosis/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-005-subspace-certified-mitosis/implementation/adapter
+  supersedes: core-validation-004
+  superseded_by: core-validation-006
+  notes: Frozen positive result; 3/3 seeds. In the registered linear-writable, fixed-feature,
+    explicit-routing world, Cell-local Q replaced learner-side historical replay for
+    exact registered-history protection, saturation detection, and bounded reusable
+    growth.
+- id: core-validation-006
+  title: Real-Representation Continual Plasticity
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: REAL_REPRESENTATION_CONTINUAL_PLASTICITY_NOT_SUPPORTED
+  scientific_decision: true
+  canonical: true
+  report: research/04-continual-learning/experiments/core-006-real-representation-continual-plasticity/validation/core-006-real-representation-continual-plasticity/README.md
+  protocol: research/04-continual-learning/experiments/core-006-real-representation-continual-plasticity/validation/core-006-real-representation-continual-plasticity/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-006-real-representation-continual-plasticity/artifacts
+  notebook: research/04-continual-learning/experiments/core-006-real-representation-continual-plasticity/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-006-real-representation-continual-plasticity/implementation/adapter
+  supersedes: core-validation-005
+  superseded_by: core-validation-007
+  notes: Frozen formal No-Go; 0/3 seeds. Real Pythia hidden states showed reusable
+    low-dimensional geometry and replay-free certificates reduced registered forgetting
+    while retaining 0.84–0.89x replay gain, but address-based dependency-partitioned
+    mitosis failed to reduce functional conflict and spawned 65.6–68.8% of addresses.
+    Canonical decision/gate summary were recovered after the Kaggle session closed;
+    missing raw/detail artifacts are explicitly documented.
+- id: core-validation-007
+  title: Functional Boundary Discovery
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: CONFIRMATION_V2_PROTOCOL_FROZEN_UNRUN
+  scientific_decision: false
+  canonical: true
+  report: research/04-continual-learning/experiments/core-007-functional-boundary-discovery/validation/core-007-functional-boundary-discovery/README.md
+  protocol: research/04-continual-learning/experiments/core-007-functional-boundary-discovery/validation/core-007-functional-boundary-discovery/protocol.json
+  artifacts: research/04-continual-learning/experiments/core-007-functional-boundary-discovery/artifacts
+  notebook: research/04-continual-learning/experiments/core-007-functional-boundary-discovery/notebook.ipynb
+  implementation: research/04-continual-learning/experiments/core-007-functional-boundary-discovery/implementation/adapter
+  supersedes: core-validation-006
+  superseded_by: null
+  notes: Discovery 80701/80702 is complete and frozen with interference_cut selected.
+    The original confirmation set 80711/80712/80713 is retired after an infrastructure
+    interruption exposed 80711 and started 80712 without durable per-seed checkpoints.
+    Infrastructure-only amendment v1.1 freezes untouched confirmation seeds 80721/80722/80723;
+    winner, model, data, baselines, mechanism and gates are unchanged. Confirmation
+    is now seed-isolated, resumable and published after every seed through the established
+    Kaggle GITHUB_TOKEN/GIT_ASKPASS path.
+- id: stage-language-validation
+  title: 'Language Validation: Token-Level Transfer and Scale Readiness'
+  kind: research-stage
+  stage: language-validation
+  outcome: active
+  scientific_decision: false
+  canonical: true
+  report: research/05-language-validation/hypothesis/README.md
+  protocol: null
+  artifacts: null
+  notebook: null
+  implementation: null
+  supersedes: stage-continual-learning-core
+  superseded_by: null
+  notes: Current stage begins after the controlled synthetic CLM core-loop freeze
+    and tests token-level transfer before 30–50M scaling.
+- id: clm-0.4-mini-language-validation
+  title: CLM-0.4-mini Token-Level Continual-Learning Validation
+  kind: language-validation
+  stage: language-validation
+  outcome: CALIBRATION_BASE_PREREQUISITES_FAILED
+  scientific_decision: false
+  canonical: true
+  report: research/05-language-validation/experiments/clm-0.4-mini-language-validation/validation/clm-0.4-mini-language-validation/README.md
+  protocol: research/05-language-validation/experiments/clm-0.4-mini-language-validation/validation/clm-0.4-mini-language-validation/protocol.json
+  artifacts: null
+  notebook: research/05-language-validation/experiments/clm-0.4-mini-m1-calibration/notebook.ipynb
+  implementation: research/05-language-validation/experiments/clm-0.4-mini
+  supersedes: core-validation-004
+  superseded_by: clm-0.4-mini-m1-v2-language-validation
+  notes: M1-v1 development seed 90401 failed base prerequisites before candidate search;
+    formal seeds remained unopened. Preserved as historical development evidence.
+- id: clm-0.4-mini-m1-v2-language-validation
+  title: CLM-0.4-mini M1-v2 Aligned Token-Level Continual-Learning Validation
+  kind: language-validation
+  stage: language-validation
+  outcome: PROTOCOL_FROZEN_DATA_LOCKED
+  scientific_decision: false
+  canonical: true
+  report: research/05-language-validation/experiments/clm-0.4-mini-m1-v2-language-validation/validation/clm-0.4-mini-m1-v2-language-validation/README.md
+  protocol: research/05-language-validation/experiments/clm-0.4-mini-m1-v2-language-validation/validation/clm-0.4-mini-m1-v2-language-validation/protocol.json
+  artifacts: null
+  notebook: research/05-language-validation/experiments/clm-0.4-mini-m1-v2-calibration/notebook.ipynb
+  implementation: research/05-language-validation/experiments/clm-0.4-mini-m1-v2
+  supersedes: clm-0.4-mini-language-validation
+  superseded_by: null
+  notes: Task-aligned base data, teacher-forced answer-exact admission, route-balanced
+    evaluation, and diagnostic dense baselines. Seed-independent v2 data identity
+    is locked; development seed 90402 and formal seeds 90411/90412/90413 were unobserved
+    when locked.
+- id: shadow-cell-validation-001-v2-developmental-maturation
+  title: 'Shadow Cell Validation 001 v2: Developmental Maturation under Copy-on-Write
+    Functional Isolation'
+  kind: core-validation
+  stage: continual-learning-core
+  outcome: REGISTERED_NOT_RUN
+  scientific_decision: false
+  canonical: true
+  report: research/06-native-clm/experiments/shadow-cell-validation-001-v2-developmental-maturation/validation/shadow-cell-validation-001-v2-developmental-maturation/README.md
+  protocol: research/06-native-clm/experiments/shadow-cell-validation-001-v2-developmental-maturation/validation/shadow-cell-validation-001-v2-developmental-maturation/protocol.json
+  artifacts: research/04-continual-learning/experiments
+  notebook: research/04-continual-learning/experiments/shadow-cell-validation-001-v2-developmental-maturation/notebook.ipynb
+  implementation: research/06-native-clm/experiments/shadow-cell-validation-001-v2-developmental-maturation/validation/shadow-cell-validation-001-v2-developmental-maturation/implementation.json
+  supersedes: null
+  superseded_by: null
+  notes: Registered but unrun. Tests isolated full-width Shadow capacity, maturity
+    frontier selection, replay-free bounded sketch state, and corrected realized-AdamW
+    direct-write protection. Formal seeds are 95311/95312/95313; v1 is linked as an
+    immutable historical parent path.
+- id: stage-hybrid-clm
+  title: 'HybridCLM: Reversible Cell Mutations on a Pretrained MoE'
+  kind: research-stage
+  stage: hybrid-clm
+  outcome: ENGINEERING_EVIDENCE_FORMAL_VALIDATION_PENDING
+  scientific_decision: false
+  canonical: true
+  report: research/08-hybrid-clm/hypothesis/README.md
+  protocol: null
+  artifacts: research/08-hybrid-clm/experiments
+  notebook: notebooks/kaggle/hybrid_clm_quickstart.ipynb
+  implementation: src/minicells/hybrid
+  supersedes: stage-language-validation
+  superseded_by: null
+  notes: Public API and Granite backend are engineering deliverables. PCU Hybrid Reattachment
+    001 v3 remains an engineering boundary; formal HybridCLM execution has not started.

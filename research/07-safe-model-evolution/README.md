@@ -1,13 +1,19 @@
-# 07 — Safe Model Evolution
+# 07-safe-model-evolution
 
-**Purpose:** real-model evolution, historical supervision, safe mutation,
-composition and rollback.
+**Research scope:** Safe mutation and evolution in real pretrained models.
 
-This is the project-first landing page for Safe Model Evolution. Existing
-protocols and result directories remain canonical during Phase 1. See
-[`../MIGRATION_MAP.md`](../MIGRATION_MAP.md) before restructuring a registered
-workflow.
+## Research question
 
-Current source families: `../stages/07-safe-model-evolution/`,
-`../notebooks/07-safe-model-evolution/`, matching validations, project scripts
-and durable artifacts. Frozen protocol gates continue to define the claims.
+Can a pretrained model be safely and locally evolved while preserving registered behavior?
+
+## Contents
+
+- [Hypothesis and stage context](hypothesis/README.md)
+- [Experiment index](experiments/README.md)
+- [Project conclusion](conclusion.md)
+- [Project-owned research runners](scripts/)
+- [Project datasets](datasets/)
+
+## Evidence discipline
+
+Frozen protocols, decisions, source identities and run bytes are preserved. Historical path shims point to these canonical project files. Scientific status comes from registered protocols and result decisions, not from folder names or notebook narratives. See the [research-wide governance and audits](../README.md).
