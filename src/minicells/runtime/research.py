@@ -12,10 +12,10 @@ from pathlib import Path
 from minicells.research.config import ROOT, digest, dump, load_definition
 
 
-def run(definition, assets, manifest_sha256, seed, output, source_commit):
+def run(definition, assets, manifest_sha256, seed, output, source_commit, session=None):
     descriptor, config, protocol = load_definition(definition)
-    if descriptor['runtime'] != 'routing-003':
-        raise ValueError('Historical experiments are archived; 004 is not registered')
+    if descriptor['runtime'] not in {'routing-003', 'routing-004'}:
+        raise ValueError('Historical experiments are archived')
     if seed not in config['seeds']:
         raise ValueError('Seed outside registered development matrix')
     os.environ['MINICELLS_RESEARCH_CONFIG'] = str(ROOT / descriptor['config'])
@@ -27,13 +27,18 @@ def run(definition, assets, manifest_sha256, seed, output, source_commit):
     from minicells.research.report import generate
     import torch
     config['seed'] = seed
+    if descriptor['runtime'] == 'routing-004':
+        from minicells.training.graph_trainer import configure
+        configure(config, session)
+    elif session is not None:
+        raise ValueError('Session selection only applies to 004')
     capacities = validate(config)
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     started = float(os.environ.get('EXPERIMENT_STARTED_AT', time.time()))
     deadline = started + min(config['session_budget_seconds'], 3300)
     provenance = {'schema_version': 2, 'experiment': descriptor['id'], 'source_commit': source_commit,
-                  'seed': seed, 'scientific_decision': False, 'capacities': capacities,
+                  'seed': seed, 'session': session, 'scientific_decision': False, 'capacities': capacities,
                   'config_sha256': digest(ROOT / descriptor['config']), 'protocol_sha256': digest(protocol),
                   'definition_sha256': digest(definition), 'assets_manifest_sha256': manifest_sha256,
                   'torch': torch.__version__, 'python': sys.version,
@@ -58,7 +63,12 @@ def run(definition, assets, manifest_sha256, seed, output, source_commit):
     except Exception:
         (output / 'error.txt').write_text(traceback.format_exc())
     # The frozen 003 gates are unchanged. Incomplete evidence is still archived.
-    decision = report(output)
+    if descriptor['runtime'] == 'routing-004':
+        from minicells.research.graph_report import summarize_session, visualize
+        decision = summarize_session(output, config)
+        generate = visualize
+    else:
+        decision = report(output)
     dump(output / 'experiment.json', {**provenance, 'status': decision['status'],
                                       'elapsed_seconds': time.time() - started})
     try:
@@ -67,7 +77,7 @@ def run(definition, assets, manifest_sha256, seed, output, source_commit):
         (output / 'report-error.txt').write_text(traceback.format_exc())
     checksums = {str(p.relative_to(output)): digest(p) for p in output.rglob('*')
                  if p.is_file() and p.suffix != '.pt'}
-    dump(output / 'evidence-manifest.json', {'source_commit': source_commit, 'seed': seed,
+    dump(output / 'evidence-manifest.json', {'source_commit': source_commit, 'seed': seed, 'session': session,
          'definition_sha256': provenance['definition_sha256'], 'config_sha256': provenance['config_sha256'],
          'protocol_sha256': provenance['protocol_sha256'], 'assets_manifest_sha256': manifest_sha256,
          'scientific_decision': False, 'files': checksums})
@@ -83,8 +93,9 @@ def main():
     parser.add_argument('--seed', type=int, required=True)
     parser.add_argument('--source-commit', required=True)
     parser.add_argument('--output', required=True)
+    parser.add_argument('--session', choices=['reference','graph'])
     args = parser.parse_args()
-    run(args.definition, args.assets, args.assets_sha256, args.seed, args.output, args.source_commit)
+    run(args.definition, args.assets, args.assets_sha256, args.seed, args.output, args.source_commit, session=args.session)
 
 
 if __name__ == '__main__':

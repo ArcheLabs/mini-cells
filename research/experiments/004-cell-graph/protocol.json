@@ -1,0 +1,85 @@
+{
+  "experiment_id": "004-cell-graph",
+  "version": "1.0",
+  "status": "registered_unrun",
+  "scientific_decision": false,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "seed_scope": "paired development 42/43/44; no untouched confirmation claim",
+  "models": [
+    "fixed-cell",
+    "global-router",
+    "soft-cell",
+    "hard-cell",
+    "graph-cell"
+  ],
+  "train_tokens_per_arm": 10000000,
+  "capacity_tolerance_fraction": 0.01,
+  "architecture": "003 shared causal Transformer backbone; eight residual FFN Cells per layer, entry Cell0, max four visits, absorbing STOP. Each Cell retains its contextual head; additive persistent 8x9 graph prior per layer. A full Transformer inside every Cell is a different architecture and is not claimed.",
+  "graph_backup_k": 2,
+  "graph_prior": "unconstrained learned logits T[i,j], including STOP; p(next|state,i)=softmax((context_head_i(state)+T[i,:])/temperature). No fixed inference edge pruning.",
+  "schedule": {
+    "soft_fraction": 0.25,
+    "anneal_fraction": 0.25,
+    "hard_fraction": 0.5,
+    "temperature_start": 2.0,
+    "temperature_end": 0.1,
+    "hard_gradient": "hard forward selected branch; backward renormalized top-2 mixture evaluated at shared incoming state; STOP identity participates. All selected and backup compute weights get gradients. Unselected outside top-2 do not. Biased STE, training cost exceeds hard inference. Clamp each retained probability to >=0.05 before renormalization; floor affects only surrogate backward, never selected forward."
+  },
+  "sessions": {
+    "reference": {
+      "queues": [
+        [
+          "soft-cell",
+          "fixed-cell"
+        ],
+        [
+          "global-router"
+        ]
+      ]
+    },
+    "graph": {
+      "queues": [
+        [
+          "graph-cell"
+        ],
+        [
+          "hard-cell"
+        ]
+      ]
+    }
+  },
+  "arm_budget_seconds": {
+    "fixed-cell": 850,
+    "global-router": 850,
+    "soft-cell": 1850,
+    "hard-cell": 1850,
+    "graph-cell": 3000
+  },
+  "session_seconds": 3300,
+  "server_seconds": 3600,
+  "evaluation_reserved_per_arm_seconds": 180,
+  "sessions_per_seed": 2,
+  "matrix_sessions": 6,
+  "execution": "dual T4 independent queues; alternate placement by seed; reference=soft+fixed / global; graph=graph / hard. Same source/input hashes across sessions and all seeds required. Each arm 10M tokens. CPU preparation outside GPU session.",
+  "measurement": {
+    "flops": "observed forward GEMM FLOPs over full paired validation, includes attention math GEMMs; excludes non-matmul and backward; graph hard inference excludes training backups",
+    "latency": "existing resident-batch 5 warmup/20 synchronized measurements; common SDPA math backend",
+    "path_entropy": "empirical H of full per-layer hard paths, including STOP/FORCED_STOP, across all 32000 paired validation tokens; layer means compared",
+    "graph_sparsity": "empirical learned edge support fraction includes STOP, excludes FORCED_STOP; prior active-edge fraction threshold p>=0.05 separately; softmax prior not structurally zero",
+    "specialization": "plug-in I(Cell;input-token-id) for non-entry executed visits; descriptive, finite-sample biased, does not prove semantic specialization"
+  },
+  "gates": {
+    "A": "mean_layer(H_path_graph) < mean_layer(H_path_hard)",
+    "B": "graph validation PPL <= 13.0",
+    "C": "graph measured GEMM FLOPs/token < 0.50 * fixed-cell measured GEMM FLOPs/token",
+    "anti_collapse": "at least 2 distinct hard paths and 2 utilized non-entry Cells per layer; lower entropy alone is not support"
+  },
+  "decision": "all five full-budget arms, same hashes and validation size, capacity match, and all A/B/C/anti-collapse must pass for EACH of all 3 seeds; incomplete blocks support. Development only.",
+  "claim_boundary": "joint graph-prior + backup-gradient intervention versus 003 selected-only STE; no causal isolation of topology, no universal superiority, no formal confirmation; descriptive MI cannot establish learned semantic modules.",
+  "failure_policy": "immutable partial archives; timeouts/OOM/missing metrics remain incomplete; never expand session cap or silently reduce token budget",
+  "graph_backup_floor": 0.05
+}

@@ -9,6 +9,15 @@ on:
       seed:
         type: string
         default: "123"
+      assets_manifest_sha256:
+        type: string
+        default: ""
+      source_commit:
+        type: string
+        default: ""
+      session:
+        type: string
+        default: "reference"
       execute:
         type: boolean
         default: false
@@ -25,8 +34,23 @@ on:
       seed:
         description: Development seed; observed seeds remain development evidence
         type: choice
-        options: ["42", "123", "456"]
+        options: ["42", "43", "44", "123", "456"]
         default: "123"
+      assets_manifest_sha256:
+        description: "Reuse the first session Dataset manifest SHA for the entire paired matrix"
+        type: string
+        required: false
+        default: ""
+      source_commit:
+        description: "Same full source SHA for every 004 session/seed; blank uses workflow commit"
+        type: string
+        required: false
+        default: ""
+      session:
+        description: "004 only: reference (soft/fixed/global) or graph (graph/hard); run both per seed"
+        type: choice
+        options: ["reference", "graph"]
+        default: "reference"
       execute:
         description: Start the registered GPU run; false prepares an offline notebook only
         type: boolean
@@ -49,11 +73,34 @@ jobs:
       PYTHONPATH: src:.
       EXPERIMENT: ${{ inputs.experiment }}
       SEED: ${{ inputs.seed }}
+      SESSION: ${{ inputs.session }}
+      ASSETS_MANIFEST: ${{ inputs.assets_manifest_sha256 }}
+      REQUESTED_SOURCE: ${{ inputs.source_commit || github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Validate pinned source identity
+        run: |
+          python - <<'PY'
+          import os, re
+          if not re.fullmatch('[0-9a-f]{40}', os.environ['REQUESTED_SOURCE']):
+              raise SystemExit('source_commit must be a full lowercase Git SHA')
+          if os.environ['ASSETS_MANIFEST'] and not re.fullmatch('[0-9a-f]{64}', os.environ['ASSETS_MANIFEST']):
+              raise SystemExit('assets_manifest_sha256 must be a full lowercase SHA256')
+          PY
+      - uses: actions/checkout@v4
+        if: ${{ inputs.experiment == '003' || inputs.experiment == '004' }}
+        with:
+          ref: ${{ inputs.source_commit || github.sha }}
+          path: experiment-source
+          persist-credentials: false
+      - name: Record actual source commit
+        if: ${{ inputs.experiment == '003' || inputs.experiment == '004' }}
+        run: |
+          source_sha="$(git -C experiment-source rev-parse HEAD)"
+          echo "SOURCE_SHA=$source_sha" >> "$GITHUB_ENV"
       - name: Resolve research definition
         run: |
           python - <<'PY'
@@ -64,11 +111,15 @@ jobs:
           definition = Path(entry['directory']) / 'experiment.yaml'
           if entry['status'] == 'planned':
               raise SystemExit('Experiment 004 is planned. Register its scientific protocol before execution.')
+          if os.environ['EXPERIMENT'] in ('003','004'):
+              config = json.loads(Path(json.loads(definition.read_text())['config']).read_text())
+              if int(os.environ['SEED']) not in config['seeds']:
+                  raise SystemExit('Seed outside registered experiment matrix')
           with Path(os.environ['GITHUB_ENV']).open('a') as handle:
               handle.write('DEFINITION=' + str(definition) + '\n')
           PY
       - name: Preserve historical notebooks
-        if: ${{ inputs.experiment != '003' }}
+        if: ${{ inputs.experiment != '003' && inputs.experiment != '004' }}
         run: |
           python - <<'PY'
           import json, os, shutil
@@ -81,19 +132,35 @@ jobs:
               raise SystemExit('Historical 001/002 are archive records; use their original frozen launcher for explicit reproduction.')
           PY
       - name: Install pinned CPU preparation dependencies
-        if: ${{ inputs.experiment == '003' }}
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') }}
         run: |
           python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
           python -m pip install 'kaggle==2.2.4' 'numpy==2.0.2' 'datasets==4.0.0' 'tokenizers==0.21.4' 'matplotlib==3.10.6'
       - name: Prepare fixed assets on CPU
-        if: ${{ inputs.experiment == '003' }}
-        run: python kaggle/prepare_assets.py --definition "$DEFINITION" --output prepared-assets
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.assets_manifest_sha256 == '' }}
+        working-directory: experiment-source
+        run: python kaggle/prepare_assets.py --definition "$DEFINITION" --output ../prepared-assets
+      - name: Reuse the exact existing immutable Dataset
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.assets_manifest_sha256 != '' }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          checksum = os.environ['ASSETS_MANIFEST']
+          Path('prepared-assets').mkdir()
+          Path('prepared-assets/input-reference.json').write_text(json.dumps({'dataset_id':'bingjiangli/minicells-assets-'+checksum[:20], 'assets_manifest_sha256':checksum, 'immutable_snapshot':True})+'\n')
+          PY
       - name: Upload immutable Dataset before GPU work
-        if: ${{ inputs.experiment == '003' && inputs.execute }}
-        run: python kaggle/upload_assets.py prepared-assets
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && inputs.assets_manifest_sha256 == '' }}
+        working-directory: experiment-source
+        run: python kaggle/upload_assets.py ../prepared-assets
       - name: Prepare notebook with embedded source and fixed Dataset
-        if: ${{ inputs.experiment == '003' }}
-        run: python kaggle/submit.py --commit "$GITHUB_SHA" --seed "$SEED" --definition "$DEFINITION" --input-reference prepared-assets/input-reference.json --output prepared-notebook
+        working-directory: experiment-source
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') }}
+        run: |
+          extra=()
+          if [ "$EXPERIMENT" = "004" ]; then extra+=(--session "$SESSION"); fi
+          python kaggle/submit.py --commit "$SOURCE_SHA" --seed "$SEED" --definition "$DEFINITION" --input-reference ../prepared-assets/input-reference.json --output ../prepared-notebook "${extra[@]}"
       - name: Preserve notebook and source identity
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
@@ -111,11 +178,25 @@ jobs:
           if-no-files-found: warn
       - name: Run original Kaggle kernel and download its exact version
         id: gpu
-        if: ${{ inputs.experiment == '003' && inputs.execute }}
+        if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute }}
         run: python kaggle/run_remote.py --prepared prepared-notebook --output kaggle-output
+      - name: Restore cumulative 004 evidence before collection
+        if: ${{ always() && inputs.experiment == '004' && inputs.execute && steps.gpu.outcome != 'skipped' }}
+        run: |
+          test -f prepared-notebook/push.json
+          branch="results/cell-graph-${SOURCE_SHA:0:12}"
+          if git ls-remote --exit-code --heads origin "$branch" > /dev/null; then
+            git fetch origin "refs/heads/$branch"
+            git switch -c "$branch" FETCH_HEAD
+          else
+            code=$?
+            if [ "$code" != "2" ]; then exit "$code"; fi
+            git switch -c "$branch"
+          fi
+          echo "RESULTS_BRANCH=$branch" >> "$GITHUB_ENV"
       - name: Verify returned evidence and archive incomplete results too
         id: collect
-        if: ${{ always() && inputs.experiment == '003' && inputs.execute && steps.gpu.outcome != 'skipped' }}
+        if: ${{ always() && (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && steps.gpu.outcome != 'skipped' }}
         run: |
           python - <<'PY'
           import json, os
@@ -155,8 +236,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          branch="results/pipeline-v2-$GITHUB_RUN_ID"
-          git switch -c "$branch"
+          branch="${RESULTS_BRANCH:-results/pipeline-v2-$GITHUB_RUN_ID}"
+          if [ "$EXPERIMENT" != "004" ]; then git switch -c "$branch"; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add research/artifacts research/registry.yaml
@@ -166,4 +247,9 @@ jobs:
           from pathlib import Path
           Path('archive-pr.md').write_text('Verified source/config/protocol/input and result hashes. Includes incomplete or negative development evidence. Frozen decision retained. Checkpoints are stored separately.\n')
           PY
-          gh pr create --base main --head "$branch" --title "research: pipeline v2 experiment $EXPERIMENT seed $SEED" --body-file archive-pr.md
+          existing="$(gh pr list --state open --head "$branch" --json url --jq '.[0].url // empty')"
+          if [ -z "$existing" ]; then
+            gh pr create --base main --head "$branch" --title "research: pipeline v2 experiment $EXPERIMENT" --body-file archive-pr.md
+          else
+            printf '%s\n' "$existing"
+          fi

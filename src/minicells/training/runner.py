@@ -23,10 +23,15 @@ from minicells.models.routing_research import LanguageModel
 from minicells.training.stages import stage
 from minicells.training.evidence import assess
 from minicells.utils.research_report import ROOT, CONFIG, PROTOCOL, report
+if json.loads(CONFIG.read_text()).get('experiment_id') == '004-cell-graph':
+    from minicells.models.graph_cell import LanguageModel
 
 
 def validate(config):
     protocol = json.loads(PROTOCOL.read_text())
+    if config['experiment_id'] == '004-cell-graph':
+        from minicells.training.graph_trainer import validate as validate_graph
+        return validate_graph(config, protocol)
     if (config['models'] != protocol['models'] or config['seeds'] != protocol['seeds']
             or config['train_tokens'] != protocol['train_tokens_per_arm']
             or config['seed'] not in config['seeds']):
@@ -71,7 +76,8 @@ def train_arm(kind, config, data, output, deadline):
     directory = output / kind
     directory.mkdir(exist_ok=False)
     started, train_seconds, completed = time.time(), 0.0, 0
-    budget = config['long_arm_budget_seconds'] if kind in {'soft-cell', 'hard-cell'} else config['baseline_budget_seconds']
+    budget = (config['arm_budget_seconds'][kind] if 'arm_budget_seconds' in config else
+              config['long_arm_budget_seconds'] if kind in {'soft-cell', 'hard-cell', 'graph-cell'} else config['baseline_budget_seconds'])
     arm_deadline = min(deadline, started + budget)
     training_deadline = arm_deadline - config['evaluation_reserve_seconds']
     metrics = {'model': kind, 'seed': config['seed'], 'status': 'incomplete',
@@ -119,17 +125,20 @@ def train_arm(kind, config, data, output, deadline):
                 routers = model.routing_modules()
                 paths = [router.last_path_length for router in routers if hasattr(router, 'last_path_length')]
                 entropy = [router.last_entropy for router in routers if getattr(router, 'last_entropy', None) is not None]
-                row = {'step': step, 'tokens': step * tokens_per_step, 'loss': float(nll.detach()),
+                training_visits = [router.last_training_cell_visits for router in routers
+                                   if getattr(router, 'last_training_cell_visits', None) is not None]
+                row = {'training_cell_visits_per_token': sum(training_visits) / len(training_visits) if training_visits and phase == 'hard' else None,
+                       'step': step, 'tokens': step * tokens_per_step, 'loss': float(nll.detach()),
                        'ppl': math.exp(min(float(nll.detach()), 80)), 'stage': phase, 'temperature': temperature,
                        'path_length': float(torch.stack(paths).mean()) if paths else (4 if kind == 'fixed-cell' else 1),
                        'entropy': float(torch.stack(entropy).mean()) if entropy else None,
                        'route_entropy': float(torch.stack(entropy).mean()) if entropy else None,
                        'lr': optimizer.param_groups[0]['lr'],
-                       'active_cells': (float(torch.stack(paths).mean()) if kind == 'hard-cell' and phase == 'hard' and paths
+                       'active_cells': (float(torch.stack(paths).mean()) if kind in {'hard-cell', 'graph-cell'} and phase == 'hard' and paths
                                         else 1 + config['experts'] * (config['max_hops'] - 1)
-                                        if kind in {'soft-cell', 'hard-cell'} else config['top_k'] if kind == 'global-router'
+                                        if kind in {'soft-cell', 'hard-cell', 'graph-cell'} else config['top_k'] if kind == 'global-router'
                                         else 4 if kind == 'fixed-cell' else None),
-                       'active_cells_scope': 'executed Cell visits per FFN; global parallel top-k selections',
+                       'active_cells_scope': 'chosen-path Cell visits per FFN; graph hard training additionally executes training_cell_visits_per_token backups; global parallel top-k selections',
                        'tokens_sec': tokens_per_step / seconds, 'gpu_memory': torch.cuda.memory_allocated(),
                        'path_scope': 'per FFN; soft expected depth, hard executed depth, global one top-k dispatch',
                        'throughput_scope': 'forward/backward/optimizer/retries only; transfer and logging excluded'}
@@ -144,7 +153,7 @@ def train_arm(kind, config, data, output, deadline):
                        train_seconds=train_seconds, tokens_per_sec=completed * tokens_per_step / max(train_seconds, 1e-9),
                        checkpoint_sha256=hashlib.sha256((directory / 'checkpoint.pt').read_bytes()).hexdigest())
         if completed == total:
-            model.set_stage('hard' if kind == 'hard-cell' else 'soft', 0.1 if kind == 'hard-cell' else 1.0)
+            model.set_stage('hard' if kind in {'hard-cell', 'graph-cell'} else 'soft', 0.1 if kind in {'hard-cell', 'graph-cell'} else 1.0)
             metrics.update(evaluation=assess(model, data, config, directory, arm_deadline), status='completed')
     except Exception:
         (directory / 'error.txt').write_text(traceback.format_exc(), encoding='utf-8')
@@ -163,7 +172,8 @@ def train_arm(kind, config, data, output, deadline):
 def schedule(config, cache, output, deadline):
     # Each GPU owns one long arm + one baseline; alternate physical placement by seed.
     first = config['seeds'].index(config['seed']) % 2
-    queues = {first: ['soft-cell', 'fixed-cell'], 1 - first: ['hard-cell', 'global-router']}
+    plan = config.get('gpu_queues', [['soft-cell', 'fixed-cell'], ['hard-cell', 'global-router']])
+    queues = {first: list(plan[0]), 1 - first: list(plan[1])}
     running, exits, samples = {}, {}, []
     sample_at = 0
     try:
@@ -217,7 +227,7 @@ def schedule(config, cache, output, deadline):
             exits[kind] = process.returncode
             log.close()
         write_json(output / 'gpu-utilization.json', {'samples': samples})
-    for kind in config['models']:
+    for kind in config.get('run_models', config['models']):
         directory = output / kind
         directory.mkdir(exist_ok=True)
         path = directory / 'metrics.json'
@@ -227,9 +237,9 @@ def schedule(config, cache, output, deadline):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--seed', required=True, type=int, choices=[42, 123, 456])
+    parser.add_argument('--seed', required=True, type=int, choices=[42, 43, 44, 123, 456])
     parser.add_argument('--output', default='/kaggle/working/results-003')
-    parser.add_argument('--worker', choices=['soft-cell', 'hard-cell', 'fixed-cell', 'global-router'])
+    parser.add_argument('--worker', choices=['soft-cell', 'hard-cell', 'fixed-cell', 'global-router', 'graph-cell'])
     parser.add_argument('--data')
     parser.add_argument('--deadline', type=float)
     args = parser.parse_args()
@@ -238,9 +248,13 @@ def main():
     capacities = validate(config)
     output = Path(args.output).resolve()
     if args.worker:
+        if args.worker not in config['models']:
+            raise ValueError('Worker arm outside registered matrix')
         data = {split: np.load(Path(args.data) / (split + '.npy'), mmap_mode='r') for split in ('train', 'validation')}
         train_arm(args.worker, config, data, output, args.deadline)
         return
+    if config['experiment_id'] == '004-cell-graph':
+        raise ValueError('004 must run through minicells.runtime.research with a registered session and offline assets')
     from minicells.utils.publication import preflight, publish
     source = os.environ.get('EXPERIMENT_COMMIT', '')
     prior = preflight(source, args.seed)

@@ -18,6 +18,8 @@ def collect(download, preparation, archive, kernel_ref, workflow_url):
         raise ValueError('Expected exactly one run evidence manifest')
     source = matches[0].parent
     manifest = json.loads(matches[0].read_text())
+    if preparation.get('session') is not None and manifest.get('session') != preparation['session']:
+        raise ValueError('Returned session identity mismatch')
     for field in ('source_commit', 'seed', 'definition_sha256', 'config_sha256', 'protocol_sha256', 'assets_manifest_sha256'):
         if manifest.get(field) != preparation.get(field):
             raise ValueError('Returned run identity mismatch: ' + field)
@@ -34,6 +36,8 @@ def collect(download, preparation, archive, kernel_ref, workflow_url):
     archive = Path(archive)
     archive = (archive if archive.is_absolute() else ROOT / archive).resolve()
     target = archive / experiment / preparation['source_commit'] / ('seed-' + str(preparation['seed']))
+    if preparation.get('session'):
+        target = target / preparation['session']
     if target.exists():
         raise FileExistsError('Observed run archive already exists; never overwrite')
     target.mkdir(parents=True)
@@ -54,9 +58,13 @@ def collect(download, preparation, archive, kernel_ref, workflow_url):
     registry = json.loads(registry_path.read_text())
     entry = next(item for item in registry['experiments'] if item['directory'].endswith('/' + experiment))
     entry.setdefault('runs', []).append({'source_commit': preparation['source_commit'],
-         'seed': preparation['seed'], 'status': decision['status'],
+         'seed': preparation['seed'], 'session': preparation.get('session'), 'status': decision['status'],
          'scientific_decision': False, 'archive': str(target.relative_to(ROOT))})
     entry['status'] = 'development_incomplete' if decision['status'] == 'DEVELOPMENT_INCOMPLETE' else 'development_observed'
+    if experiment == '004-cell-graph':
+        from minicells.research.graph_report import analyze
+        matrix = analyze(target.parent.parent, target.parent.parent / 'matrix-analysis')
+        entry['matrix_status'] = matrix['status']
     dump(registry_path, registry)
     print(json.dumps({'archive': str(target), 'status': decision['status'], 'scientific_decision': False}))
     return target

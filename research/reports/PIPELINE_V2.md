@@ -3,7 +3,7 @@
 ## Execution contract
 
 1. Define the experiment under `research/experiments/<id>/experiment.yaml`; numerical configurations live under `research/configs/`.
-2. Register the hypothesis, matrix, quality gates, timing scopes and one-hour dual-T4 budget before a GPU run. Planned 004 execution is blocked.
+2. Register the hypothesis, matrix, quality gates, timing scopes and one-hour dual-T4 budget before a GPU run. 004 now has its own frozen development protocol and two-session matrix.
 3. Actions prepares public pinned CPU assets with the existing TinyStories/train-only tokenizer implementation. Hash-named private Kaggle Dataset snapshots are reused without updating their contents.
 4. Actions embeds the exact checked-out source into a seven-section notebook plus a compatible script for **bingjiangli/minicells**. It does not create a new notebook per experiment. The source bundle, configuration, protocol and inputs have separate hashes.
 5. Kaggle runs offline with two independent T4 workers. It reads no HF_TOKEN/GITHUB_TOKEN, performs no clone, no download, and no GitHub mutation. The application budget is 3300s; server timeout is 3600s. Actions queue waiting is a separate CPU-side timeout.
@@ -16,7 +16,7 @@ The existing Actions `KAGGLE_API_TOKEN` must belong to the account allowed to up
 
 Choose **Kaggle Experiment**: 003, development seed, `execute=false` to prepare; `execute=true` explicitly starts the GPU job. Preparation-only jobs produce the notebook and manifest, but do not upload a Dataset or consume GPU hours. Their CPU-prepared arrays are retained as an artifact for subsequent manual upload. The offline notebook needs the matching Dataset attached before manual execution.
 
-001 and 002 choices export archived notebooks/definitions. They preserve historical entrypoints and are not silently rerun through a changed protocol. 004 is visible but deliberately blocked until registered.
+001 and 002 choices export archived notebooks/definitions. They preserve historical entrypoints and are not silently rerun through a changed protocol. 004 executes the registered reference/graph sessions for development seeds 42, 43, 44. Use the same source_commit and assets_manifest_sha256 for the full matrix; see its experiment README.
 
 ## Research authority and migration
 
@@ -36,7 +36,7 @@ Plots: loss, validation PPL, throughput, memory, routing entropy, Cell usage, pa
 
 The refactor supplies the registry, definitions, fixed input preparation, offline execution, structured logs, notebook preparation, plot/report generation and Actions collection. Migration creates inspectable historical views. GPU acceptance and external publication require an explicitly requested execution; no GPU smoke is part of this change. Do not describe the remote workflow as validated until a returned run passes identity checks.
 
-004 remains a hypothesis/template. No 100M/64-Cell architecture or success claim is inferred from illustrative examples. No HybridCLM regression is required for this routing pipeline change, per the user's scope.
+004 is registered and unrun, using the 003 FFN Cell substrate and shared Attention. Its full development matrix requires six bounded sessions and five full-budget arms per seed. No empirical success is claimed. No HybridCLM regression is required for this routing pipeline change, per the user's scope.
 
 ## API provenance
 

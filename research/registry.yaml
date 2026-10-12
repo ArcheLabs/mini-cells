@@ -48,10 +48,19 @@
     {
       "id": "004",
       "name": "cell-graph",
-      "status": "planned",
+      "status": "registered_unrun",
       "directory": "research/experiments/004-cell-graph",
       "scientific_decision": false,
-      "note": "No registered model, seed matrix, gates or execution budget yet"
+      "note": "Five paired full-budget arms; two sessions per development seed; not run",
+      "development_seeds": [
+        42,
+        43,
+        44
+      ],
+      "sessions": [
+        "reference",
+        "graph"
+      ]
     }
   ],
   "schema_version": 2
