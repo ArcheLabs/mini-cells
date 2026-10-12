@@ -1,0 +1,24 @@
+{
+  "params": 60919296,
+  "activated_params_per_token_estimate": 23170560,
+  "forward_flops_per_token_estimate": 47722496,
+  "flops_estimate_scope": "matmuls only; excludes dispatch, norms, activations and softmax",
+  "model": "global-router",
+  "status": "completed",
+  "steps": 5000,
+  "physical_gpu_index": "1",
+  "train_tokens": 10000000,
+  "train_seconds": 444.6198776980094,
+  "tokens_per_sec": 22491.12219582793,
+  "throughput_scope": "forward/backward/optimizer only; excludes data transfer, validation and saving",
+  "elapsed_seconds": 463.9330334663391,
+  "peak_gpu_bytes": 1448965120,
+  "last_validation": {
+    "step": 5000,
+    "train_tokens": 10000000,
+    "validation_loss": 2.513505697250366,
+    "perplexity": 12.34814312168731,
+    "validation_tokens": 32000
+  },
+  "checkpoint_sha256": "88dee1c0967f86896221728227a6523265fd1ea9e01490583db6e2cd740a374b"
+}
