@@ -2,19 +2,33 @@ name: Kaggle Experiment
 
 on:
   workflow_dispatch:
+    inputs:
+      experiment:
+        description: Experiment family
+        type: choice
+        options: ["002", "001"]
+        default: "002"
+      seed:
+        description: One Experiment 002 development seed per session (ignored for 001)
+        type: choice
+        options: ["42", "123", "456"]
+        default: "42"
 
 permissions:
   contents: read
 
 concurrency:
-  group: kaggle-experiment-${{ github.ref }}
+  group: kaggle-experiment
   cancel-in-progress: false
 
 jobs:
   kaggle:
     runs-on: ubuntu-latest
+    # This job waits on Kaggle queues/output; the separate Kaggle training deadline is 55 minutes.
     timeout-minutes: 90
     env:
+      EXPERIMENT_FAMILY: ${{ inputs.experiment }}
+      EXPERIMENT_SEED: ${{ inputs.seed }}
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
 
     steps:
@@ -29,7 +43,23 @@ jobs:
       - name: Install Kaggle CLI
         run: python -m pip install --disable-pip-version-check kaggle
 
-      - name: Package formal experiment source from this commit
+      - name: Prepare Experiment 002 exact-commit launcher
+        if: ${{ inputs.experiment == '002' }}
+        run: |
+          python - <<'PY'
+          import os
+          import shutil
+          from pathlib import Path
+          path = Path("kaggle/run_experiment_002.py")
+          content = path.read_text(encoding="utf-8")
+          content = content.replace("__EXPERIMENT_COMMIT__", os.environ["GITHUB_SHA"])
+          content = content.replace("__EXPERIMENT_SEED__", os.environ["EXPERIMENT_SEED"])
+          path.write_text(content, encoding="utf-8")
+          shutil.copyfile("kaggle/kernel-metadata-002.json", "kaggle/kernel-metadata.json")
+          PY
+
+      - name: Package Experiment 001 source from this commit
+        if: ${{ inputs.experiment == '001' }}
         run: |
           python - <<'PY'
           import base64
@@ -42,6 +72,9 @@ jobs:
               "experiments/configs/routing/experiment-001.json",
               "experiments/runners/models.py",
               "experiments/runners/train.py",
+              "experiments/common/__init__.py",
+              "experiments/common/models.py",
+              "experiments/common/train.py",
           ]
           buffer = io.BytesIO()
           with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
@@ -161,27 +194,57 @@ jobs:
           )
           PY
 
-      - name: Verify the formal comparison completed
+      - name: Verify the registered comparison and publication completed
         run: |
           python - <<'PY'
           import json
+          import os
           from pathlib import Path
 
-          reports = list(Path("kaggle-output").rglob("metrics.json"))
-          completed = [
-              json.loads(path.read_text(encoding="utf-8"))
-              for path in reports
-              if path.parent.name == "results"
-          ]
-          if len(completed) != 1 or not completed[0].get("comparable_at_full_budget"):
-              raise SystemExit("Experiment 001 is incomplete; inspect the preserved artifacts.")
+          if os.environ["EXPERIMENT_FAMILY"] == "002":
+              decisions = list(Path("kaggle-output").rglob("decision.json"))
+              if len(decisions) != 1:
+                  raise SystemExit("Missing Experiment 002 seed decision.")
+              decision = json.loads(decisions[0].read_text(encoding="utf-8"))
+              if decision.get("scientific_decision") is not False:
+                  raise SystemExit("Experiment 002 must remain a development record.")
+              if decision.get("status") == "DEVELOPMENT_INCOMPLETE":
+                  raise SystemExit("Seed was published as incomplete; inspect the preserved evidence.")
+              if not decision.get("comparable_at_full_budget"):
+                  raise SystemExit("Seed did not complete its registered token budget.")
+              publications = list(Path("kaggle-output").rglob("publication.json"))
+              if len(publications) != 1:
+                  raise SystemExit("Missing GitHub seed publication evidence.")
+              publication = json.loads(publications[0].read_text(encoding="utf-8"))
+              if publication.get("status") not in {"published", "already_published"}:
+                  raise SystemExit("GitHub return failed; evidence remains in Kaggle outputs.")
+          else:
+              reports = list(Path("kaggle-output").rglob("metrics.json"))
+              completed = [json.loads(path.read_text(encoding="utf-8"))
+                           for path in reports if path.parent.name == "results"]
+              if len(completed) != 1 or not completed[0].get("comparable_at_full_budget"):
+                  raise SystemExit("Experiment 001 is incomplete; inspect the preserved evidence.")
           PY
 
       - name: Store Kaggle results as a GitHub Actions artifact
         if: ${{ always() && env.KAGGLE_KERNEL_REF != '' }}
         uses: actions/upload-artifact@v4
         with:
-          name: experiment-001-${{ github.run_id }}
-          path: kaggle-output/
+          name: experiment-${{ inputs.experiment }}-seed-${{ inputs.seed }}-evidence-${{ github.run_id }}
+          path: |
+            kaggle-output/**/*.json
+            kaggle-output/**/*.jsonl
+            kaggle-output/**/*.csv
+            kaggle-output/**/*.txt
+            kaggle-output/**/*.log
           if-no-files-found: error
           retention-days: 30
+
+      - name: Preserve model checkpoints separately
+        if: ${{ always() && env.KAGGLE_KERNEL_REF != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: experiment-${{ inputs.experiment }}-seed-${{ inputs.seed }}-checkpoints-${{ github.run_id }}
+          path: kaggle-output/**/*.pt
+          if-no-files-found: warn
+          retention-days: 7

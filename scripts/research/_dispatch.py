@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = {
     "run": {
         "core-validation-001": "run_core_validation_001.py",
+        "routing-002": "../../experiments/cell_internal_routing_002/train.py",
         "core-validation-002": "run_core_validation_002.py",
         "core-validation-002b": "run_core_validation_002b.py",
         "core-validation-002c": "run_core_validation_002c.py",
@@ -26,6 +27,7 @@ REGISTRY = {
     "report": {
         "core-validation-001": "report_core_validation_001.py",
         "core-validation-001b": "report_core_validation_001b.py",
+        "routing-002": "../../experiments/cell_internal_routing_002/report.py",
         "core-validation-002": "report_core_validation_002.py",
         "core-validation-002b": "report_core_validation_002b.py",
         "core-validation-002c": "report_core_validation_002c.py",
@@ -40,6 +42,7 @@ REGISTRY = {
     },
     "publish": {
         "core-validation-001": "publish_core_validation_001.py",
+        "routing-002": "../../experiments/cell_internal_routing_002/publish.py",
         "core-validation-001b": "publish_core_validation_001b.py",
         "core-validation-002": "publish_core_validation_002.py",
         "core-validation-002b": "publish_core_validation_002b.py",
@@ -62,8 +65,9 @@ def dispatch(kind: str, argv: list[str] | None = None) -> None:
             f"usage: {kind}.py <experiment-id> [args...]\navailable: {available}"
         )
     experiment_id = args.pop(0)
-    script = Path(__file__).with_name(REGISTRY[kind][experiment_id])
+    script = (Path(__file__).parent / REGISTRY[kind][experiment_id]).resolve()
     if kind == "publish" and script.name == "publish_clm_0_4_mini_calibration_results.py":
         args.insert(0, experiment_id)
     sys.argv = [str(script), *args]
+    sys.path.insert(0, str(ROOT))
     runpy.run_path(str(script), run_name="__main__")
