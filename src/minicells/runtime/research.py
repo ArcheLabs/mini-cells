@@ -2,6 +2,7 @@
 import argparse
 import importlib.metadata
 import json
+import math
 import os
 import shutil
 import sys
@@ -12,7 +13,7 @@ from pathlib import Path
 from minicells.research.config import ROOT, digest, dump, load_definition
 
 
-def run(definition, assets, manifest_sha256, seed, output, source_commit, session=None):
+def run(definition, assets, manifest_sha256, seed, output, source_commit, session=None, manual=False):
     descriptor, config, protocol = load_definition(definition)
     if descriptor['runtime'] not in {'routing-003', 'routing-004'}:
         raise ValueError('Historical experiments are archived')
@@ -27,6 +28,7 @@ def run(definition, assets, manifest_sha256, seed, output, source_commit, sessio
     from minicells.research.report import generate
     import torch
     config['seed'] = seed
+    config['manual_execution'] = manual
     if descriptor['runtime'] == 'routing-004':
         from minicells.training.graph_trainer import configure
         configure(config, session)
@@ -36,7 +38,7 @@ def run(definition, assets, manifest_sha256, seed, output, source_commit, sessio
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     started = float(os.environ.get('EXPERIMENT_STARTED_AT', time.time()))
-    deadline = started + min(config['session_budget_seconds'], 3300)
+    deadline = math.inf if manual else started + min(config['session_budget_seconds'], 3300)
     provenance = {'schema_version': 2, 'experiment': descriptor['id'], 'source_commit': source_commit,
                   'seed': seed, 'session': session, 'scientific_decision': False, 'capacities': capacities,
                   'config_sha256': digest(ROOT / descriptor['config']), 'protocol_sha256': digest(protocol),
@@ -44,7 +46,8 @@ def run(definition, assets, manifest_sha256, seed, output, source_commit, sessio
                   'torch': torch.__version__, 'python': sys.version,
                   'dependencies': {name: importlib.metadata.version(name) for name in ('numpy', 'matplotlib')},
                   'execution': 'two independent T4 workers; no DDP; offline mounted Dataset',
-                  'attention_backend': 'SDPA math in every arm and measurement', 'status': 'running'}
+                  'attention_backend': 'SDPA math in every arm and measurement', 'status': 'running',
+                  'execution_policy': 'manual-token-budget' if manual else 'bounded-session'}
     dump(output / 'config.json', config)
     dump(output / 'experiment.json', provenance)
     try:
@@ -80,6 +83,7 @@ def run(definition, assets, manifest_sha256, seed, output, source_commit, sessio
     dump(output / 'evidence-manifest.json', {'source_commit': source_commit, 'seed': seed, 'session': session,
          'definition_sha256': provenance['definition_sha256'], 'config_sha256': provenance['config_sha256'],
          'protocol_sha256': provenance['protocol_sha256'], 'assets_manifest_sha256': manifest_sha256,
+         'execution_policy': provenance['execution_policy'],
          'scientific_decision': False, 'files': checksums})
     print(json.dumps(decision), flush=True)
     return decision
@@ -94,8 +98,10 @@ def main():
     parser.add_argument('--source-commit', required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--session', choices=['reference','graph'])
+    parser.add_argument('--manual', action='store_true', help='Run to the token target without time caps')
     args = parser.parse_args()
-    run(args.definition, args.assets, args.assets_sha256, args.seed, args.output, args.source_commit, session=args.session)
+    run(args.definition, args.assets, args.assets_sha256, args.seed, args.output, args.source_commit,
+        session=args.session, manual=args.manual)
 
 
 if __name__ == '__main__':

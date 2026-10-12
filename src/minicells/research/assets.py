@@ -15,12 +15,13 @@ def prepare(definition, destination, timeout_seconds=3600):
     import numpy as np
     from experiments.common.train import prepare_data
     _, config, _ = load_definition(definition)
-    if timeout_seconds <= 0:
+    if timeout_seconds is not None and timeout_seconds <= 0:
         raise TimeoutError('No CPU time remains for preparing the pinned inputs')
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=False)
     # Reuse the exact train-only tokenizer and pinned corpus implementation.
-    arrays = prepare_data(config, destination, time.time() + timeout_seconds)
+    deadline = float('inf') if timeout_seconds is None else time.time() + timeout_seconds
+    arrays = prepare_data(config, destination, deadline)
     for split, array in arrays.items():
         np.save(destination / (split + '.npy'), array)
     identity = {key: config[key] for key in DATA_KEYS}

@@ -78,7 +78,7 @@ def train_arm(kind, config, data, output, deadline):
     started, train_seconds, completed = time.time(), 0.0, 0
     budget = (config['arm_budget_seconds'][kind] if 'arm_budget_seconds' in config else
               config['long_arm_budget_seconds'] if kind in {'soft-cell', 'hard-cell', 'graph-cell'} else config['baseline_budget_seconds'])
-    arm_deadline = min(deadline, started + budget)
+    arm_deadline = math.inf if config.get('manual_execution') else min(deadline, started + budget)
     training_deadline = arm_deadline - config['evaluation_reserve_seconds']
     metrics = {'model': kind, 'seed': config['seed'], 'status': 'incomplete',
                'physical_gpu_index': os.environ.get('CUDA_VISIBLE_DEVICES'), **model.parameter_metrics()}
@@ -184,7 +184,8 @@ def schedule(config, cache, output, deadline):
                     log = (output / (kind + '-worker.log')).open('w', encoding='utf-8')
                     process = subprocess.Popen([sys.executable, '-m', 'minicells.training.runner',
                         '--worker', kind, '--seed', str(config['seed']), '--data', str(cache),
-                        '--output', str(output), '--deadline', str(deadline)],
+                        '--output', str(output), '--deadline', str(deadline)]
+                        + (['--manual'] if config.get('manual_execution') else []),
                         cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
                         env=dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu)))
                     running[gpu] = kind, process, log
@@ -242,9 +243,11 @@ def main():
     parser.add_argument('--worker', choices=['soft-cell', 'hard-cell', 'fixed-cell', 'global-router', 'graph-cell'])
     parser.add_argument('--data')
     parser.add_argument('--deadline', type=float)
+    parser.add_argument('--manual', action='store_true')
     args = parser.parse_args()
     config = json.loads(CONFIG.read_text())  # YAML 1.2 accepts this exact JSON document.
     config['seed'] = args.seed
+    config['manual_execution'] = args.manual
     capacities = validate(config)
     output = Path(args.output).resolve()
     if args.worker:

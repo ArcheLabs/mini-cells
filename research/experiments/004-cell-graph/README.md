@@ -26,18 +26,16 @@ Use the single canonical entrypoint at [`research/notebooks/03-routing-and-growt
 
 Each run selects one `SEED` (42, 43, or 44) and one `SESSION` (`reference` or `graph`). Run all cells. For the first session, `SOURCE_COMMIT` may be `main`; copy the printed full SHA into the cell for the paired session and keep that SHA for all six sessions. The notebook reuses the registered CPU data-preparation, offline dual-T4 runtime, evidence collector, and existing Kaggle Secret GitHub publisher. It checks GitHub write access before GPU work and pushes verified results to `results/cell-graph-<source-sha>` with a normal append-only push.
 
-The notebook reads `GITHUB_TOKEN` through Kaggle's existing `UserSecretsClient` path. `HF_TOKEN` is optional for this public, pinned dataset. Setup is limited to 300 seconds and fails before GPU work if setup plus the 3,300-second application cap would exceed the one-hour Kaggle session. A failed GitHub push can be retried from the notebook's final cell without rerunning training.
+The notebook reads `GITHUB_TOKEN` through Kaggle's existing `UserSecretsClient` path. `HF_TOKEN` is optional for this public, pinned dataset. Manual execution has no preparation, session, per-arm training or evaluation time cap. Each arm runs to the registered 10M token target. See [manual-execution.md](manual-execution.md) for this authorized execution change. A failed GitHub push can be retried from the notebook's final cell without rerunning training.
 
 For **each seed 42, 43, 44**, run these two sessions from the **same source commit** and hash-verified prepared inputs:
 
-| Session input | GPU queue A | GPU queue B | Maximum worker budgets |
-|---|---|---|---|
-| reference | soft-cell, then fixed-cell | global-router | 1850 + 850 / 850 seconds |
-| graph | graph-cell | hard-cell (003 STE) | 3000 / 1850 seconds |
+| Session input | GPU queue A | GPU queue B |
+|---|---|---|
+| reference | soft-cell, then fixed-cell | global-router |
+| graph | graph-cell | hard-cell (003 STE) |
 
-Physical GPU placement alternates by seed. There is no DDP. Each arm gets the full **10M token** target; baseline time caps rise from 600 to 850 seconds so the old 420-second training cutoff is not reused. Each arm reserves 180 seconds for checkpoint/evaluation. Application cap stays **3300 seconds**, server cap **3600 seconds**. Budget feasibility is a cap calculation, not a guarantee that graph will finish on T4. A slow arm remains incomplete; the token budget and cap are not relaxed after observing it.
-
-Six sessions complete the development matrix. Worst-case application wall time is 5.5 hours total; conservative dual-GPU accounting is 11 GPU-hours if Kaggle bills each GPU separately. Actual quota accounting follows Kaggle. No GPU smoke is part of this implementation.
+Physical GPU placement alternates by seed. There is no DDP. Manual workers complete the full **10M token** target and then finish checkpointing, validation and measurement without application time cutoffs. Six sessions complete the development matrix. Their runtime depends on observed training speed; the historical one-hour estimates no longer bound manual execution.
 
 ## Frozen development criteria
 
@@ -74,6 +72,6 @@ run_git = partial(existing_git, ROOT)
 ALREADY_ARCHIVED = ARCHIVE_TARGET.exists()
 ```
 
-Then rerun only the archive/commit cell and the final push cell. This reuses the historical Git helper, verifies the existing archive and publishes it without rerunning setup, data preparation or training. A push failure leaves the local commit available; retry only the final push cell. For the observed seed 42 reference run, preserve source `7c1d8b23adaf047195d38a6827f46f3e97ae1faa` and branch `results/cell-graph-7c1d8b23adaf` for its remaining paired matrix sessions.
+Then rerun only the archive/commit cell and the final push cell. This reuses the historical Git helper, verifies the existing archive and publishes it without rerunning setup, data preparation or training. A push failure leaves the local commit available; retry only the final push cell. For the observed seed 42 reference run, preserve source `7c1d8b23adaf047195d38a6827f46f3e97ae1faa` and branch `results/cell-graph-7c1d8b23adaf` when recovering its already observed evidence. New manual runs use their own printed source SHA; never relabel old evidence with the new source.
 
-The corrected notebook limits `run_setup_git` to setup. Publication imports `publish_experiment_results.run_git`; retrying the archive/commit cell checks the directory on disk instead of the pre-training `ALREADY_ARCHIVED` snapshot. The registered GPU queues remain part of the frozen protocol for this existing cohort. Changing their allocation requires a separate registered revision; archived observations must retain their original source and protocol identity.
+The corrected manual notebook removes the setup deadline entirely and reuses `publish_experiment_results.run_git` for both setup and publication; retrying the archive/commit cell checks the directory on disk instead of the pre-training `ALREADY_ARCHIVED` snapshot. The registered GPU queues remain part of the frozen protocol for this existing cohort. Changing their allocation requires a separate registered revision; archived observations must retain their original source and protocol identity.
