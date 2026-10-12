@@ -1,0 +1,33 @@
+{
+  "model": "hard-cell",
+  "seed": 42,
+  "status": "completed",
+  "physical_gpu_index": "1",
+  "params": 61115904,
+  "steps": 5000,
+  "train_tokens": 10000000,
+  "train_seconds": 1420.7216032930066,
+  "tokens_per_sec": 7038.676667421394,
+  "checkpoint_sha256": "eef8396060c8d859d5d93286179720f8520c7c3e31c1066a6dc6fbbb0e774ea2",
+  "evaluation": {
+    "validation_loss": 2.696301683783531,
+    "perplexity": 14.824803405492208,
+    "validation_tokens": 32000,
+    "executed_gemm_flops_per_token": 43833797.952,
+    "observed_gemm_calls": {
+      "aten.mm.default": 5478,
+      "aten.bmm.default": 192
+    },
+    "uncovered_attention_calls": {},
+    "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+    "inference_latency_seconds_per_batch": 0.06244784659998004,
+    "inference_tokens_per_sec": 32026.724841471783,
+    "cuda_kernel_time_us_per_validation_batch": 26426.981312497956,
+    "cuda_activity_time_us_per_validation_batch": 31107.040124997802,
+    "cuda_activity_events_per_validation_batch": 3471.875,
+    "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+    "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+    "peak_gpu_bytes": 3833828864
+  },
+  "elapsed_seconds": 1479.2221496105194
+}
