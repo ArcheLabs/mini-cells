@@ -48,7 +48,7 @@
     {
       "id": "004",
       "name": "cell-graph",
-      "status": "registered_unrun",
+      "status": "development_observed",
       "directory": "research/experiments/004-cell-graph",
       "scientific_decision": false,
       "note": "Five paired full-budget arms; two sessions per development seed; not run",
@@ -60,7 +60,18 @@
       "sessions": [
         "reference",
         "graph"
-      ]
+      ],
+      "runs": [
+        {
+          "source_commit": "a59402238b686ff4981786f307d4a3f110698d61",
+          "seed": 42,
+          "session": "reference",
+          "status": "DEVELOPMENT_SESSION_COMPLETED",
+          "scientific_decision": false,
+          "archive": "research/artifacts/004-cell-graph/a59402238b686ff4981786f307d4a3f110698d61/seed-42/reference"
+        }
+      ],
+      "matrix_status": "DEVELOPMENT_INCOMPLETE"
     }
   ],
   "schema_version": 2
