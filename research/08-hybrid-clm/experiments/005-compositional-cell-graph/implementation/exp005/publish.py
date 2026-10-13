@@ -93,7 +93,7 @@ def prepare_result_branch(source_commit: str, secret_name: str) -> str:
                check=False).returncode:
         raise RuntimeError("result branch does not descend from the pinned source commit")
     protected = [
-        "src", "experiments/common", "research/registry.yaml",
+        "src", "experiments/common", "research/08-hybrid-clm/experiments/_shared/common", "research/registry.yaml",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/README.md",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/experiment.yaml",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/protocol.json",

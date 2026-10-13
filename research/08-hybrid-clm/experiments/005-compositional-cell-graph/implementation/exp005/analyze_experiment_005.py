@@ -17,6 +17,7 @@ ROOT = next(parent for parent in HERE.parents
 sys.path.insert(0, str(HERE.parent))
 
 from exp005.models import ARMS
+from exp005.preflight import seed_role
 from exp005.report import matrix_decision, seed_decision
 
 
@@ -30,13 +31,14 @@ def analyze(archive: Path, protocol_path: Path, config_path: Path) -> tuple[dict
         raise ValueError("archive directory must be named with the full source commit SHA")
     protocol_bytes = protocol_path.read_bytes()
     protocol = json.loads(protocol_bytes)
-    config = json.loads(config_path.read_text(encoding="utf-8"))
+    config_bytes = config_path.read_bytes()
+    config = json.loads(config_bytes)
     observed: dict[str, dict[str, dict[str, Any]]] = {}
-    input_hashes: dict[str, str] = {"protocol.json": _sha256(protocol_bytes)}
+    input_hashes: dict[str, str] = {"protocol.json": _sha256(protocol_bytes), "config.json": _sha256(config_bytes)}
     for seed_dir in sorted(archive.glob("seed-*")):
         if not seed_dir.is_dir() or not re.fullmatch(r"seed-[0-9]+", seed_dir.name):
             continue
-        seed = int(seed_dir.name.removeprefix("seed-"))
+        seed = int(seed_dir.name[len("seed-"):])
         observed[seed] = {}
         for arm in ARMS:
             metric_path = seed_dir / arm / "metrics.json"
@@ -48,6 +50,13 @@ def analyze(archive: Path, protocol_path: Path, config_path: Path) -> tuple[dict
             for key, value in expected.items():
                 if metrics.get(key) != value:
                     raise ValueError(f"{metric_path}: {key} does not match its archive path")
+            if protocol.get("status") == "REGISTERED":
+                if metrics.get("seed_role") != seed_role(config, seed):
+                    raise ValueError("archive seed role differs from registered matrix")
+                for key, expected_hash in (("protocol_sha256", _sha256(protocol_bytes)),
+                                           ("config_sha256", _sha256(config_bytes))):
+                    if metrics.get("identity", {}).get(key) != expected_hash:
+                        raise ValueError("archive config/protocol differs from analysis contract")
             profile_path = seed_dir / arm / "decode-profile.json"
             if profile_path.is_file():
                 profile_raw = profile_path.read_bytes()

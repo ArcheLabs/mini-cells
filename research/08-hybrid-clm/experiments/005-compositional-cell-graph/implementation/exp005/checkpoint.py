@@ -26,7 +26,7 @@ def canonical_sha256(value: Any) -> str:
 
 def make_identity(*, source_commit: str, seed: int, arm: str,
                   config_sha256: str, protocol_sha256: str,
-                  assets_manifest_sha256: str) -> dict[str, Any]:
+                  assets_manifest_sha256: str, seed_role: str = "development") -> dict[str, Any]:
     if len(source_commit) != 40 or any(c not in "0123456789abcdef" for c in source_commit):
         raise ValueError("source_commit must be a full lowercase Git SHA")
     for label, value in (("config", config_sha256), ("protocol", protocol_sha256),
@@ -35,8 +35,10 @@ def make_identity(*, source_commit: str, seed: int, arm: str,
             raise ValueError(f"{label} identity must be a full lowercase SHA256")
     if seed < 0 or not arm:
         raise ValueError("seed must be non-negative and arm must be non-empty")
+    if seed_role not in {"development", "confirmation"}:
+        raise ValueError("invalid registered seed role")
     return {"experiment_id": "005-compositional-cell-graph", "source_commit": source_commit,
-            "seed": int(seed), "arm": arm, "config_sha256": config_sha256,
+            "seed": int(seed), "seed_role": seed_role, "arm": arm, "config_sha256": config_sha256,
             "protocol_sha256": protocol_sha256,
             "assets_manifest_sha256": assets_manifest_sha256}
 

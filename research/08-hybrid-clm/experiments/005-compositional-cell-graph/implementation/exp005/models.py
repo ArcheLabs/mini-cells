@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from typing import Any
+import hashlib
 
 import torch
 from torch import Tensor, nn
@@ -81,14 +82,15 @@ class ArmFFN(nn.Module):
         if self.arm == "M0":
             assert self.moe is not None
             captured: dict[str, Tensor] = {}
-            hook = None
-            if self.collect_trace:
-                hook = self.moe.router.register_forward_hook(
-                    lambda _module, _inputs, output: captured.__setitem__("logits", output.detach())
-                )
-            delta, auxiliary = self.moe(norm(flat))
-            if hook is not None:
+            hook = self.moe.router.register_forward_hook(
+                lambda _module, _inputs, output: captured.__setitem__("logits", output)
+            )
+            try:
+                delta, _ = self.moe(norm(flat))
+            finally:
                 hook.remove()
+            probabilities = captured["logits"].float().softmax(-1)
+            auxiliary = probabilities.shape[-1] * probabilities.mean(0).square().sum()
             delta = delta.reshape(shape)
             if self.collect_trace:
                 ids = captured["logits"].float().topk(2, dim=-1).indices.reshape(*shape[:-1], 2)
@@ -109,7 +111,7 @@ class ArmFFN(nn.Module):
                 self.last_trace = {"paths": ids.reshape(*shape[:-1], 4),
                                    "candidates": ids.reshape(*shape[:-1], 4),
                                    "backup_ids": ids.reshape(*shape[:-1], 4)}
-            return delta.reshape(shape), zero
+            return delta.reshape(shape), self.cell_count * probabilities.mean(0).square().sum()
 
         assert self.router is not None
         state = flat
@@ -136,10 +138,12 @@ class ArmFFN(nn.Module):
             auxiliary = auxiliary + self.cell_count * importance.square().sum()
             chosen = top_ids[:, 0]
             if forced_transition is not None:
-                layer, forced_step, source, target = forced_transition
-                if layer == self.layer_index and forced_step == step:
-                    chosen = torch.where(previous == source,
-                                         torch.full_like(chosen, target), chosen)
+                transitions = (forced_transition if isinstance(forced_transition, list)
+                               else [forced_transition])
+                for layer, forced_step, source, target in transitions:
+                    if layer == self.layer_index and forced_step == step:
+                        mask = torch.ones_like(previous, dtype=torch.bool) if source == -1 else previous == source
+                        chosen = torch.where(mask, torch.full_like(chosen, target), chosen)
             hard_value = self._cell(state, chosen, norm)
             if k == 2:
                 backup_value = self._cell(state, top_ids[:, 1], norm)
@@ -225,7 +229,18 @@ class Experiment005LanguageModel(nn.Module):
             CausalBlock(config, arm, seed, layer) for layer in range(int(config["layers"]))
         )
         self.norm = nn.LayerNorm(width)
-        self.apply(self._initialize)
+        # Name-derived streams make shared tensors exactly equal across structures.
+        # No process RNG is consumed by this canonical initialization.
+        for name, parameter in self.named_parameters():
+            digest = hashlib.sha256(f"exp005-init-v1:{seed}:{name}".encode()).digest()
+            generator = torch.Generator(device="cpu").manual_seed(int.from_bytes(digest[:8], "little") % (2**63))
+            with torch.no_grad():
+                if parameter.ndim >= 2:
+                    parameter.normal_(std=0.02, generator=generator)
+                elif name.endswith("weight"):
+                    parameter.fill_(1.0)
+                else:
+                    parameter.zero_()
 
     @staticmethod
     def _initialize(module: nn.Module) -> None:

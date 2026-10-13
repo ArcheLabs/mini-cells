@@ -50,18 +50,35 @@
     "edge_refresh_min_improvement": null,
     "edge_refresh_proxy": null,
     "manual_execution": true,
-    "resume_checkpoint": true
+    "resume_checkpoint": true,
+    "edge_refresh_source_count": 4,
+    "balance_coefficient": 0.01,
+    "balance_loss": "mean_probability_concentration_all_arms"
   },
-  "arms": ["M0", "P0", "S0", "R0", "G0"],
+  "arms": [
+    "M0",
+    "P0",
+    "S0",
+    "R0",
+    "G0"
+  ],
   "evaluation": {
     "windows": 256,
     "batch_size": 16,
     "bootstrap_replicates": 5000,
-    "bootstrap_seed": null,
+    "bootstrap_seed": 65005,
     "edge_perturbation_seeds": [],
-    "edge_perturbation_replacements": null
+    "edge_perturbation_replacements": null,
+    "window_seed": 55005,
+    "bootstrap_sampling_unit": "story_cluster",
+    "decode_repetitions": 30,
+    "decode_tokens": 33,
+    "decode_prefix_length": 62,
+    "decode_warmup_steps": 3
   },
-  "posthoc_diagnostics": ["G0-no-edge"],
+  "posthoc_diagnostics": [
+    "G0-no-edge"
+  ],
   "seeds": {
     "development": [],
     "confirmation": []
@@ -83,6 +100,7 @@
     "decide whether S0-shortlist is a required trained control",
     "freeze paired-bootstrap sampling unit and interval procedure",
     "freeze the decode batch matrix, warm/cold cache procedure, and CUDA kernel-time measurement",
-    "freeze G0-no-edge perturbation seeds and graph-utilization/collapse criteria"
+    "freeze G0-no-edge perturbation seeds and graph-utilization/collapse criteria",
+    "review the audit-fixed auxiliary loss, initialization, source coverage and grouped measurement rules before registration"
   ]
 }

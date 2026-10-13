@@ -42,16 +42,18 @@ def check_decode_parity(model: nn.Module, tokens: Tensor, *, atol: float = 1e-5,
 
 @torch.inference_mode()
 def benchmark_decode(model: nn.Module, tokens: Tensor, *, prefix_length: int = 16,
-                     decode_tokens: int = 16, warmup_steps: int = 3,
+                     decode_tokens: int = 33, warmup_steps: int = 3,
+                     repetitions: int = 30, repetition_tokens: Tensor | None = None,
                      profile_kernels: bool = False) -> dict[str, Any]:
     if tokens.ndim != 2 or prefix_length < 1 or tokens.shape[1] <= prefix_length:
         raise ValueError("tokens must contain the requested prefix and at least one decode token")
-    if decode_tokens < 1 or warmup_steps < 0:
+    if decode_tokens < 2 or warmup_steps < 0 or repetitions < 2:
         raise ValueError("invalid decode measurement count")
     device = next(model.parameters()).device
     if tokens.device != device:
         tokens = tokens.to(device)
     model.eval()
+    model.set_collect_trace(False)
     batch = tokens.shape[0]
     end = min(tokens.shape[1], prefix_length + decode_tokens)
     prefix = tokens[:, :prefix_length]
@@ -63,25 +65,37 @@ def benchmark_decode(model: nn.Module, tokens: Tensor, *, prefix_length: int = 1
         for index in range(min(future.shape[1], 2)):
             _, cache = model.decode_step(future[:, index], cache)
 
-    with ObservedGemmFlops(model) as counter:
-        _, cache = model.prefill(prefix)
-        host_ms: list[float] = []
-        cuda_ms: list[float] = []
-        for index in range(future.shape[1]):
-            token = future[:, index]
+    if future.shape[1] != decode_tokens:
+        raise ValueError("input cannot supply every requested decode token")
+    if repetition_tokens is not None and (repetition_tokens.shape[0] != repetitions or
+                                          repetition_tokens.shape[1] < end):
+        raise ValueError("one complete fixed prompt per independent repetition is required")
+    host_ms, cuda_ms, warm_by_run, cuda_warm_by_run, first_by_run = [], [], [], [], []
+    # Timing excludes FLOP/trace instrumentation. Every repetition resets its cache.
+    for repetition in range(repetitions):
+        run_tokens = tokens if repetition_tokens is None else repetition_tokens[repetition:repetition + 1].to(device)
+        _, cache = model.prefill(run_tokens[:, :prefix_length])
+        run_host, run_cuda = [], []
+        for index in range(decode_tokens):
+            token = run_tokens[:, prefix_length + index]
             if device.type == "cuda":
+                torch.cuda.synchronize(device)
                 start_event = torch.cuda.Event(enable_timing=True)
                 end_event = torch.cuda.Event(enable_timing=True)
-                torch.cuda.synchronize(device)
                 start_event.record()
             started = time.perf_counter()
             _, cache = model.decode_step(token, cache)
             if device.type == "cuda":
                 end_event.record()
                 torch.cuda.synchronize(device)
-                cuda_ms.append(float(start_event.elapsed_time(end_event)))
-            host_ms.append((time.perf_counter() - started) * 1000.0)
-        torch.cuda.synchronize(device) if device.type == "cuda" else None
+                run_cuda.append(float(start_event.elapsed_time(end_event)))
+            run_host.append((time.perf_counter() - started) * 1000.0)
+        first_by_run.append(run_host[0])
+        warm_by_run.append(run_host[1:])
+        host_ms.extend(run_host[1:])
+        if run_cuda:
+            cuda_warm_by_run.append(run_cuda[1:])
+            cuda_ms.extend(run_cuda[1:])
 
     kernel_report: dict[str, Any] = {"kernel_count": None,
                                      "profiler_scope": "not collected"}
@@ -94,9 +108,13 @@ def benchmark_decode(model: nn.Module, tokens: Tensor, *, prefix_length: int = 1
             model.decode_step(future[:, 0], cache)
         events = profiler.events()
         kernel_report = {
-            "kernel_count": sum(1 for event in events
-                                 if "kernel" in event.name.lower() or "gemm" in event.name.lower()),
-            "profiled_memory_bytes_proxy": sum(max(0, int(event.self_cuda_memory_usage))
+            "kernel_count": sum(event.device_type == torch.autograd.DeviceType.CUDA for event in events),
+            "cuda_kernel_total_us": sum(event.device_time_total for event in events
+                                         if event.device_type == torch.autograd.DeviceType.CUDA),
+            "cuda_gemm_kernel_us": sum(event.device_time_total for event in events
+                if event.device_type == torch.autograd.DeviceType.CUDA and
+                any(word in event.name.lower() for word in ("gemm", "matmul", "sgemm"))),
+            "profiled_memory_bytes_proxy": sum(max(0, int(getattr(event, "self_device_memory_usage", 0)))
                                                 for event in events) if device.type == "cuda" else None,
             "profiler_scope": "profiler event/memory proxy; not physical DRAM traffic",
         }
@@ -116,12 +134,19 @@ def benchmark_decode(model: nn.Module, tokens: Tensor, *, prefix_length: int = 1
         "decode_tokens": int(future.shape[1]),
         "weights_resident_on_device": True,
         "dtype": str(next(model.parameters()).dtype),
-        "cold_first_decode_host_ms": host_ms[0],
-        "warm_decode_host_ms": host_ms[1:],
-        "warm_decode_host_p50_ms": statistics.median(host_ms[1:] or host_ms),
-        "warm_decode_host_p95_ms": _percentile(host_ms[1:] or host_ms, 0.95),
-        "decode_cuda_kernel_p50_ms": statistics.median(cuda_ms[1:] or cuda_ms) if cuda_ms else None,
-        "decode_cuda_kernel_p95_ms": _percentile(cuda_ms[1:] or cuda_ms, 0.95) if cuda_ms else None,
+        "cold_first_decode_host_ms": statistics.median(first_by_run),
+        "first_decode_after_cache_reset_host_ms": first_by_run,
+        "cold_scope": "first token after fresh prefill; warmed model, not cold allocator or device",
+        "decode_repetitions": repetitions,
+        "warm_decode_host_ms_by_repetition": warm_by_run,
+        "warm_decode_sample_count": len(host_ms),
+        "warm_decode_host_ms": host_ms,
+        "warm_decode_host_p50_ms": statistics.median(host_ms),
+        "warm_decode_host_p95_ms": _percentile(host_ms, 0.95),
+        "decode_cuda_kernel_p50_ms": statistics.median(cuda_ms) if cuda_ms else None,
+        "decode_cuda_kernel_p95_ms": _percentile(cuda_ms, 0.95) if cuda_ms else None,
+        "timing_instrumentation": "FLOP/trace hooks disabled during timed decode",
+        "cuda_event_scope": "device elapsed includes launch gaps; not summed kernel time",
         "decode_tokens_per_second_host": 1000.0 * batch / statistics.mean(host_ms),
         "peak_device_memory_bytes": torch.cuda.max_memory_allocated(device) if device.type == "cuda" else None,
         "prefill_observed_gemm": prefill_flops,

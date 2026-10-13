@@ -147,3 +147,15 @@ def run_cpu_preflight(config: dict[str, Any]) -> dict[str, Any]:
             "capacity": capacity, "arms": arms, "synthetic_gate": synthetic,
             "device": "cpu",
             "note": "engineering checks only; full training remains blocked until proposal protocol is registered"}
+
+
+def seed_role(config: dict[str, Any], seed: int) -> str:
+    development = set(config["seeds"]["development"])
+    confirmation = set(config["seeds"]["confirmation"])
+    if development & confirmation:
+        raise ValueError("development and confirmation seeds overlap")
+    if seed in development:
+        return "development"
+    if seed in confirmation:
+        return "confirmation"
+    raise ValueError("seed is not in the registered development or confirmation matrix")

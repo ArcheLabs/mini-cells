@@ -20,6 +20,7 @@ from .accounting import ObservedGemmFlops, active_weight_summary, execution_summ
 from .checkpoint import file_sha256, make_identity, restore_checkpoint, save_checkpoint
 from .models import Experiment005LanguageModel, make_model
 from .profiling import benchmark_decode, check_decode_parity
+from .preflight import seed_role
 from .topology import perturb_important_edges
 
 
@@ -28,6 +29,20 @@ def _validation_starts(tokens: np.ndarray, sequence_length: int, count: int, see
         raise ValueError("validation split or sample count is invalid")
     rng = np.random.default_rng(seed)
     return rng.integers(0, len(tokens) - sequence_length - 1, size=count, dtype=np.int64)
+
+
+def holdout_windows(tokens: np.ndarray, eos_id: int, length: int, count: int, seed: int):
+    """Fixed disjoint windows wholly within stories; preserve story cluster ids."""
+    starts, groups, begin = [], [], 0
+    for story, end in enumerate(np.flatnonzero(tokens == eos_id)):
+        for start in range(begin, int(end) - length + 1, length + 1):
+            starts.append(start)
+            groups.append(story)
+        begin = int(end) + 1
+    if len(starts) < count:
+        raise ValueError("not enough disjoint within-story holdout windows")
+    indices = np.random.default_rng(seed).choice(len(starts), count, replace=False)
+    return np.asarray(starts, dtype=np.int64)[indices], np.asarray(groups, dtype=np.int64)[indices].tolist()
 
 
 def _append_edge_record(path: Path, record: dict[str, Any]) -> None:
@@ -55,7 +70,7 @@ def _append_edge_record(path: Path, record: dict[str, Any]) -> None:
 @torch.inference_mode()
 def evaluate(model: Experiment005LanguageModel, tokens: np.ndarray, starts: np.ndarray,
              *, sequence_length: int, batch_size: int, device: torch.device,
-             profile_decode: bool = False) -> dict[str, Any]:
+             profile_decode: bool = False, story_group_ids: list[int] | None = None) -> dict[str, Any]:
     was_training = model.training
     model.eval()
     model.set_collect_trace(True)
@@ -138,7 +153,8 @@ def evaluate(model: Experiment005LanguageModel, tokens: np.ndarray, starts: np.n
             "evaluation_windows": len(sample_losses),
             "validation_tokens": len(sample_losses) * sequence_length,
             "sample_nll": sample_losses,
-            "paired_sampling_unit": "fixed contiguous token windows; same starts for every arm and seed",
+            "story_group_ids": story_group_ids,
+            "paired_sampling_unit": "story clusters of fixed disjoint within-story windows" if story_group_ids is not None else "diagnostic windows; not independent confirmation units",
             "unique_weight_params_per_token": {
                 "mean": float(all_touched.mean()), "p50": float(quantiles[0]),
                 "p95": float(quantiles[1]), "p99": float(quantiles[2])},
@@ -224,7 +240,7 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
     identity = make_identity(source_commit=source_commit, seed=seed, arm=arm,
                              config_sha256=file_sha256(config["config_path"]),
                              protocol_sha256=file_sha256(protocol_file),
-                             assets_manifest_sha256=assets["manifest_sha256"])
+                             assets_manifest_sha256=assets["manifest_sha256"], seed_role=seed_role(config, seed))
     model_cfg = {**config["model"], "vocab_size": int(data_cfg["vocab_size"]),
                  "max_sequence_length": int(data_cfg["sequence_length"])}
     training_cfg = config["training"]
@@ -277,8 +293,8 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
         raise ValueError("step count does not exactly match the registered training token budget")
     regression_starts = _validation_starts(assets["regression"], sequence_length,
                                            int(config["evaluation"]["windows"]), seed + 1)
-    holdout_starts = _validation_starts(assets["holdout"], sequence_length,
-                                        int(config["evaluation"]["windows"]), seed + 1)
+    holdout_starts, story_groups = holdout_windows(assets["holdout"], assets["eos_id"], sequence_length,
+        int(config["evaluation"]["windows"]), int(config["evaluation"]["window_seed"]))
     started = time.perf_counter()
     model.train()
     train_flops = ObservedGemmFlops(model)
@@ -363,7 +379,7 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
     holdout = evaluate(model, assets["holdout"], holdout_starts,
                        sequence_length=sequence_length,
                        batch_size=int(config["evaluation"]["batch_size"]),
-                       device=device_obj, profile_decode=False)
+                       device=device_obj, profile_decode=False, story_group_ids=story_groups)
     posthoc = None
     graph_learning = None
     if arm == "G0":
@@ -389,6 +405,11 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
                    if line.strip()] if edge_log.exists() else [])
         changes = [change for event in events for change in event.get("edge_changes", [])]
         graph_learning = {
+            "effective_source_coverage_fraction_per_layer": [
+                len({row["source"] for event in events for summary in event.get("layers", [])
+                     if summary["layer"] == layer for row in summary.get("sources", [])
+                     if row["effective_probe_tokens"] > 0}) / (int(model.config["cell_count"]) + 1)
+                for layer in range(len(model.blocks))],
             "refresh_events": len(events),
             "edge_replacements": len(changes),
             "edge_changes": changes,
@@ -397,14 +418,16 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
             "interpretation": "training-only topology updates and final fixed-degree evaluation graph",
         }
     result = {"status": "completed", "scientific_decision": False,
-              "arm": arm, "seed": seed, "source_commit": source_commit,
+              "arm": arm, "seed": seed, "seed_role": seed_role(config, seed), "source_commit": source_commit,
               "identity": identity, "steps": steps,
               "train_tokens": steps * tokens_per_step,
               "train_seconds": train_seconds, "elapsed_seconds": time.perf_counter() - started,
               "tokens_per_second_train_only": steps * tokens_per_step / train_seconds if train_seconds else None,
               "training_forward_compute": train_flops.report(steps * tokens_per_step),
-              "training_compute_note": "Observed forward GEMMs include selected and top-2 backup Cell calls, including overflow retries; backward/optimizer FLOPs are not inferred.",
-              "training_compute_note": "Observed forward GEMMs include selected and top-2 backup Cell calls, including overflow retries; backward/optimizer FLOPs are not inferred.",
+              "training_probe_gemm_flops": sum(event.get("observed_probe_gemm_flops", 0)
+                  for event in ([json.loads(line) for line in (destination / "edge-refresh.jsonl").read_text().splitlines() if line.strip()]
+                                if (destination / "edge-refresh.jsonl").exists() else [])),
+              "training_compute_note": "Optimizer-forward and graph-probe GEMMs reported separately and summed; backward/optimizer FLOPs are not inferred.",
               "train_backup_cell_visits_per_token": backup_cell_visits /
                   max(1, steps * tokens_per_step),
               "peak_training_allocated_bytes": torch.cuda.max_memory_allocated(device_obj)
@@ -419,6 +442,7 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
               "posthoc_diagnostics": posthoc,
               "holdout_access": "final evaluation and preregistered posthoc diagnostics after the complete arm; never used for training or edge refresh",
               "checkpoint_sha256": __import__("hashlib").sha256(latest.read_bytes()).hexdigest()}
+    result["total_training_forward_gemm_flops"] = train_flops.total + result["training_probe_gemm_flops"]
     write_json(destination / "metrics.json", result)
     model.set_collect_trace(False)
     del model, optimizer, scaler
@@ -454,17 +478,22 @@ def profile_completed_arm(config: dict[str, Any], arm: str, seed: int, source_co
     model = make_model(model_cfg, arm, seed).to(torch.device(device))
     model.load_state_dict(payload["model"], strict=True)
     model.eval()
-    starts = _validation_starts(assets["holdout"], int(config["data"]["sequence_length"]),
-                               int(config["evaluation"]["windows"]), seed + 1)
+    starts, _ = holdout_windows(assets["holdout"], assets["eos_id"], int(config["data"]["sequence_length"]),
+                               int(config["evaluation"]["windows"]), int(config["evaluation"]["window_seed"]))
     sample, _ = make_batch(assets["holdout"], starts[:1], int(config["data"]["sequence_length"]),
                            torch.device(device))
     parity = check_decode_parity(model, sample)
     if not parity["passed"]:
         raise RuntimeError("full-forward and incremental KV-cache logits do not match")
+    evaluation = config["evaluation"]
+    prompts, _ = make_batch(assets["holdout"], starts[:int(evaluation["decode_repetitions"])],
+                            int(config["data"]["sequence_length"]), torch.device(device))
     decode = benchmark_decode(model, sample,
-                              prefix_length=max(2, int(config["data"]["sequence_length"]) // 2),
-                              decode_tokens=min(16, int(config["data"]["sequence_length"]) // 2),
-                              profile_kernels=True)
+                              prefix_length=int(evaluation["decode_prefix_length"]),
+                              decode_tokens=int(evaluation["decode_tokens"]),
+                              repetitions=int(evaluation["decode_repetitions"]),
+                              warmup_steps=int(evaluation["decode_warmup_steps"]),
+                              repetition_tokens=prompts, profile_kernels=True)
     result = {"status": "DECODE_PROFILE_COMPLETED", "scientific_decision": False,
               "identity": identity, "arm": arm, "seed": seed,
               "decode_parity": parity, "decode_profile": decode,

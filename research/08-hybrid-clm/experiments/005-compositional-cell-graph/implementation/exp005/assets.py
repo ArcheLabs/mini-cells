@@ -165,6 +165,8 @@ def load_assets(directory: str | Path, *, expected_manifest_sha256: str,
         if len(array) <= int(config["data"]["sequence_length"]) + 1:
             raise ValueError(f"token asset is too short: {split}")
         loaded[split] = array
+    from tokenizers import Tokenizer
+    loaded["eos_id"] = Tokenizer.from_file(str(directory / "tokenizer.json")).token_to_id("<eos>")
     probe = json.loads((directory / "probe-windows.json").read_text(encoding="utf-8"))
     loaded["probe_starts"] = np.asarray(probe["starts"], dtype=np.int64)
     return loaded

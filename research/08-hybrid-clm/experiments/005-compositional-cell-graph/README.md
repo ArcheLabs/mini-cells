@@ -4,7 +4,7 @@
 
 This experiment asks whether learned sparse predecessor-to-successor constraints help small FFN Cells compose more efficiently than fixed random connections and a state-aware global sequential router. It separately evaluates sequential composition (`S0` vs `P0`), learned connections (`G0` vs `R0` and `S0`), and the system comparison against native Top-2 MoE (`G0` vs `M0`). A favorable result on one question cannot stand in for another.
 
-The proposal is preserved in [PROTOCOL_DRAFT.md](PROTOCOL_DRAFT.md). Machine-readable proposed values are in [config/proposed.json](config/proposed.json) and [protocol.json](protocol.json). They remain explicitly unregistered: no seed, independent holdout, edge-refresh probe rule, or final runtime gate has been silently invented. **No full training command will run until those items are frozen and the registry status changes.**
+The proposal is preserved in [PROTOCOL_DRAFT.md](PROTOCOL_DRAFT.md). Machine-readable proposed values are in [config/proposed.json](config/proposed.json) and [protocol.json](protocol.json). They remain explicitly unregistered: audit-fixed initialization, auxiliary-loss and grouped measurement proposals are recorded; asset identities, seed matrix and remaining refresh settings still require preregistration. **No full training command will run until those items are frozen and the registry status changes.**
 
 ## Project-owned implementation
 
@@ -15,6 +15,8 @@ The proposal is preserved in [PROTOCOL_DRAFT.md](PROTOCOL_DRAFT.md). Machine-rea
 - `scripts/research/run_experiment_005.py`, `scripts/research/analyze_experiment_005.py`, and `scripts/research/publish_experiment_005.py` are thin repository entrypoints. The publisher reuses the established Kaggle Git askpass and GitHub write-preflight helpers.
 
 The old `kaggle/experiment-005-results` Consumer Language Bridge publisher is a separate historical study. This experiment uses the unique slug `005-compositional-cell-graph` and never writes to that old result path or branch.
+
+See [AUDIT_REPAIR.md](AUDIT_REPAIR.md) for each repaired finding, verification and the final review/registration procedure.
 
 ## Current engineering status
 

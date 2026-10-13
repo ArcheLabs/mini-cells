@@ -47,13 +47,39 @@
     "confirmation_seeds_required": 3
   },
   "bootstrap_replicates": 5000,
-  "b2_strong_flat_matching_rule": null,
-  "b2_graph_diagnostics_rule": null,
-  "system_runtime_rule": null,
+  "b2_strong_flat_matching_rule": {
+    "max_ratios": {
+      "ppl_ratio_g0_over_s0": 1.0,
+      "gemm_flops_ratio_g0_over_s0": 1.0
+    }
+  },
+  "b2_graph_diagnostics_rule": {
+    "min_edge_replacements": 6,
+    "min_perturbation_runs": 3,
+    "max_repeated_path_token_fraction": 0.95,
+    "min_ppl_relative_degradation": 0.01,
+    "min_source_coverage_fraction": 1.0,
+    "select_interventions_from": "fixed_training_probe_edge_use"
+  },
+  "system_runtime_rule": {
+    "decode_p95_ratio_upper_ci_max": 1.1,
+    "min_decode_repetitions": 30,
+    "min_warm_samples": 960
+  },
   "not_registered_because": [
     "no collision-free development/confirmation seed matrix has been registered",
     "the independent held-out data slice and its content hash are not yet frozen",
     "edge-refresh candidate sampling and matched-compute controls remain unspecified",
     "the bootstrap and decode measurement procedures remain proposals"
-  ]
+  ],
+  "measurement_proposal": {
+    "quality_sampling": "non-overlapping windows contained in stories; paired story-cluster bootstrap",
+    "decode_sampling": "30 independent prefill/cache-reset runs, 33 decode tokens each; first token separate, 960 warm samples; bootstrap whole runs",
+    "initialization": "per-parameter-name SHA256-derived RNG streams; identical shared tensor initialization across all arms",
+    "auxiliary_loss": "N * sum(mean(probability)^2), averaged over sequential hops and blocks; coefficient 0.01 for all arms",
+    "graph_sources": "4 consecutive cyclic source rows per refresh; START plus all 32 Cells covered in <=9 events; force predecessors for counterfactual probes and record natural support separately",
+    "graph_benefit": "signed PPL degradation under important-edge perturbation; improvement cannot support B2"
+  },
+  "rules_status": "AUDIT_FIXED_PROPOSAL_REQUIRES_PREREGISTRATION_REVIEW",
+  "bootstrap_seed": 65005
 }

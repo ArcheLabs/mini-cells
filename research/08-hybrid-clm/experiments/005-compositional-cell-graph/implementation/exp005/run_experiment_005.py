@@ -20,7 +20,7 @@ from exp005.assets import load_assets, prepare_assets
 from exp005.checkpoint import file_sha256
 from exp005.edge_refresh import make_edge_refresh_callback
 from exp005.models import ARMS
-from exp005.preflight import run_cpu_preflight, validate_config
+from exp005.preflight import run_cpu_preflight, validate_config, seed_role
 from exp005.training import profile_completed_arm, train_arm
 
 
@@ -42,7 +42,7 @@ def verify_source_commit(source_commit: str) -> None:
                       cwd=ROOT, check=False).returncode:
         raise ValueError("checkout does not descend from the requested source commit")
     protected = [
-        "src", "experiments/common", "research/registry.yaml",
+        "src", "experiments/common", "research/08-hybrid-clm/experiments/_shared/common", "research/registry.yaml",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/README.md",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/experiment.yaml",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/protocol.json",
@@ -78,7 +78,7 @@ def load_contract(path: str | Path) -> tuple[dict, dict, dict, Path, Path]:
 
 def blockers(config: dict, definition: dict, protocol: dict) -> list[str]:
     found = list(config.get("open_protocol_items", []))
-    for name in ("edge_refresh_candidate_count", "edge_refresh_probe_count",
+    for name in ("edge_refresh_candidate_count", "edge_refresh_probe_count", "edge_refresh_source_count",
                  "max_edge_replacements_per_refresh", "edge_refresh_min_improvement"):
         if config["training"].get(name) is None:
             found.append(f"training.{name} is not frozen")
@@ -110,6 +110,15 @@ def blockers(config: dict, definition: dict, protocol: dict) -> list[str]:
         found.append("G0-no-edge perturbation seeds are not frozen")
     if config.get("evaluation", {}).get("edge_perturbation_replacements") is None:
         found.append("G0-no-edge important-edge replacement count is not frozen")
+    sources = int(config["training"].get("edge_refresh_source_count", 0) or 0)
+    events = int(config["training"]["steps"]) // int(config["training"]["edge_refresh_every_steps"])
+    if sources * events < int(config["model"]["cell_count"]) + 1:
+        found.append("source-row schedule cannot cover all Cells plus START")
+    try:
+        for value in config["seeds"]["development"] + config["seeds"]["confirmation"]:
+            seed_role(config, value)
+    except ValueError as exc:
+        found.append(str(exc))
     return list(dict.fromkeys(found))
 
 
@@ -172,8 +181,7 @@ def main() -> int:
         parser.error(args.mode + " requires " + ", ".join(missing))
     if blockers(config, definition, protocol):
         raise RuntimeError("full training is blocked until the proposal is registered; see --mode dry-run")
-    if args.seed not in config["seeds"]["development"]:
-        raise ValueError("seed is not a registered development seed")
+    seed_role(config, args.seed)
     if not re.fullmatch(r"[0-9a-f]{40}", args.source_commit):
         raise ValueError("source_commit must be a full lowercase Git SHA")
     verify_source_commit(args.source_commit)
