@@ -4,6 +4,29 @@ import hashlib
 import numpy as np
 
 def story_digest(text):return hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+def select_unique_pilot_stories(rows,train_range,development_range,raw_limit):
+    """First occurrence wins, before split assignment; never scan reserved rows."""
+    high=development_range[1];seen=set();train=[];dev=[];indices={'train':[],'development':[]}
+    scanned=duplicates=0;unique=0
+    iterator=iter(rows)
+    while scanned<raw_limit and unique<high:
+        try:row=next(iterator)
+        except StopIteration:break
+        raw_index=scanned;scanned+=1;text=row['text'];sha=story_digest(text)
+        if sha in seen:
+            duplicates+=1;continue
+        seen.add(sha);ordinal=unique;unique+=1
+        for role,bounds,target in (('train',train_range,train),('development',development_range,dev)):
+            if bounds[0]<=ordinal<bounds[1]:
+                target.append(text);indices[role].append(raw_index)
+    if len(train)!=train_range[1]-train_range[0] or len(dev)!=development_range[1]-development_range[0]:
+        raise ValueError('insufficient unique pilot stories before reserved confirmation boundary')
+    audit={'policy':'pilot_global_exact_first_occurrence_v1','range_units':'unique story ordinal',
+           'raw_rows_scanned':scanned,'duplicates_removed':duplicates,'unique_stories_scanned':unique,
+           'raw_scan_limit_exclusive':raw_limit,'raw_row_indices':indices}
+    return train,dev,audit
+
 def encode_stories(texts,tokenizer,length):
     eos=tokenizer.token_to_id('<eos>');ids=[];starts=[];groups=[];hashes=[]
     if eos is None:raise ValueError('tokenizer must define EOS')

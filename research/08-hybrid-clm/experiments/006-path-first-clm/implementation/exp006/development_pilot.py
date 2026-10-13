@@ -22,6 +22,7 @@ def source_commit():
 
 def proposed(tokens):
     c=json.loads((BASE/"config/proposed.json").read_text())
+    c['data']['story_selection']='pilot_global_exact_first_occurrence_v1'
     if tokens not in (1000000,10000000):raise ValueError("pilot token budget must be 1M or 10M")
     t=c["training"];t["steps"]=tokens//(t["batch_size"]*t["sequence_length"]);t["tokens"]=tokens
     t["warmup_steps"]=50 if tokens==1000000 else 200
@@ -79,6 +80,7 @@ def prepare_pilot(root,tokens):
         "asset_manifest_sha256":c["data"]["manifest_sha256"],
         "tokenizer_sha256":digest(root/"assets/tokenizer.json"),
         "config_sha256":canonical_sha256(c),
+        "story_selection_audit":json.loads((root/"assets/manifest.json").read_text())["story_selection_audit"],
         "confirmation_access":False,"formal_registration":False})
     print(json.dumps({"status":"DEV_PILOT_ASSETS_READY","root":str(root)}),flush=True)
 

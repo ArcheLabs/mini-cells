@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 from .config import authorize,digest
 from .reuse import canonical_sha256,write_json
-from .data import encode_stories,assert_disjoint,select_windows
+from .data import encode_stories,assert_disjoint,select_windows,select_unique_pilot_stories
 
 def prepare(c,destination,source_parquet,source_sha256):
     # Only the explicitly supplied pinned training source is opened. No validation split.
@@ -13,14 +13,21 @@ def prepare(c,destination,source_parquet,source_sha256):
     from datasets import load_dataset
     from tokenizers import Tokenizer,models,pre_tokenizers,decoders,trainers
     data=c['data'];high=data['development_range'][1];rows=load_dataset('parquet',data_files=str(source_parquet),split='train',streaming=True)
-    train=[];dev=[]
-    for i,row in enumerate(rows):
-        if i>=high:break
-        if data['train_range'][0]<=i<data['train_range'][1]:train.append(row['text'])
-        if data['development_range'][0]<=i<high:dev.append(row['text'])
+    train=[];dev=[];selection_audit=None
+    if data.get('story_selection')=='pilot_global_exact_first_occurrence_v1':
+        train,dev,selection_audit=select_unique_pilot_stories(rows,data['train_range'],data['development_range'],data['confirmation_range'][0])
+    else:
+        if data.get('story_selection'):raise ValueError('unknown story selection policy')
+        for i,row in enumerate(rows):
+            if i>=high:break
+            if data['train_range'][0]<=i<data['train_range'][1]:train.append(row['text'])
+            if data['development_range'][0]<=i<high:dev.append(row['text'])
     if len(train)!=data['train_range'][1]-data['train_range'][0] or len(dev)!=high-data['development_range'][0]:raise ValueError('insufficient train/development stories')
     tokenizer=Tokenizer(models.BPE(unk_token='<unk>'));tokenizer.pre_tokenizer=pre_tokenizers.ByteLevel(add_prefix_space=False);tokenizer.decoder=decoders.ByteLevel()
     tokenizer.train_from_iterator(train[:data['tokenizer_stories']],trainers.BpeTrainer(vocab_size=c['model']['vocab_size'],special_tokens=['<unk>','<eos>'],initial_alphabet=pre_tokenizers.ByteLevel.alphabet()))
+    # Reject leakage before writing any bundle, including formal raw-row mode.
+    from .data import story_digest
+    assert_disjoint([story_digest(t) for t in train],[story_digest(t) for t in dev])
     destination=Path(destination)
     if destination.exists():raise FileExistsError('preserve existing asset bundle')
     destination.mkdir(parents=True);tokenizer.save(str(destination/'tokenizer.json'));metadata={}
@@ -32,6 +39,7 @@ def prepare(c,destination,source_parquet,source_sha256):
     names=['train.npy','development.npy','tokenizer.json','windows.json'];manifest={'experiment_id':'006-path-first-clm','source_parquet_sha256':source_sha256,
         'data_definition':{k:v for k,v in data.items() if k not in ('manifest_sha256','source_sha256','confirmation_manifest_sha256')},'sequence_length':c['training']['sequence_length'],'vocab_size':tokenizer.get_vocab_size(),'files':{n:digest(destination/n) for n in names},
         'confirmation_materialized':False,'tokenizer_training':'train only','duplicate_checks':'within split and cross train/development; exact story content'}
+    if selection_audit is not None:manifest['story_selection_audit']=selection_audit
     write_json(destination/'manifest.json',manifest);return manifest
 
 def load_assets(folder,c,p,seed,role,*,include_evaluation=None):
