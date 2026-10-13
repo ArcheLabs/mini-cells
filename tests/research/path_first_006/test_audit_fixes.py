@@ -129,3 +129,16 @@ def test_context_noop_is_not_charged_as_an_executed_read(c):
     row=summarize(model,out,count)
     assert row['selected_context_actions']==16 and row['context_read_calls']==0
     assert row['context_attention_gemm_flops']==0
+
+
+def test_micro_evidence_creates_missing_parent_and_preserves_existing(tmp_path):
+    from exp006.gpu_micro import save_evidence
+    import json
+    import pytest
+    output=tmp_path/'fresh'/'nested'/'micro.json'
+    save_evidence(str(output),{'status':'fixture'})
+    assert json.loads(output.read_text())=={'status':'fixture'}
+    assert not output.with_suffix('.tmp').exists()
+    with pytest.raises(FileExistsError):
+        save_evidence(output,{'status':'overwrite'})
+    assert json.loads(output.read_text())=={'status':'fixture'}

@@ -10,6 +10,13 @@ from .accounting import ComputeCounter,summarize
 from .reuse import write_json,canonical_sha256
 
 
+def save_evidence(output,result):
+    path=Path(output)
+    if path.exists():raise FileExistsError("micro evidence is immutable")
+    path.parent.mkdir(parents=True,exist_ok=True)
+    write_json(path,result)
+
+
 def run(c,output,device='cuda:0',source=None):
     if not str(device).startswith('cuda') or not torch.cuda.is_available():
         raise RuntimeError('GPU micro-preflight requires available CUDA; CPU is not a GPU pass')
@@ -42,5 +49,5 @@ def run(c,output,device='cuda:0',source=None):
             'gpu':torch.cuda.get_device_name(device),'cuda_capability':list(torch.cuda.get_device_capability(device)),
             'runtime':{'python':platform.python_version(),'torch':torch.__version__,'cuda':torch.version.cuda},'arms':rows,
             'scope':'untrained synthetic engineering workload; local device/shared desktop environment; not T4 validation, learning evidence, sparse-budget attainment or production latency'}
-    if output:write_json(Path(output),result)
+    if output:save_evidence(output,result)
     return result
