@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "experiment_id": "005-compositional-cell-graph",
+  "protocol_status": "registered",
+  "scientific_decision": false,
+  "model": {
+    "width": 512,
+    "layers": 6,
+    "heads": 8,
+    "sequence_length": 125,
+    "vocab_size": 8192,
+    "moe_experts": 8,
+    "moe_hidden": 1024,
+    "cell_count": 32,
+    "cell_hidden": 256,
+    "cell_visits": 4,
+    "graph_out_degree": 8,
+    "router_width": 32,
+    "residual_scale": 0.25,
+    "residual_scale_trainable": false,
+    "top2_backup_gradient": true
+  },
+  "data": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "vocab_size": 8192,
+    "train_stories": 50000,
+    "tokenizer_stories": 10000,
+    "legacy_regression_stories": 1024,
+    "holdout_stories": 1024,
+    "sequence_length": 125,
+    "train_tokens_per_arm": 10000000,
+    "batch_size": 16,
+    "validation_tokens": 32000,
+    "independent_holdout_stories": {
+      "split": "validation",
+      "story_indices": [
+        1024,
+        2048
+      ],
+      "text_sha256": "ee971cb1853b3c2b5ca7c488ce8c47b14243ac5bc5606fa48c2ef611626e97e8"
+    },
+    "probe_manifest_sha256": "959fc7475cf1c8dea92b9127000085ee8421fe107611ba37fe0d98e3680541d3",
+    "assets_manifest_sha256": "ca27f8743eae6c0d63b639e54c9224aa7fc03544d90d549f3f7d782a5ea2f51d"
+  },
+  "training": {
+    "steps": 5000,
+    "learning_rate": 0.0003,
+    "warmup_steps": 200,
+    "weight_decay": 0.1,
+    "evaluate_every_steps": 500,
+    "edge_refresh_every_steps": 500,
+    "edge_refresh_candidate_count": 4,
+    "edge_refresh_probe_count": 4,
+    "probe_seed": 50713021,
+    "max_edge_replacements_per_refresh": 4,
+    "edge_refresh_min_improvement": 0.0001,
+    "edge_refresh_proxy": "training-only soft-label-free next-token NLL; 4 cyclic source rows/layer; forced predecessor counterfactuals",
+    "manual_execution": true,
+    "resume_checkpoint": true,
+    "edge_refresh_source_count": 4,
+    "balance_coefficient": 0.01,
+    "balance_loss": "mean_probability_concentration_all_arms",
+    "probe_pool_window_count": 64
+  },
+  "arms": [
+    "M0",
+    "P0",
+    "S0",
+    "R0",
+    "G0"
+  ],
+  "evaluation": {
+    "windows": 256,
+    "batch_size": 16,
+    "bootstrap_replicates": 5000,
+    "bootstrap_seed": 65005,
+    "edge_perturbation_seeds": [
+      50713031,
+      50713032,
+      50713033
+    ],
+    "edge_perturbation_replacements": 4,
+    "window_seed": 55005,
+    "bootstrap_sampling_unit": "story_cluster",
+    "decode_repetitions": 30,
+    "decode_tokens": 33,
+    "decode_prefix_length": 62,
+    "decode_warmup_steps": 3
+  },
+  "posthoc_diagnostics": [
+    "G0-no-edge"
+  ],
+  "seeds": {
+    "development": [
+      50713001
+    ],
+    "confirmation": [
+      50713011,
+      50713012,
+      50713013
+    ]
+  },
+  "proposed_gates": {
+    "b1_sequential_vs_parallel_relative_ppl_improvement": 0.01,
+    "b2_graph_vs_random_relative_ppl_improvement": 0.01,
+    "system_ppl_ratio_max": 1.03,
+    "system_unique_weights_ratio_max": 0.75,
+    "system_gemm_flops_ratio_max": 0.8,
+    "system_decode_p50_ratio_max": 1.0,
+    "capacity_tolerance_fraction": 0.01,
+    "confirmation_seed_count": 3
+  },
+  "open_protocol_items": [],
+  "registration": {
+    "stage": "DEVELOPMENT_GATE_2",
+    "confirmation_authorized": false,
+    "shortlist_control_required": false,
+    "claim_limit": "without S0-shortlist, B2 does not establish superiority over strong global top-8 candidate retrieval",
+    "gate_1_evidence": "registration/trained-gate-1.json",
+    "seed_collision_evidence": "registration/seed-collision-check.json",
+    "evidence_manifest": "registration/evidence-manifest.json"
+  },
+  "asset_dependencies": {
+    "datasets": "2.21.0",
+    "tokenizers": "0.20.3",
+    "numpy": ">=1.24,<3",
+    "pyarrow": "17.0.0",
+    "huggingface-hub": "0.36.2"
+  }
+}

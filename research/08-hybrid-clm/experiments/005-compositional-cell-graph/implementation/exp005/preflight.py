@@ -146,7 +146,7 @@ def run_cpu_preflight(config: dict[str, Any]) -> dict[str, Any]:
     return {"status": "CPU_PREFLIGHT_PASSED", "scientific_decision": False,
             "capacity": capacity, "arms": arms, "synthetic_gate": synthetic,
             "device": "cpu",
-            "note": "engineering checks only; full training remains blocked until proposal protocol is registered"}
+            "note": "engineering checks only; use dry-run to inspect registration readiness"}
 
 
 def seed_role(config: dict[str, Any], seed: int) -> str:

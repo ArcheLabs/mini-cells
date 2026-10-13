@@ -63,8 +63,11 @@ def analyze(archive: Path, protocol_path: Path, config_path: Path) -> tuple[dict
                 profile = json.loads(profile_raw)
                 if profile.get("identity") != metrics.get("identity") or profile.get("status") != "DECODE_PROFILE_COMPLETED":
                     raise ValueError(f"{profile_path}: decode profile identity/status mismatch")
-                metrics["final_holdout"]["decode_parity"] = profile["decode_parity"]
-                metrics["final_holdout"]["decode_profile"] = profile["decode_profile"]
+                evaluation = metrics.get("final_holdout") or metrics.get("development_evaluation")
+                if evaluation is None:
+                    raise ValueError("completed arm has no seed-role evaluation")
+                evaluation["decode_parity"] = profile["decode_parity"]
+                evaluation["decode_profile"] = profile["decode_profile"]
                 input_hashes[profile_path.relative_to(archive).as_posix()] = _sha256(profile_raw)
             observed[seed][arm] = metrics
             input_hashes[metric_path.relative_to(archive).as_posix()] = _sha256(raw)
@@ -99,7 +102,7 @@ def main() -> int:
     parser.add_argument("--archive", required=True,
                         help="source-specific directory containing seed-N/ARM/metrics.json")
     parser.add_argument("--protocol", default=str(EXPERIMENT_DIR / "protocol.json"))
-    parser.add_argument("--config", default=str(EXPERIMENT_DIR / "config/proposed.json"))
+    parser.add_argument("--config", default=str(EXPERIMENT_DIR / "config/registered.json"))
     parser.add_argument("--output", help="optional immutable JSON report path")
     parser.add_argument("--output-dir", help="write under this directory using the input-content hash")
     args = parser.parse_args()

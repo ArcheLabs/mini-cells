@@ -98,6 +98,7 @@ def prepare_result_branch(source_commit: str, secret_name: str) -> str:
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/experiment.yaml",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/protocol.json",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/config",
+        "research/08-hybrid-clm/experiments/005-compositional-cell-graph/registration",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/implementation",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/manual-execution.md",
         "scripts/research/publish_experiment_results.py",

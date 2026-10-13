@@ -234,6 +234,8 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
     for split in ("train", "regression", "holdout"):
         if split not in assets or not isinstance(assets[split], np.ndarray):
             raise ValueError(f"prepared assets missing {split}.npy")
+    role = seed_role(config, seed)
+    evaluation_split = "regression" if role == "development" else "holdout"
     protocol_file = Path(config["protocol_path"])
     if config.get("protocol_status") != "registered":
         raise RuntimeError("protocol is not registered; full training is prohibited")
@@ -293,7 +295,7 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
         raise ValueError("step count does not exactly match the registered training token budget")
     regression_starts = _validation_starts(assets["regression"], sequence_length,
                                            int(config["evaluation"]["windows"]), seed + 1)
-    holdout_starts, story_groups = holdout_windows(assets["holdout"], assets["eos_id"], sequence_length,
+    holdout_starts, story_groups = holdout_windows(assets[evaluation_split], assets["eos_id"], sequence_length,
         int(config["evaluation"]["windows"]), int(config["evaluation"]["window_seed"]))
     started = time.perf_counter()
     model.train()
@@ -375,8 +377,8 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
                                   "tokens": step * tokens_per_step,
                                   "regression_ppl": evaluation["perplexity"]}), flush=True)
 
-    # The independent holdout is touched only after the complete arm checkpoint.
-    holdout = evaluate(model, assets["holdout"], holdout_starts,
+    # Development never evaluates the reserved confirmation holdout.
+    holdout = evaluate(model, assets[evaluation_split], holdout_starts,
                        sequence_length=sequence_length,
                        batch_size=int(config["evaluation"]["batch_size"]),
                        device=device_obj, profile_decode=False, story_group_ids=story_groups)
@@ -394,7 +396,7 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
         edge_use = [layer["transition_visit_counts"]
                     for layer in probe_evaluation["routing_summary"]["per_layer"]]
         posthoc = evaluate_graph_perturbations(
-            model, assets["holdout"], holdout_starts,
+            model, assets[evaluation_split], holdout_starts,
             sequence_length=sequence_length,
             batch_size=int(config["evaluation"]["batch_size"]),
             device=device_obj, seeds=perturbation_seeds, edge_use=edge_use,
@@ -437,10 +439,12 @@ def train_arm(config: dict[str, Any], arm: str, seed: int, source_commit: str,
                           "device_name": torch.cuda.get_device_name(device_obj)
                               if device_obj.type == "cuda" else platform.processor(),
                           "cuda_runtime": torch.version.cuda},
-              "final_holdout": holdout,
+              "evaluation_split": evaluation_split,
+              "final_holdout": holdout if role == "confirmation" else None,
+              "development_evaluation": holdout if role == "development" else None,
               "graph_learning": graph_learning,
               "posthoc_diagnostics": posthoc,
-              "holdout_access": "final evaluation and preregistered posthoc diagnostics after the complete arm; never used for training or edge refresh",
+              "holdout_access": "not evaluated; development uses legacy regression only" if role == "development" else "final confirmation evaluation and preregistered posthoc diagnostics only",
               "checkpoint_sha256": __import__("hashlib").sha256(latest.read_bytes()).hexdigest()}
     result["total_training_forward_gemm_flops"] = train_flops.total + result["training_probe_gemm_flops"]
     write_json(destination / "metrics.json", result)
@@ -478,15 +482,18 @@ def profile_completed_arm(config: dict[str, Any], arm: str, seed: int, source_co
     model = make_model(model_cfg, arm, seed).to(torch.device(device))
     model.load_state_dict(payload["model"], strict=True)
     model.eval()
-    starts, _ = holdout_windows(assets["holdout"], assets["eos_id"], int(config["data"]["sequence_length"]),
+    evaluation_split = metrics["evaluation_split"]
+    if evaluation_split != ("regression" if seed_role(config, seed) == "development" else "holdout"):
+        raise ValueError("completed metrics used the wrong seed-role evaluation split")
+    starts, _ = holdout_windows(assets[evaluation_split], assets["eos_id"], int(config["data"]["sequence_length"]),
                                int(config["evaluation"]["windows"]), int(config["evaluation"]["window_seed"]))
-    sample, _ = make_batch(assets["holdout"], starts[:1], int(config["data"]["sequence_length"]),
+    sample, _ = make_batch(assets[evaluation_split], starts[:1], int(config["data"]["sequence_length"]),
                            torch.device(device))
     parity = check_decode_parity(model, sample)
     if not parity["passed"]:
         raise RuntimeError("full-forward and incremental KV-cache logits do not match")
     evaluation = config["evaluation"]
-    prompts, _ = make_batch(assets["holdout"], starts[:int(evaluation["decode_repetitions"])],
+    prompts, _ = make_batch(assets[evaluation_split], starts[:int(evaluation["decode_repetitions"])],
                             int(config["data"]["sequence_length"]), torch.device(device))
     decode = benchmark_decode(model, sample,
                               prefix_length=int(evaluation["decode_prefix_length"]),

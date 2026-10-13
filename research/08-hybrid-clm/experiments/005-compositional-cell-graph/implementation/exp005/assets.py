@@ -31,7 +31,7 @@ def split_validation_tokens(tokens: np.ndarray, eos_id: int, regression_story_co
 
 
 def prepare_assets(config: dict[str, Any], destination: str | Path, *,
-                   probe_window_count: int, probe_seed: int) -> dict[str, Any]:
+                   probe_window_count: int, probe_seed: int, local_data_files=None) -> dict[str, Any]:
     """Reuse the existing pinned TinyStories loader and tokenizer implementation."""
     import time
     from tokenizers import Tokenizer
@@ -52,7 +52,8 @@ def prepare_assets(config: dict[str, Any], destination: str | Path, *,
         "sequence_length": int(data_cfg["sequence_length"]),
     }
     arrays = prepare_data(flat, destination, float("inf"),
-                          validation_prefix_count=regression_stories)
+                          validation_prefix_count=regression_stories, local_data_files=local_data_files,
+                          record_story_disjointness=True)
     tokenizer = Tokenizer.from_file(str(destination / "tokenizer.json"))
     eos_id = tokenizer.token_to_id("<eos>")
     if eos_id is None:
@@ -153,10 +154,16 @@ def load_assets(directory: str | Path, *, expected_manifest_sha256: str,
     }
     if any(data_config.get(key) != value for key, value in expected_data.items()):
         raise ValueError("asset data split/config does not match the registered experiment")
+    if data_config.get("probe_seed") != int(config["training"]["probe_seed"]) or data_config.get("probe_window_count") != int(config["training"]["probe_pool_window_count"]):
+        raise ValueError("registered probe pool does not match asset metadata")
     loaded: dict[str, Any] = {"manifest_sha256": expected_manifest_sha256}
     for name, checksum in manifest["files"].items():
         path = (directory / name).resolve()
-        if not path.is_relative_to(directory.resolve()) or file_sha256(path) != checksum:
+        try:
+            path.relative_to(directory.resolve())
+        except ValueError:
+            raise ValueError(f"asset file escapes its directory: {name}")
+        if file_sha256(path) != checksum:
             raise ValueError(f"asset file hash mismatch: {name}")
     for split in ("train", "regression", "holdout"):
         array = np.load(directory / f"{split}.npy", mmap_mode="r", allow_pickle=False)

@@ -30,7 +30,8 @@ def write_json(path, value):
     temporary.replace(path)
 
 
-def prepare_data(config, output, deadline, *, validation_prefix_count=0):
+def prepare_data(config, output, deadline, *, validation_prefix_count=0,
+                 local_data_files=None, record_story_disjointness=False):
     from datasets import load_dataset
     from tokenizers import Tokenizer, models, pre_tokenizers, decoders, trainers
 
@@ -39,8 +40,10 @@ def prepare_data(config, output, deadline, *, validation_prefix_count=0):
     validation_prefix_hash = None
     validation_suffix_hash = None
     for split, count in [('train', config['train_stories']), ('validation', config['validation_stories'])]:
-        dataset = load_dataset(config['dataset'], revision=config['dataset_revision'],
-                               split=split, streaming=True)
+        dataset = (load_dataset('parquet', data_files=local_data_files, split=split, streaming=True)
+                   if local_data_files else
+                   load_dataset(config['dataset'], revision=config['dataset_revision'],
+                                split=split, streaming=True))
         texts, digest = [], hashlib.sha256()
         prefix_digest = hashlib.sha256() if split == 'validation' and validation_prefix_count else None
         suffix_digest = hashlib.sha256() if split == 'validation' and validation_prefix_count else None
@@ -98,6 +101,19 @@ def prepare_data(config, output, deadline, *, validation_prefix_count=0):
         'sampling': 'same seeded random windows with replacement for both models; EOS between stories',
         'tokenizer_training_split': 'train only',
     }
+    if record_story_disjointness:
+        if not 0 < validation_prefix_count < len(records['validation']):
+            raise ValueError('story-disjointness verification requires the regression prefix boundary')
+        train_set = set(records['train'])
+        regression_set = set(records['validation'][:validation_prefix_count])
+        holdout_set = set(records['validation'][validation_prefix_count:])
+        data_record['exact_story_overlap_counts'] = {
+            'train_vs_holdout': len(train_set & holdout_set),
+            'regression_vs_holdout': len(regression_set & holdout_set),
+            'train_vs_regression': len(train_set & regression_set),
+        }
+        if data_record['exact_story_overlap_counts']['train_vs_holdout'] or data_record['exact_story_overlap_counts']['regression_vs_holdout']:
+            raise ValueError('the candidate independent holdout contains an already-used story')
     if validation_prefix_hash is not None:
         data_record['validation_prefix_story_count'] = int(validation_prefix_count)
         data_record['validation_prefix_text_sha256'] = validation_prefix_hash

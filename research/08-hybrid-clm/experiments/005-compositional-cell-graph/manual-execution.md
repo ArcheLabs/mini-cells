@@ -1,7 +1,7 @@
-# Manual execution policy
+# Manual execution
 
-Experiment 005 will use the existing manually executed Kaggle notebook pattern and the repository's immutable, source-specific results publisher. There is no application-defined wall-clock deadline for manual training. A Kaggle platform interruption is recorded as incomplete; it never counts as a completed arm.
+The original `bingjiangli/minicells` Notebook is the executable entrypoint. See [registration/README.md](registration/README.md) for the ready defaults, five-arm order and frozen evidence. Enable T4 ×2, Internet and the existing HF_TOKEN/GITHUB_TOKEN secrets. The Notebook runs GitHub write preflight, reproduces and checks the registered assets, then starts training. Pair workers run on distinct devices; decode profiling follows serially. There is no application time cap.
 
-At the current planned status, the notebook defaults to CPU preflight; `dry-run` and `analyze` are also available. It refuses training because the proposal has no registered seed matrix, independent holdout manifest, frozen edge-refresh probe procedure, or final matched-compute/runtime protocol. Once those protocol items are approved and registered, each training run pins one full source SHA and one registered seed. The notebook checks GitHub write access before preparing assets or using a GPU, then appends the immutable arm archive through the existing repository Git askpass publisher. Checkpoints and prepared assets remain outside Git; only metric curves, arm evidence and their hash manifest are committed.
+Source-specific archives use `results/005-compositional-cell-graph-<source-prefix>`; they never use the historical Consumer Language Bridge result branch. Checkpoints remain in Kaggle working storage. A retry preserves complete arms, resumes incomplete ones and supports `push_existing` without retraining.
 
-The experiment slug is `005-compositional-cell-graph`. It must not use the historical `kaggle/experiment-005-results` branch, which belongs to the separate Consumer Language Bridge study.
+Development seed 50713001 evaluates only legacy regression. Confirmation seeds are reserved and disabled until Gate 2 review. Keep the registered source SHA and seed unchanged across every arm in the current matrix.

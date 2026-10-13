@@ -254,6 +254,7 @@ def test_notebook_default_bootstrap_fetches_pinned_source(monkeypatch):
     import subprocess
     nb=json.loads((BASE/'notebook.ipynb').read_text())
     source=''.join(nb['cells'][1]['source'])
+    source=source.replace("MODE = 'train_pair'", "MODE = 'preflight'")
     source=source.replace("ROOT = Path('/kaggle/working/minicells-exp005')",f'ROOT = Path({str(ROOT)!r})')
     calls=[]
     def run(args,**kwargs):
@@ -266,3 +267,54 @@ def test_notebook_default_bootstrap_fetches_pinned_source(monkeypatch):
     assert ['git','fetch','--depth=1','origin',scope['SOURCE_SHA']] in calls
     assert any('preflight' in call and str(ROOT/'scripts/research/run_experiment_005.py') in call for call in calls)
     assert (scope['CONFIG_PATH']).is_file()
+
+
+def test_development_training_never_reads_reserved_holdout(tmp_path):
+    from exp005.training import train_arm
+    class ForbiddenHoldout(np.ndarray):
+        def __getitem__(self,key):raise AssertionError('development accessed confirmation holdout')
+    cfg=json.loads((BASE/'config/proposed.json').read_text())
+    cfg['model']=tiny();cfg['data'].update(vocab_size=16,sequence_length=8,batch_size=2,train_tokens_per_arm=32)
+    cfg['training'].update(steps=2,warmup_steps=1,evaluate_every_steps=1)
+    cfg['evaluation'].update(windows=4,batch_size=2)
+    cfg['protocol_status']='registered';cfg['seeds']={'development':[50713001],'confirmation':[50713011]}
+    cfg_file=tmp_path/'config.json';proto_file=tmp_path/'protocol.json'
+    cfg_file.write_text(json.dumps(cfg));proto_file.write_text('{}')
+    cfg['config_path']=str(cfg_file);cfg['protocol_path']=str(proto_file)
+    sequence=np.tile(np.array(list(range(1,16))+[0],dtype=np.int32),50)
+    assets={'train':sequence,'regression':sequence.copy(),
+            'holdout':sequence.copy().view(ForbiddenHoldout),'eos_id':0,'manifest_sha256':'d'*64}
+    result=train_arm(cfg,'M0',50713001,'a'*40,assets,tmp_path/'run',device='cpu')
+    assert result['evaluation_split']=='regression'
+    assert result['final_holdout'] is None
+    assert result['development_evaluation']['validation_tokens']==32
+    assert result['identity']['seed_role']=='development'
+
+
+def test_frozen_probe_sampling_is_reproducible_on_this_numpy():
+    c=json.loads((BASE/'config/registered.json').read_text())
+    data=json.loads((BASE/'registration/data.json').read_text())
+    probe=json.loads((BASE/'registration/probe-windows.json').read_text())
+    bound=data['token_counts']['train']-c['data']['sequence_length']-1
+    starts=np.random.default_rng(c['training']['probe_seed']).choice(
+        bound,c['training']['probe_pool_window_count'],replace=False).astype(np.int64).tolist()
+    assert starts==probe['starts']
+
+
+def test_registered_contract_is_ready_for_development():
+    from exp005.run_experiment_005 import DEFAULT_CONFIG, load_contract, blockers
+    config, definition, protocol, *_ = load_contract(str(DEFAULT_CONFIG))
+    assert DEFAULT_CONFIG.name == 'registered.json'
+    assert blockers(config, definition, protocol) == []
+    assert config['seeds']['development'] == [50713001]
+    assert config['registration']['confirmation_authorized'] is False
+
+
+def test_confirmation_is_rejected_before_assets(monkeypatch):
+    import sys
+    from exp005.run_experiment_005 import main
+    monkeypatch.setattr(sys, 'argv', ['runner', '--mode', 'train', '--arm', 'M0',
+        '--seed', '50713011', '--source-commit', 'a'*40, '--assets', '/missing',
+        '--asset-manifest-sha256', 'b'*64, '--output', '/missing'])
+    with pytest.raises(RuntimeError, match='confirmation seeds are reserved'):
+        main()

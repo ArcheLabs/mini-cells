@@ -97,13 +97,13 @@ def seed_decision(metrics_by_arm: dict[str, dict[str, Any]], *, protocol: dict[s
             return _incomplete("arm did not finish its registered token budget", seed=seed)
         if row.get("steps") != protocol["common"]["train_steps"]:
             return _incomplete("arm did not finish the registered optimizer-step budget", seed=seed)
-        evaluation = row.get("final_holdout", {})
+        evaluation = row.get("final_holdout") or row.get("development_evaluation") or {}
         if evaluation.get("validation_tokens") != protocol["common"]["heldout_validation_tokens"]:
             return _incomplete("holdout token count is incomplete or mismatched", seed=seed)
         if not isinstance(evaluation.get("decode_parity"), dict) or \
                 evaluation["decode_parity"].get("passed") is not True:
             return _incomplete("KV-cache decode parity did not pass", seed=seed)
-    metrics = {arm: metrics_by_arm[arm]["final_holdout"] for arm in ARMS}
+    metrics = {arm: (metrics_by_arm[arm].get("final_holdout") or metrics_by_arm[arm].get("development_evaluation")) for arm in ARMS}
     params = [metrics[arm]["model_total_params"] for arm in ARMS]
     tolerance = float(protocol["gates"]["parameter_tolerance_fraction"])
     if max(params) / min(params) - 1 > tolerance:

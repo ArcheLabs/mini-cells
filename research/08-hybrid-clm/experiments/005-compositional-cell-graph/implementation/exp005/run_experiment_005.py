@@ -24,7 +24,7 @@ from exp005.preflight import run_cpu_preflight, validate_config, seed_role
 from exp005.training import profile_completed_arm, train_arm
 
 
-DEFAULT_CONFIG = EXPERIMENT_DIR / "config/proposed.json"
+DEFAULT_CONFIG = EXPERIMENT_DIR / "config/registered.json"
 DEFAULT_DEFINITION = EXPERIMENT_DIR / "experiment.yaml"
 DEFAULT_PROTOCOL = EXPERIMENT_DIR / "protocol.json"
 
@@ -47,6 +47,7 @@ def verify_source_commit(source_commit: str) -> None:
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/experiment.yaml",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/protocol.json",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/config",
+        "research/08-hybrid-clm/experiments/005-compositional-cell-graph/registration",
         "research/08-hybrid-clm/experiments/005-compositional-cell-graph/implementation",
         "scripts/research/run_experiment_005.py",
     ]
@@ -69,7 +70,7 @@ def load_contract(path: str | Path) -> tuple[dict, dict, dict, Path, Path]:
     config["protocol_status"] = "registered" if protocol.get("status") == "REGISTERED" else "proposed"
     registry = json.loads((ROOT / "research/registry.yaml").read_text(encoding="utf-8"))
     entry = next((item for item in registry["experiments"] if item["id"] == "005"), None)
-    if entry is None or entry["directory"] != definition["config"].replace("/config/proposed.json", ""):
+    if entry is None or entry["directory"] != Path(definition["config"]).parents[1].as_posix():
         raise ValueError("Experiment 005 registry and definition path disagree")
     config["registry_status"] = entry.get("status")
     validate_config(config)
@@ -119,11 +120,30 @@ def blockers(config: dict, definition: dict, protocol: dict) -> list[str]:
             seed_role(config, value)
     except ValueError as exc:
         found.append(str(exc))
+    if len(config["seeds"]["confirmation"]) != int(protocol["gates"]["confirmation_seeds_required"]):
+        found.append("confirmation seed reservation does not match the protocol matrix")
+    if config.get("protocol_status") == "registered":
+        evidence_path = EXPERIMENT_DIR / "registration/evidence-manifest.json"
+        if not evidence_path.is_file():
+            found.append("registration evidence manifest is missing")
+        else:
+            evidence = json.loads(evidence_path.read_text())
+            for name, expected in evidence.get("files", {}).items():
+                file = evidence_path.parent / name
+                if not file.is_file() or file_sha256(file) != expected:
+                    found.append("registration evidence changed: " + name)
+            for name, field in (("config_path", "registered_config_sha256"), ("protocol_path", "registered_protocol_sha256")):
+                if file_sha256(config[name]) != evidence.get(field):
+                    found.append("registered contract differs from its evidence record: " + name)
     return list(dict.fromkeys(found))
 
 
 def dry_run(config: dict, definition: dict, protocol: dict) -> dict:
     return {"status": "DRY_RUN_ONLY", "scientific_decision": False,
+            "registration_stage": config.get("registration", {}).get("stage"),
+            "development_seeds": config["seeds"]["development"],
+            "confirmation_seeds_reserved": config["seeds"]["confirmation"],
+            "confirmation_authorized": config.get("registration", {}).get("confirmation_authorized", False),
             "experiment": definition["id"], "protocol_status": protocol["status"],
             "training_arms": [
                 {"arm": arm, "tokens": config["data"]["train_tokens_per_arm"],
@@ -181,7 +201,9 @@ def main() -> int:
         parser.error(args.mode + " requires " + ", ".join(missing))
     if blockers(config, definition, protocol):
         raise RuntimeError("full training is blocked until the proposal is registered; see --mode dry-run")
-    seed_role(config, args.seed)
+    role = seed_role(config, args.seed)
+    if role == "confirmation" and not config.get("registration", {}).get("confirmation_authorized", False):
+        raise RuntimeError("confirmation seeds are reserved; complete and review Gate 2 development first")
     if not re.fullmatch(r"[0-9a-f]{40}", args.source_commit):
         raise ValueError("source_commit must be a full lowercase Git SHA")
     verify_source_commit(args.source_commit)
