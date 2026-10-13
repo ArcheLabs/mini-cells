@@ -2,7 +2,7 @@ name: Research Notebook CI
 
 on:
   push:
-    branches: [main, codex/fix-004-publication-recovery]
+    branches: [main, codex/fix-004-publication-recovery, codex/research-project-first-layout]
   pull_request:
   workflow_dispatch:
 
@@ -21,3 +21,21 @@ jobs:
         run: python -m compileall -q src/minicells/runtime/research.py src/minicells/training/runner.py src/minicells/research/assets.py
       - name: Verify notebook publication and recovery using local Git
         run: python tests/research/03-routing-and-growth/test_cell_graph_manual_publication.py
+
+  experiment-005-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU audit dependencies
+        run: |
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy pytest
+      - name: Run Experiment 005 audit regressions
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+        run: python -m pytest -q tests/research/routing_005
+      - name: Run CPU Gate 0
+        run: python scripts/research/run_experiment_005.py --mode preflight

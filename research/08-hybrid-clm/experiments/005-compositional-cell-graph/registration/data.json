@@ -1,0 +1,48 @@
+{
+  "dataset": "roneneldan/TinyStories",
+  "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+  "story_counts": {
+    "train": 50000,
+    "validation": 2048
+  },
+  "text_sha256": {
+    "train": "37604a6860e0cf81ff00c964a00877062123211d11c8692f83e2a323deff7add",
+    "validation": "ca87a7651399ffda7135cb24f35f68c3cdb308ec9a3b722fa690018a47a67e58"
+  },
+  "token_counts": {
+    "train": 10929122,
+    "validation": 392204
+  },
+  "token_sha256": {
+    "train": "a31631a9b47ef5108d8a4caffcf35b8837327fea0152856a3a0bf7355fd9cadb",
+    "validation": "6cf24e255af8c74f7abc126764caa463e71416f8b06fa38d1d5da7a197489534"
+  },
+  "tokenizer_sha256": "f90b9bc48228144bb2ecbea12782b708420c12f56f16ca8c57db94f9bafe550d",
+  "tokenizer_vocab_size": 8192,
+  "sampling": "same seeded random windows with replacement for both models; EOS between stories",
+  "tokenizer_training_split": "train only",
+  "exact_story_overlap_counts": {
+    "train_vs_holdout": 0,
+    "regression_vs_holdout": 0,
+    "train_vs_regression": 0
+  },
+  "validation_prefix_story_count": 1024,
+  "validation_prefix_text_sha256": "7a01825d608741b36e26a01a719fca735a829a7f80bf950dd98c9889d068500b",
+  "validation_suffix_text_sha256": "ee971cb1853b3c2b5ca7c488ce8c47b14243ac5bc5606fa48c2ef611626e97e8",
+  "experiment_005_splits": {
+    "legacy_regression_story_indices": [
+      0,
+      1024
+    ],
+    "independent_holdout_story_indices": [
+      1024,
+      2048
+    ],
+    "legacy_regression_text_sha256": "7a01825d608741b36e26a01a719fca735a829a7f80bf950dd98c9889d068500b",
+    "independent_holdout_text_sha256": "ee971cb1853b3c2b5ca7c488ce8c47b14243ac5bc5606fa48c2ef611626e97e8",
+    "independent_holdout_story_source": "same pinned validation split; stories after the hash-verified Experiment 004 prefix",
+    "holdout_role": "final evaluation only; not used for training, tuning, or edge refresh",
+    "regression_token_sha256": "8659e0ff3820670427910f1f6a30a0938964f4d95ddd5c7d6e18f961c04ee7e0",
+    "holdout_token_sha256": "bf897d4b8acda5ee77fc8c9da89f06e3f906a7bd5d80dbbc4066ebc03044f327"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "experiment_id": "005-compositional-cell-graph",
+  "protocol_status": "proposed",
+  "scientific_decision": false,
+  "model": {
+    "width": 512,
+    "layers": 6,
+    "heads": 8,
+    "sequence_length": 125,
+    "vocab_size": 8192,
+    "moe_experts": 8,
+    "moe_hidden": 1024,
+    "cell_count": 32,
+    "cell_hidden": 256,
+    "cell_visits": 4,
+    "graph_out_degree": 8,
+    "router_width": 32,
+    "residual_scale": 0.25,
+    "residual_scale_trainable": false,
+    "top2_backup_gradient": true
+  },
+  "data": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "vocab_size": 8192,
+    "train_stories": 50000,
+    "tokenizer_stories": 10000,
+    "legacy_regression_stories": 1024,
+    "holdout_stories": 1024,
+    "sequence_length": 125,
+    "train_tokens_per_arm": 10000000,
+    "batch_size": 16,
+    "validation_tokens": 32000,
+    "independent_holdout_stories": null,
+    "probe_manifest_sha256": null,
+    "assets_manifest_sha256": null
+  },
+  "training": {
+    "steps": 5000,
+    "learning_rate": 0.0003,
+    "warmup_steps": 200,
+    "weight_decay": 0.1,
+    "evaluate_every_steps": 500,
+    "edge_refresh_every_steps": 500,
+    "edge_refresh_candidate_count": null,
+    "edge_refresh_probe_count": null,
+    "probe_seed": null,
+    "max_edge_replacements_per_refresh": null,
+    "edge_refresh_min_improvement": null,
+    "edge_refresh_proxy": null,
+    "manual_execution": true,
+    "resume_checkpoint": true,
+    "edge_refresh_source_count": 4,
+    "balance_coefficient": 0.01,
+    "balance_loss": "mean_probability_concentration_all_arms"
+  },
+  "arms": [
+    "M0",
+    "P0",
+    "S0",
+    "R0",
+    "G0"
+  ],
+  "evaluation": {
+    "windows": 256,
+    "batch_size": 16,
+    "bootstrap_replicates": 5000,
+    "bootstrap_seed": 65005,
+    "edge_perturbation_seeds": [],
+    "edge_perturbation_replacements": null,
+    "window_seed": 55005,
+    "bootstrap_sampling_unit": "story_cluster",
+    "decode_repetitions": 30,
+    "decode_tokens": 33,
+    "decode_prefix_length": 62,
+    "decode_warmup_steps": 3
+  },
+  "posthoc_diagnostics": [
+    "G0-no-edge"
+  ],
+  "seeds": {
+    "development": [],
+    "confirmation": []
+  },
+  "proposed_gates": {
+    "b1_sequential_vs_parallel_relative_ppl_improvement": 0.01,
+    "b2_graph_vs_random_relative_ppl_improvement": 0.01,
+    "system_ppl_ratio_max": 1.03,
+    "system_unique_weights_ratio_max": 0.75,
+    "system_gemm_flops_ratio_max": 0.8,
+    "system_decode_p50_ratio_max": 1.0,
+    "capacity_tolerance_fraction": 0.01,
+    "confirmation_seed_count": 3
+  },
+  "open_protocol_items": [
+    "reserve and hash a TinyStories holdout disjoint from train, edge probes, and the previously observed 004 validation stories",
+    "register collision-free development and untouched confirmation seeds",
+    "freeze edge-candidate sampling, NLL probe, refresh replacement schedule, and matched-compute accounting for R0/S0",
+    "decide whether S0-shortlist is a required trained control",
+    "freeze paired-bootstrap sampling unit and interval procedure",
+    "freeze the decode batch matrix, warm/cold cache procedure, and CUDA kernel-time measurement",
+    "freeze G0-no-edge perturbation seeds and graph-utilization/collapse criteria",
+    "review the audit-fixed auxiliary loss, initialization, source coverage and grouped measurement rules before registration"
+  ]
+}

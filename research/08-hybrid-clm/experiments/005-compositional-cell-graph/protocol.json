@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "experiment_id": "005-compositional-cell-graph",
+  "status": "REGISTERED",
+  "scientific_decision": false,
+  "source_proposal": "PROTOCOL_DRAFT.md",
+  "arms": {
+    "M0": "8-expert top-2 MoE, hidden width 1024",
+    "P0": "32-cell parallel top-4, hidden width 256",
+    "S0": "32-cell state-aware flat sequential routing, four hard visits",
+    "R0": "32-cell fixed random graph, out-degree 8, four hard visits",
+    "G0": "32-cell learned sparse graph, out-degree 8, four hard visits",
+    "G0-no-edge": "post-hoc graph perturbation of the same G0 checkpoint; no retraining"
+  },
+  "common": {
+    "layers": 6,
+    "width": 512,
+    "heads": 8,
+    "sequence_length": 125,
+    "vocab_size": 8192,
+    "ffn_parameters_per_layer": 8388608,
+    "train_tokens_per_arm": 10000000,
+    "train_steps": 5000,
+    "batch_size": 16,
+    "heldout_validation_tokens": 32000,
+    "cell_visits_per_sequential_block": 4,
+    "stop_enabled": false,
+    "residual_scale_proposal": 0.25,
+    "top2_backup_gradient": true,
+    "manual_execution": true
+  },
+  "decision_boundaries": {
+    "b1": "S0 versus P0 under matched cell capacity, visits, data and training-token budget",
+    "b2_primary": "G0 versus R0, then separately versus the strong S0 baseline",
+    "system": "G0 versus M0 on held-out PPL, unique touched weights, whole-model observed GEMM FLOPs and actual batch-1 KV-cache decode latency",
+    "no_edge_claim": "G0-no-edge is a post-hoc mechanism diagnostic, not an independent trained arm"
+  },
+  "gates": {
+    "b1_ppl_relative_improvement_min": 0.01,
+    "b2_vs_r0_ppl_relative_improvement_min": 0.01,
+    "b2_direction_each_confirmation_seed": "G0 better than R0",
+    "system_ppl_ratio_max": 1.03,
+    "system_unique_weight_ratio_max": 0.75,
+    "system_gemm_flops_ratio_max": 0.8,
+    "system_decode_p50_ratio_max": 1.0,
+    "parameter_tolerance_fraction": 0.01,
+    "confirmation_seeds_required": 3
+  },
+  "bootstrap_replicates": 5000,
+  "b2_strong_flat_matching_rule": {
+    "max_ratios": {
+      "ppl_ratio_g0_over_s0": 1.0,
+      "gemm_flops_ratio_g0_over_s0": 1.0
+    }
+  },
+  "b2_graph_diagnostics_rule": {
+    "min_edge_replacements": 6,
+    "min_perturbation_runs": 3,
+    "max_repeated_path_token_fraction": 0.95,
+    "min_ppl_relative_degradation": 0.01,
+    "min_source_coverage_fraction": 1.0,
+    "select_interventions_from": "fixed_training_probe_edge_use"
+  },
+  "system_runtime_rule": {
+    "decode_p95_ratio_upper_ci_max": 1.1,
+    "min_decode_repetitions": 30,
+    "min_warm_samples": 960
+  },
+  "not_registered_because": [],
+  "rules_status": "FROZEN_FOR_DEVELOPMENT_GATE_2",
+  "bootstrap_seed": 65005,
+  "registration_stage": "DEVELOPMENT_GATE_2",
+  "confirmation_authorized": false,
+  "registered_on": "2026-10-13",
+  "registration_authorization": "User request to complete registration; no scientific result approved",
+  "measurement": {
+    "quality_sampling": "non-overlapping windows contained in stories; paired story-cluster bootstrap",
+    "decode_sampling": "30 independent prefill/cache-reset runs, 33 decode tokens each; first token separate, 960 warm samples; bootstrap whole runs",
+    "initialization": "per-parameter-name SHA256-derived RNG streams; identical shared tensor initialization across all arms",
+    "auxiliary_loss": "N * sum(mean(probability)^2), averaged over sequential hops and blocks; coefficient 0.01 for all arms",
+    "graph_sources": "4 consecutive cyclic source rows per refresh; START plus all 32 Cells covered in <=9 events; force predecessors for counterfactual probes and record natural support separately",
+    "graph_benefit": "signed PPL degradation under important-edge perturbation; improvement cannot support B2"
+  },
+  "seed_matrix": {
+    "development": [
+      50713001
+    ],
+    "confirmation": [
+      50713011,
+      50713012,
+      50713013
+    ]
+  },
+  "shortlist_control": {
+    "required": false,
+    "claim_limit": "without S0-shortlist, B2 does not establish superiority over strong global top-8 candidate retrieval"
+  },
+  "heldout_role": "development uses only the 004 regression prefix; independent suffix reserved for confirmation"
+}

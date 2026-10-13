@@ -1,0 +1,190 @@
+{
+  "status": "ENGINEERING_READY",
+  "scientific_decision": false,
+  "gate": "CPU_GATE_0",
+  "protocol_registered": false,
+  "base_commit": "0c1886052973547be1a8beded4c44c9dac1538c2",
+  "gpu_used": false,
+  "real_corpus_read": false,
+  "confirmation_read": false,
+  "local_runtime": {
+    "python": "3.8.10",
+    "torch": "2.4.1+cu121",
+    "numpy": "1.24.4"
+  },
+  "pytest": {
+    "tests": 61,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "pytest_scope": "006 unit/fixture/gate tests plus historical 005 regressions",
+  "tests_xml_sha256": "ab87b81220d47d1abe53d8d1fc1b3f94c201a24fcab41bc0fce01443b5fd86ed",
+  "candidates": {
+    "small": {
+      "parameter_counts": {
+        "R0": {
+          "total": 16529287,
+          "controller_and_critic": 13063,
+          "cells": 12582912,
+          "shared": 3933312
+        },
+        "R1": {
+          "total": 16555954,
+          "controller_and_critic": 39730,
+          "cells": 12582912,
+          "shared": 3933312
+        },
+        "R2": {
+          "total": 16556514,
+          "controller_and_critic": 40290,
+          "cells": 12582912,
+          "shared": 3933312
+        },
+        "M0": {
+          "total": 16483968
+        }
+      },
+      "capacity_max_min_ratio": 1.0044010034477135,
+      "arms": {
+        "R0": {
+          "finite_forward_backward": true,
+          "causal": true,
+          "decode": {
+            "passed": true,
+            "max_abs_error": 3.725290298461914e-08,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "scope": "every position, static K/V, sampled actions replayed"
+          }
+        },
+        "R1": {
+          "finite_forward_backward": true,
+          "causal": true,
+          "decode": {
+            "passed": true,
+            "max_abs_error": 3.725290298461914e-08,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "scope": "every position, static K/V, sampled actions replayed"
+          }
+        },
+        "R2": {
+          "finite_forward_backward": true,
+          "causal": true,
+          "decode": {
+            "passed": true,
+            "max_abs_error": 3.725290298461914e-08,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "scope": "every position, static K/V, sampled actions replayed"
+          }
+        },
+        "M0": {
+          "finite_forward_backward": true,
+          "causal": true,
+          "decode": {
+            "passed": true,
+            "max_abs_error": 5.960464477539063e-08,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "scope": "every position, static K/V, sampled actions replayed"
+          }
+        }
+      }
+    },
+    "61m": {
+      "parameter_counts": {
+        "R0": {
+          "total": 61163879,
+          "controller_and_critic": 17255,
+          "cells": 55574528,
+          "shared": 5572096
+        },
+        "R1": {
+          "total": 61199682,
+          "controller_and_critic": 53058,
+          "cells": 55574528,
+          "shared": 5572096
+        },
+        "R2": {
+          "total": 61200754,
+          "controller_and_critic": 54130,
+          "cells": 55574528,
+          "shared": 5572096
+        },
+        "M0": {
+          "total": 60919296
+        }
+      },
+      "capacity_max_min_ratio": 1.004620178145197,
+      "arms": {
+        "R0": {
+          "finite_forward_backward": true,
+          "causal": true,
+          "decode": {
+            "passed": true,
+            "max_abs_error": 3.725290298461914e-08,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "scope": "every position, static K/V, sampled actions replayed"
+          }
+        },
+        "R1": {
+          "finite_forward_backward": true,
+          "causal": true,
+          "decode": {
+            "passed": true,
+            "max_abs_error": 3.725290298461914e-08,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "scope": "every position, static K/V, sampled actions replayed"
+          }
+        },
+        "R2": {
+          "finite_forward_backward": true,
+          "causal": true,
+          "decode": {
+            "passed": true,
+            "max_abs_error": 3.725290298461914e-08,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "scope": "every position, static K/V, sampled actions replayed"
+          }
+        },
+        "M0": {
+          "finite_forward_backward": true,
+          "causal": true,
+          "decode": {
+            "passed": true,
+            "max_abs_error": 5.960464477539063e-08,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "scope": "every position, static K/V, sampled actions replayed"
+          }
+        }
+      }
+    }
+  },
+  "source_files_sha256": {
+    "implementation/exp006/__init__.py": "32c65c38f1e35809a0dffe42cbfb9bf46ff30663628b206ef49ad7263d1d92d7",
+    "implementation/exp006/accounting.py": "cd00e160889ab337a3eb6184f1a226b917bb224be3700dda0ea16ad67c78e6a1",
+    "implementation/exp006/assets.py": "138220af6817f37ad267fae7e5a62a684ce3d011ef5ce0a2a4d3f3f5a0c83001",
+    "implementation/exp006/baseline.py": "dfea88691fbcc80e493dbc261ad6dbc693c4497a6fbd730c8fce8312b3f29f0e",
+    "implementation/exp006/cells.py": "beae0b761969699056cc135b01c7b240dda2802df67eab7fd3667946069aa383",
+    "implementation/exp006/checkpoint.py": "b7c4aa157986273a4b21e028f3a4a15a9f23c9cbbb2157bfbe8dccfc1ba2faf2",
+    "implementation/exp006/cli.py": "42022465afee91fc1b02f4fe10e4dac8da2f46b4b3960e70f57620151e689650",
+    "implementation/exp006/config.py": "f18913131b33b5dd3bb73440d9fa5a483a9539eafb70def65649a6fe806ad933",
+    "implementation/exp006/controller.py": "96c5e57e06c8c3b5bede0c37f58790cc8558d9d723178ccba56790b95d97e3cf",
+    "implementation/exp006/data.py": "745b9cc424e3e4154521c53bc35e183fc1c0242c44b4fe6b462b80ba628cd1f6",
+    "implementation/exp006/evaluation.py": "6a77a2b5c221315c00ef42ffbc1fce617f35a3f7343bddadb9fef0bc85fe8339",
+    "implementation/exp006/memory.py": "8d85da870b742fb4079b5569d07d24ff441514b6fe4e7207f7b48a9cd679b877",
+    "implementation/exp006/model.py": "31d8a1587247bd8bc60b1879ee524d4f62f8dd9ba5b355a247be38d387d098be",
+    "implementation/exp006/preflight.py": "87fbf8b51e1d9d994ec5a5569bbde5213beca09693354dff6c98568f26c4d43e",
+    "implementation/exp006/profiling.py": "c96000cfc507d0615142af7164b517bb75ad40e38db8f57a6406dbccc8960c58",
+    "implementation/exp006/publish.py": "d7553ff4a1805d4878d07be47809f4ef11c18a3b29b560de6b78c5c4ae26da65",
+    "implementation/exp006/report.py": "f0078a1cb073e911ea4482d6fb1ea2bfc8bf6057354e65b344b40f9553a3c254",
+    "implementation/exp006/reuse.py": "d1807b7a7a35b15d3e454c6a3e37dfe6f6a9ce12885784faa3acd841a1b6c5fb",
+    "implementation/exp006/training.py": "0a834c3185acd8658fef27b2dab52df2b0c7aa9d6ba78295d68bc430d336b6a6"
+  }
+}

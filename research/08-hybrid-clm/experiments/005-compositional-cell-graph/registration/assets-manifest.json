@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "005-compositional-cell-graph",
+  "data_config": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "train_stories": 50000,
+    "validation_stories": 2048,
+    "tokenizer_stories": 10000,
+    "vocab_size": 8192,
+    "sequence_length": 125,
+    "legacy_regression_stories": 1024,
+    "holdout_stories": 1024,
+    "probe_seed": 50713021,
+    "probe_window_count": 64
+  },
+  "source_text_hashes": {
+    "train": "37604a6860e0cf81ff00c964a00877062123211d11c8692f83e2a323deff7add",
+    "validation": "ca87a7651399ffda7135cb24f35f68c3cdb308ec9a3b722fa690018a47a67e58"
+  },
+  "files": {
+    "train.npy": "4a419f65f53e0926b3df09b216bc94ef67cba62e2beac19a1c5caeb226be1dbe",
+    "regression.npy": "3f861ae124723d5765d07bdf8727ac70caf5dd04dd5767012cd785a5192ae83b",
+    "holdout.npy": "f068962eb91d40842a79c9ad66b641e824a687099b48c072b74a8e02c443fca0",
+    "tokenizer.json": "f90b9bc48228144bb2ecbea12782b708420c12f56f16ca8c57db94f9bafe550d",
+    "data.json": "3cf984b12014cc8c2c6f6629de4df50160d8a116c9e855a94b1364a500eec4c0",
+    "probe-windows.json": "959fc7475cf1c8dea92b9127000085ee8421fe107611ba37fe0d98e3680541d3"
+  },
+  "disjointness": {
+    "train_vs_regression": "distinct dataset splits",
+    "train_vs_holdout": "distinct dataset splits",
+    "regression_vs_holdout": "disjoint story-index ranges"
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "status": "TRAINED_GATE_1_PASSED",
+  "scientific_decision": false,
+  "seed": 50713041,
+  "predeclared_steps": 400,
+  "predeclared_min_kl_relative_improvement": 0.25,
+  "train_input_sha256": "c438a6d31b885f6a814a13c3e018fc93efc7070ab1313059c5b79ae4987bab10",
+  "validation_input_sha256": "78734aecbec331eb99770309e62d1b1378a67dea2a5de670742850c479f17f3c",
+  "train_examples": 512,
+  "validation_examples": 256,
+  "initial_adjacency": [
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      1,
+      0,
+      1
+    ],
+    [
+      1,
+      1,
+      0
+    ]
+  ],
+  "arms": {
+    "fixed-random": {
+      "validation_soft_label_nll": 0.8072218894958496,
+      "validation_kl": 0.20489132404327393,
+      "edge_changes": [],
+      "final_adjacency": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "training_curve": [
+        {
+          "step": 50,
+          "training_soft_label_nll": 0.8360392451286316
+        },
+        {
+          "step": 100,
+          "training_soft_label_nll": 0.8360392451286316
+        },
+        {
+          "step": 150,
+          "training_soft_label_nll": 0.8360392451286316
+        },
+        {
+          "step": 200,
+          "training_soft_label_nll": 0.8360392451286316
+        },
+        {
+          "step": 250,
+          "training_soft_label_nll": 0.8360392451286316
+        },
+        {
+          "step": 300,
+          "training_soft_label_nll": 0.8360392451286316
+        },
+        {
+          "step": 350,
+          "training_soft_label_nll": 0.8360392451286316
+        },
+        {
+          "step": 400,
+          "training_soft_label_nll": 0.8360392451286316
+        }
+      ],
+      "steps": 400,
+      "cell_executions_per_example": 2
+    },
+    "learned-adjacency": {
+      "validation_soft_label_nll": 0.6023305654525757,
+      "validation_kl": 0.0,
+      "edge_changes": [
+        {
+          "step": 50,
+          "source": 1,
+          "removed": 2,
+          "added": 0,
+          "removed_probe_nll": 1.47046959400177,
+          "added_probe_nll": 0.6090503931045532,
+          "probe_improvement": 0.8614192008972168
+        }
+      ],
+      "final_adjacency": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "training_curve": [
+        {
+          "step": 50,
+          "training_soft_label_nll": 0.8360392451286316
+        },
+        {
+          "step": 100,
+          "training_soft_label_nll": 0.6060583591461182
+        },
+        {
+          "step": 150,
+          "training_soft_label_nll": 0.6060583591461182
+        },
+        {
+          "step": 200,
+          "training_soft_label_nll": 0.6060583591461182
+        },
+        {
+          "step": 250,
+          "training_soft_label_nll": 0.6060583591461182
+        },
+        {
+          "step": 300,
+          "training_soft_label_nll": 0.6060583591461182
+        },
+        {
+          "step": 350,
+          "training_soft_label_nll": 0.6060583591461182
+        },
+        {
+          "step": 400,
+          "training_soft_label_nll": 0.6060583591461182
+        }
+      ],
+      "steps": 400,
+      "cell_executions_per_example": 2
+    }
+  },
+  "scope": "trained router mechanism with two frozen affine Cells and an instruction-fixed first Cell; does not establish the full LM graph claim"
+}
