@@ -1,0 +1,37 @@
+Initialized empty Git repository in /tmp/clm-native-notebook-check/.git/
+From https://github.com/ArcheLabs/mini-cells
+ * branch            b56da19d78fe620545fbb1a57e053f7e374a9c68 -> FETCH_HEAD
+HEAD is now at b56da19 feat(research): implement preregistered CLM Native bounded sparse paths
+{
+  "status": "M0_ENGINEERING_FEASIBLE",
+  "scientific_decision": false,
+  "config_sha256": "a8796296068a4a859e5066dbef85d7f8795adc1187be546c38eae52028c0f06c",
+  "parameters": {
+    "B0": 9475,
+    "B1": 9488,
+    "B2": 9549,
+    "C0": 9475,
+    "B3": 9474
+  },
+  "parameter_spread": 0.007916402786573781,
+  "within_five_percent": true,
+  "under_one_million": true,
+  "resource": {
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.29",
+    "cpu_logical_cores": 8,
+    "ram_bytes": 8256872448,
+    "disk_free_bytes": 601633394688,
+    "torch": "2.4.1+cu121",
+    "cuda_available": true,
+    "gpus": [
+      "Quadro K620, 2048 MiB, 1536 MiB"
+    ],
+    "paid_resources_requested": false,
+    "gpu_runtime_verified": false,
+    "selected_screening_device": "cpu"
+  },
+  "screening_jobs": 12,
+  "formal_confirmation": "NOT_REGISTERED"
+}
+{'mode': 'preflight', 'results': '/tmp/clm-native-notebook-check-output', 'formal_confirmation': 'NOT_REGISTERED'}
+NOTEBOOK_CPU_PREFLIGHT_END_TO_END_PASSED
