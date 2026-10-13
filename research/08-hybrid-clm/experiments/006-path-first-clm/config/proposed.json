@@ -1,0 +1,84 @@
+{
+  "experiment_id": "006-path-first-clm",
+  "model": {
+    "width": 384,
+    "cell_count": 16,
+    "cell_hidden": 1024,
+    "heads": 6,
+    "steps": 6,
+    "vocab_size": 8192,
+    "max_sequence_length": 125,
+    "router_hidden": 64,
+    "step_width": 16,
+    "edge_rank": 16,
+    "alpha": 0.408248290463863,
+    "memory_mode": "static_input_readonly",
+    "moe_layers": 6,
+    "moe_experts": 4,
+    "moe_hidden": 528,
+    "moe_top_k": 2
+  },
+  "training": {
+    "steps": 5000,
+    "batch_size": 16,
+    "sequence_length": 125,
+    "tokens": 10000000,
+    "learning_rate": 0.0003,
+    "warmup_steps": 200,
+    "weight_decay": 0.1,
+    "evaluate_every": 500,
+    "checkpoint_every": 100,
+    "entropy_coefficient": 0.001,
+    "critic_coefficient": 0.5,
+    "cost_lambda": 0.0,
+    "policy": "on_policy_hard",
+    "actor_state_gradient": "include_policy_dependence_on_computed_state",
+    "critic_state_gradient": "detached",
+    "checkpoint_selection": "last_completed_step",
+    "moe_balance_coefficient": 0.01
+  },
+  "data": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "split": "train",
+    "train_range": [
+      0,
+      50000
+    ],
+    "development_range": [
+      50000,
+      51024
+    ],
+    "confirmation_range": [
+      60000,
+      61024
+    ],
+    "tokenizer_stories": 10000,
+    "manifest_sha256": null,
+    "source_sha256": null,
+    "confirmation_manifest_sha256": null
+  },
+  "seeds": {
+    "development": [],
+    "confirmation": [],
+    "namespace": "path-first-006; must collision-check before registration"
+  },
+  "evaluation": {
+    "windows": 256,
+    "window_seed": 60601,
+    "bootstrap_seed": 60602,
+    "bootstrap_replicates": 5000,
+    "intervention_seed": 60603,
+    "sampled_seed": 60604,
+    "decode_repetitions": 30,
+    "decode_tokens": 33,
+    "decode_prefix": 62,
+    "parity_atol": 1e-05,
+    "parity_rtol": 0.0001
+  },
+  "authorization": {
+    "gpu_development": false,
+    "confirmation": false,
+    "r3": false
+  }
+}

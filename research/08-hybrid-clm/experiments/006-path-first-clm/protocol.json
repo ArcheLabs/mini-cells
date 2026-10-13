@@ -1,0 +1,39 @@
+{
+  "experiment_id": "006-path-first-clm",
+  "status": "PROPOSED_NOT_REGISTERED",
+  "scientific_decision": false,
+  "arms": [
+    "R0",
+    "R1",
+    "R2",
+    "M0"
+  ],
+  "stage": "Gate 0 engineering",
+  "thresholds": {
+    "connection_ppl_ratio_ci_upper": null,
+    "connection_cost_ratio_max": null,
+    "state_ppl_ratio_ci_upper": null,
+    "moe_quality_ratio_max": null,
+    "intervention_nll_delta_ci_lower": null,
+    "collapse_max_fraction": null,
+    "max_unused_cells_fraction": null,
+    "state_cost_ratio_max": null,
+    "moe_decode_p50_ratio_max": null,
+    "max_sampled_greedy_nll_gap": null,
+    "min_context_read_fraction": null
+  },
+  "registration_required": [
+    "data/source hashes and disjoint story identities",
+    "tokenizer and assets manifest",
+    "collision-checked development seed and at least 3 untouched confirmation seeds",
+    "selected model scale and exact operation budget",
+    "optimizer, actor/critic/entropy settings",
+    "GPU budget and explicit development authorization",
+    "quality, cost, collapse and intervention thresholds",
+    "bootstrap, evaluation and checkpoint selection",
+    "confirmation approval and R3 remain separate"
+  ],
+  "registration_evidence_sha256": null,
+  "confirmation_review_approved": false,
+  "r3_registered": false
+}
