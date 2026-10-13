@@ -19,10 +19,16 @@ def verify_source(source):
     subprocess.run(['git','diff','--exit-code','HEAD','--',*paths],cwd=ROOT,check=True,stdout=subprocess.PIPE)
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--mode',required=True,choices=['preflight','dry-run','prepare-assets','train','profile']);ap.add_argument('--config');ap.add_argument('--arm',choices=['R0','R1','R2','M0']);ap.add_argument('--seed',type=int);ap.add_argument('--role',default='development',choices=['development','confirmation']);ap.add_argument('--source-commit');ap.add_argument('--assets');ap.add_argument('--output');ap.add_argument('--source-parquet');ap.add_argument('--source-sha256');ap.add_argument('--device',default='cuda:0');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--mode',required=True,choices=['preflight','dry-run','prepare-assets','train','profile','gpu-micro-preflight']);ap.add_argument('--config');ap.add_argument('--arm',choices=['R0','R1','R2','M0']);ap.add_argument('--seed',type=int);ap.add_argument('--role',default='development',choices=['development','confirmation']);ap.add_argument('--source-commit');ap.add_argument('--assets');ap.add_argument('--output');ap.add_argument('--source-parquet');ap.add_argument('--source-sha256');ap.add_argument('--device',default='cuda:0');args=ap.parse_args()
     c,p,_=load(args.config)
     if args.mode=='preflight':print(json.dumps({**run(c),'registration_blockers':blockers(c,p)},indent=2));return
     if args.mode=='dry-run':print(json.dumps({'experiment':'006-path-first-clm','status':p['status'],'blockers':blockers(c,p),'gpu_started':False,'confirmation_read':False},indent=2));return
+    if args.mode=='gpu-micro-preflight':
+        from .gpu_micro import run as gpu_micro
+        if args.assets or args.seed is not None or args.role!='development':raise RuntimeError('GPU micro mode accepts no corpus, experiment seed or confirmation role')
+        if args.source_commit:verify_source(args.source_commit)
+        result=gpu_micro(c,args.output,args.device,args.source_commit)
+        print(json.dumps({'status':result['status'],'scientific_decision':False,'optimizer_steps':0},indent=2));return
     if args.mode=='prepare-assets':
         if args.role=='confirmation':
             authorize(c,p,args.seed,'confirmation',require_confirmation_manifest=False)
@@ -34,9 +40,15 @@ def main():
         print(json.dumps(result,indent=2));return
     authorize(c,p,args.seed,args.role)
     if not all([args.arm,args.source_commit,args.assets,args.output]):ap.error('train/profile require arm, source, assets and output')
-    verify_source(args.source_commit);assets=load_assets(args.assets,c,p,args.seed,args.role)
+    verify_source(args.source_commit)
+    if args.mode=='profile':
+        record=json.loads((Path(args.output)/'metrics.json').read_text())
+        if record['status']!='completed' or record['steps']!=c['training']['steps']:raise RuntimeError('profiling requires the frozen final checkpoint before evaluation assets are opened')
+    assets=load_assets(args.assets,c,p,args.seed,args.role,include_evaluation=args.role=='development' or args.mode=='profile')
     run_id=identity(args.source_commit,c,p,assets['manifest_sha256'],args.arm,args.seed,args.role)
-    if args.mode=='train':train(c,run_id,assets,args.output,args.device);return
+    if args.mode=='train':
+        deferred=(lambda:load_assets(args.assets,c,p,args.seed,args.role,include_evaluation=True)) if args.role=='confirmation' else None
+        train(c,run_id,assets,args.output,args.device,final_assets_loader=deferred);return
     output=Path(args.output)
     try:
         output=Path(args.output);m=json.loads((output/'metrics.json').read_text());checkpoint=output/'latest.pt'

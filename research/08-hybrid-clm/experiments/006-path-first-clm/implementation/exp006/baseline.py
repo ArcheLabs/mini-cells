@@ -26,7 +26,7 @@ class MoELM(nn.Module):
         offset=0 if past is None else past[0][0].shape[-2];pos=torch.arange(offset,offset+tokens.shape[1],device=tokens.device)
         h=self.embedding(tokens)+self.position(pos)[None];caches=[];paths=[];balance=h.new_zeros(())
         for i,block in enumerate(self.blocks):h,cache,path,aux=block(h,None if past is None else past[i]);caches.append(cache);paths.append(path);balance=balance+aux
-        paths=torch.stack(paths,dim=-2);return Rollout(F.linear(self.final(h),self.embedding.weight),paths,h.new_empty(0),h.new_empty(0),h.new_empty(0),caches,h,balance/len(self.blocks))
+        paths=torch.stack(paths,dim=-2);return Rollout(F.linear(self.final(h),self.embedding.weight),paths,h.new_empty(0),h.new_empty(0),h.new_empty(0),caches,h,balance/len(self.blocks),training_mode=self.training)
     def prefill(self,tokens,**kwargs):return self(tokens,**kwargs)
     def decode_step(self,token,memory,**kwargs):return self(token.reshape(-1,1),past=memory,**kwargs)
     def parameter_breakdown(self):return {'total':sum(p.numel() for p in self.parameters())}

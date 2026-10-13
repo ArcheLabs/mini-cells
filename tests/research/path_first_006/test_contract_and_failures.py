@@ -108,10 +108,10 @@ def test_direct_public_train_api_retains_registration_gate(c,tmp_path):
     assert not list(tmp_path.iterdir())
 
 def test_confirmation_matrix_distinguishes_mechanism_from_system(c):
-    _,p,_=config.load();p['status']='REGISTERED'
+    _,p,_=config.load();p['status']='REGISTERED';p['system_candidate_arm']='R2'
     p['thresholds'].update(connection_ppl_ratio_ci_upper=1.,connection_cost_ratio_max=1.,state_ppl_ratio_ci_upper=1.,
         state_cost_ratio_max=1.,moe_quality_ratio_max=1.,moe_decode_p50_ratio_max=1.,intervention_nll_delta_ci_lower=0.,
-        collapse_max_fraction=.8,max_unused_cells_fraction=.5,max_sampled_greedy_nll_gap=1.,min_context_read_fraction=.01)
+        collapse_max_fraction=.8,max_unused_cells_fraction=.5,max_sampled_greedy_nll_gap=1.,min_context_read_fraction=.01,max_no_context_fraction=.8)
     c['seeds']['confirmation']=[701,702,703];c['data']['confirmation_manifest_sha256']='a'*64
     reports=[]
     for seed in c['seeds']['confirmation']:
@@ -119,14 +119,16 @@ def test_confirmation_matrix_distinguishes_mechanism_from_system(c):
         for arm,row in r.items():
             row['identity'].update(role='confirmation',seed=seed)
             row['confirmation_holdout']=row.pop('development_eval')
-        r['R2']['routing_diagnostics']={'modal_path_fraction':.2,'unused_cell_fraction':.1,'context_read_fraction':.2}
+        r['R2']['routing_diagnostics']={'modal_path_fraction':.2,'unused_cell_fraction':.1,'context_read_fraction':.2,'no_context_fraction':.1}
         r['R2']['sampled_greedy_nll_gap']=0.
+        r['R1']['routing_diagnostics']=dict(r['R2']['routing_diagnostics']);r['R1']['sampled_greedy_nll_gap']=0.
         r['R2']['interventions']={'interventions':{label:{'window_starts':[0,8],'story_groups':[0,1],
             'paired_effect':{'paired_bootstrap_95pct_ci':[.01,.02]},'order_changed_fraction':.8} for label in
-            ('connection_removed','connection_shuffled','same_multiset_order_permuted')}}
+            ('connection_removed','connection_predecessor_shifted','same_multiset_order_permuted',*[f'connection_prior_row_permuted_seed_{c["evaluation"]["intervention_seed"]+i}' for i in range(3)])}}
         reports.append({'seed':seed,**analyze(r,c,p)})
     result=matrix(reports,c,p)
     assert result['evidence_verdict']=='PATH_MECHANISM_SIGNAL_ONLY'
     assert result['scientific_decision'] is False and result['system_superiority_supported'] is False
     reports[1]['frozen_criteria']['connection_value']=False
-    assert matrix(reports,c,p)['evidence_verdict']=='NOT_SUPPORTED'
+    assert matrix(reports,c,p)['evidence_verdict']=='STATE_PATH_SIGNAL_ONLY'
+    assert matrix(reports,c,p)['hypotheses']['state_path']['evidence_status']=='STATE_PATH_SUPPORTED'

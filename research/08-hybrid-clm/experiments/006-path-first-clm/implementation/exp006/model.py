@@ -19,6 +19,9 @@ class Rollout:
     states: torch.Tensor
     balance: torch.Tensor | None = None
     edge_mode: str = 'normal'
+    training_mode: bool = False
+    context_events: object = None
+    context_mode: str = 'normal'
 
 def initialize(model,seed):
     for name,p in model.named_parameters():
@@ -38,9 +41,11 @@ class PathFirstLM(nn.Module):
         self.init=nn.Linear(d,d,bias=False);self.memory=InputMemory(d);self.norm=nn.LayerNorm(d);self.final=nn.LayerNorm(d)
         self.cells=nn.ModuleList(FeedForward(d,c['cell_hidden']) for _ in range(c['cell_count']))
         self.context=ContextRead(d,c['heads']);self.controller=Controller(c,arm);initialize(self,seed)
-    def forward(self,tokens,*,policy='greedy',replay=None,generator=None,past=None,edge_mode='normal'):
+    def forward(self,tokens,*,policy='greedy',replay=None,generator=None,past=None,edge_mode='normal',edge_permutation=None,capture_context_states=False,context_mode='normal'):
         if policy not in ('greedy','sampled'):raise ValueError('unknown policy')
-        if edge_mode not in ('normal','zero','shuffle'):raise ValueError('unknown connection intervention')
+        if edge_mode not in ('normal','zero','shuffle','permutation'):raise ValueError('unknown connection intervention')
+        if context_mode not in ('normal','zero_replay') or context_mode=='zero_replay' and replay is None:raise ValueError('context intervention requires action replay')
+        context_events=[]
         b,n=tokens.shape;offset=0 if past is None else past.key.shape[1]
         if offset+n>self.config['max_sequence_length']:raise ValueError('position budget exceeded')
         positions=torch.arange(offset,offset+n,device=tokens.device)
@@ -51,7 +56,7 @@ class PathFirstLM(nn.Module):
         acts,lps,ents,vals=[],[],[],[]
         if replay is not None and replay.shape!=(b,n,self.config['steps']):raise ValueError('replay shape mismatch')
         for t in range(self.config['steps']):
-            scores,value=self.controller(h,previous,t,edge_mode);logq=scores.log_softmax(-1);q=logq.exp()
+            scores,value=self.controller(h,previous,t,edge_mode,edge_permutation);logq=scores.log_softmax(-1);q=logq.exp()
             action=(replay[:,:,t].reshape(-1) if replay is not None else
                     torch.multinomial(q,1,generator=generator).squeeze(-1) if policy=='sampled' else scores.argmax(-1))
             if torch.any(action<0) or torch.any(action>self.config['cell_count']):raise ValueError('invalid action; STOP is disabled')
@@ -61,14 +66,17 @@ class PathFirstLM(nn.Module):
                 rows=torch.where(action==a)[0]
                 if rows.numel()==0:continue
                 if a==self.config['cell_count']:
-                    update=self.context(normalized[rows],memory,batch_ids[rows],pos[rows])
+                    if context_mode=='zero_replay':update=torch.zeros_like(normalized[rows])
+                    else:update=self.context(normalized[rows],memory,batch_ids[rows],pos[rows])
+                    if capture_context_states:context_events.append({'step':t,'rows':rows.detach(),
+                        'before':h[rows].detach(),'after':(h[rows]+self.config['alpha']*update.to(h.dtype)).detach()})
                 else:update=self.cells[a](normalized[rows])
                 delta=delta.index_copy(0,rows,update.to(delta.dtype))
             h=h+self.config['alpha']*delta
             acts.append(action);lps.append(logq.gather(1,action[:,None]).squeeze(1));ents.append(-(q*logq).sum(-1));vals.append(value);previous=action
         logits=F.linear(self.final(h).reshape(b,n,-1),self.embedding.weight)
         stack=lambda x:torch.stack(x,-1).reshape(b,n,-1)
-        return Rollout(logits,stack(acts),stack(lps),stack(ents),stack(vals),memory,h.reshape(b,n,-1),edge_mode=edge_mode)
+        return Rollout(logits,stack(acts),stack(lps),stack(ents),stack(vals),memory,h.reshape(b,n,-1),edge_mode=edge_mode,training_mode=self.training,context_events=context_events,context_mode=context_mode)
     def prefill(self,tokens,**kwargs):return self(tokens,**kwargs)
     def decode_step(self,token,memory,**kwargs):return self(token.reshape(-1,1),past=memory,**kwargs)
     def parameter_breakdown(self):

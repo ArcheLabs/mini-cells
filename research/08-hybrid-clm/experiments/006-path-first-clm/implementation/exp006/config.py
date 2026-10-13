@@ -53,5 +53,6 @@ def authorize(c,p,seed,role='development',*,require_confirmation_manifest=True):
     if role not in ('development','confirmation') or seed not in c['seeds'][role]:raise RuntimeError('seed outside registered namespace')
     if role=='confirmation':
         if not (c['authorization']['confirmation'] and p['confirmation_review_approved']):raise RuntimeError('confirmation data and seeds are sealed')
+        if p.get('system_candidate_arm') not in ('R1','R2'):raise RuntimeError('system candidate must be frozen from development before confirmation')
         if require_confirmation_manifest and not re.fullmatch('[0-9a-f]{64}',c['data'].get('confirmation_manifest_sha256') or ''):raise RuntimeError('confirmation manifest is not frozen')
     if role=='development' and not c['authorization']['gpu_development']:raise RuntimeError('GPU development not authorized')

@@ -107,3 +107,7 @@ Timing is real isolated cached FP32 decode, not a sparsity proxy; no GPU speed c
 exists. Input-only K/V may limit context expressivity, and score-function training
 may have high variance. Dataset duplicates/coverage, model scale, seeds and GPU
 budget are still unverified. R3 requires a separate registered stage.
+
+## Audit repair 1
+
+See [the controlled audit repair report](reports/audit-fixes-1/README.md). Confirmation tokens are loaded only after the final checkpoint; scientific hypotheses are reported independently. `gpu-micro-preflight` is synthetic engineering only and does not authorize training.

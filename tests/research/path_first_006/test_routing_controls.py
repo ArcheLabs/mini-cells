@@ -11,7 +11,7 @@ def test_r0_static_r1_predecessor_independent_r2_signal(c):
 def test_interventions_same_weights_order_multiset(c):
     model=make_model(c['model'],'R2',123).eval();before={n:p.clone() for n,p in model.state_dict().items()};tokens=np.arange(32,dtype=np.int32)
     suite=intervention_suite(model,tokens,[0,8],[0,1],c)
-    assert set(suite['interventions'])=={'connection_removed','connection_shuffled','same_multiset_order_permuted'}
+    assert set(suite['interventions'])>={'connection_removed','connection_predecessor_shifted','same_multiset_order_permuted','context_noop_same_path'}
     for n,p in model.state_dict().items():assert torch.equal(before[n],p)
     natural=np.asarray(suite['natural']['actions']);permuted=np.asarray(suite['interventions']['same_multiset_order_permuted']['actions'])
     assert np.array_equal(np.sort(natural,-1),np.sort(permuted,-1))

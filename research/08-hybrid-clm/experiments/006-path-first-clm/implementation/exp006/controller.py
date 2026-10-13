@@ -11,11 +11,14 @@ class Controller(nn.Module):
         if arm=='R2':
             self.source=nn.Embedding(self.actions+1,c['edge_rank']);self.target=nn.Embedding(self.actions,c['edge_rank'])
         self.critic=nn.Sequential(nn.Linear(c['width']+c['step_width'],32),nn.Tanh(),nn.Linear(32,1))
-    def forward(self,h,previous,t,edge_mode='normal'):
+    def forward(self,h,previous,t,edge_mode='normal',edge_permutation=None):
         step=self.step.weight[t].expand(h.shape[0],-1)
         scores=self.static[t].expand(h.shape[0],-1) if self.arm=='R0' else self.scorer(torch.cat((h,step),-1))
         if self.arm=='R2' and edge_mode!='zero':
-            ids=previous if edge_mode=='normal' else (previous+1)%(self.actions+1)
+            if edge_mode=='permutation':
+                if edge_permutation is None or sorted(edge_permutation.detach().cpu().tolist())!=list(range(self.actions+1)):raise ValueError('invalid predecessor row permutation')
+                ids=edge_permutation[previous]
+            else:ids=previous if edge_mode=='normal' else (previous+1)%(self.actions+1)
             scores=scores+(self.source(ids).float()@self.target.weight.float().T)*self.source.embedding_dim**-0.5
         value=self.critic(torch.cat((h.detach(),step.detach()),-1)).squeeze(-1) if self.training else h.new_zeros(h.shape[0])
         return scores.float(),value

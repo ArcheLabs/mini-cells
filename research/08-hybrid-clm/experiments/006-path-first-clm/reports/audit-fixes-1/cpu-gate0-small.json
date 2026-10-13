@@ -1,0 +1,1278 @@
+{
+  "status": "ENGINEERING_READY",
+  "scientific_decision": false,
+  "gate": "CPU_GATE_0",
+  "parameter_counts": {
+    "R0": {
+      "total": 16529287,
+      "controller_and_critic": 13063,
+      "cells": 12582912,
+      "shared": 3933312
+    },
+    "R1": {
+      "total": 16555954,
+      "controller_and_critic": 39730,
+      "cells": 12582912,
+      "shared": 3933312
+    },
+    "R2": {
+      "total": 16556514,
+      "controller_and_critic": 40290,
+      "cells": 12582912,
+      "shared": 3933312
+    },
+    "M0": {
+      "total": 16483968
+    }
+  },
+  "capacity_max_min_ratio": 1.0044010034477135,
+  "arms": {
+    "R0": {
+      "finite_forward_backward": true,
+      "causal": true,
+      "decode": {
+        "passed": true,
+        "max_abs_error": 3.725290298461914e-08,
+        "atol": 1e-05,
+        "rtol": 0.0001,
+        "scope": "every position, static K/V, sampled actions replayed"
+      },
+      "compute": {
+        "total_params": 5169,
+        "parameter_resident_bytes": 20676,
+        "parameter_catalog": {
+          "embedding.weight": {
+            "shape": [
+              32,
+              16
+            ],
+            "numel": 512,
+            "bytes": 2048
+          },
+          "position.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "init.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "memory.norm.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "memory.norm.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "memory.key.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "memory.value.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "norm.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "norm.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "final.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "final.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "cells.0.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.0.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.1.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.1.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.2.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.2.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "context.query.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "context.output.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "controller.static": {
+            "shape": [
+              2,
+              4
+            ],
+            "numel": 8,
+            "bytes": 32
+          },
+          "controller.step.weight": {
+            "shape": [
+              2,
+              4
+            ],
+            "numel": 8,
+            "bytes": 32
+          },
+          "controller.critic.0.weight": {
+            "shape": [
+              32,
+              20
+            ],
+            "numel": 640,
+            "bytes": 2560
+          },
+          "controller.critic.0.bias": {
+            "shape": [
+              32
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "controller.critic.2.weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "controller.critic.2.bias": {
+            "shape": [
+              1
+            ],
+            "numel": 1,
+            "bytes": 4
+          }
+        },
+        "unique_touched_weights": {
+          "mean": 3265.0,
+          "min": 2625,
+          "max": 3649,
+          "scope": "exact distinct parameter entries for current token operations; static K/V production attributed to its input token; cached historical activations are not parameter reads; training critic included only in training mode",
+          "inventory_method": "named parameter objects/module.numel plus executed action multiplicities"
+        },
+        "unique_touched_fraction": 0.6316502224801702,
+        "executed_work_to_total_params_ratio": 0.8222093248210486,
+        "executed_parameter_work": 68000,
+        "executed_parameter_work_per_token": 4250.0,
+        "parameter_work_by_module": {
+          "embedding": 256,
+          "position": 128,
+          "memory.norm": 512,
+          "memory.key": 4096,
+          "memory.value": 4096,
+          "init": 4096,
+          "controller.critic.0": 21504,
+          "controller.critic.2": 1056,
+          "controller.static_logits": 128,
+          "controller.step_rows": 128,
+          "norm": 1024,
+          "cells.0.up": 3456,
+          "cells.0.down": 3456,
+          "cells.1.up": 2688,
+          "cells.1.down": 2688,
+          "cells.2.up": 2688,
+          "cells.2.down": 2688,
+          "context.query": 2304,
+          "context.output": 2304,
+          "final": 512,
+          "tied_lm_head": 8192
+        },
+        "execution_trace": {
+          "verified": true,
+          "selected_module_token_rows": {
+            "cells.0.up": 9,
+            "cells.1.up": 7,
+            "cells.2.up": 7,
+            "context.query": 9
+          },
+          "expected_token_rows": {
+            "context.query": 9,
+            "cells.2.up": 7,
+            "cells.0.up": 9,
+            "cells.1.up": 7
+          }
+        },
+        "gemm_flops": 133120,
+        "gemm_flops_per_token": 8320.0,
+        "gemm_by_module": {
+          "memory.key": 8192,
+          "memory.value": 8192,
+          "init": 8192,
+          "controller.critic.0": 40960,
+          "controller.critic.2": 2048,
+          "cells.0.up": 6912,
+          "cells.0.down": 6912,
+          "cells.1.up": 5376,
+          "cells.1.down": 5376,
+          "cells.2.up": 5376,
+          "cells.2.down": 5376,
+          "context.query": 4608,
+          "context.output": 4608,
+          "context.qk_av": 4608,
+          "tied_lm_head": 16384
+        },
+        "controller_gemm_flops": 43008,
+        "context_attention_gemm_flops": 4608,
+        "selected_context_actions": 9,
+        "context_read_calls": 9,
+        "calls_per_token": 2,
+        "unique_operations_per_token": 1.625,
+        "training_mode": true,
+        "non_gemm_flops": null,
+        "non_gemm_note": "not inferred; profile reports operator counts separately",
+        "precision": "torch.float32",
+        "executed_shapes_scope": "dense masked attention products, repeated executions and actual projection/parameter visits; not a 30B/500M achievement"
+      }
+    },
+    "R1": {
+      "finite_forward_backward": true,
+      "causal": true,
+      "decode": {
+        "passed": true,
+        "max_abs_error": 3.725290298461914e-08,
+        "atol": 1e-05,
+        "rtol": 0.0001,
+        "scope": "every position, static K/V, sampled actions replayed"
+      },
+      "compute": {
+        "total_params": 5365,
+        "parameter_resident_bytes": 21460,
+        "parameter_catalog": {
+          "embedding.weight": {
+            "shape": [
+              32,
+              16
+            ],
+            "numel": 512,
+            "bytes": 2048
+          },
+          "position.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "init.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "memory.norm.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "memory.norm.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "memory.key.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "memory.value.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "norm.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "norm.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "final.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "final.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "cells.0.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.0.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.1.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.1.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.2.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.2.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "context.query.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "context.output.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "controller.step.weight": {
+            "shape": [
+              2,
+              4
+            ],
+            "numel": 8,
+            "bytes": 32
+          },
+          "controller.scorer.0.weight": {
+            "shape": [
+              8,
+              20
+            ],
+            "numel": 160,
+            "bytes": 640
+          },
+          "controller.scorer.0.bias": {
+            "shape": [
+              8
+            ],
+            "numel": 8,
+            "bytes": 32
+          },
+          "controller.scorer.2.weight": {
+            "shape": [
+              4,
+              8
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "controller.scorer.2.bias": {
+            "shape": [
+              4
+            ],
+            "numel": 4,
+            "bytes": 16
+          },
+          "controller.critic.0.weight": {
+            "shape": [
+              32,
+              20
+            ],
+            "numel": 640,
+            "bytes": 2560
+          },
+          "controller.critic.0.bias": {
+            "shape": [
+              32
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "controller.critic.2.weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "controller.critic.2.bias": {
+            "shape": [
+              1
+            ],
+            "numel": 1,
+            "bytes": 4
+          }
+        },
+        "unique_touched_weights": {
+          "mean": 3445.0,
+          "min": 2821,
+          "max": 3845,
+          "scope": "exact distinct parameter entries for current token operations; static K/V production attributed to its input token; cached historical activations are not parameter reads; training critic included only in training mode",
+          "inventory_method": "named parameter objects/module.numel plus executed action multiplicities"
+        },
+        "unique_touched_fraction": 0.6421248835041938,
+        "executed_work_to_total_params_ratio": 0.8637465051258155,
+        "executed_parameter_work": 74144,
+        "executed_parameter_work_per_token": 4634.0,
+        "parameter_work_by_module": {
+          "embedding": 256,
+          "position": 128,
+          "memory.norm": 512,
+          "memory.key": 4096,
+          "memory.value": 4096,
+          "init": 4096,
+          "controller.scorer.0": 5376,
+          "controller.scorer.2": 1152,
+          "controller.critic.0": 21504,
+          "controller.critic.2": 1056,
+          "controller.step_rows": 128,
+          "norm": 1024,
+          "cells.0.up": 3456,
+          "cells.0.down": 3456,
+          "cells.1.up": 2304,
+          "cells.1.down": 2304,
+          "cells.2.up": 2688,
+          "cells.2.down": 2688,
+          "context.query": 2560,
+          "context.output": 2560,
+          "final": 512,
+          "tied_lm_head": 8192
+        },
+        "execution_trace": {
+          "verified": true,
+          "selected_module_token_rows": {
+            "cells.0.up": 9,
+            "cells.1.up": 6,
+            "cells.2.up": 7,
+            "context.query": 10
+          },
+          "expected_token_rows": {
+            "context.query": 10,
+            "cells.2.up": 7,
+            "cells.0.up": 9,
+            "cells.1.up": 6
+          }
+        },
+        "gemm_flops": 145408,
+        "gemm_flops_per_token": 9088.0,
+        "gemm_by_module": {
+          "memory.key": 8192,
+          "memory.value": 8192,
+          "init": 8192,
+          "controller.scorer.0": 10240,
+          "controller.scorer.2": 2048,
+          "controller.critic.0": 40960,
+          "controller.critic.2": 2048,
+          "cells.0.up": 6912,
+          "cells.0.down": 6912,
+          "cells.1.up": 4608,
+          "cells.1.down": 4608,
+          "cells.2.up": 5376,
+          "cells.2.down": 5376,
+          "context.query": 5120,
+          "context.output": 5120,
+          "context.qk_av": 5120,
+          "tied_lm_head": 16384
+        },
+        "controller_gemm_flops": 55296,
+        "context_attention_gemm_flops": 5120,
+        "selected_context_actions": 10,
+        "context_read_calls": 10,
+        "calls_per_token": 2,
+        "unique_operations_per_token": 1.625,
+        "training_mode": true,
+        "non_gemm_flops": null,
+        "non_gemm_note": "not inferred; profile reports operator counts separately",
+        "precision": "torch.float32",
+        "executed_shapes_scope": "dense masked attention products, repeated executions and actual projection/parameter visits; not a 30B/500M achievement"
+      }
+    },
+    "R2": {
+      "finite_forward_backward": true,
+      "causal": true,
+      "decode": {
+        "passed": true,
+        "max_abs_error": 3.725290298461914e-08,
+        "atol": 1e-05,
+        "rtol": 0.0001,
+        "scope": "every position, static K/V, sampled actions replayed"
+      },
+      "compute": {
+        "total_params": 5383,
+        "parameter_resident_bytes": 21532,
+        "parameter_catalog": {
+          "embedding.weight": {
+            "shape": [
+              32,
+              16
+            ],
+            "numel": 512,
+            "bytes": 2048
+          },
+          "position.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "init.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "memory.norm.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "memory.norm.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "memory.key.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "memory.value.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "norm.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "norm.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "final.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "final.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "cells.0.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.0.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.1.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.1.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.2.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "cells.2.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "context.query.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "context.output.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "controller.step.weight": {
+            "shape": [
+              2,
+              4
+            ],
+            "numel": 8,
+            "bytes": 32
+          },
+          "controller.scorer.0.weight": {
+            "shape": [
+              8,
+              20
+            ],
+            "numel": 160,
+            "bytes": 640
+          },
+          "controller.scorer.0.bias": {
+            "shape": [
+              8
+            ],
+            "numel": 8,
+            "bytes": 32
+          },
+          "controller.scorer.2.weight": {
+            "shape": [
+              4,
+              8
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "controller.scorer.2.bias": {
+            "shape": [
+              4
+            ],
+            "numel": 4,
+            "bytes": 16
+          },
+          "controller.source.weight": {
+            "shape": [
+              5,
+              2
+            ],
+            "numel": 10,
+            "bytes": 40
+          },
+          "controller.target.weight": {
+            "shape": [
+              4,
+              2
+            ],
+            "numel": 8,
+            "bytes": 32
+          },
+          "controller.critic.0.weight": {
+            "shape": [
+              32,
+              20
+            ],
+            "numel": 640,
+            "bytes": 2560
+          },
+          "controller.critic.0.bias": {
+            "shape": [
+              32
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "controller.critic.2.weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "controller.critic.2.bias": {
+            "shape": [
+              1
+            ],
+            "numel": 1,
+            "bytes": 4
+          }
+        },
+        "unique_touched_weights": {
+          "mean": 3457.0,
+          "min": 2833,
+          "max": 3857,
+          "scope": "exact distinct parameter entries for current token operations; static K/V production attributed to its input token; cached historical activations are not parameter reads; training critic included only in training mode",
+          "inventory_method": "named parameter objects/module.numel plus executed action multiplicities"
+        },
+        "unique_touched_fraction": 0.6422069477986253,
+        "executed_work_to_total_params_ratio": 0.8645736578116292,
+        "executed_parameter_work": 74464,
+        "executed_parameter_work_per_token": 4654.0,
+        "parameter_work_by_module": {
+          "embedding": 256,
+          "position": 128,
+          "memory.norm": 512,
+          "memory.key": 4096,
+          "memory.value": 4096,
+          "init": 4096,
+          "controller.scorer.0": 5376,
+          "controller.scorer.2": 1152,
+          "controller.source": 64,
+          "controller.critic.0": 21504,
+          "controller.critic.2": 1056,
+          "controller.step_rows": 128,
+          "controller.target_dot": 256,
+          "norm": 1024,
+          "cells.0.up": 3456,
+          "cells.0.down": 3456,
+          "cells.1.up": 2304,
+          "cells.1.down": 2304,
+          "cells.2.up": 2688,
+          "cells.2.down": 2688,
+          "context.query": 2560,
+          "context.output": 2560,
+          "final": 512,
+          "tied_lm_head": 8192
+        },
+        "execution_trace": {
+          "verified": true,
+          "selected_module_token_rows": {
+            "cells.0.up": 9,
+            "cells.1.up": 6,
+            "cells.2.up": 7,
+            "context.query": 10
+          },
+          "expected_token_rows": {
+            "context.query": 10,
+            "cells.2.up": 7,
+            "cells.0.up": 9,
+            "cells.1.up": 6
+          }
+        },
+        "gemm_flops": 145920,
+        "gemm_flops_per_token": 9120.0,
+        "gemm_by_module": {
+          "memory.key": 8192,
+          "memory.value": 8192,
+          "init": 8192,
+          "controller.scorer.0": 10240,
+          "controller.scorer.2": 2048,
+          "controller.critic.0": 40960,
+          "controller.critic.2": 2048,
+          "controller.edge_dot": 512,
+          "cells.0.up": 6912,
+          "cells.0.down": 6912,
+          "cells.1.up": 4608,
+          "cells.1.down": 4608,
+          "cells.2.up": 5376,
+          "cells.2.down": 5376,
+          "context.query": 5120,
+          "context.output": 5120,
+          "context.qk_av": 5120,
+          "tied_lm_head": 16384
+        },
+        "controller_gemm_flops": 55808,
+        "context_attention_gemm_flops": 5120,
+        "selected_context_actions": 10,
+        "context_read_calls": 10,
+        "calls_per_token": 2,
+        "unique_operations_per_token": 1.625,
+        "training_mode": true,
+        "non_gemm_flops": null,
+        "non_gemm_note": "not inferred; profile reports operator counts separately",
+        "precision": "torch.float32",
+        "executed_shapes_scope": "dense masked attention products, repeated executions and actual projection/parameter visits; not a 30B/500M achievement"
+      }
+    },
+    "M0": {
+      "finite_forward_backward": true,
+      "causal": true,
+      "decode": {
+        "passed": true,
+        "max_abs_error": 5.960464477539063e-08,
+        "atol": 1e-05,
+        "rtol": 0.0001,
+        "scope": "every position, static K/V, sampled actions replayed"
+      },
+      "compute": {
+        "total_params": 6112,
+        "parameter_resident_bytes": 24448,
+        "parameter_catalog": {
+          "embedding.weight": {
+            "shape": [
+              32,
+              16
+            ],
+            "numel": 512,
+            "bytes": 2048
+          },
+          "position.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "blocks.0.na.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "blocks.0.na.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "blocks.0.nf.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "blocks.0.nf.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "blocks.0.qkv.weight": {
+            "shape": [
+              48,
+              16
+            ],
+            "numel": 768,
+            "bytes": 3072
+          },
+          "blocks.0.out.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "blocks.0.ffn.router.weight": {
+            "shape": [
+              2,
+              16
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "blocks.0.ffn.cells.0.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "blocks.0.ffn.cells.0.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "blocks.0.ffn.cells.1.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "blocks.0.ffn.cells.1.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "blocks.1.na.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "blocks.1.na.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "blocks.1.nf.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "blocks.1.nf.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "blocks.1.qkv.weight": {
+            "shape": [
+              48,
+              16
+            ],
+            "numel": 768,
+            "bytes": 3072
+          },
+          "blocks.1.out.weight": {
+            "shape": [
+              16,
+              16
+            ],
+            "numel": 256,
+            "bytes": 1024
+          },
+          "blocks.1.ffn.router.weight": {
+            "shape": [
+              2,
+              16
+            ],
+            "numel": 32,
+            "bytes": 128
+          },
+          "blocks.1.ffn.cells.0.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "blocks.1.ffn.cells.0.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "blocks.1.ffn.cells.1.up.weight": {
+            "shape": [
+              24,
+              16
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "blocks.1.ffn.cells.1.down.weight": {
+            "shape": [
+              16,
+              24
+            ],
+            "numel": 384,
+            "bytes": 1536
+          },
+          "final.weight": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          },
+          "final.bias": {
+            "shape": [
+              16
+            ],
+            "numel": 16,
+            "bytes": 64
+          }
+        },
+        "unique_touched_weights": {
+          "mean": 5872.0,
+          "min": 5872,
+          "max": 5872,
+          "scope": "exact distinct parameter entries for current token operations; static K/V production attributed to its input token; cached historical activations are not parameter reads; training critic included only in training mode",
+          "inventory_method": "named parameter objects/module.numel plus executed action multiplicities"
+        },
+        "unique_touched_fraction": 0.9607329842931938,
+        "executed_work_to_total_params_ratio": 0.9620418848167539,
+        "executed_parameter_work": 94080,
+        "executed_parameter_work_per_token": 5880.0,
+        "parameter_work_by_module": {
+          "embedding": 256,
+          "position": 128,
+          "blocks.0.na": 512,
+          "blocks.0.qkv": 12288,
+          "blocks.0.out": 4096,
+          "blocks.0.nf": 512,
+          "blocks.0.ffn.router": 512,
+          "blocks.0.ffn.cells.0.up": 6144,
+          "blocks.0.ffn.cells.0.down": 6144,
+          "blocks.0.ffn.cells.1.up": 6144,
+          "blocks.0.ffn.cells.1.down": 6144,
+          "blocks.1.na": 512,
+          "blocks.1.qkv": 12288,
+          "blocks.1.out": 4096,
+          "blocks.1.nf": 512,
+          "blocks.1.ffn.router": 512,
+          "blocks.1.ffn.cells.0.up": 6144,
+          "blocks.1.ffn.cells.0.down": 6144,
+          "blocks.1.ffn.cells.1.up": 6144,
+          "blocks.1.ffn.cells.1.down": 6144,
+          "final": 512,
+          "tied_lm_head": 8192
+        },
+        "execution_trace": {
+          "verified": true,
+          "selected_module_token_rows": {
+            "blocks.0.ffn.cells.0.up": 16,
+            "blocks.0.ffn.cells.1.up": 16,
+            "blocks.1.ffn.cells.0.up": 16,
+            "blocks.1.ffn.cells.1.up": 16
+          },
+          "expected_token_rows": {
+            "blocks.0.ffn.cells.0.up": 16,
+            "blocks.0.ffn.cells.1.up": 16,
+            "blocks.1.ffn.cells.0.up": 16,
+            "blocks.1.ffn.cells.1.up": 16
+          }
+        },
+        "gemm_flops": 198656,
+        "gemm_flops_per_token": 12416.0,
+        "gemm_by_module": {
+          "blocks.0.qkv": 24576,
+          "blocks.0.out": 8192,
+          "blocks.0.ffn.router": 1024,
+          "blocks.0.ffn.cells.0.up": 12288,
+          "blocks.0.ffn.cells.0.down": 12288,
+          "blocks.0.ffn.cells.1.up": 12288,
+          "blocks.0.ffn.cells.1.down": 12288,
+          "context.qk_av": 16384,
+          "blocks.1.qkv": 24576,
+          "blocks.1.out": 8192,
+          "blocks.1.ffn.router": 1024,
+          "blocks.1.ffn.cells.0.up": 12288,
+          "blocks.1.ffn.cells.0.down": 12288,
+          "blocks.1.ffn.cells.1.up": 12288,
+          "blocks.1.ffn.cells.1.down": 12288,
+          "tied_lm_head": 16384
+        },
+        "controller_gemm_flops": 2048,
+        "context_attention_gemm_flops": 16384,
+        "selected_context_actions": null,
+        "context_read_calls": 32,
+        "calls_per_token": 4,
+        "unique_operations_per_token": 4.0,
+        "training_mode": true,
+        "non_gemm_flops": null,
+        "non_gemm_note": "not inferred; profile reports operator counts separately",
+        "precision": "torch.float32",
+        "executed_shapes_scope": "dense masked attention products, repeated executions and actual projection/parameter visits; not a 30B/500M achievement"
+      }
+    }
+  },
+  "scope": "unit-sized engineering validation, no corpus, no GPU; full acceptance additionally requires pytest suite",
+  "registration_blockers": [
+    "Gate 1: protocol is not registered",
+    "data/source hashes and disjoint story identities",
+    "tokenizer and assets manifest",
+    "collision-checked development seed and at least 3 untouched confirmation seeds",
+    "selected model scale and exact operation budget",
+    "optimizer, actor/critic/entropy settings",
+    "GPU budget and explicit development authorization",
+    "quality, cost, collapse and intervention thresholds",
+    "bootstrap, evaluation and checkpoint selection",
+    "confirmation approval and R3 remain separate",
+    "scientific thresholds not frozen",
+    "assets hash not frozen",
+    "source data hash not frozen",
+    "independent seed matrix not frozen",
+    "registration evidence missing or unverified"
+  ]
+}

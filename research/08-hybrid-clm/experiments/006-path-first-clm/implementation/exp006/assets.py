@@ -34,7 +34,7 @@ def prepare(c,destination,source_parquet,source_sha256):
         'confirmation_materialized':False,'tokenizer_training':'train only','duplicate_checks':'within split and cross train/development; exact story content'}
     write_json(destination/'manifest.json',manifest);return manifest
 
-def load_assets(folder,c,p,seed,role):
+def load_assets(folder,c,p,seed,role,*,include_evaluation=None):
     authorize(c,p,seed,role) # Must precede any manifest / token reads.
     folder=Path(folder);manifest_path=folder/'manifest.json'
     expected=c['data']['confirmation_manifest_sha256'] if role=='confirmation' else c['data']['manifest_sha256']
@@ -44,14 +44,21 @@ def load_assets(folder,c,p,seed,role):
     if m['sequence_length']!=c['training']['sequence_length'] or m['vocab_size']!=c['model']['vocab_size']:raise ValueError('asset shape mismatch')
     if m.get('data_definition')!={k:v for k,v in c['data'].items() if k not in ('manifest_sha256','source_sha256','confirmation_manifest_sha256')}:raise ValueError('asset story ranges differ from registered contract')
     if role=='confirmation' and not m.get('confirmation_materialized'):raise RuntimeError('separate sealed confirmation bundle is not available')
-    needed=['train.npy',role+'.npy','tokenizer.json','windows.json']
+    if include_evaluation is None:include_evaluation=role=='development'
+    needed=['train.npy','tokenizer.json','windows.json']
+    if include_evaluation:needed.append(role+'.npy')
     for name in needed:
         if name not in m['files'] or digest(folder/name)!=m['files'][name]:raise ValueError('corrupt asset '+name)
-    windows=json.loads((folder/'windows.json').read_text());assert_disjoint(windows['train']['story_hashes'],windows[role]['story_hashes'])
-    if role=='confirmation':assert_disjoint(windows['development']['story_hashes'],windows[role]['story_hashes'])
-    starts,groups=select_windows(windows[role]['starts'],windows[role]['groups'],c['evaluation']['windows'],c['evaluation']['window_seed'])
-    return {'train':np.load(folder/'train.npy',mmap_mode='r'),role:np.load(folder/(role+'.npy'),mmap_mode='r'),'train_starts':windows['train']['starts'],
-            'eval_starts':starts,'eval_groups':groups,'manifest_sha256':digest(manifest_path)}
+    windows=json.loads((folder/'windows.json').read_text())
+    result={'train':np.load(folder/'train.npy',mmap_mode='r'),'train_starts':windows['train']['starts'],
+            'manifest_sha256':digest(manifest_path),'evaluation_loaded':include_evaluation}
+    if include_evaluation:
+        assert_disjoint(windows['train']['story_hashes'],windows[role]['story_hashes'])
+        if role=='confirmation':assert_disjoint(windows['development']['story_hashes'],windows[role]['story_hashes'])
+        starts,groups=select_windows(windows[role]['starts'],windows[role]['groups'],c['evaluation']['windows'],c['evaluation']['window_seed'])
+        result.update({role:np.load(folder/(role+'.npy'),mmap_mode='r'),'eval_starts':starts,'eval_groups':groups})
+    return result
+
 
 
 def prepare_confirmation(c,p,seed,destination,development_bundle,source_parquet):

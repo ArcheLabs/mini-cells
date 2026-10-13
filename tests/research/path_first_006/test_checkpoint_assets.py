@@ -30,7 +30,7 @@ def test_cpu_toy_end_to_end_schema(c,tmp_path):
     result=train(c,run,assets,tmp_path,device='cpu')
     assert result['status']=='completed' and result['scientific_decision'] is False
     assert result['confirmation_holdout'] is None and result['decode_profile'] is None
-    assert set(result['interventions']['interventions'])=={'connection_removed','connection_shuffled','same_multiset_order_permuted'}
+    assert set(result['interventions']['interventions'])>={'connection_removed','connection_predecessor_shifted','same_multiset_order_permuted','context_noop_same_path'}
     with pytest.raises(FileExistsError):train(c,run,assets,tmp_path,device='cpu')
 
 def test_duplicate_story_detector():

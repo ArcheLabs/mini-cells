@@ -25,7 +25,7 @@ def analyze(rows,c,p):
     if any(e['window_starts']!=first['window_starts'] or e['story_groups']!=first['story_groups'] for e in evals.values()):
         raise ValueError('unpaired story/window identity')
     comparisons={}
-    for a,b in [('R1','R0'),('R2','R1'),('R2','M0')]:
+    for a,b in [('R1','R0'),('R2','R1'),('R2','M0'),('R1','M0')]:
         e,f=evals[a],evals[b]
         ci=paired_bootstrap_delta(e['sample_nll'],f['sample_nll'],group_ids=e['story_groups'],
             seed=c['evaluation']['bootstrap_seed'],replicates=c['evaluation']['bootstrap_replicates'])
@@ -43,10 +43,19 @@ def analyze(rows,c,p):
         state=comparisons['R1_vs_R0'];moe=comparisons['R2_vs_M0']
         criteria['state_value']=state['ppl_ratio_ci'][1]<t['state_ppl_ratio_ci_upper'] and state['cost_ratio']<=t['state_cost_ratio_max']
         criteria['connection_value']=candidate['ppl_ratio_ci'][1]<t['connection_ppl_ratio_ci_upper'] and candidate['cost_ratio']<=t['connection_cost_ratio_max']
+        arm_health={}
+        for arm in ('R1','R2'):
+            route_arm=rows[arm]['routing_diagnostics']
+            arm_health[arm]=(route_arm['modal_path_fraction']<t['collapse_max_fraction'] and
+                route_arm['unused_cell_fraction']<=t['max_unused_cells_fraction'] and
+                route_arm['context_read_fraction']>=t['min_context_read_fraction'] and
+                route_arm['no_context_fraction']<=t['max_no_context_fraction'] and
+                abs(rows[arm]['sampled_greedy_nll_gap'])<=t['max_sampled_greedy_nll_gap'])
+        criteria['state_arm_health']=arm_health['R1'];criteria['connection_arm_health']=arm_health['R2']
         criteria['noncollapsed_content_paths']=route['modal_path_fraction']<t['collapse_max_fraction'] and route['unused_cell_fraction']<=t['max_unused_cells_fraction']
         criteria['uses_context']=route['context_read_fraction']>=t['min_context_read_fraction']
         criteria['sampled_greedy_gap']=abs(r['sampled_greedy_nll_gap'])<=t['max_sampled_greedy_nll_gap']
-        for label in ('connection_removed','connection_shuffled','same_multiset_order_permuted'):
+        for label in ['connection_removed','connection_predecessor_shifted','same_multiset_order_permuted']+['connection_prior_row_permuted_seed_'+str(c['evaluation']['intervention_seed']+i) for i in range(c['evaluation']['connection_permutation_repeats'])]:
             evidence=r.get('interventions',{}).get('interventions',{}).get(label)
             if evidence is None:
                 criteria[label]=False;continue
@@ -55,10 +64,21 @@ def analyze(rows,c,p):
             ci=evidence['paired_effect']['paired_bootstrap_95pct_ci'];intervention_evidence[label]=ci
             criteria[label]=ci[0]>t['intervention_nll_delta_ci_lower']
             if label=='same_multiset_order_permuted':criteria[label]=criteria[label] and evidence['order_changed_fraction']>0
-        criteria['moe_competitive']=moe['ppl_ratio_ci'][1]<=t['moe_quality_ratio_max'] and moe['cost_ratio']<1 and moe['decode_p50_ratio']<=t['moe_decode_p50_ratio_max']
+        candidate_arm=p.get('system_candidate_arm')
+        moe=comparisons[candidate_arm+'_vs_M0'] if candidate_arm in ('R1','R2') else None
+        criteria['moe_competitive']=moe is not None and moe['ppl_ratio_ci'][1]<=t['moe_quality_ratio_max'] and moe['cost_ratio']<1 and moe['decode_p50_ratio']<=t['moe_decode_p50_ratio_max']
+    order_contrast={}
+    left=rows['R2'].get('interventions',{}).get('interventions',{}).get('same_multiset_order_permuted')
+    right=rows['R1'].get('interventions',{}).get('interventions',{}).get('same_multiset_order_permuted')
+    if left and right:
+        for evidence in (left,right):
+            if evidence['window_starts']!=first['window_starts'] or evidence['story_groups']!=first['story_groups']:raise ValueError('unpaired order contrast')
+        delta2=[a-b for a,b in zip(left['sample_nll'],evals['R2']['sample_nll'])]
+        delta1=[a-b for a,b in zip(right['sample_nll'],evals['R1']['sample_nll'])]
+        order_contrast=paired_bootstrap_delta(delta2,delta1,group_ids=first['story_groups'],seed=c['evaluation']['bootstrap_seed'],replicates=c['evaluation']['bootstrap_replicates'])
     return {**FLAGS,'status':('DEVELOPMENT_SIGNAL' if signal else 'DEVELOPMENT_NO_PATH_SIGNAL') if role=='development' else 'AWAITING_CONFIRMATION_MATRIX_REVIEW',
             'identity':common,'comparisons':comparisons,'frozen_criteria':criteria,'criteria_frozen':frozen,
-            'intervention_nll_ci':intervention_evidence,
+            'intervention_nll_ci':intervention_evidence,'order_effect_R2_minus_R1':order_contrast,'system_candidate_arm':p.get('system_candidate_arm'),
             'boundary':'one seed never establishes path value or MoE superiority; R3 is not implemented'}
 
 def matrix(reports,c,p):
@@ -68,12 +88,26 @@ def matrix(reports,c,p):
         r.get('identity',{}).get('role')=='confirmation' and r['identity']['seed']==r['seed'] for r in reports))
     common=[{k:v for k,v in r.get('identity',{}).items() if k!='seed'} for r in reports]
     if complete and any(i!=common[0] for i in common):raise ValueError('confirmation matrix identities differ')
-    mechanism_keys=('state_value','connection_value','noncollapsed_content_paths','uses_context',
-                    'sampled_greedy_gap','connection_removed','connection_shuffled','same_multiset_order_permuted')
-    mechanism=complete and all(all(r['frozen_criteria'].get(k) is True for k in mechanism_keys) for r in reports)
-    competitive=mechanism and all(r['frozen_criteria'].get('moe_competitive') is True for r in reports)
-    verdict=('PATH_MECHANISM_AND_SYSTEM_CANDIDATE' if competitive else 'PATH_MECHANISM_SIGNAL_ONLY' if mechanism else 'NOT_SUPPORTED') if complete else 'INCOMPLETE'
+    state=complete and all(r['frozen_criteria'].get('state_value') is True and r['frozen_criteria'].get('state_arm_health') is True for r in reports)
+    connection_keys=['connection_value','connection_arm_health','connection_removed']+[
+        'connection_prior_row_permuted_seed_'+str(c['evaluation']['intervention_seed']+i)
+        for i in range(c['evaluation']['connection_permutation_repeats'])]
+    connection=complete and all(all(r['frozen_criteria'].get(k) is True for k in connection_keys) for r in reports)
+    candidate=p.get('system_candidate_arm')
+    competitive=complete and candidate in ('R1','R2') and all(r['frozen_criteria'].get('state_arm_health' if candidate=='R1' else 'connection_arm_health') is True for r in reports) and all(
+        r['frozen_criteria'].get('moe_competitive') is True for r in reports)
+    mechanism=state and connection
+    verdict=('PATH_MECHANISM_AND_SYSTEM_CANDIDATE' if mechanism and competitive else
+             'PATH_MECHANISM_SIGNAL_ONLY' if mechanism else
+             'STATE_PATH_SIGNAL_ONLY' if state else 'CONNECTION_SIGNAL_ONLY' if connection else 'SYSTEM_COMPETITIVE_ONLY' if competitive else 'NOT_SUPPORTED') if complete else 'INCOMPLETE'
+    hypotheses={
+        'state_path':{'comparison':'R1 vs R0','evidence_status':'STATE_PATH_SUPPORTED' if state else 'NOT_SUPPORTED'},
+        'connection':{'comparison':'R2 vs R1 plus prior interventions','evidence_status':'CONNECTION_SUPPORTED' if connection else 'NOT_SUPPORTED'},
+        'system':{'candidate_arm':candidate,'selection_rule':p.get('system_selection_rule'),
+                  'evidence_status':'SYSTEM_COMPETITIVE' if competitive else 'NOT_SUPPORTED'}}
+    if not complete:
+        for h in hypotheses.values():h['evidence_status']='INCOMPLETE'
     return {**FLAGS,'status':'AWAITING_RESEARCH_REVIEW' if complete else 'INCOMPLETE',
-            'evidence_verdict':verdict,'all_seeds_direction_and_cost_consistent':mechanism,
+            'evidence_verdict':verdict,'hypotheses':hypotheses,'all_seeds_direction_and_cost_consistent':mechanism,
             'seeds':sorted(x for x in seen if x is not None),'reports':reports,
-            'boundary':'formal claims require reviewed confirmation evidence; R3 is a separately registered stage'}
+            'boundary':'independent evidence verdicts, not formal approval; state value does not require connection value; order noncommutativity alone is insufficient; R3 remains unregistered'}

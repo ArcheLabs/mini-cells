@@ -37,3 +37,5 @@ R3/STOP is a later separate research registration. All current entrypoints rejec
 Final reports compute frozen criteria and consistency across seeds but leave formal
 scientific claims pending research review. The implementation cannot confer human
 approval; approval evidence is a repository review contract, not a cryptographic signer.
+
+Audit repair 1 additionally requires a development-selected `system_candidate_arm` (R1 or R2) frozen before Gate 4, and a frozen maximum no-context fraction. Confirmation periodic diagnostics use training-derived signals only; final holdout loading follows checkpoint freeze. GPU micro-preflight accepts no corpus and no scientific seed, and leaves these gates closed.

@@ -35,7 +35,10 @@ def benchmark(model,tokens,c):
     operators={x.key:x.count for x in profiler.key_averages() if x.key.startswith('aten::')}
     cuda_events=[event for event in profiler.events() if 'CUDA' in str(event.device_type)]
     with ComputeCounter(model) as count:out=model.decode_step(tokens[:,prefix],out.memory)
-    return {'batch_size':tokens.shape[0],'dtype':str(next(model.parameters()).dtype),'warm_p50_ms':statistics.median(flat),'warm_p95_ms':ordered[int(.95*(len(ordered)-1))],
+    memory=out.memory
+    cache_tensors=[memory.key,memory.value] if hasattr(memory,'key') else [v for layer in memory for v in layer]
+    cache_bytes=sum(t.numel()*t.element_size() for t in cache_tensors)
+    return {'cache_logical_bytes':cache_bytes,'cache_scope':'logical retained K/V tensors; allocator peak reported separately','batch_size':tokens.shape[0],'dtype':str(next(model.parameters()).dtype),'warm_p50_ms':statistics.median(flat),'warm_p95_ms':ordered[int(.95*(len(ordered)-1))],
             'warm_by_cache_reset':runs,'first_token_ms':first,'prefill_ms':prefills,'decode_compute':summarize(model,out,count),'operator_counts':operators,'cuda_device_events':len(cuda_events) if device.type=='cuda' else None,
             'peak_cuda_allocated_bytes':torch.cuda.max_memory_allocated(device) if device.type=='cuda' else None,
             'parameter_resident_bytes':sum(p.numel()*p.element_size() for p in model.parameters()),
