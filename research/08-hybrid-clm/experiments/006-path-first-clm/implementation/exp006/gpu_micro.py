@@ -42,5 +42,5 @@ def run(c,output,device='cuda:0',source=None):
             'gpu':torch.cuda.get_device_name(device),'cuda_capability':list(torch.cuda.get_device_capability(device)),
             'runtime':{'python':platform.python_version(),'torch':torch.__version__,'cuda':torch.version.cuda},'arms':rows,
             'scope':'untrained synthetic engineering workload; local device/shared desktop environment; not T4 validation, learning evidence, sparse-budget attainment or production latency'}
-    if output:write_json(output,result)
+    if output:write_json(Path(output),result)
     return result
