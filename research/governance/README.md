@@ -3,7 +3,7 @@
 This directory contains shared records and controls that span projects. It is
 not a second home for experiment code or results.
 
-- [`catalog.yaml`](catalog.yaml) lists the four research projects.
+- [`catalog.yaml`](catalog.yaml) lists the research projects.
 - [`registry.yaml`](registry.yaml) indexes registered studies and their status.
 - [`validations/`](validations/) preserves frozen protocols and decisions.
 - [`audits/`](audits/) records cross-study reviews and evidence boundaries.

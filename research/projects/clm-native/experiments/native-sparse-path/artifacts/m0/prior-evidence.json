@@ -1,0 +1,1111 @@
+{
+  "007-minicells-30m": {
+    "source_commit": "6860d3525a6fb004f63bba1958164da9be1bc88e",
+    "decision_sha256": "185d4e2ab381cf917b55a63c939356a21d58fe495a2e81366f077a0ba20167cc",
+    "archived_decision": {
+      "budget": {
+        "checkpoints": [
+          10000000,
+          25000000,
+          50000000,
+          75000000,
+          100000000
+        ],
+        "tokens_per_model": 100000000,
+        "train_stream_tokens": 120000000,
+        "validation_stream_tokens": 1000000
+      },
+      "candidate": {
+        "learning_slope_alpha": 0.13771977867525095,
+        "model": "minicells-30m-v0",
+        "nll_100m": 1.6777012000481288,
+        "parameters": 29602800,
+        "ppl_100m": 5.3532357975464855
+      },
+      "comparison": {
+        "ppl_ratio_100m": 1.00454882088745,
+        "ppl_ratio_10m": 1.0001040502873653,
+        "ratio_change_10m_to_100m": 0.0044447706000847464,
+        "ratio_trajectory": [
+          1.0001040502873653,
+          1.0000997632831643,
+          0.9965675533049765,
+          1.0022870885605357,
+          1.00454882088745
+        ],
+        "slope_ratio_to_transformer": 0.9939814492466875,
+        "source_006_1m_parameter_ratio_at_10m": 1.0255877394621922
+      },
+      "diagnosis": "MINICELLS_30M_PARAMETER_SCALING_COMPETITIVE",
+      "experiment": "MINI Cells Experiment 007 \u2014 MiniCells-30M v0",
+      "format": "minicells.language-30m.v1",
+      "interpretation": {
+        "green": "At ~30M parameters, MiniCells remains within 1.15x Transformer PPL at 100M tokens with a competitive learning slope and bounded gap growth.",
+        "red": "A material parameter-scaling disadvantage emerges by 30M parameters.",
+        "yellow": "The 30M model remains viable but shows a measurable parameter-scaling gap that warrants optimization."
+      },
+      "parameter_matching": {
+        "minicells_parameters": 29602800,
+        "relative_error": 0.00487683597497534,
+        "transformer_config": {
+          "dim": 512,
+          "ffn_dim": 2048,
+          "heads": 8,
+          "layers": 9,
+          "parameters": 29458432,
+          "relative_parameter_error": 0.00487683597497534,
+          "target_parameters": 29602800
+        },
+        "transformer_parameters": 29458432,
+        "within_1_percent": true
+      },
+      "retained_model": {
+        "bytes": 62171013,
+        "optimizer_state_published": false,
+        "path": "minicells-30m-v0-fp16.pt",
+        "precision": "fp16",
+        "sha256": "95c33bca902e571675994257368d5f791b3d7c8dd0832c3f5cf2a67c406f14ed"
+      },
+      "runtime": {
+        "gpu_count_used": 2,
+        "physical_gpus": [
+          "Tesla T4",
+          "Tesla T4"
+        ]
+      },
+      "status": "GREEN",
+      "transformer": {
+        "learning_slope_alpha": 0.13855367097607824,
+        "model": "transformer-30m",
+        "nll_100m": 1.673162693778674,
+        "parameters": 29458432,
+        "ppl_100m": 5.328995153085013
+      }
+    },
+    "manifest_checks": [
+      {
+        "path": "decision.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-spec.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "corpus-manifest.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "tokenizer.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "model-configs.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "checkpoints.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "model-summary.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "relative-gap.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "generation-samples.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "generation-progression.md",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "MODEL_CARD.md",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "minicells-30m-v0-fp16.pt",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "ppl-scaling.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "nll-scaling.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "relative-gap.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "throughput.png",
+        "exists": true,
+        "sha256_matches": true
+      }
+    ],
+    "fully_reproduced": false,
+    "raw_training_logs_available": false,
+    "status": "ARCHIVE_HASHES_VERIFIED",
+    "scope": "archived outcomes verified against recorded hashes; no historical retraining",
+    "throughput_ratio_transformer_over_cells": 2.2524028167586
+  },
+  "015-emergent-sparse-topology": {
+    "source_commit": "ae7eec4f4baf2bd91c82f8e8fcba90f96688ec92",
+    "decision_sha256": "e74f61800ba3a54a26ca3331051f5057a305e33561c8c67b08be7e7e8c5b3376",
+    "archived_decision": {
+      "controls": {
+        "A": {
+          "edge_mi_significant_replicates": 0,
+          "logical_active_fraction": 1.0,
+          "mean_composition_reuse_margin": 0.0,
+          "mean_functional_specific_rows": 0.3333333333333333,
+          "mean_nll_geomean": 0.8874113043818329,
+          "mean_token_accuracy": 0.654,
+          "region_mi_significant_replicates": 0
+        },
+        "B": {
+          "edge_mi_significant_replicates": 0,
+          "logical_active_fraction": 0.37500003290673095,
+          "mean_composition_reuse_margin": -0.00010827482948662217,
+          "mean_functional_specific_rows": 1.0,
+          "mean_nll_geomean": 0.9423871435579345,
+          "mean_token_accuracy": 0.6271666666666665,
+          "region_mi_significant_replicates": 2
+        },
+        "C": {
+          "edge_mi_significant_replicates": 2,
+          "logical_active_fraction": 0.37500003290673095,
+          "mean_composition_reuse_margin": -5.324905666130123e-05,
+          "mean_functional_specific_rows": 6.333333333333333,
+          "mean_nll_geomean": 1.3080855748309999,
+          "mean_token_accuracy": 0.43933333333333335,
+          "region_mi_significant_replicates": 2
+        }
+      },
+      "corpus": {
+        "base_tasks": [
+          "REVERSE",
+          "ROTATE",
+          "INC",
+          "SWAP"
+        ],
+        "composition_map": {
+          "INC_SWAP": [
+            "INC",
+            "SWAP"
+          ],
+          "REVERSE_INC": [
+            "REVERSE",
+            "INC"
+          ],
+          "REVERSE_ROTATE": [
+            "REVERSE",
+            "ROTATE"
+          ],
+          "REVERSE_SWAP": [
+            "REVERSE",
+            "SWAP"
+          ],
+          "ROTATE_INC": [
+            "ROTATE",
+            "INC"
+          ],
+          "ROTATE_SWAP": [
+            "ROTATE",
+            "SWAP"
+          ]
+        },
+        "kind": "deterministic synthetic multi-skill autoregressive corpus",
+        "loss_scope": "transformed output tokens + EOS"
+      },
+      "design": {
+        "active_latent": 2,
+        "dynamic_edge_router_parameters": 0,
+        "dynamic_edges_same_token_position_only": true,
+        "equal_parameterization_across_variants": true,
+        "fixed_coordinate_buffer": true,
+        "gpu_count": 2,
+        "models_total": 9,
+        "replicates": 3,
+        "tissue_height": 8,
+        "tokens_per_model": 960000,
+        "trainable_row_embedding": false,
+        "variants": {
+          "A": "dense local tissue",
+          "B": "top-2 latent sparse local tissue",
+          "C": "top-2 latent sparse tissue + state-derived top-1 long-range source per receiver"
+        }
+      },
+      "dynamic_C": {
+        "composition_reuse_replicates": 0,
+        "edge_mi_signal_replicates": 2,
+        "functional_ablation_replicates": 3,
+        "logical_sparsity_replicates": 3,
+        "nll_ratio_to_dense_A_geometric_mean": 1.4740465535789034,
+        "pass_flags": {
+          "composition_reuse": false,
+          "functional_ablation": true,
+          "logical_sparsity": true,
+          "quality": false,
+          "task_edge_routing": true,
+          "task_region_specialization": true
+        },
+        "region_mi_signal_replicates": 2
+      },
+      "experiment": "MINI Cells Experiment 015 \u2014 Emergent Sparse Tissue Topology",
+      "format": "minicells.language-sparse-topology.v1",
+      "interpretation": {
+        "fail": "Do not add growth or transplantation until specialization/routing is made reproducible.",
+        "partial": "Some specialization/routing signal exists but one or more required properties are missing.",
+        "pass": "Evidence that sparse expert-like functional topology can emerge from shared cellular rules. It is not yet evidence for tissue transplantation, birth/death, or unbounded growth."
+      },
+      "pre_registered_signal": {
+        "composition_reuse": "mean true-component reuse margin versus best wrong pair > 0",
+        "dynamic_C_nll_ratio_to_dense_A_max": 1.1,
+        "functional_ablation": "at least one row with delta NLL >=0.02 and specificity >=1.5",
+        "logical_active_fraction_max": 0.4,
+        "minimum_signal_replicates": 2,
+        "task_edge_mi": "observed > label-shuffled p99",
+        "task_region_mi": "observed > label-shuffled p99"
+      },
+      "question": "Can a homogeneous cellular language tissue develop task-dependent sparse regions and dynamic region-to-region routing without predefined experts?",
+      "source_recipe": {
+        "experiment": "014-multiseed-core-recipe",
+        "random_depth": true,
+        "stability_weight": 0.1,
+        "step_embedding_init_scale": 1.0
+      },
+      "status": "PARTIAL_TOPOLOGY_SIGNAL"
+    },
+    "manifest_checks": [
+      {
+        "path": "decision.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-spec.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "corpus-manifest.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "model-summary.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "paired-ratios.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "checkpoints.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-metrics.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-region.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-edge.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "ablation.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "composition-reuse.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "quality-vs-sparsity.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-region-heatmap.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "ablation-heatmap.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "composition-reuse.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r0-A-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r0-B-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r0-C-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r1-A-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r1-B-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r1-C-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r2-A-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r2-B-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r2-C-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      }
+    ],
+    "fully_reproduced": false,
+    "raw_training_logs_available": false,
+    "status": "ARCHIVE_HASHES_VERIFIED",
+    "scope": "archived outcomes verified against recorded hashes; no historical retraining"
+  },
+  "015c-local-substrate-emergent-topology": {
+    "source_commit": "bc059607c04d8161e3464da63e6c2d3b8e375e09",
+    "decision_sha256": "a67122e4d46d572518451559baba9b7bf6e259683a35622bab050f81679e19cd",
+    "archived_decision": {
+      "design": {
+        "activity_budget": 3.0,
+        "activity_dynamics": "multiplicative replicator competition driven by standardized local reaction magnitude",
+        "activity_rate": 0.5,
+        "expert_specific_parameters": 0,
+        "gpu_count": 2,
+        "identical_parameterization": true,
+        "initial_plastic_effect": 0.0,
+        "local_coupling": 0.08,
+        "local_substrate": "fixed nearest-neighbor graph diffusion",
+        "long_range_max_coupling": 0.08,
+        "models_total": 6,
+        "plastic_candidate_graph": "long-range only, uniform distribution at initialization",
+        "plastic_edge_strength": "LONG_RANGE_MAX_COUPLING * (1 - normalized_entropy(distribution))",
+        "plasticity": "multiplicative Hebbian competition over long-range candidate sources with row homeostasis",
+        "plasticity_rate": 0.75,
+        "replicates": 3,
+        "router_parameters": 0,
+        "tissue_height": 8,
+        "tokens_per_model": 960000,
+        "variants": {
+          "E": "same L dynamics plus emergent long-range plastic topology",
+          "L": "replicator activity + fixed nearest-neighbor local substrate only"
+        }
+      },
+      "experiment": "MINI Cells Experiment 015c \u2014 Local Substrate + Emergent Plastic Topology",
+      "format": "minicells.local-substrate-emergent-topology.v1",
+      "observability": {
+        "activity_competition": "activity-competition.png",
+        "final_node_topology": "final-node-topology.png",
+        "final_plastic_topology_heatmap": "final-plastic-topology-heatmap.png",
+        "graph_semantics": "dashed neighbor edges are fixed local substrate; directed solid arrows are only emergent long-range plastic edges; node size is mean activity",
+        "plastic_topology_growth": "plastic-topology-growth.png",
+        "reaction_diffusion_dynamics": "reaction-diffusion-dynamics.png",
+        "task_topology_atlas": "task-node-topology-atlas.png"
+      },
+      "pre_registered_signal": {
+        "E_over_L_nll_geomean_max": 1.05,
+        "causal_plasticity": "normal beats plasticity-off with paired bootstrap 95% lower > 0",
+        "causal_topology": "normal beats plastic-diffusion-off and topology-shuffled with paired bootstrap 95% lower > 0",
+        "depth_robustness_E_over_L_max": 1.15,
+        "effective_active_fraction_max": 0.75,
+        "final_plastic_strength_min": 0.005,
+        "final_plastic_tv_min": 0.05,
+        "minimum_signal_replicates": 2,
+        "per_seed_E_over_L_nll_max": 1.1,
+        "task_activity_mi": "observed > label-shuffled p99",
+        "task_plastic_topology_mi": "observed > label-shuffled p99"
+      },
+      "question": "Can a fixed local NCA substrate plus replicator activity and an initially structureless long-range plastic graph form stable, causally useful functional topology without a router or expert-specific parameters?",
+      "results": {
+        "E_over_L_depth_robustness_geometric_mean": 1.0038924413096044,
+        "E_over_L_nll_geometric_mean": 0.9359809663162371,
+        "E_over_L_nll_ratios": [
+          1.1097570803684154,
+          0.6737796266730848,
+          1.0966177020629315
+        ],
+        "activity_competition_replicates": 3,
+        "local_diffusion_off_causal_replicates": 3,
+        "mean_effective_active_fraction": 0.3454853693644206,
+        "mean_final_plastic_strength": 0.005256869364529848,
+        "mean_final_plastic_tv": 0.18768385549386343,
+        "mean_plastic_to_reaction": 0.018456204483097986,
+        "pass_flags": {
+          "activity_competition": true,
+          "causal_plastic_topology": false,
+          "causal_plasticity": false,
+          "depth_stability": true,
+          "plastic_topology_emergence": true,
+          "quality": false,
+          "task_activity_specialization": true,
+          "task_plastic_topology_specialization": true
+        },
+        "plastic_diffusion_off_causal_replicates": 1,
+        "plastic_topology_emergence_replicates": 3,
+        "plasticity_off_causal_replicates": 1,
+        "task_activity_signal_replicates": 3,
+        "task_plastic_topology_signal_replicates": 3,
+        "topology_shuffled_causal_replicates": 0
+      },
+      "scope": {
+        "claim": "transient emergent long-range functional topology over a fixed local substrate",
+        "not_claimed": [
+          "persistent long-term cellular memory",
+          "skill transplantation",
+          "birth/death",
+          "unbounded growth",
+          "clean zero-shot capability composition",
+          "one globally time-homogeneous rule across all three existing stages"
+        ]
+      },
+      "source_experiment": {
+        "experiment": "015b-plastic-reaction-diffusion",
+        "finding": "015b made diffusion causally important but mixed fixed geometry with plastic topology, remained dense, and over-coupled computation."
+      },
+      "status": "EMERGENT_TOPOLOGY_EPIPHENOMENAL"
+    },
+    "manifest_checks": [
+      {
+        "path": "decision.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-spec.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "corpus-manifest.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "model-summary.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "paired-ratios.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "checkpoints.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-metrics.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "depth-eval.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "activity.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "plastic-topology.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "final-activity.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "final-plastic-topology.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "dynamics.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "interventions.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "ablation.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "final-node-topology.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-node-topology-atlas.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "final-plastic-topology-heatmap.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "activity-competition.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "plastic-topology-growth.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "reaction-diffusion-dynamics.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r0-L-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r0-E-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r1-L-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r1-E-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r2-L-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r2-E-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      }
+    ],
+    "fully_reproduced": false,
+    "raw_training_logs_available": false,
+    "status": "ARCHIVE_HASHES_VERIFIED",
+    "scope": "archived outcomes verified against recorded hashes; no historical retraining"
+  },
+  "016-growing-cellular-lm": {
+    "source_commit": "77ab5765dfa388acf4d916c37c3353a007908eec",
+    "decision_sha256": "c55f655071a60d7ac40ec0aceb40d3e516bd38c303a0795fe7991d9c51cf3042",
+    "archived_decision": {
+      "design": {
+        "cell_rule": "one globally shared time-homogeneous recurrent rule",
+        "cellular_interface": "only cell 0 receives token embedding and supplies logits",
+        "gpu_count": 2,
+        "initial_cells": 4,
+        "max_cells": 12,
+        "models_total": 9,
+        "parameter_matched_transformer": true,
+        "persistent_phenotype": "per-cell memory vector",
+        "replicates": 3,
+        "structure": "directed graph with protected initial/lineage edges plus utility-selected learned edges",
+        "tokens_per_model": 1024000
+      },
+      "experiment": "MINI Cells Experiment 016 \u2014 Growing Cellular Language Model",
+      "format": "minicells.growing-cellular-lm.v1",
+      "pre_registered_signal": {
+        "G_over_T_nll_geomean_max": 1.25,
+        "language_retention_ratio_max": 1.1,
+        "minimum_frozen_genome_skill_improvement_replicates": 2,
+        "minimum_growth_replicates": 2,
+        "minimum_signal_replicates": 2,
+        "minimum_structural_causal_replicates": 2,
+        "per_seed_G_over_T_nll_max": 1.5,
+        "transplant_recovery_min": 0.5
+      },
+      "question": "Can a small language organism with one shared cell genome autonomously allocate activity, connect, prune and fork while remaining competitive with a parameter-matched Transformer, then acquire and transplant a skill with the genome frozen?",
+      "results": {
+        "F_over_T_nll_geomean": 1.0533640145903826,
+        "G_over_F_nll_geomean": 0.9999908294742196,
+        "G_over_T_nll_geomean": 1.0533543546885307,
+        "G_over_T_wall_cost_geomean": 5.887818226460623,
+        "connect_replicates": 3,
+        "fork_replicates": 3,
+        "growth_replicates": 3,
+        "language_retention_replicates": 0,
+        "local_skill_improvement_replicates": 3,
+        "mean_phase1_alive_cells": 7.0,
+        "mean_phase1_edges": 14.0,
+        "pass_flags": {
+          "frozen_genome_skill_learning": true,
+          "language_competitiveness": true,
+          "language_retention": false,
+          "structural_causal_use": true,
+          "structural_growth": true,
+          "tissue_transplantation": true
+        },
+        "structural_causal_replicates": 3,
+        "transplant_recovery_replicates": 3
+      },
+      "scope": {
+        "claim": "small end-to-end prototype of a growing cellular language organism",
+        "not_claimed": [
+          "production-scale language quality",
+          "arbitrary cross-genome transplantation",
+          "unbounded physical allocation",
+          "proof that mature capabilities must form MoE-like communities",
+          "optimal structural policy"
+        ]
+      },
+      "status": "PARTIAL_HOLISTIC_GROWING_CLM_SIGNAL"
+    },
+    "manifest_checks": [
+      {
+        "path": "decision.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "task-spec.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "corpus-manifest.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "tokenizer.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "model-summary.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "paired-comparisons.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "checkpoints.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "structural-events.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "structural-probes.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "interventions.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "cells.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "edges.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "local-learning.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "transplantation.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "skill-localization.csv",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "language-learning-curves.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "quality-vs-gpu-cost.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "cells-edges-over-training.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "final-organism-atlas.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "lineage-tree.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "cell-activity-heatmap.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "cell-gradient-conflict.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "local-learning-transplantation.png",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r0-T-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r0-F-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r0-G-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r1-T-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r1-F-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r1-G-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r2-T-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r2-F-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      },
+      {
+        "path": "r2-G-worker.json",
+        "exists": true,
+        "sha256_matches": true
+      }
+    ],
+    "fully_reproduced": false,
+    "raw_training_logs_available": false,
+    "status": "ARCHIVE_HASHES_VERIFIED",
+    "scope": "archived outcomes verified against recorded hashes; no historical retraining"
+  },
+  "003-hard-cell-transition": {
+    "source_commit": "819df6113ca381a79e901330b7e0a1c394e0ee3b",
+    "metrics_sha256": "bf277a965bb05216b9887769ecc7ccb1892318dc90099a9528eafd9be138d2e3",
+    "models": [
+      {
+        "model": "fixed-cell",
+        "seed": 42,
+        "status": "incomplete",
+        "physical_gpu_index": "0",
+        "params": 60894720,
+        "steps": 4452,
+        "train_tokens": 8904000,
+        "train_seconds": 414.11959649202186,
+        "tokens_per_sec": 21501.035148843865,
+        "checkpoint_sha256": "0830eb16042710cfab71f84b390c233d1fbbd7a069739632a17361206d3db3d9",
+        "elapsed_seconds": 422.9276077747345
+      },
+      {
+        "model": "global-router",
+        "seed": 42,
+        "status": "incomplete",
+        "physical_gpu_index": "1",
+        "params": 60919296,
+        "steps": 4223,
+        "train_tokens": 8446000,
+        "train_seconds": 413.1755061749775,
+        "tokens_per_sec": 20441.676415404854,
+        "checkpoint_sha256": "f4fc7d59d6bce6e77d1d36580c3c89d4293b8302ea3f6478805cb1fb4039a56c",
+        "elapsed_seconds": 423.40596103668213
+      },
+      {
+        "model": "soft-cell",
+        "seed": 42,
+        "status": "completed",
+        "physical_gpu_index": "0",
+        "params": 61115904,
+        "steps": 5000,
+        "train_tokens": 10000000,
+        "train_seconds": 1494.9421068909933,
+        "tokens_per_sec": 6689.222247406515,
+        "checkpoint_sha256": "284d54847d283ce4ab36fc06e6147275f098e032be6674680bfc6f173ea462d7",
+        "evaluation": {
+          "validation_loss": 2.4999752044677734,
+          "perplexity": 12.18219189302685,
+          "validation_tokens": 32000,
+          "executed_gemm_flops_per_token": 338020352.0,
+          "observed_gemm_calls": {
+            "aten.mm.default": 6640,
+            "aten.bmm.default": 192
+          },
+          "uncovered_attention_calls": {},
+          "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+          "inference_latency_seconds_per_batch": 0.09303747474998544,
+          "inference_tokens_per_sec": 21496.714150663393,
+          "cuda_kernel_time_us_per_validation_batch": 77653.60993750207,
+          "cuda_activity_time_us_per_validation_batch": 77656.17793750206,
+          "cuda_activity_events_per_validation_batch": 3228.0,
+          "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+          "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+          "peak_gpu_bytes": 3833828864
+        },
+        "elapsed_seconds": 1553.7671551704407
+      },
+      {
+        "model": "hard-cell",
+        "seed": 42,
+        "status": "completed",
+        "physical_gpu_index": "1",
+        "params": 61115904,
+        "steps": 5000,
+        "train_tokens": 10000000,
+        "train_seconds": 1420.7216032930066,
+        "tokens_per_sec": 7038.676667421394,
+        "checkpoint_sha256": "eef8396060c8d859d5d93286179720f8520c7c3e31c1066a6dc6fbbb0e774ea2",
+        "evaluation": {
+          "validation_loss": 2.696301683783531,
+          "perplexity": 14.824803405492208,
+          "validation_tokens": 32000,
+          "executed_gemm_flops_per_token": 43833797.952,
+          "observed_gemm_calls": {
+            "aten.mm.default": 5478,
+            "aten.bmm.default": 192
+          },
+          "uncovered_attention_calls": {},
+          "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+          "inference_latency_seconds_per_batch": 0.06244784659998004,
+          "inference_tokens_per_sec": 32026.724841471783,
+          "cuda_kernel_time_us_per_validation_batch": 26426.981312497956,
+          "cuda_activity_time_us_per_validation_batch": 31107.040124997802,
+          "cuda_activity_events_per_validation_batch": 3471.875,
+          "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+          "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+          "peak_gpu_bytes": 3833828864
+        },
+        "elapsed_seconds": 1479.2221496105194
+      }
+    ],
+    "status": "DEVELOPMENT_ARCHIVE_ONLY",
+    "scope": "one seed/session, some incomplete controls; not a full matrix claim"
+  },
+  "004-cell-graph": {
+    "source_commit": "a59402238b686ff4981786f307d4a3f110698d61",
+    "metrics_sha256": "854bf837ad55f96bff096ada8a97d79c8a52c5b82a6e448a3f5c26f748169cf9",
+    "models": [
+      {
+        "model": "soft-cell",
+        "seed": 42,
+        "status": "completed",
+        "physical_gpu_index": "0",
+        "params": 61115904,
+        "steps": 5000,
+        "train_tokens": 10000000,
+        "train_seconds": 1435.8317935559994,
+        "tokens_per_sec": 6964.604102569614,
+        "checkpoint_sha256": "f8d12a00002d3474c92df615be776da1339f48d797011eda885b2fbd7c4a2840",
+        "evaluation": {
+          "validation_loss": 2.4999752044677734,
+          "perplexity": 12.18219189302685,
+          "validation_tokens": 32000,
+          "executed_gemm_flops_per_token": 338020352.0,
+          "observed_gemm_calls": {
+            "aten.mm.default": 6640,
+            "aten.bmm.default": 192
+          },
+          "uncovered_attention_calls": {},
+          "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+          "inference_latency_seconds_per_batch": 0.08847642630001928,
+          "inference_tokens_per_sec": 22604.891309896455,
+          "cuda_kernel_time_us_per_validation_batch": 77023.04731249953,
+          "cuda_activity_time_us_per_validation_batch": 77025.61518749956,
+          "cuda_activity_events_per_validation_batch": 3228.0,
+          "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+          "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+          "peak_gpu_bytes": 3833845248
+        },
+        "elapsed_seconds": 1492.921168088913
+      },
+      {
+        "model": "fixed-cell",
+        "seed": 42,
+        "status": "completed",
+        "physical_gpu_index": "0",
+        "params": 60894720,
+        "steps": 5000,
+        "train_tokens": 10000000,
+        "train_seconds": 438.6469208880037,
+        "tokens_per_sec": 22797.378765946523,
+        "checkpoint_sha256": "28d09f7c6a025ca25f470c6d7899a87cd384af4064a6f26c4c0a3a18f2e48b17",
+        "evaluation": {
+          "validation_loss": 2.508543685078621,
+          "perplexity": 12.287023249399681,
+          "validation_tokens": 32000,
+          "executed_gemm_flops_per_token": 123170816.0,
+          "observed_gemm_calls": {
+            "aten.mm.default": 976,
+            "aten.bmm.default": 192
+          },
+          "uncovered_attention_calls": {},
+          "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+          "inference_latency_seconds_per_batch": 0.02315298239993808,
+          "inference_tokens_per_sec": 86381.96001934285,
+          "cuda_kernel_time_us_per_validation_batch": 19588.909437499988,
+          "cuda_activity_time_us_per_validation_batch": 19591.78943749998,
+          "cuda_activity_events_per_validation_batch": 396.0,
+          "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+          "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+          "peak_gpu_bytes": 1779984384
+        },
+        "elapsed_seconds": 453.9898977279663
+      },
+      {
+        "model": "global-router",
+        "seed": 42,
+        "status": "completed",
+        "physical_gpu_index": "1",
+        "params": 60919296,
+        "steps": 5000,
+        "train_tokens": 10000000,
+        "train_seconds": 498.31052844700326,
+        "tokens_per_sec": 20067.80798143126,
+        "checkpoint_sha256": "997b69f5d06bf4cb9bc09d68de1bd5a6f42540b3a41a1aa669846cd41d60c812",
+        "evaluation": {
+          "validation_loss": 2.5130081325769424,
+          "perplexity": 12.342000650152723,
+          "validation_tokens": 32000,
+          "executed_gemm_flops_per_token": 47722496.0,
+          "observed_gemm_calls": {
+            "aten.mm.default": 1840,
+            "aten.bmm.default": 192
+          },
+          "uncovered_attention_calls": {},
+          "flops_scope": "observed mm/addmm/bmm shapes including math-SDPA attention; 2 FLOPs/MAC; uncovered fused SDPA invalidates gates; excludes dispatch, normalization, activation, softmax and backward; not total hardware FLOPs",
+          "inference_latency_seconds_per_batch": 0.026306482099994356,
+          "inference_tokens_per_sec": 76026.88920539586,
+          "cuda_kernel_time_us_per_validation_batch": 15165.480250000157,
+          "cuda_activity_time_us_per_validation_batch": 15233.693250000086,
+          "cuda_activity_events_per_validation_batch": 1107.75,
+          "timing_scope": "FP16 forward on identical resident batch, synchronized host latency; profiling and transfer excluded; two independent GPU workers may share CPU",
+          "profile_scope": "summed CUDA event durations from instrumented validation; kernel time excludes named memcpy/memset/memory activities; total activity reported separately; not uninstrumented end-to-end latency",
+          "peak_gpu_bytes": 1543205376
+        },
+        "elapsed_seconds": 522.4821820259094
+      }
+    ],
+    "status": "DEVELOPMENT_ARCHIVE_ONLY",
+    "scope": "one seed/session, some incomplete controls; not a full matrix claim"
+  }
+}

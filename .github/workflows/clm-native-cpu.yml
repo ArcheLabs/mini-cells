@@ -1,0 +1,46 @@
+name: CLM Native bounded-path CPU gates
+
+on:
+  push:
+    branches: [codex/clm-native-bounded-path-v1]
+  pull_request:
+    paths:
+      - 'research/projects/clm-native/**'
+      - '.github/workflows/clm-native-cpu.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mechanism-and-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU dependencies
+        run: |
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy pytest pyyaml
+      - name: Mechanism, no-oracle, accounting and evidence gates
+        run: python -m pytest -q research/projects/clm-native/experiments/native-sparse-path/tests --junitxml=clm-native-gates.xml
+      - name: Resource and exact parameter gate
+        run: python research/projects/clm-native/experiments/native-sparse-path/run.py --mode preflight --output ci-evidence
+      - name: Notebook and source syntax
+        run: |
+          python -m compileall -q research/projects/clm-native/experiments/native-sparse-path/src
+          python research/projects/clm-native/experiments/native-sparse-path/tests/check_notebook.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: clm-native-cpu-gates
+          path: |
+            clm-native-gates.xml
+            ci-evidence/

@@ -1,0 +1,9 @@
+# M0 resource and work budget
+
+Hardware is recorded in [artifacts/m0/hardware.json](artifacts/m0/hardware.json). Local WSL has eight logical CPU cores, approximately 7.7 GiB RAM, Quadro K620 2 GiB VRAM, and only about 2.3 GiB free on C:. The first experiment uses CPU, one Torch thread per worker. CUDA availability alone does not verify profiling or kernel compatibility. No cloud machine, paid service, large dataset or pretrained weights are acquired.
+
+Four models × three tasks × 200 updates × eight examples = 19,200 training examples. Three global-pooling diagnostic runs use 4,800 examples. Final dev assessment: 64 examples/run. All arms receive identical budgets and data. Each model has approximately 9.5K parameters; parameter spread must pass <=5% before training. A complete model+Adam+RNG checkpoint is small (<1 MiB/run); total retained small JSON/log/checkpoint evidence is expected <100 MiB. No weights are committed or pushed.
+
+Estimate before measurement: twelve main CPU jobs and three diagnostics should take minutes to tens of minutes on this machine; this is not a measured guarantee. M1 short training measures feasibility before M2. Disk headroom must remain sufficient for the small local outputs. Measured training seconds and actual inference cost/throughput will replace estimates in the final report. Synthetic input generation and exact solving are separately timed/declared, not included as model FLOPs.
+
+Manual Kaggle execution uses the same step budgets, with one serial job queue per selected GPU. Two T4s execute independent arms concurrently. No manual setup deadline or arbitrary one-hour session timeout is imposed. Checkpoints allow resume and completed jobs are not retrained. M3/B3/repeats and M4 are conditional on protocol gates; no unconditional matrix expansion. Formal sealed testing remains locked.
