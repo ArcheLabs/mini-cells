@@ -318,3 +318,16 @@ def test_confirmation_is_rejected_before_assets(monkeypatch):
         '--asset-manifest-sha256', 'b'*64, '--output', '/missing'])
     with pytest.raises(RuntimeError, match='confirmation seeds are reserved'):
         main()
+
+
+@pytest.mark.parametrize('arm', ['P0', 'S0', 'R0', 'G0'])
+def test_cell_dispatch_autocast_forward_backward(arm):
+    torch.set_num_threads(1)
+    model = make_model(tiny(), arm, 50713001)
+    x = torch.randint(0, 16, (2, 8))
+    with torch.autocast(device_type='cpu', dtype=torch.bfloat16):
+        logits, auxiliary, _ = model(x)
+        loss = logits.float().square().mean() + auxiliary
+    loss.backward()
+    assert torch.isfinite(loss)
+    assert any(p.grad is not None and torch.isfinite(p.grad).all() for p in model.parameters())

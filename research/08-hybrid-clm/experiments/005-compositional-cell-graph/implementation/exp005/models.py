@@ -70,7 +70,9 @@ class ArmFFN(nn.Module):
             rows = torch.where(ids == index)[0]
             if rows.numel():
                 value = cell.compute(normalized.index_select(0, rows))
-                output = output.index_copy(0, rows, value)
+                # Autocast linear outputs can be Half/BFloat16 while residual state is Float.
+                # Keep dispatch accumulation in the residual dtype; casts preserve gradients.
+                output = output.index_copy(0, rows, value.to(output.dtype))
         return output
 
     def forward(self, x: Tensor, norm: nn.LayerNorm,
