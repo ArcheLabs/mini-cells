@@ -248,3 +248,21 @@ def test_development_rows_cannot_complete_confirmation():
     decision=matrix_decision(reports,protocol(),[901,902,903])
     assert decision['status']=='CONFIRMATION_INCOMPLETE'
     assert 'b2' not in decision
+
+
+def test_notebook_default_bootstrap_fetches_pinned_source(monkeypatch):
+    import subprocess
+    nb=json.loads((BASE/'notebook.ipynb').read_text())
+    source=''.join(nb['cells'][1]['source'])
+    source=source.replace("ROOT = Path('/kaggle/working/minicells-exp005')",f'ROOT = Path({str(ROOT)!r})')
+    calls=[]
+    def run(args,**kwargs):
+        calls.append(list(args))
+        output='HEAD' if args[:3]==['git','rev-parse','--abbrev-ref'] else ''
+        return types.SimpleNamespace(stdout=output,returncode=1 if 'show-ref' in args else 0)
+    monkeypatch.setattr(subprocess,'run',run)
+    scope={};exec(compile(source,'005 notebook','exec'),scope)
+    assert len(scope['SOURCE_SHA'])==40
+    assert ['git','fetch','--depth=1','origin',scope['SOURCE_SHA']] in calls
+    assert any('preflight' in call and str(ROOT/'scripts/research/run_experiment_005.py') in call for call in calls)
+    assert (scope['CONFIG_PATH']).is_file()
