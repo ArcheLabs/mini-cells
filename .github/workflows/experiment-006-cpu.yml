@@ -2,7 +2,7 @@ name: Experiment 006 CPU Gate 0
 
 on:
   push:
-    branches: [codex/experiment-006-path-first-clm, codex/experiment-006-audit-fixes]
+    branches: [codex/experiment-006-path-first-clm, codex/experiment-006-audit-fixes, codex/experiment-006-kaggle-dev-pilot]
   pull_request:
     paths:
       - 'research/08-hybrid-clm/experiments/006-path-first-clm/**'
@@ -41,6 +41,7 @@ jobs:
         run: |
           python -m compileall -q research/08-hybrid-clm/experiments/006-path-first-clm/implementation scripts/research/run_experiment_006.py scripts/research/publish_experiment_006.py scripts/research/analyze_experiment_006.py
           python tests/research/path_first_006/check_notebook.py
+          python tests/research/path_first_006/check_pilot_notebook.py
       - name: Count small and 61M candidate capacity and run CPU Gate 0
         run: |
           python scripts/research/run_experiment_006.py --mode preflight > gate0-small.json
