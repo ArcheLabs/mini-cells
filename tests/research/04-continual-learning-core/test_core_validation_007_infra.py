@@ -53,7 +53,7 @@ def test_confirmation_amendment_retires_exposed_seed_set_without_gate_changes() 
 def test_seed_checkpoint_identity_refuses_mismatch(tmp_path: Path) -> None:
     module = _load_script(
         "core007_seed_runner",
-        "scripts/research/run_core_validation_007_confirmation_seed.py",
+        "research/projects/continual-learning/context/04-continual-learning/scripts/research/run_core_validation_007_confirmation_seed.py",
     )
     amendment = json.loads(AMENDMENT.read_text(encoding="utf-8"))
     checkpoint = tmp_path / "seed-80721.json"
@@ -89,7 +89,7 @@ def test_partial_report_is_explicitly_non_scientific(tmp_path: Path) -> None:
     subprocess.run(
         [
             sys.executable,
-            str(ROOT / "scripts/research/report_core_validation_007_confirmation.py"),
+            str(ROOT / "research/projects/continual-learning/context/04-continual-learning/scripts/research/report_core_validation_007_confirmation.py"),
             "--out",
             str(out),
         ],
@@ -108,7 +108,7 @@ def test_partial_report_is_explicitly_non_scientific(tmp_path: Path) -> None:
 def test_hydrate_restores_seed_checkpoint_across_sessions(tmp_path: Path) -> None:
     module = _load_script(
         "core007_orchestrator",
-        "scripts/research/orchestrate_core_validation_007_confirmation.py",
+        "research/projects/continual-learning/context/04-continual-learning/scripts/research/orchestrate_core_validation_007_confirmation.py",
     )
     artifacts = tmp_path / "artifacts"
     results = tmp_path / "results"
@@ -126,7 +126,7 @@ def test_hydrate_restores_seed_checkpoint_across_sessions(tmp_path: Path) -> Non
 def test_host_level_failure_record_survives_sigkill_style_exit(tmp_path: Path) -> None:
     module = _load_script(
         "core007_orchestrator_failure",
-        "scripts/research/orchestrate_core_validation_007_confirmation.py",
+        "research/projects/continual-learning/context/04-continual-learning/scripts/research/orchestrate_core_validation_007_confirmation.py",
     )
     module.RESULTS = tmp_path / "results"
     log_path = module.RESULTS / "confirmation" / "logs" / "seed-80721.log"
@@ -143,7 +143,7 @@ def test_host_level_failure_record_survives_sigkill_style_exit(tmp_path: Path) -
 def test_partial_confirmation_requires_explicit_allow_partial(tmp_path: Path) -> None:
     module = _load_script(
         "core007_publisher",
-        "scripts/research/publish_core_validation_007.py",
+        "research/projects/continual-learning/context/04-continual-learning/scripts/research/publish_core_validation_007.py",
     )
     results = tmp_path / "results"
     artifacts = tmp_path / "artifacts"
@@ -174,7 +174,7 @@ def test_partial_confirmation_requires_explicit_allow_partial(tmp_path: Path) ->
 def test_publisher_reuses_historical_github_token_secret_name() -> None:
     module = _load_script(
         "core007_publisher_secret",
-        "scripts/research/publish_core_validation_007.py",
+        "research/projects/continual-learning/context/04-continual-learning/scripts/research/publish_core_validation_007.py",
     )
     assert module.DEFAULT_SECRET_NAME == "GITHUB_TOKEN"
 
@@ -183,7 +183,7 @@ def test_retired_monolithic_confirmation_entrypoint_fails_before_gpu_work() -> N
     proc = subprocess.run(
         [
             sys.executable,
-            str(ROOT / "scripts/research/run_core_validation_007.py"),
+            str(ROOT / "research/projects/continual-learning/context/04-continual-learning/scripts/research/run_core_validation_007.py"),
             "--phase",
             "confirmation",
             "--device",

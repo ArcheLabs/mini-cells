@@ -14,15 +14,15 @@
 - Root `results/.gitkeep` was removed. `results/` is ignored as transient local
   output; durable evidence remains under `artifacts/`.
 - CLM-0.4 Preview/Release originals are preserved under
-  `research/archive/clm-0.4/{preview,release}/`; old paths remain lightweight
+  `research/projects/cellular-language-models/context/05-language-validation/archive/clm-0.4/{preview,release}/`; old paths remain lightweight
   compatibility pointers.
 - PCU-KILL-001 protocol template is available under the validation family;
   the historical protocols path has a compatibility pointer.
-- `research/audits/BRANCH_ARCHIVE.json` and `.md` inventory local branch heads.
+- `research/governance/audits/BRANCH_ARCHIVE.json` and `.md` inventory local branch heads.
   No branches were deleted; current HybridCLM, Stage-1, and research branches
   are explicitly marked keep/review.
-- `research/stages/08-hybrid-clm/` establishes the current strategy, evidence
-  boundary, and roadmap; `research/catalog.yaml` indexes it.
+- `research/projects/cellular-language-models/context/08-hybrid-clm/hypothesis/` establishes the current strategy, evidence
+  boundary, and roadmap; `research/governance/catalog.yaml` indexes it.
 
 ## HybridCLM API
 

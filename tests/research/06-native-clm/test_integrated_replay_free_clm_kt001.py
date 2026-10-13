@@ -46,7 +46,7 @@ def _tiny_config(*, cells: int = 1, active: int = 1) -> NativeCLMConfig:
 
 
 def _data_builder_module():
-    path = Path("scripts/research/prepare_integrated_replay_free_clm_kt001_data.py")
+    path = Path("research/projects/cellular-language-models/context/06-native-clm/scripts/research/prepare_integrated_replay_free_clm_kt001_data.py")
     spec = importlib.util.spec_from_file_location("kt001_data_builder", path)
     if spec is None or spec.loader is None:
         raise RuntimeError("unable to load KT001 data builder for mechanics test")
@@ -260,7 +260,7 @@ def test_metric_semantics_match_native_continual_definitions() -> None:
 def test_formal_aggregate_requires_unanimous_valid_outcome() -> None:
     decision = json.loads(
         Path(
-            "research/experiments/04-continual-learning-core/"
+            "research/projects/continual-learning/experiments/"
             "integrated-replay-free-clm-kill-test-001/DECISION.json"
         ).read_text()
     )
@@ -285,9 +285,9 @@ def test_formal_seed_values_do_not_leak_into_execution_entrypoints() -> None:
     registry = json.loads(Path(SEED_REGISTRY_PATH).read_text())
     formal = [str(seed) for seed in registry["formal"]]
     paths = [
-        Path("scripts/research/run_integrated_replay_free_clm_kt001.py"),
-        Path("scripts/research/aggregate_integrated_replay_free_clm_kt001.py"),
-        Path("scripts/research/publish_integrated_replay_free_clm_kt001.py"),
+        Path("research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_integrated_replay_free_clm_kt001.py"),
+        Path("research/projects/cellular-language-models/context/06-native-clm/scripts/research/aggregate_integrated_replay_free_clm_kt001.py"),
+        Path("research/projects/cellular-language-models/context/06-native-clm/scripts/research/publish_integrated_replay_free_clm_kt001.py"),
     ]
     text = "\n".join(path.read_text() for path in paths)
     for seed in formal:

@@ -9,7 +9,7 @@ from minicells.constructive_clm_003 import protection_only_smoke
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PROTOCOL = (
     REPO_ROOT
-    / "research/validations/constructive-clm-003-protected-growing-cells/protocol.json"
+    / "research/projects/cellular-language-models/experiments/constructive-clm-003-protected-growing-cells/validation/constructive-clm-003-protected-growing-cells/protocol.json"
 )
 
 

@@ -1,1 +1,0 @@
-../../research/02-self-organization/scripts/research/run_independent_third_trait_worker.py

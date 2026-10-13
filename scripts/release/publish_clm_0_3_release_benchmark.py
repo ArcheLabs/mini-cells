@@ -16,8 +16,8 @@ from publish_experiment_results import DEFAULT_SECRET_NAME, push_results, repo_r
 
 
 SOURCE_DIR = Path("results/clm-0.3-release-benchmark")
-ARTIFACT_DIR = Path("artifacts/experiments/clm-0.3-release-benchmark")
-DEFAULT_BRANCH = "kaggle/clm-0.3-release-benchmark-results"
+ARTIFACT_DIR = Path("research/projects/cellular-computing/experiments/clm-0.3-release-benchmark/artifacts")
+DEFAULT_BRANCH = "shared/kaggle/clm-0.3-release-benchmark-results"
 EXPECTED_DECISION_FORMAT = "minicells.clm-0.3-release-benchmark.v1"
 EXPECTED_BRIDGE_FORMAT = "minicells.clm-0.3-release-bridge-summary.v1"
 ARMS = ("textnca_continuation", "clm_fixed4")

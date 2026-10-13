@@ -217,7 +217,7 @@ def test_fork_registry_requires_runtime_artifact_binding() -> None:
 
 
 def test_freeze_consumes_decision_and_rejects_missing_selected_value() -> None:
-    script = Path(__file__).resolve().parents[3] / "scripts/research/freeze_pcu_kill_001.py"
+    script = Path(__file__).resolve().parents[3] / "research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/freeze_pcu_kill_001.py"
     spec = importlib.util.spec_from_file_location("pcu_freeze_test", script)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)

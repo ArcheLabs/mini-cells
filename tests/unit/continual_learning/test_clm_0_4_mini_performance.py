@@ -20,7 +20,7 @@ from minicells.clm04mini.protocol import load_protocol
 
 
 ROOT = Path(__file__).resolve().parents[3]
-PROTOCOL = ROOT / "research/validations/clm-0.4-mini-language-validation/protocol.json"
+PROTOCOL = ROOT / "research/projects/cellular-language-models/experiments/clm-0.4-mini-language-validation/validation/clm-0.4-mini-language-validation/protocol.json"
 
 
 def _cfg() -> MiniCLMConfig:

@@ -86,7 +86,7 @@ def test_null_and_positive_expectations_are_not_used_as_commit_inputs() -> None:
 
 
 def test_experiment_023_published_status_matches_zero_genesis() -> None:
-    path = Path("artifacts/experiments/023-online-nonparametric-trait-genesis/decision.json")
+    path = Path("research/projects/cellular-computing/experiments/023-online-nonparametric-trait-genesis/artifacts/decision.json")
     payload = json.loads(path.read_text(encoding="utf-8"))
     assert all(int(row["final_active_k"]) == 1 for row in payload["results"]["per_replicate"])
     assert int(payload["results"]["two_mode_genesis_replicates"]) == 0

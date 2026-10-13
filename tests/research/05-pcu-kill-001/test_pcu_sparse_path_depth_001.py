@@ -86,7 +86,7 @@ def test_experiment_is_engineering_only() -> None:
 
 
 def test_dual_gpu_runner_uses_process_isolation_not_threads() -> None:
-    runner = Path(__file__).resolve().parents[3] / "scripts/research/run_pcu_sparse_path_depth_001.py"
+    runner = Path(__file__).resolve().parents[3] / "research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/run_pcu_sparse_path_depth_001.py"
     source = runner.read_text(encoding="utf-8")
     assert "subprocess.Popen" in source
     assert "ThreadPoolExecutor" not in source

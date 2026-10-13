@@ -1,1 +1,0 @@
-../../research/02-self-organization/scripts/research/run_capability_tissue_specificity.py

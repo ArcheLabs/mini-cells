@@ -1444,7 +1444,7 @@ def _run_toy_engineering(seed: int, output: Path) -> dict[str, Any]:
 def run_engineering(seed: int = DEVELOPMENT_SEED, backend: str = "granite", output: Path | None = None, device: str = "auto") -> dict[str, Any]:
     if seed != DEVELOPMENT_SEED:
         raise ValueError(f"engineering runner requires seed {DEVELOPMENT_SEED}; formal seeds are never accepted")
-    assert_seed_registry(Path(__file__).resolve().parents[3] / "research/formal_seed_registry.json")
+    assert_seed_registry(Path(__file__).resolve().parents[3] / "research/governance/formal_seed_registry.json")
     if output is None:
         output = Path("artifacts/research/pcu-kill-001/engineering") / str(seed)
     if backend == "toy":

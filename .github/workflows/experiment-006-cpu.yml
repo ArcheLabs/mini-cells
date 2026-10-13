@@ -5,8 +5,8 @@ on:
     branches: [codex/experiment-006-path-first-clm, codex/experiment-006-audit-fixes, codex/experiment-006-kaggle-dev-pilot]
   pull_request:
     paths:
-      - 'research/08-hybrid-clm/experiments/006-path-first-clm/**'
-      - 'scripts/research/*experiment_006.py'
+      - 'research/projects/cellular-language-models/experiments/006-path-first-clm/**'
+      - 'research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/**'
       - 'tests/research/path_first_006/**'
       - '.github/workflows/experiment-006-cpu.yml'
   workflow_dispatch:
@@ -39,14 +39,14 @@ jobs:
         run: python -m pytest -q tests/research/path_first_006 tests/research/routing_005 --junitxml=gate0-tests.xml
       - name: Check all modules and Notebook cells
         run: |
-          python -m compileall -q research/08-hybrid-clm/experiments/006-path-first-clm/implementation scripts/research/run_experiment_006.py scripts/research/publish_experiment_006.py scripts/research/analyze_experiment_006.py
+          python -m compileall -q research/projects/cellular-language-models/experiments/006-path-first-clm/implementation research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/run_experiment_006.py research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/publish_experiment_006.py research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/analyze_experiment_006.py
           python tests/research/path_first_006/check_notebook.py
           python tests/research/path_first_006/check_pilot_notebook.py
       - name: Count small and 61M candidate capacity and run CPU Gate 0
         run: |
-          python scripts/research/run_experiment_006.py --mode preflight > gate0-small.json
-          python scripts/research/run_experiment_006.py --mode preflight --config research/08-hybrid-clm/experiments/006-path-first-clm/config/proposed-61m.json > gate0-large.json
-          python scripts/research/run_experiment_006.py --mode dry-run > gate1-blocked.json
+          python research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/run_experiment_006.py --mode preflight > gate0-small.json
+          python research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/run_experiment_006.py --mode preflight --config research/projects/cellular-language-models/experiments/006-path-first-clm/config/proposed-61m.json > gate0-large.json
+          python research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/run_experiment_006.py --mode dry-run > gate1-blocked.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

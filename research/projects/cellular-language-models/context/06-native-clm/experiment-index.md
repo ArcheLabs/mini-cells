@@ -1,0 +1,26 @@
+# Experiment index
+
+Canonical experiments owned by `06-native-clm`. All links point to the owning project’s experiment units.
+
+- [Preview record](../../experiments/constructive-clm-001-learned-coordinate-formation/README.md)
+- [Preview record](../../experiments/constructive-clm-001b-latent-superposition/README.md)
+- [Preview record](../../experiments/constructive-clm-002-long-horizon-growth-law/README.md)
+- [Preview record](../../experiments/constructive-clm-003-protected-growing-cells/README.md)
+- [Preview record](../../experiments/constructive-clm-004-model-level-multicell-computation/README.md)
+- [Preview record](../../experiments/constructive-clm-005-scaffold-removal/README.md)
+- [Protocol materials](../../experiments/integrated-replay-free-clm-kill-test-001/README.md)
+- [Protocol materials](../../experiments/native-clm-jam-demo/README.md)
+- [Preview record](../../experiments/native-clm-v0/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m0-m1/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m2-continual-language/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m2r0-update-invariant-audit/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m2r0b-numerical-reference-audit/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m3-growth-restored-continual-language/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m3l-query-sketch-gate/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m3l1-address-state-capacity/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m3l2-online-address-state/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m3r-address-diagnostic/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m3r-read-preserving-growth/README.md)
+- [Protocol materials](../../experiments/native-clm-v0-m3w0-write-drift-restoration/README.md)
+- [Protocol materials](../../experiments/shadow-cell-validation-001-copy-on-write-functional-isolation/README.md)
+- [Preview record](../../experiments/shadow-cell-validation-001-v2-developmental-maturation/README.md)

@@ -1,1 +1,0 @@
-../../research/03-routing-and-growth/scripts/research/publish_experiment_026_cell_granularity.py

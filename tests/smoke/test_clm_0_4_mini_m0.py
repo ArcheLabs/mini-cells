@@ -121,7 +121,7 @@ def test_m0_unified_runner_and_report(tmp_path):
     subprocess.run(
         [
             sys.executable,
-            "scripts/research/run.py",
+            "shared/scripts/research/run.py",
             "clm-0.4-mini-m0",
             "--device",
             "cpu",
@@ -135,7 +135,7 @@ def test_m0_unified_runner_and_report(tmp_path):
     subprocess.run(
         [
             sys.executable,
-            "scripts/research/report.py",
+            "shared/scripts/research/report.py",
             "clm-0.4-mini-m0",
             "--out",
             str(tmp_path),

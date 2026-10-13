@@ -1,1 +1,0 @@
-../../research/01-foundations/scripts/research/train_echo.py

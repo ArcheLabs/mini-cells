@@ -151,7 +151,7 @@ next public research target is CLM-0.3 Progressive Growth.
 
 On Kaggle with Internet enabled and two T4 GPUs when available, use:
 
-`research/notebooks/03-routing-and-growth/clm-0.1-release.ipynb`
+`research/projects/cellular-computing/experiments/clm-0.1-release/notebook.ipynb`
 
 or run:
 

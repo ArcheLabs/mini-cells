@@ -55,4 +55,4 @@ protocol, RPC, deployment, and ecosystem documentation remains at
 
 ## Research
 
-See the [research landing page](../research/README.md), [final mechanism report](../research/reports/clm-core-mechanism-0.4.md), and immutable [canonical artifacts](../artifacts/experiments/).
+See the [research project index](../research/README.md), the [final mechanism report](../research/projects/cellular-language-models/context/05-language-validation/reports/clm-core-mechanism-0.4.md), and experiment-owned results under each project's `experiments/*/artifacts/` directory.

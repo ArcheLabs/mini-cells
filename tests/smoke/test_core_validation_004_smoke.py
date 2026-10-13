@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 def test_core_validation_004_smoke(tmp_path):
     env = dict(os.environ, PYTHONPATH=str(ROOT / "src"))
     subprocess.run(
-        [sys.executable, "scripts/research/run.py", "core-validation-004", "--smoke", "--device", "cpu", "--out", str(tmp_path)],
+        [sys.executable, "shared/scripts/research/run.py", "core-validation-004", "--smoke", "--device", "cpu", "--out", str(tmp_path)],
         cwd=ROOT,
         env=env,
         check=True,

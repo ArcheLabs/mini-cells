@@ -1,1 +1,0 @@
-../../../research/07-safe-model-evolution/scripts/research/jam_knowledge_mutation_001_failure_diagnostic/run_diagnostic.py

@@ -1,1 +1,0 @@
-../../research/02-self-organization/scripts/research/run_language_sparse_topology.py

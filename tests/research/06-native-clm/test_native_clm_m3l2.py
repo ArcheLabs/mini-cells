@@ -175,7 +175,7 @@ def test_protocol_config_is_exactly_registered_rank32_budget() -> None:
     assert config.max_queries_per_cell_per_batch == 256
     protocol = json.loads(
         Path(
-            "research/validations/native-clm-v0-m3l2-online-address-state/protocol.json"
+            "research/projects/cellular-language-models/experiments/native-clm-v0-m3l2-online-address-state/validation/native-clm-v0-m3l2-online-address-state/protocol.json"
         ).read_text()
     )
     assert protocol["address_state"]["maximum_affine_gate_bytes_per_edge"] == 1552
@@ -183,7 +183,7 @@ def test_protocol_config_is_exactly_registered_rank32_budget() -> None:
 
 
 def _load_runner_module():
-    path = Path("scripts/research/run_native_clm_v0_m3l2.py")
+    path = Path("research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_native_clm_v0_m3l2.py")
     spec = importlib.util.spec_from_file_location("m3l2_runner_test", path)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
@@ -278,7 +278,7 @@ def test_formal_gate_aggregation_counts_sketch_gate_and_total_storage() -> None:
     runner = _load_runner_module()
     protocol = json.loads(
         Path(
-            "research/validations/native-clm-v0-m3l2-online-address-state/protocol.json"
+            "research/projects/cellular-language-models/experiments/native-clm-v0-m3l2-online-address-state/validation/native-clm-v0-m3l2-online-address-state/protocol.json"
         ).read_text()
     )
     control = _synthetic_summary(treatment=False)

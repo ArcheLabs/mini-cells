@@ -1,0 +1,26 @@
+# Experiment index
+
+Canonical experiments owned by `07-safe-model-evolution`. All links point to the owning project’s experiment units.
+
+- [Protocol materials](../../experiments/clm-conversion-kill-test-001/README.md)
+- [COW-CLM-001 — Minimal Functional Fork](../../experiments/cow-clm-001/README.md)
+- [Preview record](../../experiments/functional-boundary-oracle-001/README.md)
+- [Protocol materials](../../experiments/granite-clm-preview-3b-release/README.md)
+- [Preview record](../../experiments/granite-hybrid-clm-v0.1/README.md)
+- [Protocol materials](../../experiments/history-compression-001/README.md)
+- [Hybrid CLM Prompt Address 001](../../experiments/hybrid-clm-prompt-address-001/README.md)
+- [Protocol materials](../../experiments/jam-knowledge-mutation-001/README.md)
+- [Protocol materials](../../experiments/jam-knowledge-mutation-001-failure-diagnostic/README.md)
+- [Preview record](../../experiments/moe-conversion-001/README.md)
+- [Preview record](../../experiments/moe-mutation-001/README.md)
+- [Protocol materials](../../experiments/pcu-cross-layer-readout-001/README.md)
+- [Protocol materials](../../experiments/pcu-hybrid-objective-001/README.md)
+- [Protocol materials](../../experiments/pcu-hybrid-reattachment-001/README.md)
+- [Protocol materials](../../experiments/pcu-joint-cross-layer-001/README.md)
+- [Preview record](../../experiments/pcu-kill-001/README.md)
+- [Protocol materials](../../experiments/pcu-kill-001-engineering/README.md)
+- [Protocol materials](../../experiments/pcu-layer-placement-001/README.md)
+- [Protocol materials](../../experiments/pcu-locality-width-001/README.md)
+- [Protocol materials](../../experiments/pcu-objective-alignment-001/README.md)
+- [Protocol materials](../../experiments/pcu-readout-localization-001/README.md)
+- [Protocol materials](../../experiments/pcu-sparse-path-depth-001/README.md)

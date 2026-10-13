@@ -175,7 +175,7 @@ def _worker_command(
     baseline_root: Path,
     seed: int,
 ) -> list[str]:
-    script = _repo_root() / "scripts/research/run_pcu_locality_width_worker.py"
+    script = _repo_root() / "research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/run_pcu_locality_width_worker.py"
     return [
         sys.executable,
         str(script),

@@ -1,6 +1,6 @@
 import ast,json,re
 from pathlib import Path
-p=Path('research/08-hybrid-clm/experiments/006-path-first-clm/notebook.ipynb')
+p=Path('research/projects/cellular-language-models/experiments/006-path-first-clm/notebook.ipynb')
 n=json.loads(p.read_text());code='\n'.join(''.join(c['source']) for c in n['cells'] if c['cell_type']=='code')
 for c in n['cells']:
     if c['cell_type']=='code':

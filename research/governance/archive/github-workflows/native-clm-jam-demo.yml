@@ -1,0 +1,55 @@
+name: Native CLM JAM Demo
+
+on:
+  pull_request:
+    paths:
+      - "research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_native_clm_jam_demo.py"
+      - "research/projects/cellular-language-models/context/06-native-clm/scripts/research/publish_native_clm_jam_demo.py"
+      - "research/projects/cellular-language-models/experiments/native-clm-jam-demo/notebook.ipynb"
+      - "research/projects/cellular-language-models/context/06-native-clm/hypothesis/JAM_DEMO.md"
+      - "research/projects/safe-model-evolution/context/07-safe-model-evolution/datasets/jam-knowledge-v0.1/**"
+      - "scripts/research/jam_knowledge_v0_1/**"
+      - "tests/research/projects/cellular-language-models/context/06-native-clm/test_native_clm_jam_demo.py"
+      - ".github/workflows/native-clm-jam-demo.yml"
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: python -m pip install -e ".[dev,lm]"
+
+      - name: Validate notebook JSON
+        run: python -m json.tool research/projects/cellular-language-models/experiments/native-clm-jam-demo/notebook.ipynb >/dev/null
+
+      - name: Compile and lint
+        run: |
+          python -m py_compile \
+            research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_native_clm_jam_demo.py \
+            research/projects/cellular-language-models/context/06-native-clm/scripts/research/publish_native_clm_jam_demo.py \
+            tests/research/projects/cellular-language-models/context/06-native-clm/test_native_clm_jam_demo.py
+          ruff check --select F,E9 \
+            research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_native_clm_jam_demo.py \
+            research/projects/cellular-language-models/context/06-native-clm/scripts/research/publish_native_clm_jam_demo.py \
+            tests/research/projects/cellular-language-models/context/06-native-clm/test_native_clm_jam_demo.py
+
+      - name: Validate JAM dataset
+        run: |
+          python research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/jam_knowledge_v0_1/build_dataset.py
+          python research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/jam_knowledge_v0_1/validate_dataset.py
+
+      - name: CPU helper tests
+        run: pytest -q tests/research/projects/cellular-language-models/context/06-native-clm/test_native_clm_jam_demo.py
+
+      - name: CLI smoke
+        run: |
+          python research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_native_clm_jam_demo.py --help >/dev/null
+          python research/projects/cellular-language-models/context/06-native-clm/scripts/research/publish_native_clm_jam_demo.py --help >/dev/null

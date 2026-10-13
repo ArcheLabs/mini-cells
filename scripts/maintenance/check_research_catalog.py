@@ -13,15 +13,35 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def main() -> None:
-    catalog = yaml.safe_load((ROOT / "research/catalog.yaml").read_text(encoding="utf-8"))
-    stages = set(catalog["stages"])
-    entries = catalog["entries"]
-    ids = [entry["id"] for entry in entries]
-    assert len(ids) == len(set(ids)), "duplicate catalog IDs"
+    catalog = yaml.safe_load((ROOT / "research/governance/catalog.yaml").read_text(encoding="utf-8"))
+    assert catalog["schema"] == "minicells.research-project-catalog.v1"
+    projects = catalog["projects"]
+    project_ids = [project["id"] for project in projects]
+    assert len(project_ids) == len(set(project_ids)), "duplicate research project IDs"
+    project_roots = set()
+    for project in projects:
+        root = ROOT / project["directory"]
+        assert root.is_dir() and (root / "README.md").is_file(), f"incomplete project: {project['id']}"
+        project_roots.add(root.resolve())
+        for stage in project.get("historical_context", []):
+            assert (root / "context" / stage).is_dir(), f"missing project context: {project['id']}/{stage}"
 
+    registry = json.loads((ROOT / "research/governance/registry.yaml").read_text(encoding="utf-8"))
+    for experiment in registry["experiments"]:
+        directory = ROOT / experiment["directory"]
+        assert directory.is_dir(), f"missing experiment directory: {experiment['id']}"
+        assert any(root in directory.resolve().parents for root in project_roots), (
+            f"experiment has no project owner: {experiment['id']}"
+        )
+
+    # Keep checking historical frozen outcomes against their original decisions.
+    history = yaml.safe_load((ROOT / "research/governance/historical-stage-catalog.yaml").read_text(encoding="utf-8"))
+    stages = set(history["stages"])
     checked = 0
-    for entry in entries:
-        assert entry["stage"] in stages, f"invalid stage: {entry['id']}"
+    ids = [entry["id"] for entry in history["entries"]]
+    assert len(ids) == len(set(ids)), "duplicate historical catalog IDs"
+    for entry in history["entries"]:
+        assert entry["stage"] in stages, f"invalid historical stage: {entry['id']}"
         for field in ("report", "protocol", "artifacts", "notebook", "implementation"):
             value = entry.get(field)
             if value:
@@ -35,8 +55,7 @@ def main() -> None:
             f"outcome mismatch for {entry['id']}: catalog={entry['outcome']} decision={actual}"
         )
         checked += 1
-    print(f"research catalog: OK ({len(entries)} entries, {checked} formal outcomes checked)")
-
+    print(f"research catalog: OK ({len(projects)} projects, {len(registry['experiments'])} experiments, {checked} frozen outcomes)")
 
 if __name__ == "__main__":
     main()

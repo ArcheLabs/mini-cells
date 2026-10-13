@@ -59,7 +59,7 @@ def test_unified_m1_runner_and_report_emit_smoke_only(tmp_path):
     subprocess.run(
         [
             sys.executable,
-            "scripts/research/run.py",
+            "shared/scripts/research/run.py",
             "clm-0.4-mini-m1",
             "--smoke",
             "--device",
@@ -74,7 +74,7 @@ def test_unified_m1_runner_and_report_emit_smoke_only(tmp_path):
     subprocess.run(
         [
             sys.executable,
-            "scripts/research/report.py",
+            "shared/scripts/research/report.py",
             "clm-0.4-mini-m1",
             "--results",
             str(tmp_path),

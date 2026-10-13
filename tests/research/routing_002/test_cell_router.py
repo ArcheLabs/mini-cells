@@ -124,7 +124,7 @@ def test_top1_training_fails_closed(config):
 
 
 def test_registered_arms_match_capacity_within_preregistered_tolerance():
-    config_path = Path(__file__).resolve().parents[3] / 'experiments/cell_internal_routing_002/configs/experiment.json'
+    config_path = Path(__file__).resolve().parents[3] / 'shared/python/experiments/cell_internal_routing_002/configs/experiment.json'
     config = json.loads(config_path.read_text(encoding='utf-8'))
     counts = validate_config(config)
     assert all(50_000_000 <= count <= 150_000_000 for count in counts)

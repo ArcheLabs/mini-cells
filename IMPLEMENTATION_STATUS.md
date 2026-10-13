@@ -19,7 +19,7 @@ The scientific tracks remain distinct:
 | MiniJAM integration | Stage-1 compatibility engineering; separate from scientific claims |
 
 See [`docs/hybrid-clm/`](docs/hybrid-clm/) and
-[`research/stages/08-hybrid-clm/`](research/stages/08-hybrid-clm/).
+[`research/projects/cellular-language-models/context/08-hybrid-clm/hypothesis/`](research/projects/cellular-language-models/context/08-hybrid-clm/hypothesis/).
 
 Compatibility target: JAM semantics 0.7.2 and the public MiniJAM Stage-1
 contract `minijam-stage1/v1` (guest SDK ABI 1). The machine-readable source of

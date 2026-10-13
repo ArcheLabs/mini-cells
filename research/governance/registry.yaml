@@ -1,0 +1,104 @@
+{
+  "experiments": [
+    {
+      "id": "001",
+      "name": "global-router",
+      "status": "completed_development",
+      "directory": "research/projects/cellular-language-models/experiments/001-global-router",
+      "historical_entry": "experiments.common.train",
+      "note": "single development comparison; no confirmation claim"
+    },
+    {
+      "id": "002",
+      "name": "cell-internal-router",
+      "status": "development_incomplete",
+      "directory": "research/projects/cellular-language-models/experiments/002-cell-internal-router",
+      "historical_entry": "experiments.cell_internal_routing_002.train",
+      "completed_development_seeds": [
+        42
+      ],
+      "missing_development_seeds": [
+        123,
+        456
+      ],
+      "result_branch": "results/routing-002-3c19e9ca5dfc",
+      "decision": "DEVELOPMENT_NOT_SUPPORTED for observed seed 42"
+    },
+    {
+      "id": "003",
+      "name": "hard-cell-transition",
+      "status": "development_incomplete",
+      "directory": "research/projects/cellular-language-models/experiments/003-hard-cell-transition",
+      "entry": "minicells.training.runner",
+      "development_seeds": [
+        42,
+        123,
+        456
+      ],
+      "observed_development_seeds": [
+        42
+      ],
+      "missing_development_seeds": [
+        123,
+        456
+      ],
+      "decision": "DEVELOPMENT_INCOMPLETE",
+      "result_source_commit": "819df6113ca381a79e901330b7e0a1c394e0ee3b"
+    },
+    {
+      "id": "004",
+      "name": "cell-graph",
+      "status": "development_observed",
+      "directory": "research/projects/cellular-language-models/experiments/004-cell-graph",
+      "scientific_decision": false,
+      "note": "Five paired full-budget arms; two sessions per development seed. Seed 42 reference and graph archives exist under different recorded source commits; matrix aggregation remains DEVELOPMENT_INCOMPLETE. No scientific decision yet.",
+      "development_seeds": [
+        42,
+        43,
+        44
+      ],
+      "sessions": [
+        "reference",
+        "graph"
+      ],
+      "runs": [
+        {
+          "source_commit": "a59402238b686ff4981786f307d4a3f110698d61",
+          "seed": 42,
+          "session": "reference",
+          "status": "DEVELOPMENT_SESSION_COMPLETED",
+          "scientific_decision": false,
+          "archive": "research/projects/cellular-language-models/experiments/004-cell-graph/artifacts/a59402238b686ff4981786f307d4a3f110698d61/seed-42/reference"
+        },
+        {
+          "source_commit": "6312cefae33c354670d2350b315ac20d1e488a51",
+          "seed": 42,
+          "session": "graph",
+          "status": "DEVELOPMENT_SESSION_COMPLETED",
+          "scientific_decision": false,
+          "archive": "research/projects/cellular-language-models/experiments/004-cell-graph/artifacts/6312cefae33c354670d2350b315ac20d1e488a51/seed-42/graph"
+        }
+      ],
+      "matrix_status": "DEVELOPMENT_INCOMPLETE"
+    },
+    {
+      "id": "005",
+      "name": "compositional-cell-graph",
+      "status": "registered_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/005-compositional-cell-graph",
+      "scientific_decision": false,
+      "note": "CPU Gate 0 and trained synthetic Gate 1 passed; development seed 50713001 registered. Confirmation seeds reserved pending Gate 2 review. No TinyStories training has run.",
+      "registration_stage": "DEVELOPMENT_GATE_2"
+    },
+    {
+      "id": "006",
+      "name": "path-first-clm",
+      "status": "proposed_not_registered",
+      "directory": "research/projects/cellular-language-models/experiments/006-path-first-clm",
+      "scientific_decision": false,
+      "registration_stage": "CPU_GATE_0_ONLY",
+      "note": "Independent real-path implementation; GPU and confirmation remain blocked pending protocol registration and user authorization."
+    }
+  ],
+  "schema_version": 2
+}

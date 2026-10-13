@@ -1,6 +1,6 @@
 # Reproducible routing experiments
 
-Consult `experiments/registry.yaml` for status and experiment directories for
+Consult `shared/python/experiments/registry.yaml` for status and experiment directories for
 entry notebooks/configuration/protocols. `003-hard-cell-transition` is registered
 and unrun. 002 has only development seed 42; its full matrix remains incomplete.
 Historical source/config/artifact paths remain intact for replay and citations.
@@ -31,7 +31,7 @@ the pipeline does not invent secret metadata or embed tokens in code. See the
 An API submission may still fail to read secrets; use the already-authorized
 original editor. Repeated GPU smoke jobs are not part of this workflow.
 
-GitHub publication reuses `scripts/research/publish_core_validation_007.py` and
+GitHub publication reuses `research/projects/continual-learning/context/04-continual-learning/scripts/research/publish_core_validation_007.py` and
 `publish_experiment_results.py`. A PAT requires ArcheLabs repository access and
 **Contents read/write**, plus Metadata read. It needs no Actions, Workflows or
 Pull requests permissions to push these result files. Organization approval,

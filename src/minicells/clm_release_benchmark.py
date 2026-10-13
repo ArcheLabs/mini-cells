@@ -21,16 +21,16 @@ BRIDGE_WORKER_FORMAT = "minicells.clm-0.3-release-bridge-worker.v1"
 BRIDGE_SUMMARY_FORMAT = "minicells.clm-0.3-release-bridge-summary.v1"
 
 SOURCE_006_CHECKPOINT = Path(
-    "artifacts/experiments/006-consumer-language-scaling/minicells-v2-10m.pt"
+    "research/projects/cellular-computing/experiments/006-consumer-language-scaling/artifacts/minicells-v2-10m.pt"
 )
 SOURCE_006_CHECKPOINT_SHA256 = (
     "b76e2dd28b31470c1ce8bcd265c56e1b306191631e304161ded55b4e763f9e9e"
 )
-SOURCE_006_DECISION = Path("artifacts/experiments/006-consumer-language-scaling/decision.json")
-SOURCE_007_DECISION = Path("artifacts/experiments/007-minicells-30m/decision.json")
+SOURCE_006_DECISION = Path("research/projects/cellular-computing/experiments/006-consumer-language-scaling/artifacts/decision.json")
+SOURCE_007_DECISION = Path("research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/decision.json")
 
-CAPABILITY_RESULTS_REF = "kaggle/clm-0.3d-probationary-mitosis-results"
-CAPABILITY_ARTIFACT_ROOT = "artifacts/experiments/clm-0.3d-probationary-mitosis"
+CAPABILITY_RESULTS_REF = "shared/kaggle/clm-0.3d-probationary-mitosis-results"
+CAPABILITY_ARTIFACT_ROOT = "research/projects/cellular-computing/experiments/clm-0.3d-probationary-mitosis/artifacts"
 CAPABILITY_DECISION_FORMAT = "minicells.clm-0.3d-probationary-mitosis.decision.v1"
 CAPABILITY_EXPECTED_TRAINING_COMMIT = "af1eed85ac674495b684c22db49e839cf433bbe0"
 CAPABILITY_EXPECTED_TRAINING_TREE = "dbe4c7ff609105cdeb2083f0269de0af17289cdb"

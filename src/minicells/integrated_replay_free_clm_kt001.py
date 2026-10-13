@@ -13,11 +13,11 @@ from typing import Literal
 
 EXPERIMENT_ID = "integrated-replay-free-clm-kill-test-001"
 PROTOCOL_PATH = (
-    "research/experiments/04-continual-learning-core/"
+    "research/projects/continual-learning/experiments/"
     "integrated-replay-free-clm-kill-test-001/PROTOCOL.md"
 )
 SEED_REGISTRY_PATH = (
-    "research/experiments/04-continual-learning-core/"
+    "research/projects/continual-learning/experiments/"
     "integrated-replay-free-clm-kill-test-001/SEEDS.json"
 )
 

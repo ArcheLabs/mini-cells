@@ -43,10 +43,10 @@ WORKER_FORMAT = "minicells.story-math-shift-30m-worker.v1"
 RESULT_DIR_NAME = "experiment-025-story-math-growth"
 
 SOURCE_007_ARTIFACT = Path(
-    "artifacts/experiments/007-minicells-30m/minicells-30m-v0-fp16.pt"
+    "research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/minicells-30m-v0-fp16.pt"
 )
 SOURCE_007_CHECKPOINTS = Path(
-    "artifacts/experiments/007-minicells-30m/checkpoints.csv"
+    "research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/checkpoints.csv"
 )
 
 SHIFT_TOKENS = 50_000_000

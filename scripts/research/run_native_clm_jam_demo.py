@@ -1,1 +1,0 @@
-../../research/06-native-clm/scripts/research/run_native_clm_jam_demo.py

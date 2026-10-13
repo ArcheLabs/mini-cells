@@ -1,1 +1,0 @@
-../../research/07-safe-model-evolution/scripts/research/run_pcu_objective_alignment_001.py

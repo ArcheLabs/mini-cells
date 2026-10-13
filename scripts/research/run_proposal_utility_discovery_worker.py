@@ -1,1 +1,0 @@
-../../research/02-self-organization/scripts/research/run_proposal_utility_discovery_worker.py

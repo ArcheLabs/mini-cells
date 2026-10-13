@@ -1,1 +1,0 @@
-../../research/01-foundations/scripts/research/sample_echo.py

@@ -206,7 +206,7 @@ def run_engineering(
     if backend != "granite":
         raise ValueError("backend must be granite or toy")
     assert_engineering_seed(seed)
-    assert_seed_registry(Path(__file__).resolve().parents[3] / "research/formal_seed_registry.json")
+    assert_seed_registry(Path(__file__).resolve().parents[3] / "research/governance/formal_seed_registry.json")
     output = output or Path("artifacts/research/pcu-kill-001/engineering") / str(seed)
     chosen_device = _resolved_device(device)
     g0 = _g0_preflight(

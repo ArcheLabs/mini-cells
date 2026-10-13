@@ -1,1 +1,0 @@
-../../research/02-self-organization/scripts/research/publish_experiment_016_results.py
