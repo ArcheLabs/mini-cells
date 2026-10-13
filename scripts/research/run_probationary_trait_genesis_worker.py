@@ -1,1 +1,0 @@
-../../research/02-self-organization/scripts/research/run_probationary_trait_genesis_worker.py

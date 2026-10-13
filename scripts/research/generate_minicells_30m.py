@@ -1,1 +1,0 @@
-../../research/01-foundations/scripts/research/generate_minicells_30m.py

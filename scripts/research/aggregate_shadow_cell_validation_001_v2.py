@@ -1,1 +1,0 @@
-../../research/06-native-clm/scripts/research/aggregate_shadow_cell_validation_001_v2.py

@@ -1,1 +1,0 @@
-../../research/06-native-clm/scripts/research/run_shadow_cell_validation_001_seed.py

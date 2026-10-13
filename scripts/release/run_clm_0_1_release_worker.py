@@ -13,7 +13,7 @@ from torch.nn import functional as F
 
 ROOT = Path.cwd()
 if not (ROOT / "src").exists():
-    ROOT = Path("/kaggle/working/mini-cells")
+    ROOT = Path("/shared/kaggle/working/mini-cells")
 sys.path.insert(0, str(ROOT / "src"))
 
 from minicells.clm_conditionality_002 import aligned_route_disagreement  # noqa: E402

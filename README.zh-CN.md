@@ -51,12 +51,12 @@ alpha 缩放、zero-state 诊断和回滚报告。当前只支持经过测试的
 
 - [`src/minicells/hybrid/`](src/minicells/hybrid/)：公共 HybridCLM API。
 - [`docs/hybrid-clm/`](docs/hybrid-clm/)：API、artifact、placement、安全和状态文档。
-- [`experiments/`](experiments/README.md)：独立的科研实验管线。
-- [`research/08-hybrid-clm/hypothesis/`](research/08-hybrid-clm/hypothesis/)：当前科研边界与路线图。
-- [`research/01-foundations/`–`research/08-hybrid-clm/`](research/MIGRATION_MAP.md)：项目优先研究结构与迁移状态。
-- [`research/`](research/README.zh-CN.md)：研究导航、协议、报告和证据目录。
-- [`research/archive/github-workflows/`](research/archive/github-workflows/)：归档的一次性科研 workflow（不再是活动 Actions）。
-- [`artifacts/`](artifacts/)：持久证据与发布资产。
+- [`research/projects/`](research/README.zh-CN.md)：四个研究项目，每个项目包含所属实验和历史背景。
+- [`research/governance/`](research/governance/README.md)：跨项目注册表、协议、审计和研究索引。
+- [`shared/`](shared/)：跨项目共用的 Python 与 Kaggle 工具。
+- [`scripts/`](scripts/README.md)：仓库级维护与发布入口。
+- [`research/governance/archive/github-workflows/`](research/governance/archive/github-workflows/)：归档的一次性科研 workflow（不再是活动 Actions）。
+- [`artifacts/`](artifacts/)：仓库级发布资产与工程证据；实验结果保存在所属项目内。
 - [`tests/`](tests/)：单元、集成、科研测试和公共 fixtures。
 - [`docs/integrations/minijam.md`](docs/integrations/minijam.md)：MiniCells/MiniJAM 边界。
 
@@ -69,3 +69,8 @@ HybridCLM 执行、LoRA 优越性、生产 JAM 执行和通用持续学习方案
 ## 许可证
 
 见 [LICENSE](LICENSE)。
+
+## 研究导航
+
+从[研究项目索引](research/README.zh-CN.md)进入。研究定义、Notebook 和结果
+都与所属项目及实验放在一起；共享注册表是索引，不是实验内容的第二个存放处。

@@ -1,1 +1,0 @@
-../../research/06-native-clm/scripts/research/publish_native_clm_v0_m3w0.py

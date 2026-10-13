@@ -117,7 +117,7 @@ def test_failed_final_confirmation_evaluation_resumes_without_training(c,tmp_pat
 
 def test_gpu_micro_does_not_accept_corpus_or_confirmation():
     import subprocess,sys
-    result=subprocess.run([sys.executable,'scripts/research/run_experiment_006.py','--mode','gpu-micro-preflight',
+    result=subprocess.run([sys.executable,'research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/run_experiment_006.py','--mode','gpu-micro-preflight',
         '--assets','not-a-bundle','--role','confirmation'],text=True,capture_output=True)
     assert result.returncode and 'accepts no corpus' in result.stderr
 

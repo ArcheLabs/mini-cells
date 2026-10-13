@@ -54,7 +54,7 @@ jobs:
     timeout-minutes: 115
     env:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
-      PYTHONPATH: src:.
+      PYTHONPATH: src:shared/python:.
       EXPERIMENT: ${{ inputs.experiment }}
       SEED_GROUP: ${{ inputs.seed }}
       SESSION: ${{ inputs.session }}
@@ -68,15 +68,34 @@ jobs:
         id: input_cache
         with:
           path: .research-input-state/
-          key: research-input-v1-${{ inputs.experiment }}-${{ hashFiles('src/**/*.py', 'experiments/**/*.py', 'research/08-hybrid-clm/experiments/**/*.py', 'kaggle/**/*.py', 'research/08-hybrid-clm/experiments/*/config/*.yaml', 'research/08-hybrid-clm/experiments/*/protocol.json') }}
+          key: research-input-v1-${{ inputs.experiment }}-${{ hashFiles('src/**/*.py', 'shared/python/**/*.py', 'research/projects/cellular-language-models/experiments/**/*.py', 'shared/kaggle/**/*.py', 'research/projects/cellular-language-models/experiments/*/config/*.yaml', 'research/projects/cellular-language-models/experiments/*/protocol.json') }}
       - name: Select experiment and seed group
-        run: python kaggle/session.py select --experiment "$EXPERIMENT" --group "$SEED_GROUP"
+        run: python shared/kaggle/session.py select --experiment "$EXPERIMENT" --group "$SEED_GROUP"
       - uses: actions/checkout@v4
         if: ${{ inputs.experiment == '003' || inputs.experiment == '004' }}
         with:
           ref: ${{ env.SOURCE_SHA }}
           path: experiment-source
           persist-credentials: false
+      - name: Resolve paths in the frozen source checkout
+        if: ${{ inputs.experiment == '003' || inputs.experiment == '004' }}
+        working-directory: experiment-source
+        run: |
+          if [ -f shared/kaggle/prepare_assets.py ]; then
+            tool_dir=shared/kaggle
+          else
+            tool_dir=kaggle
+          fi
+          if [ ! -f "$DEFINITION" ]; then
+            case "$EXPERIMENT" in
+              003) DEFINITION=research/08-hybrid-clm/experiments/003-hard-cell-transition/experiment.yaml ;;
+              004) DEFINITION=research/08-hybrid-clm/experiments/004-cell-graph/experiment.yaml ;;
+              *) echo "No frozen-source definition mapping for $EXPERIMENT" >&2; exit 1 ;;
+            esac
+          fi
+          test -f "$DEFINITION"
+          echo "DEFINITION=$DEFINITION" >> "$GITHUB_ENV"
+          echo "KAGGLE_TOOL_DIR=$tool_dir" >> "$GITHUB_ENV"
       - name: Preserve historical notebooks
         if: ${{ inputs.experiment != '003' && inputs.experiment != '004' }}
         run: |
@@ -98,17 +117,17 @@ jobs:
       - name: Prepare fixed assets on CPU
         if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && env.REUSE_INPUT != 'true' }}
         working-directory: experiment-source
-        run: python kaggle/prepare_assets.py --definition "$DEFINITION" --output ../prepared-assets
+        run: python "$KAGGLE_TOOL_DIR/prepare_assets.py" --definition "$DEFINITION" --output ../prepared-assets
       - name: Reuse prepared data automatically
         if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && env.REUSE_INPUT == 'true' }}
-        run: python kaggle/session.py reuse
+        run: python shared/kaggle/session.py reuse
       - name: Upload immutable Dataset before GPU work
         if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && env.REUSE_INPUT != 'true' }}
         working-directory: experiment-source
-        run: python kaggle/upload_assets.py ../prepared-assets
+        run: python "$KAGGLE_TOOL_DIR/upload_assets.py" ../prepared-assets
       - name: Remember uploaded data and source automatically
         if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && env.REUSE_INPUT != 'true' }}
-        run: python kaggle/session.py remember
+        run: python shared/kaggle/session.py remember
       - uses: actions/cache/save@v4
         if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute && env.REUSE_INPUT != 'true' }}
         with:
@@ -120,7 +139,7 @@ jobs:
         run: |
           extra=()
           if [ "$EXPERIMENT" = "004" ]; then extra+=(--session "$SESSION"); fi
-          python kaggle/submit.py --commit "$SOURCE_SHA" --seed "$SEED" --definition "$DEFINITION" --input-reference ../prepared-assets/input-reference.json --output ../prepared-notebook "${extra[@]}"
+          python "$KAGGLE_TOOL_DIR/submit.py" --commit "$SOURCE_SHA" --seed "$SEED" --definition "$DEFINITION" --input-reference ../prepared-assets/input-reference.json --output ../prepared-notebook "${extra[@]}"
       - name: Preserve notebook and source identity
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
@@ -139,7 +158,7 @@ jobs:
       - name: Run original Kaggle kernel and download its exact version
         id: gpu
         if: ${{ (inputs.experiment == '003' || inputs.experiment == '004') && inputs.execute }}
-        run: python kaggle/run_remote.py --prepared prepared-notebook --output kaggle-output
+        run: python shared/kaggle/run_remote.py --prepared prepared-notebook --output kaggle-output
       - name: Restore cumulative 004 evidence before collection
         if: ${{ always() && inputs.experiment == '004' && inputs.execute && steps.gpu.outcome != 'skipped' }}
         run: |
@@ -167,14 +186,15 @@ jobs:
           with Path(os.environ['GITHUB_ENV']).open('a') as handle:
               handle.write('KAGGLE_KERNEL_REF=' + json.loads(push.read_text())['kernel_ref'] + '\n')
           PY
-          python kaggle/collect.py --download kaggle-output --preparation prepared-notebook/preparation.json --kernel-ref "$(python -c 'import json; print(json.load(open("prepared-notebook/push.json"))["kernel_ref"])')" --workflow-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          python shared/kaggle/collect.py --download kaggle-output --preparation prepared-notebook/preparation.json --kernel-ref "$(python -c 'import json; print(json.load(open("prepared-notebook/push.json"))["kernel_ref"])')" --workflow-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
       - name: Preserve returned outputs
         if: ${{ always() && inputs.execute }}
         uses: actions/upload-artifact@v4
         with:
           name: research-${{ inputs.experiment }}-seed-${{ env.SEED }}-evidence-${{ github.run_id }}
           path: |
-            research/artifacts/${{ inputs.experiment }}-*/
+            research/projects/cellular-language-models/experiments/003-hard-cell-transition/artifacts/
+            research/projects/cellular-language-models/experiments/004-cell-graph/artifacts/
             kaggle-output/**/*.json
             kaggle-output/**/*.jsonl
             kaggle-output/**/*.md
@@ -200,7 +220,7 @@ jobs:
           if [ "$EXPERIMENT" != "004" ]; then git switch -c "$branch"; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add research/artifacts research/registry.yaml
+          git add research/projects/cellular-language-models/experiments/003-hard-cell-transition/artifacts research/projects/cellular-language-models/experiments/004-cell-graph/artifacts research/governance/registry.yaml
           git commit -m "research: archive pipeline v2 experiment $EXPERIMENT seed $SEED"
           git push origin "$branch"
           python - <<'PY'

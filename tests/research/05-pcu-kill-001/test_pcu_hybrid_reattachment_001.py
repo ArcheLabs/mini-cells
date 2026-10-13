@@ -130,8 +130,8 @@ def test_v3_explicitly_records_native_g0_as_non_gating_diagnostic() -> None:
 
 def test_dual_gpu_runner_and_publisher_guards_exist() -> None:
     root = Path(__file__).resolve().parents[3]
-    runner = (root / "scripts/research/run_pcu_hybrid_reattachment_001.py").read_text(encoding="utf-8")
-    publisher = (root / "scripts/research/publish_pcu_hybrid_reattachment_001.py").read_text(encoding="utf-8")
+    runner = (root / "research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/run_pcu_hybrid_reattachment_001.py").read_text(encoding="utf-8")
+    publisher = (root / "research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/publish_pcu_hybrid_reattachment_001.py").read_text(encoding="utf-8")
     assert "torch.cuda.device_count() < 2" in runner
     assert '"cuda:0": "primary_causal_reattachment"' in runner
     assert '"cuda:1": "amplitude_sweep"' in runner

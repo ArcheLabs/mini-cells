@@ -1,32 +1,26 @@
-[English](README.md) | [中文](README.zh-CN.md)
+[English](README.md) | 中文
 
-# MiniCells 研究项目
+# MiniCells 研究
 
-研究资料按项目组织。进入对应项目目录，即可查阅研究问题、实验单元、Notebook、实现代码、报告和已有证据。
+研究资料按长期研究项目组织。每个项目集中保存研究问题、实验记录、代码、Notebook、报告和项目专属结果。
 
 ## 研究项目
 
-| 项目 | 范围 |
+| 项目 | 研究范围 |
 |---|---|
-| [`01-foundations/`](01-foundations/README.md) | 早期语言动力学与训练可行性 |
-| [`02-self-organization/`](02-self-organization/README.md) | 组织形成、招募、分化与特征生成 |
-| [`03-routing-and-growth/`](03-routing-and-growth/README.md) | 路由、增长与粒度 |
-| [`04-continual-learning/`](04-continual-learning/README.md) | 持续学习核心机制 |
-| [`05-language-validation/`](05-language-validation/README.md) | 已退役的 CLM-0.4 语言验证线 |
-| [`06-native-clm/`](06-native-clm/README.md) | 原生语言模型训练与持续学习测试 |
-| [`07-safe-model-evolution/`](07-safe-model-evolution/README.md) | 预训练模型的安全演化 |
-| [`08-hybrid-clm/`](08-hybrid-clm/README.md) | HybridCLM 及其关联路由实验 |
+| [细胞计算](projects/cellular-computing/README.md) | 细胞计算、自组织、路由、增长与稀疏执行。 |
+| [持续学习](projects/continual-learning/README.md) | 持续学习机制、验证及其已知限制。 |
+| [细胞语言模型](projects/cellular-language-models/README.md) | 原生与混合细胞语言模型架构及语言验证。 |
+| [安全模型演化](projects/safe-model-evolution/README.md) | 对预训练模型进行安全、可测量的修改。 |
 
-## 跨项目研究治理
+## 共享研究治理
 
-- [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md)：当前证据支持的结论及明确的 No-Go 边界。
-- [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md)：实验结果、限制与工程价值记录。
-- [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md)：历史研究线的证据定位。
-- [`catalog.yaml`](catalog.yaml) 和 [`registry.yaml`](registry.yaml)：机器可读索引。
-- [`MIGRATION_MAP.md`](MIGRATION_MAP.md)：项目归属和旧路径兼容映射。
+[`governance/`](governance/README.md) 保存实验注册表、冻结协议、审计和历史索引。研究项目目录拥有研究内容；治理目录记录状态与规则。
 
 ## 研究纪律
 
-冻结协议与正式决策具有权威性。后续解释不能把失败决策升级；有用的机制也不能证明模型级或语言级持续学习。保留每次运行的 source commit 与身份；路径迁移前核对引用并保留兼容入口；每项实验只归属一个研究项目。
-
-Experiment 004 的手动入口现为 [`08-hybrid-clm/experiments/004-cell-graph/notebook.ipynb`](08-hybrid-clm/experiments/004-cell-graph/notebook.ipynb)。Seed 42 的 `reference` 与 `graph` 归档仍保留各自记录的 source commit，矩阵汇总仍为 `DEVELOPMENT_INCOMPLETE`。
+- 每项实验只归属一个研究项目。
+- 保留冻结协议、源代码提交、运行身份和负面结果。
+- 实验结果与所属实验放在一起；仓库级发布产物保留在顶层 `artifacts/`。
+- 跨项目共享代码放在 [`../shared/`](../shared/)；项目专属逻辑留在项目或实验目录中。
+- 运行成功、机制有用或路径可视化，都不能单独证明科学主张成立。

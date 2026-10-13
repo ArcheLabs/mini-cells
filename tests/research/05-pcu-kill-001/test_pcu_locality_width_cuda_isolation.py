@@ -36,7 +36,7 @@ def test_existing_width_results_keep_original_scientific_identity() -> None:
 
 def test_canonical_runner_uses_isolated_orchestrator() -> None:
     root = Path(__file__).resolve().parents[3]
-    runner = (root / "scripts/research/run_pcu_locality_width_001.py").read_text(encoding="utf-8")
+    runner = (root / "research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/run_pcu_locality_width_001.py").read_text(encoding="utf-8")
     assert "run_locality_width_diagnostic_isolated" in runner
     assert "run_locality_width_diagnostic(" not in runner
 

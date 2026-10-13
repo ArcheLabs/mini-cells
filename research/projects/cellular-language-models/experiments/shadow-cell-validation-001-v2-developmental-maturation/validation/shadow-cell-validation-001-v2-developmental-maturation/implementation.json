@@ -1,0 +1,27 @@
+{
+  "schema": "minicells.shadow-cell-validation.implementation.v2",
+  "validation_id": "shadow-cell-validation-001-v2-developmental-maturation",
+  "protocol": "research/projects/cellular-language-models/experiments/shadow-cell-validation-001-v2-developmental-maturation/validation/shadow-cell-validation-001-v2-developmental-maturation/protocol.json",
+  "runner": "research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_shadow_cell_validation_001_v2.py",
+  "source": ["src/minicells/shadow_maturation.py", "src/minicells/clm04mini/model.py"],
+  "tests": ["tests/research/04-continual-learning-core/test_shadow_cell_validation_001_v2.py"],
+  "figure_generation": "research/projects/cellular-language-models/context/06-native-clm/scripts/research/report_shadow_cell_validation_001_v2.py",
+  "aggregation": "research/projects/cellular-language-models/context/06-native-clm/scripts/research/aggregate_shadow_cell_validation_001_v2.py",
+  "publication": "research/projects/cellular-language-models/context/06-native-clm/scripts/research/publish_shadow_cell_validation_001_v2.py",
+  "notebook": "research/projects/continual-learning/experiments/shadow-cell-validation-001-v2-developmental-maturation-core/notebook.ipynb",
+  "result_schema_version": 2,
+  "canonical_native_checkpoint": "external-canonical-accepted-checkpoint",
+  "formal_dataset": "External JSON dataset satisfying protocol formal_dataset.required_splits; synthetic data is smoke-only.",
+  "protocol_lock": "research/projects/cellular-language-models/experiments/shadow-cell-validation-001-v2-developmental-maturation/validation/shadow-cell-validation-001-v2-developmental-maturation/protocol-lock.json",
+  "lock_helper": "research/projects/cellular-language-models/context/06-native-clm/scripts/research/lock_shadow_cell_validation_001_v2.py",
+  "formal_launcher": "python research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_shadow_cell_validation_001_v2.py --phase formal --seed 95311 --device cuda --checkpoint /shared/kaggle/input/canonical/checkpoint.pt --dataset /shared/kaggle/input/shadow-v2/formal-seed-95311.json",
+  "publication_branch": "codex/shadow-cell-validation-001-v2-amendment",
+  "implementation_lock_files": [
+    "research/projects/cellular-language-models/context/06-native-clm/scripts/research/run_shadow_cell_validation_001_v2.py",
+    "research/projects/cellular-language-models/context/06-native-clm/scripts/research/aggregate_shadow_cell_validation_001_v2.py",
+    "research/projects/cellular-language-models/context/06-native-clm/scripts/research/publish_shadow_cell_validation_001_v2.py",
+    "research/projects/cellular-language-models/context/06-native-clm/scripts/research/report_shadow_cell_validation_001_v2.py",
+    "src/minicells/shadow_maturation.py",
+    "research/projects/cellular-language-models/experiments/shadow-cell-validation-001-v2-developmental-maturation/validation/shadow-cell-validation-001-v2-developmental-maturation/protocol.json"
+  ]
+}

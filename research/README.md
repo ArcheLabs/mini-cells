@@ -2,31 +2,31 @@
 
 # MiniCells Research
 
-This directory is organized by research project. Start from one of the eight project folders to find its hypothesis, experiment units, notebooks, implementation, reports and available evidence.
+Research is organized by long-lived project. Each project owns its questions,
+experiment records, code, notebooks, reports, and project-specific results.
 
 ## Projects
 
-| Project | Scope |
+| Project | Focus |
 |---|---|
-| [`01-foundations/`](01-foundations/README.md) | Early language dynamics and training feasibility |
-| [`02-self-organization/`](02-self-organization/README.md) | Tissue formation, recruitment and trait genesis |
-| [`03-routing-and-growth/`](03-routing-and-growth/README.md) | Routing, growth and granularity |
-| [`04-continual-learning/`](04-continual-learning/README.md) | Core continual-learning mechanisms |
-| [`05-language-validation/`](05-language-validation/README.md) | Retired CLM-0.4 language-validation lineage |
-| [`06-native-clm/`](06-native-clm/README.md) | Native language-model training and continual-learning tests |
-| [`07-safe-model-evolution/`](07-safe-model-evolution/README.md) | Safe evolution of pretrained models |
-| [`08-hybrid-clm/`](08-hybrid-clm/README.md) | HybridCLM and its linked routing experiments |
+| [Cellular Computing](projects/cellular-computing/README.md) | Cellular computation, self-organization, routing, growth, and sparse execution. |
+| [Continual Learning](projects/continual-learning/README.md) | Continual-learning mechanisms, validation, and known limits. |
+| [Cellular Language Models](projects/cellular-language-models/README.md) | Native and hybrid cellular language-model architectures and language validation. |
+| [Safe Model Evolution](projects/safe-model-evolution/README.md) | Safe, measurable changes to pretrained models. |
 
-## Cross-project governance
+## Shared research governance
 
-- [`audits/CLM_CAPABILITY_CEILING.md`](audits/CLM_CAPABILITY_CEILING.md) records supported claims and explicit No-Go boundaries.
-- [`audits/RESEARCH_LEDGER.md`](audits/RESEARCH_LEDGER.md) preserves family-level outcomes, limitations and engineering value.
-- [`audits/HISTORICAL_RESEARCH_ASSET_MAP.md`](audits/HISTORICAL_RESEARCH_ASSET_MAP.md) explains the status of historical research lines.
-- [`catalog.yaml`](catalog.yaml) and [`registry.yaml`](registry.yaml) provide machine-readable indexes.
-- [`MIGRATION_MAP.md`](MIGRATION_MAP.md) records project ownership and compatibility paths.
+[`governance/`](governance/README.md) contains the experiment registry, frozen
+protocol records, audits, and historical indexes. These records govern status;
+project folders own the research itself.
 
-## Evidence discipline
+## Research discipline
 
-Frozen protocols and decisions remain authoritative. A later explanation does not promote a failed decision; a useful mechanism does not prove model-level or language-level continual learning. Keep distinct source commits and run identities intact. Move paths only with reference audits and compatibility links, and keep each experiment under one project owner.
-
-Experiment 004's manual entrypoint is now [`08-hybrid-clm/experiments/004-cell-graph/notebook.ipynb`](08-hybrid-clm/experiments/004-cell-graph/notebook.ipynb). Seed-42 `reference` and `graph` archives remain distinct under their recorded source commits; matrix aggregation remains `DEVELOPMENT_INCOMPLETE`.
+- Keep every experiment under exactly one project.
+- Preserve frozen protocols, source commits, run identities, and negative results.
+- Keep experiment outputs with their owning experiment; repository-wide release
+  artifacts remain under the top-level `artifacts/` tree.
+- Shared code belongs under [`../shared/`](../shared/); project-specific logic
+  stays with its project or experiment.
+- A successful run, useful mechanism, or visualized path does not by itself
+  establish a scientific claim.

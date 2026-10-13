@@ -37,7 +37,7 @@ def test_unified_calibration_plan_runner_and_report_do_not_open_90401(tmp_path):
     subprocess.run(
         [
             sys.executable,
-            "scripts/research/run.py",
+            "shared/scripts/research/run.py",
             "clm-0.4-mini-calibration",
             "--plan-only",
             "--out",
@@ -50,7 +50,7 @@ def test_unified_calibration_plan_runner_and_report_do_not_open_90401(tmp_path):
     subprocess.run(
         [
             sys.executable,
-            "scripts/research/report.py",
+            "shared/scripts/research/report.py",
             "clm-0.4-mini-calibration",
             "--results",
             str(tmp_path),

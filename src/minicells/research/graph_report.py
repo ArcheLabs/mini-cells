@@ -105,7 +105,7 @@ def paired_decision(reference, graph, config, protocol):
             reasons.append('source/input identity missing')
         if manifest.get('session')!=expected or manifest.get('seed')!=config['seed'] or manifest.get('scientific_decision') is not False:
             reasons.append('session/seed identity differs '+expected)
-        if manifest.get('config_sha256') != digest(ROOT/'research/configs/004-cell-graph.yaml') or manifest.get('protocol_sha256') != digest(ROOT/'research/experiments/004-cell-graph/protocol.json'):
+        if manifest.get('config_sha256') != digest(ROOT/'research/projects/cellular-language-models/experiments/004-cell-graph/config/registered.yaml') or manifest.get('protocol_sha256') != digest(ROOT/'research/projects/cellular-language-models/experiments/004-cell-graph/protocol.json'):
             reasons.append('config/protocol not registered')
     if len(identities)==2:
         for field in ('source_commit','definition_sha256','config_sha256','protocol_sha256','assets_manifest_sha256','seed','environment'):
@@ -157,8 +157,8 @@ def paired_decision(reference, graph, config, protocol):
 
 
 def analyze(archive, output):
-    config=json.loads((ROOT/'research/configs/004-cell-graph.yaml').read_text())
-    protocol=json.loads((ROOT/'research/experiments/004-cell-graph/protocol.json').read_text())
+    config=json.loads((ROOT/'research/projects/cellular-language-models/experiments/004-cell-graph/config/registered.yaml').read_text())
+    protocol=json.loads((ROOT/'research/projects/cellular-language-models/experiments/004-cell-graph/protocol.json').read_text())
     archive=Path(archive);output=Path(output)
     results=[]
     measurements=[]

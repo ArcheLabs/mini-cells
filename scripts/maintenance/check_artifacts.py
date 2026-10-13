@@ -19,7 +19,7 @@ def main() -> None:
         digest, path = line.split(None, 1)
         expected[path.lstrip("*")] = digest
     current = {}
-    for path in sorted((ROOT / "artifacts/experiments").rglob("*")):
+    for path in sorted((ROOT / "research/projects").glob("*/experiments/*/artifacts/**/*")):
         if path.is_file():
             current[str(path.relative_to(ROOT))] = hashlib.sha256(path.read_bytes()).hexdigest()
     if expected != current:

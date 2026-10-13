@@ -1,0 +1,25 @@
+# Experiment index
+
+Canonical experiments owned by `04-continual-learning`. All links point to the owning project’s experiment units.
+
+- [Protocol materials](../../experiments/core-001-knowledge-subsumption/README.md)
+- [Protocol materials](../../experiments/core-001b-residual-memorization/README.md)
+- [Protocol materials](../../experiments/core-002-write-addressability/README.md)
+- [Protocol materials](../../experiments/core-002b-sparse-write-assembly/README.md)
+- [Protocol materials](../../experiments/core-002c-oracle-tomography/README.md)
+- [Protocol materials](../../experiments/core-003-dependency-scoped-transactional-learning/README.md)
+- [Protocol materials](../../experiments/core-004-growth-restored-plasticity/README.md)
+- [Protocol materials](../../experiments/core-005-subspace-certified-mitosis/README.md)
+- [Protocol materials](../../experiments/core-006-real-representation-continual-plasticity/README.md)
+- [Protocol materials](../../experiments/core-007-functional-boundary-discovery/README.md)
+- [Protocol materials](../../experiments/core-008-certified-functional-atoms/README.md)
+- [Protocol materials](../../experiments/core-008-postmortem-functional-capacity/README.md)
+- [Protocol materials](../../experiments/core-008-preflight-functional-equivalence/README.md)
+- [Protocol materials](../../experiments/core-009a-factorized-functional-coordinates/README.md)
+- [Protocol materials](../../experiments/core-009a-right-collapse-bridge/README.md)
+- [Protocol materials](../../experiments/core-009b1-carrier-causal-sufficiency/README.md)
+- [Protocol materials](../../experiments/core-009b2-persistent-effect-geometry/README.md)
+- [Protocol materials](../../experiments/core-009b3-deployable-effect-addressability/README.md)
+- [Protocol materials](../../experiments/core-009c-sparse-local-effect-geometry/README.md)
+- [Protocol materials](../../experiments/core-009d-compositional-operator-geometry/README.md)
+- [Protocol materials](../../experiments/shadow-cell-validation-001-v2-developmental-maturation-core/README.md)

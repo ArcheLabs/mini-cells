@@ -55,12 +55,12 @@ backend is supported; unknown architectures fail closed.
 
 - [`src/minicells/hybrid/`](src/minicells/hybrid/): public HybridCLM API.
 - [`docs/hybrid-clm/`](docs/hybrid-clm/): API, artifact, placement, safety, and status docs.
-- [`experiments/`](experiments/README.md): isolated research experiment pipeline.
-- [`research/08-hybrid-clm/hypothesis/`](research/08-hybrid-clm/hypothesis/): current research boundary and roadmap.
-- [`research/01-foundations/`–`research/08-hybrid-clm/`](research/MIGRATION_MAP.md): project-first research layout and migration status.
-- [`research/`](research/README.md): research navigation, protocols, reports, and evidence catalog.
-- [`research/archive/github-workflows/`](research/archive/github-workflows/): archived one-shot research workflows (not active Actions).
-- [`artifacts/`](artifacts/): durable evidence and release assets.
+- [`research/projects/`](research/README.md): four research projects, each containing its experiment units and historical context.
+- [`research/governance/`](research/governance/README.md): shared registry, protocols, audits, and research indexes.
+- [`shared/`](shared/): cross-project Python and Kaggle tools.
+- [`scripts/`](scripts/README.md): repository-level maintenance and release entrypoints.
+- [`research/governance/archive/github-workflows/`](research/governance/archive/github-workflows/): archived one-shot research workflows (not active Actions).
+- [`artifacts/`](artifacts/): repository-wide release assets and public engineering evidence; experiment results live with their project.
 - [`tests/`](tests/): unit, integration, research, and public fixtures.
 - [`docs/integrations/minijam.md`](docs/integrations/minijam.md): MiniCells/MiniJAM ownership boundary.
 
@@ -75,6 +75,9 @@ scope for this prerelease.
 
 See [LICENSE](LICENSE).
 
-## Routing research pipeline v2
+## Research navigation
 
-See [the research registry](research/registry.yaml), [experiment definitions](research/08-hybrid-clm/experiments/003-hard-cell-transition/README.md), and [the offline Kaggle workflow](research/reports/PIPELINE_V2.md).
+Start from the [research project index](research/README.md). Current research
+definitions, notebooks, and results are kept with their owning project and
+experiment; the shared registry is an index rather than a separate experiment
+home.

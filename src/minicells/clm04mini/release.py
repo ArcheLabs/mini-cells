@@ -67,10 +67,10 @@ SOURCE_FINGERPRINT_PATHS = (
     "src/minicells/clm04mini/tokenizer.py",
     "src/minicells/clm04mini/training.py",
     "src/minicells/clm04mini/curriculum.py",
-    "scripts/research/prepare_clm_0_4_release_data.py",
-    "scripts/research/run_clm_0_4_release.py",
-    "scripts/research/report_clm_0_4_release.py",
-    "scripts/research/publish_clm_0_4_release_results.py",
+    "research/projects/cellular-language-models/context/05-language-validation/scripts/research/prepare_clm_0_4_release_data.py",
+    "research/projects/cellular-language-models/context/05-language-validation/scripts/research/run_clm_0_4_release.py",
+    "research/projects/cellular-language-models/context/05-language-validation/scripts/research/report_clm_0_4_release.py",
+    "research/projects/cellular-language-models/context/05-language-validation/scripts/research/publish_clm_0_4_release_results.py",
 )
 
 

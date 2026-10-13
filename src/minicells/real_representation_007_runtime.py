@@ -2,7 +2,7 @@
 
 Formal confirmation is intentionally not implemented through the generic
 runner anymore. The only canonical confirmation entrypoint is
-`scripts/research/orchestrate_core_validation_007_confirmation.py`, which uses
+`research/projects/continual-learning/context/04-continual-learning/scripts/research/orchestrate_core_validation_007_confirmation.py`, which uses
 its dedicated per-seed checkpoint format.
 """
 from __future__ import annotations
@@ -37,7 +37,7 @@ def write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
 def load_confirmation_amendment(*_args, **_kwargs):
     raise RuntimeError(
         "generic Core 007 formal confirmation is retired; run "
-        "scripts/research/orchestrate_core_validation_007_confirmation.py instead"
+        "research/projects/continual-learning/context/04-continual-learning/scripts/research/orchestrate_core_validation_007_confirmation.py instead"
     )
 
 

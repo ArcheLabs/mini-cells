@@ -94,7 +94,7 @@ def test_pareto_crossover_is_first_joint_dominance_point() -> None:
 
 def test_unattended_protocol_is_frozen_to_eight_hours() -> None:
     protocol = json.loads(
-        (ROOT / "research/stages/03-routing-and-growth/sources/experiment-025-protocol.json").read_text(encoding="utf-8")
+        (ROOT / "research/projects/cellular-computing/context/03-routing-and-growth/hypothesis/sources/experiment-025-protocol.json").read_text(encoding="utf-8")
     )
     hardware = protocol["hardware_budget"]
     assert hardware["global_wall_hours"] == 8.0
@@ -107,7 +107,7 @@ def test_unattended_protocol_is_frozen_to_eight_hours() -> None:
 
 def test_kaggle_notebook_uses_one_shot_budget_and_auto_publish() -> None:
     notebook = json.loads(
-        (ROOT / "research/notebooks/03-routing-and-growth/experiment-025-story-math-growth.ipynb").read_text(
+        (ROOT / "research/projects/cellular-computing/experiments/025-story-math-growth/notebook.ipynb").read_text(
             encoding="utf-8"
         )
     )
@@ -124,9 +124,9 @@ def test_kaggle_notebook_uses_one_shot_budget_and_auto_publish() -> None:
 
 def test_experiment_025_scripts_compile() -> None:
     for relative in (
-        "scripts/research/run_experiment_025_story_math_worker.py",
-        "scripts/research/run_experiment_025_story_math_growth.py",
-        "scripts/research/report_experiment_025_story_math_growth.py",
+        "research/projects/cellular-computing/context/03-routing-and-growth/scripts/research/run_experiment_025_story_math_worker.py",
+        "research/projects/cellular-computing/context/03-routing-and-growth/scripts/research/run_experiment_025_story_math_growth.py",
+        "research/projects/cellular-computing/context/03-routing-and-growth/scripts/research/report_experiment_025_story_math_growth.py",
     ):
         path = ROOT / relative
         compile(path.read_text(encoding="utf-8"), str(path), "exec")

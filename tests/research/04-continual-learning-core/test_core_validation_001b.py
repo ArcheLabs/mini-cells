@@ -47,7 +47,7 @@ def test_protocol_is_frozen_diagnostic_extension() -> None:
     assert payload["experiment_id"] == "core-validation-001b"
     assert payload["parent_experiment"] == "core-validation-001"
     assert payload["source"]["fresh_rerun_required"] is True
-    assert payload["source"]["reuse_parent_runner"] == "scripts/research/run_core_validation_001.py"
+    assert payload["source"]["reuse_parent_runner"] == "research/projects/continual-learning/context/04-continual-learning/scripts/research/run_core_validation_001.py"
     assert payload["scope"]["training_changes_from_parent"] == "none"
     assert payload["scope"]["growth"] is False
     assert payload["scope"]["replay_old_examples"] is False
@@ -142,4 +142,4 @@ def test_notebook_reuses_parent_runner_and_publishes_001b() -> None:
     assert "--skip-oracle" in source
     assert "analyze_core_validation_001b.py" in source
     assert "publish_core_validation_001b.py" in source
-    assert "kaggle/core-validation-001b-residual-memorization-results" in source
+    assert "shared/kaggle/core-validation-001b-residual-memorization-results" in source

@@ -244,7 +244,7 @@ def test_formal_executor_has_no_k_or_lr_search() -> None:
 
 
 def test_scientifically_negative_formal_result_is_still_a_valid_run() -> None:
-    script = Path(__file__).resolve().parents[3] / "scripts/research/run_pcu_kill_001.py"
+    script = Path(__file__).resolve().parents[3] / "research/projects/safe-model-evolution/context/07-safe-model-evolution/scripts/research/run_pcu_kill_001.py"
     spec = importlib.util.spec_from_file_location("pcu_run_script_test", script)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)

@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT / 'scripts/research'))
 from publish_core_validation_007 import preflight_push, _push
 from publish_experiment_results import run_git, validate_origin
 
-BASE = 'artifacts/experiments/003-hard-cell-transition'
+BASE = 'research/projects/cellular-language-models/experiments/003-hard-cell-transition/artifacts'
 ALLOWED = {'.json', '.jsonl', '.csv', '.txt', '.log', '.md', '.png'}
 
 

@@ -133,7 +133,7 @@ def test_capability_release_gate_requires_selective_formal_result() -> None:
     result = normalize_capability_evidence(
         decision,
         rows,
-        source_ref="kaggle/clm-0.3d-probationary-mitosis-results",
+        source_ref="shared/kaggle/clm-0.3d-probationary-mitosis-results",
         source_commit="results-commit",
     )
     assert result["stationary_rejected"] == 3

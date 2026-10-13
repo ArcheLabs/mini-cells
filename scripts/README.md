@@ -1,18 +1,17 @@
 # Repository Scripts
 
-Scripts are thin operational entrypoints; reusable model, evaluation, release, and runtime logic belongs in `src/minicells`.
+Top-level scripts manage the repository as a whole. They do not own scientific
+experiment implementations.
 
-- `research/`: scientific run/report/publish/orchestration entrypoints. See [`research/README.md`](research/README.md) for the compatibility taxonomy and path-stability policy. The flat named adapters are retained for historical reproducibility; new work should prefer unified dispatch or a family package.
-- `release/`: model/release construction and release-benchmark tasks.
-- `runtime/`: performance and sparse-runtime tasks.
-- `maintenance/`: repository catalog, artifact, link, branch, and architecture integrity utilities.
+- [`maintenance/`](maintenance/) checks repository catalogs, artifacts, branch
+  provenance, and layout invariants.
+- [`release/`](release/) prepares and evaluates public releases.
 
-Preferred research interfaces when the family is registered with the dispatcher:
+Experiment-specific runners live with their experiment under
+[`research/projects/`](../research/README.md). Utilities shared by multiple
+experiments live under [`shared/scripts/`](../shared/scripts/). Product behavior
+belongs in [`src/`](../src/).
 
-```bash
-python scripts/research/run.py core-validation-004 --smoke
-python scripts/research/report.py core-validation-004
-python scripts/research/publish.py core-validation-004
-```
-
-Do not infer scientific status from script placement or filename. Canonical protocols/results live under `research/validations/`, and cross-experiment claim boundaries live under `research/audits/`.
+Research protocols and status are authoritative in each experiment's frozen
+records and the cross-project registry in
+[`research/governance/`](../research/governance/README.md).

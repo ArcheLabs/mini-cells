@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / "research/archive/branch-manifest-pre-0.4.json"
+OUTPUT = ROOT / "research/governance/archive/branch-manifest-pre-0.4.json"
 
 
 def git(*args: str, check: bool = True) -> str:
@@ -58,7 +58,7 @@ def main() -> None:
         )
         unique = git("rev-list", "--count", f"{main_ref}..{ref}")
         changed = git("diff", "--name-only", f"{base}..{ref}").splitlines()
-        artifact_files = [p for p in changed if p.startswith("artifacts/experiments/")]
+        artifact_files = [p for p in changed if p.startswith("research/projects/") and "/experiments/" in p and "/artifacts/" in p]
         missing_artifacts = [p for p in artifact_files if not (ROOT / p).is_file()]
         canonical_preserved = not missing_artifacts
         classification = classify(branch, merged)

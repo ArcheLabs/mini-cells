@@ -1555,7 +1555,7 @@ fn run_gate(args: GateArgs) -> Result<(), Box<dyn std::error::Error>> {
         && last.total_loss as f64 <= best.total_loss as f64 * 1.15;
 
     let solved_path =
-        PathBuf::from("artifacts/experiments/003b-quantization-localization/solved-q88-model.bin");
+        PathBuf::from("research/projects/cellular-computing/experiments/003b-quantization-localization/artifacts/solved-q88-model.bin");
     let solved_bytes = std::fs::read(&solved_path)?;
     let solved_model = minicells_core::PackedModel::decode_from(&solved_bytes)
         .map_err(|_| "invalid solved model")?;

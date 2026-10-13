@@ -15,7 +15,7 @@ REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO / "scripts/research"))
 import publish_core_validation_007 as publisher
 
-NOTEBOOK = REPO / "research/notebooks/03-routing-and-growth/experiment-004-learned-cell-graph-kaggle.ipynb"
+NOTEBOOK = REPO / "research/projects/cellular-language-models/experiments/004-cell-graph/notebook.ipynb"
 CELLS = json.loads(NOTEBOOK.read_text(encoding="utf-8"))["cells"]
 PUBLICATION = "".join(CELLS[7]["source"])
 RECOVERY = "".join(CELLS[8]["source"]).split("```python\n", 1)[1].split("```", 1)[0]
@@ -40,7 +40,7 @@ class ManualPublicationTests(unittest.TestCase):
         config = self.root / "config.json"
         for path in (definition, protocol, config):
             path.write_text("{}\n", encoding="utf-8")
-        registry = self.root / "research/registry.yaml"
+        registry = self.root / "research/governance/registry.yaml"
         registry.parent.mkdir()
         registry.write_text("{}\n", encoding="utf-8")
         self.git("add", ".")
@@ -48,7 +48,7 @@ class ManualPublicationTests(unittest.TestCase):
         source = self.git("rev-parse", "HEAD").stdout.strip()
         branch = "results/cell-graph-" + source[:12]
         self.git("checkout", "-b", branch)
-        archive = self.root / "research/artifacts/004-cell-graph" / source / "seed-42/reference"
+        archive = self.root / "research/projects/cellular-language-models/experiments/004-cell-graph/artifacts" / source / "seed-42/reference"
         archive.mkdir(parents=True)
         required = ("metrics.json", "logs.jsonl", "routing_stats.json", "decision.json", "config.json", "experiment.json")
         for name in required:

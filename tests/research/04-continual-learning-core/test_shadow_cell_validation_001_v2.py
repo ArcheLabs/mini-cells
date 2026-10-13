@@ -153,7 +153,7 @@ def test_formal_seed_enforcement() -> None:
 
 def test_registered_taxonomy_is_exact_and_lock_stays_unlocked() -> None:
     root = Path(__file__).resolve().parents[3]
-    validation = root / "research/validations/shadow-cell-validation-001-v2-developmental-maturation"
+    validation = root / "research/projects/cellular-language-models/experiments/shadow-cell-validation-001-v2-developmental-maturation/validation/shadow-cell-validation-001-v2-developmental-maturation"
     protocol = json.loads((validation / "protocol.json").read_text())
     lock = json.loads((validation / "protocol-lock.json").read_text())
     assert protocol["decision_taxonomy"] == [

@@ -7,7 +7,7 @@ from pathlib import Path
 from experiments.common.train import write_json
 
 ROOT = Path(__file__).resolve().parents[3]
-EXPERIMENT = ROOT / 'experiments/003-hard-cell-transition'
+EXPERIMENT = ROOT / 'research/projects/cellular-language-models/experiments/003-hard-cell-transition/implementation/runner'
 CONFIG = Path(os.environ.get('MINICELLS_RESEARCH_CONFIG', EXPERIMENT / 'config.yaml'))
 PROTOCOL = Path(os.environ.get('MINICELLS_RESEARCH_PROTOCOL', EXPERIMENT / 'protocol.json'))
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import ast
 import json
+import os
 from pathlib import Path
 
 
@@ -37,21 +38,28 @@ def main() -> None:
         not list((ROOT / "scripts").glob("run_core_validation_*.py")),
         "top-level Core Validation runners remain",
     )
-    for stage in (
-        "01-foundations",
-        "02-self-organization",
-        "03-routing-and-growth",
-        "04-continual-learning-core",
-        "05-language-validation",
-    ):
-        require(
-            (ROOT / "research/notebooks" / stage).is_dir(),
-            f"missing notebook stage {stage}",
-        )
-    notebooks = list((ROOT / "research/notebooks").rglob("*.ipynb"))
+    project_root = ROOT / "research/projects"
+    projects = sorted(path for path in project_root.iterdir() if path.is_dir())
+    required = {"cellular-computing", "continual-learning", "cellular-language-models", "safe-model-evolution"}
+    require({path.name for path in projects} == required, "research project roots differ from the project catalog")
+    for project in projects:
+        require((project / "README.md").is_file(), f"missing project README: {project.name}")
+        require((project / "experiments").is_dir(), f"missing experiment units: {project.name}")
+    obsolete_roots = ("experiments", "kaggle", "notebooks", "research/01-foundations",
+                      "research/02-self-organization", "research/03-routing-and-growth",
+                      "research/04-continual-learning", "research/05-language-validation",
+                      "research/06-native-clm", "research/07-safe-model-evolution",
+                      "research/08-hybrid-clm")
+    for obsolete in obsolete_roots:
+        require(not (ROOT / obsolete).exists(), f"obsolete root path remains: {obsolete}")
+    for directory, names, files in os.walk(ROOT, topdown=True, followlinks=False):
+        names[:] = [name for name in names if name not in {".git", ".venv", "node_modules"}]
+        for name in names + files:
+            require(not (Path(directory) / name).is_symlink(), "repository contains a symlink")
+    notebooks = list(project_root.rglob("*.ipynb")) + list((ROOT / "docs/tutorials").rglob("*.ipynb"))
     for path in notebooks:
         json.loads(path.read_text(encoding="utf-8"))
-    print(f"architecture: OK ({len(notebooks)} notebooks indexed)")
+    print(f"architecture: OK ({len(notebooks)} project-owned notebooks indexed)")
 
 
 if __name__ == "__main__":

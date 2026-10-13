@@ -14,7 +14,7 @@ import pytest
 import torch
 
 ROOT = Path(__file__).resolve().parents[3]
-BASE = ROOT / 'research/08-hybrid-clm/experiments/005-compositional-cell-graph'
+BASE = ROOT / 'research/projects/cellular-language-models/experiments/005-compositional-cell-graph'
 sys.path[:0] = [str(ROOT), str(BASE / 'implementation')]
 from exp005.models import ARMS, make_model
 from exp005.report import seed_decision, matrix_decision, paired_bootstrap_delta
@@ -255,7 +255,7 @@ def test_notebook_default_bootstrap_fetches_pinned_source(monkeypatch):
     nb=json.loads((BASE/'notebook.ipynb').read_text())
     source=''.join(nb['cells'][1]['source'])
     source=source.replace("MODE = 'train_pair'", "MODE = 'preflight'")
-    source=source.replace("ROOT = Path('/kaggle/working/minicells-exp005')",f'ROOT = Path({str(ROOT)!r})')
+    source=source.replace("ROOT = Path('/shared/kaggle/working/minicells-exp005')",f'ROOT = Path({str(ROOT)!r})')
     calls=[]
     def run(args,**kwargs):
         calls.append(list(args))
@@ -265,7 +265,7 @@ def test_notebook_default_bootstrap_fetches_pinned_source(monkeypatch):
     scope={};exec(compile(source,'005 notebook','exec'),scope)
     assert len(scope['SOURCE_SHA'])==40
     assert ['git','fetch','--depth=1','origin',scope['SOURCE_SHA']] in calls
-    assert any('preflight' in call and str(ROOT/'scripts/research/run_experiment_005.py') in call for call in calls)
+    assert any('preflight' in call and str(ROOT/'research/projects/cellular-language-models/experiments/005-compositional-cell-graph/implementation/run_experiment_005.py') in call for call in calls)
     assert (scope['CONFIG_PATH']).is_file()
 
 

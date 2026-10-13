@@ -239,7 +239,7 @@ def schedule(config, cache, output, deadline):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', required=True, type=int, choices=[42, 43, 44, 123, 456])
-    parser.add_argument('--output', default='/kaggle/working/results-003')
+    parser.add_argument('--output', default='/shared/kaggle/working/results-003')
     parser.add_argument('--worker', choices=['soft-cell', 'hard-cell', 'fixed-cell', 'global-router', 'graph-cell'])
     parser.add_argument('--data')
     parser.add_argument('--deadline', type=float)

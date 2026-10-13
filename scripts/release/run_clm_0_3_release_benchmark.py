@@ -44,7 +44,7 @@ from minicells.language_scaling import prepare_scaling_corpus  # noqa: E402
 
 
 OUTPUT_ROOT = Path("results/clm-0.3-release-benchmark")
-SOURCE_005 = Path("artifacts/experiments/005-consumer-language-bridge")
+SOURCE_005 = Path("research/projects/cellular-computing/experiments/005-consumer-language-bridge/artifacts")
 WORKER = Path("scripts/release/run_clm_0_3_release_bridge_worker.py")
 CAPABILITY_REMOTE_REF = f"refs/remotes/origin/{CAPABILITY_RESULTS_REF}"
 
@@ -269,7 +269,7 @@ def run(args: argparse.Namespace) -> int:
         shutil.rmtree(output_root)
     output_root.mkdir(parents=True, exist_ok=True)
 
-    source_checkpoint = ROOT / "artifacts/experiments/006-consumer-language-scaling/minicells-v2-10m.pt"
+    source_checkpoint = ROOT / "research/projects/cellular-computing/experiments/006-consumer-language-scaling/artifacts/minicells-v2-10m.pt"
     observed_source_sha = verify_source_checkpoint(source_checkpoint)
     print(f"verified source TextNCA checkpoint: {observed_source_sha}")
 
