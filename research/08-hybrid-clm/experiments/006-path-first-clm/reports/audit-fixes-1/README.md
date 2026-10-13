@@ -19,3 +19,9 @@ Real dataset/asset hashes, selected scale, scientific thresholds (including no-c
 ## Verification
 
 Local Python 3.8 / Torch 2.4: 71 tests passed, including reused Experiment 005 tests. CPU Gate 0 runs both proposed scales. Exact results are recorded alongside this report. GitHub Actions validates the delivered commit separately.
+
+## Actual GPU engineering result
+
+All four proposed 61M arms passed one synthetic forward/backward and sampled-replay full/decode parity on Quadro K620 (sm_50, 2 GiB), Torch 2.4.1 CUDA 12.1. No optimizer updates or corpus reads occurred. Source: `f115238729df551a19098b3f07a75b55bef35966`. CUPTI initialization failed, so CUDA profiler activities were unavailable; wall-clock timing and peak allocator statistics remain engineering observations. Three timing repetitions on a shared desktop GPU do not support a scientific efficiency comparison.
+
+The first run completed CUDA checks but failed evidence serialization because the reused JSON writer expects a Path. This adapter was corrected and the full four-arm fixture rerun successfully; `gpu-micro.json` records the successful run.
