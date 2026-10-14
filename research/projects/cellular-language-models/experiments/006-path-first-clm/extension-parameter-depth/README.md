@@ -19,7 +19,7 @@ ruff check --config research/projects/cellular-language-models/experiments/006-p
 
 Use fresh output directories; evidence cannot be silently overwritten. Gate 0 constructs the actual model inventories and executes all ten full-size joint CPU synthetic steps, plus tiny mechanism fixtures. Seed 17 and artificial token IDs are engineering fixtures only, not consumed research seeds.
 
-Import [notebook.ipynb](notebook.ipynb) into the existing `bingjiangli/minicells` editor. Run all cells. Default mode is CPU preflight; CUDA is hidden in the child process, no secrets are read, no datasets downloaded and no result push happens.
+Import [notebook.ipynb](notebook.ipynb) into the existing `bingjiangli/minicells` editor. Run all cells. Default mode is `auto`: CPU preflight, then registration/authorization checks, then the registered core experiment matrix. A failed check exits with an error. The current unregistered proposal stops before training; there is no manual switch between two phases. No approval or assets are fabricated, and no secrets are read.
 
 ## Model and training
 
