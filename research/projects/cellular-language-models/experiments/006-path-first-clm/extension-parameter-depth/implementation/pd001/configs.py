@@ -208,7 +208,7 @@ def authorize(c, p, arm, seed, role, mode, source=None, device="cpu"):
         raise RuntimeError("operation not authorized")
     if str(device).startswith("cuda") and not auth["gpu"]:
         raise RuntimeError("GPU not authorized")
-    if mode == "train" and c["training"]["steps"] > 100:
+    if not automatic and mode == "train" and c["training"]["steps"] > 100:
         from .performance import retrain_review
 
         retrain_review(c, source)

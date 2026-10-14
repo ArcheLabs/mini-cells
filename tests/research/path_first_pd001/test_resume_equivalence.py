@@ -100,7 +100,6 @@ def test_pause_does_not_trigger_profile_or_publication(proposal, tmp_path, monke
     from types import SimpleNamespace
     from pd001.configs import load
 
-    monkeypatch.setattr("pd001.performance.retrain_review", lambda *a: None)
     monkeypatch.setattr(runner, "preflight", lambda *a: {"status": "ENGINEERING_READY"})
     monkeypatch.setenv("HF_TOKEN", "fixture")
     monkeypatch.setenv("GITHUB_TOKEN", "fixture")

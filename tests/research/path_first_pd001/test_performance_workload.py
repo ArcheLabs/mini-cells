@@ -52,3 +52,17 @@ def test_failed_benchmark_retains_completed_rows(tmp_path, monkeypatch, proposal
     assert report['status'] == 'PERFORMANCE_FAILED'
     assert len(report['rows']) == 1 and report['partial']
     assert report['READY_FOR_RETRAIN'] == 'NO'
+
+
+def test_direct_development_launch_has_pair_and_no_review_prerequisite():
+    from pd001.configs import ROOT
+    base = ROOT / 'research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth'
+    notebook = json.loads((base/'notebook.ipynb').read_text())
+    code = '\n'.join(''.join(c['source']) for c in notebook['cells'] if c['cell_type']=='code')
+    assert "['--devices','auto','--arms','M0','P50-F16']" in code
+    import inspect
+    from pd001.runner import auto_run
+    from pd001.configs import authorize
+    assert 'retrain_review' not in inspect.getsource(auto_run)
+    assert 'if not automatic and mode == "train"' in inspect.getsource(authorize)
+    assert 'confirmation remains sealed' in inspect.getsource(authorize)

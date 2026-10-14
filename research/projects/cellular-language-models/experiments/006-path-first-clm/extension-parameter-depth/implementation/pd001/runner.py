@@ -281,10 +281,6 @@ def auto_run(c, p, args):
 
         c = import_bundle(args.restore_from, args.output, source)
         p = c["execution"]["protocol"]
-    from .performance import retrain_review
-
-    if c["training"]["steps"] > 100:
-        retrain_review(c, source)
     output = Path(args.output)
     state = {}
 
@@ -436,7 +432,7 @@ def main():
     parser.add_argument("--config")
     parser.add_argument("--arm", choices=ARMS, default="P50-A32")
     parser.add_argument("--all-arms", action="store_true")
-    parser.add_argument("--arms", nargs="+", choices=ARMS, default=["M0", "P50-F16", "P50-F32", "P50-A32"])
+    parser.add_argument("--arms", nargs="+", choices=ARMS, default=["M0", "P50-F16"])
     parser.add_argument("--devices", nargs="+", default=["cpu"])
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--source-commit")

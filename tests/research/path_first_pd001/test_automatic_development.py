@@ -66,8 +66,9 @@ def test_auto_prepares_without_manual_registration(prepared, proposal, monkeypat
     assert p["status"] == "AUTOMATIC_DEVELOPMENT" and p["scientific_decision"] is False
     assert path.is_file() and (output / "execution-identity.json").is_file()
     monkeypatch.setattr("subprocess.run", lambda *a, **kw: SimpleNamespace(returncode=0))
-    with pytest.raises(RuntimeError, match="performance review pending"):
-        authorize(c, p, "P50-A32", seed, "development", "train", "a" * 40, "cpu")
+    # User-authorized development no longer requires performance/persistence evidence.
+    for arm in ("M0", "P50-F16"):
+        authorize(c, p, arm, seed, "development", "train", "a" * 40, "cuda:0")
     # Defaults remain immutable; only execution metadata is populated.
     assert proposal["data"]["manifest_sha256"] is None
     assert proposal["authorization"]["development"] is False
@@ -206,7 +207,6 @@ def test_one_click_runs_training_profiles_and_publication_in_order(proposal, tmp
     args = SimpleNamespace(
         source_commit="a" * 40, output=str(tmp_path), seed=None, devices=["cpu"], arms=["M0", "P50-A32"]
     )
-    monkeypatch.setattr("pd001.performance.retrain_review", lambda *a: None)  # mocked orchestration only
     result = runner.auto_run(c, p, args)
     assert result["status"] == "DEVELOPMENT_COMPLETED"
     assert calls == [

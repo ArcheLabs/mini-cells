@@ -159,3 +159,21 @@ if it does not fit, improve implementation or approve a separate versioned devel
 Never truncate a registered experiment to claim it met the original token budget.
 
 Reimport the current Notebook to obtain the new default. Already running cloud code is unchanged.
+
+## User-authorized direct development launch (2026-10-15)
+
+The user accepted the measured runtime and requested direct training without a performance
+evidence/persistence prerequisite. Automatic development now skips that engineering review,
+while retaining CPU functional preflight, data integrity, source identity, GitHub write check,
+checkpointing and result return. Default arms are M0 and P50-F16, one independent worker per
+GPU, running concurrently. No hard time cap or automatic time pause is enabled. Model geometry,
+objectives, precision, effective batch and 5000-step/10M-token budget are unchanged.
+
+Formal registration and independent-confirmation restrictions remain in their existing separate
+execution path. Development does not imply a confirmed hypothesis. The prior performance pilot
+is optional diagnostic work; no new cross-session rehearsal is required before development.
+
+Single-arm P50-F16 remains single-device. A second copy would be a different independent run,
+not faster progress through this run. Implementing DDP requires consistent microbatch/path RNG,
+global gradient averaging, distributed checkpoint restoration and numeric parity tests; it has
+not been implemented or claimed here. M0 finishing does not redistribute the ongoing CLM worker.
