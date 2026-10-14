@@ -5,6 +5,7 @@
 Research is organized by long-lived project. Each project owns its questions,
 experiment records, code, notebooks, reports, and project-specific results.
 
+
 ## Projects
 
 | Project | Focus |
@@ -13,6 +14,7 @@ experiment records, code, notebooks, reports, and project-specific results.
 | [Continual Learning](projects/continual-learning/README.md) | Continual-learning mechanisms, validation, and known limits. |
 | [Cellular Language Models](projects/cellular-language-models/README.md) | Native and hybrid cellular language-model architectures and language validation. |
 | [Safe Model Evolution](projects/safe-model-evolution/README.md) | Safe, measurable changes to pretrained models. |
+| [CLM Native](projects/clm-native/README.md) | Bounded-candidate dynamic sparse computation and causal/cost validation. |
 
 ## Shared research governance
 

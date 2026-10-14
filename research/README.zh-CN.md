@@ -4,6 +4,7 @@
 
 研究资料按长期研究项目组织。每个项目集中保存研究问题、实验记录、代码、Notebook、报告和项目专属结果。
 
+
 ## 研究项目
 
 | 项目 | 研究范围 |
@@ -12,6 +13,7 @@
 | [持续学习](projects/continual-learning/README.md) | 持续学习机制、验证及其已知限制。 |
 | [细胞语言模型](projects/cellular-language-models/README.md) | 原生与混合细胞语言模型架构及语言验证。 |
 | [安全模型演化](projects/safe-model-evolution/README.md) | 对预训练模型进行安全、可测量的修改。 |
+| [CLM Native](projects/clm-native/README.md) | Bounded-candidate dynamic sparse computation and causal/cost validation. |
 
 ## 共享研究治理
 

@@ -1,0 +1,111 @@
+{
+  "status": "INCONCLUSIVE",
+  "stage": "SCREENING",
+  "scientific_decision": false,
+  "H0": "CPU_GATE_REQUIRED",
+  "H1": "INCONCLUSIVE",
+  "H2": "NOT_RUN",
+  "H3": "NOT_RUN",
+  "H4": "INCONCLUSIVE",
+  "m3_authorized_by_screening": false,
+  "task_b_comparator": "B0",
+  "task_b_relative_mse_gain": 0.018626470168281117,
+  "task_b_latency_ratio": 1.0101231508366282,
+  "paired_task_b_difference": {
+    "mean": -0.00044506695032994325,
+    "ci95": [
+      -0.00747644589955509,
+      0.006641137971635382
+    ],
+    "scope": "paired examples conditional on one training seed; not cross-seed significance"
+  },
+  "shortcut_excluded": true,
+  "zero_predictor_task_b_accuracy": 0.015625,
+  "reason": "One seed cannot support H1. Continue only if Task B quality/cost trend passes the fixed gate.",
+  "summary": {
+    "A/B0": {
+      "mse": 0.06363956285972733,
+      "accuracy": 0.046875,
+      "parameters_total": 9475,
+      "train_seconds": 11.633206276004785,
+      "latency_p50_seconds": 0.0032432000007247552
+    },
+    "A/B1": {
+      "mse": 0.06814581384909435,
+      "accuracy": 0.046875,
+      "parameters_total": 9488,
+      "train_seconds": 7.716808144999959,
+      "latency_p50_seconds": 0.0025162000019918196
+    },
+    "A/B2": {
+      "mse": 0.06536442885972475,
+      "accuracy": 0.046875,
+      "parameters_total": 9549,
+      "train_seconds": 10.72721672699845,
+      "latency_p50_seconds": 0.002782299998216331
+    },
+    "A/C0": {
+      "mse": 0.06363956285972733,
+      "accuracy": 0.046875,
+      "parameters_total": 9475,
+      "train_seconds": 11.81036396700074,
+      "latency_p50_seconds": 0.0028806999980588444
+    },
+    "B/B0": {
+      "mse": 0.02389432599461837,
+      "accuracy": 0.28125,
+      "parameters_total": 9475,
+      "train_seconds": 12.20616548199905,
+      "latency_p50_seconds": 0.0031708014976175036
+    },
+    "B/B1": {
+      "mse": 0.027725064965542518,
+      "accuracy": 0.1875,
+      "parameters_total": 9488,
+      "train_seconds": 8.74701912299497,
+      "latency_p50_seconds": 0.002753651002421975
+    },
+    "B/B2": {
+      "mse": 0.025415026098401156,
+      "accuracy": 0.203125,
+      "parameters_total": 9549,
+      "train_seconds": 11.075092399994901,
+      "latency_p50_seconds": 0.0030023999970580917
+    },
+    "B/C0": {
+      "mse": 0.023449259044288427,
+      "accuracy": 0.25,
+      "parameters_total": 9475,
+      "train_seconds": 12.48650185400038,
+      "latency_p50_seconds": 0.003202899999450892
+    },
+    "C/B0": {
+      "mse": 0.059063857778342714,
+      "accuracy": 0.109375,
+      "parameters_total": 9475,
+      "train_seconds": 11.789687755001069,
+      "latency_p50_seconds": 0.0029064504960842896
+    },
+    "C/B1": {
+      "mse": 0.023108160604740975,
+      "accuracy": 0.25,
+      "parameters_total": 9488,
+      "train_seconds": 8.006994090996159,
+      "latency_p50_seconds": 0.0027165499996044673
+    },
+    "C/B2": {
+      "mse": 0.05881821503182825,
+      "accuracy": 0.09375,
+      "parameters_total": 9549,
+      "train_seconds": 10.49120937599946,
+      "latency_p50_seconds": 0.002818749999278225
+    },
+    "C/C0": {
+      "mse": 0.059063857778342714,
+      "accuracy": 0.109375,
+      "parameters_total": 9475,
+      "train_seconds": 11.758468234998873,
+      "latency_p50_seconds": 0.0029260999981488567
+    }
+  }
+}

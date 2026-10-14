@@ -1,0 +1,7 @@
+# Connection causality plan
+
+Legal degree-preserving swaps are constructed offline from the model's baseline trace. Swap destinations only if both are in both sources' candidate sets, neither introduces duplicate neighbours, and both are retained by the same frontier cap. This preserves each source degree, the target multiset, active count, message count, updated-node count and candidate scoring budget. Replay all baseline decisions first and compare output to normal execution, then swap, then restore baseline decisions. Report changed/unchangeable examples; unchangeable paths are not causal evidence. Three intervention seeds use the same paired dev examples.
+
+Random dynamic candidates, training-only frozen edge frequencies, zero messages and redistributed messages are separate controls. Frozen preferences use an offline nontrainable frequency buffer; its N*N storage and runtime lookup are explicitly charged. It performs no runtime all-pairs scoring and is not called a fast indexing solution. Message zeroing still computes the same messages so operation budgets remain matched.
+
+An output change alone does not establish H1. H2 requires paired degradation, budget equality, replay/restoration parity and legal edge coverage. H1 independently requires a fair Task B advantage over B0/B3 across seeds and actual total cost. Node permutations and OOD evaluation distinguish structural robustness from memorized identities. No positive conclusion is available before these stages.
