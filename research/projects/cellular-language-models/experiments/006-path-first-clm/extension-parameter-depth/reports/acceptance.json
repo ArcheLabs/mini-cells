@@ -1,0 +1,20 @@
+{
+  "experiment_id": "006-PD1",
+  "engineering": "ENGINEERING_READY",
+  "scientific_status": "NO_SCIENTIFIC_RESULT_YET",
+  "gate_state": "PROPOSED_NOT_REGISTERED",
+  "base_sha": "27b913cb6a9fd55904a27b97c980971600eb6e95",
+  "new_tests_passed": 49,
+  "parent_tests_passed": 56,
+  "ruff": "PASS 0.9.10",
+  "full_size_joint_cpu_arms": 10,
+  "gpu_runs": 0,
+  "confirmation_reads": 0,
+  "protected_files_diff": [],
+  "unresolved": [
+    "full non-GEMM/fused SDPA backward accounting",
+    "CUDA and mixed-precision training validation",
+    "real asset conflict/seed collision/power audits",
+    "baseline and hypothesis thresholds/approval remain unregistered"
+  ]
+}
