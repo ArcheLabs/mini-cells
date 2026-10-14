@@ -133,3 +133,29 @@ and host scheduling remain in the executor. This iteration intentionally does no
 introduce all-Cell evaluation, compile it, change precision or adopt larger microbatches. Their
 remaining T4 cost must be measured before any segmented-dispatch redesign. Original model scale,
 path-learning variance and language quality are unchanged by engineering speedups.
+
+## Two-hour execution budget (2026-10-15)
+
+The previous 42-round Notebook default was too expensive. The default now measures only
+B0 versus LIGHT for M0 and P50-F16: one warmup, five measured steps, one repeat (four rounds).
+This is a short engineering pilot, not a statistical confirmation. Full ablations remain opt-in
+and are subject to the same budget. No scientific budgets or training gates have changed.
+
+Both active PD-001 Notebooks start a shared monotonic **7200-second wall budget before checkout**.
+Setup, dependency installation, preflight, training, profiling and return all consume this budget.
+Every launched command runs in a process group: the supervisor terminates the whole group
+before the deadline, including nested GPU workers, and writes `pd001-session-status.json`.
+Termination begins ten seconds before the deadline, reserving time for forced cleanup.
+
+Training checks the inherited session deadline after each complete optimizer step and begins
+checkpoint/pause/export with ten minutes remaining. Existing periodic checkpoints remain enabled.
+A blocked step or export may require the hard stop: only the last successfully committed checkpoint
+is recoverable; incomplete work is never reported as a completed experiment. Kaggle Save Version
+must retain Output. The budget is wall time, not summed GPU-hours (two simultaneous GPUs can
+consume up to four GPU-hours within two hours). Full retraining remains subject to review.
+
+Performance audit has an additional **30-minute total cap** including all rounds, setup and profiler.
+`ablation.json` and `baseline.json` are saved after every successful round. A timed-out round has
+no fabricated measurement; its worker log and prior completed rows remain in Output.
+
+A new Notebook import is required. An already running cloud version cannot acquire these fixes.

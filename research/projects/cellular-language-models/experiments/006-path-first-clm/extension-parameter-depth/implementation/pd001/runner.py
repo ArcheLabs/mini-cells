@@ -454,11 +454,11 @@ def main():
     parser.add_argument("--intervention", default="stop_early")
     parser.add_argument("--intervention-step", type=int, default=1)
     parser.add_argument("--baseline-root", default="/tmp/minicells-pd001-baseline")
-    parser.add_argument("--steps", type=int, default=20)
-    parser.add_argument("--warmup", type=int, default=5)
-    parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--steps", type=int, default=5)
+    parser.add_argument("--warmup", type=int, default=1)
+    parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument(
-        "--cases", nargs="+", default=["B0", "B1", "B2", "B3", "B4", "B5", "B6-m2", "B6-m4", "LIGHT"]
+        "--cases", nargs="+", default=["B0", "LIGHT"]
     )
     parser.add_argument("--perf-fixture", action="store_true")
     parser.add_argument("--allow-gpu-microbenchmark", action="store_true")

@@ -410,10 +410,25 @@ def run(c, args):
     if output.exists():
         raise FileExistsError("choose a fresh performance evidence directory")
     output.mkdir(parents=True)
+    from .session_budget import session_deadline
+
+    # Thirty minutes for engineering measurement, including worker setup/profiling.
+    deadline = min(session_deadline() - 600, time.monotonic() + 1800)
     rows = []
+    def persist(status):
+        result = {"baseline_sha": BASELINE, "status": status,
+                  "scientific_decision": False, "READY_FOR_RETRAIN": "NO",
+                  "rows": rows, "summary": [], "partial": True}
+        write(output / "ablation.json", result)
+        write(output / "baseline.json", {"source_sha": BASELINE,
+              "rows": [r for r in rows if r["case"] == "B0"]})
+    persist("PERFORMANCE_RUNNING")
     for arm in ["M0", "P50-F16"] if args.all_arms else [args.arm]:
         for case in args.cases:
             for repeat in range(args.repeats):
+                if time.monotonic() >= deadline:
+                    persist("PERFORMANCE_TIME_LIMIT")
+                    raise TimeoutError("Performance audit time budget exhausted; completed evidence retained")
                 scratch = output / (arm + "-" + case + "-" + str(repeat))
                 scratch.mkdir()
                 root = ROOT if case == "LIGHT" else baseline
@@ -442,16 +457,35 @@ def run(c, args):
                 ]
                 if args.perf_fixture:
                     command.append("--fixture")
-                print("[Performance] " + arm + " " + case + " repeat " + str(repeat + 1), flush=True)
+                print("[Performance] " + arm + " " + case + " repeat " + str(repeat + 1)
+                      + " (completed " + str(len(rows)) + "/"
+                      + str((2 if args.all_arms else 1) * len(args.cases) * args.repeats)
+                      + "; remaining audit seconds " + str(max(0, int(deadline-time.monotonic()))) + ")",
+                      flush=True)
                 with (scratch / "worker.log").open("w") as log:
-                    subprocess.run(
-                        command,
-                        check=True,
-                        stdout=log,
-                        stderr=subprocess.STDOUT,
+                    # Inherit the Notebook launcher's process group so its hard stop
+                    # reaches workers too. This local timeout also protects CLI audits.
+                    process = subprocess.Popen(
+                        command, stdout=log, stderr=subprocess.STDOUT,
                         env={**os.environ, "OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"},
                     )
+                    try:
+                        code = process.wait(timeout=max(0.001, deadline - time.monotonic()))
+                    except BaseException as error:
+                        process.terminate()
+                        try:
+                            process.wait(timeout=3)
+                        except subprocess.TimeoutExpired:
+                            process.kill()
+                            process.wait()
+                        persist("PERFORMANCE_TIME_LIMIT" if isinstance(error, subprocess.TimeoutExpired)
+                                else "PERFORMANCE_INTERRUPTED")
+                        raise
+                    if code:
+                        persist("PERFORMANCE_FAILED")
+                        raise subprocess.CalledProcessError(code, command)
                 rows.append(json.loads((scratch / "result.json").read_text()))
+                persist("PERFORMANCE_RUNNING")
     summary = []
     for arm in sorted({r["arm"] for r in rows}):
         for case in args.cases:

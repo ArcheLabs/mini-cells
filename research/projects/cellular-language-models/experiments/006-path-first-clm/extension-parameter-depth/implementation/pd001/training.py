@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from exp006.reuse import canonical_sha256, file_sha256, make_batch, write_json
+from .session_budget import pause_due
 from .configs import authorize, arm_config, cost_lambda
 from .models import make_model
 from .losses import joint_loss, sample_paths
@@ -190,6 +191,7 @@ def _train_registered(
                         flush=True,
                     )
                 pause = step < t["steps"] and (
+                    pause_due() or
                     (perf["pause_after_step"] is not None and first < perf["pause_after_step"] <= step)
                     or (
                         perf["max_session_seconds"] is not None

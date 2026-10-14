@@ -15,7 +15,7 @@ for c in notebook["cells"]:
 assert "MODE = 'auto'" in code and "'--device','cpu'" in code
 assert "UserSecretsClient" not in code and "get_secret" not in code
 assert "CUDA_VISIBLE_DEVICES" in code and "'train'" not in code
-assert "check=True" in code and "pd001-development-" in code
+assert "raise subprocess.CalledProcessError" in code and "pd001-development-" in code
 print("PD notebook uses one automatic development flow; no embedded token values")
 performance = json.loads((BASE / 'performance-notebook.ipynb').read_text())
 performance_code = '\n'.join(''.join(c['source']) for c in performance['cells'] if c['cell_type']=='code')
