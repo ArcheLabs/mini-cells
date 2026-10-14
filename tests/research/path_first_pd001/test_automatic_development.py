@@ -218,3 +218,45 @@ def test_one_click_runs_training_profiles_and_publication_in_order(proposal, tmp
         "publish_P50-A32",
     ]
     assert not result["confirmation_access"]
+
+
+def test_workers_stream_progress_and_resume_saved_checkpoints(tmp_path, monkeypatch):
+    import io
+    import pd001.orchestration as orchestration
+    from pd001.configs import load
+
+    c, p = load()
+    commands = []
+    monkeypatch.setattr(orchestration, "authorize", lambda *a, **kw: None)
+    folder = tmp_path / "M0"
+    folder.mkdir()
+    (folder / "checkpoint.pt").write_text("fixture")
+
+    class Process:
+        def __init__(self, command, **kw):
+            commands.append(command)
+            self.stdout = io.StringIO('{"step":1}\n')
+            self.returncode = 0
+
+        def wait(self):
+            return 0
+
+    monkeypatch.setattr(orchestration.subprocess, "Popen", Process)
+    result = orchestration.matrix(
+        c,
+        p,
+        ["M0", "P50-A32"],
+        19,
+        "development",
+        "a" * 40,
+        "fixture-assets",
+        tmp_path,
+        "fixture-config",
+        ["cpu", "fixture-second-device"],
+    )
+    assert result["workers_finished"] and len(result["runs"]) == 2
+    resumed = next(cmd for cmd in commands if cmd[cmd.index("--arm") + 1] == "M0")
+    assert "--resume" in resumed
+    assert all(
+        (tmp_path / (arm + "-worker.log")).read_text().strip() == '{"step":1}' for arm in ("M0", "P50-A32")
+    )
