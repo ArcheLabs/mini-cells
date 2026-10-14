@@ -17,6 +17,38 @@ def publish(c, p, arm, seed, role, source, run, checkout):
         raise ValueError("run identity mismatch")
     if metrics["checkpoint_sha"] != file_sha256(run / "checkpoint.pt"):
         raise ValueError("checkpoint hash mismatch")
+    checkout, relative, branch, git, publisher = prepare_checkout(checkout, source)
+    files = {
+        str(f.relative_to(run)): file_sha256(f)
+        for f in sorted(run.rglob("*"))
+        if f.is_file() and f.suffix in (".json", ".jsonl", ".csv", ".png", ".md", ".log")
+    }
+    if any((run / name).stat().st_size > 20_000_000 for name in files):
+        raise ValueError("metadata too large; weights/raw data cannot be published")
+    target = checkout / relative / source / canonical_sha256(files)
+    if target.exists():
+        if json.loads((target / "evidence.json").read_text())["files"] != files:
+            raise ValueError("immutable archive changed")
+    else:
+        target.mkdir(parents=True)
+        for name in files:
+            dest = target / name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(run / name, dest)
+        write_json(
+            target / "evidence.json",
+            {"identity": metrics["identity"], "files": files, "weights": "external checkpoint hash only"},
+        )
+    git("config", "user.name", "MiniCells Research")
+    git("config", "user.email", "research@minicells.invalid")
+    git("add", "--", str(target.relative_to(checkout)))
+    if git("diff", "--cached", "--quiet", check=False).returncode:
+        git("commit", "-m", "research: archive PD-001 metadata")
+    publisher.push_branch(branch, "GITHUB_TOKEN")
+    return {"branch": branch, "archive": str(target), "scientific_decision": False}
+
+
+def prepare_checkout(checkout, source):
     checkout = Path(checkout)
     if checkout.exists():
         raise FileExistsError("preserve earlier publication checkout; use a fresh destination")
@@ -61,31 +93,9 @@ def publish(c, p, arm, seed, role, source, run, checkout):
 
     publisher.ROOT = checkout
     publisher.preflight_push(branch, "GITHUB_TOKEN")
-    files = {
-        str(f.relative_to(run)): file_sha256(f)
-        for f in sorted(run.rglob("*"))
-        if f.is_file() and f.suffix in (".json", ".jsonl", ".csv", ".png", ".md", ".log")
-    }
-    if any((run / name).stat().st_size > 20_000_000 for name in files):
-        raise ValueError("metadata too large; weights/raw data cannot be published")
-    target = checkout / relative / source / canonical_sha256(files)
-    if target.exists():
-        if json.loads((target / "evidence.json").read_text())["files"] != files:
-            raise ValueError("immutable archive changed")
-    else:
-        target.mkdir(parents=True)
-        for name in files:
-            dest = target / name
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(run / name, dest)
-        write_json(
-            target / "evidence.json",
-            {"identity": metrics["identity"], "files": files, "weights": "external checkpoint hash only"},
-        )
-    git("config", "user.name", "MiniCells Research")
-    git("config", "user.email", "research@minicells.invalid")
-    git("add", "--", str(target.relative_to(checkout)))
-    if git("diff", "--cached", "--quiet", check=False).returncode:
-        git("commit", "-m", "research: archive PD-001 metadata")
-    publisher.push_branch(branch, "GITHUB_TOKEN")
-    return {"branch": branch, "archive": str(target), "scientific_decision": False}
+    return checkout, relative, branch, git, publisher
+
+
+def preflight_development(c, p, seed, source, checkout):
+    authorize(c, p, "M0", seed, "development", "publish", source)
+    prepare_checkout(checkout, source)

@@ -1,3 +1,7 @@
+# Historical formal-comparison checklist
+
+This checklist is no longer a prerequisite for development execution. The user-requested one-click development policy automatically records source, assets, seed and configuration. The items below are retained only as scientific planning context for independent confirmation. No manual registration form is required to run development.
+
 # PD-001 registration blockers
 
 No approval is granted by engineering tests or this document. Parent 006 is currently PROPOSED_NOT_REGISTERED. Resolving its gate and approving this STOP extension must be explicit; do not edit the historical protocol automatically.

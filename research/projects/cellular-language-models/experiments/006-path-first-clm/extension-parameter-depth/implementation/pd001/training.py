@@ -10,7 +10,7 @@ from exp006.reuse import canonical_sha256, file_sha256, make_batch, write_json
 from .configs import authorize, arm_config, cost_lambda
 from .models import make_model
 from .losses import joint_loss, sample_paths
-from .diagnostics import gradients, routing
+from .diagnostics import gradients, combined_routing
 from .accounting import Counter, TrainingGemmCounter
 from .checkpoint import save, restore
 from .assets import load_bundle
@@ -169,7 +169,7 @@ def _train_registered(
                     **gradients(model, before, all_outputs),
                 )
                 if arm != "M0":
-                    log["routing"] = [routing(o, model.config["cell_count"]) for o in all_outputs]
+                    log["routing"] = combined_routing(all_outputs, model.config["cell_count"])
                 # Fixed train-derived probe only: never touch confirmation in intermediate diagnostics.
                 model.eval()
                 counter.enabled = False
@@ -188,7 +188,8 @@ def _train_registered(
                         log["train_probe_sampled_nll"] - log["train_probe_greedy_nll"]
                     )
                     if arm != "M0":
-                        log["probe_actions"] = probe.actions.cpu().tolist()
+                        if step == 1 or step % t["evaluate_every"] == 0:
+                            log["probe_actions"] = probe.actions.cpu().tolist()
                         log["route_drift_from_initial"] = float(
                             (probe.actions.cpu() != initial_actions).float().mean()
                         )
@@ -221,7 +222,7 @@ def _train_registered(
                             "initial_probe_actions": initial_actions,
                         },
                     )
-                    write_json(output / "learning-curve.json", history)
+                    write_curve(output, history)
             if step != t["steps"]:
                 raise RuntimeError("final step missing")
             checkpoint_sha = file_sha256(latest)
@@ -258,7 +259,7 @@ def _train_registered(
             run_id["evaluation_sha"] = eval_assets["evaluation_sha"]
             result = {
                 "identity": run_id,
-                "status": "DEVELOPMENT_SIGNAL" if role == "development" else "CONFIRMATION_MEASURED",
+                "status": "DEVELOPMENT_COMPLETED" if role == "development" else "CONFIRMATION_MEASURED",
                 "scientific_decision": False,
                 "checkpoint_sha": checkpoint_sha,
                 "baseline_stable": baseline_review(history, p["thresholds"].get("baseline_stability"))
@@ -294,3 +295,19 @@ def _train_registered(
             },
         )
         raise
+
+
+def write_curve(output, history):
+    """Bound metadata files so long training never creates oversized Git blobs."""
+    output = Path(output)
+    chunks = []
+    for start in range(0, len(history), 100):
+        name = f"curve/steps-{start + 1:06d}-{min(start + 100, len(history)):06d}.json"
+        target = output / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        write_json(target, history[start : start + 100])
+        chunks.append(name)
+    write_json(
+        output / "learning-curve.json",
+        {"format": "chunked-step-records-v1", "steps": len(history), "chunks": chunks},
+    )

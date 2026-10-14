@@ -3,6 +3,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import subprocess
+import os
 import sys
 from .configs import BASE, authorize
 
@@ -41,9 +42,24 @@ def matrix(c, p, arms, seed, role, source, assets, output, config_path, devices)
                 "--device",
                 devices[worker],
             ]
+            if (folder / "checkpoint.pt").exists():
+                command.append("--resume")
             folder.parent.mkdir(parents=True, exist_ok=True)
+            print(f"[Train] {arm} on {devices[worker]}", flush=True)
             with (folder.parent / (arm + "-worker.log")).open("a") as log:
-                subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
+                process = subprocess.Popen(
+                    command,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    env={**os.environ, "PYTHONUNBUFFERED": "1"},
+                )
+                for line in process.stdout:
+                    log.write(line)
+                    log.flush()
+                    print(f"[{arm}] {line.rstrip()}", flush=True)
+                if process.wait():
+                    raise subprocess.CalledProcessError(process.returncode, command)
             results.append({"arm": arm, "device": devices[worker], "run": str(folder)})
         return results
 

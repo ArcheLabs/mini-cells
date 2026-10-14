@@ -37,7 +37,7 @@ def routing(out, cells):
             )
         },
         "forced_stop_fraction": float(out.forced_stop.float().mean()),
-        "stop_probability": float(out.stop_prob[mask].mean()) if mask.any() else 0.0,
+        "stop_probability": float(out.stop_prob[mask].detach().mean()) if mask.any() else 0.0,
         "self_loop_ratio": repeats / max(1, transitions),
         "cross_cell_transitions": transitions - repeats,
         "ctx_read_calls": reads,
@@ -45,7 +45,7 @@ def routing(out, cells):
         "unused_cell_fraction": sum(usage[i] == 0 for i in range(cells)) / cells,
         "path_unique_fraction": len(set(signatures)) / len(paths),
         "predecessor_distribution": dict(connections),
-        "entropy_per_token": float((out.entropy * mask).sum(-1).mean()),
+        "entropy_per_token": float((out.entropy * mask).detach().sum(-1).mean()),
     }
 
 
@@ -76,19 +76,36 @@ def gradients(model, before, outputs):
         key: float(torch.stack(v).sum().sqrt()) if v else 0.0 for key, v in updates.items()
     }
     records = [r for o in outputs if hasattr(o, "state_records") for r in o.state_records]
-    norms["path_position_diagnostics"] = [
-        {
-            "step": r["step"],
-            "action": r["action"],
-            "state_norm": float(r["before"].detach().norm()),
-            "update_norm": float(r["delta"].detach().norm()),
-            "policy_state_gradient_norm": float(r["router_state"].grad.norm())
-            if r["router_state"].grad is not None
-            else None,
-        }
-        for r in records
-    ]
+    positions = {}
+    for r in records:
+        row = positions.setdefault(r["step"], {"state": [], "delta": [], "gradient": []})
+        row["state"].append(float(r["before"].detach().norm()))
+        row["delta"].append(float(r["delta"].detach().norm()))
+        if r["router_state"].grad is not None:
+            row["gradient"].append(float(r["router_state"].grad.norm()))
+    norms["path_position_diagnostics"] = {
+        "steps": sorted(positions),
+        "state_norm_mean": [
+            sum(positions[t]["state"]) / len(positions[t]["state"]) for t in sorted(positions)
+        ],
+        "update_norm_mean": [
+            sum(positions[t]["delta"]) / len(positions[t]["delta"]) for t in sorted(positions)
+        ],
+        "policy_gradient_norm_mean": [
+            sum(positions[t]["gradient"]) / max(1, len(positions[t]["gradient"])) for t in sorted(positions)
+        ],
+    }
     norms["nonfinite"] = any(
         p.grad is not None and not torch.isfinite(p.grad).all() for p in model.parameters()
     )
     return norms
+
+
+def combined_routing(outputs, cells):
+    from types import SimpleNamespace
+
+    fields = ("actions", "lengths", "forced_stop", "stop_prob", "decision_mask", "entropy", "log_prob")
+    combined = SimpleNamespace(
+        **{key: torch.cat([getattr(o, key).detach() for o in outputs], dim=0) for key in fields}
+    )
+    return routing(combined, cells)

@@ -15,3 +15,5 @@ not a second home for experiment code or results.
 
 Treat project experiment records and frozen protocol files as authoritative.
 The registry and indexes help locate them; they do not change their status.
+
+Current development launch policy: [one-launch automatic workflow](automatic-development-workflow.md). Manual registration fields are not a prerequisite for development execution.

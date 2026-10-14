@@ -37,8 +37,15 @@ def load_bundle(folder, c, p, arm, seed, role, source, *, evaluation=False, froz
         or m["vocab_size"] != c["model"]["vocab_size"]
     ):
         raise ValueError("asset shape mismatch")
-    if m.get("historical_005_conflict_audit") is not True or m.get("raw_range_duplicate_audit") is not True:
+    automatic = c.get("execution", {}).get("mode") == "automatic_development"
+    if automatic and (m.get("execution_scope") != "development_only" or m.get("confirmation_materialized")):
+        raise ValueError("development bundle contains unexpected confirmation material")
+    if not automatic and (
+        m.get("historical_005_conflict_audit") is not True or m.get("raw_range_duplicate_audit") is not True
+    ):
         raise ValueError("historical assets/content conflict audit required")
+    if automatic and set(m["files"]) != {"train.npy", "development.npy", "tokenizer.json", "windows.json"}:
+        raise ValueError("unexpected development asset files")
     windows = json.loads((folder / "windows.json").read_text())
     train_hashes = windows["train"]["story_hashes"]
     if len(set(train_hashes)) != len(train_hashes):

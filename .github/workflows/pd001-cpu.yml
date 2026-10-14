@@ -1,12 +1,14 @@
 name: PD-001 CPU engineering gates
 on:
   push:
-    branches: [codex/pd001-parameter-depth]
+    branches: [codex/pd001-parameter-depth, codex/automatic-development-flow]
   pull_request:
     paths:
       - 'research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/**'
       - 'tests/research/path_first_pd001/**'
       - '.github/workflows/pd001-cpu.yml'
+      - 'shared/python/experiments/common/development.py'
+      - 'AGENTS.md'
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,7 +30,7 @@ jobs:
           python -m pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
           python -m pip install numpy pytest ruff==0.9.10
       - name: Ruff
-        run: ruff check --config research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/ruff.toml research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/implementation research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/run_pd001.py tests/research/path_first_pd001
+        run: ruff check --config research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/ruff.toml research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/implementation research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/run_pd001.py tests/research/path_first_pd001 shared/python/experiments/common/development.py
       - name: Joint credit, causal execution, STOP, resume and evidence gates
         run: python -m pytest -q tests/research/path_first_pd001 --junitxml=pd001-tests.xml
       - name: Full-size CPU Gate 0

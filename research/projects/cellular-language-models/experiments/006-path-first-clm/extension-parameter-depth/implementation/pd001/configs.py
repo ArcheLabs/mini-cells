@@ -28,6 +28,8 @@ ARMS = (
 def load(path=None):
     c = json.loads(Path(path or BASE / "config/proposed.json").read_text())
     p = json.loads((BASE / "protocol.json").read_text())
+    if c.get("execution", {}).get("mode") == "automatic_development":
+        p = c["execution"]["protocol"]
     validate(c)
     return c, p
 
@@ -170,9 +172,19 @@ def blockers(c, p):
 def authorize(c, p, arm, seed, role, mode, source=None, device="cpu"):
     if mode not in ("train", "evaluate", "profile", "publish", "confirmation"):
         raise ValueError("not a scientific mode")
-    issues = blockers(c, p)
-    if issues:
-        raise RuntimeError("PROPOSED_NOT_REGISTERED: " + "; ".join(issues))
+    automatic = c.get("execution", {}).get("mode") == "automatic_development"
+    if automatic:
+        if role != "development" or mode == "confirmation" or c["authorization"]["confirmation"]:
+            raise RuntimeError("automatic development never grants confirmation access")
+        if not p.get("automatic_development") or p.get("status") != "AUTOMATIC_DEVELOPMENT":
+            raise RuntimeError("automatic development identity missing")
+        for key in ("manifest_sha256", "source_sha256", "tokenizer_sha256"):
+            if not re.fullmatch("[0-9a-f]{64}", c["data"].get(key) or ""):
+                raise RuntimeError("automatic asset identity missing: " + key)
+    else:
+        issues = blockers(c, p)
+        if issues:
+            raise RuntimeError("PROPOSED_NOT_REGISTERED: " + "; ".join(issues))
     if arm not in ARMS or role not in ("development", "confirmation") or seed not in c["seeds"][role]:
         raise RuntimeError("unregistered arm/seed/role")
     if source != p["source_sha"]:
