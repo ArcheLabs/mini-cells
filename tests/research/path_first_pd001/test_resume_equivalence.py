@@ -129,3 +129,13 @@ def test_pause_does_not_trigger_profile_or_publication(proposal, tmp_path, monke
         ),
     )
     assert result["status"] == "PAUSED_RESUMABLE"
+
+
+def test_gpu_rehearsal_tolerance_never_applies_to_rng_or_actions():
+    from pd001.resume_audit import equal
+
+    assert not equal(torch.tensor([1.0]), torch.tensor([1.0000001]))
+    assert equal(torch.tensor([1.0]), torch.tensor([1.0000001]), tolerant=True)
+    assert not equal(
+        torch.tensor([1], dtype=torch.uint8), torch.tensor([2], dtype=torch.uint8), tolerant=True
+    )

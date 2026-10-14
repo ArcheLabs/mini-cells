@@ -107,7 +107,10 @@ apply to engineering benchmarks, not the scientific path budget.
 
 Portable bundles contain run checkpoints/metadata, exact asset files and execution identities;
 no code, Git repositories, worker secrets or credential settings. Import validates every file
-hash, rejects traversal/symlinks, and requires the exact source/config identities. The existing
+hash, rejects traversal/symlinks, and requires the exact source/config identities. The rehearsal records exact hard action traces and RNG state; CPU floating state is
+bitwise compared, while CUDA floating state uses rtol 1e-5 / atol 1e-6 to allow
+ordinary nondeterministic reduction roundoff. This tolerance never applies to action
+IDs or RNG bytes. The existing
 atomic checkpoint format retains AdamW, Python/NumPy/Torch/CUDA RNG and independent trajectory
 generators. Optional `pause_after_step` and `max_session_seconds` act only at completed optimizer
 steps; default is **no imposed session deadline**. Pauses save atomically, return
