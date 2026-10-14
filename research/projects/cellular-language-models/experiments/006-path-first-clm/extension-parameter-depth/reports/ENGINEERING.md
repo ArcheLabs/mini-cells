@@ -30,3 +30,7 @@ P50 uses width384, 8 Cells, hidden688. P25 uses width256, 4 Cells, hidden800. P1
 The unit tests and full-size CPU fixtures are engineering evidence only. Formal language training, result publication and confirmation remain blocked.
 
 Frozen engineering implementation: `c7ff3a4aee6e5e2b3353b7d2b6a059e93ad0b834`. The delivered notebook pins this commit; registration source remains unset.
+
+## Workflow update — 2026-10-14
+
+The subsequent user request replaces manual development registration with automatic assets/identity generation. The original engineering audit above describes its delivery-time state; it is not a current runtime prerequisite. First-occurrence pilot deduplication is versioned in run metadata. A historical 005 holdout conflict audit is not claimed, and confirmation is excluded. All new implementation validation remains synthetic CPU; no real dataset download or training was executed by the agent.

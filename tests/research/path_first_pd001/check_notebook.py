@@ -15,5 +15,5 @@ for c in notebook["cells"]:
 assert "MODE = 'auto'" in code and "'--device','cpu'" in code
 assert "UserSecretsClient" not in code and "get_secret" not in code
 assert "CUDA_VISIBLE_DEVICES" in code and "'train'" not in code
-assert "check=True" in code and "registered.json" in code
-print("PD notebook automatically preflights, respects registration and reads no secrets")
+assert "check=True" in code and "pd001-development-" in code
+print("PD notebook uses one automatic development flow; no embedded token values")

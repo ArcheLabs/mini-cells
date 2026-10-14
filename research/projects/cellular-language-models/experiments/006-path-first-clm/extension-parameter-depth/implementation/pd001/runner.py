@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from exp006.reuse import file_sha256, write_json
-from .configs import BASE, PARENT, ROOT, ARMS, load, arm_config, count, blockers, authorize
+from .configs import PARENT, ROOT, ARMS, load, arm_config, count, blockers, authorize
 from .models import make_model
 from .losses import joint_loss, sample_paths
 from .accounting import Counter
@@ -259,67 +259,134 @@ def automatic(precheck, approve, execute):
     result = precheck()
     if result.get("status") != "ENGINEERING_READY":
         raise RuntimeError("Automatic preflight failed; experiment not started")
-    print("[2/3] Registration and authorization check", flush=True)
+    print("[2/3] Automatic assets and return-path check", flush=True)
     approve()
-    print("[3/3] Running registered experiment", flush=True)
+    print("[3/3] Running development experiment", flush=True)
     return execute()
 
 
 def auto_run(c, p, args):
     from .orchestration import matrix
+    from .development import configure
+    from .publication import preflight_development, publish
+    import os
+    import time
 
-    seed = (
-        args.seed
-        if args.seed is not None
-        else (c["seeds"]["development"][0] if c["seeds"]["development"] else 17)
-    )
     source = (
         args.source_commit
         or subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     )
+    output = Path(args.output)
+    state = {}
 
     def precheck():
         result = preflight(c, p)
-        write(Path(args.output) / "automatic-preflight.json", result)
+        write(output / "automatic-preflight.json", result)
         return result
 
     def approve():
-        for arm in args.arms:
-            authorize(c, p, arm, seed, "development", "train", source, "cpu")
-        if not args.assets:
-            raise RuntimeError("Registered asset bundle is missing; experiment not started")
+        # Existing Kaggle secrets; no new secret labels or token values are logged.
+        for name in ("HF_TOKEN", "GITHUB_TOKEN"):
+            if os.environ.get(name, "").strip():
+                continue
+            try:
+                from kaggle_secrets import UserSecretsClient
+
+                token = UserSecretsClient().get_secret(name).strip()
+                if token:
+                    os.environ[name] = token
+            except Exception:
+                if name == "GITHUB_TOKEN":
+                    raise RuntimeError(
+                        "Enable the existing GITHUB_TOKEN in this Kaggle notebook; training has not started"
+                    ) from None
+        if not os.environ.get("GITHUB_TOKEN", "").strip():
+            raise RuntimeError("Existing GITHUB_TOKEN is unavailable; training has not started")
+        runtime, protocol, config_path, assets, seed = configure(c, p, output, source, args.seed)
+        state.update(c=runtime, p=protocol, path=config_path, assets=assets, seed=seed)
+        preflight_development(
+            runtime, protocol, seed, source, output / ("publication-preflight-" + str(time.time_ns()))
+        )
 
     def execute():
+        runtime, protocol = state["c"], state["p"]
         devices = args.devices
         if devices == ["auto"]:
             devices = (
-                (["cuda:0", "cuda:1"] if torch.cuda.device_count() >= 2 else ["cuda:0"])
-                if c["authorization"]["gpu"]
+                ["cuda:0", "cuda:1"]
+                if torch.cuda.device_count() >= 2
+                else ["cuda:0"]
+                if torch.cuda.is_available()
                 else ["cpu"]
             )
-        return matrix(
-            c,
-            p,
+        runs = matrix(
+            runtime,
+            protocol,
             args.arms,
-            seed,
+            state["seed"],
             "development",
             source,
-            args.assets,
-            Path(args.output) / "runs",
-            args.config or BASE / "config/proposed.json",
+            state["assets"],
+            output / "runs",
+            state["path"],
             devices,
         )
+        # All workers have joined. Profiling cannot overlap another arm's training.
+        for run in runs["runs"]:
+            folder = Path(run["run"])
+            if not (folder / "hardware-profile.json").exists():
+                profile_args = argparse.Namespace(
+                    mode="profile",
+                    arm=run["arm"],
+                    seed=state["seed"],
+                    role="development",
+                    source_commit=source,
+                    device=run["device"],
+                    run=str(folder),
+                    assets=str(state["assets"]),
+                )
+                write(folder / "hardware-profile.json", scientific(runtime, protocol, profile_args))
+        manifest = {
+            "experiment_id": "006-PD1",
+            "metrics": [str(Path(r["run"]).relative_to(output) / "metrics.json") for r in runs["runs"]],
+        }
+        write(output / "analysis-manifest.json", manifest)
+        from .report import report
+
+        write(output / "analysis.json", report(output / "analysis-manifest.json", runtime))
+        for run in runs["runs"]:
+            import shutil
+
+            folder = Path(run["run"])
+            write(folder / "run-config.json", runtime)
+            write(folder / "run-protocol.json", protocol)
+            for name in ("manifest.json", "windows.json"):
+                shutil.copy2(state["assets"] / name, folder / ("assets-" + name))
+            print("[Publish] " + run["arm"], flush=True)
+            publish(
+                runtime,
+                protocol,
+                run["arm"],
+                state["seed"],
+                "development",
+                source,
+                run["run"],
+                output / ("publication-" + run["arm"] + "-" + str(time.time_ns())),
+            )
+        return {
+            **runs,
+            "status": "DEVELOPMENT_COMPLETED",
+            "automatic_assets": str(state["assets"]),
+            "confirmation_access": False,
+            "scientific_decision": False,
+        }
 
     try:
         return automatic(precheck, approve, execute)
     except Exception as exc:
         write(
-            Path(args.output) / "automatic-failure.json",
-            {
-                "status": "FAILED",
-                "reason": str(exc),
-                "scientific_decision": False,
-            },
+            output / "automatic-failure.json",
+            {"status": "FAILED", "reason": str(exc), "scientific_decision": False, "results_preserved": True},
         )
         raise
 
@@ -416,7 +483,7 @@ def main():
     destination = Path(args.output)
     if destination.suffix != ".json":
         destination = destination / (args.mode + ".json")
-    if destination.exists():
+    if destination.exists() and args.mode not in ("train", "auto"):
         raise FileExistsError("evidence exists; choose a fresh output directory")
     write(destination, result)
     print(
