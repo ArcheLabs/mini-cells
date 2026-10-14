@@ -69,35 +69,41 @@ def gradients(model, before, outputs):
         if p.grad is not None:
             groups[key].append(p.grad.detach().float().square().sum())
         updates[key].append((p.detach() - before[name]).float().square().sum())
-    norms = {
-        f"grad_norm_{key}": float(torch.stack(v).sum().sqrt()) if v else 0.0 for key, v in groups.items()
-    }
-    norms["update_norms"] = {
-        key: float(torch.stack(v).sum().sqrt()) if v else 0.0 for key, v in updates.items()
-    }
+    # Aggregate on device, then transfer every reported scalar in ONE batch.
+    # No per-record float(cuda_tensor) or per-parameter Python finite check.
+    zero = next(model.parameters()).new_zeros(())
+
+    def total(values):
+        return torch.stack(values).sum().sqrt() if values else zero
+
+    names = list(groups)
+    values = [total(groups[key]) for key in names] + [total(updates[key]) for key in names]
     records = [r for o in outputs if hasattr(o, "state_records") for r in o.state_records]
     positions = {}
     for r in records:
         row = positions.setdefault(r["step"], {"state": [], "delta": [], "gradient": []})
-        row["state"].append(float(r["before"].detach().norm()))
-        row["delta"].append(float(r["delta"].detach().norm()))
+        row["state"].append(r["before"].detach().norm())
+        row["delta"].append(r["delta"].detach().norm())
         if r["router_state"].grad is not None:
-            row["gradient"].append(float(r["router_state"].grad.norm()))
+            row["gradient"].append(r["router_state"].grad.detach().norm())
+    steps = sorted(positions)
+    for key in ("state", "delta", "gradient"):
+        values.extend(torch.stack(positions[t][key]).mean() if positions[t][key] else zero for t in steps)
+    finite = [torch.isfinite(p.grad).all() for p in model.parameters() if p.grad is not None]
+    values.append((~torch.stack(finite).all()).to(zero.dtype) if finite else zero)
+    scalars = torch.stack(values).detach().cpu().tolist()
+    width = len(names)
+    norms = {"grad_norm_" + key: scalars[i] for i, key in enumerate(names)}
+    norms["update_norms"] = dict(zip(names, scalars[width : 2 * width]))
+    offset = 2 * width
     norms["path_position_diagnostics"] = {
-        "steps": sorted(positions),
-        "state_norm_mean": [
-            sum(positions[t]["state"]) / len(positions[t]["state"]) for t in sorted(positions)
-        ],
-        "update_norm_mean": [
-            sum(positions[t]["delta"]) / len(positions[t]["delta"]) for t in sorted(positions)
-        ],
-        "policy_gradient_norm_mean": [
-            sum(positions[t]["gradient"]) / max(1, len(positions[t]["gradient"])) for t in sorted(positions)
-        ],
+        "steps": steps,
+        "state_norm_mean": scalars[offset : offset + len(steps)],
+        "update_norm_mean": scalars[offset + len(steps) : offset + 2 * len(steps)],
+        "policy_gradient_norm_mean": scalars[offset + 2 * len(steps) : offset + 3 * len(steps)],
     }
-    norms["nonfinite"] = any(
-        p.grad is not None and not torch.isfinite(p.grad).all() for p in model.parameters()
-    )
+    norms["nonfinite"] = bool(scalars[-1])
+
     return norms
 
 

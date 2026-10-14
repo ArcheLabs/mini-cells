@@ -2,6 +2,7 @@
 
 from torch.utils._python_dispatch import TorchDispatchMode
 from torch import nn
+from weakref import WeakKeyDictionary
 from exp006.reuse import ObservedGemmFlops
 from exp006.accounting import parameter_catalog
 
@@ -11,6 +12,9 @@ class Counter(ObservedGemmFlops):
         super().__init__(model)
         self.calls, self.work = {}, 0
         self.last = {}
+        self.module_sizes = {
+            id(m): sum(p.numel() for p in m.parameters(recurse=False)) for m in model.modules()
+        }
 
     def __enter__(self):
         super().__enter__()
@@ -26,11 +30,7 @@ class Counter(ObservedGemmFlops):
                         else inputs[0].numel() // inputs[0].shape[-1]
                     )
                     self.calls[key] = self.calls.get(key, 0) + rows
-                    size = (
-                        m.embedding_dim
-                        if isinstance(m, nn.Embedding)
-                        else sum(p.numel() for p in m.parameters(recurse=False))
-                    )
+                    size = m.embedding_dim if isinstance(m, nn.Embedding) else self.module_sizes[id(m)]
                     self.work += rows * size
 
                 self.handles.append(module.register_forward_hook(count))
@@ -107,8 +107,18 @@ class Counter(ObservedGemmFlops):
         }
 
 
+_inventories = WeakKeyDictionary()
+
+
 def touched_weights(model, out):
-    from exp006.accounting import module_size
+    from exp006.accounting import module_size as original_module_size
+
+    if model not in _inventories:
+        _inventories[model] = {id(module): original_module_size(module) for module in model.modules()}
+    inventory = _inventories[model]
+
+    def module_size(module):
+        return inventory[id(module)]
 
     c = model.config
     base = (

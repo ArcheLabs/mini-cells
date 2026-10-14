@@ -276,6 +276,15 @@ def auto_run(c, p, args):
         args.source_commit
         or subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     )
+    if getattr(args, "restore_from", None):
+        from .persistence import import_bundle
+
+        c = import_bundle(args.restore_from, args.output, source)
+        p = c["execution"]["protocol"]
+    from .performance import retrain_review
+
+    if c["training"]["steps"] > 100:
+        retrain_review(c, source)
     output = Path(args.output)
     state = {}
 
@@ -331,6 +340,16 @@ def auto_run(c, p, args):
             state["path"],
             devices,
         )
+        if not runs.get("workers_finished") or runs.get("status") == "PAUSED_RESUMABLE":
+            from .persistence import export_bundle
+
+            bundle = output / ("portable-checkpoint-" + str(time.time_ns()))
+            export_bundle(output, bundle, source)
+            return {
+                **runs,
+                "portable_output": str(bundle),
+                "persistence_notice": "Save Version must retain this Kaggle Output; actual new-session restoration is not yet verified",
+            }
         # All workers have joined. Profiling cannot overlap another arm's training.
         for run in runs["runs"]:
             folder = Path(run["run"])
@@ -397,6 +416,8 @@ def main():
         "--mode",
         choices=(
             "auto",
+            "perf-audit",
+            "resume-audit",
             "audit",
             "params",
             "preflight",
@@ -427,12 +448,35 @@ def main():
     parser.add_argument("--run")
     parser.add_argument("--manifest")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--restore-from", help="hash-verified user-attached Kaggle Output bundle; identical source only"
+    )
     parser.add_argument("--intervention", default="stop_early")
     parser.add_argument("--intervention-step", type=int, default=1)
+    parser.add_argument("--baseline-root", default="/tmp/minicells-pd001-baseline")
+    parser.add_argument("--steps", type=int, default=20)
+    parser.add_argument("--warmup", type=int, default=5)
+    parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument(
+        "--cases", nargs="+", default=["B0", "B1", "B2", "B3", "B4", "B5", "B6-m2", "B6-m4", "LIGHT"]
+    )
+    parser.add_argument("--perf-fixture", action="store_true")
+    parser.add_argument("--allow-gpu-microbenchmark", action="store_true")
+    parser.add_argument("--rehearsal-phase", choices=("pause", "resume"), default="pause")
     args = parser.parse_args()
     c, p = load(args.config)
     if args.mode in ("audit", "params", "preflight", "dry-run") and args.device != "cpu":
         raise RuntimeError("engineering modes are CPU only; CUDA synthetic preflight needs separate approval")
+    if args.mode == "resume-audit":
+        from .resume_audit import run
+
+        run(c, p, args)
+        return
+    if args.mode == "perf-audit":
+        from .perf_audit import run
+
+        run(c, args)
+        return
     if args.mode == "auto":
         result = auto_run(c, p, args)
     elif args.mode == "audit":

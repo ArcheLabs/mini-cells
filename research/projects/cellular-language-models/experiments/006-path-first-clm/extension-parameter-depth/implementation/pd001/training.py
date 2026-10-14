@@ -10,8 +10,10 @@ from exp006.reuse import canonical_sha256, file_sha256, make_batch, write_json
 from .configs import authorize, arm_config, cost_lambda
 from .models import make_model
 from .losses import joint_loss, sample_paths
-from .diagnostics import gradients, combined_routing
-from .accounting import Counter, TrainingGemmCounter
+from .accounting import Counter
+from contextlib import nullcontext
+from .performance import settings, VERSION
+from .engine import step as optimization_step, probes
 from .checkpoint import save, restore
 from .assets import load_bundle
 from .evaluation import evaluate_windows
@@ -25,6 +27,8 @@ def training_budget_sha(c):
 def identity(c, p, arm, seed, role, source, assets):
     return {
         "experiment_id": "006-PD1",
+        "implementation_version": VERSION,
+        "performance": settings(c),
         "arm": arm,
         "source_sha": source,
         "config_sha": canonical_sha256(c),
@@ -38,9 +42,9 @@ def identity(c, p, arm, seed, role, source, assets):
     }
 
 
-def optimize(model, x, y, opt, c, step, generators):
+def optimize(model, x, y, opt, c, step, generators, capture=False):
     mechanism = c["arms"][model.arm]["mechanism"]
-    outputs = sample_paths(model, x, generators, mechanism, capture=True)
+    outputs = sample_paths(model, x, generators, mechanism, capture=capture)
     total, log = joint_loss(
         outputs, y, c["training"], mechanism if model.arm != "M0" else "J0", cost_lambda(c, step)
     )
@@ -62,6 +66,7 @@ def train(
 def _train_registered(
     c, p, arm, seed, role, source, assets, assets_path, output, device, resume, confirmation_assets=None
 ):
+    perf = settings(c)
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -95,9 +100,9 @@ def _train_registered(
         return complete
     first = 0
     history = []
-    prior_flops = 0
+    prior_flops = None
     prior_elapsed = 0.0
-    prior_training_gemm = 0
+    prior_training_gemm = None
     if resume:
         first, extra = restore(latest, model, opt, run_id, rng, generators, device=device)
         history = extra["history"]
@@ -117,85 +122,46 @@ def _train_registered(
     if resume:
         initial_actions = extra.get("initial_probe_actions", initial_actions)
     try:
-        with Counter(model) as counter:
+        instrumented = perf["training_profile"] == "instrumented"
+        with Counter(model) if instrumented else nullcontext() as counter:
             for step in range(first + 1, t["steps"] + 1):
-                model.train()
-                opt.zero_grad(set_to_none=True)
+                diagnostic = instrumented or step % perf["diagnostics_interval"] == 0
                 chosen = rng.choice(assets["train_starts"], size=t["effective_batch"], replace=True)
-                before = {n: p.detach().clone() for n, p in model.named_parameters()}
-                logs = []
-                all_outputs = []
-                training_gemm = 0
-                lr = t["learning_rate"] * min(1.0, step / max(1, t["warmup_steps"]))
-                for group in opt.param_groups:
-                    group["lr"] = lr
-                for start in range(0, t["effective_batch"], t["microbatch"]):
-                    x, y = make_batch(
-                        assets["train"],
-                        chosen[start : start + t["microbatch"]],
-                        t["sequence_length"],
-                        torch.device(device),
-                    )
-                    with TrainingGemmCounter() as observed:
-                        total, log, outputs = optimize(model, x, y, opt, c, step, generators)
-                        if not torch.isfinite(total):
-                            raise FloatingPointError("nonfinite joint objective")
-                        (total / (t["effective_batch"] // t["microbatch"])).backward()
-                    training_gemm += observed.flops
-                    logs.append(log)
-                    all_outputs.extend(outputs)
-                if any(p.grad is not None and not torch.isfinite(p.grad).all() for p in model.parameters()):
-                    raise FloatingPointError("nonfinite gradients")
-                preclip = float(torch.nn.utils.clip_grad_norm_(model.parameters(), t["gradient_clip"]))
-                opt.step()
-                prior_training_gemm += training_gemm
-                log = {k: float(torch.stack([r[k] for r in logs]).mean()) for k in logs[0]}
-                log.update(
-                    step=step,
-                    cost_lambda=cost_lambda(c, step),
-                    learning_rate=lr,
-                    forward_gemm_flops=prior_flops + counter.total,
-                    training_flops_status="INCOMPLETE_ACCOUNTING",
-                    training_backward_flops=None,
-                    observed_training_gemm_flops=prior_training_gemm,
-                    training_observed_scope="mm/addmm/bmm forward and backward; excludes fused SDPA and non-GEMM",
-                    rollout_count=len(all_outputs),
-                    target_tokens=step * t["effective_batch"] * t["sequence_length"],
-                    rollout_target_tokens=step
-                    * t["effective_batch"]
-                    * t["sequence_length"]
-                    * len(generators),
-                    gradient_norm_before_clip=preclip,
-                    **gradients(model, before, all_outputs),
+                log = optimization_step(
+                    model,
+                    opt,
+                    c,
+                    step,
+                    chosen,
+                    assets["train"],
+                    generators,
+                    device,
+                    capture=diagnostic,
+                    diagnostics=diagnostic,
+                    dispatch=instrumented,
+                    routing=diagnostic,
                 )
-                if arm != "M0":
-                    log["routing"] = combined_routing(all_outputs, model.config["cell_count"])
-                # Fixed train-derived probe only: never touch confirmation in intermediate diagnostics.
-                model.eval()
-                counter.enabled = False
-                with torch.no_grad():
-                    probe = model(probe_x)
-                    from .losses import terminal_ce
-
-                    log["train_probe_greedy_nll"] = float(terminal_ce(probe, probe_y).mean())
-                    sampled = model(
-                        probe_x,
-                        policy="sampled",
-                        generator=torch.Generator(device=device).manual_seed(seed + 90000 + step),
-                    )
-                    log["train_probe_sampled_nll"] = float(terminal_ce(sampled, probe_y).mean())
-                    log["sampled_greedy_nll_gap"] = (
-                        log["train_probe_sampled_nll"] - log["train_probe_greedy_nll"]
-                    )
-                    if arm != "M0":
-                        if step == 1 or step % t["evaluate_every"] == 0:
-                            log["probe_actions"] = probe.actions.cpu().tolist()
-                        log["route_drift_from_initial"] = float(
-                            (probe.actions.cpu() != initial_actions).float().mean()
-                        )
-                counter.enabled = True
+                log["forward_gemm_flops"] = counter.total + (prior_flops or 0) if counter else None
+                if instrumented:
+                    log["observed_training_gemm_flops"] += prior_training_gemm or 0
+                    prior_training_gemm = log["observed_training_gemm_flops"]
+                log["diagnostics_interval"] = perf["diagnostics_interval"]
+                log["train_probe_interval"] = perf["train_probe_interval"]
+                log.update(
+                    train_probe_greedy_nll=None,
+                    train_probe_sampled_nll=None,
+                    sampled_greedy_nll_gap=None,
+                    route_drift_from_initial=None,
+                    probe_sampled=False,
+                )
+                if instrumented or step % perf["train_probe_interval"] == 0:
+                    if counter:
+                        counter.enabled = False
+                    log.update(probes(model, probe_x, probe_y, seed, step, initial_actions))
+                    if counter:
+                        counter.enabled = True
                 history.append(log)
-                if step == 1 or step % 100 == 0:
+                if step == 1 or step % perf["console_interval"] == 0:
                     print(
                         json.dumps(
                             {
@@ -205,7 +171,18 @@ def _train_registered(
                         ),
                         flush=True,
                     )
-                if step % t["checkpoint_every"] == 0 or step == t["steps"]:
+                pause = step < t["steps"] and (
+                    (perf["pause_after_step"] is not None and first < perf["pause_after_step"] <= step)
+                    or (
+                        perf["max_session_seconds"] is not None
+                        and time.perf_counter() - started >= perf["max_session_seconds"]
+                    )
+                )
+                # Existing checkpoint_every remains the scientific default; the explicit
+                # performance interval may request a more frequent atomic save.
+                interval = min(t["checkpoint_every"], perf["checkpoint_interval"])
+                if step % interval == 0 or step == t["steps"] or pause:
+                    save_started = time.perf_counter()
                     save(
                         latest,
                         model,
@@ -216,19 +193,40 @@ def _train_registered(
                         generators,
                         {
                             "history": history,
-                            "forward_gemm": prior_flops + counter.total,
+                            "forward_gemm": (prior_flops or 0) + counter.total if counter else None,
                             "elapsed_seconds": prior_elapsed + time.perf_counter() - started,
                             "observed_training_gemm": prior_training_gemm,
                             "initial_probe_actions": initial_actions,
                         },
                     )
+                    write_json(
+                        output / "checkpoint-io.json",
+                        {
+                            "step": step,
+                            "save_seconds": time.perf_counter() - save_started,
+                            "checkpoint_bytes": latest.stat().st_size,
+                            "scope": "atomic model/optimizer/RNG checkpoint write; excludes curves, hashing and portable export",
+                        },
+                    )
                     write_curve(output, history)
+                if pause:
+                    result = {
+                        "identity": run_id,
+                        "status": "PAUSED_RESUMABLE",
+                        "step": step,
+                        "checkpoint_sha": file_sha256(latest),
+                        "scientific_decision": False,
+                        "resume": "Use the identical source/config/assets and --resume; import a verified Kaggle Output bundle in a new session",
+                    }
+                    write_json(output / "pause.json", result)
+                    return result
             if step != t["steps"]:
                 raise RuntimeError("final step missing")
             checkpoint_sha = file_sha256(latest)
             frozen = {"sha": checkpoint_sha, "step": step, "complete": True}
             # Final-only loader happens after immutable checkpoint hash is fixed.
-            counter.enabled = False
+            if counter:
+                counter.enabled = False
             eval_assets = load_bundle(
                 confirmation_assets if role == "confirmation" else assets_path,
                 c,
@@ -266,7 +264,16 @@ def _train_registered(
                 if arm == "M0"
                 else None,
                 "quality": {"greedy": greedy, "sampled": sampled},
-                "cost": counter.report(step * t["effective_batch"] * t["sequence_length"]),
+                "cost": counter.report(step * t["effective_batch"] * t["sequence_length"])
+                if counter
+                else {
+                    "total_flops_status": "OFFLINE_ONLY",
+                    "forward_gemm_flops": None,
+                    "training_backward_flops": None,
+                    "executed_parameter_work": None,
+                    "measurement_scope": "not measured in training; use separate frozen-checkpoint profile",
+                    "resident_parameters": sum(v.numel() for v in model.parameters()),
+                },
                 "routing": greedy["routing"],
                 "stability": history[-1],
                 "interventions": [],
@@ -280,6 +287,7 @@ def _train_registered(
                 else 0.0,
             }
             write_json(output / "metrics.json", result)
+            (output / "pause.json").unlink(missing_ok=True)
             return result
     except BaseException as exc:
         write_json(
