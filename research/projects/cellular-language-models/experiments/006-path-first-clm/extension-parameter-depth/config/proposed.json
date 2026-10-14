@@ -225,5 +225,18 @@
       "ratio": 1.0,
       "mechanism": "J0"
     }
+  },
+  "performance": {
+    "training_profile": "light",
+    "console_interval": 100,
+    "diagnostics_interval": 100,
+    "train_probe_interval": 100,
+    "checkpoint_interval": 100,
+    "record_full_flops_each_step": false,
+    "full_path_capture_each_step": false,
+    "benchmark_warmup_steps": 5,
+    "benchmark_measure_steps": 20,
+    "max_session_seconds": null,
+    "pause_after_step": null
   }
 }

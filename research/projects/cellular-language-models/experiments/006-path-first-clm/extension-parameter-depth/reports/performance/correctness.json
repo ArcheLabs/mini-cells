@@ -1,0 +1,218 @@
+{
+  "source_sha": "ece765188bcf94752212ae0f6fb33a3314a655aa",
+  "status": "CPU_ENGINEERING_PASS",
+  "tests": 80,
+  "failures": 0,
+  "errors": 0,
+  "test_seconds": 27.236,
+  "coverage": [
+    "real original runner vs light, M0/J0/J1 multi-step exact state equality",
+    "replay logits, loss components, Connection scores and all gradients",
+    "self-connections, actual selected operator calls, STOP/forced STOP/zero-action STOP",
+    "causal full-vs-cached decode",
+    "diagnostic/probe RNG isolation",
+    "data sampling, global RNG, path generators, AdamW and checkpoint restart",
+    "portable manifest integrity, source mismatch, corruption and separate-process restore",
+    "baseline stability original optimizer-step window",
+    "unchanged scientific configuration and exact actual parameter inventories"
+  ],
+  "parameters": {
+    "M0": {
+      "total": 16483968,
+      "groups": {
+        "embedding_head": 3193728,
+        "moe_backbone": 13290240
+      },
+      "width": 384,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 1.0,
+      "target_ratio": 1.0,
+      "ratio_pass": true,
+      "resident_weight_bytes": 65935872
+    },
+    "P100-F16": {
+      "total": 16557539,
+      "groups": {
+        "embedding_head": 3193728,
+        "shared": 148992,
+        "context": 590592,
+        "cells": 12582912,
+        "connection": 28450,
+        "critic": 12865
+      },
+      "width": 384,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 1.0044631850777677,
+      "target_ratio": 1.0,
+      "ratio_pass": true,
+      "resident_weight_bytes": 66230156
+    },
+    "P50-F16": {
+      "total": 8200923,
+      "groups": {
+        "embedding_head": 3193728,
+        "shared": 148992,
+        "context": 590592,
+        "cells": 4227072,
+        "connection": 27674,
+        "critic": 12865
+      },
+      "width": 384,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 0.4975090342325343,
+      "target_ratio": 0.5,
+      "ratio_pass": true,
+      "resident_weight_bytes": 32803692
+    },
+    "P50-F32": {
+      "total": 8200923,
+      "groups": {
+        "embedding_head": 3193728,
+        "shared": 148992,
+        "context": 590592,
+        "cells": 4227072,
+        "connection": 27674,
+        "critic": 12865
+      },
+      "width": 384,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 0.4975090342325343,
+      "target_ratio": 0.5,
+      "ratio_pass": true,
+      "resident_weight_bytes": 32803692
+    },
+    "P50-A32": {
+      "total": 8200923,
+      "groups": {
+        "embedding_head": 3193728,
+        "shared": 148992,
+        "context": 590592,
+        "cells": 4227072,
+        "connection": 27674,
+        "critic": 12865
+      },
+      "width": 384,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 0.4975090342325343,
+      "target_ratio": 0.5,
+      "ratio_pass": true,
+      "resident_weight_bytes": 32803692
+    },
+    "P25-F32": {
+      "total": 4124631,
+      "groups": {
+        "embedding_head": 2129152,
+        "shared": 66560,
+        "context": 262656,
+        "cells": 1638400,
+        "connection": 19094,
+        "critic": 8769
+      },
+      "width": 256,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 0.25022075995294335,
+      "target_ratio": 0.25,
+      "ratio_pass": true,
+      "resident_weight_bytes": 16498524
+    },
+    "P25-A64": {
+      "total": 4124631,
+      "groups": {
+        "embedding_head": 2129152,
+        "shared": 66560,
+        "context": 262656,
+        "cells": 1638400,
+        "connection": 19094,
+        "critic": 8769
+      },
+      "width": 256,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 0.25022075995294335,
+      "target_ratio": 0.25,
+      "ratio_pass": true,
+      "resident_weight_bytes": 16498524
+    },
+    "P50-SELF32": {
+      "total": 8200923,
+      "groups": {
+        "embedding_head": 3193728,
+        "shared": 148992,
+        "context": 590592,
+        "cells": 4227072,
+        "connection": 27674,
+        "critic": 12865
+      },
+      "width": 384,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 0.4975090342325343,
+      "target_ratio": 0.5,
+      "ratio_pass": true,
+      "resident_weight_bytes": 32803692
+    },
+    "P50-STATE32": {
+      "total": 8200587,
+      "groups": {
+        "embedding_head": 3193728,
+        "shared": 148992,
+        "context": 590592,
+        "cells": 4227072,
+        "connection": 27338,
+        "critic": 12865
+      },
+      "width": 384,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 0.49748865079087756,
+      "target_ratio": 0.5,
+      "ratio_pass": true,
+      "resident_weight_bytes": 32802348
+    },
+    "P50-A32-J1": {
+      "total": 8200923,
+      "groups": {
+        "embedding_head": 3193728,
+        "shared": 148992,
+        "context": 590592,
+        "cells": 4227072,
+        "connection": 27674,
+        "critic": 12865
+      },
+      "width": 384,
+      "dtype": "float32",
+      "tied_head": true,
+      "ratio_to_moe": 0.4975090342325343,
+      "target_ratio": 0.5,
+      "ratio_pass": true,
+      "resident_weight_bytes": 32803692
+    }
+  },
+  "full_size_joint_gate_arms": 10,
+  "gpu_runs": 0,
+  "confirmation_read": false,
+  "scientific_decision": false,
+  "READY_FOR_RETRAIN": "NO",
+  "kaggle_persistence_actual_rehearsal": "NOT_RUN; portable CPU/process parity is not cloud-retention evidence",
+  "cpu_separate_cli_restart": {
+    "status": "SYNTHETIC_RESUME_PARITY_PASS",
+    "source_sha": "ece765188bcf94752212ae0f6fb33a3314a655aa",
+    "arm": "P50-F16",
+    "device": "cpu",
+    "scientific_decision": false,
+    "actual_kaggle_persistence_verified": false,
+    "hard_action_trace_equal": true,
+    "floating_tolerance": {
+      "rtol": 0,
+      "atol": 0
+    },
+    "rng_comparison": "exact; tolerance applies only to floating state",
+    "note": "User must verify imported files came from a retained previous Kaggle cloud session; local path/process parity alone cannot prove this"
+  }
+}

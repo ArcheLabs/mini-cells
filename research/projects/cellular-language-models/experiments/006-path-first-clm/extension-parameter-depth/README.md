@@ -1,3 +1,7 @@
+## Performance repair — full retraining remains blocked
+
+Use [performance-notebook.ipynb](performance-notebook.ipynb) for the bounded synthetic Kaggle benchmark and checkpoint rehearsal. See [PERFORMANCE_REPAIR.md](PERFORMANCE_REPAIR.md). This repair does not approve a 5,000-step run; the previous launcher source and checkpoints are historical evidence.
+
 # PD-001 — Parameter × adaptive path depth
 
 Execution: **automatic development**. Click Run All once; assets, hashes, seed and execution identity are generated internally. The historical formal proposal remains unregistered; development execution does not require manual registration. **NO_SCIENTIFIC_RESULT_YET** until a real run supplies evidence.

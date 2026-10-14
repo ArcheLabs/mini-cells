@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import os
 import sys
+import json
 from .configs import BASE, authorize
 
 
@@ -60,7 +61,21 @@ def matrix(c, p, arms, seed, role, source, assets, output, config_path, devices)
                     print(f"[{arm}] {line.rstrip()}", flush=True)
                 if process.wait():
                     raise subprocess.CalledProcessError(process.returncode, command)
-            results.append({"arm": arm, "device": devices[worker], "run": str(folder)})
+            paused = (folder / "pause.json").exists() and not (folder / "metrics.json").exists()
+            if paused:
+                marker = json.loads((folder / "pause.json").read_text())
+                if marker.get("status") != "PAUSED_RESUMABLE":
+                    raise RuntimeError("invalid pause evidence")
+            results.append(
+                {
+                    "arm": arm,
+                    "device": devices[worker],
+                    "run": str(folder),
+                    "status": "PAUSED_RESUMABLE" if paused else "DEVELOPMENT_COMPLETED",
+                }
+            )
+            if paused:
+                break
         return results
 
     with ThreadPoolExecutor(max_workers=len(devices)) as pool:
@@ -68,7 +83,10 @@ def matrix(c, p, arms, seed, role, source, assets, output, config_path, devices)
     # Return only after all training processes exit; caller's separate profile mode is serial.
     return {
         "runs": runs,
-        "workers_finished": True,
+        "workers_finished": len(runs) == len(arms) and all(r["status"] != "PAUSED_RESUMABLE" for r in runs),
+        "status": "PAUSED_RESUMABLE"
+        if any(r["status"] == "PAUSED_RESUMABLE" for r in runs)
+        else "TRAINING_WORKERS_COMPLETED",
         "profiling_phase": "separate serial registered invocation",
         "scientific_decision": False,
     }

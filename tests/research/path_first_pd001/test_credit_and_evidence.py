@@ -326,7 +326,8 @@ def test_cpu_fixture_training_final_loader_and_resume(tiny, proposal, tmp_path, 
         straight["stability"]["observed_training_gemm_flops"]
         == recovered["stability"]["observed_training_gemm_flops"]
     )
-    assert recovered["cost"]["total_flops_status"] == "INCOMPLETE_ACCOUNTING"
+    assert recovered["cost"]["total_flops_status"] == "OFFLINE_ONLY"
+    assert recovered["cost"]["forward_gemm_flops"] is None
 
 
 def test_report_requires_real_matched_moe(proposal, tmp_path):

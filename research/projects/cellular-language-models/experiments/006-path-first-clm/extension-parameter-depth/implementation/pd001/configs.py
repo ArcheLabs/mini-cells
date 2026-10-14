@@ -37,6 +37,9 @@ def load(path=None):
 def validate(c):
     if c["experiment_id"] != "006-PD1" or c["model"]["memory_mode"] != "static_input_readonly":
         raise ValueError("PD identity or memory mismatch")
+    from .performance import settings
+
+    settings(c)
     t = c["training"]
     if t["tokens"] != t["steps"] * t["effective_batch"] * t["sequence_length"]:
         raise ValueError("effective training token budget mismatch")
@@ -205,6 +208,10 @@ def authorize(c, p, arm, seed, role, mode, source=None, device="cpu"):
         raise RuntimeError("operation not authorized")
     if str(device).startswith("cuda") and not auth["gpu"]:
         raise RuntimeError("GPU not authorized")
+    if mode == "train" and c["training"]["steps"] > 100:
+        from .performance import retrain_review
+
+        retrain_review(c, source)
     if role == "confirmation" and (
         not p.get("candidate_locked") or not c["data"].get("confirmation_manifest_sha256")
     ):
