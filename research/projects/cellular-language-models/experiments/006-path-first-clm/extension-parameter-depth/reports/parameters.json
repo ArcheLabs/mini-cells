@@ -1,0 +1,178 @@
+{
+  "M0": {
+    "total": 16483968,
+    "groups": {
+      "embedding_head": 3193728,
+      "moe_backbone": 13290240
+    },
+    "width": 384,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 1.0,
+    "target_ratio": 1.0,
+    "ratio_pass": true,
+    "resident_weight_bytes": 65935872
+  },
+  "P100-F16": {
+    "total": 16557539,
+    "groups": {
+      "embedding_head": 3193728,
+      "shared": 148992,
+      "context": 590592,
+      "cells": 12582912,
+      "connection": 28450,
+      "critic": 12865
+    },
+    "width": 384,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 1.0044631850777677,
+    "target_ratio": 1.0,
+    "ratio_pass": true,
+    "resident_weight_bytes": 66230156
+  },
+  "P50-F16": {
+    "total": 8200923,
+    "groups": {
+      "embedding_head": 3193728,
+      "shared": 148992,
+      "context": 590592,
+      "cells": 4227072,
+      "connection": 27674,
+      "critic": 12865
+    },
+    "width": 384,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 0.4975090342325343,
+    "target_ratio": 0.5,
+    "ratio_pass": true,
+    "resident_weight_bytes": 32803692
+  },
+  "P50-F32": {
+    "total": 8200923,
+    "groups": {
+      "embedding_head": 3193728,
+      "shared": 148992,
+      "context": 590592,
+      "cells": 4227072,
+      "connection": 27674,
+      "critic": 12865
+    },
+    "width": 384,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 0.4975090342325343,
+    "target_ratio": 0.5,
+    "ratio_pass": true,
+    "resident_weight_bytes": 32803692
+  },
+  "P50-A32": {
+    "total": 8200923,
+    "groups": {
+      "embedding_head": 3193728,
+      "shared": 148992,
+      "context": 590592,
+      "cells": 4227072,
+      "connection": 27674,
+      "critic": 12865
+    },
+    "width": 384,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 0.4975090342325343,
+    "target_ratio": 0.5,
+    "ratio_pass": true,
+    "resident_weight_bytes": 32803692
+  },
+  "P25-F32": {
+    "total": 4124631,
+    "groups": {
+      "embedding_head": 2129152,
+      "shared": 66560,
+      "context": 262656,
+      "cells": 1638400,
+      "connection": 19094,
+      "critic": 8769
+    },
+    "width": 256,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 0.25022075995294335,
+    "target_ratio": 0.25,
+    "ratio_pass": true,
+    "resident_weight_bytes": 16498524
+  },
+  "P25-A64": {
+    "total": 4124631,
+    "groups": {
+      "embedding_head": 2129152,
+      "shared": 66560,
+      "context": 262656,
+      "cells": 1638400,
+      "connection": 19094,
+      "critic": 8769
+    },
+    "width": 256,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 0.25022075995294335,
+    "target_ratio": 0.25,
+    "ratio_pass": true,
+    "resident_weight_bytes": 16498524
+  },
+  "P50-SELF32": {
+    "total": 8200923,
+    "groups": {
+      "embedding_head": 3193728,
+      "shared": 148992,
+      "context": 590592,
+      "cells": 4227072,
+      "connection": 27674,
+      "critic": 12865
+    },
+    "width": 384,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 0.4975090342325343,
+    "target_ratio": 0.5,
+    "ratio_pass": true,
+    "resident_weight_bytes": 32803692
+  },
+  "P50-STATE32": {
+    "total": 8200587,
+    "groups": {
+      "embedding_head": 3193728,
+      "shared": 148992,
+      "context": 590592,
+      "cells": 4227072,
+      "connection": 27338,
+      "critic": 12865
+    },
+    "width": 384,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 0.49748865079087756,
+    "target_ratio": 0.5,
+    "ratio_pass": true,
+    "resident_weight_bytes": 32802348
+  },
+  "P50-A32-J1": {
+    "total": 8200923,
+    "groups": {
+      "embedding_head": 3193728,
+      "shared": 148992,
+      "context": 590592,
+      "cells": 4227072,
+      "connection": 27674,
+      "critic": 12865
+    },
+    "width": 384,
+    "dtype": "float32",
+    "tied_head": true,
+    "ratio_to_moe": 0.4975090342325343,
+    "target_ratio": 0.5,
+    "ratio_pass": true,
+    "resident_weight_bytes": 32803692
+  }
+}
