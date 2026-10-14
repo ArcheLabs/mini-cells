@@ -12,7 +12,8 @@ import unittest
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "scripts/research"))
+sys.path.insert(0, str(REPO / "research/projects/cellular-language-models/context/08-hybrid-clm/scripts/research"))
+sys.path.insert(0, str(REPO / "research/projects/continual-learning/context/04-continual-learning/scripts/research"))
 import publish_core_validation_007 as publisher
 
 NOTEBOOK = REPO / "research/projects/cellular-language-models/experiments/004-cell-graph/notebook.ipynb"
@@ -41,7 +42,7 @@ class ManualPublicationTests(unittest.TestCase):
         for path in (definition, protocol, config):
             path.write_text("{}\n", encoding="utf-8")
         registry = self.root / "research/governance/registry.yaml"
-        registry.parent.mkdir()
+        registry.parent.mkdir(parents=True)
         registry.write_text("{}\n", encoding="utf-8")
         self.git("add", ".")
         self.git("commit", "-m", "source")

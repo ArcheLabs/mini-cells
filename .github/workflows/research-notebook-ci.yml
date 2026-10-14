@@ -20,7 +20,7 @@ jobs:
       - name: Check changed runtime modules
         run: python -m compileall -q src/minicells/runtime/research.py src/minicells/training/runner.py src/minicells/research/assets.py
       - name: Verify notebook publication and recovery using local Git
-        run: python tests/research/projects/cellular-computing/context/03-routing-and-growth/test_cell_graph_manual_publication.py
+        run: python tests/research/03-routing-and-growth/test_cell_graph_manual_publication.py
 
   experiment-005-audit:
     runs-on: ubuntu-latest
