@@ -160,6 +160,24 @@ def _train_registered(
                     log.update(probes(model, probe_x, probe_y, seed, step, initial_actions))
                     if counter:
                         counter.enabled = True
+                # Preserve the ORIGINAL optimizer-step stability window. Sampling
+                # probes must not silently redefine the scientific threshold.
+                stability = p["thresholds"].get("baseline_stability")
+                required_baseline = (
+                    arm == "M0" and stability and (step == 1 or step > t["steps"] - stability["tail_steps"])
+                )
+                if required_baseline and log["train_probe_greedy_nll"] is None:
+                    from .losses import terminal_ce
+
+                    model.eval()
+                    if counter:
+                        counter.enabled = False
+                    with torch.no_grad():
+                        log["train_probe_greedy_nll"] = float(terminal_ce(model(probe_x), probe_y).mean())
+                    log["probe_sampled"] = True
+                    log["probe_scope"] = "required original baseline stability window; greedy only"
+                    if counter:
+                        counter.enabled = True
                 history.append(log)
                 if step == 1 or step % perf["console_interval"] == 0:
                     print(
@@ -280,7 +298,12 @@ def _train_registered(
                 "statistics": {},
                 "device": str(device),
                 "runtime": {"torch": torch.__version__, "precision": "float32"},
-                "authorization": {"registered": True, "role": role},
+                "authorization": {
+                    "registered": p.get("status") == "REGISTERED",
+                    "automatic_development": p.get("status") == "AUTOMATIC_DEVELOPMENT",
+                    "engineering_scope": c.get("engineering_scope"),
+                    "role": role,
+                },
                 "elapsed_seconds": prior_elapsed + time.perf_counter() - started,
                 "gpu_hours": (time.perf_counter() - started) / 3600
                 if str(device).startswith("cuda")

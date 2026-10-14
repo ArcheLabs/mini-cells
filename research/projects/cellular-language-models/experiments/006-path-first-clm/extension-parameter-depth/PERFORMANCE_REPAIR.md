@@ -39,7 +39,11 @@ algorithm-speed comparison.
 | Scalar loss record | one batch transfer per step; aggregate objective/norm finite checks | original scalar conversion in baseline ablations |
 | Atomic checkpoint | existing 100-step default; optional more frequent saves | IO excluded from step timing, measured separately in checkpoint tests |
 
-Unsampled probe fields are null, not carried forward. Normal training reports `OFFLINE_ONLY`
+Unsampled probe fields are null, not carried forward. M0 also retains the scientifically
+required first-step and final `tail_steps` greedy observations so the original stability
+criterion keeps its optimizer-step window and thresholds. Sampled probes are not repeated
+solely for this criterion. The steady-step benchmark does not include those final-window
+observations; they are necessary quality validation, not optional performance diagnostics. Normal training reports `OFFLINE_ONLY`
 and null FLOPs/work rather than fictitious zero or cumulative counts. `Counter` remains validated;
 module parameter inventories are cached per model. Unique visits are not executed parameter work.
 

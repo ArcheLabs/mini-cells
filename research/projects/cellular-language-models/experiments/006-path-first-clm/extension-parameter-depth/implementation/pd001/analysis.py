@@ -118,6 +118,8 @@ def baseline_review(history, criteria):
         return False
     values = np.asarray([row["train_probe_greedy_nll"] for row in history], float)
     tail = values[-count:]
+    if not np.isfinite(values[0]) or not np.isfinite(tail).all():
+        return False  # missing observations cannot support baseline stability
     slope = float(np.polyfit(np.arange(count), tail, 1)[0])
     return bool(
         values[0] - tail.mean() >= criteria["minimum_nll_drop"]

@@ -66,3 +66,36 @@ def test_light_never_installs_resident_instruments(proposal, tmp_path, monkeypat
         "cpu",
         False,
     )
+
+
+def test_baseline_stability_keeps_original_first_and_final_optimizer_window(
+    proposal, tmp_path, monkeypatch
+):
+    from pd001.analysis import baseline_review
+
+    c, p, m, assets = fixture(proposal, "M0", steps=5)
+    p = copy.deepcopy(p)
+    p["thresholds"]["baseline_stability"] = {
+        "tail_steps": 2,
+        "minimum_nll_drop": -100,
+        "tail_relative_std_max": 100,
+        "tail_absolute_slope_max": 100,
+    }
+    monkeypatch.setattr(training, "arm_config", lambda *a: m)
+    monkeypatch.setattr(training, "load_bundle", final_loader)
+    result = training._train_registered(
+        c, p, "M0", 17, "development", "a" * 40, assets, "synthetic", tmp_path / "run", "cpu", False
+    )
+    history = torch.load(tmp_path / "run/checkpoint.pt", weights_only=False)["extra"]["history"]
+    assert [r["step"] for r in history if r["train_probe_greedy_nll"] is not None] == [1, 4, 5]
+    assert result["baseline_stable"]
+    assert not result["authorization"]["registered"]
+    dense = [{"train_probe_greedy_nll": v} for v in [3.0, 2.8, 2.7, 2.6, 2.5]]
+    sparse = copy.deepcopy(dense)
+    sparse[1]["train_probe_greedy_nll"] = None
+    sparse[2]["train_probe_greedy_nll"] = None
+    assert baseline_review(dense, p["thresholds"]["baseline_stability"]) == baseline_review(
+        sparse, p["thresholds"]["baseline_stability"]
+    )
+    sparse[-1]["train_probe_greedy_nll"] = None
+    assert baseline_review(sparse, p["thresholds"]["baseline_stability"]) is False
