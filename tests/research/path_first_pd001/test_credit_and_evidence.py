@@ -359,3 +359,46 @@ def test_registered_matrix_and_publication_stay_gated(proposal, tmp_path):
     with pytest.raises(RuntimeError, match="PROPOSED_NOT_REGISTERED"):
         publish(proposal, p, "P50-A32", 17, "development", "a" * 40, "missing", tmp_path / "pub")
     assert not (tmp_path / "work").exists() and not (tmp_path / "pub").exists()
+
+
+def test_automatic_preflight_then_approval_then_execution():
+    from pd001.runner import automatic
+
+    calls = []
+
+    def pre():
+        calls.append("preflight")
+        return {"status": "ENGINEERING_READY"}
+
+    def approve():
+        calls.append("approval")
+
+    def execute():
+        calls.append("execute")
+        return {"status": "finished"}
+
+    assert automatic(pre, approve, execute)["status"] == "finished"
+    assert calls == ["preflight", "approval", "execute"]
+
+
+@pytest.mark.parametrize("failure", ["preflight", "approval", "execute"])
+def test_automatic_failure_propagates_and_stops(failure):
+    from pd001.runner import automatic
+
+    calls = []
+
+    def stage(name):
+        def invoke():
+            calls.append(name)
+            if name == failure:
+                raise RuntimeError("fixture failure")
+            return {"status": "ENGINEERING_READY"}
+
+        return invoke
+
+    with pytest.raises(RuntimeError, match="fixture failure"):
+        automatic(stage("preflight"), stage("approval"), stage("execute"))
+    assert (
+        calls
+        == ["preflight", "approval", "execute"][: ["preflight", "approval", "execute"].index(failure) + 1]
+    )

@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from exp006.reuse import file_sha256, write_json
-from .configs import PARENT, ROOT, ARMS, load, arm_config, count, blockers, authorize
+from .configs import BASE, PARENT, ROOT, ARMS, load, arm_config, count, blockers, authorize
 from .models import make_model
 from .losses import joint_loss, sample_paths
 from .accounting import Counter
@@ -230,11 +230,106 @@ def scientific(c, p, args):
     }
 
 
+def preflight(c, p):
+    print("CPU Gate 0: actual parameter inventories and synthetic joint steps for all arms", flush=True)
+    counts = count(c)
+    if not all(r["ratio_pass"] for r in counts.values()):
+        raise ValueError("parameter ratio gate failed")
+    result = {
+        "status": "ENGINEERING_READY",
+        "scientific_decision": False,
+        "gpu_runs": 0,
+        "parameters": counts,
+        "fixtures": [dry_run(c, arm) for arm in ARMS],
+        "full_size_single_step_fixtures": [dry_run(c, arm, full_size=True) for arm in ARMS],
+        "gate_state": p["status"],
+        "unregistered_fields": blockers(c, p),
+        "runtime": {
+            "python": platform.python_version(),
+            "torch": torch.__version__,
+            "numpy": np.__version__,
+        },
+        "note": "tiny nonresearch seed fixtures, not a language experiment",
+    }
+    return result
+
+
+def automatic(precheck, approve, execute):
+    print("[1/3] Automatic CPU preflight", flush=True)
+    result = precheck()
+    if result.get("status") != "ENGINEERING_READY":
+        raise RuntimeError("Automatic preflight failed; experiment not started")
+    print("[2/3] Registration and authorization check", flush=True)
+    approve()
+    print("[3/3] Running registered experiment", flush=True)
+    return execute()
+
+
+def auto_run(c, p, args):
+    from .orchestration import matrix
+
+    seed = (
+        args.seed
+        if args.seed is not None
+        else (c["seeds"]["development"][0] if c["seeds"]["development"] else 17)
+    )
+    source = (
+        args.source_commit
+        or subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    )
+
+    def precheck():
+        result = preflight(c, p)
+        write(Path(args.output) / "automatic-preflight.json", result)
+        return result
+
+    def approve():
+        for arm in args.arms:
+            authorize(c, p, arm, seed, "development", "train", source, "cpu")
+        if not args.assets:
+            raise RuntimeError("Registered asset bundle is missing; experiment not started")
+
+    def execute():
+        devices = args.devices
+        if devices == ["auto"]:
+            devices = (
+                (["cuda:0", "cuda:1"] if torch.cuda.device_count() >= 2 else ["cuda:0"])
+                if c["authorization"]["gpu"]
+                else ["cpu"]
+            )
+        return matrix(
+            c,
+            p,
+            args.arms,
+            seed,
+            "development",
+            source,
+            args.assets,
+            Path(args.output) / "runs",
+            args.config or BASE / "config/proposed.json",
+            devices,
+        )
+
+    try:
+        return automatic(precheck, approve, execute)
+    except Exception as exc:
+        write(
+            Path(args.output) / "automatic-failure.json",
+            {
+                "status": "FAILED",
+                "reason": str(exc),
+                "scientific_decision": False,
+            },
+        )
+        raise
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--mode",
         choices=(
+            "auto",
             "audit",
             "params",
             "preflight",
@@ -255,7 +350,7 @@ def main():
     parser.add_argument("--all-arms", action="store_true")
     parser.add_argument("--arms", nargs="+", choices=ARMS, default=["M0", "P50-F16", "P50-F32", "P50-A32"])
     parser.add_argument("--devices", nargs="+", default=["cpu"])
-    parser.add_argument("--seed", type=int, default=17)
+    parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--source-commit")
     parser.add_argument("--role", choices=("development", "confirmation"), default="development")
     parser.add_argument("--device", default="cpu")
@@ -271,33 +366,16 @@ def main():
     c, p = load(args.config)
     if args.mode in ("audit", "params", "preflight", "dry-run") and args.device != "cpu":
         raise RuntimeError("engineering modes are CPU only; CUDA synthetic preflight needs separate approval")
-    if args.mode == "audit":
+    if args.mode == "auto":
+        result = auto_run(c, p, args)
+    elif args.mode == "audit":
         result = audit(c, p)
     elif args.mode == "params":
         result = count(c)
     elif args.mode == "dry-run":
         result = dry_run(c, args.arm)
     elif args.mode == "preflight":
-        print("CPU Gate 0: actual parameter inventories and synthetic joint steps for all arms", flush=True)
-        counts = count(c)
-        if not all(r["ratio_pass"] for r in counts.values()):
-            raise ValueError("parameter ratio gate failed")
-        result = {
-            "status": "ENGINEERING_READY",
-            "scientific_decision": False,
-            "gpu_runs": 0,
-            "parameters": counts,
-            "fixtures": [dry_run(c, arm) for arm in ARMS],
-            "full_size_single_step_fixtures": [dry_run(c, arm, full_size=True) for arm in ARMS],
-            "gate_state": p["status"],
-            "unregistered_fields": blockers(c, p),
-            "runtime": {
-                "python": platform.python_version(),
-                "torch": torch.__version__,
-                "numpy": np.__version__,
-            },
-            "note": "tiny nonresearch seed fixtures, not a language experiment",
-        }
+        result = preflight(c, p)
     elif args.mode == "train-matrix":
         from .orchestration import matrix
 

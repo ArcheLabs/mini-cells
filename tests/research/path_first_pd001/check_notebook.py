@@ -12,7 +12,8 @@ code = "\n".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type
 for c in notebook["cells"]:
     if c["cell_type"] == "code":
         ast.parse("".join(c["source"]))
-assert "MODE = 'preflight'" in code and "'--device','cpu'" in code
+assert "MODE = 'auto'" in code and "'--device','cpu'" in code
 assert "UserSecretsClient" not in code and "get_secret" not in code
 assert "CUDA_VISIBLE_DEVICES" in code and "'train'" not in code
-print("PD notebook is CPU-only, syntax valid and reads no secrets")
+assert "check=True" in code and "registered.json" in code
+print("PD notebook automatically preflights, respects registration and reads no secrets")
