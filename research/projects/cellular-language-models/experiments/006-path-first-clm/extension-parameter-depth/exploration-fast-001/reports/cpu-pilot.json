@@ -1,0 +1,520 @@
+{
+  "experiment_id": "006-PD1-FAST-001",
+  "source_sha": "0462816af47c82359f66e78830f106b22477c3b4",
+  "source_file_sha256": {
+    "report.py": "1325f412e7242f910db2ef3e89ec8e44aa27d60c33d00f36f0e8780612e8f024",
+    "__init__.py": "c0d0378adf65a36ff25f827d6e1775c03d413aa448c23a79333cca5543a99523",
+    "config.py": "2031cb426e6a0df8f72ba671fbf19772af004faa4073c74ef35eeeccc05d4b14",
+    "interventions.py": "6fefe4d10b294a92854f54a6f78ff12e712033d3c56aaac8310d867ab832b96b",
+    "data.py": "7655682bb4fd2b183079c137a6cf1ddac5d34e1aa2f729d8d788087f2310d03b",
+    "benchmark.py": "171d1ed7ebe0477c4a609cb940eda06c24cce46b3d2a20c71a84523534c79da5",
+    "resume.py": "30977ec8bdf4d695ca2e016ce264fabfe64a1bbcd0a7d6c86298517771be24a5",
+    "train.py": "8cd811be5a2b3a9ccc8466b9d3de703f634cbd4fa9c5f3c81531cb93bb67cc54",
+    "entry.py": "e88ab52cd364aa531f917bc90a40660ab1e1b8919177621b3cc1cd732544b43d",
+    "io.py": "60c911774a7289b8e224a64104d32401df458ac4a5d7edc08292724d56a1d417",
+    "evaluate.py": "78c67d39cef0a06642d04fa0f29b9b628a28e522370458258804bcfb4b9ab444",
+    "models.py": "109a85f0605d50e94a84e40f23ae05c68aeea453760f3d3ea95f3e924c42b355",
+    "schedule.py": "e19b7c38ceff20a679eb4425b4f84df4798ec38c58472a55fd38abb73c792a40"
+  },
+  "config_sha256": "afbe27bcbaf7b38372f6bccce86b452b3e06125e2fbd21f9ae8bbed10ad2e751",
+  "device": "cpu",
+  "hardware": [
+    {
+      "device": "cpu",
+      "name": "CPU"
+    }
+  ],
+  "parameters": {
+    "M0-TINY": {
+      "total_params": 2013440,
+      "groups": {
+        "embedding_head": 524288,
+        "shared": 8448,
+        "moe_backbone": 1480704
+      },
+      "shape_sha256": "d132389099f56ec5f90dded3ef197fc0e4f62452c3d63c18cfe39e5c23779058",
+      "resident_weight_bytes": 8053760,
+      "ratio_to_moe": 1.0
+    },
+    "CLM-S8": {
+      "total_params": 1011000,
+      "groups": {
+        "embedding_head": 524288,
+        "shared": 25088,
+        "context": 65792,
+        "cell_pool": 380928,
+        "connection": 10231,
+        "critic": 4673
+      },
+      "shape_sha256": "fcccbf580901a726314a58fcb629a44356c3f45eba527707777a8d3a7e5fe96b",
+      "resident_weight_bytes": 4044000,
+      "ratio_to_moe": 0.502125715193897
+    },
+    "CLM-S16": {
+      "total_params": 1011000,
+      "groups": {
+        "embedding_head": 524288,
+        "shared": 25088,
+        "context": 65792,
+        "cell_pool": 380928,
+        "connection": 10231,
+        "critic": 4673
+      },
+      "shape_sha256": "fcccbf580901a726314a58fcb629a44356c3f45eba527707777a8d3a7e5fe96b",
+      "resident_weight_bytes": 4044000,
+      "ratio_to_moe": 0.502125715193897
+    }
+  },
+  "rows": [
+    {
+      "arm": "M0-TINY",
+      "microbatch": 1,
+      "p50_seconds": 0.3377139534999287,
+      "p90_seconds": 0.4185877519999622,
+      "step_seconds": [
+        0.4194806419998258,
+        0.3503103509999619,
+        0.27665666200005035,
+        0.3364427540000179,
+        0.3676426489998903,
+        0.33898515299983956,
+        0.4184885419999773,
+        0.31884335599988844,
+        0.2907165599999644,
+        0.28604876000008517
+      ],
+      "peak_gpu_bytes": null,
+      "supported_training_gemm_flops": 561119232,
+      "flops_scope": "one representative microbatch, supported GEMM forward/backward lower bound; not total accumulated-step FLOPs",
+      "profile_target_tokens": 64,
+      "operator_profile": {
+        "aten::mm": {
+          "count": 201,
+          "cpu_self_us": 13545.447999999948
+        },
+        "aten::nonzero_numpy": {
+          "count": 24,
+          "cpu_self_us": 76.45799999999508
+        },
+        "aten::nonzero": {
+          "count": 24,
+          "cpu_self_us": 662.6470000000108
+        },
+        "aten::_local_scalar_dense": {
+          "count": 108,
+          "cpu_self_us": 1434.6489999999912
+        },
+        "aten::is_nonzero": {
+          "count": 2,
+          "cpu_self_us": 4.8289999999979045
+        }
+      },
+      "kernel_launches": null,
+      "kernel_ms": null,
+      "trace": "M0-TINY-m1-trace.json",
+      "synthetic_data": true,
+      "fixture": false,
+      "trace_sha256": "a59d19757173f635e8cff887cbae2781d362956a6d1d5a61fa8015ae8a661d28",
+      "trace_bytes": 3071311,
+      "trace_storage": "local temporary artifact only; raw profiler trace is not committed"
+    },
+    {
+      "arm": "CLM-S8",
+      "microbatch": 1,
+      "p50_seconds": 0.6230602080000835,
+      "p90_seconds": 0.6913081989998318,
+      "step_seconds": [
+        0.6876819089998207,
+        0.6257830080000986,
+        0.6203374080000685,
+        0.6062429080000129,
+        0.6161810090000017,
+        0.7239448089999314,
+        0.6670872089998738,
+        0.6133574010000302,
+        0.6560696989999997,
+        0.6079511990001265
+      ],
+      "peak_gpu_bytes": null,
+      "supported_training_gemm_flops": 448352256,
+      "flops_scope": "one representative microbatch, supported GEMM forward/backward lower bound; not total accumulated-step FLOPs",
+      "profile_target_tokens": 64,
+      "operator_profile": {
+        "aten::mm": {
+          "count": 428,
+          "cpu_self_us": 21214.909000000484
+        },
+        "aten::nonzero_numpy": {
+          "count": 8,
+          "cpu_self_us": 25.559000000011565
+        },
+        "aten::nonzero": {
+          "count": 72,
+          "cpu_self_us": 626.1609999999914
+        },
+        "aten::addmm": {
+          "count": 32,
+          "cpu_self_us": 1579.7930000000497
+        },
+        "aten::multinomial": {
+          "count": 8,
+          "cpu_self_us": 436.6920000000473
+        },
+        "aten::_local_scalar_dense": {
+          "count": 79,
+          "cpu_self_us": 766.8319999998685
+        },
+        "aten::is_nonzero": {
+          "count": 26,
+          "cpu_self_us": 52.40899999998874
+        },
+        "aten::index_copy": {
+          "count": 104,
+          "cpu_self_us": 2786.75099999992
+        },
+        "aten::bmm": {
+          "count": 48,
+          "cpu_self_us": 2939.6720000000605
+        },
+        "autograd::engine::evaluate_function: BmmBackward0": {
+          "count": 16,
+          "cpu_self_us": 142.06899999994494
+        },
+        "BmmBackward0": {
+          "count": 16,
+          "cpu_self_us": 154.87199999994482
+        },
+        "autograd::engine::evaluate_function: AddmmBackward0": {
+          "count": 32,
+          "cpu_self_us": 545.2249999998749
+        },
+        "AddmmBackward0": {
+          "count": 32,
+          "cpu_self_us": 336.43700000000536
+        }
+      },
+      "kernel_launches": null,
+      "kernel_ms": null,
+      "trace": "CLM-S8-m1-trace.json",
+      "synthetic_data": true,
+      "fixture": false,
+      "trace_sha256": "35e677b1898be4295961a7642bf6d3c68d02225ab0cef0025a1b9db81d28070c",
+      "trace_bytes": 6190327,
+      "trace_storage": "local temporary artifact only; raw profiler trace is not committed"
+    },
+    {
+      "arm": "CLM-S16",
+      "microbatch": 1,
+      "p50_seconds": 1.252281235000055,
+      "p90_seconds": 1.2986206641999842,
+      "step_seconds": [
+        1.3340939860001981,
+        1.2094116859998394,
+        1.2878421860000344,
+        1.2460701869999866,
+        1.2581791860000067,
+        1.2471787859999495,
+        1.2573836840001604,
+        1.2946791839999605,
+        1.2051666849999947,
+        1.1442257860001064
+      ],
+      "peak_gpu_bytes": null,
+      "supported_training_gemm_flops": 675385344,
+      "flops_scope": "one representative microbatch, supported GEMM forward/backward lower bound; not total accumulated-step FLOPs",
+      "profile_target_tokens": 64,
+      "operator_profile": {
+        "aten::mm": {
+          "count": 844,
+          "cpu_self_us": 42051.96699999908
+        },
+        "aten::nonzero_numpy": {
+          "count": 16,
+          "cpu_self_us": 73.16799999996329
+        },
+        "aten::nonzero": {
+          "count": 144,
+          "cpu_self_us": 1481.6669999998435
+        },
+        "aten::addmm": {
+          "count": 64,
+          "cpu_self_us": 2898.779999999776
+        },
+        "aten::multinomial": {
+          "count": 16,
+          "cpu_self_us": 749.453000000175
+        },
+        "aten::_local_scalar_dense": {
+          "count": 119,
+          "cpu_self_us": 1172.7230000000945
+        },
+        "aten::is_nonzero": {
+          "count": 50,
+          "cpu_self_us": 75.13700000011886
+        },
+        "aten::index_copy": {
+          "count": 208,
+          "cpu_self_us": 5680.591000000106
+        },
+        "aten::bmm": {
+          "count": 96,
+          "cpu_self_us": 7393.957000000408
+        },
+        "autograd::engine::evaluate_function: BmmBackward0": {
+          "count": 32,
+          "cpu_self_us": 307.26299999980256
+        },
+        "BmmBackward0": {
+          "count": 32,
+          "cpu_self_us": 367.89799999963725
+        },
+        "autograd::engine::evaluate_function: AddmmBackward0": {
+          "count": 64,
+          "cpu_self_us": 1149.8990000002668
+        },
+        "AddmmBackward0": {
+          "count": 64,
+          "cpu_self_us": 636.3990000000049
+        }
+      },
+      "kernel_launches": null,
+      "kernel_ms": null,
+      "trace": "CLM-S16-m1-trace.json",
+      "synthetic_data": true,
+      "fixture": false,
+      "trace_sha256": "2084fc19416a9e66ccf817eb12bd7eed739b0f4a5fb9be98b41bd70b75a2f680",
+      "trace_bytes": 11674346,
+      "trace_storage": "local temporary artifact only; raw profiler trace is not committed"
+    },
+    {
+      "arm": "M0-TINY",
+      "microbatch": 2,
+      "p50_seconds": 0.2399048344999528,
+      "p90_seconds": 0.267752462999988,
+      "step_seconds": [
+        0.25828128300008757,
+        0.2676700829999845,
+        0.24828978400000778,
+        0.2684938830000192,
+        0.23151988499989784,
+        0.22913878500003193,
+        0.24925098400012757,
+        0.21113918699984424,
+        0.2107327860001078,
+        0.21863578600004985
+      ],
+      "peak_gpu_bytes": null,
+      "supported_training_gemm_flops": 1122238464,
+      "flops_scope": "one representative microbatch, supported GEMM forward/backward lower bound; not total accumulated-step FLOPs",
+      "profile_target_tokens": 128,
+      "operator_profile": {
+        "aten::mm": {
+          "count": 201,
+          "cpu_self_us": 21046.175999999974
+        },
+        "aten::nonzero_numpy": {
+          "count": 24,
+          "cpu_self_us": 123.29799999999204
+        },
+        "aten::nonzero": {
+          "count": 24,
+          "cpu_self_us": 636.3210000000167
+        },
+        "aten::_local_scalar_dense": {
+          "count": 108,
+          "cpu_self_us": 1868.5319999998947
+        },
+        "aten::is_nonzero": {
+          "count": 2,
+          "cpu_self_us": 5.0310000000026776
+        }
+      },
+      "kernel_launches": null,
+      "kernel_ms": null,
+      "trace": "M0-TINY-m2-trace.json",
+      "synthetic_data": true,
+      "fixture": false,
+      "trace_sha256": "4d544bf2e512160ccfd3903b8a23e575f460536506ebfe6a23760fbecb002e1c",
+      "trace_bytes": 3088537,
+      "trace_storage": "local temporary artifact only; raw profiler trace is not committed"
+    },
+    {
+      "arm": "CLM-S8",
+      "microbatch": 2,
+      "p50_seconds": 0.3766181839998808,
+      "p90_seconds": 0.40473273570003127,
+      "step_seconds": [
+        0.3853219759998865,
+        0.4028055740000127,
+        0.3508392770002047,
+        0.366258777999974,
+        0.4026718919999439,
+        0.3679143919998751,
+        0.34098939400018935,
+        0.3442074929998853,
+        0.4220771910001986,
+        0.38825669199991353
+      ],
+      "peak_gpu_bytes": null,
+      "supported_training_gemm_flops": 897736704,
+      "flops_scope": "one representative microbatch, supported GEMM forward/backward lower bound; not total accumulated-step FLOPs",
+      "profile_target_tokens": 128,
+      "operator_profile": {
+        "aten::mm": {
+          "count": 428,
+          "cpu_self_us": 27242.717999999626
+        },
+        "aten::nonzero_numpy": {
+          "count": 8,
+          "cpu_self_us": 37.18399999999292
+        },
+        "aten::nonzero": {
+          "count": 72,
+          "cpu_self_us": 801.449000000071
+        },
+        "aten::addmm": {
+          "count": 32,
+          "cpu_self_us": 2097.5390000000207
+        },
+        "aten::multinomial": {
+          "count": 8,
+          "cpu_self_us": 490.17100000005394
+        },
+        "aten::_local_scalar_dense": {
+          "count": 79,
+          "cpu_self_us": 855.587999999947
+        },
+        "aten::is_nonzero": {
+          "count": 26,
+          "cpu_self_us": 55.10199999999077
+        },
+        "aten::index_copy": {
+          "count": 104,
+          "cpu_self_us": 3361.504000000099
+        },
+        "aten::bmm": {
+          "count": 48,
+          "cpu_self_us": 4347.298999999941
+        },
+        "autograd::engine::evaluate_function: BmmBackward0": {
+          "count": 16,
+          "cpu_self_us": 183.67199999994773
+        },
+        "BmmBackward0": {
+          "count": 16,
+          "cpu_self_us": 221.08700000008685
+        },
+        "autograd::engine::evaluate_function: AddmmBackward0": {
+          "count": 32,
+          "cpu_self_us": 511.0420000001177
+        },
+        "AddmmBackward0": {
+          "count": 32,
+          "cpu_self_us": 345.74599999995553
+        }
+      },
+      "kernel_launches": null,
+      "kernel_ms": null,
+      "trace": "CLM-S8-m2-trace.json",
+      "synthetic_data": true,
+      "fixture": false,
+      "trace_sha256": "0e2135ad40f05e7670badc4c38f8ce6b5d6f84b49056bda217f97e9629023a91",
+      "trace_bytes": 6220155,
+      "trace_storage": "local temporary artifact only; raw profiler trace is not committed"
+    },
+    {
+      "arm": "CLM-S16",
+      "microbatch": 2,
+      "p50_seconds": 0.6652010955000378,
+      "p90_seconds": 0.6963220440999066,
+      "step_seconds": [
+        0.7149182860000565,
+        0.6858403859998816,
+        0.6455076919999101,
+        0.6260426960000132,
+        0.6486891949998608,
+        0.6791310950000025,
+        0.6512710960000732,
+        0.6384503950000635,
+        0.69425579499989,
+        0.6901862950001032
+      ],
+      "peak_gpu_bytes": null,
+      "supported_training_gemm_flops": 1354813440,
+      "flops_scope": "one representative microbatch, supported GEMM forward/backward lower bound; not total accumulated-step FLOPs",
+      "profile_target_tokens": 128,
+      "operator_profile": {
+        "aten::mm": {
+          "count": 844,
+          "cpu_self_us": 47620.94199999928
+        },
+        "aten::nonzero_numpy": {
+          "count": 16,
+          "cpu_self_us": 62.400000000072396
+        },
+        "aten::nonzero": {
+          "count": 144,
+          "cpu_self_us": 1304.4979999999337
+        },
+        "aten::addmm": {
+          "count": 64,
+          "cpu_self_us": 3474.8030000002323
+        },
+        "aten::multinomial": {
+          "count": 16,
+          "cpu_self_us": 767.5830000000142
+        },
+        "aten::_local_scalar_dense": {
+          "count": 119,
+          "cpu_self_us": 1086.1280000000015
+        },
+        "aten::is_nonzero": {
+          "count": 50,
+          "cpu_self_us": 62.570000000040636
+        },
+        "aten::index_copy": {
+          "count": 208,
+          "cpu_self_us": 6005.170000000044
+        },
+        "aten::bmm": {
+          "count": 96,
+          "cpu_self_us": 8835.649000000136
+        },
+        "autograd::engine::evaluate_function: BmmBackward0": {
+          "count": 32,
+          "cpu_self_us": 301.13300000005984
+        },
+        "BmmBackward0": {
+          "count": 32,
+          "cpu_self_us": 340.281999999861
+        },
+        "autograd::engine::evaluate_function: AddmmBackward0": {
+          "count": 64,
+          "cpu_self_us": 1210.93899999946
+        },
+        "AddmmBackward0": {
+          "count": 64,
+          "cpu_self_us": 788.4020000000892
+        }
+      },
+      "kernel_launches": null,
+      "kernel_ms": null,
+      "trace": "CLM-S16-m2-trace.json",
+      "synthetic_data": true,
+      "fixture": false,
+      "trace_sha256": "188d2c62a1c15dc1496ae6f1c00f2db0fb8baf681b2c105c3669965f409033c4",
+      "trace_bytes": 11725900,
+      "trace_storage": "local temporary artifact only; raw profiler trace is not committed"
+    }
+  ],
+  "projected_training_seconds": 649.3103320999921,
+  "projected_total_seconds": null,
+  "projected_total_range_seconds": null,
+  "projection_scope": "two T4s; S16 vs S8 then M0; p90 step times +50% and 300s; excludes this pilot",
+  "end_to_end_seconds": 62.35611731400013,
+  "synthetic": true,
+  "engineering_fixture": false,
+  "within_target": null,
+  "scientific_decision": false,
+  "status": "CPU_ENGINEERING_ONLY"
+}
