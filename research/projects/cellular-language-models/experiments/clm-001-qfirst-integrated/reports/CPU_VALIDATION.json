@@ -1,0 +1,25 @@
+{
+  "experiment_id": "CLM-001-QFIRST",
+  "tested_source_commit": "da1ecda726a2118c39e5e797e8ad6359aa42188b",
+  "cpu_gate": {
+    "passed": 59,
+    "elapsed_seconds": 25.6,
+    "scope": "synthetic only"
+  },
+  "historical_regressions": {
+    "passed": 118,
+    "elapsed_seconds": 59.09,
+    "suites": [
+      "path_first_fast001",
+      "path_first_pd001"
+    ]
+  },
+  "ruff": "passed",
+  "notebook_cells": "compiled, outputs empty",
+  "historical_diff": "only new experiment, new tests and new CI; all historical files unchanged",
+  "ci_result": "not yet observed at evidence creation",
+  "gpu_used": false,
+  "real_assets_read": false,
+  "confirmation_read": false,
+  "scientific_decision": false
+}

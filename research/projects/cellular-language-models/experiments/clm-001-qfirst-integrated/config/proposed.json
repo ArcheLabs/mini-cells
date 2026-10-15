@@ -1,0 +1,131 @@
+{
+  "experiment_id": "CLM-001-QFIRST",
+  "status": "ENGINEERING_PROPOSED",
+  "arms": [
+    "QF-FULL",
+    "J0-FULL"
+  ],
+  "seed": 151001101,
+  "seed_namespace": "CLM-001-QFIRST/development/v1",
+  "model": {
+    "width": 128,
+    "heads": 4,
+    "accepted_cells": 6,
+    "reserve_slots": 1,
+    "cell_hidden": 248,
+    "vocab_size": 4096,
+    "max_sequence_length": 64,
+    "budget": 16,
+    "minimum_actions": 1,
+    "alpha": 0.125,
+    "memory_mode": "static_input_readonly",
+    "router_hidden": 64,
+    "step_width": 16,
+    "edge_rank": 16
+  },
+  "policy": {
+    "epsilon": 0.15,
+    "temperature": 1.0,
+    "lambda_cost": null,
+    "lambda_candidate": 0.01,
+    "suffix_kind": "epsilon_boltzmann_frozen_q",
+    "cost_unit": "nonstop_calls/B",
+    "q_convention": "lower_is_better"
+  },
+  "training": {
+    "steps": 500,
+    "effective_batch": 8,
+    "microbatch": 1,
+    "sequence_length": 64,
+    "target_tokens": 256000,
+    "learning_rate": 0.0003,
+    "connection_learning_rate": 0.0003,
+    "warmup_steps": 50,
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "critic_coefficient": 0.5,
+    "entropy_coefficient": 0.001,
+    "precision": "float32",
+    "checkpoint_interval": 50,
+    "evaluation_interval": 100
+  },
+  "oracle": {
+    "probes_per_step": 2,
+    "extra_actions": 2,
+    "suffix_samples": 2,
+    "cross_version_replay": false,
+    "label_loss": "huber_inverse_conditional_inclusion_normalized",
+    "pairwise_loss": false
+  },
+  "shadow": {
+    "max_cell_births": 1,
+    "max_connection_path_groups": 1,
+    "cell_proposal_step": 100,
+    "connection_path_step": 200,
+    "admission_step": 400,
+    "private_train_steps": 2,
+    "minimum_admission_stories": 32,
+    "min_cost_aware_improvement": null,
+    "nll_regression_tolerance": null,
+    "bootstrap_replicates": 1000,
+    "connection_prior_delta": -0.01,
+    "path_plan": [
+      0,
+      0,
+      7,
+      8
+    ]
+  },
+  "data": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "split": "train",
+    "train_range": [
+      0,
+      8192
+    ],
+    "calibration_range": [
+      50000,
+      50128
+    ],
+    "admission_range": [
+      50128,
+      50256
+    ],
+    "development_range": [
+      50256,
+      50512
+    ],
+    "reserved_boundary": 60000,
+    "tokenizer_vocab": 4096
+  },
+  "evaluation": {
+    "calibration_windows": 16,
+    "admission_windows": 32,
+    "development_windows": 128,
+    "oracle_states": 8,
+    "oracle_samples": 4,
+    "seed": 151001102,
+    "bootstrap_replicates": 1000
+  },
+  "gates": {
+    "oracle_cpu_pass": false,
+    "gpu_pilot_approved": false,
+    "gpu_pilot_pass": false,
+    "portable_pass": false,
+    "development_approved": false,
+    "confirmation": false,
+    "thresholds_frozen": false
+  },
+  "thresholds": {
+    "rank_spearman_lower95": null,
+    "regret_improvement_lower95": null,
+    "internal_utility_delta_upper95": null,
+    "stop_error_rate_max": null
+  },
+  "publication": {
+    "enabled": true,
+    "secret_label": "GITHUB_TOKEN",
+    "metadata_only": true
+  }
+}
