@@ -1,0 +1,11 @@
+{
+  "experiment_id": "CLM-001-QFIRST",
+  "source_commit": "8b7cc5344d0b35f58681286101e93e39ff1fc41d",
+  "config_sha256": "5052e017e4b69a24317b1d225d19af545f7eec3faa4d09f3812ef51a15f58264",
+  "status": "ENGINEERING_READY",
+  "test_output": "........................................................................ [ 97%]\n..                                                                       [100%]\n=============================== warnings summary ===============================\ntests/research/clm001_qfirst/test_oracle_contract.py::test_continuous_finite_difference\n  /kaggle/working/clm001-qfirst-code/tests/research/clm001_qfirst/test_oracle_contract.py:112: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.\n  Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)\n    original = float(p[index])\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n74 passed, 1 warning in 20.56s\n",
+  "scope": "SYNTHETIC_CPU_ONLY",
+  "real_asset_hashes_frozen": false,
+  "gpu_pilot_completed": false,
+  "scientific_decision": false
+}
