@@ -98,6 +98,8 @@ def restore(folder, trainer, data_rng, run_identity):
     path = folder / name
     if path.is_symlink() or file_sha256(path) != latest["sha256"]:
         raise ValueError("checkpoint checksum differs")
+    # RNG byte tensors must remain on CPU even for CUDA models. The existing
+    # state_dict loaders copy model/optimizer tensors onto their target devices.
     step, extra = pd_restore(
         path,
         trainer.model,
@@ -105,7 +107,7 @@ def restore(folder, trainer, data_rng, run_identity):
         run_identity,
         data_rng,
         list(trainer.rng.values()),
-        device=next(trainer.model.parameters()).device,
+        device="cpu",
     )
     trainer.step = step
     trainer.model.registry = Registry(**extra["registry"])

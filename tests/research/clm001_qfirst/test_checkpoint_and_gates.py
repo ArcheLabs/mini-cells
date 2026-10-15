@@ -121,3 +121,49 @@ def test_private_updates_only_candidate_and_connection(config):
     for name, value in c.model.state_dict().items():
         if not name.startswith(("cells.2.", "controller.")):
             assert torch.equal(value, before[name])
+
+
+def test_cuda_target_restore_keeps_global_and_path_rng_on_cpu(config, tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    from clm001 import checkpoint
+
+    trainer = Trainer(Model(config, "QF-FULL"))
+    trainer.update([batch()])
+    data_rng = np.random.default_rng(12)
+    nursery = Nursery()
+    identity = {"experiment_id": "CLM-001-QFIRST", "case": "cuda-rng-regression"}
+    # Simulate two CUDA generators without initializing a GPU or launching any kernels.
+    cuda_states = [torch.Generator().manual_seed(seed).get_state() for seed in (101, 202)]
+    restored_cuda = []
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "get_rng_state_all", lambda: [s.clone() for s in cuda_states])
+
+    def set_cuda(states):
+        assert len(states) == 2
+        assert all(s.device.type == "cpu" and s.dtype == torch.uint8 for s in states)
+        restored_cuda.append([s.clone() for s in states])
+
+    monkeypatch.setattr(torch.cuda, "set_rng_state_all", set_cuda)
+    checkpoint.save(tmp_path, trainer, nursery, data_rng, identity)
+    original_load = torch.load
+    locations = []
+
+    def checked_load(*args, **kwargs):
+        locations.append(kwargs.get("map_location"))
+        assert kwargs.get("map_location") == "cpu", (
+            "mapping the whole payload to CUDA also relocates RNG byte states"
+        )
+        return original_load(*args, **kwargs)
+
+    monkeypatch.setattr(torch, "load", checked_load)
+    # Advertise a CUDA target at the adapter boundary; model/optimizer storage stays
+    # on CPU in this regression test, so the test is suitable for CPU-only CI.
+    monkeypatch.setattr(
+        trainer.model, "parameters", lambda: iter([SimpleNamespace(device=torch.device("cuda:0"))])
+    )
+    checkpoint.restore(tmp_path, trainer, data_rng, identity)
+    assert locations == ["cpu"] and len(restored_cuda) == 2
+    assert all(
+        torch.equal(actual, expected) for actual, expected in zip(restored_cuda[0], cuda_states)
+    )
+    assert all(g.get_state().device.type == "cpu" for g in trainer.rng.values())
