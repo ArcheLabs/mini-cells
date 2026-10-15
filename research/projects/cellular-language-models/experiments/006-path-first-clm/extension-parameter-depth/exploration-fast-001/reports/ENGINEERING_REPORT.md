@@ -1,8 +1,8 @@
 # FAST-001 engineering delivery
 
-Implementation commit: `0462816af47c82359f66e78830f106b22477c3b4`. CPU only; no GPU training, no confirmation data.
+Runtime implementation commit: `51e57b624ecd17fb3c1ba0c81998ce4ce4004292`. CPU timings were measured at `0462816af47c82359f66e78830f106b22477c3b4`; timed model/config/engine files are unchanged. Subsequent fixes only bind explicit source-file checksums and include worker startup in wall time. CPU only; no GPU training, no confirmation data.
 
-Tests: 31 FAST + 83 PD regression = 114 passed; no skips.
+Tests: 32 FAST + 83 PD regression = 115 passed; no skips.
 
 | Arm | Resident parameters | CLM/MoE |
 |---|---:|---:|

@@ -97,3 +97,9 @@ Interventions are symmetric for S8/S16: edge removal/shuffle, same-multiset perm
 context-zero replay and valid 4/8/12/16 early readouts. Self-loop replacement examines at most 8 eligible tokens/window
 and reports eligible/evaluated counts; its full-window reexecution cost is not a causal per-token compute estimate.
 All scientific decisions remain false. No fourth training arm, STOP, J1, AMP or longer budget is enabled.
+
+Advanced `--source-file` preparation requires its expected SHA256 in the reviewed data config, so an arbitrary local
+Parquet cannot be labeled as the pinned Hub shard. The default Hub path records the real checksum automatically.
+`wall_seconds` includes worker initialization and initial evaluation; `optimizer_seconds` includes scheduled diagnostic
+steps but excludes evaluation/checkpoint IO. Matrix `execution-timing.json` and Notebook `notebook-timing.json` record
+complete end-to-end stage time separately.
