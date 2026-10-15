@@ -411,6 +411,14 @@ def run(c, args):
         raise FileExistsError("choose a fresh performance evidence directory")
     output.mkdir(parents=True)
     rows = []
+    def persist(status):
+        result = {"baseline_sha": BASELINE, "status": status,
+                  "scientific_decision": False, "READY_FOR_RETRAIN": "NO",
+                  "rows": rows, "summary": [], "partial": True}
+        write(output / "ablation.json", result)
+        write(output / "baseline.json", {"source_sha": BASELINE,
+              "rows": [r for r in rows if r["case"] == "B0"]})
+    persist("PERFORMANCE_RUNNING")
     for arm in ["M0", "P50-F16"] if args.all_arms else [args.arm]:
         for case in args.cases:
             for repeat in range(args.repeats):
@@ -442,16 +450,22 @@ def run(c, args):
                 ]
                 if args.perf_fixture:
                     command.append("--fixture")
-                print("[Performance] " + arm + " " + case + " repeat " + str(repeat + 1), flush=True)
+                print("[Performance] " + arm + " " + case + " repeat " + str(repeat + 1)
+                      + " (completed " + str(len(rows)) + "/"
+                      + str((2 if args.all_arms else 1) * len(args.cases) * args.repeats)
+                      + "; " + str(args.warmup + args.steps) + " warmup/measured steps this round)",
+                      flush=True)
                 with (scratch / "worker.log").open("w") as log:
-                    subprocess.run(
-                        command,
-                        check=True,
-                        stdout=log,
-                        stderr=subprocess.STDOUT,
-                        env={**os.environ, "OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"},
-                    )
+                    try:
+                        subprocess.run(
+                            command, check=True, stdout=log, stderr=subprocess.STDOUT,
+                            env={**os.environ, "OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"},
+                        )
+                    except BaseException:
+                        persist("PERFORMANCE_FAILED")
+                        raise
                 rows.append(json.loads((scratch / "result.json").read_text()))
+                persist("PERFORMANCE_RUNNING")
     summary = []
     for arm in sorted({r["arm"] for r in rows}):
         for case in args.cases:

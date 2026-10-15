@@ -281,10 +281,6 @@ def auto_run(c, p, args):
 
         c = import_bundle(args.restore_from, args.output, source)
         p = c["execution"]["protocol"]
-    from .performance import retrain_review
-
-    if c["training"]["steps"] > 100:
-        retrain_review(c, source)
     output = Path(args.output)
     state = {}
 
@@ -436,7 +432,7 @@ def main():
     parser.add_argument("--config")
     parser.add_argument("--arm", choices=ARMS, default="P50-A32")
     parser.add_argument("--all-arms", action="store_true")
-    parser.add_argument("--arms", nargs="+", choices=ARMS, default=["M0", "P50-F16", "P50-F32", "P50-A32"])
+    parser.add_argument("--arms", nargs="+", choices=ARMS, default=["M0", "P50-F16"])
     parser.add_argument("--devices", nargs="+", default=["cpu"])
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--source-commit")
@@ -454,11 +450,11 @@ def main():
     parser.add_argument("--intervention", default="stop_early")
     parser.add_argument("--intervention-step", type=int, default=1)
     parser.add_argument("--baseline-root", default="/tmp/minicells-pd001-baseline")
-    parser.add_argument("--steps", type=int, default=20)
-    parser.add_argument("--warmup", type=int, default=5)
-    parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--steps", type=int, default=5)
+    parser.add_argument("--warmup", type=int, default=1)
+    parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument(
-        "--cases", nargs="+", default=["B0", "B1", "B2", "B3", "B4", "B5", "B6-m2", "B6-m4", "LIGHT"]
+        "--cases", nargs="+", default=["B0", "LIGHT"]
     )
     parser.add_argument("--perf-fixture", action="store_true")
     parser.add_argument("--allow-gpu-microbenchmark", action="store_true")

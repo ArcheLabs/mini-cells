@@ -133,3 +133,47 @@ and host scheduling remain in the executor. This iteration intentionally does no
 introduce all-Cell evaluation, compile it, change precision or adopt larger microbatches. Their
 remaining T4 cost must be measured before any segmented-dispatch redesign. Original model scale,
 path-learning variance and language quality are unchanged by engineering speedups.
+
+## Resource planning through workload (2026-10-15)
+
+The user's two-hour target is a planning constraint, not authorization to kill running work.
+The mistaken session supervisor, hard audit cap and inherited time-based training pause have
+been removed. Both active Notebooks let their subprocesses finish normally. Existing periodic
+checkpoints and explicitly requested checkpoint rehearsals remain; no new runtime timer is set.
+
+Default performance audit: M0 and P50-F16, B0 vs LIGHT, one warmup, five measured steps,
+one repeat: four rounds. This reduces warmup/measured steps from 1050 to 24 (97.7%).
+Including isolated profiles, LIGHT diagnostic steps and the default two-step checkpoint rehearsal,
+the first session executes 32 optimizer steps, plus initialization and evaluation. Intermediate
+ablations and repeated sweeps are opt-in, not automatically scheduled. Identical scientific
+model geometry, objectives, per-step effective batch and precision are retained. Full retraining
+is still gated and cannot silently substitute a smaller training budget.
+
+The observed supplied T4 log (old P50 B0 roughly 440 seconds per round with 25 steps plus
+profiling; M0 roughly 65 seconds) supports planning approximately 5–15 minutes for the reduced
+pilot including setup. This extrapolation is not an actual new-GPU measurement or a guarantee.
+Performance comparison stays sequential on the same GPU to avoid interference. Results are
+saved after each completed round, even if a later round fails. A two-hour scientific training
+plan must be checked against measured repaired steps/second before budget review/approval;
+if it does not fit, improve implementation or approve a separate versioned development budget.
+Never truncate a registered experiment to claim it met the original token budget.
+
+Reimport the current Notebook to obtain the new default. Already running cloud code is unchanged.
+
+## User-authorized direct development launch (2026-10-15)
+
+The user accepted the measured runtime and requested direct training without a performance
+evidence/persistence prerequisite. Automatic development now skips that engineering review,
+while retaining CPU functional preflight, data integrity, source identity, GitHub write check,
+checkpointing and result return. Default arms are M0 and P50-F16, one independent worker per
+GPU, running concurrently. No hard time cap or automatic time pause is enabled. Model geometry,
+objectives, precision, effective batch and 5000-step/10M-token budget are unchanged.
+
+Formal registration and independent-confirmation restrictions remain in their existing separate
+execution path. Development does not imply a confirmed hypothesis. The prior performance pilot
+is optional diagnostic work; no new cross-session rehearsal is required before development.
+
+Single-arm P50-F16 remains single-device. A second copy would be a different independent run,
+not faster progress through this run. Implementing DDP requires consistent microbatch/path RNG,
+global gradient averaging, distributed checkpoint restoration and numeric parity tests; it has
+not been implemented or claimed here. M0 finishing does not redistribute the ongoing CLM worker.
