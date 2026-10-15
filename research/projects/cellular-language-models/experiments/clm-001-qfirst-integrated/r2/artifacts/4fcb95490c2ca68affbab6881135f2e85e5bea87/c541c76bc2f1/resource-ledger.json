@@ -1,0 +1,32 @@
+{
+  "experiment_id": "CLM-001-R2",
+  "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+  "config_hash": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+  "scope": "DEVELOPMENT_AGGREGATE",
+  "complete": true,
+  "arm": "PAIRED",
+  "last_committed_step": {
+    "QF-R2": 500,
+    "J0-R2": 500
+  },
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "QF-R2": {
+    "live_training_tokens": 256000,
+    "counterfactual_operator_calls": 96564,
+    "shadow_private_training_tokens": 3072,
+    "oracle_seconds": 216.78341324700125,
+    "elapsed_seconds_current_attempt": 1118.005701857,
+    "committed_update_seconds_all_attempts": 941.4088066910018,
+    "trainable_parameters": 1070819
+  },
+  "J0-R2": {
+    "live_training_tokens": 256000,
+    "counterfactual_operator_calls": 98924,
+    "shadow_private_training_tokens": 3072,
+    "oracle_seconds": 217.3479734589963,
+    "elapsed_seconds_current_attempt": 1233.217752097,
+    "committed_update_seconds_all_attempts": 1051.591529289001,
+    "trainable_parameters": 1075492
+  }
+}

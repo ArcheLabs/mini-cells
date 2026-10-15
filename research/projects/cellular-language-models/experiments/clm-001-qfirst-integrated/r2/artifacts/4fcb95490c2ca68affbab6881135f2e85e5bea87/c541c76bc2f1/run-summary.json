@@ -1,0 +1,776 @@
+{
+  "experiment_id": "CLM-001-R2",
+  "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+  "config_hash": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+  "scope": "DEVELOPMENT_AGGREGATE",
+  "complete": true,
+  "arm": "PAIRED",
+  "last_committed_step": {
+    "QF-R2": 500,
+    "J0-R2": 500
+  },
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "training_status": "COMPLETE",
+  "gpu_pilot": {
+    "passed": true,
+    "arms": {
+      "QF-R2": {
+        "status": "GPU_PILOT_PASS",
+        "arm": "QF-R2",
+        "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+        "config_hash": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+        "asset_sha256": "99f8240f4338568400a0d6d66c68c2cdb540ac6cbdde3195a7655406d8a1800a",
+        "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+        "p50_step_seconds": 1.9920705690000204,
+        "p90_step_seconds": 3.463197118599942,
+        "projected_arm_seconds": 3949.423804778334,
+        "projection_includes": "500 updates + measured Shadow + conservative evaluation allowance; excludes initial downloads/publication",
+        "shadow_candidates": [
+          {
+            "kind": "cell",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "connection",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "path",
+            "state": "PROBATION",
+            "backward_pass": true
+          }
+        ],
+        "local_restore_pass": true,
+        "private_failure_isolation_pass": true,
+        "fault_injection": [
+          {
+            "kind": "cell",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "cells.6.down.weight",
+              "cells.6.up.weight",
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "connection",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "path",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          }
+        ],
+        "accepted_and_oracle_fail_closed": true,
+        "peak_gpu_bytes": 107154944,
+        "device_name": "Tesla T4",
+        "scientific_decision": false,
+        "training_status": "NOT_TRAINED"
+      },
+      "J0-R2": {
+        "status": "GPU_PILOT_PASS",
+        "arm": "J0-R2",
+        "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+        "config_hash": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+        "asset_sha256": "99f8240f4338568400a0d6d66c68c2cdb540ac6cbdde3195a7655406d8a1800a",
+        "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+        "p50_step_seconds": 2.2049123959999406,
+        "p90_step_seconds": 3.4625140240000065,
+        "projected_arm_seconds": 3950.165771970007,
+        "projection_includes": "500 updates + measured Shadow + conservative evaluation allowance; excludes initial downloads/publication",
+        "shadow_candidates": [
+          {
+            "kind": "cell",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "connection",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "path",
+            "state": "PROBATION",
+            "backward_pass": true
+          }
+        ],
+        "local_restore_pass": true,
+        "private_failure_isolation_pass": true,
+        "fault_injection": [
+          {
+            "kind": "cell",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "cells.6.down.weight",
+              "cells.6.up.weight",
+              "controller.critic.0.bias",
+              "controller.critic.0.weight",
+              "controller.critic.2.bias",
+              "controller.critic.2.weight",
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "connection",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.critic.0.bias",
+              "controller.critic.0.weight",
+              "controller.critic.2.bias",
+              "controller.critic.2.weight",
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "path",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.critic.0.bias",
+              "controller.critic.0.weight",
+              "controller.critic.2.bias",
+              "controller.critic.2.weight"
+            ],
+            "accepted_witness_ok": true
+          }
+        ],
+        "accepted_and_oracle_fail_closed": true,
+        "peak_gpu_bytes": 108879872,
+        "device_name": "Tesla T4",
+        "scientific_decision": false,
+        "training_status": "NOT_TRAINED"
+      }
+    },
+    "failures": [],
+    "scientific_decision": false,
+    "training_status": "NOT_TRAINED"
+  },
+  "arms": {
+    "QF-R2": {
+      "experiment_id": "CLM-001-R2",
+      "arm": "QF-R2",
+      "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+      "config_hash": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+      "last_committed_step": 500,
+      "scope": "DEVELOPMENT_AGGREGATE",
+      "complete": true,
+      "training_status": "COMPLETE",
+      "evaluation_status": "COMPLETE",
+      "progress": {
+        "identity": {
+          "experiment_id": "CLM-001-R2",
+          "arm": "QF-R2",
+          "seed": 151001201,
+          "source_commit": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+          "config_sha256": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+          "assets_manifest_sha256": "99f8240f4338568400a0d6d66c68c2cdb540ac6cbdde3195a7655406d8a1800a",
+          "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+          "role": "development",
+          "protocol_sha256": "ee962578e39e4c8335862fa331c902cbb321817fe791b40098d07fe4720474e5"
+        },
+        "last_committed_step": 500,
+        "live_training_tokens": 256000,
+        "last_update": {
+          "event": "train_step",
+          "step": 500,
+          "arm": "QF-R2",
+          "live_ce": 5.032193958759308,
+          "path_cost": 0.4139404296875,
+          "actual_stop_rate": 0.90625,
+          "forced_end_rate": 0.09375,
+          "q_loss": 0.0003894445253536105,
+          "loss_rel": 0.0003894445253536105,
+          "loss_rank": 0.6808791756629944,
+          "actor_loss": 0.0,
+          "critic_loss": 0.0,
+          "ctx_reads": 466,
+          "first_context_depth_counts": {
+            "0": 74,
+            "1": 52,
+            "2": 29,
+            "3": 33,
+            "4": 22,
+            "5": 25,
+            "6": 14,
+            "7": 8,
+            "8": 5,
+            "9": 6,
+            "10": 6,
+            "11": 4,
+            "12": 1,
+            "13": 1,
+            "14": 1,
+            "15": 3
+          },
+          "no_context_token_fraction": 0.4453125,
+          "cell_visits": {
+            "0": 483,
+            "1": 482,
+            "2": 491,
+            "3": 467,
+            "4": 488,
+            "5": 514,
+            "6": 0
+          },
+          "parameters_without_gradient": [
+            "cells.6.up.weight",
+            "cells.6.down.weight",
+            "controller.critic.0.weight",
+            "controller.critic.0.bias",
+            "controller.critic.2.weight",
+            "controller.critic.2.bias"
+          ],
+          "operator_calls": 3391,
+          "oracle_states": 2,
+          "candidate_labels": 5,
+          "counterfactual_operator_calls": 158,
+          "counterfactual_token_steps": 158,
+          "snapshot_sha": "d6474752ed57539dc7ebf92de2873da62dcc2bc051785885ddb62557a66bc578",
+          "policy_sha": "a5aa0c1b4a45782b548d7ff9ce018ea2c0c15fee28d56329baa0cfab24525ddb",
+          "epsilon": 0.15,
+          "live_tokens": 512,
+          "train_token_count": 256000,
+          "probe_bucket_population": {
+            "0": 1865,
+            "1": 1110,
+            "2": 579,
+            "3": 301
+          },
+          "probe_buckets_selected": [
+            0,
+            2
+          ],
+          "probe_state_measure": "alternating_stratified_visited_not_natural_event_mean",
+          "probe_conditional_inclusion": {
+            "0": 0.0005361930294906167,
+            "2": 0.0017271157167530224
+          },
+          "coverage_missing": [],
+          "oracle_sampling": [
+            {
+              "operator_calls": 128,
+              "samples": 8,
+              "budget_truncated": false,
+              "stop_loss": 5.442238807678223
+            },
+            {
+              "operator_calls": 30,
+              "samples": 4,
+              "budget_truncated": false,
+              "stop_loss": 1.1554157733917236
+            }
+          ],
+          "live_seconds": 1.333112847999928,
+          "oracle_seconds": 0.37052388100005373,
+          "snapshot_seconds": 0.022007147000067562,
+          "total_seconds": 1.7479415320001408,
+          "timer_scope": "host wall; CUDA synchronization only in Pilot",
+          "grad_norm_continuous_preclip": 1.316097378730774,
+          "grad_norm_continuous_postclip": 0.9999992847442627,
+          "grad_norm_connection_preclip": 0.054975319653749466,
+          "grad_norm_connection_postclip": 0.054975319653749466,
+          "q_mae": 0.02204452760517599,
+          "q_target_delta_mean": 0.034900174856185816,
+          "q_pairwise_accuracy": 0.75,
+          "rank_pairs_valid": 8,
+          "rank_pairs_total": 9,
+          "rank_estimator": "biased_auxiliary_sampled_pairs"
+        },
+        "counterfactual_operator_calls": 96564,
+        "committed_update_seconds": 941.4088066910018
+      },
+      "last_saved_development_quality": {
+        "mean_nll": 4.733928356319666,
+        "ppl": 113.7415030204515,
+        "actual_stop_rate": 0.7630615234375,
+        "forced_end_rate": 0.2369384765625,
+        "self_loop_rate": 0.00294264868718431,
+        "context_call_fraction": 1.34918172128604e-05,
+        "paired_identity": "32cc9f513521c1c7bbfdb4e91a0306a69378f8fbb082c39625607e55b21e6c2f",
+        "role": "development",
+        "policy": "greedy",
+        "path_count": 8192
+      },
+      "quality": {
+        "greedy": {
+          "mean_nll": 4.733928356319666,
+          "ppl": 113.7415030204515,
+          "actual_stop_rate": 0.7630615234375,
+          "forced_end_rate": 0.2369384765625,
+          "self_loop_rate": 0.00294264868718431,
+          "context_call_fraction": 1.34918172128604e-05,
+          "paired_identity": "32cc9f513521c1c7bbfdb4e91a0306a69378f8fbb082c39625607e55b21e6c2f",
+          "role": "development",
+          "policy": "greedy",
+          "path_count": 8192
+        },
+        "sampled": {
+          "mean_nll": 4.712812000885606,
+          "ppl": 111.36487815363319,
+          "actual_stop_rate": 0.867431640625,
+          "forced_end_rate": 0.132568359375,
+          "self_loop_rate": 0.12341713888263814,
+          "context_call_fraction": 0.14065703022339027,
+          "paired_identity": "e4cb7b62a6de1f94ed441dbf934cea0920fa1662944d46dfd5e605ee1ffdcf9c",
+          "role": "development",
+          "policy": "sampled",
+          "path_count": 8192
+        },
+        "uniform": {
+          "mean_nll": 4.713545931503177,
+          "ppl": 111.44664224834823,
+          "actual_stop_rate": 0.8634033203125,
+          "forced_end_rate": 0.1365966796875,
+          "self_loop_rate": 0.1232949224316951,
+          "context_call_fraction": 0.14226138544756586,
+          "paired_identity": "9f2b6d91c6c299cb8d8c7f552ac4e192bb011a47d15f25fc9891f585208e6c65",
+          "role": "development",
+          "policy": "uniform",
+          "path_count": 8192
+        },
+        "constant": {
+          "mean_nll": 4.818279957398772,
+          "ppl": 123.7520488157691,
+          "actual_stop_rate": 0.0,
+          "forced_end_rate": 1.0,
+          "self_loop_rate": 1.0,
+          "context_call_fraction": 0.0,
+          "paired_identity": "68f01c1ecf0e827d5e3eac5954227df700f2429ba21c84c26d353e7a91bd1483",
+          "role": "development",
+          "policy": "constant",
+          "path_count": 8192
+        }
+      },
+      "shadow_status": "ALL_REJECTED",
+      "inference_cost_profile": {
+        "parameter_inventory": {
+          "total_parameters": 1075492,
+          "by_module_group": {
+            "shared": 615168,
+            "cell_pool": 444416,
+            "connection": 15908
+          },
+          "reserved_parameters": 63488,
+          "accepted_initial_resident_parameters": 1012004,
+          "includes_critic_and_reserved_slot": true,
+          "dtype": "float32",
+          "resident_parameter_bytes": 4301968
+        },
+        "unique_touched_parameters_window": 915607,
+        "executed_parameter_work_per_output_token": 1332954.5625,
+        "module_parameter_work": {
+          "embedding": 8192,
+          "position": 8192,
+          "memory.norm": 16384,
+          "memory.key": 1048576,
+          "memory.value": 1048576,
+          "init": 1048576,
+          "controller.scorer.0": 6509568,
+          "controller.scorer.2": 381420,
+          "controller.source": 10432,
+          "controller.critic.0": 3025280,
+          "controller.critic.2": 21516,
+          "controller.step_rows": 10432,
+          "controller.edge_bias_rows": 5868,
+          "controller.target_table": 93888,
+          "norm": 154624,
+          "cells.4.up": 10380288,
+          "cells.4.down": 10380288,
+          "cells.1.up": 8602624,
+          "cells.1.down": 8602624,
+          "cells.0.up": 63488,
+          "cells.0.down": 63488,
+          "cells.5.up": 95232,
+          "cells.5.down": 95232,
+          "cells.2.up": 31744,
+          "cells.2.down": 31744,
+          "final": 16384,
+          "tied_output_projection": 33554432
+        },
+        "scope": "actual executed leaf-module weights plus functional tied head; embeddings charge selected rows; includes critic currently executed",
+        "p50_forward_ms": 56.26716300002954,
+        "repeats": 3,
+        "device": "cuda:0",
+        "observed_gemm_flops": 170018944,
+        "observed_gemm_by_operator": {
+          "aten.mm.default": 150281600,
+          "aten.addmm.default": 19737344
+        },
+        "flops_scope": "offline executed mm/addmm/bmm lower bound, includes tied head and Context QK/AV, excludes non-GEMM",
+        "peak_gpu_bytes": 26081280,
+        "actual_stop_rate": 0.75,
+        "forced_end_rate": 0.25,
+        "decode_p50_ms": 51.44666799992592,
+        "decode_scope": "one cached greedy step, batch=1, prefix=16",
+        "phase": "SERIAL_AFTER_ALL_TRAIN_WORKERS_EXIT",
+        "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87"
+      },
+      "scientific_decision": false,
+      "formal_confirmation": false
+    },
+    "J0-R2": {
+      "experiment_id": "CLM-001-R2",
+      "arm": "J0-R2",
+      "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+      "config_hash": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+      "last_committed_step": 500,
+      "scope": "DEVELOPMENT_AGGREGATE",
+      "complete": true,
+      "training_status": "COMPLETE",
+      "evaluation_status": "COMPLETE",
+      "progress": {
+        "identity": {
+          "experiment_id": "CLM-001-R2",
+          "arm": "J0-R2",
+          "seed": 151001201,
+          "source_commit": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+          "config_sha256": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+          "assets_manifest_sha256": "99f8240f4338568400a0d6d66c68c2cdb540ac6cbdde3195a7655406d8a1800a",
+          "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+          "role": "development",
+          "protocol_sha256": "ee962578e39e4c8335862fa331c902cbb321817fe791b40098d07fe4720474e5"
+        },
+        "last_committed_step": 500,
+        "live_training_tokens": 256000,
+        "last_update": {
+          "event": "train_step",
+          "step": 500,
+          "arm": "J0-R2",
+          "live_ce": 5.040272533893585,
+          "path_cost": 0.4296875,
+          "actual_stop_rate": 0.892578125,
+          "forced_end_rate": 0.107421875,
+          "q_loss": 0.0,
+          "loss_rel": 0.0,
+          "loss_rank": 0.0,
+          "actor_loss": -31.457285404205322,
+          "critic_loss": 13.791225671768188,
+          "ctx_reads": 513,
+          "first_context_depth_counts": {
+            "0": 83,
+            "1": 55,
+            "2": 30,
+            "3": 28,
+            "4": 24,
+            "5": 26,
+            "6": 14,
+            "7": 12,
+            "8": 8,
+            "9": 3,
+            "10": 7,
+            "11": 4,
+            "12": 1,
+            "13": 1,
+            "14": 1,
+            "15": 1
+          },
+          "no_context_token_fraction": 0.41796875,
+          "cell_visits": {
+            "0": 531,
+            "1": 487,
+            "2": 510,
+            "3": 476,
+            "4": 495,
+            "5": 508,
+            "6": 0
+          },
+          "parameters_without_gradient": [
+            "cells.6.up.weight",
+            "cells.6.down.weight"
+          ],
+          "operator_calls": 3520,
+          "oracle_states": 2,
+          "candidate_labels": 6,
+          "counterfactual_operator_calls": 183,
+          "counterfactual_token_steps": 183,
+          "snapshot_sha": "1d496882e339600317671dd1f697281585dc997c434be679bf9195143eab2566",
+          "policy_sha": "b0683b27d447d77aab02dcbdcd505d777fff4c7bc6b849aec902f020ea794fc7",
+          "epsilon": 0.15,
+          "live_tokens": 512,
+          "train_token_count": 256000,
+          "probe_bucket_population": {
+            "0": 1874,
+            "1": 1145,
+            "2": 619,
+            "3": 339
+          },
+          "probe_buckets_selected": [
+            0,
+            2
+          ],
+          "probe_state_measure": "alternating_stratified_visited_not_natural_event_mean",
+          "probe_conditional_inclusion": {
+            "0": 0.0005336179295624333,
+            "2": 0.0016155088852988692
+          },
+          "coverage_missing": [],
+          "oracle_sampling": [
+            {
+              "operator_calls": 141,
+              "samples": 8,
+              "budget_truncated": false,
+              "stop_loss": 5.900321006774902
+            },
+            {
+              "operator_calls": 42,
+              "samples": 4,
+              "budget_truncated": false,
+              "stop_loss": 7.184176445007324
+            }
+          ],
+          "live_seconds": 1.602282275999869,
+          "oracle_seconds": 0.4034422900001573,
+          "snapshot_seconds": 0.02247393400011788,
+          "total_seconds": 2.034855787999959,
+          "timer_scope": "host wall; CUDA synchronization only in Pilot",
+          "grad_norm_continuous_preclip": 1.316626787185669,
+          "grad_norm_continuous_postclip": 0.9999992847442627,
+          "grad_norm_connection_preclip": 5.4307146072387695,
+          "grad_norm_connection_postclip": 0.9999997615814209,
+          "rank_pairs_valid": 0,
+          "rank_pairs_total": 0
+        },
+        "counterfactual_operator_calls": 98924,
+        "committed_update_seconds": 1051.591529289001
+      },
+      "last_saved_development_quality": {
+        "mean_nll": 4.780971450731158,
+        "ppl": 119.22011027132362,
+        "actual_stop_rate": 0.0,
+        "forced_end_rate": 1.0,
+        "self_loop_rate": 0.8632893880208333,
+        "context_call_fraction": 0.0521087646484375,
+        "paired_identity": "32cc9f513521c1c7bbfdb4e91a0306a69378f8fbb082c39625607e55b21e6c2f",
+        "role": "development",
+        "policy": "greedy",
+        "path_count": 8192
+      },
+      "quality": {
+        "greedy": {
+          "mean_nll": 4.780971450731158,
+          "ppl": 119.22011027132362,
+          "actual_stop_rate": 0.0,
+          "forced_end_rate": 1.0,
+          "self_loop_rate": 0.8632893880208333,
+          "context_call_fraction": 0.0521087646484375,
+          "paired_identity": "32cc9f513521c1c7bbfdb4e91a0306a69378f8fbb082c39625607e55b21e6c2f",
+          "role": "development",
+          "policy": "greedy",
+          "path_count": 8192
+        },
+        "sampled": {
+          "mean_nll": 4.719746872782707,
+          "ppl": 112.13986342333962,
+          "actual_stop_rate": 0.8511962890625,
+          "forced_end_rate": 0.1488037109375,
+          "self_loop_rate": 0.12221874020683171,
+          "context_call_fraction": 0.1460640021604105,
+          "paired_identity": "e4cb7b62a6de1f94ed441dbf934cea0920fa1662944d46dfd5e605ee1ffdcf9c",
+          "role": "development",
+          "policy": "sampled",
+          "path_count": 8192
+        },
+        "uniform": {
+          "mean_nll": 4.719684200361371,
+          "ppl": 112.13283556679926,
+          "actual_stop_rate": 0.8634033203125,
+          "forced_end_rate": 0.1365966796875,
+          "self_loop_rate": 0.1232949224316951,
+          "context_call_fraction": 0.14226138544756586,
+          "paired_identity": "9f2b6d91c6c299cb8d8c7f552ac4e192bb011a47d15f25fc9891f585208e6c65",
+          "role": "development",
+          "policy": "uniform",
+          "path_count": 8192
+        },
+        "constant": {
+          "mean_nll": 4.828548301011324,
+          "ppl": 125.02932390265508,
+          "actual_stop_rate": 0.0,
+          "forced_end_rate": 1.0,
+          "self_loop_rate": 1.0,
+          "context_call_fraction": 0.0,
+          "paired_identity": "68f01c1ecf0e827d5e3eac5954227df700f2429ba21c84c26d353e7a91bd1483",
+          "role": "development",
+          "policy": "constant",
+          "path_count": 8192
+        }
+      },
+      "shadow_status": "ALL_REJECTED",
+      "inference_cost_profile": {
+        "parameter_inventory": {
+          "total_parameters": 1075492,
+          "by_module_group": {
+            "shared": 615168,
+            "cell_pool": 444416,
+            "connection": 15908
+          },
+          "reserved_parameters": 63488,
+          "accepted_initial_resident_parameters": 1012004,
+          "includes_critic_and_reserved_slot": true,
+          "dtype": "float32",
+          "resident_parameter_bytes": 4301968
+        },
+        "unique_touched_parameters_window": 821399,
+        "executed_parameter_work_per_output_token": 1818384.0,
+        "module_parameter_work": {
+          "embedding": 8192,
+          "position": 8192,
+          "memory.norm": 16384,
+          "memory.key": 1048576,
+          "memory.value": 1048576,
+          "init": 1048576,
+          "controller.scorer.0": 10223616,
+          "controller.scorer.2": 599040,
+          "controller.source": 16384,
+          "controller.critic.0": 4751360,
+          "controller.critic.2": 33792,
+          "controller.step_rows": 16384,
+          "controller.edge_bias_rows": 9216,
+          "controller.target_table": 147456,
+          "norm": 262144,
+          "cells.1.up": 2190336,
+          "cells.1.down": 2190336,
+          "cells.0.up": 28569600,
+          "cells.0.down": 28569600,
+          "context.query": 770048,
+          "context.output": 770048,
+          "cells.3.up": 253952,
+          "cells.3.down": 253952,
+          "final": 16384,
+          "tied_output_projection": 33554432
+        },
+        "scope": "actual executed leaf-module weights plus functional tied head; embeddings charge selected rows; includes critic currently executed",
+        "p50_forward_ms": 58.23730099996283,
+        "repeats": 3,
+        "device": "cuda:1",
+        "observed_gemm_flops": 233369600,
+        "observed_gemm_by_operator": {
+          "aten.mm.default": 200830976,
+          "aten.addmm.default": 30998528,
+          "aten.bmm.default": 1540096
+        },
+        "flops_scope": "offline executed mm/addmm/bmm lower bound, includes tied head and Context QK/AV, excludes non-GEMM",
+        "peak_gpu_bytes": 26145792,
+        "actual_stop_rate": 0.0,
+        "forced_end_rate": 1.0,
+        "decode_p50_ms": 49.6998569999505,
+        "decode_scope": "one cached greedy step, batch=1, prefix=16",
+        "phase": "SERIAL_AFTER_ALL_TRAIN_WORKERS_EXIT",
+        "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87"
+      },
+      "scientific_decision": false,
+      "formal_confirmation": false
+    }
+  },
+  "oracle_status": {
+    "QF-R2": "TRUSTED",
+    "J0-R2": "TRUSTED"
+  },
+  "decision": "NO_Q_ADVANTAGE",
+  "q_signal_status": "NO_SIGNAL",
+  "policy_status": "NO_GAIN",
+  "q_regret_minus_uniform": {
+    "mean": 0.007110082951507398,
+    "ci95": [
+      -0.009369042504336917,
+      0.024489952774839348
+    ],
+    "stories": 11,
+    "scope": "conditional_identifiable_fixed_calibration_states_finite_MC_single_seed"
+  },
+  "q_rank_spearman": {
+    "mean": -0.060606060606060615,
+    "ci95": [
+      -0.23160173160173161,
+      0.0930735930735931
+    ],
+    "stories": 11,
+    "scope": "conditional_identifiable_fixed_calibration_states_finite_MC_single_seed"
+  },
+  "route_degeneracy_observed": false,
+  "expansion_budget_approved": false,
+  "claim_scope": "EXPLORATORY_DEV_SIGNAL_ONLY",
+  "warning": "Story intervals do not establish seed replication; finite-MC identifiability and state aliasing remain limitations.",
+  "qf_vs_own_uniform": {
+    "nll": {
+      "mean": 0.02038242481648922,
+      "ci95": [
+        0.01509949374012649,
+        0.026126147760078308
+      ]
+    },
+    "cost": {
+      "mean": 0.12824249267578125,
+      "ci95": [
+        0.11999492645263672,
+        0.13702526092529296
+      ]
+    },
+    "utility": {
+      "mean": 0.021664849743247033,
+      "ci95": [
+        0.0164132415484637,
+        0.02737568618170916
+      ]
+    },
+    "stories": 128,
+    "scope": "EXPLORATORY_SINGLE_SEED_STORY_BOOTSTRAP_NOT_SEED_REPLICATION"
+  },
+  "integrated_system_fully_validated": false,
+  "status": "COMPLETE"
+}
