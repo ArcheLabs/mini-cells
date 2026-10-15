@@ -1,0 +1,23 @@
+{
+  "baseline_commit": "1a08ce3c6b73ff3dcf9eaeaab4fba952f1a38983",
+  "input_log_sha256": "492e0983a5b15bf4d3929b0c523601dce872e8864636a91498b291a314c55d2b",
+  "confirmed_root_cause": "J0 fixed Shadow Path bypasses scorer backward; original fault hook never fired",
+  "secondary_error": "parent read a missing success report after worker exit 1",
+  "repair": "actual-gradient injection with hook-fired assertion; typed worker failure; independent Pilot aggregation/publication",
+  "cpu_tests": {
+    "r2": 78,
+    "r1_regression": 74,
+    "total_passed": 152,
+    "failed": 0
+  },
+  "prior_source_kaggle_evidence": {
+    "QF-R2": "GPU_PILOT_PASS",
+    "J0-R2": "PILOT_TEST_HARNESS_FAILED",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "qf_projected_arm_seconds": 3618.7841922455973
+  },
+  "repaired_source_gpu_status": "NOT_RUN",
+  "training_algorithm_changed": false,
+  "training_budget_changed": false,
+  "scientific_decision": false
+}

@@ -1,0 +1,177 @@
+{
+  "experiment_id": "CLM-001-R2",
+  "status": "PROPOSED",
+  "arms": [
+    "QF-R2",
+    "J0-R2"
+  ],
+  "seed": 151001201,
+  "seed_namespace": "CLM-001-R2/development/v1",
+  "model": {
+    "width": 128,
+    "heads": 4,
+    "accepted_cells": 6,
+    "reserve_slots": 1,
+    "cell_hidden": 248,
+    "vocab_size": 4096,
+    "max_sequence_length": 64,
+    "budget": 16,
+    "minimum_actions": 1,
+    "alpha": 0.125,
+    "memory_mode": "static_input_readonly",
+    "router_hidden": 64,
+    "step_width": 16,
+    "edge_rank": 16
+  },
+  "policy": {
+    "epsilon": 0.4,
+    "temperature": 1.0,
+    "lambda_cost": 0.01,
+    "lambda_candidate": 0.01,
+    "suffix_kind": "epsilon_boltzmann_frozen_q",
+    "cost_unit": "nonstop_calls/B",
+    "q_convention": "lower_is_better",
+    "epsilon_schedule": [
+      [
+        1,
+        0.4
+      ],
+      [
+        101,
+        0.25
+      ],
+      [
+        301,
+        0.15
+      ]
+    ],
+    "stop_tie_rule": "prefer_STOP_when_legal"
+  },
+  "training": {
+    "steps": 500,
+    "effective_batch": 8,
+    "microbatch": 1,
+    "sequence_length": 64,
+    "target_tokens": 256000,
+    "learning_rate": 0.0003,
+    "connection_learning_rate": 0.0003,
+    "warmup_steps": 50,
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "critic_coefficient": 0.5,
+    "entropy_coefficient": 0.001,
+    "precision": "float32",
+    "checkpoint_interval": 50,
+    "evaluation_interval": 100,
+    "rank_loss_weight": 0.1,
+    "rank_temperature": 1.0,
+    "clip_continuous": 1.0,
+    "clip_connection": 1.0,
+    "qf_auxiliary_critic_training": false
+  },
+  "oracle": {
+    "probes_per_step": 2,
+    "extra_actions": 2,
+    "suffix_samples": 2,
+    "cross_version_replay": false,
+    "label_loss": "horvitz_thompson_uniform_legal_nonstop",
+    "pairwise_loss": true,
+    "suffix_samples_allowed": [
+      2,
+      4,
+      8
+    ],
+    "pairwise_min_samples": 4,
+    "pair_tolerance": 1e-05,
+    "pair_z": 1.96,
+    "max_counterfactual_operator_calls_per_step": 768,
+    "depth_bucket_width": 4,
+    "probe_source": "stratified_actually_visited"
+  },
+  "shadow": {
+    "max_cell_births": 1,
+    "max_connection_path_groups": 1,
+    "cell_proposal_step": 100,
+    "connection_path_step": 200,
+    "admission_step": 400,
+    "private_train_steps": 2,
+    "minimum_admission_stories": 32,
+    "min_cost_aware_improvement": 0.005,
+    "nll_regression_tolerance": 0.0,
+    "bootstrap_replicates": 1000,
+    "connection_prior_delta": -0.01,
+    "path_plan": [
+      0,
+      0,
+      7,
+      8
+    ],
+    "max_upper95_nll_regression": 0.0,
+    "admission_mode": "frozen_exploratory_thresholds"
+  },
+  "data": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "split": "train",
+    "train_range": [
+      0,
+      8192
+    ],
+    "calibration_range": [
+      50000,
+      50128
+    ],
+    "admission_range": [
+      50128,
+      50256
+    ],
+    "development_range": [
+      50256,
+      50512
+    ],
+    "reserved_boundary": 60000,
+    "tokenizer_vocab": 4096,
+    "required_r1_tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+  },
+  "evaluation": {
+    "calibration_windows": 24,
+    "admission_windows": 32,
+    "development_windows": 128,
+    "oracle_states": 24,
+    "oracle_samples": 8,
+    "seed": 151001202,
+    "bootstrap_replicates": 2000
+  },
+  "gates": {
+    "oracle_cpu_pass": false,
+    "gpu_pilot_approved": false,
+    "gpu_pilot_pass": false,
+    "portable_pass": false,
+    "development_approved": false,
+    "confirmation": false,
+    "thresholds_frozen": false
+  },
+  "thresholds": {
+    "rank_spearman_lower95": null,
+    "regret_improvement_lower95": null,
+    "internal_utility_delta_upper95": null,
+    "stop_error_rate_max": null
+  },
+  "publication": {
+    "enabled": true,
+    "secret_label": "GITHUB_TOKEN",
+    "metadata_only": true
+  },
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "resources": {
+    "target_makespan_seconds": 7200,
+    "runtime_termination": false,
+    "projection_safety_factor": 1.5,
+    "pilot_steps": 3
+  },
+  "authorization": {
+    "development_training": true,
+    "confirmation": false
+  }
+}

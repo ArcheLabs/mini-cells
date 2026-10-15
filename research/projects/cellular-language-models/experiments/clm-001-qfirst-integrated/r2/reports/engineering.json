@@ -1,0 +1,64 @@
+{
+  "experiment_id": "CLM-001-R2",
+  "status": "CPU_ENGINEERING_VALIDATED_NOT_TRAINED",
+  "baseline_sha": "8b7cc5344d0b35f58681286101e93e39ff1fc41d",
+  "base_main_sha": "0cff2c2894a1e6e5cd01ca66b7ff9796857fba80",
+  "config_sha256": "a17800bae65bab788570eb8f70064a0fa01bba96980e81d049f548532813c695",
+  "tested_source_manifest_sha256": "6308e03df3ad65fb2170364ca9c8b78f0c638cefe2339863bb9a446e78486dea",
+  "r2_cpu_tests": {
+    "passed": 67,
+    "failed": 0
+  },
+  "parameter_audit": {
+    "QF-R2": {
+      "total_parameters": 1075492,
+      "by_module_group": {
+        "shared": 615168,
+        "cell_pool": 444416,
+        "connection": 15908
+      },
+      "reserved_parameters": 63488,
+      "accepted_initial_resident_parameters": 1012004,
+      "includes_critic_and_reserved_slot": true,
+      "dtype": "float32",
+      "resident_parameter_bytes": 4301968,
+      "trainable_parameters": 1070819
+    },
+    "J0-R2": {
+      "total_parameters": 1075492,
+      "by_module_group": {
+        "shared": 615168,
+        "cell_pool": 444416,
+        "connection": 15908
+      },
+      "reserved_parameters": 63488,
+      "accepted_initial_resident_parameters": 1012004,
+      "includes_critic_and_reserved_slot": true,
+      "dtype": "float32",
+      "resident_parameter_bytes": 4301968,
+      "trainable_parameters": 1075492
+    }
+  },
+  "torch_version": "2.4.1+cu121",
+  "cuda_available": true,
+  "gpu_pilot_status": "NOT_RUN_NO_LOCAL_GPU",
+  "training_status": "NOT_TRAINED",
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "unfrozen_or_unverified": [
+    "actual source/config/assets/protocol lock before GPU Pilot",
+    "real R1 tokenizer identity reproducibility",
+    "GPU forward/backward for three Shadow types",
+    "CUDA checkpoint/event restart evidence",
+    "peak device memory and two-hour workload projection",
+    "development training authorization",
+    "scientific expansion thresholds and independent confirmation"
+  ],
+  "r1_regression_tests": {
+    "passed": 74,
+    "failed": 0
+  },
+  "total_cpu_tests_passed": 141,
+  "lint": "PASS",
+  "protocol_preserved_verbatim": true
+}
