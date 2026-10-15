@@ -101,7 +101,7 @@ def development(c, arm, output, assets, device):
                         ),
                     },
                 )
-            if step in c["evaluation"]["snapshots"]:
+            if c["evaluation"].get("periodic_diagnostics_enabled", True) and step in c["evaluation"]["snapshots"]:
                 record_snapshot(model, data, c, probes, step, output)
             if pending(c, step):
                 process(c, trainer, nursery, data, rng, output, run_id)
