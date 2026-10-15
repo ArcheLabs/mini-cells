@@ -16,6 +16,8 @@ python research/projects/clm-native/experiments/native-sparse-path/run.py --mode
 
 A completed run is preserved on rerun; an interrupted run resumes its checkpoint. Changes to source, config, data or seed reject resume. Fixed training-step budgets are research controls; manual execution has no setup or one-hour wall-time deadline.
 
+The Kaggle default is `MODE = 'screen'`: run all cells once; automatic local and publication preflights must pass before screening, and completed results are then published. Any failed subprocess stops the pipeline. This runs M2 only; subsequent scientific stages retain their registration gates.
+
 For Kaggle import [notebook.ipynb](notebook.ipynb). It pins this implementation's source commit, uses your original `bingjiangli/minicells` notebook, and runs B0/B1 and B2/C0 concurrently when two GPUs exist. It preflights the existing GITHUB_TOKEN publisher before training and publishes raw small evidence after analysis. `push_existing` retries publication without retraining. HF_TOKEN is unnecessary for these generated tasks.
 
 Use `--mode train --arm C0 --task B --output <run>` for one arm, `--mode evaluate/profile/intervene --checkpoint <run>/checkpoint.pt --arm C0 --task B --output <analysis>` for a frozen checkpoint. Source/config must match its identity. `--mode generate` records an input/target manifest for train/dev/OOD; standalone sealed generation is blocked.

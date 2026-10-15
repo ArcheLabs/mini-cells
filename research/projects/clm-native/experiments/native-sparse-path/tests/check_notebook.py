@@ -15,4 +15,9 @@ code = '\n'.join(sources)
 assert 'SOURCE_COMMIT' in code and 'push_existing' in code
 assert 'preflight-only' in code and '--devices' in code
 assert 'SETUP_DEADLINE' not in code and '3300' not in code
+assert "MODE = 'screen'" in code
+assert code.index("command('preflight')") < code.index("['--preflight-only']") < code.index("command('screen')") < code.index("command('publish'),")
+assert "subprocess.run(command('preflight'), cwd=ROOT, check=True)" in code
+assert "subprocess.run(command('publish') + ['--preflight-only'], cwd=ROOT, check=True)" in code
+assert "subprocess.run(command('screen') + ['--devices', *devices], cwd=ROOT, check=True)" in code
 print('Notebook cells compile; manual execution has no inherited setup/session deadline.')
