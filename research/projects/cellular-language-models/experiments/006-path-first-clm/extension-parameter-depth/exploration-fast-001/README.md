@@ -1,6 +1,6 @@
 # FAST-001 — small joint CLM × MoE development environment
 
-ID: `006-PD1-FAST-001`. Status: **ENGINEERING_PROPOSED**. This change authorizes CPU engineering only.
+ID: `006-PD1-FAST-001`. Status: **ENGINEERING_PROPOSED**. The later user instruction authorizes the automatic development launcher; no GPU training is run by the coding agent.
 The full protocol is [SPEC_FAST001.md](SPEC_FAST001.md). Prior PD-001 models, defaults, results and checkpoints are unchanged.
 
 ## Exact matrix and candidate geometry
@@ -32,27 +32,21 @@ python -m pytest -q tests/research/path_first_fast001
 A failed gate is an error, not permission to train. CI uses CPU wheels and synthetic stories. The real
 TinyStories shard, independent confirmation stories and old token/checkpoint files are not read by CPU Gate.
 
-## Explicit user stages on Kaggle
+## One automatic Kaggle launch
 
-Import `notebook.ipynb` into the existing Notebook. **Default Run All is CPU preflight**. No GPU training begins.
+The user's later instruction supersedes the staged launch in the original proposal. Enable Internet and two T4s,
+import the current Notebook, and Run All. The same run checks CPU functionality and independent development data,
+measures a short same-GPU pilot at the unchanged training microbatch, records reproducibility metadata internally,
+then starts S16/S8 concurrently and M0 on the first free device. Failed checks stop the flow; passing checks proceed.
+There is no separate Pilot session, external Pilot file, manual hash/seed entry, duration confirmation, or hard deadline.
+The runtime projection is advisory; training budget/model/objective are never changed to meet it.
+Matching existing execution configs/checkpoints are reused automatically. Incomplete pilot attempts are preserved.
+A fresh cloud session runs its own short check when no retained matching output is available, then continues automatically.
+Retain Output using Save Version for checkpoint portability. Confirmation remains sealed and results exploratory.
 
-1. After review, set `MODE='benchmark'`, `ALLOW_GPU_PILOT=True`. One idle T4 measures all three arms serially,
-   microbatch 1 and 2, 3 warmup + 10 measured steps and one separate offline profiler step per case.
-   This stage is not a language experiment and never auto-transitions to training.
-2. Inspect `pilot/pilot.json`: projected three-arm time is `max(S16, S8+M0)` using p90 steps, plus 50% and
-   300 seconds for evaluation/setup/saving. It is an estimate, **not a 30-minute guarantee**. If over target,
-   review bottlenecks; the code does not silently reduce steps or change batch/model/loss.
-3. Only after user approval set `MODE='train-matrix'`, `APPROVE_DEVELOPMENT=True`.
-   For an intentionally accepted over-target projection, also set `ACCEPT_SLOWER_THAN_TARGET=True`.
-   The Notebook freezes source/config/pilot, prepares new data, starts S16 and S8 on separate T4s, then M0
-   on the next free GPU. All workers join before serial evaluation/profile/interventions/report.
-4. Retain Output with Save Version. The run creates a portable hash-verified checkpoint bundle. To restore
-   in a new cloud session, attach it as input, set `RESTORE_FROM` and `RESUME=True`. Source/config/asset
-   identity must match. A completed arm is reused and never optimized again.
-
-No GitHub or Kaggle API permission is needed for this new engineering entry. The final reports and portable
-bundle are in retained Kaggle Output. Only small reviewed metadata/reports may be committed to Git; no corpus,
-`.npy` token arrays, `.pt` weights, raw profiler traces or secret environment values belong there.
+```bash
+python $FAST/run_fast001.py --mode auto --devices cuda:0 cuda:1 --output /kaggle/working/fast001-development
+```
 
 ### Equivalent CLI
 

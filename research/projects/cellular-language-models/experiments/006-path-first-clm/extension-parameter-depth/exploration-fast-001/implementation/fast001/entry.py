@@ -106,6 +106,7 @@ def main():
     parser.add_argument(
         "--mode",
         choices=[
+            "auto",
             "audit",
             "params",
             "search",
@@ -148,7 +149,11 @@ def main():
         raise ValueError("positive optional safe-pause interval")
     if args.mode in ("audit", "params", "search", "preflight") and args.device != "cpu":
         raise RuntimeError("engineering defaults are CPU-only")
-    if args.mode == "audit":
+    if args.mode == "auto":
+        from .automatic import run
+
+        result = run(c, args.output, args.devices)
+    elif args.mode == "audit":
         result = audit()
         write_json(Path(args.output) / "audit.json", result)
     elif args.mode == "params":

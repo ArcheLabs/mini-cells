@@ -20,15 +20,11 @@ values = {
     for target in node.targets
     if isinstance(target, ast.Name)
 }
-assert values["MODE"] == "preflight"
-assert values["ALLOW_GPU_PILOT"] is False and values["APPROVE_DEVELOPMENT"] is False
 literals = {
-    node.value
-    for node in ast.walk(tree)
-    if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    n.value for n in ast.walk(tree) if isinstance(n, ast.Constant) and isinstance(n.value, str)
 }
-assert {"CLM-S16", "CLM-S8", "M0-TINY", "--approve-development", "CUDA_VISIBLE_DEVICES"} <= literals
+assert "MODE" not in values and "APPROVE_DEVELOPMENT" not in values
+assert {"auto", "--devices", "cuda:0", "cuda:1"} <= literals
+assert "PILOT_FILE" not in code and "ACCEPT_SLOWER_THAN_TARGET" not in code
 assert "killpg" not in code and "timeout=" not in code
-print(
-    "FAST Notebook defaults to CPU-only preflight; explicit reviewed GPU stages, no hard time cap"
-)
+print("FAST Run All: automatic checks then development; no manual staging or hard deadline")

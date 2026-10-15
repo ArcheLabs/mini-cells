@@ -124,8 +124,11 @@ def test_notebook_code_and_default_authorization():
         for target in node.targets
         if isinstance(target, ast.Name)
     }
-    assert settings["MODE"] == "preflight"
-    assert settings["ALLOW_GPU_PILOT"] is False and settings["APPROVE_DEVELOPMENT"] is False
+    assert "MODE" not in settings and "APPROVE_DEVELOPMENT" not in settings
+    literals = {
+        n.value for n in ast.walk(tree) if isinstance(n, ast.Constant) and isinstance(n.value, str)
+    }
+    assert "auto" in literals and "PILOT_FILE" not in code
 
 
 def test_pause_checkpoint_config_cannot_be_changed_after_approval(proposed, tmp_path, monkeypatch):
