@@ -127,7 +127,7 @@ def test_primary_is_paired_difference_in_differences(config):
 def short_assets(config, request):
     config["shadow"].update(cell_proposal_step=1, connection_path_step=1, admission_step=2)
     config["evaluation"]["snapshots"] = [0, 1, 2]
-    config["evaluation"]["periodic_diagnostics_enabled"] = True
+    config["evaluation"]["periodic_diagnostics_enabled"] = getattr(request, "param", True)
     config["training"].update(checkpoint_interval=1, evaluation_interval=1)
     return request.getfixturevalue("assets")
 
@@ -156,11 +156,11 @@ def test_complete_three_arm_cpu_lifecycle_and_publication_aggregation(
     assert verified(output / "pre-admission-contrast.json")["endpoint"].startswith("DID_")
 
 
+@pytest.mark.parametrize("short_assets", [False], indirect=True)
 def test_lean_run_skips_all_periodic_diagnostics(config, short_assets, tmp_path, monkeypatch):
     from clm001_r3 import runner
 
     folder, _ = short_assets
-    config["evaluation"]["periodic_diagnostics_enabled"] = False
 
     def forbidden(*args, **kwargs):
         raise AssertionError("periodic snapshot executed in lean mode")
