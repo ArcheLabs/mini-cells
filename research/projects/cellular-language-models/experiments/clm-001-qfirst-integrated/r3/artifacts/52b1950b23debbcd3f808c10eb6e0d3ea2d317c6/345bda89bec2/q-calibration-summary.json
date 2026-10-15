@@ -1,0 +1,155 @@
+{
+  "experiment_id": "CLM-001-R3",
+  "source_sha": "52b1950b23debbcd3f808c10eb6e0d3ea2d317c6",
+  "config_hash": "629f59cfafbcb4b471975fa38d84edcf7e7085711308c08daa963145e14de84d",
+  "scope": "EXPLORATORY_DEVELOPMENT_AGGREGATE",
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "complete": true,
+  "arms": {
+    "Q-R3": {
+      "role": "calibration",
+      "states": 240,
+      "coverage_missing": 272,
+      "token_positions": [
+        0,
+        16,
+        32,
+        48
+      ],
+      "ctx_seen_states": 75,
+      "mean_cell_router_entropy": 1.791366368431571,
+      "router_choice_agreement": 0.15,
+      "paired_regret": 0.059918913741906485,
+      "local_vs_long_horizon": {
+        "status": "LOCAL_ALIGNMENT_PASS",
+        "pairs": 720,
+        "identifiable_pairs": 720,
+        "excluded_fraction": 0.0,
+        "local_agreement": {
+          "mean": 0.9697747564935064,
+          "ci95": [
+            0.9510128348214286,
+            0.9856628506042567
+          ],
+          "stories": 32
+        },
+        "local_minus_random": {
+          "mean": 0.46199156746031744,
+          "ci95": [
+            0.41441259695165944,
+            0.506500787262506
+          ],
+          "stories": 32
+        },
+        "long_horizon_agreement": {
+          "mean": 0.9574817570678286,
+          "ci95": [
+            0.936249775442839,
+            0.9752392789408242
+          ],
+          "stories": 32
+        },
+        "scope": "single_target_frozen_fixed_suffix_vs_independent_MC_replanned_suffix",
+        "scientific_decision": false
+      },
+      "scientific_decision": false
+    },
+    "QC-R3": {
+      "role": "calibration",
+      "states": 240,
+      "coverage_missing": 272,
+      "token_positions": [
+        0,
+        16,
+        32,
+        48
+      ],
+      "ctx_seen_states": 75,
+      "mean_cell_router_entropy": 1.7913408451652364,
+      "router_choice_agreement": 0.17916666666666667,
+      "paired_regret": 0.06396035669992367,
+      "local_vs_long_horizon": {
+        "status": "LOCAL_ALIGNMENT_PASS",
+        "pairs": 720,
+        "identifiable_pairs": 720,
+        "excluded_fraction": 0.0,
+        "local_agreement": {
+          "mean": 0.9747756583694084,
+          "ci95": [
+            0.9614119430916307,
+            0.9871124470147907
+          ],
+          "stories": 32
+        },
+        "local_minus_random": {
+          "mean": 0.47250556156806156,
+          "ci95": [
+            0.42498371926106304,
+            0.5197630321067821
+          ],
+          "stories": 32
+        },
+        "long_horizon_agreement": {
+          "mean": 0.9771322731671606,
+          "ci95": [
+            0.9644380624175058,
+            0.9880779911192207
+          ],
+          "stories": 32
+        },
+        "scope": "single_target_frozen_fixed_suffix_vs_independent_MC_replanned_suffix",
+        "scientific_decision": false
+      },
+      "scientific_decision": false
+    },
+    "QS-R3": {
+      "role": "calibration",
+      "states": 240,
+      "coverage_missing": 272,
+      "token_positions": [
+        0,
+        16,
+        32,
+        48
+      ],
+      "ctx_seen_states": 75,
+      "mean_cell_router_entropy": 1.791366368431571,
+      "router_choice_agreement": 0.15,
+      "paired_regret": 0.059918913741906485,
+      "local_vs_long_horizon": {
+        "status": "LOCAL_ALIGNMENT_PASS",
+        "pairs": 720,
+        "identifiable_pairs": 720,
+        "excluded_fraction": 0.0,
+        "local_agreement": {
+          "mean": 0.9697747564935064,
+          "ci95": [
+            0.9510128348214286,
+            0.9856628506042567
+          ],
+          "stories": 32
+        },
+        "local_minus_random": {
+          "mean": 0.46199156746031744,
+          "ci95": [
+            0.41441259695165944,
+            0.506500787262506
+          ],
+          "stories": 32
+        },
+        "long_horizon_agreement": {
+          "mean": 0.9574817570678286,
+          "ci95": [
+            0.936249775442839,
+            0.9752392789408242
+          ],
+          "stories": 32
+        },
+        "scope": "single_target_frozen_fixed_suffix_vs_independent_MC_replanned_suffix",
+        "scientific_decision": false
+      },
+      "scientific_decision": false
+    }
+  }
+}
