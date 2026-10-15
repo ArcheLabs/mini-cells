@@ -43,7 +43,7 @@ def development(c, arm, output, assets, device):
                 "Restore the original fixed Probe bank with the R3 checkpoint; never recreate it from trained weights"
             )
         probes = initial_bank(model, data, c, output, run_id)
-        if trainer.step == 0:
+        if trainer.step == 0 and c["evaluation"].get("periodic_diagnostics_enabled", True):
             record_snapshot(model, data, c, probes, 0, output)
         begin = time.perf_counter()
         # Complete only unfinished events after a committed training step.
@@ -105,7 +105,7 @@ def development(c, arm, output, assets, device):
                 record_snapshot(model, data, c, probes, step, output)
             if pending(c, step):
                 process(c, trainer, nursery, data, rng, output, run_id)
-            if step % c["training"]["evaluation_interval"] == 0:
+            if c["evaluation"].get("periodic_diagnostics_enabled", True) and step % c["training"]["evaluation_interval"] == 0:
                 seal(
                     output / ("development-step-%06d.json" % step),
                     {"step": step, "quality": evaluate(model, data, c, "development")},

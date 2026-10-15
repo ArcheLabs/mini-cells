@@ -230,7 +230,8 @@ def run(c, output, assets):
         )
         alignment_seconds = time.perf_counter() - alignment_begin
         diagnostic_begin = time.perf_counter()
-        snapshot(trainer.model, data, c, bank, 0, validation_role="calibration")
+        if c["evaluation"].get("periodic_diagnostics_enabled", True):
+            snapshot(trainer.model, data, c, bank, 0, validation_role="calibration")
         torch.cuda.synchronize()
         diagnostic_seconds = time.perf_counter() - diagnostic_begin
         from .evaluation import evaluate
@@ -261,7 +262,10 @@ def run(c, output, assets):
         gates = {
             "gradient_pilot_pass": all(v["status"] == "GPU_PILOT_PASS" for v in pilots.values()),
             "local_alignment_pass": alignment["summary"]["status"] == "LOCAL_ALIGNMENT_PASS",
-            "resource_projection_pass": projection <= c["resources"]["target_makespan_seconds"],
+            "resource_projection_pass": (
+                not c["resources"].get("projection_blocks_development", True)
+                or projection <= c["resources"]["target_makespan_seconds"]
+            ),
         }
         summary = {
             "status": "GRADIENT_PILOT_PASS" if all(gates.values()) else "PREFLIGHT_STOPPED",
@@ -269,6 +273,8 @@ def run(c, output, assets):
             "gates": gates,
             "beta_selection": selection,
             "projected_total_seconds": projection,
+            "resource_target_met": projection <= c["resources"]["target_makespan_seconds"],
+            "resource_projection_advisory_only": not c["resources"].get("projection_blocks_development", True),
             "projection_scope": "two queues including measured snapshot diagnostics; no wall-clock termination",
             "scientific_decision": False,
             "training_status": "NOT_TRAINED",

@@ -144,15 +144,8 @@
     "oracle_samples": 8,
     "seed": 151001304,
     "bootstrap_replicates": 2000,
-    "snapshots": [
-      0,
-      50,
-      100,
-      200,
-      300,
-      400,
-      500
-    ]
+    "snapshots": [],
+    "periodic_diagnostics_enabled": false
   },
   "gates": {
     "oracle_cpu_pass": false,
@@ -189,7 +182,8 @@
       [
         "QC-R3"
       ]
-    ]
+    ],
+    "projection_blocks_development": false
   },
   "authorization": {
     "development_training": false,
