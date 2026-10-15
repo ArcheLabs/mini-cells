@@ -13,3 +13,9 @@ trainable tensors and verifies a real backward hook fired, including the J0 crit
 Failed workers write typed Pilot failure reports; parent collection preserves sibling
 successes instead of reading a missing success file. The training algorithm/configuration
 and R1 evidence remain unchanged.
+
+## One-launch development workflow
+
+Current user instruction authorizes automatic development after successful preflight.
+The default Run All no longer returns after Pilot; it continues through paired training,
+serial profiling, analysis and publication. Confirmation stays sealed.

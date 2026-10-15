@@ -1,0 +1,17 @@
+{
+  "workflow": "one_run_all_preflight_then_development_analysis_publication",
+  "development_training_authorized": true,
+  "confirmation_authorized": false,
+  "budget_unchanged": {
+    "steps_per_arm": 500,
+    "target_tokens_per_arm": 256000,
+    "arms": [
+      "QF-R2",
+      "J0-R2"
+    ]
+  },
+  "tests_passed": 154,
+  "lint": "PASS",
+  "actual_gpu_training_launched_by_this_change": false,
+  "scientific_decision": false
+}

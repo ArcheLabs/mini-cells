@@ -188,12 +188,6 @@ def automatic(c, output, assets):
             raise RuntimeError(
                 "GPU Pilot failed; training not started: " + json.dumps(pilot["failures"])
             )
-        if not c["authorization"]["development_training"]:
-            print(
-                "[R2] Pilot complete; full development is not authorized by this implementation request.",
-                flush=True,
-            )
-            return aggregate(c, output, source)
         authorize(c, "train-dev", "cuda:0")
         codes = workers(c, config, output, assets, "train-dev")
         from .profiling import completed

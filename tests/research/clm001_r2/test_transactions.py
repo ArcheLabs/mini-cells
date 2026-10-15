@@ -206,8 +206,9 @@ def test_schema_failclosed(config, case):
         validate(config)
 
 
-def test_no_full_training_authorization():
+def test_explicitly_disabled_development_is_blocked():
     c = load()
+    c["authorization"]["development_training"] = False
     with pytest.raises(RuntimeError):
         authorize(c, "train-dev", "cuda:0")
 

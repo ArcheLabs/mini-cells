@@ -11,11 +11,12 @@ Import `r2/notebook.ipynb` from branch `codex/clm001-r2` into the existing
 internally; do not fill source/hash/seed fields. Save Version retains full Output.
 
 The launcher performs CPU tests → return check → data identity → concurrent real
-GPU Pilot. A failed check blocks the next stage. This implementation request does
-**not** authorize the 500-step development run: the shipped authorization is false.
-After explicit development authorization is committed, the same launcher continues
-automatically from successful preflight to two-arm training, analysis and return.
-No confirmation access is implemented. No process is killed on a wall-clock deadline.
+GPU preflight → 500-step QF-R2/J0-R2 development on separate T4 GPUs → isolated
+profiling/analysis → GitHub return, all within one Run All. A failed check blocks
+training and returns available diagnostics. No mode switch, second launch or
+intermediate approval is required. The user's current instruction authorizes this
+development workflow; independent confirmation remains sealed. No process is killed
+on a wall-clock deadline; the existing workload projection is checked before training.
 
 ## Implementation
 

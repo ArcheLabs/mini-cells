@@ -106,7 +106,7 @@ def test_real_candidate_budget_and_inactive_confirmation():
     c = load()
     validate(c)
     assert c["training"]["target_tokens"] == 500 * 8 * 64
-    assert not c["authorization"]["development_training"] and not c["authorization"]["confirmation"]
+    assert c["authorization"]["development_training"] and not c["authorization"]["confirmation"]
     assert c["data"]["reserved_boundary"] == 60000
 
 

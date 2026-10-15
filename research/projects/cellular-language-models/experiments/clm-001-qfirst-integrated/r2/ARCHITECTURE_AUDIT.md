@@ -42,3 +42,9 @@ Real data/asset hashes, exact R1 tokenizer reproducibility, GPU timings, device 
 cross-CUDA restart and the two-hour cost projection remain unverified until actual
 Kaggle Pilot. The lock records actual source/config/assets/protocol identities at runtime.
 No GPU was available for local verification. 500-step training authorization is false.
+
+## Current execution override
+
+The implementation-stage authorization note above is historical. The current user
+instruction enables one-launch development after successful preflight. See
+`EXECUTION_WORKFLOW.md`; independent confirmation is still sealed.
