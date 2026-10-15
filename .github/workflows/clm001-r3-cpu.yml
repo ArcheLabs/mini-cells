@@ -1,0 +1,41 @@
+name: CLM-001 R3 competitive credit and isolation gates
+on:
+  push:
+    branches: [codex/clm001-r3-competitive-credit]
+  pull_request:
+    paths:
+      - 'research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3/**'
+      - 'tests/research/clm001_r3/**'
+      - '.github/workflows/clm001-r3-cpu.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cpu-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: CPU dependencies
+        run: |
+          python -m pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy pytest tokenizers==0.20.3 ruff==0.9.10
+      - name: Lint isolated R3
+        run: ruff check --config research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/ruff.toml research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3 tests/research/clm001_r3
+      - name: R3 CPU Gate (synthetic; no data or secrets)
+        run: python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3/run.py --mode cpu-preflight --output clm001-r3-evidence
+      - name: Frozen R1 and R2 regression
+        run: python -m pytest -q tests/research/clm001_qfirst tests/research/clm001_r2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: clm001-r3-cpu-evidence
+          path: clm001-r3-evidence/

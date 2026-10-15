@@ -1,0 +1,154 @@
+{
+  "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+  "results_ref": "results/clm001-r2-4fcb95490c2c-c541c76b",
+  "report_sha256": "8210cbff34cf3f7c50e3e5f26947d4621310de7516b391bacca1e441ad37b3f3",
+  "training_status": "COMPLETE",
+  "last_committed_step": {
+    "QF-R2": 500,
+    "J0-R2": 500
+  },
+  "scientific_decision": false,
+  "arms": {
+    "QF-R2": {
+      "training_status": "COMPLETE",
+      "quality": {
+        "greedy": {
+          "mean_nll": 4.733928356319666,
+          "ppl": 113.7415030204515,
+          "actual_stop_rate": 0.7630615234375,
+          "forced_end_rate": 0.2369384765625,
+          "self_loop_rate": 0.00294264868718431,
+          "context_call_fraction": 1.34918172128604e-05,
+          "paired_identity": "32cc9f513521c1c7bbfdb4e91a0306a69378f8fbb082c39625607e55b21e6c2f",
+          "role": "development",
+          "policy": "greedy",
+          "path_count": 8192
+        },
+        "sampled": {
+          "mean_nll": 4.712812000885606,
+          "ppl": 111.36487815363319,
+          "actual_stop_rate": 0.867431640625,
+          "forced_end_rate": 0.132568359375,
+          "self_loop_rate": 0.12341713888263814,
+          "context_call_fraction": 0.14065703022339027,
+          "paired_identity": "e4cb7b62a6de1f94ed441dbf934cea0920fa1662944d46dfd5e605ee1ffdcf9c",
+          "role": "development",
+          "policy": "sampled",
+          "path_count": 8192
+        },
+        "uniform": {
+          "mean_nll": 4.713545931503177,
+          "ppl": 111.44664224834823,
+          "actual_stop_rate": 0.8634033203125,
+          "forced_end_rate": 0.1365966796875,
+          "self_loop_rate": 0.1232949224316951,
+          "context_call_fraction": 0.14226138544756586,
+          "paired_identity": "9f2b6d91c6c299cb8d8c7f552ac4e192bb011a47d15f25fc9891f585208e6c65",
+          "role": "development",
+          "policy": "uniform",
+          "path_count": 8192
+        },
+        "constant": {
+          "mean_nll": 4.818279957398772,
+          "ppl": 123.7520488157691,
+          "actual_stop_rate": 0.0,
+          "forced_end_rate": 1.0,
+          "self_loop_rate": 1.0,
+          "context_call_fraction": 0.0,
+          "paired_identity": "68f01c1ecf0e827d5e3eac5954227df700f2429ba21c84c26d353e7a91bd1483",
+          "role": "development",
+          "policy": "constant",
+          "path_count": 8192
+        }
+      },
+      "shadow_status": "ALL_REJECTED"
+    },
+    "J0-R2": {
+      "training_status": "COMPLETE",
+      "quality": {
+        "greedy": {
+          "mean_nll": 4.780971450731158,
+          "ppl": 119.22011027132362,
+          "actual_stop_rate": 0.0,
+          "forced_end_rate": 1.0,
+          "self_loop_rate": 0.8632893880208333,
+          "context_call_fraction": 0.0521087646484375,
+          "paired_identity": "32cc9f513521c1c7bbfdb4e91a0306a69378f8fbb082c39625607e55b21e6c2f",
+          "role": "development",
+          "policy": "greedy",
+          "path_count": 8192
+        },
+        "sampled": {
+          "mean_nll": 4.719746872782707,
+          "ppl": 112.13986342333962,
+          "actual_stop_rate": 0.8511962890625,
+          "forced_end_rate": 0.1488037109375,
+          "self_loop_rate": 0.12221874020683171,
+          "context_call_fraction": 0.1460640021604105,
+          "paired_identity": "e4cb7b62a6de1f94ed441dbf934cea0920fa1662944d46dfd5e605ee1ffdcf9c",
+          "role": "development",
+          "policy": "sampled",
+          "path_count": 8192
+        },
+        "uniform": {
+          "mean_nll": 4.719684200361371,
+          "ppl": 112.13283556679926,
+          "actual_stop_rate": 0.8634033203125,
+          "forced_end_rate": 0.1365966796875,
+          "self_loop_rate": 0.1232949224316951,
+          "context_call_fraction": 0.14226138544756586,
+          "paired_identity": "9f2b6d91c6c299cb8d8c7f552ac4e192bb011a47d15f25fc9891f585208e6c65",
+          "role": "development",
+          "policy": "uniform",
+          "path_count": 8192
+        },
+        "constant": {
+          "mean_nll": 4.828548301011324,
+          "ppl": 125.02932390265508,
+          "actual_stop_rate": 0.0,
+          "forced_end_rate": 1.0,
+          "self_loop_rate": 1.0,
+          "context_call_fraction": 0.0,
+          "paired_identity": "68f01c1ecf0e827d5e3eac5954227df700f2429ba21c84c26d353e7a91bd1483",
+          "role": "development",
+          "policy": "constant",
+          "path_count": 8192
+        }
+      },
+      "shadow_status": "ALL_REJECTED"
+    }
+  },
+  "checkpoint_availability": "not in published metadata; no trained weights assumed",
+  "results_commit": "4ac617d928624957cb88f0d8278f9d0cbd562797",
+  "q_calibration": {
+    "QF-R2": {
+      "role": "calibration",
+      "states": 17,
+      "coverage_missing": 7,
+      "identifiable_states": 11,
+      "oracle_status": "TRUSTED",
+      "mae": 0.08570052533521522,
+      "spearman": -0.06232492997198881,
+      "regret": 0.09942181691527364,
+      "uniform_regret": 0.0932986665251782,
+      "pairwise_accuracy": 0.4629603912885647,
+      "stop_error_rate": 0.2,
+      "scientific_decision": false
+    },
+    "J0-R2": {
+      "role": "calibration",
+      "states": 17,
+      "coverage_missing": 7,
+      "identifiable_states": 10,
+      "oracle_status": "TRUSTED",
+      "mae": 0.11340980786532792,
+      "spearman": 0.0035014005602241,
+      "regret": 0.08917070628965605,
+      "uniform_regret": 0.08658528100840057,
+      "pairwise_accuracy": 0.5027776390463159,
+      "stop_error_rate": 0.0,
+      "scientific_decision": false
+    }
+  },
+  "q_report_sha256": "91164c3df5eed8aa00f94161e0318aca7ced34711a244a3ec13e9d751a4ed732"
+}
