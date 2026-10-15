@@ -165,6 +165,9 @@ def aggregate(c, output, source):
         "config_hash": canonical_sha256(c),
         "complete": len(results) == 2,
         "training_status": status,
+        "gpu_pilot": verified(output / "preflight-summary.json")
+        if (output / "preflight-summary.json").exists()
+        else {"status": "NOT_RUN"},
         "arms": summaries,
         "oracle_status": {arm: v.get("oracle_status", "UNREVIEWED") for arm, v in q.items()},
         **decision,

@@ -112,6 +112,37 @@ def workers(c, config, output, assets, mode):
         return list(pool.map(worker, range(len(c["arms"]))))
 
 
+def collect_pilot(c, output, codes):
+    """Always retain successful siblings; a failed worker need not have a success file."""
+    arms = {}
+    failures = []
+    for arm, code in zip(c["arms"], codes):
+        folder = Path(output) / "preflight" / arm
+        path = folder / "gpu-pilot.json"
+        failure = folder / "gpu-pilot-failure.json"
+        record = verified(path) if path.exists() else None
+        if record is not None:
+            arms[arm] = record
+        if code or record is None or record.get("status") != "GPU_PILOT_PASS":
+            detail = (
+                verified(failure)
+                if failure.exists()
+                else {
+                    "message": "worker report unavailable; inspect preflight/" + arm + "/worker.log"
+                }
+            )
+            failures.append({"arm": arm, "exit_code": code, **detail})
+    result = {
+        "passed": len(codes) == len(c["arms"]) and not failures,
+        "arms": arms,
+        "failures": failures,
+        "scientific_decision": False,
+        "training_status": "NOT_TRAINED",
+    }
+    seal(Path(output) / "preflight-summary.json", result)
+    return result
+
+
 def automatic(c, output, assets):
     from .data import prepare, load_assets
     from .publication import publish
@@ -152,9 +183,11 @@ def automatic(c, output, assets):
         config = output / "runtime-config.json"
         write_json(config, c)
         codes = workers(c, config, output, assets, "gpu-pilot")
-        pilot = [verified(output / "preflight" / arm / "gpu-pilot.json") for arm in c["arms"]]
-        if any(codes) or any(p["status"] != "GPU_PILOT_PASS" for p in pilot):
-            raise RuntimeError("GPU Pilot failed; training not started")
+        pilot = collect_pilot(c, output, codes)
+        if not pilot["passed"]:
+            raise RuntimeError(
+                "GPU Pilot failed; training not started: " + json.dumps(pilot["failures"])
+            )
         if not c["authorization"]["development_training"]:
             print(
                 "[R2] Pilot complete; full development is not authorized by this implementation request.",

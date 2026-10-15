@@ -14,7 +14,7 @@ from .data import load_assets, batches
 from .report import seal
 
 
-def run(c, assets, output, arm, device):
+def _run(c, assets, output, arm, device):
     authorize(c, "gpu-pilot", device)
     if not torch.cuda.is_available() or not str(device).startswith("cuda"):
         raise RuntimeError("GPU Pilot requires actual CUDA; never fabricate CPU GPU timings")
@@ -51,27 +51,7 @@ def run(c, assets, output, arm, device):
             raise RuntimeError("GPU Shadow reserve slot received no finite gradient")
         candidate_results.append({"kind": kind, "state": candidate.state, "backward_pass": True})
     # Actual backward hooks, not a fabricated exception from a stubbed optimizer.
-    fault_results = []
-    for kind in ("cell", "connection", "path"):
-        injection = Nursery()
-        candidate = injection.propose(m, kind, t.opt)
-        param = next(
-            p
-            for name, p in candidate.model.named_parameters()
-            if p.requires_grad and name.startswith("controller.scorer.")
-        )
-        hook = param.register_hook(lambda grad: torch.full_like(grad, float("nan")))
-        try:
-            passed = injection.probation(
-                candidate, m, private, c["shadow"]["private_train_steps"], accepted_trainer=t
-            )
-        finally:
-            hook.remove()
-        if passed or candidate.state != "FAILED":
-            raise RuntimeError("GPU private fault was not isolated")
-        fault_results.append(
-            {"kind": kind, "failure_code": candidate.metrics["failure"]["failure_code"]}
-        )
+    fault_results = [private_fault(m, t, private, kind) for kind in ("cell", "connection", "path")]
     # Accepted faults must fail closed and restore its exact private rehearsal bundle.
     from .integrity import Witness
     from .oracle import Snapshot, OracleUntrusted
@@ -147,3 +127,78 @@ def run(c, assets, output, arm, device):
     }
     seal(output / "gpu-pilot.json", result)
     return result
+
+
+def private_fault(model, trainer, batches, kind):
+    """Inject only in rehearsal copies; assert an actual backward hook fired.
+
+    A fixed J0 path has no scorer gradient. Hook every trainable private tensor
+    instead of assuming scorer participation; J0's critic remains trainable.
+    """
+    nursery = Nursery()
+    candidate = nursery.propose(model, kind, trainer.opt)
+    fired = []
+
+    def inject(name):
+        def hook(gradient):
+            fired.append(name)
+            return torch.full_like(gradient, float("nan"))
+
+        return hook
+
+    handles = [
+        parameter.register_hook(inject(name))
+        for name, parameter in candidate.model.named_parameters()
+        if parameter.requires_grad
+    ]
+    try:
+        passed = nursery.probation(
+            candidate,
+            model,
+            batches,
+            model.experiment_config["shadow"]["private_train_steps"],
+            accepted_trainer=trainer,
+        )
+    finally:
+        for handle in handles:
+            handle.remove()
+    if not fired:
+        raise RuntimeError(
+            "GPU private fault injection did not reach any backward gradient: "
+            + model.arm
+            + "/"
+            + kind
+        )
+    if (
+        passed
+        or candidate.state != "FAILED"
+        or candidate.metrics["failure"]["failure_code"] != "CANDIDATE_NUMERICAL_FAILURE"
+    ):
+        raise RuntimeError("GPU private fault was not isolated: " + model.arm + "/" + kind)
+    return {
+        "kind": kind,
+        "failure_code": candidate.metrics["failure"]["failure_code"],
+        "backward_hook_fired": True,
+        "injected_parameters": sorted(set(fired)),
+        "accepted_witness_ok": candidate.metrics["failure"]["accepted_witness_ok"],
+    }
+
+
+def run(c, assets, output, arm, device):
+    try:
+        return _run(c, assets, output, arm, device)
+    except Exception as error:
+        seal(
+            Path(output) / "gpu-pilot-failure.json",
+            {
+                "arm": arm,
+                "source_sha": source_sha(),
+                "config_hash": canonical_sha256(c),
+                "status": "GPU_PILOT_FAILED",
+                "error_type": type(error).__name__,
+                "message": str(error),
+                "training_status": "NOT_TRAINED",
+                "scientific_decision": False,
+            },
+        )
+        raise

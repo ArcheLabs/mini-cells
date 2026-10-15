@@ -7,6 +7,7 @@ import sys
 from .common import ROOT, BASE, canonical_sha256, write_json, file_sha256
 
 ALLOWED = {
+    "preflight-summary.json",
     "run-summary.json",
     "arm-QF-R2-metrics-summary.json",
     "arm-J0-R2-metrics-summary.json",
