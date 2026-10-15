@@ -1,0 +1,423 @@
+{
+  "experiment_id": "CLM-001-R3",
+  "source_sha": "e4e60bd5e7869ba753e579a74ef83f18853d0bb0",
+  "config_hash": "8b7b227076147d4ace78a0c389f3136114c7aa8f10a1d38184a5db00b8f29d1a",
+  "scope": "EXPLORATORY_DEVELOPMENT_AGGREGATE",
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "complete": false,
+  "training_status": "NOT_TRAINED",
+  "engineering_status": "NOT_TRAINED",
+  "arms": {
+    "Q-R3": {
+      "experiment_id": "CLM-001-R3",
+      "source_sha": "e4e60bd5e7869ba753e579a74ef83f18853d0bb0",
+      "config_hash": "8b7b227076147d4ace78a0c389f3136114c7aa8f10a1d38184a5db00b8f29d1a",
+      "scope": "EXPLORATORY_DEVELOPMENT_AGGREGATE",
+      "scientific_decision": false,
+      "formal_confirmation": false,
+      "arm": "Q-R3",
+      "last_committed_step": 0,
+      "complete": false,
+      "training_status": "INCOMPLETE",
+      "quality": {},
+      "shadow_status": "NOT_RUN"
+    },
+    "QC-R3": {
+      "experiment_id": "CLM-001-R3",
+      "source_sha": "e4e60bd5e7869ba753e579a74ef83f18853d0bb0",
+      "config_hash": "8b7b227076147d4ace78a0c389f3136114c7aa8f10a1d38184a5db00b8f29d1a",
+      "scope": "EXPLORATORY_DEVELOPMENT_AGGREGATE",
+      "scientific_decision": false,
+      "formal_confirmation": false,
+      "arm": "QC-R3",
+      "last_committed_step": 0,
+      "complete": false,
+      "training_status": "INCOMPLETE",
+      "quality": {},
+      "shadow_status": "NOT_RUN"
+    },
+    "QS-R3": {
+      "experiment_id": "CLM-001-R3",
+      "source_sha": "e4e60bd5e7869ba753e579a74ef83f18853d0bb0",
+      "config_hash": "8b7b227076147d4ace78a0c389f3136114c7aa8f10a1d38184a5db00b8f29d1a",
+      "scope": "EXPLORATORY_DEVELOPMENT_AGGREGATE",
+      "scientific_decision": false,
+      "formal_confirmation": false,
+      "arm": "QS-R3",
+      "last_committed_step": 0,
+      "complete": false,
+      "training_status": "INCOMPLETE",
+      "quality": {},
+      "shadow_status": "NOT_RUN"
+    }
+  },
+  "credit_failure_flags": [],
+  "H1": "INCONCLUSIVE",
+  "H2": "CAUSAL_FEEDBACK_NOT_TESTED",
+  "multiseed": "NOT_TESTED",
+  "gpu_pilot": {
+    "status": "PREFLIGHT_STOPPED",
+    "arms": {
+      "Q-R3": {
+        "status": "GPU_PILOT_PASS",
+        "arm": "Q-R3",
+        "gradient_rows": [
+          {
+            "q_grad_norm": 0.10848114639520645,
+            "lcg_grad_norm": null,
+            "lcg_q_cosine": null,
+            "lcg_candidate_cell_calls": 0,
+            "lcg_events": 32
+          },
+          {
+            "q_grad_norm": 0.09070218354463577,
+            "lcg_grad_norm": null,
+            "lcg_q_cosine": null,
+            "lcg_candidate_cell_calls": 0,
+            "lcg_events": 32
+          },
+          {
+            "q_grad_norm": 0.19707858562469482,
+            "lcg_grad_norm": null,
+            "lcg_q_cosine": null,
+            "lcg_candidate_cell_calls": 0,
+            "lcg_events": 32
+          }
+        ],
+        "source_sha": "e4e60bd5e7869ba753e579a74ef83f18853d0bb0",
+        "config_hash": "19b54b2044d52a8578e56d75f7a924365e15299b5fa10158d083637e7e4285ca",
+        "asset_sha256": "407a539085d8ebe3bc9dd69b82a762ec702a981a9d5f21dac9c45be6ad5f0e88",
+        "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+        "p50_step_seconds": 2.552429525999969,
+        "p90_step_seconds": 4.799702468399983,
+        "projected_arm_seconds": 5472.024972531581,
+        "shadow_rehearsal_seconds": 19.441582244000017,
+        "projection_includes": "500 updates + measured Shadow + conservative evaluation allowance; excludes initial downloads/publication",
+        "shadow_candidates": [
+          {
+            "kind": "cell",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "connection",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "path",
+            "state": "PROBATION",
+            "backward_pass": true
+          }
+        ],
+        "local_restore_pass": true,
+        "private_failure_isolation_pass": true,
+        "fault_injection": [
+          {
+            "kind": "cell",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "cells.6.down.weight",
+              "cells.6.up.weight",
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "connection",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "path",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          }
+        ],
+        "accepted_and_oracle_fail_closed": true,
+        "peak_gpu_bytes": 108466176,
+        "device_name": "Tesla T4",
+        "scientific_decision": false,
+        "training_status": "NOT_TRAINED",
+        "isolated_training_gemm_flops": 3332935424,
+        "training_flops_scope": "single private update: live forward/backward + Oracle + candidate credit; GEMM lower bound, not full-run total"
+      },
+      "QC-R3": {
+        "status": "GPU_PILOT_PASS",
+        "arm": "QC-R3",
+        "gradient_rows": [
+          {
+            "q_grad_norm": 0.10848114639520645,
+            "lcg_grad_norm": 2.5585573894204572e-05,
+            "lcg_q_cosine": -0.0038017684128135443,
+            "lcg_candidate_cell_calls": 64,
+            "lcg_events": 32
+          },
+          {
+            "q_grad_norm": 0.09070249646902084,
+            "lcg_grad_norm": 9.961192517948803e-06,
+            "lcg_q_cosine": 0.15625302493572235,
+            "lcg_candidate_cell_calls": 64,
+            "lcg_events": 32
+          },
+          {
+            "q_grad_norm": 0.19707699120044708,
+            "lcg_grad_norm": 1.854098263720516e-05,
+            "lcg_q_cosine": 0.10402636229991913,
+            "lcg_candidate_cell_calls": 64,
+            "lcg_events": 32
+          }
+        ],
+        "source_sha": "e4e60bd5e7869ba753e579a74ef83f18853d0bb0",
+        "config_hash": "19b54b2044d52a8578e56d75f7a924365e15299b5fa10158d083637e7e4285ca",
+        "asset_sha256": "407a539085d8ebe3bc9dd69b82a762ec702a981a9d5f21dac9c45be6ad5f0e88",
+        "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+        "p50_step_seconds": 2.617303066999966,
+        "p90_step_seconds": 2.7107859213999745,
+        "projected_arm_seconds": 3106.5168499310707,
+        "shadow_rehearsal_seconds": 21.657076708999966,
+        "projection_includes": "500 updates + measured Shadow + conservative evaluation allowance; excludes initial downloads/publication",
+        "shadow_candidates": [
+          {
+            "kind": "cell",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "connection",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "path",
+            "state": "PROBATION",
+            "backward_pass": true
+          }
+        ],
+        "local_restore_pass": true,
+        "private_failure_isolation_pass": true,
+        "fault_injection": [
+          {
+            "kind": "cell",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "cells.6.down.weight",
+              "cells.6.up.weight",
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "connection",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "path",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          }
+        ],
+        "accepted_and_oracle_fail_closed": true,
+        "peak_gpu_bytes": 108466688,
+        "device_name": "Tesla T4",
+        "scientific_decision": false,
+        "training_status": "NOT_TRAINED",
+        "isolated_training_gemm_flops": 3344763648,
+        "training_flops_scope": "single private update: live forward/backward + Oracle + candidate credit; GEMM lower bound, not full-run total"
+      },
+      "QS-R3": {
+        "status": "GPU_PILOT_PASS",
+        "arm": "QS-R3",
+        "gradient_rows": [
+          {
+            "q_grad_norm": 0.10848114639520645,
+            "lcg_grad_norm": 2.5585573894204572e-05,
+            "lcg_q_cosine": -0.0038017684128135443,
+            "lcg_candidate_cell_calls": 64,
+            "lcg_events": 32
+          },
+          {
+            "q_grad_norm": 0.09070218354463577,
+            "lcg_grad_norm": 9.961142495740205e-06,
+            "lcg_q_cosine": 0.15625391900539398,
+            "lcg_candidate_cell_calls": 64,
+            "lcg_events": 32
+          },
+          {
+            "q_grad_norm": 0.19707858562469482,
+            "lcg_grad_norm": 1.8540882592787966e-05,
+            "lcg_q_cosine": 0.10402115434408188,
+            "lcg_candidate_cell_calls": 64,
+            "lcg_events": 32
+          }
+        ],
+        "source_sha": "e4e60bd5e7869ba753e579a74ef83f18853d0bb0",
+        "config_hash": "19b54b2044d52a8578e56d75f7a924365e15299b5fa10158d083637e7e4285ca",
+        "asset_sha256": "407a539085d8ebe3bc9dd69b82a762ec702a981a9d5f21dac9c45be6ad5f0e88",
+        "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+        "p50_step_seconds": 2.5550136010000415,
+        "p90_step_seconds": 2.6599492057999443,
+        "projected_arm_seconds": 3047.4303878171368,
+        "shadow_rehearsal_seconds": 20.69865895999999,
+        "projection_includes": "500 updates + measured Shadow + conservative evaluation allowance; excludes initial downloads/publication",
+        "shadow_candidates": [
+          {
+            "kind": "cell",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "connection",
+            "state": "PROBATION",
+            "backward_pass": true
+          },
+          {
+            "kind": "path",
+            "state": "PROBATION",
+            "backward_pass": true
+          }
+        ],
+        "local_restore_pass": true,
+        "private_failure_isolation_pass": true,
+        "fault_injection": [
+          {
+            "kind": "cell",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "cells.6.down.weight",
+              "cells.6.up.weight",
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "connection",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          },
+          {
+            "kind": "path",
+            "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+            "backward_hook_fired": true,
+            "injected_parameters": [
+              "controller.edge_bias",
+              "controller.scorer.0.bias",
+              "controller.scorer.0.weight",
+              "controller.scorer.2.bias",
+              "controller.scorer.2.weight",
+              "controller.source.weight",
+              "controller.step.weight",
+              "controller.target.weight"
+            ],
+            "accepted_witness_ok": true
+          }
+        ],
+        "accepted_and_oracle_fail_closed": true,
+        "peak_gpu_bytes": 108466688,
+        "device_name": "Tesla T4",
+        "scientific_decision": false,
+        "training_status": "NOT_TRAINED",
+        "isolated_training_gemm_flops": 3344763648,
+        "training_flops_scope": "single private update: live forward/backward + Oracle + candidate credit; GEMM lower bound, not full-run total"
+      }
+    },
+    "gates": {
+      "gradient_pilot_pass": true,
+      "local_alignment_pass": true,
+      "resource_projection_pass": false
+    },
+    "beta_selection": {
+      "beta": 4552.793066973983,
+      "raw_ratio_median": 0.00010982269403522997,
+      "scaled_ratio_median": 0.49999999999999994,
+      "selection_scope": "private_Train_gradient_Pilot_only_no_Development_tuning"
+    },
+    "projected_total_seconds": 7973.699068894955,
+    "projection_scope": "two queues including measured snapshot diagnostics; no wall-clock termination",
+    "scientific_decision": false,
+    "training_status": "NOT_TRAINED",
+    "source_sha": "e4e60bd5e7869ba753e579a74ef83f18853d0bb0",
+    "config_hash": "8b7b227076147d4ace78a0c389f3136114c7aa8f10a1d38184a5db00b8f29d1a"
+  }
+}
