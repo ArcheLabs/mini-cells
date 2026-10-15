@@ -193,3 +193,51 @@ def test_delivered_source_manifest_matches():
     manifest = json.loads((BASE / "reports/source-manifest.json").read_text())
     for name, digest in manifest["files"].items():
         assert file_sha256(ROOT / name) == digest, name
+
+
+def test_notebook_sparse_checkout_covers_source_manifest(tmp_path):
+    import ast
+    import subprocess
+    from clm001.common import ROOT, file_sha256
+
+    notebook = json.loads((BASE / "notebook.ipynb").read_text())
+    tree = ast.parse("".join(notebook["cells"][-1]["source"]))
+    sparse = []
+    for node in tree.body:
+        if (
+            isinstance(node, ast.Expr)
+            and isinstance(node.value, ast.Call)
+            and node.value.args
+            and isinstance(node.value.args[0], ast.List)
+        ):
+            values = [
+                v.value
+                for v in node.value.args[0].elts
+                if isinstance(v, ast.Constant) and isinstance(v.value, str)
+            ]
+            if values[:3] == ["git", "sparse-checkout", "set"]:
+                sparse = values[4:]
+    assert sparse, "sparse patterns must refresh for existing as well as new checkouts"
+    assert "/.github/workflows/clm001-qfirst-cpu.yml" in sparse
+
+    def git(*args):
+        subprocess.run(
+            ["git", *map(str, args)], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+
+    clone = tmp_path / "kaggle-sparse"
+    git("clone", "--shared", "--no-checkout", ROOT, clone)
+    git("-C", clone, "sparse-checkout", "init", "--no-cone")
+    git("-C", clone, "sparse-checkout", "set", "--no-cone", *sparse)
+    git("-C", clone, "checkout", "--detach", "HEAD")
+    manifest_path = BASE.relative_to(ROOT) / "reports/source-manifest.json"
+    manifest = json.loads((clone / manifest_path).read_text())
+    for name, digest in manifest["files"].items():
+        assert file_sha256(clone / name) == digest, name
+
+
+def test_notebook_preserves_installed_dependency_versions():
+    notebook = json.loads((BASE / "notebook.ipynb").read_text())
+    code = "".join(notebook["cells"][-1]["source"])
+    assert "find_spec" in code and "if missing:" in code
+    assert "tokenizers==0.20.3" not in code
