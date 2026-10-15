@@ -32,6 +32,7 @@ def cpu_gate(c, output):
         "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
         "OMP_NUM_THREADS": "1",
         "MKL_NUM_THREADS": "1",
+        "CUDA_VISIBLE_DEVICES": "",
     }
     result = subprocess.run(
         command, cwd=ROOT, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
@@ -226,8 +227,9 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument(
         "--mode",
-        default="cpu-preflight",
+        default="auto",
         choices=(
+            "auto",
             "cpu-preflight",
             "prepare",
             "gpu-pilot",
@@ -247,7 +249,13 @@ def main():
     a = p.parse_args()
     c = load(a.config)
     a.output.mkdir(parents=True, exist_ok=True)
-    if a.mode == "cpu-preflight":
+    if a.mode == "auto":
+        from .automatic import run
+
+        if a.assets is None:
+            a.assets = a.output.parent / "clm001-qfirst-assets"
+        result = run(c, a.output, a.assets)
+    elif a.mode == "cpu-preflight":
         result = cpu_gate(c, a.output)
     elif a.mode == "prepare":
         authorize(c, "gpu-pilot", a.device)

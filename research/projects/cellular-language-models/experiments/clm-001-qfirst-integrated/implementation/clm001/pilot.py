@@ -11,7 +11,7 @@ from .training import Trainer
 from .data import load_assets, batches
 from .evaluation import evaluate, q_diagnostics
 from .accounting import profile
-from .checkpoint import save, identity
+from .checkpoint import save, restore, identity
 from .shadows import Nursery
 
 
@@ -61,12 +61,30 @@ def run(c, assets, output, device, source):
             )
         )
         run_id = identity(c, arm, source, data)
-        _, checkpoint_wall = timed(
-            lambda: save(output / arm / "pilot-checkpoints", trainer, nursery, rng, run_id)
+        checkpoint_folder = output / arm / "pilot-checkpoints" / str(time.time_ns())
+        _, checkpoint_wall = timed(lambda: save(checkpoint_folder, trainer, nursery, rng, run_id))
+        restored = Trainer(Model(c, arm).to(device))
+        restored_rng = np.random.default_rng(0)
+        restore(checkpoint_folder, restored, restored_rng, run_id)
+        reference_batch = batches(data, c, rng, device)
+        replay_batch = batches(data, c, restored_rng, device)
+        _, reference_paths, _ = trainer.update(reference_batch)
+        _, restored_paths, _ = restored.update(replay_batch)
+        local_restore = reference_paths == restored_paths and all(
+            torch.allclose(value, restored.model.state_dict()[name], atol=1e-5, rtol=1e-4)
+            for name, value in trainer.model.state_dict().items()
         )
+        local_restore = local_restore and all(
+            torch.equal(g.get_state(), restored.rng[name].get_state())
+            for name, g in trainer.rng.items()
+        )
+        if not local_restore:
+            raise RuntimeError("GPU checkpoint continuation differs")
         median = float(np.median([v["synchronized_total_seconds"] for v in updates]))
         results[arm] = {
             "oracle": oracle,
+            "local_restore_pass": local_restore,
+            "real_kaggle_persistence_verified": False,
             "oracle_repeat_wall_seconds": repeat_wall,
             "oracle_wall_seconds": oracle_wall,
             "update_rows": updates,
@@ -81,7 +99,9 @@ def run(c, assets, output, device, source):
         }
     result = {
         "experiment_id": c["experiment_id"],
-        "status": "GPU_PILOT_REVIEW_REQUIRED",
+        "status": "GPU_PREFLIGHT_PASSED"
+        if c.get("execution", {}).get("mode") == "automatic-development"
+        else "GPU_PILOT_REVIEW_REQUIRED",
         "source_commit": source,
         "asset_sha256": data["asset_sha256"],
         "tokenizer_sha256": data["tokenizer_sha256"],

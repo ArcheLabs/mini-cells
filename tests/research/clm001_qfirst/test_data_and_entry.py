@@ -178,12 +178,12 @@ def test_historical_reuse_hashes_unchanged():
 def test_notebook_default_and_source_compilation():
     notebook = json.loads((BASE / "notebook.ipynb").read_text())
     cells = [c for c in notebook["cells"] if c["cell_type"] == "code"]
-    assert 'MODE = "cpu-preflight"' in "".join(cells[0]["source"])
+    assert "APPROVAL_CONFIG" not in "".join(cells[0]["source"])
     for c in cells:
         assert c["outputs"] == [] and c["execution_count"] is None
         compile("".join(c["source"]), "notebook-cell", "exec")
     code = "".join(cells[-1]["source"])
-    assert "publish-preflight" in code and 'command("publish")' in code
+    assert '"auto"' in code and "APPROVAL_CONFIG" not in code
     assert "terminate(" not in code and "kill(" not in code
 
 

@@ -49,7 +49,8 @@ def assess(candidate, accepted, baseline, challenger, groups, config, *, role="a
     s = config["shadow"]
     margin = s["min_cost_aware_improvement"]
     tolerance = s["nll_regression_tolerance"]
-    if margin is None or tolerance is None:
+    unfrozen = margin is None or tolerance is None
+    if unfrozen and config.get("execution", {}).get("mode") != "automatic-development":
         raise RuntimeError("Admission thresholds are not frozen")
     if baseline["paired_identity"] != challenger["paired_identity"]:
         raise ValueError("Admission windows/RNG/budget differ")
@@ -70,7 +71,7 @@ def assess(candidate, accepted, baseline, challenger, groups, config, *, role="a
     indices = rng.integers(0, len(keys), (s["bootstrap_replicates"], len(keys)))
     upper = float(np.quantile(cluster[indices].mean(1), 0.975))
     reg_upper = float(np.quantile(reg[indices].mean(1), 0.975))
-    passed = upper < -margin and reg_upper <= tolerance
+    passed = not unfrozen and upper < -margin and reg_upper <= tolerance
     candidate.metrics = {
         "cost_delta_mean": float(cluster.mean()),
         "cost_delta_upper95": upper,
@@ -78,12 +79,20 @@ def assess(candidate, accepted, baseline, challenger, groups, config, *, role="a
         "stories": len(keys),
         "passed": passed,
         "regression_contract_pass": True,
+        "admission_thresholds_frozen": not unfrozen,
         "role": role,
         "paired_identity": baseline["paired_identity"],
     }
     candidate.transition("EVALUATED", candidate.metrics)
     if not passed:
-        candidate.transition("REJECTED", {"reason": "paired Admission gate failed"})
+        candidate.transition(
+            "REJECTED",
+            {
+                "reason": "unfrozen thresholds; measured only, no promotion"
+                if unfrozen
+                else "paired Admission gate failed"
+            },
+        )
     return passed
 
 

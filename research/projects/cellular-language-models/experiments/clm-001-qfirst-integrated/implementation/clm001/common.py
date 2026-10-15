@@ -93,6 +93,21 @@ def authorize(c, phase, device="cpu"):
         if str(device) != "cpu":
             raise RuntimeError("synthetic engineering is CPU only")
         return
+    execution = c.get("execution", {})
+    if execution.get("mode") == "automatic-development":
+        if execution.get("source_commit") != source_sha() or execution.get(
+            "configuration_sha256"
+        ) != canonical_sha256({k: v for k, v in c.items() if k != "execution"}):
+            raise RuntimeError("automatic execution identity mismatch")
+        checks = execution.get("checks", {})
+        required = ("cpu", "return_path", "assets")
+        if phase in ("train-dev", "train-smoke", "evaluate"):
+            required += ("gpu_functional", "local_restore")
+        if phase not in ("gpu-pilot", "train-dev", "train-smoke", "evaluate") or not all(
+            checks.get(k) is True for k in required
+        ):
+            raise RuntimeError("automatic functional preflight has not passed")
+        return
     if not c["gates"]["oracle_cpu_pass"]:
         raise RuntimeError("ORACLE_UNTRUSTED: pass the same-source CPU oracle gate")
     if phase == "gpu-pilot" and not c["gates"]["gpu_pilot_approved"]:

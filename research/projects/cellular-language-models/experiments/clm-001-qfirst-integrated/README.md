@@ -1,20 +1,22 @@
 # CLM-001-QFIRST — integrated cost-to-go training
 
-Status: engineering implementation; Gate 0/1 synthetic CPU validation. **No GPU execution or confirmation authorization.** [SPEC.md](SPEC.md) is the unmodified supplied protocol.
+Status: automatic exploratory development launcher. Coding-agent verification uses synthetic CPU only; Kaggle Run All performs preflight and then development. [SPEC.md](SPEC.md) is the unmodified supplied protocol.
 
 ## Research question
 Can state-conditioned cost-to-go supervision, true hard execution, self-connections and real STOP jointly produce useful paths, with a bounded isolated Shadow lifecycle? This is exploratory; training completion, Q fit, Cell IDs or promotion alone cannot establish the scientific claim.
 
 ## Run now
-Import [notebook.ipynb](notebook.ipynb) into the original `bingjiangli/minicells` Kaggle Notebook and Run All. The default is **CPU preflight only**, using synthetic data. Existing `GITHUB_TOKEN` returns small metadata; full checkpoints remain in saved Kaggle Output. No new Kaggle Notebook or Action-to-Kaggle API is needed. Failed tests stop the next phase.
+Import [notebook.ipynb](notebook.ipynb) into the existing `bingjiangli/minicells` Notebook, select **T4 x2**, keep `GITHUB_TOKEN` / `HF_TOKEN` Secrets, and **Run All**.
 
-Local CPU equivalent from repository root:
+Automatic CPU correctness checks → GPU availability / existing GitHub return preflight → isolated assets and identity → bounded real-model Oracle / checkpoint continuation checks → QF-FULL and J0-FULL concurrently, one per GPU → analysis and GitHub metadata return. Failed checks stop the next step. No manual hashes, approval configuration, mode switches or second session.
+
+The declared 500-step live budget is preserved. A measured advance projection above two hours refuses to start full training; there is no process kill, runtime cap or silent budget reduction. This is not a total-duration guarantee.
+
+CPU-only engineering verification / CI remains available:
 
 ```bash
 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/run.py --mode cpu-preflight --output /tmp/clm001-cpu
 ```
-
-No manual source hash, asset hash or seed form is needed. Setup resolves its research branch once and records the full commit. A reviewed execution is pinned to that recorded source.
 
 ## Two arms only
 - `QF-FULL`: actual live CE updates continuous computation; inverse conditional-inclusion weighted Huber on detached pre-action states updates Connection. Auxiliary matched critic is trained on counterfactual returns but never chooses the action.
@@ -28,14 +30,12 @@ No manual source hash, asset hash or seed form is needed. Setup resolves its res
 - [ARCHITECTURE_AUDIT.md](ARCHITECTURE_AUDIT.md), [ORACLE_TRUST_GATE.md](ORACLE_TRUST_GATE.md), [SHADOW_ISOLATION_AUDIT.md](SHADOW_ISOLATION_AUDIT.md), [PERFORMANCE_BUDGET.md](PERFORMANCE_BUDGET.md).
 - Tests: `tests/research/clm001_qfirst`; CI: `.github/workflows/clm001-qfirst-cpu.yml`.
 
-## Later GPU sequence — separate approvals required
-1. Review CPU evidence and freeze the Pilot source/config; explicitly authorize GPU Pilot. The approval configuration is generated after that review, not by toggling Notebook booleans.
-2. Run the approved `gpu-pilot`: frozen fresh-model Q-calibration labels, repeatability, isolated real-Train timing updates and private Shadow/Admission/checkpoint timings. No old FAST checkpoint resumes a new Q-first optimizer.
-3. Review measured cost/variance. Freeze real source/asset/tokenizer identities, lambda, epsilon/temperature, thresholds/CI, seed and data budget. Explicitly authorize 50-step smoke. Do not reduce the proposed scientific budget silently if timing is too slow.
-4. Save its Output; attach it in a fresh Kaggle session and verify restore/trajectory reproducibility. Checksums alone do not set `portable_pass`.
-5. Only after that review and explicit 500-step approval, run both arms concurrently, one per T4. All candidate work stays on its own arm's device. No process killing or application wall-clock cap was added.
+## Active automatic workflow
+The current user instruction supersedes manual launch approvals in the original [SPEC.md](SPEC.md); its text remains intact. See [EXECUTION_WORKFLOW.md](EXECUTION_WORKFLOW.md).
 
-`publish-existing` recovers metadata return from retained Output without training again. Publishing uses current-main ancestry and stages result JSON only; no workflow permission, model weights, tokens or private secrets are included. Save Version remains necessary for portable checkpoint persistence.
+Runtime lambda uses the declared candidate **0.01**, recorded as development configuration. Scientific thresholds remain unfrozen and results cannot be declared preregistered or confirmed. Unset Admission margins permit measurement/probation but **no automatic Shadow promotion**; the reason is recorded instead of inventing an acceptance threshold.
+
+Save/restore/continuation is tested automatically in the bounded preflight. It is a local restart check, **not a claim of real cross-session Kaggle persistence**. Save Version still retains full checkpoints. Reopening the same source/output resumes checkpoints and skips completed training. `publish-existing` remains available through the CLI to return retained results.
 
 ## Limits
 The labels are Monte Carlo estimates, not an exact Oracle on real language. The QF continuous update intentionally omits policy-state gradients, per protocol; J0 retains its original path-level estimator. A fixed target-independent Shadow path prefix is a candidate policy, not learned path search. Logical call cost is not measured latency. No GPU speed or language advantage has yet been measured.

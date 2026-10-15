@@ -1,11 +1,13 @@
-# Items still requiring review before GPU development
+# Scientific / measurement status
 
-- Explicit GPU Pilot approval, then separate smoke/development approval.
-- Source/config approval identity; actual CLM asset/source shard/tokenizer hashes (no real data read in Gate 0/1).
-- Lambda cost and any operator-specific hardware cost calibration; epsilon/tau fixed initial candidates only.
-- Admission minimum improvement, allowed NLL regression, minimum stories, CI weighting/multiplicity policy and frozen proposal schedule.
-- Numerical Q rank/regret, on-policy paired utility and STOP-error thresholds/CI, development seed matrix and interpretation.
-- Measured GPU Oracle consistency/variance, peak memory, component timings and total-work projection.
-- Real saved Kaggle Output restore/restart evidence before 500 steps. Local portable tests alone do not approve this.
+Run All now automatically performs functional preflight and continues development; no manual launch approvals, mode changes or second session are required. See ../EXECUTION_WORKFLOW.md.
 
-No confirmation dataset, scientific claim or GPU training has been authorized or run. No application runtime kill limit was introduced.
+Still unregistered / unmeasured at implementation time:
+- Real asset/tokenizer hashes are recorded during automatic preparation.
+- Lambda uses the declared 0.01 candidate as development configuration; no preregistration is claimed.
+- Scientific Q rank/regret, STOP-error and paired utility thresholds remain null. Reports are descriptive, not positive scientific support.
+- Admission margins remain unfrozen: record candidate measurement/rejection, never auto-promote.
+- GPU timings and local save/restore continuation are measured automatically before full training. The coding agent did not run GPU training.
+- Real cross-session Kaggle persistence remains unverified. Save Version is necessary to retain Output.
+
+No confirmation data, historical results or scientific frozen evidence is changed.
