@@ -73,3 +73,12 @@ def test_historical_seed_reservation_is_metadata_only(proposed):
     with pytest.raises(ValueError, match="reserved"):
         governance(bad)
     assert governance(proposed)["raw_confirmation_boundary"] == 60000
+
+
+def test_arbitrary_local_parquet_cannot_be_labeled_as_pinned_hub_source(proposed, tmp_path):
+    from fast001.data import prepare
+
+    source = tmp_path / "wrong.parquet"
+    source.write_bytes(b"not the pinned source")
+    with pytest.raises(ValueError, match="frozen SHA256"):
+        prepare(proposed, tmp_path / "out", source)

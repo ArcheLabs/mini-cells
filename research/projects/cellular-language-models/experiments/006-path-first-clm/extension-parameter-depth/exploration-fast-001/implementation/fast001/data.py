@@ -199,6 +199,10 @@ def prepare(c, destination, source_file=None):
     from .config import validate
 
     validate(c)
+    if source_file is not None and c["data"].get("source_sha256") is None:
+        raise ValueError(
+            "explicit local source requires its frozen SHA256; default pinned Hub download records it automatically"
+        )
     if source_file is None:
         from huggingface_hub import hf_hub_download
 

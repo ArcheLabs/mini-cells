@@ -36,6 +36,7 @@ def identity(c, arm, assets):
 def train(
     c, arm, assets_dir, output, device="cpu", *, resume=False, max_session_seconds=None, pause_after_step=None
 ):
+    call_started = time.perf_counter()
     authorize(c, device, "train")
     assets = load_assets(c, assets_dir)
     run_id = identity(c, arm, assets)
@@ -114,7 +115,11 @@ def train(
             diagnostics=diagnostic,
             routing=diagnostic,
         )
-        row.update(optimizer_seconds=time.perf_counter() - tick, data_starts=chosen.tolist())
+        row.update(
+            optimizer_seconds=time.perf_counter() - tick,
+            data_starts=chosen.tolist(),
+            timing_scope="optimizer plus scheduled diagnostics; excludes data loading, evaluation and checkpoint IO",
+        )
         history.append(row)
         if index in c["evaluation"]["steps"]:
             tick = time.perf_counter()
@@ -139,7 +144,7 @@ def train(
             or (max_session_seconds is not None and time.perf_counter() - started >= max_session_seconds)
         )
         if index % c["performance"]["checkpoint_interval"] == 0 or index == t["steps"] or paused:
-            elapsed = prior + time.perf_counter() - started
+            elapsed = prior + time.perf_counter() - call_started
             # Commit a recovery pair before replacing the current atomic checkpoint.
             receipt_path = output / "checkpoint.json"
             if checkpoint.exists() and receipt_path.exists():
@@ -194,7 +199,7 @@ def train(
         "initial_quality": first_quality,
         "quality": final,
         "train_seconds": sum(r["optimizer_seconds"] for r in history),
-        "wall_seconds": prior + time.perf_counter() - started,
+        "wall_seconds": prior + time.perf_counter() - call_started,
         "peak_gpu_bytes": torch.cuda.max_memory_allocated(device) if str(device).startswith("cuda") else None,
         "checkpoint_sha256": file_sha256(checkpoint),
         "scientific_decision": False,

@@ -3,6 +3,7 @@
 import argparse
 import json
 import hashlib
+import time
 from pathlib import Path
 import torch
 from exp006.reuse import canonical_sha256, file_sha256
@@ -197,6 +198,7 @@ def main():
 
         for device in args.devices:
             authorize(c, device, "train")
+        matrix_started = time.perf_counter()
         output = Path(args.output)
         output.mkdir(parents=True, exist_ok=True)
         assets = Path(args.assets) if args.assets else output / "assets"
@@ -236,6 +238,15 @@ def main():
             destination = output / ("portable-" + str(__import__("time").time_ns()))
             result["portable_output"] = str(destination)
             export(output, destination)
+        write_json(
+            output / "execution-timing.json",
+            {
+                "end_to_end_seconds": time.perf_counter() - matrix_started,
+                "scope": "data preparation, workers, offline evaluation/profile/interventions/report and portable export",
+                "source_sha": source_sha(),
+                "scientific_decision": False,
+            },
+        )
     elif args.mode in ("evaluate", "profile", "intervene"):
         from .evaluate import evaluate, profile
         from .interventions import suite
