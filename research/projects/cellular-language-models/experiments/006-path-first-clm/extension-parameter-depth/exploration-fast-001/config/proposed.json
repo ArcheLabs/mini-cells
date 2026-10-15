@@ -1,0 +1,109 @@
+{
+  "experiment_id": "006-PD1-FAST-001",
+  "status": "ENGINEERING_PROPOSED",
+  "model": {
+    "width": 128,
+    "heads": 4,
+    "cell_count": 6,
+    "cell_hidden": 248,
+    "vocab_size": 4096,
+    "max_sequence_length": 64,
+    "router_hidden": 64,
+    "step_width": 16,
+    "edge_rank": 16,
+    "step_capacity": 16,
+    "alpha": 0.125,
+    "memory_mode": "static_input_readonly",
+    "moe_layers": 6,
+    "moe_experts": 4,
+    "moe_top_k": 2,
+    "moe_hidden": 176,
+    "router_cost_units": 0.05,
+    "cell_cost_units": 1.0,
+    "context_cost_units": 1.0
+  },
+  "training": {
+    "steps": 500,
+    "tokens": 256000,
+    "effective_batch": 8,
+    "microbatch": 1,
+    "sequence_length": 64,
+    "learning_rate": 0.0003,
+    "warmup_steps": 50,
+    "weight_decay": 0.1,
+    "gradient_clip": 1.0,
+    "critic_coefficient": 0.5,
+    "entropy_coefficient": 0.001,
+    "moe_balance_coefficient": 0.01,
+    "cost_lambda": 0.0,
+    "cost_start": 0,
+    "cost_ramp": 1,
+    "precision": "float32",
+    "mechanism": "J0",
+    "actor_state_gradient": "include_policy_dependence_on_computed_state",
+    "critic_state_gradient": "detached",
+    "checkpoint_selection": "last_completed_step"
+  },
+  "arms": {
+    "M0-TINY": {
+      "mechanism": "J0",
+      "max_actions": 6
+    },
+    "CLM-S8": {
+      "mechanism": "J0",
+      "max_actions": 8
+    },
+    "CLM-S16": {
+      "mechanism": "J0",
+      "max_actions": 16
+    }
+  },
+  "seed": 151000101,
+  "seed_namespace": "006-PD1-FAST-001/development/v1",
+  "data": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "split": "train",
+    "train_range": [
+      0,
+      8192
+    ],
+    "development_range": [
+      50000,
+      50512
+    ],
+    "tokenizer_stories": 8192,
+    "reserved_train_boundary": 60000,
+    "near_duplicate": "normalized-word-5gram-simhash64-hamming<=3",
+    "window_policy": "story_contained_nonoverlap_shift_one",
+    "source_sha256": null
+  },
+  "evaluation": {
+    "steps": [
+      100,
+      250,
+      500
+    ],
+    "intermediate_windows": 128,
+    "final_windows": 256,
+    "window_seed": 151000102,
+    "sampled_seed": 151000103,
+    "bootstrap_seed": 151000104,
+    "bootstrap_replicates": 1000,
+    "intervention_seed": 151000105,
+    "intervention_windows": 4,
+    "decode_repetitions": 10
+  },
+  "performance": {
+    "implementation": "pd001-light-v1",
+    "diagnostics_interval": 100,
+    "checkpoint_interval": 100,
+    "warmup_steps": 3,
+    "measure_steps": 10,
+    "target_wall_seconds": 1800
+  },
+  "approval": {
+    "development": false,
+    "confirmation": false
+  }
+}
