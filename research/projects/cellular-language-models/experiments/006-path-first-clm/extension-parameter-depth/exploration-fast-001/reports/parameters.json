@@ -1,0 +1,41 @@
+{
+  "M0-TINY": {
+    "total_params": 2013440,
+    "groups": {
+      "embedding_head": 524288,
+      "shared": 8448,
+      "moe_backbone": 1480704
+    },
+    "shape_sha256": "d132389099f56ec5f90dded3ef197fc0e4f62452c3d63c18cfe39e5c23779058",
+    "resident_weight_bytes": 8053760,
+    "ratio_to_moe": 1.0
+  },
+  "CLM-S8": {
+    "total_params": 1011000,
+    "groups": {
+      "embedding_head": 524288,
+      "shared": 25088,
+      "context": 65792,
+      "cell_pool": 380928,
+      "connection": 10231,
+      "critic": 4673
+    },
+    "shape_sha256": "fcccbf580901a726314a58fcb629a44356c3f45eba527707777a8d3a7e5fe96b",
+    "resident_weight_bytes": 4044000,
+    "ratio_to_moe": 0.502125715193897
+  },
+  "CLM-S16": {
+    "total_params": 1011000,
+    "groups": {
+      "embedding_head": 524288,
+      "shared": 25088,
+      "context": 65792,
+      "cell_pool": 380928,
+      "connection": 10231,
+      "critic": 4673
+    },
+    "shape_sha256": "fcccbf580901a726314a58fcb629a44356c3f45eba527707777a8d3a7e5fe96b",
+    "resident_weight_bytes": 4044000,
+    "ratio_to_moe": 0.502125715193897
+  }
+}
