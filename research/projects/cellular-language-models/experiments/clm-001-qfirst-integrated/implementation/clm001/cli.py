@@ -33,6 +33,8 @@ def cpu_gate(c, output):
         "OMP_NUM_THREADS": "1",
         "MKL_NUM_THREADS": "1",
         "CUDA_VISIBLE_DEVICES": "",
+        "GIT_ALLOW_PROTOCOL": "file",
+        "GIT_TERMINAL_PROMPT": "0",
     }
     result = subprocess.run(
         command, cwd=ROOT, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT

@@ -220,20 +220,65 @@ def test_notebook_sparse_checkout_covers_source_manifest(tmp_path):
     assert sparse, "sparse patterns must refresh for existing as well as new checkouts"
     assert "/.github/workflows/clm001-qfirst-cpu.yml" in sparse
 
-    def git(*args):
-        subprocess.run(
-            ["git", *map(str, args)], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
+    import os
+    import shutil
 
-    clone = tmp_path / "kaggle-sparse"
-    git("clone", "--shared", "--no-checkout", ROOT, clone)
-    git("-C", clone, "sparse-checkout", "init", "--no-cone")
-    git("-C", clone, "sparse-checkout", "set", "--no-cone", *sparse)
-    git("-C", clone, "checkout", "--detach", "HEAD")
+    # The Kaggle source may be a shallow promisor repository. Never clone it or ask
+    # its object database to lazily fetch omitted historical blobs during preflight.
+    # Build a standalone offline fixture from the already materialized source files.
     manifest_path = BASE.relative_to(ROOT) / "reports/source-manifest.json"
-    manifest = json.loads((clone / manifest_path).read_text())
+    manifest = json.loads((ROOT / manifest_path).read_text())
+    fixture = tmp_path / "kaggle-sparse"
+    fixture.mkdir()
+    for name in [*manifest["files"], str(manifest_path)]:
+        destination = fixture / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, destination)
+    shutil.copyfile(ROOT / "pyproject.toml", fixture / "pyproject.toml")
+    excluded = fixture / "outside/not-an-experiment-input.txt"
+    excluded.parent.mkdir()
+    excluded.write_text("must be removed by sparse rules")
+    env = {
+        **os.environ,
+        "GIT_ALLOW_PROTOCOL": "file",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": os.devnull,
+        "GIT_CONFIG_COUNT": "0",
+        "GIT_TERMINAL_PROMPT": "0",
+    }
+
+    def git(*args):
+        result = subprocess.run(
+            ["git", "-C", str(fixture), *map(str, args)],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=env,
+        )
+        return result.stdout
+
+    git("init", "--quiet")
+    git("add", "--all")
+    git(
+        "-c",
+        "user.name=CPU fixture",
+        "-c",
+        "user.email=cpu@example.invalid",
+        "-c",
+        "commit.gpgsign=false",
+        "commit",
+        "--quiet",
+        "-m",
+        "offline source fixture",
+    )
+    assert git("remote") == b""
+    assert not (fixture / ".git/objects/info/alternates").exists()
+    git("sparse-checkout", "init", "--no-cone")
+    git("sparse-checkout", "set", "--no-cone", *sparse)
+    git("checkout", "--detach", "HEAD")
+    assert not excluded.exists()
     for name, digest in manifest["files"].items():
-        assert file_sha256(clone / name) == digest, name
+        assert file_sha256(fixture / name) == digest, name
 
 
 def test_notebook_preserves_installed_dependency_versions():
