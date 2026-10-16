@@ -1,0 +1,48 @@
+{
+  "schema": "minicells.r3b.implementation-report.v1",
+  "status": "ENGINEERING_IMPLEMENTED_FORMAL_TRAINING_HOLD",
+  "audited_base_main_sha": "2e47a28a27a0932912673a1140e533e12abcc00a",
+  "implementation_source_sha": "173d6f0f6a3bb7172b0450008186d4c1235a64c3",
+  "cpu_gate": {
+    "passed_unique": 111,
+    "existing": 81,
+    "R3b": 30,
+    "lint": "PASS",
+    "historical_R3_unchanged": true
+  },
+  "CI": "PENDING_REMOTE_RUN",
+  "gates": {
+    "A": "LOCAL_CPU_PASS_CI_PENDING",
+    "B": "PRIOR_REAL_HF_AND_GITHUB_LOG_EVIDENCE_PRESENT",
+    "C": "SESSION_AND_CONTROL_PROVENANCE_PENDING",
+    "D": "NOT_RUN",
+    "E": "NOT_AUTHORIZED"
+  },
+  "production_parameters_per_arm": 1075492,
+  "requires_grad_parameters_per_arm": 1070819,
+  "training_steps_per_arm_planned": 500,
+  "live_tokens_per_arm_planned": 256000,
+  "seed_planned": 151001301,
+  "GPU_training_executed": false,
+  "GPU_pilot_executed": false,
+  "real_assets_manifest_frozen": false,
+  "beta_frozen": false,
+  "historical_results_changed": false,
+  "remaining": [
+    "Review existing C historical evaluation/control report and three Session identities; do not repeat completed A/B.",
+    "Run the private two-T4 Pilot and review actual bandwidth, snapshots and Event budget.",
+    "Freeze actual asset/tokenizer/Pilot/beta/runtime identities and explicit formal release."
+  ],
+  "known_limits": [
+    "Actual CUDA execution of new workers has not been validated on this host.",
+    "Pilot calibration timing extrapolation is not a measured full production/Event budget.",
+    "Required historical tokenizer hash must match; no silent replacement tokenizer.",
+    "GPU host/worker visibility is isolated before Torch import/spawn; actual T4 behavior remains Gate D."
+  ],
+  "scientific_status": "NO_NEW_RESEARCH_RESULTS",
+  "causal_feedback": "CAUSAL_FEEDBACK_NOT_TESTED",
+  "multiseed": "MULTISEED_NOT_TESTED",
+  "local_cuda_available": true,
+  "gpu_pilot_not_run_reason": "Gate C session/control provenance remains pending; no authenticated Kaggle two-T4 execution was started. Local CUDA availability is not Kaggle validation.",
+  "cpu_validation_evidence": "111 unique passing tests across recorded regression and post-review suites (81 existing +30 R3b); JUnit files retained."
+}
