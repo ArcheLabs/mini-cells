@@ -1,10 +1,12 @@
 name: Kaggle continuation engineering CPU gates
 on:
   push:
-    branches: [codex/kaggle-continuation-engineering]
+    branches: [codex/kaggle-continuation-engineering, codex/hf-checkpoint-storage]
   pull_request:
     paths:
       - 'shared/python/minicells_runtime/**'
+      - 'shared/python/minicells_artifacts/**'
+      - 'research/projects/cellular-language-models/engineering/hf-checkpoint-storage/**'
       - 'tests/engineering/**'
       - 'research/projects/cellular-language-models/engineering/kaggle-continuation/**'
       - '.github/workflows/kaggle-continuation-cpu.yml'
@@ -30,7 +32,7 @@ jobs:
           python -m pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
           python -m pip install numpy pytest tokenizers==0.20.3 ruff==0.9.10
       - name: Engineering lint
-        run: ruff check shared/python/minicells_runtime tests/engineering research/projects/cellular-language-models/engineering/kaggle-continuation/run.py
+        run: ruff check shared/python/minicells_runtime shared/python/minicells_artifacts tests/engineering research/projects/cellular-language-models/engineering/kaggle-continuation/run.py research/projects/cellular-language-models/engineering/hf-checkpoint-storage/run.py
       - name: Continuation and frozen R3 regression
         run: python -m pytest -q tests/engineering tests/research/clm001_r3 --junitxml=continuation-cpu.xml
       - name: Verify historical research files unchanged
