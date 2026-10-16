@@ -1,0 +1,366 @@
+{
+  "status": "GRADIENT_PILOT_PASS",
+  "arms": {
+    "Q-R3": {
+      "status": "GPU_PILOT_PASS",
+      "arm": "Q-R3",
+      "gradient_rows": [
+        {
+          "q_grad_norm": 0.10848114639520645,
+          "lcg_grad_norm": null,
+          "lcg_q_cosine": null,
+          "lcg_candidate_cell_calls": 0,
+          "lcg_events": 32
+        },
+        {
+          "q_grad_norm": 0.09070218354463577,
+          "lcg_grad_norm": null,
+          "lcg_q_cosine": null,
+          "lcg_candidate_cell_calls": 0,
+          "lcg_events": 32
+        },
+        {
+          "q_grad_norm": 0.19707858562469482,
+          "lcg_grad_norm": null,
+          "lcg_q_cosine": null,
+          "lcg_candidate_cell_calls": 0,
+          "lcg_events": 32
+        }
+      ],
+      "source_sha": "52b1950b23debbcd3f808c10eb6e0d3ea2d317c6",
+      "config_hash": "abad4a0691cd894cc520db94a8e3f1795b67cf0ffec607fc36ec305dafdc8be4",
+      "asset_sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+      "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+      "p50_step_seconds": 3.1072264919999952,
+      "p90_step_seconds": 4.132990209599962,
+      "projected_arm_seconds": 4721.329792637356,
+      "shadow_rehearsal_seconds": 23.012596633999976,
+      "projection_includes": "500 updates + measured Shadow + conservative evaluation allowance; excludes initial downloads/publication",
+      "shadow_candidates": [
+        {
+          "kind": "cell",
+          "state": "PROBATION",
+          "backward_pass": true
+        },
+        {
+          "kind": "connection",
+          "state": "PROBATION",
+          "backward_pass": true
+        },
+        {
+          "kind": "path",
+          "state": "PROBATION",
+          "backward_pass": true
+        }
+      ],
+      "local_restore_pass": true,
+      "private_failure_isolation_pass": true,
+      "fault_injection": [
+        {
+          "kind": "cell",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "cells.6.down.weight",
+            "cells.6.up.weight",
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        },
+        {
+          "kind": "connection",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        },
+        {
+          "kind": "path",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        }
+      ],
+      "accepted_and_oracle_fail_closed": true,
+      "peak_gpu_bytes": 108466176,
+      "device_name": "Tesla T4",
+      "scientific_decision": false,
+      "training_status": "NOT_TRAINED",
+      "isolated_training_gemm_flops": 3332935424,
+      "training_flops_scope": "single private update: live forward/backward + Oracle + candidate credit; GEMM lower bound, not full-run total"
+    },
+    "QC-R3": {
+      "status": "GPU_PILOT_PASS",
+      "arm": "QC-R3",
+      "gradient_rows": [
+        {
+          "q_grad_norm": 0.10848114639520645,
+          "lcg_grad_norm": 2.5585573894204572e-05,
+          "lcg_q_cosine": -0.0038017684128135443,
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32
+        },
+        {
+          "q_grad_norm": 0.09070249646902084,
+          "lcg_grad_norm": 9.961192517948803e-06,
+          "lcg_q_cosine": 0.15625302493572235,
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32
+        },
+        {
+          "q_grad_norm": 0.19707699120044708,
+          "lcg_grad_norm": 1.854098263720516e-05,
+          "lcg_q_cosine": 0.10402636229991913,
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32
+        }
+      ],
+      "source_sha": "52b1950b23debbcd3f808c10eb6e0d3ea2d317c6",
+      "config_hash": "abad4a0691cd894cc520db94a8e3f1795b67cf0ffec607fc36ec305dafdc8be4",
+      "asset_sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+      "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+      "p50_step_seconds": 3.103578669000001,
+      "p90_step_seconds": 3.216457314599995,
+      "projected_arm_seconds": 3685.7822637383942,
+      "shadow_rehearsal_seconds": 25.54644598799996,
+      "projection_includes": "500 updates + measured Shadow + conservative evaluation allowance; excludes initial downloads/publication",
+      "shadow_candidates": [
+        {
+          "kind": "cell",
+          "state": "PROBATION",
+          "backward_pass": true
+        },
+        {
+          "kind": "connection",
+          "state": "PROBATION",
+          "backward_pass": true
+        },
+        {
+          "kind": "path",
+          "state": "PROBATION",
+          "backward_pass": true
+        }
+      ],
+      "local_restore_pass": true,
+      "private_failure_isolation_pass": true,
+      "fault_injection": [
+        {
+          "kind": "cell",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "cells.6.down.weight",
+            "cells.6.up.weight",
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        },
+        {
+          "kind": "connection",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        },
+        {
+          "kind": "path",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        }
+      ],
+      "accepted_and_oracle_fail_closed": true,
+      "peak_gpu_bytes": 108466688,
+      "device_name": "Tesla T4",
+      "scientific_decision": false,
+      "training_status": "NOT_TRAINED",
+      "isolated_training_gemm_flops": 3344763648,
+      "training_flops_scope": "single private update: live forward/backward + Oracle + candidate credit; GEMM lower bound, not full-run total"
+    },
+    "QS-R3": {
+      "status": "GPU_PILOT_PASS",
+      "arm": "QS-R3",
+      "gradient_rows": [
+        {
+          "q_grad_norm": 0.10848114639520645,
+          "lcg_grad_norm": 2.5585573894204572e-05,
+          "lcg_q_cosine": -0.0038017684128135443,
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32
+        },
+        {
+          "q_grad_norm": 0.09070218354463577,
+          "lcg_grad_norm": 9.961142495740205e-06,
+          "lcg_q_cosine": 0.15625391900539398,
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32
+        },
+        {
+          "q_grad_norm": 0.19707858562469482,
+          "lcg_grad_norm": 1.8540882592787966e-05,
+          "lcg_q_cosine": 0.10402115434408188,
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32
+        }
+      ],
+      "source_sha": "52b1950b23debbcd3f808c10eb6e0d3ea2d317c6",
+      "config_hash": "abad4a0691cd894cc520db94a8e3f1795b67cf0ffec607fc36ec305dafdc8be4",
+      "asset_sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+      "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+      "p50_step_seconds": 3.0966518769999993,
+      "p90_step_seconds": 3.239980762600021,
+      "projected_arm_seconds": 3711.147773138424,
+      "shadow_rehearsal_seconds": 24.6730589,
+      "projection_includes": "500 updates + measured Shadow + conservative evaluation allowance; excludes initial downloads/publication",
+      "shadow_candidates": [
+        {
+          "kind": "cell",
+          "state": "PROBATION",
+          "backward_pass": true
+        },
+        {
+          "kind": "connection",
+          "state": "PROBATION",
+          "backward_pass": true
+        },
+        {
+          "kind": "path",
+          "state": "PROBATION",
+          "backward_pass": true
+        }
+      ],
+      "local_restore_pass": true,
+      "private_failure_isolation_pass": true,
+      "fault_injection": [
+        {
+          "kind": "cell",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "cells.6.down.weight",
+            "cells.6.up.weight",
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        },
+        {
+          "kind": "connection",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        },
+        {
+          "kind": "path",
+          "failure_code": "CANDIDATE_NUMERICAL_FAILURE",
+          "backward_hook_fired": true,
+          "injected_parameters": [
+            "controller.edge_bias",
+            "controller.scorer.0.bias",
+            "controller.scorer.0.weight",
+            "controller.scorer.2.bias",
+            "controller.scorer.2.weight",
+            "controller.source.weight",
+            "controller.step.weight",
+            "controller.target.weight"
+          ],
+          "accepted_witness_ok": true
+        }
+      ],
+      "accepted_and_oracle_fail_closed": true,
+      "peak_gpu_bytes": 108466688,
+      "device_name": "Tesla T4",
+      "scientific_decision": false,
+      "training_status": "NOT_TRAINED",
+      "isolated_training_gemm_flops": 3344763648,
+      "training_flops_scope": "single private update: live forward/backward + Oracle + candidate credit; GEMM lower bound, not full-run total"
+    }
+  },
+  "gates": {
+    "gradient_pilot_pass": true,
+    "local_alignment_pass": true,
+    "resource_projection_pass": true
+  },
+  "beta_selection": {
+    "beta": 4552.793066973983,
+    "raw_ratio_median": 0.00010982269403522997,
+    "scaled_ratio_median": 0.49999999999999994,
+    "selection_scope": "private_Train_gradient_Pilot_only_no_Development_tuning"
+  },
+  "projected_total_seconds": 7100.24302883798,
+  "resource_target_met": true,
+  "resource_projection_advisory_only": true,
+  "projection_scope": "two queues including measured snapshot diagnostics; no wall-clock termination",
+  "scientific_decision": false,
+  "training_status": "NOT_TRAINED",
+  "source_sha": "52b1950b23debbcd3f808c10eb6e0d3ea2d317c6",
+  "config_hash": "36f9e69a342b5978df263b92446bb7c055a457a0ad28e1c94c7a46a2a0fe400c"
+}
