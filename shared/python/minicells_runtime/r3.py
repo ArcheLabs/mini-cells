@@ -233,7 +233,7 @@ def diagnostics(model, data, c, frozen, step, folder, trainer, *, crash=None):
         crash("snapshot-after")
 
 
-def segment_arm(root, arm, stop, *, device="cpu", crash=None):
+def segment_arm(root, arm, stop, *, device="cpu", crash=None, committed=None):
     root = Path(root)
     c = read(root / "runtime-config.json")
     if c.get("synthetic"):
@@ -284,6 +284,8 @@ def segment_arm(root, arm, stop, *, device="cpu", crash=None):
     if pending(c, trainer.step):
         process(c, trainer, nursery, data, rng, folder, identity)
     diagnostics(trainer.model, data, c, frozen, trainer.step, folder, trainer, crash=crash)
+    if committed and (folder / "latest.json").exists():
+        committed(root)
     end = min(stop, c["training"]["steps"])
     while trainer.step < end:
         row, snapshot, labels = trainer.update(batches(data, c, rng, device))
@@ -319,6 +321,8 @@ def segment_arm(root, arm, stop, *, device="cpu", crash=None):
             "checkpoint-step-%06d" % step
         ):
             diagnostics(trainer.model, data, c, frozen, step, folder, trainer, crash=crash)
+            if committed:
+                committed(root)
         print(json.dumps({"arm": arm, "step": step, "restored_from_step": start}), flush=True)
     check_events(c, trainer.step, nursery, identity)
     if trainer.step == c["training"]["steps"] and not (folder / "final-evaluation.json").exists():
@@ -369,8 +373,15 @@ def package(root, *, crash=None, limit_bytes=None):
             witness = read(side)
             if witness["sha256"] != digest(path) or witness["identity"] != identity:
                 raise ContinuationError("CHECKPOINT_HASH_MISMATCH", path.name)
+            checkpoint_events = torch.load(path, map_location="cpu", weights_only=False)[
+                "extra"
+            ].get("events", {})
             records.append(
                 {
+                    "event_cursor": {
+                        k: {"step": v["step"], "event": v["event"]}
+                        for k, v in checkpoint_events.items()
+                    },
                     "step": int(match[1]),
                     "revision": int(match[2] or 0),
                     "checkpoint": path.relative_to(root).as_posix(),

@@ -192,3 +192,92 @@ def test_github_schema_excludes_private_nested_state(bundle, tmp_path):
     index["checkpoint_ref"]["arms"] = {"PRIVATE": "PRIVATE"}
     index["checkpoints"][0]["rng"] = "PRIVATE"
     assert "PRIVATE" not in json.dumps(storage_summary("checkpoint-index.json", index))
+
+
+def test_automatic_remote_resume_without_rebuilding_assets(tmp_path, monkeypatch):
+    import sys
+    from minicells_runtime import hf_run
+
+    hub = FakeHub(tmp_path / "hub")
+    monkeypatch.setattr(hf_run, "HubBackend", lambda repo: hub)
+
+    def invoke(name, stop):
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "hf-run",
+                "--hf-repo",
+                hub.repo,
+                "--output",
+                str(tmp_path / name),
+                "--segment-end-step",
+                str(stop),
+            ],
+        )
+        hf_run.main()
+
+    invoke("a", 6)
+    assert read(tmp_path / "a-storage/storage-status.json")["status"] == "DURABLE_PARTIAL"
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("assets prepared during HF resume")
+
+    monkeypatch.setattr(hf_run, "prepare", forbidden)
+    invoke("b", 10)
+    assert read(tmp_path / "b-storage/storage-status.json")["status"] == "DURABLE_COMPLETE"
+    assert read(tmp_path / "b/parent-input.json")["checkpoint_ref"]["hf_revision"]
+
+
+def test_actual_interleaved_publishers_cannot_rollback(bundle, tmp_path, monkeypatch):
+    hub = FakeHub(tmp_path / "hub")
+    advanced = tmp_path / "advanced"
+    r3.resume(bundle, advanced, 10, source=r3.source_sha())
+    original = hub.commit
+    raced = []
+
+    def interleave(files, parent, message):
+        if not raced:
+            raced.append(True)
+            HFCheckpointStore(hub).publish_committed_checkpoint(advanced)
+        return original(files, parent, message)
+
+    monkeypatch.setattr(hub, "commit", interleave)
+    with pytest.raises(ContinuationError, match="ROLLBACK"):
+        HFCheckpointStore(hub).publish_committed_checkpoint(bundle)
+    key = HFCheckpointStore(hub).prefix(r3.verify(bundle))
+    pointer = HFCheckpointStore(hub).lookup(key)
+    assert all(row["step"] == 10 for row in pointer["arms"].values())
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://evil.test/checkpoint-index.json",
+        "http://raw.githubusercontent.com/ArcheLabs/mini-cells/main/checkpoint-index.json",
+        "https://raw.githubusercontent.com/Other/repo/main/checkpoint-index.json",
+    ],
+)
+def test_github_index_rejects_arbitrary_origin(tmp_path, monkeypatch, url):
+    import sys
+    from minicells_runtime import hf_run
+
+    hub = FakeHub(tmp_path / "hub")
+    monkeypatch.setattr(hf_run, "HubBackend", lambda repo: hub)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "run",
+            "--mode",
+            "evaluate",
+            "--hf-repo",
+            hub.repo,
+            "--output",
+            str(tmp_path / "out"),
+            "--github-index-url",
+            url,
+        ],
+    )
+    with pytest.raises(ContinuationError, match="GITHUB_INDEX_URL_REJECTED"):
+        hf_run.main()

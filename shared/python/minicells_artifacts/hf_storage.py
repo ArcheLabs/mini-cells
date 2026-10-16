@@ -91,7 +91,12 @@ class HubBackend:
     def check_write(self):
         from huggingface_hub import auth_check
 
-        auth_check(self.repo, repo_type="model", token=self.token, write=True)
+        # Older Kaggle SDKs lack write=; the actual create_commit/readback below
+        # remains the write-permission proof in both SDK generations.
+        import inspect
+
+        kwargs = {"write": True} if "write" in inspect.signature(auth_check).parameters else {}
+        auth_check(self.repo, repo_type="model", token=self.token, **kwargs)
 
 
 def is_conflict(error):
@@ -146,6 +151,14 @@ class HFCheckpointStore:
             }
         )
 
+    def locate(self, source_sha, run_id):
+        path = "run-index/" + canonical({"source_sha": source_sha, "run_id": run_id}) + ".json"
+        revision = self.backend.info().sha
+        pointer = self.backend.optional(path, revision)
+        if pointer is None:
+            raise ContinuationError("HF_RUN_NOT_FOUND")
+        return self.lookup(pointer["run_key"], revision)
+
     def lookup(self, run_key, revision=None):
         relative(run_key)
         resolved = revision or self.backend.info().sha
@@ -165,7 +178,18 @@ class HFCheckpointStore:
             tmp = Path(tmp)
             objects = {}
             mapping = {}
+            committed_paths = {
+                record["checkpoint"]
+                for progress in meta["arms"].values()
+                for record in progress["checkpoints"]
+            }
             for name, row in files.items():
+                if name.endswith((".orphan", ".tmp")) or (
+                    Path(name).name.startswith("checkpoint-step-")
+                    and name.endswith(".pt")
+                    and name not in committed_paths
+                ):
+                    raise ContinuationError("HF_UNCOMMITTED_OBJECT_REJECTED", name)
                 physical = row.get("storage_path", name)
                 local = safe(root, physical)
                 key = "objects/sha256/" + row["sha256"]
@@ -238,6 +262,10 @@ class HFCheckpointStore:
                             ) and new["sha256"] != old["sha256"]:
                                 raise ContinuationError("HF_CHECKPOINT_ID_COLLISION", arm)
                         if previous["bundle_sha256"] == pointer["bundle_sha256"]:
+                            if readback:
+                                for key, local in objects.items():
+                                    if digest(self.backend.get(key, head)) != digest(local):
+                                        raise ContinuationError("HF_READBACK_MISMATCH")
                             return self._index(
                                 meta, snapshot, dict(pointer, hf_revision=head), mapping
                             )
@@ -248,6 +276,15 @@ class HFCheckpointStore:
                         or []
                     )
                     additions = {k: v for k, v in objects.items() if k not in existing}
+                    locator = (
+                        "run-index/"
+                        + canonical({"source_sha": meta["source_sha"], "run_id": meta["run_id"]})
+                        + ".json"
+                    )
+                    previous_locator = self.backend.optional(locator, head)
+                    if previous_locator and previous_locator["run_key"] != prefix:
+                        raise ContinuationError("HF_RUN_IDENTITY_COLLISION")
+                    additions[locator] = ptr
                     additions[snap_path] = document
                     additions[prefix + "/latest.json"] = ptr
                     for arm in pointer["arms"]:
@@ -317,6 +354,8 @@ class HFCheckpointStore:
         if destination.exists():
             raise ContinuationError("OUTPUT_ALREADY_EXISTS")
         try:
+            if not self.backend.info().private:
+                raise ContinuationError("HF_PRIVATE_REPO_REQUIRED")
             bundle = self.backend.get(relative(ref["bundle_path"]), revision)
             if digest(bundle) != ref["bundle_sha256"]:
                 raise ContinuationError("HF_BUNDLE_HASH_MISMATCH")
