@@ -17,7 +17,12 @@ def test_snapshot_hash_matches_remote_index_and_wrong_arm_rejected(case, tmp_pat
     meta = runner.package(root)
     values = analysis.aggregate(root)
     assert values["experiment-manifest.json"]["diagnostic_status"] == "INCOMPLETE"
-    file = next((root / "arms/QC-R3b/diagnostics").glob("snapshot-*.json"))
+    # Hash sidecars share the JSON suffix; filesystem iteration order varies.
+    file = next(
+        path
+        for path in sorted((root / "arms/QC-R3b/diagnostics").glob("snapshot-*.json"))
+        if not path.name.endswith(".sha256.json")
+    )
     value = read(file)
     assert value["runtime_config_sha256"] == meta["runtime_config_sha256"]
     value["identity"]["arm"] = "Q-R3b"
