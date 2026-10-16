@@ -1,0 +1,82 @@
+{
+  "experiment_id": "CLM-001-R3",
+  "engineering_status": "CPU_PASS_GPU_PENDING",
+  "baseline_source": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+  "candidate_configuration_sha256": "8b7b227076147d4ace78a0c389f3136114c7aa8f10a1d38184a5db00b8f29d1a",
+  "tested_source_manifest_sha256": "a1eac7573420fdc8e6b12da9cf42439b80813ee5bb7e4275af0fb649d42041e2",
+  "tests": {
+    "r3_passed": 44,
+    "r1_r2_regression_passed": 154,
+    "total_passed": 198,
+    "failed": 0
+  },
+  "lint": "PASS",
+  "parameters": {
+    "Q-R3": {
+      "total_parameters": 1075492,
+      "by_module_group": {
+        "shared": 615168,
+        "cell_pool": 444416,
+        "connection": 15908
+      },
+      "reserved_parameters": 63488,
+      "accepted_initial_resident_parameters": 1012004,
+      "includes_critic_and_reserved_slot": true,
+      "dtype": "float32",
+      "resident_parameter_bytes": 4301968,
+      "trainable_parameters": 1070819
+    },
+    "QC-R3": {
+      "total_parameters": 1075492,
+      "by_module_group": {
+        "shared": 615168,
+        "cell_pool": 444416,
+        "connection": 15908
+      },
+      "reserved_parameters": 63488,
+      "accepted_initial_resident_parameters": 1012004,
+      "includes_critic_and_reserved_slot": true,
+      "dtype": "float32",
+      "resident_parameter_bytes": 4301968,
+      "trainable_parameters": 1070819
+    },
+    "QS-R3": {
+      "total_parameters": 1075492,
+      "by_module_group": {
+        "shared": 615168,
+        "cell_pool": 444416,
+        "connection": 15908
+      },
+      "reserved_parameters": 63488,
+      "accepted_initial_resident_parameters": 1012004,
+      "includes_critic_and_reserved_slot": true,
+      "dtype": "float32",
+      "resident_parameter_bytes": 4301968,
+      "trainable_parameters": 1070819
+    }
+  },
+  "torch_version": "2.4.1+cu121",
+  "cuda_available": true,
+  "real_gpu_pilot": "NOT_RUN",
+  "real_development_training": "NOT_TRAINED",
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "execution": "one_Run_All_checks_then_auto_freeze_and_development_only_if_real_gates_pass",
+  "beta": null,
+  "unverified": [
+    "real CUDA hook/rollback/restart parity",
+    "real beta scale and gradient conflict",
+    "100 identifiable pairs / 32 stories local direction gate",
+    "actual asset/tokenizer lock",
+    "two-device workload projection and GPU memory",
+    "causal matched-shuffle feedback intervention",
+    "seeds2/3 independent replication",
+    "complete compute-matched training extension"
+  ],
+  "known_limits": [
+    "biased subset local surrogate; not an unbiased hard policy gradient",
+    "token-parity grouping has limited specialization detection power",
+    "story intervals do not establish seed replication",
+    "training GEMM observation is isolated, not an exact full-kernel run total"
+  ]
+}
