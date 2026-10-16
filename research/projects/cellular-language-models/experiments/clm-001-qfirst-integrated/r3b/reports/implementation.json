@@ -2,7 +2,7 @@
   "schema": "minicells.r3b.implementation-report.v1",
   "status": "ENGINEERING_IMPLEMENTED_FORMAL_TRAINING_HOLD",
   "audited_base_main_sha": "2e47a28a27a0932912673a1140e533e12abcc00a",
-  "implementation_source_sha": "173d6f0f6a3bb7172b0450008186d4c1235a64c3",
+  "implementation_source_sha": "838967e4af7d2f865537098013b6c8be36bb095a",
   "cpu_gate": {
     "passed_unique": 111,
     "existing": 81,
@@ -10,7 +10,7 @@
     "lint": "PASS",
     "historical_R3_unchanged": true
   },
-  "CI": "PENDING_REMOTE_RUN",
+  "CI": "PENDING_REMOTE_RUN_FOR_GATE_REMOVAL",
   "gates": {
     "A": "LOCAL_CPU_PASS_CI_PENDING",
     "B": "PRIOR_REAL_HF_AND_GITHUB_LOG_EVIDENCE_PRESENT",
@@ -43,5 +43,6 @@
   "multiseed": "MULTISEED_NOT_TESTED",
   "local_cuda_available": true,
   "gpu_pilot_not_run_reason": "No authenticated Kaggle two-T4 Pilot executed here.",
-  "cpu_validation_evidence": "111 unique passing tests across recorded regression and post-review suites (81 existing +30 R3b); JUnit files retained."
+  "cpu_validation_evidence": "111 unique passing tests across recorded regression and post-review suites (81 existing +30 R3b); JUnit files retained.",
+  "gate_removal_cpu_tests_passed": 16
 }
