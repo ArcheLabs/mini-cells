@@ -14,7 +14,7 @@
   "gates": {
     "A": "LOCAL_CPU_PASS_CI_PENDING",
     "B": "PRIOR_REAL_HF_AND_GITHUB_LOG_EVIDENCE_PRESENT",
-    "C": "SESSION_AND_CONTROL_PROVENANCE_PENDING",
+    "C": "REMOVED_BY_USER_REQUEST_2026_10_17",
     "D": "NOT_RUN",
     "E": "NOT_AUTHORIZED"
   },
@@ -29,7 +29,6 @@
   "beta_frozen": false,
   "historical_results_changed": false,
   "remaining": [
-    "Review existing C historical evaluation/control report and three Session identities; do not repeat completed A/B.",
     "Run the private two-T4 Pilot and review actual bandwidth, snapshots and Event budget.",
     "Freeze actual asset/tokenizer/Pilot/beta/runtime identities and explicit formal release."
   ],
@@ -43,6 +42,6 @@
   "causal_feedback": "CAUSAL_FEEDBACK_NOT_TESTED",
   "multiseed": "MULTISEED_NOT_TESTED",
   "local_cuda_available": true,
-  "gpu_pilot_not_run_reason": "Gate C session/control provenance remains pending; no authenticated Kaggle two-T4 execution was started. Local CUDA availability is not Kaggle validation.",
+  "gpu_pilot_not_run_reason": "No authenticated Kaggle two-T4 Pilot executed here.",
   "cpu_validation_evidence": "111 unique passing tests across recorded regression and post-review suites (81 existing +30 R3b); JUnit files retained."
 }

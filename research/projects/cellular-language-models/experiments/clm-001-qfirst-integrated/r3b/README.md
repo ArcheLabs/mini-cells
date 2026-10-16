@@ -15,10 +15,11 @@ real training. Source SHA is pinned in the Notebook.
 
 Default ACTION=auto performs static CPU/source/identity checks, real storage and
 GitHub permission preflight, reuses/prepares the original assets, then a **minimal
-private two-T4 Pilot** if Gate C evidence is already accepted. It never automatically
-starts500 steps. User-reported successful A/B output is retained; missing C version
-and control-comparison provenance must be reviewed, not treated as PASS or rerun
-without reason. This release therefore may correctly stop at GATE_C_NOT_VERIFIED.
+private two-T4 Pilot**. Historical cross-session acceptance is informational:
+the user has manually checked it and requested removal of Gate C because the old
+versions were not retained. No A/B/C replay or version URL is required. This is
+recorded as USER_VERIFIED, not an automated test PASS. Formal500-step authorization
+and the actual Pilot/resource review remain required.
 
 Pilot hardware:GPU T4×2. Its same host publisher measures real checkpoint sizes,
 three private Train updates per arm, snapshot cost and a restored trajectory. It
@@ -56,8 +57,6 @@ new model evaluations are run for plotting. Positive or negative outcomes are sa
 
 ## Current release limitations
 
-- Gate C's user success report lacks three saved Session/Version identities and C's
-  full-state/control/optimizer-zero evidence in the supplied repository/logs.
 - No real GPU Pilot has run here. Do not infer production bandwidth from the
   tiny CPU engineering run. Calibration snapshot extrapolation is explicitly not a
   measured full Development/Event budget. Formal release requires budget review.

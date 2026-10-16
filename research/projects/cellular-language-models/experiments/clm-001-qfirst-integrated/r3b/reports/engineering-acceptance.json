@@ -13,7 +13,7 @@
   "hf_revision": "0a94ae00b19c88751b718f30e2ec6c0db43e38a8",
   "github_result_commit": "86b52658c71f94a2328445c17ac530bf3128cfcc",
   "result_branch_deleted_after_merge": true,
-  "cross_session_status": "NOT_VERIFIED",
+  "cross_session_status": "USER_VERIFIED",
   "user_reported_success": true,
   "exact_control_pass": false,
   "sessions": {
@@ -40,8 +40,11 @@
   "notes": [
     "User confirms completion; supplied reply is a successful GitHub push receipt, not the C control comparison.",
     "No completed engineering run is repeated or modified.",
-    "The earlier local-Output version 358936394 is not HF A/B/C provenance."
+    "The earlier local-Output version 358936394 is not HF A/B/C provenance.",
+    "2026-10-17: User explicitly requests removing Gate C; prior validation checked manually, versions not retained. No automated PASS is claimed."
   ],
   "formal_training_authorized": false,
-  "scientific_decision": false
+  "scientific_decision": false,
+  "gate_C_required": false,
+  "user_verified_without_saved_versions": true
 }
