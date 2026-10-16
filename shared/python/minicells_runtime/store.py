@@ -3,6 +3,7 @@
 Only load checkpoints from this project's trusted private Kaggle Outputs. Verification
 is deliberately stdlib-only and must finish before any torch deserialization.
 """
+
 from pathlib import Path, PurePosixPath
 from abc import ABC, abstractmethod
 import hashlib
@@ -29,7 +30,9 @@ def digest(path):
 
 
 def canonical(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+    ).hexdigest()
 
 
 def read(path):
@@ -53,8 +56,16 @@ def atomic(path, value):
 
 def safe(root, relative):
     root = Path(root)
+    if not isinstance(relative, str):
+        raise ContinuationError("UNSAFE_PATH", relative)
     p = PurePosixPath(relative)
-    if not isinstance(relative, str) or not relative or "\\" in relative or p.is_absolute() or any(v in (".", "..") for v in relative.split("/")):
+    if (
+        not isinstance(relative, str)
+        or not relative
+        or "\\" in relative
+        or p.is_absolute()
+        or any(v in (".", "..") for v in relative.split("/"))
+    ):
         raise ContinuationError("UNSAFE_PATH", relative)
     # Check ancestors, including the mount root; never resolve a symlink then accept it.
     candidate = root / relative
@@ -70,6 +81,8 @@ def inventory(root):
     root = Path(root)
     files = {}
     for path in sorted(root.rglob("*")):
+        if "continuation-records" in path.relative_to(root).parts:
+            continue
         if path.is_symlink():
             raise ContinuationError("UNSAFE_PATH", path.relative_to(root))
         if path.is_file():
@@ -100,6 +113,7 @@ class CheckpointStore(ABC):
 
 class MountedInputStore(CheckpointStore):
     """Read-only access. Never writes even when validation fails."""
+
     def __init__(self, root):
         self.root = Path(root)
         if not self.root.is_dir():
@@ -116,18 +130,35 @@ class MountedInputStore(CheckpointStore):
             raise ContinuationError("MANIFEST_HASH_MISMATCH")
         files = read(mpath)["files"]
         for name, row in files.items():
-            path = safe(self.root, name)
+            path = safe(self.root, row.get("storage_path", name))
             if path.stat().st_size != row["bytes"] or digest(path) != row["sha256"]:
                 raise ContinuationError("CHECKPOINT_HASH_MISMATCH", name)
+
         def checked(name):
             if name not in files:
                 raise ContinuationError("MANIFEST_COVERAGE_MISSING", name)
-            return safe(self.root, name)
-        for name, field in (("candidate-config.json", "candidate_config_sha256"), ("runtime-config.json", "runtime_config_sha256"), ("protocol.md", "protocol_sha256"), ("assets/manifest.json", "assets_manifest_sha256"), ("assets/tokenizer.json", "tokenizer_sha256")):
+            return safe(self.root, files[name].get("storage_path", name))
+
+        for name, field in (
+            ("candidate-config.json", "candidate_config_sha256"),
+            ("runtime-config.json", "runtime_config_sha256"),
+            ("protocol.md", "protocol_sha256"),
+            ("assets/manifest.json", "assets_manifest_sha256"),
+            ("assets/tokenizer.json", "tokenizer_sha256"),
+        ):
             if digest(checked(name)) != meta.get(field):
                 raise ContinuationError("IDENTITY_MISMATCH", field)
         lock = read(checked("experiment.lock.json"))
-        for field in ("run_id", "experiment_id", "source_sha", "protocol_sha256", "candidate_config_sha256", "runtime_config_sha256", "assets_manifest_sha256", "tokenizer_sha256"):
+        for field in (
+            "run_id",
+            "experiment_id",
+            "source_sha",
+            "protocol_sha256",
+            "candidate_config_sha256",
+            "runtime_config_sha256",
+            "assets_manifest_sha256",
+            "tokenizer_sha256",
+        ):
             if lock.get(field) != meta.get(field):
                 raise ContinuationError("IDENTITY_MISMATCH", field)
         runtime = read(checked("runtime-config.json"))
@@ -138,14 +169,26 @@ class MountedInputStore(CheckpointStore):
             for record in progress["checkpoints"]:
                 cp = checked(record["checkpoint"])
                 side = read(checked(record["sidecar"]))
-                if digest(cp) != record["checkpoint_sha256"] or side["sha256"] != record["checkpoint_sha256"] or side["identity"] != identity:
+                if (
+                    digest(cp) != record["checkpoint_sha256"]
+                    or side["sha256"] != record["checkpoint_sha256"]
+                    or side["identity"] != identity
+                ):
                     raise ContinuationError("CHECKPOINT_HASH_MISMATCH", record["checkpoint"])
             latest = read(checked("arms/" + arm + "/latest.json"))
-            if latest["file"] != Path(progress["checkpoint"]).name or latest["sha256"] != progress["checkpoint_sha256"] or latest["identity"] != identity:
+            if (
+                latest["file"] != Path(progress["checkpoint"]).name
+                or latest["sha256"] != progress["checkpoint_sha256"]
+                or latest["identity"] != identity
+            ):
                 raise ContinuationError("EVENT_STATE_INCONSISTENT", arm)
             probe = read(checked("arms/" + arm + "/frozen-probe-bank.json"))
             pp = checked("arms/" + arm + "/frozen-probe-bank.pt")
-            if probe.get("identity") != identity or digest(pp) != progress["probe_bank_sha256"] or probe["sha256"] != progress["probe_bank_sha256"]:
+            if (
+                probe.get("identity") != identity
+                or digest(pp) != progress["probe_bank_sha256"]
+                or probe["sha256"] != progress["probe_bank_sha256"]
+            ):
                 raise ContinuationError("FROZEN_PROBE_MISSING", arm)
         self.meta = meta
         return meta
@@ -158,7 +201,11 @@ class MountedInputStore(CheckpointStore):
         if step is None:
             path = meta["arms"][arm]["checkpoint"]
             return next(v for v in records if v["checkpoint"] == path)
-        candidates = [v for v in records if v["step"] == step and (revision is None or v["revision"] == revision)]
+        candidates = [
+            v
+            for v in records
+            if v["step"] == step and (revision is None or v["revision"] == revision)
+        ]
         if not candidates:
             raise ContinuationError("CHECKPOINT_STEP_NOT_FOUND", (arm, step, revision))
         # Pick latest committed event revision at that step, explicitly from the index.
@@ -179,7 +226,12 @@ class MountedInputStore(CheckpointStore):
             for name in list(names) + [meta["files_manifest"], "continuation.json"]:
                 target = temporary / name
                 target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(safe(self.root, name), target)
+                physical = names.get(name, {}).get("storage_path", name)
+                shutil.copyfile(safe(self.root, physical), target)
+                if physical != name:
+                    stored = temporary / physical
+                    stored.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(safe(self.root, physical), stored)
             MountedInputStore(temporary).verify(expected_source)
             os.replace(temporary, destination)
         except Exception:
@@ -190,9 +242,29 @@ class MountedInputStore(CheckpointStore):
 
 class LocalOutputStore(MountedInputStore):
     """Publish a final continuation pointer only after every safe-boundary file exists."""
+
     def commit(self, meta, *, limit_bytes=DEFAULT_LIMIT, crash=None):
         files = inventory(self.root)
         report = capacity(files, limit_bytes)
+        # Version only mutable selector/status metadata. Weight/data assets remain
+        # single-copy immutable files. Old commit pointers survive a crash while
+        # latest.json advances to the next event revision.
+        for name, row in files.items():
+            if Path(name).name in (
+                "latest.json",
+                "run-status.json",
+                "segment-summary.json",
+                "publication-state.json",
+                "resource-estimate.json",
+                "parent-input.json",
+                "failure.json",
+            ):
+                physical = "continuation-records/" + row["sha256"] + ".json"
+                target = self.root / physical
+                if not target.exists():
+                    target.parent.mkdir(exist_ok=True)
+                    shutil.copyfile(safe(self.root, name), target)
+                row["storage_path"] = physical
         document = {"schema_version": SCHEMA, "files": files}
         manifest_name = "continuation-manifest-" + canonical(document) + ".json"
         meta = dict(meta, schema_version=SCHEMA, files_manifest=manifest_name)
@@ -201,6 +273,14 @@ class LocalOutputStore(MountedInputStore):
             crash("manifest")
         meta["files_manifest_sha256"] = digest(self.root / manifest_name)
         self.verify(meta["source_sha"], _metadata=meta)
+        actual = {
+            p.relative_to(self.root).as_posix(): {"bytes": p.stat().st_size}
+            for p in self.root.rglob("*")
+            if p.is_file() and not p.is_symlink()
+        }
+        actual["continuation.json"] = {"bytes": len(json.dumps(meta, indent=2).encode()) + 4096}
+        report = capacity(actual, limit_bytes)
+        meta["output_capacity"] = report
         if crash:
             crash("continuation")
         atomic(self.root / "continuation.json", meta)
