@@ -1,0 +1,37 @@
+{
+  "status": "CPU_PASS_KAGGLE_NOT_VERIFIED",
+  "implementation": "COMPLETE_ENGINEERING_ADAPTER_AND_SYNTHETIC_ACCEPTANCE_ENTRY",
+  "code_source_sha": "cb01879fb5a82c162acc280d59e48301e26385d4",
+  "baseline_source_sha": "52b1950b23debbcd3f808c10eb6e0d3ea2d317c6",
+  "historical_r3_tree": "da3fcf9542ed3d149e902876fd0fd58febe7df52",
+  "historical_r3_changed": false,
+  "cpu_tests": {
+    "engineering": 26,
+    "r3_regression": 45,
+    "total": 71,
+    "passed": 71,
+    "failed": 0,
+    "seconds": 285.68,
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -xq tests/engineering tests/research/clm001_r3",
+    "junit_sha256": "ab53777a0aae1da8e7f9d418bf57d72c56f127e2a4ba13c31be2bfd27ea06b9e"
+  },
+  "lint": "PASS",
+  "CI": "PENDING_REMOTE_RUN",
+  "KAGGLE_CROSS_SESSION_RESUME": "NOT_VERIFIED",
+  "real_kaggle_versions": {
+    "A": null,
+    "B": null,
+    "C": null
+  },
+  "gpu_training_started": false,
+  "r3_rerun": false,
+  "r3b_authorized": false,
+  "kaggle_blocker": "No Kaggle API credentials; Windows browser control cannot initialize under the current WSL cwd. User will run the synthetic CPU A/B/C notebook and provide saved version links.",
+  "known_limits": [
+    "No remote durability before a version successfully saves and is mounted in a later Session.",
+    "Integrity hashes do not authenticate arbitrary malicious torch pickle; trusted project-private Output only.",
+    "Historical R3 source drift requires explicit fork/migration, not automatic resume.",
+    "Future R3b scientific configuration and first real-data automatic preflight are not authorized by this engineering entry.",
+    "Actual Kaggle A/B/C persistence remains required; CPU local copying is not platform acceptance."
+  ]
+}
