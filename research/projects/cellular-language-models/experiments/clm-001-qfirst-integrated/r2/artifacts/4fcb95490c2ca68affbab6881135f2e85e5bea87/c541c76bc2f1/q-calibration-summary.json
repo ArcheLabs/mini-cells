@@ -1,0 +1,42 @@
+{
+  "experiment_id": "CLM-001-R2",
+  "source_sha": "4fcb95490c2ca68affbab6881135f2e85e5bea87",
+  "config_hash": "1d1f2e221621881e0c1995f145543c788c24ed7734ef646dad8caaa27f052cae",
+  "scope": "DEVELOPMENT_AGGREGATE",
+  "complete": true,
+  "arm": "PAIRED",
+  "last_committed_step": {
+    "QF-R2": 500,
+    "J0-R2": 500
+  },
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "QF-R2": {
+    "role": "calibration",
+    "states": 17,
+    "coverage_missing": 7,
+    "identifiable_states": 11,
+    "oracle_status": "TRUSTED",
+    "mae": 0.08570052533521522,
+    "spearman": -0.06232492997198881,
+    "regret": 0.09942181691527364,
+    "uniform_regret": 0.0932986665251782,
+    "pairwise_accuracy": 0.4629603912885647,
+    "stop_error_rate": 0.2,
+    "scientific_decision": false
+  },
+  "J0-R2": {
+    "role": "calibration",
+    "states": 17,
+    "coverage_missing": 7,
+    "identifiable_states": 10,
+    "oracle_status": "TRUSTED",
+    "mae": 0.11340980786532792,
+    "spearman": 0.0035014005602241,
+    "regret": 0.08917070628965605,
+    "uniform_regret": 0.08658528100840057,
+    "pairwise_accuracy": 0.5027776390463159,
+    "stop_error_rate": 0.0,
+    "scientific_decision": false
+  }
+}
