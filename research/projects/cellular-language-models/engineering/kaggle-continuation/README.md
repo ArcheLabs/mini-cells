@@ -1,3 +1,6 @@
+> Current cloud persistence entry: [HF checkpoints + GitHub results](../hf-checkpoint-storage/README.md).
+> The mounted-Output instructions below are retained as historical engineering documentation; use the new HF Notebook for cloud continuation.
+
 # Kaggle continuation engineering
 
 **Scope:** infrastructure only, based on frozen R3 `52b1950b23debbcd3f808c10eb6e0d3ea2d317c6`.

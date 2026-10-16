@@ -1,0 +1,41 @@
+{
+  "schema": "minicells.hf-engineering-report.v1",
+  "status": "CPU_PASS_REAL_HF_NOT_VERIFIED",
+  "code_source_sha": "660c0abcfcc137ccf423dd92e27c47d3746c6e96",
+  "tested_code_tree": "88cbd3e3671e17230b4138c754b71d6d139a8841",
+  "branch": "codex/hf-checkpoint-storage",
+  "cpu": {
+    "passed": 81,
+    "failed": 0,
+    "seconds": 510.48,
+    "engineering_tests": 36,
+    "frozen_r3_regressions": 45,
+    "lint": "PASS",
+    "historical_r3_diff": "EMPTY",
+    "junit": "cpu-junit.xml",
+    "junit_sha256": "044d3aa7e2d374415c30e0b99265d31fae14ae70a730913e232e9c5df3192bbb"
+  },
+  "gate_a": "PASS_OFFLINE_SIMULATED_STORAGE",
+  "gate_b_real_hf": "NOT_VERIFIED",
+  "gate_c_real_cross_session": "NOT_VERIFIED",
+  "gate_d_real_dual_channel": "NOT_VERIFIED",
+  "ci": "PENDING_REMOTE_RUN",
+  "requested_hf_repo_slug": "minicells-research-checkpoints",
+  "actual_hf_repo": null,
+  "hf_validation_revision": null,
+  "kaggle_validation_versions": [],
+  "historical_kaggle_version": "358936394 (previous local-output scheme; not HF evidence)",
+  "historical_r3_checkpoints": "UNAVAILABLE_NOT_MIGRATED",
+  "new_real_training_started": false,
+  "r3b_authorized": false,
+  "gpu_used": false,
+  "algorithm_changed": false,
+  "science_conclusion": false,
+  "known_limits": [
+    "Private repo/account permissions must be verified in Kaggle using existing HF_TOKEN.",
+    "Actual upload throughput/quota and production checkpoint interval have not been measured.",
+    "Single publisher serializes whole-bundle safe boundaries; stale independent worker snapshots fail closed.",
+    "Full real R3b launcher/config integration awaits engineering acceptance and separate scientific review.",
+    "No actual private repository was created or written from this workstation."
+  ]
+}
