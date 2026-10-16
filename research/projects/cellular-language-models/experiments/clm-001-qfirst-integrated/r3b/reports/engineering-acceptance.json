@@ -1,0 +1,47 @@
+{
+  "schema": "minicells.r3b.engineering-acceptance.v1",
+  "audited_main_sha": "2e47a28a27a0932912673a1140e533e12abcc00a",
+  "prior_implementation_sha": "660c0abcfcc137ccf423dd92e27c47d3746c6e96",
+  "original_R3_sha": "52b1950b23debbcd3f808c10eb6e0d3ea2d317c6",
+  "gate_A_existing_CPU": {
+    "passed": 81,
+    "failures": 0,
+    "source": "engineering/hf-checkpoint-storage/reports/engineering.json"
+  },
+  "gate_B": "OBSERVED_PRIVATE_HF_WRITE_PINNED_READ_AND_GITHUB_INDEX",
+  "hf_repo": "libingjiang/minicells-research-checkpoints",
+  "hf_revision": "0a94ae00b19c88751b718f30e2ec6c0db43e38a8",
+  "github_result_commit": "86b52658c71f94a2328445c17ac530bf3128cfcc",
+  "result_branch_deleted_after_merge": true,
+  "cross_session_status": "NOT_VERIFIED",
+  "user_reported_success": true,
+  "exact_control_pass": false,
+  "sessions": {
+    "A": {
+      "kaggle_version": null,
+      "step": 6,
+      "hf_revision_from_supplied_log": "7d72ab57631f4f81f0cbf62455b551132aa36ff7"
+    },
+    "B": {
+      "kaggle_version": null,
+      "step": 10,
+      "github_index_records_complete": true
+    },
+    "C": {
+      "kaggle_version": null,
+      "historical_eval_and_exact_control_report_in_repository": false
+    }
+  },
+  "missing": [
+    "Distinct A/B/C Kaggle Version links/session metadata",
+    "B restore-from-step-6 and random-init-false trace",
+    "C optimizer-update-zero and exact full-state control-comparison evidence"
+  ],
+  "notes": [
+    "User confirms completion; supplied reply is a successful GitHub push receipt, not the C control comparison.",
+    "No completed engineering run is repeated or modified.",
+    "The earlier local-Output version 358936394 is not HF A/B/C provenance."
+  ],
+  "formal_training_authorized": false,
+  "scientific_decision": false
+}

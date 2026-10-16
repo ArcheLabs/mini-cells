@@ -346,18 +346,19 @@ def segment_arm(root, arm, stop, *, device="cpu", crash=None, committed=None):
     }
 
 
-def package(root, *, crash=None, limit_bytes=None):
+def package(root, *, crash=None, limit_bytes=None, adapter=None):
     root = Path(root)
     c = read(root / "runtime-config.json")
     lock = read(root / "experiment.lock.json")
     data = load_assets(c, root / "assets")
     arms = {}
-    for arm in c["arms"]:
+    for arm in adapter.arms(c) if adapter else c["arms"]:
         folder = root / "arms" / arm
         if not folder.exists():
             continue
-        trainer, nursery, _, identity = load_state(folder, c, arm, data, lock["source_sha"])
-        check_events(c, trainer.step, nursery, identity)
+        loader = adapter.load_state if adapter else load_state
+        trainer, nursery, _, identity = loader(folder, c, arm, data, lock["source_sha"])
+        (adapter.check_events if adapter else check_events)(c, trainer.step, nursery, identity)
         if not (folder / "frozen-probe-bank.json").exists():
             raise ContinuationError("FROZEN_PROBE_MISSING", arm)
         latest = read(folder / "latest.json")
@@ -410,7 +411,10 @@ def package(root, *, crash=None, limit_bytes=None):
     state(root, status, arms={a: v["last_committed_step"] for a, v in arms.items()})
     from .diagnostics import resource_estimate
 
-    atomic(root / "resource-estimate.json", resource_estimate(root, c, arms))
+    atomic(
+        root / "resource-estimate.json",
+        (adapter.resources if adapter else resource_estimate)(root, c, arms),
+    )
     kwargs = {"crash": crash}
     if limit_bytes is not None:
         kwargs["limit_bytes"] = limit_bytes

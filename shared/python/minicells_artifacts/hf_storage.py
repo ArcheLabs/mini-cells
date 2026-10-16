@@ -256,19 +256,34 @@ class HFCheckpointStore:
                                 old["revision"],
                             ):
                                 raise ContinuationError("HF_LATEST_ROLLBACK_REJECTED", arm)
+                            if any(
+                                new.get("event_cursor", {}).get(k) != value
+                                for k, value in old.get("event_cursor", {}).items()
+                            ):
+                                raise ContinuationError("HF_EVENT_CURSOR_ROLLBACK_REJECTED", arm)
                             if (new["step"], new["revision"]) == (
                                 old["step"],
                                 old["revision"],
                             ) and new["sha256"] != old["sha256"]:
                                 raise ContinuationError("HF_CHECKPOINT_ID_COLLISION", arm)
                         if previous["bundle_sha256"] == pointer["bundle_sha256"]:
+                            readback_begin = time.perf_counter()
                             if readback:
                                 for key, local in objects.items():
                                     if digest(self.backend.get(key, head)) != digest(local):
                                         raise ContinuationError("HF_READBACK_MISMATCH")
-                            return self._index(
+                            index = self._index(
                                 meta, snapshot, dict(pointer, hf_revision=head), mapping
                             )
+                            index["transport"] = {
+                                "payload_bytes_submitted": 0,
+                                "new_content_object_bytes": 0,
+                                "commit_seconds": 0.0,
+                                "readback_seconds": time.perf_counter() - readback_begin,
+                                "full_readback": readback,
+                                "wire_bytes": None,
+                            }
+                            return index
                     # Existing content-addressed objects must retain identical bytes.
                     existing = set(
                         self.backend.info(head).siblings
@@ -289,9 +304,12 @@ class HFCheckpointStore:
                     additions[prefix + "/latest.json"] = ptr
                     for arm in pointer["arms"]:
                         additions[prefix + "/arms/" + relative(arm) + "/latest.json"] = ptr
+                    commit_begin = time.perf_counter()
                     revision = self.backend.commit(
                         additions, head, "durable checkpoint " + meta["run_id"]
                     )
+                    commit_seconds = time.perf_counter() - commit_begin
+                    readback_begin = time.perf_counter()
                     # Prove all paths exist in that exact commit, not mutable main.
                     present = {x.rfilename for x in self.backend.info(revision).siblings}
                     if set(objects) - present or snap_path not in present:
@@ -302,7 +320,24 @@ class HFCheckpointStore:
                         for key, local in objects.items():
                             if digest(self.backend.get(key, revision)) != digest(local):
                                 raise ContinuationError("HF_READBACK_MISMATCH")
-                    return self._index(meta, snapshot, dict(pointer, hf_revision=revision), mapping)
+                    index = self._index(
+                        meta, snapshot, dict(pointer, hf_revision=revision), mapping
+                    )
+                    index["transport"] = {
+                        "payload_bytes_submitted": sum(
+                            path.stat().st_size for path in additions.values()
+                        ),
+                        "new_content_object_bytes": sum(
+                            path.stat().st_size
+                            for name, path in additions.items()
+                            if name.startswith("objects/sha256/")
+                        ),
+                        "commit_seconds": commit_seconds,
+                        "readback_seconds": time.perf_counter() - readback_begin,
+                        "full_readback": readback,
+                        "wire_bytes": None,
+                    }
+                    return index
                 except Exception as error:
                     if is_conflict(error) and attempt + 1 < self.retries:
                         continue

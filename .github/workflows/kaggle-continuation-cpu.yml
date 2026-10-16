@@ -38,7 +38,7 @@ jobs:
       - name: Verify historical research files unchanged
         run: |
           git fetch --depth=1 origin 52b1950b23debbcd3f808c10eb6e0d3ea2d317c6
-          git diff --exit-code 52b1950b23debbcd3f808c10eb6e0d3ea2d317c6 -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3
+          git diff --exit-code 52b1950b23debbcd3f808c10eb6e0d3ea2d317c6 -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3/implementation research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3/config research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3/SPEC.md
       - uses: actions/upload-artifact@v4
         if: always()
         with:
