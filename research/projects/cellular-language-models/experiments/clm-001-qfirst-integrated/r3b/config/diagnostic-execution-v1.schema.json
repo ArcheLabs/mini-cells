@@ -1,0 +1,156 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mode",
+    "training",
+    "posthoc",
+    "analysis_publication"
+  ],
+  "properties": {
+    "schema": {
+      "const": "minicells.r3b.diagnostic-execution.v1"
+    },
+    "mode": {
+      "const": "DEFER_EXPENSIVE_ANALYSIS"
+    },
+    "training": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "journal_telemetry_steps",
+        "preserve_every_original_event_revision",
+        "mandatory_semantic_event_evaluation",
+        "save_frozen_probe_banks_at_step_zero"
+      ],
+      "properties": {
+        "journal_telemetry_steps": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 500
+          }
+        },
+        "preserve_every_original_event_revision": {
+          "const": true
+        },
+        "mandatory_semantic_event_evaluation": {
+          "const": "UNCHANGED"
+        },
+        "save_frozen_probe_banks_at_step_zero": {
+          "const": true
+        }
+      }
+    },
+    "posthoc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quality_primary_steps",
+        "quality_secondary_steps",
+        "functional_steps",
+        "quality_event_compare_at_400",
+        "functional_event_compare_at_400",
+        "primary_policies",
+        "secondary_policies",
+        "required_roles",
+        "confirmation",
+        "sampling"
+      ],
+      "properties": {
+        "quality_primary_steps": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 500
+          }
+        },
+        "quality_secondary_steps": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 500
+          }
+        },
+        "functional_steps": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 500
+          }
+        },
+        "quality_event_compare_at_400": {
+          "type": "array",
+          "const": [
+            "pre_event",
+            "post_event"
+          ]
+        },
+        "functional_event_compare_at_400": {
+          "type": "array",
+          "const": [
+            "pre_event",
+            "post_event"
+          ]
+        },
+        "primary_policies": {
+          "type": "array",
+          "const": [
+            "greedy",
+            "uniform"
+          ]
+        },
+        "secondary_policies": {
+          "type": "array",
+          "const": [
+            "sampled",
+            "constant"
+          ]
+        },
+        "required_roles": {
+          "type": "array",
+          "const": [
+            "calibration",
+            "development"
+          ]
+        },
+        "confirmation": {
+          "const": "SEALED"
+        },
+        "sampling": {
+          "const": "INHERIT_FROZEN_R3B_PROTOCOL"
+        }
+      }
+    },
+    "analysis_publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "private_raw_results",
+        "public_aggregates",
+        "separate_from_training_latest"
+      ],
+      "properties": {
+        "private_raw_results": {
+          "const": "HUGGING_FACE"
+        },
+        "public_aggregates": {
+          "const": "GITHUB"
+        },
+        "separate_from_training_latest": {
+          "const": true
+        }
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
