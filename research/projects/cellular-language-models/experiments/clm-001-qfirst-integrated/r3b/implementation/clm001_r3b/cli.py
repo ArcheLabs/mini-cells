@@ -441,7 +441,9 @@ def main():
                             {
                                 "failure-index.json": {
                                     "status": "FAILED_OR_PARTIAL",
-                                    "failures": [safe_error(error)],
+                                    "failures": read(target.parent / (target.name + "-evidence") / "failure-index.json")["failures"]
+                                    if (target.parent / (target.name + "-evidence") / "failure-index.json").exists()
+                                    else [safe_error(error)],
                                     "scientific_decision": False,
                                 },
                                 "experiment-manifest.json": {

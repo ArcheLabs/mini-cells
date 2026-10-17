@@ -1,0 +1,10 @@
+{
+  "status": "CPU_VERIFIED_GPU_NOT_RUN",
+  "observed_failure": "RuntimeError in publication; original exception text was discarded",
+  "code_defect": "CPU publisher used training restore on CUDA path RNG states",
+  "repair": "Read-only identity/hash/model/event validation without RNG restoration; full worker resume unchanged",
+  "regression_tests_passed": 24,
+  "original_kaggle_root_cause": "NOT_PROVEN_FROM_TRUNCATED_LOG",
+  "error_reporting": "stage and redacted message retained in console and GitHub failure index",
+  "formal_training_started": false
+}
