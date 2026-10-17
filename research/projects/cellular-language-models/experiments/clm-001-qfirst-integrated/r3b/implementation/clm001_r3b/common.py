@@ -66,6 +66,9 @@ def runtime(candidate, source, *, beta, pilot_hash, run_id, assets_hash):
         "analysis_protocol": "r3b-longitudinal-v1",
         "assets_manifest_sha256": assets_hash,
     }
+    from .diagnostic_schedule import load_plan
+
+    c["r3b"]["diagnostic_execution"] = load_plan()
     c["execution"] = {
         "source_sha": source,
         "cpu_pass": True,
@@ -141,13 +144,21 @@ def safe_error(error):
         else None
     )
     import re
+
     message = str(error)
     if re.search(r"(?i)secret|password|authorization|bearer|token[ :=]", message):
         message = "[SENSITIVE_MESSAGE_REDACTED]"
     message = re.sub(r"https?://[^\s]+", "[URL_REDACTED]", message)
     message = re.sub(r"(?:hf_|ghp_|github_pat_)[A-Za-z0-9_]+", "[TOKEN_REDACTED]", message)
     for name, secret in os.environ.items():
-        if any(word in name.upper() for word in ("TOKEN", "SECRET", "PASSWORD")) and len(secret) >= 8:
+        if (
+            any(word in name.upper() for word in ("TOKEN", "SECRET", "PASSWORD"))
+            and len(secret) >= 8
+        ):
             message = message.replace(secret, "[SECRET_REDACTED]")
-    return {"failure_code": code, "type": type(error).__name__, "http_status": status,
-            "message": message[:1200]}
+    return {
+        "failure_code": code,
+        "type": type(error).__name__,
+        "http_status": status,
+        "message": message[:1200],
+    }

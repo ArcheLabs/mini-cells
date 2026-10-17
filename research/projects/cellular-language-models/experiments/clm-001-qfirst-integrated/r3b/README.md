@@ -1,67 +1,54 @@
-# CLM-001-R3b — route stability and Cell specialization
+# CLM-001-R3b — deferred diagnostics
 
-**Engineering implementation; formal500-step research remains HOLD.**
-Read [SPEC](SPEC.md), [analysis definitions](ANALYSIS_PLAN.md),
-[reuse audit](DESIGN_AUDIT.md), [engineering acceptance](reports/engineering-acceptance.json)
-and [proposed config](config/proposed.json). Historical R3 is unchanged.
+Read [the execution specification](DIAGNOSTIC_EXECUTION_OPTIMIZATION.md),
+[audit](AUDIT.md), [versioned plan](config/diagnostic-execution-v1.json),
+[resource review](reports/diagnostic-optimization/PERFORMANCE_REVIEW.md).
+Original R3 model/training/Admission code and historical results remain unchanged.
 
-## One Kaggle entry
+## Two entries, independent identities
 
-Import `notebook.ipynb` into the original bingjiangli/minicells notebook. Keep the
-existing HF_TOKEN/GITHUB_TOKEN Secrets and private repo
-`libingjiang/minicells-research-checkpoints`. No Add Input, local checkpoint download,
-manual hash/seed fields, repeated pytest suite or synthetic fixture masquerading as
-real training. Source SHA is pinned in the Notebook.
+- `notebook.ipynb`: automatic source/CPU evidence and permission/data preflight.
+  This engineering release reports HOLD after preflight; it never repeats the
+  accepted Pilot or starts unapproved500-step training. Event decisions, every
+  checkpoint and verified HF ACK remain synchronous; general explanations are
+  deferred. No pytest or fault suite runs on Kaggle.
+- `analysis-notebook.ipynb`: independent read-only analysis source. Defaults to
+  listing the accepted Pilot's exact pinned HF checkpoints. It starts no GPU
+  task or optimizer update. An approved bounded task can use the same entry,
+  `analyze-checkpoint`, QC-R3b Step3/revision0, Calibration Action, max-tasks1.
+  That task is an engineering measurement, not formal Development evidence.
 
-Default ACTION=auto performs static CPU/source/identity checks, real storage and
-GitHub permission preflight, reuses/prepares the original assets, then a **minimal
-private two-T4 Pilot**. Historical cross-session acceptance is informational:
-the user has manually checked it and requested removal of Gate C because the old
-versions were not retained. No A/B/C replay or version URL is required. This is
-recorded as USER_VERIFIED, not an automated test PASS. Formal500-step authorization
-and the actual Pilot/resource review remain required.
+Existing `HF_TOKEN` / `GITHUB_TOKEN`, same private repo
+`libingjiang/minicells-research-checkpoints`. No Add Input, checkpoint download,
+old Kaggle version URL or reconstructed asset/probe is required. The prior user
+manual acceptance is recorded honestly; removed Gate C is not reinstated.
 
-Pilot hardware:GPU T4×2. Its same host publisher measures real checkpoint sizes,
-three private Train updates per arm, snapshot cost and a restored trajectory. It
-returns PENDING_REVIEW and preserves both HF and GitHub evidence. No GPU termination
-limit. Review real timings and fix the upload/snapshot budget before registration.
+## Independent analysis CLI
 
-## Formal execution (only after Gate A–E and explicit approval)
+`python r3b/analyze.py --help` exposes `list-checkpoints`, `analyze-checkpoint`,
+`analyze-batch`, `aggregate-analysis`, `publish-only`. Use an existing trusted
+GitHub checkpoint-index or pinned local reference; arbitrary URLs are rejected.
+Task budgets apply between tasks without killing processes. The private remote
+index, not local output existence, determines verified completion on reentry.
+Stage quality evaluates exact declared policies; functional retains original
+local autograd, MC and bootstrap; action reuses original STOP/CTX definitions.
+All are FROZEN_INITIAL_STATE measurements, not recomputed online state claims.
 
-- `train`: original three arms, seed151001301, fixed500-step budget; segment200.
-- `resume`: exact HF/GitHub checkpoint index or same source/run lookup; next350/500.
-  Never regenerate the assets, beta, run identity or frozen probes on resume.
-- `evaluate`: choose arm, step and optional Event Revision. At400 revision0 is
-  pre-event; omitted revision means latest committed event. Independent Development
-  evaluation, no optimizer update, original bundle unchanged.
-- `fork`: explicit new experiment+run IDs and inherit/reset optimizer policy.
-  Parent model/probes and Event cursor provenance preserved; no training occurs.
-  A different algorithm/shape needs its own reviewed runner, not a disguised Resume.
-- `publish-only`: recover committed HF evidence, retry GitHub; never retrain.
+Tasks bind training run/source/runtime/asset/tokenizer/protocol, exact checkpoint
+and event revision, analysis source/protocol, policies/roles/window/seed/probe.
+Step400 pre selects revision0; post requires the final committed complete Event
+chain. Missing history is NOT_EVALUATED, never zero or a latest-state substitute.
+New analysis protocols/sources produce separate immutable task IDs. Public
+summaries have sample counts and single-seed caveats; raw scores/probes stay HF.
 
-The launcher exposes corresponding CLI flags through `python r3b/run.py --help`.
-Do not change training.steps for segment control. Training/evaluation can resume
-from different arm progress. The host validates immutable handoffs and ACKs only
-verified HF commits. HF outage returns STORAGE_BLOCKED; GitHub failures have a
-separate retry status. All research results remain single-seed exploratory;
-CAUSAL_FEEDBACK_NOT_TESTED and MULTISEED_NOT_TESTED cannot auto-upgrade.
+`aggregate-analysis`/`publish-only` only retrieve verified task results and draw
+figures; they never run diagnostics or training. Aggregate namespace and HF index
+are separate from training latest. Publication retry cannot relaunch training.
 
-## Saved evidence
+## Release status
 
-At every declared boundary, HF stores the original full state, identity, frozen
-Calibration/Development probes, all Event revisions, diagnostics and assets.
-GitHub receives only the declared aggregate JSONs, checkpoint-index and storage
-status. Per-story scores/raw probes/Oracle labels/weights/optimizer/RNG stay private.
-Plots are generated from recorded aggregates and included in the HF bundle; no
-new model evaluations are run for plotting. Positive or negative outcomes are saved.
-
-## Current release limitations
-
-- No real GPU Pilot has run here. Do not infer production bandwidth from the
-  tiny CPU engineering run. Calibration snapshot extrapolation is explicitly not a
-  measured full Development/Event budget. Formal release requires budget review.
-- Actual beta, real asset manifest, accepted Pilot and formal authorization remain
-  unfrozen. `experiment.lock.json` is explicitly PROPOSED_NOT_REGISTERED.
-- The three production models each allocate1,075,492 parameters (including the
-  frozen critic and reserve);1,070,819 have requires_grad=True. Reserve parameters
-  do not imply initial accepted-path usage. See reports/parameters.json.
+Production parameters remain1,075,492 per arm (1,070,819 requires_grad). Original
+seed151001301,500×8×64=256,000 live tokens per arm, all semantic Shadow costs and
+original data boundaries remain. Formal authorization is false. New GPU delta,
+mandatory Event budget, <=2h training performance and total analysis GPU cost are
+NOT_VERIFIED. No full Pilot or formal training is executed by this work.

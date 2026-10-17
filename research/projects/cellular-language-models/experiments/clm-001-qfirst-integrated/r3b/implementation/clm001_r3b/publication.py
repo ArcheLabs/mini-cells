@@ -18,6 +18,9 @@ ALLOWED = {
     "resource-ledger.json",
     "failure-index.json",
     "publication.json",
+    "analysis-index.json",
+    "diagnostic-resource-ledger.json",
+    "training-resource-ledger.json",
 }
 
 

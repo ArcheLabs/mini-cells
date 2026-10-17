@@ -38,6 +38,8 @@ def case(tmp_path):
         run_id="r3b-cpu",
         assets_hash=digest(assets / "manifest.json"),
     )
+    # Legacy synchronous reference remains available for mathematical equivalence.
+    config["r3b"].pop("diagnostic_execution", None)
     root = tmp_path / "run"
     new_run(proposed, config, assets, root)
     return proposed, config, root

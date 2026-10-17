@@ -132,7 +132,12 @@ class Publisher:
         except Exception as error:
             atomic(
                 self.evidence / "storage-status.json",
-                {"status": "STORAGE_BLOCKED", "stage": stage, **safe_error(error), "scientific_decision": False},
+                {
+                    "status": "STORAGE_BLOCKED",
+                    "stage": stage,
+                    **safe_error(error),
+                    "scientific_decision": False,
+                },
             )
             print({"storage_failure_stage": stage, **safe_error(error)}, flush=True)
             raise ContinuationError("STORAGE_BLOCKED", safe_error(error)["message"]) from None

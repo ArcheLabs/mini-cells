@@ -260,6 +260,8 @@ def aggregate(root):
             "arm_progress": {a: p["step"] for a, p in meta["arms"].items()},
             "complete": meta["complete"],
             "diagnostic_status": "DIAGNOSTIC_COMPLETE" if complete else "INCOMPLETE",
+            "training_status": meta["status"],
+            "analysis_status": "COMPLETE" if complete else "DEFERRED_OR_PARTIAL",
             "missing": missing,
             "storage_status": store["status"],
             "H1": "H1_DEV_SIGNAL"

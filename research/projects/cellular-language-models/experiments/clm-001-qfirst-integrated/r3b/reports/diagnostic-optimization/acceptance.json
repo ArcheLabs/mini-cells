@@ -1,0 +1,38 @@
+{
+  "schema": "minicells.r3b.deo-acceptance.v1",
+  "implementation_source_sha": null,
+  "historical_r3_unchanged": true,
+  "training_semantics_equivalence": "SYNTHETIC_CPU_PASS",
+  "mandatory_event_semantics": "SYNTHETIC_CPU_PASS",
+  "training_checkpoint_integrity": "CPU_FAKE_HF_PASS",
+  "posthoc_numeric_equivalence": "CPU_SAMPLE_LEVEL_PASS",
+  "training_rng_optimizer_identity": "CPU_PASS",
+  "separate_hf_analysis_index": "FAKE_HF_PASS_REAL_NOT_VERIFIED",
+  "github_metadata_only": "CPU_PASS",
+  "training_critical_path_budget_seconds": null,
+  "training_budget_status": "NOT_VERIFIED",
+  "analysis_total_budget_seconds": null,
+  "analysis_budget_status": "NOT_VERIFIED",
+  "prior_successful_pilot_repeated": false,
+  "formal_500_step_training_authorized": false,
+  "scientific_decision": false,
+  "ci_url": null,
+  "hf_evidence_revision": "3e5f3d036a8b4baa3a034b22f9229612ed6f7e3d",
+  "hf_evidence_scope": "PREVIOUS_SOURCE_PILOT_ONLY_PUBLIC_INDEX_AND_USER_LOG",
+  "remaining_blockers": [
+    "New-source real bounded GPU delta/performance validation is not run.",
+    "Production Step400 mandatory Admission/Event cost and two-hour training budget NOT_VERIFIED.",
+    "Total offline analysis GPU budget NOT_VERIFIED.",
+    "Execution plan approval, exact release identities and explicit formal authorization required."
+  ],
+  "cpu_validation": {
+    "regression_first_passed": 121,
+    "regression_first_failed": 2,
+    "first_failures": "Test helper missing imports; fixed. No implementation failure hidden.",
+    "targeted_final_passed": 11,
+    "unique_covered": 123,
+    "latest_schema_and_launcher_ci": "PENDING"
+  },
+  "no_confirmation_access": true,
+  "new_gpu_work_started": false
+}
