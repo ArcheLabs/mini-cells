@@ -58,6 +58,46 @@ def primary(c, policies):
     }
 
 
+def descriptive_lag(trajectories):
+    lagged = []
+    keys = {(r["arm"], r["role"], tuple(r["cells"]), r["group"]) for r in trajectories}
+    for arm, role, pair, group in sorted(keys):
+        series = sorted(
+            (
+                r
+                for r in trajectories
+                if (r["arm"], r["role"], tuple(r["cells"]), r["group"]) == (arm, role, pair, group)
+                and r["phase"] == "post_event"
+            ),
+            key=lambda r: r["step"],
+        )
+        for before, after in zip(series, series[1:]):
+            if None in (
+                before["advantage"],
+                after["advantage"],
+                before["route_log_preference"],
+                after["route_log_preference"],
+            ):
+                continue
+            lagged.append(
+                {
+                    "arm": arm,
+                    "role": role,
+                    "cells": list(pair),
+                    "group": group,
+                    "from_step": before["step"],
+                    "to_step": after["step"],
+                    "preceding_advantage": before["advantage"],
+                    "following_route_change": after["route_log_preference"]
+                    - before["route_log_preference"],
+                    "preceding_exposure": before["group_exposure"],
+                    "following_advantage_change": after["advantage"] - before["advantage"],
+                    "causal_interpretation": "NOT_TESTED",
+                }
+            )
+    return lagged
+
+
 def aggregate(root):
     root = Path(root)
     c = read(root / "runtime-config.json")
@@ -198,42 +238,7 @@ def aggregate(root):
                                 ),
                             }
                         )
-    lagged = []
-    keys = {(r["arm"], r["role"], tuple(r["cells"]), r["group"]) for r in trajectories}
-    for arm, role, pair, group in sorted(keys):
-        series = sorted(
-            (
-                r
-                for r in trajectories
-                if (r["arm"], r["role"], tuple(r["cells"]), r["group"]) == (arm, role, pair, group)
-                and r["phase"] == "post_event"
-            ),
-            key=lambda r: r["step"],
-        )
-        for before, after in zip(series, series[1:]):
-            if None in (
-                before["advantage"],
-                after["advantage"],
-                before["route_log_preference"],
-                after["route_log_preference"],
-            ):
-                continue
-            lagged.append(
-                {
-                    "arm": arm,
-                    "role": role,
-                    "cells": list(pair),
-                    "group": group,
-                    "from_step": before["step"],
-                    "to_step": after["step"],
-                    "preceding_advantage": before["advantage"],
-                    "following_route_change": after["route_log_preference"]
-                    - before["route_log_preference"],
-                    "preceding_exposure": before["group_exposure"],
-                    "following_advantage_change": after["advantage"] - before["advantage"],
-                    "causal_interpretation": "NOT_TESTED",
-                }
-            )
+    lagged = descriptive_lag(trajectories)
     shared = {
         "experiment_id": meta["experiment_id"],
         "run_id": meta["run_id"],
@@ -260,6 +265,8 @@ def aggregate(root):
             "arm_progress": {a: p["step"] for a, p in meta["arms"].items()},
             "complete": meta["complete"],
             "diagnostic_status": "DIAGNOSTIC_COMPLETE" if complete else "INCOMPLETE",
+            "training_status": meta["status"],
+            "analysis_status": "COMPLETE" if complete else "DEFERRED_OR_PARTIAL",
             "missing": missing,
             "storage_status": store["status"],
             "H1": "H1_DEV_SIGNAL"

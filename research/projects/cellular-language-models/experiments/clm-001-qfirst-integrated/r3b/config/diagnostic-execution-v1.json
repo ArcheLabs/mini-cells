@@ -1,0 +1,74 @@
+{
+  "schema": "minicells.r3b.diagnostic-execution.v1",
+  "mode": "DEFER_EXPENSIVE_ANALYSIS",
+  "training": {
+    "journal_telemetry_steps": [
+      0,
+      50,
+      100,
+      150,
+      200,
+      250,
+      300,
+      350,
+      400,
+      450,
+      500
+    ],
+    "preserve_every_original_event_revision": true,
+    "mandatory_semantic_event_evaluation": "UNCHANGED",
+    "save_frozen_probe_banks_at_step_zero": true
+  },
+  "posthoc": {
+    "quality_primary_steps": [
+      0,
+      100,
+      200,
+      300,
+      350,
+      400,
+      450,
+      500
+    ],
+    "quality_secondary_steps": [
+      0,
+      400,
+      500
+    ],
+    "functional_steps": [
+      0,
+      200,
+      350,
+      400,
+      450,
+      500
+    ],
+    "quality_event_compare_at_400": [
+      "pre_event",
+      "post_event"
+    ],
+    "functional_event_compare_at_400": [
+      "pre_event",
+      "post_event"
+    ],
+    "primary_policies": [
+      "greedy",
+      "uniform"
+    ],
+    "secondary_policies": [
+      "sampled",
+      "constant"
+    ],
+    "required_roles": [
+      "calibration",
+      "development"
+    ],
+    "confirmation": "SEALED",
+    "sampling": "INHERIT_FROZEN_R3B_PROTOCOL"
+  },
+  "analysis_publication": {
+    "private_raw_results": "HUGGING_FACE",
+    "public_aggregates": "GITHUB",
+    "separate_from_training_latest": true
+  }
+}

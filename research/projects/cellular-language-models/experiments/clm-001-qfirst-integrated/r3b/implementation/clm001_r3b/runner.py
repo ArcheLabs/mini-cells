@@ -9,6 +9,7 @@ from pathlib import Path
 import os
 import random
 import shutil
+import time
 import numpy as np
 import torch
 from minicells_runtime import r3 as reused
@@ -112,9 +113,40 @@ def resources(root, c, progress):
     }
 
 
+def inspect_state(folder, c, arm, data, source, device="cpu", selector=None):
+    """Read-only publisher validation; never restore device-specific RNG on host."""
+    from types import SimpleNamespace
+
+    folder = Path(folder)
+    expected = identity(c, arm, source, data)
+    latest = read(folder / "latest.json") if selector is None else {"identity": expected}
+    if read(folder / "identity.json") != expected or latest["identity"] != expected:
+        raise ContinuationError("IDENTITY_MISMATCH", arm)
+    path = (
+        safe(folder.parents[1], selector["checkpoint"])
+        if selector is not None
+        else safe(folder, latest["file"])
+    )
+    wanted = selector["checkpoint_sha256"] if selector is not None else latest["sha256"]
+    if digest(path) != wanted:
+        raise ContinuationError("CHECKPOINT_HASH_MISMATCH", arm)
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    if payload.get("schema_version") != 1 or payload.get("identity") != expected:
+        raise ContinuationError("IDENTITY_MISMATCH", arm)
+    model = Model(c, ENGINE[arm])
+    model.load_state_dict(payload["model"], strict=True)
+    extra = payload["extra"]
+    # RNG bytes remain opaque here. Worker restore performs the full device-specific
+    # restoration; packaging still hashes every byte, including all RNG states.
+    trainer = SimpleNamespace(step=payload["step"])
+    nursery = SimpleNamespace(events=extra.get("events", {}))
+    check_events(c, trainer.step, nursery, expected)
+    return trainer, nursery, None, expected
+
+
 class Adapter:
     arms = staticmethod(lambda c: ARMS)
-    load_state = staticmethod(load_state)
+    load_state = staticmethod(inspect_state)
     check_events = staticmethod(check_events)
     resources = staticmethod(resources)
 
@@ -137,7 +169,7 @@ def verify(root, expected_source=None):
         raise ContinuationError("IDENTITY_MISMATCH")
     data = load_assets(c, root / "assets")
     for arm, progress in meta["arms"].items():
-        t, n, _, _ = load_state(
+        t, n, _, _ = inspect_state(
             root / "arms" / arm, c, arm, data, meta["source_sha"], selector=progress
         )
         if (
@@ -221,10 +253,22 @@ def handoff(folder, destination, *, phase):
     return target
 
 
-def segment(root, arm, end, *, device="cpu", committed=None, stop_requested=None, crash=None):
+def segment(
+    root,
+    arm,
+    end,
+    *,
+    device="cpu",
+    committed=None,
+    stop_requested=None,
+    crash=None,
+    observation_reference=False,
+):
     root = Path(root)
     c = read(root / "runtime-config.json")
     source = read(root / "experiment.lock.json")["source_sha"]
+    if observation_reference and (not c.get("synthetic") or device != "cpu"):
+        raise ContinuationError("REFERENCE_OBSERVER_CPU_TEST_ONLY")
     reused.require_source(source)
     if not c.get("synthetic"):
         if c["r3b"]["experiment_id"] != EXPERIMENT:
@@ -256,13 +300,22 @@ def segment(root, arm, end, *, device="cpu", committed=None, stop_requested=None
         rng = np.random.default_rng(c["seed"] + 10)
         ident = identity(c, arm, source, data)
         atomic(folder / "identity.json", ident)
+    bank_started = time.perf_counter()
     frozen = banks(trainer.model, data, c, folder, ident, restored=restored)
+    bank_seconds = time.perf_counter() - bank_started
     print(
         {"arm": arm, "RESTORED_FROM_STEP": trainer.step, "STARTED_FROM_RANDOM_INIT": not restored},
         flush=True,
     )
-    if not restored:
+    checkpoint_costs = {}
+
+    def save_local():
+        started = time.perf_counter()
         cp.save(folder, trainer, nursery, rng, ident)
+        checkpoint_costs[read(folder / "latest.json")["sha256"]] = time.perf_counter() - started
+
+    if not restored:
+        save_local()
 
     gpu_markers = []
     prior_progress = folder / "worker-progress" / (read(folder / "latest.json")["file"] + ".json")
@@ -273,6 +326,10 @@ def segment(root, arm, end, *, device="cpu", committed=None, stop_requested=None
     )
 
     def deliver(phase):
+        from .diagnostic_schedule import deferred, telemetry
+
+        if deferred(c) and not observation_reference:
+            telemetry(folder, trainer, c, phase)
         if gpu_markers:
             torch.cuda.synchronize(device)
             gpu_seconds[0] += sum(start.elapsed_time(end) / 1000 for start, end in gpu_markers)
@@ -280,10 +337,27 @@ def segment(root, arm, end, *, device="cpu", committed=None, stop_requested=None
         latest = read(folder / "latest.json")
         ledger_path = folder / "worker-progress" / (latest["file"] + ".json")
         if not ledger_path.exists():
+            telemetry_times = [
+                read(p)["telemetry_seconds"] for p in (folder / "telemetry").glob("*.json")
+            ]
             atomic(
                 ledger_path,
                 {
                     "checkpoint_sha256": latest["sha256"],
+                    "checkpoint_serialize_seconds": checkpoint_costs.get(latest["sha256"]),
+                    "telemetry_host_percentiles_seconds": {
+                        name: float(np.percentile(telemetry_times, q)) if telemetry_times else None
+                        for name, q in (("p50", 50), ("p90", 90), ("p99", 99))
+                    },
+                    "telemetry_scope": "journal aggregation excluding atomic metadata write",
+                    "update_host_wall_percentiles_seconds": {
+                        name: float(
+                            np.percentile([r.get("total_seconds", 0) for r in trainer.journal], q)
+                        )
+                        if trainer.journal
+                        else None
+                        for name, q in (("p50", 50), ("p90", 90), ("p99", 99))
+                    },
                     "step": trainer.step,
                     "live_training_tokens": trainer.data_position,
                     "training_worker_host_seconds": sum(
@@ -300,6 +374,8 @@ def segment(root, arm, end, *, device="cpu", committed=None, stop_requested=None
                         v.trainer.data_position for v in nursery.candidates
                     ),
                     "checkpoint_bytes": (folder / latest["file"]).stat().st_size,
+                    "probe_bank_capture_seconds": bank_seconds if not restored else 0,
+                    "probe_bank_load_seconds": bank_seconds if restored else 0,
                     "gpu_training_seconds": gpu_seconds[0] if device.startswith("cuda") else None,
                     "gpu_timer_status": "CUDA_STREAM_ELAPSED_AT_SAFE_BOUNDARY"
                     if device.startswith("cuda")
@@ -312,10 +388,33 @@ def segment(root, arm, end, *, device="cpu", committed=None, stop_requested=None
             crash(phase, trainer.step)
 
     def observe(phase):
-        snapshot(trainer, data, c, frozen, folder, phase)
+        from .diagnostic_schedule import deferred, telemetry
+
+        if deferred(c) and not observation_reference:
+            telemetry(folder, trainer, c, phase)
+        else:
+            snapshot(trainer, data, c, frozen, folder, phase)
+
+    event_starts = {}
 
     def event_callback(kind, when):
+        if when == "before":
+            event_starts[kind] = time.perf_counter()
         if when == "after":
+            latest = read(folder / "latest.json")
+            cost = folder / "semantic-costs" / (latest["sha256"] + ".json")
+            if not cost.exists():
+                atomic(
+                    cost,
+                    {
+                        "category": "TRAINING_SEMANTIC",
+                        "event": kind,
+                        "step": trainer.step,
+                        "checkpoint_sha256": latest["sha256"],
+                        "mandatory_event_wall_seconds": time.perf_counter() - event_starts[kind],
+                        "scope": "original_event_including_checkpoint_excluding_extra_observation_and_HF_ACK",
+                    },
+                )
             if kind == pending(c, trainer.step)[-1]:
                 observe("post_event")
             deliver("event-" + kind)
@@ -333,7 +432,7 @@ def segment(root, arm, end, *, device="cpu", committed=None, stop_requested=None
                 # A different worker's storage failure can arrive between this
                 # arm's scheduled boundaries. Preserve its finished local work,
                 # without sending a new unconfirmed remote/durable claim.
-                cp.save(folder, trainer, nursery, rng, ident)
+                save_local()
             break
         rng_before = deepcopy(rng.bit_generator.state)
         try:
@@ -359,7 +458,7 @@ def segment(root, arm, end, *, device="cpu", committed=None, stop_requested=None
             or (stop_requested and stop_requested())
         )
         if safe_boundary:
-            cp.save(folder, trainer, nursery, rng, ident)
+            save_local()
             if pending(c, step):
                 observe("pre_event")
             else:

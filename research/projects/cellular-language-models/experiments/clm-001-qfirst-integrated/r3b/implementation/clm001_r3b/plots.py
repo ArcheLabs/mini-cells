@@ -100,3 +100,33 @@ def render(root):
         },
     )
     return outputs
+
+
+def render_analysis(values, destination, plan):
+    """Plot already aggregated observations; NaN creates gaps at unobserved steps."""
+    import math
+    import matplotlib
+
+    matplotlib.use("Agg")
+    from matplotlib import pyplot as plt
+
+    destination = Path(destination)
+    destination.mkdir(parents=True, exist_ok=True)
+    for phase in ("pre_event", "post_event"):
+        fig, axis = plt.subplots(figsize=(7, 4), constrained_layout=True)
+        for arm in ("Q-R3b", "QC-R3b", "QS-R3b"):
+            rows = {
+                r["step"]: r["quality"]["greedy"]["mean_nll"]
+                for r in values["metrics-summary.json"]["rows"]
+                if r["arm"] == arm and r["phase"] == phase and "greedy" in r["quality"]
+            }
+            steps = plan["training"]["journal_telemetry_steps"]
+            axis.plot(steps, [rows.get(s, math.nan) for s in steps], marker="o", label=arm)
+        axis.set(
+            xlabel="Historical checkpoint step",
+            ylabel="Development greedy NLL",
+            title=phase + " — gaps are NOT_EVALUATED",
+        )
+        axis.legend()
+        fig.savefig(destination / ("quality-" + phase + ".png"), dpi=140)
+        plt.close(fig)

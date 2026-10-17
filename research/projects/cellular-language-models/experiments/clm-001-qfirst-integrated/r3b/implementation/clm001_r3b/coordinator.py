@@ -87,14 +87,17 @@ class Publisher:
         from .common import safe_error
 
         begin = time.perf_counter()
+        stage = "handoff"
         try:
             if arm is not None:
                 merge_handoff(self.root, arm, source)
+            stage = "package"
             meta = package(self.root)
             atomic(
                 self.evidence / "storage-status.json",
                 {"status": "UPLOAD_IN_PROGRESS", "scientific_decision": False},
             )
+            stage = "hf-upload"
             index = self.store.publish_committed_checkpoint(self.root, readback=readback)
             atomic(self.evidence / "checkpoint-index.json", index)
             self.ledger["uploads"].append(
@@ -129,11 +132,15 @@ class Publisher:
         except Exception as error:
             atomic(
                 self.evidence / "storage-status.json",
-                {"status": "STORAGE_BLOCKED", **safe_error(error), "scientific_decision": False},
+                {
+                    "status": "STORAGE_BLOCKED",
+                    "stage": stage,
+                    **safe_error(error),
+                    "scientific_decision": False,
+                },
             )
-            raise ContinuationError(
-                "STORAGE_BLOCKED", getattr(error, "code", type(error).__name__)
-            ) from None
+            print({"storage_failure_stage": stage, **safe_error(error)}, flush=True)
+            raise ContinuationError("STORAGE_BLOCKED", safe_error(error)["message"]) from None
 
 
 def worker_entry(root, arms, end, physical_device, messages, acknowledgements, stop, *, cpu=False):

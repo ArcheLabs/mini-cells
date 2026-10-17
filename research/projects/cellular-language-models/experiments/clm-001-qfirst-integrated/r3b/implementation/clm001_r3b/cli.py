@@ -327,6 +327,11 @@ def main():
             except ContinuationError as error:
                 if error.code != "HF_RUN_NOT_FOUND":
                     raise
+            if cached is None and not a.assets_ref:
+                # Reuse trusted accepted assets; never repeat a successful Pilot
+                # merely to obtain data/tokenizer bytes on a new source revision.
+                baseline = read(BASE / "reports/diagnostic-optimization/baseline-evidence.json")
+                cached = baseline["evidence"]["checkpoint-index.json"]["checkpoint_ref"]
             report = preflight.run(
                 candidate,
                 source,
@@ -340,30 +345,22 @@ def main():
             if a.mode == "preflight":
                 print(json.dumps(report), flush=True)
                 return
-            if a.mode in ("auto", "gpu-pilot"):
-                measured, _ = private_pilot(
-                    candidate,
-                    source,
-                    workspace,
-                    store,
-                    report,
-                    devices=devices[:2],
-                    publish_github=a.publish_github,
-                )
-                print(json.dumps(measured), flush=True)
+            if a.mode == "auto":
                 print(
-                    "R3b formal 500-Step training remains HOLD pending budget review and explicit authorization.",
+                    json.dumps(
+                        {
+                            "status": "ENGINEERING_READY_FORMAL_TRAINING_HOLD",
+                            "diagnostic_execution": "DEFER_EXPENSIVE_ANALYSIS",
+                            "prior_pilot_repeated": False,
+                            "formal_training_authorized": False,
+                            "reason": "Targeted delta verification and explicit release remain required",
+                        }
+                    ),
                     flush=True,
                 )
                 return
-            # An explicit approved Train must prove absence of an existing run.
-            try:
-                store.locate(source, run_id)
-            except ContinuationError as error:
-                if error.code != "HF_RUN_NOT_FOUND":
-                    raise
-            else:
-                raise ContinuationError("RUN_ALREADY_EXISTS_USE_RESUME")
+            if a.mode in ("gpu-pilot",):
+                raise ContinuationError("FULL_PILOT_REPLAY_NOT_AUTHORIZED")
             c = runtime(
                 candidate,
                 source,
@@ -441,7 +438,17 @@ def main():
                             {
                                 "failure-index.json": {
                                     "status": "FAILED_OR_PARTIAL",
-                                    "failures": [safe_error(error)],
+                                    "failures": read(
+                                        target.parent
+                                        / (target.name + "-evidence")
+                                        / "failure-index.json"
+                                    )["failures"]
+                                    if (
+                                        target.parent
+                                        / (target.name + "-evidence")
+                                        / "failure-index.json"
+                                    ).exists()
+                                    else [safe_error(error)],
                                     "scientific_decision": False,
                                 },
                                 "experiment-manifest.json": {

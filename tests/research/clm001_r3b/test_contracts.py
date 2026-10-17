@@ -28,7 +28,7 @@ def test_frozen_real_r3_science_cannot_change(section, key):
 
 def test_proposed_release_is_not_formal_authorization():
     candidate = common.load()
-    with pytest.raises(ContinuationError, match="GATE_C"):
+    with pytest.raises(ContinuationError, match="GATE_D"):
         common.require_training_release(candidate, "a" * 40, {}, {}, {})
     accepted = {
         "cross_session_status": "PASS",
@@ -183,28 +183,15 @@ def test_shared_package_protocol_source_and_probe_tamper_rejected(case):
         runner.verify(root)
 
 
-def test_durable_complete_is_not_cross_session_acceptance(tmp_path):
+def test_historical_acceptance_is_informational(tmp_path):
     from clm001_r3b.preflight import engineering_evidence
     from minicells_runtime.store import atomic
 
     evidence = tmp_path / "acceptance.json"
-    atomic(evidence, {"cross_session_status": "DURABLE_COMPLETE", "complete": True})
-    with pytest.raises(ContinuationError, match="GATE_C_NOT_VERIFIED"):
-        engineering_evidence(evidence)
-    atomic(
-        evidence,
-        {
-            "cross_session_status": "PASS",
-            "sessions": {
-                "A": {"kaggle_version": "same"},
-                "B": {"kaggle_version": "same"},
-                "C": {"kaggle_version": "same"},
-            },
-            "exact_control_pass": True,
-        },
-    )
-    with pytest.raises(ContinuationError, match="PROVENANCE_MISSING"):
-        engineering_evidence(evidence)
+    for status in ("NOT_VERIFIED", "USER_VERIFIED", "DURABLE_COMPLETE"):
+        value = {"cross_session_status": status, "sessions": {}}
+        atomic(evidence, value)
+        assert engineering_evidence(evidence) == value
 
 
 def test_hf_index_loader_rejects_arbitrary_urls():

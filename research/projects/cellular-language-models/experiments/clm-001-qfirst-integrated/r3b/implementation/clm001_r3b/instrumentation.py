@@ -43,8 +43,14 @@ def banks(model, data, c, folder, identity, restored=False, *, pilot=False):
     folder = Path(folder)
     if restored and not (folder / "frozen-probe-bank.json").exists():
         raise ContinuationError("FROZEN_PROBE_MISSING")
+    timing = {}
     with isolated(model):
+        start = time.perf_counter()
         first = original_bank(model, data, c, folder, identity)
+        if next(model.parameters()).is_cuda:
+            torch.cuda.synchronize()
+        timing["calibration_capture_or_load_seconds"] = time.perf_counter() - start
+        start = time.perf_counter()
         name = folder / "development-probe-bank.pt"
         meta = folder / "development-probe-bank.json"
         if meta.exists():
@@ -71,6 +77,13 @@ def banks(model, data, c, folder, identity, restored=False, *, pilot=False):
                     "source": "STEP_ZERO_ONLY",
                 },
             )
+        if next(model.parameters()).is_cuda:
+            torch.cuda.synchronize()
+        timing["development_capture_or_load_seconds"] = time.perf_counter() - start
+    timing["restored"] = restored
+    target = folder / "bank-timing" / ("restore.json" if restored else "initial.json")
+    if not target.exists():
+        atomic(target, timing)
     return {"calibration": first, "development": second}
 
 
