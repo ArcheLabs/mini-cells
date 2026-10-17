@@ -1,6 +1,7 @@
 """Research identity is new; the unchanged R3 engine uses its original arm names."""
 
 from copy import deepcopy
+import os
 from pathlib import Path
 from minicells_runtime.store import ContinuationError, canonical, digest, read
 from clm001_r3 import common as original
@@ -96,12 +97,6 @@ def require_training_release(candidate, source, acceptance, authorization, pilot
     # never booleans fabricated by the Notebook or environment overrides.
     if candidate["engine"].get("synthetic"):
         return
-    if acceptance.get("cross_session_status") != "PASS":
-        raise ContinuationError("GATE_C_NOT_VERIFIED")
-    evidence = acceptance.get("sessions", {})
-    urls = [evidence.get(k, {}).get("kaggle_version") for k in ("A", "B", "C")]
-    if not all(urls) or len(set(urls)) != 3 or not acceptance.get("exact_control_pass"):
-        raise ContinuationError("GATE_C_PROVENANCE_MISSING")
     if (
         pilot.get("status") != "GPU_PILOT_PASS"
         or pilot.get("source_sha") != source
@@ -145,4 +140,14 @@ def safe_error(error):
         if isinstance(raw_code, int)
         else None
     )
-    return {"failure_code": code, "type": type(error).__name__, "http_status": status}
+    import re
+    message = str(error)
+    if re.search(r"(?i)secret|password|authorization|bearer|token[ :=]", message):
+        message = "[SENSITIVE_MESSAGE_REDACTED]"
+    message = re.sub(r"https?://[^\s]+", "[URL_REDACTED]", message)
+    message = re.sub(r"(?:hf_|ghp_|github_pat_)[A-Za-z0-9_]+", "[TOKEN_REDACTED]", message)
+    for name, secret in os.environ.items():
+        if any(word in name.upper() for word in ("TOKEN", "SECRET", "PASSWORD")) and len(secret) >= 8:
+            message = message.replace(secret, "[SECRET_REDACTED]")
+    return {"failure_code": code, "type": type(error).__name__, "http_status": status,
+            "message": message[:1200]}

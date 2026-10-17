@@ -112,9 +112,39 @@ def resources(root, c, progress):
     }
 
 
+def inspect_state(folder, c, arm, data, source, device="cpu", selector=None):
+    """Read-only publisher validation; never restore device-specific RNG on host."""
+    from types import SimpleNamespace
+
+    folder = Path(folder)
+    expected = identity(c, arm, source, data)
+    latest = read(folder / "latest.json") if selector is None else {"identity": expected}
+    if read(folder / "identity.json") != expected or latest["identity"] != expected:
+        raise ContinuationError("IDENTITY_MISMATCH", arm)
+    path = (
+        safe(folder.parents[1], selector["checkpoint"])
+        if selector is not None else safe(folder, latest["file"])
+    )
+    wanted = selector["checkpoint_sha256"] if selector is not None else latest["sha256"]
+    if digest(path) != wanted:
+        raise ContinuationError("CHECKPOINT_HASH_MISMATCH", arm)
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    if payload.get("schema_version") != 1 or payload.get("identity") != expected:
+        raise ContinuationError("IDENTITY_MISMATCH", arm)
+    model = Model(c, ENGINE[arm])
+    model.load_state_dict(payload["model"], strict=True)
+    extra = payload["extra"]
+    # RNG bytes remain opaque here. Worker restore performs the full device-specific
+    # restoration; packaging still hashes every byte, including all RNG states.
+    trainer = SimpleNamespace(step=payload["step"])
+    nursery = SimpleNamespace(events=extra.get("events", {}))
+    check_events(c, trainer.step, nursery, expected)
+    return trainer, nursery, None, expected
+
+
 class Adapter:
     arms = staticmethod(lambda c: ARMS)
-    load_state = staticmethod(load_state)
+    load_state = staticmethod(inspect_state)
     check_events = staticmethod(check_events)
     resources = staticmethod(resources)
 
@@ -137,7 +167,7 @@ def verify(root, expected_source=None):
         raise ContinuationError("IDENTITY_MISMATCH")
     data = load_assets(c, root / "assets")
     for arm, progress in meta["arms"].items():
-        t, n, _, _ = load_state(
+        t, n, _, _ = inspect_state(
             root / "arms" / arm, c, arm, data, meta["source_sha"], selector=progress
         )
         if (

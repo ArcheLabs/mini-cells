@@ -141,3 +141,16 @@ def test_retrospective_publication_has_separate_namespace(case, tmp_path, monkey
     assert len(list(checkout.rglob("metrics-summary.json"))) == 2
     with pytest.raises(ContinuationError, match="PRIVATE_PUBLICATION"):
         publication.publish_documents(root, {"metrics-summary.json": {"raw_oracle": [1, 2]}})
+
+
+def test_host_package_does_not_restore_device_rng(case, monkeypatch):
+    _, _, root = case
+    runner.segment(root, "Q-R3b", 1)
+
+    def forbidden(*args, **kwargs):
+        raise RuntimeError("device RNG restore must not run in publisher")
+
+    monkeypatch.setattr(runner.cp, "restore", forbidden)
+    meta = runner.package(root)
+    assert meta["arms"]["Q-R3b"]["step"] == 1
+    assert runner.verify(root)["arms"]["Q-R3b"]["step"] == 1
