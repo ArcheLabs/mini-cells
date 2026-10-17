@@ -1,0 +1,33 @@
+{
+  "CAUSAL_FEEDBACK_NOT_TESTED": true,
+  "MULTISEED_NOT_TESTED": true,
+  "independent_seeds": 1,
+  "rows": [
+    {
+      "analysis_protocol_sha256": "8f9bd833ab371ce8c624693222825269889da1fde1860f8be7a73f2bb2eb90d0",
+      "analysis_source_sha": "c29d2948610547d0cafa64acefb0a5d8a2e70577",
+      "arm": "QC-R3b",
+      "checkpoint_sha256": "4c487e0e7e2e86d9e7a260d6813f468124922efabcbc2ec798c83384cc75e2d4",
+      "event_revision": 0,
+      "gradient_audit": {
+        "connection_clip_ratio": 1.0,
+        "continuous_clip_ratio": 0.7851303070296414,
+        "empty_event": false,
+        "finite": true,
+        "lcg_candidate_cell_calls": 64,
+        "lcg_events": 32,
+        "lcg_grad_norm": 1.854098263720516e-05,
+        "lcg_q_cosine": 0.10402636229991913,
+        "q_grad_norm": 0.19707699120044708,
+        "scaled_lcg_q_ratio": 9.407989499061877e-06,
+        "source": "unchanged_R3_Trainer_journal_no_extra_training_backward"
+      },
+      "phase": "post_event",
+      "role": "calibration",
+      "source": "ORIGINAL_TRAINER_JOURNAL",
+      "state_scope": "FROZEN_INITIAL_STATE",
+      "step": 3
+    }
+  ],
+  "scientific_decision": false
+}
