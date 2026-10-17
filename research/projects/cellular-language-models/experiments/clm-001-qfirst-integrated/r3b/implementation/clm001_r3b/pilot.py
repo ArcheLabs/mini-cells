@@ -13,6 +13,22 @@ import numpy as np
 from minicells_runtime.store import atomic, canonical, read, digest, ContinuationError
 
 
+def equivalent(a, b):
+    import torch
+
+    if isinstance(a, torch.Tensor):
+        return (
+            torch.allclose(a, b, rtol=1e-5, atol=1e-7)
+            if a.is_floating_point()
+            else torch.equal(a, b)
+        )
+    if isinstance(a, dict):
+        return set(a) == set(b) and all(equivalent(a[k], b[k]) for k in a)
+    if isinstance(a, (list, tuple)):
+        return len(a) == len(b) and all(equivalent(x, y) for x, y in zip(a, b))
+    return a == b
+
+
 def worker_entry(root, arms, end, physical_device, messages, acknowledgements, stop, *, cpu=False):
     if cpu:
         raise ContinuationError("GPU_PILOT_REQUIRES_CUDA")
@@ -93,19 +109,6 @@ def worker_entry(root, arms, end, physical_device, messages, acknowledgements, s
             rrng = np.random.default_rng(0)
             cp.restore(folder, restored, rrng, ident)
             actual = restored.update(batches(data, c, rrng, "cuda:0"))[0]
-
-            def equivalent(a, b):
-                if isinstance(a, torch.Tensor):
-                    return (
-                        torch.allclose(a, b, rtol=1e-5, atol=1e-7)
-                        if a.is_floating_point()
-                        else torch.equal(a, b)
-                    )
-                if isinstance(a, dict):
-                    return set(a) == set(b) and all(equivalent(a[k], b[k]) for k in a)
-                if isinstance(a, (list, tuple)):
-                    return len(a) == len(b) and all(equivalent(x, y) for x, y in zip(a, b))
-                return a == b
 
             restored_ok = (
                 equivalent(expected_model, restored.model.state_dict())
