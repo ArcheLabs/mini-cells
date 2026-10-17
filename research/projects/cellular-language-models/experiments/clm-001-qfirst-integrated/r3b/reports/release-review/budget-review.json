@@ -1,0 +1,42 @@
+{
+  "status": "BUDGET_NOT_VERIFIED",
+  "source_of_historical_proxy": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3/artifacts/52b1950b23debbcd3f808c10eb6e0d3ea2d317c6/345bda89bec2/resource-ledger.json",
+  "source_file_sha256": "48cf0f718b053d393d02ef80623496b4d2d5dac55f4b9704303d2f6ed0f9e18a",
+  "historical_complete": true,
+  "historical_arms": {
+    "Q-R3": {
+      "live_training_tokens": 256000,
+      "elapsed_seconds_current_attempt": 1978.690003596,
+      "committed_update_seconds_all_attempts": 1491.2705308899945,
+      "shadow_private_training_tokens": 3072
+    },
+    "QC-R3": {
+      "live_training_tokens": 256000,
+      "elapsed_seconds_current_attempt": 2047.8770986269997,
+      "committed_update_seconds_all_attempts": 1553.4096083970026,
+      "shadow_private_training_tokens": 3072
+    },
+    "QS-R3": {
+      "live_training_tokens": 256000,
+      "elapsed_seconds_current_attempt": 2008.2528148900005,
+      "committed_update_seconds_all_attempts": 1532.8600649250075,
+      "shadow_private_training_tokens": 3072
+    }
+  },
+  "historical_update_and_event_scope": "Existing arm elapsed recording; not new-source combined two-T4 Session wall time. Residual is NOT a separately measured Admission time.",
+  "queue_Q_then_QS_seconds": 3986.9428184860008,
+  "queue_QC_seconds": 2047.8770986269997,
+  "historical_queue_proxy_seconds": 3986.9428184860008,
+  "planning_safety_factor": 1.5,
+  "planning_proxy_with_safety_seconds": 5980.414227729001,
+  "safety_factor_is_assumption_not_confidence_bound": true,
+  "new_production_probe_bank_seconds": null,
+  "new_production_HF_history_commit_readback_seconds": null,
+  "new_production_mandatory_event_seconds": null,
+  "new_production_wall_seconds": null,
+  "target_wall_seconds": 7200,
+  "target_guaranteed": false,
+  "runtime_hard_limit": false,
+  "offline_analysis_included_in_training_proxy": false,
+  "formal_500_step_authorized": false
+}

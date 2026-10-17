@@ -1,0 +1,53 @@
+{
+  "schema": "minicells.r3b.release-review.v1",
+  "status": "CONFIGURATION_RECORDED_TRAINING_HOLD",
+  "production_source_candidate_sha": "9c396fcf2d8968a55f485a04c66e796d9e03b9d2",
+  "candidate_sha256": "ea3ea51cdbe9885bf224ba62cf4699840f4be40e686312ef9dd418aeff80581e",
+  "runtime_sha256": "248042454dea21bfe1d3973087e693bc0cf84e4cb8752523566b6c682a998c33",
+  "execution_plan_sha256": "8f9bd833ab371ce8c624693222825269889da1fde1860f8be7a73f2bb2eb90d0",
+  "assets_manifest_sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+  "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "beta": 4552.793066973983,
+  "seed": 151001301,
+  "arms": [
+    "Q-R3b",
+    "QC-R3b",
+    "QS-R3b"
+  ],
+  "updates_per_arm": 500,
+  "live_tokens_per_arm": 256000,
+  "segments": [
+    200,
+    350,
+    500
+  ],
+  "workers": [
+    "GPU0: Q-R3b then QS-R3b",
+    "GPU1: QC-R3b"
+  ],
+  "synchronous_explanatory_diagnostics": false,
+  "mandatory_admission_and_event_checkpoints": "UNCHANGED",
+  "evidence": {
+    "original_pilot_source_sha": "67b3dd47ab88d572a6f11ae056eb3a77a59be4bf",
+    "original_pilot_not_relabelled_as_new_source": true,
+    "independent_analysis_hf_revision": "b45bdc4415e2a2941e6ec46712991bbfb024bf9d",
+    "delta_hf_revision": "5631c4675bfe71d3dee1070726af8f699d6381df",
+    "delta_result_git_commit": "9cb13f860ab4f51bb22250d00d7c32f2c0d0abc2",
+    "delta_full_state_fingerprint": "e3f880a77a318b905543b45d4c1f22c5401404a1417fe12e5136938322b45ca2",
+    "delta_scope": "One-update QC comparison at original Pilot beta, not 500-Step production performance.",
+    "engineering_ci_url": "https://github.com/ArcheLabs/mini-cells/actions/runs/39047479424"
+  },
+  "gates": {
+    "CPU_AND_CI": "PASS",
+    "PRIOR_PILOT": "PASSED_ITS_ORIGINAL_SCOPE",
+    "INDEPENDENT_ANALYSIS": "PASS",
+    "ONE_UPDATE_DELTA": "PASS",
+    "HISTORICAL_VERSION_URL_GATE": "REMOVED_BY_USER_REQUEST",
+    "PRODUCTION_TWO_HOUR_BUDGET": "NOT_VERIFIED",
+    "FORMAL_TRAINING_AUTHORIZATION": "NOT_GRANTED"
+  },
+  "formal_500_step_authorized": false,
+  "confirmation": "SEALED",
+  "new_gpu_training_started": false,
+  "scientific_decision": false
+}
