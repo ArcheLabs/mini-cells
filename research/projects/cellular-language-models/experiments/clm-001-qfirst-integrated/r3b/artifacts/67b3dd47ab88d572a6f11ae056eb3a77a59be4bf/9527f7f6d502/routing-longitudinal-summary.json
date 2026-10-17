@@ -1,0 +1,81 @@
+{
+  "CAUSAL_FEEDBACK_NOT_TESTED": true,
+  "MULTISEED_NOT_TESTED": true,
+  "independent_seeds": 1,
+  "rows": [
+    {
+      "action_pairs": 46,
+      "analysis_protocol_sha256": "8f9bd833ab371ce8c624693222825269889da1fde1860f8be7a73f2bb2eb90d0",
+      "analysis_source_sha": "c29d2948610547d0cafa64acefb0a5d8a2e70577",
+      "arm": "QC-R3b",
+      "checkpoint_sha256": "4c487e0e7e2e86d9e7a260d6813f468124922efabcbc2ec798c83384cc75e2d4",
+      "direction_agreement": 0.3939393939393939,
+      "event_revision": 0,
+      "identifiable_pairs": 33,
+      "phase": "post_event",
+      "role": "calibration",
+      "router": {
+        "by_depth_and_context": [
+          {
+            "ctx_margin": 0.05292200170039574,
+            "ctx_seen": false,
+            "depth": 0,
+            "states": 107,
+            "stop_margin": null
+          },
+          {
+            "ctx_margin": 0.0360377339989339,
+            "ctx_seen": false,
+            "depth": 4,
+            "states": 38,
+            "stop_margin": 0.015672922820637102
+          },
+          {
+            "ctx_margin": 0.04153913866471628,
+            "ctx_seen": true,
+            "depth": 4,
+            "states": 29,
+            "stop_margin": 0.02899818703660677
+          },
+          {
+            "ctx_margin": 0.024094942524763092,
+            "ctx_seen": false,
+            "depth": 8,
+            "states": 14,
+            "stop_margin": 0.021414538446281637
+          },
+          {
+            "ctx_margin": 0.04438394472002983,
+            "ctx_seen": true,
+            "depth": 8,
+            "states": 25,
+            "stop_margin": 0.026869665533304214
+          },
+          {
+            "ctx_margin": 0.04833890777081251,
+            "ctx_seen": false,
+            "depth": 12,
+            "states": 6,
+            "stop_margin": 0.040534228862573705
+          },
+          {
+            "ctx_margin": 0.04371262164342971,
+            "ctx_seen": true,
+            "depth": 12,
+            "states": 21,
+            "stop_margin": 0.033670410114739625
+          }
+        ],
+        "cell_entropy": 1.7914813620439385,
+        "ctx_minus_best_cell": 0.04538187254026222,
+        "near_tie_fraction": 0.0,
+        "states": 240,
+        "stop_legal_states": 133,
+        "stop_minus_best_cell": 0.025250734236175406
+      },
+      "state_scope": "FROZEN_INITIAL_STATE",
+      "step": 3
+    }
+  ],
+  "scientific_decision": false
+}
