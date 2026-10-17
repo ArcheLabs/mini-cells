@@ -1,0 +1,317 @@
+{
+  "arms": {
+    "Q-R3b": {
+      "alignment": null,
+      "arm": "Q-R3b",
+      "calibration_only": true,
+      "calibration_snapshot_seconds": 162.533766985,
+      "checkpoint_bytes": 25385211,
+      "cuda_rng_compared": true,
+      "cuda_runtime_version": "12.8",
+      "device_name": "Tesla T4",
+      "device_uuid": "fa6b9dbe-b9c6-9438-c50e-2a1cdcf75854",
+      "formal_training_started": false,
+      "gradient_rows": [
+        {
+          "lcg_candidate_cell_calls": 0,
+          "lcg_events": 32,
+          "lcg_grad_norm": null,
+          "lcg_q_cosine": null,
+          "q_grad_norm": 0.10848114639520645,
+          "seconds": 3.3264762739999583
+        },
+        {
+          "lcg_candidate_cell_calls": 0,
+          "lcg_events": 32,
+          "lcg_grad_norm": null,
+          "lcg_q_cosine": null,
+          "q_grad_norm": 0.09070218354463577,
+          "seconds": 2.975371568000014
+        },
+        {
+          "lcg_candidate_cell_calls": 0,
+          "lcg_events": 32,
+          "lcg_grad_norm": null,
+          "lcg_q_cosine": null,
+          "q_grad_norm": 0.19707858562469482,
+          "seconds": 2.9003374409999765
+        }
+      ],
+      "model_and_optimizer_compared": true,
+      "numpy_version": "2.1.3",
+      "p90_step_seconds": 3.2562553327999693,
+      "parameters": 1075492,
+      "peak_gpu_bytes": 109933568,
+      "physical_gpu": "0",
+      "pilot_steps": 3,
+      "private_candidate_count": 3,
+      "restore_atol": 1e-07,
+      "restore_pass": true,
+      "restore_rtol": 1e-05,
+      "status": "PRIVATE_GPU_REHEARSAL_COMPLETE",
+      "torch_version": "2.11.0+cu128"
+    },
+    "QC-R3b": {
+      "alignment": {
+        "coverage_missing": 272,
+        "summary": {
+          "excluded_fraction": 0.0,
+          "identifiable_pairs": 720,
+          "local_agreement": {
+            "ci95": [
+              0.8935309662848726,
+              0.9483751108555796
+            ],
+            "mean": 0.922506688912939,
+            "stories": 32
+          },
+          "local_minus_random": {
+            "ci95": [
+              0.3610211395953583,
+              0.46064492582070704
+            ],
+            "mean": 0.41353377525252527,
+            "stories": 32
+          },
+          "long_horizon_agreement": {
+            "ci95": [
+              0.850431658167442,
+              0.9201919329588701
+            ],
+            "mean": 0.8877371191813432,
+            "stories": 32
+          },
+          "pairs": 720,
+          "scientific_decision": false,
+          "scope": "single_target_frozen_fixed_suffix_vs_independent_MC_replanned_suffix",
+          "status": "LOCAL_ALIGNMENT_PASS"
+        }
+      },
+      "arm": "QC-R3b",
+      "calibration_only": true,
+      "calibration_snapshot_seconds": 156.38413423999998,
+      "checkpoint_bytes": 25385339,
+      "cuda_rng_compared": true,
+      "cuda_runtime_version": "12.8",
+      "device_name": "Tesla T4",
+      "device_uuid": "00a1365d-0598-93ff-623e-3c65c8e41b0a",
+      "formal_training_started": false,
+      "gradient_rows": [
+        {
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32,
+          "lcg_grad_norm": 2.5585573894204572e-05,
+          "lcg_q_cosine": -0.0038017684128135443,
+          "q_grad_norm": 0.10848114639520645,
+          "seconds": 3.799200892999977
+        },
+        {
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32,
+          "lcg_grad_norm": 9.961192517948803e-06,
+          "lcg_q_cosine": 0.15625302493572235,
+          "q_grad_norm": 0.09070249646902084,
+          "seconds": 3.1024210429999926
+        },
+        {
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32,
+          "lcg_grad_norm": 1.854098263720516e-05,
+          "lcg_q_cosine": 0.10402636229991913,
+          "q_grad_norm": 0.19707699120044708,
+          "seconds": 3.021114374999968
+        }
+      ],
+      "model_and_optimizer_compared": true,
+      "numpy_version": "2.1.3",
+      "p90_step_seconds": 3.65984492299998,
+      "parameters": 1075492,
+      "peak_gpu_bytes": 109934592,
+      "physical_gpu": "1",
+      "pilot_steps": 3,
+      "private_candidate_count": 3,
+      "restore_atol": 1e-07,
+      "restore_pass": true,
+      "restore_rtol": 1e-05,
+      "status": "PRIVATE_GPU_REHEARSAL_COMPLETE",
+      "torch_version": "2.11.0+cu128"
+    },
+    "QS-R3b": {
+      "alignment": null,
+      "arm": "QS-R3b",
+      "calibration_only": true,
+      "calibration_snapshot_seconds": 159.89746954200007,
+      "checkpoint_bytes": 25385339,
+      "cuda_rng_compared": true,
+      "cuda_runtime_version": "12.8",
+      "device_name": "Tesla T4",
+      "device_uuid": "fa6b9dbe-b9c6-9438-c50e-2a1cdcf75854",
+      "formal_training_started": false,
+      "gradient_rows": [
+        {
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32,
+          "lcg_grad_norm": 2.5585573894204572e-05,
+          "lcg_q_cosine": -0.0038017684128135443,
+          "q_grad_norm": 0.10848114639520645,
+          "seconds": 2.9295175579999295
+        },
+        {
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32,
+          "lcg_grad_norm": 9.961142495740205e-06,
+          "lcg_q_cosine": 0.15625391900539398,
+          "q_grad_norm": 0.09070218354463577,
+          "seconds": 3.118697889000032
+        },
+        {
+          "lcg_candidate_cell_calls": 64,
+          "lcg_events": 32,
+          "lcg_grad_norm": 1.8540882592787966e-05,
+          "lcg_q_cosine": 0.10402115434408188,
+          "q_grad_norm": 0.19707858562469482,
+          "seconds": 2.9755223239999395
+        }
+      ],
+      "model_and_optimizer_compared": true,
+      "numpy_version": "2.1.3",
+      "p90_step_seconds": 3.0900627760000132,
+      "parameters": 1075492,
+      "peak_gpu_bytes": 109934592,
+      "physical_gpu": "0",
+      "pilot_steps": 3,
+      "private_candidate_count": 3,
+      "restore_atol": 1e-07,
+      "restore_pass": true,
+      "restore_rtol": 1e-05,
+      "status": "PRIVATE_GPU_REHEARSAL_COMPLETE",
+      "torch_version": "2.11.0+cu128"
+    }
+  },
+  "assets_manifest_sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+  "beta": 4552.793066973983,
+  "beta_selection": {
+    "beta": 4552.793066973983,
+    "raw_ratio_median": 0.00010982269403522997,
+    "scaled_ratio_median": 0.49999999999999994,
+    "selection_scope": "private_Train_gradient_Pilot_only_no_Development_tuning"
+  },
+  "candidate_sha256": "ea3ea51cdbe9885bf224ba62cf4699840f4be40e686312ef9dd418aeff80581e",
+  "checkpoint_total_bytes": 76155889,
+  "diagnostic_plan_sha256": "69e997bd4dbd023f478fbd59b3559d0fdba947fa8270b48d4e4a5f693e7a75e9",
+  "final_storage_verification": {
+    "arm_progress": {
+      "Q-R3b": 3,
+      "QC-R3b": 3,
+      "QS-R3b": 3
+    },
+    "file_count": 54,
+    "full_readback": true,
+    "hf_revision": "3e5f3d036a8b4baa3a034b22f9229612ed6f7e3d",
+    "logical_bundle_bytes": 116353001,
+    "seconds": 21.492826347000005,
+    "transport": {
+      "commit_seconds": 2.814108449999935,
+      "full_readback": true,
+      "new_content_object_bytes": 24933,
+      "payload_bytes_submitted": 49144,
+      "readback_seconds": 15.283735180999997,
+      "wire_bytes": null
+    }
+  },
+  "formal_training_authorized": false,
+  "gradient_and_alignment_pass": true,
+  "missing_before_gate_D_pass": [
+    "review production snapshot/Event overhead and freeze upload budget",
+    "review private GPU resume evidence and actual HF readback",
+    "authorize frozen scientific runtime separately"
+  ],
+  "projected_total_seconds": 26060.031151670988,
+  "projection_scope": "measured synchronized updates + conservative calibration-to-development snapshot extrapolation; event cost/bandwidth interval requires review",
+  "resource_target_met": false,
+  "scientific_decision": false,
+  "snapshot_and_event_budget_reviewed": false,
+  "source_sha": "67b3dd47ab88d572a6f11ae056eb3a77a59be4bf",
+  "status": "GPU_PILOT_MEASURED_PENDING_REVIEW",
+  "storage": [
+    {
+      "arm_progress": {
+        "Q-R3b": 3
+      },
+      "file_count": 27,
+      "full_readback": false,
+      "hf_revision": "7cb1a77b132512fbd38979a15f4119e2fe77da5c",
+      "logical_bundle_bytes": 45155607,
+      "seconds": 4.8669057769999995,
+      "transport": {
+        "commit_seconds": 2.876759364999998,
+        "full_readback": false,
+        "new_content_object_bytes": 45150774,
+        "payload_bytes_submitted": 45162176,
+        "readback_seconds": 0.23471867899996823,
+        "wire_bytes": null
+      }
+    },
+    {
+      "arm_progress": {
+        "Q-R3b": 3,
+        "QC-R3b": 3
+      },
+      "file_count": 40,
+      "full_readback": false,
+      "hf_revision": "e7869c40af480b1356216c55c4c3f4d246d45376",
+      "logical_bundle_bytes": 80744237,
+      "seconds": 5.958161507,
+      "transport": {
+        "commit_seconds": 3.026817532999985,
+        "full_readback": false,
+        "new_content_object_bytes": 30694492,
+        "payload_bytes_submitted": 30712009,
+        "readback_seconds": 0.22049589999994623,
+        "wire_bytes": null
+      }
+    },
+    {
+      "arm_progress": {
+        "Q-R3b": 3,
+        "QC-R3b": 3,
+        "QS-R3b": 3
+      },
+      "file_count": 53,
+      "full_readback": false,
+      "hf_revision": "09a3ccbfaddc6d9e9a6d9ac876ac2e5aa4b3a005",
+      "logical_bundle_bytes": 116334251,
+      "seconds": 5.6577436399999215,
+      "transport": {
+        "commit_seconds": 1.7338839679999865,
+        "full_readback": false,
+        "new_content_object_bytes": 30697231,
+        "payload_bytes_submitted": 30721204,
+        "readback_seconds": 0.2239977030000091,
+        "wire_bytes": null
+      }
+    },
+    {
+      "arm_progress": {
+        "Q-R3b": 3,
+        "QC-R3b": 3,
+        "QS-R3b": 3
+      },
+      "file_count": 53,
+      "full_readback": false,
+      "hf_revision": "09a3ccbfaddc6d9e9a6d9ac876ac2e5aa4b3a005",
+      "logical_bundle_bytes": 116334251,
+      "seconds": 3.3481483650000428,
+      "transport": {
+        "commit_seconds": 0.0,
+        "full_readback": false,
+        "new_content_object_bytes": 0,
+        "payload_bytes_submitted": 0,
+        "readback_seconds": 8.218999994369369e-05,
+        "wire_bytes": null
+      }
+    }
+  ],
+  "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "two_t4_hardware": true
+}
