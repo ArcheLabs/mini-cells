@@ -2,9 +2,9 @@
   "schema": "minicells.r3b.cpu-gate.v1",
   "status": "PASS",
   "candidate_sha256": "ea3ea51cdbe9885bf224ba62cf4699840f4be40e686312ef9dd418aeff80581e",
-  "unique_tests_passed": 111,
+  "unique_tests_passed": 123,
   "existing_tests": 81,
-  "new_R3b_tests": 30,
+  "new_R3b_tests": 42,
   "failures": 0,
   "lint": "PASS",
   "source_files": {
@@ -48,10 +48,10 @@
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/config/diagnostic-execution-v1.schema.json": "d7b67470d0eb628c9af07873532cd6ace113903adc9d1e03a243b78c7bc9b7f8",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/config/proposed.json": "af7b59ba20fa8685b1f84e58f0844aad6ac8402771d04e51e6b25fbc8bad6d98",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/__init__.py": "8de976f3576ea30a97cd65d0bbce6f135276b1bc638173cdf358aa7d3ab63d59",
-    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/analysis.py": "ac28ba05feae33c780553fcbd54fd9a33c8352d1b613e24f3024dc476bb17da6",
-    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/analysis_aggregate.py": "c78804dea1fc3dff45571f89e3c1453dcb444e4691fceec28ddc34b4c5fad6c2",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/analysis.py": "96c7f41df39fda1b9b547596e2e5a0d4a2501ee7b503c73cd63d114fb41d60b0",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/analysis_aggregate.py": "80d5e79302382103120fbac36fb413fa9e3dd3ef06d16846ffb9536f26a49ac8",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/analysis_cli.py": "6b1ae2b605f9bf0b1e7a01231e42929a03aee9623e20a2f0c1de77ed16cf285a",
-    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/analysis_runner.py": "2f84e3389ea5690f0e6bdcf5b8e03d697abbb3cb6cb31124dc91b89e6242e8e4",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/analysis_runner.py": "89da93735096a1bbcb85461633aa5a79f00604174c6d946acfe7bd9b6858dfe2",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/analysis_store.py": "e0d804fa20f1f4c71a72086d9ef6d94cb8151ea99f5a0bbe85b15c70d52c7479",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/cli.py": "bd9907874b892a40e8a463a7b588d571d0752274a88fc560d3f6b10b68e0cd1e",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b/common.py": "c4be496648beaa991ae33e200abb2ecfc3c1479ac0d6a5090c18f5e5fd423d93",
@@ -121,5 +121,5 @@
   "real_gpu_pilot": "NOT_RUN",
   "formal_training_authorized": false,
   "storage_repair_targeted_tests_passed": 24,
-  "diagnostic_optimization_validation": "123 unique covered across regression and corrected targeted test runs; new remote CI pending."
+  "diagnostic_optimization_validation": "123 full local tests passed; 123 remote tests passed at f339e73; final event-selector patch passed CPU and awaits CI."
 }

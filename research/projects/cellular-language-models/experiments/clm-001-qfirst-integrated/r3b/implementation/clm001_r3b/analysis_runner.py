@@ -106,7 +106,7 @@ def identity(root, ref, plan, analysis_source, arm, step, revision, phase, stage
     from clm001_r3.events import pending
 
     event_types = {v["event"] for v in selected["event_cursor"].values()}
-    if step in (400, c["shadow"]["admission_step"]) and (
+    if (step == 400 or pending(c, step)) and (
         (phase == "pre_event" and selected["revision"] != 0)
         or (
             phase == "post_event"
@@ -303,6 +303,7 @@ def execute(root, task, plan, *, device="cpu"):
             return value
 
         with obs.isolated(model, trainer):
+            model.eval()
             if task["stage"] == "quality":
                 value = {"quality": {}}
                 for policy in task["policies"]:

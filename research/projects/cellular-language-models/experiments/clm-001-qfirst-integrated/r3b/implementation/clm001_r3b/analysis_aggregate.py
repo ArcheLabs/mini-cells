@@ -1,7 +1,7 @@
 """Manifest-driven aggregation. Missing observations remain missing, never zero."""
 
 from minicells_runtime.store import canonical, ContinuationError
-from .analysis import primary, summarize_router, mean
+from .analysis import primary, summarize_router, mean, descriptive_lag
 
 
 def aggregate_tasks(c, meta, tasks, results, ledger):
@@ -167,6 +167,7 @@ def aggregate_tasks(c, meta, tasks, results, ledger):
             **common,
             "rows": functionals,
             "advantage_route_trajectories": trajectories,
+            "descriptive_lead_lag": descriptive_lag(trajectories),
         },
         "gradient-audit-summary.json": {**common, "rows": gradients},
         "routing-longitudinal-summary.json": {**common, "rows": routers},

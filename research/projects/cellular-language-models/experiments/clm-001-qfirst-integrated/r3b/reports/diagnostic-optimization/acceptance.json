@@ -16,7 +16,7 @@
   "prior_successful_pilot_repeated": false,
   "formal_500_step_training_authorized": false,
   "scientific_decision": false,
-  "ci_url": null,
+  "ci_url": "https://github.com/ArcheLabs/mini-cells/actions/runs/39019932379",
   "hf_evidence_revision": "3e5f3d036a8b4baa3a034b22f9229612ed6f7e3d",
   "hf_evidence_scope": "PREVIOUS_SOURCE_PILOT_ONLY_PUBLIC_INDEX_AND_USER_LOG",
   "remaining_blockers": [
@@ -26,13 +26,15 @@
     "Execution plan approval, exact release identities and explicit formal authorization required."
   ],
   "cpu_validation": {
-    "regression_first_passed": 121,
-    "regression_first_failed": 2,
-    "first_failures": "Test helper missing imports; fixed. No implementation failure hidden.",
-    "targeted_final_passed": 11,
-    "unique_covered": 123,
-    "latest_schema_and_launcher_ci": "PENDING"
+    "local_full_passed": 123,
+    "local_seconds": 551.03,
+    "remote_full_passed": 123,
+    "remote_seconds": 179.09,
+    "final_event_selector_passed": 1,
+    "scope": "SYNTHETIC_CPU_AND_FAKE_HF",
+    "latest_final_patch_ci": "PENDING"
   },
   "no_confirmation_access": true,
-  "new_gpu_work_started": false
+  "new_gpu_work_started": false,
+  "ci_verified_source_sha": "f339e73cf1bdf1c1fa7e68894c79920d70f693ec"
 }

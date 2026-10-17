@@ -257,6 +257,26 @@ def test_exact_event_revision_and_bank_tamper(case, tmp_path):
             "development",
             ["greedy"],
         )
+    mid_revision = min(
+        r["revision"]
+        for r in meta["arms"]["QC-R3b"]["checkpoints"]
+        if r["step"] == c["shadow"]["connection_path_step"] and r["revision"] > 0
+    )
+    # An intermediate connection/path Event Revision is not a completed post-event endpoint.
+    with pytest.raises(ContinuationError, match="EXACT_EVENT_PHASE"):
+        ar.identity(
+            root,
+            ref,
+            load_plan(),
+            reused.source_sha(),
+            "QC-R3b",
+            c["shadow"]["connection_path_step"],
+            mid_revision,
+            "post_event",
+            "quality",
+            "development",
+            ["greedy"],
+        )
     assert meta["arms"]["QC-R3b"]["step"] == 10
     (root / "arms/QC-R3b/development-probe-bank.pt").write_bytes(b"corrupt")
     with pytest.raises(ContinuationError, match="HASH_MISMATCH|PROBE_MISMATCH"):
