@@ -1,0 +1,262 @@
+{
+  "arms": {
+    "Q-R3b": {
+      "checkpoint_serialize_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/Q-R3b/checkpoint_serialize_seconds",
+        "value": 0.2482903999998598
+      },
+      "gpu_training_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/Q-R3b/gpu_training_seconds",
+        "value": 1384.9299638671876
+      },
+      "oracle_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/Q-R3b/oracle_seconds",
+        "value": 192.78553703100238
+      },
+      "probe_bank_capture_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/Q-R3b/probe_bank_capture_seconds",
+        "value": 6.244607041999984
+      },
+      "step": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/Q-R3b/step",
+        "value": 500
+      },
+      "training_worker_host_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/Q-R3b/training_worker_host_seconds",
+        "value": 1363.0870959910005
+      },
+      "update_host_wall_percentiles_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/Q-R3b/update_host_wall_percentiles_seconds",
+        "value": {
+          "p50": 2.729327752000131,
+          "p90": 2.9647379510999827,
+          "p99": 3.1446000248502513
+        }
+      }
+    },
+    "QC-R3b": {
+      "checkpoint_serialize_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QC-R3b/checkpoint_serialize_seconds",
+        "value": 0.2382155690002037
+      },
+      "gpu_training_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QC-R3b/gpu_training_seconds",
+        "value": 1472.3996115722657
+      },
+      "oracle_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QC-R3b/oracle_seconds",
+        "value": 196.11485709399625
+      },
+      "probe_bank_capture_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QC-R3b/probe_bank_capture_seconds",
+        "value": 6.467274901999986
+      },
+      "step": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QC-R3b/step",
+        "value": 500
+      },
+      "training_worker_host_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QC-R3b/training_worker_host_seconds",
+        "value": 1450.2918430419995
+      },
+      "update_host_wall_percentiles_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QC-R3b/update_host_wall_percentiles_seconds",
+        "value": {
+          "p50": 2.901038840999945,
+          "p90": 3.1347252334999895,
+          "p99": 3.3431646469501786
+        }
+      }
+    },
+    "QS-R3b": {
+      "checkpoint_serialize_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QS-R3b/checkpoint_serialize_seconds",
+        "value": 0.3523131160000048
+      },
+      "gpu_training_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QS-R3b/gpu_training_seconds",
+        "value": 1379.131448486328
+      },
+      "oracle_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QS-R3b/oracle_seconds",
+        "value": 182.8648348040074
+      },
+      "probe_bank_capture_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QS-R3b/probe_bank_capture_seconds",
+        "value": 5.3445535689998
+      },
+      "step": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QS-R3b/step",
+        "value": 500
+      },
+      "training_worker_host_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QS-R3b/training_worker_host_seconds",
+        "value": 1358.045454295991
+      },
+      "update_host_wall_percentiles_seconds": {
+        "classification": "MEASURED",
+        "source": "resource-ledger.json/training/QS-R3b/update_host_wall_percentiles_seconds",
+        "value": {
+          "p50": 2.7132864595000683,
+          "p90": 2.917778874600117,
+          "p99": 3.1448823792798475
+        }
+      }
+    }
+  },
+  "byte_definitions": {
+    "logical_bundle": "all referenced file lengths at final revision",
+    "new_objects": "new content-addressed objects only",
+    "payload": "submitted metadata plus new objects, not wire bytes"
+  },
+  "confirmation": "SEALED",
+  "gpu_measurement_scope": "CUDA stream elapsed during measured updates/analysis only; excludes unmeasured semantic-event GPU work",
+  "mandatory_event_cost": {
+    "classification": "NOT_MEASURED",
+    "reason": "NOT_RECORDED; oracle_seconds is not the complete event cost",
+    "source": "resource-ledger.json",
+    "value": null
+  },
+  "new_tasks_this_session": 0,
+  "observed_update_plus_analysis_cuda_seconds": {
+    "classification": "NOT_MEASURED",
+    "source": "training update + posthoc CUDA stream measurements (partial resource scope)",
+    "value": null
+  },
+  "posthoc_end_to_end_wall_seconds": {
+    "classification": "NOT_MEASURED",
+    "reason": "End-to-end publication-inclusive wall not recorded",
+    "source": "private HF coverage/sessions",
+    "value": null
+  },
+  "posthoc_gpu_seconds": {
+    "classification": "NOT_MEASURED",
+    "source": "coverage-ledger.json/tasks/gpu_stream_seconds",
+    "value": null
+  },
+  "posthoc_session_wall_scope": "task-loop wall only; excludes initial download, aggregation and GitHub publication",
+  "posthoc_session_wall_seconds": {
+    "classification": "NOT_MEASURED",
+    "source": "private HF coverage/sessions",
+    "value": null
+  },
+  "remaining_cost_seconds": {
+    "classification": "NOT_MEASURED",
+    "reason": "No validated representative estimate",
+    "source": "coverage-ledger.json",
+    "value": null
+  },
+  "remote_ack_only_seconds": {
+    "classification": "NOT_MEASURED",
+    "reason": "NOT_RECORDED separately from publisher roundtrip",
+    "source": "resource-ledger.json",
+    "value": null
+  },
+  "reused_tasks_this_session": 0,
+  "schema": "minicells.r3b.posthoc-performance.v1",
+  "scientific_decision": false,
+  "serialization_scope": "latest checkpoint only; not a sum over all serializations",
+  "stage_coverage": {
+    "action": {
+      "blocked": 0,
+      "complete": 0,
+      "pending": 21,
+      "unavailable": 0
+    },
+    "functional": {
+      "blocked": 0,
+      "complete": 0,
+      "pending": 42,
+      "unavailable": 0
+    },
+    "quality": {
+      "blocked": 0,
+      "complete": 0,
+      "pending": 39,
+      "unavailable": 0
+    }
+  },
+  "storage": {
+    "commit_seconds": {
+      "classification": "DERIVED",
+      "source": "resource-ledger.json/storage/uploads",
+      "value": 116.58928657899929
+    },
+    "final_full_readback_seconds": {
+      "classification": "MEASURED",
+      "source": "resource-ledger.json/storage/uploads/-1",
+      "value": 124.5893255810006
+    },
+    "final_logical_bundle_bytes": {
+      "classification": "MEASURED",
+      "source": "resource-ledger.json/storage/uploads/-1",
+      "value": 1284580587
+    },
+    "new_content_object_bytes": {
+      "classification": "DERIVED",
+      "source": "resource-ledger.json/storage/uploads",
+      "value": 1264190064
+    },
+    "payload_bytes_submitted": {
+      "classification": "DERIVED",
+      "source": "resource-ledger.json/storage/uploads",
+      "value": 1269151967
+    },
+    "readback_seconds": {
+      "classification": "DERIVED",
+      "source": "resource-ledger.json/storage/uploads",
+      "value": 137.6983179709996
+    },
+    "seconds": {
+      "classification": "DERIVED",
+      "source": "resource-ledger.json/storage/uploads",
+      "value": 1318.7243573899996
+    }
+  },
+  "task_timing_distributions_seconds": {},
+  "task_transport": [],
+  "total_elapsed_wall_seconds": {
+    "classification": "NOT_MEASURED",
+    "reason": "No common trusted study start/end",
+    "source": "resource-ledger.json",
+    "value": null
+  },
+  "total_study_cuda_resource_seconds": {
+    "classification": "NOT_MEASURED",
+    "reason": "Complete resource total unavailable: semantic-event GPU time not separately recorded",
+    "source": "resource-ledger.json",
+    "value": null
+  },
+  "training_critical_path_seconds": {
+    "classification": "NOT_MEASURED",
+    "reason": "NOT_RECORDED: trustworthy end-to-end timestamps absent",
+    "source": "resource-ledger.json",
+    "value": null
+  },
+  "training_cuda_resource_seconds": {
+    "classification": "DERIVED",
+    "source": "resource-ledger.json/training/*/gpu_training_seconds",
+    "value": 4236.461023925781
+  },
+  "two_hour_verdict": "NOT_VERIFIED"
+}

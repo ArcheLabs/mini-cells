@@ -29,11 +29,21 @@ class AnalysisStore:
         return info.sha, value or {"schema": "minicells.r3b.analysis-index.v1", "tasks": {}}
 
     def completed(self, identity):
-        _, index = self.index(identity)
+        head, index = self.index(identity)
         key = canonical(identity)
         entry = index["tasks"].get(key)
         if not entry:
-            return None
+            # A session can die after immutable result readback but before index CAS.
+            # Adopt the exact saved bytes instead of recomputing an expensive task.
+            orphan = self.backend.optional(
+                self.prefix(identity) + "/private/" + key + "/result.json", head
+            )
+            if orphan is None:
+                return None
+            if orphan.get("identity") != identity:
+                raise ContinuationError("ANALYSIS_TASK_IDENTITY_MISMATCH")
+            self.commit(orphan)
+            return self.completed(identity)
         if entry["identity"] != identity or entry["task_status"] != "COMPLETE":
             raise ContinuationError("ANALYSIS_TASK_IDENTITY_MISMATCH")
         if (
@@ -51,6 +61,12 @@ class AnalysisStore:
         return result
 
     def commit(self, result):
+        if (
+            result.get("optimizer_updates") != 0
+            or result.get("training_state_unchanged") is not True
+            or result.get("task_status") != "COMPLETE"
+        ):
+            raise ContinuationError("ANALYSIS_READ_ONLY_PROOF_REQUIRED")
         identity = result["identity"]
         key = canonical(identity)
         prefix = self.prefix(identity)
@@ -113,3 +129,38 @@ class AnalysisStore:
 
     def collect(self, identities):
         return [self.completed(identity) for identity in identities]
+
+    def save_coverage(self, scope, rows, session):
+        """Independent authoritative coverage; never writes training latest.json."""
+        from .full_analysis import counts
+
+        counts(rows)
+        path = self.prefix(scope) + "/coverage.json"
+        with tempfile.TemporaryDirectory() as tmp:
+            file = Path(tmp) / "coverage.json"
+            for _ in range(self.retries):
+                head, _ = self.index(scope)
+                previous = self.backend.optional(path, head) or {"sessions": []}
+                sessions = {r["session_id"]: r for r in previous["sessions"]}
+                sessions[session["session_id"]] = session
+                value = {
+                    "schema": "minicells.r3b.coverage.v1",
+                    "scope": scope,
+                    "tasks": rows,
+                    "counts": counts(rows),
+                    "sessions": list(sessions.values()),
+                }
+                atomic(file, value)
+                try:
+                    revision = self.backend.commit({path: file}, head, "R3b coverage CAS")
+                    if self.backend.optional(path, revision) != value:
+                        raise ContinuationError("ANALYSIS_COVERAGE_READBACK_FAILED")
+                    return revision, value
+                except Exception as error:
+                    if not is_conflict(error):
+                        raise
+            raise ContinuationError("ANALYSIS_CAS_CONFLICT")
+
+    def coverage(self, scope):
+        revision, _ = self.index(scope)
+        return self.backend.optional(self.prefix(scope) + "/coverage.json", revision)

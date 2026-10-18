@@ -1,6 +1,8 @@
 """Reuse main-descended R3 Git publisher; only declared aggregate evidence is staged."""
 
 from pathlib import Path
+import re
+import shutil
 from minicells_runtime.store import atomic, canonical, read, ContinuationError
 from minicells_runtime.publication import storage_summary
 from clm001_r3 import publication as existing
@@ -21,6 +23,9 @@ ALLOWED = {
     "analysis-index.json",
     "diagnostic-resource-ledger.json",
     "training-resource-ledger.json",
+    "analysis-input-reference.json",
+    "coverage-ledger.json",
+    "performance-summary.json",
 }
 
 
@@ -93,12 +98,16 @@ def reject_private_payload(value):
             ):
                 raise ContinuationError("PRIVATE_PER_SAMPLE_ARRAY_REJECTED")
             reject_private_payload(row)
+    elif isinstance(value, str) and re.search(
+        r"(?:hf_[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})", value
+    ):
+        raise ContinuationError("PRIVATE_PUBLICATION_PAYLOAD_REJECTED")
     elif isinstance(value, list):
         for row in value:
             reject_private_payload(row)
 
 
-def publish_documents(root, values, *, scope=None):
+def publish_documents(root, values, *, scope=None, attachments=None):
     root = Path(root)
     lock = read(root / "experiment.lock.json")
     evidence = root.parent / (root.name + "-evidence")
@@ -117,6 +126,7 @@ def publish_documents(root, values, *, scope=None):
         "source_sha": lock["source_sha"],
         "scientific_decision": False,
     }
+    values = dict(values)
     relatives = []
     for name, value in values.items():
         if name not in ALLOWED:
@@ -127,9 +137,31 @@ def publish_documents(root, values, *, scope=None):
             raise ContinuationError("PUBLICATION_FILE_TOO_LARGE", name)
         atomic(destination / name, value)
         relatives.append((destination / name).relative_to(checkout).as_posix())
+    for name, path in (attachments or {}).items():
+        allowed_figures = {"quality-pre_event.png", "quality-post_event.png", "coverage.png"}
+        if (
+            name not in allowed_figures | {"CLM-001-R3b-POSTHOC-PERFORMANCE.md"}
+            or Path(name).name != name
+        ):
+            raise ContinuationError("PUBLICATION_NOT_WHITELISTED")
+        path = Path(path)
+        payload = path.read_bytes()
+        if len(payload) > 2 * 1024 * 1024:
+            raise ContinuationError("PUBLICATION_FILE_TOO_LARGE")
+        if name.endswith(".png") and not payload.startswith(b"\x89PNG\r\n\x1a\n"):
+            raise ContinuationError("PUBLICATION_IMAGE_INVALID")
+        if re.search(
+            rb"(?:hf_[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})",
+            payload,
+        ):
+            raise ContinuationError("PRIVATE_PUBLICATION_PAYLOAD_REJECTED")
+        shutil.copyfile(path, destination / name)
+        relatives.append((destination / name).relative_to(checkout).as_posix())
     existing.git(checkout, "add", "--", *relatives)
     staged = existing.git(checkout, "diff", "--cached", "--name-only").stdout.splitlines()
-    if set(staged) - set(relatives) or any(Path(p).suffix != ".json" for p in staged):
+    if set(staged) - set(relatives) or any(
+        Path(p).suffix not in (".json", ".png", ".md") for p in staged
+    ):
         raise ContinuationError("NON_METADATA_PUBLICATION_REJECTED")
     if staged:
         existing.git(checkout, "commit", "-m", "results: R3b longitudinal " + lock["run_id"])
@@ -148,8 +180,36 @@ def publish_documents(root, values, *, scope=None):
             },
         )
         raise ContinuationError("GITHUB_PUBLICATION_FAILED") from None
+    content_commit = existing.git(checkout, "rev-parse", "HEAD").stdout.strip()
+    remote = existing.git(checkout, "ls-remote", "origin", "refs/heads/" + branch).stdout.split()
+    if not remote or remote[0] != content_commit:
+        raise ContinuationError("GITHUB_REMOTE_READBACK_FAILED")
+    receipt = {
+        "status": "PUBLISHED",
+        "branch": branch,
+        "content_commit_sha": content_commit,
+        "files": {
+            name: __import__("hashlib").sha256((checkout / name).read_bytes()).hexdigest()
+            for name in relatives
+            if not name.endswith("/publication.json")
+        },
+        "verification": "REMOTE_BRANCH_EQUALS_CONTENT_COMMIT",
+        "scientific_decision": False,
+    }
+    atomic(destination / "publication.json", receipt)
+    receipt_path = (destination / "publication.json").relative_to(checkout).as_posix()
+    existing.git(checkout, "add", "--", receipt_path)
+    if existing.git(checkout, "diff", "--cached", "--name-only").stdout.strip():
+        existing.git(checkout, "commit", "-m", "results: verified R3b publication receipt")
+    helper.push_branch(branch, "GITHUB_TOKEN")
+    final_commit = existing.git(checkout, "rev-parse", "HEAD").stdout.strip()
+    remote = existing.git(checkout, "ls-remote", "origin", "refs/heads/" + branch).stdout.split()
+    if not remote or remote[0] != final_commit:
+        raise ContinuationError("GITHUB_RECEIPT_READBACK_FAILED")
     result = {
         "status": "PUBLISHED",
+        "content_commit_sha": content_commit,
+        "receipt_path": receipt_path,
         "branch": branch,
         "commit_sha": existing.git(checkout, "rev-parse", "HEAD").stdout.strip(),
         "checkpoint_index_url": "https://raw.githubusercontent.com/ArcheLabs/mini-cells/"
