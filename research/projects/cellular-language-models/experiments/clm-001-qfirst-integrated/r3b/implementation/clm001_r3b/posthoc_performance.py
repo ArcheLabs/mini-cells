@@ -90,6 +90,26 @@ def build(ledger, coverage, sessions, source="resource-ledger.json"):
     train_sum = sum(train_gpu) if train_gpu and all(v is not None for v in train_gpu) else None
     analysis_gpu = sum(gpu) if gpu and all(v is not None for v in gpu) else None
     wall = sum(s["elapsed_seconds"] for s in sessions) if sessions else None
+    todo = [r for r in coverage if r["status"] in ("PENDING", "BLOCKED")]
+    estimates = []
+    for row in todo:
+        sample = [
+            r["elapsed_seconds"]
+            for r in coverage
+            if r["status"] == "COMPLETE"
+            and r.get("elapsed_seconds") is not None
+            and (r["stage"], r["role"]) == (row["stage"], row["role"])
+        ]
+        if len(sample) < 3:
+            estimates = None
+            break
+        estimates.append(float(np.median(sample)))
+    remaining = metric(
+        sum(estimates) if estimates is not None else None,
+        "coverage-ledger.json; stage/role observed medians with at least 3 tasks",
+        "ESTIMATED" if todo else "DERIVED",
+        reason="Retryable PENDING/BLOCKED compute only; excludes unavailable assets, I/O and hardware variation",
+    )
     # Old ledger has no trusted start/end pair; never manufacture it from workers.
     return {
         "schema": "minicells.r3b.posthoc-performance.v1",
@@ -122,6 +142,7 @@ def build(ledger, coverage, sessions, source="resource-ledger.json"):
         "training_cuda_resource_seconds": metric(
             train_sum, source + "/training/*/gpu_training_seconds", "DERIVED"
         ),
+        "posthoc_gpu_scope": "verified COMPLETE task compute only; failed-task GPU time is NOT_RECORDED",
         "posthoc_gpu_seconds": metric(
             analysis_gpu, "coverage-ledger.json/tasks/gpu_stream_seconds", "DERIVED"
         ),
@@ -159,9 +180,7 @@ def build(ledger, coverage, sessions, source="resource-ledger.json"):
         "total_elapsed_wall_seconds": metric(
             None, source, reason="No common trusted study start/end"
         ),
-        "remaining_cost_seconds": metric(
-            None, "coverage-ledger.json", reason="No validated representative estimate"
-        ),
+        "remaining_cost_seconds": remaining,
         "scientific_decision": False,
         "confirmation": "SEALED",
     }

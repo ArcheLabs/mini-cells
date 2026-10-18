@@ -212,6 +212,7 @@ def run_tasks(
                 if cached != result:
                     raise ContinuationError("ANALYSIS_RESULT_READBACK_FAILED")
                 row["transport_timings"] = {
+                    **entry.get("transport_timings", {}),
                     "lookup_seconds": lookup_seconds,
                     "commit_and_index_verify_seconds": commit_seconds,
                     "final_readback_seconds": time.perf_counter() - verify_start,
@@ -304,9 +305,12 @@ def _run(output, *, device="cpu", session_seconds=10 * 3600, publish=True):
     summary = counts(rows)
     c = read(root / "runtime-config.json")
     values = aggregate_tasks(c, meta, tasks, results, rows)
+    insufficient = [
+        r["slot_key"] for r in rows if r.get("coverage_status") == "INSUFFICIENT_COVERAGE"
+    ]
     status = (
         "COMPLETE"
-        if summary["complete"] == 102
+        if summary["complete"] == 102 and not insufficient
         else "PARTIAL"
         if summary["complete"]
         else "BLOCKED"
@@ -318,7 +322,18 @@ def _run(output, *, device="cpu", session_seconds=10 * 3600, publish=True):
         scientific_decision=False,
         confirmation="SEALED",
     )
-    values["experiment-manifest.json"]["status"] = "TRAINING_COMPLETE_ANALYSIS_" + status
+    values["experiment-manifest.json"].update(
+        training_source_sha=SOURCE,
+        source_sha=SOURCE,
+        run_id=INTERNAL_RUN,
+        public_run_directory=PUBLIC_RUN,
+        analysis_source_sha=analysis_source,
+        analysis_protocol_sha256=canonical(plan),
+        hf_input_revision=ref["hf_revision"],
+        hf_analysis_revision=revision,
+        insufficient_coverage_slots=insufficient,
+        status="TRAINING_COMPLETE_ANALYSIS_" + status,
+    )
     values["experiment-manifest.json"]["missing"] = [r for r in rows if r["status"] != "COMPLETE"]
     for name in (
         "metrics-summary.json",
@@ -485,9 +500,12 @@ def run(output, *, device="cpu", session_seconds=10 * 3600, publish=True):
         if publish:
             from .publication import publish_documents
 
+            failure_md = output / "CLM-001-R3b-POSTHOC-PERFORMANCE.md"
+            failure_md.write_text(markdown(report, counts(rows)), encoding="utf-8")
             publish_documents(
                 publication_root,
                 values,
+                attachments={"CLM-001-R3b-POSTHOC-PERFORMANCE.md": failure_md},
                 scope={
                     "analysis_source_sha": source_sha(),
                     "analysis_protocol_sha256": canonical(plan),

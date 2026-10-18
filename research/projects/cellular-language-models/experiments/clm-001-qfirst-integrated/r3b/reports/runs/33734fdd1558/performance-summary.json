@@ -149,6 +149,7 @@
     "source": "private HF coverage/sessions",
     "value": null
   },
+  "posthoc_gpu_scope": "verified COMPLETE task compute only; failed-task GPU time is NOT_RECORDED",
   "posthoc_gpu_seconds": {
     "classification": "NOT_MEASURED",
     "source": "coverage-ledger.json/tasks/gpu_stream_seconds",
@@ -162,8 +163,8 @@
   },
   "remaining_cost_seconds": {
     "classification": "NOT_MEASURED",
-    "reason": "No validated representative estimate",
-    "source": "coverage-ledger.json",
+    "reason": "Retryable PENDING/BLOCKED compute only; excludes unavailable assets, I/O and hardware variation",
+    "source": "coverage-ledger.json; stage/role observed medians with at least 3 tasks",
     "value": null
   },
   "remote_ack_only_seconds": {

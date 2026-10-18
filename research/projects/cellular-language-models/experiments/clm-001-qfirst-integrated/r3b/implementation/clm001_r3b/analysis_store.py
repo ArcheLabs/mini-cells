@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import tempfile
+import time
 from minicells_runtime.store import atomic, canonical, digest, read, ContinuationError
 from minicells_artifacts.hf_storage import is_conflict, relative
 
@@ -58,6 +59,11 @@ class AnalysisStore:
         result = read(private)
         if result["identity"] != identity:
             raise ContinuationError("ANALYSIS_TASK_IDENTITY_MISMATCH")
+        if (
+            result.get("optimizer_updates") != 0
+            or result.get("training_state_unchanged") is not True
+        ):
+            raise ContinuationError("ANALYSIS_READ_ONLY_PROOF_REQUIRED")
         return result
 
     def commit(self, result):
@@ -86,18 +92,26 @@ class AnalysisStore:
                     self.completed(identity)
                     return old
                 try:
+                    result_commit_start = time.perf_counter()
                     result_revision = self.backend.commit(
                         {path: tmp / "result.json"}, head, "private R3b analysis result"
                     )
+                    result_commit_seconds = time.perf_counter() - result_commit_start
                     break
                 except Exception as error:
                     if not is_conflict(error):
                         raise
             else:
                 raise ContinuationError("ANALYSIS_CAS_CONFLICT")
+            result_readback_start = time.perf_counter()
             if digest(self.backend.get(path, result_revision)) != sha:
                 raise ContinuationError("ANALYSIS_RESULT_HASH_MISMATCH")
+            result_readback_seconds = time.perf_counter() - result_readback_start
             entry = {
+                "transport_timings": {
+                    "result_successful_commit_seconds": result_commit_seconds,
+                    "result_readback_seconds": result_readback_seconds,
+                },
                 "task_status": "COMPLETE",
                 "identity": identity,
                 "sha256": sha,
@@ -115,13 +129,23 @@ class AnalysisStore:
                 index["tasks"][key] = entry
                 atomic(tmp / "index.json", index)
                 try:
+                    index_commit_start = time.perf_counter()
                     revision = self.backend.commit(
                         {prefix + "/index.json": tmp / "index.json"}, head, "R3b analysis index CAS"
                     )
+                    index_commit_seconds = time.perf_counter() - index_commit_start
+                    index_readback_start = time.perf_counter()
                     saved = self.backend.optional(prefix + "/index.json", revision)
                     if saved != index:
                         raise ContinuationError("ANALYSIS_INDEX_READBACK_FAILED")
-                    return entry
+                    return {
+                        **entry,
+                        "transport_timings": {
+                            **entry["transport_timings"],
+                            "index_successful_commit_seconds": index_commit_seconds,
+                            "index_readback_seconds": time.perf_counter() - index_readback_start,
+                        },
+                    }
                 except Exception as error:
                     if not is_conflict(error):
                         raise
