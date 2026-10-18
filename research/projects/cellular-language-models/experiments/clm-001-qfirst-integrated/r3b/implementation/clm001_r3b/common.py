@@ -100,6 +100,11 @@ def require_training_release(candidate, source, acceptance, authorization, pilot
     # never booleans fabricated by the Notebook or environment overrides.
     if candidate["engine"].get("synthetic"):
         return
+    if authorization.get("release_mode") == "USER_APPROVED_ESTIMATED_BUDGET_DEVELOPMENT":
+        from .development_release import validate as validate_release
+
+        validate_release(candidate, source, authorization, pilot)
+        return
     if (
         pilot.get("status") != "GPU_PILOT_PASS"
         or pilot.get("source_sha") != source

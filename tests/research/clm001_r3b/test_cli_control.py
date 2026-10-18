@@ -2,10 +2,12 @@
 
 from minicells_runtime.store import atomic, read, digest
 from test_hf_storage import FakeHub
+import pytest
 
 
+@pytest.mark.parametrize("mode", ["train", "auto"])
 def test_explicit_train_controller_without_github_is_defined_and_cpu_only(
-    case, tmp_path, monkeypatch, capsys
+    case, tmp_path, monkeypatch, capsys, mode
 ):
     import sys
     from clm001_r3b import cli, preflight, coordinator, plots, runner
@@ -15,7 +17,15 @@ def test_explicit_train_controller_without_github_is_defined_and_cpu_only(
     candidate_file = tmp_path / "candidate.json"
     atomic(candidate_file, candidate)
     approval = tmp_path / "approval.json"
-    atomic(approval, {})
+    atomic(
+        approval,
+        {
+            "release_mode": "USER_APPROVED_ESTIMATED_BUDGET_DEVELOPMENT",
+            "formal_500_step_authorized": True,
+        }
+        if mode == "auto"
+        else {},
+    )
     pilot_file = tmp_path / "pilot.json"
     atomic(
         pilot_file,
@@ -52,7 +62,7 @@ def test_explicit_train_controller_without_github_is_defined_and_cpu_only(
         [
             "r3b",
             "--mode",
-            "train",
+            mode,
             "--config",
             str(candidate_file),
             "--output",

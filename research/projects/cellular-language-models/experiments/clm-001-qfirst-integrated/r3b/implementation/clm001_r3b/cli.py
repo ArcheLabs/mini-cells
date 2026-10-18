@@ -154,7 +154,7 @@ def main():
     p.add_argument("--checkpoint-ref")
     p.add_argument("--assets-ref")
     p.add_argument("--run-id")
-    p.add_argument("--segment-end-step", type=int, default=200)
+    p.add_argument("--segment-end-step", type=int, default=500)
     p.add_argument("--acceptance", type=Path)
     p.add_argument("--pilot-report", type=Path)
     p.add_argument("--authorization", type=Path)
@@ -188,8 +188,26 @@ def main():
         from .publication import publish
 
         store = HFCheckpointStore(HubBackend(a.hf_repo))
+        auto_ref = None
+        if a.mode == "auto":
+            from .development_release import choose_auto_mode
+
+            approved = read(a.authorization or BASE / "config/authorization.json")
+            a.mode, auto_ref = choose_auto_mode(store, source, run_id, approved)
+            if auto_ref is not None:
+                a.checkpoint_ref = (
+                    None  # resolved() fetches the same immutable run by source/run ID.
+                )
+            print(
+                {
+                    "automatic_action": a.mode,
+                    "target_step": a.segment_end_step,
+                    "budget_status": "USER_ACCEPTED_ESTIMATE_NOT_GUARANTEED",
+                },
+                flush=True,
+            )
         if a.mode in ("evaluate", "fork", "publish-only", "resume"):
-            reference = resolved(store, source, run_id, a.checkpoint_ref)
+            reference = auto_ref or resolved(store, source, run_id, a.checkpoint_ref)
             with tempfile.TemporaryDirectory() as tmp:
                 fetched = Path(tmp) / "fetched"
                 store.fetch_verified_checkpoint(
@@ -275,6 +293,9 @@ def main():
                     print(json.dumps(Publisher(child, store).publish(readback=True)), flush=True)
                     return
                 root = workspace / "run"
+                from .development_release import retain
+
+                retain(root)
                 MountedInputStore(fetched).materialize(root, meta["source_sha"])
             if a.mode == "publish-only":
                 # Recover the actual HF reference as authoritative index even when
@@ -297,6 +318,26 @@ def main():
                 )
                 print(json.dumps(publish(root)), flush=True)
                 return
+            if meta["complete"]:
+                evidence_folder = root.parent / (root.name + "-evidence")
+                evidence_folder.mkdir(exist_ok=True)
+                snapshot = read(
+                    store.backend.get(reference["bundle_path"], reference["hf_revision"])
+                )
+                index = store._index(meta, snapshot, reference, snapshot["files"])
+                atomic(evidence_folder / "checkpoint-index.json", index)
+                atomic(
+                    evidence_folder / "storage-status.json",
+                    {
+                        "status": index["status"],
+                        "hf_revision": reference["hf_revision"],
+                        "scientific_decision": False,
+                    },
+                )
+                if a.publish_github:
+                    publish(root)
+                print({"status": "ALREADY_COMPLETE", "training_updates": 0}, flush=True)
+                return
             c = read(root / "runtime-config.json")
             preflight.cpu_evidence(read(root / "candidate-config.json"))
             release = read(root / "preflight.json")
@@ -317,7 +358,16 @@ def main():
             if a.mode == "train":
                 acceptance = preflight.engineering_evidence(a.acceptance)
                 approval = read(a.authorization or BASE / "config/authorization.json")
-                pilot_report = read(a.pilot_report or BASE / "reports/gpu-pilot.json")
+                pilot_report = read(
+                    a.pilot_report
+                    or BASE
+                    / (
+                        "reports/development-release-evidence.json"
+                        if approval.get("release_mode")
+                        == "USER_APPROVED_ESTIMATED_BUDGET_DEVELOPMENT"
+                        else "reports/gpu-pilot.json"
+                    )
+                )
                 require_training_release(candidate, source, acceptance, approval, pilot_report)
             cached = None
             try:
@@ -385,6 +435,9 @@ def main():
                 },
             )
         live = workspace / "live"
+        from .development_release import retain
+
+        retain(live)
         shutil.copytree(root, live)
         from .coordinator import run
 
@@ -405,6 +458,9 @@ def main():
         print(
             json.dumps(
                 {
+                    "status": "TRAINING_COMPLETE_ANALYSIS_DEFERRED"
+                    if read(root / "continuation.json")["complete"]
+                    else "TRAINING_PAUSED_RESUMABLE",
                     "EXPERIMENT": "CLM-001-R3b",
                     "RUN_ID": read(root / "experiment.lock.json")["run_id"],
                     "SOURCE_SHA": source,

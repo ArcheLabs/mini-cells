@@ -1,9 +1,35 @@
 {
-  "formal_500_step_authorized": false,
-  "source_sha": null,
-  "candidate_sha256": null,
-  "pilot_sha256": null,
-  "assets_manifest_sha256": null,
-  "beta": null,
-  "reason": "Gate A-D and explicit human approval required"
+  "schema": "minicells.r3b.authorized-development.v1",
+  "release_mode": "USER_APPROVED_ESTIMATED_BUDGET_DEVELOPMENT",
+  "formal_500_step_authorized": true,
+  "estimated_budget_accepted": true,
+  "two_hour_guarantee": false,
+  "authorization_provenance": {
+    "date": "2026-10-18",
+    "user_request": "授权，请开始",
+    "scope": "Three500-step development arms under the explicitly accepted estimated budget; no independent Confirmation."
+  },
+  "source_binding": "EXACT_NOTEBOOK_GIT_HEAD_PLUS_CODE_HASH_ATTESTATION",
+  "source_attestation_sha256": "094fd28803f047453f7bc19a9e57f24a7053c218f20fcb8fd9dd36aa15adc53f",
+  "candidate_sha256": "ea3ea51cdbe9885bf224ba62cf4699840f4be40e686312ef9dd418aeff80581e",
+  "execution_plan_sha256": "8f9bd833ab371ce8c624693222825269889da1fde1860f8be7a73f2bb2eb90d0",
+  "pilot_sha256": "ad490676769bd6cfc159a14798d7f81bab429396be07f722a45cd6a4990eb349",
+  "assets_manifest_sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+  "beta": 4552.793066973983,
+  "evidence_files": {
+    "artifacts/67b3dd47ab88d572a6f11ae056eb3a77a59be4bf/21b5185e0bcd/resource-ledger.json": "dc20ac147f294aaf2440d9cefc388d7fa4afd6eb038c1f8fba876652e029d6e6",
+    "reports/release-review/delta-evidence.json": "a78b187464d23150a7f5ce996acbcd8f88bd9118331a5ddd9bdd937a46ff0e0d",
+    "reports/release-review/analysis-evidence.json": "27381e82de81060f9a951a7df3c9f9de9a88bfec4d4a67767af0aa9c7b4532fc",
+    "reports/release-review/budget-review.json": "f34f7cb4446a33f38b5d173adda32884b0e1e1af97f479d7124ea22667c18172",
+    "reports/development-release-evidence.json": "b7d48176f65415ec4da7bde2d92aa76b79075649a38265da062af8ffb87e8de1"
+  },
+  "session_target_step": 500,
+  "recovery_milestones": [
+    200,
+    350,
+    500
+  ],
+  "hard_wall_time_limit": false,
+  "confirmation": "SEALED",
+  "scientific_decision": false
 }
