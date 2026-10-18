@@ -1,0 +1,18 @@
+{
+  "confirmation": "SEALED",
+  "coverage_counts": {
+    "blocked": 60,
+    "complete": 42,
+    "pending": 0,
+    "unavailable": 0
+  },
+  "failure": {
+    "failure_code": "HfHubHTTPError",
+    "http_status": 429,
+    "message": "(Request ID: Root=1-6ad4e89b-624051f6000e0c0e7b9218f3;b061f041-7a95-4727-a0e0-29c5bfc79388)\n\n429 Too Many Requests for url: [URL_REDACTED]\nYou have exceeded the rate limit for repository commit creation (128 per hour). You can retry this action in about 1 hour. To reduce the number of commits, you can upload entire folders at once using the Hub Python library: [URL_REDACTED] or for large folders: [URL_REDACTED] To increase your rate limit for this action, you can upgrade to a paid plan at [URL_REDACTED]",
+    "type": "HfHubHTTPError"
+  },
+  "input_verified": true,
+  "scientific_decision": false,
+  "status": "TRAINING_COMPLETE_ANALYSIS_BLOCKED"
+}
