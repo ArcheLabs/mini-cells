@@ -111,3 +111,30 @@ def telemetry(folder, trainer, c, phase):
     }
     atomic(path, value)
     return value
+
+
+def full_matrix(plan):
+    """Logical slots precede asset resolution, so missing evidence never shrinks N."""
+    from .common import ARMS
+
+    validate(plan)
+    slots = []
+    post = plan["posthoc"]
+    for arm in ARMS:
+        for step in sorted(
+            set(
+                post["quality_primary_steps"]
+                + post["quality_secondary_steps"]
+                + post["functional_steps"]
+            )
+        ):
+            for phase in ("pre_event", "post_event") if step == 400 else ("post_event",):
+                for stage, policies, role in stages(plan, step):
+                    slot = dict(
+                        arm=arm, step=step, phase=phase, stage=stage, policies=policies, role=role
+                    )
+                    slots.append({"slot_key": canonical(slot), **slot})
+    counts = {s: sum(t["stage"] == s for t in slots) for s in ("quality", "functional", "action")}
+    if counts != {"quality": 39, "functional": 42, "action": 21}:
+        raise ContinuationError("FROZEN_MATRIX_COUNT_MISMATCH")
+    return slots

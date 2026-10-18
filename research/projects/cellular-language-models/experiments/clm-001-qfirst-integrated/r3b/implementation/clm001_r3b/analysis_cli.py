@@ -18,6 +18,7 @@ def main():
     p.add_argument(
         "--mode",
         choices=(
+            "full-analysis",
             "list-checkpoints",
             "analyze-checkpoint",
             "analyze-batch",
@@ -26,7 +27,8 @@ def main():
         ),
         default="list-checkpoints",
     )
-    p.add_argument("--checkpoint-ref", required=True)
+    p.add_argument("--checkpoint-ref")
+    p.add_argument("--session-seconds", type=float, default=36000)
     p.add_argument("--hf-repo", default="libingjiang/minicells-research-checkpoints")
     p.add_argument("--analysis-plan", type=Path)
     p.add_argument("--output", type=Path, required=True)
@@ -46,6 +48,13 @@ def main():
     p.add_argument("--device", default="cpu", choices=("cpu", "cuda:0"))
     p.add_argument("--publish-github", action="store_true")
     a = p.parse_args()
+    if a.mode == "full-analysis":
+        from .full_analysis import run
+
+        run(a.output, device=a.device, session_seconds=a.session_seconds, publish=a.publish_github)
+        return
+    if not a.checkpoint_ref:
+        p.error("checkpoint-ref required for legacy individual task modes")
     if a.hf_repo != "libingjiang/minicells-research-checkpoints":
         p.error("only the trusted existing private repository is allowed")
     a.output.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,43 @@
+{
+  "scope": "SYNTHETIC_CPU_AND_FAKEHUB_ONLY",
+  "gpu_training_updates": 0,
+  "private_target_analysis_executed": false,
+  "confirmation": "SEALED",
+  "local_full_cpu": {
+    "command": "TMPDIR=/dev/shm CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider --basetemp=/dev/shm/r3b-posthoc-final-cpu tests/engineering tests/research/clm001_r3 tests/research/clm001_r3b --tb=short",
+    "tests": 136,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 364.022
+  },
+  "stable_head_identity_recheck": {
+    "tests": 2,
+    "failures": 0,
+    "seconds": 136.26
+  },
+  "initial_overlapped_run": {
+    "tests": 132,
+    "passed": 130,
+    "failed": 2,
+    "reason": "Git HEAD changed during source-identity fixtures; both passed under stable HEAD, then full 136 passed. No identity gate weakened."
+  },
+  "first_clean_ci": {
+    "commit": "89cfa0a99330ea4b23ba8856b27a63a43eef0e85",
+    "workflow": "https://github.com/ArcheLabs/mini-cells/actions/runs/39131672205",
+    "tests": 136,
+    "failures": 0,
+    "seconds": 191.58,
+    "frozen_r3": "UNCHANGED"
+  },
+  "final_ci": "See latest checks on https://github.com/ArcheLabs/mini-cells/pull/270",
+  "target_result_commit": "0df519b6352412bf483945ee7e3c34e02d9ebf97",
+  "copied_metadata": "byte-for-byte verified checkpoint-index, experiment-manifest, resource-ledger",
+  "new_analysis_coverage": {
+    "complete": 0,
+    "unavailable": 0,
+    "blocked": 0,
+    "pending": 102
+  },
+  "hf_private_index_verified": false,
+  "two_hour_verdict": "NOT_VERIFIED"
+}

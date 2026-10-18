@@ -130,3 +130,36 @@ def render_analysis(values, destination, plan):
         axis.legend()
         fig.savefig(destination / ("quality-" + phase + ".png"), dpi=140)
         plt.close(fig)
+
+
+def render_coverage(rows, destination):
+    """Show all 102 slots, including missing and blocked observations."""
+    import matplotlib
+
+    matplotlib.use("Agg")
+    from matplotlib import pyplot as plt
+    from matplotlib.colors import ListedColormap
+    import numpy as np
+
+    states = ["PENDING", "UNAVAILABLE", "BLOCKED", "COMPLETE"]
+    colors = ["#bdbdbd", "#fdbf6f", "#e31a1c", "#33a02c"]
+    fig, axis = plt.subplots(figsize=(12, 3.5), constrained_layout=True)
+    grid = np.array([states.index(r["status"]) for r in rows]).reshape(3, 34)
+    axis.imshow(grid, aspect="auto", vmin=0, vmax=3, cmap=ListedColormap(colors))
+    axis.set_yticks(range(3), ["Q-R3b", "QC-R3b", "QS-R3b"])
+    axis.set(
+        xlabel="Frozen logical task within arm (34 slots)",
+        title="102 planned tasks; missing observations are not scientific failures",
+    )
+    from matplotlib.patches import Patch
+
+    axis.legend(
+        handles=[Patch(color=c, label=s) for s, c in zip(states, colors)],
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.2),
+        ncol=4,
+    )
+    destination = Path(destination)
+    destination.mkdir(parents=True, exist_ok=True)
+    fig.savefig(destination / "coverage.png", dpi=140)
+    plt.close(fig)

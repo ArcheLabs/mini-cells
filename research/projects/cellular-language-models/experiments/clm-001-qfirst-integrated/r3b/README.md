@@ -12,11 +12,13 @@ Original R3 model/training/Admission code and historical results remain unchange
   accepted Pilot or starts unapproved500-step training. Event decisions, every
   checkpoint and verified HF ACK remain synchronous; general explanations are
   deferred. No pytest or fault suite runs on Kaggle.
-- `analysis-notebook.ipynb`: independent read-only analysis source. Defaults to
-  listing the accepted Pilot's exact pinned HF checkpoints. It starts no GPU
-  task or optimizer update. An approved bounded task can use the same entry,
-  `analyze-checkpoint`, QC-R3b Step3/revision0, Calibration Action, max-tasks1.
-  That task is an engineering measurement, not formal Development evidence.
+- `analysis-notebook.ipynb`: **Run All** performs the complete read-only 102-task
+  analysis of completed run directory `33734fdd1558`, training source
+  `a7792ef30582dfcaf324cca7e5245c8430df48b2`, immutable HF revision
+  `828585f1ff93420aa4485c725211ed28f70d15f3`. It automatically reuses verified
+  private HF results, batches at task boundaries, aggregates, plots and publishes.
+  No Pilot, training update, manual stage approval or Confirmation access.
+  [Run-specific identity, coverage and measured performance](reports/runs/33734fdd1558/README.md).
 
 Existing `HF_TOKEN` / `GITHUB_TOKEN`, same private repo
 `libingjiang/minicells-research-checkpoints`. No Add Input, checkpoint download,
@@ -25,8 +27,14 @@ manual acceptance is recorded honestly; removed Gate C is not reinstated.
 
 ## Independent analysis CLI
 
-`python r3b/analyze.py --help` exposes `list-checkpoints`, `analyze-checkpoint`,
-`analyze-batch`, `aggregate-analysis`, `publish-only`. Use an existing trusted
+The Notebook uses `full-analysis`: fixed Quality39 + Functional42 + Action21,
+with COMPLETE / UNAVAILABLE / BLOCKED / PENDING counts always summing to102.
+Development is never replaced by Calibration. A session boundary can leave
+PENDING; the next Run All resumes. A terminal pass has no PENDING cells.
+
+Advanced legacy commands remain available through `python r3b/analyze.py --help`:
+`list-checkpoints`, `analyze-checkpoint`, `analyze-batch`, `aggregate-analysis`,
+`publish-only`. They do not change the Notebook's full-analysis default. Use an existing trusted
 GitHub checkpoint-index or pinned local reference; arbitrary URLs are rejected.
 Task budgets apply between tasks without killing processes. The private remote
 index, not local output existence, determines verified completion on reentry.

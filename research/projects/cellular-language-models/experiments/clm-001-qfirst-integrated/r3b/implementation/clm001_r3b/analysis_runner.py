@@ -248,6 +248,8 @@ def measured_state(trainer):
 
 @obs.isolated(torch.nn.Identity())
 def execute(root, task, plan, *, device="cpu"):
+    whole_begin = time.perf_counter()
+    whole_started_at = datetime.now(timezone.utc).isoformat()
     root = Path(root)
     # Re-derive all identity fields from verified input, never trust an arbitrary task JSON.
     runner.verify(root)
@@ -273,7 +275,9 @@ def execute(root, task, plan, *, device="cpu"):
     data = load_assets(c, root / "assets")
     selected = MountedInputStore(root).select(task["arm"], task["step"], task["event_revision"])
     begin = time.perf_counter()
-    timings = {}
+    timings = {"input_verification_seconds": begin - whole_begin}
+    started_at = whole_started_at
+    gpu_start = gpu_end = None
     with obs.isolated(torch.nn.Identity()):
         payload = torch.load(root / selected["checkpoint"], map_location="cpu", weights_only=False)
         model = Model(c, ENGINE[task["arm"]]).to(device)
@@ -302,6 +306,13 @@ def execute(root, task, plan, *, device="cpu"):
             timings[name] = time.perf_counter() - start
             return value
 
+        timings["restore_seconds"] = time.perf_counter() - begin
+        if device.startswith("cuda"):
+            gpu_start, gpu_end = (
+                torch.cuda.Event(enable_timing=True),
+                torch.cuda.Event(enable_timing=True),
+            )
+            gpu_start.record()
         with obs.isolated(model, trainer):
             model.eval()
             if task["stage"] == "quality":
@@ -328,6 +339,9 @@ def execute(root, task, plan, *, device="cpu"):
                         "action", lambda: obs.action_calibration(model, frozen, c)
                     ),
                 }
+        if gpu_end is not None:
+            gpu_end.record()
+            gpu_end.synchronize()
         if measured_state(trainer) != guard:
             raise ContinuationError("ANALYSIS_MUTATED_TRAINING_STATE")
     after_files = {
@@ -348,12 +362,18 @@ def execute(root, task, plan, *, device="cpu"):
         "analysis_mode": "POSTHOC_FROM_IMMUTABLE_CHECKPOINT",
         "task_status": "COMPLETE",
         "measurement_time": datetime.now(timezone.utc).isoformat(),
+        "started_at": started_at,
+        "ended_at": datetime.now(timezone.utc).isoformat(),
+        "device": torch.cuda.get_device_name(device) if device.startswith("cuda") else "cpu",
+        "gpu_stream_seconds": gpu_start.elapsed_time(gpu_end) / 1000
+        if gpu_start is not None
+        else None,
         "result": value,
         "coverage_status": "OBSERVED" if samples else "INSUFFICIENT_COVERAGE",
         "sample_count": samples,
         "optimizer_updates": 0,
         "training_state_unchanged": True,
-        "elapsed_seconds": time.perf_counter() - begin,
+        "elapsed_seconds": time.perf_counter() - whole_begin,
         "timings": timings,
         "gradient_audit": obs.gradient_row(trainer, c),
         "training_exposure_by_group": {

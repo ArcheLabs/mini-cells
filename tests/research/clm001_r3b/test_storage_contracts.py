@@ -119,7 +119,7 @@ def test_retrospective_publication_has_separate_namespace(case, tmp_path, monkey
             stdout="\n".join(staged)
             if args[0] == "diff"
             else "a" * 40
-            if args[0] == "rev-parse"
+            if args[0] in ("rev-parse", "ls-remote")
             else ""
         )
 
