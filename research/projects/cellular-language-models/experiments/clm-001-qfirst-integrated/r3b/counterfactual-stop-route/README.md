@@ -26,6 +26,6 @@ CPU自动测试仅使用合成模型/合成Saved Output、临时Git远端；Kagg
 
 工程交付不等于真实诊断完成。本地无法验证私有Kaggle Output；真实旧59回读、真实基线、GPU耗时、CF结果与新Output跨Session验收仍待Notebook执行。
 
-固定实现：`c2795e831037c2900fb1a524ea6b3edf6d6c0382`。Notebook交付提交只固定此SHA，不改变计算或统计规则。
+固定实现：`a859e2868eb353c7290b62ca20c7f56bb732bcd0`。Notebook交付提交只固定此SHA，不改变计算或统计规则。
 
 [Notebook导入地址](https://raw.githubusercontent.com/ArcheLabs/mini-cells/refs/heads/codex/r3b-cf001-counterfactual/research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/counterfactual-stop-route/notebook.ipynb)
