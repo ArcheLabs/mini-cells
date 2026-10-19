@@ -43,13 +43,17 @@ class ReadOnlyHFRecovery:
             result = self.backend.optional(path, revision)
             if result is None:
                 return None
+        if not entry:
+            file = self.backend.get(path, revision)
+            if read(file) != result:
+                raise ContinuationError("RESULT_HASH_MISMATCH")
         proof(result, identity)
         return result, {
             "transport": "HF_READ_ONLY",
             "hf_revision": revision,
             "hf_path": path,
             "orphan_recovered": not bool(entry),
-            "source_sha256": entry["sha256"] if entry else canonical(result),
+            "source_sha256": digest(file),
         }
 
 

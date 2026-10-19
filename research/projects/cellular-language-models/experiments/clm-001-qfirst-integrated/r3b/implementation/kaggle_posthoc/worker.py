@@ -433,7 +433,8 @@ def main():
             },
         )
         print({"status": "BLOCKED", **safe_error(error)}, flush=True)
-        raise
+        # HTTP exceptions may contain signed download URLs; never rethrow their text.
+        raise ContinuationError(safe_error(error)["failure_code"]) from None
 
 
 if __name__ == "__main__":
