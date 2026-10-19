@@ -55,14 +55,14 @@ def test_one_launch_synthetic_pipeline_and_idempotent_restart(routed, tmp_path, 
     monkeypatch.setattr(
         driver,
         "audit_old",
-        lambda *a: (
+        lambda *a, **kw: (
             {"status": "OLD_ANALYSIS_PERSISTENCE_VERIFIED", "synthetic_fixture": True},
             reference,
         ),
     )
-    monkeypatch.setattr(driver, "locate_training", lambda *a: ({}, root, {}, {}))
+    monkeypatch.setattr(driver, "locate_training", lambda *a, **kw: ({}, root, {}, {}))
     monkeypatch.setattr(
-        driver, "load_model", lambda *a: (model, runtime, {"status": "SYNTHETIC_ONLY"})
+        driver, "load_model", lambda *a, **kw: (model, runtime, {"status": "SYNTHETIC_ONLY"})
     )
     monkeypatch.setattr(driver, "load_assets", lambda *a: data)
     monkeypatch.setattr(driver, "restore_saved", lambda *a: 0)
@@ -112,7 +112,7 @@ def test_old_audit_failure_blocks_model_and_all_new_cf(tmp_path, monkeypatch):
     monkeypatch.setattr(
         driver,
         "audit_old",
-        lambda *a: ({"status": "NOT_VERIFIED", "verified_saved_results": 58}, None),
+        lambda *a, **kw: ({"status": "NOT_VERIFIED", "verified_saved_results": 58}, None),
     )
 
     def forbidden(*a, **kw):
@@ -136,3 +136,38 @@ def test_old_audit_failure_blocks_model_and_all_new_cf(tmp_path, monkeypatch):
     assert (
         read(args.output / "public/old-analysis-preservation.json")["verified_saved_results"] == 58
     )
+
+
+def test_transport_failure_publishes_partial_preservation_and_exact_stage(tmp_path, monkeypatch):
+    import pytest
+    import requests
+    from minicells_runtime.store import ContinuationError
+
+    monkeypatch.setattr(driver, "KaggleOutputAPI", lambda: object())
+    monkeypatch.setattr(driver, "discover", lambda *a, **kw: ([], {}))
+
+    def interrupted(*args, on_progress):
+        on_progress(
+            {"status": "NOT_VERIFIED", "verified_saved_results": 17, "expected_local_results": 59}
+        )
+        raise requests.exceptions.ReadTimeout(
+            "request https://example.invalid/?signed=PRIVATE timed out"
+        )
+
+    monkeypatch.setattr(driver, "audit_old", interrupted)
+    args = SimpleNamespace(
+        output=tmp_path / "output",
+        cache=tmp_path / "cache",
+        orchestrator_root=tmp_path,
+        device="cpu",
+        publish_github=False,
+        segment_seconds=10000,
+    )
+    with pytest.raises(ContinuationError, match="ReadTimeout"):
+        driver.run(args, "SYNTHETIC_SOURCE")
+    report = read(args.output / "public/old-analysis-preservation.json")
+    failure = read(args.output / "failure.json")
+    assert report["verified_saved_results"] == failure["old59_verified"] == 17
+    assert failure["stage"] == "OLD59_SAVED_READBACK"
+    assert "PRIVATE" not in (args.output / "failure.json").read_text()
+    assert not (args.output / "chunks").exists()

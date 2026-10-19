@@ -10,7 +10,8 @@ from clm001_r3.data import load_assets
 from clm001_r3.oracle import Snapshot
 from clm001_r3b import runner, full_analysis as frozen, instrumentation as obs
 from clm001_r3b.analysis_runner import fingerprint
-from kaggle_posthoc.kaggle_source import KaggleOutputAPI, discover, locate_training, fetch, relative
+from kaggle_posthoc.kaggle_source import discover, locate_training, fetch, relative
+from .transport import RecoverableKaggleOutputAPI as KaggleOutputAPI
 from .common import ENGINE_SHA, EXPERIMENT, POLICIES, configuration, protocol_identity
 from .preservation import audit_old
 from .validation import load_model, baseline_parity
@@ -117,6 +118,8 @@ def run(args, source):
         raise ContinuationError("CF_INPUT_OUTPUT_ISOLATION_REQUIRED")
     c = configuration()
     timing = {}
+    phase = started
+    stage_start = started
     reports = {}
     prepared = None
     publication_phase = False
@@ -137,6 +140,11 @@ def run(args, source):
     input_files = {}
     before = None
     registry_before = None
+
+    def enter_stage(name):
+        nonlocal stage_start
+        timing["stage"] = name
+        stage_start = time.perf_counter()
 
     def finish(status, reason=None, allow_publication=True):
         nonlocal reports, publication_phase
@@ -177,6 +185,7 @@ def run(args, source):
                     **run_id,
                     "status": status,
                     "reason": reason,
+                    "last_execution_stage": timing.get("stage", "BOOTSTRAP"),
                     "confirmation": "SEALED",
                     "scientific_decision": False,
                     "formal_confirmation": False,
@@ -231,6 +240,7 @@ def run(args, source):
         return result
 
     try:
+        enter_stage("KAGGLE_DISCOVERY")
         api = KaggleOutputAPI()
         phase = time.perf_counter()
         inventories, discovery = discover(
@@ -242,7 +252,15 @@ def run(args, source):
         )
         timing["discovery_seconds"] = time.perf_counter() - phase
         phase = time.perf_counter()
-        audit, reference = audit_old(api, inventories, cache, args.orchestrator_root)
+        enter_stage("OLD59_SAVED_READBACK")
+
+        def preserve_progress(value):
+            reports["old-analysis-preservation.json"] = value
+            atomic(output / "public/old-analysis-preservation.json", value)
+
+        audit, reference = audit_old(
+            api, inventories, cache, args.orchestrator_root, on_progress=preserve_progress
+        )
         reports["old-analysis-preservation.json"] = audit
         timing["old59_readback_seconds"] = time.perf_counter() - phase
         if audit["status"] != "OLD_ANALYSIS_PERSISTENCE_VERIFIED" or reference is None:
@@ -256,6 +274,8 @@ def run(args, source):
             validate_input=frozen.validate_input,
         )
         phase = time.perf_counter()
+        enter_stage("FROZEN_TRAINING_INPUT_DOWNLOAD_VERIFY")
+        print({"stage": timing["stage"], "version": c["training_output_version"]}, flush=True)
         inv, root, meta, transfer = locate_training(
             api,
             [i for i in inventories if i["version_number"] == c["training_output_version"]],
@@ -264,6 +284,7 @@ def run(args, source):
         )
         timing["input_verify_seconds"] = time.perf_counter() - phase
         timing["training_input_transfer"] = transfer
+        enter_stage("MODEL_AND_ASSET_RESTORE")
         model, runtime, check = load_model(root, c, args.device)
         reports["checkpoint-validation.json"] = check
         data = load_assets(runtime, root / "assets")
@@ -295,9 +316,11 @@ def run(args, source):
         run_id["development_windows_sha256"] = canonical(development)
         run_id["asset_sha256"] = data["asset_sha256"]
         store = Chunks(output / "chunks", run_id)
+        enter_stage("PRIOR_CF_OUTPUT_RESTORE")
         restored = restore_saved(api, inventories, cache, store)
         timing["restored_chunks"] = restored
         if args.publish_github:
+            enter_stage("GITHUB_PREFLIGHT")
             publication_phase = True
             prepared = prepare(cache, run_id)
             publication_phase = False
@@ -328,6 +351,7 @@ def run(args, source):
             if existing is not None:
                 return existing
             boundary()
+            enter_stage(key[0])
             begin = clock(args.device)
             versions = tuple(
                 (name, p._version, p.data_ptr(), tuple(p.shape), str(p.dtype))
@@ -507,7 +531,18 @@ def run(args, source):
     except Exception as error:
         from clm001_r3b.common import safe_error
 
-        atomic(output / "failure.json", {**safe_error(error), "training_updates": 0})
+        timing["failed_stage_wall_seconds"] = time.perf_counter() - stage_start
+        atomic(
+            output / "failure.json",
+            {
+                **safe_error(error),
+                "stage": timing.get("stage", "BOOTSTRAP"),
+                "old59_verified": reports.get("old-analysis-preservation.json", {}).get(
+                    "verified_saved_results", 0
+                ),
+                "training_updates": 0,
+            },
+        )
         finish(
             "BLOCKED", safe_error(error)["failure_code"], allow_publication=not publication_phase
         )

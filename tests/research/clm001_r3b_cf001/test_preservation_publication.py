@@ -91,6 +91,32 @@ def test_tampered_raw_saved_result_fails_closed(old59, tmp_path):
         preservation.audit_old(None, [inv], tmp_path / "cache", code)
 
 
+def test_timeout_retains_verified_file_progress_without_false_completion(
+    old59, tmp_path, monkeypatch
+):
+    import requests
+
+    _, code, inv = old59
+    original = preservation.fetch
+    count = []
+    snapshots = []
+
+    def interrupted(api, inventory, names, destination):
+        count.append(list(names))
+        if len(count) == 2:
+            raise requests.exceptions.ReadTimeout("synthetic header timeout")
+        return original(api, inventory, names, destination)
+
+    monkeypatch.setattr(preservation, "fetch", interrupted)
+    with pytest.raises(requests.exceptions.ReadTimeout):
+        preservation.audit_old(None, [inv], tmp_path / "cache", code, on_progress=snapshots.append)
+    assert len(count) == 2 and all(len(names) == 1 for names in count)
+    assert snapshots[-1]["verified_saved_results"] == 1
+    assert snapshots[-1]["current_file"]["status"] == "READING"
+    assert snapshots[-1]["status"] == "NOT_VERIFIED"
+    assert len(snapshots[-1]["missing_task_keys"]) == 58
+
+
 def test_publication_only_metadata_no_workflow_changes(tmp_path, monkeypatch):
     import subprocess
     from r3b_cf001 import publication
