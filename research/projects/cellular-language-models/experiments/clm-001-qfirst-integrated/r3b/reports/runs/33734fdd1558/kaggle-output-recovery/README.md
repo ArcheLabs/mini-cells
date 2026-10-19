@@ -34,3 +34,7 @@ The pinned official Kaggle CLI commit is `6894864ff4095cf98e9e36d3a694ff5fc9ba38
 This environment has no Kaggle/HF credentials and cannot verify the private historical Output. Therefore the real training version, version65/page-ID mapping, 57/57 actual input verification, old42 recovery count and completed diagnostic counts are **NOT_EXECUTED**, not inferred from the user's logs. Runtime generates the real inventory, checkpoint/recovery ledgers, complete task matrix, research report, timings, private snapshot hashes and verified public publication receipts.
 
 Training ledger facts remain unchanged: three500-step arms; recorded CUDA update resource sum4236.461s; full training wall, complete semantic-event resources and two-hour verdict remain NOT_MEASURED / NOT_VERIFIED. Old and new analysis time is not fabricated from one another.
+
+## Duplicate listing repair
+
+Kaggle listings may repeat the same path. Equal path/size entries are counted once; different sizes fail closed. Listing equality does not establish content equality: all frozen file SHA checks still run before loading checkpoints. The inventory records page and repeated-entry counts, and progress logs show each successfully enumerated version. No real Kaggle rerun has been claimed.

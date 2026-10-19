@@ -140,6 +140,27 @@ def test_duplicate_paths_and_pagination_loops():
         inventory(api, 65)
 
 
+def test_repeated_listing_entries_across_pages_are_counted_once():
+    api = FakeKaggle({65: {"a": b"x", "b": b"yz"}})
+    pages = {
+        None: {"files": [{"name": "a", "size": 1}] * 2, "nextPageToken": "second"},
+        "second": {"files": [{"name": "a", "size": 1}, {"name": "b", "size": 2}]},
+    }
+    api.page = lambda version, token=None: pages[token]
+    inv = inventory(api, 65)
+    assert inv["files"] == [{"name": "a", "bytes": 1}, {"name": "b", "bytes": 2}]
+    assert inv["file_count"] == 2 and inv["total_bytes"] == 3
+    assert inv["listing_pages"] == 2 and inv["repeated_listing_entries"] == 2
+    assert inv["inventory_sha256"] == inventory(FakeKaggle(api.versions), 65)["inventory_sha256"]
+
+
+def test_same_path_with_conflicting_sizes_fails_closed():
+    api = FakeKaggle({65: {"a": b"x"}})
+    api.page = lambda *args: {"files": [{"name": "a", "size": 1}, {"name": "a", "size": 2}]}
+    with pytest.raises(ContinuationError, match="OUTPUT_PATH_SIZE_CONFLICT"):
+        inventory(api, 65)
+
+
 def training_fixture(tmp_path):
     report = (
         Path(__file__).parents[3]

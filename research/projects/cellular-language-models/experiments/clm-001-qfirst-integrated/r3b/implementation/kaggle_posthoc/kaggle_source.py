@@ -94,29 +94,53 @@ def inventory(api, version):
     supplied = meta.get("version_number")
     if supplied is not None and int(supplied) != version:
         raise ContinuationError("KAGGLE_VERSION_RESPONSE_MISMATCH")
-    rows, token, seen = [], None, set()
+    files, token, seen = {}, None, set()
+    duplicate_entries, pages = 0, 0
     while True:
         response = api.page(version, token)
+        pages += 1
+        if pages > 10000:
+            raise ContinuationError("KAGGLE_PAGINATION_LIMIT")
         for item in value(response, "files") or []:
             name = relative(value(item, "name", "file_name"))
             size = value(item, "total_bytes", "size", "content_length")
             if size is None or int(size) < 0:
                 raise ContinuationError("KAGGLE_FILE_SIZE_UNKNOWN")
-            rows.append({"name": name, "bytes": int(size)})
+            row = {"name": name, "bytes": int(size)}
+            if name in files:
+                if files[name] != row:
+                    raise ContinuationError("KAGGLE_OUTPUT_PATH_SIZE_CONFLICT")
+                # Repeated listing entries are not a second physical file.
+                # Equal size is not a content proof: frozen SHA verification
+                # remains mandatory after download and before checkpoint load.
+                duplicate_entries += 1
+            else:
+                files[name] = row
         token = value(response, "next_page_token", "nextPageToken")
         if not token:
             break
         if token in seen:
             raise ContinuationError("KAGGLE_PAGINATION_LOOP")
         seen.add(token)
-    if len({r["name"] for r in rows}) != len(rows):
-        raise ContinuationError("KAGGLE_DUPLICATE_OUTPUT_PATH")
+    rows = [files[name] for name in sorted(files)]
+    print(
+        {
+            "stage": "KAGGLE_VERSION_LISTED",
+            "version": version,
+            "unique_files": len(rows),
+            "pages": pages,
+            "repeated_entries": duplicate_entries,
+        },
+        flush=True,
+    )
     return {
         "kernel": KERNEL,
         "version_number": version,
         "metadata": meta,
         "files": rows,
         "file_count": len(rows),
+        "listing_pages": pages,
+        "repeated_listing_entries": duplicate_entries,
         "total_bytes": sum(r["bytes"] for r in rows),
         "inventory_sha256": canonical(rows),
         "enumeration_seconds": time.perf_counter() - started,
