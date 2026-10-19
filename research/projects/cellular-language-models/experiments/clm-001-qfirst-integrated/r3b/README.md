@@ -1,3 +1,9 @@
+## Current posthoc launch: Kaggle Saved Output first
+
+Use **[kaggle-output-analysis-notebook.ipynb](kaggle-output-analysis-notebook.ipynb)** and **Save & Run All** in the existing private Notebook. It recovers exact versioned training files and prior observations, with no HF checkpoint dependency and zero per-task HF commits. [Recovery and persistence details](reports/runs/33734fdd1558/kaggle-output-recovery/README.md).
+
+The older `analysis-notebook.ipynb` below remains an explicit legacy HF-input entry; it is not the new default.
+
 # CLM-001-R3b — deferred diagnostics
 
 Read [the execution specification](DIAGNOSTIC_EXECUTION_OPTIMIZATION.md),
