@@ -76,6 +76,18 @@ def test_old59_exact_saved_readback_and_prior43_separate(old59, tmp_path):
     )
 
 
+def test_old59_sha_verified_cache_reuses_files_without_network(old59, tmp_path, monkeypatch):
+    _, code, inv = old59
+    preservation.audit_old(None, [inv], tmp_path / "cache", code)
+
+    def forbidden(*a, **kw):
+        raise AssertionError("SHA-verified local result was downloaded again")
+
+    monkeypatch.setattr(preservation, "fetch", forbidden)
+    report, _ = preservation.audit_old(None, [inv], tmp_path / "cache", code)
+    assert report["verified_saved_results"] == 59
+
+
 def test_missing59_does_not_become_verified(old59, tmp_path):
     _, code, inv = old59
     inv["files"].pop()

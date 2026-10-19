@@ -122,6 +122,7 @@ def run(args, source):
     stage_start = started
     reports = {}
     prepared = None
+    api = None
     publication_phase = False
     store = None
     native = {}
@@ -178,6 +179,8 @@ def run(args, source):
             "CUDA event milliseconds in private chunk receipts; CPU runs report null"
         )
         timing["hf_commits"] = 0
+        if api is not None and hasattr(api, "network_metrics"):
+            timing["network_requests"] = api.network_metrics
         timing["training_updates"] = 0
         reports.update(
             {
@@ -242,6 +245,10 @@ def run(args, source):
     try:
         enter_stage("KAGGLE_DISCOVERY")
         api = KaggleOutputAPI()
+        if hasattr(api, "connectivity_probe"):
+            enter_stage("EARLY_STORAGE_CONNECTIVITY")
+            timing["early_storage_probe"] = api.connectivity_probe(c["training_output_version"])
+        enter_stage("KAGGLE_DISCOVERY")
         phase = time.perf_counter()
         inventories, discovery = discover(
             api, c["training_output_version"], minimum_version=c["training_output_version"]
@@ -273,6 +280,15 @@ def run(args, source):
             verify=runner.verify,
             validate_input=frozen.validate_input,
         )
+        checkpoints = read(frozen.REPORTS / "checkpoint-index.json")["checkpoints"]
+        timing["expected_checkpoint_transfer"] = {
+            "records": len(checkpoints),
+            "bytes": sum(r["bytes"] for r in checkpoints),
+            "largest_file_bytes": max(r["bytes"] for r in checkpoints),
+            "scope": "frozen checkpoint records only; excludes assets, banks and reused files",
+            "classification": "DERIVED_FROM_FROZEN_INDEX",
+        }
+        print({"stage": "CF_INPUT_SIZE_PLAN", **timing["expected_checkpoint_transfer"]}, flush=True)
         phase = time.perf_counter()
         enter_stage("FROZEN_TRAINING_INPUT_DOWNLOAD_VERIFY")
         print({"stage": timing["stage"], "version": c["training_output_version"]}, flush=True)
@@ -548,6 +564,8 @@ def run(args, source):
         )
         raise ContinuationError(safe_error(error)["failure_code"]) from None
     finally:
+        if api is not None and hasattr(api, "close"):
+            api.close()
         if before is not None and (
             fingerprint(model.state_dict()) != before
             or model.registry.fingerprint != registry_before

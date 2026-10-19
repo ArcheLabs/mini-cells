@@ -231,6 +231,24 @@ def inventory(api, version):
 
 
 def fetch(api, inv, names, destination):
+    names = list(dict.fromkeys(names))
+    if getattr(api, "single_pass_downloads", False) and len(names) > 1:
+        # The CF adapter keeps the size GET open for its immediately following
+        # official CLI download. Do not open all headers first: that would either
+        # hold N sockets or force N redundant GETs. Legacy adapters keep their
+        # existing bulk path. Disk/size/hash checks still run for every file.
+        transfers = [fetch(api, inv, [name], destination) for name in names]
+        return {
+            "version": inv["version_number"],
+            "download_seconds": sum(t["download_seconds"] for t in transfers),
+            "selected_file_header_seconds": sum(
+                t["selected_file_header_seconds"] for t in transfers
+            ),
+            "downloaded_bytes": sum(t["downloaded_bytes"] for t in transfers),
+            "byte_scope": transfers[0]["byte_scope"],
+            "reused_bytes": sum(t["reused_bytes"] for t in transfers),
+            "file_sha256": {name: sha for t in transfers for name, sha in t["file_sha256"].items()},
+        }
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
     if destination.is_symlink():
@@ -323,6 +341,37 @@ def locate_training(api, inventories, cache, engine):
             if digest(manifest_path) != meta["files_manifest_sha256"]:
                 raise ContinuationError("MANIFEST_HASH_MISMATCH")
             files = read(manifest_path)["files"]
+            if getattr(api, "single_pass_downloads", False):
+                # This manifest has already passed the pinned SHA check. Its
+                # sizes are stronger evidence than an extra storage GET and let
+                # already complete local files avoid network requests entirely.
+                hints = {}
+                for n, row in files.items():
+                    physical = prefix + relative(row.get("storage_path", n))
+                    size = row["bytes"]
+                    if (
+                        type(size) is not int
+                        or size < 0
+                        or (physical in hints and hints[physical] != size)
+                    ):
+                        raise ContinuationError("MANIFEST_FILE_SIZE_CONFLICT")
+                    hints[physical] = size
+                for row in inv["files"]:
+                    if row["name"] in hints:
+                        expected_size = hints[row["name"]]
+                        if row["bytes"] is not None and row["bytes"] != expected_size:
+                            raise ContinuationError("MANIFEST_FILE_SIZE_CONFLICT")
+                        row["bytes"] = expected_size
+                print(
+                    {
+                        "stage": "KAGGLE_MANIFEST_TRANSFER_PLAN",
+                        "unique_files": len(hints),
+                        "selected_payload_bytes": sum(hints.values()),
+                        "largest_file_bytes": max(hints.values(), default=0),
+                        "source": "SHA_VERIFIED_FROZEN_MANIFEST",
+                    },
+                    flush=True,
+                )
             required = [prefix + relative(row.get("storage_path", n)) for n, row in files.items()]
             required += [name, required_meta[0]]
             if not set(required).issubset(names):

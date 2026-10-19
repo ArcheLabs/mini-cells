@@ -72,8 +72,14 @@ def audit_old(api, inventories, cache, code_root, *, on_progress=None):
             )
             # The shared fetch still performs size/resume/SHA handling. Verify
             # and checkpoint each file before proceeding to the next one.
-            fetch(api, inv, [name], destination)
             path = destination / name
+            cached = (
+                path.is_file()
+                and not path.is_symlink()
+                and digest(path) == targets[key]["result_sha256"]
+            )
+            if not cached:
+                fetch(api, inv, [name], destination)
             value = read(path)
             row = targets[key]
             if digest(path) != row["result_sha256"] or canonical(value["identity"]) != key:

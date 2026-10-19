@@ -25,7 +25,7 @@ jobs:
           python-version: '3.12'
       - run: pip install --quiet pytest numpy pyyaml matplotlib tokenizers huggingface_hub requests
       - run: pip install --quiet torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
-      - run: python -m pytest tests/research/clm001_r3b_cf001 -q
+      - run: python -m pytest tests/research/clm001_r3b_cf001 tests/research/clm001_r3b/test_kaggle_output_recovery.py -q
       - name: Frozen historical implementations unchanged
         run: |
           git fetch --depth=1 origin d796eb815fb77549a594713a0d3bc5001bebbe4f
