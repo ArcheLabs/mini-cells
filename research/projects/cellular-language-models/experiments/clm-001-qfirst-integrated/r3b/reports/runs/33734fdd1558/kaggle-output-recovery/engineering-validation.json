@@ -37,5 +37,17 @@
     "seconds": 2.7,
     "real_kaggle_retest": "NOT_EXECUTED",
     "implementation_snapshot": "575ed27f177c69653179b896bc4b5cda8f953a0e"
+  },
+  "authoritative_path_repair": {
+    "reported_failure": "KAGGLE_OUTPUT_PATH_SIZE_CONFLICT",
+    "listing_endpoint": "ListKernelSessionOutput",
+    "path_field": "file_name (same as official kernels_output downloader)",
+    "sdk_source_sha": "f983c97287bf274ebab506aac85eda6efebe3b32",
+    "sdk_source_repository": "Kaggle/kaggle-sdk-python",
+    "selected_size_source": "streamed signed GET response Content-Length; close without consuming file body",
+    "unselected_file_bytes": "NOT_MEASURED",
+    "cpu_transport_tests_passed": 28,
+    "seconds": 2.74,
+    "real_kaggle_retest": "NOT_EXECUTED"
   }
 }

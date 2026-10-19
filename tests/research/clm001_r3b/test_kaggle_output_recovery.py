@@ -566,3 +566,83 @@ def test_new_public_publisher_has_real_remote_receipt(tmp_path, monkeypatch):
     )
     assert all(digest(checkout / name) == sha for name, sha in receipt["files"].items())
     assert not any(name.endswith(".pt") for name in receipt["files"])
+
+
+def test_authoritative_output_paths_not_display_basenames(tmp_path, monkeypatch):
+    import sys
+    from contextlib import nullcontext
+    from types import ModuleType
+    from kaggle_posthoc.kaggle_source import KaggleOutputAPI
+
+    extended = ModuleType("kaggle.api.kaggle_api_extended")
+    extended.ApiListKernelSessionOutputRequest = SimpleNamespace
+    monkeypatch.setitem(sys.modules, "kaggle.api.kaggle_api_extended", extended)
+    requested = []
+    names = ["arms/Q-R3b/identity.json", "arms/QC-R3b/identity.json"]
+    payloads = {names[0]: b"Q", names[1]: b"QC"}
+
+    def output(request):
+        requested.append(request)
+        return SimpleNamespace(
+            files=[
+                SimpleNamespace(file_name=n, url="https://storage.googleapis.com/private/" + n)
+                for n in names
+            ],
+            next_page_token="",
+        )
+
+    api = KaggleOutputAPI.__new__(KaggleOutputAPI)
+    api._output_urls = {}
+    api.api = SimpleNamespace(
+        _kernel_version_label=lambda version: "v" + version,
+        _set_paging=lambda request, size, token: None,
+        build_kaggle_client=lambda: nullcontext(
+            SimpleNamespace(
+                kernels=SimpleNamespace(
+                    kernels_api_client=SimpleNamespace(list_kernel_session_output=output)
+                )
+            )
+        ),
+    )
+    api.metadata = lambda version: {"is_private": True, "version_number": version}
+    inv = inventory(api, 65)
+    assert requested[0].version_label == "v65"
+    assert {r["name"] for r in inv["files"]} == set(names)
+    assert inv["total_bytes"] is None
+    assert "storage.googleapis.com" not in json.dumps(inv)
+    sizes = []
+    api.size = lambda version, name: sizes.append((version, name)) or len(payloads[name])
+
+    def download(version, selected, destination):
+        for name in selected:
+            p = destination / name
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(payloads[name])
+
+    api.download = download
+    digest_before = inv["inventory_sha256"]
+    transfer = fetch(api, inv, [names[0]], tmp_path / "download")
+    assert sizes == [(65, names[0])] and transfer["downloaded_bytes"] == 1
+    assert inv["inventory_sha256"] == digest_before
+    assert inv["files"][1]["bytes"] is None
+
+
+def test_signed_get_headers_measure_size_without_consuming_body(monkeypatch):
+    from contextlib import nullcontext
+    from kaggle_posthoc.kaggle_source import KaggleOutputAPI
+    import requests
+
+    calls = []
+    response = SimpleNamespace(headers={"Content-Length": "123"}, raise_for_status=lambda: None)
+    monkeypatch.setattr(
+        requests, "get", lambda *args, **kw: calls.append(kw) or nullcontext(response)
+    )
+    api = KaggleOutputAPI.__new__(KaggleOutputAPI)
+    api._output_urls = {
+        (65, "file.pt"): "https://storage.googleapis.com/private/file.pt?signature=not-persisted"
+    }
+    assert api.size(65, "file.pt") == 123
+    assert calls[0]["stream"] is True
+    api._output_urls[(65, "file.pt")] = "https://example.invalid/private"
+    with pytest.raises(ContinuationError, match="UNTRUSTED"):
+        api.size(65, "file.pt")

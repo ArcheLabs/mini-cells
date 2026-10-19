@@ -35,6 +35,7 @@ class KaggleOutputAPI:
 
         self.api = KaggleApi()
         self.api.authenticate()
+        self._output_urls = {}
         if (
             self.api.parse_kernel_string(KERNEL + "/65") != ("bingjiangli", "minicells", "65")
             or self.api._kernel_version_label("65") != "v65"
@@ -67,9 +68,43 @@ class KaggleOutputAPI:
         }
 
     def page(self, version, token=None):
-        return self.api.kernels_list_files(
-            KERNEL + "/" + str(version), page_token=token, page_size=200
-        )
+        # Use the same authoritative relative file_name as kernels_output.
+        # ListKernelFiles exposes display names, which are not safe path keys.
+        from kaggle.api.kaggle_api_extended import ApiListKernelSessionOutputRequest
+
+        request = ApiListKernelSessionOutputRequest()
+        request.user_name, request.kernel_slug = KERNEL.split("/")
+        request.version_label = self.api._kernel_version_label(str(version))
+        self.api._set_paging(request, 200, token)
+        with self.api.build_kaggle_client() as client:
+            response = client.kernels.kernels_api_client.list_kernel_session_output(request)
+        files = []
+        for item in response.files or []:
+            name = relative(item.file_name)
+            self._output_urls[(version, name)] = item.url
+            files.append({"file_name": name})
+        return {"files": files, "next_page_token": response.next_page_token}
+
+    def size(self, version, name):
+        # Signed URLs authorize GET, not necessarily HEAD. Read headers and close
+        # the streamed response without consuming the object. URLs stay in memory.
+        import requests
+        from urllib.parse import urlparse
+
+        url = self._output_urls[(version, name)]
+        host = urlparse(url).hostname or ""
+        if urlparse(url).scheme != "https" or not (
+            host == "storage.googleapis.com" or host.endswith(".storage.googleapis.com")
+        ):
+            raise ContinuationError("UNTRUSTED_KAGGLE_OUTPUT_URL")
+        with requests.get(
+            url, stream=True, timeout=(15, 60), headers={"Accept-Encoding": "identity"}
+        ) as response:
+            response.raise_for_status()
+            size = response.headers.get("Content-Length")
+            if size is None or not size.isdigit():
+                raise ContinuationError("KAGGLE_FILE_SIZE_UNKNOWN")
+            return int(size)
 
     def download(self, version, names, destination):
         if not names:
@@ -102,11 +137,11 @@ def inventory(api, version):
         if pages > 10000:
             raise ContinuationError("KAGGLE_PAGINATION_LIMIT")
         for item in value(response, "files") or []:
-            name = relative(value(item, "name", "file_name"))
+            name = relative(value(item, "file_name", "name"))
             size = value(item, "total_bytes", "size", "content_length")
-            if size is None or int(size) < 0:
+            if size is not None and int(size) < 0:
                 raise ContinuationError("KAGGLE_FILE_SIZE_UNKNOWN")
-            row = {"name": name, "bytes": int(size)}
+            row = {"name": name, "bytes": int(size) if size is not None else None}
             if name in files:
                 if files[name] != row:
                     raise ContinuationError("KAGGLE_OUTPUT_PATH_SIZE_CONFLICT")
@@ -141,8 +176,15 @@ def inventory(api, version):
         "file_count": len(rows),
         "listing_pages": pages,
         "repeated_listing_entries": duplicate_entries,
-        "total_bytes": sum(r["bytes"] for r in rows),
-        "inventory_sha256": canonical(rows),
+        "total_bytes": sum(r["bytes"] for r in rows)
+        if all(r["bytes"] is not None for r in rows)
+        else None,
+        "size_status": "KNOWN"
+        if all(r["bytes"] is not None for r in rows)
+        else "RESOLVED_BEFORE_SELECTED_DOWNLOAD",
+        "listing_api": "ListKernelSessionOutput/file_name",
+        "inventory_sha256": canonical([r["name"] for r in rows]),
+        "inventory_hash_scope": "sorted authoritative relative paths; selected sizes resolved before download",
         "enumeration_seconds": time.perf_counter() - started,
         "retrieved_at": datetime.now(timezone.utc).isoformat(),
         "run_status": "NOT_EXPOSED_BY_THIS_FILE_LIST_RESPONSE",
@@ -156,7 +198,18 @@ def fetch(api, inv, names, destination):
     destination.mkdir(parents=True, exist_ok=True)
     if destination.is_symlink():
         raise ContinuationError("UNSAFE_KAGGLE_OUTPUT_PATH")
-    sizes = {r["name"]: r["bytes"] for r in inv["files"]}
+    rows_by_name = {r["name"]: r for r in inv["files"]}
+    # Resolve sizes only for selected files; do not issue one HTTP request per
+    # irrelevant historical artifact merely to enumerate versions.
+    size_started = time.perf_counter()
+    for name in names:
+        relative(name)
+        if name not in rows_by_name:
+            raise ContinuationError("KAGGLE_REQUIRED_FILE_MISSING")
+        if rows_by_name[name]["bytes"] is None:
+            rows_by_name[name]["bytes"] = api.size(inv["version_number"], name)
+    size_seconds = time.perf_counter() - size_started
+    sizes = {n: r["bytes"] for n, r in rows_by_name.items()}
     required = []
     for name in names:
         relative(name)
@@ -187,6 +240,7 @@ def fetch(api, inv, names, destination):
     return {
         "version": inv["version_number"],
         "download_seconds": time.perf_counter() - start,
+        "selected_file_header_seconds": size_seconds,
         "downloaded_bytes": sum(sizes[n] for n in required),
         "byte_scope": "completed requested file payload; resumed bytes and CLI log excluded; wire bytes NOT_MEASURED",
         "reused_bytes": sum(sizes[n] for n in names if n not in required),

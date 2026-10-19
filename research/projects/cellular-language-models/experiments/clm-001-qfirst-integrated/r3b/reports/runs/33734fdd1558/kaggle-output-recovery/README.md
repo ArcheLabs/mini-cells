@@ -38,3 +38,11 @@ Training ledger facts remain unchanged: three500-step arms; recorded CUDA update
 ## Duplicate listing repair
 
 Kaggle listings may repeat the same path. Equal path/size entries are counted once; different sizes fail closed. Listing equality does not establish content equality: all frozen file SHA checks still run before loading checkpoints. The inventory records page and repeated-entry counts, and progress logs show each successfully enumerated version. No real Kaggle rerun has been claimed.
+
+## Authoritative path repair (supersedes display-list de-duplication)
+
+`ListKernelFiles` provides `name`/`size`; these display entries are not used as unique download paths. Discovery now uses **ListKernelSessionOutput.file_name**, exactly as the pinned official `kernels_output` downloader does. This preserves separate Arm directories even when filenames match. The official SDK schema was audited at [f983c972](https://github.com/Kaggle/kaggle-sdk-python/blob/f983c97287bf274ebab506aac85eda6efebe3b32/kagglesdk/kernels/types/kernels_api_service.py).
+
+The authoritative response has URLs and paths, not file lengths. Signed URLs remain in memory only. For selected files, a streamed GET reads Content-Length and closes before consuming the file body (HEAD is not assumed to be authorized by a GET signature). Capacity, completed-download length and frozen file hashes are then checked. Unselected byte counts stay unknown; enumeration does not issue an HTTP request per unrelated file. Inventory SHA covers sorted authoritative paths, with lengths independently recorded once resolved. Scientific task identity and frozen hashes are unchanged.
+
+28 offline CPU transport tests passed, including two identically named files under different Arm directories, lazy length resolution, no signed URL in inventory, and streaming-header behavior. Real private Output execution remains unverified here.
