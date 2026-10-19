@@ -63,5 +63,24 @@
     "seconds": 3.26,
     "real_kaggle_retest": "NOT_EXECUTED",
     "implementation_snapshot": "14ff395846883cb8252233de3640a880f0992e10"
+  },
+  "removed_extra_restrictions": {
+    "reported_failure": "UNTRUSTED_KAGGLE_OUTPUT_URL",
+    "removed": [
+      "storage-domain whitelist",
+      "runtime SDK source-text inspection",
+      "arbitrary page-count and version-number ceilings",
+      "silent 512MiB raw-result skip"
+    ],
+    "retained": [
+      "version-pinned authenticated API provenance",
+      "path traversal checks",
+      "frozen file hashes and scientific identity",
+      "retry pacing and resumable downloads",
+      "private/public evidence separation"
+    ],
+    "cpu_transport_tests_passed": 34,
+    "seconds": 2.76,
+    "real_kaggle_retest": "NOT_EXECUTED"
   }
 }

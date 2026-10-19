@@ -635,17 +635,21 @@ def test_signed_get_headers_measure_size_without_consuming_body(monkeypatch):
     calls = []
     response = SimpleNamespace(headers={"Content-Length": "123"}, raise_for_status=lambda: None)
     monkeypatch.setattr(
-        requests, "get", lambda *args, **kw: calls.append(kw) or nullcontext(response)
+        requests, "get", lambda *args, **kw: calls.append((args[0], kw)) or nullcontext(response)
     )
     api = KaggleOutputAPI.__new__(KaggleOutputAPI)
     api._output_urls = {
         (65, "file.pt"): "https://storage.googleapis.com/private/file.pt?signature=not-persisted"
     }
     assert api.size(65, "file.pt") == 123
-    assert calls[0]["stream"] is True
-    api._output_urls[(65, "file.pt")] = "https://example.invalid/private"
-    with pytest.raises(ContinuationError, match="UNTRUSTED"):
-        api.size(65, "file.pt")
+    assert calls[0][1]["stream"] is True
+    for url in (
+        "https://www.kaggle.com/api/v1/output/file?signature=example",
+        "https://example.kaggleusercontent.com/private/file.pt",
+    ):
+        api._output_urls[(65, "file.pt")] = url
+        assert api.size(65, "file.pt") == 123
+        assert calls[-1][0] == url
 
 
 def test_429_retry_keeps_completed_pages_and_honors_retry_after():

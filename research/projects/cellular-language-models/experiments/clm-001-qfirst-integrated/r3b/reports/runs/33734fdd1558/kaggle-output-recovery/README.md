@@ -56,3 +56,11 @@ Default discovery now covers the supplied candidate and newer saved versions. It
 API requests are paced and transient429/5xx responses retry only the current request (five attempts). Retry-After parsing and streamed resumable file downloads reuse the pinned official CLI components. Selected downloads use already enumerated, version-pinned URLs instead of calling kernels_output repeatedly: the latter would traverse all32 pages for every filtered download. Completed version inventories are written immediately, including before any later discovery failure. Signed URLs remain in memory, never in ledgers or logs.
 
 34 offline CPU transport tests passed, including Retry-After handling, current-page retries, bounded retry exhaustion, retained version inventories, no retries for authentication errors, limited initial discovery, and selected streaming downloads without relisting. No new cloud diagnostic result or checkpoint verification is claimed.
+
+## Remove unnecessary transport restrictions
+
+The custom Google Storage domain whitelist has been removed. Download URLs come from the authenticated exact-version Kaggle API response and pass unchanged to the HTTP client, matching the official downloader; signed URLs remain in memory only. No hardcoded storage-provider assumption remains.
+
+Also removed runtime SDK source-string inspection, arbitrary page-count/version-number ceilings, and the silent512MiB raw-result skip. Token-loop detection, exact version selection, safe output paths, complete downloads, frozen hashes, scientific identity and private/public separation remain. No experiment or sampling definition changed.
+
+34 CPU transport tests passed, including unchanged API-provided Kaggle/CDN URLs; no live Kaggle retest is claimed.

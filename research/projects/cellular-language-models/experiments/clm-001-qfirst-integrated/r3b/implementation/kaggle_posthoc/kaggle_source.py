@@ -1,7 +1,6 @@
 """Authenticated, versioned Kaggle Output enumeration/download; never an HF input fallback."""
 
 from pathlib import Path, PurePosixPath
-import inspect
 import re
 import shutil
 import time
@@ -36,14 +35,6 @@ class KaggleOutputAPI:
         self.api = KaggleApi()
         self.api.authenticate()
         self._output_urls = {}
-        if (
-            self.api.parse_kernel_string(KERNEL + "/65") != ("bingjiangli", "minicells", "65")
-            or self.api._kernel_version_label("65") != "v65"
-        ):
-            raise ContinuationError("KAGGLE_HISTORICAL_VERSION_UNSUPPORTED")
-        for name in ("kernels_list_files", "kernels_output", "kernels_pull"):
-            if "version_label" not in inspect.getsource(getattr(KaggleApi, name)):
-                raise ContinuationError("KAGGLE_HISTORICAL_VERSION_UNSUPPORTED")
 
     def _call(self, operation, label, *, pace=True):
         """Retry a single request, retaining completed enumeration pages."""
@@ -130,14 +121,11 @@ class KaggleOutputAPI:
 
     def _file_response(self, version, name):
         import requests
-        from urllib.parse import urlparse
 
+        # The authenticated versioned Kaggle response supplies this URL.
+        # Use it exactly as the official downloader does, without a guessed
+        # storage-provider/domain whitelist.
         url = self._output_urls[(version, relative(name))]
-        host = urlparse(url).hostname or ""
-        if urlparse(url).scheme != "https" or not (
-            host == "storage.googleapis.com" or host.endswith(".storage.googleapis.com")
-        ):
-            raise ContinuationError("UNTRUSTED_KAGGLE_OUTPUT_URL")
         return requests.get(
             url, stream=True, timeout=(15, 60), headers={"Accept-Encoding": "identity"}
         )
@@ -185,8 +173,6 @@ def inventory(api, version):
     while True:
         response = api.page(version, token)
         pages += 1
-        if pages > 10000:
-            raise ContinuationError("KAGGLE_PAGINATION_LIMIT")
         for item in value(response, "files") or []:
             name = relative(value(item, "file_name", "name"))
             size = value(item, "total_bytes", "size", "content_length")
@@ -378,8 +364,6 @@ def discover(api, candidate=65, *, minimum_version=1, on_inventory=None):
         matched = re.fullmatch(r"v?(\d+)", str(label))
         hint = int(matched[1]) if matched else None
     upper = max(candidate, int(hint)) if hint else candidate + 32
-    if upper > 10000:
-        raise ContinuationError("KAGGLE_VERSION_NUMBER_INVALID")
     found, rejected = [], []
     for version in [candidate, *range(upper, minimum_version - 1, -1)]:
         if any(i["version_number"] == version for i in found) or any(

@@ -62,7 +62,7 @@ def scan_raw_results(root, identities, store, provenance):
     planned = {canonical(t): t for t in identities}
     reused, rejected = set(), []
     for path in sorted(Path(root).rglob("*.json")):
-        if path.is_symlink() or path.stat().st_size > 512 * 1024 * 1024:
+        if path.is_symlink():
             continue
         try:
             if path.parent.name == "sha256" and len(path.stem) == 64 and digest(path) != path.stem:
