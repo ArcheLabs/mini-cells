@@ -25,3 +25,7 @@ CPU自动测试仅使用合成模型/合成Saved Output、临时Git远端；Kagg
 `SPEC.md`保存原文，`FREEZE.md`明确实施冻结与统计限制，`config/frozen-cf-v1.json`固定身份和参数。
 
 工程交付不等于真实诊断完成。本地无法验证私有Kaggle Output；真实旧59回读、真实基线、GPU耗时、CF结果与新Output跨Session验收仍待Notebook执行。
+
+固定实现：`5bff16c7d17c337fcd5f18cfd72c383b335d8965`。Notebook交付提交只固定此SHA，不改变计算或统计规则。
+
+[Notebook导入地址](https://raw.githubusercontent.com/ArcheLabs/mini-cells/refs/heads/codex/r3b-cf001-counterfactual/research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/counterfactual-stop-route/notebook.ipynb)
