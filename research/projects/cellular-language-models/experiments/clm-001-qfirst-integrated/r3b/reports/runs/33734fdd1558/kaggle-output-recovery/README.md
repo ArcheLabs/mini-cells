@@ -46,3 +46,13 @@ Kaggle listings may repeat the same path. Equal path/size entries are counted on
 The authoritative response has URLs and paths, not file lengths. Signed URLs remain in memory only. For selected files, a streamed GET reads Content-Length and closes before consuming the file body (HEAD is not assumed to be authorized by a GET signature). Capacity, completed-download length and frozen file hashes are then checked. Unselected byte counts stay unknown; enumeration does not issue an HTTP request per unrelated file. Inventory SHA covers sorted authoritative paths, with lengths independently recorded once resolved. Scientific task identity and frozen hashes are unchanged.
 
 28 offline CPU transport tests passed, including two identically named files under different Arm directories, lazy length resolution, no signed URL in inventory, and streaming-header behavior. Real private Output execution remains unverified here.
+
+## Rate-limit repair
+
+The user's latest log confirms version65 listed 6,246 unique authoritative paths across32 pages. The next historical-version request received HTTP429; checkpoint verification and analysis were not reached.
+
+Default discovery now covers the supplied candidate and newer saved versions. It verifies the candidate's actual input identity; when input is absent, it searches older versions until a matching verified training input is found. Older analysis versions are not claimed to have been exhaustively scanned when input was already available in the initial scope. The recovery ledger records actually searched sources, and optional exact-identity HF recovery remains read-only.
+
+API requests are paced and transient429/5xx responses retry only the current request (five attempts). Retry-After parsing and streamed resumable file downloads reuse the pinned official CLI components. Selected downloads use already enumerated, version-pinned URLs instead of calling kernels_output repeatedly: the latter would traverse all32 pages for every filtered download. Completed version inventories are written immediately, including before any later discovery failure. Signed URLs remain in memory, never in ledgers or logs.
+
+34 offline CPU transport tests passed, including Retry-After handling, current-page retries, bounded retry exhaustion, retained version inventories, no retries for authentication errors, limited initial discovery, and selected streaming downloads without relisting. No new cloud diagnostic result or checkpoint verification is claimed.

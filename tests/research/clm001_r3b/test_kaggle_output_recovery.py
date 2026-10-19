@@ -646,3 +646,120 @@ def test_signed_get_headers_measure_size_without_consuming_body(monkeypatch):
     api._output_urls[(65, "file.pt")] = "https://example.invalid/private"
     with pytest.raises(ContinuationError, match="UNTRUSTED"):
         api.size(65, "file.pt")
+
+
+def test_429_retry_keeps_completed_pages_and_honors_retry_after():
+    from kaggle_posthoc.kaggle_source import KaggleOutputAPI
+
+    adapter = KaggleOutputAPI.__new__(KaggleOutputAPI)
+    waits, calls = [], []
+    adapter._sleep = waits.append
+    adapter.api = SimpleNamespace(
+        _get_retry_after_delay=lambda response: float(response.headers["Retry-After"])
+    )
+    api = FakeKaggle({65: {"a": b"1", "b": b"2", "c": b"3"}})
+    original = api.page
+    failed = False
+
+    def request(version, token):
+        nonlocal failed
+        calls.append(token)
+        if token == "2" and not failed:
+            failed = True
+            e = RuntimeError("redacted")
+            e.response = SimpleNamespace(status_code=429, headers={"Retry-After": "2"})
+            raise e
+        return original(version, token)
+
+    api.page = lambda version, token=None: adapter._call(
+        lambda: request(version, token), "output-page", pace=False
+    )
+    assert inventory(api, 65)["file_count"] == 3
+    assert calls == [None, "2", "2"] and waits == [2]
+
+
+def test_non_transient_auth_error_is_not_retried():
+    from kaggle_posthoc.kaggle_source import KaggleOutputAPI
+
+    adapter = KaggleOutputAPI.__new__(KaggleOutputAPI)
+    adapter._sleep = lambda seconds: pytest.fail("403 must not retry")
+    e = RuntimeError("auth")
+    e.response = SimpleNamespace(status_code=403)
+
+    def forbidden():
+        raise e
+
+    with pytest.raises(RuntimeError, match="auth"):
+        adapter._call(forbidden, "metadata", pace=False)
+
+
+def test_default_worker_discovery_does_not_scan_older_versions():
+    api = FakeKaggle(
+        {63: {"old.pt": b"x"}, 65: {"run/continuation.json": b"{}"}, 66: {"result.json": b"{}"}}
+    )
+    saved = []
+    rows, status = discover(api, minimum_version=65, on_inventory=saved.append)
+    assert {r["version_number"] for r in rows} == {65, 66}
+    assert all(version >= 65 for version, token in api.calls)
+    assert saved == rows and status["older_versions"] == "DEFERRED_UNLESS_INPUT_MISSING"
+    assert not status["exhaustive_to_exposed_latest"]
+
+
+def test_selected_download_reuses_cli_streaming_without_relisting(tmp_path):
+    from contextlib import nullcontext
+    from kaggle_posthoc.kaggle_source import KaggleOutputAPI
+
+    adapter = KaggleOutputAPI.__new__(KaggleOutputAPI)
+    calls = []
+    response = SimpleNamespace(raise_for_status=lambda: None)
+    adapter._file_response = lambda version, name: nullcontext(response)
+
+    def stream(response, destination, client, **kwargs):
+        calls.append((destination, kwargs))
+
+    adapter.api = SimpleNamespace(
+        download_file=stream,
+        kernels_output=lambda *args, **kwargs: pytest.fail(
+            "do not relist 32 pages for a filtered file"
+        ),
+    )
+    adapter.download(65, ["run/continuation.json", "run/manifest.json"], tmp_path)
+    assert len(calls) == 2 and all(kwargs["resume"] and kwargs["quiet"] for path, kwargs in calls)
+
+
+def test_inventory_progress_survives_later_throttle():
+    api = FakeKaggle({65: {"ready": b"x"}, 66: {"later": b"y"}})
+    original = api.page
+    saved = []
+
+    def page(version, token=None):
+        if version == 66:
+            e = RuntimeError("throttle")
+            e.response = SimpleNamespace(status_code=429)
+            raise e
+        return original(version, token)
+
+    api.page = page
+    with pytest.raises(RuntimeError, match="throttle"):
+        discover(api, minimum_version=65, on_inventory=saved.append)
+    assert [r["version_number"] for r in saved] == [65]
+    assert saved[0]["file_count"] == 1
+
+
+def test_rate_retry_is_bounded_without_real_sleep():
+    from kaggle_posthoc.kaggle_source import KaggleOutputAPI
+
+    api = KaggleOutputAPI.__new__(KaggleOutputAPI)
+    waits, calls = [], []
+    api._sleep = waits.append
+    api.api = SimpleNamespace(_get_retry_after_delay=lambda response: 0)
+
+    def throttled():
+        calls.append(1)
+        e = RuntimeError("throttled")
+        e.response = SimpleNamespace(status_code=429, headers={})
+        raise e
+
+    with pytest.raises(RuntimeError, match="throttled"):
+        api._call(throttled, "page", pace=False)
+    assert len(calls) == 5 and waits == [1] * 4

@@ -48,6 +48,7 @@ def main():
     from kaggle_posthoc.kaggle_source import (
         KaggleOutputAPI,
         discover,
+        inventory,
         locate_training,
         fetch,
         KERNEL,
@@ -93,7 +94,28 @@ def main():
             flush=True,
         )
         discovery_started = time.perf_counter()
-        inventories, discovery = discover(api, args.candidate_version)
+        inventories = []
+        discovery = {"status": "DISCOVERY_IN_PROGRESS", "candidate": args.candidate_version}
+
+        def checkpoint_inventory(item):
+            inventories.append(item)
+            atomic(
+                output / "kaggle-version-inventory.json",
+                {"versions": inventories, "discovery": discovery},
+            )
+
+        lower = min(
+            v
+            for v in (
+                args.candidate_version,
+                args.training_output_version,
+                args.prior_analysis_output_version,
+            )
+            if v is not None
+        )
+        inventories, discovery = discover(
+            api, args.candidate_version, minimum_version=lower, on_inventory=checkpoint_inventory
+        )
         discovery["discovery_wall_seconds"] = time.perf_counter() - discovery_started
         atomic(
             output / "kaggle-version-inventory.json",
@@ -116,7 +138,33 @@ def main():
             execute=ar.execute,
             unavailable=frozen.unavailable,
         )
-        inv, root, meta, transfer = locate_training(api, chosen, cache, engine)
+        try:
+            inv, root, meta, transfer = locate_training(api, chosen, cache, engine)
+        except ContinuationError as error:
+            if (
+                error.code != "KAGGLE_TRAINING_OUTPUT_VERSION_UNRESOLVED"
+                or args.training_output_version
+            ):
+                raise
+            discovery["older_versions"] = "SEARCHED_UNTIL_VERIFIED_INPUT"
+            for number in range(lower - 1, 0, -1):
+                try:
+                    older = inventory(api, number)
+                except Exception as lookup_error:
+                    status = getattr(getattr(lookup_error, "response", None), "status_code", None)
+                    if status in (404, 410):
+                        continue
+                    raise
+                checkpoint_inventory(older)
+                try:
+                    inv, root, meta, transfer = locate_training(api, [older], cache, engine)
+                    discovery["search_lower_bound"] = number
+                    break
+                except ContinuationError as missing:
+                    if missing.code != "KAGGLE_TRAINING_OUTPUT_VERSION_UNRESOLVED":
+                        raise
+            else:
+                raise ContinuationError("KAGGLE_TRAINING_OUTPUT_VERSION_UNRESOLVED") from None
         plan = load_plan()
         if canonical(plan) != "8f9bd833ab371ce8c624693222825269889da1fde1860f8be7a73f2bb2eb90d0":
             raise ContinuationError("FROZEN_ANALYSIS_PROTOCOL_MISMATCH")

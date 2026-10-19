@@ -45,6 +45,41 @@ class KaggleOutputAPI:
             if "version_label" not in inspect.getsource(getattr(KaggleApi, name)):
                 raise ContinuationError("KAGGLE_HISTORICAL_VERSION_UNSUPPORTED")
 
+    def _call(self, operation, label, *, pace=True):
+        """Retry a single request, retaining completed enumeration pages."""
+        sleep = getattr(self, "_sleep", time.sleep)
+        for attempt in range(5):
+            if pace:
+                previous = getattr(self, "_last_request_at", None)
+                delay = 1.0 - (time.monotonic() - previous) if previous is not None else 0
+                if delay > 0:
+                    sleep(delay)
+                self._last_request_at = time.monotonic()
+            try:
+                return operation()
+            except Exception as error:
+                response = getattr(error, "response", None)
+                status = getattr(response, "status_code", None)
+                if status not in (429, 500, 502, 503, 504) or attempt == 4:
+                    raise
+                # Reuse the pinned CLI's RFC Retry-After parser.
+                delay = self.api._get_retry_after_delay(response)
+                delay = max(1, delay) if delay is not None else min(120, 15 * 2**attempt)
+                print(
+                    {
+                        "stage": "KAGGLE_REQUEST_RETRY",
+                        "request": label,
+                        "http_status": status,
+                        "attempt": attempt + 1,
+                        "wait_seconds": delay,
+                    },
+                    flush=True,
+                )
+                while delay > 0:
+                    chunk = min(30, delay)
+                    sleep(chunk)
+                    delay -= chunk
+
     def metadata(self, version=None):
         from kaggle.api.kaggle_api_extended import ApiGetKernelRequest
 
@@ -52,8 +87,12 @@ class KaggleOutputAPI:
         request.user_name, request.kernel_slug = KERNEL.split("/")
         if version is not None:
             request.version_label = self.api._kernel_version_label(str(version))
-        with self.api.build_kaggle_client() as client:
-            response = client.kernels.kernels_api_client.get_kernel(request)
+
+        def get():
+            with self.api.build_kaggle_client() as client:
+                return client.kernels.kernels_api_client.get_kernel(request)
+
+        response = self._call(get, "metadata")
         m = response.metadata
         # Never store source code, signed file URLs or the unrestricted API payload.
         return {
@@ -76,8 +115,12 @@ class KaggleOutputAPI:
         request.user_name, request.kernel_slug = KERNEL.split("/")
         request.version_label = self.api._kernel_version_label(str(version))
         self.api._set_paging(request, 200, token)
-        with self.api.build_kaggle_client() as client:
-            response = client.kernels.kernels_api_client.list_kernel_session_output(request)
+
+        def get():
+            with self.api.build_kaggle_client() as client:
+                return client.kernels.kernels_api_client.list_kernel_session_output(request)
+
+        response = self._call(get, "output-page")
         files = []
         for item in response.files or []:
             name = relative(item.file_name)
@@ -85,40 +128,48 @@ class KaggleOutputAPI:
             files.append({"file_name": name})
         return {"files": files, "next_page_token": response.next_page_token}
 
-    def size(self, version, name):
-        # Signed URLs authorize GET, not necessarily HEAD. Read headers and close
-        # the streamed response without consuming the object. URLs stay in memory.
+    def _file_response(self, version, name):
         import requests
         from urllib.parse import urlparse
 
-        url = self._output_urls[(version, name)]
+        url = self._output_urls[(version, relative(name))]
         host = urlparse(url).hostname or ""
         if urlparse(url).scheme != "https" or not (
             host == "storage.googleapis.com" or host.endswith(".storage.googleapis.com")
         ):
             raise ContinuationError("UNTRUSTED_KAGGLE_OUTPUT_URL")
-        with requests.get(
+        return requests.get(
             url, stream=True, timeout=(15, 60), headers={"Accept-Encoding": "identity"}
-        ) as response:
-            response.raise_for_status()
-            size = response.headers.get("Content-Length")
-            if size is None or not size.isdigit():
-                raise ContinuationError("KAGGLE_FILE_SIZE_UNKNOWN")
-            return int(size)
+        )
+
+    def size(self, version, name):
+        # Signed URLs authorize GET, not necessarily HEAD. Never persist URLs.
+        def get():
+            with self._file_response(version, name) as response:
+                response.raise_for_status()
+                size = response.headers.get("Content-Length")
+                if size is None or not size.isdigit():
+                    raise ContinuationError("KAGGLE_FILE_SIZE_UNKNOWN")
+                return int(size)
+
+        return self._call(get, "file-size", pace=False)
 
     def download(self, version, names, destination):
-        if not names:
-            return
-        # All names have been independently checked before allowing CLI filesystem I/O.
-        pattern = "^(?:" + "|".join(re.escape(relative(n)) for n in names) + ")$"
-        self.api.kernels_output(
-            KERNEL + "/" + str(version),
-            path=str(destination),
-            file_pattern=pattern,
-            force=False,
-            quiet=True,
-            page_size=200,
-        )
+        # Reuse the pinned CLI streaming/resume implementation, but NOT its
+        # kernels_output wrapper: that wrapper relists every page for each
+        # filtered download. Reuse the version-pinned signed file URLs instead.
+        for name in names:
+            relative(name)
+            path = Path(destination) / name
+            if any(p.is_symlink() for p in (path, *path.parents)):
+                raise ContinuationError("UNSAFE_KAGGLE_OUTPUT_PATH")
+
+            def get(name=name, path=path):
+                with self._file_response(version, name) as response:
+                    response.raise_for_status()
+                    self.api.download_file(response, str(path), None, quiet=True, resume=True)
+
+            self._call(get, "selected-file-download", pace=False)
 
 
 def inventory(api, version):
@@ -312,7 +363,7 @@ def locate_training(api, inventories, cache, engine):
     raise ContinuationError("KAGGLE_TRAINING_OUTPUT_VERSION_UNRESOLVED")
 
 
-def discover(api, candidate=65):
+def discover(api, candidate=65, *, minimum_version=1, on_inventory=None):
     """Every candidate is enumerated through an explicit v<N> selector.
 
     A current metadata version hint expands the search; otherwise record the
@@ -330,7 +381,7 @@ def discover(api, candidate=65):
     if upper > 10000:
         raise ContinuationError("KAGGLE_VERSION_NUMBER_INVALID")
     found, rejected = [], []
-    for version in [candidate, *range(upper, 0, -1)]:
+    for version in [candidate, *range(upper, minimum_version - 1, -1)]:
         if any(i["version_number"] == version for i in found) or any(
             i["version_number"] == version for i in rejected
         ):
@@ -338,6 +389,8 @@ def discover(api, candidate=65):
         try:
             item = inventory(api, version)
             found.append(item)
+            if on_inventory:
+                on_inventory(item)
         except Exception as error:
             status = getattr(getattr(error, "response", None), "status_code", None)
             if status not in (404, 410):
@@ -349,7 +402,9 @@ def discover(api, candidate=65):
         "candidate": candidate,
         "search_upper_bound": upper,
         "latest_number_exposed": hint,
-        "exhaustive_to_exposed_latest": bool(hint),
+        "exhaustive_to_exposed_latest": bool(hint) and minimum_version == 1,
+        "search_lower_bound": minimum_version,
+        "older_versions": "DEFERRED_UNLESS_INPUT_MISSING" if minimum_version > 1 else "SCANNED",
         "unavailable_versions": rejected,
         "current_visibility_verified_private": True,
         "user_reported_script_version_id": 359735394,

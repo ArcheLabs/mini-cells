@@ -50,5 +50,17 @@
     "seconds": 2.74,
     "real_kaggle_retest": "NOT_EXECUTED",
     "implementation_snapshot": "1b258cfa1c94dbeddcedf9713862a33b160052fd"
+  },
+  "rate_limit_repair": {
+    "reported_failure": "HTTP 429 during eager historical version discovery",
+    "observed_version_65_unique_files": 6246,
+    "observed_version_65_pages": 32,
+    "observed_input_checkpoint_validation": "NOT_REACHED",
+    "request_policy": "one-second API pacing; five attempts per transient request; reuse pinned CLI Retry-After parser",
+    "discovery": "candidate and newer versions first; older versions searched only if verified training input is missing",
+    "download": "reuse cached version-pinned URLs and official CLI download_file(resume=True); no per-file output relisting",
+    "cpu_transport_tests_passed": 34,
+    "seconds": 3.26,
+    "real_kaggle_retest": "NOT_EXECUTED"
   }
 }
