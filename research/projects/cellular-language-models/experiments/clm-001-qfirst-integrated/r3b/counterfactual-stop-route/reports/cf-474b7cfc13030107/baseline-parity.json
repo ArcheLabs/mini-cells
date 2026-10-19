@@ -1,0 +1,36 @@
+{
+  "actual": {
+    "actual_stop_rate": 0.258056640625,
+    "context_call_fraction": 0.27624048567571374,
+    "forced_end_rate": 0.741943359375,
+    "mean_nll": 4.699343874217448,
+    "mean_path_length": 14.7386474609375,
+    "path_count": 8192,
+    "self_loop_rate": 0.20667809892755915
+  },
+  "errors": {
+    "actual_stop_rate": 0.0,
+    "context_call_fraction": 0.0,
+    "forced_end_rate": 0.0,
+    "mean_nll": 1.034277374856174e-08,
+    "mean_path_length": 0.0,
+    "path_count": 0,
+    "self_loop_rate": 0.0
+  },
+  "expected": {
+    "actual_stop_rate": 0.258056640625,
+    "context_call_fraction": 0.27624048567571374,
+    "forced_end_rate": 0.741943359375,
+    "mean_nll": 4.699343863874674,
+    "mean_path_length": 14.7386474609375,
+    "path_count": 8192,
+    "self_loop_rate": 0.20667809892755915
+  },
+  "historical_raw_action_fingerprint": "NOT_RECORDED_BY_OLD_EVALUATOR",
+  "historical_story_means": "WITHIN_PREDECLARED_FLOAT_TOLERANCE",
+  "historical_trace_evidence": "EXACT_AGGREGATE_TRANSITIONS_AND_TERMINATIONS_PLUS_NATIVE_EXECUTOR_REPLAY",
+  "native_vs_noop": "EXACT_ACTIONS_STATES_STOP_LENGTH",
+  "status": "BASELINE_PARITY_PASS",
+  "training_updates": 0,
+  "window_count": 128
+}
