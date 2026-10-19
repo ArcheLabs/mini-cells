@@ -1,0 +1,49 @@
+{
+  "experiment_id": "CLM-001-R3b-CF-001",
+  "protocol_version": 1,
+  "training_source_sha": "a7792ef30582dfcaf324cca7e5245c8430df48b2",
+  "training_run_id": "r3b-a7792ef30582-ea3ea51c",
+  "training_output_version": 65,
+  "engine_sha": "ed2accbc90f541325ca2f6c53229e9c81475768d",
+  "original_analysis_protocol_sha256": "8f9bd833ab371ce8c624693222825269889da1fde1860f8be7a73f2bb2eb90d0",
+  "checkpoint_sha256": {
+    "QC-R3b": "57b9daaaa54b0a67c6bc43c2f216ac375d0bb127ffbda132ac00f4cd42caffbb",
+    "Q-R3b": "7cd30b9107ecd1af5ab3215233716bdf71536e224e31ea76ab001198812ffcdf",
+    "QS-R3b": "41dc44eb1e2a90faacd214d5ae169845228b5dfec5cd10afac56c2bedcf73610"
+  },
+  "force_stop_depths": [
+    4,
+    8,
+    12
+  ],
+  "lambda_cost": 0.01,
+  "budget": 16,
+  "minimum_actions": 1,
+  "stories": 128,
+  "sequence_length": 64,
+  "mc_samples": 8,
+  "mc_seed": 2026101901,
+  "sampling_seed": 2026101902,
+  "bootstrap_seed": 2026101903,
+  "bootstrap_replicates": 2000,
+  "mc_z": 2.364624251,
+  "q_zero_tolerance": 1e-06,
+  "nll_atol": 1e-06,
+  "nll_rtol": 1e-05,
+  "state_replay": "EXACT_FINGERPRINT",
+  "actions_parity": "EXACT_NATIVE_FROZEN_EXECUTOR",
+  "historical_raw_trace": "NOT_RECORDED_COMPARE_NATIVE_REPLAY_AND_HISTORICAL_AGGREGATES",
+  "cf1_state_candidates": [
+    512,
+    1024,
+    2048
+  ],
+  "cf1_target_seconds": 3600,
+  "cf1_count_selection": "LARGEST_PROJECTED_CALIBRATION_ONLY_CANDIDATE_WITHIN_TARGET_ELSE_512",
+  "pilot_states": 2,
+  "pilot_stories": 1,
+  "confirmation": "SEALED",
+  "formal_confirmation": false,
+  "scientific_decision": false,
+  "mc_interval": "STUDENT_T_7_TWO_SIDED_APPROXIMATE"
+}
