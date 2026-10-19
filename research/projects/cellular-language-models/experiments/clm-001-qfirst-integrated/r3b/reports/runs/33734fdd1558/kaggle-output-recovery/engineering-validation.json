@@ -1,0 +1,87 @@
+{
+  "scope": "SYNTHETIC_CPU_ENGINEERING_ONLY",
+  "full_cpu_regression": {
+    "passed": 160,
+    "failures": 0,
+    "seconds": 423.78,
+    "includes_new_publication_test": false,
+    "implementation_snapshot": "b6cff9812a83880f428fb942820f87323456b36e"
+  },
+  "new_transport_tests": {
+    "passed": 24,
+    "failures": 0,
+    "seconds": 3.39,
+    "includes_new_publication_test": true,
+    "implementation_snapshot": "deadaf8cd393974828cb826aaba8c43815f88cf9"
+  },
+  "lint": "PASS",
+  "notebook_syntax": "PASS",
+  "immutable_engine_import": {
+    "measurement_engine_source_sha": "ed2accbc90f541325ca2f6c53229e9c81475768d",
+    "materialized_files_verified": 849,
+    "source_files_sha256": "1c51c0cb1c5a99e25ff0cbcc695cda4a0f30bb5b693cc0ed40d3eea6148c3cd9",
+    "module_origin_verified": true,
+    "planned_tasks": 102,
+    "training_updates": 0
+  },
+  "actual_kaggle_execution": "NOT_EXECUTED_NO_KAGGLE_CREDENTIALS",
+  "real_checkpoint_records_verified": 0,
+  "old_42_results_recovered": null,
+  "scientific_decision": false,
+  "confirmation": "SEALED",
+  "execution_orchestrator_source_sha": "7b372432bc589a8643c74b8e9772a9078490f520",
+  "listing_repair": {
+    "reported_failure": "KAGGLE_DUPLICATE_OUTPUT_PATH",
+    "behavior": "Deduplicate equal path/size listing entries; reject size conflicts; retain frozen content hash verification and pagination-loop detection",
+    "cpu_transport_tests_passed": 26,
+    "seconds": 2.7,
+    "real_kaggle_retest": "NOT_EXECUTED",
+    "implementation_snapshot": "575ed27f177c69653179b896bc4b5cda8f953a0e"
+  },
+  "authoritative_path_repair": {
+    "reported_failure": "KAGGLE_OUTPUT_PATH_SIZE_CONFLICT",
+    "listing_endpoint": "ListKernelSessionOutput",
+    "path_field": "file_name (same as official kernels_output downloader)",
+    "sdk_source_sha": "f983c97287bf274ebab506aac85eda6efebe3b32",
+    "sdk_source_repository": "Kaggle/kaggle-sdk-python",
+    "selected_size_source": "streamed signed GET response Content-Length; close without consuming file body",
+    "unselected_file_bytes": "NOT_MEASURED",
+    "cpu_transport_tests_passed": 28,
+    "seconds": 2.74,
+    "real_kaggle_retest": "NOT_EXECUTED",
+    "implementation_snapshot": "1b258cfa1c94dbeddcedf9713862a33b160052fd"
+  },
+  "rate_limit_repair": {
+    "reported_failure": "HTTP 429 during eager historical version discovery",
+    "observed_version_65_unique_files": 6246,
+    "observed_version_65_pages": 32,
+    "observed_input_checkpoint_validation": "NOT_REACHED",
+    "request_policy": "one-second API pacing; five attempts per transient request; reuse pinned CLI Retry-After parser",
+    "discovery": "candidate and newer versions first; older versions searched only if verified training input is missing",
+    "download": "reuse cached version-pinned URLs and official CLI download_file(resume=True); no per-file output relisting",
+    "cpu_transport_tests_passed": 34,
+    "seconds": 3.26,
+    "real_kaggle_retest": "NOT_EXECUTED",
+    "implementation_snapshot": "14ff395846883cb8252233de3640a880f0992e10"
+  },
+  "removed_extra_restrictions": {
+    "reported_failure": "UNTRUSTED_KAGGLE_OUTPUT_URL",
+    "removed": [
+      "storage-domain whitelist",
+      "runtime SDK source-text inspection",
+      "arbitrary page-count and version-number ceilings",
+      "silent 512MiB raw-result skip"
+    ],
+    "retained": [
+      "version-pinned authenticated API provenance",
+      "path traversal checks",
+      "frozen file hashes and scientific identity",
+      "retry pacing and resumable downloads",
+      "private/public evidence separation"
+    ],
+    "cpu_transport_tests_passed": 34,
+    "seconds": 2.76,
+    "real_kaggle_retest": "NOT_EXECUTED",
+    "implementation_snapshot": "7b372432bc589a8643c74b8e9772a9078490f520"
+  }
+}
