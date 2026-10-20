@@ -1,7 +1,6 @@
 """Bounded synthetic CPU engineering, and an authorization-guarded future GPU smoke."""
 
 from pathlib import Path
-import time
 import random
 import numpy as np
 import torch
@@ -9,10 +8,10 @@ from .common import ARMS, ID, canonical, atomic, fingerprint, synthetic_configur
 from .model import BridgeModel
 from .training import Trainer
 from .checkpoint import Store
-from .data import synthetic_batches, train_batches, fixed_windows
+from .data import synthetic_batches
 from .instrumentation import parameters, MatmulAudit
 from .provenance import provenance
-from .release import require_gpu_smoke, choose_balance
+from .release import require_gpu_smoke
 
 
 def identity(c, arm, seed, source):
@@ -101,85 +100,14 @@ def engineering(output):
 
 
 def gpu_smoke(c, output, assets, authorization, device="cuda:0"):
-    require_gpu_smoke(c, authorization)  # Must precede device allocation and data loading.
+    """Compatibility adapter to the same resumable bounded pilot engine."""
+    require_gpu_smoke(c, authorization)
     if c.get("synthetic"):
         raise ValueError("real asset pilot requires proposed real configuration")
     from .data import load_assets
+    from .pilot import execute_pilot
 
-    data = load_assets(c, assets)
     if not torch.cuda.is_available():
         raise RuntimeError("authorized smoke requires CUDA")
-    output = Path(output)
-    measurements = {}
-    source = provenance(c)["source_sha"]
-    seed = c["candidate_training"]["seeds"][0]
-    for coefficient in c["balance"]["candidates"]:
-        trainer = Trainer(BridgeModel(c, "C", seed).to(device), coefficient)
-        for _ in range(c["balance"]["pilot_steps_per_candidate"]):
-            trainer.update(train_batches(data, c, trainer.data_rng, device))
-        shares = []
-        with torch.no_grad():
-            for story, x, y in fixed_windows(data, c, "calibration", device):
-                out = trainer.model(x)
-                shares.append(
-                    (out.operator_rows / out.operator_rows.sum(-1, keepdim=True)).cpu().tolist()
-                )
-                if len(shares) == c["balance"]["measurement_windows"]:
-                    break
-        measurements[coefficient] = {"role": "calibration", "cell_shares": shares}
-    selected = choose_balance(c, measurements)
-    if selected["status"] == "NO_GO":
-        atomic(output / "reports/pilot.json", selected)
-        return selected
-    results = []
-    for arm in ARMS:
-        trainer = Trainer(BridgeModel(c, arm, seed).to(device), selected["coefficient"])
-        logs = []
-        ident = {
-            **identity(c, arm, seed, source),
-            "pilot_balance_coefficient": selected["coefficient"],
-        }
-        for _ in range(c["pilot"]["steps_per_arm"]):
-            batches = train_batches(data, c, trainer.data_rng, device)
-            start, end = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
-            torch.cuda.reset_peak_memory_stats()
-            start.record()
-            begin = time.perf_counter()
-            row = trainer.update(batches)
-            end.record()
-            end.synchronize()
-            wall = time.perf_counter() - begin
-            row.update(
-                cuda_time_ms=start.elapsed_time(end),
-                wall_seconds=wall,
-                tokens_per_second=c["training"]["effective_batch"]
-                * c["training"]["sequence_length"]
-                / wall,
-            )
-            logs.append({**ident, **row})
-        with torch.no_grad(), MatmulAudit(trainer.model) as audit:
-            out = trainer.model(batches[0][0], route_rng=torch.Generator().manual_seed(seed))
-        checkpoint = Store(output / "private-checkpoints" / arm, ident).save(trainer)
-        results.append(
-            {
-                "arm": arm,
-                "logs": logs,
-                "inference_matmul_cost": audit.finish(out),
-                "parameters": parameters(trainer.model),
-                "checkpoint": checkpoint,
-                "projected_500_update_seconds": 500
-                * float(np.median([r["wall_seconds"] for r in logs])),
-                "projection_scope": "short synthetic-shape Train updates only; excludes assets, evaluation, saving and HF upload",
-            }
-        )
-    report = {
-        "status": "GPU_SMOKE_COMPLETED_NOT_FORMALLY_RELEASED",
-        "arms": results,
-        "selection": selected,
-        "measurements": {str(k): v for k, v in measurements.items()},
-        "optimizer_updates": c["pilot"]["total_optimizer_updates"],
-        "cross_session_verified": False,
-        "scientific_decision": False,
-    }
-    atomic(output / "reports/pilot.json", report)
-    return report
+    data = load_assets(c, assets)
+    return execute_pilot(c, data, output, provenance(c)["source_sha"], device)

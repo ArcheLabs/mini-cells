@@ -80,7 +80,7 @@ class Store:
         trainer.restore(self.verified(row))
 
 
-def publish_segment(backend, root, identity, session_id):
+def publish_segment(backend, root, identity, session_id, *, pointer_path=None):
     if not backend.info().private:
         raise ContinuationError("HF_PRIVATE_REPO_REQUIRED")
     backend.check_write()
@@ -110,6 +110,21 @@ def publish_segment(backend, root, identity, session_id):
         key = "r3c-moe-bridge/segments/" + canonical(manifest) + ".json"
         additions = {row["object"]: root / name for name, row in files.items()}
         additions[key] = path
+        if pointer_path:
+            from minicells_artifacts.hf_storage import relative
+
+            relative(pointer_path)
+            pointer = Path(tmp) / "pointer.json"
+            atomic(
+                pointer,
+                {
+                    "manifest_path": key,
+                    "manifest_sha256": digest(path),
+                    "writer_session_id": session_id,
+                    "identity": identity,
+                },
+            )
+            additions[pointer_path] = pointer
         revision = backend.commit(
             additions, backend.info().sha, "R3c bounded segment checkpoint bundle"
         )

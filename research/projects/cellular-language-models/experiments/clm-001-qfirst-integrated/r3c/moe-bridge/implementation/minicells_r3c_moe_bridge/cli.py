@@ -8,12 +8,19 @@ def main():
     parser = argparse.ArgumentParser(
         description="R3c isolated CPU engineering; GPU is separately authorized"
     )
-    parser.add_argument("--mode", choices=("engineering", "gpu-smoke"), default="engineering")
+    parser.add_argument(
+        "--mode", choices=("engineering", "gpu-smoke", "pilot"), default="engineering"
+    )
     parser.add_argument("--output", required=True)
     parser.add_argument("--assets")
     parser.add_argument("--authorization")
     parser.add_argument("--publish-github", action="store_true")
     a = parser.parse_args()
+    if a.mode == "pilot":
+        from .pilot import automatic
+
+        print(json.dumps(automatic(a.output, a.assets), indent=2))
+        return
     if a.mode == "engineering":
         result = engineering(a.output)
     else:
