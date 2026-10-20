@@ -294,3 +294,30 @@ def test_receipt_recovers_observations_after_sidecar_interruption(tiny, tmp_path
     monkeypatch.setattr(dev, "atomic", original)
     result = dev.train_job(tiny, {}, tmp_path, "source", 101, "C", "cpu")
     assert [row["step"] for row in result["curve"]] == [1, 2, 3, 4]
+
+
+def test_one_launch_development_notebook_is_pinned_and_has_no_test_phase():
+    import ast
+    import json
+    import subprocess
+    from minicells_r3c_moe_bridge.common import BASE, ROOT
+
+    notebook = json.loads((BASE / "notebooks/kaggle-development.ipynb").read_text())
+    code = "".join(notebook["cells"][1]["source"])
+    ast.parse(code)
+    tree = ast.parse(code)
+    pin = next(
+        ast.literal_eval(n.value)
+        for n in tree.body
+        if isinstance(n, ast.Assign)
+        and any(isinstance(t, ast.Name) and t.id == "SOURCE_SHA" for t in n.targets)
+    )
+    config = subprocess.check_output(
+        ["git", "show", pin + ":" + str(BASE.relative_to(ROOT) / "config/development.json")],
+        cwd=ROOT,
+        text=True,
+    )
+    assert json.loads(config)["development"]["steps"] == 500
+    assert "'--mode','development'" in code and "pytest" not in code
+    assert "kwargs.setdefault('timeout',45)" in code
+    assert "'--mode','pilot'" not in code and "ACCEPT_" not in code

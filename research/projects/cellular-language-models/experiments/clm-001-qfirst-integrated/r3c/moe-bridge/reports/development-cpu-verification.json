@@ -1,0 +1,38 @@
+{
+  "scope": "SYNTHETIC_CPU_ONLY",
+  "implementation_commit": "54ad9aa4cebb73232743e2b7dd124c002d2fac7e",
+  "tests": {
+    "passed": 76,
+    "seconds": 22.7,
+    "suite": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/tests"
+  },
+  "lint": "PASS",
+  "gpu_training_started_by_agent": false,
+  "parameters_per_logical_arm": 1005830,
+  "physical_arms": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "derived_aliases": {
+    "E": "C"
+  },
+  "selected_balance_coefficient": 0.0,
+  "steps_per_model": 500,
+  "paired_seeds": [
+    151001301,
+    151001302,
+    151001303
+  ],
+  "new_updates_upper_bound": 6000,
+  "confirmation": "SEALED",
+  "scientific_decision": false,
+  "actual_new_kaggle_session_verified": false,
+  "limits": [
+    "Development Notebook awaits user execution",
+    "Pilot update-speed projection excludes network, evaluation and saving",
+    "lambda=0 makes E/C identical; no independent balance ablation",
+    "Expensive mechanism diagnostics deferred to read-only analysis"
+  ]
+}
