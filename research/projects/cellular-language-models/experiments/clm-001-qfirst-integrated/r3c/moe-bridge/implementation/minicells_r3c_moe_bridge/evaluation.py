@@ -20,15 +20,18 @@ def evaluate(model, windows, seed, *, intervention=None):
     with isolated(model):
         model.eval()
         for story, x, y in windows:
-            if story in rows:
-                raise ValueError("Story windows must be aggregated explicitly, not overwritten")
             out = model(x, route_rng=rng, intervention=intervention)
             ce = F.cross_entropy(
                 out.logits.reshape(-1, out.logits.shape[-1]), y.reshape(-1), reduction="none"
             )
+            previous = rows.get(story, {"nll_sum": 0.0, "tokens": 0, "windows": 0})
+            total = previous["tokens"] + y.numel()
+            nll_sum = previous["nll_sum"] + float(ce.sum())
             rows[story] = {
-                "mean_nll": float(ce.mean()),
-                "tokens": y.numel(),
+                "mean_nll": nll_sum / total,
+                "nll_sum": nll_sum,
+                "windows": previous["windows"] + 1,
+                "tokens": total,
                 "cell_calls_per_token": 8,
                 "context_calls_per_token": 1,
             }

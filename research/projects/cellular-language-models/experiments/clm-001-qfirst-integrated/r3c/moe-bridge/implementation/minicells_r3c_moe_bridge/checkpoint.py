@@ -14,14 +14,21 @@ class Store:
         self.root = Path(root)
         self.identity = identity
 
-    def save(self, trainer):
-        key = canonical({"identity": self.identity, "step": trainer.step})
-        receipt = self.root / "receipts" / (key + ".json")
+    def receipt_file(self, step):
+        key = canonical({"identity": self.identity, "step": step})
+        return self.root / "receipts" / (key + ".json")
+
+    def save(self, trainer, observations=None):
+        receipt = self.receipt_file(trainer.step)
         state = trainer.state()
         semantic = fingerprint(state)
         if receipt.exists():
             old = read(receipt)
-            if old["identity"] != self.identity or old["state_fingerprint"] != semantic:
+            if (
+                old["identity"] != self.identity
+                or old["state_fingerprint"] != semantic
+                or (observations is not None and old.get("observations") != observations)
+            ):
                 raise ContinuationError("R3C_CHECKPOINT_IMMUTABLE_CONFLICT")
             self.verified(old)
             return old
@@ -54,6 +61,8 @@ class Store:
             "file": target.relative_to(self.root).as_posix(),
             "cross_session_verified": False,
         }
+        if observations is not None:
+            row["observations"] = observations
         atomic(receipt, row)
         self.verified(row)
         return row
@@ -80,7 +89,7 @@ class Store:
         trainer.restore(self.verified(row))
 
 
-def publish_segment(backend, root, identity, session_id, *, pointer_path=None):
+def publish_segment(backend, root, identity, session_id, *, pointer_path=None, prior_manifest=None):
     if not backend.info().private:
         raise ContinuationError("HF_PRIVATE_REPO_REQUIRED")
     backend.check_write()
@@ -98,6 +107,18 @@ def publish_segment(backend, root, identity, session_id, *, pointer_path=None):
             }
     if not files or not session_id:
         raise ContinuationError("R3C_EMPTY_SEGMENT_OR_SESSION")
+    inherited = {} if prior_manifest is None else prior_manifest["files"]
+    if prior_manifest is not None and prior_manifest["identity"] != identity:
+        raise ContinuationError("R3C_PRIOR_MANIFEST_IDENTITY_MISMATCH")
+    local_files = dict(files)
+    for name, row in local_files.items():
+        if (
+            name in inherited
+            and inherited[name] != row
+            and Path(name).name not in ("latest.json", "curve.json", "progress.json", "result.json")
+        ):
+            raise ContinuationError("R3C_ARCHIVE_IMMUTABLE_CONFLICT")
+    files = {**inherited, **files}
     manifest = {
         "schema": "minicells.r3c.segment.v1",
         "identity": identity,
@@ -108,7 +129,12 @@ def publish_segment(backend, root, identity, session_id, *, pointer_path=None):
         path = Path(tmp) / "segment.json"
         atomic(path, manifest)
         key = "r3c-moe-bridge/segments/" + canonical(manifest) + ".json"
-        additions = {row["object"]: root / name for name, row in files.items()}
+        known = {row["object"] for row in inherited.values()}
+        additions = {
+            row["object"]: root / name
+            for name, row in local_files.items()
+            if row["object"] not in known
+        }
         additions[key] = path
         if pointer_path:
             from minicells_artifacts.hf_storage import relative
@@ -141,7 +167,7 @@ def publish_segment(backend, root, identity, session_id, *, pointer_path=None):
     }
 
 
-def restore_segment(backend, ref, root, identity, session_id):
+def restore_segment(backend, ref, root, identity, session_id, *, include_paths=None):
     if ref["hf_repo"] != backend.repo:
         raise ContinuationError("R3C_REPOSITORY_IDENTITY_MISMATCH")
     path = backend.get(ref["manifest_path"], ref["hf_revision"])
@@ -157,6 +183,8 @@ def restore_segment(backend, ref, root, identity, session_id):
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
     for name, row in manifest["files"].items():
+        if include_paths is not None and name not in include_paths:
+            continue
         from minicells_artifacts.hf_storage import relative
 
         relative(name)

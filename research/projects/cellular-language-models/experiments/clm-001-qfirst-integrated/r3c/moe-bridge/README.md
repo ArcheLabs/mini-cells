@@ -1,6 +1,6 @@
 # CLM-001-R3c-MOE-Bridge-001
 
-**当前阶段：已授权最多 40 次更新的短 GPU Pilot；完整 500-Step 训练和 Confirmation 未授权。**
+**当前阶段：Pilot 已完成；已授权 500 Step × 3 Seed 的探索性开发。Confirmation 保持隔离，不作科学通过判断。**
 
 用户已完成并确认 CPU Notebook；无需重复运行它。
 
@@ -16,7 +16,22 @@
 
 五组名义参数均为 **1,005,830**；共享核心 **996,096**、Gate **9,734**。这是从新模型逐参数计数，包含所有六个 Cell、Context、Memory 和 tied head；不包含旧 reserve/Q 模块。D 的 Gate 是否实际训练取决于尚未冻结的均衡系数是否非零。
 
-## 现在运行：自动短 GPU Pilot
+## 现在运行：一键开发训练
+
+导入 `notebooks/kaggle-development.ipynb` 到原来的 `bingjiangli/minicells`，选择 **T4 ×2**、启用 Internet，勾选既有 **HF_TOKEN / GITHUB_TOKEN**，直接 **Run All**。无需修改模式、Seed 或哈希。自动检查通过后继续训练；失败则保留检查点并报告错误。
+
+- 三个配对 Seed，每个实际训练 A/B/C/D 各 500 Step；两张 GPU 并发运行独立模型。单 GPU 可顺序执行。
+- Pilot 选择 λ=0，因此 E 与 C 数学上相同；每个 Seed 的 E 明确引用 C，不复制计算或充当独立对照。D 此时没有 Gate 梯度。
+- 首个 Seed 优先复用 Pilot 的前五步完整状态；设备 RNG 布局不兼容时保留原状态，从固定初始化开始。总新增更新不超过 6,000 次，物理训练 Token 上限 3,072,000。
+- 每 50 步保存可恢复状态；正式保留 0/50/100/200/350/500 快照。只在最终 Checkpoint 评估 Calibration/Development，不用评估结果选模型；昂贵机制诊断留给离线只读分析。
+- 每个 Seed 完成后串行批量上传 HF，只提交新增对象；恢复只下载最新状态，旧快照继续由不可变引用保留。GitHub 仅返回聚合结果。
+- **Save Version 必须保留 Output**，远端失败时完整本地状态仍在 Output。同一源码重复运行会恢复已有步骤；不要删除 Output 后当作新实验重跑。
+
+依据 Pilot 的实测更新速度，四组 × 三 Seed 的纯更新串行估计约 22 分钟；双 GPU 可重叠独立模型。该估计不含终点评估、保存、下载和网络，不能保证总耗时。通过控制固定工作量节约资源，没有训练时长硬终止器。
+
+开发入口不会重复运行 pytest、CPU Gate、候选 Pilot 或独立大型基准。既有 Pilot 与 CPU Notebook 保留用于追溯，当前无需再运行。完整跨 Kaggle Session 验收仍须以实际恢复记录为证，上传即时 manifest 核验不等同于这项验收。
+
+## 历史入口：自动短 GPU Pilot（已完成，无需重跑）
 
 将 `notebooks/kaggle-pilot.ipynb` 导入原来的 `bingjiangli/minicells`，启用 Internet 和 GPU，保留既有 **HF_TOKEN / GITHUB_TOKEN** 勾选，直接 **Run All**。无需修改 hash、Seed、授权文件或模式。
 
@@ -38,7 +53,7 @@ python research/projects/cellular-language-models/experiments/clm-001-qfirst-int
 
 自动完成两类合成序列、五组短更新、局部完整状态恢复及算子计数，输出 `reports/` 和私有 `private-checkpoints/`。这不是 TinyStories 训练。可选 `--publish-github` 仅通过既有认证工具推送构造后的公开聚合，不能推送 Checkpoint 或原始样本。
 
-Kaggle：导入 `notebooks/kaggle-smoke.ipynb`，加速器选择 **None**，Run All 一次。无需密钥、模式切换或另跑 pytest；保存 Output 即可。此 Notebook 特意保持 CPU：本轮只授权 CPU 测试，不让文件名中的 smoke 隐含 GPU 授权。GPU 开发 Notebook 在正式放行前不发布。
+Kaggle：导入 `notebooks/kaggle-smoke.ipynb`，加速器选择 **None**，Run All 一次。无需密钥、模式切换或另跑 pytest；保存 Output 即可。此 Notebook 特意保持 CPU：本轮只授权 CPU 测试，不让文件名中的 smoke 隐含 GPU 授权。当前开发训练使用上面的 kaggle-development.ipynb；此 CPU 入口仅供工程追溯。
 
 ## 复用与边界
 

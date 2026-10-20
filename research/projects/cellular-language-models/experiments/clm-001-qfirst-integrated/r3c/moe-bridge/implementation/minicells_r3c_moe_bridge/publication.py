@@ -172,10 +172,20 @@ def pilot_public_summary(report):
 
 
 def publish_pilot_result(report, prepared):
-    summary = pilot_public_summary(report)
+    return publish_aggregate(pilot_public_summary(report), prepared, "r3c-pilot")
+
+
+def publish_aggregate(summary, prepared, namespace):
+    if (
+        summary.get("confirmation") != "SEALED"
+        or summary.get("scientific_decision") is not False
+        or namespace not in ("r3c-pilot", "r3c-development")
+    ):
+        raise ValueError("known public aggregate required")
     checkout = prepared["checkout"]
-    parent = prepared["parent"]
-    branch = "results/r3c-pilot-" + canonical(summary)[:16] + "-" + parent[:12]
+    git(checkout, "fetch", "--depth=1", "--filter=blob:none", "origin", "main")
+    parent = git(checkout, "rev-parse", "FETCH_HEAD").stdout.strip()
+    branch = "results/" + namespace + "-" + canonical(summary)[:16] + "-" + parent[:12]
     destination = BASE.relative_to(ROOT) / "reports/published" / (canonical(summary) + ".json")
     existing = git(checkout, "ls-remote", "origin", "refs/heads/" + branch).stdout.strip()
     if existing:
@@ -184,12 +194,12 @@ def publish_pilot_result(report, prepared):
         git(checkout, "fetch", "--depth=1", "--filter=blob:none", "origin", branch)
         old = json.loads(git(checkout, "show", "FETCH_HEAD:" + str(destination)).stdout)
         if old != summary:
-            raise RuntimeError("published pilot identity conflict")
+            raise RuntimeError("published aggregate identity conflict")
         return {"status": "ALREADY_PUBLISHED", "branch": branch, "parent_main_sha": parent}
     git(checkout, "checkout", "-b", branch, parent)
     atomic(checkout / destination, summary)
     git(checkout, "add", "--", str(destination))
-    git(checkout, "commit", "-m", "Publish short R3c pilot aggregates only")
+    git(checkout, "commit", "-m", "Publish " + namespace + " aggregates only")
     if git(checkout, "diff", "--name-only", parent, "HEAD").stdout.splitlines() != [
         str(destination)
     ]:
