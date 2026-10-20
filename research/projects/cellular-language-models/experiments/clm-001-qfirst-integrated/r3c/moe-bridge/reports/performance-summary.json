@@ -1,0 +1,67 @@
+{
+  "arms": [
+    {
+      "arm": "A",
+      "operator_cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      }
+    },
+    {
+      "arm": "B",
+      "operator_cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      }
+    },
+    {
+      "arm": "C",
+      "operator_cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      }
+    },
+    {
+      "arm": "D",
+      "operator_cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      }
+    },
+    {
+      "arm": "E",
+      "operator_cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      }
+    }
+  ],
+  "formal_runtime_projection": "NOT_MEASURED",
+  "gpu_time": "NOT_MEASURED",
+  "peak_gpu_bytes": "NOT_MEASURED"
+}
