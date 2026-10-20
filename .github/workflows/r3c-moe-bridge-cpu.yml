@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - run: python -m pip install numpy pytest ruff
+      - run: python -m pip install numpy pytest pyyaml ruff
       - name: Preserve historical experiments
         env:
           HISTORICAL_BASE: ${{ github.event.pull_request.base.sha || 'c79e28e' }}

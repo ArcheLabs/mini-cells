@@ -23,16 +23,22 @@ asset_sha = json.loads((Path(__file__).resolve().parents[1] / "config/pilot.json
     "input"
 ]["assets_manifest_sha256"]
 code = f"""from pathlib import Path
-import importlib.util, os, subprocess, sys
+import importlib.util
+import os
+import subprocess
+import sys
 SOURCE_SHA={sha!r}
 ROOT=Path('/kaggle/working/r3c-pilot-code-'+SOURCE_SHA[:12])
 OUTPUT=Path('/kaggle/working/r3c-pilot-output-'+SOURCE_SHA[:12])
 ASSETS=Path('/kaggle/working/r3c-pilot-assets-{asset_sha[:12]}')
 def run(*args, **kwargs):
     print('[R3c Pilot]', *map(str,args), flush=True)
-    if str(args[0])=='git':kwargs.setdefault('timeout',45)
+    if str(args[0])=='git':
+        kwargs.setdefault('timeout',45)
     return subprocess.run(list(map(str,args)),check=True,**kwargs)
 # Use installed PyTorch; only add the existing storage dependency if absent.
+if importlib.util.find_spec('yaml') is None:
+    run(sys.executable,'-m','pip','install','--quiet','pyyaml')
 if importlib.util.find_spec('huggingface_hub') is None:
     run(sys.executable,'-m','pip','install','--quiet','huggingface_hub>=0.23,<2')
 ROOT.mkdir(parents=True,exist_ok=True)
@@ -49,7 +55,8 @@ if head.returncode or head.stdout.strip()!=SOURCE_SHA:
     run('git','-C',ROOT,'fetch','--depth=1','--filter=blob:none','origin',SOURCE_SHA)
     run('git','-C',ROOT,'checkout','--detach','FETCH_HEAD')
 actual=subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip()
-if actual!=SOURCE_SHA:raise RuntimeError('Source identity mismatch')
+if actual!=SOURCE_SHA:
+    raise RuntimeError('Source identity mismatch')
 env=dict(os.environ,HF_HUB_DISABLE_PROGRESS_BARS='1',HF_HUB_ETAG_TIMEOUT='10',HF_HUB_DOWNLOAD_TIMEOUT='30',TOKENIZERS_PARALLELISM='false')
 print('Automatic short pilot: max 40 optimizer updates / 20,480 Train tokens. No formal 500-step training.',flush=True)
 try:
