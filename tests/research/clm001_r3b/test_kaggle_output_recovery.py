@@ -233,6 +233,27 @@ def test_all_57_checkpoints_verified_without_hf(tmp_path, monkeypatch):
     assert (root / "arms/Q-R3b/frozen-probe-bank.pt").exists()
 
 
+def test_single_pass_uses_verified_manifest_sizes_without_checkpoint_header_gets(tmp_path):
+    blobs, engine, calls = training_fixture(tmp_path)
+    api = FakeKaggle({65: blobs})
+    api.single_pass_downloads = True
+    headers = []
+
+    def size(version, name):
+        headers.append(name)
+        return len(blobs[name])
+
+    api.size = size
+    inv = inventory(api, 65)
+    for row in inv["files"]:
+        row["bytes"] = None
+    _, root, meta, transfer = locate_training(api, [inv], tmp_path / "cache", engine)
+    assert headers == ["run/continuation.json", "run/manifest.json"]
+    assert len(calls) == 1 and sum(len(a["checkpoints"]) for a in meta["arms"].values()) == 57
+    assert len(transfer["file_sha256"]) == len(blobs)
+    assert (root / "arms/Q-R3b/frozen-probe-bank.pt").read_bytes() == b"fixed-bank"
+
+
 def test_missing_revision_and_wrong_identity_do_not_load_pickle(tmp_path):
     blobs, engine, calls = training_fixture(tmp_path)
     missing = next(n for n in blobs if "revision-8.pt" in n)

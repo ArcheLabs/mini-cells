@@ -1,0 +1,32 @@
+name: R3b CF-001 CPU
+on:
+  pull_request:
+    paths:
+      - 'research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/counterfactual-stop-route/**'
+      - 'tests/research/clm001_r3b_cf001/**'
+      - '.github/workflows/r3b-cf001-cpu.yml'
+  push:
+    branches: ['codex/r3b-cf001-counterfactual']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cpu:
+    runs-on: ubuntu-latest
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pytest numpy pyyaml matplotlib tokenizers huggingface_hub requests
+      - run: pip install --quiet torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pytest tests/research/clm001_r3b_cf001 tests/research/clm001_r3b/test_kaggle_output_recovery.py -q
+      - name: Frozen historical implementations unchanged
+        run: |
+          git fetch --depth=1 origin d796eb815fb77549a594713a0d3bc5001bebbe4f
+          git diff --exit-code d796eb815fb77549a594713a0d3bc5001bebbe4f -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3 research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/implementation/clm001_r3b research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/artifacts research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/reports
