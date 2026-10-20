@@ -1,0 +1,182 @@
+{
+  "actual_kaggle_persistence_verified": false,
+  "arms": [
+    {
+      "arm": "A",
+      "ce": 2.6515069007873535,
+      "cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "gate_balance_grad_norm": 0.0,
+      "gate_task_grad_norm": 0.0,
+      "parameters": {
+        "any_loss_trainable_parameters": 1328,
+        "cells": 4,
+        "core_parameters": 1328,
+        "gate_parameters": 156,
+        "nominal_parameters": 1484,
+        "note": "participating parameters describe reachable loss paths, not weights merely declared requires_grad",
+        "requires_grad_parameters": 1484,
+        "shared_across_stages": true,
+        "task_trainable_parameters": 1328
+      }
+    },
+    {
+      "arm": "B",
+      "ce": 2.6458287239074707,
+      "cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "gate_balance_grad_norm": 0.0,
+      "gate_task_grad_norm": 0.0,
+      "parameters": {
+        "any_loss_trainable_parameters": 1328,
+        "cells": 4,
+        "core_parameters": 1328,
+        "gate_parameters": 156,
+        "nominal_parameters": 1484,
+        "note": "participating parameters describe reachable loss paths, not weights merely declared requires_grad",
+        "requires_grad_parameters": 1484,
+        "shared_across_stages": true,
+        "task_trainable_parameters": 1328
+      }
+    },
+    {
+      "arm": "C",
+      "ce": 2.645904064178467,
+      "cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "gate_balance_grad_norm": 0.5003278255462646,
+      "gate_task_grad_norm": 0.0007640886469744146,
+      "parameters": {
+        "any_loss_trainable_parameters": 1484,
+        "cells": 4,
+        "core_parameters": 1328,
+        "gate_parameters": 156,
+        "nominal_parameters": 1484,
+        "note": "participating parameters describe reachable loss paths, not weights merely declared requires_grad",
+        "requires_grad_parameters": 1484,
+        "shared_across_stages": true,
+        "task_trainable_parameters": 1484
+      }
+    },
+    {
+      "arm": "D",
+      "ce": 2.645904779434204,
+      "cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "gate_balance_grad_norm": 0.500332772731781,
+      "gate_task_grad_norm": 0.0,
+      "parameters": {
+        "any_loss_trainable_parameters": 1484,
+        "cells": 4,
+        "core_parameters": 1328,
+        "gate_parameters": 156,
+        "nominal_parameters": 1484,
+        "note": "participating parameters describe reachable loss paths, not weights merely declared requires_grad",
+        "requires_grad_parameters": 1484,
+        "shared_across_stages": true,
+        "task_trainable_parameters": 1328
+      }
+    },
+    {
+      "arm": "E",
+      "ce": 2.648024082183838,
+      "cost": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 20480,
+        "gate_rows": 16,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 5120.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "gate_balance_grad_norm": 0.0,
+      "gate_task_grad_norm": 0.0025334793608635664,
+      "parameters": {
+        "any_loss_trainable_parameters": 1484,
+        "cells": 4,
+        "core_parameters": 1328,
+        "gate_parameters": 156,
+        "nominal_parameters": 1484,
+        "note": "participating parameters describe reachable loss paths, not weights merely declared requires_grad",
+        "requires_grad_parameters": 1484,
+        "shared_across_stages": true,
+        "task_trainable_parameters": 1484
+      }
+    }
+  ],
+  "config_sha256": "7b8fa3d4cee9eafc9dbae39e7198f1399df1e1f15970e4129e6fb3e491233782",
+  "confirmation": "SEALED",
+  "experiment_id": "CLM-001-R3c-MOE-Bridge-001",
+  "full_engineering_pass": false,
+  "gpu_pilot_completed": false,
+  "resume": [
+    {
+      "arm": "A",
+      "cross_session_verified": false,
+      "exact_full_state": true,
+      "next_ce_exact": true,
+      "scope": "LOCAL_CPU_RESTORE_NOT_KAGGLE_PERSISTENCE"
+    },
+    {
+      "arm": "B",
+      "cross_session_verified": false,
+      "exact_full_state": true,
+      "next_ce_exact": true,
+      "scope": "LOCAL_CPU_RESTORE_NOT_KAGGLE_PERSISTENCE"
+    },
+    {
+      "arm": "C",
+      "cross_session_verified": false,
+      "exact_full_state": true,
+      "next_ce_exact": true,
+      "scope": "LOCAL_CPU_RESTORE_NOT_KAGGLE_PERSISTENCE"
+    },
+    {
+      "arm": "D",
+      "cross_session_verified": false,
+      "exact_full_state": true,
+      "next_ce_exact": true,
+      "scope": "LOCAL_CPU_RESTORE_NOT_KAGGLE_PERSISTENCE"
+    },
+    {
+      "arm": "E",
+      "cross_session_verified": false,
+      "exact_full_state": true,
+      "next_ce_exact": true,
+      "scope": "LOCAL_CPU_RESTORE_NOT_KAGGLE_PERSISTENCE"
+    }
+  ],
+  "schema": "minicells.r3c.public-engineering.v1",
+  "scientific_decision": false,
+  "scope": "SYNTHETIC_CPU_ONLY",
+  "source_sha": "0b04e89ef6f14f7c9ad3aa6da5692df8daef9b9b",
+  "status": "CPU_ENGINEERING_COMPLETE_GPU_PENDING"
+}
