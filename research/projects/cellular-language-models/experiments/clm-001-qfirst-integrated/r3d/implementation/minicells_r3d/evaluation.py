@@ -35,6 +35,9 @@ def final_evaluation(model, c, data, device):
         raise RuntimeError("inference budget changed")
     tokens = sum(v["tokens"] for role in quality.values() for v in role.values())
     cost.update(
+        device=str(device),
+        device_name=torch.cuda.get_device_name(device) if str(device).startswith("cuda") else "CPU",
+        torch_version=str(torch.__version__),
         evaluation_seconds=elapsed,
         evaluation_tokens=tokens,
         evaluation_tokens_per_second=tokens / elapsed,
@@ -42,6 +45,7 @@ def final_evaluation(model, c, data, device):
         if str(device).startswith("cuda")
         else None,
         timing_scope="all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+        memory_scope="Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
         correction_parameters=sum(p.numel() for p in model.connection.parameters()),
         active_correction_parameters=0
         if getattr(model, "force_original", False)
@@ -83,6 +87,7 @@ def exposure(curve, c):
         "cell_updates": sum(r["cell_optimizer_updated"] for r in curve),
         "observed_steps": len(curve),
         "stage_cell_counts": a.sum(0).tolist(),
+        "stage_pair_counts": np.asarray([r["stage_pair_counts"] for r in curve]).sum(0).tolist(),
         "cell_counts": a.sum((0, 1)).tolist(),
         "zero_gradient_step_fraction": float((g == 0).any(1).mean()),
         "mean_cell_gradient_norms": g.mean(0).tolist(),

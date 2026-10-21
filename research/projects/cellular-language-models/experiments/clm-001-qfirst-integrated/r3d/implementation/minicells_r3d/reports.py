@@ -5,6 +5,35 @@ from minicells_r3c_moe_bridge.statistics import story_interval
 from .evaluation import mean_nll
 
 
+def paired_story_interval(x, y, seed, replicates):
+    if set(x) != set(y):
+        raise ValueError("Story pairing differs")
+    keys = sorted(x)
+    if any(x[k]["tokens"] != y[k]["tokens"] for k in keys):
+        raise ValueError("paired Story token counts differ")
+    delta = np.asarray([x[k]["mean_nll"] - y[k]["mean_nll"] for k in keys], float)
+    weight = np.asarray([x[k]["tokens"] for k in keys], float)
+    if not len(keys) or not np.isfinite(delta).all() or (weight <= 0).any():
+        raise ValueError("finite paired Story values required")
+    if np.all(weight == weight[0]):
+        row = story_interval(delta, seed, replicates)
+    else:
+        mean = float(np.average(delta, weights=weight))
+        rng = np.random.default_rng(seed)
+        indices = rng.integers(len(keys), size=(replicates, len(keys)))
+        sampled = (delta[indices] * weight[indices]).sum(1) / weight[indices].sum(1)
+        row = {
+            "mean": mean,
+            "ci95": np.quantile(sampled, [0.025, 0.975]).tolist(),
+            "stories": len(keys),
+            "exploratory_bootstrap_p": float(
+                (1 + np.sum(np.abs(sampled - mean) >= abs(mean))) / (replicates + 1)
+            ),
+        }
+    row["estimand"] = "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING"
+    return row
+
+
 def conclusions(c, results):
     comparisons = c["statistics"]["comparisons"]
     per_seed = []
@@ -28,11 +57,7 @@ def conclusions(c, results):
             a, b = comp.split("-")
             x = per[a]["quality"]["development"]
             y = per[b]["quality"]["development"]
-            if set(x) != set(y):
-                raise ValueError("Story pairing differs")
-            keys = sorted(x)
-            delta = [x[k]["mean_nll"] - y[k]["mean_nll"] for k in keys]
-            row = story_interval(delta, seed, c["statistics"]["bootstrap_replicates"])
+            row = paired_story_interval(x, y, seed, c["statistics"]["bootstrap_replicates"])
             row["token_weighted_nll_delta"] = quality[key][a] - quality[key][b]
             paired[comp] = row
         order = sorted(paired, key=lambda k: paired[k].get("exploratory_bootstrap_p", 1))
@@ -94,6 +119,17 @@ def conclusions(c, results):
         "status": "EXPLORATORY_DEVELOPMENT_COMPLETE" if complete else "PARTIAL",
         "hypotheses": states,
         "nll": quality,
+        "mean_nll_across_seeds": None
+        if not complete
+        else {a: float(np.mean([quality[str(seed)][a] for seed in c["seeds"]])) for a in c["arms"]},
+        "seed_nll_sd": None
+        if not complete
+        else {
+            a: float(np.std([quality[str(seed)][a] for seed in c["seeds"]], ddof=1))
+            if len(c["seeds"]) > 1
+            else None
+            for a in c["arms"]
+        },
         "paired_seed_differences": deltas,
         "story_bootstrap_within_seed": per_seed,
         "independent_training_seeds": len(per_seed),
@@ -140,6 +176,7 @@ def markdown(report):
             )
             + " |"
         )
+    lines += ["", "Mean NLL across training Seeds: " + str(report["mean_nll_across_seeds"]), ""]
     lines += [
         "",
         "Paired comparisons and clustered intervals: METRICS.json.",

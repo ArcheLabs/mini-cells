@@ -147,6 +147,10 @@ def job(c, data, output, source, seed, arm, parent, device, learned=None):
                 flush=True,
             )
     latest = save(tr, store, curve, lineage)
+    # Full state is committed; release training-only residency before inference memory measurement.
+    for parameter in model.parameters():
+        parameter.grad = None
+    del tr
     quality, cost = final_evaluation(model, c, data, device)
     result = {
         "status": "COMPLETED",
@@ -236,6 +240,9 @@ def gather(c, output, source):
         ),
         confirmation="SEALED",
         actual_kaggle_persistence_verified=False,
+    )
+    report["actual_optimizer_updates"] = (
+        report["actual_cell_updates"] + report["actual_policy_updates"]
     )
     folder = Path(output) / "reports"
     atomic(folder / "METRICS.json", report)
@@ -424,6 +431,12 @@ def automatic(c, config_path, output, assets):
         "started_at_unix": started,
         "wall_seconds": time.time() - started,
         "worker_exit_codes": codes,
+        "runtime": {
+            "python": sys.version,
+            "torch": str(torch.__version__),
+            "cuda": torch.version.cuda,
+            "gpus": [torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())],
+        },
         "training_config": c["training"],
         "arm_status": report["arm_status"],
         "confirmation": "SEALED",

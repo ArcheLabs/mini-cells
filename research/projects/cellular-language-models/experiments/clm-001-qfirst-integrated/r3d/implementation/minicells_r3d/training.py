@@ -80,6 +80,7 @@ class Trainer:
         losses = []
         counts = []
         changes = []
+        pair_counts = []
         if self.cell_opt:
             self.cell_opt.zero_grad(set_to_none=True)
         epsilon = self.epsilon()
@@ -98,6 +99,7 @@ class Trainer:
                     (loss / len(batches)).backward()
             losses.append(loss.detach())
             counts.append(out.operator_rows.detach())
+            micro_pairs = []
             for st in out.stages:
                 base = m.connection.base_action(st.logits.detach())
                 actual = (
@@ -107,6 +109,8 @@ class Trainer:
                     .argmax(-1)
                 )
                 changes.append((base != actual).float().mean())
+                micro_pairs.append(torch.bincount(actual, minlength=len(m.connection.pairs)))
+            pair_counts.append(torch.stack(micro_pairs))
             if policy_due:
                 visited.append((out, y))
         grads = []
@@ -177,6 +181,7 @@ class Trainer:
             "policy_updates": self.policy_updates,
             "cell_grad_norms": [float(v) for v in grads],
             "stage_cell_counts": torch.stack(counts).sum(0).cpu().tolist(),
+            "stage_pair_counts": torch.stack(pair_counts).sum(0).cpu().tolist(),
             "action_change_fraction": float(torch.stack(changes).mean()),
             "epsilon": epsilon,
             "connection_parameter_update_norm": update_norm,

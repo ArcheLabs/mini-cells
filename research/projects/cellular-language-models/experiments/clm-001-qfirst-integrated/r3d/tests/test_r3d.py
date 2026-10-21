@@ -373,3 +373,16 @@ def test_released_notebook_pins_existing_unified_entry_without_extra_test_phase(
     assert "ROOT/'scripts/run_r3d.py'" in code and "'--run-all'" in code
     assert "/scripts/run_r3d.py" in code and "pytest" not in code and "KAGGLE_API_TOKEN" not in code
     assert "'--mode','development'" not in code and "'--mode','pilot'" not in code
+
+
+def test_story_bootstrap_matches_token_weighted_nll_estimand():
+    from minicells_r3d.reports import paired_story_interval
+
+    x = {"short": {"mean_nll": 1.0, "tokens": 1}, "long": {"mean_nll": 4.0, "tokens": 9}}
+    y = {"short": {"mean_nll": 2.0, "tokens": 1}, "long": {"mean_nll": 2.0, "tokens": 9}}
+    report = paired_story_interval(x, y, 2, 100)
+    assert report["mean"] == pytest.approx(1.7)
+    assert report["ci95"] is not None
+    y["long"]["tokens"] = 8
+    with pytest.raises(ValueError, match="token counts"):
+        paired_story_interval(x, y, 2, 100)
