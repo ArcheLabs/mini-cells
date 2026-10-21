@@ -1,0 +1,3106 @@
+{
+  "actual_cell_updates": 4500,
+  "actual_job_steps": 5700,
+  "actual_kaggle_persistence_verified": false,
+  "actual_main_training_tokens": 2918400,
+  "actual_optimizer_updates": 6075,
+  "actual_policy_updates": 1575,
+  "arm_status": {
+    "151001301/F": "COMPLETED",
+    "151001301/F0": "COMPLETED",
+    "151001301/J": "COMPLETED",
+    "151001301/L": "COMPLETED",
+    "151001301/M": "COMPLETED",
+    "151001301/P": "COMPLETED",
+    "151001302/F": "COMPLETED",
+    "151001302/F0": "COMPLETED",
+    "151001302/J": "COMPLETED",
+    "151001302/L": "COMPLETED",
+    "151001302/M": "COMPLETED",
+    "151001302/P": "COMPLETED",
+    "151001303/F": "COMPLETED",
+    "151001303/F0": "COMPLETED",
+    "151001303/J": "COMPLETED",
+    "151001303/L": "COMPLETED",
+    "151001303/M": "COMPLETED",
+    "151001303/P": "COMPLETED"
+  },
+  "candidate_learning": {
+    "151001301": {
+      "F": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      },
+      "F0": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      },
+      "J": {
+        "mean_candidate_gap": 0.0814293204843998,
+        "mean_ranking_accuracy": 0.5483068261146545,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 2042
+      },
+      "L": {
+        "mean_candidate_gap": 0.1216996317449957,
+        "mean_ranking_accuracy": 0.4953298629820347,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 3525
+      },
+      "M": {
+        "mean_candidate_gap": 0.20924497731029987,
+        "mean_ranking_accuracy": 0.561956524476409,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 3414
+      },
+      "P": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      }
+    },
+    "151001302": {
+      "F": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      },
+      "F0": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      },
+      "J": {
+        "mean_candidate_gap": 0.07941437700390816,
+        "mean_ranking_accuracy": 0.525588432431221,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 2216
+      },
+      "L": {
+        "mean_candidate_gap": 0.1230204652249813,
+        "mean_ranking_accuracy": 0.48994185894727704,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 3497
+      },
+      "M": {
+        "mean_candidate_gap": 0.18899335626512767,
+        "mean_ranking_accuracy": 0.5688736449927092,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 3398
+      },
+      "P": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      }
+    },
+    "151001303": {
+      "F": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      },
+      "F0": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      },
+      "J": {
+        "mean_candidate_gap": 0.08038022580742836,
+        "mean_ranking_accuracy": 0.5033173800706864,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 2287
+      },
+      "L": {
+        "mean_candidate_gap": 0.12766358615830542,
+        "mean_ranking_accuracy": 0.47142957113683226,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 3729
+      },
+      "M": {
+        "mean_candidate_gap": 0.19134792314842344,
+        "mean_ranking_accuracy": 0.5522363533824682,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 3744
+      },
+      "P": {
+        "mean_candidate_gap": null,
+        "mean_ranking_accuracy": null,
+        "scope": "Train pre-update sampled candidates; not independent ranking generalization",
+        "scored_pairs": 0
+      }
+    }
+  },
+  "checkpoint_storage": "HF_COMMIT_AND_MANIFEST_VERIFIED_ONLY",
+  "config_sha256": "e845d82d297edc044a8a022d98678f308602d26c41061553d9a2c84d12bfe7e6",
+  "confirmation": "SEALED",
+  "continued_connection_gain": "see J-P separately; H3 alone does not establish continuing-policy value",
+  "cost": {
+    "151001301": {
+      "F": {
+        "inference": {
+          "active_correction_parameters": 0,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1005830,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.214324615999999,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4624.434884573403,
+          "forward_matmul_flops": 149618688,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2337792.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 598474752000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 106.40546459599966,
+          "training_forward_plus_backward_proxy_upper_bound": 1795424256000.0
+        }
+      },
+      "F0": {
+        "inference": {
+          "active_correction_parameters": 0,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1005830,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.264777369000001,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4521.41572066371,
+          "forward_matmul_flops": 149618688,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 21684224,
+          "per_token_forward_matmul_flops": 2337792.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 0.0,
+          "main_training_tokens": 0,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 0,
+          "training_forward_plus_backward_proxy_upper_bound": 0.0
+        }
+      },
+      "J": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 3.2661379170000373,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 3135.201347959454,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 12620,
+          "counterfactual_forward_matmul_estimate_upper_bound": 4401565328,
+          "counterfactual_gate_rows": 7310,
+          "counterfactual_head_rows": 2508,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 602529792000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 125,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 132.19048700900032,
+          "training_forward_plus_backward_proxy_upper_bound": 1820794071984.0
+        }
+      },
+      "L": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.6777573040000107,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 3824.0956283467426,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 20806,
+          "counterfactual_forward_matmul_estimate_upper_bound": 7269345384,
+          "counterfactual_gate_rows": 12003,
+          "counterfactual_head_rows": 4148,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 241011916800.0,
+          "main_training_tokens": 102400,
+          "policy_optimizer_updates": 200,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 52.63894034000026,
+          "training_forward_plus_backward_proxy_upper_bound": 744843786552.0
+        }
+      },
+      "M": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.655552694999983,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 3856.0710993536,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 8178,
+          "counterfactual_forward_matmul_estimate_upper_bound": 5457794232,
+          "counterfactual_gate_rows": 5689,
+          "counterfactual_head_rows": 4089,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 241011916800.0,
+          "main_training_tokens": 102400,
+          "policy_optimizer_updates": 200,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 39.60314022000023,
+          "training_forward_plus_backward_proxy_upper_bound": 739409133096.0
+        }
+      },
+      "P": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.8391819839999926,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 3606.672646454785,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 602529792000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 115.46308678499997,
+          "training_forward_plus_backward_proxy_upper_bound": 1807589376000.0
+        }
+      }
+    },
+    "151001302": {
+      "F": {
+        "inference": {
+          "active_correction_parameters": 0,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1005830,
+          "device": "cuda:1",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.233405382000001,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4584.926714392594,
+          "forward_matmul_flops": 149618688,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2337792.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 598474752000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 105.85663065900133,
+          "training_forward_plus_backward_proxy_upper_bound": 1795424256000.0
+        }
+      },
+      "F0": {
+        "inference": {
+          "active_correction_parameters": 0,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1005830,
+          "device": "cuda:1",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.28235500400001,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4486.593883096004,
+          "forward_matmul_flops": 149618688,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 21684224,
+          "per_token_forward_matmul_flops": 2337792.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 0.0,
+          "main_training_tokens": 0,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 0,
+          "training_forward_plus_backward_proxy_upper_bound": 0.0
+        }
+      },
+      "J": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:1",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.6805933919999916,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 3820.0497063674147,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 12950,
+          "counterfactual_forward_matmul_estimate_upper_bound": 4542709224,
+          "counterfactual_gate_rows": 7475,
+          "counterfactual_head_rows": 2599,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 602529792000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 125,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 130.97318013999734,
+          "training_forward_plus_backward_proxy_upper_bound": 1821217503672.0
+        }
+      },
+      "L": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:1",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.5953033920000053,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 3945.588801511488,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 20754,
+          "counterfactual_forward_matmul_estimate_upper_bound": 7246411832,
+          "counterfactual_gate_rows": 11977,
+          "counterfactual_head_rows": 4133,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 241011916800.0,
+          "main_training_tokens": 102400,
+          "policy_optimizer_updates": 200,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 51.76573610799994,
+          "training_forward_plus_backward_proxy_upper_bound": 744774985896.0
+        }
+      },
+      "M": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:1",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.52722513599997,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4051.874862327312,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 8166,
+          "counterfactual_forward_matmul_estimate_upper_bound": 5449840104,
+          "counterfactual_gate_rows": 5683,
+          "counterfactual_head_rows": 4083,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 241011916800.0,
+          "main_training_tokens": 102400,
+          "policy_optimizer_updates": 200,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 38.815741071000446,
+          "training_forward_plus_backward_proxy_upper_bound": 739385270712.0
+        }
+      },
+      "P": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:1",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 3.0166904980000027,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 3394.4483223548746,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 602529792000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 113.88292306300036,
+          "training_forward_plus_backward_proxy_upper_bound": 1807589376000.0
+        }
+      }
+    },
+    "151001303": {
+      "F": {
+        "inference": {
+          "active_correction_parameters": 0,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1005830,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.1869287209999584,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4682.365685571055,
+          "forward_matmul_flops": 149618688,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2337792.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 598474752000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 103.70695847399963,
+          "training_forward_plus_backward_proxy_upper_bound": 1795424256000.0
+        }
+      },
+      "F0": {
+        "inference": {
+          "active_correction_parameters": 0,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1005830,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.243059070000072,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4565.1940855929715,
+          "forward_matmul_flops": 149618688,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30203904,
+          "per_token_forward_matmul_flops": 2337792.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 0.0,
+          "main_training_tokens": 0,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 0,
+          "training_forward_plus_backward_proxy_upper_bound": 0.0
+        }
+      },
+      "J": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.555918747000078,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4006.387140443666,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 13212,
+          "counterfactual_forward_matmul_estimate_upper_bound": 4615711056,
+          "counterfactual_gate_rows": 7606,
+          "counterfactual_head_rows": 2634,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 602529792000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 125,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 126.50269324600117,
+          "training_forward_plus_backward_proxy_upper_bound": 1821436509168.0
+        }
+      },
+      "L": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.5134956749999446,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4074.0074080295467,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 21422,
+          "counterfactual_forward_matmul_estimate_upper_bound": 7463747784,
+          "counterfactual_gate_rows": 12311,
+          "counterfactual_head_rows": 4252,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 241011916800.0,
+          "main_training_tokens": 102400,
+          "policy_optimizer_updates": 200,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 50.85848678300033,
+          "training_forward_plus_backward_proxy_upper_bound": 745426993752.0
+        }
+      },
+      "M": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.534423384999968,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4040.3667597946064,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 0,
+          "counterfactual_cell_rows": 8522,
+          "counterfactual_forward_matmul_estimate_upper_bound": 5685812568,
+          "counterfactual_gate_rows": 5861,
+          "counterfactual_head_rows": 4261,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 241011916800.0,
+          "main_training_tokens": 102400,
+          "policy_optimizer_updates": 200,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 38.67246034199866,
+          "training_forward_plus_backward_proxy_upper_bound": 740093188104.0
+        }
+      },
+      "P": {
+        "inference": {
+          "active_correction_parameters": 1995,
+          "cell_rows": 512,
+          "context_rows": 64,
+          "correction_parameters": 1995,
+          "deployable_parameters": 1007825,
+          "device": "cuda:0",
+          "device_name": "Tesla T4",
+          "evaluation_seconds": 2.511942040000122,
+          "evaluation_tokens": 10240,
+          "evaluation_tokens_per_second": 4076.527179743169,
+          "forward_matmul_flops": 150632448,
+          "gate_rows": 256,
+          "hardware_kernel_flops": "NOT_MEASURED",
+          "memory_scope": "Torch allocated peak for model plus terminal evaluation; training optimizer and gradients released; not reserved memory or entire-device VRAM",
+          "peak_gpu_allocated_bytes": 30212096,
+          "per_token_forward_matmul_flops": 2353632.0,
+          "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+          "timing_scope": "all terminal Calibration/Development forward+CE+Story aggregation; not decode latency",
+          "torch_version": "2.11.0+cu128",
+          "total_parameters": 1007825
+        },
+        "training": {
+          "cell_optimizer_updates": 500,
+          "counterfactual_cell_rows": 0,
+          "counterfactual_forward_matmul_estimate_upper_bound": 0,
+          "counterfactual_gate_rows": 0,
+          "counterfactual_head_rows": 0,
+          "counterfactual_scope": "upper bound: charges correction per scored-stage gate even when forced action skips it",
+          "main_forward_matmul_estimate": 602529792000.0,
+          "main_training_tokens": 256000,
+          "policy_optimizer_updates": 0,
+          "scope": "analytic matmul proxy; includes repeated executed Cell work; excludes nonmatmul and optimizer; not hardware FLOPs",
+          "summed_update_seconds": 111.82003605799787,
+          "training_forward_plus_backward_proxy_upper_bound": 1807589376000.0
+        }
+      }
+    }
+  },
+  "experiment_id": "CLM-001-R3d-LHCJL-001",
+  "exposure": {
+    "151001301": {
+      "F": {
+        "cell_counts": [
+          382107,
+          425156,
+          324938,
+          366718,
+          352086,
+          196995
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.0791865234375,
+        "mean_cell_gradient_norms": [
+          0.20513377806544303,
+          0.2520366851687431,
+          0.21705369088053703,
+          0.2021961074769497,
+          0.20818845146894455,
+          0.12993910893797875
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            11614,
+            167075,
+            147561,
+            28312,
+            64697,
+            92741
+          ],
+          [
+            83753,
+            122926,
+            49982,
+            110423,
+            121246,
+            23670
+          ],
+          [
+            149150,
+            43975,
+            64418,
+            98511,
+            102832,
+            53114
+          ],
+          [
+            137590,
+            91180,
+            62977,
+            129472,
+            63311,
+            27470
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            2307,
+            3966,
+            1520,
+            1515,
+            2306,
+            83959,
+            13411,
+            16041,
+            51357,
+            7174,
+            29407,
+            23055,
+            3959,
+            2248,
+            13775
+          ],
+          [
+            30476,
+            6290,
+            29066,
+            15479,
+            2442,
+            18916,
+            24934,
+            44247,
+            4353,
+            9522,
+            12311,
+            2943,
+            41089,
+            5812,
+            8120
+          ],
+          [
+            16097,
+            28648,
+            64164,
+            25656,
+            14585,
+            3581,
+            2623,
+            19411,
+            2263,
+            5082,
+            18958,
+            8149,
+            18666,
+            7976,
+            20141
+          ],
+          [
+            30862,
+            17422,
+            76167,
+            7136,
+            6003,
+            19680,
+            14027,
+            23904,
+            2707,
+            10618,
+            10071,
+            5186,
+            18643,
+            10017,
+            3557
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      },
+      "F0": {
+        "cell_updates": 0,
+        "persistent_zero_exposure": null,
+        "zero_gradient_step_fraction": null
+      },
+      "J": {
+        "cell_counts": [
+          419657,
+          350838,
+          306737,
+          378157,
+          373803,
+          218808
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.647236328125,
+        "mean_cell_gradient_norms": [
+          0.23354596731066704,
+          0.22730193570256232,
+          0.21507463398575782,
+          0.23598976758122445,
+          0.23748984169960022,
+          0.14715165264904498
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            58141,
+            130954,
+            107711,
+            52515,
+            85870,
+            76809
+          ],
+          [
+            95476,
+            95157,
+            69951,
+            90219,
+            105032,
+            56165
+          ],
+          [
+            129446,
+            65833,
+            63067,
+            111365,
+            94061,
+            48228
+          ],
+          [
+            136594,
+            58894,
+            66008,
+            124058,
+            88840,
+            37606
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            3236,
+            10302,
+            5879,
+            33979,
+            4745,
+            56814,
+            10696,
+            17141,
+            43067,
+            15928,
+            7918,
+            16749,
+            17298,
+            2714,
+            9534
+          ],
+          [
+            14536,
+            16409,
+            37955,
+            23278,
+            3298,
+            21476,
+            7180,
+            28168,
+            23797,
+            9067,
+            11715,
+            11284,
+            30051,
+            5966,
+            11820
+          ],
+          [
+            17875,
+            22833,
+            67115,
+            18140,
+            3483,
+            10055,
+            5584,
+            20982,
+            11337,
+            5727,
+            14188,
+            10264,
+            25273,
+            7666,
+            15478
+          ],
+          [
+            16695,
+            24106,
+            80469,
+            12355,
+            2969,
+            8430,
+            4137,
+            21587,
+            8045,
+            5480,
+            19919,
+            8073,
+            25216,
+            8756,
+            9763
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      },
+      "L": {
+        "cell_counts": [
+          159249,
+          187574,
+          102401,
+          148848,
+          149703,
+          71425
+        ],
+        "cell_updates": 0,
+        "mean_action_change_fraction": 0.68124267578125,
+        "mean_cell_gradient_norms": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "observed_steps": 200,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 151,
+        "stage_cell_counts": [
+          [
+            21606,
+            60916,
+            37941,
+            25374,
+            35307,
+            23656
+          ],
+          [
+            36855,
+            49042,
+            23618,
+            37580,
+            41071,
+            16634
+          ],
+          [
+            49460,
+            39219,
+            19367,
+            41049,
+            38038,
+            17667
+          ],
+          [
+            51328,
+            38397,
+            21475,
+            44845,
+            35287,
+            13468
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            3865,
+            1971,
+            4463,
+            7868,
+            3439,
+            24859,
+            7840,
+            11905,
+            12447,
+            3457,
+            5307,
+            2347,
+            7209,
+            2405,
+            3018
+          ],
+          [
+            10793,
+            3118,
+            11288,
+            7470,
+            4186,
+            11740,
+            7029,
+            14376,
+            5104,
+            4701,
+            3672,
+            387,
+            11579,
+            2983,
+            3974
+          ],
+          [
+            13367,
+            5857,
+            18020,
+            6312,
+            5904,
+            4853,
+            6208,
+            12989,
+            1802,
+            4481,
+            4074,
+            102,
+            8572,
+            3768,
+            6091
+          ],
+          [
+            13042,
+            7770,
+            20503,
+            4770,
+            5243,
+            4682,
+            6336,
+            13009,
+            1328,
+            4554,
+            4403,
+            66,
+            9863,
+            3589,
+            3242
+          ]
+        ],
+        "zero_gradient_step_fraction": 1.0
+      },
+      "M": {
+        "cell_counts": [
+          229994,
+          190939,
+          74616,
+          176005,
+          109356,
+          38290
+        ],
+        "cell_updates": 0,
+        "mean_action_change_fraction": 0.65466064453125,
+        "mean_cell_gradient_norms": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "observed_steps": 200,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 151,
+        "stage_cell_counts": [
+          [
+            52383,
+            57371,
+            19409,
+            36891,
+            30452,
+            8294
+          ],
+          [
+            56434,
+            49177,
+            17996,
+            44653,
+            27716,
+            8824
+          ],
+          [
+            59907,
+            42540,
+            18242,
+            46271,
+            26842,
+            10998
+          ],
+          [
+            61270,
+            41851,
+            18969,
+            48190,
+            24346,
+            10174
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            20097,
+            1178,
+            30043,
+            263,
+            802,
+            13982,
+            1299,
+            20370,
+            1623,
+            1004,
+            2442,
+            803,
+            3428,
+            1117,
+            3949
+          ],
+          [
+            17787,
+            3765,
+            32223,
+            780,
+            1879,
+            11815,
+            2573,
+            15365,
+            1637,
+            1078,
+            1133,
+            205,
+            7057,
+            1722,
+            3381
+          ],
+          [
+            16337,
+            5810,
+            30684,
+            2467,
+            4609,
+            9985,
+            3480,
+            11777,
+            961,
+            1259,
+            1066,
+            122,
+            8537,
+            2311,
+            2995
+          ],
+          [
+            15517,
+            6133,
+            30650,
+            3255,
+            5715,
+            10492,
+            4852,
+            9859,
+            1131,
+            1188,
+            1064,
+            92,
+            9216,
+            2284,
+            952
+          ]
+        ],
+        "zero_gradient_step_fraction": 1.0
+      },
+      "P": {
+        "cell_counts": [
+          500378,
+          444259,
+          273388,
+          366820,
+          332686,
+          130469
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.6918095703125,
+        "mean_cell_gradient_norms": [
+          0.2589797013700008,
+          0.26701315411925314,
+          0.19670357701182364,
+          0.22392917543649674,
+          0.22976608750224115,
+          0.10944499215483665
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            57524,
+            149555,
+            108300,
+            53715,
+            85548,
+            57358
+          ],
+          [
+            120195,
+            111911,
+            65532,
+            91532,
+            96262,
+            26568
+          ],
+          [
+            158611,
+            92430,
+            48991,
+            106670,
+            79545,
+            25753
+          ],
+          [
+            164048,
+            90363,
+            50565,
+            114903,
+            71331,
+            20790
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            3987,
+            6167,
+            3050,
+            42789,
+            1531,
+            76470,
+            18562,
+            11688,
+            38848,
+            9407,
+            7826,
+            8430,
+            18696,
+            4000,
+            4549
+          ],
+          [
+            53645,
+            6570,
+            20180,
+            37018,
+            2782,
+            28115,
+            7895,
+            13321,
+            8935,
+            22193,
+            5966,
+            2688,
+            34529,
+            6735,
+            5428
+          ],
+          [
+            69848,
+            10878,
+            40205,
+            33067,
+            4613,
+            11727,
+            5288,
+            3804,
+            1763,
+            20437,
+            4454,
+            1495,
+            30539,
+            10201,
+            7681
+          ],
+          [
+            70317,
+            15529,
+            49010,
+            24674,
+            4518,
+            8967,
+            4939,
+            4646,
+            1494,
+            19969,
+            4635,
+            1465,
+            32524,
+            8461,
+            4852
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      }
+    },
+    "151001302": {
+      "F": {
+        "cell_counts": [
+          395624,
+          303300,
+          359350,
+          590572,
+          209815,
+          189339
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.0787998046875,
+        "mean_cell_gradient_norms": [
+          0.22644504910707475,
+          0.20846377021074294,
+          0.19356097212433815,
+          0.330073795735836,
+          0.12397410160303116,
+          0.12142192360758781
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            113740,
+            107947,
+            123629,
+            106109,
+            21690,
+            38885
+          ],
+          [
+            119252,
+            61664,
+            54987,
+            167277,
+            48490,
+            60330
+          ],
+          [
+            101998,
+            68896,
+            107038,
+            157202,
+            24339,
+            52527
+          ],
+          [
+            60634,
+            64793,
+            73696,
+            159984,
+            115296,
+            37597
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            42111,
+            36332,
+            29394,
+            3874,
+            2029,
+            26577,
+            24729,
+            10407,
+            4123,
+            37784,
+            3476,
+            19460,
+            2431,
+            11771,
+            1502
+          ],
+          [
+            18184,
+            9732,
+            74371,
+            11722,
+            5243,
+            4933,
+            25929,
+            6980,
+            5638,
+            25488,
+            2161,
+            12673,
+            16170,
+            25319,
+            11457
+          ],
+          [
+            10732,
+            18097,
+            66032,
+            4387,
+            2750,
+            21954,
+            28944,
+            2495,
+            4771,
+            37749,
+            1536,
+            27702,
+            11547,
+            12930,
+            4374
+          ],
+          [
+            5071,
+            8400,
+            38421,
+            7264,
+            1478,
+            21670,
+            16731,
+            15845,
+            5476,
+            30236,
+            7034,
+            6356,
+            67731,
+            6865,
+            17422
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      },
+      "F0": {
+        "cell_updates": 0,
+        "persistent_zero_exposure": null,
+        "zero_gradient_step_fraction": null
+      },
+      "J": {
+        "cell_counts": [
+          432893,
+          429470,
+          236599,
+          487371,
+          289255,
+          172412
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.7112158203125,
+        "mean_cell_gradient_norms": [
+          0.23674718034267425,
+          0.2691642237603664,
+          0.16157322265207769,
+          0.29276756182312963,
+          0.18719010417163373,
+          0.12580118919909
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            125887,
+            116851,
+            79701,
+            103082,
+            44475,
+            42004
+          ],
+          [
+            106289,
+            106375,
+            55026,
+            124609,
+            67944,
+            51757
+          ],
+          [
+            102972,
+            109158,
+            50976,
+            128849,
+            78312,
+            41733
+          ],
+          [
+            97745,
+            97086,
+            50896,
+            130831,
+            98524,
+            36918
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            36313,
+            50745,
+            21079,
+            9156,
+            8594,
+            5439,
+            45199,
+            23306,
+            6594,
+            15873,
+            3926,
+            3718,
+            2960,
+            17971,
+            5127
+          ],
+          [
+            25138,
+            19133,
+            34153,
+            21601,
+            6264,
+            3674,
+            44021,
+            26332,
+            7210,
+            22015,
+            3573,
+            6631,
+            4603,
+            19817,
+            11835
+          ],
+          [
+            24997,
+            10727,
+            31178,
+            32963,
+            3107,
+            7055,
+            46555,
+            26232,
+            4319,
+            24753,
+            2741,
+            5700,
+            7066,
+            19297,
+            9310
+          ],
+          [
+            26981,
+            6003,
+            23314,
+            39611,
+            1836,
+            6380,
+            34471,
+            25790,
+            3464,
+            31057,
+            2641,
+            4815,
+            22834,
+            19155,
+            7648
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      },
+      "L": {
+        "cell_counts": [
+          142694,
+          132026,
+          141795,
+          215794,
+          103770,
+          83121
+        ],
+        "cell_updates": 0,
+        "mean_action_change_fraction": 0.673701171875,
+        "mean_cell_gradient_norms": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "observed_steps": 200,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 151,
+        "stage_cell_counts": [
+          [
+            37088,
+            39906,
+            45098,
+            45420,
+            17572,
+            19716
+          ],
+          [
+            34996,
+            32304,
+            36143,
+            51779,
+            25741,
+            23837
+          ],
+          [
+            37546,
+            30354,
+            31611,
+            57068,
+            27543,
+            20678
+          ],
+          [
+            33064,
+            29462,
+            28943,
+            61527,
+            32914,
+            18890
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            9373,
+            18135,
+            6725,
+            1189,
+            1666,
+            3557,
+            17302,
+            7042,
+            2632,
+            12770,
+            4672,
+            5964,
+            1919,
+            6704,
+            2750
+          ],
+          [
+            5163,
+            10806,
+            14798,
+            1684,
+            2545,
+            3633,
+            11089,
+            7993,
+            4426,
+            11949,
+            2937,
+            6818,
+            8511,
+            5432,
+            4616
+          ],
+          [
+            4209,
+            9036,
+            20350,
+            1971,
+            1980,
+            4699,
+            8193,
+            7603,
+            5650,
+            10986,
+            1435,
+            5455,
+            13240,
+            4299,
+            3294
+          ],
+          [
+            3619,
+            7218,
+            17876,
+            2432,
+            1919,
+            3656,
+            8850,
+            8452,
+            4885,
+            11855,
+            1061,
+            5153,
+            18491,
+            4455,
+            2478
+          ]
+        ],
+        "zero_gradient_step_fraction": 1.0
+      },
+      "M": {
+        "cell_counts": [
+          107240,
+          139655,
+          155544,
+          255120,
+          98648,
+          62993
+        ],
+        "cell_updates": 0,
+        "mean_action_change_fraction": 0.6573583984375,
+        "mean_cell_gradient_norms": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "observed_steps": 200,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 151,
+        "stage_cell_counts": [
+          [
+            18353,
+            38432,
+            49276,
+            70105,
+            13710,
+            14924
+          ],
+          [
+            26125,
+            34503,
+            40484,
+            62811,
+            24543,
+            16334
+          ],
+          [
+            32257,
+            32770,
+            34743,
+            61508,
+            27223,
+            16299
+          ],
+          [
+            30505,
+            33950,
+            31041,
+            60696,
+            33172,
+            15436
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            4422,
+            7335,
+            5133,
+            946,
+            517,
+            3706,
+            25500,
+            4324,
+            480,
+            30961,
+            166,
+            7108,
+            4983,
+            3528,
+            3291
+          ],
+          [
+            3333,
+            10097,
+            11457,
+            601,
+            637,
+            3846,
+            17499,
+            8850,
+            975,
+            20483,
+            925,
+            5133,
+            8975,
+            4397,
+            5192
+          ],
+          [
+            3399,
+            11075,
+            16133,
+            695,
+            955,
+            3422,
+            14600,
+            10149,
+            1200,
+            14702,
+            871,
+            4673,
+            11055,
+            5018,
+            4453
+          ],
+          [
+            3085,
+            9887,
+            14875,
+            1340,
+            1318,
+            3474,
+            13830,
+            12642,
+            919,
+            12609,
+            989,
+            4082,
+            14233,
+            5149,
+            3968
+          ]
+        ],
+        "zero_gradient_step_fraction": 1.0
+      },
+      "P": {
+        "cell_counts": [
+          316783,
+          485706,
+          278556,
+          514257,
+          297975,
+          154723
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.6749609375,
+        "mean_cell_gradient_norms": [
+          0.19443137016892434,
+          0.28671269726753235,
+          0.17067165815830232,
+          0.3041602899730206,
+          0.19275833773612977,
+          0.10638639687001705
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            91104,
+            137073,
+            85426,
+            119876,
+            40329,
+            38192
+          ],
+          [
+            77218,
+            113277,
+            66813,
+            135361,
+            71559,
+            47772
+          ],
+          [
+            82353,
+            116528,
+            60723,
+            131627,
+            85103,
+            35666
+          ],
+          [
+            66108,
+            118828,
+            65594,
+            127393,
+            100984,
+            33093
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            38713,
+            18877,
+            28066,
+            3114,
+            2334,
+            17438,
+            50245,
+            25615,
+            5062,
+            30798,
+            1850,
+            16463,
+            3092,
+            7675,
+            6658
+          ],
+          [
+            12059,
+            6827,
+            52551,
+            2755,
+            3026,
+            11799,
+            37172,
+            48193,
+            4054,
+            31699,
+            1513,
+            14975,
+            3660,
+            10279,
+            15438
+          ],
+          [
+            10193,
+            4278,
+            61377,
+            4634,
+            1871,
+            16109,
+            26480,
+            60867,
+            2879,
+            29845,
+            1461,
+            9030,
+            5090,
+            8835,
+            13051
+          ],
+          [
+            9088,
+            3847,
+            45280,
+            6169,
+            1724,
+            11250,
+            24865,
+            71259,
+            2366,
+            39454,
+            1498,
+            9545,
+            10197,
+            7597,
+            11861
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      }
+    },
+    "151001303": {
+      "F": {
+        "cell_counts": [
+          296206,
+          328433,
+          507571,
+          354007,
+          384901,
+          176882
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.079796875,
+        "mean_cell_gradient_norms": [
+          0.18576217916607857,
+          0.2008897299170494,
+          0.27724630522727967,
+          0.19009698128700256,
+          0.2320474565923214,
+          0.12933545149862766
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            127035,
+            19392,
+            81161,
+            124939,
+            139324,
+            20149
+          ],
+          [
+            44095,
+            188170,
+            172783,
+            36149,
+            44307,
+            26496
+          ],
+          [
+            69185,
+            32194,
+            123392,
+            115048,
+            113840,
+            58341
+          ],
+          [
+            55891,
+            88677,
+            130235,
+            77871,
+            87430,
+            71896
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            4379,
+            20239,
+            43925,
+            52861,
+            5631,
+            3621,
+            3926,
+            4633,
+            2833,
+            24012,
+            31232,
+            2057,
+            47023,
+            6053,
+            3575
+          ],
+          [
+            11436,
+            14032,
+            5632,
+            11065,
+            1930,
+            130830,
+            17084,
+            11949,
+            16871,
+            8908,
+            15771,
+            3242,
+            2797,
+            1728,
+            2725
+          ],
+          [
+            2886,
+            15891,
+            11722,
+            19518,
+            19168,
+            13751,
+            9142,
+            2569,
+            3846,
+            46442,
+            39122,
+            8186,
+            36616,
+            11126,
+            16015
+          ],
+          [
+            7689,
+            13721,
+            4632,
+            12360,
+            17489,
+            39204,
+            14005,
+            4460,
+            23319,
+            30446,
+            33221,
+            13643,
+            24366,
+            4422,
+            13023
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      },
+      "F0": {
+        "cell_updates": 0,
+        "persistent_zero_exposure": null,
+        "zero_gradient_step_fraction": null
+      },
+      "J": {
+        "cell_counts": [
+          346741,
+          341554,
+          382232,
+          394189,
+          405245,
+          178039
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.763390625,
+        "mean_cell_gradient_norms": [
+          0.20329858475923537,
+          0.23828297808766366,
+          0.24838966196775436,
+          0.23773986750841142,
+          0.2643691418468952,
+          0.1476493390649557
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            95337,
+            67955,
+            86162,
+            103449,
+            114633,
+            44464
+          ],
+          [
+            83697,
+            100903,
+            102204,
+            89801,
+            100644,
+            34751
+          ],
+          [
+            79486,
+            92390,
+            96223,
+            100174,
+            97731,
+            45996
+          ],
+          [
+            88221,
+            80306,
+            97643,
+            100765,
+            92237,
+            52828
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            15585,
+            27006,
+            14182,
+            32945,
+            5619,
+            18246,
+            16063,
+            9136,
+            8925,
+            15536,
+            15284,
+            10090,
+            47553,
+            10115,
+            9715
+          ],
+          [
+            20628,
+            17319,
+            15139,
+            23916,
+            6695,
+            39291,
+            22066,
+            10176,
+            8742,
+            13200,
+            28158,
+            4236,
+            31356,
+            8040,
+            7038
+          ],
+          [
+            20795,
+            10920,
+            25160,
+            14326,
+            8285,
+            35443,
+            19598,
+            6987,
+            9567,
+            19618,
+            27680,
+            2562,
+            29477,
+            6321,
+            19261
+          ],
+          [
+            21013,
+            10324,
+            35783,
+            10956,
+            10145,
+            29764,
+            15833,
+            6272,
+            7424,
+            25147,
+            30199,
+            2209,
+            17881,
+            6121,
+            26929
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      },
+      "L": {
+        "cell_counts": [
+          120896,
+          133597,
+          178260,
+          152921,
+          165206,
+          68320
+        ],
+        "cell_updates": 0,
+        "mean_action_change_fraction": 0.77798583984375,
+        "mean_cell_gradient_norms": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "observed_steps": 200,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 151,
+        "stage_cell_counts": [
+          [
+            27377,
+            23339,
+            46801,
+            47540,
+            46123,
+            13620
+          ],
+          [
+            26511,
+            39403,
+            46481,
+            35627,
+            41107,
+            15671
+          ],
+          [
+            31881,
+            37138,
+            40528,
+            36730,
+            40037,
+            18486
+          ],
+          [
+            35127,
+            33717,
+            44450,
+            33024,
+            37939,
+            20543
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            3744,
+            4981,
+            5092,
+            11094,
+            2466,
+            9846,
+            3808,
+            2382,
+            3559,
+            16581,
+            10614,
+            4779,
+            20638,
+            1421,
+            1395
+          ],
+          [
+            6257,
+            5516,
+            2222,
+            8138,
+            4378,
+            13697,
+            8586,
+            6768,
+            4095,
+            10795,
+            11497,
+            4976,
+            13253,
+            771,
+            1451
+          ],
+          [
+            7351,
+            5744,
+            3437,
+            7635,
+            7714,
+            8565,
+            9391,
+            7682,
+            4149,
+            11538,
+            10750,
+            3931,
+            11821,
+            543,
+            2149
+          ],
+          [
+            8139,
+            6678,
+            4410,
+            7053,
+            8847,
+            8263,
+            7453,
+            5567,
+            4295,
+            11912,
+            13568,
+            4029,
+            8814,
+            435,
+            2937
+          ]
+        ],
+        "zero_gradient_step_fraction": 1.0
+      },
+      "M": {
+        "cell_counts": [
+          122263,
+          203967,
+          232945,
+          78265,
+          139060,
+          42700
+        ],
+        "cell_updates": 0,
+        "mean_action_change_fraction": 0.782529296875,
+        "mean_cell_gradient_norms": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "observed_steps": 200,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 151,
+        "stage_cell_counts": [
+          [
+            28805,
+            51725,
+            69081,
+            13000,
+            34549,
+            7640
+          ],
+          [
+            28397,
+            52916,
+            62679,
+            16316,
+            35111,
+            9381
+          ],
+          [
+            31230,
+            50832,
+            51397,
+            23997,
+            35873,
+            11471
+          ],
+          [
+            33831,
+            48494,
+            49788,
+            24952,
+            33527,
+            14208
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            15969,
+            9665,
+            1018,
+            705,
+            1448,
+            30844,
+            1214,
+            1030,
+            2668,
+            1896,
+            23971,
+            2705,
+            8448,
+            424,
+            395
+          ],
+          [
+            15414,
+            9476,
+            305,
+            1337,
+            1865,
+            28198,
+            3360,
+            3828,
+            2116,
+            2117,
+            19794,
+            3094,
+            9190,
+            1344,
+            962
+          ],
+          [
+            16318,
+            9414,
+            1803,
+            1418,
+            2277,
+            22235,
+            4314,
+            6278,
+            1687,
+            2708,
+            13301,
+            3739,
+            13140,
+            2032,
+            1736
+          ],
+          [
+            15333,
+            10206,
+            3614,
+            1926,
+            2752,
+            21667,
+            3556,
+            6336,
+            1602,
+            2824,
+            10534,
+            4557,
+            12196,
+            2762,
+            2535
+          ]
+        ],
+        "zero_gradient_step_fraction": 1.0
+      },
+      "P": {
+        "cell_counts": [
+          276388,
+          506458,
+          401535,
+          389950,
+          409565,
+          64104
+        ],
+        "cell_updates": 500,
+        "mean_action_change_fraction": 0.753580078125,
+        "mean_cell_gradient_norms": [
+          0.1764460288286209,
+          0.3036578275561333,
+          0.2708396121561527,
+          0.22632058355212212,
+          0.24860528558492662,
+          0.08174080253392459
+        ],
+        "observed_steps": 500,
+        "persistent_zero_exposure": false,
+        "rolling_window": 50,
+        "rolling_windows": 451,
+        "stage_cell_counts": [
+          [
+            85022,
+            82422,
+            129922,
+            87000,
+            103260,
+            24374
+          ],
+          [
+            61151,
+            151251,
+            102992,
+            76867,
+            106007,
+            13732
+          ],
+          [
+            57855,
+            143255,
+            86283,
+            107970,
+            103770,
+            12867
+          ],
+          [
+            72360,
+            129530,
+            82338,
+            118113,
+            96528,
+            13131
+          ]
+        ],
+        "stage_pair_counts": [
+          [
+            5899,
+            21882,
+            13014,
+            40415,
+            3812,
+            48519,
+            6755,
+            18501,
+            2748,
+            35122,
+            17609,
+            6790,
+            23910,
+            8199,
+            2825
+          ],
+          [
+            3683,
+            10367,
+            8594,
+            34551,
+            3956,
+            72389,
+            30970,
+            41910,
+            2299,
+            12065,
+            6630,
+            1541,
+            21109,
+            4129,
+            1807
+          ],
+          [
+            2070,
+            6386,
+            21371,
+            23778,
+            4250,
+            53039,
+            42046,
+            44378,
+            1722,
+            16503,
+            8949,
+            1406,
+            24613,
+            3437,
+            2052
+          ],
+          [
+            2082,
+            9812,
+            35681,
+            20636,
+            4149,
+            43843,
+            39425,
+            42492,
+            1688,
+            17419,
+            9753,
+            1511,
+            21726,
+            3862,
+            1921
+          ]
+        ],
+        "zero_gradient_step_fraction": 0.0
+      }
+    }
+  },
+  "failures": [],
+  "hf_reference": {
+    "cross_session_verified": false,
+    "hf_repo": "libingjiang/minicells-research-checkpoints",
+    "hf_revision": "cbc7d0b6bc4007f74e08057a94979265ebcb798e",
+    "manifest_path": "r3c-moe-bridge/segments/a9ccc5d9a44962f2786a4d056125e071fce65cf9274cd5518724539127da0791.json",
+    "manifest_sha256": "2452e7d4f6673a5fdcf67d9d5e4bde6940e9db2732f87eb0b394644f41b49d11",
+    "scope": "IMMEDIATE_PRIVATE_READBACK_ONLY",
+    "writer_session_id": "dd8fc34f145842b39a875df83afdf4c3"
+  },
+  "hypotheses": {
+    "H1": "NOT_SUPPORTED",
+    "H2": "NOT_SUPPORTED",
+    "H3": "NOT_SUPPORTED",
+    "H4": "NOT_SUPPORTED"
+  },
+  "independent_training_seeds": 3,
+  "mean_nll_across_seeds": {
+    "F": 4.51336599017183,
+    "F0": 4.55088006456693,
+    "J": 4.529020147398114,
+    "L": 4.6044606156647205,
+    "M": 4.596799522017439,
+    "P": 4.514825419212381
+  },
+  "nll": {
+    "151001301": {
+      "F": 4.512964459136128,
+      "F0": 4.549327140673995,
+      "J": 4.524557188153267,
+      "L": 4.609698938205838,
+      "M": 4.589830093085766,
+      "P": 4.512948706746101
+    },
+    "151001302": {
+      "F": 4.526828218251467,
+      "F0": 4.557350741699338,
+      "J": 4.544734459370375,
+      "L": 4.590361451730132,
+      "M": 4.599855909124017,
+      "P": 4.529036041349173
+    },
+    "151001303": {
+      "F": 4.500305293127894,
+      "F0": 4.545962311327457,
+      "J": 4.517768794670701,
+      "L": 4.613321457058191,
+      "M": 4.600712563842535,
+      "P": 4.502491509541869
+    }
+  },
+  "noninferiority_J_P": false,
+  "paired_seed_differences": {
+    "J-F": {
+      "mean": 0.015654157226284344,
+      "paired_seed_deltas": [
+        0.011592729017138481,
+        0.01790624111890793,
+        0.017463501542806625
+      ],
+      "seed_sd": 0.003524259341563263
+    },
+    "J-P": {
+      "mean": 0.01419472818573316,
+      "paired_seed_deltas": [
+        0.011608481407165527,
+        0.015698418021202087,
+        0.015277285128831863
+      ],
+      "seed_sd": 0.0022496316427356765
+    },
+    "L-F0": {
+      "mean": 0.0535805510977904,
+      "paired_seed_deltas": [
+        0.060371797531843185,
+        0.033010710030794144,
+        0.06735914573073387
+      ],
+      "seed_sd": 0.018153361392707675
+    },
+    "L-M": {
+      "mean": 0.007661093647281329,
+      "paired_seed_deltas": [
+        0.019868845120072365,
+        -0.009494457393884659,
+        0.01260889321565628
+      ],
+      "seed_sd": 0.01529416307151677
+    },
+    "P-F": {
+      "mean": 0.0014594290405511856,
+      "paired_seed_deltas": [
+        -1.5752390027046204e-05,
+        0.002207823097705841,
+        0.002186216413974762
+      ],
+      "seed_sd": 0.0012775902715806788
+    }
+  },
+  "scientific_scope": "EXPLORATORY_ONLY; no independent confirmation; bootstrap Story counts are not training repeats",
+  "seed_nll_sd": {
+    "F": 0.013266020867506952,
+    "F0": 0.005850877374097778,
+    "J": 0.014025878656600535,
+    "L": 0.012343843746974148,
+    "M": 0.006050881675584496,
+    "P": 0.013371409031140024
+  },
+  "source_sha": "ed6b0cf375c8224ed1246203aa2a3109325274b6",
+  "status": "EXPLORATORY_DEVELOPMENT_COMPLETE",
+  "story_bootstrap_within_seed": [
+    {
+      "comparisons": {
+        "J-F": {
+          "ci95": [
+            0.008012909349054098,
+            0.015055000968277452
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.011592729017138481,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.011592729017138481
+        },
+        "J-P": {
+          "ci95": [
+            0.008015896612778305,
+            0.015173558611422775
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.011608481407165527,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.011608481407165527
+        },
+        "L-F0": {
+          "ci95": [
+            0.05239898758009076,
+            0.0678386879619211
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.060371797531843185,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.060371797531843185
+        },
+        "L-M": {
+          "ci95": [
+            0.011743625719100237,
+            0.02704136758111417
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.019868845120072365,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.019868845120072365
+        },
+        "P-F": {
+          "ci95": [
+            -0.003296773275360465,
+            0.003311121463775633
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.993503248375812,
+          "holm_exploratory_p": 0.993503248375812,
+          "mean": -1.5752390027046204e-05,
+          "stories": 128,
+          "token_weighted_nll_delta": -1.5752390027046204e-05
+        }
+      },
+      "seed": 151001301
+    },
+    {
+      "comparisons": {
+        "J-F": {
+          "ci95": [
+            0.013802751433104277,
+            0.02219302225857973
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.01790624111890793,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.01790624111890793
+        },
+        "J-P": {
+          "ci95": [
+            0.011847106739878654,
+            0.019642982818186282
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.015698418021202087,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.015698418021202087
+        },
+        "L-F0": {
+          "ci95": [
+            0.028307690331712366,
+            0.0379666100256145
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.033010710030794144,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.033010710030794144
+        },
+        "L-M": {
+          "ci95": [
+            -0.015200422005727887,
+            -0.003580950153991583
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0009995002498750624,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": -0.009494457393884659,
+          "stories": 128,
+          "token_weighted_nll_delta": -0.009494457393884659
+        },
+        "P-F": {
+          "ci95": [
+            -0.0009928748942911625,
+            0.005562854791060086
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.18690654672663667,
+          "holm_exploratory_p": 0.18690654672663667,
+          "mean": 0.002207823097705841,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.002207823097705841
+        }
+      },
+      "seed": 151001302
+    },
+    {
+      "comparisons": {
+        "J-F": {
+          "ci95": [
+            0.013283006753772498,
+            0.02175147742964327
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.017463501542806625,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.017463501542806625
+        },
+        "J-P": {
+          "ci95": [
+            0.011147705698385834,
+            0.019482956919819116
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.015277285128831863,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.015277285128831863
+        },
+        "L-F0": {
+          "ci95": [
+            0.05843100440688431,
+            0.07580532613210379
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0004997501249375312,
+          "holm_exploratory_p": 0.002498750624687656,
+          "mean": 0.06735914573073387,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.06735914573073387
+        },
+        "L-M": {
+          "ci95": [
+            0.005643701367080212,
+            0.019786983588710425
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.0014992503748125937,
+          "holm_exploratory_p": 0.0029985007496251873,
+          "mean": 0.01260889321565628,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.01260889321565628
+        },
+        "P-F": {
+          "ci95": [
+            -0.0016783872619271277,
+            0.006262685125693678
+          ],
+          "estimand": "TOKEN_WEIGHTED_NLL_DIFFERENCE_WITH_STORY_CLUSTER_RESAMPLING",
+          "exploratory_bootstrap_p": 0.2708645677161419,
+          "holm_exploratory_p": 0.2708645677161419,
+          "mean": 0.002186216413974762,
+          "stories": 128,
+          "token_weighted_nll_delta": 0.002186216413974762
+        }
+      },
+      "seed": 151001303
+    }
+  ]
+}
