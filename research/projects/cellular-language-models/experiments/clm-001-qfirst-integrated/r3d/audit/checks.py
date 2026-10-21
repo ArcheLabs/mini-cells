@@ -97,6 +97,28 @@ def main():
 
     with tempfile.TemporaryDirectory() as temp:
         temp = Path(temp)
+        # Reproduce simultaneous worker publication at the replace boundary.
+        from concurrent.futures import ThreadPoolExecutor
+        from threading import Barrier
+        from unittest.mock import patch
+        import os
+
+        barrier = Barrier(2)
+        replace = os.replace
+
+        def simultaneous(source, destination):
+            barrier.wait(timeout=10)
+            return replace(source, destination)
+
+        with patch("os.replace", simultaneous), ThreadPoolExecutor(max_workers=2) as pool:
+            list(
+                pool.map(
+                    lambda _: atomic(temp / "shared-reference.json", {"revision": "fixed"}),
+                    range(2),
+                )
+            )
+        assert json.loads((temp / "shared-reference.json").read_text()) == {"revision": "fixed"}
+        assert not list(temp.glob("shared-reference.json.*.tmp"))
         # An absent cache destination must be created before the existing file verifier runs.
         from minicells_r3c_moe_bridge.checkpoint import Store
         from minicells_runtime.store import ContinuationError
@@ -237,6 +259,7 @@ def main():
                     "single-job cache and three figures",
                     "read-only HF manifest identity fallback",
                     "fresh checkpoint cache restoration and existing Store verification",
+                    "simultaneous shared-reference writers with synchronized replace",
                 ],
                 "scope": "SYNTHETIC_CPU_ONLY_NOT_CHECKPOINT_EVIDENCE",
             }

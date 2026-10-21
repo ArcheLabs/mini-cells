@@ -64,6 +64,11 @@ def seed_jobs(c, original, historical, output, local, assets, seed, device, audi
                 "code": failure_code(error),
                 "status": "ANALYSIS_FAILED_CHECKPOINT_NOT_SUBSTITUTED",
             }
+            if isinstance(error, FileNotFoundError) and error.filename:
+                try:
+                    failure["missing_local_file"] = str(Path(error.filename).relative_to(output))
+                except ValueError:
+                    failure["missing_local_file"] = Path(error.filename).name
             # A stable missing object/name may be useful, but arbitrary HTTP exception text is private.
             atomic(Path(output) / "private/failures" / ("%s-%s.json" % (seed, arm)), failure)
             print("[R3d-A] failed", seed, arm, failure["code"], failure["type"], flush=True)

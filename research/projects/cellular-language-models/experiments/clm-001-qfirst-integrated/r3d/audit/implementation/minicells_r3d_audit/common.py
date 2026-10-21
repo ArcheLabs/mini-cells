@@ -1,7 +1,6 @@
 from pathlib import Path
 from minicells_r3d.common import ROOT, identity as training_identity
 from minicells_r3c_moe_bridge.common import (
-    atomic as atomic,
     canonical,
     digest,
     read,
@@ -11,6 +10,35 @@ from minicells_r3c_moe_bridge.common import (
 
 BASE = Path(__file__).resolve().parents[2]
 ID = "CLM-001-R3d-AUDIT-001"
+
+
+def atomic(path, value):
+    """Each audit writer owns its temporary file, including shared input-reference writers."""
+    import json
+    import os
+    import tempfile
+
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=path.name + ".",
+            suffix=".tmp",
+            delete=False,
+        ) as stream:
+            temporary = Path(stream.name)
+            json.dump(value, stream, sort_keys=True, indent=2, allow_nan=False)
+            stream.write("\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def configuration(path=None):
