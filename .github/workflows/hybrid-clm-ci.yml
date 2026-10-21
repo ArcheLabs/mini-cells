@@ -10,7 +10,21 @@ permissions:
   contents: read
 
 jobs:
+  audit-scope:
+    runs-on: ubuntu-latest
+    outputs:
+      run_model_tests: ${{ steps.scope.outputs.run_model_tests }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python shared/scripts/ci/read_only_audit_scope.py
   preflight:
+    needs: audit-scope
+    if: needs.audit-scope.outputs.run_model_tests == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
