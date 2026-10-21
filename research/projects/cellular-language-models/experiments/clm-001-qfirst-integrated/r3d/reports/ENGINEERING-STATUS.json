@@ -1,0 +1,79 @@
+{
+  "experiment_id": "CLM-001-R3d-LHCJL-001",
+  "date": "2026-10-21",
+  "implementation_commit": "ed6b0cf375c8224ed1246203aa2a3109325274b6",
+  "scope": "SYNTHETIC_CPU_ENGINEERING",
+  "tests": {
+    "passed": 18,
+    "seconds": 7.46,
+    "suite": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d/tests"
+  },
+  "lint": "PASS",
+  "historical_r3_r3b_r3c_changed_since_parent_branch": false,
+  "parameters": {
+    "historical_model": 1005830,
+    "new_connection": 1995,
+    "total_with_correction": 1007825,
+    "trainable_cell_parameters_B": 380928,
+    "original_gate_frozen": 9734
+  },
+  "actual_experiment_status": "BLOCKED_BEFORE_TRAINING",
+  "launch_attempt": {
+    "source_commit": "213ff626997c934a0e3d33e49156c4052bd037fe",
+    "failure_code": "ENABLE_EXISTING_KAGGLE_SECRET_HF_TOKEN",
+    "new_training_steps": 0,
+    "new_private_assets_read": false,
+    "output": "/tmp/minicells-r3d-213ff626997c"
+  },
+  "alternate_cloud_launch": {
+    "status": "TOOL_INITIALIZATION_FAILED",
+    "error": "node_repl/js: sandboxCwd is not a local file URI: file:///mnt/c/users/administrator/documents/codex/2026-10-11/new-chat",
+    "browser_read_or_edited": false
+  },
+  "real_arm_results": {
+    "F0": "NOT_RUN",
+    "L": "NOT_RUN",
+    "M": "NOT_RUN",
+    "F": "NOT_RUN",
+    "P": "NOT_RUN",
+    "J": "NOT_RUN"
+  },
+  "hypotheses": {
+    "H1": "INCONCLUSIVE",
+    "H2": "INCONCLUSIVE",
+    "H3": "INCONCLUSIVE",
+    "H4": "INCONCLUSIVE"
+  },
+  "gpu_timing": "NOT_MEASURED_FOR_R3D",
+  "new_remote_checkpoints": "NONE",
+  "actual_kaggle_persistence_verified": false,
+  "confirmation": "SEALED",
+  "known_limits": [
+    "Actual R3d runtime and inference latency require user Kaggle execution; no timing claim from synthetic CPU tests.",
+    "Bootstrap intervals describe Story sampling within each training Seed, not independent training replication.",
+    "Ranking/gap summaries use in-training sampled candidates, not independent value-generalization evidence.",
+    "Cell gradients are conditional executed-path approximations, not unbiased full stochastic-policy gradients.",
+    "Training FLOPs are labelled matrix-work proxies/upper estimates, not full hardware measurements."
+  ],
+  "synthetic_cpu_forward_matmul_audit": {
+    "F": {
+      "forward_matmul_flops": 149618688,
+      "per_token_forward_matmul_flops": 2337792.0,
+      "cell_rows": 512,
+      "context_rows": 64,
+      "gate_rows": 256,
+      "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+      "hardware_kernel_flops": "NOT_MEASURED"
+    },
+    "L": {
+      "forward_matmul_flops": 150632448,
+      "per_token_forward_matmul_flops": 2353632.0,
+      "cell_rows": 512,
+      "context_rows": 64,
+      "gate_rows": 256,
+      "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+      "hardware_kernel_flops": "NOT_MEASURED"
+    }
+  },
+  "synthetic_cpu_forward_matmul_audit_scope": "single synthetic 1x64 forward per F/L; no private data, no optimizer, no GPU timing"
+}
