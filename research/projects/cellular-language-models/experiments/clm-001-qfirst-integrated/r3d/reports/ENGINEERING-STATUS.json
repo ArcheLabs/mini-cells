@@ -1,11 +1,11 @@
 {
   "experiment_id": "CLM-001-R3d-LHCJL-001",
   "date": "2026-10-21",
-  "implementation_commit": "0dac37d70784d64f67ad0b80dfacac31738446cf",
+  "implementation_commit": "ed6b0cf375c8224ed1246203aa2a3109325274b6",
   "scope": "SYNTHETIC_CPU_ENGINEERING",
   "tests": {
-    "passed": 17,
-    "seconds": 7.22,
+    "passed": 18,
+    "seconds": 7.46,
     "suite": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d/tests"
   },
   "lint": "PASS",
@@ -54,5 +54,26 @@
     "Ranking/gap summaries use in-training sampled candidates, not independent value-generalization evidence.",
     "Cell gradients are conditional executed-path approximations, not unbiased full stochastic-policy gradients.",
     "Training FLOPs are labelled matrix-work proxies/upper estimates, not full hardware measurements."
-  ]
+  ],
+  "synthetic_cpu_forward_matmul_audit": {
+    "F": {
+      "forward_matmul_flops": 149618688,
+      "per_token_forward_matmul_flops": 2337792.0,
+      "cell_rows": 512,
+      "context_rows": 64,
+      "gate_rows": 256,
+      "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+      "hardware_kernel_flops": "NOT_MEASURED"
+    },
+    "L": {
+      "forward_matmul_flops": 150632448,
+      "per_token_forward_matmul_flops": 2353632.0,
+      "cell_rows": 512,
+      "context_rows": 64,
+      "gate_rows": 256,
+      "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer",
+      "hardware_kernel_flops": "NOT_MEASURED"
+    }
+  },
+  "synthetic_cpu_forward_matmul_audit_scope": "single synthetic 1x64 forward per F/L; no private data, no optimizer, no GPU timing"
 }
