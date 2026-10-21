@@ -191,6 +191,10 @@ def test_runner_completes_all_arms_and_reuses_without_training(config, tmp_path,
             "result": r,
             "state": Store(d, identity(config, "source", 11, arm)).verified(r["checkpoint"]),
         }
+    assert (
+        results["L"]["result"]["inference_cost"]["per_token_forward_matmul_flops"]
+        > results["F"]["result"]["inference_cost"]["per_token_forward_matmul_flops"]
+    )
     report = runner.gather(config, tmp_path, "source")
     assert (
         report["status"] == "EXPLORATORY_DEVELOPMENT_COMPLETE" and report["actual_job_steps"] == 16
@@ -317,3 +321,31 @@ def test_parent_identity_rejects_before_pickle(config, tmp_path, monkeypatch):
     )
     with pytest.raises(RuntimeError, match="PARENT_D_STEP500"):
         storage.parent_state(config, tmp_path, 11)
+
+
+def test_sampled_long_value_matches_full_forced_prefix_and_rerouted_suffix(config):
+    from torch.nn import functional as F
+
+    m = PathModel(config, 11)
+    x, y = synthetic_batches(config["engine"], np.random.default_rng(16))[0]
+    original = m(x)
+    records, _ = collect(m, [(original, y)], torch.Generator().manual_seed(19), 4, "long")
+    for record in records:
+        t, row = record["stage"], record["sample_row"]
+        for candidate, expected in zip(record["candidates"], record["values"]):
+
+            def intervene(stage, h, z, ids, weights):
+                if stage < t:
+                    return original.stages[stage].indices, original.stages[stage].weights
+                if stage == t:
+                    ids, weights = ids.clone(), weights.clone()
+                    selected, mix = m.indices_weights(z[row : row + 1], torch.tensor([candidate]))
+                    ids[row], weights[row] = selected[0], mix[0]
+                return ids, weights
+
+            with torch.no_grad():
+                out = m(x, intervention=intervene)
+                actual = F.cross_entropy(
+                    out.logits.reshape(-1, 16)[row : row + 1], y.reshape(-1)[row : row + 1]
+                )
+            torch.testing.assert_close(actual, expected, rtol=1e-6, atol=1e-7)

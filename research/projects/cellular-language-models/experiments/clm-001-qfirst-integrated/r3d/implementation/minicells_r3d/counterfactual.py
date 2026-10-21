@@ -20,7 +20,8 @@ def collect(model, visited, rng, count, mode):
     }
     for i in range(count):
         t = order[i % len(order)]
-        out, y = visited[int(torch.randint(len(visited), (1,), generator=rng))]
+        batch_index = int(torch.randint(len(visited), (1,), generator=rng))
+        out, y = visited[batch_index]
         row = int(torch.randint(y.numel(), (1,), generator=rng))
         h = out.stages[t].inputs[row : row + 1].detach()
         z = model.gate(h, t)
@@ -43,6 +44,8 @@ def collect(model, visited, rng, count, mode):
             work["counterfactual_head_rows"] += 1
         records.append(
             {
+                "sample_batch_index": batch_index,
+                "sample_row": row,
                 "state": model.norm(h).detach(),
                 "stage": t,
                 "base_logits": z.detach(),
