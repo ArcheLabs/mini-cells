@@ -3,13 +3,31 @@
 from pathlib import Path
 import os
 import shutil
-from minicells_artifacts.hf_storage import HubBackend
-from minicells_runtime.store import safe
+from minicells_artifacts.hf_storage import HubBackend, relative
+from minicells_runtime.store import safe, ContinuationError
 from minicells_r3c_moe_bridge.checkpoint import Store
 from minicells_r3c_moe_bridge.development import verified_manifest
 from .data import load as load_assets, restore as private_asset_subset
 from minicells_r3d.connection import PathModel
 from .common import atomic, digest, read, checkpoint_identity, run_identity, fingerprint
+
+
+def restore_object(source, root, row):
+    """Validate a destination before creation; verify bytes using the existing Store afterwards."""
+    target = Path(root) / relative(row["file"])
+    for part in (target,) + tuple(target.parents):
+        if part.is_symlink():
+            raise ContinuationError("UNSAFE_PATH", row["file"])
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        if digest(target) != row["sha256"]:
+            raise RuntimeError("CHECKPOINT_CACHE_COLLISION")
+    else:
+        try:
+            os.link(source, target)
+        except OSError:
+            shutil.copyfile(source, target)
+    return safe(root, row["file"])
 
 
 def secret(name, required=False):
@@ -129,8 +147,11 @@ class Inputs:
         matches = [r for r in receipts if r.get("step") == target and r.get("identity") == ident]
         if matches:
             row = matches[0]
-            path = safe(directory, row["file"])
-            if not path.exists():
+            try:
+                path = safe(directory, row["file"])
+            except ContinuationError as error:
+                if error.code != "CHECKPOINT_FILE_MISSING":
+                    raise
                 matches = []
         if matches:
             origin = "EXISTING_KAGGLE_OUTPUT"
@@ -164,15 +185,7 @@ class Inputs:
         if d["source_file"] is None:
             prefix = "jobs/" + d["name"] + "/"
             source = self.object(prefix + row["file"])
-            target = safe(root, row["file"])
-            target.parent.mkdir(parents=True, exist_ok=True)
-            if not target.exists():
-                try:
-                    os.link(source, target)
-                except OSError:
-                    shutil.copyfile(source, target)
-            elif digest(target) != row["sha256"]:
-                raise RuntimeError("CHECKPOINT_CACHE_COLLISION")
+            restore_object(source, root, row)
         state = Store(root, row["identity"]).verified(row)
         expected_tokens = row["step"] * self.original["training"]["train_tokens_per_step"]
         if state["step"] != row["step"] or state["data_cursor"] != expected_tokens:

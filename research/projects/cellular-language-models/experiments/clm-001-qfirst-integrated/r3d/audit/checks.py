@@ -92,11 +92,52 @@ def main():
     from types import SimpleNamespace
     from minicells_r3d_audit import job as audit_job
     from minicells_r3d_audit.reporting import aggregate, plots, markdown
-    from minicells_r3d_audit.inputs import Inputs
+    from minicells_r3d_audit.inputs import Inputs, restore_object
     from minicells_r3d_audit.common import atomic, digest, run_identity
 
     with tempfile.TemporaryDirectory() as temp:
         temp = Path(temp)
+        # An absent cache destination must be created before the existing file verifier runs.
+        from minicells_r3c_moe_bridge.checkpoint import Store
+        from minicells_runtime.store import ContinuationError
+
+        payload_state = {"model": {"weight": torch.tensor([1.0])}, "step": 0}
+        ident = {"fixture": "readonly-restore"}
+        source = temp / "source.pt"
+        torch.save(
+            {
+                "identity": ident,
+                "state": payload_state,
+                "state_fingerprint": fingerprint(payload_state),
+            },
+            source,
+        )
+        row = {
+            "schema": "minicells.r3c.checkpoint.v1",
+            "identity": ident,
+            "file": "objects/fixture.pt",
+            "sha256": digest(source),
+            "bytes": source.stat().st_size,
+            "state_fingerprint": fingerprint(payload_state),
+        }
+        cache = temp / "fresh-checkpoint-cache"
+        restore_object(source, cache, row)
+        assert fingerprint(Store(cache, ident).verified(row)) == fingerprint(payload_state)
+        restore_object(source, cache, row)  # verified cache reuse
+        for unsafe in ("../escape.pt", "/absolute.pt"):
+            try:
+                restore_object(source, cache, dict(row, file=unsafe))
+            except ContinuationError:
+                pass
+            else:
+                raise AssertionError("unsafe destination accepted")
+        (cache / "linked").symlink_to(temp, target_is_directory=True)
+        try:
+            restore_object(source, cache, dict(row, file="linked/escape.pt"))
+        except ContinuationError:
+            pass
+        else:
+            raise AssertionError("symlink destination accepted")
         h = copy.deepcopy(configuration()[2])
         h["nll"] = {"7": {"L": closed["1.0"]["mean_nll"]}}
         h["candidate_learning"] = {"7": {"L": {"scope": "SYNTHETIC_CPU_FIXTURE"}}}
@@ -195,6 +236,7 @@ def main():
                     "parameter immutability",
                     "single-job cache and three figures",
                     "read-only HF manifest identity fallback",
+                    "fresh checkpoint cache restoration and existing Store verification",
                 ],
                 "scope": "SYNTHETIC_CPU_ONLY_NOT_CHECKPOINT_EVIDENCE",
             }
