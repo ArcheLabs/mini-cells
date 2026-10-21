@@ -349,3 +349,27 @@ def test_sampled_long_value_matches_full_forced_prefix_and_rerouted_suffix(confi
                     out.logits.reshape(-1, 16)[row : row + 1], y.reshape(-1)[row : row + 1]
                 )
             torch.testing.assert_close(actual, expected, rtol=1e-6, atol=1e-7)
+
+
+def test_released_notebook_pins_existing_unified_entry_without_extra_test_phase():
+    import ast
+    import json
+    import subprocess
+    from minicells_r3d.common import ROOT
+
+    notebook = json.loads((BASE / "notebooks/kaggle-development.ipynb").read_text())
+    code = "".join(notebook["cells"][1]["source"])
+    tree = ast.parse(code)
+    pin = next(
+        ast.literal_eval(n.value)
+        for n in tree.body
+        if isinstance(n, ast.Assign)
+        and any(isinstance(t, ast.Name) and t.id == "SOURCE_SHA" for t in n.targets)
+    )
+    source = subprocess.check_output(
+        ["git", "show", pin + ":scripts/run_r3d.py"], cwd=ROOT, text=True
+    )
+    assert "r3d/run.py" in source
+    assert "ROOT/'scripts/run_r3d.py'" in code and "'--run-all'" in code
+    assert "/scripts/run_r3d.py" in code and "pytest" not in code and "KAGGLE_API_TOKEN" not in code
+    assert "'--mode','development'" not in code and "'--mode','pilot'" not in code
