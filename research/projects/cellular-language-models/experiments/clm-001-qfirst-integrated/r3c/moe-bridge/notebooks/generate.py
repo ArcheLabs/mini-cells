@@ -20,7 +20,9 @@ paths = [
     "/research/projects/cellular-language-models/context/08-hybrid-clm/scripts/research/",
 ]
 code = f"""from pathlib import Path
-import os, subprocess, sys
+import os
+import subprocess
+import sys
 SOURCE_SHA={sha!r}
 ROOT=Path('/kaggle/working/r3c-bridge-code-'+SOURCE_SHA[:12])
 OUTPUT=Path('/kaggle/working/r3c-bridge-cpu-'+SOURCE_SHA[:12])
@@ -41,7 +43,8 @@ if head.returncode or head.stdout.strip()!=SOURCE_SHA:
     run('git','-C',ROOT,'fetch','--depth=1','--filter=blob:none','origin',SOURCE_SHA)
     run('git','-C',ROOT,'checkout','--detach','FETCH_HEAD')
 actual=subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip()
-if actual!=SOURCE_SHA:raise RuntimeError('Source identity mismatch')
+if actual!=SOURCE_SHA:
+    raise RuntimeError('Source identity mismatch')
 env=dict(os.environ,CUDA_VISIBLE_DEVICES='',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1')
 run(sys.executable,ROOT/{base!r}/'run.py','--mode','engineering','--output',OUTPUT,cwd=ROOT,env=env)
 print('CPU synthetic engineering complete. Save Version retains:',OUTPUT)

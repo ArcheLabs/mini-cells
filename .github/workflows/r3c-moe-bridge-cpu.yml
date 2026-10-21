@@ -1,7 +1,7 @@
 name: R3c MoE Bridge CPU
 on:
   push:
-    branches: [codex/r3c-moe-bridge]
+    branches: [codex/r3c-moe-bridge, codex/r3c-one-launch-pilot]
   pull_request:
     paths:
       - 'research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/**'
@@ -25,10 +25,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - run: python -m pip install numpy pytest ruff
+      - run: python -m pip install numpy pytest pyyaml ruff
       - name: Preserve historical experiments
+        env:
+          HISTORICAL_BASE: ${{ github.event.pull_request.base.sha || 'c79e28e' }}
         run: |
-          git diff --exit-code d796eb815fb77549a594713a0d3bc5001bebbe4f HEAD -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3 research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b
+          git diff --exit-code "$HISTORICAL_BASE" HEAD -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3 research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b
       - name: Synthetic CPU invariants
         run: python -m pytest -q research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/tests
       - name: Lint new experiment

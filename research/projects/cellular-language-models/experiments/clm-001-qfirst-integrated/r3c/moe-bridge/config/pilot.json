@@ -1,0 +1,172 @@
+{
+  "experiment_id": "CLM-001-R3c-MOE-Bridge-001",
+  "status": "SHORT_GPU_PILOT_AUTHORIZED_NOT_FORMAL",
+  "arms": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "arm_labels": {
+    "A": "FIXED_BALANCED",
+    "B": "RANDOM_BALANCED",
+    "C": "GATED_TOP2",
+    "D": "GATE_STOPGRAD",
+    "E": "GATED_NO_BALANCE"
+  },
+  "model": {
+    "width": 128,
+    "heads": 4,
+    "cell_hidden": 248,
+    "vocab_size": 4096,
+    "max_sequence_length": 64,
+    "alpha": 0.125,
+    "memory_mode": "static_input_readonly",
+    "router_hidden": 64,
+    "step_width": 16
+  },
+  "routing": {
+    "stages": 4,
+    "top_k": 2,
+    "cells": 6,
+    "temperature": 1.0,
+    "shared_cells": true,
+    "fixed_context_reads": 1,
+    "tie_rule": "stable_descending_cell_id_ascending",
+    "fixed_pair_offset": 3
+  },
+  "training": {
+    "learning_rate": 0.0003,
+    "connection_learning_rate": 0.0003,
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "precision": "float32",
+    "warmup_steps": 50,
+    "microbatch": 1,
+    "effective_batch": 8,
+    "sequence_length": 64
+  },
+  "candidate_training": {
+    "steps": 500,
+    "tokens_per_step": 512,
+    "tokens_per_arm_seed": 256000,
+    "seeds": [
+      151001301,
+      151001302,
+      151001303
+    ],
+    "checkpoints": [
+      0,
+      50,
+      100,
+      200,
+      350,
+      500
+    ],
+    "frozen": false
+  },
+  "balance": {
+    "coefficient": null,
+    "candidates": [
+      0.0,
+      0.001,
+      0.01
+    ],
+    "selection_rule": "minimum_candidate_with_all_cell_share_at_least_minimum_on_all_last_calibration_windows_else_NO_GO",
+    "minimum_cell_share": 0.0078125,
+    "measurement_windows": 2,
+    "pilot_steps_per_candidate": 5,
+    "threshold_scope": "Engineering nonzero exposure: at least one of 128 selected slots per Cell per Stage in each of two fixed 64-token Calibration windows. Not a scientific specialization threshold."
+  },
+  "pilot": {
+    "steps_per_arm": 5,
+    "candidate_updates": 15,
+    "arm_updates": 25,
+    "total_optimizer_updates": 40,
+    "training_tokens": 20480,
+    "data_roles": [
+      "train",
+      "calibration"
+    ],
+    "uses_development": false,
+    "gpu_authorized": true,
+    "authorization": {
+      "date": "2026-10-20",
+      "user_request": "\u597d\u7684\uff0c\u8bf7\u7ee7\u7eed\u63a5\u4e0b\u6765\u7684\u6b65\u9aa4",
+      "scope": "GPU_SMOKE_ONLY",
+      "max_optimizer_updates": 40,
+      "max_train_tokens": 20480,
+      "formal_500_step_authorized": false
+    }
+  },
+  "statistics": {
+    "bootstrap_unit": "STORY_WITHIN_SEED",
+    "bootstrap_replicates": 2000,
+    "bootstrap_seed": 2026102001,
+    "primary_comparisons": [
+      "C-A",
+      "C-B",
+      "C-D"
+    ],
+    "multiplicity": "HOLM",
+    "minimum_practical_delta_nll": null,
+    "noninferiority_margin": null,
+    "minimum_cell_exposure": null,
+    "mechanism_thresholds": null,
+    "formal_confirmation": false
+  },
+  "groups": {
+    "rule": "frozen_input_projection_with_calibration_median",
+    "projection_seed": 2026102002,
+    "threshold": null,
+    "uses_targets": false
+  },
+  "release": {
+    "gpu_smoke_authorized": true,
+    "formal_development_authorized": false,
+    "confirmation": "SEALED",
+    "uses_cf_private_data": false
+  },
+  "input": {
+    "historical_training_sha": "a7792ef30582dfcaf324cca7e5245c8430df48b2",
+    "reference_engine_sha": "ed2accbc90f541325ca2f6c53229e9c81475768d",
+    "assets_manifest_sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "data_config": {
+      "dataset": "roneneldan/TinyStories",
+      "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "split": "train",
+      "train_range": [
+        0,
+        8192
+      ],
+      "calibration_range": [
+        50000,
+        50128
+      ],
+      "admission_range": [
+        50128,
+        50256
+      ],
+      "development_range": [
+        50256,
+        50512
+      ],
+      "reserved_boundary": 60000,
+      "tokenizer_vocab": 4096,
+      "required_r1_tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+    },
+    "development_previously_used": true,
+    "confirmation_materialized": false,
+    "asset_bundle_ref": {
+      "bundle_path": "runs/9a46521e5542fb95189d50fd0d9a2163a849f7b1c53e4ed281a1d290483ab627/bundles/cb5dadb9783fee8419ce06b154e1db4978e8665bc945bd00c4c5925014a933a0.json",
+      "bundle_sha256": "f8689351b6fb1c57233a4693c0e3954f389f284ed0daf7d3a47fa9b437246bf3",
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_repo_type": "model",
+      "hf_revision": "828585f1ff93420aa4485c725211ed28f70d15f3",
+      "run_key": "runs/9a46521e5542fb95189d50fd0d9a2163a849f7b1c53e4ed281a1d290483ab627"
+    }
+  },
+  "scientific_decision": false
+}

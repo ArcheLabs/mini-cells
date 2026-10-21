@@ -1,0 +1,28 @@
+{
+  "schema": "minicells.r3c.pilot-cpu-validation.v1",
+  "implementation_sha": "ff24f8c9952064c22eab6b6c6acdf88376531e57",
+  "base_main_sha": "c79e28e90a7858c604f829a521e6e2470f6b1d94",
+  "tests": {
+    "passed": 59,
+    "failed": 0,
+    "scope": "SYNTHETIC_CPU_AND_FAKE_REMOTE_SERVICES_ONLY"
+  },
+  "validated": [
+    "one-launch preflight failure stops before assets/updates",
+    "bounded candidate selection then five arms",
+    "per-update complete-state checkpoint and partial-job resume",
+    "fresh-directory pinned fake-HF restore without repeated updates",
+    "one fake-HF batch commit exporting latest state per job",
+    "metadata-only GitHub publication descending main and idempotent retry",
+    "pilot Notebook syntax/source pin and no in-Kaggle pytest"
+  ],
+  "max_optimizer_updates": 40,
+  "max_train_tokens": 20480,
+  "model_parameters_unchanged": 1005830,
+  "actual_gpu_run": false,
+  "actual_hf_upload": false,
+  "actual_kaggle_cross_session_verified": false,
+  "formal_500_step_authorized": false,
+  "confirmation": "SEALED",
+  "scientific_decision": false
+}

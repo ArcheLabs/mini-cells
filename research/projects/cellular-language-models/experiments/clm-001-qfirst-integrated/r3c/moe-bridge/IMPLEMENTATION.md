@@ -30,3 +30,21 @@ GPU smoke 入口先验证授权与配置 hash，才分配设备/读资产。授�
 真实 GPU 时间/显存/算子 FLOPs 校验；有依据的 balance 候选/曝光门槛及最终系数；数据及 Tokenizer 固定 hash 的实际读取验证；独立 Kaggle Session 的对象回读和完整恢复比较；资源投影；正式训练 Seed/预算/检查点矩阵；实践收益、非劣容差和互补机制阈值；正式源码/协议锁定与单独授权。
 
 当前不提供 500-Step 正式调度器，不生成 `frozen.json`，不声称工程或科学全面通过。统计模块仅支持探索性、Seed 内 Story 配对 Bootstrap 和前三项 Holm；Seed 间重复独立报告，三 Seed 不等于高功效 Confirmation。
+
+
+## 2026-10-20 后续授权：单次 Run All 的短 GPU Pilot
+
+用户在询问性能统计用途后明确回复“好的，请继续接下来的步骤”。本轮释放最多40次更新/20,480 Train Token 的短 Pilot，不扩展到正式500-Step。`pilot.json` 固定工程非零曝光规则：每个64-Token Calibration窗口、每个Stage的128次选择中，每个Cell至少出现一次（share>=1/128）；两窗口都须满足。这是具体化“避免零曝光”的工程规则，不是专业化的科学门槛。原 proposed.json 和科学阈值继续保留未冻结状态。无法找到有效候选即NO_GO，不自动扩大预算。
+
+入口自动调用原HF资产验证和同一可恢复训练引擎，不创建第二套算法。各候选/实验臂同Seed独立初始化；每个模型每次更新后原子保存完整优化器、RNG、游标和身份。HF只导出每任务最新完整状态、receipt和聚合日志，正式历史产物不动。Kaggle Output保留所有本轮中间Checkpoint，HF SDK内部可能有多个上传请求，但不按Step零散提交。
+
+当前实际GPU速度/显存仍待用户运行，不能把CPU模拟服务测试当作真实Kaggle运行证据。自动恢复可以减少重跑，但用户仍需保存云端Output，尤其当HF上传失败时。完整独立Kaggle版本证明不会由随机进程ID自动宣布通过。
+
+
+## Pilot 后的一键探索开发
+
+用户确认 Pilot 后继续下一步。`config/development.json` 以已回传 Pilot 的固定结果、完整 Checkpoint SHA 和原始模型源码字节为依据，记录 500×3 的探索性开发授权。沿用原 Trainer、模型、输入、优化器和批次预算；不修改科学门槛，不读取 Confirmation。λ=0 时 E/C 完整训练状态相同（CPU 测试），E 作为每 Seed 的派生别名输出，不作为独立统计重复。
+
+父进程仅管理资产、两个独立 GPU 子进程和每 Seed 的串行持久化。各子进程完整保存 RNG/数据位置/优化器/模型，并在恢复时校验；首个 Seed 仅在 GPU RNG 布局匹配时导入经 SHA 验证的 Pilot 五步状态。每 50 步原子提交完整检查点及对应观测，异常时可从最后已提交边界恢复；尚未提交的更新可能重算。无时长终止器。
+
+HF 每个 Seed 一次批量提交新增内容对象，manifest 保留过去快照引用；恢复仅获取最新状态和小型元数据。GitHub 公开聚合从当时 main 构造，只包含结果。HF/GitHub 上传失败须保留 Kaggle Output；真实跨 Session 证明尚不由本轮 CPU 模拟代替。最终质量用冻结的 Calibration/Development 窗口，逐 Story 聚合，配对种子统计仅描述开发结果；昂贵机制分析后置，不能据此宣布科学假设成立。
