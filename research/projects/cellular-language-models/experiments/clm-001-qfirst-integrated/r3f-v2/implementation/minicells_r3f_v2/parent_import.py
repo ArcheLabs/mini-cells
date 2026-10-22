@@ -86,11 +86,39 @@ def restore(c, backend, cache, arm):
             "snapshot_fingerprint"
         ) != fingerprint(selected["model"]):
             raise RuntimeError("OFFICIAL_REJECTED_PROPOSAL_IDENTITY_MISMATCH")
-        if baseline is None:
-            raise RuntimeError("OFFICIAL_STEP100_COMPARISON_MISSING")
-        for key in ("model", "cell_optimizer", "data_rng", "route_rng", "data_cursor", "step"):
-            if fingerprint(selected[key]) != fingerprint(baseline[key]):
-                raise RuntimeError("OFFICIAL_STEP100_STATE_MISMATCH")
+        # A verified COMMITTED transaction's selected state (or official job state)
+        # is already an authoritative complete checkpoint. Historical exports retain
+        # latest receipts, so an independent pre-proposal Step 100 copy is optional.
+        expected_optimizer = canonical(
+            {"cell": old["engine"]["training"], "experiment": old["experiment_id"], "arm": arm}
+        )
+        if selected["optimizer_identity"] != expected_optimizer:
+            raise RuntimeError("PARENT_OPTIMIZER_IDENTITY_MISMATCH")
+        for field, event_field in (
+            ("route_switch_margin", "route_switch_margin"),
+            ("route_numeric_tolerance", "numeric_tolerance"),
+        ):
+            if float(selected["model"][field]) != events[-1].get(event_field):
+                raise RuntimeError("PARENT_MARGIN_IDENTITY_MISMATCH")
+        if selected["connection_version"] != events[-1].get("snapshot_connection_version"):
+            raise RuntimeError("PARENT_CONNECTION_VERSION_MISMATCH")
+        required = (
+            "cell_optimizer",
+            "data_rng",
+            "route_rng",
+            "cf_rng",
+            "global_cpu_rng",
+            "global_cuda_rng",
+            "python_rng",
+            "numpy_rng",
+            "frozen_sha256",
+        )
+        if any(key not in selected for key in required):
+            raise RuntimeError("PARENT_FULL_STATE_INCOMPLETE")
+        if baseline is not None:
+            for key in ("model", "cell_optimizer", "data_rng", "route_rng", "data_cursor", "step"):
+                if fingerprint(selected[key]) != fingerprint(baseline[key]):
+                    raise RuntimeError("OFFICIAL_STEP100_STATE_MISMATCH")
         return selected, {
             "parent_identity": ident,
             "parent_hf_reference": ref,
@@ -100,6 +128,13 @@ def restore(c, backend, cache, arm):
             "step": 100,
             "post_rejection_verified": True,
             "official_step100_invariants_verified": True,
+            "authority": "VERIFIED_COMMITTED_SELECTED_STATE"
+            if origin == "COMMITTED_TRANSACTION_SELECTED"
+            else "VERIFIED_OFFICIAL_JOB_STATE",
+            "secondary_step100_copy": "MATCHED"
+            if baseline is not None
+            else "NOT_ARCHIVED_NOT_REQUIRED",
+            "full_state_content_hash_and_identity_verified": True,
         }
     raise RuntimeError("OFFICIAL_POST_REJECTION_STEP100_NOT_AVAILABLE_NO_RETRAIN")
 

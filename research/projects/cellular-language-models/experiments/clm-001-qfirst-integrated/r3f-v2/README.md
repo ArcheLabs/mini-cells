@@ -39,3 +39,7 @@ No engineering pass, raw parameter difference, surrogate objective improvement o
 ## Engineering validation
 
 `python .../r3f-v2/checks.py` runs only synthetic CPU fixtures. It covers explicit parent import, rejection of Step 110 substitution, archive-before-scan and candidate reuse, all 22 scales, strict nonempty admission, fixed Admission windows, paired K=10 updates, interrupts at pairs 1/5/10 and exact restart, committed replay, and independent hypothesis statuses. Real parent receipts, candidate hashes, scan outcomes, timing and NLL are produced by Kaggle; engineering reports do not fabricate them.
+
+### Historical Step 100 export compatibility
+
+A content/identity-verified official job Step 100 state, or a verified COMMITTED transaction's selected Step 100 state, is authoritative. An additional pre-proposal Step 100 job receipt is compared when present, but its absence is not a new research gate. Original exports retain latest receipts and may omit this redundant copy. Import still requires the original rejected proposal identity and model fingerprint, step/cursor, unchanged Connection version, recorded margin/tolerance, historical optimizer identity, and complete optimizer/RNG state. Step 110 and pending shadow branches remain forbidden. The report distinguishes `MATCHED` from `NOT_ARCHIVED_NOT_REQUIRED` instead of claiming a comparison that did not occur.

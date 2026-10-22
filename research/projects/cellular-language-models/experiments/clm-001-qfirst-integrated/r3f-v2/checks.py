@@ -89,6 +89,9 @@ def parent_restore_regression(c):
             "adapt_steps": 0,
             "experiment_identity": ident,
             "snapshot_fingerprint": fingerprint(state["model"]),
+            "route_switch_margin": float(state["model"]["route_switch_margin"]),
+            "numeric_tolerance": float(state["model"]["route_numeric_tolerance"]),
+            "snapshot_connection_version": state["connection_version"],
         }
     ]
     with tempfile.TemporaryDirectory() as tmp:
@@ -112,6 +115,55 @@ def parent_restore_regression(c):
             assert evidence["post_rejection_verified"] and fingerprint(restored) == fingerprint(
                 state
             )
+        # Production regression: latest official Step 100 is verified even when
+        # its redundant pre-proposal receipt was not included in the HF manifest.
+        subset = {k: v for k, v in files.items() if "/receipts/" not in k}
+        with ExitStack() as stack:
+            stack.enter_context(patch.object(parent_import, "historical_config", return_value=old))
+            stack.enter_context(
+                patch.object(parent_import, "verified_manifest", return_value={"files": subset})
+            )
+            restored, evidence = parent_import.restore(test, backend, root / "latest-only", arm)
+            assert fingerprint(restored) == fingerprint(state)
+            assert evidence["secondary_step100_copy"] == "NOT_ARCHIVED_NOT_REQUIRED"
+        # Production regression: latest may be Step 110 while an immutable COMMITTED
+        # transaction still preserves the authoritative post-rejection Step 100 state.
+        txprefix = prefix + "transactions/proposal-0100/"
+        txstore = Store(root / txprefix, {**ident, "proposal_at_step": 100})
+        txrow = txstore.save(
+            SimpleNamespace(step=12, state=lambda: {"phase": "COMMITTED", "selected": state})
+        )
+        (txstore.root / "latest.json").write_text(json.dumps(txrow))
+        ahead = copy.deepcopy(state)
+        ahead["step"] = 110
+        ahead["data_cursor"] = 110 * c["training"]["tokens_per_step"]
+        aheadrow = store.save(SimpleNamespace(step=110, state=lambda: ahead))
+        (store.root / "latest.json").write_text(json.dumps(aheadrow))
+        transaction_files = {
+            p.relative_to(root).as_posix(): {"sha256": digest(p), "object": str(p)}
+            for p in store.root.rglob("*")
+            if p.is_file()
+            and (
+                p.is_relative_to(store.root)
+                if hasattr(p, "is_relative_to")
+                else str(p).startswith(str(store.root))
+            )
+        }
+        transaction_files = {k: v for k, v in transaction_files.items() if "/receipts/" not in k}
+        with ExitStack() as stack:
+            stack.enter_context(patch.object(parent_import, "historical_config", return_value=old))
+            stack.enter_context(
+                patch.object(
+                    parent_import, "verified_manifest", return_value={"files": transaction_files}
+                )
+            )
+            restored, evidence = parent_import.restore(
+                test, backend, root / "transaction-only", arm
+            )
+            assert fingerprint(restored) == fingerprint(state)
+            assert evidence["origin"] == "COMMITTED_TRANSACTION_SELECTED"
+            assert evidence["secondary_step100_copy"] == "NOT_ARCHIVED_NOT_REQUIRED"
+        # Leave only official latest state for the negative Step 110 test below.
         # A different/missing Step 100 is never silently replaced with Step 110.
         wrong = copy.deepcopy(state)
         wrong["step"] = 110
@@ -123,6 +175,7 @@ def parent_restore_regression(c):
             for p in store.root.rglob("*")
             if p.is_file()
         }
+        files = {k: v for k, v in files.items() if "/transactions/" not in k}
         with ExitStack() as stack:
             stack.enter_context(patch.object(parent_import, "historical_config", return_value=old))
             stack.enter_context(
