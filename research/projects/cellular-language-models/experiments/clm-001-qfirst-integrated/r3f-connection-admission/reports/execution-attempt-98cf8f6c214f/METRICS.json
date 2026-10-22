@@ -1,0 +1,70 @@
+{
+  "actual_kaggle_persistence_verified": false,
+  "budget_comparison": "EQUAL_MAIN_TOKENS_NOT_EQUAL_TOTAL_TRAINING_COMPUTE",
+  "calibration": "TRAINING_ORGANIZATION_SELECTION_NOT_INDEPENDENT_VALIDATION",
+  "comparisons": {
+    "A-C vs A-F": {
+      "mean": null,
+      "paired_seed_deltas": [],
+      "seed_sd": null,
+      "supported": false
+    },
+    "A-C vs A-T": {
+      "mean": null,
+      "paired_seed_deltas": [],
+      "seed_sd": null,
+      "supported": false
+    },
+    "B-C vs B-F": {
+      "mean": null,
+      "paired_seed_deltas": [],
+      "seed_sd": null,
+      "supported": false
+    },
+    "B-C vs B-R": {
+      "mean": null,
+      "paired_seed_deltas": [],
+      "seed_sd": null,
+      "supported": false
+    }
+  },
+  "config_sha256": "c8d896bd7780a3aa104afca151d1e86937438eb1f4e9842ec9d7f8bbfb464e25",
+  "confirmation": "SEALED",
+  "development": "HISTORICALLY_USED_EXPLORATORY_ONLY",
+  "experiment_id": "r3f-connection-admission",
+  "failures": [
+    {
+      "code": "EXISTING_HF_TOKEN_REQUIRED_NO_TRAINING_STARTED",
+      "http_status": null,
+      "type": "RuntimeError"
+    }
+  ],
+  "h4_scope": "Conditional nonuniform connection distributions only; no specialization or small-world evidence",
+  "hypotheses": {
+    "H1": "INVALID_RUN",
+    "H2": "INVALID_RUN",
+    "H3": "INVALID_RUN",
+    "H4": "INVALID_RUN"
+  },
+  "independent_seed_count": 3,
+  "mean_nll": {},
+  "nll": {
+    "151001301": {},
+    "151001302": {},
+    "151001303": {}
+  },
+  "origin_r3e": {
+    "config_path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/config/frozen.json",
+    "config_sha256": "cd56bfdf6fb53b470d37558e3a45dec34ec43293974662bf12919735d7225113",
+    "reported_36_proposals_all_rejected": "USER_SUPPLIED_SPEC; REMOTE_CHECKPOINTS_AND_METRICS_TO_BE_VERIFIED",
+    "source_sha": "db5b3b5fea4fcc14b0d65451d4495c00c77aed58"
+  },
+  "source_sha": "98cf8f6c214f33af72d1badf28d80a0c202dc934",
+  "status": "BLOCKED_OR_PARTIAL",
+  "story_paired_bootstrap": {
+    "A-C vs A-F": [],
+    "A-C vs A-T": [],
+    "B-C vs B-F": [],
+    "B-C vs B-R": []
+  }
+}

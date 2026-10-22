@@ -1,0 +1,52 @@
+{
+  "status": "SYNTHETIC_MECHANISM_PASS_REAL_A_C_PENDING",
+  "implementation_sha": "98cf8f6c214f33af72d1badf28d80a0c202dc934",
+  "config_sha256": "c8d896bd7780a3aa104afca151d1e86937438eb1f4e9842ec9d7f8bbfb464e25",
+  "original_r3e_source_sha": "db5b3b5fea4fcc14b0d65451d4495c00c77aed58",
+  "original_r3e_code_config_preserved": true,
+  "cpu_tests": "PASS",
+  "lint": "PASS",
+  "notebook_syntax_pin_entry": "PASS",
+  "controlled_adaptation": {
+    "A-C": "PASS_NONEMPTY_ADMISSION_AND_COMPLETE_PAIRED_ADAPTATION",
+    "B-C": "PASS_NONEMPTY_ADMISSION_AND_COMPLETE_PAIRED_ADAPTATION"
+  },
+  "interrupted_resume": [
+    "PROPOSED",
+    "FIRST_ADAPTATION_STEP",
+    "MIDDLE_ADAPTATION_STEP",
+    "AFTER_CALIBRATION_EVALUATED"
+  ],
+  "other_checks": [
+    "FLOAT_PAIR_SUM_TIE_VS_STABLE_TOP2",
+    "IDENTICAL_MODEL_ZERO_TRUST",
+    "PARAMETER_LOGIT_INTERPOLATION_11_SCALES",
+    "NUMERICAL_EMPTY_UPDATE_REJECTION",
+    "NONFINITE_LOGITS_KL_GRADIENT_FAILURE",
+    "THREE_INDEPENDENT_TRUST_GATES",
+    "PAIRED_RNG_STATE_AND_NEXT_UPDATE",
+    "TWO_GPU_TRIAL_ARM_SCHEDULING_WITH_CPU_MOCKS",
+    "DEVELOPMENT_FORBIDDEN_DURING_ADMISSION",
+    "CONTROLLED_FINAL_QUALITY_ACCEPT_AND_REJECT_RETAIN_MATCHING_CELL_OPTIMIZER"
+  ],
+  "parameters": {
+    "A": 1007825,
+    "B": 1006694,
+    "new_trainable_parameters": 0
+  },
+  "real_readonly_diagnostics": "NOT_RUN_MISSING_PRIVATE_HF_CREDENTIAL",
+  "real_single_seed_trial": "NOT_RUN",
+  "full_multi_seed_training_allowed": false,
+  "real_admission_rate": null,
+  "real_adaptation_count": null,
+  "real_final_quality_acceptance_rate": null,
+  "real_development_nll": "NOT_MEASURED",
+  "confirmation": "SEALED",
+  "known_limits": [
+    "Historical rejected candidate weights may not be available: read-only direction scans are explicitly surrogate; real proposal scans use actual optimized candidates.",
+    "Real Kaggle A/C gates remain unverified; no full-matrix release from CPU fixtures.",
+    "Uncommitted pre-interruption hardware time cannot be exactly reconstructed."
+  ],
+  "synthetic_adaptation_steps_per_branch": 3,
+  "production_adaptation_steps": 10
+}
