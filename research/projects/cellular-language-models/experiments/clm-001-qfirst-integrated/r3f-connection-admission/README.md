@@ -61,3 +61,9 @@ GitHub 仅回传聚合和诊断，私有模型/训练数据不公开。HF/本地
 ## 当前验收边界
 
 CPU 受控候选可证明 A-C/B-C 都能实际进入配对适应、正确提交/拒绝与恢复；它不能替代真实私有资产上的阶段 A/C。完整矩阵的门禁只接受真实单 Seed 的准入与适应记录。机制测试通过不是质量收益、专业化或小世界证据。
+
+## Retrying aggregate publication after a failed push
+
+Use the retained output directory with `scripts/run_r3f.py --publish-existing --output <retained-output>`. This entry only publishes existing aggregate reports; it does not run diagnostics, access datasets, update checkpoints or execute training. A previously committed local result branch is reused.
+
+The run from source `98cf8f6c214f33af72d1badf28d80a0c202dc934` stopped at the single-seed admission gate. Its publication adapter incorrectly supplied an unsupported `timeout` keyword to the historical Git helper. The adapter is corrected without changing admission thresholds, scientific configuration or historical checkpoints. Inspect `SINGLE_SEED_TRIAL.json` and `TRUST_REGION_TRACE.jsonl` from that retained output before interpreting the admission failure.

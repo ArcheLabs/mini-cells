@@ -8,7 +8,7 @@ from .common import read
 def publish(output):
     summary = read(Path(output) / "reports/METRICS.json")
     # Reuse exact result-only main-descended publishing discipline; no pre-training GitHub handshake.
-    from minicells_r3c_moe_bridge.publication import git, helper, ROOT
+    from minicells_r3c_moe_bridge.publication import git, ROOT
     from .common import BASE, canonical
 
     prepared = Path(output) / "github-metadata"
@@ -27,7 +27,11 @@ def publish(output):
     dest = BASE.relative_to(ROOT) / "reports/published" / key
     git(prepared, "sparse-checkout", "init", "--no-cone")
     git(prepared, "sparse-checkout", "set", "--no-cone", "/" + str(dest.parent) + "/")
-    git(prepared, "checkout", "-b", branch, parent)
+    existing = git(prepared, "branch", "--list", branch).stdout.strip()
+    if existing:
+        git(prepared, "checkout", branch)
+    else:
+        git(prepared, "checkout", "-b", branch, parent)
     git(prepared, "config", "user.name", "MiniCells Kaggle")
     git(prepared, "config", "user.email", "minicells@users.noreply.github.com")
     allowed = (
@@ -51,30 +55,30 @@ def publish(output):
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(src, target)
     git(prepared, "add", "--", str(dest))
-    git(prepared, "commit", "-m", "Publish R3f aggregate results only")
+    if git(prepared, "diff", "--cached", "--name-only").stdout.strip():
+        git(prepared, "commit", "-m", "Publish R3f aggregate results only")
     changed = git(prepared, "diff", "--name-only", parent, "HEAD").stdout.splitlines()
     if not changed or any(
         not p.startswith(str(dest) + "/") or Path(p).name not in allowed for p in changed
     ):
         raise RuntimeError("RESULT_ONLY_PUBLICATION_REQUIRED")
-    auth = helper()
-    old_root = auth.ROOT
-    old_git = auth.run_git
-
-    def bounded(*args, **kwargs):
-        kwargs.setdefault("timeout", 45)
-        return old_git(*args, **kwargs)
-
-    try:
-        auth.ROOT = prepared
-        auth.run_git = bounded
-        auth.push_branch(branch, "GITHUB_TOKEN")
-    finally:
-        auth.ROOT = old_root
-        auth.run_git = old_git
+    push_results(prepared, branch)
     return {
         "status": "PUBLISHED",
         "branch": branch,
         "parent_main_sha": parent,
         "report_directory": str(dest),
     }
+
+
+def push_results(prepared, branch):
+    """Use the historical auth helper with its supported call signature."""
+    from minicells_r3c_moe_bridge.publication import helper
+
+    auth = helper()
+    old_root = auth.ROOT
+    try:
+        auth.ROOT = prepared
+        auth.push_branch(branch, "GITHUB_TOKEN")
+    finally:
+        auth.ROOT = old_root

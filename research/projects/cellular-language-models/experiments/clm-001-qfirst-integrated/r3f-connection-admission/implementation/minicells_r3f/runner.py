@@ -489,6 +489,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--config", default=str(BASE / "config/frozen.json"))
     p.add_argument("--run-all", action="store_true")
+    p.add_argument("--publish-existing", action="store_true")
     p.add_argument("--output")
     p.add_argument("--assets")
     p.add_argument("--worker", type=int)
@@ -497,7 +498,13 @@ def main():
     a = p.parse_args()
     c = configuration(a.config)
     out = a.output or str(Path("/kaggle/working") / ("r3f-output-" + source_sha()[:12]))
-    if a.worker is not None:
+    if a.publish_existing:
+        from .publication import publish
+
+        if not a.output:
+            p.error("--publish-existing requires the retained --output directory")
+        print(json.dumps(publish(out)))
+    elif a.worker is not None:
         worker(c, out, a.assets, source_sha(), a.worker, a.workers, a.phase)
     elif a.run_all:
         automatic(c, Path(a.config).resolve(), out, a.assets)

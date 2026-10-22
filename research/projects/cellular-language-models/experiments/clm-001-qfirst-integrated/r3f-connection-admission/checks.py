@@ -40,7 +40,37 @@ def comparable(state):
     return result
 
 
+def publication_regression():
+    from types import SimpleNamespace
+    from minicells_r3f.publication import push_results
+
+    calls = []
+    original = Path("/historical")
+    auth = SimpleNamespace(ROOT=original)
+
+    def supported_git(root, *args, check=True, env=None):
+        calls.append((root, args, check, env))
+
+    def push(branch, secret):
+        supported_git(auth.ROOT, "push", branch, check=False, env={"secret_label": secret})
+
+    auth.push_branch = push
+    with patch("minicells_r3c_moe_bridge.publication.helper", return_value=auth):
+        push_results(Path("/retained"), "results/test")
+        assert calls[0][0] == Path("/retained")
+        assert auth.ROOT == original
+        auth.push_branch = lambda *args: (_ for _ in ()).throw(RuntimeError("offline"))
+        try:
+            push_results(Path("/retained"), "results/test")
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("push failure hidden")
+        assert auth.ROOT == original
+
+
 def main():
+    publication_regression()
     torch.set_num_threads(1)
     c = copy.deepcopy(configuration())
     c["synthetic"] = True
