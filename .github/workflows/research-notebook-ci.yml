@@ -10,7 +10,21 @@ permissions:
   contents: read
 
 jobs:
+  r3e-scope:
+    runs-on: ubuntu-latest
+    outputs:
+      run_legacy: ${{ steps.scope.outputs.run_legacy }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python shared/scripts/ci/r3e_scope.py
   manual-notebook:
+    needs: r3e-scope
+    if: needs.r3e-scope.outputs.run_legacy == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,6 +37,8 @@ jobs:
         run: python tests/research/03-routing-and-growth/test_cell_graph_manual_publication.py
 
   experiment-005-audit:
+    needs: r3e-scope
+    if: needs.r3e-scope.outputs.run_legacy == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

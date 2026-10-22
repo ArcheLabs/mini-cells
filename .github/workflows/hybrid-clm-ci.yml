@@ -10,7 +10,21 @@ permissions:
   contents: read
 
 jobs:
+  r3e-scope:
+    runs-on: ubuntu-latest
+    outputs:
+      run_legacy: ${{ steps.scope.outputs.run_legacy }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python shared/scripts/ci/r3e_scope.py
   preflight:
+    needs: r3e-scope
+    if: needs.r3e-scope.outputs.run_legacy == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
