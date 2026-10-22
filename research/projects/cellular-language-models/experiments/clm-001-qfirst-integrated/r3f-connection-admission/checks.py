@@ -253,6 +253,28 @@ def main():
                 again.restore(start)
                 execute(again, data, tmp, identity(c, "fixture", 7, arm))
                 assert fingerprint(again.state()) == committed
+        # Admission and mechanism execution are separate from final quality acceptance.
+        for accept, values in [(False, [1.0, 1.0]), (True, [1.0, 0.9])]:
+            selected = Trainer(build(c, parent, 7, arm, "cpu", data), c, arm)
+            selected.restore(start)
+            expected_branch = selected.clone()
+            if accept:
+                proposed, _ = controlled(expected_branch, data)
+                expected_branch.model.load_state_dict(proposed.state_dict(), strict=True)
+            for _ in range(c["training"]["adapt_steps"]):
+                expected_branch.update(data)
+            with tempfile.TemporaryDirectory() as tmp, ExitStack() as stack:
+                stack.enter_context(patch.object(adapter, "optimize", controlled))
+                stack.enter_context(patch.object(adapter, "calibration", side_effect=values))
+                execute(selected, data, tmp, identity(c, "quality-control", 7, arm))
+            assert selected.proposals[-1]["final_quality_accepted"] == accept
+            assert selected.proposals[-1]["cell_adaptation_executed"]
+            assert fingerprint(selected.model.state_dict()) == fingerprint(
+                expected_branch.model.state_dict()
+            )
+            assert fingerprint(selected.cell_opt.state_dict()) == fingerprint(
+                expected_branch.cell_opt.state_dict()
+            )
         altered = tr.clone()
         altered.route_rng.manual_seed(2)
         try:

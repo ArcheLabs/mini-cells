@@ -26,7 +26,8 @@
     "THREE_INDEPENDENT_TRUST_GATES",
     "PAIRED_RNG_STATE_AND_NEXT_UPDATE",
     "TWO_GPU_TRIAL_ARM_SCHEDULING_WITH_CPU_MOCKS",
-    "DEVELOPMENT_FORBIDDEN_DURING_ADMISSION"
+    "DEVELOPMENT_FORBIDDEN_DURING_ADMISSION",
+    "CONTROLLED_FINAL_QUALITY_ACCEPT_AND_REJECT_RETAIN_MATCHING_CELL_OPTIMIZER"
   ],
   "parameters": {
     "A": 1007825,
@@ -45,5 +46,7 @@
     "Historical rejected candidate weights may not be available: read-only direction scans are explicitly surrogate; real proposal scans use actual optimized candidates.",
     "Real Kaggle A/C gates remain unverified; no full-matrix release from CPU fixtures.",
     "Uncommitted pre-interruption hardware time cannot be exactly reconstructed."
-  ]
+  ],
+  "synthetic_adaptation_steps_per_branch": 3,
+  "production_adaptation_steps": 10
 }
