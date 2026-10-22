@@ -5,10 +5,13 @@ from pathlib import Path
 import subprocess
 
 PREFIX = (
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-v2/",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission/",
 )
 ALLOWED = {
+    "scripts/run_r3f_v2.py",
+    ".github/workflows/r3f-v2-local-connection.yml",
     ".github/workflows/clm001-qfirst-cpu.yml",
     ".github/workflows/hybrid-clm-ci.yml",
     ".github/workflows/research-notebook-ci.yml",
