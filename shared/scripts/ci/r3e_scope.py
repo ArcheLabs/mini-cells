@@ -4,7 +4,10 @@ import os
 from pathlib import Path
 import subprocess
 
-PREFIX = "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/"
+PREFIX = (
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission/",
+)
 ALLOWED = {
     ".github/workflows/clm001-qfirst-cpu.yml",
     ".github/workflows/hybrid-clm-ci.yml",
@@ -12,6 +15,8 @@ ALLOWED = {
     ".github/workflows/r3e-stable-coadaptation.yml",
     "shared/scripts/ci/r3e_scope.py",
     "scripts/run_r3e.py",
+    "scripts/run_r3f.py",
+    ".github/workflows/r3f-connection-admission.yml",
 }
 
 
