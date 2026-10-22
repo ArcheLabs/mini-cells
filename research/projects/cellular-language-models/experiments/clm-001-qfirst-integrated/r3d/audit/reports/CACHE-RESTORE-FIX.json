@@ -1,0 +1,10 @@
+{
+  "fix_source_sha": "07fc912330c00a84416a254b83883df866ee1e5e",
+  "incident": "HF objects downloaded but safe() required destination to exist before restoration",
+  "repair": "Validate destination path, restore bytes, then reuse Store.verified for SHA/size/identity/state fingerprint. Missing local receipt objects fall back to pinned HF.",
+  "focused_cpu_checks": "PASS",
+  "lint": "PASS",
+  "training_updates": 0,
+  "optimizer_instances": 0,
+  "real_checkpoint_analysis": "PENDING_KAGGLE_RERUN_PRIVATE_INPUT_UNAVAILABLE_LOCALLY"
+}

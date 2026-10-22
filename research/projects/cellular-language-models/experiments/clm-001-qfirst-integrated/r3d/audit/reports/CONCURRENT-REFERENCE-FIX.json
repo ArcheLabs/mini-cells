@@ -1,0 +1,9 @@
+{
+  "implementation_sha": "f86ad9b74d509d3c35937a1803c8f0675e8ed2e1",
+  "observed": "17/18 checkpoints completed; seed151001301 F0 FileNotFoundError before restore/check",
+  "identified_defect": "Concurrent workers write input-reference.json through identical .tmp name",
+  "repair": "Audit-local atomic JSON writer uses a unique temporary file per writer; historical helpers unchanged",
+  "verification": "Synchronized two-writer replacement and focused CPU checks PASS; lint PASS",
+  "real_kaggle_rerun": "PENDING",
+  "training_updates": 0
+}
