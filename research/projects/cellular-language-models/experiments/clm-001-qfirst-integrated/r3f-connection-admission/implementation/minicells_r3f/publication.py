@@ -63,8 +63,13 @@ def publish(output):
     ):
         raise RuntimeError("RESULT_ONLY_PUBLICATION_REQUIRED")
     push_results(prepared, branch)
+    local_commit = git(prepared, "rev-parse", "HEAD").stdout.strip()
+    remote = git(prepared, "ls-remote", "origin", "refs/heads/" + branch).stdout.split()
+    if not remote or remote[0] != local_commit:
+        raise RuntimeError("REMOTE_RESULT_COMMIT_NOT_VERIFIED")
     return {
         "status": "PUBLISHED",
+        "remote_commit_sha": local_commit,
         "branch": branch,
         "parent_main_sha": parent,
         "report_directory": str(dest),

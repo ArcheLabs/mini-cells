@@ -67,3 +67,13 @@ CPU 受控候选可证明 A-C/B-C 都能实际进入配对适应、正确提交/
 Use the retained output directory with `scripts/run_r3f.py --publish-existing --output <retained-output>`. This entry only publishes existing aggregate reports; it does not run diagnostics, access datasets, update checkpoints or execute training. A previously committed local result branch is reused.
 
 The run from source `98cf8f6c214f33af72d1badf28d80a0c202dc934` stopped at the single-seed admission gate. Its publication adapter incorrectly supplied an unsupported `timeout` keyword to the historical Git helper. The adapter is corrected without changing admission thresholds, scientific configuration or historical checkpoints. Inspect `SINGLE_SEED_TRIAL.json` and `TRUST_REGION_TRACE.jsonl` from that retained output before interpreting the admission failure.
+
+## Read-only retained-run audit
+
+Use `notebooks/kaggle-readonly-audit.ipynb` on CPU. Run All once. It reads the retained source-98cf trial Output if present; otherwise it retrieves only the two latest trial states and receipts from the exact HF revision provided in the historical manifest. It never starts workers, runs a policy optimizer, writes to HF or publishes to GitHub. The audit is saved to a fresh directory. No additional Notebook test suite is executed.
+
+`CANDIDATE_NOT_RETAINED_NO_REOPTIMIZATION` is an honest historical limitation: rejected full proposal weights were not retained by source 98cf. Do not reconstruct them by training, substitute the random-direction scan, or interpret this status as a new admission failure. Verified final checkpoints can still expose their original proposal identity, margin and snapshot fingerprint.
+
+Future proposals retain the full pre-backtracking Connection weights and official snapshot in a separate immutable Store archive. A diagnostic-only scan can inspect smaller scales without releasing the training matrix or changing frozen admission scales/thresholds. Old checkpoints are not retroactively modified.
+
+New automatic executions use execution-scoped directories and an aggregate-report hash manifest. Private checkpoint integrity continues to use the existing Store receipt hashes; large private checkpoints are not hashed again for the public aggregate manifest. The final local manifest records publication status and the remote commit only after an exact remote branch SHA check. The remote pre-push manifest intentionally cannot claim its own future commit.

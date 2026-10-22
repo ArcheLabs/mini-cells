@@ -347,8 +347,11 @@ def reports(c, output, source, manifest, failures):
 def automatic(c, path, output, assets):
     if c.get("synthetic"):
         raise RuntimeError("SYNTHETIC_CONFIGURATION_CANNOT_RELEASE_REAL_MATRIX")
-    output = Path(output)
-    output.mkdir(parents=True, exist_ok=True)
+    from datetime import datetime, timezone
+    from .evidence import execution_directory, seal
+
+    started_at = datetime.now(timezone.utc).isoformat()
+    output = execution_directory(output)
     source = source_sha()
     run = canonical({"source": source, "config": canonical(c)})
     ident = {
@@ -460,6 +463,14 @@ def automatic(c, path, output, assets):
     manifest["hf_reference"] = prior
     report = reports(c, output, source, manifest, failures)
     publication = {"status": "NOT_REQUESTED_OR_GITHUB_TOKEN_UNAVAILABLE"}
+    seal(
+        output,
+        manifest,
+        status=report["status"],
+        exit_code=1 if failures else 0,
+        publication=publication,
+        started_at=started_at,
+    )
     if os.environ.get("GITHUB_TOKEN"):
         try:
             from .publication import publish
@@ -468,6 +479,14 @@ def automatic(c, path, output, assets):
         except Exception as error:
             publication = {"status": "LOCAL_RETAINED", **error_code(error)}
     atomic(output / "reports/PUBLICATION.json", publication)
+    seal(
+        output,
+        manifest,
+        status=report["status"],
+        exit_code=1 if failures else 0,
+        publication=publication,
+        started_at=started_at,
+    )
     print(
         json.dumps(
             {
@@ -490,6 +509,8 @@ def main():
     p.add_argument("--config", default=str(BASE / "config/frozen.json"))
     p.add_argument("--run-all", action="store_true")
     p.add_argument("--publish-existing", action="store_true")
+    p.add_argument("--inspect-retained")
+    p.add_argument("--device", default="cpu")
     p.add_argument("--output")
     p.add_argument("--assets")
     p.add_argument("--worker", type=int)
@@ -498,7 +519,13 @@ def main():
     a = p.parse_args()
     c = configuration(a.config)
     out = a.output or str(Path("/kaggle/working") / ("r3f-output-" + source_sha()[:12]))
-    if a.publish_existing:
+    if a.inspect_retained:
+        from .readonly import inspect
+
+        if not a.output:
+            p.error("--inspect-retained requires a separate --output directory")
+        inspect(a.inspect_retained, a.output, a.assets, a.device)
+    elif a.publish_existing:
         from .publication import publish
 
         if not a.output:

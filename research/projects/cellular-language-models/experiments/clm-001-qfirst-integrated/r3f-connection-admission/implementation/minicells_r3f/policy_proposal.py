@@ -111,6 +111,7 @@ def optimize(tr, data):
     # Probe forwards are additional work, not normal main-stream updates.
     m.work = start
     return candidate if chosen is not None else None, {
+        "_readonly_candidate_connection": new_params,
         "losses": losses,
         "snapshot_fingerprint": snapshot,
         "snapshot_cell_step": tr.step,

@@ -28,7 +28,19 @@ def trace(directory, at, public):
     root.mkdir(parents=True, exist_ok=True)
     path = root / "TRUST_REGION_TRACE.jsonl"
     content = "".join(
-        json.dumps({"at_step": at, **row}, sort_keys=True, allow_nan=False) + "\n"
+        json.dumps(
+            {
+                "at_step": at,
+                "experiment_identity": public.get("experiment_identity"),
+                "route_switch_margin": public.get("route_switch_margin"),
+                "numeric_tolerance": public.get("numeric_tolerance"),
+                "snapshot_fingerprint": public.get("snapshot_fingerprint"),
+                **row,
+            },
+            sort_keys=True,
+            allow_nan=False,
+        )
+        + "\n"
         for row in public["attempts"]
     )
     if path.exists():
@@ -65,6 +77,21 @@ def execute(tr, data, directory, identity):
             "new": None,
         }
         save_event(store, package, 0)
+    # The transaction is authoritative, including across interruptions during archival.
+    if "_readonly_candidate_connection" in package.get("info", {}):
+        info = package["info"]
+        archive = event_store(Path(directory) / "readonly-proposals", identity, at)
+        save_event(
+            archive,
+            {
+                "at_step": at,
+                "official": package["official"],
+                "candidate_connection": info["_readonly_candidate_connection"],
+                "route_switch_margin": info["route_switch_margin"],
+                "numeric_tolerance": info["numeric_tolerance"],
+            },
+            0,
+        )
     if package["phase"] == "COMMITTED":
         tr.restore(package["selected"])
         trace(directory, at, tr.proposals[-1])
@@ -73,7 +100,11 @@ def execute(tr, data, directory, identity):
         tr.restore(package["official"])
         info = package["info"]
         public = copy.deepcopy(
-            {k: v for k, v in info.items() if k != "proposal_optimizer_final_state"}
+            {
+                k: v
+                for k, v in info.items()
+                if k not in ("proposal_optimizer_final_state", "_readonly_candidate_connection")
+            }
         )
         public.update(
             experiment_identity=identity,

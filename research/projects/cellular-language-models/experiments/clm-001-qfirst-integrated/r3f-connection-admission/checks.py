@@ -69,8 +69,59 @@ def publication_regression():
         assert auth.ROOT == original
 
 
+def evidence_regression():
+    from minicells_r3f.evidence import execution_directory, seal
+    from minicells_r3f.common import canonical
+    from minicells_r3f.readonly import inspect
+
+    with tempfile.TemporaryDirectory() as temp:
+        root = Path(temp)
+        first = execution_directory(root / "runs")
+        second = execution_directory(root / "runs")
+        assert first != second
+        (first / "reports").mkdir()
+        (first / "reports/SINGLE_SEED_TRIAL.json").write_text('{"status":"STOPPED"}')
+        ident = {
+            "experiment_id": "r3f-connection-admission",
+            "source_sha": "test",
+            "config_sha256": "config",
+            "run_id": "run",
+        }
+        result = seal(
+            first,
+            ident,
+            status="BLOCKED",
+            exit_code=1,
+            publication={"status": "LOCAL_RETAINED"},
+            started_at="test",
+        )
+        assert result["exit_code"] == 1 and "remote_commit_sha" not in result
+        assert result["artifact_files"][0]["bytes"] > 0
+        assert len(result["artifact_files"][0]["sha256"]) == 64
+        c = configuration()
+        ident["config_sha256"] = canonical(c)
+        ident["run_id"] = canonical({"source": "test", "config": canonical(c)})
+        (first / "identity.json").write_text(json.dumps(ident))
+        (first / "reports/RUN_MANIFEST.json").write_text(json.dumps(ident))
+        before = {str(f): f.read_bytes() for f in first.rglob("*") if f.is_file()}
+        with patch("minicells_r3f.readonly.configuration", return_value=c):
+            report = inspect(first, root / "audits")
+        assert report["training_updates"] == report["policy_optimizer_updates"] == 0
+        assert all(
+            v["scan_status"] == "CANDIDATE_NOT_RETAINED_NO_REOPTIMIZATION" for v in report["arms"].values()
+        )
+        assert before == {str(f): f.read_bytes() for f in first.rglob("*") if f.is_file()}
+        try:
+            inspect(first, first / "nested")
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("readonly output inside input accepted")
+
+
 def main():
     publication_regression()
+    evidence_regression()
     torch.set_num_threads(1)
     c = copy.deepcopy(configuration())
     c["synthetic"] = True
@@ -110,6 +161,9 @@ def main():
         status = admission(metrics, c, float(old.route_numeric_tolerance))
         assert status["trust_region_passed"] and status["effective_update"]
         return new, {
+            "_readonly_candidate_connection": copy.deepcopy(new.connection.state_dict()),
+            "route_switch_margin": float(old.route_switch_margin),
+            "numeric_tolerance": float(old.route_numeric_tolerance),
             "attempts": [{"scale": 1.0, **metrics, **status}],
             "chosen_scale": 1.0,
             "trust_region_passed": True,
@@ -151,9 +205,7 @@ def main():
             assert torch.equal(base, hard_action(raw, base, model.route_switch_margin))
             assert torch.equal(
                 base,
-                hard_action(
-                    raw + 1e-9 * torch.arange(raw.shape[-1]), base, model.route_switch_margin
-                ),
+                hard_action(raw + 1e-9 * torch.arange(raw.shape[-1]), base, model.route_switch_margin),
             )
             for scale in (0.0, 0.125, 1.0):
                 raw2 = raw.clone()
@@ -177,9 +229,7 @@ def main():
             tested = dict(same)
             tested.update(centered_score_delta_max_abs=0.01, score_delta_max_abs=0.01)
             tested[metric] = c["proposal"][limit] + 0.1
-            assert not admission(tested, c, float(model.route_numeric_tolerance))[
-                "trust_region_passed"
-            ]
+            assert not admission(tested, c, float(model.route_numeric_tolerance))["trust_region_passed"]
         zero = admission(same, c, float(model.route_numeric_tolerance))
         assert zero["reject_reasons"] == ["NO_EFFECTIVE_UPDATE"]
         real_adam = torch.optim.AdamW
@@ -200,8 +250,7 @@ def main():
         candidate, info = optimize(tr, data)
         assert len(info["attempts"]) == 11
         assert all(
-            "interpolation_max_abs_error" in row and "reject_reasons" in row
-            for row in info["attempts"]
+            "interpolation_max_abs_error" in row and "reject_reasons" in row for row in info["attempts"]
         )
         # A zero-learning-rate optimizer must produce only empty updates, not a falsely successful candidate.
         empty = Trainer(build(c, parent, 7, arm, "cpu", data), copy.deepcopy(c), arm)
@@ -235,16 +284,22 @@ def main():
         with tempfile.TemporaryDirectory() as clean:
             with patch.object(adapter, "optimize", controlled):
                 execute(tr, data, clean, identity(c, "fixture", 7, arm))
+            archive = Path(clean) / "readonly-proposals/transactions/proposal-0001"
+            event_ident = {**identity(c, "fixture", 7, arm), "proposal_at_step": 1}
+            package = Store(archive, event_ident).verified(json.loads((archive / "latest.json").read_text()))
+            from minicells_r3f.readonly import scan
+
+            with patch("minicells_r3f.data.load", return_value=data):
+                scanned = scan(c, identity(c, "fixture", 7, arm), package, "unused", "cpu")
+            assert scanned["scan_status"] == "SCANNED" and len(scanned["attempts"]) == 22
+            assert scanned["attempts"][0]["action_change"] == 0
+
         expected = copy.deepcopy(tr.state())
         event = tr.proposals[-1]
         assert (
-            event["trust_region_passed"]
-            and event["cell_adaptation_executed"]
-            and event["adapt_steps"] == 3
+            event["trust_region_passed"] and event["cell_adaptation_executed"] and event["adapt_steps"] == 3
         )
-        assert (
-            tr.step == 4 and tr.data_cursor == 32 and tr.cost["discarded_adaptation_updates"] == 3
-        )
+        assert tr.step == 4 and tr.data_cursor == 32 and tr.cost["discarded_adaptation_updates"] == 3
         assert isinstance(event["final_quality_accepted"], bool)
         for stop in (0, 1, 2, 4):
             interrupted = Trainer(build(c, parent, 7, arm, "cpu", data), c, arm)
@@ -299,9 +354,7 @@ def main():
                 execute(selected, data, tmp, identity(c, "quality-control", 7, arm))
             assert selected.proposals[-1]["final_quality_accepted"] == accept
             assert selected.proposals[-1]["cell_adaptation_executed"]
-            assert fingerprint(selected.model.state_dict()) == fingerprint(
-                expected_branch.model.state_dict()
-            )
+            assert fingerprint(selected.model.state_dict()) == fingerprint(expected_branch.model.state_dict())
             assert fingerprint(selected.cell_opt.state_dict()) == fingerprint(
                 expected_branch.cell_opt.state_dict()
             )
@@ -327,13 +380,8 @@ def main():
         for arm in ("A-C", "B-C"):
             with patch("minicells_r3f.adaptation.optimize", controlled):
                 result = train_job(c, data, tmp, "fixture", 7, arm, parent, "cpu", target=4)
-            assert (
-                result["checkpoint"]["step"] == 4
-                and result["proposals"][-1]["cell_adaptation_executed"]
-            )
-        assert not trial_gate(c, {arm: result})[
-            "passed"
-        ]  # synthetic admission cannot release real training.
+            assert result["checkpoint"]["step"] == 4 and result["proposals"][-1]["cell_adaptation_executed"]
+        assert not trial_gate(c, {arm: result})["passed"]  # synthetic admission cannot release real training.
     import minicells_r3f.runner as runtime
 
     tasks = []
@@ -341,16 +389,12 @@ def main():
         stack.enter_context(patch.object(runtime, "load", return_value=data))
         stack.enter_context(patch.object(runtime, "parent_state", return_value=parent))
         stack.enter_context(
-            patch.object(
-                runtime, "train_job", side_effect=lambda *args: tasks.append((args[5], args[7]))
-            )
+            patch.object(runtime, "train_job", side_effect=lambda *args: tasks.append((args[5], args[7])))
         )
         runtime.worker(c, "unused", "unused", "fixture", 0, 2, "trial")
         runtime.worker(c, "unused", "unused", "fixture", 1, 2, "trial")
     assert tasks == [("A-C", "cuda:0"), ("B-C", "cuda:1")]
-    checks.append(
-        "Train/Calibration-only trial entry; synthetic evidence cannot release real matrix"
-    )
+    checks.append("Train/Calibration-only trial entry; synthetic evidence cannot release real matrix")
     print(
         json.dumps(
             {
