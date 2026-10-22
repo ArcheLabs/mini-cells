@@ -1,6 +1,7 @@
 """Reuse existing immutable Store, selective restore, serialized segment commits and readback."""
 
 from pathlib import Path
+from contextlib import contextmanager
 import os
 import shutil
 import tempfile
@@ -16,7 +17,34 @@ def save(tr, store):
     return row
 
 
+@contextmanager
+def snapshot_lock(private):
+    import fcntl
+
+    private = Path(private)
+    private.mkdir(parents=True, exist_ok=True)
+    with (private / ".snapshot.lock").open("a") as stream:
+        fcntl.flock(stream, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(stream, fcntl.LOCK_UN)
+
+
+def cleanup_transactions(directory, committed_step):
+    directory = Path(directory)
+    with snapshot_lock(directory.parent.parent):
+        for transaction in (directory / "transactions").glob("proposal-*"):
+            if int(transaction.name.split("-")[-1]) < committed_step:
+                shutil.rmtree(transaction)
+
+
 def export(private, destination):
+    with snapshot_lock(private):
+        return _export(private, destination)
+
+
+def _export(private, destination):
     """Coordinator snapshots immutable receipts, not mutable worker latest/temp files."""
     private = Path(private)
     destination = Path(destination)

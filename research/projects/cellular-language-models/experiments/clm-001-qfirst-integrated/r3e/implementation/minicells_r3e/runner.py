@@ -6,7 +6,6 @@ import json
 import os
 from pathlib import Path
 import queue
-import shutil
 import subprocess
 import sys
 import threading
@@ -41,6 +40,7 @@ from .storage import (
     restore_latest,
     remote_snapshot,
     public_publish,
+    cleanup_transactions,
 )
 from .reports import write
 
@@ -146,7 +146,7 @@ def job(c, data, output, source, seed, arm, parent, device):
                 raise RuntimeError("ADAPTATION_CHECKPOINT_COMMIT_FAILED")
             # Once official state has a new step, obsolete private shadow tensors need not persist.
             if tr.step > tr.proposals[-1]["at_step"]:
-                shutil.rmtree(directory / "transactions", ignore_errors=True)
+                cleanup_transactions(directory, tr.step)
         else:
             row = tr.update(data)
             if tr.step % c["training"]["print_every"] == 0:
@@ -159,9 +159,7 @@ def job(c, data, output, source, seed, arm, parent, device):
             if tr.step != latest["step"]:
                 latest = save(tr, store)
             # Main state now includes completed proposal decisions; old branch tensors are redundant.
-            for transaction in (directory / "transactions").glob("proposal-*"):
-                if int(transaction.name.split("-")[-1]) < tr.step:
-                    shutil.rmtree(transaction)
+            cleanup_transactions(directory, tr.step)
             print("[R3E_SNAPSHOT]", seed, arm, tr.step, flush=True)
     latest = save(tr, store)
     tr.verify_frozen()
