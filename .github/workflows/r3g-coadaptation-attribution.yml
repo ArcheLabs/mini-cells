@@ -1,0 +1,32 @@
+name: R3g Read-Only Attribution CPU
+on:
+  push:
+    branches: [codex/r3g-coadaptation-attribution]
+  pull_request:
+    paths:
+      - 'research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3g/**'
+      - 'scripts/run_r3g.py'
+      - '.github/workflows/r3g-coadaptation-attribution.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  readonly-attribution:
+    runs-on: ubuntu-latest
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install numpy pyyaml ruff
+      - run: python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3g/checks.py
+      - run: ruff check --config research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/ruff.toml research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3g scripts/run_r3g.py
+      - name: Historical R3f and R3f-v2 stay unchanged
+        run: git diff --exit-code 57906beece8d2f0034fa6305c05d510954f0d586 HEAD -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-v2

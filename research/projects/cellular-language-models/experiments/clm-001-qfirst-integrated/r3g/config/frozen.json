@@ -1,0 +1,68 @@
+{
+  "experiment_id": "CLM-001-R3g-CoAdaptation-Attribution-001",
+  "scope": "READ_ONLY_EXPLORATORY",
+  "seed": 151001301,
+  "arms": [
+    "A-C",
+    "B-C"
+  ],
+  "optimizer_updates": 0,
+  "confirmation": "SEALED",
+  "parent": {
+    "experiment_id": "CLM-001-R3f-v2-Local-Connection-001",
+    "source_sha": "df096d4567326257f19f7bd58359a401fde3c3e5",
+    "config_sha256": "2648a588dacea2119552ff487929942fe2af8c9b42d9fdd6482901639e84a1e5",
+    "run_id": "6b79bb4c6c29694e10e5ad77a20285613e3b98ff247b58845f218b48ded8c39b",
+    "execution_id": "31633d7661954111aa3727535f044d00",
+    "hf_repo": "libingjiang/minicells-research-checkpoints",
+    "pointer": "r3fv2/6b79bb4c6c29694e10e5ad77a20285613e3b98ff247b58845f218b48ded8c39b/latest.json",
+    "public_commit_sha": "f87ad21a4104c010ba3eb0c091328aeb2cc46f4c"
+  },
+  "historical_nll": {
+    "A-C": {
+      "OO": 4.4156653434,
+      "NN": 4.4142163992
+    },
+    "B-C": {
+      "OO": 4.4465711489,
+      "NN": 4.445827134
+    }
+  },
+  "selected_branches": {
+    "A-C": "new",
+    "B-C": "old"
+  },
+  "chosen_scale": 0.000244140625,
+  "start_step": 100,
+  "end_step": 110,
+  "adapt_steps": 10,
+  "intermediate_sequences": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "quality_repeats": 2,
+  "historical_nll_atol": 1e-06,
+  "numerical_floor": 1e-12,
+  "routing_reference_role": "calibration",
+  "routing_reference_windows": 8,
+  "data_roles": [
+    "calibration"
+  ],
+  "development_access": false,
+  "sampling_monte_carlo": false,
+  "automatic_next_training": false,
+  "dtype_resolution_floor": "FLOAT32_EPSILON_TIMES_MAX_ABS_NLL",
+  "descriptive_routing_thresholds": {
+    "normalized_entropy_near_uniform_min": 0.99,
+    "hard_match_uniform_relative_deviation_max": 0.1,
+    "scope": "DESCRIPTIVE_ONLY_NOT_AN_ADMISSION_OR_TRAINING_GATE"
+  }
+}
