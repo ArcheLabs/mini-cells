@@ -42,7 +42,10 @@ def trial_gate(c, results):
     observations = []
     for arm, row in results.items():
         for event in row["proposals"]:
-            if event["at_step"] not in c["training"]["proposal_steps"]:
+            if (
+                event["at_step"] > c["admission"]["trial_end_step"]
+                or event["at_step"] not in c["training"]["proposal_steps"]
+            ):
                 continue
             observations.append(
                 {
@@ -140,8 +143,26 @@ def evaluate_job(c, data, output, source, seed, arm, parent, device):
 
 
 def worker(c, output, assets, source, index, count, phase):
-    roles = ("train", "calibration") if phase == "train" else ("calibration", "development")
+    roles = (
+        ("train", "calibration") if phase in ("train", "trial") else ("calibration", "development")
+    )
     data = load(c, assets, roles)
+    if phase == "trial":
+        seed = c["admission"]["trial_seed"]
+        parent = parent_state(c, Path(output) / "parent-r3c", seed)
+        for arm in c["admission"]["trial_arms"][index::count]:
+            train_job(
+                c,
+                data,
+                output,
+                source,
+                seed,
+                arm,
+                parent,
+                "cuda:%s" % index,
+                c["admission"]["trial_end_step"],
+            )
+        return
     for seed in c["seeds"][index::count]:
         parent = parent_state(c, Path(output) / "parent-r3c", seed)
         for arm in ARMS:
@@ -369,42 +390,7 @@ def automatic(c, path, output, assets):
         assets = Path(assets or "/kaggle/working/r3c-pilot-assets-d8a0fd0da03e")
         calibration_data = ensure(c, backend, assets, ("calibration",))
         readonly_stage(c, calibration_data, backend, output, "cuda:0")
-        manifest["stage"] = "C_SINGLE_SEED_TRIAL"
-        training_data = ensure(c, backend, assets, ("train", "calibration"))
-        seed = c["admission"]["trial_seed"]
-        parent = parent_state(c, output / "parent-r3c", seed)
-        trial = {}
-        for arm in c["admission"]["trial_arms"]:
-            trial[arm] = train_job(
-                c,
-                training_data,
-                output,
-                source,
-                seed,
-                arm,
-                parent,
-                "cuda:0",
-                c["admission"]["trial_end_step"],
-            )
-        gate = trial_gate(c, trial)
-        atomic(output / "reports/SINGLE_SEED_TRIAL.json", gate)
-        prior = remote_snapshot(backend, private, output, ident, pointer, session, prior) or prior
-        if not gate["passed"]:
-            raise RuntimeError("SINGLE_SEED_NO_ADMISSION_STOP_NO_THRESHOLD_RELAXATION")
-        atomic(
-            output / "reports/MATRIX_RELEASE.json",
-            {
-                "identity": ident,
-                "calibration_margins_frozen": True,
-                "calibration_diagnostic_sha256": digest(
-                    output / "reports/ROUTING_DIAGNOSTICS.json"
-                ),
-                "real_trial_gate": gate,
-                "code_config_assets_locked_before_development": True,
-                "development_accessed": False,
-            },
-        )
-        last = [time.monotonic()]
+        last = [0.0]
 
         def callback(force):
             nonlocal prior
@@ -425,6 +411,40 @@ def automatic(c, path, output, assets):
                 )
             last[0] = time.monotonic()
 
+        manifest["stage"] = "C_SINGLE_SEED_TRIAL"
+        ensure(c, backend, assets, ("train", "calibration"))
+        workers(c, path, output, assets, "trial", callback)
+        seed = c["admission"]["trial_seed"]
+        trial = {}
+        for arm in c["admission"]["trial_arms"]:
+            root = directory(output, seed, arm)
+            row = read(root / "latest.json")
+            state = Store(root, identity(c, source, seed, arm)).verified(row)
+            if row["step"] < c["admission"]["trial_end_step"]:
+                raise RuntimeError("SINGLE_SEED_TRIAL_INCOMPLETE")
+            trial[arm] = {
+                "identity": row["identity"],
+                "checkpoint": row,
+                "proposals": state["proposals"],
+            }
+        gate = trial_gate(c, trial)
+        atomic(output / "reports/SINGLE_SEED_TRIAL.json", gate)
+        prior = remote_snapshot(backend, private, output, ident, pointer, session, prior) or prior
+        if not gate["passed"]:
+            raise RuntimeError("SINGLE_SEED_NO_ADMISSION_STOP_NO_THRESHOLD_RELAXATION")
+        atomic(
+            output / "reports/MATRIX_RELEASE.json",
+            {
+                "identity": ident,
+                "calibration_margins_frozen": True,
+                "calibration_diagnostic_sha256": digest(
+                    output / "reports/ROUTING_DIAGNOSTICS.json"
+                ),
+                "real_trial_gate": gate,
+                "code_config_assets_locked_before_development": True,
+                "development_accessed": False,
+            },
+        )
         manifest["stage"] = "D_FULL_TRAINING"
         workers(c, path, output, assets, "train", callback)
         # Only now may Development arrays be loaded and terminal evaluations begin.
@@ -473,7 +493,7 @@ def main():
     p.add_argument("--assets")
     p.add_argument("--worker", type=int)
     p.add_argument("--workers", type=int)
-    p.add_argument("--phase", choices=["train", "evaluate"])
+    p.add_argument("--phase", choices=["train", "trial", "evaluate"])
     a = p.parse_args()
     c = configuration(a.config)
     out = a.output or str(Path("/kaggle/working") / ("r3f-output-" + source_sha()[:12]))

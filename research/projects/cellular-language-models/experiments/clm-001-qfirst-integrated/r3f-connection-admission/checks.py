@@ -282,6 +282,20 @@ def main():
         assert not trial_gate(c, {arm: result})[
             "passed"
         ]  # synthetic admission cannot release real training.
+    import minicells_r3f.runner as runtime
+
+    tasks = []
+    with ExitStack() as stack:
+        stack.enter_context(patch.object(runtime, "load", return_value=data))
+        stack.enter_context(patch.object(runtime, "parent_state", return_value=parent))
+        stack.enter_context(
+            patch.object(
+                runtime, "train_job", side_effect=lambda *args: tasks.append((args[5], args[7]))
+            )
+        )
+        runtime.worker(c, "unused", "unused", "fixture", 0, 2, "trial")
+        runtime.worker(c, "unused", "unused", "fixture", 1, 2, "trial")
+    assert tasks == [("A-C", "cuda:0"), ("B-C", "cuda:1")]
     checks.append(
         "Train/Calibration-only trial entry; synthetic evidence cannot release real matrix"
     )

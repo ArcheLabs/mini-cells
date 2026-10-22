@@ -12,7 +12,7 @@ python scripts/run_r3f.py --config research/projects/cellular-language-models/ex
 
 1. **阶段 A，只读**：验证原 R3e 的 9 个 A-T/A-C/B-C 最终 Checkpoint，从同参数副本检查 KL/动作/路径完全一致；记录原规则与修复规则的 Calibration Margin 和尺度扫描。无优化器更新、不读取 Development。
 2. **阶段 B，工程测试**：本地/CI 的 `checks.py` 覆盖新机制；Notebook 不重跑测试套件。
-3. **阶段 C，真实单 Seed**：151001301 的 A-C/B-C 到 Step110，包含 Step100 提案和可能的 K=10 适应。实际非空候选至少一组通过并完成 K 步，才自动放行。质量最终接受不是机制门禁；没有候选通过就停止并保存诊断，不改阈值、不追加搜索。
+3. **阶段 C，真实单 Seed**：151001301 的 A-C/B-C 各用一张 T4 并发到 Step110，包含 Step100 提案和可能的 K=10 适应。实际非空候选至少一组通过并完成 K 步，才自动放行。质量最终接受不是机制门禁；没有候选通过就停止并保存诊断，不改阈值、不追加搜索。
 4. **阶段 D，完整实验**：自动保存源码/配置/资产/Calibration 阈值冻结记录，续接试运行 Checkpoint，执行三 Seed 六组各500主 Step。全部训练和选择结束后，才读取 Development Token 数组进行终端评价。Confirmation 不读取。
 
 本地恢复沿用 Store 事务；HF 使用新 `r3f/<run_id>/latest.json`。试运行纳入对应主训练前缀，不从头重复训练。真实 Kaggle 独立会话验收如未发生，仍标记未验证。完整训练不会因科学负结果追加预算或提前停止；阶段 C 无准入则按本次规格停止。
