@@ -1,0 +1,52 @@
+{
+  "experiment_id": "CLM-001-R3k-Future-Learning-Value-001",
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "confirmation": "SEALED",
+  "prediction_scope": "PREDECLARED_POST_R3J_EXPLORATORY_PREDICTION",
+  "bootstrap_seed": 2026102303,
+  "bootstrap_replicates": 2000,
+  "horizons": [
+    10,
+    50,
+    100
+  ],
+  "practical_gain": 0.005,
+  "new_updates": 6480,
+  "new_tokens": 3317760,
+  "connection_updates": 0,
+  "probe_range": [
+    8192,
+    8448
+  ],
+  "holdout_range": [
+    8448,
+    8960
+  ],
+  "scores": [
+    "S_Cal",
+    "S_Direct",
+    "S_K10",
+    "S_Cell",
+    "S_Slope"
+  ],
+  "primary_comparisons": [
+    [
+      "S_K10",
+      "S_Cal"
+    ],
+    [
+      "S_Cell",
+      "S_Direct"
+    ],
+    [
+      "S_Slope",
+      "S_Direct"
+    ]
+  ],
+  "parent_r3j_result_commit": "1ea706fd9358c7b3ca2cc1ec62006a2a7ed8aee2",
+  "parent_r3j_source": "42310c92e0fa44236ad6ca43686caf749edc4501",
+  "parent_r3j_config": "233a8724d4349db5402fcf533ff6c64236fbb85b3202acd2b37f42ed37957de1",
+  "parent_r3j_run": "af24ef87516daeda3c319baa1b97ca797e8acc8a03309764c34dd16155c63334",
+  "parent_r3j_hf_revision": "102237d5cf1b8b160641b280de61c28e7729ffc1",
+  "parent_r3j_manifest_sha256": "6ed09a662622fec637b27b13b92dfffbb31dc758158abfd22bf2d65357093f11"
+}
