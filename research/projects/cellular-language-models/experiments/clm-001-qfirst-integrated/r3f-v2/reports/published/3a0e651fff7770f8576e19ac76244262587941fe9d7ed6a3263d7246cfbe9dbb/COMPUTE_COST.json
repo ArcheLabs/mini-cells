@@ -1,0 +1,204 @@
+{
+  "allocated_gpu_seconds_estimate": 184.44738121400007,
+  "arms": {
+    "A-C": {
+      "adaptation_and_selection": {
+        "calibration": {
+          "cell_rows": 32768,
+          "context_rows": 4096,
+          "gate_rows": 32768,
+          "head_rows": 4096,
+          "input_rows": 4096,
+          "policy_rows": 16384
+        },
+        "connection_optimization": {
+          "cell_rows": 0,
+          "context_rows": 0,
+          "gate_rows": 96,
+          "head_rows": 0,
+          "input_rows": 0,
+          "policy_rows": 96
+        },
+        "counterfactual": {
+          "cell_rows": 4996,
+          "context_rows": 512,
+          "gate_rows": 4816,
+          "head_rows": 692,
+          "input_rows": 512,
+          "policy_rows": 2318
+        },
+        "discarded_adaptation": {
+          "cell_rows": 40960,
+          "context_rows": 5120,
+          "gate_rows": 61440,
+          "head_rows": 5120,
+          "input_rows": 5120,
+          "policy_rows": 40960
+        },
+        "trust_scales": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      "baseline_check_incremental_work": {
+        "cell_rows": 16384,
+        "context_rows": 2048,
+        "gate_rows": 20480,
+        "head_rows": 2048,
+        "input_rows": 2048,
+        "policy_rows": 12288
+      },
+      "proposal": {
+        "counterfactual_seconds": 0.3525608519999821,
+        "counterfactual_work": {
+          "cell_rows": 4996,
+          "context_rows": 512,
+          "gate_rows": 4816,
+          "head_rows": 692,
+          "input_rows": 512,
+          "policy_rows": 2318
+        },
+        "optimization_seconds": 0.5104827199999988,
+        "optimization_work": {
+          "cell_rows": 0,
+          "context_rows": 0,
+          "gate_rows": 96,
+          "head_rows": 0,
+          "input_rows": 0,
+          "policy_rows": 96
+        },
+        "total_work": {
+          "cell_rows": 4996,
+          "context_rows": 512,
+          "gate_rows": 4912,
+          "head_rows": 692,
+          "input_rows": 512,
+          "policy_rows": 2414
+        }
+      },
+      "scan_seconds": 8.135417107000023,
+      "scan_work": {
+        "cell_rows": 184320,
+        "context_rows": 23040,
+        "gate_rows": 456704,
+        "head_rows": 23040,
+        "input_rows": 23040,
+        "policy_rows": 364544
+      },
+      "selected_branch_incremental": {
+        "discarded_adaptation_tokens": 5120,
+        "discarded_adaptation_updates": 10,
+        "elapsed_update_seconds": 2.2346894260000454,
+        "main_tokens": 5120,
+        "main_updates": 10,
+        "policy_optimizer_updates": 8
+      },
+      "total_arm_wall_seconds_this_invocation": 39.203691047999996
+    },
+    "B-C": {
+      "adaptation_and_selection": {
+        "calibration": {
+          "cell_rows": 32768,
+          "context_rows": 4096,
+          "gate_rows": 32768,
+          "head_rows": 4096,
+          "input_rows": 4096,
+          "policy_rows": 32768
+        },
+        "connection_optimization": {
+          "cell_rows": 0,
+          "context_rows": 0,
+          "gate_rows": 96,
+          "head_rows": 0,
+          "input_rows": 0,
+          "policy_rows": 96
+        },
+        "counterfactual": {
+          "cell_rows": 4432,
+          "context_rows": 512,
+          "gate_rows": 4360,
+          "head_rows": 584,
+          "input_rows": 512,
+          "policy_rows": 4360
+        },
+        "discarded_adaptation": {
+          "cell_rows": 40960,
+          "context_rows": 5120,
+          "gate_rows": 81920,
+          "head_rows": 5120,
+          "input_rows": 5120,
+          "policy_rows": 81920
+        },
+        "trust_scales": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      "baseline_check_incremental_work": {
+        "cell_rows": 16384,
+        "context_rows": 2048,
+        "gate_rows": 24576,
+        "head_rows": 2048,
+        "input_rows": 2048,
+        "policy_rows": 24576
+      },
+      "proposal": {
+        "counterfactual_seconds": 0.25357987099999946,
+        "counterfactual_work": {
+          "cell_rows": 4432,
+          "context_rows": 512,
+          "gate_rows": 4360,
+          "head_rows": 584,
+          "input_rows": 512,
+          "policy_rows": 4360
+        },
+        "optimization_seconds": 0.1093939950000049,
+        "optimization_work": {
+          "cell_rows": 0,
+          "context_rows": 0,
+          "gate_rows": 96,
+          "head_rows": 0,
+          "input_rows": 0,
+          "policy_rows": 96
+        },
+        "total_work": {
+          "cell_rows": 4432,
+          "context_rows": 512,
+          "gate_rows": 4456,
+          "head_rows": 584,
+          "input_rows": 512,
+          "policy_rows": 4456
+        }
+      },
+      "scan_seconds": 13.691425349000156,
+      "scan_work": {
+        "cell_rows": 184320,
+        "context_rows": 23040,
+        "gate_rows": 729088,
+        "head_rows": 23040,
+        "input_rows": 23040,
+        "policy_rows": 729088
+      },
+      "selected_branch_incremental": {
+        "discarded_adaptation_tokens": 5120,
+        "discarded_adaptation_updates": 10,
+        "elapsed_update_seconds": 3.7875438619998363,
+        "main_tokens": 5120,
+        "main_updates": 10,
+        "policy_optimizer_updates": 8
+      },
+      "total_arm_wall_seconds_this_invocation": 37.14897903799999
+    }
+  },
+  "runner_wall_seconds_before_publication": 92.22369060700004,
+  "scope": "Runner wall time including storage; GPU allocation estimate is not summed kernel time; Notebook setup and post-publication excluded",
+  "visible_gpu_count": 2
+}
