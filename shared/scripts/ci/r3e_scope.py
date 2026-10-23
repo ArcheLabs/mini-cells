@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 
 PREFIX = (
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3i/",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3g/",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-v2/",
@@ -12,6 +13,8 @@ PREFIX = (
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission/",
 )
 ALLOWED = {
+    "scripts/run_r3i.py",
+    ".github/workflows/r3i-stable-coadaptation.yml",
     "scripts/run_r3h.py",
     ".github/workflows/r3h-routing-alignment.yml",
     "scripts/run_r3g.py",

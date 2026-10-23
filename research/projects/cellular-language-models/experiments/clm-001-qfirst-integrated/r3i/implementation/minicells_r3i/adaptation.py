@@ -8,19 +8,41 @@ from minicells_r3f_v2.scale_scan import scan
 from minicells_r3f_v2.storage import save, latest
 from minicells_r3h.evaluation import quality
 from minicells_r3e.common import fingerprint, canonical
+from minicells_r3h.sampler import probabilities
+from minicells_r3f.stable_connection import hard_action, baseline_action
 
 
-def observe_update(tr, data):
+def observe_update(tr, data, counter=None):
     actions = []
     inputs = []
+    kls = []
+    raw_kls = []
 
-    def before(module, args):
+    def before(module, args, kwargs):
         inputs.append(fingerprint(args[0]))
+        kwargs["keep_trace"] = True
+        return args, kwargs
 
     def after(module, args, out):
         actions.append(out.actions.detach().cpu())
+        if counter is not None:
+            with torch.no_grad():
+                for r in out.trace:
+                    values = []
+                    raw = []
+                    for m in (module, counter):
+                        q, _, z = m.scores(r["state"], r["stage"], r["previous"])
+                        h = hard_action(q, baseline_action(m, z), m.route_switch_margin)
+                        values.append(
+                            probabilities(q, h, m.routing_mode, tr.epsilon(), m.temperature, m.rho)
+                        )
+                        raw.append(q.double().softmax(-1))
+                    kls.append(
+                        float((values[0] * (values[0].log() - values[1].log())).sum(-1).mean())
+                    )
+                    raw_kls.append(float((raw[0] * (raw[0].log() - raw[1].log())).sum(-1).mean()))
 
-    a = tr.model.register_forward_pre_hook(before)
+    a = tr.model.register_forward_pre_hook(before, with_kwargs=True)
     b = tr.model.register_forward_hook(after)
     try:
         row = tr.update(data)
@@ -34,6 +56,8 @@ def observe_update(tr, data):
         gradients=row["cell_gradient_norms"],
         step=tr.step,
         cursor=tr.data_cursor,
+        actual_training_policy_kl=sum(kls) / len(kls) if kls else None,
+        raw_policy_kl=sum(raw_kls) / len(raw_kls) if raw_kls else None,
     )
 
 
@@ -73,13 +97,63 @@ def crossover(old, new, c, data):
     )
 
 
+@torch.no_grad()
+def training_policy_diagnostics(old, new, c, data, epsilon):
+    from minicells_r3f_v2.evaluation import admission_windows
+
+    kl = []
+    entropy_old = []
+    entropy_new = []
+    match_old = []
+    match_new = []
+    magnitudes = []
+    for x in admission_windows(old, c, data):
+        for r in old(x, keep_trace=True).trace:
+            values = []
+            for model in (old, new):
+                q, _, z = model.scores(r["state"], r["stage"], r["previous"])
+                h = hard_action(q, baseline_action(model, z), model.route_switch_margin)
+                p = probabilities(q, h, model.routing_mode, epsilon, model.temperature, model.rho)
+                if not torch.isfinite(p).all() or not torch.allclose(
+                    p.sum(-1), torch.ones_like(p[:, 0])
+                ):
+                    raise RuntimeError("INVALID_ACTUAL_TRAINING_POLICY")
+                values.append((p, h))
+                magnitudes.append(float(q.abs().max()))
+            po, ho = values[0]
+            pn, hn = values[1]
+            kl.append(float((po * (po.log() - pn.log())).sum(-1).mean()))
+            entropy_old.append(float(-(po * po.log()).sum(-1).mean()))
+            entropy_new.append(float(-(pn * pn.log()).sum(-1).mean()))
+            match_old.append(float(po.gather(-1, ho[:, None]).mean()))
+            match_new.append(float(pn.gather(-1, hn[:, None]).mean()))
+    return dict(
+        actual_training_policy_kl=sum(kl) / len(kl),
+        entropy_old=sum(entropy_old) / len(entropy_old),
+        entropy_new=sum(entropy_new) / len(entropy_new),
+        hard_match_old=sum(match_old) / len(match_old),
+        hard_match_new=sum(match_new) / len(match_new),
+        raw_logit_abs_max=max(magnitudes),
+        epsilon=epsilon,
+        temperature=old.temperature,
+        data_role="ADMISSION",
+        additional_admission_gate=False,
+    )
+
+
 def execute(tr, data, directory, identity, durable):
     at = tr.step
     root = Path(directory) / "transactions" / ("proposal-%04d" % at)
     ident = {**identity, "proposal_at_step": at}
     tx = latest(root, ident)
     if tx is None:
-        package = generate(tr, data, root / "candidate", ident, durable)
+        tr.model.active_step = tr.step
+        tr.model.microbatch_index = 0
+        try:
+            package = generate(tr, data, root / "candidate", ident, durable)
+        finally:
+            tr.model.active_step = None
+            tr.model.training_context = None
         tx = {"phase": "PROPOSED", "at_step": at, "package": package, "adapt_done": 0, "rows": []}
         save(root, ident, tx, 0)
     if tx["phase"] == "COMMITTED":
@@ -117,13 +191,20 @@ def execute(tr, data, directory, identity, durable):
                 accepted=True,
                 expected_previous=new.connection_sha,
             )
+            policy_diagnostic = (
+                training_policy_diagnostics(old.model, new.model, tr.c, data, tr.epsilon())
+                if data is not None
+                else {}
+            )
             if tx["adapt_done"]:
                 old.restore(tx["old"])
                 new.restore(tx["new"])
             for k in range(tx["adapt_done"], tr.c["training"]["adapt_steps"]):
                 paired(old, new)
-                a = observe_update(old, data)
-                b = observe_update(new, data)
+                old_probe = copy.deepcopy(old.model)
+                new_probe = copy.deepcopy(new.model)
+                a = observe_update(old, data, new_probe)
+                b = observe_update(new, data, old_probe)
                 paired(old, new)
                 if a["inputs"] != b["inputs"]:
                     raise RuntimeError("PAIRED_INPUT_HASH_MISMATCH")
@@ -132,6 +213,8 @@ def execute(tr, data, directory, identity, durable):
                     input_hashes=a["inputs"],
                     action_change=float((a["actions"] != b["actions"]).float().mean()),
                     path_change=float((a["actions"] != b["actions"]).any(-1).float().mean()),
+                    actual_training_policy_kl_old_states=a["actual_training_policy_kl"],
+                    actual_training_policy_kl_new_states=b["actual_training_policy_kl"],
                     old_cell_counts=a["cell_counts"],
                     new_cell_counts=b["cell_counts"],
                     old_gradients=a["gradients"],
@@ -166,9 +249,12 @@ def execute(tr, data, directory, identity, durable):
                 selected_branch="new" if accepted else "old",
                 adapt_steps=tx["adapt_done"],
                 training_path_rows=tx["rows"],
+                actual_training_policy_diagnostic=policy_diagnostic,
                 attribution=attribution,
                 scan=tx["scan"],
             )
+        event["candidate_cost"] = package["cost"] if "cost" in package else {}
+        event["scan_cost"] = tx["scan"].get("work", {})
         selected["proposals"].append(event)
         selected["policy_updates"] += tr.c["training"]["policy_steps"]
         selected["cost"]["policy_optimizer_updates"] += tr.c["training"]["policy_steps"]

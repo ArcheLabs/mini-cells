@@ -33,6 +33,8 @@ def restore(c, backend, root):
                     raise RuntimeError("R3H_RECEIPT_IDENTITY_MISMATCH")
                 selected.update((name, prefix + row["file"]))
                 receipts[(seed, arm, step)] = row
+            if prefix + "result.json" not in manifest["files"]:
+                raise RuntimeError("R3H_COMPLETED_RESULT_NOT_RETAINED")
             selected.add(prefix + "result.json")
     restore_segment(backend, ref, root, ident, uuid.uuid4().hex, include_paths=selected)
     result = {}
@@ -47,6 +49,16 @@ def restore(c, backend, root):
             or routing["random_protocol"] != "KEYED_CPU_TORCH_STREAMS_V1"
         ):
             raise RuntimeError("R3H_BASELINE_ROUTER_MISMATCH")
+        if step == 500:
+            record = read(folder / "result.json")
+            if (
+                record["identity"] != row["identity"]
+                or record["checkpoint"] != row
+                or record["status"] != "COMPLETED"
+            ):
+                raise RuntimeError("R3H_FINAL_RESULT_IDENTITY_MISMATCH")
+            if record["final_model_fingerprint"] != fingerprint(state["model"]):
+                raise RuntimeError("R3H_FINAL_MODEL_FINGERPRINT_MISMATCH")
         result[(seed, arm, step)] = {"receipt": row, "state": state}
     return result
 
