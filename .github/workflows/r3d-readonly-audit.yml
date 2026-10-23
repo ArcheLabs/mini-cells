@@ -1,0 +1,45 @@
+name: R3d-A Read-Only Arithmetic and Adapter
+on:
+  push:
+    branches: [codex/r3d-readonly-audit]
+  pull_request:
+    paths:
+      - 'research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d/audit/**'
+      - '.github/workflows/r3d-readonly-audit.yml'
+      - 'shared/scripts/ci/read_only_audit_scope.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  readonly:
+    runs-on: ubuntu-latest
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install numpy pyyaml matplotlib ruff
+      - name: Focused read-only arithmetic and adapter checks (no historical suites)
+        run: python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d/audit/checks.py
+      - name: Lint audit only
+        run: ruff check --config research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/ruff.toml research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d/audit shared/scripts/ci/read_only_audit_scope.py
+      - name: Preserve historical R3c/R3d code and frozen evidence
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+        run: |
+          python - <<'PY'
+          import subprocess, os
+          base=os.environ['BASE_SHA']
+          if not base:
+              base=subprocess.check_output(['git','merge-base','HEAD','origin/main'],text=True).strip()
+          paths=subprocess.check_output(['git','diff','--name-only',base,'HEAD','--','research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c','research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d'],text=True).splitlines()
+          prefix='research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d/audit/'
+          assert all(path.startswith(prefix) for path in paths), paths
+          PY

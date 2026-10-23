@@ -1,0 +1,143 @@
+{
+  "arms": {
+    "A-C": {
+      "attribution": {
+        "attribution_status": [
+          "CELL_ADAPTATION_DETECTED",
+          "FAVORABLE_INTERACTION_DETECTED"
+        ],
+        "automatic_next_training": false,
+        "cell_adaptation_benefit": true,
+        "cell_effect_status": "RESOLVED",
+        "cell_parameters_changed": true,
+        "favorable_interaction": true,
+        "interaction_effect": -3.829598426818848e-06,
+        "limits": "One seed; Calibration selected the parent organization. No independent confirmation or specialization claim.",
+        "next_research_recommendation": "PRIORITIZE_TRAIN_INFERENCE_ROUTING_ALIGNMENT_STUDY",
+        "numerical_resolution": 5.265301892265484e-07,
+        "quality_change_detected": true,
+        "raw_effects": {
+          "cell_effect_new_connection": -6.020069122314453e-06,
+          "cell_effect_old_connection": -2.1904706954956055e-06,
+          "immediate_route_effect": -0.0013099536299705505,
+          "interaction": -3.829598426818848e-06,
+          "new_branch_total_change": -0.0013290047645568848,
+          "old_branch_total_change": -0.0011900141835212708,
+          "route_effect_new_cells": -0.001446753740310669,
+          "route_effect_old_cells": -0.00144292414188385
+        },
+        "route_only_benefit": false,
+        "train_inference_distribution_assessment": {
+          "new": {
+            "closed_loop_path_probability": false,
+            "descriptive_thresholds": {
+              "hard_match_uniform_relative_deviation_max": 0.1,
+              "normalized_entropy_near_uniform_min": 0.99,
+              "scope": "DESCRIPTIVE_ONLY_NOT_AN_ADMISSION_OR_TRAINING_GATE"
+            },
+            "expected_local_mismatch_probability": 0.9332872220816661,
+            "high_entropy_near_uniform": true,
+            "mean_hard_action_match_probability": 0.06671277791833385,
+            "median_normalized_entropy_averaged_over_epsilon": 0.9999999790783132,
+            "statistical_confirmation": false,
+            "status": "HIGH_ENTROPY_TRAIN_DETERMINISTIC_EVAL_GAP"
+          },
+          "old": {
+            "closed_loop_path_probability": false,
+            "descriptive_thresholds": {
+              "hard_match_uniform_relative_deviation_max": 0.1,
+              "normalized_entropy_near_uniform_min": 0.99,
+              "scope": "DESCRIPTIVE_ONLY_NOT_AN_ADMISSION_OR_TRAINING_GATE"
+            },
+            "expected_local_mismatch_probability": 0.9332873110249322,
+            "high_entropy_near_uniform": true,
+            "mean_hard_action_match_probability": 0.06671268897506773,
+            "median_normalized_entropy_averaged_over_epsilon": 0.9999999793274743,
+            "statistical_confirmation": false,
+            "status": "HIGH_ENTROPY_TRAIN_DETERMINISTIC_EVAL_GAP"
+          }
+        },
+        "training_route_changed": true
+      },
+      "failure": null,
+      "valid": true
+    },
+    "B-C": {
+      "attribution": {
+        "attribution_status": [
+          "ROUTE_DOMINANT",
+          "NO_DETECTABLE_CELL_ADAPTATION"
+        ],
+        "automatic_next_training": false,
+        "cell_adaptation_benefit": false,
+        "cell_effect_status": "BELOW_NUMERICAL_RESOLUTION",
+        "cell_parameters_changed": false,
+        "favorable_interaction": false,
+        "interaction_effect": 0.0,
+        "limits": "One seed; Calibration selected the parent organization. No independent confirmation or specialization claim.",
+        "next_research_recommendation": "PRIORITIZE_TRAIN_INFERENCE_ROUTING_ALIGNMENT_STUDY",
+        "numerical_resolution": 5.300725876011825e-07,
+        "quality_change_detected": true,
+        "raw_effects": {
+          "cell_effect_new_connection": 0.0,
+          "cell_effect_old_connection": 0.0,
+          "immediate_route_effect": 4.7966837882995605e-05,
+          "interaction": 0.0,
+          "new_branch_total_change": 0.0016325339674949646,
+          "old_branch_total_change": 0.0024245157837867737,
+          "route_effect_new_cells": -0.0007440149784088135,
+          "route_effect_old_cells": -0.0007440149784088135
+        },
+        "route_only_benefit": true,
+        "train_inference_distribution_assessment": {
+          "new": {
+            "closed_loop_path_probability": false,
+            "descriptive_thresholds": {
+              "hard_match_uniform_relative_deviation_max": 0.1,
+              "normalized_entropy_near_uniform_min": 0.99,
+              "scope": "DESCRIPTIVE_ONLY_NOT_AN_ADMISSION_OR_TRAINING_GATE"
+            },
+            "expected_local_mismatch_probability": 0.8332487921795275,
+            "high_entropy_near_uniform": true,
+            "mean_hard_action_match_probability": 0.16675120782047245,
+            "median_normalized_entropy_averaged_over_epsilon": 0.9999999752559248,
+            "statistical_confirmation": false,
+            "status": "HIGH_ENTROPY_TRAIN_DETERMINISTIC_EVAL_GAP"
+          },
+          "old": {
+            "closed_loop_path_probability": false,
+            "descriptive_thresholds": {
+              "hard_match_uniform_relative_deviation_max": 0.1,
+              "normalized_entropy_near_uniform_min": 0.99,
+              "scope": "DESCRIPTIVE_ONLY_NOT_AN_ADMISSION_OR_TRAINING_GATE"
+            },
+            "expected_local_mismatch_probability": 0.8332486970219639,
+            "high_entropy_near_uniform": true,
+            "mean_hard_action_match_probability": 0.1667513029780361,
+            "median_normalized_entropy_averaged_over_epsilon": 0.9999999747159706,
+            "statistical_confirmation": false,
+            "status": "HIGH_ENTROPY_TRAIN_DETERMINISTIC_EVAL_GAP"
+          }
+        },
+        "training_route_changed": false
+      },
+      "failure": null,
+      "valid": true
+    }
+  },
+  "confirmation": "SEALED",
+  "development_accessed": false,
+  "identity": {
+    "config_sha256": "016dd8a5c6bf804846d9107677c4f67b1686a8632f0e7215e7406408fcc703c5",
+    "execution_id": "195f97d17e2a413c8bfba024c0fae31e",
+    "experiment_id": "CLM-001-R3g-CoAdaptation-Attribution-001",
+    "parent_execution_id": "31633d7661954111aa3727535f044d00",
+    "parent_run_id": "6b79bb4c6c29694e10e5ad77a20285613e3b98ff247b58845f218b48ded8c39b",
+    "run_id": "2927b5f2faaf6cb4ed1620197d0683b74c62e754094da961ad5fafffbbb7cf01",
+    "seed": 151001301,
+    "source_sha": "753ec7a61b32b2b0ff18a05744fb0087fd4916c1"
+  },
+  "optimizer_updates": 0,
+  "scientific_decision": false,
+  "status": "READONLY_ATTRIBUTION_AUDIT_COMPLETE"
+}
