@@ -1,0 +1,2402 @@
+[
+  {
+    "arm": "A-CH",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.512079019099474,
+      "role": "development",
+      "seconds": 2.250487522000185,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 3640.1001649274317
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 122.66487518599999,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2060288,
+      "context_rows": 257536,
+      "gate_rows": 2150400,
+      "head_rows": 257536,
+      "input_rows": 257536,
+      "policy_rows": 1120256
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.20999268599996412,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.09584771400000136,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.2503800169999977,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.10055605400003742,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.21456677300000138,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.09508008299997073,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.20514660599997114,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.0937339829999928,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      }
+    ],
+    "seed": 151001301,
+    "wall_seconds": 484.23688202100004
+  },
+  {
+    "arm": "A-CT",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.513093722984195,
+      "role": "development",
+      "seconds": 2.3856197130007786,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 3433.9085795428814
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 129.67631244300046,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2064384,
+      "context_rows": 258048,
+      "gate_rows": 2154496,
+      "head_rows": 258048,
+      "input_rows": 258048,
+      "policy_rows": 1122304
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.21703069799997365,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.30443233200003306,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.21770990199996731,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.1055385639999713,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.2194979930000045,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.10163166099999899,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.2128571660000489,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.09267072900001949,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      }
+    ],
+    "seed": 151001301,
+    "wall_seconds": 540.2827833450001
+  },
+  {
+    "arm": "B-CH",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.517169015482068,
+      "role": "development",
+      "seconds": 2.564655180000045,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 3194.1915871902343
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 197.23782726700279,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2064384,
+      "context_rows": 258048,
+      "gate_rows": 2244608,
+      "head_rows": 258048,
+      "input_rows": 258048,
+      "policy_rows": 2244608
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.2900671190000139,
+          "counterfactual_work": {
+            "cell_rows": 4414,
+            "context_rows": 512,
+            "gate_rows": 4342,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4342
+          },
+          "optimization_seconds": 0.09979624899995088,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4414,
+            "context_rows": 512,
+            "gate_rows": 4438,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4438
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.2777039609999292,
+          "counterfactual_work": {
+            "cell_rows": 4432,
+            "context_rows": 512,
+            "gate_rows": 4360,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4360
+          },
+          "optimization_seconds": 0.08727667999994537,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4432,
+            "context_rows": 512,
+            "gate_rows": 4456,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4456
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.27210683799989965,
+          "counterfactual_work": {
+            "cell_rows": 4462,
+            "context_rows": 512,
+            "gate_rows": 4390,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4390
+          },
+          "optimization_seconds": 0.08677106400000412,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4462,
+            "context_rows": 512,
+            "gate_rows": 4486,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4486
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.2656054500000664,
+          "counterfactual_work": {
+            "cell_rows": 4420,
+            "context_rows": 512,
+            "gate_rows": 4348,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4348
+          },
+          "optimization_seconds": 0.08578894099991885,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4420,
+            "context_rows": 512,
+            "gate_rows": 4444,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4444
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      }
+    ],
+    "seed": 151001301,
+    "wall_seconds": 1197.331794238
+  },
+  {
+    "arm": "B-CT",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.520078586414456,
+      "role": "development",
+      "seconds": 2.622188809000363,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 3124.107605021384
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 206.16085707700188,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2064384,
+      "context_rows": 258048,
+      "gate_rows": 2244608,
+      "head_rows": 258048,
+      "input_rows": 258048,
+      "policy_rows": 2244608
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.28628534999995736,
+          "counterfactual_work": {
+            "cell_rows": 4414,
+            "context_rows": 512,
+            "gate_rows": 4342,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4342
+          },
+          "optimization_seconds": 0.0959660729999996,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4414,
+            "context_rows": 512,
+            "gate_rows": 4438,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4438
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.29105862700021135,
+          "counterfactual_work": {
+            "cell_rows": 4432,
+            "context_rows": 512,
+            "gate_rows": 4360,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4360
+          },
+          "optimization_seconds": 0.09192771800007904,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4432,
+            "context_rows": 512,
+            "gate_rows": 4456,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4456
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.299035270000104,
+          "counterfactual_work": {
+            "cell_rows": 4462,
+            "context_rows": 512,
+            "gate_rows": 4390,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4390
+          },
+          "optimization_seconds": 0.09207059300001674,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4462,
+            "context_rows": 512,
+            "gate_rows": 4486,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4486
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.288431780999872,
+          "counterfactual_work": {
+            "cell_rows": 4420,
+            "context_rows": 512,
+            "gate_rows": 4348,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4348
+          },
+          "optimization_seconds": 0.09026288399991245,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4420,
+            "context_rows": 512,
+            "gate_rows": 4444,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4444
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      }
+    ],
+    "seed": 151001301,
+    "wall_seconds": 1250.779952069
+  },
+  {
+    "arm": "A-CH",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.527076439931989,
+      "role": "development",
+      "seconds": 1.786742215999766,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 4584.880754841399
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 121.85395531099834,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2060288,
+      "context_rows": 257536,
+      "gate_rows": 2150400,
+      "head_rows": 257536,
+      "input_rows": 257536,
+      "policy_rows": 1120256
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.20401648699998987,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.09246621099987351,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.19597095900007844,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.08875963399987086,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.20159242599993377,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.0869587209999736,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.19420870600015405,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.08914711700026601,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      }
+    ],
+    "seed": 151001302,
+    "wall_seconds": 1993.507000306
+  },
+  {
+    "arm": "A-CT",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.527941390872002,
+      "role": "development",
+      "seconds": 1.8908895309996296,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 4332.35250695436
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 128.58829534099618,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2064384,
+      "context_rows": 258048,
+      "gate_rows": 2154496,
+      "head_rows": 258048,
+      "input_rows": 258048,
+      "policy_rows": 1122304
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.2049607429999014,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.09210796800016396,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.20408902700000908,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.09342603899995083,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.2049159459998009,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.08835277100024541,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.21821564799984117,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.09638419999964754,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      }
+    ],
+    "seed": 151001302,
+    "wall_seconds": 2041.395872035
+  },
+  {
+    "arm": "B-CH",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.535839511081576,
+      "role": "development",
+      "seconds": 2.5387327859989455,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 3226.8067144280394
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 196.54339002799816,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2060288,
+      "context_rows": 257536,
+      "gate_rows": 2240512,
+      "head_rows": 257536,
+      "input_rows": 257536,
+      "policy_rows": 2240512
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.28303506800011746,
+          "counterfactual_work": {
+            "cell_rows": 4438,
+            "context_rows": 512,
+            "gate_rows": 4366,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4366
+          },
+          "optimization_seconds": 0.08851849599977868,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4438,
+            "context_rows": 512,
+            "gate_rows": 4462,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4462
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.28039019599964377,
+          "counterfactual_work": {
+            "cell_rows": 4438,
+            "context_rows": 512,
+            "gate_rows": 4366,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4366
+          },
+          "optimization_seconds": 0.09570467399953486,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4438,
+            "context_rows": 512,
+            "gate_rows": 4462,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4462
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.2631875459992443,
+          "counterfactual_work": {
+            "cell_rows": 4444,
+            "context_rows": 512,
+            "gate_rows": 4372,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4372
+          },
+          "optimization_seconds": 0.07976167400011036,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4444,
+            "context_rows": 512,
+            "gate_rows": 4468,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4468
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.28472854500068934,
+          "counterfactual_work": {
+            "cell_rows": 4432,
+            "context_rows": 512,
+            "gate_rows": 4360,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4360
+          },
+          "optimization_seconds": 0.09197935799966217,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4432,
+            "context_rows": 512,
+            "gate_rows": 4456,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4456
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      }
+    ],
+    "seed": 151001302,
+    "wall_seconds": 2845.409620134
+  },
+  {
+    "arm": "B-CT",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.536062316969037,
+      "role": "development",
+      "seconds": 2.6766694170000846,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 3060.519893854244
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 208.20876586799386,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2060288,
+      "context_rows": 257536,
+      "gate_rows": 2240512,
+      "head_rows": 257536,
+      "input_rows": 257536,
+      "policy_rows": 2240512
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.29407860599985725,
+          "counterfactual_work": {
+            "cell_rows": 4438,
+            "context_rows": 512,
+            "gate_rows": 4366,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4366
+          },
+          "optimization_seconds": 0.12130690100002539,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4438,
+            "context_rows": 512,
+            "gate_rows": 4462,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4462
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.28293437200045446,
+          "counterfactual_work": {
+            "cell_rows": 4438,
+            "context_rows": 512,
+            "gate_rows": 4366,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4366
+          },
+          "optimization_seconds": 0.08826612299981207,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4438,
+            "context_rows": 512,
+            "gate_rows": 4462,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4462
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.2947151759999542,
+          "counterfactual_work": {
+            "cell_rows": 4444,
+            "context_rows": 512,
+            "gate_rows": 4372,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4372
+          },
+          "optimization_seconds": 0.08822733599936328,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4444,
+            "context_rows": 512,
+            "gate_rows": 4468,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4468
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.28190457100026833,
+          "counterfactual_work": {
+            "cell_rows": 4432,
+            "context_rows": 512,
+            "gate_rows": 4360,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4360
+          },
+          "optimization_seconds": 0.1074125670002104,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4432,
+            "context_rows": 512,
+            "gate_rows": 4456,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4456
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      }
+    ],
+    "seed": 151001302,
+    "wall_seconds": 2894.253955804
+  },
+  {
+    "arm": "A-CH",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.500100772827864,
+      "role": "development",
+      "seconds": 1.7898046729987982,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 4577.035764620277
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 119.00137647898555,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2060288,
+      "context_rows": 257536,
+      "gate_rows": 2150400,
+      "head_rows": 257536,
+      "input_rows": 257536,
+      "policy_rows": 1120256
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.1966693550002674,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.08614334399953805,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.20283151700004964,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.0894665489995532,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.19534869699964474,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.08664016600050672,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.19792553500155918,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.08558329900006356,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      }
+    ],
+    "seed": 151001303,
+    "wall_seconds": 3586.3253610440006
+  },
+  {
+    "arm": "A-CT",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.500797701999545,
+      "role": "development",
+      "seconds": 1.9051511480010959,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 4299.921299470192
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 127.13754686598804,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2064384,
+      "context_rows": 258048,
+      "gate_rows": 2154496,
+      "head_rows": 258048,
+      "input_rows": 258048,
+      "policy_rows": 1122304
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.20299257399983617,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.10534503199960454,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.20574378200035426,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.08994429399990622,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.2079444329992839,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.09093283500078542,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.21184680099941033,
+          "counterfactual_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4816,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2318
+          },
+          "optimization_seconds": 0.10306805899926985,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4996,
+            "context_rows": 512,
+            "gate_rows": 4912,
+            "head_rows": 692,
+            "input_rows": 512,
+            "policy_rows": 2414
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 456704,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 364544
+        }
+      }
+    ],
+    "seed": 151001303,
+    "wall_seconds": 3636.194179045001
+  },
+  {
+    "arm": "B-CH",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.505786646157503,
+      "role": "development",
+      "seconds": 2.5480577779999294,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 3214.9977409186627
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 199.19007531499847,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2060288,
+      "context_rows": 257536,
+      "gate_rows": 2240512,
+      "head_rows": 257536,
+      "input_rows": 257536,
+      "policy_rows": 2240512
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.2829807960006292,
+          "counterfactual_work": {
+            "cell_rows": 4402,
+            "context_rows": 512,
+            "gate_rows": 4330,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4330
+          },
+          "optimization_seconds": 0.09355128700008208,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4402,
+            "context_rows": 512,
+            "gate_rows": 4426,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4426
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.32344783100052155,
+          "counterfactual_work": {
+            "cell_rows": 4402,
+            "context_rows": 512,
+            "gate_rows": 4330,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4330
+          },
+          "optimization_seconds": 0.11015032599971164,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4402,
+            "context_rows": 512,
+            "gate_rows": 4426,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4426
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.27168356599941035,
+          "counterfactual_work": {
+            "cell_rows": 4396,
+            "context_rows": 512,
+            "gate_rows": 4324,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4324
+          },
+          "optimization_seconds": 0.08880694400068023,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4396,
+            "context_rows": 512,
+            "gate_rows": 4420,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4420
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.25850250799885544,
+          "counterfactual_work": {
+            "cell_rows": 4420,
+            "context_rows": 512,
+            "gate_rows": 4348,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4348
+          },
+          "optimization_seconds": 0.0860137109993957,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4420,
+            "context_rows": 512,
+            "gate_rows": 4444,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4444
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      }
+    ],
+    "seed": 151001303,
+    "wall_seconds": 4421.518593163
+  },
+  {
+    "arm": "B-CT",
+    "connection_proposals": 4,
+    "development_work": {
+      "nll": 4.50706378556788,
+      "role": "development",
+      "seconds": 2.7409216779997223,
+      "throughput_scope": "TEACHER_FORCED_DETERMINISTIC_FORWARD_NOT_AUTOREGRESSIVE_DECODE",
+      "tokens": 8192,
+      "tokens_per_second": 2988.775661031796
+    },
+    "forward_cost_scope": "EXECUTED_OPERATOR_ROWS_NOT_HARDWARE_FLOPS; BACKWARD_NOT_DIRECTLY_MEASURED",
+    "gpu_memory_peak": 80302592,
+    "main_cost": {
+      "discarded_adaptation_tokens": 20480,
+      "discarded_adaptation_updates": 40,
+      "elapsed_update_seconds": 205.19457058599437,
+      "main_tokens": 256000,
+      "main_updates": 500,
+      "policy_optimizer_updates": 32,
+      "work": {}
+    },
+    "main_forward_work": {
+      "cell_rows": 2056192,
+      "context_rows": 257024,
+      "gate_rows": 2236416,
+      "head_rows": 257024,
+      "input_rows": 257024,
+      "policy_rows": 2236416
+    },
+    "policy_optimizer_updates": 32,
+    "proposal_phase_costs": [
+      {
+        "adapt_steps": 10,
+        "at_step": 100,
+        "candidate": {
+          "counterfactual_seconds": 0.27768691799974476,
+          "counterfactual_work": {
+            "cell_rows": 4402,
+            "context_rows": 512,
+            "gate_rows": 4330,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4330
+          },
+          "optimization_seconds": 0.08994329000051948,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4402,
+            "context_rows": 512,
+            "gate_rows": 4426,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4426
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 200,
+        "candidate": {
+          "counterfactual_seconds": 0.2678955239989591,
+          "counterfactual_work": {
+            "cell_rows": 4402,
+            "context_rows": 512,
+            "gate_rows": 4330,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4330
+          },
+          "optimization_seconds": 0.08781037500011735,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4402,
+            "context_rows": 512,
+            "gate_rows": 4426,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4426
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 300,
+        "candidate": {
+          "counterfactual_seconds": 0.2726953630008211,
+          "counterfactual_work": {
+            "cell_rows": 4396,
+            "context_rows": 512,
+            "gate_rows": 4324,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4324
+          },
+          "optimization_seconds": 0.09073474400065606,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4396,
+            "context_rows": 512,
+            "gate_rows": 4420,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4420
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      },
+      {
+        "adapt_steps": 10,
+        "at_step": 400,
+        "candidate": {
+          "counterfactual_seconds": 0.2883646040008898,
+          "counterfactual_work": {
+            "cell_rows": 4420,
+            "context_rows": 512,
+            "gate_rows": 4348,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4348
+          },
+          "optimization_seconds": 0.09025500999996439,
+          "optimization_work": {
+            "cell_rows": 0,
+            "context_rows": 0,
+            "gate_rows": 96,
+            "head_rows": 0,
+            "input_rows": 0,
+            "policy_rows": 96
+          },
+          "total_work": {
+            "cell_rows": 4420,
+            "context_rows": 512,
+            "gate_rows": 4444,
+            "head_rows": 584,
+            "input_rows": 512,
+            "policy_rows": 4444
+          }
+        },
+        "discarded_tokens": 5120,
+        "trust": {
+          "cell_rows": 184320,
+          "context_rows": 23040,
+          "gate_rows": 729088,
+          "head_rows": 23040,
+          "input_rows": 23040,
+          "policy_rows": 729088
+        }
+      }
+    ],
+    "seed": 151001303,
+    "wall_seconds": 4474.2724006809985
+  }
+]
