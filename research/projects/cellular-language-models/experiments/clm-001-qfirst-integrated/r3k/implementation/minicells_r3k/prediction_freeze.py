@@ -34,7 +34,7 @@ def scores(historical_cal, direct, k10):
     return result
 
 
-def freeze(path, rows, data_identity, source_identity):
+def freeze(path, rows, data_identity, source_identity, protocol=None):
     ids = [row["case_id"] for row in rows]
     matrix = {(r["seed"], r["arm"], r["proposal_at_step"]) for r in rows}
     expected = {
@@ -53,6 +53,7 @@ def freeze(path, rows, data_identity, source_identity):
     manifest = dict(
         scope="PREDECLARED_POST_R3J_EXPLORATORY_PREDICTION",
         formulas=FORMULAS,
+        protocol=protocol,
         data_identity=data_identity,
         source_identity=source_identity,
         rows=sorted(rows, key=lambda x: x["case_id"]),
