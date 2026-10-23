@@ -1,0 +1,20 @@
+{
+  "status": "ENGINEERING_READY_KAGGLE_EXECUTION_PENDING",
+  "scope": "SYNTHETIC_CPU_ONLY",
+  "cpu_transaction_checks": "PASS",
+  "actual_candidate_22_scale_checks": "PASS",
+  "job_checkpoint_report_integration": "PASS",
+  "three_seed_report_comparisons": "PASS",
+  "mid_adaptation_resume": "PASS",
+  "lint": "PASS",
+  "real_training_started": false,
+  "confirmation": "SEALED",
+  "real_historical_step100_comparability": "CHECKED_AT_RUNTIME_STRICT_NO_TOLERANCE_RELAXATION",
+  "known_limits": [
+    "Real T4 end-to-end execution not performed locally",
+    "Real hardware wall-time not measured",
+    "Exact historical comparability can stop the run before the first Proposal",
+    "Checkpoint delivery needs existing HF_TOKEN/GITHUB_TOKEN permissions"
+  ],
+  "runtime_source_sha": "80e49b071790c8bfb58dead19e6037259551ed61"
+}
