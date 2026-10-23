@@ -19,6 +19,7 @@ from .parent_import import (
     BASE,
     ROOT,
     config,
+    canonical,
     identity,
     read,
     atomic,
