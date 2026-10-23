@@ -25,10 +25,10 @@ def write(c, output, results, failures, manifest):
             common = dict(seed=int(seed), architecture=arm[0], routing_mode=arm[-1])
             i = r["initial"]
             inputs.append(
-                dict(
+                {
                     **common,
                     **{k: v for k, v in i.items() if k not in ("initial_quality", "temperature")},
-                )
+                }
             )
             fits.append(dict(**common, **i["temperature"]))
             if "quality" in r:

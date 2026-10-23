@@ -432,10 +432,73 @@ def automatic(c, path, output, folder):
     return report
 
 
+def report_existing(c, output):
+    """Read verified historical outputs only. No model forward or optimizer construction."""
+    output = Path(output)
+    ident = read(output / "identity.json")
+    if ident["config_sha256"] != canonical(c) or ident["experiment_id"] != c["experiment_id"]:
+        raise RuntimeError("RECOVERY_IDENTITY_MISMATCH")
+    backend = None
+    if not list((output / "private-checkpoints").glob("jobs/*/result.json")):
+        secrets()
+        backend = HubBackend(c["storage"]["private_repo"])
+        revision = backend.info().sha
+        pointer = backend.optional("r3h/" + ident["run_id"] + "/latest.json", revision)
+        if not pointer:
+            raise RuntimeError("SAVED_OUTPUT_OR_HF_REFERENCE_REQUIRED")
+        restore_latest(
+            backend,
+            {**pointer, "hf_repo": backend.repo, "hf_revision": revision},
+            output / "private-checkpoints",
+            ident,
+            uuid.uuid4().hex,
+        )
+    results = {}
+    failures = []
+    for seed in c["seeds"]:
+        results[str(seed)] = {}
+        for arm in c["arms"]:
+            d = jobdir(output, seed, arm)
+            if not (d / "result.json").exists():
+                failures.append({"code": "RESULT_MISSING", "seed": seed, "arm": arm})
+                continue
+            r = read(d / "result.json")
+            if any(r["identity"].get(k) != v for k, v in ident.items()):
+                raise RuntimeError("RESULT_IDENTITY_MISMATCH")
+            Store(d, r["identity"]).verified(r["checkpoint"])
+            results[str(seed)][arm] = r
+    prior = read(output / "hf-reference.json") if (output / "hf-reference.json").exists() else None
+    report = write(
+        c,
+        output,
+        results,
+        failures,
+        dict(
+            **ident,
+            hf_reference=prior,
+            recovery_source_sha=identity(c)["source_sha"],
+            optimizer_updates=0,
+        ),
+    )
+    secrets()
+    from .publication import publish
+
+    publication = publish(output)
+    atomic(output / "PUBLICATION.json", publication)
+    print(
+        json.dumps(
+            {"status": report["status"], "publication": publication, "optimizer_updates": 0}
+        ),
+        flush=True,
+    )
+    return report
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--config", default=str(BASE / "config/frozen.json"))
     p.add_argument("--run-all", action="store_true")
+    p.add_argument("--report-existing", action="store_true")
     p.add_argument("--output")
     p.add_argument("--assets")
     p.add_argument("--worker", type=int)
@@ -444,7 +507,9 @@ def main():
     a = p.parse_args()
     c = config(a.config)
     out = a.output or "/kaggle/working/r3h-output-" + identity(c)["source_sha"][:12]
-    if a.worker is not None:
+    if a.report_existing:
+        report_existing(c, out)
+    elif a.worker is not None:
         worker(c, out, a.assets, a.worker, a.workers, a.phase)
     elif a.run_all:
         automatic(c, Path(a.config).resolve(), out, a.assets)
