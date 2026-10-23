@@ -9,7 +9,7 @@ class Trainer(FrozenTrainer):
     def __init__(self, model, c, arm):
         super().__init__(model, c, arm)
         self.connection_commits = []
-        self.initial_connection_sha=self.connection_sha
+        self.initial_connection_sha = self.connection_sha
 
     def authorize_connection(self, connection, *, transaction, accepted, expected_previous):
         if not transaction or fingerprint(self.model.connection.state_dict()) != expected_previous:
@@ -44,16 +44,16 @@ class Trainer(FrozenTrainer):
             if not row["accepted"] and row["current"] != expected:
                 raise RuntimeError("REJECTED_CONNECTION_LINEAGE_CHANGED")
             expected = row["current"]
-        if (
-            fingerprint(
-                {
-                    k[len("connection.") :]: v
-                    for k, v in state["model"].items()
-                    if k.startswith("connection.")
-                }
-            )
-            != expected
-        ):
+        imported = copy.deepcopy(self.model.connection)
+        imported.load_state_dict(
+            {
+                k[len("connection.") :]: v
+                for k, v in state["model"].items()
+                if k.startswith("connection.")
+            },
+            strict=True,
+        )
+        if fingerprint(imported.state_dict()) != expected:
             raise RuntimeError("CONNECTION_STATE_WITHOUT_COMMIT")
         if state["r3h"]["connection_sha"] != expected:
             raise RuntimeError("CONNECTION_CHECKPOINT_HASH_MISMATCH")
@@ -68,6 +68,7 @@ class Trainer(FrozenTrainer):
 
     def clone(self):
         clone = Trainer(copy.deepcopy(self.model), self.c, self.arm)
+        clone.initial_connection_sha = self.initial_connection_sha
         clone.opt_identity = self.opt_identity
         clone.parent_identity = copy.deepcopy(self.parent_identity)
         # Restore validates the entire lineage from the original zero Connection.
