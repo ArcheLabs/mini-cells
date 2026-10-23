@@ -1,0 +1,255 @@
+{
+  "admission_successes": 48,
+  "comparisons": {
+    "A-CH vs A-FH": {
+      "caveat": "Story bootstrap does not replace training Seed replication; Development previously used.",
+      "ci95_story_bootstrap_conditional_on_three_seeds": [
+        -0.00025491222428778804,
+        0.0009088190582891303
+      ],
+      "deltas": [
+        0.0003819689154624939,
+        0.0003564264625310898,
+        0.00026008859276771545
+      ],
+      "exploratory_bootstrap_p": 0.2538730634682659,
+      "holm_exploratory_p": 1.0,
+      "independent_training_seeds": 3,
+      "mean_delta": 0.00033282799025376636,
+      "per_seed": [
+        {
+          "seed": 151001301,
+          "story_paired": {
+            "ci95": [
+              -0.00036587491631507875,
+              0.0011470057070255277
+            ],
+            "delta_token_weighted_nll": 0.0003819689154624939,
+            "exploratory_bootstrap_p": 0.344327836081959,
+            "mean": 0.0003819689154624939,
+            "stories": 128
+          }
+        },
+        {
+          "seed": 151001302,
+          "story_paired": {
+            "ci95": [
+              -0.0007784927729517221,
+              0.001449765590950846
+            ],
+            "delta_token_weighted_nll": 0.0003564264625310898,
+            "exploratory_bootstrap_p": 0.5382308845577212,
+            "mean": 0.0003564264625310898,
+            "stories": 128
+          }
+        },
+        {
+          "seed": 151001303,
+          "story_paired": {
+            "ci95": [
+              -0.0007016509771347046,
+              0.001243059709668159
+            ],
+            "delta_token_weighted_nll": 0.00026008859276771545,
+            "exploratory_bootstrap_p": 0.5977011494252874,
+            "mean": 0.00026008859276771545,
+            "stories": 128
+          }
+        }
+      ],
+      "statistical_confirmation": false,
+      "status": "NOT_SUPPORTED"
+    },
+    "A-CT vs A-FT": {
+      "caveat": "Story bootstrap does not replace training Seed replication; Development previously used.",
+      "ci95_story_bootstrap_conditional_on_three_seeds": [
+        0.0,
+        0.0
+      ],
+      "deltas": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "exploratory_bootstrap_p": 1.0,
+      "holm_exploratory_p": 1.0,
+      "independent_training_seeds": 3,
+      "mean_delta": 0.0,
+      "per_seed": [
+        {
+          "seed": 151001301,
+          "story_paired": {
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta_token_weighted_nll": 0.0,
+            "exploratory_bootstrap_p": 1.0,
+            "mean": 0.0,
+            "stories": 128
+          }
+        },
+        {
+          "seed": 151001302,
+          "story_paired": {
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta_token_weighted_nll": 0.0,
+            "exploratory_bootstrap_p": 1.0,
+            "mean": 0.0,
+            "stories": 128
+          }
+        },
+        {
+          "seed": 151001303,
+          "story_paired": {
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta_token_weighted_nll": 0.0,
+            "exploratory_bootstrap_p": 1.0,
+            "mean": 0.0,
+            "stories": 128
+          }
+        }
+      ],
+      "statistical_confirmation": false,
+      "status": "NOT_SUPPORTED"
+    },
+    "B-CH vs B-FH": {
+      "caveat": "Story bootstrap does not replace training Seed replication; Development previously used.",
+      "ci95_story_bootstrap_conditional_on_three_seeds": [
+        -0.0004890790364394584,
+        0.0008414094801992174
+      ],
+      "deltas": [
+        0.0,
+        0.00027276575565338135,
+        0.0002674199640750885
+      ],
+      "exploratory_bootstrap_p": 0.6041979010494752,
+      "holm_exploratory_p": 1.0,
+      "independent_training_seeds": 3,
+      "mean_delta": 0.00018006190657615662,
+      "per_seed": [
+        {
+          "seed": 151001301,
+          "story_paired": {
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta_token_weighted_nll": 0.0,
+            "exploratory_bootstrap_p": 1.0,
+            "mean": 0.0,
+            "stories": 128
+          }
+        },
+        {
+          "seed": 151001302,
+          "story_paired": {
+            "ci95": [
+              -0.0012130654882639646,
+              0.001750702038407325
+            ],
+            "delta_token_weighted_nll": 0.00027276575565338135,
+            "exploratory_bootstrap_p": 0.729135432283858,
+            "mean": 0.00027276575565338135,
+            "stories": 128
+          }
+        },
+        {
+          "seed": 151001303,
+          "story_paired": {
+            "ci95": [
+              -0.0010715655982494355,
+              0.001647179154679177
+            ],
+            "delta_token_weighted_nll": 0.0002674199640750885,
+            "exploratory_bootstrap_p": 0.703648175912044,
+            "mean": 0.0002674199640750885,
+            "stories": 128
+          }
+        }
+      ],
+      "statistical_confirmation": false,
+      "status": "NOT_SUPPORTED"
+    },
+    "B-CT vs B-FT": {
+      "caveat": "Story bootstrap does not replace training Seed replication; Development previously used.",
+      "ci95_story_bootstrap_conditional_on_three_seeds": [
+        -0.0005416907214870055,
+        0.0009523105186720687
+      ],
+      "deltas": [
+        0.0,
+        0.00046594254672527313,
+        0.00016525201499462128
+      ],
+      "exploratory_bootstrap_p": 0.5857071464267866,
+      "holm_exploratory_p": 1.0,
+      "independent_training_seeds": 3,
+      "mean_delta": 0.0002103981872399648,
+      "per_seed": [
+        {
+          "seed": 151001301,
+          "story_paired": {
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta_token_weighted_nll": 0.0,
+            "exploratory_bootstrap_p": 1.0,
+            "mean": 0.0,
+            "stories": 128
+          }
+        },
+        {
+          "seed": 151001302,
+          "story_paired": {
+            "ci95": [
+              -0.0010841224808245896,
+              0.002099859295412897
+            ],
+            "delta_token_weighted_nll": 0.00046594254672527313,
+            "exploratory_bootstrap_p": 0.5647176411794103,
+            "mean": 0.00046594254672527313,
+            "stories": 128
+          }
+        },
+        {
+          "seed": 151001303,
+          "story_paired": {
+            "ci95": [
+              -0.0014504741411656141,
+              0.001796060102060435
+            ],
+            "delta_token_weighted_nll": 0.00016525201499462128,
+            "exploratory_bootstrap_p": 0.8375812093953023,
+            "mean": 0.00016525201499462128,
+            "stories": 128
+          }
+        }
+      ],
+      "statistical_confirmation": false,
+      "status": "NOT_SUPPORTED"
+    }
+  },
+  "completed_models": 12,
+  "confirmation": "SEALED",
+  "failures": [],
+  "hf_manifest_sha256": "25930ac73f54cb06cc1a61670e97aad7847f52a1aacca836d8595b64f7820a15",
+  "identity": {
+    "config_sha256": "72de3cfb262a93ec6bb24b29b9f6c18d1d40030c76245cfda9a504852b30e630",
+    "experiment_id": "CLM-001-R3i-Stable-CoAdaptation-001",
+    "run_id": "ed08463119358da0f81b733786ab24bd89ac69c0f6b290dafc0f26311fe328a9",
+    "source_sha": "80e49b071790c8bfb58dead19e6037259551ed61"
+  },
+  "interpretation": "Admission, Cell adaptation and model quality are independent evidence levels.",
+  "quality_acceptances": 8,
+  "scientific_decision": false,
+  "status": "COMPLETED"
+}
