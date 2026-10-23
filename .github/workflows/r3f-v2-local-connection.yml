@@ -1,0 +1,32 @@
+name: R3f-v2 Local Connection CPU
+on:
+  push:
+    branches: [codex/r3f-v2-local-connection]
+  pull_request:
+    paths:
+      - 'research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-v2/**'
+      - 'scripts/run_r3f_v2.py'
+      - '.github/workflows/r3f-v2-local-connection.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-mechanism:
+    runs-on: ubuntu-latest
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install numpy pyyaml ruff
+      - run: python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-v2/checks.py
+      - run: ruff check --config research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/ruff.toml research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-v2 scripts/run_r3f_v2.py
+      - name: Historical R3e and R3f remain unchanged
+        run: git diff --exit-code 39a1aa3460ed00f08848872590b78bb63dcd536c HEAD -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission

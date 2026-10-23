@@ -1,0 +1,35 @@
+name: R3f Connection Admission CPU
+on:
+  push:
+    branches: [codex/r3e-connection-admission-fix]
+  pull_request:
+    paths:
+      - 'research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission/**'
+      - 'scripts/run_r3f.py'
+      - '.github/workflows/r3f-connection-admission.yml'
+      - 'shared/scripts/ci/r3e_scope.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  admission-tests:
+    runs-on: ubuntu-latest
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install numpy pyyaml ruff
+      - name: R3f mechanism, admission, paired adaptation and exact transaction recovery
+        run: python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission/checks.py
+      - name: R3f lint only
+        run: ruff check --config research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/ruff.toml research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission scripts/run_r3f.py shared/scripts/ci/r3e_scope.py
+      - name: Preserve exact historical R3e implementation and protocol
+        run: git diff --exit-code db5b3b5fea4fcc14b0d65451d4495c00c77aed58 HEAD -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/config research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/SPEC.md
