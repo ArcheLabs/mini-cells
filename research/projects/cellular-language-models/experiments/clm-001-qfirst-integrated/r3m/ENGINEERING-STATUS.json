@@ -1,0 +1,45 @@
+{
+  "status": "CPU_ENGINEERING_IMPLEMENTED_DATA_REGISTRATION_BLOCKED",
+  "scientific_execution_ready": false,
+  "gpu_runs_started": 0,
+  "model": {
+    "total_parameters": 1006694,
+    "cell_parameters": 380928,
+    "connection_parameters": 864,
+    "calls_per_token": 8,
+    "cells": 6
+  },
+  "cpu_gate": {
+    "status": "PASS",
+    "tests": 16,
+    "seconds": 18.2,
+    "scope": "SYNTHETIC_CPU"
+  },
+  "kaggle_cross_session_restore": "NOT_YET_RUN",
+  "main_release": "BLOCKED_UNTIL_REVIEWED_POSITIVE_PILOT_AND_FREEZES",
+  "data_proof": "registration/DATA_BOUNDARY_PROOF.json",
+  "data_conflict": "Requested 100000..101024 is inside exactly reproduced historical Experiment007 training stream; no registration change",
+  "candidate_only_ranges": {
+    "trigger": [
+      500000,
+      500256
+    ],
+    "pilot_report": [
+      500256,
+      500512
+    ],
+    "main_report": [
+      500512,
+      501024
+    ]
+  },
+  "candidate_status": "NOT_REGISTERED_NOT_CONTENT_VALIDATED",
+  "known_risks": [
+    "Real private R3h Step300 and cross-Kaggle restore require authorized HF access in Kaggle",
+    "Main initialization mapping and pressure/effect/cost thresholds remain unfrozen",
+    "Fixed signed gradient sketch is not full dense-gradient cosine",
+    "Measured T4 runtime not established",
+    "Five-seed exact sign-flip inference with Holm has coarse power",
+    "All proposed replacement ranges overlap verified historical training content"
+  ]
+}

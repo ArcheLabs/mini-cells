@@ -6,6 +6,7 @@ import subprocess
 
 PREFIX = (
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3j/",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3i/",
@@ -17,6 +18,8 @@ PREFIX = (
 )
 ALLOWED = {
     "scripts/run_r3l.py",
+    "scripts/run_r3m.py",
+    ".github/workflows/r3m-stability-reorganization.yml",
     ".github/workflows/r3l-reorganization-potential.yml",
     "scripts/run_r3k.py",
     ".github/workflows/r3k-future-learning-value.yml",
