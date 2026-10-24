@@ -214,6 +214,12 @@ def write(c, output, ident, manifest, failures=()):
         connection_updates=0,
         embedding_head="ORIGINAL_FROZEN_RULES",
         parameters_added=0,
+        anchors=[
+            dict(seed=seed, arm=arm, evidence=read(roots / str(seed) / arm / "ANCHOR.json"))
+            for seed in c["seeds"]
+            for arm in c["arms"]
+            if (roots / str(seed) / arm / "ANCHOR.json").is_file()
+        ],
     )
     payload["DATA_AUDIT.json"].update(manifest=manifest)
     payload["TINY_OVERFIT_REPORT.json"].update(

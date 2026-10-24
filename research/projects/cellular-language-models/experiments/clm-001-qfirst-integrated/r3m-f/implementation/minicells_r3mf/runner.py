@@ -3,6 +3,10 @@
 import argparse
 import copy
 import os
+import sys
+import platform
+from importlib import metadata
+import numpy as np
 from pathlib import Path
 import time
 from types import SimpleNamespace
@@ -276,6 +280,17 @@ def run(c, path, output, folder, phase="tiny"):
         persist(True)
     result = report.write(q, output, ident, manifest, failures)
     result.update(
+        runtime_environment=dict(
+            python=platform.python_version(),
+            numpy=np.__version__,
+            torch=torch.__version__,
+            tokenizers=metadata.version("tokenizers"),
+            cuda=torch.version.cuda,
+            devices=[torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())],
+            worker_omp_num_threads=1,
+            worker_mkl_num_threads=1,
+        ),
+        command=list(sys.argv),
         started_at_unix=start,
         finished_at_unix=time.time(),
         hf_reference=publisher.prior,
