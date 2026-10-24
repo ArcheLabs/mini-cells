@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - 'research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/**'
+      - 'shared/python/minicells_data_registry/**'
       - 'scripts/run_r3m.py'
       - '.github/workflows/r3m-stability-reorganization.yml'
   workflow_dispatch:
@@ -29,5 +30,6 @@ jobs:
       - run: python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/checks.py
       - run: python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/audit_checks.py
       - run: ruff check --config research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/ruff.toml research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m scripts/run_r3m.py
+      - run: python research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registry_checks.py
       - name: Frozen history remains unchanged
         run: git diff --exit-code abf0f79ec3df6b9548f918499b1f4dd5373c454b HEAD -- research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3i research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l
