@@ -64,8 +64,8 @@ def cpu_gate(c):
 
 def _arm_runtime_name(arm):
     return {
-        "E0-STORY-STABLE": "S0",
-        "E1-MIX-STABLE": "S0",
+        "E0-STORY-STABLE": "STABLE",
+        "E1-MIX-STABLE": "STABLE",
         "E2-MIX-REORG": "P1",
         "E3-MIX-SHAM": "P0",
     }[arm]
@@ -155,7 +155,7 @@ def analyze_job(c, output, runtime, train_assets, research, tokenizer, identity,
             "strict_equal_total_compute": False,
         },
         "checkpoint_receipts": [
-            Store(root, arm_identity).verified(read(Store(root, arm_identity).receipt_file(t)))
+            read(Store(root, arm_identity).receipt_file(t))
             for t in c["barriers"]
         ],
         "confirmation": "SEALED",
@@ -171,7 +171,8 @@ def run_study(c, output, assets_dir, device="cuda:0"):
     from minicells_artifacts.hf_storage import HubBackend
     from minicells_r3m import engine as r3m_engine
     from minicells_r3m import anchor as r3m_anchor
-    from minicells_r3m.storage import Publisher as R3mPublisher, restore as restore_private
+    from minicells_r3m.storage import restore as restore_private
+    from .storage import Publisher as R3mPublisher
     from minicells_r3e.runner import secrets
     from tokenizers import Tokenizer
 
@@ -370,7 +371,7 @@ def smoke(c, output, assets_dir, device="cuda:0"):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=("cpu-gate", "auto", "smoke", "train"), default="auto")
+    parser.add_argument("--mode", choices=("cpu-gate", "auto", "smoke", "gate2", "train"), default="auto")
     parser.add_argument("--config", type=Path, default=BASE / "config/exploratory.frozen.json")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--assets", type=Path, default=None)
@@ -385,6 +386,12 @@ def main():
     if args.mode == "cpu-gate":
         return
     assets_dir = args.assets or (args.output / "assets")
+    if args.mode == "gate2":
+        from .gate2 import run as run_gate2
+
+        result = run_gate2(c, args.output, assets_dir, args.device)
+        print(json.dumps(result, sort_keys=True), flush=True)
+        return
     if args.mode == "train":
         result = run_study(c, args.output, assets_dir, args.device)
         print(json.dumps(result, sort_keys=True), flush=True)

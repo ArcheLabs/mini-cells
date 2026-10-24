@@ -66,7 +66,8 @@ never as formal confirmation.
   acceptance, barriers, and exploratory decisions.
 - Gate 1 uses synthetic CPU fixtures for arithmetic fact isolation, token masking, schedule,
   task budget, legal routing budget, rollback and report barriers.
-- Gate 2 is an opt-in one-update real-checkpoint engineering smoke; it must not advance the
+- Gate 2 includes the completed one-update-per-task Smoke plus the disposable transaction
+  and cross-session relay specified in `GATE2_PROTOCOL.md`. It does not advance the
   production cursor or count as a study update.
 - Gate 3 full exploratory training stays disabled until engineering gates pass and compute is
   explicitly authorized. The original R3m scientific gate remains blocked.
