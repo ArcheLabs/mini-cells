@@ -70,3 +70,12 @@ never as formal confirmation.
   production cursor or count as a study update.
 - Gate 3 full exploratory training stays disabled until engineering gates pass and compute is
   explicitly authorized. The original R3m scientific gate remains blocked.
+
+## Engineering correction: Story evaluation window selection
+
+The historical fixed evaluation list contains one window per story. R3m-E selects
+32 eligible stories from the verified complete Development legal-window list,
+using the frozen SHA-256 story order and the first two distinct ascending starts.
+The input manifest records all chosen story IDs, starts and payload hash.
+No model quality results informed this correction. The config identity is revised;
+no R3m-E training or successful evaluation preceded it. Historical assets stay intact.

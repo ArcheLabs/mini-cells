@@ -16,21 +16,33 @@ from .protocol import task_for
 
 
 def _story_eval_assets(assets, sequence_length, groups=32, windows_per_group=2):
-    meta = assets["windows"]["development"]["evaluation"]
+    meta = assets["windows"]["development"]
     starts, group_ids = meta["starts"], meta["groups"]
+    if len(starts) != len(group_ids):
+        raise ValueError("R3H_DEVELOPMENT_WINDOW_METADATA_INVALID")
     tokens = assets["development"]
     grouped = {}
+    selected_starts = {}
     for start, group in zip(starts, group_ids):
         group = int(group)
         lo = int(start)
         hi = lo + sequence_length + 1
+        if lo < 0 or hi > len(tokens):
+            raise ValueError("R3H_DEVELOPMENT_WINDOW_INVALID")
         grouped.setdefault(group, []).append(np.asarray(tokens[lo:hi], dtype=np.int64).tolist())
-    if any(len(w) < windows_per_group or any(len(x) != sequence_length + 1 for x in w) for w in grouped.values()):
+        selected_starts.setdefault(group, []).append(lo)
+    if any(any(len(x) != sequence_length + 1 for x in w) for w in grouped.values()):
         raise ValueError("R3H_DEVELOPMENT_WINDOW_INVALID")
-    chosen = sorted(grouped, key=lambda g: hashlib.sha256(("R3ME-STORY-DEV:" + str(g)).encode()).hexdigest())[:groups]
+    eligible = [g for g in grouped if len(set(selected_starts[g])) >= windows_per_group]
+    chosen = sorted(eligible, key=lambda g: hashlib.sha256(("R3ME-STORY-DEV:" + str(g)).encode()).hexdigest())[:groups]
     if len(chosen) != groups:
         raise ValueError("R3H_DEVELOPMENT_GROUPS_INSUFFICIENT")
-    return [dict(group=str(g), windows=grouped[g][:windows_per_group]) for g in chosen]
+    result = []
+    for g in chosen:
+        by_start = dict(zip(selected_starts[g], grouped[g]))
+        chosen_starts = sorted(by_start)[:windows_per_group]
+        result.append(dict(group=str(g), starts=chosen_starts, windows=[by_start[start] for start in chosen_starts]))
+    return result
 
 
 def prepare(c, runtime, backend, folder):
@@ -94,6 +106,11 @@ def prepare(c, runtime, backend, folder):
         "r3h_development_manifest": dev["manifest"],
         "r3h_development_role": "REUSED_HISTORICAL_DEVELOPMENT_NOT_UNTOUCHED_TEST",
         "arithmetic": arithmetic_audit,
+        "story_evaluation_selection": {
+            "rule": c["evaluation"]["story_window_selection"],
+            "groups_and_starts": [{"group": row["group"], "starts": row["starts"]} for row in story],
+            "selected_payload_sha256": canonical(story),
+        },
         "research_payload_sha256": research_sha,
         "forbidden_roles_materialized": [],
         "r3m_main_candidates_accessed": False,

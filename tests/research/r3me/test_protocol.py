@@ -105,3 +105,20 @@ def test_gpu_authorization_cannot_be_enabled_by_editing_the_frozen_config():
     config["authorization"]["full_training"] = True
     with pytest.raises(ValueError, match="FROZEN_CONFIG_HASH_MISMATCH"):
         protocol.validate(config)
+
+
+def test_story_selection_uses_historical_legal_windows_not_single_fixed_window():
+    metadata_path = PROJECT.parent / 'r3m/registration/artifact-recovery-001/independent-review-001/windows.json'
+    metadata = json.loads(metadata_path.read_text())['development']
+    # Original fixed evaluation has one window/story; the legal pool supports two.
+    assert len(set(metadata['evaluation']['groups'])) == len(metadata['evaluation']['starts'])
+    tokens = np.zeros(metadata['story_offsets'][-1], dtype=np.int32)
+    assets = {'windows': {'development': metadata}, 'development': tokens}
+    selected = data._story_eval_assets(assets, 64, 32, 2)
+    assert len(selected) == 32
+    legal = set(zip(metadata['starts'], metadata['groups']))
+    for row in selected:
+        assert len(row['windows']) == len(set(row['starts'])) == 2
+        assert all((start, int(row['group'])) in legal for start in row['starts'])
+        assert all(len(window) == 65 for window in row['windows'])
+    assert selected == data._story_eval_assets(assets, 64, 32, 2)
