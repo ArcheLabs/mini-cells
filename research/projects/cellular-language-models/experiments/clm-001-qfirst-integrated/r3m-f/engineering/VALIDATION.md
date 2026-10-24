@@ -34,3 +34,5 @@ Scope: synthetic CPU execution plus the exactly recovered public Tokenizer bytes
 6. Eleven unseen A1 facts and three seeds support exploratory evidence only. Wilson intervals refer to the stricter all-variants-correct fact success; variant-averaged EM is reported separately.
 7. Historical Development is reused; no complete global historical content-isolation claim is made. Original R3m registration stays BLOCKED.
 8. Cell 1 was selected from R3m-E. A five-timepoint correlation cannot establish causation or justify Connection reorganization.
+
+Metadata completion additionally passed 4 targeted CPU checks in 7.20s (protocol/release boundary, private restore and GitHub publication). Producer Python/NumPy/Torch/Tokenizer/CUDA versions and actual parent receipts are retained in runtime reports.
