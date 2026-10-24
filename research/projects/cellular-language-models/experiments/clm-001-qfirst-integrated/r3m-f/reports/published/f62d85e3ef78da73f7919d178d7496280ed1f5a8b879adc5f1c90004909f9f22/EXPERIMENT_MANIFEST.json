@@ -1,0 +1,311 @@
+{
+  "completed_jobs": 1,
+  "config": {
+    "anchor_step": 300,
+    "arithmetic": {
+      "answer_format": "DIGITS_ONLY_THEN_EOS_NO_PERIOD",
+      "canonicalization": "MIN_MAX_OPERANDS_0_TO_9",
+      "dev_facts": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          8
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          9,
+          9
+        ]
+      ],
+      "dev_templates": [
+        "What is {a} plus {b}? Answer:\n",
+        "Add {a} and {b}. Answer:\n",
+        "Calculate {a} + {b}. Answer:\n"
+      ],
+      "eos_token_id": 1,
+      "generator_seed": 153301,
+      "heldout_template": 2,
+      "later_stages_authorized": false,
+      "max_sequence_length": 64,
+      "swapped_variants": "BOTH_ORDERS_SAME_FACT_ROLE_EQUAL_WEIGHT",
+      "tiny_facts": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          9
+        ]
+      ],
+      "train_templates": [
+        "What is {a} plus {b}? Answer:\n",
+        "Add {a} and {b}. Answer:\n"
+      ]
+    },
+    "arms": [
+      "TINY-A1"
+    ],
+    "authorization": {
+      "formal_confirmation": false,
+      "full_training": false,
+      "reason": "Tiny Overfit result requires independent review and explicit pilot release; no A2/A3"
+    },
+    "barriers": [
+      0,
+      50,
+      100,
+      200
+    ],
+    "baseline": {
+      "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "hf_reference": {
+        "cross_session_verified": false,
+        "hf_repo": "libingjiang/minicells-research-checkpoints",
+        "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+        "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+        "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+        "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+      },
+      "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "source_sha": "01f226e259356bb06a8ef275e8314649062446e4"
+    },
+    "calls_per_token": 8,
+    "continuation_steps": 200,
+    "copy": {
+      "dev_numbers": [
+        3,
+        8,
+        12,
+        17
+      ],
+      "dev_templates": [
+        "Repeat the number {n}. Answer:\n",
+        "Copy {n}. Answer:\n",
+        "Write the number {n} again. Answer:\n"
+      ],
+      "fact_identity": "NUMBER; NUMBER_DISJOINT_TRAIN_DEV",
+      "numbers": [
+        0,
+        18
+      ],
+      "residual_distribution": "REPORT_TV_AND_ONE_TWO_DIGIT_MASS; NO_POSTHOC_REBALANCING",
+      "train_templates": [
+        "Repeat the number {n}. Answer:\n",
+        "Copy {n}. Answer:\n"
+      ],
+      "weighting": "TRAIN_A1_FACT_ANSWER_FREQUENCY_RESTRICTED_TO_COPY_TRAIN_NUMBERS; MINIMUM_WEIGHT_ONE"
+    },
+    "data": {
+      "confirmation": "SEALED",
+      "dataset": "roneneldan/TinyStories",
+      "main_candidates_forbidden": true,
+      "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "story_dev": "REUSED_HISTORICAL_DEVELOPMENT",
+      "story_train": "REUSE_R3H_TRAIN_ASSET",
+      "trigger_pilot_ranges_forbidden": true
+    },
+    "decision": {
+      "a1_unseen_em_min": 0.5,
+      "baseline": "TRAIN_FACT_MAJORITY_ANSWER_LOWEST_INTEGER_TIE_BREAK",
+      "copy_unseen_em_min": 0.75,
+      "minimum_positive_seeds": 2,
+      "require_both_control_arms": true,
+      "require_positive_a1_replacement_harm": true,
+      "scope": "EXPLORATORY_REFERENCE_NOT_CONFIRMATORY",
+      "specialization_primary": "CELL_1_USAGE_MATCHED_FINAL_MINUS_ANCHOR_F2_MINUS_F0_AND_F1",
+      "specificity_double_difference_min": 0.005
+    },
+    "epsilon_terminal": 0.02,
+    "evaluation": {
+      "autoregressive_answer_token_cap": 8,
+      "cell_id_indexing": "ZERO_BASED_CELL_1_IS_SECOND_CELL",
+      "fact_unit": "AVERAGE_TEMPLATES_AND_ORDERS_WITHIN_CANONICAL_FACT_THEN_AVERAGE_FACTS",
+      "gradient_probe_seed_offset": 154002,
+      "normalization": "(REPLACED_NLL-BASE_NLL)/max(BASE_NLL,1e-12)",
+      "relative_steps": [
+        0,
+        100,
+        300,
+        600,
+        900
+      ],
+      "replacement_seed": 153301,
+      "specialization_controls": [
+        "FIXED_CYCLIC_CELL_ID",
+        "USAGE_MATCHED",
+        "RANDOM_CELL_ID"
+      ],
+      "story_groups": 32,
+      "story_windows_per_group": 2
+    },
+    "execution": {
+      "analysis_after_training": true,
+      "checkpoint_every": 50,
+      "hard_runtime_limit": null,
+      "remote_snapshot_min_seconds": 180,
+      "runtime_test_suite": false,
+      "workers": 2
+    },
+    "execution_phase": "tiny",
+    "experiment_id": "CLM-001-R3m-F-Arithmetic-Specialization-001",
+    "formal_confirmation": "NOT_AUTHORIZED",
+    "frozen_config_sha256": "0f61a239e3012650497b2bb66a0927d64c89383711102a425af1cd07a57efc7c",
+    "known_limitations": [
+      "R3h B-H original NumPy producer version is unknown; deterministic replay is consistent but not strictly certified.",
+      "R3m global historical content isolation is blocked; R3m-E discloses known overlap and is not independent confirmation.",
+      "Historical development data are reused and are not untouched test data."
+    ],
+    "lr_terminal_fraction": 0.2,
+    "model": {
+      "architecture": "B-H",
+      "calls_per_token": 8,
+      "cells": 6,
+      "optimizer": "CONTINUE_VERIFIED_R3H_CELL_ADAMW_STATE",
+      "parent_config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "parent_experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "parent_hf_repo": "libingjiang/minicells-research-checkpoints",
+      "parent_hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "parent_manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "parent_manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "parent_run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "parent_source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+      "parent_step": 300,
+      "sequence_length": 64,
+      "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+      "tokens_per_step": 512,
+      "vocab_size": 4096
+    },
+    "pressure": {
+      "consecutive": 2,
+      "cooldown": 100,
+      "gradient_mean": null,
+      "gradient_observation": "EXISTING_TASK_BLIND_R3M_SIGNED_32_COMPONENT_SKETCH_DIAGNOSTIC_ONLY",
+      "gradient_std": null,
+      "interval": 20,
+      "loss_mean": null,
+      "loss_std": null,
+      "maximum_proposals": 0,
+      "threshold": null
+    },
+    "scope": "EXPLORATORY_DEVELOPMENT",
+    "seeds": [
+      151001301
+    ],
+    "status": "ENGINEERING_TINY_FIRST",
+    "tiny": {
+      "barriers": [
+        0,
+        50,
+        100,
+        200
+      ],
+      "evaluation_template": 0,
+      "minimum_exact_match": 0.75,
+      "pilot_auto_start": false,
+      "scope": "TRAIN_FACT_MEMORIZATION_NOT_GENERALIZATION",
+      "seed": 151001301,
+      "steps": 200
+    },
+    "tokens_per_step": 512,
+    "training": {
+      "anchor_step": 300,
+      "barrier_relative_steps": [
+        0,
+        50,
+        100,
+        200
+      ],
+      "continuation_steps": 200,
+      "data_seed_offset": 41001,
+      "effective_batch": 8,
+      "epsilon_final": 0.02,
+      "epsilon_initial": 0.15,
+      "logical_tokens": 102400,
+      "logical_updates": 200,
+      "microbatch": 1,
+      "sequence_length": 64,
+      "step_allocation": "FIXED_10_STEP_BLOCKS_EXACT_TOKEN_BUDGET",
+      "steps": 500,
+      "task_schedule": "EVEN_RELATIVE_STEP_NEW_TASK_ODD_STORY; F0_ALL_STORY",
+      "terminal_epsilon": 0.02,
+      "terminal_learning_rate_fraction": 0.2,
+      "tokens_per_step": 512,
+      "warmup_reset": false
+    }
+  },
+  "confirmation": "SEALED",
+  "expected_jobs": 1,
+  "failures": [],
+  "identity": {
+    "config_sha256": "d00e8f039ff18ad5e53405495f3ee21622ac88a2b6b5db198627443497789a56",
+    "experiment_id": "CLM-001-R3m-F-Arithmetic-Specialization-001",
+    "phase": "EXPLORATORY_DEVELOPMENT",
+    "run_id": "7f4ae3ed14da7ddbcfa9dcccce56e574450bed167cff0332cca35140d8b3fe68",
+    "source_sha": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05"
+  },
+  "missing": [],
+  "phase": "tiny",
+  "r3m_registration": "BLOCKED",
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "status": "NOT_RUN_TINY_ONLY"
+}

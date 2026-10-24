@@ -1,0 +1,48 @@
+{
+  "analysis_seconds": 5.298836609000034,
+  "confirmation": "SEALED",
+  "full_pilot_tokens": 4147200,
+  "full_pilot_updates": 8100,
+  "hard_runtime_termination": false,
+  "identity": {
+    "config_sha256": "d00e8f039ff18ad5e53405495f3ee21622ac88a2b6b5db198627443497789a56",
+    "experiment_id": "CLM-001-R3m-F-Arithmetic-Specialization-001",
+    "phase": "EXPLORATORY_DEVELOPMENT",
+    "run_id": "7f4ae3ed14da7ddbcfa9dcccce56e574450bed167cff0332cca35140d8b3fe68",
+    "source_sha": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05"
+  },
+  "jobs": {
+    "151001301/TINY-A1": {
+      "cell_calls": 819200,
+      "continuation_cost": {
+        "discarded_adaptation_tokens": 0,
+        "discarded_adaptation_updates": 0,
+        "elapsed_update_seconds": 71.21394360100007,
+        "main_tokens": 102400,
+        "main_updates": 200,
+        "policy_optimizer_updates": 0
+      },
+      "main_updates": 200,
+      "observed_parameter_work": {
+        "cell_rows": 819200,
+        "context_rows": 102400,
+        "gate_rows": 819200,
+        "head_rows": 102400,
+        "input_rows": 102400,
+        "policy_rows": 819200
+      },
+      "parameter_counts": {
+        "cells": 380928,
+        "connection": 864,
+        "total": 1006694,
+        "trainable": 380928
+      },
+      "tokens": 102400
+    }
+  },
+  "observed_gpu_latency": "NOT_INFERRED_FROM_CPU",
+  "r3m_registration": "BLOCKED",
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "status": "NOT_RUN_TINY_ONLY",
+  "tiny_excluded_from_pilot": true
+}
