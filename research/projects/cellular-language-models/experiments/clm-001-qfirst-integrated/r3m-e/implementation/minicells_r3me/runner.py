@@ -58,7 +58,7 @@ def cpu_gate(c):
         "logical_tokens": c["training"]["logical_tokens"],
         "confirmation": "SEALED",
         "formal_confirmation_authorized": False,
-        "full_gpu_training_authorized": False,
+        "full_gpu_training_authorized": c["authorization"]["full_training"],
     }
 
 
@@ -89,18 +89,21 @@ def analyze_job(c, output, runtime, train_assets, research, tokenizer, identity,
     arm_identity = dict(identity, seed=seed, arm=arm)
     evaluations = {}
     models = {}
+    anchor_cost = None
     for relative in c["barriers"]:
         store = Store(root, arm_identity)
         receipt = read(store.receipt_file(relative))
         payload = store.verified(receipt)
+        if relative == 0:
+            anchor_cost = copy.deepcopy(payload["trainer"]["cost"])
         trainer = restore_trainer(runtime, payload["trainer"], seed, device)
         metrics = evaluation.measure(trainer.model, research, tokenizer, c)
         evaluations[str(relative)] = metrics
         if relative in c["evaluation"]["cell_connection_grid_relative_steps"]:
             models[relative] = trainer.model
-    final_payload = Store(root, arm_identity).verified(read(Store(root, arm_identity).receipt_file(600)))
+    final_payload = Store(root, arm_identity).verified(read(Store(root, arm_identity).receipt_file(c["continuation_steps"])))
     final_tr = restore_trainer(runtime, final_payload["trainer"], seed, device)
-    specialization = evaluation.specialization(final_tr.model, research, tokenizer, c)
+    specialization = evaluation.specialization(final_tr.model, research, tokenizer, c, baseline=evaluations[str(c["continuation_steps"])])
     gradient = evaluation.gradient_conflict(final_tr, train_assets, research, seed, c)
     four_grid = {}
     if arm == "E1-MIX-STABLE":
@@ -130,6 +133,10 @@ def analyze_job(c, output, runtime, train_assets, research, tokenizer, identity,
             if not training_exposure[task]:
                 training_exposure[task] = [0] * len(counts)
             training_exposure[task] = [a + int(b) for a, b in zip(training_exposure[task], counts)]
+    def difference(final, initial):
+        return {key: difference(value, initial.get(key, {})) if isinstance(value, dict)
+                else value - initial.get(key, 0) for key, value in final.items()}
+
     result = {
         "seed": seed,
         "arm": arm,
@@ -150,6 +157,12 @@ def analyze_job(c, output, runtime, train_assets, research, tokenizer, identity,
             "discarded_shadow_updates": final_payload["aux"]["discarded_shadow_updates"],
             "proposal_optimizer_updates": final_payload["aux"]["proposal_optimizer_updates"],
             "trainer_cost": final_tr.cost,
+            "trainer_cost_scope": "CUMULATIVE_INCLUDING_R3H_PARENT",
+            "continuation_trainer_cost": difference(final_tr.cost, anchor_cost or {}),
+            "total_parameters": sum(p.numel() for p in final_tr.model.parameters()),
+            "cell_parameters": sum(p.numel() for p in final_tr.model.cells.parameters()),
+            "connection_parameters": sum(p.numel() for p in final_tr.model.connection.parameters()),
+            "inference_cell_calls_per_token": c["calls_per_token"],
             "evaluation_seconds": sum(v["seconds"] for v in evaluations.values()),
             "intervention_seconds": sum(v.get("seconds", 0.0) for v in specialization),
             "strict_equal_total_compute": False,
@@ -164,107 +177,9 @@ def analyze_job(c, output, runtime, train_assets, research, tokenizer, identity,
     return result
 
 
-def run_study(c, output, assets_dir, device="cuda:0"):
-    """Run the explicitly released exploratory matrix; resume from immutable HF receipts."""
-    if not c["authorization"]["full_training"] or c["formal_confirmation"] != "NOT_AUTHORIZED":
-        raise RuntimeError("R3ME_EXPLORATORY_GPU_TRAINING_NOT_AUTHORIZED_IN_FROZEN_CONFIG")
-    from minicells_artifacts.hf_storage import HubBackend
-    from minicells_r3m import engine as r3m_engine
-    from minicells_r3m import anchor as r3m_anchor
-    from minicells_r3m.storage import restore as restore_private
-    from .storage import Publisher as R3mPublisher
-    from minicells_r3e.runner import secrets
-    from tokenizers import Tokenizer
-
-    if not torch.cuda.is_available():
-        raise RuntimeError("R3ME_EXPLORATORY_TRAINING_REQUIRES_CUDA")
-    secrets()
-    backend = HubBackend(c["baseline"]["hf_reference"]["hf_repo"])
-    backend.check_write()
-    runtime = anchor.runtime(c)
-    train_assets, research, input_manifest, tokenizer_path = data.prepare(
-        c, runtime, backend, assets_dir
-    )
-    tokenizer = Tokenizer.from_file(str(tokenizer_path))
-    ident = run_identity(c, source_sha())
-    anchor_evidence = []
-    private = Path(output) / "private-checkpoints" / ident["run_id"]
-    private.mkdir(parents=True, exist_ok=True)
-    session = uuid.uuid4().hex
-    revision = backend.info().sha
-    pointer_path = "r3m-e/" + ident["run_id"] + "/latest.json"
-    prior = backend.optional(pointer_path, revision)
-    prior = dict(prior, hf_repo=backend.repo, hf_revision=revision) if prior else None
-    if prior:
-        restore_private(backend, prior, private, output, ident, session, c["barriers"])
-    publisher = R3mPublisher(backend, private, Path(output), ident, session, prior)
-
-    def persist(force=True):
-        publisher.publish(force=force)
-
-    failures = []
-    runtime_for_arm = copy.deepcopy(runtime)
-    for seed in c["seeds"]:
-        for logical_arm in c["arms"]:
-            root = _job_root(output, seed, logical_arm, ident["run_id"])
-            aid = dict(ident, seed=seed, arm=logical_arm)
-            try:
-                base, evidence = r3m_anchor.load(
-                    c, backend, Path(output) / "parent-r3h", seed, device, step=c["anchor_step"]
-                )
-                if seed not in {item["seed"] for item in anchor_evidence}:
-                    anchor_evidence.append({"seed": seed, **evidence})
-                atomic(root / "ANCHOR.json", evidence)
-                if not (root / "COMPLETE.json").exists():
-                    r3m_engine.run_arm(
-                        c,
-                        copy.deepcopy(runtime_for_arm),
-                        base,
-                        aid,
-                        root,
-                        train_assets,
-                        research,
-                        "N" if logical_arm == "E0-STORY-STABLE" else "C",
-                        _arm_runtime_name(logical_arm),
-                        device,
-                        persist,
-                    )
-                persist()
-            except Exception as exc:
-                failures.append({"seed": seed, "arm": logical_arm, "type": type(exc).__name__, "message": str(exc)[:180]})
-                atomic(Path(output) / "FAILURES.json", failures)
-                try:
-                    persist()
-                except Exception:
-                    pass
-                break
-        if failures:
-            break
-    input_identity = {
-        "identity": ident,
-        "input_manifest": input_manifest,
-        "anchors": anchor_evidence,
-        "confirmation": "SEALED",
-        "r3m_main_candidates_accessed": False,
-    }
-    atomic(Path(output) / "INPUT_IDENTITY.json", input_identity)
-    if not failures:
-        for seed in c["seeds"]:
-            for logical_arm in c["arms"]:
-                try:
-                    analyze_job(
-                        c, output, runtime, train_assets, research, tokenizer,
-                        ident, seed, logical_arm, device,
-                    )
-                except Exception as exc:
-                    failures.append({"seed": seed, "arm": logical_arm, "phase": "analysis", "type": type(exc).__name__, "message": str(exc)[:180]})
-                    break
-            if failures:
-                break
-    result = reports.write(c, output, ident, input_identity, failures)
-    result["hf_reference"] = publisher.prior
-    atomic(Path(output) / "reports" / "RUN_MANIFEST.json", result)
-    return result
+def run_study(c, output, assets_dir, device="cuda:0", config_path=None):
+    from .study import run
+    return run(c, config_path or BASE / "config/exploratory.released.json", output, assets_dir)
 
 
 def preflight(c, output, assets_dir):
@@ -371,15 +286,30 @@ def smoke(c, output, assets_dir, device="cuda:0"):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=("cpu-gate", "auto", "smoke", "gate2", "train"), default="auto")
+    parser.add_argument("--mode", choices=("cpu-gate", "auto", "smoke", "gate2", "train", "run-all", "publish-existing"), default="auto")
     parser.add_argument("--config", type=Path, default=BASE / "config/exploratory.frozen.json")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--assets", type=Path, default=None)
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--worker", type=int)
+    parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--phase", choices=("train", "evaluate"))
     args = parser.parse_args()
     c = read(args.config)
     protocol.validate(c)
     args.output.mkdir(parents=True, exist_ok=True)
+    if args.worker is not None:
+        if not c["authorization"]["full_training"] or not args.phase or args.assets is None:
+            raise RuntimeError("R3ME_WORKER_NOT_AUTHORIZED")
+        from .study import worker
+        worker(c, args.output, args.assets, args.worker, args.workers, args.phase)
+        return
+    if args.mode == "publish-existing":
+        from minicells_r3e.runner import secrets
+        from .study import publication
+        secrets()
+        print(json.dumps(publication(args.output), sort_keys=True), flush=True)
+        return
     result = cpu_gate(c)
     atomic(args.output / "CPU_GATE.json", result)
     print(json.dumps(result, sort_keys=True), flush=True)
@@ -392,8 +322,8 @@ def main():
         result = run_gate2(c, args.output, assets_dir, args.device)
         print(json.dumps(result, sort_keys=True), flush=True)
         return
-    if args.mode == "train":
-        result = run_study(c, args.output, assets_dir, args.device)
+    if args.mode in ("train", "run-all"):
+        result = run_study(c, args.output, assets_dir, args.device, args.config)
         print(json.dumps(result, sort_keys=True), flush=True)
         return
     if args.mode == "smoke":

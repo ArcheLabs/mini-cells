@@ -1,6 +1,6 @@
 # R3m-E — Capability Differentiation & Reorganization Pilot
 
-Status: `PROPOSED_EXPLORATORY_ENGINEERING_READY`; formal confirmation is not authorized.
+Status: `RELEASED_EXPLORATORY_DEVELOPMENT` under the separate released config; formal confirmation is not authorized. Original engineering config and original R3m BLOCKED registration are retained.
 
 ## Questions
 
@@ -69,8 +69,9 @@ never as formal confirmation.
 - Gate 2 includes the completed one-update-per-task Smoke plus the disposable transaction
   and cross-session relay specified in `GATE2_PROTOCOL.md`. It does not advance the
   production cursor or count as a study update.
-- Gate 3 full exploratory training stays disabled until engineering gates pass and compute is
-  explicitly authorized. The original R3m scientific gate remains blocked.
+- Gate 3 is released for the original 4-arm × 3-seed matrix using the separate released config.
+  Launch verifies the already completed cloud Gate 2 evidence, with no repeated GPU tests.
+  The original R3m scientific gate remains blocked; Confirmation is not authorized.
 
 ## Engineering correction: Story evaluation window selection
 

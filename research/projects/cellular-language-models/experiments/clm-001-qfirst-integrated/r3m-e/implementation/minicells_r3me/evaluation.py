@@ -2,6 +2,8 @@
 
 import copy
 import hashlib
+import functools
+import random
 import time
 
 import numpy as np
@@ -131,11 +133,10 @@ def _path_keys(out):
     if actions is None:
         return []
     values = actions.detach().cpu().numpy()
-    if values.ndim == 2:
-        values = values[:, :, None]
     if values.ndim < 2:
         return []
-    return [tuple(np.asarray(path).reshape(-1).tolist()) for path in values.reshape(-1, *values.shape[-2:])]
+    return [tuple(path.tolist()) for path in values.reshape(-1, values.shape[-1])]
+
 
 
 @torch.no_grad()
@@ -153,6 +154,33 @@ def _generate(model, prompt_ids, device, cap):
     return generated
 
 
+def _preserve_diagnostic_state(function):
+    @functools.wraps(function)
+    def wrapped(tr, *args, **kwargs):
+        model = tr.model
+        before = fingerprint(model.state_dict())
+        saved = (copy.deepcopy(model.work), copy.deepcopy(tr.cost), tr.route_rng.get_state(),
+                 torch.get_rng_state(), torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+                 random.getstate(), np.random.get_state(), model.training_context, model.observer, model.training)
+        try:
+            return function(tr, *args, **kwargs)
+        finally:
+            model.work, tr.cost = saved[0], saved[1]
+            tr.route_rng.set_state(saved[2])
+            torch.set_rng_state(saved[3])
+            if saved[4] is not None:
+                torch.cuda.set_rng_state_all(saved[4])
+            random.setstate(saved[5])
+            np.random.set_state(saved[6])
+            model.training_context, model.observer = saved[7], saved[8]
+            model.train(saved[9])
+            model.zero_grad(set_to_none=True)
+            if fingerprint(model.state_dict()) != before:
+                raise RuntimeError('R3ME_DIAGNOSTIC_MUTATED_MODEL')
+    return wrapped
+
+
+@_preserve_diagnostic_state
 def gradient_conflict(tr, train_assets, research, seed, config):
     """Exact signed cell-gradient cosine on deterministic Train-only Story/Arithmetic probes."""
     model = tr.model
@@ -177,8 +205,8 @@ def gradient_conflict(tr, train_assets, research, seed, config):
             values.append(float(loss.detach()))
         per_cell = []
         for cell in model.cells:
-            grads = [p.grad.detach().reshape(-1) for p in cell.parameters() if p.grad is not None]
-            vector = torch.cat(grads).float().cpu() if grads else torch.zeros(1)
+            grads = [p.grad.detach().reshape(-1) if p.grad is not None else torch.zeros_like(p).reshape(-1) for p in cell.parameters()]
+            vector = torch.cat(grads).float().cpu()
             per_cell.append(vector)
         result[task] = {"loss": sum(values) / max(1, len(values)), "gradients": per_cell}
     tr.route_rng.set_state(saved_rng)
@@ -199,11 +227,12 @@ def gradient_conflict(tr, train_assets, research, seed, config):
     }
 
 
-def specialization(model, research, tokenizer, config):
+def specialization(model, research, tokenizer, config, baseline=None):
     """Matched-use Cell replacement tests; no development labels enter routing or training."""
     import numpy as np
 
-    baseline = measure(model, research, tokenizer, config, decode=False)
+    if baseline is None:
+        baseline = measure(model, research, tokenizer, config, decode=False)
     usage = [
         sum(baseline["teacher_forced_cell_usage"][task][i] for task in ("story", "arithmetic"))
         for i in range(len(model.cells))

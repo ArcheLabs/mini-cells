@@ -43,8 +43,10 @@ def write(c, output, ident, input_identity, failures=()):
             )
             if path.exists():
                 row = read(path)
-                if row.get("seed") != seed or row.get("arm") != arm:
+                if row.get("seed") != seed or row.get("arm") != arm or row.get("identity") != ident:
                     raise RuntimeError("R3ME_EVALUATION_IDENTITY_MISMATCH")
+                if row.get("status") != "COMPLETE" or set(row.get("evaluations", {})) != {str(t) for t in c["barriers"]}:
+                    raise RuntimeError("R3ME_EVALUATION_BARRIER_INCOMPLETE")
                 jobs.append(row)
     complete = len(jobs) == len(c["seeds"]) * len(c["arms"]) and not failures
     by = {(r["seed"], r["arm"]): r for r in jobs}
@@ -53,7 +55,7 @@ def write(c, output, ident, input_identity, failures=()):
         stable = by.get((seed, "E1-MIX-STABLE"), {}).get("evaluations", {})
         reorg = by.get((seed, "E2-MIX-REORG"), {}).get("evaluations", {})
         sham = by.get((seed, "E3-MIX-SHAM"), {}).get("evaluations", {})
-        for barrier in (0, 100, 110, 200, 400, 600):
+        for barrier in c["barriers"]:
             key = str(barrier)
             if key not in stable or key not in reorg:
                 continue
@@ -67,12 +69,12 @@ def write(c, output, ident, input_identity, failures=()):
                     "arithmetic_answer_gain": s["answer_nll"] - r["answer_nll"],
                     "story_harm": r["story_nll"] - s["story_nll"],
                     "exact_match_change": r["arithmetic_exact_match"] - s["arithmetic_exact_match"],
-                    "sham_answer_nll": sham_row[key]["answer_nll"] if sham_row else None,
+                    "sham_answer_nll": sham_row["answer_nll"] if sham_row else None,
                 }
             )
-    final_rows = [r for r in comparisons if r["relative_step"] == 600]
+    final_rows = [r for r in comparisons if r["relative_step"] == c["continuation_steps"]]
     gains = [r["arithmetic_answer_gain"] for r in final_rows]
-    middle_rows = [r for r in comparisons if r["relative_step"] == 400]
+    middle_rows = [r for r in comparisons if r["relative_step"] == c["evaluation"]["cell_connection_grid_relative_steps"][0]]
     middle_gains = [r["arithmetic_answer_gain"] for r in middle_rows]
     transactions = [
         {"seed": r["seed"], "arm": r["arm"], "transactions": r.get("transactions", [])}
@@ -96,11 +98,12 @@ def write(c, output, ident, input_identity, failures=()):
         rows_for_seed = [by.get((seed, arm), {}).get("evaluations", {}) for arm in ("E1-MIX-STABLE", "E2-MIX-REORG")]
         improved = False
         for values in rows_for_seed:
-            if "0" in values and "600" in values:
+            terminal = str(c["continuation_steps"])
+            if "0" in values and terminal in values:
                 improved |= (
-                    values["0"]["answer_nll"] - values["600"]["answer_nll"]
+                    values["0"]["answer_nll"] - values[terminal]["answer_nll"]
                     >= c["exploratory_decisions"]["arithmetic_answer_nll_min_gain"]
-                    and values["600"]["arithmetic_exact_match"] > values["0"]["arithmetic_exact_match"]
+                    and values[terminal]["arithmetic_exact_match"] > values["0"]["arithmetic_exact_match"]
                 )
         learnability.append({"seed": seed, "learnable_signal": improved})
     matching = [
@@ -122,7 +125,7 @@ def write(c, output, ident, input_identity, failures=()):
     exact_match_ok = bool(final_rows) and all(row["exact_match_change"] >= 0 for row in final_rows)
     sham_differences = [
         row["sham_answer_nll"]
-        - by[(row["seed"], "E2-MIX-REORG")]["evaluations"]["600"]["answer_nll"]
+        - by[(row["seed"], "E2-MIX-REORG")]["evaluations"][str(c["continuation_steps"])]["answer_nll"]
         for row in final_rows
         if row["sham_answer_nll"] is not None
     ]
@@ -137,8 +140,13 @@ def write(c, output, ident, input_identity, failures=()):
         and sham_separates
         and intervention_ok
     )
+    learnable_seeds = sum(row["learnable_signal"] for row in learnability)
+    learnable = learnable_seeds >= c["exploratory_decisions"]["minimum_seed_directions_positive"]
+    retained = retained and learnable
     if not complete:
         reorg_status = "INCONCLUSIVE"
+    elif not learnable:
+        reorg_status = "ARITHMETIC_LEARNABILITY_INSUFFICIENT"
     elif not intervention_ok:
         reorg_status = "INTERVENTION_INSUFFICIENT"
     elif middle_gains and sum(middle_gains) / len(middle_gains) > 0 and not retained:
@@ -151,7 +159,7 @@ def write(c, output, ident, input_identity, failures=()):
         "status": "INCONCLUSIVE" if not complete else "EXPLORATORY_SIGNAL" if retained else reorg_status,
         "arithmetic_learnability": (
             "INCONCLUSIVE" if not complete else
-            "ARITHMETIC_LEARNABILITY_INSUFFICIENT" if not any(x["learnable_signal"] for x in learnability)
+            "ARITHMETIC_LEARNABILITY_INSUFFICIENT" if not learnable
             else "LEARNABILITY_SIGNAL_OBSERVED"
         ),
         "learnability_by_seed": learnability,

@@ -22,8 +22,16 @@ def load_config():
 
 
 def validate(c):
-    if not CONFIG_LOCK.is_file() or canonical(c) != CONFIG_LOCK.read_text().strip():
+    locks = (CONFIG_LOCK, BASE / "config/exploratory.released.sha256")
+    if canonical(c) not in {p.read_text().strip() for p in locks if p.is_file()}:
         raise ValueError("R3ME_FROZEN_CONFIG_HASH_MISMATCH")
+    if c["authorization"]["full_training"]:
+        original = json.loads(CONFIG.read_text())
+        excluded = {"status", "authorization", "release", "execution"}
+        if {k: v for k, v in c.items() if k not in excluded} != {k: v for k, v in original.items() if k not in excluded}:
+            raise ValueError("R3ME_RELEASE_CHANGED_SCIENTIFIC_PROTOCOL")
+        if c["release"]["parent_config_sha256"] != canonical(original):
+            raise ValueError("R3ME_RELEASE_PARENT_CONFIG_CHANGED")
     if c.get("experiment_id") != "CLM-001-R3m-E-Capability-Differentiation-001":
         raise ValueError("R3ME_EXPERIMENT_ID_CHANGED")
     if tuple(c.get("arms", ())) != ARMS or tuple(c.get("seeds", ())) != SEEDS:
