@@ -1,0 +1,17 @@
+{
+  "schema": "minicells.r3m.sampling-audit-plan.v1",
+  "status": "CPU_READONLY_BOUNDARY_VERIFICATION_ONLY",
+  "initial_scope": "R3h B-H, the immediate R3m parent; no extrapolation to other arms or experiments",
+  "seeds": [151001301, 151001302, 151001303],
+  "boundary_steps": [0, 100, 200, 300, 400, 500],
+  "checkpoint_source": "original fixed R3h baseline HF reference from frozen R3i config",
+  "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+  "expected_numpy_provenance": "Must recover producer version evidence; absence is UNKNOWN, not substituted with current Kaggle version",
+  "interval_rule": "Both endpoints must match complete data_rng state including uint32 cache, cursor and verified original receipt/checkpoint identity; fixed source code and producer/runtime NumPy identity required for certification",
+  "missing_or_divergent_boundary": "NOT_CERTIFIED; retain the failure; do not adjust seed, window ordering, offsets or sampler to fit",
+  "large_object_policy": "Only B-H checkpoints; existing HubBackend cache and Store verification; retain small RNG evidence, not another checkpoint archive; no writes to HF/GitHub",
+  "global_content_isolation": "Independent BLOCKED gate; successful sampling replay does not replace it",
+  "main_candidates_changed": false,
+  "scientific_registration": "BLOCKED",
+  "gpu_training_authorized": false
+}
