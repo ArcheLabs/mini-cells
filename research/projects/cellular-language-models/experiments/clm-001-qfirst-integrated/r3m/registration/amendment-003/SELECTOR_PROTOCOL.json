@@ -1,0 +1,18 @@
+{
+  "schema": "minicells.content-selector.v1",
+  "status": "ALGORITHM_FROZEN_BEFORE_SELECTION_NOT_SCIENTIFIC_REGISTRATION",
+  "dataset": "roneneldan/TinyStories",
+  "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+  "split": "train",
+  "pool": "entire fully SHA-verified first original Parquet shard, raw indices [0,529930); no quality-based filtering",
+  "count": 512,
+  "domain": "MINICELLS-R3M-AMENDMENT003-MAIN-v1",
+  "exclusions": "all recoverable historical content and reserved roles; Trigger/Pilot content; unresolved historical claims remain release blockers",
+  "hashes": ["raw UTF8 SHA256", "NFKC casefold collapsed whitespace SHA256", "NFKC word sequence SHA256"],
+  "ranking": "ascending SHA256(domain + ':' + normalized-content-hash), raw index breaks ties; greedily reject collision in any of three hashes",
+  "unknown_policy": "candidate generation permitted as provisional audit only; UNKNOWN blocks qualified status and registration",
+  "main_previous_range": "ABANDONED [500512,501024); failure evidence retained",
+  "trigger_pilot": "PENDING_NOT_REGISTERED",
+  "quality_access": false,
+  "scientific_review_required": true
+}
