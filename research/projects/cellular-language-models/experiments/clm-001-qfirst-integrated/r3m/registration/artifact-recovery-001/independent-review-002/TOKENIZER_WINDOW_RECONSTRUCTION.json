@@ -1,0 +1,158 @@
+{
+  "schema": "minicells.r3m.original-tokenizer-window-reconstruction.v1",
+  "status": "ORIGINAL_TOKENIZER_AND_HISTORICAL_ELIGIBLE_WINDOWS_INDEPENDENTLY_RECONSTRUCTED_REGISTRATION_BLOCKED",
+  "auditor_sha256": "de4ff49a9bfb5c262fcc55686322c2731396feac0d0d0a6181f0fa71b3e9f33a",
+  "input_files": {
+    "RECOVERY_PROOF.json": {
+      "sha256": "1f772cb56a9e8e68e7ce26ec55200f614138c8454453179c6f37107040a32821",
+      "bytes": 1739
+    },
+    "manifest.json": {
+      "sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+      "bytes": 122715
+    },
+    "windows.json": {
+      "sha256": "0ecfd4848bb99b01bf87cb50ec02265b7fcc2a1506fbec6bfc28b2a1f40d9291",
+      "bytes": 1535422
+    }
+  },
+  "hf_revision": "828585f1ff93420aa4485c725211ed28f70d15f3",
+  "source_shard_sha256": "77cf780cebe52b6e83e3a2ac84bc56d8059363113e41d17a023f1d8b2ed0fc0b",
+  "recovered_auditor_identity": "MATCHES_PINNED_RECOVERY_IMPLEMENTATION",
+  "tokenizer": {
+    "expected_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "kaggle_hash_attestation": "MATCHES_ORIGINAL_FIXED_IDENTITY",
+    "local_original_bytes_supplied": true,
+    "local_independent_hash": "PASS"
+  },
+  "historical_window_function": {
+    "path": "research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/exploration-fast-001/implementation/fast001/data.py",
+    "sha256": "74b39618c2214d64c526a20f5b8637ad3052276f5f693fb15c8a1bbe724373b0"
+  },
+  "roles": {
+    "train": {
+      "stories": 8192,
+      "eligible_windows": 23940,
+      "evaluation_windows": 0,
+      "token_extent": 1799302,
+      "raw_index_min": 0,
+      "raw_index_max": 8191,
+      "story_hash_mapping": "PASS",
+      "input_plus_target_within_story": "PASS",
+      "eligible_start_enumeration": "PASS_FROM_ATTESTED_OFFSETS",
+      "evaluation_sampling": "NOT_APPLICABLE"
+    },
+    "calibration": {
+      "stories": 128,
+      "eligible_windows": 330,
+      "evaluation_windows": 32,
+      "token_extent": 25572,
+      "raw_index_min": 50000,
+      "raw_index_max": 50127,
+      "story_hash_mapping": "PASS",
+      "input_plus_target_within_story": "PASS",
+      "eligible_start_enumeration": "PASS_FROM_ATTESTED_OFFSETS",
+      "evaluation_sampling": "EXACT_HISTORICAL_RULE_MATCH"
+    },
+    "admission": {
+      "stories": 128,
+      "eligible_windows": 317,
+      "evaluation_windows": 32,
+      "token_extent": 24273,
+      "raw_index_min": 50128,
+      "raw_index_max": 50255,
+      "story_hash_mapping": "PASS",
+      "input_plus_target_within_story": "PASS",
+      "eligible_start_enumeration": "PASS_FROM_ATTESTED_OFFSETS",
+      "evaluation_sampling": "EXACT_HISTORICAL_RULE_MATCH"
+    },
+    "development": {
+      "stories": 256,
+      "eligible_windows": 620,
+      "evaluation_windows": 128,
+      "token_extent": 48149,
+      "raw_index_min": 50256,
+      "raw_index_max": 50511,
+      "story_hash_mapping": "PASS",
+      "input_plus_target_within_story": "PASS",
+      "eligible_start_enumeration": "PASS_FROM_ATTESTED_OFFSETS",
+      "evaluation_sampling": "EXACT_HISTORICAL_RULE_MATCH"
+    }
+  },
+  "story_membership_and_exact_source_hashes": "PASS_8704_RECORDS",
+  "role_content_disjointness": "PASS_EXACT_RAW_SHA256",
+  "main_vs_recovered_roles": "PASS_RAW_ID_AND_WHOLE_STORY_EXACT_HASH_ONLY",
+  "main_candidate_manifest_sha256": "a9c38b8f6293cdc0b1ae76fd1f30ed612aa79c76aba1ca6427b5ae9b08ea8e4d",
+  "main_candidates_changed": false,
+  "evaluation_start_rule": "EXACT_ORIGINAL_GROUPED_WINDOWS_SEED_151001304",
+  "limitations": [
+    "This verifies the original four-role R3 assets, not actual optimizer-consumed start logs.",
+    "Actual R3k/R3l research-role membership remains unrecovered.",
+    "Main whole-story nonoverlap is not a cross-fragment or cross-story window isolation proof.",
+    "Path B has not been approved; unresolved global reservations and coverage remain."
+  ],
+  "window_gate": "BLOCKED_PENDING_GLOBAL_ISOLATION_PROOF_AND_SCIENTIFIC_REVIEW",
+  "path_b_approved": false,
+  "scientific_review": "PENDING",
+  "registration_changed": false,
+  "quality_evaluations": 0,
+  "gpu_training_started": false,
+  "metadata_auditor_sha256": "860ed7105a002ba69b50dbb482850ad65a103a1feb661f0bae0684eeb24d1f16",
+  "original_encoder": {
+    "path": "research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/exp006/data.py",
+    "sha256": "571fd08c3ed160485dfa658cd628e0f4afabe87498bfdc57d651962ce5098822"
+  },
+  "input_tokenizer": {
+    "sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "bytes": 265240,
+    "vocab": 4096
+  },
+  "tokenizer_gate": "PASS_EXACT_ORIGINAL_BYTES_INDEPENDENTLY_HASHED",
+  "original_token_assets": {
+    "train": {
+      "status": "EXACT_ORIGINAL_TOKEN_ASSET_REPRODUCED",
+      "tokens": 1799302,
+      "dtype": "int32",
+      "npy_sha256": "e914a912bde852c6c2ebf850b02d020834c17c8f831fd2261e3ef7ac4426394d",
+      "bytes": 7197336,
+      "story_offsets": "EXACT_MATCH_FROM_ORIGINAL_TOKENIZER",
+      "starts_groups_story_hashes": "EXACT_MATCH",
+      "windows": 23940
+    },
+    "calibration": {
+      "status": "EXACT_ORIGINAL_TOKEN_ASSET_REPRODUCED",
+      "tokens": 25572,
+      "dtype": "int32",
+      "npy_sha256": "2b0fb7acf99f0c9f30d68ac75d7ac97ab536b93279eb64d41bb27bde8f862ce5",
+      "bytes": 102416,
+      "story_offsets": "EXACT_MATCH_FROM_ORIGINAL_TOKENIZER",
+      "starts_groups_story_hashes": "EXACT_MATCH",
+      "windows": 330
+    },
+    "admission": {
+      "status": "EXACT_ORIGINAL_TOKEN_ASSET_REPRODUCED",
+      "tokens": 24273,
+      "dtype": "int32",
+      "npy_sha256": "41a83169e19055d33071ad627b46cf11e5bd2b039414e687432e6e8fafd436a2",
+      "bytes": 97220,
+      "story_offsets": "EXACT_MATCH_FROM_ORIGINAL_TOKENIZER",
+      "starts_groups_story_hashes": "EXACT_MATCH",
+      "windows": 317
+    },
+    "development": {
+      "status": "EXACT_ORIGINAL_TOKEN_ASSET_REPRODUCED",
+      "tokens": 48149,
+      "dtype": "int32",
+      "npy_sha256": "3dabeeb2a067e1b7d5dee7905ed25c575d0858751e4b77aca9e955830c54ef1e",
+      "bytes": 192724,
+      "story_offsets": "EXACT_MATCH_FROM_ORIGINAL_TOKENIZER",
+      "starts_groups_story_hashes": "EXACT_MATCH",
+      "windows": 620
+    }
+  },
+  "historical_eligible_windows_gate": "PASS_EXACT_HISTORICAL_ASSET_RECONSTRUCTION_ONLY",
+  "main_arrays_materialized": false,
+  "confirmation_materialized": false,
+  "reconstructed_historical_arrays": "TEMPORARY_CPU_ONLY_REMOVED_AFTER_HASH_CHECK",
+  "optimizer_updates": 0
+}
