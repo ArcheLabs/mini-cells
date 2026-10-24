@@ -1,13 +1,66 @@
-# R3m-F-D1: Supervision × Context diagnosis
+# R3m-F-D1: Supervision and Context Causal Diagnosis
 
-Engineering phase only; no GPU authorization. Arm A is the immutable published failure ab5c7345; no retraining. B/C/D all reuse seed 151001301 and the original Step300 weights/AdamW/RNG, Tokenizer and eight fixed Tiny facts. Maximum 200 updates, evaluation relative0/50/100/200, no early success stopping or extensions.
+## Scope
 
-The fixed sampler reconstructs the same eight source rows of65 tokens per update in all conditions, including original truncation. B applies Answer+EOS CE to unchanged packed labels. C and D split those already-truncated source rows at QA boundaries, forward each fragment separately, reset positions to0, and construct fresh input memory and path predecessor for each forward. They exclude EOS-to-next-prompt target edges because an independent QA has no preceding QA EOS context. No padding or new samples are introduced.
+D1 is a bounded mechanism diagnosis based on the frozen Tiny Overfit audit at `2d545f45`. It preserves the original `TINY_OVERFIT_FAILED` result and does not alter the R3m-F configuration, checkpoint, tokenizer, model size, optimizer state, or original result. Arm A is the published 200-update result and is reused as-is. Only B, C, and D are prospective arms. Each prospective arm is capped at 200 optimizer updates, with evaluation at relative steps 0, 50, 100, and 200. No result-dependent extension, full Pilot, Main data, or Confirmation access is allowed.
 
-Uniform CE sums every retained target; Answer/EOS CE sums only answer digits and EOS. Both divide by the total selected targets of the whole optimizer update, not the number of fragments or nonempty masks. All fragments execute even if their answer mask is empty. Independent fragments inherit routing exogenous draws from the corresponding original source-row/token offset, preserving random uniforms while allowing state-conditioned hard choices to change.
+This protocol and its CPU gate do not authorize or start GPU training. B/C/D require a separate independent review and later explicit run authorization.
 
-Budget comparison is deliberately honest: answer identities, answer exposures, EOS labels, source draws, inherited optimizer/schedule, updates and evaluation align; C/D drop4800 cross-question prompt edges over200 steps and execute97600 rather than102400 token positions. Attention pair counts and launch count also differ. A is historical, the new baseline endpoint has not been independently RNG-attested, and NumPy producer identities differ in the available audit. Therefore this is mechanism diagnosis, NOT an unqualified equal-FLOP pure2x2 causal estimate. B vs A addresses a changed loss objective under identical packed exposure; D vs C isolates that same loss change under identical independent exposure. C vs A and D vs B additionally change position/context and remove boundary prompt targets. A difference-of-differences cannot silently remove these confounds.
+## Fixed identity and initialization
 
-No task labels enter the model. Only existing Cell FFN parameters update, with original frozen shared components, original Cell AdamW and continuous inherited learning-rate/epsilon schedules. The inherited data_cursor counts source512 slots per update; actual processed tokens, selected targets, denominator, answer exposure, matrix-work counters and attention MACs are separate ledger fields. Restores verify arm/config/data/plan identities and all original semantic state.
+- Facts and order: `0+1`, `1+2`, `2+2`, `2+7`, `3+4`, `4+6`, `6+8`, `7+9`, from the exact Tiny records file pinned in `config/frozen.json`.
+- Seed: `151001301`.
+- Initial state: R3h B-H, global Step 300, exact checkpoint byte hash and full-state fingerprint pinned in the frozen config. Continue its original Cell AdamW moments and the existing continuous R3m schedule; do not reset optimizer state.
+- Tokenizer: original 4096-token Tokenizer, SHA-256 `612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff`.
+- Sampler: original PCG64 state at Step 300, eight rows per update, uniform `integers(8)` draws, append each sampled prompt+answer+EOS, truncate each source row independently to 65 tokens, and do not carry tails to the next row.
+- B/C/D consume the same CPU-frozen per-step row-index plan. The future runtime must replay each draw and compare the source-token hash and RNG end state before any forward or optimizer update. A mismatch aborts before that update. The original run's terminal RNG was not independently attested, and the original producer/replay NumPy versions differ; the CPU-generated plan is therefore an explicit prospective common sequence, not an assertion that the historical A production trajectory is endpoint-certified.
 
-Every endpoint reports all eight actual freely generated answers, first-token accuracy, strict full EM, text-only EM, Answer NLL, EOS termination and EOS NLL. NLL or memorization improvement alone establishes neither unseen arithmetic competence nor specialization. All outcomes retained; GPU/full Pilot/Main/Confirmation are blocked until separate independent review and explicit authorization.
+## Arms
+
+| Arm | Context | Loss | Execution |
+|---|---|---|---|
+| A | Packed | Uniform CE | Reuse published initial/final predictions and report; no model/checkpoint load or retraining |
+| B | Packed | Answer digits + EOS CE | Same 8×65 sampled source rows as the frozen plan |
+| C | Independent QA | Uniform CE | Split each already-truncated source row at QA starts; one separate forward per retained QA fragment |
+| D | Independent QA | Answer digits + EOS CE | Same fragments and source plan as C |
+
+Answer/EOS masking is applied only after the original shifted labels are constructed. It selects positions; it never rewrites, shifts, or replaces a label. The target mask marks answer digits and EOS separately. The CE numerator is the sum over selected target positions from every chunk in an optimizer update; the denominator is the total selected positions across that entire update. Uniform CE uses all retained targets and divides by the update's total retained target count. Per-fragment averaging is forbidden.
+
+## Independent QA context
+
+The split happens after the sampler has built and truncated each 65-token source row. Every retained QA fragment is passed to the model in a separate forward call, without a previous fragment, KV cache, carried hidden state, or shared predecessor. Its position indices start at zero; the model creates fresh input memory and initializes the first Cell predecessor exactly as on an ordinary fresh forward. Keyed H-routing random arrays are first generated for the original 64 source input offsets, then sliced by the QA's original source-row offset. Thus C and D use the same exogenous routing draws as each other and are not affected by how many earlier QA forwards occurred.
+
+The EOS-to-next-prompt target is omitted because predicting the next QA's first prompt token from the previous QA's EOS would reintroduce a cross-QA state. All other retained within-QA shifted targets, including answer digits and EOS, retain their original labels. Consequently C/D necessarily process fewer input positions and attention pairs than A/B; this is a declared cost and supervision difference, not a hidden implementation detail.
+
+## Training and evaluation invariants
+
+All arms retain the frozen R3h B-H model and original parameter mask: only the original Cell FFN parameters train. Token and position embeddings, tied LM Head, all normalizations/projections, gate and Connection remain frozen. No output representation or model capacity change is introduced.
+
+At each evaluation point, report every one of the eight free autoregressive predictions. Decode only generated continuation tokens, stop on EOS id 1, and exclude EOS from displayed text. Report first generated token accuracy, text-only exact match, strict exact match requiring EOS, termination rate, Teacher-forced answer-digit NLL, and EOS NLL. These are distinct metrics: gold-conditioned answer NLL and the first free token do not establish complete free-generation success. Arm A's initial and final rows are copied from the published negative result with provenance.
+
+Checkpoints must bind arm, source/config/data/sample-plan identities, seed, anchor checkpoint, global and relative steps, full model and Cell-optimizer state, data RNG, route RNG, CPU/CUDA/Python/NumPy RNG states, source cursor, and frozen-parameter fingerprint. Resume rejects any mismatch and performs no implicit update. The inherited data cursor advances by 512 source slots per update; actual input positions, selected CE labels, answer exposures, Cell calls, FFN MAC, tied-head MAC, attention pairs, and wall time remain separate accounting fields.
+
+## CPU budget comparison and interpretation
+
+The CPU replay uses the verified Step-300 data RNG state and the eight frozen records. It produces 1,600 source rows over 200 updates. There are 6,661 answer-digit targets, 4,805 EOS targets, 4,849 complete-answer appearances, and 4,805 complete-answer-plus-EOS appearances. Each D1 prospective arm sees the same answer and EOS target identities and per-fact exposures.
+
+| Measure over 200 updates | A / B packed | C / D independent QA |
+|---|---:|---:|
+| Source slots | 102,400 | 102,400 |
+| Model input / retained target positions | 102,400 | 97,600 |
+| Answer + EOS targets | 11,466 | 11,466 |
+| Cross-QA EOS→prompt targets omitted | 0 | 4,800 |
+| Hard Cell calls (8 per input position) | 819,200 | 780,800 |
+| Cell FFN MAC (63,488 per call) | 52,009,369,600 | 49,571,430,400 |
+| Tied LM Head MAC (524,288 per input position) | 53,687,091,200 | 51,170,508,800 |
+| Causal input-memory query/key pairs | 3,328,000 | 804,607 |
+
+B and D have an answer/EOS loss denominator of 11,466 across the full 200-update plan; per-update denominators are in `SAMPLE_PLAN.json`. C's uniform denominator is 97,600. Cell/Head MAC and causal-pair counts are analytic operation counters, not observed FLOPs or runtime. They omit routing, normalizations, optimizer/backward cost, launch overhead, and other operations.
+
+The diagnostic is **not a perfectly cost-matched 2×2 factorial**. C/D remove 4,800 boundary targets, reset position numbering, issue more separate forwards, and reduce input/attention work. A is historical; its full production terminal RNG was not independently attested, so exact production sample-by-sample matching with B is not claimed. The strongest prospective contrast is D vs C (same independent context and sample plan, loss objective differs). B vs A is a mechanism comparison with a matching declared sampler and update budget, but not endpoint-certified sample identity. Context contrasts and the difference-of-differences must be interpreted with the explicit target and compute differences above. No result alone establishes arithmetic competence, generalization, or Cell specialization.
+
+## CPU gate artifacts
+
+`run.py --mode cpu-gate` validates the frozen input and Tokenizer hashes, prompt/answer token boundaries, sampler replay, per-step source plan/RNG boundaries, masks, fragment isolation structure, restart identity, and evaluation metric contracts. It writes a unique run directory containing `SAMPLE_PLAN.json`, `BUDGET_PROOF.json`, `A_REUSED_PREDICTIONS.json`, and `RUN_MANIFEST.json`. It does not import Torch, load model weights, compute logits, perform an optimizer update, or use a GPU. `RUN_MANIFEST.json` declares the negative A result reused and B/C/D not run.
+
+The separate D1 package exposes the later bounded update/route adapter, but the public entry point remains CPU-gate-only. No Kaggle Notebook automatically launches B/C/D in this engineering phase.
