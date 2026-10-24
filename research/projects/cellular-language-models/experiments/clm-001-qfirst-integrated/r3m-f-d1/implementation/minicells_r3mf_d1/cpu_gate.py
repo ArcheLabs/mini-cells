@@ -313,6 +313,8 @@ def run(output=None):
         "gpu_used": False,
         "full_r3mf_pilot_authorized": False,
         "main_or_confirmation_accessed": False,
+        "publication_status": "LOCAL_ENGINEERING_EVIDENCE_NOT_PUSHED",
+        "remote_commit_sha": None,
         "evaluation_times": config["evaluation_steps"],
         "artifacts": {},
     }
