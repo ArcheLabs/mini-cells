@@ -1,0 +1,44 @@
+{
+  "status": "NO_HISTORICAL_RNG_COMPARISON_OCCURRED",
+  "input_sha256": {
+    "SAMPLING_REPLAY_REVIEW.json": "0c2062a2b565c820a319ac3891886153169e61807263a7e357caf83e7bb9efc6",
+    "CHECKPOINT_BOUNDARY_EVIDENCE.json": "91af36c5f494115e9155bb601064fa6f1de3c390d60c7db30471821df05ed32e"
+  },
+  "original_audit_source": "86399a638f30598cbfa9110dce435d8e70e8e2cd",
+  "original_code_hashes_verified": true,
+  "extracted_boundaries": 0,
+  "failed_boundaries": 18,
+  "rng_comparisons": 0,
+  "certified_intervals": 0,
+  "confirmed_implementation_defect": "safe() requires an existing file; it was called before copying the checkpoint into a fresh temporary directory",
+  "exact_first_exception_per_historical_attempt": "NOT_RECORDED_IN_OLD_REPORT; exception type alone cannot uniquely prove the failing stage",
+  "corrected_flow": "validate relative destination -> copy verified bytes -> original Store.verified",
+  "cross_runtime_candidate_checks": [
+    {
+      "seed": 151001301,
+      "local_numpy": "1.24.4",
+      "kaggle_numpy": "2.1.3",
+      "candidate_trace_hash_match": true,
+      "predicted_rng_states_match": true
+    },
+    {
+      "seed": 151001302,
+      "local_numpy": "1.24.4",
+      "kaggle_numpy": "2.1.3",
+      "candidate_trace_hash_match": true,
+      "predicted_rng_states_match": true
+    },
+    {
+      "seed": 151001303,
+      "local_numpy": "1.24.4",
+      "kaggle_numpy": "2.1.3",
+      "candidate_trace_hash_match": true,
+      "predicted_rng_states_match": true
+    }
+  ],
+  "original_numpy_version": "UNKNOWN_NOT_INFERRED_FROM_CANDIDATE_AGREEMENT",
+  "tokenizer_and_asset_gates": "PREVIOUS_PASS_UNCHANGED",
+  "main_candidates_changed": false,
+  "registration": "BLOCKED",
+  "gpu_work": 0
+}

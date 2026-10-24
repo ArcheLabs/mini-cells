@@ -92,6 +92,7 @@ def replay(c, windows, seed, evidence=None):
         version_match = historical_version is not None and historical_version == np.__version__
         intervals.append(dict(start_step_exclusive=a, end_step_inclusive=b,
                               boundary_consistent=boundaries_match,
+                              comparison_performed=a in {x['step'] for x in comparisons} and b in {x['step'] for x in comparisons},
                               status='CHECKPOINT_BOUNDED_SAMPLER_REPLAY_VERIFIED' if boundaries_match and version_match
                               else 'NOT_CERTIFIED',
                               historical_numpy_identity_match=version_match))
@@ -100,7 +101,8 @@ def replay(c, windows, seed, evidence=None):
                       bit_generator=rng.bit_generator.__class__.__name__,
                       sampler_source_sha256=sha(SAMPLER), predicted_boundary_states=states,
                       comparisons=comparisons, intervals=intervals,
-                      status='CANDIDATE_REPLAY_NOT_HISTORICAL_PROOF' if not evidence else 'BOUNDARY_REVIEW_RECORDED',
+                      status='CANDIDATE_REPLAY_NOT_HISTORICAL_PROOF' if not evidence else
+                      ('BOUNDARY_REVIEW_RECORDED' if comparisons else 'NO_BOUNDARIES_COMPARED_CANDIDATE_ONLY'),
                       scientific_registration='BLOCKED', optimizer_updates=0, gpu_work=0)
 
 
