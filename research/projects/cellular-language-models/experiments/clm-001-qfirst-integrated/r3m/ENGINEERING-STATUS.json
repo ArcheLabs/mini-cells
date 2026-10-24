@@ -18,7 +18,7 @@
   "kaggle_cross_session_restore": "NOT_YET_RUN",
   "main_release": "BLOCKED_UNTIL_REVIEWED_POSITIVE_PILOT_AND_FREEZES",
   "data_proof": "registration/DATA_BOUNDARY_PROOF.json",
-  "data_conflict": "Requested 100000..101024 is inside exactly reproduced historical Experiment007 training stream; no registration change",
+  "data_conflict": "Main [500512,501024) contains150 exact Experiment007 historical train texts; all registration remains blocked",
   "candidate_only_ranges": {
     "trigger": [
       500000,
@@ -33,7 +33,7 @@
       501024
     ]
   },
-  "candidate_status": "NOT_REGISTERED_NOT_CONTENT_VALIDATED",
+  "candidate_status": "FAILED_HISTORICAL_TEXT_LEAKAGE_150_MAIN_STORIES_NOT_REGISTERED",
   "known_risks": [
     "Real private R3h Step300 and cross-Kaggle restore require authorized HF access in Kaggle",
     "Main initialization mapping and pressure/effect/cost thresholds remain unfrozen",
@@ -41,5 +41,6 @@
     "Measured T4 runtime not established",
     "Five-seed exact sign-flip inference with Holm has coarse power",
     "All proposed replacement ranges overlap verified historical training content"
-  ]
+  ],
+  "latest_data_proof": "registration/amendment-002/DATA_BOUNDARY_PROOF.json"
 }

@@ -12,6 +12,10 @@ Resolve the intended isolation scope or register new verified unused ranges befo
 
 The subsequent user-proposed amendment `[100000,101024)` also FAILED: historical Cellular Computing Experiment007 consumed476847 nonempty stories through raw index476900. Reproducing its120000000 uint16 training tokens at the requested Revision produced exactly the historical SHA256 `0d51d5779a168d4b65a1b5ff469669e42f46f69cba061ff7f7872a3f7290f8b8`. See `registration/DATA_BOUNDARY_PROOF.json` and `GLOBAL_DATASET_USAGE_LEDGER.json` (111 metadata files). No frozen range was changed. `[500000,501024)` is a new unregistered suggestion only, not automatically approved or content/window verified.
 
+## Latest candidate audit: amendment002
+
+The separately approved read-only `[500000,501024)` audit is also **BLOCKED**. Main Report contains150 exact historical Experiment007 training stories at different raw indices. Trigger/Pilot have no detected text matches, but no role is registered. See `registration/amendment-002/DATA_BOUNDARY_PROOF.json` and REVIEW.md. Frozen config/tokenizer/source/model are unchanged. The earlier500000-range suggestion above is retained as history and is superseded by this failed audit. No further range is chosen. Exact R3m token-window verification is not claimed without the original tokenizer artifact/observed historical starts.
+
 ## Implementation and reuse
 
 - R3h B-H real Step300 receipts at a fixed HF revision, model/optimizer/RNG/cursor/router checks. No R3i adapted anchor substitution. Missing Step300 stops without retraining.
