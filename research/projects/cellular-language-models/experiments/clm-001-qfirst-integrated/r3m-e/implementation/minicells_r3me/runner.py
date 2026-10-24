@@ -275,9 +275,11 @@ def preflight(c, output, assets_dir):
     backend = HubBackend(c["baseline"]["hf_reference"]["hf_repo"])
     folder = Path(assets_dir)
     historical, research, manifest, tokenizer_path = data.prepare(c, runtime, backend, folder)
+    from .parent import load_for_cpu_inspection
+
     anchors = []
     for seed in c["seeds"]:
-        trainer, proof = anchor.load(c, backend, Path(output) / "parent-r3h", seed, "cpu")
+        trainer, proof = load_for_cpu_inspection(c, backend, Path(output) / "parent-r3h", seed)
         anchors.append(
             {
                 "seed": seed,
@@ -289,6 +291,7 @@ def preflight(c, output, assets_dir):
                 "anchor_receipt_sha256": proof["receipt"].get("sha256"),
                 "temperature": trainer.model.temperature,
                 "routing_mode": trainer.mode,
+                "cpu_inspection": proof["cpu_inspection"],
             }
         )
         del trainer

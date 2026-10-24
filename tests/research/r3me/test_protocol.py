@@ -122,3 +122,27 @@ def test_story_selection_uses_historical_legal_windows_not_single_fixed_window()
         assert all((start, int(row['group'])) in legal for start in row['starts'])
         assert all(len(window) == 65 for window in row['windows'])
     assert selected == data._story_eval_assets(assets, 64, 32, 2)
+
+
+def test_cpu_parent_inspection_preserves_original_cuda_state(monkeypatch):
+    from types import SimpleNamespace
+    from minicells_r3me import parent
+    from minicells_r3me.common import fingerprint
+    state = {'global_cuda_rng': [torch.tensor([1, 2], dtype=torch.uint8)],
+             'model': {'weight': torch.ones(2)}, 'cell_optimizer': {'step': 300}}
+    original = fingerprint(state)
+    captured = {}
+    def restore(runtime, copied, seed, arm, device):
+        captured.update(copied)
+        assert device == 'cpu'
+        return SimpleNamespace()
+    monkeypatch.setattr(parent, 'parent_restore', restore)
+    trainer = parent._restore_for_cpu_inspection({}, state, 151001301, 'B-H', 'cpu')
+    assert captured['global_cuda_rng'] == []
+    assert fingerprint(captured['model']) == fingerprint(state['model'])
+    assert captured['cell_optimizer'] == state['cell_optimizer']
+    assert fingerprint(state) == original
+    assert trainer.cpu_inspection_evidence['original_cuda_rng_count'] == 1
+    assert trainer.cpu_inspection_evidence['gpu_resume_verified'] is False
+    with pytest.raises(RuntimeError, match='CPU_ONLY'):
+        parent._restore_for_cpu_inspection({}, state, 151001301, 'B-H', 'cuda:0')

@@ -16,3 +16,8 @@ starts it implicitly.
 The experiment reuses R3h historical development data and discloses known historical overlap.
 It is not an independent confirmation study. Confirmation and the original R3m Main candidates
 remain inaccessible.
+
+CPU parent inspection retains the original checkpoint and records the original CUDA
+RNG count/hash, while omitting CUDA RNG application to the temporary CPU copy.
+This verifies model/optimizer identity only; it does not certify GPU restart.
+Production GPU recovery continues to use the unmodified strict historical loader.
