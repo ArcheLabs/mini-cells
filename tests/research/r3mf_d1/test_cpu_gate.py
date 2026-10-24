@@ -98,6 +98,26 @@ class D1UnitTests(unittest.TestCase):
         self.assertEqual(nll["eos_nll"], 4.0)
         self.assertEqual(nll["answer_target_count"], 2)
 
+    def test_torch_answer_eos_ce_backpropagates_only_selected_original_labels(self):
+        import torch
+        from minicells_r3mf_d1.loss import selected_loss
+
+        logits = torch.tensor(
+            [[1.0, 0.0, -1.0], [0.0, 2.0, -1.0], [1.0, -1.0, 0.0], [-1.0, 0.0, 2.0]],
+            requires_grad=True,
+        )
+        labels = torch.tensor([0, 1, 2, 2])
+        mask = (False, True, False, True)
+        loss = selected_loss(logits, labels, mask, "answer_eos", 2)
+        expected = torch.nn.functional.cross_entropy(
+            logits[[1, 3]], labels[[1, 3]], reduction="mean"
+        )
+        self.assertTrue(torch.equal(labels, torch.tensor([0, 1, 2, 2])))
+        self.assertTrue(torch.allclose(loss, expected))
+        loss.backward()
+        self.assertTrue(torch.equal(logits.grad[[0, 2]], torch.zeros_like(logits.grad[[0, 2]])))
+        self.assertTrue(torch.all(logits.grad[[1, 3]].abs().sum(dim=1) > 0))
+
     def test_independent_fragments_reset_position_and_drop_only_cross_qa_edges(self):
         a = record([10, 11], [12], "a")
         b = record([20, 21], [22], "b")
