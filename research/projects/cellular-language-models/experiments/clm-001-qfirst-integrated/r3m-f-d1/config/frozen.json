@@ -1,0 +1,81 @@
+{
+  "experiment_id": "CLM-001-R3m-F-D1-Supervision-Context-001",
+  "scope": "MECHANISM_DIAGNOSIS_NOT_PURE_FACTORIAL",
+  "seed": 151001301,
+  "anchor_step": 300,
+  "steps": 200,
+  "continuation_steps": 200,
+  "lr_terminal_fraction": 0.2,
+  "epsilon_terminal": 0.02,
+  "evaluation_steps": [
+    0,
+    50,
+    100,
+    200
+  ],
+  "arms": {
+    "A": {
+      "context": "PACKED",
+      "loss": "UNIFORM",
+      "execution": "REUSE_PUBLISHED_ONLY"
+    },
+    "B": {
+      "context": "PACKED",
+      "loss": "ANSWER_EOS"
+    },
+    "C": {
+      "context": "INDEPENDENT_QA",
+      "loss": "UNIFORM"
+    },
+    "D": {
+      "context": "INDEPENDENT_QA",
+      "loss": "ANSWER_EOS"
+    }
+  },
+  "source_rows_per_step": 8,
+  "source_sequence_tokens": 65,
+  "source_targets_per_step": 512,
+  "record_order": "FROZEN_EIGHT_TINY_RECORDS",
+  "sampler": "RESTORED_PARENT_PCG64; integers(8), append QA+EOS until >=65, truncate first65 independently per row; no carry",
+  "loss_normalization": "SUM_SELECTED_TARGET_CE_OVER_ALL_CHUNKS_DIVIDED_BY_STEP_SELECTED_TARGET_COUNT",
+  "independence": "SEPARATE_FORWARD_PER_RETAINED_QA_FRAGMENT; position0 reset; fresh input memory and predecessor; drop EOS->next-question transition",
+  "routing_randomness": "ORIGINAL_H_COUNTER_SEED(step,source_microbatch,stage); generate64 rows then slice by original packed input offsets",
+  "independent_cursor": "INHERITED_DATA_CURSOR_COUNTS_SOURCE_512_SLOTS; PROCESSED_TARGETS_SEPARATELY_ACCOUNTED",
+  "answers": "ORIGINAL_LABEL_IDS_UNCHANGED; mask Answer and EOS by offsets, no padding",
+  "later_budget_extension": false,
+  "authorization": {
+    "gpu_training": false,
+    "full_r3mf_pilot": false,
+    "main_confirmation": false,
+    "reason": "Independent CPU engineering/protocol review and later separate run authorization required"
+  },
+  "original_result_commit": "ab5c734537776874ea5a57faa68a548f7c52b01b",
+  "audit_commit": "2d545f4530e6e7a02566879cae991f8ae7c84674",
+  "original_source": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05",
+  "inputs": {
+    "RECONSTRUCTED_TINY_RECORDS.json": {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/RECONSTRUCTED_TINY_RECORDS.json",
+      "sha256": "5776188bfb5e76624765920547c74e513ded91a97f2af10de3fd97384fef42de"
+    },
+    "TOKEN_DISTRIBUTION_PROOF.json": {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/TOKEN_DISTRIBUTION_PROOF.json",
+      "sha256": "176b4872f74ee751cc4e7c25b4725cdabbe930f6fdcdc1a1d9bf0e2aa5dd415c"
+    },
+    "original-TINY_OVERFIT_REPORT.json": {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/original-TINY_OVERFIT_REPORT.json",
+      "sha256": "bee8249be12adf4a003e974b204c0fe95e655134171e004cd3ea95556c22bec3"
+    },
+    "original-MODEL_LINEAGE.json": {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/original-MODEL_LINEAGE.json",
+      "sha256": "3f67dab9f295ee125d9f7960ae8059e1c27dc9e0b19cfb8adb86163ab22a980f"
+    }
+  },
+  "invariants": {
+    "cells": 6,
+    "calls_per_token": 8,
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "trainable": "CELLS_ONLY; original embedding/tied LM head, norms, projections, gate and Connection frozen",
+    "optimizer": "CONTINUE_ORIGINAL_CELL_ADAMW_NO_RESET",
+    "a_status": "TINY_OVERFIT_FAILED_IMMUTABLE"
+  }
+}
