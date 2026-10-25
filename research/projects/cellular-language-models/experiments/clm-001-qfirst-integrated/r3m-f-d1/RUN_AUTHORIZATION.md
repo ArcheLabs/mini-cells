@@ -13,3 +13,7 @@ Scope: B/C/D only; each arm at most 200 logical optimizer updates from the pinne
 This record supplies the later separate human authorization contemplated by the original engineering configuration. The frozen scientific configuration is not rewritten. The Notebook supplies the existing `--authorize-d1-run` flag, defaults to `RUN_BCD=True` and automatically performs preflight before execution. The code checkout directory includes its pinned source prefix to avoid reusing an old Notebook checkout.
 
 This authorization record and launch preparation do not claim that the cloud run has already started or succeeded.
+
+## Publication-enabled rerun amendment
+
+The human subsequently requested: “请重新完成训练文件，加上回传能力，之后我们重新训练”. This authorizes preparing and using a new publication-enabled D1 execution source with the same B/C/D scope and frozen scientific config. The execution source is pinned in the delivered Notebook. The present engineering task does not itself launch the Kaggle training run. Existing GITHUB_TOKEN authentication is enabled in addition to the unchanged HF_TOKEN path.

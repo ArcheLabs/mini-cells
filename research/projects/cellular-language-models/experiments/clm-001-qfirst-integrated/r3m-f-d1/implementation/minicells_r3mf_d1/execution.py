@@ -534,11 +534,13 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
             "retry_cost_accounting": "CUMULATIVE_FAILED_ATTEMPT_WORK_NOT_MEASURED",
             "cumulative_retry_hard_cap": False,
             "main_or_confirmation_accessed": False,
-            "publication_status": "KAGGLE_OUTPUT_ONLY",
+            "publication_status": "PENDING_GITHUB_PREFLIGHT",
             "remote_commit_sha": None,
             "artifacts": {},
         }
-    manifest["run_status"] = "RUNNING"
+    already_complete = manifest.get("run_status") == "COMPLETE"
+    if not already_complete:
+        manifest["run_status"] = "RUNNING"
     for name, source in (
         ("SAMPLE_PLAN.json", plan_path),
         ("BUDGET_PROOF.json", proof_path),
@@ -554,6 +556,17 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
         _artifact(manifest, run_root, target)
     _write_manifest(manifest_path, manifest)
 
+    from .publication import preflight, payload
+
+    if already_complete:
+        if any(manifest["arms"][arm] != {"status": "COMPLETE", "updates": config["steps"]} for arm in ("B", "C", "D")):
+            raise RuntimeError("D1_COMPLETED_RUN_PROGRESS_INVALID")
+        payload(run_root)
+    preflight(run_root)
+    manifest = _read(manifest_path)
+    if already_complete:
+        return {"status": "COMPLETE", "run_id": run_key, "output": str(run_root),
+                "training_updates_this_launch": 0, "manifest": manifest}
     return _execute_run(
         config, plan, proof, records, tokenizer, _runtime(config), run_root,
         manifest, identity_base, device,

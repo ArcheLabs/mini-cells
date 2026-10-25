@@ -55,12 +55,20 @@ def _record_run_failure(output, source_sha):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=("cpu-gate", "auto"), default="auto")
+    parser.add_argument("--mode", choices=("cpu-gate", "auto", "publish-existing"), default="auto")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--authorize-d1-run", action="store_true")
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
     sys.path.insert(0, str(BASE / "implementation"))
+    if args.mode == "publish-existing":
+        _bootstrap()
+        from minicells_r3mf_d1.publication import publish_existing
+
+        receipts = publish_existing(args.output)
+        print(json.dumps({"mode": "publish-existing", "optimizer_updates": 0,
+                          "publication": receipts}, sort_keys=True), flush=True)
+        return
 
     from minicells_r3mf_d1.cpu_gate import run as run_cpu_gate
 
@@ -111,8 +119,24 @@ def main():
         )
     except Exception:
         _record_run_failure(args.output, _source_sha())
+        from minicells_r3mf_d1.publication import publish
+
+        for path in (args.output / "runs").glob("*/RUN_MANIFEST.json"):
+            retained = json.loads(path.read_text(encoding="utf-8"))
+            if retained.get("source_sha") != _source_sha() or retained.get("publication_status") != "PREFLIGHT_PASSED":
+                continue
+            try:
+                publish(path.parent)
+            except Exception as publication_error:
+                print(json.dumps({"publication_status": "FAILED_LOCAL_RETAINED",
+                                  "failure_type": type(publication_error).__name__,
+                                  "output": str(path.parent)}, sort_keys=True), flush=True)
         raise
-    print(json.dumps(result, sort_keys=True), flush=True)
+    from minicells_r3mf_d1.publication import publish
+
+    receipt = publish(Path(result["output"]))
+    print(json.dumps({"status": result["status"], "run_id": result["run_id"],
+                      "output": result["output"], "publication": receipt}, sort_keys=True), flush=True)
 
 
 if __name__ == "__main__":
