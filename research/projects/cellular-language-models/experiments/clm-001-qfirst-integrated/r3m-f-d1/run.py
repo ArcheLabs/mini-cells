@@ -35,6 +35,9 @@ def _record_run_failure(output, source_sha):
             value = json.loads(path.read_text(encoding="utf-8"))
             if value.get("run_status") != "RUNNING" or value.get("source_sha") != source_sha:
                 continue
+            from minicells_r3mf_d1.execution import observe_gpu_usage
+
+            observe_gpu_usage(value)
             value["run_status"] = "FAILED_RESUMABLE"
             value["exit_code"] = 1
             value["failure_type"] = "EXECUTION_EXCEPTION"

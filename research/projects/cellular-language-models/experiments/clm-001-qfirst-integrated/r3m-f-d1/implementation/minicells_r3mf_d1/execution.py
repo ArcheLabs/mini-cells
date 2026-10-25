@@ -247,6 +247,43 @@ def _write_manifest(path, manifest):
     _atomic_json(path, manifest)
 
 
+def observe_gpu_usage(manifest, model=None, torch_module=None):
+    """Observe existing CUDA tensors/allocator records without allocating or syncing GPU work."""
+    if torch_module is None:
+        import torch as torch_module
+
+    evidence = list(manifest.get("gpu_usage_evidence", []))
+    if model is not None:
+        devices = {str(parameter.device) for parameter in model.parameters() if parameter.device.type == "cuda"}
+        for device in sorted(devices):
+            row = {"kind": "MODEL_PARAMETERS_ON_CUDA", "device": device}
+            if row not in evidence:
+                evidence.append(row)
+    observation_failed = False
+    try:
+        # Querying allocator records only after initialization also handles failed model loads.
+        if torch_module.cuda.is_initialized():
+            for device in range(torch_module.cuda.device_count()):
+                peak = int(torch_module.cuda.max_memory_allocated(device))
+                if peak > 0:
+                    row = {"kind": "CUDA_ALLOCATOR_PEAK", "device": device, "bytes": peak}
+                    if row not in evidence:
+                        evidence.append(row)
+    except Exception:
+        observation_failed = True
+    manifest["gpu_usage_evidence"] = evidence
+    if evidence or manifest.get("gpu_used") is True:
+        manifest["gpu_used"] = True
+        manifest["gpu_usage_status"] = "ACTUAL_USE_OBSERVED"
+    elif observation_failed:
+        manifest["gpu_used"] = None
+        manifest["gpu_usage_status"] = "UNKNOWN_OBSERVATION_FAILED"
+    else:
+        manifest["gpu_used"] = False
+        manifest["gpu_usage_status"] = "NO_CUDA_ALLOCATION_OBSERVED"
+    return manifest["gpu_used"]
+
+
 def _checkpoint(trainer, arm_identity, relative_step, config, arm_dir, manifest, run_root, result):
     import torch
     from minicells_r3e.common import fingerprint
@@ -485,9 +522,17 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
             "arms": {arm: {"status": "NOT_STARTED", "updates": 0} for arm in ("B", "C", "D")},
             "arm_a": "REUSED_PUBLISHED_TINY_OVERFIT_FAILED_WITHOUT_RETRAINING",
             "budgets": proof["arm_budgets"],
-            "optimizer_updates_total_max": 600,
-            "optimizer_updates_actual": 0,
-            "gpu_used": True,
+            "logical_optimizer_updates_total_max": 600,
+            "logical_optimizer_updates": 0,
+            "gpu_requested": str(device).split(":")[0] == "cuda",
+            "gpu_used": False,
+            "gpu_usage_status": "NOT_YET_OBSERVED",
+            "gpu_usage_evidence": [],
+            "update_budget_semantics": "AT_MOST_200_LOGICAL_UPDATES_PER_ARM",
+            "cumulative_optimizer_calls_across_retries": None,
+            "cumulative_gpu_seconds_across_retries": None,
+            "retry_cost_accounting": "CUMULATIVE_FAILED_ATTEMPT_WORK_NOT_MEASURED",
+            "cumulative_retry_hard_cap": False,
             "main_or_confirmation_accessed": False,
             "publication_status": "KAGGLE_OUTPUT_ONLY",
             "remote_commit_sha": None,
@@ -540,7 +585,7 @@ def _execute_run(config, plan, proof, records, tokenizer, runtime, run_root,
                 anchor_file = arm_dir / "schedule.json"
                 schedule_state = _read(anchor_file)
             manifest["arms"][arm] = {"status": "RUNNING", "updates": relative_step}
-            manifest["optimizer_updates_actual"] = sum(
+            manifest["logical_optimizer_updates"] = sum(
                 row.get("updates", 0) for row in manifest["arms"].values()
             )
             _write_manifest(manifest_path, manifest)
@@ -577,6 +622,8 @@ def _execute_run(config, plan, proof, records, tokenizer, runtime, run_root,
             manifest["arms"][arm] = {"status": "RUNNING", "updates": 0}
             _write_manifest(manifest_path, manifest)
 
+        observe_gpu_usage(manifest, trainer.model)
+        _write_manifest(manifest_path, manifest)
         if relative_step not in config["evaluation_steps"] and relative_step % 25 != 0:
             raise RuntimeError("D1_RESUME_NOT_AT_DURABLE_BOUNDARY")
         if relative_step == 0:
@@ -621,7 +668,7 @@ def _execute_run(config, plan, proof, records, tokenizer, runtime, run_root,
             result["curve"].append(update_row)
             relative_step = next_relative
             manifest["arms"][arm]["updates"] = relative_step
-            manifest["optimizer_updates_actual"] = sum(
+            manifest["logical_optimizer_updates"] = sum(
                 row.get("updates", 0) for row in manifest["arms"].values()
             )
             should_checkpoint = relative_step % 25 == 0 or relative_step in config["evaluation_steps"]
@@ -647,7 +694,7 @@ def _execute_run(config, plan, proof, records, tokenizer, runtime, run_root,
                     flush=True,
                 )
         result["status"] = "COMPLETE"
-        result["optimizer_updates"] = relative_step
+        result["logical_optimizer_updates"] = relative_step
         result["budget"] = proof["arm_budgets"][arm]
         result["cell_optimizer_end_sha256"] = fingerprint(trainer.cell_opt.state_dict())
         trainer.verify_frozen()
@@ -662,7 +709,7 @@ def _execute_run(config, plan, proof, records, tokenizer, runtime, run_root,
 
     manifest["run_status"] = "COMPLETE"
     manifest["exit_code"] = 0
-    manifest["optimizer_updates_actual"] = sum(row["updates"] for row in manifest["arms"].values())
+    manifest["logical_optimizer_updates"] = sum(row["updates"] for row in manifest["arms"].values())
     manifest["completed_at_unix"] = time.time()
     results = {
         "schema": "minicells.r3mf_d1.results.v1",
@@ -675,6 +722,9 @@ def _execute_run(config, plan, proof, records, tokenizer, runtime, run_root,
             for arm in ("B", "C", "D")
         },
         "pure_equal_budget_factorial": False,
+        "update_budget_semantics": "AT_MOST_200_LOGICAL_UPDATES_PER_ARM",
+        "cumulative_optimizer_calls_across_retries": None,
+        "cumulative_gpu_seconds_across_retries": None,
     }
     results_path = run_root / "RESULTS.json"
     _atomic_json(results_path, results)

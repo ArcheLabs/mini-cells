@@ -116,7 +116,7 @@ class ExecutionTests(unittest.TestCase):
             experiment_id=self.identity["experiment_id"],
             arms={a: dict(status="NOT_STARTED", updates=0) for a in "BCD"},
             artifacts={},
-            optimizer_updates_actual=0,
+            logical_optimizer_updates=0,
             gpu_used=False,
         )
         return manifest
@@ -272,7 +272,7 @@ class ExecutionTests(unittest.TestCase):
                     # A fresh process sees the last manifest committed to disk, not mutated memory.
                     manifest = exe._read(target / "RUN_MANIFEST.json")
                     result = self.execute(target, manifest)
-                    self.assertEqual(result["manifest"]["optimizer_updates_actual"], 6)
+                    self.assertEqual(result["manifest"]["logical_optimizer_updates"], 6)
                     for arm in "BCD":
                         report = exe._read(target / ("arm-" + arm) / "ARM_RESULT.json")
                         self.assertEqual([x["step"] for x in report["curve"]], [301, 302])
@@ -343,6 +343,40 @@ class ExecutionTests(unittest.TestCase):
             state, actual_receipt = exe._load_parent_state(config, tmp, "cuda:0")
         self.assertEqual(fingerprint(state), fingerprint(self.parent))
         self.assertEqual(actual_receipt, receipt)
+
+    def test_rejected_gpu_request_is_not_reported_as_actual_use(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / "runs/fixture/RUN_MANIFEST.json"
+            exe._atomic_json(path, dict(source_sha="fixture", run_status="RUNNING",
+                                      gpu_requested=True, gpu_used=False, arms={}))
+            with patch("torch.cuda.is_available", return_value=False), patch.object(exe, "_runtime_secret", side_effect=AssertionError("SECRET_MUST_NOT_BE_READ")):
+                with self.assertRaisesRegex(RuntimeError, "TWO_VISIBLE_CUDA"):
+                    exe._load_parent_state(self.config, root, "cuda:0")
+            with patch("torch.cuda.is_initialized", return_value=False), patch("torch.cuda.max_memory_allocated", side_effect=AssertionError("MUST_NOT_INITIALIZE_CUDA")):
+                bootstrap["_record_run_failure"](root, "fixture")
+            retained = exe._read(path)
+            self.assertTrue(retained["gpu_requested"])
+            self.assertFalse(retained["gpu_used"])
+            self.assertEqual(retained["run_status"], "FAILED_RESUMABLE")
+
+    def test_gpu_allocator_evidence_is_observed_and_unknown_is_explicit(self):
+        from types import SimpleNamespace
+
+        # These are simulated allocator API responses, not CUDA execution.
+        module = SimpleNamespace(cuda=SimpleNamespace(is_initialized=lambda: True,
+            device_count=lambda: 2, max_memory_allocated=lambda device: 128 if device == 0 else 0))
+        manifest = dict(gpu_requested=True, gpu_used=False)
+        self.assertTrue(exe.observe_gpu_usage(manifest, torch_module=module))
+        self.assertEqual(manifest["gpu_usage_evidence"][0]["bytes"], 128)
+        def unavailable(device):
+            raise RuntimeError("SIMULATED_QUERY_FAILURE")
+        module.cuda.max_memory_allocated = unavailable
+        unknown = dict(gpu_requested=True, gpu_used=False)
+        self.assertIsNone(exe.observe_gpu_usage(unknown, torch_module=module))
+        self.assertEqual(unknown["gpu_usage_status"], "UNKNOWN_OBSERVATION_FAILED")
+        # An earlier retained observation remains true even when a later query fails.
+        self.assertTrue(exe.observe_gpu_usage(manifest, torch_module=module))
 
     def test_source_dirty_or_untracked_code_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
