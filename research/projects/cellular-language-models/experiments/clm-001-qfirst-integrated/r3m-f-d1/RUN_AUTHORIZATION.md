@@ -17,3 +17,5 @@ This authorization record and launch preparation do not claim that the cloud run
 ## Publication-enabled rerun amendment
 
 The human subsequently requested: “请重新完成训练文件，加上回传能力，之后我们重新训练”. This authorizes preparing and using a new publication-enabled D1 execution source with the same B/C/D scope and frozen scientific config. The execution source is pinned in the delivered Notebook. The present engineering task does not itself launch the Kaggle training run. Existing GITHUB_TOKEN authentication is enabled in addition to the unchanged HF_TOKEN path.
+
+The delivered publication-enabled rerun is pinned to execution source `2e64ee711b204002c5e8d3418dd95bb833543359`, with the unchanged configuration hash above.
