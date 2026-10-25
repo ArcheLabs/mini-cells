@@ -38,6 +38,9 @@ def _record_run_failure(output, source_sha):
             value["run_status"] = "FAILED_RESUMABLE"
             value["exit_code"] = 1
             value["failure_type"] = "EXECUTION_EXCEPTION"
+            for arm in value.get("arms", {}).values():
+                if arm.get("status") == "RUNNING":
+                    arm["status"] = "FAILED_RESUMABLE"
             value["finished_at_unix"] = time.time()
             temporary = path.with_name(path.name + ".tmp")
             temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")

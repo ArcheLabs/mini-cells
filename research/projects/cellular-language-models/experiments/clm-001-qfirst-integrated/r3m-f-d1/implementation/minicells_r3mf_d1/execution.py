@@ -322,9 +322,9 @@ def _load_parent_state(config, output, device):
     from minicells_r3m.anchor import load
     from minicells_r3e.common import fingerprint
 
-    _runtime_secret()
     if not torch.cuda.is_available() or torch.cuda.device_count() != 2:
         raise RuntimeError("D1_EXACT_R3H_RESTORE_REQUIRES_TWO_VISIBLE_CUDA_DEVICES")
+    _runtime_secret()
     reference = config["baseline"]["hf_reference"]
     backend = HubBackend(reference["hf_repo"])
     info = backend.info(reference["hf_revision"])
