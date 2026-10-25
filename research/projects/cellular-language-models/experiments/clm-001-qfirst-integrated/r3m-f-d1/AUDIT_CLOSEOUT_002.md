@@ -19,3 +19,7 @@ The frozen config SHA remains `656da576ad7e6908825c9c496a5434155957f591aadcf4fee
 ## Release status
 
 `RUN_BCD=False` remains the Notebook default. No real checkpoint is trained or evaluated in the CPU fixtures; no GPU scientific run is started. A short review of this closeout and its CPU evidence is the next step before any separate B/C/D authorization. The full R3m-F Pilot remains outside the scope.
+
+## Recorded CPU evidence
+
+Execution source: `16df822e95ac2466529f424a8ebfec63ee93c295`. All 21 CPU tests pass, including the two new GPU-use audit tests and all previous actual-model/recovery fixtures. The same Notebook sparse checkout imports the reused runtime and passes default CPU Gate. Sample-plan bytes and budget totals are unchanged. Machine-readable proof, complete test log and artifact hashes are retained in [`engineering/8c7c5621ac48e3142b461ebc1b6a54ba/AUDIT_CLOSEOUT_PROOF.json`](engineering/8c7c5621ac48e3142b461ebc1b6a54ba/AUDIT_CLOSEOUT_PROOF.json). The Notebook pins this source and remains `RUN_BCD=False`. No actual GPU execution is claimed.
