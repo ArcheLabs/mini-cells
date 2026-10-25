@@ -163,5 +163,19 @@
     "D_vs_C": "PROSPECTIVE_OBJECTIVE_CONTRAST; same independent QA context and common source plan; only loss mask/normalization differs",
     "context_contrasts": "NOT PURE_EQUAL_BUDGET; QA fragmentation removes cross-QA targets, resets positions and reduces input/attention work",
     "difference_in_differences": "DESCRIPTIVE_ONLY; do not claim pure 2x2 interaction"
+  },
+  "baseline": {
+    "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+    "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+    "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+    "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+    }
   }
 }

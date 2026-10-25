@@ -24,6 +24,7 @@ from minicells_r3mf_d1.identity import identity, validate_resume  # noqa: E402
 from minicells_r3mf_d1.loss import normalized_loss_sum, selected_positions  # noqa: E402
 from minicells_r3mf_d1.routing import source_random_inputs  # noqa: E402
 from minicells_r3mf_d1.sample_plan import replay_planned_update  # noqa: E402
+from minicells_r3mf_d1.training import torch_batches, update as training_update  # noqa: E402
 
 
 class FixedRng:
@@ -49,6 +50,93 @@ def record(prompt, answer, group):
 
 
 class D1UnitTests(unittest.TestCase):
+    def test_torch_batches_keep_labels_and_split_qa_context(self):
+        records = [record([10, 11], [12], "a"), record([20, 21], [22], "b")]
+        row = build_source_row(FixedRng([0, 1]), records, 65, 1, microbatch=3)
+        packed = torch_batches((row,), "PACKED", "cpu")
+        independent = torch_batches((row,), "INDEPENDENT_QA", "cpu")
+        self.assertEqual(len(packed), 1)
+        self.assertEqual(packed[0]["x"].shape, (1, 64))
+        self.assertEqual(packed[0]["y"].tolist()[0], list(row.tokens[1:]))
+        self.assertEqual(len(independent), len(split_independent(row)))
+        self.assertEqual(
+            sum(batch["y"].numel() for batch in independent),
+            sum(len(fragment.labels) for fragment in split_independent(row)),
+        )
+        for batch, fragment in zip(independent, split_independent(row)):
+            self.assertEqual(batch["source_microbatch"], 3)
+            self.assertEqual(batch["source_start"], fragment.source_start)
+            self.assertEqual(batch["x"].shape[1], batch["input_positions"])
+            self.assertEqual(batch["y"][0].tolist(), list(fragment.tokens[1:]))
+
+    def test_training_update_uses_update_global_masked_ce_and_one_optimizer_step(self):
+        import torch
+        from types import SimpleNamespace
+
+        class TinyCellModel(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.cells = torch.nn.ModuleList([torch.nn.Linear(32, 32, bias=False)])
+                self.active_step = None
+                self.microbatch_index = 0
+                self.training_context = None
+                self.d1_source_context = None
+                self.last_logits = None
+
+            def forward(self, tokens, **kwargs):
+                one_hot = torch.nn.functional.one_hot(tokens, num_classes=32).float()
+                logits = self.cells[0](one_hot)
+                logits.retain_grad()
+                self.last_logits = logits
+                return SimpleNamespace(logits=logits)
+
+            def forward_fragment(self, tokens, **kwargs):
+                return self(tokens)
+
+        class TinyTrainer:
+            def __init__(self, model):
+                self.model = model
+                self.c = {"engine": {"training": {"clip": 1.0, "learning_rate": 0.1, "warmup_steps": 5}}}
+                self.cell_opt = torch.optim.SGD(model.cells.parameters(), lr=0.1)
+                self.step = 300
+                self.data_cursor = 300 * 512
+                self.route_rng = None
+                self.cost = {"main_updates": 0, "main_tokens": 0, "elapsed_update_seconds": 0.0}
+                self.curve = []
+
+            def epsilon(self):
+                return 0.0
+
+            def verify_frozen(self):
+                return None
+
+        row = build_source_row(
+            FixedRng([0, 1]),
+            [record([10, 11], [12], "a"), record([20, 21], [22], "b")],
+            65,
+            1,
+        )
+        batches = torch_batches((row,), "PACKED", "cpu")
+        model = TinyCellModel()
+        trainer = TinyTrainer(model)
+        before = [parameter.detach().clone() for parameter in model.parameters()]
+        result = training_update(
+            trainer,
+            batches,
+            objective="ANSWER_EOS",
+            context="PACKED",
+            d1_config={"source_rows_per_step": 8, "source_sequence_tokens": 65},
+        )
+        selected = batches[0]["answer_eos_mask"]
+        grads = model.last_logits.grad[0]
+        self.assertEqual(result["selected_target_count"], int(selected.sum()))
+        self.assertTrue(torch.equal(grads[~selected], torch.zeros_like(grads[~selected])))
+        self.assertTrue(bool(model.last_logits.grad[0][selected].abs().sum() > 0))
+        self.assertEqual(trainer.step, 301)
+        self.assertEqual(trainer.data_cursor, 301 * 512)
+        self.assertEqual(trainer.cost["main_updates"], 1)
+        self.assertTrue(any(not torch.equal(old, new) for old, new in zip(before, model.parameters())))
+
     def test_sample_plan_replay_validates_draws_tokens_and_rng_boundary(self):
         records = [record([10, 11], [12], "a"), record([20, 21], [22], "b")]
         rng = FixedRng([0, 1])

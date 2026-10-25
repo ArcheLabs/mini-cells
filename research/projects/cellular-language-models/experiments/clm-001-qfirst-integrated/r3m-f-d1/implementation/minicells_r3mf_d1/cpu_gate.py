@@ -271,6 +271,8 @@ def run(output=None):
     if (
         original_report["status"] != "TINY_OVERFIT_FAILED"
         or original_report["optimizer_updates"] != 200
+        or len(original_report["initial"]["predictions"]) != 8
+        or len(original_report["final"]["predictions"]) != 8
     ):
         raise RuntimeError("D1_ORIGINAL_TINY_RESULT_CHANGED")
     a_predictions = {
@@ -366,22 +368,29 @@ def run(output=None):
     }
     if output:
         target = Path(output) / run_id
-        if target.exists() and any(target.iterdir()):
-            raise RuntimeError("D1_RUN_OUTPUT_ALREADY_EXISTS_USE_NEW_RUN_ID")
         target.mkdir(parents=True, exist_ok=True)
         for name, value in outputs.items():
             if name == "RUN_MANIFEST.json":
                 continue
             path = target / name
-            path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            serialized = json.dumps(value, indent=2, sort_keys=True) + "\n"
+            if path.exists():
+                if path.read_text(encoding="utf-8") != serialized:
+                    raise RuntimeError("D1_EXISTING_PREFLIGHT_ARTIFACT_MISMATCH_" + name)
+            else:
+                path.write_text(serialized, encoding="utf-8")
             manifest["artifacts"][name] = {
                 "bytes": path.stat().st_size,
                 "sha256": _sha_file(path),
             }
         outputs["RUN_MANIFEST.json"] = manifest
-        (target / "RUN_MANIFEST.json").write_text(
-            json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-        )
+        manifest_path = target / "RUN_MANIFEST.json"
+        serialized_manifest = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+        if manifest_path.exists():
+            if manifest_path.read_text(encoding="utf-8") != serialized_manifest:
+                raise RuntimeError("D1_EXISTING_PREFLIGHT_MANIFEST_MISMATCH")
+        else:
+            manifest_path.write_text(serialized_manifest, encoding="utf-8")
     return {"proof": proof, "manifest": manifest, "sample_plan": plan_payload}
 
 
