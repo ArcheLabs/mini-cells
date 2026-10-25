@@ -1,9 +1,11 @@
 # R3m-F-D1 Kaggle entry
 
-Import [`notebooks/kaggle-r3mf-d1.ipynb`](notebooks/kaggle-r3mf-d1.ipynb) into the existing Kaggle Notebook and use **Run All** once. It fetches the pinned source commit, checks the original Tiny records and tokenizer, and runs the CPU Gate. The Notebook defaults to `RUN_BCD = False`; this does not load a model, use a GPU, or make optimizer updates.
+Human authorization for B/C/D was received on 2026-10-25; see [RUN_AUTHORIZATION.md](RUN_AUTHORIZATION.md). Import [`notebooks/kaggle-r3mf-d1.ipynb`](notebooks/kaggle-r3mf-d1.ipynb) into the existing Kaggle Notebook. Select **T4 x2**, enable **Internet** and the existing **HF_TOKEN**, then use **Save Version → Save & Run All** once. No code switch or manually copied hash is required.
 
-B/C/D are deliberately unavailable until independent review and separate explicit authorization. After that authorization, set the single `RUN_BCD` switch to `True`, enable Internet and the existing `HF_TOKEN` secret, and select two visible T4 GPUs. Run All then performs the CPU Gate first and continues into the bounded, resumable B/C/D run only if it passes. Each arm is limited to 200 updates; checkpoints are retained in Kaggle Output every 25 updates and at each evaluation barrier. The original A result is reused, and no Main or Confirmation data are accessed.
+The Notebook defaults to `RUN_BCD=True`. It fetches execution source `16df822e95ac2466529f424a8ebfec63ee93c295`, runs the frozen CPU Gate automatically, and continues only if the checks pass. B/C/D each retain at most 200 logical updates, with evaluation at 0/50/100/200. A reuses the historical result. The full R3m-F Pilot, Main and Confirmation remain outside this authorization.
 
-The Notebook does not need `KAGGLE_API_TOKEN` or `GITHUB_TOKEN`; it keeps run artifacts in Kaggle Output. The supplied Kaggle log verifies the CPU Gate for the prior `b7685aeb` source only. The review correction is verified locally on CPU; no B/C/D GPU run has been performed.
+Full-state checkpoints are retained every 25 updates and at evaluation barriers under `/kaggle/working/r3mf-d1-output`. The final per-arm predictions and combined `RESULTS.json` are in the same Output tree. `KAGGLE_API_TOKEN` and `GITHUB_TOKEN` are not required; this Notebook retains results in Kaggle Output.
 
-The 200-step cap is a logical per-arm training cap. Failed work since the last checkpoint may be repeated after interruption, so cumulative retry computation can exceed 200 optimizer calls. New manifests explicitly distinguish logical progress, unknown cumulative retry cost, requested GPU and observed GPU use.
+The 200-step budget limits logical trajectory length. Failed work since the last checkpoint may be repeated, so cumulative retry computation can exceed 200 optimizer calls. Manifests distinguish logical progress, unknown cumulative retry costs, requested GPU and observed GPU use.
+
+Engineering validation includes 21 CPU tests, the pure CPU Gate and the exact sparse-checkout entry. Actual B/C/D CUDA execution is performed by the authorized Kaggle launch; it is not inferred from the CPU tests.
