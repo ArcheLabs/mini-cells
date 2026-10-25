@@ -89,6 +89,9 @@ class PublicationTests(unittest.TestCase):
         second = pub.publish(self.run)
         self.assertEqual(second['remote_commit_sha'],commit)
         self.assertTrue(second['reused_existing_remote'])
+        self.assertFalse(second['push_attempted'])
+        self.assertFalse(second['push_completed'])
+        self.assertIsNone(second['push_exit_code'])
 
     def test_failed_push_retains_complete_results_and_can_retry_only_publication(self):
         original = pub._git
@@ -105,6 +108,7 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(manifest['publication_status'],'FAILED_LOCAL_RETAINED')
         self.assertIsNone(manifest['remote_commit_sha'])
         self.assertTrue(receipt['git_commit_created'])
+        self.assertTrue(receipt['push_attempted'])
         self.assertFalse(receipt['push_completed'])
         before = exe._file_sha(self.run/'RESULTS.json')
         with patch.object(exe,'advance',side_effect=AssertionError('MUST_NOT_TRAIN')):

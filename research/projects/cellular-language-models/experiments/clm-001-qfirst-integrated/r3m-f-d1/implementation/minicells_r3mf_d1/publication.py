@@ -165,7 +165,8 @@ def publish(root):
     root = Path(root)
     manifest = _read(root / 'RUN_MANIFEST.json')
     receipt = dict(status='VALIDATING', run_id=manifest.get('run_id'),
-                   git_commit_created=False, push_completed=False, remote_verified=False)
+                   git_commit_created=False, push_attempted=False, push_completed=False,
+                   push_exit_code=None, remote_verified=False)
     try:
         manifest, files, hashes, key = payload(root)
         branch = 'results/r3mf-d1-' + manifest['run_id'] + '-' + key[:12]
@@ -187,7 +188,6 @@ def publish(root):
                     if not path.is_file() or path.is_symlink() or path.stat().st_size != row['bytes'] or _file_sha(path) != row['sha256']:
                         raise PublicationError('D1_REMOTE_ARTIFACT_CONTENT_NOT_VERIFIED')
                 parent = retained['parent_main_sha']
-                receipt['push_completed'] = True  # Existing remote payload was read back successfully.
                 receipt['reused_existing_remote'] = True
             else:
                 _git(checkout, 'fetch', '--depth=1', '--filter=blob:none', 'origin', 'main', env=env)
@@ -215,8 +215,10 @@ def publish(root):
                 receipt.update(status='COMMITTED_LOCALLY', git_commit_created=True,
                                local_commit_sha=_git(checkout,'rev-parse','HEAD',env=env))
                 _receipt(root, manifest, receipt)
+                receipt['push_attempted'] = True
+                _receipt(root, manifest, receipt)
                 _git(checkout, 'push', 'origin', 'HEAD:refs/heads/'+branch, env=env, timeout=45)
-                receipt.update(status='PUSH_SUCCEEDED_AWAITING_REMOTE_VERIFICATION',push_completed=True)
+                receipt.update(status='PUSH_SUCCEEDED_AWAITING_REMOTE_VERIFICATION',push_completed=True,push_exit_code=0)
                 _receipt(root, manifest, receipt)
             local = _git(checkout, 'rev-parse', 'HEAD', env=env)
             verified = _git(checkout, 'ls-remote', 'origin', 'refs/heads/'+branch, env=env, timeout=15).split()
