@@ -4,4 +4,4 @@ Import [`notebooks/kaggle-r3mf-d1.ipynb`](notebooks/kaggle-r3mf-d1.ipynb) into t
 
 B/C/D are deliberately unavailable until independent review and separate explicit authorization. After that authorization, set the single `RUN_BCD` switch to `True`, enable Internet and the existing `HF_TOKEN` secret, and select two visible T4 GPUs. Run All then performs the CPU Gate first and continues into the bounded, resumable B/C/D run only if it passes. Each arm is limited to 200 updates; checkpoints are retained in Kaggle Output every 25 updates and at each evaluation barrier. The original A result is reused, and no Main or Confirmation data are accessed.
 
-The Notebook does not need `KAGGLE_API_TOKEN` or `GITHUB_TOKEN`; it keeps run artifacts in Kaggle Output. A real Kaggle execution has not yet been performed by this engineering task.
+The Notebook does not need `KAGGLE_API_TOKEN` or `GITHUB_TOKEN`; it keeps run artifacts in Kaggle Output. The supplied Kaggle log verifies the CPU Gate for the prior `b7685aeb` source only. The review correction is verified locally on CPU; no B/C/D GPU run has been performed.

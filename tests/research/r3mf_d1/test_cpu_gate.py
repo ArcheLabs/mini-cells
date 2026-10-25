@@ -311,6 +311,9 @@ class D1UnitTests(unittest.TestCase):
         self.assertFalse(config["authorization"]["gpu_training"])
         self.assertFalse(config["authorization"]["full_r3mf_pilot"])
         self.assertEqual(config["steps"], 200)
+        self.assertEqual(config["sampling_plan"]["prospective_arms_share_exact_draws"], ["B", "C", "D"])
+        self.assertEqual(config["sampling_plan"]["arm_a_sampling_identity"], "HISTORICAL_REUSED_ENDPOINT_NOT_CERTIFIED")
+        self.assertNotIn("all_diagnostic_arms_share_exact_draws", config["sampling_plan"])
 
 
 if __name__ == "__main__":

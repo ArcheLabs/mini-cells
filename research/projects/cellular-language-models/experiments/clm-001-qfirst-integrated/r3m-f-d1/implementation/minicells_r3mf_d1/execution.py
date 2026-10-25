@@ -106,7 +106,7 @@ def _cpu_tree(value):
     if isinstance(value, torch.Tensor):
         return value.detach().cpu().clone()
     if isinstance(value, dict):
-        return {key: _cpu_tree(item) for key, item in value.items()}
+        return type(value)((key, _cpu_tree(item)) for key, item in value.items())
     if isinstance(value, list):
         return [_cpu_tree(item) for item in value]
     if isinstance(value, tuple):
@@ -118,7 +118,7 @@ def _checkpoint_metadata(state, arm_identity, relative_step, anchor_step):
     from minicells_r3e.common import fingerprint
 
     return {
-        "schema": "minicells.r3mf_d1.checkpoint.v1",
+        "schema": "minicells.r3mf_d1.checkpoint.v2",
         "identity": dict(arm_identity, max_steps=200),
         "relative_step": relative_step,
         "step": anchor_step + relative_step,
@@ -133,14 +133,14 @@ def _checkpoint_metadata(state, arm_identity, relative_step, anchor_step):
 def _validate_checkpoint(checkpoint, expected_identity, plan, records, anchor_step):
     from .identity import validate_resume
 
-    if checkpoint.get("schema") != "minicells.r3mf_d1.checkpoint.v1":
+    if checkpoint.get("schema") != "minicells.r3mf_d1.checkpoint.v2":
         raise ValueError("D1_CHECKPOINT_SCHEMA_INVALID")
     validate_resume(checkpoint["metadata"], dict(expected_identity, max_steps=200))
     relative = checkpoint["metadata"]["relative_step"]
     state = checkpoint["trainer_state"]
-    if checkpoint["metadata"]["trainer_state_sha256"] != _checkpoint_metadata(
+    if checkpoint["metadata"] != _checkpoint_metadata(
         state, expected_identity, relative, anchor_step
-    )["trainer_state_sha256"]:
+    ):
         raise ValueError("D1_CHECKPOINT_STATE_HASH_MISMATCH")
     if relative:
         expected_rng = plan["relative_updates"][relative - 1]["rng_state_after"]
@@ -247,17 +247,17 @@ def _write_manifest(path, manifest):
     _atomic_json(path, manifest)
 
 
-def _checkpoint(trainer, arm_identity, relative_step, config, arm_dir, manifest, run_root, metrics):
+def _checkpoint(trainer, arm_identity, relative_step, config, arm_dir, manifest, run_root, result):
     import torch
     from minicells_r3e.common import fingerprint
 
     state = copy.deepcopy(trainer.state())
     metadata = _checkpoint_metadata(state, arm_identity, relative_step, config["anchor_step"])
     payload = {
-        "schema": "minicells.r3mf_d1.checkpoint.v1",
+        "schema": "minicells.r3mf_d1.checkpoint.v2",
         "metadata": metadata,
         "anchor_data_cursor": config["sampling_start"]["data_cursor"],
-        "metrics": copy.deepcopy(metrics),
+        "arm_result": copy.deepcopy(result),
         "trainer_state": state,
         "state_fingerprint": fingerprint(state),
     }
@@ -273,7 +273,7 @@ def _save_arm_result(arm_dir, result, manifest, run_root):
     _artifact(manifest, run_root, path)
 
 
-def _resume_checkpoint(arm_dir, expected_identity, plan, records, config, device, manifest, run_root):
+def _resume_checkpoint(arm_dir, expected_identity, plan, records, config, device, manifest, run_root, runtime=None):
     import torch
     from minicells_r3e.common import fingerprint
 
@@ -292,16 +292,51 @@ def _resume_checkpoint(arm_dir, expected_identity, plan, records, config, device
     if fingerprint(payload["trainer_state"]) != payload["state_fingerprint"]:
         raise ValueError("D1_CHECKPOINT_FINGERPRINT_MISMATCH")
     trainer = _restore_d1_trainer(
-        _runtime(config), payload["trainer_state"], config["seed"], device
+        runtime if runtime is not None else _runtime(config), payload["trainer_state"], config["seed"], device
     )
     result_path = Path(arm_dir) / "ARM_RESULT.json"
-    result = _read(result_path) if result_path.exists() else {
-        "arm": expected_identity["arm"],
-        "status": "RUNNING",
-        "evaluations": [],
-        "curve": trainer.curve.copy(),
-    }
+    existing = _read(result_path) if result_path.exists() else None
+    result = _reconcile_result(payload, existing, expected_identity, config, arm_dir)
     return trainer, payload["metadata"]["relative_step"], result
+
+
+def _reconcile_result(payload, existing, identity, config, arm_dir):
+    """Checkpoint state owns completed updates; result files may only lag behind it."""
+    anchor = config["anchor_step"]
+    relative = payload["metadata"]["relative_step"]
+    curve = [copy.deepcopy(row) for row in payload["trainer_state"]["curve"] if row["step"] > anchor]
+    if [row["step"] for row in curve] != list(range(anchor + 1, anchor + relative + 1)):
+        raise ValueError("D1_CHECKPOINT_CURVE_NOT_CONTIGUOUS")
+    snapshot = payload["arm_result"]
+    if snapshot.get("identity") != identity or snapshot.get("curve") != curve:
+        raise ValueError("D1_CHECKPOINT_RESULT_STATE_MISMATCH")
+    result = copy.deepcopy(snapshot)
+    result["status"] = "RUNNING"
+    evaluations = {}
+    for candidate in (snapshot, existing):
+        if candidate is None:
+            continue
+        if candidate.get("identity") != identity:
+            raise ValueError("D1_ARM_RESULT_IDENTITY_MISMATCH")
+        reported_curve = candidate.get("curve", [])
+        if reported_curve != curve[:len(reported_curve)]:
+            raise ValueError("D1_ARM_RESULT_CURVE_CONFLICT")
+        for row in candidate.get("evaluations", []):
+            step = row["relative_step"]
+            if step not in config["evaluation_steps"] or step > relative or row["global_step"] != anchor + step:
+                raise ValueError("D1_ARM_RESULT_EVALUATION_BOUNDARY_INVALID")
+            checkpoint_path = Path(arm_dir) / ("checkpoint-step-%06d.pt" % step)
+            if row.get("checkpoint_sha256") != _file_sha(checkpoint_path):
+                raise ValueError("D1_ARM_RESULT_EVALUATION_CHECKPOINT_MISMATCH")
+            if step in evaluations and evaluations[step] != row:
+                raise ValueError("D1_ARM_RESULT_EVALUATION_CONFLICT")
+            evaluations[step] = copy.deepcopy(row)
+    result["curve"] = curve
+    result["evaluations"] = [evaluations[step] for step in sorted(evaluations)]
+    earlier = [step for step in config["evaluation_steps"] if step < relative]
+    if any(step not in evaluations for step in earlier):
+        raise ValueError("D1_CHECKPOINT_PRIOR_EVALUATION_MISSING")
+    return result
 
 
 def _runtime(config):
@@ -330,8 +365,9 @@ def _load_parent_state(config, output, device):
     info = backend.info(reference["hf_revision"])
     if info.sha != reference["hf_revision"]:
         raise RuntimeError("D1_PINNED_HF_REVISION_CHANGED")
+    anchor_config = dict(config, tokens_per_step=config["source_targets_per_step"])
     anchor, receipt = load(
-        config, backend, Path(output) / "parent-cache", config["seed"], device, step=300
+        anchor_config, backend, Path(output) / "parent-cache", config["seed"], device, step=300
     )
     if receipt["receipt"]["sha256"] != config["anchor_checkpoint"]["checkpoint_sha256"]:
         raise RuntimeError("D1_ANCHOR_CHECKPOINT_SHA_MISMATCH")
@@ -353,10 +389,13 @@ def _load_parent_state(config, output, device):
 
 def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
     """Run only B/C/D with a fixed 200-update ceiling and exact resume checks."""
-    import torch
     from tokenizers import Tokenizer
-    from minicells_r3e.common import fingerprint
 
+    from .source_identity import verify_source_tree, code_sha
+
+    if verify_source_tree(REPO) != source_sha:
+        raise RuntimeError("D1_SOURCE_COMMIT_MISMATCH")
+    source_code_sha = code_sha(BASE, REPO)
     config = copy.deepcopy(config)
     config_sha = sha256_bytes(canonical(config).encode("utf-8"))
     if config_sha != Path(BASE / "config/frozen.sha256").read_text().strip():
@@ -376,6 +415,7 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
         or gate_manifest.get("source_sha") != source_sha
         or gate_manifest.get("config_sha256") != config_sha
         or gate_manifest.get("data_sha256") != data_sha
+        or gate_manifest.get("source_code_sha256") != source_code_sha
     ):
         raise RuntimeError("D1_PREFLIGHT_MANIFEST_IDENTITY_MISMATCH")
     verify_plan_identity(
@@ -403,6 +443,7 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
             {
                 "experiment_id": config["experiment_id"],
                 "source_sha": source_sha,
+                "source_code_sha256": source_code_sha,
                 "config_sha256": config_sha,
                 "data_sha256": data_sha,
                 "sample_plan_sha256": plan_sha,
@@ -419,6 +460,7 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
     identity_base = {
         "experiment_id": config["experiment_id"],
         "source_sha": source_sha,
+        "source_code_sha256": source_code_sha,
         "config_sha256": config_sha,
         "data_sha256": data_sha,
         "sample_plan_sha256": plan_sha,
@@ -467,7 +509,21 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
         _artifact(manifest, run_root, target)
     _write_manifest(manifest_path, manifest)
 
-    runtime = _runtime(config)
+    return _execute_run(
+        config, plan, proof, records, tokenizer, _runtime(config), run_root,
+        manifest, identity_base, device,
+    )
+
+
+def _execute_run(config, plan, proof, records, tokenizer, runtime, run_root,
+                 manifest, identity_base, device):
+    """Shared production control flow; tests inject synthetic CPU parent state only."""
+    import torch
+    from minicells_r3e.common import fingerprint
+
+    run_root = Path(run_root)
+    manifest_path = run_root / "RUN_MANIFEST.json"
+    run_key = manifest["run_id"]
     schedule_state = None
     parent_state = None
     anchor_receipt = None
@@ -476,7 +532,7 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
         arm_dir = run_root / ("arm-" + arm)
         arm_dir.mkdir(parents=True, exist_ok=True)
         arm_identity = dict(identity_base, arm=arm)
-        resume = _resume_checkpoint(arm_dir, arm_identity, plan, records, config, device, manifest, run_root)
+        resume = _resume_checkpoint(arm_dir, arm_identity, plan, records, config, device, manifest, run_root, runtime)
         if resume is not None:
             trainer, relative_step, result = resume
             schedule_state = result.get("schedule_state")
@@ -509,6 +565,7 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
             result = {
                 "schema": "minicells.r3mf_d1.arm_result.v1",
                 "arm": arm,
+                "identity": arm_identity,
                 "status": "RUNNING",
                 "context": config["arms"][arm]["context"],
                 "objective": config["arms"][arm]["loss"],
@@ -525,7 +582,7 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
         if relative_step == 0:
             if not result["evaluations"]:
                 path, checkpoint_sha = _checkpoint(
-                    trainer, arm_identity, 0, config, arm_dir, manifest, run_root, result["evaluations"]
+                    trainer, arm_identity, 0, config, arm_dir, manifest, run_root, result
                 )
                 result["evaluations"].append(
                     dict(_evaluate(trainer, records, tokenizer, device, 0), checkpoint_sha256=checkpoint_sha)
@@ -572,13 +629,13 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
                 metrics = []
                 if relative_step in config["evaluation_steps"]:
                     checkpoint_path, checkpoint_sha = _checkpoint(
-                        trainer, arm_identity, relative_step, config, arm_dir, manifest, run_root, result["evaluations"]
+                        trainer, arm_identity, relative_step, config, arm_dir, manifest, run_root, result
                     )
                     metrics = _evaluate(trainer, records, tokenizer, device, relative_step)
                     result["evaluations"].append(dict(metrics, checkpoint_sha256=checkpoint_sha))
                 else:
                     _checkpoint(
-                        trainer, arm_identity, relative_step, config, arm_dir, manifest, run_root, result["evaluations"]
+                        trainer, arm_identity, relative_step, config, arm_dir, manifest, run_root, result
                     )
                 _save_arm_result(arm_dir, result, manifest, run_root)
                 _write_manifest(manifest_path, manifest)
@@ -600,7 +657,8 @@ def run_bcd(config, preflight_dir, output_root, source_sha, device="cuda:0"):
         manifest["arms"][arm] = {"status": "COMPLETE", "updates": relative_step}
         _write_manifest(manifest_path, manifest)
         del trainer
-        torch.cuda.empty_cache()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     manifest["run_status"] = "COMPLETE"
     manifest["exit_code"] = 0

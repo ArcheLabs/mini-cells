@@ -99,9 +99,14 @@
   "sampling_plan": {
     "path": "engineering/{run_id}/SAMPLE_PLAN.json",
     "schema": "minicells.r3mf_d1.common_sample_plan.v1",
-    "all_diagnostic_arms_share_exact_draws": true,
     "plan_is_cpu_generated_from_sampling_start": true,
-    "future_runtime_must_verify_each_step_draws": true
+    "future_runtime_must_verify_each_step_draws": true,
+    "prospective_arms_share_exact_draws": [
+      "B",
+      "C",
+      "D"
+    ],
+    "arm_a_sampling_identity": "HISTORICAL_REUSED_ENDPOINT_NOT_CERTIFIED"
   },
   "input_records": {
     "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/RECONSTRUCTED_TINY_RECORDS.json",

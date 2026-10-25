@@ -42,6 +42,9 @@ def _causal_pairs(lengths):
 
 
 def run(output=None):
+    from .source_identity import verify_source_tree
+
+    verify_source_tree(REPO)
     config = _read(BASE / "config/frozen.json")
     config_sha = sha256_bytes(canonical(config).encode("utf-8"))
     frozen_sha_path = BASE / "config/frozen.sha256"
@@ -406,9 +409,6 @@ def _source_commit():
 
 
 def _code_sha():
-    directory = BASE / "implementation/minicells_r3mf_d1"
-    files = sorted(directory.rglob("*.py")) + [BASE / "run.py"]
-    material = []
-    for path in files:
-        material.append((path.relative_to(REPO).as_posix(), _sha_file(path)))
-    return sha256_bytes(canonical(material).encode("utf-8"))
+    from .source_identity import code_sha
+
+    return code_sha(BASE, REPO)
