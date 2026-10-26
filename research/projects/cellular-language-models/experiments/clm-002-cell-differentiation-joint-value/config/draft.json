@@ -48,7 +48,10 @@
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/implementation/minicells_r3h/trainer.py": "3bfea7d1d2fc27919b771cebce54cf7698add404ab31bbc610b99dab6680f489",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-e/release/gate2/SESSION_B.json": "7a2056e8d00a2eee9ac63a1fce0fe6098a505afa5b34062935faaf7b82a2b1a9",
     "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/GLOBAL_DATASET_USAGE_LEDGER.json": "ac0f9c4abc921c5969d830d41a3bd238ad10c1f088ff4f93feab783b65033ca1",
-    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/content-isolation-001/REVIEW.md": "c5ec69490843a1db49c917e9926aa6f87646e209108033c64c1712761061876b"
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/content-isolation-001/ADDITIONAL_COVERAGE_GAPS.json": "f296a3ae53c8fba8ca1e72358ef189b1c3ac2456091965eeafeb64ef18ac0074",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/content-isolation-001/HISTORICAL_SOURCE_COVERAGE.json": "474227b8b08fdbf87cea82fb0e44f548f1856bd60507e76678d4eb25dd067d43",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/content-isolation-001/REVIEW.md": "c5ec69490843a1db49c917e9926aa6f87646e209108033c64c1712761061876b",
+    "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value/config/HISTORICAL_REFERENCE_BINDINGS.json": "81c91df9f923806ff8281ba137419e4e39685cb3f642d9d94259a6f1e9601ea6"
   },
   "stage_a": {
     "arms": [
@@ -69,6 +72,7 @@
     "confirmation_seeds_required": 4,
     "development_run_authorized": false,
     "development_seed_count": 3,
+    "native_connection_behavior": "FROZEN_AS_INHERITED_R3H_B_H; DO_NOT_SILENTLY_ENABLE_Q_UPDATES",
     "negative_result_early_stop": false,
     "nonfinite_stop": true,
     "normalized_specialization_min": 0.01,
@@ -87,6 +91,7 @@
       "B11-H"
     ],
     "confirmation_seed_count": 5,
+    "evaluation_weighting": null,
     "interval_method": "DRAFT_PAIRED_SEED_STUDENT_T_WITH_PROSPECTIVE_REGISTRATION",
     "minimum_effect_nats_per_token": 0.01,
     "prerequisite": "ARCHIVED_STAGE_A_CONFIRMATION_SUPPORTED",
@@ -104,7 +109,7 @@
     "class_name": "minicells_r3h.routing.Model",
     "connection_registration": "BLOCKED_NATIVE_R3H_FREEZES_CONNECTION_REVIEW_REQUIRED",
     "connection_update_frequency": null,
-    "connection_update_rule": "R3E_ALL_ACTION_TERMINAL_Q_EXPECTED_CENTERED_COST_FRESH_ADAMW",
+    "connection_update_rule": "STAGE_A_NATIVE_FROZEN; STAGE_B_CANDIDATE_R3E_TERMINAL_Q_PENDING_REGISTRATION",
     "historical_identity": {
       "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
       "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
