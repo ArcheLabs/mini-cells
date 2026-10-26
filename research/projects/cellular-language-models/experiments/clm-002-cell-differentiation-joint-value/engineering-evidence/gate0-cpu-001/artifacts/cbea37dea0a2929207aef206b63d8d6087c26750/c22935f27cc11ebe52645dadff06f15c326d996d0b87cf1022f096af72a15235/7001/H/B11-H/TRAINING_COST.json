@@ -1,0 +1,83 @@
+{
+  "attempts": {
+    "accounting_status": "RECONCILED_CPU_FIXTURE",
+    "actual_optimizer_attempts": 4,
+    "analytic_cell_forward_mac": 1580,
+    "analytic_router_forward_mac": 140832,
+    "claim_scope": "ACTUAL_CPU_FIXTURE_WORK_NOT_GPU_RUNTIME_PROOF",
+    "completed_optimizer_calls": 4,
+    "counterfactual_target_evaluations": 24,
+    "cpu_seconds_by_phase": {
+      "atomic_checkpoint": 0.16613870699802646,
+      "isolated_profile": 0.07142723200013279,
+      "main_native_clm_update": 1.7115126050011895,
+      "native_connection_all_action_q": 0.3234974240003794,
+      "offline_fixed_path_measurement": 0.22938938199877157,
+      "offline_task_gradient_measurement": 0.065369838001061
+    },
+    "distinct_extra_counterfactual_examples": 0,
+    "effective_targets_attempted": 16,
+    "effective_targets_committed": 16,
+    "executed_operator_work": {
+      "cell_rows": 1580,
+      "context_rows": 184,
+      "gate_rows": 1304,
+      "head_rows": 208,
+      "input_rows": 184,
+      "policy_rows": 1304
+    },
+    "failed_or_retried_attempt_records": 0,
+    "gpu_seconds": null,
+    "gpu_used": false,
+    "input_examples_attempted": 4,
+    "input_unit": "SYNTHETIC_FEATURE_EXAMPLES_NOT_LANGUAGE_TOKENS",
+    "logical_steps": [
+      1,
+      2
+    ],
+    "logical_updates": 2,
+    "observed_flops": null,
+    "optimizer_calls_by_group": {
+      "cell": 2,
+      "connection": 2
+    },
+    "pending_attempts": 0,
+    "training_tokens": null,
+    "uncertain_optimizer_calls": 0
+  },
+  "identity": {
+    "arm": "B11-H",
+    "code_sha256": "6e3f2d613e7e31bc9579e94c7b6ba5ed1f13b64eaaba147ad7642bdeebe3f47e",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "run_id": "c0b1fdb4be9f7ba335c3718b06ad87f9",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "seed": 7001,
+    "source_sha": "cbea37dea0a2929207aef206b63d8d6087c26750",
+    "task_condition": "H"
+  },
+  "offline_profile": {
+    "actual_cell_calls": 32,
+    "batch": 1,
+    "cache": "STATIC_INPUT_MEMORY_REBUILT_EACH_FORWARD",
+    "calls_per_token": 8.0,
+    "device": "cpu",
+    "observed_shape_gemm": {
+      "cell_rows": 32,
+      "context_rows": 4,
+      "forward_matmul_flops": 39552,
+      "gate_rows": 32,
+      "hardware_kernel_flops": "NOT_MEASURED",
+      "per_token_forward_matmul_flops": 9888.0,
+      "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+    },
+    "p50_ms": 7.78009299756377,
+    "p95_ms": 9.012911200261442,
+    "peak_cuda_bytes": null,
+    "precision": "torch.float32",
+    "repeats": 3,
+    "scope": "ISOLATED_INFERENCE_PROFILE_NOT_TRAINING_RESIDENT; NO_DRAM_OR_MOBILE_CLAIM",
+    "sequence": 4
+  }
+}
