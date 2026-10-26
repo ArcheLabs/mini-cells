@@ -241,6 +241,15 @@ def test_zero_update_acceptance_covers_all_ten_paths_per_seed(config, tmp_path, 
 
     source, _ident, _ = miniature(config, tmp_path)
     original = parent.make_engine
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("zero-update acceptance executed model training work")
+
+    from minicells_r3h.routing import Model
+
+    monkeypatch.setattr(Model, "forward", forbidden)
+    monkeypatch.setattr(torch.optim.AdamW, "step", forbidden)
+    monkeypatch.setattr(torch.autograd, "backward", forbidden)
     monkeypatch.setattr(
         parent, "inspect_parent", lambda c, p, o: {"scope": "SYNTHETIC_TEST_NOT_REAL_PARENT"}
     )
