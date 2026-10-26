@@ -1,6 +1,6 @@
 # JCT-001: independent engineering implementation
 
-This directory preserves the supplied draft protocol and implements a bounded, synthetic CPU engineering fixture. No scientific Pilot, real-model experiment, GPU job or Confirmation is authorized or executed by this version. Historical R3 implementations, models, data identities, Checkpoints and conclusions are unchanged.
+This directory preserves the supplied draft protocol and implements a bounded, synthetic CPU engineering fixture. The original CPU entry does not execute a scientific Pilot. The separately authorized exploratory Stage 1 GPU release is described below; real-model and Confirmation execution remain blocked. Historical R3 implementations, models, data identities, Checkpoints and conclusions are unchanged.
 
 ## Run once
 
@@ -27,3 +27,14 @@ The runner writes the protocol's 12 report artifacts plus gate status (13 files 
 `CPU_ENGINEERING_PASS_SCIENTIFIC_BLOCKED` is the intended engineering result. Gates 0.1–0.6 remain scientifically blocked where evidence is missing: global real-content isolation, arithmetic learnability, actual cross-session recovery, independently reviewed task/Connection mechanism and Trust Region, GPU cost and scientific budget, frozen scientific Seeds/endpoints and Confirmation power plan. No new Story range is selected. Scientific CLI modes fail before loading data or models. Releasing a scientific executor requires an independently reviewed protocol/config revision; flipping a boolean does not authorize it.
 
 CPU tests: `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q tests/research/jct001`. They cover canonical split isolation, hard paths/self edges, real four-arm gradient/parameter updates, rejected-proposal costs, exact restoration/continuation, failed-attempt accounting, sealed scientific stages, report completeness and publication failure/idempotent retry against a local bare Git remote. The bare-remote test is not a live Kaggle return or cross-session test.
+
+
+## Authorized Stage 1 GPU entry
+
+The user authorized proceeding to GPU on 2026-10-26. `synthetic-pilot/AMENDMENT.md` and the separately hashed `PILOT_CONFIG.json` were committed before Pilot execution. Import **notebooks/kaggle-jct001-synthetic-pilot.ipynb**, enable one T4 GPU, Internet and existing GITHUB_TOKEN, then Run All once. A small disposable GPU functional/restore check proceeds automatically into the three fixed Seeds, 200 logical ticks per A/C arm, final evaluation and GitHub report return. There is no manual release field, repeated pytest suite, full language-model training, or wall-clock kill limit.
+
+This stage compares frozen Connection and trainable Connection with fixed Cells; random routes and exhaustive Oracle remain read-only diagnostics. It cannot establish joint Cell–Connection training benefit. The prerecord's held-out split has only two canonical compositions/four examples, so results are explicitly exploratory. Independent scientific review remains pending and no formal Pilot PASS, real-model release or Confirmation is automatic.
+
+Source/config identities, matched exposures, frozen Cells, full state restoration, actual optimizer calls (including the separately reported disposable check), failed attempts, CUDA training intervals and host wall times are retained. The registered fixed budget is 1,200 scientific optimizer calls (600 Connection ticks × two fresh-AdamW steps), plus two disposable functional-check calls. Publication creates a results/jct001-synthetic-pilot-* branch. Reports and manifests return automatically; weights remain in Output. `gpu_run.py --mode publish-existing --output <run_directory>` retries return with zero training updates.
+
+The original CPU Notebook remains pinned and its successful historical reports are unchanged. The active GPU entry is `gpu_run.py`, not the older blocked synthetic-pilot mode of `run.py`. A local bare-Git publisher test and CPU device-adapter tests do not claim Kaggle GPU or cross-session persistence verification.

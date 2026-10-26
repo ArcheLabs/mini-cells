@@ -59,7 +59,9 @@ def run_identity(c, registry=None):
     code = {
         str(p.relative_to(ROOT)): digest(p) for p in sorted((BASE / "implementation").rglob("*.py"))
     }
-    code[str((BASE / "run.py").relative_to(ROOT))] = digest(BASE / "run.py")
+    for entry in (BASE / "run.py", BASE / "gpu_run.py"):
+        if entry.exists():
+            code[str(entry.relative_to(ROOT))] = digest(entry)
     identity = dict(
         experiment_id=ID,
         source_sha=source,

@@ -12,6 +12,7 @@ from minicells_r3mf_d1.publication import _git, _auth_env
 REPOSITORY_URL = "https://github.com/ArcheLabs/mini-cells.git"
 REPORTS = BASE.relative_to(ROOT) / "reports/published"
 EXPERIMENT_ID = "JCT-001"
+BRANCH_PREFIX = "results/jct001-engineering-"
 ALLOWED = (
     "JCT001_PROTOCOL.md",
     "CONFIG.json",
@@ -201,7 +202,7 @@ def publish(root):
     )
     try:
         manifest, files, hashes, key = payload(root)
-        branch = "results/jct001-engineering-" + manifest["run_id"] + "-" + key[:12]
+        branch = BRANCH_PREFIX + manifest["run_id"] + "-" + key[:12]
         dest = REPORTS / manifest["run_id"]
         receipt.update(
             branch=branch,

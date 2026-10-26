@@ -93,3 +93,45 @@ def test_failed_push_keeps_local_and_retry_no_updates(
     monkeypatch.setattr(p, "_git", original)
     assert p.publish_existing(root)[0]["remote_verified"]
     assert read(root / "RUN_MANIFEST.json")["cpu_fixture_optimizer_calls"] == 6
+
+
+def test_gpu_publication_uses_separate_scope_and_branch(identity, tmp_path, monkeypatch, remote):
+    # Entirely simulated metadata against a local bare remote, no scientific execution.
+    from minicells_jct001 import gpu_publication as gpu
+    from minicells_jct001.common import atomic, digest
+
+    root = tmp_path / "simulated-gpu-reports"
+    root.mkdir()
+    ident = dict(
+        identity,
+        experiment_id="JCT-001-S1",
+        scope="SYNTHETIC_KNOWN_PATH_PILOT",
+        unit_test_only=True,
+    )
+    manifest = dict(
+        identity=ident,
+        experiment_id="JCT-001-S1",
+        scope=ident["scope"],
+        run_id=ident["run_id"],
+        source_sha="a" * 40,
+        config_sha256="b" * 64,
+        confirmation_materialized=False,
+        run_status="SYNTHETIC_PILOT_COMPLETE_EXPLORATORY_REVIEW_REQUIRED",
+        artifact_files={},
+    )
+    for name in gpu.ALLOWED:
+        if name in ("RUN_MANIFEST.json", "PARTIAL_RESULTS.json"):
+            continue
+        path = root / name
+        if name.endswith(".json"):
+            atomic(path, dict(identity=ident, unit_test_only=True))
+        else:
+            path.write_text("UNIT TEST FIXTURE; NO GPU RESULT\n")
+        manifest["artifact_files"][name] = dict(bytes=path.stat().st_size, sha256=digest(path))
+    atomic(root / "RUN_MANIFEST.json", manifest)
+    receipt = gpu.publish(root)
+    assert receipt["remote_verified"] and receipt["branch"].startswith(
+        "results/jct001-synthetic-pilot-"
+    )
+    assert "/reports/synthetic-pilot/" in receipt["report_directory"]
+    assert gpu.publish_existing(root)[0]["reused_existing_remote"]

@@ -113,7 +113,11 @@ class Journal:
         key = kind + "-" + str(len(self.events))
         grads = [p.grad.detach() for p in parameters if p.grad is not None]
         norm = float(torch.stack([g.square().sum() for g in grads]).sum().sqrt()) if grads else 0.0
-        if not grads or not all(torch.isfinite(g).all() for g in grads) or norm == 0:
+        if (
+            not grads
+            or not all(torch.isfinite(g).all() for g in grads)
+            or (norm == 0 and not getattr(self, "allow_zero_signal", False))
+        ):
             raise RuntimeError("JCT_INTENDED_OPTIMIZER_SIGNAL_MISSING_" + kind)
         self.append("OPT_BEGIN", dict(id=key, optimizer=kind, gradient_norm=norm))
         try:
