@@ -1,6 +1,7 @@
 import contextlib
 import subprocess
 from pathlib import Path
+
 import pytest
 from minicells_clm002 import engineering, publication
 from minicells_clm002.common import read
@@ -17,12 +18,12 @@ def completed(config, ident, tmp_path, monkeypatch):
     monkeypatch.setattr(
         engineering,
         "reserve_seeds",
-        lambda: dict(
-            status="UNIT_SEED_METADATA_ONLY",
-            development=[1, 2, 3],
-            stage_a_confirmation=[4, 5, 6, 7, 8],
-            stage_b_confirmation=[9, 10, 11, 12, 13],
-        ),
+        lambda: {
+            "status": "UNIT_SEED_METADATA_ONLY",
+            "development": [1, 2, 3],
+            "stage_a_confirmation": [4, 5, 6, 7, 8],
+            "stage_b_confirmation": [9, 10, 11, 12, 13],
+        },
     )
     result = engineering.run(config, tmp_path / "output")
     return Path(result["output"])

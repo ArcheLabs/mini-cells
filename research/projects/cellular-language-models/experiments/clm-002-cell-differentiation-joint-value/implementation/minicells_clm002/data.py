@@ -3,8 +3,10 @@
 import copy
 import re
 import unicodedata
+
 import numpy as np
 import torch
+
 from .common import sha
 
 
@@ -69,25 +71,25 @@ def allocation_audit(rows, history_coverage_complete=False, window_size=4):
                 windows[window] = role
         else:
             errors.append("TOKEN_WINDOW_IDENTITY_UNKNOWN")
-    return dict(
-        status="CONFLICT"
+    return {
+        "status": "CONFLICT"
         if errors
         else "PASS_LOCAL_ROWS_ONLY"
         if history_coverage_complete
         else "UNKNOWN_HISTORICAL_COVERAGE",
-        errors=sorted(set(errors)),
-        rows=len(rows),
-        raw_or_normalized_text_uploaded=False,
-        content_identity_sha256=sha(
-            [dict(role=r["role"], text_sha256=sha(normalize(r["text"]))) for r in rows]
+        "errors": sorted(set(errors)),
+        "rows": len(rows),
+        "raw_or_normalized_text_uploaded": False,
+        "content_identity_sha256": sha(
+            [{"role": r["role"], "text_sha256": sha(normalize(r["text"]))} for r in rows]
         ),
-        full_historical_coverage=history_coverage_complete,
-        global_scientific_isolation_pass=False,
-        limitations=[
+        "full_historical_coverage": history_coverage_complete,
+        "global_scientific_isolation_pass": False,
+        "limitations": [
             "Window check requires explicit same-Tokenizer IDs; cross-story and cross-Tokenizer historical coverage need original streams.",
             "Near-duplicate threshold is an engineering candidate, not a registered scientific leakage threshold.",
         ],
-    )
+    }
 
 
 class PairedStream:
@@ -103,7 +105,7 @@ class PairedStream:
         self.pool_sha = sha(
             {
                 name: [
-                    dict(x=r["x"].tolist(), y=r["y"].tolist(), valid=r["valid"].tolist())
+                    {"x": r["x"].tolist(), "y": r["y"].tolist(), "valid": r["valid"].tolist()}
                     for r in rows
                 ]
                 for name, rows in pools.items()
@@ -134,14 +136,14 @@ class PairedStream:
 
     def state(self):
         return copy.deepcopy(
-            dict(
-                condition=self.condition,
-                target_tokens=self.target_tokens,
-                pool_sha=self.pool_sha,
-                step=self.step,
-                order=self.order.bit_generator.state,
-                streams=[r.bit_generator.state for r in self.streams],
-            )
+            {
+                "condition": self.condition,
+                "target_tokens": self.target_tokens,
+                "pool_sha": self.pool_sha,
+                "step": self.step,
+                "order": self.order.bit_generator.state,
+                "streams": [r.bit_generator.state for r in self.streams],
+            }
         )
 
     def restore(self, state):
@@ -162,7 +164,7 @@ def unit_pools(c):
         for _ in range(3):
             tokens = torch.randint(0, u["vocab_size"], (1, u["sequence_length"] + 1), generator=rng)
             rows.append(
-                dict(x=tokens[:, :-1], y=tokens[:, 1:], valid=torch.ones_like(tokens[:, 1:]))
+                {"x": tokens[:, :-1], "y": tokens[:, 1:], "valid": torch.ones_like(tokens[:, 1:])}
             )
         result[task] = rows
     return result

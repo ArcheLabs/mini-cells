@@ -1,6 +1,6 @@
 import pytest
-from minicells_clm002.statistics import factorial, stage_a, joint_decision, correct_secondary
 from minicells_clm002.gates import require_scientific
+from minicells_clm002.statistics import correct_secondary, factorial, joint_decision, stage_a
 
 
 def test_seed_factorial_contrast_sign_and_complete_matrix():
@@ -12,7 +12,7 @@ def test_seed_factorial_contrast_sign_and_complete_matrix():
             for arm, value in [("B00", 4.0), ("B10", 3.0), ("B01", 3.5), ("B11", 2.0)]
         }
         losses["B11-S"] = 2.4
-        rows.append(dict(seed=seed, losses=losses))
+        rows.append({"seed": seed, "losses": losses})
     report = factorial(rows)
     assert report["I_H"]["mean"] == pytest.approx(-0.5)
     assert report["delta_I"]["mean"] == pytest.approx(-0.4)
@@ -39,31 +39,31 @@ def test_seed_factorial_contrast_sign_and_complete_matrix():
 def test_stage_a_requires_confirmation_and_no_automatic_stage_b_release():
     assert stage_a([])["status"] == "STAGE_A_INCOMPLETE"
     rows = [
-        dict(
-            seed=s,
-            complete=True,
-            registered_confirmation=False,
-            integrity_pass=True,
-            checkpoints=[],
-        )
+        {
+            "seed": s,
+            "complete": True,
+            "registered_confirmation": False,
+            "integrity_pass": True,
+            "checkpoints": [],
+        }
         for s in range(5)
     ]
     assert stage_a(rows)["status"] == "STAGE_A_INCOMPLETE"
     for r in rows:
         r["registered_confirmation"] = True
         r["checkpoints"] = [
-            dict(
-                step=400,
-                H=dict(S=0.04, bidirectional=True),
-                S=dict(S=0.01),
-                single_route_collapse=False,
-            ),
-            dict(
-                step=500,
-                H=dict(S=0.04, bidirectional=True),
-                S=dict(S=0.01),
-                single_route_collapse=False,
-            ),
+            {
+                "step": 400,
+                "H": {"S": 0.04, "bidirectional": True},
+                "S": {"S": 0.01},
+                "single_route_collapse": False,
+            },
+            {
+                "step": 500,
+                "H": {"S": 0.04, "bidirectional": True},
+                "S": {"S": 0.01},
+                "single_route_collapse": False,
+            },
         ]
     result = stage_a(rows)
     assert (
@@ -78,15 +78,15 @@ def test_no_scientific_execution_from_cpu_success(config, mode):
 
 
 def test_duplicate_checkpoints_cannot_establish_durable_specialization():
-    row = dict(
-        seed=1,
-        complete=True,
-        registered_confirmation=True,
-        integrity_pass=True,
-        checkpoints=[
-            dict(step=500, H=dict(S=0.1, bidirectional=True), S=dict(S=0)),
-            dict(step=500, H=dict(S=0.1, bidirectional=True), S=dict(S=0)),
+    row = {
+        "seed": 1,
+        "complete": True,
+        "registered_confirmation": True,
+        "integrity_pass": True,
+        "checkpoints": [
+            {"step": 500, "H": {"S": 0.1, "bidirectional": True}, "S": {"S": 0}},
+            {"step": 500, "H": {"S": 0.1, "bidirectional": True}, "S": {"S": 0}},
         ],
-    )
+    }
     rows = [dict(row, seed=s) for s in range(5)]
     assert stage_a(rows)["status"] == "STAGE_A_INCOMPLETE"

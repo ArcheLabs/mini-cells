@@ -1,7 +1,8 @@
 """Independent retained-report verification; no model load, no new optimizer updates."""
 
 from pathlib import Path
-from .common import read, digest, atomic
+
+from .common import atomic, digest, read
 
 
 def analyze_existing(input_root, output):
@@ -26,16 +27,16 @@ def analyze_existing(input_root, output):
         or manifest.get("scientific_optimizer_updates") != 0
     ):
         raise RuntimeError("CLM002_ANALYSIS_UNREGISTERED_SCIENTIFIC_SCOPE")
-    result = dict(
-        identity=manifest["identity"],
-        status="VERIFIED_GATE0_EVIDENCE_NO_SCIENTIFIC_RESULTS",
-        source_sha=manifest["source_sha"],
-        verified_artifact_count=len(manifest["artifact_files"]),
-        decision=read(root / "DECISION.json"),
-        stage_a="NOT_RUN",
-        stage_b="NOT_RUN",
-        optimizer_updates=0,
-        model_loaded=False,
-    )
+    result = {
+        "identity": manifest["identity"],
+        "status": "VERIFIED_GATE0_EVIDENCE_NO_SCIENTIFIC_RESULTS",
+        "source_sha": manifest["source_sha"],
+        "verified_artifact_count": len(manifest["artifact_files"]),
+        "decision": read(root / "DECISION.json"),
+        "stage_a": "NOT_RUN",
+        "stage_b": "NOT_RUN",
+        "optimizer_updates": 0,
+        "model_loaded": False,
+    }
     atomic(Path(output) / "READONLY_ANALYSIS.json", result)
     return result

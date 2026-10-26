@@ -1,8 +1,10 @@
 """Use the actual token-predictive R3h class. No affine/TextNCA substitute."""
 
 import copy
-from minicells_r3h.routing import Model
+
 from minicells_r3e.common import fingerprint
+from minicells_r3h.routing import Model
+
 from .common import ROOT, read
 
 TREATMENTS = {
@@ -59,9 +61,10 @@ def build(c, seed, unit=False):
         # A synthetic fixture has no historic Calibration margin. Never use for real weights.
         model.route_switch_margin.fill_(0)
         model.route_numeric_tolerance.fill_(0)
-        model.margin_evidence = dict(
-            scope="SYNTHETIC_CPU_FIXTURE_ONLY", historical_parent_verified=False
-        )
+        model.margin_evidence = {
+            "scope": "SYNTHETIC_CPU_FIXTURE_ONLY",
+            "historical_parent_verified": False,
+        }
     return model, r
 
 
@@ -90,16 +93,21 @@ def parameter_report(model):
     rows = {g: [] for g in ("cells", "connection", "public")}
     for name, p in model.named_parameters():
         rows[classify(name)].append(
-            dict(name=name, shape=list(p.shape), parameters=p.numel(), trainable=p.requires_grad)
+            {
+                "name": name,
+                "shape": list(p.shape),
+                "parameters": p.numel(),
+                "trainable": p.requires_grad,
+            }
         )
-    return dict(
-        total=sum(p.numel() for p in model.parameters()),
-        groups={
-            g: dict(parameters=sum(r["parameters"] for r in rs), entries=rs)
+    return {
+        "total": sum(p.numel() for p in model.parameters()),
+        "groups": {
+            g: {"parameters": sum(r["parameters"] for r in rs), "entries": rs}
             for g, rs in rows.items()
         },
-        tied_lm_head="embedding.weight; counted once",
-    )
+        "tied_lm_head": "embedding.weight; counted once",
+    }
 
 
 def public_fingerprint(model):

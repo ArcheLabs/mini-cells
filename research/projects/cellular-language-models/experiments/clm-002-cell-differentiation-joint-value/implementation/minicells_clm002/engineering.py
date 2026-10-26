@@ -1,30 +1,31 @@
 """One CPU Gate 0 transaction, reusable reports, no GPU scientific executor."""
 
 import copy
-
 import csv
-import platform
 import importlib.metadata
+import platform
 import random
 import time
 from pathlib import Path
+
 import numpy as np
 import torch
 from minicells_r3e.common import fingerprint
-from .common import BASE, ID, atomic, read, digest, sha, identity
-from .native import build, treatment, public_fingerprint
-from .engine import Engine
+
+from . import publication
+from .audit import historical_audit, reserve_seeds
+from .common import BASE, ID, atomic, digest, identity, read, sha
 from .data import PairedStream, unit_pools
+from .engine import Engine
+from .gates import status
 from .measurement import (
     contributions,
-    specialization,
-    profile_once,
-    js_divergence,
     gradient_exposure,
+    js_divergence,
+    profile_once,
+    specialization,
 )
-from .gates import status
-from .audit import historical_audit, reserve_seeds
-from . import publication
+from .native import build, public_fingerprint, treatment
 
 
 def _write_json(path, ident, value):
@@ -53,28 +54,28 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
                     or (root / name).stat().st_size != row["bytes"]
                 ):
                     raise RuntimeError("CLM002_RETAINED_REPORT_CHANGED")
-            return dict(
-                status=existing["run_status"],
-                output=str(root),
-                scientific_optimizer_updates=0,
-                reused_completed=True,
-                publication=publication.publish(root) if publish_github else None,
-            )
-    manifest = dict(
-        identity=ident,
-        experiment_id=ID,
-        run_id=ident["run_id"],
-        source_sha=ident["source_sha"],
-        config_sha256=ident["config_sha256"],
-        scope=ident["scope"],
-        run_status="CPU_ENGINEERING_STARTED",
-        scientific_optimizer_updates=0,
-        gpu_used=False,
-        confirmation_materialized=False,
-        publication_status="NOT_REQUESTED",
-        artifact_files={},
-        started_at_unix=time.time(),
-    )
+            return {
+                "status": existing["run_status"],
+                "output": str(root),
+                "scientific_optimizer_updates": 0,
+                "reused_completed": True,
+                "publication": publication.publish(root) if publish_github else None,
+            }
+    manifest = {
+        "identity": ident,
+        "experiment_id": ID,
+        "run_id": ident["run_id"],
+        "source_sha": ident["source_sha"],
+        "config_sha256": ident["config_sha256"],
+        "scope": ident["scope"],
+        "run_status": "CPU_ENGINEERING_STARTED",
+        "scientific_optimizer_updates": 0,
+        "gpu_used": False,
+        "confirmation_materialized": False,
+        "publication_status": "NOT_REQUESTED",
+        "artifact_files": {},
+        "started_at_unix": time.time(),
+    }
     atomic(manifest_path, manifest)
     if publish_github:
         publication.preflight(root)
@@ -102,7 +103,7 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
         pools = unit_pools(c)
         data_sha = sha(
             {
-                name: [dict(x=r["x"].tolist(), y=r["y"].tolist()) for r in rows]
+                name: [{"x": r["x"].tolist(), "y": r["y"].tolist()} for r in rows]
                 for name, rows in pools.items()
             }
         )
@@ -157,25 +158,25 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
             with tr.journal.phase("offline_task_gradient_measurement"):
                 gradients = gradient_exposure(tr.model, rows)
             matrix_summary = specialization(matrix)
-            matrices[arm] = dict(
-                tasks=matrix,
-                specialization=matrix_summary,
-                task_gradient_exposure=gradients,
-                routing_js=js_divergence(
+            matrices[arm] = {
+                "tasks": matrix,
+                "specialization": matrix_summary,
+                "task_gradient_exposure": gradients,
+                "routing_js": js_divergence(
                     matrix["Story"]["call_counts"], matrix["Arithmetic"]["call_counts"]
                 ),
-            )
+            }
             profiles[arm] = profile
-            restore[arm] = dict(local_cpu_full_state_exact=exact, cross_session_verified=False)
-            results[arm] = dict(
-                scope="SYNTHETIC_CPU_ENGINEERING_TOKEN_MODEL_NOT_SCIENTIFIC_RESULTS",
-                curve=tr.curve,
-                mask={n: p.requires_grad for n, p in tr.model.named_parameters()},
-                shared_initial_checkpoint_sha256=tr.parent_sha,
-                public_parameters_unchanged=True,
-                task_labels_enter_model=False,
-                parameter_groups_moved=moved,
-            )
+            restore[arm] = {"local_cpu_full_state_exact": exact, "cross_session_verified": False}
+            results[arm] = {
+                "scope": "SYNTHETIC_CPU_ENGINEERING_TOKEN_MODEL_NOT_SCIENTIFIC_RESULTS",
+                "curve": tr.curve,
+                "mask": {n: p.requires_grad for n, p in tr.model.named_parameters()},
+                "shared_initial_checkpoint_sha256": tr.parent_sha,
+                "public_parameters_unchanged": True,
+                "task_labels_enter_model": False,
+                "parameter_groups_moved": moved,
+            }
             cost[arm] = tr.journal.summary()
             cost[arm]["effective_targets_attempted"] = sum(
                 e["data"].get("target_tokens", 0)
@@ -188,36 +189,36 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
             )
             child = dict(ident, seed=seed, task_condition="H", arm=arm)
             files = {
-                "RUN_MANIFEST.json": dict(
-                    parent_checkpoint="SYNTHETIC_CPU_BASELINE_NOT_HISTORICAL_PARENT",
-                    run_status="CPU_UNIT_COMPLETE",
-                    effective_targets=tr.tokens,
-                    logical_updates=tr.step,
-                    model_sha256=fingerprint(tr.model.state_dict()),
-                    model_config_sha256=sha(rc),
-                    data_manifest_sha256=data_sha,
-                    tokenizer_identity="SYNTHETIC_RANDOM_TOKEN_IDS_NO_TOKENIZER",
-                    historical_tokenizer_expected_sha256=c["substrate"]["tokenizer_sha256"],
-                    parent_checkpoint_sha256=tr.parent_sha,
-                    parameter_update_list=[
+                "RUN_MANIFEST.json": {
+                    "parent_checkpoint": "SYNTHETIC_CPU_BASELINE_NOT_HISTORICAL_PARENT",
+                    "run_status": "CPU_UNIT_COMPLETE",
+                    "effective_targets": tr.tokens,
+                    "logical_updates": tr.step,
+                    "model_sha256": fingerprint(tr.model.state_dict()),
+                    "model_config_sha256": sha(rc),
+                    "data_manifest_sha256": data_sha,
+                    "tokenizer_identity": "SYNTHETIC_RANDOM_TOKEN_IDS_NO_TOKENIZER",
+                    "historical_tokenizer_expected_sha256": c["substrate"]["tokenizer_sha256"],
+                    "parent_checkpoint_sha256": tr.parent_sha,
+                    "parameter_update_list": [
                         n for n, p in tr.model.named_parameters() if p.requires_grad
                     ],
-                    runtime=dict(
-                        python=platform.python_version(),
-                        torch=importlib.metadata.version("torch"),
-                        numpy=importlib.metadata.version("numpy"),
-                        hardware="CPU",
-                    ),
-                    rng_sha256=fingerprint(
+                    "runtime": {
+                        "python": platform.python_version(),
+                        "torch": importlib.metadata.version("torch"),
+                        "numpy": importlib.metadata.version("numpy"),
+                        "hardware": "CPU",
+                    },
+                    "rng_sha256": fingerprint(
                         (tr.route_rng.get_state(), tr.cf_rng.get_state(), stream.state())
                     ),
-                    scientific_optimizer_updates=0,
-                ),
-                "CONFIG.json": dict(configuration=c),
-                "METRICS.json": dict(unit_curve=tr.curve, scientific_results=False),
+                    "scientific_optimizer_updates": 0,
+                },
+                "CONFIG.json": {"configuration": c},
+                "METRICS.json": {"unit_curve": tr.curve, "scientific_results": False},
                 "CELL_SPECIALIZATION.json": matrices[arm],
-                "ROUTING_SUMMARY.json": dict(tasks=matrix, scientific_claim=False),
-                "TRAINING_COST.json": dict(attempts=cost[arm], offline_profile=profile),
+                "ROUTING_SUMMARY.json": {"tasks": matrix, "scientific_claim": False},
+                "TRAINING_COST.json": {"attempts": cost[arm], "offline_profile": profile},
                 "CHECKPOINT_MANIFEST.json": dict(
                     receipt=tr.save(checkpoint, stream),
                     private_checkpoint_retained=True,
@@ -228,9 +229,10 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
                 if name != "RUN_MANIFEST.json":
                     _write_json(destination / name, child, value)
             files["RUN_MANIFEST.json"]["artifact_files"] = {
-                name: dict(
-                    bytes=(destination / name).stat().st_size, sha256=digest(destination / name)
-                )
+                name: {
+                    "bytes": (destination / name).stat().st_size,
+                    "sha256": digest(destination / name),
+                }
                 for name in files
                 if name != "RUN_MANIFEST.json"
             }
@@ -256,39 +258,40 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
         reports = {
             "ARCHITECTURE_AUDIT.json": architecture,
             "DATA_BOUNDARY_PROOF.json": boundary,
-            "CONFIG.json": dict(configuration=c),
+            "CONFIG.json": {"configuration": c},
             "SEED_REGISTRY.json": seeds,
-            "CPU_ENGINEERING.json": dict(
-                status="CPU_ENGINEERING_PASS",
-                arms=results,
-                restoration=restore,
-                actual_cpu_unit_optimizer_calls=sum(
+            "CPU_ENGINEERING.json": {
+                "status": "CPU_ENGINEERING_PASS",
+                "arms": results,
+                "restoration": restore,
+                "actual_cpu_unit_optimizer_calls": sum(
                     row["completed_optimizer_calls"] for row in cost.values()
                 ),
-                scientific_updates=0,
-                gpu_used=False,
-                same_paired_data_order=True,
-                historical_parent_used_for_unit_training=False,
-                parent_inspected=architecture["parent_bytes_verified"],
-            ),
-            "MEASUREMENT_UNIT_PROOF.json": dict(
-                arms=matrices, scope="RANDOM_TOKEN_CPU_FIXTURE_NO_SCIENTIFIC_SPECIALIZATION_CLAIM"
-            ),
-            "COST_UNIT.json": dict(
-                arms=cost,
-                profiles=profiles,
-                gpu_time_seconds=None,
-                performance_extrapolation="UNKNOWN_NOT_MEASURED_ON_GPU",
-            ),
+                "scientific_updates": 0,
+                "gpu_used": False,
+                "same_paired_data_order": True,
+                "historical_parent_used_for_unit_training": False,
+                "parent_inspected": architecture["parent_bytes_verified"],
+            },
+            "MEASUREMENT_UNIT_PROOF.json": {
+                "arms": matrices,
+                "scope": "RANDOM_TOKEN_CPU_FIXTURE_NO_SCIENTIFIC_SPECIALIZATION_CLAIM",
+            },
+            "COST_UNIT.json": {
+                "arms": cost,
+                "profiles": profiles,
+                "gpu_time_seconds": None,
+                "performance_extrapolation": "UNKNOWN_NOT_MEASURED_ON_GPU",
+            },
             "GATE_STATUS.json": gates,
-            "DECISION.json": dict(
-                status="INCOMPLETE_OR_PROTOCOL_VIOLATION",
-                category="PREREQUISITES_INCOMPLETE_NOT_SCIENTIFIC_NEGATIVE_RESULT",
-                engineering_status="CPU_ENGINEERING_PASS",
-                scientific_training_started=False,
-                stage_b_authorized=False,
-                blockers=gates["blockers"],
-            ),
+            "DECISION.json": {
+                "status": "INCOMPLETE_OR_PROTOCOL_VIOLATION",
+                "category": "PREREQUISITES_INCOMPLETE_NOT_SCIENTIFIC_NEGATIVE_RESULT",
+                "engineering_status": "CPU_ENGINEERING_PASS",
+                "scientific_training_started": False,
+                "stage_b_authorized": False,
+                "blockers": gates["blockers"],
+            },
         }
         for name, value in reports.items():
             _write_json(root / name, ident, value)
@@ -334,14 +337,15 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
         )
         for path in root.rglob("*"):
             if path.is_file() and publication.permitted(str(path.relative_to(root))):
-                manifest["artifact_files"][str(path.relative_to(root))] = dict(
-                    bytes=path.stat().st_size, sha256=digest(path)
-                )
+                manifest["artifact_files"][str(path.relative_to(root))] = {
+                    "bytes": path.stat().st_size,
+                    "sha256": digest(path),
+                }
         atomic(manifest_path, manifest)
         if publish_github:
             try:
                 publication.publish(root)
-            except Exception as publication_error:
+            except publication.PublicationError as publication_error:
                 print(
                     "[CLM002 CPU] Partial report return failed; Output retained: "
                     + type(publication_error).__name__,
@@ -350,16 +354,17 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
         raise
     for path in root.rglob("*"):
         if path.is_file() and publication.permitted(str(path.relative_to(root))):
-            manifest["artifact_files"][str(path.relative_to(root))] = dict(
-                bytes=path.stat().st_size, sha256=digest(path)
-            )
+            manifest["artifact_files"][str(path.relative_to(root))] = {
+                "bytes": path.stat().st_size,
+                "sha256": digest(path),
+            }
     atomic(manifest_path, manifest)
     receipt = publication.publish(root) if publish_github else None
-    return dict(
-        status=manifest["run_status"],
-        output=str(root),
-        run_id=ident["run_id"],
-        scientific_optimizer_updates=0,
-        gpu_used=False,
-        publication=receipt,
-    )
+    return {
+        "status": manifest["run_status"],
+        "output": str(root),
+        "run_id": ident["run_id"],
+        "scientific_optimizer_updates": 0,
+        "gpu_used": False,
+        "publication": receipt,
+    }

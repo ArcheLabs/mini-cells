@@ -4,9 +4,13 @@ import copy
 import hashlib
 import json
 from pathlib import Path
-from minicells_r3k.reuse import bind
+
 from minicells_jct001 import publication as parent
-from .common import BASE, ROOT, ID, read, digest, sha
+from minicells_r3k.reuse import bind
+
+from .common import BASE, ID, ROOT, digest, read, sha
+
+PublicationError = parent.PublicationError
 
 REPORTS = BASE.relative_to(ROOT) / "reports/published/gate0"
 TOP = {
@@ -74,7 +78,7 @@ def payload(root):
         if (
             len(content) > parent.MAX_FILE_BYTES
             or total > parent.MAX_TOTAL_BYTES
-            or item != dict(bytes=len(content), sha256=digest(path))
+            or item != {"bytes": len(content), "sha256": digest(path)}
         ):
             raise parent.PublicationError("CLM002_REPORT_HASH_OR_SIZE_INVALID")
         if name.endswith(".json"):
@@ -94,7 +98,7 @@ def payload(root):
         json.dumps(snapshot, sort_keys=True, indent=2, allow_nan=False) + "\n"
     ).encode()
     index = {
-        name: dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+        name: {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
         for name, data in files.items()
     }
     return m, files, index, sha(index)

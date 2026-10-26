@@ -1,7 +1,7 @@
 import hashlib
 import json
-from pathlib import Path
 import subprocess
+from pathlib import Path
 
 BASE = Path(__file__).resolve().parents[2]
 ROOT = BASE.parents[4]
@@ -56,14 +56,14 @@ def identity(c):
         str(p.relative_to(ROOT)): digest(p) for p in sorted((BASE / "implementation").rglob("*.py"))
     }
     code["run.py"] = digest(BASE / "run.py")
-    value = dict(
-        experiment_id=ID,
-        source_sha=source,
-        config_sha256=sha(c),
-        code_sha256=sha(code),
-        scope="GATE0_SYNTHETIC_CPU_ONLY",
-        scientific_training_authorized=False,
-    )
+    value = {
+        "experiment_id": ID,
+        "source_sha": source,
+        "config_sha256": sha(c),
+        "code_sha256": sha(code),
+        "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+        "scientific_training_authorized": False,
+    }
     value["run_id"] = sha(value)[:32]
     return value
 

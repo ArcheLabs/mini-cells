@@ -3,17 +3,19 @@
 import copy
 import os
 import random
-from pathlib import Path
 import tempfile
+from pathlib import Path
+
 import numpy as np
 import torch
+from minicells_jct001.connection import TorchAdapter
+from minicells_jct001.cost import Journal
 from minicells_r3e import policy_proposal as source
 from minicells_r3e.common import fingerprint
 from minicells_r3k.reuse import bind
-from minicells_jct001.cost import Journal
-from minicells_jct001.connection import TorchAdapter
-from .native import masks, treatment, public_fingerprint
+
 from .measurement import nll
+from .native import masks, public_fingerprint, treatment
 
 
 class Engine:
@@ -80,32 +82,34 @@ class Engine:
 
     def state(self):
         return copy.deepcopy(
-            dict(
-                arm=self.arm,
-                parent_sha=self.parent_sha,
-                model=self.model.state_dict(),
-                cell_optimizer=self.cell_optimizer.state_dict(),
-                connection_optimizer=dict(
-                    lifecycle="FRESH_ADAMW_PER_PROPOSAL",
-                    last_completed=self.policy_optimizer_state,
-                    pending=None,
-                ),
-                step=self.step,
-                parent_step=self.parent_step,
-                tokens=self.tokens,
-                curve=self.curve,
-                data_rng=self.data_rng.bit_generator.state,
-                route_rng=self.route_rng.get_state(),
-                cf_rng=self.cf_rng.get_state(),
-                cpu_rng=torch.get_rng_state(),
-                python_rng=random.getstate(),
-                numpy_rng=np.random.get_state(),
-                schedule=dict(
-                    epsilon=self.epsilon(), temperature=self.model.temperature, rho=self.model.rho
-                ),
-                work=self.model.work,
-                parameter_mask={n: p.requires_grad for n, p in self.model.named_parameters()},
-            )
+            {
+                "arm": self.arm,
+                "parent_sha": self.parent_sha,
+                "model": self.model.state_dict(),
+                "cell_optimizer": self.cell_optimizer.state_dict(),
+                "connection_optimizer": {
+                    "lifecycle": "FRESH_ADAMW_PER_PROPOSAL",
+                    "last_completed": self.policy_optimizer_state,
+                    "pending": None,
+                },
+                "step": self.step,
+                "parent_step": self.parent_step,
+                "tokens": self.tokens,
+                "curve": self.curve,
+                "data_rng": self.data_rng.bit_generator.state,
+                "route_rng": self.route_rng.get_state(),
+                "cf_rng": self.cf_rng.get_state(),
+                "cpu_rng": torch.get_rng_state(),
+                "python_rng": random.getstate(),
+                "numpy_rng": np.random.get_state(),
+                "schedule": {
+                    "epsilon": self.epsilon(),
+                    "temperature": self.model.temperature,
+                    "rho": self.model.rho,
+                },
+                "work": self.model.work,
+                "parameter_mask": {n: p.requires_grad for n, p in self.model.named_parameters()},
+            }
         )
 
     def _values(self, state):
@@ -134,13 +138,13 @@ class Engine:
     def save(self, path, stream):
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        payload = dict(
-            identity=self.identity,
-            state=self.state(),
-            stream=stream.state(),
-            public_sha=self.public_sha,
-            watermark=self.journal.watermark(),
-        )
+        payload = {
+            "identity": self.identity,
+            "state": self.state(),
+            "stream": stream.state(),
+            "public_sha": self.public_sha,
+            "watermark": self.journal.watermark(),
+        }
         payload["full_state_sha256"] = fingerprint((payload["state"], payload["stream"]))
         fd, name = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
         os.close(fd)
@@ -152,13 +156,13 @@ class Engine:
         finally:
             if os.path.exists(name):
                 os.unlink(name)
-        return dict(
-            sha256=__import__("hashlib").sha256(path.read_bytes()).hexdigest(),
-            bytes=path.stat().st_size,
-            step=self.step,
-            local_full_state_sha256=payload["full_state_sha256"],
-            cross_session_verified=False,
-        )
+        return {
+            "sha256": __import__("hashlib").sha256(path.read_bytes()).hexdigest(),
+            "bytes": path.stat().st_size,
+            "step": self.step,
+            "local_full_state_sha256": payload["full_state_sha256"],
+            "cross_session_verified": False,
+        }
 
     def restore(self, path, stream):
         saved = torch.load(path, map_location="cpu", weights_only=False)
@@ -199,12 +203,12 @@ class Engine:
         before = {n: p.detach().clone() for n, p in self.model.named_parameters()}
         self.journal.append(
             "ATTEMPT_BEGIN",
-            dict(
-                id=attempt,
-                logical_step=self.step + 1,
-                examples=self.c["engine"]["training"]["effective_batch"],
-                target_tokens=stream.target_tokens,
-            ),
+            {
+                "id": attempt,
+                "logical_step": self.step + 1,
+                "examples": self.c["engine"]["training"]["effective_batch"],
+                "target_tokens": stream.target_tokens,
+            },
         )
         try:
             rows = stream.next()
@@ -285,10 +289,10 @@ class Engine:
                 self.policy_optimizer_state = proposal.pop("proposal_optimizer_final_state")
                 self.journal.append(
                     "AUXILIARY_LABEL_WORK",
-                    dict(
-                        target_evaluations=proposal["counterfactual_states"]
+                    {
+                        "target_evaluations": proposal["counterfactual_states"]
                         * proposal["actions_per_state"]
-                    ),
+                    },
                 )
             if failure_hook:
                 failure_hook(self)
@@ -300,20 +304,20 @@ class Engine:
             self.step += 1
             self.tokens += valid_tokens
             self.curve.append(
-                dict(
-                    step=self.step,
-                    effective_targets=valid_tokens,
-                    loss=float(np.mean(losses)),
-                    input_sha256=fingerprint([(r["x"], r["y"], r["valid"]) for r in rows]),
-                    cell_call_counts=exposure.tolist(),
-                    cell_gradient_norms=grad_norms,
-                    task_cell_call_counts={
+                {
+                    "step": self.step,
+                    "effective_targets": valid_tokens,
+                    "loss": float(np.mean(losses)),
+                    "input_sha256": fingerprint([(r["x"], r["y"], r["valid"]) for r in rows]),
+                    "cell_call_counts": exposure.tolist(),
+                    "cell_gradient_norms": grad_norms,
+                    "task_cell_call_counts": {
                         task: value.tolist() for task, value in task_exposure.items()
                     },
-                    main_gradient_norm_scope="ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
-                    zero_gradient_cells=[i for i, g in enumerate(grad_norms) if g == 0],
-                    proposal=proposal,
-                    parameter_delta={
+                    "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+                    "zero_gradient_cells": [i for i, g in enumerate(grad_norms) if g == 0],
+                    "proposal": proposal,
+                    "parameter_delta": {
                         g: float(
                             sum(
                                 (p.detach() - before[n]).square().sum()
@@ -323,13 +327,15 @@ class Engine:
                         )
                         for g in ("cells", "connection")
                     },
-                )
+                }
             )
             with self.journal.phase("atomic_checkpoint"):
                 receipt = self.save(checkpoint, stream)
-            self.journal.append("LOGICAL_COMMIT", dict(step=self.step))
-            self.journal.append("ATTEMPT_END", dict(id=attempt))
+            self.journal.append("LOGICAL_COMMIT", {"step": self.step})
+            self.journal.append("ATTEMPT_END", {"id": attempt})
             return receipt
         except Exception as error:
-            self.journal.append("ATTEMPT_ERROR", dict(id=attempt, error_type=type(error).__name__))
+            self.journal.append(
+                "ATTEMPT_ERROR", {"id": attempt, "error_type": type(error).__name__}
+            )
             raise

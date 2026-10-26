@@ -1,20 +1,20 @@
 import numpy as np
 import pytest
 import torch
-from minicells_r3e.common import fingerprint
-from minicells_clm002.native import build, masks, classify, treatment, public_fingerprint
+from minicells_clm002.data import PairedStream, allocation_audit, unit_pools
 from minicells_clm002.engine import Engine
-from minicells_clm002.data import PairedStream, unit_pools, allocation_audit
 from minicells_clm002.measurement import (
-    replay,
-    nll,
+    arithmetic_generation,
     contributions,
-    specialization,
     gradient_exposure,
     js_divergence,
+    nll,
+    replay,
     route_switch,
-    arithmetic_generation,
+    specialization,
 )
+from minicells_clm002.native import build, classify, masks, public_fingerprint, treatment
+from minicells_r3e.common import fingerprint
 
 
 def setup(config, ident, tmp_path, arm="B11-H"):
@@ -41,7 +41,7 @@ def test_parameter_boundaries(config, arm):
     flags = masks(model, arm)
     cells, connection = treatment(arm)
     assert all(
-        value == dict(cells=cells, connection=connection, public=False)[classify(name)]
+        value == {"cells": cells, "connection": connection, "public": False}[classify(name)]
         for name, value in flags.items()
     )
     assert not model.embedding.weight.requires_grad and not model.final.weight.requires_grad
@@ -96,7 +96,7 @@ def test_pairing_effective_token_fairness_restore(config):
 
 @pytest.mark.parametrize("arm", ["B00-H", "B10-H", "B01-H", "B11-H"])
 def test_actual_native_updates_and_restore(config, ident, tmp_path, arm):
-    tr, stream, base, pools = setup(config, ident, tmp_path, arm)
+    tr, stream, _base, pools = setup(config, ident, tmp_path, arm)
     initial = public_fingerprint(tr.model)
     path = tmp_path / "state.pt"
     tr.update(stream, path, [pools["Story"][0]["x"]])
@@ -163,10 +163,10 @@ def test_measurements_are_readonly_and_task_labels_not_router_inputs(config):
 
 
 def test_bidirectional_specialization_requires_exposure():
-    tasks = dict(
-        Story=dict(D=[0.04, 0, 9.0], call_share=[0.5, 0.5, 0]),
-        Arithmetic=dict(D=[0, 0.05, 0], call_share=[0.5, 0.5, 0]),
-    )
+    tasks = {
+        "Story": {"D": [0.04, 0, 9.0], "call_share": [0.5, 0.5, 0]},
+        "Arithmetic": {"D": [0, 0.05, 0], "call_share": [0.5, 0.5, 0]},
+    }
     result = specialization(tasks)
     assert result["S"] == pytest.approx(0.04) and result["story_preferring_exposed_cells"] == [0]
     tasks["Story"]["call_share"][0] = 0
@@ -177,25 +177,29 @@ def test_bidirectional_specialization_requires_exposure():
 def test_arithmetic_generation_stops_at_context_limit(config):
     model, _ = build(config, 7001, True)
     result = arithmetic_generation(
-        model, [dict(prompt_tokens=[1], answer_tokens=[2])], eos_id=0, max_new_tokens=2
+        model, [{"prompt_tokens": [1], "answer_tokens": [2]}], eos_id=0, max_new_tokens=2
     )
     assert len(result["records"]) == 1
     with pytest.raises(ValueError, match="CONTEXT_BUDGET"):
-        arithmetic_generation(model, [dict(prompt_tokens=[1, 2, 3], answer_tokens=[])], 0, 2)
+        arithmetic_generation(model, [{"prompt_tokens": [1, 2, 3], "answer_tokens": []}], 0, 2)
 
 
 def test_content_and_token_conflicts_are_not_hidden():
     rows = [
-        dict(
-            role="train",
-            task="Story",
-            text="Ｆoo   bar",
-            tokens=[1, 2, 3, 4],
-            tokenizer_sha256="same",
-        ),
-        dict(
-            role="dev", task="Story", text="foo bar", tokens=[1, 2, 3, 4], tokenizer_sha256="same"
-        ),
+        {
+            "role": "train",
+            "task": "Story",
+            "text": "Ｆoo   bar",
+            "tokens": [1, 2, 3, 4],
+            "tokenizer_sha256": "same",
+        },
+        {
+            "role": "dev",
+            "task": "Story",
+            "text": "foo bar",
+            "tokens": [1, 2, 3, 4],
+            "tokenizer_sha256": "same",
+        },
     ]
     proof = allocation_audit(rows)
     assert proof["status"] == "CONFLICT"
@@ -208,26 +212,26 @@ def test_content_and_token_conflicts_are_not_hidden():
 
 def test_arithmetic_group_boundaries_and_unknown_coverage():
     rows = [
-        dict(
-            role="train",
-            task="Arithmetic",
-            text="a b c d e",
-            tokens=[1, 2, 3, 4],
-            tokenizer_sha256="t",
-            template_family="a",
-            operator_combination="+",
-            numeric_range=[0, 10],
-        ),
-        dict(
-            role="dev",
-            task="Arithmetic",
-            text="u v w x y",
-            tokens=[5, 6, 7, 8],
-            tokenizer_sha256="t",
-            template_family="b",
-            operator_combination="*",
-            numeric_range=[10, 20],
-        ),
+        {
+            "role": "train",
+            "task": "Arithmetic",
+            "text": "a b c d e",
+            "tokens": [1, 2, 3, 4],
+            "tokenizer_sha256": "t",
+            "template_family": "a",
+            "operator_combination": "+",
+            "numeric_range": [0, 10],
+        },
+        {
+            "role": "dev",
+            "task": "Arithmetic",
+            "text": "u v w x y",
+            "tokens": [5, 6, 7, 8],
+            "tokenizer_sha256": "t",
+            "template_family": "b",
+            "operator_combination": "*",
+            "numeric_range": [10, 20],
+        },
     ]
     assert allocation_audit(rows)["status"] == "UNKNOWN_HISTORICAL_COVERAGE"
     rows[1]["template_family"] = "a"

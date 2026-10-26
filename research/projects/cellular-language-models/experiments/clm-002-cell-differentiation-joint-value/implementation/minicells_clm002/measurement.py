@@ -1,14 +1,15 @@
 """Fixed-path Cell contribution: selected residual is zeroed; routes cannot adapt."""
 
-from contextlib import contextmanager
 import math
 import time
+from contextlib import contextmanager
 from types import SimpleNamespace
+
 import numpy as np
 import torch
-from torch.nn import functional as F
-from minicells_r3e.common import fingerprint
 from minicells_r3c_moe_bridge.instrumentation import MatmulAudit
+from minicells_r3e.common import fingerprint
+from torch.nn import functional as F
 
 
 @contextmanager
@@ -90,14 +91,14 @@ def contributions(model, batches, epsilon=1e-12):
                 raise RuntimeError("CLM002_FIXED_REPLAY_PARITY_FAILED")
             row = tasks.setdefault(
                 batch["task"],
-                dict(
-                    tokens=0,
-                    loss_sum=0.0,
-                    fixed=np.zeros(len(model.cells)),
-                    closed=np.zeros(len(model.cells)),
-                    counts=np.zeros(len(model.cells)),
-                    paths=[],
-                ),
+                {
+                    "tokens": 0,
+                    "loss_sum": 0.0,
+                    "fixed": np.zeros(len(model.cells)),
+                    "closed": np.zeros(len(model.cells)),
+                    "counts": np.zeros(len(model.cells)),
+                    "paths": [],
+                },
             )
             row["tokens"] += weight
             row["loss_sum"] += float(base) * weight
@@ -120,39 +121,39 @@ def contributions(model, batches, epsilon=1e-12):
         fixed = row["fixed"] / row["tokens"]
         closed = row["closed"] / row["tokens"]
         counts = row["counts"]
-        result[task] = dict(
-            nll=base,
-            ppl=math.exp(base) if base < 700 else None,
-            tokens=row["tokens"],
-            fixed_nll=fixed.tolist(),
-            closed_loop_nll=closed.tolist(),
-            D=((fixed - base) / max(abs(base), epsilon)).tolist(),
-            call_counts=counts.astype(int).tolist(),
-            call_share=(counts / max(1, counts.sum())).tolist(),
-            paths_sha256=fingerprint(row["paths"]),
-        )
+        result[task] = {
+            "nll": base,
+            "ppl": math.exp(base) if base < 700 else None,
+            "tokens": row["tokens"],
+            "fixed_nll": fixed.tolist(),
+            "closed_loop_nll": closed.tolist(),
+            "D": ((fixed - base) / max(abs(base), epsilon)).tolist(),
+            "call_counts": counts.astype(int).tolist(),
+            "call_share": (counts / max(1, counts.sum())).tolist(),
+            "paths_sha256": fingerprint(row["paths"]),
+        }
     if fingerprint(model.state_dict()) != original:
         raise RuntimeError("CLM002_READ_ONLY_MEASUREMENT_MUTATED_MODEL")
     return result
 
 
 def specialization(tasks, minimum_share=0.01):
-    if set(tasks) != set(("Story", "Arithmetic")):
+    if set(tasks) != {"Story", "Arithmetic"}:
         raise ValueError("CLM002_BOTH_EVALUATION_TASKS_REQUIRED")
     story, arith = tasks["Story"], tasks["Arithmetic"]
     s = np.array(story["D"]) - np.array(arith["D"])
     pos = [i for i, v in enumerate(story["call_share"]) if v >= minimum_share and s[i] > 0]
     neg = [i for i, v in enumerate(arith["call_share"]) if v >= minimum_share and s[i] < 0]
     score = min(max(s[i] for i in pos), -min(s[i] for i in neg)) if pos and neg else 0.0
-    return dict(
-        S=float(score),
-        s=s.tolist(),
-        story_preferring_exposed_cells=pos,
-        arithmetic_preferring_exposed_cells=neg,
-        bidirectional=bool(pos and neg),
-        minimum_share=minimum_share,
-        scientific_decision=False,
-    )
+    return {
+        "S": float(score),
+        "s": s.tolist(),
+        "story_preferring_exposed_cells": pos,
+        "arithmetic_preferring_exposed_cells": neg,
+        "bidirectional": bool(pos and neg),
+        "minimum_share": minimum_share,
+        "scientific_decision": False,
+    }
 
 
 def js_divergence(a, b):
@@ -183,21 +184,23 @@ def profile_once(model, tokens, repeats=3):
             if tokens.is_cuda:
                 torch.cuda.synchronize(tokens.device)
             intervals.append((time.perf_counter() - start) * 1000)
-    return dict(
-        observed_shape_gemm=gemm,
-        p50_ms=float(np.percentile(intervals, 50)),
-        p95_ms=float(np.percentile(intervals, 95)),
-        repeats=repeats,
-        device=str(tokens.device),
-        batch=tokens.shape[0],
-        sequence=tokens.shape[1],
-        precision=str(out.logits.dtype),
-        cache="STATIC_INPUT_MEMORY_REBUILT_EACH_FORWARD",
-        actual_cell_calls=int(out.operator_rows.sum()),
-        calls_per_token=float(out.operator_rows.sum()) / tokens.numel(),
-        peak_cuda_bytes=torch.cuda.max_memory_allocated(tokens.device) if tokens.is_cuda else None,
-        scope="ISOLATED_INFERENCE_PROFILE_NOT_TRAINING_RESIDENT; NO_DRAM_OR_MOBILE_CLAIM",
-    )
+    return {
+        "observed_shape_gemm": gemm,
+        "p50_ms": float(np.percentile(intervals, 50)),
+        "p95_ms": float(np.percentile(intervals, 95)),
+        "repeats": repeats,
+        "device": str(tokens.device),
+        "batch": tokens.shape[0],
+        "sequence": tokens.shape[1],
+        "precision": str(out.logits.dtype),
+        "cache": "STATIC_INPUT_MEMORY_REBUILT_EACH_FORWARD",
+        "actual_cell_calls": int(out.operator_rows.sum()),
+        "calls_per_token": float(out.operator_rows.sum()) / tokens.numel(),
+        "peak_cuda_bytes": torch.cuda.max_memory_allocated(tokens.device)
+        if tokens.is_cuda
+        else None,
+        "scope": "ISOLATED_INFERENCE_PROFILE_NOT_TRAINING_RESIDENT; NO_DRAM_OR_MOBILE_CLAIM",
+    }
 
 
 def gradient_exposure(model, batches):
@@ -222,12 +225,12 @@ def gradient_exposure(model, batches):
                     offset += length
                     values = [g.square().sum() for g in part if g is not None]
                     norms.append(float(torch.stack(values).sum().sqrt()) if values else 0.0)
-                result[row["task"]] = dict(
-                    norms=norms,
-                    zero_gradient_cells=[i for i, n in enumerate(norms) if n == 0],
-                    call_counts=out.operator_rows.sum(0).cpu().tolist(),
-                    scope="OFFLINE_CHECKPOINT_GRADIENT_PROBE_NO_OPTIMIZER_STEP",
-                )
+                result[row["task"]] = {
+                    "norms": norms,
+                    "zero_gradient_cells": [i for i, n in enumerate(norms) if n == 0],
+                    "call_counts": out.operator_rows.sum(0).cpu().tolist(),
+                    "scope": "OFFLINE_CHECKPOINT_GRADIENT_PROBE_NO_OPTIMIZER_STEP",
+                }
     finally:
         for n, p in model.named_parameters():
             p.requires_grad_(flags[n])
@@ -239,10 +242,10 @@ def gradient_exposure(model, batches):
 def route_switch(previous, current, previous_probe_sha, current_probe_sha):
     if previous_probe_sha != current_probe_sha or previous.shape != current.shape:
         raise ValueError("CLM002_FIXED_PROBE_IDENTITY_CHANGED")
-    return dict(
-        action_change=float((previous != current).float().mean()),
-        path_change=float((previous != current).any(-1).float().mean()),
-    )
+    return {
+        "action_change": float((previous != current).float().mean()),
+        "path_change": float((previous != current).any(-1).float().mean()),
+    }
 
 
 @torch.no_grad()
@@ -266,17 +269,17 @@ def arithmetic_generation(model, questions, eos_id, max_new_tokens):
                     break
             answer = generated[:-1] if generated and generated[-1] == eos_id else generated
             records.append(
-                dict(
-                    generated_token_ids=generated,
-                    first_token_correct=bool(
+                {
+                    "generated_token_ids": generated,
+                    "first_token_correct": bool(
                         expected and generated and generated[0] == expected[0]
                     ),
-                    exact_match=answer == expected,
-                    eos_generated=bool(generated and generated[-1] == eos_id),
-                )
+                    "exact_match": answer == expected,
+                    "eos_generated": bool(generated and generated[-1] == eos_id),
+                }
             )
-    return dict(
-        records=records,
-        exact_match=sum(r["exact_match"] for r in records) / len(records) if records else None,
-        scope="REGISTERED_QUESTION_TOKENS_REQUIRED; NEVER_ACCESS_CONFIRMATION_FROM_ENGINEERING",
-    )
+    return {
+        "records": records,
+        "exact_match": sum(r["exact_match"] for r in records) / len(records) if records else None,
+        "scope": "REGISTERED_QUESTION_TOKENS_REQUIRED; NEVER_ACCESS_CONFIRMATION_FROM_ENGINEERING",
+    }

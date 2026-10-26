@@ -1,6 +1,7 @@
-from pathlib import Path
 import copy
 import runpy
+from pathlib import Path
+
 import pytest
 import torch
 
@@ -24,12 +25,12 @@ def config():
 
 @pytest.fixture
 def ident():
-    return dict(
-        experiment_id="CLM-002-DIFF-JOINT-VALUE-001",
-        source_sha="a" * 40,
-        config_sha256="b" * 64,
-        code_sha256="c" * 64,
-        scope="GATE0_SYNTHETIC_CPU_ONLY",
-        scientific_training_authorized=False,
-        run_id="d" * 32,
-    )
+    return {
+        "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+        "source_sha": "a" * 40,
+        "config_sha256": "b" * 64,
+        "code_sha256": "c" * 64,
+        "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+        "scientific_training_authorized": False,
+        "run_id": "d" * 32,
+    }
