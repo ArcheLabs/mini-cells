@@ -27,6 +27,7 @@ class Engine:
         self.unit = unit
         self.step = 0
         self.parent_step = 0
+        self.parent_origin = None
         self.tokens = 0
         self.curve = []
         self.policy_optimizer_state = None
@@ -94,6 +95,7 @@ class Engine:
                 },
                 "step": self.step,
                 "parent_step": self.parent_step,
+                "parent_origin": copy.deepcopy(self.parent_origin),
                 "tokens": self.tokens,
                 "curve": self.curve,
                 "data_rng": self.data_rng.bit_generator.state,
@@ -123,6 +125,7 @@ class Engine:
         self.policy_optimizer_state = copy.deepcopy(state["connection_optimizer"]["last_completed"])
         for key in ("step", "parent_step", "tokens", "curve"):
             setattr(self, key, copy.deepcopy(state[key]))
+        self.parent_origin = copy.deepcopy(state.get("parent_origin"))
         self.data_rng.bit_generator.state = copy.deepcopy(state["data_rng"])
         self.route_rng.set_state(state["route_rng"])
         self.cf_rng.set_state(state["cf_rng"])

@@ -47,7 +47,7 @@ def permitted(name):
     path = Path(name)
     if path.is_absolute() or ".." in path.parts:
         return False
-    return name in TOP or (
+    return name in TOP or name == "PARENT_FORK_AUDIT.json" or (
         len(path.parts) == 7 and path.parts[0] == "artifacts" and path.name in ARM
     )
 
@@ -57,7 +57,7 @@ def payload(root):
     m = read(root / "RUN_MANIFEST.json")
     if (
         m.get("experiment_id") != ID
-        or m.get("scope") != "GATE0_SYNTHETIC_CPU_ONLY"
+        or m.get("scope") not in ("GATE0_SYNTHETIC_CPU_ONLY", "GATE0_CPU_PARENT_FORK_ONLY")
         or m.get("scientific_optimizer_updates") != 0
         or m.get("confirmation_materialized") is not False
     ):
@@ -87,6 +87,8 @@ def payload(root):
                 raise parent.PublicationError("CLM002_REPORT_IDENTITY_MISMATCH")
         files[name] = content
     complete = m["run_status"] == "CPU_ENGINEERING_COMPLETE_GATE0_BLOCKED"
+    if m["scope"] == "GATE0_CPU_PARENT_FORK_ONLY" and set(files) != {"PARENT_FORK_AUDIT.json"}:
+        raise parent.PublicationError("CLM002_PARENT_FORK_REPORT_SCOPE_INVALID")
     if complete and not TOP <= set(files):
         raise parent.PublicationError("CLM002_REQUIRED_REPORTS_MISSING")
     snapshot = copy.deepcopy(m)

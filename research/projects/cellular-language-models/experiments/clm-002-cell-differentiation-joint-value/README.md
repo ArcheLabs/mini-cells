@@ -49,3 +49,9 @@
 Seed 证据的扫描提交先于该证据文件本身，不能把最终提交 SHA 嵌入自身。新版记录 scan_source_sha 和不可变的仓库外部扫描范围指纹；实际报告记录 execution_source_sha，并要求范围完全一致。任何范围变化都阻断并要求重扫；发现碰撞停止，不自动换 Seed。当前仍只是预留，不是科学确认注册。
 
 Notebook Run All **会写本地工程报告，并创建 GitHub results/clm002-gate0-* 白名单报告分支**。不会合并 main、上传权重/原始文本/私有 Token 数据，也不会启动科学训练。可选 HF 父权重及缓存仅放在 `/tmp`，不进入 Save Version Output；永久历史工件不删除。纯本地检查使用 run.py 默认模式、不传 --publish-github。
+
+## 后续闭合 002
+
+见 [registration/closure-002/REVIEW.md](registration/closure-002/REVIEW.md)。此前真实 Kaggle 父工件与 Secret 路径验收已通过，不需重跑旧工程 Notebook。本轮恢复 R3k/R3l 六角色的原成员身份，其中 R3k 两组 Token 数组及 windows.json 已按原完整文件哈希精确重建，R3l 四组精确 Token/窗口身份仍缺。原 14 项保留声明上界仍未知，全局独立性 BLOCKED。
+
+新增 `--mode inspect-initialization --checkpoint <固定原父对象> --output <目录> --publish-github` 是零前向、零反向、零优化器调用的 10-Arm CPU 分叉检查，不是训练入口。真实父对象上的本项新检查尚未执行。科学规则候选只供独立审阅，没有替换活动配置或授权阶段 A/B。当前不要求用户再跑 Kaggle；先处理剩余证据与协议修订。

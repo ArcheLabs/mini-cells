@@ -27,6 +27,7 @@ def main():
             "stage-b",
             "publish-existing",
             "inspect-parent",
+            "inspect-initialization",
             "analyze-existing",
         ),
         default="engineering",
@@ -60,6 +61,15 @@ def main():
         if args.checkpoint is None:
             parser.error("--checkpoint is required; historical bytes are never substituted")
         result = inspect_parent(c, args.checkpoint, args.output)
+    elif args.mode == "inspect-initialization":
+        from minicells_clm002.initialization import inspect_initialization
+        from minicells_clm002.publication import publish
+
+        if args.checkpoint is None:
+            parser.error("--checkpoint is required; no synthetic parent substitution")
+        root, result = inspect_initialization(c, args.checkpoint, args.output)
+        if args.publish_github:
+            result["publication"] = publish(root)
     else:
         from minicells_clm002.engineering import run
 
