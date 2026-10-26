@@ -105,3 +105,21 @@ def test_independent_readonly_analysis_has_no_model_updates(completed, tmp_path)
         child["artifact_files"]
         and child["tokenizer_identity"] == "SYNTHETIC_RANDOM_TOKEN_IDS_NO_TOKENIZER"
     )
+
+
+def test_failed_engineering_still_returns_partial_report(config, ident, tmp_path, monkeypatch):
+    seen = []
+    monkeypatch.setattr(engineering, "identity", lambda c: ident)
+    monkeypatch.setattr(publication, "preflight", lambda root: None)
+
+    def fail(c):
+        raise RuntimeError("CLM002_INJECTED_AUDIT_FAILURE")
+
+    monkeypatch.setattr(engineering, "historical_audit", fail)
+    monkeypatch.setattr(
+        publication, "publish", lambda root: seen.append(read(root / "RUN_MANIFEST.json"))
+    )
+    with pytest.raises(RuntimeError, match="INJECTED"):
+        engineering.run(config, tmp_path / "failed", publish_github=True)
+    assert len(seen) == 1 and seen[0]["run_status"] == "CPU_ENGINEERING_FAILED_GATE0_BLOCKED"
+    assert seen[0]["scientific_optimizer_updates"] == 0

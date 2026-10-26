@@ -332,7 +332,21 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
             finished_at_unix=time.time(),
             failure_type=type(error).__name__,
         )
+        for path in root.rglob("*"):
+            if path.is_file() and publication.permitted(str(path.relative_to(root))):
+                manifest["artifact_files"][str(path.relative_to(root))] = dict(
+                    bytes=path.stat().st_size, sha256=digest(path)
+                )
         atomic(manifest_path, manifest)
+        if publish_github:
+            try:
+                publication.publish(root)
+            except Exception as publication_error:
+                print(
+                    "[CLM002 CPU] Partial report return failed; Output retained: "
+                    + type(publication_error).__name__,
+                    flush=True,
+                )
         raise
     for path in root.rglob("*"):
         if path.is_file() and publication.permitted(str(path.relative_to(root))):
