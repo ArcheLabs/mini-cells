@@ -13,7 +13,7 @@ import torch
 from minicells_r3e.common import fingerprint
 
 from . import publication
-from .audit import historical_audit, reserve_seeds
+from .audit import historical_audit
 from .common import BASE, ID, atomic, digest, identity, read, sha
 from .data import PairedStream, unit_pools
 from .engine import Engine
@@ -26,6 +26,7 @@ from .measurement import (
     specialization,
 )
 from .native import build, public_fingerprint, treatment
+from .seeds import load_registry
 
 
 def _write_json(path, ident, value):
@@ -88,11 +89,7 @@ def run(c, output, publish_github=False, parent_checkpoint=None):
             parent_proof = inspect_parent(c, parent_checkpoint, root / "private/parent-inspection")
             architecture["parent_bytes_verified"] = True
             architecture["parent_inspection"] = parent_proof
-        seeds = (
-            read(BASE / "config/SEED_REGISTRY.json")
-            if (BASE / "config/SEED_REGISTRY.json").exists()
-            else reserve_seeds()
-        )
+        seeds = load_registry()
         seed = c["engineering"]["seed"]
         random.seed(seed)
         np.random.seed(seed)

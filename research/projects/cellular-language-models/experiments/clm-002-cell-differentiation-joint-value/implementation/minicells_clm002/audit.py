@@ -1,65 +1,20 @@
 """Read-only historical evidence audit. Missing identity is UNKNOWN, never inferred PASS."""
 
 import copy
-import subprocess
 from pathlib import Path
 
 import torch
 from minicells_r3e.common import fingerprint
 
-from .common import BASE, LINEAGE, ROOT, atomic, digest, git, read, sha
+from .common import BASE, LINEAGE, ROOT, atomic, digest, read, sha
 from .native import build, parameter_report
 
 
 def reserve_seeds():
-    policy = read(BASE / "config/SEED_SELECTION_POLICY.json")
-    selected = []
-    collisions = []
-    candidate = policy["start"]
-    exclude = ":(exclude)" + str(BASE.relative_to(ROOT)) + "/**"
-    while len(selected) < 13:
-        result = subprocess.run(
-            [
-                "git",
-                "grep",
-                "-I",
-                "-l",
-                "-E",
-                "(^|[^0-9])" + str(candidate) + "([^0-9]|$)",
-                "--",
-                ".",
-                exclude,
-            ],
-            cwd=ROOT,
-            text=True,
-            capture_output=True,
-            check=False,
-        )
-        if result.returncode not in (0, 1):
-            raise RuntimeError("CLM002_SEED_SCAN_FAILED")
-        if result.returncode == 0:
-            collisions.append({"seed": candidate, "source_files": result.stdout.splitlines()})
-        else:
-            selected.append(candidate)
-        candidate += 1
-    tracked = git("ls-files").splitlines()
-    missing = [p for p in tracked if not (ROOT / p).exists()]
-    return {
-        "status": "RESERVED_UNEXECUTED_METADATA_SEEDS_NOT_CONFIRMATION_REGISTRATION"
-        if not missing
-        else "UNKNOWN_SPARSE_COVERAGE",
-        "source_sha": git("rev-parse", "HEAD"),
-        "coverage": "ALL_PRESENT_GIT_TRACKED_TEXT; BINARY_CHECKPOINT_INTERNALS_NOT_SCANNED",
-        "missing_tracked_files": len(missing),
-        "tracked_file_count": len(tracked),
-        "collisions": collisions,
-        "development": selected[:3],
-        "stage_a_confirmation": selected[3:8],
-        "stage_b_confirmation": selected[8:],
-        "task_or_model_quality_used": False,
-        "all_groups_disjoint": len(set(selected)) == 13,
-        "scientific_training_started": False,
-    }
+    """Read-only rescan of current reservations; never silently choose replacement Seeds."""
+    from .seeds import refresh_registry
+
+    return refresh_registry(read(BASE / "config/SEED_REGISTRY.json"))
 
 
 def historical_audit(c):

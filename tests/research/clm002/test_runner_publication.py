@@ -17,7 +17,7 @@ def completed(config, ident, tmp_path, monkeypatch):
     monkeypatch.setattr(engineering, "identity", lambda c: ident)
     monkeypatch.setattr(
         engineering,
-        "reserve_seeds",
+        "load_registry",
         lambda: {
             "status": "UNIT_SEED_METADATA_ONLY",
             "development": [1, 2, 3],
