@@ -1,0 +1,68 @@
+{
+  "status": "EXACT_R3L_RESEARCH_ARRAYS_AND_WINDOWS_RECONSTRUCTED",
+  "original_manifest": {
+    "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+    "source_sha256": "77cf780cebe52b6e83e3a2ac84bc56d8059363113e41d17a023f1d8b2ed0fc0b",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "confirmation": "SEALED",
+    "files": {
+      "windows.json": "34ec36f1a00680be095a00b46d2905cc24875c71dea104774d4a9de7dc5d5765",
+      "select.npy": "5744b4b5f1d617af7fec6e3c6492cd4fa7ba994261331488061cdbac55af6f03",
+      "search.npy": "4525ddb00c9c54e93163b38004a70b313bc06479b3e2e7f1da1082ae651a5921",
+      "report.npy": "bc6e9bba0c6710d33182e369649ff88a0eb4fa0333330f167d601163e841a0ae",
+      "path_diagnostic.npy": "2a9d3563f678caef3acfd19f108ddda6e1f0b36bf5f396dba4cdf662a0a5e16f",
+      "DATA_BOUNDARY_PROOF.json": "68c701443ee8e3c7809c6ddb39a5360c5c3eb690e07811cbb439ba33b2b787c3"
+    }
+  },
+  "matching_file_sha256": {
+    "windows.json": "34ec36f1a00680be095a00b46d2905cc24875c71dea104774d4a9de7dc5d5765",
+    "select.npy": "5744b4b5f1d617af7fec6e3c6492cd4fa7ba994261331488061cdbac55af6f03",
+    "search.npy": "4525ddb00c9c54e93163b38004a70b313bc06479b3e2e7f1da1082ae651a5921",
+    "report.npy": "bc6e9bba0c6710d33182e369649ff88a0eb4fa0333330f167d601163e841a0ae",
+    "path_diagnostic.npy": "2a9d3563f678caef3acfd19f108ddda6e1f0b36bf5f396dba4cdf662a0a5e16f"
+  },
+  "roles": {
+    "search": {
+      "stories": 256,
+      "tokens": 54174,
+      "eligible_windows": 715,
+      "fixed_evaluation_windows": 32
+    },
+    "select": {
+      "stories": 256,
+      "tokens": 68014,
+      "eligible_windows": 933,
+      "fixed_evaluation_windows": 128
+    },
+    "report": {
+      "stories": 512,
+      "tokens": 121729,
+      "eligible_windows": 1644,
+      "fixed_evaluation_windows": 128
+    },
+    "path_diagnostic": {
+      "stories": 64,
+      "tokens": 12797,
+      "eligible_windows": 169,
+      "fixed_evaluation_windows": 16
+    }
+  },
+  "remote_evidence_commit": "51f5016f78f0348a79b1dd1e9bcfff339c9ee29c",
+  "published_full_file_sha256": "b8c4c1b01ea8976954177ef3af5c1ea90ede7f22f36cefe5193bd19e16fee394",
+  "published_json_pointer": "/*/data_identity",
+  "published_identity_bearing_rows": 192,
+  "reconstructed_full_manifest_sha256": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+  "proof_method": "COMPLETE_RECONSTRUCTED_ASSET_MANIFEST_MATCHES_PUBLISHED_CRYPTOGRAPHIC_COMMITMENT",
+  "extracted_manifest_sha256": "0a2213f5dcbbd75bc87af1d8b26a92c8a177adeaf16db301fee5444aa026dd6e",
+  "auditor_sha256": "c483f16035e7639745596318ee0618c3fbd173e7640dccacf870b1fbe3724e78",
+  "encoder_sha256": "571fd08c3ed160485dfa658cd628e0f4afabe87498bfdc57d651962ce5098822",
+  "window_sampler_sha256": "74b39618c2214d64c526a20f5b8637ad3052276f5f693fb15c8a1bbe724373b0",
+  "numpy_version": "1.24.4",
+  "private_arrays_retained": false,
+  "model_loaded": false,
+  "optimizer_updates": 0,
+  "gpu_used": false,
+  "scientific_registration": "BLOCKED",
+  "original_manifest_bytes_retrieved": false,
+  "original_manifest_canonical_hash_matched": true
+}
