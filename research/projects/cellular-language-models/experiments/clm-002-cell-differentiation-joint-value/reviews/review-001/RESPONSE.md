@@ -31,3 +31,9 @@ Notebook Run All 会生成本地报告并写 GitHub `results/clm002-gate0-*` 白
 - S/H 共同评价样本与权重、阶段 A 门槛、单任务退化上限和统计规则仍待正式冻结；本轮没有擅自选择数值。
 
 本响应只收口已获授权的 CI/来源绑定与发布边界问题，不能解释为完整实验注册或训练放行。
+
+## 最终工程验收
+
+运行源码 `3ca3e4433cb82fdcb43066984afb925e6bfc766a` 的 [CI 40307922574](https://github.com/ArcheLabs/mini-cells/actions/runs/40307922574) 已完成 success，版本断言、lint 和 CPU pytest 均成功；本地 39 项 CPU 测试通过。Notebook 固定该运行源码，最终交付提交仅补充 Notebook 与证据。
+
+实际白名单报告回传成功：远端提交 `290f38f610b862abe944528a8c5ee373ddb74da0`，分支 `results/clm002-gate0-67ee365f820d060e1611c67269631c02-f74930645b79`。证据见 LIVE_PUBLICATION_PROOF.json。使用已有 SSH 授权，未执行 Kaggle，也不代表 Kaggle GITHUB_TOKEN 路径已验收。科学更新为 0。
