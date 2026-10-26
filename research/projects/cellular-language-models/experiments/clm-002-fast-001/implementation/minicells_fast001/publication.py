@@ -11,6 +11,8 @@ from minicells_r3k.reuse import bind
 from .common import BASE, ID, ROOT, digest, read, sha
 
 REPORTS = BASE.relative_to(ROOT) / "reports/published"
+# 50 raw 500-step curves plus 17,024 hash-only dataset rows; no weights/tokens.
+MAX_TOTAL_BYTES = 24_000_000
 
 
 def allowed(name):
@@ -52,7 +54,7 @@ def payload(root):
             raise transport.PublicationError("FAST_UNSAFE_REPORT_PATH")
         data = path.read_bytes()
         total += len(data)
-        if len(data) > transport.MAX_FILE_BYTES or total > transport.MAX_TOTAL_BYTES:
+        if len(data) > transport.MAX_FILE_BYTES or total > MAX_TOTAL_BYTES:
             raise transport.PublicationError("FAST_REPORT_PAYLOAD_LIMIT_EXCEEDED")
         if expected != {"bytes": len(data), "sha256": digest(path)}:
             raise transport.PublicationError("FAST_REPORT_HASH_CHANGED")

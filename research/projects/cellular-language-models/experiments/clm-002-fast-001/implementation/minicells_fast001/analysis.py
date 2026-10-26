@@ -81,6 +81,11 @@ def factorial(c, rows):
     primary = mean_interval([r["I_H"] for r in effects])
     secondary_values = [r["delta_I"] for r in effects]
     secondary = mean_interval(secondary_values)
+    for interval in (primary, secondary):
+        interval["method"] = "PREDECLARED_NOMINAL_PAIRED_SEED_STUDENT_T_DF4_95_PERCENT"
+        interval["assumptions"] = (
+            "INDEPENDENT_PAIRED_SEED_EFFECTS_APPROX_NORMALITY; PREDECLARED_A_GATE_CONDITIONAL_SCOPE"
+        )
     p = t_one_sided_negative(secondary_values)
     secondary_pass = mean(secondary_values) < 0 and holm([p])[0] < 0.05
     primary_pass = primary["high"] <= -c["analysis"]["minimum_effect"]
@@ -103,4 +108,7 @@ def factorial(c, rows):
         "quality_safe": quality,
         "joint_specialized_seed_count": differentiated,
         "interpretation_scope": "CONTROLLED_SYNTHETIC_TASKS_CURRENT_MODEL_AND_BUDGET_ONLY",
+        "delta_I_scope": c["analysis"]["delta_I_interpretation"],
+        "gate_selection_limitation": c["analysis"]["gate_selection_limitation"],
+        "independent_A_B_replication_claimed": False,
     }

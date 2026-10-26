@@ -78,6 +78,7 @@ def acceptance(c, checkpoint, root, ident):
     before = fingerprint(state)
     forks = []
     for seed in c["seeds"]:
+        siblings, sibling_storage = [], set()
         for arm in c["arms"]:
             engine = make_engine(
                 c,
@@ -89,6 +90,13 @@ def acceptance(c, checkpoint, root, ident):
                 parent_sha=c["parent"]["sha256"],
             )
             cells, connection = treatment(arm)
+            tensors = list(engine.model.state_dict().values()) + [
+                value
+                for item in engine.cell_optimizer.state_dict()["state"].values()
+                for value in item.values()
+                if isinstance(value, torch.Tensor)
+            ]
+            storage = {tensor.untyped_storage().data_ptr() for tensor in tensors if tensor.numel()}
             checks = {
                 "model_values_exact": fingerprint(engine.model.state_dict())
                 == fingerprint(state["model"]),
@@ -102,6 +110,7 @@ def acceptance(c, checkpoint, root, ident):
                 ),
                 "zero_optimizer_calls": engine.journal.summary()["actual_optimizer_attempts"] == 0,
                 "zero_new_steps_and_tokens": engine.step == engine.tokens == 0,
+                "sibling_storage_independent": not bool(storage & sibling_storage),
                 "parent_storage_independent": all(
                     engine.model.state_dict()[k].data_ptr() != v.data_ptr()
                     for k, v in state["model"].items()
@@ -127,7 +136,9 @@ def acceptance(c, checkpoint, root, ident):
             )
             for hook in engine._work_handles:
                 hook.remove()
-            del engine
+            sibling_storage.update(storage)
+            siblings.append(engine)
+        del engine, siblings
     report = {
         "status": "ZERO_UPDATE_50_FORK_ACCEPTANCE_PASS",
         "implementation_sha256": implementation_identity(),

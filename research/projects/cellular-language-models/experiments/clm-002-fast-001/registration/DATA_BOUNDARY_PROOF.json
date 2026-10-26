@@ -1,0 +1,77 @@
+{
+  "config_sha256": "4a2f9e12656620a428fca7dae6136e149abaf8685d9e52a70c3dfad6f9d12225",
+  "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+  "disjoint_role_name_cohorts": {
+    "confirm": [
+      "Ella",
+      "Jack",
+      "Ruby",
+      "Leo",
+      "Clara",
+      "Finn",
+      "Iris",
+      "Owen"
+    ],
+    "train": [
+      "Lena",
+      "Tom",
+      "Mia",
+      "Ben",
+      "Sara",
+      "Alex",
+      "Nora",
+      "Sam"
+    ]
+  },
+  "disjoint_role_numeric_ranges": {
+    "confirm": [
+      1000,
+      2000
+    ],
+    "train": [
+      10,
+      1000
+    ]
+  },
+  "does_not_certify_global_historical_natural_corpus_exclusion": true,
+  "exact_raw_normalized_input_target_window_duplicates": 0,
+  "generator_sha256": "6e43c633a4476c5db1f037c3c4ca74af92f60234a8067a59a9ddbc6459631d52",
+  "gpu_used": false,
+  "historical_data_or_model_quality_loaded": false,
+  "historical_fourteen_boundaries": "UNRESOLVED_UNCHANGED",
+  "optimizer_updates": 0,
+  "parent_fixed_before_generation": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+  "records_verified": 17024,
+  "roles": {
+    "Arithmetic-confirm": {
+      "effective_targets": 32768,
+      "records": 512,
+      "tokens_max": 3730,
+      "tokens_min": 12
+    },
+    "Arithmetic-train": {
+      "effective_targets": 512000,
+      "records": 8000,
+      "tokens_max": 3887,
+      "tokens_min": 1
+    },
+    "Story-confirm": {
+      "effective_targets": 32768,
+      "records": 512,
+      "tokens_max": 4016,
+      "tokens_min": 1
+    },
+    "Story-train": {
+      "effective_targets": 512000,
+      "records": 8000,
+      "tokens_max": 4016,
+      "tokens_min": 1
+    }
+  },
+  "separate_generation_keys": {
+    "confirm": 271027002,
+    "train": 271027001
+  },
+  "shared_grammar_templates_are_intentional": true,
+  "status": "PASS_NEW_CONTROLLED_SAMPLE_AND_WINDOW_ISOLATION"
+}

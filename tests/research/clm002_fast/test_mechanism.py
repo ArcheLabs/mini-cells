@@ -184,3 +184,73 @@ def test_publication_rejects_weights_and_hash_changes(config, tmp_path):
     atomic(tmp_path / "BUDGET.json", {"changed": True})
     with pytest.raises(RuntimeError, match="REPORT_HASH_CHANGED"):
         publication.payload(tmp_path)
+
+
+def test_a_to_b_parent_and_batched_confirm_are_readonly(config, tmp_path):
+    from minicells_fast001.evaluation import evaluate
+
+    source, ident, folder = miniature(config, tmp_path)
+    first = make_engine(config, source, 7001, "A-H", ident, tmp_path / "a.jsonl", unit=True)
+    stream = data.Stream(config, folder, 7001, "H", "A")
+    first.update(stream, tmp_path / "a.pt", [])
+    first.update(stream, tmp_path / "a.pt", [])
+    before = fingerprint(first.model.state_dict())
+    result = evaluate(first.model, config, folder, mechanism=True)
+    assert fingerprint(first.model.state_dict()) == before
+    assert result["tasks"]["Story"]["tokens"] == 8 * 4
+    child = make_engine(
+        config, first.state(), 7001, "B00-H", ident, tmp_path / "b.jsonl", unit=True
+    )
+    assert child.parent_step == 302
+    assert fingerprint(child.model.state_dict()) == before
+    assert fingerprint(child.cell_optimizer.state_dict()) == fingerprint(
+        first.cell_optimizer.state_dict()
+    )
+
+
+def test_partial_optimizer_work_is_counted_and_never_automatically_retrained(config, tmp_path):
+    from minicells_fast001.runner import budget
+
+    source, ident, folder = miniature(config, tmp_path)
+    root = tmp_path / "run"
+    directory = root / "private/A/7001-A-H"
+    directory.mkdir(parents=True)
+    engine = make_engine(config, source, 7001, "A-H", ident, directory / "cost.jsonl", unit=True)
+    stream = data.Stream(config, folder, 7001, "H", "A")
+    checkpoint = directory / "latest.pt"
+    engine.save(checkpoint, stream)
+    with engine.journal.phase("confirm_0"):
+        pass
+    engine.restore(checkpoint, stream)
+
+    def failure(_):
+        raise RuntimeError("disposable interruption")
+
+    with pytest.raises(RuntimeError, match="disposable interruption"):
+        engine.update(stream, checkpoint, [], failure_hook=failure)
+    result = budget(config, root)
+    assert result["actual_cell_optimizer_calls"] == 1
+    assert result["partial_jobs"][0]["restoration_uncertain"]
+    assert result["gpu_used"] is False
+    with pytest.raises(RuntimeError, match="INFLIGHT_WORK_AFTER_CHECKPOINT"):
+        engine.restore(checkpoint, stream)
+
+
+def test_zero_update_acceptance_covers_all_ten_paths_per_seed(config, tmp_path, monkeypatch):
+    from minicells_fast001 import parent
+
+    source, _ident, _ = miniature(config, tmp_path)
+    original = parent.make_engine
+    monkeypatch.setattr(
+        parent, "inspect_parent", lambda c, p, o: {"scope": "SYNTHETIC_TEST_NOT_REAL_PARENT"}
+    )
+    monkeypatch.setattr(parent, "original_state", lambda c, p: source)
+    monkeypatch.setattr(
+        parent, "make_engine", lambda *args, **kwargs: original(*args, **kwargs, unit=True)
+    )
+    report = parent.acceptance(
+        config, tmp_path / "unused", tmp_path / "acceptance", {"source_sha": "a" * 40}
+    )
+    assert len(report["forks"]) == 50
+    assert report["actual_optimizer_calls"] == report["actual_forward_calls"] == 0
+    assert all(r["checks"]["sibling_storage_independent"] for r in report["forks"])

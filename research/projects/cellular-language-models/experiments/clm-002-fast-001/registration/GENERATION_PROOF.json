@@ -1,0 +1,36 @@
+{
+  "config_sha256": "4a2f9e12656620a428fca7dae6136e149abaf8685d9e52a70c3dfad6f9d12225",
+  "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+  "generator_sha256": "6e43c633a4476c5db1f037c3c4ca74af92f60234a8067a59a9ddbc6459631d52",
+  "gpu_used": false,
+  "model_loaded": false,
+  "numpy": "1.24.4",
+  "optimizer_updates": 0,
+  "parent_fixed_before_generator": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+  "python": "3.8.10",
+  "roles": {
+    "Arithmetic-confirm": {
+      "effective_targets": 32768,
+      "no_cross_record_context": true,
+      "records": 512
+    },
+    "Arithmetic-train": {
+      "effective_targets": 512000,
+      "no_cross_record_context": true,
+      "records": 8000
+    },
+    "Story-confirm": {
+      "effective_targets": 32768,
+      "no_cross_record_context": true,
+      "records": 512
+    },
+    "Story-train": {
+      "effective_targets": 512000,
+      "no_cross_record_context": true,
+      "records": 8000
+    }
+  },
+  "source_sha_before_generation": "99a638ebbfec14e73888b9ae987c36f3f9542f33",
+  "tokenizers": "0.20.3",
+  "whole_historical_data_audit_repeated": false
+}

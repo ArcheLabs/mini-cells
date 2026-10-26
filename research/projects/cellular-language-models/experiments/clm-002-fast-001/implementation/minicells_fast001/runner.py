@@ -27,6 +27,7 @@ from .common import (
     release,
     require_ci,
     sha,
+    source_sha,
 )
 from .evaluation import evaluate
 from .parent import acceptance, make_engine, original_state
@@ -40,9 +41,17 @@ def completed(root, phase, seed, arm):
     return job_path(root, phase, seed, arm) / "COMPLETE.json"
 
 
+def confirm(engine, c, assets):
+    with engine.journal.phase("confirm_" + str(engine.step)):
+        return evaluate(engine.model, c, assets, mechanism=True)
+
+
 def worker(c, root, assets, checkpoint, phase, index, workers, *, device="cuda:0"):
     manifest = data.read(Path(assets) / "DATASET_MANIFEST.json")
     release(c, sha(manifest))
+    ci = read(root / "CI_ACCEPTANCE.json")
+    if ci["source_sha"] != source_sha() or ci["conclusion"] != "success":
+        raise RuntimeError("FAST_WORKER_EXACT_SOURCE_CI_REQUIRED")
     if phase == "B" and not read(root / "STAGE_A_DECISION.json")["stage_b_allowed"]:
         raise RuntimeError("FAST_STAGE_A_NOT_PASSED_STAGE_B_FORBIDDEN")
     if not torch.cuda.is_available() or not str(device).startswith("cuda"):
@@ -53,7 +62,12 @@ def worker(c, root, assets, checkpoint, phase, index, workers, *, device="cuda:0
     ident = read(root / "RUN_MANIFEST.json")["identity"]
     arms = [a for a in c["arms"] if a.startswith(phase)]
     jobs = [(seed, arm) for seed in c["seeds"] for arm in arms]
-    for seed, arm in jobs[index::workers]:
+    queues, loads = [[] for _ in range(workers)], [0] * workers
+    for seed, arm in jobs:
+        target = min(range(workers), key=lambda n: (loads[n], n))
+        queues[target].append((seed, arm))
+        loads[target] += {"B00": 1, "B10": 2, "B01": 2, "B11": 3}.get(arm.split("-")[0], 2)
+    for seed, arm in queues[index]:
         job_started = time.perf_counter()
         directory = job_path(root, phase, seed, arm)
         directory.mkdir(parents=True, exist_ok=True)
@@ -122,8 +136,9 @@ def worker(c, root, assets, checkpoint, phase, index, workers, *, device="cuda:0
                         raise RuntimeError(
                             "FAST_REQUIRED_A_CHECKPOINT_EVALUATION_MISSING_NO_RETRAIN"
                         )
-                    evaluations[str(required)] = evaluate(engine.model, c, assets, mechanism=True)
+                    evaluations[str(required)] = confirm(engine, c, assets)
                     atomic(directory / "EVALUATIONS.json", evaluations)
+                    engine.save(latest, stream)
         while engine.step < c["updates"]:
             engine.update(stream, latest, refs)
             if engine.step % 25 == 0:
@@ -132,16 +147,18 @@ def worker(c, root, assets, checkpoint, phase, index, workers, *, device="cuda:0
                     flush=True,
                 )
             if phase == "A" and engine.step in c["stage_a"]["persistence_steps"]:
-                evaluations[str(engine.step)] = evaluate(engine.model, c, assets, mechanism=True)
+                evaluations[str(engine.step)] = confirm(engine, c, assets)
                 atomic(directory / "EVALUATIONS.json", evaluations)
+                engine.save(latest, stream)
         if phase == "B":
-            evaluations[str(c["updates"])] = evaluate(
-                engine.model, c, assets, mechanism=arm.startswith("B11")
-            )
+            evaluations[str(c["updates"])] = confirm(engine, c, assets)
             atomic(directory / "EVALUATIONS.json", evaluations)
+            engine.save(latest, stream)
         peak_bytes = torch.cuda.max_memory_allocated(torch.device(device))
         one_probe = next(data.evaluation_rows(c, assets, device))["x"]
-        profile = profile_once(engine.model, one_probe, repeats=3)
+        with engine.journal.phase("inference_profile"):
+            profile = profile_once(engine.model, one_probe, repeats=3)
+        engine.save(latest, stream)
         result = {
             "identity": child_ident,
             "seed": seed,
@@ -326,6 +343,12 @@ def budget(c, root):
             for e in j["evaluations"].values()
         ),
         "main_and_search_costs_separately_recorded": True,
+        "diagnostic_wall_seconds_from_all_cost_journals": sum(
+            v
+            for summary in summaries
+            for phase, v in summary["cpu_seconds_by_phase"].items()
+            if phase.startswith("confirm_") or phase == "inference_profile"
+        ),
         "logical_updates_are_not_optimizer_call_or_gpu_cost_estimates": True,
     }
 
@@ -417,6 +440,8 @@ def main(args):
                 "status": "STAGE_A_DIFFERENTIATION_NOT_SUPPORTED",
                 "stage_b_run": False,
                 "scientific_support": False,
+                "joint_effect_conclusion": "INSUFFICIENT_EVIDENCE_STAGE_B_NOT_RUN",
+                "stage_a_conclusion": "DIFFERENTIATION_PREREQUISITE_NOT_SUPPORTED",
                 "reason": "Predeclared A gate failed; no budget extension or seed replacement",
             }
         atomic(root / "FINAL_ANALYSIS.json", final)
@@ -437,6 +462,12 @@ def main(args):
             "output": str(root),
             "budget": costs,
         }
+    except publication.transport.PublicationError:
+        print(
+            "[FAST] Scientific/CPU results retained; publication failed. Retry --publish-existing without training.",
+            flush=True,
+        )
+        raise
     except Exception as error:
         atomic(
             root / "FAILURE.json",

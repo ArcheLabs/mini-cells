@@ -77,7 +77,15 @@ class Engine(ParentEngine):
     def restore(self, path, stream):
         super().restore(path, stream)
         saved = torch.load(path, map_location="cpu", weights_only=False)
-        if len(self.journal.events) != saved["watermark"]["events"]:
+        tail = self.journal.events[saved["watermark"]["events"] :]
+        if any(
+            event["kind"] not in ("PHASE_BEGIN", "PHASE_END", "PHASE_ERROR")
+            or not (
+                event["data"].get("phase", "").startswith("confirm_")
+                or event["data"].get("phase") == "inference_profile"
+            )
+            for event in tail
+        ):
             raise RuntimeError("FAST_INFLIGHT_WORK_AFTER_CHECKPOINT_NO_AUTOMATIC_RETRAIN")
 
     def epsilon(self):
@@ -129,7 +137,7 @@ class Engine(ParentEngine):
                         loss = nll(out.logits, row["y"], row["valid"])
                         if cells:
                             (loss / len(rows)).backward()
-                        losses.append(float(loss.detach()))
+                        losses.append(loss.detach())
                         exposure = out.operator_rows.sum(0)
                         counts += exposure
                         task_counts[row["task"]] += exposure
@@ -141,7 +149,9 @@ class Engine(ParentEngine):
                         p.grad.square().sum() for p in cell.parameters() if p.grad is not None
                     ]
                     cell_gradient_norms.append(
-                        float(torch.stack(values).sum().sqrt()) if values else 0.0
+                        torch.stack(values).sum().sqrt()
+                        if values
+                        else torch.zeros((), device=device)
                     )
                 gradients = [p.grad for p in self.model.cells.parameters() if p.grad is not None]
                 if cells:
@@ -203,10 +213,10 @@ class Engine(ParentEngine):
             self.curve.append(
                 {
                     "step": self.step,
-                    "ce": float(np.mean(losses)),
+                    "ce": float(torch.stack(losses).mean()),
                     "input_sha256": fingerprint([(r["x"], r["y"]) for r in rows]),
                     "cell_counts": counts.cpu().tolist(),
-                    "cell_gradient_norms": cell_gradient_norms,
+                    "cell_gradient_norms": torch.stack(cell_gradient_norms).detach().cpu().tolist(),
                     "task_cell_counts": {k: v.cpu().tolist() for k, v in task_counts.items()},
                     "proposal": proposal,
                 }

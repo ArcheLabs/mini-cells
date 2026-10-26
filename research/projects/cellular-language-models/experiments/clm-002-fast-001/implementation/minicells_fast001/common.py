@@ -102,6 +102,11 @@ def implementation_identity():
         (BASE.parent / "jct-001").relative_to(ROOT).as_posix(),
         "src",
         "shared/python",
+        (BASE.parent / "005-compositional-cell-graph/implementation").relative_to(ROOT).as_posix(),
+        (BASE.parent / "006-path-first-clm").relative_to(ROOT).as_posix(),
+        "research/projects/cellular-language-models/engineering/kaggle-continuation/implementation",
+        "research/projects/continual-learning/context/04-continual-learning/scripts/research",
+        "research/projects/cellular-language-models/context/08-hybrid-clm/scripts/research",
     ]
     output = subprocess.check_output(
         ["git", "ls-tree", "-r", "-z", "HEAD", "--", *prefixes], cwd=ROOT
