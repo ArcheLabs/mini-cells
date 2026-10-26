@@ -117,6 +117,9 @@ def validate_registry(registry, root=ROOT, excluded_prefix=None):
         any(len(registry[group]) != count for group, count in GROUPS.items())
         or len(set(ids)) != 13
         or registry.get("scientific_training_started") is not False
+        or registry.get("task_or_model_quality_used") is not False
+        or registry.get("collisions") != []
+        or registry.get("all_groups_disjoint") is not True
     ):
         raise RuntimeError("CLM002_SEED_RESERVATION_INVALID")
     if registry.get("reserved_ids_sha256") != sha(ids):

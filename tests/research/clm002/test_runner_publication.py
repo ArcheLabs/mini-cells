@@ -124,3 +124,15 @@ def test_failed_engineering_still_returns_partial_report(config, ident, tmp_path
         engineering.run(config, tmp_path / "failed", publish_github=True)
     assert len(seen) == 1 and seen[0]["run_status"] == "CPU_ENGINEERING_FAILED_GATE0_BLOCKED"
     assert seen[0]["scientific_optimizer_updates"] == 0
+
+
+def test_parent_inspection_cannot_clear_all_arms_initialization_gate(config):
+    from minicells_clm002.gates import status
+
+    blockers = status(config)["blockers"]
+    after_inspection = [
+        b
+        for b in blockers
+        if b != "REAL_PARENT_BYTES_AND_RESTORED_VALUES_NOT_VERIFIED_IN_THIS_EXPERIMENT"
+    ]
+    assert "ALL_ARMS_INITIALIZATION_FROM_VERIFIED_PARENT_NOT_TESTED" in after_inspection

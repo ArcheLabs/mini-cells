@@ -74,3 +74,22 @@ def test_checked_in_registry_is_verified_against_execution_tree():
     assert registry["execution_source_sha"]
     assert registry["scan_scope"]["scope_sha256"]
     assert registry["scientific_training_started"] is False
+
+
+@pytest.mark.parametrize(
+    "field,bad",
+    [
+        ("task_or_model_quality_used", True),
+        ("collisions", ["historical-use"]),
+        ("all_groups_disjoint", False),
+    ],
+)
+@pytest.mark.parametrize("missing", [False, True])
+def test_seed_declarations_are_required_invariants(source, field, bad, missing):
+    registry = refresh_registry(previous(), source, "experiment")
+    if missing:
+        registry.pop(field)
+    else:
+        registry[field] = bad
+    with pytest.raises(RuntimeError, match="RESERVATION_INVALID"):
+        validate_registry(registry, source, "experiment")
