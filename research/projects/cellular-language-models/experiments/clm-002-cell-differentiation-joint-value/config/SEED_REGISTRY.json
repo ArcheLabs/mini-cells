@@ -1,25 +1,20 @@
 {
-  "all_groups_disjoint": true,
-  "collisions": [],
-  "coverage_limits": "TRACKED_TEXT_ONLY; BINARY_CHECKPOINT_INTERNALS_AND_UNPUBLISHED_RUNS_NOT_CERTIFIED",
+  "schema": "minicells.clm002.seed_reservation.v2",
+  "status": "RESERVED_UNEXECUTED_METADATA_SEEDS_NOT_CONFIRMATION_REGISTRATION",
+  "scan_source_sha": "d8333f5a886ebacf38aca3c6bf985f96e4878980",
+  "scan_repository_tree_sha": "f95ab4be5bef76f49a515b2118d8fa4865e209be",
+  "scan_scope": {
+    "excluded_prefix": "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value",
+    "scope_sha256": "9da9bcd96c4f4dd13ddf6277abcc9a2273b2975b7ae0c6e5380cee255b294df3",
+    "scope_entry_count": 5661,
+    "definition": "ALL_COMMITTED_REPOSITORY_ENTRIES_EXCEPT_THIS_EXPERIMENT; MODE_PATH_GIT_OBJECT_ID"
+  },
+  "tracked_file_count_at_scan": 5748,
   "development": [
     2026200001,
     2026200002,
     2026200003
   ],
-  "previous_reservation_sha256": "48b5915be670254e5a971d75a17b0c946d1f68dda4fcf47b63060f1af93e712b",
-  "reserved_ids_sha256": "fce97b72bb7437a1082a15e298cac86c43835ec52d31d5779c1d7c144303a3ed",
-  "scan_repository_tree_sha": "5be346dc6701c18de8b7d51bbfe990332b51c2dc",
-  "scan_scope": {
-    "definition": "ALL_COMMITTED_REPOSITORY_ENTRIES_EXCEPT_THIS_EXPERIMENT; MODE_PATH_GIT_OBJECT_ID",
-    "excluded_prefix": "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value",
-    "scope_entry_count": 5661,
-    "scope_sha256": "a71efd27af0c6d748334ea7b2193a501c312cc3caafa4c8121849b59662df76c"
-  },
-  "scan_source_sha": "2ccc6dccd1c4b258dcfd96522bc832c53c301d91",
-  "schema": "minicells.clm002.seed_reservation.v2",
-  "scientific_training_started": false,
-  "self_reference_rule": "THE_SCAN_COMMIT_PRECEDES_ITS_OWN_EVIDENCE; VALIDATE_IDENTICAL_EXTERNAL_SCOPE_AT_EACH_EXECUTION",
   "stage_a_confirmation": [
     2026200004,
     2026200005,
@@ -34,7 +29,12 @@
     2026200012,
     2026200013
   ],
-  "status": "RESERVED_UNEXECUTED_METADATA_SEEDS_NOT_CONFIRMATION_REGISTRATION",
+  "previous_reservation_sha256": "38bac2c7e43f634c590eb9fbc334d758fe3f29bce8e2ab0df3f0da1962a92c48",
+  "reserved_ids_sha256": "fce97b72bb7437a1082a15e298cac86c43835ec52d31d5779c1d7c144303a3ed",
+  "collisions": [],
+  "all_groups_disjoint": true,
+  "scientific_training_started": false,
   "task_or_model_quality_used": false,
-  "tracked_file_count_at_scan": 5737
+  "coverage_limits": "TRACKED_TEXT_ONLY; BINARY_CHECKPOINT_INTERNALS_AND_UNPUBLISHED_RUNS_NOT_CERTIFIED",
+  "self_reference_rule": "THE_SCAN_COMMIT_PRECEDES_ITS_OWN_EVIDENCE; VALIDATE_IDENTICAL_EXTERNAL_SCOPE_AT_EACH_EXECUTION"
 }
