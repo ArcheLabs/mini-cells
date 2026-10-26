@@ -1,0 +1,287 @@
+{
+  "arms": {
+    "B00-H": {
+      "accounting_status": "RECONCILED_CPU_FIXTURE",
+      "actual_optimizer_attempts": 0,
+      "analytic_cell_forward_mac": 1216,
+      "analytic_router_forward_mac": 82944,
+      "claim_scope": "ACTUAL_CPU_FIXTURE_WORK_NOT_GPU_RUNTIME_PROOF",
+      "completed_optimizer_calls": 0,
+      "counterfactual_target_evaluations": 0,
+      "cpu_seconds_by_phase": {
+        "atomic_checkpoint": 0.04346645600003285,
+        "isolated_profile": 0.05102420500020344,
+        "main_native_clm_update": 0.39572291800027415,
+        "offline_fixed_path_measurement": 0.1831753540000136,
+        "offline_task_gradient_measurement": 0.08697666399984882
+      },
+      "distinct_extra_counterfactual_examples": 0,
+      "effective_targets_attempted": 16,
+      "effective_targets_committed": 16,
+      "executed_operator_work": {
+        "cell_rows": 1216,
+        "context_rows": 152,
+        "gate_rows": 768,
+        "head_rows": 152,
+        "input_rows": 152,
+        "policy_rows": 768
+      },
+      "failed_or_retried_attempt_records": 0,
+      "gpu_seconds": null,
+      "gpu_used": false,
+      "input_examples_attempted": 4,
+      "input_unit": "SYNTHETIC_FEATURE_EXAMPLES_NOT_LANGUAGE_TOKENS",
+      "logical_steps": [
+        1,
+        2
+      ],
+      "logical_updates": 2,
+      "observed_flops": null,
+      "optimizer_calls_by_group": {},
+      "pending_attempts": 0,
+      "training_tokens": null,
+      "uncertain_optimizer_calls": 0
+    },
+    "B01-H": {
+      "accounting_status": "RECONCILED_CPU_FIXTURE",
+      "actual_optimizer_attempts": 2,
+      "analytic_cell_forward_mac": 1580,
+      "analytic_router_forward_mac": 140832,
+      "claim_scope": "ACTUAL_CPU_FIXTURE_WORK_NOT_GPU_RUNTIME_PROOF",
+      "completed_optimizer_calls": 2,
+      "counterfactual_target_evaluations": 24,
+      "cpu_seconds_by_phase": {
+        "atomic_checkpoint": 0.032592642999816235,
+        "isolated_profile": 0.03781783199997335,
+        "main_native_clm_update": 0.04721562100007759,
+        "native_connection_all_action_q": 0.14607698399981928,
+        "offline_fixed_path_measurement": 0.1834634140000162,
+        "offline_task_gradient_measurement": 0.032823251000081655
+      },
+      "distinct_extra_counterfactual_examples": 0,
+      "effective_targets_attempted": 16,
+      "effective_targets_committed": 16,
+      "executed_operator_work": {
+        "cell_rows": 1580,
+        "context_rows": 184,
+        "gate_rows": 1304,
+        "head_rows": 208,
+        "input_rows": 184,
+        "policy_rows": 1304
+      },
+      "failed_or_retried_attempt_records": 0,
+      "gpu_seconds": null,
+      "gpu_used": false,
+      "input_examples_attempted": 4,
+      "input_unit": "SYNTHETIC_FEATURE_EXAMPLES_NOT_LANGUAGE_TOKENS",
+      "logical_steps": [
+        1,
+        2
+      ],
+      "logical_updates": 2,
+      "observed_flops": null,
+      "optimizer_calls_by_group": {
+        "connection": 2
+      },
+      "pending_attempts": 0,
+      "training_tokens": null,
+      "uncertain_optimizer_calls": 0
+    },
+    "B10-H": {
+      "accounting_status": "RECONCILED_CPU_FIXTURE",
+      "actual_optimizer_attempts": 2,
+      "analytic_cell_forward_mac": 1216,
+      "analytic_router_forward_mac": 82944,
+      "claim_scope": "ACTUAL_CPU_FIXTURE_WORK_NOT_GPU_RUNTIME_PROOF",
+      "completed_optimizer_calls": 2,
+      "counterfactual_target_evaluations": 0,
+      "cpu_seconds_by_phase": {
+        "atomic_checkpoint": 0.03916630799994891,
+        "isolated_profile": 0.03470508600003086,
+        "main_native_clm_update": 0.10452393400009896,
+        "offline_fixed_path_measurement": 0.15614233799988142,
+        "offline_task_gradient_measurement": 0.02730870999994295
+      },
+      "distinct_extra_counterfactual_examples": 0,
+      "effective_targets_attempted": 16,
+      "effective_targets_committed": 16,
+      "executed_operator_work": {
+        "cell_rows": 1216,
+        "context_rows": 152,
+        "gate_rows": 768,
+        "head_rows": 152,
+        "input_rows": 152,
+        "policy_rows": 768
+      },
+      "failed_or_retried_attempt_records": 0,
+      "gpu_seconds": null,
+      "gpu_used": false,
+      "input_examples_attempted": 4,
+      "input_unit": "SYNTHETIC_FEATURE_EXAMPLES_NOT_LANGUAGE_TOKENS",
+      "logical_steps": [
+        1,
+        2
+      ],
+      "logical_updates": 2,
+      "observed_flops": null,
+      "optimizer_calls_by_group": {
+        "cell": 2
+      },
+      "pending_attempts": 0,
+      "training_tokens": null,
+      "uncertain_optimizer_calls": 0
+    },
+    "B11-H": {
+      "accounting_status": "RECONCILED_CPU_FIXTURE",
+      "actual_optimizer_attempts": 4,
+      "analytic_cell_forward_mac": 1580,
+      "analytic_router_forward_mac": 140832,
+      "claim_scope": "ACTUAL_CPU_FIXTURE_WORK_NOT_GPU_RUNTIME_PROOF",
+      "completed_optimizer_calls": 4,
+      "counterfactual_target_evaluations": 24,
+      "cpu_seconds_by_phase": {
+        "atomic_checkpoint": 0.04115956400005416,
+        "isolated_profile": 0.03970970099999249,
+        "main_native_clm_update": 0.08842769700004283,
+        "native_connection_all_action_q": 0.13718273800009229,
+        "offline_fixed_path_measurement": 0.18073596699991867,
+        "offline_task_gradient_measurement": 0.03227075099994181
+      },
+      "distinct_extra_counterfactual_examples": 0,
+      "effective_targets_attempted": 16,
+      "effective_targets_committed": 16,
+      "executed_operator_work": {
+        "cell_rows": 1580,
+        "context_rows": 184,
+        "gate_rows": 1304,
+        "head_rows": 208,
+        "input_rows": 184,
+        "policy_rows": 1304
+      },
+      "failed_or_retried_attempt_records": 0,
+      "gpu_seconds": null,
+      "gpu_used": false,
+      "input_examples_attempted": 4,
+      "input_unit": "SYNTHETIC_FEATURE_EXAMPLES_NOT_LANGUAGE_TOKENS",
+      "logical_steps": [
+        1,
+        2
+      ],
+      "logical_updates": 2,
+      "observed_flops": null,
+      "optimizer_calls_by_group": {
+        "cell": 2,
+        "connection": 2
+      },
+      "pending_attempts": 0,
+      "training_tokens": null,
+      "uncertain_optimizer_calls": 0
+    }
+  },
+  "gpu_time_seconds": null,
+  "identity": {
+    "code_sha256": "47416cc444b4dc66a0d0e916bdb811dd772e6b7dd4e2ad178bd2b58eaaf23401",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "parent_inspection_requested": true,
+    "run_id": "95581f402386c0a46a7b257889becc68",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "source_sha": "c9ab66a52c037373cc8324f1dbac4889e89d7ad0"
+  },
+  "performance_extrapolation": "UNKNOWN_NOT_MEASURED_ON_GPU",
+  "profiles": {
+    "B00-H": {
+      "actual_cell_calls": 32,
+      "batch": 1,
+      "cache": "STATIC_INPUT_MEMORY_REBUILT_EACH_FORWARD",
+      "calls_per_token": 8.0,
+      "device": "cpu",
+      "observed_shape_gemm": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 39552,
+        "gate_rows": 32,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 9888.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "p50_ms": 6.987095999875237,
+      "p95_ms": 7.214130899888005,
+      "peak_cuda_bytes": null,
+      "precision": "torch.float32",
+      "repeats": 3,
+      "scope": "ISOLATED_INFERENCE_PROFILE_NOT_TRAINING_RESIDENT; NO_DRAM_OR_MOBILE_CLAIM",
+      "sequence": 4
+    },
+    "B01-H": {
+      "actual_cell_calls": 32,
+      "batch": 1,
+      "cache": "STATIC_INPUT_MEMORY_REBUILT_EACH_FORWARD",
+      "calls_per_token": 8.0,
+      "device": "cpu",
+      "observed_shape_gemm": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 39552,
+        "gate_rows": 32,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 9888.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "p50_ms": 7.916948999991291,
+      "p95_ms": 8.015794199945958,
+      "peak_cuda_bytes": null,
+      "precision": "torch.float32",
+      "repeats": 3,
+      "scope": "ISOLATED_INFERENCE_PROFILE_NOT_TRAINING_RESIDENT; NO_DRAM_OR_MOBILE_CLAIM",
+      "sequence": 4
+    },
+    "B10-H": {
+      "actual_cell_calls": 32,
+      "batch": 1,
+      "cache": "STATIC_INPUT_MEMORY_REBUILT_EACH_FORWARD",
+      "calls_per_token": 8.0,
+      "device": "cpu",
+      "observed_shape_gemm": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 39552,
+        "gate_rows": 32,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 9888.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "p50_ms": 7.218613000077312,
+      "p95_ms": 7.402637800032608,
+      "peak_cuda_bytes": null,
+      "precision": "torch.float32",
+      "repeats": 3,
+      "scope": "ISOLATED_INFERENCE_PROFILE_NOT_TRAINING_RESIDENT; NO_DRAM_OR_MOBILE_CLAIM",
+      "sequence": 4
+    },
+    "B11-H": {
+      "actual_cell_calls": 32,
+      "batch": 1,
+      "cache": "STATIC_INPUT_MEMORY_REBUILT_EACH_FORWARD",
+      "calls_per_token": 8.0,
+      "device": "cpu",
+      "observed_shape_gemm": {
+        "cell_rows": 32,
+        "context_rows": 4,
+        "forward_matmul_flops": 39552,
+        "gate_rows": 32,
+        "hardware_kernel_flops": "NOT_MEASURED",
+        "per_token_forward_matmul_flops": 9888.0,
+        "scope": "executed linear, tied head, dense QK/AV matmuls; excludes norms/GELU/softmax/dispatch/optimizer"
+      },
+      "p50_ms": 8.229545999938637,
+      "p95_ms": 8.425583099938194,
+      "peak_cuda_bytes": null,
+      "precision": "torch.float32",
+      "repeats": 3,
+      "scope": "ISOLATED_INFERENCE_PROFILE_NOT_TRAINING_RESIDENT; NO_DRAM_OR_MOBILE_CLAIM",
+      "sequence": 4
+    }
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "configuration": {
+    "budget": {
+      "batch_size": 8,
+      "calls_per_token": 8,
+      "gradient_objective": "UNIFORM_NEXT_TOKEN_CE_ALL_VALID_POSITIONS",
+      "padding_counts_as_training": false,
+      "sequence_length": 64,
+      "target_tokens_per_update": 512,
+      "updates": 500
+    },
+    "data": {
+      "arithmetic_confirm": null,
+      "arithmetic_dev": null,
+      "arithmetic_train": null,
+      "confirmation_materialized": false,
+      "global_content_isolation": "BLOCKED_UNCLOSED_HISTORICAL_COVERAGE",
+      "historical_data_development_only": true,
+      "story_confirm": null,
+      "story_dev": null,
+      "story_train": null
+    },
+    "engineering": {
+      "batch_size": 2,
+      "cell_hidden": 16,
+      "connection_policy_steps": 1,
+      "connection_states": 2,
+      "heads": 2,
+      "proposal_trust_fixture_only": {
+        "action_change_max": 1.0,
+        "kl_max": 1.0,
+        "path_change_max": 1.0
+      },
+      "seed": 7001,
+      "sequence_length": 4,
+      "unit_ticks": 2,
+      "vocab_size": 32,
+      "width": 8
+    },
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "protocol_sha256": "6ead92136c39ed44c33c75fe2874b48a44eef4a47fac40433ea08c3b3438ba9b",
+    "scope": "GATE0_CPU_ONLY",
+    "source_references": {
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/graph.py": "dd996e173b24fe917cf41f7f7401d9940b7c2a9f187175426a6b72045c1faebc",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/policy_proposal.py": "d6886eff3945f6091b901801b3c915820c3adaf43ba367e02df4f189d413a4f0",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/stable_connection.py": "b17c4d84d6575c6ee82724b79a293ba19d831e811c3d5f912c8427e6a3a2d4f4",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/config/frozen.json": "8bea314eca493e26f7c9dc841e4709bd9cffb03dbda841e62efc30b073dc1aad",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/implementation/minicells_r3h/routing.py": "ce83a183f4a6143dffcf4b84ac3e7021b160fe9728c9ae45c3798ea66f8fc60a",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/implementation/minicells_r3h/trainer.py": "3bfea7d1d2fc27919b771cebce54cf7698add404ab31bbc610b99dab6680f489",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-e/release/gate2/SESSION_B.json": "7a2056e8d00a2eee9ac63a1fce0fe6098a505afa5b34062935faaf7b82a2b1a9",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/GLOBAL_DATASET_USAGE_LEDGER.json": "ac0f9c4abc921c5969d830d41a3bd238ad10c1f088ff4f93feab783b65033ca1",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/content-isolation-001/ADDITIONAL_COVERAGE_GAPS.json": "f296a3ae53c8fba8ca1e72358ef189b1c3ac2456091965eeafeb64ef18ac0074",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/content-isolation-001/HISTORICAL_SOURCE_COVERAGE.json": "474227b8b08fdbf87cea82fb0e44f548f1856bd60507e76678d4eb25dd067d43",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/content-isolation-001/REVIEW.md": "c5ec69490843a1db49c917e9926aa6f87646e209108033c64c1712761061876b",
+      "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value/config/HISTORICAL_REFERENCE_BINDINGS.json": "81c91df9f923806ff8281ba137419e4e39685cb3f642d9d94259a6f1e9601ea6"
+    },
+    "stage_a": {
+      "arms": [
+        "A-S",
+        "A-H"
+      ],
+      "cell_call_share_min": 0.01,
+      "checkpoints": [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500
+      ],
+      "confirmation_run_authorized": false,
+      "confirmation_seed_count": 5,
+      "confirmation_seeds_required": 4,
+      "development_run_authorized": false,
+      "development_seed_count": 3,
+      "native_connection_behavior": "FROZEN_AS_INHERITED_R3H_B_H; DO_NOT_SILENTLY_ENABLE_Q_UPDATES",
+      "negative_result_early_stop": false,
+      "nonfinite_stop": true,
+      "normalized_specialization_min": 0.01,
+      "paired_specialization_min": 0.01,
+      "threshold_status": "SUGGESTED_NOT_FROZEN_AFTER_DEVELOPMENT"
+    },
+    "stage_b": {
+      "arms": [
+        "B00-S",
+        "B10-S",
+        "B01-S",
+        "B11-S",
+        "B00-H",
+        "B10-H",
+        "B01-H",
+        "B11-H"
+      ],
+      "confirmation_seed_count": 5,
+      "evaluation_weighting": null,
+      "interval_method": "DRAFT_PAIRED_SEED_STUDENT_T_WITH_PROSPECTIVE_REGISTRATION",
+      "minimum_effect_nats_per_token": 0.01,
+      "prerequisite": "ARCHIVED_STAGE_A_CONFIRMATION_SUPPORTED",
+      "primary": "I_H",
+      "quality_regression_limit": null,
+      "run_authorized": false,
+      "scientific_analysis_frozen": false,
+      "secondary": "I_H_MINUS_I_S",
+      "secondary_multiplicity": "HOLM"
+    },
+    "status": "ENGINEERING_DRAFT_NOT_SCIENTIFICALLY_REGISTERED",
+    "substrate": {
+      "architecture": "B-H",
+      "cell_schedule": "DRAFT_CONTINUE_PARENT_WARMUP_COUNTER_PENDING_FREEZE",
+      "class_name": "minicells_r3h.routing.Model",
+      "connection_registration": "BLOCKED_NATIVE_R3H_FREEZES_CONNECTION_REVIEW_REQUIRED",
+      "connection_update_frequency": null,
+      "connection_update_rule": "STAGE_A_NATIVE_FROZEN; STAGE_B_CANDIDATE_R3E_TERMINAL_Q_PENDING_REGISTRATION",
+      "historical_identity": {
+        "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+        "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+        "hf_reference": {
+          "cross_session_verified": false,
+          "hf_repo": "libingjiang/minicells-research-checkpoints",
+          "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+          "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+          "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+          "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+        },
+        "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+        "source_sha": "01f226e259356bb06a8ef275e8314649062446e4"
+      },
+      "historical_source": "01f226e259356bb06a8ef275e8314649062446e4",
+      "parent_cell_optimizer": "CONTINUE_SHARED_PARENT_ADAMW_VALUES_NO_ARM_SPECIFIC_PRETRAINING",
+      "public_parameters": "ALL_NON_CELL_NON_CONNECTION_FROZEN",
+      "runtime_config_path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/config/frozen.json",
+      "runtime_config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "selected_parent_checkpoint_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+      "selected_parent_seed": 151001301,
+      "selected_parent_step": 300,
+      "tokenizer_path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/artifact-recovery-001/independent-review-002/tokenizer.json",
+      "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+    }
+  },
+  "identity": {
+    "arm": "B11-H",
+    "code_sha256": "47416cc444b4dc66a0d0e916bdb811dd772e6b7dd4e2ad178bd2b58eaaf23401",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "parent_inspection_requested": true,
+    "run_id": "95581f402386c0a46a7b257889becc68",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "seed": 7001,
+    "source_sha": "c9ab66a52c037373cc8324f1dbac4889e89d7ad0",
+    "task_condition": "H"
+  }
+}
