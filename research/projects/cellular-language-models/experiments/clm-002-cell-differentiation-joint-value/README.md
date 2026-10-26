@@ -25,7 +25,7 @@
 
 ## 使用
 
-`python run.py --mode engineering --output <目录> --publish-github` 是一次自动 GitHub 预检 → CPU 单元 smoke → 审计/报告 → 回传流程。Kaggle 使用 `notebooks/kaggle-clm002-gate0.ipynb`，不启用 GPU，不在 Notebook 中重复执行 pytest。沿用现有 GITHUB_TOKEN；如启用了既有 HF_TOKEN，Notebook 可读取唯一固定的约 7.4 MB 父权重到云端 Output 并进行只读 CPU inspection，无需下载整个历史输出或数据集。HF 访问缺失/失败会明确保留未核验状态，不伪造恢复 PASS。
+`python run.py --mode engineering --output <目录> --publish-github` 是一次自动 GitHub 预检 → CPU 单元 smoke → 审计/报告 → 回传流程。Kaggle 使用 `notebooks/kaggle-clm002-gate0.ipynb`，不启用 GPU，不在 Notebook 中重复执行 pytest。沿用现有 GITHUB_TOKEN；如启用了既有 HF_TOKEN，Notebook 可读取唯一固定的约 7.4 MB 父权重到云端 `/tmp` 并进行只读 CPU inspection，无需下载整个历史输出或数据集。HF 访问缺失/失败会明确保留未核验状态，不伪造恢复 PASS。
 
 `--mode publish-existing --output <已完成运行目录>` 只重试回传。
 
@@ -35,8 +35,17 @@
 
 ## 已预留 Seed 与预算草案
 
-先冻结 Seed 选择算法，再扫描当前 5,659 个 Git 跟踪文件的文本元数据；无缺失文件、无候选碰撞。开发 Seed `2026200001–003`，阶段 A 确认 `2026200004–008`，阶段 B 确认 `2026200009–013`，集合互不重叠且未执行。扫描覆盖不包括二进制权重内部未发表的运行身份，不能据此声明数据 untouched。
+先冻结 Seed 选择算法。原 5,659 文件扫描是历史记录；review-001 已对新代码快照重新扫描同一批预留值，并使用路径/模式/Git 对象指纹绑定扫描范围，每次运行必须重新验证该范围，不能仅凭缓存文件存在就复用。开发 Seed `2026200001–003`，阶段 A 确认 `2026200004–008`，阶段 B 确认 `2026200009–013`，集合互不重叠且未执行。扫描覆盖不包括二进制权重内部未发表的运行身份，不能据此声明数据 untouched。
 
 预算沿用实际 500×512：开发 A 为 6 个 Arm×Seed（1,536,000 targets），A 确认 10 个（2,560,000），B 确认 40 个（10,240,000），合计 14,336,000 主训练目标位置。额外 Q/探针/失败尝试成本单列；Connection 更新频率未冻结，GPU 时间未实测，因此没有声称这些数字能证明科学总预算或两小时可完成。没有缩减确认 Seed，也没有设置训练硬超时。
 
 定向测试：`PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q tests/research/clm002`。历史 021/022/023b 的结论只作为各自 substrate 的证据，不由本轮改变。
+
+
+## review-001 修复边界
+
+本轮实际 CI Ruff 为 0.16.6，旧本地 Ruff 为 0.9.10；旧工程证据中的本地 lint PASS 不代表 CI PASS。修复保留全部 lint 规则，并在工作流中断言版本。历史失败记录和本地 CPU 记录保持原样，审计响应单独归档。
+
+Seed 证据的扫描提交先于该证据文件本身，不能把最终提交 SHA 嵌入自身。新版记录 scan_source_sha 和不可变的仓库外部扫描范围指纹；实际报告记录 execution_source_sha，并要求范围完全一致。任何范围变化都阻断并要求重扫；发现碰撞停止，不自动换 Seed。当前仍只是预留，不是科学确认注册。
+
+Notebook Run All **会写本地工程报告，并创建 GitHub results/clm002-gate0-* 白名单报告分支**。不会合并 main、上传权重/原始文本/私有 Token 数据，也不会启动科学训练。可选 HF 父权重及缓存仅放在 `/tmp`，不进入 Save Version Output；永久历史工件不删除。纯本地检查使用 run.py 默认模式、不传 --publish-github。
