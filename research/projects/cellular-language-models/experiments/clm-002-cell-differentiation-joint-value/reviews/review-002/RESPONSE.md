@@ -16,3 +16,5 @@ Seed 加载强制要求 task_or_model_quality_used=false、collisions=[]、all_g
 4. 已有 SSH 回传证明与 Kaggle Secret 端到端验收继续严格区分。Notebook Run All 会写白名单报告分支，不写权重，不合并 main。
 
 本次只补充错误声明拒绝和门禁语义，不代表正式注册获准。
+
+本地 46 项 CPU 测试通过，Ruff 0.16.6 通过。重扫后 11 项 Seed 测试通过；Notebook 固定运行源码 b1321b9a1eb94a5fd8e47bdbef89a33552b60a55，外层和内嵌读取器语法检查通过。本轮尚未执行 Kaggle；本地检查不冒充 GitHub CI 或 Kaggle 验收。
