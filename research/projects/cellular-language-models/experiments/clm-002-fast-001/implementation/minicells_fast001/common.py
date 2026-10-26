@@ -133,9 +133,7 @@ def require_ci(source):
         + "&per_page=20"
     )
     headers = {"User-Agent": "MiniCells-FAST-001", "Accept": "application/vnd.github+json"}
-    token = os.environ.get("GITHUB_TOKEN", "").strip()
-    if token:
-        headers["Authorization"] = "Bearer " + token
+    # Public repository: reading CI does not require broader Secret permissions.
     try:
         with urllib.request.urlopen(
             urllib.request.Request(url, headers=headers), timeout=20
