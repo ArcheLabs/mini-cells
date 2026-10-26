@@ -124,10 +124,23 @@ def validate_registry(registry, root=ROOT, excluded_prefix=None):
         raise RuntimeError("CLM002_SEED_RESERVATION_INVALID")
     if registry.get("reserved_ids_sha256") != sha(ids):
         raise RuntimeError("CLM002_SEED_IDS_NOT_BOUND_TO_SCAN")
+    # A self-consistent edited ID hash is not evidence that those IDs were scanned.
+    # Re-run the committed-text scan for the exact groups supplied to this load.
+    fresh = refresh_registry(registry, root, excluded_prefix)
+    if fresh["reserved_ids_sha256"] != registry["reserved_ids_sha256"]:
+        raise RuntimeError("CLM002_SEED_IDS_NOT_BOUND_TO_SCAN")
     value = copy.deepcopy(registry)
     value.update(
         {
             "source_snapshot_verified": True,
+            "exact_reserved_ids_rescanned": True,
+            "execution_scan_binding_sha256": sha(
+                {
+                    "groups": {group: registry[group] for group in GROUPS},
+                    "scope": registry["scan_scope"],
+                    "collisions": fresh["collisions"],
+                }
+            ),
             "execution_source_sha": current["source_sha"],
             "execution_repository_tree_sha": current["repository_tree_sha"],
             "current_tracked_file_count": current["tracked_file_count"],

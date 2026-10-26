@@ -93,3 +93,43 @@ def test_seed_declarations_are_required_invariants(source, field, bad, missing):
         registry[field] = bad
     with pytest.raises(RuntimeError, match="RESERVATION_INVALID"):
         validate_registry(registry, source, "experiment")
+
+
+def test_rehashed_replacement_seed_must_be_rescanned(source):
+    from minicells_clm002.common import sha
+
+    (source / "prior.txt").write_text("historical seed 999999")
+    git(source, "add", ".")
+    git(source, "commit", "-m", "historical metadata")
+    registry = refresh_registry(previous(), source, "experiment")
+    registry["development"][0] = 999999
+    registry["reserved_ids_sha256"] = sha(
+        [
+            v
+            for group in ("development", "stage_a_confirmation", "stage_b_confirmation")
+            for v in registry[group]
+        ]
+    )
+    with pytest.raises(RuntimeError, match="COLLISION"):
+        validate_registry(registry, source, "experiment")
+
+
+def test_group_assignment_is_bound_to_execution_scan(source):
+    registry = refresh_registry(previous(), source, "experiment")
+    first = validate_registry(registry, source, "experiment")
+    assert first["exact_reserved_ids_rescanned"]
+    from minicells_clm002.common import sha
+
+    registry["development"][0], registry["stage_a_confirmation"][0] = (
+        registry["stage_a_confirmation"][0],
+        registry["development"][0],
+    )
+    registry["reserved_ids_sha256"] = sha(
+        [
+            v
+            for group in ("development", "stage_a_confirmation", "stage_b_confirmation")
+            for v in registry[group]
+        ]
+    )
+    second = validate_registry(registry, source, "experiment")
+    assert first["execution_scan_binding_sha256"] != second["execution_scan_binding_sha256"]
