@@ -116,6 +116,8 @@ def inspect_initialization(c, checkpoint, output):
     report = {
         "identity": ident,
         "status": "CPU_PARENT_FANOUT_PASS_PRODUCTION_INITIALIZATION_NOT_RELEASED",
+        "audit_seed": c["engineering"]["seed"],
+        "seed_scope": "ENGINEERING_ONLY_NOT_REGISTERED_SCIENTIFIC_SEEDS",
         "parent_inspection": parent,
         "arms": rows,
         "scientific_policy_registered": False,
@@ -137,6 +139,8 @@ def inspect_initialization(c, checkpoint, output):
         "experiment_id": c["experiment_id"],
         "run_id": ident["run_id"],
         "scope": ident["scope"],
+        "seed": c["engineering"]["seed"],
+        "gpu_used": False,
         "source_sha": ident["source_sha"],
         "config_sha256": ident["config_sha256"],
         "scientific_optimizer_updates": 0,
