@@ -1,0 +1,545 @@
+{
+  "actual_inherited_budget": {
+    "tokens_per_step": 512,
+    "updates": 500
+  },
+  "calls_per_token": 8,
+  "cell_update": "R3E_EXECUTED_PATH_UNIFORM_CE_ADAMW; R3H_KEYED_HARD_PLUS_EPSILON_SAMPLER",
+  "cells": 6,
+  "connection_update": "R3H_TRAINER_FREEZES_CONNECTION; R3E_Q_OPTIMIZER_AVAILABLE_BUT_CADENCE_AND_GOVERNANCE_NOT_REGISTERED",
+  "context_reads_per_forward": 1,
+  "historical_config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+  "historical_source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+  "history": {
+    "021-conflict-driven-differentiation": {
+      "decision": {
+        "checkpoint_manifest": {
+          "expected_file_count": 12,
+          "file_count": 12,
+          "published_model_checkpoints": false
+        },
+        "design": {
+          "arms": [
+            "unified",
+            "capacity-fork",
+            "differentiation-fork"
+          ],
+          "calibration_windows": 3,
+          "capacity_and_differentiation_same_symmetry_break": true,
+          "capacity_routing": "task-agnostic deterministic 50/50",
+          "conflict_axis_uses_task_label": false,
+          "domains": [
+            "STORY",
+            "ARITHMETIC"
+          ],
+          "fork_epsilon": 0.02,
+          "gpu_count": 2,
+          "identity_normalized_margin_min": 0.01,
+          "one_child_update_per_microbatch_in_both_fork_controls": true,
+          "positive_replicates_min": 2,
+          "postfork_steps": 400,
+          "replicates": 3,
+          "routing_purity_min": 0.75,
+          "routing_uses_task_label": false,
+          "shared_genome_after_fork": true,
+          "story_pretraining_steps": 300,
+          "task_labels_used_for_posthoc_validation": true
+        },
+        "experiment": "MINI Cells Experiment 021 \u2014 Conflict-Driven Differentiation",
+        "format": "minicells.conflict-driven-differentiation.v1",
+        "interpretation": {
+          "capacity_control": "Capacity fork uses the same symmetry break and the same per-child update budget as differentiation fork, but routes by a deterministic task-agnostic 50/50 schedule rather than conflict geometry.",
+          "scope": "021 proves or falsifies conflict->division->differentiation in a minimal fixed-topology TextNCA substrate. It does not yet test autonomous topology rewiring or inference-time recruitment.",
+          "success": "A positive result requires conflict, posthoc evidence that unlabeled gradient geometry separates the abilities, functional branch identity in >=2/3 replicates, and failure of the capacity-only control to explain the effect."
+        },
+        "question": "Can persistent story/arithmetic learning conflict cause two shared-genome TextNCA populations to become functionally distinct when learning pressure is split by unlabeled phenotype-gradient geometry?",
+        "results": {
+          "capacity_identity_pass_replicates": 2,
+          "conflict_confirmed_replicates": 0,
+          "conflict_windows_passed": 1,
+          "conflict_windows_total": 9,
+          "differentiation_identity_pass_replicates": 3,
+          "differentiation_routing_pass_replicates": 3,
+          "mean_capacity_identity_margin": 0.0202615405824321,
+          "mean_differentiation_identity_margin": 0.159978064195173,
+          "mean_differentiation_routing_purity": 0.9341666666666667
+        },
+        "status": "CAPACITY_ALONE_SPECIALIZES"
+      },
+      "path": "research/projects/cellular-computing/experiments/021-conflict-driven-differentiation/artifacts/decision.json",
+      "sha256": "cb4523704a294b6dfc0c1af5cb08db9a9e69be629eb715a673ccb50cf3d7d0b0",
+      "source_sha": "edec11d95a0a6233839de74da841bc6d725bc092",
+      "substrate": "HISTORICAL_TEXTNCA_NOT_CURRENT_TOKEN_PREDICTIVE_CLM"
+    },
+    "022-emergent-trait-bifurcation": {
+      "decision": {
+        "checkpoint_manifest": {
+          "expected_file_count": 12,
+          "file_count": 12,
+          "published_model_checkpoints": false
+        },
+        "design": {
+          "arms": [
+            "unified",
+            "stratified-capacity-fork",
+            "geometry-bifurcation-fork"
+          ],
+          "bifurcation_axis_stability_min": 0.5,
+          "bifurcation_gain_min": 0.2,
+          "bifurcation_split_balance_min": 0.25,
+          "calibration_windows": 3,
+          "capacity_control_uses_labels_only_to_enforce_exact_domain_balance": true,
+          "domains": [
+            "STORY",
+            "ARITHMETIC"
+          ],
+          "fork_epsilon": 0.02,
+          "geometry_margin_advantage_min": 0.05,
+          "geometry_routing_uses_task_label": false,
+          "gpu_count": 2,
+          "identity_normalized_margin_min": 0.01,
+          "positive_replicates_min": 2,
+          "postfork_steps": 400,
+          "replicates": 3,
+          "routing_purity_min": 0.75,
+          "story_pretraining_steps": 300,
+          "trigger_uses_task_label": false
+        },
+        "experiment": "MINI Cells Experiment 022 \u2014 Emergent Trait Bifurcation",
+        "format": "minicells.emergent-trait-bifurcation.v1",
+        "interpretation": {
+          "capacity_control": "The negative control deliberately uses benchmark labels only to guarantee that each child receives exactly the same count of STORY and ARITHMETIC updates. It is not a proposed routing mechanism.",
+          "scope": "022 tests developmental bifurcation in a minimal fixed-topology TextNCA phenotype substrate. It does not test inference-time recruitment or autonomous rewiring.",
+          "success": "A positive result requires persistent K=2 gradient-field structure, functional identity and posthoc label purity in >=2/3 replicates, a >=0.05 identity-margin advantage over stratified capacity in >=2/3, and failure of the strictly balanced capacity control to explain specialization."
+        },
+        "question": "Can a persistent task-label-free two-mode phenotype-gradient field cause functional trait bifurcation beyond a strictly stratified capacity control?",
+        "results": {
+          "bifurcation_windows_passed": 9,
+          "bifurcation_windows_total": 9,
+          "geometry_identity_pass_replicates": 3,
+          "geometry_margin_advantage_replicates": 3,
+          "geometry_routing_pass_replicates": 3,
+          "mean_capacity_identity_margin": 0.0009795126189500666,
+          "mean_geometry_identity_margin": 0.15834542444481478,
+          "mean_geometry_minus_capacity_margin": 0.1573659118258647,
+          "mean_geometry_oracle_combined_nll": 6.053901796539624,
+          "mean_geometry_routing_purity": 0.8983333333333333,
+          "mean_unified_combined_nll": 6.353699803352356,
+          "persistent_multimodality_replicates": 3,
+          "stratified_capacity_identity_pass_replicates": 0
+        },
+        "status": "EMERGENT_TRAIT_BIFURCATION_SIGNAL"
+      },
+      "path": "research/projects/cellular-computing/experiments/022-emergent-trait-bifurcation/artifacts/decision.json",
+      "sha256": "05114695827fbd26fe3cdb023d5e829046fc74dba559706af14ccfe87711c46a",
+      "source_sha": "edec11d95a0a6233839de74da841bc6d725bc092",
+      "substrate": "HISTORICAL_TEXTNCA_NOT_CURRENT_TOKEN_PREDICTIVE_CLM"
+    },
+    "023b-probationary-trait-genesis": {
+      "decision": {
+        "checkpoint_manifest": {
+          "expected_file_count": 15,
+          "file_count": 15,
+          "published_model_checkpoints": false
+        },
+        "design": {
+          "arms": [
+            "parent",
+            "capacity-shadow",
+            "geometry-shadow"
+          ],
+          "commit_uses_task_label": false,
+          "conditions": [
+            "STORY_ONLY",
+            "DUPLICATED_STORY",
+            "STORY_ARITHMETIC",
+            "WEAK_ARITHMETIC"
+          ],
+          "geometry_advantage_min": 0.005,
+          "geometry_routing_uses_task_label": false,
+          "gpu_count": 2,
+          "probation_windows": 4,
+          "proposal_always_opened": true,
+          "proposal_uses_task_label": false,
+          "replicates": 3,
+          "routing_purity_min": 0.75,
+          "structural_cost_fraction": 0.005,
+          "utility": "(parent prequential NLL - candidate prequential NLL) / abs(parent NLL) - structural_cost"
+        },
+        "experiment": "MINI Cells Experiment 023b \u2014 Probationary Trait Genesis",
+        "format": "minicells.probationary-trait-genesis.v1",
+        "interpretation": {
+          "scope": "023b tests birth valuation, not unknown-K growth, local sensing, rewiring, merging, pruning, or inference-time recruitment.",
+          "success": "Strong positive requires STORY_ONLY and DUPLICATED_STORY rejection in 3/3, and STORY+ARITHMETIC probation acceptance with 2x2 functional identity and routing purity >=0.75 in >=2/3. WEAK_ARITHMETIC is discovery-only."
+        },
+        "question": "Can a temporary task-label-free fork prove on future online data that it deserves to become a persistent trait?",
+        "results": {
+          "duplicated_story_reject_replicates": 3,
+          "story_arithmetic_accept_replicates": 3,
+          "story_arithmetic_geometry_advantage_replicates": 3,
+          "story_arithmetic_identity_replicates": 3,
+          "story_arithmetic_positive_utility_replicates": 3,
+          "story_arithmetic_routing_replicates": 3,
+          "story_arithmetic_strong_positive_replicates": 3,
+          "story_only_reject_replicates": 3,
+          "weak_arithmetic_accept_replicates": 0
+        },
+        "status": "PROBATIONARY_TRAIT_GENESIS_SIGNAL"
+      },
+      "path": "research/projects/cellular-computing/experiments/023b-probationary-trait-genesis/artifacts/decision.json",
+      "sha256": "2303a10ddf45afbf79dfaab3aab4ae81379d89739695e43a74db5d5692393fbf",
+      "source_sha": "edec11d95a0a6233839de74da841bc6d725bc092",
+      "substrate": "HISTORICAL_TEXTNCA_NOT_CURRENT_TOKEN_PREDICTIVE_CLM"
+    }
+  },
+  "identity": {
+    "code_sha256": "83ada1d62b369be68c7f892043549d35db5d585e3b5b95a406ad156db8248dae",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "run_id": "67ee365f820d060e1611c67269631c02",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "source_sha": "3ca3e4433cb82fdcb43066984afb925e6bfc766a"
+  },
+  "not_equivalent_to": [
+    "JCT_AFFINE_126_PARAMETER_FIXTURE",
+    "TEXTNCA_PHENOTYPE"
+  ],
+  "parameters": {
+    "groups": {
+      "cells": {
+        "entries": [
+          {
+            "name": "cells.0.up.weight",
+            "parameters": 31744,
+            "shape": [
+              248,
+              128
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.0.down.weight",
+            "parameters": 31744,
+            "shape": [
+              128,
+              248
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.1.up.weight",
+            "parameters": 31744,
+            "shape": [
+              248,
+              128
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.1.down.weight",
+            "parameters": 31744,
+            "shape": [
+              128,
+              248
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.2.up.weight",
+            "parameters": 31744,
+            "shape": [
+              248,
+              128
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.2.down.weight",
+            "parameters": 31744,
+            "shape": [
+              128,
+              248
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.3.up.weight",
+            "parameters": 31744,
+            "shape": [
+              248,
+              128
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.3.down.weight",
+            "parameters": 31744,
+            "shape": [
+              128,
+              248
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.4.up.weight",
+            "parameters": 31744,
+            "shape": [
+              248,
+              128
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.4.down.weight",
+            "parameters": 31744,
+            "shape": [
+              128,
+              248
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.5.up.weight",
+            "parameters": 31744,
+            "shape": [
+              248,
+              128
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.5.down.weight",
+            "parameters": 31744,
+            "shape": [
+              128,
+              248
+            ],
+            "trainable": true
+          }
+        ],
+        "parameters": 380928
+      },
+      "connection": {
+        "entries": [
+          {
+            "name": "connection.linear.weight",
+            "parameters": 858,
+            "shape": [
+              6,
+              143
+            ],
+            "trainable": false
+          },
+          {
+            "name": "connection.linear.bias",
+            "parameters": 6,
+            "shape": [
+              6
+            ],
+            "trainable": false
+          }
+        ],
+        "parameters": 864
+      },
+      "public": {
+        "entries": [
+          {
+            "name": "embedding.weight",
+            "parameters": 524288,
+            "shape": [
+              4096,
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "position.weight",
+            "parameters": 8192,
+            "shape": [
+              64,
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "init.weight",
+            "parameters": 16384,
+            "shape": [
+              128,
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "memory.norm.weight",
+            "parameters": 128,
+            "shape": [
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "memory.norm.bias",
+            "parameters": 128,
+            "shape": [
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "memory.key.weight",
+            "parameters": 16384,
+            "shape": [
+              128,
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "memory.value.weight",
+            "parameters": 16384,
+            "shape": [
+              128,
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "norm.weight",
+            "parameters": 128,
+            "shape": [
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "norm.bias",
+            "parameters": 128,
+            "shape": [
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "final.weight",
+            "parameters": 128,
+            "shape": [
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "final.bias",
+            "parameters": 128,
+            "shape": [
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "context.query.weight",
+            "parameters": 16384,
+            "shape": [
+              128,
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "context.output.weight",
+            "parameters": 16384,
+            "shape": [
+              128,
+              128
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.stage.weight",
+            "parameters": 64,
+            "shape": [
+              4,
+              16
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.net.0.weight",
+            "parameters": 9216,
+            "shape": [
+              64,
+              144
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.net.0.bias",
+            "parameters": 64,
+            "shape": [
+              64
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.net.2.weight",
+            "parameters": 384,
+            "shape": [
+              6,
+              64
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.net.2.bias",
+            "parameters": 6,
+            "shape": [
+              6
+            ],
+            "trainable": false
+          }
+        ],
+        "parameters": 624902
+      }
+    },
+    "tied_lm_head": "embedding.weight; counted once",
+    "total": 1006694
+  },
+  "parent": {
+    "architecture": "B-H",
+    "cell_schedule": "DRAFT_CONTINUE_PARENT_WARMUP_COUNTER_PENDING_FREEZE",
+    "class_name": "minicells_r3h.routing.Model",
+    "connection_registration": "BLOCKED_NATIVE_R3H_FREEZES_CONNECTION_REVIEW_REQUIRED",
+    "connection_update_frequency": null,
+    "connection_update_rule": "STAGE_A_NATIVE_FROZEN; STAGE_B_CANDIDATE_R3E_TERMINAL_Q_PENDING_REGISTRATION",
+    "historical_identity": {
+      "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "hf_reference": {
+        "cross_session_verified": false,
+        "hf_repo": "libingjiang/minicells-research-checkpoints",
+        "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+        "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+        "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+        "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+      },
+      "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "source_sha": "01f226e259356bb06a8ef275e8314649062446e4"
+    },
+    "historical_source": "01f226e259356bb06a8ef275e8314649062446e4",
+    "parent_cell_optimizer": "CONTINUE_SHARED_PARENT_ADAMW_VALUES_NO_ARM_SPECIFIC_PRETRAINING",
+    "public_parameters": "ALL_NON_CELL_NON_CONNECTION_FROZEN",
+    "runtime_config_path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/config/frozen.json",
+    "runtime_config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+    "selected_parent_checkpoint_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "selected_parent_seed": 151001301,
+    "selected_parent_step": 300,
+    "tokenizer_path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/artifact-recovery-001/independent-review-002/tokenizer.json",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+  },
+  "parent_bytes_verified": false,
+  "public_components_frozen": true,
+  "readout": "TIED_FROZEN_EMBEDDING_LM_HEAD",
+  "self_connections": true,
+  "substrate_class": "minicells_r3h.routing.Model"
+}
