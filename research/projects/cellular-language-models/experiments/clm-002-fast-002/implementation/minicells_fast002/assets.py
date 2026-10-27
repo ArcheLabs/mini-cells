@@ -4,7 +4,7 @@ from minicells_fast001 import data
 from minicells_fast001.common import BASE as OLD_BASE
 from minicells_fast001.common import configuration
 
-from .common import atomic, digest, read, sha
+from .common import BASE, atomic, digest, read, sha
 
 
 def training(folder):
@@ -20,6 +20,8 @@ def training(folder):
 
 def fresh(c, folder, old_folder):
     manifest = data.generate(c, folder)
+    if sha(manifest) != sha(read(BASE / "registration/FRESH_DATASET_MANIFEST.json")):
+        raise RuntimeError("FAST002_FRESH_DATASET_NOT_REGISTERED_BYTES")
     for task in ("Story", "Arithmetic"):
         if digest(folder / (task + "-train.npy")) != digest(old_folder / (task + "-train.npy")):
             raise RuntimeError("FAST002_TRAINING_POOL_CHANGED")
