@@ -1,0 +1,83 @@
+{
+  "fast001_totals": {
+    "admitted_proposals": 0,
+    "candidate_optimizer_calls": 1600,
+    "cell_optimizer_calls": 15000,
+    "committed_connection_updates": 0,
+    "logical_updates": 25000,
+    "main_target_tokens": 12800000,
+    "proposals": 200,
+    "rejected_candidate_optimizer_calls": 1600,
+    "scale_checks": 1000,
+    "synchronized_training_wall_seconds": 8775.419606114054
+  },
+  "fast002": {
+    "admitted": 0,
+    "candidate_optimizer_calls": 160,
+    "contexts": 20,
+    "main_updates": 0
+  },
+  "gpu_used": false,
+  "historical_registered_config_and_results_unchanged": true,
+  "no_backward_recovery_from_step500": true,
+  "r3fv2": {
+    "anchor_4096_verified": true,
+    "identity": {
+      "config_sha256": "2648a588dacea2119552ff487929942fe2af8c9b42d9fdd6482901639e84a1e5",
+      "execution_id": "31633d7661954111aa3727535f044d00",
+      "experiment_id": "CLM-001-R3f-v2-Local-Connection-001",
+      "parent_run_id": "0d1b8b91af485b9a923ecdf01f94885fce7d6a15745eccff97a8738c7939b1c5",
+      "parent_source_sha": "98cf8f6c214f33af72d1badf28d80a0c202dc934",
+      "run_id": "6b79bb4c6c29694e10e5ad77a20285613e3b98ff247b58845f218b48ded8c39b",
+      "source_sha": "df096d4567326257f19f7bd58359a401fde3c3e5"
+    },
+    "metric_definition_sha256": "e343c040a8af9b778a3d94717cb5efc49c93c7914d08e55289ad08ba20495c4f",
+    "metrics": {
+      "A-C": {
+        "adapt_steps": 10,
+        "chosen_scale": 0.000244140625,
+        "failure": null,
+        "final_quality_accepted": true,
+        "valid": true
+      },
+      "B-C": {
+        "adapt_steps": 10,
+        "chosen_scale": 0.000244140625,
+        "failure": null,
+        "final_quality_accepted": false,
+        "valid": true
+      }
+    },
+    "private_historical_weight_bytes": "NOT_RECOVERED_NOT_USED_AS_R1_PARENT"
+  },
+  "real_parent_bytes_loaded": false,
+  "scientific_optimizer_updates": 0,
+  "stage_a": {
+    "per_seed": [
+      {
+        "passed": true,
+        "seed": 2026200004
+      },
+      {
+        "passed": true,
+        "seed": 2026200005
+      },
+      {
+        "passed": true,
+        "seed": 2026200006
+      },
+      {
+        "passed": true,
+        "seed": 2026200007
+      },
+      {
+        "passed": true,
+        "seed": 2026200008
+      }
+    ],
+    "stage_b_allowed": true,
+    "status": "STAGE_A_DIFFERENTIATION_SUPPORTED"
+  },
+  "status": "PUBLISHED_EVIDENCE_VERIFIED_REAL_PARENT_BYTES_PENDING",
+  "step50_availability": "NOT_IN_PUBLISHED_REPORTS; ORIGINAL_EXECUTOR_OVERWRITES_LATEST_EACH_STEP"
+}
