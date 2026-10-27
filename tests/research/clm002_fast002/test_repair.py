@@ -217,7 +217,9 @@ def test_partial_budget_retains_uncertain_optimizer_work_and_phase_time(tmp_path
     def fail():
         raise RuntimeError("injected interrupted optimizer")
 
-    with pytest.raises(RuntimeError, match="injected"), journal.phase("train_only_scale_calibration"):
+    with pytest.raises(RuntimeError, match="injected"), journal.phase(
+        "train_only_scale_calibration"
+    ):
         journal.optimizer_call("connection", fail, [p])
     report = costs(tmp_path)
     assert report["actual_optimizer_attempts"] == report["uncertain_optimizer_calls"] == 1

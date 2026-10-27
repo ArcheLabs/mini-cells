@@ -11,7 +11,7 @@ from minicells_jct001.cost import Journal
 from minicells_r3e.common import fingerprint
 from minicells_r3k.reuse import bind
 
-from . import accounting, assets, audit, checkpoints, policy, publication
+from . import accounting, assets, audit, checkpoints, policy, publication, recovery
 from .common import ID, atomic, config, digest, historical_reports, read, require_ci, sha, source
 
 
@@ -392,7 +392,14 @@ def main(args):
             if args.publish_github:
                 bind(publication.old.transport.preflight, _checkout=publication.checkout)(root)
             device = "cuda:0"
-            paths = checkpoints.locate(c, reports, args.checkpoint_roots)
+            paths, recovery_proof = recovery.resolve(
+                c,
+                reports,
+                args.checkpoint_roots,
+                args.assets / "kaggle-output",
+                version=args.kaggle_version,
+            )
+            atomic(root / "KAGGLE_RECOVERY_PROOF.json", recovery_proof)
             atomic(
                 root / "CHECKPOINT_REUSE_PROOF.json",
                 {

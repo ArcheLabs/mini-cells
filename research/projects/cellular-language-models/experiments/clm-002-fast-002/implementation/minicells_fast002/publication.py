@@ -11,6 +11,7 @@ REPORTS = BASE.relative_to(ROOT) / "reports/published"
 def allowed(name):
     return old.allowed(name) or name in {
         "HISTORICAL_AUDIT.json",
+        "KAGGLE_RECOVERY_PROOF.json",
         "CALIBRATION.json",
         "CHECKPOINT_REUSE_PROOF.json",
         "FRESH_CONFIRM_PROOF.json",

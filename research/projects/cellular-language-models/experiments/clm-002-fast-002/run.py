@@ -30,6 +30,11 @@ def main():
         nargs="+",
         default=[Path("/kaggle/input"), Path("/kaggle/working")],
     )
+    parser.add_argument(
+        "--kaggle-version",
+        type=int,
+        help="Optional exact saved version; normally discovered automatically",
+    )
     parser.add_argument("--publish-github", action="store_true")
     parser.add_argument("--publish-existing", action="store_true")
     result = execute(parser.parse_args())
