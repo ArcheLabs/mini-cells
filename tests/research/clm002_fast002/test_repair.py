@@ -204,3 +204,24 @@ def test_repair_main_update_exact_restore_and_pairing(tmp_path):
     engine.restore(latest, stream)
     assert fingerprint((engine.state(), stream.state())) == before
     assert accounting.summary(engine, device="cpu")["training_tokens"] == 8
+
+
+def test_partial_budget_retains_uncertain_optimizer_work_and_phase_time(tmp_path):
+    from minicells_fast002.runner import costs
+    from minicells_jct001.cost import Journal
+
+    journal = Journal(tmp_path / "private/calibration/test.jsonl", {"scope": "CPU_TEST_ONLY"})
+    p = torch.nn.Parameter(torch.tensor(1.0))
+    p.grad = torch.tensor(1.0)
+
+    def fail():
+        raise RuntimeError("injected interrupted optimizer")
+
+    with pytest.raises(RuntimeError, match="injected"), journal.phase("train_only_scale_calibration"):
+        journal.optimizer_call("connection", fail, [p])
+    report = costs(tmp_path)
+    assert report["actual_optimizer_attempts"] == report["uncertain_optimizer_calls"] == 1
+    assert report["actual_optimizer_calls"] == report["main_logical_updates"] == 0
+    assert report["observed_phase_wall_seconds"] > 0
+    assert report["gpu_kernel_seconds"] is None
+    assert report["completed_job_connection_commits"] == 0

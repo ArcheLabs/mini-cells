@@ -322,10 +322,29 @@ def costs(root):
                 "logical_updates": summary["logical_updates"],
                 "uncertain_optimizer_calls": summary["uncertain_optimizer_calls"],
                 "pending_attempts": summary["pending_attempts"],
+                "phase_wall_seconds": summary["cpu_seconds_by_phase"],
             }
         )
+    completed = [read(p)["budget"] for p in (root / "jobs").glob("*.json")]
     return {
         "scope": "NEW_FAST002_WORK_ONLY_HISTORICAL_COSTS_SEPARATE",
+        "completed_job_connection_commits": sum(
+            r["committed_connection_updates"] for r in completed
+        ),
+        "completed_job_rejected_candidate_optimizer_calls": sum(
+            r["rejected_candidate_optimizer_calls"] for r in completed
+        ),
+        "connection_commit_count_scope": "COMPLETED_JOBS_ONLY_LOWER_BOUND_IF_PARTIAL_JOBS_EXIST",
+        "observed_phase_wall_seconds": sum(sum(r["phase_wall_seconds"].values()) for r in rows),
+        "actual_optimizer_attempts": sum(
+            r["completed_optimizer_calls"] + r["uncertain_optimizer_calls"] for r in rows
+        ),
+        "uncertain_optimizer_calls": sum(r["uncertain_optimizer_calls"] for r in rows),
+        "calibration_candidate_optimizer_calls": sum(
+            r["optimizer_calls_by_group"].get("connection", 0)
+            for r in rows
+            if r["path"].startswith("private/calibration/")
+        ),
         "journals": rows,
         "actual_optimizer_calls": sum(r["completed_optimizer_calls"] for r in rows),
         "main_logical_updates": sum(r["logical_updates"] for r in rows),
