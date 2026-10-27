@@ -1,0 +1,60 @@
+{
+  "admission_manifest_sha256": "f43701a4c18ab72f6ef9d8dc5f0a9d3f4184c78689c5b9d88bf433bf57a013e3",
+  "admission_records": 32,
+  "confirm_access_scope": "ISOLATED_HASH_IDENTITY_AUDITOR_ONLY_NO_MODEL",
+  "confirm_quality_read": false,
+  "coverage": [
+    {
+      "array_sha256": "5ce2a90d4add223cac7cb9c6a370229f46191f2e91f16c66c60b32ff97e024ac",
+      "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+      "records": 8000,
+      "role": "Story-train"
+    },
+    {
+      "array_sha256": "72fe47a1362a6960e0b53b9f197482c9e24e5bdd5f2c198d1cce9a8b13f84f42",
+      "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+      "records": 512,
+      "role": "Story-confirm"
+    },
+    {
+      "array_sha256": "0240cedc969dd033316284ed72ad5eb35d4a1034dafe0049b51d36251730eb12",
+      "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+      "records": 8000,
+      "role": "Arithmetic-train"
+    },
+    {
+      "array_sha256": "17d86aa1c90906134f192b367ebee193ff7ca0021df7d13b4f5a879d2727d05b",
+      "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+      "records": 512,
+      "role": "Arithmetic-confirm"
+    },
+    {
+      "array_sha256": "478357764dd935942d083f7bf06dd67adab4f8402a08f3875a6330683a4b7f83",
+      "dataset_sha256": "d6b4694d2cb98bb0b173f52111b467b97d0b865cc72f1b636781b4cb51332bbb",
+      "records": 512,
+      "role": "Story-confirm"
+    },
+    {
+      "array_sha256": "a87673fde031b130ce8bd2df0085e6b7739ddb64f63945a58167dc1f9af533d7",
+      "dataset_sha256": "d6b4694d2cb98bb0b173f52111b467b97d0b865cc72f1b636781b4cb51332bbb",
+      "records": 512,
+      "role": "Arithmetic-confirm"
+    }
+  ],
+  "covered_source_records": 18048,
+  "generation_tooling_source": "fc52069496c472ae66c07752bf28a1250c70629f",
+  "gpu_used": false,
+  "model_loaded": false,
+  "overlaps": {
+    "input": 0,
+    "normalized": 0,
+    "raw": 0,
+    "target": 0,
+    "window": 0
+  },
+  "partial_template_overlap_excluded": false,
+  "raw_text_exported": false,
+  "recipe_frozen_source": "4317c543b73797e2dcba234c984ebe281f64cb92",
+  "scientific_optimizer_updates": 0,
+  "status": "PASS_EXACT_RAW_NORMALIZED_WINDOW_INPUT_TARGET_ISOLATION"
+}

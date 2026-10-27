@@ -1,0 +1,341 @@
+{
+  "Admission": {
+    "files": {
+      "Arithmetic-admission.json": {
+        "bytes": 7952,
+        "sha256": "530389d1abef4a414f9aced9ccdb78c8783c5418dbd4f8fd1595cd44b7badc56"
+      },
+      "Arithmetic-admission.npy": {
+        "bytes": 4288,
+        "sha256": "b3fe62cc36c23d3052caaf3d698cf962663c1847da5c6e1083ab509cf0c05398"
+      },
+      "Story-admission.json": {
+        "bytes": 7945,
+        "sha256": "0675bc6d764a9cdb7c72431654cfd45d75cb85bacd27168b121d170ab2e3cfc1"
+      },
+      "Story-admission.npy": {
+        "bytes": 4288,
+        "sha256": "abaaa4a4b03144daeb553d1f626d7a9066cdb9d465ee6b56faee2b29ee95b3f2"
+      }
+    },
+    "frozen_record_generator_sha256": "6e43c633a4476c5db1f037c3c4ca74af92f60234a8067a59a9ddbc6459631d52",
+    "generator_sha256": "a89ee89cd6751b249974b54f94e001ea8ee9f135ad02e47b0a4368ceccad498f",
+    "no_model_quality_used": true,
+    "records_per_task": 16,
+    "role": "admission",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+  },
+  "Confirm": {
+    "identity": {
+      "conclusion_scope": "CONTROLLED_GENERATOR_DISTRIBUTION_ONLY",
+      "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+      "engineering_small_fixture": false,
+      "experiment_id": "CLM-002-FAST-002",
+      "files": {
+        "Arithmetic-confirm.json": {
+          "bytes": 232791,
+          "sha256": "8c22af7545671eca5e47815682190990853c717c2f47dd4a0966761457e58672"
+        },
+        "Arithmetic-confirm.npy": {
+          "bytes": 133248,
+          "sha256": "a87673fde031b130ce8bd2df0085e6b7739ddb64f63945a58167dc1f9af533d7"
+        },
+        "Arithmetic-train.json": {
+          "bytes": 3637218,
+          "sha256": "423ce428f55f8f570aca5d36a11afdd81d6c4acfb18453611af14d795fdc28e2"
+        },
+        "Arithmetic-train.npy": {
+          "bytes": 2080128,
+          "sha256": "0240cedc969dd033316284ed72ad5eb35d4a1034dafe0049b51d36251730eb12"
+        },
+        "Story-confirm.json": {
+          "bytes": 232705,
+          "sha256": "150cbf6735cb29bd33a1dd2272a748c1e1cd787cf1a4698ee822cc68246e3efc"
+        },
+        "Story-confirm.npy": {
+          "bytes": 133248,
+          "sha256": "478357764dd935942d083f7bf06dd67adab4f8402a08f3875a6330683a4b7f83"
+        },
+        "Story-train.json": {
+          "bytes": 3634679,
+          "sha256": "ad13cc524f9d43b5045c22f57f229cfda03959fc7cf2200e546108eb7714e314"
+        },
+        "Story-train.npy": {
+          "bytes": 2080128,
+          "sha256": "5ce2a90d4add223cac7cb9c6a370229f46191f2e91f16c66c60b32ff97e024ac"
+        }
+      },
+      "generator_sha256": "6e43c633a4476c5db1f037c3c4ca74af92f60234a8067a59a9ddbc6459631d52",
+      "historical_data_loaded": false,
+      "historical_fourteen_boundaries": "UNRESOLVED_NOT_A_PRECONDITION_FOR_THIS_NEW_SYNTHETIC_STUDY",
+      "model_quality_used": false,
+      "normalized_record_overlap": 0,
+      "parent_fixed_before_generation": {
+        "hf_reference": {
+          "cross_session_verified": false,
+          "hf_repo": "libingjiang/minicells-research-checkpoints",
+          "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+          "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+          "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+          "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+        },
+        "identity": {
+          "architecture": "B",
+          "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+          "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+          "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+          "seed": 151001301,
+          "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+          "training_router": "H"
+        },
+        "previous_bytes_acceptance_commit": "6fcd0ab9be2efc75d340bb414b0b09e04019a342",
+        "sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+        "step": 300
+      },
+      "role_names": {
+        "confirm": [
+          "Cora",
+          "Dorian",
+          "Elara",
+          "Felix",
+          "Galen",
+          "Hana",
+          "Iris",
+          "Jonas"
+        ],
+        "train": [
+          "Lena",
+          "Tom",
+          "Mia",
+          "Ben",
+          "Sara",
+          "Alex",
+          "Nora",
+          "Sam"
+        ]
+      },
+      "role_numeric_ranges": {
+        "confirm": [
+          2000,
+          3000
+        ],
+        "train": [
+          10,
+          1000
+        ]
+      },
+      "roles": {
+        "Arithmetic-confirm": {
+          "effective_targets": 32768,
+          "no_cross_record_context": true,
+          "records": 512
+        },
+        "Arithmetic-train": {
+          "effective_targets": 512000,
+          "no_cross_record_context": true,
+          "records": 8000
+        },
+        "Story-confirm": {
+          "effective_targets": 32768,
+          "no_cross_record_context": true,
+          "records": 512
+        },
+        "Story-train": {
+          "effective_targets": 512000,
+          "no_cross_record_context": true,
+          "records": 8000
+        }
+      },
+      "sample_id_count": 17024,
+      "schema": "minicells.fast001.dataset.v1",
+      "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+      "train_confirm_exact_text_and_window_overlap": 0
+    },
+    "status": "SEALED_FROM_MODEL"
+  },
+  "Train": {
+    "conclusion_scope": "CONTROLLED_GENERATOR_DISTRIBUTION_ONLY",
+    "config_sha256": "4a2f9e12656620a428fca7dae6136e149abaf8685d9e52a70c3dfad6f9d12225",
+    "engineering_small_fixture": false,
+    "experiment_id": "CLM-002-FAST-001",
+    "files": {
+      "Arithmetic-confirm.json": {
+        "bytes": 232790,
+        "sha256": "45407ea93f6e478f0d69aeb632f14874a2f7fed629add70f798a906c00857772"
+      },
+      "Arithmetic-confirm.npy": {
+        "bytes": 133248,
+        "sha256": "17d86aa1c90906134f192b367ebee193ff7ca0021df7d13b4f5a879d2727d05b"
+      },
+      "Arithmetic-train.json": {
+        "bytes": 3637218,
+        "sha256": "31e5b91e87aa15313ddf541e96448d83fbaa9e95e044ce86e1a0c0534afda689"
+      },
+      "Arithmetic-train.npy": {
+        "bytes": 2080128,
+        "sha256": "0240cedc969dd033316284ed72ad5eb35d4a1034dafe0049b51d36251730eb12"
+      },
+      "Story-confirm.json": {
+        "bytes": 232662,
+        "sha256": "bd721088e9d57140c1b896e52a5828b12fde94de5bded83f69bfb98399a690d2"
+      },
+      "Story-confirm.npy": {
+        "bytes": 133248,
+        "sha256": "72fe47a1362a6960e0b53b9f197482c9e24e5bdd5f2c198d1cce9a8b13f84f42"
+      },
+      "Story-train.json": {
+        "bytes": 3634679,
+        "sha256": "91b1b48acb77a0aeab6fdaf5c65a3eaf772881b6271d9098a38e0875339d3c57"
+      },
+      "Story-train.npy": {
+        "bytes": 2080128,
+        "sha256": "5ce2a90d4add223cac7cb9c6a370229f46191f2e91f16c66c60b32ff97e024ac"
+      }
+    },
+    "generator_sha256": "6e43c633a4476c5db1f037c3c4ca74af92f60234a8067a59a9ddbc6459631d52",
+    "historical_data_loaded": false,
+    "historical_fourteen_boundaries": "UNRESOLVED_NOT_A_PRECONDITION_FOR_THIS_NEW_SYNTHETIC_STUDY",
+    "model_quality_used": false,
+    "normalized_record_overlap": 0,
+    "parent_fixed_before_generation": {
+      "hf_reference": {
+        "cross_session_verified": false,
+        "hf_repo": "libingjiang/minicells-research-checkpoints",
+        "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+        "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+        "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+        "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+      },
+      "identity": {
+        "architecture": "B",
+        "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+        "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+        "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+        "seed": 151001301,
+        "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+        "training_router": "H"
+      },
+      "previous_bytes_acceptance_commit": "6fcd0ab9be2efc75d340bb414b0b09e04019a342",
+      "sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+      "step": 300
+    },
+    "role_names": {
+      "confirm": [
+        "Ella",
+        "Jack",
+        "Ruby",
+        "Leo",
+        "Clara",
+        "Finn",
+        "Iris",
+        "Owen"
+      ],
+      "train": [
+        "Lena",
+        "Tom",
+        "Mia",
+        "Ben",
+        "Sara",
+        "Alex",
+        "Nora",
+        "Sam"
+      ]
+    },
+    "role_numeric_ranges": {
+      "confirm": [
+        1000,
+        2000
+      ],
+      "train": [
+        10,
+        1000
+      ]
+    },
+    "roles": {
+      "Arithmetic-confirm": {
+        "effective_targets": 32768,
+        "no_cross_record_context": true,
+        "records": 512
+      },
+      "Arithmetic-train": {
+        "effective_targets": 512000,
+        "no_cross_record_context": true,
+        "records": 8000
+      },
+      "Story-confirm": {
+        "effective_targets": 32768,
+        "no_cross_record_context": true,
+        "records": 512
+      },
+      "Story-train": {
+        "effective_targets": 512000,
+        "no_cross_record_context": true,
+        "records": 8000
+      }
+    },
+    "sample_id_count": 17024,
+    "schema": "minicells.fast001.dataset.v1",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "train_confirm_exact_text_and_window_overlap": 0
+  },
+  "identity_only_audit": {
+    "admission_manifest_sha256": "f43701a4c18ab72f6ef9d8dc5f0a9d3f4184c78689c5b9d88bf433bf57a013e3",
+    "admission_records": 32,
+    "confirm_access_scope": "ISOLATED_HASH_IDENTITY_AUDITOR_ONLY_NO_MODEL",
+    "confirm_quality_read": false,
+    "coverage": [
+      {
+        "array_sha256": "5ce2a90d4add223cac7cb9c6a370229f46191f2e91f16c66c60b32ff97e024ac",
+        "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+        "records": 8000,
+        "role": "Story-train"
+      },
+      {
+        "array_sha256": "72fe47a1362a6960e0b53b9f197482c9e24e5bdd5f2c198d1cce9a8b13f84f42",
+        "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+        "records": 512,
+        "role": "Story-confirm"
+      },
+      {
+        "array_sha256": "0240cedc969dd033316284ed72ad5eb35d4a1034dafe0049b51d36251730eb12",
+        "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+        "records": 8000,
+        "role": "Arithmetic-train"
+      },
+      {
+        "array_sha256": "17d86aa1c90906134f192b367ebee193ff7ca0021df7d13b4f5a879d2727d05b",
+        "dataset_sha256": "d9b1d3d2d6c21ec070a33f2cb19b4d1d4ace4b2f4cae684266bfc5b13c3b5536",
+        "records": 512,
+        "role": "Arithmetic-confirm"
+      },
+      {
+        "array_sha256": "478357764dd935942d083f7bf06dd67adab4f8402a08f3875a6330683a4b7f83",
+        "dataset_sha256": "d6b4694d2cb98bb0b173f52111b467b97d0b865cc72f1b636781b4cb51332bbb",
+        "records": 512,
+        "role": "Story-confirm"
+      },
+      {
+        "array_sha256": "a87673fde031b130ce8bd2df0085e6b7739ddb64f63945a58167dc1f9af533d7",
+        "dataset_sha256": "d6b4694d2cb98bb0b173f52111b467b97d0b865cc72f1b636781b4cb51332bbb",
+        "records": 512,
+        "role": "Arithmetic-confirm"
+      }
+    ],
+    "covered_source_records": 18048,
+    "generation_tooling_source": "fc52069496c472ae66c07752bf28a1250c70629f",
+    "gpu_used": false,
+    "model_loaded": false,
+    "overlaps": {
+      "input": 0,
+      "normalized": 0,
+      "raw": 0,
+      "target": 0,
+      "window": 0
+    },
+    "partial_template_overlap_excluded": false,
+    "raw_text_exported": false,
+    "recipe_frozen_source": "4317c543b73797e2dcba234c984ebe281f64cb92",
+    "scientific_optimizer_updates": 0,
+    "status": "PASS_EXACT_RAW_NORMALIZED_WINDOW_INPUT_TARGET_ISOLATION"
+  }
+}
