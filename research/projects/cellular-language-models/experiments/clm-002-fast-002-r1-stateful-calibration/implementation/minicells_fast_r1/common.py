@@ -1,6 +1,8 @@
 from pathlib import Path
 
 from minicells_fast001.common import digest, read, sha
+from minicells_fast001.common import atomic as atomic
+from minicells_fast002.common import source as source
 
 BASE = Path(__file__).resolve().parents[2]
 ROOT = BASE.parents[4]
