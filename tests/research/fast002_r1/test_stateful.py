@@ -300,3 +300,19 @@ def test_unattested_parent_cannot_initialize_a_real_replay(tmp_path, monkeypatch
         replay.make_engine(
             c, state, 7001, "B11-H", {"scope": "NOT_REAL"}, tmp_path / "forbidden.jsonl", unit=False
         )
+
+
+def test_failure_reports_do_not_export_signed_urls_or_tokens():
+    from minicells_fast_r1.runner import safe_failure
+
+    private = "https://storage.example/file?X-Goog-Signature=private-value&token=private-token"
+    encoded = str(safe_failure(RuntimeError(private)))
+    assert (
+        "private-value" not in encoded
+        and "private-token" not in encoded
+        and "https://" not in encoded
+    )
+    assert (
+        safe_failure(RuntimeError("R1_SOURCE_IDENTITY_CHANGED:private-detail"))["code"]
+        == "R1_SOURCE_IDENTITY_CHANGED"
+    )

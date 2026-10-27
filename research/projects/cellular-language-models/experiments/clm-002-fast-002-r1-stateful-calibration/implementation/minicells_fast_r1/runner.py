@@ -3,6 +3,7 @@
 import copy
 import importlib.metadata
 import platform
+import re
 import shutil
 import sys
 import time
@@ -16,6 +17,14 @@ from minicells_r3k.reuse import bind
 
 from . import assets, history, publication
 from .common import BASE, ID, atomic, config, digest, read, require_ci, sha, source
+
+
+def safe_failure(error):
+    code = str(error).split(":", 1)[0]
+    if not re.fullmatch(r"(?:R1|FAST002|CF|KAGGLE)_[A-Z0-9_]+", code):
+        code = "EXTERNAL_FAILURE_DETAILS_NOT_EXPORTED"
+    status = getattr(getattr(error, "response", None), "status_code", None)
+    return {"type": type(error).__name__, "code": code, "http_status": status}
 
 
 def inspect_parents(c, reports, paths, root, identity):
@@ -183,7 +192,7 @@ def engineering(args):
         manifest["run_status"] = "CPU_ENGINEERING_COMPLETE_DIAGNOSTIC_EXECUTION_BLOCKED"
     except Exception as error:
         manifest["run_status"] = "BLOCKED_OR_PARTIAL"
-        atomic(root / "FAILURE.json", {"type": type(error).__name__, "message": str(error)[:1000]})
+        atomic(root / "FAILURE.json", safe_failure(error))
         raise
     finally:
         atomic(
