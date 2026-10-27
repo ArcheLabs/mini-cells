@@ -1,0 +1,29 @@
+{
+  "candidate_optimizer_calls": 1600,
+  "cell_optimizer_calls": 10000,
+  "committed_main_target_tokens": 10240000,
+  "committed_main_updates": 20000,
+  "completed_jobs": 40,
+  "connection_commit_count_scope": "COMPLETED_JOBS_ONLY; PARTIAL_JOB_CURVES_RETAINED_IN_CHECKPOINTS",
+  "executed_operator_work": {
+    "cell_rows": 377061192,
+    "context_rows": 47124480,
+    "gate_rows": 542872072,
+    "head_rows": 47138880,
+    "input_rows": 47124480,
+    "policy_rows": 542872072
+  },
+  "formal_connection_commits": 200,
+  "gpu_kernel_seconds": null,
+  "main_update_attempts": 20000,
+  "observed_wall_seconds_by_phase": {
+    "confirm_final500": 617.8251642879964,
+    "connection_candidate_search": 10993.189243878998,
+    "main_update": 5957.941808399037
+  },
+  "proposal_forward_and_scan_operator_work_scope": "INCLUDED_IN_MAIN_ENGINE_CONNECTION_CANDIDATE_SEARCH_PHASES; CHILD_LEDGERS_NOT_DOUBLE_ADDED",
+  "recorded_candidates": 200,
+  "scale_checks": 4400,
+  "uncertain_optimizer_calls": 0,
+  "wall_time_scope": "MAIN_AND_CANDIDATE_SYNCHRONIZED_BY_ORIGINAL_ENGINE; NOT_GPU_KERNEL_TIME"
+}
