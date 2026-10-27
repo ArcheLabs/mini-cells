@@ -30,7 +30,9 @@ def main():
     parser.add_argument("--run-diagnostic", action="store_true")
     args = parser.parse_args()
     if args.run_diagnostic:
-        raise RuntimeError("R1_GATE1_REQUIRES_INDEPENDENT_REVIEW_AND_EXPLICIT_EXECUTION_APPROVAL")
+        from minicells_fast_r1.diagnostic import diagnostic
+
+        return diagnostic(args)
     print(json.dumps(engineering(args), sort_keys=True), flush=True)
 
 

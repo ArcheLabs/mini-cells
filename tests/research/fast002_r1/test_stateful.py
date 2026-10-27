@@ -231,32 +231,28 @@ def test_report_allowlist_accepts_metadata_csv_md_but_never_weights(tmp_path):
     assert "candidate.pt" not in publication.NAMES
 
 
-def test_cli_cannot_launch_gate1_or_gate3_without_new_approval(tmp_path, monkeypatch):
+def test_cli_default_stays_engineering_and_authorized_flag_is_explicit(tmp_path, monkeypatch):
     import runpy
     import sys
 
-    from minicells_fast_r1 import runner
+    from minicells_fast_r1 import diagnostic, runner
     from minicells_fast_r1.common import BASE
 
-    monkeypatch.setattr(
-        runner, "engineering", lambda args: pytest.fail("No execution before approval")
-    )
-    monkeypatch.setattr(
-        sys,
-        "argv",
-        [
-            "run.py",
-            "--output",
-            str(tmp_path / "out"),
-            "--assets",
-            str(tmp_path / "assets"),
-            "--run-diagnostic",
-        ],
-    )
-    ns = runpy.run_path(str(BASE / "run.py"), run_name="r1_no_launch")
-    with pytest.raises(RuntimeError, match="REQUIRES_INDEPENDENT_REVIEW_AND_EXPLICIT"):
-        ns["main"]()
-    assert not (tmp_path / "out").exists()
+    calls = []
+    monkeypatch.setattr(runner, "engineering", lambda args: calls.append("engineering"))
+    monkeypatch.setattr(diagnostic, "diagnostic", lambda args: calls.append("bounded_gate1"))
+    argv = ["run.py", "--output", str(tmp_path / "out"), "--assets", str(tmp_path / "assets")]
+    monkeypatch.setattr(sys, "argv", argv)
+    ns = runpy.run_path(str(BASE / "run.py"), run_name="r1_launch")
+    ns["main"]()
+    argv.append("--run-diagnostic")
+    ns["main"]()
+    assert calls == ["engineering", "bounded_gate1"]
+    c, approval = diagnostic.authorized_config()
+    assert approval["limits"]["main_updates"] == 1000
+    assert c["diagnostic"]["gate1_execution_authorized"]
+    assert not c["diagnostic"]["gate3_execution_authorized"]
+    assert not config()["diagnostic"]["gate1_execution_authorized"]
 
 
 def test_zero_candidate_direction_is_recorded_not_made_into_success(tmp_path, monkeypatch):
@@ -316,3 +312,53 @@ def test_failure_reports_do_not_export_signed_urls_or_tokens():
         safe_failure(RuntimeError("R1_SOURCE_IDENTITY_CHANGED:private-detail"))["code"]
         == "R1_SOURCE_IDENTITY_CHANGED"
     )
+
+
+def test_authorized_context_full_pipeline_and_completed_resume(tmp_path, monkeypatch):
+    from minicells_fast_r1 import diagnostic, publication
+    from minicells_fast_r1.common import ID, read
+
+    c, state, folder = fixture(tmp_path)
+    first, _, proof, _ = context(c, state, folder, tmp_path / "reference")
+    historical = first.curve + [proof["pending_main_curve_row"]]
+    x = torch.tensor([[7, 8, 9, 10]])
+    c["admission"].update(
+        manifest_sha256="fixture", ordered_input_hashes=[sha(x.squeeze(0).tolist())]
+    )
+    bundle = {"role": "admission", "manifest_sha256": "fixture", "inputs": [x]}
+    root = tmp_path / "diagnostic"
+    ident = {"scope": "CPU_SYNTHETIC_ONLY", "seed": 7001, "arm": "B11-H"}
+    parent = {"checkpoint_sha256": "fixture", "identity": {"scope": "CPU_SYNTHETIC_ONLY"}}
+    decision = diagnostic.execute_context(
+        c, state, parent, folder, bundle, root, ident, historical, unit=True
+    )
+    assert len(decision["attempts"]) == 22
+    assert diagnostic.totals(root)["main_replay_updates"] == 50
+    assert diagnostic.totals(root)["cell_optimizer_calls"] == 50
+    assert diagnostic.totals(root)["candidate_optimizer_calls"] == 2
+    monkeypatch.setattr(
+        replay, "make_engine", lambda *a, **k: pytest.fail("Completed run must not retrain")
+    )
+    assert (
+        diagnostic.execute_context(
+            c, state, parent, folder, bundle, root, ident, historical, unit=True
+        )
+        == decision
+    )
+    manifest = {"experiment_id": ID, "scope": diagnostic.SCOPE, "run_id": "a" * 32}
+    publication.finalize(root, manifest, False)
+    _, files, _, _ = publication.payload(root)
+    assert "contexts/7001-B11-H/REPLAY_AUDIT.json" in files
+    assert not any(name.endswith(".pt") or name.startswith("private/") for name in files)
+    assert read(root / "contexts/7001-B11-H/REPLAY_AUDIT.json")["exact_same_environment_restore"]
+
+
+def test_partial_attempt_accounting_blocks_uncertain_candidate(tmp_path):
+    from minicells_fast_r1 import diagnostic
+
+    identity = {"scope": "CPU_SYNTHETIC_ONLY"}
+    path = tmp_path / "private/seed-arm/candidate.jsonl"
+    journal = Journal(path, identity)
+    journal.append("OPT_BEGIN", {"id": "unknown", "optimizer": "connection", "gradient_norm": 1.0})
+    with pytest.raises(RuntimeError, match="BUDGET_OR_UNCERTAIN"):
+        diagnostic.totals(tmp_path)

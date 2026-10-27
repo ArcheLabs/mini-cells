@@ -180,6 +180,10 @@ def run(engine, stream, directory, c, identity, historical_curve=None):
     try:
         while engine.step < c["diagnostic"]["pause_main_step"]:
             engine.update(stream, directory / "latest.pt", [])
+            if not engine.r1_cpu_fixture and engine.step % 10 == 0:
+                print(
+                    "[R1 Gate1]", identity["seed"], identity["arm"], "main", engine.step, flush=True
+                )
             if historical_curve:
                 actual = engine.curve[-1]
                 old = historical_curve[engine.step - 1]

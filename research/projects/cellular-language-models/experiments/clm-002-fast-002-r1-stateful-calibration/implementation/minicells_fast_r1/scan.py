@@ -105,6 +105,17 @@ def run(engine, package, refs, journal, directory, c, identity):
                 }
             progress["attempts"].append(row)
             atomic(path, progress)
+            if not getattr(engine, "r1_cpu_fixture", False):
+                print(
+                    "[R1 Gate1]",
+                    identity["seed"],
+                    identity["arm"],
+                    "scale",
+                    scale,
+                    "passed",
+                    row["passed"],
+                    flush=True,
+                )
     finally:
         old.work = work
     if fingerprint(old.state_dict()) != source or len(progress["attempts"]) != 22:

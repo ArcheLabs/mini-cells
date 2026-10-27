@@ -31,19 +31,40 @@ NAMES = {
 }
 
 
+CONTEXT_NAMES = {
+    "REPLAY_AUDIT.json",
+    "CANDIDATE.json",
+    "ADMISSION_DECISION.json",
+    "COST_LEDGER.json",
+    "COMPLETE.json",
+    "SCAN_PROGRESS.json",
+    "CONNECTION_SCALE_SCAN.csv",
+}
+
+
+def allowed(name):
+    parts = Path(name).parts
+    return name in NAMES or (
+        len(parts) == 3
+        and parts[0] == "contexts"
+        and parts[1].replace("-", "").isalnum()
+        and parts[2] in CONTEXT_NAMES
+    )
+
+
 def payload(root):
     root = Path(root)
     manifest = read(root / "RUN_MANIFEST.json")
-    if (
-        manifest.get("experiment_id") != ID
-        or manifest.get("scope") != "STATEFUL_CALIBRATION_ENGINEERING"
-    ):
+    if manifest.get("experiment_id") != ID or manifest.get("scope") not in {
+        "STATEFUL_CALIBRATION_ENGINEERING",
+        "BOUNDED_STATEFUL_GATE1_DIAGNOSTIC",
+    }:
         raise previous.old.transport.PublicationError("R1_REPORT_SCOPE_MISMATCH")
     files = {}
     total = 0
     for name, expected in manifest["artifact_files"].items():
         path = root / name
-        if name not in NAMES or any(p.is_symlink() for p in (path, *path.parents)):
+        if not allowed(name) or any(p.is_symlink() for p in (path, *path.parents)):
             raise previous.old.transport.PublicationError("R1_UNSAFE_ARTIFACT")
         raw = path.read_bytes()
         total += len(raw)
@@ -92,9 +113,9 @@ def existing(root):
 
 def finalize(root, manifest, enabled):
     manifest["artifact_files"] = {
-        p.name: {"bytes": p.stat().st_size, "sha256": digest(p)}
-        for p in root.iterdir()
-        if p.is_file() and p.name in NAMES
+        p.relative_to(root).as_posix(): {"bytes": p.stat().st_size, "sha256": digest(p)}
+        for p in root.rglob("*")
+        if p.is_file() and allowed(p.relative_to(root).as_posix())
     }
     atomic(root / "RUN_MANIFEST.json", manifest)
     return publish(root) if enabled else {"status": "LOCAL_RETAINED_NOT_PUBLISHED"}
