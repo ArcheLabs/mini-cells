@@ -27,3 +27,7 @@
 完整源码CI和CPU测试先在本地/GitHub完成，Kaggle不跑旧测试套件。`--publish-existing`仅回传已有报告。权重、原始文本、Token数组和私有状态不进入结果分支；签名URL不落盘。
 
 历史GPU资产在本机未加载时，审计明确显示PENDING。工程或CPU测试通过不代表 Gate1/Gate3 通过，更不代表联合训练的科学收益已获证实。
+
+## Runtime evidence fix001
+
+The CPU Notebook explicitly includes `verification/CPU_VALIDATION.json`, which is consumed by report finalization. It repairs a prior sparse checkout before asset access, reuses the existing asset cache, and writes to `fast-r1-cpu-output-evidence-fix001` to preserve the failed output. Scientific runtime source/config/data and Gate1/Gate3 restrictions are unchanged. The previous published parent audit already verified all10 real A Checkpoints; that failure occurred afterward during report assembly.
