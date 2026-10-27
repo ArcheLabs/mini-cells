@@ -130,6 +130,14 @@ def engineering(args):
                 "gpu_used": False,
                 "optimizer_calls": 0,
             }
+        historical = read(root / "HISTORICAL_EVIDENCE_AUDIT.json")
+        historical["real_parent_bytes_loaded"] = (
+            parent["status"] == "REAL_A_PARENT_CPU_IDENTITY_PASS"
+        )
+        historical["r1_parent_cpu_inspection_status"] = parent["status"]
+        if historical["real_parent_bytes_loaded"]:
+            historical["status"] = "PUBLISHED_EVIDENCE_AND_R1_PARENT_CPU_IDENTITY_VERIFIED"
+        atomic(root / "HISTORICAL_EVIDENCE_AUDIT.json", historical)
         atomic(root / "PARENT_STATE_AUDIT.json", parent)
         atomic(
             root / "REPLAY_AUDIT.json",
