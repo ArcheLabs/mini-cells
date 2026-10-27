@@ -12,6 +12,7 @@ from minicells_fast001.parent import make_engine
 from minicells_fast002 import checkpoints, recovery
 from minicells_fast002.common import historical_reports
 from minicells_r3e.common import fingerprint
+from minicells_r3k.reuse import bind
 
 from . import assets, history, publication
 from .common import BASE, ID, atomic, config, digest, read, require_ci, sha, source
@@ -101,6 +102,8 @@ def engineering(args):
     }
     atomic(root / "RUN_MANIFEST.json", manifest)
     try:
+        if args.publish_github:
+            bind(publication.previous.old.transport.preflight, _checkout=publication.checkout)(root)
         atomic(
             root / "REGISTRATION.json",
             {"identity": ident, "configuration": c, "execution_authorized": False},
