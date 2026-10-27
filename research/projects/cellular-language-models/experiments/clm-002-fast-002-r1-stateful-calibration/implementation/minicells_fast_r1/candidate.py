@@ -12,9 +12,9 @@ from .common import atomic, digest, read
 
 
 def generate(engine, journal, directory, identity):
-    if (
-        not getattr(engine, "r1_cpu_fixture", False)
-        and not engine.fast["diagnostic"]["gate1_execution_authorized"]
+    if not getattr(engine, "r1_cpu_fixture", False) and not (
+        engine.fast["diagnostic"]["gate1_execution_authorized"]
+        or engine.fast.get("stage_b", {}).get("execution_authorized", False)
     ):
         raise RuntimeError("R1_REAL_CANDIDATE_SEARCH_REQUIRES_EXPLICIT_GATE1_APPROVAL")
     artifact = directory / "candidate.pt"

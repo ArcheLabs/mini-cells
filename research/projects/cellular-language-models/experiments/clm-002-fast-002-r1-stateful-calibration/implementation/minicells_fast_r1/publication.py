@@ -28,6 +28,7 @@ NAMES = {
     "CI_ACCEPTANCE.json",
     "PROTOCOL_AMENDMENT.md",
     "REGISTRATION.json",
+    "FINAL_ANALYSIS.json",
 }
 
 
@@ -44,6 +45,13 @@ CONTEXT_NAMES = {
 
 def allowed(name):
     parts = Path(name).parts
+    if len(parts) == 2 and parts[0] == "jobs" and parts[1].endswith(".json"):
+        return parts[1][:-5].replace("-", "").isalnum()
+    if len(parts) == 3 and parts[0] == "proposals":
+        return parts[1].replace("-", "").isalnum() and parts[2] in {
+            "CANDIDATE.json",
+            "ADMISSION_DECISION.json",
+        }
     return name in NAMES or (
         len(parts) == 3
         and parts[0] == "contexts"
@@ -58,6 +66,7 @@ def payload(root):
     if manifest.get("experiment_id") != ID or manifest.get("scope") not in {
         "STATEFUL_CALIBRATION_ENGINEERING",
         "BOUNDED_STATEFUL_GATE1_DIAGNOSTIC",
+        "FORMAL_STAGE_B_CONTROLLED_JOINT_VALUE",
     }:
         raise previous.old.transport.PublicationError("R1_REPORT_SCOPE_MISMATCH")
     files = {}
@@ -68,7 +77,11 @@ def payload(root):
             raise previous.old.transport.PublicationError("R1_UNSAFE_ARTIFACT")
         raw = path.read_bytes()
         total += len(raw)
-        if len(raw) > previous.old.transport.MAX_FILE_BYTES or total > 24_000_000:
+        if len(raw) > previous.old.transport.MAX_FILE_BYTES or total > (
+            48_000_000
+            if manifest["scope"] == "FORMAL_STAGE_B_CONTROLLED_JOINT_VALUE"
+            else 24_000_000
+        ):
             raise previous.old.transport.PublicationError("R1_REPORT_TOO_LARGE")
         if expected != {"bytes": len(raw), "sha256": digest(path)}:
             raise previous.old.transport.PublicationError("R1_ARTIFACT_BYTES_CHANGED")

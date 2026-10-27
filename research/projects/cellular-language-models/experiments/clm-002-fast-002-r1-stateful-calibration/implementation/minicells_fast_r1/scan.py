@@ -13,9 +13,9 @@ from .common import atomic, read, sha
 
 @torch.no_grad()
 def run(engine, package, refs, journal, directory, c, identity):
-    if (
-        not getattr(engine, "r1_cpu_fixture", False)
-        and not c["diagnostic"]["gate1_execution_authorized"]
+    if not getattr(engine, "r1_cpu_fixture", False) and not (
+        c["diagnostic"]["gate1_execution_authorized"]
+        or c.get("stage_b", {}).get("execution_authorized", False)
     ):
         raise RuntimeError("R1_REAL_ADMISSION_SCAN_REQUIRES_EXPLICIT_GATE1_APPROVAL")
     if refs.get("role") != "admission" or refs.get("manifest_sha256") != c["admission"].get(
