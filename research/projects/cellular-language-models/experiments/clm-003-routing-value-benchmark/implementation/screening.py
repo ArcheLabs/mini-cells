@@ -145,6 +145,9 @@ def prepare_data(m, folder):
     c["experiment_id"] = m["experiment_id"]
     c["data"]["confirm_windows"] = d["records_per_task"]
     generated = data.generate(c, folder / "evaluation")
+    for name, expected in d["sha256"].items():
+        if rv.digest(folder / "evaluation" / name) != expected:
+            raise RuntimeError("CLM003_FROZEN_CONFIRMATION_ARRAY_CHANGED")
     assets.training(folder / "train")
     assets.admission(c, folder / "admission")
     # Compare the new untouched pool against all known FAST001/FAST002 and R1 role hashes.
