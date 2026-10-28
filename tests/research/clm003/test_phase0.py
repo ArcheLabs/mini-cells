@@ -93,3 +93,31 @@ def test_notebook_actual_launch_arguments_parse_without_network(tmp_path, monkey
     runpy.run_path(str(BASE / "run.py"), run_name="notebook_actual_command")["main"]()
     assert len(calls) == 1 and calls[0].publish_github
     assert calls[0].output == tmp_path
+
+
+def test_first_run_manifest_exists_before_real_preflight_contract(tmp_path, monkeypatch):
+    from minicells_r3k.reuse import bind as real_bind
+
+    observed = []
+
+    def bind_with_preflight_probe(function, **kwargs):
+        if function is rv.transport.previous.old.transport.preflight:
+
+            def probe(root):
+                m = rv.read(root / "RUN_MANIFEST.json")
+                assert m["run_status"] == "PREPARING"
+                observed.append(m["run_id"])
+
+            return probe
+        return real_bind(function, **kwargs)
+
+    monkeypatch.setattr(rv, "bind", bind_with_preflight_probe)
+    monkeypatch.setattr(rv, "publish", lambda root: {"status": "TEST_TRANSPORT_ONLY"})
+    root = rv.engineering(
+        SimpleNamespace(output=tmp_path, publish_existing=False, publish_github=True)
+    )
+    assert observed == [rv.read(root / "RUN_MANIFEST.json")["run_id"]]
+    assert (
+        rv.read(root / "RUN_MANIFEST.json")["run_status"]
+        == "PHASE0_CPU_PASS_SCIENTIFIC_SPECIFICATION_PENDING"
+    )

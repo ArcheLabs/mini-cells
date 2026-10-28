@@ -169,6 +169,7 @@ def engineering(args):
         run_status="PREPARING",
         environment={"python": platform.python_version(), "torch": str(torch.__version__)},
     )
+    atomic(root / "RUN_MANIFEST.json", manifest)
     failure = None
     try:
         if args.publish_github:
