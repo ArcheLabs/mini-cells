@@ -4,6 +4,7 @@ import copy
 import json
 import math
 import platform
+import traceback
 from pathlib import Path
 from statistics import mean, stdev
 
@@ -342,6 +343,17 @@ def run(args):
         evidence = safe_failure(error)
         if str(error).startswith("CLM003_") and str(error).replace("_", "").isalnum():
             evidence["code"] = str(error)
+        if str(error) in {
+            "CONNECTION_LOGIT_INTERPOLATION_MISMATCH",
+            "NONFINITE_TRUST_METRIC",
+            "NONFINITE_ROUTING_LOGITS",
+        }:
+            evidence["code"] = str(error)
+        evidence["repository_frames"] = [
+            {"file": Path(f.filename).name, "function": f.name, "line": f.lineno}
+            for f in traceback.extract_tb(error.__traceback__)
+            if str(rv.ROOT) in f.filename
+        ]
         rv.atomic(root / "FAILURE.json", evidence)
         print("[CLM003 PRIMARY FAILURE] " + json.dumps(evidence, sort_keys=True), flush=True)
     finally:
