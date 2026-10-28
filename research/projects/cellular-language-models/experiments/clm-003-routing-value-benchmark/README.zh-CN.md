@@ -25,3 +25,9 @@ Kaggle 导入 `notebooks/kaggle-phase0-cpu.ipynb`，选择 CPU、Internet 并勾
 Kaggle 使用 GPU、Internet、GITHUB_TOKEN、KAGGLE_API_TOKEN 后 Run All。历史 Output 自动按固定版本 116 和固定文件哈希读取，无需 Input 挂载。完整报告、九组结果、候选治理明细、失败记录和成本自动回传 GitHub；权重和数组保留 Output。完整结果回传失败时再次 Run All 只重试回传。跨会话必须先恢复本次 Output；不宣称已实现自动跨会话续跑。
 
 新增改动相关测试及短程合成 A/B/C 端到端试验已通过；未重复旧阶段 0 门禁。实际九路径筛查尚未运行，不能提供真实 NLL 或成功结论。运行后查看 `SCREENING_RESULTS.json`、`COST_LEDGER.json`、`jobs/*.json`。
+
+### 插值校验修复（数值版本 2）
+
+只对 CLM003 的已知线性 GraphConnection 使用 FP64 仿射恒等式校验，同时逐项严格核验实际部署的 Float32 缩放参数。实际 Float32 路由、原始 softmax KL、动作/完整路径变化计算及 Trust 上限不变；旧 Float32 插值误差和是否通过仍写入每尺度报告。非线性或未知 Connection 明确阻断，不跳过校验。历史 R1、FAST001、已发布失败结果不修改。
+
+旧失败运行尚有未提交的主训练事务，不能把它当作可自动续跑的完整检查点。修复后 Run All 创建独立新版本，不覆盖旧 Output；应保留旧 `COST_LEDGER.json` 与失败记录，分别报告失败预算。这里没有启动重训。
