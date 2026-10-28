@@ -73,7 +73,7 @@ def audited_scan(engine, package, refs, journal, directory, config, identity):
         )
         return metrics
 
-    return bind(scan.run, trust=checked_trust)(
+    return bind(getattr(scan.run, "__wrapped__", scan.run), trust=checked_trust)(
         engine, package, refs, journal, directory, config, identity
     )
 

@@ -55,6 +55,16 @@ def test_one_short_ABC_end_to_end_trial(tmp_path, monkeypatch):
         inputs.append([r["input_sha256"] for r in e.curve])
         assert e.journal.summary()["optimizer_calls_by_group"]["cell"] == 2
         assert ("random_rewire" in e.curve[-1]) == (arm == "C")
+        if arm == "A":
+            reports = list((tmp_path / "trial/proposals").glob("*/*/ADMISSION_DECISION.json"))
+            assert len(reports) == 1
+            attempts = rv.read(reports[0])["attempts"]
+            assert len(attempts) == 22
+            assert all(
+                r.get("interpolation_check_scope")
+                == "FP64_AFFINE_LAW_AND_EXACT_DEPLOYED_FP32_PARAMETERS"
+                for r in attempts
+            )
         if arm == "C":
             assert e.curve[-1]["random_rewire"]["independent_of_A_acceptance"]
         for h in e._work_handles:
