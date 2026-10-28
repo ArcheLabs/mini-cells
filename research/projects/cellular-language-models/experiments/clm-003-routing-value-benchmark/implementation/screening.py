@@ -412,10 +412,9 @@ def publish(root):
     if "config_sha256" not in stored:
         registered = rv.read(root / "REGISTRATION.json")
         frozen = registered["manifest"]
-        import hashlib
-
-        raw = (json.dumps(frozen, ensure_ascii=False, indent=2) + "\n").encode()
-        if hashlib.sha256(raw).hexdigest() != stored["manifest_sha256"]:
+        if rv.digest(BASE / "SCREENING_MANIFEST.json") != stored["manifest_sha256"] or rv.sha(
+            frozen
+        ) != rv.sha(rv.read(BASE / "SCREENING_MANIFEST.json")):
             raise RuntimeError("CLM003_RETAINED_MANIFEST_IDENTITY_MISMATCH")
         stored["config_sha256"] = rv.sha(frozen)
         stored["publication_metadata_repair"] = (
