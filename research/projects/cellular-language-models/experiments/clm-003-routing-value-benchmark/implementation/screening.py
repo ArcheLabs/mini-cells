@@ -3,6 +3,7 @@
 import copy
 import json
 import math
+import platform
 from pathlib import Path
 from statistics import mean, stdev
 
@@ -149,17 +150,29 @@ def prepare_data(m, folder):
     # Compare the new untouched pool against all known FAST001/FAST002 and R1 role hashes.
     fields = ["raw_text_sha256", "normalized_text_sha256", "window_sha256"]
     exclusion = {k: set() for k in fields}
+    window_parts = {"input": set(), "target": set()}
+    import numpy as np
+
+    def exclude_arrays(path, roles):
+        for task in ("Story", "Arithmetic"):
+            for role in roles:
+                for window in np.load(path / (task + "-" + role + ".npy"), mmap_mode="r"):
+                    window_parts["input"].add(rv.sha(window[:-1].tolist()))
+                    window_parts["target"].add(rv.sha(window[1:].tolist()))
+
     from minicells_fast001.common import configuration as old_config
     from minicells_fast002.common import config as previous_config
 
     for number, old in enumerate((old_config(), previous_config())):
         path = folder / ("historical-" + str(number))
         data.generate(old, path)
+        exclude_arrays(path, ("train", "confirm"))
         for task in ("Story", "Arithmetic"):
             for role in ("train", "confirm"):
                 for row in rv.read(path / (task + "-" + role + ".json")):
                     for key in fields:
                         exclusion[key].add(row[key])
+    exclude_arrays(folder / "admission", ("admission",))
     for task in ("Story", "Arithmetic"):
         for row in rv.read(folder / "admission" / (task + "-admission.json")):
             for key, alias in zip(fields, ["raw", "normalized", "window"]):
@@ -168,6 +181,18 @@ def prepare_data(m, folder):
         for row in rv.read(folder / "evaluation" / (task + "-confirm.json")):
             if any(row[k] in exclusion[k] for k in fields):
                 raise RuntimeError("CLM003_CONFIRMATION_CONTENT_CONFLICT_NO_RESELECTION")
+    for task in ("Story", "Arithmetic"):
+        for window in np.load(folder / "evaluation" / (task + "-confirm.npy"), mmap_mode="r"):
+            if (
+                rv.sha(window[:-1].tolist()) in window_parts["input"]
+                or rv.sha(window[1:].tolist()) in window_parts["target"]
+            ):
+                raise RuntimeError("CLM003_CONFIRMATION_INPUT_TARGET_CONFLICT_NO_RESELECTION")
+    generated["screening_exclusion"] = {
+        "raw_normalized_window_input_target_overlap": 0,
+        "coverage": "FAST001_FAST002_TRAIN_CONFIRM_AND_R1_ADMISSION",
+        "global_history_coverage_claimed": False,
+    }
     return c, generated
 
 
@@ -196,6 +221,11 @@ def run(args):
         run_status="PREPARING",
         scientific_optimizer_updates=0,
         gpu_used=False,
+        environment={
+            "python": platform.python_version(),
+            "torch": str(torch.__version__),
+            "cuda": torch.version.cuda,
+        },
     )
     rv.atomic(root / "RUN_MANIFEST.json", run_manifest)
     failure = None
@@ -204,6 +234,7 @@ def run(args):
         if not torch.cuda.is_available():
             raise RuntimeError("CLM003_SCREENING_GPU_REQUIRED")
         run_manifest["gpu_used"] = True
+        run_manifest["environment"]["gpu"] = torch.cuda.get_device_name(0)
         c, ds = prepare_data(m, args.assets)
         rv.atomic(root / "REGISTRATION.json", {"manifest": m, "data": ds})
         reports = historical_reports(c, args.assets / "historical-reports")
@@ -232,6 +263,12 @@ def run(args):
         for seed in m["seeds"]:
             for arm in "ABC":
                 e = engine(m, parent, seed, arm, root, bundle, device="cuda:0")
+                initialization = {
+                    "cell_state_sha256": rv.fingerprint(e.model.cells.state_dict()),
+                    "connection_sha256": rv.fingerprint(e.model.connection.state_dict()),
+                    "cell_optimizer_sha256": rv.fingerprint(e.cell_optimizer.state_dict()),
+                    "parent_cells_previously_coadapted": True,
+                }
                 directory = e.stage_directory
                 latest = directory / "latest.pt"
                 done = directory / "COMPLETE.json"
@@ -277,6 +314,7 @@ def run(args):
                         "seed": seed,
                         "arm": arm,
                         "manifest_sha256": rv.sha(m),
+                        "initialization": initialization,
                         "checkpoint_sha256": rv.digest(latest),
                         "evaluation": evaluation,
                         "curve": e.curve,
