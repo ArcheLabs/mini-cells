@@ -61,3 +61,35 @@ def test_engineering_manifests_and_metadata_only_payload(tmp_path):
     (root / "CPU_GATE.json").write_text("{}")
     with pytest.raises(RuntimeError):
         rv.payload(root)
+
+
+def test_notebook_actual_launch_arguments_parse_without_network(tmp_path, monkeypatch):
+    import ast
+    import json
+    import sys
+
+    notebook = json.loads((BASE / "notebooks/kaggle-phase0-cpu.ipynb").read_text())
+    code = "".join(notebook["cells"][1]["source"])
+    tree = ast.parse(code)
+    commands = [
+        node.args[0]
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "run"
+        and node.args
+        and isinstance(node.args[0], ast.List)
+        and any(isinstance(e, ast.Constant) and e.value == "--output" for e in node.args[0].elts)
+    ]
+    assert len(commands) == 1
+    command = eval(
+        compile(ast.Expression(commands[0]), "<notebook-command>", "eval"),
+        {"sys": sys, "CODE": BASE.parent, "BASE_REL": BASE.name, "OUTPUT": tmp_path},
+    )
+    assert "--assets" not in command
+    calls = []
+    monkeypatch.setattr(rv, "engineering", lambda args: calls.append(args))
+    monkeypatch.setattr(sys, "argv", list(map(str, command[1:])))
+    runpy.run_path(str(BASE / "run.py"), run_name="notebook_actual_command")["main"]()
+    assert len(calls) == 1 and calls[0].publish_github
+    assert calls[0].output == tmp_path
