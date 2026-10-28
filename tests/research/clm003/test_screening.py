@@ -58,3 +58,42 @@ def test_one_short_ABC_end_to_end_trial(tmp_path, monkeypatch):
             h.remove()
     assert len(set(starts)) == 1
     assert inputs[0] == inputs[1] == inputs[2]
+
+
+def test_actual_screening_notebook_commands_parse(tmp_path, monkeypatch):
+    import ast
+    import json
+    import runpy
+
+    from test_phase0 import BASE
+
+    notebook = json.loads((BASE / "notebooks/kaggle-abc-screening.ipynb").read_text())
+    commands = [
+        n.args[0]
+        for n in ast.walk(ast.parse("".join(notebook["cells"][1]["source"])))
+        if isinstance(n, ast.Call)
+        and isinstance(n.func, ast.Name)
+        and n.func.id == "run"
+        and n.args
+        and isinstance(n.args[0], ast.List)
+        and any(isinstance(e, ast.Constant) and e.value == "--output" for e in n.args[0].elts)
+    ]
+    assert len(commands) == 2
+    calls = []
+    monkeypatch.setattr(sc, "run", lambda args: calls.append(args))
+    monkeypatch.syspath_prepend(str(BASE))
+    for node in commands:
+        values = eval(
+            compile(ast.Expression(node), "<screen-command>", "eval"),
+            {
+                "sys": sys,
+                "CODE": BASE.parent,
+                "BASE_REL": BASE.name,
+                "OUTPUT": tmp_path / "output",
+                "ASSETS": tmp_path / "assets",
+            },
+        )
+        monkeypatch.setattr(sys, "argv", list(map(str, values[1:])))
+        runpy.run_path(str(BASE / "screen.py"), run_name="screen_parser")["main"]()
+    assert len(calls) == 2
+    assert any(x.publish_existing for x in calls) and any(x.publish_github for x in calls)

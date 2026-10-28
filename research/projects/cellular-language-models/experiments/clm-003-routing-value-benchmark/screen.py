@@ -5,12 +5,20 @@ from pathlib import Path
 
 from run import bootstrap
 
-if __name__ == "__main__":
+
+def main():
     bootstrap()
     from screening import run
 
-    p = argparse.ArgumentParser()
-    p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--assets", type=Path, required=True)
-    p.add_argument("--publish-existing", action="store_true")
-    run(p.parse_args())
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--assets", type=Path, required=True)
+    parser.add_argument("--publish-existing", action="store_true")
+    parser.add_argument(
+        "--publish-github", action="store_true", help="Reports always use verified GitHub return"
+    )
+    run(parser.parse_args())
+
+
+if __name__ == "__main__":
+    main()
