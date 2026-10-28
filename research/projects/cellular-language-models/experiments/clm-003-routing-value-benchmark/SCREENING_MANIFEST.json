@@ -387,5 +387,16 @@
       "execution_authorized": true
     }
   },
-  "scientific_confirmation_claimed": false
+  "scientific_confirmation_claimed": false,
+  "numerical_audit_revision": {
+    "version": 2,
+    "scope": "CLM003_ONLY_AFFINE_INTERPOLATION",
+    "production_trust_metrics_and_thresholds_changed": false,
+    "checks": [
+      "EXACT_DEPLOYED_FP32_SCALED_PARAMETER_IDENTITY",
+      "FP64_AFFINE_LAW_SAME_RTOL_ATOL",
+      "RECORD_LEGACY_FP32_CHECK_ERROR_WITHOUT_USING_IT_AS_TRUST_METRIC"
+    ],
+    "old_failed_run": "PRESERVE_OUTPUT_AND_COSTS; DO_NOT_RESUME_UNCERTAIN_INFLIGHT_OPTIMIZER; NEW_SOURCE_RUN_IS_SEPARATE"
+  }
 }

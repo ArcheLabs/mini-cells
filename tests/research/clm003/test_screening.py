@@ -5,6 +5,9 @@ import os
 import sys
 from pathlib import Path
 
+import pytest
+from minicells_r3f.evaluation import trust
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "fast002_r1"))
 import screening as sc
 from minicells_fast001.data import Stream
@@ -132,3 +135,57 @@ def test_retained_publication_supplies_required_config_hash_without_training(tmp
 
     monkeypatch.setattr(sc, "bind", intercept)
     assert sc.publish(tmp_path)["status"] == "TEST_PUBLICATION_CONTRACT_PASS"
+
+
+def test_affine_audit_handles_fp32_rounding_and_rejects_wrong_parameters(monkeypatch):
+
+    import interpolation_audit as audit
+    import torch
+    from minicells_r3e.graph import GraphConnection
+
+    torch.manual_seed(414)
+
+    class Model(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.connection = GraphConnection(128)
+
+        def scores(self, h, t, p):
+            z = torch.zeros(h.shape[0], 6)
+            q, d = self.connection(h, t, z, p)
+            return q, d, z
+
+    old = Model()
+    for p in old.connection.parameters():
+        p.data.normal_()
+    full = copy.deepcopy(old)
+    for p in full.connection.parameters():
+        p.data.add_(torch.randn_like(p) * 0.01)
+    new = copy.deepcopy(old)
+    for name, p in new.connection.named_parameters():
+        a = old.connection.state_dict()[name]
+        b = full.connection.state_dict()[name]
+        p.data.copy_(a + 0.5 * (b - a))
+    h = torch.randn(4096, 128)
+    previous = torch.zeros(4096, dtype=torch.long)
+    rows = [{"state": h, "stage": 0, "previous": previous}]
+    package = {
+        "original_connection": old.connection.state_dict(),
+        "candidate_connection": full.connection.state_dict(),
+    }
+    sentinel = {"kl": 0.123, "action_change": 0.04, "path_change": 0.17}
+    monkeypatch.setattr(audit, "trust", lambda *a, **k: dict(sentinel))
+
+    def run_scan(*args, **kwargs):
+        return trust(
+            old, new, [], fixed=rows, expected_delta=[full.scores(h, 0, previous)[1]], scale=0.5
+        )
+
+    monkeypatch.setattr(audit.scan, "run", run_scan)
+    metrics = audit.audited_scan(None, package, None, None, None, None, None)
+    assert not metrics["legacy_fp32_interpolation_pass"]
+    assert metrics["interpolation_max_abs_error"] < 1e-10
+    assert all(metrics[k] == v for k, v in sentinel.items())
+    next(new.connection.parameters()).data.add_(0.01)
+    with pytest.raises(RuntimeError, match="SCALED_PARAMETER_IDENTITY"):
+        audit.audited_scan(None, package, None, None, None, None, None)

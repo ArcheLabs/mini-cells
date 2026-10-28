@@ -9,13 +9,13 @@ from statistics import mean, stdev
 
 import routing_value as rv
 import torch
+from interpolation_audit import Engine
 from minicells_fast001 import data
 from minicells_fast001.evaluation import evaluate
 from minicells_fast001.parent import make_engine as original_engine
 from minicells_fast002 import checkpoints, recovery
 from minicells_fast002.common import historical_reports
 from minicells_fast_r1 import assets
-from minicells_fast_r1.stageb_engine import Engine
 from minicells_r3f.evaluation import states, trust
 from minicells_r3k.reuse import bind
 
