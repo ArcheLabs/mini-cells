@@ -213,6 +213,7 @@ def run(args):
         "screening_id": m["experiment_id"],
         "source_sha": rv.source(),
         "manifest_sha256": rv.digest(BASE / "SCREENING_MANIFEST.json"),
+        "config_sha256": rv.sha(m),
     }
     identity["run_id"] = rv.sha(identity)[:32]
     root = args.output / identity["run_id"]
@@ -342,6 +343,7 @@ def run(args):
         if str(error).startswith("CLM003_") and str(error).replace("_", "").isalnum():
             evidence["code"] = str(error)
         rv.atomic(root / "FAILURE.json", evidence)
+        print("[CLM003 PRIMARY FAILURE] " + json.dumps(evidence, sort_keys=True), flush=True)
     finally:
         from minicells_jct001.cost import Journal
 
@@ -405,6 +407,22 @@ def allowed(name):
 
 
 def publish(root):
+    root = Path(root)
+    stored = rv.read(root / "RUN_MANIFEST.json")
+    if "config_sha256" not in stored:
+        registered = rv.read(root / "REGISTRATION.json")
+        frozen = registered["manifest"]
+        import hashlib
+
+        raw = (json.dumps(frozen, ensure_ascii=False, indent=2) + "\n").encode()
+        if hashlib.sha256(raw).hexdigest() != stored["manifest_sha256"]:
+            raise RuntimeError("CLM003_RETAINED_MANIFEST_IDENTITY_MISMATCH")
+        stored["config_sha256"] = rv.sha(frozen)
+        stored["publication_metadata_repair"] = (
+            "ADD_CANONICAL_CONFIG_HASH_FROM_RETAINED_REGISTRATION_NO_MODEL_WORK"
+        )
+        rv.atomic(root / "RUN_MANIFEST.json", stored)
+
     def payload(directory):
         # Reuse checked metadata serialization with the screening scope explicitly bound here.
         m = rv.read(directory / "RUN_MANIFEST.json")

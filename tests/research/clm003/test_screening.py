@@ -97,3 +97,38 @@ def test_actual_screening_notebook_commands_parse(tmp_path, monkeypatch):
         runpy.run_path(str(BASE / "screen.py"), run_name="screen_parser")["main"]()
     assert len(calls) == 2
     assert any(x.publish_existing for x in calls) and any(x.publish_github for x in calls)
+
+
+def test_retained_publication_supplies_required_config_hash_without_training(tmp_path, monkeypatch):
+    import hashlib
+    import json
+
+    from minicells_r3k.reuse import bind as real_bind
+
+    m = sc.manifest()
+    rv.atomic(tmp_path / "REGISTRATION.json", {"manifest": m})
+    raw = (json.dumps(m, ensure_ascii=False, indent=2) + "\n").encode()
+    rv.atomic(
+        tmp_path / "RUN_MANIFEST.json",
+        {
+            "manifest_sha256": hashlib.sha256(raw).hexdigest(),
+            "scope": "CLM003_ABC_SCREENING",
+            "artifact_files": {},
+            "run_id": "a" * 32,
+            "source_sha": "b" * 40,
+        },
+    )
+
+    def intercept(function, **kwargs):
+        if function is rv.transport.previous.old.transport.publish:
+
+            def transport(root):
+                manifest, _, _, _ = kwargs["payload"](root)
+                assert manifest["config_sha256"] == rv.sha(m)
+                return {"status": "TEST_PUBLICATION_CONTRACT_PASS"}
+
+            return transport
+        return real_bind(function, **kwargs)
+
+    monkeypatch.setattr(sc, "bind", intercept)
+    assert sc.publish(tmp_path)["status"] == "TEST_PUBLICATION_CONTRACT_PASS"
