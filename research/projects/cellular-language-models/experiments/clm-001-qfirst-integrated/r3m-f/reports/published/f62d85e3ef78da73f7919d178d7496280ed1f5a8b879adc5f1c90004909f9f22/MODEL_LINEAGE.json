@@ -1,0 +1,92 @@
+{
+  "anchors": [
+    {
+      "arm": "TINY-A1",
+      "evidence": {
+        "hf_reference": {
+          "cross_session_verified": false,
+          "hf_repo": "libingjiang/minicells-research-checkpoints",
+          "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+          "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+          "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+          "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+        },
+        "identity": {
+          "architecture": "B",
+          "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+          "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+          "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+          "seed": 151001301,
+          "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+          "training_router": "H"
+        },
+        "receipt": {
+          "bytes": 7445890,
+          "cross_session_verified": false,
+          "file": "objects/9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf.pt",
+          "identity": {
+            "architecture": "B",
+            "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+            "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+            "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+            "seed": 151001301,
+            "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+            "training_router": "H"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+          "state_fingerprint": "053fd7ed95849d128524be73359ce04cd8cf5c68752f996cf821e937ba30907e",
+          "step": 300
+        }
+      },
+      "seed": 151001301
+    }
+  ],
+  "architecture": {
+    "architecture": "B-H",
+    "calls_per_token": 8,
+    "cells": 6,
+    "optimizer": "CONTINUE_VERIFIED_R3H_CELL_ADAMW_STATE",
+    "parent_config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+    "parent_experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+    "parent_hf_repo": "libingjiang/minicells-research-checkpoints",
+    "parent_hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+    "parent_manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+    "parent_manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+    "parent_run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+    "parent_source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+    "parent_step": 300,
+    "sequence_length": 64,
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "tokens_per_step": 512,
+    "vocab_size": 4096
+  },
+  "confirmation": "SEALED",
+  "connection_updates": 0,
+  "embedding_head": "ORIGINAL_FROZEN_RULES",
+  "identity": {
+    "config_sha256": "d00e8f039ff18ad5e53405495f3ee21622ac88a2b6b5db198627443497789a56",
+    "experiment_id": "CLM-001-R3m-F-Arithmetic-Specialization-001",
+    "phase": "EXPLORATORY_DEVELOPMENT",
+    "run_id": "7f4ae3ed14da7ddbcfa9dcccce56e574450bed167cff0332cca35140d8b3fe68",
+    "source_sha": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05"
+  },
+  "parameters_added": 0,
+  "parent": {
+    "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+    "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+    },
+    "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+    "source_sha": "01f226e259356bb06a8ef275e8314649062446e4"
+  },
+  "r3m_registration": "BLOCKED",
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "status": "NOT_RUN_TINY_ONLY"
+}
