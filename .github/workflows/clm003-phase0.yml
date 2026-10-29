@@ -2,7 +2,7 @@ name: CLM003 Phase0 CPU
 on:
   workflow_dispatch:
   push:
-    branches: [codex/fast002-r1-stateful-calibration]
+    branches: [codex/fast002-r1-stateful-calibration, codex/clm003-csync]
     paths: ['research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/**', 'tests/research/clm003/**', '.github/workflows/clm003-phase0.yml']
 permissions:
   contents: read
