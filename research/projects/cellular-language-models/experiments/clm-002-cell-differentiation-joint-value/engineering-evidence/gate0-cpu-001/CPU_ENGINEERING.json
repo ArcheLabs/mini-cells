@@ -1,0 +1,735 @@
+{
+  "actual_cpu_unit_optimizer_calls": 8,
+  "arms": {
+    "B00-H": {
+      "curve": [
+        {
+          "cell_call_counts": [
+            2.0,
+            3.0,
+            9.0,
+            14.0,
+            25.0,
+            11.0
+          ],
+          "cell_gradient_norms": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "effective_targets": 8,
+          "input_sha256": "50d9dfebff1bd90099d6083440f665eeb87e81fb0d65227032d50f9ac477830e",
+          "loss": 3.466840982437134,
+          "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+          "parameter_delta": {
+            "cells": 0.0,
+            "connection": 0.0
+          },
+          "proposal": null,
+          "step": 1,
+          "task_cell_call_counts": {
+            "Arithmetic": [
+              0.0,
+              2.0,
+              6.0,
+              7.0,
+              12.0,
+              5.0
+            ],
+            "Story": [
+              2.0,
+              1.0,
+              3.0,
+              7.0,
+              13.0,
+              6.0
+            ]
+          },
+          "zero_gradient_cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "cell_call_counts": [
+            0.0,
+            1.0,
+            4.0,
+            16.0,
+            28.0,
+            15.0
+          ],
+          "cell_gradient_norms": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "effective_targets": 8,
+          "input_sha256": "a14fff8d74ec91b28e3d576dd6f59ddd9ecd5c490dc1d2b4ac38e3e35a3b258a",
+          "loss": 3.480193853378296,
+          "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+          "parameter_delta": {
+            "cells": 0.0,
+            "connection": 0.0
+          },
+          "proposal": null,
+          "step": 2,
+          "task_cell_call_counts": {
+            "Arithmetic": [
+              0.0,
+              1.0,
+              2.0,
+              8.0,
+              14.0,
+              7.0
+            ],
+            "Story": [
+              0.0,
+              0.0,
+              2.0,
+              8.0,
+              14.0,
+              8.0
+            ]
+          },
+          "zero_gradient_cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "mask": {
+        "cells.0.down.weight": false,
+        "cells.0.up.weight": false,
+        "cells.1.down.weight": false,
+        "cells.1.up.weight": false,
+        "cells.2.down.weight": false,
+        "cells.2.up.weight": false,
+        "cells.3.down.weight": false,
+        "cells.3.up.weight": false,
+        "cells.4.down.weight": false,
+        "cells.4.up.weight": false,
+        "cells.5.down.weight": false,
+        "cells.5.up.weight": false,
+        "connection.linear.bias": false,
+        "connection.linear.weight": false,
+        "context.output.weight": false,
+        "context.query.weight": false,
+        "embedding.weight": false,
+        "final.bias": false,
+        "final.weight": false,
+        "gate.net.0.bias": false,
+        "gate.net.0.weight": false,
+        "gate.net.2.bias": false,
+        "gate.net.2.weight": false,
+        "gate.stage.weight": false,
+        "init.weight": false,
+        "memory.key.weight": false,
+        "memory.norm.bias": false,
+        "memory.norm.weight": false,
+        "memory.value.weight": false,
+        "norm.bias": false,
+        "norm.weight": false,
+        "position.weight": false
+      },
+      "parameter_groups_moved": {
+        "cells": false,
+        "connection": false
+      },
+      "public_parameters_unchanged": true,
+      "scope": "SYNTHETIC_CPU_ENGINEERING_TOKEN_MODEL_NOT_SCIENTIFIC_RESULTS",
+      "shared_initial_checkpoint_sha256": "da11d9927757d48f8bbb77a709650bd46a655318d6cba2b6daebcdd47217f0b7",
+      "task_labels_enter_model": false
+    },
+    "B01-H": {
+      "curve": [
+        {
+          "cell_call_counts": [
+            2.0,
+            3.0,
+            9.0,
+            14.0,
+            25.0,
+            11.0
+          ],
+          "cell_gradient_norms": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "effective_targets": 8,
+          "input_sha256": "50d9dfebff1bd90099d6083440f665eeb87e81fb0d65227032d50f9ac477830e",
+          "loss": 3.466840982437134,
+          "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+          "parameter_delta": {
+            "cells": 0.0,
+            "connection": 0.002644540509209037
+          },
+          "proposal": {
+            "actions_per_state": 6,
+            "attempts": [
+              {
+                "action_change": 0.9375,
+                "kl": 2.468067350491765e-07,
+                "passed": true,
+                "path_change": 1.0,
+                "scale": 1.0
+              }
+            ],
+            "chosen_scale": 1.0,
+            "counterfactual_states": 2,
+            "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+            "losses": [
+              1.3518365449272096e-07
+            ],
+            "policy_optimizer_updates": 1,
+            "work": {
+              "cell_rows": 218,
+              "context_rows": 16,
+              "gate_rows": 304,
+              "head_rows": 28,
+              "input_rows": 16,
+              "policy_rows": 304
+            }
+          },
+          "step": 1,
+          "task_cell_call_counts": {
+            "Arithmetic": [
+              0.0,
+              2.0,
+              6.0,
+              7.0,
+              12.0,
+              5.0
+            ],
+            "Story": [
+              2.0,
+              1.0,
+              3.0,
+              7.0,
+              13.0,
+              6.0
+            ]
+          },
+          "zero_gradient_cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "cell_call_counts": [
+            0.0,
+            21.0,
+            27.0,
+            8.0,
+            8.0,
+            0.0
+          ],
+          "cell_gradient_norms": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "effective_targets": 8,
+          "input_sha256": "a14fff8d74ec91b28e3d576dd6f59ddd9ecd5c490dc1d2b4ac38e3e35a3b258a",
+          "loss": 3.4810203313827515,
+          "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+          "parameter_delta": {
+            "cells": 0.0,
+            "connection": 0.002541624242439866
+          },
+          "proposal": {
+            "actions_per_state": 6,
+            "attempts": [
+              {
+                "action_change": 0.46875,
+                "kl": 1.3467672488332028e-07,
+                "passed": true,
+                "path_change": 0.75,
+                "scale": 1.0
+              }
+            ],
+            "chosen_scale": 1.0,
+            "counterfactual_states": 2,
+            "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+            "losses": [
+              2.0847619452979416e-07
+            ],
+            "policy_optimizer_updates": 1,
+            "work": {
+              "cell_rows": 146,
+              "context_rows": 16,
+              "gate_rows": 232,
+              "head_rows": 28,
+              "input_rows": 16,
+              "policy_rows": 232
+            }
+          },
+          "step": 2,
+          "task_cell_call_counts": {
+            "Arithmetic": [
+              0.0,
+              11.0,
+              13.0,
+              8.0,
+              0.0,
+              0.0
+            ],
+            "Story": [
+              0.0,
+              10.0,
+              14.0,
+              0.0,
+              8.0,
+              0.0
+            ]
+          },
+          "zero_gradient_cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "mask": {
+        "cells.0.down.weight": false,
+        "cells.0.up.weight": false,
+        "cells.1.down.weight": false,
+        "cells.1.up.weight": false,
+        "cells.2.down.weight": false,
+        "cells.2.up.weight": false,
+        "cells.3.down.weight": false,
+        "cells.3.up.weight": false,
+        "cells.4.down.weight": false,
+        "cells.4.up.weight": false,
+        "cells.5.down.weight": false,
+        "cells.5.up.weight": false,
+        "connection.linear.bias": true,
+        "connection.linear.weight": true,
+        "context.output.weight": false,
+        "context.query.weight": false,
+        "embedding.weight": false,
+        "final.bias": false,
+        "final.weight": false,
+        "gate.net.0.bias": false,
+        "gate.net.0.weight": false,
+        "gate.net.2.bias": false,
+        "gate.net.2.weight": false,
+        "gate.stage.weight": false,
+        "init.weight": false,
+        "memory.key.weight": false,
+        "memory.norm.bias": false,
+        "memory.norm.weight": false,
+        "memory.value.weight": false,
+        "norm.bias": false,
+        "norm.weight": false,
+        "position.weight": false
+      },
+      "parameter_groups_moved": {
+        "cells": false,
+        "connection": true
+      },
+      "public_parameters_unchanged": true,
+      "scope": "SYNTHETIC_CPU_ENGINEERING_TOKEN_MODEL_NOT_SCIENTIFIC_RESULTS",
+      "shared_initial_checkpoint_sha256": "da11d9927757d48f8bbb77a709650bd46a655318d6cba2b6daebcdd47217f0b7",
+      "task_labels_enter_model": false
+    },
+    "B10-H": {
+      "curve": [
+        {
+          "cell_call_counts": [
+            2.0,
+            3.0,
+            9.0,
+            14.0,
+            25.0,
+            11.0
+          ],
+          "cell_gradient_norms": [
+            0.008493722416460514,
+            0.0131844412535429,
+            0.04931527376174927,
+            0.041391849517822266,
+            0.08100114017724991,
+            0.03722354769706726
+          ],
+          "effective_targets": 8,
+          "input_sha256": "50d9dfebff1bd90099d6083440f665eeb87e81fb0d65227032d50f9ac477830e",
+          "loss": 3.466840982437134,
+          "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+          "parameter_delta": {
+            "cells": 0.011755190789699554,
+            "connection": 0.0
+          },
+          "proposal": null,
+          "step": 1,
+          "task_cell_call_counts": {
+            "Arithmetic": [
+              0.0,
+              2.0,
+              6.0,
+              7.0,
+              12.0,
+              5.0
+            ],
+            "Story": [
+              2.0,
+              1.0,
+              3.0,
+              7.0,
+              13.0,
+              6.0
+            ]
+          },
+          "zero_gradient_cells": []
+        },
+        {
+          "cell_call_counts": [
+            0.0,
+            1.0,
+            4.0,
+            16.0,
+            28.0,
+            15.0
+          ],
+          "cell_gradient_norms": [
+            0.0,
+            0.006257918663322926,
+            0.029668038710951805,
+            0.04201945289969444,
+            0.07641508430242538,
+            0.043955590575933456
+          ],
+          "effective_targets": 8,
+          "input_sha256": "a14fff8d74ec91b28e3d576dd6f59ddd9ecd5c490dc1d2b4ac38e3e35a3b258a",
+          "loss": 3.4803370237350464,
+          "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+          "parameter_delta": {
+            "cells": 0.007283875253051519,
+            "connection": 0.0
+          },
+          "proposal": null,
+          "step": 2,
+          "task_cell_call_counts": {
+            "Arithmetic": [
+              0.0,
+              1.0,
+              2.0,
+              8.0,
+              14.0,
+              7.0
+            ],
+            "Story": [
+              0.0,
+              0.0,
+              2.0,
+              8.0,
+              14.0,
+              8.0
+            ]
+          },
+          "zero_gradient_cells": [
+            0
+          ]
+        }
+      ],
+      "mask": {
+        "cells.0.down.weight": true,
+        "cells.0.up.weight": true,
+        "cells.1.down.weight": true,
+        "cells.1.up.weight": true,
+        "cells.2.down.weight": true,
+        "cells.2.up.weight": true,
+        "cells.3.down.weight": true,
+        "cells.3.up.weight": true,
+        "cells.4.down.weight": true,
+        "cells.4.up.weight": true,
+        "cells.5.down.weight": true,
+        "cells.5.up.weight": true,
+        "connection.linear.bias": false,
+        "connection.linear.weight": false,
+        "context.output.weight": false,
+        "context.query.weight": false,
+        "embedding.weight": false,
+        "final.bias": false,
+        "final.weight": false,
+        "gate.net.0.bias": false,
+        "gate.net.0.weight": false,
+        "gate.net.2.bias": false,
+        "gate.net.2.weight": false,
+        "gate.stage.weight": false,
+        "init.weight": false,
+        "memory.key.weight": false,
+        "memory.norm.bias": false,
+        "memory.norm.weight": false,
+        "memory.value.weight": false,
+        "norm.bias": false,
+        "norm.weight": false,
+        "position.weight": false
+      },
+      "parameter_groups_moved": {
+        "cells": true,
+        "connection": false
+      },
+      "public_parameters_unchanged": true,
+      "scope": "SYNTHETIC_CPU_ENGINEERING_TOKEN_MODEL_NOT_SCIENTIFIC_RESULTS",
+      "shared_initial_checkpoint_sha256": "da11d9927757d48f8bbb77a709650bd46a655318d6cba2b6daebcdd47217f0b7",
+      "task_labels_enter_model": false
+    },
+    "B11-H": {
+      "curve": [
+        {
+          "cell_call_counts": [
+            2.0,
+            3.0,
+            9.0,
+            14.0,
+            25.0,
+            11.0
+          ],
+          "cell_gradient_norms": [
+            0.008493722416460514,
+            0.0131844412535429,
+            0.04931527376174927,
+            0.041391849517822266,
+            0.08100114017724991,
+            0.03722354769706726
+          ],
+          "effective_targets": 8,
+          "input_sha256": "50d9dfebff1bd90099d6083440f665eeb87e81fb0d65227032d50f9ac477830e",
+          "loss": 3.466840982437134,
+          "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+          "parameter_delta": {
+            "cells": 0.011755190789699554,
+            "connection": 0.00264679454267025
+          },
+          "proposal": {
+            "actions_per_state": 6,
+            "attempts": [
+              {
+                "action_change": 0.875,
+                "kl": 2.2188496018316073e-07,
+                "passed": true,
+                "path_change": 1.0,
+                "scale": 1.0
+              }
+            ],
+            "chosen_scale": 1.0,
+            "counterfactual_states": 2,
+            "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+            "losses": [
+              -2.7794158086180687e-09
+            ],
+            "policy_optimizer_updates": 1,
+            "work": {
+              "cell_rows": 218,
+              "context_rows": 16,
+              "gate_rows": 304,
+              "head_rows": 28,
+              "input_rows": 16,
+              "policy_rows": 304
+            }
+          },
+          "step": 1,
+          "task_cell_call_counts": {
+            "Arithmetic": [
+              0.0,
+              2.0,
+              6.0,
+              7.0,
+              12.0,
+              5.0
+            ],
+            "Story": [
+              2.0,
+              1.0,
+              3.0,
+              7.0,
+              13.0,
+              6.0
+            ]
+          },
+          "zero_gradient_cells": []
+        },
+        {
+          "cell_call_counts": [
+            0.0,
+            21.0,
+            18.0,
+            17.0,
+            8.0,
+            0.0
+          ],
+          "cell_gradient_norms": [
+            0.0,
+            0.05396992713212967,
+            0.09526413679122925,
+            0.08657559752464294,
+            0.07737260311841965,
+            0.0
+          ],
+          "effective_targets": 8,
+          "input_sha256": "a14fff8d74ec91b28e3d576dd6f59ddd9ecd5c490dc1d2b4ac38e3e35a3b258a",
+          "loss": 3.4803171157836914,
+          "main_gradient_norm_scope": "ACCUMULATED_MAIN_BACKWARD; TASKWISE_GRADIENTS_ARE_OFFLINE_PROBES",
+          "parameter_delta": {
+            "cells": 0.006544568110257387,
+            "connection": 0.0025408281944692135
+          },
+          "proposal": {
+            "actions_per_state": 6,
+            "attempts": [
+              {
+                "action_change": 0.6875,
+                "kl": 1.48909947483844e-07,
+                "passed": true,
+                "path_change": 1.0,
+                "scale": 1.0
+              }
+            ],
+            "chosen_scale": 1.0,
+            "counterfactual_states": 2,
+            "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+            "losses": [
+              8.27094481792301e-08
+            ],
+            "policy_optimizer_updates": 1,
+            "work": {
+              "cell_rows": 146,
+              "context_rows": 16,
+              "gate_rows": 232,
+              "head_rows": 28,
+              "input_rows": 16,
+              "policy_rows": 232
+            }
+          },
+          "step": 2,
+          "task_cell_call_counts": {
+            "Arithmetic": [
+              0.0,
+              12.0,
+              8.0,
+              12.0,
+              0.0,
+              0.0
+            ],
+            "Story": [
+              0.0,
+              9.0,
+              10.0,
+              5.0,
+              8.0,
+              0.0
+            ]
+          },
+          "zero_gradient_cells": [
+            0,
+            5
+          ]
+        }
+      ],
+      "mask": {
+        "cells.0.down.weight": true,
+        "cells.0.up.weight": true,
+        "cells.1.down.weight": true,
+        "cells.1.up.weight": true,
+        "cells.2.down.weight": true,
+        "cells.2.up.weight": true,
+        "cells.3.down.weight": true,
+        "cells.3.up.weight": true,
+        "cells.4.down.weight": true,
+        "cells.4.up.weight": true,
+        "cells.5.down.weight": true,
+        "cells.5.up.weight": true,
+        "connection.linear.bias": true,
+        "connection.linear.weight": true,
+        "context.output.weight": false,
+        "context.query.weight": false,
+        "embedding.weight": false,
+        "final.bias": false,
+        "final.weight": false,
+        "gate.net.0.bias": false,
+        "gate.net.0.weight": false,
+        "gate.net.2.bias": false,
+        "gate.net.2.weight": false,
+        "gate.stage.weight": false,
+        "init.weight": false,
+        "memory.key.weight": false,
+        "memory.norm.bias": false,
+        "memory.norm.weight": false,
+        "memory.value.weight": false,
+        "norm.bias": false,
+        "norm.weight": false,
+        "position.weight": false
+      },
+      "parameter_groups_moved": {
+        "cells": true,
+        "connection": true
+      },
+      "public_parameters_unchanged": true,
+      "scope": "SYNTHETIC_CPU_ENGINEERING_TOKEN_MODEL_NOT_SCIENTIFIC_RESULTS",
+      "shared_initial_checkpoint_sha256": "da11d9927757d48f8bbb77a709650bd46a655318d6cba2b6daebcdd47217f0b7",
+      "task_labels_enter_model": false
+    }
+  },
+  "gpu_used": false,
+  "historical_parent_used_for_unit_training": false,
+  "identity": {
+    "code_sha256": "6e3f2d613e7e31bc9579e94c7b6ba5ed1f13b64eaaba147ad7642bdeebe3f47e",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "run_id": "c0b1fdb4be9f7ba335c3718b06ad87f9",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "source_sha": "cbea37dea0a2929207aef206b63d8d6087c26750"
+  },
+  "parent_inspected": false,
+  "restoration": {
+    "B00-H": {
+      "cross_session_verified": false,
+      "local_cpu_full_state_exact": true
+    },
+    "B01-H": {
+      "cross_session_verified": false,
+      "local_cpu_full_state_exact": true
+    },
+    "B10-H": {
+      "cross_session_verified": false,
+      "local_cpu_full_state_exact": true
+    },
+    "B11-H": {
+      "cross_session_verified": false,
+      "local_cpu_full_state_exact": true
+    }
+  },
+  "same_paired_data_order": true,
+  "scientific_updates": 0,
+  "status": "CPU_ENGINEERING_PASS"
+}
