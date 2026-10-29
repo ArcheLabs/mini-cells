@@ -1,0 +1,79 @@
+{
+  "artifact_files": {
+    "ADMISSION_DECISION.json": {
+      "bytes": 185,
+      "sha256": "d200e13c168756e180012ab8964cc2333bb79414821699a9fe29e664147647e7"
+    },
+    "CONNECTION_SCALE_SCAN.csv": {
+      "bytes": 72,
+      "sha256": "f361a52f7893f4a73785bb2e2471e163881eb58a3be29f69e6ba88a0daf983af"
+    },
+    "COST_LEDGER.json": {
+      "bytes": 273,
+      "sha256": "03a600001009f8f3e6a4ccb2f78a77c51342caaa95fd56342d85210f8a79e9b0"
+    },
+    "DATASET_MANIFEST.json": {
+      "bytes": 12094,
+      "sha256": "eb6c33204529398ca9fdf1b5728239f8699a1d88333144b8ff57b169807296ff"
+    },
+    "FINAL_REPORT.md": {
+      "bytes": 626,
+      "sha256": "e84a6fad713a64a460b79c160d019671aebfee55a444348aa5729a4f5953917a"
+    },
+    "GATE_DECISION.json": {
+      "bytes": 398,
+      "sha256": "31d238e851a80a248c4f6a41da601499139c40fa64e5628794d9f470f11981e8"
+    },
+    "HISTORICAL_AUDIT.json": {
+      "bytes": 48818,
+      "sha256": "0e0a13cbdf0ab1c6ac48f08c7f434a7150f61bdd48ef25b89d829bfd8060c23c"
+    },
+    "HISTORICAL_EVIDENCE_AUDIT.json": {
+      "bytes": 2501,
+      "sha256": "2bd0ac7ef6461f2a6bc12feb064372fc0ffe498960fdd64fb3db07957d7f0699"
+    },
+    "PARENT_STATE_AUDIT.json": {
+      "bytes": 110,
+      "sha256": "14b7d9bf87da0413faf2369390f4dba5f06744af60c5cc8298d5c27605cf63b3"
+    },
+    "PROTOCOL_AMENDMENT.md": {
+      "bytes": 33031,
+      "sha256": "59681d4e826decaa1a51fd26d1de43209e6331046b292eb7c881c156195a4740"
+    },
+    "REGISTRATION.json": {
+      "bytes": 11519,
+      "sha256": "132fcfc305d27deae781f461e9a22eb97f31285b973758ef08772ee6c90251e9"
+    },
+    "REPLAY_AUDIT.json": {
+      "bytes": 597,
+      "sha256": "98a13d0d7117d516a72c33dab76f62a73734147466655c537ed01219d52fe8bd"
+    }
+  },
+  "command": [
+    "research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/run.py",
+    "--output",
+    "/tmp/fast-r1-engineering-output",
+    "--assets",
+    "/tmp/fast-r1-cpu-assets"
+  ],
+  "config_sha256": "83afea53894e941c34e71dfc0378c02a4064e62fbc912b30e60f6f4f05f47244",
+  "environment": {
+    "numpy": "1.24.4",
+    "python": "3.8.10",
+    "tokenizers": "0.20.3",
+    "torch": "2.4.1+cu121"
+  },
+  "experiment_id": "CLM-002-FAST-002-R1-STATEFUL-CALIBRATION",
+  "gpu_used": false,
+  "identity": {
+    "config_sha256": "83afea53894e941c34e71dfc0378c02a4064e62fbc912b30e60f6f4f05f47244",
+    "experiment_id": "CLM-002-FAST-002-R1-STATEFUL-CALIBRATION",
+    "run_id": "fc3dc3130728c4da1577a3d52d64479c",
+    "source_sha": "08da0d59fde20459a468a1acf6bd339fba840ae1"
+  },
+  "run_id": "fc3dc3130728c4da1577a3d52d64479c",
+  "run_status": "CPU_ENGINEERING_COMPLETE_DIAGNOSTIC_EXECUTION_BLOCKED",
+  "scientific_optimizer_updates": 0,
+  "scope": "STATEFUL_CALIBRATION_ENGINEERING",
+  "source_sha": "08da0d59fde20459a468a1acf6bd339fba840ae1"
+}

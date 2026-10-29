@@ -1,0 +1,292 @@
+{
+  "admission": {
+    "all_contexts_same_refs": true,
+    "generation_seed": 271027004,
+    "manifest_sha256": "f43701a4c18ab72f6ef9d8dc5f0a9d3f4184c78689c5b9d88bf433bf57a013e3",
+    "names": [
+      "Kira",
+      "Leon",
+      "Mira",
+      "Nolan",
+      "Opal",
+      "Pavel",
+      "Rina",
+      "Soren"
+    ],
+    "namespace": "FAST002_R1_ADMISSION",
+    "order": "STORY_0_TO_15_THEN_ARITHMETIC_0_TO_15",
+    "ordered_input_hashes": [
+      "30f113b69113396301c0c44cf0483859ca61b36a32511855b59120a44a88dcbe",
+      "c9de2602b6bd677363401e33cf91e8c1685b42f7fb4a8e68d4b86c8c0630c203",
+      "cc2de44ea08052d15105ade7c6fdde61ccf902648a129f4d775e5703cda780e8",
+      "8eba97f1bf2afe12ed93068e7519240e67887d726e7eea153c6c0a9fa6f0503c",
+      "c8d49775de66f01b18042c58ea1808b7567ecacf32ef23e393fa238abaace23e",
+      "f0389a7bd03f21a37fe2fe09f558be3f60ce198f19cd02f5e17bcd0626363c6b",
+      "6f34303dd47a7488d370139e215c41035d44949913a93438933e76c5d7f61c6f",
+      "1bbd61423021a3064698cba4a1864e84556844efe584e669b5fb06fffc8be8f7",
+      "4a5746ea1d45de9e6aa45dec22d39769102121abe7462f2532abaada841401a4",
+      "199b05ec2fe40d6f414600aa9d02614d938ad5c8c8a2599283ad86f8f2fbbcdb",
+      "32dc5c9460b8aba3e4d7433bb2ec49ad299448d12b32a9da6d7796a7a56b8fd0",
+      "5f5441e1395ae2cefcf073c505a011a561ffceca9e5ce4a9bcffd8cc3116a0e0",
+      "7af4dbc193f27511178ce28c9bc1b017821cbaff4bf2ea7b75fa583150f07902",
+      "0982f634ba27ef9804c4d2e7429acde2bff30ccbe6f1b257b9ee26eb129f99c2",
+      "01fcda2699d6c944d8f883d5db9c4b0b6a67e448f5746ba510206469e47f16a9",
+      "b6fb99c0bda2ba101c2c07899963cb52db1e2849450ff1348c2b35dee061f45a",
+      "e2067b11fef9703e357f5109709be3f13f5f09e614e482cdb977f61c24f915da",
+      "e5060dcaab3f5e7736dc1dceb714c99f93c29360ab721213064006a3373bfbd0",
+      "7fc3a28b8160e4467ee8e47d4585beceeb74626d4c5c2c7765b665d5afe4ef67",
+      "2a7d8113bf0b205387775a289ec9846132c79a0bf77a257b0a74929e2fadb1ab",
+      "0d82f208e96d294653a29efec98208dffa129e9e02e1fc53bd4e4caa8990b948",
+      "2420522a7deba1f8b88e8e7f8288fb4e5011f9d6895e5b3fda826e426a1f1239",
+      "926376e66f0d2e51c7114a852b8390e7eb83931804187ade8837bce717311631",
+      "a49b76f2b4de3fb79040fdfbee5730a70aecc25f457067112d9020bbe1bd3d4f",
+      "64ed455bbb298ab44a2a0132d59404adc1cb56243b67060b233085ce39ff9369",
+      "76a297a0a86cd427e44e93f6ccef9736c2f6757eae0ea2bf241b7ecb63a69523",
+      "75cf267f38345fd63b92d8f0a9a00dee506560f6cebec372287e945a0066064c",
+      "75ff80e392d706b2468dabdfe89d2dcf7f6cb40a48b655effd06fd14ea87043f",
+      "07429b136ab295c5c4f36fa54d5841826c3ef2a7f120ece8ac87aaf9b6dc3733",
+      "cc260da0aeeeb39a9c13a4870ebc054e04a44fa8065114157986d27ae03c32ea",
+      "9e114a7b3e2a7ed66ab860f6fe4074f3151ff3557edc899c260740b6baa8670e",
+      "4719116c2562cb2ba850acefe363bc18205c6bb13fe69ce54cc97fc02cd3750a"
+    ],
+    "range": [
+      3000,
+      4000
+    ],
+    "records_per_task": 16
+  },
+  "analysis": {
+    "confidence": 0.95,
+    "delta_I_interpretation": "WHOLE_S_VS_H_TRAJECTORY_INCLUDING_DIFFERENT_STAGE_A_PARENTS_NOT_DIRECT_STAGE_B_ONLY_TASK_EFFECT",
+    "df": 4,
+    "final_step": 500,
+    "gate_selection_limitation": "SAME_SEEDS_AND_CONFIRM_REUSED_BY_DESIGN; NOMINAL_SEED_T_INTERVAL_NOT_UNCONDITIONAL_TYPE_I_ERROR_CERTIFICATION",
+    "inference_routing": "HARD_EPSILON_ZERO",
+    "joint_specialization_required_seeds": 4,
+    "main_loss": "0.5_STORY_TOKEN_MEAN_NLL_PLUS_0.5_ARITHMETIC_TOKEN_MEAN_NLL",
+    "minimum_effect": 0.01,
+    "primary": "I_H",
+    "quality_baseline": "SAME_SEED_SAME_CONDITION_SAME_TASK_B00",
+    "quality_cap": 0.02,
+    "secondary_alpha": 0.05,
+    "secondary_confirmatory_family": [
+      "delta_I"
+    ],
+    "secondary_multiplicity": "HOLM_SINGLE_PREDECLARED_SECONDARY_ENDPOINT"
+  },
+  "arms": [
+    "A-S",
+    "A-H",
+    "B00-S",
+    "B10-S",
+    "B01-S",
+    "B11-S",
+    "B00-H",
+    "B10-H",
+    "B01-H",
+    "B11-H"
+  ],
+  "batch_size": 8,
+  "connection": {
+    "actions": 6,
+    "backtrack": [
+      1.0,
+      0.5,
+      0.25,
+      0.125,
+      0.0625,
+      0.03125,
+      0.015625,
+      0.0078125,
+      0.00390625,
+      0.001953125,
+      0.0009765625,
+      0.00048828125,
+      0.000244140625,
+      0.0001220703125,
+      6.103515625e-05,
+      3.0517578125e-05,
+      1.52587890625e-05,
+      7.62939453125e-06,
+      3.814697265625e-06,
+      1.9073486328125e-06,
+      9.5367431640625e-07
+    ],
+    "candidate_labels": "CURRENT_MAIN_TRAIN_BATCH_NO_CONFIRM_TARGETS",
+    "clip": 1.0,
+    "learning_rate": 0.0003,
+    "optimizer": "FRESH_ADAMW_PER_PROPOSAL_NO_MOMENT_INTERPOLATION",
+    "policy_steps": 8,
+    "policy_steps_interpretation": "EIGHT_UPDATES_OF_MEAN_LOSS_OVER_ALL_12_STATES_EACH_STATE_CONTRIBUTES_EACH_ROUND",
+    "proposal_steps": [
+      50,
+      100,
+      150,
+      200,
+      250,
+      300,
+      350,
+      400,
+      450,
+      500
+    ],
+    "reference_sampling": "FIRST_8_STORY_TRAIN_FOR_S; FIRST_4_STORY_AND_4_ARITHMETIC_TRAIN_FOR_H; INPUT_ONLY",
+    "states": 12,
+    "suffix": "NATIVE_HARD_REROUTED_GREEDY_SUFFIX",
+    "trust": {
+      "action_change_max": 0.1,
+      "kl_max": 0.01,
+      "path_change_max": 0.2
+    },
+    "weight_decay": 0.1
+  },
+  "data": {
+    "confirm_windows": 512,
+    "dev_set": null,
+    "duplicate_attempt_cap": 50,
+    "generation_seeds": {
+      "confirm": 271027003,
+      "train": 271027001
+    },
+    "generator_version": "HASH_COUNTER_CONTROLLED_NARRATIVE_ARITHMETIC_V1",
+    "historical_samples_copied": false,
+    "ids_are_metadata_only_never_model_inputs": true,
+    "names": {
+      "confirm": [
+        "Cora",
+        "Dorian",
+        "Elara",
+        "Felix",
+        "Galen",
+        "Hana",
+        "Iris",
+        "Jonas"
+      ],
+      "train": [
+        "Lena",
+        "Tom",
+        "Mia",
+        "Ben",
+        "Sara",
+        "Alex",
+        "Nora",
+        "Sam"
+      ]
+    },
+    "numeric_ranges": {
+      "confirm": [
+        2000,
+        3000
+      ],
+      "train": [
+        10,
+        1000
+      ]
+    },
+    "train_windows": 8000
+  },
+  "diagnostic": {
+    "admission_parameter_rule": "NONZERO_PARAMETERS_AND_THREE_UPPER_BOUNDS_AS_REQUESTED",
+    "candidate_optimizer_calls_per_context": 8,
+    "contexts": 20,
+    "formal_connection_commits_allowed": 0,
+    "gate1_execution_authorized": false,
+    "gate3_execution_authorized": false,
+    "historical_ce_atol": 1e-06,
+    "historical_ce_rtol": 1e-05,
+    "interpolation_atol": 1e-07,
+    "interpolation_rtol": 1e-05,
+    "max_candidate_optimizer_calls": 160,
+    "max_replay_logical_updates": 1000,
+    "pause_main_step": 50,
+    "r3fv2_nonempty_path_rule": "SEPARATE_REPORTED_FLAG_PENDING_INDEPENDENT_REVIEW_NOT_SILENTLY_SUBSTITUTED",
+    "required_complete_seeds": 4,
+    "runtime_duplicate_replay_budget": "REVIEW_REQUIRED_IF_SECOND_FULL_TRAJECTORY_IS_REQUIRED; NO_EXTRA_UPDATES_AUTOMATICALLY",
+    "scales_including_zero": 22,
+    "strict_same_environment_replay_state_equality": true
+  },
+  "evaluation_batch_size": 8,
+  "experiment_id": "CLM-002-FAST-002-R1-STATEFUL-CALIBRATION",
+  "historical": {
+    "report_directory": "research/projects/cellular-language-models/experiments/clm-002-fast-001/reports/published/75df16bf240cb1998b134e420964d7bc",
+    "results_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+    "run_id": "75df16bf240cb1998b134e420964d7bc",
+    "source_sha": "cfef209dc1e33874137bae0069afc0d4fce33eb6"
+  },
+  "historical_fourteen_boundaries": "UNRESOLVED_UNCHANGED_NOT_USED_FOR_FAST_CONFIRM",
+  "history_fast002": {
+    "calibration_sha256": "b9096f3d1695edd0acd7f2d9162ffc036ce3f8f5f4f79100ae17ae0710c07ce8",
+    "commit": "6d3ab9a032e6232e93235fcf3b8d671ad744012d",
+    "run_id": "40ab59e0c7a4395ba019ecf28da6469a"
+  },
+  "initialization": {
+    "cell_optimizer": "INHERIT_PARENT_ADAMW_MOMENTS_ALL_ARMS",
+    "cell_warmup": "CONTINUE_ABSOLUTE_PARENT_STEP",
+    "epsilon": "RESET_REGISTERED_500_STEP_PHASE_SCHEDULE_ALL_ARMS",
+    "new_phase_counters": "ZERO_LOCAL_STEPS_AND_TARGETS",
+    "rng": "NEW_COMMON_SEED_AND_PHASE_STREAMS_NO_HISTORICAL_CUDA_RESUME_CLAIM",
+    "stage_b_parent": "MATCHING_SEED_AND_CONDITION_STAGE_A_STEP_500"
+  },
+  "max_workers": 2,
+  "parent": {
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+    },
+    "identity": {
+      "architecture": "B",
+      "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "seed": 151001301,
+      "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+      "training_router": "H"
+    },
+    "previous_bytes_acceptance_commit": "6fcd0ab9be2efc75d340bb414b0b09e04019a342",
+    "sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "step": 300
+  },
+  "phase_seed_offsets": {
+    "A": 271001,
+    "B": 272001
+  },
+  "protocol_sha256": "59681d4e826decaa1a51fd26d1de43209e6331046b292eb7c881c156195a4740",
+  "registration_status": "ENGINEERING_REVISION_GATE1_REQUIRES_REVIEW_AND_EXPLICIT_APPROVAL",
+  "scientific_scope": "CONTROLLED_SYNTHETIC_DISTRIBUTION_CURRENT_PARENT_ARCHITECTURE_AND_BUDGET_ONLY",
+  "seed_provenance": {
+    "does_not_claim_full_history_or_unpublished_seed_usage_certified": true,
+    "previous_registry_path": "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value/config/SEED_REGISTRY.json",
+    "same_seeds_in_both_fast_stages": true,
+    "type": "TRANSFER_OF_FIVE_PREVIOUSLY_RESERVED_UNEXECUTED_CLM002_STAGE_A_SEEDS"
+  },
+  "seeds": [
+    2026200004,
+    2026200005,
+    2026200006,
+    2026200007,
+    2026200008
+  ],
+  "sequence_length": 64,
+  "stage_a": {
+    "cell_call_share_min": 0.01,
+    "connection_frozen": true,
+    "paired_min": 0.01,
+    "persistence_steps": [
+      400,
+      500
+    ],
+    "required_seeds": 4,
+    "route_mass_collapse": 0.99,
+    "specialization_min": 0.01
+  },
+  "targets_per_update": 512,
+  "tokenizer": {
+    "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/artifact-recovery-001/independent-review-002/tokenizer.json",
+    "sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+  },
+  "updates": 500
+}

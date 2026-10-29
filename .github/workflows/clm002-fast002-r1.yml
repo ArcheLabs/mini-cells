@@ -1,0 +1,35 @@
+name: CLM-002 FAST-002 R1 CPU gate
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/fast002-r1-stateful-calibration]
+    paths:
+      - 'research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/implementation/**'
+      - 'research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/config/**'
+      - 'research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/run.py'
+      - 'research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/stage_b.py'
+      - 'tests/research/fast002_r1/**'
+      - '.github/workflows/clm002-fast002-r1.yml'
+  pull_request:
+    paths:
+      - 'research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/**'
+      - 'tests/research/fast002_r1/**'
+      - '.github/workflows/clm002-fast002-r1.yml'
+permissions:
+  contents: read
+jobs:
+  cpu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install numpy==1.24.4 tokenizers==0.20.3 pytest==8.3.5 ruff==0.16.6
+      - name: Lint only the new FAST implementation and necessary tests
+        run: python -m ruff check research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/implementation research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/run.py research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/stage_b.py tests/research/fast002_r1
+      - name: FAST CPU mechanism, data and gate tests
+        run: python -m pytest -q tests/research/fast002_r1 tests/research/clm002_fast002 tests/research/clm002_fast/test_mechanism.py::test_phase_parent_moments_pairing_cadence_and_frozen_groups
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'

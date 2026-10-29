@@ -1,0 +1,35 @@
+{
+  "schema": "minicells.r1.gate1.review-decision.v1",
+  "date": "2026-10-28",
+  "experiment_id": "CLM-002-FAST-002-R1-STATEFUL-CALIBRATION",
+  "review_basis": {
+    "human_supplied_review": "Current user message: execution integrity, source/state evidence, full scale scan, limitations and explicit request to record Gate1 decision",
+    "recorded_by": "IMPLEMENTING_AGENT; NOT_A_NEW_INDEPENDENT_REVIEWER",
+    "result_commit": "66a1db32567a48efc3b1da5faf521263b5d7915e",
+    "run_id": "bc11db59c60ede819e1b12d1f24f8c42",
+    "runtime_source_sha": "5768b89afcc113dbccf49f2176ac5b29648632a2",
+    "effective_config_sha256": "a45bfe1f74da598e2cc940068c2042f688e3bf16d0a168e4fc2d1c7136fae985"
+  },
+  "status": "GATE1_APPROVED_FOR_BOUNDED_DIAGNOSTIC_AND_ADMISSION_FEASIBILITY",
+  "gate1_approved": true,
+  "review_stage_completed": true,
+  "complete_contexts": 20,
+  "scale_checks": 440,
+  "complete_paired_seeds": 5,
+  "required_complete_paired_seeds": 4,
+  "all_selected_scales_pass_primary_and_historical_nonempty_path": true,
+  "gate3_authorized": false,
+  "formal_stage_b_authorized": false,
+  "scientific_joint_benefit_tested": false,
+  "new_optimizer_updates": 0,
+  "historical_results_mutated": false,
+  "approval_scope": "Accept the completed R1 Gate1 diagnostic and its feasibility evidence; allow preparation of a separate formal Stage B plan. No GPU execution authorization.",
+  "limitations": [
+    "Historical GPU bitwise replay NOT_CERTIFIED",
+    "Exact-content disjointness is not semantic independence",
+    "S/H contrast includes different Stage A parents",
+    "Candidate admission does not establish model quality or joint-learning benefit",
+    "Future proposals cannot be approved solely by a non-null chosen_scale"
+  ],
+  "historical_gate_decision": "Preserved unchanged in published commit; this additive review decision supersedes its pending-review field only for the named run."
+}
