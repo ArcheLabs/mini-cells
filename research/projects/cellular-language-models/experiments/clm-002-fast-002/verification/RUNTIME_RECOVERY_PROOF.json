@@ -1,0 +1,20 @@
+{
+  "actual_cloud_download_verified": false,
+  "automatic_version_search_bound": 12,
+  "existing_components": [
+    "kaggle_posthoc.kaggle_source.fetch",
+    "r3b_cf001.transport.RecoverableKaggleOutputAPI"
+  ],
+  "gpu_used": false,
+  "private_output_auth": "EXISTING_KAGGLE_API_TOKEN_OR_EXISTING_KAGGLE_CREDENTIALS",
+  "required_checkpoint_count": 30,
+  "scientific_optimizer_updates": 0,
+  "status": "MOCK_CPU_RECOVERY_PASS",
+  "tests": [
+    "single_pagination_per_version_and_exact_hashes",
+    "wrong_run_blocks_before_weights",
+    "wrong_checkpoint_sha_rejected",
+    "partial_file_preserved_for_official_resume",
+    "valid_complete_cache_skips_network"
+  ]
+}
