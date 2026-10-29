@@ -1,0 +1,145 @@
+{
+  "cross_session_verified": false,
+  "functional_preflight": {
+    "actual_optimizer_calls": 2,
+    "checkpoint_sha256": "212546909747c0fd6dc983adfafe956ebbe4c56a8c420e8ee0b664fe2e89a660",
+    "config_sha256": "743ee1114df1e6d8869189430afca474ea73dd9df6c13a14510a7c154f389593",
+    "cross_session_verified": false,
+    "host_wall_seconds": 6.132780147000005,
+    "identity": {
+      "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+      "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+      "device": "cuda:0",
+      "experiment_id": "JCT-001-S1",
+      "gpu_name": "Tesla T4",
+      "pilot_config_sha256": "ce555dc75d982379d7f8fa343ee36cbe2ddf045aec744b47f01ad2224751ec0a",
+      "role": "DISPOSABLE_FUNCTIONAL_PREFLIGHT",
+      "run_id": "d4d4fbca294078cc449d1cad02f2fe59",
+      "runtime": {
+        "numpy": "2.1.3",
+        "python": "3.13.15",
+        "torch": "2.11.0+cu128"
+      },
+      "scope": "SYNTHETIC_KNOWN_PATH_PILOT",
+      "seed": 431,
+      "source_code_sha256": "2db5137adde4c0baa017ccf9ab035d0596d53fc391ddb0c565ddc0a939bd8a12",
+      "source_sha": "711736cbc53dc8346416e378c4f2f422c17f4a0f"
+    },
+    "local_full_state_exact": true,
+    "next_forward_allclose": true,
+    "parameter_delta_l2": {
+      "cells": 0.0,
+      "connection": 0.4147605001926422
+    },
+    "reference_sha256": "541b22aada239d3311d54d1197217b276433fc878d80402a7dce75a18ed4de02",
+    "scientific_updates": 0,
+    "status": "FUNCTIONAL_PREFLIGHT_PASS"
+  },
+  "identity": {
+    "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+    "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+    "device": "cuda:0",
+    "experiment_id": "JCT-001-S1",
+    "gpu_name": "Tesla T4",
+    "pilot_config_sha256": "ce555dc75d982379d7f8fa343ee36cbe2ddf045aec744b47f01ad2224751ec0a",
+    "run_id": "d4d4fbca294078cc449d1cad02f2fe59",
+    "runtime": {
+      "numpy": "2.1.3",
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128"
+    },
+    "scope": "SYNTHETIC_KNOWN_PATH_PILOT",
+    "seed": 431,
+    "source_code_sha256": "2db5137adde4c0baa017ccf9ab035d0596d53fc391ddb0c565ddc0a939bd8a12",
+    "source_sha": "711736cbc53dc8346416e378c4f2f422c17f4a0f"
+  },
+  "receipts": {
+    "731001": {
+      "A": {
+        "bytes": 61882,
+        "cross_session_verified": false,
+        "file": "private/731001/A.pt",
+        "scope": "LOCAL_DEVICE_RESTORE_ONLY",
+        "sha256": "5f59ec47c2a9e27a6c632c6f12a11b1475d75a6899d5cc19915baca313737651",
+        "state_sha256": "2eab76e4ea01bf7c957631a0865ab32ea271abc26b986125c5918d5b592d9b0f",
+        "step": 200
+      },
+      "C": {
+        "bytes": 70216,
+        "cross_session_verified": false,
+        "file": "private/731001/C.pt",
+        "scope": "LOCAL_DEVICE_RESTORE_ONLY",
+        "sha256": "2a0286d596e1716753059cb39498683d410ec9ef8c39c61f82f7848da0aedae5",
+        "state_sha256": "f060fbd9143ad51d0c357f748764405846d7afc9e4e561b032aceda60cb19ee8",
+        "step": 200
+      },
+      "base": {
+        "bytes": 33210,
+        "cross_session_verified": false,
+        "file": "base.pt",
+        "scope": "LOCAL_CPU_RESTORE_ONLY",
+        "sha256": "c4b7b795ab1c2e39d690faec7ea92f114a1a544a1c1bde25c92292bdc758029f",
+        "state_sha256": "4f7258c56ed4f96dd8a22caddd6c874b3acb5fded14009c071323b6b198589d7",
+        "step": 0
+      }
+    },
+    "731002": {
+      "A": {
+        "bytes": 62010,
+        "cross_session_verified": false,
+        "file": "private/731002/A.pt",
+        "scope": "LOCAL_DEVICE_RESTORE_ONLY",
+        "sha256": "60f402f3983413ee856673915613bbe032733f1811812f652b004fdd197f54a1",
+        "state_sha256": "65343ccb0c32078c852b45a0025ea5ac1e59dc819a099aa3d055eee0bebcba10",
+        "step": 200
+      },
+      "C": {
+        "bytes": 70344,
+        "cross_session_verified": false,
+        "file": "private/731002/C.pt",
+        "scope": "LOCAL_DEVICE_RESTORE_ONLY",
+        "sha256": "df7c0a1cc4aa16fef321aa5dc2f5f4c8f598a117521bd8b1d10a88de890eb1e9",
+        "state_sha256": "c9d613f4a637bf4d009e329c689c6b4c54d15aa250d49a188180687437bb83ec",
+        "step": 200
+      },
+      "base": {
+        "bytes": 33338,
+        "cross_session_verified": false,
+        "file": "base.pt",
+        "scope": "LOCAL_CPU_RESTORE_ONLY",
+        "sha256": "f22a26f8d28d40441c29a9c83b9df34ed00e62f54fed6d783024f6713cbb9e2a",
+        "state_sha256": "aaba50d9f6ec704074ce2e89eb3a0ae33f450bd5f668c019074aa28555efde89",
+        "step": 0
+      }
+    },
+    "731003": {
+      "A": {
+        "bytes": 61946,
+        "cross_session_verified": false,
+        "file": "private/731003/A.pt",
+        "scope": "LOCAL_DEVICE_RESTORE_ONLY",
+        "sha256": "948bf498c37fa024a39904152972ffae1c40c9620fbe3f3174e0475027415277",
+        "state_sha256": "6505496026342d4dab968ff658bd823406eca1492dd21ed7f40903aef85e2556",
+        "step": 200
+      },
+      "C": {
+        "bytes": 70216,
+        "cross_session_verified": false,
+        "file": "private/731003/C.pt",
+        "scope": "LOCAL_DEVICE_RESTORE_ONLY",
+        "sha256": "17dc14f74193ca723d1696f347ecb50138cb5b0182fe3dab613efba78781d7bd",
+        "state_sha256": "e67e87ae5bcf777bc8da291c9cb6a6db9eaf02895d6cf146712cad63d17dadb0",
+        "step": 200
+      },
+      "base": {
+        "bytes": 33210,
+        "cross_session_verified": false,
+        "file": "base.pt",
+        "scope": "LOCAL_CPU_RESTORE_ONLY",
+        "sha256": "7ce927825eb0da4f7c31c99c56ad599f57f335d86638c8c08c3630b82c9f47e0",
+        "state_sha256": "af6c670f4f102b71dbb6aafe537d496ffaafa6d0f5cbfe737de919c8054ca3dd",
+        "step": 0
+      }
+    }
+  }
+}
