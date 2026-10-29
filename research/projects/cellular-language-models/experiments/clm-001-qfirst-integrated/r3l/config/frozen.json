@@ -1,0 +1,87 @@
+{
+  "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "confirmation": "SEALED",
+  "anchor_step": 300,
+  "seeds": [
+    151001301,
+    151001302,
+    151001303
+  ],
+  "arms": [
+    "A-CH",
+    "A-CT",
+    "B-CH",
+    "B-CT"
+  ],
+  "families": {
+    "BASELINE": 1,
+    "HISTORICAL": 1,
+    "REVERSE": 1,
+    "RANDOM": 8,
+    "STRUCTURED": 4
+  },
+  "ranges": {
+    "SEARCH": [
+      8960,
+      9216
+    ],
+    "SELECT": [
+      9216,
+      9472
+    ],
+    "REPORT": [
+      9472,
+      9984
+    ],
+    "PATH_DIAGNOSTIC": [
+      9984,
+      10048
+    ]
+  },
+  "search_windows": 32,
+  "select_windows": 128,
+  "search_finalists": 4,
+  "horizons": [
+    0,
+    10,
+    50,
+    100
+  ],
+  "maximum_cell_updates": 4800,
+  "maximum_train_tokens": 2457600,
+  "connection_optimizer_updates": 0,
+  "bootstrap_replicates": 2000,
+  "bootstrap_seed": 2026102304,
+  "practical_gain": 0.005,
+  "r3k_evidence_commit": "622af501e805b422393455927d122e492449ced4",
+  "parent": {
+    "experiment_id": "CLM-001-R3i-Stable-CoAdaptation-001",
+    "source_sha": "80e49b071790c8bfb58dead19e6037259551ed61",
+    "config_sha256": "72de3cfb262a93ec6bb24b29b9f6c18d1d40030c76245cfda9a504852b30e630",
+    "run_id": "ed08463119358da0f81b733786ab24bd89ac69c0f6b290dafc0f26311fe328a9",
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "2fd527bf4958979f16da1fbc88ef5000bb70cc62",
+      "manifest_path": "r3c-moe-bridge/segments/5b7b8303eab8cd0110c9ba1efa97c9d8e9bc0a19ae046860a21191c670c5df56.json",
+      "manifest_sha256": "25930ac73f54cb06cc1a61670e97aad7847f52a1aacca836d8595b64f7820a15",
+      "scope": "IMMEDIATE_PRIVATE_READBACK_ONLY",
+      "writer_session_id": "46845a910c50482ca058160eda2823a5"
+    }
+  },
+  "direction_seed": 2026102305,
+  "oracle_seed": 151001301,
+  "oracle_tokens": 16,
+  "beam_width": 8,
+  "report_windows": 128,
+  "path_windows": 16,
+  "evaluation_repeats": 2,
+  "structured_rule": "A: one stage-column contrast per stage; B: one paired step/predecessor-column rank-one contrast per direction; dedicated CPU RNG; independent block L2 normalization",
+  "direction_rms": 0.1,
+  "source_r3k": "879a1348c9dfee1d0c0f33af9643fc66497b57fa",
+  "allow_oracle": true,
+  "evaluation_seed": 2026102304,
+  "direction_normalization": "Each nonzero parameter block has L2 norm 0.1, independently; original parameter dtype retained",
+  "oracle_position_rule": "First sixteen token positions in the fixed sampled PATH_DIAGNOSTIC windows, ordered by fixed window sampler"
+}
