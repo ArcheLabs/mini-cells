@@ -1,0 +1,48 @@
+{
+  "candidate_optimizer_calls": 8,
+  "cell_optimizer_calls": 50,
+  "checkpoint_read_seconds": 0.0,
+  "checkpoint_write_seconds": 3.9849669959996845,
+  "counterfactual_target_evaluations": 72,
+  "expected_pending_preproposal_attempts": 1,
+  "formal_connection_commits": 0,
+  "gpu_kernel_seconds": null,
+  "gpu_time_scope": "KERNEL_TIME_NOT_MEASURED_PHASE_WALL_RECORDED",
+  "main_replay_updates": 50,
+  "main_target_tokens": 25600,
+  "observed_wall_seconds_by_stage": {
+    "admission": 48.56219191599894,
+    "candidate": 0.40921848000016325,
+    "replay": 16.578688405001003
+  },
+  "operator_work_by_stage": {
+    "admission": {
+      "cell_rows": 737280,
+      "context_rows": 92160,
+      "gate_rows": 2195456,
+      "head_rows": 92160,
+      "input_rows": 92160,
+      "policy_rows": 2195456
+    },
+    "candidate": {
+      "cell_rows": 4390,
+      "context_rows": 512,
+      "gate_rows": 4414,
+      "head_rows": 584,
+      "input_rows": 512,
+      "policy_rows": 4414
+    },
+    "replay": {
+      "cell_rows": 204800,
+      "context_rows": 25600,
+      "gate_rows": 204800,
+      "head_rows": 25600,
+      "input_rows": 25600,
+      "policy_rows": 204800
+    }
+  },
+  "peak_gpu_bytes": 47831040,
+  "peak_scope": "THIS_CONTEXT_MODEL_REPLAY_CANDIDATE_AND_SCAN",
+  "status": "REPLAY_PAUSE_AND_CANDIDATE_EVENTS_RECONCILED",
+  "uncertain_optimizer_calls": 0
+}

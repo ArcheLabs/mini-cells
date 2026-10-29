@@ -1,0 +1,47 @@
+{
+  "checkpoint_read_seconds": 0.0,
+  "checkpoint_write_seconds": 3.979991442000255,
+  "counterfactual_optimizer_calls": 0,
+  "data_cursor_batches": 50,
+  "effective_replay_target_tokens": 25600,
+  "engine_step_before_logical_commit": 49,
+  "exact_same_environment_restore": true,
+  "executed_main_updates": 50,
+  "files": {
+    "pending.pt": {
+      "bytes": 1541519,
+      "sha256": "d4c15689bd1ae909af976a01d7b502237c01c50a93c69a981746e6f85ae9a253"
+    },
+    "preproposal.pt": {
+      "bytes": 7144133,
+      "sha256": "7c9ce41204c6c43cef5f3984ae5bdf65310239db40b2824892a21963e08df1c0"
+    }
+  },
+  "formal_connection_commits": 0,
+  "full_replay_executions": 1,
+  "historical_batch_and_ce_rows": 50,
+  "historical_gpu_bitwise_certification": "NOT_CLAIMED",
+  "historical_runtime_bitwise_certification": "NOT_CLAIMED_FROM_INPUT_HASH_OR_CE_MATCHES",
+  "identity": {
+    "arm": "B11-S",
+    "authorization_sha256": "5857428971660cd496053f97367adac41e771843d7815c92026e2b4fe12601ee",
+    "config_sha256": "a45bfe1f74da598e2cc940068c2042f688e3bf16d0a168e4fc2d1c7136fae985",
+    "experiment_id": "CLM-002-FAST-002-R1-STATEFUL-CALIBRATION",
+    "parent_sha256": "0402594dff3b3a3fa439708072cd0402b276575ed6197c7877cc0156fe5f8ccc",
+    "run_id": "bc11db59c60ede819e1b12d1f24f8c42",
+    "scope": "BOUNDED_STATEFUL_GATE1_DIAGNOSTIC",
+    "seed": 2026200005,
+    "source_sha": "5768b89afcc113dbccf49f2176ac5b29648632a2"
+  },
+  "pending_main_curve_row": {
+    "ce": 4.411707401275635,
+    "input_sha256": "a9ccb9ae01c4944b7332bd1936ba50e12618126e4ca303e32a743036092f7e26",
+    "step": 50
+  },
+  "pending_values_sha256": "7ac5bef901fdcd7a8b4201081a08dedabbe306f6c693af713b8e0a6218d6a717",
+  "scientific_state_sha256": "a21abfda44bbedb6fd8a2ce233763fbef1da5e0b0993833c3404277639afb0fa",
+  "status": "MAIN50_COMPLETE_BEFORE_FIRST_CONNECTION_SEARCH",
+  "timing_excluded_from_repeat_scientific_fingerprint": [
+    "fast.training_seconds"
+  ]
+}
