@@ -1,0 +1,256 @@
+{
+  "arms": {
+    "A": {
+      "actual_parameter_counts": {
+        "cells": 12,
+        "connection": 114,
+        "total": 126
+      },
+      "connection_candidate_admitted": false,
+      "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+      "connection_optimizer_state_sha256": "b483a4ba291c44c6b495f929cc54f7a5839495ee03a91f02ef1b6fac535cd3ed",
+      "curve": [
+        {
+          "connection_admitted": false,
+          "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+          "input_batch_sha256": "6569e28fa53189f5c5853cd3f981814c26ca16e246e3395e4f4370856abd6a9d",
+          "loss": 1.3224682807922363,
+          "parameter_delta_l2": {
+            "cells": 0.0,
+            "connection": 0.0
+          },
+          "source_examples": 4,
+          "step": 1
+        }
+      ],
+      "data_rng_sha256": "782f2f81fec8ce1ab24665beaa38da691784ec1dff8d74200de91c99af5b543e",
+      "final_parameter_fingerprints": {
+        "cells": "c2977cfef4d33d14988e2e338c59823282cc4180977034be2fd50f0a3aec1b2b",
+        "connection": "a2ca65cbdaea6b769ec2cced291f0795b6f0cf815640c4d30ba713113d8429cf"
+      },
+      "identity": {
+        "arm": "A",
+        "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+        "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+        "experiment_id": "JCT-001",
+        "run_id": "8ab59d4feeedf276c24510e3325e2523",
+        "runtime": {
+          "numpy": "2.1.3",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128"
+        },
+        "scope": "SYNTHETIC_CPU_ENGINEERING_ONLY",
+        "seed": 431,
+        "source_code_sha256": "8edd229807803b103ed7a4f32263adc67baadc06fde3d4a4e4da894508c4f7fe",
+        "source_sha": "d3e70fd4d6fb64f4faa103f71872d1770454323d"
+      },
+      "initial_shared_state_sha256": "63eb493865b86b7a6a0dcc27d3d225dc941ee322d0875c3ab6062ed38f1414c7",
+      "local_restore_exact": true,
+      "logical_updates": 1,
+      "main_route_rng_sha256": "a6f8e6382dc0def8cc154e56900fc32da1c4feba01fce718ead93a1f89d8246a",
+      "parameter_delta_l2": {
+        "cells": 0.0,
+        "connection": 0.0
+      },
+      "scientific_decision": false,
+      "status": "CPU_FIXTURE_ONLY",
+      "treatment": {
+        "cells": false,
+        "connection": false
+      }
+    },
+    "B": {
+      "actual_parameter_counts": {
+        "cells": 12,
+        "connection": 114,
+        "total": 126
+      },
+      "connection_candidate_admitted": false,
+      "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+      "connection_optimizer_state_sha256": "b483a4ba291c44c6b495f929cc54f7a5839495ee03a91f02ef1b6fac535cd3ed",
+      "curve": [
+        {
+          "connection_admitted": false,
+          "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+          "input_batch_sha256": "6569e28fa53189f5c5853cd3f981814c26ca16e246e3395e4f4370856abd6a9d",
+          "loss": 1.3224682807922363,
+          "parameter_delta_l2": {
+            "cells": 0.02449488453567028,
+            "connection": 0.0
+          },
+          "source_examples": 4,
+          "step": 1
+        }
+      ],
+      "data_rng_sha256": "782f2f81fec8ce1ab24665beaa38da691784ec1dff8d74200de91c99af5b543e",
+      "final_parameter_fingerprints": {
+        "cells": "b454e5609ac72ba56473fd60e8af2d67f551ea59ee06233380229917de944734",
+        "connection": "a2ca65cbdaea6b769ec2cced291f0795b6f0cf815640c4d30ba713113d8429cf"
+      },
+      "identity": {
+        "arm": "B",
+        "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+        "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+        "experiment_id": "JCT-001",
+        "run_id": "8ab59d4feeedf276c24510e3325e2523",
+        "runtime": {
+          "numpy": "2.1.3",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128"
+        },
+        "scope": "SYNTHETIC_CPU_ENGINEERING_ONLY",
+        "seed": 431,
+        "source_code_sha256": "8edd229807803b103ed7a4f32263adc67baadc06fde3d4a4e4da894508c4f7fe",
+        "source_sha": "d3e70fd4d6fb64f4faa103f71872d1770454323d"
+      },
+      "initial_shared_state_sha256": "63eb493865b86b7a6a0dcc27d3d225dc941ee322d0875c3ab6062ed38f1414c7",
+      "local_restore_exact": true,
+      "logical_updates": 1,
+      "main_route_rng_sha256": "a6f8e6382dc0def8cc154e56900fc32da1c4feba01fce718ead93a1f89d8246a",
+      "parameter_delta_l2": {
+        "cells": 0.02449488453567028,
+        "connection": 0.0
+      },
+      "scientific_decision": false,
+      "status": "CPU_FIXTURE_ONLY",
+      "treatment": {
+        "cells": true,
+        "connection": false
+      }
+    },
+    "C": {
+      "actual_parameter_counts": {
+        "cells": 12,
+        "connection": 114,
+        "total": 126
+      },
+      "connection_candidate_admitted": true,
+      "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+      "connection_optimizer_state_sha256": "b4196c43a03ae997285b1514b438bc3849e702b005fc2e8cec8bd57cc1368d64",
+      "curve": [
+        {
+          "connection_admitted": true,
+          "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+          "input_batch_sha256": "6569e28fa53189f5c5853cd3f981814c26ca16e246e3395e4f4370856abd6a9d",
+          "loss": 1.3224682807922363,
+          "parameter_delta_l2": {
+            "cells": 0.0,
+            "connection": 0.4147605001926422
+          },
+          "source_examples": 4,
+          "step": 1
+        }
+      ],
+      "data_rng_sha256": "782f2f81fec8ce1ab24665beaa38da691784ec1dff8d74200de91c99af5b543e",
+      "final_parameter_fingerprints": {
+        "cells": "c2977cfef4d33d14988e2e338c59823282cc4180977034be2fd50f0a3aec1b2b",
+        "connection": "3cd69799a8a697d93f00a6ccb97039d4a69122b66c41a180dfd76abcc7ea524f"
+      },
+      "identity": {
+        "arm": "C",
+        "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+        "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+        "experiment_id": "JCT-001",
+        "run_id": "8ab59d4feeedf276c24510e3325e2523",
+        "runtime": {
+          "numpy": "2.1.3",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128"
+        },
+        "scope": "SYNTHETIC_CPU_ENGINEERING_ONLY",
+        "seed": 431,
+        "source_code_sha256": "8edd229807803b103ed7a4f32263adc67baadc06fde3d4a4e4da894508c4f7fe",
+        "source_sha": "d3e70fd4d6fb64f4faa103f71872d1770454323d"
+      },
+      "initial_shared_state_sha256": "63eb493865b86b7a6a0dcc27d3d225dc941ee322d0875c3ab6062ed38f1414c7",
+      "local_restore_exact": true,
+      "logical_updates": 1,
+      "main_route_rng_sha256": "a6f8e6382dc0def8cc154e56900fc32da1c4feba01fce718ead93a1f89d8246a",
+      "parameter_delta_l2": {
+        "cells": 0.0,
+        "connection": 0.4147605001926422
+      },
+      "scientific_decision": false,
+      "status": "CPU_FIXTURE_ONLY",
+      "treatment": {
+        "cells": false,
+        "connection": true
+      }
+    },
+    "D": {
+      "actual_parameter_counts": {
+        "cells": 12,
+        "connection": 114,
+        "total": 126
+      },
+      "connection_candidate_admitted": true,
+      "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+      "connection_optimizer_state_sha256": "5f57be1b592a83df9a3d3512d31390b90f7673b7fbfb5979f698bc6844f34617",
+      "curve": [
+        {
+          "connection_admitted": true,
+          "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+          "input_batch_sha256": "6569e28fa53189f5c5853cd3f981814c26ca16e246e3395e4f4370856abd6a9d",
+          "loss": 1.3224682807922363,
+          "parameter_delta_l2": {
+            "cells": 0.02449488453567028,
+            "connection": 0.4147733449935913
+          },
+          "source_examples": 4,
+          "step": 1
+        }
+      ],
+      "data_rng_sha256": "782f2f81fec8ce1ab24665beaa38da691784ec1dff8d74200de91c99af5b543e",
+      "final_parameter_fingerprints": {
+        "cells": "b454e5609ac72ba56473fd60e8af2d67f551ea59ee06233380229917de944734",
+        "connection": "f4b77a33247cc4eca02ad17a66ba2c9b0b39b63416a235023c7554b3d640013c"
+      },
+      "identity": {
+        "arm": "D",
+        "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+        "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+        "experiment_id": "JCT-001",
+        "run_id": "8ab59d4feeedf276c24510e3325e2523",
+        "runtime": {
+          "numpy": "2.1.3",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128"
+        },
+        "scope": "SYNTHETIC_CPU_ENGINEERING_ONLY",
+        "seed": 431,
+        "source_code_sha256": "8edd229807803b103ed7a4f32263adc67baadc06fde3d4a4e4da894508c4f7fe",
+        "source_sha": "d3e70fd4d6fb64f4faa103f71872d1770454323d"
+      },
+      "initial_shared_state_sha256": "63eb493865b86b7a6a0dcc27d3d225dc941ee322d0875c3ab6062ed38f1414c7",
+      "local_restore_exact": true,
+      "logical_updates": 1,
+      "main_route_rng_sha256": "a6f8e6382dc0def8cc154e56900fc32da1c4feba01fce718ead93a1f89d8246a",
+      "parameter_delta_l2": {
+        "cells": 0.02449488453567028,
+        "connection": 0.4147733449935913
+      },
+      "scientific_decision": false,
+      "status": "CPU_FIXTURE_ONLY",
+      "treatment": {
+        "cells": true,
+        "connection": true
+      }
+    }
+  },
+  "identity": {
+    "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+    "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+    "experiment_id": "JCT-001",
+    "run_id": "8ab59d4feeedf276c24510e3325e2523",
+    "runtime": {
+      "numpy": "2.1.3",
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128"
+    },
+    "scope": "SYNTHETIC_CPU_ENGINEERING_ONLY",
+    "seed": 431,
+    "source_code_sha256": "8edd229807803b103ed7a4f32263adc67baadc06fde3d4a4e4da894508c4f7fe",
+    "source_sha": "d3e70fd4d6fb64f4faa103f71872d1770454323d"
+  },
+  "scope": "CPU_UNIT_UPDATE_AUDIT_NOT_SCIENTIFIC_TRAINING"
+}

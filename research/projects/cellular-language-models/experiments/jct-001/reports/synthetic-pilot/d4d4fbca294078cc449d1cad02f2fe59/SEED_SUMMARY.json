@@ -1,0 +1,45 @@
+{
+  "confidence_intervals": null,
+  "decision": "INDEPENDENT_REVIEW_REQUIRED",
+  "formal_protocol_pilot_pass": false,
+  "identity": {
+    "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+    "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+    "device": "cuda:0",
+    "experiment_id": "JCT-001-S1",
+    "gpu_name": "Tesla T4",
+    "pilot_config_sha256": "ce555dc75d982379d7f8fa343ee36cbe2ddf045aec744b47f01ad2224751ec0a",
+    "run_id": "d4d4fbca294078cc449d1cad02f2fe59",
+    "runtime": {
+      "numpy": "2.1.3",
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128"
+    },
+    "scope": "SYNTHETIC_KNOWN_PATH_PILOT",
+    "seed": 431,
+    "source_code_sha256": "2db5137adde4c0baa017ccf9ab035d0596d53fc391ddb0c565ddc0a939bd8a12",
+    "source_sha": "711736cbc53dc8346416e378c4f2f422c17f4a0f"
+  },
+  "per_seed": [
+    {
+      "accuracy_delta_C_minus_A": 0.0,
+      "loss_delta_C_minus_A": 449.37711334228516,
+      "provisional_routing_criterion": false,
+      "seed": 731001
+    },
+    {
+      "accuracy_delta_C_minus_A": 0.0,
+      "loss_delta_C_minus_A": 77.00000762939453,
+      "provisional_routing_criterion": false,
+      "seed": 731002
+    },
+    {
+      "accuracy_delta_C_minus_A": 0.0,
+      "loss_delta_C_minus_A": 16.43854522705078,
+      "provisional_routing_criterion": false,
+      "seed": 731003
+    }
+  ],
+  "provisional_all_seeds_criterion": false,
+  "statistical_unit": "REGISTERED_TRAINING_SEED"
+}

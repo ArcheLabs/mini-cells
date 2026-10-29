@@ -1,0 +1,103 @@
+{
+  "A": {
+    "accounting_status": "RECONCILED_CPU_FIXTURE",
+    "actual_optimizer_attempts": 2,
+    "analytic_cell_forward_mac": 1644,
+    "analytic_router_forward_mac": 864864,
+    "claim_scope": "ACTUAL_CPU_FIXTURE_WORK_NOT_GPU_RUNTIME_PROOF",
+    "completed_optimizer_calls": 2,
+    "counterfactual_target_evaluations": 6,
+    "cpu_seconds_by_phase": {
+      "connection_candidate_search": 0.9610416939999595,
+      "main_update": 0.13138179999941713
+    },
+    "distinct_extra_counterfactual_examples": 0,
+    "executed_operator_work": {
+      "cell_rows": 1644,
+      "context_rows": 204,
+      "gate_rows": 5896,
+      "head_rows": 210,
+      "input_rows": 204,
+      "policy_rows": 8008
+    },
+    "failed_or_retried_attempt_records": 0,
+    "gpu_seconds": null,
+    "gpu_used": false,
+    "input_examples_attempted": 4,
+    "input_unit": "SYNTHETIC_FEATURE_EXAMPLES_NOT_LANGUAGE_TOKENS",
+    "logical_steps": [
+      1,
+      2
+    ],
+    "logical_updates": 2,
+    "observed_flops": null,
+    "optimizer_calls_by_group": {
+      "cell": 2
+    },
+    "pending_attempts": 0,
+    "training_tokens": null,
+    "uncertain_optimizer_calls": 0
+  },
+  "C": {
+    "accounting_status": "RECONCILED_CPU_FIXTURE",
+    "actual_optimizer_attempts": 2,
+    "analytic_cell_forward_mac": 576,
+    "analytic_router_forward_mac": 145152,
+    "claim_scope": "ACTUAL_CPU_FIXTURE_WORK_NOT_GPU_RUNTIME_PROOF",
+    "completed_optimizer_calls": 2,
+    "counterfactual_target_evaluations": 0,
+    "cpu_seconds_by_phase": {
+      "csync_geometry_search": 0.20582989900003668,
+      "main_update": 0.05531839900004343
+    },
+    "distinct_extra_counterfactual_examples": 0,
+    "executed_operator_work": {
+      "cell_rows": 576,
+      "context_rows": 72,
+      "gate_rows": 1344,
+      "head_rows": 72,
+      "input_rows": 72,
+      "policy_rows": 1344
+    },
+    "failed_or_retried_attempt_records": 0,
+    "gpu_seconds": null,
+    "gpu_used": false,
+    "input_examples_attempted": 4,
+    "input_unit": "SYNTHETIC_FEATURE_EXAMPLES_NOT_LANGUAGE_TOKENS",
+    "logical_steps": [
+      1,
+      2
+    ],
+    "logical_updates": 2,
+    "observed_flops": null,
+    "optimizer_calls_by_group": {
+      "cell": 2
+    },
+    "pending_attempts": 0,
+    "training_tokens": null,
+    "uncertain_optimizer_calls": 0
+  },
+  "C_events": [
+    {
+      "candidate_evaluations": 0,
+      "cpu_sampling_seconds": 0.0,
+      "directions_attempted": 0,
+      "gpu_used": false,
+      "legal_failures": 0,
+      "optimizer_calls": 0,
+      "training_tokens": 0,
+      "wall_seconds": 0.0006268000001909968
+    },
+    {
+      "candidate_evaluations": 6,
+      "cpu_sampling_seconds": 0.00023840000039854203,
+      "directions_attempted": 2,
+      "gpu_used": false,
+      "legal_failures": 6,
+      "optimizer_calls": 0,
+      "training_tokens": 0,
+      "wall_seconds": 0.19549419899976783
+    }
+  ],
+  "scope": "SYNTHETIC_CPU_NOT_SCIENCE"
+}

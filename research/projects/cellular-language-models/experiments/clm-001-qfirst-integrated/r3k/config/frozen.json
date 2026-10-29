@@ -1,0 +1,89 @@
+{
+  "experiment_id": "CLM-001-R3k-Future-Learning-Value-001",
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "confirmation": "SEALED",
+  "prediction_scope": "PREDECLARED_POST_R3J_EXPLORATORY_PREDICTION",
+  "bootstrap_seed": 2026102303,
+  "bootstrap_replicates": 2000,
+  "horizons": [
+    10,
+    50,
+    100
+  ],
+  "practical_gain": 0.005,
+  "new_updates": 6480,
+  "new_tokens": 3317760,
+  "connection_updates": 0,
+  "probe_range": [
+    8192,
+    8448
+  ],
+  "holdout_range": [
+    8448,
+    8960
+  ],
+  "scores": [
+    "S_Cal",
+    "S_Direct",
+    "S_K10",
+    "S_Cell",
+    "S_Slope"
+  ],
+  "primary_comparisons": [
+    [
+      "S_K10",
+      "S_Cal"
+    ],
+    [
+      "S_Cell",
+      "S_Direct"
+    ],
+    [
+      "S_Slope",
+      "S_Direct"
+    ]
+  ],
+  "parent_r3j_result_commit": "1ea706fd9358c7b3ca2cc1ec62006a2a7ed8aee2",
+  "parent_r3j_source": "42310c92e0fa44236ad6ca43686caf749edc4501",
+  "parent_r3j_config": "233a8724d4349db5402fcf533ff6c64236fbb85b3202acd2b37f42ed37957de1",
+  "parent_r3j_run": "af24ef87516daeda3c319baa1b97ca797e8acc8a03309764c34dd16155c63334",
+  "parent_r3j_hf_revision": "102237d5cf1b8b160641b280de61c28e7729ffc1",
+  "parent_r3j_manifest_sha256": "6ed09a662622fec637b27b13b92dfffbb31dc758158abfd22bf2d65357093f11",
+  "parent": {
+    "experiment_id": "CLM-001-R3i-Stable-CoAdaptation-001",
+    "source_sha": "80e49b071790c8bfb58dead19e6037259551ed61",
+    "config_sha256": "72de3cfb262a93ec6bb24b29b9f6c18d1d40030c76245cfda9a504852b30e630",
+    "run_id": "ed08463119358da0f81b733786ab24bd89ac69c0f6b290dafc0f26311fe328a9",
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "2fd527bf4958979f16da1fbc88ef5000bb70cc62",
+      "manifest_path": "r3c-moe-bridge/segments/5b7b8303eab8cd0110c9ba1efa97c9d8e9bc0a19ae046860a21191c670c5df56.json",
+      "manifest_sha256": "25930ac73f54cb06cc1a61670e97aad7847f52a1aacca836d8595b64f7820a15",
+      "scope": "IMMEDIATE_PRIVATE_READBACK_ONLY",
+      "writer_session_id": "46845a910c50482ca058160eda2823a5"
+    }
+  },
+  "evaluation_repeats": 2,
+  "historical_nll_atol": 1e-06,
+  "predictor_windows": 128,
+  "value_windows": 128,
+  "evaluation_seed": 2026102303,
+  "r3j_reference": {
+    "hf_repo": "libingjiang/minicells-research-checkpoints",
+    "hf_revision": "102237d5cf1b8b160641b280de61c28e7729ffc1",
+    "manifest_path": "r3c-moe-bridge/segments/b1043a32d86c702e479a2cb46d9a30fd51209c4f4e038e86907e8847485a0766.json",
+    "manifest_sha256": "6ed09a662622fec637b27b13b92dfffbb31dc758158abfd22bf2d65357093f11",
+    "writer_session_id": "02507f1dfe144e89b338de87cd1b3fa5"
+  },
+  "r3j_identity": {
+    "experiment_id": "CLM-001-R3j-Long-Horizon-Connection-Value-001",
+    "source_sha": "42310c92e0fa44236ad6ca43686caf749edc4501",
+    "config_sha256": "233a8724d4349db5402fcf533ff6c64236fbb85b3202acd2b37f42ed37957de1",
+    "run_id": "af24ef87516daeda3c319baa1b97ca797e8acc8a03309764c34dd16155c63334",
+    "parent_r3i_run_id": "ed08463119358da0f81b733786ab24bd89ac69c0f6b290dafc0f26311fe328a9",
+    "parent_manifest_sha256": "25930ac73f54cb06cc1a61670e97aad7847f52a1aacca836d8595b64f7820a15"
+  },
+  "evaluation_window_rule": "Reuse grouped_windows, fixed 128-window story-cluster sampling; all raw indices audited; no performance-based replacement",
+  "extreme_point_rule": "leave_one_case_out_minimum_rho_ge_0.20"
+}

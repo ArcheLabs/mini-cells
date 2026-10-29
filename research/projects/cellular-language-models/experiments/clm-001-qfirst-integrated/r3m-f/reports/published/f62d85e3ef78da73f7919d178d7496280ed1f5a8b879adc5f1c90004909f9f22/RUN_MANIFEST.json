@@ -1,0 +1,123 @@
+{
+  "artifact_files": {
+    "ARITHMETIC_CAPABILITY.json": {
+      "bytes": 510,
+      "sha256": "dc11e24e86be9721eeb8db709d6b3581ecea591beb7cd7d40c56fdda96908729"
+    },
+    "CELL_EXPOSURE.json": {
+      "bytes": 4493,
+      "sha256": "318dcb579be36a7a33b097791437c73c84a4b516c9980a7ba625cd009821b4f9"
+    },
+    "CELL_INTERVENTION.json": {
+      "bytes": 510,
+      "sha256": "dc11e24e86be9721eeb8db709d6b3581ecea591beb7cd7d40c56fdda96908729"
+    },
+    "COMPUTE_COST.json": {
+      "bytes": 1491,
+      "sha256": "32a4a12c8344b405e64e90572d5ac64c4d3725a72d6ce70ece7527acfc4f855a"
+    },
+    "COPY_CAPABILITY.json": {
+      "bytes": 510,
+      "sha256": "dc11e24e86be9721eeb8db709d6b3581ecea591beb7cd7d40c56fdda96908729"
+    },
+    "DATA_AUDIT.json": {
+      "bytes": 319293,
+      "sha256": "a883753f43bc57cf94f34b9d76abdc41c8b2e0a44ff974a722635a80c6cb8bd0"
+    },
+    "EXPERIMENT_MANIFEST.json": {
+      "bytes": 8993,
+      "sha256": "634ce9993c2409e0ad95a039959980667e2cb8a435c9602e5206ab26db61807b"
+    },
+    "GRADIENT_CONFLICT.json": {
+      "bytes": 510,
+      "sha256": "dc11e24e86be9721eeb8db709d6b3581ecea591beb7cd7d40c56fdda96908729"
+    },
+    "LEARNABILITY_DECISION.json": {
+      "bytes": 15001,
+      "sha256": "bee8249be12adf4a003e974b204c0fe95e655134171e004cd3ea95556c22bec3"
+    },
+    "MODEL_LINEAGE.json": {
+      "bytes": 4353,
+      "sha256": "3f67dab9f295ee125d9f7960ae8059e1c27dc9e0b19cfb8adb86163ab22a980f"
+    },
+    "SCIENTIFIC-FINDINGS.md": {
+      "bytes": 999,
+      "sha256": "cb716c746990edfb5aff36553941048c898421f6e88733422414e5410c9e9c6e"
+    },
+    "SPECIALIZATION_TRAJECTORY.json": {
+      "bytes": 601,
+      "sha256": "b06bd538cbc740e19fedecac9c1b6b5a954b239434cc78378f778276a44193a3"
+    },
+    "STORY_RETENTION.json": {
+      "bytes": 618,
+      "sha256": "4294d9faccaed2c27d7927d30a74d75f51669fd75911a769412122d6b20f649f"
+    },
+    "TINY_OVERFIT_REPORT.json": {
+      "bytes": 15001,
+      "sha256": "bee8249be12adf4a003e974b204c0fe95e655134171e004cd3ea95556c22bec3"
+    },
+    "TRAINING_CURVES.json": {
+      "bytes": 1017580,
+      "sha256": "99bdd143bf71b5f9fec7eee9be627d2eb688c5fda215748db708d7d8866e53d2"
+    }
+  },
+  "command": [
+    "/kaggle/working/r3mf-code-bb43297a39a4/research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/run.py",
+    "--mode",
+    "auto",
+    "--config",
+    "/kaggle/working/r3mf-code-bb43297a39a4/research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/config/exploratory.frozen.json",
+    "--output",
+    "/kaggle/working/r3mf-output-bb43297a39a4",
+    "--assets",
+    "/kaggle/working/r3mf-assets-bb43297a39a4"
+  ],
+  "config_sha256": "d00e8f039ff18ad5e53405495f3ee21622ac88a2b6b5db198627443497789a56",
+  "confirmation": "SEALED",
+  "exit_code": 0,
+  "finished_at_unix": 1792861118.5248818,
+  "full_pilot_authorized": false,
+  "hf_reference": {
+    "cross_session_verified": false,
+    "hf_repo": "libingjiang/minicells-research-checkpoints",
+    "hf_revision": "e135c0ffa95b9eebf7d7fd93aeceb108009c4439",
+    "manifest_path": "r3c-moe-bridge/segments/5a87a8c5fe7b191b019cd56edcf09ea5aae0b35afc6c2d450a8760fc7256bb92.json",
+    "manifest_sha256": "d2800bce6dcb02fbeee8b958e2aa9c5bc2e4175289f18ab4f4f46b5547745bfe",
+    "scope": "IMMEDIATE_PRIVATE_READBACK_ONLY",
+    "writer_session_id": "a48aa75068c94327acb4d944df834983"
+  },
+  "identity": {
+    "config_sha256": "d00e8f039ff18ad5e53405495f3ee21622ac88a2b6b5db198627443497789a56",
+    "experiment_id": "CLM-001-R3m-F-Arithmetic-Specialization-001",
+    "phase": "EXPLORATORY_DEVELOPMENT",
+    "run_id": "7f4ae3ed14da7ddbcfa9dcccce56e574450bed167cff0332cca35140d8b3fe68",
+    "source_sha": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05"
+  },
+  "publication_errors": [],
+  "publication_status": "LOCAL_RETAINED",
+  "r3m_registration": "BLOCKED",
+  "remote_commit_sha": null,
+  "run_id": "7f4ae3ed14da7ddbcfa9dcccce56e574450bed167cff0332cca35140d8b3fe68",
+  "runtime_environment": {
+    "cuda": "12.8",
+    "devices": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "numpy": "2.1.3",
+    "python": "3.13.15",
+    "tokenizers": "0.23.1",
+    "torch": "2.11.0+cu128",
+    "worker_mkl_num_threads": 1,
+    "worker_omp_num_threads": 1
+  },
+  "scientific_decision": false,
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "seeds": [
+    151001301
+  ],
+  "source_sha": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05",
+  "started_at_unix": 1792860995.7707772,
+  "status": "TINY_OVERFIT_FAILED",
+  "trial_status": "TINY_OVERFIT_FAILED"
+}

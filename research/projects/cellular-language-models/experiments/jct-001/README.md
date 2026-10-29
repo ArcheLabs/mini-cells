@@ -1,0 +1,40 @@
+# JCT-001: independent engineering implementation
+
+This directory preserves the supplied draft protocol and implements a bounded, synthetic CPU engineering fixture. The original CPU entry does not execute a scientific Pilot. The separately authorized exploratory Stage 1 GPU release is described below; real-model and Confirmation execution remain blocked. Historical R3 implementations, models, data identities, Checkpoints and conclusions are unchanged.
+
+## Run once
+
+Import `notebooks/kaggle-jct001-engineering.ipynb` from this branch into Kaggle. Enable Internet and the existing `GITHUB_TOKEN` secret. GPU is unnecessary. Run All once. The Notebook checks GitHub write access, executes one CPU engineering fixture, emits reports and publishes them automatically. It does not run the pytest suite in Kaggle, install GPU packages, fetch model weights or require HF/Kaggle API credentials.
+
+The entry point is `run.py --mode engineering --output <directory> --publish-github`. Results are under `<directory>/<run_id>/`. A completed run is reused without further updates. Publication failure retains all files and Checkpoints; `--mode publish-existing --output <run_directory>` retries report return without restoring a model. `PUBLICATION.json` records local commit creation, attempted/completed push, and independent remote SHA verification separately. Only a remotely verified receipt is called `PUBLISHED`.
+
+## Implemented CPU boundary
+
+The fixture config and original protocol were committed in `1181d832` before inspecting generated data or performing unit updates. Six known affine Cells share a fixed three-stage hard path with legal self connections. The router receives only the current value and requested affine coefficients, never an answer, correct action or Oracle path. Equivalent paths are grouped by their composed affine function before hash-based split assignment. Confirmation has reserved identity hashes only: no examples are materialized. These engineering reservations do not establish formal scientific data registration.
+
+Four branches share one complete initial state: A frozen, B Cells only, C Connection only, D both. There are 126 parameters (12 Cell and 114 Connection); the readout is fixed. The single unit-update fixture is separate from the generated Pilot dataset. Its six actual optimizer calls test update paths rather than demonstrate task learning. Normal training and Connection counterfactuals reuse the same selected TRAIN batch, so Connection arms do not peek at extra examples. Ordinary hard execution uses only selected Cells, not a soft mixture.
+
+The exact imported R3e `policy_proposal.optimize` and collector bodies provide all-action terminal-Q and expected centered-cost optimization. Explicit adapters replace sampling with the current batch, provide synthetic task references and measure synthetic Trust Region changes. No parent module globals or frozen historical files are modified. The optimizer retains the source's **fresh AdamW per proposal** lifecycle; completed moments are saved for audit, not silently reused next proposal. This task adapter and its engineering thresholds are **unreviewed candidates**, not an approved production JCT mechanism.
+
+The append-only attempt ledger records failed/retried work independently of model rollback, including real optimizer calls, all copied-model operator work, counterfactual target evaluations, reference/Trust Region probes, evaluation and checkpoint phases. GPU time and observed FLOPs remain unavailable, not zero. The reported analytic MAC estimates cover router/Cell forward arithmetic only, not total forward/backward FLOPs. Uncertain in-flight optimizer work or a broken ledger is quarantined. Checkpoints include model, both optimizer lifecycles, Python/NumPy/Torch and dedicated generator states, schedule, cursor, masks and ledger watermark. Local exact CPU continuation does not claim cross-session persistence.
+
+Read-only learned/initial-Connection/random-route/Oracle interventions and separate per-Seed H2/H3 contrasts are implemented and unit tested. Oracle is a separate target-aware diagnostic, never supplied to ordinary routing. Replacing a router is a distribution intervention, not sufficient causal evidence. No Pilot outcome, inferential method, significance threshold or Confirmation power calculation is fabricated.
+
+## Reports and release status
+
+The runner writes the protocol's 12 report artifacts plus gate status (13 files total, including manifest), complete run/source/config identities, artifact sizes and SHA-256, local Checkpoint receipts and attempted-work budgets. Private weights and ledgers remain in Kaggle Output and are excluded from Git. Publication creates a results-only branch descending from current `main`, through existing repository Git/auth components, and verifies the remote SHA. The remote manifest is an immutable payload snapshot; its commit SHA is available in the Git commit and local publication receipt rather than embedded circularly in itself.
+
+`CPU_ENGINEERING_PASS_SCIENTIFIC_BLOCKED` is the intended engineering result. Gates 0.1–0.6 remain scientifically blocked where evidence is missing: global real-content isolation, arithmetic learnability, actual cross-session recovery, independently reviewed task/Connection mechanism and Trust Region, GPU cost and scientific budget, frozen scientific Seeds/endpoints and Confirmation power plan. No new Story range is selected. Scientific CLI modes fail before loading data or models. Releasing a scientific executor requires an independently reviewed protocol/config revision; flipping a boolean does not authorize it.
+
+CPU tests: `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q tests/research/jct001`. They cover canonical split isolation, hard paths/self edges, real four-arm gradient/parameter updates, rejected-proposal costs, exact restoration/continuation, failed-attempt accounting, sealed scientific stages, report completeness and publication failure/idempotent retry against a local bare Git remote. The bare-remote test is not a live Kaggle return or cross-session test.
+
+
+## Authorized Stage 1 GPU entry
+
+The user authorized proceeding to GPU on 2026-10-26. `synthetic-pilot/AMENDMENT.md` and the separately hashed `PILOT_CONFIG.json` were committed before Pilot execution. Import **notebooks/kaggle-jct001-synthetic-pilot.ipynb**, enable one T4 GPU, Internet and existing GITHUB_TOKEN, then Run All once. A small disposable GPU functional/restore check proceeds automatically into the three fixed Seeds, 200 logical ticks per A/C arm, final evaluation and GitHub report return. There is no manual release field, repeated pytest suite, full language-model training, or wall-clock kill limit.
+
+This stage compares frozen Connection and trainable Connection with fixed Cells; random routes and exhaustive Oracle remain read-only diagnostics. It cannot establish joint Cell–Connection training benefit. The prerecord's held-out split has only two canonical compositions/four examples, so results are explicitly exploratory. Independent scientific review remains pending and no formal Pilot PASS, real-model release or Confirmation is automatic.
+
+Source/config identities, matched exposures, frozen Cells, full state restoration, actual optimizer calls (including the separately reported disposable check), failed attempts, CUDA training intervals and host wall times are retained. The registered fixed budget is 1,200 scientific optimizer calls (600 Connection ticks × two fresh-AdamW steps), plus two disposable functional-check calls. Publication creates a results/jct001-synthetic-pilot-* branch. Reports and manifests return automatically; weights remain in Output. `gpu_run.py --mode publish-existing --output <run_directory>` retries return with zero training updates.
+
+The original CPU Notebook remains pinned and its successful historical reports are unchanged. The active GPU entry is `gpu_run.py`, not the older blocked synthetic-pilot mode of `run.py`. A local bare-Git publisher test and CPU device-adapter tests do not claim Kaggle GPU or cross-session persistence verification.

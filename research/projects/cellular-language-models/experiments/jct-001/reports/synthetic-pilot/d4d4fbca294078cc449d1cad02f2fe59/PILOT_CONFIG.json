@@ -1,0 +1,175 @@
+{
+  "configuration": {
+    "arms": [
+      "A",
+      "C"
+    ],
+    "authorization": "USER_REQUEST_2026_10_26_DIRECT_GPU_AND_CONTINUE",
+    "automatic_retry": false,
+    "cell_parameters_frozen": true,
+    "checkpoint_every_logical_update": true,
+    "confirmation_authorized": false,
+    "data_generator_and_split": "REUSE_PRERECORDED_AFFINE_SIGNATURE_SHA256_V1_UNCHANGED",
+    "decision": {
+      "accuracy": "C_STRICTLY_HIGHER_THAN_FROZEN_AND_RANDOM",
+      "all_three_seeds_must_improve": true,
+      "independent_scientific_review_required_for_protocol_pilot_pass": true,
+      "loss": "C_STRICTLY_LOWER_THAN_FROZEN_AND_RANDOM",
+      "parameter_and_budget_audit_required": true
+    },
+    "experiment_id": "JCT-001-S1",
+    "fixture": {
+      "backtrack": [
+        1.0,
+        0.5,
+        0.25
+      ],
+      "batch_size": 4,
+      "cell_lr": 0.01,
+      "cell_weight_decay": 0.0,
+      "checkpoint_rule": "ONE_ATOMIC_LOGICAL_TRANSACTION; REPLAY_UNCOMMITTED_WORK_AND_COUNT_RETRY_CALLS",
+      "classification_values": [
+        -32,
+        32
+      ],
+      "connection_clip": 1.0,
+      "connection_lr": 0.03,
+      "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+      "connection_weight_decay": 0.0,
+      "counterfactual_states": 3,
+      "determinism": "CPU_FP32_EXACT; GPU_TOLERANCE_NOT_REGISTERED",
+      "engineering_trust": {
+        "action_change_max": 1.0,
+        "kl_max": 1.0,
+        "path_change_max": 1.0,
+        "uses_quality_for_admission": false
+      },
+      "epsilon": 0.15,
+      "generator_version": "AFFINE_SIGNATURE_SHA256_V1",
+      "logical_updates": 1,
+      "operands": {
+        "calibration": [
+          1,
+          2
+        ],
+        "pilot_report": [
+          3,
+          4
+        ],
+        "train": [
+          -2,
+          -1,
+          0
+        ]
+      },
+      "path_steps": 3,
+      "policy_steps": 2,
+      "primitive_affines": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          -1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ],
+      "seed": 431,
+      "split_buckets": {
+        "calibration": [
+          4
+        ],
+        "confirmation_reserved": [
+          6,
+          7
+        ],
+        "pilot_report": [
+          5
+        ],
+        "train": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "split_salt": "JCT001_CPU_FIXTURE_V1",
+      "unit_update_features": [
+        0,
+        0,
+        0
+      ],
+      "unit_update_scope": "UNIT_ONLY_NOT_PILOT_DATA",
+      "unit_update_target": 0
+    },
+    "initialization": "NEW_KNOWN_PRIMITIVE_BASELINE_PER_REGISTERED_SEED_NOT_HISTORICAL_CHECKPOINT",
+    "logical_updates_per_arm": 200,
+    "oracle": "TARGET_AWARE_EXHAUSTIVE_DIAGNOSTIC_ONLY",
+    "primary_metrics": [
+      "heldout_accuracy",
+      "heldout_loss",
+      "path_equivalence_rate"
+    ],
+    "random_route_seed_offset": 901,
+    "real_model_authorized": false,
+    "report_times": [
+      0,
+      200
+    ],
+    "restore_tolerance": {
+      "atol": 1e-07,
+      "rtol": 1e-05
+    },
+    "review_status": "USER_AUTHORIZED_EXPLORATORY_NOT_INDEPENDENTLY_REVIEWED",
+    "runtime_limit_seconds": null,
+    "schema": "minicells.jct001.synthetic_pilot.v1",
+    "scientific_confirmation": false,
+    "scope": "SYNTHETIC_KNOWN_PATH_PILOT",
+    "secondary_metrics": [
+      "unique_correct_path_rate",
+      "cell_utilization",
+      "distinct_routes",
+      "equivalent_input_route_stability",
+      "cost"
+    ],
+    "seeds": [
+      731001,
+      731002,
+      731003
+    ]
+  },
+  "identity": {
+    "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+    "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+    "device": "cuda:0",
+    "experiment_id": "JCT-001-S1",
+    "gpu_name": "Tesla T4",
+    "pilot_config_sha256": "ce555dc75d982379d7f8fa343ee36cbe2ddf045aec744b47f01ad2224751ec0a",
+    "run_id": "d4d4fbca294078cc449d1cad02f2fe59",
+    "runtime": {
+      "numpy": "2.1.3",
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128"
+    },
+    "scope": "SYNTHETIC_KNOWN_PATH_PILOT",
+    "seed": 431,
+    "source_code_sha256": "2db5137adde4c0baa017ccf9ab035d0596d53fc391ddb0c565ddc0a939bd8a12",
+    "source_sha": "711736cbc53dc8346416e378c4f2f422c17f4a0f"
+  }
+}

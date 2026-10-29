@@ -1,0 +1,251 @@
+{
+  "config": {
+    "anchor_step": 300,
+    "arithmetic": {
+      "canonical_fact": "(min(a,b),max(a,b))",
+      "eos_token_id": 1,
+      "fact_split": "SHA256('MINICELLS-R3ME-ARITH-v1:' + seed + ':' + a + ':' + b) first 8 hex digits mod 5; 0=dev, else=train",
+      "generator_seed": 153301,
+      "max_sequence_length": 64,
+      "operand_range_inclusive": [
+        10,
+        99
+      ],
+      "operator": "ADDITION",
+      "template_assignment": "SHA256_FACT_TEMPLATE_VARIANT_WITHIN_FACT_SPLIT",
+      "templates": [
+        "What is {a} plus {b}? Answer: ",
+        "Add {a} and {b}. Answer: ",
+        "Calculate {a} + {b}. Answer: ",
+        "Find the sum of {a} and {b}. Answer: "
+      ]
+    },
+    "arms": [
+      "E0-STORY-STABLE",
+      "E1-MIX-STABLE",
+      "E2-MIX-REORG",
+      "E3-MIX-SHAM"
+    ],
+    "authorization": {
+      "formal_confirmation": false,
+      "full_training": true,
+      "reason": "User requested the next step after accepted Gate 2 cloud-session verification; authorize the original 4-arm x 3-seed exploratory matrix only."
+    },
+    "barriers": [
+      0,
+      100,
+      110,
+      200,
+      400,
+      600
+    ],
+    "baseline": {
+      "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "hf_reference": {
+        "cross_session_verified": false,
+        "hf_repo": "libingjiang/minicells-research-checkpoints",
+        "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+        "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+        "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+        "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+      },
+      "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "source_sha": "01f226e259356bb06a8ef275e8314649062446e4"
+    },
+    "calls_per_token": 8,
+    "continuation_steps": 600,
+    "data": {
+      "confirmation": "SEALED",
+      "dataset": "roneneldan/TinyStories",
+      "main_candidates_forbidden": true,
+      "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "story_dev": "REUSED_HISTORICAL_DEVELOPMENT",
+      "story_train": "REUSE_R3H_TRAIN_ASSET",
+      "trigger_pilot_ranges_forbidden": true
+    },
+    "epsilon_terminal": 0.02,
+    "evaluation": {
+      "arithmetic_groups": 32,
+      "arithmetic_role": "ARITH_DEV",
+      "autoregressive_answer_token_cap": 8,
+      "carry_strata_balanced": true,
+      "cell_connection_grid_relative_steps": [
+        400,
+        600
+      ],
+      "relative_steps": [
+        0,
+        100,
+        110,
+        200,
+        400,
+        600
+      ],
+      "story_groups": 32,
+      "story_role": "REUSED_HISTORICAL_DEVELOPMENT",
+      "story_window_selection": "R3H_DEVELOPMENT_LEGAL_WINDOWS; eligible stories have >=2 distinct starts; SHA256(R3ME-STORY-DEV:group) order; first 32 stories; first 2 ascending starts per story",
+      "story_windows_per_group": 2
+    },
+    "execution": {
+      "durable_proposal_before_scale_scan": true,
+      "gpu_smoke_repeated": false,
+      "gpu_test_suite_on_launch": false,
+      "hard_runtime_limit": null,
+      "max_workers": 2,
+      "public_results_after_training": true,
+      "remote_snapshot_min_seconds": 180
+    },
+    "experiment_id": "CLM-001-R3m-E-Capability-Differentiation-001",
+    "exploratory_decisions": {
+      "arithmetic_answer_nll_min_gain": 0.005,
+      "exact_match_harm_max": 0.0,
+      "minimum_seed_directions_positive": 2,
+      "phase_iii_gain_retention_fraction": 0.5,
+      "scope": "EXPLORATORY_SIGNAL_ONLY_NOT_CONFIRMATORY",
+      "story_nll_harm_max": 0.01
+    },
+    "formal_confirmation": "NOT_AUTHORIZED",
+    "intervention": {
+      "acceptance": "EXISTING_R3I_PAIRED_10_STEP_SHADOW_TRAIN_ONLY_NLL_GAIN_AT_LEAST_0.001",
+      "max_proposals_per_seed_arm": 1,
+      "proposal_config_sha256": "72de3cfb262a93ec6bb24b29b9f6c18d1d40030c76245cfda9a504852b30e630",
+      "proposal_search": "EXISTING_FROZEN_22_SCALE_SCAN",
+      "proposal_source": "R3I_FROZEN_QFIRST_PROPOSAL",
+      "task_labels_to_proposal": false,
+      "trust_region": {
+        "full_path_change_max": 0.2,
+        "hard_action_change_max": 0.1,
+        "kl_max": 0.01
+      }
+    },
+    "known_limitations": [
+      "R3h B-H original NumPy producer version is unknown; deterministic replay is consistent but not strictly certified.",
+      "R3m global historical content isolation is blocked; R3m-E discloses known overlap and is not independent confirmation.",
+      "Historical development data are reused and are not untouched test data."
+    ],
+    "lr_terminal_fraction": 0.2,
+    "model": {
+      "architecture": "B-H",
+      "calls_per_token": 8,
+      "cells": 6,
+      "optimizer": "CONTINUE_VERIFIED_R3H_CELL_ADAMW_STATE",
+      "parent_config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "parent_experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "parent_hf_repo": "libingjiang/minicells-research-checkpoints",
+      "parent_hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "parent_manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "parent_manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "parent_run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "parent_source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+      "parent_step": 300,
+      "sequence_length": 64,
+      "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+      "tokens_per_step": 512,
+      "vocab_size": 4096
+    },
+    "pressure": {
+      "consecutive": 2,
+      "cooldown": 100,
+      "gradient_mean": null,
+      "gradient_observation": "EXISTING_TASK_BLIND_R3M_SIGNED_32_COMPONENT_SKETCH_DIAGNOSTIC_ONLY",
+      "gradient_std": null,
+      "interval": 20,
+      "loss_mean": null,
+      "loss_std": null,
+      "maximum_proposals": 0,
+      "threshold": null
+    },
+    "proposal_at": 100,
+    "release": {
+      "formal_confirmation_authorized": false,
+      "gate2_protocol_sha256": "efa8c0433a006e17b491202266e204d7eee1459f862b02b49f76948026147bb6",
+      "gate2_review_sha256": "35afe9e8083aa54e03e415109733a70f12f487be8351ca58aa34fe2dce3a5167",
+      "gate2_run_id": "a6bf658285d769ef3195a3508bfa61755cce32796e28548b6700b2a240ae1dcd",
+      "gate2_source_sha": "53fcde98c872324e70d36741742ff4862e3c61ba",
+      "hf_reference": {
+        "cross_session_verified": false,
+        "hf_repo": "libingjiang/minicells-research-checkpoints",
+        "hf_revision": "116af6327e5e083f0cac451a40bb61dff55122e0",
+        "manifest_path": "r3c-moe-bridge/segments/b1db94501406755fb2e5157e9021c6225160212bf157aa921d45738cac01e8f8.json",
+        "manifest_sha256": "4a513c247c81a2d3882a4d3f419e3c838b246f82e8389b6fd701de40d433dc71",
+        "scope": "IMMEDIATE_PRIVATE_READBACK_ONLY",
+        "writer_session_id": "a62849336e054333b3670a9f1d6e4c25"
+      },
+      "parent_config_sha256": "3d641b26d4b70a5aabfd315bd35ac015652cea359bb234fb6b4b72d8b2ffbd99",
+      "scientific_changes": [],
+      "scope": "ORIGINAL_R3ME_EXPLORATORY_MATRIX_ONLY"
+    },
+    "scope": "EXPLORATORY_DEVELOPMENT",
+    "seeds": [
+      151001301,
+      151001302,
+      151001303
+    ],
+    "shadow_steps": 10,
+    "status": "RELEASED_EXPLORATORY_DEVELOPMENT",
+    "tokens_per_step": 512,
+    "training": {
+      "anchor_step": 300,
+      "barrier_relative_steps": [
+        0,
+        100,
+        110,
+        200,
+        400,
+        600
+      ],
+      "continuation_steps": 600,
+      "data_seed_offset": 41001,
+      "effective_batch": 8,
+      "epsilon_final": 0.02,
+      "epsilon_initial": 0.15,
+      "logical_tokens": 3686400,
+      "logical_updates": 7200,
+      "microbatch": 1,
+      "proposal_relative_step": 100,
+      "sequence_length": 64,
+      "shadow_steps": 10,
+      "step_allocation": "FIXED_10_STEP_BLOCKS_EXACT_TOKEN_BUDGET",
+      "steps": 500,
+      "task_schedule": [
+        {
+          "arithmetic_tokens_fraction": 0.1,
+          "relative_steps": [
+            0,
+            100
+          ],
+          "story_tokens_fraction": 0.9
+        },
+        {
+          "arithmetic_tokens_fraction": 0.3,
+          "relative_steps": [
+            100,
+            200
+          ],
+          "story_tokens_fraction": 0.7
+        },
+        {
+          "arithmetic_tokens_fraction": 0.5,
+          "relative_steps": [
+            200,
+            600
+          ],
+          "story_tokens_fraction": 0.5
+        }
+      ],
+      "terminal_epsilon": 0.02,
+      "terminal_learning_rate_fraction": 0.2,
+      "tokens_per_step": 512,
+      "warmup_reset": false
+    }
+  },
+  "identity": {
+    "config_sha256": "39a310d8709479fe138fc67a312e9ded62161525c6ff86ef6884d9ed8cc802a2",
+    "experiment_id": "CLM-001-R3m-E-Capability-Differentiation-001",
+    "phase": "EXPLORATORY_DEVELOPMENT",
+    "run_id": "cf6aa875524c32bd862711590fe183b624b9557bcae49bb325a12b3f3cf83f27",
+    "source_sha": "062fba450823f91f2d23ca6e17959f7c0d8dcbb0"
+  },
+  "status": "COMPLETE_EXPLORATORY"
+}

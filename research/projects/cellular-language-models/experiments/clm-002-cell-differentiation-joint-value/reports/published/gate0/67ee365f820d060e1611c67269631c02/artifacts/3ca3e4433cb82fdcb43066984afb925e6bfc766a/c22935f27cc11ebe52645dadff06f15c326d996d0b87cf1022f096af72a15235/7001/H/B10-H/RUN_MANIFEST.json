@@ -1,0 +1,72 @@
+{
+  "artifact_files": {
+    "CELL_SPECIALIZATION.json": {
+      "bytes": 3830,
+      "sha256": "fbc73add2a5aad97c333f113968e47e1800178824dfe287982c022e1a74e7c24"
+    },
+    "CHECKPOINT_MANIFEST.json": {
+      "bytes": 899,
+      "sha256": "3782b7a6496ee16d711648cc883118606cae84c8855e46c1bbdf1851280057e7"
+    },
+    "CONFIG.json": {
+      "bytes": 7960,
+      "sha256": "bf5a861567f5c334640205e941c380a64ba82985ab2167a1a5b5d285ba8acf3f"
+    },
+    "METRICS.json": {
+      "bytes": 2690,
+      "sha256": "d53f991609970aeb0c5376ce792cc6644b79933c917a2a9cf3e16f8c3b853355"
+    },
+    "ROUTING_SUMMARY.json": {
+      "bytes": 2525,
+      "sha256": "066efac89a8dcf169871fd1b145a2a45431f418023259d502c9b36807a5872e2"
+    },
+    "TRAINING_COST.json": {
+      "bytes": 2708,
+      "sha256": "f0800de38e3d35fb649181c4d23dc03f7f0d3bcf44e3bdb40b56efd4bf4a0487"
+    }
+  },
+  "data_manifest_sha256": "c22935f27cc11ebe52645dadff06f15c326d996d0b87cf1022f096af72a15235",
+  "effective_targets": 16,
+  "historical_tokenizer_expected_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "identity": {
+    "arm": "B10-H",
+    "code_sha256": "83ada1d62b369be68c7f892043549d35db5d585e3b5b95a406ad156db8248dae",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "run_id": "67ee365f820d060e1611c67269631c02",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "seed": 7001,
+    "source_sha": "3ca3e4433cb82fdcb43066984afb925e6bfc766a",
+    "task_condition": "H"
+  },
+  "logical_updates": 2,
+  "model_config_sha256": "ef216dcab4c544cad010cbd5e4dde75cf176167ef3bf028a900376a8fddf69d9",
+  "model_sha256": "4498582f26a852f9f5a1d91318550fe887701a6c22e6c97c2d712084c3e908fc",
+  "parameter_update_list": [
+    "cells.0.up.weight",
+    "cells.0.down.weight",
+    "cells.1.up.weight",
+    "cells.1.down.weight",
+    "cells.2.up.weight",
+    "cells.2.down.weight",
+    "cells.3.up.weight",
+    "cells.3.down.weight",
+    "cells.4.up.weight",
+    "cells.4.down.weight",
+    "cells.5.up.weight",
+    "cells.5.down.weight"
+  ],
+  "parent_checkpoint": "SYNTHETIC_CPU_BASELINE_NOT_HISTORICAL_PARENT",
+  "parent_checkpoint_sha256": "da11d9927757d48f8bbb77a709650bd46a655318d6cba2b6daebcdd47217f0b7",
+  "rng_sha256": "5dec07dcb983707625fa6028d40cca016bdcc56f67a720e415f96f17fc79b25b",
+  "run_status": "CPU_UNIT_COMPLETE",
+  "runtime": {
+    "hardware": "CPU",
+    "numpy": "1.24.4",
+    "python": "3.8.10",
+    "torch": "2.4.1"
+  },
+  "scientific_optimizer_updates": 0,
+  "tokenizer_identity": "SYNTHETIC_RANDOM_TOKEN_IDS_NO_TOKENIZER"
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "SYNTHETIC_CPU_ONLY",
+  "tests": 18,
+  "passed": 18,
+  "failed": 0,
+  "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q tests/research/r3me",
+  "elapsed_seconds": 108.77,
+  "released_config_sha256": "39a310d8709479fe138fc67a312e9ded62161525c6ff86ef6884d9ed8cc802a2",
+  "gpu_training_started": false,
+  "coverage": [
+    "real shared Q-first and 22-scale Trust Region on synthetic CPU model",
+    "mid-Shadow checkpoint and restart",
+    "forced rejection rollback",
+    "three-seed four-arm reduced-budget workflow",
+    "exact reconstructed cloud Gate 2 evidence hash",
+    "private HF simulated segment publication and selective restore",
+    "task-specific gradient layout with unused cells",
+    "complete report and missing-arm barrier",
+    "local bare Git remote: main ancestry, metadata allowlist, remote SHA and idempotent republish"
+  ],
+  "real_cloud_gate2_evidence": "release/gate2/SESSION_B.json",
+  "full_exploratory_runtime": "NOT_MEASURED"
+}

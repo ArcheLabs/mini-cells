@@ -1,0 +1,77 @@
+{
+  "schema": "minicells.r3m.boundary-consistency-review.v1",
+  "status": "ALL_18_BOUNDARIES_CONSISTENT_STRICT_CERTIFICATION_PENDING",
+  "input_files": {
+    "KAGGLE_SAMPLING_REPLAY_REVIEW.json": {
+      "sha256": "cdeaf849500342430820b62781da3172daa8c66afed536f83130da32dde1f626",
+      "bytes": 18145
+    },
+    "CHECKPOINT_BOUNDARY_EVIDENCE.json": {
+      "sha256": "cacc821e10d4bde4613ed145be4f4c563c2bbaee14058b5190f047dda122f256",
+      "bytes": 17266
+    }
+  },
+  "arm": "B-H",
+  "seeds": [
+    151001301,
+    151001302,
+    151001303
+  ],
+  "boundary_steps": [
+    0,
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "boundary_rng_and_cursor_matches": 18,
+  "boundary_comparisons": 18,
+  "consistent_intervals": 15,
+  "certified_intervals": 0,
+  "independent_local_numpy": "1.24.4",
+  "kaggle_replay_numpy": "2.1.3",
+  "original_numpy_producer_version": "UNKNOWN_NOT_A_MISMATCH_FINDING",
+  "source_code_identities": "MATCH_RETAINED_FIXED_RECOVERY_AND_REPLAY_IMPLEMENTATIONS",
+  "checkpoint_provenance": "Original byte/identity/full-state verification attested by pinned Kaggle extractor; local independent replay compares extracted RNG states, not unavailable checkpoint bytes",
+  "per_seed": [
+    {
+      "seed": 151001301,
+      "windows": 4000,
+      "trace_sha256": "a0403962356eafb2666fccc466641999f86e1f81adc8af445c29571d624e3c7f",
+      "cross_runtime_trace_hash_match": true,
+      "predicted_boundary_states_match": true
+    },
+    {
+      "seed": 151001302,
+      "windows": 4000,
+      "trace_sha256": "83b45f81870413f9c04112eccd28f2b60631b348f52b6d0fdb5f97f7336ab49d",
+      "cross_runtime_trace_hash_match": true,
+      "predicted_boundary_states_match": true
+    },
+    {
+      "seed": 151001303,
+      "windows": 4000,
+      "trace_sha256": "a74ffccd69c45c310213b41100ff13b5b186005ef14f659e9e52e274f285ca15",
+      "cross_runtime_trace_hash_match": true,
+      "predicted_boundary_states_match": true
+    }
+  ],
+  "scope": "R3H_B_H_NORMAL_MAIN_TRAINING_ONLY",
+  "r3i_r3j_r3k_r3l_exposure_certified": false,
+  "tokenizer_identity": "PASS_UNCHANGED",
+  "original_asset_reconstruction": "PASS_UNCHANGED",
+  "global_content_isolation": "BLOCKED",
+  "proof_route_b": "PENDING_SCIENTIFIC_REVIEW",
+  "scientific_registration": "BLOCKED",
+  "main_candidates_changed": false,
+  "scientific_config_modified": false,
+  "new_gpu_work": 0,
+  "new_optimizer_updates": 0,
+  "code_ci": {
+    "run": "https://github.com/ArcheLabs/mini-cells/actions/runs/40085822308",
+    "conclusion": "success",
+    "source": "97243d9a4c1838fcf1baaac3c753f62d3482ffab",
+    "meaning": "ENGINEERING_ONLY"
+  }
+}

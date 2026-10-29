@@ -1,0 +1,6717 @@
+{
+  "arm": "B",
+  "budget": {
+    "answer_eos_target_positions": 11466,
+    "answer_exposures_by_fact": {
+      "0+1": 592,
+      "1+2": 615,
+      "2+2": 619,
+      "2+7": 583,
+      "3+4": 648,
+      "4+6": 1190,
+      "6+8": 1202,
+      "7+9": 1212
+    },
+    "answer_target_positions": 6661,
+    "causal_input_memory_pairs": 3328000,
+    "cell_ffn_mac": 52009369600,
+    "cell_hard_calls": 819200,
+    "complete_answer_exposures_by_fact": {
+      "0+1": 592,
+      "1+2": 615,
+      "2+2": 619,
+      "2+7": 583,
+      "3+4": 648,
+      "4+6": 590,
+      "6+8": 600,
+      "7+9": 602
+    },
+    "complete_answer_instances": 4849,
+    "complete_answer_plus_eos_by_fact": {
+      "0+1": 586,
+      "1+2": 613,
+      "2+2": 616,
+      "2+7": 577,
+      "3+4": 622,
+      "4+6": 590,
+      "6+8": 599,
+      "7+9": 602
+    },
+    "complete_answer_plus_eos_instances": 4805,
+    "eos_target_positions": 4805,
+    "estimated_forward_backward_flops": null,
+    "flops_note": "Only explicit FFN/LM-head MAC counts and causal memory pair counts are provided; optimizer/backward/normalization/router/runtime FLOPs are not measured.",
+    "gradient_denominator": "SUM_SELECTED_ANSWER_AND_EOS_TARGET_COUNT_PER_UPDATE",
+    "logical_updates": 200,
+    "model_input_positions": 102400,
+    "plan_sha256": "95d83b001c61f477cf391ee9c027dfb4068a1d4a03bb42462727bd86971eb2bb",
+    "run_status": "NOT_RUN_REVIEW_REQUIRED",
+    "sampled_qa_instances": 6400,
+    "sampling_version_caveat": "Producer NumPy 2.1.3; start-state replay used NumPy 1.24.4. The complete original trial endpoint RNG was not independently compared. D1 freezes one common CPU-generated source-sampling plan; a future runtime must verify its step draws before applying an update.",
+    "selected_loss_targets": 11466,
+    "source_rows": 1600,
+    "source_slots": 102400,
+    "tied_lm_head_mac": 53687091200,
+    "truncated_qa_instances": 1595
+  },
+  "cell_optimizer_end_sha256": "7962bd8e235d2b19d7d9f426be9c715b05e6cac9f04a2391c1bf4a3727d586f8",
+  "context": "PACKED",
+  "curve": [
+    {
+      "cell_counts": [
+        908,
+        511,
+        178,
+        1413,
+        745,
+        341
+      ],
+      "cell_gradient_norms": [
+        5.500141143798828,
+        7.3931355476379395,
+        0.8631274104118347,
+        5.179732322692871,
+        0.1812209188938141,
+        3.074160099029541
+      ],
+      "context": "PACKED",
+      "loss": 9.445999145507812,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 510.0839538574219,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 301,
+      "update_seconds": 1.0018832840000016
+    },
+    {
+      "cell_counts": [
+        875,
+        524,
+        160,
+        1476,
+        748,
+        313
+      ],
+      "cell_gradient_norms": [
+        4.024904251098633,
+        6.013051986694336,
+        0.6050066947937012,
+        5.761467456817627,
+        0.3565802276134491,
+        1.7823572158813477
+      ],
+      "context": "PACKED",
+      "loss": 9.291038876488095,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 585.33544921875,
+      "selected_target_count": 63,
+      "source_slots": 512,
+      "step": 302,
+      "update_seconds": 0.3139966630000117
+    },
+    {
+      "cell_counts": [
+        801,
+        513,
+        170,
+        1510,
+        744,
+        358
+      ],
+      "cell_gradient_norms": [
+        3.3218605518341064,
+        4.009199619293213,
+        0.33929163217544556,
+        4.459212779998779,
+        0.1978401243686676,
+        1.7927216291427612
+      ],
+      "context": "PACKED",
+      "loss": 8.84151138797883,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 548.1737060546875,
+      "selected_target_count": 62,
+      "source_slots": 512,
+      "step": 303,
+      "update_seconds": 0.30953141200001255
+    },
+    {
+      "cell_counts": [
+        743,
+        515,
+        187,
+        1575,
+        674,
+        402
+      ],
+      "cell_gradient_norms": [
+        2.347506284713745,
+        2.867072820663452,
+        0.6657425165176392,
+        4.170297622680664,
+        0.2216142863035202,
+        1.744598388671875
+      ],
+      "context": "PACKED",
+      "loss": 8.543723270810883,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 495.53594970703125,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 304,
+      "update_seconds": 0.30922056800000064
+    },
+    {
+      "cell_counts": [
+        651,
+        515,
+        170,
+        1598,
+        714,
+        448
+      ],
+      "cell_gradient_norms": [
+        1.3048629760742188,
+        1.8226025104522705,
+        0.2567521035671234,
+        3.5719008445739746,
+        0.060251276940107346,
+        1.549870491027832
+      ],
+      "context": "PACKED",
+      "loss": 8.186922200520833,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 491.21533203125,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 305,
+      "update_seconds": 0.3202607540000031
+    },
+    {
+      "cell_counts": [
+        620,
+        483,
+        191,
+        1655,
+        642,
+        505
+      ],
+      "cell_gradient_norms": [
+        0.8771824240684509,
+        1.4124387502670288,
+        0.3697672486305237,
+        2.874750852584839,
+        0.12884151935577393,
+        1.4579800367355347
+      ],
+      "context": "PACKED",
+      "loss": 7.960247408959173,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 493.53533935546875,
+      "selected_target_count": 62,
+      "source_slots": 512,
+      "step": 306,
+      "update_seconds": 0.3200106019999964
+    },
+    {
+      "cell_counts": [
+        530,
+        469,
+        165,
+        1645,
+        628,
+        659
+      ],
+      "cell_gradient_norms": [
+        0.6855517625808716,
+        1.2226241827011108,
+        0.21425718069076538,
+        3.0365025997161865,
+        0.23519514501094818,
+        2.410174608230591
+      ],
+      "context": "PACKED",
+      "loss": 7.730343627929687,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 463.82061767578125,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 307,
+      "update_seconds": 0.31488575599999535
+    },
+    {
+      "cell_counts": [
+        533,
+        472,
+        168,
+        1580,
+        661,
+        682
+      ],
+      "cell_gradient_norms": [
+        0.4551265239715576,
+        1.0394260883331299,
+        0.32927405834198,
+        3.0511257648468018,
+        0.12890486419200897,
+        1.9873930215835571
+      ],
+      "context": "PACKED",
+      "loss": 7.493910910866477,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 412.16510009765625,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 308,
+      "update_seconds": 0.3068336489999979
+    },
+    {
+      "cell_counts": [
+        517,
+        489,
+        186,
+        1582,
+        679,
+        643
+      ],
+      "cell_gradient_norms": [
+        0.5878463387489319,
+        0.8561369776725769,
+        0.15445326268672943,
+        2.923121452331543,
+        0.2844596207141876,
+        1.7110368013381958
+      ],
+      "context": "PACKED",
+      "loss": 7.153896876743862,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 400.61822509765625,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 309,
+      "update_seconds": 0.3124394049999921
+    },
+    {
+      "cell_counts": [
+        540,
+        500,
+        175,
+        1574,
+        640,
+        667
+      ],
+      "cell_gradient_norms": [
+        0.42319753766059875,
+        0.6796882748603821,
+        0.31574320793151855,
+        2.7708818912506104,
+        0.07331479340791702,
+        1.3884165287017822
+      ],
+      "context": "PACKED",
+      "loss": 6.904576794854526,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 400.4654541015625,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 310,
+      "update_seconds": 0.32058761400000435
+    },
+    {
+      "cell_counts": [
+        565,
+        546,
+        185,
+        1555,
+        617,
+        628
+      ],
+      "cell_gradient_norms": [
+        0.40423354506492615,
+        0.6689049005508423,
+        0.11274898797273636,
+        1.7791892290115356,
+        0.036635905504226685,
+        1.8000034093856812
+      ],
+      "context": "PACKED",
+      "loss": 6.847887674967448,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 410.8732604980469,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 311,
+      "update_seconds": 0.32881033999998976
+    },
+    {
+      "cell_counts": [
+        570,
+        568,
+        179,
+        1543,
+        623,
+        613
+      ],
+      "cell_gradient_norms": [
+        0.3237011730670929,
+        0.7876070737838745,
+        0.12090089917182922,
+        1.6642706394195557,
+        0.08486579358577728,
+        1.1651577949523926
+      ],
+      "context": "PACKED",
+      "loss": 6.59014892578125,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 369.04833984375,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 312,
+      "update_seconds": 0.33086663099999214
+    },
+    {
+      "cell_counts": [
+        526,
+        738,
+        177,
+        1455,
+        652,
+        548
+      ],
+      "cell_gradient_norms": [
+        0.27630192041397095,
+        0.8898271918296814,
+        0.09349428862333298,
+        1.444540023803711,
+        0.17005351185798645,
+        0.9146258234977722
+      ],
+      "context": "PACKED",
+      "loss": 6.3987493341619315,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 351.93121337890625,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 313,
+      "update_seconds": 0.3292217690000143
+    },
+    {
+      "cell_counts": [
+        634,
+        770,
+        171,
+        1375,
+        659,
+        487
+      ],
+      "cell_gradient_norms": [
+        0.43666648864746094,
+        0.7882212400436401,
+        0.13882726430892944,
+        1.414543628692627,
+        0.06473397463560104,
+        0.9438462257385254
+      ],
+      "context": "PACKED",
+      "loss": 6.318435103804977,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 341.19549560546875,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 314,
+      "update_seconds": 0.32781248000000573
+    },
+    {
+      "cell_counts": [
+        690,
+        868,
+        178,
+        1298,
+        612,
+        450
+      ],
+      "cell_gradient_norms": [
+        0.49165308475494385,
+        0.9485906958580017,
+        0.17582270503044128,
+        1.3594533205032349,
+        0.06599444895982742,
+        0.6809570789337158
+      ],
+      "context": "PACKED",
+      "loss": 6.263126997514204,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 344.47198486328125,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 315,
+      "update_seconds": 0.33518002200000296
+    },
+    {
+      "cell_counts": [
+        779,
+        928,
+        165,
+        1112,
+        683,
+        429
+      ],
+      "cell_gradient_norms": [
+        0.6023025512695312,
+        1.2092704772949219,
+        0.0936933159828186,
+        0.9158242344856262,
+        0.0643063485622406,
+        0.8909282088279724
+      ],
+      "context": "PACKED",
+      "loss": 6.359468104475636,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 375.2086181640625,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 316,
+      "update_seconds": 0.3225476169999979
+    },
+    {
+      "cell_counts": [
+        823,
+        1057,
+        169,
+        955,
+        652,
+        440
+      ],
+      "cell_gradient_norms": [
+        0.7140501737594604,
+        1.3554445505142212,
+        0.1226707175374031,
+        0.5371906161308289,
+        0.05837099254131317,
+        0.8380546569824219
+      ],
+      "context": "PACKED",
+      "loss": 6.398150213833513,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 371.09271240234375,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 317,
+      "update_seconds": 0.3471452540000257
+    },
+    {
+      "cell_counts": [
+        798,
+        1175,
+        164,
+        892,
+        616,
+        451
+      ],
+      "cell_gradient_norms": [
+        0.657484769821167,
+        1.5845117568969727,
+        0.06910966336727142,
+        0.5232447385787964,
+        0.06721296906471252,
+        0.5660685896873474
+      ],
+      "context": "PACKED",
+      "loss": 6.283546710836476,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 364.4457092285156,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 318,
+      "update_seconds": 0.318490885000017
+    },
+    {
+      "cell_counts": [
+        913,
+        1087,
+        196,
+        854,
+        633,
+        413
+      ],
+      "cell_gradient_norms": [
+        0.6649231314659119,
+        1.3769663572311401,
+        0.10805472731590271,
+        0.49537938833236694,
+        0.3163810968399048,
+        0.516788125038147
+      ],
+      "context": "PACKED",
+      "loss": 6.109685724431818,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 336.03271484375,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 319,
+      "update_seconds": 0.31871930099998735
+    },
+    {
+      "cell_counts": [
+        886,
+        1220,
+        204,
+        736,
+        645,
+        405
+      ],
+      "cell_gradient_norms": [
+        0.9049260020256042,
+        1.5292531251907349,
+        0.18928636610507965,
+        0.22934263944625854,
+        0.0785800963640213,
+        0.9608283638954163
+      ],
+      "context": "PACKED",
+      "loss": 6.307836699904057,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 359.54669189453125,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 320,
+      "update_seconds": 0.3268462240000076
+    },
+    {
+      "cell_counts": [
+        1001,
+        1118,
+        191,
+        740,
+        655,
+        391
+      ],
+      "cell_gradient_norms": [
+        0.5195534229278564,
+        1.1998968124389648,
+        0.12936682999134064,
+        0.3451032340526581,
+        0.14755092561244965,
+        0.3796640932559967
+      ],
+      "context": "PACKED",
+      "loss": 6.104630903764204,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 335.75469970703125,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 321,
+      "update_seconds": 0.322765583000006
+    },
+    {
+      "cell_counts": [
+        1080,
+        1114,
+        237,
+        627,
+        655,
+        383
+      ],
+      "cell_gradient_norms": [
+        0.5729942321777344,
+        1.5974754095077515,
+        0.08849471062421799,
+        0.3495142459869385,
+        0.036186449229717255,
+        0.7042173147201538
+      ],
+      "context": "PACKED",
+      "loss": 5.993132414641203,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 323.629150390625,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 322,
+      "update_seconds": 0.33052760600000397
+    },
+    {
+      "cell_counts": [
+        1048,
+        1155,
+        244,
+        626,
+        657,
+        366
+      ],
+      "cell_gradient_norms": [
+        0.9008522629737854,
+        1.5637770891189575,
+        0.1112203523516655,
+        0.38369905948638916,
+        0.03137052431702614,
+        0.48580092191696167
+      ],
+      "context": "PACKED",
+      "loss": 6.271892610143443,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 382.58544921875,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 323,
+      "update_seconds": 0.3267382589999954
+    },
+    {
+      "cell_counts": [
+        1083,
+        1084,
+        234,
+        624,
+        699,
+        372
+      ],
+      "cell_gradient_norms": [
+        0.5895869731903076,
+        1.2350218296051025,
+        0.07081878930330276,
+        0.2732084393501282,
+        0.1089140921831131,
+        0.5015900731086731
+      ],
+      "context": "PACKED",
+      "loss": 6.141930014400159,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 362.3738708496094,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 324,
+      "update_seconds": 0.33174606800000106
+    },
+    {
+      "cell_counts": [
+        1091,
+        1112,
+        238,
+        599,
+        681,
+        375
+      ],
+      "cell_gradient_norms": [
+        0.4059050381183624,
+        0.9886922836303711,
+        0.0797143206000328,
+        0.27037203311920166,
+        0.04417085647583008,
+        0.2684807777404785
+      ],
+      "context": "PACKED",
+      "loss": 6.121949768066406,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 367.3169860839844,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 325,
+      "update_seconds": 0.3266263200000026
+    },
+    {
+      "cell_counts": [
+        1132,
+        1121,
+        252,
+        575,
+        653,
+        363
+      ],
+      "cell_gradient_norms": [
+        0.5462686419487,
+        1.3029154539108276,
+        0.09339539706707001,
+        0.296954870223999,
+        0.14571736752986908,
+        0.5590277314186096
+      ],
+      "context": "PACKED",
+      "loss": 6.0225979989035086,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 343.2880859375,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 326,
+      "update_seconds": 0.3314396959999897
+    },
+    {
+      "cell_counts": [
+        1166,
+        1092,
+        236,
+        599,
+        639,
+        364
+      ],
+      "cell_gradient_norms": [
+        0.5161548256874084,
+        1.130476474761963,
+        0.0711086168885231,
+        0.3184608817100525,
+        0.025231115520000458,
+        0.3705946207046509
+      ],
+      "context": "PACKED",
+      "loss": 6.057181803385417,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 363.430908203125,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 327,
+      "update_seconds": 0.3222722810000107
+    },
+    {
+      "cell_counts": [
+        1190,
+        1116,
+        223,
+        579,
+        650,
+        338
+      ],
+      "cell_gradient_norms": [
+        0.32380160689353943,
+        0.7620604634284973,
+        0.03310081735253334,
+        0.1421595811843872,
+        0.04230174794793129,
+        0.22156544029712677
+      ],
+      "context": "PACKED",
+      "loss": 6.085716372630635,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 371.22869873046875,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 328,
+      "update_seconds": 0.3215236930000174
+    },
+    {
+      "cell_counts": [
+        1213,
+        1157,
+        250,
+        526,
+        624,
+        326
+      ],
+      "cell_gradient_norms": [
+        0.39410388469696045,
+        1.3338836431503296,
+        0.04488099366426468,
+        0.14418160915374756,
+        0.10893777012825012,
+        0.6666823625564575
+      ],
+      "context": "PACKED",
+      "loss": 5.999616350446429,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 335.978515625,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 329,
+      "update_seconds": 0.324244603000011
+    },
+    {
+      "cell_counts": [
+        1210,
+        1146,
+        245,
+        568,
+        594,
+        333
+      ],
+      "cell_gradient_norms": [
+        0.2574080526828766,
+        1.0047529935836792,
+        0.05570776015520096,
+        0.07818888127803802,
+        0.053652938455343246,
+        0.39945581555366516
+      ],
+      "context": "PACKED",
+      "loss": 5.995572226388114,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 335.7520446777344,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 330,
+      "update_seconds": 0.3223039549999953
+    },
+    {
+      "cell_counts": [
+        1259,
+        1174,
+        249,
+        543,
+        590,
+        281
+      ],
+      "cell_gradient_norms": [
+        0.2649588882923126,
+        1.0093591213226318,
+        0.041642602533102036,
+        0.0615847073495388,
+        0.03426288813352585,
+        0.19792281091213226
+      ],
+      "context": "PACKED",
+      "loss": 5.961100075461648,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 327.8605041503906,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 331,
+      "update_seconds": 0.3154252049999968
+    },
+    {
+      "cell_counts": [
+        1310,
+        1117,
+        245,
+        570,
+        574,
+        280
+      ],
+      "cell_gradient_norms": [
+        0.8971043229103088,
+        0.6875051259994507,
+        0.10634409636259079,
+        0.23177753388881683,
+        0.08237086981534958,
+        0.2517165541648865
+      ],
+      "context": "PACKED",
+      "loss": 6.047672459336578,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 368.90802001953125,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 332,
+      "update_seconds": 0.3127657480000039
+    },
+    {
+      "cell_counts": [
+        1298,
+        1161,
+        275,
+        533,
+        547,
+        282
+      ],
+      "cell_gradient_norms": [
+        0.36770984530448914,
+        0.5226823687553406,
+        0.0456349179148674,
+        0.09743541479110718,
+        0.018606062978506088,
+        0.1602480709552765
+      ],
+      "context": "PACKED",
+      "loss": 5.948051715719289,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 344.98699951171875,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 333,
+      "update_seconds": 0.3158512519999874
+    },
+    {
+      "cell_counts": [
+        1237,
+        1162,
+        267,
+        564,
+        567,
+        299
+      ],
+      "cell_gradient_norms": [
+        0.3172357380390167,
+        0.523139476776123,
+        0.06748177111148834,
+        0.14842121303081512,
+        0.03226638585329056,
+        0.1953519731760025
+      ],
+      "context": "PACKED",
+      "loss": 5.891676766531808,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 329.93389892578125,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 334,
+      "update_seconds": 0.31278181300001506
+    },
+    {
+      "cell_counts": [
+        1194,
+        1165,
+        262,
+        579,
+        596,
+        300
+      ],
+      "cell_gradient_norms": [
+        0.34171172976493835,
+        0.7788266539573669,
+        0.05909319967031479,
+        0.19726960361003876,
+        0.0335567407310009,
+        0.2583329975605011
+      ],
+      "context": "PACKED",
+      "loss": 5.948834228515625,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 356.9300537109375,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 335,
+      "update_seconds": 0.3360791370000129
+    },
+    {
+      "cell_counts": [
+        1174,
+        1172,
+        265,
+        576,
+        610,
+        299
+      ],
+      "cell_gradient_norms": [
+        0.4303930997848511,
+        0.7582767009735107,
+        0.14158791303634644,
+        0.23319867253303528,
+        0.046864867210388184,
+        0.2168266922235489
+      ],
+      "context": "PACKED",
+      "loss": 5.911257934570313,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 354.67547607421875,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 336,
+      "update_seconds": 0.3201907080000126
+    },
+    {
+      "cell_counts": [
+        1202,
+        1215,
+        243,
+        560,
+        572,
+        304
+      ],
+      "cell_gradient_norms": [
+        0.48452019691467285,
+        0.435350239276886,
+        0.02842085249722004,
+        0.11818592250347137,
+        0.040882520377635956,
+        0.2050420045852661
+      ],
+      "context": "PACKED",
+      "loss": 5.902984619140625,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 336.4701232910156,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 337,
+      "update_seconds": 0.33272117699999626
+    },
+    {
+      "cell_counts": [
+        1205,
+        1205,
+        233,
+        553,
+        607,
+        293
+      ],
+      "cell_gradient_norms": [
+        0.21125514805316925,
+        0.6303189992904663,
+        0.03942929580807686,
+        0.21597279608249664,
+        0.011954768560826778,
+        0.22199825942516327
+      ],
+      "context": "PACKED",
+      "loss": 5.987672867313508,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 371.2357177734375,
+      "selected_target_count": 62,
+      "source_slots": 512,
+      "step": 338,
+      "update_seconds": 0.32279181399999857
+    },
+    {
+      "cell_counts": [
+        1236,
+        1215,
+        257,
+        542,
+        587,
+        259
+      ],
+      "cell_gradient_norms": [
+        0.21676814556121826,
+        0.7000976204872131,
+        0.04592902213335037,
+        0.12231459468603134,
+        0.03770202398300171,
+        0.23509091138839722
+      ],
+      "context": "PACKED",
+      "loss": 5.91090338570731,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 331.0105895996094,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 339,
+      "update_seconds": 0.32894725799999947
+    },
+    {
+      "cell_counts": [
+        1246,
+        1248,
+        237,
+        546,
+        566,
+        253
+      ],
+      "cell_gradient_norms": [
+        0.19769135117530823,
+        0.44552525877952576,
+        0.05126708745956421,
+        0.05866053327918053,
+        0.035012997686862946,
+        0.11817222833633423
+      ],
+      "context": "PACKED",
+      "loss": 5.8486566716974435,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 321.6761169433594,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 340,
+      "update_seconds": 0.32825374600000146
+    },
+    {
+      "cell_counts": [
+        1245,
+        1250,
+        218,
+        554,
+        585,
+        244
+      ],
+      "cell_gradient_norms": [
+        0.36131858825683594,
+        0.564980685710907,
+        0.01393040083348751,
+        0.08518814295530319,
+        0.0832548514008522,
+        0.16865432262420654
+      ],
+      "context": "PACKED",
+      "loss": 5.946557831345943,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 338.95379638671875,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 341,
+      "update_seconds": 0.31463714700001333
+    },
+    {
+      "cell_counts": [
+        1263,
+        1241,
+        202,
+        548,
+        597,
+        245
+      ],
+      "cell_gradient_norms": [
+        0.4470798075199127,
+        0.6253227591514587,
+        0.017842859029769897,
+        0.21650376915931702,
+        0.02136237360537052,
+        0.180714413523674
+      ],
+      "context": "PACKED",
+      "loss": 5.924450174967448,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 355.4670104980469,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 342,
+      "update_seconds": 0.3120638729999996
+    },
+    {
+      "cell_counts": [
+        1250,
+        1259,
+        197,
+        539,
+        584,
+        267
+      ],
+      "cell_gradient_norms": [
+        0.1923598200082779,
+        0.3699946105480194,
+        0.02879013679921627,
+        0.09148519486188889,
+        0.03284130245447159,
+        0.14412295818328857
+      ],
+      "context": "PACKED",
+      "loss": 5.926049068056304,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 343.7108459472656,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 343,
+      "update_seconds": 0.3210088970000129
+    },
+    {
+      "cell_counts": [
+        1245,
+        1272,
+        194,
+        589,
+        537,
+        259
+      ],
+      "cell_gradient_norms": [
+        0.16404034197330475,
+        0.3400104343891144,
+        0.05034460127353668,
+        0.12648102641105652,
+        0.05333926901221275,
+        0.12741516530513763
+      ],
+      "context": "PACKED",
+      "loss": 5.889321845874452,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 335.69134521484375,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 344,
+      "update_seconds": 0.32430471399999306
+    },
+    {
+      "cell_counts": [
+        1200,
+        1354,
+        199,
+        552,
+        554,
+        237
+      ],
+      "cell_gradient_norms": [
+        0.14218728244304657,
+        0.7842382192611694,
+        0.046198613941669464,
+        0.07999887317419052,
+        0.03243418410420418,
+        0.14269588887691498
+      ],
+      "context": "PACKED",
+      "loss": 5.83165449662642,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 320.7409973144531,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 345,
+      "update_seconds": 0.32134864399998264
+    },
+    {
+      "cell_counts": [
+        1196,
+        1320,
+        206,
+        563,
+        570,
+        241
+      ],
+      "cell_gradient_norms": [
+        0.23665271699428558,
+        0.8566163778305054,
+        0.036170411854982376,
+        0.08899390697479248,
+        0.03559311851859093,
+        0.10662039369344711
+      ],
+      "context": "PACKED",
+      "loss": 5.896740294339364,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 336.11419677734375,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 346,
+      "update_seconds": 0.3546039530000087
+    },
+    {
+      "cell_counts": [
+        1197,
+        1332,
+        211,
+        572,
+        539,
+        245
+      ],
+      "cell_gradient_norms": [
+        0.2279985547065735,
+        0.5426949858665466,
+        0.044586144387722015,
+        0.07828773558139801,
+        0.017403937876224518,
+        0.18440167605876923
+      ],
+      "context": "PACKED",
+      "loss": 5.907794499801377,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 348.55987548828125,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 347,
+      "update_seconds": 0.32452050000000554
+    },
+    {
+      "cell_counts": [
+        1155,
+        1355,
+        212,
+        559,
+        587,
+        228
+      ],
+      "cell_gradient_norms": [
+        0.2959628403186798,
+        0.6242342591285706,
+        0.03835245221853256,
+        0.05769049748778343,
+        0.02272837422788143,
+        0.27379459142684937
+      ],
+      "context": "PACKED",
+      "loss": 5.921758191338901,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 343.46197509765625,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 348,
+      "update_seconds": 0.31816175800000224
+    },
+    {
+      "cell_counts": [
+        1202,
+        1390,
+        196,
+        542,
+        531,
+        235
+      ],
+      "cell_gradient_norms": [
+        0.1944638043642044,
+        0.638338565826416,
+        0.008672850206494331,
+        0.035569969564676285,
+        0.022634195163846016,
+        0.19924862682819366
+      ],
+      "context": "PACKED",
+      "loss": 5.812921488060142,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 308.0848388671875,
+      "selected_target_count": 53,
+      "source_slots": 512,
+      "step": 349,
+      "update_seconds": 0.3051957609999931
+    },
+    {
+      "cell_counts": [
+        1244,
+        1297,
+        215,
+        537,
+        581,
+        222
+      ],
+      "cell_gradient_norms": [
+        0.22709393501281738,
+        0.6211283802986145,
+        0.026044540107250214,
+        0.06302428245544434,
+        0.025786487385630608,
+        0.14402540028095245
+      ],
+      "context": "PACKED",
+      "loss": 5.798291122704222,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 330.5025939941406,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 350,
+      "update_seconds": 0.3083044349999966
+    },
+    {
+      "cell_counts": [
+        1243,
+        1325,
+        215,
+        543,
+        542,
+        228
+      ],
+      "cell_gradient_norms": [
+        0.17057986557483673,
+        0.7057914137840271,
+        0.04764259606599808,
+        0.05228496342897415,
+        0.030688250437378883,
+        0.11350929737091064
+      ],
+      "context": "PACKED",
+      "loss": 5.870943839089913,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 334.643798828125,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 351,
+      "update_seconds": 0.312715403999988
+    },
+    {
+      "cell_counts": [
+        1238,
+        1304,
+        208,
+        513,
+        602,
+        231
+      ],
+      "cell_gradient_norms": [
+        0.27992624044418335,
+        0.7952978610992432,
+        0.02268342114984989,
+        0.13635146617889404,
+        0.010264522396028042,
+        0.20955054461956024
+      ],
+      "context": "PACKED",
+      "loss": 5.8675785387976696,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 346.1871337890625,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 352,
+      "update_seconds": 0.31737273600001004
+    },
+    {
+      "cell_counts": [
+        1233,
+        1376,
+        206,
+        488,
+        573,
+        220
+      ],
+      "cell_gradient_norms": [
+        0.36000895500183105,
+        1.4526346921920776,
+        0.01945478841662407,
+        0.02826794981956482,
+        0.027483252808451653,
+        0.16161730885505676
+      ],
+      "context": "PACKED",
+      "loss": 5.823706454918033,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 355.24609375,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 353,
+      "update_seconds": 0.3151119669999787
+    },
+    {
+      "cell_counts": [
+        1282,
+        1353,
+        227,
+        489,
+        537,
+        208
+      ],
+      "cell_gradient_norms": [
+        0.26683667302131653,
+        0.8832469582557678,
+        0.1341722160577774,
+        0.08737566322088242,
+        0.032019853591918945,
+        0.19886748492717743
+      ],
+      "context": "PACKED",
+      "loss": 5.7557802553530095,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 310.8121337890625,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 354,
+      "update_seconds": 0.31762649500001316
+    },
+    {
+      "cell_counts": [
+        1273,
+        1419,
+        220,
+        474,
+        491,
+        219
+      ],
+      "cell_gradient_norms": [
+        0.30730774998664856,
+        1.6118147373199463,
+        0.061969365924596786,
+        0.06611543148756027,
+        0.04897293820977211,
+        0.12885929644107819
+      ],
+      "context": "PACKED",
+      "loss": 5.928496779057017,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 337.92431640625,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 355,
+      "update_seconds": 0.31768000299999244
+    },
+    {
+      "cell_counts": [
+        1288,
+        1348,
+        232,
+        482,
+        532,
+        214
+      ],
+      "cell_gradient_norms": [
+        0.4614541232585907,
+        1.7966645956039429,
+        0.05420709773898125,
+        0.07647586613893509,
+        0.00820228923112154,
+        0.17734181880950928
+      ],
+      "context": "PACKED",
+      "loss": 5.979485648018973,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 334.8511962890625,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 356,
+      "update_seconds": 0.31224868200001765
+    },
+    {
+      "cell_counts": [
+        1255,
+        1401,
+        229,
+        451,
+        545,
+        215
+      ],
+      "cell_gradient_norms": [
+        0.4868607819080353,
+        1.6468498706817627,
+        0.025863736867904663,
+        0.10692556947469711,
+        0.03542272374033928,
+        0.23212705552577972
+      ],
+      "context": "PACKED",
+      "loss": 5.880801669034091,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 323.444091796875,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 357,
+      "update_seconds": 0.30835210500001153
+    },
+    {
+      "cell_counts": [
+        1303,
+        1323,
+        227,
+        460,
+        574,
+        209
+      ],
+      "cell_gradient_norms": [
+        0.28357112407684326,
+        0.8669505715370178,
+        0.03799920156598091,
+        0.07182725518941879,
+        0.05162619426846504,
+        0.13961750268936157
+      ],
+      "context": "PACKED",
+      "loss": 5.926024406186996,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 367.41351318359375,
+      "selected_target_count": 62,
+      "source_slots": 512,
+      "step": 358,
+      "update_seconds": 0.3169766729999992
+    },
+    {
+      "cell_counts": [
+        1325,
+        1343,
+        235,
+        434,
+        533,
+        226
+      ],
+      "cell_gradient_norms": [
+        0.24307867884635925,
+        1.1764925718307495,
+        0.024492288008332253,
+        0.08639433234930038,
+        0.007179482374340296,
+        0.33972927927970886
+      ],
+      "context": "PACKED",
+      "loss": 5.799354553222656,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 301.5664367675781,
+      "selected_target_count": 52,
+      "source_slots": 512,
+      "step": 359,
+      "update_seconds": 0.30774868499997865
+    },
+    {
+      "cell_counts": [
+        1369,
+        1270,
+        222,
+        461,
+        554,
+        220
+      ],
+      "cell_gradient_norms": [
+        0.1670263111591339,
+        0.49955055117607117,
+        0.09439010173082352,
+        0.09527348726987839,
+        0.015472130849957466,
+        0.16814245283603668
+      ],
+      "context": "PACKED",
+      "loss": 5.8349159642269735,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 332.5902099609375,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 360,
+      "update_seconds": 0.3109793080000145
+    },
+    {
+      "cell_counts": [
+        1351,
+        1324,
+        222,
+        441,
+        534,
+        224
+      ],
+      "cell_gradient_norms": [
+        0.1761023998260498,
+        0.44800642132759094,
+        0.042872682213783264,
+        0.02741844207048416,
+        0.058954864740371704,
+        0.08510800451040268
+      ],
+      "context": "PACKED",
+      "loss": 5.846032393606086,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 333.2238464355469,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 361,
+      "update_seconds": 0.31598488399998814
+    },
+    {
+      "cell_counts": [
+        1353,
+        1311,
+        203,
+        462,
+        546,
+        221
+      ],
+      "cell_gradient_norms": [
+        0.36822718381881714,
+        0.7720681428909302,
+        0.009003675542771816,
+        0.026689043268561363,
+        0.035575851798057556,
+        0.2636823058128357
+      ],
+      "context": "PACKED",
+      "loss": 5.7043576921735495,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 319.44403076171875,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 362,
+      "update_seconds": 0.3073641789999897
+    },
+    {
+      "cell_counts": [
+        1376,
+        1241,
+        208,
+        451,
+        594,
+        226
+      ],
+      "cell_gradient_norms": [
+        0.3745974004268646,
+        0.48731353878974915,
+        0.14771437644958496,
+        0.019565889611840248,
+        0.02767973020672798,
+        0.08570890128612518
+      ],
+      "context": "PACKED",
+      "loss": 5.8623046875,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 328.2890625,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 363,
+      "update_seconds": 0.3095014630000037
+    },
+    {
+      "cell_counts": [
+        1385,
+        1311,
+        187,
+        421,
+        562,
+        230
+      ],
+      "cell_gradient_norms": [
+        0.5667401552200317,
+        0.9003893733024597,
+        0.01577574759721756,
+        0.01441885530948639,
+        0.024863259866833687,
+        0.09713418781757355
+      ],
+      "context": "PACKED",
+      "loss": 5.921190459152748,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 343.4290466308594,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 364,
+      "update_seconds": 0.31502429800002574
+    },
+    {
+      "cell_counts": [
+        1346,
+        1345,
+        203,
+        424,
+        551,
+        227
+      ],
+      "cell_gradient_norms": [
+        0.23602452874183655,
+        0.4712626338005066,
+        0.04499891772866249,
+        0.03494751453399658,
+        0.010729030705988407,
+        0.13695061206817627
+      ],
+      "context": "PACKED",
+      "loss": 5.84869384765625,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 321.67816162109375,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 365,
+      "update_seconds": 0.3124533710000037
+    },
+    {
+      "cell_counts": [
+        1379,
+        1358,
+        188,
+        415,
+        524,
+        232
+      ],
+      "cell_gradient_norms": [
+        0.26503774523735046,
+        0.33073434233665466,
+        0.06289143115282059,
+        0.06531719118356705,
+        0.05012914165854454,
+        0.18362335860729218
+      ],
+      "context": "PACKED",
+      "loss": 5.803864655671297,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 313.40869140625,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 366,
+      "update_seconds": 0.30652091899997913
+    },
+    {
+      "cell_counts": [
+        1348,
+        1307,
+        197,
+        427,
+        571,
+        246
+      ],
+      "cell_gradient_norms": [
+        0.2351023554801941,
+        0.4874371886253357,
+        0.07237496972084045,
+        0.027443496510386467,
+        0.030444681644439697,
+        0.1535489708185196
+      ],
+      "context": "PACKED",
+      "loss": 5.851098422346444,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.36370849609375,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 367,
+      "update_seconds": 0.3107279189999872
+    },
+    {
+      "cell_counts": [
+        1373,
+        1306,
+        182,
+        449,
+        563,
+        223
+      ],
+      "cell_gradient_norms": [
+        0.23681719601154327,
+        0.42017894983291626,
+        0.06706153601408005,
+        0.04026408493518829,
+        0.033852893859148026,
+        0.05129053443670273
+      ],
+      "context": "PACKED",
+      "loss": 5.834051617121292,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 344.20904541015625,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 368,
+      "update_seconds": 0.3021480539999857
+    },
+    {
+      "cell_counts": [
+        1334,
+        1306,
+        198,
+        434,
+        589,
+        235
+      ],
+      "cell_gradient_norms": [
+        0.31059426069259644,
+        0.76103276014328,
+        0.09394744038581848,
+        0.06793162226676941,
+        0.07730906456708908,
+        0.13593550026416779
+      ],
+      "context": "PACKED",
+      "loss": 5.833574422200521,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 350.01446533203125,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 369,
+      "update_seconds": 0.30636000200001945
+    },
+    {
+      "cell_counts": [
+        1336,
+        1361,
+        174,
+        414,
+        583,
+        228
+      ],
+      "cell_gradient_norms": [
+        1.1125521659851074,
+        1.8207405805587769,
+        0.03821480646729469,
+        0.050137560814619064,
+        0.19302912056446075,
+        0.47973203659057617
+      ],
+      "context": "PACKED",
+      "loss": 6.059407737038352,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 333.2674255371094,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 370,
+      "update_seconds": 0.3138232179999818
+    },
+    {
+      "cell_counts": [
+        1315,
+        1388,
+        191,
+        422,
+        552,
+        228
+      ],
+      "cell_gradient_norms": [
+        0.6227138638496399,
+        1.2573796510696411,
+        0.04623673856258392,
+        0.09110326319932938,
+        0.02968595363199711,
+        0.120283342897892
+      ],
+      "context": "PACKED",
+      "loss": 5.849531693892046,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 321.7242431640625,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 371,
+      "update_seconds": 0.3203198290000273
+    },
+    {
+      "cell_counts": [
+        1331,
+        1377,
+        190,
+        391,
+        565,
+        242
+      ],
+      "cell_gradient_norms": [
+        0.48281851410865784,
+        1.1457419395446777,
+        0.014449217356741428,
+        0.028298674151301384,
+        0.06821276247501373,
+        0.1401117891073227
+      ],
+      "context": "PACKED",
+      "loss": 5.785314706655649,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 300.83636474609375,
+      "selected_target_count": 52,
+      "source_slots": 512,
+      "step": 372,
+      "update_seconds": 0.30717272099997217
+    },
+    {
+      "cell_counts": [
+        1347,
+        1375,
+        187,
+        393,
+        553,
+        241
+      ],
+      "cell_gradient_norms": [
+        0.34659865498542786,
+        0.5806959867477417,
+        0.009828276000916958,
+        0.03589513152837753,
+        0.02529342845082283,
+        0.12543317675590515
+      ],
+      "context": "PACKED",
+      "loss": 5.871262122844827,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 340.533203125,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 373,
+      "update_seconds": 0.3633626850000269
+    },
+    {
+      "cell_counts": [
+        1372,
+        1357,
+        177,
+        400,
+        542,
+        248
+      ],
+      "cell_gradient_norms": [
+        0.46980229020118713,
+        0.599617600440979,
+        0.025919942185282707,
+        0.03617837652564049,
+        0.009772319346666336,
+        0.11650051921606064
+      ],
+      "context": "PACKED",
+      "loss": 5.931830570615571,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 344.0461730957031,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 374,
+      "update_seconds": 0.31119506599998203
+    },
+    {
+      "cell_counts": [
+        1383,
+        1338,
+        178,
+        437,
+        534,
+        226
+      ],
+      "cell_gradient_norms": [
+        0.31187742948532104,
+        0.5865018367767334,
+        0.00788940116763115,
+        0.0315512977540493,
+        0.008307509124279022,
+        0.15019966661930084
+      ],
+      "context": "PACKED",
+      "loss": 5.891732943260063,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 347.61224365234375,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 375,
+      "update_seconds": 0.31200077999994846
+    },
+    {
+      "cell_counts": [
+        1335,
+        1370,
+        194,
+        439,
+        525,
+        233
+      ],
+      "cell_gradient_norms": [
+        0.598499596118927,
+        0.9734125733375549,
+        0.016599955037236214,
+        0.08013932406902313,
+        0.011434098705649376,
+        0.15678264200687408
+      ],
+      "context": "PACKED",
+      "loss": 5.878436172217653,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 335.07086181640625,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 376,
+      "update_seconds": 0.31231634400000985
+    },
+    {
+      "cell_counts": [
+        1375,
+        1326,
+        203,
+        428,
+        545,
+        219
+      ],
+      "cell_gradient_norms": [
+        0.4848664700984955,
+        0.8049317598342896,
+        0.23706799745559692,
+        0.041972219944000244,
+        0.010655240155756474,
+        0.12543605268001556
+      ],
+      "context": "PACKED",
+      "loss": 5.927481441174523,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 349.7214050292969,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 377,
+      "update_seconds": 0.3051901050000083
+    },
+    {
+      "cell_counts": [
+        1348,
+        1338,
+        186,
+        411,
+        587,
+        226
+      ],
+      "cell_gradient_norms": [
+        0.5983358025550842,
+        1.2923505306243896,
+        0.03181677311658859,
+        0.0232105515897274,
+        0.03918003663420677,
+        0.16635318100452423
+      ],
+      "context": "PACKED",
+      "loss": 5.9593556722005205,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 357.56134033203125,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 378,
+      "update_seconds": 0.307351567000012
+    },
+    {
+      "cell_counts": [
+        1356,
+        1323,
+        200,
+        440,
+        539,
+        238
+      ],
+      "cell_gradient_norms": [
+        0.1682172268629074,
+        0.7022994160652161,
+        0.17240777611732483,
+        0.021517036482691765,
+        0.002553453901782632,
+        0.18056121468544006
+      ],
+      "context": "PACKED",
+      "loss": 5.884573417797423,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 335.4206848144531,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 379,
+      "update_seconds": 0.3115226560000224
+    },
+    {
+      "cell_counts": [
+        1297,
+        1410,
+        194,
+        428,
+        533,
+        234
+      ],
+      "cell_gradient_norms": [
+        0.21622297167778015,
+        0.5587109327316284,
+        0.042929861694574356,
+        0.015290860086679459,
+        0.03718552738428116,
+        0.18470428884029388
+      ],
+      "context": "PACKED",
+      "loss": 5.918353971887807,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 361.01959228515625,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 380,
+      "update_seconds": 0.31414789299998347
+    },
+    {
+      "cell_counts": [
+        1321,
+        1386,
+        169,
+        428,
+        541,
+        251
+      ],
+      "cell_gradient_norms": [
+        0.39948147535324097,
+        0.8578351140022278,
+        0.017755290493369102,
+        0.0414421483874321,
+        0.0233236663043499,
+        0.2723125219345093
+      ],
+      "context": "PACKED",
+      "loss": 5.806868941695602,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 313.5709228515625,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 381,
+      "update_seconds": 0.30342886500000077
+    },
+    {
+      "cell_counts": [
+        1305,
+        1410,
+        190,
+        458,
+        494,
+        239
+      ],
+      "cell_gradient_norms": [
+        0.40276721119880676,
+        0.9766122698783875,
+        0.05624964460730553,
+        0.04093633219599724,
+        0.008748489432036877,
+        0.19952087104320526
+      ],
+      "context": "PACKED",
+      "loss": 5.776313781738281,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 323.47357177734375,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 382,
+      "update_seconds": 0.30031825800000433
+    },
+    {
+      "cell_counts": [
+        1248,
+        1398,
+        191,
+        477,
+        544,
+        238
+      ],
+      "cell_gradient_norms": [
+        0.5296004414558411,
+        0.7884443998336792,
+        0.0350186787545681,
+        0.03851281479001045,
+        0.025301069021224976,
+        0.2546827793121338
+      ],
+      "context": "PACKED",
+      "loss": 5.932576163870389,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 361.88714599609375,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 383,
+      "update_seconds": 0.2961820029999558
+    },
+    {
+      "cell_counts": [
+        1258,
+        1397,
+        187,
+        482,
+        540,
+        232
+      ],
+      "cell_gradient_norms": [
+        0.41493871808052063,
+        1.0074410438537598,
+        0.03217460215091705,
+        0.04192429035902023,
+        0.0261401254683733,
+        0.17468000948429108
+      ],
+      "context": "PACKED",
+      "loss": 5.81169750072338,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 313.8316650390625,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 384,
+      "update_seconds": 0.3012295710000217
+    },
+    {
+      "cell_counts": [
+        1226,
+        1458,
+        191,
+        481,
+        522,
+        218
+      ],
+      "cell_gradient_norms": [
+        0.4736504852771759,
+        0.7021409869194031,
+        0.052749667316675186,
+        0.0767933577299118,
+        0.006388927809894085,
+        0.16478192806243896
+      ],
+      "context": "PACKED",
+      "loss": 5.884535450046346,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 347.1875915527344,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 385,
+      "update_seconds": 0.305834295000011
+    },
+    {
+      "cell_counts": [
+        1221,
+        1385,
+        174,
+        467,
+        602,
+        247
+      ],
+      "cell_gradient_norms": [
+        0.38433319330215454,
+        0.835593581199646,
+        0.14120951294898987,
+        0.06135163456201553,
+        0.02912280522286892,
+        0.06101227551698685
+      ],
+      "context": "PACKED",
+      "loss": 5.871325356619699,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 328.7942199707031,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 386,
+      "update_seconds": 0.3023364210000068
+    },
+    {
+      "cell_counts": [
+        1262,
+        1342,
+        190,
+        457,
+        610,
+        235
+      ],
+      "cell_gradient_norms": [
+        0.6608157157897949,
+        1.4191420078277588,
+        0.03228963911533356,
+        0.02956012636423111,
+        0.008055671118199825,
+        0.1712815910577774
+      ],
+      "context": "PACKED",
+      "loss": 5.8645126100570435,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 369.46429443359375,
+      "selected_target_count": 63,
+      "source_slots": 512,
+      "step": 387,
+      "update_seconds": 0.31720931900002824
+    },
+    {
+      "cell_counts": [
+        1264,
+        1435,
+        184,
+        459,
+        533,
+        221
+      ],
+      "cell_gradient_norms": [
+        0.3232344090938568,
+        0.5399792194366455,
+        0.07298251986503601,
+        0.025342723354697227,
+        0.050453223288059235,
+        0.06771428883075714
+      ],
+      "context": "PACKED",
+      "loss": 5.822549715909091,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 320.240234375,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 388,
+      "update_seconds": 0.32003882499998326
+    },
+    {
+      "cell_counts": [
+        1292,
+        1396,
+        189,
+        504,
+        496,
+        219
+      ],
+      "cell_gradient_norms": [
+        0.21812792122364044,
+        0.5789969563484192,
+        0.1278034746646881,
+        0.04531179741024971,
+        0.04699604958295822,
+        0.11279097944498062
+      ],
+      "context": "PACKED",
+      "loss": 5.810741077769887,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 319.59075927734375,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 389,
+      "update_seconds": 0.31048327500002415
+    },
+    {
+      "cell_counts": [
+        1275,
+        1344,
+        204,
+        494,
+        559,
+        220
+      ],
+      "cell_gradient_norms": [
+        0.3278084397315979,
+        0.5374346971511841,
+        0.030299067497253418,
+        0.03428054228425026,
+        0.023682868108153343,
+        0.15102200210094452
+      ],
+      "context": "PACKED",
+      "loss": 5.780362729673032,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 312.13958740234375,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 390,
+      "update_seconds": 0.31850222200000644
+    },
+    {
+      "cell_counts": [
+        1293,
+        1372,
+        197,
+        492,
+        530,
+        212
+      ],
+      "cell_gradient_norms": [
+        0.6507738828659058,
+        1.2311981916427612,
+        0.03223561868071556,
+        0.09162019193172455,
+        0.0157796461135149,
+        0.09847762435674667
+      ],
+      "context": "PACKED",
+      "loss": 5.846062215169271,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 350.76373291015625,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 391,
+      "update_seconds": 0.3212552079999682
+    },
+    {
+      "cell_counts": [
+        1247,
+        1368,
+        189,
+        487,
+        571,
+        234
+      ],
+      "cell_gradient_norms": [
+        0.47623980045318604,
+        0.8217245936393738,
+        0.01943032070994377,
+        0.11745253205299377,
+        0.005074442829936743,
+        0.09149295836687088
+      ],
+      "context": "PACKED",
+      "loss": 5.8947392781575525,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 353.6843566894531,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 392,
+      "update_seconds": 0.3173669729999915
+    },
+    {
+      "cell_counts": [
+        1230,
+        1397,
+        196,
+        498,
+        545,
+        230
+      ],
+      "cell_gradient_norms": [
+        0.37722715735435486,
+        0.9415064454078674,
+        0.06255163997411728,
+        0.029432376846671104,
+        0.05716334655880928,
+        0.04309498891234398
+      ],
+      "context": "PACKED",
+      "loss": 5.803396290746228,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 336.59698486328125,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 393,
+      "update_seconds": 0.3177422690000071
+    },
+    {
+      "cell_counts": [
+        1207,
+        1420,
+        189,
+        478,
+        559,
+        243
+      ],
+      "cell_gradient_norms": [
+        0.3234409689903259,
+        1.1184231042861938,
+        0.15997999906539917,
+        0.007993641309440136,
+        0.007778402417898178,
+        0.10443619638681412
+      ],
+      "context": "PACKED",
+      "loss": 5.948564495956688,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.06817626953125,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 394,
+      "update_seconds": 0.31957294599999386
+    },
+    {
+      "cell_counts": [
+        1188,
+        1422,
+        182,
+        478,
+        564,
+        262
+      ],
+      "cell_gradient_norms": [
+        0.15788275003433228,
+        0.33058154582977295,
+        0.04253408685326576,
+        0.021502509713172913,
+        0.0,
+        0.10012535750865936
+      ],
+      "context": "PACKED",
+      "loss": 5.827228414601293,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 337.979248046875,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 395,
+      "update_seconds": 0.3132766360000119
+    },
+    {
+      "cell_counts": [
+        1186,
+        1374,
+        202,
+        487,
+        576,
+        271
+      ],
+      "cell_gradient_norms": [
+        0.21268679201602936,
+        0.5992676615715027,
+        0.009632322937250137,
+        0.06364552676677704,
+        0.004964996129274368,
+        0.11488310247659683
+      ],
+      "context": "PACKED",
+      "loss": 5.794379679361979,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 347.66278076171875,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 396,
+      "update_seconds": 0.32034498899997743
+    },
+    {
+      "cell_counts": [
+        1207,
+        1433,
+        189,
+        472,
+        516,
+        279
+      ],
+      "cell_gradient_norms": [
+        0.28044700622558594,
+        0.5456566214561462,
+        0.027513323351740837,
+        0.024285290390253067,
+        0.022082915529608727,
+        0.09944471716880798
+      ],
+      "context": "PACKED",
+      "loss": 5.741322299890351,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 327.25537109375,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 397,
+      "update_seconds": 0.3101660130000141
+    },
+    {
+      "cell_counts": [
+        1183,
+        1395,
+        198,
+        498,
+        557,
+        265
+      ],
+      "cell_gradient_norms": [
+        0.27744799852371216,
+        0.46408921480178833,
+        0.16194409132003784,
+        0.04471783712506294,
+        0.007124542258679867,
+        0.07487630099058151
+      ],
+      "context": "PACKED",
+      "loss": 5.708351001404879,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 325.3760070800781,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 398,
+      "update_seconds": 0.31664008799998555
+    },
+    {
+      "cell_counts": [
+        1171,
+        1516,
+        174,
+        448,
+        499,
+        288
+      ],
+      "cell_gradient_norms": [
+        0.287493497133255,
+        0.7863810658454895,
+        0.005636260844767094,
+        0.024022605270147324,
+        0.008810325525701046,
+        0.08799576014280319
+      ],
+      "context": "PACKED",
+      "loss": 5.876716613769531,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 329.09613037109375,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 399,
+      "update_seconds": 0.3074710180000011
+    },
+    {
+      "cell_counts": [
+        1173,
+        1471,
+        191,
+        450,
+        519,
+        292
+      ],
+      "cell_gradient_norms": [
+        0.29656755924224854,
+        0.5055409073829651,
+        0.0407484769821167,
+        0.12324317544698715,
+        0.04209636524319649,
+        0.13224102556705475
+      ],
+      "context": "PACKED",
+      "loss": 5.802137943736294,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 330.72186279296875,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 400,
+      "update_seconds": 0.3148444980000136
+    },
+    {
+      "cell_counts": [
+        1188,
+        1447,
+        190,
+        422,
+        556,
+        293
+      ],
+      "cell_gradient_norms": [
+        0.2213788628578186,
+        0.8353049755096436,
+        0.02384513057768345,
+        0.012682830914855003,
+        0.011904250830411911,
+        0.16572290658950806
+      ],
+      "context": "PACKED",
+      "loss": 5.913478918242872,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 337.06829833984375,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 401,
+      "update_seconds": 0.31514381099998445
+    },
+    {
+      "cell_counts": [
+        1270,
+        1341,
+        173,
+        442,
+        603,
+        267
+      ],
+      "cell_gradient_norms": [
+        0.15548492968082428,
+        0.6894276738166809,
+        0.06928558647632599,
+        0.01646164245903492,
+        0.018852274864912033,
+        0.1551579087972641
+      ],
+      "context": "PACKED",
+      "loss": 5.839032706567797,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 344.5029296875,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 402,
+      "update_seconds": 0.31117392300001256
+    },
+    {
+      "cell_counts": [
+        1248,
+        1461,
+        182,
+        438,
+        504,
+        263
+      ],
+      "cell_gradient_norms": [
+        0.1431233435869217,
+        0.41546308994293213,
+        0.052696168422698975,
+        0.05271995812654495,
+        0.011726880446076393,
+        0.10130849480628967
+      ],
+      "context": "PACKED",
+      "loss": 5.806373725503178,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 342.5760498046875,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 403,
+      "update_seconds": 0.3135740139999825
+    },
+    {
+      "cell_counts": [
+        1268,
+        1412,
+        187,
+        435,
+        543,
+        251
+      ],
+      "cell_gradient_norms": [
+        0.35904115438461304,
+        1.2116142511367798,
+        0.08983955532312393,
+        0.025202197954058647,
+        0.027264829725027084,
+        0.1559617966413498
+      ],
+      "context": "PACKED",
+      "loss": 5.872455738208912,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 317.11260986328125,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 404,
+      "update_seconds": 0.3096638490000032
+    },
+    {
+      "cell_counts": [
+        1302,
+        1419,
+        195,
+        437,
+        494,
+        249
+      ],
+      "cell_gradient_norms": [
+        0.2737375795841217,
+        0.389268159866333,
+        0.03493224456906319,
+        0.03028564713895321,
+        0.10233960300683975,
+        0.14885610342025757
+      ],
+      "context": "PACKED",
+      "loss": 5.7985374321371825,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 342.11370849609375,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 405,
+      "update_seconds": 0.3148519599999986
+    },
+    {
+      "cell_counts": [
+        1297,
+        1373,
+        186,
+        449,
+        543,
+        248
+      ],
+      "cell_gradient_norms": [
+        0.15116845071315765,
+        0.807435929775238,
+        0.09567299485206604,
+        0.03517100587487221,
+        0.03443765267729759,
+        0.2649126648902893
+      ],
+      "context": "PACKED",
+      "loss": 5.912589151351178,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 360.6679382324219,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 406,
+      "update_seconds": 0.31304679900000565
+    },
+    {
+      "cell_counts": [
+        1329,
+        1381,
+        169,
+        413,
+        551,
+        253
+      ],
+      "cell_gradient_norms": [
+        0.23994246125221252,
+        1.090617060661316,
+        0.12254169583320618,
+        0.07552415877580643,
+        0.1050662100315094,
+        0.24669580161571503
+      ],
+      "context": "PACKED",
+      "loss": 5.795404287484976,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 301.36102294921875,
+      "selected_target_count": 52,
+      "source_slots": 512,
+      "step": 407,
+      "update_seconds": 0.308345815999985
+    },
+    {
+      "cell_counts": [
+        1317,
+        1372,
+        203,
+        421,
+        554,
+        229
+      ],
+      "cell_gradient_norms": [
+        0.20166665315628052,
+        0.4428533613681793,
+        0.082915760576725,
+        0.05502556636929512,
+        0.049842990934848785,
+        0.09981629252433777
+      ],
+      "context": "PACKED",
+      "loss": 5.824231904128502,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 337.8054504394531,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 408,
+      "update_seconds": 0.3180255739999893
+    },
+    {
+      "cell_counts": [
+        1342,
+        1377,
+        182,
+        405,
+        545,
+        245
+      ],
+      "cell_gradient_norms": [
+        0.2461707890033722,
+        0.5013601183891296,
+        0.02119070664048195,
+        0.032553475350141525,
+        0.045438364148139954,
+        0.11085373908281326
+      ],
+      "context": "PACKED",
+      "loss": 5.7798581804547995,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 323.67205810546875,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 409,
+      "update_seconds": 0.30248971899999333
+    },
+    {
+      "cell_counts": [
+        1374,
+        1319,
+        196,
+        436,
+        541,
+        230
+      ],
+      "cell_gradient_norms": [
+        0.23694545030593872,
+        0.7886812686920166,
+        0.07887545973062515,
+        0.06531684845685959,
+        0.020251991227269173,
+        0.19304868578910828
+      ],
+      "context": "PACKED",
+      "loss": 5.775848924067983,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 329.223388671875,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 410,
+      "update_seconds": 0.310747407000008
+    },
+    {
+      "cell_counts": [
+        1356,
+        1340,
+        190,
+        432,
+        533,
+        245
+      ],
+      "cell_gradient_norms": [
+        0.2654421031475067,
+        0.8028357028961182,
+        0.01757126674056053,
+        0.015237001702189445,
+        0.01171004306524992,
+        0.1096290871500969
+      ],
+      "context": "PACKED",
+      "loss": 5.854110191608298,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.53839111328125,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 411,
+      "update_seconds": 0.3138242370000057
+    },
+    {
+      "cell_counts": [
+        1324,
+        1429,
+        178,
+        411,
+        502,
+        252
+      ],
+      "cell_gradient_norms": [
+        0.13923634588718414,
+        0.48717769980430603,
+        0.1354299932718277,
+        0.019336502999067307,
+        0.0016125275287777185,
+        0.2193731665611267
+      ],
+      "context": "PACKED",
+      "loss": 5.7830686216001155,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 312.28570556640625,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 412,
+      "update_seconds": 0.31117191900000307
+    },
+    {
+      "cell_counts": [
+        1341,
+        1356,
+        198,
+        414,
+        539,
+        248
+      ],
+      "cell_gradient_norms": [
+        0.22814449667930603,
+        0.949935793876648,
+        0.04803774133324623,
+        0.005836143158376217,
+        0.014841250143945217,
+        0.3640283942222595
+      ],
+      "context": "PACKED",
+      "loss": 5.7851029829545455,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 318.1806640625,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 413,
+      "update_seconds": 0.3077770720000217
+    },
+    {
+      "cell_counts": [
+        1300,
+        1377,
+        203,
+        411,
+        560,
+        245
+      ],
+      "cell_gradient_norms": [
+        0.18610775470733643,
+        0.6294809579849243,
+        0.012333366088569164,
+        0.016713740304112434,
+        0.04130227118730545,
+        0.3376922607421875
+      ],
+      "context": "PACKED",
+      "loss": 5.820459300074084,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 337.5866394042969,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 414,
+      "update_seconds": 0.3090077279999832
+    },
+    {
+      "cell_counts": [
+        1311,
+        1393,
+        189,
+        420,
+        537,
+        246
+      ],
+      "cell_gradient_norms": [
+        0.20544974505901337,
+        0.5592020750045776,
+        0.0302768275141716,
+        0.06425026059150696,
+        0.012972371652722359,
+        0.045296866446733475
+      ],
+      "context": "PACKED",
+      "loss": 5.883256057213092,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 341.2288513183594,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 415,
+      "update_seconds": 0.3108442579999746
+    },
+    {
+      "cell_counts": [
+        1330,
+        1430,
+        177,
+        422,
+        498,
+        239
+      ],
+      "cell_gradient_norms": [
+        0.19914627075195312,
+        0.6345089673995972,
+        0.02770719863474369,
+        0.04597119987010956,
+        0.0332585833966732,
+        0.14983011782169342
+      ],
+      "context": "PACKED",
+      "loss": 5.925223795572917,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 355.513427734375,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 416,
+      "update_seconds": 0.3101585940000291
+    },
+    {
+      "cell_counts": [
+        1320,
+        1442,
+        166,
+        440,
+        489,
+        239
+      ],
+      "cell_gradient_norms": [
+        0.29033124446868896,
+        1.0777486562728882,
+        0.0722048208117485,
+        0.03312573581933975,
+        0.017644573003053665,
+        0.18851473927497864
+      ],
+      "context": "PACKED",
+      "loss": 5.810871188923464,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 342.8414001464844,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 417,
+      "update_seconds": 0.30988339700002143
+    },
+    {
+      "cell_counts": [
+        1298,
+        1457,
+        185,
+        422,
+        500,
+        234
+      ],
+      "cell_gradient_norms": [
+        0.16094404458999634,
+        0.3332577347755432,
+        0.017421605065464973,
+        0.043460313230752945,
+        0.018114252015948296,
+        0.08416853845119476
+      ],
+      "context": "PACKED",
+      "loss": 5.8194933439555925,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 331.71112060546875,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 418,
+      "update_seconds": 0.30726517599998715
+    },
+    {
+      "cell_counts": [
+        1320,
+        1474,
+        164,
+        417,
+        500,
+        221
+      ],
+      "cell_gradient_norms": [
+        0.22129109501838684,
+        0.40145906805992126,
+        0.047642264515161514,
+        0.03632622957229614,
+        0.015084048733115196,
+        0.10929962247610092
+      ],
+      "context": "PACKED",
+      "loss": 5.833337191877694,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 338.33355712890625,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 419,
+      "update_seconds": 0.3167628569999579
+    },
+    {
+      "cell_counts": [
+        1319,
+        1401,
+        174,
+        428,
+        540,
+        234
+      ],
+      "cell_gradient_norms": [
+        0.19001024961471558,
+        0.6297038197517395,
+        0.0232175774872303,
+        0.036950208246707916,
+        0.04412263259291649,
+        0.16320857405662537
+      ],
+      "context": "PACKED",
+      "loss": 5.686191491913378,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 324.1129150390625,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 420,
+      "update_seconds": 0.3182685349999588
+    },
+    {
+      "cell_counts": [
+        1310,
+        1441,
+        182,
+        436,
+        492,
+        235
+      ],
+      "cell_gradient_norms": [
+        0.17585347592830658,
+        0.6468610167503357,
+        0.06842640042304993,
+        0.028204916045069695,
+        0.06132190674543381,
+        0.1754513382911682
+      ],
+      "context": "PACKED",
+      "loss": 5.752437522194603,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 316.3840637207031,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 421,
+      "update_seconds": 0.3205479540000056
+    },
+    {
+      "cell_counts": [
+        1328,
+        1443,
+        175,
+        426,
+        509,
+        215
+      ],
+      "cell_gradient_norms": [
+        0.1591273546218872,
+        0.39325183629989624,
+        0.017399903386831284,
+        0.062163084745407104,
+        0.019098972901701927,
+        0.14600709080696106
+      ],
+      "context": "PACKED",
+      "loss": 5.755133793271821,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 333.7977600097656,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 422,
+      "update_seconds": 0.3107949469999767
+    },
+    {
+      "cell_counts": [
+        1291,
+        1498,
+        191,
+        409,
+        482,
+        225
+      ],
+      "cell_gradient_norms": [
+        0.116969533264637,
+        0.3436436355113983,
+        0.01127494778484106,
+        0.05947292968630791,
+        0.014649606309831142,
+        0.11941809207201004
+      ],
+      "context": "PACKED",
+      "loss": 5.782772609165737,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 323.83526611328125,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 423,
+      "update_seconds": 0.30716302400003315
+    },
+    {
+      "cell_counts": [
+        1285,
+        1451,
+        178,
+        427,
+        519,
+        236
+      ],
+      "cell_gradient_norms": [
+        0.20041075348854065,
+        1.1577593088150024,
+        0.01264188066124916,
+        0.013434777967631817,
+        0.011849943548440933,
+        0.18185272812843323
+      ],
+      "context": "PACKED",
+      "loss": 5.971717165227522,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 340.38787841796875,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 424,
+      "update_seconds": 0.3120743329999982
+    },
+    {
+      "cell_counts": [
+        1318,
+        1396,
+        180,
+        439,
+        548,
+        215
+      ],
+      "cell_gradient_norms": [
+        0.09335923939943314,
+        0.4658443033695221,
+        0.020118730142712593,
+        0.06323754787445068,
+        0.017533712089061737,
+        0.06624829769134521
+      ],
+      "context": "PACKED",
+      "loss": 5.739728800455729,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 344.38372802734375,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 425,
+      "update_seconds": 0.31822253500001807
+    },
+    {
+      "cell_counts": [
+        1302,
+        1475,
+        193,
+        422,
+        481,
+        223
+      ],
+      "cell_gradient_norms": [
+        0.07627435028553009,
+        0.5795518755912781,
+        0.009148172102868557,
+        0.0686149075627327,
+        0.01961057074368,
+        0.20406563580036163
+      ],
+      "context": "PACKED",
+      "loss": 5.84576521248653,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.05438232421875,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 426,
+      "update_seconds": 0.3170806809999931
+    },
+    {
+      "cell_counts": [
+        1278,
+        1449,
+        195,
+        431,
+        535,
+        208
+      ],
+      "cell_gradient_norms": [
+        0.07810266315937042,
+        0.6083828806877136,
+        0.05857325345277786,
+        0.012257009744644165,
+        0.024523122236132622,
+        0.1908542513847351
+      ],
+      "context": "PACKED",
+      "loss": 5.863838195800781,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 351.8302917480469,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 427,
+      "update_seconds": 0.31248812100000123
+    },
+    {
+      "cell_counts": [
+        1300,
+        1456,
+        186,
+        421,
+        507,
+        226
+      ],
+      "cell_gradient_norms": [
+        0.10603666305541992,
+        0.5474879145622253,
+        0.005500075872987509,
+        0.09091321378946304,
+        0.03357217088341713,
+        0.08621182292699814
+      ],
+      "context": "PACKED",
+      "loss": 5.806263890759698,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 336.7633056640625,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 428,
+      "update_seconds": 0.3066664199999991
+    },
+    {
+      "cell_counts": [
+        1343,
+        1458,
+        181,
+        402,
+        495,
+        217
+      ],
+      "cell_gradient_norms": [
+        0.2334565371274948,
+        0.8055866360664368,
+        0.017073186114430428,
+        0.019275015220046043,
+        0.032974421977996826,
+        0.125283882021904
+      ],
+      "context": "PACKED",
+      "loss": 5.884966316869703,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 347.2130126953125,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 429,
+      "update_seconds": 0.31076903199999606
+    },
+    {
+      "cell_counts": [
+        1300,
+        1485,
+        175,
+        415,
+        505,
+        216
+      ],
+      "cell_gradient_norms": [
+        0.20984578132629395,
+        0.5534967184066772,
+        0.06623891741037369,
+        0.009146048687398434,
+        0.0,
+        0.11384324729442596
+      ],
+      "context": "PACKED",
+      "loss": 5.841137266995614,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 332.94482421875,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 430,
+      "update_seconds": 0.34314688699998896
+    },
+    {
+      "cell_counts": [
+        1331,
+        1457,
+        180,
+        412,
+        492,
+        224
+      ],
+      "cell_gradient_norms": [
+        0.17432354390621185,
+        0.9009125232696533,
+        0.024272961542010307,
+        0.038511667400598526,
+        0.01599646732211113,
+        0.255179226398468
+      ],
+      "context": "PACKED",
+      "loss": 5.847406321558459,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.1495666503906,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 431,
+      "update_seconds": 0.3051156829999968
+    },
+    {
+      "cell_counts": [
+        1330,
+        1430,
+        194,
+        416,
+        511,
+        215
+      ],
+      "cell_gradient_norms": [
+        0.1350679099559784,
+        0.7267829775810242,
+        0.020842954516410828,
+        0.06889982521533966,
+        0.038316939026117325,
+        0.22727717459201813
+      ],
+      "context": "PACKED",
+      "loss": 5.680413818359375,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 312.4227600097656,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 432,
+      "update_seconds": 0.30342665500000976
+    },
+    {
+      "cell_counts": [
+        1337,
+        1426,
+        183,
+        416,
+        510,
+        224
+      ],
+      "cell_gradient_norms": [
+        0.11842383444309235,
+        0.5436334013938904,
+        0.009356390684843063,
+        0.01313892100006342,
+        0.008827698417007923,
+        0.32881832122802734
+      ],
+      "context": "PACKED",
+      "loss": 5.811010528029057,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 331.22760009765625,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 433,
+      "update_seconds": 0.3120234190000133
+    },
+    {
+      "cell_counts": [
+        1334,
+        1406,
+        172,
+        402,
+        565,
+        217
+      ],
+      "cell_gradient_norms": [
+        0.1035948321223259,
+        0.40194785594940186,
+        0.03298487141728401,
+        0.01228770799934864,
+        0.016319958493113518,
+        0.16285762190818787
+      ],
+      "context": "PACKED",
+      "loss": 5.771162888099408,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 334.7274475097656,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 434,
+      "update_seconds": 0.2988961059999724
+    },
+    {
+      "cell_counts": [
+        1318,
+        1430,
+        204,
+        418,
+        515,
+        211
+      ],
+      "cell_gradient_norms": [
+        0.2539360821247101,
+        0.6281106472015381,
+        0.05499832332134247,
+        0.006516627501696348,
+        0.026512524113059044,
+        0.16652262210845947
+      ],
+      "context": "PACKED",
+      "loss": 5.800422159830729,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 348.02532958984375,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 435,
+      "update_seconds": 0.3025712540000427
+    },
+    {
+      "cell_counts": [
+        1354,
+        1354,
+        191,
+        466,
+        523,
+        208
+      ],
+      "cell_gradient_norms": [
+        0.21356666088104248,
+        0.5445019602775574,
+        0.026658078655600548,
+        0.034112781286239624,
+        0.1313731074333191,
+        0.15354636311531067
+      ],
+      "context": "PACKED",
+      "loss": 5.8285397388896,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 355.5409240722656,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 436,
+      "update_seconds": 0.3207024760000081
+    },
+    {
+      "cell_counts": [
+        1358,
+        1421,
+        176,
+        419,
+        503,
+        219
+      ],
+      "cell_gradient_norms": [
+        0.1977619230747223,
+        0.5094700455665588,
+        0.0038597295060753822,
+        0.01753091812133789,
+        0.06916291266679764,
+        0.08756206929683685
+      ],
+      "context": "PACKED",
+      "loss": 5.907661701070851,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 342.6443786621094,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 437,
+      "update_seconds": 0.3070460630000298
+    },
+    {
+      "cell_counts": [
+        1353,
+        1429,
+        183,
+        406,
+        511,
+        214
+      ],
+      "cell_gradient_norms": [
+        0.5841419696807861,
+        1.160448431968689,
+        0.027399607002735138,
+        0.050544001162052155,
+        0.012732617557048798,
+        0.3569347560405731
+      ],
+      "context": "PACKED",
+      "loss": 5.8342008770636795,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 309.212646484375,
+      "selected_target_count": 53,
+      "source_slots": 512,
+      "step": 438,
+      "update_seconds": 0.3028651089999812
+    },
+    {
+      "cell_counts": [
+        1334,
+        1390,
+        181,
+        426,
+        538,
+        227
+      ],
+      "cell_gradient_norms": [
+        0.31545740365982056,
+        0.9906885623931885,
+        0.07324650138616562,
+        0.03746793046593666,
+        0.02087021805346012,
+        0.145917147397995
+      ],
+      "context": "PACKED",
+      "loss": 5.69757080078125,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 313.36639404296875,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 439,
+      "update_seconds": 0.3057534420000252
+    },
+    {
+      "cell_counts": [
+        1326,
+        1399,
+        194,
+        431,
+        520,
+        226
+      ],
+      "cell_gradient_norms": [
+        0.12911130487918854,
+        0.3706507682800293,
+        0.003825620049610734,
+        0.016891412436962128,
+        0.017552204430103302,
+        0.21926920115947723
+      ],
+      "context": "PACKED",
+      "loss": 5.843097555226293,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 338.899658203125,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 440,
+      "update_seconds": 0.31537252600003285
+    },
+    {
+      "cell_counts": [
+        1346,
+        1445,
+        173,
+        429,
+        476,
+        227
+      ],
+      "cell_gradient_norms": [
+        0.23393452167510986,
+        0.7231598496437073,
+        0.026529785245656967,
+        0.0018199895275756717,
+        0.011390662752091885,
+        0.22034378349781036
+      ],
+      "context": "PACKED",
+      "loss": 5.777845711543642,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 335.11505126953125,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 441,
+      "update_seconds": 0.3074688919999744
+    },
+    {
+      "cell_counts": [
+        1353,
+        1372,
+        172,
+        419,
+        555,
+        225
+      ],
+      "cell_gradient_norms": [
+        0.370268851518631,
+        0.6884583234786987,
+        0.02434503845870495,
+        0.03520994260907173,
+        0.02591831423342228,
+        0.09369609504938126
+      ],
+      "context": "PACKED",
+      "loss": 5.80875990125868,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 313.67303466796875,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 442,
+      "update_seconds": 0.2991085130000215
+    },
+    {
+      "cell_counts": [
+        1345,
+        1364,
+        181,
+        425,
+        561,
+        220
+      ],
+      "cell_gradient_norms": [
+        0.11316391825675964,
+        0.47389739751815796,
+        0.022519677877426147,
+        0.06715298444032669,
+        0.036499787122011185,
+        0.15662069618701935
+      ],
+      "context": "PACKED",
+      "loss": 5.811329469842426,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 342.8684387207031,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 443,
+      "update_seconds": 0.31476234899997735
+    },
+    {
+      "cell_counts": [
+        1350,
+        1374,
+        176,
+        432,
+        543,
+        221
+      ],
+      "cell_gradient_norms": [
+        0.41506415605545044,
+        0.9264086484909058,
+        0.08399716764688492,
+        0.008301560766994953,
+        0.004072865471243858,
+        0.12688572704792023
+      ],
+      "context": "PACKED",
+      "loss": 5.659514290945871,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 316.93280029296875,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 444,
+      "update_seconds": 0.30724339900001496
+    },
+    {
+      "cell_counts": [
+        1348,
+        1359,
+        188,
+        449,
+        532,
+        220
+      ],
+      "cell_gradient_norms": [
+        0.14820685982704163,
+        0.6124304533004761,
+        0.10245393961668015,
+        0.023378148674964905,
+        0.025989599525928497,
+        0.31920090317726135
+      ],
+      "context": "PACKED",
+      "loss": 5.77744140625,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 317.75927734375,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 445,
+      "update_seconds": 0.3162974150000082
+    },
+    {
+      "cell_counts": [
+        1345,
+        1367,
+        171,
+        427,
+        552,
+        234
+      ],
+      "cell_gradient_norms": [
+        0.3298947513103485,
+        0.7218269109725952,
+        0.012808829545974731,
+        0.03310424089431763,
+        0.0,
+        0.10966358333826065
+      ],
+      "context": "PACKED",
+      "loss": 5.757017953055246,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 322.39300537109375,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 446,
+      "update_seconds": 0.31037464399997816
+    },
+    {
+      "cell_counts": [
+        1351,
+        1372,
+        166,
+        423,
+        560,
+        224
+      ],
+      "cell_gradient_norms": [
+        0.307171106338501,
+        0.7481462359428406,
+        0.11822370439767838,
+        0.01807994954288006,
+        0.008743161335587502,
+        0.06724472343921661
+      ],
+      "context": "PACKED",
+      "loss": 5.805940272444386,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 342.55047607421875,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 447,
+      "update_seconds": 0.305667016999962
+    },
+    {
+      "cell_counts": [
+        1343,
+        1407,
+        160,
+        435,
+        527,
+        224
+      ],
+      "cell_gradient_norms": [
+        0.3589325249195099,
+        1.017406940460205,
+        0.01988772116601467,
+        0.0246189646422863,
+        0.0,
+        0.13650044798851013
+      ],
+      "context": "PACKED",
+      "loss": 5.912832695141173,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 337.0314636230469,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 448,
+      "update_seconds": 0.31820386100002906
+    },
+    {
+      "cell_counts": [
+        1304,
+        1448,
+        182,
+        407,
+        541,
+        214
+      ],
+      "cell_gradient_norms": [
+        0.10440275818109512,
+        0.866210401058197,
+        0.039799414575099945,
+        0.007428379729390144,
+        0.030885176733136177,
+        0.3292236626148224
+      ],
+      "context": "PACKED",
+      "loss": 5.934266153971354,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 356.05596923828125,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 449,
+      "update_seconds": 0.3160063259999788
+    },
+    {
+      "cell_counts": [
+        1301,
+        1429,
+        170,
+        413,
+        555,
+        228
+      ],
+      "cell_gradient_norms": [
+        0.1596376895904541,
+        0.8373525738716125,
+        0.04317890480160713,
+        0.07129546999931335,
+        0.014360507018864155,
+        0.3275946080684662
+      ],
+      "context": "PACKED",
+      "loss": 5.802477226882685,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 353.95111083984375,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 450,
+      "update_seconds": 0.315759082999989
+    },
+    {
+      "cell_counts": [
+        1328,
+        1365,
+        183,
+        429,
+        555,
+        236
+      ],
+      "cell_gradient_norms": [
+        0.2771760821342468,
+        1.1581753492355347,
+        0.0034406420309096575,
+        0.018164247274398804,
+        0.14801089465618134,
+        0.18617047369480133
+      ],
+      "context": "PACKED",
+      "loss": 5.789678955078125,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 318.4323425292969,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 451,
+      "update_seconds": 0.31761672000004637
+    },
+    {
+      "cell_counts": [
+        1315,
+        1370,
+        170,
+        429,
+        583,
+        229
+      ],
+      "cell_gradient_norms": [
+        0.050875645130872726,
+        0.5249060392379761,
+        0.01731576770544052,
+        0.01209760457277298,
+        0.03409355506300926,
+        0.11228367686271667
+      ],
+      "context": "PACKED",
+      "loss": 5.87181396484375,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 352.308837890625,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 452,
+      "update_seconds": 0.30739544300001853
+    },
+    {
+      "cell_counts": [
+        1317,
+        1393,
+        176,
+        402,
+        569,
+        239
+      ],
+      "cell_gradient_norms": [
+        0.13129165768623352,
+        0.5548447966575623,
+        0.010490566492080688,
+        0.014128552749752998,
+        0.014842883683741093,
+        0.2343863546848297
+      ],
+      "context": "PACKED",
+      "loss": 5.829693048650568,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 320.63311767578125,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 453,
+      "update_seconds": 0.30959488799999235
+    },
+    {
+      "cell_counts": [
+        1306,
+        1348,
+        172,
+        428,
+        612,
+        230
+      ],
+      "cell_gradient_norms": [
+        0.2182731032371521,
+        0.8570714592933655,
+        0.0018012335058301687,
+        0.016353419050574303,
+        0.01973227597773075,
+        0.22736653685569763
+      ],
+      "context": "PACKED",
+      "loss": 5.8713485475570435,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 369.89495849609375,
+      "selected_target_count": 63,
+      "source_slots": 512,
+      "step": 454,
+      "update_seconds": 0.3287451609999721
+    },
+    {
+      "cell_counts": [
+        1310,
+        1439,
+        165,
+        389,
+        566,
+        227
+      ],
+      "cell_gradient_norms": [
+        0.1620299071073532,
+        0.7237020134925842,
+        0.02440730854868889,
+        0.016496567055583,
+        0.008226141333580017,
+        0.24645096063613892
+      ],
+      "context": "PACKED",
+      "loss": 5.8943869850852275,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 324.1912841796875,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 455,
+      "update_seconds": 0.3024504790000151
+    },
+    {
+      "cell_counts": [
+        1326,
+        1366,
+        176,
+        430,
+        575,
+        223
+      ],
+      "cell_gradient_norms": [
+        0.09694279730319977,
+        0.8515421748161316,
+        0.008549582213163376,
+        0.11116942763328552,
+        0.028114818036556244,
+        0.36603373289108276
+      ],
+      "context": "PACKED",
+      "loss": 5.859105791364398,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 328.10992431640625,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 456,
+      "update_seconds": 0.3053481329999954
+    },
+    {
+      "cell_counts": [
+        1322,
+        1394,
+        167,
+        414,
+        576,
+        223
+      ],
+      "cell_gradient_norms": [
+        0.16212429106235504,
+        0.5283604860305786,
+        0.032499443739652634,
+        0.020083334296941757,
+        0.006964844651520252,
+        0.25118160247802734
+      ],
+      "context": "PACKED",
+      "loss": 5.888637288411458,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 353.3182373046875,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 457,
+      "update_seconds": 0.3107420050000087
+    },
+    {
+      "cell_counts": [
+        1327,
+        1435,
+        179,
+        404,
+        530,
+        221
+      ],
+      "cell_gradient_norms": [
+        0.09328600764274597,
+        0.4030907452106476,
+        0.007769258692860603,
+        0.00238586962223053,
+        0.029758043587207794,
+        0.1454937905073166
+      ],
+      "context": "PACKED",
+      "loss": 5.871685685782597,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 340.5577697753906,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 458,
+      "update_seconds": 0.3077243139999837
+    },
+    {
+      "cell_counts": [
+        1307,
+        1422,
+        171,
+        408,
+        562,
+        226
+      ],
+      "cell_gradient_norms": [
+        0.15811263024806976,
+        0.526272714138031,
+        0.02098032832145691,
+        0.0035071223974227905,
+        0.0,
+        0.057524554431438446
+      ],
+      "context": "PACKED",
+      "loss": 5.860856441029331,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 334.0688171386719,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 459,
+      "update_seconds": 0.3172205609999992
+    },
+    {
+      "cell_counts": [
+        1349,
+        1388,
+        151,
+        414,
+        571,
+        223
+      ],
+      "cell_gradient_norms": [
+        0.2812598645687103,
+        0.7915161848068237,
+        0.03215164318680763,
+        0.01297977939248085,
+        0.0,
+        0.18017907440662384
+      ],
+      "context": "PACKED",
+      "loss": 5.868610446735964,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 346.2480163574219,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 460,
+      "update_seconds": 0.34054167900001175
+    },
+    {
+      "cell_counts": [
+        1330,
+        1329,
+        199,
+        432,
+        583,
+        223
+      ],
+      "cell_gradient_norms": [
+        0.10482041537761688,
+        0.5580187439918518,
+        0.07694915682077408,
+        0.013718734495341778,
+        0.03002389334142208,
+        0.13260269165039062
+      ],
+      "context": "PACKED",
+      "loss": 5.73643209166446,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 338.4494934082031,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 461,
+      "update_seconds": 0.3107609500000308
+    },
+    {
+      "cell_counts": [
+        1323,
+        1427,
+        175,
+        413,
+        537,
+        221
+      ],
+      "cell_gradient_norms": [
+        0.13430990278720856,
+        0.6192016005516052,
+        0.0038470905274152756,
+        0.003785741748288274,
+        0.02416316233575344,
+        0.07142665237188339
+      ],
+      "context": "PACKED",
+      "loss": 5.752430162931743,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 327.8885192871094,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 462,
+      "update_seconds": 0.3051410799999985
+    },
+    {
+      "cell_counts": [
+        1335,
+        1394,
+        165,
+        423,
+        549,
+        230
+      ],
+      "cell_gradient_norms": [
+        0.652353823184967,
+        1.4247065782546997,
+        0.15734699368476868,
+        0.021972104907035828,
+        0.007089587859809399,
+        0.125860333442688
+      ],
+      "context": "PACKED",
+      "loss": 5.91588451244213,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 319.457763671875,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 463,
+      "update_seconds": 0.3057172700000024
+    },
+    {
+      "cell_counts": [
+        1326,
+        1429,
+        165,
+        412,
+        529,
+        235
+      ],
+      "cell_gradient_norms": [
+        0.21798712015151978,
+        0.9078869223594666,
+        0.010336527600884438,
+        0.038579538464546204,
+        0.0,
+        0.5347559452056885
+      ],
+      "context": "PACKED",
+      "loss": 5.753092447916667,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 310.6669921875,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 464,
+      "update_seconds": 0.3071370509999838
+    },
+    {
+      "cell_counts": [
+        1347,
+        1378,
+        185,
+        421,
+        541,
+        224
+      ],
+      "cell_gradient_norms": [
+        0.1836208552122116,
+        0.6712636947631836,
+        0.010083585046231747,
+        0.029072461649775505,
+        0.0009108026279136539,
+        0.18377691507339478
+      ],
+      "context": "PACKED",
+      "loss": 5.793819358132103,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 318.6600646972656,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 465,
+      "update_seconds": 0.30361184200000935
+    },
+    {
+      "cell_counts": [
+        1331,
+        1337,
+        178,
+        426,
+        593,
+        231
+      ],
+      "cell_gradient_norms": [
+        0.5620158314704895,
+        1.4323559999465942,
+        0.13855920732021332,
+        0.004272843711078167,
+        0.0012899352004751563,
+        0.30633461475372314
+      ],
+      "context": "PACKED",
+      "loss": 5.853287993884478,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 357.0505676269531,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 466,
+      "update_seconds": 0.31273903999999675
+    },
+    {
+      "cell_counts": [
+        1386,
+        1277,
+        181,
+        445,
+        588,
+        219
+      ],
+      "cell_gradient_norms": [
+        0.44951632618904114,
+        1.0614962577819824,
+        0.008002185262739658,
+        0.024483727291226387,
+        0.03368179500102997,
+        0.1075497418642044
+      ],
+      "context": "PACKED",
+      "loss": 5.886910860655738,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 359.1015625,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 467,
+      "update_seconds": 0.3144871540000054
+    },
+    {
+      "cell_counts": [
+        1355,
+        1295,
+        186,
+        441,
+        580,
+        239
+      ],
+      "cell_gradient_norms": [
+        0.0968969315290451,
+        0.759583055973053,
+        0.012565679848194122,
+        0.022388631477952003,
+        0.021313846111297607,
+        0.07755926996469498
+      ],
+      "context": "PACKED",
+      "loss": 5.674927847726004,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 317.79595947265625,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 468,
+      "update_seconds": 0.3061855039999841
+    },
+    {
+      "cell_counts": [
+        1362,
+        1378,
+        167,
+        428,
+        542,
+        219
+      ],
+      "cell_gradient_norms": [
+        0.4930292069911957,
+        0.9831470847129822,
+        0.15255823731422424,
+        0.05259988456964493,
+        0.0,
+        0.1363392323255539
+      ],
+      "context": "PACKED",
+      "loss": 5.894337047230113,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 324.18853759765625,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 469,
+      "update_seconds": 0.2967164810000327
+    },
+    {
+      "cell_counts": [
+        1367,
+        1361,
+        181,
+        444,
+        531,
+        212
+      ],
+      "cell_gradient_norms": [
+        0.13717946410179138,
+        0.6987696886062622,
+        0.06821385025978088,
+        0.036600060760974884,
+        0.03768133372068405,
+        0.3500194549560547
+      ],
+      "context": "PACKED",
+      "loss": 5.843889959927263,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 338.94561767578125,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 470,
+      "update_seconds": 0.3039151220000349
+    },
+    {
+      "cell_counts": [
+        1349,
+        1364,
+        175,
+        413,
+        584,
+        211
+      ],
+      "cell_gradient_norms": [
+        0.15980024635791779,
+        0.4746861159801483,
+        0.010651670396327972,
+        0.03191642463207245,
+        0.005019075237214565,
+        0.1914145052433014
+      ],
+      "context": "PACKED",
+      "loss": 5.836287925983298,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 338.50469970703125,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 471,
+      "update_seconds": 0.30023315599999023
+    },
+    {
+      "cell_counts": [
+        1377,
+        1384,
+        171,
+        409,
+        527,
+        228
+      ],
+      "cell_gradient_norms": [
+        0.1376643031835556,
+        0.3071673810482025,
+        0.023179449141025543,
+        0.024073677137494087,
+        0.00993238016963005,
+        0.0882914736866951
+      ],
+      "context": "PACKED",
+      "loss": 5.821384363007128,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 331.81890869140625,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 472,
+      "update_seconds": 0.3076983949999885
+    },
+    {
+      "cell_counts": [
+        1362,
+        1385,
+        168,
+        400,
+        547,
+        234
+      ],
+      "cell_gradient_norms": [
+        0.13778217136859894,
+        0.2895483076572418,
+        0.03820330649614334,
+        0.012703479267656803,
+        0.001083974028006196,
+        0.09175998717546463
+      ],
+      "context": "PACKED",
+      "loss": 5.786707652698864,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 318.2689208984375,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 473,
+      "update_seconds": 0.3027397970000152
+    },
+    {
+      "cell_counts": [
+        1376,
+        1309,
+        199,
+        435,
+        554,
+        223
+      ],
+      "cell_gradient_norms": [
+        0.15870580077171326,
+        0.7819812297821045,
+        0.04240943491458893,
+        0.013419536873698235,
+        0.0,
+        0.28000617027282715
+      ],
+      "context": "PACKED",
+      "loss": 5.747083391462054,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 321.836669921875,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 474,
+      "update_seconds": 0.301283404000003
+    },
+    {
+      "cell_counts": [
+        1372,
+        1322,
+        167,
+        467,
+        553,
+        215
+      ],
+      "cell_gradient_norms": [
+        0.29311010241508484,
+        0.8908804059028625,
+        0.2440659999847412,
+        0.3812580406665802,
+        0.041791416704654694,
+        0.0653839036822319
+      ],
+      "context": "PACKED",
+      "loss": 5.751079014369419,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 322.0604248046875,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 475,
+      "update_seconds": 0.3048267409999994
+    },
+    {
+      "cell_counts": [
+        1359,
+        1438,
+        164,
+        386,
+        519,
+        230
+      ],
+      "cell_gradient_norms": [
+        0.13400191068649292,
+        0.5806320309638977,
+        0.02203367091715336,
+        0.010461932979524136,
+        0.019013701006770134,
+        0.14850857853889465
+      ],
+      "context": "PACKED",
+      "loss": 5.893290201822917,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 335.91754150390625,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 476,
+      "update_seconds": 0.2987442719999649
+    },
+    {
+      "cell_counts": [
+        1333,
+        1416,
+        161,
+        402,
+        562,
+        222
+      ],
+      "cell_gradient_norms": [
+        0.16982074081897736,
+        0.5396587252616882,
+        0.009659724310040474,
+        0.07506607472896576,
+        0.012970860116183758,
+        0.0881875529885292
+      ],
+      "context": "PACKED",
+      "loss": 5.8545903986150565,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 322.0024719238281,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 477,
+      "update_seconds": 0.3024762470000155
+    },
+    {
+      "cell_counts": [
+        1321,
+        1384,
+        174,
+        417,
+        566,
+        234
+      ],
+      "cell_gradient_norms": [
+        0.14095841348171234,
+        0.3336951732635498,
+        0.00840766355395317,
+        0.004547415301203728,
+        0.01303279772400856,
+        0.09874637424945831
+      ],
+      "context": "PACKED",
+      "loss": 5.812202855160362,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 331.2955627441406,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 478,
+      "update_seconds": 0.30473634899999524
+    },
+    {
+      "cell_counts": [
+        1349,
+        1411,
+        173,
+        423,
+        513,
+        227
+      ],
+      "cell_gradient_norms": [
+        0.19640783965587616,
+        0.44322821497917175,
+        0.1439593881368637,
+        0.004392286762595177,
+        0.028432300314307213,
+        0.10470958799123764
+      ],
+      "context": "PACKED",
+      "loss": 5.793829781668527,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 324.4544677734375,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 479,
+      "update_seconds": 0.2985325050000256
+    },
+    {
+      "cell_counts": [
+        1339,
+        1392,
+        184,
+        449,
+        513,
+        219
+      ],
+      "cell_gradient_norms": [
+        0.17157883942127228,
+        0.5767636895179749,
+        0.007148747332394123,
+        0.027743445709347725,
+        0.023124471306800842,
+        0.11884284019470215
+      ],
+      "context": "PACKED",
+      "loss": 5.751670190843485,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.3485412597656,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 480,
+      "update_seconds": 0.30822703600000523
+    },
+    {
+      "cell_counts": [
+        1332,
+        1340,
+        184,
+        449,
+        573,
+        218
+      ],
+      "cell_gradient_norms": [
+        0.1869383156299591,
+        0.5033706426620483,
+        0.06457941979169846,
+        0.005833814851939678,
+        0.008429230190813541,
+        0.10760582238435745
+      ],
+      "context": "PACKED",
+      "loss": 5.699537797407671,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 313.4745788574219,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 481,
+      "update_seconds": 0.3211846720000153
+    },
+    {
+      "cell_counts": [
+        1344,
+        1425,
+        174,
+        425,
+        507,
+        221
+      ],
+      "cell_gradient_norms": [
+        0.2243165671825409,
+        0.5337872505187988,
+        0.08146897703409195,
+        0.06606857478618622,
+        0.0007858495810069144,
+        0.0926336720585823
+      ],
+      "context": "PACKED",
+      "loss": 5.739829615542763,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 327.1702880859375,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 482,
+      "update_seconds": 0.3157668590000071
+    },
+    {
+      "cell_counts": [
+        1327,
+        1413,
+        179,
+        431,
+        538,
+        208
+      ],
+      "cell_gradient_norms": [
+        0.21235403418540955,
+        0.5147898197174072,
+        0.03477231785655022,
+        0.004364880733191967,
+        0.04170702025294304,
+        0.20122727751731873
+      ],
+      "context": "PACKED",
+      "loss": 5.7702382405598955,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 311.5928649902344,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 483,
+      "update_seconds": 0.31142765999999256
+    },
+    {
+      "cell_counts": [
+        1315,
+        1426,
+        181,
+        424,
+        538,
+        212
+      ],
+      "cell_gradient_norms": [
+        0.13909536600112915,
+        0.42387428879737854,
+        0.003542161313816905,
+        0.005155268590897322,
+        0.017883043736219406,
+        0.19247877597808838
+      ],
+      "context": "PACKED",
+      "loss": 5.765225497159091,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 317.08740234375,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 484,
+      "update_seconds": 0.3150806589999888
+    },
+    {
+      "cell_counts": [
+        1320,
+        1379,
+        176,
+        428,
+        585,
+        208
+      ],
+      "cell_gradient_norms": [
+        0.309177041053772,
+        0.9683970808982849,
+        0.007419995963573456,
+        0.024707067757844925,
+        0.019774949178099632,
+        0.27984896302223206
+      ],
+      "context": "PACKED",
+      "loss": 5.919629923502604,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 355.17779541015625,
+      "selected_target_count": 60,
+      "source_slots": 512,
+      "step": 485,
+      "update_seconds": 0.3015859280000086
+    },
+    {
+      "cell_counts": [
+        1322,
+        1341,
+        182,
+        436,
+        594,
+        221
+      ],
+      "cell_gradient_norms": [
+        0.16698148846626282,
+        0.7159075140953064,
+        0.03865591436624527,
+        0.0036320211365818977,
+        0.052243784070014954,
+        0.06374192982912064
+      ],
+      "context": "PACKED",
+      "loss": 5.771269117082868,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 323.1910705566406,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 486,
+      "update_seconds": 0.30210357299995394
+    },
+    {
+      "cell_counts": [
+        1346,
+        1361,
+        190,
+        441,
+        558,
+        200
+      ],
+      "cell_gradient_norms": [
+        0.1704169064760208,
+        0.6138367652893066,
+        0.015481176786124706,
+        0.03566429018974304,
+        0.012503966689109802,
+        0.09476776421070099
+      ],
+      "context": "PACKED",
+      "loss": 5.76837158203125,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 317.26043701171875,
+      "selected_target_count": 55,
+      "source_slots": 512,
+      "step": 487,
+      "update_seconds": 0.3078367130000288
+    },
+    {
+      "cell_counts": [
+        1341,
+        1385,
+        176,
+        459,
+        532,
+        203
+      ],
+      "cell_gradient_norms": [
+        0.28612077236175537,
+        0.6349509954452515,
+        0.06975092738866806,
+        0.004377949982881546,
+        0.011525879614055157,
+        0.08856420964002609
+      ],
+      "context": "PACKED",
+      "loss": 5.835532052176339,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 326.789794921875,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 488,
+      "update_seconds": 0.30502696100001003
+    },
+    {
+      "cell_counts": [
+        1334,
+        1378,
+        182,
+        413,
+        581,
+        208
+      ],
+      "cell_gradient_norms": [
+        0.20255370438098907,
+        0.4206710457801819,
+        0.05270759388804436,
+        0.0034036897122859955,
+        0.011923686601221561,
+        0.08367418497800827
+      ],
+      "context": "PACKED",
+      "loss": 5.783247027480812,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 329.64508056640625,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 489,
+      "update_seconds": 0.3066048299999693
+    },
+    {
+      "cell_counts": [
+        1377,
+        1294,
+        174,
+        430,
+        607,
+        214
+      ],
+      "cell_gradient_norms": [
+        0.2966890037059784,
+        0.6272501945495605,
+        0.002987310755997896,
+        0.003984432201832533,
+        0.01296735368669033,
+        0.23731020092964172
+      ],
+      "context": "PACKED",
+      "loss": 5.842104119769598,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 344.68414306640625,
+      "selected_target_count": 59,
+      "source_slots": 512,
+      "step": 490,
+      "update_seconds": 0.34468093099997077
+    },
+    {
+      "cell_counts": [
+        1351,
+        1385,
+        180,
+        439,
+        541,
+        200
+      ],
+      "cell_gradient_norms": [
+        0.38355398178100586,
+        0.8647609949111938,
+        0.12462684512138367,
+        0.013954331167042255,
+        0.015420584939420223,
+        0.35579296946525574
+      ],
+      "context": "PACKED",
+      "loss": 5.821583732229764,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 355.1166076660156,
+      "selected_target_count": 61,
+      "source_slots": 512,
+      "step": 491,
+      "update_seconds": 0.3050117630000386
+    },
+    {
+      "cell_counts": [
+        1362,
+        1366,
+        172,
+        441,
+        540,
+        215
+      ],
+      "cell_gradient_norms": [
+        0.4393533766269684,
+        0.9719210863113403,
+        0.10381051898002625,
+        0.005920771975070238,
+        0.05212178826332092,
+        0.1945251077413559
+      ],
+      "context": "PACKED",
+      "loss": 5.860860890355603,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.929931640625,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 492,
+      "update_seconds": 0.30273461899997756
+    },
+    {
+      "cell_counts": [
+        1334,
+        1414,
+        162,
+        420,
+        551,
+        215
+      ],
+      "cell_gradient_norms": [
+        0.1596563160419464,
+        0.4524272382259369,
+        0.0682482197880745,
+        0.021855175495147705,
+        0.02516031637787819,
+        0.09778361767530441
+      ],
+      "context": "PACKED",
+      "loss": 5.860236858499461,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.89373779296875,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 493,
+      "update_seconds": 0.3067238479999901
+    },
+    {
+      "cell_counts": [
+        1378,
+        1384,
+        170,
+        445,
+        514,
+        205
+      ],
+      "cell_gradient_norms": [
+        0.2498501092195511,
+        0.4859452545642853,
+        0.07257495820522308,
+        0.00734865665435791,
+        0.010345900431275368,
+        0.13326816260814667
+      ],
+      "context": "PACKED",
+      "loss": 5.759561811174665,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 322.53546142578125,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 494,
+      "update_seconds": 0.30310980900003415
+    },
+    {
+      "cell_counts": [
+        1358,
+        1355,
+        179,
+        418,
+        572,
+        214
+      ],
+      "cell_gradient_norms": [
+        0.1774924248456955,
+        0.7386841773986816,
+        0.017392868176102638,
+        0.07784043252468109,
+        0.0005616610287688673,
+        0.3792991042137146
+      ],
+      "context": "PACKED",
+      "loss": 5.875677038122107,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 317.28656005859375,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 495,
+      "update_seconds": 0.3044383349999862
+    },
+    {
+      "cell_counts": [
+        1346,
+        1333,
+        181,
+        433,
+        591,
+        212
+      ],
+      "cell_gradient_norms": [
+        0.30234378576278687,
+        0.7651550769805908,
+        0.1580679714679718,
+        0.025067146867513657,
+        0.0,
+        0.09000412374734879
+      ],
+      "context": "PACKED",
+      "loss": 5.770897045470121,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 328.9411315917969,
+      "selected_target_count": 57,
+      "source_slots": 512,
+      "step": 496,
+      "update_seconds": 0.30114996700001484
+    },
+    {
+      "cell_counts": [
+        1355,
+        1428,
+        176,
+        408,
+        515,
+        214
+      ],
+      "cell_gradient_norms": [
+        0.2046869695186615,
+        0.7203564643859863,
+        0.03148529678583145,
+        0.04792014881968498,
+        0.01097849477082491,
+        0.10119311511516571
+      ],
+      "context": "PACKED",
+      "loss": 5.879721505301339,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 329.264404296875,
+      "selected_target_count": 56,
+      "source_slots": 512,
+      "step": 497,
+      "update_seconds": 0.2997873380000442
+    },
+    {
+      "cell_counts": [
+        1369,
+        1388,
+        182,
+        446,
+        507,
+        204
+      ],
+      "cell_gradient_norms": [
+        0.27690738439559937,
+        0.7424120306968689,
+        0.10539407283067703,
+        0.029623035341501236,
+        0.0,
+        0.10197199136018753
+      ],
+      "context": "PACKED",
+      "loss": 5.730707628973599,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 332.38104248046875,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 498,
+      "update_seconds": 0.3023606719999634
+    },
+    {
+      "cell_counts": [
+        1341,
+        1358,
+        181,
+        434,
+        570,
+        212
+      ],
+      "cell_gradient_norms": [
+        0.1710016429424286,
+        0.42033684253692627,
+        0.007241820450872183,
+        0.0037704668939113617,
+        0.0005295335431583226,
+        0.17035099864006042
+      ],
+      "context": "PACKED",
+      "loss": 5.858893032731681,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 339.8157958984375,
+      "selected_target_count": 58,
+      "source_slots": 512,
+      "step": 499,
+      "update_seconds": 0.3024689760000001
+    },
+    {
+      "cell_counts": [
+        1361,
+        1384,
+        174,
+        425,
+        548,
+        204
+      ],
+      "cell_gradient_norms": [
+        0.14117400348186493,
+        0.8004040718078613,
+        0.1676492542028427,
+        0.012792639434337616,
+        0.0,
+        0.21284285187721252
+      ],
+      "context": "PACKED",
+      "loss": 5.701956854926215,
+      "model_input_positions": 512,
+      "objective": "ANSWER_EOS",
+      "selected_loss_sum": 307.9056701660156,
+      "selected_target_count": 54,
+      "source_slots": 512,
+      "step": 500,
+      "update_seconds": 0.302389087999984
+    }
+  ],
+  "evaluations": [
+    {
+      "answer_nll": 9.789226770401001,
+      "checkpoint_sha256": "cc9eee1b5ccd5ae0f67f5ea10dc1caf374f6da3288f7c60f40fe786730ffecc1",
+      "eos_nll": 9.2013578414917,
+      "eos_termination_rate": 0.0,
+      "exact_match_requires_eos": true,
+      "first_token_accuracy": 0.0,
+      "global_step": 300,
+      "predictions": [
+        {
+          "answer_nll": 9.67773723602295,
+          "eos_generated": false,
+          "eos_nll": 8.847101211547852,
+          "expected_answer": "1",
+          "expected_answer_tokens": [
+            18
+          ],
+          "fact": "0+1",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            3,
+            42,
+            481
+          ],
+          "generated_text": "\n\n\n\n\n\"I have",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            17,
+            351,
+            573,
+            222,
+            18,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 9.565196990966797,
+          "eos_generated": false,
+          "eos_nll": 9.325237274169922,
+          "expected_answer": "3",
+          "expected_answer_tokens": [
+            20
+          ],
+          "fact": "1+2",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            3,
+            42,
+            481
+          ],
+          "generated_text": "\n\n\n\n\n\"I have",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            18,
+            351,
+            573,
+            222,
+            19,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 9.721847534179688,
+          "eos_generated": false,
+          "eos_nll": 9.387157440185547,
+          "expected_answer": "4",
+          "expected_answer_tokens": [
+            21
+          ],
+          "fact": "2+2",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            3,
+            42,
+            481
+          ],
+          "generated_text": "\n\n\n\n\n\"I have",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            19,
+            351,
+            573,
+            222,
+            19,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 10.04233169555664,
+          "eos_generated": false,
+          "eos_nll": 8.86815071105957,
+          "expected_answer": "9",
+          "expected_answer_tokens": [
+            26
+          ],
+          "fact": "2+7",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            3,
+            42,
+            481
+          ],
+          "generated_text": "\n\n\n\n\n\"I have",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            19,
+            351,
+            573,
+            222,
+            24,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 10.659255981445312,
+          "eos_generated": false,
+          "eos_nll": 9.485836029052734,
+          "expected_answer": "7",
+          "expected_answer_tokens": [
+            24
+          ],
+          "fact": "3+4",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            3,
+            42
+          ],
+          "generated_text": "\n\n\n\n\n\n\"I",
+          "prompt_ids": [
+            930,
+            427,
+            1890,
+            351,
+            573,
+            222,
+            21,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 9.180603981018066,
+          "eos_generated": false,
+          "eos_nll": 8.86480712890625,
+          "expected_answer": "10",
+          "expected_answer_tokens": [
+            18,
+            17
+          ],
+          "fact": "4+6",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            3,
+            42,
+            481
+          ],
+          "generated_text": "\n\n\n\n\n\"I have",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            21,
+            351,
+            573,
+            222,
+            23,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 9.792013168334961,
+          "eos_generated": false,
+          "eos_nll": 9.553377151489258,
+          "expected_answer": "14",
+          "expected_answer_tokens": [
+            18,
+            21
+          ],
+          "fact": "6+8",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            3,
+            42,
+            481
+          ],
+          "generated_text": "\n\n\n\n\n\"I have",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            23,
+            351,
+            573,
+            222,
+            25,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 9.674827575683594,
+          "eos_generated": false,
+          "eos_nll": 9.279195785522461,
+          "expected_answer": "16",
+          "expected_answer_tokens": [
+            18,
+            23
+          ],
+          "fact": "7+9",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            3,
+            42,
+            481
+          ],
+          "generated_text": "\n\n\n\n\n\"I have",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            24,
+            351,
+            573,
+            222,
+            26,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        }
+      ],
+      "relative_step": 0,
+      "strict_exact_match": 0.0,
+      "text_only_exact_match": 0.0
+    },
+    {
+      "answer_nll": 6.607500731945038,
+      "checkpoint_sha256": "26d5323453627aa36cd45d781cf9c8526d43e64a439796a6fb272354fe006630",
+      "eos_nll": 4.7632737159729,
+      "eos_termination_rate": 0.625,
+      "exact_match_requires_eos": true,
+      "first_token_accuracy": 0.625,
+      "global_step": 350,
+      "predictions": [
+        {
+          "answer_nll": 6.486199855804443,
+          "eos_generated": true,
+          "eos_nll": 6.462363243103027,
+          "expected_answer": "1",
+          "expected_answer_tokens": [
+            18
+          ],
+          "fact": "0+1",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            17,
+            351,
+            573,
+            222,
+            18,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": true,
+          "text_exact_match": true
+        },
+        {
+          "answer_nll": 6.95610237121582,
+          "eos_generated": true,
+          "eos_nll": 4.527346611022949,
+          "expected_answer": "3",
+          "expected_answer_tokens": [
+            20
+          ],
+          "fact": "1+2",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            18,
+            351,
+            573,
+            222,
+            19,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.720385551452637,
+          "eos_generated": true,
+          "eos_nll": 4.5215020179748535,
+          "expected_answer": "4",
+          "expected_answer_tokens": [
+            21
+          ],
+          "fact": "2+2",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            19,
+            351,
+            573,
+            222,
+            19,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.547371864318848,
+          "eos_generated": false,
+          "eos_nll": 4.521503925323486,
+          "expected_answer": "9",
+          "expected_answer_tokens": [
+            26
+          ],
+          "fact": "2+7",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            18,
+            21,
+            316,
+            316,
+            316,
+            26,
+            316,
+            26
+          ],
+          "generated_text": "14 He He He9 He9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            19,
+            351,
+            573,
+            222,
+            24,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.335604190826416,
+          "eos_generated": true,
+          "eos_nll": 4.513497352600098,
+          "expected_answer": "7",
+          "expected_answer_tokens": [
+            24
+          ],
+          "fact": "3+4",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            24
+          ],
+          "generated_text": "7",
+          "prompt_ids": [
+            930,
+            427,
+            1890,
+            351,
+            573,
+            222,
+            21,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": true,
+          "text_exact_match": true
+        },
+        {
+          "answer_nll": 6.850612640380859,
+          "eos_generated": false,
+          "eos_nll": 4.5184807777404785,
+          "expected_answer": "10",
+          "expected_answer_tokens": [
+            18,
+            17
+          ],
+          "fact": "4+6",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            18,
+            21,
+            316,
+            316,
+            561,
+            21,
+            316,
+            26
+          ],
+          "generated_text": "14 He He ran4 He9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            21,
+            351,
+            573,
+            222,
+            23,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.4726643562316895,
+          "eos_generated": false,
+          "eos_nll": 4.525124549865723,
+          "expected_answer": "14",
+          "expected_answer_tokens": [
+            18,
+            21
+          ],
+          "fact": "6+8",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            18,
+            21,
+            316,
+            316,
+            561,
+            21,
+            316,
+            26
+          ],
+          "generated_text": "14 He He ran4 He9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            23,
+            351,
+            573,
+            222,
+            25,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.49106502532959,
+          "eos_generated": true,
+          "eos_nll": 4.516371250152588,
+          "expected_answer": "16",
+          "expected_answer_tokens": [
+            18,
+            23
+          ],
+          "fact": "7+9",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            18,
+            21,
+            316,
+            316,
+            26
+          ],
+          "generated_text": "14 He He9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            24,
+            351,
+            573,
+            222,
+            26,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        }
+      ],
+      "relative_step": 50,
+      "strict_exact_match": 0.25,
+      "text_only_exact_match": 0.25
+    },
+    {
+      "answer_nll": 6.481904029846191,
+      "checkpoint_sha256": "41e2fa851d7cf551f0825caff4e5376ead09ef6d7d5b812eaa664ad0cb916d52",
+      "eos_nll": 4.893115699291229,
+      "eos_termination_rate": 1.0,
+      "exact_match_requires_eos": true,
+      "first_token_accuracy": 0.25,
+      "global_step": 400,
+      "predictions": [
+        {
+          "answer_nll": 6.467831611633301,
+          "eos_generated": true,
+          "eos_nll": 7.545245170593262,
+          "expected_answer": "1",
+          "expected_answer_tokens": [
+            18
+          ],
+          "fact": "0+1",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            26
+          ],
+          "generated_text": "9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            17,
+            351,
+            573,
+            222,
+            18,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 7.017666339874268,
+          "eos_generated": true,
+          "eos_nll": 4.521759510040283,
+          "expected_answer": "3",
+          "expected_answer_tokens": [
+            20
+          ],
+          "fact": "1+2",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            26
+          ],
+          "generated_text": "9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            18,
+            351,
+            573,
+            222,
+            19,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.710330486297607,
+          "eos_generated": true,
+          "eos_nll": 4.519166469573975,
+          "expected_answer": "4",
+          "expected_answer_tokens": [
+            21
+          ],
+          "fact": "2+2",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            26
+          ],
+          "generated_text": "9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            19,
+            351,
+            573,
+            222,
+            19,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.446014404296875,
+          "eos_generated": true,
+          "eos_nll": 4.512027740478516,
+          "expected_answer": "9",
+          "expected_answer_tokens": [
+            26
+          ],
+          "fact": "2+7",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            26
+          ],
+          "generated_text": "9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            19,
+            351,
+            573,
+            222,
+            24,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": true,
+          "text_exact_match": true
+        },
+        {
+          "answer_nll": 5.964816570281982,
+          "eos_generated": true,
+          "eos_nll": 4.509655952453613,
+          "expected_answer": "7",
+          "expected_answer_tokens": [
+            24
+          ],
+          "fact": "3+4",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            24
+          ],
+          "generated_text": "7",
+          "prompt_ids": [
+            930,
+            427,
+            1890,
+            351,
+            573,
+            222,
+            21,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": true,
+          "text_exact_match": true
+        },
+        {
+          "answer_nll": 6.6913557052612305,
+          "eos_generated": true,
+          "eos_nll": 4.512259483337402,
+          "expected_answer": "10",
+          "expected_answer_tokens": [
+            18,
+            17
+          ],
+          "fact": "4+6",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            26
+          ],
+          "generated_text": "9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            21,
+            351,
+            573,
+            222,
+            23,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.302030563354492,
+          "eos_generated": true,
+          "eos_nll": 4.514031887054443,
+          "expected_answer": "14",
+          "expected_answer_tokens": [
+            18,
+            21
+          ],
+          "fact": "6+8",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            26
+          ],
+          "generated_text": "9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            23,
+            351,
+            573,
+            222,
+            25,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.255186557769775,
+          "eos_generated": true,
+          "eos_nll": 4.51077938079834,
+          "expected_answer": "16",
+          "expected_answer_tokens": [
+            18,
+            23
+          ],
+          "fact": "7+9",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            26
+          ],
+          "generated_text": "9",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            24,
+            351,
+            573,
+            222,
+            26,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        }
+      ],
+      "relative_step": 100,
+      "strict_exact_match": 0.25,
+      "text_only_exact_match": 0.25
+    },
+    {
+      "answer_nll": 6.509511947631836,
+      "checkpoint_sha256": "56c8b4829b48007a78ed0ec1610f989c4fa7a05724b5b0371989e4b5905bc9ff",
+      "eos_nll": 4.665063321590424,
+      "eos_termination_rate": 1.0,
+      "exact_match_requires_eos": true,
+      "first_token_accuracy": 0.625,
+      "global_step": 500,
+      "predictions": [
+        {
+          "answer_nll": 6.431993007659912,
+          "eos_generated": true,
+          "eos_nll": 5.767599105834961,
+          "expected_answer": "1",
+          "expected_answer_tokens": [
+            18
+          ],
+          "fact": "0+1",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            17,
+            351,
+            573,
+            222,
+            18,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": true,
+          "text_exact_match": true
+        },
+        {
+          "answer_nll": 6.950885772705078,
+          "eos_generated": true,
+          "eos_nll": 4.505813121795654,
+          "expected_answer": "3",
+          "expected_answer_tokens": [
+            20
+          ],
+          "fact": "1+2",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            18,
+            351,
+            573,
+            222,
+            19,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.871067047119141,
+          "eos_generated": true,
+          "eos_nll": 4.509103298187256,
+          "expected_answer": "4",
+          "expected_answer_tokens": [
+            21
+          ],
+          "fact": "2+2",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            19,
+            351,
+            573,
+            222,
+            19,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.450194358825684,
+          "eos_generated": true,
+          "eos_nll": 4.507687091827393,
+          "expected_answer": "9",
+          "expected_answer_tokens": [
+            26
+          ],
+          "fact": "2+7",
+          "first_token_correct": false,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            19,
+            351,
+            573,
+            222,
+            24,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 5.3855299949646,
+          "eos_generated": true,
+          "eos_nll": 4.505447864532471,
+          "expected_answer": "7",
+          "expected_answer_tokens": [
+            24
+          ],
+          "fact": "3+4",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            24
+          ],
+          "generated_text": "7",
+          "prompt_ids": [
+            930,
+            427,
+            1890,
+            351,
+            573,
+            222,
+            21,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": true,
+          "text_exact_match": true
+        },
+        {
+          "answer_nll": 6.857266426086426,
+          "eos_generated": true,
+          "eos_nll": 4.5069899559021,
+          "expected_answer": "10",
+          "expected_answer_tokens": [
+            18,
+            17
+          ],
+          "fact": "4+6",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            21,
+            351,
+            573,
+            222,
+            23,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.577431678771973,
+          "eos_generated": true,
+          "eos_nll": 4.506173610687256,
+          "expected_answer": "14",
+          "expected_answer_tokens": [
+            18,
+            21
+          ],
+          "fact": "6+8",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            23,
+            351,
+            573,
+            222,
+            25,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        },
+        {
+          "answer_nll": 6.551727294921875,
+          "eos_generated": true,
+          "eos_nll": 4.511692523956299,
+          "expected_answer": "16",
+          "expected_answer_tokens": [
+            18,
+            23
+          ],
+          "fact": "7+9",
+          "first_token_correct": true,
+          "generated_answer_tokens": [
+            18
+          ],
+          "generated_text": "1",
+          "prompt_ids": [
+            930,
+            427,
+            222,
+            24,
+            351,
+            573,
+            222,
+            26,
+            32,
+            464,
+            79,
+            1626,
+            279,
+            27,
+            200
+          ],
+          "strict_exact_match": false,
+          "text_exact_match": false
+        }
+      ],
+      "relative_step": 200,
+      "strict_exact_match": 0.25,
+      "text_only_exact_match": 0.25
+    }
+  ],
+  "identity": {
+    "anchor_checkpoint_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "anchor_step": 300,
+    "arm": "B",
+    "config_sha256": "656da576ad7e6908825c9c496a5434155957f591aadcf4fee00ddbd14f67648b",
+    "data_sha256": "5776188bfb5e76624765920547c74e513ded91a97f2af10de3fd97384fef42de",
+    "experiment_id": "CLM-001-R3m-F-D1-Supervision-Context-001",
+    "max_steps": 200,
+    "sample_plan_sha256": "b54c2a67381f52e2eb16578c444935c687d6531fe89c892a367461352d0deca4",
+    "seed": 151001301,
+    "source_code_sha256": "143b149c8e10df6e2cb82ebf19de26bd546aaccba9416811f6dfc8b10b9804e6",
+    "source_sha": "2e64ee711b204002c5e8d3418dd95bb833543359"
+  },
+  "logical_optimizer_updates": 200,
+  "objective": "ANSWER_EOS",
+  "schedule_state": {
+    "anchor_epsilon": 0.07184368737474948,
+    "anchor_lr": 0.0003
+  },
+  "schema": "minicells.r3mf_d1.arm_result.v1",
+  "status": "COMPLETE"
+}

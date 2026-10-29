@@ -1,0 +1,122 @@
+{
+  "schema": "minicells.clm002.scientific_rule_candidate.v1",
+  "status": "PRE_EXECUTION_REVIEW_CANDIDATE_NOT_REGISTERED",
+  "scientific_training_authorized": false,
+  "replaces_active_config": false,
+  "parent_initialization": {
+    "parent_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "model": "ALL_PARAMETERS_AND_BUFFERS_EXACT_COPY",
+    "cell_optimizer": "INHERIT_ADAMW_MOMENTS_AND_HYPERPARAMETERS_ALL_ARMS_EVEN_WHEN_FROZEN",
+    "historical_step": 300,
+    "new_experiment_step": 0,
+    "historical_target_tokens": 153600,
+    "new_target_tokens": 0,
+    "cell_warmup_counter": "PARENT_STEP_PLUS_LOCAL_STEP",
+    "experiment_rng": "NEW_REGISTERED_SEED_STREAMS_SHARED_ACROSS_ARMS; HISTORICAL_RNG_RETAINED_AS_PROVENANCE",
+    "epsilon_counter": "LOCAL_0_TO_499_MATCHED_ACROSS_ARMS",
+    "connection_optimizer": "NONE_IN_PARENT; FRESH_ADAMW_EACH_PROPOSAL_NO_MOMENT_INTERPOLATION",
+    "gpu_rng_resume_claim": false
+  },
+  "budget": {
+    "batch_size": 8,
+    "calls_per_token": 8,
+    "gradient_objective": "UNIFORM_NEXT_TOKEN_CE_ALL_VALID_POSITIONS",
+    "padding_counts_as_training": false,
+    "sequence_length": 64,
+    "target_tokens_per_update": 512,
+    "updates": 500
+  },
+  "stage_a": {
+    "connection": "NATIVE_R3H_FROZEN",
+    "minimum_specialization": 0.01,
+    "minimum_paired_difference": 0.01,
+    "minimum_cell_call_share": 0.01,
+    "confirm_seeds": 5,
+    "required_seeds": 4,
+    "persistence_checkpoints": [
+      400,
+      500
+    ],
+    "threshold_adoption": "REVIEW_AND_DEVELOPMENT_MEASURABILITY_REQUIRED_BEFORE_CONFIRMATION",
+    "single_complete_route_mass_collapse_threshold": 0.99,
+    "collapse_test": "AT_BOTH_FINAL_PERSISTENCE_CHECKPOINTS_ANY_TASK_SINGLE_COMPLETE_ROUTE_MASS_GE_0.99"
+  },
+  "stage_b": {
+    "rule": "R3E_ALL_ACTION_TERMINAL_Q_WITH_GREEDY_REROUTED_SUFFIX",
+    "proposal_after_steps": [
+      50,
+      100,
+      150,
+      200,
+      250,
+      300,
+      350,
+      400,
+      450,
+      500
+    ],
+    "states_per_proposal": 12,
+    "policy_steps_per_proposal": 8,
+    "actions_per_state": 6,
+    "policy_lr": 0.0003,
+    "policy_weight_decay": 0.1,
+    "policy_clip": 1.0,
+    "backtrack": [
+      1.0,
+      0.5,
+      0.25,
+      0.125,
+      0.0625
+    ],
+    "trust_limits": {
+      "kl_max": 0.01,
+      "action_change_max": 0.1,
+      "path_change_max": 0.2
+    },
+    "reference_inputs": "8_IMMUTABLE_TRAIN_ONLY_WINDOWS_PER_CONDITION; FIXED_BEFORE_UPDATES; IDENTICAL_B01_B11",
+    "S_reference": "8_STORY_WINDOWS",
+    "H_reference": "4_STORY_PLUS_4_ARITHMETIC_WINDOWS",
+    "reference_targets_accessed": false,
+    "candidate_labels": "CURRENT_REGISTERED_MAIN_TRAIN_BATCH_ONLY",
+    "admission": "FIRST_BACKTRACK_PASSING_ALL_THREE_TRUST_LIMITS_OTHERWISE_KEEP_PARENT_CONNECTION",
+    "no_additional_quality_selection": true,
+    "B01_B11_identical_rule": true,
+    "extra_policy_optimizer_calls_per_arm_cap": 80,
+    "all_action_targets_per_arm_cap": 720
+  },
+  "evaluation": {
+    "same_inputs_across_all_S_H_arms": true,
+    "per_task_nll": "SUM_VALID_TARGET_NEG_LOG_PROB_DIVIDED_BY_VALID_TARGET_COUNT",
+    "common_main_loss": "0.5_STORY_TOKEN_MEAN_NLL_PLUS_0.5_ARITHMETIC_TOKEN_MEAN_NLL",
+    "effective_task_token_quotas": "EQUAL_STORY_ARITHMETIC_VALID_TARGET_COUNTS",
+    "inference_routing": "NATIVE_HARD_ROUTE_EPSILON_0_NO_TASK_LABEL",
+    "quality_regression_cap_nats_per_token": 0.02,
+    "quality_baseline": "SAME_SEED_SAME_TASK_B00; REPORT_EACH_TASK_FOR_ALL_ARMS",
+    "checkpoint_selection": "NO_BEST_CHECKPOINT; PRIMARY_STEP_500"
+  },
+  "statistics": {
+    "primary": "I_H=L11_H-L10_H-L01_H+L00_H",
+    "secondary": "DELTA_I=I_H-I_S",
+    "unit": "FIVE_INDEPENDENT_PAIRED_TRAINING_SEEDS",
+    "primary_interval": "TWO_SIDED_STUDENT_T_DF4_95_PERCENT",
+    "primary_support": "UPPER_CI_I_H_LE_MINUS_0.01",
+    "secondary_confirmatory_family": [
+      "DELTA_I"
+    ],
+    "secondary_error_control": "HOLM_ALPHA_0.05; ONE_ENDPOINT_REDUCES_TO_ITS_SINGLE_TEST",
+    "secondary_support": "DELTA_I_LT_0_AND_ADJUSTED_P_LT_0.05",
+    "other_secondary_outputs": "DESCRIPTIVE_WITH_NO_SIGNIFICANCE_CLAIM",
+    "failure_handling": "REPORT_ALL_SEEDS_NO_REPLACEMENT_NO_POSTHOC_TRAINING_EXTENSION"
+  },
+  "open_prerequisites": [
+    "DATA_IDENTITY_AND_INDEPENDENCE",
+    "EXACT_ROLE_ARRAYS_AND_WINDOWS_IF_REQUIRED_BY_REVIEW",
+    "FOURTEEN_LEGACY_RESERVED_BOUNDARIES",
+    "REAL_PARENT_FANOUT_AUDIT",
+    "INDEPENDENT_SCIENTIFIC_ADOPTION_REVIEW"
+  ],
+  "no_new_quality_results_used_to_choose_rules": true,
+  "original_protocol_sha256": "6ead92136c39ed44c33c75fe2874b48a44eef4a47fac40433ea08c3b3438ba9b",
+  "baseline_config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+  "not_a_runtime_configuration": true
+}

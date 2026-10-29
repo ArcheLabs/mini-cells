@@ -1,0 +1,107 @@
+{
+  "actual_train_admission_isolation": {
+    "confirm_opened": false,
+    "files": [
+      {
+        "all_actual_windows_and_text_hashes_recomputed": true,
+        "array_sha256": "5ce2a90d4add223cac7cb9c6a370229f46191f2e91f16c66c60b32ff97e024ac",
+        "records": 8000,
+        "role": "train",
+        "task": "Story"
+      },
+      {
+        "all_actual_windows_and_text_hashes_recomputed": true,
+        "array_sha256": "0240cedc969dd033316284ed72ad5eb35d4a1034dafe0049b51d36251730eb12",
+        "records": 8000,
+        "role": "train",
+        "task": "Arithmetic"
+      },
+      {
+        "all_actual_windows_and_text_hashes_recomputed": true,
+        "array_sha256": "abaaa4a4b03144daeb553d1f626d7a9066cdb9d465ee6b56faee2b29ee95b3f2",
+        "records": 16,
+        "role": "admission",
+        "task": "Story"
+      },
+      {
+        "all_actual_windows_and_text_hashes_recomputed": true,
+        "array_sha256": "b3fe62cc36c23d3052caaf3d698cf962663c1847da5c6e1083ab509cf0c05398",
+        "records": 16,
+        "role": "admission",
+        "task": "Arithmetic"
+      }
+    ],
+    "gpu_used": false,
+    "limitation": "EXACT_STORY_NORMALIZATION_AND_65_64_TOKEN_WINDOWS; SHARED_GENERATOR_TEMPLATE_FRAGMENTS_ARE_NOT_EXCLUDED",
+    "model_loaded": false,
+    "overlaps": {
+      "input": 0,
+      "normalized": 0,
+      "raw": 0,
+      "target": 0,
+      "window": 0
+    },
+    "published_result_commit": "fe362d89736c5816f4cd287d69f520155ac9c406",
+    "scientific_optimizer_updates": 0,
+    "scope": "TRAIN_VS_ADMISSION_ONLY",
+    "status": "PASS_ACTUAL_CONTENT_IDENTITY_AND_EXACT_ISOLATION",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+  },
+  "execution_authorization": "PENDING_EXPLICIT_HUMAN_GATE1_LAUNCH_AUTHORIZATION",
+  "limited_gate1_bounds": {
+    "arms": [
+      "B01",
+      "B11"
+    ],
+    "conditions": [
+      "S",
+      "H"
+    ],
+    "confirm_model_reads": 0,
+    "contexts": 20,
+    "gate3_authorized": false,
+    "max_candidate_optimizer_calls": 160,
+    "max_cell_optimizer_calls": 500,
+    "max_formal_connection_commits": 0,
+    "max_main_replay_updates": 1000,
+    "required_anchor": 0.000244140625,
+    "scales_each_context": 22,
+    "seeds": 5,
+    "total_scale_checks": 440
+  },
+  "no_further_broad_CPU_audit_required": true,
+  "parent_state": {
+    "all_cell_optimizer_values_exact": true,
+    "all_model_values_exact": true,
+    "all_source_A_steps_500": true,
+    "contexts": 10,
+    "evidence": "PUBLISHED_REAL_KAGGLE_CPU_CONTENT_AUDIT_WITH_PINNED_FILE_SHA_AND_FULL_STATE_FINGERPRINT",
+    "status": "PASS"
+  },
+  "prior_review_items_for_limited_diagnosis": {
+    "duplicate_GPU_replay": "ONE_REGISTERED_REPLAY_PER_CONTEXT_WITH_RESTORE_CHECK_AND_HISTORICAL_CURVE_MATCHING; DO_NOT_ADD_SECOND1000_UPDATES_OR_CLAIM_HISTORICAL_BITWISE_CERTIFICATION",
+    "nonempty_path_rule": "REPORT_ALONGSIDE_FROZEN_PARAMETER_NONZERO_AND_ORIGINAL_TRUST_CAPS; NO_AUTOMATIC_GATE3_APPROVAL"
+  },
+  "published_run_commit": "fe362d89736c5816f4cd287d69f520155ac9c406",
+  "real_gate1_execution_started": false,
+  "replay_code": {
+    "B01_cell_updates": 0,
+    "B11_cell_updates": 50,
+    "actual_real_GPU_replay_executed": false,
+    "candidate_optimizer_calls_before_pause": 0,
+    "code_sha256": {
+      "research/projects/cellular-language-models/experiments/clm-002-fast-001/implementation/minicells_fast001/engine.py": "86994ddceea3ad25504320ed301b99486aa699a9352a8067612011e222ef2b97",
+      "research/projects/cellular-language-models/experiments/clm-002-fast-002-r1-stateful-calibration/implementation/minicells_fast_r1/replay.py": "ecf6988de555acff703607a3e6cfd41661794f81b00dc7e08cbc0070a34362fc"
+    },
+    "executed_main_updates": 50,
+    "paused_engine_step": 49,
+    "paused_stream_step": 50,
+    "restores_gradients_rng_optimizer_batch_and_cursor": true,
+    "status": "PASS_CODE_AND_CPU_SEMANTICS",
+    "targeted_tests": 3
+  },
+  "reviewed_runtime_source_sha": "689af330fcd0dd62e4788e67ea52b50facccfc94",
+  "reviewer_role": "IMPLEMENTER_TARGETED_REVIEW_NOT_EXTERNAL_INDEPENDENT_SCIENTIFIC_REVIEW",
+  "scientific_configuration_changed": false,
+  "status": "THREE_TARGETED_CHECKS_PASS_READY_FOR_LIMITED_GATE1"
+}

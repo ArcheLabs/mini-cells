@@ -1,0 +1,35 @@
+{
+  "experiment_id": "CLM-001-R3j-Long-Horizon-Connection-Value-001",
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "confirmation": "SEALED",
+  "parent": {
+    "experiment_id": "CLM-001-R3i-Stable-CoAdaptation-001",
+    "source_sha": "80e49b071790c8bfb58dead19e6037259551ed61",
+    "config_sha256": "72de3cfb262a93ec6bb24b29b9f6c18d1d40030c76245cfda9a504852b30e630",
+    "run_id": "ed08463119358da0f81b733786ab24bd89ac69c0f6b290dafc0f26311fe328a9",
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "2fd527bf4958979f16da1fbc88ef5000bb70cc62",
+      "manifest_path": "r3c-moe-bridge/segments/5b7b8303eab8cd0110c9ba1efa97c9d8e9bc0a19ae046860a21191c670c5df56.json",
+      "manifest_sha256": "25930ac73f54cb06cc1a61670e97aad7847f52a1aacca836d8595b64f7820a15",
+      "scope": "IMMEDIATE_PRIVATE_READBACK_ONLY",
+      "writer_session_id": "46845a910c50482ca058160eda2823a5"
+    }
+  },
+  "horizons": [
+    10,
+    50,
+    100
+  ],
+  "bootstrap_replicates": 2000,
+  "bootstrap_seed": 2026102302,
+  "practical_gain": 0.005,
+  "accepted_cases": 8,
+  "rejected_rule": "FIRST_TRUST_PASSED_REJECTED_SORT_SEED_THEN_STEP_PER_ARM",
+  "new_cell_updates_upper_bound": 2160,
+  "new_tokens_upper_bound": 1105920,
+  "new_connection_updates": 0,
+  "historical_nll_atol": 1e-06,
+  "evaluation_repeats": 2
+}

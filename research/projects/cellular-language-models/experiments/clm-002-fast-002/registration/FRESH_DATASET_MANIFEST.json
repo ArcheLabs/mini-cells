@@ -1,0 +1,125 @@
+{
+  "conclusion_scope": "CONTROLLED_GENERATOR_DISTRIBUTION_ONLY",
+  "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+  "engineering_small_fixture": false,
+  "experiment_id": "CLM-002-FAST-002",
+  "files": {
+    "Arithmetic-confirm.json": {
+      "bytes": 232791,
+      "sha256": "8c22af7545671eca5e47815682190990853c717c2f47dd4a0966761457e58672"
+    },
+    "Arithmetic-confirm.npy": {
+      "bytes": 133248,
+      "sha256": "a87673fde031b130ce8bd2df0085e6b7739ddb64f63945a58167dc1f9af533d7"
+    },
+    "Arithmetic-train.json": {
+      "bytes": 3637218,
+      "sha256": "423ce428f55f8f570aca5d36a11afdd81d6c4acfb18453611af14d795fdc28e2"
+    },
+    "Arithmetic-train.npy": {
+      "bytes": 2080128,
+      "sha256": "0240cedc969dd033316284ed72ad5eb35d4a1034dafe0049b51d36251730eb12"
+    },
+    "Story-confirm.json": {
+      "bytes": 232705,
+      "sha256": "150cbf6735cb29bd33a1dd2272a748c1e1cd787cf1a4698ee822cc68246e3efc"
+    },
+    "Story-confirm.npy": {
+      "bytes": 133248,
+      "sha256": "478357764dd935942d083f7bf06dd67adab4f8402a08f3875a6330683a4b7f83"
+    },
+    "Story-train.json": {
+      "bytes": 3634679,
+      "sha256": "ad13cc524f9d43b5045c22f57f229cfda03959fc7cf2200e546108eb7714e314"
+    },
+    "Story-train.npy": {
+      "bytes": 2080128,
+      "sha256": "5ce2a90d4add223cac7cb9c6a370229f46191f2e91f16c66c60b32ff97e024ac"
+    }
+  },
+  "generator_sha256": "6e43c633a4476c5db1f037c3c4ca74af92f60234a8067a59a9ddbc6459631d52",
+  "historical_data_loaded": false,
+  "historical_fourteen_boundaries": "UNRESOLVED_NOT_A_PRECONDITION_FOR_THIS_NEW_SYNTHETIC_STUDY",
+  "model_quality_used": false,
+  "normalized_record_overlap": 0,
+  "parent_fixed_before_generation": {
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+    },
+    "identity": {
+      "architecture": "B",
+      "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "seed": 151001301,
+      "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+      "training_router": "H"
+    },
+    "previous_bytes_acceptance_commit": "6fcd0ab9be2efc75d340bb414b0b09e04019a342",
+    "sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "step": 300
+  },
+  "role_names": {
+    "confirm": [
+      "Cora",
+      "Dorian",
+      "Elara",
+      "Felix",
+      "Galen",
+      "Hana",
+      "Iris",
+      "Jonas"
+    ],
+    "train": [
+      "Lena",
+      "Tom",
+      "Mia",
+      "Ben",
+      "Sara",
+      "Alex",
+      "Nora",
+      "Sam"
+    ]
+  },
+  "role_numeric_ranges": {
+    "confirm": [
+      2000,
+      3000
+    ],
+    "train": [
+      10,
+      1000
+    ]
+  },
+  "roles": {
+    "Arithmetic-confirm": {
+      "effective_targets": 32768,
+      "no_cross_record_context": true,
+      "records": 512
+    },
+    "Arithmetic-train": {
+      "effective_targets": 512000,
+      "no_cross_record_context": true,
+      "records": 8000
+    },
+    "Story-confirm": {
+      "effective_targets": 32768,
+      "no_cross_record_context": true,
+      "records": 512
+    },
+    "Story-train": {
+      "effective_targets": 512000,
+      "no_cross_record_context": true,
+      "records": 8000
+    }
+  },
+  "sample_id_count": 17024,
+  "schema": "minicells.fast001.dataset.v1",
+  "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "train_confirm_exact_text_and_window_overlap": 0
+}

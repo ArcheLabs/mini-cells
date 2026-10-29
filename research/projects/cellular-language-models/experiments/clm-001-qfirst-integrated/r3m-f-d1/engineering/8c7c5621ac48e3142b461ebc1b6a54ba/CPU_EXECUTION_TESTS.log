@@ -1,0 +1,52 @@
+test_answer_eos_mask_is_shifted_target_aligned (test_cpu_gate.D1UnitTests) ... ok
+test_answer_eos_selection_preserves_original_labels (test_cpu_gate.D1UnitTests) ... ok
+test_autoregressive_generation_uses_prompt_prefix_and_stops_before_eos (test_cpu_gate.D1UnitTests) ... ok
+test_autoregressive_scores_separate_text_match_eos_and_nll (test_cpu_gate.D1UnitTests) ... ok
+test_fixed_config_keeps_gpu_phase_closed (test_cpu_gate.D1UnitTests) ... ok
+test_independent_fragments_reset_position_and_drop_only_cross_qa_edges (test_cpu_gate.D1UnitTests) ... ok
+test_isolated_fragment_has_no_sibling_context_state (test_cpu_gate.D1UnitTests) ... ok
+test_resume_identity_checks_full_arm_and_state_contract (test_cpu_gate.D1UnitTests) ... ok
+test_routing_random_numbers_slice_by_source_offset (test_cpu_gate.D1UnitTests) ... ok
+test_sample_plan_replay_validates_draws_tokens_and_rng_boundary (test_cpu_gate.D1UnitTests) ... ok
+test_torch_answer_eos_ce_backpropagates_only_selected_original_labels (test_cpu_gate.D1UnitTests) ... ok
+test_torch_batches_keep_labels_and_split_qa_context (test_cpu_gate.D1UnitTests) ... ok
+test_training_update_uses_update_global_masked_ce_and_one_optimizer_step (test_cpu_gate.D1UnitTests) ... ok
+test_actual_checkpoint_roundtrip_and_evaluation_restore_full_state (test_execution.ExecutionTests) ... ok
+test_actual_model_routes_use_source_offsets_and_qa_state_is_isolated (test_execution.ExecutionTests) ... ok
+test_checkpoint_before_result_failure_recovers_stale_and_missing_reports (test_execution.ExecutionTests) ... {"arm": "B", "ce": 3.4609107971191406, "evaluation": true, "step": 1}
+{"arm": "B", "ce": 3.4553065299987793, "evaluation": true, "step": 2}
+{"arm": "C", "ce": 3.460860252380371, "evaluation": true, "step": 1}
+{"arm": "C", "ce": 3.4464244842529297, "evaluation": true, "step": 2}
+{"arm": "D", "ce": 3.4665825366973877, "evaluation": true, "step": 1}
+{"arm": "D", "ce": 3.453249931335449, "evaluation": true, "step": 2}
+{"arm": "B", "ce": 3.4553065299987793, "evaluation": true, "step": 2}
+{"arm": "C", "ce": 3.460860252380371, "evaluation": true, "step": 1}
+{"arm": "C", "ce": 3.4464244842529297, "evaluation": true, "step": 2}
+{"arm": "D", "ce": 3.4665825366973877, "evaluation": true, "step": 1}
+{"arm": "D", "ce": 3.453249931335449, "evaluation": true, "step": 2}
+{"arm": "B", "ce": 3.4553065299987793, "evaluation": true, "step": 2}
+{"arm": "C", "ce": 3.460860252380371, "evaluation": true, "step": 1}
+{"arm": "C", "ce": 3.4464244842529297, "evaluation": true, "step": 2}
+{"arm": "D", "ce": 3.4665825366973877, "evaluation": true, "step": 1}
+{"arm": "D", "ce": 3.453249931335449, "evaluation": true, "step": 2}
+{"arm": "B", "ce": 3.4553065299987793, "evaluation": true, "step": 2}
+{"arm": "C", "ce": 3.460860252380371, "evaluation": true, "step": 1}
+{"arm": "C", "ce": 3.4464244842529297, "evaluation": true, "step": 2}
+{"arm": "D", "ce": 3.4665825366973877, "evaluation": true, "step": 1}
+{"arm": "D", "ce": 3.453249931335449, "evaluation": true, "step": 2}
+{"arm": "B", "ce": 3.4553065299987793, "evaluation": true, "step": 2}
+{"arm": "C", "ce": 3.460860252380371, "evaluation": true, "step": 1}
+{"arm": "C", "ce": 3.4464244842529297, "evaluation": true, "step": 2}
+{"arm": "D", "ce": 3.4665825366973877, "evaluation": true, "step": 1}
+{"arm": "D", "ce": 3.453249931335449, "evaluation": true, "step": 2}
+ok
+test_gpu_allocator_evidence_is_observed_and_unknown_is_explicit (test_execution.ExecutionTests) ... ok
+test_parent_loader_adapter_binds_original_source_slot_budget (test_execution.ExecutionTests) ... ok
+test_rejected_gpu_request_is_not_reported_as_actual_use (test_execution.ExecutionTests) ... ok
+test_run_bcd_checks_code_content_before_model_or_parent_loading (test_execution.ExecutionTests) ... ok
+test_source_dirty_or_untracked_code_is_rejected (test_execution.ExecutionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 59.273s
+
+OK

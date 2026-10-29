@@ -1,0 +1,40 @@
+{
+  "schema": "minicells.clm002.seed_reservation.v2",
+  "status": "RESERVED_UNEXECUTED_METADATA_SEEDS_NOT_CONFIRMATION_REGISTRATION",
+  "scan_source_sha": "d09323c58d21bf4dd1ed83f5d13342990e32bf00",
+  "scan_repository_tree_sha": "b67a25eb18b2d5819113e31a4a9ca58ff2c28b2d",
+  "scan_scope": {
+    "excluded_prefix": "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value",
+    "scope_sha256": "f7f6326ddbf8d11d86347e718f13fe18a4dfbf7903a52ce31793f7650de1bfc3",
+    "scope_entry_count": 5662,
+    "definition": "ALL_COMMITTED_REPOSITORY_ENTRIES_EXCEPT_THIS_EXPERIMENT; MODE_PATH_GIT_OBJECT_ID"
+  },
+  "tracked_file_count_at_scan": 5777,
+  "development": [
+    2026200001,
+    2026200002,
+    2026200003
+  ],
+  "stage_a_confirmation": [
+    2026200004,
+    2026200005,
+    2026200006,
+    2026200007,
+    2026200008
+  ],
+  "stage_b_confirmation": [
+    2026200009,
+    2026200010,
+    2026200011,
+    2026200012,
+    2026200013
+  ],
+  "previous_reservation_sha256": "169acfb27343e28c58822ae4e3b0912a7eb867de25c081d02bf7ad9fb78e2310",
+  "reserved_ids_sha256": "fce97b72bb7437a1082a15e298cac86c43835ec52d31d5779c1d7c144303a3ed",
+  "collisions": [],
+  "all_groups_disjoint": true,
+  "scientific_training_started": false,
+  "task_or_model_quality_used": false,
+  "coverage_limits": "TRACKED_TEXT_ONLY; BINARY_CHECKPOINT_INTERNALS_AND_UNPUBLISHED_RUNS_NOT_CERTIFIED",
+  "self_reference_rule": "THE_SCAN_COMMIT_PRECEDES_ITS_OWN_EVIDENCE; VALIDATE_IDENTICAL_EXTERNAL_SCOPE_AT_EACH_EXECUTION"
+}

@@ -1,0 +1,3810 @@
+{
+  "candidate_optimizer_calls": 160,
+  "confirm_accessed": false,
+  "identity": {
+    "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+    "experiment_id": "CLM-002-FAST-002",
+    "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+    "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+    "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+    "source_sha": "947718035add443385413c0231b6569e49b68563"
+  },
+  "main_updates": 0,
+  "next_action": "STOP_FIX_UPDATE_MECHANISM_OR_TRUST_METRIC_NO_THRESHOLD_RELAXATION",
+  "passed": false,
+  "production_connection_commits": 0,
+  "rows": [
+    {
+      "arm": "B01-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "2e8da6e46375b50f014bf07a2c181935980e78553ea64f4624e21436e1f0ff60",
+      "main_updates": 0,
+      "parent_sha256": "f3b4351763dc126e59736dfac73d984a8d55596bf837022be2ec9b17c46bba6d",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.84033203125,
+            "kl": 0.0010632670018821955,
+            "parameter_delta_l2": 0.06974828243255615,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.835205078125,
+            "kl": 0.00026601244462653995,
+            "parameter_delta_l2": 0.034874141216278076,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.82958984375,
+            "kl": 6.651305011473596e-05,
+            "parameter_delta_l2": 0.017437070608139038,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.81298828125,
+            "kl": 1.662280919845216e-05,
+            "parameter_delta_l2": 0.008718535304069519,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.75830078125,
+            "kl": 4.149926553509431e-06,
+            "parameter_delta_l2": 0.0043592676520347595,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.667236328125,
+            "kl": 1.035386503644986e-06,
+            "parameter_delta_l2": 0.0021796338260173798,
+            "passed": false,
+            "path_change": 0.99609375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.495361328125,
+            "kl": 2.587971721368376e-07,
+            "parameter_delta_l2": 0.0010898169130086899,
+            "passed": false,
+            "path_change": 0.96875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.329345703125,
+            "kl": 6.426436982565065e-08,
+            "parameter_delta_l2": 0.0005449084565043449,
+            "passed": false,
+            "path_change": 0.89453125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.2109375,
+            "kl": 1.5392533470048875e-08,
+            "parameter_delta_l2": 0.00027245422825217247,
+            "passed": false,
+            "path_change": 0.8125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.112548828125,
+            "kl": 5.008759629276938e-09,
+            "parameter_delta_l2": 0.00013622711412608624,
+            "passed": false,
+            "path_change": 0.6015625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.060791015625,
+            "kl": 2.3441995011808103e-09,
+            "parameter_delta_l2": 6.811355706304312e-05,
+            "passed": false,
+            "path_change": 0.373046875,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -3.3639275898167398e-06,
+          -0.0009899192955344915,
+          -0.0019811363890767097,
+          -0.0029766082298010588,
+          -0.00397599209100008,
+          -0.0049789282493293285,
+          -0.00598496338352561,
+          -0.006993547081947327
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94526,
+          "context_rows": 11776,
+          "gate_rows": 229718,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229718
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200004,
+      "synchronized_wall_seconds": 7.861788313000034
+    },
+    {
+      "arm": "B11-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "2e8da6e46375b50f014bf07a2c181935980e78553ea64f4624e21436e1f0ff60",
+      "main_updates": 0,
+      "parent_sha256": "f3b4351763dc126e59736dfac73d984a8d55596bf837022be2ec9b17c46bba6d",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.84033203125,
+            "kl": 0.0010632670018821955,
+            "parameter_delta_l2": 0.06974828243255615,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.835205078125,
+            "kl": 0.00026601244462653995,
+            "parameter_delta_l2": 0.034874141216278076,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.82958984375,
+            "kl": 6.651305011473596e-05,
+            "parameter_delta_l2": 0.017437070608139038,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.81298828125,
+            "kl": 1.662280919845216e-05,
+            "parameter_delta_l2": 0.008718535304069519,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.75830078125,
+            "kl": 4.149926553509431e-06,
+            "parameter_delta_l2": 0.0043592676520347595,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.667236328125,
+            "kl": 1.035386503644986e-06,
+            "parameter_delta_l2": 0.0021796338260173798,
+            "passed": false,
+            "path_change": 0.99609375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.495361328125,
+            "kl": 2.587971721368376e-07,
+            "parameter_delta_l2": 0.0010898169130086899,
+            "passed": false,
+            "path_change": 0.96875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.329345703125,
+            "kl": 6.426436982565065e-08,
+            "parameter_delta_l2": 0.0005449084565043449,
+            "passed": false,
+            "path_change": 0.89453125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.2109375,
+            "kl": 1.5392533470048875e-08,
+            "parameter_delta_l2": 0.00027245422825217247,
+            "passed": false,
+            "path_change": 0.8125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.112548828125,
+            "kl": 5.008759629276938e-09,
+            "parameter_delta_l2": 0.00013622711412608624,
+            "passed": false,
+            "path_change": 0.6015625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.060791015625,
+            "kl": 2.3441995011808103e-09,
+            "parameter_delta_l2": 6.811355706304312e-05,
+            "passed": false,
+            "path_change": 0.373046875,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -3.3639275898167398e-06,
+          -0.0009899192955344915,
+          -0.0019811363890767097,
+          -0.0029766082298010588,
+          -0.00397599209100008,
+          -0.0049789282493293285,
+          -0.00598496338352561,
+          -0.006993547081947327
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94526,
+          "context_rows": 11776,
+          "gate_rows": 229718,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229718
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200004,
+      "synchronized_wall_seconds": 6.183177897999997
+    },
+    {
+      "arm": "B01-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "bc6715228c7500154315093fea00278d454647096c303d0d15af304bddb16cc0",
+      "main_updates": 0,
+      "parent_sha256": "2616ba9244ddda49c7fab07edc1af0d00aa09b8ad54865477fc847ea0faed62b",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.8916015625,
+            "kl": 0.0018892809748649597,
+            "parameter_delta_l2": 0.06938175112009048,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.890625,
+            "kl": 0.0004730737709905952,
+            "parameter_delta_l2": 0.03469087556004524,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.886474609375,
+            "kl": 0.00011834046745207161,
+            "parameter_delta_l2": 0.01734543778002262,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.876953125,
+            "kl": 2.958575169031974e-05,
+            "parameter_delta_l2": 0.00867271889001131,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.859375,
+            "kl": 7.3915489338105544e-06,
+            "parameter_delta_l2": 0.004336359445005655,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.8212890625,
+            "kl": 1.8464362483427976e-06,
+            "parameter_delta_l2": 0.0021681797225028276,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.717529296875,
+            "kl": 4.627274279300764e-07,
+            "parameter_delta_l2": 0.0010840898612514138,
+            "passed": false,
+            "path_change": 0.994140625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.543701171875,
+            "kl": 1.1764310414719148e-07,
+            "parameter_delta_l2": 0.0005420449306257069,
+            "passed": false,
+            "path_change": 0.96875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.352783203125,
+            "kl": 3.217464694671435e-08,
+            "parameter_delta_l2": 0.00027102246531285346,
+            "passed": false,
+            "path_change": 0.916015625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.2158203125,
+            "kl": 1.1125197652006591e-08,
+            "parameter_delta_l2": 0.00013551123265642673,
+            "passed": false,
+            "path_change": 0.8046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.118896484375,
+            "kl": 4.3399843718816555e-09,
+            "parameter_delta_l2": 6.775561632821336e-05,
+            "passed": false,
+            "path_change": 0.60546875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          1.9716305814654334e-06,
+          -0.0007449155091308057,
+          -0.0014877284411340952,
+          -0.002226240001618862,
+          -0.002960225334390998,
+          -0.003689439967274666,
+          -0.0044136433862149715,
+          -0.005132615100592375
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94526,
+          "context_rows": 11776,
+          "gate_rows": 229718,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229718
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200004,
+      "synchronized_wall_seconds": 6.105939970999998
+    },
+    {
+      "arm": "B11-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "bc6715228c7500154315093fea00278d454647096c303d0d15af304bddb16cc0",
+      "main_updates": 0,
+      "parent_sha256": "2616ba9244ddda49c7fab07edc1af0d00aa09b8ad54865477fc847ea0faed62b",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.8916015625,
+            "kl": 0.0018892809748649597,
+            "parameter_delta_l2": 0.06938175112009048,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.890625,
+            "kl": 0.0004730737709905952,
+            "parameter_delta_l2": 0.03469087556004524,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.886474609375,
+            "kl": 0.00011834046745207161,
+            "parameter_delta_l2": 0.01734543778002262,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.876953125,
+            "kl": 2.958575169031974e-05,
+            "parameter_delta_l2": 0.00867271889001131,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.859375,
+            "kl": 7.3915489338105544e-06,
+            "parameter_delta_l2": 0.004336359445005655,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.8212890625,
+            "kl": 1.8464362483427976e-06,
+            "parameter_delta_l2": 0.0021681797225028276,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.717529296875,
+            "kl": 4.627274279300764e-07,
+            "parameter_delta_l2": 0.0010840898612514138,
+            "passed": false,
+            "path_change": 0.994140625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.543701171875,
+            "kl": 1.1764310414719148e-07,
+            "parameter_delta_l2": 0.0005420449306257069,
+            "passed": false,
+            "path_change": 0.96875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.352783203125,
+            "kl": 3.217464694671435e-08,
+            "parameter_delta_l2": 0.00027102246531285346,
+            "passed": false,
+            "path_change": 0.916015625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.2158203125,
+            "kl": 1.1125197652006591e-08,
+            "parameter_delta_l2": 0.00013551123265642673,
+            "passed": false,
+            "path_change": 0.8046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.118896484375,
+            "kl": 4.3399843718816555e-09,
+            "parameter_delta_l2": 6.775561632821336e-05,
+            "passed": false,
+            "path_change": 0.60546875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          1.9716305814654334e-06,
+          -0.0007449155091308057,
+          -0.0014877284411340952,
+          -0.002226240001618862,
+          -0.002960225334390998,
+          -0.003689439967274666,
+          -0.0044136433862149715,
+          -0.005132615100592375
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94526,
+          "context_rows": 11776,
+          "gate_rows": 229718,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229718
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200004,
+      "synchronized_wall_seconds": 6.074026360000005
+    },
+    {
+      "arm": "B01-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "a9ccb9ae01c4944b7332bd1936ba50e12618126e4ca303e32a743036092f7e26",
+      "main_updates": 0,
+      "parent_sha256": "0402594dff3b3a3fa439708072cd0402b276575ed6197c7877cc0156fe5f8ccc",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.869140625,
+            "kl": 0.0011955955997109413,
+            "parameter_delta_l2": 0.0690435990691185,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.85791015625,
+            "kl": 0.00030390755273401737,
+            "parameter_delta_l2": 0.03452179953455925,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.83349609375,
+            "kl": 7.659140101168305e-05,
+            "parameter_delta_l2": 0.017260899767279625,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.79931640625,
+            "kl": 1.921642615343444e-05,
+            "parameter_delta_l2": 0.008630449883639812,
+            "passed": false,
+            "path_change": 0.990234375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.720947265625,
+            "kl": 4.809919573744992e-06,
+            "parameter_delta_l2": 0.004315224941819906,
+            "passed": false,
+            "path_change": 0.96875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.564697265625,
+            "kl": 1.2015643733320758e-06,
+            "parameter_delta_l2": 0.002157612470909953,
+            "passed": false,
+            "path_change": 0.927734375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.4404296875,
+            "kl": 2.9980236604387756e-07,
+            "parameter_delta_l2": 0.0010788062354549766,
+            "passed": false,
+            "path_change": 0.91015625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.311767578125,
+            "kl": 7.356892695042916e-08,
+            "parameter_delta_l2": 0.0005394031177274883,
+            "passed": false,
+            "path_change": 0.861328125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.19189453125,
+            "kl": 1.7561564646939587e-08,
+            "parameter_delta_l2": 0.00026970155886374414,
+            "passed": false,
+            "path_change": 0.7265625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.10302734375,
+            "kl": 4.20882129148481e-09,
+            "parameter_delta_l2": 0.00013485077943187207,
+            "passed": false,
+            "path_change": 0.5,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.041015625,
+            "kl": 7.415378866504341e-10,
+            "parameter_delta_l2": 6.742538971593603e-05,
+            "passed": false,
+            "path_change": 0.267578125,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -5.516712917597033e-07,
+          -0.001554772607050836,
+          -0.003057781606912613,
+          -0.004509598948061466,
+          -0.005910802632570267,
+          -0.007262351922690868,
+          -0.008565315045416355,
+          -0.009820710867643356
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94574,
+          "context_rows": 11776,
+          "gate_rows": 229766,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229766
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200005,
+      "synchronized_wall_seconds": 6.0986647420000395
+    },
+    {
+      "arm": "B11-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "a9ccb9ae01c4944b7332bd1936ba50e12618126e4ca303e32a743036092f7e26",
+      "main_updates": 0,
+      "parent_sha256": "0402594dff3b3a3fa439708072cd0402b276575ed6197c7877cc0156fe5f8ccc",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.869140625,
+            "kl": 0.0011955955997109413,
+            "parameter_delta_l2": 0.0690435990691185,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.85791015625,
+            "kl": 0.00030390755273401737,
+            "parameter_delta_l2": 0.03452179953455925,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.83349609375,
+            "kl": 7.659140101168305e-05,
+            "parameter_delta_l2": 0.017260899767279625,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.79931640625,
+            "kl": 1.921642615343444e-05,
+            "parameter_delta_l2": 0.008630449883639812,
+            "passed": false,
+            "path_change": 0.990234375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.720947265625,
+            "kl": 4.809919573744992e-06,
+            "parameter_delta_l2": 0.004315224941819906,
+            "passed": false,
+            "path_change": 0.96875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.564697265625,
+            "kl": 1.2015643733320758e-06,
+            "parameter_delta_l2": 0.002157612470909953,
+            "passed": false,
+            "path_change": 0.927734375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.4404296875,
+            "kl": 2.9980236604387756e-07,
+            "parameter_delta_l2": 0.0010788062354549766,
+            "passed": false,
+            "path_change": 0.91015625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.311767578125,
+            "kl": 7.356892695042916e-08,
+            "parameter_delta_l2": 0.0005394031177274883,
+            "passed": false,
+            "path_change": 0.861328125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.19189453125,
+            "kl": 1.7561564646939587e-08,
+            "parameter_delta_l2": 0.00026970155886374414,
+            "passed": false,
+            "path_change": 0.7265625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.10302734375,
+            "kl": 4.20882129148481e-09,
+            "parameter_delta_l2": 0.00013485077943187207,
+            "passed": false,
+            "path_change": 0.5,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.041015625,
+            "kl": 7.415378866504341e-10,
+            "parameter_delta_l2": 6.742538971593603e-05,
+            "passed": false,
+            "path_change": 0.267578125,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -5.516712917597033e-07,
+          -0.001554772607050836,
+          -0.003057781606912613,
+          -0.004509598948061466,
+          -0.005910802632570267,
+          -0.007262351922690868,
+          -0.008565315045416355,
+          -0.009820710867643356
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94574,
+          "context_rows": 11776,
+          "gate_rows": 229766,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229766
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200005,
+      "synchronized_wall_seconds": 6.030214336000029
+    },
+    {
+      "arm": "B01-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "4402b042ba0e796981bf3226b41d2a4e77f1d9e210de954967606abca3c8426c",
+      "main_updates": 0,
+      "parent_sha256": "29ff30c95c4752283e22a6f665e57e332956e2ec26139cc245aa9be9bdfb5d37",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.78125,
+            "kl": 0.0020216484554111958,
+            "parameter_delta_l2": 0.07025685906410217,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.77978515625,
+            "kl": 0.0005026296712458134,
+            "parameter_delta_l2": 0.035128429532051086,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.77783203125,
+            "kl": 0.00012528247316367924,
+            "parameter_delta_l2": 0.017564214766025543,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.774658203125,
+            "kl": 3.1263796699931845e-05,
+            "parameter_delta_l2": 0.008782107383012772,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.760986328125,
+            "kl": 7.800730600138195e-06,
+            "parameter_delta_l2": 0.004391053691506386,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.71142578125,
+            "kl": 1.9436060938460287e-06,
+            "parameter_delta_l2": 0.002195526845753193,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.6455078125,
+            "kl": 4.853908421864617e-07,
+            "parameter_delta_l2": 0.0010977634228765965,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.517822265625,
+            "kl": 1.2087625123058388e-07,
+            "parameter_delta_l2": 0.0005488817114382982,
+            "passed": false,
+            "path_change": 0.98046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.37548828125,
+            "kl": 2.9086445252346493e-08,
+            "parameter_delta_l2": 0.0002744408557191491,
+            "passed": false,
+            "path_change": 0.94140625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.238037109375,
+            "kl": 7.708612415058269e-09,
+            "parameter_delta_l2": 0.00013722042785957456,
+            "passed": false,
+            "path_change": 0.84375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.135498046875,
+            "kl": 2.3191830678115366e-09,
+            "parameter_delta_l2": 6.861021392978728e-05,
+            "passed": false,
+            "path_change": 0.650390625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -9.4791857918608e-06,
+          -0.0017114626243710518,
+          -0.003428762312978506,
+          -0.00516077084466815,
+          -0.006906709633767605,
+          -0.00866573117673397,
+          -0.01043688040226698,
+          -0.012219074182212353
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94574,
+          "context_rows": 11776,
+          "gate_rows": 229766,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229766
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200005,
+      "synchronized_wall_seconds": 5.930892791999952
+    },
+    {
+      "arm": "B11-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "4402b042ba0e796981bf3226b41d2a4e77f1d9e210de954967606abca3c8426c",
+      "main_updates": 0,
+      "parent_sha256": "29ff30c95c4752283e22a6f665e57e332956e2ec26139cc245aa9be9bdfb5d37",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.78125,
+            "kl": 0.0020216484554111958,
+            "parameter_delta_l2": 0.07025685906410217,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.77978515625,
+            "kl": 0.0005026296712458134,
+            "parameter_delta_l2": 0.035128429532051086,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.77783203125,
+            "kl": 0.00012528247316367924,
+            "parameter_delta_l2": 0.017564214766025543,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.774658203125,
+            "kl": 3.1263796699931845e-05,
+            "parameter_delta_l2": 0.008782107383012772,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.760986328125,
+            "kl": 7.800730600138195e-06,
+            "parameter_delta_l2": 0.004391053691506386,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.71142578125,
+            "kl": 1.9436060938460287e-06,
+            "parameter_delta_l2": 0.002195526845753193,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.6455078125,
+            "kl": 4.853908421864617e-07,
+            "parameter_delta_l2": 0.0010977634228765965,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.517822265625,
+            "kl": 1.2087625123058388e-07,
+            "parameter_delta_l2": 0.0005488817114382982,
+            "passed": false,
+            "path_change": 0.98046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.37548828125,
+            "kl": 2.9086445252346493e-08,
+            "parameter_delta_l2": 0.0002744408557191491,
+            "passed": false,
+            "path_change": 0.94140625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.238037109375,
+            "kl": 7.708612415058269e-09,
+            "parameter_delta_l2": 0.00013722042785957456,
+            "passed": false,
+            "path_change": 0.84375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.135498046875,
+            "kl": 2.3191830678115366e-09,
+            "parameter_delta_l2": 6.861021392978728e-05,
+            "passed": false,
+            "path_change": 0.650390625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -9.4791857918608e-06,
+          -0.0017114626243710518,
+          -0.003428762312978506,
+          -0.00516077084466815,
+          -0.006906709633767605,
+          -0.00866573117673397,
+          -0.01043688040226698,
+          -0.012219074182212353
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94574,
+          "context_rows": 11776,
+          "gate_rows": 229766,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229766
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200005,
+      "synchronized_wall_seconds": 6.04017550399999
+    },
+    {
+      "arm": "B01-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "277c5bc478062e413668ea331183cf850cb854c0cffbb15e293af730bdbb8a02",
+      "main_updates": 0,
+      "parent_sha256": "abf8e79a3b64486f031fbdfed9e5e255009d4c6847e6104c944b0de67a3274a1",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.75439453125,
+            "kl": 0.0010164130944758654,
+            "parameter_delta_l2": 0.06959336251020432,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.751953125,
+            "kl": 0.00025534542510285974,
+            "parameter_delta_l2": 0.03479668125510216,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.7490234375,
+            "kl": 6.397328979801387e-05,
+            "parameter_delta_l2": 0.01739834062755108,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.729248046875,
+            "kl": 1.600163523107767e-05,
+            "parameter_delta_l2": 0.00869917031377554,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.646240234375,
+            "kl": 3.9971732803678606e-06,
+            "parameter_delta_l2": 0.00434958515688777,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.54345703125,
+            "kl": 9.978663229048834e-07,
+            "parameter_delta_l2": 0.002174792578443885,
+            "passed": false,
+            "path_change": 0.994140625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.4013671875,
+            "kl": 2.4935309284046525e-07,
+            "parameter_delta_l2": 0.0010873962892219424,
+            "passed": false,
+            "path_change": 0.98828125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.302490234375,
+            "kl": 6.29328837931098e-08,
+            "parameter_delta_l2": 0.0005436981446109712,
+            "passed": false,
+            "path_change": 0.94921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.197021484375,
+            "kl": 1.3570244483673832e-08,
+            "parameter_delta_l2": 0.0002718490723054856,
+            "passed": false,
+            "path_change": 0.791015625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.11083984375,
+            "kl": 4.301343281554182e-09,
+            "parameter_delta_l2": 0.0001359245361527428,
+            "passed": false,
+            "path_change": 0.576171875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.057373046875,
+            "kl": 8.993953359848206e-10,
+            "parameter_delta_l2": 6.79622680763714e-05,
+            "passed": false,
+            "path_change": 0.376953125,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -4.286620878701797e-06,
+          -0.0010570018785074353,
+          -0.0020885858684778214,
+          -0.003097713692113757,
+          -0.004083211533725262,
+          -0.005044068209826946,
+          -0.0059794215485453606,
+          -0.006888560485094786
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94562,
+          "context_rows": 11776,
+          "gate_rows": 229754,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229754
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200006,
+      "synchronized_wall_seconds": 6.048319742999979
+    },
+    {
+      "arm": "B11-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "277c5bc478062e413668ea331183cf850cb854c0cffbb15e293af730bdbb8a02",
+      "main_updates": 0,
+      "parent_sha256": "abf8e79a3b64486f031fbdfed9e5e255009d4c6847e6104c944b0de67a3274a1",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.75439453125,
+            "kl": 0.0010164130944758654,
+            "parameter_delta_l2": 0.06959336251020432,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.751953125,
+            "kl": 0.00025534542510285974,
+            "parameter_delta_l2": 0.03479668125510216,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.7490234375,
+            "kl": 6.397328979801387e-05,
+            "parameter_delta_l2": 0.01739834062755108,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.729248046875,
+            "kl": 1.600163523107767e-05,
+            "parameter_delta_l2": 0.00869917031377554,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.646240234375,
+            "kl": 3.9971732803678606e-06,
+            "parameter_delta_l2": 0.00434958515688777,
+            "passed": false,
+            "path_change": 0.998046875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.54345703125,
+            "kl": 9.978663229048834e-07,
+            "parameter_delta_l2": 0.002174792578443885,
+            "passed": false,
+            "path_change": 0.994140625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.4013671875,
+            "kl": 2.4935309284046525e-07,
+            "parameter_delta_l2": 0.0010873962892219424,
+            "passed": false,
+            "path_change": 0.98828125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.302490234375,
+            "kl": 6.29328837931098e-08,
+            "parameter_delta_l2": 0.0005436981446109712,
+            "passed": false,
+            "path_change": 0.94921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.197021484375,
+            "kl": 1.3570244483673832e-08,
+            "parameter_delta_l2": 0.0002718490723054856,
+            "passed": false,
+            "path_change": 0.791015625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.11083984375,
+            "kl": 4.301343281554182e-09,
+            "parameter_delta_l2": 0.0001359245361527428,
+            "passed": false,
+            "path_change": 0.576171875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.057373046875,
+            "kl": 8.993953359848206e-10,
+            "parameter_delta_l2": 6.79622680763714e-05,
+            "passed": false,
+            "path_change": 0.376953125,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -4.286620878701797e-06,
+          -0.0010570018785074353,
+          -0.0020885858684778214,
+          -0.003097713692113757,
+          -0.004083211533725262,
+          -0.005044068209826946,
+          -0.0059794215485453606,
+          -0.006888560485094786
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94562,
+          "context_rows": 11776,
+          "gate_rows": 229754,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229754
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200006,
+      "synchronized_wall_seconds": 5.993798826000102
+    },
+    {
+      "arm": "B01-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "abc31de2faead8634ee6d1b2833f3524ead918ed70e0ce9f1ab461c9daf2a26f",
+      "main_updates": 0,
+      "parent_sha256": "06820ed278002dc18120f1f67d7bf966df7ddcdf8b56ee8948887ac396402f70",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.777587890625,
+            "kl": 0.002051572548225522,
+            "parameter_delta_l2": 0.06921467185020447,
+            "passed": false,
+            "path_change": 0.9375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.774169921875,
+            "kl": 0.0005149483913555741,
+            "parameter_delta_l2": 0.034607335925102234,
+            "passed": false,
+            "path_change": 0.935546875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.767333984375,
+            "kl": 0.00012897624401375651,
+            "parameter_delta_l2": 0.017303667962551117,
+            "passed": false,
+            "path_change": 0.93359375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.754638671875,
+            "kl": 3.226255648769438e-05,
+            "parameter_delta_l2": 0.008651833981275558,
+            "passed": false,
+            "path_change": 0.931640625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.73193359375,
+            "kl": 8.062350389081985e-06,
+            "parameter_delta_l2": 0.004325916990637779,
+            "passed": false,
+            "path_change": 0.931640625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.6669921875,
+            "kl": 2.012764070968842e-06,
+            "parameter_delta_l2": 0.0021629584953188896,
+            "passed": false,
+            "path_change": 0.9296875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.57861328125,
+            "kl": 5.020660864829551e-07,
+            "parameter_delta_l2": 0.0010814792476594448,
+            "passed": false,
+            "path_change": 0.921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.46728515625,
+            "kl": 1.2746778565997374e-07,
+            "parameter_delta_l2": 0.0005407396238297224,
+            "passed": false,
+            "path_change": 0.88671875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.34228515625,
+            "kl": 3.456938912904661e-08,
+            "parameter_delta_l2": 0.0002703698119148612,
+            "passed": false,
+            "path_change": 0.82421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.212890625,
+            "kl": 9.329689021342347e-09,
+            "parameter_delta_l2": 0.0001351849059574306,
+            "passed": false,
+            "path_change": 0.732421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.114013671875,
+            "kl": 3.369832191069122e-09,
+            "parameter_delta_l2": 6.75924529787153e-05,
+            "passed": false,
+            "path_change": 0.56640625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          3.3338778848701622e-06,
+          -0.0015732472529634833,
+          -0.0031153797172009945,
+          -0.004623007960617542,
+          -0.006096310913562775,
+          -0.007535618729889393,
+          -0.008941439911723137,
+          -0.010314424522221088
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94562,
+          "context_rows": 11776,
+          "gate_rows": 229754,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229754
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200006,
+      "synchronized_wall_seconds": 6.074462456999981
+    },
+    {
+      "arm": "B11-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "abc31de2faead8634ee6d1b2833f3524ead918ed70e0ce9f1ab461c9daf2a26f",
+      "main_updates": 0,
+      "parent_sha256": "06820ed278002dc18120f1f67d7bf966df7ddcdf8b56ee8948887ac396402f70",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.777587890625,
+            "kl": 0.002051572548225522,
+            "parameter_delta_l2": 0.06921467185020447,
+            "passed": false,
+            "path_change": 0.9375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.774169921875,
+            "kl": 0.0005149483913555741,
+            "parameter_delta_l2": 0.034607335925102234,
+            "passed": false,
+            "path_change": 0.935546875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.767333984375,
+            "kl": 0.00012897624401375651,
+            "parameter_delta_l2": 0.017303667962551117,
+            "passed": false,
+            "path_change": 0.93359375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.754638671875,
+            "kl": 3.226255648769438e-05,
+            "parameter_delta_l2": 0.008651833981275558,
+            "passed": false,
+            "path_change": 0.931640625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.73193359375,
+            "kl": 8.062350389081985e-06,
+            "parameter_delta_l2": 0.004325916990637779,
+            "passed": false,
+            "path_change": 0.931640625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.6669921875,
+            "kl": 2.012764070968842e-06,
+            "parameter_delta_l2": 0.0021629584953188896,
+            "passed": false,
+            "path_change": 0.9296875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.57861328125,
+            "kl": 5.020660864829551e-07,
+            "parameter_delta_l2": 0.0010814792476594448,
+            "passed": false,
+            "path_change": 0.921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.46728515625,
+            "kl": 1.2746778565997374e-07,
+            "parameter_delta_l2": 0.0005407396238297224,
+            "passed": false,
+            "path_change": 0.88671875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.34228515625,
+            "kl": 3.456938912904661e-08,
+            "parameter_delta_l2": 0.0002703698119148612,
+            "passed": false,
+            "path_change": 0.82421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.212890625,
+            "kl": 9.329689021342347e-09,
+            "parameter_delta_l2": 0.0001351849059574306,
+            "passed": false,
+            "path_change": 0.732421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.114013671875,
+            "kl": 3.369832191069122e-09,
+            "parameter_delta_l2": 6.75924529787153e-05,
+            "passed": false,
+            "path_change": 0.56640625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          3.3338778848701622e-06,
+          -0.0015732472529634833,
+          -0.0031153797172009945,
+          -0.004623007960617542,
+          -0.006096310913562775,
+          -0.007535618729889393,
+          -0.008941439911723137,
+          -0.010314424522221088
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94562,
+          "context_rows": 11776,
+          "gate_rows": 229754,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229754
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200006,
+      "synchronized_wall_seconds": 5.9790793629999825
+    },
+    {
+      "arm": "B01-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "84a8882d63c70eb90f744f1352b34fcfec0b3533023160a8c115b89dfc911a19",
+      "main_updates": 0,
+      "parent_sha256": "01a8c05de47aa43ea492b5b9f4fe1c21bc8a1fa2016931455f05714693031774",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.765380859375,
+            "kl": 0.0009664621320553124,
+            "parameter_delta_l2": 0.06915610283613205,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.76318359375,
+            "kl": 0.00024129687517415732,
+            "parameter_delta_l2": 0.034578051418066025,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.756591796875,
+            "kl": 6.0270838730502874e-05,
+            "parameter_delta_l2": 0.017289025709033012,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.723876953125,
+            "kl": 1.5051572518132161e-05,
+            "parameter_delta_l2": 0.008644512854516506,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.692626953125,
+            "kl": 3.7570091535599204e-06,
+            "parameter_delta_l2": 0.004322256427258253,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.637451171875,
+            "kl": 9.363251365357428e-07,
+            "parameter_delta_l2": 0.0021611282136291265,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.566650390625,
+            "kl": 2.3234434820551542e-07,
+            "parameter_delta_l2": 0.0010805641068145633,
+            "passed": false,
+            "path_change": 0.994140625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.411376953125,
+            "kl": 5.784784917750585e-08,
+            "parameter_delta_l2": 0.0005402820534072816,
+            "passed": false,
+            "path_change": 0.984375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.26416015625,
+            "kl": 1.3818974409218754e-08,
+            "parameter_delta_l2": 0.0002701410267036408,
+            "passed": false,
+            "path_change": 0.884765625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.153076171875,
+            "kl": 2.6601811864424008e-09,
+            "parameter_delta_l2": 0.0001350705133518204,
+            "passed": false,
+            "path_change": 0.673828125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.076171875,
+            "kl": 1.709226649104778e-10,
+            "parameter_delta_l2": 6.75352566759102e-05,
+            "passed": false,
+            "path_change": 0.435546875,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -3.9086280594347045e-06,
+          -0.0003743373090401292,
+          -0.0007473102305084467,
+          -0.0011227127397432923,
+          -0.0015005292370915413,
+          -0.001880807220004499,
+          -0.0022635660134255886,
+          -0.0026487750001251698
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94502,
+          "context_rows": 11776,
+          "gate_rows": 229694,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229694
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200007,
+      "synchronized_wall_seconds": 6.0167283490000045
+    },
+    {
+      "arm": "B11-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "84a8882d63c70eb90f744f1352b34fcfec0b3533023160a8c115b89dfc911a19",
+      "main_updates": 0,
+      "parent_sha256": "01a8c05de47aa43ea492b5b9f4fe1c21bc8a1fa2016931455f05714693031774",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.765380859375,
+            "kl": 0.0009664621320553124,
+            "parameter_delta_l2": 0.06915610283613205,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.76318359375,
+            "kl": 0.00024129687517415732,
+            "parameter_delta_l2": 0.034578051418066025,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.756591796875,
+            "kl": 6.0270838730502874e-05,
+            "parameter_delta_l2": 0.017289025709033012,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.723876953125,
+            "kl": 1.5051572518132161e-05,
+            "parameter_delta_l2": 0.008644512854516506,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.692626953125,
+            "kl": 3.7570091535599204e-06,
+            "parameter_delta_l2": 0.004322256427258253,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.637451171875,
+            "kl": 9.363251365357428e-07,
+            "parameter_delta_l2": 0.0021611282136291265,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.566650390625,
+            "kl": 2.3234434820551542e-07,
+            "parameter_delta_l2": 0.0010805641068145633,
+            "passed": false,
+            "path_change": 0.994140625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.411376953125,
+            "kl": 5.784784917750585e-08,
+            "parameter_delta_l2": 0.0005402820534072816,
+            "passed": false,
+            "path_change": 0.984375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.26416015625,
+            "kl": 1.3818974409218754e-08,
+            "parameter_delta_l2": 0.0002701410267036408,
+            "passed": false,
+            "path_change": 0.884765625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.153076171875,
+            "kl": 2.6601811864424008e-09,
+            "parameter_delta_l2": 0.0001350705133518204,
+            "passed": false,
+            "path_change": 0.673828125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.076171875,
+            "kl": 1.709226649104778e-10,
+            "parameter_delta_l2": 6.75352566759102e-05,
+            "passed": false,
+            "path_change": 0.435546875,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -3.9086280594347045e-06,
+          -0.0003743373090401292,
+          -0.0007473102305084467,
+          -0.0011227127397432923,
+          -0.0015005292370915413,
+          -0.001880807220004499,
+          -0.0022635660134255886,
+          -0.0026487750001251698
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94502,
+          "context_rows": 11776,
+          "gate_rows": 229694,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229694
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200007,
+      "synchronized_wall_seconds": 6.071526482999957
+    },
+    {
+      "arm": "B01-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "09218777a0c0f7a5545b205bfd48089c46918166108ef30bb14e3575453415df",
+      "main_updates": 0,
+      "parent_sha256": "ae39e4b2a6cfbef82f4e6812fe23448ab95feb8775c52df391221fe309f1a2c9",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.75732421875,
+            "kl": 0.0016440200852230191,
+            "parameter_delta_l2": 0.06949366629123688,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.75439453125,
+            "kl": 0.00040905101923272014,
+            "parameter_delta_l2": 0.03474683314561844,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.7470703125,
+            "kl": 0.00010199555254075676,
+            "parameter_delta_l2": 0.01737341657280922,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.736572265625,
+            "kl": 2.5454735805396922e-05,
+            "parameter_delta_l2": 0.00868670828640461,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.71728515625,
+            "kl": 6.351210686261766e-06,
+            "parameter_delta_l2": 0.004343354143202305,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.666015625,
+            "kl": 1.5823696912775631e-06,
+            "parameter_delta_l2": 0.0021716770716011524,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.572998046875,
+            "kl": 3.938547479265253e-07,
+            "parameter_delta_l2": 0.0010858385358005762,
+            "passed": false,
+            "path_change": 0.98828125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.442138671875,
+            "kl": 9.547404999921127e-08,
+            "parameter_delta_l2": 0.0005429192679002881,
+            "passed": false,
+            "path_change": 0.947265625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.32568359375,
+            "kl": 2.3088706058160824e-08,
+            "parameter_delta_l2": 0.00027145963395014405,
+            "passed": false,
+            "path_change": 0.8671875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.19873046875,
+            "kl": 3.9507526139459515e-09,
+            "parameter_delta_l2": 0.00013572981697507203,
+            "passed": false,
+            "path_change": 0.732421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.109375,
+            "kl": 8.234547488328303e-10,
+            "parameter_delta_l2": 6.786490848753601e-05,
+            "passed": false,
+            "path_change": 0.53125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -5.039857114752522e-06,
+          -0.0001764805056154728,
+          -0.0003488988149911165,
+          -0.0005223166663199663,
+          -0.0006967643275856972,
+          -0.0008722855127416551,
+          -0.0010489379055798054,
+          -0.001226786756888032
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94502,
+          "context_rows": 11776,
+          "gate_rows": 229694,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229694
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200007,
+      "synchronized_wall_seconds": 6.002202374000035
+    },
+    {
+      "arm": "B11-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "09218777a0c0f7a5545b205bfd48089c46918166108ef30bb14e3575453415df",
+      "main_updates": 0,
+      "parent_sha256": "ae39e4b2a6cfbef82f4e6812fe23448ab95feb8775c52df391221fe309f1a2c9",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.75732421875,
+            "kl": 0.0016440200852230191,
+            "parameter_delta_l2": 0.06949366629123688,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.75439453125,
+            "kl": 0.00040905101923272014,
+            "parameter_delta_l2": 0.03474683314561844,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.7470703125,
+            "kl": 0.00010199555254075676,
+            "parameter_delta_l2": 0.01737341657280922,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.736572265625,
+            "kl": 2.5454735805396922e-05,
+            "parameter_delta_l2": 0.00868670828640461,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.71728515625,
+            "kl": 6.351210686261766e-06,
+            "parameter_delta_l2": 0.004343354143202305,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.666015625,
+            "kl": 1.5823696912775631e-06,
+            "parameter_delta_l2": 0.0021716770716011524,
+            "passed": false,
+            "path_change": 0.9921875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.572998046875,
+            "kl": 3.938547479265253e-07,
+            "parameter_delta_l2": 0.0010858385358005762,
+            "passed": false,
+            "path_change": 0.98828125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.442138671875,
+            "kl": 9.547404999921127e-08,
+            "parameter_delta_l2": 0.0005429192679002881,
+            "passed": false,
+            "path_change": 0.947265625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.32568359375,
+            "kl": 2.3088706058160824e-08,
+            "parameter_delta_l2": 0.00027145963395014405,
+            "passed": false,
+            "path_change": 0.8671875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.19873046875,
+            "kl": 3.9507526139459515e-09,
+            "parameter_delta_l2": 0.00013572981697507203,
+            "passed": false,
+            "path_change": 0.732421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.109375,
+            "kl": 8.234547488328303e-10,
+            "parameter_delta_l2": 6.786490848753601e-05,
+            "passed": false,
+            "path_change": 0.53125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -5.039857114752522e-06,
+          -0.0001764805056154728,
+          -0.0003488988149911165,
+          -0.0005223166663199663,
+          -0.0006967643275856972,
+          -0.0008722855127416551,
+          -0.0010489379055798054,
+          -0.001226786756888032
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94502,
+          "context_rows": 11776,
+          "gate_rows": 229694,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229694
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200007,
+      "synchronized_wall_seconds": 6.057578668000019
+    },
+    {
+      "arm": "B01-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "f8b9342b0a9b2da592c9b6422c909b5824206a5d59cd6bdd3cba44ff394dbdd6",
+      "main_updates": 0,
+      "parent_sha256": "467a7cd568310bb5cd18a31b5c75ff6787f2ab0bc034778d183d907da7e4aa2f",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.880126953125,
+            "kl": 0.00170372542925179,
+            "parameter_delta_l2": 0.0695636048913002,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.876708984375,
+            "kl": 0.00042713875882327557,
+            "parameter_delta_l2": 0.0347818024456501,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.8720703125,
+            "kl": 0.00010690886119846255,
+            "parameter_delta_l2": 0.01739090122282505,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.864013671875,
+            "kl": 2.6733985578175634e-05,
+            "parameter_delta_l2": 0.008695450611412525,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.841796875,
+            "kl": 6.678262252535205e-06,
+            "parameter_delta_l2": 0.004347725305706263,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.70703125,
+            "kl": 1.6686083199601853e-06,
+            "parameter_delta_l2": 0.0021738626528531313,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.470703125,
+            "kl": 4.158853244007332e-07,
+            "parameter_delta_l2": 0.0010869313264265656,
+            "passed": false,
+            "path_change": 0.96484375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.334716796875,
+            "kl": 1.0264250960290155e-07,
+            "parameter_delta_l2": 0.0005434656632132828,
+            "passed": false,
+            "path_change": 0.912109375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.2392578125,
+            "kl": 2.4453830960169398e-08,
+            "parameter_delta_l2": 0.0002717328316066414,
+            "passed": false,
+            "path_change": 0.826171875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.15771484375,
+            "kl": 5.797308411104041e-09,
+            "parameter_delta_l2": 0.0001358664158033207,
+            "passed": false,
+            "path_change": 0.697265625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.09765625,
+            "kl": 1.3220692318682836e-09,
+            "parameter_delta_l2": 6.793320790166035e-05,
+            "passed": false,
+            "path_change": 0.5390625,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          1.8461530970625972e-08,
+          -0.0004792260588146746,
+          -0.0009577406453900039,
+          -0.0014353904407471418,
+          -0.0019120208453387022,
+          -0.0023875038605183363,
+          -0.0028617444913834333,
+          -0.0033346698619425297
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94556,
+          "context_rows": 11776,
+          "gate_rows": 229748,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229748
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200008,
+      "synchronized_wall_seconds": 6.0641673640000135
+    },
+    {
+      "arm": "B11-S",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "f8b9342b0a9b2da592c9b6422c909b5824206a5d59cd6bdd3cba44ff394dbdd6",
+      "main_updates": 0,
+      "parent_sha256": "467a7cd568310bb5cd18a31b5c75ff6787f2ab0bc034778d183d907da7e4aa2f",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.880126953125,
+            "kl": 0.00170372542925179,
+            "parameter_delta_l2": 0.0695636048913002,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.876708984375,
+            "kl": 0.00042713875882327557,
+            "parameter_delta_l2": 0.0347818024456501,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.8720703125,
+            "kl": 0.00010690886119846255,
+            "parameter_delta_l2": 0.01739090122282505,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.864013671875,
+            "kl": 2.6733985578175634e-05,
+            "parameter_delta_l2": 0.008695450611412525,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.841796875,
+            "kl": 6.678262252535205e-06,
+            "parameter_delta_l2": 0.004347725305706263,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.70703125,
+            "kl": 1.6686083199601853e-06,
+            "parameter_delta_l2": 0.0021738626528531313,
+            "passed": false,
+            "path_change": 1.0,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.470703125,
+            "kl": 4.158853244007332e-07,
+            "parameter_delta_l2": 0.0010869313264265656,
+            "passed": false,
+            "path_change": 0.96484375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.334716796875,
+            "kl": 1.0264250960290155e-07,
+            "parameter_delta_l2": 0.0005434656632132828,
+            "passed": false,
+            "path_change": 0.912109375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.2392578125,
+            "kl": 2.4453830960169398e-08,
+            "parameter_delta_l2": 0.0002717328316066414,
+            "passed": false,
+            "path_change": 0.826171875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.15771484375,
+            "kl": 5.797308411104041e-09,
+            "parameter_delta_l2": 0.0001358664158033207,
+            "passed": false,
+            "path_change": 0.697265625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.09765625,
+            "kl": 1.3220692318682836e-09,
+            "parameter_delta_l2": 6.793320790166035e-05,
+            "passed": false,
+            "path_change": 0.5390625,
+            "rejected_by": [
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          1.8461530970625972e-08,
+          -0.0004792260588146746,
+          -0.0009577406453900039,
+          -0.0014353904407471418,
+          -0.0019120208453387022,
+          -0.0023875038605183363,
+          -0.0028617444913834333,
+          -0.0033346698619425297
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94556,
+          "context_rows": 11776,
+          "gate_rows": 229748,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229748
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200008,
+      "synchronized_wall_seconds": 6.080772531999969
+    },
+    {
+      "arm": "B01-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "f37f14325281ff7add31aa8f4164678b659b99126c8df8985e39f8000044ce5e",
+      "main_updates": 0,
+      "parent_sha256": "68452a16945d3881b09e91be43e9fd059e7c00d677c193cbbeceebf9695d4003",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.857421875,
+            "kl": 0.0013254191726446152,
+            "parameter_delta_l2": 0.06970950961112976,
+            "passed": false,
+            "path_change": 0.984375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.85302734375,
+            "kl": 0.00033203704515472054,
+            "parameter_delta_l2": 0.03485475480556488,
+            "passed": false,
+            "path_change": 0.984375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.84521484375,
+            "kl": 8.307785174110904e-05,
+            "parameter_delta_l2": 0.01742737740278244,
+            "passed": false,
+            "path_change": 0.982421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.8271484375,
+            "kl": 2.0768911781487986e-05,
+            "parameter_delta_l2": 0.00871368870139122,
+            "passed": false,
+            "path_change": 0.982421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.79052734375,
+            "kl": 5.187812348594889e-06,
+            "parameter_delta_l2": 0.00435684435069561,
+            "passed": false,
+            "path_change": 0.982421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.736328125,
+            "kl": 1.2933719517604914e-06,
+            "parameter_delta_l2": 0.002178422175347805,
+            "passed": false,
+            "path_change": 0.982421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.61474609375,
+            "kl": 3.2359434953832533e-07,
+            "parameter_delta_l2": 0.0010892110876739025,
+            "passed": false,
+            "path_change": 0.978515625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.436767578125,
+            "kl": 7.96978980588392e-08,
+            "parameter_delta_l2": 0.0005446055438369513,
+            "passed": false,
+            "path_change": 0.953125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.296630859375,
+            "kl": 2.133901588763365e-08,
+            "parameter_delta_l2": 0.00027230277191847563,
+            "passed": false,
+            "path_change": 0.88671875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.188720703125,
+            "kl": 4.948184972874969e-09,
+            "parameter_delta_l2": 0.00013615138595923781,
+            "passed": false,
+            "path_change": 0.73828125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.105224609375,
+            "kl": 2.9008697666199623e-09,
+            "parameter_delta_l2": 6.807569297961891e-05,
+            "passed": false,
+            "path_change": 0.513671875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -1.5415110965477652e-06,
+          -0.0027033842634409666,
+          -0.005366510711610317,
+          -0.007989495992660522,
+          -0.010571062564849854,
+          -0.01310996524989605,
+          -0.015604987740516663,
+          -0.01805500127375126
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94556,
+          "context_rows": 11776,
+          "gate_rows": 229748,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229748
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200008,
+      "synchronized_wall_seconds": 6.074061133999976
+    },
+    {
+      "arm": "B11-H",
+      "candidate_optimizer_calls": 8,
+      "confirm_accessed": false,
+      "gate_passed": false,
+      "gpu_used": true,
+      "identity": {
+        "config_sha256": "e5bb0e31991a1d69a8ed72136a4a5cfda65bd6ddfa304ebd0a3819769a967fbd",
+        "experiment_id": "CLM-002-FAST-002",
+        "historical_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+        "historical_run_id": "75df16bf240cb1998b134e420964d7bc",
+        "run_id": "40ab59e0c7a4395ba019ecf28da6469a",
+        "source_sha": "947718035add443385413c0231b6569e49b68563"
+      },
+      "input_sha256": "f37f14325281ff7add31aa8f4164678b659b99126c8df8985e39f8000044ce5e",
+      "main_updates": 0,
+      "parent_sha256": "68452a16945d3881b09e91be43e9fd059e7c00d677c193cbbeceebf9695d4003",
+      "production_connection_commits": 0,
+      "proposal": {
+        "actions_per_state": 6,
+        "attempts": [
+          {
+            "action_change": 0.857421875,
+            "kl": 0.0013254191726446152,
+            "parameter_delta_l2": 0.06970950961112976,
+            "passed": false,
+            "path_change": 0.984375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 1.0
+          },
+          {
+            "action_change": 0.85302734375,
+            "kl": 0.00033203704515472054,
+            "parameter_delta_l2": 0.03485475480556488,
+            "passed": false,
+            "path_change": 0.984375,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.5
+          },
+          {
+            "action_change": 0.84521484375,
+            "kl": 8.307785174110904e-05,
+            "parameter_delta_l2": 0.01742737740278244,
+            "passed": false,
+            "path_change": 0.982421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.25
+          },
+          {
+            "action_change": 0.8271484375,
+            "kl": 2.0768911781487986e-05,
+            "parameter_delta_l2": 0.00871368870139122,
+            "passed": false,
+            "path_change": 0.982421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.125
+          },
+          {
+            "action_change": 0.79052734375,
+            "kl": 5.187812348594889e-06,
+            "parameter_delta_l2": 0.00435684435069561,
+            "passed": false,
+            "path_change": 0.982421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0625
+          },
+          {
+            "action_change": 0.736328125,
+            "kl": 1.2933719517604914e-06,
+            "parameter_delta_l2": 0.002178422175347805,
+            "passed": false,
+            "path_change": 0.982421875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.03125
+          },
+          {
+            "action_change": 0.61474609375,
+            "kl": 3.2359434953832533e-07,
+            "parameter_delta_l2": 0.0010892110876739025,
+            "passed": false,
+            "path_change": 0.978515625,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.015625
+          },
+          {
+            "action_change": 0.436767578125,
+            "kl": 7.96978980588392e-08,
+            "parameter_delta_l2": 0.0005446055438369513,
+            "passed": false,
+            "path_change": 0.953125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0078125
+          },
+          {
+            "action_change": 0.296630859375,
+            "kl": 2.133901588763365e-08,
+            "parameter_delta_l2": 0.00027230277191847563,
+            "passed": false,
+            "path_change": 0.88671875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.00390625
+          },
+          {
+            "action_change": 0.188720703125,
+            "kl": 4.948184972874969e-09,
+            "parameter_delta_l2": 0.00013615138595923781,
+            "passed": false,
+            "path_change": 0.73828125,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.001953125
+          },
+          {
+            "action_change": 0.105224609375,
+            "kl": 2.9008697666199623e-09,
+            "parameter_delta_l2": 6.807569297961891e-05,
+            "passed": false,
+            "path_change": 0.513671875,
+            "rejected_by": [
+              "action_change",
+              "path_change"
+            ],
+            "scale": 0.0009765625
+          }
+        ],
+        "chosen_scale": null,
+        "connection_after_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_before_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+        "connection_parameters_changed": false,
+        "counterfactual_states": 12,
+        "counterfactual_suffix": "CURRENT_POLICY_REROUTED",
+        "losses": [
+          -1.5415110965477652e-06,
+          -0.0027033842634409666,
+          -0.005366510711610317,
+          -0.007989495992660522,
+          -0.010571062564849854,
+          -0.01310996524989605,
+          -0.015604987740516663,
+          -0.01805500127375126
+        ],
+        "policy_optimizer_updates": 8,
+        "trust_thresholds_unchanged": true,
+        "work": {
+          "cell_rows": 94556,
+          "context_rows": 11776,
+          "gate_rows": 229748,
+          "head_rows": 11848,
+          "input_rows": 11776,
+          "policy_rows": 229748
+        },
+        "zero_perturbation": {
+          "action_change": 0.0,
+          "kl": 0.0,
+          "path_change": 0.0
+        }
+      },
+      "scope": "MATCHING_FAST001_A_FINAL_NOT_ORIGINAL_STEP50_REPLAY",
+      "seed": 2026200008,
+      "synchronized_wall_seconds": 5.976481782000064
+    }
+  ],
+  "status": "CALIBRATION_FAILED_STOP",
+  "thresholds_unchanged": true
+}

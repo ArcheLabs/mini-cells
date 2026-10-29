@@ -1,0 +1,184 @@
+{
+  "configuration": {
+    "arms": {
+      "A": {
+        "cells": false,
+        "connection": false
+      },
+      "B": {
+        "cells": true,
+        "connection": false
+      },
+      "C": {
+        "cells": false,
+        "connection": true
+      },
+      "D": {
+        "cells": true,
+        "connection": true
+      }
+    },
+    "confirmation": "SEALED",
+    "confirmation_plan": {
+      "delta_min": null,
+      "inferential_method": null,
+      "materialized": false,
+      "multiple_testing": null,
+      "power_analysis": null,
+      "seeds": null
+    },
+    "experiment_id": "JCT-001",
+    "fixture": {
+      "backtrack": [
+        1.0,
+        0.5,
+        0.25
+      ],
+      "batch_size": 4,
+      "cell_lr": 0.01,
+      "cell_weight_decay": 0.0,
+      "checkpoint_rule": "ONE_ATOMIC_LOGICAL_TRANSACTION; REPLAY_UNCOMMITTED_WORK_AND_COUNT_RETRY_CALLS",
+      "classification_values": [
+        -32,
+        32
+      ],
+      "connection_clip": 1.0,
+      "connection_lr": 0.03,
+      "connection_optimizer_lifecycle": "FRESH_ADAMW_PER_PROPOSAL_AS_REUSED_SOURCE",
+      "connection_weight_decay": 0.0,
+      "counterfactual_states": 3,
+      "determinism": "CPU_FP32_EXACT; GPU_TOLERANCE_NOT_REGISTERED",
+      "engineering_trust": {
+        "action_change_max": 1.0,
+        "kl_max": 1.0,
+        "path_change_max": 1.0,
+        "uses_quality_for_admission": false
+      },
+      "epsilon": 0.15,
+      "generator_version": "AFFINE_SIGNATURE_SHA256_V1",
+      "logical_updates": 1,
+      "operands": {
+        "calibration": [
+          1,
+          2
+        ],
+        "pilot_report": [
+          3,
+          4
+        ],
+        "train": [
+          -2,
+          -1,
+          0
+        ]
+      },
+      "path_steps": 3,
+      "policy_steps": 2,
+      "primitive_affines": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          -1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ],
+      "seed": 431,
+      "split_buckets": {
+        "calibration": [
+          4
+        ],
+        "confirmation_reserved": [
+          6,
+          7
+        ],
+        "pilot_report": [
+          5
+        ],
+        "train": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "split_salt": "JCT001_CPU_FIXTURE_V1",
+      "unit_update_features": [
+        0,
+        0,
+        0
+      ],
+      "unit_update_scope": "UNIT_ONLY_NOT_PILOT_DATA",
+      "unit_update_target": 0
+    },
+    "protocol_sha256": "4c531aadc003e2371be260edd4d9a1c67e9ae5700b4491ca436ede6d20ea30ff",
+    "protocol_version": "0.1.0",
+    "real_model": {
+      "checkpoint_refs": null,
+      "cross_session_verified": false,
+      "curriculum_frozen": false,
+      "data_roles": {
+        "calibration": null,
+        "confirmation": null,
+        "pilot_report": null,
+        "train": null
+      },
+      "planning_only": {
+        "logical_updates": 600,
+        "tokens_per_update": 512
+      },
+      "registered": false,
+      "source_revision": null,
+      "task_learnability_passed": false
+    },
+    "scope": "ENGINEERING_SYNTHETIC_CPU_ONLY",
+    "source_references": {
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/graph.py": "dd996e173b24fe917cf41f7f7401d9940b7c2a9f187175426a6b72045c1faebc",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/policy_proposal.py": "d6886eff3945f6091b901801b3c915820c3adaf43ba367e02df4f189d413a4f0",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/GLOBAL_DATASET_USAGE_LEDGER.json": "ac0f9c4abc921c5969d830d41a3bd238ad10c1f088ff4f93feab783b65033ca1",
+      "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/content-isolation-001/REVIEW.md": "c5ec69490843a1db49c917e9926aa6f87646e209108033c64c1712761061876b"
+    },
+    "status": "DRAFT_NOT_SCIENTIFICALLY_RELEASED",
+    "synthetic_pilot": {
+      "acceptance_thresholds": null,
+      "connection_adapter_reviewed": false,
+      "generator_reviewed": false,
+      "registered": false,
+      "seeds": null,
+      "updates": null
+    }
+  },
+  "fixture_config_frozen_before_inspection_commit": "1181d832",
+  "identity": {
+    "config_sha256": "aa3de8cd6eb7d15c55877fb819ca95daf248cc651afdbcfa3679f2f575f893e5",
+    "data_registry_sha256": "b78db8db4fa1ad7e15dbd2c1e5e2a222c59d40313e69ad6d1cc89224d3d7e68a",
+    "experiment_id": "JCT-001",
+    "run_id": "439810cb6c76520c9c333ab2894d419a",
+    "runtime": {
+      "numpy": "1.24.4",
+      "python": "3.8.10",
+      "torch": "2.4.1"
+    },
+    "scope": "SYNTHETIC_CPU_ENGINEERING_ONLY",
+    "seed": 431,
+    "source_code_sha256": "8edd229807803b103ed7a4f32263adc67baadc06fde3d4a4e4da894508c4f7fe",
+    "source_sha": "d3e70fd4d6fb64f4faa103f71872d1770454323d"
+  }
+}

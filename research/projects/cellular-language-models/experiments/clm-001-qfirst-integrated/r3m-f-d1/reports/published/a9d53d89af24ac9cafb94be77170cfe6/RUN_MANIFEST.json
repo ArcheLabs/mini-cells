@@ -1,0 +1,436 @@
+{
+  "anchor_checkpoint_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+  "anchor_receipt": {
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+    },
+    "identity": {
+      "architecture": "B",
+      "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "seed": 151001301,
+      "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+      "training_router": "H"
+    },
+    "receipt": {
+      "bytes": 7445890,
+      "cross_session_verified": false,
+      "file": "objects/9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf.pt",
+      "identity": {
+        "architecture": "B",
+        "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+        "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+        "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+        "seed": 151001301,
+        "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+        "training_router": "H"
+      },
+      "schema": "minicells.r3c.checkpoint.v1",
+      "sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+      "state_fingerprint": "053fd7ed95849d128524be73359ce04cd8cf5c68752f996cf821e937ba30907e",
+      "step": 300
+    }
+  },
+  "anchor_state_fingerprint": "053fd7ed95849d128524be73359ce04cd8cf5c68752f996cf821e937ba30907e",
+  "anchor_step": 300,
+  "arm_a": "REUSED_PUBLISHED_TINY_OVERFIT_FAILED_WITHOUT_RETRAINING",
+  "arms": {
+    "B": {
+      "status": "COMPLETE",
+      "updates": 200
+    },
+    "C": {
+      "status": "COMPLETE",
+      "updates": 200
+    },
+    "D": {
+      "status": "COMPLETE",
+      "updates": 200
+    }
+  },
+  "artifacts": {
+    "A_REUSED_PREDICTIONS.json": {
+      "bytes": 8825,
+      "sha256": "9fdd1cbbd29201f680c6eadd490cdaddb01c959a3c1dbedeb274a882a4b5c39f"
+    },
+    "BUDGET_PROOF.json": {
+      "bytes": 9016,
+      "sha256": "6bdc8a16d9284b574a87a7af356cd22e6b7474c6fd9bb2f68738c60cd76a835a"
+    },
+    "CPU_GATE_RUN_MANIFEST.json": {
+      "bytes": 8824,
+      "sha256": "c66eec29b37e2ed4d352e5cae4ef578faf942691243fc414e01ed1ca27bd86cc"
+    },
+    "RESULTS.json": {
+      "bytes": 567436,
+      "sha256": "24605c900aaa9e9d3034f03e8a2848d34b0402b6807770dae02eafe8d4c4af4c"
+    },
+    "SAMPLE_PLAN.json": {
+      "bytes": 2565871,
+      "sha256": "b54c2a67381f52e2eb16578c444935c687d6531fe89c892a367461352d0deca4"
+    },
+    "arm-B/ARM_RESULT.json": {
+      "bytes": 157791,
+      "sha256": "f9e3f3b3f5b4e15da79026fe2f83591738a613fc25c9ca1d1b72640588b6a138"
+    },
+    "arm-B/checkpoint-step-000000.pt": {
+      "bytes": 7449805,
+      "sha256": "cc9eee1b5ccd5ae0f67f5ea10dc1caf374f6da3288f7c60f40fe786730ffecc1"
+    },
+    "arm-B/checkpoint-step-000025.pt": {
+      "bytes": 7459917,
+      "sha256": "49f9201e2e6a991167fa8b41f9f43a21e75c1575b98642bca7dc568371c6d642"
+    },
+    "arm-B/checkpoint-step-000050.pt": {
+      "bytes": 7468749,
+      "sha256": "26d5323453627aa36cd45d781cf9c8526d43e64a439796a6fb272354fe006630"
+    },
+    "arm-B/checkpoint-step-000075.pt": {
+      "bytes": 7477965,
+      "sha256": "665986fc5b2d57ec8537f1cd3025d323e8f3a907a17a5a5a626c4fd5001d9040"
+    },
+    "arm-B/checkpoint-step-000100.pt": {
+      "bytes": 7485901,
+      "sha256": "41e2fa851d7cf551f0825caff4e5376ead09ef6d7d5b812eaa664ad0cb916d52"
+    },
+    "arm-B/checkpoint-step-000125.pt": {
+      "bytes": 7494989,
+      "sha256": "0b89258d0e689c3a42ce157517a28a0c5b86fa140e718f686e5357281854329f"
+    },
+    "arm-B/checkpoint-step-000150.pt": {
+      "bytes": 7502861,
+      "sha256": "4529594e259571ebdb28287cda3efbf36dd5f3bb602cbf12cdfe111af0bcd868"
+    },
+    "arm-B/checkpoint-step-000175.pt": {
+      "bytes": 7510797,
+      "sha256": "75e55617cc50493b63f80e88307867dacd6fe54b9c55565d13ca150760046cfa"
+    },
+    "arm-B/checkpoint-step-000200.pt": {
+      "bytes": 7518669,
+      "sha256": "56c8b4829b48007a78ed0ec1610f989c4fa7a05724b5b0371989e4b5905bc9ff"
+    },
+    "arm-C/ARM_RESULT.json": {
+      "bytes": 159943,
+      "sha256": "462ef5410865773494d4279d8a17dbe8582237fc2f89f25a8d498ee02945450a"
+    },
+    "arm-C/checkpoint-step-000000.pt": {
+      "bytes": 7449805,
+      "sha256": "90f59903c6b8df4b3527d95300d6548c348be203a3dce64d49d8f5c823cc80d6"
+    },
+    "arm-C/checkpoint-step-000025.pt": {
+      "bytes": 7459981,
+      "sha256": "c81a368de127fb3341e8ef3a8743edcc7a34d3b62d0b9b61d39177e93d3c39e8"
+    },
+    "arm-C/checkpoint-step-000050.pt": {
+      "bytes": 7468749,
+      "sha256": "780827ae6027741493a3d2aac309c5d8873ef2060f23d48b13055a344c0bc4b8"
+    },
+    "arm-C/checkpoint-step-000075.pt": {
+      "bytes": 7478093,
+      "sha256": "a6ded6c54c7b22906462dc7d0a6fd268b6c648360a26ded8762ea7023da00f37"
+    },
+    "arm-C/checkpoint-step-000100.pt": {
+      "bytes": 7485965,
+      "sha256": "10d2f3f5db877187f890748c1dce9f85f94fefb095eecd76c4cbf9fb654701e0"
+    },
+    "arm-C/checkpoint-step-000125.pt": {
+      "bytes": 7495181,
+      "sha256": "7bb78255d045fd406d4ff3217949c68c8f217de5200846ed30711dd6539c12b6"
+    },
+    "arm-C/checkpoint-step-000150.pt": {
+      "bytes": 7503117,
+      "sha256": "2363c0e020cef9eb8080cec7d3ff79f2a0930f99866475e5d547cc454cb065b5"
+    },
+    "arm-C/checkpoint-step-000175.pt": {
+      "bytes": 7510989,
+      "sha256": "4a63b5d7eefe0d2a90cfe8b21117c153d584ffae86e30000c0c23c4bc3b36a37"
+    },
+    "arm-C/checkpoint-step-000200.pt": {
+      "bytes": 7518925,
+      "sha256": "3da7c82f1435ff321970eb8d0e97b6ba81485d152baef6a51848c5ad308190a7"
+    },
+    "arm-D/ARM_RESULT.json": {
+      "bytes": 158856,
+      "sha256": "22be03755ec28e8fdf8c5d16976bb6234c37e2a4ba694cd0e2b0573ec05f237a"
+    },
+    "arm-D/checkpoint-step-000000.pt": {
+      "bytes": 7449805,
+      "sha256": "1d32e0065c22f97d705cd7469afacf8ed266319a23a05d070b6deb2dea8a322c"
+    },
+    "arm-D/checkpoint-step-000025.pt": {
+      "bytes": 7459981,
+      "sha256": "2cd80eafb728d6906e9cc3c7658e8dd9c2476db750729f22df8bd49392c63ca2"
+    },
+    "arm-D/checkpoint-step-000050.pt": {
+      "bytes": 7468813,
+      "sha256": "6d432dc243a2ae02e3eb706ba00cacfcc67497c972bad6c9ce8b2c25c3e49bc5"
+    },
+    "arm-D/checkpoint-step-000075.pt": {
+      "bytes": 7477965,
+      "sha256": "26597e6283d08b5bf262b557980b9c2f552f8674746969325835d744d58d6b0b"
+    },
+    "arm-D/checkpoint-step-000100.pt": {
+      "bytes": 7485901,
+      "sha256": "a295390ccca8adcc437d9ac70ac812578001892167742558fdacb04db9a4662e"
+    },
+    "arm-D/checkpoint-step-000125.pt": {
+      "bytes": 7495053,
+      "sha256": "1ebabb539bb41699861e3e0a709f8444594881e1f631c83c8c942dbad755bd81"
+    },
+    "arm-D/checkpoint-step-000150.pt": {
+      "bytes": 7502925,
+      "sha256": "9301a14542640e7a461186b39eea8e14d2df7a865c221c0b0fd912c4f7128788"
+    },
+    "arm-D/checkpoint-step-000175.pt": {
+      "bytes": 7510797,
+      "sha256": "d48db85d63a3423c0260f3cad841d696b40eccbe4677eb48312ec685cc519031"
+    },
+    "arm-D/checkpoint-step-000200.pt": {
+      "bytes": 7518733,
+      "sha256": "c7752c0ab4433025a59c1d1d6521feb8fb289f3fc09b046a79565b281f257f1a"
+    }
+  },
+  "budgets": {
+    "A": {
+      "answer_target_positions": null,
+      "causal_input_memory_pairs": 3328000,
+      "cell_ffn_mac": 52009369600,
+      "cell_hard_calls": 819200,
+      "eos_target_positions": null,
+      "exposure_provenance": "Start-state CPU replay only; original run endpoint RNG was not independently attested, so per-fact counts are not asserted as certified production exposure.",
+      "logical_updates": 200,
+      "model_input_positions": 102400,
+      "published_target_positions": 102400,
+      "reconstructed_answer_exposures_by_fact": {
+        "0+1": 592,
+        "1+2": 615,
+        "2+2": 619,
+        "2+7": 583,
+        "3+4": 648,
+        "4+6": 1190,
+        "6+8": 1202,
+        "7+9": 1212
+      },
+      "reconstructed_answer_target_positions": 6661,
+      "reconstructed_eos_target_positions": 4805,
+      "run_status": "REUSED_PUBLISHED_RESULT_NO_TRAINING",
+      "sample_plan_reference_sha256": "95d83b001c61f477cf391ee9c027dfb4068a1d4a03bb42462727bd86971eb2bb",
+      "source": "Published TINY_OVERFIT_REPORT.json; historical execution was not repeated",
+      "source_rows": 1600,
+      "tied_lm_head_mac": 53687091200
+    },
+    "B": {
+      "answer_eos_target_positions": 11466,
+      "answer_exposures_by_fact": {
+        "0+1": 592,
+        "1+2": 615,
+        "2+2": 619,
+        "2+7": 583,
+        "3+4": 648,
+        "4+6": 1190,
+        "6+8": 1202,
+        "7+9": 1212
+      },
+      "answer_target_positions": 6661,
+      "causal_input_memory_pairs": 3328000,
+      "cell_ffn_mac": 52009369600,
+      "cell_hard_calls": 819200,
+      "complete_answer_exposures_by_fact": {
+        "0+1": 592,
+        "1+2": 615,
+        "2+2": 619,
+        "2+7": 583,
+        "3+4": 648,
+        "4+6": 590,
+        "6+8": 600,
+        "7+9": 602
+      },
+      "complete_answer_instances": 4849,
+      "complete_answer_plus_eos_by_fact": {
+        "0+1": 586,
+        "1+2": 613,
+        "2+2": 616,
+        "2+7": 577,
+        "3+4": 622,
+        "4+6": 590,
+        "6+8": 599,
+        "7+9": 602
+      },
+      "complete_answer_plus_eos_instances": 4805,
+      "eos_target_positions": 4805,
+      "estimated_forward_backward_flops": null,
+      "flops_note": "Only explicit FFN/LM-head MAC counts and causal memory pair counts are provided; optimizer/backward/normalization/router/runtime FLOPs are not measured.",
+      "gradient_denominator": "SUM_SELECTED_ANSWER_AND_EOS_TARGET_COUNT_PER_UPDATE",
+      "logical_updates": 200,
+      "model_input_positions": 102400,
+      "plan_sha256": "95d83b001c61f477cf391ee9c027dfb4068a1d4a03bb42462727bd86971eb2bb",
+      "run_status": "NOT_RUN_REVIEW_REQUIRED",
+      "sampled_qa_instances": 6400,
+      "sampling_version_caveat": "Producer NumPy 2.1.3; start-state replay used NumPy 1.24.4. The complete original trial endpoint RNG was not independently compared. D1 freezes one common CPU-generated source-sampling plan; a future runtime must verify its step draws before applying an update.",
+      "selected_loss_targets": 11466,
+      "source_rows": 1600,
+      "source_slots": 102400,
+      "tied_lm_head_mac": 53687091200,
+      "truncated_qa_instances": 1595
+    },
+    "C": {
+      "answer_eos_target_positions": 11466,
+      "answer_exposures_by_fact": {
+        "0+1": 592,
+        "1+2": 615,
+        "2+2": 619,
+        "2+7": 583,
+        "3+4": 648,
+        "4+6": 1190,
+        "6+8": 1202,
+        "7+9": 1212
+      },
+      "answer_target_positions": 6661,
+      "causal_input_memory_pairs": 804607,
+      "cell_ffn_mac": 49571430400,
+      "cell_hard_calls": 780800,
+      "complete_answer_exposures_by_fact": {
+        "0+1": 592,
+        "1+2": 615,
+        "2+2": 619,
+        "2+7": 583,
+        "3+4": 648,
+        "4+6": 590,
+        "6+8": 600,
+        "7+9": 602
+      },
+      "complete_answer_instances": 4849,
+      "complete_answer_plus_eos_by_fact": {
+        "0+1": 586,
+        "1+2": 613,
+        "2+2": 616,
+        "2+7": 577,
+        "3+4": 622,
+        "4+6": 590,
+        "6+8": 599,
+        "7+9": 602
+      },
+      "complete_answer_plus_eos_instances": 4805,
+      "eos_target_positions": 4805,
+      "estimated_forward_backward_flops": null,
+      "flops_note": "Only explicit FFN/LM-head MAC counts and causal memory pair counts are provided; optimizer/backward/normalization/router/runtime FLOPs are not measured.",
+      "gradient_denominator": "SUM_INDEPENDENT_TARGET_COUNT_PER_UPDATE",
+      "logical_updates": 200,
+      "model_input_positions": 97600,
+      "plan_sha256": "95d83b001c61f477cf391ee9c027dfb4068a1d4a03bb42462727bd86971eb2bb",
+      "run_status": "NOT_RUN_REVIEW_REQUIRED",
+      "sampled_qa_instances": 6400,
+      "sampling_version_caveat": "Producer NumPy 2.1.3; start-state replay used NumPy 1.24.4. The complete original trial endpoint RNG was not independently compared. D1 freezes one common CPU-generated source-sampling plan; a future runtime must verify its step draws before applying an update.",
+      "selected_loss_targets": 97600,
+      "source_rows": 1600,
+      "source_slots": 102400,
+      "tied_lm_head_mac": 51170508800,
+      "truncated_qa_instances": 1595
+    },
+    "D": {
+      "answer_eos_target_positions": 11466,
+      "answer_exposures_by_fact": {
+        "0+1": 592,
+        "1+2": 615,
+        "2+2": 619,
+        "2+7": 583,
+        "3+4": 648,
+        "4+6": 1190,
+        "6+8": 1202,
+        "7+9": 1212
+      },
+      "answer_target_positions": 6661,
+      "causal_input_memory_pairs": 804607,
+      "cell_ffn_mac": 49571430400,
+      "cell_hard_calls": 780800,
+      "complete_answer_exposures_by_fact": {
+        "0+1": 592,
+        "1+2": 615,
+        "2+2": 619,
+        "2+7": 583,
+        "3+4": 648,
+        "4+6": 590,
+        "6+8": 600,
+        "7+9": 602
+      },
+      "complete_answer_instances": 4849,
+      "complete_answer_plus_eos_by_fact": {
+        "0+1": 586,
+        "1+2": 613,
+        "2+2": 616,
+        "2+7": 577,
+        "3+4": 622,
+        "4+6": 590,
+        "6+8": 599,
+        "7+9": 602
+      },
+      "complete_answer_plus_eos_instances": 4805,
+      "eos_target_positions": 4805,
+      "estimated_forward_backward_flops": null,
+      "flops_note": "Only explicit FFN/LM-head MAC counts and causal memory pair counts are provided; optimizer/backward/normalization/router/runtime FLOPs are not measured.",
+      "gradient_denominator": "SUM_SELECTED_ANSWER_AND_EOS_TARGET_COUNT_PER_UPDATE",
+      "logical_updates": 200,
+      "model_input_positions": 97600,
+      "plan_sha256": "95d83b001c61f477cf391ee9c027dfb4068a1d4a03bb42462727bd86971eb2bb",
+      "run_status": "NOT_RUN_REVIEW_REQUIRED",
+      "sampled_qa_instances": 6400,
+      "sampling_version_caveat": "Producer NumPy 2.1.3; start-state replay used NumPy 1.24.4. The complete original trial endpoint RNG was not independently compared. D1 freezes one common CPU-generated source-sampling plan; a future runtime must verify its step draws before applying an update.",
+      "selected_loss_targets": 11466,
+      "source_rows": 1600,
+      "source_slots": 102400,
+      "tied_lm_head_mac": 51170508800,
+      "truncated_qa_instances": 1595
+    }
+  },
+  "completed_at_unix": 1792926988.8323488,
+  "config_sha256": "656da576ad7e6908825c9c496a5434155957f591aadcf4fee00ddbd14f67648b",
+  "cumulative_gpu_seconds_across_retries": null,
+  "cumulative_optimizer_calls_across_retries": null,
+  "cumulative_retry_hard_cap": false,
+  "data_sha256": "5776188bfb5e76624765920547c74e513ded91a97f2af10de3fd97384fef42de",
+  "exit_code": 0,
+  "experiment_id": "CLM-001-R3m-F-D1-Supervision-Context-001",
+  "explicit_run_authorization": true,
+  "gpu_requested": true,
+  "gpu_usage_evidence": [
+    {
+      "device": "cuda:0",
+      "kind": "MODEL_PARAMETERS_ON_CUDA"
+    },
+    {
+      "bytes": 14154240,
+      "device": 0,
+      "kind": "CUDA_ALLOCATOR_PEAK"
+    },
+    {
+      "bytes": 34484736,
+      "device": 0,
+      "kind": "CUDA_ALLOCATOR_PEAK"
+    }
+  ],
+  "gpu_usage_status": "ACTUAL_USE_OBSERVED",
+  "gpu_used": true,
+  "logical_optimizer_updates": 600,
+  "logical_optimizer_updates_total_max": 600,
+  "main_or_confirmation_accessed": false,
+  "max_steps": 200,
+  "optimizer_state_at_anchor_sha256": "dd7145142d9d7ef72207d85cefa97b529d697d7ee6282768e4dd69272b8a8e2e",
+  "publication_receipt_location": "Kaggle Output PUBLICATION.json; remote branch commit metadata",
+  "publication_status": "GIT_PAYLOAD_SNAPSHOT",
+  "retry_cost_accounting": "CUMULATIVE_FAILED_ATTEMPT_WORK_NOT_MEASURED",
+  "run_id": "a9d53d89af24ac9cafb94be77170cfe6",
+  "run_status": "COMPLETE",
+  "sample_plan_sha256": "b54c2a67381f52e2eb16578c444935c687d6531fe89c892a367461352d0deca4",
+  "schema": "minicells.r3mf_d1.run_manifest.v1",
+  "seed": 151001301,
+  "source_code_sha256": "143b149c8e10df6e2cb82ebf19de26bd546aaccba9416811f6dfc8b10b9804e6",
+  "source_sha": "2e64ee711b204002c5e8d3418dd95bb833543359",
+  "trial_status": "BOUNDED_DEVELOPMENT_DIAGNOSIS",
+  "update_budget_semantics": "AT_MOST_200_LOGICAL_UPDATES_PER_ARM"
+}

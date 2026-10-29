@@ -1,0 +1,78 @@
+{
+  "status": "KAGGLE_CPU_PARENT_ACCEPTANCE_PASS_GATE0_BLOCKED",
+  "evidence_source_commit": "6fcd0ab9be2efc75d340bb414b0b09e04019a342",
+  "result_branch": "results/clm002-gate0-95581f402386c0a46a7b257889becc68-cd61db6d1470",
+  "execution_identity": {
+    "code_sha256": "47416cc444b4dc66a0d0e916bdb811dd772e6b7dd4e2ad178bd2b58eaaf23401",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "parent_inspection_requested": true,
+    "run_id": "95581f402386c0a46a7b257889becc68",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "source_sha": "c9ab66a52c037373cc8324f1dbac4889e89d7ad0"
+  },
+  "parent_inspection": {
+    "cell_optimizer_values_exact": true,
+    "clm002_scientific_registration": "BLOCKED",
+    "cpu_inspection": {
+      "cuda_rng_applied": false,
+      "gpu_resume_verified": false,
+      "original_cuda_rng_count": 2,
+      "original_cuda_rng_sha256": "fdb2c6ba6575c8a928238e4db38aa7c58da925106cb4d7778144875c66962ec6",
+      "scope": "CPU_MODEL_OPTIMIZER_IDENTITY_INSPECTION_ONLY"
+    },
+    "cross_session_recertified": false,
+    "gpu_used": false,
+    "identity": {
+      "architecture": "B",
+      "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "seed": 151001301,
+      "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+      "training_router": "H"
+    },
+    "model_values_exact": true,
+    "original_state_unchanged": true,
+    "parent_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "scientific_updates": 0,
+    "status": "EXACT_ORIGINAL_PARENT_CPU_INSPECTION_PASS"
+  },
+  "report_hashes_verified_against_manifest": {
+    "ARCHITECTURE_AUDIT.json": {
+      "bytes": 20611,
+      "sha256": "fbff889d5a5110403590b87244e56f77bf205484a207d57dcdee9ce0492f3616"
+    },
+    "GATE_STATUS.json": {
+      "bytes": 1453,
+      "sha256": "ca40e701b591b51df7e57ba545898c416119305e7ec9fcd2616afd1a7a0cfe64"
+    },
+    "DATA_BOUNDARY_PROOF.json": {
+      "bytes": 10766,
+      "sha256": "95ab0818877fe77bd0c127a4f3b29cf84246cdf964963090c61c3099b6ff6420"
+    },
+    "SEED_REGISTRY.json": {
+      "bytes": 2459,
+      "sha256": "bba0e5df9140c42c445b41551a75feb59fb1e425d7688f1af8f5d593b779c72a"
+    }
+  },
+  "kaggle_hf_read_path": "PASS_FROM_USER_EXECUTION_LOG_AND_PARENT_BYTES_PROOF",
+  "kaggle_github_secret_path": "PASS_FROM_USER_EXECUTION_LOG_AND_REMOTE_REPORTS",
+  "gpu_used": false,
+  "scientific_optimizer_updates": 0,
+  "remaining_blockers": [
+    "ALL_ARMS_INITIALIZATION_FROM_VERIFIED_PARENT_NOT_TESTED",
+    "GLOBAL_STORY_CONTENT_FRAGMENT_AND_WINDOW_COVERAGE_NOT_CLOSED",
+    "ARITHMETIC_TRAIN_DEV_CONFIRM_FAMILY_OPERATOR_RANGE_ALLOCATION_UNREGISTERED",
+    "CURRENT_R3H_TRAINER_FORBIDS_CONNECTION_UPDATES; RULE_AND_CADENCE_REQUIRE_REGISTRATION",
+    "DEVELOPMENT_THRESHOLDS_SCIENTIFIC_BUDGET_QUALITY_CAP_AND_ANALYSIS_NOT_FROZEN"
+  ],
+  "scientific_registration": "BLOCKED",
+  "all_arms_initialization": "NOT_VERIFIED",
+  "new_execution_performed_for_this_review": false,
+  "notebook_version_url": "NOT_PROVIDED",
+  "remote_publication_evidence": "USER_LOG_PLUS_FILES_READ_AT_EXACT_REMOTE_COMMIT",
+  "entire_payload_hash_recomputed": false,
+  "independent_remote_branch_sha_verified": "6fcd0ab9be2efc75d340bb414b0b09e04019a342"
+}

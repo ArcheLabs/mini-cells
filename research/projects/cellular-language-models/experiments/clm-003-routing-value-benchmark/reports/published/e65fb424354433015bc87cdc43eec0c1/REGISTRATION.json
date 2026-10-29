@@ -1,0 +1,58 @@
+{
+  "blockers": [
+    "A_update_algorithm_and_admission",
+    "NLL_noninferiority_margin",
+    "dense_architecture_and_matching_tolerances",
+    "hardware_and_inference_measurement_protocol",
+    "minimum_meaningful_effect_and_multiplicity",
+    "moe_architecture_and_matching_tolerances",
+    "parent_checkpoint_identity",
+    "train_development_calibration_confirmation_identities",
+    "training_seeds_and_power",
+    "training_token_budget"
+  ],
+  "configuration": {
+    "arms": {
+      "A": "LEARNED_CLM",
+      "B": "FROZEN_RANDOM_CONNECTION",
+      "C": "A_COMMIT_TIMING_MATCHED_RANDOM_REWIRING",
+      "D": "STANDARD_MOE_PENDING_SPECIFICATION",
+      "E": "DENSE_PENDING_SPECIFICATION"
+    },
+    "experiment_id": "CLM-003-ROUTING-VALUE-BENCHMARK-001",
+    "history": {
+      "historical_confirm_independent": false,
+      "historical_stage_b_evaluation_role": "CONFIRMATION_REUSED; DO_NOT_RELABEL_AS_INDEPENDENT_DEVELOPMENT",
+      "parent_history": "EXISTING_CELLS_HAVE_PRIOR_CONNECTION_COADAPTATION; NOT_NAIVE_INITIALIZATION",
+      "stage_b_result_commit": "48cf12fd5f6c9665250b887e9878aa42e86ef985"
+    },
+    "pending_scientific_registration": {
+      "A_update_algorithm_and_admission": null,
+      "NLL_noninferiority_margin": null,
+      "dense_architecture_and_matching_tolerances": null,
+      "hardware_and_inference_measurement_protocol": null,
+      "minimum_meaningful_effect_and_multiplicity": null,
+      "moe_architecture_and_matching_tolerances": null,
+      "parent_checkpoint_identity": null,
+      "train_development_calibration_confirmation_identities": null,
+      "training_seeds_and_power": null,
+      "training_token_budget": null
+    },
+    "random_connection": {
+      "distribution": "PYTORCH_LINEAR_RESET_PARAMETERS_FOR_EVERY_CONNECTION_LINEAR",
+      "magnitude_matched": false,
+      "preserve_topology_and_nonconnection_state": true,
+      "random_streams": "DEDICATED_SEED_PER_INITIALIZATION_AND_REWIRE_EVENT",
+      "shared_initialization_ABC": true
+    },
+    "scientific_training_authorized": false,
+    "version": "PHASE0_ENGINEERING_V1"
+  },
+  "identity": {
+    "config_sha256": "af9c70bb91ce37925b4733dca0137cf3e115624510695b35b042373f04ca0b87",
+    "experiment_id": "CLM-003-ROUTING-VALUE-BENCHMARK-001",
+    "protocol_sha256": "f8d6ddeebe8947a5c0dfc27ce923ece449dc71948923c6089b7de285da77c93e",
+    "run_id": "e65fb424354433015bc87cdc43eec0c1",
+    "source_sha": "d18a81a702f7ad0ae190b586dde0bb471a23e9be"
+  }
+}

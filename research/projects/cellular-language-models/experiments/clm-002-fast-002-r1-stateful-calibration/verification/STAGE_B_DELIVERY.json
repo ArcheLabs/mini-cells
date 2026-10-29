@@ -1,0 +1,37 @@
+{
+  "schema": "minicells.r1.stage-b.delivery.v1",
+  "date": "2026-10-28",
+  "status": "CPU_AND_CI_PASS_KAGGLE_STAGE_B_READY",
+  "runtime_source_sha": "4a20183a3fcb892ad8ea2f1c69c046b12c5c1156",
+  "config_sha256": "83119cec776619fdbb86e147c7a5ca1d1223de80abd5ca63d32aec4dcc0fcd42",
+  "ci_run": 40549715271,
+  "ci_conclusion": "success",
+  "ci_url": "https://github.com/ArcheLabs/mini-cells/actions/runs/40549715271",
+  "ci_test_count": 43,
+  "synthetic_cpu_checks": [
+    "B00_B10_B01_B11_masks_and_update_counts",
+    "original_main_loop_and_candidate_integration",
+    "all22_scales_and_dual_rule_selection",
+    "model_Cell_and_candidate_optimizer_and_RNG_stream_restore",
+    "fixed40_job_queue",
+    "missing_GPU_stops_without_asset_or_optimizer_access_and_retains_reports",
+    "metadata_only_publication_allowlist",
+    "Notebook_explicit_formal_entry_and_return_only_retry"
+  ],
+  "cold_sparse_entry_and_config": "PASS",
+  "frozen_FAST002_Confirm_manifest": "EXACT_HASH_VALIDATED_NO_MODEL_LOADED",
+  "real_GPU_scientific_updates_during_implementation": 0,
+  "execution_trigger": "User runs dedicated Kaggle Notebook Run All",
+  "stage_a_retraining": false,
+  "gate1_replay_repeated": false,
+  "gate1_candidate_initialization": false,
+  "limits": {
+    "jobs": 40,
+    "main_updates_per_job": 500,
+    "main_updates": 20000,
+    "main_target_tokens": 10240000,
+    "Cell_optimizer_calls": 10000,
+    "candidate_optimizer_calls": 1600,
+    "scale_checks": 4400
+  }
+}
