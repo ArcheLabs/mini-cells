@@ -1,0 +1,95 @@
+{
+  "status": "NO_GO_CANDIDATE_REQUIRES_REVISION",
+  "static_only": true,
+  "model_instantiations": 0,
+  "optimizer_updates": 0,
+  "quality_evaluations": 0,
+  "GPU_used": false,
+  "source_commit_parent": "cc880f3bc4b23643e0b8d4c14f446eafd62793c9",
+  "model_configuration": {
+    "width": 128,
+    "cell_hidden_observed_not_newly_approved": 248,
+    "heads_observed": 4,
+    "vocabulary_observed": 4096,
+    "context": 64,
+    "CLM_serial_steps": 8,
+    "global_shared_pool_size": 6,
+    "independent_pool_per_depth": false
+  },
+  "route_parameters": {
+    "CLM_Bridge_Gate": 9734,
+    "CLM_Connection": 864,
+    "CLM_complete": 10598,
+    "MoE_shared_GlobalRouter": 768,
+    "CLM_current_trainable_correction_only": 864,
+    "MoE_router_trainable": 768,
+    "CLM_future_trainable_count": "PENDING_PUBLIC_VS_ARCHITECTURE_GATE_REVIEW",
+    "reduction_ratio": -12.799479166666666,
+    "required_ratio": 0.2,
+    "gate_possible_without_architecture_change": false,
+    "count_includes_frozen_routing_parameters": true,
+    "tiny_formula_crosscheck": "PASS_PUBLISHED_318_VS_48"
+  },
+  "budget": {
+    "main_updates_all_arms": 4500,
+    "main_targets_all_arms": 2304000,
+    "CLM_candidate_steps_per_opportunity": 8,
+    "CLM_max_candidate_optimizer_calls_per_run": 80,
+    "CLM_max_candidate_optimizer_calls_all_three": 240,
+    "main_plus_candidate_calls_if_one_main_optimizer_step_each": 4740,
+    "scales_per_candidate": 22,
+    "max_CLM_scale_evaluations_all_three": 660,
+    "wall_time_estimate": null,
+    "resource_sufficiency": "NOT_ESTABLISHED_NO_NEW_PROFILE_OR_TRAINING",
+    "note": "Candidate counterfactual targets/forwards are extra costs, not additional main target-token budget. Public optimizer ownership not yet approved."
+  },
+  "seed_scan": {
+    "candidate_seeds": [
+      2026300101,
+      2026300102,
+      2026300103
+    ],
+    "snapshots": [
+      {
+        "ref": "HEAD",
+        "commit": "cc880f3bc4b23643e0b8d4c14f446eafd62793c9",
+        "tracked_entries": 6996,
+        "tree_listing_sha256": "37273114639f2c4fd7aa82a4e15fcda1a317ff042888c0836f5a3e0bb15cf41b",
+        "matches": [],
+        "exit_code": 1
+      },
+      {
+        "ref": "origin/main",
+        "commit": "b91d6dfa34b260d4d7a22028f44c565000d9d945",
+        "tracked_entries": 6952,
+        "tree_listing_sha256": "c5113e1f4ea2602df040f93fd405bb8b8df42ba4629769570fe7031ab5c5b195",
+        "matches": [],
+        "exit_code": 1
+      }
+    ],
+    "status": "NO_LITERAL_COLLISIONS_IN_SCANNED_TRACKED_TEXT",
+    "reserved": false,
+    "limits": "HEAD plus freshly fetched main only; binary checkpoint internals, unpublished/external runs and unmerged remote-only branches not certified"
+  },
+  "sources": {
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/config/frozen.json": "8bea314eca493e26f7c9dc841e4709bd9cffb03dbda841e62efc30b073dc1aad",
+    "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value/config/draft.json": "376e2adb532b70653e5516316dd6ba5e84a0b9ffee5441c2545d4d3b7dbf0978",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/graph.py": "dd996e173b24fe917cf41f7f7401d9940b7c2a9f187175426a6b72045c1faebc",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/implementation/minicells_r3c_moe_bridge/gate.py": "9e4a095b0c0a821102455205007cc48bd60ca83f6b9172121951d6f837c4f19c",
+    "shared/python/experiments/common/models.py": "1a0750a44f10b5cd3316daabe44e331c7b4490595b3e643de2c7b74b6b65e2f5",
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/architecture-benchmark/implementation/benchmark.py": "43a653bd57806a81749b9a44bf9ae7d0e72ed112fbe28d406cbe354068b12c67",
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/SCREENING_MANIFEST.json": "4991c2a98ed8ad2f85f0042e5194b34321662220d355a31e7e96d95136f1114e",
+    "research/governance/formal_seed_registry.json": "d86da9656ef18c75bab8fa41a9053a68cf4dbb64fbba1a93c80850c29b42e06a",
+    "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value/config/SEED_REGISTRY.json": "c89759f01a3a82a72ddedb46f079dd2aec85f6c32d5e07e72a6274c9a881c0ee",
+    "research/projects/cellular-language-models/experiments/clm-002-fast-001/registration/SEED_REGISTRY.json": "b68e8c31c4be7d05b3bc175ceb0d5b7239ef73b0b44ba9a00378100d95ac8ffb",
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/architecture-benchmark/EXPERIMENT_MANIFEST.json": "ed1c8c777e46a403bac2021bc55c647fc9cbbe20f16d126140850bb8c3db5947",
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/architecture-benchmark/STAGE2_PREPARATION.json": "54f7983db045b453e05588b590ae1d785f7646a62e73ef00e08e7c9709bcbed2",
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/architecture-benchmark/proposals/stage2-v0.1/STAGE2_PROPOSAL.json": "9f9cc2e21881d915ce8a7c60042a1bfb13de688938355151855d99624f4b06a1"
+  },
+  "blocking_decisions": [
+    "Clarify eight serial shared-pool steps versus independent experts per layer",
+    "Review infeasible 20 percent routing-parameter hard gate; do not silently relax",
+    "Approve explicit public-training algorithm revision and optimizer ownership/hyperparameters",
+    "Freeze scientific splits, failure policy, Seeds/budget and statistical proposal only after review"
+  ]
+}
