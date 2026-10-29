@@ -31,6 +31,18 @@ def digest(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
+def legacy_configuration():
+    """Immutable legacy ENGINEERING template; new manifest owns the three Trust caps."""
+    m = manifest()
+    raw = (BASE.parent / m["CLM"]["trust_source"]["path"]).read_bytes()
+    if digest(raw) != m["CLM"]["trust_source"]["sha256"]:
+        raise RuntimeError("LEGACY_ENGINEERING_SOURCE_HASH_MISMATCH")
+    original = json.loads(raw)
+    if original["runtime_template"]["connection"]["trust"] != m["CLM"]["trust_caps"]:
+        raise RuntimeError("REGISTERED_TRUST_CAPS_MISMATCH")
+    return original
+
+
 def tensor_hash(x):
     return fingerprint({"value": x})
 
@@ -169,7 +181,7 @@ def make_models(seed, calibration_inputs):
     config["engineering"].update(vocab_size=4096, sequence_length=8, batch_size=2)
     native, runtime = build(config, seed, unit=True)
     # Unit builder widens three Trust caps; discard those fixture-only overrides.
-    original = json.loads((BASE.parent / "SCREENING_MANIFEST.json").read_text())
+    original = legacy_configuration()
     runtime["proposal"].update(original["runtime_template"]["connection"]["trust"])
     # Unit helper's zero margin is discarded, then the original calibration is applied.
     native.route_switch_margin.fill_(float("inf"))
@@ -418,15 +430,15 @@ class EngineeringReferenceTrainer:
         }
 
 
-def make_clm_trainer(native, runtime, calibration_rows, root):
+def make_clm_trainer(native, runtime, calibration_rows, root, *, connection_only_fixture=False):
     """Existing CLM Engine, Q optimizer and full 22-scale admission; CPU fixture cap only."""
     import screening as sc
-    from interpolation_audit import Engine
+    from connection_commit import VerifiedEngine as Engine
 
     if any(p.is_cuda for p in native.parameters()):
         raise RuntimeError("STAGE1_CPU_ONLY")
     state = neutral_state(native, runtime, root)
-    c = copy.deepcopy(sc.manifest()["runtime_template"])
+    c = copy.deepcopy(legacy_configuration()["runtime_template"])
     c.update(updates=2, batch_size=2, sequence_length=8, targets_per_update=16)
     c["connection"].update(proposal_steps=[2], states=1, policy_steps=1)
     c["stage_b"]["execution_authorized"] = False
@@ -448,7 +460,7 @@ def make_clm_trainer(native, runtime, calibration_rows, root):
     engine = Engine(
         native,
         runtime,
-        "B11-H",
+        "B01-H" if connection_only_fixture else "B11-H",
         identity,
         root / "clm-cost.jsonl",
         c,

@@ -6,3 +6,7 @@ BASE = (
     / "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark"
 )
 runpy.run_path(str(BASE / "run.py"), run_name="screening_tests")["bootstrap"]()
+
+import sys
+
+sys.path.insert(0, str(BASE / "architecture-benchmark/implementation"))

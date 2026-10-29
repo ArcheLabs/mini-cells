@@ -4,14 +4,95 @@
   "stage2_authorized": false,
   "confirmation_quality_authorized": false,
   "scientific_frozen": false,
-  "scientific": {"seeds": null, "target_tokens": null, "steps": null, "noninferiority_nats": null, "efficiency_threshold": null, "screening_advancement_rule": null, "natural_language_dataset": null},
-  "shared_initialization": {"history_updates": 0, "source": "NATIVE_BRIDGEMODEL_EXP006_NAME_SEEDED_INITIALIZATION_NO_CHECKPOINT", "copy": "EXACT_SHARED_CELLS_AND_PUBLIC_COMPONENTS_INDEPENDENT_STORAGE", "optimizer": "FRESH_EMPTY"},
+  "scientific": {
+    "seeds": null,
+    "target_tokens": null,
+    "steps": null,
+    "noninferiority_nats": null,
+    "efficiency_threshold": null,
+    "screening_advancement_rule": null,
+    "natural_language_dataset": null
+  },
+  "shared_initialization": {
+    "history_updates": 0,
+    "source": "NATIVE_BRIDGEMODEL_EXP006_NAME_SEEDED_INITIALIZATION_NO_CHECKPOINT",
+    "copy": "EXACT_SHARED_CELLS_AND_PUBLIC_COMPONENTS_INDEPENDENT_STORAGE",
+    "optimizer": "FRESH_EMPTY"
+  },
   "public_parameters": "FROZEN_ALL_ARMS_AS_EXISTING_CLM; CELLS_TRAINABLE_ALL_ARMS; ROUTER_TRAINABLE_CLM_MOE_ONLY",
-  "CLM": {"model": "UNMODIFIED_R3H_ROUTING_MODEL", "trainer": "UNMODIFIED_INTERPOLATION_AUDIT_ENGINE", "margin": "UNCHANGED_R3F_CALIBRATE_FORMULA_NEW_CALIBRATION_INPUTS_ONCE", "source_weights": "NO_HISTORICAL_CHECKPOINT"},
-  "MoE": {"router": "EXISTING_GLOBALROUTER", "top_k": 2, "capacity": "UNBOUNDED_DROPLESS", "balance_coefficient": 0.01, "noise": "NONE", "depth": 8, "residual": "h + native_graph_alpha * weighted_expert_delta(norm(h))"},
-  "Dense-AllCell-Mean": {"depth": 8, "aggregation": "ARITHMETIC_MEAN_ALL_6_CELLS", "learned_aggregation": false, "residual": "h + native_graph_alpha * mean(cell(norm(h)))"},
-  "data": {"scope": "TINY_SYNTHETIC_ENGINEERING_NOT_SCIENTIFIC_SPLITS", "roles": ["train", "development", "calibration", "confirmation"], "confirmation_access": "HASH_IDENTITY_ONLY_NEVER_QUALITY", "scientific_split_identities": null, "old_confirmation_reused": false},
-  "engineering": {"seed": 73001, "records_per_role": 2, "sequence_length": 8, "CLM_steps": 2, "MoE_steps": 2, "Dense_steps": 2, "candidate_steps": 1, "cpu_only": true, "vocabulary": 4096},
-  "metrics": {"primary": "SUM_SEQUENCE_LOSS_SUM_DIV_SUM_VALID_COUNT", "flops": "OBSERVED_LINEAR_GEMM_ONLY_INCOMPLETE_CONTEXT_AND_FUNCTIONAL_HEAD_EXCLUDED", "energy": "NOT_MEASURED", "compute_matched_claim": false},
-  "release": "STOP_AFTER_STAGE1_REPORT_REVIEW_REQUIRED"
+  "CLM": {
+    "model": "UNMODIFIED_R3H_ROUTING_MODEL",
+    "trainer": "UNMODIFIED_INTERPOLATION_AUDIT_ENGINE",
+    "margin": "UNCHANGED_R3F_CALIBRATE_FORMULA_NEW_CALIBRATION_INPUTS_ONCE",
+    "source_weights": "NO_HISTORICAL_CHECKPOINT",
+    "trust_caps": {
+      "action_change_max": 0.1,
+      "kl_max": 0.01,
+      "path_change_max": 0.2
+    },
+    "trust_source": {
+      "path": "SCREENING_MANIFEST.json",
+      "sha256": "4991c2a98ed8ad2f85f0042e5194b34321662220d355a31e7e96d95136f1114e",
+      "interpretation": "Engineering legacy runtime template only; NEVER scientific registration for new architecture benchmark"
+    }
+  },
+  "MoE": {
+    "router": "EXISTING_GLOBALROUTER",
+    "top_k": 2,
+    "capacity": "UNBOUNDED_DROPLESS",
+    "balance_coefficient": 0.01,
+    "noise": "NONE",
+    "depth": 8,
+    "residual": "h + native_graph_alpha * weighted_expert_delta(norm(h))"
+  },
+  "Dense-AllCell-Mean": {
+    "depth": 8,
+    "aggregation": "ARITHMETIC_MEAN_ALL_6_CELLS",
+    "learned_aggregation": false,
+    "residual": "h + native_graph_alpha * mean(cell(norm(h)))"
+  },
+  "data": {
+    "scope": "TINY_SYNTHETIC_ENGINEERING_NOT_SCIENTIFIC_SPLITS",
+    "roles": [
+      "train",
+      "development",
+      "calibration",
+      "confirmation"
+    ],
+    "confirmation_access": "HASH_IDENTITY_ONLY_NEVER_QUALITY",
+    "scientific_split_identities": null,
+    "old_confirmation_reused": false
+  },
+  "engineering": {
+    "seed": 73001,
+    "records_per_role": 2,
+    "sequence_length": 8,
+    "CLM_steps": 2,
+    "MoE_steps": 2,
+    "Dense_steps": 2,
+    "candidate_steps": 1,
+    "cpu_only": true,
+    "vocabulary": 4096
+  },
+  "metrics": {
+    "primary": "SUM_SEQUENCE_LOSS_SUM_DIV_SUM_VALID_COUNT",
+    "flops": "OBSERVED_LINEAR_GEMM_ONLY_INCOMPLETE_CONTEXT_AND_FUNCTIONAL_HEAD_EXCLUDED",
+    "energy": "NOT_MEASURED",
+    "compute_matched_claim": false
+  },
+  "release": "STOP_AFTER_STAGE1_REPORT_REVIEW_REQUIRED",
+  "protocol_relationship": {
+    "experiment": "INDEPENDENT_THREE_ARCHITECTURE_EXPLORATORY_STUDY",
+    "basis": "architecture-benchmark/PROTOCOL.v1.zh-CN.md sections 0,2,11; subsequent Stage1 authorization",
+    "old_five_arm_protocol": "RETAINED_UNFULFILLED_FOR_ROUTING_CAUSAL_QUESTION",
+    "old_ABC_not_new_registration": true,
+    "C_sync_NO_GO_unchanged": true,
+    "connection_learning_superiority_claim_allowed": false
+  },
+  "stage2_preparation": {
+    "path": "STAGE2_PREPARATION.json",
+    "public_parameters": "TRAIN_COMMON_PUBLIC_PENDING_INDEPENDENT_ALGORITHM_REVIEW",
+    "comparison": "FIXED_TARGET_TOKENS_RECORD_COSTS_NO_COMPUTE_EFFICIENCY_CLAIM",
+    "stage2_authorized": false
+  }
 }
