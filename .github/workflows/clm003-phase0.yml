@@ -2,7 +2,7 @@ name: CLM003 Phase0 CPU
 on:
   workflow_dispatch:
   push:
-    branches: [codex/fast002-r1-stateful-calibration]
+    branches: [codex/fast002-r1-stateful-calibration, codex/clm003-csync]
     paths: ['research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/**', 'tests/research/clm003/**', '.github/workflows/clm003-phase0.yml']
 permissions:
   contents: read
@@ -17,6 +17,6 @@ jobs:
       - run: python -m pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
       - run: python -m pip install numpy==1.24.4 tokenizers==0.20.3 pytest==8.3.5 ruff==0.16.6
       - run: python -m ruff check research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark tests/research/clm003
-      - run: python -m pytest -q tests/research/clm003/test_screening.py
+      - run: python -m pytest -q tests/research/clm003/test_csync.py
         env:
           PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'

@@ -1,0 +1,122 @@
+{
+  "experiment_id": "CLM003-CSYNC-ENGINEERING-001",
+  "status": "ENGINEERING_FROZEN_SCIENTIFIC_NO_GO",
+  "training_authorized": false,
+  "historical_manifest_sha256": "4991c2a98ed8ad2f85f0042e5194b34321662220d355a31e7e96d95136f1114e",
+  "parent": {
+    "historical_result_commit": "d70c423a0ef8d3c36911e58b0900c5dba5e2dbcb",
+    "historical_job": "2026200004-A-H",
+    "checkpoint_sha256": "2616ba9244ddda49c7fab07edc1af0d00aa09b8ad54865477fc847ea0faed62b",
+    "cells_previously_coadapted": true
+  },
+  "seeds": [
+    2026300001,
+    2026300002,
+    2026300003
+  ],
+  "steps": 500,
+  "targets_per_step": 512,
+  "update_steps": [
+    50,
+    100,
+    150,
+    200,
+    250,
+    300,
+    350,
+    400,
+    450,
+    500
+  ],
+  "A_algorithm": "UNCHANGED interpolation_audit.Engine",
+  "B_definition": "UNCHANGED frozen common random Connection",
+  "C_definition": "OWN_CELL_STATE_A_ACCEPTED_EVENTS_ONLY",
+  "random": {
+    "distribution": "ISOTROPIC_GAUSSIAN_UNIT_L2_ALL_CONNECTION_PARAMETERS",
+    "seed_offset": 730000000,
+    "K": 8,
+    "scales": [
+      1.0,
+      0.5,
+      0.25,
+      0.125,
+      0.0625,
+      0.03125,
+      0.015625,
+      0.0078125,
+      0.00390625,
+      0.001953125,
+      0.0009765625,
+      0.00048828125,
+      0.000244140625,
+      0.0001220703125,
+      6.103515625e-05,
+      3.0517578125e-05,
+      1.52587890625e-05,
+      7.62939453125e-06,
+      3.814697265625e-06,
+      1.9073486328125e-06,
+      9.5367431640625e-07
+    ],
+    "selection": "FIRST_LEGAL_MATCH_IN_DIRECTION_THEN_SCALE_ORDER",
+    "maximum_candidate_evaluations_per_event": 168
+  },
+  "matching": {
+    "metrics": [
+      "action_change",
+      "path_change",
+      "kl"
+    ],
+    "absolute_tolerance": {
+      "action_change": 0.01,
+      "path_change": 0.02,
+      "kl": 0.0001
+    },
+    "relative_tolerance": 0.2,
+    "rule": "ABS_DIFFERENCE_LE_MAX_ABSOLUTE_AND_RELATIVE_TARGET",
+    "nonempty": "R3F_V2_NATIVE_ADMISSION",
+    "unmatched": "SKIP_NO_RELAXATION",
+    "maximum_unmatched_fraction": 0.1,
+    "parameter_delta_norm": "RAW_L2_AND_L2_DIV_SQRT_PARAMETER_COUNT_AUDIT_ONLY"
+  },
+  "trust": {
+    "action_change_max": 0.1,
+    "kl_max": 0.01,
+    "path_change_max": 0.2
+  },
+  "probe": {
+    "role": "routing_probe",
+    "identity": null,
+    "source": "DEDICATED_UNLABELLED_INPUTS_REQUIRED_NOT_ADMISSION_OR_CONFIRMATION",
+    "metrics": "R3F_SAME_OLD_STATE_KL_OLD_TO_NEW_RAW_DOUBLE_SOFTMAX_MEAN; ACTION_MEAN; INDEPENDENT_CLOSED_LOOP_PATH_MEAN",
+    "deterministic_routing_required": true
+  },
+  "data": {
+    "train": "UNCHANGED_FAST001_TRAIN",
+    "calibration": "UNCHANGED_R1_ADMISSION_32",
+    "development": "NOT_USED_FOR_CANDIDATE_SELECTION",
+    "confirmation": {
+      "identity": null,
+      "old_screening_confirmation": "PREVIOUSLY_USED_DO_NOT_REUSE_AS_INDEPENDENT_CONFIRMATION"
+    }
+  },
+  "statistics": {
+    "scope": "THREE_PAIRED_SEED_SCREENING_ONLY",
+    "primary": "EQUAL_TASK_TOKEN_MEAN_NLL_A_MINUS_CSYNC",
+    "practical_effect_nats": 0.01,
+    "interval": "DESCRIPTIVE_PAIRED_SEED_T_95_DF2",
+    "multiplicity": "ONE_PRIMARY_A_VS_CSYNC; B_AUXILIARY_DESCRIPTIVE",
+    "automatic_expansion": false
+  },
+  "limitations": [
+    "Cells previously coadapted with learned Connection",
+    "Synchronized on A acceptance: conditional update-direction estimand",
+    "Unmatched skips change complete policy; no matched-event quality effect can be inferred from geometry alone"
+  ],
+  "go_blockers": [
+    "Routing probe identity and independence not fixed",
+    "Fresh independent Confirmation identity not fixed",
+    "Native matching feasibility not established on representative engineering states",
+    "Independent review and explicit GO required"
+  ]
+}
