@@ -1,0 +1,60 @@
+{
+  "artifact_files": {
+    "CELL_SPECIALIZATION.json": {
+      "bytes": 3894,
+      "sha256": "b89b3ba9d97a64d98c001763a6b1f93333faca60e7e7fa15dde87daefadef507"
+    },
+    "CHECKPOINT_MANIFEST.json": {
+      "bytes": 940,
+      "sha256": "b3de4f0279a77a6527bf50755485a016062999bc46c4d171db6d847cc1ecacff"
+    },
+    "CONFIG.json": {
+      "bytes": 8001,
+      "sha256": "3a6313f7f3afa9983ae92fcabb75579de77a4c6deaba274fea8aa237cdbccc2e"
+    },
+    "METRICS.json": {
+      "bytes": 2643,
+      "sha256": "4cf9cf49caacd1d066388d7cfe7da57ef2971baa46ae1afb18988a6b499de962"
+    },
+    "ROUTING_SUMMARY.json": {
+      "bytes": 2573,
+      "sha256": "8677eec4bf45250ef4a55d0e885fb13efc37ec1f60b494cbcae06f97d3e11781"
+    },
+    "TRAINING_COST.json": {
+      "bytes": 2726,
+      "sha256": "8f9935965d05bc0681a2d2981f844f75c972cfeb85d5d210e8122c5c3e98288b"
+    }
+  },
+  "data_manifest_sha256": "c22935f27cc11ebe52645dadff06f15c326d996d0b87cf1022f096af72a15235",
+  "effective_targets": 16,
+  "historical_tokenizer_expected_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "identity": {
+    "arm": "B00-H",
+    "code_sha256": "47416cc444b4dc66a0d0e916bdb811dd772e6b7dd4e2ad178bd2b58eaaf23401",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "parent_inspection_requested": true,
+    "run_id": "95581f402386c0a46a7b257889becc68",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "seed": 7001,
+    "source_sha": "c9ab66a52c037373cc8324f1dbac4889e89d7ad0",
+    "task_condition": "H"
+  },
+  "logical_updates": 2,
+  "model_config_sha256": "ef216dcab4c544cad010cbd5e4dde75cf176167ef3bf028a900376a8fddf69d9",
+  "model_sha256": "4ee5ecb56bd8fcda13b3da1d1aa9cd1da2aa6501447f1987109067fc0ba06dd0",
+  "parameter_update_list": [],
+  "parent_checkpoint": "SYNTHETIC_CPU_BASELINE_NOT_HISTORICAL_PARENT",
+  "parent_checkpoint_sha256": "553283e61a2df3d6ffe90deeed40d1124f90f8d8e49a8e15ae659fbf35e8aebb",
+  "rng_sha256": "5dec07dcb983707625fa6028d40cca016bdcc56f67a720e415f96f17fc79b25b",
+  "run_status": "CPU_UNIT_COMPLETE",
+  "runtime": {
+    "hardware": "CPU",
+    "numpy": "2.1.3",
+    "python": "3.13.15",
+    "torch": "2.11.0+cpu"
+  },
+  "scientific_optimizer_updates": 0,
+  "tokenizer_identity": "SYNTHETIC_RANDOM_TOKEN_IDS_NO_TOKENIZER"
+}

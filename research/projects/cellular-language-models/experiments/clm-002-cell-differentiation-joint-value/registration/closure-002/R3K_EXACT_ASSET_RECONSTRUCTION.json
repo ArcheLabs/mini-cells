@@ -1,0 +1,48 @@
+{
+  "status": "EXACT_R3K_RESEARCH_ARRAYS_AND_WINDOWS_RECONSTRUCTED",
+  "original_manifest": {
+    "config_sha256": "5f528c91d680a4c8e630ab3ca273514bc07f8503a641aceb6731d55a35fad0f9",
+    "confirmation": "SEALED",
+    "files": {
+      "DATA_BOUNDARY_PROOF.json": "6ed3d4ffceda3c07f6a0bec0d95199b68a6d8287ffd95668de75e81d43a95e4c",
+      "predictor_probe.npy": "6f51fde9ba54828fd1c1a3472de1c24c449a3c06c9a6d0d0d1a388c71e3d7947",
+      "value_holdout.npy": "dbab78f9ebdd221e61e04e5715b857a7e69b743cb42debdd52f7320f5c17abeb",
+      "windows.json": "009fe068a5b23b790bac9d318acfa0981a592c9203db83247fc5a321f21ec0f9"
+    },
+    "source_sha256": "77cf780cebe52b6e83e3a2ac84bc56d8059363113e41d17a023f1d8b2ed0fc0b",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+  },
+  "matching_file_sha256": {
+    "windows.json": "009fe068a5b23b790bac9d318acfa0981a592c9203db83247fc5a321f21ec0f9",
+    "predictor_probe.npy": "6f51fde9ba54828fd1c1a3472de1c24c449a3c06c9a6d0d0d1a388c71e3d7947",
+    "value_holdout.npy": "dbab78f9ebdd221e61e04e5715b857a7e69b743cb42debdd52f7320f5c17abeb"
+  },
+  "roles": {
+    "predictor_probe": {
+      "stories": 256,
+      "tokens": 63769,
+      "eligible_windows": 868,
+      "fixed_evaluation_windows": 128
+    },
+    "value_holdout": {
+      "stories": 512,
+      "tokens": 102804,
+      "eligible_windows": 1336,
+      "fixed_evaluation_windows": 128
+    }
+  },
+  "remote_evidence_commit": "622af501e805b422393455927d122e492449ced4",
+  "published_full_file_sha256": "eaf1a4559410814ffcea35b82348ae4e51ec2651b93e80369e1f9b0dd5f7ae7a",
+  "published_json_pointer": "/data_identity",
+  "extracted_manifest_sha256": "0b1bc765d008bd3ba78e387cb01541af43b1884106f3c658456ff8e23d0e059c",
+  "auditor_sha256": "6e90f3373ca4475183887a1308b27f62f5e1c4b6abb7e62eaee2fd9e18319992",
+  "encoder_sha256": "571fd08c3ed160485dfa658cd628e0f4afabe87498bfdc57d651962ce5098822",
+  "window_sampler_sha256": "74b39618c2214d64c526a20f5b8637ad3052276f5f693fb15c8a1bbe724373b0",
+  "numpy_version": "1.24.4",
+  "private_arrays_retained": false,
+  "model_loaded": false,
+  "optimizer_updates": 0,
+  "gpu_used": false,
+  "scientific_registration": "BLOCKED",
+  "r3l_arrays_recovered": false
+}

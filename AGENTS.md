@@ -21,3 +21,9 @@ workflow to future experiments and active launchers; migrate older launchers onl
 
 Implementation work must not launch real training merely to test the launcher. Use synthetic CPU
 fixtures unless the current task separately requests running an experiment.
+
+New experiment launchers must automatically return result reports, metrics and run manifests to
+GitHub using the repository's existing publication/authentication components. Verify the remote
+commit SHA before declaring return successful. Keep weight files out of Git result commits and
+retain Kaggle Output on return failures. Publication retries must reuse completed results rather
+than repeat training. Preserve historical launchers and evidence unless their migration is requested.

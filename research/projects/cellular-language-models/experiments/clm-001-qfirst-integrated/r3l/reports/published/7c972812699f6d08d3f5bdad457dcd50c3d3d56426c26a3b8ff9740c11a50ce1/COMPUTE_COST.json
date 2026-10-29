@@ -1,0 +1,656 @@
+{
+  "new_tokens": 2457600,
+  "new_updates": 4800,
+  "oracle_seconds": 27.062142181000127,
+  "scope": "Measured time and executed operator rows; not observed GPU FLOPs",
+  "training": [
+    {
+      "arm": "A-CH",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "d3a91161a3a1ff4a152d0ed1406e7d257f478bb755e0970f0a60e6fdf749cc4e",
+        "HISTORICAL": "53f2a437115fdcf5ebb79c0b877ef4cd0c4f42da5ae8f5ee1fa1951ae66337b7",
+        "RANDOM_CONTROL": "11bdd304fe20b8a9566e459fcb9d4931a6533858f93c766ab17f95e38004082f",
+        "SEARCH_BEST": "d1659920c8e82dcbe408a6d084d95aa1c3a0f4d846c310ce801a4d12a0bb4532"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "0ab0ead6f259ee94ca97b97c4f69b95fe1fbc538387f12541b1fdcf764a570c6": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "2a46739eb4b05a094c9cb9d6bc69fa9e22797243ccf9056b421180f89d62f966": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "666db5a63d5e765e92de6381ae79726c9da10f7100f5742f991cd1302a86c77f": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "edd789ebfe8dfa67d0b8e389a60e9a03e3203b4a27a54d47cfac730c3c99d6cc": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "0ab0ead6f259ee94ca97b97c4f69b95fe1fbc538387f12541b1fdcf764a570c6": 300,
+        "2a46739eb4b05a094c9cb9d6bc69fa9e22797243ccf9056b421180f89d62f966": 300,
+        "666db5a63d5e765e92de6381ae79726c9da10f7100f5742f991cd1302a86c77f": 300,
+        "edd789ebfe8dfa67d0b8e389a60e9a03e3203b4a27a54d47cfac730c3c99d6cc": 300
+      },
+      "seed": 151001301
+    },
+    {
+      "arm": "A-CT",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "f38705213228df39d51f87ed0fd35dbec7fa479c8a59e21690068e14bde1d432",
+        "HISTORICAL": "c27fa3b32dea5205d5ad8f0723696ffba71e5fafe297b791ef1558ac19e0ae35",
+        "RANDOM_CONTROL": "20ba92a7727eb151be1c893adcf20646a900d388e33eb0e2477738217235e4b5",
+        "SEARCH_BEST": "5d4c190c071b892ed4a8272338d9bbd4829c02675157b961408c3b61000b1c2f"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "5f6a59d9a558708f3cdca7600973e3b687b496c831f2afecfe2216f3c2e56baf": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "9fae642d9fc276f436cfb8afa578606b707174985e0a88f866215fa807a2d233": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "e9d27a5ff0abd317f812adebf9084b63db4fe770cc0780c87485a2ad01c90782": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "5f6a59d9a558708f3cdca7600973e3b687b496c831f2afecfe2216f3c2e56baf": 300,
+        "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f": 300,
+        "9fae642d9fc276f436cfb8afa578606b707174985e0a88f866215fa807a2d233": 300,
+        "e9d27a5ff0abd317f812adebf9084b63db4fe770cc0780c87485a2ad01c90782": 300
+      },
+      "seed": 151001301
+    },
+    {
+      "arm": "B-CH",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "64a7117f71bd0db3c93643714356df554111e5a27685e7d2022185304574872a",
+        "HISTORICAL": "fd169a267b08919de76ab4ed91c1faea4f84be31b95ca16632df1bfc00ffe98b",
+        "RANDOM_CONTROL": "2361d2b14521257e7a3b2a8d292c56722ccdf88e86b93ab2c2b4b6eb4fea97f6",
+        "SEARCH_BEST": "81a5bd1804cbd1c905705350d1cc949d074516fdb98baa93aa7689edb16ae9bd"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "6d497a8d3d60ceb6fc21846c6dc1a8553a3e70c9013768035f31b44bef50cd21": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "f9b8f9ab1f519a344eb1a355da11c59814fcda75d2f54c10c76edba37cd5c843": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "fb02e891afdb065108386863b8a679348efab595930480d7cc199d8ecb97ee95": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "6d497a8d3d60ceb6fc21846c6dc1a8553a3e70c9013768035f31b44bef50cd21": 300,
+        "f9b8f9ab1f519a344eb1a355da11c59814fcda75d2f54c10c76edba37cd5c843": 300,
+        "fb02e891afdb065108386863b8a679348efab595930480d7cc199d8ecb97ee95": 300,
+        "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1": 300
+      },
+      "seed": 151001301
+    },
+    {
+      "arm": "B-CT",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "ad9c2a6aaa860a0d3624fcc6211b7d600249b9bccd57d635cdd3c9c2780cf613",
+        "HISTORICAL": "ab56a0c94b00b33ee5bf433947a1fa51a887efb39eeb3320b82d67b4d2496320",
+        "RANDOM_CONTROL": "0ba2a402c7f4735d46d3e46e80a5bea5b49ddf6aaed2a3c2ff8b90d10d460f95",
+        "SEARCH_BEST": "8f55848bb7cd643e39580d923bd028cb693ff60db547092e3330c1ed5083515d"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "4531e48f5b691c55538311b45bc97b39415841b13148e73eff45f4fe9d845daa": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "e527bf086ec4dfcc5b98e55c7fd0c783a815b854d422c99168b811e86b675f59": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "fb02e891afdb065108386863b8a679348efab595930480d7cc199d8ecb97ee95": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "4531e48f5b691c55538311b45bc97b39415841b13148e73eff45f4fe9d845daa": 300,
+        "e527bf086ec4dfcc5b98e55c7fd0c783a815b854d422c99168b811e86b675f59": 300,
+        "fb02e891afdb065108386863b8a679348efab595930480d7cc199d8ecb97ee95": 300,
+        "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1": 300
+      },
+      "seed": 151001301
+    },
+    {
+      "arm": "A-CH",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "4bf223b9d301a4cbc7944505cdb9c0f30751c4e5899ca36c8bb2645cddba1ef1",
+        "HISTORICAL": "9a23af283e49fcb4cae0bb9816bdc518b1338d32f4e168ac324880369a3922bf",
+        "RANDOM_CONTROL": "38c2a482ab4a2b3fc6ffe4cc96815d3a91dd9b9f97fec9e2b18a79457406af3a",
+        "SEARCH_BEST": "b2d12f311e232369733ed4e6725a03df9c3098949c310738cc5324cc6d53729c"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "43e82762393b3c037f273354e6f260968b411893283904c192658c7d0c48b1c8": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "a10f39cf4630d2bec0d2f9d03789a13d53a659b9352f0e7b83934e553bc07018": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "a296dade8e7e37ee175db11f716946108753939b064bfff3fc18c78589392d08": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "43e82762393b3c037f273354e6f260968b411893283904c192658c7d0c48b1c8": 300,
+        "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f": 300,
+        "a10f39cf4630d2bec0d2f9d03789a13d53a659b9352f0e7b83934e553bc07018": 300,
+        "a296dade8e7e37ee175db11f716946108753939b064bfff3fc18c78589392d08": 300
+      },
+      "seed": 151001302
+    },
+    {
+      "arm": "A-CT",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "012f39397511656d5560bfc15c1c239f1ad6e2ea6569c3911e6d70942725baba",
+        "HISTORICAL": "b86ede862900cf7082f56091d59caa76f88960576b0aef4517319cb35b040501",
+        "RANDOM_CONTROL": "011ebddef70e9d6903f60b060adc18a9ade2db9ac59a61aa66de46792862432b",
+        "SEARCH_BEST": "c493a02b4dd70e9cb14aaa30b4a1de4c3d7899c1af1485dee36a488a22a54e3e"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "4e855e44edb60fc29b8017fbd723d823814185221a6614441e63262e58e09ae4": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "5b909404b5744610553770c609d56870c3545f5c76e4b8975c30aa166889a71b": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "be60cfe8b15088a57bde0119c34e7ff2d30b64008121bb52190e2a69c3197ff0": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "4e855e44edb60fc29b8017fbd723d823814185221a6614441e63262e58e09ae4": 300,
+        "5b909404b5744610553770c609d56870c3545f5c76e4b8975c30aa166889a71b": 300,
+        "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f": 300,
+        "be60cfe8b15088a57bde0119c34e7ff2d30b64008121bb52190e2a69c3197ff0": 300
+      },
+      "seed": 151001302
+    },
+    {
+      "arm": "B-CH",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "35cd63d6a0a59f5bb48c02c6fcd24ab4c0be00d9aaf38c38d41eaf4f5bb7d582",
+        "HISTORICAL": "618190f49adda98b46d97ea01a013f6314ddccddc47ae6ecfc68ccb47fbb008b",
+        "RANDOM_CONTROL": "1124ee8ced3b3dc30be32f53626ef86708bd031da5852c9c5e0f961e4b3822b3",
+        "SEARCH_BEST": "eea1be987adee8aabdd7df33c88df42143dd50d4862fe1a820490b2543c82351"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "316ea2aac0860bc58ffc160f94f8188f66dea1c03e22bf27845d531d232ca90b": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "5e2b89ba9229907284a67f3cecc50b25b93a848c6363cf761c6c214d906e692e": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "8d32432e224f9d5500b800864a3775fe19e2a7b8892c807a248f5b3688fd8311": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "a311fe50bae0581de5e3e4707b8fb6dca5181b59a92ab48de769b34620a30217": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "316ea2aac0860bc58ffc160f94f8188f66dea1c03e22bf27845d531d232ca90b": 300,
+        "5e2b89ba9229907284a67f3cecc50b25b93a848c6363cf761c6c214d906e692e": 300,
+        "8d32432e224f9d5500b800864a3775fe19e2a7b8892c807a248f5b3688fd8311": 300,
+        "a311fe50bae0581de5e3e4707b8fb6dca5181b59a92ab48de769b34620a30217": 300
+      },
+      "seed": 151001302
+    },
+    {
+      "arm": "B-CT",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "7f4e3fa7fa9f3fabccbccdb645f2951141f03a25c124563d5b26072f9d172c81",
+        "HISTORICAL": "268fad8f558df466d5e3edabb253c399d9f3880918a6a3c1fe8a9e1910326408",
+        "RANDOM_CONTROL": "115c3aba91e42e84a0582997d0b3668310d3bda76d2b3e1ad58c75b1f0ba520f",
+        "SEARCH_BEST": "bb6c4ab723256f2fb536f864736949002d4d96e0a1ad7d31c72f3b56ce9b254f"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "3ecfd5f61995cbccafacd635d35cf727384837186135380282d8c75c3b697e1f": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "931d4a20835ec6cb1c6fdd36d4e0ec384912bf50c9927061dcc01c0e778696ce": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "e8ab8b7ebac2326672755173c24861e457a84031afbaeca99ebfbfae815e1e10": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "3ecfd5f61995cbccafacd635d35cf727384837186135380282d8c75c3b697e1f": 300,
+        "931d4a20835ec6cb1c6fdd36d4e0ec384912bf50c9927061dcc01c0e778696ce": 300,
+        "e8ab8b7ebac2326672755173c24861e457a84031afbaeca99ebfbfae815e1e10": 300,
+        "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1": 300
+      },
+      "seed": 151001302
+    },
+    {
+      "arm": "A-CH",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "ced123771c534f2f5988ac0fcab32e5bb2f2bbe1621c97d15db7961702e40ad8",
+        "HISTORICAL": "2240a9f4a16ceae08e340426e66f9f69c64f372b32a8abd92ed6667574eebabd",
+        "RANDOM_CONTROL": "0b3dc968f507e1174659ecbe5f4eb972edb3a62562970c8179504e0eafa1df45",
+        "SEARCH_BEST": "560b7566d6e886434fcb7fca13f91d9dab69f8d0fdd201c7e6a0bbfb2e4e08e3"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "478bf3e7a3effe2538c8821f79be1b0eeb8b17615b778208920b94a5ed2b6974": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "8c5d9baf8d0c794448745a0b64b1850a3b77c82daea9ac5ff928ac97e66fce33": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "9c2b718710e905b12aaebf6a7fcd7cf9310ff2651af43d53bb4de4b17929a1c5": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "ceb516245aedf5193b7a5167c9774c2881930c173ad3a0e1495ebde6d27740a8": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "478bf3e7a3effe2538c8821f79be1b0eeb8b17615b778208920b94a5ed2b6974": 300,
+        "8c5d9baf8d0c794448745a0b64b1850a3b77c82daea9ac5ff928ac97e66fce33": 300,
+        "9c2b718710e905b12aaebf6a7fcd7cf9310ff2651af43d53bb4de4b17929a1c5": 300,
+        "ceb516245aedf5193b7a5167c9774c2881930c173ad3a0e1495ebde6d27740a8": 300
+      },
+      "seed": 151001303
+    },
+    {
+      "arm": "A-CT",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "38d3f75001bf75ca9eb2bbd283da10cef8d242074795cb6c2669d6881fc92f45",
+        "HISTORICAL": "8077faf0a8b4353200cd66ff7e22ff6a2762c7a4ea1c95efdc1acf93291f9ea1",
+        "RANDOM_CONTROL": "43666afe06c4a80e076d1e4e874c4613012ad1175a5ddae2e891d54ce97d2269",
+        "SEARCH_BEST": "78745a87efcb11961fc7d7523a33d162e04905bd4b974f252b963811b42e307e"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "387d691e6a80671d79949ba2b0a3dbcd545e1f2395c33739c8f7a9d90e4d6870": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "78c1bf308ca8596545c232dfc80b29c2efa8b514f0e3c168865cf43d698275fa": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        },
+        "e7700c375c3254dcc9fe403f774c6f43b776e9ac977c87dfcc98b37996c0ef9c": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 204800
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "387d691e6a80671d79949ba2b0a3dbcd545e1f2395c33739c8f7a9d90e4d6870": 300,
+        "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f": 300,
+        "78c1bf308ca8596545c232dfc80b29c2efa8b514f0e3c168865cf43d698275fa": 300,
+        "e7700c375c3254dcc9fe403f774c6f43b776e9ac977c87dfcc98b37996c0ef9c": 300
+      },
+      "seed": 151001303
+    },
+    {
+      "arm": "B-CH",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "a24f3d3a73db3bcff172c32ab95217c991f3532563737459439ea9810347fa7e",
+        "HISTORICAL": "74dafc7c5010df7c7438870671449acc0623fc041db4e96cca1019ca97fbabbb",
+        "RANDOM_CONTROL": "1222af64827783337771803373dddcd2969d42ac6a9ae1da40fb438f4224f8a8",
+        "SEARCH_BEST": "b289c3028f6a30d1a6d086d857c723a178c86f6dc332adac241b6c5d8c486473"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "1b19cc2788b9ba34823d3fabfee4c850b3dedc4cdcf3e3bd128801607cffd3c7": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "ce8eeb52c29f5bb946fc216be3c421685849c617d23bbddd474ced712d80296b": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "dd82c76aa58792d7ea85865a17c602c08ee93552ad41476e34aea5e5676002e9": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "1b19cc2788b9ba34823d3fabfee4c850b3dedc4cdcf3e3bd128801607cffd3c7": 300,
+        "ce8eeb52c29f5bb946fc216be3c421685849c617d23bbddd474ced712d80296b": 300,
+        "dd82c76aa58792d7ea85865a17c602c08ee93552ad41476e34aea5e5676002e9": 300,
+        "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1": 300
+      },
+      "seed": 151001303
+    },
+    {
+      "arm": "B-CT",
+      "completed_step": 400,
+      "logical_roles": {
+        "BASELINE": "2275efb3df119c3f85915609920addf69760e7f84ce2f4dba0037201988fc063",
+        "HISTORICAL": "37d67bf7cdb3ef8e51e549329ec68de61dca4eac069fbc3f6bc9ccd4c4f55ac1",
+        "RANDOM_CONTROL": "1b617c11f1079a4835579ea657084c1487a76b4d178d21b66beefeee80b71c02",
+        "SEARCH_BEST": "394dfbfb71cc40b870dc334372eb26fed69541e53714210eb1a5d731fb5b20b3"
+      },
+      "new_tokens": 204800,
+      "new_updates": 400,
+      "operator_rows": {
+        "83b6b1fe7d9a88ed5fa9415e1b11c5cda8a1c4210ee7d911f1902d782d7f40a9": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "87bc358c29769daee3d06cebc4fc4b9b98b30dddaa2c0b8c9ab6f85753585ffc": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "9c63814cf07a214c9229464daf11e312437a48c70d165d27263aac6f46ef8777": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        },
+        "a79ee3ecc2e1416c4591d2d686319dd0cec1db39782182622ac62e9d0bdc59c4": {
+          "cell_rows": 409600,
+          "context_rows": 51200,
+          "gate_rows": 409600,
+          "head_rows": 51200,
+          "input_rows": 51200,
+          "policy_rows": 409600
+        }
+      },
+      "physical_branches": 4,
+      "resumed_from": {
+        "83b6b1fe7d9a88ed5fa9415e1b11c5cda8a1c4210ee7d911f1902d782d7f40a9": 300,
+        "87bc358c29769daee3d06cebc4fc4b9b98b30dddaa2c0b8c9ab6f85753585ffc": 300,
+        "9c63814cf07a214c9229464daf11e312437a48c70d165d27263aac6f46ef8777": 300,
+        "a79ee3ecc2e1416c4591d2d686319dd0cec1db39782182622ac62e9d0bdc59c4": 300
+      },
+      "seed": 151001303
+    }
+  ]
+}

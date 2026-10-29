@@ -1,0 +1,3937 @@
+{
+  "cases": [
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "d3a91161a3a1ff4a152d0ed1406e7d257f478bb755e0970f0a60e6fdf749cc4e",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "edd789ebfe8dfa67d0b8e389a60e9a03e3203b4a27a54d47cfac730c3c99d6cc",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd",
+          "state_fingerprint": "7ab0d429cdaf07dd4af7750a3f8456b7d052605a5f6359e401dc08a331ba231c",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "edd789ebfe8dfa67d0b8e389a60e9a03e3203b4a27a54d47cfac730c3c99d6cc",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd",
+          "state_fingerprint": "7ab0d429cdaf07dd4af7750a3f8456b7d052605a5f6359e401dc08a331ba231c",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0115989286241245e-06,
+      "evaluation_seconds": 15.094759085000078,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.057994643120622e-07,
+      "parameter_sha256": "edd789ebfe8dfa67d0b8e389a60e9a03e3203b4a27a54d47cfac730c3c99d6cc",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.24295343272388,
+        "NO": 4.24295343272388,
+        "ON": 4.24295343272388,
+        "OO": 4.24295343272388
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.00018694251775741577,
+      "V": -0.00018694251775741577,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0010919512249529361,
+          0.0006685607600957138
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "53f2a437115fdcf5ebb79c0b877ef4cd0c4f42da5ae8f5ee1fa1951ae66337b7",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "edd789ebfe8dfa67d0b8e389a60e9a03e3203b4a27a54d47cfac730c3c99d6cc",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd",
+          "state_fingerprint": "7ab0d429cdaf07dd4af7750a3f8456b7d052605a5f6359e401dc08a331ba231c",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/0d53c11eec588cd7b9a216d2f24c487340291058fe4c0bc083afe5df63b3b4e2.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "666db5a63d5e765e92de6381ae79726c9da10f7100f5742f991cd1302a86c77f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "0d53c11eec588cd7b9a216d2f24c487340291058fe4c0bc083afe5df63b3b4e2",
+          "state_fingerprint": "acf0a43e5785dfba9667f071ea69a7f8e46aca479d08d2e733f0700784a90ed6",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0116434991935819e-06,
+      "evaluation_seconds": 14.500062846999754,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.058217495967909e-07,
+      "parameter_sha256": "666db5a63d5e765e92de6381ae79726c9da10f7100f5742f991cd1302a86c77f",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.243140375241637,
+        "NO": 4.24295343272388,
+        "ON": 4.243140375241637,
+        "OO": 4.24295343272388
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -6.324052810668945e-05,
+      "V": -6.324052810668945e-05,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0007766475901007652,
+          0.0006450378801673651
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "11bdd304fe20b8a9566e459fcb9d4931a6533858f93c766ab17f95e38004082f",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "edd789ebfe8dfa67d0b8e389a60e9a03e3203b4a27a54d47cfac730c3c99d6cc",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd",
+          "state_fingerprint": "7ab0d429cdaf07dd4af7750a3f8456b7d052605a5f6359e401dc08a331ba231c",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/c2f63846b95f643c4305e9cd500355730de4aecb9cf2fec47b8e0e39e46c7d29.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "2a46739eb4b05a094c9cb9d6bc69fa9e22797243ccf9056b421180f89d62f966",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "c2f63846b95f643c4305e9cd500355730de4aecb9cf2fec47b8e0e39e46c7d29",
+          "state_fingerprint": "5ea035c8b76e116be67608c818ec90c7279a1456584d4e86e0df46c58ecfe179",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0116140063409773e-06,
+      "evaluation_seconds": 14.655555482999716,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.058070031704887e-07,
+      "parameter_sha256": "2a46739eb4b05a094c9cb9d6bc69fa9e22797243ccf9056b421180f89d62f966",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.2430166732519865,
+        "NO": 4.24295343272388,
+        "ON": 4.2430166732519865,
+        "OO": 4.24295343272388
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0001469086855649948,
+      "V": 0.0001469086855649948,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0005008951760828495,
+          0.0007620144169777631
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "d1659920c8e82dcbe408a6d084d95aa1c3a0f4d846c310ce801a4d12a0bb4532",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "edd789ebfe8dfa67d0b8e389a60e9a03e3203b4a27a54d47cfac730c3c99d6cc",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "1bfcb5dc335a181182f67e39d5891517137ad6e843446118c72f57e18f4b02fd",
+          "state_fingerprint": "7ab0d429cdaf07dd4af7750a3f8456b7d052605a5f6359e401dc08a331ba231c",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/6e113e3b63f5ec886bcf093a13467b5168f48c59a37fda92448a555af15f6c6a.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "0ab0ead6f259ee94ca97b97c4f69b95fe1fbc538387f12541b1fdcf764a570c6",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "6e113e3b63f5ec886bcf093a13467b5168f48c59a37fda92448a555af15f6c6a",
+          "state_fingerprint": "e3b079ec72704b33e4b582b7e3758fdddc9faeabe8b29ddd982d84ab8b2cb8e9",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0115989286241245e-06,
+      "evaluation_seconds": 14.558691399000054,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.057994643120622e-07,
+      "parameter_sha256": "0ab0ead6f259ee94ca97b97c4f69b95fe1fbc538387f12541b1fdcf764a570c6",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.242806524038315,
+        "NO": 4.24295343272388,
+        "ON": 4.242806524038315,
+        "OO": 4.24295343272388
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "f38705213228df39d51f87ed0fd35dbec7fa479c8a59e21690068e14bde1d432",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9",
+          "state_fingerprint": "9cc880e2350f669fdfa3446ccb558a18be182799b1ee6671aec5895c646b2ab2",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9",
+          "state_fingerprint": "9cc880e2350f669fdfa3446ccb558a18be182799b1ee6671aec5895c646b2ab2",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0116045374708449e-06,
+      "evaluation_seconds": 15.395446714000173,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.058022687354224e-07,
+      "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.242976957932115,
+        "NO": 4.242976957932115,
+        "ON": 4.242976957932115,
+        "OO": 4.242976957932115
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.00042918696999549866,
+      "V": -0.00042918696999549866,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.001073823357000947,
+          0.00025205914862453906
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "c27fa3b32dea5205d5ad8f0723696ffba71e5fafe297b791ef1558ac19e0ae35",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9",
+          "state_fingerprint": "9cc880e2350f669fdfa3446ccb558a18be182799b1ee6671aec5895c646b2ab2",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/8e9cb8b374f2cad49cbd36a19000fce1282b96932b3b107a96da04c21e13b686.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "9fae642d9fc276f436cfb8afa578606b707174985e0a88f866215fa807a2d233",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "8e9cb8b374f2cad49cbd36a19000fce1282b96932b3b107a96da04c21e13b686",
+          "state_fingerprint": "cd43d0e0c5bcc551d6a479d408f7529308bbc8e7664d99b5365c84dd12919e37",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0117068636184001e-06,
+      "evaluation_seconds": 14.892715622000196,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.058534318092001e-07,
+      "parameter_sha256": "9fae642d9fc276f436cfb8afa578606b707174985e0a88f866215fa807a2d233",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.24340614490211,
+        "NO": 4.242976957932115,
+        "ON": 4.24340614490211,
+        "OO": 4.242976957932115
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.0005941372364759445,
+      "V": -0.0005941372364759445,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0014186735730618238,
+          0.00028249677270650824
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "20ba92a7727eb151be1c893adcf20646a900d388e33eb0e2477738217235e4b5",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9",
+          "state_fingerprint": "9cc880e2350f669fdfa3446ccb558a18be182799b1ee6671aec5895c646b2ab2",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/a58fb98ea2ad7df26ddd4bbec84d721a4b480ac12922c57c2346a7436562ba4f.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "e9d27a5ff0abd317f812adebf9084b63db4fe770cc0780c87485a2ad01c90782",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "a58fb98ea2ad7df26ddd4bbec84d721a4b480ac12922c57c2346a7436562ba4f",
+          "state_fingerprint": "4f13081f849c27c5e9188e0662cbf4c0d65b93a015bd2bc0953a54565d7e0d82",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0117461908265568e-06,
+      "evaluation_seconds": 14.821326934000354,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.058730954132784e-07,
+      "parameter_sha256": "e9d27a5ff0abd317f812adebf9084b63db4fe770cc0780c87485a2ad01c90782",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.2435710951685905,
+        "NO": 4.242976957932115,
+        "ON": 4.2435710951685905,
+        "OO": 4.242976957932115
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.00022766366600990295,
+      "V": 0.00022766366600990295,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0004591221921145916,
+          0.0009019662160426377
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "5d4c190c071b892ed4a8272338d9bbd4829c02675157b961408c3b61000b1c2f",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "34d9e0a484fc61c04a8bc65fd97ceff2d0372f111f12701b9b693f5fe25114d9",
+          "state_fingerprint": "9cc880e2350f669fdfa3446ccb558a18be182799b1ee6671aec5895c646b2ab2",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/522aff7a6f0b250fc1af2d405407f39b9355759fd111407dce7e51ceebda917c.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "5f6a59d9a558708f3cdca7600973e3b687b496c831f2afecfe2216f3c2e56baf",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "522aff7a6f0b250fc1af2d405407f39b9355759fd111407dce7e51ceebda917c",
+          "state_fingerprint": "2d988f7a4b53a9c6f81a722a5cf9e8ff4f979b3722fe9a0345b38d719b15cef7",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0116045374708449e-06,
+      "evaluation_seconds": 14.8282560560001,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.058022687354224e-07,
+      "parameter_sha256": "5f6a59d9a558708f3cdca7600973e3b687b496c831f2afecfe2216f3c2e56baf",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.242749294266105,
+        "NO": 4.242976957932115,
+        "ON": 4.242749294266105,
+        "OO": 4.242976957932115
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "64a7117f71bd0db3c93643714356df554111e5a27685e7d2022185304574872a",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224",
+          "state_fingerprint": "45426f436b5330f74dd26cd98cde275c4adefe36a3c8609f3e6cf12b6992f6e8",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224",
+          "state_fingerprint": "45426f436b5330f74dd26cd98cde275c4adefe36a3c8609f3e6cf12b6992f6e8",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.013524352888595e-06,
+      "evaluation_seconds": 20.340102823000052,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.067621764442976e-07,
+      "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.251029247418046,
+        "NO": 4.251029247418046,
+        "ON": 4.251029247418046,
+        "OO": 4.251029247418046
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0004367046058177948,
+      "V": 0.0004367046058177948,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0005373734049499035,
+          0.0014046601019799695
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "fd169a267b08919de76ab4ed91c1faea4f84be31b95ca16632df1bfc00ffe98b",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224",
+          "state_fingerprint": "45426f436b5330f74dd26cd98cde275c4adefe36a3c8609f3e6cf12b6992f6e8",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/dac15f80c75daa350e32afb19767d58b475123e557c9d294f4708d0e00e52bd1.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "6d497a8d3d60ceb6fc21846c6dc1a8553a3e70c9013768035f31b44bef50cd21",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "dac15f80c75daa350e32afb19767d58b475123e557c9d294f4708d0e00e52bd1",
+          "state_fingerprint": "e02a861a951164c3975695ccee7c25205b5735fc878fcfefa3671e62ee160421",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.013524352888595e-06,
+      "evaluation_seconds": 20.268670208000003,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.067621764442976e-07,
+      "parameter_sha256": "6d497a8d3d60ceb6fc21846c6dc1a8553a3e70c9013768035f31b44bef50cd21",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.250592542812228,
+        "NO": 4.251029247418046,
+        "ON": 4.250592542812228,
+        "OO": 4.251029247418046
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -2.4553388357162476e-05,
+      "V": -2.4553388357162476e-05,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0009560339152812958,
+          0.0009586168918758626
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "2361d2b14521257e7a3b2a8d292c56722ccdf88e86b93ab2c2b4b6eb4fea97f6",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224",
+          "state_fingerprint": "45426f436b5330f74dd26cd98cde275c4adefe36a3c8609f3e6cf12b6992f6e8",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/3e6f877ae34558ba070eca3dfe618ec710727d5df1aed867b0103adb89c01119.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "f9b8f9ab1f519a344eb1a355da11c59814fcda75d2f54c10c76edba37cd5c843",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "3e6f877ae34558ba070eca3dfe618ec710727d5df1aed867b0103adb89c01119",
+          "state_fingerprint": "bdb68f75f39f26c0ff1d60c7b4a62727b19303b0626b0749bcf143422f7d69ad",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0135302068725593e-06,
+      "evaluation_seconds": 20.408810248999544,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.067651034362797e-07,
+      "parameter_sha256": "f9b8f9ab1f519a344eb1a355da11c59814fcda75d2f54c10c76edba37cd5c843",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.251053800806403,
+        "NO": 4.251029247418046,
+        "ON": 4.251053800806403,
+        "OO": 4.251029247418046
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0004233643412590027,
+      "V": 0.0004233643412590027,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0005939838476479054,
+          0.0014081239234656094
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "81a5bd1804cbd1c905705350d1cc949d074516fdb98baa93aa7689edb16ae9bd",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "918272e44b8cf8476328fa6f6a9e8db381a261172159df50225bc1a5f408d224",
+          "state_fingerprint": "45426f436b5330f74dd26cd98cde275c4adefe36a3c8609f3e6cf12b6992f6e8",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/7c58b8c2c8acd30e1c075470f50e009930a611ee3b5dd0970b10ca03bbde41df.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fb02e891afdb065108386863b8a679348efab595930480d7cc199d8ecb97ee95",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "7c58b8c2c8acd30e1c075470f50e009930a611ee3b5dd0970b10ca03bbde41df",
+          "state_fingerprint": "7cdd7b77e30b6952660364fa3497e878f4839422426b5692e8344671e062f96b",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.013524352888595e-06,
+      "evaluation_seconds": 20.019305183000142,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.067621764442976e-07,
+      "parameter_sha256": "fb02e891afdb065108386863b8a679348efab595930480d7cc199d8ecb97ee95",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.250605883076787,
+        "NO": 4.251029247418046,
+        "ON": 4.250605883076787,
+        "OO": 4.251029247418046
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "ad9c2a6aaa860a0d3624fcc6211b7d600249b9bccd57d635cdd3c9c2780cf613",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479362,
+          "cross_session_verified": false,
+          "file": "objects/7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002",
+          "state_fingerprint": "eb35b27a8514815c6ef0e14db38d8e7d89dde1f7b8e2fdf12cc89353a4b8b4bc",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479362,
+          "cross_session_verified": false,
+          "file": "objects/7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002",
+          "state_fingerprint": "eb35b27a8514815c6ef0e14db38d8e7d89dde1f7b8e2fdf12cc89353a4b8b4bc",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0136934096571792e-06,
+      "evaluation_seconds": 20.656176915000287,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.068467048285896e-07,
+      "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.2517383228987455,
+        "NO": 4.2517383228987455,
+        "ON": 4.2517383228987455,
+        "OO": 4.2517383228987455
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.00021750479936599731,
+      "V": 0.00021750479936599731,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0008137763943523169,
+          0.0012564547359943375
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "ab56a0c94b00b33ee5bf433947a1fa51a887efb39eeb3320b82d67b4d2496320",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479362,
+          "cross_session_verified": false,
+          "file": "objects/7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002",
+          "state_fingerprint": "eb35b27a8514815c6ef0e14db38d8e7d89dde1f7b8e2fdf12cc89353a4b8b4bc",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479362,
+          "cross_session_verified": false,
+          "file": "objects/fcd662fe1fce74403534edd86f0d2f11ef8c687b2e87f08c3c8cdf0aa14b6b76.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "e527bf086ec4dfcc5b98e55c7fd0c783a815b854d422c99168b811e86b675f59",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "fcd662fe1fce74403534edd86f0d2f11ef8c687b2e87f08c3c8cdf0aa14b6b76",
+          "state_fingerprint": "006c037d215509aba2f1f795eb9d978073f3d22070edfff2b4f95092a1818568",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0136934096571792e-06,
+      "evaluation_seconds": 20.625373509000383,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.068467048285896e-07,
+      "parameter_sha256": "e527bf086ec4dfcc5b98e55c7fd0c783a815b854d422c99168b811e86b675f59",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.2515208180993795,
+        "NO": 4.2517383228987455,
+        "ON": 4.2515208180993795,
+        "OO": 4.2517383228987455
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.0008061081171035767,
+      "V": -0.0008061081171035767,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0019050717819482088,
+          0.00038997186347842106
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "0ba2a402c7f4735d46d3e46e80a5bea5b49ddf6aaed2a3c2ff8b90d10d460f95",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479362,
+          "cross_session_verified": false,
+          "file": "objects/7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002",
+          "state_fingerprint": "eb35b27a8514815c6ef0e14db38d8e7d89dde1f7b8e2fdf12cc89353a4b8b4bc",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479362,
+          "cross_session_verified": false,
+          "file": "objects/91dc3eb8e346eae5f6d5acfa47ba917662d780a551ec4aafef187c1cb0551d50.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "4531e48f5b691c55538311b45bc97b39415841b13148e73eff45f4fe9d845daa",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "91dc3eb8e346eae5f6d5acfa47ba917662d780a551ec4aafef187c1cb0551d50",
+          "state_fingerprint": "9abef80bc25b5767a366cbd2962f9b097a12c08b09be6633530e29be168c56fb",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0138856008090613e-06,
+      "evaluation_seconds": 20.795061775999784,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.069428004045307e-07,
+      "parameter_sha256": "4531e48f5b691c55538311b45bc97b39415841b13148e73eff45f4fe9d845daa",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.252544431015849,
+        "NO": 4.2517383228987455,
+        "ON": 4.252544431015849,
+        "OO": 4.2517383228987455
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0012619812041521072,
+      "V": 0.0012619812041521072,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          0.000282118609175086,
+          0.002249295404180884
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "8f55848bb7cd643e39580d923bd028cb693ff60db547092e3330c1ed5083515d",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479362,
+          "cross_session_verified": false,
+          "file": "objects/7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "7cde275f4aa2d72bb918465c6da34aa7682f5666109a668c5fd214abb52e8002",
+          "state_fingerprint": "eb35b27a8514815c6ef0e14db38d8e7d89dde1f7b8e2fdf12cc89353a4b8b4bc",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479362,
+          "cross_session_verified": false,
+          "file": "objects/d6ed6eb0e6ae8b6d9e5ffdab66b4721317a5b3570570b6d3693f244fb3050818.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fb02e891afdb065108386863b8a679348efab595930480d7cc199d8ecb97ee95",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001301,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "d6ed6eb0e6ae8b6d9e5ffdab66b4721317a5b3570570b6d3693f244fb3050818",
+          "state_fingerprint": "0cd7d644b0e94b66945c872586f303b4bc601571bdb2d23d3a52e5c57d5ce904",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0136934096571792e-06,
+      "evaluation_seconds": 21.393473965999874,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.068467048285896e-07,
+      "parameter_sha256": "fb02e891afdb065108386863b8a679348efab595930480d7cc199d8ecb97ee95",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001301,
+      "values": {
+        "NN": 4.250476341694593,
+        "NO": 4.2517383228987455,
+        "ON": 4.250476341694593,
+        "OO": 4.2517383228987455
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "4bf223b9d301a4cbc7944505cdb9c0f30751c4e5899ca36c8bb2645cddba1ef1",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7408767,
+          "cross_session_verified": false,
+          "file": "objects/e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07",
+          "state_fingerprint": "71e5dfc3eafc0f3b7b605323c2d37f92c7584a3655b49b0d55c023c7e5a9367f",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7408767,
+          "cross_session_verified": false,
+          "file": "objects/e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07",
+          "state_fingerprint": "71e5dfc3eafc0f3b7b605323c2d37f92c7584a3655b49b0d55c023c7e5a9367f",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0174727376188741e-06,
+      "evaluation_seconds": 14.434924709999905,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.087363688094371e-07,
+      "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.267589973285794,
+        "NO": 4.267589973285794,
+        "ON": 4.267589973285794,
+        "OO": 4.267589973285794
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0008929315954446793,
+      "V": 0.0008929315954446793,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          -8.740476332604885e-05,
+          0.00192215908318758
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "9a23af283e49fcb4cae0bb9816bdc518b1338d32f4e168ac324880369a3922bf",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7408767,
+          "cross_session_verified": false,
+          "file": "objects/e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07",
+          "state_fingerprint": "71e5dfc3eafc0f3b7b605323c2d37f92c7584a3655b49b0d55c023c7e5a9367f",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7408767,
+          "cross_session_verified": false,
+          "file": "objects/c7a17fb32220635f1cc8490959dc4765251d1f1bd972a1485b89828bfc183f5a.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "43e82762393b3c037f273354e6f260968b411893283904c192658c7d0c48b1c8",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "c7a17fb32220635f1cc8490959dc4765251d1f1bd972a1485b89828bfc183f5a",
+          "state_fingerprint": "d53c0aeb19ee563eee5a699f55769895f899215bfd11c8fcb98fc196ce69f16b",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0174727376188741e-06,
+      "evaluation_seconds": 14.623978435000026,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.087363688094371e-07,
+      "parameter_sha256": "43e82762393b3c037f273354e6f260968b411893283904c192658c7d0c48b1c8",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.26669704169035,
+        "NO": 4.267589973285794,
+        "ON": 4.26669704169035,
+        "OO": 4.267589973285794
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0009292475879192352,
+      "V": 0.0009292475879192352,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          5.770474672317505e-05,
+          0.001833194913342595
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "38c2a482ab4a2b3fc6ffe4cc96815d3a91dd9b9f97fec9e2b18a79457406af3a",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7408767,
+          "cross_session_verified": false,
+          "file": "objects/e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07",
+          "state_fingerprint": "71e5dfc3eafc0f3b7b605323c2d37f92c7584a3655b49b0d55c023c7e5a9367f",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7408767,
+          "cross_session_verified": false,
+          "file": "objects/9fc025df1776f702df0fff621b2c66965f2d4d5de6c4d00e7a845362aee4e426.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "a296dade8e7e37ee175db11f716946108753939b064bfff3fc18c78589392d08",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "9fc025df1776f702df0fff621b2c66965f2d4d5de6c4d00e7a845362aee4e426",
+          "state_fingerprint": "6f921a8a6870c2b834d799c773ddda34111815e1f726c577d0f6fb6779ebde5b",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0174727376188741e-06,
+      "evaluation_seconds": 14.516078025999377,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.087363688094371e-07,
+      "parameter_sha256": "a296dade8e7e37ee175db11f716946108753939b064bfff3fc18c78589392d08",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.266660725697875,
+        "NO": 4.267589973285794,
+        "ON": 4.266660725697875,
+        "OO": 4.267589973285794
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0003264937549829483,
+      "V": 0.0003264937549829483,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0005905688274651765,
+          0.0013283823616802692
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "b2d12f311e232369733ed4e6725a03df9c3098949c310738cc5324cc6d53729c",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7408767,
+          "cross_session_verified": false,
+          "file": "objects/e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "e636a9347ee0764f73df7ca1e34555379eed2d0237ea013b3e36e9da17ef9a07",
+          "state_fingerprint": "71e5dfc3eafc0f3b7b605323c2d37f92c7584a3655b49b0d55c023c7e5a9367f",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7408767,
+          "cross_session_verified": false,
+          "file": "objects/ae02b049253fab0d2b6c22bdf8786eece670a818f17419c81e639db8cfccad4a.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "a10f39cf4630d2bec0d2f9d03789a13d53a659b9352f0e7b83934e553bc07018",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "ae02b049253fab0d2b6c22bdf8786eece670a818f17419c81e639db8cfccad4a",
+          "state_fingerprint": "8446bc56e9c7966b54ff20d15e7f114a6be2b9c9c26b6632ee2042e70cce7e17",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0174727376188741e-06,
+      "evaluation_seconds": 14.37551259600059,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.087363688094371e-07,
+      "parameter_sha256": "a10f39cf4630d2bec0d2f9d03789a13d53a659b9352f0e7b83934e553bc07018",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.267263479530811,
+        "NO": 4.267589973285794,
+        "ON": 4.267263479530811,
+        "OO": 4.267589973285794
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "012f39397511656d5560bfc15c1c239f1ad6e2ea6569c3911e6d70942725baba",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7408703,
+          "cross_session_verified": false,
+          "file": "objects/36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7",
+          "state_fingerprint": "e53ac96708fde769d9d55a59c22c7271081187ce9033db6b71e354dd2ab26b3c",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7408703,
+          "cross_session_verified": false,
+          "file": "objects/36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7",
+          "state_fingerprint": "e53ac96708fde769d9d55a59c22c7271081187ce9033db6b71e354dd2ab26b3c",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0177022824464643e-06,
+      "evaluation_seconds": 15.145291519999773,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.088511412232322e-07,
+      "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.268552754074335,
+        "NO": 4.268552754074335,
+        "ON": 4.268552754074335,
+        "OO": 4.268552754074335
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 6.76717609167099e-05,
+      "V": 6.76717609167099e-05,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0005735677666962146,
+          0.0006670814938843243
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "b86ede862900cf7082f56091d59caa76f88960576b0aef4517319cb35b040501",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7408703,
+          "cross_session_verified": false,
+          "file": "objects/36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7",
+          "state_fingerprint": "e53ac96708fde769d9d55a59c22c7271081187ce9033db6b71e354dd2ab26b3c",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7408703,
+          "cross_session_verified": false,
+          "file": "objects/8397554e5f682c536c12fd2c4142866c4a0b39822e24be7fab50d01dc8deda13.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "5b909404b5744610553770c609d56870c3545f5c76e4b8975c30aa166889a71b",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "8397554e5f682c536c12fd2c4142866c4a0b39822e24be7fab50d01dc8deda13",
+          "state_fingerprint": "119f0c704a140898287ef79042c97bd66f0f14911a577334eae225945a013dc9",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0177022824464643e-06,
+      "evaluation_seconds": 15.074610683000174,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.088511412232322e-07,
+      "parameter_sha256": "5b909404b5744610553770c609d56870c3545f5c76e4b8975c30aa166889a71b",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.268485082313418,
+        "NO": 4.268552754074335,
+        "ON": 4.268485082313418,
+        "OO": 4.268552754074335
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0007133018225431442,
+      "V": 0.0007133018225431442,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          -5.6675728410482405e-05,
+          0.0014803759288042784
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "011ebddef70e9d6903f60b060adc18a9ade2db9ac59a61aa66de46792862432b",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7408703,
+          "cross_session_verified": false,
+          "file": "objects/36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7",
+          "state_fingerprint": "e53ac96708fde769d9d55a59c22c7271081187ce9033db6b71e354dd2ab26b3c",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7408703,
+          "cross_session_verified": false,
+          "file": "objects/6f7b26fdcf81f3da77f330e453c6d83963a2b8dd810b7b46f59d1bf8b7a6cfeb.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "4e855e44edb60fc29b8017fbd723d823814185221a6614441e63262e58e09ae4",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "6f7b26fdcf81f3da77f330e453c6d83963a2b8dd810b7b46f59d1bf8b7a6cfeb",
+          "state_fingerprint": "9a4f6d836bac54283da7a27d9636c4c845c8a0f9bf050fb6e9c1ca3fdaeaf570",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0177022824464643e-06,
+      "evaluation_seconds": 15.327739825999743,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.088511412232322e-07,
+      "parameter_sha256": "4e855e44edb60fc29b8017fbd723d823814185221a6614441e63262e58e09ae4",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.267839452251792,
+        "NO": 4.268552754074335,
+        "ON": 4.267839452251792,
+        "OO": 4.268552754074335
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0007541459053754807,
+      "V": 0.0007541459053754807,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          3.5623507574200634e-05,
+          0.001490363897755742
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "c493a02b4dd70e9cb14aaa30b4a1de4c3d7899c1af1485dee36a488a22a54e3e",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7408703,
+          "cross_session_verified": false,
+          "file": "objects/36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "36be1934ede5d21c759329c7c5c85724ff0416c23c8414b4b4c4d8a4014525f7",
+          "state_fingerprint": "e53ac96708fde769d9d55a59c22c7271081187ce9033db6b71e354dd2ab26b3c",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7408703,
+          "cross_session_verified": false,
+          "file": "objects/54d479ba05064b80ad4464a25b3f7289b221dad63c78b835b8e32d554f125ab1.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "be60cfe8b15088a57bde0119c34e7ff2d30b64008121bb52190e2a69c3197ff0",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "54d479ba05064b80ad4464a25b3f7289b221dad63c78b835b8e32d554f125ab1",
+          "state_fingerprint": "811962e1374cec6ce1dfa5ae3ea107900a9b3b401895f91a58fbd00f1cda9628",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0177022824464643e-06,
+      "evaluation_seconds": 15.33073930899991,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.088511412232322e-07,
+      "parameter_sha256": "be60cfe8b15088a57bde0119c34e7ff2d30b64008121bb52190e2a69c3197ff0",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.26779860816896,
+        "NO": 4.268552754074335,
+        "ON": 4.26779860816896,
+        "OO": 4.268552754074335
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "35cd63d6a0a59f5bb48c02c6fcd24ab4c0be00d9aaf38c38d41eaf4f5bb7d582",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "316ea2aac0860bc58ffc160f94f8188f66dea1c03e22bf27845d531d232ca90b",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13",
+          "state_fingerprint": "11d38099e66514f6aab94fc110210bfb9e6fcf542dc8c6c2af9c5f9d382fec28",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "316ea2aac0860bc58ffc160f94f8188f66dea1c03e22bf27845d531d232ca90b",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13",
+          "state_fingerprint": "11d38099e66514f6aab94fc110210bfb9e6fcf542dc8c6c2af9c5f9d382fec28",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0196166311260413e-06,
+      "evaluation_seconds": 20.591178942000624,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.098083155630206e-07,
+      "parameter_sha256": "316ea2aac0860bc58ffc160f94f8188f66dea1c03e22bf27845d531d232ca90b",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.2765821143984795,
+        "NO": 4.2765821143984795,
+        "ON": 4.2765821143984795,
+        "OO": 4.2765821143984795
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.00010923855006694794,
+      "V": 0.00010923855006694794,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0012000251095741986,
+          0.0013799830805510276
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "618190f49adda98b46d97ea01a013f6314ddccddc47ae6ecfc68ccb47fbb008b",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "316ea2aac0860bc58ffc160f94f8188f66dea1c03e22bf27845d531d232ca90b",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13",
+          "state_fingerprint": "11d38099e66514f6aab94fc110210bfb9e6fcf542dc8c6c2af9c5f9d382fec28",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/071f3f6edb4f7b33ee2e58065ce06f84aa7fbbab4c47b8d8866bcb2416c54190.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "a311fe50bae0581de5e3e4707b8fb6dca5181b59a92ab48de769b34620a30217",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "071f3f6edb4f7b33ee2e58065ce06f84aa7fbbab4c47b8d8866bcb2416c54190",
+          "state_fingerprint": "3ce4a223dd60fd8c6c4e8a5786ca606ec4f0ad320712d0f70df01c332d4530d6",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0196166311260413e-06,
+      "evaluation_seconds": 20.569530484999632,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.098083155630206e-07,
+      "parameter_sha256": "a311fe50bae0581de5e3e4707b8fb6dca5181b59a92ab48de769b34620a30217",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.2764728758484125,
+        "NO": 4.2765821143984795,
+        "ON": 4.2764728758484125,
+        "OO": 4.2765821143984795
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 9.022839367389679e-05,
+      "V": 9.022839367389679e-05,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0007177658844739199,
+          0.0008496683556586495
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "1124ee8ced3b3dc30be32f53626ef86708bd031da5852c9c5e0f961e4b3822b3",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "316ea2aac0860bc58ffc160f94f8188f66dea1c03e22bf27845d531d232ca90b",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13",
+          "state_fingerprint": "11d38099e66514f6aab94fc110210bfb9e6fcf542dc8c6c2af9c5f9d382fec28",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/ecfd6ef45fee2897e3b6f250e8fea505d9c05ebef5f7218a901e96da2a4da801.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "5e2b89ba9229907284a67f3cecc50b25b93a848c6363cf761c6c214d906e692e",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "ecfd6ef45fee2897e3b6f250e8fea505d9c05ebef5f7218a901e96da2a4da801",
+          "state_fingerprint": "2eac0fc6c2c739e79c0c946ce4264fe1093ca1f90f831930a0e171fba3c82738",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0196166311260413e-06,
+      "evaluation_seconds": 20.563666600999568,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.098083155630206e-07,
+      "parameter_sha256": "5e2b89ba9229907284a67f3cecc50b25b93a848c6363cf761c6c214d906e692e",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.276491886004806,
+        "NO": 4.2765821143984795,
+        "ON": 4.276491886004806,
+        "OO": 4.2765821143984795
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 4.584901034832001e-05,
+      "V": 4.584901034832001e-05,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0008517332375049591,
+          0.000923215458169579
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "eea1be987adee8aabdd7df33c88df42143dd50d4862fe1a820490b2543c82351",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "316ea2aac0860bc58ffc160f94f8188f66dea1c03e22bf27845d531d232ca90b",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "91cd41ebd41fc004ce3b73addc7bfd3a621682ceb033da23f09d16c00400ed13",
+          "state_fingerprint": "11d38099e66514f6aab94fc110210bfb9e6fcf542dc8c6c2af9c5f9d382fec28",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/c0e9770739ac5c9eb5304bffd24f37657fbfeb8aa6746d57ec0a0ad1f7a2a9d7.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "8d32432e224f9d5500b800864a3775fe19e2a7b8892c807a248f5b3688fd8311",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "c0e9770739ac5c9eb5304bffd24f37657fbfeb8aa6746d57ec0a0ad1f7a2a9d7",
+          "state_fingerprint": "c9a7fa2ada601bf532e247da16941e88adf264ff0b55c545fc6e7f36d7e433ed",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0196166311260413e-06,
+      "evaluation_seconds": 20.410666841999955,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.098083155630206e-07,
+      "parameter_sha256": "8d32432e224f9d5500b800864a3775fe19e2a7b8892c807a248f5b3688fd8311",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.276536265388131,
+        "NO": 4.2765821143984795,
+        "ON": 4.276536265388131,
+        "OO": 4.2765821143984795
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "7f4e3fa7fa9f3fabccbccdb645f2951141f03a25c124563d5b26072f9d172c81",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479234,
+          "cross_session_verified": false,
+          "file": "objects/feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4",
+          "state_fingerprint": "4544f65704c5547986412a6045943f52a0200534653c6c4011cfbac8231e8355",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479234,
+          "cross_session_verified": false,
+          "file": "objects/feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4",
+          "state_fingerprint": "4544f65704c5547986412a6045943f52a0200534653c6c4011cfbac8231e8355",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0201016542588093e-06,
+      "evaluation_seconds": 20.69497332699939,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.100508271294046e-07,
+      "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.278616448864341,
+        "NO": 4.278616448864341,
+        "ON": 4.278616448864341,
+        "OO": 4.278616448864341
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.0003452897071838379,
+      "V": -0.0003452897071838379,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0016867964528501033,
+          0.0008756708819419144
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "268fad8f558df466d5e3edabb253c399d9f3880918a6a3c1fe8a9e1910326408",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479234,
+          "cross_session_verified": false,
+          "file": "objects/feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4",
+          "state_fingerprint": "4544f65704c5547986412a6045943f52a0200534653c6c4011cfbac8231e8355",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479234,
+          "cross_session_verified": false,
+          "file": "objects/4867650a4d812c70ac8559dc0ff48d71d7a9dda5d5b61aa784a316713d84cfc9.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "e8ab8b7ebac2326672755173c24861e457a84031afbaeca99ebfbfae815e1e10",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "4867650a4d812c70ac8559dc0ff48d71d7a9dda5d5b61aa784a316713d84cfc9",
+          "state_fingerprint": "2f9cb32f864bae0700f63486dfeb972341192cb6c24d722154406c97cc3f73d3",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0201839777401744e-06,
+      "evaluation_seconds": 20.838449632000447,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.100919888700872e-07,
+      "parameter_sha256": "e8ab8b7ebac2326672755173c24861e457a84031afbaeca99ebfbfae815e1e10",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.278961738571525,
+        "NO": 4.278616448864341,
+        "ON": 4.278961738571525,
+        "OO": 4.278616448864341
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.001005483791232109,
+      "V": -0.001005483791232109,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.002201111102476716,
+          0.00011490094475448036
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "115c3aba91e42e84a0582997d0b3668310d3bda76d2b3e1ad58c75b1f0ba520f",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479234,
+          "cross_session_verified": false,
+          "file": "objects/feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4",
+          "state_fingerprint": "4544f65704c5547986412a6045943f52a0200534653c6c4011cfbac8231e8355",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479234,
+          "cross_session_verified": false,
+          "file": "objects/698a0d55b3d19ad56e622f6d81e7e1a5e566c1d5ac5291d200229a25c4197930.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "931d4a20835ec6cb1c6fdd36d4e0ec384912bf50c9927061dcc01c0e778696ce",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "698a0d55b3d19ad56e622f6d81e7e1a5e566c1d5ac5291d200229a25c4197930",
+          "state_fingerprint": "35b38b0e5f9dab3be03eb6cac6f046e886927f9e2be7385a23d5261cc5e09c65",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0203413802756245e-06,
+      "evaluation_seconds": 20.741054269000415,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.101706901378122e-07,
+      "parameter_sha256": "931d4a20835ec6cb1c6fdd36d4e0ec384912bf50c9927061dcc01c0e778696ce",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.279621932655573,
+        "NO": 4.278616448864341,
+        "ON": 4.279621932655573,
+        "OO": 4.278616448864341
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.00031162798404693604,
+      "V": 0.00031162798404693604,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.00048479526303708554,
+          0.0011068792082369325
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "bb6c4ab723256f2fb536f864736949002d4d96e0a1ad7d31c72f3b56ce9b254f",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479234,
+          "cross_session_verified": false,
+          "file": "objects/feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "feee8ac8302fdca0bc13d9f837b7df3d343f746b295d87a3c58f547926b1bfd4",
+          "state_fingerprint": "4544f65704c5547986412a6045943f52a0200534653c6c4011cfbac8231e8355",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479234,
+          "cross_session_verified": false,
+          "file": "objects/225d90df62ceadaaca10da6b446052a7bd1304a41ff0ed3bd6ddc9058af91275.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "3ecfd5f61995cbccafacd635d35cf727384837186135380282d8c75c3b697e1f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001302,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "225d90df62ceadaaca10da6b446052a7bd1304a41ff0ed3bd6ddc9058af91275",
+          "state_fingerprint": "b086092c4601e27bbd9d3789140376521c2e9cd9e02fcb73702913945eea0cb8",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0201016542588093e-06,
+      "evaluation_seconds": 21.424262610999904,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.100508271294046e-07,
+      "parameter_sha256": "3ecfd5f61995cbccafacd635d35cf727384837186135380282d8c75c3b697e1f",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001302,
+      "values": {
+        "NN": 4.278304820880294,
+        "NO": 4.278616448864341,
+        "ON": 4.278304820880294,
+        "OO": 4.278616448864341
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "ced123771c534f2f5988ac0fcab32e5bb2f2bbe1621c97d15db7961702e40ad8",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "8c5d9baf8d0c794448745a0b64b1850a3b77c82daea9ac5ff928ac97e66fce33",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9",
+          "state_fingerprint": "cbb3748f07a3012d9d1f30bf06faf6d8b1118b2411aae28da4d7c8af86dfa96f",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "8c5d9baf8d0c794448745a0b64b1850a3b77c82daea9ac5ff928ac97e66fce33",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9",
+          "state_fingerprint": "cbb3748f07a3012d9d1f30bf06faf6d8b1118b2411aae28da4d7c8af86dfa96f",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0132175551902378e-06,
+      "evaluation_seconds": 14.435778308000408,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.066087775951189e-07,
+      "parameter_sha256": "8c5d9baf8d0c794448745a0b64b1850a3b77c82daea9ac5ff928ac97e66fce33",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.249742444604635,
+        "NO": 4.249742444604635,
+        "ON": 4.249742444604635,
+        "OO": 4.249742444604635
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0005207080394029617,
+      "V": 0.0005207080394029617,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0005901953205466271,
+          0.0016453641932457678
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "2240a9f4a16ceae08e340426e66f9f69c64f372b32a8abd92ed6667574eebabd",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "8c5d9baf8d0c794448745a0b64b1850a3b77c82daea9ac5ff928ac97e66fce33",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9",
+          "state_fingerprint": "cbb3748f07a3012d9d1f30bf06faf6d8b1118b2411aae28da4d7c8af86dfa96f",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/6ba73ef6c2a4d4622dc52af9874c320a85a5bbfbd7582e22baced27b33c51ebd.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "478bf3e7a3effe2538c8821f79be1b0eeb8b17615b778208920b94a5ed2b6974",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "6ba73ef6c2a4d4622dc52af9874c320a85a5bbfbd7582e22baced27b33c51ebd",
+          "state_fingerprint": "4eafa2df7734736b2c9f351755be27ab5fa13dec586df7ff2b57aa2462ded325",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0132175551902378e-06,
+      "evaluation_seconds": 14.354516087000775,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.066087775951189e-07,
+      "parameter_sha256": "478bf3e7a3effe2538c8821f79be1b0eeb8b17615b778208920b94a5ed2b6974",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.249221736565232,
+        "NO": 4.249742444604635,
+        "ON": 4.249221736565232,
+        "OO": 4.249742444604635
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.000326547771692276,
+      "V": -0.000326547771692276,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0013046604581177235,
+          0.0006497579161077732
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "0b3dc968f507e1174659ecbe5f4eb972edb3a62562970c8179504e0eafa1df45",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "8c5d9baf8d0c794448745a0b64b1850a3b77c82daea9ac5ff928ac97e66fce33",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9",
+          "state_fingerprint": "cbb3748f07a3012d9d1f30bf06faf6d8b1118b2411aae28da4d7c8af86dfa96f",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/dabb42d182bbaf10542a35be1a5b8859b3596106a21a405674eac721f1920e85.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "9c2b718710e905b12aaebf6a7fcd7cf9310ff2651af43d53bb4de4b17929a1c5",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "dabb42d182bbaf10542a35be1a5b8859b3596106a21a405674eac721f1920e85",
+          "state_fingerprint": "8225c1932af4fa850c71bb60fa6dbc15f2bc3df7616eed53efecc4cb5fb9da21",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0132954102459735e-06,
+      "evaluation_seconds": 14.562581848000264,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.066477051229867e-07,
+      "parameter_sha256": "9c2b718710e905b12aaebf6a7fcd7cf9310ff2651af43d53bb4de4b17929a1c5",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.2500689923763275,
+        "NO": 4.249742444604635,
+        "ON": 4.2500689923763275,
+        "OO": 4.249742444604635
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.0002789534628391266,
+      "V": -0.0002789534628391266,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0009674867149442434,
+          0.0004415887407958493
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "560b7566d6e886434fcb7fca13f91d9dab69f8d0fdd201c7e6a0bbfb2e4e08e3",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "8c5d9baf8d0c794448745a0b64b1850a3b77c82daea9ac5ff928ac97e66fce33",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "09362f768e4d149746eae63861984bf86260809dee6f4e7acfac7b35c03e91b9",
+          "state_fingerprint": "cbb3748f07a3012d9d1f30bf06faf6d8b1118b2411aae28da4d7c8af86dfa96f",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409535,
+          "cross_session_verified": false,
+          "file": "objects/bbb6f02440f209f3317b220a2c14acfd8f12d9797576a6ef7be29bff503b6c48.pt",
+          "identity": {
+            "arm": "A-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "ceb516245aedf5193b7a5167c9774c2881930c173ad3a0e1495ebde6d27740a8",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "bbb6f02440f209f3317b220a2c14acfd8f12d9797576a6ef7be29bff503b6c48",
+          "state_fingerprint": "1a81cf78cbbb08778a6a27fba2949f0d5e6b33b8152c4ca2a6f78fc330f42847",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0132840628784834e-06,
+      "evaluation_seconds": 14.573118937999425,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.066420314392417e-07,
+      "parameter_sha256": "ceb516245aedf5193b7a5167c9774c2881930c173ad3a0e1495ebde6d27740a8",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.250021398067474,
+        "NO": 4.249742444604635,
+        "ON": 4.250021398067474,
+        "OO": 4.249742444604635
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "38d3f75001bf75ca9eb2bbd283da10cef8d242074795cb6c2669d6881fc92f45",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409663,
+          "cross_session_verified": false,
+          "file": "objects/451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91",
+          "state_fingerprint": "53d39d07923cc54f54686800faac224e0139247fe6803f811fd2c61eac417569",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409663,
+          "cross_session_verified": false,
+          "file": "objects/451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91",
+          "state_fingerprint": "53d39d07923cc54f54686800faac224e0139247fe6803f811fd2c61eac417569",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.013456650600375e-06,
+      "evaluation_seconds": 14.87693788100023,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.067283253001875e-07,
+      "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.250745283439755,
+        "NO": 4.250745283439755,
+        "ON": 4.250745283439755,
+        "OO": 4.250745283439755
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.00021745264530181885,
+      "V": 0.00021745264530181885,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0003875629976391792,
+          0.0008517359849065539
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "8077faf0a8b4353200cd66ff7e22ff6a2762c7a4ea1c95efdc1acf93291f9ea1",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409663,
+          "cross_session_verified": false,
+          "file": "objects/451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91",
+          "state_fingerprint": "53d39d07923cc54f54686800faac224e0139247fe6803f811fd2c61eac417569",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409663,
+          "cross_session_verified": false,
+          "file": "objects/a792480bdb600c72b055aa089c40dc1444f0cdfb2fa2d65dd029d8304808538d.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "e7700c375c3254dcc9fe403f774c6f43b776e9ac977c87dfcc98b37996c0ef9c",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "a792480bdb600c72b055aa089c40dc1444f0cdfb2fa2d65dd029d8304808538d",
+          "state_fingerprint": "31800bb67ad47463999f6b375e8471ea69280e1ca51cce4faad068cd09171cd5",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.013456650600375e-06,
+      "evaluation_seconds": 15.01175434400011,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.067283253001875e-07,
+      "parameter_sha256": "e7700c375c3254dcc9fe403f774c6f43b776e9ac977c87dfcc98b37996c0ef9c",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.250527830794454,
+        "NO": 4.250745283439755,
+        "ON": 4.250527830794454,
+        "OO": 4.250745283439755
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0005616527050733566,
+      "V": 0.0005616527050733566,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.00045302035287022593,
+          0.0015287437010556456
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "43666afe06c4a80e076d1e4e874c4613012ad1175a5ddae2e891d54ce97d2269",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409663,
+          "cross_session_verified": false,
+          "file": "objects/451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91",
+          "state_fingerprint": "53d39d07923cc54f54686800faac224e0139247fe6803f811fd2c61eac417569",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409663,
+          "cross_session_verified": false,
+          "file": "objects/302956210087bf05426b73a2520a6f508787e6591d8bfce8d576223211ae2dc2.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "78c1bf308ca8596545c232dfc80b29c2efa8b514f0e3c168865cf43d698275fa",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "302956210087bf05426b73a2520a6f508787e6591d8bfce8d576223211ae2dc2",
+          "state_fingerprint": "52fa96bd7cddf5c4e8d54154a569ce7e07f5c613e528e20c5f024eb80b2b0055",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.013456650600375e-06,
+      "evaluation_seconds": 14.793893685000512,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.067283253001875e-07,
+      "parameter_sha256": "78c1bf308ca8596545c232dfc80b29c2efa8b514f0e3c168865cf43d698275fa",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.250183630734682,
+        "NO": 4.250745283439755,
+        "ON": 4.250183630734682,
+        "OO": 4.250745283439755
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.0006468147039413452,
+      "V": -0.0006468147039413452,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "A-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0015485395677387714,
+          0.00031749224290251717
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "78745a87efcb11961fc7d7523a33d162e04905bd4b974f252b963811b42e307e",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7409663,
+          "cross_session_verified": false,
+          "file": "objects/451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "76be6d585954cdb4001e2ae32f816fdd32b13b02b8b3a2fa6c07e67446638c8f",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "451b1df1144208f80eaf9447bb16b9da97a8ea955811d04a6c626c8af90aaf91",
+          "state_fingerprint": "53d39d07923cc54f54686800faac224e0139247fe6803f811fd2c61eac417569",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7409663,
+          "cross_session_verified": false,
+          "file": "objects/2db84c612fe682d20dfc37d44722776b26af580b68c26c4456c99db3a1d447bd.pt",
+          "identity": {
+            "arm": "A-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "387d691e6a80671d79949ba2b0a3dbcd545e1f2395c33739c8f7a9d90e4d6870",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "2db84c612fe682d20dfc37d44722776b26af580b68c26c4456c99db3a1d447bd",
+          "state_fingerprint": "97f736378fa78e1d5a144be015919f2bab2b394ddc79fdc50aedc524890b6fe0",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0136108632430307e-06,
+      "evaluation_seconds": 15.273513150999861,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.068054316215154e-07,
+      "parameter_sha256": "387d691e6a80671d79949ba2b0a3dbcd545e1f2395c33739c8f7a9d90e4d6870",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.251392098143697,
+        "NO": 4.250745283439755,
+        "ON": 4.251392098143697,
+        "OO": 4.250745283439755
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "a24f3d3a73db3bcff172c32ab95217c991f3532563737459439ea9810347fa7e",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479874,
+          "cross_session_verified": false,
+          "file": "objects/faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601",
+          "state_fingerprint": "88b809c0812d5b697d7d70a168d329d8e435c24ccce72d810c6b898290238df4",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479874,
+          "cross_session_verified": false,
+          "file": "objects/faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601",
+          "state_fingerprint": "88b809c0812d5b697d7d70a168d329d8e435c24ccce72d810c6b898290238df4",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0153610965346616e-06,
+      "evaluation_seconds": 20.526445031999174,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.076805482673308e-07,
+      "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.258733108639717,
+        "NO": 4.258733108639717,
+        "ON": 4.258733108639717,
+        "OO": 4.258733108639717
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0003493819385766983,
+      "V": 0.0003493819385766983,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0005538415163755417,
+          0.0012824551202356813
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "74dafc7c5010df7c7438870671449acc0623fc041db4e96cca1019ca97fbabbb",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479874,
+          "cross_session_verified": false,
+          "file": "objects/faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601",
+          "state_fingerprint": "88b809c0812d5b697d7d70a168d329d8e435c24ccce72d810c6b898290238df4",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479874,
+          "cross_session_verified": false,
+          "file": "objects/36be3036d2fdc1f4db8832aa3a2a969db4da5626a6e12be2121a5fe0e340cd48.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "ce8eeb52c29f5bb946fc216be3c421685849c617d23bbddd474ced712d80296b",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "36be3036d2fdc1f4db8832aa3a2a969db4da5626a6e12be2121a5fe0e340cd48",
+          "state_fingerprint": "0d63f625b909bab4cee1cf9fec23b147bcbafc7e80acc8243a0eb9cd0287c247",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0153610965346616e-06,
+      "evaluation_seconds": 20.392852181999842,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.076805482673308e-07,
+      "parameter_sha256": "ce8eeb52c29f5bb946fc216be3c421685849c617d23bbddd474ced712d80296b",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.25838372670114,
+        "NO": 4.258733108639717,
+        "ON": 4.25838372670114,
+        "OO": 4.258733108639717
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.00027849525213241577,
+      "V": 0.00027849525213241577,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0006603678688406944,
+          0.0011749195400625467
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "1222af64827783337771803373dddcd2969d42ac6a9ae1da40fb438f4224f8a8",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479874,
+          "cross_session_verified": false,
+          "file": "objects/faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601",
+          "state_fingerprint": "88b809c0812d5b697d7d70a168d329d8e435c24ccce72d810c6b898290238df4",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479874,
+          "cross_session_verified": false,
+          "file": "objects/574661b280ea299ab8ec670eb1fadd180c459904b730f3d7fafdebdc989110b0.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "1b19cc2788b9ba34823d3fabfee4c850b3dedc4cdcf3e3bd128801607cffd3c7",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "574661b280ea299ab8ec670eb1fadd180c459904b730f3d7fafdebdc989110b0",
+          "state_fingerprint": "c48cd619e8cc2a6f33372b0d396f8a9c475729f3b2a30efa1e7744091f74962c",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0153610965346616e-06,
+      "evaluation_seconds": 20.60336740599996,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.076805482673308e-07,
+      "parameter_sha256": "1b19cc2788b9ba34823d3fabfee4c850b3dedc4cdcf3e3bd128801607cffd3c7",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.258454613387585,
+        "NO": 4.258733108639717,
+        "ON": 4.258454613387585,
+        "OO": 4.258733108639717
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.0006035324186086655,
+      "V": -0.0006035324186086655,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CH",
+      "bootstrap": {
+        "ci95": [
+          -0.0019960385747253896,
+          0.0008314592763781547
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "b289c3028f6a30d1a6d086d857c723a178c86f6dc332adac241b6c5d8c486473",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7479874,
+          "cross_session_verified": false,
+          "file": "objects/faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "fdeb1b49eaad79ddf4e3b7b8e2d4550eec61876d4b2dd0d4ce0cfdabc8963dc1",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "faed9aa6af47a48761969a94144cb38b013f79ba441df9b9e71257f0573b4601",
+          "state_fingerprint": "88b809c0812d5b697d7d70a168d329d8e435c24ccce72d810c6b898290238df4",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7479874,
+          "cross_session_verified": false,
+          "file": "objects/86b3e9413337a12b71c4006bc81cbe512533408a505cb4275694142db33b00c8.pt",
+          "identity": {
+            "arm": "B-CH",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "dd82c76aa58792d7ea85865a17c602c08ee93552ad41476e34aea5e5676002e9",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "86b3e9413337a12b71c4006bc81cbe512533408a505cb4275694142db33b00c8",
+          "state_fingerprint": "fdf1c9bf667e67b3ea2b380f1b1c2bae127639f1bdae7f6127284080d71fa81c",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.015504989876348e-06,
+      "evaluation_seconds": 20.696066628000153,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.07752494938174e-07,
+      "parameter_sha256": "dd82c76aa58792d7ea85865a17c602c08ee93552ad41476e34aea5e5676002e9",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.259336641058326,
+        "NO": 4.258733108639717,
+        "ON": 4.259336641058326,
+        "OO": 4.258733108639717
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.0,
+      "V": 0.0,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "2275efb3df119c3f85915609920addf69760e7f84ce2f4dba0037201988fc063",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "a79ee3ecc2e1416c4591d2d686319dd0cec1db39782182622ac62e9d0bdc59c4",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa",
+          "state_fingerprint": "81a7097eb62f8292d1615be8ea2179d5df7459bb7a9fa7e217182282516d0179",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "a79ee3ecc2e1416c4591d2d686319dd0cec1db39782182622ac62e9d0bdc59c4",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa",
+          "state_fingerprint": "81a7097eb62f8292d1615be8ea2179d5df7459bb7a9fa7e217182282516d0179",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0160471601849963e-06,
+      "evaluation_seconds": 20.749154966999413,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.080235800924982e-07,
+      "parameter_sha256": "a79ee3ecc2e1416c4591d2d686319dd0cec1db39782182622ac62e9d0bdc59c4",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "BASELINE",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.261610668152571,
+        "NO": 4.261610668152571,
+        "ON": 4.261610668152571,
+        "OO": 4.261610668152571
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": 0.00020269304513931274,
+      "V": 0.00020269304513931274,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0008155987598001957,
+          0.00127896126359701
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "37d67bf7cdb3ef8e51e549329ec68de61dca4eac069fbc3f6bc9ccd4c4f55ac1",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "a79ee3ecc2e1416c4591d2d686319dd0cec1db39782182622ac62e9d0bdc59c4",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa",
+          "state_fingerprint": "81a7097eb62f8292d1615be8ea2179d5df7459bb7a9fa7e217182282516d0179",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/837b796f9f2f94fa1dd15f10d9503ccaf5b3a7668ee73f635327869c760e2291.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "9c63814cf07a214c9229464daf11e312437a48c70d165d27263aac6f46ef8777",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "837b796f9f2f94fa1dd15f10d9503ccaf5b3a7668ee73f635327869c760e2291",
+          "state_fingerprint": "ec2d39d456f843efe63062461036d83fffbcc108018b44e398dcda679c92dbd2",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0160471601849963e-06,
+      "evaluation_seconds": 20.622153209000317,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.080235800924982e-07,
+      "parameter_sha256": "9c63814cf07a214c9229464daf11e312437a48c70d165d27263aac6f46ef8777",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "HISTORICAL",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.261407975107431,
+        "NO": 4.261610668152571,
+        "ON": 4.261407975107431,
+        "OO": 4.261610668152571
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.00028589367866516113,
+      "V": -0.00028589367866516113,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0011676420457661153,
+          0.000661961967125535
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "1b617c11f1079a4835579ea657084c1487a76b4d178d21b66beefeee80b71c02",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "a79ee3ecc2e1416c4591d2d686319dd0cec1db39782182622ac62e9d0bdc59c4",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa",
+          "state_fingerprint": "81a7097eb62f8292d1615be8ea2179d5df7459bb7a9fa7e217182282516d0179",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/b8d3c22607186ca18feeef4c4d8762edc8a4ad938ae566b0561db5772b235ada.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "83b6b1fe7d9a88ed5fa9415e1b11c5cda8a1c4210ee7d911f1902d782d7f40a9",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "b8d3c22607186ca18feeef4c4d8762edc8a4ad938ae566b0561db5772b235ada",
+          "state_fingerprint": "d1b826ba3b14390bada89fd8a4a1c37b88a4e7f61570f9fa03408cbbac9bc8d5",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0161153225496378e-06,
+      "evaluation_seconds": 20.790028774999882,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.080576612748189e-07,
+      "parameter_sha256": "83b6b1fe7d9a88ed5fa9415e1b11c5cda8a1c4210ee7d911f1902d782d7f40a9",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "RANDOM_CONTROL",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.261896561831236,
+        "NO": 4.261610668152571,
+        "ON": 4.261896561831236,
+        "OO": 4.261610668152571
+      }
+    },
+    {
+      "C": 0.0,
+      "I": 0.0,
+      "R": -0.00026922114193439484,
+      "V": -0.00026922114193439484,
+      "accounting_scope": "Existing forward operator counters; no TorchDispatch, profiler or wall-time-to-FLOPs conversion",
+      "arm": "B-CT",
+      "bootstrap": {
+        "ci95": [
+          -0.0012973257806152105,
+          0.0007880328223109244
+        ],
+        "stories": 128,
+        "unit": "PAIRED_STORY_CLUSTER_WITHIN_CASE_NOT_INDEPENDENT_TRAINING_SEEDS"
+      },
+      "candidate_id": "394dfbfb71cc40b870dc334372eb26fed69541e53714210eb1a5d731fb5b20b3",
+      "cell_parameter_difference_l2": 0.0,
+      "checkpoint": {
+        "baseline": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "a79ee3ecc2e1416c4591d2d686319dd0cec1db39782182622ac62e9d0bdc59c4",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "60a2c503501ec933b29f40db17b39152555da6cef09daf3e79fd56c54cfc76aa",
+          "state_fingerprint": "81a7097eb62f8292d1615be8ea2179d5df7459bb7a9fa7e217182282516d0179",
+          "step": 0
+        },
+        "candidate": {
+          "bytes": 7480194,
+          "cross_session_verified": false,
+          "file": "objects/468c8d5a2f828adcb58b76b8183eda91a7cc13ff29304adf466db72baa5ed531.pt",
+          "identity": {
+            "arm": "B-CT",
+            "config_sha256": "454986088aed4764d2f788e87538a9de57ec1a7aab51a14e7e86054ba43c164c",
+            "experiment_id": "CLM-001-R3l-Connection-Reorganization-Potential-001",
+            "kind": "counterfactual_training_branch",
+            "parameter_sha256": "87bc358c29769daee3d06cebc4fc4b9b98b30dddaa2c0b8c9ab6f85753585ffc",
+            "run_id": "cc20ea2fde990192364940abc76e63680de08cf4072062beec36ddd3192eae1e",
+            "seed": 151001303,
+            "source_sha": "209b46707c887bad1315da646c7dae85f648de95"
+          },
+          "schema": "minicells.r3c.checkpoint.v1",
+          "sha256": "468c8d5a2f828adcb58b76b8183eda91a7cc13ff29304adf466db72baa5ed531",
+          "state_fingerprint": "48b0ce522e4525207845cb35b4dd32616c366c94a7a783c3d204e61ff3ce4f9c",
+          "step": 0
+        }
+      },
+      "data_identity": "771ee684e8e2a54187993e236fb8184fd65802b5a391ac0515f5f3d49861760c",
+      "data_role": "R3L_REPORT",
+      "decomposition": "V=R+C; interaction is separate, never added again",
+      "deterministic_evaluation_passes": 8,
+      "error_bound": 1.0161113475071204e-06,
+      "evaluation_seconds": 21.27441187600016,
+      "executed_operator_rows": {},
+      "hardware_flops": null,
+      "horizon": 0,
+      "measured_repeat_error": 0.0,
+      "numerical_resolution": 5.080556737535602e-07,
+      "parameter_sha256": "87bc358c29769daee3d06cebc4fc4b9b98b30dddaa2c0b8c9ab6f85753585ffc",
+      "partial_forward_gemm_flops": 0,
+      "practical_gain": false,
+      "role": "SEARCH_BEST",
+      "seed": 151001303,
+      "values": {
+        "NN": 4.261879889294505,
+        "NO": 4.261610668152571,
+        "ON": 4.261879889294505,
+        "OO": 4.261610668152571
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "architecture": "A",
+      "assessable": true,
+      "by_seed": {
+        "151001301": 0.00018728617578744888,
+        "151001302": 0.0005403198301792145,
+        "151001303": -0.0004628840833902359
+      },
+      "comparison": "F2",
+      "exploratory_p": 0.75,
+      "holm_adjusted_exploratory_p": 1,
+      "horizon": 0,
+      "mean_gain": 8.824064085880916e-05,
+      "signal": false
+    },
+    {
+      "architecture": "A",
+      "assessable": true,
+      "by_seed": {
+        "151001301": 0.0004953509196639061,
+        "151001302": 6.00181519985199e-05,
+        "151001303": -0.0008319644257426262
+      },
+      "comparison": "F3",
+      "exploratory_p": 1.0,
+      "holm_adjusted_exploratory_p": 1,
+      "horizon": 0,
+      "mean_gain": -9.219845136006673e-05,
+      "signal": false
+    },
+    {
+      "architecture": "A",
+      "assessable": true,
+      "by_seed": {
+        "151001301": -0.0005667638033628464,
+        "151001302": 0.0005603116005659103,
+        "151001303": -0.0005356296896934509
+      },
+      "comparison": "L1",
+      "exploratory_p": 0.75,
+      "holm_adjusted_exploratory_p": 1,
+      "horizon": 100,
+      "mean_gain": -0.0001806939641634623,
+      "signal": false
+    },
+    {
+      "architecture": "B",
+      "assessable": true,
+      "by_seed": {
+        "151001301": 0.000842672772705555,
+        "151001302": 0.00017873849719762802,
+        "151001303": -0.00043637678027153015
+      },
+      "comparison": "F2",
+      "exploratory_p": 0.75,
+      "holm_adjusted_exploratory_p": 1,
+      "horizon": 0,
+      "mean_gain": 0.00019501149654388428,
+      "signal": false
+    },
+    {
+      "architecture": "B",
+      "assessable": true,
+      "by_seed": {
+        "151001301": 0.0005155680701136589,
+        "151001302": 0.000296764075756073,
+        "151001303": -0.0007124142721295357
+      },
+      "comparison": "F3",
+      "exploratory_p": 1.0,
+      "holm_adjusted_exploratory_p": 1,
+      "horizon": 0,
+      "mean_gain": 3.330595791339874e-05,
+      "signal": false
+    },
+    {
+      "architecture": "B",
+      "assessable": true,
+      "by_seed": {
+        "151001301": 0.00024121440947055817,
+        "151001302": 0.0009727440774440765,
+        "151001303": 0.0008804462850093842
+      },
+      "comparison": "L1",
+      "exploratory_p": 0.25,
+      "holm_adjusted_exploratory_p": 0.75,
+      "horizon": 100,
+      "mean_gain": 0.0006981349239746729,
+      "signal": false
+    }
+  ],
+  "independence": "Three Seeds; candidates/Arms are paired dependent comparisons, not independent replications"
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "minicells.fragment-implementation-bindings.v1",
+  "word_ids": "0 is explicit story boundary; full SHA256(UTF8 normalized word) keys assigned IDs 1.. in deterministic encounter order: fixed Main manifest order, then historical train raw order, then validation raw order; never compare word IDs across independently built vocabularies",
+  "binary_format": "little-endian uint32 source tokens; patterns MCF1 + uint32 count + repeated uint32 length and sequence; compiler uint64 unsigned overflow modulo 2^64",
+  "historical_model_stream_guard": "Check first 120000000 old-2048 train tokens and 1000000 validation tokens as uint16 against immutable 007 manifest, without treating later full-story over-exclusion as consumed training",
+  "per_pattern_examples": 3,
+  "public_example_order": "First 128 matching pattern IDs per view/length; not ranked by model quality",
+  "normalization_runtime": "Record Python and Unicode database versions; no package substitution to obtain a preferred result",
+  "index_durability": "Large streams, patterns, mappings and complete match counts retained locally with SHA256 manifests; no HF upload or remote persistence claimed",
+  "gate_effect": "No scientific pass/fail threshold or Proof B approval introduced"
+}

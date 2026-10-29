@@ -1,0 +1,310 @@
+{
+  "D_MoE": "NOT_IMPLEMENTED_PENDING_ARCHITECTURE_FREEZE",
+  "E_Dense": "NOT_IMPLEMENTED_PENDING_ARCHITECTURE_FREEZE",
+  "activation_and_FLOPs": "NOT_MEASURED_DO_NOT_EQUATE_PARAMETER_COUNT_WITH_FLOPs",
+  "comparison_tracks": [
+    "TOTAL_PARAMETER_MATCHED",
+    "ACTIVATED_COMPUTE_MATCHED"
+  ],
+  "latency_memory_throughput": "PENDING_REAL_HARDWARE_PROTOCOL",
+  "native_synthetic_fixture": {
+    "groups": {
+      "cells": {
+        "entries": [
+          {
+            "name": "cells.0.up.weight",
+            "parameters": 128,
+            "shape": [
+              16,
+              8
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.0.down.weight",
+            "parameters": 128,
+            "shape": [
+              8,
+              16
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.1.up.weight",
+            "parameters": 128,
+            "shape": [
+              16,
+              8
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.1.down.weight",
+            "parameters": 128,
+            "shape": [
+              8,
+              16
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.2.up.weight",
+            "parameters": 128,
+            "shape": [
+              16,
+              8
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.2.down.weight",
+            "parameters": 128,
+            "shape": [
+              8,
+              16
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.3.up.weight",
+            "parameters": 128,
+            "shape": [
+              16,
+              8
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.3.down.weight",
+            "parameters": 128,
+            "shape": [
+              8,
+              16
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.4.up.weight",
+            "parameters": 128,
+            "shape": [
+              16,
+              8
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.4.down.weight",
+            "parameters": 128,
+            "shape": [
+              8,
+              16
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.5.up.weight",
+            "parameters": 128,
+            "shape": [
+              16,
+              8
+            ],
+            "trainable": true
+          },
+          {
+            "name": "cells.5.down.weight",
+            "parameters": 128,
+            "shape": [
+              8,
+              16
+            ],
+            "trainable": true
+          }
+        ],
+        "parameters": 1536
+      },
+      "connection": {
+        "entries": [
+          {
+            "name": "connection.linear.weight",
+            "parameters": 138,
+            "shape": [
+              6,
+              23
+            ],
+            "trainable": true
+          },
+          {
+            "name": "connection.linear.bias",
+            "parameters": 6,
+            "shape": [
+              6
+            ],
+            "trainable": true
+          }
+        ],
+        "parameters": 144
+      },
+      "public": {
+        "entries": [
+          {
+            "name": "embedding.weight",
+            "parameters": 256,
+            "shape": [
+              32,
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "position.weight",
+            "parameters": 32,
+            "shape": [
+              4,
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "init.weight",
+            "parameters": 64,
+            "shape": [
+              8,
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "memory.norm.weight",
+            "parameters": 8,
+            "shape": [
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "memory.norm.bias",
+            "parameters": 8,
+            "shape": [
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "memory.key.weight",
+            "parameters": 64,
+            "shape": [
+              8,
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "memory.value.weight",
+            "parameters": 64,
+            "shape": [
+              8,
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "norm.weight",
+            "parameters": 8,
+            "shape": [
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "norm.bias",
+            "parameters": 8,
+            "shape": [
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "final.weight",
+            "parameters": 8,
+            "shape": [
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "final.bias",
+            "parameters": 8,
+            "shape": [
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "context.query.weight",
+            "parameters": 64,
+            "shape": [
+              8,
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "context.output.weight",
+            "parameters": 64,
+            "shape": [
+              8,
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.stage.weight",
+            "parameters": 16,
+            "shape": [
+              4,
+              4
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.net.0.weight",
+            "parameters": 96,
+            "shape": [
+              8,
+              12
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.net.0.bias",
+            "parameters": 8,
+            "shape": [
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.net.2.weight",
+            "parameters": 48,
+            "shape": [
+              6,
+              8
+            ],
+            "trainable": false
+          },
+          {
+            "name": "gate.net.2.bias",
+            "parameters": 6,
+            "shape": [
+              6
+            ],
+            "trainable": false
+          }
+        ],
+        "parameters": 830
+      }
+    },
+    "tied_lm_head": "embedding.weight; counted once",
+    "total": 2510
+  }
+}

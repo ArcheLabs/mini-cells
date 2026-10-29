@@ -1,0 +1,100 @@
+{
+  "schema": "minicells.r3m.recovered-metadata-review.v1",
+  "status": "RECOVERED_METADATA_IDENTITY_AND_INTERNAL_STRUCTURE_VERIFIED_REGISTRATION_BLOCKED",
+  "auditor_sha256": "860ed7105a002ba69b50dbb482850ad65a103a1feb661f0bae0684eeb24d1f16",
+  "input_files": {
+    "RECOVERY_PROOF.json": {
+      "sha256": "1f772cb56a9e8e68e7ce26ec55200f614138c8454453179c6f37107040a32821",
+      "bytes": 1739
+    },
+    "manifest.json": {
+      "sha256": "d8a0fd0da03e6c15bec8506c4e217f7e9c52111ac792470cf271036352a51193",
+      "bytes": 122715
+    },
+    "windows.json": {
+      "sha256": "0ecfd4848bb99b01bf87cb50ec02265b7fcc2a1506fbec6bfc28b2a1f40d9291",
+      "bytes": 1535422
+    }
+  },
+  "hf_revision": "828585f1ff93420aa4485c725211ed28f70d15f3",
+  "source_shard_sha256": "77cf780cebe52b6e83e3a2ac84bc56d8059363113e41d17a023f1d8b2ed0fc0b",
+  "recovered_auditor_identity": "MATCHES_PINNED_RECOVERY_IMPLEMENTATION",
+  "tokenizer": {
+    "expected_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "kaggle_hash_attestation": "MATCHES_ORIGINAL_FIXED_IDENTITY",
+    "local_original_bytes_supplied": false,
+    "local_independent_hash": "NOT_PERFORMED_NO_LOCAL_BYTES"
+  },
+  "historical_window_function": {
+    "path": "research/projects/cellular-language-models/experiments/006-path-first-clm/extension-parameter-depth/exploration-fast-001/implementation/fast001/data.py",
+    "sha256": "74b39618c2214d64c526a20f5b8637ad3052276f5f693fb15c8a1bbe724373b0"
+  },
+  "roles": {
+    "train": {
+      "stories": 8192,
+      "eligible_windows": 23940,
+      "evaluation_windows": 0,
+      "token_extent": 1799302,
+      "raw_index_min": 0,
+      "raw_index_max": 8191,
+      "story_hash_mapping": "PASS",
+      "input_plus_target_within_story": "PASS",
+      "eligible_start_enumeration": "PASS_FROM_ATTESTED_OFFSETS",
+      "evaluation_sampling": "NOT_APPLICABLE"
+    },
+    "calibration": {
+      "stories": 128,
+      "eligible_windows": 330,
+      "evaluation_windows": 32,
+      "token_extent": 25572,
+      "raw_index_min": 50000,
+      "raw_index_max": 50127,
+      "story_hash_mapping": "PASS",
+      "input_plus_target_within_story": "PASS",
+      "eligible_start_enumeration": "PASS_FROM_ATTESTED_OFFSETS",
+      "evaluation_sampling": "EXACT_HISTORICAL_RULE_MATCH"
+    },
+    "admission": {
+      "stories": 128,
+      "eligible_windows": 317,
+      "evaluation_windows": 32,
+      "token_extent": 24273,
+      "raw_index_min": 50128,
+      "raw_index_max": 50255,
+      "story_hash_mapping": "PASS",
+      "input_plus_target_within_story": "PASS",
+      "eligible_start_enumeration": "PASS_FROM_ATTESTED_OFFSETS",
+      "evaluation_sampling": "EXACT_HISTORICAL_RULE_MATCH"
+    },
+    "development": {
+      "stories": 256,
+      "eligible_windows": 620,
+      "evaluation_windows": 128,
+      "token_extent": 48149,
+      "raw_index_min": 50256,
+      "raw_index_max": 50511,
+      "story_hash_mapping": "PASS",
+      "input_plus_target_within_story": "PASS",
+      "eligible_start_enumeration": "PASS_FROM_ATTESTED_OFFSETS",
+      "evaluation_sampling": "EXACT_HISTORICAL_RULE_MATCH"
+    }
+  },
+  "story_membership_and_exact_source_hashes": "PASS_8704_RECORDS",
+  "role_content_disjointness": "PASS_EXACT_RAW_SHA256",
+  "main_vs_recovered_roles": "PASS_RAW_ID_AND_WHOLE_STORY_EXACT_HASH_ONLY",
+  "main_candidate_manifest_sha256": "a9c38b8f6293cdc0b1ae76fd1f30ed612aa79c76aba1ca6427b5ae9b08ea8e4d",
+  "main_candidates_changed": false,
+  "evaluation_start_rule": "EXACT_ORIGINAL_GROUPED_WINDOWS_SEED_151001304",
+  "limitations": [
+    "Token offsets are hash-bound original metadata, not independently re-tokenized without tokenizer bytes.",
+    "Eligible training starts and fixed evaluation starts are not actual optimizer-consumed starts.",
+    "Whole-story hash nonoverlap does not establish fragment, cross-story or cross-tokenizer window nonoverlap.",
+    "Recovered R3 assets do not identify actual R3k/R3l research-role assets."
+  ],
+  "window_gate": "BLOCKED",
+  "path_b_approved": false,
+  "scientific_review": "PENDING",
+  "registration_changed": false,
+  "quality_evaluations": 0,
+  "gpu_training_started": false
+}

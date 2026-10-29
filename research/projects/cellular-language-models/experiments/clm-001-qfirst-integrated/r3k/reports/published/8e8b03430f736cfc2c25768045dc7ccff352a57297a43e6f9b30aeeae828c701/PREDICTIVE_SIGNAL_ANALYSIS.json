@@ -1,0 +1,854 @@
+{
+  "cell_mechanism_correlations": {
+    "S_Cal": 0.3590733590733591,
+    "S_Cell": -0.12123552123552124,
+    "S_Direct": 0.4,
+    "S_K10": 0.2182754182754183,
+    "S_Slope": -0.17503217503217505
+  },
+  "core_questions": {
+    "Q1_Direct_predicts_future_value": "PREDICTIVE_SIGNAL_NOT_SUPPORTED",
+    "Q2_Early_Cell_adaptation_signal": "PREDICTIVE_SIGNAL_NOT_SUPPORTED",
+    "Q3_Any_fixed_early_predictor_signal": "PREDICTIVE_SIGNAL_NOT_SUPPORTED"
+  },
+  "extreme_point_rule": "Frozen leave-one-case-out minimum rho >= 0.20",
+  "groups": {
+    "R3K_ALL48": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 14,
+        "false_positive": 9,
+        "n": 48,
+        "positive_coverage": 0.36363636363636365,
+        "resolved": 48,
+        "rho": 0.18638732088580112,
+        "sign_accuracy": 0.5208333333333334
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 11,
+        "false_positive": 17,
+        "n": 48,
+        "positive_coverage": 0.5,
+        "resolved": 48,
+        "rho": -0.10182370820668693,
+        "sign_accuracy": 0.4166666666666667
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 10,
+        "false_positive": 14,
+        "n": 48,
+        "positive_coverage": 0.5454545454545454,
+        "resolved": 48,
+        "rho": 0.13808076422058185,
+        "sign_accuracy": 0.5
+      },
+      "S_K10": {
+        "abstention_fraction": 0.02083333333333337,
+        "false_negative": 12,
+        "false_positive": 10,
+        "n": 48,
+        "positive_coverage": 0.45454545454545453,
+        "resolved": 47,
+        "rho": 0.14090316977854972,
+        "sign_accuracy": 0.5319148936170213
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.02083333333333337,
+        "false_negative": 13,
+        "false_positive": 11,
+        "n": 48,
+        "positive_coverage": 0.38095238095238093,
+        "resolved": 47,
+        "rho": -0.004342162396873643,
+        "sign_accuracy": 0.48936170212765956
+      }
+    },
+    "R3K_NEW36": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 12,
+        "false_positive": 4,
+        "leave_one_out_min_rho": 0.2372549019607843,
+        "n": 36,
+        "positive_coverage": 0.2,
+        "positive_seeds": 3,
+        "resolved": 36,
+        "rho": 0.27181467181467184,
+        "sign_accuracy": 0.5555555555555556,
+        "status": "PREDICTIVE_SIGNAL_NOT_SUPPORTED"
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 7,
+        "false_positive": 13,
+        "leave_one_out_min_rho": -0.18375350140056024,
+        "n": 36,
+        "positive_coverage": 0.5333333333333333,
+        "positive_seeds": 0,
+        "resolved": 36,
+        "rho": -0.12844272844272847,
+        "sign_accuracy": 0.4444444444444444,
+        "status": "PREDICTIVE_SIGNAL_NOT_SUPPORTED"
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 11,
+        "leave_one_out_min_rho": 0.17815126050420171,
+        "n": 36,
+        "positive_coverage": 0.6666666666666666,
+        "positive_seeds": 2,
+        "resolved": 36,
+        "rho": 0.24144144144144145,
+        "sign_accuracy": 0.5555555555555556,
+        "status": "PREDICTIVE_SIGNAL_NOT_SUPPORTED"
+      },
+      "S_K10": {
+        "abstention_fraction": 0.02777777777777779,
+        "false_negative": 8,
+        "false_positive": 8,
+        "leave_one_out_min_rho": 0.10756302521008403,
+        "n": 36,
+        "positive_coverage": 0.4666666666666667,
+        "positive_seeds": 2,
+        "resolved": 35,
+        "rho": 0.1716859716859717,
+        "sign_accuracy": 0.5428571428571428,
+        "status": "PREDICTIVE_SIGNAL_NOT_SUPPORTED"
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.02777777777777779,
+        "false_negative": 9,
+        "false_positive": 8,
+        "leave_one_out_min_rho": -0.08487394957983195,
+        "n": 36,
+        "positive_coverage": 0.35714285714285715,
+        "positive_seeds": 1,
+        "resolved": 35,
+        "rho": -0.014929214929214929,
+        "sign_accuracy": 0.5142857142857142,
+        "status": "PREDICTIVE_SIGNAL_NOT_SUPPORTED"
+      }
+    },
+    "architecture=A": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 7,
+        "n": 24,
+        "positive_coverage": 0.5555555555555556,
+        "resolved": 24,
+        "rho": 0.049565217391304345,
+        "sign_accuracy": 0.5416666666666666
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 10,
+        "n": 24,
+        "positive_coverage": 0.6666666666666666,
+        "resolved": 24,
+        "rho": 0.06434782608695652,
+        "sign_accuracy": 0.4583333333333333
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 6,
+        "n": 24,
+        "positive_coverage": 0.6666666666666666,
+        "resolved": 24,
+        "rho": 0.32695652173913037,
+        "sign_accuracy": 0.625
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 3,
+        "n": 24,
+        "positive_coverage": 0.5555555555555556,
+        "resolved": 24,
+        "rho": 0.5330434782608695,
+        "sign_accuracy": 0.7083333333333334
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 7,
+        "n": 24,
+        "positive_coverage": 0.4444444444444444,
+        "resolved": 24,
+        "rho": 0.09913043478260869,
+        "sign_accuracy": 0.5
+      }
+    },
+    "architecture=B": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 10,
+        "false_positive": 2,
+        "n": 24,
+        "positive_coverage": 0.23076923076923078,
+        "resolved": 24,
+        "rho": 0.4260869565217391,
+        "sign_accuracy": 0.5
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 8,
+        "false_positive": 7,
+        "n": 24,
+        "positive_coverage": 0.38461538461538464,
+        "resolved": 24,
+        "rho": -0.20347826086956516,
+        "sign_accuracy": 0.375
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 7,
+        "false_positive": 8,
+        "n": 24,
+        "positive_coverage": 0.46153846153846156,
+        "resolved": 24,
+        "rho": 0.09217391304347824,
+        "sign_accuracy": 0.375
+      },
+      "S_K10": {
+        "abstention_fraction": 0.04166666666666663,
+        "false_negative": 8,
+        "false_positive": 7,
+        "n": 24,
+        "positive_coverage": 0.38461538461538464,
+        "resolved": 23,
+        "rho": 0.034782608695652174,
+        "sign_accuracy": 0.34782608695652173
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.04166666666666663,
+        "false_negative": 8,
+        "false_positive": 4,
+        "n": 24,
+        "positive_coverage": 0.3333333333333333,
+        "resolved": 23,
+        "rho": -0.10869565217391304,
+        "sign_accuracy": 0.4782608695652174
+      }
+    },
+    "arm=A-CH": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 3,
+        "n": 12,
+        "positive_coverage": 0.5,
+        "resolved": 12,
+        "rho": -0.07692307692307693,
+        "sign_accuracy": 0.5
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 2,
+        "false_positive": 5,
+        "n": 12,
+        "positive_coverage": 0.6666666666666666,
+        "resolved": 12,
+        "rho": 0.06993006993006995,
+        "sign_accuracy": 0.4166666666666667
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 2,
+        "false_positive": 2,
+        "n": 12,
+        "positive_coverage": 0.6666666666666666,
+        "resolved": 12,
+        "rho": 0.2447552447552448,
+        "sign_accuracy": 0.6666666666666666
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 0,
+        "n": 12,
+        "positive_coverage": 0.5,
+        "resolved": 12,
+        "rho": 0.6433566433566434,
+        "sign_accuracy": 0.75
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 3,
+        "n": 12,
+        "positive_coverage": 0.5,
+        "resolved": 12,
+        "rho": 0.034965034965034975,
+        "sign_accuracy": 0.5
+      }
+    },
+    "arm=A-CT": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 1,
+        "false_positive": 4,
+        "n": 12,
+        "positive_coverage": 0.6666666666666666,
+        "resolved": 12,
+        "rho": -0.18881118881118883,
+        "sign_accuracy": 0.5833333333333334
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 1,
+        "false_positive": 5,
+        "n": 12,
+        "positive_coverage": 0.6666666666666666,
+        "resolved": 12,
+        "rho": -0.17482517482517487,
+        "sign_accuracy": 0.5
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 1,
+        "false_positive": 4,
+        "n": 12,
+        "positive_coverage": 0.6666666666666666,
+        "resolved": 12,
+        "rho": 0.5314685314685316,
+        "sign_accuracy": 0.5833333333333334
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0,
+        "false_negative": 1,
+        "false_positive": 3,
+        "n": 12,
+        "positive_coverage": 0.6666666666666666,
+        "resolved": 12,
+        "rho": 0.6433566433566434,
+        "sign_accuracy": 0.6666666666666666
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0,
+        "false_negative": 2,
+        "false_positive": 4,
+        "n": 12,
+        "positive_coverage": 0.3333333333333333,
+        "resolved": 12,
+        "rho": 0.1258741258741259,
+        "sign_accuracy": 0.5
+      }
+    },
+    "arm=B-CH": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 6,
+        "false_positive": 1,
+        "n": 12,
+        "positive_coverage": 0.14285714285714285,
+        "resolved": 12,
+        "rho": 0.31468531468531474,
+        "sign_accuracy": 0.4166666666666667
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 2,
+        "n": 12,
+        "positive_coverage": 0.2857142857142857,
+        "resolved": 12,
+        "rho": -0.2657342657342658,
+        "sign_accuracy": 0.4166666666666667
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 4,
+        "n": 12,
+        "positive_coverage": 0.42857142857142855,
+        "resolved": 12,
+        "rho": 0.15384615384615385,
+        "sign_accuracy": 0.3333333333333333
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 4,
+        "n": 12,
+        "positive_coverage": 0.2857142857142857,
+        "resolved": 12,
+        "rho": -0.034965034965034975,
+        "sign_accuracy": 0.25
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 1,
+        "n": 12,
+        "positive_coverage": 0.2857142857142857,
+        "resolved": 12,
+        "rho": -0.30069930069930073,
+        "sign_accuracy": 0.5
+      }
+    },
+    "arm=B-CT": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 1,
+        "n": 12,
+        "positive_coverage": 0.3333333333333333,
+        "resolved": 12,
+        "rho": 0.5804195804195805,
+        "sign_accuracy": 0.5833333333333334
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 5,
+        "n": 12,
+        "positive_coverage": 0.5,
+        "resolved": 12,
+        "rho": 0.06293706293706294,
+        "sign_accuracy": 0.3333333333333333
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 4,
+        "n": 12,
+        "positive_coverage": 0.5,
+        "resolved": 12,
+        "rho": -0.02097902097902098,
+        "sign_accuracy": 0.4166666666666667
+      },
+      "S_K10": {
+        "abstention_fraction": 0.08333333333333337,
+        "false_negative": 3,
+        "false_positive": 3,
+        "n": 12,
+        "positive_coverage": 0.5,
+        "resolved": 11,
+        "rho": 0.2027972027972028,
+        "sign_accuracy": 0.45454545454545453
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.08333333333333337,
+        "false_negative": 3,
+        "false_positive": 3,
+        "n": 12,
+        "positive_coverage": 0.4,
+        "resolved": 11,
+        "rho": 0.17482517482517487,
+        "sign_accuracy": 0.45454545454545453
+      }
+    },
+    "historical_accepted=False": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 14,
+        "false_positive": 5,
+        "n": 40,
+        "positive_coverage": 0.2222222222222222,
+        "resolved": 40,
+        "rho": 0.21744840525328332,
+        "sign_accuracy": 0.525
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 9,
+        "false_positive": 14,
+        "n": 40,
+        "positive_coverage": 0.5,
+        "resolved": 40,
+        "rho": -0.17917448405253283,
+        "sign_accuracy": 0.425
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 7,
+        "false_positive": 11,
+        "n": 40,
+        "positive_coverage": 0.6111111111111112,
+        "resolved": 40,
+        "rho": 0.17298311444652908,
+        "sign_accuracy": 0.55
+      },
+      "S_K10": {
+        "abstention_fraction": 0.025000000000000022,
+        "false_negative": 10,
+        "false_positive": 8,
+        "n": 40,
+        "positive_coverage": 0.4444444444444444,
+        "resolved": 39,
+        "rho": 0.11500938086303941,
+        "sign_accuracy": 0.5384615384615384
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.025000000000000022,
+        "false_negative": 10,
+        "false_positive": 9,
+        "n": 40,
+        "positive_coverage": 0.4117647058823529,
+        "resolved": 39,
+        "rho": 0.005440900562851784,
+        "sign_accuracy": 0.5128205128205128
+      }
+    },
+    "historical_accepted=True": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 0,
+        "false_positive": 4,
+        "n": 8,
+        "positive_coverage": 1.0,
+        "resolved": 8,
+        "rho": 0.0,
+        "sign_accuracy": 0.5
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 2,
+        "false_positive": 3,
+        "n": 8,
+        "positive_coverage": 0.5,
+        "resolved": 8,
+        "rho": 0.11904761904761905,
+        "sign_accuracy": 0.375
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 3,
+        "n": 8,
+        "positive_coverage": 0.25,
+        "resolved": 8,
+        "rho": 0.09523809523809526,
+        "sign_accuracy": 0.25
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0,
+        "false_negative": 2,
+        "false_positive": 2,
+        "n": 8,
+        "positive_coverage": 0.5,
+        "resolved": 8,
+        "rho": 0.1666666666666667,
+        "sign_accuracy": 0.5
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 2,
+        "n": 8,
+        "positive_coverage": 0.25,
+        "resolved": 8,
+        "rho": 0.14285714285714288,
+        "sign_accuracy": 0.375
+      }
+    },
+    "routing=H": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 9,
+        "false_positive": 4,
+        "n": 24,
+        "positive_coverage": 0.3076923076923077,
+        "resolved": 24,
+        "rho": 0.04608695652173912,
+        "sign_accuracy": 0.4583333333333333
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 7,
+        "false_positive": 7,
+        "n": 24,
+        "positive_coverage": 0.46153846153846156,
+        "resolved": 24,
+        "rho": -0.11913043478260868,
+        "sign_accuracy": 0.4166666666666667
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 6,
+        "false_positive": 6,
+        "n": 24,
+        "positive_coverage": 0.5384615384615384,
+        "resolved": 24,
+        "rho": 0.08869565217391304,
+        "sign_accuracy": 0.5
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0,
+        "false_negative": 8,
+        "false_positive": 4,
+        "n": 24,
+        "positive_coverage": 0.38461538461538464,
+        "resolved": 24,
+        "rho": 0.09913043478260869,
+        "sign_accuracy": 0.5
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0,
+        "false_negative": 8,
+        "false_positive": 4,
+        "n": 24,
+        "positive_coverage": 0.38461538461538464,
+        "resolved": 24,
+        "rho": -0.10956521739130433,
+        "sign_accuracy": 0.5
+      }
+    },
+    "routing=T": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 5,
+        "n": 24,
+        "positive_coverage": 0.4444444444444444,
+        "resolved": 24,
+        "rho": 0.3078260869565217,
+        "sign_accuracy": 0.5833333333333334
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 10,
+        "n": 24,
+        "positive_coverage": 0.5555555555555556,
+        "resolved": 24,
+        "rho": -0.02869565217391304,
+        "sign_accuracy": 0.4166666666666667
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 8,
+        "n": 24,
+        "positive_coverage": 0.5555555555555556,
+        "resolved": 24,
+        "rho": 0.2208695652173913,
+        "sign_accuracy": 0.5
+      },
+      "S_K10": {
+        "abstention_fraction": 0.04166666666666663,
+        "false_negative": 4,
+        "false_positive": 6,
+        "n": 24,
+        "positive_coverage": 0.5555555555555556,
+        "resolved": 23,
+        "rho": 0.32521739130434785,
+        "sign_accuracy": 0.5652173913043478
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.04166666666666663,
+        "false_negative": 5,
+        "false_positive": 7,
+        "n": 24,
+        "positive_coverage": 0.375,
+        "resolved": 23,
+        "rho": 0.17130434782608694,
+        "sign_accuracy": 0.4782608695652174
+      }
+    },
+    "seed=151001301": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 3,
+        "n": 16,
+        "positive_coverage": 0.375,
+        "resolved": 16,
+        "rho": 0.2588235294117647,
+        "sign_accuracy": 0.5
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 7,
+        "n": 16,
+        "positive_coverage": 0.375,
+        "resolved": 16,
+        "rho": -0.4852941176470588,
+        "sign_accuracy": 0.25
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 4,
+        "n": 16,
+        "positive_coverage": 0.5,
+        "resolved": 16,
+        "rho": 0.014705882352941175,
+        "sign_accuracy": 0.5
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0625,
+        "false_negative": 4,
+        "false_positive": 2,
+        "n": 16,
+        "positive_coverage": 0.5,
+        "resolved": 15,
+        "rho": 0.15588235294117647,
+        "sign_accuracy": 0.6
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 3,
+        "n": 16,
+        "positive_coverage": 0.5,
+        "resolved": 16,
+        "rho": 0.047058823529411764,
+        "sign_accuracy": 0.5625
+      }
+    },
+    "seed=151001302": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 3,
+        "n": 16,
+        "positive_coverage": 0.42857142857142855,
+        "resolved": 16,
+        "rho": 0.19117647058823528,
+        "sign_accuracy": 0.5625
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 4,
+        "n": 16,
+        "positive_coverage": 0.5714285714285714,
+        "resolved": 16,
+        "rho": 0.25,
+        "sign_accuracy": 0.5625
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 3,
+        "n": 16,
+        "positive_coverage": 0.5714285714285714,
+        "resolved": 16,
+        "rho": 0.17352941176470588,
+        "sign_accuracy": 0.625
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 2,
+        "n": 16,
+        "positive_coverage": 0.42857142857142855,
+        "resolved": 16,
+        "rho": 0.4823529411764706,
+        "sign_accuracy": 0.625
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0625,
+        "false_negative": 5,
+        "false_positive": 3,
+        "n": 16,
+        "positive_coverage": 0.16666666666666666,
+        "resolved": 15,
+        "rho": 0.16764705882352943,
+        "sign_accuracy": 0.4666666666666667
+      }
+    },
+    "seed=151001303": {
+      "S_Cal": {
+        "abstention_fraction": 0.0,
+        "false_negative": 5,
+        "false_positive": 3,
+        "n": 16,
+        "positive_coverage": 0.2857142857142857,
+        "resolved": 16,
+        "rho": 0.055882352941176466,
+        "sign_accuracy": 0.5
+      },
+      "S_Cell": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 6,
+        "n": 16,
+        "positive_coverage": 0.5714285714285714,
+        "resolved": 16,
+        "rho": -0.31764705882352945,
+        "sign_accuracy": 0.4375
+      },
+      "S_Direct": {
+        "abstention_fraction": 0.0,
+        "false_negative": 3,
+        "false_positive": 7,
+        "n": 16,
+        "positive_coverage": 0.5714285714285714,
+        "resolved": 16,
+        "rho": -0.0411764705882353,
+        "sign_accuracy": 0.375
+      },
+      "S_K10": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 6,
+        "n": 16,
+        "positive_coverage": 0.42857142857142855,
+        "resolved": 16,
+        "rho": -0.19117647058823528,
+        "sign_accuracy": 0.375
+      },
+      "S_Slope": {
+        "abstention_fraction": 0.0,
+        "false_negative": 4,
+        "false_positive": 5,
+        "n": 16,
+        "positive_coverage": 0.42857142857142855,
+        "resolved": 16,
+        "rho": -0.2411764705882353,
+        "sign_accuracy": 0.4375
+      }
+    }
+  },
+  "limitation": "Only three independent Seeds. Cluster bootstrap and within-trajectory score-label swaps assume exchangeability and are exploratory, not independent confirmation.",
+  "primary_comparisons": [
+    {
+      "cluster_bootstrap_ci95": [
+        -0.46589499060834866,
+        0.47151140261511415
+      ],
+      "holm_adjusted_exploratory_p": 0.6011994002998501,
+      "left": "S_K10",
+      "rho_gain": -0.10012870012870015,
+      "right": "S_Cal",
+      "sign_accuracy_gain": -0.012698412698412764,
+      "unadjusted_exploratory_p": 0.6011994002998501
+    },
+    {
+      "cluster_bootstrap_ci95": [
+        -0.6565714025969118,
+        -0.0008727565183639788
+      ],
+      "holm_adjusted_exploratory_p": 0.10794602698650674,
+      "left": "S_Cell",
+      "rho_gain": -0.36988416988416994,
+      "right": "S_Direct",
+      "sign_accuracy_gain": -0.11111111111111116,
+      "unadjusted_exploratory_p": 0.035982008995502246
+    },
+    {
+      "cluster_bootstrap_ci95": [
+        -0.6517799133175981,
+        0.16561559055709152
+      ],
+      "holm_adjusted_exploratory_p": 0.41379310344827586,
+      "left": "S_Slope",
+      "rho_gain": -0.25637065637065637,
+      "right": "S_Direct",
+      "sign_accuracy_gain": -0.041269841269841345,
+      "unadjusted_exploratory_p": 0.20689655172413793
+    }
+  ],
+  "scientific_confirmation": false,
+  "target": "V100_R3K_VALUE_HOLDOUT",
+  "unit": "Seed/Arm trajectory clusters; NOT 48 independent Seeds"
+}

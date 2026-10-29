@@ -1,0 +1,282 @@
+{
+  "answer_frequency_baseline": {
+    "dev": {
+      "facts": 833,
+      "majority_answer_fraction": 0.01800720288115246,
+      "scope": "DETERMINISTIC_LABEL_FREQUENCY_ONLY_NOT_MODEL_SELECTION"
+    },
+    "train": {
+      "facts": 3262,
+      "majority_answer_fraction": 0.012262415695892091,
+      "scope": "DETERMINISTIC_LABEL_FREQUENCY_ONLY_NOT_MODEL_SELECTION"
+    }
+  },
+  "answer_range_inclusive": [
+    20,
+    198
+  ],
+  "carry_strata": {
+    "dev": {
+      "carry": 387,
+      "no_carry": 446
+    },
+    "train": {
+      "carry": 1458,
+      "no_carry": 1804
+    }
+  },
+  "confirmation": "SEALED",
+  "eos_delimiter_added_between_training_facts": true,
+  "eos_token_id": 1,
+  "evaluation_fact_selection": "SHA256_GROUP_ORDER_WITH_EQUAL_CARRY_STRATA",
+  "fact_counts": {
+    "dev": 833,
+    "train": 3262
+  },
+  "fact_sets_sha256": {
+    "dev": "9bc984337069476b398f93c57d3a2860021372c7f7f434b6749ccd35259a6d1e",
+    "train": "ba4c8d43671772546524ed609332fe8ff91a67b76c6ccd1f1c46b0a9baacffd4"
+  },
+  "fact_split": "SHA256_DOMAIN_SEED_CANONICAL_UNORDERED_PAIR_MOD5_ZERO_IS_DEV",
+  "fixed_evaluation_facts": [
+    {
+      "answer": 84,
+      "carry": false,
+      "group": "11+73",
+      "sample_sha256": "26e08c97718517f72ea54a7a5cf698ea18e753adc3fb6f3388c34de2430b1f9f"
+    },
+    {
+      "answer": 168,
+      "carry": false,
+      "group": "72+96",
+      "sample_sha256": "c99cb7a284c5ae121c4a51dbfa5d2e7fac630f0e6e4f51417928af8f752fefbb"
+    },
+    {
+      "answer": 77,
+      "carry": false,
+      "group": "23+54",
+      "sample_sha256": "e93bf84310acd09242dbf5aafb46fa81ccaad59bb7ef00e6e89f108aae4a67bb"
+    },
+    {
+      "answer": 107,
+      "carry": false,
+      "group": "53+54",
+      "sample_sha256": "1face7be439d9ceb3c0f9bfe22f21741ce080234c558c9cacb15a95774083b28"
+    },
+    {
+      "answer": 107,
+      "carry": false,
+      "group": "34+73",
+      "sample_sha256": "9146f7425e0beec5c725837c7f8cce2584c9f539a97a042b2cfd263d93017dc3"
+    },
+    {
+      "answer": 179,
+      "carry": false,
+      "group": "80+99",
+      "sample_sha256": "11ec9c90614da4e90a0a9850aa830455684c9408466f56f07c6cc77ecfe5eadf"
+    },
+    {
+      "answer": 67,
+      "carry": false,
+      "group": "23+44",
+      "sample_sha256": "c752b839fda3452dab013e975fbad2932ff6cf7721964f7a717d7e5f44e53178"
+    },
+    {
+      "answer": 109,
+      "carry": false,
+      "group": "29+80",
+      "sample_sha256": "5879c1a2b6e07b17919035c9a1ef97390bda1868888cb079c72321219b3c62ab"
+    },
+    {
+      "answer": 134,
+      "carry": false,
+      "group": "60+74",
+      "sample_sha256": "bf55d64ec691fba5788efa94c90f3b23d882d8a1c5ff8e5b575029ceaf76a528"
+    },
+    {
+      "answer": 46,
+      "carry": false,
+      "group": "21+25",
+      "sample_sha256": "621201188c5e3bdc38b7cd15ec8c57efd508e62ecd97f9f66c3886ba00091530"
+    },
+    {
+      "answer": 69,
+      "carry": false,
+      "group": "11+58",
+      "sample_sha256": "0b163dfc81cf948f26dfcf5a915d49086d7b60a29ac678d78e29908fce5ce4aa"
+    },
+    {
+      "answer": 96,
+      "carry": false,
+      "group": "33+63",
+      "sample_sha256": "82ebf5178c224f7707c9332b7baacd7e63b05286efe6f7dfa81edc0a227f8377"
+    },
+    {
+      "answer": 68,
+      "carry": false,
+      "group": "32+36",
+      "sample_sha256": "041e30ae0869afad0cccce070738a68e3f1d2518b0ecb1a0b1ff5211775ee566"
+    },
+    {
+      "answer": 123,
+      "carry": false,
+      "group": "40+83",
+      "sample_sha256": "1590138e6ec3d90f5ef31b05977f4371eb89682bfd6a0d3e963fcbe29b300c51"
+    },
+    {
+      "answer": 99,
+      "carry": false,
+      "group": "17+82",
+      "sample_sha256": "46f9fbc2548ebbe2eb881d81b529d423eb3d5b99e218186a2f7484821a260353"
+    },
+    {
+      "answer": 58,
+      "carry": false,
+      "group": "21+37",
+      "sample_sha256": "bebceb258070bb6cd14c0975d9c6cb2b1b7b4c2d1355ba77a31c75fcd33a0b68"
+    },
+    {
+      "answer": 104,
+      "carry": true,
+      "group": "19+85",
+      "sample_sha256": "bb2df1f7d3407fc319de16279d569242e1b6fd28fa06469c58015e20f5ce9712"
+    },
+    {
+      "answer": 63,
+      "carry": true,
+      "group": "18+45",
+      "sample_sha256": "6b313a7f7aef22dbe2df5506ed67f983fa355f51abd051c0710486239afe4583"
+    },
+    {
+      "answer": 110,
+      "carry": true,
+      "group": "55+55",
+      "sample_sha256": "eeaa540fc8eb8f9bf0d8f5838bd5bec3cd9845df548ec3d74c8fc40bb3b7efec"
+    },
+    {
+      "answer": 131,
+      "carry": true,
+      "group": "37+94",
+      "sample_sha256": "cca02198a379735d4c54eb48ca4cd9351066d1f815d7fad9539fb1abbbacd6e4"
+    },
+    {
+      "answer": 80,
+      "carry": true,
+      "group": "17+63",
+      "sample_sha256": "3a09d2077e1bd3b3738e22a65b28e2125bd8a56304a35a4dd8f5fcff34c844ed"
+    },
+    {
+      "answer": 152,
+      "carry": true,
+      "group": "74+78",
+      "sample_sha256": "37925f16bf87e32ab34a6d3eed56f0714943cd6c10f4a7c7626a3a04d2ef5bed"
+    },
+    {
+      "answer": 44,
+      "carry": true,
+      "group": "18+26",
+      "sample_sha256": "086190d6c9691cd1cc13fa4d1be70f18be1cfb2e7b2b631bcb09d7fd68500ee8"
+    },
+    {
+      "answer": 147,
+      "carry": true,
+      "group": "48+99",
+      "sample_sha256": "ac88136e7886ec6e1f29a068f7b06bb65fac1e18a79d1c0b1c7a0e895ff51cf6"
+    },
+    {
+      "answer": 113,
+      "carry": true,
+      "group": "45+68",
+      "sample_sha256": "09826f50ab9e5588ca7722cc4a1172e674cbf6c16178fb55e2cdf0722494d5b4"
+    },
+    {
+      "answer": 56,
+      "carry": true,
+      "group": "27+29",
+      "sample_sha256": "b1ebb6394850bc306da536709dabe3dcc5ccc3e6742d6486372c7b52c7e0c6b0"
+    },
+    {
+      "answer": 118,
+      "carry": true,
+      "group": "29+89",
+      "sample_sha256": "3b9941b65c59532280b46d2aeb2963862eccbe01c01b6263613660ca85fc18ad"
+    },
+    {
+      "answer": 142,
+      "carry": true,
+      "group": "59+83",
+      "sample_sha256": "b09841c887f1d7955fd475799c49c920bd4f8ce0c65c5e249b69f21c7c2889e9"
+    },
+    {
+      "answer": 144,
+      "carry": true,
+      "group": "48+96",
+      "sample_sha256": "64ea1de253ee647ca2fcbe47e813a2cdde56b1523c2676bc6eaf6ee71d74709a"
+    },
+    {
+      "answer": 197,
+      "carry": true,
+      "group": "98+99",
+      "sample_sha256": "21a47fe52aa35469519560e2a50c8a3c6e270c5dad4132a5da23d65ad806c174"
+    },
+    {
+      "answer": 60,
+      "carry": true,
+      "group": "25+35",
+      "sample_sha256": "d84d9d28af833599aec3d3aa09af5138432c210fb9beff9afc97b7c334282726"
+    },
+    {
+      "answer": 102,
+      "carry": true,
+      "group": "26+76",
+      "sample_sha256": "7057188292896774f743e19466418170478be381f89acb365a3d9e48cbb00964"
+    }
+  ],
+  "generator": "MINICELLS-R3ME-ARITH-v1",
+  "generator_seed": 153301,
+  "generator_sha256": "487d79c77a78cc3df5a009c0591b896e98e1f14f7f88f4d37584f27a0e99c7fd",
+  "operand_range_inclusive": [
+    10,
+    99
+  ],
+  "sample_counts": {
+    "dev": 833,
+    "train": 3262
+  },
+  "sample_hashes_sha256": {
+    "dev": "c3f0488601331e8b8418a2ebcfae706a38c1e8a1b65894163d48af4882b9e60a",
+    "train": "55ea7b4ad3324bb89203e16ef441f65d403c90bf9326d2dca575ab6b8775e593"
+  },
+  "schema": "minicells.r3me.arithmetic-data-audit.v1",
+  "template_variants_are_not_independent_facts": true,
+  "templates": [
+    "What is {a} plus {b}? Answer: ",
+    "Add {a} and {b}. Answer: ",
+    "Calculate {a} + {b}. Answer: ",
+    "Find the sum of {a} and {b}. Answer: "
+  ],
+  "token_length_histograms": {
+    "dev": {
+      "16": 4,
+      "17": 25,
+      "18": 103,
+      "19": 176,
+      "20": 139,
+      "21": 90,
+      "22": 175,
+      "23": 121
+    },
+    "train": {
+      "16": 8,
+      "17": 124,
+      "18": 391,
+      "19": 703,
+      "20": 527,
+      "21": 381,
+      "22": 682,
+      "23": 446
+    }
+  },
+  "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "train_dev_fact_overlap": 0
+}

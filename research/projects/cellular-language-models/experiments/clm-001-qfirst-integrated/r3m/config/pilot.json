@@ -1,0 +1,160 @@
+{
+  "experiment_id": "CLM-001-R3m-Stability-Reorganization-Boundary-001",
+  "scope": "EXPLORATORY_DEVELOPMENT",
+  "architecture": "B-H",
+  "cells": 6,
+  "calls_per_token": 8,
+  "tokens_per_step": 512,
+  "anchor_step": 300,
+  "continuation_steps": 600,
+  "pilot_seeds": [
+    151001301,
+    151001302,
+    151001303
+  ],
+  "main_seeds": [
+    151001401,
+    151001402,
+    151001403,
+    151001404,
+    151001405
+  ],
+  "environments": [
+    "N",
+    "C"
+  ],
+  "pilot_arms": [
+    "P0",
+    "P1",
+    "P2",
+    "P3"
+  ],
+  "main_arms": [
+    "S0",
+    "S1",
+    "S2",
+    "S3",
+    "S4"
+  ],
+  "barriers": [
+    0,
+    100,
+    110,
+    200,
+    400,
+    600
+  ],
+  "proposal_at": 100,
+  "shadow_steps": 10,
+  "lr_terminal_fraction": 0.2,
+  "epsilon_terminal": 0.02,
+  "perturbation": {
+    "rule": "TOKEN_ROW_CYCLIC_PERMUTATION",
+    "every": 20,
+    "phase_end": 400,
+    "permutation_seed": 153301
+  },
+  "pilot_thresholds": {
+    "action_min": 0.05,
+    "minimum_seeds": 2,
+    "answer_gain": 0.005,
+    "story_harm_max": 0.01,
+    "retention_min": 0.5,
+    "em_harm_max": 0.0
+  },
+  "pressure": {
+    "interval": 20,
+    "consecutive": 2,
+    "cooldown": 100,
+    "maximum_proposals": 2,
+    "threshold": null,
+    "loss_mean": null,
+    "loss_std": null,
+    "gradient_mean": null,
+    "gradient_std": null,
+    "gradient_observation": "FIXED_SIGNED_32_COMPONENTS_PER_PARAMETER_TENSOR_ZERO_FOR_UNUSED"
+  },
+  "main_release": {
+    "reviewed": false,
+    "pilot_manifest_sha256": null,
+    "frozen": false
+  },
+  "story_ranges": {
+    "trigger": [
+      10048,
+      10304
+    ],
+    "pilot_report": [
+      10304,
+      10560
+    ],
+    "main_report": [
+      10560,
+      11072
+    ]
+  },
+  "arithmetic": {
+    "seed": 153301,
+    "operands": [
+      10,
+      99
+    ],
+    "grouping": "DISJOINT_OPERAND_RESIDUES_AND_SUM_RESIDUES_AND_TEMPLATE_FAMILIES",
+    "roles": [
+      "train",
+      "trigger",
+      "pilot_report",
+      "main_report"
+    ]
+  },
+  "baseline": {
+    "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+    "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+    "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+    "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "scope": "IMMEDIATE_PRIVATE_READBACK_ONLY",
+      "writer_session_id": "586bb02767244ec1b517cdac1882a5c6"
+    },
+    "public_commit": "77b0f8dffd930b8be6a576e72049f213322ba028",
+    "manifest_report_path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/reports/published/126b550a18b6f38d6531a5848b6ca111e227714bb8befbdaf20a218abf7dcef4/RUN_MANIFEST.json",
+    "manifest_report_sha256": "5cc30355dedf0344b5a3001a585dfc267d70aa0f75e7508ef08f4c6f85010859",
+    "mapping": {
+      "A-FH": "A-H",
+      "A-FT": "A-T",
+      "B-FH": "B-H",
+      "B-FT": "B-T"
+    }
+  },
+  "confirmation": "SEALED",
+  "main_initialization": null,
+  "main_thresholds": {
+    "story_harm_max": null,
+    "answer_gain_min": null,
+    "utility_gain_min": null,
+    "specificity_min": null,
+    "false_positive_max": null,
+    "extra_compute_ratio_max": null
+  },
+  "frozen_pilot_choices": {
+    "shadow_acceptance": "TRAIN_ONLY_NLL_GAIN_AT_LEAST_R3I_0.001",
+    "evaluation": "32_CANONICAL_GROUPS_BALANCED_CARRY_2_TEMPLATES;32_STORIES_2_WINDOWS",
+    "eos_token": 1,
+    "answer_generation_cap": 8,
+    "schedule": "LINEAR_ANCHOR_TO_20_PERCENT_NO_WARMUP",
+    "perturbation": "CYCLE_ROW_ACTIONS_AND_PROBABILITIES_KEEP_STAGE_HISTOGRAM",
+    "cross_session_tolerance": {
+      "rtol": 1e-05,
+      "atol": 1e-07
+    },
+    "proposal": "R3I_FIXED_22_SCALES_QFIRST_ON_ALREADY_OBSERVED_TRAIN",
+    "scientific_thresholds": "PILOT_THRESHOLDS_EXPLORATORY_NOT_CONFIRMATORY"
+  },
+  "story_isolation_scope": "GLOBAL_HISTORY",
+  "data_registration_reviewed": false
+}

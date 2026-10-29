@@ -1,0 +1,186 @@
+{
+  "experiment_id": "CLM-001-R3m-F-D1-Supervision-Context-001",
+  "scope": "MECHANISM_DIAGNOSIS_NOT_PURE_FACTORIAL",
+  "seed": 151001301,
+  "anchor_step": 300,
+  "steps": 200,
+  "continuation_steps": 200,
+  "lr_terminal_fraction": 0.2,
+  "epsilon_terminal": 0.02,
+  "evaluation_steps": [
+    0,
+    50,
+    100,
+    200
+  ],
+  "arms": {
+    "A": {
+      "context": "PACKED",
+      "loss": "UNIFORM",
+      "execution": "REUSE_PUBLISHED_ONLY"
+    },
+    "B": {
+      "context": "PACKED",
+      "loss": "ANSWER_EOS"
+    },
+    "C": {
+      "context": "INDEPENDENT_QA",
+      "loss": "UNIFORM"
+    },
+    "D": {
+      "context": "INDEPENDENT_QA",
+      "loss": "ANSWER_EOS"
+    }
+  },
+  "source_rows_per_step": 8,
+  "source_sequence_tokens": 65,
+  "source_targets_per_step": 512,
+  "record_order": "FROZEN_EIGHT_TINY_RECORDS",
+  "sampler": "RESTORED_PARENT_PCG64; NumPy default_rng with exact Step300 state below; integers(8), append QA+EOS until >=65, truncate first65 independently per row; no carry",
+  "loss_normalization": "SUM_SELECTED_TARGET_CE_OVER_ALL_CHUNKS_DIVIDED_BY_STEP_SELECTED_TARGET_COUNT",
+  "independence": "SEPARATE_FORWARD_PER_RETAINED_QA_FRAGMENT; position0 reset; fresh input memory and predecessor; drop EOS->next-question transition",
+  "routing_randomness": "KEYED_CPU_TORCH_STREAMS_V1; source microbatch 0..7; generate full 64-token exogenous draw arrays at each absolute step/stage and slice by original source token offset for each independent QA fragment",
+  "independent_cursor": "INHERITED_DATA_CURSOR_COUNTS_SOURCE_512_SLOTS; PROCESSED_TARGETS_SEPARATELY_ACCOUNTED",
+  "answers": "ORIGINAL_LABEL_IDS_UNCHANGED; mask Answer and EOS by offsets, no padding",
+  "later_budget_extension": false,
+  "authorization": {
+    "gpu_training": false,
+    "full_r3mf_pilot": false,
+    "main_confirmation": false,
+    "reason": "Independent CPU engineering/protocol review and later separate run authorization required"
+  },
+  "original_result_commit": "ab5c734537776874ea5a57faa68a548f7c52b01b",
+  "audit_commit": "2d545f4530e6e7a02566879cae991f8ae7c84674",
+  "original_source": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05",
+  "inputs": {
+    "RECONSTRUCTED_TINY_RECORDS.json": {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/RECONSTRUCTED_TINY_RECORDS.json",
+      "sha256": "5776188bfb5e76624765920547c74e513ded91a97f2af10de3fd97384fef42de"
+    },
+    "TOKEN_DISTRIBUTION_PROOF.json": {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/TOKEN_DISTRIBUTION_PROOF.json",
+      "sha256": "176b4872f74ee751cc4e7c25b4725cdabbe930f6fdcdc1a1d9bf0e2aa5dd415c"
+    },
+    "original-TINY_OVERFIT_REPORT.json": {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/original-TINY_OVERFIT_REPORT.json",
+      "sha256": "bee8249be12adf4a003e974b204c0fe95e655134171e004cd3ea95556c22bec3"
+    },
+    "original-MODEL_LINEAGE.json": {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/original-MODEL_LINEAGE.json",
+      "sha256": "3f67dab9f295ee125d9f7960ae8059e1c27dc9e0b19cfb8adb86163ab22a980f"
+    }
+  },
+  "invariants": {
+    "cells": 6,
+    "calls_per_token": 8,
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "trainable": "CELLS_ONLY; original embedding/tied LM head, norms, projections, gate and Connection frozen",
+    "optimizer": "CONTINUE_ORIGINAL_CELL_ADAMW_NO_RESET",
+    "a_status": "TINY_OVERFIT_FAILED_IMMUTABLE"
+  },
+  "sampling_start": {
+    "checkpoint_step": 300,
+    "data_cursor": 153600,
+    "checkpoint_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "state_fingerprint": "053fd7ed95849d128524be73359ce04cd8cf5c68752f996cf821e937ba30907e",
+    "data_rng": {
+      "bit_generator": "PCG64",
+      "state": {
+        "state": 33570646379721314489055326921007332393,
+        "inc": 157120304889028543830475149769838040923
+      },
+      "has_uint32": 0,
+      "uinteger": 1792167167
+    },
+    "evidence_path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/TOKEN_DISTRIBUTION_PROOF.json",
+    "evidence_sha256": "176b4872f74ee751cc4e7c25b4725cdabbe930f6fdcdc1a1d9bf0e2aa5dd415c",
+    "cross_version_note": "Producer NumPy 2.1.3; start-state replay used NumPy 1.24.4. The complete original trial endpoint RNG was not independently compared. D1 freezes one common CPU-generated source-sampling plan; a future runtime must verify its step draws before applying an update."
+  },
+  "sampling_plan": {
+    "path": "engineering/{run_id}/SAMPLE_PLAN.json",
+    "schema": "minicells.r3mf_d1.common_sample_plan.v1",
+    "plan_is_cpu_generated_from_sampling_start": true,
+    "future_runtime_must_verify_each_step_draws": true,
+    "prospective_arms_share_exact_draws": [
+      "B",
+      "C",
+      "D"
+    ],
+    "arm_a_sampling_identity": "HISTORICAL_REUSED_ENDPOINT_NOT_CERTIFIED"
+  },
+  "input_records": {
+    "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m-f/audits/tiny-failure-001/RECONSTRUCTED_TINY_RECORDS.json",
+    "sha256": "5776188bfb5e76624765920547c74e513ded91a97f2af10de3fd97384fef42de"
+  },
+  "anchor_checkpoint": {
+    "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+    "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+    "seed": 151001301,
+    "arm": "B-H",
+    "step": 300,
+    "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+    "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+    "checkpoint_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "state_fingerprint": "053fd7ed95849d128524be73359ce04cd8cf5c68752f996cf821e937ba30907e",
+    "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff"
+  },
+  "budget_accounting": {
+    "packed_target_slots_per_step": 512,
+    "independent_target_slots_per_step_expected": 488,
+    "dropped_eos_to_next_prompt_edges_per_step_expected": 24,
+    "answer_eos_target_count_per_step": "REPLAY_DERIVED",
+    "cell_ffn_mac_per_hard_call": 63488,
+    "tied_lm_head_mac_per_position": 524288,
+    "attention_pair_count": "SUM_OVER_INDEPENDENT_CAUSAL_INPUT_LENGTHS",
+    "analytic_mac_only": true,
+    "wall_time_and_measured_flops": "NOT_ESTIMATED_IN_CPU_GATE"
+  },
+  "evaluation": {
+    "records": "ALL_EIGHT_FROZEN_TINY_FACTS_ONLY",
+    "generation": "FREE_AUTOREGRESSIVE_FROM_FROZEN_PROMPT_IDS; CAP 8; STOP_ON_EOS_1; EOS_EXCLUDED_FROM_DECODED_TEXT",
+    "metrics": [
+      "all_predictions",
+      "first_token_accuracy",
+      "strict_exact_match_requires_eos",
+      "text_only_exact_match",
+      "answer_nll",
+      "eos_termination_rate",
+      "eos_nll"
+    ],
+    "A_metrics": "REUSE_PUBLISHED_INITIAL_AND_FINAL_RESULT_WITH_PROVENANCE; NO_RETRAIN"
+  },
+  "learning_rate_and_optimizer": "ORIGINAL_R3M_CONTINUATION_SCHEDULE_FROM_STEP300; RESTORE_CELL_ADAMW_MOMENTS; NO_RESET; SAME_CELL_ONLY_TRAINABLE_MASK",
+  "tiny_facts": [
+    "0+1",
+    "1+2",
+    "2+2",
+    "2+7",
+    "3+4",
+    "4+6",
+    "6+8",
+    "7+9"
+  ],
+  "eos_token_id": 1,
+  "prompt_final_token_id": 200,
+  "original_result_run_id": "7f4ae3ed14da7ddbcfa9dcccce56e574450bed167cff0332cca35140d8b3fe68",
+  "cross_arm_comparability": {
+    "B_vs_A": "MECHANISTIC_ONLY; same frozen sampler definition and budget but A full production terminal RNG not independently attested; no exact sample-identity claim",
+    "D_vs_C": "PROSPECTIVE_OBJECTIVE_CONTRAST; same independent QA context and common source plan; only loss mask/normalization differs",
+    "context_contrasts": "NOT PURE_EQUAL_BUDGET; QA fragmentation removes cross-QA targets, resets positions and reduces input/attention work",
+    "difference_in_differences": "DESCRIPTIVE_ONLY; do not claim pure 2x2 interaction"
+  },
+  "baseline": {
+    "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+    "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+    "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+    "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+    "hf_reference": {
+      "cross_session_verified": false,
+      "hf_repo": "libingjiang/minicells-research-checkpoints",
+      "hf_revision": "c3d182f7684e61b3d1d8fa44e6c7b41a7a5a42df",
+      "manifest_path": "r3c-moe-bridge/segments/1254ffe740073287d2bc81320e783f7c59761178ca805ab15d470e8718581c76.json",
+      "manifest_sha256": "397327a673fbb2bd65f9d57a93ebf72f912efea3ab369f1d1a3cb0c7c17a1759",
+      "scope": "PINNED_PRIVATE_R3H_PARENT_READ_ONLY"
+    }
+  }
+}

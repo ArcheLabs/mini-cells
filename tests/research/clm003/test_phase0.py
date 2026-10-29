@@ -1,0 +1,123 @@
+import runpy
+from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
+import torch
+
+BASE = (
+    Path(__file__).resolve().parents[3]
+    / "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark"
+)
+runpy.run_path(str(BASE / "run.py"), run_name="bootstrap")["bootstrap"]()
+import routing_value as rv
+
+
+def test_native_ABC_common_random_and_parent_immutable():
+    model, _ = rv.build(rv.substrate(), 7001, unit=True)
+    before = rv.fingerprint(model.state_dict())
+    rng = torch.get_rng_state().clone()
+    models = rv.paired_initialization(model, 7002)
+    assert torch.equal(rng, torch.get_rng_state())
+    assert before == rv.fingerprint(model.state_dict())
+    assert len({rv.fingerprint(m.state_dict()) for m in models.values()}) == 1
+    assert rv.fingerprint(rv.random_connection(model, 7002)) != rv.fingerprint(
+        rv.random_connection(model, 7003)
+    )
+    for arm, m in models.items():
+        for n, p in m.named_parameters():
+            assert p.requires_grad == (
+                n.startswith("cells.") or (arm == "A" and n.startswith("connection."))
+            )
+
+
+def test_C_matches_actual_A_commits_and_rejects_replay():
+    schedule = rv.RewiringSchedule()
+    assert not schedule.observe(50, False, None, 7003)["C_rewire"]
+    assert schedule.observe(100, True, "a" * 64, 7004)["C_rewire"]
+    with pytest.raises(RuntimeError):
+        schedule.observe(100, True, "a" * 64, 7005)
+    with pytest.raises(RuntimeError):
+        schedule.observe(150, True, None, 7006)
+
+
+def test_paired_seed_unit_not_sample_pseudoreplication():
+    assert (
+        rv.paired_effects({1: 1.0, 2: 2.0}, {1: 2.0, 2: 3.0}, {1: 3.0, 2: 4.0})[0]["A_minus_B"]
+        == -1
+    )
+    with pytest.raises(RuntimeError):
+        rv.paired_effects({1: 1.0}, {1: 2.0}, {1: 3.0})
+
+
+def test_engineering_manifests_and_metadata_only_payload(tmp_path):
+    root = rv.engineering(
+        SimpleNamespace(output=tmp_path, publish_existing=False, publish_github=False)
+    )
+    m, files, _, _ = rv.payload(root)
+    assert m["scientific_optimizer_updates"] == 0 and not m["gpu_used"]
+    assert len(rv.read(root / "REGISTRATION.json")["blockers"]) == 10
+    assert not any(n.endswith(".pt") for n in files)
+    (root / "CPU_GATE.json").write_text("{}")
+    with pytest.raises(RuntimeError):
+        rv.payload(root)
+
+
+def test_notebook_actual_launch_arguments_parse_without_network(tmp_path, monkeypatch):
+    import ast
+    import json
+    import sys
+
+    notebook = json.loads((BASE / "notebooks/kaggle-phase0-cpu.ipynb").read_text())
+    code = "".join(notebook["cells"][1]["source"])
+    tree = ast.parse(code)
+    commands = [
+        node.args[0]
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "run"
+        and node.args
+        and isinstance(node.args[0], ast.List)
+        and any(isinstance(e, ast.Constant) and e.value == "--output" for e in node.args[0].elts)
+    ]
+    assert len(commands) == 1
+    command = eval(
+        compile(ast.Expression(commands[0]), "<notebook-command>", "eval"),
+        {"sys": sys, "CODE": BASE.parent, "BASE_REL": BASE.name, "OUTPUT": tmp_path},
+    )
+    assert "--assets" not in command
+    calls = []
+    monkeypatch.setattr(rv, "engineering", lambda args: calls.append(args))
+    monkeypatch.setattr(sys, "argv", list(map(str, command[1:])))
+    runpy.run_path(str(BASE / "run.py"), run_name="notebook_actual_command")["main"]()
+    assert len(calls) == 1 and calls[0].publish_github
+    assert calls[0].output == tmp_path
+
+
+def test_first_run_manifest_exists_before_real_preflight_contract(tmp_path, monkeypatch):
+    from minicells_r3k.reuse import bind as real_bind
+
+    observed = []
+
+    def bind_with_preflight_probe(function, **kwargs):
+        if function is rv.transport.previous.old.transport.preflight:
+
+            def probe(root):
+                m = rv.read(root / "RUN_MANIFEST.json")
+                assert m["run_status"] == "PREPARING"
+                observed.append(m["run_id"])
+
+            return probe
+        return real_bind(function, **kwargs)
+
+    monkeypatch.setattr(rv, "bind", bind_with_preflight_probe)
+    monkeypatch.setattr(rv, "publish", lambda root: {"status": "TEST_TRANSPORT_ONLY"})
+    root = rv.engineering(
+        SimpleNamespace(output=tmp_path, publish_existing=False, publish_github=True)
+    )
+    assert observed == [rv.read(root / "RUN_MANIFEST.json")["run_id"]]
+    assert (
+        rv.read(root / "RUN_MANIFEST.json")["run_status"]
+        == "PHASE0_CPU_PASS_SCIENTIFIC_SPECIFICATION_PENDING"
+    )

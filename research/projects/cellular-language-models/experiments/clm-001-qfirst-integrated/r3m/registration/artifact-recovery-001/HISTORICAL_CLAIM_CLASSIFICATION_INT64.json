@@ -1,0 +1,1717 @@
+{
+  "schema": "minicells.r3m.historical-coverage-closure.v1",
+  "status": "PARTIAL_EVIDENCE_RECOVERED_NOT_RELEASED",
+  "source_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+  "ledger_sha256": "ac0f9c4abc921c5969d830d41a3bd238ad10c1f088ff4f93feab783b65033ca1",
+  "auditor_sha256": "b063e1880f6710e0211d0811dccae743a68eaee1a41bb9e7303b638a4b9303f8",
+  "historical_tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "r3m_original_tokenizer_replaced": false,
+  "source_files": [
+    {
+      "path": "data/train-00000-of-00004-2d5a1467fff1081b.parquet",
+      "sha256": "77cf780cebe52b6e83e3a2ac84bc56d8059363113e41d17a023f1d8b2ed0fc0b",
+      "bytes": 248731111
+    },
+    {
+      "path": "data/validation-00000-of-00001-869c898b519ad725.parquet",
+      "sha256": "33406a6206554cfc279c29c11f4df51528af487aa1a602b075566fc83c49dcab",
+      "bytes": 9989127
+    }
+  ],
+  "reproduced_unique_streams": {
+    "train": {
+      "800000": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "3000000": {
+        "sha256": "dcaf7f641fd34dc51f482238df6e00f47197cd7a93f9974a0d4b55b0a842a3fd",
+        "consumed_nonempty_stories": 12284,
+        "last_raw_index": 12283,
+        "bytes": 24000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "15000000": {
+        "sha256": "85dbc64fca3c5c5744d02b25d434e9e0c3cdfffd123f5ef019eb6efd245dcb07",
+        "consumed_nonempty_stories": 60287,
+        "last_raw_index": 60298,
+        "bytes": 120000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      }
+    },
+    "validation": {
+      "100000": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "200000": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      }
+    }
+  },
+  "claims": [
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/005-consumer-language-bridge/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/005-consumer-language-bridge/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/005b-consumer-language-ablation/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/005b-consumer-language-ablation/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/006-consumer-language-scaling/artifacts/corpus-manifest.json",
+        "sha256": "f20f0e70b8f61f0297a7d403b3af3dc022c8b83bb7b446967d1ed2d4eae492be",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          60287
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "85dbc64fca3c5c5744d02b25d434e9e0c3cdfffd123f5ef019eb6efd245dcb07",
+        "consumed_nonempty_stories": 60287,
+        "last_raw_index": 60298,
+        "bytes": 120000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/006-consumer-language-scaling/artifacts/corpus-manifest.json",
+        "sha256": "f20f0e70b8f61f0297a7d403b3af3dc022c8b83bb7b446967d1ed2d4eae492be",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/corpus-manifest.json",
+        "sha256": "9550b716a8323e86ccf9dbd331f0ed48e9ac320833021d0d1e74892a33d4c176",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          476847
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "PREVIOUSLY_REPRODUCED_STREAM_REUSE",
+      "proof_path": "amendment-002/DATA_BOUNDARY_PROOF.json",
+      "proof_sha256": "b3582a3ac92ead93923d86c272cc12ce118cdc53a1c61aab35aecd713d554198",
+      "coverage": "007_CORPUS_SUPERSET_NOT_OPTIMIZER_OBSERVED_STARTS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/corpus-manifest.json",
+        "sha256": "9550b716a8323e86ccf9dbd331f0ed48e9ac320833021d0d1e74892a33d4c176",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          4396
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "PREVIOUSLY_REPRODUCED_STREAM_REUSE",
+      "proof_path": "amendment-002/DATA_BOUNDARY_PROOF.json",
+      "proof_sha256": "b3582a3ac92ead93923d86c272cc12ce118cdc53a1c61aab35aecd713d554198",
+      "coverage": "007_CORPUS_SUPERSET_NOT_OPTIMIZER_OBSERVED_STARTS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/009-2d-latent-tissue/artifacts/corpus-manifest.json",
+        "sha256": "97e57da98af5b5dc1408581c3f18f945b5797304511d096d2f6a4f6f982a72c0",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          12284
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "dcaf7f641fd34dc51f482238df6e00f47197cd7a93f9974a0d4b55b0a842a3fd",
+        "consumed_nonempty_stories": 12284,
+        "last_raw_index": 12283,
+        "bytes": 24000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/009-2d-latent-tissue/artifacts/corpus-manifest.json",
+        "sha256": "97e57da98af5b5dc1408581c3f18f945b5797304511d096d2f6a4f6f982a72c0",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/011-stabilizing-cost/artifacts/corpus-manifest.json",
+        "sha256": "736d76eb1d27d663d59bd5ef4528184164268220904dda00b0943be8e41e6aea",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          12284
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "dcaf7f641fd34dc51f482238df6e00f47197cd7a93f9974a0d4b55b0a842a3fd",
+        "consumed_nonempty_stories": 12284,
+        "last_raw_index": 12283,
+        "bytes": 24000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/011-stabilizing-cost/artifacts/corpus-manifest.json",
+        "sha256": "736d76eb1d27d663d59bd5ef4528184164268220904dda00b0943be8e41e6aea",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/012-settling-dynamics/artifacts/corpus-manifest.json",
+        "sha256": "494d1fd02eb3f878e4d44e151eace5ea9a9fa2cff120ba8497028ffadd7ce627",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          12284
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "dcaf7f641fd34dc51f482238df6e00f47197cd7a93f9974a0d4b55b0a842a3fd",
+        "consumed_nonempty_stories": 12284,
+        "last_raw_index": 12283,
+        "bytes": 24000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/012-settling-dynamics/artifacts/corpus-manifest.json",
+        "sha256": "494d1fd02eb3f878e4d44e151eace5ea9a9fa2cff120ba8497028ffadd7ce627",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/013-random-depth-ablation/artifacts/corpus-manifest.json",
+        "sha256": "2aea10ce20c986e44e2ebb9b9e1289760ffc13c5604bc911ba408512d29d3dfb",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          12284
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "dcaf7f641fd34dc51f482238df6e00f47197cd7a93f9974a0d4b55b0a842a3fd",
+        "consumed_nonempty_stories": 12284,
+        "last_raw_index": 12283,
+        "bytes": 24000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/013-random-depth-ablation/artifacts/corpus-manifest.json",
+        "sha256": "2aea10ce20c986e44e2ebb9b9e1289760ffc13c5604bc911ba408512d29d3dfb",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/014-multiseed-core-recipe/artifacts/corpus-manifest.json",
+        "sha256": "4cc94a4d943063d8fa8a377771b1ac479cf99a4a89ad62e9d3e441c461c62af2",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          12284
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "dcaf7f641fd34dc51f482238df6e00f47197cd7a93f9974a0d4b55b0a842a3fd",
+        "consumed_nonempty_stories": 12284,
+        "last_raw_index": 12283,
+        "bytes": 24000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/014-multiseed-core-recipe/artifacts/corpus-manifest.json",
+        "sha256": "4cc94a4d943063d8fa8a377771b1ac479cf99a4a89ad62e9d3e441c461c62af2",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/016-growing-cellular-lm/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/016-growing-cellular-lm/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/017-localized-cellular-learning/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/017-localized-cellular-learning/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/018-conditional-tissue-recruitment/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/018-conditional-tissue-recruitment/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/018b-feedback-isolated-pressure-recruitment/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/018b-feedback-isolated-pressure-recruitment/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/018b-feedback-isolated-pressure-recruitment/artifacts/task-spec.json",
+        "sha256": "5bb849be8a35182d8763ba6664222d9d65e977bdce579d34c0e61901b190ef1e",
+        "json_pointer": "/manifest/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/018b-feedback-isolated-pressure-recruitment/artifacts/task-spec.json",
+        "sha256": "5bb849be8a35182d8763ba6664222d9d65e977bdce579d34c0e61901b190ef1e",
+        "json_pointer": "/manifest/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/019-proposal-utility-discovery-stable/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/019-proposal-utility-discovery-stable/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/020-capability-tissue-specificity/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/020-capability-tissue-specificity/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/021-conflict-driven-differentiation/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/021-conflict-driven-differentiation/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/022-emergent-trait-bifurcation/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/022-emergent-trait-bifurcation/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/023-online-nonparametric-trait-genesis/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/023-online-nonparametric-trait-genesis/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/023b-probationary-trait-genesis/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/023b-probationary-trait-genesis/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/024-sequential-probationary-genesis/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/024-sequential-probationary-genesis/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/024b-independent-third-trait/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          3353
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "a0c787337bcbf9b4d65266d11691f117dc910ac7449c4982de928e18168549d5",
+        "consumed_nonempty_stories": 3353,
+        "last_raw_index": 3352,
+        "bytes": 6400000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/024b-independent-third-trait/artifacts/corpus-manifest.json",
+        "sha256": "cbcc14cbd11528939b2cac86ada73ce0ec55d669d60e62f11a0d28813356a8a1",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          448
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "26dae49b857d81b8725c46ffb8258fe37e72178d453005900d5a2177ebc7da0d",
+        "consumed_nonempty_stories": 448,
+        "last_raw_index": 447,
+        "bytes": 800000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/clm-upcycling-study-001-inherit-then-differentiate/artifacts/corpus-manifest.json",
+        "sha256": "e5bc6a52ecd582d8b12db4efe88792ebd74a852a88f7e6bf9f9a84aae638b83d",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          60287
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "85dbc64fca3c5c5744d02b25d434e9e0c3cdfffd123f5ef019eb6efd245dcb07",
+        "consumed_nonempty_stories": 60287,
+        "last_raw_index": 60298,
+        "bytes": 120000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/clm-upcycling-study-001-inherit-then-differentiate/artifacts/corpus-manifest.json",
+        "sha256": "e5bc6a52ecd582d8b12db4efe88792ebd74a852a88f7e6bf9f9a84aae638b83d",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/clm-v2-validation-001b-closed-loop-handoff/artifacts/corpus-manifest.json",
+        "sha256": "e5bc6a52ecd582d8b12db4efe88792ebd74a852a88f7e6bf9f9a84aae638b83d",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          60287
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "85dbc64fca3c5c5744d02b25d434e9e0c3cdfffd123f5ef019eb6efd245dcb07",
+        "consumed_nonempty_stories": 60287,
+        "last_raw_index": 60298,
+        "bytes": 120000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/clm-v2-validation-001b-closed-loop-handoff/artifacts/corpus-manifest.json",
+        "sha256": "e5bc6a52ecd582d8b12db4efe88792ebd74a852a88f7e6bf9f9a84aae638b83d",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/clm-validation-001-program-conditionality/artifacts/corpus-manifest.json",
+        "sha256": "f20f0e70b8f61f0297a7d403b3af3dc022c8b83bb7b446967d1ed2d4eae492be",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          60287
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "85dbc64fca3c5c5744d02b25d434e9e0c3cdfffd123f5ef019eb6efd245dcb07",
+        "consumed_nonempty_stories": 60287,
+        "last_raw_index": 60298,
+        "bytes": 120000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/clm-validation-001-program-conditionality/artifacts/corpus-manifest.json",
+        "sha256": "f20f0e70b8f61f0297a7d403b3af3dc022c8b83bb7b446967d1ed2d4eae492be",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/clm-validation-001b-stable-program-conditionality/artifacts/corpus-manifest.json",
+        "sha256": "f20f0e70b8f61f0297a7d403b3af3dc022c8b83bb7b446967d1ed2d4eae492be",
+        "json_pointer": "/train_stories_consumed",
+        "role": "train_stories_consumed",
+        "split": "train",
+        "range": [
+          0,
+          60287
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "85dbc64fca3c5c5744d02b25d434e9e0c3cdfffd123f5ef019eb6efd245dcb07",
+        "consumed_nonempty_stories": 60287,
+        "last_raw_index": 60298,
+        "bytes": 120000000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-computing/experiments/clm-validation-001b-stable-program-conditionality/artifacts/corpus-manifest.json",
+        "sha256": "f20f0e70b8f61f0297a7d403b3af3dc022c8b83bb7b446967d1ed2d4eae492be",
+        "json_pointer": "/validation_stories_consumed",
+        "role": "validation_stories_consumed",
+        "split": "validation",
+        "range": [
+          0,
+          915
+        ],
+        "revision": null,
+        "evidence": "PREFIX_COUNT_FILTERED_STREAM_REQUIRES_SOURCE_VERIFICATION"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY",
+      "evidence": {
+        "sha256": "8708ba5b765bbac2c64efb5fcada9c48757a0f973271cf810cfef23015b12c9e",
+        "consumed_nonempty_stories": 915,
+        "last_raw_index": 914,
+        "bytes": 1600000,
+        "encoding": "little-endian int64 torch.long tensor hash"
+      },
+      "matching_snapshot": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "coverage": "WITHIN_007_REPRODUCED_CORPUS_TOKEN_PREFIX",
+      "raw_text_identity": "NOT_INFERRED_FROM_TOKEN_IDS",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/config/frozen.json",
+        "sha256": "64c47f880e09b8959f6c767df1a78fb0ac58a7b6950d4ae5303d5fcca9f1999b",
+        "json_pointer": "/probe_range",
+        "role": "probe_range",
+        "split": "train",
+        "range": [
+          8192,
+          8448
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "UNKNOWN_REQUIRES_ARTIFACT_OR_SNAPSHOT_CHAIN",
+      "coverage": "CONSERVATIVE_INDEX_RANGE_NOT_IDENTITY_PROOF",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/config/frozen.json",
+        "sha256": "64c47f880e09b8959f6c767df1a78fb0ac58a7b6950d4ae5303d5fcca9f1999b",
+        "json_pointer": "/holdout_range",
+        "role": "holdout_range",
+        "split": "train",
+        "range": [
+          8448,
+          8960
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "UNKNOWN_REQUIRES_ARTIFACT_OR_SNAPSHOT_CHAIN",
+      "coverage": "CONSERVATIVE_INDEX_RANGE_NOT_IDENTITY_PROOF",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/config/frozen.json",
+        "sha256": "ec20fcf02f9320c45325543cffc3ae37dd964df00704d6a6b83e2b4cf70ee208",
+        "json_pointer": "/ranges/SEARCH",
+        "role": "search",
+        "split": "train",
+        "range": [
+          8960,
+          9216
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "UNKNOWN_REQUIRES_ARTIFACT_OR_SNAPSHOT_CHAIN",
+      "coverage": "CONSERVATIVE_INDEX_RANGE_NOT_IDENTITY_PROOF",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/config/frozen.json",
+        "sha256": "ec20fcf02f9320c45325543cffc3ae37dd964df00704d6a6b83e2b4cf70ee208",
+        "json_pointer": "/ranges/SELECT",
+        "role": "select",
+        "split": "train",
+        "range": [
+          9216,
+          9472
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "UNKNOWN_REQUIRES_ARTIFACT_OR_SNAPSHOT_CHAIN",
+      "coverage": "CONSERVATIVE_INDEX_RANGE_NOT_IDENTITY_PROOF",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/config/frozen.json",
+        "sha256": "ec20fcf02f9320c45325543cffc3ae37dd964df00704d6a6b83e2b4cf70ee208",
+        "json_pointer": "/ranges/REPORT",
+        "role": "report",
+        "split": "train",
+        "range": [
+          9472,
+          9984
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "UNKNOWN_REQUIRES_ARTIFACT_OR_SNAPSHOT_CHAIN",
+      "coverage": "CONSERVATIVE_INDEX_RANGE_NOT_IDENTITY_PROOF",
+      "blocks_global_release": true
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/config/frozen.json",
+        "sha256": "ec20fcf02f9320c45325543cffc3ae37dd964df00704d6a6b83e2b4cf70ee208",
+        "json_pointer": "/ranges/PATH_DIAGNOSTIC",
+        "role": "path_diagnostic",
+        "split": "train",
+        "range": [
+          9984,
+          10048
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "original_revision": "UNKNOWN_NOT_REWRITTEN",
+      "classification": "UNKNOWN_REQUIRES_ARTIFACT_OR_SNAPSHOT_CHAIN",
+      "coverage": "CONSERVATIVE_INDEX_RANGE_NOT_IDENTITY_PROOF",
+      "blocks_global_release": true
+    }
+  ],
+  "counts": {
+    "RECOVERED_MODEL_VISIBLE_STREAM_IDENTITY": 50,
+    "PREVIOUSLY_REPRODUCED_STREAM_REUSE": 2,
+    "UNKNOWN_REQUIRES_ARTIFACT_OR_SNAPSHOT_CHAIN": 6
+  },
+  "original_claims_rewritten": false,
+  "candidate_list_changed": false,
+  "unknown_reservation_scopes": [
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/config/proposed.json",
+      "json_pointer": "/data/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r2/config/proposed.json",
+      "json_pointer": "/data/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3/config/proposed.json",
+      "json_pointer": "/data/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/config/proposed.json",
+      "json_pointer": "/engine/data/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3b/reports/release-review/runtime-candidate.json",
+      "json_pointer": "/frozen_runtime/data/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/config/development.json",
+      "json_pointer": "/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/config/pilot.json",
+      "json_pointer": "/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/config/proposed.json",
+      "json_pointer": "/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d/config/frozen.json",
+      "json_pointer": "/engine/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/config/frozen.json",
+      "json_pointer": "/engine/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission/config/frozen.json",
+      "json_pointer": "/engine/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-v2/config/frozen.json",
+      "json_pointer": "/engine/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/config/frozen.json",
+      "json_pointer": "/engine/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3i/config/frozen.json",
+      "json_pointer": "/engine/input/data_config/reserved_boundary",
+      "value": 60000,
+      "scope": "UPPER_RANGE_ENDPOINT_NOT_RECORDED; NOT_ASSUMED_INFINITE_CONFIRMATION"
+    }
+  ],
+  "window_gate": "BLOCKED_NO_EQUIVALENCE_AMENDMENT_APPROVED",
+  "optimizer_windows_recovered": false,
+  "model_quality_reads": 0,
+  "gpu_training_started": false
+}

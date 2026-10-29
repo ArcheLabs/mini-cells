@@ -1,0 +1,27 @@
+{
+  "autograd_device": "CPU",
+  "command": "PYTHONPATH=/tmp/minicells-exp005-registration-deps python -m unittest discover -s tests/research/r3mf_d1 -p test_cpu_gate.py -v",
+  "gpu_used": false,
+  "model_loaded": false,
+  "optimizer_updates": 0,
+  "ruff": "PASS",
+  "schema": "minicells.r3mf_d1.cpu_tests.v1",
+  "source_sha": "4aa6333ccf3a4d7a58ec5ccc27f5bd5af201356a",
+  "status": "PASS",
+  "test_names": [
+    "test_answer_eos_mask_is_shifted_target_aligned",
+    "test_answer_eos_selection_preserves_original_labels",
+    "test_torch_answer_eos_ce_backpropagates_only_selected_original_labels",
+    "test_autoregressive_generation_uses_prompt_prefix_and_stops_before_eos",
+    "test_autoregressive_scores_separate_text_match_eos_and_nll",
+    "test_fixed_config_keeps_gpu_phase_closed",
+    "test_independent_fragments_reset_position_and_drop_only_cross_qa_edges",
+    "test_isolated_fragment_has_no_sibling_context_state",
+    "test_resume_identity_checks_full_arm_and_state_contract",
+    "test_routing_random_numbers_slice_by_source_offset",
+    "test_sample_plan_replay_validates_draws_tokens_and_rng_boundary"
+  ],
+  "test_source_commit": "e9f4a524320c26a80f73fe4dc3944be8f09fcc15",
+  "tests_failed": 0,
+  "tests_run": 11
+}

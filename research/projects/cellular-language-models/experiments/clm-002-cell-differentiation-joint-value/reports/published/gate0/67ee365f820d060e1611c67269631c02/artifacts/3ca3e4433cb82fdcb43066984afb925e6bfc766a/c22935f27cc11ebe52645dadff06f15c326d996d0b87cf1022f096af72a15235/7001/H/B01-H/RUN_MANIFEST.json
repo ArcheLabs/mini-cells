@@ -1,0 +1,62 @@
+{
+  "artifact_files": {
+    "CELL_SPECIALIZATION.json": {
+      "bytes": 3819,
+      "sha256": "17df9e87d5884992f64074a39cb3fe76a7cfc8cc2710bbb118dc1b591106758b"
+    },
+    "CHECKPOINT_MANIFEST.json": {
+      "bytes": 899,
+      "sha256": "b743c2722cff9f1b36025ab6ec2bb6ee42a5c410991fc5985ec21ecbc2410f94"
+    },
+    "CONFIG.json": {
+      "bytes": 7960,
+      "sha256": "e9617e5b3150d21293af954a62725cb463fc45fc2370b9690c015a0bda68064f"
+    },
+    "METRICS.json": {
+      "bytes": 4007,
+      "sha256": "02281404aed496702be8e90dfec75dcbd20389e9b8549098d6f8dd4fc1a464e8"
+    },
+    "ROUTING_SUMMARY.json": {
+      "bytes": 2506,
+      "sha256": "8ee8879e1f7faae784bd5b39f5765e9a81505681313fb93bf4fe19b225e8efef"
+    },
+    "TRAINING_COST.json": {
+      "bytes": 2777,
+      "sha256": "838edf0dcea168dc0e2b51c0e6c42704cd3c88ed8363297d91e8fccb69c972ab"
+    }
+  },
+  "data_manifest_sha256": "c22935f27cc11ebe52645dadff06f15c326d996d0b87cf1022f096af72a15235",
+  "effective_targets": 16,
+  "historical_tokenizer_expected_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "identity": {
+    "arm": "B01-H",
+    "code_sha256": "83ada1d62b369be68c7f892043549d35db5d585e3b5b95a406ad156db8248dae",
+    "config_sha256": "706788d6906b8c6e55e92927dea06c5673ca01ed13cfa466329319139fc60ac1",
+    "experiment_id": "CLM-002-DIFF-JOINT-VALUE-001",
+    "run_id": "67ee365f820d060e1611c67269631c02",
+    "scientific_training_authorized": false,
+    "scope": "GATE0_SYNTHETIC_CPU_ONLY",
+    "seed": 7001,
+    "source_sha": "3ca3e4433cb82fdcb43066984afb925e6bfc766a",
+    "task_condition": "H"
+  },
+  "logical_updates": 2,
+  "model_config_sha256": "ef216dcab4c544cad010cbd5e4dde75cf176167ef3bf028a900376a8fddf69d9",
+  "model_sha256": "28142afaeb5cc60e4b09d5d16dd7ea74f2fac60b47b340f36dc88a3eccda8ebe",
+  "parameter_update_list": [
+    "connection.linear.weight",
+    "connection.linear.bias"
+  ],
+  "parent_checkpoint": "SYNTHETIC_CPU_BASELINE_NOT_HISTORICAL_PARENT",
+  "parent_checkpoint_sha256": "da11d9927757d48f8bbb77a709650bd46a655318d6cba2b6daebcdd47217f0b7",
+  "rng_sha256": "e75e24268e54ecf92773afb520974dc155574c5445049b4b1b3b4930bddb86b2",
+  "run_status": "CPU_UNIT_COMPLETE",
+  "runtime": {
+    "hardware": "CPU",
+    "numpy": "1.24.4",
+    "python": "3.8.10",
+    "torch": "2.4.1"
+  },
+  "scientific_optimizer_updates": 0,
+  "tokenizer_identity": "SYNTHETIC_RANDOM_TOKEN_IDS_NO_TOKENIZER"
+}
