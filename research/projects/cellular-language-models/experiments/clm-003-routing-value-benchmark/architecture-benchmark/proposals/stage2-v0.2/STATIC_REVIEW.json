@@ -1,0 +1,108 @@
+{
+  "status": "STATIC_CHECKS_PARTIAL_TRAINING_NO_GO",
+  "source_commit_parent": "812cfde0c8c86e6c8d8cc5fe6eeacb3340b2304f",
+  "proposal_sha256": "9d22d9e8daf5e87e3ab00258c6d2cd4f5e6f42041100bcc386c480a976846bee",
+  "sources": {
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/architecture-benchmark/implementation/benchmark.py": "43a653bd57806a81749b9a44bf9ae7d0e72ed112fbe28d406cbe354068b12c67",
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/SCREENING_MANIFEST.json": "4991c2a98ed8ad2f85f0042e5194b34321662220d355a31e7e96d95136f1114e",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/stable_connection.py": "b17c4d84d6575c6ee82724b79a293ba19d831e811c3d5f912c8427e6a3a2d4f4",
+    "research/projects/cellular-language-models/experiments/clm-002-fast-001/implementation/minicells_fast001/engine.py": "86994ddceea3ad25504320ed301b99486aa699a9352a8067612011e222ef2b97",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/graph.py": "dd996e173b24fe917cf41f7f7401d9940b7c2a9f187175426a6b72045c1faebc",
+    "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/implementation/minicells_r3c_moe_bridge/gate.py": "9e4a095b0c0a821102455205007cc48bd60ca83f6b9172121951d6f837c4f19c",
+    "shared/python/experiments/common/models.py": "1a0750a44f10b5cd3316daabe44e331c7b4490595b3e643de2c7b74b6b65e2f5"
+  },
+  "new_model_instantiations": 0,
+  "optimizer_updates": 0,
+  "quality_evaluations": 0,
+  "gpu_used": false,
+  "graph": {
+    "candidate_only": true,
+    "out_degree": 2,
+    "self_edges": false,
+    "strongly_connected": true,
+    "reachability_all_starts": {
+      "0": {
+        "0": 0,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 3
+      },
+      "1": {
+        "0": 3,
+        "1": 0,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "2": {
+        "0": 2,
+        "1": 3,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "3": {
+        "0": 2,
+        "1": 2,
+        "2": 3,
+        "3": 0,
+        "4": 1,
+        "5": 1
+      },
+      "4": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 3,
+        "4": 0,
+        "5": 1
+      },
+      "5": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 3,
+        "5": 0
+      }
+    },
+    "diameter": 3,
+    "legal_path_sequences_per_fixed_start": 128,
+    "calls": 8,
+    "decisions": 7,
+    "minimum_repeat_visits_due_to_six_nodes": 2,
+    "cannot_ban_all_cycles": true
+  },
+  "parameter_formulas": {
+    "L_full_heads_at_width128": 1548,
+    "G_reference_full_router": 10598,
+    "MoE_reference_shared_router": 768,
+    "F_trainable_router_if_no_heads_allocated": 0,
+    "L_vs_G_reduction": 0.8539347046612569,
+    "L_vs_MoE_reduction": -1.015625,
+    "product_target_ceiling": 614,
+    "product_20_percent_pass": false,
+    "scope": "STATIC_LINEAR_HEAD_CANDIDATE_NOT_IMPLEMENTED_MEASUREMENTS; ALL_SIX_HEADS_COUNT_EVEN_IF_UNUSED_ON_A_GIVEN_TOKEN"
+  },
+  "semantic_blockers": [
+    "Existing G chooses all 8 actions; fixed first Cell introduces a distinct forward/sampler/Q collection variant",
+    "Original G Q optimization is interleaved with main updates; its effects already influence the 500th main checkpoint",
+    "Do not include Q-interleaved primary result while claiming candidate updates excluded; define branch/comparison explicitly",
+    "Trajectory reward granularity, reduction, baseline update timing, entropy and state gradient paths unspecified",
+    "MoE existing top2 depth8 performs 16 calls, not universal 8-call statement",
+    "Definition of ineffective cycles must distinguish unavoidable repeated visits",
+    "Implementation/engineering dry-run authorization for new architecture not explicit; no previous approval transfer"
+  ],
+  "missing_gates": [
+    "Starting Cell and primary successor",
+    "Frozen graph/config/data/Seeds",
+    "Public optimizer algorithm review",
+    "Quality/conditional-path/cost thresholds",
+    "No-global-routing executable tests",
+    "Hardware cost evidence"
+  ]
+}

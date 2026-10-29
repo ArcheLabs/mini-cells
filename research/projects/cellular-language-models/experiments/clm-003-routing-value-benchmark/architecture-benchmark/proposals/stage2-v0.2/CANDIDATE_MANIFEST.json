@@ -1,0 +1,97 @@
+{
+  "version": "0.2",
+  "status": "PROPOSED_NOT_FROZEN_NOT_IMPLEMENTED_NOT_TRAINED",
+  "stage2_authorized": false,
+  "gpu_authorized": false,
+  "confirmation_quality_authorized": false,
+  "relationship": "NEW_ARCHITECTURE_AND_POLICY_GRADIENT_ALGORITHM_PROPOSAL; DOES_NOT_REPLACE_OR_VALIDATE_OLD_CLM",
+  "core_arms": [
+    "F-CLM",
+    "G-CLM",
+    "L-CLM"
+  ],
+  "reference": "MoE",
+  "primary": "L-CLM vs F-CLM",
+  "secondary": "L-CLM vs G-CLM",
+  "candidate_graph": {
+    "adjacency": {
+      "0": [
+        1,
+        2
+      ],
+      "1": [
+        2,
+        3
+      ],
+      "2": [
+        3,
+        4
+      ],
+      "3": [
+        4,
+        5
+      ],
+      "4": [
+        5,
+        0
+      ],
+      "5": [
+        0,
+        1
+      ]
+    },
+    "frozen": false,
+    "start_cell": null,
+    "primary_successor": null
+  },
+  "calls": {
+    "serial_calls": 8,
+    "fixed_first_cell": true,
+    "route_decisions": 7,
+    "shared_compute_pool": 6,
+    "STOP": false,
+    "parallel_paths": false,
+    "topology_evolution": false
+  },
+  "local_head_candidate": {
+    "type": "SEPARATE_LINEAR_PER_CELL",
+    "in_features": 128,
+    "out_features": 2,
+    "bias": true,
+    "decision_input": "POST_CELL_STATE; NORMALIZATION_AND_GRADIENT_PATH_PENDING",
+    "sampling": "ONE_HARD_LEGAL_SUCCESSOR",
+    "training": "TRAJECTORY_REINFORCE",
+    "reward_unit": null,
+    "loss_reduction": null,
+    "baseline": null,
+    "entropy_coefficient": null,
+    "state_gradient_mode": null
+  },
+  "route_parameter_20_percent_gate": "NOT_DEFAULT_SCIENTIFIC_HARD_GATE; PRODUCT_TARGET_REQUIRES_SEPARATE_APPROVAL",
+  "budget": {
+    "main_updates_per_core_run_max": 500,
+    "extra_candidate_updates_max": 80,
+    "extra_candidate_scope": "UNRESOLVED_CORE_VS_EXPLORATORY_G_Q_BRANCH",
+    "effective_batch": null,
+    "sequence_length": null,
+    "valid_targets_per_update": null,
+    "seeds": null,
+    "optimizer": null,
+    "public_training_rules": "EARLIER_TRAIN_COMMON_CHOICE_REQUIRES_NEW_ALGORITHM_REVIEW"
+  },
+  "data": {
+    "Train": null,
+    "Development": null,
+    "Calibration": null,
+    "sealed_Confirmation": null
+  },
+  "thresholds": {
+    "minimum_meaningful_L_vs_F_nll_improvement": null,
+    "quality_requirement": null,
+    "noninferiority_margin": null,
+    "cost_advantage": null,
+    "invalid_cycle_criterion": null
+  },
+  "registration": "NONE_NO_SEEDS_RESERVED",
+  "prior_v01_seeds_and_thresholds": "NOT_AUTOMATICALLY_INHERITED"
+}
