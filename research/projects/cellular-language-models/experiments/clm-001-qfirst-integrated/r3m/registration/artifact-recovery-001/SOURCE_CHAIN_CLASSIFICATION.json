@@ -1,0 +1,174 @@
+{
+  "rows": [
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/config/frozen.json",
+        "sha256": "64c47f880e09b8959f6c767df1a78fb0ac58a7b6950d4ae5303d5fcca9f1999b",
+        "json_pointer": "/probe_range",
+        "role": "probe_range",
+        "split": "train",
+        "range": [
+          8192,
+          8448
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "classification": "INTENDED_SOURCE_PINNED_ACTUAL_ASSET_NOT_RECOVERED",
+      "review_category": "CONSERVATIVE_SOURCE_SUPERSET_COVERAGE_CONDITIONAL",
+      "intended_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "code_evidence": {
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/implementation/minicells_r3k/data.py": "0175551144bc906ed3c99206301a3bd15979806dce125d8af8cd4368613cac07",
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/implementation/minicells_r3k/data_boundaries.py": "67fc5ce15e5fa3daca9a02852eacbc83d2691a7d9b1145ee43ec8f87507d24c0"
+      },
+      "assertions": "loader checks frozen Revision and source SHA against original asset manifest; raw IDs selected within registered ranges",
+      "known_conservative_superset": "007 raw train prefix [0,476901)",
+      "remaining": "Recover historical windows.json + DATA_BOUNDARY_PROOF.json + manifest/config binding for actual run",
+      "actual_asset_identity": "UNKNOWN",
+      "original_revision_rewritten": false,
+      "window_gate": "BLOCKED"
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/config/frozen.json",
+        "sha256": "64c47f880e09b8959f6c767df1a78fb0ac58a7b6950d4ae5303d5fcca9f1999b",
+        "json_pointer": "/holdout_range",
+        "role": "holdout_range",
+        "split": "train",
+        "range": [
+          8448,
+          8960
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "classification": "INTENDED_SOURCE_PINNED_ACTUAL_ASSET_NOT_RECOVERED",
+      "review_category": "CONSERVATIVE_SOURCE_SUPERSET_COVERAGE_CONDITIONAL",
+      "intended_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "code_evidence": {
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/implementation/minicells_r3k/data.py": "0175551144bc906ed3c99206301a3bd15979806dce125d8af8cd4368613cac07",
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3k/implementation/minicells_r3k/data_boundaries.py": "67fc5ce15e5fa3daca9a02852eacbc83d2691a7d9b1145ee43ec8f87507d24c0"
+      },
+      "assertions": "loader checks frozen Revision and source SHA against original asset manifest; raw IDs selected within registered ranges",
+      "known_conservative_superset": "007 raw train prefix [0,476901)",
+      "remaining": "Recover historical windows.json + DATA_BOUNDARY_PROOF.json + manifest/config binding for actual run",
+      "actual_asset_identity": "UNKNOWN",
+      "original_revision_rewritten": false,
+      "window_gate": "BLOCKED"
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/config/frozen.json",
+        "sha256": "ec20fcf02f9320c45325543cffc3ae37dd964df00704d6a6b83e2b4cf70ee208",
+        "json_pointer": "/ranges/SEARCH",
+        "role": "search",
+        "split": "train",
+        "range": [
+          8960,
+          9216
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "classification": "INTENDED_SOURCE_PINNED_ACTUAL_ASSET_NOT_RECOVERED",
+      "review_category": "CONSERVATIVE_SOURCE_SUPERSET_COVERAGE_CONDITIONAL",
+      "intended_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "code_evidence": {
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/implementation/minicells_r3l/data.py": "29ec55e6453e54c6e5aa7a70b244a0533fc34aff69576237e294b750c3bfd711",
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/implementation/minicells_r3l/data_boundaries.py": "ea74e3ac076cc15d9b2d85204aa0bf3995426eff88f2883b19c7d5fef465125d"
+      },
+      "assertions": "loader checks frozen Revision and source SHA against original asset manifest; raw IDs selected within registered ranges",
+      "known_conservative_superset": "007 raw train prefix [0,476901)",
+      "remaining": "Recover historical windows.json + DATA_BOUNDARY_PROOF.json + manifest/config binding for actual run",
+      "actual_asset_identity": "UNKNOWN",
+      "original_revision_rewritten": false,
+      "window_gate": "BLOCKED"
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/config/frozen.json",
+        "sha256": "ec20fcf02f9320c45325543cffc3ae37dd964df00704d6a6b83e2b4cf70ee208",
+        "json_pointer": "/ranges/SELECT",
+        "role": "select",
+        "split": "train",
+        "range": [
+          9216,
+          9472
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "classification": "INTENDED_SOURCE_PINNED_ACTUAL_ASSET_NOT_RECOVERED",
+      "review_category": "CONSERVATIVE_SOURCE_SUPERSET_COVERAGE_CONDITIONAL",
+      "intended_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "code_evidence": {
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/implementation/minicells_r3l/data.py": "29ec55e6453e54c6e5aa7a70b244a0533fc34aff69576237e294b750c3bfd711",
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/implementation/minicells_r3l/data_boundaries.py": "ea74e3ac076cc15d9b2d85204aa0bf3995426eff88f2883b19c7d5fef465125d"
+      },
+      "assertions": "loader checks frozen Revision and source SHA against original asset manifest; raw IDs selected within registered ranges",
+      "known_conservative_superset": "007 raw train prefix [0,476901)",
+      "remaining": "Recover historical windows.json + DATA_BOUNDARY_PROOF.json + manifest/config binding for actual run",
+      "actual_asset_identity": "UNKNOWN",
+      "original_revision_rewritten": false,
+      "window_gate": "BLOCKED"
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/config/frozen.json",
+        "sha256": "ec20fcf02f9320c45325543cffc3ae37dd964df00704d6a6b83e2b4cf70ee208",
+        "json_pointer": "/ranges/REPORT",
+        "role": "report",
+        "split": "train",
+        "range": [
+          9472,
+          9984
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "classification": "INTENDED_SOURCE_PINNED_ACTUAL_ASSET_NOT_RECOVERED",
+      "review_category": "CONSERVATIVE_SOURCE_SUPERSET_COVERAGE_CONDITIONAL",
+      "intended_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "code_evidence": {
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/implementation/minicells_r3l/data.py": "29ec55e6453e54c6e5aa7a70b244a0533fc34aff69576237e294b750c3bfd711",
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/implementation/minicells_r3l/data_boundaries.py": "ea74e3ac076cc15d9b2d85204aa0bf3995426eff88f2883b19c7d5fef465125d"
+      },
+      "assertions": "loader checks frozen Revision and source SHA against original asset manifest; raw IDs selected within registered ranges",
+      "known_conservative_superset": "007 raw train prefix [0,476901)",
+      "remaining": "Recover historical windows.json + DATA_BOUNDARY_PROOF.json + manifest/config binding for actual run",
+      "actual_asset_identity": "UNKNOWN",
+      "original_revision_rewritten": false,
+      "window_gate": "BLOCKED"
+    },
+    {
+      "original_claim": {
+        "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/config/frozen.json",
+        "sha256": "ec20fcf02f9320c45325543cffc3ae37dd964df00704d6a6b83e2b4cf70ee208",
+        "json_pointer": "/ranges/PATH_DIAGNOSTIC",
+        "role": "path_diagnostic",
+        "split": "train",
+        "range": [
+          9984,
+          10048
+        ],
+        "revision": null,
+        "evidence": "EXPLICIT_HALF_OPEN_RANGE"
+      },
+      "classification": "INTENDED_SOURCE_PINNED_ACTUAL_ASSET_NOT_RECOVERED",
+      "review_category": "CONSERVATIVE_SOURCE_SUPERSET_COVERAGE_CONDITIONAL",
+      "intended_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "code_evidence": {
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/implementation/minicells_r3l/data.py": "29ec55e6453e54c6e5aa7a70b244a0533fc34aff69576237e294b750c3bfd711",
+        "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3l/implementation/minicells_r3l/data_boundaries.py": "ea74e3ac076cc15d9b2d85204aa0bf3995426eff88f2883b19c7d5fef465125d"
+      },
+      "assertions": "loader checks frozen Revision and source SHA against original asset manifest; raw IDs selected within registered ranges",
+      "known_conservative_superset": "007 raw train prefix [0,476901)",
+      "remaining": "Recover historical windows.json + DATA_BOUNDARY_PROOF.json + manifest/config binding for actual run",
+      "actual_asset_identity": "UNKNOWN",
+      "original_revision_rewritten": false,
+      "window_gate": "BLOCKED"
+    }
+  ],
+  "cross_revision_claims_confirmed": 0,
+  "warning": "No observed evidence of a different Revision is not proof that all historical source identities match."
+}

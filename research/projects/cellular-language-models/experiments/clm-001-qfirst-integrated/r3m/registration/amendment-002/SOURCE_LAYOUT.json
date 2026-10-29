@@ -1,0 +1,48 @@
+{
+  "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+  "split": "train",
+  "ordering": "LEXICOGRAPHIC_FROZEN_TRAIN_PARQUET_PATHS",
+  "total_rows": 2119719,
+  "shards": [
+    {
+      "path": "data/train-00000-of-00004-2d5a1467fff1081b.parquet",
+      "rows": 529930,
+      "global_start": 0,
+      "global_end": 529930,
+      "lfs_sha256": "77cf780cebe52b6e83e3a2ac84bc56d8059363113e41d17a023f1d8b2ed0fc0b",
+      "bytes": 248731111,
+      "verification": "FULL_FILE_SHA256_VERIFIED",
+      "footer_sha256": null
+    },
+    {
+      "path": "data/train-00001-of-00004-5852b56a2bd28fd9.parquet",
+      "rows": 529930,
+      "global_start": 529930,
+      "global_end": 1059860,
+      "lfs_sha256": "e2f173a6dcc2b5895183e8ad376e115bd5c06764eb0cfc01ce1add156b2d017f",
+      "bytes": 248171980,
+      "verification": "PINNED_REVISION_HTTP_RANGE_FOOTER_ONLY_NOT_FULL_FILE_SHA256",
+      "footer_sha256": "4b65546d2dc6f0c22268ec873cf105e557b48082bc70ca297aa26f2a347381d0"
+    },
+    {
+      "path": "data/train-00002-of-00004-a26307300439e943.parquet",
+      "rows": 529930,
+      "global_start": 1059860,
+      "global_end": 1589790,
+      "lfs_sha256": "cac73cd1a0973a7fccde022a5a5c78f8ba58ea6849541835c58e7c5fc747f2ef",
+      "bytes": 245894874,
+      "verification": "PINNED_REVISION_HTTP_RANGE_FOOTER_ONLY_NOT_FULL_FILE_SHA256",
+      "footer_sha256": "4f3b5e6a6d64c14895297cfcc5fce63d37ac09c34f7093d6fed271d7423b549a"
+    },
+    {
+      "path": "data/train-00003-of-00004-d243063613e5a057.parquet",
+      "rows": 529929,
+      "global_start": 1589790,
+      "global_end": 2119719,
+      "lfs_sha256": "862514ae75723ddd339337f1ef7617b88f82290dcddd57445e1d38d257ca7891",
+      "bytes": 247988350,
+      "verification": "PINNED_REVISION_HTTP_RANGE_FOOTER_ONLY_NOT_FULL_FILE_SHA256",
+      "footer_sha256": "3dc8ba4ec5db8aba6f149d44100ea8d2d66733670cae84e971e29a5f351d02a1"
+    }
+  ]
+}

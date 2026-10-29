@@ -1,0 +1,491 @@
+{
+  "actual_final_rng_independently_compared": false,
+  "answer_target_input_position_histogram": {
+    "13": 221,
+    "14": 1379,
+    "15": 571,
+    "29": 25,
+    "30": 303,
+    "31": 865,
+    "32": 788,
+    "33": 217,
+    "45": 1,
+    "46": 52,
+    "47": 264,
+    "48": 655,
+    "49": 747,
+    "50": 426,
+    "51": 77,
+    "62": 6,
+    "63": 64
+  },
+  "boundary_evidence_sha256": "cacc821e10d4bde4613ed145be4f4c563c2bbaee14058b5190f047dda122f256",
+  "boundary_validation": [
+    {
+      "answer": "1",
+      "answer_tokens": [
+        18
+      ],
+      "final_eos": false,
+      "final_first_token_correct": false,
+      "final_prediction": "9 HeWhat is\n7 plus",
+      "first_answer_logit_position": 14,
+      "first_answer_token_position": 15,
+      "full_em": false,
+      "group": "0+1",
+      "initial_prediction": "\"I have",
+      "prompt": "What is 0 plus 1? Answer:\n",
+      "prompt_last_token": "\u010a",
+      "prompt_last_token_id": 200,
+      "prompt_length": 15,
+      "text_only_match": false
+    },
+    {
+      "answer": "3",
+      "answer_tokens": [
+        20
+      ],
+      "final_eos": false,
+      "final_first_token_correct": false,
+      "final_prediction": "9 HeWhat is\n7 plus",
+      "first_answer_logit_position": 14,
+      "first_answer_token_position": 15,
+      "full_em": false,
+      "group": "1+2",
+      "initial_prediction": "\"I have",
+      "prompt": "What is 1 plus 2? Answer:\n",
+      "prompt_last_token": "\u010a",
+      "prompt_last_token_id": 200,
+      "prompt_length": 15,
+      "text_only_match": false
+    },
+    {
+      "answer": "4",
+      "answer_tokens": [
+        21
+      ],
+      "final_eos": false,
+      "final_first_token_correct": false,
+      "final_prediction": "9 HeWhat is\n7 plus",
+      "first_answer_logit_position": 14,
+      "first_answer_token_position": 15,
+      "full_em": false,
+      "group": "2+2",
+      "initial_prediction": "\"I have",
+      "prompt": "What is 2 plus 2? Answer:\n",
+      "prompt_last_token": "\u010a",
+      "prompt_last_token_id": 200,
+      "prompt_length": 15,
+      "text_only_match": false
+    },
+    {
+      "answer": "9",
+      "answer_tokens": [
+        26
+      ],
+      "final_eos": false,
+      "final_first_token_correct": true,
+      "final_prediction": "9 HeWhat is\n7 plus",
+      "first_answer_logit_position": 14,
+      "first_answer_token_position": 15,
+      "full_em": false,
+      "group": "2+7",
+      "initial_prediction": "\"I have",
+      "prompt": "What is 2 plus 7? Answer:\n",
+      "prompt_last_token": "\u010a",
+      "prompt_last_token_id": 200,
+      "prompt_length": 15,
+      "text_only_match": false
+    },
+    {
+      "answer": "7",
+      "answer_tokens": [
+        24
+      ],
+      "final_eos": false,
+      "final_first_token_correct": true,
+      "final_prediction": "7 HeWhat is\n7 plus",
+      "first_answer_logit_position": 13,
+      "first_answer_token_position": 14,
+      "full_em": false,
+      "group": "3+4",
+      "initial_prediction": "\"I",
+      "prompt": "What is 3 plus 4? Answer:\n",
+      "prompt_last_token": "\u010a",
+      "prompt_last_token_id": 200,
+      "prompt_length": 14,
+      "text_only_match": false
+    },
+    {
+      "answer": "10",
+      "answer_tokens": [
+        18,
+        17
+      ],
+      "final_eos": true,
+      "final_first_token_correct": false,
+      "final_prediction": "9",
+      "first_answer_logit_position": 14,
+      "first_answer_token_position": 15,
+      "full_em": false,
+      "group": "4+6",
+      "initial_prediction": "\"I have",
+      "prompt": "What is 4 plus 6? Answer:\n",
+      "prompt_last_token": "\u010a",
+      "prompt_last_token_id": 200,
+      "prompt_length": 15,
+      "text_only_match": false
+    },
+    {
+      "answer": "14",
+      "answer_tokens": [
+        18,
+        21
+      ],
+      "final_eos": true,
+      "final_first_token_correct": false,
+      "final_prediction": "9",
+      "first_answer_logit_position": 14,
+      "first_answer_token_position": 15,
+      "full_em": false,
+      "group": "6+8",
+      "initial_prediction": "\"I have",
+      "prompt": "What is 6 plus 8? Answer:\n",
+      "prompt_last_token": "\u010a",
+      "prompt_last_token_id": 200,
+      "prompt_length": 15,
+      "text_only_match": false
+    },
+    {
+      "answer": "16",
+      "answer_tokens": [
+        18,
+        23
+      ],
+      "final_eos": true,
+      "final_first_token_correct": false,
+      "final_prediction": "9",
+      "first_answer_logit_position": 14,
+      "first_answer_token_position": 15,
+      "full_em": false,
+      "group": "7+9",
+      "initial_prediction": "\"I have",
+      "prompt": "What is 7 plus 9? Answer:\n",
+      "prompt_last_token": "\u010a",
+      "prompt_last_token_id": 200,
+      "prompt_length": 15,
+      "text_only_match": false
+    }
+  ],
+  "evidence_limits": [
+    "No actual F terminal/intermediate raw data_rng state was opened or compared. Counts reconstruct from matched parent start and frozen code; they are not newly endpoint-attested runtime observations.",
+    "Replay NumPy differs from production; sampler-reference comparison shares the local NumPy implementation and is not independent cross-version certification.",
+    "No model weights, logits, activations or new counterfactual predictions were computed. Causal bottleneck attribution remains limited."
+  ],
+  "final_metrics": {
+    "answer_nll": 6.684513330459595,
+    "exact_match": 0.0,
+    "first_token_accuracy": 0.25,
+    "full_nll": 4.49550849199295
+  },
+  "final_replayed_rng": {
+    "bit_generator": "PCG64",
+    "has_uint32": 0,
+    "state": {
+      "inc": 157120304889028543830475149769838040923,
+      "state": 234107786878497082689821191012077676713
+    },
+    "uinteger": 2160779055
+  },
+  "frozen_config_sha256": "0f61a239e3012650497b2bb66a0927d64c89383711102a425af1cd07a57efc7c",
+  "full_pilot_authorized": false,
+  "gpu_used": false,
+  "identity": {
+    "config_sha256": "d00e8f039ff18ad5e53405495f3ee21622ac88a2b6b5db198627443497789a56",
+    "experiment_id": "CLM-001-R3m-F-Arithmetic-Specialization-001",
+    "phase": "EXPLORATORY_DEVELOPMENT",
+    "run_id": "7f4ae3ed14da7ddbcfa9dcccce56e574450bed167cff0332cca35140d8b3fe68",
+    "source_sha": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05"
+  },
+  "initial_metrics": {
+    "answer_nll": 9.789226770401001,
+    "exact_match": 0.0,
+    "first_token_accuracy": 0.0,
+    "full_nll": 7.778337776660919
+  },
+  "initial_rng_evidence": {
+    "checkpoint_bytes_verified": true,
+    "checkpoint_sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "data_cursor": 153600,
+    "data_rng": {
+      "bit_generator": "PCG64",
+      "has_uint32": 0,
+      "state": {
+        "inc": 157120304889028543830475149769838040923,
+        "state": 33570646379721314489055326921007332393
+      },
+      "uinteger": 1792167167
+    },
+    "full_state_fingerprint_verified": true,
+    "original_state_fingerprint": "053fd7ed95849d128524be73359ce04cd8cf5c68752f996cf821e937ba30907e",
+    "receipt_identity_verified": true,
+    "receipt_sha256": "66b6a58f12058082df7e43e87eda392142a1b81f68ecd9bcf4c00b26b8a9f54d",
+    "step": 300
+  },
+  "input_evidence_hashes": {
+    "COMPUTE_COST.json": {
+      "bytes": 1491,
+      "sha256": "32a4a12c8344b405e64e90572d5ac64c4d3725a72d6ce70ece7527acfc4f855a"
+    },
+    "DATA_AUDIT.json": {
+      "bytes": 319293,
+      "sha256": "a883753f43bc57cf94f34b9d76abdc41c8b2e0a44ff974a722635a80c6cb8bd0"
+    },
+    "MODEL_LINEAGE.json": {
+      "bytes": 4353,
+      "sha256": "3f67dab9f295ee125d9f7960ae8059e1c27dc9e0b19cfb8adb86163ab22a980f"
+    },
+    "TINY_OVERFIT_REPORT.json": {
+      "bytes": 15001,
+      "sha256": "bee8249be12adf4a003e974b204c0fe95e655134171e004cd3ea95556c22bec3"
+    }
+  },
+  "optimizer_updates": 0,
+  "original_trial_status": "TINY_OVERFIT_FAILED",
+  "overlays": {
+    "answer_targets_with_prior_qa_context": {
+      "count": 4490,
+      "fraction_of_target_tokens": 0.04384765625
+    },
+    "complete_answer_with_clean_prefix": {
+      "count": 1600,
+      "fraction_of_target_tokens": null
+    },
+    "complete_answer_with_prior_qa": {
+      "count": 3249,
+      "fraction_of_target_tokens": null
+    },
+    "discarded_tail_tokens": {
+      "count": 6358,
+      "fraction_of_target_tokens": null
+    },
+    "eos_to_next_prompt_edges": {
+      "count": 4800,
+      "fraction_of_target_tokens": 0.046875
+    },
+    "targets_with_prior_qa_context": {
+      "count": 76450,
+      "fraction_of_target_tokens": 0.74658203125
+    },
+    "truncated_qa": {
+      "count": 1595,
+      "fraction_of_target_tokens": null
+    },
+    "truncated_qa_after_complete_answer_before_eos": {
+      "count": 44,
+      "fraction_of_target_tokens": null
+    },
+    "truncated_qa_with_no_answer": {
+      "count": 1531,
+      "fraction_of_target_tokens": null
+    },
+    "truncated_qa_with_partial_answer": {
+      "count": 20,
+      "fraction_of_target_tokens": null
+    }
+  },
+  "parent_receipt": {
+    "bytes": 7445890,
+    "cross_session_verified": false,
+    "file": "objects/9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf.pt",
+    "identity": {
+      "architecture": "B",
+      "config_sha256": "f0090b76382e0b29042dc7a5a017927377c06413cc27dbb01d24b378ab338d65",
+      "experiment_id": "CLM-001-R3h-Routing-Alignment-001",
+      "run_id": "7cb36823c6e1a705bc5200a108e3ab160ec2df0f4cb6639e512696d574706ba7",
+      "seed": 151001301,
+      "source_sha": "01f226e259356bb06a8ef275e8314649062446e4",
+      "training_router": "H"
+    },
+    "schema": "minicells.r3c.checkpoint.v1",
+    "sha256": "9b2d77efe3d6346fbf46ead8d8e4038af07538813c14125c70c2f36ba48d3ddf",
+    "state_fingerprint": "053fd7ed95849d128524be73359ce04cd8cf5c68752f996cf821e937ba30907e",
+    "step": 300
+  },
+  "per_fact": {
+    "0+1": {
+      "answer_target_tokens": 592,
+      "complete_answer_and_eos_supervisions": 586,
+      "complete_answer_supervisions": 592,
+      "complete_qa_retained": 586,
+      "eos_target_tokens": 586,
+      "prompt_target_tokens": 11290,
+      "sampled_qa": 792
+    },
+    "1+2": {
+      "answer_target_tokens": 615,
+      "complete_answer_and_eos_supervisions": 613,
+      "complete_answer_supervisions": 615,
+      "complete_qa_retained": 613,
+      "eos_target_tokens": 613,
+      "prompt_target_tokens": 11569,
+      "sampled_qa": 810
+    },
+    "2+2": {
+      "answer_target_tokens": 619,
+      "complete_answer_and_eos_supervisions": 616,
+      "complete_answer_supervisions": 619,
+      "complete_qa_retained": 616,
+      "eos_target_tokens": 616,
+      "prompt_target_tokens": 11710,
+      "sampled_qa": 818
+    },
+    "2+7": {
+      "answer_target_tokens": 583,
+      "complete_answer_and_eos_supervisions": 577,
+      "complete_answer_supervisions": 583,
+      "complete_qa_retained": 577,
+      "eos_target_tokens": 577,
+      "prompt_target_tokens": 11165,
+      "sampled_qa": 780
+    },
+    "3+4": {
+      "answer_target_tokens": 648,
+      "complete_answer_and_eos_supervisions": 622,
+      "complete_answer_supervisions": 648,
+      "complete_qa_retained": 622,
+      "eos_target_tokens": 622,
+      "prompt_target_tokens": 11086,
+      "sampled_qa": 821
+    },
+    "4+6": {
+      "answer_target_tokens": 1190,
+      "complete_answer_and_eos_supervisions": 590,
+      "complete_answer_supervisions": 590,
+      "complete_qa_retained": 590,
+      "eos_target_tokens": 590,
+      "prompt_target_tokens": 11293,
+      "sampled_qa": 788
+    },
+    "6+8": {
+      "answer_target_tokens": 1202,
+      "complete_answer_and_eos_supervisions": 599,
+      "complete_answer_supervisions": 600,
+      "complete_qa_retained": 599,
+      "eos_target_tokens": 599,
+      "prompt_target_tokens": 11498,
+      "sampled_qa": 803
+    },
+    "7+9": {
+      "answer_target_tokens": 1212,
+      "complete_answer_and_eos_supervisions": 602,
+      "complete_answer_supervisions": 602,
+      "complete_qa_retained": 602,
+      "eos_target_tokens": 602,
+      "prompt_target_tokens": 11323,
+      "sampled_qa": 788
+    }
+  },
+  "primary_disjoint_categories": {
+    "answer": {
+      "fraction": 0.065048828125,
+      "tokens": 6661
+    },
+    "eos": {
+      "fraction": 0.046923828125,
+      "tokens": 4805
+    },
+    "prompt": {
+      "fraction": 0.88802734375,
+      "tokens": 90934
+    }
+  },
+  "production_numpy_version": "2.1.3",
+  "reference_sampler_match_all_1600_rows": true,
+  "replay_numpy_version": "1.24.4",
+  "replay_status": "PINNED_SOURCE_AND_MATCHED_PARENT_START_RECONSTRUCTION_NOT_ENDPOINT_CERTIFIED",
+  "result_commit": "ab5c734537776874ea5a57faa68a548f7c52b01b",
+  "rows": 1600,
+  "sampled_65_token_rows_sha256": "7d5bbddc645157a559fd997bb0406d12d0bcc229a27a9f39da2884261778fc9c",
+  "schema": "minicells.r3mf.readonly-failure-audit.v1",
+  "scope": "CPU_BATCH_RECONSTRUCTION_ONLY_NO_MODEL_LOAD_NO_TORCH",
+  "source_sha": "bb43297a39a4ccca14dcaeb5863f21d42d9aad05",
+  "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "total_input_tokens": 102400,
+  "total_target_tokens": 102400,
+  "trace_sha256": "ee199be5e5fad68d439b01f4924b33382cd0d06f71ee9fefe1d3f82848a1766a",
+  "truncation_examples": [
+    {
+      "batch": 0,
+      "cut": 65,
+      "end": 69,
+      "group": "3+4",
+      "retained_text": "What is 3 plus 4? Answer",
+      "start": 53,
+      "step": 1
+    },
+    {
+      "batch": 1,
+      "cut": 65,
+      "end": 68,
+      "group": "0+1",
+      "retained_text": "What is 0 plus 1? Answer:",
+      "start": 51,
+      "step": 1
+    },
+    {
+      "batch": 2,
+      "cut": 65,
+      "end": 68,
+      "group": "1+2",
+      "retained_text": "What is 1 plus 2? Answer:",
+      "start": 51,
+      "step": 1
+    },
+    {
+      "batch": 3,
+      "cut": 65,
+      "end": 68,
+      "group": "1+2",
+      "retained_text": "What is 1 plus 2? Answer:",
+      "start": 51,
+      "step": 1
+    },
+    {
+      "batch": 4,
+      "cut": 65,
+      "end": 67,
+      "group": "3+4",
+      "retained_text": "What is 3 plus 4? Answer:\n",
+      "start": 51,
+      "step": 1
+    },
+    {
+      "batch": 5,
+      "cut": 65,
+      "end": 71,
+      "group": "4+6",
+      "retained_text": "What is 4 plus 6? Answ",
+      "start": 53,
+      "step": 1
+    },
+    {
+      "batch": 6,
+      "cut": 65,
+      "end": 67,
+      "group": "3+4",
+      "retained_text": "What is 3 plus 4? Answer:\n",
+      "start": 51,
+      "step": 1
+    },
+    {
+      "batch": 7,
+      "cut": 65,
+      "end": 69,
+      "group": "2+7",
+      "retained_text": "What is 2 plus 7? Answer",
+      "start": 52,
+      "step": 1
+    }
+  ]
+}

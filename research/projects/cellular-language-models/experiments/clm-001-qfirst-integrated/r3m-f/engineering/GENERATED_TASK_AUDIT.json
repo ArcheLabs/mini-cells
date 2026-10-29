@@ -1,0 +1,94 @@
+{
+  "a1_train_distribution": {
+    "1": 0.022727272727272728,
+    "10": 0.06818181818181818,
+    "11": 0.09090909090909091,
+    "12": 0.09090909090909091,
+    "13": 0.022727272727272728,
+    "14": 0.06818181818181818,
+    "15": 0.045454545454545456,
+    "16": 0.045454545454545456,
+    "17": 0.022727272727272728,
+    "2": 0.022727272727272728,
+    "3": 0.045454545454545456,
+    "4": 0.06818181818181818,
+    "5": 0.045454545454545456,
+    "6": 0.09090909090909091,
+    "7": 0.06818181818181818,
+    "8": 0.09090909090909091,
+    "9": 0.09090909090909091
+  },
+  "a2_a3_materialized": false,
+  "confirmation": "SEALED",
+  "copy_train_distribution": {
+    "0": 0.02857142857142857,
+    "1": 0.02857142857142857,
+    "10": 0.08571428571428572,
+    "11": 0.11428571428571428,
+    "13": 0.02857142857142857,
+    "14": 0.08571428571428572,
+    "15": 0.05714285714285714,
+    "16": 0.05714285714285714,
+    "18": 0.02857142857142857,
+    "2": 0.02857142857142857,
+    "4": 0.08571428571428572,
+    "5": 0.05714285714285714,
+    "6": 0.11428571428571428,
+    "7": 0.08571428571428572,
+    "9": 0.11428571428571428
+  },
+  "facts": {
+    "a1": {
+      "dev": 11,
+      "dev_hash": "5d81e6a8c17f104ba042e421f501bb35917879b382d8282afd09672002dd2507",
+      "dev_strata": {
+        "at_least10": 5,
+        "below10": 6,
+        "equal": 4,
+        "zero": 2
+      },
+      "overlap": 0,
+      "train": 44,
+      "train_hash": "53ed16cd07249da84db5626039aead1bbd5392f4f35e7917a682bbaf744b125a",
+      "train_strata": {
+        "at_least10": 20,
+        "below10": 24,
+        "equal": 6,
+        "zero": 8
+      }
+    },
+    "copy": {
+      "dev": 4,
+      "dev_hash": "82a5755864ef7a0591ee70f830bf4ae9b6d4c7c3f3fc816625c142093d0d7411",
+      "overlap": 0,
+      "train": 15,
+      "train_hash": "b8ec1e79312a911b1c8016209cab37defdc13abb585201a8e09e2c9f65ccf10b"
+    }
+  },
+  "frequency_baseline": {
+    "answer": "6",
+    "dev_fact_accuracy": 0.0
+  },
+  "historical_global_isolation": "NOT_CLAIMED_EXPLORATORY_REUSED_DEVELOPMENT",
+  "mismatch": "Disjoint Copy numbers exclude some A1 answers; not an exactly frequency-matched control",
+  "model_quality_used_for_selection": false,
+  "one_digit_mass": {
+    "a1": 0.5454545454545454,
+    "copy": 0.5428571428571429
+  },
+  "r3m_main_candidates_accessed": false,
+  "selection_plan_commit": "b603dc2c",
+  "status": "GENERATED_TASK_AUDIT_PASS",
+  "tiny_facts": [
+    "0+1",
+    "1+2",
+    "2+2",
+    "2+7",
+    "3+4",
+    "4+6",
+    "6+8",
+    "7+9"
+  ],
+  "tokenizer_sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+  "total_variation_distance": 0.25000000000000006
+}

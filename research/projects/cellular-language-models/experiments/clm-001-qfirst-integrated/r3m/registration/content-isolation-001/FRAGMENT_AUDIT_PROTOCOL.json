@@ -1,0 +1,28 @@
+{
+  "schema": "minicells.r3m.fragment-audit-protocol.v1",
+  "status": "FROZEN_ENGINEERING_DIAGNOSTIC_NOT_SCIENTIFIC_RELEASE_CRITERIA",
+  "candidate_manifest": "registration/amendment-003/MAIN_CANDIDATE_INDICES.json",
+  "candidate_count": 512,
+  "candidate_changes_allowed": false,
+  "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+  "source_union": {
+    "train_raw_half_open": [0, 476901],
+    "validation_raw_half_open": [0, 4396],
+    "interpretation": "Conservative complete-story superset of reproduced 007 corpus and declared lower-prefix roles; not a claim that all source unknowns/reservation tails are resolved"
+  },
+  "views": {
+    "r3m4096_raw": "Exact original tokenizer 612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff, original raw text, EOS after each story",
+    "historical2048_strip": "Original tokenizer becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2, str.strip as historical loader, EOS after each nonempty encoded story; full terminal story is an explicit over-exclusion",
+    "nfkc_words": "NFKC then casefold then Unicode regex \\w+; words identified by full SHA256, shared deterministic vocabulary; explicit non-word story-boundary sentinel"
+  },
+  "token_fragment_lengths": [16, 32, 64, 65],
+  "word_fragment_lengths": [16, 32, 64],
+  "window_policy": "All stride-1 fragments of every fixed candidate story including EOS, compared with every same-length position in the source stream; historical streams concatenate across stories with EOS/sentinel and do not reset at processing chunks",
+  "candidate_boundary_policy": "No fragments connecting different Main candidates",
+  "cross_tokenizer_policy": "Never compare numeric IDs across different vocabularies; compare within each tokenizer view and supplement with normalized word fragments",
+  "hash_filter": "uint64 polynomial hash base 1000003 modulo 2^64, token value plus 1",
+  "collision_resolution": "Mandatory exact elementwise comparison of the entire sequence on each hash hit; no hash-only matches",
+  "evidence": "Count all occurrences; retain first three source positions per matching unique fragment. Fixed first 128 pattern IDs per view/length as public examples; complete counts retained in private local index artifacts with SHA256. No raw text or quality output published",
+  "decision": "Report overlap by view/length and candidate. Nonzero overlap is not automatically a semantic contamination verdict. Zero overlap in this partial source universe is not a global PASS. Proof B and fragment release semantics require independent scientific review",
+  "forbidden": ["model evaluation", "quality-based selection", "candidate replacement", "threshold adaptation after results", "GPU training", "sampling replay repetition", "scientific registration"]
+}
