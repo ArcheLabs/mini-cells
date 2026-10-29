@@ -168,6 +168,9 @@ def make_models(seed, calibration_inputs):
     config = copy.deepcopy(substrate())
     config["engineering"].update(vocab_size=4096, sequence_length=8, batch_size=2)
     native, runtime = build(config, seed, unit=True)
+    # Unit builder widens three Trust caps; discard those fixture-only overrides.
+    original = json.loads((BASE.parent / "SCREENING_MANIFEST.json").read_text())
+    runtime["proposal"].update(original["runtime_template"]["connection"]["trust"])
     # Unit helper's zero margin is discarded, then the original calibration is applied.
     native.route_switch_margin.fill_(float("inf"))
     native.route_numeric_tolerance.fill_(float("inf"))

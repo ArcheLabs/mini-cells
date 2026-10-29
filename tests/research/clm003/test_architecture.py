@@ -103,6 +103,7 @@ def test_one_bounded_cpu_trial_and_restore(tmp_path, monkeypatch):
     native = models["CLM"]
     engine = ab.make_clm_trainer(native, runtime, store.read("calibration"), tmp_path)
     assert not engine.cell_optimizer.state
+    assert all(engine.c["proposal"][k] == v for k, v in engine.fast["connection"]["trust"].items())
     stream = Stream(store.read("train"))
     latest = tmp_path / "latest.pt"
     engine.update(stream, latest, [])
