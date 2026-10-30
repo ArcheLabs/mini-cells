@@ -1,0 +1,3343 @@
+{
+  "H1_INCREMENTAL": {
+    "H1a": "SUPPORTED",
+    "H1b": "SUPPORTED",
+    "comparisons": [
+      {
+        "mode": "A0",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.1922800939827232,
+            "mean": 1.2188257346297542,
+            "median": 1.22384124052344,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.038328781956154405,
+            "upper": 1.2356476282514597
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.07774605973928425,
+            "mean": 0.07936994115121233,
+            "median": 0.07890395140945075,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0030464513204924103,
+            "upper": 0.08126051062318783
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.644612348964262,
+            "mean": 0.6534701292172265,
+            "median": 0.6548462881705418,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.013241902426213545,
+            "upper": 0.6595708228482047
+          }
+        },
+        "workload": "p16-d16"
+      },
+      {
+        "mode": "A1",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.1895655975528907,
+            "mean": 1.2122517172841043,
+            "median": 1.2172568347248178,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.032175520572136775,
+            "upper": 1.2256028705639654
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.07530415869805354,
+            "mean": 0.07791300577826606,
+            "median": 0.07840619019351966,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.004148059396092885,
+            "upper": 0.08024999253864076
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.6340995650446781,
+            "mean": 0.6456123110126117,
+            "median": 0.6485916341727763,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.017553905558218074,
+            "upper": 0.6531229369352349
+          }
+        },
+        "workload": "p16-d16"
+      },
+      {
+        "mode": "A0",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.215459290715682,
+            "mean": 1.2368153402379183,
+            "median": 1.2310304821044797,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.04113498457256546,
+            "upper": 1.2632563931788017
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.03886150425132948,
+            "mean": 0.03987417174779976,
+            "median": 0.0398038746707,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0018416395725411822,
+            "upper": 0.041002440992608274
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.6281814450748242,
+            "mean": 0.6397698287189585,
+            "median": 0.6392054249859285,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.022301211400782665,
+            "upper": 0.6536143334434368
+          }
+        },
+        "workload": "p32-d32"
+      },
+      {
+        "mode": "A1",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.211525342468809,
+            "mean": 1.227928535123702,
+            "median": 1.221575783159909,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.03530568951574968,
+            "upper": 1.2509738947215612
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.038700014424219144,
+            "mean": 0.03967115551371317,
+            "median": 0.039393523124938955,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.001759881440438621,
+            "upper": 0.04085328619964727
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.6257918206643089,
+            "mean": 0.6358860340830067,
+            "median": 0.6315847377352588,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.019492117786931492,
+            "upper": 0.6477365602318871
+          }
+        },
+        "workload": "p32-d32"
+      },
+      {
+        "mode": "A0",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.2075772848398267,
+            "mean": 1.227308547147141,
+            "median": 1.228862258669861,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.030114505542192783,
+            "upper": 1.2451006472767974
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.019864999409512116,
+            "mean": 0.0202433698736079,
+            "median": 0.020223186752644215,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0006543761632618723,
+            "upper": 0.02063796348978706
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.41979089578040235,
+            "mean": 0.4249410622207245,
+            "median": 0.42501034251444125,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.009179229269330591,
+            "upper": 0.43050357826370106
+          }
+        },
+        "workload": "p64-d32"
+      },
+      {
+        "mode": "A1",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.207025433717129,
+            "mean": 1.2208824085092622,
+            "median": 1.2181122238379027,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.02451544482162618,
+            "upper": 1.2365579820388939
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.01973751211690615,
+            "mean": 0.020006336174373605,
+            "median": 0.019908455228347756,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0005512697810005079,
+            "upper": 0.020357633915750094
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.41649977817279055,
+            "mean": 0.4209307579998139,
+            "median": 0.4208086188453468,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.008358065591639846,
+            "upper": 0.4261015279940151
+          }
+        },
+        "workload": "p64-d32"
+      },
+      {
+        "mode": "A0",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.2103044477123586,
+            "mean": 1.2290672360617907,
+            "median": 1.2221380586419184,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.03383936487403391,
+            "upper": 1.2499263822314413
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.013231263617422875,
+            "mean": 0.01341354381376734,
+            "median": 0.013334472664824633,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.00040468462770626017,
+            "upper": 0.013716884841934786
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.31772323782910017,
+            "mean": 0.3211337940251006,
+            "median": 0.32026975343571595,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.006998526612477836,
+            "upper": 0.32568496594862084
+          }
+        },
+        "workload": "p96-d32"
+      },
+      {
+        "mode": "A1",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.2023968386071135,
+            "mean": 1.2242069568021343,
+            "median": 1.2199441066640195,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.035861574069389786,
+            "upper": 1.2448920860183104
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.013004814572297524,
+            "mean": 0.013244677755477737,
+            "median": 0.013181290226536135,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.00048553420410436365,
+            "upper": 0.013570838318265905
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.3134544841136422,
+            "mean": 0.3177679159239002,
+            "median": 0.31666619217468117,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.008232350846353027,
+            "upper": 0.3232612954886727
+          }
+        },
+        "workload": "p96-d32"
+      },
+      {
+        "mode": "A0",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.2064671071971427,
+            "mean": 1.224699219627476,
+            "median": 1.2286833268307151,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.032590364621386925,
+            "upper": 1.2447689761333183
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.011348845705779275,
+            "mean": 0.011511685064545694,
+            "median": 0.011472070057551138,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.00030641703844373205,
+            "upper": 0.011700641435463432
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.16349294081423446,
+            "mean": 0.16523696381767614,
+            "median": 0.1647402147559497,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0037593052455182443,
+            "upper": 0.16783533040101514
+          }
+        },
+        "workload": "p112-d16"
+      },
+      {
+        "mode": "A1",
+        "model": "X3",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.2064473442333008,
+            "mean": 1.221713687042288,
+            "median": 1.2173706439397534,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.033755624644894636,
+            "upper": 1.2451337127618531
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.011236601705588137,
+            "mean": 0.011407703791139968,
+            "median": 0.011349658741174797,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.00033002632143620104,
+            "upper": 0.011616938229064165
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.16203690171839583,
+            "mean": 0.1638818992874904,
+            "median": 0.16358807332372344,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.004015906088668049,
+            "upper": 0.16655554644851772
+          }
+        },
+        "workload": "p112-d16"
+      },
+      {
+        "mode": "A0",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.165918841038106,
+            "mean": 1.189010521388909,
+            "median": 1.1950755188685287,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.03530244707775525,
+            "upper": 1.2063906063453067
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.07427778855650406,
+            "mean": 0.07621335858795483,
+            "median": 0.07597222480741389,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.002974607914054979,
+            "upper": 0.07815798502870946
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.6248981867999898,
+            "mean": 0.6344217135797093,
+            "median": 0.6364557498408683,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.01481500215306688,
+            "upper": 0.6423479444566138
+          }
+        },
+        "workload": "p16-d16"
+      },
+      {
+        "mode": "A1",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.1710347825438976,
+            "mean": 1.1846424345131734,
+            "median": 1.186444714622108,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.021061236751136997,
+            "upper": 1.1959763457444572
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.07339219404574437,
+            "mean": 0.07548796896142401,
+            "median": 0.07547404706275143,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0031765116977584985,
+            "upper": 0.07748863185730882
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.6218012210878303,
+            "mean": 0.6302587003115114,
+            "median": 0.6303233951113855,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.01238393012998578,
+            "upper": 0.6363224652733422
+          }
+        },
+        "workload": "p16-d16"
+      },
+      {
+        "mode": "A0",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.1834701033725514,
+            "mean": 1.203741810206023,
+            "median": 1.2051248239970866,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.034139390282880086,
+            "upper": 1.22360787881864
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.038183821745607124,
+            "mean": 0.03963211570693963,
+            "median": 0.038933869731254914,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0036504051367263926,
+            "upper": 0.042271046204792086
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.616543288383158,
+            "mean": 0.6247292634426167,
+            "median": 0.6240468252163438,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.015071417287360864,
+            "upper": 0.6337675576956913
+          }
+        },
+        "workload": "p32-d32"
+      },
+      {
+        "mode": "A1",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.1862502588178896,
+            "mean": 1.1983650627501492,
+            "median": 1.1961899438888985,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0221371659372572,
+            "upper": 1.211090174840732
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.03775056199139829,
+            "mean": 0.03920484724154269,
+            "median": 0.03826962803495286,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0038325329900065082,
+            "upper": 0.041942645777777114
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.6122995694853889,
+            "mean": 0.6199421703290842,
+            "median": 0.6200742085590036,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.013884353594617947,
+            "upper": 0.6277634923397496
+          }
+        },
+        "workload": "p32-d32"
+      },
+      {
+        "mode": "A0",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.1679225794928132,
+            "mean": 1.195372843838474,
+            "median": 1.2025392668714154,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.04599207404619057,
+            "upper": 1.2240716374260738
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.019299569833026317,
+            "mean": 0.019817578621294983,
+            "median": 0.01960380344973302,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0011057473309228616,
+            "upper": 0.020667873026665756
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.4091211686714788,
+            "mean": 0.415295503786665,
+            "median": 0.4145940544337299,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.010974170448157478,
+            "upper": 0.4228354840364741
+          }
+        },
+        "workload": "p64-d32"
+      },
+      {
+        "mode": "A1",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.173939818339118,
+            "mean": 1.1906685513533908,
+            "median": 1.1833553331376132,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.03300862926724501,
+            "upper": 1.2117604186964093
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.019243824325075754,
+            "mean": 0.019703319445674293,
+            "median": 0.01940646245876477,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0010427723867772367,
+            "upper": 0.020525748106458533
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.4074648732356087,
+            "mean": 0.413275475034859,
+            "median": 0.4115192774803954,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.01123511029691036,
+            "upper": 0.42122308425120303
+          }
+        },
+        "workload": "p64-d32"
+      },
+      {
+        "mode": "A0",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.187986485556266,
+            "mean": 1.2087738654024593,
+            "median": 1.2043686177559558,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.036696405773134405,
+            "upper": 1.2312948855332717
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.012870453947580823,
+            "mean": 0.013186618183581193,
+            "median": 0.01302832174278258,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0007896358162563261,
+            "upper": 0.013845222210635087
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.31114668993614875,
+            "mean": 0.3148641201709865,
+            "median": 0.3129286023644282,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.007849115625103128,
+            "upper": 0.3202790721860177
+          }
+        },
+        "workload": "p96-d32"
+      },
+      {
+        "mode": "A1",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.17129052277933,
+            "mean": 1.1961030082520476,
+            "median": 1.1937575695821927,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.04006875565935428,
+            "upper": 1.2209228926821902
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.012747743806723843,
+            "mean": 0.013049807826938133,
+            "median": 0.012814871168070611,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0008716427957246373,
+            "upper": 0.01377582757951226
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.3067933713988418,
+            "mean": 0.31154255946406906,
+            "median": 0.31029542191346693,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.009166145823073544,
+            "upper": 0.3175438400338389
+          }
+        },
+        "workload": "p96-d32"
+      },
+      {
+        "mode": "A0",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.196733021975445,
+            "mean": 1.2138723300134584,
+            "median": 1.2074947720276574,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.035880606320642154,
+            "upper": 1.2401012391818034
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.011041116992674047,
+            "mean": 0.01140182943159562,
+            "median": 0.01113285488296518,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0008424330220491554,
+            "upper": 0.012008689267820626
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.16013860321313655,
+            "mean": 0.16256804331815655,
+            "median": 0.16126429686867944,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.005070438621236353,
+            "upper": 0.16645115918689893
+          }
+        },
+        "workload": "p112-d16"
+      },
+      {
+        "mode": "A1",
+        "model": "X4",
+        "paired_speedups": {
+          "decode_host_ms": {
+            "confidence": 0.999,
+            "lower": 1.1468251175705368,
+            "mean": 1.1859682414838155,
+            "median": 1.198614809636425,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.06269416398354781,
+            "upper": 1.2237257470857565
+          },
+          "prefill_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.011007934077938208,
+            "mean": 0.011351585305889538,
+            "median": 0.011096282430463471,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.0008157004688212666,
+            "upper": 0.011953375933796011
+          },
+          "total_host_ms": {
+            "confidence": 0.999,
+            "lower": 0.15906834955430982,
+            "mean": 0.1614457814104239,
+            "median": 0.16064796250273386,
+            "paired_repetitions": 30,
+            "scope": "Timing repetitions, not model seeds or quality uncertainty",
+            "std": 0.004899030603015213,
+            "upper": 0.16506144252849997
+          }
+        },
+        "workload": "p112-d16"
+      }
+    ],
+    "scope": "FP32 pinned models, tested GPU/lengths; no benefit means not established, not proof of zero effect",
+    "status": "SUPPORTED"
+  },
+  "H2_EVENT_RUNTIME": {
+    "H2a": "SUPPORTED",
+    "comparisons": [
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9231975697665927,
+          "mean": 1.0213291162788005,
+          "median": 1.0038143495877785,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1709377038485416,
+          "upper": 1.1405941580349095
+        },
+        "point": "n256-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9359259588802752,
+          "mean": 1.0651785648663437,
+          "median": 1.0165688714585004,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.24650945044529826,
+          "upper": 1.240455197417361
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8965318891488263,
+          "mean": 1.0119508829636736,
+          "median": 1.0215873696884308,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.17585547756063918,
+          "upper": 1.11945954723803
+        },
+        "point": "n256-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9208146894490092,
+          "mean": 1.0521299400281487,
+          "median": 1.0040141760958672,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.23050416193647993,
+          "upper": 1.1999067652344357
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9187131750556656,
+          "mean": 1.1369587107859462,
+          "median": 0.9988092601632668,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.8567722042636465,
+          "upper": 1.7902857042199378
+        },
+        "point": "n256-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9374144186356029,
+          "mean": 1.1672660004887667,
+          "median": 0.996001353543668,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.9132151839745388,
+          "upper": 1.9823706617323376
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8904506694231439,
+          "mean": 1.1651217024239628,
+          "median": 1.015232457197005,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 1.0283251589214566,
+          "upper": 1.939440758330762
+        },
+        "point": "n256-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8807894662170654,
+          "mean": 1.1746752201304276,
+          "median": 1.0059819062720048,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.9144823396015507,
+          "upper": 1.9600484874341682
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8024937151376104,
+          "mean": 1.1076714233154015,
+          "median": 0.9833358305879867,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 1.0888490443564256,
+          "upper": 1.94808183529095
+        },
+        "point": "n256-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8347439012014635,
+          "mean": 1.142671049278161,
+          "median": 1.0052376609813796,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 1.0914574416235452,
+          "upper": 2.0824165279202322
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8268365971005274,
+          "mean": 1.1606168611639653,
+          "median": 0.9695011001595792,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 1.1338527900080504,
+          "upper": 2.0305400463989036
+        },
+        "point": "n256-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8640372085382083,
+          "mean": 1.1997732196288942,
+          "median": 0.9895952418046282,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 1.1243862119735968,
+          "upper": 2.1595585986464045
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9755802424044925,
+          "mean": 1.0199289995410188,
+          "median": 1.027206238322884,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06922137233511932,
+          "upper": 1.0619809999691447
+        },
+        "point": "n256-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9136461558563496,
+          "mean": 0.9559120797357805,
+          "median": 0.9572682356168389,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07597518006885665,
+          "upper": 1.0074903837984532
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.768516487622611,
+          "mean": 0.8013362856393307,
+          "median": 0.8025143030024522,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05181985151978676,
+          "upper": 0.83561488072654
+        },
+        "point": "n256-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7172446225618062,
+          "mean": 0.7508291069766102,
+          "median": 0.7476243609562662,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05337565880078426,
+          "upper": 0.7841609537863776
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9701245462185999,
+          "mean": 1.0327193368113896,
+          "median": 1.0401815571116173,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10251452826551392,
+          "upper": 1.0965804472165137
+        },
+        "point": "n256-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9382339585306977,
+          "mean": 1.0024100602012223,
+          "median": 0.9969303122239419,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1329904367061129,
+          "upper": 1.1050662692924746
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8116129518448189,
+          "mean": 0.8683386388686893,
+          "median": 0.8606602349099202,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10567254041766937,
+          "upper": 0.9474291390717996
+        },
+        "point": "n256-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7931842616450705,
+          "mean": 0.8407864789063452,
+          "median": 0.8192867899693177,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10531687406211959,
+          "upper": 0.9200002472817543
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9945071401086258,
+          "mean": 1.0397915446665562,
+          "median": 1.050754308974749,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07923018712454423,
+          "upper": 1.0993328057473553
+        },
+        "point": "n256-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9441174209992391,
+          "mean": 0.9720022390854337,
+          "median": 0.9736225260406823,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04799441263678137,
+          "upper": 0.9999481142270187
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8387607249283487,
+          "mean": 0.8700378248228381,
+          "median": 0.8654118760142359,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05818945697345185,
+          "upper": 0.9129791743591372
+        },
+        "point": "n256-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7849249929544899,
+          "mean": 0.8144191328055819,
+          "median": 0.8107704193330454,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.052111408748558595,
+          "upper": 0.8463075583101239
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9566038088209325,
+          "mean": 1.0199598532122216,
+          "median": 1.0259121338276427,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08767904837093399,
+          "upper": 1.067628827758784
+        },
+        "point": "n256-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8988675379500686,
+          "mean": 0.9585673254631598,
+          "median": 0.9511206026924772,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10762222139566313,
+          "upper": 1.0340283034179798
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9399993313297338,
+          "mean": 0.9813312277923788,
+          "median": 0.9839732787092508,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06712845680926309,
+          "upper": 1.022713762835873
+        },
+        "point": "n256-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8654794464408772,
+          "mean": 0.9246359928069375,
+          "median": 0.886848148868476,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.11801603262990171,
+          "upper": 1.0136885931958934
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9902401523871365,
+          "mean": 1.0749031566421885,
+          "median": 1.028285492263237,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.21958372911301774,
+          "upper": 1.2400712502085616
+        },
+        "point": "n256-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9374109471959753,
+          "mean": 0.9690413872303681,
+          "median": 0.9685004106277382,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.053226522985920066,
+          "upper": 0.9995488763484431
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9488305159201287,
+          "mean": 1.0521215104490456,
+          "median": 0.9847694179553228,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.26755354967621214,
+          "upper": 1.250684117847968
+        },
+        "point": "n256-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8985535298353632,
+          "mean": 0.943619557306482,
+          "median": 0.92797055272141,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07953114585050394,
+          "upper": 0.993562980154258
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9780886922570544,
+          "mean": 1.0247581344493613,
+          "median": 1.0285753347852817,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0694713462874226,
+          "upper": 1.067440160365561
+        },
+        "point": "n256-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9368728124551114,
+          "mean": 0.9854592376086972,
+          "median": 0.9991960823427137,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07555647263184322,
+          "upper": 1.0340635021426179
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9228890784631093,
+          "mean": 0.9694555597983453,
+          "median": 0.9681838219185729,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06831592981543835,
+          "upper": 1.0082298189349124
+        },
+        "point": "n256-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8875152918768823,
+          "mean": 0.9315164130822553,
+          "median": 0.9334822311557287,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06267263903724966,
+          "upper": 0.9651927396655882
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9232231673794211,
+          "mean": 0.9487220275182581,
+          "median": 0.9550198322393486,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.041003824236145923,
+          "upper": 0.9730673767997728
+        },
+        "point": "n256-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8399608011412183,
+          "mean": 0.87171312751977,
+          "median": 0.8541767821344398,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.073541757283749,
+          "upper": 0.9314824327683024
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8017568392786173,
+          "mean": 0.8291352487963606,
+          "median": 0.828346332505233,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04379105238066111,
+          "upper": 0.8560179348025945
+        },
+        "point": "n256-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7342630269461125,
+          "mean": 0.7608524513008589,
+          "median": 0.7534314408935275,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05156183693449903,
+          "upper": 0.7951177903624663
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9344063273750653,
+          "mean": 0.9789338424684787,
+          "median": 0.9682193823238259,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0715813647067524,
+          "upper": 1.0236770126644756
+        },
+        "point": "n256-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.860875585458669,
+          "mean": 0.8988495635505914,
+          "median": 0.9030902582902081,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05792985911517326,
+          "upper": 0.9342053084936486
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8328338304102824,
+          "mean": 0.871712440980589,
+          "median": 0.8741734755906918,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06455995145013801,
+          "upper": 0.9143396101273428
+        },
+        "point": "n256-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7614129983149899,
+          "mean": 0.8007671743662058,
+          "median": 0.808228963962743,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05711078721479109,
+          "upper": 0.8337404875422066
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9248741391387674,
+          "mean": 0.9606934142062337,
+          "median": 0.9628000459605657,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05546029030074125,
+          "upper": 0.9916884725412557
+        },
+        "point": "n256-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8600661955724225,
+          "mean": 0.8964385670048498,
+          "median": 0.8944352609081727,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05848822169739265,
+          "upper": 0.9337704997283817
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8527866944771204,
+          "mean": 0.8825171217013892,
+          "median": 0.8839863665482941,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.047789657452253886,
+          "upper": 0.9096771865216651
+        },
+        "point": "n256-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7873348003471248,
+          "mean": 0.8241979960616231,
+          "median": 0.8220976038215461,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06184921535953559,
+          "upper": 0.8613599489174147
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9289220754252208,
+          "mean": 0.9602835828893113,
+          "median": 0.9524129497447331,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05372690659236432,
+          "upper": 0.9949959841100104
+        },
+        "point": "n256-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8272268315745108,
+          "mean": 0.8502970671711412,
+          "median": 0.8428905535256759,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.03879062762034111,
+          "upper": 0.8759654941183611
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8815012136137617,
+          "mean": 0.9220981181920792,
+          "median": 0.9228340588905617,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.057564475400042024,
+          "upper": 0.9531939033672028
+        },
+        "point": "n256-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7848576709505923,
+          "mean": 0.8168511037475693,
+          "median": 0.8169298876221116,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05102417383156746,
+          "upper": 0.8463701008409609
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9378639609035211,
+          "mean": 0.9827621479416926,
+          "median": 0.9596277295719192,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.11032021287143944,
+          "upper": 1.065131685165549
+        },
+        "point": "n256-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8694645639517314,
+          "mean": 0.9204668136193371,
+          "median": 0.8897721203041615,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10711130099957576,
+          "upper": 0.9998255631005322
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8943059819518304,
+          "mean": 0.9472030892815353,
+          "median": 0.9247716278100988,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.11574773313733937,
+          "upper": 1.036207364183294
+        },
+        "point": "n256-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8359137863881986,
+          "mean": 0.886483610980224,
+          "median": 0.8707151631160555,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10441408232877113,
+          "upper": 0.9663469078535202
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.862094180177899,
+          "mean": 0.9327144837598859,
+          "median": 0.9478061542700579,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08103194766849926,
+          "upper": 0.971578911284781
+        },
+        "point": "n256-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7936368842413696,
+          "mean": 0.8748142743099027,
+          "median": 0.8858058732785593,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08985126357232302,
+          "upper": 0.9165372757506154
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.889515126308672,
+          "mean": 0.9349322858260047,
+          "median": 0.9465483390073484,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06555022223333498,
+          "upper": 0.9694230009848157
+        },
+        "point": "n256-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8328004700016577,
+          "mean": 0.8751453896669719,
+          "median": 0.8797578160594267,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06007329349297856,
+          "upper": 0.9134798103005057
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9035630303802619,
+          "mean": 0.9352437829882777,
+          "median": 0.9210900807882414,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06399661935662213,
+          "upper": 0.9831089837745821
+        },
+        "point": "n256-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8151633546994409,
+          "mean": 0.8338683554018804,
+          "median": 0.8361921394525844,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.03107672261242287,
+          "upper": 0.8542655489524104
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8678150940568301,
+          "mean": 0.8950213062473238,
+          "median": 0.8789924763499197,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06016026067705552,
+          "upper": 0.944314566524335
+        },
+        "point": "n256-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7801825055619418,
+          "mean": 0.7979421047810579,
+          "median": 0.8002511275849334,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.024558476331377928,
+          "upper": 0.8117871644129357
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8957708792933636,
+          "mean": 0.9372890183151334,
+          "median": 0.9409932470349056,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06276753337048899,
+          "upper": 0.9756795904399207
+        },
+        "point": "n256-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8317907537120763,
+          "mean": 0.8547449338629505,
+          "median": 0.8548009515026642,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.03620258119424477,
+          "upper": 0.8769143339403942
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8697080923296576,
+          "mean": 0.9058407551775474,
+          "median": 0.9035625347417282,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0630574384267429,
+          "upper": 0.9501665077302714
+        },
+        "point": "n256-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7986535449450398,
+          "mean": 0.826446003802506,
+          "median": 0.8295387960611067,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04345577300824312,
+          "upper": 0.8526160501331547
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8800945556495253,
+          "mean": 0.9264776617807241,
+          "median": 0.9349026033421012,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06363812488391703,
+          "upper": 0.958769710621818
+        },
+        "point": "n256-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8297916531038896,
+          "mean": 0.8690035260673479,
+          "median": 0.8644660624550711,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05913016896524393,
+          "upper": 0.9055225174228954
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8159323788845059,
+          "mean": 0.8805763337964507,
+          "median": 0.9082085830526907,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08830090994781441,
+          "upper": 0.9248998350514557
+        },
+        "point": "n256-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7648999176515646,
+          "mean": 0.8267655558792539,
+          "median": 0.8449486642032165,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08765385409980159,
+          "upper": 0.8723129340442137
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9068791271514316,
+          "mean": 1.0006483809074975,
+          "median": 1.0114749795111557,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.13081156668049357,
+          "upper": 1.0676905816300801
+        },
+        "point": "n256-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.826308413539907,
+          "mean": 0.9186501660735124,
+          "median": 0.9519348899700677,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1178832702273414,
+          "upper": 0.9764927311539489
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.887837805264515,
+          "mean": 0.968650495642919,
+          "median": 0.9684296563703362,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.14182911200659223,
+          "upper": 1.06946474909736
+        },
+        "point": "n256-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8055113150390439,
+          "mean": 0.8930091871308115,
+          "median": 0.8775734460198208,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1680656287006649,
+          "upper": 1.021748999795065
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9500228485546685,
+          "mean": 1.0190754081970026,
+          "median": 1.0227670587081628,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.09173324075639369,
+          "upper": 1.0608159638268166
+        },
+        "point": "n256-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9165246260846011,
+          "mean": 1.0092767663795628,
+          "median": 0.9731250504924913,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.19305873984718716,
+          "upper": 1.158766298477851
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9074501097358236,
+          "mean": 0.9622373284243378,
+          "median": 0.9787236838167646,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07302372922808299,
+          "upper": 0.9975250741668965
+        },
+        "point": "n256-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8801575447711383,
+          "mean": 0.950499246447632,
+          "median": 0.92130471069087,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1527250731747861,
+          "upper": 1.0705852312520017
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9961621508691301,
+          "mean": 1.0609882497067267,
+          "median": 1.0380026397754296,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.14215315782940438,
+          "upper": 1.162762909992135
+        },
+        "point": "n256-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9482480527728151,
+          "mean": 0.9772092407038201,
+          "median": 0.9693417113900782,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04693991896892505,
+          "upper": 1.0037177411353908
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9406613568713079,
+          "mean": 1.0187610063775054,
+          "median": 0.9969228120956348,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1560209784623443,
+          "upper": 1.1364212816862804
+        },
+        "point": "n256-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8949714357218571,
+          "mean": 0.937136502799603,
+          "median": 0.9381805635407345,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0626130879392585,
+          "upper": 0.9739571618662075
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9440861180107286,
+          "mean": 0.9771302276928557,
+          "median": 0.976108788395804,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05208533765244467,
+          "upper": 1.011716591288009
+        },
+        "point": "n256-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8701957650569091,
+          "mean": 0.905090543680733,
+          "median": 0.9061389030510614,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05875367356085755,
+          "upper": 0.948371328852636
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8147460447144109,
+          "mean": 0.8412323008722121,
+          "median": 0.8453488880944426,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.040825573613911564,
+          "upper": 0.8651295585325736
+        },
+        "point": "n256-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.753988195166057,
+          "mean": 0.7790778190722963,
+          "median": 0.777742221800247,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.045076879994027694,
+          "upper": 0.8083974586977595
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.949654940150183,
+          "mean": 0.982197252454076,
+          "median": 0.9927881510180193,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05061241088052278,
+          "upper": 1.011124782279818
+        },
+        "point": "n256-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8869681037855267,
+          "mean": 0.9268350035671354,
+          "median": 0.9212390980639715,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06671114756519803,
+          "upper": 0.9680930740296702
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.82175844592286,
+          "mean": 0.8657573579404997,
+          "median": 0.8810062200573938,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07699955880679757,
+          "upper": 0.9141059296513643
+        },
+        "point": "n256-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7780855142744301,
+          "mean": 0.8152066969542344,
+          "median": 0.8229796522113904,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06162960819934507,
+          "upper": 0.8537849358388208
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9622650648349136,
+          "mean": 1.0244601631337906,
+          "median": 1.000979340773756,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.15641240322223846,
+          "upper": 1.1641580856626128
+        },
+        "point": "n256-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8993351781799318,
+          "mean": 0.9317436259018588,
+          "median": 0.9131531150370576,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0561267930135616,
+          "upper": 0.9653014059452975
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8686905004014769,
+          "mean": 0.9195990647679284,
+          "median": 0.8960311370058393,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.14801930834755445,
+          "upper": 1.0547936890011866
+        },
+        "point": "n256-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.809246122395232,
+          "mean": 0.8356916791274391,
+          "median": 0.8352510821073991,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.044491247191935805,
+          "upper": 0.8629720556365409
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8021318241626764,
+          "mean": 0.9680134732430237,
+          "median": 1.0141322892750249,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.22894268967321962,
+          "upper": 1.0878164855869266
+        },
+        "point": "n1024-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8203519693340615,
+          "mean": 0.99083055530648,
+          "median": 1.030870751451008,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.2507482039656471,
+          "upper": 1.1201979862992026
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8961726964800764,
+          "mean": 1.0026605090343166,
+          "median": 1.0161100003488133,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1561561603739605,
+          "upper": 1.0932757431404827
+        },
+        "point": "n1024-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9046235016144593,
+          "mean": 1.0240081311844076,
+          "median": 1.0005903295769412,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.17990008260926318,
+          "upper": 1.137069614266211
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.882852515434623,
+          "mean": 1.0190195323024978,
+          "median": 0.9935336281304799,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.24210657923683826,
+          "upper": 1.1673004578707395
+        },
+        "point": "n1024-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9248889162364085,
+          "mean": 1.0542992649668825,
+          "median": 1.0133064482493195,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.22979027370290292,
+          "upper": 1.1999213468250454
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7518870959495333,
+          "mean": 0.9549825357275616,
+          "median": 0.9663914585422653,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.3204662871642005,
+          "upper": 1.1517022243682598
+        },
+        "point": "n1024-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.7789629657365588,
+          "mean": 0.9848465245800395,
+          "median": 0.9756739517693289,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.3250978319919966,
+          "upper": 1.1692402408749836
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8556610536536811,
+          "mean": 1.035049298934259,
+          "median": 0.9816059915331301,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.3311714364270347,
+          "upper": 1.2649938362449145
+        },
+        "point": "n1024-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8782516229596068,
+          "mean": 1.0707517404300346,
+          "median": 1.0508101183659133,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.3182444345696001,
+          "upper": 1.2639811466797954
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8067082615479968,
+          "mean": 1.0544454036989641,
+          "median": 1.0271706090748758,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.3879561866429053,
+          "upper": 1.2911722019386007
+        },
+        "point": "n1024-zero-active-0",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8414474479961978,
+          "mean": 1.0788589706080913,
+          "median": 1.0421562195520586,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.36736314895723776,
+          "upper": 1.297631205232277
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.5710207404465897,
+          "mean": 1.7275034554348179,
+          "median": 1.6668512359827379,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.27666205490599444,
+          "upper": 1.9292380848606536
+        },
+        "point": "n1024-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4854262067662622,
+          "mean": 1.6278719396780506,
+          "median": 1.6003464709467523,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.2460011730617399,
+          "upper": 1.810691779357774
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.014686583176954,
+          "mean": 1.0779307325229068,
+          "median": 1.0481885713133758,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1521668456037045,
+          "upper": 1.1922216886839319
+        },
+        "point": "n1024-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9659021713090887,
+          "mean": 1.0154550971627956,
+          "median": 0.9937246355535285,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.13649720986925784,
+          "upper": 1.1316603235162763
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.5135410189242822,
+          "mean": 1.5805064734785508,
+          "median": 1.591216036803024,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.09836446223405056,
+          "upper": 1.6384180575045602
+        },
+        "point": "n1024-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4546492549691283,
+          "mean": 1.5074830859540245,
+          "median": 1.4971065179936311,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.09016001344391202,
+          "upper": 1.5637563461983004
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.996317837317775,
+          "mean": 1.032631050548641,
+          "median": 1.0428578198010108,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06071186597733552,
+          "upper": 1.0734850769607551
+        },
+        "point": "n1024-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9548207331783217,
+          "mean": 0.9847402248217417,
+          "median": 0.9776478228680745,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05139746431283059,
+          "upper": 1.0181437202761048
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4967723206097696,
+          "mean": 1.5420253833974882,
+          "median": 1.5385818662395447,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07283544615651599,
+          "upper": 1.5891098446142589
+        },
+        "point": "n1024-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4168317552935634,
+          "mean": 1.4633647001619736,
+          "median": 1.4673176963432444,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07966115173310054,
+          "upper": 1.5146521012857928
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0156047557351324,
+          "mean": 1.0467274260337125,
+          "median": 1.0489944424318576,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05273418889367597,
+          "upper": 1.0796098342807325
+        },
+        "point": "n1024-uniform-random-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.966368123557786,
+          "mean": 0.9926637145036074,
+          "median": 1.0019111449393652,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.042139577700895624,
+          "upper": 1.015518890034302
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.6223174658759947,
+          "mean": 1.687898948124349,
+          "median": 1.7087032436160263,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10167569451674688,
+          "upper": 1.7450000878173848
+        },
+        "point": "n1024-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.54462847067158,
+          "mean": 1.603652853135091,
+          "median": 1.608043631370137,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.09389232519207202,
+          "upper": 1.6614734362754167
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.600537723273138,
+          "mean": 1.632961330363941,
+          "median": 1.6271819293639629,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06602947034678971,
+          "upper": 1.6839505048644685
+        },
+        "point": "n1024-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.5070619824423728,
+          "mean": 1.5526268801234115,
+          "median": 1.5433139964903355,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0833934501141306,
+          "upper": 1.6090910836621368
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.5120819745413718,
+          "mean": 1.5785701037231057,
+          "median": 1.5921366925534002,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10299928814814993,
+          "upper": 1.6409570189018285
+        },
+        "point": "n1024-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4400973758566489,
+          "mean": 1.5111740926852488,
+          "median": 1.517877702493243,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.12144844009080363,
+          "upper": 1.5965202072816023
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.471927184963114,
+          "mean": 1.5234945199991856,
+          "median": 1.5294401966400297,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08201887936569019,
+          "upper": 1.570537568318582
+        },
+        "point": "n1024-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4013185459781055,
+          "mean": 1.4590261710347887,
+          "median": 1.462267766257622,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.11196182718482225,
+          "upper": 1.5426056343722416
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.5062429151627819,
+          "mean": 1.5834208675990307,
+          "median": 1.5524334515989127,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1517709068858373,
+          "upper": 1.6944761319773165
+        },
+        "point": "n1024-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4287546770865474,
+          "mean": 1.4829342187181298,
+          "median": 1.4691650041418929,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10467370416141634,
+          "upper": 1.5646927238588773
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4499767182956633,
+          "mean": 1.543866391786324,
+          "median": 1.5254523643526783,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.16637408137454984,
+          "upper": 1.6613567134871525
+        },
+        "point": "n1024-clustered-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.3836543436784146,
+          "mean": 1.4437786481653025,
+          "median": 1.4385227126870745,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.09313744508847954,
+          "upper": 1.503531578527906
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.1173311968881858,
+          "mean": 1.1439275488968186,
+          "median": 1.1487908324761382,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.046353139155393075,
+          "upper": 1.174232057892663
+        },
+        "point": "n1024-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0268321343873643,
+          "mean": 1.0633574525931886,
+          "median": 1.0575665482898648,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0670134881510773,
+          "upper": 1.1083063757163314
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.87755727710493,
+          "mean": 0.9107103029441996,
+          "median": 0.9145676852899662,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04500095322207989,
+          "upper": 0.9347434960372084
+        },
+        "point": "n1024-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8152137736314418,
+          "mean": 0.8463910964602569,
+          "median": 0.84212712771791,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05643440758994139,
+          "upper": 0.8840205875699265
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0812935161933905,
+          "mean": 1.1350250469054748,
+          "median": 1.132458120696752,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07757189620559213,
+          "upper": 1.1791705764821545
+        },
+        "point": "n1024-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0065049247339786,
+          "mean": 1.0561098142118133,
+          "median": 1.04995577771105,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07921983472985145,
+          "upper": 1.1059678393638444
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8775083824409176,
+          "mean": 0.9224463863295873,
+          "median": 0.9295292106153505,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06658291139749035,
+          "upper": 0.9587347886569557
+        },
+        "point": "n1024-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8129680049021252,
+          "mean": 0.8591609935041563,
+          "median": 0.8512077774730298,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07722175607877216,
+          "upper": 0.9068492624830731
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0709553986825506,
+          "mean": 1.1149460087915055,
+          "median": 1.1081720588382318,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07740379957835787,
+          "upper": 1.1632954910658049
+        },
+        "point": "n1024-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.013732170988247,
+          "mean": 1.0475053163676773,
+          "median": 1.0474374566372662,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05591560944767711,
+          "upper": 1.0816106074636493
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9030008663345841,
+          "mean": 0.9351199885889582,
+          "median": 0.9271920814743847,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06339498136057979,
+          "upper": 0.9831863368112814
+        },
+        "point": "n1024-uniform-random-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.845214970027273,
+          "mean": 0.8792016262795598,
+          "median": 0.8691179650281464,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.054272946348339526,
+          "upper": 0.9128244009695202
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.110225252911772,
+          "mean": 1.1492596703770104,
+          "median": 1.1460016394808439,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06640560251974562,
+          "upper": 1.1910604427314342
+        },
+        "point": "n1024-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0149039749295834,
+          "mean": 1.0542303481068507,
+          "median": 1.0551024253991368,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06255082075347192,
+          "upper": 1.0958604601391915
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.063723393880113,
+          "mean": 1.097352467487194,
+          "median": 1.0889673959840582,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.056446626983980744,
+          "upper": 1.1331464769057555
+        },
+        "point": "n1024-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9695790461102624,
+          "mean": 1.0077732568541338,
+          "median": 0.9968887289981883,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0760755375937835,
+          "upper": 1.0627582007687488
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.1059885275242884,
+          "mean": 1.1446035298927129,
+          "median": 1.1330344558759387,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06409756971340783,
+          "upper": 1.1848333737888572
+        },
+        "point": "n1024-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0358413968795208,
+          "mean": 1.0626495399507374,
+          "median": 1.0574165598607164,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04968239159456901,
+          "upper": 1.097594351700356
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0464481088478683,
+          "mean": 1.0724580437733287,
+          "median": 1.0663875486650243,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0482063482825243,
+          "upper": 1.102171566868738
+        },
+        "point": "n1024-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9604969296702521,
+          "mean": 0.9971534229454662,
+          "median": 0.9976605644885883,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06492362908155089,
+          "upper": 1.0410930801552418
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0964766963384676,
+          "mean": 1.133570433777057,
+          "median": 1.1277187934981017,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0675927751796576,
+          "upper": 1.1821997982359582
+        },
+        "point": "n1024-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0163097198397686,
+          "mean": 1.0386217021295103,
+          "median": 1.0323637776084695,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.03886478385355343,
+          "upper": 1.0642663380777402
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0400887299107406,
+          "mean": 1.0786181210740484,
+          "median": 1.0688995966500978,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06292724927503544,
+          "upper": 1.1174701072820359
+        },
+        "point": "n1024-clustered-0.5",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9544582488951496,
+          "mean": 0.9888148720687248,
+          "median": 0.9941314094869222,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04831381978710387,
+          "upper": 1.0160122638731552
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0281871632985216,
+          "mean": 1.044123257261355,
+          "median": 1.0454055461855538,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.025924884178541514,
+          "upper": 1.0587618066251376
+        },
+        "point": "n1024-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9451006213800911,
+          "mean": 0.9579358777948868,
+          "median": 0.9541551000271584,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.02142794730795392,
+          "upper": 0.9710247216244398
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9531930612903915,
+          "mean": 0.9703473536119731,
+          "median": 0.9683882152623238,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0305054199798676,
+          "upper": 0.9887510542801942
+        },
+        "point": "n1024-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.877110163008813,
+          "mean": 0.8901347216573561,
+          "median": 0.8905562922187455,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.021895957266012216,
+          "upper": 0.9037226598032783
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0007457845670613,
+          "mean": 1.0249224163781354,
+          "median": 1.0168655249543854,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04365536390971135,
+          "upper": 1.053158335890033
+        },
+        "point": "n1024-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.939465362187731,
+          "mean": 0.9625511931555292,
+          "median": 0.9569485848899583,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.056075289487438,
+          "upper": 1.0085063729293875
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.95238988067214,
+          "mean": 0.9721773765745375,
+          "median": 0.9694174417767434,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.036715394722046386,
+          "upper": 0.9946037665079183
+        },
+        "point": "n1024-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8882611231150206,
+          "mean": 0.9134674789275755,
+          "median": 0.9085072118798669,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05820328777126837,
+          "upper": 0.9606103164399599
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.0073248387619222,
+          "mean": 1.0275729037435657,
+          "median": 1.0253888082425946,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.03331537452001543,
+          "upper": 1.0488947213554656
+        },
+        "point": "n1024-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.933599008474004,
+          "mean": 0.9562745217715761,
+          "median": 0.9450992305447493,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04956795543623108,
+          "upper": 0.995884741152532
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9498505202835703,
+          "mean": 0.9748385731470675,
+          "median": 0.9771851566233327,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.03884903061021272,
+          "upper": 0.9987254473400029
+        },
+        "point": "n1024-all-active-1",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.881504852307316,
+          "mean": 0.9070447168243445,
+          "median": 0.904130684071186,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04803900967455357,
+          "upper": 0.9443562568943915
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.6303135550647219,
+          "mean": 1.6861756792253453,
+          "median": 1.6880700799153625,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.09650996425965021,
+          "upper": 1.7524925569120307
+        },
+        "point": "n1024-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.5374268529899011,
+          "mean": 1.5884417106659223,
+          "median": 1.6042975136413724,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08035684549646574,
+          "upper": 1.641937337710192
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.5450705536418354,
+          "mean": 1.6074057512011346,
+          "median": 1.603790875765144,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08993684551651608,
+          "upper": 1.6611512887346473
+        },
+        "point": "n1024-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.455151528498439,
+          "mean": 1.5151625096001344,
+          "median": 1.5276852346734848,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.09336101598439328,
+          "upper": 1.568672647577895
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4580294182667837,
+          "mean": 1.5724563966881275,
+          "median": 1.6023041917440055,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1542601302533077,
+          "upper": 1.652133740382732
+        },
+        "point": "n1024-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.3608973574264966,
+          "mean": 1.468959961811876,
+          "median": 1.5077056041296655,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1501054623470007,
+          "upper": 1.5382608967491018
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4738180783211632,
+          "mean": 1.538283769675491,
+          "median": 1.5392317317508168,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.10331175205055197,
+          "upper": 1.6041757946187745
+        },
+        "point": "n1024-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.3662858846055956,
+          "mean": 1.4366993815202045,
+          "median": 1.4546999265013223,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1044341239520127,
+          "upper": 1.4959580578903022
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4711127268252793,
+          "mean": 1.5492704558163977,
+          "median": 1.5213830340171133,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1830072255578425,
+          "upper": 1.701065307619105
+        },
+        "point": "n1024-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4017584417663793,
+          "mean": 1.4517494044658112,
+          "median": 1.4722363680602601,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08004879841086425,
+          "upper": 1.50222240678311
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.4383386544675596,
+          "mean": 1.5102106505551136,
+          "median": 1.4987843038027384,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.1645341869718917,
+          "upper": 1.6408686982065535
+        },
+        "point": "n1024-wavefront-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.3752060366994923,
+          "mean": 1.4153938796237016,
+          "median": 1.4229431757238116,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06491546359637781,
+          "upper": 1.4601317623085086
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.2406932288094534,
+          "mean": 1.2883375836583795,
+          "median": 1.2962600581961614,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07674041716671393,
+          "upper": 1.3339199066653078
+        },
+        "point": "n1024-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.1756340122037643,
+          "mean": 1.2226852052744293,
+          "median": 1.2149241409522944,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08999957087627738,
+          "upper": 1.2879392881801737
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B0",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.962652070355056,
+          "mean": 1.0010096710956806,
+          "median": 0.9985525454318953,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05906737486596246,
+          "upper": 1.0383576561273367
+        },
+        "point": "n1024-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9125122124098328,
+          "mean": 0.9506049460920765,
+          "median": 0.9331750975430873,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.07928185590759362,
+          "upper": 1.0114494202695057
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.2035022794953936,
+          "mean": 1.2601386111287145,
+          "median": 1.2625381495957604,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08957338508607994,
+          "upper": 1.3197546228203507
+        },
+        "point": "n1024-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.117284554109191,
+          "mean": 1.1639014104249732,
+          "median": 1.1643952780902702,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06299612324961298,
+          "upper": 1.1962432792341737
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X3",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9437870562408257,
+          "mean": 1.0077854942607614,
+          "median": 1.0048053773275853,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.09015279860118446,
+          "upper": 1.0623231288921995
+        },
+        "point": "n1024-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.8772732317776079,
+          "mean": 0.9307634684489499,
+          "median": 0.9404206956711257,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06749474049629912,
+          "upper": 0.9608787107531138
+        }
+      },
+      {
+        "implementation": "S0_sparse_cell",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.2169782261009696,
+          "mean": 1.2604932481385005,
+          "median": 1.2490400178456356,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.08154371497546413,
+          "upper": 1.3194186048616035
+        },
+        "point": "n1024-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 1.1653252181428515,
+          "mean": 1.2008952763069136,
+          "median": 1.1990731010206899,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.05646541495822309,
+          "upper": 1.2368762004917508
+        }
+      },
+      {
+        "implementation": "S1_sparse_region",
+        "kernel": "B1_X4",
+        "paired_speedup": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9609278296483531,
+          "mean": 0.9988016105695333,
+          "median": 0.9959653895367269,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.06317139487615518,
+          "upper": 1.0427852537350812
+        },
+        "point": "n1024-burst-0.05",
+        "vs_masked": {
+          "confidence": 0.9994791666666667,
+          "lower": 0.9240133412507436,
+          "mean": 0.9514796482932628,
+          "median": 0.9555910317040093,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.04158443130817474,
+          "upper": 0.976117039391563
+        }
+      }
+    ],
+    "scope": "External synthetic events; B0 and B1 are not full CLM inference",
+    "status": "SUPPORTED"
+  },
+  "H3_COMPETITIVE": {
+    "comparisons": [
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X3",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.38863692163665753,
+          "mean": 0.3933928834173096,
+          "median": 0.3929651574374675,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.008194756570877674,
+          "upper": 0.3983579327858304
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p16-d16"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X4",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.3419491458675092,
+          "mean": 0.34690292653762195,
+          "median": 0.3463558712603777,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.00817470416572615,
+          "upper": 0.3517780548537373
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p16-d16"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X3",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.3874503498640644,
+          "mean": 0.3928743840687355,
+          "median": 0.394069389553797,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.008141619683533741,
+          "upper": 0.39655667447557297
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p32-d32"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X4",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.34246493506033004,
+          "mean": 0.3465145446920187,
+          "median": 0.34750005409260976,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.0057669023066900535,
+          "upper": 0.3492119505725791
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p32-d32"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X3",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.38895714926729175,
+          "mean": 0.3942693475463903,
+          "median": 0.392458181611625,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.011019650999602965,
+          "upper": 0.4019650402712464
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p64-d32"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X4",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.33821346362949856,
+          "mean": 0.34554003258539107,
+          "median": 0.3475585335683523,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.012712378379431968,
+          "upper": 0.3535358447479138
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p64-d32"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X3",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.3858116908360258,
+          "mean": 0.39292060195077866,
+          "median": 0.39404797727339075,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.01237923806310988,
+          "upper": 0.4008174966281216
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p96-d32"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X4",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.3448546550711891,
+          "mean": 0.34946516303567804,
+          "median": 0.3484736937014853,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.00889535471140698,
+          "upper": 0.3557772830561966
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p96-d32"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X3",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.3929476377794371,
+          "mean": 0.39950054894978027,
+          "median": 0.3969637566463527,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.014555230801430908,
+          "upper": 0.40978730113970885
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p112-d16"
+      },
+      {
+        "CLM_faster": false,
+        "gap_reduced": true,
+        "lower_memory": false,
+        "model": "X4",
+        "paired_speedup_vs_cached_T1": {
+          "confidence": 0.999,
+          "lower": 0.3458435356076916,
+          "mean": 0.35275008133081853,
+          "median": 0.3492403353256396,
+          "paired_repetitions": 30,
+          "scope": "Timing repetitions, not model seeds or quality uncertainty",
+          "std": 0.014015459031810607,
+          "upper": 0.36255296976857765
+        },
+        "quality": "Lower recorded development PPL, not equal-quality comparison",
+        "workload": "p112-d16"
+      }
+    ],
+    "scope": "Cached T1 research implementation, not vLLM/SGLang or universal architecture efficiency",
+    "status": "SUPPORTED"
+  }
+}
