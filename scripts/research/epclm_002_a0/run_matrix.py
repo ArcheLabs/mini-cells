@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import time
 from pathlib import Path
 from typing import Any
 
@@ -13,8 +14,16 @@ from .validate import sha256, validate_protocol, validate_result
 
 
 def run_matrix(
-    *, backend: str, output: Path, checkpoint_dir: Path | None, episodes_per_condition: int, formal: bool
+    *,
+    backend: str,
+    output: Path,
+    checkpoint_dir: Path | None,
+    episodes_per_condition: int,
+    formal: bool,
+    max_runtime_seconds: int = 7200,
 ) -> dict[str, Any]:
+    if not 1 <= max_runtime_seconds <= 7200:
+        raise ValueError("max_runtime_seconds must be between 1 and 7200")
     protocol_errors = validate_protocol(PROTOCOL)
     if protocol_errors:
         raise ValueError("protocol validation failed: " + "; ".join(protocol_errors))
@@ -54,28 +63,41 @@ def run_matrix(
     ]
     conditions.extend((int(row["facts"]), int(row["distractors"]), int(row["updates"])) for row in protocol["task"]["overwrite_conditions"])
     output.mkdir(parents=True, exist_ok=True)
+    deadline = time.monotonic() + max_runtime_seconds
     results: list[dict[str, Any]] = []
+    timed_out = False
+    timed_out_condition: Path | None = None
     for model_seed, evaluation_seed, checkpoint in run_pairs:
         seed_label = f"model-seed-{model_seed}" if model_seed is not None else f"evaluation-seed-{evaluation_seed}"
         for fact_count, distractor_count, overwrite_count in conditions:
+            remaining = deadline - time.monotonic()
+            if remaining < 1:
+                timed_out = True
+                break
             suffix = f"facts-{fact_count}-distractors-{distractor_count}-updates-{overwrite_count}"
             condition_output = output / backend / seed_label / suffix
             print(
                 f"Starting {backend} {seed_label} {suffix} ({episodes_per_condition} episodes)",
                 flush=True,
             )
-            result = run_condition(
-                backend=backend,
-                episodes=episodes_per_condition,
-                seed=evaluation_seed,
-                fact_count=fact_count,
-                distractor_count=distractor_count,
-                overwrite_count=overwrite_count,
-                negative_control_count=16,
-                checkpoint=checkpoint,
-                formal_run=True,
-                output=condition_output,
-            )
+            try:
+                result = run_condition(
+                    backend=backend,
+                    episodes=episodes_per_condition,
+                    seed=evaluation_seed,
+                    fact_count=fact_count,
+                    distractor_count=distractor_count,
+                    overwrite_count=overwrite_count,
+                    negative_control_count=16,
+                    checkpoint=checkpoint,
+                    formal_run=True,
+                    max_runtime_seconds=max(1, min(7200, int(remaining))),
+                    output=condition_output,
+                )
+            except TimeoutError:
+                timed_out = True
+                timed_out_condition = condition_output / "partial-status.json"
+                break
             validation = validate_result(condition_output / "result.json")
             results.append(
                 {
@@ -90,20 +112,30 @@ def run_matrix(
                     "metrics": result["metrics"],
                 }
             )
+        if timed_out:
+            break
     expected = len(run_pairs) * len(conditions)
     complete = len(results) == expected and all(row["result_valid"] for row in results)
     decision = {
         "format": "minicells.epclm-002-a0-formal-matrix.v1",
         "experiment_id": protocol["experiment_id"],
-        "status": "FORMAL_MATRIX_COMPLETE" if complete else "INVALID",
+        "status": "FORMAL_MATRIX_COMPLETE" if complete else (
+            "FORMAL_MATRIX_INCOMPLETE_TIMEOUT" if timed_out else "INVALID"
+        ),
+        "scientific_decision": complete,
         "backend": backend,
         "protocol_sha256": sha256(PROTOCOL),
         "episodes_per_condition": episodes_per_condition,
         "expected_condition_runs": expected,
         "completed_condition_runs": len(results),
-        "h1": _h1_summary(backend, results),
-        "h2": _h2_summary(backend, results, formal_model_seeds),
-        "h3": _h3_summary(backend, results),
+        "h1": _h1_summary(backend, results) if complete else {"status": "INCONCLUSIVE"},
+        "h2": _h2_summary(backend, results, formal_model_seeds) if complete else {"status": "INCONCLUSIVE"},
+        "h3": _h3_summary(backend, results) if complete else {"status": "INCONCLUSIVE"},
+        "resume_supported": True,
+        "partial_condition_status_path": (
+            str(timed_out_condition) if timed_out_condition is not None and timed_out_condition.is_file() else None
+        ),
+        "timeout_seconds": max_runtime_seconds,
         "results": results,
         "interpretation_limit": "A formal matrix result is limited to this protocol's synthetic episode distribution and registered model implementations.",
     }
@@ -218,6 +250,7 @@ def main() -> None:
     parser.add_argument("--episodes-per-condition", type=int, default=1000)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--formal", action="store_true", help="explicitly authorize the frozen formal matrix")
+    parser.add_argument("--max-runtime-seconds", type=int, default=7200)
     args = parser.parse_args()
     result = run_matrix(
         backend=args.backend,
@@ -225,6 +258,7 @@ def main() -> None:
         checkpoint_dir=args.checkpoint_dir,
         episodes_per_condition=args.episodes_per_condition,
         formal=args.formal,
+        max_runtime_seconds=args.max_runtime_seconds,
     )
     print(json.dumps({"status": result["status"], "h1": result["h1"], "h2": result["h2"], "h3": result["h3"]}, sort_keys=True))
 

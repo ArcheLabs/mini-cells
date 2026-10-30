@@ -4,6 +4,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -175,4 +176,118 @@ def test_reserved_formal_evaluation_seed_cannot_be_run_as_pilot(tmp_path) -> Non
             fact_count=8,
             distractor_count=0,
             output=tmp_path,
+        )
+
+
+def test_worker_wall_time_expiry_terminates_worker(monkeypatch, tmp_path) -> None:
+    import scripts.research.epclm_002_a0.runner as runner
+
+    class FakeProcess:
+        pid = 12345
+        returncode = None
+
+        def __init__(self):
+            self.terminated = False
+            self.calls = 0
+
+        def communicate(self, timeout=None):
+            self.calls += 1
+            if self.calls == 1:
+                raise subprocess.TimeoutExpired("worker", timeout)
+            return "", ""
+
+        def terminate(self):
+            self.terminated = True
+            self.returncode = -15
+
+        def kill(self):
+            self.returncode = -9
+
+    fake = FakeProcess()
+    monkeypatch.setattr(runner.subprocess, "Popen", lambda *args, **kwargs: fake)
+    monkeypatch.setattr(runner.os, "killpg", lambda pid, signum: fake.terminate())
+    with pytest.raises(TimeoutError, match="wall-time budget"):
+        runner._worker(
+            "reader",
+            cwd=tmp_path,
+            backend="direct-address",
+            deadline=time.monotonic() + 1,
+        )
+    assert fake.terminated is True
+
+
+def test_condition_timeout_resumes_completed_episode_without_repeating_it(tmp_path, monkeypatch) -> None:
+    import scripts.research.epclm_002_a0.runner as runner
+
+    original = runner._run_episode
+    calls: list[int] = []
+
+    def interrupt_after_first(*args, **kwargs):
+        index = kwargs["episode_index"]
+        calls.append(index)
+        if index == 1:
+            raise TimeoutError("synthetic CPU-fixture interruption")
+        return original(*args, **kwargs)
+
+    output = tmp_path / "resumable-condition"
+    monkeypatch.setattr(runner, "_run_episode", interrupt_after_first)
+    with pytest.raises(TimeoutError, match="synthetic CPU-fixture"):
+        runner.run_condition(
+            backend="direct-address",
+            episodes=2,
+            seed=80400,
+            fact_count=4,
+            distractor_count=0,
+            negative_control_count=1,
+            output=output,
+        )
+    assert calls == [0, 1]
+    assert len((output / "episodes.partial.jsonl").read_text(encoding="utf-8").splitlines()) == 1
+    assert json.loads((output / "partial-status.json").read_text(encoding="utf-8"))["scientific_decision"] is False
+
+    monkeypatch.setattr(runner, "_run_episode", original)
+    result = runner.run_condition(
+        backend="direct-address",
+        episodes=2,
+        seed=80400,
+        fact_count=4,
+        distractor_count=0,
+        negative_control_count=1,
+        output=output,
+    )
+    assert len(result["records"]) == 2
+    assert not (output / "episodes.partial.jsonl").exists()
+    assert not (output / "partial-status.json").exists()
+
+
+def test_runtime_caps_reject_more_than_two_hours(tmp_path) -> None:
+    with pytest.raises(ValueError, match="between 1 and 7200"):
+        run_condition(
+            backend="direct-address",
+            episodes=1,
+            seed=80401,
+            fact_count=1,
+            distractor_count=0,
+            max_runtime_seconds=7201,
+            output=tmp_path,
+        )
+    with pytest.raises(ValueError, match="between 1 and 7200"):
+        run_matrix(
+            backend="direct-address",
+            output=tmp_path,
+            checkpoint_dir=None,
+            episodes_per_condition=1000,
+            formal=False,
+            max_runtime_seconds=7201,
+        )
+    from scripts.research.epclm_002_a0.train import train
+
+    with pytest.raises(ValueError, match="between 1 and 7200"):
+        train(
+            model_name="learned-cells",
+            seed=80402,
+            steps=500,
+            batch_size=8,
+            output=tmp_path / "never-trained.pt",
+            max_runtime_seconds=7201,
         )

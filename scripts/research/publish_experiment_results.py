@@ -111,6 +111,13 @@ EXPERIMENTS: dict[str, ExperimentSpec] = {
         branch="kaggle/experiment-005-results",
         expected_format="minicells.consumer-language-bridge.v1",
     ),
+    "epclm-002-a0": ExperimentSpec(
+        source_dir="results/epclm-002-a0/publish",
+        artifact_dir="artifacts/experiments/epclm-002-a0-persistent-state-recall/development",
+        files=("decision.json", "metrics.json", "execution-identity.json", "summary.md"),
+        branch="kaggle/epclm-002-a0-development",
+        expected_format="minicells.epclm-002-a0-development.v1",
+    ),
 }
 
 
@@ -291,11 +298,18 @@ def push_results(
     experiment_id: str,
     branch: str,
     secret_name: str,
+    base_ref: str | None = None,
 ) -> None:
     validate_origin(root)
     token = load_github_token(secret_name)
     old_remote_sha = remote_branch_sha(root, branch)
-    base_sha = run_git(root, "rev-parse", "HEAD").stdout.strip()
+    if base_ref is None:
+        base_sha = run_git(root, "rev-parse", "HEAD").stdout.strip()
+    else:
+        if base_ref != "origin/main":
+            raise ValueError("authenticated research artifact publication must use origin/main")
+        run_git(root, "fetch", "--depth=1", "origin", "main")
+        base_sha = run_git(root, "rev-parse", "refs/remotes/origin/main").stdout.strip()
     # Switching to an existing local result branch can remove tracked artifacts
     # from the working tree. Keep the freshly curated directory across that
     # switch so repeated Kaggle seed runs do not publish an empty artifact set.
@@ -359,6 +373,12 @@ def push_results(
         if askpass_path is not None:
             askpass_path.unlink(missing_ok=True)
         token = ""
+    local_sha = run_git(root, "rev-parse", "HEAD").stdout.strip()
+    pushed_sha = remote_branch_sha(root, branch)
+    if pushed_sha != local_sha:
+        raise RuntimeError(
+            f"publication verification failed for {branch}: remote={pushed_sha!r}, local={local_sha!r}"
+        )
     print(f"Pushed experiment {experiment_id} results to branch: {branch}")
 
 
@@ -375,6 +395,10 @@ def parse_args() -> argparse.Namespace:
         help="Commit the curated artifacts and push them to the experiment result branch.",
     )
     parser.add_argument("--branch", help="Override the configured result branch.")
+    parser.add_argument(
+        "--base-ref",
+        help="Optional repository base. Research result branches may specify only origin/main.",
+    )
     parser.add_argument(
         "--secret-name",
         default=DEFAULT_SECRET_NAME,
@@ -402,6 +426,7 @@ def main() -> int:
             args.experiment,
             args.branch or spec.branch,
             args.secret_name,
+            args.base_ref,
         )
     else:
         print("Not pushed. Re-run with --push to publish to GitHub.")

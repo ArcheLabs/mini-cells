@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import platform
+import signal
 import shutil
 import subprocess
 import sys
@@ -39,6 +40,69 @@ def _json_write(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def _atomic_json_write(path: Path, payload: dict[str, Any]) -> None:
+    temporary = path.with_name(path.name + ".tmp")
+    _json_write(temporary, payload)
+    temporary.replace(path)
+
+
+def _load_episode_progress(
+    path: Path,
+    *,
+    episodes: int,
+    seed: int,
+    fact_count: int,
+    distractor_count: int,
+    overwrite_count: int,
+) -> dict[int, dict[str, Any]]:
+    if not path.is_file():
+        return {}
+    lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+    records: dict[int, dict[str, Any]] = {}
+    valid_lines: list[str] = []
+    needs_rewrite = False
+    for line_index, line in enumerate(lines):
+        try:
+            envelope = json.loads(line)
+        except json.JSONDecodeError:
+            if line_index != len(lines) - 1:
+                raise ValueError(f"corrupt episode progress before final line: {path}:{line_index + 1}")
+            break  # A killed append may leave only its last JSONL record incomplete.
+        if not isinstance(envelope, dict):
+            raise ValueError(f"invalid episode progress envelope: {path}:{line_index + 1}")
+        record = envelope.get("record")
+        if not isinstance(record, dict):
+            raise ValueError(f"invalid episode progress record envelope: {path}:{line_index + 1}")
+        expected_record_sha = hashlib.sha256(
+            json.dumps(record, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if envelope.get("record_sha256") != expected_record_sha:
+            raise ValueError(f"episode progress record checksum mismatch: {path}:{line_index + 1}")
+        index = int(record.get("episode_index", -1))
+        if not 0 <= index < episodes or index in records:
+            raise ValueError(f"duplicate or out-of-range episode progress index {index}: {path}")
+        episode_seed = seed + index * 104729
+        episode = generate_episode(
+            episode_seed,
+            fact_count=fact_count,
+            distractor_count=distractor_count,
+            overwrite_count=overwrite_count,
+        )
+        expected_queries = generate_queries(episode, seed=episode_seed ^ 0x5A17)
+        if record.get("episode_id") != episode.episode_id:
+            raise ValueError(f"episode progress does not match deterministic task identity: {path}:{index}")
+        if record.get("query_keys") != expected_queries:
+            raise ValueError(f"episode progress query mapping changed: {path}:{index}")
+        if record.get("targets") != [episode.final_facts[key] for key in expected_queries]:
+            raise ValueError(f"episode progress targets changed: {path}:{index}")
+        records[index] = record
+        needs_rewrite = needs_rewrite or not line.endswith("\n")
+        valid_lines.append(line if line.endswith("\n") else line + "\n")
+    if needs_rewrite or len(valid_lines) != len(lines):
+        path.write_text("".join(valid_lines), encoding="utf-8")
+    return records
+
+
 def _child_env(forbidden_root: Path | None = None) -> dict[str, str]:
     env = dict(os.environ)
     current = env.get("PYTHONPATH", "")
@@ -62,7 +126,10 @@ def _worker(
     result: Path | None = None,
     checkpoint: Path | None = None,
     forbidden_root: Path | None = None,
+    deadline: float | None = None,
 ) -> tuple[subprocess.CompletedProcess[str], int]:
+    if deadline is not None and time.monotonic() >= deadline:
+        raise TimeoutError(f"{mode} worker was not started because the run budget expired")
     command = [sys.executable, "-m", "scripts.research.epclm_002_a0.worker", mode, "--backend", backend]
     for flag, path in (
         ("--input", input_path),
@@ -80,9 +147,32 @@ def _worker(
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        start_new_session=(os.name == "posix"),
     )
     pid = process.pid
-    stdout, stderr = process.communicate()
+    try:
+        remaining = None if deadline is None else max(0.0, deadline - time.monotonic())
+        stdout, stderr = process.communicate(timeout=remaining)
+    except subprocess.TimeoutExpired as exc:
+        try:
+            if os.name == "posix":
+                os.killpg(process.pid, signal.SIGTERM)
+            else:
+                process.terminate()
+        except ProcessLookupError:
+            pass
+        try:
+            stdout, stderr = process.communicate(timeout=3)
+        except subprocess.TimeoutExpired:
+            try:
+                if os.name == "posix":
+                    os.killpg(process.pid, signal.SIGKILL)
+                else:
+                    process.kill()
+            except ProcessLookupError:
+                pass
+            stdout, stderr = process.communicate()
+        raise TimeoutError(f"{mode} worker exceeded the run wall-time budget") from exc
     completed = subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
     if completed.returncode != 0:
         raise RuntimeError(
@@ -99,8 +189,11 @@ def _run_episode(
     checkpoint: Path | None,
     work_root: Path,
     episode_index: int,
+    deadline: float | None = None,
 ) -> dict[str, Any]:
     case = work_root / f"case-{episode_index:06d}"
+    if case.exists():
+        shutil.rmtree(case)
     raw_root = case / "raw"
     sandbox = case / "reader-sandbox"
     raw_root.mkdir(parents=True)
@@ -118,6 +211,7 @@ def _run_episode(
         input_path=writer_input,
         state=state_path,
         checkpoint=checkpoint,
+        deadline=deadline,
     )
     writer_completed_ns = time.monotonic_ns()
     input_sha256 = _sha256(writer_input)
@@ -140,6 +234,7 @@ def _run_episode(
         result=result_path,
         checkpoint=checkpoint,
         forbidden_root=raw_root,
+        deadline=deadline,
     )
     state_sha_after = _sha256(state_path)
     reader_completed_ns = time.monotonic_ns()
@@ -218,7 +313,9 @@ def _run_episode(
     }
 
 
-def _run_negative_controls(*, seed: int, work_root: Path, count: int = 16) -> dict[str, Any]:
+def _run_negative_controls(
+    *, seed: int, work_root: Path, count: int = 16, deadline: float | None = None
+) -> dict[str, Any]:
     """Exercise no-state abstention and independent wrong-episode state controls."""
     no_state_case = work_root / "negative-no-state"
     no_state_case.mkdir(parents=True)
@@ -235,6 +332,7 @@ def _run_negative_controls(*, seed: int, work_root: Path, count: int = 16) -> di
         queries=query_path,
         result=result_path,
         forbidden_root=no_state_case / "raw",
+        deadline=deadline,
     )
     no_state_result = json.loads(result_path.read_text(encoding="utf-8"))
     no_state_abstains = (
@@ -260,7 +358,8 @@ def _run_negative_controls(*, seed: int, work_root: Path, count: int = 16) -> di
         wrong_state = sandbox / "wrong-episode-state.json"
         _json_write(writer_input, wrong_episode.writer_payload())
         _worker(
-            "writer", cwd=sandbox, backend="direct-address", input_path=writer_input, state=wrong_state
+            "writer", cwd=sandbox, backend="direct-address", input_path=writer_input,
+            state=wrong_state, deadline=deadline,
         )
         writer_input.unlink()
         shutil.rmtree(raw)
@@ -276,6 +375,7 @@ def _run_negative_controls(*, seed: int, work_root: Path, count: int = 16) -> di
             queries=wrong_query_path,
             result=wrong_result_path,
             forbidden_root=raw,
+            deadline=deadline,
         )
         wrong_result = json.loads(wrong_result_path.read_text(encoding="utf-8"))
         wrong_expected_files = {wrong_state.resolve(), wrong_query_path.resolve()}
@@ -318,10 +418,13 @@ def run_condition(
     negative_control_count: int = 16,
     checkpoint: Path | None = None,
     formal_run: bool = False,
+    max_runtime_seconds: int = 7200,
     output: Path,
 ) -> dict[str, Any]:
     if episodes < 1:
         raise ValueError("episodes must be positive")
+    if not 1 <= max_runtime_seconds <= 7200:
+        raise ValueError("max_runtime_seconds must be between 1 and 7200")
     if backend != "direct-address" and checkpoint is None:
         raise ValueError("learned model backends require --checkpoint")
     if checkpoint is not None and not checkpoint.is_file():
@@ -353,37 +456,132 @@ def run_condition(
             if not matching_pairs or checkpoint_metadata.get("training_seed") != matching_pairs[0]["model_seed"]:
                 raise ValueError("formal checkpoint/evaluation seed pairing does not match protocol")
     output.mkdir(parents=True, exist_ok=True)
-    records: list[dict[str, Any]] = []
-    with tempfile.TemporaryDirectory(prefix="epclm-002-a0-") as work_dir:
-        work_root = Path(work_dir)
-        progress_interval = max(1, min(100, episodes // 10 or 1))
-        for index in range(episodes):
-            episode_seed = seed + index * 104729
-            episode = generate_episode(
-                episode_seed,
-                fact_count=fact_count,
-                distractor_count=distractor_count,
-                overwrite_count=overwrite_count,
-            )
-            records.append(
-                _run_episode(
+    implementation_hash = _implementation_sha256()
+    identity = {
+        "format": "minicells.epclm-002-a0.condition-identity.v1",
+        "backend": backend,
+        "episodes": episodes,
+        "seed": seed,
+        "condition": {
+            "fact_count": fact_count,
+            "distractor_count": distractor_count,
+            "overwrite_count": overwrite_count,
+        },
+        "negative_control_count": negative_control_count,
+        "formal_run": formal_run,
+        "protocol_sha256": protocol_hash,
+        "implementation_sha256": implementation_hash,
+        "model_checkpoint_sha256": _sha256(checkpoint) if checkpoint is not None else None,
+    }
+    identity_path = output / "condition-identity.json"
+    if identity_path.is_file() and json.loads(identity_path.read_text(encoding="utf-8")) != identity:
+        raise ValueError("existing condition identity differs; refusing to mix or overwrite evidence")
+    if not identity_path.exists():
+        _atomic_json_write(identity_path, identity)
+    final_path = output / "result.json"
+    if final_path.is_file():
+        existing = json.loads(final_path.read_text(encoding="utf-8"))
+        if existing.get("condition_identity_sha256") != hashlib.sha256(
+            json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest():
+            raise ValueError("completed condition result does not match its immutable identity")
+        if len(existing.get("records", [])) != episodes:
+            raise ValueError("completed condition result has an incomplete episode list")
+        completed_episodes = output / "episodes.jsonl"
+        if not completed_episodes.is_file() or len(
+            completed_episodes.read_text(encoding="utf-8").splitlines()
+        ) != episodes:
+            raise ValueError("completed condition episode evidence is missing or incomplete")
+        partial_path = output / "episodes.partial.jsonl"
+        partial_path.unlink(missing_ok=True)
+        (output / "partial-status.json").unlink(missing_ok=True)
+        return existing
+
+    identity_digest = hashlib.sha256(
+        json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    partial_path = output / "episodes.partial.jsonl"
+    progress = _load_episode_progress(
+        partial_path,
+        episodes=episodes,
+        seed=seed,
+        fact_count=fact_count,
+        distractor_count=distractor_count,
+        overwrite_count=overwrite_count,
+    )
+    deadline = time.monotonic() + max_runtime_seconds
+    try:
+        with tempfile.TemporaryDirectory(prefix="epclm-002-a0-") as work_dir:
+            work_root = Path(work_dir)
+            progress_interval = max(1, min(100, episodes // 10 or 1))
+            for index in range(episodes):
+                if index in progress:
+                    continue
+                if time.monotonic() >= deadline:
+                    raise TimeoutError("condition reached its registered wall-time budget")
+                episode_seed = seed + index * 104729
+                episode = generate_episode(
+                    episode_seed,
+                    fact_count=fact_count,
+                    distractor_count=distractor_count,
+                    overwrite_count=overwrite_count,
+                )
+                record = _run_episode(
                     episode,
                     query_seed=episode_seed ^ 0x5A17,
                     backend=backend,
                     checkpoint=checkpoint,
                     work_root=work_root,
                     episode_index=index,
+                    deadline=deadline,
                 )
-            )
-            if (index + 1) % progress_interval == 0 or index + 1 == episodes:
-                print(
-                    f"EPCLM-002-A0 {backend} facts={fact_count} distractors={distractor_count} "
-                    f"updates={overwrite_count}: {index + 1}/{episodes} episodes",
-                    flush=True,
+                with partial_path.open("a", encoding="utf-8") as handle:
+                    record_sha = hashlib.sha256(
+                        json.dumps(record, sort_keys=True, separators=(",", ":")).encode("utf-8")
+                    ).hexdigest()
+                    handle.write(
+                        json.dumps(
+                            {"record": record, "record_sha256": record_sha}, sort_keys=True
+                        )
+                        + "\n"
+                    )
+                    handle.flush()
+                    os.fsync(handle.fileno())
+                progress[index] = record
+                if (index + 1) % progress_interval == 0 or index + 1 == episodes:
+                    print(
+                        f"EPCLM-002-A0 {backend} facts={fact_count} distractors={distractor_count} "
+                        f"updates={overwrite_count}: {len(progress)}/{episodes} episodes",
+                        flush=True,
+                    )
+            controls_path = output / "negative-controls.json"
+            if controls_path.is_file():
+                negative_controls = json.loads(controls_path.read_text(encoding="utf-8"))
+            else:
+                negative_controls = _run_negative_controls(
+                    seed=seed,
+                    work_root=work_root,
+                    count=negative_control_count,
+                    deadline=deadline,
                 )
-        negative_controls = _run_negative_controls(
-            seed=seed, work_root=work_root, count=negative_control_count
+                _atomic_json_write(controls_path, negative_controls)
+    except TimeoutError:
+        _atomic_json_write(
+            output / "partial-status.json",
+            {
+                "format": "minicells.epclm-002-a0.partial-status.v1",
+                "status": "FORMAL_INCOMPLETE_TIMEOUT" if formal_run else "DEVELOPMENT_INCOMPLETE_TIMEOUT",
+                "scientific_decision": False,
+                "formal_run": formal_run,
+                "condition_identity_sha256": identity_digest,
+                "completed_episodes": len(progress),
+                "expected_episodes": episodes,
+                "negative_controls_complete": (output / "negative-controls.json").is_file(),
+                "resume_from": "episodes.partial.jsonl",
+            },
         )
+        raise
+    records = [progress[index] for index in range(episodes)]
 
     all_correct = sum(record["exact_matches"] for record in records)
     all_queries = sum(record["query_count"] for record in records)
@@ -412,7 +610,8 @@ def run_condition(
         ),
         "formal_run": formal_run,
         "protocol_sha256": protocol_hash,
-        "implementation_sha256": _implementation_sha256(),
+        "implementation_sha256": implementation_hash,
+        "condition_identity_sha256": identity_digest,
         "model_checkpoint_sha256": _sha256(checkpoint) if checkpoint is not None else None,
         "training_seed": checkpoint_metadata.get("training_seed") if checkpoint_metadata else None,
         "model_config": checkpoint_metadata.get("model_config") if checkpoint_metadata else None,
@@ -466,10 +665,17 @@ def run_condition(
             else "A learned-model result is pilot-only until all registered seeds and gates are run."
         ),
     }
-    _json_write(output / "result.json", payload)
-    with (output / "episodes.jsonl").open("w", encoding="utf-8") as handle:
+    final_episodes = output / "episodes.jsonl"
+    temporary_episodes = final_episodes.with_name(final_episodes.name + ".tmp")
+    with temporary_episodes.open("w", encoding="utf-8") as handle:
         for record in records:
             handle.write(json.dumps(record, sort_keys=True) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    temporary_episodes.replace(final_episodes)
+    _atomic_json_write(output / "result.json", payload)
+    partial_path.unlink(missing_ok=True)
+    (output / "partial-status.json").unlink(missing_ok=True)
     return payload
 
 
@@ -489,6 +695,7 @@ def main() -> None:
     parser.add_argument("--overwrites", type=int, default=0)
     parser.add_argument("--negative-control-count", type=int, default=16)
     parser.add_argument("--formal", action="store_true", help="authorize one frozen formal evaluation condition")
+    parser.add_argument("--max-runtime-seconds", type=int, default=7200)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     result = run_condition(
@@ -501,6 +708,7 @@ def main() -> None:
         negative_control_count=args.negative_control_count,
         checkpoint=args.checkpoint,
         formal_run=args.formal,
+        max_runtime_seconds=args.max_runtime_seconds,
         output=args.output,
     )
     print(json.dumps({"status": result["status"], "metrics": result["metrics"]}, sort_keys=True))

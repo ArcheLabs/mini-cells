@@ -35,47 +35,62 @@ H1、H2、H3 分开报告。H1 参考实现通过只能支持跨进程序列化�
 
 ## 运行
 
+### Kaggle 单次开发启动（推荐）
+
+仓库提供项目级入口：[EPCLM-002-A0 Kaggle Notebook](../../projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/notebook.ipynb)。在 Kaggle 中打开/导入该 Notebook，开启 Internet，配置已有 Secret `GITHUB_TOKEN`，然后点击一次 **Run All**。无需手工填写源码哈希、种子或切换运行模式；启动器会先验证冻结协议、干净源码、发布仓库和 Secret，再记录实际源码/协议/配置哈希并自动选择未占用的开发种子。
+
+单次 Notebook 的硬上限为 7,200 秒。启动器最多运行 6,600 秒，并为报告发布预留最多 600 秒；评估工作不会在训练进程仍运行时并发执行。检查点和 Episode 级证据留在 Kaggle Output，GitHub 结果分支只接收 `decision.json`、`metrics.json`、`execution-identity.json` 和摘要，不含模型权重。训练或评估超时会保存可恢复进度并标记 `DEVELOPMENT_INCOMPLETE_TIMEOUT`；发布失败时 Kaggle Output 保留，重跑会复用已完成的训练/条件结果。
+
+这条自动入口仅执行开发配置，固定使用 CPU，并且 `scientific_decision=false`。冻结正式矩阵包含 20 个条件 × 3 个模型种子 × 每条件 1,000 Episode（每个学习型后端共 60,000 Episode），不能在两小时内伪装成完整正式结果。正式条件运行器也受 7,200 秒上限约束，逐 Episode 保存进度并可在后续启动恢复；矩阵未完成全部注册条件前只报告 `INCONCLUSIVE`，不会生成正式支持结论。配置和执行说明见[项目 README](../../projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/README.md)。
+
+### 本地低层诊断命令
+
 仓库虚拟环境须安装 `torch`。先执行低成本开发运行：
 
 ```bash
 .venv/bin/python -m scripts.research.epclm_002_a0.validate
 .venv/bin/python -m scripts.research.epclm_002_a0.train \
   --model learned-cells --seed 98100 --steps 500 --batch-size 8 \
+  --max-runtime-seconds 7200 \
   --output artifacts/experiments/epclm-002-a0-persistent-state-recall/dev-learned-cells.pt
 .venv/bin/python -m scripts.research.epclm_002_a0.runner \
   --backend direct-address --episodes 16 --seed 80100 --facts 8 --distractors 0 \
+  --max-runtime-seconds 7200 \
   --output artifacts/experiments/epclm-002-a0-persistent-state-recall/pilot-direct
 .venv/bin/python -m scripts.research.epclm_002_a0.runner \
   --backend learned-cells \
   --checkpoint artifacts/experiments/epclm-002-a0-persistent-state-recall/dev-learned-cells.pt \
   --episodes 16 --seed 80100 --facts 8 --distractors 0 \
+  --max-runtime-seconds 7200 \
   --output artifacts/experiments/epclm-002-a0-persistent-state-recall/pilot-learned-cells
 .venv/bin/python -m scripts.research.epclm_002_a0.validate \
   artifacts/experiments/epclm-002-a0-persistent-state-recall/pilot-learned-cells/result.json
 ```
 
-正式训练固定为 500 步、批大小 8，在固定验证集上每 50 步选择最佳 checkpoint。正式评估需对每个事实/干扰条件执行三个正式模型种子，每个组合至少 1,000 个 Episode，并使用协议中与模型种子一一对应的独立评估种子；正式模型训练调用必须带 `--formal`。开发种子不能替代正式种子，测试集不能参与训练、模型选择或门槛调整。正式矩阵命令如下：
+正式训练固定为 500 步、批大小 8，在固定验证集上每 50 步选择最佳 checkpoint。正式评估需对每个事实/干扰条件执行三个正式模型种子，每个组合至少 1,000 个 Episode，并使用协议中与模型种子一一对应的独立评估种子；正式模型训练调用必须带 `--formal`。每个正式模型种子单独启动，单次不超过 7,200 秒；开发种子不能替代正式种子，测试集不能参与训练、模型选择或门槛调整。以下仅示例第一个种子，其余两个种子需按协议配对分开启动：
 
 ```bash
-for seed in 98211 98212 98213; do
-  .venv/bin/python -m scripts.research.epclm_002_a0.train \
-    --model learned-cells --seed "$seed" --formal --steps 500 --batch-size 8 \
-    --output "artifacts/experiments/epclm-002-a0-persistent-state-recall/checkpoints/learned-cells-seed-${seed}.pt"
-done
+.venv/bin/python -m scripts.research.epclm_002_a0.train \
+  --model learned-cells --seed 98211 --formal --steps 500 --batch-size 8 \
+  --max-runtime-seconds 7200 --resume \
+  --output artifacts/experiments/epclm-002-a0-persistent-state-recall/checkpoints/learned-cells-seed-98211.pt
 .venv/bin/python -m scripts.research.epclm_002_a0.run_matrix \
   --backend learned-cells \
   --checkpoint-dir artifacts/experiments/epclm-002-a0-persistent-state-recall/checkpoints \
-  --episodes-per-condition 1000 --formal \
+  --episodes-per-condition 1000 --formal --max-runtime-seconds 7200 \
   --output artifacts/experiments/epclm-002-a0-persistent-state-recall/formal-learned-cells
 ```
 
-`direct-address` 矩阵使用 `run_matrix --backend direct-address --episodes-per-condition 1000 --formal`，只用于隔离与工程参考检查。正式汇总不会从未完成的条件运行中生成。
+`direct-address` 矩阵使用 `run_matrix --backend direct-address --episodes-per-condition 1000 --formal --max-runtime-seconds 7200`，只用于隔离与工程参考检查。正式汇总不会从未完成的条件运行中生成。
+
+正式矩阵每次启动最多运行两小时。若超时，`partial-status.json` 会标记未完成状态，`episodes.partial.jsonl` 保存已完成 Episode；再次使用相同输出目录和身份运行会跳过已完成 Episode。正式训练也支持以 `--resume` 恢复同一训练身份的进度。不能通过降低冻结的 Episode 数或删减条件来满足时限。
 
 `direct-address` 单条件试运行示例：
 
 ```bash
 .venv/bin/python -m scripts.research.epclm_002_a0.runner \
   --backend direct-address --episodes 16 --seed 80100 --facts 8 --distractors 64 --overwrites 2 \
+  --max-runtime-seconds 7200 \
   --output artifacts/experiments/epclm-002-a0-persistent-state-recall/pilot-direct-8f-64d
 ```
 
