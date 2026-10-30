@@ -212,11 +212,80 @@ class IncrementalLM:
             or start_position + input_ids.shape[1] > cache["max_context"]
         ):
             raise ValueError("PREFIX_CONTEXT_OR_POSITION_MISMATCH")
+        if self.kind == "T1":
+            return self._prefill_t1(input_ids, cache, start_position)
         for i in range(input_ids.shape[1]):
             logits, cache = self.decode_one(
                 input_ids[:, i : i + 1], cache, absolute_position=start_position + i
             )
         return logits, cache
+
+    @torch.inference_mode()
+    def _prefill_t1(self, ids, cache, start):
+        """Parallel causal prefill (including nonempty-cache chunk continuation)."""
+        self._check(cache, ids[:, :1], start)
+        base, _, _ = native()
+        m = self.model
+        batch, length = ids.shape
+        x = m.token_embedding(ids)
+        cache["states"] = {}
+        for i, block in enumerate(m.blocks):
+            a = block.attn
+            z = block.n1(x)
+            q = a.q(z).view(batch, length, a.heads, a.head_dim).transpose(1, 2)
+            k = a.k(z).view(batch, length, a.kv_heads, a.head_dim).transpose(1, 2)
+            v = a.v(z).view(batch, length, a.kv_heads, a.head_dim).transpose(1, 2)
+            if start == 0:
+                q, k = base._rope(q), base._rope(k)
+            else:
+                # Reuse exactly the original half-split frequency convention.
+                half = a.head_dim // 2
+                inv = 1.0 / (
+                    10000 ** (torch.arange(half, device=x.device, dtype=torch.float32) / half)
+                )
+                angle = (
+                    torch.arange(start, start + length, device=x.device, dtype=torch.float32)[
+                        :, None
+                    ]
+                    * inv
+                )
+                sin, cos = angle.sin().to(q.dtype)[None, None], angle.cos().to(q.dtype)[None, None]
+
+                def rotate(value, cos=cos, sin=sin):
+                    one, two = value.chunk(2, -1)
+                    return torch.cat((one * cos - two * sin, one * sin + two * cos), -1)
+
+                q, k = rotate(q), rotate(k)
+            k, v = self._append_chunk(cache, f"block:{i}", start, k, v)
+            rep = a.heads // a.kv_heads
+            keys, values = k.repeat_interleave(rep, 1), v.repeat_interleave(rep, 1)
+            if start == 0:
+                delta = F.scaled_dot_product_attention(
+                    q, keys, values, is_causal=True, dropout_p=0.0
+                )
+            else:
+                qi = torch.arange(start, start + length, device=x.device)[:, None]
+                ki = torch.arange(start + length, device=x.device)[None, :]
+                delta = F.scaled_dot_product_attention(
+                    q, keys, values, attn_mask=(ki <= qi)[None, None], dropout_p=0.0
+                )
+            x = x + a.o(delta.transpose(1, 2).contiguous().view(batch, length, -1))
+            x = x + block.ffn(block.n2(x))
+            cache["states"][f"block:{i}"] = x[:, -1:].clone()
+            self.iteration_updates += batch * length
+            self.kv_history_slots_read += (
+                batch * a.kv_heads * sum(start + j + 1 for j in range(length))
+            )
+        cache["position"] = start + length
+        cache["reset"] = False
+        return m.lm_head(m.final_norm(x[:, -1:]))[:, -1], cache
+
+    def _append_chunk(self, cache, key, start, k, v):
+        entry = cache["layers"].get(key)
+        if entry:
+            k, v = torch.cat((entry["k"], k), 2), torch.cat((entry["v"], v), 2)
+        cache["layers"][key] = {"tag": key, "frontier": k.shape[2], "k": k, "v": v}
+        return k, v
 
     def reset(self, cache):
         fresh = self.init_cache(
@@ -270,6 +339,23 @@ class PreallocatedIncrementalLM(IncrementalLM):
             frontier=position + 1,
             k=entry["k_storage"][:, :, start : position + 1],
             v=entry["v_storage"][:, :, start : position + 1],
+        )
+        cache["layers"][key] = entry
+        return entry["k"], entry["v"]
+
+    def _append_chunk(self, cache, key, start, k, v):
+        entry = cache["layers"].get(key)
+        if entry is None:
+            shape = (k.shape[0], k.shape[1], cache["max_context"], k.shape[-1])
+            entry = {"k_storage": k.new_empty(shape), "v_storage": v.new_empty(shape)}
+        end = start + k.shape[2]
+        entry["k_storage"][:, :, start:end].copy_(k)
+        entry["v_storage"][:, :, start:end].copy_(v)
+        entry.update(
+            tag=key,
+            frontier=end,
+            k=entry["k_storage"][:, :, :end],
+            v=entry["v_storage"][:, :, :end],
         )
         cache["layers"][key] = entry
         return entry["k"], entry["v"]

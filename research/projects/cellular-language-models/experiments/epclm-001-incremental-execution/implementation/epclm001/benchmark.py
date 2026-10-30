@@ -88,7 +88,7 @@ def incremental_timings(model, tokens, prefill_length, *, repeats=5, warmup=2):
                         "peak_vram_bytes": None,
                         "limitations": [
                             "Teacher-forced timing excludes tokenizer/sampling/return",
-                            "Sequential prefill; A1 preallocates KV only; no kernel fusion",
+                            "T1 parallel prefill; CLM sequential A0/A1 prefill; no fused kernels",
                         ],
                     }
                 )
@@ -104,52 +104,83 @@ def event_matrix(matrix, *, device="cpu"):
         state = torch.randn(n, d, generator=rng).to(device)
         weight = (torch.randn(d, d, generator=rng) / math.sqrt(d)).to(device)
         events = trace(n, steps, point["ratio"], point["layout"], matrix["seed"])
-        expected = None
+        trace_hash = sha([asdict(e) for e in events])
+
+        def new_runtime(
+            impl, mode, state=state, weight=weight, point=point, steps=steps, events=events
+        ):
+            r = Runtime(
+                state, weight, implementation=impl, tile=point["tile"], max_steps=steps, mode=mode
+            )
+            for event in events:
+                r.enqueue(event)
+            return r
+
+        # Entire correctness pass is outside every measured sample.
+        checks = {impl: new_runtime(impl, "correctness") for impl in IMPLEMENTATIONS}
+        for _ in range(steps):
+            rows = {impl: r.microstep() for impl, r in checks.items()}
+            reference = checks[IMPLEMENTATIONS[0]]
+            for impl, r in checks.items():
+                torch.testing.assert_close(r.state, reference.state, atol=2e-6, rtol=2e-5)
+                for key in ("consumed", "event_hash", "active_ids", "dropped", "reads"):
+                    if rows[impl][key] != rows[IMPLEMENTATIONS[0]][key]:
+                        raise RuntimeError("EVENT_PARITY_FAILED")
         for repeat in range(matrix["warmup"] + matrix["repeats"]):
             order = IMPLEMENTATIONS if repeat % 2 == 0 else tuple(reversed(IMPLEMENTATIONS))
             for impl in order:
-                runtime = Runtime(
-                    state, weight, implementation=impl, tile=point["tile"], max_steps=steps
-                )
-                for e in events:
-                    runtime.enqueue(e)
+                runtime = new_runtime(impl, "performance")
+                start_event = end_event = None
+                if torch.device(device).type == "cuda":
+                    start_event, end_event = (
+                        torch.cuda.Event(enable_timing=True),
+                        torch.cuda.Event(enable_timing=True),
+                    )
                 sync(device)
                 begin = time.perf_counter()
-                rows = [runtime.microstep() for _ in range(steps)]
+                if start_event is not None:
+                    start_event.record()
+                for _ in range(steps):
+                    runtime.microstep()
+                if end_event is not None:
+                    end_event.record()
                 sync(device)
                 elapsed = (time.perf_counter() - begin) * 1000
-                if expected is None:
-                    expected = (
-                        runtime.state.clone(),
-                        [r["event_hash"] for r in rows],
-                        [r["consumed"] for r in rows],
-                    )
-                torch.testing.assert_close(runtime.state, expected[0], atol=2e-6, rtol=2e-5)
-                if [r["event_hash"] for r in rows] != expected[1] or [
-                    r["consumed"] for r in rows
-                ] != expected[2]:
-                    raise RuntimeError("EVENT_PARITY_FAILED")
+                device_ms = start_event.elapsed_time(end_event) if start_event is not None else None
+                # Validation and serialization occur only after the ending sync.
+                reference = checks[impl]
+                torch.testing.assert_close(runtime.state, reference.state, atol=2e-6, rtol=2e-5)
+                if runtime.consumed != reference.consumed or runtime.queue != reference.queue:
+                    raise RuntimeError("PERFORMANCE_EVENT_SEMANTICS_MISMATCH")
+                if (runtime.total_logical, runtime.total_physical) != (
+                    reference.total_logical,
+                    reference.total_physical,
+                ):
+                    raise RuntimeError("PERFORMANCE_COST_MISMATCH")
                 if repeat >= matrix["warmup"]:
+                    rows = reference.history
+                    unique = len({i for row in rows for i in row["active_ids"]})
                     raw.append(
                         {
                             "workload": point,
                             "repeat": repeat - matrix["warmup"],
                             "implementation": impl,
-                            "trace_hash": sha([asdict(e) for e in events]),
+                            "trace_hash": trace_hash,
                             "elapsed_ms": elapsed,
+                            "device_stream_elapsed_ms": device_ms,
                             "logical_updates": runtime.total_logical,
                             "physical_updates": runtime.total_physical,
-                            "unique_cells_touched": len(
-                                {i for row in rows for i in row["active_ids"]}
-                            ),
-                            "repeated_activations": runtime.total_logical
-                            - len({i for row in rows for i in row["active_ids"]}),
+                            "unique_cells_touched": unique,
+                            "repeated_activations": runtime.total_logical - unique,
                             "microsteps": rows,
+                            "microsteps_origin": "SEPARATE_UNTIMED_CORRECTNESS_PASS",
                             "parity_passed": True,
+                            "measurement_mode": "performance",
+                            "timing_scope": "host end-to-end microsteps; queue/packing/transfers included; no hashes or phase syncs",
                             "limitations": [
-                                "Diagnostic state hashes and synchronized phase timers included",
-                                "No profiler DRAM traffic or energy measurement",
-                                "External trace generation excluded; enqueue excluded",
+                                "Event interval is GPU stream elapsed time, not kernel-only profiler sum",
+                                "Phase timings belong to correctness pass, not performance decomposition",
+                                "No measured DRAM traffic or energy; trace generation/initial enqueue excluded",
                             ],
                         }
                     )

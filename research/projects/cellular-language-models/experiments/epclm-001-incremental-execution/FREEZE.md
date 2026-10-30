@@ -14,3 +14,8 @@ holdout trace and small hardware workload matrix still need binding.
 Existing FP32 tiny-fixture tolerances (atol=2e-5, rtol=2e-4) are diagnostic.
 They do not certify the approximately 1.9M trained models or another precision.
 H1/H2/H3 remain INCOMPLETE until their independent requirements are met.
+
+Engineering closure: validation_policy.json and validation_inputs.json bind
+fixed FP32 CPU/CUDA diagnostic criteria and 128-token IDs. These are fixture
+correctness criteria, not scientific tolerance certification of recovered
+trained weights. FP16/BF16 remain blocked until separately calibrated/frozen.

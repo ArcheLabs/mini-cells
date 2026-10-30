@@ -26,7 +26,13 @@ def engineering(args):
     inputs.update(
         {
             str(p.relative_to(ROOT)): digest(p)
-            for p in (BASE / "protocol.json", BASE / "workloads.json", BASE / "PROTOCOL_DRAFT.md")
+            for p in (
+                BASE / "protocol.json",
+                BASE / "workloads.json",
+                BASE / "PROTOCOL_DRAFT.md",
+                BASE / "validation_policy.json",
+                BASE / "validation_inputs.json",
+            )
         }
     )
     manifest = {
@@ -127,7 +133,7 @@ def engineering(args):
                     "A1 preallocated cache implemented; hardware performance unvalidated",
                     "Padding masks explicitly unsupported",
                     "30M deferred and excluded from all round-1 execution",
-                    "Event phase timing includes diagnostic overhead",
+                    "Performance uses boundary timing only; detailed phase timings are from the separate correctness pass",
                 ],
             },
         )
@@ -243,15 +249,25 @@ def main():
         from .benchmark import incremental_timings
         from .validation import parity
 
-        model, _ = load_native(args.checkpoint, args.model)
+        policy = json.loads((BASE / "validation_policy.json").read_text())
+        inputs = json.loads((BASE / policy["input_file"]).read_text())
+        model, metadata = load_native(args.checkpoint, args.model)
         model.to(args.device)
-        ids = torch.randint(
-            0,
-            model.lm_head.out_features if hasattr(model, "lm_head") else model.head.out_features,
-            (1, 32),
-            generator=torch.Generator().manual_seed(1832),
-        ).to(args.device)
-        check = parity(model, ids, atol=2e-5, rtol=2e-4, checkpoint_sha256=digest(args.checkpoint))
+        dtype = str(next(model.parameters()).dtype).split(".")[-1]
+        key = str(next(model.parameters()).device.type) + ":" + dtype
+        if key not in policy["criteria"]:
+            parser.error("DEVICE_PRECISION_TOLERANCE_NOT_FROZEN")
+        ids = torch.tensor(inputs["tokens"], dtype=torch.long, device=args.device)
+        if ids.shape[1] != policy["required_length"] or ids.shape[1] != 128:
+            parser.error("FULL_BOUNDARY_VALIDATION_INPUT_REQUIRED")
+        criterion = policy["criteria"][key]
+        check = parity(model, ids, **criterion, checkpoint_sha256=digest(args.checkpoint))
+        check.update(
+            validation_policy_sha256=digest(BASE / "validation_policy.json"),
+            validation_input_sha256=digest(BASE / policy["input_file"]),
+            input_scope=inputs["scope"],
+            checkpoint_metadata=metadata,
+        )
         write(args.output / "PARITY.json", check)
         if not check["passed"]:
             parser.error("PARITY_FAILED_NO_PERFORMANCE_RESULT")
@@ -260,7 +276,7 @@ def main():
             "source_sha": source(),
             "checkpoint_sha256": digest(args.checkpoint),
             "correctness": check,
-            "records": incremental_timings(model, ids, 16),
+            "records": incremental_timings(model, ids, 32),
         }
         write(args.output / "INCREMENTAL_TIMING.json", result)
     else:

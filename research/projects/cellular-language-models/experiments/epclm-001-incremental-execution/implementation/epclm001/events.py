@@ -25,9 +25,12 @@ class Event:
 
 
 class Runtime:
-    def __init__(self, state, weight, *, implementation, tile=16, max_steps=32):
+    def __init__(self, state, weight, *, implementation, tile=16, max_steps=32, mode="correctness"):
         if implementation not in IMPLEMENTATIONS or tile < 1 or max_steps < 1:
             raise ValueError("INVALID_EXECUTOR_OR_BUDGET")
+        if mode not in ("correctness", "performance"):
+            raise ValueError("INVALID_EXECUTION_MODE")
+        self.mode = mode
         self.state = state.clone()
         self.initial = state.clone()
         self.weight = weight.clone()
@@ -36,6 +39,7 @@ class Runtime:
         self.versions = [0] * len(state)
         self.step = 0
         self.history = []
+        self.last_reads = {}
         self.total_physical = 0
         self.total_logical = 0
 
@@ -53,15 +57,18 @@ class Runtime:
         self.queue.append(event)
 
     def _sync(self):
-        if self.state.is_cuda:
+        if self.mode == "correctness" and self.state.is_cuda:
             torch.cuda.synchronize(self.state.device)
+
+    def _clock(self):
+        return time.perf_counter() if self.mode == "correctness" else 0.0
 
     @torch.inference_mode()
     def microstep(self):
         if self.step >= self.max_steps:
             raise ValueError("MICROSTEP_BUDGET_EXHAUSTED")
         self._sync()
-        start = time.perf_counter()
+        start = self._clock()
         ready = sorted(
             (e for e in self.queue if e.due == self.step),
             key=lambda e: (e.source, e.target, e.sequence, e.event_id),
@@ -88,9 +95,10 @@ class Runtime:
             self.last_sequence.clear()
             self.consumed.clear()
         reads = {e.event_id: self.state[e.target].clone() for e in valid if e.kind == "READ_QUERY"}
+        self.last_reads = reads
         updating = [e for e in valid if e.kind in ("INPUT", "STATE_MESSAGE", "SELF_TICK")]
         active = sorted({e.target for e in updating})
-        queue_end = time.perf_counter()
+        queue_end = self._clock()
         messages = {}
         for e in updating:
             messages[e.target] = messages.get(e.target, 0.0) + e.value
@@ -109,7 +117,7 @@ class Runtime:
             ]
         ids = torch.tensor(physical, device=self.state.device, dtype=torch.long)
         self._sync()
-        compact_end = time.perf_counter()
+        compact_end = self._clock()
         if physical:
             if self.impl.startswith("D"):
                 before = self.state
@@ -117,11 +125,11 @@ class Runtime:
                 before = self.state.index_select(0, ids)
             aggregation = self.state.new_tensor([messages.get(i, 0.0) for i in physical])[:, None]
             self._sync()
-            gather_end = time.perf_counter()
+            gather_end = self._clock()
             # Shared deterministic kernel; all reads precede every write.
             proposed = torch.tanh(before @ self.weight + aggregation)
             self._sync()
-            compute_end = time.perf_counter()
+            compute_end = self._clock()
             mask = torch.tensor([i in messages for i in physical], device=ids.device)
             if self.impl == "D1_masked_dense":
                 self.state = torch.where(mask[:, None], proposed, self.state)
@@ -135,7 +143,7 @@ class Runtime:
         else:
             gather_end = compute_end = compact_end
         self._sync()
-        scatter_end = time.perf_counter()
+        scatter_end = self._clock()
         outgoing = []
         # Send rule independent of floating-point differences: absolute event payload.
         for e in updating:
@@ -157,7 +165,12 @@ class Runtime:
         for e in outgoing:
             self.enqueue(e)
         self._sync()
-        end = time.perf_counter()
+        end = self._clock()
+        self.total_physical += len(physical)
+        self.total_logical += len(active)
+        if self.mode == "performance":
+            self.step += 1
+            return None
         row = {
             "step": self.step,
             "consumed": [e.event_id for e in ready],
@@ -184,8 +197,6 @@ class Runtime:
             },
             "timing_scope": "host synchronized phases; instrumentation overhead included",
         }
-        self.total_physical += len(physical)
-        self.total_logical += len(active)
         self.history.append(row)
         self.step += 1
         return row
@@ -198,8 +209,10 @@ class Runtime:
     def restore(self, snapshot):
         import copy
 
-        if snapshot["impl"] != self.impl or tensor_hash(snapshot["weight"]) != tensor_hash(
-            self.weight
+        if (
+            snapshot["mode"] != self.mode
+            or snapshot["impl"] != self.impl
+            or tensor_hash(snapshot["weight"]) != tensor_hash(self.weight)
         ):
             raise ValueError("EVENT_SNAPSHOT_IDENTITY_MISMATCH")
         self.__dict__ = copy.deepcopy(snapshot)

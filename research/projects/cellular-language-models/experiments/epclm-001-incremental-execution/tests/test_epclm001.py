@@ -200,3 +200,141 @@ def test_round1_scope_never_loads_30m(tmp_path, monkeypatch):
     assert result.returncode != 0
     notebook = (BASE / "epclm001_cpu.ipynb").read_text()
     assert "007-minicells-30m" not in notebook
+
+
+@pytest.mark.parametrize("adapter_class", [IncrementalLM, PreallocatedIncrementalLM])
+@pytest.mark.parametrize("batch", [1, 2])
+def test_t1_parallel_prefill_and_chunk_cache(adapter_class, batch, monkeypatch):
+    model = fixture("T1")
+    adapter = adapter_class(model)
+    ids = torch.arange(128).remainder(32).repeat(batch, 1)
+    cache = adapter.init_cache(batch, "cpu", torch.float32, max_context=128)
+
+    # A serial decode fallback must not be used by Transformer prefill.
+    def forbidden(*args, **kwargs):
+        raise AssertionError("T1 prefill must process whole chunks")
+
+    monkeypatch.setattr(adapter, "decode_one", forbidden)
+    with torch.inference_mode():
+        out, cache = adapter.prefill(ids[:, :7], cache)
+        torch.testing.assert_close(out, full_logits(model, ids[:, :7])[:, -1], atol=2e-5, rtol=2e-4)
+        snap = adapter.snapshot(cache)
+        out, cache = adapter.prefill(ids[:, 7:], cache, start_position=7)
+        torch.testing.assert_close(out, full_logits(model, ids)[:, -1], atol=2e-5, rtol=2e-4)
+        replay = adapter.restore(snap)
+        out2, replay = adapter.prefill(ids[:, 7:], replay, start_position=7)
+        torch.testing.assert_close(out, out2, atol=0, rtol=0)
+        other = adapter_class(model)
+        sequential = other.init_cache(batch, "cpu", torch.float32, max_context=128)
+        for pos in range(128):
+            _, sequential = other.decode_one(
+                ids[:, pos : pos + 1], sequential, absolute_position=pos
+            )
+        for key in cache["layers"]:
+            for field in ("k", "v"):
+                torch.testing.assert_close(
+                    cache["layers"][key][field],
+                    sequential["layers"][key][field],
+                    atol=2e-5,
+                    rtol=2e-4,
+                )
+
+
+@pytest.mark.parametrize("impl", IMPLEMENTATIONS)
+def test_performance_mode_excludes_diagnostics(impl, monkeypatch):
+    from epclm001 import events
+
+    state = torch.zeros(8, 4)
+    r = Runtime(state, torch.eye(4), implementation=impl, tile=4, max_steps=2, mode="performance")
+    r.enqueue(Event("start", 0, 0, ttl=1))
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("Diagnostic function called in performance mode")
+
+    with monkeypatch.context() as patch:
+        patch.setattr(events, "tensor_hash", forbidden)
+        patch.setattr(events, "sha", forbidden)
+        patch.setattr(events.time, "perf_counter", forbidden)
+        patch.setattr(torch.cuda, "synchronize", forbidden)
+        assert r.microstep() is None
+        assert r.microstep() is None
+    assert r.history == []
+    assert r.total_logical == 2
+    assert r.state[0].ne(0).any() and r.state[1].ne(0).any()
+
+
+def test_event_measurement_pass_is_separate():
+    from epclm001.benchmark import event_matrix
+
+    matrix = {
+        "seed": 1,
+        "warmup": 0,
+        "repeats": 1,
+        "event_points": [
+            {"cells": 16, "dim": 4, "steps": 2, "tile": 4, "ratio": 0.25, "layout": "clustered"}
+        ],
+    }
+    rows = event_matrix(matrix)
+    assert len(rows) == 4
+    assert all(r["microsteps_origin"] == "SEPARATE_UNTIMED_CORRECTNESS_PASS" for r in rows)
+    assert all(r["measurement_mode"] == "performance" and r["parity_passed"] for r in rows)
+    assert all(r["device_stream_elapsed_ms"] is None for r in rows)
+
+
+def test_asset_header_discovery_and_unknown_source(tmp_path, monkeypatch):
+    import json
+
+    from epclm001 import assets
+
+    path = tmp_path / "opaque-name.ckpt"
+    torch.save({"model": assets.MODELS["E0B_T1"], "step": 100, "seed": 91002}, path)
+    assert assets.checkpoint_models(path) == {assets.MODELS["E0B_T1"]}
+    model = fixture("T1")
+    monkeypatch.setattr(
+        assets,
+        "load_native",
+        lambda *args: (model, {"seed": 91002, "step": 100, "profile": "baseline"}),
+    )
+    row = next(r for r in assets.inventory([tmp_path])["assets"] if r["baseline_id"] == "E0B_T1")
+    assert row["checkpoint_uri"] == str(path)
+    assert row["architecture_source_sha"] is None
+    assert row["adapter_source_sha"] is not None
+    assert not row["binding_complete"]
+    (tmp_path / "opaque-name.ckpt.identity.json").write_text(
+        json.dumps({"checkpoint_sha256": "wrong", "training_source_sha": "a" * 40})
+    )
+    row = next(r for r in assets.inventory([tmp_path])["assets"] if r["baseline_id"] == "E0B_T1")
+    assert row["architecture_source_sha"] is None
+
+
+@pytest.mark.parametrize("kind", ["T1", "X3", "X4"])
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA unavailable; not a GPU PASS")
+def test_cuda_fixed_prefix_parity_engineering_only(kind):
+    from epclm001.validation import parity
+
+    model = fixture(kind).to("cuda")
+    ids = torch.arange(128, device="cuda").remainder(32)[None]
+    # Fixed engineering criteria declared before this run; no timing/performance claim.
+    result = parity(model, ids, atol=2e-5, rtol=2e-4)
+    assert result["passed"] and result["model_unchanged"]
+    adapter = IncrementalLM(model)
+    cache = adapter.init_cache(1, "cuda:0", torch.float32, max_context=128)
+    out, cache = adapter.prefill(ids[:, :127], cache)
+    out, cache = adapter.decode_one(ids[:, 127:], cache, absolute_position=127)
+    torch.testing.assert_close(out, full_logits(model, ids)[:, -1], atol=2e-5, rtol=2e-4)
+
+
+def test_event_readout_and_mode_restore_contract():
+    state = torch.ones(4, 2)
+    correct = Runtime(state, torch.eye(2), implementation=IMPLEMENTATIONS[0], max_steps=2)
+    performance = Runtime(
+        state, torch.eye(2), implementation=IMPLEMENTATIONS[0], max_steps=2, mode="performance"
+    )
+    for r in (correct, performance):
+        r.enqueue(Event("read", 0, 0, kind="READ_QUERY"))
+        r.microstep()
+    torch.testing.assert_close(
+        correct.last_reads["read"], performance.last_reads["read"], atol=0, rtol=0
+    )
+    with pytest.raises(ValueError, match="IDENTITY"):
+        performance.restore(correct.snapshot())

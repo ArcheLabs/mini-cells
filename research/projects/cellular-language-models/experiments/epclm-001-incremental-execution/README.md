@@ -37,3 +37,31 @@ Missing checkpoints mean absent from the recorded search roots, not globally
 nonexistent. Matching tokenizer size or source defaults does not prove common
 training/evaluation provenance. See [freeze status](FREEZE.md) and
 [claim limits](WHAT_THIS_DOES_NOT_PROVE.md).
+
+
+## Engineering closure after review of 1d527228
+
+T1 now uses parallel causal prefill, with offset-aware chunk continuation and
+GQA KV construction checked against full forward and serial decode. X3/X4
+retain the original per-iteration sequential reference path.
+
+Event correctness and performance are separate passes. Correctness retains
+hashes, traces and synchronized phase diagnostics. Performance disables those
+observations and internal synchronization; outer host and CUDA-event intervals
+include actual queue/packing/compute/commit costs. GPU-event intervals are not
+labelled as summed kernel-only time. Detailed phase timings remain diagnostic,
+not a performance decomposition.
+
+Checkpoint discovery inspects bounded Torch archive metadata rather than model
+names in paths, includes the original notebook's output/cache roots, and keeps
+legacy/unrecognized files unclassified. Training source stays UNKNOWN unless
+recorded in the checkpoint or bound by a matching checkpoint-hash sidecar;
+the current adapter source is recorded separately. Nearby tokenizer/corpus
+files are accepted only through saved hashes, not directory proximity.
+
+`validation_policy.json` fixes engineering device/dtype criteria before the
+checks, and `validation_inputs.json` provides a fixed 128-token diagnostic
+sequence. Unlisted precision/device combinations stop rather than inheriting
+FP32 tolerances. These fixed token IDs are not a model-quality corpus.
+See `reports/engineering-closure-001/REVIEW.md` for the full test record and
+unresolved trained-asset/low-precision/formal-benchmark gates.

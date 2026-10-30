@@ -1,0 +1,17 @@
+{
+  "status": "ENGINEERING_CRITERIA_FIXED_BEFORE_THIS_CORRECTNESS_RUN_NOT_SCIENTIFIC_DEVICE_CERTIFICATION",
+  "criteria": {
+    "cpu:float32": {
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "cuda:float32": {
+      "atol": 2e-05,
+      "rtol": 0.0002
+    }
+  },
+  "input_file": "validation_inputs.json",
+  "required_length": 128,
+  "scientific_quality_corpus": null,
+  "unlisted_device_precision": "BLOCKED_NOT_CALIBRATED"
+}
