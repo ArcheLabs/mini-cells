@@ -1,9 +1,9 @@
 # EPCLM-001 v0.4 engineering delivery
 
-Implementation source: `550861d3c6d45a616c483aff360b1612e7798183`. Branch: `codex/epclm001-incremental`.
+Implementation source: `227a3a0783049b63b0d29d7c88bf752b415e2b63`. Branch: `codex/epclm001-incremental`.
 
-Engineering tests: **109 passed** (63 historical regressions, 46 formal-workflow
-fixtures), followed by 6 focused passing checks after report/publication guards.
+Engineering tests: **110 passed** (63 historical regressions, 47 formal-workflow
+fixtures), followed by 6 focused passing source-identity/recovery checks, including one additional new test.
 The initial expanded test run caught a missing import in a test; it was corrected
 before the final full-suite run. Ruff, compile checks and diff whitespace checks
 passed. Notebook JSON structure/compilation and a mocked Run All bootstrap passed.
