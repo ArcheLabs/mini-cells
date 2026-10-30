@@ -1,17 +1,18 @@
-# Evidence Map 完整性审计（初次迁移）
+# Evidence Map completeness and repair audit
 
-main 快照 `3a70e57e6fbf2c515fda239aae03641a66ff6d74`。扫描 5833 个文件，发现 141 个工作目录、220 种身份声明；39 种 ID 尚未归属目录，保留来源清单。141 是工作目录数，不是去重后的独立科学实验数。
+Reviewed 2026-10-30. Source inventory remains main `3a70e57e6fbf2c515fda239aae03641a66ff6d74`: 5,833 research files, 141 work directories and 220 declared ID strings. These are discovery units, not independent experiment counts.
 
-- 已逐结果核定的类型：{'UNKNOWN': 137, 'FORMAL_EXPERIMENT': 3, 'EXPLORATORY_EXPERIMENT': 1}。
-- 已核定 Outcome：{'UNKNOWN': 137, 'PASS': 2, 'FAIL': 2}。未核定记录不能被统计为未执行或失败。
-- 46 个目录未按文件名找到协议候选，39 个未找到结果候选；不证明原资料不存在。
-- 526 条文字 research 路径未直接解析，含旧目录迁移/脚本生成路径；全量待核查列表在 JSON，不擅自认定证据丢失。
-- 同 Run ID/文件类型的状态差异候选 2 项：标 CONFLICT_REVIEW_REQUIRED，需按阶段/快照逐一确认，不自动选版本。
-- 已建立 Claim 6 条，其中 ESTABLISHED 1 条；Open Questions 5 个。
-- 校验本 Map/附录本地链接 1024 个，失败 0 个。
+## Repairs
 
-## 验收边界
+- Replaced the bilingual, duplicated primary document with one English research-history narrative.
+- Removed the appended obsolete five-line template and inconsistent duplicate claim sections.
+- Reconciled Core005 as SUPPORTED under controlled conditions and Core006 as Outcome FAIL / system claim NOT_ESTABLISHED; preserved positive sub-results and interpretation revision history.
+- Refreshed claim counts: 2 SUPPORTED, 1 CONTRADICTED, 3 NOT_ESTABLISHED, 0 ESTABLISHED; five stable open questions.
+- Explicitly separated unreviewed records from reviewed-but-missing evidence.
+- Checked 1023 local links across the primary Map and inventory: zero broken generated links. 0 unresolved primary-source paths encountered in the inherited synthesis remain explicitly marked, without inventing replacement evidence.
 
-框架、main 固定快照发现索引和维护入口已建立；原始实验文件未修改。**最终科学语义验收尚未通过**：137 个工作目录的类型/Outcome、39 种身份声明的归属、完整日期/演进关系和状态冲突仍待人工逐来源核定，不能仅凭目录扫描宣称五阶段全部完成。各类 UNKNOWN 和冲突均显式列入附录或审计 JSON，不能让它们变成隐含 PASS。
+## Remaining acceptance gaps
 
-`evidence_map_inventory.py` 可重新生成发现附录；执行前固定 main 引用。生成器不修改原始研究文件，不自动修改人工主张状态。完整性 JSON 中人工审阅补充字段在重新生成后需重新审计；不能把重新生成视为关闭历史审阅。
+137 work units remain NOT_YET_REVIEWED; 39 identity declarations remain unowned; two potential same-run state differences require chronology/phase review. Filename discovery found no protocol candidate for 46 units and no result candidate for 39, which does not prove those records are absent. The 526 unresolved literal research references may include relocated or generated paths.
+
+Stages 07/08 and later studies still need experiment-level narrative integration. Historical chronology, aliases and prospective registration timing are not certified. Full historical acceptance is NOT PASSED. No original experiment records or research authorization changed; no model, optimizer, GPU or quality evaluation ran.
