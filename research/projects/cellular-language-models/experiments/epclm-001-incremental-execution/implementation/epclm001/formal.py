@@ -15,7 +15,7 @@ from pathlib import Path
 import torch
 
 from . import formal_storage
-from .common import BASE, ROOT, digest, sha, source, write
+from .common import BASE, NATIVE, ROOT, digest, sha, source, write
 
 STAGES = (
     "e1-preflight",
@@ -47,6 +47,24 @@ def configuration():
     ):
         raise RuntimeError("FORMAL_SCOPE_CHANGED")
     return c
+
+
+def verify_execution_source():
+    paths = [
+        BASE / "implementation",
+        BASE / "run.py",
+        BASE / "formal_config.json",
+        BASE / "formal_config.sha256",
+        NATIVE,
+        ROOT / "src/minicells/language_models.py",
+    ]
+    result = subprocess.run(
+        ["git", "diff", "--quiet", "HEAD", "--", *[str(p.relative_to(ROOT)) for p in paths]],
+        cwd=ROOT,
+        check=False,
+    )
+    if result.returncode:
+        raise RuntimeError("FORMAL_EXECUTION_CODE_DIFFERS_FROM_PINNED_COMMIT")
 
 
 def hardware():
@@ -109,6 +127,7 @@ class Runner:
         self.root = Path(root)
         self.directory = Path(assets)
         self.root.mkdir(parents=True, exist_ok=True)
+        verify_execution_source()
         self.c = configuration()
         self.publish = publish
         self.deadline = None

@@ -432,3 +432,11 @@ def test_profiler_counts_kernels_without_copy_or_cpu_events(tmp_path):
     assert result["kernel_event_count"] == 2 and result["summed_kernel_event_us"] == 7
     write(path, {"traceEvents": [{"ph": "X", "cat": "cpu_op", "dur": 30}]})
     assert kernel_observations(path)["kernel_event_count"] is None
+
+
+def test_modified_execution_code_rejected_before_assets_or_gpu(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setattr(formal.subprocess, "run", lambda *a, **kw: SimpleNamespace(returncode=1))
+    with pytest.raises(RuntimeError, match="DIFFERS_FROM_PINNED_COMMIT"):
+        formal.verify_execution_source()
