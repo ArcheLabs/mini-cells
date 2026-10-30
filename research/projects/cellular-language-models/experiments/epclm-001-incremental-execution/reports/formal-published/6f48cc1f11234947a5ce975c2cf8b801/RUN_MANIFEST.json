@@ -1,0 +1,100 @@
+{
+  "config_sha256": "caf4fbec63d7343e51c1c11f65cf61101b482940d39f53834067bfa7bacd2c72",
+  "device_contract": {
+    "cuda": "12.8",
+    "identity": "GPU-9c892d32-b480-309b-5cad-13e4dcaf463c, Tesla T4, 15360, 580.178.04",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "uuid": "GPU-9c892d32-b480-309b-5cad-13e4dcaf463c"
+  },
+  "experiment_id": "EPCLM-001",
+  "gpu_worker_seconds_charged": 3221.5637744469996,
+  "gpu_worker_seconds_observed": 3221.5637744469996,
+  "optimizer_updates": 0,
+  "run_id": "6f48cc1f11234947a5ce975c2cf8b801",
+  "scope": "E1_FORMAL_INFERENCE_ONLY",
+  "source_sha": "227a3a0783049b63b0d29d7c88bf752b415e2b63",
+  "stages": {
+    "e1-preflight": {
+      "outputs": {
+        "ASSET_MANIFEST.json": "a3ca5ecf18c4f5d22d2c1bdddbedc9b8bb1e02c7aed73ba6c0175412e60b07fc",
+        "ENVIRONMENT.json": "3e8c22621b1028030bd3e0ea23aa6ac2729b15dc3fce392cb1a7fa8400a5fb4a",
+        "EXECUTION_INPUTS.json": "52ae9455afe41eff0a5cc4f031d410c7efd8f7291ab70379330baeeda467cb43",
+        "PERSISTENCE_PREFLIGHT.json": "2acfcba4df7837a90cb983b27ea3cf9894de1173199871052b671addbc474606"
+      },
+      "previous_attempts": [],
+      "progress": {
+        "ASSET_MANIFEST.json": "a3ca5ecf18c4f5d22d2c1bdddbedc9b8bb1e02c7aed73ba6c0175412e60b07fc",
+        "ENVIRONMENT.json": "3e8c22621b1028030bd3e0ea23aa6ac2729b15dc3fce392cb1a7fa8400a5fb4a",
+        "EXECUTION_INPUTS.json": "52ae9455afe41eff0a5cc4f031d410c7efd8f7291ab70379330baeeda467cb43",
+        "PERSISTENCE_PREFLIGHT.json": "2acfcba4df7837a90cb983b27ea3cf9894de1173199871052b671addbc474606"
+      },
+      "status": "COMPLETE"
+    },
+    "e1a-benchmark": {
+      "outputs": {
+        "E1A_TIMING.json": "7162c8b5a70cd30ff6b7a629ac23c00f0338e072da7f1f9e3e8eed2a920695f9",
+        "FORMAL_FREEZE.json": "ddfa2e7d5e09a1a279d17dc4964327d6ea07e45614cd130da3ab3f21a9935764",
+        "pilot/E1A_TIMING.json": "6ddfe468a79c62c2726f6f7119f257500d105f41e2ae4142b2546cecfb891987"
+      },
+      "previous_attempts": [],
+      "progress": {
+        "E1A_TIMING.json": "7162c8b5a70cd30ff6b7a629ac23c00f0338e072da7f1f9e3e8eed2a920695f9",
+        "FORMAL_FREEZE.json": "ddfa2e7d5e09a1a279d17dc4964327d6ea07e45614cd130da3ab3f21a9935764",
+        "pilot/E1A_TIMING.json": "6ddfe468a79c62c2726f6f7119f257500d105f41e2ae4142b2546cecfb891987"
+      },
+      "status": "COMPLETE"
+    },
+    "e1a-correctness": {
+      "outputs": {
+        "E1A_PARITY.json": "1841cd1c1e2446b7a31e11d77fd9631a71c25ed8726cbcc13e6429705aa23583"
+      },
+      "previous_attempts": [],
+      "progress": {
+        "E1A_PARITY.json": "1841cd1c1e2446b7a31e11d77fd9631a71c25ed8726cbcc13e6429705aa23583"
+      },
+      "status": "COMPLETE"
+    },
+    "e1b-benchmark": {
+      "outputs": {
+        "E1B_TIMING.json": "dc36242d22a664f24886fd24afbab2ca5b5465b68e6b919fe3aadd537bec2ff5",
+        "EVENT_PROFILER.json": "cc139d92576b1440fa53e90842982aed2c68fe5b0d54f95eddb99f7c3b7608f7",
+        "pilot/E1B_TIMING.json": "d55881f9f9740309e967735c855c36dc04364d26a590279d4cff976df1ae67ca"
+      },
+      "previous_attempts": [],
+      "progress": {
+        "E1B_TIMING.json": "dc36242d22a664f24886fd24afbab2ca5b5465b68e6b919fe3aadd537bec2ff5",
+        "EVENT_PROFILER.json": "cc139d92576b1440fa53e90842982aed2c68fe5b0d54f95eddb99f7c3b7608f7",
+        "pilot/E1B_TIMING.json": "d55881f9f9740309e967735c855c36dc04364d26a590279d4cff976df1ae67ca"
+      },
+      "status": "COMPLETE"
+    },
+    "e1b-correctness": {
+      "outputs": {
+        "E1B_PARITY.json": "49f58857d888f72b5267f7b716e72e51923a2343d4058207a466a01f4e109331",
+        "E1B_SPECIAL_SEMANTICS.json": "956d4cba3bf4f863d0ae19fdca681f140261aa6018f115a3aa2f5b84c4fdad28"
+      },
+      "previous_attempts": [],
+      "progress": {
+        "E1B_PARITY.json": "49f58857d888f72b5267f7b716e72e51923a2343d4058207a466a01f4e109331",
+        "E1B_SPECIAL_SEMANTICS.json": "956d4cba3bf4f863d0ae19fdca681f140261aa6018f115a3aa2f5b84c4fdad28"
+      },
+      "status": "COMPLETE"
+    },
+    "e1c-benchmark": {
+      "outputs": {
+        "E1C_QUALITY.json": "7a3583f2a505d5d05c5d1c3eab5bb0d856045df5ba7f23e4f1b421b44a847387",
+        "E1C_TIMING.json": "0efa56a5b728a8ee11994dc5694d0cf951d15402d9a3645349ada961fc5db902",
+        "MODEL_PROFILER.json": "540ef0749f2e6c5f5b28c096831c9b1a04bb802177166e65203cdda40d38ce57"
+      },
+      "previous_attempts": [],
+      "progress": {
+        "E1C_QUALITY.json": "7a3583f2a505d5d05c5d1c3eab5bb0d856045df5ba7f23e4f1b421b44a847387",
+        "E1C_TIMING.json": "0efa56a5b728a8ee11994dc5694d0cf951d15402d9a3645349ada961fc5db902",
+        "MODEL_PROFILER.json": "540ef0749f2e6c5f5b28c096831c9b1a04bb802177166e65203cdda40d38ce57"
+      },
+      "status": "COMPLETE"
+    }
+  },
+  "status": "RUNNING"
+}
