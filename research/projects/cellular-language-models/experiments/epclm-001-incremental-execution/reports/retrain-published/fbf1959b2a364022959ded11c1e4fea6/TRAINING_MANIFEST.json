@@ -1,0 +1,227 @@
+{
+  "active_controller_source_sha": "4f3f1b195fbfec8213c2fd5579ade08bd3f2530b",
+  "asset_generation": "CONTROLLED_RETRAIN_001",
+  "cache": "/kaggle/working/epclm001-retrain-data",
+  "config": {
+    "amendment_sha256": "6389de6bbdd43fe5ac3d9f768324599db901f375f9419d22bf3b9179ac16be20",
+    "artifact_repo": "archelabsxyz/native-clm-v0",
+    "asset_generation": "CONTROLLED_RETRAIN_001",
+    "autocast": "float16",
+    "batch_size": 8,
+    "checkpoints": [
+      1000000,
+      2500000,
+      5000000,
+      7500000,
+      10000000
+    ],
+    "context": 128,
+    "data_seed": 91002,
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "experiment_id": "EPCLM-001",
+    "gpu_budget_seconds": 7200,
+    "grad_clip": 1.0,
+    "historical_corpus_manifest": {
+      "dataset": "roneneldan/TinyStories",
+      "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "dtype": "uint16",
+      "format": "minicells.native-clm-corpus.v1",
+      "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+      "tokenizer_training_stories": 20000,
+      "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+      "train_stories_consumed": 48394,
+      "train_stream_tokens": 12000000,
+      "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+      "validation_stories_consumed": 4396,
+      "validation_stream_tokens": 1000000,
+      "vocab_size_actual": 2048,
+      "vocab_size_requested": 2048
+    },
+    "historical_ppl": {
+      "T1": 12.3361,
+      "X3": 11.8364,
+      "X4": 11.9127
+    },
+    "legacy_source_files": {
+      "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_candidates.py": "294079fe88486848f19121767254bc98cc349876e9230386bacc807f283198d5",
+      "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_phase_b.py": "9cb3cb2dc9814361b7a183b889a6ea64f13653a1d3b5d75b80a60e7ebdc2d80d",
+      "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_phase_c.py": "3a385552da26fd23b2d4fd26cb92ebf3d3910bed21bb9ebe162f19e02735687c",
+      "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_replication.py": "e79153d007d420a377b38d5d032c7db92c34305cb7e562d4ecf39c2f161df683",
+      "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_replication_runlib.py": "fae0df56e4c10160cf4f008f2dfe48cf4e0544f61300eb892c8a3283ec046a59",
+      "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_runtime.py": "3c1ae7d35ce51724954bd0d323125cbe48ff8cbd9c488abf2a4671f0f83bffb4"
+    },
+    "loss": {
+      "ignore_index": -100,
+      "label_smoothing": 0.0,
+      "reduction": "mean"
+    },
+    "model_seeds": {
+      "T1": 91003,
+      "X3": 91002,
+      "X4": 91002
+    },
+    "models": {
+      "T1": "T1-modern-transformer",
+      "X3": "X3-n1-swiglu-rope",
+      "X4": "X4-n1-swiglu-rope-rmsnorm"
+    },
+    "optimizer": {
+      "amsgrad": false,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "capturable": false,
+      "class": "AdamW",
+      "differentiable": false,
+      "eps": 1e-08,
+      "foreach": null,
+      "fused": null,
+      "lr": 0.0003,
+      "maximize": false,
+      "weight_decay": 0.1
+    },
+    "parameter_counts": {
+      "T1": 1894080,
+      "X3": 1893536,
+      "X4": 1893912
+    },
+    "profile": "baseline",
+    "scaler": {
+      "backoff_factor": 0.5,
+      "growth_factor": 2.0,
+      "growth_interval": 2000,
+      "init_scale": 65536.0
+    },
+    "seed": 91002,
+    "sequence_length": 125,
+    "steps": 10000,
+    "tokenizer_path": "research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/tokenizer.json",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokens_per_step": 1000,
+    "training_tokens": 10000000,
+    "validation_seed": 101002,
+    "warmup": 1000
+  },
+  "config_sha256": "5d8a8b56ab65b5b9b6570d687d9421e3695e96a09d70ec214c5c3f8bdace22ea",
+  "control_source_files": {
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain.py": "f45af84e054d5d8323c7055655ee382b9c1f17e7d9ff8f97575b234205ab2e36",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_accounting.py": "c6b9f6e96cd2c84fcedfc366f9089f8c2a1b5495877b12dcaa7e0c37198c1154",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_assets.py": "95eabf30e947b9b9a2508998ab58073d275bfc6596d69f67ca41487a405f7411",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_data.py": "c15184cdf400f2d592d1bdbc2ba8393090cb078a8c4cad68b5542893404565f6",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_guard.py": "a72782f1469df3f9348d1aaa701dd768beb19b4536008493484441d7e7c6f503",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_publication.py": "bff3193613f12e466e1d8e51fa49e8fdad41fda0b4948be8b38e9fc6a523c13c",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_validation.py": "d3c169e7553b12f499f49e9d934da19ca5ef52821b9382a1db1baf33035d5991"
+  },
+  "controller_revisions": [
+    {
+      "controller_source_sha": "4f3f1b195fbfec8213c2fd5579ade08bd3f2530b",
+      "policy_sha256": "ec377a465620f1149d1f038c150f2b293d4348b68665fe883e0cc902ed455e79",
+      "preserved_checkpoints": {
+        "T1": {
+          "actual_optimizer_updates": 9999,
+          "sha256": "2e795ffa48020b9662020e2ae36dce2f7dd56fc67c84a803b75a1fa6a58756fe",
+          "step": 10000,
+          "training_source_sha": "d6d5a5ae6e77a07378596e68bf7dee15a742336b"
+        }
+      },
+      "preserved_gpu_seconds_charged": 224.544535773,
+      "preserved_run_id": "fbf1959b2a364022959ded11c1e4fea6",
+      "previous_control_source_files": {
+        "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain.py": "7106970d90ade3b3c3f4cd5c88bfcaa7dc0bf9f5b823bf4950134dcbea619557",
+        "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_assets.py": "1ac5955a4aff468d61f17199d92aad22ffb4f32d245667ebc0d6960a2b166597",
+        "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_data.py": "c15184cdf400f2d592d1bdbc2ba8393090cb078a8c4cad68b5542893404565f6",
+        "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_guard.py": "a72782f1469df3f9348d1aaa701dd768beb19b4536008493484441d7e7c6f503",
+        "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_publication.py": "bff3193613f12e466e1d8e51fa49e8fdad41fda0b4948be8b38e9fc6a523c13c",
+        "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_validation.py": "239c7e0c4d77fffa42f823b3e5be8d48c2aa44568607e39001c3973cd44d8768"
+      },
+      "reason": "HISTORICAL_FP16_STEP_ACCOUNTING"
+    }
+  ],
+  "environment": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_count": 2,
+    "gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128"
+  },
+  "experiment_id": "EPCLM-001",
+  "gpu_budget_seconds": 7200,
+  "gpu_seconds_charged": 1532.5950092619996,
+  "gpu_worker_observed_seconds": 1532.5950092619996,
+  "library_versions": {
+    "datasets": "4.8.5",
+    "huggingface_hub": "1.29.0",
+    "numpy": "2.1.3",
+    "tokenizers": "0.23.1",
+    "torch": "2.11.0+cu128"
+  },
+  "model_training_sources": {
+    "T1": "d6d5a5ae6e77a07378596e68bf7dee15a742336b",
+    "X3": "4f3f1b195fbfec8213c2fd5579ade08bd3f2530b",
+    "X4": "4f3f1b195fbfec8213c2fd5579ade08bd3f2530b"
+  },
+  "models": {
+    "T1": "ASSET_AVAILABLE",
+    "X3": "ASSET_AVAILABLE",
+    "X4": "ASSET_AVAILABLE"
+  },
+  "optimizer_updates": 29996,
+  "optimizer_updates_known_from_saved_checkpoints": 29996,
+  "preflight": {
+    "configuration": "PASS",
+    "controller_restore": "PASS",
+    "cuda": "PASS",
+    "data": "HISTORICAL_DATA_IDENTITY_MATCHED",
+    "persistence": {
+      "path": "epclm001/controlled-retrain-001/fbf1959b2a364022959ded11c1e4fea6/PERSISTENCE_PROBE.json",
+      "repo_id": "archelabsxyz/native-clm-v0",
+      "revision": "3cd83db3d31ad2c7aa5462452e53cf1127e0e74f",
+      "status": "PERSISTENCE_PREFLIGHT_PASS"
+    },
+    "source": "PASS"
+  },
+  "run_id": "fbf1959b2a364022959ded11c1e4fea6",
+  "saved_optimizer_updates": {
+    "T1": 9999,
+    "X3": 9998,
+    "X4": 9999
+  },
+  "saved_skipped_optimizer_updates": {
+    "T1": 1,
+    "X3": 2,
+    "X4": 1
+  },
+  "saved_training_steps": {
+    "T1": 10000,
+    "X3": 10000,
+    "X4": 10000
+  },
+  "scope": "CONTROLLED_RETRAIN_001",
+  "seed": 91002,
+  "source_sha": "d6d5a5ae6e77a07378596e68bf7dee15a742336b",
+  "status": "CONTROLLED_RETRAIN_COMPLETE_E1_BENCHMARK_NOT_AUTHORIZED",
+  "worker_budget_seconds": 6352.134394169,
+  "worker_runs": [
+    {
+      "exit_code": 0,
+      "model": "T1",
+      "observed_wall_seconds": 224.544535773
+    },
+    {
+      "exit_code": 0,
+      "model": "X3",
+      "observed_wall_seconds": 623.3210700579999
+    },
+    {
+      "exit_code": 0,
+      "model": "X4",
+      "observed_wall_seconds": 684.7294034309998
+    }
+  ]
+}
