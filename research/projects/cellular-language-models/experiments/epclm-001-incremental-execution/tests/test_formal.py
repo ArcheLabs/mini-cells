@@ -411,3 +411,24 @@ def test_complete_analysis_outputs_nine_figures_from_fixture(tmp_path):
     assert result["H1_INCREMENTAL"]["status"] == "SUPPORTED"
     assert result["H2_EVENT_RUNTIME"]["status"] == "SUPPORTED"
     assert json.loads((tmp_path / "SAMPLE_STATISTICS.json").read_text())["records"]
+
+
+def test_profiler_counts_kernels_without_copy_or_cpu_events(tmp_path):
+    from epclm001.formal_profile import kernel_observations
+
+    path = tmp_path / "trace.json"
+    write(
+        path,
+        {
+            "traceEvents": [
+                {"ph": "X", "cat": "kernel", "dur": 3},
+                {"ph": "X", "cat": "kernel", "dur": 4},
+                {"ph": "X", "cat": "gpu_memcpy", "dur": 20},
+                {"ph": "X", "cat": "cpu_op", "dur": 30},
+            ]
+        },
+    )
+    result = kernel_observations(path)
+    assert result["kernel_event_count"] == 2 and result["summed_kernel_event_us"] == 7
+    write(path, {"traceEvents": [{"ph": "X", "cat": "cpu_op", "dur": 30}]})
+    assert kernel_observations(path)["kernel_event_count"] is None

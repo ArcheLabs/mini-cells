@@ -1,5 +1,6 @@
 """Fixed, separate diagnostic passes: never mix profiler samples into latency distributions."""
 
+import json
 from pathlib import Path
 
 import torch
@@ -8,6 +9,19 @@ from .common import digest
 from .events import IMPLEMENTATIONS
 from .formal_events import runtime, setup
 from .formal_measure import request
+
+
+def kernel_observations(path):
+    trace = json.loads(Path(path).read_text())["traceEvents"]
+    kernels = [e for e in trace if e.get("ph") == "X" and "kernel" in e.get("cat", "").split(",")]
+    return {
+        "kernel_event_count": len(kernels) if kernels else None,
+        "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY"
+        if kernels
+        else "UNAVAILABLE_NO_CUDA_KERNEL_TRACE",
+        "summed_kernel_event_us": sum(e["dur"] for e in kernels) if kernels else None,
+        "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+    }
 
 
 def capture(call, path):
@@ -21,16 +35,9 @@ def capture(call, path):
         torch.cuda.synchronize()
     prof.export_chrome_trace(str(path))
     events = prof.events()
-    kernels = [e for e in events if e.device_type == torch.autograd.DeviceType.CUDA]
     return {
         "trace_sha256": digest(path),
-        "kernel_event_count": len(kernels) if kernels else None,
-        "kernel_count_status": "MEASURED" if kernels else "UNAVAILABLE_NO_CUDA_PROFILER_EVENTS",
-        "summed_cuda_event_us": sum(
-            getattr(e, "device_time_total", getattr(e, "cuda_time_total", 0)) for e in kernels
-        )
-        if kernels
-        else None,
+        **kernel_observations(path),
         "cpu_operator_event_count": sum(
             e.device_type == torch.autograd.DeviceType.CPU for e in events
         ),
