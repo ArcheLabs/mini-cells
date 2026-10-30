@@ -122,6 +122,9 @@ def publish_model(root, config, run_id, model_id):
         "seed": 91002,
         "training_tokens": 10000000,
         "completed_steps": 10000,
+        "training_accounting": json.loads((directory / "IDENTITY.json").read_text())[
+            "training_accounting"
+        ],
         "checkpoint_sha256": digest(directory / "resume.pt"),
         "inference_checkpoint_sha256": digest(directory / "inference.pt"),
         "persistent_artifact_uri": f"hf://{config['artifact_repo']}@{info.oid}/{remote}",
@@ -151,6 +154,13 @@ def readback(identity_path, resume_path, inference_path):
         or digest(inference_path) != identity["inference_sha256"]
     ):
         raise RuntimeError("READBACK_HASH_MISMATCH")
+    from .retrain_accounting import completed_budget
+
+    accounting = completed_budget(resume)
+    if identity.get("training_accounting") != accounting or any(
+        inference.get(k) != v for k, v in accounting.items()
+    ):
+        raise RuntimeError("READBACK_TRAINING_ACCOUNTING_MISMATCH")
     for x in (inference, resume):
         if x["model"] != name or x["seed"] != 91002 or x["step"] != 10000:
             raise RuntimeError("READBACK_MODEL_SEED_STEP_MISMATCH")

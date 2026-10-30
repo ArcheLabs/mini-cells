@@ -295,7 +295,8 @@ def test_zero_progress_manifest_refreshes_control_source_only(tmp_path):
     updated["models"]["T1"] = "TRAINED"
     updated["control_source_files"] = {"trained-old": "preserve"}
     (tmp_path / "TRAINING_MANIFEST.json").write_text(json.dumps(updated))
-    assert manifest(tmp_path, c)["control_source_files"] == {"trained-old": "preserve"}
+    with pytest.raises(RuntimeError, match="UNREVIEWED_CONTROL_SOURCE_MIGRATION"):
+        manifest(tmp_path, c)
 
 
 def test_persistence_api_error_is_reported_as_blocked_r0(tmp_path, monkeypatch):
@@ -331,3 +332,275 @@ def test_persistence_api_error_is_reported_as_blocked_r0(tmp_path, monkeypatch):
     assert result["status"] == "R0_BLOCKED_NO_TRAINING"
     assert result["preflight"]["persistence"]["code"] == "TypeError"
     assert result["models"] == {"T1": "NOT_STARTED", "X3": "NOT_STARTED", "X4": "NOT_STARTED"}
+
+
+def accounting_fixture(actual=9999):
+    import torch
+
+    return {
+        "step": 10000,
+        "consumed_tokens": 10000000,
+        "actual_optimizer_updates": actual,
+        "optimizer_state_dict": {
+            "param_groups": [{"params": [0, 1]}],
+            "state": {
+                i: {
+                    "step": torch.tensor(float(actual)),
+                    "exp_avg": torch.zeros(2),
+                    "exp_avg_sq": torch.zeros(2),
+                }
+                for i in (0, 1)
+            },
+        },
+        "scaler_state_dict": {"scale": 32768.0},
+    }
+
+
+@pytest.mark.parametrize("actual", [9999, 10000, 9998])
+def test_amp_budget_counts_attempts_and_successes_separately(actual):
+    from epclm001.retrain_accounting import completed_budget
+
+    value = completed_budget(accounting_fixture(actual))
+    assert (
+        value["training_steps"]
+        == value["successful_optimizer_updates"] + value["skipped_optimizer_updates"]
+        == 10000
+    )
+    assert value["training_tokens"] == 10000000 and value["compensation_updates"] == 0
+    assert value["actual_optimizer_updates"] == actual
+
+
+@pytest.mark.parametrize("actual", [0, -1, 10001, "9999"])
+def test_amp_budget_rejects_invalid_actual_counts(actual):
+    from epclm001.retrain_accounting import completed_budget
+
+    value = accounting_fixture()
+    value["actual_optimizer_updates"] = actual
+    with pytest.raises(RuntimeError, match="UPDATE_COUNT"):
+        completed_budget(value)
+
+
+def test_amp_budget_requires_optimizer_corroboration_and_finite_state():
+    import torch
+    from epclm001.retrain_accounting import completed_budget
+
+    value = accounting_fixture()
+    value["optimizer_state_dict"]["state"][0]["step"] = torch.tensor(10000.0)
+    with pytest.raises(RuntimeError, match="DISAGREES"):
+        completed_budget(value)
+    value = accounting_fixture()
+    value["optimizer_state_dict"]["state"][0]["exp_avg"][0] = float("inf")
+    with pytest.raises(RuntimeError, match="MOMENT_STATE"):
+        completed_budget(value)
+    value = accounting_fixture()
+    value["step"] = 9999
+    with pytest.raises(RuntimeError, match="LOOP_BUDGET"):
+        completed_budget(value)
+
+
+def completed_manifest_fixture(root):
+    import hashlib
+
+    import torch
+    from epclm001.common import BASE, sha
+
+    c = configuration()
+    m = manifest(root, c)
+    policy = json.loads((BASE / "amp_step_accounting.json").read_text())
+    m.update(
+        source_sha=policy["predecessor_commit"],
+        control_source_files=policy["predecessor_control_source_files"],
+        status="R2_PENDING",
+        gpu_seconds_charged=224.544535773,
+        cache=str(root / "cache"),
+    )
+    m["models"]["T1"] = "TRAINED"
+    state = dict(
+        accounting_fixture(),
+        model=c["models"]["T1"],
+        seed=91002,
+        profile="baseline",
+        asset_generation="CONTROLLED_RETRAIN_001",
+        controlled_config_sha256=sha(c),
+        retrain_run_id=m["run_id"],
+        training_source_sha=m["source_sha"],
+        corpus_manifest_sha256=hashlib.sha256(
+            json.dumps(c["historical_corpus_manifest"], sort_keys=True).encode()
+        ).hexdigest(),
+    )
+    path = root / "models" / c["models"]["T1"] / "resume.pt"
+    path.parent.mkdir(parents=True)
+    torch.save(state, path)
+    (root / "TRAINING_MANIFEST.json").write_text(json.dumps(m))
+    return c, m, path
+
+
+def test_completed_controller_migration_preserves_original_evidence(tmp_path):
+    from epclm001.common import digest
+
+    c, old, path = completed_manifest_fixture(tmp_path)
+    before = digest(path)
+    new = manifest(tmp_path, c)
+    assert new["run_id"] == old["run_id"] and new["source_sha"] == old["source_sha"]
+    assert new["gpu_seconds_charged"] == old["gpu_seconds_charged"]
+    assert new["model_training_sources"]["T1"] == old["source_sha"]
+    assert new["controller_revisions"][-1]["reason"] == "HISTORICAL_FP16_STEP_ACCOUNTING"
+    assert digest(path) == before
+    assert len(manifest(tmp_path, c)["controller_revisions"]) == 1
+
+
+def test_partial_controller_migration_fails_closed(tmp_path):
+    import torch
+
+    c, _, path = completed_manifest_fixture(tmp_path)
+    state = torch.load(path, map_location="cpu", weights_only=True)
+    state.update(step=9000, consumed_tokens=9000000)
+    torch.save(state, path)
+    with pytest.raises(RuntimeError, match="PARTIAL_TRAINING"):
+        manifest(tmp_path, c)
+
+
+def test_completed_t1_is_verified_before_any_new_worker(tmp_path, monkeypatch):
+    from epclm001 import retrain, retrain_assets, retrain_data
+
+    _c, _, path = completed_manifest_fixture(tmp_path)
+    monkeypatch.setattr(retrain, "source", lambda: "b" * 40)
+    monkeypatch.setattr(retrain_data, "load_verified", lambda *a: None)
+    monkeypatch.setattr(retrain_assets, "persist_controller", lambda *a: None)
+    events = []
+
+    def verified(root, key):
+        events.append(("verify", key))
+        assert key == "T1"
+        current = json.loads((root / "TRAINING_MANIFEST.json").read_text())
+        current["models"][key] = "ASSET_AVAILABLE"
+        (root / "TRAINING_MANIFEST.json").write_text(json.dumps(current))
+
+    monkeypatch.setattr(retrain, "verify_and_publish", verified)
+
+    class StopBeforeActualWorker(Exception):
+        pass
+
+    def stopped(args, **kwargs):
+        events.append(("worker", args[args.index("--model") + 1]))
+        raise StopBeforeActualWorker()
+
+    monkeypatch.setattr(retrain.subprocess, "run", stopped)
+    with pytest.raises(StopBeforeActualWorker):
+        run(tmp_path, tmp_path / "cache")
+    assert events == [("verify", "T1"), ("worker", "X3")]
+    assert path.exists()
+
+
+def test_quality_hash_export_and_publication_retry(tmp_path, monkeypatch):
+    from epclm001 import retrain, retrain_assets, retrain_data, retrain_validation
+    from epclm001.common import digest
+
+    c, m = configuration(), manifest(tmp_path, configuration())
+    m["cache"] = str(tmp_path / "cache")
+    (tmp_path / "TRAINING_MANIFEST.json").write_text(json.dumps(m))
+    directory = tmp_path / "models" / c["models"]["T1"]
+    directory.mkdir(parents=True)
+    (directory / "resume.pt").write_bytes(b"unchanged synthetic checkpoint fixture")
+    (tmp_path / "ASSET_MANIFEST.json").write_text(
+        json.dumps({"assets": [{"model": k, "status": "PENDING"} for k in c["models"]]})
+    )
+    monkeypatch.setattr(retrain, "validate_resume", lambda *a: {})
+    monkeypatch.setattr(retrain_data, "load_verified", lambda *a: None)
+    monkeypatch.setattr(retrain_assets, "persist_controller", lambda *a: None)
+    calls = []
+
+    def verify(*args):
+        calls.append("verify")
+        (directory / "inference.pt").write_bytes(b"synthetic inference fixture")
+        (directory / "QUALITY.json").write_text(json.dumps({"status": "QUALITY_VALID"}))
+        (directory / "IDENTITY.json").write_text(
+            json.dumps(
+                {
+                    "resume_sha256": digest(directory / "resume.pt"),
+                    "inference_sha256": digest(directory / "inference.pt"),
+                    "quality_sha256": digest(directory / "QUALITY.json"),
+                }
+            )
+        )
+        return {"status": "QUALITY_VALID"}
+
+    def publish(*args):
+        calls.append("publish")
+        if calls.count("publish") == 1:
+            raise OSError("Synthetic interrupted upload")
+        return {"model": "T1", "status": "ASSET_AVAILABLE"}
+
+    monkeypatch.setattr(retrain_validation, "verify", verify)
+    monkeypatch.setattr(retrain_assets, "publish_model", publish)
+    with pytest.raises(OSError):
+        retrain.verify_and_publish(tmp_path, "T1")
+    retrain.verify_and_publish(tmp_path, "T1")
+    assert calls == ["verify", "publish", "publish"]
+    assert (directory / "resume.pt").read_bytes() == b"unchanged synthetic checkpoint fixture"
+
+
+def test_actual_export_writes_quality_digest_and_preserves_resume(tmp_path, monkeypatch):
+    import hashlib
+
+    import torch
+    from epclm001 import retrain_validation
+    from epclm001.common import digest, native
+    from epclm001.validation import engineering_model
+
+    base, _, _ = native()
+    model = engineering_model("T1")
+    c = configuration()
+    c["parameter_counts"] = dict(
+        c["parameter_counts"], T1=sum(p.numel() for p in model.parameters())
+    )
+    directory = tmp_path / "models" / c["models"]["T1"]
+    directory.mkdir(parents=True)
+    state = dict(
+        accounting_fixture(),
+        model=c["models"]["T1"],
+        seed=91002,
+        profile="baseline",
+        training_source_sha="a" * 40,
+        asset_generation="CONTROLLED_RETRAIN_001",
+        corpus_manifest_sha256=hashlib.sha256(json.dumps({}, sort_keys=True).encode()).hexdigest(),
+        model_state_dict=model.state_dict(),
+        batch_rng_state=(),
+        torch_rng_state=torch.get_rng_state(),
+        cuda_rng_state_all=[],
+        metrics=[
+            {"consumed_tokens": n, "validation_nll": 1.0, "validation_ppl": 2.718}
+            for n in c["checkpoints"]
+        ],
+    )
+    torch.save(state, directory / "resume.pt")
+    before = digest(directory / "resume.pt")
+    tokenizer = tmp_path / "tokenizer.json"
+    tokenizer.write_text("synthetic unit fixture")
+    inputs = tmp_path / "inputs"
+    inputs.mkdir()
+    (inputs / "validation_inputs.json").write_text(
+        json.dumps({"tokens": [[i % 32 for i in range(128)]]})
+    )
+    monkeypatch.setattr(retrain_validation, "BASE", inputs)
+    monkeypatch.setattr(base, "build_model", lambda *args: engineering_model("T1"))
+    monkeypatch.setattr(base, "open_memmap", lambda *args: list(range(1024)))
+    monkeypatch.setattr(base, "fixed_validation_starts", lambda *args, **kwargs: ())
+    monkeypatch.setattr(
+        base,
+        "evaluate",
+        lambda *args: {"validation_nll": 1.0, "validation_ppl": 2.718, "validation_tokens": 8},
+    )
+    result = retrain_validation.verify(
+        tmp_path,
+        c,
+        "T1",
+        SimpleNamespace(
+            manifest={}, tokenizer_path=tokenizer, validation_path=tmp_path / "validation"
+        ),
+        device="cpu",
+    )
+    identity = json.loads((directory / "IDENTITY.json").read_text())
+    assert identity["quality_sha256"] == digest(directory / "QUALITY.json")
+    assert result["training_accounting"]["actual_optimizer_updates"] == 9999
+    assert digest(directory / "resume.pt") == before

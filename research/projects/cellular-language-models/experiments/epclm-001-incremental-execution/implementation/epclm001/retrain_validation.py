@@ -32,8 +32,13 @@ def verify(root, config, model_id, corpus, device="cuda:0"):
     for k, v in expected.items():
         if x.get(k) != v:
             raise RuntimeError("COMPLETED_CHECKPOINT_IDENTITY_MISMATCH_" + k)
-    if x.get("actual_optimizer_updates") != 10000:
-        raise RuntimeError("SCALER_SKIPPED_UPDATES_REVIEW_REQUIRED_NO_BUDGET_EXTENSION")
+    from .retrain_accounting import completed_budget
+
+    accounting = completed_budget(x)
+    print(
+        f"[EPCLM VERIFY] {model_id}: {accounting['training_steps']} loop steps = {accounting['successful_optimizer_updates']} successful + {accounting['skipped_optimizer_updates']} skipped; no compensation",
+        flush=True,
+    )
     for key in (
         "optimizer_state_dict",
         "scaler_state_dict",
@@ -83,6 +88,7 @@ def verify(root, config, model_id, corpus, device="cuda:0"):
             "asset_generation",
         )
     }
+    inference.update(accounting)
     inference.update(
         format="epclm001.inference.v1",
         model_state_dict=x["model_state_dict"],
@@ -96,7 +102,7 @@ def verify(root, config, model_id, corpus, device="cuda:0"):
             "model_state_dict"
         ]
     )
-    reloaded.eval()
+    reloaded.eval().requires_grad_(False)
     with torch.inference_mode():
         probe = torch.tensor([[2, 11, 17, 23, 3]], dtype=torch.long)
         if not torch.equal(model(probe), reloaded(probe)):
@@ -133,6 +139,7 @@ def verify(root, config, model_id, corpus, device="cuda:0"):
         raise RuntimeError("QUALITY_INVALID_OR_NONREPRODUCIBLE")
     quality = {
         "status": "QUALITY_VALID",
+        "training_accounting": accounting,
         "first": first,
         "second": second,
         "historical_ppl": config["historical_ppl"][model_id],
@@ -152,6 +159,8 @@ def verify(root, config, model_id, corpus, device="cuda:0"):
         "tokenizer_sha256": config["tokenizer_sha256"],
         "dataset_manifest_sha256": x["corpus_manifest_sha256"],
         "export_probe_sha256": tensor_hash(probe),
+        "quality_sha256": digest(directory / "QUALITY.json"),
+        "training_accounting": accounting,
     }
     write(directory / "IDENTITY.json", identity)
     return quality

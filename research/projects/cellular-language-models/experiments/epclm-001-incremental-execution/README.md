@@ -94,8 +94,10 @@ The original single-model replication worker, sampler, loss, initialization,
 AdamW and FP16 GradScaler remain in use. Wrapper observation forces the historical
 optimizer/scaler defaults explicitly and saves after complete update boundaries.
 Extra 100-step resume saves do not add evaluations or updates; the original
-five quality checkpoints are retained. Actual AdamW calls are counted separately
-from loop steps. Scaler skips trigger review, never extra training to compensate.
+five quality checkpoints are retained. Actual AdamW calls and scaler skips are counted separately
+from loop attempts. Completed-loop acceptance checks the observer against Adam
+state counters and finite numerical state; skips are reported, never compensated
+with extra training. See [step-accounting repair](AMP_STEP_ACCOUNTING.md).
 The original NumPy trapezoid report calculation has an equivalent reporting-only
 fallback for older NumPy; it does not alter training.
 

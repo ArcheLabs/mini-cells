@@ -61,6 +61,55 @@ def manifest(root, c):
                 source_sha=source(), control_source_files=current_control, status="PENDING_R0"
             )
             write(path, value)
+        if not pristine and value["control_source_files"] != current_control:
+            policy = json.loads((BASE / "amp_step_accounting.json").read_text())
+            if (
+                sha(c) != policy["frozen_config_sha256"]
+                or value["control_source_files"] != policy["predecessor_control_source_files"]
+            ):
+                raise RuntimeError("UNREVIEWED_CONTROL_SOURCE_MIGRATION")
+            for filename in policy["unchanged_training_controls"]:
+                key = str((BASE / "implementation/epclm001" / filename).relative_to(ROOT))
+                if current_control[key] != policy["predecessor_control_source_files"][key]:
+                    raise RuntimeError("TRAINING_CONTROL_CHANGED_MIGRATION_FORBIDDEN")
+            model_sources = {}
+            preserved_checkpoints = {}
+            for model_id, name in c["models"].items():
+                checkpoint = root / "models" / name / "resume.pt"
+                if checkpoint.exists():
+                    state = validate_resume(checkpoint, c, value, name)
+                    if state["step"] != 10000:
+                        raise RuntimeError("PARTIAL_TRAINING_REQUIRES_SEPARATE_SOURCE_REVIEW")
+                    model_sources[model_id] = state["training_source_sha"]
+                    preserved_checkpoints[model_id] = {
+                        "sha256": digest(checkpoint),
+                        "step": state["step"],
+                        "actual_optimizer_updates": state["actual_optimizer_updates"],
+                        "training_source_sha": state["training_source_sha"],
+                    }
+                    value.setdefault("saved_training_steps", {})[model_id] = state["step"]
+                    value.setdefault("saved_skipped_optimizer_updates", {})[model_id] = (
+                        state["step"] - state["actual_optimizer_updates"]
+                    )
+                elif value["models"][model_id] != "NOT_STARTED":
+                    raise RuntimeError("EXPECTED_TRAINED_CHECKPOINT_MISSING")
+            value.setdefault("controller_revisions", []).append(
+                {
+                    "previous_control_source_files": value["control_source_files"],
+                    "controller_source_sha": source(),
+                    "policy_sha256": digest(BASE / "amp_step_accounting.json"),
+                    "reason": policy["repair"],
+                    "preserved_run_id": value["run_id"],
+                    "preserved_gpu_seconds_charged": value["gpu_seconds_charged"],
+                    "preserved_checkpoints": preserved_checkpoints,
+                }
+            )
+            value.update(
+                control_source_files=current_control,
+                active_controller_source_sha=source(),
+                model_training_sources=model_sources,
+            )
+            write(path, value)
         return value
     value = {
         "experiment_id": "EPCLM-001",
@@ -192,7 +241,9 @@ def validate_resume(path, c, m, name):
         "asset_generation": "CONTROLLED_RETRAIN_001",
         "controlled_config_sha256": sha(c),
         "retrain_run_id": m["run_id"],
-        "training_source_sha": m["source_sha"],
+        "training_source_sha": m.get("model_training_sources", {}).get(
+            next(key for key, value in c["models"].items() if value == name), m["source_sha"]
+        ),
     }
     expected["corpus_manifest_sha256"] = hashlib.sha256(
         json.dumps(c["historical_corpus_manifest"], sort_keys=True).encode()
@@ -239,7 +290,11 @@ def worker(root, model_id, seconds):
     name = c["models"][model_id]
     path = Path(root) / "models" / name / "resume.pt"
     guard = TrainingGuard(
-        seconds, Path(root) / "WORKER_RESOURCE.json", m["source_sha"], sha(c), m["run_id"]
+        seconds,
+        Path(root) / "WORKER_RESOURCE.json",
+        m.get("model_training_sources", {}).get(model_id, m["source_sha"]),
+        sha(c),
+        m["run_id"],
     )
     if path.exists():
         guard.actual_updates = validate_resume(path, c, m, name)["actual_optimizer_updates"]
@@ -322,6 +377,7 @@ def run(root, cache):
             m.update(
                 status="R1_RUNNING", gpu_seconds_charged=7200.0, worker_budget_seconds=remaining
             )
+            m.setdefault("model_training_sources", {}).setdefault(model_id, source())
             m["models"][model_id] = "RUNNING"
             write(Path(root) / "TRAINING_MANIFEST.json", m)
             from .retrain_assets import persist_controller
@@ -380,6 +436,10 @@ def run(root, cache):
                     m.setdefault("saved_optimizer_updates", {})[model_id] = state[
                         "actual_optimizer_updates"
                     ]
+                    m.setdefault("saved_training_steps", {})[model_id] = state["step"]
+                    m.setdefault("saved_skipped_optimizer_updates", {})[model_id] = (
+                        state["step"] - state["actual_optimizer_updates"]
+                    )
                 m["optimizer_updates_known_from_saved_checkpoints"] = sum(
                     m.get("saved_optimizer_updates", {}).values()
                 )
@@ -394,6 +454,11 @@ def run(root, cache):
             if code != 0:
                 break
         # Persist each model before starting the next. Failed publication never retrains it.
+        if complete:
+            print(
+                f"[EPCLM RETRAIN] {model_id}: completed checkpoint retained; verify/export only, no training",
+                flush=True,
+            )
         verify_and_publish(root, model_id)
         m = json.loads((Path(root) / "TRAINING_MANIFEST.json").read_text())
     if all(value == "ASSET_AVAILABLE" for value in m["models"].values()):
@@ -411,6 +476,7 @@ def verify_and_publish(root, model_id, publish=True):
 
     corpus = load_verified(m["cache"], c)
     directory = Path(root) / "models" / c["models"][model_id]
+    validate_resume(directory / "resume.pt", c, m, c["models"][model_id])
     identity_path = directory / "IDENTITY.json"
     if publish and identity_path.exists():
         identity = json.loads(identity_path.read_text())
