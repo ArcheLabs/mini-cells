@@ -29,10 +29,10 @@ Historical stages follow the [ownership migration map](historical-migration-map.
 #### Legacy experiments 001–026 — foundations, self-organization, routing and growth
 
 
-**Claim / role**  
+**Claim / role**
 Establish early feasibility of sparse Cell computation, self-organization pressure, routing, differentiation and growth before the formal continual-learning core.
 
-**Evidence source**  
+**Evidence source**
 `research/projects/cellular-computing/experiments/` through `research/projects/cellular-language-models/experiments/`, plus `research/governance/catalog.yaml`.
 
 **Positive evidence**
@@ -45,16 +45,16 @@ Establish early feasibility of sparse Cell computation, self-organization pressu
 - local or synthetic behavior from this period should not be promoted into current Native-CLM claims;
 - the old catalog is incomplete relative to the modern validation tree.
 
-**Formal status**  
+**Formal status**
 Historical evidence, heterogeneous strength.
 
-**Known ceiling**  
+**Known ceiling**
 Architecture exploration and mechanism discovery.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Natural Cell ontology, replay-free continual language learning, globally optimal local learning decisions, or bounded long-horizon growth.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Sparse modular execution, explicit routing/growth scaffolds, early experiment harnesses.
 
 ---
@@ -67,28 +67,28 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Core 001 / 001B / 002 / 002B / 002C — knowledge subsumption and write-addressability foundations
 
 
-**Claim / role**  
+**Claim / role**
 Probe whether knowledge/write effects can be isolated, assembled, or recovered in controlled systems and whether superposition prevents useful write addressability.
 
-**Evidence source**  
+**Evidence source**
 `research/governance/validations/core-001-*`, `core-002-*`.
 
-**Positive evidence**  
+**Positive evidence**
 Established controlled settings in which local write/effect structure is measurable and supplied the foundations for later transaction and certificate experiments.
 
-**Negative evidence / limitation**  
+**Negative evidence / limitation**
 Controlled write-addressability does not establish that mature LLM checkpoints expose a stable deployable Cell boundary.
 
-**Formal status**  
+**Formal status**
 Foundational controlled evidence; consult per-validation frozen result for exact claim.
 
-**Known ceiling**  
+**Known ceiling**
 Mechanism-level write geometry.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Task-free continual learning or natural modularity in pretrained Transformers.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Local-effect measurement and transaction-oriented experimental framing.
 
 ---
@@ -99,19 +99,19 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Core 003 — dependency-scoped transactional learning
 
 
-**Claim / role**  
+**Claim / role**
 Treat model changes as scoped transactions rather than unconstrained global mutation.
 
-**Positive evidence**  
+**Positive evidence**
 Helped establish the useful distinction between a candidate local update and its accepted/committed effect.
 
-**Known ceiling**  
+**Known ceiling**
 Scoped transaction mechanics do not decide whether the complete model is globally better.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 A local acceptance signal is a global model-quality oracle.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Candidate/commit separation and dependency-scoped validation.
 
 ---
@@ -122,25 +122,25 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Core 004 — growth-restored plasticity
 
 
-**Claim / role**  
+**Claim / role**
 Test whether adding capacity can restore learning when safe mutation of existing capacity is blocked.
 
-**Positive evidence**  
+**Positive evidence**
 Growth restores plasticity in the registered controlled setting when the old-behavior evaluator rejects unsafe writes.
 
-**Negative evidence / limitation**  
+**Negative evidence / limitation**
 Uses a controlled old-behavior oracle; later Native M3 shows that new capacity can still damage old behavior through read/routing ownership.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — controlled**.
 
-**Known ceiling**  
+**Known ceiling**
 Capacity rescue, not safe system-level growth.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 That growth is sufficient for continual learning or that the correct split/routing boundary is known.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Append/expand as an escape from exhausted writable freedom.
 
 ---
@@ -151,10 +151,10 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Core 005 — replay-free subspace-certified mitosis
 
 
-**Claim**  
+**Claim**
 Can bounded Cell-local subspace state replace raw historical replay for safe writes and saturation-triggered growth in a controlled continual-learning system?
 
-**Evidence source**  
+**Evidence source**
 [research/projects/continual-learning/experiments/core-005-subspace-certified-mitosis/validation/core-005-subspace-certified-mitosis/README.md](../../research/projects/continual-learning/experiments/core-005-subspace-certified-mitosis/validation/core-005-subspace-certified-mitosis/README.md) and frozen protocol/artifacts.
 
 **Positive evidence**
@@ -171,16 +171,16 @@ Can bounded Cell-local subspace state replace raw historical replay for safe wri
 - certificate is constructed from registered activations;
 - synthetic conflict construction.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — controlled**.
 
-**Known ceiling**  
+**Known ceiling**
 Exact protection of the registered linear history plus controlled capacity rescue.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 A fixed sufficient certificate exists for arbitrary Transformer weights, language-scale activation spans stay low-rank, semantic routing is solved, or an opaque checkpoint contains reconstructable certificates.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Explicit functional contracts, safe projected local writes, saturation detection, and growth as a transactional fallback.
 
 ---
@@ -191,10 +191,10 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Core 006 — real-representation continual plasticity
 
 
-**Claim**  
+**Claim**
 Can the Core-005 style bounded state support replay-free continual learning on real pretrained language-model representations without rapid saturation or growth explosion?
 
-**Evidence source**  
+**Evidence source**
 [research/projects/continual-learning/experiments/core-006-real-representation-continual-plasticity/validation/core-006-real-representation-continual-plasticity/README.md](../../research/projects/continual-learning/experiments/core-006-real-representation-continual-plasticity/validation/core-006-real-representation-continual-plasticity/README.md).
 
 **Positive evidence**
@@ -210,16 +210,16 @@ Can the Core-005 style bounded state support replay-free continual learning on r
 - address-based splits failed the registered conflict-relief requirement;
 - detailed Kaggle artifacts were partly lost after session closure and were not reconstructed.
 
-**Formal status**  
+**Formal status**
 **NOT SUPPORTED**, with positive sub-results.
 
-**Known ceiling**  
+**Known ceiling**
 Real hidden-state low-dimensional/reusable geometry is useful, but routing address is not equivalent to a writable functional boundary.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 That semantic addresses are Cells, that growth remains bounded, or that the certificate mechanism alone solves continual learning.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Real-model functional regression measurement and certificate-based damage reduction.
 
 ---
@@ -230,10 +230,10 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Core 007 — functional-boundary discovery
 
 
-**Claim**  
+**Claim**
 Can write-demand/interference geometry provide a better split boundary than semantic address identity, and can that identity be recovered from inference-visible representations?
 
-**Evidence source**  
+**Evidence source**
 [research/projects/continual-learning/experiments/core-007-functional-boundary-discovery/validation/core-007-functional-boundary-discovery/README.md](../../research/projects/continual-learning/experiments/core-007-functional-boundary-discovery/validation/core-007-functional-boundary-discovery/README.md).
 
 **Positive evidence**
@@ -245,16 +245,16 @@ Can write-demand/interference geometry provide a better split boundary than sema
 - the first confirmation infrastructure lost a completed seed before durable checkpointing, forcing seed retirement;
 - the main README still records later boundary work as an unresolved/negative integration area.
 
-**Formal status**  
+**Formal status**
 The checked-in validation README is **confirmation incomplete / amended protocol**, not a supported scientific confirmation.
 
-**Known ceiling**  
+**Known ceiling**
 Promising discovery geometry only.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 A stable deployable functional boundary, safe nonlinear updates, or autonomous CLM growth.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Resumable per-seed checkpoint/publish discipline and explicit separation of discovery from confirmation.
 
 ---
@@ -265,28 +265,28 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Core 008 family — certified functional atoms / equivalence / postmortem capacity
 
 
-**Claim / role**  
+**Claim / role**
 Interrogate whether increasingly local functional units can be certified and whether apparent Cell evidence survives causal/control analysis.
 
-**Evidence source**  
+**Evidence source**
 `research/governance/validations/core-008-*` and associated stage documents.
 
-**Positive evidence**  
+**Positive evidence**
 Produced useful causal controls, functional-equivalence preflights and capacity diagnostics that narrowed which local effects deserve later testing.
 
-**Negative evidence / limitation**  
+**Negative evidence / limitation**
 The family did not establish a universal natural Cell atom or a trained-language continual-learning solution. Some results are diagnostic/postmortem rather than formal model milestones.
 
-**Formal status**  
+**Formal status**
 Mixed family; preserve per-validation statuses.
 
-**Known ceiling**  
+**Known ceiling**
 Mechanism selection and causal diagnostics.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 That a local causal effect is a globally useful or stable Cell boundary.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Stronger preflight/control methodology before expensive formal runs.
 
 ---
@@ -297,28 +297,28 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Core 009 family — factorized/effect geometry and deployable addressability
 
 
-**Claim / role**  
+**Claim / role**
 Probe whether mature model write/effect geometry can supply sparse, persistent, compositional and deployable functional coordinates.
 
-**Evidence source**  
+**Evidence source**
 `research/governance/validations/core-009a-*`, `core-009b*`, `core-009c-*`, `core-009d-*`, plus branch-published artifacts where applicable.
 
-**Positive evidence**  
+**Positive evidence**
 The family provides bridge evidence that pretrained-model representations/effects contain useful local and factorized signals worth decoding.
 
-**Negative evidence / limitation**  
+**Negative evidence / limitation**
 The checked-in tree contains multiple sequential/revised 009 hypotheses, and not all branch-published outcomes are normalized into the main validation directories. The accumulated evidence has not established a stable, low-growth natural Cell boundary that transfers into Native continual-language success.
 
-**Formal status**  
+**Formal status**
 **MIXED / family-level audit**; do not collapse the individual 009 decisions into one positive claim.
 
-**Known ceiling**  
+**Known ceiling**
 Foundation-interface diagnostics.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 That sparse local effect geometry is the correct Cell ontology, or that effect addressability solves read/write ownership in a trained CLM.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Functional-effect probes and a more disciplined interface between foundation-model diagnostics and CLM experiments.
 
 ---
@@ -331,22 +331,22 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Constructive CLM-001 / 001B — coordinate formation and latent discovery
 
 
-**Claim / role**  
+**Claim / role**
 Can a persistent addressable coordinate system form from experience, including under the registered additive superposition scaffold?
 
-**Positive evidence**  
+**Positive evidence**
 Both registered constructive claims are supported on their frozen formal seeds.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — controlled**.
 
-**Known ceiling**  
+**Known ceiling**
 Singleton-exposure and registered additive pair-superposition worlds.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Arbitrary blind source separation or natural coordinates in pretrained LLMs.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Learned coordinate/address formation in an engineered substrate.
 
 ---
@@ -357,22 +357,22 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Constructive CLM-002 — long-horizon structure-tracking growth
 
 
-**Claim / role**  
+**Claim / role**
 Can growth track reusable latent structure rather than simply spawn one Cell per observation?
 
-**Positive evidence**  
+**Positive evidence**
 Supported to the registered finite horizon: `N_final=4096`, 30 latent factors, 30 final Cells, finite-horizon fitted growth exponent ~0.663.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — controlled finite horizon**.
 
-**Known ceiling**  
+**Known ceiling**
 Finite-horizon evidence only.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 An asymptotic sublinear-growth theorem or language-scale bounded growth.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Structure-tracking growth controller under known constructive assumptions.
 
 ---
@@ -383,22 +383,22 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Constructive CLM-003 — protected learned/growing Cells
 
 
-**Claim / role**  
+**Claim / role**
 Integrate learned/growing Cells with replay-free protected writes.
 
-**Positive evidence**  
+**Positive evidence**
 `PROTECTED_GROWING_CELL_INTEGRATION_SUPPORTED` on seeds `90511/90512/90513`.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — controlled**.
 
-**Known ceiling**  
+**Known ceiling**
 Learned root plus linear protected-write integration.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Nonlinear Transformer Cell safety or Native continual-language success.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Protected append/growth composition in an explicit modular substrate.
 
 ---
@@ -409,10 +409,10 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Constructive CLM-004 — model-level multi-Cell computation
 
 
-**Claim**  
+**Claim**
 Can multiple learned Cells participate sparsely in nontrivial model-level simultaneous and order-sensitive sequential computation while preserving a protected mutation invariant?
 
-**Evidence source**  
+**Evidence source**
 [research/projects/cellular-language-models/experiments/constructive-clm-004-model-level-multicell-computation/validation/constructive-clm-004-model-level-multicell-computation/FORMAL_RESULT.md](../../research/projects/cellular-language-models/experiments/constructive-clm-004-model-level-multicell-computation/validation/constructive-clm-004-model-level-multicell-computation/FORMAL_RESULT.md).
 
 **Positive evidence**
@@ -421,16 +421,16 @@ Can multiple learned Cells participate sparsely in nontrivial model-level simult
 - all 17 registered gates pass;
 - held-out simultaneous and sequential composition, sparse execution, route support/order recovery and protected mutation all pass.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — controlled**.
 
-**Known ceiling**  
+**Known ceiling**
 Controlled linear residual operators.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Arbitrary nonlinear Transformer Cells, language generation, learned/endogenous routing/growth/write control, LLM-scale endogenous CLM or JAM execution.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Sparse multi-module composition as a model-level structural primitive.
 
 ---
@@ -441,10 +441,10 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Constructive CLM-005 — learned control-plane transition
 
 
-**Claim**  
+**Claim**
 Can routing/write/growth scaffolds transition to learned controllers while retaining earlier constructive invariants?
 
-**Evidence source**  
+**Evidence source**
 [research/projects/cellular-language-models/experiments/constructive-clm-005-scaffold-removal/validation/constructive-clm-005-scaffold-removal/FORMAL_RESULT.md](../../research/projects/cellular-language-models/experiments/constructive-clm-005-scaffold-removal/validation/constructive-clm-005-scaffold-removal/FORMAL_RESULT.md).
 
 **Positive evidence**
@@ -454,19 +454,19 @@ Can routing/write/growth scaffolds transition to learned controllers while retai
 - learned router/growth/write heldout meta accuracy 1.0 in the registered world;
 - bounded reusable children, sparse composition and replay-free protected behavior retained.
 
-**Negative evidence / limitation**  
+**Negative evidence / limitation**
 Core-005 certificate basis and constrained update solver remain fixed safety primitives.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — controlled**.
 
-**Known ceiling**  
+**Known ceiling**
 Learned control plane over a supplied safety geometry in a controlled linear-residual world.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Fully learned safety geometry, arbitrary nonlinear Cells, language-scale continual learning, asymptotic growth, or foundation-scale Native CLM.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Learned candidate-control policies can coexist with deterministic safety/validation primitives.
 
 ---
@@ -479,7 +479,7 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Native CLM v0 M0/M1 — architecture and next-token trainability
 
 
-**Claim / role**  
+**Claim / role**
 Can the Native CLM architecture execute and train end-to-end from next-token loss?
 
 **Positive evidence**
@@ -488,16 +488,16 @@ Can the Native CLM architecture execute and train end-to-end from next-token los
 - validation loss `5.723429 -> 0.788535` and perplexity `305.9523 -> 2.2002` in the registered run;
 - sparse active Cell fraction `2/8`.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — trainability**.
 
-**Known ceiling**  
+**Known ceiling**
 End-to-end trainability of a small token-predictive Native CLM.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Continual learning, retention, autonomous growth or superiority to dense/MoE baselines.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 A real trainable Native-CLM test substrate for falsifying stronger mechanisms.
 
 ---
@@ -508,7 +508,7 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Native CLM v0 M2 — fixed-topology replay-free continual language
 
 
-**Claim**  
+**Claim**
 Are fixed-topology protected Cells sufficient for replay-free continual language learning?
 
 **Positive evidence**
@@ -520,16 +520,16 @@ Are fixed-topology protected Cells sufficient for replay-free continual language
 - formal seeds `73211/73212/73213`;
 - A/TinyStories regression ~43.9% against the registered <=20% target.
 
-**Formal status**  
+**Formal status**
 **NOT SUPPORTED**, with partial causal value for protection.
 
-**Known ceiling**  
+**Known ceiling**
 Protection helps, but fixed topology and current certificate semantics do not provide sufficient continual-language retention.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Replay-free continual language learning or that better protection alone will solve the problem.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Certificates as bounded regression guards, not as a complete learner.
 
 ---
@@ -540,7 +540,7 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Native M2-R0 / M2-R0b — optimizer/update invariant audit
 
 
-**Claim / role**  
+**Claim / role**
 Determine whether the registered safe-gradient constraint survives the optimizer/parameter transaction.
 
 **Evidence source**
@@ -553,19 +553,19 @@ Determine whether the registered safe-gradient constraint survives the optimizer
 - R0b identifies `ADAMW_PRECONDITIONER_BREAKS_UPDATE_INVARIANT`;
 - projecting the final realized AdamW update reduces committed p95 violation to ~`5.44e-6`, at the matched numerical floor.
 
-**Important threshold discipline**  
+**Important threshold discipline**
 The SGD+weight-decay arm is not post-hoc promoted to a material structural violation: its excess factor (~3.95) remains below the preregistered material threshold 16.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — mechanics/diagnostic**. R0b explicitly has `scientific_decision=false` and `native_clm_training_milestone=false`.
 
-**Known ceiling**  
+**Known ceiling**
 Optimizer transaction correctness.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Certificate semantic coverage, old-function sufficiency or continual-learning success; it does not change the historical M2 decision.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 `raw optimizer proposal -> realized-update projection/validation -> commit`.
 
 ---
@@ -576,10 +576,10 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Native CLM v0 M3 — global-pool growth-restored continual language
 
 
-**Claim**  
+**Claim**
 Does adding fresh writable Cells restore continual-language retention after M2?
 
-**Evidence source**  
+**Evidence source**
 [research/projects/cellular-language-models/experiments/native-clm-v0-m3-growth-restored-continual-language/validation/native-clm-v0-m3-growth-restored-continual-language/FORMAL_RESULT.md](../../research/projects/cellular-language-models/experiments/native-clm-v0-m3-growth-restored-continual-language/validation/native-clm-v0-m3-growth-restored-continual-language/FORMAL_RESULT.md).
 
 **Positive evidence**
@@ -593,16 +593,16 @@ Does adding fresh writable Cells restore continual-language retention after M2?
 - growth A regression ~0.484–0.494, worse than matched fixed protected topology ~0.429–0.442;
 - global Top-K insertion changes read ownership even when a new child begins as an exact clone.
 
-**Formal status**  
+**Formal status**
 **NOT SUPPORTED**.
 
-**Known ceiling**  
+**Known ceiling**
 Fresh capacity is not enough; read ownership must also be preserved.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 That growth is generally useless. It falsifies the registered global-pool growth mechanism.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 A strong invariant for future expansion: **safe write growth requires safe read-address growth**.
 
 ---
@@ -613,7 +613,7 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### Native CLM v0 M3R — read-preserving / lineage-isolated growth
 
 
-**Claim**  
+**Claim**
 Does preserving top-level root read ownership make growth safe enough for continual retention?
 
 **Positive evidence**
@@ -627,16 +627,16 @@ Does preserving top-level root read ownership make growth safe enough for contin
 - A regression remains ~0.469–0.472, far above the <=20% absolute target;
 - child execution remains broad across old and new domains.
 
-**Formal status**  
+**Formal status**
 **NOT SUPPORTED**, with a positive causal sub-result for root read conservation.
 
-**Known ceiling**  
+**Known ceiling**
 Top-level read ownership can be conserved; lineage-local parent/child functional addressing remains unresolved.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 That hierarchical routing is sufficient for continual learning.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Lineage isolation as a safer expansion topology than unrestricted global insertion.
 
 ---
@@ -647,7 +647,7 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### M3R Address Diagnostic — local query geometry
 
 
-**Claim**  
+**Claim**
 Within a stable lineage, is the parent/child functional split present in current frozen query geometry or write/effect geometry?
 
 **Positive evidence**
@@ -656,16 +656,16 @@ Within a stable lineage, is the parent/child functional split present in current
 - free affine query probe median AUC ~0.9623;
 - classification recorded in the research index as `QUERY_GEOMETRY_SEPARABLE`.
 
-**Formal status**  
+**Formal status**
 **SUPPORTED — diagnostic only**, no new continual-learning seeds.
 
-**Known ceiling**  
+**Known ceiling**
 The representation contains a recoverable offline local boundary; the deployed cosine rule does not decode it.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 That the boundary can be learned online without historical state, or that using it restores continual retention.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Offline address diagnostics can distinguish representation failure from decoder/routing-rule failure.
 
 ---
@@ -676,7 +676,7 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### M3L Query-Sketch Gate
 
 
-**Claim**  
+**Claim**
 Can the useful lineage-local affine boundary be recovered without replaying old tokens/queries, using a compact rank-16 historical Gaussian query sketch plus the current conflict stream?
 
 **Positive evidence**
@@ -687,16 +687,16 @@ Can the useful lineage-local affine boundary be recovered without replaying old 
 **Negative evidence**
 - frozen classification `QUERY_SKETCH_GATE_NOT_FEASIBLE` because registered median AUC >=0.9000 is missed.
 
-**Formal status**  
+**Formal status**
 **NOT SUPPORTED — diagnostic**, no new continual-language seed claim.
 
-**Known ceiling**  
+**Known ceiling**
 The registered compact sketch is insufficient under its frozen threshold; the remaining question is capacity/family, not whether query geometry contains signal.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 That all compact historical state is insufficient, or that raw replay is necessary.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Historical address summaries can be audited explicitly for information capacity before another expensive training run.
 
 ---
@@ -707,19 +707,19 @@ Synthesis source: [Research Ledger](audits/RESEARCH_LEDGER.md). Unstated chronol
 #### M3L-1 / later address-state diagnostics
 
 
-**Claim / role**  
+**Claim / role**
 Separate low-rank capacity limits from Gaussian-family/model-family limits using the exact frozen M3L samples and oracle.
 
-**Formal status**  
+**Formal status**
 **ACTIVE / diagnostic in the checked-in research index**. Do not infer a new continual-learning milestone.
 
-**Known ceiling**  
+**Known ceiling**
 Checkpoint-only mechanism diagnosis.
 
-**What it does NOT prove**  
+**What it does NOT prove**
 Any improvement to M2/M3/M3R unless a later full registered model run transfers the mechanism.
 
-**Engineering primitive obtained**  
+**Engineering primitive obtained**
 Escalate representation capacity only after a fixed-sample diagnostic identifies the actual bottleneck.
 
 ---
