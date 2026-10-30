@@ -1,0 +1,120 @@
+{
+  "CLM": [
+    {
+      "step": 1,
+      "ce": 8.312347412109375,
+      "input_sha256": "68f7c8d6520553b07c41a4df460918e54f3c70630c7417014d4c245a31a0a4f5",
+      "cell_counts": [
+        2.0,
+        58.0,
+        55.0,
+        4.0,
+        8.0,
+        1.0
+      ],
+      "cell_gradient_norms": [
+        0.0054551344364881516,
+        0.0735783576965332,
+        0.06964682787656784,
+        0.007604612503200769,
+        0.013556468300521374,
+        0.0044218567200005054
+      ],
+      "task_cell_counts": {
+        "Story": [
+          1.0,
+          28.0,
+          29.0,
+          3.0,
+          2.0,
+          1.0
+        ],
+        "Arithmetic": [
+          1.0,
+          30.0,
+          26.0,
+          1.0,
+          6.0,
+          0.0
+        ]
+      },
+      "proposal": null
+    },
+    {
+      "step": 2,
+      "ce": 8.311671257019043,
+      "input_sha256": "68f7c8d6520553b07c41a4df460918e54f3c70630c7417014d4c245a31a0a4f5",
+      "cell_counts": [
+        0.0,
+        63.0,
+        65.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cell_gradient_norms": [
+        0.0,
+        0.07176096737384796,
+        0.08711626380681992,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "task_cell_counts": {
+        "Story": [
+          0.0,
+          31.0,
+          33.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Arithmetic": [
+          0.0,
+          32.0,
+          32.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "proposal": {
+        "step": 2,
+        "accepted": true,
+        "scale": 0.00390625,
+        "candidate_source_model_sha256": "3c12236e7728f4b64185e2d5dd51c3a6d0dc7d1519305a29ea9abfe40ef094a4",
+        "selected_connection_sha256": "afb9d4a065997f923b928f8fcb6726b762f45e5863db94d31fd3be25bdfc57d3",
+        "primary_chosen_scale": 0.00390625,
+        "all_scales": 22,
+        "r3fv2_nonempty_path_required": true,
+        "report_key": "73001-B11-H-2",
+        "counterfactual_states": 1,
+        "actions_per_state": 6
+      }
+    }
+  ],
+  "MoE": [
+    {
+      "step": 1,
+      "objective": 8.324272632598877,
+      "input_sha256": "68f7c8d6520553b07c41a4df460918e54f3c70630c7417014d4c245a31a0a4f5"
+    },
+    {
+      "step": 2,
+      "objective": 8.32346248626709,
+      "input_sha256": "68f7c8d6520553b07c41a4df460918e54f3c70630c7417014d4c245a31a0a4f5"
+    }
+  ],
+  "Dense-AllCell-Mean": [
+    {
+      "step": 1,
+      "objective": 8.313177108764648,
+      "input_sha256": "68f7c8d6520553b07c41a4df460918e54f3c70630c7417014d4c245a31a0a4f5"
+    },
+    {
+      "step": 2,
+      "objective": 8.312673568725586,
+      "input_sha256": "68f7c8d6520553b07c41a4df460918e54f3c70630c7417014d4c245a31a0a4f5"
+    }
+  ]
+}

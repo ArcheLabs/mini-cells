@@ -1,0 +1,77 @@
+{
+  "CLM": {
+    "total_parameters": 35054,
+    "trainable_parameters": 1680,
+    "complete_routing_parameters": 318,
+    "cell_calls": 64,
+    "unique_active_modules_batch": 4,
+    "cell_calls_per_target": 8.0,
+    "observed_linear_gemm_flops": 73984,
+    "flops_complete": false,
+    "flops_excluded": [
+      "functional tied LM head",
+      "ContextRead QK/AV",
+      "norms/softmax/dispatch"
+    ],
+    "single_cpu_forward_seconds": 0.007517000000007101,
+    "latency_p50_p95": {
+      "p50_seconds": 0.007384300000012445,
+      "p95_seconds": 0.009765839999818126,
+      "samples": 5,
+      "scope": "CPU_FORWARD_ONLY_NOT_KV_DECODE"
+    },
+    "peak_device_memory": null,
+    "energy": null,
+    "coverage": "CPU_FORWARD_ONLY_NO_KV_DECODE_PROFILING; UNIQUE_COUNT_BATCH_NOT_PER_TOKEN"
+  },
+  "MoE": {
+    "total_parameters": 34784,
+    "trainable_parameters": 1584,
+    "complete_routing_parameters": 48,
+    "cell_calls": 128,
+    "unique_active_modules_batch": 6,
+    "cell_calls_per_target": 16.0,
+    "observed_linear_gemm_flops": 76800,
+    "flops_complete": false,
+    "flops_excluded": [
+      "functional tied LM head",
+      "ContextRead QK/AV",
+      "norms/softmax/dispatch"
+    ],
+    "single_cpu_forward_seconds": 0.011136600000099861,
+    "latency_p50_p95": {
+      "p50_seconds": 0.008940900000197871,
+      "p95_seconds": 0.00989709999976185,
+      "samples": 5,
+      "scope": "CPU_FORWARD_ONLY_NOT_KV_DECODE"
+    },
+    "peak_device_memory": null,
+    "energy": null,
+    "coverage": "CPU_FORWARD_ONLY_NO_KV_DECODE_PROFILING; UNIQUE_COUNT_BATCH_NOT_PER_TOKEN"
+  },
+  "Dense-AllCell-Mean": {
+    "total_parameters": 34736,
+    "trainable_parameters": 1536,
+    "complete_routing_parameters": 0,
+    "cell_calls": 384,
+    "unique_active_modules_batch": 6,
+    "cell_calls_per_target": 48.0,
+    "observed_linear_gemm_flops": 201728,
+    "flops_complete": false,
+    "flops_excluded": [
+      "functional tied LM head",
+      "ContextRead QK/AV",
+      "norms/softmax/dispatch"
+    ],
+    "single_cpu_forward_seconds": 0.004085298999598308,
+    "latency_p50_p95": {
+      "p50_seconds": 0.0036002999995616847,
+      "p95_seconds": 0.004629140000361076,
+      "samples": 5,
+      "scope": "CPU_FORWARD_ONLY_NOT_KV_DECODE"
+    },
+    "peak_device_memory": null,
+    "energy": null,
+    "coverage": "CPU_FORWARD_ONLY_NO_KV_DECODE_PROFILING; UNIQUE_COUNT_BATCH_NOT_PER_TOKEN"
+  }
+}

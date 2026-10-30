@@ -1,0 +1,359 @@
+{
+  "schema": "minicells.architecture_benchmark.audit.v1",
+  "audit_source_commit": "b91d6dfa34b260d4d7a22028f44c565000d9d945",
+  "protocol_sha256": "288ba3bdf8dd9d1d61b02cfdd98a5b61a35702bee926c1b1ad31e97a405845f0",
+  "scope": "STAGE_0_READ_ONLY_STATIC_AUDIT",
+  "scientific_training_authorized": false,
+  "model_instantiations": 0,
+  "optimizer_updates": 0,
+  "gpu_used": false,
+  "confirmation_model_reads": 0,
+  "tests_executed": false,
+  "reason_no_tests": "No runtime code changed; no Phase0 replay or short training in stage0. Static Python parse and JSON validation only.",
+  "status": "NO_GO",
+  "gates": {
+    "neutral_common_asset": "NOT_ESTABLISHED_RECIPE_AVAILABLE",
+    "standard_moe_primitive": "AVAILABLE_GLOBALROUTER_TOPK_DROPLESS",
+    "shared_pool_and_interfaces": "ADAPTER_REQUIRED",
+    "dense_same_library_reference": "MISSING",
+    "new_split_identity_and_hashes": "NOT_FROZEN",
+    "quality_evaluator": "MASKED_NLL_REUSABLE_ROLE_ADAPTER_REQUIRED",
+    "FLOPs": "PARTIAL_GEMM_AND_CONTEXT_INSTRUMENTATION_REQUIRED",
+    "statistical_thresholds_and_budget": "NOT_FROZEN",
+    "C_sync": "NO_GO_UNCHANGED_NOT_A_PREREQUISITE"
+  },
+  "sources": [
+    {
+      "path": "shared/python/experiments/common/models.py",
+      "bytes": 6107,
+      "sha256": "1a0750a44f10b5cd3316daabe44e331c7b4490595b3e643de2c7b74b6b65e2f5",
+      "top_level_symbols": {
+        "FeedForward": 9,
+        "RoutedFeedForward": 19,
+        "GlobalRouter": 24,
+        "Block": 62,
+        "LanguageModel": 90
+      }
+    },
+    {
+      "path": "shared/python/experiments/common/train.py",
+      "bytes": 20297,
+      "sha256": "20a7d38e8a9216d38fe6399d80cb973200f24e0215fcdc1c8c8d6550917cbabb",
+      "top_level_symbols": {
+        "write_json": 27,
+        "prepare_data": 33,
+        "make_batch": 125,
+        "evaluate": 131,
+        "checkpoint": 174,
+        "train_one": 182,
+        "main": 286
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/exp006/model.py",
+      "bytes": 5612,
+      "sha256": "f0d27fd7187b5d84a3910bd034ad693a8f170cc3b4832cd2e942d230aef7bd33",
+      "top_level_symbols": {
+        "Rollout": 12,
+        "initialize": 26,
+        "PathFirstLM": 34
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/exp006/baseline.py",
+      "bytes": 2738,
+      "sha256": "5c270e22ead49cb02f9df76a5ee0dd3381bbb3cc8912739c2cedf76ef24417f8",
+      "top_level_symbols": {
+        "Block": 8,
+        "MoELM": 20,
+        "make_model": 33
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/006-path-first-clm/implementation/exp006/cells.py",
+      "bytes": 1041,
+      "sha256": "beae0b761969699056cc135b01c7b240dda2802df67eab7fd3667946069aa383",
+      "top_level_symbols": {
+        "ContextRead": 6
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/006-path-first-clm/config/proposed.json",
+      "bytes": 2058,
+      "sha256": "9296f4f3a5ca21b1f3720552639d4a8dd844187602d539a567903a118cc82854",
+      "top_level_symbols": {}
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/005-compositional-cell-graph/implementation/exp005/models.py",
+      "bytes": 15641,
+      "sha256": "0644d0127a9820407c1c26219f6e254db8a8591656d2b2f8221d2716f4e0a9fa",
+      "top_level_symbols": {
+        "ArmFFN": 21,
+        "CausalBlock": 181,
+        "Experiment005LanguageModel": 220,
+        "make_model": 319
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/005-compositional-cell-graph/implementation/exp005/cell.py",
+      "bytes": 638,
+      "sha256": "59c3595c80552bba96042ebef7c50dd54313d2fe69a9f924b99597b825acda88",
+      "top_level_symbols": {
+        "ResidualCell": 10
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/005-compositional-cell-graph/implementation/exp005/assets.py",
+      "bytes": 10447,
+      "sha256": "17990587c27bf34e3578b15560c6f014062c57235630171e66aa1839112f771d",
+      "top_level_symbols": {
+        "split_validation_tokens": 14,
+        "prepare_assets": 33,
+        "load_assets": 130
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/005-compositional-cell-graph/implementation/exp005/accounting.py",
+      "bytes": 8444,
+      "sha256": "4d05b00fc47bf24c0eb69d0663adea3eb8899647c11ebb5fc3a13d970258327d",
+      "top_level_symbols": {
+        "record_attention_flops": 17,
+        "record_linear_flops": 28,
+        "ObservedGemmFlops": 34,
+        "_as_path_tensor": 82,
+        "unique_weight_counts": 91,
+        "execution_summary": 151,
+        "active_weight_summary": 171
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/005-compositional-cell-graph/implementation/exp005/profiling.py",
+      "bytes": 8081,
+      "sha256": "76c2bcc50ad7c6525d09fd464a3de8126bf49473dfb32aa312ba62f015bf5671",
+      "top_level_symbols": {
+        "_percentile": 14,
+        "check_decode_parity": 24,
+        "benchmark_decode": 44
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/implementation/minicells_r3c_moe_bridge/model.py",
+      "bytes": 5568,
+      "sha256": "1828371f4f0ca8fb71f971c2c092b5a3c61d0faed4b68b86a13fc2effaeb3b5c",
+      "top_level_symbols": {
+        "Stage": 15,
+        "Output": 24,
+        "BridgeModel": 33
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3c/moe-bridge/implementation/minicells_r3c_moe_bridge/gate.py",
+      "bytes": 1322,
+      "sha256": "9e4a095b0c0a821102455205007cc48bd60ca83f6b9172121951d6f837c4f19c",
+      "top_level_symbols": {
+        "Gate": 7,
+        "controlled_indices": 24
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3d/implementation/minicells_r3d/connection.py",
+      "bytes": 4532,
+      "sha256": "e1b1ba4062622c02da592545297cf779b3789d1b65f3b46821602f69ca4b5e2b",
+      "top_level_symbols": {
+        "Connection": 10,
+        "PathModel": 40
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/graph.py",
+      "bytes": 1168,
+      "sha256": "dd996e173b24fe917cf41f7f7401d9940b7c2a9f187175426a6b72045c1faebc",
+      "top_level_symbols": {
+        "GraphConnection": 8,
+        "random_action": 23
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3e/implementation/minicells_r3e/stable_connection.py",
+      "bytes": 5719,
+      "sha256": "b17c4d84d6575c6ee82724b79a293ba19d831e811c3d5f912c8427e6a3a2d4f4",
+      "top_level_symbols": {
+        "Model": 9,
+        "build": 139
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3f-connection-admission/implementation/minicells_r3f/stable_connection.py",
+      "bytes": 2647,
+      "sha256": "0c856ca674cf4022c6002af14357be1b60643f86a0032c04cf328eb28f6cdb3e",
+      "top_level_symbols": {
+        "baseline_action": 7,
+        "hard_action": 13,
+        "Model": 23,
+        "build": 57
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3h/implementation/minicells_r3h/routing.py",
+      "bytes": 2024,
+      "sha256": "ce83a183f4a6143dffcf4b84ac3e7021b160fe9728c9ae45c3798ea66f8fc60a",
+      "top_level_symbols": {
+        "Model": 9
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/GLOBAL_DATASET_USAGE_LEDGER.json",
+      "bytes": 121504,
+      "sha256": "ac0f9c4abc921c5969d830d41a3bd238ad10c1f088ff4f93feab783b65033ca1",
+      "top_level_symbols": {}
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value/implementation/minicells_clm002/native.py",
+      "bytes": 3389,
+      "sha256": "eb20f3d855d72009a7b2a1553443b45cabba98bf5196c7067242cb478fc783c7",
+      "top_level_symbols": {
+        "treatment": 20,
+        "runtime": 27,
+        "build": 57,
+        "classify": 71,
+        "masks": 81,
+        "parameter_report": 92,
+        "public_fingerprint": 113
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-002-cell-differentiation-joint-value/implementation/minicells_clm002/measurement.py",
+      "bytes": 11771,
+      "sha256": "a22c4223289ba241e4206818ca32ed5af92a7eac9a314fa37ab9925f0ff85197",
+      "top_level_symbols": {
+        "evaluation_mode": 16,
+        "nll": 25,
+        "replay": 43,
+        "contributions": 78,
+        "specialization": 140,
+        "js_divergence": 159,
+        "profile_once": 171,
+        "gradient_exposure": 206,
+        "route_switch": 242,
+        "arithmetic_generation": 252
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-002-fast-001/implementation/minicells_fast001/parent.py",
+      "bytes": 6572,
+      "sha256": "a0302cb8a4866776df93cf4c6771a942e4a76bab4d3f20960340e86e8c164f94",
+      "top_level_symbols": {
+        "substrate": 13,
+        "runtime": 17,
+        "make_engine": 34,
+        "original_state": 51,
+        "acceptance": 62
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-002-fast-001/implementation/minicells_fast001/data.py",
+      "bytes": 10596,
+      "sha256": "6e43c633a4476c5db1f037c3c4ca74af92f60234a8067a59a9ddbc6459631d52",
+      "top_level_symbols": {
+        "Draw": 15,
+        "record": 29,
+        "generate": 59,
+        "validate": 165,
+        "Stream": 180,
+        "evaluation_rows": 240
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-002-fast-001/implementation/minicells_fast001/evaluation.py",
+      "bytes": 3662,
+      "sha256": "5b6ae4c2177efd0c05a6c0b77d415546ea88055ac1d461a86ba6f6ae5577d404",
+      "top_level_symbols": {
+        "evaluate": 14
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-002-fast-002/implementation/minicells_fast002/accounting.py",
+      "bytes": 1590,
+      "sha256": "f0c70b5af3d4c0f12daab2676bcce611095b980cb33be5fca3d2bebc8b67941b",
+      "top_level_symbols": {
+        "summary": 4
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/jct-001/implementation/minicells_jct001/cost.py",
+      "bytes": 7191,
+      "sha256": "33e8c9681b372d885a72e0482c361ca0e787f6412d1e7389a9439d39fdfce68d",
+      "top_level_symbols": {
+        "WorkMeter": 12,
+        "Journal": 23
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/SCREENING_MANIFEST.json",
+      "bytes": 14659,
+      "sha256": "4991c2a98ed8ad2f85f0042e5194b34321662220d355a31e7e96d95136f1114e",
+      "top_level_symbols": {}
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/CSYNC_MANIFEST.json",
+      "bytes": 3688,
+      "sha256": "10c3f453edb930d5f72831ab6edbad2f87fe4a1b05385a2dd2bd17fc6f477cf4",
+      "top_level_symbols": {}
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/implementation/screening.py",
+      "bytes": 20125,
+      "sha256": "a7bcff28339b09978f799f17abb4707c8a9ccb885e7806a85e65d124994207c9",
+      "top_level_symbols": {
+        "manifest": 26,
+        "decision": 36,
+        "random_connection": 71,
+        "engine": 78,
+        "fixed_rewire": 115,
+        "prepare_data": 137,
+        "run": 203,
+        "allowed": 408,
+        "publish": 421
+      }
+    },
+    {
+      "path": "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/implementation/interpolation_audit.py",
+      "bytes": 4281,
+      "sha256": "55c56f62f7463ff3789e799ca991f19379909e0de1e5963dffb85a18e67562b5",
+      "top_level_symbols": {
+        "audited_scan": 15,
+        "Engine": 81
+      }
+    }
+  ],
+  "external_dataset_source": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "card_url": "https://huggingface.co/datasets/roneneldan/TinyStories/blob/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/README.md",
+    "license_metadata": "cdla-sharing-1.0",
+    "raw_card_download": "FAILED_IN_WEB_OPEN; pinned official card indexed search confirms license metadata",
+    "source_bytes_and_new_split_hashes_verified": false,
+    "approval": "CANDIDATE_ONLY_SYNTHETIC_NARRATIVES_NOT_GENERAL_NATURAL_LANGUAGE_PROOF"
+  },
+  "parameter_formula_example": {
+    "width": 128,
+    "cells": 6,
+    "connection_correction": 864,
+    "linear_moe_router": 768,
+    "scope": "SAME_WIDTH_AND_6_OUTPUTS_ONLY_NOT_FINAL_MODEL_COMPARISON; CLM_GATE_PARAMETERS_ADDITIONAL"
+  },
+  "next_step": "Review minimal adapter/init/data plan; no automatic implementation or training authorization.",
+  "tokenizer_static_identity": {
+    "path": "research/projects/cellular-language-models/experiments/clm-001-qfirst-integrated/r3m/registration/artifact-recovery-001/independent-review-002/tokenizer.json",
+    "sha256": "612c2aaa09e7f35c89c41c1e6270bdca1ef861a283a4de859cd808c8e6bfe6ff",
+    "vocabulary": 4096,
+    "status": "PASS_FILE_IDENTITY_ONLY_NO_ENCODING_OR_MODEL_ACCESS"
+  },
+  "verification": {
+    "source_hashes_checked": 30,
+    "python_ast_and_json_parse": "PASS",
+    "protocol_bytes_preserved": true,
+    "optimizer_updates": 0,
+    "scientific_training_started": false
+  }
+}

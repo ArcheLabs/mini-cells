@@ -1,0 +1,35 @@
+{
+  "status": "STAGE1_ENGINEERING_PASS_STAGE2_NO_GO",
+  "tests_passed": 2,
+  "tests_failed_final_run": 0,
+  "cpu_only": true,
+  "main_optimizer_updates": 6,
+  "candidate_optimizer_updates": 1,
+  "target_tokens_per_arm": 32,
+  "confirmation_model_reads": 0,
+  "source_hashes": {
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/architecture-benchmark/EXPERIMENT_MANIFEST.json": "4188d72127bd2a637a89f5c77a66725b1f3d3f99d4de761a7792a01da74371d6",
+    "research/projects/cellular-language-models/experiments/clm-003-routing-value-benchmark/architecture-benchmark/implementation/benchmark.py": "c7f5cfb61ea1f2a46aa6e2c5d656c0aab0f8cbfc6c9b4c8866befa9681af9412",
+    "tests/research/clm003/test_architecture.py": "863ba0b85b92d9462d7b0b1c08c986106ebe945f3d29a79a867a78f94b080674"
+  },
+  "unfrozen_fields": [
+    "scientific Seed list",
+    "scientific Token budget",
+    "noninferiority margin",
+    "efficiency improvement threshold",
+    "screening advancement rule",
+    "scientific split identities",
+    "natural language dataset"
+  ],
+  "coverage_limits": [
+    "linear GEMM count incomplete",
+    "latency CPU forward only not GPU/KV decode",
+    "peak memory unmeasured",
+    "energy unmeasured",
+    "engineering templates not scientific dataset",
+    "no compute matching: 8/16/48 Cell calls per target"
+  ],
+  "next_action": "STOP_WAIT_FOR_REVIEW_AND_EXPLICIT_STAGE2_GO",
+  "historical_results_unchanged": true,
+  "old_C_sync_NO_GO_unchanged": true
+}

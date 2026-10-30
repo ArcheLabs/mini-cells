@@ -1,0 +1,81 @@
+{
+  "CLM": {
+    "logical_updates": 2,
+    "logical_steps": [
+      1,
+      2
+    ],
+    "actual_optimizer_attempts": 2,
+    "completed_optimizer_calls": 2,
+    "optimizer_calls_by_group": {
+      "cell": 2
+    },
+    "uncertain_optimizer_calls": 0,
+    "pending_attempts": 0,
+    "failed_or_retried_attempt_records": 0,
+    "input_examples_attempted": 4,
+    "counterfactual_target_evaluations": 6,
+    "distinct_extra_counterfactual_examples": 0,
+    "training_tokens": 32,
+    "input_unit": "LANGUAGE_TARGET_TOKENS_CPU_ENGINEERING",
+    "gpu_seconds": null,
+    "gpu_used": false,
+    "executed_operator_work": {
+      "input_rows": 768,
+      "context_rows": 768,
+      "gate_rows": 23175,
+      "policy_rows": 31623,
+      "cell_rows": 6156,
+      "head_rows": 774
+    },
+    "observed_flops": null,
+    "accounting_status": "RECONCILED_CPU_FIXTURE",
+    "claim_scope": "ACTUAL_CPU_FIXTURE_WORK_NOT_GPU_RUNTIME_PROOF",
+    "target_tokens": 32,
+    "wall_seconds": 1.8256196739994266,
+    "wall_seconds_by_phase": {
+      "connection_candidate_search": 1.7685515749999468,
+      "main_update": 0.05403069899966795
+    },
+    "candidate_optimizer_calls": 1,
+    "total_optimizer_calls_main_plus_candidate": 3,
+    "candidate_evaluations": 22,
+    "candidate_receipt": {
+      "actual_optimizer_calls": 1,
+      "confirm_read": false,
+      "formal_connection_commits": 0,
+      "identity": {
+        "arm": "CLM",
+        "experiment_id": "CLM003-STAGE1-CPU-FIXTURE",
+        "manifest_sha256": "ac503060b6062d3467de033c9ef861e4112b12b7e3a8800eeffdf4dfea236ae6",
+        "proposal_step": 2,
+        "seed": 73001
+      },
+      "sha256": "fdbcee5f8e2d0e506945e0702a206ab0a330f98d456db370bf7fee10a95ca5d3",
+      "source_model_sha256": "3c12236e7728f4b64185e2d5dd51c3a6d0dc7d1519305a29ea9abfe40ef094a4",
+      "watermark": {
+        "events": 6,
+        "sha256": "11012583772f86cd115c9c6b058751439a6073fe10ac783be274d03814eb478d"
+      }
+    },
+    "scope": "CPU_ENGINEERING_MAIN_AND_SEPARATE_CANDIDATE_JOURNAL"
+  },
+  "MoE": {
+    "optimizer_calls": 2,
+    "target_tokens": 32,
+    "wall_seconds": 0.09248199900048348,
+    "gpu_used": false,
+    "device": "CPU",
+    "uncertain": false,
+    "random_stream": "NONE_FIXED_ROWS_AND_NO_STOCHASTIC_LAYERS"
+  },
+  "Dense-AllCell-Mean": {
+    "optimizer_calls": 2,
+    "target_tokens": 32,
+    "wall_seconds": 0.04183089900016057,
+    "gpu_used": false,
+    "device": "CPU",
+    "uncertain": false,
+    "random_stream": "NONE_FIXED_ROWS_AND_NO_STOCHASTIC_LAYERS"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "version": "0.1",
+  "status": "PROPOSED_NOT_APPROVED_NOT_FROZEN",
+  "scientific_frozen": false,
+  "stage2_authorized": false,
+  "gpu_authorized": false,
+  "confirmation_quality_authorized": false,
+  "source": "Human proposal received after cc880f3b; values are candidates only",
+  "model": {
+    "width": 128,
+    "depth_proposed": 8,
+    "cells_or_experts_proposed_per_layer": 6,
+    "context_length": 64,
+    "cell_hidden": null,
+    "heads": null,
+    "vocabulary": null,
+    "pool_sharing": "PENDING_WORDING_REVIEW_EXISTING_GLOBAL_POOL_ONLY",
+    "CLM": "Existing Connection + Bridge Gate + Q updates unchanged",
+    "MoE": "Existing GlobalRouter top-2 candidate",
+    "Dense": "Dense-AllCell-Mean all six modules fixed mean"
+  },
+  "public_parameters": "TRAIN_SHARED_PUBLIC_COMPONENTS_ALL_ARMS_PENDING_INDEPENDENT_ALGORITHM_REVIEW",
+  "budget": {
+    "mode": "FIXED_VALID_TARGET_TOKENS",
+    "paired_seeds": [
+      2026300101,
+      2026300102,
+      2026300103
+    ],
+    "main_updates_per_run": 500,
+    "valid_targets_per_main_update": 512,
+    "training_targets_per_run": 256000,
+    "runs_per_arm": 3,
+    "total_runs": 9,
+    "all_arms_main_training_targets": 2304000,
+    "CLM_proposal_opportunities_per_run": 10,
+    "CLM_proposal_steps": [
+      50,
+      100,
+      150,
+      200,
+      250,
+      300,
+      350,
+      400,
+      450,
+      500
+    ],
+    "main_optimizer_hyperparameters": {
+      "learning_rate": null,
+      "schedule": null,
+      "weight_decay": null,
+      "clip": null
+    },
+    "optimizer_ownership": "PENDING_REVIEW_MAIN_STEPS_NOT_ALL_OPTIMIZER_CALLS"
+  },
+  "screening": {
+    "evaluation_role": "DEVELOPMENT_ONLY",
+    "primary_delta": "NLL_CLM_MINUS_NLL_MOE",
+    "all_9_runs_complete": true,
+    "nonfinite_or_unexplained_failures_allowed": false,
+    "mean_delta_max_nats": 0.02,
+    "seeds_delta_le_0_02_required": 2,
+    "seed_count": 3,
+    "any_seed_delta_max_nats": 0.05,
+    "route_parameter_reduction_minimum": 0.2,
+    "route_parameter_hard_gate": "PROPOSED_PENDING_EXPLICIT_REVIEW_STATICALLY_INFEASIBLE_CURRENT_ARCHITECTURE",
+    "Dense_hard_gate": false,
+    "confidence_scope": "EXPLORATORY_NOT_NONINFERIORITY_CONFIRMATION"
+  },
+  "confirmation": {
+    "candidate_noninferiority_margin_nats": 0.02,
+    "candidate_rule": "UPPER_BOUND_OF_PAIRED_SEED_DIFFERENCE_INTERVAL_BELOW_MARGIN",
+    "seeds": null,
+    "sample_size_power_plan": null,
+    "confidence_level_one_vs_two_sided": null,
+    "data_identity": null,
+    "read_authorized": false
+  },
+  "efficiency": {
+    "parameter_reduction_formula": "1-P_ROUTE_CLM/P_ROUTE_MOE",
+    "count_scope": "ALL_ACTUAL_ROUTING_PARAMETERS_CONNECTION_AND_BRIDGE_GATE_VS_ALL_MOE_ROUTER_PARAMETERS; report total and trainable separately",
+    "compute_gain_threshold": null,
+    "compute_efficiency_claim_authorized": false,
+    "record": [
+      "wall time",
+      "throughput",
+      "valid target tokens",
+      "optimizer calls",
+      "measurable compute"
+    ]
+  },
+  "data": {
+    "Train": null,
+    "Development": null,
+    "Calibration": null,
+    "sealed_Confirmation": null,
+    "natural_language_dataset": null
+  },
+  "failure_policy_details": null,
+  "automatic_advancement": false
+}
