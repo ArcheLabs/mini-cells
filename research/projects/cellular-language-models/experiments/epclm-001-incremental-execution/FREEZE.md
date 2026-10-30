@@ -19,3 +19,11 @@ Engineering closure: validation_policy.json and validation_inputs.json bind
 fixed FP32 CPU/CUDA diagnostic criteria and 128-token IDs. These are fixture
 correctness criteria, not scientific tolerance certification of recovered
 trained weights. FP16/BF16 remain blocked until separately calibrated/frozen.
+
+
+v0.3 exception: PROTOCOL.v0.3.md explicitly authorizes controlled baseline
+retraining only. retrain_config.json and retrain_config.sha256 freeze the
+three model IDs, seed 91002, historical data/optimizer defaults and 7,200-second
+training resource cap. R0 must pass before a worker starts. This exception does
+not authorize any other seed/model or formal E1-A/E1-C performance experiment.
+Historical source and prior reports remain unchanged.

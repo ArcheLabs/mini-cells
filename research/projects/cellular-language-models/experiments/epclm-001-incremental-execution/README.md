@@ -1,13 +1,15 @@
 # EPCLM-001 — ~1.9M native-only first round
 
-The active scope is **T1 / X3 / X4 only**, defined by
+The active model scope is **T1 / X3 / X4 only**, defined by
 [protocol v0.2](PROTOCOL.v0.2.md) and [machine-readable configuration](protocol.json).
 The original [v0.1 draft](PROTOCOL_DRAFT.md) is preserved unchanged; its broader
 E0-A execution scope is superseded. 30M is **DEFERRED / CONDITIONAL SCALE
 VALIDATION**, with no automatic loader or CLI selection in round 1.
 
-No training, formal benchmark or 30M execution is authorized by this scope
-amendment. Historical E0 results and checkpoints remain unchanged.
+The v0.2 scope amendment did not authorize training. The new v0.3 amendment
+authorizes only the controlled retraining exception described below; formal
+E1 benchmarks and 30M remain unauthorized. Historical E0 results and checkpoints
+remain unchanged.
 
 Order: native asset preflight → numerical/cache correctness → small event
 microbenchmark → gated formal competitive benchmark. H1/H2/H3 remain separate.
@@ -65,3 +67,47 @@ sequence. Unlisted precision/device combinations stop rather than inheriting
 FP32 tolerances. These fixed token IDs are not a model-quality corpus.
 See `reports/engineering-closure-001/REVIEW.md` for the full test record and
 unresolved trained-asset/low-precision/formal-benchmark gates.
+
+## v0.3 controlled retraining exception
+
+The [user amendment](PROTOCOL.v0.3.md) authorizes only T1 → X3 → X4,
+seed 91002, 10M tokens / 10,000 original loop steps per model. It does not
+reopen architecture search, seed expansion, 30M, or formal E1-C. Original
+v0.1/v0.2 protocols and engineering reports remain unchanged.
+
+Use `epclm001_controlled_retrain.ipynb` in Kaggle, enable one GPU/Internet and
+the existing `HF_TOKEN` and `GITHUB_TOKEN` secrets, then Run All. No manual hash,
+seed or source registration is needed. The existing Native CLM artifact repo
+`archelabsxyz/native-clm-v0` is reused under a new controlled-retrain namespace;
+R0 verifies write access and fresh-download readback before GPU training.
+No new repository is silently created. Git receives reports/indexes only.
+
+The CLI routes `retrain-preflight`, `retrain-run`, `retrain-verify` and
+`retrain-publish` through `run.py`. `retrain-run` performs R0 automatically.
+Reusing the retained output resumes matching state; it never intentionally
+restarts a completed model. Failed publication can be retried without training.
+Controller metadata and verified resume bytes are retained remotely for a later
+cloud session. An unresolved active reservation remains charged, failing closed
+rather than resetting the resource allowance after a lost session.
+
+The original single-model replication worker, sampler, loss, initialization,
+AdamW and FP16 GradScaler remain in use. Wrapper observation forces the historical
+optimizer/scaler defaults explicitly and saves after complete update boundaries.
+Extra 100-step resume saves do not add evaluations or updates; the original
+five quality checkpoints are retained. Actual AdamW calls are counted separately
+from loop steps. Scaler skips trigger review, never extra training to compensate.
+The original NumPy trapezoid report calculation has an equivalent reporting-only
+fallback for older NumPy; it does not alter training.
+
+The 7,200-second cap conservatively charges worker wall time. Validation and
+checkpoint IO are recorded separately. A running update may finish before safe
+save; a stuck process has a bounded 120-second termination grace. Actual observed
+time is retained, including any overrun, and never treated as a budget increase.
+Only one GPU worker may hold the shared lock. CPU synthetic tests do not use the
+real baseline data or train a research model.
+
+`ASSET_AVAILABLE` requires strict completed-state checks, inference export,
+HF upload, forced fresh readback and independent-process strict loading. It is
+an asset-availability result, not H1/H2/H3 support. Full resume and inference
+weights stay outside Git; Save Version also retains the local output. R4 can
+only request the separately authorized inference benchmark.

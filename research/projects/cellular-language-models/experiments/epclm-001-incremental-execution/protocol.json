@@ -1,6 +1,6 @@
 {
   "experiment_id": "EPCLM-001",
-  "protocol_version": "0.2-round1-native-only",
+  "protocol_version": "0.3-controlled-retraining-exception",
   "status": "SCOPE_FIXED_PERFORMANCE_NOT_FROZEN",
   "training_allowed": false,
   "optimizer_updates": 0,
@@ -78,5 +78,19 @@
     "EXPLICIT_SCALING_QUESTION_AND_COST",
     "COMPLETE_1P9M_RESULTS_REVIEW",
     "NEW_EXPLICIT_USER_AUTHORIZATION"
-  ]
+  ],
+  "controlled_retrain": {
+    "authorized": true,
+    "config": "retrain_config.json",
+    "models": [
+      "T1",
+      "X3",
+      "X4"
+    ],
+    "seed": 91002,
+    "tokens_per_model": 10000000,
+    "requires_gate_R0": true,
+    "formal_E1C_authorized": false
+  },
+  "training_permission_semantics": "General training remains forbidden; only the v0.3 controlled_retrain exception is authorized."
 }

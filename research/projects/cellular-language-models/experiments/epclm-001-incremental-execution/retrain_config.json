@@ -1,0 +1,101 @@
+{
+  "experiment_id": "EPCLM-001",
+  "asset_generation": "CONTROLLED_RETRAIN_001",
+  "seed": 91002,
+  "models": {
+    "T1": "T1-modern-transformer",
+    "X3": "X3-n1-swiglu-rope",
+    "X4": "X4-n1-swiglu-rope-rmsnorm"
+  },
+  "parameter_counts": {
+    "T1": 1894080,
+    "X3": 1893536,
+    "X4": 1893912
+  },
+  "profile": "baseline",
+  "steps": 10000,
+  "training_tokens": 10000000,
+  "gpu_budget_seconds": 7200,
+  "artifact_repo": "archelabsxyz/native-clm-v0",
+  "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+  "tokenizer_path": "research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/tokenizer.json",
+  "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "historical_corpus_manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "dtype": "uint16",
+    "format": "minicells.native-clm-corpus.v1",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_training_stories": 20000,
+    "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "train_stories_consumed": 48394,
+    "train_stream_tokens": 12000000,
+    "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+    "validation_stories_consumed": 4396,
+    "validation_stream_tokens": 1000000,
+    "vocab_size_actual": 2048,
+    "vocab_size_requested": 2048
+  },
+  "checkpoints": [
+    1000000,
+    2500000,
+    5000000,
+    7500000,
+    10000000
+  ],
+  "historical_ppl": {
+    "T1": 12.3361,
+    "X3": 11.8364,
+    "X4": 11.9127
+  },
+  "optimizer": {
+    "class": "AdamW",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "eps": 1e-08,
+    "amsgrad": false,
+    "foreach": null,
+    "maximize": false,
+    "capturable": false,
+    "differentiable": false,
+    "fused": null
+  },
+  "scaler": {
+    "init_scale": 65536.0,
+    "growth_factor": 2.0,
+    "backoff_factor": 0.5,
+    "growth_interval": 2000
+  },
+  "loss": {
+    "reduction": "mean",
+    "label_smoothing": 0.0,
+    "ignore_index": -100
+  },
+  "model_seeds": {
+    "T1": 91003,
+    "X3": 91002,
+    "X4": 91002
+  },
+  "data_seed": 91002,
+  "validation_seed": 101002,
+  "context": 128,
+  "sequence_length": 125,
+  "batch_size": 8,
+  "tokens_per_step": 1000,
+  "grad_clip": 1.0,
+  "warmup": 1000,
+  "autocast": "float16",
+  "legacy_source_files": {
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_candidates.py": "294079fe88486848f19121767254bc98cc349876e9230386bacc807f283198d5",
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_phase_b.py": "9cb3cb2dc9814361b7a183b889a6ea64f13653a1d3b5d75b80a60e7ebdc2d80d",
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_phase_c.py": "3a385552da26fd23b2d4fd26cb92ebf3d3910bed21bb9ebe162f19e02735687c",
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_replication.py": "e79153d007d420a377b38d5d032c7db92c34305cb7e562d4ecf39c2f161df683",
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_replication_runlib.py": "fae0df56e4c10160cf4f008f2dfe48cf4e0544f61300eb892c8a3283ec046a59",
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_runtime.py": "3c1ae7d35ce51724954bd0d323125cbe48ff8cbd9c488abf2a4671f0f83bffb4"
+  },
+  "amendment_sha256": "6389de6bbdd43fe5ac3d9f768324599db901f375f9419d22bf3b9179ac16be20"
+}
