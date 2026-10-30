@@ -1,7 +1,7 @@
 {
   "experiment_id": "EPCLM-001",
-  "protocol_version": "0.3-controlled-retraining-exception",
-  "status": "SCOPE_FIXED_PERFORMANCE_NOT_FROZEN",
+  "protocol_version": "0.4-formal-inference",
+  "status": "IMPLEMENTED_AWAITING_RUNTIME_PREFLIGHT",
   "training_allowed": false,
   "optimizer_updates": 0,
   "engineering_tolerance": {
@@ -11,9 +11,12 @@
     "rtol": 0.0002,
     "basis": "Diagnostic proposed tolerances; all prefix maxima reported; scientific precision/device tolerances not frozen"
   },
-  "scientific_tolerances": null,
-  "scientific_device": null,
-  "scientific_holdout_trace": null,
+  "scientific_tolerances": {
+    "config": "formal_config.json",
+    "dtype": "float32"
+  },
+  "scientific_device": "BOUND_BY_RUNTIME_PREFLIGHT_AND_FORMAL_FREEZE",
+  "scientific_holdout_trace": "formal_config.json fixed validation offsets",
   "source_anchor": "36b0770f2858b89314911d3cdbaf3ac5505e4785",
   "decisions": [
     "H1_INCREMENTAL",
@@ -33,9 +36,9 @@
       "requires_separate_user_authorization": true
     }
   },
-  "formal_execution_authorized": false,
+  "formal_execution_authorized": true,
   "new_training_allowed": false,
-  "scope_amendment": "PROTOCOL.v0.2.md",
+  "scope_amendment": "PROTOCOL.v0.4.md",
   "allowed_context_max": 128,
   "execution_order": [
     "PREFLIGHT_NATIVE_ASSETS",
@@ -44,7 +47,7 @@
     "GATED_E1C_FORMAL_BENCHMARK"
   ],
   "proposed_microbenchmark": {
-    "status": "PROPOSED_NOT_EXECUTED_NOT_FROZEN",
+    "status": "SUPERSEDED_BY_EXACT_V04_FORMAL_CONFIG",
     "device_workers": 1,
     "batch": 1,
     "state_dim": 188,
@@ -90,7 +93,16 @@
     "seed": 91002,
     "tokens_per_model": 10000000,
     "requires_gate_R0": true,
-    "formal_E1C_authorized": false
+    "formal_E1C_authorized": false,
+    "status": "HISTORICAL_V03_EXCEPTION_NOT_INVOKED_BY_E1_COMMANDS"
   },
-  "training_permission_semantics": "General training remains forbidden; only the v0.3 controlled_retrain exception is authorized."
+  "training_permission_semantics": "v0.4 launches no training. Historical v0.3 exception and results retained separately.",
+  "formal_execution": {
+    "config": "formal_config.json",
+    "budget_seconds": 7200,
+    "independent_of_training_budget": true,
+    "optimizer_updates": 0,
+    "authorization": "INFERENCE_ONLY",
+    "precision_extensions": "NOT_REGISTERED_NOT_RUN"
+  }
 }

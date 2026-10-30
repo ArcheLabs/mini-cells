@@ -11,5 +11,9 @@ if __name__ == "__main__":
         from epclm001.retrain import main as retrain_main
 
         retrain_main()
+    elif len(sys.argv) > 1 and sys.argv[1].startswith("e1-"):
+        from epclm001.formal import main as formal_main
+
+        formal_main()
     else:
         main()

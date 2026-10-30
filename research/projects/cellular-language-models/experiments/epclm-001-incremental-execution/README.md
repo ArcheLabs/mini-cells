@@ -1,3 +1,15 @@
+# EPCLM-001 — v0.4 bounded ~1.9M inference
+
+The active user authorization is [Formal Protocol v0.4](PROTOCOL.v0.4.md).
+Use the new `epclm001_formal_e1.ipynb` for inference-only E1-A/B/C with pinned
+controlled-baseline assets, automatic HF recovery and GitHub report return.
+See [execution contract](FORMAL_EXECUTION.md) and [configuration](formal_config.json).
+There is no training or 30M execution in this path. Engineering readiness does
+not imply completed formal measurements. Historical scope/retraining notes
+below describe earlier versions and do not override v0.4.
+
+---
+
 # EPCLM-001 — ~1.9M native-only first round
 
 The active model scope is **T1 / X3 / X4 only**, defined by

@@ -1,3 +1,16 @@
+# Current freeze — v0.4
+
+`PROTOCOL.v0.4.md` authorizes bounded inference only. `formal_config.json` and
+its marker bind all three declared asset revisions/hashes, FP32 tolerances,
+five model workloads, 16 event points per B0/B1 kernel, warmups/repeats and
+paired analysis. `FORMAL_FREEZE.json` will bind actual device and source before
+formal measurements. Real asset availability and correctness remain runtime
+gates, not assertions from the pins. No new training or 30M execution.
+
+The previous status is retained below as versioned context, not the active gate.
+
+---
+
 # Scope and freeze status — v0.2
 
 Round-1 scope: T1/X3/X4, approximately 1.9M parameters. Fixed by the user's

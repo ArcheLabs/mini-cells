@@ -25,12 +25,25 @@ class Event:
 
 
 class Runtime:
-    def __init__(self, state, weight, *, implementation, tile=16, max_steps=32, mode="correctness"):
+    def __init__(
+        self,
+        state,
+        weight,
+        *,
+        implementation,
+        tile=16,
+        max_steps=32,
+        mode="correctness",
+        kernel=None,
+    ):
         if implementation not in IMPLEMENTATIONS or tile < 1 or max_steps < 1:
             raise ValueError("INVALID_EXECUTOR_OR_BUDGET")
-        if mode not in ("correctness", "performance"):
+        if mode not in ("correctness", "performance", "profile"):
             raise ValueError("INVALID_EXECUTION_MODE")
         self.mode = mode
+        self.kernel = kernel
+        self.kernel_identity = getattr(kernel, "identity", None)
+        self.profile_marks = []
         self.state = state.clone()
         self.initial = state.clone()
         self.weight = weight.clone()
@@ -61,7 +74,11 @@ class Runtime:
             torch.cuda.synchronize(self.state.device)
 
     def _clock(self):
-        return time.perf_counter() if self.mode == "correctness" else 0.0
+        if self.mode == "profile" and self.state.is_cuda:
+            event = torch.cuda.Event(enable_timing=True)
+            event.record()
+            self.profile_marks.append((self.step, event))
+        return time.perf_counter() if self.mode != "performance" else 0.0
 
     @torch.inference_mode()
     def microstep(self):
@@ -127,7 +144,11 @@ class Runtime:
             self._sync()
             gather_end = self._clock()
             # Shared deterministic kernel; all reads precede every write.
-            proposed = torch.tanh(before @ self.weight + aggregation)
+            proposed = (
+                self.kernel(before, aggregation)
+                if self.kernel is not None
+                else torch.tanh(before @ self.weight + aggregation)
+            )
             self._sync()
             compute_end = self._clock()
             mask = torch.tensor([i in messages for i in physical], device=ids.device)
@@ -168,8 +189,19 @@ class Runtime:
         end = self._clock()
         self.total_physical += len(physical)
         self.total_logical += len(active)
-        if self.mode == "performance":
+        if self.mode in ("performance", "profile"):
             self.step += 1
+            if self.mode == "profile":
+                row = {
+                    "queue": (queue_end - start) * 1000,
+                    "compact": (compact_end - queue_end) * 1000,
+                    "gather": (gather_end - compact_end) * 1000,
+                    "compute": (compute_end - gather_end) * 1000,
+                    "scatter": (scatter_end - compute_end) * 1000,
+                    "message": (end - scatter_end) * 1000,
+                }
+                self.history.append(row)
+                return row
             return None
         row = {
             "step": self.step,
@@ -185,7 +217,8 @@ class Runtime:
             "reads": {k: tensor_hash(v) for k, v in reads.items()},
             "message_bytes": len(outgoing) * 8,
             "message_bytes_scope": "float64 payload only; metadata excluded",
-            "kernel_matmul_flops": 2 * len(physical) * self.state.shape[1] ** 2,
+            "kernel_matmul_flops": len(physical)
+            * getattr(self.kernel, "matmul_flops_per_cell", 2 * self.state.shape[1] ** 2),
             "timing_ms": {
                 "queue": (queue_end - start) * 1000,
                 "compact": (compact_end - queue_end) * 1000,
@@ -210,7 +243,8 @@ class Runtime:
         import copy
 
         if (
-            snapshot["mode"] != self.mode
+            snapshot.get("kernel_identity") != self.kernel_identity
+            or snapshot["mode"] != self.mode
             or snapshot["impl"] != self.impl
             or tensor_hash(snapshot["weight"]) != tensor_hash(self.weight)
         ):
