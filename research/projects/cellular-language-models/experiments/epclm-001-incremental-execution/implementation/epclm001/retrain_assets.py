@@ -28,7 +28,9 @@ def probe(root, config, run_id):
 
     credential = token()
     repo = config["artifact_repo"]
-    auth_check(repo, repo_type="model", token=credential, write=True)
+    # auth_check in Hub 0.36.x checks access, not write permission.
+    # The actual upload + forced readback below proves write capability.
+    auth_check(repo, repo_type="model", token=credential)
     path = Path(root) / "PERSISTENCE_PROBE.json"
     write(path, {"asset_generation": "CONTROLLED_RETRAIN_001", "run_id": run_id})
     remote = f"epclm001/controlled-retrain-001/{run_id}/PERSISTENCE_PROBE.json"

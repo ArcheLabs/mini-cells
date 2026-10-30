@@ -39,6 +39,28 @@ def manifest(root, c):
         value = json.loads(path.read_text())
         if value["config_sha256"] != sha(c):
             raise RuntimeError("EXISTING_RUN_CONFIG_MISMATCH_NO_RESTART")
+        current_control = {
+            str(p.relative_to(ROOT)): digest(p)
+            for p in sorted((BASE / "implementation/epclm001").glob("retrain*.py"))
+        }
+        pristine = (
+            all(v == "NOT_STARTED" for v in value["models"].values())
+            and not any((root / "models").rglob("*.pt"))
+            and value.get("optimizer_updates") == 0
+        )
+        if pristine and value["control_source_files"] != current_control:
+            value.setdefault("pretraining_engineering_revisions", []).append(
+                {
+                    "source_sha": value["source_sha"],
+                    "control_source_files": value["control_source_files"],
+                    "status": value["status"],
+                    "preflight": value.get("preflight"),
+                }
+            )
+            value.update(
+                source_sha=source(), control_source_files=current_control, status="PENDING_R0"
+            )
+            write(path, value)
         return value
     value = {
         "experiment_id": "EPCLM-001",
@@ -70,7 +92,7 @@ def preflight(root, cache):
     restore_error = None
     try:
         restore_controller(root, c)
-    except (ImportError, OSError, RuntimeError, ValueError) as error:
+    except (ImportError, OSError, RuntimeError, ValueError, TypeError) as error:
         restore_error = type(error).__name__
     m = manifest(root, c)
     checks = {"controller_restore": "PASS" if restore_error is None else "BLOCKED_" + restore_error}
@@ -98,14 +120,14 @@ def preflight(root, cache):
 
         prepare(cache, c)
         checks["data"] = "HISTORICAL_DATA_IDENTITY_MATCHED"
-    except (ImportError, OSError, RuntimeError, ValueError) as error:
+    except (ImportError, OSError, RuntimeError, ValueError, TypeError) as error:
         checks["data"] = "BLOCKED_" + type(error).__name__
         checks["data_error"] = str(error).splitlines()[0][:300]
     try:
         from .retrain_assets import probe
 
         checks["persistence"] = probe(root, c, m["run_id"])
-    except (ImportError, OSError, RuntimeError, ValueError) as error:
+    except (ImportError, OSError, RuntimeError, ValueError, TypeError) as error:
         checks["persistence"] = {
             "status": "BLOCKED",
             "code": type(error).__name__,

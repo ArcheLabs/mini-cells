@@ -248,3 +248,86 @@ def test_failed_independent_readback_never_marks_available(tmp_path, monkeypatch
     with pytest.raises(subprocess.CalledProcessError):
         retrain_assets.publish_model(tmp_path, c, "test-run", "T1")
     assert not (directory / "PERSISTENCE.json").exists()
+
+
+def test_probe_compatible_with_hub_036_and_checks_real_write(tmp_path, monkeypatch):
+    import shutil
+
+    import huggingface_hub
+    from epclm001 import retrain_assets
+
+    calls = []
+
+    def auth(repo_id, *, repo_type=None, token=None):
+        calls.append("access")
+
+    def upload(**kwargs):
+        calls.append("write")
+        return SimpleNamespace(oid="a" * 40)
+
+    def download(repo, path, **kwargs):
+        assert kwargs["force_download"] is True and kwargs["revision"] == "a" * 40
+        calls.append("readback")
+        copy = Path(kwargs["local_dir"]) / "probe.json"
+        shutil.copyfile(tmp_path / "PERSISTENCE_PROBE.json", copy)
+        return str(copy)
+
+    monkeypatch.setattr(retrain_assets, "token", lambda: "synthetic-test-credential")
+    monkeypatch.setattr(huggingface_hub, "auth_check", auth)
+    monkeypatch.setattr(huggingface_hub, "HfApi", lambda **kw: SimpleNamespace(upload_file=upload))
+    monkeypatch.setattr(huggingface_hub, "hf_hub_download", download)
+    assert (
+        retrain_assets.probe(tmp_path, configuration(), "test")["status"]
+        == "PERSISTENCE_PREFLIGHT_PASS"
+    )
+    assert calls == ["access", "write", "readback"]
+
+
+def test_zero_progress_manifest_refreshes_control_source_only(tmp_path):
+    c = configuration()
+    m = manifest(tmp_path, c)
+    previous = m["source_sha"]
+    m["control_source_files"] = {"old": "old"}
+    (tmp_path / "TRAINING_MANIFEST.json").write_text(json.dumps(m))
+    updated = manifest(tmp_path, c)
+    assert updated["control_source_files"] != {"old": "old"}
+    assert updated["pretraining_engineering_revisions"][-1]["source_sha"] == previous
+    updated["models"]["T1"] = "TRAINED"
+    updated["control_source_files"] = {"trained-old": "preserve"}
+    (tmp_path / "TRAINING_MANIFEST.json").write_text(json.dumps(updated))
+    assert manifest(tmp_path, c)["control_source_files"] == {"trained-old": "preserve"}
+
+
+def test_persistence_api_error_is_reported_as_blocked_r0(tmp_path, monkeypatch):
+    import torch
+    from epclm001 import retrain, retrain_assets, retrain_data
+
+    c = configuration()
+
+    def model(name, *args):
+        key = next(k for k, v in c["models"].items() if v == name)
+        return SimpleNamespace(
+            parameters=lambda: [SimpleNamespace(numel=lambda: c["parameter_counts"][key])]
+        )
+
+    monkeypatch.setattr(
+        retrain,
+        "native",
+        lambda: (
+            SimpleNamespace(build_model=model, environment_record=dict),
+            None,
+            SimpleNamespace(build_phase_c=model),
+        ),
+    )
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(retrain_assets, "restore_controller", lambda *args: None)
+    monkeypatch.setattr(retrain_data, "prepare", lambda *args: None)
+
+    def broken(*args):
+        raise TypeError("Synthetic incompatible persistence API")
+
+    monkeypatch.setattr(retrain_assets, "probe", broken)
+    result = retrain.preflight(tmp_path, tmp_path / "cache")
+    assert result["status"] == "R0_BLOCKED_NO_TRAINING"
+    assert result["preflight"]["persistence"]["code"] == "TypeError"
+    assert result["models"] == {"T1": "NOT_STARTED", "X3": "NOT_STARTED", "X4": "NOT_STARTED"}
