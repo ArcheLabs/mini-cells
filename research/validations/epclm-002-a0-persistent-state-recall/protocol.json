@@ -1,0 +1,162 @@
+{
+  "format": "minicells.epclm-002-a0-persistent-state-recall.v1",
+  "experiment_id": "epclm-002-a0-persistent-state-recall",
+  "title": "EPCLM-002-A0 — Persistent State Recall",
+  "status": "FROZEN",
+  "registered_date": "2026-10-31",
+  "scientific_decision": false,
+  "protocol_version": "1.0",
+  "scope": {
+    "primary_question": "Can a learned cellular state preserve random episode-specific key-value facts and answer queries after the Writer process ends and raw history is removed?",
+    "h1": "Persistent Memory Survival across process and context removal.",
+    "h2": "Query-conditioned sufficiency of a learned state under independent episode mappings.",
+    "h3": "Selective retrieval from a small candidate set without scoring or reading every Cell.",
+    "excluded": [
+      "natural-language comprehension or generation",
+      "replacement of Transformer/Mamba/RWKV architectures",
+      "arbitrary-history lossless compression",
+      "production readiness",
+      "generalization beyond the registered task distribution"
+    ]
+  },
+  "repository_inspection": {
+    "date": "2026-10-31",
+    "reused_conventions": [
+      "research/validations/*/protocol.json frozen protocol format",
+      "scripts/research experiment-specific runner layout",
+      "tests/research scientific protocol regression layout",
+      "research/catalog.yaml canonical experiment registration"
+    ],
+    "adjacent_assets_found": [
+      "History Compression 001: frozen historical calibration budget ladder; it is not a future-query episodic memory test.",
+      "Native CLM v0 M3L-1/M3L-2: persistent query-address sketches on language-model streams; these do not implement the A0 synthetic KV task.",
+      "Constructive CLM-005: learned routing/write/growth control over persistent cells; its task is not episodic key-value recall.",
+      "TextNCA and CLM validation implementations exist, but none was identified as a reusable isolated Writer/Reader recall runner."
+    ],
+    "x3_x4_context": "Do not assume historical CLM X3/X4 assets are present or canonical; locate and verify any relevant source during future project-wide history review.",
+    "implementation_decision": "Add an experiment-only module under scripts/research and register it under the existing continual-learning-core stage. Do not modify MiniCells core model code or existing experiment outcomes."
+  },
+  "task": {
+    "generator": "PCG/stdlib deterministic PRNG keyed by split seed and episode index; each episode independently samples its own mapping.",
+    "key_bits": 16,
+    "value_bits": 16,
+    "facts_per_episode": [1, 2, 4, 8, 16, 32],
+    "distractors_per_episode": [0, 16, 64],
+    "overwrite_conditions": [
+      {"facts": 8, "distractors": 0, "updates": 2},
+      {"facts": 8, "distractors": 64, "updates": 2}
+    ],
+    "query_count": "one query for every final fact, sampled only after the Writer subprocess exits",
+    "episode_mapping": "No fixed Key->Value mapping exists across episodes. Values are re-sampled independently. Keys are unique within an episode except in explicit overwrite cases.",
+    "distractor_definition": "Non-factual 64-bit events with no key/value label; they are interleaved with valid facts and must not be counted as additional facts.",
+    "splits": {
+      "development_seed": 98100,
+      "validation_seeds": [98101, 98102],
+      "formal_evaluation_seeds": [98311, 98312, 98313],
+      "formal_episodes_per_condition_per_model_seed": 1000,
+      "formal_seed_pairing": [
+        {"model_seed": 98211, "evaluation_seed": 98311},
+        {"model_seed": 98212, "evaluation_seed": 98312},
+        {"model_seed": 98213, "evaluation_seed": 98313}
+      ],
+      "test_set_visible_for_training_or_selection": false
+    }
+  },
+  "context_removal": {
+    "writer_reader_are_separate_processes": true,
+    "writer_receives_query": false,
+    "writer_input_deleted_before_reader_start": true,
+    "reader_data_inputs": ["serialized_state", "model_checkpoint_if_applicable", "query_file", "fixed_metadata"],
+    "raw_history_and_episode_mapping_accessible_to_reader": false,
+    "forbidden_raw_data_path_guard": "Reader installs a Python audit hook that rejects opens under the removed raw-data root.",
+    "state_integrity": "SHA-256 is recorded before and after Reader execution; the bytes must remain unchanged.",
+    "negative_controls": [
+      "No state: Reader must abstain and return no prediction.",
+      "Wrong episode state: use independently sampled episode state and measure exact recall against the target episode."
+    ],
+    "leakage_decision": "Any Reader access to raw history, writer input, evaluator mapping, or training/test source invalidates the affected condition."
+  },
+  "models": {
+    "full_context_oracle": "Evaluator-only upper bound; returns the known target and is never presented as a memory model.",
+    "no_memory": "Deterministic query-only guess; expected exact-match chance is 1/65536.",
+    "direct_address": "Explicit serialized key->value dictionary; engineering reference only and never evidence for learned Cell memory.",
+    "flat_recurrent": {
+      "implementation": "Learned single-vector GRU memory; persistent state has the same byte budget as the cellular candidate.",
+      "state_bytes": 8320,
+      "formal_comparison_required": true
+    },
+    "learned_cells": {
+      "implementation": "Learned event-to-cell encoder and learned query/key/value readout; one latent cell per write event; checkpointed model weights are shared across episodes.",
+      "cell_count_max": 128,
+      "cell_dim": 16,
+      "state_bytes": 8320,
+      "uses_external_key_value_table": false,
+      "training_address_supervision": "For training episodes only, the latest matching factual event index supplies an auxiliary slot target. The Writer and Reader do not receive slot labels at inference.",
+      "candidate_scoring": "All valid latent cells are scored, so this candidate is a full-scan H2 model and cannot pass H3.",
+      "formal_comparison_required": true
+    },
+    "learned_sparse_router": "NOT_IMPLEMENTED in A0 v1; the registered learned-cell candidate explicitly scans all Cells. A separate sparse retrieval mechanism requires a new protocol version and must not be claimed from A0."
+  },
+  "training": {
+    "formal_seeds": [98211, 98212, 98213],
+    "formal_seeds_must_not_be_used_for_development": true,
+    "model_checkpoint_format": "minicells.epclm-002-a0.model.v1",
+    "checkpoint_records": ["model name", "architecture config", "training seed", "training steps", "protocol SHA-256"],
+    "development_trainer_default_steps": 500,
+    "formal_max_steps": 500,
+    "formal_batch_size": 8,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "batch_size": 8,
+    "gradient_clip_norm": 1.0,
+    "validation_interval_steps": 50,
+    "model_selection": "lowest development-validation objective; test episodes are never visible",
+    "validation_used_for_model_selection": true,
+    "formal_test_used_for_training_or_model_selection": false,
+    "hyperparameters_frozen_before_formal_test": true
+  },
+  "metrics": [
+    "query exact-match accuracy, overall and by fact/distractor condition",
+    "per-fact exact-match accuracy",
+    "overwrite new-value accuracy and stale-old-value rate",
+    "unchanged-fact accuracy after overwrite events",
+    "performance degradation from 0 to 64 distractors",
+    "logical and serialized state bytes and checkpoint bytes",
+    "candidate Cells scored, Cells read, and full_scan flag",
+    "Writer termination, raw-input deletion, Reader allowlist and state-hash checks"
+  ],
+  "thresholds": {
+    "full_context_oracle_min_accuracy": 0.99,
+    "direct_address_min_accuracy": 0.99,
+    "no_memory_expected_accuracy": 0.0000152587890625,
+    "learned_cells_accuracy_at_8_facts_0_distractors_each_seed": 0.95,
+    "maximum_accuracy_drop_at_8_facts_64_distractors": 0.05,
+    "minimum_overwrite_new_value_accuracy": 0.90,
+    "minimum_unchanged_fact_accuracy": 0.95,
+    "maximum_stale_old_value_rate": 0.10,
+    "context_removal_audit_all_cases": true,
+    "negative_control_no_state_must_abstain": true,
+    "wrong_episode_state_max_accuracy": 0.05,
+    "h3_minimum_recall": 0.95,
+    "h3_maximum_candidate_cell_fraction": 0.25,
+    "h3_full_scan_forbidden": true
+  },
+  "decision_rules": {
+    "h1_supported": "Direct-address engineering reference passes process isolation, serialization integrity, no-state abstention, and wrong-episode controls. Report as protocol/mechanism evidence only.",
+    "h2_supported": "Learned-cells passes every H2 threshold on all three formal model seeds; direct-address results do not count.",
+    "h3_supported": "A learned candidate passes H3 recall, candidate fraction, and no-full-scan gates. The v1 learned-cells candidate cannot satisfy this rule because it full-scans.",
+    "overall_status": "Report H1/H2/H3 separately as PASS, PARTIAL, FAIL, INVALID, or INCONCLUSIVE. Never merge a reference result into a learned-model claim.",
+    "formal_incomplete": "If fewer than three formal model seeds or 1000 episodes per condition complete, report PILOT/PARTIAL, not formal support."
+  },
+  "artifacts": {
+    "protocol": "research/validations/epclm-002-a0-persistent-state-recall/protocol.json",
+    "report": "research/validations/epclm-002-a0-persistent-state-recall/README.md",
+    "implementation": "scripts/research/epclm_002_a0/",
+    "tests": "tests/research/04-continual-learning-core/test_epclm_002_a0.py",
+    "formal_output": "artifacts/experiments/epclm-002-a0-persistent-state-recall/",
+    "per_condition": ["result.json", "episodes.jsonl"],
+    "formal_matrix": ["decision.json", "summary.csv", "summary.md"],
+    "reproducibility": ["code version", "branch", "protocol hash", "model checkpoint hash", "task seeds", "run command", "environment"]
+  }
+}
