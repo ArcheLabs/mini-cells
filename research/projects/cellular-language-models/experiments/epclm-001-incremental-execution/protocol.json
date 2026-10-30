@@ -1,0 +1,82 @@
+{
+  "experiment_id": "EPCLM-001",
+  "protocol_version": "0.2-round1-native-only",
+  "status": "SCOPE_FIXED_PERFORMANCE_NOT_FROZEN",
+  "training_allowed": false,
+  "optimizer_updates": 0,
+  "engineering_tolerance": {
+    "dtype": "float32",
+    "device": "cpu",
+    "atol": 2e-05,
+    "rtol": 0.0002,
+    "basis": "Diagnostic proposed tolerances; all prefix maxima reported; scientific precision/device tolerances not frozen"
+  },
+  "scientific_tolerances": null,
+  "scientific_device": null,
+  "scientific_holdout_trace": null,
+  "source_anchor": "36b0770f2858b89314911d3cdbaf3ac5505e4785",
+  "decisions": [
+    "H1_INCREMENTAL",
+    "H2_EVENT_RUNTIME",
+    "H3_COMPETITIVE"
+  ],
+  "active_baselines": [
+    "E0B_T1",
+    "E0B_X3",
+    "E0B_X4"
+  ],
+  "model_scale": "approximately 1.9M parameters",
+  "deferred_baselines": {
+    "E0A_30M": {
+      "status": "DEFERRED / CONDITIONAL SCALE VALIDATION",
+      "execution_allowed": false,
+      "requires_separate_user_authorization": true
+    }
+  },
+  "formal_execution_authorized": false,
+  "new_training_allowed": false,
+  "scope_amendment": "PROTOCOL.v0.2.md",
+  "allowed_context_max": 128,
+  "execution_order": [
+    "PREFLIGHT_NATIVE_ASSETS",
+    "CORRECTNESS_E1A_AND_T1_CACHE",
+    "SMALL_E1B_MICROBENCHMARK",
+    "GATED_E1C_FORMAL_BENCHMARK"
+  ],
+  "proposed_microbenchmark": {
+    "status": "PROPOSED_NOT_EXECUTED_NOT_FROZEN",
+    "device_workers": 1,
+    "batch": 1,
+    "state_dim": 188,
+    "cell_counts": [
+      256,
+      1024
+    ],
+    "activity_ratios": [
+      0,
+      0.05,
+      0.5,
+      1
+    ],
+    "layouts": [
+      "uniform-random",
+      "clustered"
+    ],
+    "primary_tile": 16,
+    "optional_tile_comparison": 32,
+    "steps": 4,
+    "selection": "layered representative subset, not full Cartesian grid",
+    "kernel": "Current synthetic tanh linear kernel; native-width FFN variant requires separately identified parity before freeze",
+    "gpu_hours_estimate": null,
+    "estimate_blocker": "No eligible recovered checkpoints or on-device timing pilot"
+  },
+  "scale_expansion_requires": [
+    "NATIVE_INCREMENTAL_PARITY",
+    "MEASURED_NATIVE_RESOURCE_BENEFIT",
+    "MEANINGFUL_EVENT_HARDWARE_BENEFIT",
+    "MODERN_T1_CLM_GAP_REPORTED",
+    "EXPLICIT_SCALING_QUESTION_AND_COST",
+    "COMPLETE_1P9M_RESULTS_REVIEW",
+    "NEW_EXPLICIT_USER_AUTHORIZATION"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "experiment_id": "EPCLM-001",
+  "scope_version": "0.2",
+  "task": "SCOPE_AMENDMENT_ONLY",
+  "scope_amendment": "GO",
+  "formal_execution": "NO_GO",
+  "models": [
+    "E0B_T1",
+    "E0B_X3",
+    "E0B_X4"
+  ],
+  "model_definition_parameters": {
+    "T1": 1894080,
+    "X3": 1893536,
+    "X4": 1893912
+  },
+  "checkpoint_availability": "ASSET_UNAVAILABLE_IN_RECORDED_SEARCH_ROOTS",
+  "new_training_runs": 0,
+  "formal_benchmark_runs": 0,
+  "model_30m_runs_after_scope_amendment": 0,
+  "gpu_compute_runs_after_scope_amendment": 0,
+  "cuda_available": true,
+  "gpu_hours_estimate": null,
+  "gpu_estimate_blocker": "Native weights and on-device pilot unavailable",
+  "tests": {
+    "selected_tests_passed": 2,
+    "other_tests_not_rerun_for_scope_change": 20,
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/tests/test_epclm001.py -k \"round1_scope or cli_and_publication\" --disable-warnings",
+    "ruff": "PASS",
+    "compileall": "PASS",
+    "original_protocol_bytes": "UNCHANGED",
+    "diff_check": "PASS"
+  },
+  "decisions": {
+    "H1_INCREMENTAL": "INCOMPLETE",
+    "H2_EVENT_RUNTIME": "INCOMPLETE",
+    "H3_COMPETITIVE": "INCOMPLETE"
+  },
+  "input_sha256": {
+    "PROTOCOL.v0.2.md": "86943ed06d933281a1a2a381973956313c7097c89585e6ab5e7561035c6733d4",
+    "PROTOCOL_DRAFT.md": "70ae280af2eeaf505a0cd2fa4ae324290a0deb56d45174fa2a78cc714ebd959a",
+    "epclm001_cpu.ipynb": "f5915fec8524d75b350a3a4797c334887629f0bb5a64e425de755283b48ac49b",
+    "implementation/epclm001/__init__.py": "f1ceed30993fde94aba96f710d235685cd4a947fb06cd42f0e935f4c8cc37a33",
+    "implementation/epclm001/analysis.py": "7fb22f717a412874cec101c1354ec3da925a11de2eae930ecc18b96f01392484",
+    "implementation/epclm001/assets.py": "27a76beafce33fa90945593cb3e088bcd98b8b8d1c31de9ec847ad5cc0d03520",
+    "implementation/epclm001/benchmark.py": "49731846e0174de64a0b4c80b972ebdcfff1f61a17bd80076282795306b9f177",
+    "implementation/epclm001/cli.py": "98536eb6f1a7d7000e26fa1bfa26e5ffa9a09a8d4ced544007f175ad61aece52",
+    "implementation/epclm001/common.py": "14291a33bbd72a752acb6cebba993b2c179cbf14235b30a66e220dc2d5df97ed",
+    "implementation/epclm001/events.py": "daf7899545414890e00ca96bfe09581dfdf749c938eaf68d71ce93fbccce72e5",
+    "implementation/epclm001/incremental.py": "41eb75e744bc55ac5ebbcfe66d3877db1d87bf09045fbe5a7e7636da1e78a10c",
+    "implementation/epclm001/publication.py": "d81e212d43bbb29118468cab3c133e809d86a00f33fbf582a9af689dfc4d2be2",
+    "implementation/epclm001/validation.py": "b263976a222a1765f098900e106c0f1cab95a360cf8870339033e7b97de2596a",
+    "protocol.json": "dcb8f1e840a2d2fb4d3efbf564134899c9fdbad0faf38aa1da23fc974f0ac3a7",
+    "tests/test_epclm001.py": "7204f6078db30043cfd7c8daa74a623e7a278fc81bb26942aee9a21005956200",
+    "workloads.json": "69f015e7bb0ceef6c619456106206360595318013820b44da9574b550059e8b9"
+  }
+}

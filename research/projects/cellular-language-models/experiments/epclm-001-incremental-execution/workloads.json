@@ -1,0 +1,105 @@
+{
+  "status": "ENGINEERING_NOT_FROZEN_PERFORMANCE_MATRIX",
+  "seed": 1833,
+  "warmup": 1,
+  "repeats": 3,
+  "event_points": [
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.05,
+      "layout": "uniform-random"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.5,
+      "layout": "uniform-random"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.05,
+      "layout": "clustered"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.5,
+      "layout": "clustered"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.05,
+      "layout": "wavefront"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.5,
+      "layout": "wavefront"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.05,
+      "layout": "hotspot"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.5,
+      "layout": "hotspot"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.05,
+      "layout": "burst"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0.5,
+      "layout": "burst"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 1,
+      "layout": "all-active"
+    },
+    {
+      "cells": 64,
+      "dim": 16,
+      "steps": 4,
+      "tile": 8,
+      "ratio": 0,
+      "layout": "zero-active"
+    }
+  ],
+  "event_kernel_relation": "Synthetic shared tanh(sW + message), not the full X3/X4 update. Engineering dimension 16; planned native-relevant dimension 188 and width 638/639 require separate microbenchmark freeze."
+}
