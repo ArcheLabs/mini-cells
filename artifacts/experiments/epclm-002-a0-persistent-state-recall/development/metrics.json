@@ -1,0 +1,632 @@
+{
+  "format": "minicells.epclm-002-a0-development-metrics.v1",
+  "plan_id": "A0-v0.2-screening",
+  "training": {
+    "status": {
+      "flat-recurrent": "COMPLETE",
+      "learned-cells": "COMPLETE"
+    },
+    "models": {
+      "flat-recurrent": {
+        "training_elapsed_seconds": 786.2413557189999,
+        "training_compute_seconds": 782.0740522639999,
+        "checkpoint_save_seconds": 4.167303454999967,
+        "resume_restore_seconds": 0.10007330600001296,
+        "reused_completed_checkpoint": 0.0,
+        "training_gpu_name": "Tesla T4"
+      },
+      "learned-cells": {
+        "training_elapsed_seconds": 15.705287128999998,
+        "training_compute_seconds": 15.647831549000102,
+        "checkpoint_save_seconds": 0.057455579999896145,
+        "resume_restore_seconds": 0.009239539000191144,
+        "reused_completed_checkpoint": 0.0,
+        "training_gpu_name": "Tesla T4"
+      }
+    },
+    "checkpoint_sha256": {
+      "flat-recurrent": "29f4c6713d1fa5ca8437018fcaba0c11c19d841d664b86c32205caf3cd8593f3",
+      "learned-cells": "b81cd7420d7ef6ff3589b04bcdb920d607803f5eb20508669d5c2a13120b3d30"
+    }
+  },
+  "runtime_pilot": {
+    "format": "minicells.epclm-002-a0-runtime-pilot.v1",
+    "plan_id": "A0-v0.2-screening",
+    "training": {
+      "flat-recurrent": {
+        "training_elapsed_seconds": 786.2413557189999,
+        "training_compute_seconds": 782.0740522639999,
+        "checkpoint_save_seconds": 4.167303454999967,
+        "resume_restore_seconds": 0.10007330600001296,
+        "reused_completed_checkpoint": 0.0,
+        "training_gpu_name": "Tesla T4"
+      },
+      "learned-cells": {
+        "training_elapsed_seconds": 15.705287128999998,
+        "training_compute_seconds": 15.647831549000102,
+        "checkpoint_save_seconds": 0.057455579999896145,
+        "resume_restore_seconds": 0.009239539000191144,
+        "reused_completed_checkpoint": 0.0,
+        "training_gpu_name": "Tesla T4"
+      }
+    },
+    "pilot_conditions": {
+      "flat-recurrent-f32-d64": {
+        "status": "COMPLETE",
+        "episodes": 32,
+        "metrics": {
+          "exact_match_accuracy": 0.0,
+          "no_memory_accuracy": 0.0,
+          "full_context_oracle_accuracy": 1.0,
+          "exact_matches": 0,
+          "query_count": 1024,
+          "mean_serialized_state_bytes": 10011.0,
+          "mean_logical_state_bytes": 8320.0,
+          "mean_writer_time_ms": 2386.43082803125,
+          "mean_reader_time_ms": 2243.8933394375,
+          "checkpoint_bytes": 55838337,
+          "isolation_audit_pass": true,
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_query_count": 128,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_negative_control_pass": true,
+          "full_scan": false,
+          "mean_read_cells": 1.0,
+          "max_candidate_cells": 1,
+          "mean_overwritten_accuracy": null,
+          "mean_unchanged_accuracy": 0.0,
+          "mean_stale_old_value_rate": null
+        },
+        "p50_episode_seconds": 4.531706439,
+        "p95_episode_seconds": 4.661065818,
+        "condition_wall_seconds": 151.480724647,
+        "cell_overhead_seconds": 3.249992252999988,
+        "negative_controls": {
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_query_count": 128,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_state_cases": [
+            {
+              "episode_id": "A0-b44b51743e87ab71",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-172a787037855cf3",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-5dbbf9469ee8574f",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-6bea8e011698ff3f",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-5fcce16ae83b4ba3",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-02f3ebd3b72102a5",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-22d35c1e061d8ae1",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-6049fd47151b0fa5",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-9050613666cc3e88",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-b4b2fac00377973b",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-e31e585dfed7213e",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-4ac5c4545267500f",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-b4230366b5e7b821",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-7394cf4bfb7d0950",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-9bc1a64b3e76b474",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-b02a8843d788c84b",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            }
+          ]
+        }
+      },
+      "learned-cells-f32-d64": {
+        "status": "COMPLETE",
+        "episodes": 32,
+        "metrics": {
+          "exact_match_accuracy": 0.0,
+          "no_memory_accuracy": 0.0,
+          "full_context_oracle_accuracy": 1.0,
+          "exact_matches": 0,
+          "query_count": 1024,
+          "mean_serialized_state_bytes": 10197.0,
+          "mean_logical_state_bytes": 8320.0,
+          "mean_writer_time_ms": 1948.972995125,
+          "mean_reader_time_ms": 1971.1862113749999,
+          "checkpoint_bytes": 36129,
+          "isolation_audit_pass": true,
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_query_count": 128,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_negative_control_pass": true,
+          "full_scan": true,
+          "mean_read_cells": 128.0,
+          "max_candidate_cells": 128,
+          "mean_overwritten_accuracy": null,
+          "mean_unchanged_accuracy": 0.0,
+          "mean_stale_old_value_rate": null
+        },
+        "p50_episode_seconds": 3.8890259289999998,
+        "p95_episode_seconds": 4.090182324,
+        "condition_wall_seconds": 128.2548975000002,
+        "cell_overhead_seconds": 2.7447618920001986,
+        "negative_controls": {
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_query_count": 128,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_state_cases": [
+            {
+              "episode_id": "A0-b44b51743e87ab71",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-172a787037855cf3",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-5dbbf9469ee8574f",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-6bea8e011698ff3f",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-5fcce16ae83b4ba3",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-02f3ebd3b72102a5",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-22d35c1e061d8ae1",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-6049fd47151b0fa5",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-9050613666cc3e88",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-b4b2fac00377973b",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-e31e585dfed7213e",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-4ac5c4545267500f",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-b4230366b5e7b821",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-7394cf4bfb7d0950",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-9bc1a64b3e76b474",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            },
+            {
+              "episode_id": "A0-b02a8843d788c84b",
+              "correct": 0,
+              "queries": 8,
+              "reader_allowlist_pass": true
+            }
+          ]
+        }
+      }
+    },
+    "pilot_elapsed_seconds_this_run": 279.73697683,
+    "screening_execution_budget_seconds": 5400,
+    "publication_reserve_seconds": 600,
+    "notebook_hard_limit_seconds": 7200,
+    "publication_elapsed_seconds": null,
+    "training_gpu_name": "Tesla T4",
+    "evaluation_device": "cpu (frozen runner path)",
+    "selected_episodes_per_cell": 76,
+    "target_episodes_per_cell": 128,
+    "capacity_estimate": {
+      "format": "minicells.epclm-002-a0-capacity-estimate.v1",
+      "plan_id": "A0-v0.2-screening",
+      "execution_budget_seconds": 5400,
+      "preflight_setup_seconds": 0.6914876369999092,
+      "training_compute_seconds_current_run": 797.7234264480003,
+      "checkpoint_save_seconds_current_run": 4.224759034999863,
+      "pilot_elapsed_seconds_current_run": 279.73697683,
+      "remaining_execution_seconds": 4317.623348116999,
+      "planned_cells": 12,
+      "max_p95_episode_seconds": 4.661065818,
+      "conservative_cell_overhead_seconds": 3.249992252999988,
+      "estimated_episode_capacity_per_cell": 76,
+      "selected_episodes_per_cell": 76,
+      "target_episodes_per_cell": 128,
+      "capacity_numerator_seconds": 4278.623441080999,
+      "capacity_formula": "floor((remaining_execution_seconds - planned_cells*cell_overhead)/(planned_cells*worst_p95_episode_seconds))"
+    }
+  },
+  "screening": {
+    "target_episodes_per_cell": 128,
+    "selected_episodes_per_cell": 76,
+    "planned_cells": 12,
+    "completed_cells": 6,
+    "conditions": {
+      "flat-recurrent-f01-d00": {
+        "status": "COMPLETE",
+        "episodes": 76,
+        "metrics": {
+          "checkpoint_bytes": 55838337,
+          "exact_match_accuracy": 0.0,
+          "exact_matches": 0,
+          "full_context_oracle_accuracy": 1.0,
+          "full_scan": false,
+          "isolation_audit_pass": true,
+          "max_candidate_cells": 1,
+          "mean_logical_state_bytes": 8320.0,
+          "mean_overwritten_accuracy": null,
+          "mean_read_cells": 1.0,
+          "mean_reader_time_ms": 2261.9874632236842,
+          "mean_serialized_state_bytes": 10011.0,
+          "mean_stale_old_value_rate": null,
+          "mean_unchanged_accuracy": 0.0,
+          "mean_writer_time_ms": 2321.352250907895,
+          "no_memory_accuracy": 0.0,
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "query_count": 76,
+          "wrong_episode_negative_control_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_state_query_count": 128
+        },
+        "partial": null
+      },
+      "learned-cells-f01-d00": {
+        "status": "COMPLETE",
+        "episodes": 76,
+        "metrics": {
+          "checkpoint_bytes": 36129,
+          "exact_match_accuracy": 0.0,
+          "exact_matches": 0,
+          "full_context_oracle_accuracy": 1.0,
+          "full_scan": true,
+          "isolation_audit_pass": true,
+          "max_candidate_cells": 128,
+          "mean_logical_state_bytes": 8320.0,
+          "mean_overwritten_accuracy": null,
+          "mean_read_cells": 128.0,
+          "mean_reader_time_ms": 1960.7862110526314,
+          "mean_serialized_state_bytes": 10197.0,
+          "mean_stale_old_value_rate": null,
+          "mean_unchanged_accuracy": 0.0,
+          "mean_writer_time_ms": 1953.8999711973684,
+          "no_memory_accuracy": 0.0,
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "query_count": 76,
+          "wrong_episode_negative_control_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_state_query_count": 128
+        },
+        "partial": null
+      },
+      "flat-recurrent-f01-d64": {
+        "status": "COMPLETE",
+        "episodes": 76,
+        "metrics": {
+          "checkpoint_bytes": 55838337,
+          "exact_match_accuracy": 0.0,
+          "exact_matches": 0,
+          "full_context_oracle_accuracy": 1.0,
+          "full_scan": false,
+          "isolation_audit_pass": true,
+          "max_candidate_cells": 1,
+          "mean_logical_state_bytes": 8320.0,
+          "mean_overwritten_accuracy": null,
+          "mean_read_cells": 1.0,
+          "mean_reader_time_ms": 2272.237782855263,
+          "mean_serialized_state_bytes": 10011.0,
+          "mean_stale_old_value_rate": null,
+          "mean_unchanged_accuracy": 0.0,
+          "mean_writer_time_ms": 2334.625580263158,
+          "no_memory_accuracy": 0.0,
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "query_count": 76,
+          "wrong_episode_negative_control_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_state_query_count": 128
+        },
+        "partial": null
+      },
+      "learned-cells-f01-d64": {
+        "status": "COMPLETE",
+        "episodes": 76,
+        "metrics": {
+          "checkpoint_bytes": 36129,
+          "exact_match_accuracy": 0.0,
+          "exact_matches": 0,
+          "full_context_oracle_accuracy": 1.0,
+          "full_scan": true,
+          "isolation_audit_pass": true,
+          "max_candidate_cells": 128,
+          "mean_logical_state_bytes": 8320.0,
+          "mean_overwritten_accuracy": null,
+          "mean_read_cells": 128.0,
+          "mean_reader_time_ms": 1960.5694282236843,
+          "mean_serialized_state_bytes": 10197.0,
+          "mean_stale_old_value_rate": null,
+          "mean_unchanged_accuracy": 0.0,
+          "mean_writer_time_ms": 1957.7783486578946,
+          "no_memory_accuracy": 0.0,
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "query_count": 76,
+          "wrong_episode_negative_control_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_state_query_count": 128
+        },
+        "partial": null
+      },
+      "flat-recurrent-f08-d00": {
+        "status": "COMPLETE",
+        "episodes": 76,
+        "metrics": {
+          "checkpoint_bytes": 55838337,
+          "exact_match_accuracy": 0.0,
+          "exact_matches": 0,
+          "full_context_oracle_accuracy": 1.0,
+          "full_scan": false,
+          "isolation_audit_pass": true,
+          "max_candidate_cells": 1,
+          "mean_logical_state_bytes": 8320.0,
+          "mean_overwritten_accuracy": null,
+          "mean_read_cells": 1.0,
+          "mean_reader_time_ms": 2266.2776469605265,
+          "mean_serialized_state_bytes": 10011.0,
+          "mean_stale_old_value_rate": null,
+          "mean_unchanged_accuracy": 0.0,
+          "mean_writer_time_ms": 2326.306102907895,
+          "no_memory_accuracy": 0.0,
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "query_count": 608,
+          "wrong_episode_negative_control_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_state_query_count": 128
+        },
+        "partial": null
+      },
+      "learned-cells-f08-d00": {
+        "status": "COMPLETE",
+        "episodes": 76,
+        "metrics": {
+          "checkpoint_bytes": 36129,
+          "exact_match_accuracy": 0.0,
+          "exact_matches": 0,
+          "full_context_oracle_accuracy": 1.0,
+          "full_scan": true,
+          "isolation_audit_pass": true,
+          "max_candidate_cells": 128,
+          "mean_logical_state_bytes": 8320.0,
+          "mean_overwritten_accuracy": null,
+          "mean_read_cells": 128.0,
+          "mean_reader_time_ms": 1965.4515245789473,
+          "mean_serialized_state_bytes": 10197.0,
+          "mean_stale_old_value_rate": null,
+          "mean_unchanged_accuracy": 0.0,
+          "mean_writer_time_ms": 1967.406655263158,
+          "no_memory_accuracy": 0.0,
+          "no_state_reader_abstained": true,
+          "no_state_reader_allowlist_pass": true,
+          "query_count": 608,
+          "wrong_episode_negative_control_pass": true,
+          "wrong_episode_state_accuracy": 0.0,
+          "wrong_episode_state_audit_pass": true,
+          "wrong_episode_state_query_count": 128
+        },
+        "partial": null
+      },
+      "flat-recurrent-f08-d64": {
+        "status": "INCOMPLETE_STOP_RULE",
+        "episodes": null,
+        "metrics": null,
+        "partial": null
+      },
+      "flat-recurrent-f32-d00": {
+        "status": "INCOMPLETE_STOP_RULE",
+        "episodes": null,
+        "metrics": null,
+        "partial": null
+      },
+      "flat-recurrent-f32-d64": {
+        "status": "INCOMPLETE_STOP_RULE",
+        "episodes": null,
+        "metrics": null,
+        "partial": null
+      },
+      "learned-cells-f08-d64": {
+        "status": "INCOMPLETE_STOP_RULE",
+        "episodes": null,
+        "metrics": null,
+        "partial": null
+      },
+      "learned-cells-f32-d00": {
+        "status": "INCOMPLETE_STOP_RULE",
+        "episodes": null,
+        "metrics": null,
+        "partial": null
+      },
+      "learned-cells-f32-d64": {
+        "status": "INCOMPLETE_STOP_RULE",
+        "episodes": null,
+        "metrics": null,
+        "partial": null
+      }
+    },
+    "paired_architecture_analysis": {
+      "facts-1-distractors-0": {
+        "status": "PAIRED_SCREENING_DIAGNOSTIC",
+        "paired_episode_count": 76,
+        "same_queries_and_targets": true,
+        "mean_flat_minus_cellular_episode_accuracy": 0.0,
+        "flat_query_weighted_accuracy": 0.0,
+        "cellular_query_weighted_accuracy": 0.0,
+        "query_weighted_flat_minus_cellular": 0.0
+      },
+      "facts-1-distractors-64": {
+        "status": "PAIRED_SCREENING_DIAGNOSTIC",
+        "paired_episode_count": 76,
+        "same_queries_and_targets": true,
+        "mean_flat_minus_cellular_episode_accuracy": 0.0,
+        "flat_query_weighted_accuracy": 0.0,
+        "cellular_query_weighted_accuracy": 0.0,
+        "query_weighted_flat_minus_cellular": 0.0
+      },
+      "facts-8-distractors-0": {
+        "status": "PAIRED_SCREENING_DIAGNOSTIC",
+        "paired_episode_count": 76,
+        "same_queries_and_targets": true,
+        "mean_flat_minus_cellular_episode_accuracy": 0.0,
+        "flat_query_weighted_accuracy": 0.0,
+        "cellular_query_weighted_accuracy": 0.0,
+        "query_weighted_flat_minus_cellular": 0.0
+      },
+      "facts-8-distractors-64": {
+        "status": "INCOMPLETE"
+      },
+      "facts-32-distractors-0": {
+        "status": "INCOMPLETE"
+      },
+      "facts-32-distractors-64": {
+        "status": "INCOMPLETE"
+      }
+    },
+    "stop_rule_interpretation": {
+      "flags": [
+        {
+          "rule": "BOTH_ARCHITECTURES_FAIL_LOW_LOAD",
+          "action": "STOP_SAMPLE_EXPANSION_AND_INSPECT_STATE_WRITE_READ"
+        }
+      ],
+      "scientific_decision": false,
+      "interpretation": "Development screening diagnostics only. Small differences require paired confirmatory analysis across multiple training seeds."
+    }
+  },
+  "interpretation": "Mechanism-screening and runtime-pilot evidence only. No formal threshold, hypothesis, or scientific decision is evaluated."
+}
