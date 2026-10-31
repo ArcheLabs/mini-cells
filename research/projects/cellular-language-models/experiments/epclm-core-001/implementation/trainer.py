@@ -103,6 +103,8 @@ def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unro
     scheduler=torch.optim.lr_scheduler.LambdaLR(optimizer,lambda step:lr_multiplier(step,total_steps,min(100,max(1,total_steps//10))))
     scaler=torch.amp.GradScaler('cuda',enabled=precision=='fp16' and next(model.parameters()).is_cuda,init_scale=initial_scale)
     amp_enabled=scaler.is_enabled()
+    if precision=='fp32' and (amp_enabled or any(p.dtype!=torch.float32 for p in model.parameters())):
+        raise ValueError('FP32 training requires disabled autocast/scaler and FP32 model parameters')
     order=list(range(len(documents))); random.shuffle(order)
     cursor=0; lanes=[None]*batch; positions=[0]*batch; state=model.init_state(batch)
     tokens=updates=0; curve=[]; diagnostics=[]; consecutive_overflows=0; fp32_probes={}
@@ -117,6 +119,9 @@ def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unro
         state=saved['state'].to(model.embedding.weight); tokens,updates=saved['tokens'],saved['updates']
         curve=saved['curve']; diagnostics=saved.get('overflow_diagnostics',[])
         consecutive_overflows=saved.get('consecutive_overflows',0); restore_rng(saved['rng'])
+    if precision=='fp32' and any(value.is_floating_point() and value.dtype!=torch.float32
+                                for entry in optimizer.state.values() for value in entry.values() if torch.is_tensor(value)):
+        raise ValueError('FP32 optimizer checkpoint contains non-FP32 floating state')
     last_saved_updates=updates if Path(path).exists() else -1
     initial_updates=updates
     restore_seconds=time.monotonic()-restore_started
@@ -167,6 +172,8 @@ def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unro
             with torch.autocast(device_type=state.device.type,dtype=torch.float16,enabled=use_amp):
                 next_state,logits=model.step(state,inputs)
                 per_token=F.cross_entropy(logits,torch.tensor(targets,device=state.device),reduction='none')
+            if precision=='fp32' and (next_state.dtype!=torch.float32 or per_token.dtype!=torch.float32):
+                raise ValueError('FP32 state/loss dtype mismatch')
             check_numerics(torch.isfinite(per_token).all(), 'non-finite loss')
             state=torch.where(mask[:,None,None],next_state,state)
             losses.append((per_token*mask).sum()); actual+=sum(active)
@@ -255,7 +262,13 @@ def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unro
             'target_tokens':target_tokens,'new_tokens':tokens-initial_tokens,'elapsed_seconds':time.monotonic()-started,
             'checkpoint_save_seconds':checkpoint_seconds,'checkpoint_restore_seconds':restore_seconds,
             'tokens_per_second':(tokens-initial_tokens)/max(time.monotonic()-started,1e-9),'curve':curve,
-            'overflow_diagnostics':diagnostics,'peak_vram_bytes':torch.cuda.max_memory_allocated() if state.is_cuda else None}
+            'overflow_diagnostics':diagnostics,
+            'effective_precision':{'autocast_enabled':amp_enabled,'grad_scaler_enabled':scaler.is_enabled(),
+                                   'model_dtype':str(next(model.parameters()).dtype),'state_dtype':str(state.dtype),
+                                   'loss_dtype':str(loss.dtype) if updates>initial_updates else None,
+                                   'optimizer_dtypes':sorted({str(value.dtype) for entry in optimizer.state.values()
+                                                             for value in entry.values() if torch.is_tensor(value) and value.is_floating_point()})},
+            'peak_vram_bytes':torch.cuda.max_memory_allocated() if state.is_cuda else None}
 
 
 def paired(left,right,seed=713,draws=1000):

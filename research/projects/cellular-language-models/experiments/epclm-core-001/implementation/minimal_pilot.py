@@ -34,15 +34,19 @@ def run_pilot(protocol, documents, identity, output, deadline, on_checkpoint=Non
         'status': 'INCOMPLETE', 'identity': identity, 'configuration': {**plan, 'checkpoint_interval_updates': plan['resume_after_updates'], 'precision':protocol['precision'], 'model': asdict(config)},
         'environment': {'python': platform.python_version(), 'torch': str(torch.__version__),
                         'cuda': torch.version.cuda, 'gpu': torch.cuda.get_device_name(0),
-                        'precision': 'FP32 state/weights; '+protocol['precision']['mode']+' training; FP32 replay on non-finite FP16 gradients'},
+                        'precision': 'FP32 model/state/loss/optimizer; autocast and GradScaler disabled' if protocol['precision']['mode']=='fp32' else 'FP16 autocast; FP32 replay on non-finite gradients'},
         'hypotheses': dict.fromkeys(('H1', 'H2', 'H3', 'H4', 'H5'), 'NOT_EVALUATED'),
         'scientific_decision': False, 'formal_confirmation': False,
         'checkpoint_resume': 'NOT_COMPLETED', 'numerical_stability': 'NOT_EVALUATED',
         'initial_diagnostic':{'status':'NOT_COMPLETED','successful_updates':0,'counted_toward_50':True},
     }
+    if protocol['precision']['mode']=='fp32':
+        torch.backends.cuda.matmul.allow_tf32=False
+        torch.backends.cudnn.allow_tf32=False
+    report['environment']['tf32_matmul_enabled']=torch.backends.cuda.matmul.allow_tf32
     torch.cuda.reset_peak_memory_stats()
     torch.manual_seed(protocol['seed'])
-    model = Core(config).cuda()
+    model = Core(config).float().cuda()
     kwargs = dict(documents=documents, identity=identity, path=checkpoint,
                   target_tokens=target_tokens, deadline=deadline, seed=protocol['seed'],
                   batch=plan['batch'], unroll=plan['bptt'], on_checkpoint=on_checkpoint,
@@ -63,7 +67,7 @@ def run_pilot(protocol, documents, identity, output, deadline, on_checkpoint=Non
         if saved['updates'] >= plan['resume_after_updates']:
             # A fresh model and fresh optimizer/scaler/scheduler instances must load the checkpoint.
             del model
-            model = Core(config).cuda()
+            model = Core(config).float().cuda()
             resumed = train(model, **kwargs)
             segments.append(resumed)
             if resumed['resumed_from_updates'] != saved['updates'] or resumed['resumed_from_tokens'] != saved['tokens']:
@@ -88,6 +92,7 @@ def run_pilot(protocol, documents, identity, output, deadline, on_checkpoint=Non
             'loss': {'first': curve[0]['nll'], 'last': curve[-1]['nll'], 'minimum': min(row['nll'] for row in curve)} if curve else None,
             'max_gradient_norm': max((row['gradient_norm'] for row in curve), default=None),
             'max_state_norm': max((row['state_norm'] for row in curve), default=None),
+            'effective_precision':final['effective_precision'],
             'overflow_diagnostics':final['overflow_diagnostics'],
             'precision_classification':final['overflow_diagnostics'][-1]['classification'] if final['overflow_diagnostics'] else 'NO_NONFINITE_GRADIENTS_OBSERVED',
             'curve': curve, 'tokens_per_second': speed, 'measured_tokens': measured_tokens,

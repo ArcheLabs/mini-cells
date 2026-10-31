@@ -43,7 +43,15 @@ def test_overflow_transaction(tmp_path,monkeypatch):
     documents=[{'id':'a','tokens':[1,2,3,4,5]},{'id':'b','tokens':[5,4,3,2,1]}]
     kwargs=dict(documents=documents,identity={'test':'overflow'},target_tokens=8,
                 deadline=time.monotonic()+120,seed=17,batch=2,unroll=2)
-    train(reference,path=tmp_path/'reference.pt',**kwargs)
+    fp32=train(reference,path=tmp_path/'reference.pt',precision='fp32',**kwargs)
+    assert fp32['updates']==2
+    assert fp32['effective_precision']['autocast_enabled'] is False
+    assert fp32['effective_precision']['grad_scaler_enabled'] is False
+    assert fp32['effective_precision']['model_dtype']==fp32['effective_precision']['state_dtype']=='torch.float32'
+    assert fp32['effective_precision']['optimizer_dtypes']==['torch.float32']
+    assert any(not torch.equal(a,b) for a,b in zip(reference.parameters(),original.parameters()))
+    with pytest.raises(ValueError,match='precision mismatch'):
+        train(copy.deepcopy(original),path=tmp_path/'reference.pt',precision='fp16',**kwargs)
     monkeypatch.setattr(torch.amp,'GradScaler',FakeScaler)
     monkeypatch.setattr(torch,'autocast',lambda **kwargs:nullcontext())
     clip=torch.nn.utils.clip_grad_norm_

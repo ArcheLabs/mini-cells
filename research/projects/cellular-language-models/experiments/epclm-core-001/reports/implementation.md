@@ -23,3 +23,7 @@ The original T4 failure report for source 26186fed2048 is preserved byte-for-byt
 The first two successful diagnostic updates count toward the original 50, followed by the update-25 checkpoint/restore boundary. No real GPU experiment was run during implementation; FP16/FP32 behavior and throughput require the next Kaggle execution. Focused CPU fault injection covers skip/backoff/rollback, FP32 classification, tolerance exhaustion and assets-only cross-source recovery; the existing small resume integration test is retained.
 
 Validation completed: the existing CPU resume integration check, focused injected-overflow transaction test, and remote/local assets-only recovery checks pass. No repository-wide test matrix, GPU benchmark, or real GPU training was executed.
+
+## Full FP32 pilot — 2026-11-01
+
+The repeated FP16 failures on the same first update are preserved under reports/failures/5bd2f2c5e67a-pilot-report.json. The matched FP32 probe had finite gradients but performed no optimizer update; it did not establish training stability. The next pilot therefore explicitly selects FP32, disables Autocast/GradScaler/TF32, and validates model, loss, recurrent state and optimizer dtypes. C1, batch 4, TBPTT 64, K=4, the 50-update budget and the update-25 restore boundary are unchanged. The first two successful optimizer steps count toward those 50; no additional diagnostic training is introduced. No GPU training was executed during this implementation change.
