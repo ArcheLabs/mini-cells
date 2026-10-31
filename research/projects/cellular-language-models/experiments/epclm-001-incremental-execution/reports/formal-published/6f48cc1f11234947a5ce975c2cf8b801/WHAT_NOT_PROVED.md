@@ -1,0 +1,1 @@
+No persistent Cell memory, learned event policy, removal of token attention, 30M scaling, production Transformer superiority, or equal-quality efficiency is established. FP16/BF16 and full user TTFT/E2E were not measured. Partial analytic FLOPs are not measured DRAM traffic or energy.

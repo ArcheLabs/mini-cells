@@ -1,0 +1,1012 @@
+{
+  "records": [
+    {
+      "cpu_operator_event_count": 363,
+      "device_stream_phase_ms": [
+        {
+          "compact": 5.902112007141113,
+          "compute": 3.0970239639282227,
+          "gather": 0.36604800820350647,
+          "message": 0.033695999532938004,
+          "queue": 0.18425600230693817,
+          "scatter": 3.039423942565918
+        },
+        {
+          "compact": 0.22748799622058868,
+          "compute": 0.1706240028142929,
+          "gather": 0.2964160144329071,
+          "message": 0.026623999699950218,
+          "queue": 0.10486400127410889,
+          "scatter": 0.5187839865684509
+        },
+        {
+          "compact": 0.21270400285720825,
+          "compute": 0.14351999759674072,
+          "gather": 0.29257598519325256,
+          "message": 0.02566399984061718,
+          "queue": 0.12249600142240524,
+          "scatter": 0.5522879958152771
+        },
+        {
+          "compact": 0.21404799818992615,
+          "compute": 0.19577600061893463,
+          "gather": 0.22652800381183624,
+          "message": 0.024927999824285507,
+          "queue": 0.08895999938249588,
+          "scatter": 0.47174400091171265
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 5.902711999624444,
+          "compute": 3.0974320002314926,
+          "gather": 0.36515700003292295,
+          "message": 0.032002999887481565,
+          "queue": 0.17711700002109865,
+          "scatter": 3.0393249999178806
+        },
+        {
+          "compact": 0.22759099965696805,
+          "compute": 0.1706859998193977,
+          "gather": 0.2967360001093766,
+          "message": 0.025133000235655345,
+          "queue": 0.10496900040379842,
+          "scatter": 0.5192200001147285
+        },
+        {
+          "compact": 0.21306000007825787,
+          "compute": 0.14365099968927098,
+          "gather": 0.29255400022520917,
+          "message": 0.024382999981753528,
+          "queue": 0.12272399999346817,
+          "scatter": 0.5525550000129442
+        },
+        {
+          "compact": 0.21436199995150673,
+          "compute": 0.1959579999493144,
+          "gather": 0.22707800007992773,
+          "message": 0.023517999579780735,
+          "queue": 0.08887100011634175,
+          "scatter": 0.4718330001196591
+        }
+      ],
+      "implementation": "D0_dense_reference",
+      "kernel": "B0",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 20,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 332.058,
+      "trace_sha256": "cf47c69e871b597e95605272ddda67b3808d8741424c778d4f0db1dd731c5b60"
+    },
+    {
+      "cpu_operator_event_count": 283,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.2803199887275696,
+          "compute": 0.14854399859905243,
+          "gather": 0.254720002412796,
+          "message": 0.025760000571608543,
+          "queue": 0.11609599739313126,
+          "scatter": 0.40041598677635193
+        },
+        {
+          "compact": 0.2378239929676056,
+          "compute": 0.13897599279880524,
+          "gather": 0.2197439968585968,
+          "message": 0.023391999304294586,
+          "queue": 0.08687999844551086,
+          "scatter": 0.3840639889240265
+        },
+        {
+          "compact": 0.20838400721549988,
+          "compute": 0.13840000331401825,
+          "gather": 0.2128320038318634,
+          "message": 0.024159999564290047,
+          "queue": 0.09849599748849869,
+          "scatter": 0.4158079922199249
+        },
+        {
+          "compact": 0.20374399423599243,
+          "compute": 0.13523200154304504,
+          "gather": 0.21423999965190887,
+          "message": 0.02252800017595291,
+          "queue": 0.0793600007891655,
+          "scatter": 0.4215039908885956
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.28097199992771493,
+          "compute": 0.14896599986968795,
+          "gather": 0.2539940001042851,
+          "message": 0.024436000330751995,
+          "queue": 0.11303400015094667,
+          "scatter": 0.40034599987848196
+        },
+        {
+          "compact": 0.2384569997957442,
+          "compute": 0.13905900004829164,
+          "gather": 0.2196919999732927,
+          "message": 0.02222700004494982,
+          "queue": 0.08680900009494508,
+          "scatter": 0.38425799994001864
+        },
+        {
+          "compact": 0.20903800032101572,
+          "compute": 0.13876999992135097,
+          "gather": 0.21253099976092926,
+          "message": 0.02286199969603331,
+          "queue": 0.09834200000113924,
+          "scatter": 0.41621700029281783
+        },
+        {
+          "compact": 0.20426800028872094,
+          "compute": 0.1351779997094127,
+          "gather": 0.21436299994093133,
+          "message": 0.021319000097719254,
+          "queue": 0.07932699963930645,
+          "scatter": 0.42186000018773484
+        }
+      ],
+      "implementation": "D1_masked_dense",
+      "kernel": "B0",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 16,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 331.15999999999997,
+      "trace_sha256": "5190f01024a42afcc86d162f532a04bc766b2bdcff3004c9c0f40117ce72ebfd"
+    },
+    {
+      "cpu_operator_event_count": 519,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.1812479943037033,
+          "compute": 0.15855999290943146,
+          "gather": 0.2943040132522583,
+          "message": 0.029823999851942062,
+          "queue": 0.13286399841308594,
+          "scatter": 2.0532479286193848
+        },
+        {
+          "compact": 0.13206399977207184,
+          "compute": 0.17238399386405945,
+          "gather": 0.1769919991493225,
+          "message": 0.02505600079894066,
+          "queue": 0.0944959968328476,
+          "scatter": 0.41145598888397217
+        },
+        {
+          "compact": 0.13551999628543854,
+          "compute": 0.16342400014400482,
+          "gather": 0.17718400061130524,
+          "message": 0.023871999233961105,
+          "queue": 0.08019199967384338,
+          "scatter": 0.4164159893989563
+        },
+        {
+          "compact": 0.11369600147008896,
+          "compute": 0.15414400398731232,
+          "gather": 0.18211199343204498,
+          "message": 0.02252800017595291,
+          "queue": 0.08102399855852127,
+          "scatter": 0.3917120099067688
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.18114800013790955,
+          "compute": 0.15851000034672325,
+          "gather": 0.2947129996755393,
+          "message": 0.02842599997165962,
+          "queue": 0.12134999997215346,
+          "scatter": 2.0537059999696794
+        },
+        {
+          "compact": 0.13196500003687106,
+          "compute": 0.17265999986193492,
+          "gather": 0.17721499989420408,
+          "message": 0.023647000034543453,
+          "queue": 0.09455700001126388,
+          "scatter": 0.4118179999750282
+        },
+        {
+          "compact": 0.1364220001960348,
+          "compute": 0.1635519997762458,
+          "gather": 0.17738999986249837,
+          "message": 0.022637999791186303,
+          "queue": 0.08012199987206259,
+          "scatter": 0.41648800015536835
+        },
+        {
+          "compact": 0.11425499997130828,
+          "compute": 0.15381200000774697,
+          "gather": 0.18266899996888242,
+          "message": 0.021393000224634307,
+          "queue": 0.08084399996732827,
+          "scatter": 0.3920700000890065
+        }
+      ],
+      "implementation": "S0_sparse_cell",
+      "kernel": "B0",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 52,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 268.247,
+      "trace_sha256": "18053535e6d93a59ee2f09a8a7683ae020276a42ab427e17bc92839fbff6de66"
+    },
+    {
+      "cpu_operator_event_count": 519,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.7650240063667297,
+          "compute": 0.164000004529953,
+          "gather": 0.25196799635887146,
+          "message": 0.025407999753952026,
+          "queue": 0.18028800189495087,
+          "scatter": 0.4262720048427582
+        },
+        {
+          "compact": 0.1534080058336258,
+          "compute": 0.13148799538612366,
+          "gather": 0.1881919950246811,
+          "message": 0.02412799932062626,
+          "queue": 0.08707199990749359,
+          "scatter": 0.4033919870853424
+        },
+        {
+          "compact": 0.1780479997396469,
+          "compute": 0.13260799646377563,
+          "gather": 0.18860800564289093,
+          "message": 0.023264000192284584,
+          "queue": 0.0801599994301796,
+          "scatter": 0.41788798570632935
+        },
+        {
+          "compact": 0.15299199521541595,
+          "compute": 0.1268800050020218,
+          "gather": 0.17295999825000763,
+          "message": 0.026528000831604004,
+          "queue": 0.07964800298213959,
+          "scatter": 0.455487996339798
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.7650540001122863,
+          "compute": 0.16360800009351806,
+          "gather": 0.25214099969161907,
+          "message": 0.024282000140374294,
+          "queue": 0.1756540000314999,
+          "scatter": 0.4264190001777024
+        },
+        {
+          "compact": 0.1542380000500998,
+          "compute": 0.13158599995222175,
+          "gather": 0.18767900019156514,
+          "message": 0.022772999727749266,
+          "queue": 0.08721699987290776,
+          "scatter": 0.40398500004812377
+        },
+        {
+          "compact": 0.17916099977810518,
+          "compute": 0.13229900014266605,
+          "gather": 0.18833500007531256,
+          "message": 0.022062999960326124,
+          "queue": 0.08016199990379391,
+          "scatter": 0.41844599991236464
+        },
+        {
+          "compact": 0.15337700006057275,
+          "compute": 0.12630200035346206,
+          "gather": 0.17369999977745465,
+          "message": 0.02565400018283981,
+          "queue": 0.07945200013637077,
+          "scatter": 0.45595899973704945
+        }
+      ],
+      "implementation": "S1_sparse_region",
+      "kernel": "B0",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 52,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 271.351,
+      "trace_sha256": "4255ca550c18ddedf6b1dfd47d47fb3dbc9c318c2ff44a77fe4a0ef2c8d260a4"
+    },
+    {
+      "cpu_operator_event_count": 531,
+      "device_stream_phase_ms": [
+        {
+          "compact": 1.0204800367355347,
+          "compute": 3.1113600730895996,
+          "gather": 0.2898240089416504,
+          "message": 0.024447999894618988,
+          "queue": 0.13555200397968292,
+          "scatter": 0.4045119881629944
+        },
+        {
+          "compact": 0.21913599967956543,
+          "compute": 0.6291199922561646,
+          "gather": 0.2869119942188263,
+          "message": 0.057792000472545624,
+          "queue": 0.08879999816417694,
+          "scatter": 0.44275200366973877
+        },
+        {
+          "compact": 0.5369920134544373,
+          "compute": 0.9375680088996887,
+          "gather": 0.5766720175743103,
+          "message": 0.026176000013947487,
+          "queue": 0.25043201446533203,
+          "scatter": 0.6087999939918518
+        },
+        {
+          "compact": 0.21395200490951538,
+          "compute": 0.6386880278587341,
+          "gather": 0.23337599635124207,
+          "message": 0.02707199938595295,
+          "queue": 0.07583999633789062,
+          "scatter": 0.33478400111198425
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 1.0205039998254506,
+          "compute": 2.9812200000378652,
+          "gather": 0.2897070003200497,
+          "message": 0.023121000140235992,
+          "queue": 0.12876900018454762,
+          "scatter": 0.5346659995666414
+        },
+        {
+          "compact": 0.21941299974059802,
+          "compute": 0.4521289997683198,
+          "gather": 0.28735600017171237,
+          "message": 0.05503000011231052,
+          "queue": 0.08899000022211112,
+          "scatter": 0.6237229999896954
+        },
+        {
+          "compact": 0.5393579999690701,
+          "compute": 0.9346070000901818,
+          "gather": 0.5752820002271619,
+          "message": 0.036081999951420585,
+          "queue": 0.24979999989227508,
+          "scatter": 0.6085350000830658
+        },
+        {
+          "compact": 0.2146250003534078,
+          "compute": 0.46324200002345606,
+          "gather": 0.23384199994325172,
+          "message": 0.02495599983376451,
+          "queue": 0.07570299976578099,
+          "scatter": 0.5111509999551345
+        }
+      ],
+      "implementation": "D0_dense_reference",
+      "kernel": "B1_X3",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 44,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 1904.812,
+      "trace_sha256": "3d23fa5946c207707a9847a59725061ed1e6dfa86955756a32395f3cf310c8c9"
+    },
+    {
+      "cpu_operator_event_count": 451,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.9394879937171936,
+          "compute": 0.6338880062103271,
+          "gather": 0.23660799860954285,
+          "message": 0.023072000592947006,
+          "queue": 0.1666560024023056,
+          "scatter": 0.2805120050907135
+        },
+        {
+          "compact": 0.21561600267887115,
+          "compute": 0.6427199840545654,
+          "gather": 0.21904000639915466,
+          "message": 0.022143999114632607,
+          "queue": 0.08569599688053131,
+          "scatter": 0.2043199986219406
+        },
+        {
+          "compact": 0.2329919934272766,
+          "compute": 0.6270080208778381,
+          "gather": 0.22224000096321106,
+          "message": 0.025567999109625816,
+          "queue": 0.0796160027384758,
+          "scatter": 0.263264000415802
+        },
+        {
+          "compact": 0.22089600563049316,
+          "compute": 0.6215360164642334,
+          "gather": 0.2338239997625351,
+          "message": 0.02377600036561489,
+          "queue": 0.07897599786520004,
+          "scatter": 0.2693440020084381
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.9393889999955718,
+          "compute": 0.4536609999377106,
+          "gather": 0.23600500026077498,
+          "message": 0.021641000330419047,
+          "queue": 0.16057899983934476,
+          "scatter": 0.46137899971654406
+        },
+        {
+          "compact": 0.21601799971904256,
+          "compute": 0.45697900031882455,
+          "gather": 0.21895899999435642,
+          "message": 0.02110600007654284,
+          "queue": 0.08585800014770939,
+          "scatter": 0.3904259997398185
+        },
+        {
+          "compact": 0.23387500004901085,
+          "compute": 0.4365649997453147,
+          "gather": 0.2219440002591,
+          "message": 0.023766000140312826,
+          "queue": 0.0795709997873928,
+          "scatter": 0.45474099988496164
+        },
+        {
+          "compact": 0.22154199996293755,
+          "compute": 0.4779519999829063,
+          "gather": 0.2341989998058125,
+          "message": 0.022437000097852433,
+          "queue": 0.07890599999882397,
+          "scatter": 0.41318600005979533
+        }
+      ],
+      "implementation": "D1_masked_dense",
+      "kernel": "B1_X3",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 40,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 1909.519,
+      "trace_sha256": "fdd2c086e24a1cf346bf6765676b9c90bb488293ed00edfe1c1207a0dd242e4e"
+    },
+    {
+      "cpu_operator_event_count": 691,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.8203520178794861,
+          "compute": 1.0182080268859863,
+          "gather": 0.39232000708580017,
+          "message": 0.052000001072883606,
+          "queue": 0.24659200012683868,
+          "scatter": 1.0323519706726074
+        },
+        {
+          "compact": 0.12534399330615997,
+          "compute": 0.510528028011322,
+          "gather": 0.19459199905395508,
+          "message": 0.025567999109625816,
+          "queue": 0.13651199638843536,
+          "scatter": 0.45580801367759705
+        },
+        {
+          "compact": 0.12668800354003906,
+          "compute": 0.43827199935913086,
+          "gather": 0.19072000682353973,
+          "message": 0.026335999369621277,
+          "queue": 0.11324799805879593,
+          "scatter": 0.5036159753799438
+        },
+        {
+          "compact": 0.11622399836778641,
+          "compute": 0.515936017036438,
+          "gather": 0.18211199343204498,
+          "message": 0.030880000442266464,
+          "queue": 0.08137600123882294,
+          "scatter": 0.7143999934196472
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.8219780002036714,
+          "compute": 1.0372729998380237,
+          "gather": 0.3900229999089788,
+          "message": 0.04752399991048151,
+          "queue": 0.2407669999229256,
+          "scatter": 1.016232999972999
+        },
+        {
+          "compact": 0.12532700020528864,
+          "compute": 0.5112290000397479,
+          "gather": 0.19472999974823324,
+          "message": 0.024137999844242586,
+          "queue": 0.1351639998574683,
+          "scatter": 0.4557480001494696
+        },
+        {
+          "compact": 0.12754899989886326,
+          "compute": 0.4389690002426505,
+          "gather": 0.19031800002267119,
+          "message": 0.024967000172182452,
+          "queue": 0.11173099983352586,
+          "scatter": 0.5035069998484687
+        },
+        {
+          "compact": 0.11666299997159513,
+          "compute": 0.5165640000086569,
+          "gather": 0.18269300016982015,
+          "message": 0.027677999696607003,
+          "queue": 0.08113700005196733,
+          "scatter": 0.7161120001910604
+        }
+      ],
+      "implementation": "S0_sparse_cell",
+      "kernel": "B1_X3",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 80,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 575.376,
+      "trace_sha256": "0d0e87f1c8d3598fb6d6b6917063cc963ec28c21b4a30b2ec0b4eb35147ad3d0"
+    },
+    {
+      "cpu_operator_event_count": 691,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.9176639914512634,
+          "compute": 0.654591977596283,
+          "gather": 0.2703680098056793,
+          "message": 0.02470399998128414,
+          "queue": 0.1329919993877411,
+          "scatter": 0.4774399995803833
+        },
+        {
+          "compact": 0.20342400670051575,
+          "compute": 0.4583039879798889,
+          "gather": 0.204352006316185,
+          "message": 0.02518399991095066,
+          "queue": 0.10412800312042236,
+          "scatter": 0.5176960229873657
+        },
+        {
+          "compact": 0.1343040019273758,
+          "compute": 0.5183359980583191,
+          "gather": 0.17772799730300903,
+          "message": 0.023840000852942467,
+          "queue": 0.08627200126647949,
+          "scatter": 0.40646401047706604
+        },
+        {
+          "compact": 0.14502400159835815,
+          "compute": 0.4145280122756958,
+          "gather": 0.25862398743629456,
+          "message": 0.02457600086927414,
+          "queue": 0.07843200117349625,
+          "scatter": 0.4811199903488159
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.918251999792119,
+          "compute": 0.6613710002056905,
+          "gather": 0.2701280000110273,
+          "message": 0.02346300016142777,
+          "queue": 0.1284059999306919,
+          "scatter": 0.4705119999925955
+        },
+        {
+          "compact": 0.2044080001724069,
+          "compute": 0.45913400026620366,
+          "gather": 0.20396599984451314,
+          "message": 0.02377400005570962,
+          "queue": 0.10412599976916681,
+          "scatter": 0.5173589997866657
+        },
+        {
+          "compact": 0.13492899961420335,
+          "compute": 0.5190890001358639,
+          "gather": 0.17782400027499534,
+          "message": 0.022662999981548637,
+          "queue": 0.08626900034869323,
+          "scatter": 0.4060769997522584
+        },
+        {
+          "compact": 0.14621400032410747,
+          "compute": 0.4143919995840406,
+          "gather": 0.25916100003087195,
+          "message": 0.02304700001332094,
+          "queue": 0.07790399968143902,
+          "scatter": 0.4814290000467736
+        }
+      ],
+      "implementation": "S1_sparse_region",
+      "kernel": "B1_X3",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 80,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 584.464,
+      "trace_sha256": "efd099a044d99a9e65697564229b3066f9b08cba50eb8e71ab027ad3e412a686"
+    },
+    {
+      "cpu_operator_event_count": 591,
+      "device_stream_phase_ms": [
+        {
+          "compact": 1.0945600271224976,
+          "compute": 0.8090879917144775,
+          "gather": 0.31673601269721985,
+          "message": 0.02659199945628643,
+          "queue": 0.2027519941329956,
+          "scatter": 0.363072007894516
+        },
+        {
+          "compact": 0.20204800367355347,
+          "compute": 0.7673599720001221,
+          "gather": 0.22015999257564545,
+          "message": 0.024800000712275505,
+          "queue": 0.08982399851083755,
+          "scatter": 0.30828800797462463
+        },
+        {
+          "compact": 0.2048960030078888,
+          "compute": 0.7088000178337097,
+          "gather": 0.22127999365329742,
+          "message": 0.024224000051617622,
+          "queue": 0.08137600123882294,
+          "scatter": 0.3144319951534271
+        },
+        {
+          "compact": 0.20972800254821777,
+          "compute": 0.7095040082931519,
+          "gather": 0.24569599330425262,
+          "message": 0.025599999353289604,
+          "queue": 0.0772479996085167,
+          "scatter": 0.3843199908733368
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 1.0946399997919798,
+          "compute": 0.6312479999905918,
+          "gather": 0.31636499988962896,
+          "message": 0.025085999823204475,
+          "queue": 0.20018600025650812,
+          "scatter": 0.541132000307698
+        },
+        {
+          "compact": 0.20238700017216615,
+          "compute": 0.5716460000257939,
+          "gather": 0.22026799979357747,
+          "message": 0.023443999907613033,
+          "queue": 0.08993399978862726,
+          "scatter": 0.5045200000495242
+        },
+        {
+          "compact": 0.20569999969666242,
+          "compute": 0.5410849998952472,
+          "gather": 0.22114600005807006,
+          "message": 0.022939999780646758,
+          "queue": 0.08121200016830699,
+          "scatter": 0.48265900022670394
+        },
+        {
+          "compact": 0.21049699989816872,
+          "compute": 0.5298949999996694,
+          "gather": 0.2458920002936793,
+          "message": 0.023964999854797497,
+          "queue": 0.0770789997659449,
+          "scatter": 0.5644249999932072
+        }
+      ],
+      "implementation": "D0_dense_reference",
+      "kernel": "B1_X4",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 64,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 1965.973,
+      "trace_sha256": "331b73772ef45a93c9eb28055fc12ae8b1514e284a5f12c47ee551301dfc8e67"
+    },
+    {
+      "cpu_operator_event_count": 511,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.894815981388092,
+          "compute": 0.7972480058670044,
+          "gather": 0.31593599915504456,
+          "message": 0.029472000896930695,
+          "queue": 0.12415999919176102,
+          "scatter": 0.3928320109844208
+        },
+        {
+          "compact": 0.23292799293994904,
+          "compute": 0.7634559869766235,
+          "gather": 0.29417601227760315,
+          "message": 0.0244159996509552,
+          "queue": 0.10259199887514114,
+          "scatter": 0.2800320088863373
+        },
+        {
+          "compact": 0.20448000729084015,
+          "compute": 0.7225919961929321,
+          "gather": 0.22572800517082214,
+          "message": 0.022943999618291855,
+          "queue": 0.07977599650621414,
+          "scatter": 0.2258239984512329
+        },
+        {
+          "compact": 0.21094399690628052,
+          "compute": 0.7105600237846375,
+          "gather": 0.24633599817752838,
+          "message": 0.023360000923275948,
+          "queue": 0.07680000364780426,
+          "scatter": 0.2268799990415573
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.8957129998634628,
+          "compute": 0.6614789999730419,
+          "gather": 0.31553899998471024,
+          "message": 0.027192999823455466,
+          "queue": 0.1214290000461915,
+          "scatter": 0.5292810001265025
+        },
+        {
+          "compact": 0.2338099998269172,
+          "compute": 0.575814000058017,
+          "gather": 0.2948169999399397,
+          "message": 0.022949000140215503,
+          "queue": 0.10196200037171366,
+          "scatter": 0.46750399997108616
+        },
+        {
+          "compact": 0.2054030001090723,
+          "compute": 0.5485400001816743,
+          "gather": 0.22546899981534807,
+          "message": 0.021764999928564066,
+          "queue": 0.07966999964992283,
+          "scatter": 0.4004080001323018
+        },
+        {
+          "compact": 0.21165599991945783,
+          "compute": 0.5017899998165376,
+          "gather": 0.2466540004206763,
+          "message": 0.022106999949755846,
+          "queue": 0.07648099972357159,
+          "scatter": 0.43582699981925543
+        }
+      ],
+      "implementation": "D1_masked_dense",
+      "kernel": "B1_X4",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 60,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 1961.652,
+      "trace_sha256": "c15143f8c1fab7e6e35d4bbba3f9da6a260e41a2b5a963f4e5cb8475af4662ac"
+    },
+    {
+      "cpu_operator_event_count": 751,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.6558079719543457,
+          "compute": 0.5566719770431519,
+          "gather": 0.2269120067358017,
+          "message": 0.026335999369621277,
+          "queue": 0.11980800330638885,
+          "scatter": 0.45257601141929626
+        },
+        {
+          "compact": 0.1191679984331131,
+          "compute": 0.5260159969329834,
+          "gather": 0.17926399409770966,
+          "message": 0.024159999564290047,
+          "queue": 0.11097600311040878,
+          "scatter": 0.4254719913005829
+        },
+        {
+          "compact": 0.11148799955844879,
+          "compute": 0.541920006275177,
+          "gather": 0.17052799463272095,
+          "message": 0.024320000782608986,
+          "queue": 0.07964800298213959,
+          "scatter": 0.3965759873390198
+        },
+        {
+          "compact": 0.19152000546455383,
+          "compute": 0.5035200119018555,
+          "gather": 0.18835200369358063,
+          "message": 0.024383999407291412,
+          "queue": 0.10284800082445145,
+          "scatter": 0.4342400133609772
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.65600900006757,
+          "compute": 0.5573930002356065,
+          "gather": 0.22716099965691683,
+          "message": 0.024714000119274715,
+          "queue": 0.11703800009854604,
+          "scatter": 0.45218800005386584
+        },
+        {
+          "compact": 0.1191829996969318,
+          "compute": 0.5266409998512245,
+          "gather": 0.17959900014830055,
+          "message": 0.023010999939288013,
+          "queue": 0.11121500028821174,
+          "scatter": 0.4251469999871915
+        },
+        {
+          "compact": 0.11214599999220809,
+          "compute": 0.542740999662783,
+          "gather": 0.170587000411615,
+          "message": 0.022789000013290206,
+          "queue": 0.07958399964991258,
+          "scatter": 0.39624100008950336
+        },
+        {
+          "compact": 0.19220700005462277,
+          "compute": 0.5039050001869327,
+          "gather": 0.1884220000647474,
+          "message": 0.023111999780667247,
+          "queue": 0.10082500011776574,
+          "scatter": 0.4338319999988016
+        }
+      ],
+      "implementation": "S0_sparse_cell",
+      "kernel": "B1_X4",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 100,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 648.6610000000001,
+      "trace_sha256": "bd6b70f65babae7793824e9d7ecebb15fffe7ffb334ca0fc11387e120a6ef790"
+    },
+    {
+      "cpu_operator_event_count": 751,
+      "device_stream_phase_ms": [
+        {
+          "compact": 0.7758079767227173,
+          "compute": 0.5984320044517517,
+          "gather": 0.21561600267887115,
+          "message": 0.025567999109625816,
+          "queue": 0.12643200159072876,
+          "scatter": 0.4623039960861206
+        },
+        {
+          "compact": 0.1327359974384308,
+          "compute": 0.5382720232009888,
+          "gather": 0.1910720020532608,
+          "message": 0.0352960005402565,
+          "queue": 0.08982399851083755,
+          "scatter": 0.4012160003185272
+        },
+        {
+          "compact": 0.13513599336147308,
+          "compute": 0.4925119876861572,
+          "gather": 0.1775359958410263,
+          "message": 0.024064000695943832,
+          "queue": 0.10080000013113022,
+          "scatter": 0.4428800046443939
+        },
+        {
+          "compact": 0.13040000200271606,
+          "compute": 0.5386880040168762,
+          "gather": 0.17455999553203583,
+          "message": 0.025248000398278236,
+          "queue": 0.07711999863386154,
+          "scatter": 0.39980798959732056
+        }
+      ],
+      "dram_status": "UNAVAILABLE_NO_HARDWARE_COUNTERS",
+      "energy_joules": null,
+      "energy_status": "UNAVAILABLE",
+      "host_phase_ms": [
+        {
+          "compact": 0.7763609996800369,
+          "compute": 0.5998120000185736,
+          "gather": 0.21534200004680315,
+          "message": 0.023998999949981226,
+          "queue": 0.12309200019444688,
+          "scatter": 0.4615390002982167
+        },
+        {
+          "compact": 0.1331580001533439,
+          "compute": 0.5387750002228131,
+          "gather": 0.19140899985359283,
+          "message": 0.033927000004041474,
+          "queue": 0.08975799983090837,
+          "scatter": 0.40113799968821695
+        },
+        {
+          "compact": 0.13545199999498436,
+          "compute": 0.4930210002385138,
+          "gather": 0.17775800006347708,
+          "message": 0.022708999949827557,
+          "queue": 0.1010389996736194,
+          "scatter": 0.4428779998306709
+        },
+        {
+          "compact": 0.13075800006845384,
+          "compute": 0.5391169997892575,
+          "gather": 0.17524399981994065,
+          "message": 0.023986000087461434,
+          "queue": 0.0771560003158811,
+          "scatter": 0.3995880001639307
+        }
+      ],
+      "implementation": "S1_sparse_region",
+      "kernel": "B1_X4",
+      "kernel_count_scope": "Chrome trace kernel category only; memcpy/memset excluded; summed durations may overlap",
+      "kernel_count_status": "MEASURED_TRACE_KERNEL_CATEGORY",
+      "kernel_event_count": 100,
+      "measured_dram_bytes": null,
+      "point": "n1024-clustered-0.05",
+      "scope": "Separate profiler pass; summed CUDA event durations may overlap; not wall time or latency samples",
+      "summed_kernel_event_us": 661.686,
+      "trace_sha256": "8b9acc774e77a919e09767a249751dedb7fc3d6a76c8b816b0e3a00a170ba0a2"
+    }
+  ]
+}

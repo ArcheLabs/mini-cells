@@ -1,20 +1,104 @@
 {
   "models": {
     "T1": {
-      "nll": null,
-      "ppl": null,
-      "status": "NOT_RUN"
+      "delta_ppl": -2.204176522369039e-05,
+      "first": {
+        "validation_nll": 2.5125281363725662,
+        "validation_ppl": 12.336077958234776,
+        "validation_tokens": 49152
+      },
+      "historical_ppl": 12.3361,
+      "interpretation": "Development asset validation, not new scientific confirmation; historical PPL is diagnostic only",
+      "second": {
+        "validation_nll": 2.5125281363725662,
+        "validation_ppl": 12.336077958234776,
+        "validation_tokens": 49152
+      },
+      "status": "QUALITY_VALID",
+      "training_accounting": {
+        "actual_optimizer_updates": 9999,
+        "amp_skip_observation": "SKIPS_PRESENT_REPORTED",
+        "budget_basis": "HISTORICAL_LOOP_ATTEMPTS_AND_CONSUMED_TOKENS",
+        "compensation_updates": 0,
+        "found_inf_evidence": "NOT_LOGGED_IN_EXISTING_CHECKPOINT",
+        "optimizer_counter_corroboration": "ALL_ADAM_PARAMETER_STEP_COUNTERS_MATCH",
+        "optimizer_step_attempts": 10000,
+        "scaler_skipped_updates": 1,
+        "skipped_optimizer_updates": 1,
+        "skipped_step_locations": "UNKNOWN_NOT_RECORDED_BY_ORIGINAL_OBSERVER",
+        "skipped_update_fraction": 0.0001,
+        "successful_optimizer_updates": 9999,
+        "training_loop_steps": 10000,
+        "training_steps": 10000,
+        "training_tokens": 10000000
+      }
     },
     "X3": {
-      "nll": null,
-      "ppl": null,
-      "status": "NOT_RUN"
+      "delta_ppl": 4.713501937203546e-06,
+      "first": {
+        "validation_nll": 2.471179927388827,
+        "validation_ppl": 11.836404713501937,
+        "validation_tokens": 49152
+      },
+      "historical_ppl": 11.8364,
+      "interpretation": "Development asset validation, not new scientific confirmation; historical PPL is diagnostic only",
+      "second": {
+        "validation_nll": 2.471179927388827,
+        "validation_ppl": 11.836404713501937,
+        "validation_tokens": 49152
+      },
+      "status": "QUALITY_VALID",
+      "training_accounting": {
+        "actual_optimizer_updates": 9998,
+        "amp_skip_observation": "SKIPS_PRESENT_REPORTED",
+        "budget_basis": "HISTORICAL_LOOP_ATTEMPTS_AND_CONSUMED_TOKENS",
+        "compensation_updates": 0,
+        "found_inf_evidence": "NOT_LOGGED_IN_EXISTING_CHECKPOINT",
+        "optimizer_counter_corroboration": "ALL_ADAM_PARAMETER_STEP_COUNTERS_MATCH",
+        "optimizer_step_attempts": 10000,
+        "scaler_skipped_updates": 2,
+        "skipped_optimizer_updates": 2,
+        "skipped_step_locations": "UNKNOWN_NOT_RECORDED_BY_ORIGINAL_OBSERVER",
+        "skipped_update_fraction": 0.0002,
+        "successful_optimizer_updates": 9998,
+        "training_loop_steps": 10000,
+        "training_steps": 10000,
+        "training_tokens": 10000000
+      }
     },
     "X4": {
-      "nll": null,
-      "ppl": null,
-      "status": "NOT_RUN"
+      "delta_ppl": 2.2684161443464745e-05,
+      "first": {
+        "validation_nll": 2.4776069621245065,
+        "validation_ppl": 11.912722684161443,
+        "validation_tokens": 49152
+      },
+      "historical_ppl": 11.9127,
+      "interpretation": "Development asset validation, not new scientific confirmation; historical PPL is diagnostic only",
+      "second": {
+        "validation_nll": 2.4776069621245065,
+        "validation_ppl": 11.912722684161443,
+        "validation_tokens": 49152
+      },
+      "status": "QUALITY_VALID",
+      "training_accounting": {
+        "actual_optimizer_updates": 9999,
+        "amp_skip_observation": "SKIPS_PRESENT_REPORTED",
+        "budget_basis": "HISTORICAL_LOOP_ATTEMPTS_AND_CONSUMED_TOKENS",
+        "compensation_updates": 0,
+        "found_inf_evidence": "NOT_LOGGED_IN_EXISTING_CHECKPOINT",
+        "optimizer_counter_corroboration": "ALL_ADAM_PARAMETER_STEP_COUNTERS_MATCH",
+        "optimizer_step_attempts": 10000,
+        "scaler_skipped_updates": 1,
+        "skipped_optimizer_updates": 1,
+        "skipped_step_locations": "UNKNOWN_NOT_RECORDED_BY_ORIGINAL_OBSERVER",
+        "skipped_update_fraction": 0.0001,
+        "successful_optimizer_updates": 9999,
+        "training_loop_steps": 10000,
+        "training_steps": 10000,
+        "training_tokens": 10000000
+      }
     }
   },
-  "status": "NOT_RUN_R0_PENDING"
+  "status": "QUALITY_COMPLETE"
 }
