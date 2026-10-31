@@ -6,8 +6,10 @@ EPCLM-002-A0 remains a mechanism-validation experiment. The original 60,000-epis
 
 1. Open notebook.ipynb in Kaggle or import it into the existing [MiniCells Kaggle notebook](https://www.kaggle.com/code/bingjiangli/minicells).
 2. Enable Internet and select a GPU accelerator.
-3. Keep the existing Kaggle Secret named GITHUB_TOKEN.
-4. Click **Run All** once. The notebook checks out this branch, verifies the frozen protocol and clean source identity, trains the two existing architectures, measures a high-load runtime pilot, chooses a feasible target capped at 128 episodes per cell, runs the screening matrix, and publishes the report and metrics.
+3. Enable the existing Kaggle Secrets named `KAGGLE_API_TOKEN` and `GITHUB_TOKEN`.
+4. Click **Run All** once. The notebook first checks the recent saved versions of `bingjiangli/minicells` through the existing versioned Kaggle Output API. If it finds the prior unpublished A0-v0.2 result, it downloads and verifies only the four curated publication files, then calls the existing publisher without rerunning training or evaluation. This recovery does not require mounting Output as Input. If no matching saved result exists, the normal screening workflow starts.
+
+After a Kaggle run has created an Output version but publication failed, run the same notebook again with both Secrets enabled. The recovery searches the latest 25 version numbers, checks the saved execution identity against the frozen protocol, config, and implementation digest, and records the exact Kaggle version and file hashes. It never downloads checkpoints or per-episode evidence for publication recovery.
 
 The six task conditions are 1, 8, or 32 facts crossed with 0 or 64 distractors. Flat Recurrent and Cellular use the same evaluation seed, episodes, queries, and targets, producing 12 architecture-condition cells. The planned target is 128 episodes per cell (1,536 screening episodes). The separate pilot measures 32 high-load episodes per architecture and is excluded from screening counts.
 
