@@ -526,6 +526,7 @@ def run_condition(
                     distractor_count=distractor_count,
                     overwrite_count=overwrite_count,
                 )
+                episode_started_ns = time.monotonic_ns()
                 record = _run_episode(
                     episode,
                     query_seed=episode_seed ^ 0x5A17,
@@ -535,6 +536,9 @@ def run_condition(
                     episode_index=index,
                     deadline=deadline,
                 )
+                record["episode_wall_time_ms"] = (
+                    time.monotonic_ns() - episode_started_ns
+                ) / 1_000_000
                 with partial_path.open("a", encoding="utf-8") as handle:
                     record_sha = hashlib.sha256(
                         json.dumps(record, sort_keys=True, separators=(",", ":")).encode("utf-8")

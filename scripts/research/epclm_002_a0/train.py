@@ -23,9 +23,17 @@ HERE = Path(__file__).resolve().parent
 PROTOCOL = HERE.parents[2] / "research/governance/validations/epclm-002-a0-persistent-state-recall/protocol.json"
 
 
-def _atomic_torch_save(payload: dict[str, Any], path: Path) -> None:
+def _atomic_torch_save(payload: dict[str, Any], path: Path) -> float:
+    started = time.monotonic()
     temporary = path.with_name(path.name + ".tmp")
     torch.save(payload, temporary)
+    temporary.replace(path)
+    return time.monotonic() - started
+
+
+def _atomic_json_write(payload: dict[str, Any], path: Path) -> None:
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8")
     temporary.replace(path)
 
 
@@ -91,7 +99,10 @@ def train(
     if not 1 <= max_runtime_seconds <= 7200:
         raise ValueError("max_runtime_seconds must be between 1 and 7200")
     output.parent.mkdir(parents=True, exist_ok=True)
+    training_started = time.monotonic()
     deadline = time.monotonic() + max_runtime_seconds
+    checkpoint_save_seconds = 0.0
+    resume_restore_seconds = 0.0
     torch.manual_seed(seed)
     random.seed(seed)
     selected_device = torch.device(device)
@@ -127,8 +138,10 @@ def train(
     best_state = copy.deepcopy(model.state_dict())
     best_step = 0
     progress_path = output.with_suffix(output.suffix + ".progress.pt")
+    progress_runtime_path = output.with_suffix(output.suffix + ".progress-runtime.json")
     start_step = 0
     if resume and progress_path.is_file():
+        resume_started = time.monotonic()
         saved = torch.load(progress_path, map_location=selected_device, weights_only=False)
         expected_identity = (model_name, seed, protocol_sha256, model_config_dict(config))
         saved_identity = (
@@ -146,6 +159,13 @@ def train(
         best_validation_loss = float(saved["best_validation_loss"])
         best_step = int(saved["best_step"])
         start_step = int(saved["next_step"])
+        if progress_runtime_path.is_file():
+            checkpoint_save_seconds = float(
+                json.loads(progress_runtime_path.read_text(encoding="utf-8")).get(
+                    "checkpoint_save_seconds", 0.0
+                )
+            )
+        resume_restore_seconds = time.monotonic() - resume_started
         if not 0 <= start_step < steps:
             raise ValueError("saved training progress has an invalid next_step")
     model.train()
@@ -153,7 +173,7 @@ def train(
     for step in range(start_step, steps):
         if time.monotonic() >= deadline:
             model.eval()
-            _atomic_torch_save(
+            checkpoint_save_seconds += _atomic_torch_save(
                 {
                     "model_name": model_name,
                     "model_config": model_config_dict(config),
@@ -170,6 +190,10 @@ def train(
                     "next_step": step,
                 },
                 progress_path,
+            )
+            _atomic_json_write(
+                {"checkpoint_save_seconds": checkpoint_save_seconds},
+                progress_runtime_path,
             )
             raise TimeoutError("training reached its registered wall-time budget; progress checkpoint saved")
         episodes = [_training_episode(rng) for _ in range(batch_size)]
@@ -191,7 +215,7 @@ def train(
                 best_validation_loss = validation_loss
                 best_state = copy.deepcopy(model.state_dict())
                 best_step = step + 1
-            _atomic_torch_save(
+            checkpoint_save_seconds += _atomic_torch_save(
                 {
                     "model_name": model_name,
                     "model_config": model_config_dict(config),
@@ -208,6 +232,10 @@ def train(
                     "next_step": step + 1,
                 },
                 progress_path,
+            )
+            _atomic_json_write(
+                {"checkpoint_save_seconds": checkpoint_save_seconds},
+                progress_runtime_path,
             )
             model.train()
 
@@ -230,9 +258,17 @@ def train(
         "selected_step": best_step,
         "protocol_sha256": protocol_sha256,
     }
-    _atomic_torch_save(checkpoint, output)
+    checkpoint_save_seconds += _atomic_torch_save(checkpoint, output)
     progress_path.unlink(missing_ok=True)
+    progress_runtime_path.unlink(missing_ok=True)
     metadata = {key: value for key, value in checkpoint.items() if key != "model_state"}
+    training_elapsed_seconds = time.monotonic() - training_started
+    metadata["runtime_metrics"] = {
+        "training_elapsed_seconds": training_elapsed_seconds,
+        "checkpoint_save_seconds": checkpoint_save_seconds,
+        "training_compute_seconds": max(0.0, training_elapsed_seconds - checkpoint_save_seconds),
+        "resume_restore_seconds": resume_restore_seconds,
+    }
     metadata["checkpoint_sha256"] = hashlib.sha256(output.read_bytes()).hexdigest()
     output.with_suffix(output.suffix + ".json").write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
