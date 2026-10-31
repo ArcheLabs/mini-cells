@@ -1,0 +1,199 @@
+{
+  "config_sha256": "caf4fbec63d7343e51c1c11f65cf61101b482940d39f53834067bfa7bacd2c72",
+  "device_contract": {
+    "cuda": "12.8",
+    "identity": "GPU-9c892d32-b480-309b-5cad-13e4dcaf463c, Tesla T4, 15360, 580.178.04",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "uuid": "GPU-9c892d32-b480-309b-5cad-13e4dcaf463c"
+  },
+  "dtype": "float32",
+  "event_points": [
+    {
+      "cells": 256,
+      "dim": 188,
+      "id": "n256-zero-active-0",
+      "layout": "zero-active",
+      "ratio": 0,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 256,
+      "dim": 188,
+      "id": "n256-uniform-random-0.05",
+      "layout": "uniform-random",
+      "ratio": 0.05,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 256,
+      "dim": 188,
+      "id": "n256-clustered-0.05",
+      "layout": "clustered",
+      "ratio": 0.05,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 256,
+      "dim": 188,
+      "id": "n256-uniform-random-0.5",
+      "layout": "uniform-random",
+      "ratio": 0.5,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 256,
+      "dim": 188,
+      "id": "n256-clustered-0.5",
+      "layout": "clustered",
+      "ratio": 0.5,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 256,
+      "dim": 188,
+      "id": "n256-all-active-1",
+      "layout": "all-active",
+      "ratio": 1,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 256,
+      "dim": 188,
+      "id": "n256-wavefront-0.05",
+      "layout": "wavefront",
+      "ratio": 0.05,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 256,
+      "dim": 188,
+      "id": "n256-burst-0.05",
+      "layout": "burst",
+      "ratio": 0.05,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 1024,
+      "dim": 188,
+      "id": "n1024-zero-active-0",
+      "layout": "zero-active",
+      "ratio": 0,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 1024,
+      "dim": 188,
+      "id": "n1024-uniform-random-0.05",
+      "layout": "uniform-random",
+      "ratio": 0.05,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 1024,
+      "dim": 188,
+      "id": "n1024-clustered-0.05",
+      "layout": "clustered",
+      "ratio": 0.05,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 1024,
+      "dim": 188,
+      "id": "n1024-uniform-random-0.5",
+      "layout": "uniform-random",
+      "ratio": 0.5,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 1024,
+      "dim": 188,
+      "id": "n1024-clustered-0.5",
+      "layout": "clustered",
+      "ratio": 0.5,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 1024,
+      "dim": 188,
+      "id": "n1024-all-active-1",
+      "layout": "all-active",
+      "ratio": 1,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 1024,
+      "dim": 188,
+      "id": "n1024-wavefront-0.05",
+      "layout": "wavefront",
+      "ratio": 0.05,
+      "steps": 4,
+      "tile": 16
+    },
+    {
+      "cells": 1024,
+      "dim": 188,
+      "id": "n1024-burst-0.05",
+      "layout": "burst",
+      "ratio": 0.05,
+      "steps": 4,
+      "tile": 16
+    }
+  ],
+  "input_sha256": "a4087b735c713b3759a59339ee42ed5c99c7c03085d4f50ed18488a5e855829b",
+  "plan_selection": "All points fixed before pilot; no outcome-based reduction",
+  "repeats": 30,
+  "source_sha": "227a3a0783049b63b0d29d7c88bf752b415e2b63",
+  "statistics": "Paired request bootstrap; Bonferroni-adjusted percentile intervals; timing repetitions are not independent model seeds",
+  "tolerances": {
+    "atol": 2e-05,
+    "rtol": 0.0002
+  },
+  "warmup": 5,
+  "workloads": [
+    {
+      "decode": 16,
+      "id": "p16-d16",
+      "offset": 16384,
+      "prefill": 16
+    },
+    {
+      "decode": 32,
+      "id": "p32-d32",
+      "offset": 32768,
+      "prefill": 32
+    },
+    {
+      "decode": 32,
+      "id": "p64-d32",
+      "offset": 65536,
+      "prefill": 64
+    },
+    {
+      "decode": 32,
+      "id": "p96-d32",
+      "offset": 131072,
+      "prefill": 96
+    },
+    {
+      "decode": 16,
+      "id": "p112-d16",
+      "offset": 262144,
+      "prefill": 112
+    }
+  ]
+}
