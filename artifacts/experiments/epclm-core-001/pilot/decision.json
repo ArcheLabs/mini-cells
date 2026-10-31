@@ -1,0 +1,64 @@
+{
+  "format": "minicells.epclm-core-001.v1",
+  "mode": "MINIMAL_GPU_PILOT",
+  "status": "INCOMPLETE",
+  "identity": {
+    "source": "26186fed2048ff111005bdc0a5e575fcc7b1377c",
+    "protocol": "c7a2f1ec4d4165aa667ce94296c8ea0e3d5f7ddc55b0f3a6671d3c221a45abd0",
+    "data": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "seed": 173018021,
+    "mode": "minimal_gpu_pilot",
+    "model": {
+      "vocab": 2048,
+      "cells": 16,
+      "dim": 128,
+      "steps": 4,
+      "alpha": 0.1,
+      "arm": "C1",
+      "window": 4,
+      "max_state_abs": 10000.0
+    },
+    "batch": 4,
+    "bptt": 64,
+    "target_tokens": 12800
+  },
+  "configuration": {
+    "arm": "C1",
+    "batch": 4,
+    "bptt": 64,
+    "K": 4,
+    "updates": 50,
+    "resume_after_updates": 25,
+    "checkpoint_interval_updates": 25,
+    "model": {
+      "vocab": 2048,
+      "cells": 16,
+      "dim": 128,
+      "steps": 4,
+      "alpha": 0.1,
+      "arm": "C1",
+      "window": 4,
+      "max_state_abs": 10000.0
+    }
+  },
+  "environment": {
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "gpu": "Tesla T4",
+    "precision": "FP32 state/weights; FP16 autocast and GradScaler"
+  },
+  "hypotheses": {
+    "H1": "NOT_EVALUATED",
+    "H2": "NOT_EVALUATED",
+    "H3": "NOT_EVALUATED",
+    "H4": "NOT_EVALUATED",
+    "H5": "NOT_EVALUATED"
+  },
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "checkpoint_resume": "NOT_COMPLETED",
+  "numerical_stability": "FAILED_OR_INTERRUPTED",
+  "error": "The total norm of order 2.0 for gradients from `parameters` is non-finite, so it cannot be clipped. To disable this error and scale the gradients by the non-finite norm anyway, set `error_if_nonfinite=False`",
+  "peak_vram_bytes": 193848832
+}
