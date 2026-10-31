@@ -69,7 +69,7 @@ def reuse_local_assets(output,source,protocol,spec):
     return True
 
 
-def recover(root,output,source,protocol,asset_spec=None,cache=None):
+def recover(root,output,source,protocol,asset_spec=None,cache=None,asset_namespace=None):
     if reuse_local_assets(output,source,protocol,asset_spec): return
     sys.path.insert(0,str(root/'research/projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/scripts'))
     from kaggle_output_recovery import _load_backend,_version_number
@@ -102,13 +102,13 @@ def recover(root,output,source,protocol,asset_spec=None,cache=None):
             if not token: break
             if token in seen: raise ValueError('pagination loop')
             seen.add(token)
-        manifests=sorted(n for n in names if n.endswith(output.name+'/recovery.json'))
+        manifests=sorted(n for n in names if (n.endswith(output.name+'/recovery.json') or (asset_namespace is not None and n.endswith(asset_namespace+'/recovery.json'))))
         for name in manifests:
             inventory={'version_number':version,'files':[{'name':name,'bytes':None}]}
             destination=cache/str(version); fetch(api,inventory,[name],destination)
             manifest=json.loads((destination/name).read_text()); identity=manifest['identity']
             prefix=name[:-len('recovery.json')]
-            compatible=identity['source']==source and identity['protocol']==protocol
+            compatible=identity['source']==source and identity['protocol']==protocol and name.endswith(output.name+'/recovery.json')
             if compatible:
                 files=download(manifest,manifest['files'],prefix,version,names,destination)
                 for relative,saved in files.items():

@@ -35,8 +35,8 @@ def test_assets_only_recovery(tmp_path,monkeypatch):
             path=destination/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(payload[name])
     monkeypatch.setattr(backend,'_load_backend',lambda root:(API(),fetch))
     spec={'id':'fixture','revision':'pinned','stories':2}
-    output=tmp_path/'one/epclm-core-001-pilot'
-    recover(root,output,'new','new',asset_spec=spec,cache=tmp_path/'cache')
+    output=tmp_path/'one/epclm-core-001-development-pair'
+    recover(root,output,'old','old',asset_spec=spec,cache=tmp_path/'cache',asset_namespace='epclm-core-001-pilot')
     assert not (output/'C1-pilot.pt').exists()
     assert prefix+locations['C1-pilot.pt'] not in requested
     assert (output/'assets/tokenizer.json').read_bytes()==files['assets/tokenizer.json']

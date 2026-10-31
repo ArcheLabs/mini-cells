@@ -58,5 +58,13 @@
     "mode": "fp32",
     "grad_scaler_initial_scale": 1024.0,
     "max_consecutive_overflows": 3
+  },
+  "development_pair": {
+    "arms": [
+      "C1",
+      "F0"
+    ],
+    "tokens_per_arm": 250000,
+    "precision": "fp32"
   }
 }

@@ -21,7 +21,7 @@ from native_clm_runtime import sha256_file,load_tokenizer
 def write(path,value):
     path.parent.mkdir(parents=True,exist_ok=True); path.write_text(json.dumps(value,indent=2,allow_nan=False)+'\n')
 
-def launch(output,device,preflight_only=False,pilot_only=False):
+def launch(output,device,preflight_only=False,pilot_only=False,development_pair=False):
     from test_core import test_contracts
     test_contracts()
     output.mkdir(parents=True,exist_ok=True)
@@ -35,13 +35,21 @@ def launch(output,device,preflight_only=False,pilot_only=False):
     configure_dataset(config['data'])
     from minimal_pilot import pilot_plan,run_pilot
     if pilot_only: pilot_plan(config)
+    selected_arms=config['development_pair']['arms'] if development_pair else config['arms']
+    target_tokens=config['development_pair']['tokens_per_arm'] if development_pair else config['pilot_tokens']
+    if development_pair and (selected_arms!=['C1','F0'] or config['precision']['mode']!='fp32' or config['development_pair']['precision']!='fp32'):
+        raise ValueError('development pair requires C1/F0 and FP32')
+    if config['precision']['mode']=='fp32':
+        torch.backends.cuda.matmul.allow_tf32=False
+        torch.backends.cudnn.allow_tf32=False
     for arm in config['arms']: config_from_protocol(config,arm)
     deadline=time.monotonic()+5400
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-    recover(ROOT,output,source,sha256_file(BASE/'protocol.json'),asset_spec={**config['data'],'stories':config['development_stories']})
+    recover(ROOT,output,source,sha256_file(BASE/'protocol.json'),asset_spec={**config['data'],'stories':config['development_stories']},asset_namespace='epclm-core-001-pilot' if development_pair else None)
     manifest=prepare(output/'assets',config['development_stories'],dataset=config['data'])
     identity={'source':source,'protocol':sha256_file(BASE/'protocol.json'),
               'data':sha256_file(output/'assets/manifest.json'),'seed':config['seed']}
+    if development_pair: identity.update(mode='DEVELOPMENT_PAIR',arms=selected_arms,target_tokens=target_tokens)
     if pilot_only:
         report_path=output/'pilot-report.json'
         report=json.loads(report_path.read_text()) if report_path.exists() else None
@@ -72,24 +80,28 @@ def launch(output,device,preflight_only=False,pilot_only=False):
         previous=json.loads(saved_report.read_text())
         if previous['identity']!=identity: raise ValueError('saved report identity mismatch')
         if previous['status']=='DEVELOPMENT_COMPLETE': report=previous
-    arms=() if report['status']=='DEVELOPMENT_COMPLETE' else config['arms']
+    arms=() if report['status']=='DEVELOPMENT_COMPLETE' else selected_arms
     for arm in arms:
+        completed=previous.get('arms',{}).get(arm,{})
+        if development_pair and completed.get('status')=='COMPLETE' and 'validation' in completed and (output/f'{arm}.pt').exists() and completed.get('model_asset',{}).get('sha256')==sha256_file(output/f'{arm}.pt'):
+            report['arms'][arm]=completed
+            continue
         if time.monotonic()>deadline-60: break
         torch.manual_seed(config['seed']); c=config_from_protocol(config,arm); model=Core(c).to(device)
-        pilot_result=pilot(model) if not (output/f'{arm}.pt').exists() else previous.get('arms',{}).get(arm,{}).get('gpu_pilot',{'status':'REUSED_CHECKPOINT'})
-        arm_identity={**identity,'model':asdict(c),'target_tokens':config['pilot_tokens']}
+        pilot_result={'status':'OMITTED_FOR_DEVELOPMENT_PAIR'} if development_pair else pilot(model) if not (output/f'{arm}.pt').exists() else previous.get('arms',{}).get(arm,{}).get('gpu_pilot',{'status':'REUSED_CHECKPOINT'})
+        arm_identity={**identity,'model':asdict(c),'target_tokens':target_tokens}
         try:
-            result=train(model,docs['train'],arm_identity,output/f'{arm}.pt',config['pilot_tokens'],deadline,config['seed'],batch=config['batch'],unroll=config['bptt'],precision=config['precision']['mode'],initial_scale=config['precision']['grad_scaler_initial_scale'],max_consecutive_overflows=config['precision']['max_consecutive_overflows'],on_checkpoint=lambda:bundle(output,identity))
+            result=train(model,docs['train'],arm_identity,output/f'{arm}.pt',target_tokens,deadline,config['seed'],batch=config['batch'],unroll=config['bptt'],precision=config['precision']['mode'],initial_scale=config['precision']['grad_scaler_initial_scale'],max_consecutive_overflows=config['precision']['max_consecutive_overflows'],on_checkpoint=lambda:bundle(output,identity))
         except (FloatingPointError,RuntimeError) as error:
             report['arms'][arm]={'status':'STOPPED_NUMERICAL_FAILURE','error':str(error)}
             break
         result.update({'gpu_pilot':pilot_result,'parameters':sum(p.numel() for p in model.parameters()),'state_bytes':model.init_state(1).numel()*4,
                        'weights_sha256':weight_hash(model),'model':asdict(c),'kernel_launch_count':pilot_result.get('kernel_launch_count','NOT_MEASURED'),
-                       'model_asset':{'storage':'PRIVATE_KAGGLE_OUTPUT','path':f'epclm-core-001/{arm}.pt','sha256':sha256_file(output/f'{arm}.pt'),'saved_version':'PENDING_SAVE'}})
+                       'model_asset':{'storage':'PRIVATE_KAGGLE_OUTPUT','path':f'{output.name}/{arm}.pt','sha256':sha256_file(output/f'{arm}.pt'),'saved_version':'PENDING_SAVE'}})
         try:
             if result['status']=='COMPLETE' and time.monotonic()<deadline-60:
                 result['validation']=evaluate(model,docs['development'][:16],deadline=deadline)
-                if arm=='C1':
+                if arm=='C1' and not development_pair:
                     result['ablations']={name:evaluate(model,docs['development'][:4],ablation=name,deadline=deadline) for name in ('reset','swap','communication','entry')}
                     result['k_sensitivity']={str(k):evaluate(model,docs['development'][:4],steps=k,deadline=deadline) for k in (2,4,8)}
                     write(output/'inspector.json',inspector(model,output))
@@ -103,9 +115,9 @@ def launch(output,device,preflight_only=False,pilot_only=False):
         if result['status']=='COMPLETE' and 'validation' not in result: result['status']='INCOMPLETE_VALIDATION'
         report['arms'][arm]=result
         write(output/'report.json',report)
-    if len(report['arms'])==4 and all(v['status']=='COMPLETE' and 'validation' in v for v in report['arms'].values()):
+    if set(report['arms'])==set(selected_arms) and all(v['status']=='COMPLETE' and 'validation' in v for v in report['arms'].values()):
         report['status']='DEVELOPMENT_COMPLETE'
-        report['paired']={arm:paired(report['arms']['C1']['validation'],report['arms'][arm]['validation']) for arm in ('C0','F0','L0')}
+        report['paired']={arm:paired(report['arms']['C1']['validation'],report['arms'][arm]['validation']) for arm in selected_arms if arm!='C1'}
     write(output/'report.json',report)
     import matplotlib
     matplotlib.use('Agg')
@@ -128,6 +140,7 @@ def launch(output,device,preflight_only=False,pilot_only=False):
     from scripts.research.publish_experiment_results import prepare_artifacts,push_results,EXPERIMENTS
     destination=prepare_artifacts(ROOT,'epclm-core-001',EXPERIMENTS['epclm-core-001'],None)
     push_results(ROOT,destination,'epclm-core-001','kaggle/epclm-core-001-'+source[:12],'GITHUB_TOKEN','origin/main')
+    print(json.dumps({'mode':'DEVELOPMENT_PAIR' if development_pair else 'DEVELOPMENT','status':report['status'],'arms':list(report['arms']),'report':str(output/'report.json')}))
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
@@ -136,6 +149,7 @@ if __name__=='__main__':
     modes=parser.add_mutually_exclusive_group()
     modes.add_argument('--preflight-only',action='store_true')
     modes.add_argument('--pilot-only',action='store_true')
+    modes.add_argument('--development-pair',action='store_true')
     args=parser.parse_args()
-    output=args.output or Path('/kaggle/working/epclm-core-001-pilot' if args.pilot_only else '/kaggle/working/epclm-core-001')
-    launch(output,args.device,args.preflight_only,args.pilot_only)
+    output=args.output or Path('/kaggle/working/epclm-core-001-pilot' if args.pilot_only else '/kaggle/working/epclm-core-001-development-pair' if args.development_pair else '/kaggle/working/epclm-core-001')
+    launch(output,args.device,args.preflight_only,args.pilot_only,args.development_pair)
