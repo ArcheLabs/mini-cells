@@ -1,0 +1,41 @@
+{
+  "format": "minicells.epclm-core-001.protocol.v1",
+  "status": "DEVELOPMENT_ONLY",
+  "seed": 173018021,
+  "development_stories": 2048,
+  "pilot_tokens": 250000,
+  "gate2_max_tokens": 10000000,
+  "bptt": 64,
+  "batch": 4,
+  "arms": [
+    "C1",
+    "F0",
+    "C0",
+    "L0"
+  ],
+  "architecture": {
+    "cells": 16,
+    "dim": 128,
+    "K": 4,
+    "alpha": 0.1,
+    "topology": "ring-radius1"
+  },
+  "budget": {
+    "execution": 5400,
+    "publication": 600,
+    "safety": 1200,
+    "hard": 7200
+  },
+  "confirmation": {
+    "status": "SEALED_NOT_AUTHORIZED",
+    "minimum_fresh_seeds": 3,
+    "thresholds": "NOT_FROZEN"
+  },
+  "scientific_hypotheses": {
+    "H1": "NOT_EVALUATED",
+    "H2": "NOT_EVALUATED",
+    "H3": "NOT_EVALUATED",
+    "H4": "NOT_EVALUATED",
+    "H5": "NOT_EVALUATED"
+  }
+}

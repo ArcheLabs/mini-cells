@@ -28,6 +28,13 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-core-001": ExperimentSpec(
+        source_dir="results/epclm-core-001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/development",
+        files=("decision.json", "summary.md"),
+        branch="kaggle/epclm-core-001-results",
+        expected_format="minicells.epclm-core-001.v1",
+    ),
     "003b": ExperimentSpec(
         source_dir="results/quantization-localization-v1",
         artifact_dir="artifacts/experiments/003b-quantization-localization",
