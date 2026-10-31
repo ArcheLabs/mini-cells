@@ -15,4 +15,4 @@ Keep outputs under the owning experiment's `artifacts/` directory. Do not
 publish an experiment result only in notebook output or temporary hosted
 storage. The shared Kaggle helpers live in [`shared/kaggle/`](../../shared/kaggle/).
 
-- [EPCLM Core-001 development](../projects/cellular-language-models/experiments/epclm-core-001/notebook.ipynb): event-state model, isolated GPU pilot, resumable development training and metadata return; confirmation sealed.
+- [EPCLM Core-001 development](../projects/cellular-language-models/experiments/epclm-core-001/notebook.ipynb): default C1-only 50-update GPU pilot with real checkpoint resume; development training remains an explicit separate invocation; confirmation sealed.

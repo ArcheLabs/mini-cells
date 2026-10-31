@@ -38,7 +38,8 @@ def test_contracts():
     else: raise AssertionError('non-finite state accepted')
     import tempfile,time
     from pathlib import Path
-    from trainer import train
+    from trainer import train,save_checkpoint,load_checkpoint
+    from unittest.mock import patch
     documents=[{'id':'a','tokens':[1,2,3,4,5,6,7,8,9]},{'id':'b','tokens':[9,8,7,6,5,4,3,2,1]}]
     with tempfile.TemporaryDirectory() as directory:
         one,two=Core(Config(vocab=32,cells=4,dim=8)),Core(Config(vocab=32,cells=4,dim=8))
@@ -46,7 +47,32 @@ def test_contracts():
         kwargs=dict(documents=documents,identity=identity,target_tokens=16,deadline=time.monotonic()+60,seed=12,batch=2,unroll=2)
         train(one,path=Path(directory)/'one.pt',**kwargs)
         train(two,path=Path(directory)/'two.pt',stop_after_updates=1,**kwargs)
-        train(two,path=Path(directory)/'two.pt',**kwargs)
+        checkpoint=Path(directory)/'two.pt'
+        committed=load_checkpoint(checkpoint)
+        assert committed['updates']==1
+        assert not Path(str(checkpoint)+'.sha256').exists()
+        # A stale legacy hash must not invalidate the single-file v2 checkpoint.
+        Path(str(checkpoint)+'.sha256').write_text('stale')
+        with patch.object(Path,'replace',side_effect=OSError('interrupted before atomic commit')):
+            try: save_checkpoint({'updates':999},checkpoint)
+            except OSError: pass
+            else: raise AssertionError('interrupted save unexpectedly committed')
+        assert load_checkpoint(checkpoint)['updates']==1
+        # Recovery manifests keep immutable bytes even if the working file advances.
+        from storage import bundle
+        bundle(Path(directory),{'fixture':'recovery'})
+        import json
+        manifest=json.loads((Path(directory)/'recovery.json').read_text())
+        frozen=Path(directory)/manifest['objects']['two.pt']
+        before=frozen.read_bytes()
+        train(two,path=checkpoint,**kwargs)
+        assert frozen.read_bytes()==before
+        broken=torch.load(checkpoint,weights_only=False)
+        broken['sha256']='corrupt'
+        corrupt=Path(directory)/'corrupt.pt'; torch.save(broken,corrupt)
+        try: load_checkpoint(corrupt)
+        except ValueError: pass
+        else: raise AssertionError('corrupt checkpoint accepted')
         for a,b in zip(one.parameters(),two.parameters()): torch.testing.assert_close(a,b,atol=0,rtol=0)
     for arm in ('C0','C1','F0','L0'):
         model=Core(Config(vocab=32,cells=4,dim=8,arm=arm))
@@ -63,3 +89,18 @@ def test_contracts():
     zero=model.init_state(1); changed=model.inject(zero,[1])
     delta=model.evolve(changed,1)-model.evolve(zero,1)
     assert torch.count_nonzero(delta[:,2:7])==0
+
+    from model import config_from_protocol
+    from minimal_pilot import pilot_plan
+    import json
+    from pathlib import Path
+    protocol=json.loads((Path(__file__).resolve().parents[1]/'protocol.json').read_text())
+    configured,plan,target=pilot_plan(protocol)
+    assert (configured.cells,configured.dim,configured.steps,configured.alpha)==(16,128,4,.1)
+    assert (plan['batch'],plan['bptt'],plan['updates'],target)==(4,64,50,12800)
+    changed=copy.deepcopy(protocol); changed['architecture']['dim']=24
+    assert config_from_protocol(changed).dim==24
+    changed['architecture']['K']=8
+    try: pilot_plan(changed)
+    except ValueError: pass
+    else: raise AssertionError('pilot/protocol K mismatch accepted')

@@ -18,7 +18,10 @@
     "dim": 128,
     "K": 4,
     "alpha": 0.1,
-    "topology": "ring-radius1"
+    "topology": "ring-radius1",
+    "vocab": 2048,
+    "window": 4,
+    "max_state_abs": 10000.0
   },
   "budget": {
     "execution": 5400,
@@ -37,5 +40,13 @@
     "H3": "NOT_EVALUATED",
     "H4": "NOT_EVALUATED",
     "H5": "NOT_EVALUATED"
+  },
+  "minimal_gpu_pilot": {
+    "arm": "C1",
+    "batch": 4,
+    "bptt": 64,
+    "K": 4,
+    "updates": 50,
+    "resume_after_updates": 25
   }
 }

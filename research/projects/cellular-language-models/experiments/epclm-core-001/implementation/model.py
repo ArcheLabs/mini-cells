@@ -1,5 +1,6 @@
 """Functional event transitions; training and inference use exactly the same core."""
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
+import math
 import torch
 from torch import nn
 from native_clm_runtime import RMSNorm, SwiGLU
@@ -15,11 +16,29 @@ class Config:
     window: int = 4
     max_state_abs: float = 10000.
 
+def config_from_protocol(protocol, arm='C1'):
+    architecture = dict(protocol['architecture'])
+    if architecture.pop('topology') != 'ring-radius1':
+        raise ValueError('unsupported protocol topology')
+    architecture['steps'] = architecture.pop('K')
+    expected = {field.name for field in fields(Config)} - {'arm'}
+    if set(architecture) != expected:
+        raise ValueError('protocol architecture fields differ: ' + str(sorted(set(architecture) ^ expected)))
+    return Config(arm=arm, **architecture)
+
+
+def check_numerics(valid, message):
+    # CUDA assertions stay on the device; CPU retains an immediate reference error.
+    if valid.is_cuda:
+        torch._assert_async(valid, message)
+    elif not valid:
+        raise FloatingPointError(message)
+
 class Core(nn.Module):
     def __init__(self, config=Config()):
         super().__init__()
         self.config = c = config
-        if c.arm not in ('C0', 'C1', 'F0', 'L0') or min(c.cells,c.dim,c.steps,c.window) < 1 or not 0 < c.alpha <= 1:
+        if c.arm not in ('C0', 'C1', 'F0', 'L0') or min(c.cells,c.dim,c.steps,c.window) < 1 or not 0 < c.alpha <= 1 or not math.isfinite(c.max_state_abs) or c.max_state_abs <= 0:
             raise ValueError('invalid core configuration')
         self.embedding = nn.Embedding(c.vocab,c.dim)
         self.norm = RMSNorm(c.dim)
@@ -68,8 +87,8 @@ class Core(nn.Module):
                 message = self.center(normalized) + self.left(normalized.roll(1,1) if neighbors else normalized) + self.right(normalized.roll(-1,1) if neighbors else normalized)
                 delta = self.update(torch.cat((normalized,message),-1))
             updated = state + c.alpha*delta
-            if not torch.isfinite(updated).all() or updated.detach().abs().max()>c.max_state_abs:
-                raise FloatingPointError('cellular state outside registered numerical range')
+            check_numerics(updated.detach().abs().amax() <= c.max_state_abs,
+                           'cellular state outside registered numerical range')
             if trace is not None:
                 trace.append({'state_norm':updated.detach().norm(dim=-1).cpu().tolist(),
                               'delta_norm':delta.detach().norm(dim=-1).cpu().tolist(),

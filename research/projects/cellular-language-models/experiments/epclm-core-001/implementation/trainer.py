@@ -1,6 +1,7 @@
 """Resumable document TBPTT with explicit per-lane cursors and state."""
-import copy
-import json
+import hashlib
+import io
+import os
 import math
 import random
 import time
@@ -9,14 +10,40 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 from native_clm_runtime import lr_multiplier,sha256_file
+from model import check_numerics
 
 def atomic_save(value,path):
     path=Path(path); path.parent.mkdir(parents=True,exist_ok=True)
-    temporary=path.with_suffix('.tmp'); torch.save(value,temporary); temporary.replace(path)
+    temporary=path.with_suffix('.tmp')
+    with temporary.open('wb') as stream:
+        torch.save(value,stream); stream.flush(); os.fsync(stream.fileno())
+    temporary.replace(path)
 
-def rng():
+def save_checkpoint(value, path):
+    payload = io.BytesIO()
+    torch.save(value, payload)
+    content = payload.getvalue()
+    # The payload and its checksum become visible in one atomic file replacement.
+    atomic_save({'format': 'core001.checkpoint.v2', 'payload': content,
+                 'sha256': hashlib.sha256(content).hexdigest()}, path)
+
+
+def load_checkpoint(path):
+    saved = torch.load(path, map_location='cpu', weights_only=False)
+    if saved.get('format') == 'core001.checkpoint.v2':
+        content = saved['payload']
+        if hashlib.sha256(content).hexdigest() != saved['sha256']:
+            raise ValueError('checkpoint hash mismatch')
+        return torch.load(io.BytesIO(content), map_location='cpu', weights_only=False)
+    # Existing v0.1 checkpoints remain readable with their original sidecar.
+    sidecar = Path(str(path) + '.sha256')
+    if not sidecar.exists() or sidecar.read_text().strip() != sha256_file(Path(path)):
+        raise ValueError('legacy checkpoint hash mismatch')
+    return saved
+
+def rng(include_cuda=True):
     return {'python':random.getstate(),'numpy':np.random.get_state(),'torch':torch.get_rng_state(),
-            'cuda':torch.cuda.get_rng_state_all() if torch.cuda.is_available() else []}
+            'cuda':torch.cuda.get_rng_state_all() if include_cuda else []}
 
 def restore_rng(value):
     random.setstate(value['python']); np.random.set_state(value['numpy']); torch.set_rng_state(value['torch'])
@@ -44,7 +71,8 @@ def evaluate(model,documents,steps=None,ablation=None,deadline=float("inf")):
     nll=sum(r['nll_sum'] for r in rows)/sum(r['tokens'] for r in rows)
     return {'nll':nll,'ppl':math.exp(min(nll,700)),'stories':rows}
 
-def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unroll=64,stop_after_updates=None,on_checkpoint=None):
+def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unroll=64,stop_after_updates=None,on_checkpoint=None,checkpoint_interval=10):
+    if checkpoint_interval < 1: raise ValueError('checkpoint interval must be positive')
     random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
     optimizer=torch.optim.AdamW(model.parameters(),lr=3e-4,betas=(.9,.95),weight_decay=.1)
     total_steps=max(1,math.ceil(target_tokens/(batch*unroll)))
@@ -55,26 +83,26 @@ def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unro
     tokens=updates=0; curve=[]
     restore_started=time.monotonic()
     if Path(path).exists():
-        sidecar=Path(str(path)+'.sha256')
-        if not sidecar.exists() or sidecar.read_text().strip()!=sha256_file(Path(path)): raise ValueError('checkpoint hash mismatch')
-        saved=torch.load(path,map_location='cpu',weights_only=False)
+        saved=load_checkpoint(path)
         if saved['identity']!=identity: raise ValueError('checkpoint source/config/data/protocol mismatch')
         model.load_state_dict(saved['model']); optimizer.load_state_dict(saved['optimizer'])
         scheduler.load_state_dict(saved['scheduler']); scaler.load_state_dict(saved['scaler'])
         order,cursor,lanes,positions=saved['order'],saved['cursor'],saved['lanes'],saved['positions']
         state=saved['state'].to(model.embedding.weight); tokens,updates=saved['tokens'],saved['updates']
         curve=saved['curve']; restore_rng(saved['rng'])
+    last_saved_updates=updates if Path(path).exists() else -1
+    initial_updates=updates
     restore_seconds=time.monotonic()-restore_started
     checkpoint_seconds=0.
     started=time.monotonic(); initial_tokens=tokens
     def save():
-        nonlocal checkpoint_seconds
+        nonlocal checkpoint_seconds,last_saved_updates
         checkpoint_started=time.monotonic()
-        atomic_save({'identity':identity,'model':model.state_dict(),'optimizer':optimizer.state_dict(),
-                     'scheduler':scheduler.state_dict(),'scaler':scaler.state_dict(),'rng':rng(),
+        save_checkpoint({'identity':identity,'model':model.state_dict(),'optimizer':optimizer.state_dict(),
+                     'scheduler':scheduler.state_dict(),'scaler':scaler.state_dict(),'rng':rng(state.is_cuda),
                      'order':order,'cursor':cursor,'lanes':lanes,'positions':positions,'state':state.detach().cpu(),
                      'tokens':tokens,'updates':updates,'curve':curve},path)
-        Path(str(path)+'.sha256').write_text(sha256_file(Path(path))+'\n')
+        last_saved_updates=updates
         checkpoint_seconds+=time.monotonic()-checkpoint_started
         if on_checkpoint is not None: on_checkpoint()
     model.train()
@@ -96,9 +124,9 @@ def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unro
             with torch.autocast(device_type=state.device.type,dtype=torch.float16,enabled=state.is_cuda):
                 next_state,logits=model.step(state,inputs)
                 per_token=F.cross_entropy(logits,torch.tensor(targets,device=state.device),reduction='none')
-            if not torch.isfinite(per_token).all(): raise FloatingPointError('non-finite loss')
+            check_numerics(torch.isfinite(per_token).all(), 'non-finite loss')
             state=torch.where(mask[:,None,None],next_state,state)
-            losses.append(per_token[mask].sum()); actual+=int(mask.sum())
+            losses.append((per_token*mask).sum()); actual+=sum(active)
             for lane,enabled in enumerate(active): positions[lane]+=int(enabled)
         loss=sum(losses)/actual
         scaler.scale(loss).backward(); scaler.unscale_(optimizer)
@@ -106,9 +134,9 @@ def train(model,documents,identity,path,target_tokens,deadline,seed,batch=4,unro
         scaler.step(optimizer); scaler.update(); scheduler.step()
         tokens+=actual; updates+=1
         curve.append({'tokens':tokens,'nll':float(loss.detach()),'gradient_norm':float(norm),'state_norm':float(state.detach().norm())})
-        if updates%10==0: save()
-    save()
-    return {'status':'COMPLETE' if tokens>=target_tokens else 'INCOMPLETE','tokens':tokens,'target_tokens':target_tokens,
+        if updates%checkpoint_interval==0: save()
+    if last_saved_updates!=updates: save()
+    return {'status':'COMPLETE' if tokens>=target_tokens else 'INCOMPLETE','tokens':tokens,'updates':updates,'resumed_from_tokens':initial_tokens,'resumed_from_updates':initial_updates,'target_tokens':target_tokens,'new_tokens':tokens-initial_tokens,'elapsed_seconds':time.monotonic()-started,
             'checkpoint_save_seconds':checkpoint_seconds,'checkpoint_restore_seconds':restore_seconds,
             'tokens_per_second':(tokens-initial_tokens)/max(time.monotonic()-started,1e-9),'curve':curve,
             'peak_vram_bytes':torch.cuda.max_memory_allocated() if state.is_cuda else None}

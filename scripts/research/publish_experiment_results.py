@@ -28,6 +28,13 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-core-001-pilot": ExperimentSpec(
+        source_dir="results/epclm-core-001-pilot/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/pilot",
+        files=("decision.json", "pilot-report.json", "summary.md"),
+        branch="kaggle/epclm-core-001-pilot-results",
+        expected_format="minicells.epclm-core-001.v1",
+    ),
     "epclm-core-001": ExperimentSpec(
         source_dir="results/epclm-core-001/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/development",

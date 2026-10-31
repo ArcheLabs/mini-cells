@@ -11,18 +11,17 @@ import torch
 BASE=Path(__file__).resolve().parent
 ROOT=next(p for p in BASE.parents if (p/'pyproject.toml').exists())
 sys.path[:0]=[str(BASE/'implementation'),str(BASE/'tests'),str(ROOT),str(ROOT/'shared/python'),str(BASE.parent/'native-clm-v0/implementation')]
-from model import Core,Config
+from model import Core,config_from_protocol
 from runtime import Runtime,weight_hash
 from trainer import train,evaluate,paired,atomic_save
 from data import prepare
-from diagnostics import pilot,inspector,history_test
 from storage import bundle,recover
 from native_clm_runtime import sha256_file,load_tokenizer
 
 def write(path,value):
     path.parent.mkdir(parents=True,exist_ok=True); path.write_text(json.dumps(value,indent=2,allow_nan=False)+'\n')
 
-def launch(output,device,preflight_only=False):
+def launch(output,device,preflight_only=False,pilot_only=False):
     from test_core import test_contracts
     test_contracts()
     output.mkdir(parents=True,exist_ok=True)
@@ -33,12 +32,35 @@ def launch(output,device,preflight_only=False):
     from scripts.research.publish_experiment_results import load_github_token,validate_origin
     validate_origin(ROOT); load_github_token('GITHUB_TOKEN')
     config=json.loads((BASE/'protocol.json').read_text())
+    from minimal_pilot import pilot_plan,run_pilot
+    if pilot_only: pilot_plan(config)
+    for arm in config['arms']: config_from_protocol(config,arm)
     deadline=time.monotonic()+5400
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     recover(ROOT,output,source,sha256_file(BASE/'protocol.json'))
     manifest=prepare(output/'assets',config['development_stories'])
     identity={'source':source,'protocol':sha256_file(BASE/'protocol.json'),
               'data':sha256_file(output/'assets/manifest.json'),'seed':config['seed']}
+    if pilot_only:
+        report_path=output/'pilot-report.json'
+        report=json.loads(report_path.read_text()) if report_path.exists() else None
+        if report is not None and any(report['identity'].get(k)!=v for k,v in identity.items()):
+            raise ValueError('saved pilot report identity mismatch')
+        if report is None or report['status']!='COMPLETE':
+            documents=json.loads((output/'assets/train.json').read_text())
+            report=run_pilot(config,documents,identity,output,deadline,on_checkpoint=lambda:bundle(output,identity))
+            write(report_path,report)
+            bundle(output,identity)
+        publication=ROOT/'results/epclm-core-001-pilot/publish'
+        write(publication/'decision.json',report)
+        write(publication/'pilot-report.json',report)
+        (publication/'summary.md').write_text('# Core-001 minimal GPU pilot\n\n'+report['status']+'\n\nC1 only; 50 updates; no automatic development training. All hypotheses NOT_EVALUATED.\n')
+        from scripts.research.publish_experiment_results import prepare_artifacts,push_results,EXPERIMENTS
+        destination=prepare_artifacts(ROOT,'epclm-core-001-pilot',EXPERIMENTS['epclm-core-001-pilot'],None)
+        push_results(ROOT,destination,'epclm-core-001-pilot','kaggle/epclm-core-001-pilot-'+source[:12],'GITHUB_TOKEN','origin/main')
+        print(json.dumps({'mode':'MINIMAL_GPU_PILOT','status':report['status'],'report':str(report_path)}))
+        return
+    from diagnostics import pilot,inspector,history_test
     docs={split:json.loads((output/'assets'/f'{split}.json').read_text()) for split in ('train','development')}
     report={'format':'minicells.epclm-core-001.v1','status':'INCOMPLETE','identity':identity,
             'formal_confirmation':False,'scientific_decision':False,'hypotheses':dict.fromkeys(['H1','H2','H3','H4','H5'],'NOT_EVALUATED'),'arms':{}}
@@ -48,14 +70,14 @@ def launch(output,device,preflight_only=False):
         previous=json.loads(saved_report.read_text())
         if previous['identity']!=identity: raise ValueError('saved report identity mismatch')
         if previous['status']=='DEVELOPMENT_COMPLETE': report=previous
-    arms=() if report['status']=='DEVELOPMENT_COMPLETE' else ('C1','F0','C0','L0')
+    arms=() if report['status']=='DEVELOPMENT_COMPLETE' else config['arms']
     for arm in arms:
         if time.monotonic()>deadline-60: break
-        torch.manual_seed(config['seed']); c=Config(arm=arm); model=Core(c).to(device)
+        torch.manual_seed(config['seed']); c=config_from_protocol(config,arm); model=Core(c).to(device)
         pilot_result=pilot(model) if not (output/f'{arm}.pt').exists() else previous.get('arms',{}).get(arm,{}).get('gpu_pilot',{'status':'REUSED_CHECKPOINT'})
         arm_identity={**identity,'model':asdict(c),'target_tokens':config['pilot_tokens']}
         try:
-            result=train(model,docs['train'],arm_identity,output/f'{arm}.pt',config['pilot_tokens'],deadline,config['seed'],on_checkpoint=lambda:bundle(output,identity))
+            result=train(model,docs['train'],arm_identity,output/f'{arm}.pt',config['pilot_tokens'],deadline,config['seed'],batch=config['batch'],unroll=config['bptt'],on_checkpoint=lambda:bundle(output,identity))
         except (FloatingPointError,RuntimeError) as error:
             report['arms'][arm]={'status':'STOPPED_NUMERICAL_FAILURE','error':str(error)}
             break
@@ -106,6 +128,12 @@ def launch(output,device,preflight_only=False):
     push_results(ROOT,destination,'epclm-core-001','kaggle/epclm-core-001-'+source[:12],'GITHUB_TOKEN','origin/main')
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(); parser.add_argument('--output',type=Path,default=Path('/kaggle/working/epclm-core-001'))
-    parser.add_argument('--device',default='cuda'); parser.add_argument('--preflight-only',action='store_true')
-    args=parser.parse_args(); launch(args.output,args.device,args.preflight_only)
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path)
+    parser.add_argument('--device',default='cuda')
+    modes=parser.add_mutually_exclusive_group()
+    modes.add_argument('--preflight-only',action='store_true')
+    modes.add_argument('--pilot-only',action='store_true')
+    args=parser.parse_args()
+    output=args.output or Path('/kaggle/working/epclm-core-001-pilot' if args.pilot_only else '/kaggle/working/epclm-core-001')
+    launch(output,args.device,args.preflight_only,args.pilot_only)
