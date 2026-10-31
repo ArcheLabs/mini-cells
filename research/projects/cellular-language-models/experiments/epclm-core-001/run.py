@@ -38,7 +38,7 @@ def launch(output,device,preflight_only=False,pilot_only=False):
     for arm in config['arms']: config_from_protocol(config,arm)
     deadline=time.monotonic()+5400
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-    recover(ROOT,output,source,sha256_file(BASE/'protocol.json'))
+    recover(ROOT,output,source,sha256_file(BASE/'protocol.json'),asset_spec={**config['data'],'stories':config['development_stories']})
     manifest=prepare(output/'assets',config['development_stories'],dataset=config['data'])
     identity={'source':source,'protocol':sha256_file(BASE/'protocol.json'),
               'data':sha256_file(output/'assets/manifest.json'),'seed':config['seed']}
@@ -50,6 +50,7 @@ def launch(output,device,preflight_only=False,pilot_only=False):
         if report is None or report['status']!='COMPLETE':
             documents=json.loads((output/'assets/train.json').read_text())
             report=run_pilot(config,documents,identity,output,deadline,on_checkpoint=lambda:bundle(output,identity))
+            if (output/'asset-reuse.json').exists(): report['asset_reuse']=json.loads((output/'asset-reuse.json').read_text())
             write(report_path,report)
             bundle(output,identity)
         publication=ROOT/'results/epclm-core-001-pilot/publish'
@@ -78,7 +79,7 @@ def launch(output,device,preflight_only=False,pilot_only=False):
         pilot_result=pilot(model) if not (output/f'{arm}.pt').exists() else previous.get('arms',{}).get(arm,{}).get('gpu_pilot',{'status':'REUSED_CHECKPOINT'})
         arm_identity={**identity,'model':asdict(c),'target_tokens':config['pilot_tokens']}
         try:
-            result=train(model,docs['train'],arm_identity,output/f'{arm}.pt',config['pilot_tokens'],deadline,config['seed'],batch=config['batch'],unroll=config['bptt'],on_checkpoint=lambda:bundle(output,identity))
+            result=train(model,docs['train'],arm_identity,output/f'{arm}.pt',config['pilot_tokens'],deadline,config['seed'],batch=config['batch'],unroll=config['bptt'],precision=config['precision']['mode'],initial_scale=config['precision']['grad_scaler_initial_scale'],max_consecutive_overflows=config['precision']['max_consecutive_overflows'],on_checkpoint=lambda:bundle(output,identity))
         except (FloatingPointError,RuntimeError) as error:
             report['arms'][arm]={'status':'STOPPED_NUMERICAL_FAILURE','error':str(error)}
             break
