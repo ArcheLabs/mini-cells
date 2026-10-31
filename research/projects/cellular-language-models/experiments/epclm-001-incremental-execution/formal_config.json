@@ -1,0 +1,253 @@
+{
+  "experiment": "EPCLM-001",
+  "version": "0.4",
+  "authorization": "BOUNDED_INFERENCE_ONLY",
+  "training_authorized": false,
+  "repo": "archelabsxyz/native-clm-v0",
+  "asset_run_id": "fbf1959b2a364022959ded11c1e4fea6",
+  "assets": {
+    "T1": {
+      "revision": "732dfa2fb500656d34b2b097187f0d87d9d0ab13",
+      "inference_sha256": "89f78262eac99adb2f56ec281324521c8e3e829e0010e5d73e7288bfc6904bdc",
+      "parameters": 1894080,
+      "declared_ppl": 12.336077958
+    },
+    "X3": {
+      "revision": "42e2b82948292e047e21adafb7a2dc6805ccefa8",
+      "inference_sha256": "38c5755735486e91de8d0c853be644033e89f5eddd050c7217d36fbebb702ad0",
+      "parameters": 1893536,
+      "declared_ppl": 11.836404714
+    },
+    "X4": {
+      "revision": "13c6c975390fdda4b18bfabfe8e6bf2be3a67d54",
+      "inference_sha256": "b2c6e7cb7c523e2112fee7e5f3aef10f34cb720a93bd666747af77137303a2e8",
+      "parameters": 1893912,
+      "declared_ppl": 11.912722684
+    }
+  },
+  "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+  "dtype": "float32",
+  "precision_extensions": "FP16_BF16_NOT_REGISTERED_NOT_RUN",
+  "max_context": 128,
+  "batch": 1,
+  "gpu_worker_budget_seconds": 7200,
+  "warmup": 5,
+  "repeats": 30,
+  "pilot_warmup": 1,
+  "pilot_repeats": 3,
+  "tolerances": {
+    "atol": 2e-05,
+    "rtol": 0.0002
+  },
+  "event_tolerances": {
+    "atol": 2e-05,
+    "rtol": 0.0002
+  },
+  "correctness_offsets": [
+    0,
+    4096
+  ],
+  "holdout_offsets": [
+    16384,
+    32768,
+    65536,
+    131072,
+    262144
+  ],
+  "workloads": [
+    {
+      "id": "p16-d16",
+      "prefill": 16,
+      "decode": 16,
+      "offset": 16384
+    },
+    {
+      "id": "p32-d32",
+      "prefill": 32,
+      "decode": 32,
+      "offset": 32768
+    },
+    {
+      "id": "p64-d32",
+      "prefill": 64,
+      "decode": 32,
+      "offset": 65536
+    },
+    {
+      "id": "p96-d32",
+      "prefill": 96,
+      "decode": 32,
+      "offset": 131072
+    },
+    {
+      "id": "p112-d16",
+      "prefill": 112,
+      "decode": 16,
+      "offset": 262144
+    }
+  ],
+  "event_points": [
+    {
+      "id": "n256-zero-active-0",
+      "cells": 256,
+      "dim": 188,
+      "ratio": 0,
+      "layout": "zero-active",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n256-uniform-random-0.05",
+      "cells": 256,
+      "dim": 188,
+      "ratio": 0.05,
+      "layout": "uniform-random",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n256-clustered-0.05",
+      "cells": 256,
+      "dim": 188,
+      "ratio": 0.05,
+      "layout": "clustered",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n256-uniform-random-0.5",
+      "cells": 256,
+      "dim": 188,
+      "ratio": 0.5,
+      "layout": "uniform-random",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n256-clustered-0.5",
+      "cells": 256,
+      "dim": 188,
+      "ratio": 0.5,
+      "layout": "clustered",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n256-all-active-1",
+      "cells": 256,
+      "dim": 188,
+      "ratio": 1,
+      "layout": "all-active",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n256-wavefront-0.05",
+      "cells": 256,
+      "dim": 188,
+      "ratio": 0.05,
+      "layout": "wavefront",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n256-burst-0.05",
+      "cells": 256,
+      "dim": 188,
+      "ratio": 0.05,
+      "layout": "burst",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n1024-zero-active-0",
+      "cells": 1024,
+      "dim": 188,
+      "ratio": 0,
+      "layout": "zero-active",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n1024-uniform-random-0.05",
+      "cells": 1024,
+      "dim": 188,
+      "ratio": 0.05,
+      "layout": "uniform-random",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n1024-clustered-0.05",
+      "cells": 1024,
+      "dim": 188,
+      "ratio": 0.05,
+      "layout": "clustered",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n1024-uniform-random-0.5",
+      "cells": 1024,
+      "dim": 188,
+      "ratio": 0.5,
+      "layout": "uniform-random",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n1024-clustered-0.5",
+      "cells": 1024,
+      "dim": 188,
+      "ratio": 0.5,
+      "layout": "clustered",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n1024-all-active-1",
+      "cells": 1024,
+      "dim": 188,
+      "ratio": 1,
+      "layout": "all-active",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n1024-wavefront-0.05",
+      "cells": 1024,
+      "dim": 188,
+      "ratio": 0.05,
+      "layout": "wavefront",
+      "tile": 16,
+      "steps": 4
+    },
+    {
+      "id": "n1024-burst-0.05",
+      "cells": 1024,
+      "dim": 188,
+      "ratio": 0.05,
+      "layout": "burst",
+      "tile": 16,
+      "steps": 4
+    }
+  ],
+  "event_kernels": [
+    "B0",
+    "B1_X3",
+    "B1_X4"
+  ],
+  "event_seed": 2026103004,
+  "bootstrap_seed": 2026103005,
+  "bootstrap_samples": 10000,
+  "interval_alpha": 0.05,
+  "model_family_comparisons": 50,
+  "event_family_comparisons": 96,
+  "statistics": "Paired request bootstrap; Bonferroni-adjusted percentile intervals; timing repetitions are not independent model seeds",
+  "profiler_model_workload": "p32-d32",
+  "profiler_event_points": [
+    "n1024-clustered-0.05"
+  ],
+  "protocol_sha256": "47b84ebabf16855074721065014a1ce4047bcc5ef04dd3cf455ba013aa69618f"
+}

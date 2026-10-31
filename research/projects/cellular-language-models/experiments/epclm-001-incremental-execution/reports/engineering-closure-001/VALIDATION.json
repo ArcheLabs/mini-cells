@@ -1,0 +1,47 @@
+{
+  "reviewed_commit": "1d527228d5f083c7857dfc3ed0faa7ea1f577790",
+  "implementation_commit": "25240810382ed72780ac28827ae2a57650e5a84d",
+  "scope": "BOUNDED_ENGINEERING_CLOSURE_NOT_FORMAL_EXPERIMENT",
+  "date": "2026-10-30",
+  "full_correctness_suite": {
+    "passed": 36,
+    "failed": 0,
+    "skipped": 0,
+    "cuda_fixture_cases": [
+      "test_cuda_fixed_prefix_parity_engineering_only[T1]",
+      "test_cuda_fixed_prefix_parity_engineering_only[X3]",
+      "test_cuda_fixed_prefix_parity_engineering_only[X4]"
+    ],
+    "cuda_scope": "Tiny randomly initialized FP32 correctness only; no GPU timing experiment"
+  },
+  "checks": {
+    "ruff": "PASS",
+    "compileall": "PASS",
+    "git_diff_check": "PASS",
+    "cpu_smoke": "ENGINEERING_PASS_SCIENTIFIC_INCOMPLETE"
+  },
+  "new_training_runs": 0,
+  "optimizer_updates": 0,
+  "model_30m_runs": 0,
+  "formal_gpu_benchmark_runs": 0,
+  "trained_model_parity": "BLOCKED_MISSING_CHECKPOINTS",
+  "fp16_bf16": "NOT_CALIBRATED_NOT_TESTED",
+  "checkpoint_recovery": "UNRESOLVED",
+  "h1": "INCOMPLETE",
+  "h2": "INCOMPLETE",
+  "h3": "INCOMPLETE",
+  "formal_execution": "NO_GO",
+  "test_command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/tests --disable-warnings --junitxml=/tmp/epclm001-closure-tests.xml",
+  "inputs": {
+    "implementation/epclm001/__init__.py": "f1ceed30993fde94aba96f710d235685cd4a947fb06cd42f0e935f4c8cc37a33",
+    "implementation/epclm001/analysis.py": "7fb22f717a412874cec101c1354ec3da925a11de2eae930ecc18b96f01392484",
+    "implementation/epclm001/assets.py": "caaf297b48a8c598a885a84cf0e0f48b81659f793a4131e367d24ca4828517ed",
+    "implementation/epclm001/benchmark.py": "9eb8e1c6206eb08de653f468f32c4167566c273a2887e0f71d8a348423640514",
+    "implementation/epclm001/cli.py": "553d73d2cb9775c3df06cfb73b9650d27269e1ea8c18d6141fbfda74f19414b1",
+    "implementation/epclm001/common.py": "14291a33bbd72a752acb6cebba993b2c179cbf14235b30a66e220dc2d5df97ed",
+    "implementation/epclm001/events.py": "1888c8ee4eb4d2f2756220d9046c6e1fe4fe2703cded9f6fb83b9ae588f3328f",
+    "implementation/epclm001/incremental.py": "242287782ccd9fb51eb0aa0ea5683ed24ddb90831208543e5ab0df0632897f37",
+    "implementation/epclm001/publication.py": "d81e212d43bbb29118468cab3c133e809d86a00f33fbf582a9af689dfc4d2be2",
+    "implementation/epclm001/validation.py": "b263976a222a1765f098900e106c0f1cab95a360cf8870339033e7b97de2596a"
+  }
+}

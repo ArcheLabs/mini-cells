@@ -98,6 +98,26 @@
       "scientific_decision": false,
       "registration_stage": "CPU_GATE_0_ONLY",
       "note": "Independent real-path implementation; GPU and confirmation remain blocked pending protocol registration and user authorization."
+    },
+    {
+      "id": "EPCLM-001",
+      "name": "incremental-and-event-driven-execution",
+      "status": "development_engineering_scientific_incomplete",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution",
+      "entry": "run.py engineering",
+      "note": "Round 1: E0-B T1/X3/X4 ~1.9M only; E0-A 30M deferred and requires new explicit authorization. No training. H1/H2/H3 incomplete; native asset identity and performance freeze pending.",
+      "controlled_retrain": {
+        "amendment": "v0.3",
+        "seed": 91002,
+        "models": [
+          "T1",
+          "X3",
+          "X4"
+        ],
+        "tokens_per_model": 10000000,
+        "status": "AUTHORIZED_REQUIRES_R0",
+        "formal_benchmark_authorized": false
+      }
     }
   ],
   "schema_version": 2

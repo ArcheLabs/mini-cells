@@ -1,0 +1,19 @@
+{
+  "failure_source_commit": "62e8f7db155dc77dfeef046c307bdebcdc4431a2",
+  "failure_report_commit": "c646a9a2fde324c3c2e5562654e22d82dbaf0680",
+  "repair": "HUB_AUTH_CHECK_SIGNATURE_AND_PRISTINE_RUN_REFRESH",
+  "retrain_tests_passed": 14,
+  "retrain_tests_failed": 0,
+  "ruff": "PASS",
+  "compileall": "PASS",
+  "diff_check": "PASS",
+  "baseline_training_started": false,
+  "live_persistence_probe": "NOT_RUN_LOCALLY_NO_WRITE_CREDENTIAL",
+  "gate_policy": "Upload and forced readback still required; no training on failed R0",
+  "inputs": {
+    "implementation/epclm001/retrain.py": "7106970d90ade3b3c3f4cd5c88bfcaa7dc0bf9f5b823bf4950134dcbea619557",
+    "implementation/epclm001/retrain_assets.py": "1ac5955a4aff468d61f17199d92aad22ffb4f32d245667ebc0d6960a2b166597",
+    "epclm001_controlled_retrain.ipynb": "87981ea97e702bb64bb1dafb2a235cd5893f0abbc1ebb3d5c3f5d6e28727628c",
+    "tests/test_retrain.py": "de1e79651bf164ec0a0668f17dd7e19de7285b170fe189b0a9c8e81171a561cf"
+  }
+}

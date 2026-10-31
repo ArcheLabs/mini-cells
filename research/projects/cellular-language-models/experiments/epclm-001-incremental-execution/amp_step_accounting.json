@@ -1,0 +1,19 @@
+{
+  "repair": "HISTORICAL_FP16_STEP_ACCOUNTING",
+  "predecessor_commit": "d6d5a5ae6e77a07378596e68bf7dee15a742336b",
+  "predecessor_control_source_files": {
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain.py": "7106970d90ade3b3c3f4cd5c88bfcaa7dc0bf9f5b823bf4950134dcbea619557",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_assets.py": "1ac5955a4aff468d61f17199d92aad22ffb4f32d245667ebc0d6960a2b166597",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_data.py": "c15184cdf400f2d592d1bdbc2ba8393090cb078a8c4cad68b5542893404565f6",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_guard.py": "a72782f1469df3f9348d1aaa701dd768beb19b4536008493484441d7e7c6f503",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_publication.py": "bff3193613f12e466e1d8e51fa49e8fdad41fda0b4948be8b38e9fc6a523c13c",
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_validation.py": "239c7e0c4d77fffa42f823b3e5be8d48c2aa44568607e39001c3973cd44d8768"
+  },
+  "unchanged_training_controls": [
+    "retrain_guard.py",
+    "retrain_data.py"
+  ],
+  "frozen_config_sha256": "5d8a8b56ab65b5b9b6570d687d9421e3695e96a09d70ec214c5c3f8bdace22ea",
+  "budget_semantics": "10000 historical loop attempts; preserve successful and skipped AdamW counts separately; no compensating steps",
+  "migration_scope": "Completed verified-identity checkpoints and not-started models only; partial training is not migrated"
+}

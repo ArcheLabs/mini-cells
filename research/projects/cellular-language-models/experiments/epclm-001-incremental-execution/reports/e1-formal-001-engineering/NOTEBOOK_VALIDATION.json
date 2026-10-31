@@ -1,0 +1,111 @@
+{
+  "status": "PASS",
+  "scope": "Mocked bootstrap only; no network, assets, GPU or formal inference",
+  "pinned_source_sha": "227a3a0783049b63b0d29d7c88bf752b415e2b63",
+  "nbformat": "JSON_STRUCTURE_VALID_NBFORMAT_PACKAGE_UNAVAILABLE",
+  "python": "COMPILES",
+  "default_stage": "e1-run",
+  "automatic_publication": true,
+  "legacy_publication_dependencies_in_sparse_checkout": true,
+  "calls": [
+    [
+      "git",
+      "init",
+      "--quiet",
+      "/kaggle/working/epclm001-formal-code-227a3a078304"
+    ],
+    [
+      "git",
+      "-C",
+      "/kaggle/working/epclm001-formal-code-227a3a078304",
+      "remote",
+      "add",
+      "origin",
+      "https://github.com/ArcheLabs/mini-cells.git"
+    ],
+    [
+      "git",
+      "-C",
+      "/kaggle/working/epclm001-formal-code-227a3a078304",
+      "config",
+      "remote.origin.promisor",
+      "true"
+    ],
+    [
+      "git",
+      "-C",
+      "/kaggle/working/epclm001-formal-code-227a3a078304",
+      "config",
+      "remote.origin.partialclonefilter",
+      "blob:none"
+    ],
+    [
+      "git",
+      "-C",
+      "/kaggle/working/epclm001-formal-code-227a3a078304",
+      "sparse-checkout",
+      "init",
+      "--no-cone"
+    ],
+    [
+      "git",
+      "-C",
+      "/kaggle/working/epclm001-formal-code-227a3a078304",
+      "sparse-checkout",
+      "set",
+      "--no-cone",
+      "/pyproject.toml",
+      "/src/",
+      "/shared/",
+      "/research/projects/cellular-language-models/",
+      "/research/projects/continual-learning/context/"
+    ],
+    [
+      "git",
+      "-C",
+      "/kaggle/working/epclm001-formal-code-227a3a078304",
+      "fetch",
+      "--depth=1",
+      "--filter=blob:none",
+      "origin",
+      "227a3a0783049b63b0d29d7c88bf752b415e2b63"
+    ],
+    [
+      "git",
+      "-C",
+      "/kaggle/working/epclm001-formal-code-227a3a078304",
+      "checkout",
+      "--detach",
+      "227a3a0783049b63b0d29d7c88bf752b415e2b63"
+    ],
+    [
+      "/usr/bin/python3",
+      "-m",
+      "pip",
+      "install",
+      "-q",
+      "datasets>=2.19",
+      "tokenizers>=0.15"
+    ],
+    [
+      "/usr/bin/python3",
+      "-m",
+      "pip",
+      "install",
+      "-q",
+      "--no-deps",
+      "-e",
+      "/kaggle/working/epclm001-formal-code-227a3a078304"
+    ],
+    [
+      "/usr/bin/python3",
+      "/kaggle/working/epclm001-formal-code-227a3a078304/research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/run.py",
+      "e1-run",
+      "--output",
+      "/kaggle/working/epclm001-e1-formal-output",
+      "--assets",
+      "/kaggle/working/epclm001-e1-assets",
+      "--publish-github"
+    ]
+  ]
+}

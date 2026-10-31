@@ -1,0 +1,42 @@
+# Current freeze — v0.4
+
+`PROTOCOL.v0.4.md` authorizes bounded inference only. `formal_config.json` and
+its marker bind all three declared asset revisions/hashes, FP32 tolerances,
+five model workloads, 16 event points per B0/B1 kernel, warmups/repeats and
+paired analysis. `FORMAL_FREEZE.json` will bind actual device and source before
+formal measurements. Real asset availability and correctness remain runtime
+gates, not assertions from the pins. No new training or 30M execution.
+
+The previous status is retained below as versioned context, not the active gate.
+
+---
+
+# Scope and freeze status — v0.2
+
+Round-1 scope: T1/X3/X4, approximately 1.9M parameters. Fixed by the user's
+2026-10-30 amendment. No new training, formal experiment or 30M execution.
+
+30M: DEFERRED / CONDITIONAL SCALE VALIDATION. Separate user approval required
+after complete 1.9M results and a bounded scaling proposal. The original v0.1
+source draft remains unchanged and does not override this amendment.
+
+Scientific performance protocol: NOT FROZEN. Exact native checkpoints,
+actual tokenizer/data identity, device/precision-specific tolerances,
+holdout trace and small hardware workload matrix still need binding.
+
+Existing FP32 tiny-fixture tolerances (atol=2e-5, rtol=2e-4) are diagnostic.
+They do not certify the approximately 1.9M trained models or another precision.
+H1/H2/H3 remain INCOMPLETE until their independent requirements are met.
+
+Engineering closure: validation_policy.json and validation_inputs.json bind
+fixed FP32 CPU/CUDA diagnostic criteria and 128-token IDs. These are fixture
+correctness criteria, not scientific tolerance certification of recovered
+trained weights. FP16/BF16 remain blocked until separately calibrated/frozen.
+
+
+v0.3 exception: PROTOCOL.v0.3.md explicitly authorizes controlled baseline
+retraining only. retrain_config.json and retrain_config.sha256 freeze the
+three model IDs, seed 91002, historical data/optimizer defaults and 7,200-second
+training resource cap. R0 must pass before a worker starts. This exception does
+not authorize any other seed/model or formal E1-A/E1-C performance experiment.
+Historical source and prior reports remain unchanged.

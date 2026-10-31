@@ -1,0 +1,42 @@
+{
+  "status": "R0_BLOCKED_NO_TRAINING",
+  "date": "2026-10-30",
+  "implementation_commit": "f71b9815ec81f3932563326393c20f45811817e7",
+  "original_amendment_sha256": "6389de6bbdd43fe5ac3d9f768324599db901f375f9419d22bf3b9179ac16be20",
+  "source_gate": "PASS",
+  "configuration_gate": "PASS",
+  "gpu_availability": "PASS",
+  "tokenizer_actual_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "tokenizer_hash_matches": true,
+  "data_stream_identity": "NOT_VERIFIED_DEPENDENCIES_UNAVAILABLE",
+  "persistence_gate": "BLOCKED_MISSING_HF_WRITE_CREDENTIAL",
+  "tests": {
+    "full_suite_passed": 47,
+    "full_suite_failed": 0,
+    "post_change_focused_passed": 11,
+    "post_change_focused_failed": 0,
+    "description": "CPU synthetic guard equivalence plus existing bounded CUDA correctness fixtures; no baseline training"
+  },
+  "libraries": {
+    "datasets": null,
+    "huggingface_hub": "0.36.2",
+    "numpy": "1.24.4",
+    "tokenizers": null,
+    "torch": "2.4.1"
+  },
+  "training_gpu_seconds": 0,
+  "training_models_completed": 0,
+  "baseline_optimizer_updates": 0,
+  "engineering_cuda_fixture_seconds": null,
+  "formal_E1C_authorized": false,
+  "model_30m_runs": 0,
+  "seed_91003_runs": 0,
+  "pipeline_risks": [
+    "Live dataset reconstruction and expected stream hashes not exercised here",
+    "Live HF upload/readback/controller recovery not exercised without credentials",
+    "Original worker/scaler guard validated on synthetic CPU step, not a full live baseline training run",
+    "Scaler skips are counted separately and require review; budget is never extended to compensate"
+  ],
+  "actual_persistence_uris": {},
+  "next_action": "Import controlled-retrain notebook into Kaggle with one GPU, Internet and existing HF_TOKEN/GITHUB_TOKEN. R0 must pass before automatic authorized training."
+}
