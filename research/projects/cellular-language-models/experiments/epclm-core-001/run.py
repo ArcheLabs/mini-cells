@@ -14,7 +14,7 @@ sys.path[:0]=[str(BASE/'implementation'),str(BASE/'tests'),str(ROOT),str(ROOT/'s
 from model import Core,config_from_protocol
 from runtime import Runtime,weight_hash
 from trainer import train,evaluate,paired,atomic_save
-from data import prepare
+from data import prepare,configure_dataset
 from storage import bundle,recover
 from native_clm_runtime import sha256_file,load_tokenizer
 
@@ -32,13 +32,14 @@ def launch(output,device,preflight_only=False,pilot_only=False):
     from scripts.research.publish_experiment_results import load_github_token,validate_origin
     validate_origin(ROOT); load_github_token('GITHUB_TOKEN')
     config=json.loads((BASE/'protocol.json').read_text())
+    configure_dataset(config['data'])
     from minimal_pilot import pilot_plan,run_pilot
     if pilot_only: pilot_plan(config)
     for arm in config['arms']: config_from_protocol(config,arm)
     deadline=time.monotonic()+5400
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     recover(ROOT,output,source,sha256_file(BASE/'protocol.json'))
-    manifest=prepare(output/'assets',config['development_stories'])
+    manifest=prepare(output/'assets',config['development_stories'],dataset=config['data'])
     identity={'source':source,'protocol':sha256_file(BASE/'protocol.json'),
               'data':sha256_file(output/'assets/manifest.json'),'seed':config['seed']}
     if pilot_only:

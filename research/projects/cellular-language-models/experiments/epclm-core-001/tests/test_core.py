@@ -104,3 +104,21 @@ def test_contracts():
     try: pilot_plan(changed)
     except ValueError: pass
     else: raise AssertionError('pilot/protocol K mismatch accepted')
+    # The shared Native runtime still has a historical default; Core must apply
+    # the same verified revision correction as Native's real entrypoints.
+    from data import configure_dataset,iter_tinystories,train_tokenizer
+    import native_clm_runtime as native
+    native.DATASET_REVISION='invalid-historical-default'
+    revision=configure_dataset(protocol['data'])
+    assert revision=='f54c09fd23315a6f9c86f9dc80f725de7d8f9c64'
+    assert train_tokenizer.__globals__['DATASET_REVISION']==revision
+    requests=[]
+    def fake_dataset(**kwargs):
+        requests.append(kwargs)
+        return [{'text':'fixture story'}]
+    with patch.object(native,'_require_hf',return_value=(fake_dataset,)):
+        assert list(iter_tinystories('train',max_stories=1))==['fixture story']
+    assert requests[0]['revision']==revision
+    try: configure_dataset({**protocol['data'],'revision':'invalid'})
+    except ValueError: pass
+    else: raise AssertionError('invalid dataset revision accepted')
