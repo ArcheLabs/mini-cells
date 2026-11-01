@@ -112,7 +112,7 @@ def public_result(root,branch,artifact,source=None,protocol=None,commit=None,opt
     return value,{'branch':branch,'commit':revision,'decision_sha256':__import__('hashlib').sha256(raw).hexdigest()}
 
 
-def recover_namespace(root,output,namespace,identity,deadline,max_versions=25,selected=None,trace=None,resume_only=False,cache=None,compatible_identity=None):
+def recover_namespace(root,output,namespace,identity,deadline,max_versions=25,selected=None,trace=None,resume_only=False,cache=None,compatible_identity=None,skip_versions=()):
     """Exact-source progress or explicitly pinned historical weights, never an implicit optimizer reuse."""
     api,fetch=backend(root,trace)
     from kaggle_output_recovery import _version_number
@@ -120,6 +120,8 @@ def recover_namespace(root,output,namespace,identity,deadline,max_versions=25,se
     latest=_version_number(api.metadata())
     cache=Path(cache) if cache is not None else Path('/kaggle/temp/gc001-repair-recovery')/namespace
     for version in range(latest,max(0,latest-max_versions),-1):
+        if version in skip_versions:continue
+        print('[Repair recovery] inspect saved version '+str(version),flush=True)
         names=version_files(api,version,deadline,trace)
         for name in sorted(n for n in names if n.endswith(namespace+'/recovery.json')):
             safe_path(name);destination=cache/str(version)
@@ -159,7 +161,28 @@ def recover_namespace(root,output,namespace,identity,deadline,max_versions=25,se
                 target=output/safe_path(n);target.parent.mkdir(parents=True,exist_ok=True)
                 shutil.copyfile(saved,target)
             return {'version':version,'namespace':namespace,'identity':identity,'files':{n:manifest['files'][n] for n in logical}}
+        if trace is not None:trace.setdefault('inspected_versions',[]).append(version)
     return None
+
+
+def recover_progress(root,output,namespace,identity,deadline,plan,trace,compatible_identity=None,protected=False):
+    """Recent fast path followed by the existing bounded historical policy."""
+    trace['inspected_versions']=[]
+    options=dict(trace=trace,resume_only=True,compatible_identity=compatible_identity)
+    try:
+        with timed_budget(plan['progress_search_seconds']):
+            restored=recover_namespace(root,output,namespace,identity,min(deadline,time.monotonic()+plan['progress_search_seconds']),plan['max_versions'],**options)
+    except TimeoutError:
+        if not protected or trace.get('active_operation')=='BACKEND_INITIALIZATION':raise
+        trace['recent_search_status']='TIMED_OUT'
+        restored=None
+    if restored is not None or not protected:return restored
+    check_deadline(deadline)
+    trace['active_stage']='HISTORICAL_CHECKPOINT_SEARCH'
+    trace['historical_max_versions']=25
+    # Only fully inspected versions can be skipped; an interrupted inventory or
+    # manifest/Checkpoint transfer must be retried with the remaining budget.
+    return recover_namespace(root,output,namespace,identity,deadline,25,skip_versions=tuple(trace['inspected_versions']),**options)
 
 
 @contextmanager

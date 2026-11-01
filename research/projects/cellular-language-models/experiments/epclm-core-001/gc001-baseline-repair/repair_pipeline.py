@@ -19,7 +19,7 @@ from generation_evaluation import audit_data,performance,aggregate_generation
 from mechanism_diagnostic import write
 from native_clm_runtime import sha256_file,load_tokenizer
 from repair_models import ARMS,build,select_rank,architecture
-from repair_io import public_result,recover_namespace,recover_inputs
+from repair_io import public_result,recover_namespace,recover_inputs,recover_progress
 from repair_diagnostics import generate,teacher_diagnostics,training_diagnostics,quality_findings,blind_review,state_observations
 
 ARTIFACT='artifacts/experiments/epclm-core-001/gc001-baseline-repair/'
@@ -273,9 +273,12 @@ def launch(root,base,out,device,batch):
                     if had_local:restored={'storage':'VERIFIED_LOCAL_SOURCE_REPORT'}
                     else:
                         recovery_trace['active_stage']='RECENT_PROGRESS_SEARCH';phase_started=time.monotonic()
+                        protected=batch=='a' and prior_identity is not None
+                        search_seconds=plan['budget']['recovery']-60 if protected else plan['recovery']['progress_search_seconds']
+                        recovery_trace['effective_policy']={'recent_versions':plan['recovery']['max_versions'],'recent_seconds':plan['recovery']['progress_search_seconds'],'historical_fallback':protected,'total_search_seconds':search_seconds,'input_reserve_seconds':60 if protected else plan['recovery']['asset_seconds'],'total_recovery_seconds':plan['budget']['recovery']}
                         try:
-                            with timed_budget(plan['recovery']['progress_search_seconds']):
-                                restored=recover_namespace(root,out,out.name,recovery_id,min(deadline,time.monotonic()+plan['recovery']['progress_search_seconds']),plan['recovery']['max_versions'],trace=recovery_trace,resume_only=True,compatible_identity=prior_recovery_id)
+                            with timed_budget(search_seconds):
+                                restored=recover_progress(root,out,out.name,recovery_id,min(deadline,time.monotonic()+search_seconds),plan['recovery'],recovery_trace,compatible_identity=prior_recovery_id,protected=protected)
                         except TimeoutError:
                             # If a bundle was found, a partial restore is not safe to abandon.
                             if recovery_trace.get('active_operation')=='BACKEND_INITIALIZATION':raise

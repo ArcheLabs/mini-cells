@@ -27,17 +27,24 @@ def test_audited_source_resume(tmp_path):
     import hashlib
     manifest={'identity':old,'files':{n:hashlib.sha256(v).hexdigest() for n,v in files.items()}}
     files['recovery.json']=json.dumps(manifest).encode()
+    visited=[]
     class API:
-        def metadata(self):return {'version_number':99}
-        def page(self,version,token):return {'files':[{'file_name':'progress/'+n} for n in files]}
+        def metadata(self):return {'version_number':149}
+        def page(self,version,token):
+            visited.append(version)
+            return {'files':[{'file_name':'progress/'+n} for n in files] if version==147 else []}
     def fetch(api,inventory,names,destination):
         for name in names:
             target=destination/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(files[name.split('/')[-1]])
     # Existing adapter interprets metadata; isolate it to avoid network/import setup.
     import sys,types
     adapter=types.ModuleType('kaggle_output_recovery');adapter._version_number=lambda value:value['version_number']
-    with patch.object(repair_io,'backend',return_value=(API(),fetch)),patch.dict(sys.modules,{'kaggle_output_recovery':adapter}):
-        repair_io.recover_namespace(tmp_path,tmp_path/'out','progress',new,float('inf'),max_versions=2,resume_only=True,cache=tmp_path/'cache',compatible_identity=old)
+    from functools import partial
+    trace={}
+    with patch.object(repair_io,'backend',return_value=(API(),fetch)),patch.dict(sys.modules,{'kaggle_output_recovery':adapter}),patch.object(repair_io,'recover_namespace',partial(repair_io.recover_namespace,cache=tmp_path/'cache')):
+        repair_io.recover_progress(tmp_path,tmp_path/'out','progress',new,float('inf'),{'progress_search_seconds':30,'max_versions':2},trace,compatible_identity=old,protected=True)
+    assert visited==[149,148,147]
+    assert trace['active_stage']=='HISTORICAL_CHECKPOINT_SEARCH'
     assert (tmp_path/'out/C1-BROADCAST.pt').read_bytes()==b'saved-optimizer'
     assert json.loads((tmp_path/'out/decision.json').read_text())['identity']==old
 
@@ -72,3 +79,19 @@ def test_compatibility_in_depth_one_clone(tmp_path):
         (shallow/'trainer.py').write_text('incompatible training')
         git(shallow,'add','.');git(shallow,'commit','-qm','changed training')
         assert pipeline.compatible_progress(shallow,shallow/'repair',identity) is None
+
+
+def test_interrupted_inventory_retried_in_bounded_fallback(tmp_path):
+    import repair_io
+    trace={};calls=[]
+    def recover(*args,**kwargs):
+        calls.append(kwargs)
+        if len(calls)==1:
+            trace.update(active_operation='OUTPUT_INVENTORY',inspected_versions=[149],current_version=148)
+            raise TimeoutError('partial inventory')
+        assert kwargs['skip_versions']==(149,)
+        return {'version':147}
+    with patch.object(repair_io,'recover_namespace',side_effect=recover):
+        restored=repair_io.recover_progress(tmp_path,tmp_path/'out','progress',{},float('inf'),{'progress_search_seconds':30,'max_versions':2},trace,protected=True)
+    assert restored=={'version':147} and len(calls)==2
+    assert trace['recent_search_status']=='TIMED_OUT'
