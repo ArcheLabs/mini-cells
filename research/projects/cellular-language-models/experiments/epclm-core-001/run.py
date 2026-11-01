@@ -150,6 +150,11 @@ if __name__=='__main__':
     modes.add_argument('--preflight-only',action='store_true')
     modes.add_argument('--pilot-only',action='store_true')
     modes.add_argument('--development-pair',action='store_true')
+    modes.add_argument('--diagnose-c1',action='store_true')
     args=parser.parse_args()
+    if args.diagnose_c1:
+        from mechanism_diagnostic import launch_diagnostic
+        launch_diagnostic(ROOT,BASE,args.output or Path('/kaggle/working/epclm-core-001-c1-diagnostic'),args.device)
+        sys.exit(0)
     output=args.output or Path('/kaggle/working/epclm-core-001-pilot' if args.pilot_only else '/kaggle/working/epclm-core-001-development-pair' if args.development_pair else '/kaggle/working/epclm-core-001')
     launch(output,args.device,args.preflight_only,args.pilot_only,args.development_pair)

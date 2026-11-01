@@ -18,3 +18,5 @@ storage. The shared Kaggle helpers live in [`shared/kaggle/`](../../shared/kaggl
 - [EPCLM Core-001 development](../projects/cellular-language-models/experiments/epclm-core-001/notebook.ipynb): default C1-only 50-update GPU pilot with real checkpoint resume; development training remains an explicit separate invocation; confirmation sealed.
 
 - [Core-001 C1/F0 development comparison](../projects/cellular-language-models/experiments/epclm-core-001/development-pair.ipynb): FP32, 250K tokens per arm, verified asset reuse and resumable two-hour execution.
+
+- [Core-001 frozen C1 mechanism diagnostic](../projects/cellular-language-models/experiments/epclm-core-001/c1-mechanism-diagnostic.ipynb): original 250K-token C1 only, FP32 inference, D0-gated D1–D3, no training; private asset recovery and GPU execution pending.

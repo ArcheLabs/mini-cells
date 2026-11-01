@@ -139,6 +139,15 @@
       "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/protocol.json",
       "scientific_decision": false,
       "note": "Development only. GPU pilot and H1-H5 NOT EVALUATED; independent confirmation sealed."
+    },
+    {
+      "id": "EPCLM-CORE-001-C1-DIAGNOSTIC",
+      "name": "frozen-c1-mechanism-diagnostic",
+      "status": "development_implementation_ready_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/diagnostic-protocol.json",
+      "scientific_decision": false,
+      "note": "Post-training exploratory D0-D3; pinned 398a191 C1, forward only. Private checkpoint recovery and actual D0 not yet verified. No training/confirmation; H1-H5 NOT_EVALUATED."
     }
   ],
   "schema_version": 2
