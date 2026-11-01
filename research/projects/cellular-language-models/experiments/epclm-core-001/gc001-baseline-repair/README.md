@@ -185,3 +185,7 @@ New code/protocol identities do not reuse incompatible optimizer checkpoints.
 Validation for this amendment is one mocked recovery contract (known-version data only,
 no historical weights, local hash-checked reuse, shared backend, selective unfinished
 checkpoint restore), plus static checks. No full CPU suite, model run or GPU pilot.
+
+### Checkpoint metadata hotfix
+
+Fix `st_size` attribute access after completed training, and return TypeError failures through the existing report publisher. No training, model, data, or budget changes. The exact `6ac7cc1e465eb7d985a23ed35caab6c81f4cef89` source may resume only while the Git diff is confined to the audited recovery/metadata files, this note and its regression test; protocol/data/report identity and checkpoint hashes remain checked. Original per-model training identities are retained, and the new execution records its predecessor. No general cross-source optimizer reuse is enabled. Recent-version search remains bounded; missing progress must not be interpreted as evidence that training never happened.

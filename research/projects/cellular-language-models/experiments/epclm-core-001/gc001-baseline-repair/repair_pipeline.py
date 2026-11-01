@@ -23,6 +23,17 @@ from repair_io import public_result,recover_namespace,recover_inputs
 from repair_diagnostics import generate,teacher_diagnostics,training_diagnostics,quality_findings,blind_review,state_observations
 
 ARTIFACT='artifacts/experiments/epclm-core-001/gc001-baseline-repair/'
+METADATA_FIX_SOURCE='6ac7cc1e465eb7d985a23ed35caab6c81f4cef89'
+
+
+def compatible_progress(root,base,identity):
+    # Only this audited metadata hotfix may reuse this exact training source.
+    changed=subprocess.check_output(['git','diff','--name-only',METADATA_FIX_SOURCE,'HEAD'],cwd=root,text=True).splitlines()
+    prefix=base.relative_to(root).as_posix()+'/'
+    allowed={prefix+n for n in ('repair_pipeline.py','repair_io.py','README.md','tests/test_checkpoint_metadata.py')}
+    if not set(changed)<=allowed:return None
+    return {**identity,'source':METADATA_FIX_SOURCE}
+
 
 
 def dependency(root,batch,identity,optional=False):
@@ -79,7 +90,7 @@ def learning(model,arm,documents,groups,entry,path,identity,plan,deadline,persis
         raise BaselineIntegrityError('not all intended trainable parameters had observed finite nonzero gradients')
     entry['training_diagnostics']=training_diagnostics(current['curve'],entry['progression'])
     if next(model.parameters()).is_cuda:entry['training_peak_vram_bytes']=torch.cuda.max_memory_allocated()
-    entry['checkpoint_sha256']=sha256_file(path);entry['checkpoint_bytes']=path.stat().st_size()
+    entry['checkpoint_sha256']=sha256_file(path);entry['checkpoint_bytes']=path.stat().st_size
     return current
 
 
@@ -202,6 +213,8 @@ def launch(root,base,out,device,batch):
     identity={'source':source,'protocol':sha256_file(base/'protocol.json'),'data':gc['training_identity']['data'],'batch':batch,
               'original_result_commit':plan['original_result_commit']}
     recovery_id={k:identity[k] for k in ('source','protocol','data','batch')}
+    prior_identity=compatible_progress(root,base,identity)
+    prior_recovery_id={k:prior_identity[k] for k in recovery_id} if prior_identity else None
     experiment='epclm-gc001-repair-'+batch;out.mkdir(parents=True,exist_ok=True);path=out/'decision.json'
     report={'format':'minicells.gc001-repair.v1','status':'INCOMPLETE','identity':identity,'protocol':plan,'models':{},'timings':{},
             'environment':{'python':platform.python_version(),'torch':str(torch.__version__),'cuda':torch.version.cuda,'gpu':torch.cuda.get_device_name(),'precision':'fp32','autocast':False,'tf32':False},
@@ -210,6 +223,9 @@ def launch(root,base,out,device,batch):
         nonlocal report
         if path.exists():
             saved=json.loads(path.read_text())
+            if saved['identity']==prior_identity and saved['identity']!=identity:
+                saved.setdefault('execution_lineage',[]).append({'prior_identity':saved['identity'],'reason':'checkpoint file-size metadata hotfix; training identity retained'})
+                saved['identity']=identity
             if saved['identity']!=identity:raise BaselineIntegrityError('repair progress identity differs')
             report=saved
             if saved['status']=='BLOCKED_MODEL_ASSET_UNAVAILABLE':
@@ -256,7 +272,7 @@ def launch(root,base,out,device,batch):
                         recovery_trace['active_stage']='RECENT_PROGRESS_SEARCH';phase_started=time.monotonic()
                         try:
                             with timed_budget(plan['recovery']['progress_search_seconds']):
-                                restored=recover_namespace(root,out,out.name,recovery_id,min(deadline,time.monotonic()+plan['recovery']['progress_search_seconds']),plan['recovery']['max_versions'],trace=recovery_trace,resume_only=True)
+                                restored=recover_namespace(root,out,out.name,recovery_id,min(deadline,time.monotonic()+plan['recovery']['progress_search_seconds']),plan['recovery']['max_versions'],trace=recovery_trace,resume_only=True,compatible_identity=prior_recovery_id)
                         except TimeoutError:
                             # If a bundle was found, a partial restore is not safe to abandon.
                             if recovery_trace.get('active_operation')=='BACKEND_INITIALIZATION':raise
@@ -266,6 +282,8 @@ def launch(root,base,out,device,batch):
                             if own is not None and any(e.get('gradient_activity') or e.get('training',{}).get('tokens',0)>0 for e in own[0].get('models',{}).values() if e.get('origin','').startswith('NEW_REPAIR')):raise
                             recovery_trace['progress_search_status']='TIMED_OUT_NO_MATCHING_COMMITTED_PROGRESS'
                         finally:report['timings']['progress_search_seconds']=time.monotonic()-phase_started
+                    if batch=='a' and prior_identity and restored is None and not had_local:
+                        raise AssetUnavailable('known 6ac7cc1 Batch A training must be recovered before continuing; refusing fresh retraining')
                     if own is not None and restored is None and not had_local and any(e.get('gradient_activity') or e.get('training',{}).get('tokens',0)>0 or e.get('checkpoint_sha256') for e in own[0].get('models',{}).values() if e.get('origin','').startswith('NEW_REPAIR')):
                         report=own[0];record_recovery()
                         raise AssetUnavailable('published partial batch exists but private progress is unavailable; refusing retraining')
@@ -336,6 +354,11 @@ def launch(root,base,out,device,batch):
                         if arm=='IC-ALL-SELF' and reference.get('initial_weights_sha256')!=weight_hash(model):raise BaselineIntegrityError('companion cellular controls do not share initial parameters')
                     entry['architecture']=stats
                     training_identity={**identity,'model_id':arm,'model':asdict(model.config),'architecture':stats,'precision':'fp32','seed':173018021,'target_tokens':250000}
+                    if 'training_identity' in entry:
+                        previous=entry['training_identity']
+                        if previous!={**training_identity,'source':previous.get('source')} or previous.get('source') not in ((source,METADATA_FIX_SOURCE) if prior_identity else (source,)):
+                            raise BaselineIntegrityError('resumed training identity differs beyond audited source hotfix')
+                        training_identity=previous
                     entry['training_identity']=training_identity
                     stage='TRAINING';learning(model,arm,groups['train'],groups,entry,out/(arm+'.pt'),training_identity,plan,deadline,persist)
                     stage='EVALUATION';evaluate_repair(model,tokenizer,tokenizer_sha,groups,entry,plan,out,persist,deadline)
@@ -352,7 +375,7 @@ def launch(root,base,out,device,batch):
     except AssetUnavailable as error:report.update(status='BLOCKED_MODEL_ASSET_UNAVAILABLE',error=str(error),failed_stage=stage)
     except BaselineIntegrityError as error:report.update(status='FAILED_INTEGRITY',error=str(error),failed_stage=stage)
     except TimeoutError as error:report.update(status='BLOCKED_MODEL_ASSET_UNAVAILABLE' if stage=='RECOVERY' else 'INCOMPLETE',error=str(error),failed_stage=stage)
-    except (FloatingPointError,RuntimeError,ValueError,OSError,KeyError) as error:report.update(status='BLOCKED_MODEL_ASSET_UNAVAILABLE' if stage=='RECOVERY' else 'FAILED_NUMERICAL_OR_EXECUTION',error=str(error),failed_stage=stage)
+    except (FloatingPointError,RuntimeError,ValueError,OSError,KeyError,TypeError) as error:report.update(status='BLOCKED_MODEL_ASSET_UNAVAILABLE' if stage=='RECOVERY' else 'FAILED_NUMERICAL_OR_EXECUTION',error=str(error),failed_stage=stage)
     finally:
         elapsed=time.monotonic()-started
         if stage=='RECOVERY':

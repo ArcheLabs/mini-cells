@@ -112,7 +112,7 @@ def public_result(root,branch,artifact,source=None,protocol=None,commit=None,opt
     return value,{'branch':branch,'commit':revision,'decision_sha256':__import__('hashlib').sha256(raw).hexdigest()}
 
 
-def recover_namespace(root,output,namespace,identity,deadline,max_versions=25,selected=None,trace=None,resume_only=False,cache=None):
+def recover_namespace(root,output,namespace,identity,deadline,max_versions=25,selected=None,trace=None,resume_only=False,cache=None,compatible_identity=None):
     """Exact-source progress or explicitly pinned historical weights, never an implicit optimizer reuse."""
     api,fetch=backend(root,trace)
     from kaggle_output_recovery import _version_number
@@ -125,7 +125,7 @@ def recover_namespace(root,output,namespace,identity,deadline,max_versions=25,se
             safe_path(name);destination=cache/str(version)
             fetch(api,{'version_number':version,'files':[{'name':name,'bytes':None}]},[name],destination)
             manifest=json.loads((destination/name).read_text())
-            if manifest['identity']!=identity:continue
+            if manifest['identity'] not in (identity,compatible_identity):continue
             if trace is not None:trace['matching_progress_found']={'version':version,'namespace':namespace}
             logical=list(manifest['files']) if selected is None else list(selected)
             if resume_only and selected is None:
@@ -135,7 +135,7 @@ def recover_namespace(root,output,namespace,identity,deadline,max_versions=25,se
                 decision_file=destination/physical
                 if sha256_file(decision_file)!=manifest['files'][decision]:raise BaselineIntegrityError('progress decision checksum differs')
                 report=json.loads(decision_file.read_text())
-                if any(report.get('identity',{}).get(k)!=v for k,v in identity.items()):raise BaselineIntegrityError('progress report identity differs from manifest')
+                if any(report.get('identity',{}).get(k)!=v for k,v in manifest['identity'].items()):raise BaselineIntegrityError('progress report identity differs from manifest')
                 needed={decision,'blind-review.csv','private/human-key.json','human-review-scored.csv'}
                 if report['status']!='COMPLETE':
                     needed.update(model+'.pt' for model,entry in report.get('models',{}).items() if entry.get('origin','').startswith('NEW_REPAIR') and entry.get('status')!='COMPLETE')
