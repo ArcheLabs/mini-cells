@@ -132,9 +132,8 @@ protocol/identity and equal extension budget. Insufficient evidence yields no pr
 
 ## Budgets and publication
 
-Every batch: execution5400s, private recovery cap600s **inside execution**, publication600s,
-safety1200s, Notebook hard cap7200s. Treating recovery as an additional 600s outside
-execution would sum to 7800s, so it is not added twice. Nested timers preserve the outer
+Every batch: execution5400s, private recovery cap180s **inside execution**, publication600s,
+safety1200s, Notebook hard cap7200s. Recovery is not added a second time to the 7200-second total. Nested timers preserve the outer
 deadline, and per-event checks bound inference. No CPU performance benchmark is run. Full synthetic gradient preflight is executed once for Batch A; B/C and publication retries reuse the matching A proof and only perform cheap configuration checks.
 
 New namespaces: `gc001-baseline-repair/batch-a`, `batch-b`, `batch-c` under the existing
@@ -151,3 +150,38 @@ checkpoint rejection, plus blind-review preservation and nested timers. All orig
 contracts/integration tests remain applicable. No actual GPU experiment, full local
 language training or human review has been run for this implementation task. P1/P2/P3
 execution and real findings remain pending the three Kaggle batches; H1–H5 NOT_EVALUATED.
+
+
+## Recovery optimization after the 1a3bd87 attempt
+
+The original failed result `0a404b94df2afc42779f3c7d5f47a4ce8c2ce59a` is unchanged:
+RECOVERY exhausted ~601.5 seconds, with no new models/training entries. This operational
+amendment changes recovery limits, not architectures, token budgets, data or evaluation.
+New code/protocol identities do not reuse incompatible optimizer checkpoints.
+
+- Local verified progress first; current-source history search is capped at two recent
+  versions / 30 seconds, not 25 versions / ten minutes. Backend setup has a 30-second
+  cap and is cached once per process across recovery helpers. Backend failure is not
+  mistaken for proof that no checkpoint exists.
+- A/B directly retrieve version142 input manifest, tokenizer, train and development
+  files only. They neither download nor load original C1/F0 weights. Original metrics
+  and generated text are reused from pinned GC publication. C retrieves historical
+  weights only when it actually needs frozen diagnostics.
+- Known input lookup has a 120-second cap and does not fall back to a wide history scan.
+  All files are verified against the pinned data manifest and nested file hashes;
+  complete local inputs bypass the network entirely. No new tokenizer/data generation.
+- A short search with no known committed training may end and proceed to first training.
+  Once matching progress or published committed training is known, failed recovery
+  blocks instead of silently resetting a model. Completed models are never retrained.
+- Resume transfers report metadata and the unfinished model checkpoint only, not complete
+  model weights or old milestone copies. Deferred files keep explicit private-version /
+  namespace / SHA locators in the report for later retrieval; saved outputs are not deleted.
+- Initial recovery totals are capped at 180 seconds, within unchanged execution5400s /
+  publication600s / safety1200s / hard7200s. Phase timings, searched versions, requested
+  and verified inputs, backend initialization and failed substage are retained even
+  on timeout. Recovery timeouts report BLOCKED_MODEL_ASSET_UNAVAILABLE, not a training
+  interruption. No budget is enlarged and no automatic retraining is introduced.
+
+Validation for this amendment is one mocked recovery contract (known-version data only,
+no historical weights, local hash-checked reuse, shared backend, selective unfinished
+checkpoint restore), plus static checks. No full CPU suite, model run or GPU pilot.

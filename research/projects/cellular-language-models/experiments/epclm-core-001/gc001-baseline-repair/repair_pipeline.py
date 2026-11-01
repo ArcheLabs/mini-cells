@@ -11,15 +11,15 @@ from model import Config
 from runtime import weight_hash
 from trainer import train,load_checkpoint,atomic_save,evaluate,paired
 from storage import bundle
-from frozen_model import AssetUnavailable,BaselineIntegrityError,recover_frozen_assets,load_frozen_model,check_deadline
+from frozen_model import AssetUnavailable,BaselineIntegrityError,load_frozen_model,check_deadline
 from repair_io import timed_budget
 from generative_core import load_flat,training_summary
 from generative_baselines import freeze,TransformerReference,NoCommunicationCore
 from generation_evaluation import audit_data,performance,aggregate_generation
 from mechanism_diagnostic import write
-from native_clm_runtime import sha256_file
+from native_clm_runtime import sha256_file,load_tokenizer
 from repair_models import ARMS,build,select_rank,architecture
-from repair_io import public_result,recover_namespace
+from repair_io import public_result,recover_namespace,recover_inputs
 from repair_diagnostics import generate,teacher_diagnostics,training_diagnostics,quality_findings,blind_review,state_observations
 
 ARTIFACT='artifacts/experiments/epclm-core-001/gc001-baseline-repair/'
@@ -218,6 +218,14 @@ def launch(root,base,out,device,batch):
                 report.setdefault('prior_recovery_failures',[]).append({'path':archived,'sha256':sha256_file(out/archived)})
                 report['status']='INCOMPLETE';report.pop('error',None);write(path,report)
     def persist():write(path,report);bundle(out,recovery_id)
+    def record_recovery():
+        report['recovery']=recovery_trace
+        deferred=recovery_trace.get('deferred_private_assets',{})
+        if deferred:
+            locations=report.setdefault('private_asset_locations',{})
+            for name,sha in deferred['files'].items():
+                if name not in locations or locations[name]['sha256']!=sha:
+                    locations[name]={'version':deferred['version'],'namespace':deferred['namespace'],'sha256':sha}
     load_report()
     if report['status']!='INCOMPLETE':
         if batch=='c' and (out/'private/human-key.json').exists():
@@ -230,6 +238,9 @@ def launch(root,base,out,device,batch):
         torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
         with timed_budget(plan['budget']['execution']):
             began=time.monotonic()
+            recovery_trace=report.setdefault('recovery',{})
+            recovery_trace.update(active_stage='PUBLISHED_RESULT_LOOKUP',verified_assets={})
+            recovery_trace.pop('matching_progress_found',None)
             with timed_budget(plan['budget']['recovery']):
                 own=dependency(root,batch,identity,optional=True)
                 if own is not None and own[0]['status']=='COMPLETE':
@@ -239,19 +250,38 @@ def launch(root,base,out,device,batch):
                         (out/'blind-review.csv').write_bytes(raw)
                 else:
                     had_local=path.exists()
-                    restored={'storage':'VERIFIED_LOCAL_SOURCE_REPORT'} if had_local else recover_namespace(root,out,out.name,recovery_id,min(deadline,began+plan['budget']['recovery']),plan['recovery']['max_versions'])
+                    restored=None
+                    if had_local:restored={'storage':'VERIFIED_LOCAL_SOURCE_REPORT'}
+                    else:
+                        recovery_trace['active_stage']='RECENT_PROGRESS_SEARCH';phase_started=time.monotonic()
+                        try:
+                            with timed_budget(plan['recovery']['progress_search_seconds']):
+                                restored=recover_namespace(root,out,out.name,recovery_id,min(deadline,time.monotonic()+plan['recovery']['progress_search_seconds']),plan['recovery']['max_versions'],trace=recovery_trace,resume_only=True)
+                        except TimeoutError:
+                            # If a bundle was found, a partial restore is not safe to abandon.
+                            if recovery_trace.get('active_operation')=='BACKEND_INITIALIZATION':raise
+                            if recovery_trace.get('matching_progress_found'):
+                                load_report();record_recovery()
+                                raise
+                            if own is not None and any(e.get('gradient_activity') or e.get('training',{}).get('tokens',0)>0 for e in own[0].get('models',{}).values() if e.get('origin','').startswith('NEW_REPAIR')):raise
+                            recovery_trace['progress_search_status']='TIMED_OUT_NO_MATCHING_COMMITTED_PROGRESS'
+                        finally:report['timings']['progress_search_seconds']=time.monotonic()-phase_started
                     if own is not None and restored is None and not had_local and any(e.get('gradient_activity') or e.get('training',{}).get('tokens',0)>0 or e.get('checkpoint_sha256') for e in own[0].get('models',{}).values() if e.get('origin','').startswith('NEW_REPAIR')):
+                        report=own[0];record_recovery()
                         raise AssetUnavailable('published partial batch exists but private progress is unavailable; refusing retraining')
-                    load_report();restored_terminal=report['status']!='INCOMPLETE'
-                if not restored_terminal and batch in ('a','c'):
+                    load_report();record_recovery();restored_terminal=report['status']!='INCOMPLETE'
+                if not restored_terminal:
+                    recovery_trace['active_stage']='INPUT_ASSET_DOWNLOAD';phase_started=time.monotonic()
                     assets=out.with_name(out.name+'-assets')
-                    recover_frozen_assets(root,assets,gc['training_identity'],gc['C1_checkpoint'],min(deadline,began+plan['budget']['recovery']),
-                        preferred_versions=plan['recovery']['known_original_asset_versions'],extra_asset_hashes={'assets/train.json':None,'F0.pt':gc['F0_checkpoint']['sha256']})
-                    c1,tokenizer,_=load_frozen_model(gc['training_identity'],gc['C1_checkpoint'],assets,core/'protocol.json',device)
-                elif not restored_terminal:
-                    assets=out.with_name(out.name+'-assets')
-                    recover_frozen_assets(root,assets,gc['training_identity'],gc['C1_checkpoint'],min(deadline,began+plan['budget']['recovery']),preferred_versions=[142],extra_asset_hashes={'assets/train.json':None})
-                    c1,tokenizer,_=load_frozen_model(gc['training_identity'],gc['C1_checkpoint'],assets,core/'protocol.json',device)
+                    try:
+                        with timed_budget(plan['recovery']['asset_seconds']):
+                            report['input_recovery']=recover_inputs(root,assets,gc,plan['recovery']['known_original_asset_versions'],
+                                min(deadline,time.monotonic()+plan['recovery']['asset_seconds']),include_weights=batch=='c',trace=recovery_trace)
+                            tokenizer=load_tokenizer(assets/'assets/tokenizer.json');c1=None
+                            if batch=='c':
+                                recovery_trace['active_stage']='FROZEN_HISTORICAL_MODEL_LOAD'
+                                c1,tokenizer,_=load_frozen_model(gc['training_identity'],gc['C1_checkpoint'],assets,core/'protocol.json',device)
+                    finally:report['timings']['input_asset_seconds']=time.monotonic()-phase_started
             report['timings']['recovery_seconds']=time.monotonic()-began
             if not restored_terminal:
                 if batch=='a' and report['preflight']['status']!='PASS':report['preflight']=preflight(plan,full=True)
@@ -318,13 +348,16 @@ def launch(root,base,out,device,batch):
                     'empirically_observed':communication_analysis(report['models']),
                     'preliminary_hypotheses':'DESCRIPTIVE_SINGLE_SEED_ONLY_NO_FORMAL_SUPPORT',
                     'not_established':['architectural superiority','independent-Test generalization','semantic memory or reasoning','human coherence before supplied reviews']}
-                report.update(status='COMPLETE');report.pop('error',None)
+                report.update(status='COMPLETE');report.pop('error',None);report.pop('failed_stage',None);report.pop('failed_substage',None)
     except AssetUnavailable as error:report.update(status='BLOCKED_MODEL_ASSET_UNAVAILABLE',error=str(error),failed_stage=stage)
     except BaselineIntegrityError as error:report.update(status='FAILED_INTEGRITY',error=str(error),failed_stage=stage)
-    except TimeoutError as error:report.update(status='INCOMPLETE',error=str(error),failed_stage=stage)
-    except (FloatingPointError,RuntimeError,ValueError,OSError,KeyError) as error:report.update(status='FAILED_NUMERICAL_OR_EXECUTION',error=str(error),failed_stage=stage)
+    except TimeoutError as error:report.update(status='BLOCKED_MODEL_ASSET_UNAVAILABLE' if stage=='RECOVERY' else 'INCOMPLETE',error=str(error),failed_stage=stage)
+    except (FloatingPointError,RuntimeError,ValueError,OSError,KeyError) as error:report.update(status='BLOCKED_MODEL_ASSET_UNAVAILABLE' if stage=='RECOVERY' else 'FAILED_NUMERICAL_OR_EXECUTION',error=str(error),failed_stage=stage)
     finally:
         elapsed=time.monotonic()-started
+        if stage=='RECOVERY':
+            report['timings']['recovery_seconds']=time.monotonic()-began if 'began' in locals() else elapsed
+            if report.get('error') and report['status']!='COMPLETE':report['failed_substage']=report.get('recovery',{}).get('active_stage','INITIALIZATION')
         if restored_terminal:report['timings']['publication_recovery_seconds']=elapsed
         else:report['timings']['execution_seconds']=report['timings'].get('execution_seconds',0.)+elapsed
         persist()

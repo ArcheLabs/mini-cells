@@ -193,14 +193,18 @@
     "extension_validation_deterioration_tolerance": 0.02
   },
   "recovery": {
-    "max_versions": 25,
+    "max_versions": 2,
     "known_original_asset_versions": [
       142
-    ]
+    ],
+    "backend_seconds": 30,
+    "progress_search_seconds": 30,
+    "asset_seconds": 120,
+    "policy": "local first; at most two recent progress versions; exact known-version inputs; no historical weights in A/B"
   },
   "budget": {
     "execution": 5400,
-    "recovery": 600,
+    "recovery": 180,
     "publication": 600,
     "safety": 1200,
     "hard": 7200,
