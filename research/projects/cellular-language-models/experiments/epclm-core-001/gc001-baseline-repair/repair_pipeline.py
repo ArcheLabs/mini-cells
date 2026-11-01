@@ -231,14 +231,14 @@ def launch(root,base,out,device,batch):
     identity={'source':source,'protocol':sha256_file(base/'protocol.json'),'data':gc['training_identity']['data'],'batch':batch,
               'original_result_commit':plan['original_result_commit']}
     recovery_id={k:identity[k] for k in ('source','protocol','data','batch')}
-    prior_identity=None if batch=='a' else compatible_progress(root,base,identity)
+    prior_identity=None if batch in ('a','b') else compatible_progress(root,base,identity)
     prior_recovery_id={k:prior_identity[k] for k in recovery_id} if prior_identity else None
-    archived_output=fresh_output(out,identity) if batch=='a' else None
+    archived_output=fresh_output(out,identity) if batch in ('a','b') else None
     experiment='epclm-gc001-repair-'+batch;out.mkdir(parents=True,exist_ok=True);path=out/'decision.json'
     report={'format':'minicells.gc001-repair.v1','status':'INCOMPLETE','identity':identity,'protocol':plan,'models':{},'timings':{},
             'environment':{'python':platform.python_version(),'torch':str(torch.__version__),'cuda':torch.version.cuda,'gpu':torch.cuda.get_device_name(),'precision':'fp32','autocast':False,'tf32':False},
             'hypotheses':dict.fromkeys(['H1','H2','H3','H4','H5'],'NOT_EVALUATED'),'human_evaluation':{'status':'PENDING','reviewers':0}}
-    if batch=='a':report['execution_policy']={'training':'FRESH_NO_PRIOR_CHECKPOINT','historical_progress_search':False,'prior_output_archive':archived_output,'tokenizer_data':'HASH_VERIFIED_REUSE','new_checkpoint_role':'CURRENT_RUN_TRAINING_AND_AUDIT_ONLY'}
+    if batch in ('a','b'):report['execution_policy']={'training':'FRESH_NO_PRIOR_CHECKPOINT','historical_progress_search':False,'prior_output_archive':archived_output,'tokenizer_data':'HASH_VERIFIED_REUSE','new_checkpoint_role':'CURRENT_RUN_TRAINING_AND_AUDIT_ONLY'}
     def load_report():
         nonlocal report
         if path.exists():
@@ -287,7 +287,7 @@ def launch(root,base,out,device,batch):
                 else:
                     had_local=path.exists()
                     restored=None
-                    if batch=='a':
+                    if batch in ('a','b'):
                         restored={'storage':'USER_REQUESTED_FRESH_TRAINING'}
                         recovery_trace.update(active_stage='FRESH_TRAINING',progress_search_status='SKIPPED_BY_USER_REQUEST')
                     elif had_local:restored={'storage':'VERIFIED_LOCAL_SOURCE_REPORT'}
@@ -347,6 +347,9 @@ def launch(root,base,out,device,batch):
                         if name=='F0':e['structural_parameter_audit']={'forward_participating_parameters':1312896,'inactive_allocated_parameters':180224,'basis':'unchanged Core F0 never uses left/center/right/update; post-hoc code audit'}
                         if name=='NO-COMM':e['structural_parameter_audit']={'declared_trainable':934016,'forward_participating_parameters':688256,'basis':'center-only zero non-entry states make 245760 pool coefficients inactive; post-hoc code audit'}
                     arms=ARMS
+                elif batch=='b':
+                    arms=('T1',)
+                    report['batch_a_result']={'status':'NOT_REQUIRED_FOR_STANDALONE_T1','comparison':'DEFERRED_TO_BATCH_C'}
                 else:
                     a=dependency(root,'a',identity)
                     if a[0]['status']!='COMPLETE':raise AssetUnavailable('Batch A is not complete; resume A instead of repeating training')

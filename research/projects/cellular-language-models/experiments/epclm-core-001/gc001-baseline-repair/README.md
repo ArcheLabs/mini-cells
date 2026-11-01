@@ -4,15 +4,15 @@ Status: IMPLEMENTATION_READY; real P1/P2 training and P3 GPU diagnostics NOT_RUN
 Source branch: `codex/epclm-gc001-baseline-repair`. The supplied [specification](SPEC.md)
 is retained as reference; [protocol.json](protocol.json) is the executable frozen design.
 
-## Execute in order
+## Execution entrypoints
 
 1. [Batch A — P1](batch-a.ipynb): import into the existing private
    `bingjiangli/minicells` Kaggle Notebook. Enable GPU, Internet, KAGGLE_API_TOKEN and
    GITHUB_TOKEN, then Save & Run All. Train C1-BROADCAST, IC-ALL-SELF and F0-PM-BROADCAST
    from fresh initialization, each for 250K tokens. Original C1/F0 and all original
    GC samples/metrics are frozen references, not retrained or regenerated.
-2. [Batch B — P2](batch-b.ipynb): only after A is published COMPLETE. Reuse all A
-   results; train the existing Native T1 adapter for 250K tokens. No repeated C1 pilot
+2. [Batch B — P2](batch-b.ipynb): standalone fresh Native T1 training for 250K
+   tokens; no Batch A prerequisite or historical training Checkpoint search. No C1 pilot
    or completed generation. Context128, KV disabled, actual bounded context replay.
 3. [Batch C — P3](batch-c.ipynb): reuse compatible published A/B and original GC.
    No training, sampling reruns or model extension. Aggregate all retained samples,
@@ -199,3 +199,5 @@ The two-version/30-second lookup is only the fast path when known committed trai
 ### Fresh Batch A execution (supersedes checkpoint-search policy above)
 
 At the user's explicit request, Batch A now trains fresh without searching or loading prior training Checkpoints. Existing local unfinished/different-identity output directories are archived, not deleted, before starting. Matching completed results are still reused for publication. Only the hash-verified original Tokenizer and data are recovered from known version 142. Current-run Checkpoints are still created and read by the existing milestone trainer; this does not reuse historical weights or optimizer state. Models, seeds, 250K Token targets, evaluation rules and overall time budgets are unchanged. The report records this policy and any archived local output; historical Kaggle/GitHub results remain untouched.
+
+Batch B is now the direct entrypoint for Native T1. It archives prior unfinished local output, recovers only verified Tokenizer/data, and trains/evaluates only T1 with the existing 250K Token FP32 path. The normal result publisher remains automatic. Cross-model comparisons are deferred to Batch C. A and B retain current-run milestone Checkpoints; historical optimizer/weight Checkpoints are not reused.
