@@ -178,6 +178,20 @@
       "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/gc001-baseline-repair/protocol.json",
       "scientific_decision": false,
       "note": "P1 fresh 250K C1-BROADCAST/IC-ALL-SELF/F0-PM-BROADCAST; P2 existing Native T1; P3 diagnostics and pending blind review. Original GC49c6fef immutable. GPU unrun; H1-H5 NOT_EVALUATED."
+    },
+    {
+      "id": "EPCLM-GC002-FAIR-ARCHITECTURE",
+      "name": "direction-c-fair-architecture-comparison",
+      "status": "protocol_draft_engineering_preparation_no_training_authorized",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/protocol.json",
+      "scientific_decision": false,
+      "authorized_phases": [
+        0,
+        1
+      ],
+      "authorized_training_tokens": 0,
+      "note": "GC001 immutable; separate parameter/token/FLOPs/inference-memory tracks. Native GQA KV and parameter-matched candidate preparation; raw asset audit, GPU/full FLOPs, seed/budget freeze pending. H1-H5 NOT_EVALUATED; Human Review PENDING."
     }
   ],
   "schema_version": 2

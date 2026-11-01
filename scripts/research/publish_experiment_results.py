@@ -28,6 +28,13 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-gc002-preparation": ExperimentSpec(
+        source_dir="results/epclm-gc002-preparation/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/preparation",
+        files=("decision.json", "baseline-audit.json", "data-audit.json", "tokenizer-audit.json", "parameter-match-report.json", "kv-cache-equivalence.json", "inference-profile.json", "memory-profile.json", "training-flops.json", "summary.md"),
+        branch="kaggle/epclm-gc002-preparation-results",
+        expected_format="minicells.gc002.preparation.v1",
+    ),
     "epclm-gc001-repair-a": ExperimentSpec(
         source_dir="results/epclm-gc001-repair-a/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-a",
