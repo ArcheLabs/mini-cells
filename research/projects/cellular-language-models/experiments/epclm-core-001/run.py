@@ -152,7 +152,13 @@ if __name__=='__main__':
     modes.add_argument('--development-pair',action='store_true')
     modes.add_argument('--diagnose-c1',action='store_true')
     modes.add_argument('--communication-propagation',action='store_true')
+    modes.add_argument('--generative-core',action='store_true')
+    modes.add_argument('--generative-core-transformer',action='store_true')
     args=parser.parse_args()
+    if args.generative_core or args.generative_core_transformer:
+        from generative_core import launch
+        launch(ROOT,BASE,args.output or Path('/kaggle/working/epclm-gc001-transformer' if args.generative_core_transformer else '/kaggle/working/epclm-gc001'),args.device,args.generative_core_transformer)
+        sys.exit(0)
     if args.communication_propagation:
         from communication_propagation import launch
         launch(ROOT,BASE,args.output or Path('/kaggle/working/epclm-core-001-cp001'),args.device)
