@@ -25,3 +25,11 @@ python research/projects/cellular-language-models/experiments/epclm-core-001/gc0
 - Phase 3/4：没有训练入口，不自动启动。门禁完成后提交完整预算与 GPU 小时计划，再获得单独授权。
 
 准备输出位于 `artifacts/experiments/epclm-core-001/gc002-fair-architecture/preparation/`，并为每份 JSON 附源码/文件/协议身份。未知身份为 null 且写明原因，不填写虚构的 Tokenizer、模型或性能哈希。随机权重的 KV 检查不构成历史训练 Checkpoint 等价性或科学效果证据。
+
+## 后续准备补充
+
+[运行计划](RUN-PLAN.zh-CN.md) 和 [冻结候选](freeze-candidate.json) 现已给出 A/B 12 个作业、3M Token 的**待批准提案**；当前授权仍为 0。历史逐 Update 输入哈希未发布，审计将此缺口保留为 `HISTORICAL_RUNTIME_ORDER_UNVERIFIABLE`，不再声称能事后验证实际顺序。原始 `SPEC.zh-CN.md` 和 GC001 均未改变。
+
+后续 Notebook 按完整 Update 形状检查四个模型的前向/反向/裁剪/零学习率 AdamW 清单，复用已完成的 CUDA KV 检查。合成夹具调用 Optimizer 仅验证运算路径，模型权重不变，不消费真实语料 Token。`flops_audit.py` 报告的是有明确规则的标量等价算术计数，不是实测硬件 FLOPs；未知算子、实际提交计量和目标环境验证仍会阻断正式 Compute-Matched 就绪。
+
+`exposure.py` 提供 commit-only、unique/repeated、顺序链哈希及身份绑定的恢复；`training_path.py` 提供事务采样和逐 lane 重置的并行 Chunk Teacher Forcing。只有采样 resolve(True) 才提交 ledger；溢出 rollback 恢复同一候选输入。正式 Checkpoint 必须将采样器、状态、ledger、Optimizer/Scheduler/RNG 作为同一原子事务保存。没有新增正式训练入口，也未把准备结果标记为 PROTOCOL_FROZEN。

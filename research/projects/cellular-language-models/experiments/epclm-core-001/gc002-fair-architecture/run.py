@@ -15,8 +15,10 @@ def publish(output):
     experiment='epclm-gc002-preparation';destination=ROOT/'results'/experiment/'publish';destination.mkdir(parents=True,exist_ok=True)
     decision=json.loads((output/'reports/research-decision.json').read_text())
     write(destination/'decision.json',{'format':'minicells.gc002.preparation.v1','status':decision['result']['status'],**decision})
-    mapping={'audit/baseline-audit.json':'baseline-audit.json','audit/data-audit.json':'data-audit.json','audit/tokenizer-audit.json':'tokenizer-audit.json','audit/parameter-match-report.json':'parameter-match-report.json','profiling/kv-cache-equivalence.json':'kv-cache-equivalence.json','profiling/inference-profile.json':'inference-profile.json','profiling/memory-profile.json':'memory-profile.json','profiling/training-flops.json':'training-flops.json','reports/summary.md':'summary.md'}
+    mapping={'audit/baseline-audit.json':'baseline-audit.json','audit/data-audit.json':'data-audit.json','audit/tokenizer-audit.json':'tokenizer-audit.json','audit/parameter-match-report.json':'parameter-match-report.json','profiling/kv-cache-equivalence.json':'kv-cache-equivalence.json','profiling/inference-profile.json':'inference-profile.json','profiling/memory-profile.json':'memory-profile.json','profiling/training-flops.json':'training-flops.json','reports/summary.md':'summary.md','audit/token-exposure.json':'token-exposure.json','audit/reused-engineering-evidence.json':'reused-engineering-evidence.json'}
     for source,target in mapping.items():shutil.copyfile(output/source,destination/target)
+    shutil.copyfile(BASE/'freeze-candidate.json',destination/'freeze-candidate.json')
+    shutil.copyfile(BASE/'RUN-PLAN.zh-CN.md',destination/'run-plan.zh-CN.md')
     artifacts=prepare_artifacts(ROOT,experiment,EXPERIMENTS[experiment],None)
     branch='kaggle/epclm-gc002-preparation-'+decision['identity']['git_commit'][:12]
     push_results(ROOT,artifacts,experiment,branch,'GITHUB_TOKEN','origin/main')
