@@ -45,7 +45,7 @@ EXPERIMENTS: dict[str, ExperimentSpec] = {
     "epclm-gc001-repair-c": ExperimentSpec(
         source_dir="results/epclm-gc001-repair-c/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-c",
-        files=('decision.json', 'summary.json', 'baseline-comparison.json', 'generation-metrics.json', 'generation-samples.json', 'performance.json', 'data-audit.json', 'state-diagnostics.json', 'human-evaluation.json', 'training-curves.json', 'communication-analysis.json', 'quality-diagnosis.json', 'extension-proposal.json', 'summary.md', 'blind-review.csv'),
+        files=('decision.json', 'summary.json', 'baseline-comparison.json', 'generation-metrics.json', 'generation-samples.json', 'performance.json', 'data-audit.json', 'state-diagnostics.json', 'human-evaluation.json', 'training-curves.json', 'communication-analysis.json', 'quality-diagnosis.json', 'extension-proposal.json', 'summary.md', 'blind-review.csv', 'statistical-evidence.json', 'research-decision.json'),
         branch="kaggle/epclm-gc001-repair-c-results",
         expected_format="minicells.gc001-repair.v1",
     ),

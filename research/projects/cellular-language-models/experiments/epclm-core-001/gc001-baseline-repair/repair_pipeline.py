@@ -192,6 +192,9 @@ def publish(root,out,report,experiment):
     from scripts.research.publish_experiment_results import EXPERIMENTS,prepare_artifacts,push_results
     destination=root/'results'/experiment/'publish';destination.mkdir(parents=True,exist_ok=True)
     write(destination/'decision.json',report)
+    if report['identity']['batch']=='c':
+        write(destination/'statistical-evidence.json',report['statistical_evidence'])
+        write(destination/'research-decision.json',report['research_decision_basis'])
     write(destination/'summary.json',{'status':report['status'],'identity':report['identity'],'batch':report['identity']['batch'],'scientific_status':'DEVELOPMENT_ONLY_H1_H5_NOT_EVALUATED',
                                     'human_review':report.get('human_evaluation',{'status':'PENDING'})})
     write(destination/'baseline-comparison.json',compare(report['models']))
@@ -210,6 +213,8 @@ def publish(root,out,report,experiment):
         '## D. State architecture','Fixed 2048-number cellular/independent/flat states versus T1 bounded token context; KV disabled for reference.',
         '## E. Generation quality','Every fixed prompt/mode is retained. Low repetition/PPL alone is not coherence. Human review remains pending unless real scores are supplied.',
         '## F. Scientific conclusions','Engineering checks and numerical observations are separate from hypotheses. One seed/development-only data establish no architectural superiority. H1–H5 NOT_EVALUATED.']
+    if report.get('research_decision_basis'):
+        sections+=['## G. Research decision basis',json.dumps(report['research_decision_basis'],ensure_ascii=False,indent=2),'## H. Completion boundary','Analysis is complete; Batch C remains review-pending until at least two reviewers independently rate every blinded sample in every dimension. No training budget increase is authorized.']
     if report.get('error'):sections+=['','Stop reason: '+report['error']]
     (destination/'summary.md').write_text('\n\n'.join(sections)+'\n')
     if report['identity']['batch']=='c':
@@ -223,6 +228,9 @@ def publish(root,out,report,experiment):
 
 
 def launch(root,base,out,device,batch):
+    if batch=='c':
+        from batch_c_analysis import launch_analysis
+        return launch_analysis(root,base,out)
     from scripts.research.publish_experiment_results import validate_origin,load_github_token
     if device!='cuda' or not torch.cuda.is_available():raise RuntimeError('Kaggle GPU required; no CPU training fallback')
     validate_origin(root);load_github_token('GITHUB_TOKEN')

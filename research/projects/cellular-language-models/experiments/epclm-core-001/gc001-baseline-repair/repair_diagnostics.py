@@ -142,6 +142,7 @@ def quality_findings(models,plan):
 
 def blind_review(output,models,plan):
     package=output/'blind-review.csv';keyfile=output/'private/human-key.json'
+    if (output/'human-review-scored.csv').exists() and not keyfile.exists():raise BaselineIntegrityError('scored reviews require the original private blind key; refusing remapping')
     all_rows=[(name,row) for name,entry in sorted(models.items()) if entry.get('status')=='COMPLETE' for row in entry.get('samples',[])]
     content_hash=hashlib.sha256(json.dumps([(name,r['prompt_index'],r['mode']['name'],r['text']) for name,r in all_rows],sort_keys=True).encode()).hexdigest()
     if keyfile.exists():
@@ -162,7 +163,7 @@ def blind_review(output,models,plan):
     from native_clm_runtime import sha256_file
     result={'status':'PENDING','reviewers':0,'samples':len(all_rows),'scale':[1,5],'dimensions':dimensions,
             'blind_package_sha256':sha256_file(package),'private_key_sha256':sha256_file(keyfile),
-            'comments':'No reviewer scores have been supplied. Reviewer receives only the blind package; named outputs must be withheld during scoring. Inter-reviewer agreement is not available.'}
+            'reviews_complete':False,'required_reviewers':2,'comments':'No reviewer scores have been supplied. Reviewer receives only the blind package; named outputs must be withheld during scoring. Inter-reviewer agreement is not available.'}
     scored=output/'human-review-scored.csv'
     if scored.exists():
         scores=[];seen=set();reviewers=set()
@@ -175,12 +176,15 @@ def blind_review(output,models,plan):
                 except (ValueError,KeyError):raise BaselineIntegrityError('human review requires six integer ratings')
                 if any(v<1 or v>5 for v in values.values()):raise BaselineIntegrityError('human scores outside 1–5')
                 reviewers.add(reviewer);seen.add((reviewer,sample))
-                scores.append({'sample_id':sample,'model':key['mapping'][sample]['model'],'scores':values,'comments':row.get('comments','')})
+                scores.append({'reviewer_id':reviewer,'sample_id':sample,'model':key['mapping'][sample]['model'],'scores':values,'comments':row.get('comments','')})
         result.update(status='REVIEWS_RECORDED' if scores else 'PENDING',reviewers=len(reviewers),reviews=len(scores),
             comments='Only supplied human ratings; complete source CSV and comments retained privately. Higher is better, including less degeneration.',
             inter_reviewer_agreement='NOT_AVAILABLE' if len(reviewers)<2 else 'NOT_COMPUTED',
             rated_samples=len({r['sample_id'] for r in scores}),
             mean_scores={name:{d:sum(r['scores'][d] for r in scores if r['model']==name)/sum(r['model']==name for r in scores) for d in dimensions} for name in {r['model'] for r in scores}})
+        counts={reviewer:sum(r['reviewer_id']==reviewer for r in scores) for reviewer in reviewers}
+        complete=len(reviewers)>=2 and all(count==len(all_rows) for count in counts.values())
+        result.update(reviews_complete=complete,coverage_by_reviewer=counts,required_ratings_per_reviewer=len(all_rows),status='COMPLETE' if complete else 'PARTIAL_REVIEWS' if scores else 'PENDING')
         write(output/'private/human-reviews-preserved.json',scores)
     return result
 
