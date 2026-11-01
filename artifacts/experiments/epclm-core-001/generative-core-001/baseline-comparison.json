@@ -1,0 +1,363 @@
+{
+  "C1": {
+    "status": "COMPLETE",
+    "allocated_parameters": 966784,
+    "training_trainable_parameters": 966784,
+    "persistent_state_dimension": 2048,
+    "state_memory_bytes": 8192,
+    "validation": {
+      "nll": 5.814626392302277,
+      "ppl": 335.16615445117395,
+      "documents": 16,
+      "tokens": 3322
+    },
+    "development_holdout": {
+      "nll": 5.863766379902273,
+      "ppl": 352.0475951325309,
+      "documents": 205,
+      "tokens": 47403
+    },
+    "test": {
+      "status": "NOT_AVAILABLE",
+      "reason": "no independent test in original pinned assets; development holdout has tokenizer-overlap limitation"
+    },
+    "generation_metrics": {
+      "greedy": {
+        "prompts": 16,
+        "generated_tokens": 2048,
+        "average_generated_length": 128.0,
+        "eos_rate": 0.0,
+        "tokens_per_second": 379.9461598407434,
+        "repeated_3gram_rate": 0.9459325396825397,
+        "distinct_1": 0.02734375,
+        "distinct_2": 0.04330708661417323,
+        "average_token_entropy": 6.6489025603514165
+      },
+      "sampling": {
+        "prompts": 16,
+        "generated_tokens": 1460,
+        "average_generated_length": 91.25,
+        "eos_rate": 0.875,
+        "tokens_per_second": 303.54132316404787,
+        "repeated_3gram_rate": 0.0394357643392059,
+        "distinct_1": 0.2810504539120016,
+        "distinct_2": 0.7657781866474013,
+        "average_token_entropy": 5.9357747753143855
+      }
+    },
+    "training": {
+      "status": "REUSED_COMPLETE",
+      "tokens": 250000,
+      "new_training_tokens": 0,
+      "source": "398a191dbb32e383c86c89b9c981777c7cd6c77f",
+      "elapsed_seconds": 571.241171671
+    },
+    "comparison_scope": {
+      "token_matched": true,
+      "state_matched": true,
+      "allocated_parameter_matched": true,
+      "active_parameter_matched": true,
+      "compute_matched": false,
+      "note": "NO-COMM allocated parameters include inactive left/right terms; zero-init bias-free disconnected non-entry cells stay zero, so allocated state is not used capacity. F0 has 1.49M vs C1 0.967M; T1 is context-based reference only",
+      "tbptt": 64,
+      "state_vs_gradient": "latent state retained across TBPTT, gradients detached at truncation; every document reset",
+      "kv_cache_bytes": 0,
+      "context_window": "NOT_APPLICABLE",
+      "no_history_replay_contract": "PASS_STATE_ONLY"
+    },
+    "model_identity": {
+      "namespace": "epclm-core-001-development-pair",
+      "path": "C1.pt",
+      "sha256": "36a58f642f93b859ce33f5fd55bd92c9f4196669dc8c62293088ea43ce8e7fd1",
+      "weights_sha256": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf",
+      "transition": "C1_NORMAL"
+    },
+    "checkpoint_bytes": 16992429,
+    "eligible_for_comparison": true,
+    "architecture_control": true
+  },
+  "B1-FROZEN-NO-COMM": {
+    "status": "COMPLETE",
+    "allocated_parameters": 966784,
+    "training_trainable_parameters": "NOT_AVAILABLE_FROZEN_ABLATION",
+    "persistent_state_dimension": 2048,
+    "state_memory_bytes": 8192,
+    "validation": {
+      "nll": 5.931120723073271,
+      "ppl": 376.57631518460676,
+      "documents": 16,
+      "tokens": 3322
+    },
+    "development_holdout": {
+      "nll": 5.977418931118308,
+      "ppl": 394.42102538935785,
+      "documents": 205,
+      "tokens": 47403
+    },
+    "test": {
+      "status": "NOT_AVAILABLE",
+      "reason": "no independent test in original pinned assets; development holdout has tokenizer-overlap limitation"
+    },
+    "generation_metrics": {
+      "greedy": {
+        "prompts": 16,
+        "generated_tokens": 2048,
+        "average_generated_length": 128.0,
+        "eos_rate": 0.0,
+        "tokens_per_second": 439.89214903852786,
+        "repeated_3gram_rate": 0.9563492063492063,
+        "distinct_1": 0.02392578125,
+        "distinct_2": 0.03543307086614173,
+        "average_token_entropy": 7.01069322344847
+      },
+      "sampling": {
+        "prompts": 16,
+        "generated_tokens": 1663,
+        "average_generated_length": 103.9375,
+        "eos_rate": 0.5625,
+        "tokens_per_second": 353.83727879735557,
+        "repeated_3gram_rate": 0.09823210318206119,
+        "distinct_1": 0.2676321898825786,
+        "distinct_2": 0.7025417567281994,
+        "average_token_entropy": 6.381593942577232
+      }
+    },
+    "training": {
+      "status": "FROZEN_INFERENCE_ABLATION_NOT_TRAINED",
+      "tokens": 250000,
+      "new_training_tokens": 0,
+      "source": "398a191dbb32e383c86c89b9c981777c7cd6c77f",
+      "elapsed_seconds": "NOT_APPLICABLE"
+    },
+    "comparison_scope": {
+      "token_matched": false,
+      "state_matched": true,
+      "allocated_parameter_matched": true,
+      "active_parameter_matched": false,
+      "compute_matched": false,
+      "note": "NO-COMM allocated parameters include inactive left/right terms; zero-init bias-free disconnected non-entry cells stay zero, so allocated state is not used capacity. F0 has 1.49M vs C1 0.967M; T1 is context-based reference only",
+      "tbptt": 64,
+      "state_vs_gradient": "latent state retained across TBPTT, gradients detached at truncation; every document reset",
+      "kv_cache_bytes": 0,
+      "context_window": "NOT_APPLICABLE",
+      "no_history_replay_contract": "PASS_STATE_ONLY"
+    },
+    "model_identity": {
+      "namespace": "epclm-core-001-development-pair",
+      "path": "C1.pt",
+      "sha256": "36a58f642f93b859ce33f5fd55bd92c9f4196669dc8c62293088ea43ce8e7fd1",
+      "weights_sha256": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf",
+      "transition": "FROZEN_CENTER_ONLY_ABLATION"
+    },
+    "checkpoint_bytes": 16992429,
+    "eligible_for_comparison": true,
+    "architecture_control": false
+  },
+  "NO-COMM": {
+    "status": "COMPLETE",
+    "allocated_parameters": 966784,
+    "training_trainable_parameters": 934016,
+    "persistent_state_dimension": 2048,
+    "state_memory_bytes": 8192,
+    "validation": {
+      "nll": 5.829323429710746,
+      "ppl": 340.1284803833766,
+      "documents": 16,
+      "tokens": 3322
+    },
+    "development_holdout": {
+      "nll": 5.8762854435574745,
+      "ppl": 356.48260454458404,
+      "documents": 205,
+      "tokens": 47403
+    },
+    "test": {
+      "status": "NOT_AVAILABLE",
+      "reason": "no independent test in original pinned assets; development holdout has tokenizer-overlap limitation"
+    },
+    "generation_metrics": {
+      "greedy": {
+        "prompts": 16,
+        "generated_tokens": 2048,
+        "average_generated_length": 128.0,
+        "eos_rate": 0.0,
+        "tokens_per_second": 443.8058744390374,
+        "repeated_3gram_rate": 0.9246031746031746,
+        "distinct_1": 0.02978515625,
+        "distinct_2": 0.0531496062992126,
+        "average_token_entropy": 6.259418311296031
+      },
+      "sampling": {
+        "prompts": 16,
+        "generated_tokens": 1311,
+        "average_generated_length": 81.9375,
+        "eos_rate": 0.875,
+        "tokens_per_second": 350.40579569071843,
+        "repeated_3gram_rate": 0.03799381949191753,
+        "distinct_1": 0.33215642918700783,
+        "distinct_2": 0.7916503878804363,
+        "average_token_entropy": 5.878463494069949
+      }
+    },
+    "training": {
+      "status": "COMPLETE",
+      "tokens": 250000,
+      "updates": 977,
+      "resumed_from_tokens": 0,
+      "resumed_from_updates": 0,
+      "target_tokens": 250000,
+      "new_tokens": 250000,
+      "elapsed_seconds": 460.033421954,
+      "checkpoint_save_seconds": 19.894938285999615,
+      "checkpoint_restore_seconds": 7.36069999902611e-05,
+      "tokens_per_second": 543.438774018732,
+      "effective_precision": {
+        "autocast_enabled": false,
+        "grad_scaler_enabled": false,
+        "model_dtype": "torch.float32",
+        "state_dtype": "torch.float32",
+        "loss_dtype": "torch.float32",
+        "optimizer_dtypes": [
+          "torch.float32"
+        ]
+      },
+      "peak_vram_bytes": 158621184,
+      "first_loss": 7.760518550872803,
+      "last_loss": 5.931589126586914,
+      "overflow_count": 0
+    },
+    "comparison_scope": {
+      "token_matched": true,
+      "state_matched": true,
+      "allocated_parameter_matched": true,
+      "active_parameter_matched": false,
+      "compute_matched": false,
+      "note": "NO-COMM allocated parameters include inactive left/right terms; zero-init bias-free disconnected non-entry cells stay zero, so allocated state is not used capacity. F0 has 1.49M vs C1 0.967M; T1 is context-based reference only",
+      "tbptt": 64,
+      "state_vs_gradient": "latent state retained across TBPTT, gradients detached at truncation; every document reset",
+      "kv_cache_bytes": 0,
+      "context_window": "NOT_APPLICABLE",
+      "no_history_replay_contract": "PASS_STATE_ONLY"
+    },
+    "model_identity": {
+      "checkpoint_sha256": "7f6331637d5fbfdc980ebe84493a16cd0cad07fcfb3401ad8961c1e49df27557",
+      "weights_sha256": "4abc8060c2d2f1a83e1ee35d35607c880d5992df5aec3f60adef69dac00eb3ba",
+      "transition": "CENTER_ONLY",
+      "training_identity": {
+        "source": "fc999f7677200ea875b8aacf2fe56ee896bd43ec",
+        "protocol": "1bf1771d7ae5b147d40671b51a7685484f88caa098ab05a992ff61039774d716",
+        "data": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+        "model": {
+          "vocab": 2048,
+          "cells": 16,
+          "dim": 128,
+          "steps": 4,
+          "alpha": 0.1,
+          "arm": "C0",
+          "window": 4,
+          "max_state_abs": 10000.0
+        },
+        "model_id": "NO-COMM",
+        "transition": "CENTER_ONLY",
+        "target_tokens": 250000,
+        "seed": 173018021
+      }
+    },
+    "checkpoint_bytes": 15740973,
+    "eligible_for_comparison": true,
+    "architecture_control": true
+  },
+  "F0": {
+    "status": "COMPLETE",
+    "allocated_parameters": 1493120,
+    "training_trainable_parameters": 1493120,
+    "persistent_state_dimension": 2048,
+    "state_memory_bytes": 8192,
+    "validation": {
+      "nll": 5.830023798407524,
+      "ppl": 340.3667791626818,
+      "documents": 16,
+      "tokens": 3322
+    },
+    "development_holdout": {
+      "nll": 5.888962144926173,
+      "ppl": 361.03039263948676,
+      "documents": 205,
+      "tokens": 47403
+    },
+    "test": {
+      "status": "NOT_AVAILABLE",
+      "reason": "no independent test in original pinned assets; development holdout has tokenizer-overlap limitation"
+    },
+    "generation_metrics": {
+      "greedy": {
+        "prompts": 16,
+        "generated_tokens": 2048,
+        "average_generated_length": 128.0,
+        "eos_rate": 0.0,
+        "tokens_per_second": 534.1120114794203,
+        "repeated_3gram_rate": 0.8412698412698413,
+        "distinct_1": 0.04345703125,
+        "distinct_2": 0.09744094488188976,
+        "average_token_entropy": 5.985160547075793
+      },
+      "sampling": {
+        "prompts": 16,
+        "generated_tokens": 1825,
+        "average_generated_length": 114.0625,
+        "eos_rate": 0.5625,
+        "tokens_per_second": 400.1681336782704,
+        "repeated_3gram_rate": 0.025952879284311104,
+        "distinct_1": 0.236818573232972,
+        "distinct_2": 0.7591099728228111,
+        "average_token_entropy": 5.995315019482384
+      }
+    },
+    "training": {
+      "status": "REUSED_COMPLETE",
+      "tokens": 250000,
+      "new_training_tokens": 0,
+      "source": "398a191dbb32e383c86c89b9c981777c7cd6c77f",
+      "elapsed_seconds": 348.574707358
+    },
+    "comparison_scope": {
+      "token_matched": true,
+      "state_matched": true,
+      "allocated_parameter_matched": false,
+      "active_parameter_matched": false,
+      "compute_matched": false,
+      "note": "NO-COMM allocated parameters include inactive left/right terms; zero-init bias-free disconnected non-entry cells stay zero, so allocated state is not used capacity. F0 has 1.49M vs C1 0.967M; T1 is context-based reference only",
+      "tbptt": 64,
+      "state_vs_gradient": "latent state retained across TBPTT, gradients detached at truncation; every document reset",
+      "kv_cache_bytes": 0,
+      "context_window": "NOT_APPLICABLE",
+      "no_history_replay_contract": "PASS_STATE_ONLY"
+    },
+    "model_identity": {
+      "path": "F0.pt",
+      "sha256": "19daca2c6a0ace49de17b56a55894ca8448f813e172a8f52917274c937de7004",
+      "weights_sha256": "7c882ef3b2d557ec6e33aff5d4d82f062ff1fa3dd43db4e1026bca90924e6ad4",
+      "transition": "FLAT_RECURRENT"
+    },
+    "checkpoint_bytes": 24143597,
+    "eligible_for_comparison": true,
+    "architecture_control": true
+  },
+  "T1": {
+    "status": "NOT_RUN",
+    "allocated_parameters": "NOT_RUN",
+    "training_trainable_parameters": "NOT_RUN",
+    "persistent_state_dimension": "NOT_RUN",
+    "state_memory_bytes": "NOT_RUN",
+    "validation": "NOT_AVAILABLE_INCOMPLETE",
+    "development_holdout": "NOT_AVAILABLE_INCOMPLETE",
+    "test": "NOT_RUN",
+    "generation_metrics": "NOT_AVAILABLE_INCOMPLETE",
+    "training": "NOT_RUN",
+    "comparison_scope": "NOT_RUN",
+    "model_identity": "NOT_RUN",
+    "checkpoint_bytes": "NOT_RUN",
+    "eligible_for_comparison": false,
+    "architecture_control": false
+  }
+}
