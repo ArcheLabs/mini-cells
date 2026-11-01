@@ -28,6 +28,27 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-gc001-repair-a": ExperimentSpec(
+        source_dir="results/epclm-gc001-repair-a/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-a",
+        files=('decision.json', 'summary.json', 'baseline-comparison.json', 'generation-metrics.json', 'generation-samples.json', 'performance.json', 'data-audit.json', 'state-diagnostics.json', 'human-evaluation.json', 'training-curves.json', 'communication-analysis.json', 'quality-diagnosis.json', 'extension-proposal.json', 'summary.md'),
+        branch="kaggle/epclm-gc001-repair-a-results",
+        expected_format="minicells.gc001-repair.v1",
+    ),
+    "epclm-gc001-repair-b": ExperimentSpec(
+        source_dir="results/epclm-gc001-repair-b/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-b",
+        files=('decision.json', 'summary.json', 'baseline-comparison.json', 'generation-metrics.json', 'generation-samples.json', 'performance.json', 'data-audit.json', 'state-diagnostics.json', 'human-evaluation.json', 'training-curves.json', 'communication-analysis.json', 'quality-diagnosis.json', 'extension-proposal.json', 'summary.md'),
+        branch="kaggle/epclm-gc001-repair-b-results",
+        expected_format="minicells.gc001-repair.v1",
+    ),
+    "epclm-gc001-repair-c": ExperimentSpec(
+        source_dir="results/epclm-gc001-repair-c/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-c",
+        files=('decision.json', 'summary.json', 'baseline-comparison.json', 'generation-metrics.json', 'generation-samples.json', 'performance.json', 'data-audit.json', 'state-diagnostics.json', 'human-evaluation.json', 'training-curves.json', 'communication-analysis.json', 'quality-diagnosis.json', 'extension-proposal.json', 'summary.md', 'blind-review.csv'),
+        branch="kaggle/epclm-gc001-repair-c-results",
+        expected_format="minicells.gc001-repair.v1",
+    ),
     "epclm-gc001": ExperimentSpec(
         source_dir="results/epclm-gc001/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/generative-core-001",
