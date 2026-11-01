@@ -20,3 +20,5 @@ The registry is only a discovery index. The owning experiment's frozen protocol
 and recorded source commit determine what was run and what can be concluded.
 
 - **EPCLM-CORE-001-C1-DIAGNOSTIC** — [Frozen C1 mechanism diagnostic](../projects/cellular-language-models/experiments/epclm-core-001/reports/mechanism-diagnostic/README.md). Post-training exploratory development; original C1 frozen; D0–D3 implementation ready, real asset recovery/GPU execution pending; H1–H5 NOT_EVALUATED.
+
+- **EPCLM-CORE-001-CP-001** — [Communication Propagation-001](../projects/cellular-language-models/experiments/epclm-core-001/reports/communication-propagation/README.md). Frozen C1, spatial propagation/cross-event persistence/predictive utility measured separately. Exploratory implementation ready; GPU unrun; no training or formal confirmation.

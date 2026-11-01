@@ -151,7 +151,12 @@ if __name__=='__main__':
     modes.add_argument('--pilot-only',action='store_true')
     modes.add_argument('--development-pair',action='store_true')
     modes.add_argument('--diagnose-c1',action='store_true')
+    modes.add_argument('--communication-propagation',action='store_true')
     args=parser.parse_args()
+    if args.communication_propagation:
+        from communication_propagation import launch
+        launch(ROOT,BASE,args.output or Path('/kaggle/working/epclm-core-001-cp001'),args.device)
+        sys.exit(0)
     if args.diagnose_c1:
         from mechanism_diagnostic import launch_diagnostic
         launch_diagnostic(ROOT,BASE,args.output or Path('/kaggle/working/epclm-core-001-c1-diagnostic'),args.device)

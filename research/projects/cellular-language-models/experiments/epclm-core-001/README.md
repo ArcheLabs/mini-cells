@@ -35,3 +35,7 @@ For the next round after the successful FP32 pilot, import **development-pair.ip
 ## Frozen C1 mechanism diagnostic
 
 Run [c1-mechanism-diagnostic.ipynb](c1-mechanism-diagnostic.ipynb) in the existing private Kaggle Notebook after the completed C1/F0 pair. This is inference only: pinned original C1/data, mandatory D0, State/Connection/Evolution interventions, independent budgets and automatic separate result publication. No optimizer or training fallback. See [implementation and remaining gates](reports/mechanism-diagnostic/README.md), [supplied specification](C1-MECHANISM-DIAGNOSTIC.md), and [diagnostic protocol](diagnostic-protocol.json). Actual private asset availability and GPU diagnostics remain unverified until execution; H1–H5 remain NOT_EVALUATED.
+
+## Communication Propagation-001
+
+[communication-propagation.ipynb](communication-propagation.ipynb) runs frozen C1 global/single-edge pulses with SHAM and ring-cone gates, all fixed future horizons, story-clustered analysis and independent result publication. Recovery prioritizes known version 142 (600-second cap); diagnosis is capped at 900 seconds. No training or confirmation. See [implementation record](reports/communication-propagation/README.md) and [fixed protocol](communication-propagation-protocol.json). CP-001 GPU execution remains pending.

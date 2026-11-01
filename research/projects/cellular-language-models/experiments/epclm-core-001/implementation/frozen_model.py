@@ -20,8 +20,10 @@ class BaselineIntegrityError(ValueError):
 
 
 class DiagnosticCore(Core):
-    """Identical parameters and normal forward; one inference-only message intervention."""
-    def evolve(self, state, steps=None, communication=True, trace=None):
+    """Identical parameters/normal forward; diagnostic-only message interventions."""
+    def evolve(self, state, steps=None, communication=True, trace=None, intervention=None, on_update=None):
+        if intervention is not None or on_update is not None:
+            return self._pulse_evolve(state, steps, communication, intervention, on_update, trace)
         if communication != 'CROSS_CELL_REMOVED':
             return super().evolve(state, steps, communication, trace)
         if self.config.arm != 'C1' or trace is not None:
@@ -38,6 +40,33 @@ class DiagnosticCore(Core):
         return state
 
 
+    def _pulse_evolve(self, state, steps, communication, intervention, on_update, trace):
+        steps = self.config.steps if steps is None else steps
+        if trace is not None or steps < 0: raise ValueError('invalid pulse trace/steps')
+        if intervention is not None:
+            receiver = intervention.get('receiver', -1)
+            expected = {'type':'EDGE_DROP_ONCE','receiver':receiver,
+                        'source':(receiver-1)%self.config.cells,'internal_step':0}
+            if (intervention != expected or not 0 <= receiver < self.config.cells or self.config.arm != 'C1'
+                    or communication is not True or not torch.is_inference_mode_enabled()
+                    or self.training or any(p.requires_grad for p in self.parameters())):
+                raise ValueError('invalid forward-only single-edge intervention')
+        for index in range(steps):
+            if intervention is not None and index == 0:
+                normalized = self.norm(state)
+                left = self.left(normalized.roll(1,1)).clone()
+                left[:,receiver] = 0  # Drop one directed term, not its weight or other receivers.
+                message = self.center(normalized) + left + self.right(normalized.roll(-1,1))
+                delta = self.update(torch.cat((normalized,message),-1))
+                state = state + self.config.alpha*delta
+                check_numerics(state.abs().amax() <= self.config.max_state_abs,
+                               'pulse state outside registered numerical range')
+            else:
+                state = self.evolve(state, 1, communication)
+            if on_update is not None: on_update(index, state)
+        return state
+
+
 def check_deadline(deadline):
     if time.monotonic() >= deadline: raise TimeoutError('diagnostic/recovery budget exhausted')
 
@@ -49,7 +78,7 @@ def safe_path(name):
 
 
 def recover_frozen_assets(root, destination, training_identity, checkpoint_identity, deadline, max_versions=25,
-                          progress_output=None, progress_identity=None):
+                          progress_output=None, progress_identity=None, preferred_versions=()):
     """Find the newest exact identity; stop immediately once verified assets are found."""
     names = (checkpoint_identity['path'], 'assets/manifest.json', 'assets/tokenizer.json', 'assets/development.json')
 
@@ -86,13 +115,27 @@ def recover_frozen_assets(root, destination, training_identity, checkpoint_ident
     api, fetch = _load_backend(root)
     latest = _version_number(api.metadata())
     cache = destination/'download-cache'
-    for version in range(latest, max(0, latest-max_versions), -1):
+    # Inspect only current-source progress in the newest version before the known
+    # model version. This keeps publication retries cheap without a history scan.
+    visits = ([(latest, True)] if preferred_versions and progress_output is not None else [])
+    visits += [(v,False) for v in dict.fromkeys(preferred_versions)]
+    visits += [(v,False) for v in range(latest,max(0,latest-max_versions),-1) if v not in preferred_versions]
+    for version, progress_only in visits:
         check_deadline(deadline)
         print('[C1 frozen recovery] inspect saved version '+str(version), flush=True)
         token = None; seen = set(); inventory_names = set()
         while True:
             check_deadline(deadline)
-            page = api.page(version, token)
+            try:
+                page = api.page(version, token)
+            except Exception as error:
+                # An absent preferred historical version may fall back safely. Auth,
+                # throttling and transport errors still stop rather than hide failure.
+                status=getattr(error,'status_code',getattr(error,'status',None))
+                if version in preferred_versions and (status==404 or '404' in str(error)):
+                    print('[C1 frozen recovery] preferred version unavailable; using bounded fallback',flush=True)
+                    break
+                raise
             inventory_names.update(row['file_name'] for row in page['files'])
             token = page.get('next_page_token')
             if not token: break
@@ -102,6 +145,8 @@ def recover_frozen_assets(root, destination, training_identity, checkpoint_ident
                             or n.endswith(destination.name+'/training-recovery.json')
                             or (progress_output is not None and n.endswith(progress_output.name+'/recovery.json')))
         candidates.sort(key=lambda n:(0 if progress_output is not None and n.endswith(progress_output.name+'/recovery.json') else 1,n))
+        if progress_only:
+            candidates=[n for n in candidates if progress_output is not None and n.endswith(progress_output.name+'/recovery.json')]
         for name in candidates:
             safe_path(name)
             download = cache/str(version)

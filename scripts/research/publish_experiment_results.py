@@ -28,6 +28,14 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-core-001-cp001": ExperimentSpec(
+        source_dir="results/epclm-core-001-cp001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/communication-propagation",
+        files=("decision.json", "summary.md", "global-pulse.json", "local-edge-pulse.json",
+               "temporal-impact.json", "spatial-propagation.json", "temporal-response.png", "propagation-heatmap.png"),
+        branch="kaggle/epclm-core-001-cp001-results",
+        expected_format="minicells.epclm-core-001.cp001.v1",
+    ),
     "epclm-core-001-c1-diagnostic": ExperimentSpec(
         source_dir="results/epclm-core-001-c1-diagnostic/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/mechanism-diagnostic",
