@@ -28,9 +28,10 @@ if __name__=='__main__':
     parser.add_argument('--device',choices=['cpu','cuda'],default='cpu')
     parser.add_argument('--output',type=Path,default=Path('/tmp/gc002-preparation'))
     parser.add_argument('--publish',action='store_true')
+    parser.add_argument('--recover-input-assets',action='store_true',help='verify known-version Tokenizer/data only, never weights')
     args=parser.parse_args()
     from repair_io import timed_budget
-    with timed_budget(5400):result=prepare(ROOT,BASE,args.output,args.device)
+    with timed_budget(5400):result=prepare(ROOT,BASE,args.output,args.device,recover_assets=args.recover_input_assets)
     if args.publish:
         with timed_budget(600):publish(args.output)
     print(result)

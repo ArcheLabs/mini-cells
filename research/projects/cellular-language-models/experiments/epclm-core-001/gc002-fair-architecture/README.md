@@ -5,7 +5,7 @@
 - [原始需求文档](SPEC.zh-CN.md)，原文保留。
 - [机器可读草案](protocol.json)：不是冻结协议；不生成表示冻结完成的 `protocol.sha256`。
 - [实施说明与待决项](IMPLEMENTATION-NOTES.zh-CN.md)。
-- [唯一准备 Notebook](prepare.ipynb)：原有 Kaggle Notebook、Internet 和 GITHUB_TOKEN，Save & Run All。CPU 可用；若已有 GPU，仅运行无训练的工程推理检查。无需 Kaggle Output 挂载、历史模型恢复或手填 SHA。
+- [唯一准备 Notebook](prepare.ipynb)：原有 Kaggle Notebook、Internet、GITHUB_TOKEN 和原有 KAGGLE_API_TOKEN，Save & Run All。CPU 可用；若已有 GPU，仅运行无训练的工程推理检查。自动从已知版本 142 只恢复四份数据资产并核验，不加载模型权重；无需 Kaggle Output 挂载或手填 SHA。
 
 本地只执行合成正确性与元数据审计，不运行训练或 CPU 性能 Benchmark：
 
