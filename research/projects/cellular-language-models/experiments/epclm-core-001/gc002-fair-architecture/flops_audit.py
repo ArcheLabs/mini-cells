@@ -10,7 +10,7 @@ from repair_models import build
 
 # A scalar-equivalent arithmetic convention, not hardware instruction counts.
 POINTWISE={'add':1,'sub':1,'mul':1,'div':1,'neg':1,'pow':1,'sqrt':1,'rsqrt':1,'reciprocal':1,'exp':1,'log':1,'sin':1,'cos':1,'abs':1,'sign':1,'silu':4,'silu_backward':10,'sigmoid':3,'sigmoid_backward':3,'tanh':1,'tanh_backward':3,'lerp':3,'addcmul':2,'addcdiv':2,'maximum':1,'minimum':1,'clamp':2,'clamp_min':1,'clamp_max':1,'where':0}
-ZERO={'view','_unsafe_view','reshape','transpose','t','permute','as_strided','expand','slice','select','detach','clone','copy','_to_copy','to','alias','contiguous','empty','empty_like','empty_strided','zeros','zeros_like','ones','ones_like','new_zeros','new_empty','fill','zero','cat','stack','split','split_with_sizes','unbind','unsqueeze','squeeze','roll','index','index_select','gather','scatter','masked_fill','arange','scalar_tensor','lift_fresh','resolve_conj','resolve_neg','slice_backward'}
+ZERO={'view','_unsafe_view','reshape','transpose','t','permute','as_strided','expand','slice','select','detach','clone','copy','_to_copy','to','alias','contiguous','empty','empty_like','empty_strided','zeros','zeros_like','ones','ones_like','new_zeros','new_empty','fill','zero','cat','stack','split','split_with_sizes','unbind','unsqueeze','squeeze','roll','index','index_select','gather','scatter','masked_fill','arange','scalar_tensor','lift_fresh','resolve_conj','resolve_neg','slice_backward','select_backward'}
 
 
 class ArithmeticCounter(FlopCounterMode):
