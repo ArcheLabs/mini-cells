@@ -40,3 +40,35 @@ def test_audited_source_resume(tmp_path):
         repair_io.recover_namespace(tmp_path,tmp_path/'out','progress',new,float('inf'),max_versions=2,resume_only=True,cache=tmp_path/'cache',compatible_identity=old)
     assert (tmp_path/'out/C1-BROADCAST.pt').read_bytes()==b'saved-optimizer'
     assert json.loads((tmp_path/'out/decision.json').read_text())['identity']==old
+
+
+def test_compatibility_in_depth_one_clone(tmp_path):
+    import hashlib
+    import subprocess
+    repo=tmp_path/'origin';repo.mkdir()
+    def git(root,*args):
+        return subprocess.check_output(['git',*args],cwd=root,stderr=subprocess.PIPE)
+    git(repo,'init','-q')
+    git(repo,'config','user.name','Fixture');git(repo,'config','user.email','fixture@example.invalid')
+    base=repo/'repair';base.mkdir()
+    (repo/'trainer.py').write_text('unchanged training')
+    (base/'protocol.json').write_text('unchanged protocol')
+    (base/'README.md').write_text('original note')
+    git(repo,'add','.');git(repo,'commit','-qm','original')
+    old=git(repo,'rev-parse','HEAD').decode().strip()
+    tree=git(repo,'ls-tree','-r','-z','HEAD')
+    rows=[r for r in tree.split(b'\0') if r and r.split(b'\t',1)[1]!=b'repair/README.md']
+    digest=hashlib.sha256(b'\0'.join(rows)+b'\0').hexdigest()
+    (base/'README.md').write_text('metadata hotfix note')
+    git(repo,'add','.');git(repo,'commit','-qm','hotfix')
+    shallow=tmp_path/'shallow'
+    git(tmp_path,'clone','-q','--depth=1',repo.as_uri(),str(shallow))
+    assert git(shallow,'rev-parse','--is-shallow-repository').strip()==b'true'
+    assert subprocess.run(['git','cat-file','-e',old],cwd=shallow,stderr=subprocess.PIPE).returncode!=0
+    identity={'source':'new','protocol':'same','data':'same','batch':'a'}
+    with patch.object(pipeline,'METADATA_FIX_SOURCE',old),patch.object(pipeline,'METADATA_FIX_TREE_SHA256',digest):
+        assert pipeline.compatible_progress(shallow,shallow/'repair',identity)=={**identity,'source':old}
+        git(shallow,'config','user.name','Fixture');git(shallow,'config','user.email','fixture@example.invalid')
+        (shallow/'trainer.py').write_text('incompatible training')
+        git(shallow,'add','.');git(shallow,'commit','-qm','changed training')
+        assert pipeline.compatible_progress(shallow,shallow/'repair',identity) is None

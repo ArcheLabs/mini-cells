@@ -24,14 +24,17 @@ from repair_diagnostics import generate,teacher_diagnostics,training_diagnostics
 
 ARTIFACT='artifacts/experiments/epclm-core-001/gc001-baseline-repair/'
 METADATA_FIX_SOURCE='6ac7cc1e465eb7d985a23ed35caab6c81f4cef89'
+# SHA256 of the original Git tree outside the four audited hotfix paths.
+METADATA_FIX_TREE_SHA256='94e4e7bd001c6977a9975de6d3b399bc0734588d97e6a895a41ca34082c7961b'
 
 
 def compatible_progress(root,base,identity):
-    # Only this audited metadata hotfix may reuse this exact training source.
-    changed=subprocess.check_output(['git','diff','--name-only',METADATA_FIX_SOURCE,'HEAD'],cwd=root,text=True).splitlines()
+    # HEAD's tree exists in shallow clones; the old commit need not be fetched.
+    tree=subprocess.check_output(['git','ls-tree','-r','-z','HEAD'],cwd=root)
     prefix=base.relative_to(root).as_posix()+'/'
     allowed={prefix+n for n in ('repair_pipeline.py','repair_io.py','README.md','tests/test_checkpoint_metadata.py')}
-    if not set(changed)<=allowed:return None
+    unchanged=[row for row in tree.split(b'\0') if row and row.split(b'\t',1)[1].decode() not in allowed]
+    if hashlib.sha256(b'\0'.join(unchanged)+b'\0').hexdigest()!=METADATA_FIX_TREE_SHA256:return None
     return {**identity,'source':METADATA_FIX_SOURCE}
 
 
