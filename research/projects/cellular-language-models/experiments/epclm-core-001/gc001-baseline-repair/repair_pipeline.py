@@ -39,6 +39,21 @@ def compatible_progress(root,base,identity):
 
 
 
+
+def fresh_output(out,identity):
+    """Preserve prior local outputs; never feed their weights into a fresh run."""
+    if not out.exists():return None
+    decision=out/'decision.json'
+    if decision.exists():
+        saved=json.loads(decision.read_text())
+        if saved.get('identity')==identity and saved.get('status')=='COMPLETE':return None
+    if not any(out.iterdir()):return None
+    import uuid
+    archive=out.with_name(out.name+'-previous-'+uuid.uuid4().hex[:12])
+    out.rename(archive)
+    return str(archive)
+
+
 def dependency(root,batch,identity,optional=False):
     branch='kaggle/epclm-gc001-repair-'+batch+'-'+identity['source'][:12]
     return public_result(root,branch,ARTIFACT+'batch-'+batch,identity['source'],identity['protocol'],optional=optional)
@@ -216,12 +231,14 @@ def launch(root,base,out,device,batch):
     identity={'source':source,'protocol':sha256_file(base/'protocol.json'),'data':gc['training_identity']['data'],'batch':batch,
               'original_result_commit':plan['original_result_commit']}
     recovery_id={k:identity[k] for k in ('source','protocol','data','batch')}
-    prior_identity=compatible_progress(root,base,identity)
+    prior_identity=None if batch=='a' else compatible_progress(root,base,identity)
     prior_recovery_id={k:prior_identity[k] for k in recovery_id} if prior_identity else None
+    archived_output=fresh_output(out,identity) if batch=='a' else None
     experiment='epclm-gc001-repair-'+batch;out.mkdir(parents=True,exist_ok=True);path=out/'decision.json'
     report={'format':'minicells.gc001-repair.v1','status':'INCOMPLETE','identity':identity,'protocol':plan,'models':{},'timings':{},
             'environment':{'python':platform.python_version(),'torch':str(torch.__version__),'cuda':torch.version.cuda,'gpu':torch.cuda.get_device_name(),'precision':'fp32','autocast':False,'tf32':False},
             'hypotheses':dict.fromkeys(['H1','H2','H3','H4','H5'],'NOT_EVALUATED'),'human_evaluation':{'status':'PENDING','reviewers':0}}
+    if batch=='a':report['execution_policy']={'training':'FRESH_NO_PRIOR_CHECKPOINT','historical_progress_search':False,'prior_output_archive':archived_output,'tokenizer_data':'HASH_VERIFIED_REUSE','new_checkpoint_role':'CURRENT_RUN_TRAINING_AND_AUDIT_ONLY'}
     def load_report():
         nonlocal report
         if path.exists():
@@ -270,7 +287,10 @@ def launch(root,base,out,device,batch):
                 else:
                     had_local=path.exists()
                     restored=None
-                    if had_local:restored={'storage':'VERIFIED_LOCAL_SOURCE_REPORT'}
+                    if batch=='a':
+                        restored={'storage':'USER_REQUESTED_FRESH_TRAINING'}
+                        recovery_trace.update(active_stage='FRESH_TRAINING',progress_search_status='SKIPPED_BY_USER_REQUEST')
+                    elif had_local:restored={'storage':'VERIFIED_LOCAL_SOURCE_REPORT'}
                     else:
                         recovery_trace['active_stage']='RECENT_PROGRESS_SEARCH';phase_started=time.monotonic()
                         protected=batch=='a' and prior_identity is not None

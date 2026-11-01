@@ -95,3 +95,15 @@ def test_interrupted_inventory_retried_in_bounded_fallback(tmp_path):
         restored=repair_io.recover_progress(tmp_path,tmp_path/'out','progress',{},float('inf'),{'progress_search_seconds':30,'max_versions':2},trace,protected=True)
     assert restored=={'version':147} and len(calls)==2
     assert trace['recent_search_status']=='TIMED_OUT'
+
+
+def test_fresh_output_archives_weights_and_keeps_completed_result(tmp_path):
+    import json
+    out=tmp_path/'batch-a';out.mkdir()
+    identity={'source':'new'}
+    (out/'decision.json').write_text(json.dumps({'identity':{'source':'old'},'status':'INCOMPLETE'}))
+    (out/'C1-BROADCAST.pt').write_bytes(b'old weights')
+    archived=pipeline.fresh_output(out,identity)
+    assert not out.exists() and (Path(archived)/'C1-BROADCAST.pt').read_bytes()==b'old weights'
+    out.mkdir();(out/'decision.json').write_text(json.dumps({'identity':identity,'status':'COMPLETE'}))
+    assert pipeline.fresh_output(out,identity) is None and out.exists()
