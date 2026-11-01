@@ -192,6 +192,17 @@
       ],
       "authorized_training_tokens": 0,
       "note": "GC001 immutable; separate parameter/token/FLOPs/inference-memory tracks. Native GQA KV and parameter-matched candidate preparation; raw asset audit, GPU/full FLOPs, seed/budget freeze pending. H1-H5 NOT_EVALUATED; Human Review PENDING."
+    },
+    {
+      "id": "EPCLM-GC002-T1-PILOT",
+      "name": "approved-t1-pm-kv-minimal-gpu-pilot",
+      "status": "user_authorized_pilot_implementation",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/pilot-protocol.json",
+      "authorized_training_tokens": 12800,
+      "authorized_updates": 50,
+      "scientific_decision": false,
+      "note": "User explicitly approved this minimal Pilot only. Full GC002 and larger budgets remain unauthorized. H1-H5 NOT_EVALUATED; human review PENDING."
     }
   ],
   "schema_version": 2
