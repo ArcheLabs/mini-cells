@@ -23,6 +23,11 @@ def test_committed_accounting_resume_and_fail_closed_flops():
     a=reconstruct(docs,7,target=9,batch=2,unroll=2)
     assert a==reconstruct(docs,7,target=9,batch=2,unroll=2)
     assert a['expected']['consumed_training_tokens']==9 and a['expected']['optimizer_updates']==3
+    from training_path import ChunkSampler
+    sampler=ChunkSampler(docs,7,batch=2);live=ExposureLedger(5)
+    while live.consumed<9:
+        sampler.propose(9-live.consumed,unroll=2);sampler.resolve(True,live)
+    assert live.report()==a['expected']
     with ArithmeticCounter() as counter:
         x=torch.ones(2,3);y=torch.ones(3,4);x@y
         torch.erf(x) # intentionally unregistered arithmetic must be visible.
