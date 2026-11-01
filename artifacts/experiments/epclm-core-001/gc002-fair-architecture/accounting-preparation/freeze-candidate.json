@@ -1,0 +1,153 @@
+{
+  "format": "minicells.gc002.freeze-candidate.v1",
+  "status": "FREEZE_CANDIDATE_NOT_AUTHORIZED_TO_TRAIN",
+  "training_authorized": false,
+  "stage": "MULTI_SEED_DEVELOPMENT_COMPARISON_NOT_INDEPENDENT_CONFIRMATION",
+  "approved_training_tokens": 0,
+  "seeds_proposed": [
+    173020021,
+    173020123,
+    173020227
+  ],
+  "seed_registry_check": "no exact matches in formal_seed_registry.json at preparation; must recheck at freeze",
+  "models": {
+    "C1-BROADCAST": {
+      "active_parameters": 966784
+    },
+    "IC-ALL-SELF": {
+      "active_parameters": 966784
+    },
+    "F0-PM-BROADCAST": {
+      "active_parameters": 964736,
+      "rank": 43
+    },
+    "T1-PM-KV": {
+      "active_parameters": 967808,
+      "config": {
+        "vocab": 2048,
+        "dim": 128,
+        "layers": 4,
+        "heads": 2,
+        "kv_heads": 2,
+        "ffn": 288,
+        "window": 128
+      }
+    }
+  },
+  "tracks_A_B": {
+    "jobs": 12,
+    "tokens_per_model_seed": 250000,
+    "total_tokens_proposed": 3000000,
+    "batch": 4,
+    "tbptt": 64,
+    "full_updates": 976,
+    "full_update_tokens": 256,
+    "final_update_tokens": 144,
+    "updates": 977,
+    "duplicate_A_B_cells": "execute once, reference under both control views; not extra independent replication",
+    "parameter_tolerance": 0.01,
+    "same_data_order_per_seed": true,
+    "precision": "fp32",
+    "data": "GC001_HASH_VERIFIED_REPRODUCTION_DEVELOPMENT_ONLY",
+    "optimizer": {
+      "name": "AdamW",
+      "lr": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "weight_decay": 0.1,
+      "clip_norm": 1.0,
+      "warmup_updates": 97,
+      "schedule": "cosine",
+      "hyperparameter_search_trials": 0
+    },
+    "transformer_training": "parallel teacher-forced chunk with detached previous-layer KV across TBPTT boundaries; no inference-only cached() training call; validate separately before freeze"
+  },
+  "track_C": {
+    "model_pair": [
+      "C1-BROADCAST",
+      "T1-PM-KV"
+    ],
+    "numerical_flops_budget": null,
+    "budget_proposal": "measured/validated cumulative complete-update C1 budget corresponding to 250K prediction events",
+    "checkpoints_fractions": [
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "relative_budget_tolerance": 0.05,
+    "last_update_policy": "count full accepted update, record undershoot/overshoot; reject completion if outside 5%; never silently change target",
+    "different_training_tokens_allowed": true,
+    "gate": "NOT_READY_UNTIL_LIVE_OPERATOR_AND_BUDGET_VALIDATED"
+  },
+  "track_D": {
+    "models": [
+      "C1-BROADCAST",
+      "T1-KV",
+      "T1-PM-KV"
+    ],
+    "tasks": [
+      "M1_DELAYED_FACT",
+      "M2_LONG_RANGE",
+      "M3_UPDATE",
+      "M4_INTERFERENCE",
+      "M5_PERSISTENCE"
+    ],
+    "distractor_token_lengths": [
+      128,
+      512,
+      1024,
+      4096,
+      8192
+    ],
+    "persistent_budget_bytes_proposed": [
+      16384,
+      65536,
+      262144,
+      1048576
+    ],
+    "natural_budget_inference": true,
+    "memory_scope": "all per-session tensor storage, retained token buffers, counters and explicit metadata; weights shared and reported separately; no padding to manufacture matching",
+    "cellular_fixed_state": "8192 tensor bytes plus per-session metadata; no state truncation without separate architecture/protocol",
+    "transformer_budgets": "derive maximum retained KV length from actual storage plus metadata; changing inference window is an explicit intervention",
+    "episodes_per_condition": null,
+    "query_rule": "fixed answer-token sequence and exact match; same randomized entities/queries across models; no model-dependent prompt tuning",
+    "gate": "EPISODES_TASK_GENERATOR_AND_CAPACITY_MAPPING_NOT_FROZEN"
+  },
+  "statistics": {
+    "primary_contrast": "C1-BROADCAST versus IC-ALL-SELF",
+    "primary_metric": "development holdout token-weighted NLL difference",
+    "secondary": "C1-BROADCAST versus T1-PM-KV under each distinct controlled track",
+    "paired_unit": "unique document ID and equal target token count",
+    "bootstrap_seed": 713,
+    "document_bootstrap_draws": 1000,
+    "seed_mean_and_sample_variance": true,
+    "reviewers": 2,
+    "reviewer_agreement": "ordinal weighted kappa with sample/model/mode coverage; specify handling before scoring",
+    "no_equivalence_claim_from_nonsignificance": true,
+    "no_test_access": true
+  },
+  "runtime_plan": {
+    "per_kaggle_session_hard_seconds": 7200,
+    "execution_seconds": 5400,
+    "publication_seconds": 600,
+    "safety_seconds": 1200,
+    "jobs_per_session": 1,
+    "A_B_maximum_reserved_gpu_hours": 24,
+    "interpretation": "12 isolated jobs times two-hour allocation cap, not measured training cost; C/D and Pilot excluded",
+    "historical_T1_reference_gpu_hours_for_3_seeds": 3.3444376542325003,
+    "measured_optimized_training_gpu_hours": null,
+    "no_long_training_extension": true
+  },
+  "freeze_gates": [
+    "complete data/Tokenizer identity from pinned verified source",
+    "accepted-update exposure ledger must be checkpoint-atomic with sampler/optimizer",
+    "validate complete forward/backward/clipping/optimizer arithmetic coverage in target runtime",
+    "choose numerical Compute-Matched budget and checkpoint targets",
+    "freeze memory episode counts/generator/byte accounting",
+    "measure optimized training throughput in separately authorized Pilot before estimating actual GPU hours",
+    "explicit separate Pilot/formal training approval"
+  ]
+}
