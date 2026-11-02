@@ -142,8 +142,13 @@ class FormalTrainer:
         result.flops_updates=saved['flops_updates'];result.flops_aggregate=saved['flops_aggregate'];result.metrics=saved['metrics'];result.resume_result=saved['resume_result']
         result.training_seconds=saved.get('training_seconds',sum(row['seconds'] for row in result.metrics))
         result.checkpoint_seconds=saved.get('checkpoint_seconds',0.)
-        if len(result.metrics)!=result.ledger.updates or len(result.flops_updates)!=result.ledger.updates or sum(r['prediction_tokens'] for r in result.metrics)!=result.ledger.consumed:
+        if len(result.metrics)!=result.ledger.updates or len(result.flops_updates)!=result.ledger.updates or sum(r['update_prediction_tokens'] for r in result.metrics)!=result.ledger.consumed:
             raise ValueError('checkpoint metric, FLOPs and exposure positions disagree')
+        cumulative=0
+        for update,(metric,flops) in enumerate(zip(result.metrics,result.flops_updates),1):
+            cumulative+=metric['update_prediction_tokens']
+            if metric['update']!=update or flops['update']!=update or metric['prediction_tokens']!=cumulative or flops['prediction_tokens']!=metric['update_prediction_tokens']:
+                raise ValueError('checkpoint per-update metric, FLOPs and exposure positions disagree')
         restore_rng(saved['rng']);return result
 
     def next_signature(self):

@@ -50,16 +50,17 @@ def test_formal_update_flops_and_interrupted_resume_are_atomic(tmp_path):
     torch.set_num_threads(1)
     assert missing_operator_categories({'forward':{'matmul','softmax'}},{'forward':['matmul']})=={'forward':['softmax']}
     protocol={'model':{'vocab':32,'dim':16,'layers':1,'heads':2,'kv_heads':1,'ffn':32,'window':4},'seed':19,
-        'training':{'batch_lanes':2,'fresh_prediction_targets_per_lane':2,'context_reuse_per_sequence_max':2,'prediction_token_budget':8},
+        'training':{'batch_lanes':2,'fresh_prediction_targets_per_lane':2,'context_reuse_per_sequence_max':2,'prediction_token_budget':12},
         'optimizer':{'learning_rate':1e-3,'betas':[.9,.95],'weight_decay':.1,'foreach':False,'gradient_clip_norm':1.},
-        'scheduler':{'total_updates':2,'warmup_updates':1}}
+        'scheduler':{'total_updates':3,'warmup_updates':1}}
     documents=[{'id':'a','tokens':[2,4,5,6,7,3]},{'id':'b','tokens':[2,8,9,10,11,3]}]
     identity={'source':'synthetic','protocol':'fixture','data':'fixture','tokenizer':'fixture','seed':19}
-    engine=FormalTrainer(documents,identity,protocol,'cpu',target_tokens=8);row,_=engine.update()
+    engine=FormalTrainer(documents,identity,protocol,'cpu',target_tokens=12);row,_=engine.update()
     assert row['phase_flops']['forward']>0 and row['phase_flops']['backward']>0 and row['phase_flops']['optimizer']>0
     assert not row['unsupported_operators']
+    engine.update() # Recover after multiple cumulative metric rows.
     engine=verify_resume(engine,tmp_path/'formal.pt')
-    assert engine.resume_result['status']=='PASS' and engine.ledger.consumed==8
+    assert engine.resume_result['status']=='PASS' and engine.ledger.consumed==12
 
 
 def test_exact_source_bundle_restores_last_committed_report_and_checkpoint(tmp_path):
