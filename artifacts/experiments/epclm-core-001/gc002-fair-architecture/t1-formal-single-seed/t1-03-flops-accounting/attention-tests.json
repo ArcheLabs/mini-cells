@@ -1,0 +1,1674 @@
+{
+  "status": "PASS",
+  "attention_records": [
+    {
+      "phase": "forward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 64, 64]"
+      ],
+      "output_shapes": [
+        "[2, 64, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 33554432,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 2048]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 2048]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 288]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 150994944,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[288, 128]",
+        "[64, 288]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 75497472,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 128]",
+        "[2, 128, 64]"
+      ],
+      "output_shapes": [
+        "[2, 128, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 64]",
+        "[2, 64, 128]"
+      ],
+      "output_shapes": [
+        "[2, 128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 268435456,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[128, 2048]"
+      ],
+      "output_shapes": [
+        "[128, 2048]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 268435456,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[128, 288]"
+      ],
+      "output_shapes": [
+        "[128, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 301989888,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 288]",
+        "[288, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 150994944,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 64, 64]"
+      ],
+      "output_shapes": [
+        "[2, 64, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 288]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 75497472,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 64]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 64]",
+        "[64, 288]"
+      ],
+      "output_shapes": [
+        "[128, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 75497472,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2048, 128]",
+        "[64, 2048]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2048, 64]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[2048, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[288, 128]",
+        "[64, 288]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 150994944,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[288, 64]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[288, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 150994944,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 128]",
+        "[2, 128, 64]"
+      ],
+      "output_shapes": [
+        "[2, 128, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 128]",
+        "[2, 64, 128]"
+      ],
+      "output_shapes": [
+        "[2, 64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 64]",
+        "[2, 64, 128]"
+      ],
+      "output_shapes": [
+        "[2, 128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 128,
+      "estimated_flops": 536870912,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[128, 288]"
+      ],
+      "output_shapes": [
+        "[128, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 301989888,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[2048, 128]"
+      ],
+      "output_shapes": [
+        "[2048, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 268435456,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[288, 128]"
+      ],
+      "output_shapes": [
+        "[288, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 301989888,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 2048]",
+        "[2048, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 268435456,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 288]",
+        "[288, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 301989888,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten._log_softmax",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[64, 2048]"
+      ],
+      "output_shapes": [
+        "[64, 2048]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 8,
+      "estimated_flops": 5242880,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten._safe_softmax",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[1, 2, 64, 64]"
+      ],
+      "output_shapes": [
+        "[1, 2, 64, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 655360,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten._safe_softmax",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[1, 2, 128, 128]"
+      ],
+      "output_shapes": [
+        "[1, 2, 128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 2621440,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten._log_softmax_backward_data",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[64, 2048]"
+      ],
+      "output_shapes": [
+        "[64, 2048]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 8,
+      "estimated_flops": 4194304,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten._softmax_backward_data",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[1, 2, 64, 64]"
+      ],
+      "output_shapes": [
+        "[1, 2, 64, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 524288,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten._softmax_backward_data",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[1, 2, 128, 128]"
+      ],
+      "output_shapes": [
+        "[1, 2, 128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 2097152,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    }
+  ],
+  "qk_and_av_forward_matrix_records": [
+    {
+      "phase": "forward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 64, 64]"
+      ],
+      "output_shapes": [
+        "[2, 64, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 33554432,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 2048]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 2048]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 288]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 150994944,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[288, 128]",
+        "[64, 288]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 75497472,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 128]",
+        "[2, 128, 64]"
+      ],
+      "output_shapes": [
+        "[2, 128, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 64]",
+        "[2, 64, 128]"
+      ],
+      "output_shapes": [
+        "[2, 128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 268435456,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[128, 2048]"
+      ],
+      "output_shapes": [
+        "[128, 2048]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 268435456,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[128, 288]"
+      ],
+      "output_shapes": [
+        "[128, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 301989888,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 288]",
+        "[288, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 150994944,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    }
+  ],
+  "softmax_forward_records": [
+    {
+      "phase": "forward",
+      "operator": "aten._log_softmax",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[64, 2048]"
+      ],
+      "output_shapes": [
+        "[64, 2048]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 8,
+      "estimated_flops": 5242880,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten._safe_softmax",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[1, 2, 64, 64]"
+      ],
+      "output_shapes": [
+        "[1, 2, 64, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 655360,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "forward",
+      "operator": "aten._safe_softmax",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[1, 2, 128, 128]"
+      ],
+      "output_shapes": [
+        "[1, 2, 128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 2621440,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    }
+  ],
+  "attention_backward_matrix_records": [
+    {
+      "phase": "backward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 64, 64]"
+      ],
+      "output_shapes": [
+        "[2, 64, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 288]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[64, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 75497472,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 64]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 64,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 64]",
+        "[64, 288]"
+      ],
+      "output_shapes": [
+        "[128, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 75497472,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2048, 128]",
+        "[64, 2048]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2048, 64]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[2048, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[288, 128]",
+        "[64, 288]"
+      ],
+      "output_shapes": [
+        "[64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 150994944,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[288, 64]",
+        "[64, 128]"
+      ],
+      "output_shapes": [
+        "[288, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 150994944,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 128]",
+        "[2, 128, 64]"
+      ],
+      "output_shapes": [
+        "[2, 128, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 134217728,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 128]",
+        "[2, 64, 128]"
+      ],
+      "output_shapes": [
+        "[2, 64, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.bmm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[2, 128, 64]",
+        "[2, 64, 128]"
+      ],
+      "output_shapes": [
+        "[2, 128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 67108864,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 128,
+      "estimated_flops": 536870912,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[128, 288]"
+      ],
+      "output_shapes": [
+        "[128, 288]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 301989888,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[2048, 128]"
+      ],
+      "output_shapes": [
+        "[2048, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 268435456,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 128]",
+        "[288, 128]"
+      ],
+      "output_shapes": [
+        "[288, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 301989888,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 2048]",
+        "[2048, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 4,
+      "estimated_flops": 268435456,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten.mm",
+      "category": "MATRIX_MULTIPLY",
+      "input_shapes": [
+        "[128, 288]",
+        "[288, 128]"
+      ],
+      "output_shapes": [
+        "[128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 32,
+      "estimated_flops": 301989888,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    }
+  ],
+  "softmax_backward_records": [
+    {
+      "phase": "backward",
+      "operator": "aten._log_softmax_backward_data",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[64, 2048]"
+      ],
+      "output_shapes": [
+        "[64, 2048]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 8,
+      "estimated_flops": 4194304,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten._softmax_backward_data",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[1, 2, 64, 64]"
+      ],
+      "output_shapes": [
+        "[1, 2, 64, 64]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 524288,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    },
+    {
+      "phase": "backward",
+      "operator": "aten._softmax_backward_data",
+      "category": "ATTENTION_SOFTMAX",
+      "input_shapes": [
+        "[1, 2, 128, 128]"
+      ],
+      "output_shapes": [
+        "[1, 2, 128, 128]"
+      ],
+      "input_dtypes": [
+        "torch.float32"
+      ],
+      "output_dtypes": [
+        "torch.float32"
+      ],
+      "execution_count": 16,
+      "estimated_flops": 2097152,
+      "accounting_status": "ESTIMATED_REFERENCE_FORMULA",
+      "estimate_method": "semantic_scalar_operation_reference_formula_v1",
+      "memory_output_bytes": 0,
+      "logical_output_bytes": 0
+    }
+  ],
+  "basis": "actual T1-PM-KV updates using held-out-free documents from the audited training split"
+}

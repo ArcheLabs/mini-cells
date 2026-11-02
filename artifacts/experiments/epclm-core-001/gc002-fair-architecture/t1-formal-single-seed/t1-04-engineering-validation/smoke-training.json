@@ -1,0 +1,129 @@
+{
+  "status": "RUNNING",
+  "run_id": "t1-04-smoke-f3ec4ba7ce65",
+  "training_tokens": 12800,
+  "committed_tokens": 1280,
+  "optimizer_updates": 5,
+  "metrics": [
+    {
+      "update": 1,
+      "prediction_tokens": 256,
+      "update_prediction_tokens": 256,
+      "loss": 7.587162017822266,
+      "gradient_norm_before_clip": 3.169825792312622,
+      "input_tokens": 256,
+      "context_reuse_tokens": 0,
+      "padding_tokens": 0,
+      "eos_targets": 0,
+      "seconds": 0.9218511359999866,
+      "tokens_per_second": 277.70210395445423,
+      "phase_flops": {
+        "forward": 536060934,
+        "backward": 1073943045,
+        "gradient_clipping": 2903505,
+        "optimizer": 11613734
+      },
+      "registered_operator_records": 251,
+      "unsupported_operators": {},
+      "data_order_hash": "f1c74c595057ccbf8eb7168ed1b39f821e53c9ddbf41beba2c01529fa0697b5d",
+      "learning_rate_used": 3.092783505154639e-06
+    },
+    {
+      "update": 2,
+      "prediction_tokens": 512,
+      "update_prediction_tokens": 256,
+      "loss": 7.583497524261475,
+      "gradient_norm_before_clip": 3.7072787284851074,
+      "input_tokens": 512,
+      "context_reuse_tokens": 256,
+      "padding_tokens": 0,
+      "eos_targets": 0,
+      "seconds": 0.45893981300002906,
+      "tokens_per_second": 557.8073480410465,
+      "phase_flops": {
+        "forward": 1138177542,
+        "backward": 2275615749,
+        "gradient_clipping": 2903505,
+        "optimizer": 11613734
+      },
+      "registered_operator_records": 257,
+      "unsupported_operators": {},
+      "data_order_hash": "9847767037df670c570051364cced90da6dbe84031a888bf1438ef8130a20177",
+      "learning_rate_used": 6.185567010309278e-06
+    },
+    {
+      "update": 3,
+      "prediction_tokens": 768,
+      "update_prediction_tokens": 256,
+      "loss": 7.638485908508301,
+      "gradient_norm_before_clip": 3.1986186504364014,
+      "input_tokens": 512,
+      "context_reuse_tokens": 256,
+      "padding_tokens": 0,
+      "eos_targets": 1,
+      "seconds": 0.5619989720000262,
+      "tokens_per_second": 455.51684745784206,
+      "phase_flops": {
+        "forward": 1135110023,
+        "backward": 2270801158,
+        "gradient_clipping": 2903505,
+        "optimizer": 11613734
+      },
+      "registered_operator_records": 533,
+      "unsupported_operators": {},
+      "data_order_hash": "b4c44ec02e404d6f7f4a23b50d099286226babee3959980bddd406f4171a4f14",
+      "learning_rate_used": 9.278350515463917e-06
+    },
+    {
+      "update": 4,
+      "prediction_tokens": 1024,
+      "update_prediction_tokens": 256,
+      "loss": 7.623839855194092,
+      "gradient_norm_before_clip": 2.6248271465301514,
+      "input_tokens": 454,
+      "context_reuse_tokens": 198,
+      "padding_tokens": 0,
+      "eos_targets": 3,
+      "seconds": 0.7856886829999894,
+      "tokens_per_second": 325.82879903846526,
+      "phase_flops": {
+        "forward": 952595605,
+        "backward": 1910213556,
+        "gradient_clipping": 2903505,
+        "optimizer": 11613734
+      },
+      "registered_operator_records": 960,
+      "unsupported_operators": {},
+      "data_order_hash": "66dea7ee4befa3e948c830f0298040b9155986e180668979fdfc3f7948ebb841",
+      "learning_rate_used": 1.2371134020618556e-05
+    },
+    {
+      "update": 5,
+      "prediction_tokens": 1280,
+      "update_prediction_tokens": 256,
+      "loss": 7.591363906860352,
+      "gradient_norm_before_clip": 2.789746046066284,
+      "input_tokens": 471,
+      "context_reuse_tokens": 215,
+      "padding_tokens": 0,
+      "eos_targets": 0,
+      "seconds": 0.4670110989999898,
+      "tokens_per_second": 548.1668434608351,
+      "phase_flops": {
+        "forward": 1037781268,
+        "backward": 2075354307,
+        "gradient_clipping": 2903505,
+        "optimizer": 11613734
+      },
+      "registered_operator_records": 656,
+      "unsupported_operators": {},
+      "data_order_hash": "dfaa236b60242e5cc00f8afa208a5e3ab2c54e0dacb333f769f839df297e7b88",
+      "learning_rate_used": 1.5463917525773194e-05
+    }
+  ],
+  "resume": {
+    "status": "NOT_RUN"
+  },
+  "training_seconds": 3.195489703000021,
+  "checkpoint_sha256": "1e7b6c55575abe5c6142b6bb91ce133017a3bd287350b60fbe6a8bb09ec8dd0c"
+}
