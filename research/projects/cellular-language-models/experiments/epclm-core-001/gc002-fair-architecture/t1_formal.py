@@ -24,6 +24,7 @@ from preparation import parameter_count,write
 from repair_io import recover_inputs,timed_budget
 from t1_evaluation import evaluate_documents,generation_diagnostics,inference_profile
 from t1_validation import cache_equivalence_and_invalidation,training_reference
+from storage import bundle
 
 PROTOCOL_PATH=BASE/'t1-formal-protocol.json'
 PUBLISH_FILES=('decision.json','t1-formal-readiness/decision.json','manifest.json','summary.md',
