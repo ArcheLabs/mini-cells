@@ -83,6 +83,14 @@ def stage_decision(out,name,status,**fields):
     write_json(out/name/'decision.json',{'status':status,**fields})
 
 
+def missing_operator_categories(required_categories,observed_categories):
+    missing={}
+    for phase,required in required_categories.items():
+        absent=set(required)-set(observed_categories.get(phase,[]))
+        if absent:missing[phase]=sorted(absent)
+    return missing
+
+
 def validate_freeze(protocol,registry):
     train=protocol['training'];schedule=protocol['scheduler'];optimizer=protocol['optimizer'];checkpoint=protocol['checkpoint']
     if protocol['status']!='FROZEN_T1_SINGLE_SEED_CONDITIONAL_ON_ENGINEERING_GATES':raise ValueError('T1 formal protocol is not frozen')
@@ -146,7 +154,7 @@ def _t1_03(root,protocol,identity,device,out,training_documents):
     required_categories={'forward':{'MATRIX_MULTIPLY','ATTENTION_SOFTMAX','EMBEDDING_OR_GRADIENT_ACCUMULATION','NORMALIZATION_OR_REDUCTION','ACTIVATION_OR_TRANSCENDENTAL'},
         'backward':{'MATRIX_MULTIPLY','ATTENTION_SOFTMAX','EMBEDDING_OR_GRADIENT_ACCUMULATION','NORMALIZATION_OR_REDUCTION','ACTIVATION_OR_TRANSCENDENTAL'},
         'optimizer':{'OPTIMIZER'}}
-    missing={key:sorted(required-values) for key,required in required_categories.items() if not required<=set(categories.get(key,[]))}
+    missing=missing_operator_categories(required_categories,categories)
     unknown=live.get('unsupported_operators',{})
     if any(phase.get(key,0)<=0 for key in required_phases) or not records or unknown or missing:raise ValueError('T1 live arithmetic coverage failed: '+json.dumps({'phase_flops':phase,'unsupported':unknown,'missing_categories':missing},sort_keys=True))
     measured=profiler_inventory(profiler)
@@ -155,7 +163,7 @@ def _t1_03(root,protocol,identity,device,out,training_documents):
         'accounting_probe_updates':probe_plan['updates'],'accounting_probe_prediction_tokens':probe_plan['prediction_targets'],
         'formal_training_tokens_consumed':probe_plan['formal_training_budget_tokens'],
         'probe_data_order_sha256':probe.ledger.order_hash,'probe_exposure':probe.ledger.report(),
-        'phase_flops':phase,'total_training_flops':total,'flops_per_prediction_token':total/512,
+        'phase_flops':phase,'total_training_flops':total,'flops_per_prediction_token':total/probe_plan['prediction_targets'],
         'phase_operator_categories':categories,'unsupported_operators':unknown,'missing_major_categories':missing,
         'operator_inventory_records':len(records),'input_shape_profile':'actual full-sequence windows from four-lane batches sampled from the audited Training Split',
         'counter_convention':'semantic scalar-operation equivalents; 1 MAC=2 FLOPs; direct dispatch inventory plus reference formula; not hardware instruction measurements',

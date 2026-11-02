@@ -7,6 +7,7 @@ from training_path import FullSequenceSampler,teacher_forced_sequences
 from exposure import ExposureLedger
 from formal_training import FormalTrainer,verify_resume
 from storage import bundle,reuse_local_assets
+from t1_formal import missing_operator_categories
 
 
 def test_full_sequence_training_reset_loss_gradient_and_cache_weight_version():
@@ -47,6 +48,7 @@ def test_full_sequence_training_reset_loss_gradient_and_cache_weight_version():
 
 def test_formal_update_flops_and_interrupted_resume_are_atomic(tmp_path):
     torch.set_num_threads(1)
+    assert missing_operator_categories({'forward':{'matmul','softmax'}},{'forward':['matmul']})=={'forward':['softmax']}
     protocol={'model':{'vocab':32,'dim':16,'layers':1,'heads':2,'kv_heads':1,'ffn':32,'window':4},'seed':19,
         'training':{'batch_lanes':2,'fresh_prediction_targets_per_lane':2,'context_reuse_per_sequence_max':2,'prediction_token_budget':8},
         'optimizer':{'learning_rate':1e-3,'betas':[.9,.95],'weight_decay':.1,'foreach':False,'gradient_clip_norm':1.},
