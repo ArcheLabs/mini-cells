@@ -1,0 +1,38 @@
+{
+  "format": "minicells.gc002.t1-formal-manifest.v1",
+  "run_id": "gc002-t1-formal-63cb0a48c2f5-s173020021",
+  "identity": {
+    "source": "63cb0a48c2f59362e5e41864effa2d310bc3cddf",
+    "protocol": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
+    "dataset": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "train_json": "711e8f2f1255c1fa2b3855a7cb6cef108b593ea0e1e8b68f96273883da83fdfd",
+    "development_json": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164",
+    "seed": 173020021,
+    "environment": {
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "gpu": "Tesla T4",
+      "precision": "fp32",
+      "tf32": false,
+      "autocast": false,
+      "grad_scaler": false
+    },
+    "mode": "T1-05_FORMAL_SINGLE_SEED",
+    "target_tokens": 250000
+  },
+  "training_tokens": 250000,
+  "optimizer_updates": 977,
+  "seed": 173020021,
+  "active_parameters": 967808,
+  "source_commit": "63cb0a48c2f59362e5e41864effa2d310bc3cddf",
+  "protocol_sha256": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
+  "dataset_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+  "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "training_order_sha256": "aead03158a49294162ff7fcb58f4f8bbd2f6f477b45f81af4edc6f6e4e4189f9",
+  "training_checkpoint_sha256": "78d5adb63a435e072fc735f640e789e69e0617a8711406b6e9fec10d19ab4415",
+  "final_model_sha256": "12bbfec66040160f51a106ab36f57f7580ae2ec5e7799ee23a133c580c8ff763",
+  "independent_test_accessed": false,
+  "GC001_results_modified": false
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "formula": "2*M*K*N",
+  "shape": [
+    2,
+    3,
+    4
+  ],
+  "forward_gemm_flops": 48,
+  "dA_flops": 48,
+  "dB_flops": 48,
+  "gradient_accumulation_flops": 18,
+  "expected_each_gemm_flops": 48,
+  "gradient_accumulation_numerical_check": "PASS",
+  "unsupported_operators": {}
+}
