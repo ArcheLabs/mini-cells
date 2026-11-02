@@ -73,3 +73,45 @@ def test_exact_source_bundle_restores_last_committed_report_and_checkpoint(tmp_p
     assert reuse_local_assets(output,'same-source','same-protocol',None)
     assert (output/'private/training.pt').read_bytes()==b'committed-checkpoint'
     assert (output/'decision.json').read_text()=='{"committed": true}\n'
+
+
+def test_smoke_50_updates_resume_and_formal_checkpoint_reports(tmp_path,monkeypatch):
+    """Exercise launcher helpers with real tiny CPU updates and actual recovery bundles."""
+    import json,time
+    import t1_formal as runner
+    torch.set_num_threads(1)
+    class CPUTrainer(FormalTrainer):
+        def __init__(self,documents,identity,protocol,device='cuda',target_tokens=None):
+            super().__init__(documents,identity,protocol,'cpu',target_tokens)
+    monkeypatch.setattr(runner,'FormalTrainer',CPUTrainer)
+    monkeypatch.setattr(torch.cuda,'reset_peak_memory_stats',lambda:None)
+    protocol={'model':{'vocab':32,'dim':16,'layers':1,'heads':2,'kv_heads':1,'ffn':32,'window':4},'seed':19,
+        'training':{'batch_lanes':2,'fresh_prediction_targets_per_lane':2,'context_reuse_per_sequence_max':2,'prediction_token_budget':204},
+        'optimizer':{'learning_rate':1e-3,'betas':[.9,.95],'weight_decay':.1,'foreach':False,'gradient_clip_norm':1.},
+        'scheduler':{'total_updates':51,'warmup_updates':5},'checkpoint':{'smoke_interval_updates':5},
+        'engineering_validation':{'t1_04_smoke':{'updates':50,'prediction_targets':200,'resume_check_after_update':25}}}
+    docs=[{'id':'a','tokens':[2,4,5,6,7,3]},{'id':'b','tokens':[2,8,9,10,11,3]}]
+    identity={'source':'synthetic','protocol':'fixture'}
+    engine,report=runner._smoke(protocol,identity,{'train':docs},tmp_path,time.monotonic()+3600,identity)
+    assert report['status']=='PASS' and engine.ledger.updates==50 and engine.ledger.consumed==200
+    assert report['resume']['verified_after_update']==25
+    restored,again=runner._smoke(protocol,identity,{'train':docs},tmp_path,time.monotonic()+3600,identity)
+    assert again['status']=='PASS' and restored.ledger.updates==50
+    assert runner._flops_report(engine)['status']=='PASS'
+    decision={'status':'SYNTHETIC_ONLY'};folder=tmp_path/'formal';folder.mkdir()
+    checkpoint=tmp_path/'private/training.pt'
+    runner._save_formal_checkpoint(engine,checkpoint,folder,tmp_path,decision,identity,identity)
+    manifest=json.loads((folder/'checkpoint-manifest.json').read_text())
+    assert manifest['checkpoint']['bytes']==checkpoint.stat().st_size
+    assert decision['formal_progress']['committed_tokens']==200
+    assert reuse_local_assets(tmp_path,'synthetic','fixture',None)
+    loaded=FormalTrainer.load(checkpoint,docs,engine.identity,protocol,'cpu',200)
+    assert loaded.ledger.report()==engine.ledger.report()
+
+    # Final partial update keeps cumulative and per-update accounting distinct.
+    partial=FormalTrainer.load(checkpoint,docs,engine.identity,protocol,'cpu',202)
+    row,_=partial.update()
+    assert row['update_prediction_tokens']==2 and partial.ledger.consumed==202
+    partial.save(checkpoint)
+    final=FormalTrainer.load(checkpoint,docs,engine.identity,protocol,'cpu',202)
+    assert final.ledger.updates==51 and final.ledger.consumed==202
