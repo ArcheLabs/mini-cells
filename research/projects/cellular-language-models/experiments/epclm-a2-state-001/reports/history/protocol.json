@@ -1,0 +1,227 @@
+{
+  "baseline": {
+    "alpha": "native_clm_phase_b.N1_ALPHA = sigmoid(-2)",
+    "dim": 188,
+    "ffn": 639,
+    "heads": 4,
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "parameters": 1893912,
+    "tied_head": true,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "budget": {
+    "execution_seconds": 5400,
+    "hard_limit_seconds": 7200,
+    "publication_seconds": 600,
+    "safety_seconds": 1200
+  },
+  "comparison_axes": [
+    "PARAMETERS",
+    "PREDICTION_TOKENS_AND_ORDER",
+    "ANALYTIC_TRAINING_COMPUTE",
+    "SAME_RUNTIME_INFERENCE"
+  ],
+  "compute_matching": {
+    "budget": "A0 profile token budget times declared matmul-heavy training FLOPs per token",
+    "limitations": "analytic estimate excludes operators; never claim complete hardware-compute matching",
+    "mode": "separate job via --match compute",
+    "token_matched_run_gets_extra_tokens": false
+  },
+  "confirmation_seeds_used": [],
+  "data": {
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "historical_seed_91001_manifest_status": "NOT_PRESENT_LOCALLY; use explicitly identified controlled-retrain corpus",
+    "holdout_policy": "384 nonoverlapping 129-token spans excluding all validation spans; same frozen offsets for every model",
+    "holdout_seed": 713,
+    "source": "epclm001.retrain_data.prepare with pinned retrain_config.json historical_corpus_manifest",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "train_tokens": 12000000,
+    "validation_seed": 101001,
+    "validation_stream_tokens": 1000000
+  },
+  "evaluation": {
+    "atol": 2e-05,
+    "batch8_decode": true,
+    "dtype": "float32",
+    "generation_prompts": [
+      "Once upon a time",
+      "A little girl found",
+      "The dog wanted",
+      "One sunny day"
+    ],
+    "generation_seed": 713,
+    "generation_tokens": 64,
+    "inference_prefill": [
+      32,
+      64,
+      128
+    ],
+    "inference_repetitions": 10,
+    "inference_warmup": 3,
+    "rtol": 0.0002,
+    "sampling_temperature": 0.8,
+    "sampling_top_k": 40,
+    "sampling_top_p": 0.95
+  },
+  "experiment": "EPCLM-X4C-001",
+  "format": "minicells.epclm-x4c-001.protocol.v1",
+  "g1_selection": {
+    "base_iterations": null,
+    "maximum_decode_latency_ratio": 1.05,
+    "maximum_ppl_ratio": 1.02,
+    "minimum_forward_flops_reduction": 0.2,
+    "minimum_profile": "dev",
+    "parameter_tolerance": 0.05,
+    "selection": "lowest validation NLL among eligible A1/A2/A3; holdout reported but never used for selection"
+  },
+  "g2": {
+    "B3_B4": "frozen-weight read/write ablations on task-trained B2; not independent structural training",
+    "cell_update_hidden": 120,
+    "cellular_shape": [
+      16,
+      128
+    ],
+    "execution_control": "B0/B1/B2 and all G3 arms use identical fixed_chunk32 training scheduling; G1 retains legacy parallel reference",
+    "flat_shape": [
+      2048
+    ],
+    "flat_update_rank": 8,
+    "state_read_rank": 32,
+    "state_residual_alpha": 0.1,
+    "write_gate_bias": -2
+  },
+  "g3": {
+    "C3": "retain Cellular State; choose integer dense Stage-2 SwiGLU width nearest C2 allocated parameter count; compute difference separately",
+    "capacity_note": "Rank 16 chosen by pre-training structural parameter accounting to keep C2 within +/-5% of original X4; stateless C1 lacks state-network parameters and remains explicitly unmatched.",
+    "cell_adapter_rank": 16,
+    "cells": 16,
+    "parameter_warning": "routing variants may exceed +/-5% parameter target; report mismatch, do not claim parameter matching",
+    "replace_stage_index": 1,
+    "shared_ffn_hidden": 128,
+    "top_k": 2
+  },
+  "gates": [
+    "reference_equivalence",
+    "causality",
+    "kv_cache_equivalence",
+    "chunk_partition_equivalence",
+    "snapshot_restore",
+    "cross_chunk_gradient"
+  ],
+  "independent_test_accessed": false,
+  "mechanisms": {
+    "G3_gate": "correctness PASS plus task gain over B0 and read/write ablation contribution; candidate signal, not scientific confirmation",
+    "delay": "larger than exact configured attention receptive field plus two Chunks",
+    "evaluation_combinations_per_task": 32,
+    "evaluation_seed": 714,
+    "extra_training_prediction_targets_per_model": 128,
+    "loss": "query target only; observed input tokens reported separately",
+    "minimum_candidate_accuracy_gain": 0.05,
+    "optimizer": {
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "gradient_clip": 1.0,
+      "lr": 0.0003,
+      "name": "AdamW",
+      "schedule": "fixed LR, one pass, 128 query-target updates; separate from language schedule",
+      "weight_decay": 0.1
+    },
+    "tasks": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5"
+    ],
+    "tbptt": "entire mechanism episode; no detach before delayed query",
+    "train_combinations_per_task": 32,
+    "train_seed": 713
+  },
+  "multi_seed_followup": "at least three separately authorized independent training seeds; no automatic confirmation-seed consumption",
+  "resources": {
+    "fallback": "NOT_RUN_RESOURCE_UNAVAILABLE",
+    "target_gpu": "Tesla T4"
+  },
+  "scientific_confirmation": false,
+  "seed": 91001,
+  "stages": {
+    "G0": [
+      "A0"
+    ],
+    "G1": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "D_ATTN4_FFN1",
+      "D_ATTN1_FFN4"
+    ],
+    "G2": [
+      "B0",
+      "B1",
+      "B2"
+    ],
+    "G3": [
+      "C0",
+      "C1",
+      "C2",
+      "C3"
+    ]
+  },
+  "streaming_semantics": {
+    "cache": "separate Stage/Iteration K/V",
+    "chunk_size": 32,
+    "maximum_session_tokens": 4096,
+    "position": "absolute RoPE, never renumber on sliding; boundaries at absolute position mod 32",
+    "reference": "legacy exact within 128; extended absolute-position local-window reference explicitly distinct from truncated-history recomputation",
+    "reset": "independent samples/documents/sessions",
+    "snapshot": "model/tokenizer identities, absolute position, persistent state, per-iteration KV, partial Chunk buffer, generator RNG",
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "training": {
+    "batch": 8,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "clip": 1.0,
+    "detach_policy": "independent 125-token random stream sample resets Session each optimizer update; no detach at internal 32-token write boundaries",
+    "dev_smoke_milestone": 100000,
+    "initial_scale": 65536,
+    "lr": 0.0003,
+    "maximum_consecutive_overflows": 5,
+    "precision": "float16_autocast_with_fp32_parameters_and_GradScaler",
+    "profiles": {
+      "dev": {
+        "tokens": 1000000,
+        "warmup": 100
+      },
+      "development": {
+        "tokens": 10000000,
+        "warmup": 1000
+      },
+      "smoke": {
+        "tokens": 100000,
+        "warmup": 20
+      }
+    },
+    "resume_policy": "no optimizer checkpoint recovery; failed model restarts fresh; final weights saved once",
+    "sequence_length": 125,
+    "tbptt_chunks": 4,
+    "weight_decay": 0.1
+  }
+}
