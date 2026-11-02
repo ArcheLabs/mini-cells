@@ -366,7 +366,7 @@ def launch(out):
     protocol=json.loads(PROTOCOL_PATH.read_text());registry=json.loads((ROOT/'research/governance/formal_seed_registry.json').read_text())
     config=validate_freeze(protocol,registry);source=assert_clean_source();protocol_sha=sha256_file(PROTOCOL_PATH);env=environment()
     decision=initial_decision(source,protocol_sha,env)
-    started=time.monotonic();deadline=started+protocol['budget']['execution'];out.mkdir(parents=True,exist_ok=True)
+    started=time.monotonic();deadline=started+protocol['budget']['execution_seconds'];out.mkdir(parents=True,exist_ok=True)
     original_report=json.loads((out/'decision.json').read_text()) if (out/'decision.json').exists() else None
     placeholders(out)
     decision.update({'identity':{'source':source,'protocol':protocol_sha},'source_branch':'codex/gc002-t1-formal-readiness',
@@ -586,7 +586,7 @@ def launch(out):
                 decision['recovery_bundle']={'status':'FAILED','error':type(bundle_error).__name__+': '+str(bundle_error)}
                 persist(out,decision)
         try:
-            with timed_budget(protocol['budget']['publication']):_publish(ROOT,out,decision)
+            with timed_budget(protocol['budget']['publication_seconds']):_publish(ROOT,out,decision)
         except Exception as publish_error:
             decision['publication']={'status':'FAILED','error':type(publish_error).__name__+': '+str(publish_error),
                 'kaggle_output_preserved':True};persist(out,decision)
