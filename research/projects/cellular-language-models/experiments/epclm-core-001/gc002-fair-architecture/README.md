@@ -43,3 +43,11 @@ GPU/FP32，967,808 参数、Batch 4、TBPTT 64；只复用已验证的 CUDA 准�
 模型、优化器、调度器、每-lane KV、事务采样器、Token 账本及 RNG 存入同一个既有 Core checksum checkpoint。只允许本地同源码/协议/数据身份恢复；发布失败重试不会重复已完成训练，权重留在 Kaggle Output，不进入 Git。正式 H1–H5 NOT_EVALUATED，Human Review PENDING。算子未覆盖会单独标明，不冒充正式 Compute-Matched 证据。
 
 执行上限 5400 秒，发布 600 秒，安全余量 1200 秒，总计两小时。Pilot 只做真实训练与恢复验证，不运行完整评估、Bootstrap、其他架构或正式训练。
+
+## 已批准：T1-PM-KV 条件式正式单 Seed
+
+用户已选择正式 Seed `173020021` 与 `97` 次 Warmup；单独冻结在 [t1-formal-protocol.json](t1-formal-protocol.json)，不改写 GC002 其他轨道的草案。使用 [t1-formal.ipynb](t1-formal.ipynb) 在 Kaggle GPU 运行。该 Notebook 顺序检查 T1-02 缓存/训练状态一致性、T1-03 实际目标环境算术账本、T1-04 50 次更新 / 12,800 Token 工程验证与第 25 次 Checkpoint 恢复。**任一门禁未通过时，T1-05 保持 BLOCKED，不会启动正式训练。**
+
+T1-03 用已审计 Training Split 的四 Lane 采样路径执行 2 次、共 512 个预测目标的计量探针，并单独记录其数据顺序；T1-04 Smoke 也单独记录。两者都不计入 T1-05 的 250,000 Token 正式预算。
+
+门禁全通过后才运行 T1-PM-KV FP32 单 Seed 正式作业，最多 250,000 个有效 Prediction Targets、977 次更新；断点仅按源码、协议、数据、Tokenizer、Seed 和运行环境身份精确恢复。正式 Checkpoint 与权重保存在 Kaggle Output，不进入 Git。运行预算为训练/门禁 5,400 秒、发布 600 秒、安全余量 1,200 秒；达到运行预算时保存同一源码检查点并标记 INCOMPLETE。独立 Test 不访问，GC001 历史结果不变，H1–H5 仍为 NOT_EVALUATED，单 Seed 结果不构成架构优越或等价结论。

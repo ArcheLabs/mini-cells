@@ -35,6 +35,36 @@ EXPERIMENTS: dict[str, ExperimentSpec] = {
         branch="kaggle/epclm-gc002-t1-pilot-results",
         expected_format="minicells.gc002.pilot.v1",
     ),
+    "epclm-gc002-t1-formal": ExperimentSpec(
+        source_dir="results/epclm-gc002-t1-formal/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/t1-formal-single-seed",
+        files=(
+            "decision.json", "t1-formal-readiness/decision.json", "manifest.json", "summary.md",
+            "t1-02-kv-consistency/decision.json", "t1-02-kv-consistency/training-semantics.json",
+            "t1-02-kv-consistency/training-reference-tests.json", "t1-02-kv-consistency/kv-cache-equivalence.json",
+            "t1-02-kv-consistency/cache-version-audit.json", "t1-02-kv-consistency/document-reset-tests.json",
+            "t1-02-kv-consistency/checkpoint-state-tests.json",
+            "t1-03-flops-accounting/decision.json", "t1-03-flops-accounting/operator-inventory.json",
+            "t1-03-flops-accounting/arithmetic-rules.json", "t1-03-flops-accounting/gemm-tests.json",
+            "t1-03-flops-accounting/attention-tests.json", "t1-03-flops-accounting/backward-tests.json",
+            "t1-03-flops-accounting/optimizer-tests.json", "t1-03-flops-accounting/end-to-end-accounting.json",
+            "t1-03-flops-accounting/coverage-report.json",
+            "t1-04-engineering-validation/decision.json", "t1-04-engineering-validation/model-validation.json",
+            "t1-04-engineering-validation/smoke-training.json", "t1-04-engineering-validation/checkpoint-resume.json",
+            "t1-04-engineering-validation/data-ledger-validation.json", "t1-04-engineering-validation/flops-ledger-validation.json",
+            "t1-04-engineering-validation/gpu-profile.json", "t1-04-engineering-validation/environment.json",
+            "t1-04-engineering-validation/frozen-training-config.json",
+            "t1-pm-formal-single-seed/manifest.json", "t1-pm-formal-single-seed/training-config.json",
+            "t1-pm-formal-single-seed/training-metrics.json", "t1-pm-formal-single-seed/token-exposure-ledger.json",
+            "t1-pm-formal-single-seed/flops-ledger.json", "t1-pm-formal-single-seed/checkpoint-manifest.json",
+            "t1-pm-formal-single-seed/final-model-manifest.json", "t1-pm-formal-single-seed/validation-results.json",
+            "t1-pm-formal-single-seed/holdout-results.json", "t1-pm-formal-single-seed/generation-metrics.json",
+            "t1-pm-formal-single-seed/inference-profile.json", "t1-pm-formal-single-seed/memory-profile.json",
+            "t1-pm-formal-single-seed/environment.json", "t1-pm-formal-single-seed/research-decision.json",
+        ),
+        branch="kaggle/epclm-gc002-t1-formal-results",
+        expected_format="minicells.gc002.t1-formal.v1",
+    ),
     "epclm-gc002-preparation": ExperimentSpec(
         source_dir="results/epclm-gc002-preparation/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/preparation",
@@ -298,6 +328,7 @@ def prepare_artifacts(
         shutil.rmtree(destination)
     destination.mkdir(parents=True)
     for name in spec.files:
+        (destination / name).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source / name, destination / name)
 
     source_commit = run_git(root, "rev-parse", "HEAD").stdout.strip()
