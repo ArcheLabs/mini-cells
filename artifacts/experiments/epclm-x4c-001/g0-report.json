@@ -1,0 +1,19 @@
+{
+  "cpu_tests": "...............                                                          [100%]\n=============================== warnings summary ===============================\nresearch/projects/cellular-language-models/experiments/epclm-x4c-001/tests/test_correctness.py::test_training_gradients\n  /usr/local/lib/python3.13/dist-packages/torch/profiler/profiler.py:224: UserWarning: Warning: Profiler clears events at the end of each cycle.Only events from the current cycle will be reported.To keep events across cycles, set acc_events=True.\n    _warn_once(\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n15 passed, 1 warning in 15.83s\n",
+  "cpu_tests_returncode": 0,
+  "stderr": "",
+  "target_gpu": {
+    "checks": {
+      "cache_equivalence": true,
+      "causality": true,
+      "deterministic": true,
+      "flops": true,
+      "original_parameter_count": true,
+      "reference_equivalence": true
+    },
+    "max_cache_error": 4.76837158203125e-07,
+    "max_reference_error": 0.0,
+    "status": "PASS",
+    "weights": "fresh random initialization for correctness only, not a quality evaluation"
+  }
+}

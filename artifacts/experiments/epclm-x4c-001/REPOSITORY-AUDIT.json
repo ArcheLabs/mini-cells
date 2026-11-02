@@ -1,0 +1,216 @@
+{
+  "baseline": {
+    "actual_alpha": 0.11920292202211755,
+    "alpha": "native_clm_phase_b.N1_ALPHA = sigmoid(-2)",
+    "architecture": "Native Phase-C X4",
+    "parameter_count_matches": true,
+    "parameters": 1893912,
+    "phase_c_initialization_seed_rule": "run_native_clm_phase_c temporarily sets base.C0_NAME=name, so model_seed=data_seed=91001"
+  },
+  "data": {
+    "effective_phase_c_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "manifest": {
+      "dataset": "roneneldan/TinyStories",
+      "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "dtype": "uint16",
+      "format": "minicells.native-clm-corpus.v1",
+      "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+      "tokenizer_training_stories": 20000,
+      "train_raw_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+      "train_stories_consumed": 48394,
+      "train_stream_tokens": 12000000,
+      "validation_raw_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f",
+      "validation_stories_consumed": 4396,
+      "validation_stream_tokens": 1000000,
+      "vocab_size_actual": 2048,
+      "vocab_size_requested": 2048
+    },
+    "manifest_source": "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/retrain_config.json",
+    "preparation": "reuse epclm001.retrain_data.prepare; pinned tokenizer and original writer, byte hashes must match",
+    "raw_train_validation_status": "NOT_PRESENT_LOCALLY_NOT_RECONSTRUCTED_FOR_CPU_TESTS",
+    "runtime_default_revision_discrepancy": true,
+    "tokenizer_local_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "tokenizer_matches": true
+  },
+  "files": {
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/incremental.py": {
+      "exists": true,
+      "sha256": "242287782ccd9fb51eb0aa0ea5683ed24ddb90831208543e5ab0df0632897f37"
+    },
+    "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/implementation/epclm001/retrain_data.py": {
+      "exists": true,
+      "sha256": "c15184cdf400f2d592d1bdbc2ba8393090cb078a8c4cad68b5542893404565f6"
+    },
+    "research/projects/cellular-language-models/experiments/epclm-core-001/gc001-baseline-repair/repair_models.py": {
+      "exists": true,
+      "sha256": "39eb26e6862a7fd86a39f92853acfa3229fb10ed5e33333e346fa34d65af4db1"
+    },
+    "research/projects/cellular-language-models/experiments/epclm-core-001/implementation/model.py": {
+      "exists": true,
+      "sha256": "980745583e6f95157c5a6bb5cb6917d4f9ae9cec8fee39b4eb8520eef81c6c64"
+    },
+    "research/projects/cellular-language-models/experiments/epclm-core-001/topology-001/topology.py": {
+      "exists": true,
+      "sha256": "88017e6e7233c7783969f4adbae860f031d5ecf1e4e878b2a9d871b9fb557a1c"
+    },
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/README.md": {
+      "exists": true,
+      "sha256": "f564276b0740aac8b159fb6a72da268819f35204f233f50e8d8cf75dd02e9a7c"
+    },
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_phase_b.py": {
+      "exists": true,
+      "sha256": "9cb3cb2dc9814361b7a183b889a6ea64f13653a1d3b5d75b80a60e7ebdc2d80d"
+    },
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_phase_c.py": {
+      "exists": true,
+      "sha256": "3a385552da26fd23b2d4fd26cb92ebf3d3910bed21bb9ebe162f19e02735687c"
+    },
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_runtime.py": {
+      "exists": true,
+      "sha256": "3c1ae7d35ce51724954bd0d323125cbe48ff8cbd9c488abf2a4671f0f83bffb4"
+    }
+  },
+  "flops": {
+    "A0": {
+      "backward_flops_estimate": 3277447616,
+      "batch": 1,
+      "convention": "MAC=2; legacy matmul-heavy estimate; backward=2x forward is an estimate, not measured autograd work",
+      "excluded": "normalization, RoPE, activations, softmax, top-k, aggregation, optimizer and device traffic; not a complete scalar-operation FLOPs standard; local-pair formulas can undercount dense masked SDPA backend work",
+      "forward_flops": 1638723808,
+      "forward_flops_per_prediction_token": 13109790.464,
+      "parameter_count": 1893912,
+      "parameter_matched_within_5pct": true,
+      "parts": {
+        "attention": 461279808,
+        "cell_ffn": 0,
+        "dense_ffn": 1081188000,
+        "head": 96256000,
+        "router": 0,
+        "state_read": 0,
+        "state_write": 0
+      },
+      "relative_parameters_to_x4": 0.0,
+      "sequence_length": 125,
+      "state_read_cost_note": "parallel Chunk estimate; token-wise runtime recomputes K/V projections and may cost more",
+      "training_flops_estimate": 4916171424
+    },
+    "A1": {
+      "backward_flops_estimate": 1734979808,
+      "batch": 1,
+      "convention": "MAC=2; legacy matmul-heavy estimate; backward=2x forward is an estimate, not measured autograd work",
+      "excluded": "normalization, RoPE, activations, softmax, top-k, aggregation, optimizer and device traffic; not a complete scalar-operation FLOPs standard; local-pair formulas can undercount dense masked SDPA backend work",
+      "forward_flops": 867489904,
+      "forward_flops_per_prediction_token": 6939919.232,
+      "parameter_count": 1892784,
+      "parameter_matched_within_5pct": true,
+      "parts": {
+        "attention": 230639904,
+        "cell_ffn": 0,
+        "dense_ffn": 540594000,
+        "head": 96256000,
+        "router": 0,
+        "state_read": 0,
+        "state_write": 0
+      },
+      "relative_parameters_to_x4": -0.0005955926146515855,
+      "sequence_length": 125,
+      "state_read_cost_note": "parallel Chunk estimate; token-wise runtime recomputes K/V projections and may cost more",
+      "training_flops_estimate": 2602469712
+    },
+    "A2": {
+      "backward_flops_estimate": 963745904,
+      "batch": 1,
+      "convention": "MAC=2; legacy matmul-heavy estimate; backward=2x forward is an estimate, not measured autograd work",
+      "excluded": "normalization, RoPE, activations, softmax, top-k, aggregation, optimizer and device traffic; not a complete scalar-operation FLOPs standard; local-pair formulas can undercount dense masked SDPA backend work",
+      "forward_flops": 481872952,
+      "forward_flops_per_prediction_token": 3854983.616,
+      "parameter_count": 1892220,
+      "parameter_matched_within_5pct": true,
+      "parts": {
+        "attention": 115319952,
+        "cell_ffn": 0,
+        "dense_ffn": 270297000,
+        "head": 96256000,
+        "router": 0,
+        "state_read": 0,
+        "state_write": 0
+      },
+      "relative_parameters_to_x4": -0.0008933889219773228,
+      "sequence_length": 125,
+      "state_read_cost_note": "parallel Chunk estimate; token-wise runtime recomputes K/V projections and may cost more",
+      "training_flops_estimate": 1445618856
+    },
+    "A3": {
+      "backward_flops_estimate": 1219901920,
+      "batch": 1,
+      "convention": "MAC=2; legacy matmul-heavy estimate; backward=2x forward is an estimate, not measured autograd work",
+      "excluded": "normalization, RoPE, activations, softmax, top-k, aggregation, optimizer and device traffic; not a complete scalar-operation FLOPs standard; local-pair formulas can undercount dense masked SDPA backend work",
+      "forward_flops": 609950960,
+      "forward_flops_per_prediction_token": 4879607.68,
+      "parameter_count": 1892408,
+      "parameter_matched_within_5pct": true,
+      "parts": {
+        "attention": 153298960,
+        "cell_ffn": 0,
+        "dense_ffn": 360396000,
+        "head": 96256000,
+        "router": 0,
+        "state_read": 0,
+        "state_write": 0
+      },
+      "relative_parameters_to_x4": -0.000794123486202114,
+      "sequence_length": 125,
+      "state_read_cost_note": "parallel Chunk estimate; token-wise runtime recomputes K/V projections and may cost more",
+      "training_flops_estimate": 1829852880
+    }
+  },
+  "history": {
+    "controlled_retrain_report": "research/projects/cellular-language-models/experiments/epclm-001-incremental-execution/reports/retrain-published/fbf1959b2a364022959ded11c1e4fea6/MODEL_X4_REPORT.json",
+    "controlled_retrain_seed": 91002,
+    "phase_c_seed_91001_results": "README points to implementation/results/dev/phase-c-baseline-seed-91001; not present locally",
+    "pinned_external_asset": {
+      "declared_ppl": 11.912722684,
+      "inference_sha256": "b2c6e7cb7c523e2112fee7e5f3aef10f34cb720a93bd666747af77137303a2e8",
+      "parameters": 1893912,
+      "repo": "archelabsxyz/native-clm-v0",
+      "revision": "13c6c975390fdda4b18bfabfe8e6bf2be3a67d54",
+      "run_id": "fbf1959b2a364022959ded11c1e4fea6"
+    },
+    "policy": "external asset is located, not downloaded or relabeled as fresh initialization",
+    "weights_scope": "local weights absent; pinned remote located but not downloaded or verified in this job",
+    "weights_status": "HISTORICAL_WEIGHTS_UNAVAILABLE"
+  },
+  "implementation_files": {
+    "architecture.py": "331454302b31b462d723467b570c265e4da9a25a2216b746e5215b7b19fca02e",
+    "audit.py": "f5d003d8d9a94ebe8653479bd75f8fff5eb4852c4d8578f570fe7fcf87333a45",
+    "cell.py": "2808a3a0fbaa0478e22cd8ffeddf9cd028f3044223d5cdcc8f98e82daa156d53",
+    "common.py": "5d9093b66b71f3e467e2116f1a7c7430c811f32b498e6736ee9a8aa5bef76389",
+    "decisions.py": "120b7e7c745d872ddc1de578b015b31949a0f5a144ce7d5bac69126cfb45ef6a",
+    "evaluate.py": "a0a964f9a5d4fe2d9f3cde8153b6ae9a321d5acac61ea477df3fb239aa40131b",
+    "flops.py": "2fda8dde22a748c5c485290eabebd93260e4d33bc143bf10ca9f32be7660abfa",
+    "mechanisms.py": "ca448ce21c2656302002e2ec960fe7cfc1439ec8c7bfa3183ac1e37cf509fc77",
+    "research_report.py": "1ee49dac094a6c8b01e5a7dbf1681c1238bd4c7790d662a47bb3b886b8b6037e",
+    "routing.py": "c1f38111bb06fa8dcc30f267c971d564282a6a1dc1551e41bf1ecd525d9539fc",
+    "runtime.py": "575a6af2a3f53b555ecffd591de872df6a191e7aa9d9563dccc3713e19510724",
+    "state.py": "36c1858940b82d864b5eda0a3698689e7f41d16c0b05a08f1e56bb53ea445711",
+    "train.py": "73b7f9026f815dc99dfc74922a4e57dd8411fad3b26aaaba3a480883ac08f785"
+  },
+  "incremental_reuse": {
+    "extension": "fixed 32-token state commits and explicit absolute-position local-window semantics",
+    "module": "epclm001.incremental.IncrementalLM",
+    "reused": [
+      "per-stage/per-iteration layout",
+      "_attend",
+      "_append",
+      "rope_at",
+      "cache validation",
+      "cache_bytes"
+    ]
+  },
+  "independent_test_accessed": false,
+  "local_gpu": "Tesla T4",
+  "repository_head_at_audit": "bc1288d34748038455b2e9b441095821da6d5bc3",
+  "scientific_confirmation": false,
+  "status": "SOURCE_AND_PINNED_MANIFEST_AUDITED",
+  "training_status": "NOT_RUN_YET"
+}
