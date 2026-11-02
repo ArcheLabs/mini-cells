@@ -41,7 +41,7 @@ class ArithmeticCounter(TorchDispatchMode):
         if name in ('mm','matmul','bmm','addmm','linear'):return 'MATRIX_MULTIPLY'
         if 'softmax' in name:return 'ATTENTION_SOFTMAX'
         if 'embedding' in name or name in ('index_add','scatter_add'):return 'EMBEDDING_OR_GRADIENT_ACCUMULATION'
-        if 'norm' in name or name in ('mean','var','variance'):return 'NORMALIZATION_OR_REDUCTION'
+        if 'norm' in name or name in ('sum','mean','var','variance'):return 'NORMALIZATION_OR_REDUCTION'
         if name in ('silu','silu_backward','sigmoid','tanh','exp','log','sin','cos','sqrt','rsqrt'):return 'ACTIVATION_OR_TRANSCENDENTAL'
         if name in ZERO:return 'MEMORY_OR_SHAPE'
         return 'ELEMENTWISE_OR_REDUCTION'
