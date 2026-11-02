@@ -14,7 +14,7 @@ def sync(model):
 
 @torch.inference_mode()
 def evaluate_documents(model,documents,device):
-    model.eval();loss_sum=0.;tokens=0
+    model.eval();loss_sum=0.;tokens=0;started=time.monotonic()
     for document in documents:
         values=document['tokens'];cache=None
         for start in range(0,len(values)-1,128):
@@ -25,7 +25,7 @@ def evaluate_documents(model,documents,device):
     nll=loss_sum/tokens
     perplexity=math.exp(nll) if nll<700 else None
     return {'status':'PASS_DEVELOPMENT_ONLY','documents':len(documents),'prediction_tokens':tokens,
-        'negative_log_likelihood':nll,'perplexity':perplexity,
+        'negative_log_likelihood':nll,'mean_nll':nll,'total_nll':loss_sum,'perplexity':perplexity,'evaluation_seconds':time.monotonic()-started,
         'perplexity_status':'MEASURED' if perplexity is not None else 'OVERFLOW_NOT_REPRESENTABLE',
         'context_window':model.config.window,'inference_path':'T1-PM-KV incremental cache; independent cache per document',
         'independent_test':'NOT_ACCESSED'}
@@ -48,6 +48,7 @@ def generation_diagnostics(model,tokenizer,protocol,device):
     for index,prompt in enumerate(old['prompts']):
         prompt_ids=tokenizer.encode(prompt).ids
         for mode in plan['generation_modes']:
+            sync(model);started=time.monotonic()
             generator=torch.Generator(device=device);generator.manual_seed(plan['generation_seed']+index)
             logits,cache=model.cached(torch.tensor([prompt_ids],device=device,dtype=torch.long));generated=[]
             for _ in range(plan['generation_max_new_tokens']):
@@ -58,7 +59,7 @@ def generation_diagnostics(model,tokenizer,protocol,device):
             trigrams=[tuple(visible[i:i+3]) for i in range(max(0,len(visible)-2))]
             text=tokenizer.decode(generated,skip_special_tokens=True)
             rows.append({'prompt_index':index,'prompt':prompt,'mode':mode,'seed':plan['generation_seed']+index,
-                'generated_tokens':len(generated),'stop_reason':'EOS' if generated and generated[-1]==eos else 'MAX_TOKENS',
+                'generation_seconds':time.monotonic()-started,'token_ids':generated,'generated_tokens':len(generated),'stop_reason':'EOS' if generated and generated[-1]==eos else 'MAX_TOKENS',
                 'text':text,'distinct_1':len(set(visible))/max(1,len(visible)),
                 'distinct_2':len(set(zip(visible,visible[1:])))/max(1,len(visible)-1),
                 'repeated_3gram_rate':(len(trigrams)-len(set(trigrams)))/max(1,len(trigrams))})
@@ -66,6 +67,8 @@ def generation_diagnostics(model,tokenizer,protocol,device):
     for mode in plan['generation_modes']:
         name=mode;group=[r for r in rows if r['mode']==name]
         aggregate[name]={'prompts':len(group),'generated_tokens':sum(r['generated_tokens'] for r in group),
+            'average_generated_tokens':statistics.mean(r['generated_tokens'] for r in group),
+            'generation_seconds':sum(r['generation_seconds'] for r in group),
             'eos_rate':sum(r['stop_reason']=='EOS' for r in group)/len(group),
             'distinct_1_mean':statistics.mean(r['distinct_1'] for r in group),
             'distinct_2_mean':statistics.mean(r['distinct_2'] for r in group),
@@ -90,7 +93,19 @@ def inference_profile(model,tokenizer,protocol,device):
             'prefill_p95_seconds':sorted(prefill)[math.ceil(.95*len(prefill))-1],
             'decode_median_seconds':statistics.median(decode),'decode_p95_seconds':sorted(decode)[math.ceil(.95*len(decode))-1],
             'decode_tokens_per_second':1/statistics.median(decode),'persistent_kv_memory':cache_memory(model,last_cache)})
-    return {'status':'MEASURED_ON_TARGET_GPU','gpu':torch.cuda.get_device_name() if torch.cuda.is_available() else 'CPU_NOT_ELIGIBLE',
+    equivalence=[]
+    for length in (32,128,160):
+        ids=(phrase*((length+len(phrase)-1)//len(phrase)))[:length]
+        tensor=torch.tensor([ids],device=device,dtype=torch.long)
+        sync(model);start=time.perf_counter();reference=model(tensor);sync(model);direct=time.perf_counter()-start
+        cache=None;parts=[];sync(model);start=time.perf_counter()
+        for token in tensor.split(1,dim=1):
+            logits,cache=model.cached(token,cache);parts.append(logits)
+        sync(model);cached=time.perf_counter()-start
+        error=float((reference-torch.cat(parts,dim=1)).abs().max())
+        equivalence.append({'history_tokens':length,'max_absolute_logit_error':error,'tolerance':1e-5,'status':'PASS' if error<=1e-5 else 'FAIL','noncached_seconds':direct,'cached_incremental_seconds':cached})
+    if any(row['status']!='PASS' for row in equivalence):raise ValueError('cached/noncached inference differs: '+json.dumps(equivalence))
+    return {'cached_noncached_equivalence':equivalence,'status':'MEASURED_ON_TARGET_GPU','gpu':torch.cuda.get_device_name() if torch.cuda.is_available() else 'CPU_NOT_ELIGIBLE',
         'precision':'fp32','repetitions_per_length':10,'history_lengths':rows,
         'peak_cuda_allocated_bytes':torch.cuda.max_memory_allocated() if torch.cuda.is_available() else None,
         'peak_cuda_reserved_bytes':torch.cuda.max_memory_reserved() if torch.cuda.is_available() else None,

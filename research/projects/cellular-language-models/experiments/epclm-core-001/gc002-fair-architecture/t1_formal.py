@@ -611,9 +611,10 @@ def launch(out):
 
 
 def main():
-    parser=argparse.ArgumentParser(description='Sequential T1-02 through conditional 250K T1-PM-KV formal run')
+    parser=argparse.ArgumentParser(description='GC002 T1-FRESH-02: fresh 250K training and complete independent evaluations')
     parser.add_argument('--output',type=Path,default=Path('/kaggle/working/epclm-gc002-t1-formal'))
-    launch(parser.parse_args().output)
+    from t1_fresh import launch as launch_fresh
+    launch_fresh(parser.parse_args().output)
 
 
 if __name__=='__main__':main()

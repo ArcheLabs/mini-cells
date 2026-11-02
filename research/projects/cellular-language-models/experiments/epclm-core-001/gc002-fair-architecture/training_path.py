@@ -10,7 +10,7 @@ class ChunkSampler:
     def __init__(self,documents,seed,batch=4):
         if not documents or any(len(d['tokens'])<2 for d in documents):raise ValueError('nonempty documents required')
         if len({d['id'] for d in documents})!=len(documents):raise ValueError('duplicate document IDs')
-        self.identity=hashlib.sha256(json.dumps(documents,sort_keys=True,separators=(',',':')).encode()).hexdigest();self.seed=seed
+        self.identity=hashlib.sha256(json.dumps(documents,sort_keys=True,separators=(',',':')).encode()).hexdigest() if record_identity else None;self.seed=seed
         self.documents=documents;self.rng=random.Random(seed);self.order=list(range(len(documents)));self.rng.shuffle(self.order)
         self.cursor=0;self.lanes=[None]*batch;self.positions=[0]*batch;self.pending=None
 
@@ -73,12 +73,12 @@ class FullSequenceSampler:
     Every forward is at most ``context + target_chunk`` tokens, never crosses a
     document boundary, and does not carry activations or KV across optimizer steps.
     """
-    def __init__(self,documents,seed,batch=4,target_chunk=64,context=64):
+    def __init__(self,documents,seed,batch=4,target_chunk=64,context=64,record_identity=True):
         if not documents or any(len(d['tokens'])<2 for d in documents):raise ValueError('nonempty documents required')
         if len({d['id'] for d in documents})!=len(documents):raise ValueError('duplicate document IDs')
         if batch<1 or target_chunk<1 or context<0 or context+target_chunk>128:raise ValueError('invalid full-sequence window')
         self.documents=documents;self.seed=seed;self.batch=batch;self.target_chunk=target_chunk;self.context=context
-        self.identity=hashlib.sha256(json.dumps(documents,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+        self.identity=hashlib.sha256(json.dumps(documents,sort_keys=True,separators=(',',':')).encode()).hexdigest() if record_identity else None
         self.rng=random.Random(seed);self.order=list(range(len(documents)));self.rng.shuffle(self.order)
         self.cursor=0;self.lanes=[None]*batch;self.positions=[0]*batch;self.pending=None
 
