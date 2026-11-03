@@ -525,13 +525,13 @@ Seed，则在训练前选择一个 Seed 并写入 protocol。
   阶段                                预算             累计截止 主要工作
   ------------------- -------------------- -------------------- -----------------------------
   Phase                            10 分钟                00:10 A2 配置、代码入口、GPU 环境
-  0：仓库与配置审计                                             
+  0：仓库与配置审计
 
   Phase                             5 分钟                00:15 Hash、Manifest、split、seed
-  1：数据与协议校验                                             
+  1：数据与协议校验
 
   Phase 2：Warm-up                 10 分钟                00:25 四模型短时启动、测 tokens/sec
-  与吞吐测量                                                    
+  与吞吐测量
 
   Phase                            80 分钟                01:45 四模型同 Token budget 单 Seed
   3：四模型统一训练                                             训练
@@ -774,7 +774,7 @@ T0 与 M0/M1/M2 的总参数量和激活参数量可能不同。必须如实报�
 
   -----------------------------------------------------------------------
   模型          Total Params         Active     Cell Count  Routing Steps
-                               Params/Token                
+                               Params/Token
   ----------- -------------- -------------- -------------- --------------
   T0                    实测           实测            ---            ---
 
@@ -1015,20 +1015,20 @@ COMPLETE。
                                                                 表示、更新和调用频率
 
   State Read Disabled     State 没有实质参与输出                不得声称持久计算有效
-  不退化                                                        
+  不退化
 
   State Write Disabled    动态更新可能无效                      检查更新机制和训练梯度
-  不退化                                                        
+  不退化
 
   M2 ≈ M1                 State-aware Routing 无额外价值        暂停 Router 复杂化
 
   M2 路由集中于少数 Cell  可能是 Router                         结合消融判断，不直接判定好坏
-                          collapse，也可能是专业化              
+                          collapse，也可能是专业化
 
   Cell State 高相似       状态可能同质化                        检查输入和更新是否相同
 
   Cell State              多样性未转化为有效计算                不把 diversity 当成功
-  低相似但无性能收益                                            
+  低相似但无性能收益
 
   PPL 更好但延迟更差      质量收益来自额外成本                  报告 Pareto trade-off
 
