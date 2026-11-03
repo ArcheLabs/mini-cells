@@ -61,3 +61,5 @@ Smoke验证仅取固定8篇开发文档；包含normal、均匀无放回random T
 Notebook与调度器额外为Kaggle启动/转换预留60秒，Python进程外层在119分钟截止；训练6000秒和评估6900秒截止不变，余下240秒用于回传，不用减少Targets补偿超时。
 
 续跑会保留已知Pilot会话耗时并纳入预算预测；不会通过重启把旧训练耗时清零来宣称满足两小时。模型全局RNG和Router RNG按Seed17与模型名派生独立子流，不依赖Worker领取顺序。
+
+已完成的Pilot包恢复后只重试发布，不重训；也可用 `pilot.py --publish-only <run目录>`。部分续跑按各模型剩余targets重新预测，不用完整2M重复计价。

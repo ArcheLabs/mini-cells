@@ -45,6 +45,13 @@ def telemetry(path,started,tasks):
 def run_workers(out,spec_path,phase,deadline,started,priorities,run_identity):
     phase_started=time.monotonic()
     queue=out/(phase+'-queue.sqlite');initialize(queue,[(a,priorities.get(a,1)) for a in ARMS])
+    # Completed model reports survive cloud restore even though SQLite is regenerated.
+    if phase=='train' and (out/'training-metrics.json').exists():
+        from pilot_queue import connect
+        with connect(queue) as db:
+            for item in json.loads((out/'training-metrics.json').read_text()):
+                if item['status']=='COMPLETE' and (item.get('result') or {}).get('committed_targets')==2000000:
+                    db.execute("UPDATE tasks SET status='COMPLETE',worker=?,started=?,ended=?,result=? WHERE arm=?",(item['worker'],item['started'],item['ended'],json.dumps(item['result']),item['arm']))
     # An explicit resume may continue unfinished tasks; completed tasks remain complete.
     from pilot_queue import connect
     with connect(queue) as db:
@@ -116,7 +123,7 @@ def launch(args):
     p['smoke']['seed']=17;p['precision'].setdefault('requested','auto');p['pilot']={'name':NAME,'seed':17,'targets_per_model':2000000,'model_count':6,'total_targets':12000000,'gpus':2,'hard_limit_seconds':7200,'platform_reserve_seconds':60,'training_deadline_seconds':6000,'evaluation_deadline_seconds':6900,'cross_session_recovery_validation':'REMOVED_BY_USER','data_pipeline':{'bulk_resident_documents':True,'pin_memory':True,'num_workers':0,'persistent_workers':False,'prefetch_factor':'NOT_APPLICABLE; whole documents cached and copied once asynchronously'}}
     out=args.resume_run or args.output/('clm-v04-pilot-2m-seed17-'+source[:12]);out.mkdir(parents=True,exist_ok=True)
     decision={'format':'minicells.clm-workspace-controller-001.v04','run_id':out.name+'-'+uuid.uuid4().hex[:8],'experiment':NAME,'status':'PILOT_BLOCKED','source_commit':source,'seed':17,'targets_per_model':2000000,'total_targets':12000000,'main_training_started':False,'pilot_training_started':False,'scientific_confirmation':False,'hypotheses':dict.fromkeys(('H1','H2','H3','H4'),'NOT_EVALUATED'),'recovery_validation':'REMOVED_BY_USER; existing infrastructure reused'}
-    audit={};phases={};training=[];evaluation=[]
+    audit={};phases={};training=[];evaluation=[];saved_package=False
     try:
         audit['observed_gpu_count']=torch.cuda.device_count()
         try:audit['nvidia_smi_L']=subprocess.check_output(['nvidia-smi','-L'],text=True,timeout=5)
@@ -160,6 +167,8 @@ def launch(args):
         prior_active_seconds=sum(item['elapsed_before_publication'] for item in history if item.get('pilot_training_started'))
         hard=min(hard,started+max(0,7140-prior_active_seconds))
         shared.write(out/'protocol.json',p)
+        if (out/'decision.json').exists() and json.loads((out/'decision.json').read_text()).get('status')=='PILOT_PASS':
+            decision=json.loads((out/'decision.json').read_text());saved_package=True;return
         hashes={}
         if (out/'recovery.json').exists():
             bundle=json.loads((out/'recovery.json').read_text())
@@ -186,7 +195,11 @@ def launch(args):
         if 'NOT_EXPOSED' not in uuids and len(uuids)!=2:raise RuntimeError('DUAL_GPU_BLOCKED: workers mapped to the same physical GPU')
         if any(r<=0 for r in rates.values()):raise RuntimeError('invalid concurrent training rate')
         overheads={r['arm']:max(0,r['result']['wall_seconds']-r['result']['performance']['session_seconds']) for r in measured}
-        prediction=predict(rates,overhead=overheads);elapsed=time.monotonic()-started
+        remaining={arm:2000000 for arm in ARMS}
+        for arm,digest in hashes.items():
+            saved=torch.load(out/'train'/arm/'checkpoint.pt',map_location='cpu',weights_only=False)
+            remaining[arm]=max(0,2000000-saved['progress']['targets']);del saved
+        prediction=predict(rates,targets=remaining,overhead=overheads);prediction['remaining_targets']=remaining;elapsed=time.monotonic()-started
         prediction.update(measured_rates=rates,measured_concurrently=True,elapsed_before_launch=elapsed,training_margin_fraction=.2,finalization_seconds_reserved=600,predicted_complete_seconds=prior_active_seconds+elapsed+prediction['lpt_seconds']*1.2+600,previous_pilot_active_seconds=prior_active_seconds)
         shared.write(out/'dual-gpu-profile.json',{'benchmark_tasks':measured,'prediction':prediction})
         if prediction['predicted_complete_seconds']>6300 or prior_active_seconds+elapsed+prediction['lpt_seconds']*1.2>6000:raise RuntimeError('TIME_BUDGET_BLOCKED: exact 2M per model retained; no reduction')
@@ -213,20 +226,24 @@ def launch(args):
         decision['blocking_gate']='TIME_BUDGET_BLOCKED' if 'TIME_BUDGET_BLOCKED' in str(error) else 'DUAL_GPU_BLOCKED' if 'DUAL_GPU_BLOCKED' in str(error) else 'ENGINEERING_GATE_BLOCKED'
         if decision['pilot_training_started']:decision['status']='PILOT_INCOMPLETE'
     finally:
-        decision['elapsed_before_publication']=time.monotonic()-started;decision['wall_clock_limit_seconds']=7200
-        previous=locals().get('history',[])
-        decision['cumulative_pilot_active_seconds']=locals().get('prior_active_seconds',0)+decision['elapsed_before_publication']
-        if decision['status']=='PILOT_PASS' and decision['cumulative_pilot_active_seconds']>7140:decision['status']='PILOT_INCOMPLETE';decision['error']='cumulative pilot time budget exceeded'
-        previous.append({'run_id':decision['run_id'],'pilot_training_started':decision['pilot_training_started'],'elapsed_before_publication':decision['elapsed_before_publication'],'status':decision['status']})
-        shared.write(out/'session-history.json',previous)
-        if 'run_identity' in locals() and (out/'manifest.json').exists():commit_bundle(out,run_identity,out/'session-history.json')
-        for name,value in [('audit',audit),('protocol',p),('decision',decision),('routing-diagnostics',{r['arm']:r['result'].get('validation',{}).get('records',[]) for r in evaluation if r['result']}),('counterfactual-routing',{r['arm']:r['result'].get('counterfactual',{}) for r in evaluation if r['result']}),('state-diagnostics',{'scope':'token-local controller; route records and module gradients retained','single_seed':True}),('recovery-report',{'validation':'REMOVED_BY_USER','strategy':'existing immutable-object recovery infrastructure','models':{r['arm']:r['result'].get('checkpoint_sha256') for r in training if r['result']}}),('compute-profile',{r['arm']:r['result'].get('compute_profile',{}) for r in evaluation if r['result']})]:shared.write(out/(name+'.json'),value)
-        lines=['# CLM v0.4 双 T4 2M Pilot','',json.dumps(decision,ensure_ascii=False,indent=2),'','| Model | Committed Targets | Training | Validation NLL |','|---|---:|---|---:|']
-        for arm in ARMS:
-            tr=next((r['result'] for r in training if r['arm']==arm),{}) or {};ev=next((r['result'] for r in evaluation if r['arm']==arm),{}) or {}
-            lines.append(f"| {arm} | {tr.get('committed_targets',0)} | {tr.get('status','NOT_RUN')} | {ev.get('validation',{}).get('mean_nll','NOT_RUN')} |")
-        lines+=['','本轮只包含六模型、Seed17、每模型2M；缺失诊断为PENDING，不视为门禁通过。不执行32M×三Seed，不宣称单Seed统计显著。跨Kaggle恢复验证按用户要求删除。']
-        (out/'RESEARCH-REPORT.zh-CN.md').write_text('\n'.join(lines)+'\n')
+        if not saved_package:
+            decision['elapsed_before_publication']=time.monotonic()-started;decision['wall_clock_limit_seconds']=7200
+            previous=locals().get('history',[])
+            decision['cumulative_pilot_active_seconds']=locals().get('prior_active_seconds',0)+decision['elapsed_before_publication']
+            if decision['status']=='PILOT_PASS' and decision['cumulative_pilot_active_seconds']>7140:decision['status']='PILOT_INCOMPLETE';decision['error']='cumulative pilot time budget exceeded'
+            previous.append({'run_id':decision['run_id'],'pilot_training_started':decision['pilot_training_started'],'elapsed_before_publication':decision['elapsed_before_publication'],'status':decision['status']})
+            shared.write(out/'session-history.json',previous)
+            if 'run_identity' in locals() and (out/'manifest.json').exists():commit_bundle(out,run_identity,out/'session-history.json')
+            for name,value in [('audit',audit),('protocol',p),('decision',decision),('routing-diagnostics',{r['arm']:r['result'].get('validation',{}).get('records',[]) for r in evaluation if r['result']}),('counterfactual-routing',{r['arm']:r['result'].get('counterfactual',{}) for r in evaluation if r['result']}),('state-diagnostics',{'scope':'token-local controller; route records and module gradients retained','single_seed':True}),('recovery-report',{'validation':'REMOVED_BY_USER','strategy':'existing immutable-object recovery infrastructure','models':{r['arm']:r['result'].get('checkpoint_sha256') for r in training if r['result']}}),('compute-profile',{r['arm']:r['result'].get('compute_profile',{}) for r in evaluation if r['result']})]:shared.write(out/(name+'.json'),value)
+            lines=['# CLM v0.4 双 T4 2M Pilot','',json.dumps(decision,ensure_ascii=False,indent=2),'','| Model | Committed Targets | Training | Validation NLL |','|---|---:|---|---:|']
+            for arm in ARMS:
+                tr=next((r['result'] for r in training if r['arm']==arm),{}) or {};ev=next((r['result'] for r in evaluation if r['arm']==arm),{}) or {}
+                lines.append(f"| {arm} | {tr.get('committed_targets',0)} | {tr.get('status','NOT_RUN')} | {ev.get('validation',{}).get('mean_nll','NOT_RUN')} |")
+            lines+=['','本轮只包含六模型、Seed17、每模型2M；缺失诊断为PENDING，不视为门禁通过。不执行32M×三Seed，不宣称单Seed统计显著。跨Kaggle恢复验证按用户要求删除。']
+            (out/'RESEARCH-REPORT.zh-CN.md').write_text('\n'.join(lines)+'\n')
+        if 'run_identity' in locals() and (out/'manifest.json').exists() and not saved_package:
+            for name in ('decision.json','training-metrics.json','evaluation-results.json','routing-diagnostics.json','state-diagnostics.json','counterfactual-routing.json','compute-profile.json','dual-gpu-telemetry.csv','RESEARCH-REPORT.zh-CN.md','pilot-budget-freeze.json','dual-gpu-profile.json','model-matching.json'):
+                if (out/name).exists():commit_bundle(out,run_identity,out/name)
         try:
             with shared.bounded(max(.1,hard-time.monotonic())):publish(out,'clm-workspace-controller-001-pilot-2m-seed17')
         except Exception as error:shared.write(out/'publication-failure.json',{'error':str(error),'output_preserved':True})
@@ -234,4 +251,6 @@ def launch(args):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--started',type=float);parser.add_argument('--output',type=Path,default=Path('/kaggle/working/clm-v04-pilot'));parser.add_argument('--cache',type=Path,default=Path('/kaggle/working/stateful-routing-data'));parser.add_argument('--resume-run',type=Path);parser.add_argument('--no-recovery',action='store_true');launch(parser.parse_args())
+    parser=argparse.ArgumentParser();parser.add_argument('--started',type=float);parser.add_argument('--output',type=Path,default=Path('/kaggle/working/clm-v04-pilot'));parser.add_argument('--cache',type=Path,default=Path('/kaggle/working/stateful-routing-data'));parser.add_argument('--resume-run',type=Path);parser.add_argument('--no-recovery',action='store_true');parser.add_argument('--publish-only',type=Path);args=parser.parse_args()
+    if args.publish_only:publish(args.publish_only,'clm-workspace-controller-001-pilot-2m-seed17')
+    else:launch(args)

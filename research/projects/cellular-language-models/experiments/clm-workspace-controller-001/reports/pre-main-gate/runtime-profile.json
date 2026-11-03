@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "source_commit": "56840dd6f2558f86fb392350f7ef94e8c0b5495f",
+    "experiment": "clm-workspace-controller-001-pilot-2m-seed17",
+    "seed": 17,
+    "declared_targets_per_model": 2000000,
+    "declared_total_targets": 12000000,
+    "actual_targets_trained": 0,
+    "scientific_confirmation": false,
+    "local_environment": {
+      "gpu": "Quadro K620, 5.0",
+      "torch": "2.4.1+cu121"
+    },
+    "source_files_sha256": {
+      "pilot.py": "a9e853b0e089ef588a0493deab01a583d083a28d97499751d5bed1efb91c86ad",
+      "recovery.py": "665188a2bcbaa3847c1f2808221db5780db6dd76b865d6556bb9d3b4ee353831",
+      "training.py": "26b936a94303c3d7e107b5867ecd5e1e925e5f2227bf6669db2453c7add7f7cf",
+      "costs.py": "b9076337b1340183ea4a1940593cbe74a62a094fd3cdceedb7921c13c4a000ea",
+      "pilot_worker.py": "fce11b7a5e56ae094285f1c2e63a40d8e5ebbb28375df316cc3c1e4b2dfd37f4",
+      "matching_gate.py": "448cd262d2c30d0eb8cf13f6790e03df66253ac91cdaa380992c40440080d734",
+      "pilot_queue.py": "fd08f3d6b2d2904cbb22b79b3238eb18cdede128c02b67924b089d8fc14a3fda",
+      "dependencies.py": "cc528a2673504795b9a613ae0b9985152153c6d55ccaaeeef565b12f4611d51b",
+      "run.py": "3441212b155d40da64cff3ab7874e493d3e74fe1961c92a50592e032af9d6376",
+      "pre_main_gate.py": "8d45a992457324ce4abec0ba4a054e1eaf18bb26560c015709d7162bd8d2073d",
+      "main_runner.py": "ab185729c4d1e45b11e6e13f1d694150cbfcf81d11ffcf1920dd093da07280d3",
+      "gpu_gate.py": "48b3155560db84408bb58206a1cc1ddbfcb9d1fb355beb6e97279ef77792b60c",
+      "evaluate.py": "c8af329de40b9502023e7c89736106e36593ca9e3a62ae739bc18fc6723e0109",
+      "precision.py": "0f80711b6342452bdf419d616997b6aaa46df780e74fb8e06a39fc422f5bea3f",
+      "models.py": "b20a4909110fc69b7e546be3995a1140713c16c9069010faec3060b423858752"
+    }
+  },
+  "evidence": {
+    "status": "BLOCKED",
+    "actual_T4_throughput": null,
+    "reason": "no local dual T4; oldSmoke TPS not reused"
+  }
+}
