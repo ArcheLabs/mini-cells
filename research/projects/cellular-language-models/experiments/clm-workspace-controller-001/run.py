@@ -12,19 +12,19 @@ from recovery import restore,commit_bundle
 EXPERIMENT='clm-workspace-controller-001-v04'
 
 
-def publish(out):
+def publish(out,experiment=EXPERIMENT):
     from scripts.research.publish_experiment_results import EXPERIMENTS,prepare_artifacts,push_results,remote_branch_sha
-    spec=EXPERIMENTS[EXPERIMENT];source=ROOT/spec.source_dir
+    spec=EXPERIMENTS[experiment];source=ROOT/spec.source_dir
     if source.exists():shutil.rmtree(source)
     source.mkdir(parents=True);names=[]
     for f in out.rglob('*'):
         if not f.is_file() or f.suffix not in ('.json','.jsonl','.md','.py','.ipynb') or f.name.startswith('publication-'):continue
         name=f.relative_to(out).as_posix();target=source/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,target);names.append(name)
-    destination=prepare_artifacts(ROOT,EXPERIMENT,replace(spec,files=tuple(sorted(names))),None);decision=json.loads((out/'decision.json').read_text());branch='kaggle/'+decision['run_id'];digest=shared.digest(out/'decision.json')
-    push_results(ROOT,destination,EXPERIMENT,branch,'GITHUB_TOKEN','origin/main');first=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    destination=prepare_artifacts(ROOT,experiment,replace(spec,files=tuple(sorted(names))),None);decision=json.loads((out/'decision.json').read_text());branch='kaggle/'+decision['run_id'];digest=shared.digest(out/'decision.json')
+    push_results(ROOT,destination,experiment,branch,'GITHUB_TOKEN','origin/main');first=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     receipt={'status':'ARTIFACT_COMMIT_REMOTE_SHA_VERIFIED','artifact_commit':first,'decision_sha256':digest,'branch':branch}
     shared.write(destination/'publication-receipt.json',receipt);shared.write(out/'publication-receipt.json',receipt)
-    push_results(ROOT,destination,EXPERIMENT,branch,'GITHUB_TOKEN',None);final=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    push_results(ROOT,destination,experiment,branch,'GITHUB_TOKEN',None);final=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     if remote_branch_sha(ROOT,branch)!=final or shared.digest(out/'decision.json')!=digest:raise RuntimeError('publication identity mismatch')
     shared.write(out/'publication-verification.json',{'status':'REMOTE_SHA_VERIFIED','receipt_commit':final});print({'publication':'REMOTE_SHA_VERIFIED','branch':branch,'sha':final},flush=True)
 

@@ -77,7 +77,8 @@
     "prefer": "bf16",
     "fallback": "fp16_grad_scaler",
     "initial_scale": 1024,
-    "max_consecutive_overflows": 5
+    "max_consecutive_overflows": 5,
+    "requested": "auto"
   },
   "matching": {
     "layers": 3,
@@ -113,5 +114,22 @@
     "objects": "immutable content-addressed snapshots plus atomic recovery manifest"
   },
   "norm": "LayerNorm",
-  "controller_updates": 2
+  "controller_updates": 1,
+  "gate_version": "pre-main-gate-v1",
+  "pre_main_gate": {
+    "cross_session_validation": "REMOVED_BY_USER",
+    "required": [
+      "CONTROLLER_UPDATE_FIX",
+      "PRECISION_VALIDATION",
+      "COMPUTE_BUDGET_FREEZE",
+      "MAIN_RUNNER_READY",
+      "H2_H3_MATCHING_FREEZE",
+      "GPU_CORRECTNESS"
+    ],
+    "formal_main_auto_start": false,
+    "gpu_tolerances": "gpu_gate.TOLERANCE frozen before execution",
+    "performance_floor_vs_fp32": 0.8,
+    "main_plan": "repeat pinned complete-document stream; deterministic complete-document subset-sum tail reaches exact target; all seeds/arms share plan hash",
+    "budget_freeze_requires_separate_decision": true
+  }
 }
