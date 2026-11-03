@@ -91,7 +91,7 @@ class Model(nn.Module):
         if self.diagnostics:
             with torch.no_grad():
                 sorted_p=p.topk(2,-1).values
-                self.records.append({'step':step,'logit_mean':float(logits.float().mean()),'logit_std':float(logits.float().std()),'entropy':float(-(p*p.clamp_min(1e-30).log()).sum(-1).mean()),'top1_probability':float(sorted_p[...,0].mean()),'top12_gap':float((sorted_p[...,0]-sorted_p[...,1]).mean()),'selected':index.cpu().tolist(),'state_norm':float(z.float().norm(dim=-1).mean()) if z is not None else None,'state_logit_norm':float(state_term.float().norm(dim=-1).mean()) if state_term is not None else None})
+                self.records.append({'step':step,'logit_mean':float(logits.float().mean()),'logit_std':float(logits.float().std()),'entropy':float(-(p*p.clamp_min(1e-30).log()).sum(-1).mean()),'top1_probability':float(sorted_p[...,0].mean()),'top12_gap':float((sorted_p[...,0]-sorted_p[...,1]).mean()),'selected':index.cpu().tolist(),'state_norm':float(z.float().norm(dim=-1).mean()) if z is not None else None,'state_update_norm':float(z.float().norm(dim=-1).mean()) if z is not None and step==1 else 0.,'state_logit_norm':float(state_term.float().norm(dim=-1).mean()) if state_term is not None else None})
         return index,weights,sparse,balance
     def forward(self,ids,cache=None):
         cache=self.reset() if cache is None else cache;c=self.config;pos=cache['position'];self._position=pos;x=self.token(ids);b,t,d=x.shape;self.records=[];self.route_tape=[];self.tensor_trace={'steps':[]}

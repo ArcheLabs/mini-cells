@@ -55,7 +55,7 @@ def test_main_seed_scheduler_isolation_exact_plan_and_control_definitions(tmp_pa
     documents=[{'doc_id':'a','ids':[2,4,5,3]},{'doc_id':'b','ids':[2,5,3]}]
     groups,n=plan(documents,p,12);assert n==12 and sum(len(d['ids'])-1 for g in groups for d in g)==12
     a=Model('C2',C,17);b=Model('C2',C,29);assert not torch.equal(a.token.weight,b.token.weight)
-    p['schedule_target_budget']=12;p['session_stop_targets']=len(groups[0][0]['ids'])-1
+    p['checkpoint_interval_targets']=250000;p['schedule_target_budget']=12;p['session_stop_targets']=len(groups[0][0]['ids'])-1
     first,_=train(a,groups,p,time.monotonic()+20,tmp_path/'resume.pt','exact-main-dry')
     assert first['targets']==p['session_stop_targets'] and first['status']=='INCOMPLETE'
     del p['session_stop_targets'];resumed,_=train(a,groups,p,time.monotonic()+20,tmp_path/'resume.pt','exact-main-dry')

@@ -33,8 +33,8 @@ def correctness(configs,p,deadline):
                         logits,cache=model(chunk,cache);outputs.append(logits)
                         for k,row in enumerate(model.tensor_trace.get('steps',[])):steps[k].append(row)
                 return torch.cat(outputs,1),cache,steps
-            full,cache,full_trace=run([ids],policy);full_encoder=model.tensor_trace.get('encoder_output');prefill,_,cached_trace=run([ids[:,:max(1,length//2)],ids[:,max(1,length//2):]] if length>1 else [ids],policy)
-            sequential,_,single_trace=run(list(ids.split(1,1)),policy)
+            full,cache,full_trace=run([ids],policy);full_encoder=model.tensor_trace.get('encoder_output');prefill,prefill_cache,cached_trace=run([ids[:,:max(1,length//2)],ids[:,max(1,length//2):]] if length>1 else [ids],policy)
+            sequential,single_cache,single_trace=run(list(ids.split(1,1)),policy)
             fp32,_,_=run([ids],select('fp32',device));comparisons={'prefill_cached':error(full,prefill),'token_decode':error(full,sequential),'fp32_reference':error(fp32,full)}
             changed=ids.clone();cut=max(1,length//2);changed[:,cut:]=103
             causal,changed_cache,changed_trace=run([changed],policy);changed_encoder=model.tensor_trace.get('encoder_output');comparisons['causality']=error(full[:,:cut],causal[:,:cut])
@@ -47,6 +47,14 @@ def correctness(configs,p,deadline):
                 if cache.get(name) is not None:
                     take=max(0,cut-(length-cache[name][0].shape[2]))
                     if take:comparisons[name+'_causality']=error(cache[name][0][:,:,:take],changed_cache[name][0][:,:,:take])
+            for execution,other_cache in (('prefill',prefill_cache),('single',single_cache)):
+                if other_cache['position']!=cache['position']:raise ValueError('cache absolute position mismatch')
+                for field in ('encoder_kv','workspace_kv'):
+                    if cache.get(field) is not None:
+                        for part in (0,1):comparisons[execution+'_'+field+str(part)]=error(cache[field][part],other_cache[field][part])
+                for layer,(normal_layer,other_layer) in enumerate(zip(cache.get('layers',[]),other_cache.get('layers',[]))):
+                    if normal_layer is not None:
+                        for part in (0,1):comparisons[execution+'_layer'+str(layer)+'_kv'+str(part)]=error(normal_layer[part],other_layer[part])
             route_differences=[]
             for label,other in (('cached',cached_trace),('single',single_trace)):
                 for k,records in enumerate(other):
@@ -79,14 +87,15 @@ def benchmark(configs,groups,p,out,deadline):
                 progress,performance=train(model,groups[:5],q,deadline,directory/'checkpoint.pt','precision-diagnostic-'+arm+'-'+requested,resume=False)
                 torch.cuda.synchronize();elapsed=time.monotonic()-started;rows=progress['rows'][1:]
                 timings=[r['seconds'] for r in rows]
-                reports[arm][requested]={'status':'PASS' if progress['status']=='COMPLETE' else 'FAIL','policy':policy,'first_loss':progress['rows'][0]['lm_loss'],'overflow_count':len(progress['overflows']),'effective_targets_per_second':progress['targets']/elapsed,'median_group_seconds':statistics.median(timings),'p95_group_seconds':sorted(timings)[-1],'forward_gpu_ms':[r['forward_gpu_ms'] for r in rows],'backward_gpu_ms':[r['backward_gpu_ms'] for r in rows],'optimizer_gpu_ms':[r['optimizer_gpu_ms'] for r in rows],'peak_vram':performance['peak_allocated_bytes'],'inference':profile(model,q,deadline,policy)}
+                gradient_ok=arm!='C2' or all(any(row['module_gradients'].get(module,0)>0 for row in progress['rows']) for module in ('router','controller'))
+                reports[arm][requested]={'status':'PASS' if progress['status']=='COMPLETE' and gradient_ok else 'FAIL','gradient_verified':gradient_ok,'policy':policy,'first_loss':progress['rows'][0]['lm_loss'],'overflow_count':len(progress['overflows']),'effective_targets_per_second':progress['targets']/elapsed,'median_group_seconds':statistics.median(timings),'p95_group_seconds':sorted(timings)[-1],'forward_gpu_ms':[r['forward_gpu_ms'] for r in rows],'backward_gpu_ms':[r['backward_gpu_ms'] for r in rows],'optimizer_gpu_ms':[r['optimizer_gpu_ms'] for r in rows],'peak_vram':performance['peak_allocated_bytes'],'inference':profile(model,q,deadline,policy)}
             except Exception as failure:reports[arm][requested]={'status':'FAIL','error':type(failure).__name__+': '+str(failure)}
             finally:
                 if 'model' in locals():del model
                 torch.cuda.empty_cache()
     selected=select(p['precision'].get('requested','auto'),device)['selected_precision']
     ratios={arm:reports[arm].get(selected,{}).get('effective_targets_per_second',0)/max(1e-9,reports[arm].get('fp32',{}).get('effective_targets_per_second',0)) for arm in reports}
-    return {'status':('PASS' if min(ratios.values())>=.8 else 'BLOCKED') if all(reports[a].get(selected,{}).get('status')=='PASS' for a in reports) else 'FAIL','target_vs_fp32_throughput_ratio':ratios,'performance_rule':'selected policy must achieve >=80% of FP32 throughput in both model families, otherwise request explicit precision decision; no silent fallback','hardware':select('auto',device),'models':reports,'native_claim':'capability-based policy; raw kernel names recorded, no native BF16 claim from framework compatibility'}
+    return {'status':('PASS' if min(ratios.values())>=.8 else 'BLOCKED') if all(reports[a].get(selected,{}).get('status')=='PASS' for a in reports) else 'FAIL','target_vs_fp32_throughput_ratio':ratios,'performance_rule':'selected policy must achieve >=80% of FP32 throughput in both model families, otherwise request explicit precision decision; no silent fallback','hardware':select(p['precision'].get('requested','auto'),device),'models':reports,'native_claim':'capability-based policy; raw kernel names recorded, no native BF16 claim from framework compatibility'}
 
 
 def controller_equivalence(config,p,deadline):
@@ -108,7 +117,8 @@ def controller_equivalence(config,p,deadline):
             other=dict(after.named_parameters())[name]
             if value.grad is not None:differences.append(error(value.grad/1024,other.grad/1024))
         e=error(outputs[0],outputs[1]);same_routes=all(torch.equal(a[0],b[0]) and torch.equal(a[1],b[1]) for a,b in zip(captures[0],captures[1]))
-        good=accepted(e,policy['selected_precision']) and same_routes and len(calls[0])==2 and len(calls[1])==1 and all(accepted(d,policy['selected_precision']) for d in differences)
-        results[arm]={'status':'PASS' if good else 'FAIL','logits':e,'routes_and_gates_equal':same_routes,'controller_call_counts':[len(calls[0]),len(calls[1])],'first_state':error(calls[0][0],calls[1][0]),'losses':losses,'max_parameter_gradient_error':max(d['maximum_absolute'] for d in differences)}
+        controller_gradient=float(after.controller.weight_ih.grad.float().norm())
+        good=controller_gradient>0 and accepted(e,policy['selected_precision']) and same_routes and len(calls[0])==2 and len(calls[1])==1 and all(accepted(d,policy['selected_precision']) for d in differences)
+        results[arm]={'status':'PASS' if good else 'FAIL','logits':e,'controller_ce_gradient_norm':controller_gradient,'routes_and_gates_equal':same_routes,'controller_call_counts':[len(calls[0]),len(calls[1])],'first_state':error(calls[0][0],calls[1][0]),'losses':losses,'max_parameter_gradient_error':max(d['maximum_absolute'] for d in differences)}
         del before,after;torch.cuda.empty_cache()
     return {'status':'PASS' if all(v['status']=='PASS' for v in results.values()) else 'FAIL','policy':policy,'models':results}

@@ -47,6 +47,9 @@ def validate_freeze(freeze,source,p,manifest):
 
 
 def launch(args):
+    if args.mode=='pilot':
+        from pilot import launch as pilot
+        pilot(argparse.Namespace(started=args.started,output=args.output,cache=args.cache,resume_run=args.run_dir,no_recovery=False));return
     started=args.started if args.started is not None else time.monotonic();deadline=started+min(args.session_seconds,10800)-600
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();p=json.loads((BASE/'protocol.json').read_text())
     if args.mode=='publish-only':publish(args.run_dir);return
@@ -127,5 +130,5 @@ def launch(args):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--mode',choices=['smoke','main-dry-run','main','evaluate-only','publish-only'],default='main-dry-run');parser.add_argument('--started',type=float);parser.add_argument('--output',type=Path,default=Path('/kaggle/working/clm-v04-main'));parser.add_argument('--run-dir',type=Path);parser.add_argument('--cache',type=Path,default=Path('/kaggle/working/stateful-routing-data'));parser.add_argument('--freeze',type=Path);parser.add_argument('--dry-run-targets',type=int,default=4096);parser.add_argument('--stop-after-groups',type=int,default=0);parser.add_argument('--require-recovery',action='store_true');parser.add_argument('--session-seconds',type=int,default=10800);parser.add_argument('--arms',nargs='+',default=['C0','C1','C2','C3','T0-P','T0-F'])
+    parser=argparse.ArgumentParser();parser.add_argument('--mode',choices=['smoke','main-dry-run','main','evaluate-only','publish-only','pilot'],default='main-dry-run');parser.add_argument('--started',type=float);parser.add_argument('--output',type=Path,default=Path('/kaggle/working/clm-v04-main'));parser.add_argument('--run-dir',type=Path);parser.add_argument('--cache',type=Path,default=Path('/kaggle/working/stateful-routing-data'));parser.add_argument('--freeze',type=Path);parser.add_argument('--dry-run-targets',type=int,default=4096);parser.add_argument('--stop-after-groups',type=int,default=0);parser.add_argument('--require-recovery',action='store_true');parser.add_argument('--session-seconds',type=int,default=10800);parser.add_argument('--arms',nargs='+',default=['C0','C1','C2','C3','T0-P','T0-F'])
     launch(parser.parse_args())

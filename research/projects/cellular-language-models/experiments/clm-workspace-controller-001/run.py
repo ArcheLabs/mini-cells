@@ -18,7 +18,7 @@ def publish(out,experiment=EXPERIMENT):
     if source.exists():shutil.rmtree(source)
     source.mkdir(parents=True);names=[]
     for f in out.rglob('*'):
-        if not f.is_file() or f.suffix not in ('.json','.jsonl','.md','.py','.ipynb') or f.name.startswith('publication-'):continue
+        if not f.is_file() or f.suffix not in ('.json','.jsonl','.md','.py','.ipynb','.csv') or f.name.startswith('publication-'):continue
         name=f.relative_to(out).as_posix();target=source/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,target);names.append(name)
     destination=prepare_artifacts(ROOT,experiment,replace(spec,files=tuple(sorted(names))),None);decision=json.loads((out/'decision.json').read_text());branch='kaggle/'+decision['run_id'];digest=shared.digest(out/'decision.json')
     push_results(ROOT,destination,experiment,branch,'GITHUB_TOKEN','origin/main');first=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
