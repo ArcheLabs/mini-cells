@@ -28,6 +28,13 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-stateful-computation-routing-001": ExperimentSpec(
+        source_dir="results/epclm-stateful-computation-routing-001/publish",
+        artifact_dir="artifacts/experiments/epclm-stateful-computation-routing-001",
+        files=("decision.json", "protocol.json", "audit.json", "metrics.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/epclm-stateful-routing-results",
+        expected_format="minicells.epclm-stateful-computation-routing-001.v1",
+    ),
     "epclm-a2-state-001": ExperimentSpec(
         source_dir="results/epclm-a2-state-001/publish",
         artifact_dir="artifacts/experiments/epclm-a2-state-001",
