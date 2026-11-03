@@ -1,0 +1,110 @@
+{
+  "format": "minicells.stateful-routing.protocol.v1",
+  "seed": 91001,
+  "router_seed": 9100102,
+  "state_seed": 9100101,
+  "model": {
+    "dim": 188,
+    "heads": 4,
+    "ffn": 639,
+    "layers": 3,
+    "vocab": 2048,
+    "cells": 16,
+    "state_dim": 128,
+    "router_dim": 128,
+    "window": 128,
+    "chunk": 64,
+    "K": 2
+  },
+  "optimizer": {
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "warmup_fraction": 0.1
+  },
+  "precision": "fp32",
+  "groups": {
+    "documents": 8,
+    "max_document_targets": 4096
+  },
+  "router": {
+    "temperature": 1.0,
+    "baseline_beta": 0.98,
+    "baseline_initial": [
+      0.0,
+      0.0
+    ],
+    "pg_weight": 0.1,
+    "credit": "current token CE + next logical chunk mean CE (beta=1); truncated even across TBPTT boundary via detached lookahead",
+    "gradient": "per-action detached(current target CE + next chunk mean CE - old baseline[step]) times logprob; global action mean; beta=1",
+    "baseline_commit": "two old step baselines frozen throughout optimizer group; EMA .98 updated from group mean returns only after successful step"
+  },
+  "budget": {
+    "total": 10800,
+    "audit": 600,
+    "data": 900,
+    "warmup": 1500,
+    "training": 6300,
+    "evaluation": 9000,
+    "publication": 9900,
+    "training_reserve_fraction": 0.2,
+    "candidates": [
+      1000000,
+      500000,
+      250000
+    ],
+    "minimum_actual_targets": 250000,
+    "complete_document_rule": "largest full-group prefix <= candidate; minimum actual 250K unchanged; ineligible rounded lowest candidate is reported explicitly"
+  },
+  "evaluation": {
+    "documents": 32,
+    "sample_seed": 91003,
+    "bootstrap_seed": 91002,
+    "bootstrap_repetitions": 2000,
+    "threshold": 0.01,
+    "primary": "argmax",
+    "secondary": "categorical fixed seed",
+    "holdout": "NOT_RUN; excluded from selection",
+    "optional_long_range": "NOT_RUN"
+  },
+  "source_a2": "../epclm-a2-state-001/reports/history/A2-config.json",
+  "initialization": "forked same seed for common M0/M1/M2 components; new state and state-router modules independent seed",
+  "training_status": "NOT_RUN",
+  "precision_policy": {
+    "autocast": false,
+    "grad_scaler": false,
+    "overflow": "FP32 nonfinite loss/gradient fails before optimizer.step; restore RNG and discard group baseline/counters; no blind retries. Post-step nonfinite params invalidate run and are not checkpointed."
+  },
+  "gradient_horizon": {
+    "state_and_kv": "two logical chunks, backward once per nonoverlapping window; detach after window",
+    "T0": "standard causal self-attention includes current input Token, no future Token; all layer KV detached at each chunk boundary",
+    "optimizer_group": "CE sum/group valid targets + .1 PG sum/(2*group valid targets); backward per H=2 window, optimizer step only after complete document group",
+    "state_update": "shared tanh Linear(3d,state_dim) proposals, scatter mean per cell, shared GRU(state_dim,state_dim), frozen snapshot in both steps; commit only at logical boundary or explicit document finish"
+  },
+  "ablations": {
+    "cell_off": "replace CellCore State input by zero; preserve state updates and Router",
+    "router_off": "zero W_S*s term only; M2 only",
+    "recurrence_off": "replace GRU old-state argument by zero, preserve h_before/u and write",
+    "all_off": "cell_off + router_off + recurrence_off; no claim distinct predictive content beyond cell_off+router_off",
+    "write_off": "keep zero initial State by preventing all updates",
+    "reset_chunk": "reset numerical State at chunk starts; not KV",
+    "shuffle": "cyclic shift by one in CellCore State reads only; Router mapping unchanged"
+  },
+  "holdout_policy": "separate dataset validation subset used for development selection; independent holdout not loaded",
+  "mechanism_version": "chunk-parallel-v0.3",
+  "tbptt_horizon": 2,
+  "benchmark": {
+    "candidates": [
+      32,
+      64,
+      128
+    ],
+    "selection": "prefer 64 when feasible; otherwise fastest feasible four-model aggregate; no quality-based selection",
+    "seconds_per_model_candidate": 8
+  },
+  "scope": "new input-KV chunk-parallel mechanism, not numerical/kernel-equivalent to v0.2"
+}
