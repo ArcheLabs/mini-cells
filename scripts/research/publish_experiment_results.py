@@ -308,7 +308,7 @@ def push_results(
     else:
         if base_ref != "origin/main":
             raise ValueError("authenticated research artifact publication must use origin/main")
-        run_git(root, "fetch", "--depth=1", "origin", "main")
+        run_git(root, "fetch", "--depth=1", "origin", "refs/heads/main:refs/remotes/origin/main")
         base_sha = run_git(root, "rev-parse", "refs/remotes/origin/main").stdout.strip()
     # Switching to an existing local result branch can remove tracked artifacts
     # from the working tree. Keep the freshly curated directory across that
