@@ -48,7 +48,19 @@ def reuse_local_assets(output,source,protocol,spec):
     record=output/'recovery.json'
     if not record.exists(): return False
     manifest=json.loads(record.read_text()); identity=manifest['identity']
-    if identity['source']==source and identity['protocol']==protocol: return True
+    if identity['source']==source and identity['protocol']==protocol:
+        locations=manifest.get('objects',{n:n for n in manifest['files']})
+        for name,digest in manifest['files'].items():
+            relative=Path(locations[name])
+            if relative.is_absolute() or '..' in relative.parts:raise ValueError('unsafe local recovery path')
+            saved=output/relative
+            if sha256_file(saved)!=digest:raise ValueError('local recovery checksum mismatch: '+name)
+            target=output/name
+            if not target.is_file() or sha256_file(target)!=digest:
+                target.parent.mkdir(parents=True,exist_ok=True)
+                temporary=target.with_name(target.name+'.restore.tmp')
+                shutil.copy2(saved,temporary);temporary.replace(target)
+        return True
     if spec is None: raise ValueError('local saved source/protocol differs')
     names=('assets/manifest.json','assets/tokenizer.json','assets/train.json','assets/development.json')
     locations=manifest.get('objects',{n:n for n in manifest['files']})
@@ -69,7 +81,7 @@ def reuse_local_assets(output,source,protocol,spec):
     return True
 
 
-def recover(root,output,source,protocol,asset_spec=None,cache=None,asset_namespace=None):
+def recover(root,output,source,protocol,asset_spec=None,cache=None,asset_namespace=None,max_versions=25):
     if reuse_local_assets(output,source,protocol,asset_spec): return
     sys.path.insert(0,str(root/'research/projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/scripts'))
     from kaggle_output_recovery import _load_backend,_version_number
@@ -93,7 +105,7 @@ def recover(root,output,source,protocol,asset_spec=None,cache=None,asset_namespa
             if sha256_file(path)!=manifest['files'][name]: raise ValueError('recovery checksum mismatch')
         return files
 
-    for version in range(latest,max(0,latest-25),-1):
+    for version in range(latest,max(0,latest-max_versions),-1):
         print('[Core recovery] inspect saved version '+str(version),flush=True)
         token=None; names=set(); seen=set()
         while True:

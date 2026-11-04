@@ -30,6 +30,7 @@ class Cache:
     owner: int
     next_position: int
     layers: tuple
+    weight_version: tuple
 
 
 def rope(x,positions):
@@ -58,11 +59,17 @@ class CachedTransformer(nn.Module):
         self.lm_head.weight=self.token_embedding.weight
         self.apply(HistoricalScaledCLM._init_weights)
 
-    def _forward(self,ids,cache=None,save_cache=False):
+    def _weight_version(self):
+        # Tensor version counters advance on ordinary optimizer/load_state_dict writes.
+        # This avoids hashing all weights on every incremental inference token.
+        return tuple(parameter._version for parameter in self.parameters())
+
+    def _forward(self,ids,cache=None,save_cache=False,position_offset=0):
         c=self.config
         if ids.ndim!=2 or ids.shape[1]<1:raise ValueError('nonempty [batch,time] IDs required')
         if cache is not None and (cache.owner!=id(self) or len(cache.layers)!=c.layers):raise ValueError('cache belongs to another model')
-        start=cache.next_position if cache else 0
+        if cache is not None and cache.weight_version!=self._weight_version():raise ValueError('cache invalidated by a model weight update')
+        start=cache.next_position if cache else position_offset
         positions=torch.arange(start,start+ids.shape[1],device=ids.device)
         h=self.token_embedding(ids);b,t,_=h.shape;entries=[]
         for index,block in enumerate(self.blocks):
@@ -85,9 +92,9 @@ class CachedTransformer(nn.Module):
                 # clone prevents a short view retaining an unbounded old backing storage.
                 entries.append((k[:,:,-c.window:].detach().clone(),v[:,:,-c.window:].detach().clone()))
         logits=self.lm_head(self.final_norm(h))
-        return logits,Cache(id(self),start+t,tuple(entries)) if save_cache else None
+        return logits,Cache(id(self),start+t,tuple(entries),self._weight_version()) if save_cache else None
 
-    def forward(self,ids):return self._forward(ids)[0]
+    def forward(self,ids,position_offset=0):return self._forward(ids,position_offset=position_offset)[0]
 
     @torch.inference_mode()
     def cached(self,ids,cache=None):
@@ -112,6 +119,7 @@ class CachedTransformer(nn.Module):
 
     def snapshot(self,cache):
         if cache.owner!=id(self):raise ValueError('cache owner differs')
+        if cache.weight_version!=self._weight_version():raise ValueError('cache invalidated by a model weight update')
         return {'format':'gc002.kv.v1','model_sha256':self.weight_identity(),'next_position':cache.next_position,
                 'layers':tuple(tuple(v.cpu().clone() for v in pair) for pair in cache.layers)}
 
@@ -127,7 +135,7 @@ class CachedTransformer(nn.Module):
                 if value.ndim!=4 or value.shape[1:]!=expected or not value.is_floating_point() or not torch.isfinite(value).all():raise ValueError('invalid snapshot tensor')
                 if batch is not None and value.shape[0]!=batch:raise ValueError('snapshot batch mismatch')
                 batch=value.shape[0]
-        return Cache(id(self),position,tuple(tuple(v.to(reference).clone() for v in pair) for pair in layers))
+        return Cache(id(self),position,tuple(tuple(v.to(reference).clone() for v in pair) for pair in layers),self._weight_version())
 
 
 def cache_memory(model,cache):

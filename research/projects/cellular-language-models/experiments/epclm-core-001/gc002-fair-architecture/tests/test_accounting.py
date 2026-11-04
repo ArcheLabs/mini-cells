@@ -58,3 +58,14 @@ def test_parallel_teacher_forcing_lane_reset_and_rollback():
     for lane,parts in enumerate(proposal['segments']):
         # Last segment starts a new document when reset; no previous-document KV leaks.
         if parts[-1]['reset']:assert next_caches[lane].next_position==len(parts[-1]['inputs'])
+
+
+def test_backward_sum_is_counted_as_reduction():
+    x=torch.ones(2,3,requires_grad=True)
+    y=x*torch.ones(3,requires_grad=True)
+    with ArithmeticCounter() as counter:
+        counter.phase='backward'
+        y.sum().backward()
+    assert not counter.unknown
+    assert ArithmeticCounter._category('sum','backward')=='NORMALIZATION_OR_REDUCTION'
+    assert counter.totals['backward']>0
