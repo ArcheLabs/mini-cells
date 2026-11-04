@@ -130,6 +130,34 @@
       "screening_plan": "research/projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/A0-v0.2-screening.md",
       "scientific_decision": false,
       "note": "Historical development pilot remains as recorded. A0-v0.2 screening implementation is prepared but has not been run. The registered full matrix remains frozen and unrun; H2 remains INCONCLUSIVE and the v1 full-scan candidate cannot satisfy H3. No scientific decision is made."
+    },
+    {
+      "id": "EPCLM-CORE-001",
+      "name": "event-driven-persistent-cellular-computing",
+      "status": "development_implementation",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/protocol.json",
+      "scientific_decision": false,
+      "note": "Development only. GPU pilot and H1-H5 NOT EVALUATED; independent confirmation sealed."
+    },
+    {
+      "id": "EPCLM-CORE-001-C1-DIAGNOSTIC",
+      "name": "frozen-c1-mechanism-diagnostic",
+      "status": "development_observed",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/diagnostic-protocol.json",
+      "scientific_decision": false,
+      "note": "Frozen diagnostic COMPLETE; D0 exact and unchanged weights; model recovered from private version 142. State and communication dependence observed. No formal confirmation; H1-H5 NOT_EVALUATED.",
+      "result_branch": "kaggle/epclm-core-001-c1-diagnostic-7ee5cd46e10c"
+    },
+    {
+      "id": "EPCLM-CORE-001-CP-001",
+      "name": "communication-propagation",
+      "status": "development_implementation_ready_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/communication-propagation-protocol.json",
+      "scientific_decision": false,
+      "note": "Frozen C1; global one-event and local single-round pulses; SHAM and ring-cone validation; 16 stories, <=48 probes, <=240 pulse branches. Recovery <=600s, diagnosis <=900s. No training/confirmation; H1-H5 NOT_EVALUATED."
     }
   ],
   "schema_version": 2

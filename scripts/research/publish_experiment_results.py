@@ -28,6 +28,36 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-core-001-cp001": ExperimentSpec(
+        source_dir="results/epclm-core-001-cp001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/communication-propagation",
+        files=("decision.json", "summary.md", "global-pulse.json", "local-edge-pulse.json",
+               "temporal-impact.json", "spatial-propagation.json", "temporal-response.png", "propagation-heatmap.png"),
+        branch="kaggle/epclm-core-001-cp001-results",
+        expected_format="minicells.epclm-core-001.cp001.v1",
+    ),
+    "epclm-core-001-c1-diagnostic": ExperimentSpec(
+        source_dir="results/epclm-core-001-c1-diagnostic/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/mechanism-diagnostic",
+        files=("decision.json", "summary.md", "baseline.json", "state-causality.json",
+               "connection-causality.json", "internal-evolution.json", "mechanism-diagnostic.png"),
+        branch="kaggle/epclm-core-001-c1-diagnostic-results",
+        expected_format="minicells.epclm-core-001.c1-diagnostic.v1",
+    ),
+    "epclm-core-001-pilot": ExperimentSpec(
+        source_dir="results/epclm-core-001-pilot/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/pilot",
+        files=("decision.json", "pilot-report.json", "summary.md"),
+        branch="kaggle/epclm-core-001-pilot-results",
+        expected_format="minicells.epclm-core-001.v1",
+    ),
+    "epclm-core-001": ExperimentSpec(
+        source_dir="results/epclm-core-001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/development",
+        files=("decision.json", "summary.md"),
+        branch="kaggle/epclm-core-001-results",
+        expected_format="minicells.epclm-core-001.v1",
+    ),
     "003b": ExperimentSpec(
         source_dir="results/quantization-localization-v1",
         artifact_dir="artifacts/experiments/003b-quantization-localization",
