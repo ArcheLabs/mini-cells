@@ -1,0 +1,173 @@
+{
+  "active_experiment": {
+    "cross_session_validation": "REMOVED_BY_USER",
+    "evaluation_deadline_seconds": 6900,
+    "execution": "independent_subprocess_workers_dynamic_queue",
+    "future_main_auto_start": false,
+    "gpu": "Tesla T4",
+    "mode": "pilot",
+    "name": "clm-workspace-controller-001-pilot-2m-seed17",
+    "required_gpus": 2,
+    "seed": 17,
+    "targets_per_model": 2000000,
+    "total_targets": 12000000,
+    "training_deadline_seconds": 6000,
+    "wall_clock_seconds": 7200
+  },
+  "checkpoint_interval_targets": 250000,
+  "checkpoint_policy": {
+    "objects": "immutable content-addressed snapshots plus atomic recovery manifest",
+    "recovery": "reuse repair_io transport, <=3 saved versions, <=45s; published same-source progress with failed recovery blocks retraining",
+    "resume": "exact source/config/data identity; every committed document group"
+  },
+  "controller_updates": 1,
+  "counterfactual": {
+    "fixed_pairs": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "oracle": "bounded optional offline path diagnostic; NOT_RUN in initial smoke",
+    "random_seed": 4301,
+    "shuffle": "permute normal route assignments and their selected weights across tokens within each evaluated chunk, separately per step; update actual controller path"
+  },
+  "evaluation": {
+    "bootstrap_repetitions": 2000,
+    "bootstrap_seed": 91002,
+    "documents": 32,
+    "threshold": 0.01
+  },
+  "execution_mode": "pilot",
+  "format": "minicells.clm-v04.protocol.v1",
+  "gate_version": "pre-main-gate-v1",
+  "groups": {
+    "documents": 8,
+    "max_document_targets": 4096
+  },
+  "independent_test_accessed": false,
+  "main": {
+    "additional_gates": [
+      "smoke completion",
+      "runtime throughput and active-compute audit",
+      "three-seed total GPU-hours and per-session schedule freeze",
+      "formal training-FLOPs matching plan"
+    ],
+    "frozen": false,
+    "planned_targets_per_model_seed": 32000000,
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "status": "DEFERRED_SUPERSEDED_BY_SINGLE_SEED_2M_PILOT"
+  },
+  "matching": {
+    "F": "declared dense-matmul MAC=2 active forward cost at context256; runtime profiling separate",
+    "P": "actual total parameter count",
+    "ffn_multiple": 8,
+    "layers": 3,
+    "tolerance": 0.01
+  },
+  "mechanism_version": "workspace-controller-v0.4",
+  "model": {
+    "cells": 8,
+    "chunk": 64,
+    "dim": 256,
+    "encoder_ffn": 512,
+    "ffn": 512,
+    "heads": 4,
+    "layers": 3,
+    "norm": "LayerNorm",
+    "state_dim": 256,
+    "steps": 2,
+    "top_k": 2,
+    "vocab": 2048,
+    "window": 256
+  },
+  "norm": "LayerNorm",
+  "optimizer": {
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "clip": 1.0,
+    "lr": 0.0003,
+    "warmup_fraction": 0.1,
+    "weight_decay": 0.1
+  },
+  "pilot": {
+    "cross_session_recovery_validation": "REMOVED_BY_USER",
+    "data_pipeline": {
+      "bulk_resident_documents": true,
+      "num_workers": 0,
+      "persistent_workers": false,
+      "pin_memory": true,
+      "prefetch_factor": "NOT_APPLICABLE; whole documents cached and copied once asynchronously"
+    },
+    "evaluation_deadline_seconds": 6900,
+    "gpus": 2,
+    "hard_limit_seconds": 7200,
+    "model_count": 6,
+    "name": "clm-workspace-controller-001-pilot-2m-seed17",
+    "platform_reserve_seconds": 60,
+    "seed": 17,
+    "targets_per_model": 2000000,
+    "total_targets": 12000000,
+    "training_deadline_seconds": 6000
+  },
+  "pin_memory": true,
+  "pre_main_gate": {
+    "budget_freeze_requires_separate_decision": true,
+    "cross_session_validation": "REMOVED_BY_USER",
+    "formal_main_auto_start": false,
+    "gpu_tolerances": "gpu_gate.TOLERANCE frozen before execution",
+    "main_plan": "repeat pinned complete-document stream; deterministic complete-document subset-sum tail reaches exact target; all seeds/arms share plan hash",
+    "performance_floor_vs_fp32": 0.8,
+    "required": [
+      "CONTROLLER_UPDATE_FIX",
+      "PRECISION_VALIDATION",
+      "COMPUTE_BUDGET_FREEZE",
+      "MAIN_RUNNER_READY",
+      "H2_H3_MATCHING_FREEZE",
+      "GPU_CORRECTNESS"
+    ]
+  },
+  "precision": {
+    "fallback": "fp16_grad_scaler",
+    "initial_scale": 1024,
+    "max_consecutive_overflows": 5,
+    "prefer": "bf16",
+    "requested": "auto"
+  },
+  "router": {
+    "balance": "N * sum(stopgrad(top2_assignment_fraction) * mean(full_router_softmax)), averaged over steps; diagnostic auxiliary only",
+    "balance_alpha": 0.001,
+    "noise": 0.0,
+    "temperature": 1.0
+  },
+  "scientific_confirmation": false,
+  "smoke": {
+    "evaluation_documents": 8,
+    "minimum_groups": 3,
+    "models": [
+      "C0",
+      "C1",
+      "C2",
+      "C3",
+      "T0-P",
+      "T0-F"
+    ],
+    "seed": 17,
+    "single_session_seconds": 10800,
+    "target_cap": 32768
+  }
+}
