@@ -28,6 +28,27 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-stateful-computation-routing-001": ExperimentSpec(
+        source_dir="results/epclm-stateful-computation-routing-001/publish",
+        artifact_dir="artifacts/experiments/epclm-stateful-computation-routing-001",
+        files=("decision.json", "protocol.json", "audit.json", "metrics.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/epclm-stateful-routing-results",
+        expected_format="minicells.epclm-stateful-computation-routing-001.v1",
+    ),
+    "epclm-a2-state-001": ExperimentSpec(
+        source_dir="results/epclm-a2-state-001/publish",
+        artifact_dir="artifacts/experiments/epclm-a2-state-001",
+        files=("decision.json", "protocol.json", "stage-results.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/epclm-a2-state-001-results",
+        expected_format="minicells.epclm-a2-state-001.v1",
+    ),
+    "epclm-x4c-001": ExperimentSpec(
+        source_dir="results/epclm-x4c-001/publish",
+        artifact_dir="artifacts/experiments/epclm-x4c-001",
+        files=("decision.json", "protocol.json", "manifest.json", "g0-report.json", "stage-results.json", "selection.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/epclm-x4c-001-results",
+        expected_format="minicells.epclm-x4c-001.v1",
+    ),
     "epclm-core-001-topology-001": ExperimentSpec(
         source_dir="results/epclm-core-001-topology-001/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/topology-001",
