@@ -28,6 +28,20 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-gc002-t1-pilot": ExperimentSpec(
+        source_dir="results/epclm-gc002-t1-pilot/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/t1-pm-pilot",
+        files=("decision.json", "pilot-report.json", "metrics.json", "execution-identity.json", "summary.md"),
+        branch="kaggle/epclm-gc002-t1-pilot-results",
+        expected_format="minicells.gc002.pilot.v1",
+    ),
+    "epclm-gc002-preparation": ExperimentSpec(
+        source_dir="results/epclm-gc002-preparation/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/preparation",
+        files=("decision.json", "baseline-audit.json", "data-audit.json", "tokenizer-audit.json", "parameter-match-report.json", "kv-cache-equivalence.json", "inference-profile.json", "memory-profile.json", "training-flops.json", "summary.md", "token-exposure.json", "reused-engineering-evidence.json", "freeze-candidate.json", "run-plan.zh-CN.md"),
+        branch="kaggle/epclm-gc002-preparation-results",
+        expected_format="minicells.gc002.preparation.v1",
+    ),
     "epclm-gc001-repair-a": ExperimentSpec(
         source_dir="results/epclm-gc001-repair-a/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-a",
