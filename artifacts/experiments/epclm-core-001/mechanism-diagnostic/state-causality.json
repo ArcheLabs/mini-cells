@@ -1,0 +1,120 @@
+{
+  "RESET_EVERY_TOKEN": {
+    "nll": 7.08826984785394,
+    "ppl": 1197.8335724371243,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 8.826748929000019,
+    "seconds_per_token": 0.002657058678205906,
+    "state_norm_mean": 11.131168070936116,
+    "state_norm_max": 13.295266151428223,
+    "event_state_delta_mean": 11.131168070936116,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "RESET_EVERY_TOKEN",
+    "K": 4,
+    "comparison": {
+      "delta_nll": 1.2736434555516625,
+      "paired_document_mean_delta_nll": 1.2754323109275079,
+      "document_bootstrap_95": [
+        1.1903340981950044,
+        1.362818323572377
+      ],
+      "documents": 16,
+      "tokens": 3322,
+      "positive_delta_document_fraction": 1.0,
+      "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+    }
+  },
+  "RESET_AT_PROBE": {
+    "nll": 5.873753115050338,
+    "ppl": 355.58101552438694,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 8.770610725999973,
+    "seconds_per_token": 0.0026401597609873487,
+    "state_norm_mean": 112.75756062462271,
+    "state_norm_max": 278.0208740234375,
+    "event_state_delta_mean": 11.164074110310167,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "RESET_AT_PROBE",
+    "K": 4,
+    "comparison": {
+      "delta_nll": 0.059126722748059954,
+      "paired_document_mean_delta_nll": 0.05901145023310877,
+      "document_bootstrap_95": [
+        0.0342123998103566,
+        0.09133051982013986
+      ],
+      "documents": 16,
+      "tokens": 3322,
+      "positive_delta_document_fraction": 0.9375,
+      "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+    },
+    "post_probe_comparison": {
+      "delta_nll": 0.11804024817851874,
+      "paired_document_mean_delta_nll": 0.11787001433256972,
+      "document_bootstrap_95": [
+        0.06822110149517614,
+        0.1825487572784075
+      ],
+      "documents": 16,
+      "tokens": 1664,
+      "positive_delta_document_fraction": 0.9375,
+      "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+    }
+  },
+  "ENTRY_ONLY": {
+    "nll": 5.926930496952464,
+    "ppl": 375.0016766220179,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 8.847327841999913,
+    "seconds_per_token": 0.0026632534142082822,
+    "state_norm_mean": 187.1137998355289,
+    "state_norm_max": 478.39862060546875,
+    "event_state_delta_mean": 11.133498943404646,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "ENTRY_ONLY",
+    "K": 4,
+    "comparison": {
+      "delta_nll": 0.11230410465018567,
+      "paired_document_mean_delta_nll": 0.11245152189955368,
+      "document_bootstrap_95": [
+        0.08416116916083415,
+        0.14165458894420188
+      ],
+      "documents": 16,
+      "tokens": 3322,
+      "positive_delta_document_fraction": 1.0,
+      "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+    },
+    "intervention_schedule": "clear non-entry cells before every event"
+  },
+  "history_pairs": {
+    "status": "COMPLETE",
+    "pairs": 8,
+    "excluded_count": 0,
+    "means": {
+      "normal": {
+        "margin": -0.003463447093963623,
+        "correct_target_nll": 7.788469225168228
+      },
+      "reset": {
+        "margin": 0.0,
+        "correct_target_nll": 7.68293696641922
+      },
+      "swapped": {
+        "margin": 0.003463447093963623,
+        "correct_target_nll": 7.7850057780742645
+      }
+    },
+    "bidirectional_pair_success_fraction": 0.0,
+    "direction_correct_fraction": 0.0,
+    "suffix_ids_identical_within_pair": true,
+    "balanced_two_directions": true,
+    "semantic_signal_rule": "at least 8 accepted pairs, >=75% bidirectional pairs correct, normal correct-target NLL < reset; descriptive only"
+  }
+}
