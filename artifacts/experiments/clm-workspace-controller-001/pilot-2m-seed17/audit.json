@@ -1,0 +1,44 @@
+{
+  "devices": [
+    {
+      "capability": [
+        7,
+        5
+      ],
+      "logical_index": 0,
+      "name": "Tesla T4",
+      "total_memory": 15636037632,
+      "uuid": "6f59df89-b499-a52b-08cc-6fb1f745a75a"
+    },
+    {
+      "capability": [
+        7,
+        5
+      ],
+      "logical_index": 1,
+      "name": "Tesla T4",
+      "total_memory": 15636037632,
+      "uuid": "99b13afb-446f-9402-2be7-f6757e716fa7"
+    }
+  ],
+  "nvidia_smi": "Wed Nov  4 01:13:00 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 580.178.04             Driver Version: 580.178.04     CUDA Version: 13.0     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |\n| N/A   48C    P8             10W /   70W |       3MiB /  15360MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n|   1  Tesla T4                       Off |   00000000:00:05.0 Off |                    0 |\n| N/A   45C    P8             11W /   70W |       3MiB /  15360MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|  No running processes found                                                             |\n+-----------------------------------------------------------------------------------------+\n",
+  "nvidia_smi_L": "GPU 0: Tesla T4 (UUID: GPU-6f59df89-b499-a52b-08cc-6fb1f745a75a)\nGPU 1: Tesla T4 (UUID: GPU-99b13afb-446f-9402-2be7-f6757e716fa7)\n",
+  "observed_gpu_count": 2,
+  "precision_policy": {
+    "bf16_framework_supported": true,
+    "bf16_native_hardware_supported": false,
+    "cuda_version": "13.0",
+    "diagnostic_non_native_bf16": false,
+    "fp16_hardware_supported": true,
+    "gpu_capability": [
+      7,
+      5
+    ],
+    "gpu_name": "Tesla T4",
+    "requested_precision": "auto",
+    "scaler_enabled": true,
+    "selected_precision": "fp16",
+    "selection_reason": "auto chooses native BF16 on CC>=8, otherwise FP16+GradScaler when supported; never auto-emulated BF16",
+    "torch_version": "2.11.0+cu130"
+  }
+}
