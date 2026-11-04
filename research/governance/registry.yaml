@@ -162,12 +162,22 @@
     {
       "id": "EPCLM-GC-001",
       "name": "generative-core-and-development-baselines",
-      "status": "development_implementation_ready_gpu_unrun",
+      "status": "development_observed",
       "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
       "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/generative-core-protocol.json",
       "audit": "research/projects/cellular-language-models/experiments/epclm-core-001/generative-core/generative-core-audit.md",
       "scientific_decision": false,
-      "note": "State-only C1 generation sessions; pinned C1/F0 reused, missing center-only B2 trained at 250K tokens; optional later reused Native T1. GPU execution pending. Development holdout only, independent Test NOT_AVAILABLE; H1-H5 NOT_EVALUATED."
+      "note": "Original GC COMPLETE; immutable C1/F0 references and center-only historical baseline. Independent Test NOT_AVAILABLE; H1-H5 NOT_EVALUATED. Repair is a separate study.",
+      "result_commit": "49c6fef619d51cac9ce5079d698e2876ff2d144b"
+    },
+    {
+      "id": "EPCLM-GC-001-BASELINE-REPAIR",
+      "name": "broadcast-independent-flat-matched-controls",
+      "status": "development_implementation_ready_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001/gc001-baseline-repair",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/gc001-baseline-repair/protocol.json",
+      "scientific_decision": false,
+      "note": "P1 fresh 250K C1-BROADCAST/IC-ALL-SELF/F0-PM-BROADCAST; P2 existing Native T1; P3 diagnostics and pending blind review. Original GC49c6fef immutable. GPU unrun; H1-H5 NOT_EVALUATED."
     }
   ],
   "schema_version": 2
