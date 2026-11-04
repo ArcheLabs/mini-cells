@@ -1,0 +1,281 @@
+{
+  "identity": "6750744abe6140ad174a3bedd480bbecf5c3df9f52740a46952fbab3bd36ccc9",
+  "model_configs": {
+    "C0": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2097152,
+          "controller": 0,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 0
+        },
+        "total": 7077888
+      },
+      "parameters": 3542016
+    },
+    "C1": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2097152,
+          "controller": 0,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 8192
+        },
+        "total": 7086080
+      },
+      "parameters": 5116936
+    },
+    "C2": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2097152,
+          "controller": 1585152,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 16384
+        },
+        "total": 8679424
+      },
+      "parameters": 5913096
+    },
+    "C3": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 1572864,
+          "controller": 1585152,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 16384
+        },
+        "total": 8155136
+      },
+      "parameters": 5913096
+    },
+    "T0-F": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 1144,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2359296,
+          "controller": 0,
+          "ffn": 5271552,
+          "head": 1048576,
+          "router": 0
+        },
+        "total": 8679424
+      },
+      "matched": true,
+      "matching_convention": "flops",
+      "parameters": 4474368,
+      "relative_matching_error": 0.0
+    },
+    "T0-P": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 1768,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2359296,
+          "controller": 0,
+          "ffn": 8146944,
+          "head": 1048576,
+          "router": 0
+        },
+        "total": 11554816
+      },
+      "matched": true,
+      "matching_convention": "parameters",
+      "parameters": 5912064,
+      "relative_matching_error": 0.00017452786154659172
+    }
+  },
+  "no_future_budget_auto_start": true,
+  "precision_policy": {
+    "bf16_framework_supported": true,
+    "bf16_native_hardware_supported": false,
+    "cuda_version": "13.0",
+    "diagnostic_non_native_bf16": false,
+    "fp16_hardware_supported": true,
+    "gpu_capability": [
+      7,
+      5
+    ],
+    "gpu_name": "Tesla T4",
+    "requested_precision": "fp32",
+    "scaler_enabled": false,
+    "selected_precision": "fp32",
+    "selection_reason": "explicit request; non-native BF16 diagnostic only",
+    "torch_version": "2.11.0+cu130"
+  },
+  "schedule": {
+    "elapsed_before_formal_training": 203.741424337,
+    "elapsed_before_launch": 190.44175090399995,
+    "finalization_seconds_reserved": 600,
+    "ideal_lower_bound_seconds": 2089.8799968776852,
+    "lpt_seconds": 2216.812294095445,
+    "measured_concurrently": true,
+    "measured_rates": {
+      "C0": 4331.912559611027,
+      "C1": 2389.5290176890962,
+      "C2": 1964.9708958360827,
+      "C3": 2127.078228570363,
+      "T0-F": 4641.490101942606,
+      "T0-P": 4232.2553753060165
+    },
+    "per_model_seconds": {
+      "C0": 465.5114156626392,
+      "C1": 837.8869743892795,
+      "C2": 1020.4541359563735,
+      "C3": 943.4143059624695,
+      "T0-F": 435.51101374369574,
+      "T0-P": 476.98214804091316
+    },
+    "predicted_complete_seconds": 3463.9161772515336,
+    "previous_pilot_active_seconds": 0,
+    "remaining_targets": {
+      "C0": 2000000,
+      "C1": 2000000,
+      "C2": 2000000,
+      "C3": 2000000,
+      "T0-F": 2000000,
+      "T0-P": 2000000
+    },
+    "schedule": [
+      {
+        "arm": "C2",
+        "seconds": 1020.4541359563735,
+        "start": 0.0,
+        "worker": 0
+      },
+      {
+        "arm": "C3",
+        "seconds": 943.4143059624695,
+        "start": 0.0,
+        "worker": 1
+      },
+      {
+        "arm": "C1",
+        "seconds": 837.8869743892795,
+        "start": 943.4143059624695,
+        "worker": 1
+      },
+      {
+        "arm": "T0-P",
+        "seconds": 476.98214804091316,
+        "start": 1020.4541359563735,
+        "worker": 0
+      },
+      {
+        "arm": "C0",
+        "seconds": 465.5114156626392,
+        "start": 1497.4362839972866,
+        "worker": 0
+      },
+      {
+        "arm": "T0-F",
+        "seconds": 435.51101374369574,
+        "start": 1781.301280351749,
+        "worker": 1
+      }
+    ],
+    "training_margin_fraction": 0.2
+  },
+  "seed": 17,
+  "source_commit": "cf777887532a021826afb05f063addc651af5570",
+  "status": "FROZEN_FOR_THIS_PILOT_ONLY",
+  "targets_per_model": 2000000,
+  "total_targets": 12000000
+}

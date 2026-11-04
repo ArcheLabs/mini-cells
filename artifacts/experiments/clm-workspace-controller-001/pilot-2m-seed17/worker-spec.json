@@ -1,0 +1,407 @@
+{
+  "budgets": {
+    "benchmark": 16384,
+    "dry-run": 4096,
+    "evaluate": 2000000,
+    "train": 2000000
+  },
+  "configs": {
+    "C0": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2097152,
+          "controller": 0,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 0
+        },
+        "total": 7077888
+      },
+      "parameters": 3542016
+    },
+    "C1": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2097152,
+          "controller": 0,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 8192
+        },
+        "total": 7086080
+      },
+      "parameters": 5116936
+    },
+    "C2": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2097152,
+          "controller": 1585152,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 16384
+        },
+        "total": 8679424
+      },
+      "parameters": 5913096
+    },
+    "C3": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 1572864,
+          "controller": 1585152,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 16384
+        },
+        "total": 8155136
+      },
+      "parameters": 5913096
+    },
+    "T0-F": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 1144,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2359296,
+          "controller": 0,
+          "ffn": 5271552,
+          "head": 1048576,
+          "router": 0
+        },
+        "total": 8679424
+      },
+      "matched": true,
+      "matching_convention": "flops",
+      "parameters": 4474368,
+      "relative_matching_error": 0.0
+    },
+    "T0-P": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 1768,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2359296,
+          "controller": 0,
+          "ffn": 8146944,
+          "head": 1048576,
+          "router": 0
+        },
+        "total": 11554816
+      },
+      "matched": true,
+      "matching_convention": "parameters",
+      "parameters": 5912064,
+      "relative_matching_error": 0.00017452786154659172
+    }
+  },
+  "data_cache": "/kaggle/working/stateful-routing-data",
+  "manifest": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "files": {
+      "document_index.jsonl": "2f2fbae06552dafb54cdb4dce15ac591578b174d790f4cdf33622a115bef87c2",
+      "train.json": "2d4af7aa137a839a2f82a1ba7dd09a3b7225bb25b2fabacaace3ec0ff4cd6e26",
+      "validation.json": "d27f49f13d05a121a336a5a295fda4eca00d8ee719565ec74be2c9b4898e7028"
+    },
+    "holdout": "NOT_ACCESSED",
+    "max_document_targets": 4096,
+    "selection": "first complete nonempty documents <= max targets; filtered-length development subset; not historical A2 stream",
+    "tokenizer_path": "research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/tokenizer.json",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2"
+  },
+  "plan_sha256": {
+    "benchmark": "312dfc67fe1e284cd854424fde78ad3bb4674fd4121b8b5ccba7586dda8b733f",
+    "dry-run": "ef9ebe0fa15a59fadc67225ed5f7a2fef2cba377d177df35e6a870f30dd16848",
+    "evaluate": "95e11558d74d4321be9b1efd16b918eb01e23c6cf4694a4393348bf9e85dbcb7",
+    "train": "95e11558d74d4321be9b1efd16b918eb01e23c6cf4694a4393348bf9e85dbcb7"
+  },
+  "precision_policy": {
+    "bf16_framework_supported": true,
+    "bf16_native_hardware_supported": false,
+    "cuda_version": "13.0",
+    "diagnostic_non_native_bf16": false,
+    "fp16_hardware_supported": true,
+    "gpu_capability": [
+      7,
+      5
+    ],
+    "gpu_name": "Tesla T4",
+    "requested_precision": "fp32",
+    "scaler_enabled": false,
+    "selected_precision": "fp32",
+    "selection_reason": "explicit request; non-native BF16 diagnostic only",
+    "torch_version": "2.11.0+cu130"
+  },
+  "protocol": {
+    "active_experiment": {
+      "cross_session_validation": "REMOVED_BY_USER",
+      "evaluation_deadline_seconds": 6900,
+      "execution": "independent_subprocess_workers_dynamic_queue",
+      "future_main_auto_start": false,
+      "gpu": "Tesla T4",
+      "mode": "pilot",
+      "name": "clm-workspace-controller-001-pilot-2m-seed17",
+      "required_gpus": 2,
+      "seed": 17,
+      "target_planning": "greedy complete-document prefix; exact bounded/repeated tail with prefix rewind; frozen before GPU gates",
+      "targets_per_model": 2000000,
+      "total_targets": 12000000,
+      "training_deadline_seconds": 6000,
+      "wall_clock_seconds": 7200
+    },
+    "checkpoint_interval_targets": 250000,
+    "checkpoint_policy": {
+      "objects": "immutable content-addressed snapshots plus atomic recovery manifest",
+      "recovery": "reuse repair_io transport, <=3 saved versions, <=45s; published same-source progress with failed recovery blocks retraining",
+      "resume": "exact source/config/data identity; every committed document group"
+    },
+    "controller_updates": 1,
+    "counterfactual": {
+      "fixed_pairs": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "oracle": "bounded optional offline path diagnostic; NOT_RUN in initial smoke",
+      "random_seed": 4301,
+      "shuffle": "permute normal route assignments and their selected weights across tokens within each evaluated chunk, separately per step; update actual controller path"
+    },
+    "evaluation": {
+      "bootstrap_repetitions": 2000,
+      "bootstrap_seed": 91002,
+      "documents": 32,
+      "threshold": 0.01
+    },
+    "execution_mode": "pilot",
+    "format": "minicells.clm-v04.protocol.v1",
+    "gate_version": "pilot-routing-precision-v2",
+    "groups": {
+      "documents": 8,
+      "max_document_targets": 4096
+    },
+    "independent_test_accessed": false,
+    "main": {
+      "additional_gates": [
+        "smoke completion",
+        "runtime throughput and active-compute audit",
+        "three-seed total GPU-hours and per-session schedule freeze",
+        "formal training-FLOPs matching plan"
+      ],
+      "frozen": false,
+      "planned_targets_per_model_seed": 32000000,
+      "seeds": [
+        17,
+        29,
+        43
+      ],
+      "status": "DEFERRED_SUPERSEDED_BY_SINGLE_SEED_2M_PILOT"
+    },
+    "matching": {
+      "F": "declared dense-matmul MAC=2 active forward cost at context256; runtime profiling separate",
+      "P": "actual total parameter count",
+      "ffn_multiple": 8,
+      "layers": 3,
+      "tolerance": 0.01
+    },
+    "mechanism_version": "workspace-controller-v0.4",
+    "model": {
+      "cells": 8,
+      "chunk": 64,
+      "dim": 256,
+      "encoder_ffn": 512,
+      "ffn": 512,
+      "heads": 4,
+      "layers": 3,
+      "norm": "LayerNorm",
+      "state_dim": 256,
+      "steps": 2,
+      "top_k": 2,
+      "vocab": 2048,
+      "window": 256
+    },
+    "norm": "LayerNorm",
+    "optimizer": {
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "clip": 1.0,
+      "lr": 0.0003,
+      "warmup_fraction": 0.1,
+      "weight_decay": 0.1
+    },
+    "pilot": {
+      "cross_session_recovery_validation": "REMOVED_BY_USER",
+      "data_pipeline": {
+        "bulk_resident_documents": true,
+        "num_workers": 0,
+        "persistent_workers": false,
+        "pin_memory": true,
+        "prefetch_factor": "NOT_APPLICABLE; whole documents cached and copied once asynchronously"
+      },
+      "evaluation_deadline_seconds": 6900,
+      "gpus": 2,
+      "hard_limit_seconds": 7200,
+      "model_count": 6,
+      "name": "clm-workspace-controller-001-pilot-2m-seed17",
+      "platform_reserve_seconds": 60,
+      "seed": 17,
+      "targets_per_model": 2000000,
+      "total_targets": 12000000,
+      "training_deadline_seconds": 6000
+    },
+    "pin_memory": true,
+    "pre_main_gate": {
+      "budget_freeze_requires_separate_decision": true,
+      "cross_session_validation": "REMOVED_BY_USER",
+      "formal_main_auto_start": false,
+      "gpu_tolerances": "gpu_gate.TOLERANCE frozen before execution",
+      "main_plan": "repeat pinned complete-document stream; deterministic complete-document subset-sum tail reaches exact target; all seeds/arms share plan hash",
+      "performance_floor_vs_fp32": 0.8,
+      "required": [
+        "CONTROLLER_UPDATE_FIX",
+        "PRECISION_VALIDATION",
+        "COMPUTE_BUDGET_FREEZE",
+        "MAIN_RUNNER_READY",
+        "H2_H3_MATCHING_FREEZE",
+        "GPU_CORRECTNESS"
+      ]
+    },
+    "precision": {
+      "consistency_fallback": "fp32",
+      "fallback": "fp16_grad_scaler",
+      "initial_scale": 1024,
+      "max_consecutive_overflows": 5,
+      "prefer": "bf16",
+      "requested": "fp32",
+      "router": "fp32"
+    },
+    "router": {
+      "balance": "N * sum(stopgrad(top2_assignment_fraction) * mean(full_router_softmax)), averaged over steps; diagnostic auxiliary only",
+      "balance_alpha": 0.001,
+      "noise": 0.0,
+      "temperature": 1.0
+    },
+    "scientific_confirmation": false,
+    "smoke": {
+      "evaluation_documents": 8,
+      "minimum_groups": 3,
+      "models": [
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "T0-P",
+        "T0-F"
+      ],
+      "seed": 17,
+      "single_session_seconds": 10800,
+      "target_cap": 32768
+    }
+  },
+  "resume_checkpoint_sha256": {},
+  "source_commit": "cf777887532a021826afb05f063addc651af5570",
+  "training_output": "/kaggle/working/clm-v04-pilot-cf777887532a/clm-v04-pilot-2m-seed17-cf777887532a/train"
+}
