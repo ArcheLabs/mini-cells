@@ -28,6 +28,15 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "epclm-core-001-topology-001": ExperimentSpec(
+        source_dir="results/epclm-core-001-topology-001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/topology-001",
+        files=("protocol.json", "topology-adjacency.json", "training-metrics.json", "validation-results.json", "holdout-results.json",
+               "paired-comparison.json", "propagation-diagnostics.json", "state-diversity.json", "compute-profile.json",
+               "inference-profile.json", "memory-profile.json", "generation-metrics.json", "decision.json", "summary.zh-CN.md"),
+        branch="kaggle/epclm-core-001-topology-001-results",
+        expected_format="minicells.epclm.topology-001.v1",
+    ),
     "epclm-gc002-t1-fresh-02": ExperimentSpec(
         source_dir="results/epclm-gc002-t1-fresh-02/publish",
         artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/t1-fresh-02",
