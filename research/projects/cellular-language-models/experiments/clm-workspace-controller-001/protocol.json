@@ -78,7 +78,7 @@
     "fallback": "fp16_grad_scaler",
     "initial_scale": 1024,
     "max_consecutive_overflows": 5,
-    "requested": "auto",
+    "requested": "fp32",
     "router": "fp32",
     "consistency_fallback": "fp32"
   },
@@ -147,6 +147,7 @@
     "training_deadline_seconds": 6000,
     "evaluation_deadline_seconds": 6900,
     "future_main_auto_start": false,
-    "cross_session_validation": "REMOVED_BY_USER"
+    "cross_session_validation": "REMOVED_BY_USER",
+    "target_planning": "greedy complete-document prefix; exact bounded/repeated tail with prefix rewind; frozen before GPU gates"
   }
 }

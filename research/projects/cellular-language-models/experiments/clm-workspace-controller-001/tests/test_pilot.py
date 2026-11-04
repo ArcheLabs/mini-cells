@@ -5,7 +5,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from concurrent.futures import ThreadPoolExecutor
 import pytest
 from pilot_queue import initialize,claim,finish,rows,predict
-from pilot import inventory
+from pilot import inventory,freeze_plans,BUDGETS
 from main_runner import plan
 import torch
 
@@ -31,3 +31,20 @@ def test_exact_2m_budget_and_no_single_gpu_fallback(monkeypatch):
     assert n==2000000 and sum(len(d['ids'])-1 for group in groups for d in group)==2000000
     monkeypatch.setattr(torch.cuda,'device_count',lambda:1)
     with pytest.raises(RuntimeError,match='DUAL_GPU_BLOCKED'):inventory()
+
+
+def test_complete_document_tail_backtracks_and_freezes_all_pilot_budgets():
+    # Greedy [6,10] leaves 5, but rewinding admits the intact [6,15] tail.
+    docs=[{'doc_id':str(i),'ids':[2]+[4]*(n-1)+[3]} for i,n in enumerate((6,10,15))]
+    for target in (21,20):
+        groups,actual=plan(docs,{'groups':{'documents':2}},target)
+        assert actual==sum(len(d['ids'])-1 for g in groups for d in g)==target
+        assert all(any(d is original for original in docs) for g in groups for d in g)
+    # No one-target document that would hide an unreachable greedy remainder.
+    docs=[{'doc_id':str(i),'ids':[2]+[4]*(n-1)+[3]} for i,n in enumerate((101,137,173))]
+    p={'groups':{'documents':8}};report=freeze_plans(docs,p)
+    assert {phase:value['targets'] for phase,value in report.items()}==BUDGETS
+    assert report==freeze_plans(docs,{**p,'precision':{'requested':'fp32'}})
+    assert report['evaluate']==report['train']
+    with pytest.raises(ValueError,match='complete-document lengths'):
+        plan([{'doc_id':'even','ids':[2,4,3]}],p,3)

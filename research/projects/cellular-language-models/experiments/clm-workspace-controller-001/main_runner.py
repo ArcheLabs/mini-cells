@@ -1,5 +1,6 @@
 """Explicit bounded modes and three-seed ledger; never auto-start formal Main."""
 import argparse,copy,json,time,subprocess,uuid,math
+from functools import reduce
 from pathlib import Path
 import torch
 from dependencies import BASE,ROOT,shared,assets
@@ -15,26 +16,45 @@ from precision import select
 def plan(documents,p,budget):
     # Deterministic repeated complete-document groups; never truncate a document.
     # A fixed subset-sum tail attains exact budgets without partial documents.
-    groups=[];total=0;cursor=0;size=p['groups']['documents']
+    if budget==0:return [],0
+    lengths=[len(doc['ids'])-1 for doc in documents];size=p['groups']['documents']
+    if budget<0 or size<1 or not lengths or min(lengths)<1:raise ValueError('target plan requires positive complete documents, group size and budget')
+    if budget%reduce(math.gcd,lengths):raise ValueError('exact target budget is incompatible with complete-document lengths')
+    groups=[];total=0;cursor=0
     while total<budget:
         group=[documents[(cursor+i)%len(documents)] for i in range(size)];n=targets(group)
         if total+n>budget:break
         groups.append(group);total+=n;cursor+=size
-    if total<budget:
-        # Deterministic exact-budget tail using complete documents only. Skips and
-        # chosen doc IDs are frozen by this rule, identical in every arm/seed.
+    while total<budget:
+        # A greedy prefix can leave a remainder shorter than every document.
+        # Rewind committed *plans*, not training, until a complete tail fits.
         remaining=budget-total;reachable=1;parents={};limit=(1<<(remaining+1))-1
         candidates=[documents[(cursor+i)%len(documents)] for i in range(max(len(documents),2*size))]
-        for index,doc in enumerate(candidates):
-            n=len(doc['ids'])-1;new=((reachable<<n)&limit)&~reachable;reachable|=new
+        def add(index,n,count):
+            nonlocal reachable
+            new=((reachable<<n)&limit)&~reachable;reachable|=new
             while new:
-                bit=new&-new;value=bit.bit_length()-1;parents[value]=(value-n,index);new-=bit
+                bit=new&-new;value=bit.bit_length()-1;parents[value]=(value-n,index,count);new-=bit
+        for index,doc in enumerate(candidates):
+            add(index,len(doc['ids'])-1,1)
             if reachable&(1<<remaining):break
+        if not reachable&(1<<remaining):
+            # The stream already repeats documents. Binary bundles allow exact
+            # repeated-document tails too, without truncation or synthetic tokens.
+            for index,doc in enumerate(candidates[:len(documents)]):
+                n=len(doc['ids'])-1;count=1
+                while n*count<=remaining:
+                    add(index,n*count,count);count*=2
+                if reachable&(1<<remaining):break
         if reachable&(1<<remaining):
             chosen=[];value=remaining
-            while value:value,index=parents[value];chosen.append(index)
+            while value:
+                value,index,count=parents[value];chosen.extend([index]*count)
             tail=[candidates[i] for i in sorted(chosen)]
             groups.extend(tail[i:i+size] for i in range(0,len(tail),size));total=budget
+        elif groups:
+            last=groups.pop();total-=targets(last);cursor-=len(last)
+        else:raise ValueError('no exact target plan exists using complete documents')
     return groups,total
 
 

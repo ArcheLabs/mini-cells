@@ -13,6 +13,20 @@ from run import publish
 
 ARMS=('T0-P','T0-F','C0','C1','C2','C3')
 NAME='clm-workspace-controller-001-pilot-2m-seed17'
+BUDGETS={'benchmark':16384,'dry-run':4096,'train':2000000,'evaluate':2000000}
+
+
+def freeze_plans(documents,p):
+    from main_runner import plan
+    report={}
+    for phase,target in BUDGETS.items():
+        if phase=='evaluate':report[phase]=dict(report['train']);continue
+        try:groups,actual=plan(documents,p,target)
+        except ValueError as error:raise ValueError('TARGET_PLAN_BLOCKED: '+phase+' '+str(target)+' targets: '+str(error)) from error
+        observed=sum(len(doc['ids'])-1 for group in groups for doc in group)
+        if actual!=target or observed!=target:raise ValueError('cannot freeze exact target budget for '+phase)
+        report[phase]={'targets':actual,'groups':len(groups),'document_visits':sum(map(len,groups)),'plan_sha256':shared.sha([[doc['doc_id'] for doc in group] for group in groups])}
+    return report
 
 
 def inventory():
@@ -146,6 +160,8 @@ def launch(args):
         validate_origin(ROOT);load_github_token('GITHUB_TOKEN')
         with shared.bounded(max(.1,min(started+300,hard)-time.monotonic())):
             docs,manifest=assets.prepare(args.cache,p)
+            plan_report=freeze_plans(docs['train'],p);shared.write(out/'sample-plans.json',plan_report)
+            plans={phase:value['plan_sha256'] for phase,value in plan_report.items()}
             gate_groups=[docs['train'][i:i+8] for i in range(0,40,8)]
             phases=pilot_engineering_gates(configs,gate_groups,p,out,min(started+300,hard))
         shared.write(out/'engineering-gates.json',phases);controls=freeze(p['model']);controls['review_budget']={'targets_per_model':2000000,'seeds':[17],'activation':'future independent decision only; excluded from current12M Pilot'};controls['pilot_trigger']='relative NLL or counterfactual gain >=1% is only a follow-up design signal, never single-seed statistical confirmation';shared.write(out/'hypothesis-matching-freeze.json',controls)
@@ -154,12 +170,6 @@ def launch(args):
         if policies[0]!=policies[1]:raise RuntimeError('dual GPU precision policies differ after engineering gate')
         audit['precision_policy']=policies[0]
         decision['selected_precision']=policies[0]['selected_precision'];decision['precision_fallback']=phases.get('fallback')
-        from main_runner import plan
-        plans={}
-        for phase,target in [('benchmark',16384),('dry-run',4096),('train',2000000),('evaluate',2000000)]:
-            planned,actual=plan(docs['train'],p,target)
-            if actual!=target:raise RuntimeError('cannot freeze exact target budget for '+phase)
-            plans[phase]=shared.sha([[doc['doc_id'] for doc in group] for group in planned])
         immutable={'plans':plans,'source':source,'protocol':p,'configs':configs,'data':manifest,'precision_policy':policies[0]};run_identity=shared.sha(immutable)
         if not args.no_recovery and not (out/'manifest.json').exists():restore(out,run_identity,min(hard,time.monotonic()+45),artifact_dir='artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17')
         if (out/'manifest.json').exists() and json.loads((out/'manifest.json').read_text())['identity']!=run_identity:raise ValueError('Pilot resume identity mismatch; fresh restart forbidden')
@@ -186,7 +196,7 @@ def launch(args):
                 hashes[Path(logical).parent.name]=digest
         for checkpoint in (out/'train').glob('*/checkpoint.pt') if (out/'train').exists() else []:
             if checkpoint.parent.name not in hashes:raise RuntimeError('RECOVERY_BLOCKED: checkpoint lacks immutable hash manifest')
-        spec={'protocol':p,'configs':configs,'manifest':manifest,'source_commit':source,'data_cache':str(args.cache),'precision_policy':policies[0],'budgets':{'benchmark':16384,'dry-run':4096,'train':2000000,'evaluate':2000000},'training_output':str(out/'train'),'resume_checkpoint_sha256':hashes,'plan_sha256':plans}
+        spec={'protocol':p,'configs':configs,'manifest':manifest,'source_commit':source,'data_cache':str(args.cache),'precision_policy':policies[0],'budgets':BUDGETS,'training_output':str(out/'train'),'resume_checkpoint_sha256':hashes,'plan_sha256':plans}
         spec_path=out/'worker-spec.json';shared.write(spec_path,spec)
         gc.collect();torch.cuda.empty_cache()
         priorities={'C2':6,'C3':5,'C1':4,'C0':3,'T0-P':2,'T0-F':1}
@@ -244,12 +254,12 @@ def launch(args):
             lines+=['','本轮只包含六模型、Seed17、每模型2M；缺失诊断为PENDING，不视为门禁通过。不执行32M×三Seed，不宣称单Seed统计显著。跨Kaggle恢复验证按用户要求删除。']
             (out/'RESEARCH-REPORT.zh-CN.md').write_text('\n'.join(lines)+'\n')
         if 'run_identity' in locals() and (out/'manifest.json').exists() and not saved_package:
-            for name in ('decision.json','training-metrics.json','evaluation-results.json','routing-diagnostics.json','state-diagnostics.json','counterfactual-routing.json','compute-profile.json','dual-gpu-telemetry.csv','RESEARCH-REPORT.zh-CN.md','pilot-budget-freeze.json','dual-gpu-profile.json','model-matching.json'):
+            for name in ('decision.json','training-metrics.json','evaluation-results.json','routing-diagnostics.json','state-diagnostics.json','counterfactual-routing.json','compute-profile.json','dual-gpu-telemetry.csv','RESEARCH-REPORT.zh-CN.md','pilot-budget-freeze.json','dual-gpu-profile.json','model-matching.json','sample-plans.json'):
                 if (out/name).exists():commit_bundle(out,run_identity,out/name)
         try:
             with shared.bounded(max(.1,hard-time.monotonic())):publish(out,'clm-workspace-controller-001-pilot-2m-seed17')
         except Exception as error:shared.write(out/'publication-failure.json',{'error':str(error),'output_preserved':True})
-        print({'status':decision['status'],'report':str(out/'decision.json')},flush=True)
+        print({'status':decision['status'],'report':str(out/'decision.json'),**({'error':decision['error']} if 'error' in decision else {})},flush=True)
 
 
 if __name__=='__main__':
