@@ -28,6 +28,13 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "clm-workspace-depth-kv-001": ExperimentSpec(
+        source_dir="results/clm-workspace-depth-kv-001/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-depth-kv-001",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-depth-kv-001-results",
+        expected_format="minicells.clm-workspace-depth-kv-001.v1",
+    ),
     "clm-workspace-controller-001-pilot-2m-seed17": ExperimentSpec(
         source_dir="results/clm-workspace-controller-001-pilot-2m-seed17/publish",
         artifact_dir="artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17",

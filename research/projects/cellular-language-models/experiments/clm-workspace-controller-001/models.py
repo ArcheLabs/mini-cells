@@ -37,7 +37,7 @@ class Model(nn.Module):
                     self.cells=nn.ModuleList([shared.native.SwiGLU(d,c['ffn']) for _ in range(c['cells'])]);self.router=nn.Linear(d,c['cells'])
                 for name in ('fixed','cells','router'):
                     if hasattr(self,name):getattr(self,name).apply(shared.native.HistoricalScaledCLM._init_weights)
-            if arm in ('C2','C3'):
+            if arm in ('C2','C3','C-DKV'):
                 with torch.random.fork_rng(devices=[]):
                     torch.manual_seed(seed+202);self.state_router=nn.Linear(c['state_dim'],c['cells'],bias=False)
                     self.controller=nn.GRUCell(3*d+c['cells'],c['state_dim']);self.state_router.apply(shared.native.HistoricalScaledCLM._init_weights)
@@ -50,7 +50,9 @@ class Model(nn.Module):
                 self.router.apply(shared.native.HistoricalScaledCLM._init_weights)
     def scope(self,name):return torch.profiler.record_function(name) if self.profiling else nullcontext()
     def reset(self,doc_id='document'):
-        return {'doc_id':doc_id,'position':0,'encoder_kv':None,'workspace_kv':None,'layers':[None]*self.config['layers']}
+        cache={'doc_id':doc_id,'position':0,'encoder_kv':None,'workspace_kv':None,'layers':[None]*self.config['layers']}
+        if self.arm=='C-DKV':cache['workspace_kv_depth1']=None
+        return cache
     def dispatch(self,v,index,weights):
         flat=v.reshape(-1,v.shape[-1]);ids=index.reshape(-1,2);g=weights.reshape(-1,2);result=torch.zeros_like(flat)
         for expert,cell in enumerate(self.cells):
@@ -108,9 +110,19 @@ class Model(nn.Module):
         positions=torch.arange(pos,pos+t,device=x.device)[None,None,:,None];k=shared.rope_at(k,positions)
         old=cache['workspace_kv'];previous=0 if old is None else old[0].shape[2]
         if old is not None:k=torch.cat((old[0],k),2);v=torch.cat((old[1],v),2)
+        if self.arm=='C-DKV':depth0=(k[:,:,-c['window']:],v[:,:,-c['window']:])
         qp=torch.arange(pos,pos+t,device=x.device)[:,None];kp=torch.arange(pos-previous,pos+t,device=x.device)[None,:]
         mask=(kp<=qp)&(kp>qp-c['window']);h=u;z=h.new_zeros(b,t,c['state_dim']) if hasattr(self,'controller') else None;balances=[];first=None
         for step in range(2):
+            if self.arm=='C-DKV' and step==1:
+                # h is exactly the post-first-cell residual stream, still attached.
+                k1,v1=self.kv(self.ws_norm(h)).view(b,t,2,c['heads'],d//c['heads']).unbind(2)
+                k1=shared.rope_at(k1.transpose(1,2),positions);v1=v1.transpose(1,2)
+                old1=cache['workspace_kv_depth1']
+                if old1 is not None:k1=torch.cat((old1[0],k1),2);v1=torch.cat((old1[1],v1),2)
+                depth1=(k1[:,:,-c['window']:],v1[:,:,-c['window']:])
+                k,v=k1,v1
+                if self.trace_tensors:self.tensor_trace['depth1_input']=h
             if self.arm=='C3' and step==1:r=first
             else:
                 q=self.query(self.q_norm(h)).view(b,t,c['heads'],d//c['heads']).transpose(1,2);q=shared.rope_at(q,positions)
@@ -131,6 +143,9 @@ class Model(nn.Module):
                 else:self.tensor_trace['steps'][-1]['delta']=delta.detach()
             h=h+r+delta
         self.balance=torch.stack(balances).mean() if balances else h.new_zeros(())
+        # Keep the original shared cache at depth0, even after the second read.
+        if self.arm=='C-DKV':
+            return self.head(self.norm(h)),{**cache,'position':pos+t,'encoder_kv':enc,'workspace_kv':depth0,'workspace_kv_depth1':depth1}
         return self.head(self.norm(h)),{**cache,'position':pos+t,'encoder_kv':enc,'workspace_kv':(k[:,:,-c['window']:],v[:,:,-c['window']:])}
 
 
@@ -139,3 +154,10 @@ class Session:
     @torch.no_grad()
     def prefill(self,ids):
         logits,self.cache=self.model(ids,self.cache);return logits
+    def reset(self,doc_id='document'):self.cache=self.model.reset(doc_id)
+    def close(self):self.cache=None
+    def reorder(self,indices):
+        indices=torch.as_tensor(indices,dtype=torch.long,device=self.model.token.weight.device)
+        for field in ('encoder_kv','workspace_kv','workspace_kv_depth1'):
+            if self.cache.get(field) is not None:self.cache[field]=tuple(v.index_select(0,indices) for v in self.cache[field])
+        self.cache['layers']=[tuple(v.index_select(0,indices) for v in layer) if layer is not None else None for layer in self.cache['layers']]
