@@ -158,6 +158,16 @@
       "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/communication-propagation-protocol.json",
       "scientific_decision": false,
       "note": "Frozen C1; global one-event and local single-round pulses; SHAM and ring-cone validation; 16 stories, <=48 probes, <=240 pulse branches. Recovery <=600s, diagnosis <=900s. No training/confirmation; H1-H5 NOT_EVALUATED."
+    },
+    {
+      "id": "EPCLM-GC-001",
+      "name": "generative-core-and-development-baselines",
+      "status": "development_implementation_ready_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/generative-core-protocol.json",
+      "audit": "research/projects/cellular-language-models/experiments/epclm-core-001/generative-core/generative-core-audit.md",
+      "scientific_decision": false,
+      "note": "State-only C1 generation sessions; pinned C1/F0 reused, missing center-only B2 trained at 250K tokens; optional later reused Native T1. GPU execution pending. Development holdout only, independent Test NOT_AVAILABLE; H1-H5 NOT_EVALUATED."
     }
   ],
   "schema_version": 2

@@ -39,3 +39,7 @@ Run [c1-mechanism-diagnostic.ipynb](c1-mechanism-diagnostic.ipynb) in the existi
 ## Communication Propagation-001
 
 [communication-propagation.ipynb](communication-propagation.ipynb) runs frozen C1 global/single-edge pulses with SHAM and ring-cone gates, all fixed future horizons, story-clustered analysis and independent result publication. Recovery prioritizes known version 142 (600-second cap); diagnosis is capped at 900 seconds. No training or confirmation. See [implementation record](reports/communication-propagation/README.md) and [fixed protocol](communication-propagation-protocol.json). CP-001 GPU execution remains pending.
+
+## Generative Core-001
+
+[generative-core-001.ipynb](generative-core-001.ipynb) runs frozen C1 generation Pilot, complete fixed-prompt evaluation, trained center-only control and reused F0, with separate GC identities/results. [Audit and execution details](reports/generative-core-001/README.md). Native T1 is an [optional second batch](generative-core-001-transformer.ipynb), not automatic. No independent Test exists in original assets; development holdout is explicitly exploratory. GPU execution and new baseline training remain pending.

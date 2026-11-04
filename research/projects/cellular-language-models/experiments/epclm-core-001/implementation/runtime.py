@@ -54,6 +54,10 @@ class Runtime:
         self.events,self.internal_steps,self.session=meta['events'],meta['internal_steps'],meta['session']
         return state.to(self.core.embedding.weight).clone()
 
+    def generation(self,tokenizer,checkpoint_identity,tokenizer_identity,seed=713,eos_trained=True):
+        from generation import GenerationSession
+        return GenerationSession(self.core,tokenizer,checkpoint_identity,tokenizer_identity,seed,eos_trained)
+
     @torch.no_grad()
     def generate(self,tokens,count=32):
         state=self.core.init_state(1)

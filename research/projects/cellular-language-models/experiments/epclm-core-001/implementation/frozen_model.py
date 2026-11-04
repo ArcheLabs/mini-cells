@@ -78,17 +78,24 @@ def safe_path(name):
 
 
 def recover_frozen_assets(root, destination, training_identity, checkpoint_identity, deadline, max_versions=25,
-                          progress_output=None, progress_identity=None, preferred_versions=()):
+                          progress_output=None, progress_identity=None, preferred_versions=(), extra_asset_hashes=None, allow_training_progress=False):
     """Find the newest exact identity; stop immediately once verified assets are found."""
     names = (checkpoint_identity['path'], 'assets/manifest.json', 'assets/tokenizer.json', 'assets/development.json')
+    extra_asset_hashes=extra_asset_hashes or {}
+    names += tuple(n for n in extra_asset_hashes if n not in names)
 
     def accept(manifest, locate, provenance):
         if manifest.get('identity') != training_identity: return False
-        if not set(names) <= manifest.get('files', {}).keys():
+        missing=set(names)-manifest.get('files',{}).keys()
+        if missing:
+            if missing<=extra_asset_hashes.keys():return False  # Smaller optional-asset cache.
             raise AssetUnavailable('matching training manifest is incomplete')
         if manifest['files'][names[0]] != checkpoint_identity['sha256'] or manifest['files'][names[1]] != training_identity['data']:
             raise BaselineIntegrityError('pinned checkpoint/data hash differs from training manifest')
         for name in names:
+            expected=extra_asset_hashes.get(name)
+            if expected is not None and manifest['files'][name]!=expected:
+                raise BaselineIntegrityError('additional trained asset hash mismatch: '+name)
             check_deadline(deadline)
             source = locate(name)
             if sha256_file(source) != manifest['files'][name]:
@@ -163,7 +170,8 @@ def recover_frozen_assets(root, destination, training_identity, checkpoint_ident
                 # Results only: never deserialize model/optimizer state through progress recovery.
                 for logical, sha in manifest['files'].items():
                     relative = safe_path(logical)
-                    if relative.suffix not in ('.json','.png','.md'): raise BaselineIntegrityError('unexpected diagnostic progress file')
+                    if relative.suffix not in (('.json','.png','.md','.pt') if allow_training_progress else ('.json','.png','.md')):
+                        raise BaselineIntegrityError('unexpected progress file')
                     saved = get(prefix+str(safe_path(manifest.get('objects',{}).get(logical,logical))))
                     if sha256_file(saved) != sha: raise BaselineIntegrityError('diagnostic progress checksum mismatch')
                     target = progress_output/relative; target.parent.mkdir(parents=True,exist_ok=True)
