@@ -6,7 +6,7 @@ from dependencies import BASE,ROOT,shared,assets
 from costs import match
 from matching_gate import freeze
 from precision import select
-from gpu_gate import correctness,benchmark,controller_equivalence
+from gpu_gate import pilot_engineering_gates
 from pilot_queue import initialize,rows,predict
 from recovery import restore,commit_bundle
 from run import publish
@@ -147,11 +147,13 @@ def launch(args):
         with shared.bounded(max(.1,min(started+300,hard)-time.monotonic())):
             docs,manifest=assets.prepare(args.cache,p)
             gate_groups=[docs['train'][i:i+8] for i in range(0,40,8)]
-            phases['precision']=benchmark(configs,gate_groups,p,out/'precision-gate',min(started+300,hard))
-            phases['controller']=controller_equivalence(p['model'],p,min(started+300,hard))
-            phases['gpu_correctness']=correctness(configs,p,min(started+300,hard))
+            phases=pilot_engineering_gates(configs,gate_groups,p,out,min(started+300,hard))
         shared.write(out/'engineering-gates.json',phases);controls=freeze(p['model']);controls['review_budget']={'targets_per_model':2000000,'seeds':[17],'activation':'future independent decision only; excluded from current12M Pilot'};controls['pilot_trigger']='relative NLL or counterfactual gain >=1% is only a follow-up design signal, never single-seed statistical confirmation';shared.write(out/'hypothesis-matching-freeze.json',controls)
-        if not all(v['status']=='PASS' for v in phases.values()):raise RuntimeError('engineering GPU gate failed or blocked')
+        if phases['status']!='PASS':raise RuntimeError('engineering GPU gate failed or blocked; see engineering-gates.json')
+        policies=[select(p['precision']['requested'],'cuda:'+str(i)) for i in range(2)]
+        if policies[0]!=policies[1]:raise RuntimeError('dual GPU precision policies differ after engineering gate')
+        audit['precision_policy']=policies[0]
+        decision['selected_precision']=policies[0]['selected_precision'];decision['precision_fallback']=phases.get('fallback')
         from main_runner import plan
         plans={}
         for phase,target in [('benchmark',16384),('dry-run',4096),('train',2000000),('evaluate',2000000)]:

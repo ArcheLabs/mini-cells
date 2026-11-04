@@ -78,7 +78,9 @@
     "fallback": "fp16_grad_scaler",
     "initial_scale": 1024,
     "max_consecutive_overflows": 5,
-    "requested": "auto"
+    "requested": "auto",
+    "router": "fp32",
+    "consistency_fallback": "fp32"
   },
   "matching": {
     "layers": 3,
@@ -115,7 +117,7 @@
   },
   "norm": "LayerNorm",
   "controller_updates": 1,
-  "gate_version": "pre-main-gate-v1",
+  "gate_version": "pilot-routing-precision-v2",
   "pre_main_gate": {
     "cross_session_validation": "REMOVED_BY_USER",
     "required": [

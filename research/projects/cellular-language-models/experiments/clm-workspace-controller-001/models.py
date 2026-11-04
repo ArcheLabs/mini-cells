@@ -68,12 +68,15 @@ class Model(nn.Module):
                 index=torch.stack((first,(first+1)%self.config['cells']),-1)[None].expand(v.shape[0],-1,-1)
             weights=v.new_full(index.shape,.5);sparse=v.new_zeros(*v.shape[:-1],self.config['cells']).scatter(-1,index,weights)
             return index,weights,sparse,v.new_zeros(())
-        logits=self.router(v)
-        state_term=None
-        if hasattr(self,'state_router') and self.mode!='state_off':
-            state_term=self.state_router(z);logits=logits+state_term
-        if self.training and self.noise:logits=logits+torch.randn(logits.shape,device=logits.device,generator=self.generator)*self.noise
-        selected,index=logits.topk(2,-1);weights=selected.float().softmax(-1).to(v.dtype)
+        # Hard Top-2 amplifies rounded near-ties; keep its whole decision path in FP32.
+        # Experts still inherit the caller's autocast policy.
+        with torch.autocast(device_type=v.device.type,enabled=False):
+            logits=self.router(v.float())
+            state_term=None
+            if hasattr(self,'state_router') and self.mode!='state_off':
+                state_term=self.state_router(z.float());logits=logits+state_term
+            if self.training and self.noise:logits=logits+torch.randn(logits.shape,device=logits.device,generator=self.generator)*self.noise
+            selected,index=logits.topk(2,-1);weights=selected.softmax(-1)
         if self.forced_routes is not None:
             index,weights=self.forced_routes[step]
         elif self.mode=='random':

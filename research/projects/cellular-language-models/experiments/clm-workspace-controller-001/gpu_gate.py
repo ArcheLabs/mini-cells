@@ -93,9 +93,37 @@ def benchmark(configs,groups,p,out,deadline):
             finally:
                 if 'model' in locals():del model
                 torch.cuda.empty_cache()
-    selected=select(p['precision'].get('requested','auto'),device)['selected_precision']
+    return precision_summary(reports,p)
+
+
+def precision_summary(reports,p):
+    device=torch.device('cuda');selected=select(p['precision'].get('requested','auto'),device)['selected_precision']
     ratios={arm:reports[arm].get(selected,{}).get('effective_targets_per_second',0)/max(1e-9,reports[arm].get('fp32',{}).get('effective_targets_per_second',0)) for arm in reports}
     return {'status':('PASS' if min(ratios.values())>=.8 else 'BLOCKED') if all(reports[a].get(selected,{}).get('status')=='PASS' for a in reports) else 'FAIL','target_vs_fp32_throughput_ratio':ratios,'performance_rule':'selected policy must achieve >=80% of FP32 throughput in both model families, otherwise request explicit precision decision; no silent fallback','hardware':select(p['precision'].get('requested','auto'),device),'models':reports,'native_claim':'capability-based policy; raw kernel names recorded, no native BF16 claim from framework compatibility'}
+
+
+def pilot_engineering_gates(configs,groups,p,out,deadline):
+    from dependencies import shared
+    attempts={};report={'status':'BLOCKED','attempts':attempts}
+    def record(precision,controller,gpu):
+        selected=select(p['precision'].get('requested','auto'),'cuda')['selected_precision']
+        attempt={'precision':precision,'controller':controller,'gpu_correctness':gpu}
+        attempt['status']='PASS' if all(v['status']=='PASS' for v in attempt.values()) else 'FAIL'
+        attempts[selected]=attempt;report.update(status=attempt['status'],selected_precision=selected)
+        shared.write(out/'engineering-gates.json',report)
+        print({'stage':'GPU_ENGINEERING_GATE','precision':selected,'status':attempt['status'],'components':{k:v['status'] for k,v in attempt.items() if isinstance(v,dict)},'failed_models':[arm for arm,value in gpu.get('models',{}).items() if value['status']!='PASS']},flush=True)
+        return attempt
+    measured=benchmark(configs,groups,p,out/'precision-gate',deadline)
+    first=record(measured,controller_equivalence(p['model'],p,deadline),correctness(configs,p,deadline))
+    # One declared pre-training fallback, never a mixed-precision checkpoint continuation.
+    if report['selected_precision']=='fp16' and first['gpu_correctness']['status']=='FAIL' and p['precision'].get('consistency_fallback')=='fp32':
+        report['fallback']={'from':'fp16','to':'fp32','reason':'GPU cached/full/decode correctness failed; upstream AMP error can still change hard Top-2 after FP32 Router'}
+        p['precision']['requested']='fp32'
+        shared.write(out/'engineering-gates.json',report)
+        print({'stage':'PRETRAINING_PRECISION_FALLBACK',**report['fallback']},flush=True)
+        # Reuse the actual FP32 training benchmark, rerun all correctness/Controller checks.
+        record(precision_summary(measured['models'],p),controller_equivalence(p['model'],p,deadline),correctness(configs,p,deadline))
+    return report
 
 
 def controller_equivalence(config,p,deadline):
@@ -104,6 +132,9 @@ def controller_equivalence(config,p,deadline):
     for arm in ('C2','C3'):
         if time.monotonic()>=deadline:raise TimeoutError('controller regression deadline')
         before=historical.Model(arm,config,17).to(device);after=Model(arm,config,17).to(device);after.load_state_dict(before.state_dict())
+        # Isolate the dead-GRU removal using the same repaired routing arithmetic.
+        # The frozen source is unchanged; the adapter exists only in this diagnostic.
+        before.trace_tensors=False;before.route=Model.route.__get__(before)
         ids=torch.arange(64,device=device)[None]%100+4;captures=[];calls=[];losses=[];outputs=[]
         for model in (before,after):
             route=model.route;records=[];updates=[]
@@ -121,4 +152,4 @@ def controller_equivalence(config,p,deadline):
         good=controller_gradient>0 and accepted(e,policy['selected_precision']) and same_routes and len(calls[0])==2 and len(calls[1])==1 and all(accepted(d,policy['selected_precision']) for d in differences)
         results[arm]={'status':'PASS' if good else 'FAIL','logits':e,'controller_ce_gradient_norm':controller_gradient,'routes_and_gates_equal':same_routes,'controller_call_counts':[len(calls[0]),len(calls[1])],'first_state':error(calls[0][0],calls[1][0]),'losses':losses,'max_parameter_gradient_error':max(d['maximum_absolute'] for d in differences)}
         del before,after;torch.cuda.empty_cache()
-    return {'status':'PASS' if all(v['status']=='PASS' for v in results.values()) else 'FAIL','policy':policy,'models':results}
+    return {'status':'PASS' if all(v['status']=='PASS' for v in results.values()) else 'FAIL','policy':policy,'models':results,'comparison_scope':'historical two-GRU versus one-GRU; identical FP32 Router in both diagnostic instances; frozen source unchanged'}
