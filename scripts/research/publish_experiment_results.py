@@ -28,6 +28,13 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "clm-workspace-controller-001-v04": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-v04/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4",
+        files=("decision.json", "protocol.json", "manifest.json", "audit.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-controller-v04-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
     "epclm-stateful-computation-routing-001-v03": ExperimentSpec(
         source_dir="results/epclm-stateful-computation-routing-001-v03/publish",
         artifact_dir="artifacts/experiments/epclm-stateful-computation-routing-001/v0.3",

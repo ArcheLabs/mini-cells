@@ -1,0 +1,117 @@
+{
+  "format": "minicells.clm-v04.protocol.v1",
+  "mechanism_version": "workspace-controller-v0.4",
+  "model": {
+    "dim": 256,
+    "heads": 4,
+    "ffn": 512,
+    "encoder_ffn": 512,
+    "layers": 3,
+    "vocab": 2048,
+    "cells": 8,
+    "state_dim": 256,
+    "window": 256,
+    "chunk": 64,
+    "steps": 2,
+    "top_k": 2,
+    "norm": "LayerNorm"
+  },
+  "optimizer": {
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "warmup_fraction": 0.1
+  },
+  "router": {
+    "balance_alpha": 0.001,
+    "noise": 0.0,
+    "temperature": 1.0,
+    "balance": "N * sum(stopgrad(top2_assignment_fraction) * mean(full_router_softmax)), averaged over steps; diagnostic auxiliary only"
+  },
+  "groups": {
+    "documents": 8,
+    "max_document_targets": 4096
+  },
+  "evaluation": {
+    "documents": 32,
+    "bootstrap_seed": 91002,
+    "bootstrap_repetitions": 2000,
+    "threshold": 0.01
+  },
+  "smoke": {
+    "seed": 17,
+    "target_cap": 32768,
+    "minimum_groups": 3,
+    "evaluation_documents": 8,
+    "single_session_seconds": 10800,
+    "models": [
+      "C0",
+      "C1",
+      "C2",
+      "C3",
+      "T0-P",
+      "T0-F"
+    ]
+  },
+  "main": {
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "planned_targets_per_model_seed": 32000000,
+    "frozen": false,
+    "status": "NOT_RUN_PENDING_SMOKE_AND_MATCHING_FREEZE",
+    "additional_gates": [
+      "smoke completion",
+      "runtime throughput and active-compute audit",
+      "three-seed total GPU-hours and per-session schedule freeze",
+      "formal training-FLOPs matching plan"
+    ]
+  },
+  "precision": {
+    "prefer": "bf16",
+    "fallback": "fp16_grad_scaler",
+    "initial_scale": 1024,
+    "max_consecutive_overflows": 5
+  },
+  "matching": {
+    "layers": 3,
+    "tolerance": 0.01,
+    "ffn_multiple": 8,
+    "P": "actual total parameter count",
+    "F": "declared dense-matmul MAC=2 active forward cost at context256; runtime profiling separate"
+  },
+  "counterfactual": {
+    "random_seed": 4301,
+    "fixed_pairs": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "shuffle": "permute normal route assignments and their selected weights across tokens within each evaluated chunk, separately per step; update actual controller path",
+    "oracle": "bounded optional offline path diagnostic; NOT_RUN in initial smoke"
+  },
+  "scientific_confirmation": false,
+  "independent_test_accessed": false,
+  "checkpoint_policy": {
+    "resume": "exact source/config/data identity; every committed document group",
+    "recovery": "reuse repair_io transport, <=3 saved versions, <=45s; published same-source progress with failed recovery blocks retraining",
+    "objects": "immutable content-addressed snapshots plus atomic recovery manifest"
+  },
+  "norm": "LayerNorm",
+  "controller_updates": 2
+}
