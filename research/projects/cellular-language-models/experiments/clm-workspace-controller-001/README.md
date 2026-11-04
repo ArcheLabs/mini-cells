@@ -41,3 +41,25 @@ Smoke验证仅取固定8篇开发文档；包含normal、均匀无放回random T
 记录每步Logit均值/标准差、熵、Top1概率、概率Gap、所选Cell、State范数及其Logit贡献；记录模块梯度、每Expert激活数与参数张量更新幅度。Z0=0，Z1范数同时给出第一次状态变化量。性能包括训练CUDA前后向时间、总吞吐/显存，冻结推理的Encoder/Read/Router/Dispatch/Cell/Controller算子分项及两个物理KV成本。
 
 本轮不是完整研究报告：三Seed主训练、固定训练FLOPs曲线、条件性参数匹配C0及Stateless Router复核、Oracle、完整Cell替换/余弦诊断、反事实专门延迟实验和正式Bootstrap研究决策暂未执行，不能用Smoke填充这些正式结果。H1–H4保持NOT_EVALUATED。
+
+## 当前执行范围：双 T4、Seed17、2M Pilot（优先于上文 Smoke/Main 计划）
+
+新入口为 **pilot-2m.ipynb**，选择 **GPU T4 ×2**、Internet、沿用 GITHUB_TOKEN，Save & Run All。`main_runner.py --mode pilot` 是同一入口。已有 `run.ipynb` 仍为历史 Smoke，不用于本轮。
+
+本轮仅六模型 T0-P/T0-F/C0/C1/C2/C3，Seed17，每组恰好2,000,000成功提交有效targets，合计12M。计划器重复固定只读文档流，最后用确定性的完整文档子集补齐精确预算；不截断文档、不减少目标。单模型Scheduler基于2M，Benchmark/Dry Run使用独立身份及短预算，不继承其权重。32M×三Seed不运行；H2/H3条件性复核只冻结设计，不加入六模型训练。
+
+自动顺序：Controller等价回归、原生精度核查、六模型目标精度GPU因果/缓存门禁 → 两个真实Worker并发测六模型 → 同接口Dry Run及本地Checkpoint续训 → 成本预测通过后训练12M → 最终验证/有限反事实/遥测/回传。既有恢复设施复用，不新增跨Kaggle恢复验证。当前CPU通过不能替代这些GPU门禁。
+
+一个物理GPU一个Subprocess，`CUDA_VISIBLE_DEVICES`隔离、内部cuda:0，中央SQLite事务队列保证每模型只领取一次；空闲Worker动态取任务。Worker继承Notebook硬停止进程组，不能在父进程超时后遗留训练。缺少两张T4、Worker映射错误或吞吐预测超限，均停止，无单卡回退、不降2M。
+
+所有阶段共用Notebook起点：工程门禁建议截止300秒，双卡基准600秒、Dry Run900秒；训练6000秒硬截止，验证6900秒，发布/余量7200秒。若前置条件耗尽窗口则BLOCKED。预测使用双Worker实测各模型速度、LPT makespan、初始化和Checkpoint开销，增加20%训练余量和600秒收尾预留；预测整体必须≤6300秒，且训练预测≤6000秒。未完成只能PILOT_INCOMPLETE；没有启动为PILOT_BLOCKED；六模型各2M且共同最终验证通过才PILOT_PASS。
+
+训练数据父进程准备一次、Worker只读加载；整篇文档CPU Tensor pinned缓存，异步一次拷贝后切Chunk。数据已驻留内存，num_workers=0/persistent_workers=False，避免嵌套DataLoader争抢CPU；每Worker一个CPU计算线程。减少逐Chunk标量同步，保留提交前有限数检查。训练每约250K记录共同4文档验证、保存Checkpoint（实际完整组边界targets明确记录）；中断时保存最新成功提交组。最终验证固定32篇，反事实固定8篇；诊断超时标PENDING，不计入已通过机制证据。
+
+`dual-gpu-telemetry.csv`每5秒采样；报告训练任务时间交集/并集、每GPU有效训练期平均利用率，90%重叠/60%利用率为性能目标，不通过空转达标。Checkpoint只在Output，父进程单独维护不可变Hash对象恢复清单，避免两个Worker并发改写共享清单。各模型Seed/RNG/Optimizer/Scaler/游标独立，恢复失败不自动Fresh Restart。
+
+Notebook与调度器额外为Kaggle启动/转换预留60秒，Python进程外层在119分钟截止；训练6000秒和评估6900秒截止不变，余下240秒用于回传，不用减少Targets补偿超时。
+
+续跑会保留已知Pilot会话耗时并纳入预算预测；不会通过重启把旧训练耗时清零来宣称满足两小时。模型全局RNG和Router RNG按Seed17与模型名派生独立子流，不依赖Worker领取顺序。
+
+已完成的Pilot包恢复后只重试发布，不重训；也可用 `pilot.py --publish-only <run目录>`。部分续跑按各模型剩余targets重新预测，不用完整2M重复计价。

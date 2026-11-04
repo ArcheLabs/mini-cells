@@ -65,7 +65,7 @@
     ],
     "planned_targets_per_model_seed": 32000000,
     "frozen": false,
-    "status": "NOT_RUN_PENDING_SMOKE_AND_MATCHING_FREEZE",
+    "status": "DEFERRED_SUPERSEDED_BY_SINGLE_SEED_2M_PILOT",
     "additional_gates": [
       "smoke completion",
       "runtime throughput and active-compute audit",
@@ -77,7 +77,10 @@
     "prefer": "bf16",
     "fallback": "fp16_grad_scaler",
     "initial_scale": 1024,
-    "max_consecutive_overflows": 5
+    "max_consecutive_overflows": 5,
+    "requested": "fp32",
+    "router": "fp32",
+    "consistency_fallback": "fp32"
   },
   "matching": {
     "layers": 3,
@@ -113,5 +116,38 @@
     "objects": "immutable content-addressed snapshots plus atomic recovery manifest"
   },
   "norm": "LayerNorm",
-  "controller_updates": 2
+  "controller_updates": 1,
+  "gate_version": "pilot-routing-precision-v2",
+  "pre_main_gate": {
+    "cross_session_validation": "REMOVED_BY_USER",
+    "required": [
+      "CONTROLLER_UPDATE_FIX",
+      "PRECISION_VALIDATION",
+      "COMPUTE_BUDGET_FREEZE",
+      "MAIN_RUNNER_READY",
+      "H2_H3_MATCHING_FREEZE",
+      "GPU_CORRECTNESS"
+    ],
+    "formal_main_auto_start": false,
+    "gpu_tolerances": "gpu_gate.TOLERANCE frozen before execution",
+    "performance_floor_vs_fp32": 0.8,
+    "main_plan": "repeat pinned complete-document stream; deterministic complete-document subset-sum tail reaches exact target; all seeds/arms share plan hash",
+    "budget_freeze_requires_separate_decision": true
+  },
+  "active_experiment": {
+    "name": "clm-workspace-controller-001-pilot-2m-seed17",
+    "mode": "pilot",
+    "seed": 17,
+    "targets_per_model": 2000000,
+    "total_targets": 12000000,
+    "required_gpus": 2,
+    "gpu": "Tesla T4",
+    "execution": "independent_subprocess_workers_dynamic_queue",
+    "wall_clock_seconds": 7200,
+    "training_deadline_seconds": 6000,
+    "evaluation_deadline_seconds": 6900,
+    "future_main_auto_start": false,
+    "cross_session_validation": "REMOVED_BY_USER",
+    "target_planning": "greedy complete-document prefix; exact bounded/repeated tail with prefix rewind; frozen before GPU gates"
+  }
 }

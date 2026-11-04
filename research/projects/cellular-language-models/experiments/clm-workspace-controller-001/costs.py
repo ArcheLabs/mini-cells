@@ -11,8 +11,8 @@ def flops(arm,c):
         parts['attention']=attention+4*d*d+(1 if arm=='C3' else 2)*(4*d*d+4*d*w)
         parts['ffn']=6*d*c['encoder_ffn']+24*d*f
         if arm!='C0':parts['router']=4*d*n
-        if arm in ('C2','C3'):parts['router']+=4*m*n;parts['controller']=12*m*(3*d+n+m)
-    return {'total':sum(parts.values()),'parts':parts,'convention':'MAC=2, full-window forward matmul reference, includes actually executed controller update twice; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs'}
+        if arm in ('C2','C3'):parts['router']+=4*m*n;parts['controller']=6*m*(3*d+n+m)
+    return {'total':sum(parts.values()),'parts':parts,'convention':'MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs'}
 
 def match(config,seed=17):
     from copy import deepcopy

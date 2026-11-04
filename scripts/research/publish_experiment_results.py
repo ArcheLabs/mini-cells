@@ -28,6 +28,34 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "clm-workspace-controller-001-pilot-2m-seed17": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-pilot-2m-seed17/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-v04-pilot-2m-seed17-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
+    "clm-workspace-controller-001-pre-main": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-pre-main/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4/pre-main-gate",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-controller-001-pre-main-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
+    "clm-workspace-controller-001-main-dry-run": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-main-dry-run/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4/main-dry-run",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-controller-001-main-dry-run-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
+    "clm-workspace-controller-001-main": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-main/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4/main",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-controller-001-main-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
     "clm-workspace-controller-001-v04": ExperimentSpec(
         source_dir="results/clm-workspace-controller-001-v04/publish",
         artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4",
