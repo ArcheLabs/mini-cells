@@ -25,7 +25,7 @@ M3C 研究一种以 **Mamba-3 为层级主干、以无持久状态的平面 Cell
 | 编号 | 研究内容 | 状态 |
 |---|---|---|
 | M3C-001 | 官方 Mamba-3 SISO/MIMO 基线与运行时复现 | [模块审计入口](M3C-001/README.md)已实现；GPU 未运行，T4 不满足依赖门禁 |
-| M3C-002 | 有界 Shared Workspace Attention | 未开始 |
+| M3C-002 | 有界 Shared Workspace Attention | [工程门禁入口](M3C-002/README.md)已实现；任务收益未评估 |
 | M3C-003 | 固定调用的 Stateless Cell Adapter | 未开始 |
 | M3C-004 | 跨 Mamba 层的动态 Cell / Skip 路由 | 未开始 |
 | M3C-005 | 同层多次 Cell 调用与自适应计算深度 | 未开始 |
@@ -56,3 +56,7 @@ M3C 是新的实验系列，不修改或取代以下历史记录：
 ## 当前执行路径：T4 Reference
 
 [M3C-001-T4-Reference](M3C-001-T4-Reference/README.md)使用纯 PyTorch 第三方实现，首轮 FP32 正确性检查。官方 BLOCKED_HARDWARE 与 TPU/JAX 记录保留；不再要求等待 H100 或完成 TPU 路径后才能推进。M3C-002 至006的研究路线不变，底座差异显式记录。
+
+## 当前下一步
+
+[M3C-002 Workspace Notebook](M3C-002/notebook.ipynb)：基于已通过T4审计的Reference，自动工程门禁与GPU成本测量；暂不训练，不将工程成功写成完整Gate002通过。
