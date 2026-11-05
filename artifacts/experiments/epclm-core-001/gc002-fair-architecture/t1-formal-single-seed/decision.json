@@ -4,7 +4,7 @@
   "status": "INCOMPLETE",
   "overall_status": "INCOMPLETE",
   "identity": {
-    "source": "b21f1382d84c33037342de7cfbb09dfc9f1cc50d",
+    "source": "506c693907c7f14b77e35f2b4e7bf2b86676e893",
     "protocol": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
     "dataset": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
     "tokenizer": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
@@ -22,7 +22,7 @@
       "grad_scaler": false
     },
     "mode": "GC002_T1_PM_KV_FORMAL_SINGLE_SEED",
-    "run_id": "gc002-t1-formal-b21f1382d84c-s173020021"
+    "run_id": "gc002-t1-formal-506c693907c7-s173020021"
   },
   "t1_02_training_state_consistency": "PASS",
   "t1_03_flops_accounting": "FAIL",
@@ -60,11 +60,11 @@
   },
   "error": {
     "stage": "T1_03_FLOPS_ACCOUNTING",
-    "type": "ValueError",
-    "message": "T1 live arithmetic coverage failed: {\"missing_categories\": {\"backward\": [\"NORMALIZATION_OR_REDUCTION\"]}, \"phase_flops\": {\"backward\": 3349558794, \"forward\": 1674238476, \"gradient_clipping\": 5807010, \"optimizer\": 23227468}, \"unsupported\": {}}"
+    "type": "NameError",
+    "message": "name 'values' is not defined"
   },
   "source_branch": "codex/gc002-t1-formal-readiness",
-  "run_id": "gc002-t1-formal-b21f1382d84c-s173020021",
+  "run_id": "gc002-t1-formal-506c693907c7-s173020021",
   "protocol": {
     "format": "minicells.gc002.t1-formal-protocol.v1",
     "status": "FROZEN_T1_SINGLE_SEED_CONDITIONAL_ON_ENGINEERING_GATES",
@@ -256,7 +256,7 @@
     "status": "NO_PRIOR_FORMAL_CHECKPOINT",
     "max_versions": 3,
     "checkpoint_identity": {
-      "source": "b21f1382d84c33037342de7cfbb09dfc9f1cc50d",
+      "source": "506c693907c7f14b77e35f2b4e7bf2b86676e893",
       "protocol": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
       "dataset": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
       "tokenizer": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
@@ -277,5 +277,5 @@
     }
   },
   "failed_stage": "T1_03_FLOPS_ACCOUNTING",
-  "execution_seconds": 144.79149035
+  "execution_seconds": 146.71978114699996
 }

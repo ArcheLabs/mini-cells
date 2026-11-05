@@ -1,0 +1,69 @@
+{
+  "T1": {
+    "history_scaling": [
+      {
+        "history_tokens_including_bos": 32,
+        "prefill_seconds": 0.167750438999974,
+        "prefill_seconds_per_token": 0.005242201218749187,
+        "single_token_decode_seconds": 0.010725446999458654,
+        "persistent_state_bytes": 516,
+        "snapshot_bytes_after_prefill": 9893,
+        "nonzero_state_blocks_after_prefill": 1,
+        "snapshot_scope": "bounded reference token context, identities and RNG",
+        "context_window": 128,
+        "retained_reference_context_tokens": 32,
+        "kv_cache_bytes": 0,
+        "kv_cache_status": "DISABLED_BOUNDED_CONTEXT_REPLAY"
+      },
+      {
+        "history_tokens_including_bos": 128,
+        "prefill_seconds": 0.6564177910004219,
+        "prefill_seconds_per_token": 0.005128263992190796,
+        "single_token_decode_seconds": 0.01573592800014012,
+        "persistent_state_bytes": 516,
+        "snapshot_bytes_after_prefill": 9893,
+        "nonzero_state_blocks_after_prefill": 1,
+        "snapshot_scope": "bounded reference token context, identities and RNG",
+        "context_window": 128,
+        "retained_reference_context_tokens": 128,
+        "kv_cache_bytes": 0,
+        "kv_cache_status": "DISABLED_BOUNDED_CONTEXT_REPLAY"
+      },
+      {
+        "history_tokens_including_bos": 512,
+        "prefill_seconds": 2.6848150709993206,
+        "prefill_seconds_per_token": 0.005243779435545548,
+        "single_token_decode_seconds": 0.010793760000524344,
+        "persistent_state_bytes": 516,
+        "snapshot_bytes_after_prefill": 9893,
+        "nonzero_state_blocks_after_prefill": 1,
+        "snapshot_scope": "bounded reference token context, identities and RNG",
+        "context_window": 128,
+        "retained_reference_context_tokens": 128,
+        "kv_cache_bytes": 0,
+        "kv_cache_status": "DISABLED_BOUNDED_CONTEXT_REPLAY"
+      },
+      {
+        "history_tokens_including_bos": 1024,
+        "prefill_seconds": 5.302722655000252,
+        "prefill_seconds_per_token": 0.005178440092773684,
+        "single_token_decode_seconds": 0.01065317199936544,
+        "persistent_state_bytes": 516,
+        "snapshot_bytes_after_prefill": 9893,
+        "nonzero_state_blocks_after_prefill": 1,
+        "snapshot_scope": "bounded reference token context, identities and RNG",
+        "context_window": 128,
+        "retained_reference_context_tokens": 128,
+        "kv_cache_bytes": 0,
+        "kv_cache_status": "DISABLED_BOUNDED_CONTEXT_REPLAY"
+      }
+    ],
+    "gpu_peak_allocated_bytes": 26680832,
+    "cpu_process_peak_rss_bytes": 2006097920,
+    "gpu_utilization": "NOT_MEASURED",
+    "memory_scope": "process high-water marks; includes other resident frozen assets",
+    "timing_scope": "synchronized end-to-end forward/finite checks/readout/CPU sampling, excludes network/assets",
+    "flops": "NOT_MEASURED",
+    "prefill_complexity": "C1 processes every input event; fixed state does not make prefill constant time"
+  }
+}

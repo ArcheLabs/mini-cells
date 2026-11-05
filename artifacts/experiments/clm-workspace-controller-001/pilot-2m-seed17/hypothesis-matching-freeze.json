@@ -1,0 +1,81 @@
+{
+  "H2": "CONTROL_DESIGN_FROZEN",
+  "H2_controls": {
+    "C0-PoolBalanced": {
+      "active_training_experts": 8,
+      "pool": "same independently initialized eight SwiGLU experts as C1",
+      "router_parameters": 0,
+      "schedule": "(absolute input position + 2*step) mod8, adjacent partner; independent of input representation"
+    },
+    "C0-PoolFixed": {
+      "active_training_experts": 2,
+      "note": "only two experts trained; not an effective-capacity match",
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "H3": "CONTROL_DESIGN_FROZEN",
+  "H3_controls": {
+    "F": {
+      "active_forward_flops": 8683008,
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "matched_router_width": 1520,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops_error": 0.000412930627654573,
+      "parameter_error": -0.06686987662638999,
+      "parameters": 5517688
+    },
+    "P": {
+      "active_forward_flops": 10262784,
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "matched_router_width": 3016,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops_error": 0.1824268522888155,
+      "parameter_error": 0.00017452786154659172,
+      "parameters": 5914128
+    }
+  },
+  "decision_rule": "effect >=1% relative NLL, >=2/3 seed sign agreement, paired document intervals reported separately; matched control must not explain away effect; no scientific claim from freeze alone",
+  "matching_note": "P matches total parameters and reports extra FLOPs; F matches active matrix cost and reports parameter deficit; do not claim both matched when impossible",
+  "pilot_trigger": "relative NLL or counterfactual gain >=1% is only a follow-up design signal, never single-seed statistical confirmation",
+  "review_budget": {
+    "activation": "future independent decision only; excluded from current12M Pilot",
+    "seeds": [
+      17
+    ],
+    "targets_per_model": 2000000
+  },
+  "status": "PASS",
+  "trigger": {
+    "H2": "C1 pooled mean NLL improves over C0 by >=1% and >=2/3 seeds favor C1, OR normal-vs-random/fixed route gain >=1% with >=2/3 positive seeds",
+    "H3": "C2 pooled mean NLL improves over C1 by >=1% with >=2/3 positive seeds; require State-Off consistency before claiming controller utility"
+  }
+}
