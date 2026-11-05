@@ -1,0 +1,114 @@
+{
+  "identity": "7be32a9e2c2484b31d0e3e88ae13fedb03b497eac3b3bdff6913c68eaeb83fbb",
+  "source": "254ddc8e2b9fe43a1a051e687278f6e3f21e2363",
+  "protocol": {
+    "experiment": "M3C-002B-CAL-001",
+    "type": "DEVELOPMENT_CALIBRATION",
+    "model_seed": 27101,
+    "data_seed": 2710101,
+    "arms": {
+      "M3-Base": 0,
+      "M3-WA-W16": 16,
+      "M3-WA-W64": 64
+    },
+    "model": {
+      "d_model": 64,
+      "n_layer": 2,
+      "d_state": 16,
+      "headdim": 16,
+      "expand": 2,
+      "chunk_size": 16,
+      "vocab_size": 256,
+      "use_mimo": false
+    },
+    "workspace_heads": 4,
+    "precision": "fp32",
+    "tf32": false,
+    "training": {
+      "targets_per_arm": 32768,
+      "total_targets": 98304,
+      "episodes_per_arm": 4096,
+      "batch_episodes": 8,
+      "query_targets_per_episode": 8,
+      "updates_per_arm": 512,
+      "full_sequence_length": 160,
+      "optimizer": "AdamW",
+      "learning_rate": 0.001,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "weight_decay": 0.01,
+      "clip": 1.0,
+      "scheduler": "constant",
+      "evaluation_updates": [
+        0,
+        256,
+        512
+      ],
+      "checkpoint_every_updates": 64,
+      "input_tokens_per_arm_including_padding": 655360,
+      "total_input_tokens_including_padding": 1966080
+    },
+    "development_evaluation": {
+      "episodes": 384,
+      "conditions": 6,
+      "episodes_per_condition": 64,
+      "bootstrap_samples": 1000,
+      "bootstrap_seed": 2710102,
+      "scope": "paired episode sampling only; one model seed does not estimate training-seed variance"
+    },
+    "budget": {
+      "session_seconds": 7200,
+      "execution_seconds": 5400,
+      "evaluation_seconds": 6000,
+      "publication_seconds": 600,
+      "safety_seconds": 600
+    },
+    "formal_training_targets": 0,
+    "formal_test_access": false,
+    "natural_language_ppl": "NOT_RUN",
+    "scientific_hypotheses": "NOT_EVALUATED",
+    "kaggle_kernel": "bingjiangli/minicells",
+    "identity_required_before_first_update": false,
+    "next_stage": "NO_AUTOMATIC_FORMAL_TRAINING_OR_M3C003",
+    "development_training_authorized": true,
+    "formal_training_authorized": false,
+    "trained_inference": {
+      "context": 96,
+      "teacher_forced_decode_tokens": 16,
+      "development_episode_index": 2,
+      "condition": "mqar-gap64",
+      "batch": 1,
+      "warmup": 3,
+      "samples": 5
+    },
+    "allow_deferred_script_version_id_development_only": true,
+    "script_version_id_policy": "User authorized ID_PENDING for development; append actual saved-version URL after execution; formal training remains unauthorized"
+  },
+  "data": {
+    "status": "PASS",
+    "oracle_exact_match": 1.0,
+    "targets_per_episode": 8,
+    "formal_test_accessed": false,
+    "train_hash": "aedc9350a19ddca01f4df1ddde48ac33dc0b538bd9200f3a3c934dfaf0685cc3",
+    "train_label_hash": "4e93fe27fb21ef773ea3c9fd99bd6c50d19fdb8f7731c2879fbdda39ecae1c8d",
+    "validation_hash": "c7dfb74ced08700d1d28bc3da22a90cba2a9df751e0a2408d75de31df9213d3b",
+    "validation_label_hash": "d7aa43b18ecf9fd32194d95aca873b7142110d1cf2757e68ae699dbc8ddc9a83"
+  },
+  "execution_sessions": [
+    {
+      "status": "ID_PENDING",
+      "kernel": "bingjiangli/minicells",
+      "script_version_id": null,
+      "session_id": "e20d7e27ba0944fb89c66ccad89d22e7",
+      "protocol_tag": "M3C-002B-CAL-001:18f68959c51efcae1ca37449d468ed27668057cc27f599071d88113d8ac304a1",
+      "runtime_source_sha256": "15628626cf0d5a73720e8086a42327e2fe21df4d7120c9c78806afa962c0d636",
+      "run_type": "Batch",
+      "reason": "CURRENT_SCRIPT_VERSION_ID_NOT_EXPOSED_BY_RUNTIME",
+      "scope": "User-authorized development calibration only; saved-version identity must be supplemented later",
+      "formal_training_allowed": false,
+      "current_protocol_sha256": "18f68959c51efcae1ca37449d468ed27668057cc27f599071d88113d8ac304a1"
+    }
+  ]
+}

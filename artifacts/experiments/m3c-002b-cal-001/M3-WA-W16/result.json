@@ -1,0 +1,176 @@
+{
+  "status": "COMPLETE",
+  "identity": "7be32a9e2c2484b31d0e3e88ae13fedb03b497eac3b3bdff6913c68eaeb83fbb:M3-WA-W16",
+  "updates": 512,
+  "targets": 32768,
+  "parameters": 204850,
+  "training_seconds": 20.083217428999546,
+  "query_targets_per_second": 1631.6110760561712,
+  "processed_input_tokens": 655360,
+  "nonpadding_input_tokens": 401376,
+  "update_seconds_p50": 0.0386934294999719,
+  "update_seconds_p95": 0.04191666019999615,
+  "peak_training_allocated_bytes": 108364288,
+  "no_binding_control": {
+    "all": {
+      "episode_mean_em": 0.015625,
+      "episode_sd": 0.0510976130307596,
+      "query_nll": 4.175488077259312,
+      "episodes": 384,
+      "queries": 3072
+    },
+    "mqar-gap0": {
+      "episode_mean_em": 0.01953125,
+      "episode_sd": 0.045745315919462494,
+      "query_nll": 4.169493246357888,
+      "episodes": 64,
+      "queries": 512
+    },
+    "key_inside16": {
+      "episode_mean_em": 0.0,
+      "episode_sd": 0.0,
+      "query_nll": 4.188610339902111,
+      "episodes": 85,
+      "queries": 97
+    },
+    "key_inside64_out16": {
+      "episode_mean_em": 0.02036830357142857,
+      "episode_sd": 0.08738518631758789,
+      "query_nll": 4.166741668092709,
+      "episodes": 256,
+      "queries": 1373
+    },
+    "mqar-gap32": {
+      "episode_mean_em": 0.017578125,
+      "episode_sd": 0.043797805514170944,
+      "query_nll": 4.162297037895769,
+      "episodes": 64,
+      "queries": 512
+    },
+    "key_outside64": {
+      "episode_mean_em": 0.013155691964285714,
+      "episode_sd": 0.05324662088566557,
+      "query_nll": 4.182189675454938,
+      "episodes": 256,
+      "queries": 1602
+    },
+    "mqar-gap64": {
+      "episode_mean_em": 0.013671875,
+      "episode_sd": 0.039322054350368486,
+      "query_nll": 4.190625876188278,
+      "episodes": 64,
+      "queries": 512
+    },
+    "repeat-gap0": {
+      "episode_mean_em": 0.01171875,
+      "episode_sd": 0.053260506452896664,
+      "query_nll": 4.17738132039085,
+      "episodes": 64,
+      "queries": 512
+    },
+    "repeat-gap32": {
+      "episode_mean_em": 0.0078125,
+      "episode_sd": 0.043842023400762604,
+      "query_nll": 4.17357871029526,
+      "episodes": 64,
+      "queries": 512
+    },
+    "repeat-gap64": {
+      "episode_mean_em": 0.0234375,
+      "episode_sd": 0.07344620642412539,
+      "query_nll": 4.179552272427827,
+      "episodes": 64,
+      "queries": 512
+    },
+    "repeat_first": {
+      "query_em": 0.014322916666666666,
+      "queries": 768
+    },
+    "repeat_later": {
+      "query_em": 0.014322916666666666,
+      "queries": 768
+    }
+  },
+  "checkpoint_sha256": "d22c409fd9076e1c3dd2235f53195cb4e6cb47552118509890a7c1fb8e080d80",
+  "checkpoint_bytes": 2559427,
+  "metrics": {
+    "all": {
+      "episode_mean_em": 0.015625,
+      "episode_sd": 0.0510976130307596,
+      "query_nll": 4.175403081579134,
+      "episodes": 384,
+      "queries": 3072
+    },
+    "mqar-gap0": {
+      "episode_mean_em": 0.01953125,
+      "episode_sd": 0.045745315919462494,
+      "query_nll": 4.169826277997345,
+      "episodes": 64,
+      "queries": 512
+    },
+    "key_inside16": {
+      "episode_mean_em": 0.0,
+      "episode_sd": 0.0,
+      "query_nll": 4.188245856884828,
+      "episodes": 85,
+      "queries": 97
+    },
+    "key_inside64_out16": {
+      "episode_mean_em": 0.02036830357142857,
+      "episode_sd": 0.08738518631758789,
+      "query_nll": 4.166757646305059,
+      "episodes": 256,
+      "queries": 1373
+    },
+    "mqar-gap32": {
+      "episode_mean_em": 0.017578125,
+      "episode_sd": 0.043797805514170944,
+      "query_nll": 4.162041807547212,
+      "episodes": 64,
+      "queries": 512
+    },
+    "key_outside64": {
+      "episode_mean_em": 0.013155691964285714,
+      "episode_sd": 0.05324662088566557,
+      "query_nll": 4.182035062494647,
+      "episodes": 256,
+      "queries": 1602
+    },
+    "mqar-gap64": {
+      "episode_mean_em": 0.013671875,
+      "episode_sd": 0.039322054350368486,
+      "query_nll": 4.19048146950081,
+      "episodes": 64,
+      "queries": 512
+    },
+    "repeat-gap0": {
+      "episode_mean_em": 0.01171875,
+      "episode_sd": 0.053260506452896664,
+      "query_nll": 4.177084487397224,
+      "episodes": 64,
+      "queries": 512
+    },
+    "repeat-gap32": {
+      "episode_mean_em": 0.0078125,
+      "episode_sd": 0.043842023400762604,
+      "query_nll": 4.173674917314202,
+      "episodes": 64,
+      "queries": 512
+    },
+    "repeat-gap64": {
+      "episode_mean_em": 0.0234375,
+      "episode_sd": 0.07344620642412539,
+      "query_nll": 4.179309529718012,
+      "episodes": 64,
+      "queries": 512
+    },
+    "repeat_first": {
+      "query_em": 0.014322916666666666,
+      "queries": 768
+    },
+    "repeat_later": {
+      "query_em": 0.014322916666666666,
+      "queries": 768
+    }
+  }
+}
