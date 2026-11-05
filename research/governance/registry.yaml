@@ -247,6 +247,17 @@
       "scientific_decision": false,
       "candidate_source": "ffa55848fc513ca91aa330bda4c33c86dab74827",
       "note": "Independent community backend. SISO gates before MIMO; official kernel equivalence NOT_VERIFIED. M3C-002 conditional on TPU gates and review; historical PyTorch results unchanged."
+    },
+    {
+      "id": "M3C-001-T4-Reference",
+      "name": "Pure PyTorch Mamba3 Reference correctness",
+      "status": "implementation_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-001-T4-Reference",
+      "entry": "run_audit.py",
+      "training_tokens": 0,
+      "scientific_decision": false,
+      "candidate_source": "15ba9983123703d9f4f7d6f8709152d0a07edbd9",
+      "note": "FP32 SISO then MIMO synthetic forward/backward/cache gates. Third-party definition; official kernel equivalence NOT_VERIFIED. No formal training; historical audits unchanged."
     }
   ],
   "schema_version": 2
