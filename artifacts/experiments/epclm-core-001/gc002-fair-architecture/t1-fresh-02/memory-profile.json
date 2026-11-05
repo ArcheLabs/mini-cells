@@ -1,0 +1,106 @@
+{
+  "model_parameter_bytes": 3871232,
+  "peak_cuda_allocated_bytes": 47350784,
+  "peak_cuda_reserved_bytes": 88080384,
+  "inference_peak_allocated_bytes": 47350784,
+  "kv_cache_memory": [
+    {
+      "history_tokens": 32,
+      "prefill_median_seconds": 0.0055469314999925246,
+      "prefill_p95_seconds": 0.005606178999983058,
+      "decode_median_seconds": 0.005774135999985219,
+      "decode_p95_seconds": 0.006048238000005313,
+      "decode_tokens_per_second": 173.18608359805862,
+      "persistent_kv_memory": {
+        "batch": 1,
+        "cached_tokens": 32,
+        "absolute_next_position": 32,
+        "kv_tensor_payload_bytes": 131072,
+        "kv_tensor_backing_storage_bytes": 131072,
+        "persistent_state_bytes_per_stream": 131072,
+        "token_buffer_bytes": 0,
+        "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+        "python_metadata_shallow_bytes": 508,
+        "tensor_wrapper_shallow_bytes": 576,
+        "serialization_bytes": 134157,
+        "theoretical_full_window_gqa_bytes_per_stream": 524288,
+        "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+        "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+      }
+    },
+    {
+      "history_tokens": 128,
+      "prefill_median_seconds": 0.0056375865000291014,
+      "prefill_p95_seconds": 0.005978267000045889,
+      "decode_median_seconds": 0.005828311500010841,
+      "decode_p95_seconds": 0.006071272999975008,
+      "decode_tokens_per_second": 171.5762789957503,
+      "persistent_kv_memory": {
+        "batch": 1,
+        "cached_tokens": 128,
+        "absolute_next_position": 128,
+        "kv_tensor_payload_bytes": 524288,
+        "kv_tensor_backing_storage_bytes": 524288,
+        "persistent_state_bytes_per_stream": 524288,
+        "token_buffer_bytes": 0,
+        "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+        "python_metadata_shallow_bytes": 508,
+        "tensor_wrapper_shallow_bytes": 576,
+        "serialization_bytes": 527373,
+        "theoretical_full_window_gqa_bytes_per_stream": 524288,
+        "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+        "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+      }
+    },
+    {
+      "history_tokens": 512,
+      "prefill_median_seconds": 0.006164056500011839,
+      "prefill_p95_seconds": 0.006815863999975136,
+      "decode_median_seconds": 0.00627365549996739,
+      "decode_p95_seconds": 0.006459013000039704,
+      "decode_tokens_per_second": 159.3967026090607,
+      "persistent_kv_memory": {
+        "batch": 1,
+        "cached_tokens": 128,
+        "absolute_next_position": 512,
+        "kv_tensor_payload_bytes": 524288,
+        "kv_tensor_backing_storage_bytes": 524288,
+        "persistent_state_bytes_per_stream": 524288,
+        "token_buffer_bytes": 0,
+        "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+        "python_metadata_shallow_bytes": 508,
+        "tensor_wrapper_shallow_bytes": 576,
+        "serialization_bytes": 527373,
+        "theoretical_full_window_gqa_bytes_per_stream": 524288,
+        "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+        "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+      }
+    },
+    {
+      "history_tokens": 1024,
+      "prefill_median_seconds": 0.006671675500030005,
+      "prefill_p95_seconds": 0.007221680999975888,
+      "decode_median_seconds": 0.006362670999976672,
+      "decode_p95_seconds": 0.006621238000036556,
+      "decode_tokens_per_second": 157.16669933172193,
+      "persistent_kv_memory": {
+        "batch": 1,
+        "cached_tokens": 128,
+        "absolute_next_position": 1024,
+        "kv_tensor_payload_bytes": 524288,
+        "kv_tensor_backing_storage_bytes": 524288,
+        "persistent_state_bytes_per_stream": 524288,
+        "token_buffer_bytes": 0,
+        "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+        "python_metadata_shallow_bytes": 508,
+        "tensor_wrapper_shallow_bytes": 576,
+        "serialization_bytes": 527373,
+        "theoretical_full_window_gqa_bytes_per_stream": 524288,
+        "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+        "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+      }
+    }
+  ],
+  "status": "COMPLETE",
+  "evaluation_seconds": 0.000613052999995034
+}

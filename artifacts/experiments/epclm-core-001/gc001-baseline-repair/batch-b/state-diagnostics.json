@@ -1,0 +1,522 @@
+{
+  "T1": {
+    "teacher_forced": {
+      "scope": "teacher-forced fixed validation documents; no generation replay",
+      "documents": 16,
+      "tokens": 3322,
+      "mean_max_token_probability": 0.19921703329859308,
+      "token_accuracy": 0.23630343166767007,
+      "expected_calibration_error_10_bins": 0.03871836166516,
+      "eos_targets": 16,
+      "mean_eos_target_probability": 0.08594145881943405,
+      "mean_eos_target_nll": 2.467240035533905,
+      "eos_target_top1_fraction": 0.0,
+      "mean_non_eos_position_eos_probability": 0.0035902166004062796,
+      "eos_brier_score": 0.004236611631223207,
+      "final_document_states": [],
+      "calibration_bins": [
+        {
+          "count": 1183,
+          "confidence_sum": 56.36920383665711,
+          "correct": 94
+        },
+        {
+          "count": 1148,
+          "confidence_sum": 163.15252041816711,
+          "correct": 205
+        },
+        {
+          "count": 334,
+          "confidence_sum": 82.70101508498192,
+          "correct": 97
+        },
+        {
+          "count": 202,
+          "confidence_sum": 69.87025991082191,
+          "correct": 83
+        },
+        {
+          "count": 114,
+          "confidence_sum": 50.82564276456833,
+          "correct": 51
+        },
+        {
+          "count": 99,
+          "confidence_sum": 53.70829510688782,
+          "correct": 68
+        },
+        {
+          "count": 69,
+          "confidence_sum": 44.606046080589294,
+          "correct": 47
+        },
+        {
+          "count": 75,
+          "confidence_sum": 55.710691034793854,
+          "correct": 53
+        },
+        {
+          "count": 72,
+          "confidence_sum": 60.84585094451904,
+          "correct": 61
+        },
+        {
+          "count": 26,
+          "confidence_sum": 24.00945943593979,
+          "correct": 26
+        }
+      ]
+    },
+    "free_running": [
+      {
+        "prompt_index": 0,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 14
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 1,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 2,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 12
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 3,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 4,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 14
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 5,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 12
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 6,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 7,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 12
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 8,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 13
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 9,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 12
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 10,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 9
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 11,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 12,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 13,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 14,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 15,
+        "mode": {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 13
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 0,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 14
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 1,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 2,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 12
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 3,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 4,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 14
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 5,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 12
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 6,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 7,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 12
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 8,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 13
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 9,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 12
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 10,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 9
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 11,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 12,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 13,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 14,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 10
+        },
+        "state_trajectory": []
+      },
+      {
+        "prompt_index": 15,
+        "mode": {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        },
+        "prefill_state": {
+          "state_kind": "BOUNDED_TOKEN_CONTEXT",
+          "retained_tokens": 13
+        },
+        "state_trajectory": []
+      }
+    ],
+    "flat_blocks_note": "Flat storage blocks have no cellular semantic interpretation"
+  }
+}

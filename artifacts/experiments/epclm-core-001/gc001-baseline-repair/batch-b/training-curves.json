@@ -1,0 +1,6909 @@
+{
+  "T1": {
+    "status": "OBSERVED",
+    "updates": 977,
+    "initial_loss": 7.647443771362305,
+    "final_loss": 4.610959529876709,
+    "first_50_mean_loss": 7.330487661361694,
+    "last_50_mean_loss": 4.621134419441223,
+    "recent_loss_reduction": -0.09214433670043931,
+    "max_gradient_norm": 8.308855056762695,
+    "numerical_stability": "FINITE_RECORDED_CURVE",
+    "curve": [
+      {
+        "tokens": 256,
+        "nll": 7.647443771362305,
+        "gradient_norm": 4.324774742126465,
+        "state_norm": 12150.9296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 512,
+        "nll": 7.650837421417236,
+        "gradient_norm": 4.407249450683594,
+        "state_norm": 16813.541015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 768,
+        "nll": 7.679502487182617,
+        "gradient_norm": 2.8795952796936035,
+        "state_norm": 13645.8037109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 1024,
+        "nll": 7.622786045074463,
+        "gradient_norm": 4.110647678375244,
+        "state_norm": 13034.40234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 1280,
+        "nll": 7.62233304977417,
+        "gradient_norm": 3.8392977714538574,
+        "state_norm": 13254.4697265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 1536,
+        "nll": 7.648880958557129,
+        "gradient_norm": 3.7509870529174805,
+        "state_norm": 13897.853515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 1792,
+        "nll": 7.594444274902344,
+        "gradient_norm": 4.0434136390686035,
+        "state_norm": 12285.3671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 2048,
+        "nll": 7.629633903503418,
+        "gradient_norm": 3.6846461296081543,
+        "state_norm": 13549.5908203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 2304,
+        "nll": 7.608921051025391,
+        "gradient_norm": 3.732511520385742,
+        "state_norm": 12943.6474609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 2560,
+        "nll": 7.5449981689453125,
+        "gradient_norm": 3.2321643829345703,
+        "state_norm": 11343.185546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 2816,
+        "nll": 7.549371242523193,
+        "gradient_norm": 3.4204986095428467,
+        "state_norm": 14562.7294921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 3072,
+        "nll": 7.5863356590271,
+        "gradient_norm": 3.263235092163086,
+        "state_norm": 14787.1201171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 3328,
+        "nll": 7.529944896697998,
+        "gradient_norm": 3.5028016567230225,
+        "state_norm": 11157.5244140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 3584,
+        "nll": 7.539700031280518,
+        "gradient_norm": 3.2361364364624023,
+        "state_norm": 15436.3408203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 3840,
+        "nll": 7.582615375518799,
+        "gradient_norm": 3.5328187942504883,
+        "state_norm": 16248.81640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 4096,
+        "nll": 7.454692840576172,
+        "gradient_norm": 3.050596237182617,
+        "state_norm": 11632.248046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 4352,
+        "nll": 7.461849689483643,
+        "gradient_norm": 2.8214406967163086,
+        "state_norm": 15866.5947265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 4608,
+        "nll": 7.554135322570801,
+        "gradient_norm": 3.619716167449951,
+        "state_norm": 15520.09765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 4864,
+        "nll": 7.4929656982421875,
+        "gradient_norm": 3.400904417037964,
+        "state_norm": 11906.84765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 5120,
+        "nll": 7.40224552154541,
+        "gradient_norm": 3.1126255989074707,
+        "state_norm": 12821.8076171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 5376,
+        "nll": 7.41269588470459,
+        "gradient_norm": 3.5609424114227295,
+        "state_norm": 15741.9365234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 5632,
+        "nll": 7.4543890953063965,
+        "gradient_norm": 3.1578269004821777,
+        "state_norm": 13314.0703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 5888,
+        "nll": 7.396920204162598,
+        "gradient_norm": 2.746974229812622,
+        "state_norm": 13493.099609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 6144,
+        "nll": 7.366086959838867,
+        "gradient_norm": 2.8111000061035156,
+        "state_norm": 14917.0234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 6400,
+        "nll": 7.4255900382995605,
+        "gradient_norm": 2.5659124851226807,
+        "state_norm": 14972.5068359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 6656,
+        "nll": 7.317479610443115,
+        "gradient_norm": 2.762361526489258,
+        "state_norm": 10786.80859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 6912,
+        "nll": 7.282946586608887,
+        "gradient_norm": 2.5098068714141846,
+        "state_norm": 11158.1474609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 7168,
+        "nll": 7.258307456970215,
+        "gradient_norm": 2.4401185512542725,
+        "state_norm": 16591.1640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 7424,
+        "nll": 7.321890354156494,
+        "gradient_norm": 2.430637836456299,
+        "state_norm": 15569.02734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 7680,
+        "nll": 7.189718246459961,
+        "gradient_norm": 2.250169038772583,
+        "state_norm": 8130.52587890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 7936,
+        "nll": 7.201693534851074,
+        "gradient_norm": 2.210834503173828,
+        "state_norm": 13201.37890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 8192,
+        "nll": 7.259056568145752,
+        "gradient_norm": 2.078619956970215,
+        "state_norm": 16362.7783203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 8448,
+        "nll": 7.153234481811523,
+        "gradient_norm": 2.1880316734313965,
+        "state_norm": 8838.390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 8704,
+        "nll": 7.1544647216796875,
+        "gradient_norm": 2.1372580528259277,
+        "state_norm": 15156.0322265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 8960,
+        "nll": 7.16816520690918,
+        "gradient_norm": 1.9630736112594604,
+        "state_norm": 15931.5263671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 9216,
+        "nll": 7.15633487701416,
+        "gradient_norm": 1.980668544769287,
+        "state_norm": 13470.5888671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 9472,
+        "nll": 7.117676734924316,
+        "gradient_norm": 1.9891802072525024,
+        "state_norm": 14610.3193359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 9728,
+        "nll": 7.130252838134766,
+        "gradient_norm": 1.8563748598098755,
+        "state_norm": 12489.35546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 9984,
+        "nll": 7.144533634185791,
+        "gradient_norm": 1.894405484199524,
+        "state_norm": 14719.7041015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 10240,
+        "nll": 7.091833114624023,
+        "gradient_norm": 1.8213592767715454,
+        "state_norm": 11982.599609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 10496,
+        "nll": 7.078511714935303,
+        "gradient_norm": 1.8628056049346924,
+        "state_norm": 12617.892578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 10752,
+        "nll": 7.095546722412109,
+        "gradient_norm": 1.9510793685913086,
+        "state_norm": 15283.583984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 11008,
+        "nll": 7.055214881896973,
+        "gradient_norm": 1.9670783281326294,
+        "state_norm": 13775.796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 11264,
+        "nll": 6.964000701904297,
+        "gradient_norm": 1.954811453819275,
+        "state_norm": 12359.7734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 11520,
+        "nll": 7.066219806671143,
+        "gradient_norm": 2.037928581237793,
+        "state_norm": 13115.2841796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 11776,
+        "nll": 7.032050132751465,
+        "gradient_norm": 1.7837921380996704,
+        "state_norm": 14655.4306640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 12032,
+        "nll": 6.96153450012207,
+        "gradient_norm": 1.7526499032974243,
+        "state_norm": 12218.5712890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 12288,
+        "nll": 6.99597692489624,
+        "gradient_norm": 1.810524344444275,
+        "state_norm": 15082.453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 12544,
+        "nll": 6.971465587615967,
+        "gradient_norm": 1.8547611236572266,
+        "state_norm": 14801.955078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 12800,
+        "nll": 6.896954536437988,
+        "gradient_norm": 1.9294263124465942,
+        "state_norm": 11186.2568359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 13056,
+        "nll": 6.836350440979004,
+        "gradient_norm": 1.8680682182312012,
+        "state_norm": 12258.3681640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 13312,
+        "nll": 6.8498077392578125,
+        "gradient_norm": 1.8654836416244507,
+        "state_norm": 13900.642578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 13568,
+        "nll": 6.78050422668457,
+        "gradient_norm": 1.9454447031021118,
+        "state_norm": 14351.2978515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 13824,
+        "nll": 6.97007417678833,
+        "gradient_norm": 1.6950669288635254,
+        "state_norm": 14636.0029296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 14080,
+        "nll": 6.83795690536499,
+        "gradient_norm": 1.7628132104873657,
+        "state_norm": 8291.48828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 14336,
+        "nll": 6.859854221343994,
+        "gradient_norm": 1.7455285787582397,
+        "state_norm": 10931.986328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 14592,
+        "nll": 6.817733287811279,
+        "gradient_norm": 1.7677401304244995,
+        "state_norm": 12003.986328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 14848,
+        "nll": 6.781097412109375,
+        "gradient_norm": 1.6837999820709229,
+        "state_norm": 10765.9990234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 15104,
+        "nll": 6.710651874542236,
+        "gradient_norm": 1.9775879383087158,
+        "state_norm": 12997.1201171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 15360,
+        "nll": 6.712326526641846,
+        "gradient_norm": 1.7352524995803833,
+        "state_norm": 15539.2119140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 15616,
+        "nll": 6.657846450805664,
+        "gradient_norm": 1.7508199214935303,
+        "state_norm": 13432.904296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 15872,
+        "nll": 6.697720527648926,
+        "gradient_norm": 1.6414626836776733,
+        "state_norm": 13036.751953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 16128,
+        "nll": 6.664280414581299,
+        "gradient_norm": 1.5924607515335083,
+        "state_norm": 12650.0068359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 16384,
+        "nll": 6.657230854034424,
+        "gradient_norm": 1.5812652111053467,
+        "state_norm": 11262.1181640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 16640,
+        "nll": 6.644435405731201,
+        "gradient_norm": 1.5828973054885864,
+        "state_norm": 14000.4443359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 16896,
+        "nll": 6.612038612365723,
+        "gradient_norm": 1.640088438987732,
+        "state_norm": 13240.9150390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 17152,
+        "nll": 6.631102085113525,
+        "gradient_norm": 1.5825822353363037,
+        "state_norm": 13437.7412109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 17408,
+        "nll": 6.780835151672363,
+        "gradient_norm": 1.4154566526412964,
+        "state_norm": 15416.6337890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 17664,
+        "nll": 6.761795520782471,
+        "gradient_norm": 1.47385835647583,
+        "state_norm": 16720.333984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 17920,
+        "nll": 6.507299900054932,
+        "gradient_norm": 1.9738636016845703,
+        "state_norm": 11411.6318359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 18176,
+        "nll": 6.582138538360596,
+        "gradient_norm": 1.4733985662460327,
+        "state_norm": 13225.677734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 18432,
+        "nll": 6.442361831665039,
+        "gradient_norm": 1.7886674404144287,
+        "state_norm": 13487.9833984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 18688,
+        "nll": 6.625919342041016,
+        "gradient_norm": 1.9368388652801514,
+        "state_norm": 10705.4912109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 18944,
+        "nll": 6.46354341506958,
+        "gradient_norm": 1.5541419982910156,
+        "state_norm": 11764.6416015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 19200,
+        "nll": 6.51251220703125,
+        "gradient_norm": 1.5657998323440552,
+        "state_norm": 12256.3046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 19456,
+        "nll": 6.5251874923706055,
+        "gradient_norm": 1.5058387517929077,
+        "state_norm": 15653.0859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 19712,
+        "nll": 6.4614481925964355,
+        "gradient_norm": 1.5118712186813354,
+        "state_norm": 12657.720703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 19968,
+        "nll": 6.200124740600586,
+        "gradient_norm": 1.687793254852295,
+        "state_norm": 11991.14453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 20224,
+        "nll": 6.4842963218688965,
+        "gradient_norm": 1.5500028133392334,
+        "state_norm": 13627.646484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 20480,
+        "nll": 6.442404747009277,
+        "gradient_norm": 1.531461238861084,
+        "state_norm": 14818.9619140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 20736,
+        "nll": 6.375164985656738,
+        "gradient_norm": 1.8202695846557617,
+        "state_norm": 9565.095703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 20992,
+        "nll": 6.517393589019775,
+        "gradient_norm": 1.280753254890442,
+        "state_norm": 14083.751953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 21248,
+        "nll": 6.501684188842773,
+        "gradient_norm": 1.1697148084640503,
+        "state_norm": 14342.359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 21504,
+        "nll": 6.519404411315918,
+        "gradient_norm": 1.2822449207305908,
+        "state_norm": 14294.9638671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 21760,
+        "nll": 6.484911918640137,
+        "gradient_norm": 1.2581286430358887,
+        "state_norm": 16478.21875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 22016,
+        "nll": 6.1514177322387695,
+        "gradient_norm": 1.6496999263763428,
+        "state_norm": 10349.16015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 22272,
+        "nll": 6.171199798583984,
+        "gradient_norm": 1.4356831312179565,
+        "state_norm": 14316.0068359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 22528,
+        "nll": 6.179787635803223,
+        "gradient_norm": 1.3884148597717285,
+        "state_norm": 14132.2744140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 22784,
+        "nll": 6.227099418640137,
+        "gradient_norm": 1.435740351676941,
+        "state_norm": 11919.0146484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 23040,
+        "nll": 5.987304210662842,
+        "gradient_norm": 1.5372765064239502,
+        "state_norm": 12922.4208984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 23296,
+        "nll": 6.242443561553955,
+        "gradient_norm": 1.4153721332550049,
+        "state_norm": 15571.5419921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 23552,
+        "nll": 6.000291347503662,
+        "gradient_norm": 1.5117031335830688,
+        "state_norm": 12814.4248046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 23808,
+        "nll": 6.0354228019714355,
+        "gradient_norm": 1.4063910245895386,
+        "state_norm": 14737.9658203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 24064,
+        "nll": 5.932255744934082,
+        "gradient_norm": 1.3010591268539429,
+        "state_norm": 11584.671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 24320,
+        "nll": 6.047115325927734,
+        "gradient_norm": 1.2698396444320679,
+        "state_norm": 11221.9345703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 24576,
+        "nll": 6.0570149421691895,
+        "gradient_norm": 1.3091264963150024,
+        "state_norm": 13852.1123046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 24832,
+        "nll": 6.08186149597168,
+        "gradient_norm": 1.2505826950073242,
+        "state_norm": 14675.2529296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 25088,
+        "nll": 6.074475288391113,
+        "gradient_norm": 1.347872018814087,
+        "state_norm": 12050.3984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 25344,
+        "nll": 6.034069538116455,
+        "gradient_norm": 1.2413758039474487,
+        "state_norm": 14101.197265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 25600,
+        "nll": 6.053622245788574,
+        "gradient_norm": 1.1834824085235596,
+        "state_norm": 16164.4169921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 25856,
+        "nll": 6.08840799331665,
+        "gradient_norm": 1.2597068548202515,
+        "state_norm": 11744.4892578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 26112,
+        "nll": 6.148547172546387,
+        "gradient_norm": 1.1589233875274658,
+        "state_norm": 13210.3662109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 26368,
+        "nll": 6.021270751953125,
+        "gradient_norm": 1.312756896018982,
+        "state_norm": 12297.6435546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 26624,
+        "nll": 6.204617023468018,
+        "gradient_norm": 1.1315935850143433,
+        "state_norm": 13818.3701171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 26880,
+        "nll": 6.216562747955322,
+        "gradient_norm": 1.2942932844161987,
+        "state_norm": 15969.068359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 27136,
+        "nll": 6.328522205352783,
+        "gradient_norm": 1.291203498840332,
+        "state_norm": 15708.7724609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 27392,
+        "nll": 5.941141605377197,
+        "gradient_norm": 1.2229564189910889,
+        "state_norm": 12735.4677734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 27648,
+        "nll": 5.944826126098633,
+        "gradient_norm": 1.3313307762145996,
+        "state_norm": 13709.470703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 27904,
+        "nll": 6.010082244873047,
+        "gradient_norm": 1.4965378046035767,
+        "state_norm": 15924.0068359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 28160,
+        "nll": 6.0056891441345215,
+        "gradient_norm": 1.3378021717071533,
+        "state_norm": 14796.9716796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 28416,
+        "nll": 5.951013565063477,
+        "gradient_norm": 1.3416849374771118,
+        "state_norm": 12388.0166015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 28672,
+        "nll": 5.8784637451171875,
+        "gradient_norm": 1.2297664880752563,
+        "state_norm": 14261.9921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 28928,
+        "nll": 5.92243766784668,
+        "gradient_norm": 1.3390684127807617,
+        "state_norm": 14032.5458984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 29184,
+        "nll": 5.784217834472656,
+        "gradient_norm": 1.849052906036377,
+        "state_norm": 8197.130859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 29440,
+        "nll": 6.189241886138916,
+        "gradient_norm": 1.2886953353881836,
+        "state_norm": 13291.134765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 29696,
+        "nll": 6.004024028778076,
+        "gradient_norm": 1.2627980709075928,
+        "state_norm": 15217.4921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 29952,
+        "nll": 5.7422380447387695,
+        "gradient_norm": 1.408463716506958,
+        "state_norm": 9029.8115234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 30208,
+        "nll": 5.788931846618652,
+        "gradient_norm": 1.4482097625732422,
+        "state_norm": 14549.529296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 30464,
+        "nll": 5.831456184387207,
+        "gradient_norm": 1.2340320348739624,
+        "state_norm": 13277.71875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 30720,
+        "nll": 5.9712138175964355,
+        "gradient_norm": 1.2955783605575562,
+        "state_norm": 12152.833984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 30976,
+        "nll": 5.823043346405029,
+        "gradient_norm": 1.2392361164093018,
+        "state_norm": 13223.9697265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 31232,
+        "nll": 5.7975382804870605,
+        "gradient_norm": 1.2999449968338013,
+        "state_norm": 8701.849609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 31488,
+        "nll": 5.696274757385254,
+        "gradient_norm": 1.4719207286834717,
+        "state_norm": 8680.2705078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 31744,
+        "nll": 6.043830871582031,
+        "gradient_norm": 1.3311288356781006,
+        "state_norm": 13599.091796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 32000,
+        "nll": 5.7035980224609375,
+        "gradient_norm": 2.5979747772216797,
+        "state_norm": 12781.5888671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 32256,
+        "nll": 5.8890886306762695,
+        "gradient_norm": 1.4163367748260498,
+        "state_norm": 11288.45703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 32512,
+        "nll": 5.93469762802124,
+        "gradient_norm": 1.4381062984466553,
+        "state_norm": 14179.0791015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 32768,
+        "nll": 5.844163417816162,
+        "gradient_norm": 1.379311203956604,
+        "state_norm": 16701.849609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 33024,
+        "nll": 5.708018779754639,
+        "gradient_norm": 1.6463607549667358,
+        "state_norm": 13905.23046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 33280,
+        "nll": 5.566362380981445,
+        "gradient_norm": 2.0031864643096924,
+        "state_norm": 12219.5068359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 33536,
+        "nll": 5.74130916595459,
+        "gradient_norm": 1.3132177591323853,
+        "state_norm": 14576.0537109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 33792,
+        "nll": 5.807347297668457,
+        "gradient_norm": 1.4947724342346191,
+        "state_norm": 15133.96484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 34048,
+        "nll": 5.572719097137451,
+        "gradient_norm": 1.6582939624786377,
+        "state_norm": 10850.3994140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 34304,
+        "nll": 5.789577007293701,
+        "gradient_norm": 1.4809882640838623,
+        "state_norm": 12452.8232421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 34560,
+        "nll": 5.59248161315918,
+        "gradient_norm": 1.4821453094482422,
+        "state_norm": 14884.6748046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 34816,
+        "nll": 5.764444351196289,
+        "gradient_norm": 1.4138606786727905,
+        "state_norm": 14100.994140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 35072,
+        "nll": 5.7780351638793945,
+        "gradient_norm": 1.4709184169769287,
+        "state_norm": 12783.62109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 35328,
+        "nll": 5.61152458190918,
+        "gradient_norm": 1.4333349466323853,
+        "state_norm": 8012.04736328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 35584,
+        "nll": 5.771817684173584,
+        "gradient_norm": 1.385559320449829,
+        "state_norm": 13885.4453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 35840,
+        "nll": 5.595992088317871,
+        "gradient_norm": 1.4193768501281738,
+        "state_norm": 14293.6337890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 36096,
+        "nll": 6.12192964553833,
+        "gradient_norm": 1.5868247747421265,
+        "state_norm": 15277.0205078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 36352,
+        "nll": 6.135581016540527,
+        "gradient_norm": 1.4710371494293213,
+        "state_norm": 15057.779296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 36608,
+        "nll": 5.884947776794434,
+        "gradient_norm": 1.5380442142486572,
+        "state_norm": 10801.2099609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 36864,
+        "nll": 6.005433559417725,
+        "gradient_norm": 1.509886384010315,
+        "state_norm": 14907.322265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 37120,
+        "nll": 6.0634965896606445,
+        "gradient_norm": 1.3612762689590454,
+        "state_norm": 13956.0537109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 37376,
+        "nll": 5.6456499099731445,
+        "gradient_norm": 1.5163815021514893,
+        "state_norm": 8753.93359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 37632,
+        "nll": 5.741917133331299,
+        "gradient_norm": 1.5612131357192993,
+        "state_norm": 15005.9326171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 37888,
+        "nll": 5.841287612915039,
+        "gradient_norm": 1.419822096824646,
+        "state_norm": 15643.0478515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 38144,
+        "nll": 5.601406574249268,
+        "gradient_norm": 1.4523465633392334,
+        "state_norm": 14202.7353515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 38400,
+        "nll": 5.978100299835205,
+        "gradient_norm": 1.5622329711914062,
+        "state_norm": 15556.291015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 38656,
+        "nll": 5.693668365478516,
+        "gradient_norm": 1.399129033088684,
+        "state_norm": 11582.2431640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 38912,
+        "nll": 5.8618268966674805,
+        "gradient_norm": 1.7386772632598877,
+        "state_norm": 13662.1904296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 39168,
+        "nll": 5.791584491729736,
+        "gradient_norm": 1.4396657943725586,
+        "state_norm": 16659.0625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 39424,
+        "nll": 5.670809268951416,
+        "gradient_norm": 1.7212989330291748,
+        "state_norm": 15562.9873046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 39680,
+        "nll": 5.586491584777832,
+        "gradient_norm": 1.8606131076812744,
+        "state_norm": 15471.390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 39936,
+        "nll": 5.723310947418213,
+        "gradient_norm": 2.220264196395874,
+        "state_norm": 14128.42578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 40192,
+        "nll": 5.678765296936035,
+        "gradient_norm": 1.8682503700256348,
+        "state_norm": 12808.1923828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 40448,
+        "nll": 5.883030414581299,
+        "gradient_norm": 1.7088466882705688,
+        "state_norm": 12554.3671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 40704,
+        "nll": 5.453495025634766,
+        "gradient_norm": 1.531734824180603,
+        "state_norm": 12864.91015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 40960,
+        "nll": 5.510799884796143,
+        "gradient_norm": 1.5370644330978394,
+        "state_norm": 11454.2333984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 41216,
+        "nll": 5.680818557739258,
+        "gradient_norm": 1.4817036390304565,
+        "state_norm": 14181.796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 41472,
+        "nll": 5.320650577545166,
+        "gradient_norm": 1.5691026449203491,
+        "state_norm": 11169.5322265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 41728,
+        "nll": 5.71641206741333,
+        "gradient_norm": 1.5821536779403687,
+        "state_norm": 12876.9365234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 41984,
+        "nll": 5.543509006500244,
+        "gradient_norm": 1.457603096961975,
+        "state_norm": 14033.283203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 42240,
+        "nll": 5.817770481109619,
+        "gradient_norm": 1.5310306549072266,
+        "state_norm": 12313.6845703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 42496,
+        "nll": 5.644604682922363,
+        "gradient_norm": 1.5582027435302734,
+        "state_norm": 13903.8125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 42752,
+        "nll": 5.724161624908447,
+        "gradient_norm": 1.716364860534668,
+        "state_norm": 15392.0107421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 43008,
+        "nll": 5.784746170043945,
+        "gradient_norm": 1.5604476928710938,
+        "state_norm": 14510.4765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 43264,
+        "nll": 5.7657880783081055,
+        "gradient_norm": 1.4519270658493042,
+        "state_norm": 13362.302734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 43520,
+        "nll": 5.606464385986328,
+        "gradient_norm": 1.617127537727356,
+        "state_norm": 11714.6455078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 43776,
+        "nll": 5.749998092651367,
+        "gradient_norm": 1.849704384803772,
+        "state_norm": 13000.38671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 44032,
+        "nll": 5.503077507019043,
+        "gradient_norm": 1.6988075971603394,
+        "state_norm": 13780.9150390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 44288,
+        "nll": 5.504819393157959,
+        "gradient_norm": 1.440213680267334,
+        "state_norm": 10268.013671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 44544,
+        "nll": 5.386127948760986,
+        "gradient_norm": 1.7063881158828735,
+        "state_norm": 12360.6240234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 44800,
+        "nll": 5.627049446105957,
+        "gradient_norm": 1.8148680925369263,
+        "state_norm": 14472.0439453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 45056,
+        "nll": 5.612663745880127,
+        "gradient_norm": 1.7037980556488037,
+        "state_norm": 15820.263671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 45312,
+        "nll": 5.529378414154053,
+        "gradient_norm": 1.546860933303833,
+        "state_norm": 13212.05859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 45568,
+        "nll": 5.519687652587891,
+        "gradient_norm": 1.7067346572875977,
+        "state_norm": 13078.1708984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 45824,
+        "nll": 5.503228664398193,
+        "gradient_norm": 1.7893708944320679,
+        "state_norm": 13515.162109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 46080,
+        "nll": 5.741186141967773,
+        "gradient_norm": 1.6143804788589478,
+        "state_norm": 13066.0712890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 46336,
+        "nll": 5.631685733795166,
+        "gradient_norm": 1.8799054622650146,
+        "state_norm": 12990.255859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 46592,
+        "nll": 5.619110107421875,
+        "gradient_norm": 1.828729510307312,
+        "state_norm": 12615.515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 46848,
+        "nll": 5.7668137550354,
+        "gradient_norm": 1.5617966651916504,
+        "state_norm": 14752.8525390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 47104,
+        "nll": 5.388815879821777,
+        "gradient_norm": 2.2140636444091797,
+        "state_norm": 12875.3095703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 47360,
+        "nll": 5.640385150909424,
+        "gradient_norm": 2.3405022621154785,
+        "state_norm": 14772.5439453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 47616,
+        "nll": 5.70903205871582,
+        "gradient_norm": 2.381716728210449,
+        "state_norm": 13850.8447265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 47872,
+        "nll": 5.448392391204834,
+        "gradient_norm": 1.95380699634552,
+        "state_norm": 10617.0986328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 48128,
+        "nll": 5.270474910736084,
+        "gradient_norm": 1.8977080583572388,
+        "state_norm": 15848.765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 48384,
+        "nll": 5.663871765136719,
+        "gradient_norm": 1.665181279182434,
+        "state_norm": 11980.955078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 48640,
+        "nll": 5.358201026916504,
+        "gradient_norm": 1.7414090633392334,
+        "state_norm": 11915.11328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 48896,
+        "nll": 5.4384446144104,
+        "gradient_norm": 1.4644936323165894,
+        "state_norm": 15971.3583984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 49152,
+        "nll": 5.5608720779418945,
+        "gradient_norm": 1.9796093702316284,
+        "state_norm": 15996.23828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 49408,
+        "nll": 5.124195575714111,
+        "gradient_norm": 1.6951701641082764,
+        "state_norm": 9595.9970703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 49664,
+        "nll": 5.351836204528809,
+        "gradient_norm": 1.7268744707107544,
+        "state_norm": 12618.4833984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 49920,
+        "nll": 5.388424873352051,
+        "gradient_norm": 1.8243749141693115,
+        "state_norm": 13730.7412109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 50176,
+        "nll": 5.378317832946777,
+        "gradient_norm": 1.5457557439804077,
+        "state_norm": 12134.8330078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 50432,
+        "nll": 5.614063739776611,
+        "gradient_norm": 2.1119935512542725,
+        "state_norm": 13577.2890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 50688,
+        "nll": 5.344473838806152,
+        "gradient_norm": 1.6831316947937012,
+        "state_norm": 12473.3173828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 50944,
+        "nll": 5.480763912200928,
+        "gradient_norm": 1.855484962463379,
+        "state_norm": 12104.1689453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 51200,
+        "nll": 5.505542755126953,
+        "gradient_norm": 2.0441501140594482,
+        "state_norm": 14926.65625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 51456,
+        "nll": 5.486454486846924,
+        "gradient_norm": 2.3562045097351074,
+        "state_norm": 13938.7021484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 51712,
+        "nll": 5.639566898345947,
+        "gradient_norm": 1.783636450767517,
+        "state_norm": 12425.0380859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 51968,
+        "nll": 5.070274829864502,
+        "gradient_norm": 2.0942602157592773,
+        "state_norm": 10357.1845703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 52224,
+        "nll": 5.2087082862854,
+        "gradient_norm": 2.4023592472076416,
+        "state_norm": 13048.8212890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 52480,
+        "nll": 5.382346153259277,
+        "gradient_norm": 1.7508227825164795,
+        "state_norm": 11976.732421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 52736,
+        "nll": 5.3870062828063965,
+        "gradient_norm": 2.4832749366760254,
+        "state_norm": 9973.53515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 52992,
+        "nll": 5.729836940765381,
+        "gradient_norm": 2.2870256900787354,
+        "state_norm": 15002.712890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 53248,
+        "nll": 5.679818153381348,
+        "gradient_norm": 1.9769736528396606,
+        "state_norm": 16559.87890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 53504,
+        "nll": 5.266541481018066,
+        "gradient_norm": 1.9786031246185303,
+        "state_norm": 10240.447265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 53760,
+        "nll": 5.026878833770752,
+        "gradient_norm": 2.335543394088745,
+        "state_norm": 11757.8662109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 54016,
+        "nll": 5.392642021179199,
+        "gradient_norm": 2.16036319732666,
+        "state_norm": 12939.7529296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 54272,
+        "nll": 5.402749061584473,
+        "gradient_norm": 2.1742870807647705,
+        "state_norm": 12917.408203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 54528,
+        "nll": 5.608259677886963,
+        "gradient_norm": 2.2789273262023926,
+        "state_norm": 14404.6982421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 54784,
+        "nll": 5.465300559997559,
+        "gradient_norm": 2.032639741897583,
+        "state_norm": 14375.2119140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 55040,
+        "nll": 5.5258917808532715,
+        "gradient_norm": 2.471144676208496,
+        "state_norm": 15200.61328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 55296,
+        "nll": 5.335801124572754,
+        "gradient_norm": 2.6340136528015137,
+        "state_norm": 14307.486328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 55552,
+        "nll": 5.282758712768555,
+        "gradient_norm": 2.2587227821350098,
+        "state_norm": 12063.8330078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 55808,
+        "nll": 5.440296173095703,
+        "gradient_norm": 2.104705810546875,
+        "state_norm": 14349.068359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 56064,
+        "nll": 5.215722560882568,
+        "gradient_norm": 3.2410500049591064,
+        "state_norm": 13533.427734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 56320,
+        "nll": 5.377502918243408,
+        "gradient_norm": 2.3540165424346924,
+        "state_norm": 14379.6025390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 56576,
+        "nll": 5.131917476654053,
+        "gradient_norm": 2.0166656970977783,
+        "state_norm": 14129.9453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 56832,
+        "nll": 5.220468997955322,
+        "gradient_norm": 1.8855127096176147,
+        "state_norm": 9893.322265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 57088,
+        "nll": 5.165581703186035,
+        "gradient_norm": 2.080840587615967,
+        "state_norm": 11685.1279296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 57344,
+        "nll": 5.773536205291748,
+        "gradient_norm": 2.426532506942749,
+        "state_norm": 16160.4609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 57600,
+        "nll": 5.356631755828857,
+        "gradient_norm": 2.0154662132263184,
+        "state_norm": 13146.2568359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 57856,
+        "nll": 5.399969577789307,
+        "gradient_norm": 2.290555715560913,
+        "state_norm": 8976.1259765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 58112,
+        "nll": 5.418340682983398,
+        "gradient_norm": 2.2846522331237793,
+        "state_norm": 13787.255859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 58368,
+        "nll": 5.537530422210693,
+        "gradient_norm": 2.2190489768981934,
+        "state_norm": 16006.603515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 58624,
+        "nll": 5.1440110206604,
+        "gradient_norm": 2.262312889099121,
+        "state_norm": 9755.1513671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 58880,
+        "nll": 5.355484962463379,
+        "gradient_norm": 2.4207003116607666,
+        "state_norm": 14146.208984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 59136,
+        "nll": 5.268703460693359,
+        "gradient_norm": 2.1051225662231445,
+        "state_norm": 16091.431640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 59392,
+        "nll": 5.311919689178467,
+        "gradient_norm": 2.097003221511841,
+        "state_norm": 14946.3369140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 59648,
+        "nll": 5.040021896362305,
+        "gradient_norm": 1.9541374444961548,
+        "state_norm": 12128.7587890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 59904,
+        "nll": 5.1930952072143555,
+        "gradient_norm": 2.188406467437744,
+        "state_norm": 15603.3642578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 60160,
+        "nll": 5.053930759429932,
+        "gradient_norm": 1.7179425954818726,
+        "state_norm": 14440.966796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 60416,
+        "nll": 5.244454383850098,
+        "gradient_norm": 1.7357887029647827,
+        "state_norm": 13597.8740234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 60672,
+        "nll": 5.4377522468566895,
+        "gradient_norm": 1.9623242616653442,
+        "state_norm": 15212.64453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 60928,
+        "nll": 5.502551078796387,
+        "gradient_norm": 1.7949162721633911,
+        "state_norm": 15997.1494140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 61184,
+        "nll": 5.043453216552734,
+        "gradient_norm": 1.908847689628601,
+        "state_norm": 10735.2998046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 61440,
+        "nll": 5.234579563140869,
+        "gradient_norm": 2.4042160511016846,
+        "state_norm": 12159.345703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 61696,
+        "nll": 5.200193405151367,
+        "gradient_norm": 2.471468448638916,
+        "state_norm": 14924.9169921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 61952,
+        "nll": 5.272570610046387,
+        "gradient_norm": 1.8355103731155396,
+        "state_norm": 12226.9345703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 62208,
+        "nll": 5.177810192108154,
+        "gradient_norm": 1.8704516887664795,
+        "state_norm": 11213.47265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 62464,
+        "nll": 5.40895414352417,
+        "gradient_norm": 1.9614129066467285,
+        "state_norm": 15036.70703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 62720,
+        "nll": 5.289618968963623,
+        "gradient_norm": 1.8726845979690552,
+        "state_norm": 16251.763671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 62976,
+        "nll": 5.27350378036499,
+        "gradient_norm": 1.8093128204345703,
+        "state_norm": 12542.6376953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 63232,
+        "nll": 5.213686943054199,
+        "gradient_norm": 2.206827163696289,
+        "state_norm": 12891.0556640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 63488,
+        "nll": 5.219061374664307,
+        "gradient_norm": 1.8307727575302124,
+        "state_norm": 15309.6142578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 63744,
+        "nll": 5.138424873352051,
+        "gradient_norm": 1.8764981031417847,
+        "state_norm": 9714.41015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 64000,
+        "nll": 5.287691593170166,
+        "gradient_norm": 2.0461905002593994,
+        "state_norm": 12618.75390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 64256,
+        "nll": 5.330938816070557,
+        "gradient_norm": 2.4940648078918457,
+        "state_norm": 15527.13671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 64512,
+        "nll": 5.543757915496826,
+        "gradient_norm": 2.4297239780426025,
+        "state_norm": 14097.6328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 64768,
+        "nll": 5.282664775848389,
+        "gradient_norm": 2.282684564590454,
+        "state_norm": 15246.732421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 65024,
+        "nll": 5.30952787399292,
+        "gradient_norm": 2.1823182106018066,
+        "state_norm": 15593.126953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 65280,
+        "nll": 5.321541786193848,
+        "gradient_norm": 1.9267470836639404,
+        "state_norm": 15969.3837890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 65536,
+        "nll": 5.1088714599609375,
+        "gradient_norm": 1.8147960901260376,
+        "state_norm": 9120.9453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 65792,
+        "nll": 5.590524196624756,
+        "gradient_norm": 1.9182865619659424,
+        "state_norm": 14690.578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 66048,
+        "nll": 5.43841552734375,
+        "gradient_norm": 1.827219009399414,
+        "state_norm": 15548.43359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 66304,
+        "nll": 5.085301399230957,
+        "gradient_norm": 1.798271894454956,
+        "state_norm": 11312.2177734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 66560,
+        "nll": 5.211989402770996,
+        "gradient_norm": 1.8307751417160034,
+        "state_norm": 12303.90234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 66816,
+        "nll": 5.174810886383057,
+        "gradient_norm": 1.7356947660446167,
+        "state_norm": 15667.3681640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 67072,
+        "nll": 4.585092544555664,
+        "gradient_norm": 2.3180811405181885,
+        "state_norm": 11055.177734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 67328,
+        "nll": 5.404751300811768,
+        "gradient_norm": 2.0744879245758057,
+        "state_norm": 15021.263671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 67584,
+        "nll": 5.02415657043457,
+        "gradient_norm": 1.9117358922958374,
+        "state_norm": 14069.142578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 67840,
+        "nll": 4.8430328369140625,
+        "gradient_norm": 1.9998811483383179,
+        "state_norm": 10452.787109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 68096,
+        "nll": 5.282865524291992,
+        "gradient_norm": 2.139962673187256,
+        "state_norm": 12677.5771484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 68352,
+        "nll": 5.6364617347717285,
+        "gradient_norm": 2.8372368812561035,
+        "state_norm": 15094.353515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 68608,
+        "nll": 5.060918807983398,
+        "gradient_norm": 2.2437069416046143,
+        "state_norm": 11514.5498046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 68864,
+        "nll": 5.340106010437012,
+        "gradient_norm": 2.01269268989563,
+        "state_norm": 12550.9853515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 69120,
+        "nll": 5.191536903381348,
+        "gradient_norm": 1.9463555812835693,
+        "state_norm": 14400.7607421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 69376,
+        "nll": 5.128592491149902,
+        "gradient_norm": 2.2569310665130615,
+        "state_norm": 14013.041015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 69632,
+        "nll": 5.275149822235107,
+        "gradient_norm": 2.282517910003662,
+        "state_norm": 11721.26953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 69888,
+        "nll": 5.527844429016113,
+        "gradient_norm": 1.9981539249420166,
+        "state_norm": 13951.5771484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 70144,
+        "nll": 5.457240104675293,
+        "gradient_norm": 2.089526653289795,
+        "state_norm": 14821.1943359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 70400,
+        "nll": 5.438990592956543,
+        "gradient_norm": 2.0133275985717773,
+        "state_norm": 13702.9541015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 70656,
+        "nll": 5.3874969482421875,
+        "gradient_norm": 1.9614205360412598,
+        "state_norm": 9597.1689453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 70912,
+        "nll": 5.181277275085449,
+        "gradient_norm": 2.13083553314209,
+        "state_norm": 11665.48046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 71168,
+        "nll": 5.1078901290893555,
+        "gradient_norm": 2.259148120880127,
+        "state_norm": 14555.357421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 71424,
+        "nll": 5.045674800872803,
+        "gradient_norm": 1.664466381072998,
+        "state_norm": 11576.9091796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 71680,
+        "nll": 4.87122917175293,
+        "gradient_norm": 1.8388134241104126,
+        "state_norm": 11353.66796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 71936,
+        "nll": 4.9546427726745605,
+        "gradient_norm": 1.9935767650604248,
+        "state_norm": 14963.1005859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 72192,
+        "nll": 5.171934127807617,
+        "gradient_norm": 1.8585700988769531,
+        "state_norm": 10473.7568359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 72448,
+        "nll": 5.100985050201416,
+        "gradient_norm": 2.0909671783447266,
+        "state_norm": 12575.51953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 72704,
+        "nll": 5.241633892059326,
+        "gradient_norm": 2.0294153690338135,
+        "state_norm": 15829.29296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 72960,
+        "nll": 5.087958812713623,
+        "gradient_norm": 2.0539984703063965,
+        "state_norm": 14400.3154296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 73216,
+        "nll": 4.76369047164917,
+        "gradient_norm": 2.0711445808410645,
+        "state_norm": 14356.9404296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 73472,
+        "nll": 5.084475517272949,
+        "gradient_norm": 1.8389009237289429,
+        "state_norm": 12026.2841796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 73728,
+        "nll": 4.996049404144287,
+        "gradient_norm": 2.080491781234741,
+        "state_norm": 10847.337890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 73984,
+        "nll": 4.9068169593811035,
+        "gradient_norm": 1.9755438566207886,
+        "state_norm": 12872.4130859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 74240,
+        "nll": 4.825223445892334,
+        "gradient_norm": 1.9152213335037231,
+        "state_norm": 11276.1943359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 74496,
+        "nll": 5.3111572265625,
+        "gradient_norm": 2.2818174362182617,
+        "state_norm": 15103.4599609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 74752,
+        "nll": 4.93258810043335,
+        "gradient_norm": 2.2662274837493896,
+        "state_norm": 13307.134765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 75008,
+        "nll": 5.089656829833984,
+        "gradient_norm": 2.0571749210357666,
+        "state_norm": 10781.0654296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 75264,
+        "nll": 5.01724100112915,
+        "gradient_norm": 2.0206780433654785,
+        "state_norm": 15012.65234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 75520,
+        "nll": 5.168949127197266,
+        "gradient_norm": 1.9897639751434326,
+        "state_norm": 14474.5947265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 75776,
+        "nll": 5.034726619720459,
+        "gradient_norm": 1.9268349409103394,
+        "state_norm": 11338.9326171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 76032,
+        "nll": 5.433806419372559,
+        "gradient_norm": 2.0288779735565186,
+        "state_norm": 14710.390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 76288,
+        "nll": 5.333971977233887,
+        "gradient_norm": 2.363245725631714,
+        "state_norm": 13760.0556640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 76544,
+        "nll": 5.679280757904053,
+        "gradient_norm": 2.1523611545562744,
+        "state_norm": 13277.439453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 76800,
+        "nll": 5.216962814331055,
+        "gradient_norm": 2.181309700012207,
+        "state_norm": 14953.048828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 77056,
+        "nll": 5.180531978607178,
+        "gradient_norm": 2.550847291946411,
+        "state_norm": 16575.83984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 77312,
+        "nll": 5.148209095001221,
+        "gradient_norm": 2.2516603469848633,
+        "state_norm": 14888.6298828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 77568,
+        "nll": 4.58459997177124,
+        "gradient_norm": 1.9302347898483276,
+        "state_norm": 10876.8173828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 77824,
+        "nll": 4.908515453338623,
+        "gradient_norm": 1.94648277759552,
+        "state_norm": 13268.736328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 78080,
+        "nll": 5.208783149719238,
+        "gradient_norm": 2.2339844703674316,
+        "state_norm": 14441.7021484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 78336,
+        "nll": 5.222873210906982,
+        "gradient_norm": 1.8775808811187744,
+        "state_norm": 7828.11572265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 78592,
+        "nll": 5.256673336029053,
+        "gradient_norm": 2.2185373306274414,
+        "state_norm": 13743.751953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 78848,
+        "nll": 5.316455841064453,
+        "gradient_norm": 2.0143585205078125,
+        "state_norm": 14117.6123046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 79104,
+        "nll": 5.426426410675049,
+        "gradient_norm": 2.009885311126709,
+        "state_norm": 15643.529296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 79360,
+        "nll": 5.0866522789001465,
+        "gradient_norm": 2.145094633102417,
+        "state_norm": 12297.1298828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 79616,
+        "nll": 5.029695987701416,
+        "gradient_norm": 2.4000027179718018,
+        "state_norm": 12242.509765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 79872,
+        "nll": 4.864928245544434,
+        "gradient_norm": 2.173959732055664,
+        "state_norm": 11963.421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 80128,
+        "nll": 4.996232032775879,
+        "gradient_norm": 2.2788124084472656,
+        "state_norm": 11958.306640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 80384,
+        "nll": 4.84611701965332,
+        "gradient_norm": 2.184723377227783,
+        "state_norm": 12540.486328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 80640,
+        "nll": 5.304784297943115,
+        "gradient_norm": 2.0447916984558105,
+        "state_norm": 15757.04296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 80896,
+        "nll": 4.632466793060303,
+        "gradient_norm": 1.862468957901001,
+        "state_norm": 11171.0205078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 81152,
+        "nll": 4.9406256675720215,
+        "gradient_norm": 2.0313379764556885,
+        "state_norm": 15124.7080078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 81408,
+        "nll": 5.1720452308654785,
+        "gradient_norm": 2.0893402099609375,
+        "state_norm": 15297.9970703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 81664,
+        "nll": 4.977858543395996,
+        "gradient_norm": 1.9439430236816406,
+        "state_norm": 11879.5595703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 81920,
+        "nll": 4.6984405517578125,
+        "gradient_norm": 1.919103741645813,
+        "state_norm": 13420.943359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 82176,
+        "nll": 5.152318000793457,
+        "gradient_norm": 1.9136583805084229,
+        "state_norm": 13451.2373046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 82432,
+        "nll": 5.405515670776367,
+        "gradient_norm": 1.959518551826477,
+        "state_norm": 15393.8369140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 82688,
+        "nll": 4.979983806610107,
+        "gradient_norm": 2.5508193969726562,
+        "state_norm": 15506.3515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 82944,
+        "nll": 5.343593597412109,
+        "gradient_norm": 2.285947799682617,
+        "state_norm": 12808.982421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 83200,
+        "nll": 4.911245346069336,
+        "gradient_norm": 2.0938973426818848,
+        "state_norm": 13872.7109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 83456,
+        "nll": 5.2102437019348145,
+        "gradient_norm": 1.9112839698791504,
+        "state_norm": 12052.5732421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 83712,
+        "nll": 5.17496395111084,
+        "gradient_norm": 2.0528037548065186,
+        "state_norm": 14931.376953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 83968,
+        "nll": 5.115884780883789,
+        "gradient_norm": 2.0396087169647217,
+        "state_norm": 10254.0439453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 84224,
+        "nll": 5.0082879066467285,
+        "gradient_norm": 2.123856544494629,
+        "state_norm": 12346.650390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 84480,
+        "nll": 5.265872955322266,
+        "gradient_norm": 1.8532218933105469,
+        "state_norm": 15101.19921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 84736,
+        "nll": 5.307199954986572,
+        "gradient_norm": 2.1462764739990234,
+        "state_norm": 17145.703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 84992,
+        "nll": 4.948147773742676,
+        "gradient_norm": 2.0176429748535156,
+        "state_norm": 10538.263671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 85248,
+        "nll": 5.448455810546875,
+        "gradient_norm": 2.146725654602051,
+        "state_norm": 11012.7392578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 85504,
+        "nll": 5.190382480621338,
+        "gradient_norm": 1.9636106491088867,
+        "state_norm": 12566.26953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 85760,
+        "nll": 4.929659843444824,
+        "gradient_norm": 2.184857130050659,
+        "state_norm": 12285.001953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 86016,
+        "nll": 4.72281551361084,
+        "gradient_norm": 2.3289530277252197,
+        "state_norm": 13553.95703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 86272,
+        "nll": 5.2353901863098145,
+        "gradient_norm": 2.1440658569335938,
+        "state_norm": 16495.884765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 86528,
+        "nll": 5.288681983947754,
+        "gradient_norm": 2.285094738006592,
+        "state_norm": 17188.228515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 86784,
+        "nll": 5.064314842224121,
+        "gradient_norm": 2.046924114227295,
+        "state_norm": 12879.5009765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 87040,
+        "nll": 4.984875202178955,
+        "gradient_norm": 2.1568849086761475,
+        "state_norm": 11719.8876953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 87296,
+        "nll": 5.153203010559082,
+        "gradient_norm": 2.2834155559539795,
+        "state_norm": 13443.65234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 87552,
+        "nll": 5.471508502960205,
+        "gradient_norm": 2.080115556716919,
+        "state_norm": 14058.306640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 87808,
+        "nll": 5.069916248321533,
+        "gradient_norm": 2.176551342010498,
+        "state_norm": 13450.55078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 88064,
+        "nll": 5.340973377227783,
+        "gradient_norm": 2.102832078933716,
+        "state_norm": 15325.6259765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 88320,
+        "nll": 4.905688762664795,
+        "gradient_norm": 1.8718122243881226,
+        "state_norm": 11447.7626953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 88576,
+        "nll": 4.83834171295166,
+        "gradient_norm": 2.402149200439453,
+        "state_norm": 11231.296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 88832,
+        "nll": 5.192238807678223,
+        "gradient_norm": 2.131669759750366,
+        "state_norm": 14588.396484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 89088,
+        "nll": 5.092395782470703,
+        "gradient_norm": 2.0393006801605225,
+        "state_norm": 14567.06640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 89344,
+        "nll": 4.841726303100586,
+        "gradient_norm": 1.9760187864303589,
+        "state_norm": 13736.5400390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 89600,
+        "nll": 4.87395715713501,
+        "gradient_norm": 2.0795719623565674,
+        "state_norm": 11500.5419921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 89856,
+        "nll": 5.090381145477295,
+        "gradient_norm": 2.2377097606658936,
+        "state_norm": 15315.0927734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 90112,
+        "nll": 5.091777801513672,
+        "gradient_norm": 1.7841700315475464,
+        "state_norm": 14469.7568359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 90368,
+        "nll": 5.343898296356201,
+        "gradient_norm": 2.1100587844848633,
+        "state_norm": 14573.8095703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 90624,
+        "nll": 4.984913349151611,
+        "gradient_norm": 1.9885823726654053,
+        "state_norm": 13968.0732421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 90880,
+        "nll": 4.908273696899414,
+        "gradient_norm": 2.018015146255493,
+        "state_norm": 13009.369140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 91136,
+        "nll": 4.889057159423828,
+        "gradient_norm": 2.3626904487609863,
+        "state_norm": 11357.32421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 91392,
+        "nll": 4.8027167320251465,
+        "gradient_norm": 2.5932884216308594,
+        "state_norm": 12702.1513671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 91648,
+        "nll": 4.997961521148682,
+        "gradient_norm": 2.379392623901367,
+        "state_norm": 12835.845703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 91904,
+        "nll": 4.77215051651001,
+        "gradient_norm": 2.1825108528137207,
+        "state_norm": 11919.2431640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 92160,
+        "nll": 4.786614894866943,
+        "gradient_norm": 2.6961889266967773,
+        "state_norm": 12085.7109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 92416,
+        "nll": 4.546822547912598,
+        "gradient_norm": 2.992152452468872,
+        "state_norm": 10509.9287109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 92672,
+        "nll": 4.561435222625732,
+        "gradient_norm": 2.1305902004241943,
+        "state_norm": 14131.8212890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 92928,
+        "nll": 4.659925937652588,
+        "gradient_norm": 2.3606648445129395,
+        "state_norm": 7599.01953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 93184,
+        "nll": 4.930281639099121,
+        "gradient_norm": 2.1864492893218994,
+        "state_norm": 12750.8095703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 93440,
+        "nll": 4.6399970054626465,
+        "gradient_norm": 1.9903541803359985,
+        "state_norm": 14664.0908203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 93696,
+        "nll": 4.594162940979004,
+        "gradient_norm": 1.861323356628418,
+        "state_norm": 12210.7021484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 93952,
+        "nll": 5.175835609436035,
+        "gradient_norm": 2.2616636753082275,
+        "state_norm": 12440.666015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 94208,
+        "nll": 5.204548358917236,
+        "gradient_norm": 2.3127329349517822,
+        "state_norm": 15262.1181640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 94464,
+        "nll": 4.796895980834961,
+        "gradient_norm": 1.9606050252914429,
+        "state_norm": 12495.421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 94720,
+        "nll": 5.156966686248779,
+        "gradient_norm": 2.119900941848755,
+        "state_norm": 13679.8408203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 94976,
+        "nll": 5.270036697387695,
+        "gradient_norm": 2.27347993850708,
+        "state_norm": 16075.7490234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 95232,
+        "nll": 5.061978340148926,
+        "gradient_norm": 1.9241737127304077,
+        "state_norm": 10582.7568359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 95488,
+        "nll": 5.086781024932861,
+        "gradient_norm": 1.847873330116272,
+        "state_norm": 13965.203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 95744,
+        "nll": 5.06791353225708,
+        "gradient_norm": 1.8287302255630493,
+        "state_norm": 13274.115234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 96000,
+        "nll": 5.074288845062256,
+        "gradient_norm": 1.9690650701522827,
+        "state_norm": 15075.38671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 96256,
+        "nll": 4.993696212768555,
+        "gradient_norm": 1.8999664783477783,
+        "state_norm": 13714.490234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 96512,
+        "nll": 5.244451999664307,
+        "gradient_norm": 2.061769485473633,
+        "state_norm": 13702.560546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 96768,
+        "nll": 5.257667064666748,
+        "gradient_norm": 2.1402769088745117,
+        "state_norm": 11454.466796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 97024,
+        "nll": 4.93671178817749,
+        "gradient_norm": 1.9976216554641724,
+        "state_norm": 11835.533203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 97280,
+        "nll": 5.142369747161865,
+        "gradient_norm": 2.621248960494995,
+        "state_norm": 13287.3779296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 97536,
+        "nll": 4.929506301879883,
+        "gradient_norm": 2.3419055938720703,
+        "state_norm": 12295.9970703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 97792,
+        "nll": 5.004411220550537,
+        "gradient_norm": 2.582484006881714,
+        "state_norm": 10189.2890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 98048,
+        "nll": 5.10357666015625,
+        "gradient_norm": 2.109623432159424,
+        "state_norm": 14080.5146484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 98304,
+        "nll": 5.20864725112915,
+        "gradient_norm": 2.1167666912078857,
+        "state_norm": 13443.146484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 98560,
+        "nll": 5.315722942352295,
+        "gradient_norm": 2.5703485012054443,
+        "state_norm": 15220.5712890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 98816,
+        "nll": 5.184299945831299,
+        "gradient_norm": 2.0943386554718018,
+        "state_norm": 13584.8310546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 99072,
+        "nll": 5.31722354888916,
+        "gradient_norm": 2.1737899780273438,
+        "state_norm": 15064.1962890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 99328,
+        "nll": 4.980907917022705,
+        "gradient_norm": 2.2373385429382324,
+        "state_norm": 11141.671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 99584,
+        "nll": 5.009975433349609,
+        "gradient_norm": 2.3096120357513428,
+        "state_norm": 15159.0380859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 99840,
+        "nll": 4.953283786773682,
+        "gradient_norm": 1.9543532133102417,
+        "state_norm": 12492.74609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 100096,
+        "nll": 5.434690475463867,
+        "gradient_norm": 2.14514422416687,
+        "state_norm": 16537.6640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 100352,
+        "nll": 4.951971530914307,
+        "gradient_norm": 1.9867295026779175,
+        "state_norm": 15865.3291015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 100608,
+        "nll": 4.6929731369018555,
+        "gradient_norm": 2.140059471130371,
+        "state_norm": 8014.49462890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 100864,
+        "nll": 4.758204460144043,
+        "gradient_norm": 2.405900001525879,
+        "state_norm": 12292.3828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 101120,
+        "nll": 4.924100875854492,
+        "gradient_norm": 2.1823811531066895,
+        "state_norm": 11193.0263671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 101376,
+        "nll": 4.780753135681152,
+        "gradient_norm": 2.1048531532287598,
+        "state_norm": 11794.3603515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 101632,
+        "nll": 5.133933067321777,
+        "gradient_norm": 2.706845998764038,
+        "state_norm": 15769.283203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 101888,
+        "nll": 4.9824604988098145,
+        "gradient_norm": 2.0714683532714844,
+        "state_norm": 15624.4052734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 102144,
+        "nll": 4.926965713500977,
+        "gradient_norm": 2.224299907684326,
+        "state_norm": 11403.7314453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 102400,
+        "nll": 4.9113898277282715,
+        "gradient_norm": 2.029069423675537,
+        "state_norm": 13714.2314453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 102656,
+        "nll": 4.8880438804626465,
+        "gradient_norm": 1.8696722984313965,
+        "state_norm": 12073.94140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 102912,
+        "nll": 4.930233955383301,
+        "gradient_norm": 2.125171184539795,
+        "state_norm": 12039.88671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 103168,
+        "nll": 5.07429313659668,
+        "gradient_norm": 1.9613919258117676,
+        "state_norm": 12671.4140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 103424,
+        "nll": 4.890799522399902,
+        "gradient_norm": 1.8877023458480835,
+        "state_norm": 15255.0439453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 103680,
+        "nll": 5.091403484344482,
+        "gradient_norm": 1.853512167930603,
+        "state_norm": 16865.1484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 103936,
+        "nll": 4.608669757843018,
+        "gradient_norm": 1.93240225315094,
+        "state_norm": 12745.427734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 104192,
+        "nll": 4.872898101806641,
+        "gradient_norm": 2.3470957279205322,
+        "state_norm": 13887.5341796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 104448,
+        "nll": 5.107337474822998,
+        "gradient_norm": 1.8708760738372803,
+        "state_norm": 16479.84765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 104704,
+        "nll": 4.878220081329346,
+        "gradient_norm": 2.165619373321533,
+        "state_norm": 13006.837890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 104960,
+        "nll": 4.63743257522583,
+        "gradient_norm": 2.0129899978637695,
+        "state_norm": 12454.4072265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 105216,
+        "nll": 4.791194438934326,
+        "gradient_norm": 1.9649863243103027,
+        "state_norm": 14648.0556640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 105472,
+        "nll": 4.560561180114746,
+        "gradient_norm": 2.2136504650115967,
+        "state_norm": 13846.3134765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 105728,
+        "nll": 5.002042293548584,
+        "gradient_norm": 2.247281551361084,
+        "state_norm": 13566.1982421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 105984,
+        "nll": 5.1888275146484375,
+        "gradient_norm": 2.314760208129883,
+        "state_norm": 14327.697265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 106240,
+        "nll": 4.840256690979004,
+        "gradient_norm": 2.004518508911133,
+        "state_norm": 12848.8193359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 106496,
+        "nll": 5.121184349060059,
+        "gradient_norm": 2.104471445083618,
+        "state_norm": 14723.6943359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 106752,
+        "nll": 4.857109546661377,
+        "gradient_norm": 2.2111222743988037,
+        "state_norm": 13233.5517578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 107008,
+        "nll": 4.94185209274292,
+        "gradient_norm": 2.1761176586151123,
+        "state_norm": 13753.0283203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 107264,
+        "nll": 4.919265270233154,
+        "gradient_norm": 2.0424270629882812,
+        "state_norm": 13271.697265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 107520,
+        "nll": 4.950331687927246,
+        "gradient_norm": 1.9669843912124634,
+        "state_norm": 13045.5263671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 107776,
+        "nll": 4.826092720031738,
+        "gradient_norm": 2.1571879386901855,
+        "state_norm": 14022.673828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 108032,
+        "nll": 4.806988716125488,
+        "gradient_norm": 2.0539629459381104,
+        "state_norm": 11890.2626953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 108288,
+        "nll": 5.065044403076172,
+        "gradient_norm": 1.9603756666183472,
+        "state_norm": 13856.9677734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 108544,
+        "nll": 5.12731409072876,
+        "gradient_norm": 1.9651774168014526,
+        "state_norm": 15001.8310546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 108800,
+        "nll": 5.283636093139648,
+        "gradient_norm": 2.0273396968841553,
+        "state_norm": 14487.4326171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 109056,
+        "nll": 4.725569248199463,
+        "gradient_norm": 2.039104461669922,
+        "state_norm": 12398.236328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 109312,
+        "nll": 4.521700382232666,
+        "gradient_norm": 1.960397481918335,
+        "state_norm": 9439.6513671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 109568,
+        "nll": 4.620738506317139,
+        "gradient_norm": 2.1310360431671143,
+        "state_norm": 12141.8134765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 109824,
+        "nll": 4.95851469039917,
+        "gradient_norm": 2.116039991378784,
+        "state_norm": 15844.0380859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 110080,
+        "nll": 4.504261493682861,
+        "gradient_norm": 2.0572235584259033,
+        "state_norm": 12895.283203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 110336,
+        "nll": 4.9580230712890625,
+        "gradient_norm": 1.9133294820785522,
+        "state_norm": 16532.068359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 110592,
+        "nll": 4.759729862213135,
+        "gradient_norm": 1.999132513999939,
+        "state_norm": 14404.3369140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 110848,
+        "nll": 4.464488506317139,
+        "gradient_norm": 1.9746679067611694,
+        "state_norm": 12664.298828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 111104,
+        "nll": 4.5945725440979,
+        "gradient_norm": 2.026745319366455,
+        "state_norm": 14220.7060546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 111360,
+        "nll": 4.291870594024658,
+        "gradient_norm": 2.0945112705230713,
+        "state_norm": 9524.9423828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 111616,
+        "nll": 4.802768707275391,
+        "gradient_norm": 2.0295286178588867,
+        "state_norm": 14011.85546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 111872,
+        "nll": 4.743061065673828,
+        "gradient_norm": 2.0316948890686035,
+        "state_norm": 16249.3505859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 112128,
+        "nll": 4.524545192718506,
+        "gradient_norm": 2.1663169860839844,
+        "state_norm": 12279.9599609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 112384,
+        "nll": 5.096504211425781,
+        "gradient_norm": 2.158668279647827,
+        "state_norm": 14561.728515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 112640,
+        "nll": 5.00250244140625,
+        "gradient_norm": 2.3083689212799072,
+        "state_norm": 16599.77734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 112896,
+        "nll": 4.833375930786133,
+        "gradient_norm": 2.173710346221924,
+        "state_norm": 14324.5283203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 113152,
+        "nll": 4.696213245391846,
+        "gradient_norm": 2.630542039871216,
+        "state_norm": 15732.3994140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 113408,
+        "nll": 4.639784336090088,
+        "gradient_norm": 2.508711576461792,
+        "state_norm": 14421.0087890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 113664,
+        "nll": 4.845539093017578,
+        "gradient_norm": 2.3625004291534424,
+        "state_norm": 13191.80859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 113920,
+        "nll": 4.742111682891846,
+        "gradient_norm": 2.5503573417663574,
+        "state_norm": 13183.17578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 114176,
+        "nll": 4.684804439544678,
+        "gradient_norm": 2.1126701831817627,
+        "state_norm": 13095.091796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 114432,
+        "nll": 4.9223785400390625,
+        "gradient_norm": 2.0102591514587402,
+        "state_norm": 13189.876953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 114688,
+        "nll": 4.716163158416748,
+        "gradient_norm": 1.812640905380249,
+        "state_norm": 14057.6875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 114944,
+        "nll": 4.702481269836426,
+        "gradient_norm": 1.851385474205017,
+        "state_norm": 14020.333984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 115200,
+        "nll": 5.04556941986084,
+        "gradient_norm": 2.0348641872406006,
+        "state_norm": 9609.5673828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 115456,
+        "nll": 4.6079230308532715,
+        "gradient_norm": 1.9457223415374756,
+        "state_norm": 14811.087890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 115712,
+        "nll": 4.797021865844727,
+        "gradient_norm": 2.0845205783843994,
+        "state_norm": 14120.8359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 115968,
+        "nll": 4.650918006896973,
+        "gradient_norm": 1.8744585514068604,
+        "state_norm": 13502.40234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 116224,
+        "nll": 5.3256096839904785,
+        "gradient_norm": 2.160449743270874,
+        "state_norm": 14039.033203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 116480,
+        "nll": 4.807982921600342,
+        "gradient_norm": 2.1208627223968506,
+        "state_norm": 14247.9228515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 116736,
+        "nll": 5.143646717071533,
+        "gradient_norm": 2.064542770385742,
+        "state_norm": 13629.12109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 116992,
+        "nll": 4.725020885467529,
+        "gradient_norm": 2.1132144927978516,
+        "state_norm": 13474.046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 117248,
+        "nll": 4.538995742797852,
+        "gradient_norm": 2.208685874938965,
+        "state_norm": 11293.224609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 117504,
+        "nll": 4.814165115356445,
+        "gradient_norm": 2.0529592037200928,
+        "state_norm": 14210.4208984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 117760,
+        "nll": 4.805605411529541,
+        "gradient_norm": 2.518786907196045,
+        "state_norm": 10928.091796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 118016,
+        "nll": 4.557077407836914,
+        "gradient_norm": 2.0993521213531494,
+        "state_norm": 12676.505859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 118272,
+        "nll": 4.879164695739746,
+        "gradient_norm": 2.187284231185913,
+        "state_norm": 13788.736328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 118528,
+        "nll": 4.989049434661865,
+        "gradient_norm": 2.1440536975860596,
+        "state_norm": 10849.0947265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 118784,
+        "nll": 5.139706134796143,
+        "gradient_norm": 2.317791223526001,
+        "state_norm": 15222.0517578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 119040,
+        "nll": 4.849309921264648,
+        "gradient_norm": 2.012226104736328,
+        "state_norm": 13120.1728515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 119296,
+        "nll": 5.152123928070068,
+        "gradient_norm": 2.4667999744415283,
+        "state_norm": 15803.0283203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 119552,
+        "nll": 4.6305365562438965,
+        "gradient_norm": 1.9840513467788696,
+        "state_norm": 12405.8203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 119808,
+        "nll": 4.811936855316162,
+        "gradient_norm": 2.173460006713867,
+        "state_norm": 12740.875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 120064,
+        "nll": 5.195304870605469,
+        "gradient_norm": 2.120584487915039,
+        "state_norm": 15165.4638671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 120320,
+        "nll": 4.692637920379639,
+        "gradient_norm": 1.8948293924331665,
+        "state_norm": 11774.2333984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 120576,
+        "nll": 4.808535099029541,
+        "gradient_norm": 2.199098587036133,
+        "state_norm": 12320.5048828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 120832,
+        "nll": 4.842020034790039,
+        "gradient_norm": 2.247313976287842,
+        "state_norm": 14992.2138671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 121088,
+        "nll": 4.415999889373779,
+        "gradient_norm": 1.9414030313491821,
+        "state_norm": 11659.4404296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 121344,
+        "nll": 4.228024959564209,
+        "gradient_norm": 1.9851434230804443,
+        "state_norm": 11906.7744140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 121600,
+        "nll": 4.903330326080322,
+        "gradient_norm": 2.2095813751220703,
+        "state_norm": 14641.7685546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 121856,
+        "nll": 4.555413246154785,
+        "gradient_norm": 3.0047333240509033,
+        "state_norm": 11215.9833984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 122112,
+        "nll": 4.7447710037231445,
+        "gradient_norm": 2.154224157333374,
+        "state_norm": 11681.80859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 122368,
+        "nll": 4.957626819610596,
+        "gradient_norm": 1.943064570426941,
+        "state_norm": 16118.751953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 122624,
+        "nll": 4.8229594230651855,
+        "gradient_norm": 2.018411636352539,
+        "state_norm": 12428.197265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 122880,
+        "nll": 4.440590858459473,
+        "gradient_norm": 2.227475166320801,
+        "state_norm": 11589.1533203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 123136,
+        "nll": 4.966400146484375,
+        "gradient_norm": 2.141092538833618,
+        "state_norm": 15573.1376953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 123392,
+        "nll": 4.595822811126709,
+        "gradient_norm": 2.1114585399627686,
+        "state_norm": 9689.931640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 123648,
+        "nll": 4.547408103942871,
+        "gradient_norm": 2.1417179107666016,
+        "state_norm": 11996.53125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 123904,
+        "nll": 5.02771520614624,
+        "gradient_norm": 2.3154494762420654,
+        "state_norm": 15604.96875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 124160,
+        "nll": 4.302327632904053,
+        "gradient_norm": 1.953062653541565,
+        "state_norm": 10654.591796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 124416,
+        "nll": 4.59894323348999,
+        "gradient_norm": 2.557199239730835,
+        "state_norm": 10737.2490234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 124672,
+        "nll": 4.608849048614502,
+        "gradient_norm": 2.0787463188171387,
+        "state_norm": 14871.6435546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 124928,
+        "nll": 4.496394634246826,
+        "gradient_norm": 1.9822795391082764,
+        "state_norm": 13710.3125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 125184,
+        "nll": 5.031271934509277,
+        "gradient_norm": 2.2162625789642334,
+        "state_norm": 12658.314453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 125440,
+        "nll": 4.9393486976623535,
+        "gradient_norm": 1.973328709602356,
+        "state_norm": 16103.6240234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 125696,
+        "nll": 4.8552374839782715,
+        "gradient_norm": 2.2508838176727295,
+        "state_norm": 15025.6728515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 125952,
+        "nll": 4.9298787117004395,
+        "gradient_norm": 2.006969690322876,
+        "state_norm": 10229.3466796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 126208,
+        "nll": 4.950073719024658,
+        "gradient_norm": 1.9628077745437622,
+        "state_norm": 15551.7353515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 126464,
+        "nll": 5.095865249633789,
+        "gradient_norm": 1.9568547010421753,
+        "state_norm": 13962.5341796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 126720,
+        "nll": 4.5455851554870605,
+        "gradient_norm": 1.959979772567749,
+        "state_norm": 13677.3623046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 126976,
+        "nll": 4.956712245941162,
+        "gradient_norm": 2.098583221435547,
+        "state_norm": 13045.134765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 127232,
+        "nll": 4.875524520874023,
+        "gradient_norm": 2.089578628540039,
+        "state_norm": 12864.875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 127488,
+        "nll": 4.847630023956299,
+        "gradient_norm": 1.892453670501709,
+        "state_norm": 11777.46875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 127744,
+        "nll": 4.895503997802734,
+        "gradient_norm": 2.261409044265747,
+        "state_norm": 13707.8349609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 128000,
+        "nll": 5.132043361663818,
+        "gradient_norm": 2.2756826877593994,
+        "state_norm": 15548.9130859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 128256,
+        "nll": 5.1623101234436035,
+        "gradient_norm": 2.229909658432007,
+        "state_norm": 14525.1552734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 128512,
+        "nll": 4.85618782043457,
+        "gradient_norm": 2.5308163166046143,
+        "state_norm": 13982.3095703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 128768,
+        "nll": 4.707367897033691,
+        "gradient_norm": 2.517371654510498,
+        "state_norm": 13239.7626953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 129024,
+        "nll": 4.798562526702881,
+        "gradient_norm": 2.0627381801605225,
+        "state_norm": 13436.8310546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 129280,
+        "nll": 4.721244812011719,
+        "gradient_norm": 2.2402291297912598,
+        "state_norm": 13622.2255859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 129536,
+        "nll": 4.726888656616211,
+        "gradient_norm": 2.013291358947754,
+        "state_norm": 10588.5673828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 129792,
+        "nll": 4.590758323669434,
+        "gradient_norm": 2.014132261276245,
+        "state_norm": 12122.8125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 130048,
+        "nll": 4.7131571769714355,
+        "gradient_norm": 1.9214181900024414,
+        "state_norm": 16128.0439453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 130304,
+        "nll": 4.449239253997803,
+        "gradient_norm": 2.1415205001831055,
+        "state_norm": 15794.244140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 130560,
+        "nll": 4.724124431610107,
+        "gradient_norm": 2.02394700050354,
+        "state_norm": 16953.4609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 130816,
+        "nll": 4.2776360511779785,
+        "gradient_norm": 1.983171820640564,
+        "state_norm": 13026.6923828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 131072,
+        "nll": 4.846371650695801,
+        "gradient_norm": 2.0031256675720215,
+        "state_norm": 13392.876953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 131328,
+        "nll": 4.711588382720947,
+        "gradient_norm": 2.114161729812622,
+        "state_norm": 13422.0341796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 131584,
+        "nll": 4.683704376220703,
+        "gradient_norm": 2.0530505180358887,
+        "state_norm": 11699.810546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 131840,
+        "nll": 5.0127153396606445,
+        "gradient_norm": 2.1704959869384766,
+        "state_norm": 12342.37890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 132096,
+        "nll": 4.8205180168151855,
+        "gradient_norm": 1.9807407855987549,
+        "state_norm": 14381.6630859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 132352,
+        "nll": 4.751770973205566,
+        "gradient_norm": 1.9764480590820312,
+        "state_norm": 11336.2958984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 132608,
+        "nll": 4.7370710372924805,
+        "gradient_norm": 2.3249423503875732,
+        "state_norm": 12514.1982421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 132864,
+        "nll": 4.974815368652344,
+        "gradient_norm": 2.304144859313965,
+        "state_norm": 13620.025390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 133120,
+        "nll": 4.994993686676025,
+        "gradient_norm": 1.9769701957702637,
+        "state_norm": 13116.8564453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 133376,
+        "nll": 5.3621697425842285,
+        "gradient_norm": 2.003298759460449,
+        "state_norm": 13087.3583984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 133632,
+        "nll": 5.021449089050293,
+        "gradient_norm": 2.1885619163513184,
+        "state_norm": 15616.357421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 133888,
+        "nll": 4.49449348449707,
+        "gradient_norm": 1.9475977420806885,
+        "state_norm": 12340.0,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 134144,
+        "nll": 4.470184326171875,
+        "gradient_norm": 1.9297220706939697,
+        "state_norm": 11112.83203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 134400,
+        "nll": 4.908810615539551,
+        "gradient_norm": 2.010648250579834,
+        "state_norm": 15859.2900390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 134656,
+        "nll": 4.633773326873779,
+        "gradient_norm": 1.885858178138733,
+        "state_norm": 14296.2958984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 134912,
+        "nll": 4.598746299743652,
+        "gradient_norm": 2.1685118675231934,
+        "state_norm": 14506.4267578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 135168,
+        "nll": 4.478744983673096,
+        "gradient_norm": 1.856869101524353,
+        "state_norm": 12472.0771484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 135424,
+        "nll": 4.74921178817749,
+        "gradient_norm": 2.123619556427002,
+        "state_norm": 12043.13671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 135680,
+        "nll": 5.018552780151367,
+        "gradient_norm": 1.906660795211792,
+        "state_norm": 16080.4267578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 135936,
+        "nll": 4.889747619628906,
+        "gradient_norm": 2.05472731590271,
+        "state_norm": 13671.9267578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 136192,
+        "nll": 4.672872066497803,
+        "gradient_norm": 1.7913098335266113,
+        "state_norm": 13991.5029296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 136448,
+        "nll": 5.029916286468506,
+        "gradient_norm": 2.0054402351379395,
+        "state_norm": 15968.5302734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 136704,
+        "nll": 4.9000115394592285,
+        "gradient_norm": 2.0159053802490234,
+        "state_norm": 16402.68359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 136960,
+        "nll": 4.736663341522217,
+        "gradient_norm": 1.7949997186660767,
+        "state_norm": 15384.41796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 137216,
+        "nll": 4.404172897338867,
+        "gradient_norm": 1.8282513618469238,
+        "state_norm": 13020.408203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 137472,
+        "nll": 4.3274335861206055,
+        "gradient_norm": 1.9170331954956055,
+        "state_norm": 12350.0927734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 137728,
+        "nll": 4.752213954925537,
+        "gradient_norm": 1.8889012336730957,
+        "state_norm": 13679.05859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 137984,
+        "nll": 4.917980194091797,
+        "gradient_norm": 2.2247674465179443,
+        "state_norm": 14609.140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 138240,
+        "nll": 4.84540319442749,
+        "gradient_norm": 1.9429925680160522,
+        "state_norm": 13897.9931640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 138496,
+        "nll": 5.043126583099365,
+        "gradient_norm": 2.1803407669067383,
+        "state_norm": 13614.677734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 138752,
+        "nll": 4.545281410217285,
+        "gradient_norm": 2.1729350090026855,
+        "state_norm": 12298.517578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 139008,
+        "nll": 4.7808518409729,
+        "gradient_norm": 2.1007273197174072,
+        "state_norm": 12130.8134765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 139264,
+        "nll": 4.558170318603516,
+        "gradient_norm": 2.027033805847168,
+        "state_norm": 10092.220703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 139520,
+        "nll": 4.560904502868652,
+        "gradient_norm": 2.4247312545776367,
+        "state_norm": 11649.458984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 139776,
+        "nll": 4.614567279815674,
+        "gradient_norm": 2.1136388778686523,
+        "state_norm": 10047.4140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 140032,
+        "nll": 4.5486345291137695,
+        "gradient_norm": 2.167741537094116,
+        "state_norm": 12485.7412109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 140288,
+        "nll": 5.004795551300049,
+        "gradient_norm": 2.0977392196655273,
+        "state_norm": 15698.140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 140544,
+        "nll": 4.582541465759277,
+        "gradient_norm": 2.1652002334594727,
+        "state_norm": 14515.3955078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 140800,
+        "nll": 4.883456230163574,
+        "gradient_norm": 1.9625383615493774,
+        "state_norm": 11161.38671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 141056,
+        "nll": 5.051948547363281,
+        "gradient_norm": 2.0650265216827393,
+        "state_norm": 14080.8525390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 141312,
+        "nll": 4.7542524337768555,
+        "gradient_norm": 2.212721347808838,
+        "state_norm": 14801.0625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 141568,
+        "nll": 4.977074146270752,
+        "gradient_norm": 2.225090980529785,
+        "state_norm": 15980.78515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 141824,
+        "nll": 4.7817254066467285,
+        "gradient_norm": 2.0204572677612305,
+        "state_norm": 10248.6015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 142080,
+        "nll": 4.808955669403076,
+        "gradient_norm": 2.2413504123687744,
+        "state_norm": 13889.86328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 142336,
+        "nll": 4.382705211639404,
+        "gradient_norm": 2.0911121368408203,
+        "state_norm": 14212.4619140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 142592,
+        "nll": 4.0803914070129395,
+        "gradient_norm": 1.9013954401016235,
+        "state_norm": 12307.6025390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 142848,
+        "nll": 4.463473320007324,
+        "gradient_norm": 1.8785635232925415,
+        "state_norm": 14630.26953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 143104,
+        "nll": 4.474613666534424,
+        "gradient_norm": 2.0714638233184814,
+        "state_norm": 12139.4580078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 143360,
+        "nll": 4.468048095703125,
+        "gradient_norm": 2.224153518676758,
+        "state_norm": 8758.359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 143616,
+        "nll": 4.560455799102783,
+        "gradient_norm": 1.980617642402649,
+        "state_norm": 13159.5419921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 143872,
+        "nll": 4.549488067626953,
+        "gradient_norm": 1.8128852844238281,
+        "state_norm": 11599.701171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 144128,
+        "nll": 4.319845676422119,
+        "gradient_norm": 2.0822434425354004,
+        "state_norm": 9896.6171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 144384,
+        "nll": 4.754705429077148,
+        "gradient_norm": 2.446197032928467,
+        "state_norm": 14370.9560546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 144640,
+        "nll": 4.932098865509033,
+        "gradient_norm": 1.9500551223754883,
+        "state_norm": 13582.07421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 144896,
+        "nll": 5.066762924194336,
+        "gradient_norm": 2.511166572570801,
+        "state_norm": 13331.6552734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 145152,
+        "nll": 4.994928359985352,
+        "gradient_norm": 2.074982166290283,
+        "state_norm": 14843.0751953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 145408,
+        "nll": 4.554965019226074,
+        "gradient_norm": 2.108646869659424,
+        "state_norm": 13641.6953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 145664,
+        "nll": 4.755894660949707,
+        "gradient_norm": 1.9945577383041382,
+        "state_norm": 12959.80078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 145920,
+        "nll": 4.099429130554199,
+        "gradient_norm": 1.8200823068618774,
+        "state_norm": 10949.8203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 146176,
+        "nll": 4.869649887084961,
+        "gradient_norm": 1.983614206314087,
+        "state_norm": 14866.041015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 146432,
+        "nll": 4.691904067993164,
+        "gradient_norm": 1.9450234174728394,
+        "state_norm": 16436.3125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 146688,
+        "nll": 4.388998508453369,
+        "gradient_norm": 1.945325255393982,
+        "state_norm": 9078.5126953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 146944,
+        "nll": 4.502883434295654,
+        "gradient_norm": 2.0328447818756104,
+        "state_norm": 11034.494140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 147200,
+        "nll": 4.545829772949219,
+        "gradient_norm": 1.7767252922058105,
+        "state_norm": 13476.3076171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 147456,
+        "nll": 4.67460298538208,
+        "gradient_norm": 1.7946608066558838,
+        "state_norm": 15828.7333984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 147712,
+        "nll": 4.590780258178711,
+        "gradient_norm": 1.8222860097885132,
+        "state_norm": 9927.2744140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 147968,
+        "nll": 4.811639785766602,
+        "gradient_norm": 2.029019355773926,
+        "state_norm": 12361.8466796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 148224,
+        "nll": 4.913281440734863,
+        "gradient_norm": 1.9120359420776367,
+        "state_norm": 14487.4619140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 148480,
+        "nll": 4.186906337738037,
+        "gradient_norm": 1.7749125957489014,
+        "state_norm": 9207.3095703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 148736,
+        "nll": 4.496711254119873,
+        "gradient_norm": 2.0293660163879395,
+        "state_norm": 11940.7607421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 148992,
+        "nll": 4.598021984100342,
+        "gradient_norm": 2.1445741653442383,
+        "state_norm": 15792.5380859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 149248,
+        "nll": 4.589386463165283,
+        "gradient_norm": 2.2212281227111816,
+        "state_norm": 10735.7666015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 149504,
+        "nll": 4.385898590087891,
+        "gradient_norm": 2.053175687789917,
+        "state_norm": 11877.9677734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 149760,
+        "nll": 4.46938943862915,
+        "gradient_norm": 1.86452054977417,
+        "state_norm": 10875.7333984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 150016,
+        "nll": 4.826730251312256,
+        "gradient_norm": 2.3473544120788574,
+        "state_norm": 13008.7666015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 150272,
+        "nll": 4.929801940917969,
+        "gradient_norm": 2.135878324508667,
+        "state_norm": 16760.3046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 150528,
+        "nll": 4.537003993988037,
+        "gradient_norm": 2.132974863052368,
+        "state_norm": 14904.2958984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 150784,
+        "nll": 4.493976593017578,
+        "gradient_norm": 2.2890501022338867,
+        "state_norm": 14048.3642578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 151040,
+        "nll": 4.514536380767822,
+        "gradient_norm": 2.392517328262329,
+        "state_norm": 14647.8154296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 151296,
+        "nll": 4.923084735870361,
+        "gradient_norm": 2.1672260761260986,
+        "state_norm": 14383.3037109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 151552,
+        "nll": 4.574265480041504,
+        "gradient_norm": 2.397050142288208,
+        "state_norm": 13598.49609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 151808,
+        "nll": 4.769171237945557,
+        "gradient_norm": 2.3582847118377686,
+        "state_norm": 13890.58203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 152064,
+        "nll": 4.186966896057129,
+        "gradient_norm": 2.221724271774292,
+        "state_norm": 11004.234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 152320,
+        "nll": 4.658740997314453,
+        "gradient_norm": 2.179277181625366,
+        "state_norm": 12407.3076171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 152576,
+        "nll": 4.771458625793457,
+        "gradient_norm": 2.2174179553985596,
+        "state_norm": 14405.8046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 152832,
+        "nll": 4.840790271759033,
+        "gradient_norm": 2.0783345699310303,
+        "state_norm": 11670.7138671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 153088,
+        "nll": 4.440984725952148,
+        "gradient_norm": 2.1572210788726807,
+        "state_norm": 12740.2294921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 153344,
+        "nll": 4.944967746734619,
+        "gradient_norm": 2.1911563873291016,
+        "state_norm": 12369.8173828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 153600,
+        "nll": 4.767953872680664,
+        "gradient_norm": 2.4415969848632812,
+        "state_norm": 14104.234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 153856,
+        "nll": 4.951563358306885,
+        "gradient_norm": 2.3277294635772705,
+        "state_norm": 15163.2568359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 154112,
+        "nll": 4.292492389678955,
+        "gradient_norm": 1.9517751932144165,
+        "state_norm": 11255.2109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 154368,
+        "nll": 4.5034685134887695,
+        "gradient_norm": 2.20579195022583,
+        "state_norm": 13777.2509765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 154624,
+        "nll": 4.584039688110352,
+        "gradient_norm": 2.042052984237671,
+        "state_norm": 12288.7255859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 154880,
+        "nll": 4.611481666564941,
+        "gradient_norm": 2.226039171218872,
+        "state_norm": 13687.4775390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 155136,
+        "nll": 4.607764720916748,
+        "gradient_norm": 2.5205438137054443,
+        "state_norm": 13131.7841796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 155392,
+        "nll": 4.610054016113281,
+        "gradient_norm": 2.149651527404785,
+        "state_norm": 11978.9404296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 155648,
+        "nll": 4.510981559753418,
+        "gradient_norm": 2.2927613258361816,
+        "state_norm": 13601.998046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 155904,
+        "nll": 4.559709072113037,
+        "gradient_norm": 2.10908842086792,
+        "state_norm": 14175.5576171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 156160,
+        "nll": 4.546151638031006,
+        "gradient_norm": 1.9161158800125122,
+        "state_norm": 15287.8056640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 156416,
+        "nll": 4.405815124511719,
+        "gradient_norm": 2.1675848960876465,
+        "state_norm": 9300.041015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 156672,
+        "nll": 4.458131790161133,
+        "gradient_norm": 1.9880633354187012,
+        "state_norm": 12357.251953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 156928,
+        "nll": 4.704896926879883,
+        "gradient_norm": 2.099363088607788,
+        "state_norm": 15581.94921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 157184,
+        "nll": 4.278442859649658,
+        "gradient_norm": 1.903114914894104,
+        "state_norm": 11329.0419921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 157440,
+        "nll": 4.449791431427002,
+        "gradient_norm": 1.9582369327545166,
+        "state_norm": 12860.513671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 157696,
+        "nll": 4.57492208480835,
+        "gradient_norm": 2.1102304458618164,
+        "state_norm": 15313.083984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 157952,
+        "nll": 4.412387371063232,
+        "gradient_norm": 2.0266549587249756,
+        "state_norm": 11688.3310546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 158208,
+        "nll": 4.570507049560547,
+        "gradient_norm": 1.9764810800552368,
+        "state_norm": 10693.9111328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 158464,
+        "nll": 4.762484550476074,
+        "gradient_norm": 1.964406132698059,
+        "state_norm": 14181.505859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 158720,
+        "nll": 4.751887321472168,
+        "gradient_norm": 2.1318302154541016,
+        "state_norm": 11774.5478515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 158976,
+        "nll": 4.166069984436035,
+        "gradient_norm": 1.8300892114639282,
+        "state_norm": 9759.4931640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 159232,
+        "nll": 4.449525833129883,
+        "gradient_norm": 1.9869813919067383,
+        "state_norm": 9234.90234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 159488,
+        "nll": 4.78593111038208,
+        "gradient_norm": 2.112879514694214,
+        "state_norm": 13518.9609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 159744,
+        "nll": 4.982551574707031,
+        "gradient_norm": 2.3422632217407227,
+        "state_norm": 15344.4951171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 160000,
+        "nll": 4.684813022613525,
+        "gradient_norm": 1.965665340423584,
+        "state_norm": 14029.3701171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 160256,
+        "nll": 4.350039005279541,
+        "gradient_norm": 1.9388328790664673,
+        "state_norm": 10902.994140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 160512,
+        "nll": 4.833622455596924,
+        "gradient_norm": 2.0776994228363037,
+        "state_norm": 14343.9619140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 160768,
+        "nll": 4.782003879547119,
+        "gradient_norm": 2.6494290828704834,
+        "state_norm": 12611.7939453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 161024,
+        "nll": 4.674310684204102,
+        "gradient_norm": 1.9616003036499023,
+        "state_norm": 11602.126953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 161280,
+        "nll": 4.7141432762146,
+        "gradient_norm": 2.002955198287964,
+        "state_norm": 13209.2578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 161536,
+        "nll": 4.435305595397949,
+        "gradient_norm": 1.91462242603302,
+        "state_norm": 12028.3271484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 161792,
+        "nll": 4.535980224609375,
+        "gradient_norm": 2.121004819869995,
+        "state_norm": 12770.2705078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 162048,
+        "nll": 4.6411213874816895,
+        "gradient_norm": 2.468601703643799,
+        "state_norm": 14874.0751953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 162304,
+        "nll": 4.398159980773926,
+        "gradient_norm": 2.1959714889526367,
+        "state_norm": 12550.4853515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 162560,
+        "nll": 4.498158931732178,
+        "gradient_norm": 2.1220815181732178,
+        "state_norm": 10376.9658203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 162816,
+        "nll": 4.810530185699463,
+        "gradient_norm": 2.6643481254577637,
+        "state_norm": 12828.37890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 163072,
+        "nll": 4.69434928894043,
+        "gradient_norm": 2.2000577449798584,
+        "state_norm": 14378.3291015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 163328,
+        "nll": 4.8167195320129395,
+        "gradient_norm": 2.440553665161133,
+        "state_norm": 11739.0224609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 163584,
+        "nll": 4.283923149108887,
+        "gradient_norm": 2.109816312789917,
+        "state_norm": 7930.51904296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 163840,
+        "nll": 4.460173606872559,
+        "gradient_norm": 2.031285285949707,
+        "state_norm": 13397.80078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 164096,
+        "nll": 4.671296119689941,
+        "gradient_norm": 2.125091314315796,
+        "state_norm": 13305.6728515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 164352,
+        "nll": 4.896259784698486,
+        "gradient_norm": 2.3324739933013916,
+        "state_norm": 15590.6005859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 164608,
+        "nll": 4.824944496154785,
+        "gradient_norm": 2.602754592895508,
+        "state_norm": 17947.5703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 164864,
+        "nll": 4.215223789215088,
+        "gradient_norm": 2.045902729034424,
+        "state_norm": 12650.07421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 165120,
+        "nll": 4.537559986114502,
+        "gradient_norm": 2.043806314468384,
+        "state_norm": 13832.775390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 165376,
+        "nll": 5.229158878326416,
+        "gradient_norm": 2.153804063796997,
+        "state_norm": 16708.490234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 165632,
+        "nll": 4.351022720336914,
+        "gradient_norm": 1.9227885007858276,
+        "state_norm": 10076.8779296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 165888,
+        "nll": 4.628375053405762,
+        "gradient_norm": 1.9907488822937012,
+        "state_norm": 12351.3408203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 166144,
+        "nll": 4.992318153381348,
+        "gradient_norm": 1.8843531608581543,
+        "state_norm": 13949.70703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 166400,
+        "nll": 4.696265697479248,
+        "gradient_norm": 2.065187931060791,
+        "state_norm": 12536.8642578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 166656,
+        "nll": 4.652164936065674,
+        "gradient_norm": 2.1471753120422363,
+        "state_norm": 12971.71484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 166912,
+        "nll": 4.691211223602295,
+        "gradient_norm": 2.003199338912964,
+        "state_norm": 13564.580078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 167168,
+        "nll": 4.721147060394287,
+        "gradient_norm": 2.2689425945281982,
+        "state_norm": 13248.6767578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 167424,
+        "nll": 4.896774768829346,
+        "gradient_norm": 1.888750433921814,
+        "state_norm": 12376.267578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 167680,
+        "nll": 4.71622896194458,
+        "gradient_norm": 2.138336420059204,
+        "state_norm": 12224.138671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 167936,
+        "nll": 4.563733100891113,
+        "gradient_norm": 2.5934290885925293,
+        "state_norm": 12385.8955078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 168192,
+        "nll": 4.741527557373047,
+        "gradient_norm": 1.9825541973114014,
+        "state_norm": 11665.9912109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 168448,
+        "nll": 4.9819207191467285,
+        "gradient_norm": 2.5917482376098633,
+        "state_norm": 15167.953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 168704,
+        "nll": 4.770195960998535,
+        "gradient_norm": 2.302384614944458,
+        "state_norm": 15726.255859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 168960,
+        "nll": 4.74395227432251,
+        "gradient_norm": 2.374025821685791,
+        "state_norm": 11796.708984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 169216,
+        "nll": 4.949965953826904,
+        "gradient_norm": 2.292543411254883,
+        "state_norm": 13067.728515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 169472,
+        "nll": 4.821178913116455,
+        "gradient_norm": 1.9977660179138184,
+        "state_norm": 14769.1865234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 169728,
+        "nll": 4.792211055755615,
+        "gradient_norm": 1.9983198642730713,
+        "state_norm": 13867.6640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 169984,
+        "nll": 4.323531150817871,
+        "gradient_norm": 1.9557864665985107,
+        "state_norm": 8641.73828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 170240,
+        "nll": 4.553365230560303,
+        "gradient_norm": 2.0907020568847656,
+        "state_norm": 13732.3564453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 170496,
+        "nll": 4.591231346130371,
+        "gradient_norm": 1.9650574922561646,
+        "state_norm": 15657.072265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 170752,
+        "nll": 3.877222776412964,
+        "gradient_norm": 1.7841829061508179,
+        "state_norm": 7573.55126953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 171008,
+        "nll": 4.674762725830078,
+        "gradient_norm": 1.9003851413726807,
+        "state_norm": 13985.314453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 171264,
+        "nll": 4.823387622833252,
+        "gradient_norm": 1.8940162658691406,
+        "state_norm": 16302.4541015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 171520,
+        "nll": 4.028841018676758,
+        "gradient_norm": 2.0116419792175293,
+        "state_norm": 11841.3798828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 171776,
+        "nll": 4.434638500213623,
+        "gradient_norm": 1.8428947925567627,
+        "state_norm": 10014.544921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 172032,
+        "nll": 4.491876125335693,
+        "gradient_norm": 1.9790856838226318,
+        "state_norm": 13701.0361328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 172288,
+        "nll": 4.508369445800781,
+        "gradient_norm": 1.999435305595398,
+        "state_norm": 9953.546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 172544,
+        "nll": 4.4829020500183105,
+        "gradient_norm": 2.2921078205108643,
+        "state_norm": 14114.376953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 172800,
+        "nll": 4.685398578643799,
+        "gradient_norm": 2.1673712730407715,
+        "state_norm": 15307.33203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 173056,
+        "nll": 4.237654209136963,
+        "gradient_norm": 1.9590266942977905,
+        "state_norm": 12223.1357421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 173312,
+        "nll": 4.2748847007751465,
+        "gradient_norm": 2.04673171043396,
+        "state_norm": 12877.5302734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 173568,
+        "nll": 4.30026912689209,
+        "gradient_norm": 2.076465606689453,
+        "state_norm": 15261.1064453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 173824,
+        "nll": 4.320485591888428,
+        "gradient_norm": 2.042471408843994,
+        "state_norm": 7249.85400390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 174080,
+        "nll": 4.22068452835083,
+        "gradient_norm": 2.1156039237976074,
+        "state_norm": 12861.2119140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 174336,
+        "nll": 4.6114115715026855,
+        "gradient_norm": 2.1761960983276367,
+        "state_norm": 16162.5791015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 174592,
+        "nll": 4.6785993576049805,
+        "gradient_norm": 2.312107801437378,
+        "state_norm": 13193.796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 174848,
+        "nll": 4.892681121826172,
+        "gradient_norm": 2.8768978118896484,
+        "state_norm": 15836.6328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 175104,
+        "nll": 4.335204124450684,
+        "gradient_norm": 2.2127416133880615,
+        "state_norm": 14601.8701171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 175360,
+        "nll": 4.053864002227783,
+        "gradient_norm": 2.027111291885376,
+        "state_norm": 12706.6484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 175616,
+        "nll": 4.321259021759033,
+        "gradient_norm": 2.2770581245422363,
+        "state_norm": 14540.3583984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 175872,
+        "nll": 4.383901596069336,
+        "gradient_norm": 2.069647789001465,
+        "state_norm": 11691.599609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 176128,
+        "nll": 4.305682182312012,
+        "gradient_norm": 2.121797800064087,
+        "state_norm": 12971.18359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 176384,
+        "nll": 4.692673206329346,
+        "gradient_norm": 2.364945650100708,
+        "state_norm": 13989.4453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 176640,
+        "nll": 4.345737457275391,
+        "gradient_norm": 2.2438437938690186,
+        "state_norm": 8626.88671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 176896,
+        "nll": 4.472574234008789,
+        "gradient_norm": 2.0043222904205322,
+        "state_norm": 13696.7041015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 177152,
+        "nll": 4.686676502227783,
+        "gradient_norm": 2.015275716781616,
+        "state_norm": 16176.6904296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 177408,
+        "nll": 4.95802116394043,
+        "gradient_norm": 2.191039800643921,
+        "state_norm": 14773.138671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 177664,
+        "nll": 4.385458469390869,
+        "gradient_norm": 2.150414228439331,
+        "state_norm": 10264.046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 177920,
+        "nll": 4.745908737182617,
+        "gradient_norm": 2.274348735809326,
+        "state_norm": 12975.060546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 178176,
+        "nll": 4.633550643920898,
+        "gradient_norm": 1.8298509120941162,
+        "state_norm": 14151.3447265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 178432,
+        "nll": 4.521625518798828,
+        "gradient_norm": 1.9761909246444702,
+        "state_norm": 12045.9755859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 178688,
+        "nll": 4.318620681762695,
+        "gradient_norm": 1.891755223274231,
+        "state_norm": 12029.953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 178944,
+        "nll": 4.244880676269531,
+        "gradient_norm": 2.030158042907715,
+        "state_norm": 9646.5556640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 179200,
+        "nll": 4.67459774017334,
+        "gradient_norm": 2.4912147521972656,
+        "state_norm": 10190.5087890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 179456,
+        "nll": 4.484549045562744,
+        "gradient_norm": 2.2533082962036133,
+        "state_norm": 14692.8154296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 179712,
+        "nll": 4.783899784088135,
+        "gradient_norm": 2.035384178161621,
+        "state_norm": 14247.552734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 179968,
+        "nll": 4.4035420417785645,
+        "gradient_norm": 2.464273452758789,
+        "state_norm": 13811.796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 180224,
+        "nll": 4.637880325317383,
+        "gradient_norm": 2.2675044536590576,
+        "state_norm": 14271.5537109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 180480,
+        "nll": 4.48984432220459,
+        "gradient_norm": 2.568514823913574,
+        "state_norm": 9880.5439453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 180736,
+        "nll": 4.8489885330200195,
+        "gradient_norm": 2.5375313758850098,
+        "state_norm": 14237.5078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 180992,
+        "nll": 4.7323102951049805,
+        "gradient_norm": 2.20389986038208,
+        "state_norm": 9083.712890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 181248,
+        "nll": 4.350684642791748,
+        "gradient_norm": 2.296487808227539,
+        "state_norm": 12458.4052734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 181504,
+        "nll": 4.553680896759033,
+        "gradient_norm": 2.4590275287628174,
+        "state_norm": 11329.1767578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 181760,
+        "nll": 4.576396465301514,
+        "gradient_norm": 2.31929874420166,
+        "state_norm": 12004.0673828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 182016,
+        "nll": 4.6157331466674805,
+        "gradient_norm": 1.907926082611084,
+        "state_norm": 14701.4365234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 182272,
+        "nll": 4.703141689300537,
+        "gradient_norm": 2.185748815536499,
+        "state_norm": 15012.6240234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 182528,
+        "nll": 4.109859466552734,
+        "gradient_norm": 2.0055181980133057,
+        "state_norm": 11533.6376953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 182784,
+        "nll": 4.4447503089904785,
+        "gradient_norm": 2.165365219116211,
+        "state_norm": 14663.8564453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 183040,
+        "nll": 4.6902079582214355,
+        "gradient_norm": 2.0010263919830322,
+        "state_norm": 16016.89453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 183296,
+        "nll": 4.465434551239014,
+        "gradient_norm": 2.1901230812072754,
+        "state_norm": 13406.9052734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 183552,
+        "nll": 4.150796890258789,
+        "gradient_norm": 1.9095336198806763,
+        "state_norm": 12894.26953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 183808,
+        "nll": 4.591949939727783,
+        "gradient_norm": 2.144477128982544,
+        "state_norm": 13891.6806640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 184064,
+        "nll": 4.643070220947266,
+        "gradient_norm": 1.9874073266983032,
+        "state_norm": 10983.4794921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 184320,
+        "nll": 4.190063953399658,
+        "gradient_norm": 2.2069356441497803,
+        "state_norm": 11366.615234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 184576,
+        "nll": 4.360503673553467,
+        "gradient_norm": 1.9884527921676636,
+        "state_norm": 13326.1298828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 184832,
+        "nll": 4.5765790939331055,
+        "gradient_norm": 1.9155679941177368,
+        "state_norm": 13720.935546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 185088,
+        "nll": 4.828111171722412,
+        "gradient_norm": 2.498563051223755,
+        "state_norm": 9740.6748046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 185344,
+        "nll": 4.86737060546875,
+        "gradient_norm": 2.3863165378570557,
+        "state_norm": 14709.0087890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 185600,
+        "nll": 4.781858921051025,
+        "gradient_norm": 2.017388105392456,
+        "state_norm": 14076.689453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 185856,
+        "nll": 4.669450283050537,
+        "gradient_norm": 2.1161305904388428,
+        "state_norm": 13372.2197265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 186112,
+        "nll": 4.59147834777832,
+        "gradient_norm": 2.366267681121826,
+        "state_norm": 11978.58984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 186368,
+        "nll": 4.583796501159668,
+        "gradient_norm": 2.150712490081787,
+        "state_norm": 11672.9873046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 186624,
+        "nll": 4.684587001800537,
+        "gradient_norm": 2.055617332458496,
+        "state_norm": 13844.4833984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 186880,
+        "nll": 4.531932353973389,
+        "gradient_norm": 2.077444314956665,
+        "state_norm": 14012.34375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 187136,
+        "nll": 4.645016193389893,
+        "gradient_norm": 2.357057809829712,
+        "state_norm": 14228.890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 187392,
+        "nll": 4.456854820251465,
+        "gradient_norm": 2.4463658332824707,
+        "state_norm": 13331.5009765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 187648,
+        "nll": 4.267038345336914,
+        "gradient_norm": 2.2069108486175537,
+        "state_norm": 14847.1083984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 187904,
+        "nll": 4.362492084503174,
+        "gradient_norm": 2.2657275199890137,
+        "state_norm": 16179.853515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 188160,
+        "nll": 4.654897689819336,
+        "gradient_norm": 1.9471021890640259,
+        "state_norm": 13724.611328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 188416,
+        "nll": 3.9656147956848145,
+        "gradient_norm": 2.6730270385742188,
+        "state_norm": 8392.0205078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 188672,
+        "nll": 4.586612701416016,
+        "gradient_norm": 2.2697057723999023,
+        "state_norm": 13650.69140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 188928,
+        "nll": 4.704200267791748,
+        "gradient_norm": 2.3192293643951416,
+        "state_norm": 14893.484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 189184,
+        "nll": 4.391368865966797,
+        "gradient_norm": 2.20654034614563,
+        "state_norm": 9345.83203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 189440,
+        "nll": 4.44296407699585,
+        "gradient_norm": 2.1753127574920654,
+        "state_norm": 14648.3359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 189696,
+        "nll": 5.04502534866333,
+        "gradient_norm": 2.3602263927459717,
+        "state_norm": 15527.2431640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 189952,
+        "nll": 4.257976531982422,
+        "gradient_norm": 2.1548824310302734,
+        "state_norm": 7523.03857421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 190208,
+        "nll": 4.6560211181640625,
+        "gradient_norm": 2.1964237689971924,
+        "state_norm": 13205.767578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 190464,
+        "nll": 4.538727283477783,
+        "gradient_norm": 2.08085560798645,
+        "state_norm": 13320.6962890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 190720,
+        "nll": 4.328989505767822,
+        "gradient_norm": 2.336686134338379,
+        "state_norm": 10778.7373046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 190976,
+        "nll": 4.443695068359375,
+        "gradient_norm": 2.123628616333008,
+        "state_norm": 12131.83203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 191232,
+        "nll": 4.289294719696045,
+        "gradient_norm": 2.1673355102539062,
+        "state_norm": 11153.396484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 191488,
+        "nll": 4.578855037689209,
+        "gradient_norm": 2.0458803176879883,
+        "state_norm": 13895.7607421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 191744,
+        "nll": 4.7236504554748535,
+        "gradient_norm": 2.369318962097168,
+        "state_norm": 15476.9140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 192000,
+        "nll": 4.36356258392334,
+        "gradient_norm": 1.8317492008209229,
+        "state_norm": 13151.69921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 192256,
+        "nll": 4.472278594970703,
+        "gradient_norm": 2.0645551681518555,
+        "state_norm": 11634.0712890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 192512,
+        "nll": 4.72720193862915,
+        "gradient_norm": 2.1132681369781494,
+        "state_norm": 13602.2841796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 192768,
+        "nll": 4.669273853302002,
+        "gradient_norm": 2.407358407974243,
+        "state_norm": 12928.8662109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 193024,
+        "nll": 4.515125751495361,
+        "gradient_norm": 1.9031187295913696,
+        "state_norm": 12654.59765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 193280,
+        "nll": 4.742707252502441,
+        "gradient_norm": 2.0399160385131836,
+        "state_norm": 11856.7451171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 193536,
+        "nll": 4.501675128936768,
+        "gradient_norm": 2.4635562896728516,
+        "state_norm": 12116.59765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 193792,
+        "nll": 4.514228820800781,
+        "gradient_norm": 2.2022697925567627,
+        "state_norm": 11818.4697265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 194048,
+        "nll": 4.5609307289123535,
+        "gradient_norm": 1.9967784881591797,
+        "state_norm": 13261.240234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 194304,
+        "nll": 4.364631175994873,
+        "gradient_norm": 1.8962661027908325,
+        "state_norm": 10540.654296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 194560,
+        "nll": 4.476987361907959,
+        "gradient_norm": 2.338992118835449,
+        "state_norm": 14350.1240234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 194816,
+        "nll": 4.720813274383545,
+        "gradient_norm": 2.154531955718994,
+        "state_norm": 17538.107421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 195072,
+        "nll": 4.725332736968994,
+        "gradient_norm": 2.241861343383789,
+        "state_norm": 15550.6416015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 195328,
+        "nll": 4.376121997833252,
+        "gradient_norm": 2.022860288619995,
+        "state_norm": 9292.1640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 195584,
+        "nll": 4.425169944763184,
+        "gradient_norm": 2.039581537246704,
+        "state_norm": 11693.541015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 195840,
+        "nll": 4.275925159454346,
+        "gradient_norm": 2.192762851715088,
+        "state_norm": 14146.6806640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 196096,
+        "nll": 4.49312686920166,
+        "gradient_norm": 2.3679544925689697,
+        "state_norm": 12084.193359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 196352,
+        "nll": 4.258548736572266,
+        "gradient_norm": 2.289522886276245,
+        "state_norm": 12369.23046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 196608,
+        "nll": 4.393853664398193,
+        "gradient_norm": 2.478391408920288,
+        "state_norm": 14284.6845703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 196864,
+        "nll": 4.483797550201416,
+        "gradient_norm": 2.289043426513672,
+        "state_norm": 13261.064453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 197120,
+        "nll": 4.419985294342041,
+        "gradient_norm": 2.3438594341278076,
+        "state_norm": 13788.7373046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 197376,
+        "nll": 4.757086753845215,
+        "gradient_norm": 2.2316184043884277,
+        "state_norm": 15671.361328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 197632,
+        "nll": 3.955753803253174,
+        "gradient_norm": 1.965882420539856,
+        "state_norm": 7339.8212890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 197888,
+        "nll": 4.588268756866455,
+        "gradient_norm": 2.4244155883789062,
+        "state_norm": 13266.75390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 198144,
+        "nll": 4.697875499725342,
+        "gradient_norm": 2.419128894805908,
+        "state_norm": 14070.951171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 198400,
+        "nll": 4.205246925354004,
+        "gradient_norm": 2.1930336952209473,
+        "state_norm": 9920.703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 198656,
+        "nll": 4.556884288787842,
+        "gradient_norm": 2.85907244682312,
+        "state_norm": 10365.0517578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 198912,
+        "nll": 4.914336681365967,
+        "gradient_norm": 5.306776523590088,
+        "state_norm": 13256.234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 199168,
+        "nll": 4.796021461486816,
+        "gradient_norm": 8.308855056762695,
+        "state_norm": 12957.736328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 199424,
+        "nll": 4.540565490722656,
+        "gradient_norm": 2.378218173980713,
+        "state_norm": 10092.8291015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 199680,
+        "nll": 4.680713653564453,
+        "gradient_norm": 2.0136969089508057,
+        "state_norm": 15272.740234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 199936,
+        "nll": 4.424648284912109,
+        "gradient_norm": 1.9096966981887817,
+        "state_norm": 13374.732421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 200192,
+        "nll": 4.711463928222656,
+        "gradient_norm": 2.60150146484375,
+        "state_norm": 16036.1728515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 200448,
+        "nll": 4.553064823150635,
+        "gradient_norm": 2.2031455039978027,
+        "state_norm": 13876.033203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 200704,
+        "nll": 4.6655402183532715,
+        "gradient_norm": 2.506317138671875,
+        "state_norm": 11423.283203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 200960,
+        "nll": 4.3455657958984375,
+        "gradient_norm": 2.7502105236053467,
+        "state_norm": 13648.314453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 201216,
+        "nll": 4.507214069366455,
+        "gradient_norm": 2.0881872177124023,
+        "state_norm": 14478.576171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 201472,
+        "nll": 4.404818058013916,
+        "gradient_norm": 2.3290157318115234,
+        "state_norm": 13020.40234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 201728,
+        "nll": 4.523402690887451,
+        "gradient_norm": 2.024397850036621,
+        "state_norm": 13313.470703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 201984,
+        "nll": 4.924172401428223,
+        "gradient_norm": 2.30151104927063,
+        "state_norm": 15290.10546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 202240,
+        "nll": 4.3710503578186035,
+        "gradient_norm": 2.0965850353240967,
+        "state_norm": 9651.0595703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 202496,
+        "nll": 4.806868076324463,
+        "gradient_norm": 2.8522233963012695,
+        "state_norm": 12758.7958984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 202752,
+        "nll": 4.621161460876465,
+        "gradient_norm": 2.2978391647338867,
+        "state_norm": 13550.0908203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 203008,
+        "nll": 4.556113243103027,
+        "gradient_norm": 2.18526554107666,
+        "state_norm": 14678.9912109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 203264,
+        "nll": 4.57861852645874,
+        "gradient_norm": 2.2530832290649414,
+        "state_norm": 14483.5791015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 203520,
+        "nll": 4.570066928863525,
+        "gradient_norm": 2.0661354064941406,
+        "state_norm": 13609.365234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 203776,
+        "nll": 4.5000319480896,
+        "gradient_norm": 2.3324406147003174,
+        "state_norm": 15219.04296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 204032,
+        "nll": 4.128229141235352,
+        "gradient_norm": 1.996298909187317,
+        "state_norm": 10282.498046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 204288,
+        "nll": 4.288785934448242,
+        "gradient_norm": 2.29117751121521,
+        "state_norm": 13361.6416015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 204544,
+        "nll": 4.4216628074646,
+        "gradient_norm": 2.068148136138916,
+        "state_norm": 14891.931640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 204800,
+        "nll": 4.178649425506592,
+        "gradient_norm": 2.066617965698242,
+        "state_norm": 10232.474609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 205056,
+        "nll": 4.526186943054199,
+        "gradient_norm": 2.0800676345825195,
+        "state_norm": 13898.869140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 205312,
+        "nll": 4.357615947723389,
+        "gradient_norm": 2.10722017288208,
+        "state_norm": 10284.232421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 205568,
+        "nll": 4.7121171951293945,
+        "gradient_norm": 2.2057085037231445,
+        "state_norm": 12364.630859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 205824,
+        "nll": 5.064223766326904,
+        "gradient_norm": 2.4802796840667725,
+        "state_norm": 16179.9970703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 206080,
+        "nll": 4.967545986175537,
+        "gradient_norm": 2.333428382873535,
+        "state_norm": 16808.537109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 206336,
+        "nll": 3.9473347663879395,
+        "gradient_norm": 2.054187059402466,
+        "state_norm": 11150.451171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 206592,
+        "nll": 4.891639709472656,
+        "gradient_norm": 1.9857542514801025,
+        "state_norm": 13550.2841796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 206848,
+        "nll": 4.683270454406738,
+        "gradient_norm": 2.004760980606079,
+        "state_norm": 13977.3642578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 207104,
+        "nll": 4.549678802490234,
+        "gradient_norm": 2.2339248657226562,
+        "state_norm": 10969.2861328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 207360,
+        "nll": 4.4370646476745605,
+        "gradient_norm": 2.222499132156372,
+        "state_norm": 14647.1875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 207616,
+        "nll": 4.035635471343994,
+        "gradient_norm": 2.1808745861053467,
+        "state_norm": 11887.1005859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 207872,
+        "nll": 4.534756660461426,
+        "gradient_norm": 2.2219982147216797,
+        "state_norm": 13863.6689453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 208128,
+        "nll": 4.5074143409729,
+        "gradient_norm": 1.9512274265289307,
+        "state_norm": 16439.810546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 208384,
+        "nll": 4.682981014251709,
+        "gradient_norm": 2.2280521392822266,
+        "state_norm": 12548.5732421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 208640,
+        "nll": 4.438192367553711,
+        "gradient_norm": 2.2719650268554688,
+        "state_norm": 11271.845703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 208896,
+        "nll": 4.658207416534424,
+        "gradient_norm": 1.9154186248779297,
+        "state_norm": 13158.5830078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 209152,
+        "nll": 4.49984884262085,
+        "gradient_norm": 1.9760078191757202,
+        "state_norm": 13194.40625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 209408,
+        "nll": 4.554075717926025,
+        "gradient_norm": 1.9626611471176147,
+        "state_norm": 11209.9072265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 209664,
+        "nll": 4.398193359375,
+        "gradient_norm": 2.083087205886841,
+        "state_norm": 15813.154296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 209920,
+        "nll": 4.468453407287598,
+        "gradient_norm": 2.220418691635132,
+        "state_norm": 16996.0546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 210176,
+        "nll": 4.511857509613037,
+        "gradient_norm": 2.092254877090454,
+        "state_norm": 13202.0205078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 210432,
+        "nll": 4.298497200012207,
+        "gradient_norm": 1.8616533279418945,
+        "state_norm": 14255.208984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 210688,
+        "nll": 4.887720584869385,
+        "gradient_norm": 1.9598352909088135,
+        "state_norm": 15460.267578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 210944,
+        "nll": 4.238333225250244,
+        "gradient_norm": 2.0073866844177246,
+        "state_norm": 11394.4404296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 211200,
+        "nll": 4.4429545402526855,
+        "gradient_norm": 2.3512344360351562,
+        "state_norm": 12791.6337890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 211456,
+        "nll": 4.714850902557373,
+        "gradient_norm": 2.1925737857818604,
+        "state_norm": 14614.171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 211712,
+        "nll": 4.781976699829102,
+        "gradient_norm": 2.1140618324279785,
+        "state_norm": 13944.701171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 211968,
+        "nll": 4.4615254402160645,
+        "gradient_norm": 2.1643872261047363,
+        "state_norm": 14714.2705078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 212224,
+        "nll": 4.644528865814209,
+        "gradient_norm": 1.92670738697052,
+        "state_norm": 11293.404296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 212480,
+        "nll": 3.7867956161499023,
+        "gradient_norm": 1.8841931819915771,
+        "state_norm": 10333.5029296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 212736,
+        "nll": 4.398797035217285,
+        "gradient_norm": 2.041262626647949,
+        "state_norm": 14978.181640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 212992,
+        "nll": 4.282354354858398,
+        "gradient_norm": 1.8579902648925781,
+        "state_norm": 14638.396484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 213248,
+        "nll": 4.3237528800964355,
+        "gradient_norm": 2.1398890018463135,
+        "state_norm": 10877.9580078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 213504,
+        "nll": 4.386183738708496,
+        "gradient_norm": 2.47280216217041,
+        "state_norm": 12046.18359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 213760,
+        "nll": 4.410004138946533,
+        "gradient_norm": 2.2283825874328613,
+        "state_norm": 13832.7109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 214016,
+        "nll": 4.7049455642700195,
+        "gradient_norm": 2.7810018062591553,
+        "state_norm": 14877.7578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 214272,
+        "nll": 4.4881978034973145,
+        "gradient_norm": 2.283928632736206,
+        "state_norm": 12098.806640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 214528,
+        "nll": 4.456538677215576,
+        "gradient_norm": 2.3127689361572266,
+        "state_norm": 12772.662109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 214784,
+        "nll": 4.44596529006958,
+        "gradient_norm": 2.2553930282592773,
+        "state_norm": 13766.720703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 215040,
+        "nll": 4.595370769500732,
+        "gradient_norm": 2.169921398162842,
+        "state_norm": 11885.001953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 215296,
+        "nll": 4.778228759765625,
+        "gradient_norm": 2.317129611968994,
+        "state_norm": 13869.33203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 215552,
+        "nll": 4.307840824127197,
+        "gradient_norm": 2.047483205795288,
+        "state_norm": 12949.4794921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 215808,
+        "nll": 4.103301525115967,
+        "gradient_norm": 2.017944574356079,
+        "state_norm": 9609.8818359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 216064,
+        "nll": 4.656317710876465,
+        "gradient_norm": 2.084766149520874,
+        "state_norm": 12913.2998046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 216320,
+        "nll": 4.846682548522949,
+        "gradient_norm": 2.1007046699523926,
+        "state_norm": 17122.8203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 216576,
+        "nll": 4.44150447845459,
+        "gradient_norm": 2.168766498565674,
+        "state_norm": 16256.8759765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 216832,
+        "nll": 4.496257305145264,
+        "gradient_norm": 1.9962679147720337,
+        "state_norm": 11990.876953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 217088,
+        "nll": 4.711461067199707,
+        "gradient_norm": 1.9409443140029907,
+        "state_norm": 12854.8837890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 217344,
+        "nll": 4.847691535949707,
+        "gradient_norm": 2.4519550800323486,
+        "state_norm": 15318.515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 217600,
+        "nll": 5.012426376342773,
+        "gradient_norm": 2.1422431468963623,
+        "state_norm": 15940.5908203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 217856,
+        "nll": 4.231218338012695,
+        "gradient_norm": 1.862502098083496,
+        "state_norm": 9276.484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 218112,
+        "nll": 4.182697296142578,
+        "gradient_norm": 1.9643429517745972,
+        "state_norm": 11596.875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 218368,
+        "nll": 4.777747631072998,
+        "gradient_norm": 2.173053026199341,
+        "state_norm": 15788.576171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 218624,
+        "nll": 4.981600284576416,
+        "gradient_norm": 2.1695878505706787,
+        "state_norm": 14956.29296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 218880,
+        "nll": 4.1422953605651855,
+        "gradient_norm": 2.0075018405914307,
+        "state_norm": 7990.515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 219136,
+        "nll": 4.431212902069092,
+        "gradient_norm": 2.1386146545410156,
+        "state_norm": 13713.2333984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 219392,
+        "nll": 4.075309753417969,
+        "gradient_norm": 1.889794111251831,
+        "state_norm": 11536.6982421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 219648,
+        "nll": 4.4649457931518555,
+        "gradient_norm": 2.4115545749664307,
+        "state_norm": 9617.298828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 219904,
+        "nll": 4.407132148742676,
+        "gradient_norm": 2.290471315383911,
+        "state_norm": 14088.5234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 220160,
+        "nll": 4.092621803283691,
+        "gradient_norm": 2.3228607177734375,
+        "state_norm": 9878.646484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 220416,
+        "nll": 4.495001316070557,
+        "gradient_norm": 2.4648115634918213,
+        "state_norm": 13669.763671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 220672,
+        "nll": 4.532631874084473,
+        "gradient_norm": 2.3327653408050537,
+        "state_norm": 15742.47265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 220928,
+        "nll": 4.3783135414123535,
+        "gradient_norm": 2.151585817337036,
+        "state_norm": 8167.42431640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 221184,
+        "nll": 4.467731952667236,
+        "gradient_norm": 2.37367844581604,
+        "state_norm": 12658.9921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 221440,
+        "nll": 4.67773962020874,
+        "gradient_norm": 2.132826805114746,
+        "state_norm": 13310.5869140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 221696,
+        "nll": 4.732438564300537,
+        "gradient_norm": 3.293776273727417,
+        "state_norm": 12761.0791015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 221952,
+        "nll": 4.781633377075195,
+        "gradient_norm": 3.0853464603424072,
+        "state_norm": 13991.0869140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 222208,
+        "nll": 4.8513946533203125,
+        "gradient_norm": 2.4751434326171875,
+        "state_norm": 15045.142578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 222464,
+        "nll": 5.015204429626465,
+        "gradient_norm": 2.3293330669403076,
+        "state_norm": 15067.802734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 222720,
+        "nll": 4.732889175415039,
+        "gradient_norm": 2.2594892978668213,
+        "state_norm": 14815.1201171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 222976,
+        "nll": 4.766892910003662,
+        "gradient_norm": 2.0445733070373535,
+        "state_norm": 14506.1728515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 223232,
+        "nll": 4.743305206298828,
+        "gradient_norm": 1.9731706380844116,
+        "state_norm": 14497.61328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 223488,
+        "nll": 4.272825241088867,
+        "gradient_norm": 2.215960741043091,
+        "state_norm": 11388.2158203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 223744,
+        "nll": 4.920198440551758,
+        "gradient_norm": 2.066711902618408,
+        "state_norm": 15720.0234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 224000,
+        "nll": 4.685857772827148,
+        "gradient_norm": 2.156458854675293,
+        "state_norm": 14685.443359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 224256,
+        "nll": 4.366633892059326,
+        "gradient_norm": 2.199129581451416,
+        "state_norm": 9931.3408203125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 224512,
+        "nll": 4.814979076385498,
+        "gradient_norm": 2.175187587738037,
+        "state_norm": 15324.3154296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 224768,
+        "nll": 4.407293796539307,
+        "gradient_norm": 2.3079874515533447,
+        "state_norm": 13711.880859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 225024,
+        "nll": 4.38839864730835,
+        "gradient_norm": 2.3749279975891113,
+        "state_norm": 10430.720703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 225280,
+        "nll": 4.367475509643555,
+        "gradient_norm": 2.076934814453125,
+        "state_norm": 11150.177734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 225536,
+        "nll": 4.469498634338379,
+        "gradient_norm": 2.660979747772217,
+        "state_norm": 14333.2666015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 225792,
+        "nll": 4.45361328125,
+        "gradient_norm": 2.5127317905426025,
+        "state_norm": 15484.3955078125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 226048,
+        "nll": 4.237724781036377,
+        "gradient_norm": 2.450752019882202,
+        "state_norm": 13410.8896484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 226304,
+        "nll": 4.364143371582031,
+        "gradient_norm": 2.3993923664093018,
+        "state_norm": 7230.9462890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 226560,
+        "nll": 4.350393772125244,
+        "gradient_norm": 2.403414487838745,
+        "state_norm": 12320.5478515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 226816,
+        "nll": 4.532669544219971,
+        "gradient_norm": 2.518062114715576,
+        "state_norm": 13879.46875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 227072,
+        "nll": 4.255313396453857,
+        "gradient_norm": 2.0650084018707275,
+        "state_norm": 12212.474609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 227328,
+        "nll": 4.105661869049072,
+        "gradient_norm": 1.879271388053894,
+        "state_norm": 10489.66015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 227584,
+        "nll": 4.618271350860596,
+        "gradient_norm": 2.0528862476348877,
+        "state_norm": 15034.8681640625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 227840,
+        "nll": 4.382471561431885,
+        "gradient_norm": 2.039665460586548,
+        "state_norm": 14565.3310546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 228096,
+        "nll": 3.680372476577759,
+        "gradient_norm": 1.7925970554351807,
+        "state_norm": 10762.11328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 228352,
+        "nll": 4.693720817565918,
+        "gradient_norm": 1.9783952236175537,
+        "state_norm": 15727.9384765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 228608,
+        "nll": 4.516810417175293,
+        "gradient_norm": 2.373612403869629,
+        "state_norm": 17389.140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 228864,
+        "nll": 5.1267409324646,
+        "gradient_norm": 2.5309219360351562,
+        "state_norm": 14679.322265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 229120,
+        "nll": 4.57940673828125,
+        "gradient_norm": 2.246589183807373,
+        "state_norm": 13833.478515625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 229376,
+        "nll": 4.392780303955078,
+        "gradient_norm": 2.211972236633301,
+        "state_norm": 15329.7998046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 229632,
+        "nll": 4.476567268371582,
+        "gradient_norm": 2.571242094039917,
+        "state_norm": 12260.1494140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 229888,
+        "nll": 4.247027397155762,
+        "gradient_norm": 2.3307788372039795,
+        "state_norm": 14363.8037109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 230144,
+        "nll": 4.64307975769043,
+        "gradient_norm": 2.4246137142181396,
+        "state_norm": 14242.5771484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 230400,
+        "nll": 4.307385444641113,
+        "gradient_norm": 1.997305989265442,
+        "state_norm": 11777.2666015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 230656,
+        "nll": 4.710139274597168,
+        "gradient_norm": 2.1926686763763428,
+        "state_norm": 12700.8720703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 230912,
+        "nll": 4.656035900115967,
+        "gradient_norm": 2.181971311569214,
+        "state_norm": 12171.802734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 231168,
+        "nll": 4.662017345428467,
+        "gradient_norm": 2.001521348953247,
+        "state_norm": 12351.3623046875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 231424,
+        "nll": 4.578545570373535,
+        "gradient_norm": 2.4166178703308105,
+        "state_norm": 14449.8984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 231680,
+        "nll": 4.874135971069336,
+        "gradient_norm": 2.101851224899292,
+        "state_norm": 14938.95703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 231936,
+        "nll": 4.272488117218018,
+        "gradient_norm": 2.1695597171783447,
+        "state_norm": 12146.33984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 232192,
+        "nll": 4.30142879486084,
+        "gradient_norm": 1.9387341737747192,
+        "state_norm": 11996.970703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 232448,
+        "nll": 4.356062889099121,
+        "gradient_norm": 2.220306158065796,
+        "state_norm": 11396.4111328125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 232704,
+        "nll": 4.837230682373047,
+        "gradient_norm": 2.0987372398376465,
+        "state_norm": 11802.3876953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 232960,
+        "nll": 4.558954238891602,
+        "gradient_norm": 2.2531208992004395,
+        "state_norm": 13711.7744140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 233216,
+        "nll": 4.666958808898926,
+        "gradient_norm": 2.09997820854187,
+        "state_norm": 11740.447265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 233472,
+        "nll": 4.802865028381348,
+        "gradient_norm": 2.2807228565216064,
+        "state_norm": 14386.0263671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 233728,
+        "nll": 4.515284061431885,
+        "gradient_norm": 2.1215879917144775,
+        "state_norm": 14041.5615234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 233984,
+        "nll": 4.3614726066589355,
+        "gradient_norm": 2.1294784545898438,
+        "state_norm": 10044.490234375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 234240,
+        "nll": 4.6787214279174805,
+        "gradient_norm": 2.4397597312927246,
+        "state_norm": 14712.5126953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 234496,
+        "nll": 4.699435710906982,
+        "gradient_norm": 2.365440845489502,
+        "state_norm": 16637.060546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 234752,
+        "nll": 5.056100368499756,
+        "gradient_norm": 2.1834678649902344,
+        "state_norm": 17211.970703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 235008,
+        "nll": 4.479198455810547,
+        "gradient_norm": 1.9901585578918457,
+        "state_norm": 12927.62890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 235264,
+        "nll": 4.562439918518066,
+        "gradient_norm": 2.0938968658447266,
+        "state_norm": 15299.8505859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 235520,
+        "nll": 4.675736904144287,
+        "gradient_norm": 2.176281690597534,
+        "state_norm": 15703.435546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 235776,
+        "nll": 4.4160566329956055,
+        "gradient_norm": 2.053788900375366,
+        "state_norm": 13016.091796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 236032,
+        "nll": 5.104465484619141,
+        "gradient_norm": 2.2256317138671875,
+        "state_norm": 15735.76953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 236288,
+        "nll": 4.989938735961914,
+        "gradient_norm": 2.3933560848236084,
+        "state_norm": 16435.6171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 236544,
+        "nll": 4.617672920227051,
+        "gradient_norm": 1.9736140966415405,
+        "state_norm": 13278.173828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 236800,
+        "nll": 4.523355484008789,
+        "gradient_norm": 2.0670552253723145,
+        "state_norm": 9795.423828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 237056,
+        "nll": 4.422085285186768,
+        "gradient_norm": 2.5688822269439697,
+        "state_norm": 11791.796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 237312,
+        "nll": 4.473856449127197,
+        "gradient_norm": 2.240663766860962,
+        "state_norm": 13101.3818359375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 237568,
+        "nll": 4.303354263305664,
+        "gradient_norm": 2.0451714992523193,
+        "state_norm": 13342.3984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 237824,
+        "nll": 4.391964435577393,
+        "gradient_norm": 2.131166458129883,
+        "state_norm": 14602.001953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 238080,
+        "nll": 3.8715765476226807,
+        "gradient_norm": 1.9895086288452148,
+        "state_norm": 9922.57421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 238336,
+        "nll": 4.3977556228637695,
+        "gradient_norm": 1.9623743295669556,
+        "state_norm": 13496.28125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 238592,
+        "nll": 4.579259872436523,
+        "gradient_norm": 2.142164707183838,
+        "state_norm": 12180.84375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 238848,
+        "nll": 4.544376850128174,
+        "gradient_norm": 2.280466318130493,
+        "state_norm": 14441.1396484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 239104,
+        "nll": 4.396749496459961,
+        "gradient_norm": 2.140427350997925,
+        "state_norm": 13024.8291015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 239360,
+        "nll": 4.860847473144531,
+        "gradient_norm": 2.118250846862793,
+        "state_norm": 13524.9208984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 239616,
+        "nll": 4.691887855529785,
+        "gradient_norm": 2.0764615535736084,
+        "state_norm": 14432.9619140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 239872,
+        "nll": 4.611985683441162,
+        "gradient_norm": 2.1765685081481934,
+        "state_norm": 15313.8291015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 240128,
+        "nll": 4.5747599601745605,
+        "gradient_norm": 2.0038821697235107,
+        "state_norm": 12088.841796875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 240384,
+        "nll": 4.930030822753906,
+        "gradient_norm": 2.511815071105957,
+        "state_norm": 12915.85546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 240640,
+        "nll": 4.676124572753906,
+        "gradient_norm": 2.2374861240386963,
+        "state_norm": 13979.1435546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 240896,
+        "nll": 4.6971611976623535,
+        "gradient_norm": 2.1366353034973145,
+        "state_norm": 12846.232421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 241152,
+        "nll": 4.839336395263672,
+        "gradient_norm": 2.0932488441467285,
+        "state_norm": 15924.646484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 241408,
+        "nll": 4.377768039703369,
+        "gradient_norm": 2.0651421546936035,
+        "state_norm": 14413.6484375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 241664,
+        "nll": 4.643316268920898,
+        "gradient_norm": 2.14162540435791,
+        "state_norm": 13083.212890625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 241920,
+        "nll": 4.654177188873291,
+        "gradient_norm": 2.193420886993408,
+        "state_norm": 10915.5400390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 242176,
+        "nll": 4.717810153961182,
+        "gradient_norm": 2.103027105331421,
+        "state_norm": 13288.130859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 242432,
+        "nll": 4.794770240783691,
+        "gradient_norm": 2.0802037715911865,
+        "state_norm": 15790.6826171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 242688,
+        "nll": 4.341251373291016,
+        "gradient_norm": 2.0447354316711426,
+        "state_norm": 9844.2265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 242944,
+        "nll": 4.654857635498047,
+        "gradient_norm": 2.2880859375,
+        "state_norm": 13349.6669921875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 243200,
+        "nll": 4.701537609100342,
+        "gradient_norm": 2.1795313358306885,
+        "state_norm": 15491.84375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 243456,
+        "nll": 4.55192232131958,
+        "gradient_norm": 2.1745331287384033,
+        "state_norm": 13367.076171875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 243712,
+        "nll": 4.118400573730469,
+        "gradient_norm": 2.1048662662506104,
+        "state_norm": 13203.09765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 243968,
+        "nll": 4.758430480957031,
+        "gradient_norm": 2.345787286758423,
+        "state_norm": 15995.5927734375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 244224,
+        "nll": 4.297671794891357,
+        "gradient_norm": 2.204922914505005,
+        "state_norm": 9751.1884765625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 244480,
+        "nll": 4.645017147064209,
+        "gradient_norm": 2.219658374786377,
+        "state_norm": 14520.947265625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 244736,
+        "nll": 4.570351600646973,
+        "gradient_norm": 2.3259267807006836,
+        "state_norm": 12336.064453125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 244992,
+        "nll": 4.639552116394043,
+        "gradient_norm": 2.2879295349121094,
+        "state_norm": 13741.99609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 245248,
+        "nll": 4.760350227355957,
+        "gradient_norm": 2.124765634536743,
+        "state_norm": 14896.48828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 245504,
+        "nll": 5.155860424041748,
+        "gradient_norm": 2.0003345012664795,
+        "state_norm": 15838.376953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 245760,
+        "nll": 4.811341762542725,
+        "gradient_norm": 2.2367405891418457,
+        "state_norm": 12177.91015625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 246016,
+        "nll": 4.5986552238464355,
+        "gradient_norm": 1.9660344123840332,
+        "state_norm": 11684.6435546875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 246272,
+        "nll": 4.61496639251709,
+        "gradient_norm": 2.3006856441497803,
+        "state_norm": 12306.34375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 246528,
+        "nll": 4.867971897125244,
+        "gradient_norm": 2.2011890411376953,
+        "state_norm": 13000.5595703125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 246784,
+        "nll": 4.486225128173828,
+        "gradient_norm": 2.520965814590454,
+        "state_norm": 11149.798828125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 247040,
+        "nll": 4.54618501663208,
+        "gradient_norm": 2.046271324157715,
+        "state_norm": 14252.9140625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 247296,
+        "nll": 4.690698623657227,
+        "gradient_norm": 2.2580158710479736,
+        "state_norm": 15251.7421875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 247552,
+        "nll": 4.680109977722168,
+        "gradient_norm": 2.1065878868103027,
+        "state_norm": 11835.13671875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 247808,
+        "nll": 4.2766242027282715,
+        "gradient_norm": 2.167950391769409,
+        "state_norm": 12027.4130859375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 248064,
+        "nll": 4.797642230987549,
+        "gradient_norm": 2.0725018978118896,
+        "state_norm": 15044.126953125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 248320,
+        "nll": 4.665580749511719,
+        "gradient_norm": 2.1683130264282227,
+        "state_norm": 14837.912109375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 248576,
+        "nll": 4.433141708374023,
+        "gradient_norm": 2.1621623039245605,
+        "state_norm": 11948.5849609375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 248832,
+        "nll": 4.9899468421936035,
+        "gradient_norm": 2.210825204849243,
+        "state_norm": 15521.3525390625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 249088,
+        "nll": 4.983768463134766,
+        "gradient_norm": 2.3675377368927,
+        "state_norm": 13767.2578125,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 249344,
+        "nll": 4.3559064865112305,
+        "gradient_norm": 2.228790044784546,
+        "state_norm": 10963.83984375,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 249600,
+        "nll": 5.079958438873291,
+        "gradient_norm": 2.4475901126861572,
+        "state_norm": 12878.5029296875,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 249856,
+        "nll": 4.816822052001953,
+        "gradient_norm": 2.2978978157043457,
+        "state_norm": 15575.5625,
+        "grad_scaler_scale": 1.0
+      },
+      {
+        "tokens": 250000,
+        "nll": 4.610959529876709,
+        "gradient_norm": 2.8655059337615967,
+        "state_norm": 14027.7119140625,
+        "grad_scaler_scale": 1.0
+      }
+    ],
+    "validation_progression": {
+      "250": {
+        "status": "OBSERVED",
+        "updates": 250,
+        "training_tokens": 64000,
+        "validation_probe": {
+          "nll": 5.057846174561962,
+          "ppl": 157.25145912659661
+        },
+        "holdout_probe": {
+          "nll": 5.472549964694465,
+          "ppl": 238.06648054674943
+        }
+      },
+      "500": {
+        "status": "OBSERVED",
+        "updates": 500,
+        "training_tokens": 128000,
+        "validation_probe": {
+          "nll": 4.5806481043172225,
+          "ppl": 97.57761419129038
+        },
+        "holdout_probe": {
+          "nll": 5.016251332475396,
+          "ppl": 150.84477568285644
+        }
+      },
+      "750": {
+        "status": "OBSERVED",
+        "updates": 750,
+        "training_tokens": 192000,
+        "validation_probe": {
+          "nll": 4.370997028134831,
+          "ppl": 79.12247972456615
+        },
+        "holdout_probe": {
+          "nll": 4.831150848248945,
+          "ppl": 125.3551424193356
+        }
+      },
+      "977": {
+        "status": "OBSERVED",
+        "updates": 977,
+        "training_tokens": 250000,
+        "validation_probe": {
+          "nll": 4.340943536744361,
+          "ppl": 76.77994987586023
+        },
+        "holdout_probe": {
+          "nll": 4.805372857435442,
+          "ppl": 122.1650326711655
+        }
+      }
+    },
+    "progression_scope": "prespecified first4 validation/first4 holdout diagnostic subsets; final quality uses all 16/205 documents"
+  }
+}

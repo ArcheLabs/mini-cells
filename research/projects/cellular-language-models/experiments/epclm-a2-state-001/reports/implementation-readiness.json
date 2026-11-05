@@ -1,0 +1,37 @@
+{
+  "status": "IMPLEMENTATION_READY_GPU_NOT_RUN",
+  "correctness_tests": {
+    "passed": 16,
+    "failed": 0,
+    "seconds": 10.55,
+    "scope": "16 required tests including one synthetic actual-trainer update and checkpoint reload; no real training or CPU benchmark"
+  },
+  "gpu_training": "NOT_RUN_RESOURCE_UNAVAILABLE",
+  "target_gpu": "Tesla T4",
+  "local_gpu": "Quadro K620",
+  "scientific_confirmation": false,
+  "independent_test_accessed": false,
+  "strict_historical_initialization_match": false,
+  "hypotheses": {
+    "H1": "NOT_RUN",
+    "H2": "NOT_RUN",
+    "H3": "NOT_RUN"
+  },
+  "implementation_files_sha256": {
+    "architecture.py": "d20b7a353b30361fa3ba505dcdbf893b05eacd095c1d6e232d8028cd203878bb",
+    "audit.py": "6c445524540c73f9a0cb5e342bc26ce6806b0d4b2bc4bba8c7c2c4ec88f49adf",
+    "bootstrap.py": "02ed1960ac1bc5c5c2c1414b8558b601d16bc3949ca001e9c2c0fca16a03e8d1",
+    "evaluate.py": "4296c52db8ed65a2449f57396430f7573bd062490c044ff42353049e6c0e2455",
+    "flops.py": "5a1c92eb226dc4028b5ff05febaca48d04cfefdc7a1ff39e44e8e67eddbe8343",
+    "report.py": "cabf12ab8a86d9abdfde4cdbe15c036d6cb084d8eb231d4fad32743839d179b3",
+    "runner.py": "b43453efc2eb323c08b4ecff76a7084fb63ca807f2c60fbf4f2c0aab5439838e",
+    "runtime.py": "137666ae9782d58c74707c33812c4ab820990b8633a3ad9e7a7cd57f8c3fdad0",
+    "state.py": "c37a1ae7fec3bfe83e43ccdf138eace07c6ecbce4858a64a20f986a244ee6578",
+    "state_read.py": "37dd6803b3a1579270ad5b6ef16649203a0bbe6c83a43c0bdefe2f9704a8f070",
+    "train.py": "427ce568d7b71a3361a27146961bb3fe9b5ac41ff99d43cf2252708fd9a1b614",
+    "training.py": "ec51f3dfc1bd825eee865121dabf1b8c1f28b713c280e2b0f7d69301333753f2"
+  },
+  "protocol_sha256": "dfcbe9794c60b37865224b5a20e5b42f7887b7abea5a2322ca746c69ae90f75c",
+  "notebook_code": "COMPILED",
+  "baseline_audit": "PASSED_SOURCE_HASH_AND_CONTENT_CHECKS"
+}

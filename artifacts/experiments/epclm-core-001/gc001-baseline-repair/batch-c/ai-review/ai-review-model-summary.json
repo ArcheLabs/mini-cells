@@ -1,0 +1,218 @@
+{
+  "reviewer_type": "AI_NOT_HUMAN",
+  "aggregation": "After scores were frozen, exact prompt+continuation matched against published model samples; duplicate texts have identical score tuples, so aggregate means do not depend on unresolved ID assignment. No access to private blind key.",
+  "duplicate_prompt_text_sample_ids": [
+    "S0011",
+    "S0024",
+    "S0058",
+    "S0063",
+    "S0065",
+    "S0080",
+    "S0117",
+    "S0152",
+    "S0155",
+    "S0179",
+    "S0188",
+    "S0210",
+    "S0221",
+    "S0225",
+    "S0227",
+    "S0228",
+    "S0243",
+    "S0248"
+  ],
+  "models": {
+    "C1": {
+      "greedy": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 1.0
+        }
+      },
+      "sampling": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 3.8125
+        }
+      }
+    },
+    "B1-FROZEN-NO-COMM": {
+      "greedy": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 1.0
+        }
+      },
+      "sampling": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 2.6875
+        }
+      }
+    },
+    "NO-COMM": {
+      "greedy": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 1.0
+        }
+      },
+      "sampling": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 3.875
+        }
+      }
+    },
+    "F0": {
+      "greedy": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 1.0
+        }
+      },
+      "sampling": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 3.9375
+        }
+      }
+    },
+    "C1-BROADCAST": {
+      "greedy": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 1.0
+        }
+      },
+      "sampling": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 3.875
+        }
+      }
+    },
+    "IC-ALL-SELF": {
+      "greedy": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 1.0
+        }
+      },
+      "sampling": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 3.875
+        }
+      }
+    },
+    "F0-PM-BROADCAST": {
+      "greedy": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 1.0
+        }
+      },
+      "sampling": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 1.0,
+          "local_coherence": 1.0,
+          "semantic_consistency": 1.0,
+          "prompt_relevance": 1.0,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 3.875
+        }
+      }
+    },
+    "T1": {
+      "greedy": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 3.625,
+          "local_coherence": 2.0,
+          "semantic_consistency": 2.0,
+          "prompt_relevance": 1.4375,
+          "story_progression": 1.0,
+          "repetition_and_degeneration": 1.0
+        }
+      },
+      "sampling": {
+        "n": 16,
+        "mean_scores": {
+          "grammaticality": 2.0,
+          "local_coherence": 2.0,
+          "semantic_consistency": 1.125,
+          "prompt_relevance": 1.375,
+          "story_progression": 2.0,
+          "repetition_and_degeneration": 3.6875
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "audit_status": "PASS",
+  "source_commit": "6b95b93a733d3789efa4d66f8235e03395fe6a91",
+  "a2_config_path": "research/projects/cellular-language-models/experiments/epclm-a2-state-001/reports/history/A2-config.json",
+  "a2_config_sha256": "8817b2f8734f070fdee567a9794535e98f30fed1efef3a5218cd18b6de08af66",
+  "model_config": {
+    "dim": 188,
+    "heads": 4,
+    "ffn": 639,
+    "layers": 3,
+    "vocab": 2048,
+    "cells": 16,
+    "state_dim": 128,
+    "router_dim": 128,
+    "window": 128,
+    "chunk": 32,
+    "K": 2
+  },
+  "training_config": {
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "warmup_fraction": 0.1
+  },
+  "data_config": {
+    "status": "PENDING_RUNTIME_VERIFICATION",
+    "source": "pinned TinyStories revision and frozen tokenizer via retrain_config.json",
+    "boundaries": "real complete documents; not historical random slices"
+  },
+  "common_initialization": {
+    "M0": "97a09735676e543d6be0632df00516d22d01e7f6b908a3b3eae9107d4a6d7d82",
+    "M1": "97a09735676e543d6be0632df00516d22d01e7f6b908a3b3eae9107d4a6d7d82",
+    "M2": "97a09735676e543d6be0632df00516d22d01e7f6b908a3b3eae9107d4a6d7d82"
+  },
+  "parameter_count": {
+    "T0": 2276680,
+    "M0": 1358864,
+    "M1": 1577232,
+    "M2": 1593616
+  },
+  "environment": {
+    "gpu": "Quadro K620",
+    "torch": "2.4.1+cu121",
+    "cuda": "12.1",
+    "precision": "FP32",
+    "tf32": false,
+    "gpu_total_memory_bytes": 2147221504
+  },
+  "historical_comparison": "background only; new complete-document protocol"
+}
