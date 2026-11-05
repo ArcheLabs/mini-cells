@@ -1,18 +1,12 @@
 {
   "identity": {
-    "git_commit": "339ec9d4aa692b3a1c6b88a4e8c1fb52c2abb038",
+    "git_commit": "ba35017c2c51b0799c3baa28b4d741a46282b4f7",
     "source_files_sha256": {
       "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "e17d01d8fa6df2fa5d173d12ab8f4eb47ff0b51d4327a037f79970d0749058c1",
-      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/exposure.py": "13f1db357ecf2e11e2cd72eccf0923b8f64ce9becc342a559943e617786d32ff",
-      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/flops_audit.py": "2ab0821f84c312b6894a28e65c1dc370f55a76cfc5fade2d7a2255dbbffec1fe",
-      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/preparation.py": "dbb9543bc80805e380ba53a79e2117735dea8bf13297ff689cc278b802505206",
-      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/readiness.py": "34aa362f5b930863fb75a1ddba578399ed6a9347b066fb31d9f5a7670f873deb",
-      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/run.py": "20ff2c7003e0a976dbe5963899fb459d79c0e4d17aa7da663f96f353ee0c1b9e",
-      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/training_path.py": "77a11d2954fa87b2067980d47f223916fa42505ed15d436130eebce0ac264604"
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/preparation.py": "9e56a9a4c89198ea36b42fe5541620da0b34499d1667031f429433947b2080bf",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/run.py": "0b413633204ff7872285048abb04a3957b0bfd2135b8a979e090e59ed741925d"
     },
     "protocol_sha256": "d3e08853a21a58657558e8abf0b5f2bf9dd1686d8d50a78e0fccd911d36e1b56",
-    "freeze_candidate_sha256": "1ccb449ef7906d38bf0f573ae8afd715b33dd9c89485715cc61e8507125e4309",
-    "protocol_frozen": false,
     "dataset_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
     "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
     "seed": 713,
@@ -31,7 +25,7 @@
     }
   },
   "result": {
-    "status": "AUDIT_COMPLETE_WITH_DOCUMENTED_HISTORICAL_LIMIT",
+    "status": "BASELINE_METADATA_AND_RAW_ASSETS_PASS_EXPOSURE_ORDER_PENDING",
     "sources": {
       "a": {
         "commit": "16134c64c637893dd05279801e19e3702e2181e8",
@@ -260,9 +254,8 @@
         "historical_weights_requested": false
       }
     },
-    "baseline_audit_gate": "HISTORICAL_RUNTIME_ORDER_UNVERIFIABLE_NEW_RUN_LOGGING_REQUIRED",
+    "baseline_audit_gate": "PENDING_HISTORICAL_CONSUMPTION_ORDER_VERIFICATION",
     "historical_hypotheses": "H1_H5_NOT_EVALUATED",
-    "human_review": "PENDING_AI_REVIEW_IS_NOT_HUMAN",
-    "original_phase0_full_pass_claimed": false
+    "human_review": "PENDING_AI_REVIEW_IS_NOT_HUMAN"
   }
 }

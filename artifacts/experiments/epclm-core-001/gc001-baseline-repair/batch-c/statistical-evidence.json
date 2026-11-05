@@ -1,0 +1,44 @@
+{
+  "status": "SINGLE_SEED_DEVELOPMENT_ONLY",
+  "splits": {
+    "validation": {
+      "nll_difference": -0.0029267576993552407,
+      "relative_change": -0.0005056204031579119,
+      "story_bootstrap_95": [
+        -0.006411619447475012,
+        0.0005912855390859751
+      ],
+      "training_seeds": 1,
+      "between_seed_variance": "NOT_EVALUATED",
+      "scientific_decision": false,
+      "documents": 16,
+      "pairing": "EXACT_UNIQUE_STORY_ID_AND_TOKEN_COUNT",
+      "unit": "document",
+      "draws": 1000,
+      "seed": 713
+    },
+    "development_holdout": {
+      "nll_difference": -0.0006289480746130631,
+      "relative_change": -0.0001076911818399336,
+      "story_bootstrap_95": [
+        -0.0015861831504744611,
+        0.0002983633510862453
+      ],
+      "training_seeds": 1,
+      "between_seed_variance": "NOT_EVALUATED",
+      "scientific_decision": false,
+      "documents": 205,
+      "pairing": "EXACT_UNIQUE_STORY_ID_AND_TOKEN_COUNT",
+      "unit": "document",
+      "draws": 1000,
+      "seed": 713
+    }
+  },
+  "primary_split": "development_holdout",
+  "limits": [
+    "one trained seed; no between-seed variance",
+    "development holdout is not an independent Test",
+    "document bootstrap is conditional on these trained weights",
+    "post-result synthesis; no preregistered significance decision"
+  ]
+}

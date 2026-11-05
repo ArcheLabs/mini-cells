@@ -1,0 +1,334 @@
+{
+  "identity": {
+    "git_commit": "339ec9d4aa692b3a1c6b88a4e8c1fb52c2abb038",
+    "source_files_sha256": {
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "e17d01d8fa6df2fa5d173d12ab8f4eb47ff0b51d4327a037f79970d0749058c1",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/exposure.py": "13f1db357ecf2e11e2cd72eccf0923b8f64ce9becc342a559943e617786d32ff",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/flops_audit.py": "2ab0821f84c312b6894a28e65c1dc370f55a76cfc5fade2d7a2255dbbffec1fe",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/preparation.py": "dbb9543bc80805e380ba53a79e2117735dea8bf13297ff689cc278b802505206",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/readiness.py": "34aa362f5b930863fb75a1ddba578399ed6a9347b066fb31d9f5a7670f873deb",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/run.py": "20ff2c7003e0a976dbe5963899fb459d79c0e4d17aa7da663f96f353ee0c1b9e",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/training_path.py": "77a11d2954fa87b2067980d47f223916fa42505ed15d436130eebce0ac264604"
+    },
+    "protocol_sha256": "d3e08853a21a58657558e8abf0b5f2bf9dd1686d8d50a78e0fccd911d36e1b56",
+    "freeze_candidate_sha256": "1ccb449ef7906d38bf0f573ae8afd715b33dd9c89485715cc61e8507125e4309",
+    "protocol_frozen": false,
+    "dataset_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "seed": 713,
+    "seed_scope": "synthetic correctness fixtures only; formal seeds not selected",
+    "hardware": {
+      "device": "cuda",
+      "gpu": "Tesla T4"
+    },
+    "software": {
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128",
+      "cuda_runtime": "12.8",
+      "driver_version": null,
+      "power_limit": null,
+      "kernel_configuration": "default SDPA with explicit local causal mask; TF32 disabled"
+    }
+  },
+  "result": {
+    "reused_evidence": {
+      "status": "REUSED_VERIFIED_COMPLETED_ENGINEERING_EVIDENCE",
+      "commit": "187d7f498dcf252a13da9e6dbc384fa3a8c36d9a",
+      "branch": "kaggle/epclm-gc002-preparation-ba35017c2c51",
+      "files_sha256": {
+        "baseline-audit.json": "0807da46f7022a72b1e2aa23b729cb532574f023ad1b2dfe34bb50dd88f21b2e",
+        "kv-cache-equivalence.json": "a32b780f076eb05b58c65cf0a57eca5883e8774fce6397d265d313350c8c6b5c",
+        "inference-profile.json": "3ba91f96bee83a303cc894f38eedee164abec73871987f5474d87500b9197dfa",
+        "parameter-match-report.json": "a7b47d34ba2a2a8f0395d2729bc9d31a9bd07ac5ca18b43e97eb6aaf7dec4504"
+      },
+      "original_identity": {
+        "git_commit": "ba35017c2c51b0799c3baa28b4d741a46282b4f7",
+        "source_files_sha256": {
+          "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "e17d01d8fa6df2fa5d173d12ab8f4eb47ff0b51d4327a037f79970d0749058c1",
+          "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/preparation.py": "9e56a9a4c89198ea36b42fe5541620da0b34499d1667031f429433947b2080bf",
+          "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/run.py": "0b413633204ff7872285048abb04a3957b0bfd2135b8a979e090e59ed741925d"
+        },
+        "protocol_sha256": "d3e08853a21a58657558e8abf0b5f2bf9dd1686d8d50a78e0fccd911d36e1b56",
+        "dataset_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+        "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+        "seed": 713,
+        "seed_scope": "synthetic correctness fixtures only; formal seeds not selected",
+        "hardware": {
+          "device": "cuda",
+          "gpu": "Tesla T4"
+        },
+        "software": {
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128",
+          "cuda_runtime": "12.8",
+          "driver_version": null,
+          "power_limit": null,
+          "kernel_configuration": "default SDPA with explicit local causal mask; TF32 disabled"
+        }
+      },
+      "scope": "same cached_transformer.py bytes; previously measured CUDA random-weight correctness and inference; not new measurement"
+    },
+    "measurements": {
+      "T1-KV": {
+        "status": "MEASURED_RANDOM_WEIGHTS_ENGINEERING_ONLY",
+        "formal_performance_eligible": false,
+        "rows": [
+          {
+            "history_tokens": 32,
+            "prefill_median_seconds": 0.005710964999991575,
+            "prefill_p95_seconds": 0.005990141999973275,
+            "decode_median_seconds": 0.0059358084999985294,
+            "decode_p95_seconds": 0.006228919999955451,
+            "decode_tokens_per_second": 168.46904680301728,
+            "peak_cuda_allocated_bytes": 16703488,
+            "peak_cuda_reserved_bytes": 67108864,
+            "baseline_cuda_allocated_bytes": 16098816,
+            "total_inference_memory_bytes": null,
+            "total_runtime_memory_status": "CUDA_COMPONENT_MEASURED_HOST_DRIVER_UNATTRIBUTED",
+            "runtime_memory_scope": "process-wide CUDA tensor allocations incl model and temporary workspace; Python/driver overhead separately unknown",
+            "persistent_memory": {
+              "batch": 1,
+              "cached_tokens": 33,
+              "absolute_next_position": 33,
+              "kv_tensor_payload_bytes": 67584,
+              "kv_tensor_backing_storage_bytes": 67584,
+              "persistent_state_bytes_per_stream": 67584,
+              "token_buffer_bytes": 0,
+              "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+              "python_metadata_shallow_bytes": 500,
+              "tensor_wrapper_shallow_bytes": 576,
+              "serialization_bytes": 70669,
+              "theoretical_full_window_gqa_bytes_per_stream": 262144,
+              "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+              "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+            }
+          },
+          {
+            "history_tokens": 128,
+            "prefill_median_seconds": 0.005781766500007279,
+            "prefill_p95_seconds": 0.007348728000010851,
+            "decode_median_seconds": 0.00600099399997589,
+            "decode_p95_seconds": 0.008511230999999952,
+            "decode_tokens_per_second": 166.63906012970813,
+            "peak_cuda_allocated_bytes": 18510336,
+            "peak_cuda_reserved_bytes": 67108864,
+            "baseline_cuda_allocated_bytes": 16235008,
+            "total_inference_memory_bytes": null,
+            "total_runtime_memory_status": "CUDA_COMPONENT_MEASURED_HOST_DRIVER_UNATTRIBUTED",
+            "runtime_memory_scope": "process-wide CUDA tensor allocations incl model and temporary workspace; Python/driver overhead separately unknown",
+            "persistent_memory": {
+              "batch": 1,
+              "cached_tokens": 128,
+              "absolute_next_position": 129,
+              "kv_tensor_payload_bytes": 262144,
+              "kv_tensor_backing_storage_bytes": 262144,
+              "persistent_state_bytes_per_stream": 262144,
+              "token_buffer_bytes": 0,
+              "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+              "python_metadata_shallow_bytes": 500,
+              "tensor_wrapper_shallow_bytes": 576,
+              "serialization_bytes": 265229,
+              "theoretical_full_window_gqa_bytes_per_stream": 262144,
+              "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+              "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+            }
+          },
+          {
+            "history_tokens": 512,
+            "prefill_median_seconds": 0.0061336294999989605,
+            "prefill_p95_seconds": 0.006996057999970162,
+            "decode_median_seconds": 0.005731546500015838,
+            "decode_p95_seconds": 0.006245510999974613,
+            "decode_tokens_per_second": 174.4729803722672,
+            "peak_cuda_allocated_bytes": 23582208,
+            "peak_cuda_reserved_bytes": 67108864,
+            "baseline_cuda_allocated_bytes": 16627200,
+            "total_inference_memory_bytes": null,
+            "total_runtime_memory_status": "CUDA_COMPONENT_MEASURED_HOST_DRIVER_UNATTRIBUTED",
+            "runtime_memory_scope": "process-wide CUDA tensor allocations incl model and temporary workspace; Python/driver overhead separately unknown",
+            "persistent_memory": {
+              "batch": 1,
+              "cached_tokens": 128,
+              "absolute_next_position": 513,
+              "kv_tensor_payload_bytes": 262144,
+              "kv_tensor_backing_storage_bytes": 262144,
+              "persistent_state_bytes_per_stream": 262144,
+              "token_buffer_bytes": 0,
+              "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+              "python_metadata_shallow_bytes": 500,
+              "tensor_wrapper_shallow_bytes": 576,
+              "serialization_bytes": 265229,
+              "theoretical_full_window_gqa_bytes_per_stream": 262144,
+              "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+              "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+            }
+          },
+          {
+            "history_tokens": 1024,
+            "prefill_median_seconds": 0.007826835500026164,
+            "prefill_p95_seconds": 0.008066212000017003,
+            "decode_median_seconds": 0.005776644000007991,
+            "decode_p95_seconds": 0.005948650999982874,
+            "decode_tokens_per_second": 173.11089276033223,
+            "peak_cuda_allocated_bytes": 31720960,
+            "peak_cuda_reserved_bytes": 67108864,
+            "baseline_cuda_allocated_bytes": 16631296,
+            "total_inference_memory_bytes": null,
+            "total_runtime_memory_status": "CUDA_COMPONENT_MEASURED_HOST_DRIVER_UNATTRIBUTED",
+            "runtime_memory_scope": "process-wide CUDA tensor allocations incl model and temporary workspace; Python/driver overhead separately unknown",
+            "persistent_memory": {
+              "batch": 1,
+              "cached_tokens": 128,
+              "absolute_next_position": 1025,
+              "kv_tensor_payload_bytes": 262144,
+              "kv_tensor_backing_storage_bytes": 262144,
+              "persistent_state_bytes_per_stream": 262144,
+              "token_buffer_bytes": 0,
+              "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+              "python_metadata_shallow_bytes": 500,
+              "tensor_wrapper_shallow_bytes": 576,
+              "serialization_bytes": 265229,
+              "theoretical_full_window_gqa_bytes_per_stream": 262144,
+              "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+              "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+            }
+          }
+        ],
+        "precision": "fp32",
+        "gpu": "Tesla T4",
+        "flops_per_token": null,
+        "flops_status": "FULL_OPERATOR_FORWARD_BACKWARD_OPTIMIZER_ACCOUNTING_NOT_IMPLEMENTED"
+      },
+      "T1-PM-KV": {
+        "status": "MEASURED_RANDOM_WEIGHTS_ENGINEERING_ONLY",
+        "formal_performance_eligible": false,
+        "rows": [
+          {
+            "history_tokens": 32,
+            "prefill_median_seconds": 0.005783836000006204,
+            "prefill_p95_seconds": 0.006244321999986369,
+            "decode_median_seconds": 0.005938460999971085,
+            "decode_p95_seconds": 0.006250950000037392,
+            "decode_tokens_per_second": 168.3937976531073,
+            "peak_cuda_allocated_bytes": 13168128,
+            "peak_cuda_reserved_bytes": 67108864,
+            "baseline_cuda_allocated_bytes": 12391424,
+            "total_inference_memory_bytes": null,
+            "total_runtime_memory_status": "CUDA_COMPONENT_MEASURED_HOST_DRIVER_UNATTRIBUTED",
+            "runtime_memory_scope": "process-wide CUDA tensor allocations incl model and temporary workspace; Python/driver overhead separately unknown",
+            "persistent_memory": {
+              "batch": 1,
+              "cached_tokens": 33,
+              "absolute_next_position": 33,
+              "kv_tensor_payload_bytes": 135168,
+              "kv_tensor_backing_storage_bytes": 135168,
+              "persistent_state_bytes_per_stream": 135168,
+              "token_buffer_bytes": 0,
+              "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+              "python_metadata_shallow_bytes": 500,
+              "tensor_wrapper_shallow_bytes": 576,
+              "serialization_bytes": 138253,
+              "theoretical_full_window_gqa_bytes_per_stream": 524288,
+              "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+              "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+            }
+          },
+          {
+            "history_tokens": 128,
+            "prefill_median_seconds": 0.005681285999969532,
+            "prefill_p95_seconds": 0.005887744000006023,
+            "decode_median_seconds": 0.005707639999997127,
+            "decode_p95_seconds": 0.006243463000032534,
+            "decode_tokens_per_second": 175.2037619752653,
+            "peak_cuda_allocated_bytes": 15491072,
+            "peak_cuda_reserved_bytes": 67108864,
+            "baseline_cuda_allocated_bytes": 12658688,
+            "total_inference_memory_bytes": null,
+            "total_runtime_memory_status": "CUDA_COMPONENT_MEASURED_HOST_DRIVER_UNATTRIBUTED",
+            "runtime_memory_scope": "process-wide CUDA tensor allocations incl model and temporary workspace; Python/driver overhead separately unknown",
+            "persistent_memory": {
+              "batch": 1,
+              "cached_tokens": 128,
+              "absolute_next_position": 129,
+              "kv_tensor_payload_bytes": 524288,
+              "kv_tensor_backing_storage_bytes": 524288,
+              "persistent_state_bytes_per_stream": 524288,
+              "token_buffer_bytes": 0,
+              "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+              "python_metadata_shallow_bytes": 500,
+              "tensor_wrapper_shallow_bytes": 576,
+              "serialization_bytes": 527373,
+              "theoretical_full_window_gqa_bytes_per_stream": 524288,
+              "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+              "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+            }
+          },
+          {
+            "history_tokens": 512,
+            "prefill_median_seconds": 0.006161987499979205,
+            "prefill_p95_seconds": 0.006339889999992465,
+            "decode_median_seconds": 0.006229743000034205,
+            "decode_p95_seconds": 0.0065617089999818745,
+            "decode_tokens_per_second": 160.5202654418504,
+            "peak_cuda_allocated_bytes": 20268032,
+            "peak_cuda_reserved_bytes": 67108864,
+            "baseline_cuda_allocated_bytes": 13444096,
+            "total_inference_memory_bytes": null,
+            "total_runtime_memory_status": "CUDA_COMPONENT_MEASURED_HOST_DRIVER_UNATTRIBUTED",
+            "runtime_memory_scope": "process-wide CUDA tensor allocations incl model and temporary workspace; Python/driver overhead separately unknown",
+            "persistent_memory": {
+              "batch": 1,
+              "cached_tokens": 128,
+              "absolute_next_position": 513,
+              "kv_tensor_payload_bytes": 524288,
+              "kv_tensor_backing_storage_bytes": 524288,
+              "persistent_state_bytes_per_stream": 524288,
+              "token_buffer_bytes": 0,
+              "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+              "python_metadata_shallow_bytes": 500,
+              "tensor_wrapper_shallow_bytes": 576,
+              "serialization_bytes": 527373,
+              "theoretical_full_window_gqa_bytes_per_stream": 524288,
+              "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+              "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+            }
+          },
+          {
+            "history_tokens": 1024,
+            "prefill_median_seconds": 0.0062673445000029915,
+            "prefill_p95_seconds": 0.006518694000021696,
+            "decode_median_seconds": 0.00626045650000151,
+            "decode_p95_seconds": 0.006555952000041998,
+            "decode_tokens_per_second": 159.73276070199654,
+            "peak_cuda_allocated_bytes": 28013568,
+            "peak_cuda_reserved_bytes": 67108864,
+            "baseline_cuda_allocated_bytes": 13448192,
+            "total_inference_memory_bytes": null,
+            "total_runtime_memory_status": "CUDA_COMPONENT_MEASURED_HOST_DRIVER_UNATTRIBUTED",
+            "runtime_memory_scope": "process-wide CUDA tensor allocations incl model and temporary workspace; Python/driver overhead separately unknown",
+            "persistent_memory": {
+              "batch": 1,
+              "cached_tokens": 128,
+              "absolute_next_position": 1025,
+              "kv_tensor_payload_bytes": 524288,
+              "kv_tensor_backing_storage_bytes": 524288,
+              "persistent_state_bytes_per_stream": 524288,
+              "token_buffer_bytes": 0,
+              "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+              "python_metadata_shallow_bytes": 500,
+              "tensor_wrapper_shallow_bytes": 576,
+              "serialization_bytes": 527373,
+              "theoretical_full_window_gqa_bytes_per_stream": 524288,
+              "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+              "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+            }
+          }
+        ],
+        "precision": "fp32",
+        "gpu": "Tesla T4",
+        "flops_per_token": null,
+        "flops_status": "FULL_OPERATOR_FORWARD_BACKWARD_OPTIMIZER_ACCOUNTING_NOT_IMPLEMENTED"
+      }
+    }
+  }
+}

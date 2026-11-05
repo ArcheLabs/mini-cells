@@ -1,0 +1,21 @@
+{
+  "reused": {
+    "document_assets": "epclm-stateful-computation-routing-001/v0.3/data.py",
+    "MHA_RoPE_SwiGLU": "frozen v0.2 Attention + native primitives",
+    "atomic_checkpoint": "native_clm_runtime._atomic_save",
+    "Kaggle_recovery": "gc001-baseline-repair/repair_io.py",
+    "publisher": "scripts/research/publish_experiment_results.py"
+  },
+  "new": [
+    "causal Workspace encoder and separate cache",
+    "independent sparse SwiGLU experts",
+    "per-token Controller",
+    "matched baseline configs",
+    "checkpoint and recovery identity",
+    "frozen counterfactual routing"
+  ],
+  "historical_results_mutated": false,
+  "assets_runtime_status": "PENDING_KAGGLE_HASH_VERIFICATION",
+  "GPU_smoke": "NOT_RUN",
+  "main_training": "NOT_FROZEN"
+}

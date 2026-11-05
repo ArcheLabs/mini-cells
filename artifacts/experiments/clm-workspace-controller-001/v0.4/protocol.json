@@ -1,0 +1,300 @@
+{
+  "checkpoint_policy": {
+    "objects": "immutable content-addressed snapshots plus atomic recovery manifest",
+    "recovery": "reuse repair_io transport, <=3 saved versions, <=45s; published same-source progress with failed recovery blocks retraining",
+    "resume": "exact source/config/data identity; every committed document group"
+  },
+  "controller_updates": 2,
+  "counterfactual": {
+    "fixed_pairs": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "oracle": "bounded optional offline path diagnostic; NOT_RUN in initial smoke",
+    "random_seed": 4301,
+    "shuffle": "permute normal route assignments and their selected weights across tokens within each evaluated chunk, separately per step; update actual controller path"
+  },
+  "evaluation": {
+    "bootstrap_repetitions": 2000,
+    "bootstrap_seed": 91002,
+    "documents": 32,
+    "threshold": 0.01
+  },
+  "format": "minicells.clm-v04.protocol.v1",
+  "groups": {
+    "documents": 8,
+    "max_document_targets": 4096
+  },
+  "independent_test_accessed": false,
+  "main": {
+    "additional_gates": [
+      "smoke completion",
+      "runtime throughput and active-compute audit",
+      "three-seed total GPU-hours and per-session schedule freeze",
+      "formal training-FLOPs matching plan"
+    ],
+    "frozen": false,
+    "planned_targets_per_model_seed": 32000000,
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "status": "NOT_RUN_PENDING_SMOKE_AND_MATCHING_FREEZE"
+  },
+  "matching": {
+    "F": "declared dense-matmul MAC=2 active forward cost at context256; runtime profiling separate",
+    "P": "actual total parameter count",
+    "ffn_multiple": 8,
+    "layers": 3,
+    "tolerance": 0.01
+  },
+  "mechanism_version": "workspace-controller-v0.4",
+  "model": {
+    "cells": 8,
+    "chunk": 64,
+    "dim": 256,
+    "encoder_ffn": 512,
+    "ffn": 512,
+    "heads": 4,
+    "layers": 3,
+    "norm": "LayerNorm",
+    "state_dim": 256,
+    "steps": 2,
+    "top_k": 2,
+    "vocab": 2048,
+    "window": 256
+  },
+  "norm": "LayerNorm",
+  "optimizer": {
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "clip": 1.0,
+    "lr": 0.0003,
+    "warmup_fraction": 0.1,
+    "weight_decay": 0.1
+  },
+  "precision": {
+    "fallback": "fp16_grad_scaler",
+    "initial_scale": 1024,
+    "max_consecutive_overflows": 5,
+    "prefer": "bf16"
+  },
+  "router": {
+    "balance": "N * sum(stopgrad(top2_assignment_fraction) * mean(full_router_softmax)), averaged over steps; diagnostic auxiliary only",
+    "balance_alpha": 0.001,
+    "noise": 0.0,
+    "temperature": 1.0
+  },
+  "scientific_confirmation": false,
+  "selected_document_groups": [
+    [
+      "train:0",
+      "train:1",
+      "train:2",
+      "train:3",
+      "train:4",
+      "train:5",
+      "train:6",
+      "train:7"
+    ],
+    [
+      "train:8",
+      "train:9",
+      "train:10",
+      "train:11",
+      "train:12",
+      "train:13",
+      "train:14",
+      "train:15"
+    ],
+    [
+      "train:16",
+      "train:17",
+      "train:18",
+      "train:19",
+      "train:20",
+      "train:21",
+      "train:22",
+      "train:23"
+    ],
+    [
+      "train:24",
+      "train:25",
+      "train:26",
+      "train:27",
+      "train:28",
+      "train:29",
+      "train:30",
+      "train:31"
+    ],
+    [
+      "train:32",
+      "train:33",
+      "train:34",
+      "train:35",
+      "train:36",
+      "train:37",
+      "train:38",
+      "train:39"
+    ],
+    [
+      "train:40",
+      "train:41",
+      "train:42",
+      "train:43",
+      "train:44",
+      "train:45",
+      "train:46",
+      "train:47"
+    ],
+    [
+      "train:48",
+      "train:49",
+      "train:50",
+      "train:51",
+      "train:52",
+      "train:53",
+      "train:54",
+      "train:55"
+    ],
+    [
+      "train:56",
+      "train:57",
+      "train:58",
+      "train:59",
+      "train:60",
+      "train:61",
+      "train:62",
+      "train:63"
+    ],
+    [
+      "train:64",
+      "train:65",
+      "train:66",
+      "train:67",
+      "train:68",
+      "train:69",
+      "train:70",
+      "train:71"
+    ],
+    [
+      "train:72",
+      "train:73",
+      "train:74",
+      "train:75",
+      "train:76",
+      "train:77",
+      "train:78",
+      "train:79"
+    ],
+    [
+      "train:80",
+      "train:81",
+      "train:82",
+      "train:83",
+      "train:84",
+      "train:85",
+      "train:86",
+      "train:87"
+    ],
+    [
+      "train:88",
+      "train:89",
+      "train:90",
+      "train:91",
+      "train:92",
+      "train:93",
+      "train:94",
+      "train:95"
+    ],
+    [
+      "train:96",
+      "train:97",
+      "train:98",
+      "train:99",
+      "train:100",
+      "train:101",
+      "train:102",
+      "train:103"
+    ],
+    [
+      "train:104",
+      "train:105",
+      "train:106",
+      "train:107",
+      "train:108",
+      "train:109",
+      "train:110",
+      "train:111"
+    ],
+    [
+      "train:112",
+      "train:113",
+      "train:114",
+      "train:115",
+      "train:116",
+      "train:117",
+      "train:118",
+      "train:119"
+    ],
+    [
+      "train:120",
+      "train:121",
+      "train:122",
+      "train:123",
+      "train:124",
+      "train:125",
+      "train:126",
+      "train:127"
+    ],
+    [
+      "train:128",
+      "train:129",
+      "train:130",
+      "train:131",
+      "train:132",
+      "train:133",
+      "train:134",
+      "train:135"
+    ],
+    [
+      "train:136",
+      "train:137",
+      "train:138",
+      "train:139",
+      "train:140",
+      "train:141",
+      "train:142",
+      "train:143"
+    ]
+  ],
+  "selected_smoke_targets": 31721,
+  "smoke": {
+    "evaluation_documents": 8,
+    "minimum_groups": 3,
+    "models": [
+      "C0",
+      "C1",
+      "C2",
+      "C3",
+      "T0-P",
+      "T0-F"
+    ],
+    "seed": 17,
+    "single_session_seconds": 10800,
+    "target_cap": 32768
+  }
+}

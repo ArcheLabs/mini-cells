@@ -4,74 +4,54 @@
   "experiment_id": "epclm-gc002-preparation",
   "files": [
     {
-      "bytes": 3597,
+      "bytes": 2021,
       "path": "decision.json",
-      "sha256": "647986969ab9f471fb86ab879afd201bda134b12a6086753da8325672ed80fb2"
+      "sha256": "c6c0e9a03dc60cf7e25fe7bc5ae43ad59e4437821d79d9a1d1fcbac8f6a420ed"
     },
     {
-      "bytes": 12901,
+      "bytes": 11983,
       "path": "baseline-audit.json",
-      "sha256": "b794494088ca008efd8e0a2bc9051c45199948a2ea976e8629a1dd4597a53c91"
+      "sha256": "0807da46f7022a72b1e2aa23b729cb532574f023ad1b2dfe34bb50dd88f21b2e"
     },
     {
-      "bytes": 3552,
+      "bytes": 2673,
       "path": "data-audit.json",
-      "sha256": "ae04fd817c16738e53e9aae21ab221918b1da0e7966a09b6056617b14c3d9a8e"
+      "sha256": "e31277e921187d01ff039cf59cffd01dbc2f7276a2a47dd635db5e27835a2572"
     },
     {
-      "bytes": 3753,
+      "bytes": 2883,
       "path": "tokenizer-audit.json",
-      "sha256": "a0ec48d3366e965fc6ccabf6f87f9f805b13c8e4a4de997a53d38894596819af"
+      "sha256": "b4592f80c82fcae979f0ade74e8472564fae1b10f8e06f4702b026b655e3025d"
     },
     {
-      "bytes": 6596,
+      "bytes": 5726,
       "path": "parameter-match-report.json",
-      "sha256": "6f485d3948f6717d83348971472378ff6ca318655af56097fbc50e61be9c3701"
+      "sha256": "a7b47d34ba2a2a8f0395d2729bc9d31a9bd07ac5ca18b43e97eb6aaf7dec4504"
     },
     {
-      "bytes": 7047,
+      "bytes": 6177,
       "path": "kv-cache-equivalence.json",
-      "sha256": "7f21ea8c746e76dc44f714e8ef0de99cd15d360db9a8379f99ca6bb40721844f"
+      "sha256": "a32b780f076eb05b58c65cf0a57eca5883e8774fce6397d265d313350c8c6b5c"
     },
     {
-      "bytes": 18578,
+      "bytes": 14865,
       "path": "inference-profile.json",
-      "sha256": "8303b130ea34b2ed1fc79614c329f1c84550cb6dd8d5ef2c84757d3932780844"
+      "sha256": "3ba91f96bee83a303cc894f38eedee164abec73871987f5474d87500b9197dfa"
     },
     {
-      "bytes": 3709,
+      "bytes": 2839,
       "path": "memory-profile.json",
-      "sha256": "f825c1e71496ca39e74196271c0fc3ef073d66075dd034865d390065c6806ee0"
+      "sha256": "252b6cf58fe0c05486d9b2f7246f444f9f955a35d0c0ed1a57186d82d500405b"
     },
     {
-      "bytes": 7791,
+      "bytes": 1604,
       "path": "training-flops.json",
-      "sha256": "a1794707d92cac183c0adb86b1b02c0584b5ceab92dc389f0de23b5e2254f0fd"
+      "sha256": "8b03fc86a383471d07539d54141cbe243c8f5fa1fc176ce58d408ecc7a266baf"
     },
     {
-      "bytes": 455,
+      "bytes": 287,
       "path": "summary.md",
-      "sha256": "ae6b444e710846a6d06fc939a57b2309ecbaffc121e5c3aab7bb9181a4e167e3"
-    },
-    {
-      "bytes": 16020,
-      "path": "token-exposure.json",
-      "sha256": "24ba6e92549b91506aa2072a03cc8d6a4cc0a051cab0327e9666db4e77911308"
-    },
-    {
-      "bytes": 4468,
-      "path": "reused-engineering-evidence.json",
-      "sha256": "32f42346556d0720e5f92208ffb02af34ba6f97b4ecf2d5387e4e88154bca53f"
-    },
-    {
-      "bytes": 5450,
-      "path": "freeze-candidate.json",
-      "sha256": "1ccb449ef7906d38bf0f573ae8afd715b33dd9c89485715cc61e8507125e4309"
-    },
-    {
-      "bytes": 4187,
-      "path": "run-plan.zh-CN.md",
-      "sha256": "f6b2538f089babc6694f3840c3e7598da03927833a48f8f620929f51a8b82a2e"
+      "sha256": "4eaf4148a2f6d783bb66e45a326508a9c2ed980ae78f8545c2f18fa4385f075a"
     }
   ],
   "format": "minicells.experiment-publication.v1",
@@ -79,13 +59,13 @@
     "kernel_run_type": "Batch",
     "script_version_id": null
   },
-  "published_at_utc": "2026-11-01T23:11:04.544287+00:00",
+  "published_at_utc": "2026-11-01T17:16:45.617893+00:00",
   "runtime": {
     "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
     "python": "3.13.15"
   },
   "source_branch": "codex/epclm-gc002-fair-architecture",
-  "source_commit": "339ec9d4aa692b3a1c6b88a4e8c1fb52c2abb038",
+  "source_commit": "ba35017c2c51b0799c3baa28b4d741a46282b4f7",
   "source_results_dir": "results/epclm-gc002-preparation/publish",
-  "status": "PREPARATION_ADVANCED_FREEZE_CANDIDATE_NOT_AUTHORIZED"
+  "status": "ENGINEERING_PREPARATION_ONLY_NOT_FROZEN"
 }

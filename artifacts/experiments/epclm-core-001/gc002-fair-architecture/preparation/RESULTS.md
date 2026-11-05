@@ -5,7 +5,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Decision
 
-- Status: `PREPARATION_ADVANCED_FREEZE_CANDIDATE_NOT_AUTHORIZED`
+- Status: `ENGINEERING_PREPARATION_ONLY_NOT_FROZEN`
 - Diagnosis: `not provided`
 
 ## Key metrics
@@ -14,7 +14,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Provenance
 
-- Source commit: `339ec9d4aa692b3a1c6b88a4e8c1fb52c2abb038`
+- Source commit: `ba35017c2c51b0799c3baa28b4d741a46282b4f7`
 - Source branch: `codex/epclm-gc002-fair-architecture`
 - Kaggle script version ID: `not recorded`
 - Source results directory: `results/epclm-gc002-preparation/publish`
