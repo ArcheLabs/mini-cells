@@ -29,7 +29,7 @@ def publish(out,decision):
     for f in out.rglob('*'):
         if '_recovery_objects' in f.parts or not f.is_file() or f.suffix not in ('.json','.csv','.md'):continue
         name=f.relative_to(out).as_posix();target=staging/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,target);names.append(name)
-    script_id=decision.get('execution',{}).get('script_version_id')
+    script_id=(decision.get('execution') or {}).get('script_version_id')
     dest=prepare_artifacts(ROOT,key,replace(spec,files=tuple(sorted(names))),script_id)
     branch='kaggle/'+decision['run_id'];push_results(ROOT,dest,key,branch,'GITHUB_TOKEN','origin/main')
     commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()

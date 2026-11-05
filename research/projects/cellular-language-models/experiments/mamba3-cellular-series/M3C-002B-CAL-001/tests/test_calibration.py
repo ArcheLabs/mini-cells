@@ -45,3 +45,18 @@ def test_script_version_must_be_current_and_source_bound():
     assert validate_identity({'123456'},123456,'TAG','TAG','TAG')=='123456'
     for ids,saved,runtime,source in [(set(),123456,'TAG','TAG'),({'123456'},999999,'TAG','TAG'),({'123456'},123456,'TAG','OLD')]:
         with pytest.raises(RuntimeError):validate_identity(ids,saved,runtime,source,'TAG')
+
+
+def test_failed_identity_still_publishes_without_execution_object(tmp_path,monkeypatch):
+    sys.path.insert(0,str(next(p for p in BASE.parents if (p/'scripts').exists())))
+    import run as launcher
+    from scripts.research import publish_experiment_results as publisher
+    out=tmp_path/'output';out.mkdir();(out/'decision.json').write_text('{}')
+    monkeypatch.setattr(launcher,'ROOT',tmp_path)
+    with patch.object(publisher,'prepare_artifacts',return_value=tmp_path) as prepare, \
+         patch.object(publisher,'push_results'), \
+         patch.object(publisher,'remote_branch_sha',return_value='a'*40), \
+         patch.object(launcher.subprocess,'check_output',return_value='a'*40):
+        launcher.publish(out,{'run_id':'blocked-fixture','execution':None,'status':'BLOCKED_EXECUTION_IDENTITY'})
+    assert prepare.call_args.args[3] is None
+    assert json.loads((out/'publication-verification.json').read_text())['status']=='REMOTE_SHA_VERIFIED'

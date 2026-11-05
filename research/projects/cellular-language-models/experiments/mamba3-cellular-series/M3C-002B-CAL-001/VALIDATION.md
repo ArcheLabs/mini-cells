@@ -19,3 +19,7 @@ Python3.11.18、PyTorch2.6.0+cpu、einops0.8.2。未启动真实GPU开发训练�
 Python/Notebook语法、协议标记、预算算术、JSON与Git格式检查通过。复用恢复设施时发现其导入另一个通用model模块；本入口以明确文件路径绑定既有M3C-002 Model，避免模块名碰撞，不修改历史恢复实现。
 
 真实Kaggle当前Script Version ID获取、GPU耗时/显存/学习曲线与结果发布尚未在本机实测。公开SDK的ApiKernelMetadata并未保证提供ScriptVersionId，不能把current_version_number或kernel id替代。入口依赖运行端实际提供并可核对的ID；取不到则首更新前停止。此限制明确保留，不以fixture测试冒充平台已验证。
+
+## 运行后修复：身份缺失时发布
+
+真实运行在训练前因平台未暴露Script Version ID停止；随后publish对execution=None调用get导致异常。已修复nullable execution处理，增加一项定向回归验证：缺失身份的失败包仍能进入已有发布流程，metadata的ID保持null，不伪造ID。定向检查1 passed，3 deselected（6.01秒）；未重跑完整训练或测试矩阵。实际GitHub凭据/网络由运行时验证，fixture仅验证失败分支不会再发生AttributeError。
