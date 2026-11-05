@@ -9,7 +9,6 @@
     "name": "clm-workspace-controller-001-pilot-2m-seed17",
     "required_gpus": 2,
     "seed": 17,
-    "target_planning": "greedy complete-document prefix; exact bounded/repeated tail with prefix rewind; frozen before GPU gates",
     "targets_per_model": 2000000,
     "total_targets": 12000000,
     "training_deadline_seconds": 6000,
@@ -49,7 +48,7 @@
   },
   "execution_mode": "pilot",
   "format": "minicells.clm-v04.protocol.v1",
-  "gate_version": "pilot-routing-precision-v2",
+  "gate_version": "pre-main-gate-v1",
   "groups": {
     "documents": 8,
     "max_document_targets": 4096
@@ -143,13 +142,11 @@
     ]
   },
   "precision": {
-    "consistency_fallback": "fp32",
     "fallback": "fp16_grad_scaler",
     "initial_scale": 1024,
     "max_consecutive_overflows": 5,
     "prefer": "bf16",
-    "requested": "fp32",
-    "router": "fp32"
+    "requested": "auto"
   },
   "router": {
     "balance": "N * sum(stopgrad(top2_assignment_fraction) * mean(full_router_softmax)), averaged over steps; diagnostic auxiliary only",

@@ -5,7 +5,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Decision
 
-- Status: `PILOT_PASS`
+- Status: `PILOT_BLOCKED`
 - Diagnosis: `not provided`
 
 ## Key metrics
@@ -14,7 +14,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Provenance
 
-- Source commit: `cf777887532a021826afb05f063addc651af5570`
+- Source commit: `c114ac0a548b41ce709b099c01eb4a4fdb78fa1c`
 - Source branch: `codex/clm-v04-pilot-2m-seed17`
 - Kaggle script version ID: `not recorded`
 - Source results directory: `results/clm-workspace-controller-001-pilot-2m-seed17/publish`

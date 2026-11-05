@@ -1,0 +1,88 @@
+{
+  "4": {
+    "nll": 5.814626392302277,
+    "ppl": 335.16615445117395,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 9.629776230000061,
+    "seconds_per_token": 0.002898788750752577,
+    "state_norm_mean": 200.0118471285724,
+    "state_norm_max": 505.2760925292969,
+    "event_state_delta_mean": 11.168440111999695,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "NORMAL",
+    "K": 4
+  },
+  "2": {
+    "nll": 5.827611493766487,
+    "ppl": 339.5467003393133,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 5.6126580229999945,
+    "seconds_per_token": 0.001689541849187235,
+    "state_norm_mean": 189.64028892166854,
+    "state_norm_max": 482.873046875,
+    "event_state_delta_mean": 11.140491882625076,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "NORMAL",
+    "K": 2,
+    "comparison": {
+      "delta_nll": 0.012985101464209536,
+      "paired_document_mean_delta_nll": 0.01267261228069011,
+      "document_bootstrap_95": [
+        0.005317630630503246,
+        0.020647079459095226
+      ],
+      "documents": 16,
+      "tokens": 3322,
+      "positive_delta_document_fraction": 0.8125,
+      "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+    }
+  },
+  "8": {
+    "nll": 5.854044475984602,
+    "ppl": 348.6416054170865,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 14.67812914000001,
+    "seconds_per_token": 0.004418461511137872,
+    "state_norm_mean": 236.43874386030103,
+    "state_norm_max": 583.6861572265625,
+    "event_state_delta_mean": 11.271772341007644,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "NORMAL",
+    "K": 8,
+    "comparison": {
+      "delta_nll": 0.039418083682324356,
+      "paired_document_mean_delta_nll": 0.04165294861760334,
+      "document_bootstrap_95": [
+        0.026447861115702503,
+        0.05414959381457477
+      ],
+      "documents": 16,
+      "tokens": 3322,
+      "positive_delta_document_fraction": 1.0,
+      "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+    }
+  },
+  "extra_evolution_summary": {
+    "0": {
+      "events": 48,
+      "mean": 0.0,
+      "positive_fraction": 0.0
+    },
+    "4": {
+      "events": 48,
+      "mean": -0.0005162705977757772,
+      "positive_fraction": 0.5
+    },
+    "8": {
+      "events": 48,
+      "mean": -0.001044576366742452,
+      "positive_fraction": 0.5
+    }
+  }
+}

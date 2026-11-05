@@ -1,0 +1,233 @@
+{
+  "format": "minicells.gc001-repair.protocol.v1",
+  "stage": "DEVELOPMENT_BENCHMARK",
+  "original_result_commit": "49c6fef619d51cac9ce5079d698e2876ff2d144b",
+  "original_result_branch": "kaggle/epclm-gc001-fc999f767720",
+  "original_decision_sha256": "7c496854daba77d8f5e2544ed9c2920215ac579454be2e78c94b8f89583b80b5",
+  "original_gc_source": "fc999f7677200ea875b8aacf2fe56ee896bd43ec",
+  "original_gc_protocol_sha256": "1bf1771d7ae5b147d40671b51a7685484f88caa098ab05a992ff61039774d716",
+  "gc_protocol": {
+    "format": "minicells.gc001.protocol.v1",
+    "experiment": "EPCLM-GC-001",
+    "stage": "DEVELOPMENT_BENCHMARK",
+    "training_identity": {
+      "source": "398a191dbb32e383c86c89b9c981777c7cd6c77f",
+      "protocol": "2835ced239c30dc71ad1f8066b7e61aa329203ca448c5dcf5adb98fff2170aa2",
+      "data": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+      "seed": 173018021,
+      "mode": "DEVELOPMENT_PAIR",
+      "arms": [
+        "C1",
+        "F0"
+      ],
+      "target_tokens": 250000
+    },
+    "C1_checkpoint": {
+      "namespace": "epclm-core-001-development-pair",
+      "path": "C1.pt",
+      "sha256": "36a58f642f93b859ce33f5fd55bd92c9f4196669dc8c62293088ea43ce8e7fd1",
+      "weights_sha256": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf"
+    },
+    "F0_checkpoint": {
+      "path": "F0.pt",
+      "sha256": "19daca2c6a0ace49de17b56a55894ca8448f813e172a8f52917274c937de7004",
+      "weights_sha256": "7c882ef3b2d557ec6e33aff5d4d82f062ff1fa3dd43db4e1026bca90924e6ad4"
+    },
+    "preferred_asset_versions": [
+      142
+    ],
+    "seed": 173018021,
+    "generation_seed": 713,
+    "precision": "fp32",
+    "batch": 4,
+    "tbptt": 64,
+    "tokens_per_trained_baseline": 250000,
+    "baseline_order": [
+      "C1",
+      "B1-FROZEN-NO-COMM",
+      "NO-COMM",
+      "F0"
+    ],
+    "optional_second_batch": "T1",
+    "tokenizer_special_names": [
+      "<pad>",
+      "<unk>",
+      "<bos>",
+      "<eos>"
+    ],
+    "evaluation_split": {
+      "validation": "original development[:16]",
+      "development_holdout": "original development[16:]",
+      "formal_test": "NOT_AVAILABLE",
+      "confirmation": "SEALED_NOT_ACCESSED",
+      "tokenizer_overlap": "historical tokenizer training may overlap development; no independent-test claim"
+    },
+    "prompts": [
+      "Once upon a time, there was a little girl named Lily.",
+      "Tom found a small box under a tree.",
+      "Alice and her friend went to the park.",
+      "A little dog was looking for its home.",
+      "One morning, the village woke up to a surprise.",
+      "Ben wanted to help his mother bake a cake.",
+      "The red ball rolled into the garden.",
+      "A bird landed beside the open window.",
+      "Lucy was afraid of the dark, but tonight",
+      "The children built a boat from old wood.",
+      "Sam gave his friend a special gift.",
+      "It started to rain while Mia was outside.",
+      "The old man smiled and told a story.",
+      "A tiny kitten hid behind the chair.",
+      "Anna planted a seed and waited.",
+      "Everyone was ready for the picnic, when"
+    ],
+    "pilot": {
+      "prompt_indices": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "max_new_tokens": 32,
+      "snapshot_after": 20,
+      "mode": "greedy"
+    },
+    "generation": {
+      "max_new_tokens": 128,
+      "modes": [
+        {
+          "name": "greedy",
+          "temperature": 0.0,
+          "top_k": 0,
+          "top_p": 1.0
+        },
+        {
+          "name": "sampling",
+          "temperature": 0.8,
+          "top_k": 40,
+          "top_p": 0.95
+        }
+      ]
+    },
+    "history_lengths": [
+      32,
+      128,
+      512,
+      1024
+    ],
+    "baseline_convergence_gate": {
+      "initial_updates": 50,
+      "final_updates": 50,
+      "minimum_mean_loss_reduction": 0.01
+    },
+    "budget": {
+      "execution": 5400,
+      "recovery": 600,
+      "publication": 600,
+      "safety": 1200,
+      "hard": 7200
+    },
+    "comparison": "token/state-matched where applicable; parameter/compute differences reported, not hidden",
+    "formal_confirmation": false,
+    "scientific_hypotheses": "NOT_EVALUATED"
+  },
+  "arms": [
+    "C1-BROADCAST",
+    "IC-ALL-SELF",
+    "F0-PM-BROADCAST"
+  ],
+  "primary_comparison": [
+    "C1-BROADCAST",
+    "IC-ALL-SELF"
+  ],
+  "parameter_matching": {
+    "target_active_parameters": 966784,
+    "relative_tolerance": 0.01,
+    "rank": 43,
+    "expected_active_parameters": 964736,
+    "rank_tie_break": "smaller integer rank"
+  },
+  "event": {
+    "rule": "P_i(e)=roll(e,8*i)",
+    "coordinate_shift": 8,
+    "cells": 16,
+    "dim": 128,
+    "trainable_parameters": 0,
+    "identical_across_new_arms": true
+  },
+  "training": {
+    "tokens": 250000,
+    "seed": 173018021,
+    "batch": 4,
+    "tbptt": 64,
+    "precision": "fp32",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "scheduler": "existing warmup/cosine",
+    "checkpoint_interval": 25,
+    "milestone_updates": [
+      250,
+      500,
+      750,
+      977
+    ]
+  },
+  "progression_probe": {
+    "validation_docs": 4,
+    "holdout_docs": 4,
+    "role": "fixed diagnostic subsets, not selection or independent Test"
+  },
+  "diagnostics": {
+    "nonzero_tolerance": 1e-06,
+    "epsilon": 1e-12,
+    "saturation_ratio": 0.9,
+    "pair_similarity_alert": 0.99,
+    "repetition_alert": 0.5,
+    "confidence_alert": 0.95,
+    "extension_recent_loss_reduction": 0.01,
+    "extension_validation_deterioration_tolerance": 0.02
+  },
+  "recovery": {
+    "max_versions": 2,
+    "known_original_asset_versions": [
+      142
+    ],
+    "backend_seconds": 30,
+    "progress_search_seconds": 30,
+    "asset_seconds": 120,
+    "policy": "local first; at most two recent progress versions; exact known-version inputs; no historical weights in A/B"
+  },
+  "budget": {
+    "execution": 5400,
+    "recovery": 180,
+    "publication": 600,
+    "safety": 1200,
+    "hard": 7200,
+    "recovery_is_inside_execution": true
+  },
+  "formal_test": "NOT_AVAILABLE",
+  "confirmation": "SEALED_NOT_ACCESSED",
+  "human_review": {
+    "status": "PENDING",
+    "score_range": [
+      1,
+      5
+    ],
+    "dimensions": [
+      "grammaticality",
+      "local_coherence",
+      "semantic_consistency",
+      "prompt_relevance",
+      "story_progression",
+      "repetition_and_degeneration"
+    ],
+    "reviewers": 0
+  },
+  "scientific_hypotheses": "NOT_EVALUATED",
+  "extension_training": "PROPOSAL_ONLY_NEVER_AUTOMATIC"
+}

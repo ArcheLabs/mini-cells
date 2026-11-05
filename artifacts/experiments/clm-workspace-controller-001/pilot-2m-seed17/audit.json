@@ -8,7 +8,7 @@
       "logical_index": 0,
       "name": "Tesla T4",
       "total_memory": 15636037632,
-      "uuid": "ccad2993-7af4-f22c-d5ad-09e40ad5a305"
+      "uuid": "6f59df89-b499-a52b-08cc-6fb1f745a75a"
     },
     {
       "capability": [
@@ -18,26 +18,11 @@
       "logical_index": 1,
       "name": "Tesla T4",
       "total_memory": 15636037632,
-      "uuid": "952eb203-84c4-03ec-a4aa-f71ca79fdfa0"
+      "uuid": "99b13afb-446f-9402-2be7-f6757e716fa7"
     }
   ],
-  "dual_gpu_training": {
-    "active_worker_seconds": {
-      "worker-0": 2013.0178775369998,
-      "worker-1": 1849.775072762
-    },
-    "mean_training_gpu_utilization": {
-      "0": 36.370558375634516,
-      "1": 36.392265193370164
-    },
-    "note": "performance targets, not artificial work or scientific gates; sampled only while assigned training task active",
-    "overlap_over_union": 0.9187864022142737,
-    "overlap_seconds": 1849.6491496959998,
-    "overlap_target_90pct": true,
-    "utilization_target_60pct": false
-  },
-  "nvidia_smi": "Wed Nov  4 01:59:31 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 580.178.04             Driver Version: 580.178.04     CUDA Version: 13.0     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |\n| N/A   40C    P8             10W /   70W |       3MiB /  15360MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n|   1  Tesla T4                       Off |   00000000:00:05.0 Off |                    0 |\n| N/A   42C    P8             10W /   70W |       3MiB /  15360MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|  No running processes found                                                             |\n+-----------------------------------------------------------------------------------------+\n",
-  "nvidia_smi_L": "GPU 0: Tesla T4 (UUID: GPU-ccad2993-7af4-f22c-d5ad-09e40ad5a305)\nGPU 1: Tesla T4 (UUID: GPU-952eb203-84c4-03ec-a4aa-f71ca79fdfa0)\n",
+  "nvidia_smi": "Wed Nov  4 01:13:00 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 580.178.04             Driver Version: 580.178.04     CUDA Version: 13.0     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |\n| N/A   48C    P8             10W /   70W |       3MiB /  15360MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n|   1  Tesla T4                       Off |   00000000:00:05.0 Off |                    0 |\n| N/A   45C    P8             11W /   70W |       3MiB /  15360MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|  No running processes found                                                             |\n+-----------------------------------------------------------------------------------------+\n",
+  "nvidia_smi_L": "GPU 0: Tesla T4 (UUID: GPU-6f59df89-b499-a52b-08cc-6fb1f745a75a)\nGPU 1: Tesla T4 (UUID: GPU-99b13afb-446f-9402-2be7-f6757e716fa7)\n",
   "observed_gpu_count": 2,
   "precision_policy": {
     "bf16_framework_supported": true,
@@ -50,10 +35,10 @@
       5
     ],
     "gpu_name": "Tesla T4",
-    "requested_precision": "fp32",
-    "scaler_enabled": false,
-    "selected_precision": "fp32",
-    "selection_reason": "explicit request; non-native BF16 diagnostic only",
+    "requested_precision": "auto",
+    "scaler_enabled": true,
+    "selected_precision": "fp16",
+    "selection_reason": "auto chooses native BF16 on CC>=8, otherwise FP16+GradScaler when supported; never auto-emulated BF16",
     "torch_version": "2.11.0+cu130"
   }
 }
