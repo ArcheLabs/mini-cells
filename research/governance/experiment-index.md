@@ -26,3 +26,5 @@ and recorded source commit determine what was run and what can be concluded.
 - **EPCLM-GC-001** — [Generative Core and baseline pipeline](../projects/cellular-language-models/experiments/epclm-core-001/reports/generative-core-001/README.md). Repository-audited extension of Runtime; C1/F0 frozen reuse, center-only controlled training, optional Native T1 reference. Implementation ready, GPU unrun, development-only holdout; H1–H5 NOT_EVALUATED.
 
 - **EPCLM-GC-001-BASELINE-REPAIR** — [Matched broadcast/independent/Flat controls and generation diagnosis](../projects/cellular-language-models/experiments/epclm-core-001/gc001-baseline-repair/README.md). Separate immutable-source development study; P1→P2→P3, single-seed, no independent Test; implementation ready, GPU unrun.
+
+- **M3C-SERIES** — [Mamba-3 Cellular series proposal](../projects/cellular-language-models/experiments/mamba3-cellular-series/README.md). Proposed, not registered; Mamba-3 baseline, bounded Workspace, stateless Cells, dynamic routing and State-Memory Workspace are staged as separate gates; no training authorized.
