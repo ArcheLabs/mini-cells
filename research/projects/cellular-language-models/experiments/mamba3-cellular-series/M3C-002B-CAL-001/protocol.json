@@ -67,7 +67,7 @@
   "natural_language_ppl": "NOT_RUN",
   "scientific_hypotheses": "NOT_EVALUATED",
   "kaggle_kernel": "bingjiangli/minicells",
-  "identity_required_before_first_update": true,
+  "identity_required_before_first_update": false,
   "next_stage": "NO_AUTOMATIC_FORMAL_TRAINING_OR_M3C003",
   "development_training_authorized": true,
   "formal_training_authorized": false,
@@ -79,5 +79,7 @@
     "batch": 1,
     "warmup": 3,
     "samples": 5
-  }
+  },
+  "allow_deferred_script_version_id_development_only": true,
+  "script_version_id_policy": "User authorized ID_PENDING for development; append actual saved-version URL after execution; formal training remains unauthorized"
 }

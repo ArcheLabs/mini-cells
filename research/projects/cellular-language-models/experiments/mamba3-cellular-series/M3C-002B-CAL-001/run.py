@@ -27,9 +27,15 @@ def publish(out,decision):
     if staging.exists():shutil.rmtree(staging)
     staging.mkdir(parents=True);names=[]
     for f in out.rglob('*'):
-        if '_recovery_objects' in f.parts or not f.is_file() or f.suffix not in ('.json','.csv','.md'):continue
+        if '_recovery_objects' in f.parts or not f.is_file() or f.name.startswith('publication-') or f.suffix not in ('.json','.csv','.md'):continue
         name=f.relative_to(out).as_posix();target=staging/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,target);names.append(name)
     script_id=(decision.get('execution') or {}).get('script_version_id')
+    supplement=out/'saved-version-supplement.json'
+    if supplement.exists():
+        record=json.loads(supplement.read_text())
+        assert record['run_id']==decision['run_id'] and record['source_commit']==decision['source_commit']
+        assert record['original_decision_sha256']==hashlib.sha256((out/'decision.json').read_bytes()).hexdigest()
+        script_id=record['script_version_id']
     dest=prepare_artifacts(ROOT,key,replace(spec,files=tuple(sorted(names))),script_id)
     branch='kaggle/'+decision['run_id'];push_results(ROOT,dest,key,branch,'GITHUB_TOKEN','origin/main')
     commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
@@ -42,10 +48,24 @@ def publish(out,decision):
 def launch(args):
     from train import write,file_sha
     started=args.started or time.monotonic();p=json.loads((BASE/'protocol.json').read_text())
+    assert p['type']=='DEVELOPMENT_CALIBRATION' and p['development_training_authorized'] and not p['formal_training_authorized'] and p['formal_training_targets']==0 and not p['formal_test_access']
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-    out=args.output/('m3c-002b-cal-001-'+source[:12]);out.mkdir(parents=True,exist_ok=True)
+    out=args.output if (args.output/'decision.json').exists() else args.output/('m3c-002b-cal-001-'+source[:12])
+    out.mkdir(parents=True,exist_ok=True)
+    if args.saved_version_url:
+        from identity import saved_version_record
+        original=json.loads((out/'decision.json').read_text());record=saved_version_record(args.saved_version_url,original)
+        record['original_decision_sha256']=file_sha(out/'decision.json')
+        supplement=out/'saved-version-supplement.json'
+        if supplement.exists() and json.loads(supplement.read_text())!=record:raise ValueError('existing saved-version supplement differs; refusing overwrite')
+        write(supplement,record);publish(out,original);return
     if args.publish_only:
         publish(out,json.loads((out/'decision.json').read_text()));return
+    completed_statuses={'DEVELOPMENT_CALIBRATION_COMPLETE','DEVELOPMENT_CALIBRATION_COMPLETE_ID_PENDING'}
+    if (out/'decision.json').exists():
+        previous=json.loads((out/'decision.json').read_text())
+        if previous.get('source_commit')!=source:raise ValueError('Existing run belongs to another source; use metadata-only publication/supplement or the original source, never overwrite')
+        if previous.get('source_commit')==source and previous.get('status') in completed_statuses:publish(out,previous);return
     decision={'format':'minicells.m3c-002b-cal-001.v1','run_id':out.name+'-'+uuid.uuid4().hex[:8],
          'source_commit':source,'status':'INCOMPLETE','type':'DEVELOPMENT_CALIBRATION','formal_training_targets':0,
          'formal_test_accessed':False,'natural_language_ppl':'NOT_RUN','scientific_hypotheses':'NOT_EVALUATED',
@@ -69,8 +89,14 @@ def launch(args):
         assert Path(mamba3.__file__).resolve().is_relative_to(args.candidate.resolve())
         from identity import capture
         tag='M3C-002B-CAL-001:'+sha(p)
+        # Accept the preceding bootstrap only for this metadata-only authorization amendment.
+        script=Path('/kaggle/src/script.py')
+        previous_tag='M3C-002B-CAL-001:c362efd864e893a9d06df296f06d0f01c27c8735c610bfed3dfeb5a36ca93211'
+        if script.exists() and tag not in script.read_text() and previous_tag in script.read_text():tag=previous_tag
         stage='EXECUTION_IDENTITY'
-        execution=capture(ROOT,p['kaggle_kernel'],tag)
+        execution=capture(ROOT,p['kaggle_kernel'],tag,allow_deferred=p.get('allow_deferred_script_version_id_development_only',False))
+        print({'stage':'EXECUTION_IDENTITY','status':execution['status'],'script_version_id':execution.get('script_version_id')},flush=True)
+        execution['current_protocol_sha256']=sha(p)
         decision['execution']=execution;write(out/'execution-identity.json',execution)
         write(out/'environment.json',{'python':sys.version,'torch':str(torch.__version__),'cuda':torch.version.cuda,
               'gpu':torch.cuda.get_device_name(),'capability':list(torch.cuda.get_device_capability()),
@@ -91,11 +117,11 @@ def launch(args):
         if (out/'manifest.json').exists():assert json.loads((out/'manifest.json').read_text())['identity']==identity,'incompatible continuation'
         else:write(out/'manifest.json',{'identity':identity,'source':source,'protocol':p,'data':data})
         manifest=json.loads((out/'manifest.json').read_text());sessions=manifest.setdefault('execution_sessions',[])
-        if not any(row['script_version_id']==execution['script_version_id'] for row in sessions):sessions.append(execution)
+        if not any(row.get('session_id')==execution['session_id'] for row in sessions):sessions.append(execution)
         write(out/'manifest.json',manifest)
         if (out/'decision.json').exists():
             old=json.loads((out/'decision.json').read_text())
-            if old.get('status')=='DEVELOPMENT_CALIBRATION_COMPLETE':publish(out,old);return
+            if old.get('status') in completed_statuses:publish(out,old);return
         from mamba3 import Mamba3Config
         # Legacy recovery imports a different generic 'model' module; bind Workspace explicitly.
         spec=importlib.util.spec_from_file_location('m3c002_workspace',BASE.parent/'M3C-002/model.py')
@@ -127,7 +153,8 @@ def launch(args):
         write(out/'trained-inference.json',profiles)
         differences=paired_analysis(out,list(p['arms']),p['development_evaluation']['bootstrap_samples'],p['development_evaluation']['bootstrap_seed'])
         write(out/'paired-development-analysis.json',differences)
-        decision.update(status='DEVELOPMENT_CALIBRATION_COMPLETE',initial_common_parameter_sha256=initial_hash,
+        decision.update(status='DEVELOPMENT_CALIBRATION_COMPLETE_ID_PENDING' if execution['status']=='ID_PENDING' else 'DEVELOPMENT_CALIBRATION_COMPLETE',
+                        training_status='COMPLETE',evaluation_status='COMPLETE',script_version_id_status=execution['status'],initial_common_parameter_sha256=initial_hash,
                         committed_development_targets=sum(r['targets'] for r in reports.values()),session_seconds=time.monotonic()-started)
     except Exception as error:
         # Do not spill credential/API response payloads; keep typed failure and local checkpoints.
@@ -142,7 +169,8 @@ def launch(args):
     write(out/'decision.json',decision)
     lines=['# M3C-002B-CAL-001 开发校准','', '状态：'+decision['status'],
            '', 'R线MQAR/Repeated Retrieval，单开发Seed27101；正式训练/测试/语言PPL未运行，科学假设NOT_EVALUATED。',
-           '单Seed只提供Episode抽样波动，不能估计跨训练Seed方差。', '',
+           '单Seed只提供Episode抽样波动，不能估计跨训练Seed方差。',
+           '若状态带ID_PENDING，仅表示开发训练和评估完成，真实Script Version ID待保存后补录；不放行正式训练。', '',
            '| Arm | Targets | Initial Query NLL | Final Query NLL | Dev EM | Repeat first/later EM | Train s | Targets/s | Update P95 s | Decode ms/token |',
            '|---|---:|---:|---:|---:|---|---:|---:|---:|---:|']
     for arm,r in reports.items():
@@ -156,5 +184,5 @@ def launch(args):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--candidate',type=Path,required=True);parser.add_argument('--started',type=float);parser.add_argument('--publish-only',action='store_true')
+    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--candidate',type=Path,required=True);parser.add_argument('--started',type=float);parser.add_argument('--publish-only',action='store_true');parser.add_argument('--saved-version-url')
     launch(parser.parse_args())

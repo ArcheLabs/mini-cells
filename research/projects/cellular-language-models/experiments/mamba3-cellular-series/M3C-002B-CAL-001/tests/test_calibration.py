@@ -60,3 +60,44 @@ def test_failed_identity_still_publishes_without_execution_object(tmp_path,monke
         launcher.publish(out,{'run_id':'blocked-fixture','execution':None,'status':'BLOCKED_EXECUTION_IDENTITY'})
     assert prepare.call_args.args[3] is None
     assert json.loads((out/'publication-verification.json').read_text())['status']=='REMOTE_SHA_VERIFIED'
+
+
+def test_development_missing_id_is_explicitly_pending_only_when_authorized(tmp_path,monkeypatch):
+    import identity
+    script=tmp_path/'script.py';script.write_text('TAG')
+    monkeypatch.setattr(identity,'Path',lambda _:script)
+    monkeypatch.setitem(sys.modules,'kaggle_session',None)
+    with patch.dict(identity.os.environ,{},clear=True):
+        record=identity.capture(tmp_path,'bingjiangli/minicells','TAG',allow_deferred=True)
+        assert record['status']=='ID_PENDING' and record['script_version_id'] is None
+        assert record['formal_training_allowed'] is False
+        with pytest.raises(RuntimeError):identity.capture(tmp_path,'bingjiangli/minicells','TAG')
+        with pytest.raises(RuntimeError):identity.capture(tmp_path,'bingjiangli/minicells','OTHER',allow_deferred=True)
+
+
+def test_saved_version_supplement_never_claims_independent_verification():
+    from identity import saved_version_record
+    decision={'run_id':'fixture','source_commit':'abc','execution':{'kernel':'bingjiangli/minicells','status':'ID_PENDING'}}
+    record=saved_version_record('https://www.kaggle.com/code/bingjiangli/minicells?scriptVersionId=123456',decision)
+    assert record['script_version_id']=='123456' and record['run_id']=='fixture'
+    assert record['independent_platform_verification']=='NOT_PERFORMED'
+    conflicting={**decision,'execution':{'kernel':'bingjiangli/minicells','script_version_id':'999999'}}
+    with pytest.raises(ValueError):saved_version_record('https://www.kaggle.com/code/bingjiangli/minicells?scriptVersionId=123456',conflicting)
+    for url in ('https://www.kaggle.com/code/other/notebook?scriptVersionId=123456',
+                'https://www.kaggle.com/code/bingjiangli/minicells?version=183'):
+        with pytest.raises(ValueError):saved_version_record(url,decision)
+
+
+def test_completed_pending_run_republishes_without_entering_training(tmp_path,monkeypatch):
+    from types import SimpleNamespace
+    import run as launcher
+    old={'status':'DEVELOPMENT_CALIBRATION_COMPLETE_ID_PENDING','source_commit':'a'*40,'execution':{'status':'ID_PENDING'},'run_id':'fixture'}
+    path=tmp_path/'decision.json';path.write_text(json.dumps(old));before=path.read_bytes()
+    args=SimpleNamespace(started=None,output=tmp_path,publish_only=False,saved_version_url=None)
+    with patch.object(launcher.subprocess,'check_output',return_value='a'*40), \
+         patch.object(launcher,'publish') as publish:
+        launcher.launch(args)
+    assert publish.call_args.args==(tmp_path,old) and path.read_bytes()==before
+    with patch.object(launcher.subprocess,'check_output',return_value='b'*40), pytest.raises(ValueError):
+        launcher.launch(args)
+    assert path.read_bytes()==before

@@ -35,9 +35,19 @@
 
 沿用bingjiangli/minicells，T4、Internet、原GITHUB_TOKEN和KAGGLE_API_TOKEN。运行 notebook.ipynb，使用Save Version → Save & Run All，不能用未保存的交互草稿冒充Saved Version。
 
-入口先尝试从**当前运行**的显式平台字段、当前Session返回或Runtime credential的scriptVersionId字段取得真实ID，再核对该Notebook的冻结协议标记及保存源码；只保存ID/来源，不保存Token或完整凭据。公共Kaggle SDK本身可能根本不暴露scriptVersionId，它的current_version_number与metadata.id都不能当成Script Version ID。若当前运行不暴露可核验ID，首个Optimizer Update之前停止并发布具体诊断；不能以Git SHA、时间戳或“最近版本”猜测替代。**这段平台获取在本地无法实测，不能承诺每种Kaggle运行模式均能提供该字段。** 本次要求是身份真实，而不是用假ID绕过门禁。
+入口先尝试从当前运行真实提供的字段或Session返回取得ID。公共Kaggle SDK可能根本不暴露scriptVersionId，它的current_version_number与metadata.id不能当作Script Version ID；不解析/公开凭据全量内容。平台分支尚未在本机实测，依用户授权允许真实缺项待补录。
 
-成功获取后，Script Version ID进入execution-identity、每个恢复Session记录及现有publisher的原生metadata字段。首次两个真实参数更新在本次512次预算内验证参数实际变化，不额外启动GPU Pilot。
+用户已明确批准：本次开发校准可先训练，缺失ID时记录ID_PENDING，保存版本后补齐。协议中的allow_deferred_script_version_id_development_only=true只适用于本次Development Calibration，正式训练仍为false、正式Targets仍为0。未提供ID不再归因为用户没有保存版本；真实冲突或协议标记不一致仍停止。
+
+当前运行真实提供且可核验ID时继续使用；否则execution-identity保存script_version_id=null、ID_PENDING、独立Session标识、当前启动脚本hash及缺项原因，决不使用序号/时间戳/Git SHA代替。训练和评估完成后状态为DEVELOPMENT_CALIBRATION_COMPLETE_ID_PENDING；这表示开发计算完成，平台身份待补录，不表示正式放行。多个待补录Session分别记录，不按null值合并。
+
+保存后把带`?scriptVersionId=真实ID`的Kaggle版本链接用于补录。入口支持`--saved-version-url`，`--output`可直接指向含decision.json的已有运行目录；只追加saved-version-supplement.json并复用现有发布器，不加载优化器或训练。例：
+
+```text
+python run.py --output /kaggle/working/<已有运行目录> --candidate /kaggle/working/mamba3-minimal-reference --saved-version-url 'https://www.kaggle.com/code/bingjiangli/minicells?scriptVersionId=<真实ID>'
+```
+
+补充记录绑定原run_id、Source与decision文件hash，保留原始ID_PENDING报告，不能用版本序号或其他Notebook的URL补位。仅解析用户提供的保存版本链接不等于独立平台验证，补充记录明确标为USER_SUPPLIED_PLATFORM_SAVED_VERSION_URL / independent_platform_verification=NOT_PERFORMED，不伪造已验证状态；既有补充记录不允许被不同记录静默覆盖。收到实际版本链接后也可在仓库追加对应补充记录，无需重新训练。
 
 单次总上限7200秒：前置/训练/中间评估/必要保存至5400秒、终评/推理至6000秒、发布600秒、余量600秒（Notebook平台输出预留60秒来自余量）。超时保持INCOMPLETE，不减目标数或伪造完成。正式训练不会自动启动。
 
@@ -47,6 +57,6 @@
 
 训练计时包含forward/backward/finite checks/clip/optimizer，但不包含数据传输、准备、验证、保存、逐步日志指标提取和发布；总Session时间另列。记录P50/P95更新耗时、有效目标/s、含Padding输入Token及训练峰值显存。全部训练退出后，逐模型测量训练后Full/Decode一致性与Decode延迟（context96、16 Token、Batch1、3warmup+5采样）；选择mqar-gap64的同一Episode，避免以大量Padding作为主要Decode输入。该context不同于原工程Benchmark的128，不直接对比绝对延迟。
 
-结果状态DEVELOPMENT_CALIBRATION_COMPLETE只表示固定开发预算完成且输出齐全。无论哪一臂领先，都不能宣布H-R1/H-R2成立；不按结果自动追加预算或选择正式δ_R。后续使用开发成本/方差支持正式预算选型，实用收益阈值仍需研究决策。
+结果状态DEVELOPMENT_CALIBRATION_COMPLETE（或带ID_PENDING后缀）只表示固定开发预算的计算完成；待补录状态仍缺少平台身份。无论哪一臂领先，都不能宣布H-R1/H-R2成立；不按结果自动追加预算或选择正式δ_R。后续使用开发成本/方差支持正式预算选型，实用收益阈值仍需研究决策。
 
 发布失败保留Output；支持 --publish-only，同一已完成模型不重复训练。本地只运行三个有价值的合成回归检查，不做完整本地训练、CPU Benchmark或完整历史测试矩阵。
