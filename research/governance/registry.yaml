@@ -214,6 +214,28 @@
       "scientific_decision": false,
       "authorized_training_tokens": 0,
       "note": "Series-level proposal only. M3C-001 official Mamba-3 source/environment/correctness audit is the first gate. No GPU training, formal protocol freeze, or scientific confirmation is authorized. Historical CLM v0.4 and EPCLM records remain immutable."
+    },
+    {
+      "id": "clm-workspace-depth-kv-001",
+      "name": "Depth-indexed Workspace KV",
+      "status": "implementation_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/clm-workspace-depth-kv-001",
+      "entry": "execute.py",
+      "seeds": [
+        18001,
+        18002,
+        18003
+      ],
+      "targets_per_model": 2000000,
+      "arms": [
+        "C2",
+        "C-DKV",
+        "T0-P",
+        "T0-F"
+      ],
+      "baseline_source": "cf777887532a021826afb05f063addc651af5570",
+      "scientific_decision": false,
+      "note": "Same-parameter C2 vs C-DKV; historical validation remains development data. New seeds are not independent confirmation data. No local real training."
     }
   ],
   "schema_version": 2

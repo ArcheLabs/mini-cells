@@ -1,0 +1,199 @@
+{
+  "format": "minicells.epclm.topology-001.v1",
+  "experiment": "EPCLM-CORE-001-TOPOLOGY-001",
+  "run_id": "topology-001-3e4270973141-5a604561",
+  "source_commit": "3e4270973141f0cd69a96a0c8e52f4fc2d90b26f",
+  "status": "DEVELOPMENT_SCREEN_COMPLETE",
+  "training_status": "COMPLETE",
+  "evaluation_status": "COMPLETE",
+  "propagation_status": "COMPLETE",
+  "compute_status": "COMPLETE",
+  "publication_status": "PENDING",
+  "research_review_status": "PENDING",
+  "scientific_confirmation": false,
+  "independent_test_accessed": false,
+  "result_branch": "kaggle/epclm-core-001-topology-001-3e4270973141",
+  "environment": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "precision": "fp32",
+    "tf32": false
+  },
+  "screen": {
+    "status": "NO_CLEAR_TOPOLOGY_WINNER",
+    "selected": null,
+    "checks": {
+      "R2": {
+        "status": "EVALUATED",
+        "criteria": {
+          "holdout_improvement": false,
+          "paired_ci": false,
+          "validation": true,
+          "causal_propagation": true,
+          "latency": true
+        },
+        "eligible": false
+      },
+      "SR": {
+        "status": "EVALUATED",
+        "criteria": {
+          "holdout_improvement": false,
+          "paired_ci": false,
+          "validation": true,
+          "causal_propagation": true,
+          "latency": true
+        },
+        "eligible": false
+      },
+      "T4": {
+        "status": "EVALUATED",
+        "criteria": {
+          "holdout_improvement": false,
+          "paired_ci": false,
+          "validation": true,
+          "causal_propagation": true,
+          "latency": true
+        },
+        "eligible": false
+      }
+    },
+    "rules": {
+      "minimum_holdout_ppl_improvement": 0.01,
+      "delta_nll_ci_upper_max": 0.0,
+      "maximum_validation_ppl_ratio": 1.01,
+      "maximum_decode_latency_ratio": 2.0,
+      "threshold_note": "operational definitions for unspecified obvious validation degradation and reasonable latency; development screen only"
+    },
+    "scientific_confirmation": false,
+    "next_phase_automatic": false,
+    "recommendation": "multi-seed follow-up only after review; no automatic training"
+  },
+  "arms": {
+    "R1": {
+      "arm": "R1",
+      "run_id": "topology-001-3e4270973141-5a604561",
+      "seed": 173018021,
+      "training_status": "COMPLETE",
+      "model_parameters": 966784,
+      "same_initial_parameters": true,
+      "data_order": "trainer.train Random(seed) shuffle, lane-major within each TBPTT tick",
+      "fresh_initialization": true,
+      "prediction_tokens": 250000,
+      "optimizer_updates": 977,
+      "training_compute_seconds": 641.3438909510006,
+      "training_wall_seconds": 681.89036437,
+      "tokens_per_second": 389.80647282582487,
+      "peak_cuda_allocated_bytes": 171762176,
+      "peak_cuda_reserved_bytes": 178257920,
+      "final_model": {
+        "file": "R1-final-model.pt",
+        "bytes": 3872313,
+        "kaggle_run_id": "topology-001-3e4270973141-5a604561",
+        "output": "/kaggle/working/epclm-topology-001-3e4270973141",
+        "git_storage": false
+      },
+      "arm_wall_seconds": 846.849055777
+    },
+    "IC": {
+      "arm": "IC",
+      "run_id": "topology-001-3e4270973141-5a604561",
+      "seed": 173018021,
+      "training_status": "COMPLETE",
+      "model_parameters": 966784,
+      "same_initial_parameters": true,
+      "data_order": "trainer.train Random(seed) shuffle, lane-major within each TBPTT tick",
+      "fresh_initialization": true,
+      "prediction_tokens": 250000,
+      "optimizer_updates": 977,
+      "training_compute_seconds": 563.629819521002,
+      "training_wall_seconds": 606.240128161,
+      "tokens_per_second": 443.5535369872042,
+      "peak_cuda_allocated_bytes": 155247104,
+      "peak_cuda_reserved_bytes": 161480704,
+      "final_model": {
+        "file": "IC-final-model.pt",
+        "bytes": 3872313,
+        "kaggle_run_id": "topology-001-3e4270973141-5a604561",
+        "output": "/kaggle/working/epclm-topology-001-3e4270973141",
+        "git_storage": false
+      },
+      "arm_wall_seconds": 747.15116076
+    },
+    "R2": {
+      "arm": "R2",
+      "run_id": "topology-001-3e4270973141-5a604561",
+      "seed": 173018021,
+      "training_status": "COMPLETE",
+      "model_parameters": 966784,
+      "same_initial_parameters": true,
+      "data_order": "trainer.train Random(seed) shuffle, lane-major within each TBPTT tick",
+      "fresh_initialization": true,
+      "prediction_tokens": 250000,
+      "optimizer_updates": 977,
+      "training_compute_seconds": 662.8787212479929,
+      "training_wall_seconds": 715.024037017,
+      "tokens_per_second": 377.1428950522478,
+      "peak_cuda_allocated_bytes": 171762176,
+      "peak_cuda_reserved_bytes": 178257920,
+      "final_model": {
+        "file": "R2-final-model.pt",
+        "bytes": 3872313,
+        "kaggle_run_id": "topology-001-3e4270973141-5a604561",
+        "output": "/kaggle/working/epclm-topology-001-3e4270973141",
+        "git_storage": false
+      },
+      "arm_wall_seconds": 878.0107919410002
+    },
+    "SR": {
+      "arm": "SR",
+      "run_id": "topology-001-3e4270973141-5a604561",
+      "seed": 173018021,
+      "training_status": "COMPLETE",
+      "model_parameters": 966784,
+      "same_initial_parameters": true,
+      "data_order": "trainer.train Random(seed) shuffle, lane-major within each TBPTT tick",
+      "fresh_initialization": true,
+      "prediction_tokens": 250000,
+      "optimizer_updates": 977,
+      "training_compute_seconds": 664.4046821700153,
+      "training_wall_seconds": 723.125483924,
+      "tokens_per_second": 376.2766980862835,
+      "peak_cuda_allocated_bytes": 171762176,
+      "peak_cuda_reserved_bytes": 178257920,
+      "final_model": {
+        "file": "SR-final-model.pt",
+        "bytes": 3872313,
+        "kaggle_run_id": "topology-001-3e4270973141-5a604561",
+        "output": "/kaggle/working/epclm-topology-001-3e4270973141",
+        "git_storage": false
+      },
+      "arm_wall_seconds": 885.7393973590001
+    },
+    "T4": {
+      "arm": "T4",
+      "run_id": "topology-001-3e4270973141-5a604561",
+      "seed": 173018021,
+      "training_status": "COMPLETE",
+      "model_parameters": 966784,
+      "same_initial_parameters": true,
+      "data_order": "trainer.train Random(seed) shuffle, lane-major within each TBPTT tick",
+      "fresh_initialization": true,
+      "prediction_tokens": 250000,
+      "optimizer_updates": 977,
+      "training_compute_seconds": 663.6311288429974,
+      "training_wall_seconds": 728.9285825350003,
+      "tokens_per_second": 376.7153003142884,
+      "peak_cuda_allocated_bytes": 171762176,
+      "peak_cuda_reserved_bytes": 178257920,
+      "final_model": {
+        "file": "T4-final-model.pt",
+        "bytes": 3872313,
+        "kaggle_run_id": "topology-001-3e4270973141-5a604561",
+        "output": "/kaggle/working/epclm-topology-001-3e4270973141",
+        "git_storage": false
+      },
+      "arm_wall_seconds": 893.6560302759999
+    }
+  }
+}

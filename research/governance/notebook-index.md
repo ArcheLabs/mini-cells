@@ -30,3 +30,5 @@ storage. The shared Kaggle helpers live in [`shared/kaggle/`](../../shared/kaggl
 - [GC002 Fair Architecture preparation](../projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/prepare.ipynb): Phase 0/1 only; no training authorization. Synthetic KV equivalence, parameter search, optional GPU engineering inference profile and automatic report return.
 
 - [GC002 approved T1-PM-KV GPU Pilot](../projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/t1-pm-pilot.ipynb): real FP32 50 Updates / 12,800 Tokens; update-25 checkpoint restore, automatic publication and stop. Distinct from preparation; no formal training extension.
+
+- [CLM Workspace Depth-KV](../projects/cellular-language-models/experiments/clm-workspace-depth-kv-001/notebook.ipynb): C2/C-DKV and unchanged T0 references, three new seeds, 2M per arm/seed; automatic engineering smoke then budget-gated paired run, FP32 dual T4. GPU execution pending.

@@ -1,0 +1,105 @@
+{
+  "experiment": "EPCLM-CORE-001-TOPOLOGY-001",
+  "phase": "SINGLE_SEED_DEVELOPMENT_SCREEN",
+  "seed": 173018021,
+  "dataset_version": 142,
+  "arms": [
+    "R1",
+    "IC",
+    "R2",
+    "SR",
+    "T4"
+  ],
+  "architecture": {
+    "cells": 16,
+    "dim": 128,
+    "vocab": 2048,
+    "K": 4,
+    "alpha": 0.1,
+    "parameters": 966784,
+    "state_bytes_per_lane": 8192
+  },
+  "training": {
+    "prediction_tokens_per_arm": 250000,
+    "updates": 977,
+    "batch": 4,
+    "tbptt": 64,
+    "precision": "fp32",
+    "tf32": false,
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "scheduler": "native_clm_runtime.lr_multiplier(step,977,97), identical to trainer.train; initial step=0",
+    "warmup_updates": 97,
+    "validation_milestones": [
+      250,
+      500,
+      750,
+      977
+    ]
+  },
+  "evaluation": {
+    "validation_documents": 16,
+    "validation_prediction_tokens": 3322,
+    "holdout_documents": 205,
+    "holdout_prediction_tokens": 47403,
+    "bootstrap_replicates": 2000,
+    "bootstrap_seed": 713,
+    "bootstrap_estimand": "token-weighted paired NLL; shared document-cluster draws",
+    "generation_prompts": 8,
+    "generation_max_tokens": 128,
+    "generation_mode": "greedy",
+    "inference_warmup": 5,
+    "inference_repetitions": 30
+  },
+  "pulse": {
+    "seed": 713,
+    "fractions": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "source_cells": [
+      0,
+      4,
+      8,
+      12
+    ],
+    "relative_amplitude": 0.001,
+    "minimum_amplitude": 1e-06,
+    "absolute_effect_threshold": 1e-06,
+    "relative_effect_threshold": 1e-06,
+    "future_events": [
+      0,
+      1,
+      2,
+      4,
+      8
+    ],
+    "samples_per_arm": 48,
+    "boundary_policy": "clamp anchor to leave eight future events; report actual anchors; never cross document boundary"
+  },
+  "screen": {
+    "minimum_holdout_ppl_improvement": 0.01,
+    "delta_nll_ci_upper_max": 0.0,
+    "maximum_validation_ppl_ratio": 1.01,
+    "maximum_decode_latency_ratio": 2.0,
+    "threshold_note": "operational definitions for unspecified obvious validation degradation and reasonable latency; development screen only"
+  },
+  "budget": {
+    "execution_seconds": 5400,
+    "publication_seconds": 600,
+    "safety_seconds": 1200,
+    "hard_limit_seconds": 7200
+  },
+  "checkpoint": false,
+  "recovery": false,
+  "hash_verification": false,
+  "independent_test_accessed": false,
+  "scientific_confirmation": false,
+  "next_phase_automatic": false
+}

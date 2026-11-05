@@ -43,13 +43,13 @@ def correctness(configs,p,deadline):
                 if rows:
                     comparisons['cell_causality_step'+str(step)]=error(rows[0]['delta'][:,:cut],changed_trace[step][0]['delta'][:,:cut])
                     if 'logits' in rows[0]:comparisons['router_causality_step'+str(step)]=error(rows[0]['logits'][:,:cut],changed_trace[step][0]['logits'][:,:cut])
-            for name in ('encoder_kv','workspace_kv'):
+            for name in ('encoder_kv','workspace_kv','workspace_kv_depth1'):
                 if cache.get(name) is not None:
                     take=max(0,cut-(length-cache[name][0].shape[2]))
                     if take:comparisons[name+'_causality']=error(cache[name][0][:,:,:take],changed_cache[name][0][:,:,:take])
             for execution,other_cache in (('prefill',prefill_cache),('single',single_cache)):
                 if other_cache['position']!=cache['position']:raise ValueError('cache absolute position mismatch')
-                for field in ('encoder_kv','workspace_kv'):
+                for field in ('encoder_kv','workspace_kv','workspace_kv_depth1'):
                     if cache.get(field) is not None:
                         for part in (0,1):comparisons[execution+'_'+field+str(part)]=error(cache[field][part],other_cache[field][part])
                 for layer,(normal_layer,other_layer) in enumerate(zip(cache.get('layers',[]),other_cache.get('layers',[]))):

@@ -1,0 +1,103 @@
+{
+  "model": {
+    "cells": 8,
+    "chunk": 64,
+    "dim": 256,
+    "encoder_ffn": 512,
+    "ffn": 512,
+    "heads": 4,
+    "layers": 3,
+    "norm": "LayerNorm",
+    "state_dim": 256,
+    "steps": 2,
+    "top_k": 2,
+    "vocab": 2048,
+    "window": 256
+  },
+  "optimizer": {
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "clip": 1.0,
+    "lr": 0.0003,
+    "warmup_fraction": 0.1,
+    "weight_decay": 0.1
+  },
+  "router": {
+    "balance": "N * sum(stopgrad(top2_assignment_fraction) * mean(full_router_softmax)), averaged over steps; diagnostic auxiliary only",
+    "balance_alpha": 0.001,
+    "noise": 0.0,
+    "temperature": 1.0
+  },
+  "groups": {
+    "documents": 8,
+    "max_document_targets": 4096
+  },
+  "evaluation": {
+    "bootstrap_repetitions": 2000,
+    "bootstrap_seed": 91002,
+    "documents": 32,
+    "threshold": 0.01
+  },
+  "precision": {
+    "consistency_fallback": "fp32",
+    "fallback": "fp16_grad_scaler",
+    "initial_scale": 1024,
+    "max_consecutive_overflows": 5,
+    "prefer": "bf16",
+    "requested": "fp32",
+    "router": "fp32"
+  },
+  "counterfactual": {
+    "fixed_pairs": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "oracle": "bounded optional offline path diagnostic; NOT_RUN in initial smoke",
+    "random_seed": 4301,
+    "shuffle": "permute normal route assignments and their selected weights across tokens within each evaluated chunk, separately per step; update actual controller path"
+  },
+  "format": "minicells.clm-depth-kv.protocol.v1",
+  "smoke": {
+    "seed": 17
+  },
+  "experiment": {
+    "id": "clm-workspace-depth-kv-001",
+    "arms": [
+      "C2",
+      "C-DKV",
+      "T0-P",
+      "T0-F"
+    ],
+    "seeds": [
+      18001,
+      18002,
+      18003
+    ],
+    "targets_per_model": 2000000,
+    "smoke_targets": 16384,
+    "session_seconds": 7200,
+    "execution_seconds": 6000,
+    "evaluation_seconds": 6900,
+    "decode_tokens": 32,
+    "benchmark_warmup": 3,
+    "benchmark_samples": 5,
+    "workspace_kv_mode": "depth_indexed",
+    "kv_projection": "shared",
+    "cross_session_recovery_validation": "REMOVED_BY_USER",
+    "scientific_confirmation": false
+  },
+  "checkpoint_interval_targets": 250000,
+  "pin_memory": true
+}

@@ -1,0 +1,62 @@
+{
+  "R1": {
+    "status": "COMPLETE",
+    "projection_flops_per_microstep": 1572864,
+    "projection_flops_per_event": 6291456,
+    "aggregation_scalar_operations_per_microstep": 0,
+    "directed_cross_cell_neighbor_inputs_per_microstep": 32,
+    "neighbor_feature_reads_per_microstep": 4096,
+    "aggregation_formula": "degree 4: two sums and two mean scalings per Cell feature; projection count unchanged",
+    "scope": "theoretical logical counts; excludes full model FLOPs; not physical DRAM traffic or kernel measurements",
+    "training_tokens_per_second": 389.80647282582487,
+    "training_wall_seconds": 681.89036437
+  },
+  "IC": {
+    "status": "COMPLETE",
+    "projection_flops_per_microstep": 1572864,
+    "projection_flops_per_event": 6291456,
+    "aggregation_scalar_operations_per_microstep": 0,
+    "directed_cross_cell_neighbor_inputs_per_microstep": 0,
+    "neighbor_feature_reads_per_microstep": 0,
+    "aggregation_formula": "degree 4: two sums and two mean scalings per Cell feature; projection count unchanged",
+    "scope": "theoretical logical counts; excludes full model FLOPs; not physical DRAM traffic or kernel measurements",
+    "training_tokens_per_second": 443.5535369872042,
+    "training_wall_seconds": 606.240128161
+  },
+  "R2": {
+    "status": "COMPLETE",
+    "projection_flops_per_microstep": 1572864,
+    "projection_flops_per_event": 6291456,
+    "aggregation_scalar_operations_per_microstep": 8192,
+    "directed_cross_cell_neighbor_inputs_per_microstep": 64,
+    "neighbor_feature_reads_per_microstep": 8192,
+    "aggregation_formula": "degree 4: two sums and two mean scalings per Cell feature; projection count unchanged",
+    "scope": "theoretical logical counts; excludes full model FLOPs; not physical DRAM traffic or kernel measurements",
+    "training_tokens_per_second": 377.1428950522478,
+    "training_wall_seconds": 715.024037017
+  },
+  "SR": {
+    "status": "COMPLETE",
+    "projection_flops_per_microstep": 1572864,
+    "projection_flops_per_event": 6291456,
+    "aggregation_scalar_operations_per_microstep": 8192,
+    "directed_cross_cell_neighbor_inputs_per_microstep": 64,
+    "neighbor_feature_reads_per_microstep": 8192,
+    "aggregation_formula": "degree 4: two sums and two mean scalings per Cell feature; projection count unchanged",
+    "scope": "theoretical logical counts; excludes full model FLOPs; not physical DRAM traffic or kernel measurements",
+    "training_tokens_per_second": 376.2766980862835,
+    "training_wall_seconds": 723.125483924
+  },
+  "T4": {
+    "status": "COMPLETE",
+    "projection_flops_per_microstep": 1572864,
+    "projection_flops_per_event": 6291456,
+    "aggregation_scalar_operations_per_microstep": 8192,
+    "directed_cross_cell_neighbor_inputs_per_microstep": 64,
+    "neighbor_feature_reads_per_microstep": 8192,
+    "aggregation_formula": "degree 4: two sums and two mean scalings per Cell feature; projection count unchanged",
+    "scope": "theoretical logical counts; excludes full model FLOPs; not physical DRAM traffic or kernel measurements",
+    "training_tokens_per_second": 376.7153003142884,
+    "training_wall_seconds": 728.9285825350003
+  }
+}
