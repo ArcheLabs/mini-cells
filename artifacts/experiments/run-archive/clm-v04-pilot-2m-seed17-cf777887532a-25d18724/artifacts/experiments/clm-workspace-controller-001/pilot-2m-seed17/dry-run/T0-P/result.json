@@ -1,0 +1,176 @@
+{
+  "arm": "T0-P",
+  "checkpoint_sha256": "a446f83fc58639df5d031f44f19de143091c70f53739b4352760d3ba1b7f7db6",
+  "committed_targets": 4096,
+  "ended": 605.843980974,
+  "gpu_name": "Tesla T4",
+  "gpu_uuid": "952eb203-84c4-03ec-a4aa-f71ca79fdfa0",
+  "loss_declined": true,
+  "performance": {
+    "attempted_targets_this_session": 2481,
+    "committed_targets": 4096,
+    "completed_updates": 3,
+    "expert_parameter_tensor_update_norms": [],
+    "overflow_count": 0,
+    "peak_allocated_bytes": 163380736,
+    "precision": "fp32",
+    "precision_policy": {
+      "bf16_framework_supported": true,
+      "bf16_native_hardware_supported": false,
+      "cuda_version": "13.0",
+      "diagnostic_non_native_bf16": false,
+      "fp16_hardware_supported": true,
+      "gpu_capability": [
+        7,
+        5
+      ],
+      "gpu_name": "Tesla T4",
+      "requested_precision": "fp32",
+      "scaler_enabled": false,
+      "selected_precision": "fp32",
+      "selection_reason": "explicit request; non-native BF16 diagnostic only",
+      "torch_version": "2.11.0+cu130"
+    },
+    "session_seconds": 0.6660987870000099,
+    "session_targets": 2481,
+    "session_targets_per_second": 3724.672748878558,
+    "skipped_updates": 0
+  },
+  "phase": "dry-run",
+  "physical_gpu_mask": "1",
+  "precision_policy": {
+    "bf16_framework_supported": true,
+    "bf16_native_hardware_supported": false,
+    "cuda_version": "13.0",
+    "diagnostic_non_native_bf16": false,
+    "fp16_hardware_supported": true,
+    "gpu_capability": [
+      7,
+      5
+    ],
+    "gpu_name": "Tesla T4",
+    "requested_precision": "fp32",
+    "scaler_enabled": false,
+    "selected_precision": "fp32",
+    "selection_reason": "explicit request; non-native BF16 diagnostic only",
+    "torch_version": "2.11.0+cu130"
+  },
+  "rng_substreams": {
+    "data_order": "deterministic ordered documents, no stochastic shuffle",
+    "data_order_seed": 17,
+    "global_seed": 385543299,
+    "initialization_seed": 17,
+    "router_seed": 1711487412
+  },
+  "started": 603.940909381,
+  "status": "COMPLETE",
+  "training": {
+    "attempted_targets": 4096,
+    "next_group": 3,
+    "overflow_count": 0,
+    "overflows": [],
+    "rows": [
+      {
+        "backward_gpu_ms": 138.09520053863525,
+        "balance_loss": 0.0,
+        "forward_gpu_ms": 127.03049659729004,
+        "gradient_norm": 2.5049664974212646,
+        "lm_loss": 7.673219680786133,
+        "lr": 0.00022757542539478533,
+        "module_gradients": {
+          "blocks": 2.1240062713623047,
+          "head": 1.07366943359375,
+          "norm": 0.04428505524992943,
+          "token": 0.7802087068557739
+        },
+        "optimizer_gpu_ms": 4.742688179016113,
+        "seconds": 0.2885194920000913,
+        "targets": 1615,
+        "total_loss": 7.673219680786133
+      },
+      {
+        "backward_gpu_ms": 143.02016067504883,
+        "balance_loss": 0.0,
+        "forward_gpu_ms": 138.70953583717346,
+        "gradient_norm": 2.4490857124328613,
+        "lm_loss": 7.366276741027832,
+        "lr": 5.000716994769686e-05,
+        "module_gradients": {
+          "blocks": 1.84005868434906,
+          "head": 1.4648959636688232,
+          "norm": 0.048586856573820114,
+          "token": 0.6811195611953735
+        },
+        "optimizer_gpu_ms": 3.349855899810791,
+        "seconds": 0.299611771000059,
+        "targets": 3109,
+        "total_loss": 7.366276741027832
+      },
+      {
+        "backward_gpu_ms": 87.52073574066162,
+        "balance_loss": 0.0,
+        "forward_gpu_ms": 83.48284912109375,
+        "gradient_norm": 2.487273931503296,
+        "lm_loss": 7.352998733520508,
+        "lr": 0.0,
+        "module_gradients": {
+          "blocks": 1.8572933673858643,
+          "head": 1.5165152549743652,
+          "norm": 0.0489957369863987,
+          "token": 0.6593739986419678
+        },
+        "optimizer_gpu_ms": 3.135296106338501,
+        "seconds": 0.18505543600008423,
+        "targets": 4096,
+        "total_loss": 7.352998733520508
+      }
+    ],
+    "skipped_updates": 0,
+    "status": "COMPLETE",
+    "targets": 4096,
+    "updates": 3
+  },
+  "validation": {
+    "documents": [
+      {
+        "doc_id": "validation:0",
+        "nll_sum": 700.0016021728516,
+        "targets": 93
+      },
+      {
+        "doc_id": "validation:1",
+        "nll_sum": 2601.3897247314453,
+        "targets": 351
+      },
+      {
+        "doc_id": "validation:2",
+        "nll_sum": 956.2506561279297,
+        "targets": 133
+      },
+      {
+        "doc_id": "validation:3",
+        "nll_sum": 1558.756851196289,
+        "targets": 214
+      }
+    ],
+    "expert_activation_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "fixed_pair": null,
+    "mean_nll": 7.353222293588515,
+    "mode": "normal",
+    "ppl": 1561.219137747242,
+    "records": [],
+    "seconds": 0.06155148100003771,
+    "status": "COMPLETE"
+  },
+  "wall_seconds": 1.9030715930000497,
+  "worker": "worker-1"
+}

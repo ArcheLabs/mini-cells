@@ -1,0 +1,836 @@
+{
+  "original_branch": "kaggle/clm-v04-pilot-2m-seed17-cf777887532a-25d18724",
+  "original_head": "6dc69a817a59b6624c9d46b1cd98bb3de29c27cb",
+  "main": "7d560ea7a0e72be589bd18c87bb9bcb3d190e88d",
+  "resolution": "Keep current main tree and preserve original result snapshot verbatim; original full source remains in merge parent. No training or scientific status changes.",
+  "files": [
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/RESEARCH-REPORT.zh-CN.md",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/RESEARCH-REPORT.zh-CN.md",
+      "git_blob": "21a3bdd62d244699de25b4641e8823f9087ae8f3",
+      "sha256": "25f4ee98a7a9a95da9f575f4bd42bde52661f663fde8b697248a8ce588262661"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/RESULTS.md",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/RESULTS.md",
+      "git_blob": "cf605945d17f575a9d672e674b77b720323b06ed",
+      "sha256": "ff410540b2a2897b509ad67bd9f237fa8d5076cb537c0b3c5672014dbfba3864"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/25f1b6646da589e0b99d15fb52e5e4cce2f2a8cddd41d3442db640710bec8af5.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/25f1b6646da589e0b99d15fb52e5e4cce2f2a8cddd41d3442db640710bec8af5.json",
+      "git_blob": "6699c7916f4ba8f4a384d5af93874197e450b9f5",
+      "sha256": "25f1b6646da589e0b99d15fb52e5e4cce2f2a8cddd41d3442db640710bec8af5"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/25f4ee98a7a9a95da9f575f4bd42bde52661f663fde8b697248a8ce588262661.md",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/25f4ee98a7a9a95da9f575f4bd42bde52661f663fde8b697248a8ce588262661.md",
+      "git_blob": "21a3bdd62d244699de25b4641e8823f9087ae8f3",
+      "sha256": "25f4ee98a7a9a95da9f575f4bd42bde52661f663fde8b697248a8ce588262661"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/2ec39c9cb2ff5bc1afb286196d9c86fe883aa36e47ebc42717d64e9adb97361c.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/2ec39c9cb2ff5bc1afb286196d9c86fe883aa36e47ebc42717d64e9adb97361c.json",
+      "git_blob": "b5c8773e33879f84a95f62e9b8dc5e495f7f379e",
+      "sha256": "2ec39c9cb2ff5bc1afb286196d9c86fe883aa36e47ebc42717d64e9adb97361c"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/39951c8838b3e0c762ef98569a0c7ade09b65fea88203db1f962f7a6d47cbd38.csv",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/39951c8838b3e0c762ef98569a0c7ade09b65fea88203db1f962f7a6d47cbd38.csv",
+      "git_blob": "c3423ed9b7c993b5f649a054fde77e28f425bc73",
+      "sha256": "39951c8838b3e0c762ef98569a0c7ade09b65fea88203db1f962f7a6d47cbd38"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/608c82c7ec5140f885f58817886870f0edcabda961324d18e09b221665ffd5bf.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/608c82c7ec5140f885f58817886870f0edcabda961324d18e09b221665ffd5bf.json",
+      "git_blob": "c51a00923e72640087771c20788e92b746c1e081",
+      "sha256": "608c82c7ec5140f885f58817886870f0edcabda961324d18e09b221665ffd5bf"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/7d281b9db986f5e7596769c60c9fbe1517d21d70eace359457a6ae8213f79ace.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/7d281b9db986f5e7596769c60c9fbe1517d21d70eace359457a6ae8213f79ace.json",
+      "git_blob": "134718ec045655e6498a8243c4de540489abff17",
+      "sha256": "7d281b9db986f5e7596769c60c9fbe1517d21d70eace359457a6ae8213f79ace"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/82f666cf88616969c367bef5c95b8e458aeb667853c965ebdde7cc5215e4ecfc.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/82f666cf88616969c367bef5c95b8e458aeb667853c965ebdde7cc5215e4ecfc.json",
+      "git_blob": "6d57607607b8dde2ae15d38b1092fe18a2107b16",
+      "sha256": "82f666cf88616969c367bef5c95b8e458aeb667853c965ebdde7cc5215e4ecfc"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/90af493207e45bde36b88b371b6aae7e358878042e61faf619e039395be63140.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/90af493207e45bde36b88b371b6aae7e358878042e61faf619e039395be63140.json",
+      "git_blob": "0541bbde548025cbf9244a1fadd86ca9ebfbb927",
+      "sha256": "90af493207e45bde36b88b371b6aae7e358878042e61faf619e039395be63140"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/952765fa1c5b874342728acdf34c648b947023ce014a0129b02671bd36ff0523.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/952765fa1c5b874342728acdf34c648b947023ce014a0129b02671bd36ff0523.json",
+      "git_blob": "bd2cdf0b37a956ed59b4031d0e7f870141ec6847",
+      "sha256": "952765fa1c5b874342728acdf34c648b947023ce014a0129b02671bd36ff0523"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/9e149564684b278930a2601ec0312bc89c112072f1cc68aae0e914be2ad7a5c8.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/9e149564684b278930a2601ec0312bc89c112072f1cc68aae0e914be2ad7a5c8.json",
+      "git_blob": "dbd5c7585c8dcb720d263e1b5cc02739bca2e512",
+      "sha256": "9e149564684b278930a2601ec0312bc89c112072f1cc68aae0e914be2ad7a5c8"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/ad2de9949cb37234168e50b5e5000265b1f34dd8f59cf83f60abaab574fc5ab1.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/ad2de9949cb37234168e50b5e5000265b1f34dd8f59cf83f60abaab574fc5ab1.json",
+      "git_blob": "d449158436a615efac411d275c1b377e112426a5",
+      "sha256": "ad2de9949cb37234168e50b5e5000265b1f34dd8f59cf83f60abaab574fc5ab1"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/ae86fa354bd7baf1f39c87b9bdead8c4085b476c4963b968d7ab6186c9ea7a0a.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/ae86fa354bd7baf1f39c87b9bdead8c4085b476c4963b968d7ab6186c9ea7a0a.json",
+      "git_blob": "14fe05e09a08b18ee767c4dec40985c07a9bfe66",
+      "sha256": "ae86fa354bd7baf1f39c87b9bdead8c4085b476c4963b968d7ab6186c9ea7a0a"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/b7f3563df3ab6ce6bd98175e155297234281d04bdd3305e746201f612baaecd8.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/b7f3563df3ab6ce6bd98175e155297234281d04bdd3305e746201f612baaecd8.json",
+      "git_blob": "6123b69c424c2810453ee798004574199ae6cd3a",
+      "sha256": "b7f3563df3ab6ce6bd98175e155297234281d04bdd3305e746201f612baaecd8"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/dc78f35bc06db633a00f905781edbea578bd9647878a90035de9bafe58c7095c.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/dc78f35bc06db633a00f905781edbea578bd9647878a90035de9bafe58c7095c.json",
+      "git_blob": "a6ffa2e1b9b9c7546ce760da7a75c8f82792a278",
+      "sha256": "dc78f35bc06db633a00f905781edbea578bd9647878a90035de9bafe58c7095c"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/e92d990295121106ffd646b23aab1f21eda84c39653d03a79471e6f7551735ca.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/_recovery_objects/e92d990295121106ffd646b23aab1f21eda84c39653d03a79471e6f7551735ca.json",
+      "git_blob": "9468da25ce0a6346790e19960d4f4c4d647ee253",
+      "sha256": "e92d990295121106ffd646b23aab1f21eda84c39653d03a79471e6f7551735ca"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/audit.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/audit.json",
+      "git_blob": "00692fa6997e31ec42c222a3d334d8bcdbcfbd34",
+      "sha256": "813669802eeb083a2f17261ec03a3b03b7de114e42051391a71594ef983d6c95"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark-timing.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark-timing.json",
+      "git_blob": "c508c8029d790fb2f961adfe4e2042af59addb2b",
+      "sha256": "013b393b295fd3cbf765e5771d6bd6ec1b4db6afcceaf520b19f79e638313a68"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C0/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C0/checkpoint-event.json",
+      "git_blob": "a601abe9b12c251462e60fecbf97b3afc680cf78",
+      "sha256": "81caffd78607aa7d9a3a48702802054f643038c472539df68c634c438dd20e17"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C0/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C0/performance.json",
+      "git_blob": "4872469876fd9fc71c913c77a7f48983b9dda535",
+      "sha256": "aaf0c5126a39dbe01d8cadd70f4f295ba565e33f0a88d429ba813fbccbe7cf1f"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C0/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C0/result.json",
+      "git_blob": "d3e9189137723306e89dd6ff375bc74ae569fb2e",
+      "sha256": "fcd6e785b191a37192a9aa813efc29e43556dd763098cd1b327a0589c3ae8fd0"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C0/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C0/training.json",
+      "git_blob": "9673eafd0434169e6a8a9bbd3acd5ea2147f0afb",
+      "sha256": "c272fa51e279e479e37aab7c594dda0df9116bc3ba72372c7fbc0d173661cab3"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C1/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C1/checkpoint-event.json",
+      "git_blob": "beb7f1d2e342df6eabb3c49556a5ebecadf20240",
+      "sha256": "8ca3baa1bbbe80791b80722585733de4194e21cc9f3f55e7b6676823761f5eb0"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C1/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C1/performance.json",
+      "git_blob": "121390d62ec5e6909df853b075dd5e0017bd677d",
+      "sha256": "79e5bc91bb565db53e56e4e40e994f223b2a894f2441c0be304f901878f37b59"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C1/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C1/result.json",
+      "git_blob": "6d32f0cc5d0459780d6ea264c2b88c79a6584c8b",
+      "sha256": "ba56e5c604599760d8fb2e75bd53ed0fccf64e076d4620fd0d4d8a864c25117e"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C1/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C1/training.json",
+      "git_blob": "038690e0777f3a640c9bc46fe9aa5d0b61de63ff",
+      "sha256": "a1b7f523e2a1d4a40cdbad17206177d190a389c8a6a329fe38e6cfc7b8a41ade"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C2/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C2/checkpoint-event.json",
+      "git_blob": "add3b7ed77dce4b3b5cd5ecd31d625a903de62b7",
+      "sha256": "baf93cab3b74acf210387f84e8d3ef5811e3ba2e1c51bacd8c487dd516cb72a8"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C2/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C2/performance.json",
+      "git_blob": "b208d87279221f2ab327a1b38840f2d3aa40a6e5",
+      "sha256": "b7090ba5e3d77afd179430425e7303c5a1d35e448519f9b5cc31e71ce65cb3de"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C2/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C2/result.json",
+      "git_blob": "2956b9d473cca948d6948dc360779e94705c0255",
+      "sha256": "8ca57052f63f9d3810e672052ffa2c0a89a8331be36576ffc386962817e6da98"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C2/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C2/training.json",
+      "git_blob": "8c2a5498b5e0cfa5dfef1159cc44a61df8dfc53a",
+      "sha256": "a4d956b7af672749285f1958f4d83dac872788a67308924749485b4c284f5755"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C3/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C3/checkpoint-event.json",
+      "git_blob": "3c7e5e11f4bd6353e362103089d0935a68c42f4b",
+      "sha256": "8876b48a4d685b6da32842667554b26fd217adcf8f9030804637a5da94c80d67"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C3/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C3/performance.json",
+      "git_blob": "f5b11b04c823b22537a8b372896c3cde6bded5c3",
+      "sha256": "68e1a385de448a7a784e2fddb7378d0f61d469e2699deb8641e2a778bc75d146"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C3/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C3/result.json",
+      "git_blob": "b5345536b5226d2ceada89860456563ae03f3eb4",
+      "sha256": "44b3a6061c331e13f0105fe66ddbc0cd930b0063a4f322512ca185ce79986373"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C3/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/C3/training.json",
+      "git_blob": "f1e4e2c2a34ce9ce2cef0c8955efcba1fdddf726",
+      "sha256": "6a06ff46f58e4413949b9927e47ffa4029c5ff7bbb88613977684e6b686cb6c5"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-F/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-F/checkpoint-event.json",
+      "git_blob": "b805c3d19322390d188cabbae4e1974b25ac72d4",
+      "sha256": "04d7bfc08340fdda1dd3553ef9e5f21e9ea9db20fe423c41a4505c1b595c1a07"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-F/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-F/performance.json",
+      "git_blob": "7e699952b3bb950850a1599fae7bcdbbce5d8f03",
+      "sha256": "873c99f226bbb93af297d478ad81c0bd8aa5b4a7bc7adf55cc3ccb3fc09ee7e3"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-F/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-F/result.json",
+      "git_blob": "04fe9d4dc7e2bebc057fe79369485f719e8a4623",
+      "sha256": "cb5e535d256ad7a66c15c010ce0c540b786a89d71fbeac83f68c574f302bdd76"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-F/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-F/training.json",
+      "git_blob": "44f37a9d22149bcff0d60665832619909d8020a4",
+      "sha256": "f61fdbf01f3f6ade19f6e54565f7e63994558981b279dd331268f3bd47eeee15"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-P/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-P/checkpoint-event.json",
+      "git_blob": "d9d2d035dc2954b6a98823e435c13a8de32c81ff",
+      "sha256": "0bb71818f2a0fb00537d700c3223410c04eb3935352282a334d9253516986ee0"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-P/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-P/performance.json",
+      "git_blob": "764861d12c92515e0c2395fef48c4f276f2e1d24",
+      "sha256": "6330f83de0142c08d796c8f1f81f02bd24d10bc4fcc5da47ed18957a8b82c373"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-P/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-P/result.json",
+      "git_blob": "34af260e7832b18b7dbc2be899bde69c7daa98c5",
+      "sha256": "5c4d9b974e80f06e900a6828f5573dfa303a5128e711a447aeb96ed7ee735c2e"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-P/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/benchmark/T0-P/training.json",
+      "git_blob": "120613719ef0c7b25490bebad080f2ddd2a316f5",
+      "sha256": "ee43d4dfedefb2d2e2ba2073989edf83342b2af17e39ff1ac0adf2eac461d21e"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/compute-profile.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/compute-profile.json",
+      "git_blob": "0541bbde548025cbf9244a1fadd86ca9ebfbb927",
+      "sha256": "90af493207e45bde36b88b371b6aae7e358878042e61faf619e039395be63140"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/correctness-cpu.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/correctness-cpu.json",
+      "git_blob": "ab89a498ce8b478f65f05647def7a04c6a9fa1ad",
+      "sha256": "a3211445f28ecd2cf2b444731e52c354d0f12ad955159efd6283c8a4d4446f19"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/counterfactual-routing.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/counterfactual-routing.json",
+      "git_blob": "a6ffa2e1b9b9c7546ce760da7a75c8f82792a278",
+      "sha256": "dc78f35bc06db633a00f905781edbea578bd9647878a90035de9bafe58c7095c"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/decision.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/decision.json",
+      "git_blob": "c51a00923e72640087771c20788e92b746c1e081",
+      "sha256": "608c82c7ec5140f885f58817886870f0edcabda961324d18e09b221665ffd5bf"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run-timing.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run-timing.json",
+      "git_blob": "11cae5ffefb9386249044084c43b60d2eba8bb47",
+      "sha256": "730d65779f5f248ebc1b1096b28e4973209dfe0cf3ebca08d9c53f8eb2e61a41"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C0/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C0/checkpoint-event.json",
+      "git_blob": "8ab4d0d06c0909970e2f929503aaa434affb3cf0",
+      "sha256": "e0c6709938a581286c1169ed89d5bfef91be2bca6b19deb676199863f0f594dc"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C0/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C0/performance.json",
+      "git_blob": "0d27cc2a5e0dc84c67c3fe10806f974c9c26b202",
+      "sha256": "2f155ad0c9d8c625cb2f93eeab4bdaa0f8516ec024823f16c1ef13e10d49bd14"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C0/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C0/result.json",
+      "git_blob": "2032aba9d8eb69958e6a502fc309259050a7b318",
+      "sha256": "cd2135271995275e14b5718de5e1ca894d1e2a2d321ce076bc4d2e2ecdb81ee8"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C0/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C0/training.json",
+      "git_blob": "3503364d308c9e816352be626b61d15b0932c4f5",
+      "sha256": "c894575d4b55ff96c7db306e743aa3f157a9572eee83dd403dd1137a7a66b650"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C1/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C1/checkpoint-event.json",
+      "git_blob": "319336bd7642a502a0145140e0f12f63ca942696",
+      "sha256": "dd09390aca995ce2021361a4d1ee33ce053c400c2a7dcbd7cfc12f779f62e585"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C1/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C1/performance.json",
+      "git_blob": "50d37dbffac144363e1dd3308a4bc4d13daedfeb",
+      "sha256": "7033701f22feac4833422f1b51b7002fed7899aa7f3d184e71d29c61c14fa872"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C1/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C1/result.json",
+      "git_blob": "189a2a05aa76c6afd040490ca8e934a548cc8d3e",
+      "sha256": "050382145d914ec60eb73ce63f8553d8082fb084dd5ab5245e6118ecfb48b068"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C1/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C1/training.json",
+      "git_blob": "968358099f310657c73da11ccca6445e36fe6ff0",
+      "sha256": "cf5dd2186a7f03c7c4badef243f753aed2a6cb7ff11e8113464463e6df1a6ac8"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C2/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C2/checkpoint-event.json",
+      "git_blob": "a932935c36d26758b664fb757c2d27b536cf69ba",
+      "sha256": "ad6e28e39d98d03bccf912cb3b14d50115d8cbc09cd8d5d4bc107ded2cf8bf79"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C2/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C2/performance.json",
+      "git_blob": "d175637ea2506e25b62fb06f05175fccf3832eac",
+      "sha256": "e0063aba3abcdf1b41bd474bbda679242ec41b05889dd52e6496cff8e6c8baa0"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C2/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C2/result.json",
+      "git_blob": "13a37abf143aab2b9cd867c2a44492237ecbf2b5",
+      "sha256": "850c727e3202e27ea7e12d49af476654f5f3319a5b11782e048ccc554d0c2425"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C2/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C2/training.json",
+      "git_blob": "d4975163202d8232eaeee3c5e187948d15f5fc3f",
+      "sha256": "6695529a2945b4081b7259f847225268c90465f03350627e15fa9c795ef2a317"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C3/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C3/checkpoint-event.json",
+      "git_blob": "804383c171436bf534ea500a31085cfe5a1d1497",
+      "sha256": "6ebc6b7c0fd0ee4e839b49fd1fefb0355c570dd44929037f2b858dbbae07ac6e"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C3/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C3/performance.json",
+      "git_blob": "df32baa25477347c901a346676268957fa452622",
+      "sha256": "7ec77f5c41981da46ed58fcb287b638fcbb1bd043ea14f787686f1010d59f030"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C3/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C3/result.json",
+      "git_blob": "fc058fb2c2fb3d7b7a76e4774510c31266387a99",
+      "sha256": "1cdd968e56360c9cd4b5d451550471361ac1ae24fdcd1d89dce31bc912f4824d"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C3/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/C3/training.json",
+      "git_blob": "8c6fa33a5d54325a97c49d1199adc1bd7fd1a0f8",
+      "sha256": "1a03f5288f68db3e2c74020cd1f9bf9613e6cd6e03bb1d64943f86900ffd671c"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-F/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-F/checkpoint-event.json",
+      "git_blob": "43763057c1030dd4d708847d1167c2f18cec6b4a",
+      "sha256": "f3eed72ab4548f36037e8e1acc70defa09e7fe56df7311de67f72fb6e931ba74"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-F/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-F/performance.json",
+      "git_blob": "ed2c2b806d14b350c324e70262f19e4480a29ff4",
+      "sha256": "b903d39ac062f9ac1189f5dd3359005243a38aed2ce2129f185a8badbb4cd5e7"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-F/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-F/result.json",
+      "git_blob": "99b0e0ee756a2857985bc03c9eb8cf21293410c7",
+      "sha256": "46c3998f2e12d5190f8c246f5174540c0135e12ac3f1463ebfcae51d301cfa31"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-F/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-F/training.json",
+      "git_blob": "e1ff9e150d91892e17c86db38532f8072ae40f77",
+      "sha256": "38b08918fd034b00c5bbc802f6f9fdc2d5732174e0cc9e9e75d903fc073a59b7"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-P/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-P/checkpoint-event.json",
+      "git_blob": "57ecdd110a69163c6b984e5a8d1064275097afed",
+      "sha256": "1e962ab3fca0a30618812a9c4e673dda67a59fb091933d992ac2cf3eb4337dab"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-P/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-P/performance.json",
+      "git_blob": "dd12bdad15e132e22187232e20d266c1fb72d5a6",
+      "sha256": "74ecc3c694e210c0d06eaa6a692359e460da0dd0935dffd203ef140b4e5b7322"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-P/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-P/result.json",
+      "git_blob": "7f7be7ef7037990979600bf69f15f3f51c75bb19",
+      "sha256": "f9126b9213bd8f1aaf6d778b119be15db80226b2035a39848ae35b6bca3ad176"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-P/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dry-run/T0-P/training.json",
+      "git_blob": "81dcfbd072f93559506ac4b84d346dab2ccf5b3b",
+      "sha256": "8cefd4c9c2c5f3ea90ea1248f6f2f59ece38c7c14e9c27fc14fc18be8c30dddc"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dual-gpu-profile.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dual-gpu-profile.json",
+      "git_blob": "bd2cdf0b37a956ed59b4031d0e7f870141ec6847",
+      "sha256": "952765fa1c5b874342728acdf34c648b947023ce014a0129b02671bd36ff0523"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dual-gpu-telemetry.csv",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dual-gpu-telemetry.csv",
+      "git_blob": "c3423ed9b7c993b5f649a054fde77e28f425bc73",
+      "sha256": "39951c8838b3e0c762ef98569a0c7ade09b65fea88203db1f962f7a6d47cbd38"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dual-gpu-utilization.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/dual-gpu-utilization.json",
+      "git_blob": "b2ceaa761c34b2f8f4b9e0850bb86699e6864a9e",
+      "sha256": "08190f1f91478b733df71db4a7a9ca027e533934dc115185154dac8ff28da31a"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/engineering-gates.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/engineering-gates.json",
+      "git_blob": "dde6090973928f0034c3b88069ad824ed40616f3",
+      "sha256": "ca883d217bcb4a75d05dfd8691dfd7e37007da47d204e8bc8d20dac614e3bf54"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate-timing.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate-timing.json",
+      "git_blob": "caff6bfbef5cd75af26844106d8e442325bd3c9d",
+      "sha256": "ccad206d1a02390a429e45545dd998e6947bb4df251e8c35fa3759761e406cb2"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/C0/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/C0/result.json",
+      "git_blob": "d2f038e4edc67a08545a87d03cf33657a7811572",
+      "sha256": "2e67a41ae21f6e85d07623d413998f27e0b566d99c9361052bd94310f062721f"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/C1/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/C1/result.json",
+      "git_blob": "3dda6f5fb4a404b762b43c4c17609a5bdcc87a88",
+      "sha256": "84e54a4aa7e60ed6768987c0d75f594c134d0ee78ef568db96e91f1c50783340"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/C2/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/C2/result.json",
+      "git_blob": "d8a75ceebb45cc06410aca62c206a53ef00708af",
+      "sha256": "f5cf259993eb0642137d02cad9f5398dd8742842e28e2221daaaef2a85085813"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/C3/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/C3/result.json",
+      "git_blob": "702f80d56f9e6892b6f8c5fa15d7c8a952a70a5d",
+      "sha256": "3f6b0cb71a3714475905f9f116bd4472b0fb8f7d46cb552320977be6d2c499ee"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/T0-F/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/T0-F/result.json",
+      "git_blob": "04f4f42fd10a8edf21126698062999bc6fe946ea",
+      "sha256": "ce777faf3b2343aed094426e9260f22dbaa0f1b0c0717f44f05ba9fc0e33335a"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/T0-P/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluate/T0-P/result.json",
+      "git_blob": "0e072280f4309a0b36e31ef321185344030ba6e6",
+      "sha256": "5489192419b394af9955f5232df01420575240800b5f2cfd9e354e20b6427eaa"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluation-results.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/evaluation-results.json",
+      "git_blob": "6699c7916f4ba8f4a384d5af93874197e450b9f5",
+      "sha256": "25f1b6646da589e0b99d15fb52e5e4cce2f2a8cddd41d3442db640710bec8af5"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/hypothesis-matching-freeze.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/hypothesis-matching-freeze.json",
+      "git_blob": "d9c979f0b56b7df7c9aa56c2e4d55bca7a53361b",
+      "sha256": "247545bd23a57b096b478fb6860145c572f420a2fcfd1587f7472c4a150df10a"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/manifest.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/manifest.json",
+      "git_blob": "6123b69c424c2810453ee798004574199ae6cd3a",
+      "sha256": "b7f3563df3ab6ce6bd98175e155297234281d04bdd3305e746201f612baaecd8"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/metadata.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/metadata.json",
+      "git_blob": "8702f867eba25f2081956a1e9f54e79c7e919815",
+      "sha256": "42e10b187427f2403fa2e8f01f368bdea9f23e0c471ac9d4b01e214def0d4bc3"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/model-matching.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/model-matching.json",
+      "git_blob": "6d57607607b8dde2ae15d38b1092fe18a2107b16",
+      "sha256": "82f666cf88616969c367bef5c95b8e458aeb667853c965ebdde7cc5215e4ecfc"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/pilot-budget-freeze.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/pilot-budget-freeze.json",
+      "git_blob": "b5c8773e33879f84a95f62e9b8dc5e495f7f379e",
+      "sha256": "2ec39c9cb2ff5bc1afb286196d9c86fe883aa36e47ebc42717d64e9adb97361c"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/pilot-dry-run.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/pilot-dry-run.json",
+      "git_blob": "808f2afb2d174cbee3711b5830c18f597fcb56e3",
+      "sha256": "39b9ac846ce9291b8f025dd421ec4b01e7cd0cf80b0bc3b2db28d1ffc0a16d64"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/protocol.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/protocol.json",
+      "git_blob": "ac97db6eb6b1a54dc4040246e2879b79082187cc",
+      "sha256": "3c68b066a97bbad16133d6c9933fc831d5665cad99c47e195a0e791ff1cd1557"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/publication-receipt.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/publication-receipt.json",
+      "git_blob": "fb1cd8c422fc401ddf49e68af7e3a7616f02e812",
+      "sha256": "24ae09fc6c0df89ae464815b4de384aae162d26b61c13afad7c45f5b909bdaf4"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/recovery-attempt.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/recovery-attempt.json",
+      "git_blob": "84496a5b88469361f0f26a0205cc3669e8d6d1c5",
+      "sha256": "abe389cda29952a4513607d48a051383b1fb893ee923fed377aa544182392eb7"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/recovery-report.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/recovery-report.json",
+      "git_blob": "042f8ed50ea2221159682d9fd0dbffe248de5bb2",
+      "sha256": "46ac4cff4253b8c91b4677981378326993b9741ed004a2d336e4f6951554a44c"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/recovery.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/recovery.json",
+      "git_blob": "8e68686b74437bed05411950cb62ecb553faa1a9",
+      "sha256": "9c1def304a59599de8d2a22b07303e10fb606a6bb2048e8be7eb5488ae69c1c1"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/routing-diagnostics.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/routing-diagnostics.json",
+      "git_blob": "134718ec045655e6498a8243c4de540489abff17",
+      "sha256": "7d281b9db986f5e7596769c60c9fbe1517d21d70eace359457a6ae8213f79ace"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/sample-plans.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/sample-plans.json",
+      "git_blob": "d449158436a615efac411d275c1b377e112426a5",
+      "sha256": "ad2de9949cb37234168e50b5e5000265b1f34dd8f59cf83f60abaab574fc5ab1"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/session-history.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/session-history.json",
+      "git_blob": "dbd5c7585c8dcb720d263e1b5cc02739bca2e512",
+      "sha256": "9e149564684b278930a2601ec0312bc89c112072f1cc68aae0e914be2ad7a5c8"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/state-diagnostics.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/state-diagnostics.json",
+      "git_blob": "14fe05e09a08b18ee767c4dec40985c07a9bfe66",
+      "sha256": "ae86fa354bd7baf1f39c87b9bdead8c4085b476c4963b968d7ab6186c9ea7a0a"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train-timing.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train-timing.json",
+      "git_blob": "efb1b515fc750201c0f6b47585ada0120c071eb5",
+      "sha256": "0aea399a46e1c03a2f5c824ce02f7bf15ac97bae43b1d11fa2ff15198a49fa9a"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C0/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C0/checkpoint-event.json",
+      "git_blob": "acd287c884824e1cc46f1e98d9a82c5d818c30d9",
+      "sha256": "6be4f1a182c82c46741391d184722488cee64b7c8649d8340bc884813df532d2"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C0/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C0/performance.json",
+      "git_blob": "8e798a4666fc41f1996c602c5cf776136113eb11",
+      "sha256": "68dcfcbc9ee6881924c802457d4cc3047c698f32c5f3333d372d507c68281d8b"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C0/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C0/result.json",
+      "git_blob": "b5845a27d1f849adda9a974ab7da73337a1114d5",
+      "sha256": "03588b303f53e5eef78c31035ffabcf227baff6c3e3087007f425ac375f62200"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C0/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C0/training.json",
+      "git_blob": "607a48a96803ac5f9a433926eadfc6d41b1ea171",
+      "sha256": "a3acc9f33e5f469984315fa1e53675e21ec013b62de86b3daeeafdf2ad22128a"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C1/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C1/checkpoint-event.json",
+      "git_blob": "2132c8db2cf6f0e5e8486ee83ea7b0f6aaac10b4",
+      "sha256": "ee18c2297bb1b16598e77b33b36f3f4a48774d366b5c58b187ab660d4cbab3f6"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C1/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C1/performance.json",
+      "git_blob": "25c8837b8f0fe3fd72bd6538fc2b8ecaf9b09aba",
+      "sha256": "ae8f89702596e6fd7358ba0ed179beefb6162173e5bb0bb58dd67860452f2e18"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C1/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C1/result.json",
+      "git_blob": "30efe4fd008ca758ac026ba8525d0dcd3554d138",
+      "sha256": "cfca9f865002aa7e9b2b56bdc93770b8742e17807fe0648325e1069d133092e6"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C1/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C1/training.json",
+      "git_blob": "50f63c808abbcef03b6a7d7edfffb9d9074b9cca",
+      "sha256": "fa654f3cce6a53a956f89dea30dbed886681dc06cb8fc8c3c143ba34e031371a"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C2/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C2/checkpoint-event.json",
+      "git_blob": "db0ac962401c4d3e5f338ed2770693061488be62",
+      "sha256": "9962f6baa58808d63eb202fa31b6fa033b3395e0c3d5038f2ce900590e34d5d9"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C2/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C2/performance.json",
+      "git_blob": "4b74e5ad9d3e774efa745024031082447bd18485",
+      "sha256": "06f7957890527ef66eed54874fb56e5bc0464143e1c04418fafeb1cf3a7eab93"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C2/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C2/result.json",
+      "git_blob": "d376d00c514b9102eb21f77a2d3f1e3a83294716",
+      "sha256": "78bddef352346259e93804875d13097954badbaf99334d64ad2317a072c51716"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C2/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C2/training.json",
+      "git_blob": "31b90e83afc5c61d7fd8ec96b05232f9fa38264b",
+      "sha256": "ffb36097cf3a93436c6a631f56672227d6ec49c94f2a9b9580c5bf0ffab2ea8b"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C3/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C3/checkpoint-event.json",
+      "git_blob": "a72c512698c770c3870c636ff2a966319af7fa08",
+      "sha256": "e48caa760ddad58ca6a66483d5fc39983a6de4bbb26cda14a6b12a83ea05ae38"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C3/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C3/performance.json",
+      "git_blob": "4724ba0ef798253ba562b35b34e5669a7e77c90f",
+      "sha256": "91980724f8b06ff66731edee62a5d78eacec16900176428dd902875bb081538f"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C3/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C3/result.json",
+      "git_blob": "5c71b6cd15484d5c8e47f6e7d0c375644b73cece",
+      "sha256": "d1423abb842d8be53ba6b2bb727a0f66453473129ec733735a16cb4a542cbbdd"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C3/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/C3/training.json",
+      "git_blob": "24cc05733f9877f1dbbd312278abeb73c1289c7b",
+      "sha256": "f8a2b1cb3fe06a8090f820fd06969ef1c4daebcb77cbdcebbae3bf8e35028433"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-F/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-F/checkpoint-event.json",
+      "git_blob": "83358fa93e0a392e7840b3e061eb2be4a461e119",
+      "sha256": "1b87cc383fe70d472110c5b3b74fdd3e9790bb1fec4cec396c983668c5f8e7a6"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-F/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-F/performance.json",
+      "git_blob": "89312588abddcb21356eaf2693e4ef63c5fae4d1",
+      "sha256": "7820c8caaca6ace7ee973dd42611d4bca97e23735a7c5eaa8218990c70b90f9c"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-F/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-F/result.json",
+      "git_blob": "0e7da6f5c87b4b05836927fcf80a0398521d4358",
+      "sha256": "06bc0ff5c740cf59c76429052db96b9e614b90da130770bef8884ecd585541e7"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-F/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-F/training.json",
+      "git_blob": "081c4ee218e4cb72d74c3a7782a33ca831385c0f",
+      "sha256": "e8a0adfe2352f3390dfb1b10987a0dd625370f70ef0803957cbafd23a846391e"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-P/checkpoint-event.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-P/checkpoint-event.json",
+      "git_blob": "047003f5b1117bc3b6c8746f8a2f6e11686f8a73",
+      "sha256": "643cd30717558483ebfb04fc3994009ccac04bf27f8ed4482e1dfa29f4512236"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-P/performance.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-P/performance.json",
+      "git_blob": "7782c8e4da30db7702014390e205d3aa296179ec",
+      "sha256": "5395c350654d03ad517824979be354e78da0227d5e828b1b1aa81a7ed2e9bd71"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-P/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-P/result.json",
+      "git_blob": "17ceed329516f4dca6438ff03aacbf8901ea47ef",
+      "sha256": "8d40afe06b9754cd192bd5c71e91f257affcf36e99d252b01748930acb1d200f"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-P/training.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/train/T0-P/training.json",
+      "git_blob": "eeab8350abcdf8b3a4f2419509003d9ece47e88c",
+      "sha256": "8cb60f3ac4cfaa810d4a45dbcc4d533b8451596f8fb7b76683e156c8ff4e8f5f"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/training-metrics.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/training-metrics.json",
+      "git_blob": "9468da25ce0a6346790e19960d4f4c4d647ee253",
+      "sha256": "e92d990295121106ffd646b23aab1f21eda84c39653d03a79471e6f7551735ca"
+    },
+    {
+      "path": "artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/worker-spec.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17/worker-spec.json",
+      "git_blob": "82cc2010b56f2c48fa5ad60b93b18d2044afb840",
+      "sha256": "867a279b15e8cb1dc4d82d29d4c4e892b0be2cf52e92c76c6a63930a5e0568ef"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/README.md",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/README.md",
+      "git_blob": "073eb8902c1af6dcdf01088058ca33ecb8ae1ed9",
+      "sha256": "acf6ff2d2365c3bf9574b7147adaf16bede55b57abdbb016eda9f15e261a10a8"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/README.md",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/README.md",
+      "git_blob": "bb1cab1b8ead43c0ef56ae251c59f159cf33c0dd",
+      "sha256": "b0585a80367d46d15956d9be61be2c355a1399132722d544ba0f7b7e78554bcb"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/direct-address-8f-0d/episodes.jsonl",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/direct-address-8f-0d/episodes.jsonl",
+      "git_blob": "cff6a058a2d5a1b15f5b55b10939b5dbf404aa6d",
+      "sha256": "0e695d67471bdc0a6c5d1dd0855458dd6ad201e2a1b12992ac92fb07b2745d72"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/direct-address-8f-0d/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/direct-address-8f-0d/result.json",
+      "git_blob": "cdeb405542ae3caf8ef5b085bcbc57d1e4b6d91a",
+      "sha256": "624f06a8de3db3f14e144b21781a60a27e047b4907d0613532c7b7a16494f2a5"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-100/checkpoint.pt",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-100/checkpoint.pt",
+      "git_blob": "f9c74385796def2a4536a45c3bf4018485a7122d",
+      "sha256": "1665e0bb658fb46e292dfb89c5d3fb90983c3d70af25d9478b98274c709438ad"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-100/checkpoint.pt.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-100/checkpoint.pt.json",
+      "git_blob": "b33176a11429e98b1891746e51e081b5082f271e",
+      "sha256": "e798989fe6d848ef7774dd763acdb34fb0d8696ea52b5dacacaeeb0af19ffab8"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-100/episodes.jsonl",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-100/episodes.jsonl",
+      "git_blob": "7b4a810185d31258dd4103599aa829983d6f9dda",
+      "sha256": "6414943a7931e887fbe406095f1e7f27c5668ade05fd6b0ca58d874947c580c1"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-100/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-100/result.json",
+      "git_blob": "1627865e6b735fb27b0cd1ec5ed5e371a225121d",
+      "sha256": "5af37055bf2de468d1df01b5ffb9dbef07f5851aa69205d444ceb8ff499d8937"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-500/checkpoint.pt",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-500/checkpoint.pt",
+      "git_blob": "c91e9f2086743337a2389480f50755a6fc29c1f0",
+      "sha256": "cddfc23b70a410a6745e13d6acbeddbad472f945575276f793eca82e5e214610"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-500/checkpoint.pt.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-500/checkpoint.pt.json",
+      "git_blob": "f70bcd6926f1c414c2da54a1fa9d98785d374557",
+      "sha256": "4be1d5170fed201fff9924c04b85c8f672921ca423adf9c1cdeae1ecf1d449c3"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-500/episodes.jsonl",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-500/episodes.jsonl",
+      "git_blob": "a3aa4f47eb6820f98c146a4c23aba31301299216",
+      "sha256": "97a5bea7b44313d033eb6cf84334289fb28bd8ca1f95d851db2cb4ca2207169e"
+    },
+    {
+      "path": "artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-500/result.json",
+      "archive": "artifacts/experiments/run-archive/clm-v04-pilot-2m-seed17-cf777887532a-25d18724/artifacts/experiments/epclm-002-a0-persistent-state-recall/development-pilot/learned-cells-500/result.json",
+      "git_blob": "a9a9b432c7755706bcf3a9f2481af258f282f7a6",
+      "sha256": "f7136787072e857f1837767d55a0c8c80b298737f01ef5ecc5636fc06a98b786"
+    }
+  ]
+}
