@@ -1,0 +1,54 @@
+{
+  "a2_config_path": "research/projects/cellular-language-models/experiments/epclm-a2-state-001/reports/history/A2-config.json",
+  "a2_config_sha256": "8817b2f8734f070fdee567a9794535e98f30fed1efef3a5218cd18b6de08af66",
+  "audit_status": "PASS",
+  "common_initialization": {
+    "M0": "97a09735676e543d6be0632df00516d22d01e7f6b908a3b3eae9107d4a6d7d82",
+    "M1": "97a09735676e543d6be0632df00516d22d01e7f6b908a3b3eae9107d4a6d7d82",
+    "M2": "97a09735676e543d6be0632df00516d22d01e7f6b908a3b3eae9107d4a6d7d82"
+  },
+  "data_config": {
+    "boundaries": "real complete documents; not historical random slices",
+    "source": "pinned TinyStories revision and frozen tokenizer via retrain_config.json",
+    "status": "PENDING_RUNTIME_VERIFICATION"
+  },
+  "environment": {
+    "cuda": "13.0",
+    "gpu": "Tesla T4",
+    "gpu_total_memory_bytes": 15636037632,
+    "precision": "FP32",
+    "tf32": false,
+    "torch": "2.11.0+cu130"
+  },
+  "historical_comparison": "background only; new complete-document protocol",
+  "model_config": {
+    "K": 2,
+    "cells": 16,
+    "chunk": 32,
+    "dim": 188,
+    "ffn": 639,
+    "heads": 4,
+    "layers": 3,
+    "router_dim": 128,
+    "state_dim": 128,
+    "vocab": 2048,
+    "window": 128
+  },
+  "parameter_count": {
+    "M0": 1358864,
+    "M1": 1577232,
+    "M2": 1593616,
+    "T0": 2276680
+  },
+  "source_commit": "c99ece72dc47bba0859854b60dc2e2f4e20d2f15",
+  "training_config": {
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "clip": 1.0,
+    "lr": 0.0003,
+    "warmup_fraction": 0.1,
+    "weight_decay": 0.1
+  }
+}

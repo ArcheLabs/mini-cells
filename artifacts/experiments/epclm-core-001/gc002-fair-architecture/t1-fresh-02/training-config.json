@@ -1,0 +1,80 @@
+{
+  "model": {
+    "name": "T1-PM-KV",
+    "vocab": 2048,
+    "dim": 128,
+    "layers": 4,
+    "heads": 2,
+    "kv_heads": 2,
+    "ffn": 288,
+    "window": 128,
+    "active_parameters": 967808,
+    "precision": "fp32"
+  },
+  "seed": 173020021,
+  "training": {
+    "prediction_token_budget": 250000,
+    "batch_lanes": 4,
+    "fresh_prediction_targets_per_lane": 64,
+    "context_reuse_per_sequence_max": 64,
+    "max_input_tokens_per_sequence": 128,
+    "optimizer_updates": 977,
+    "full_update_prediction_tokens": 256,
+    "final_update_prediction_tokens": 144,
+    "document_boundary": "never cross; reset position and context at each document",
+    "position_ids": "absolute within each document; overlapping context retained in each sequence",
+    "loss": "sum over valid next-token targets divided by valid target count; padding and masked context excluded",
+    "eos_token_id": 3,
+    "padding_token_id": 0,
+    "precision": "fp32",
+    "tf32": false,
+    "autocast": false,
+    "grad_scaler": false,
+    "cross_optimizer_training_kv_cache": false
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "learning_rate": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "foreach": false,
+    "gradient_clip_norm": 1.0
+  },
+  "scheduler": {
+    "name": "linear_warmup_then_cosine",
+    "warmup_updates": 97,
+    "total_updates": 977,
+    "step_convention": "optimizer update index starts at 1; lr_multiplier(update_index, 977, 97); warmup update 97 reaches base learning rate; cosine reaches zero after update 977",
+    "source": "native_clm_runtime.lr_multiplier",
+    "warmup_selection": "97 updates explicitly selected by user for formal run; Pilot's 5-update schedule remains Pilot-only"
+  },
+  "budget": {
+    "execution_seconds": 5400,
+    "publication_seconds": 600,
+    "safety_seconds": 1200,
+    "hard_limit_seconds": 7200
+  },
+  "evaluation": {
+    "development_splits": [
+      "validation",
+      "development_holdout"
+    ],
+    "generation_max_new_tokens": 128,
+    "generation_seed": 713,
+    "generation_modes": [
+      "greedy",
+      "sampling_temperature_0.8_top_k_40_top_p_0.95"
+    ],
+    "prompts_source": "gc001-baseline-repair/protocol.json frozen 16 prompt list",
+    "independent_test_access": false,
+    "human_review": "PENDING"
+  },
+  "data": {
+    "dataset_version": 142,
+    "tokenizer_version": "Kaggle output 142",
+    "split": "validation=development[:16]; holdout=development[16:]"
+  }
+}

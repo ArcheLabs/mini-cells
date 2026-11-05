@@ -1,0 +1,40 @@
+{
+  "identity": {
+    "git_commit": "330980f237f84e254550430b7fb67b7d867d5393",
+    "source_files_sha256": {
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "e17d01d8fa6df2fa5d173d12ab8f4eb47ff0b51d4327a037f79970d0749058c1",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/preparation.py": "68dbc290e5dfccc52152cdf16aced7934e1c1235cf47c95100d0da7db8d91ab8",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/run.py": "0b413633204ff7872285048abb04a3957b0bfd2135b8a979e090e59ed741925d"
+    },
+    "protocol_sha256": "d3e08853a21a58657558e8abf0b5f2bf9dd1686d8d50a78e0fccd911d36e1b56",
+    "dataset_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer_sha256": null,
+    "seed": 713,
+    "seed_scope": "synthetic correctness fixtures only; formal seeds not selected",
+    "hardware": {
+      "device": "cpu",
+      "gpu": null
+    },
+    "software": {
+      "python": "3.8.10",
+      "torch": "2.4.1+cu121",
+      "cuda_runtime": "12.1",
+      "driver_version": null,
+      "power_limit": null,
+      "kernel_configuration": "default SDPA with explicit local causal mask; TF32 disabled"
+    }
+  },
+  "result": {
+    "config": {
+      "vocab": 2048,
+      "dim": 192,
+      "layers": 4,
+      "heads": 6,
+      "kv_heads": 2,
+      "ffn": 480,
+      "window": 128
+    },
+    "native_parameters": 1894080,
+    "historical_kv_cache": false
+  }
+}

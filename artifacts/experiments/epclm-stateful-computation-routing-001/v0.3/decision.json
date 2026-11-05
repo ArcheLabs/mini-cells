@@ -1,0 +1,79 @@
+{
+  "chunk_size": 64,
+  "dataset_manifest_sha256": "494f322a848eb492eae42041647fff34d8f8a2029b78faa1bb45f066cf0c9439",
+  "development_signals": {
+    "cross_chunk_retention": false,
+    "interpretation": "screening signals only; parameter/optimization confounding remains; missing evidence is not a negative scientific finding",
+    "state_aware_routing": false,
+    "state_computation": false
+  },
+  "environment": {
+    "cuda": "13.0",
+    "gpu": "Tesla T4",
+    "gpu_total_memory_bytes": 15636037632,
+    "precision": "FP32",
+    "tf32": false,
+    "torch": "2.11.0+cu130"
+  },
+  "experiment_id": "epclm-stateful-computation-routing-001-v03",
+  "format": "minicells.epclm-stateful-computation-routing-001-v03.v1",
+  "holdout_sha256": null,
+  "hypotheses": {
+    "H1": "INCONCLUSIVE",
+    "H2": "INCONCLUSIVE",
+    "H3": "INCONCLUSIVE"
+  },
+  "implementation_sha256": "d103564d7eb7432a6a2d944c0ffe59a93f25db4ce8e2fd96284c0aa7641ba24e",
+  "independent_test_accessed": false,
+  "mechanism_version": "chunk-parallel-v0.3",
+  "models": {
+    "M0": {
+      "argmax_status": "COMPLETE",
+      "sampled_status": "COMPLETE",
+      "training_status": "COMPLETE"
+    },
+    "M1": {
+      "argmax_status": "COMPLETE",
+      "sampled_status": "COMPLETE",
+      "training_status": "COMPLETE"
+    },
+    "M2": {
+      "argmax_status": "COMPLETE",
+      "sampled_status": "COMPLETE",
+      "training_status": "COMPLETE"
+    },
+    "T0": {
+      "argmax_status": "COMPLETE",
+      "sampled_status": "COMPLETE",
+      "training_status": "COMPLETE"
+    }
+  },
+  "not_run": [
+    "independent_holdout",
+    "long_range_tasks",
+    "M1 All-State-Off: redundant with CellCore-State-Off; no direct State Router path"
+  ],
+  "phases": {
+    "audit": "COMPLETE",
+    "data": "COMPLETE",
+    "evaluation": "COMPLETE",
+    "training": "COMPLETE",
+    "warmup": "COMPLETE"
+  },
+  "post_run_data_integrity": "PASS",
+  "protocol_sha256": "0bcf6160beedc5d845d06e398fadc7bcb44775b0d200001f0ed4a91b7a8156d1",
+  "publication_status": "SEE_INDEPENDENT_RECEIPT",
+  "run_id": "epclm-stateful-computation-routing-001-v03-60571d64aa79",
+  "scientific_confirmation": false,
+  "seed": 91001,
+  "source_commit": "39bafd62212d2de66bc075a4125d0929302f5642",
+  "status": "COMPLETE",
+  "tbptt_horizon": 2,
+  "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "train_sha256": "2d4af7aa137a839a2f82a1ba7dd09a3b7225bb25b2fabacaace3ec0ff4cd6e26",
+  "training_token_budget": 998773,
+  "validation_sha256": "d27f49f13d05a121a336a5a295fda4eca00d8ee719565ec74be2c9b4898e7028",
+  "wall_clock_actual_seconds": 957.9707012209999,
+  "wall_clock_budget_seconds": 10800,
+  "wall_clock_scope": "through decision finalization; final publication elapsed recorded independently"
+}

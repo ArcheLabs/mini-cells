@@ -2,10 +2,10 @@
 
 {
   "format": "minicells.clm-workspace-controller-001.v04",
-  "run_id": "clm-v04-pilot-2m-seed17-7c94a3724475-edc54d46",
+  "run_id": "clm-v04-pilot-2m-seed17-c114ac0a548b-e4e99a54",
   "experiment": "clm-workspace-controller-001-pilot-2m-seed17",
   "status": "PILOT_BLOCKED",
-  "source_commit": "7c94a37244758c890184d43d96f3a0adfb1a4337",
+  "source_commit": "c114ac0a548b41ce709b099c01eb4a4fdb78fa1c",
   "seed": 17,
   "targets_per_model": 2000000,
   "total_targets": 12000000,
@@ -19,17 +19,11 @@
     "H4": "NOT_EVALUATED"
   },
   "recovery_validation": "REMOVED_BY_USER; existing infrastructure reused",
-  "selected_precision": "fp32",
-  "precision_fallback": {
-    "from": "fp16",
-    "to": "fp32",
-    "reason": "GPU cached/full/decode correctness failed; upstream AMP error can still change hard Top-2 after FP32 Router"
-  },
-  "error": "RuntimeError: cannot freeze exact target budget for benchmark",
+  "error": "RuntimeError: engineering GPU gate failed or blocked",
   "blocking_gate": "ENGINEERING_GATE_BLOCKED",
-  "elapsed_before_publication": 168.41322934200002,
+  "elapsed_before_publication": 139.36311571799996,
   "wall_clock_limit_seconds": 7200,
-  "cumulative_pilot_active_seconds": 168.41322934200002
+  "cumulative_pilot_active_seconds": 139.36311571799996
 }
 
 | Model | Committed Targets | Training | Validation NLL |

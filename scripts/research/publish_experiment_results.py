@@ -28,6 +28,198 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "clm-workspace-controller-001-pilot-2m-seed17": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-pilot-2m-seed17/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/pilot-2m-seed17",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-v04-pilot-2m-seed17-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
+    "clm-workspace-controller-001-pre-main": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-pre-main/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4/pre-main-gate",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-controller-001-pre-main-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
+    "clm-workspace-controller-001-main-dry-run": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-main-dry-run/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4/main-dry-run",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-controller-001-main-dry-run-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
+    "clm-workspace-controller-001-main": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-main/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4/main",
+        files=("decision.json", "protocol.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-controller-001-main-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
+    "clm-workspace-controller-001-v04": ExperimentSpec(
+        source_dir="results/clm-workspace-controller-001-v04/publish",
+        artifact_dir="artifacts/experiments/clm-workspace-controller-001/v0.4",
+        files=("decision.json", "protocol.json", "manifest.json", "audit.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/clm-workspace-controller-v04-results",
+        expected_format="minicells.clm-workspace-controller-001.v04",
+    ),
+    "epclm-stateful-computation-routing-001-v03": ExperimentSpec(
+        source_dir="results/epclm-stateful-computation-routing-001-v03/publish",
+        artifact_dir="artifacts/experiments/epclm-stateful-computation-routing-001/v0.3",
+        files=("decision.json", "protocol.json", "audit.json", "metrics.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/epclm-stateful-routing-v03-results",
+        expected_format="minicells.epclm-stateful-computation-routing-001-v03.v1",
+    ),
+    "epclm-stateful-computation-routing-001": ExperimentSpec(
+        source_dir="results/epclm-stateful-computation-routing-001/publish",
+        artifact_dir="artifacts/experiments/epclm-stateful-computation-routing-001",
+        files=("decision.json", "protocol.json", "audit.json", "metrics.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/epclm-stateful-routing-results",
+        expected_format="minicells.epclm-stateful-computation-routing-001.v1",
+    ),
+    "epclm-a2-state-001": ExperimentSpec(
+        source_dir="results/epclm-a2-state-001/publish",
+        artifact_dir="artifacts/experiments/epclm-a2-state-001",
+        files=("decision.json", "protocol.json", "stage-results.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/epclm-a2-state-001-results",
+        expected_format="minicells.epclm-a2-state-001.v1",
+    ),
+    "epclm-x4c-001": ExperimentSpec(
+        source_dir="results/epclm-x4c-001/publish",
+        artifact_dir="artifacts/experiments/epclm-x4c-001",
+        files=("decision.json", "protocol.json", "manifest.json", "g0-report.json", "stage-results.json", "selection.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/epclm-x4c-001-results",
+        expected_format="minicells.epclm-x4c-001.v1",
+    ),
+    "epclm-core-001-topology-001": ExperimentSpec(
+        source_dir="results/epclm-core-001-topology-001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/topology-001",
+        files=("protocol.json", "topology-adjacency.json", "training-metrics.json", "validation-results.json", "holdout-results.json",
+               "paired-comparison.json", "propagation-diagnostics.json", "state-diversity.json", "compute-profile.json",
+               "inference-profile.json", "memory-profile.json", "generation-metrics.json", "decision.json", "summary.zh-CN.md"),
+        branch="kaggle/epclm-core-001-topology-001-results",
+        expected_format="minicells.epclm.topology-001.v1",
+    ),
+    "epclm-gc002-t1-fresh-02": ExperimentSpec(
+        source_dir="results/epclm-gc002-t1-fresh-02/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/t1-fresh-02",
+        files=("manifest.json", "decision.json", "training-config.json", "training-metrics.json",
+               "validation-results.json", "holdout-results.json", "generation-metrics.json", "generation-samples.json",
+               "inference-profile.json", "memory-profile.json", "final-model-manifest.json", "research-summary.zh-CN.md"),
+        branch="kaggle/epclm-gc002-t1-fresh-02-results",
+        expected_format="minicells.gc002.t1-fresh-02.v1",
+    ),
+    "epclm-gc002-t1-pilot": ExperimentSpec(
+        source_dir="results/epclm-gc002-t1-pilot/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/t1-pm-pilot",
+        files=("decision.json", "pilot-report.json", "metrics.json", "execution-identity.json", "summary.md"),
+        branch="kaggle/epclm-gc002-t1-pilot-results",
+        expected_format="minicells.gc002.pilot.v1",
+    ),
+    "epclm-gc002-t1-formal": ExperimentSpec(
+        source_dir="results/epclm-gc002-t1-formal/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/t1-formal-single-seed",
+        files=(
+            "decision.json", "t1-formal-readiness/decision.json", "manifest.json", "summary.md",
+            "t1-02-kv-consistency/decision.json", "t1-02-kv-consistency/training-semantics.json",
+            "t1-02-kv-consistency/training-reference-tests.json", "t1-02-kv-consistency/kv-cache-equivalence.json",
+            "t1-02-kv-consistency/cache-version-audit.json", "t1-02-kv-consistency/document-reset-tests.json",
+            "t1-02-kv-consistency/checkpoint-state-tests.json",
+            "t1-03-flops-accounting/decision.json", "t1-03-flops-accounting/operator-inventory.json",
+            "t1-03-flops-accounting/arithmetic-rules.json", "t1-03-flops-accounting/gemm-tests.json",
+            "t1-03-flops-accounting/attention-tests.json", "t1-03-flops-accounting/backward-tests.json",
+            "t1-03-flops-accounting/optimizer-tests.json", "t1-03-flops-accounting/end-to-end-accounting.json",
+            "t1-03-flops-accounting/coverage-report.json",
+            "t1-04-engineering-validation/decision.json", "t1-04-engineering-validation/model-validation.json",
+            "t1-04-engineering-validation/smoke-training.json", "t1-04-engineering-validation/checkpoint-resume.json",
+            "t1-04-engineering-validation/data-ledger-validation.json", "t1-04-engineering-validation/flops-ledger-validation.json",
+            "t1-04-engineering-validation/gpu-profile.json", "t1-04-engineering-validation/environment.json",
+            "t1-04-engineering-validation/frozen-training-config.json",
+            "t1-pm-formal-single-seed/manifest.json", "t1-pm-formal-single-seed/training-config.json",
+            "t1-pm-formal-single-seed/training-metrics.json", "t1-pm-formal-single-seed/token-exposure-ledger.json",
+            "t1-pm-formal-single-seed/flops-ledger.json", "t1-pm-formal-single-seed/checkpoint-manifest.json",
+            "t1-pm-formal-single-seed/final-model-manifest.json", "t1-pm-formal-single-seed/validation-results.json",
+            "t1-pm-formal-single-seed/holdout-results.json", "t1-pm-formal-single-seed/generation-metrics.json",
+            "t1-pm-formal-single-seed/inference-profile.json", "t1-pm-formal-single-seed/memory-profile.json",
+            "t1-pm-formal-single-seed/environment.json", "t1-pm-formal-single-seed/research-decision.json",
+        ),
+        branch="kaggle/epclm-gc002-t1-formal-results",
+        expected_format="minicells.gc002.t1-formal.v1",
+    ),
+    "epclm-gc002-preparation": ExperimentSpec(
+        source_dir="results/epclm-gc002-preparation/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc002-fair-architecture/preparation",
+        files=("decision.json", "baseline-audit.json", "data-audit.json", "tokenizer-audit.json", "parameter-match-report.json", "kv-cache-equivalence.json", "inference-profile.json", "memory-profile.json", "training-flops.json", "summary.md", "token-exposure.json", "reused-engineering-evidence.json", "freeze-candidate.json", "run-plan.zh-CN.md"),
+        branch="kaggle/epclm-gc002-preparation-results",
+        expected_format="minicells.gc002.preparation.v1",
+    ),
+    "epclm-gc001-repair-a": ExperimentSpec(
+        source_dir="results/epclm-gc001-repair-a/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-a",
+        files=('decision.json', 'summary.json', 'baseline-comparison.json', 'generation-metrics.json', 'generation-samples.json', 'performance.json', 'data-audit.json', 'state-diagnostics.json', 'human-evaluation.json', 'training-curves.json', 'communication-analysis.json', 'quality-diagnosis.json', 'extension-proposal.json', 'summary.md'),
+        branch="kaggle/epclm-gc001-repair-a-results",
+        expected_format="minicells.gc001-repair.v1",
+    ),
+    "epclm-gc001-repair-b": ExperimentSpec(
+        source_dir="results/epclm-gc001-repair-b/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-b",
+        files=('decision.json', 'summary.json', 'baseline-comparison.json', 'generation-metrics.json', 'generation-samples.json', 'performance.json', 'data-audit.json', 'state-diagnostics.json', 'human-evaluation.json', 'training-curves.json', 'communication-analysis.json', 'quality-diagnosis.json', 'extension-proposal.json', 'summary.md'),
+        branch="kaggle/epclm-gc001-repair-b-results",
+        expected_format="minicells.gc001-repair.v1",
+    ),
+    "epclm-gc001-repair-c": ExperimentSpec(
+        source_dir="results/epclm-gc001-repair-c/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/gc001-baseline-repair/batch-c",
+        files=('decision.json', 'summary.json', 'baseline-comparison.json', 'generation-metrics.json', 'generation-samples.json', 'performance.json', 'data-audit.json', 'state-diagnostics.json', 'human-evaluation.json', 'training-curves.json', 'communication-analysis.json', 'quality-diagnosis.json', 'extension-proposal.json', 'summary.md', 'blind-review.csv', 'statistical-evidence.json', 'research-decision.json'),
+        branch="kaggle/epclm-gc001-repair-c-results",
+        expected_format="minicells.gc001-repair.v1",
+    ),
+    "epclm-gc001": ExperimentSpec(
+        source_dir="results/epclm-gc001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/generative-core-001",
+        files=("decision.json", "summary.md", "generation-samples.md", "generation-metrics.json",
+               "baseline-comparison.json", "performance.json", "data-audit.json"),
+        branch="kaggle/epclm-gc001-results",
+        expected_format="minicells.epclm.gc001.v1",
+    ),
+    "epclm-gc001-transformer": ExperimentSpec(
+        source_dir="results/epclm-gc001-transformer/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/generative-core-001-transformer",
+        files=("decision.json", "summary.md", "generation-samples.md", "generation-metrics.json",
+               "baseline-comparison.json", "performance.json", "data-audit.json"),
+        branch="kaggle/epclm-gc001-transformer-results",
+        expected_format="minicells.epclm.gc001.v1",
+    ),
+    "epclm-core-001-cp001": ExperimentSpec(
+        source_dir="results/epclm-core-001-cp001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/communication-propagation",
+        files=("decision.json", "summary.md", "global-pulse.json", "local-edge-pulse.json",
+               "temporal-impact.json", "spatial-propagation.json", "temporal-response.png", "propagation-heatmap.png"),
+        branch="kaggle/epclm-core-001-cp001-results",
+        expected_format="minicells.epclm-core-001.cp001.v1",
+    ),
+    "epclm-core-001-c1-diagnostic": ExperimentSpec(
+        source_dir="results/epclm-core-001-c1-diagnostic/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/mechanism-diagnostic",
+        files=("decision.json", "summary.md", "baseline.json", "state-causality.json",
+               "connection-causality.json", "internal-evolution.json", "mechanism-diagnostic.png"),
+        branch="kaggle/epclm-core-001-c1-diagnostic-results",
+        expected_format="minicells.epclm-core-001.c1-diagnostic.v1",
+    ),
+    "epclm-core-001-pilot": ExperimentSpec(
+        source_dir="results/epclm-core-001-pilot/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/pilot",
+        files=("decision.json", "pilot-report.json", "summary.md"),
+        branch="kaggle/epclm-core-001-pilot-results",
+        expected_format="minicells.epclm-core-001.v1",
+    ),
+    "epclm-core-001": ExperimentSpec(
+        source_dir="results/epclm-core-001/publish",
+        artifact_dir="artifacts/experiments/epclm-core-001/development",
+        files=("decision.json", "summary.md"),
+        branch="kaggle/epclm-core-001-results",
+        expected_format="minicells.epclm-core-001.v1",
+    ),
     "003b": ExperimentSpec(
         source_dir="results/quantization-localization-v1",
         artifact_dir="artifacts/experiments/003b-quantization-localization",
@@ -217,6 +409,7 @@ def prepare_artifacts(
         shutil.rmtree(destination)
     destination.mkdir(parents=True)
     for name in spec.files:
+        (destination / name).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source / name, destination / name)
 
     source_commit = run_git(root, "rev-parse", "HEAD").stdout.strip()
@@ -308,7 +501,7 @@ def push_results(
     else:
         if base_ref != "origin/main":
             raise ValueError("authenticated research artifact publication must use origin/main")
-        run_git(root, "fetch", "--depth=1", "origin", "main")
+        run_git(root, "fetch", "--depth=1", "origin", "refs/heads/main:refs/remotes/origin/main")
         base_sha = run_git(root, "rev-parse", "refs/remotes/origin/main").stdout.strip()
     # Switching to an existing local result branch can remove tracked artifacts
     # from the working tree. Keep the freshly curated directory across that
