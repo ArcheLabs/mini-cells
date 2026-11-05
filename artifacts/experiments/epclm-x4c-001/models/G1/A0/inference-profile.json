@@ -1,0 +1,51 @@
+{
+  "batch1_decode": {
+    "median_seconds": 0.017347946500024136,
+    "p95_seconds": 0.0183007790000147
+  },
+  "batch8_decode": {
+    "median_seconds": 0.018009707999993907,
+    "p95_seconds": 0.018371009000020422
+  },
+  "batch8_tokens_per_second": 444.204869951401,
+  "cache_implementation": "EPCLM-001 IncrementalLM._attend/_append adapted with fixed Chunk state writes",
+  "dtype": "float32",
+  "memory": {
+    "kv_cache_bytes": 433152,
+    "kv_cache_scope": "logical element bytes; storage may retain larger views",
+    "kv_tensor_storage_bytes": 439168,
+    "pending_chunk_bytes": 0,
+    "persistent_state_bytes": 0,
+    "runtime_tensor_storage_bytes": 439168
+  },
+  "peak_cuda_allocated_bytes": 33382400,
+  "peak_cuda_reserved_bytes": 304087040,
+  "position_semantics": "absolute-position local windows; not truncated-history recomputation",
+  "prefill": [
+    {
+      "median_seconds": 0.5889407009999843,
+      "p95_seconds": 0.6301758170000085,
+      "tokens": 32
+    },
+    {
+      "median_seconds": 1.1453819154999962,
+      "p95_seconds": 1.2139137830000095,
+      "tokens": 64
+    },
+    {
+      "median_seconds": 2.311756106500013,
+      "p95_seconds": 2.376115808999998,
+      "tokens": 128
+    }
+  ],
+  "repetitions": 10,
+  "restore": {
+    "median_seconds": 0.03510660299997426,
+    "p95_seconds": 0.036040635000006205
+  },
+  "snapshot": {
+    "median_seconds": 0.0022060310000142636,
+    "p95_seconds": 0.003769804999990356
+  },
+  "status": "COMPLETE"
+}

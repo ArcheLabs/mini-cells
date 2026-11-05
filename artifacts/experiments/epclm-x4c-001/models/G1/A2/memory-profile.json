@@ -1,0 +1,22 @@
+{
+  "forward_output_bytes": 1024000,
+  "forward_peak_increment_bytes_including_outputs_and_internal_state": 3272192,
+  "inference_peak_cuda_allocated_bytes": 30076928,
+  "inference_peak_cuda_reserved_bytes": 146800640,
+  "model_parameter_bytes": 7568880,
+  "peak_cuda_allocated_bytes": 30076928,
+  "peak_cuda_reserved_bytes": 146800640,
+  "registered_buffer_bytes": 0,
+  "runtime_memory": {
+    "kv_cache_bytes": 108288,
+    "kv_cache_scope": "logical element bytes; storage may retain larger views",
+    "kv_tensor_storage_bytes": 109792,
+    "pending_chunk_bytes": 0,
+    "persistent_state_bytes": 0,
+    "runtime_tensor_storage_bytes": 109792
+  },
+  "status": "MEASURED",
+  "temporary_activation_memory": "peak allocated includes weights, caches and transient tensors; not separately attributed",
+  "total_known_runtime_tensor_bytes": 7678672,
+  "total_scope": "parameters + registered buffers + unique runtime tensor storage; excludes Python/allocator overhead, which CUDA allocated/reserved expose separately"
+}
