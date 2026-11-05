@@ -1,0 +1,227 @@
+{
+  "experiment": "EPCLM-X4C-001",
+  "seed": 91001,
+  "confirmation_seeds_used": [],
+  "stages": {
+    "G0": [
+      "A0"
+    ],
+    "G1": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "D_ATTN4_FFN1",
+      "D_ATTN1_FFN4"
+    ],
+    "G2": [
+      "B0",
+      "B1",
+      "B2"
+    ],
+    "G3": [
+      "C0",
+      "C1",
+      "C2",
+      "C3"
+    ]
+  },
+  "baseline": {
+    "parameters": 1893912,
+    "dim": 188,
+    "heads": 4,
+    "ffn": 639,
+    "windows": [
+      8,
+      32,
+      128
+    ],
+    "iterations": [
+      4,
+      4,
+      4
+    ],
+    "alpha": "native_clm_phase_b.N1_ALPHA = sigmoid(-2)",
+    "tied_head": true
+  },
+  "data": {
+    "source": "epclm001.retrain_data.prepare with pinned retrain_config.json historical_corpus_manifest",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "train_tokens": 12000000,
+    "validation_stream_tokens": 1000000,
+    "historical_seed_91001_manifest_status": "NOT_PRESENT_LOCALLY; use explicitly identified controlled-retrain corpus",
+    "validation_seed": 101001,
+    "holdout_seed": 713,
+    "holdout_policy": "384 nonoverlapping 129-token spans excluding all validation spans; same frozen offsets for every model"
+  },
+  "training": {
+    "sequence_length": 125,
+    "batch": 8,
+    "precision": "float16_autocast_with_fp32_parameters_and_GradScaler",
+    "initial_scale": 65536,
+    "maximum_consecutive_overflows": 5,
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "profiles": {
+      "smoke": {
+        "tokens": 100000,
+        "warmup": 20
+      },
+      "dev": {
+        "tokens": 1000000,
+        "warmup": 100
+      },
+      "development": {
+        "tokens": 10000000,
+        "warmup": 1000
+      }
+    },
+    "dev_smoke_milestone": 100000,
+    "tbptt_chunks": 4,
+    "detach_policy": "independent 125-token random stream sample resets Session each optimizer update; no detach at internal 32-token write boundaries",
+    "resume_policy": "no optimizer checkpoint recovery; failed model restarts fresh; final weights saved once"
+  },
+  "streaming_semantics": {
+    "chunk_size": 32,
+    "position": "absolute RoPE, never renumber on sliding; boundaries at absolute position mod 32",
+    "windows": [
+      8,
+      32,
+      128
+    ],
+    "cache": "separate Stage/Iteration K/V",
+    "reference": "legacy exact within 128; extended absolute-position local-window reference explicitly distinct from truncated-history recomputation",
+    "reset": "independent samples/documents/sessions",
+    "snapshot": "model/tokenizer identities, absolute position, persistent state, per-iteration KV, partial Chunk buffer, generator RNG",
+    "maximum_session_tokens": 4096
+  },
+  "g1_selection": {
+    "minimum_profile": "dev",
+    "maximum_ppl_ratio": 1.02,
+    "minimum_forward_flops_reduction": 0.2,
+    "maximum_decode_latency_ratio": 1.05,
+    "selection": "lowest validation NLL among eligible A1/A2/A3; holdout reported but never used for selection",
+    "parameter_tolerance": 0.05,
+    "base_iterations": null
+  },
+  "g2": {
+    "flat_shape": [
+      2048
+    ],
+    "cellular_shape": [
+      16,
+      128
+    ],
+    "state_read_rank": 32,
+    "flat_update_rank": 8,
+    "cell_update_hidden": 120,
+    "state_residual_alpha": 0.1,
+    "write_gate_bias": -2,
+    "B3_B4": "frozen-weight read/write ablations on task-trained B2; not independent structural training",
+    "execution_control": "B0/B1/B2 and all G3 arms use identical fixed_chunk32 training scheduling; G1 retains legacy parallel reference"
+  },
+  "mechanisms": {
+    "tasks": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5"
+    ],
+    "train_combinations_per_task": 32,
+    "evaluation_combinations_per_task": 32,
+    "train_seed": 713,
+    "evaluation_seed": 714,
+    "extra_training_prediction_targets_per_model": 128,
+    "loss": "query target only; observed input tokens reported separately",
+    "delay": "larger than exact configured attention receptive field plus two Chunks",
+    "tbptt": "entire mechanism episode; no detach before delayed query",
+    "minimum_candidate_accuracy_gain": 0.05,
+    "G3_gate": "correctness PASS plus task gain over B0 and read/write ablation contribution; candidate signal, not scientific confirmation",
+    "optimizer": {
+      "name": "AdamW",
+      "lr": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "weight_decay": 0.1,
+      "gradient_clip": 1.0,
+      "schedule": "fixed LR, one pass, 128 query-target updates; separate from language schedule"
+    }
+  },
+  "g3": {
+    "replace_stage_index": 1,
+    "cells": 16,
+    "top_k": 2,
+    "shared_ffn_hidden": 128,
+    "cell_adapter_rank": 16,
+    "C3": "retain Cellular State; choose integer dense Stage-2 SwiGLU width nearest C2 allocated parameter count; compute difference separately",
+    "parameter_warning": "routing variants may exceed +/-5% parameter target; report mismatch, do not claim parameter matching",
+    "capacity_note": "Rank 16 chosen by pre-training structural parameter accounting to keep C2 within +/-5% of original X4; stateless C1 lacks state-network parameters and remains explicitly unmatched."
+  },
+  "evaluation": {
+    "generation_prompts": [
+      "Once upon a time",
+      "A little girl found",
+      "The dog wanted",
+      "One sunny day"
+    ],
+    "generation_tokens": 64,
+    "generation_seed": 713,
+    "sampling_temperature": 0.8,
+    "sampling_top_k": 40,
+    "sampling_top_p": 0.95,
+    "inference_prefill": [
+      32,
+      64,
+      128
+    ],
+    "inference_warmup": 3,
+    "inference_repetitions": 10,
+    "batch8_decode": true,
+    "dtype": "float32",
+    "atol": 2e-05,
+    "rtol": 0.0002
+  },
+  "comparison_axes": [
+    "PARAMETERS",
+    "PREDICTION_TOKENS_AND_ORDER",
+    "ANALYTIC_TRAINING_COMPUTE",
+    "SAME_RUNTIME_INFERENCE"
+  ],
+  "compute_matching": {
+    "mode": "separate job via --match compute",
+    "budget": "A0 profile token budget times declared matmul-heavy training FLOPs per token",
+    "limitations": "analytic estimate excludes operators; never claim complete hardware-compute matching",
+    "token_matched_run_gets_extra_tokens": false
+  },
+  "budget": {
+    "execution_seconds": 5400,
+    "publication_seconds": 600,
+    "safety_seconds": 1200,
+    "hard_limit_seconds": 7200
+  },
+  "resources": {
+    "target_gpu": "Tesla T4",
+    "fallback": "NOT_RUN_RESOURCE_UNAVAILABLE"
+  },
+  "gates": [
+    "reference_equivalence",
+    "causality",
+    "kv_cache_equivalence",
+    "chunk_partition_equivalence",
+    "snapshot_restore",
+    "cross_chunk_gradient"
+  ],
+  "independent_test_accessed": false,
+  "scientific_confirmation": false,
+  "multi_seed_followup": "at least three separately authorized independent training seeds; no automatic confirmation-seed consumption",
+  "format": "minicells.epclm-x4c-001.protocol.v1"
+}

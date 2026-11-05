@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "training": "parallel full-sequence teacher forcing",
+  "max_sequence_input_tokens": 128,
+  "context_overlap_tokens": 64,
+  "cross_optimizer_training_kv_cache": false,
+  "position_ids": "absolute within document",
+  "loss_mask": "only fresh next-token targets",
+  "precision": "fp32"
+}

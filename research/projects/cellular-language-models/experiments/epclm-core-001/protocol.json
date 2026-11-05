@@ -1,0 +1,70 @@
+{
+  "format": "minicells.epclm-core-001.protocol.v1",
+  "status": "DEVELOPMENT_ONLY",
+  "seed": 173018021,
+  "development_stories": 2048,
+  "pilot_tokens": 250000,
+  "gate2_max_tokens": 10000000,
+  "bptt": 64,
+  "batch": 4,
+  "arms": [
+    "C1",
+    "F0",
+    "C0",
+    "L0"
+  ],
+  "architecture": {
+    "cells": 16,
+    "dim": 128,
+    "K": 4,
+    "alpha": 0.1,
+    "topology": "ring-radius1",
+    "vocab": 2048,
+    "window": 4,
+    "max_state_abs": 10000.0
+  },
+  "budget": {
+    "execution": 5400,
+    "publication": 600,
+    "safety": 1200,
+    "hard": 7200
+  },
+  "confirmation": {
+    "status": "SEALED_NOT_AUTHORIZED",
+    "minimum_fresh_seeds": 3,
+    "thresholds": "NOT_FROZEN"
+  },
+  "scientific_hypotheses": {
+    "H1": "NOT_EVALUATED",
+    "H2": "NOT_EVALUATED",
+    "H3": "NOT_EVALUATED",
+    "H4": "NOT_EVALUATED",
+    "H5": "NOT_EVALUATED"
+  },
+  "minimal_gpu_pilot": {
+    "arm": "C1",
+    "batch": 4,
+    "bptt": 64,
+    "K": 4,
+    "updates": 50,
+    "resume_after_updates": 25,
+    "diagnostic_updates": 2
+  },
+  "data": {
+    "id": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64"
+  },
+  "precision": {
+    "mode": "fp32",
+    "grad_scaler_initial_scale": 1024.0,
+    "max_consecutive_overflows": 3
+  },
+  "development_pair": {
+    "arms": [
+      "C1",
+      "F0"
+    ],
+    "tokens_per_arm": 250000,
+    "precision": "fp32"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "format": "minicells.core001.cp001.protocol.v1",
+  "experiment": "EPCLM-CORE-001-CP-001",
+  "stage": "DEVELOPMENT_FROZEN_MODEL",
+  "training_identity": {
+    "source": "398a191dbb32e383c86c89b9c981777c7cd6c77f",
+    "protocol": "2835ced239c30dc71ad1f8066b7e61aa329203ca448c5dcf5adb98fff2170aa2",
+    "data": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "seed": 173018021,
+    "mode": "DEVELOPMENT_PAIR",
+    "arms": [
+      "C1",
+      "F0"
+    ],
+    "target_tokens": 250000
+  },
+  "checkpoint_identity": {
+    "namespace": "epclm-core-001-development-pair",
+    "path": "C1.pt",
+    "sha256": "36a58f642f93b859ce33f5fd55bd92c9f4196669dc8c62293088ea43ce8e7fd1",
+    "weights_sha256": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf"
+  },
+  "prior_diagnostic_source": "7ee5cd46e10c29bf70854c3cd52a232fa9da1adc",
+  "preferred_asset_versions": [
+    142
+  ],
+  "fallback_saved_versions": 25,
+  "documents": 16,
+  "expected_prediction_tokens": 3322,
+  "expected_baseline_nll": 5.814626392302277,
+  "baseline_atol": 0.0001,
+  "K": 4,
+  "probe_fractions": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "horizons": [
+    0,
+    1,
+    2,
+    4,
+    8,
+    16
+  ],
+  "cumulative_windows": [
+    4,
+    8,
+    16
+  ],
+  "receivers": [
+    0,
+    1,
+    4,
+    8
+  ],
+  "edge_intervention": {
+    "type": "EDGE_DROP_ONCE",
+    "internal_step": 0,
+    "direction": "left",
+    "source_rule": "(receiver-1) % cells"
+  },
+  "global_intervention": "CROSS_CELL_REMOVED_FOR_ONE_EVENT",
+  "precision": "fp32",
+  "tolerances": {
+    "state_atol": 1e-06,
+    "state_rtol": 1e-06,
+    "logit_atol": 1e-06,
+    "logit_rtol": 1e-06,
+    "js_atol": 1e-10,
+    "tv_atol": 1e-08,
+    "nll_atol": 1e-06,
+    "epsilon": 1e-12
+  },
+  "bootstrap_draws": 1000,
+  "bootstrap_seed": 713,
+  "useful_delayed_signal_rule": {
+    "primary_family": "LOCAL_POOLED",
+    "primary_window": 16,
+    "include_intervention_event": false,
+    "minimum_mean_delta_nll": 0.001,
+    "minimum_positive_story_fraction": 0.75,
+    "minimum_stories": 8,
+    "require_cluster_bootstrap_lower_above_zero": true,
+    "require_positive_cumulative_means_for_windows": [
+      4,
+      8,
+      16
+    ]
+  },
+  "heatmap_selection": {
+    "story_index": 0,
+    "probe_fraction": 0.25,
+    "receivers": [
+      0,
+      1,
+      4,
+      8
+    ]
+  },
+  "budgets": {
+    "recovery_seconds": 600,
+    "diagnostic_seconds": 900,
+    "execution_seconds": 5400,
+    "publication_reserve_seconds": 600,
+    "safety_seconds": 1200,
+    "notebook_hard_seconds": 7200
+  },
+  "formal_confirmation": false,
+  "core_hypotheses": "NOT_EVALUATED",
+  "signal_rules": {
+    "future_prediction_min_stories": 2,
+    "future_prediction_js_floor": "max(js_atol, observed_SHAM_max_JS)",
+    "spatial_requires_first_receiver_then_other_cell": true,
+    "temporal_requires_fixed_future_horizon_above_SHAM_state_noise": true
+  }
+}

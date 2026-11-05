@@ -1,0 +1,82 @@
+{
+  "arm": "B1",
+  "base_initial_sha256": "1ea683a38c48bd02b26c16a6d30ebe19de48c2d901ecb3424fac64b0f40106de",
+  "configuration": {
+    "alpha": 0.11920292202211755,
+    "attention_masks": [
+      [
+        true
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ]
+    ],
+    "attention_memory_heads": "existing Token Attention heads; no additional multihead module",
+    "cell_ffn": null,
+    "chunk_size": 32,
+    "dense_width": null,
+    "dim": 188,
+    "ffn": 639,
+    "ffn_injection": "after unchanged n2 RMSNorm, before unchanged SwiGLU",
+    "ffn_masks": [
+      [
+        true
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ]
+    ],
+    "ffn_read_heads": 1,
+    "heads": 4,
+    "iterations": [
+      1,
+      1,
+      1
+    ],
+    "name": "B1",
+    "partial_chunk": "explicit finish/independent forward flush; never at arbitrary prefill API boundary",
+    "read_attention": true,
+    "read_ffn": false,
+    "routed": null,
+    "state_key_position": "unrotated content keys; memory scores use unrotated Q",
+    "state_kind": "learned_slot_bank_gru",
+    "state_read_rank": null,
+    "state_seed": 9100101,
+    "state_shape": [
+      16,
+      128
+    ],
+    "state_write_hidden": null,
+    "vocab": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ],
+    "writer_sources": "attention_outputs"
+  },
+  "dataset_manifest_sha256": "dfc7eeee33aaab5693a43bf72c88a991ee572b84cc93a5793e6901bf2c9cb6dc",
+  "evaluation_status": "NOT_STARTED",
+  "implementation_sha256": "8b0bf733446af7a2f6dd3e56539322e33c3e2f1a172ac2036f44a996c6e6422c",
+  "independent_test_accessed": false,
+  "match": "tokens",
+  "parameters": 2040445,
+  "profile": "dev",
+  "protocol_sha256": "dfcbe9794c60b37865224b5a20e5b42f7887b7abea5a2322ca746c69ae90f75c",
+  "run_id": "epclm-a2-state-001-6b95b93a733d-34a787e8",
+  "seed": 91001,
+  "source_commit": "6b95b93a733d3789efa4d66f8235e03395fe6a91",
+  "state_initial_sha256": "fede604a520f2a646007470452f11f8614ba7c8251ebe33a4c8babc74690390e",
+  "state_seed": 9100101,
+  "strict_historical_initialization_match": false,
+  "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "train_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+  "training_status": "NOT_STARTED",
+  "validation_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f"
+}
