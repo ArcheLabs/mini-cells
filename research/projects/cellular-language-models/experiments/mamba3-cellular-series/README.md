@@ -24,7 +24,7 @@ M3C 研究一种以 **Mamba-3 为层级主干、以无持久状态的平面 Cell
 
 | 编号 | 研究内容 | 状态 |
 |---|---|---|
-| M3C-001 | 官方 Mamba-3 SISO/MIMO 基线与运行时复现 | 未开始 |
+| M3C-001 | 官方 Mamba-3 SISO/MIMO 基线与运行时复现 | [模块审计入口](M3C-001/README.md)已实现；GPU 未运行，T4 不满足依赖门禁 |
 | M3C-002 | 有界 Shared Workspace Attention | 未开始 |
 | M3C-003 | 固定调用的 Stateless Cell Adapter | 未开始 |
 | M3C-004 | 跨 Mamba 层的动态 Cell / Skip 路由 | 未开始 |
