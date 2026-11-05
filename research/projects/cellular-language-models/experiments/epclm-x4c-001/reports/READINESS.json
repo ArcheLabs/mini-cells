@@ -1,0 +1,73 @@
+{
+  "G0": "SOURCE_AND_CPU_CORRECTNESS_PASS; TARGET_GPU_NOT_RUN",
+  "G1": "IMPLEMENTED_NOT_TRAINED",
+  "G2": "IMPLEMENTED_CORRECTNESS_TESTED; BASE_SELECTION_PENDING_G1_MEASUREMENTS",
+  "G3": "IMPLEMENTED_CORRECTNESS_TESTED; EXECUTION_REQUIRES_G1_G2_EVIDENCE",
+  "client_date": "2026-11-02",
+  "correctness": {
+    "cases": [
+      "test_x4_reference_equivalence",
+      "test_iteration_configs",
+      "test_causality",
+      "test_kv_cache_equivalence",
+      "test_chunk_partition_equivalence",
+      "test_state_persistence",
+      "test_state_reset",
+      "test_snapshot_restore",
+      "test_state_read_ablation",
+      "test_state_write_ablation",
+      "test_flat_vs_cellular_state",
+      "test_sparse_cell_execution",
+      "test_parameter_accounting",
+      "test_flops_accounting",
+      "test_training_gradients"
+    ],
+    "errors": 0,
+    "failures": 0,
+    "scope": "synthetic CPU correctness and tiny trainer fixtures including profiler-failure isolation; no real-data training or CPU performance benchmark",
+    "seconds": 15.395,
+    "skipped": 0,
+    "status": "PASS",
+    "tests": 15
+  },
+  "evaluation_status": "NOT_RUN_RESOURCE_UNAVAILABLE",
+  "frozen_native_source_matches": {
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_candidates.py": true,
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_phase_b.py": true,
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_phase_c.py": true,
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_replication.py": true,
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_replication_runlib.py": true,
+    "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_runtime.py": true
+  },
+  "historical_weights": "HISTORICAL_WEIGHTS_UNAVAILABLE",
+  "historical_weights_scope": "not present locally; pinned external asset located but not downloaded",
+  "independent_test_accessed": false,
+  "local_gpu": "Quadro K620",
+  "protocol_sha256": "0958e1282974b06d95d09d732799cc0c7c0932d56a9177d9b51fc9e11b580496",
+  "scientific_confirmation": false,
+  "scientific_hypotheses": {
+    "H1": "NOT_EVALUATED",
+    "H2": "NOT_EVALUATED",
+    "H3": "NOT_EVALUATED"
+  },
+  "status": "IMPLEMENTATION_READY_NOT_RUN_RESOURCE_UNAVAILABLE",
+  "target_gpu": "Tesla T4",
+  "tested_python_files": {
+    "architecture.py": "331454302b31b462d723467b570c265e4da9a25a2216b746e5215b7b19fca02e",
+    "audit.py": "f5d003d8d9a94ebe8653479bd75f8fff5eb4852c4d8578f570fe7fcf87333a45",
+    "cell.py": "2808a3a0fbaa0478e22cd8ffeddf9cd028f3044223d5cdcc8f98e82daa156d53",
+    "common.py": "5d9093b66b71f3e467e2116f1a7c7430c811f32b498e6736ee9a8aa5bef76389",
+    "decisions.py": "120b7e7c745d872ddc1de578b015b31949a0f5a144ce7d5bac69126cfb45ef6a",
+    "evaluate.py": "a0a964f9a5d4fe2d9f3cde8153b6ae9a321d5acac61ea477df3fb239aa40131b",
+    "flops.py": "2fda8dde22a748c5c485290eabebd93260e4d33bc143bf10ca9f32be7660abfa",
+    "mechanisms.py": "ca448ce21c2656302002e2ec960fe7cfc1439ec8c7bfa3183ac1e37cf509fc77",
+    "research_report.py": "1ee49dac094a6c8b01e5a7dbf1681c1238bd4c7790d662a47bb3b886b8b6037e",
+    "routing.py": "c1f38111bb06fa8dcc30f267c971d564282a6a1dc1551e41bf1ecd525d9539fc",
+    "runtime.py": "575a6af2a3f53b555ecffd591de872df6a191e7aa9d9563dccc3713e19510724",
+    "state.py": "36c1858940b82d864b5eda0a3698689e7f41d16c0b05a08f1e56bb53ea445711",
+    "tests/conftest.py": "cc369cc53cb20561056e6b22f8bc6c5a99f9b1b87b8ae002691594a0e63b646b",
+    "tests/test_correctness.py": "ede556fea025ee65b4444480fbbe4df4d0b9284c011cef3424a757276e2fc707",
+    "train.py": "73b7f9026f815dc99dfc74922a4e57dd8411fad3b26aaaba3a480883ac08f785"
+  },
+  "training_status": "NOT_RUN_RESOURCE_UNAVAILABLE"
+}

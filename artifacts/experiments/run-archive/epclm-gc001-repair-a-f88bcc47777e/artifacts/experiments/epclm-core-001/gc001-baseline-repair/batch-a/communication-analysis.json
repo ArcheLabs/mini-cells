@@ -1,0 +1,37 @@
+{
+  "paired_story_bootstrap": {
+    "validation": {
+      "nll_difference": -0.0029267576993552407,
+      "relative_change": -0.0005056204031579119,
+      "story_bootstrap_95": [
+        -0.006411619447475012,
+        0.0005912855390859751
+      ],
+      "training_seeds": 1,
+      "between_seed_variance": "NOT_EVALUATED",
+      "scientific_decision": false
+    },
+    "development_holdout": {
+      "nll_difference": -0.0006289480746130631,
+      "relative_change": -0.0001076911818399336,
+      "story_bootstrap_95": [
+        -0.0015861831504744611,
+        0.0002983633510862453
+      ],
+      "training_seeds": 1,
+      "between_seed_variance": "NOT_EVALUATED",
+      "scientific_decision": false
+    }
+  },
+  "status": "SINGLE_SEED_DEVELOPMENT_OBSERVATION",
+  "primary": [
+    "C1-BROADCAST",
+    "IC-ALL-SELF"
+  ],
+  "delta_nll_broadcast_minus_independent": {
+    "validation": -0.0029267576993552424,
+    "development_holdout": -0.0006289480746133336
+  },
+  "interpretation": "negative favors broadcast under matched event access/parameter structure; no seed variance or independent Test; no superiority claim",
+  "historical_C1_vs_center_only": "NOT_A_FULL_CAPACITY_COMMUNICATION_CONTROL"
+}

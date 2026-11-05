@@ -2,7 +2,7 @@
 
 
 
-COMPLETE
+INCOMPLETE
 
 
 
@@ -29,3 +29,7 @@ Every fixed prompt/mode is retained. Low repetition/PPL alone is not coherence. 
 ## F. Scientific conclusions
 
 Engineering checks and numerical observations are separate from hypotheses. One seed/development-only data establish no architectural superiority. H1–H5 NOT_EVALUATED.
+
+
+
+Stop reason: diagnostic/recovery budget exhausted

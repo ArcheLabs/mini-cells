@@ -1,0 +1,95 @@
+{
+  "ablations": {
+    "all_off": "cell_off + router_off + recurrence_off; no claim distinct predictive content beyond cell_off+router_off",
+    "cell_off": "replace CellCore State input by zero; preserve state updates and Router",
+    "recurrence_off": "replace GRU old-state argument by zero, preserve h_before/u and write",
+    "reset_chunk": "reset numerical State at chunk starts; not KV",
+    "router_off": "zero W_S*s term only; M2 only",
+    "shuffle": "fixed cyclic shift by one of CellCore-read State indices only; storage, writes and Router State mapping unchanged; probes CellCore identity binding only",
+    "write_off": "keep zero initial State by preventing all updates"
+  },
+  "budget": {
+    "audit": 600,
+    "candidates": [
+      1000000,
+      500000,
+      250000
+    ],
+    "complete_document_rule": "largest complete group prefix <= candidate; actual must be >=250K; lowest candidate may be ineligible after rounding, report insufficient rather than pretend exact budget",
+    "data": 900,
+    "evaluation": 9000,
+    "minimum_actual_targets": 250000,
+    "publication": 9900,
+    "total": 10800,
+    "training": 6300,
+    "training_reserve_fraction": 0.2,
+    "warmup": 1500
+  },
+  "evaluation": {
+    "bootstrap_repetitions": 2000,
+    "bootstrap_seed": 91002,
+    "documents": 32,
+    "holdout": "NOT_RUN; excluded from selection",
+    "optional_long_range": "NOT_RUN",
+    "primary": "argmax",
+    "sample_seed": 91003,
+    "secondary": "categorical fixed seed",
+    "threshold": 0.01
+  },
+  "format": "minicells.stateful-routing.protocol.v1",
+  "gradient_horizon": {
+    "T0": "standard causal self-attention includes current input Token, no future Token; all layer KV detached at each chunk boundary",
+    "optimizer_group": "sum chunk sum-CE / total valid group targets, PG uses same denominator; one step per eight complete documents",
+    "state_and_kv": "retain graph within chunk, detach both after backward; numeric carry until document end",
+    "state_update": "h_before and output u; functional replacement; second same-cell call reads newly updated state"
+  },
+  "groups": {
+    "documents": 8,
+    "max_document_targets": 4096
+  },
+  "holdout_policy": "separate dataset validation subset used for development selection; independent holdout not loaded",
+  "initialization": "forked same seed for common M0/M1/M2 components; new state and state-router modules independent seed",
+  "model": {
+    "K": 2,
+    "cells": 16,
+    "chunk": 32,
+    "dim": 188,
+    "ffn": 639,
+    "heads": 4,
+    "layers": 3,
+    "router_dim": 128,
+    "state_dim": 128,
+    "vocab": 2048,
+    "window": 128
+  },
+  "optimizer": {
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "clip": 1.0,
+    "lr": 0.0003,
+    "warmup_fraction": 0.1,
+    "weight_decay": 0.1
+  },
+  "precision": "fp32",
+  "precision_policy": {
+    "autocast": false,
+    "grad_scaler": false,
+    "overflow": "FP32 nonfinite loss/gradient fails before optimizer.step; restore RNG and discard group baseline/counters; no blind retries. Post-step nonfinite params invalidate run and are not checkpointed."
+  },
+  "router": {
+    "baseline_beta": 0.99,
+    "baseline_commit": "EMA per-token CE beta .99, updated after each chunk using detached loss; candidate state commits only after successful optimizer group",
+    "baseline_initial": 0.0,
+    "credit": "current action token through current TBPTT chunk end, including current target; no past-token loss or future chunks",
+    "gradient": "CE mean + sum_t,k(stopgrad(loss_to_go_t - b_old * remaining_targets_t) * logp_tk)/chunk_targets, then chunk_targets/group_targets weighting",
+    "pg_weight": 1.0,
+    "temperature": 1.0
+  },
+  "router_seed": 9100102,
+  "seed": 91001,
+  "source_a2": "../epclm-a2-state-001/reports/history/A2-config.json",
+  "state_seed": 9100101,
+  "training_status": "NOT_RUN"
+}
