@@ -1,0 +1,96 @@
+{
+  "format": "minicells.m3c-002b.preregistration-candidate.v0.1",
+  "status": "PREREGISTRATION_CANDIDATE_NOT_FROZEN",
+  "training_authorized": false,
+  "authorized_training_targets": 0,
+  "formal_test_access_authorized": false,
+  "scientific_hypotheses": "NOT_EVALUATED",
+  "protocol": "PREREGISTRATION.zh-CN.md",
+  "engineering_evidence": "evidence-baseline.json",
+  "arms": [
+    "M3-Base",
+    "M3-WA-W16",
+    "M3-WA-W64"
+  ],
+  "reference_commit": "15ba9983123703d9f4f7d6f8709152d0a07edbd9",
+  "architecture": {
+    "candidate_mode": "SISO",
+    "precision": "fp32",
+    "tf32": false,
+    "window_values": [
+      16,
+      64
+    ],
+    "workspace_implementation_commit": "2ad2d8acabbd359ac5e921423ddcc871ee34509d",
+    "formal_model_config": null
+  },
+  "tasks": {
+    "retrieval_format": "FACT key value SEP; QUERY key ANSWER HOLE; score ANSWER only; never feed previous gold/model answers",
+    "retrieval_tokenizer": null,
+    "mapping_loads": null,
+    "distance_distribution": null,
+    "query_repetition_counts": null,
+    "training_mixture_query_target_weights": null,
+    "train_validation_test_manifests": null,
+    "primary_condition_weights": null,
+    "evaluation_episode_counts": null,
+    "language_corpus_tokenizer_splits": null
+  },
+  "statistics": {
+    "minimum_formal_model_seeds_from_series": 3,
+    "selected_model_seeds": null,
+    "sample_size_power_or_precision_evidence": null,
+    "primary_metric": "episode-mean retrieval exact match",
+    "paired_contrasts": [
+      "W16-Base",
+      "W64-Base"
+    ],
+    "proposal_not_frozen": {
+      "familywise_alpha": 0.05,
+      "interval_coverage": 0.95,
+      "multiple_comparisons": "Holm",
+      "resampling": "paired crossed model-seed and episode resampling"
+    },
+    "frozen_analysis_method": null,
+    "resampling_count_seed": null,
+    "minimum_meaningful_retrieval_gain_pp": null
+  },
+  "budget": {
+    "targets_per_model_seed_retrieval": null,
+    "targets_per_model_seed_language": null,
+    "development_calibration_targets": null,
+    "total_supervised_targets": null,
+    "total_input_tokens": null,
+    "gpu_hours_cap": null,
+    "measured_training_p95": null,
+    "session_cap_seconds_from_current_workflow": 7200,
+    "execution_evaluation_publication_safety_allocation": null,
+    "optimizer_scheduler_gradient_horizon": null
+  },
+  "advancement": {
+    "max_decode_latency_ratio": null,
+    "max_training_cost_ratio": null,
+    "max_peak_memory": null,
+    "language_nll_noninferiority_or_quality_rule": null,
+    "fixed_quality_cost_tradeoff_rule": null,
+    "m3c003": "BLOCKED_PENDING_REPEATED_TASK_BENEFIT"
+  },
+  "provenance": {
+    "kaggle_kernel_identity": null,
+    "kaggle_script_version_id": null,
+    "script_version_id_source": null,
+    "historical_002a_script_version_id": "MISSING_NOT_BACKFILLED",
+    "final_protocol_commit_sha256": null,
+    "final_training_authorization_record": null
+  },
+  "required_before_freeze": [
+    "task and model definitions plus asset hashes",
+    "pilot-based variance and actual training cost evidence under separately authorized development budget",
+    "minimum meaningful gain and acceptable cost decision",
+    "model-seed count and unused IDs",
+    "per-line and total target/GPU-hour budgets",
+    "analysis and advancement rules",
+    "exact platform identity with source",
+    "final protocol/data manifests and separate formal authorization"
+  ]
+}
