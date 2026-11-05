@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "nll": 5.814626392302277,
+  "ppl": 335.16615445117395,
+  "documents": 16,
+  "tokens": 3322,
+  "seconds": 9.629776230000061,
+  "seconds_per_token": 0.002898788750752577,
+  "state_norm_mean": 200.0118471285724,
+  "state_norm_max": 505.2760925292969,
+  "event_state_delta_mean": 11.168440111999695,
+  "numerical_stability": "PASS",
+  "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+  "mode": "NORMAL",
+  "K": 4,
+  "checks": {
+    "frozen": "PASS",
+    "pure_read": "PASS",
+    "repeat": "PASS",
+    "stream_segment": "PASS",
+    "snapshot_restore": "PASS"
+  },
+  "expected_nll": 5.814626392302277,
+  "atol": 0.0001
+}

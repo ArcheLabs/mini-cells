@@ -5,7 +5,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Decision
 
-- Status: `COMPLETE`
+- Status: `INCOMPLETE`
 - Diagnosis: `not provided`
 
 ## Key metrics
@@ -14,7 +14,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Provenance
 
-- Source commit: `f9ad1d44500177eed242dc8988801465b9109d7d`
+- Source commit: `5bd2f2c5e67adad703ea31a29d8a4488a92f9e15`
 - Source branch: `codex/epclm-core-001`
 - Kaggle script version ID: `not recorded`
 - Source results directory: `results/epclm-core-001-pilot/publish`

@@ -1,0 +1,56 @@
+{
+  "format": "minicells.c1-mechanism-diagnostic.protocol.v1",
+  "stage": "DEVELOPMENT_FROZEN_MODEL",
+  "training_identity": {
+    "source": "398a191dbb32e383c86c89b9c981777c7cd6c77f",
+    "protocol": "2835ced239c30dc71ad1f8066b7e61aa329203ca448c5dcf5adb98fff2170aa2",
+    "data": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "seed": 173018021,
+    "mode": "DEVELOPMENT_PAIR",
+    "arms": [
+      "C1",
+      "F0"
+    ],
+    "target_tokens": 250000
+  },
+  "checkpoint_identity": {
+    "namespace": "epclm-core-001-development-pair",
+    "path": "C1.pt",
+    "sha256": "36a58f642f93b859ce33f5fd55bd92c9f4196669dc8c62293088ea43ce8e7fd1",
+    "weights_sha256": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf"
+  },
+  "expected_validation_nll": 5.814626392302277,
+  "baseline_atol": 0.0001,
+  "documents": 16,
+  "history_pairs": 8,
+  "probe_fractions": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "probe_cells": [
+    0,
+    1,
+    4,
+    8
+  ],
+  "K": [
+    2,
+    4,
+    8
+  ],
+  "extra_evolve": [
+    4,
+    8
+  ],
+  "bootstrap_draws": 1000,
+  "seed": 713,
+  "precision": "fp32",
+  "recovery_seconds": 600,
+  "diagnostic_seconds": 2400,
+  "execution_seconds": 5400,
+  "publication_reserve_seconds": 600,
+  "safety_seconds": 1200,
+  "max_saved_versions": 25,
+  "formal_confirmation": false
+}
