@@ -12,6 +12,10 @@ HybridCLM lines so each experiment can be read in its research context.
   routing series, compositional Cell Graph, and Path-First CLM.
 - [`examples/`](examples/) contains project-specific examples.
 
+## New research line: Mamba-3 Cellular
+
+- [Mamba-3 Cellular (M3C)](experiments/mamba3-cellular-series/README.md): Mamba-3 hierarchical backbone with optional stateless, flat Cells and bounded shared Workspace Attention. Proposal only; no training authorized.
+
 ## Running an experiment
 
 Start from that experiment's README or notebook and use its frozen configuration
