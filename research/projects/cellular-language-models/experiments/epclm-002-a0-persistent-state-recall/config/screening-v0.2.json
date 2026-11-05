@@ -1,0 +1,57 @@
+{
+  "format": "minicells.epclm-002-a0-screening-config.v1",
+  "plan_id": "A0-v0.2-screening",
+  "role": "development_screening",
+  "formal_run": false,
+  "training": {
+    "steps": 500,
+    "batch_size": 8,
+    "device": "cuda",
+    "resume_probe": true
+  },
+  "matrix": {
+    "facts": [1, 8, 32],
+    "distractors": [0, 64],
+    "architectures": ["flat-recurrent", "learned-cells"],
+    "target_episodes_per_cell": 128,
+    "pilot_episodes_per_architecture": 32,
+    "pilot_condition": {
+      "facts": 32,
+      "distractors": 64
+    },
+    "overwrites": 0,
+    "negative_control_count": 16
+  },
+  "fixed": {
+    "evaluation_seed_within_run": true,
+    "query_generation": "frozen deterministic protocol",
+    "state_budget": "frozen ModelConfig; equal Flat and Cellular budgets",
+    "query_distance": "held fixed by existing task implementation",
+    "metrics": "frozen EPCLM-002-A0 v1 metrics"
+  },
+  "runtime": {
+    "execution_budget_seconds": 5400,
+    "publication_reserve_seconds": 600,
+    "notebook_hard_limit_seconds": 7200,
+    "safety_margin_seconds": 1200
+  },
+  "confirmatory_followup": {
+    "conditions_selected_after_screening": "2-3",
+    "target_total_independent_episodes_per_condition": 400,
+    "training_seeds_minimum": 3,
+    "requires_separate_preregistration": true
+  },
+  "stop_rules": {
+    "full_context_oracle_min_accuracy": 0.99,
+    "no_memory_max_accuracy_for_diagnostic": 0.05,
+    "low_load_condition": {
+      "facts": 8,
+      "distractors": 0,
+      "both_architectures_below_accuracy": 0.95
+    },
+    "ceiling_accuracy": 0.99,
+    "cellular_worse_than_flat_diagnostic_margin": 0.05,
+    "minimum_practical_difference_for_claim": 0.05,
+    "note": "These are screening diagnostics and interpretation guards. They do not replace or satisfy frozen formal thresholds."
+  }
+}

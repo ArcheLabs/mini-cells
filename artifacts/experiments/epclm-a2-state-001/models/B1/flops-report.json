@@ -1,0 +1,18 @@
+{
+  "caveat": "local-pair Attention formula may undercount dense masked SDPA kernels; compare actual timings separately",
+  "convention": "MAC=2; matmul-heavy analytic estimate; includes final partial Chunk write; excludes normalization, gates, softmax and allocator traffic",
+  "forward_flops": 532141368,
+  "forward_flops_per_prediction_token": 4257130.944,
+  "parameter_count": 2040445,
+  "parts": {
+    "ffn": 270297000,
+    "head": 96256000,
+    "state_read_attention_path": 4512000,
+    "state_read_bridge": 3080192,
+    "state_read_ffn_path": 0,
+    "state_read_kv": 27144192,
+    "state_write": 15532032,
+    "token_attention": 115319952
+  },
+  "state_bytes_per_sample": 8192
+}

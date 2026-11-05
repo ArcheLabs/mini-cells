@@ -1,0 +1,197 @@
+{
+  "identity": {
+    "git_commit": "330980f237f84e254550430b7fb67b7d867d5393",
+    "source_files_sha256": {
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "e17d01d8fa6df2fa5d173d12ab8f4eb47ff0b51d4327a037f79970d0749058c1",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/preparation.py": "68dbc290e5dfccc52152cdf16aced7934e1c1235cf47c95100d0da7db8d91ab8",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/run.py": "0b413633204ff7872285048abb04a3957b0bfd2135b8a979e090e59ed741925d"
+    },
+    "protocol_sha256": "d3e08853a21a58657558e8abf0b5f2bf9dd1686d8d50a78e0fccd911d36e1b56",
+    "dataset_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer_sha256": null,
+    "seed": 713,
+    "seed_scope": "synthetic correctness fixtures only; formal seeds not selected",
+    "hardware": {
+      "device": "cpu",
+      "gpu": null
+    },
+    "software": {
+      "python": "3.8.10",
+      "torch": "2.4.1+cu121",
+      "cuda_runtime": "12.1",
+      "driver_version": null,
+      "power_limit": null,
+      "kernel_configuration": "default SDPA with explicit local causal mask; TF32 disabled"
+    }
+  },
+  "result": {
+    "status": "PARAMETER_MATCH_CANDIDATE_PASS_NOT_FROZEN",
+    "target_active_parameters": 966784,
+    "config": {
+      "vocab": 2048,
+      "dim": 128,
+      "layers": 4,
+      "heads": 2,
+      "kv_heads": 2,
+      "ffn": 288,
+      "window": 128
+    },
+    "total_parameters": 967808,
+    "active_trainable_parameters": 967808,
+    "nontrainable_parameters": 0,
+    "relative_difference_percent": 0.10591817820733151,
+    "tolerance_percent": 1.0,
+    "tied_embeddings_counted_once": true,
+    "head_alias": "lm_head.weight aliases token_embedding.weight; no second allocation",
+    "module_parameters": {
+      "token_embedding": 262144,
+      "blocks.0.n1": 128,
+      "blocks.0.attn.q": 16384,
+      "blocks.0.attn.k": 16384,
+      "blocks.0.attn.v": 16384,
+      "blocks.0.attn.o": 16384,
+      "blocks.0.n2": 128,
+      "blocks.0.ffn.gate": 36864,
+      "blocks.0.ffn.up": 36864,
+      "blocks.0.ffn.down": 36864,
+      "blocks.1.n1": 128,
+      "blocks.1.attn.q": 16384,
+      "blocks.1.attn.k": 16384,
+      "blocks.1.attn.v": 16384,
+      "blocks.1.attn.o": 16384,
+      "blocks.1.n2": 128,
+      "blocks.1.ffn.gate": 36864,
+      "blocks.1.ffn.up": 36864,
+      "blocks.1.ffn.down": 36864,
+      "blocks.2.n1": 128,
+      "blocks.2.attn.q": 16384,
+      "blocks.2.attn.k": 16384,
+      "blocks.2.attn.v": 16384,
+      "blocks.2.attn.o": 16384,
+      "blocks.2.n2": 128,
+      "blocks.2.ffn.gate": 36864,
+      "blocks.2.ffn.up": 36864,
+      "blocks.2.ffn.down": 36864,
+      "blocks.3.n1": 128,
+      "blocks.3.attn.q": 16384,
+      "blocks.3.attn.k": 16384,
+      "blocks.3.attn.v": 16384,
+      "blocks.3.attn.o": 16384,
+      "blocks.3.n2": 128,
+      "blocks.3.ffn.gate": 36864,
+      "blocks.3.ffn.up": 36864,
+      "blocks.3.ffn.down": 36864,
+      "final_norm": 128
+    },
+    "gradient_reachability": "PASS_SYNTHETIC_FOUR_TOKENS_NO_OPTIMIZER",
+    "optimizer_updates": 0,
+    "search": "parameter counts only; no accuracy selection",
+    "candidate_count": 16,
+    "top_candidates": [
+      {
+        "config": {
+          "vocab": 2048,
+          "dim": 128,
+          "layers": 4,
+          "heads": 2,
+          "kv_heads": 2,
+          "ffn": 288,
+          "window": 128
+        },
+        "parameters": 967808,
+        "relative_error": 0.0010591817820733151
+      },
+      {
+        "config": {
+          "vocab": 2048,
+          "dim": 128,
+          "layers": 4,
+          "heads": 4,
+          "kv_heads": 1,
+          "ffn": 352,
+          "window": 128
+        },
+        "parameters": 967808,
+        "relative_error": 0.0010591817820733151
+      },
+      {
+        "config": {
+          "vocab": 2048,
+          "dim": 128,
+          "layers": 3,
+          "heads": 2,
+          "kv_heads": 1,
+          "ffn": 480,
+          "window": 128
+        },
+        "parameters": 963456,
+        "relative_error": 0.0034423407917383297
+      },
+      {
+        "config": {
+          "vocab": 2048,
+          "dim": 128,
+          "layers": 3,
+          "heads": 4,
+          "kv_heads": 2,
+          "ffn": 480,
+          "window": 128
+        },
+        "parameters": 963456,
+        "relative_error": 0.0034423407917383297
+      },
+      {
+        "config": {
+          "vocab": 2048,
+          "dim": 160,
+          "layers": 2,
+          "heads": 5,
+          "kv_heads": 1,
+          "ffn": 544,
+          "window": 128
+        },
+        "parameters": 973600,
+        "relative_error": 0.007050178736925705
+      },
+      {
+        "config": {
+          "vocab": 2048,
+          "dim": 160,
+          "layers": 3,
+          "heads": 5,
+          "kv_heads": 1,
+          "ffn": 320,
+          "window": 128
+        },
+        "parameters": 973920,
+        "relative_error": 0.0073811730438235745
+      },
+      {
+        "config": {
+          "vocab": 2048,
+          "dim": 144,
+          "layers": 3,
+          "heads": 3,
+          "kv_heads": 1,
+          "ffn": 384,
+          "window": 128
+        },
+        "parameters": 959472,
+        "relative_error": 0.007563219912617547
+      },
+      {
+        "config": {
+          "vocab": 2048,
+          "dim": 144,
+          "layers": 3,
+          "heads": 6,
+          "kv_heads": 2,
+          "ffn": 384,
+          "window": 128
+        },
+        "parameters": 959472,
+        "relative_error": 0.007563219912617547
+      }
+    ]
+  }
+}

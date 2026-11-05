@@ -1,0 +1,28 @@
+{
+  "status": "AI_REVIEW_COMPLETE_HUMAN_REVIEW_PENDING",
+  "reviewer_count": 1,
+  "reviewer_type": "AI_NOT_HUMAN",
+  "independent_human_reviewers": 0,
+  "samples": 256,
+  "dimensions": [
+    "grammaticality",
+    "local_coherence",
+    "semantic_consistency",
+    "prompt_relevance",
+    "story_progression",
+    "repetition_and_degeneration"
+  ],
+  "source_blind_csv_sha256": "628a697f9722e6f34da7e97d95d1ece4c4bac5527ebee8f3af023a492554e7c0",
+  "scores_sha256": "4e5a036a8981a4e7add4edce4c55574739fdd367a3d0355b5b3b9fb391253a8e",
+  "scoring": "Model read all anonymized prompts and continuations; exact repetitive substrings were losslessly compacted for rows 33–256; scores explicitly assigned per sample. No metric-to-rating conversion.",
+  "limits": [
+    "single AI assessment, not two independent raters",
+    "aggregate model reports were seen before scoring; not a strict independent blind review",
+    "post-hoc rubric with no inter-rater reliability or confirmation claims",
+    "do not import this file into human-review-scored.csv or change historical status"
+  ],
+  "source_result_commit": "0df8a8f4ec9d9d921e55da2c94fba92af79555b5",
+  "source_branch": "kaggle/epclm-gc001-repair-c-2dd19fb1f8f8",
+  "verified_public_artifacts": 17,
+  "rating_order": "All 256 anonymous IDs scored before association to model samples; previously read aggregate results prevent strict independent blindness"
+}
