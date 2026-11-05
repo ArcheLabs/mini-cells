@@ -1,0 +1,269 @@
+{
+  "identity": {
+    "git_commit": "3fa58b621009584de47037db6d6a25734fe2004a",
+    "source_files_sha256": {
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "e17d01d8fa6df2fa5d173d12ab8f4eb47ff0b51d4327a037f79970d0749058c1",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/exposure.py": "13f1db357ecf2e11e2cd72eccf0923b8f64ce9becc342a559943e617786d32ff",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/flops_audit.py": "2ab0821f84c312b6894a28e65c1dc370f55a76cfc5fade2d7a2255dbbffec1fe",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/preparation.py": "dbb9543bc80805e380ba53a79e2117735dea8bf13297ff689cc278b802505206",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/readiness.py": "34aa362f5b930863fb75a1ddba578399ed6a9347b066fb31d9f5a7670f873deb",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/run.py": "20ff2c7003e0a976dbe5963899fb459d79c0e4d17aa7da663f96f353ee0c1b9e",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/training_path.py": "77a11d2954fa87b2067980d47f223916fa42505ed15d436130eebce0ac264604"
+    },
+    "protocol_sha256": "d3e08853a21a58657558e8abf0b5f2bf9dd1686d8d50a78e0fccd911d36e1b56",
+    "freeze_candidate_sha256": "1ccb449ef7906d38bf0f573ae8afd715b33dd9c89485715cc61e8507125e4309",
+    "protocol_frozen": false,
+    "dataset_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "seed": 713,
+    "seed_scope": "synthetic correctness fixtures only; formal seeds not selected",
+    "hardware": {
+      "device": "cpu",
+      "gpu": null
+    },
+    "software": {
+      "python": "3.8.10",
+      "torch": "2.4.1+cu121",
+      "cuda_runtime": "12.1",
+      "driver_version": null,
+      "power_limit": null,
+      "kernel_configuration": "default SDPA with explicit local causal mask; TF32 disabled"
+    }
+  },
+  "result": {
+    "status": "AUDIT_COMPLETE_WITH_DOCUMENTED_HISTORICAL_LIMIT",
+    "sources": {
+      "a": {
+        "commit": "16134c64c637893dd05279801e19e3702e2181e8",
+        "source": "f88bcc47777e013f72eaa5fd7ff806676e6a7305",
+        "decision_sha256": "30d7a0fd6506ab392f4bbfef28a431f86b2d732f0063979c032a7f8b74fe5e7b"
+      },
+      "b": {
+        "commit": "04942f9e81dfc649d5f6d7ab3ac34dd6e2eccf31",
+        "source": "40f86adcf2979cb2a4aafc96d6f18c6064f67b3d",
+        "decision_sha256": "119f773d4dcac8264a4b1703013866ed02d2b1eecec5e06d5dcde834ce06316b"
+      }
+    },
+    "models": {
+      "C1-BROADCAST": {
+        "active_parameters": 966784,
+        "consumed_training_tokens": 250000,
+        "optimizer_updates": 977,
+        "tokens_per_update": {
+          "full_updates": 976,
+          "full_update_tokens": 256,
+          "last_update_tokens": 144
+        },
+        "training_wall_seconds": 541.01277409,
+        "throughput_tokens_per_second": 462.09629785638174,
+        "last_trainer_segment": {
+          "resumed_from_tokens": 192000,
+          "resumed_from_updates": 750,
+          "new_tokens": 58000
+        },
+        "seed": 173018021,
+        "checkpoint_sha256": "29cab0a33f30d8e84c2a386fc42e0b748e7073aaf56a8de91e900ad8b093e2ab",
+        "model_sha256": "78fbbe6816e059f70032bafb3426cc906f6b16296f1217bc29de388203b0f5b0",
+        "full_curve_token_counts_verified": true,
+        "unique_training_tokens": null,
+        "repeated_training_tokens": null,
+        "training_epochs": null,
+        "consumed_data_order_hash": null,
+        "unknown_reason": "raw document/token traversal and actual per-update input hashes not published; no inference from dataset size alone",
+        "execution_policy": {
+          "training": "FRESH_NO_PRIOR_CHECKPOINT",
+          "historical_progress_search": false,
+          "prior_output_archive": null,
+          "tokenizer_data": "HASH_VERIFIED_REUSE",
+          "new_checkpoint_role": "CURRENT_RUN_TRAINING_AND_AUDIT_ONLY"
+        }
+      },
+      "IC-ALL-SELF": {
+        "active_parameters": 966784,
+        "consumed_training_tokens": 250000,
+        "optimizer_updates": 977,
+        "tokens_per_update": {
+          "full_updates": 976,
+          "full_update_tokens": 256,
+          "last_update_tokens": 144
+        },
+        "training_wall_seconds": 522.396664996,
+        "throughput_tokens_per_second": 478.5635451978129,
+        "last_trainer_segment": {
+          "resumed_from_tokens": 192000,
+          "resumed_from_updates": 750,
+          "new_tokens": 58000
+        },
+        "seed": 173018021,
+        "checkpoint_sha256": "e598e4b3f7b83a084265f6e117f48d8d70cf12c68d17248caf8f38e912dbe848",
+        "model_sha256": "a15c35b68be117eb1c4282d2a9e85c4f4587ba27356480ac73ab3456770c8568",
+        "full_curve_token_counts_verified": true,
+        "unique_training_tokens": null,
+        "repeated_training_tokens": null,
+        "training_epochs": null,
+        "consumed_data_order_hash": null,
+        "unknown_reason": "raw document/token traversal and actual per-update input hashes not published; no inference from dataset size alone",
+        "execution_policy": {
+          "training": "FRESH_NO_PRIOR_CHECKPOINT",
+          "historical_progress_search": false,
+          "prior_output_archive": null,
+          "tokenizer_data": "HASH_VERIFIED_REUSE",
+          "new_checkpoint_role": "CURRENT_RUN_TRAINING_AND_AUDIT_ONLY"
+        }
+      },
+      "F0-PM-BROADCAST": {
+        "active_parameters": 964736,
+        "consumed_training_tokens": 250000,
+        "optimizer_updates": 977,
+        "tokens_per_update": {
+          "full_updates": 976,
+          "full_update_tokens": 256,
+          "last_update_tokens": 144
+        },
+        "training_wall_seconds": 314.13098069100033,
+        "throughput_tokens_per_second": 795.8463678115094,
+        "last_trainer_segment": {
+          "resumed_from_tokens": 192000,
+          "resumed_from_updates": 750,
+          "new_tokens": 58000
+        },
+        "seed": 173018021,
+        "checkpoint_sha256": "8b1f286717b69135abbfc0e2b5147d1e010499a399a52028ed2c4bf76f898b0c",
+        "model_sha256": "ddb77c0e97934a0f09c600dbcef19700f99c683299e4f44f251a1e841f33a7b1",
+        "full_curve_token_counts_verified": true,
+        "unique_training_tokens": null,
+        "repeated_training_tokens": null,
+        "training_epochs": null,
+        "consumed_data_order_hash": null,
+        "unknown_reason": "raw document/token traversal and actual per-update input hashes not published; no inference from dataset size alone",
+        "execution_policy": {
+          "training": "FRESH_NO_PRIOR_CHECKPOINT",
+          "historical_progress_search": false,
+          "prior_output_archive": null,
+          "tokenizer_data": "HASH_VERIFIED_REUSE",
+          "new_checkpoint_role": "CURRENT_RUN_TRAINING_AND_AUDIT_ONLY"
+        }
+      },
+      "T1": {
+        "active_parameters": 1894080,
+        "consumed_training_tokens": 250000,
+        "optimizer_updates": 977,
+        "tokens_per_update": {
+          "full_updates": 976,
+          "full_update_tokens": 256,
+          "last_update_tokens": 144
+        },
+        "training_wall_seconds": 4013.325185079,
+        "throughput_tokens_per_second": 62.29248527616605,
+        "last_trainer_segment": {
+          "resumed_from_tokens": 192000,
+          "resumed_from_updates": 750,
+          "new_tokens": 58000
+        },
+        "seed": 173018021,
+        "checkpoint_sha256": "b6402e77c6a550d2b0ac87ebba22111d0725f6dee53c280b2d403e229cc474d2",
+        "model_sha256": "99fc6dc82814fc61e190fe10fb389e294b106bcfd3ac21a07c4a03cc5281c876",
+        "full_curve_token_counts_verified": true,
+        "unique_training_tokens": null,
+        "repeated_training_tokens": null,
+        "training_epochs": null,
+        "consumed_data_order_hash": null,
+        "unknown_reason": "raw document/token traversal and actual per-update input hashes not published; no inference from dataset size alone",
+        "execution_policy": {
+          "training": "FRESH_NO_PRIOR_CHECKPOINT",
+          "historical_progress_search": false,
+          "prior_output_archive": null,
+          "tokenizer_data": "HASH_VERIFIED_REUSE",
+          "new_checkpoint_role": "CURRENT_RUN_TRAINING_AND_AUDIT_ONLY"
+        }
+      }
+    },
+    "data_audit": {
+      "status": "PASS_DEVELOPMENT_ONLY",
+      "special_tokens": {
+        "<pad>": 0,
+        "<unk>": 1,
+        "<bos>": 2,
+        "<eos>": 3
+      },
+      "splits": {
+        "train": {
+          "documents": 1827,
+          "prediction_tokens": 416027,
+          "ordered_story_ids_sha256": "2bddc1c5f54f6009ae05ba3a14b3e5dc7a5dda6c216a2b1dfa4c985c6df27178"
+        },
+        "validation": {
+          "documents": 16,
+          "prediction_tokens": 3322,
+          "ordered_story_ids_sha256": "acc903ed43f9e87ee7c27c248d41e705e53206348fa12d2d734c7e6bb7abf4fc"
+        },
+        "development_holdout": {
+          "documents": 205,
+          "prediction_tokens": 47403,
+          "ordered_story_ids_sha256": "2fdd42f8978dc0659b8fc268564c4300df5fc5b36a96aeef8010b70273f83c28"
+        }
+      },
+      "document_content_and_token_duplicates": "NONE",
+      "document_reset": "EVERY_DOCUMENT",
+      "test_status": "NOT_AVAILABLE",
+      "tokenizer_overlap": "historical tokenizer training may overlap development; development only",
+      "independent_confirmation": "SEALED_NOT_ACCESSED",
+      "eos_training": "EOS is a real final next-token target in every training document"
+    },
+    "dataset_prediction_tokens": 416027,
+    "train_budget_tokens": 250000,
+    "token_accounting": "committed input-target prediction events, not available corpus size, not lexical unique token IDs",
+    "last_segment_explanation": "learning() invokes train() at updates 250/500/750/977. Final segment restores current-run milestone 750 (192000 tokens); 58000 new tokens complete 250000. This field alone does not show cross-run reuse.",
+    "fresh_cross_run_claim": "POLICY_RECORDED_NOT_INDEPENDENTLY_PROVEN_FROM_PRIVATE_CHECKPOINTS",
+    "wall_time_scope": "learning() sums segment elapsed_seconds; checkpoint/restore fields are last-segment fields, not whole-run totals",
+    "kv_missing_reason": "historical TransformerReference.step/read replays each lane context each token; no cache; RoPE IDs restart from 0 on each cropped replay",
+    "training_speed_caveat": "GC001 teacher-forced trainer also replays Transformer prefixes per event/TBPTT; KV inference optimization is not a remedy for normal parallel teacher-forced training",
+    "gqa_correction": {
+      "query_heads": 6,
+      "kv_heads": 2,
+      "head_dim": 32,
+      "compact_fp32_cache_bytes": 262144,
+      "expanded_mha_equivalent_bytes": 786432,
+      "old_token_context_wrapper_bytes": 516,
+      "wrapper_is_not_kv_cache": true
+    },
+    "tokenizer_audit": {
+      "status": "RAW_FILE_HASHES_AND_TOKEN_CONTRACTS_VERIFIED",
+      "dataset_manifest_sha256_recorded": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+      "tokenizer_file_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+      "ordered_document_hashes_recorded": {
+        "train": {
+          "documents": 1827,
+          "prediction_tokens": 416027,
+          "ordered_story_ids_sha256": "2bddc1c5f54f6009ae05ba3a14b3e5dc7a5dda6c216a2b1dfa4c985c6df27178"
+        },
+        "validation": {
+          "documents": 16,
+          "prediction_tokens": 3322,
+          "ordered_story_ids_sha256": "acc903ed43f9e87ee7c27c248d41e705e53206348fa12d2d734c7e6bb7abf4fc"
+        },
+        "development_holdout": {
+          "documents": 205,
+          "prediction_tokens": 47403,
+          "ordered_story_ids_sha256": "2fdd42f8978dc0659b8fc268564c4300df5fc5b36a96aeef8010b70273f83c28"
+        }
+      },
+      "input_recovery": {
+        "status": "VERIFIED_KNOWN_VERSION_INPUTS",
+        "version": 142,
+        "files": {
+          "assets/manifest.json": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+          "assets/tokenizer.json": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+          "assets/train.json": "711e8f2f1255c1fa2b3855a7cb6cef108b593ea0e1e8b68f96273883da83fdfd",
+          "assets/development.json": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164"
+        },
+        "historical_weights_requested": false
+      }
+    },
+    "baseline_audit_gate": "HISTORICAL_RUNTIME_ORDER_UNVERIFIABLE_NEW_RUN_LOGGING_REQUIRED",
+    "historical_hypotheses": "H1_H5_NOT_EVALUATED",
+    "human_review": "PENDING_AI_REVIEW_IS_NOT_HUMAN",
+    "raw_asset_evidence_scope": "hashes verified by pinned prior run, not reread locally",
+    "original_phase0_full_pass_claimed": false
+  }
+}

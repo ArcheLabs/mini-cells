@@ -1,0 +1,139 @@
+{
+  "baseline_run_id": "epclm-x4c-001-bc1288d34748-b8cc5876",
+  "baseline_source": "bc1288d34748038455b2e9b441095821da6d5bc3",
+  "historical_backbone_configuration": {
+    "alpha": 0.11920292202211755,
+    "attention_masks": [
+      [
+        true
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ]
+    ],
+    "cell_ffn": null,
+    "chunk_size": 32,
+    "dense_width": null,
+    "dim": 188,
+    "ffn": 639,
+    "ffn_masks": [
+      [
+        true
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ]
+    ],
+    "heads": 4,
+    "iterations": [
+      1,
+      1,
+      1
+    ],
+    "name": "A2",
+    "routed": null,
+    "state_kind": null,
+    "state_read_rank": null,
+    "state_write_hidden": null,
+    "training_execution": "legacy_parallel_sequence",
+    "vocab": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "historical_final_weight_identity": "aebea43c18f5ba9e17f05ad7e99490c454e2b4219715f5732d94d7843880b831",
+  "historical_checkpoint": {
+    "file": "models/G1/A2/private/final-model.pt",
+    "location": "Kaggle Output only; owner access required if private; not committed to Git"
+  },
+  "historical_initial_weights": "NOT_ARCHIVED_IN_PUBLISHED_ARTIFACTS",
+  "initialization_reconstruction_sha256": "1ea683a38c48bd02b26c16a6d30ebe19de48c2d901ecb3424fac64b0f40106de",
+  "independent_native_reconstruction_sha256": "1ea683a38c48bd02b26c16a6d30ebe19de48c2d901ecb3424fac64b0f40106de",
+  "initialization_status": "SOURCE_AND_SEED_RECONSTRUCTION_HASH_VERIFIED; NO_ARCHIVED_INITIAL_HASH",
+  "strict_historical_initialization_match": false,
+  "local_torch_version": "2.4.1+cu121",
+  "source_matches": {
+    "decisions.py": true,
+    "common.py": true,
+    "cell.py": true,
+    "train.py": true,
+    "audit.py": true,
+    "research_report.py": true,
+    "routing.py": true,
+    "architecture.py": true,
+    "mechanisms.py": true,
+    "runtime.py": true,
+    "evaluate.py": true,
+    "state.py": true,
+    "flops.py": true
+  },
+  "source_protocol_sha256": "0958e1282974b06d95d09d732799cc0c7c0932d56a9177d9b51fc9e11b580496",
+  "published_protocol_sha256": "a36d6d895fad6959b4c9d75b7a96cded6ec5c7c081a112f34faa8e5ed3c28637",
+  "protocol_note": "publication JSON was sorted; source bytes hash and parsed content both verified",
+  "historical_evaluation": "archived measured values; not reevaluated without final weights",
+  "data_boundary": "Native continuous token stream sampled as independent 125-token examples; no State across samples or long-memory claim",
+  "models": {
+    "B1": {
+      "parts": {
+        "token_attention": 115319952,
+        "ffn": 270297000,
+        "state_read_bridge": 3080192,
+        "state_read_kv": 27144192,
+        "state_read_attention_path": 4512000,
+        "state_read_ffn_path": 0,
+        "state_write": 15532032,
+        "head": 96256000
+      },
+      "forward_flops": 532141368,
+      "forward_flops_per_prediction_token": 4257130.944,
+      "parameter_count": 2040445,
+      "state_bytes_per_sample": 8192,
+      "convention": "MAC=2; matmul-heavy analytic estimate; includes final partial Chunk write; excludes normalization, gates, softmax and allocator traffic",
+      "caveat": "local-pair Attention formula may undercount dense masked SDPA kernels; compare actual timings separately"
+    },
+    "B2": {
+      "parts": {
+        "token_attention": 115319952,
+        "ffn": 270297000,
+        "state_read_bridge": 3080192,
+        "state_read_kv": 27144192,
+        "state_read_attention_path": 0,
+        "state_read_ffn_path": 57528000,
+        "state_write": 15532032,
+        "head": 96256000
+      },
+      "forward_flops": 585157368,
+      "forward_flops_per_prediction_token": 4681258.944,
+      "parameter_count": 2040445,
+      "state_bytes_per_sample": 8192,
+      "convention": "MAC=2; matmul-heavy analytic estimate; includes final partial Chunk write; excludes normalization, gates, softmax and allocator traffic",
+      "caveat": "local-pair Attention formula may undercount dense masked SDPA kernels; compare actual timings separately"
+    },
+    "B3": {
+      "parts": {
+        "token_attention": 115319952,
+        "ffn": 270297000,
+        "state_read_bridge": 3080192,
+        "state_read_kv": 27144192,
+        "state_read_attention_path": 4512000,
+        "state_read_ffn_path": 57528000,
+        "state_write": 15532032,
+        "head": 96256000
+      },
+      "forward_flops": 589669368,
+      "forward_flops_per_prediction_token": 4717354.944,
+      "parameter_count": 2040445,
+      "state_bytes_per_sample": 8192,
+      "convention": "MAC=2; matmul-heavy analytic estimate; includes final partial Chunk write; excludes normalization, gates, softmax and allocator traffic",
+      "caveat": "local-pair Attention formula may undercount dense masked SDPA kernels; compare actual timings separately"
+    }
+  }
+}

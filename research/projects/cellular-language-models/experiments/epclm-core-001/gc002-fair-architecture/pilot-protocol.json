@@ -1,0 +1,46 @@
+{
+  "format": "minicells.gc002.pilot-protocol.v1",
+  "authorization": "USER_APPROVED_T1_PM_KV_50_UPDATES_12800_TOKENS",
+  "training_authorized": true,
+  "scope": "MINIMAL_GPU_PILOT_ONLY_NOT_FORMAL_COMPARISON",
+  "model": {
+    "vocab": 2048,
+    "dim": 128,
+    "layers": 4,
+    "heads": 2,
+    "kv_heads": 2,
+    "ffn": 288,
+    "window": 128
+  },
+  "seed": 173020001,
+  "batch": 4,
+  "tbptt": 64,
+  "updates": 50,
+  "training_tokens": 12800,
+  "precision": "fp32",
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "foreach": false
+  },
+  "clip_norm": 1.0,
+  "warmup_updates": 5,
+  "checkpoint_interval": 5,
+  "resume_check_update": 25,
+  "attention_backend": "MATH_REFERENCE",
+  "budget": {
+    "execution": 5400,
+    "publication": 600,
+    "safety": 1200,
+    "hard": 7200
+  },
+  "automatic_formal_training": false,
+  "human_review": "PENDING",
+  "formal_hypotheses": "NOT_EVALUATED",
+  "scheduler": "cosine lr_multiplier(max(1,step),50,5); all 50 training updates have positive learning rate"
+}

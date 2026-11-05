@@ -1,0 +1,32 @@
+{
+  "status": "PASS_DEVELOPMENT_ONLY",
+  "special_tokens": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3
+  },
+  "splits": {
+    "train": {
+      "documents": 1827,
+      "prediction_tokens": 416027,
+      "ordered_story_ids_sha256": "2bddc1c5f54f6009ae05ba3a14b3e5dc7a5dda6c216a2b1dfa4c985c6df27178"
+    },
+    "validation": {
+      "documents": 16,
+      "prediction_tokens": 3322,
+      "ordered_story_ids_sha256": "acc903ed43f9e87ee7c27c248d41e705e53206348fa12d2d734c7e6bb7abf4fc"
+    },
+    "development_holdout": {
+      "documents": 205,
+      "prediction_tokens": 47403,
+      "ordered_story_ids_sha256": "2fdd42f8978dc0659b8fc268564c4300df5fc5b36a96aeef8010b70273f83c28"
+    }
+  },
+  "document_content_and_token_duplicates": "NONE",
+  "document_reset": "EVERY_DOCUMENT",
+  "test_status": "NOT_AVAILABLE",
+  "tokenizer_overlap": "historical tokenizer training may overlap development; development only",
+  "independent_confirmation": "SEALED_NOT_ACCESSED",
+  "eos_training": "EOS is a real final next-token target in every training document"
+}

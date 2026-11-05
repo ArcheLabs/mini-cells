@@ -1,0 +1,199 @@
+{
+  "format": "minicells.epclm-core-001.v1",
+  "mode": "MINIMAL_GPU_PILOT",
+  "status": "INCOMPLETE",
+  "identity": {
+    "source": "5bd2f2c5e67adad703ea31a29d8a4488a92f9e15",
+    "protocol": "dae37add4502fbe25a2c41b691c8ea710d24e627276d4f7792df5d10bdca2c81",
+    "data": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "seed": 173018021,
+    "mode": "minimal_gpu_pilot",
+    "model": {
+      "vocab": 2048,
+      "cells": 16,
+      "dim": 128,
+      "steps": 4,
+      "alpha": 0.1,
+      "arm": "C1",
+      "window": 4,
+      "max_state_abs": 10000.0
+    },
+    "batch": 4,
+    "bptt": 64,
+    "target_tokens": 12800,
+    "precision": {
+      "mode": "fp16",
+      "grad_scaler_initial_scale": 1024.0,
+      "max_consecutive_overflows": 3
+    }
+  },
+  "configuration": {
+    "arm": "C1",
+    "batch": 4,
+    "bptt": 64,
+    "K": 4,
+    "updates": 50,
+    "resume_after_updates": 25,
+    "diagnostic_updates": 2,
+    "checkpoint_interval_updates": 25,
+    "precision": {
+      "mode": "fp16",
+      "grad_scaler_initial_scale": 1024.0,
+      "max_consecutive_overflows": 3
+    },
+    "model": {
+      "vocab": 2048,
+      "cells": 16,
+      "dim": 128,
+      "steps": 4,
+      "alpha": 0.1,
+      "arm": "C1",
+      "window": 4,
+      "max_state_abs": 10000.0
+    }
+  },
+  "environment": {
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "gpu": "Tesla T4",
+    "precision": "FP32 state/weights; fp16 training; FP32 replay on non-finite FP16 gradients"
+  },
+  "hypotheses": {
+    "H1": "NOT_EVALUATED",
+    "H2": "NOT_EVALUATED",
+    "H3": "NOT_EVALUATED",
+    "H4": "NOT_EVALUATED",
+    "H5": "NOT_EVALUATED"
+  },
+  "scientific_decision": false,
+  "formal_confirmation": false,
+  "checkpoint_resume": "NOT_COMPLETED",
+  "numerical_stability": "FAILED_OR_INTERRUPTED",
+  "initial_diagnostic": {
+    "status": "NOT_COMPLETED",
+    "successful_updates": 0,
+    "counted_toward_50": true
+  },
+  "overflow_diagnostics": [
+    {
+      "stage": "GRADIENT_OVERFLOW",
+      "update": 1,
+      "committed_updates": 0,
+      "attempt_tokens": 256,
+      "committed_tokens": 0,
+      "loss": 7.756317138671875,
+      "state_norm": 258.1728210449219,
+      "gradient_norm": "nan",
+      "grad_scaler_scale": 1024.0,
+      "input_sha256": "e23c59579bbc04e8c081e16a2ee0912b4572852c3d00e000ce7a3b0cfc652e3c",
+      "classification": "MIXED_PRECISION_PATH",
+      "next_scale": 512.0,
+      "fp32": {
+        "loss": 7.755640029907227,
+        "state_norm": 258.1120910644531,
+        "gradient_norm": 73.8415756225586,
+        "tokens": 256,
+        "input_sha256": "e23c59579bbc04e8c081e16a2ee0912b4572852c3d00e000ce7a3b0cfc652e3c",
+        "finite": true,
+        "optimizer_updates": 0
+      },
+      "consecutive_overflows": 1
+    },
+    {
+      "stage": "GRADIENT_OVERFLOW",
+      "update": 1,
+      "committed_updates": 0,
+      "attempt_tokens": 256,
+      "committed_tokens": 0,
+      "loss": 7.756317138671875,
+      "state_norm": 258.1728210449219,
+      "gradient_norm": "nan",
+      "grad_scaler_scale": 512.0,
+      "input_sha256": "e23c59579bbc04e8c081e16a2ee0912b4572852c3d00e000ce7a3b0cfc652e3c",
+      "classification": "MIXED_PRECISION_PATH",
+      "next_scale": 256.0,
+      "fp32": {
+        "loss": 7.755640029907227,
+        "state_norm": 258.1120910644531,
+        "gradient_norm": 73.8415756225586,
+        "tokens": 256,
+        "input_sha256": "e23c59579bbc04e8c081e16a2ee0912b4572852c3d00e000ce7a3b0cfc652e3c",
+        "finite": true,
+        "optimizer_updates": 0
+      },
+      "reused_fp32_diagnostic": true,
+      "consecutive_overflows": 2
+    },
+    {
+      "stage": "GRADIENT_OVERFLOW",
+      "update": 1,
+      "committed_updates": 0,
+      "attempt_tokens": 256,
+      "committed_tokens": 0,
+      "loss": 7.756317138671875,
+      "state_norm": 258.1728210449219,
+      "gradient_norm": "nan",
+      "grad_scaler_scale": 256.0,
+      "input_sha256": "e23c59579bbc04e8c081e16a2ee0912b4572852c3d00e000ce7a3b0cfc652e3c",
+      "classification": "MIXED_PRECISION_PATH",
+      "next_scale": 128.0,
+      "fp32": {
+        "loss": 7.755640029907227,
+        "state_norm": 258.1120910644531,
+        "gradient_norm": 73.8415756225586,
+        "tokens": 256,
+        "input_sha256": "e23c59579bbc04e8c081e16a2ee0912b4572852c3d00e000ce7a3b0cfc652e3c",
+        "finite": true,
+        "optimizer_updates": 0
+      },
+      "reused_fp32_diagnostic": true,
+      "consecutive_overflows": 3
+    }
+  ],
+  "last_failed_update": {
+    "stage": "GRADIENT_OVERFLOW",
+    "update": 1,
+    "committed_updates": 0,
+    "attempt_tokens": 256,
+    "committed_tokens": 0,
+    "loss": 7.756317138671875,
+    "state_norm": 258.1728210449219,
+    "gradient_norm": "nan",
+    "grad_scaler_scale": 256.0,
+    "input_sha256": "e23c59579bbc04e8c081e16a2ee0912b4572852c3d00e000ce7a3b0cfc652e3c",
+    "classification": "MIXED_PRECISION_PATH",
+    "next_scale": 128.0,
+    "fp32": {
+      "loss": 7.755640029907227,
+      "state_norm": 258.1120910644531,
+      "gradient_norm": 73.8415756225586,
+      "tokens": 256,
+      "input_sha256": "e23c59579bbc04e8c081e16a2ee0912b4572852c3d00e000ce7a3b0cfc652e3c",
+      "finite": true,
+      "optimizer_updates": 0
+    },
+    "reused_fp32_diagnostic": true,
+    "consecutive_overflows": 3
+  },
+  "precision_classification": "MIXED_PRECISION_PATH",
+  "error": "non-finite gradients: MIXED_PRECISION_PATH",
+  "peak_vram_bytes": 193799680,
+  "asset_reuse": {
+    "status": "VERIFIED_ASSETS_ONLY",
+    "prior_identity": {
+      "source": "26186fed2048ff111005bdc0a5e575fcc7b1377c",
+      "protocol": "c7a2f1ec4d4165aa667ce94296c8ea0e3d5f7ddc55b0f3a6671d3c221a45abd0",
+      "data": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+      "seed": 173018021
+    },
+    "kaggle_version": 136,
+    "asset_sha256": {
+      "assets/manifest.json": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+      "assets/tokenizer.json": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+      "assets/train.json": "711e8f2f1255c1fa2b3855a7cb6cef108b593ea0e1e8b68f96273883da83fdfd",
+      "assets/development.json": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164"
+    },
+    "model_optimizer_checkpoint_reused": false
+  }
+}

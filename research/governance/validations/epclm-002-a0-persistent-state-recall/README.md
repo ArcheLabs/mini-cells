@@ -35,13 +35,15 @@ H1、H2、H3 分开报告。H1 参考实现通过只能支持跨进程序列化�
 
 ## 运行
 
-### Kaggle 单次开发启动（推荐）
+### Kaggle 首轮筛选启动（推荐）
 
-仓库提供项目级入口：[EPCLM-002-A0 Kaggle Notebook](../../projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/notebook.ipynb)。在 Kaggle 中打开/导入该 Notebook，开启 Internet，配置已有 Secret `GITHUB_TOKEN`，然后点击一次 **Run All**。无需手工填写源码哈希、种子或切换运行模式；启动器会先验证冻结协议、干净源码、发布仓库和 Secret，再记录实际源码/协议/配置哈希并自动选择未占用的开发种子。
+项目级入口仍是 [EPCLM-002-A0 Kaggle Notebook](../../projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/notebook.ipynb)。在 Kaggle 中打开/导入该 Notebook，开启 Internet，选择 GPU accelerator，保留已有 Secret GITHUB_TOKEN，然后点击一次 **Run All**。启动器自动验证冻结协议、干净源码、发布仓库和 Secret，记录源码/协议/配置哈希并选择开发种子；不需要手工切换模式或填写哈希。
 
-单次 Notebook 的硬上限为 7,200 秒。启动器最多运行 6,600 秒，并为报告发布预留最多 600 秒；评估工作不会在训练进程仍运行时并发执行。检查点和 Episode 级证据留在 Kaggle Output，GitHub 结果分支只接收 `decision.json`、`metrics.json`、`execution-identity.json` 和摘要，不含模型权重。训练或评估超时会保存可恢复进度并标记 `DEVELOPMENT_INCOMPLETE_TIMEOUT`；发布失败时 Kaggle Output 保留，重跑会复用已完成的训练/条件结果。
+Notebook 默认执行独立的 A0-v0.2 筛选计划：先使用现有 500-step trainer 在 GPU 上训练 Flat Recurrent 和 Cellular，再对 32 facts/64 distractors 运行真实计时 pilot，根据每架构 Episode P50/P95、训练与检查点保存耗时、恢复加载耗时和单条件固定开销计算可行样本数，最多为每个架构-条件单元运行 128 Episode。评估器继续使用现有 CPU 执行路径。筛选运行使用 5,400 秒执行预算，另留 600 秒发布和 1,200 秒安全余量；Notebook 总硬上限仍为 7,200 秒。具体矩阵、容量公式和停止规则见[项目筛选协议](../../projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/A0-v0.2-screening.md)。
 
-这条自动入口仅执行开发配置，固定使用 CPU，并且 `scientific_decision=false`。冻结正式矩阵包含 20 个条件 × 3 个模型种子 × 每条件 1,000 Episode（每个学习型后端共 60,000 Episode），不能在两小时内伪装成完整正式结果。正式条件运行器也受 7,200 秒上限约束，逐 Episode 保存进度并可在后续启动恢复；矩阵未完成全部注册条件前只报告 `INCONCLUSIVE`，不会生成正式支持结论。配置和执行说明见[项目 README](../../projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/README.md)。
+原 config/development.json 与 scripts/kaggle_launch.py CPU 开发入口仍保留。新默认入口 scripts/kaggle_screening_launch.py 不修改训练算法、模型架构、任务生成或评价指标，也不运行正式矩阵。每个未完成筛选单元均标记 INCOMPLETE；结果发布失败时 Kaggle Output 保留，重跑会复用已完成 checkpoint 和 Episode 证据。GitHub 结果分支只接收报告、指标、执行身份和摘要，不含模型权重；发布器以 origin/main 为基线并核验远程结果提交 SHA。
+
+筛选结果始终是 development-only，scientific_decision=false。原冻结正式矩阵仍为每个学习型后端 20 个条件 × 3 个正式模型种子 × 每条件 1,000 Episode（每个后端 60,000 Episode），协议、种子、阈值和正式结论未被修改。筛选结果不能代替正式矩阵，也不能称为预注册确认性结果。正式任务仍需按原冻结协议分批运行；未完成全部注册条件前保持 INCONCLUSIVE。
 
 ### 本地低层诊断命令
 

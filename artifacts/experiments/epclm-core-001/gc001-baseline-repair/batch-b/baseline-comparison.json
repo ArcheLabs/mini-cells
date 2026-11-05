@@ -1,0 +1,167 @@
+{
+  "T1": {
+    "status": "COMPLETE",
+    "eligible_for_architecture_comparison": false,
+    "reference_only": true,
+    "origin": "NEW_REPAIR_REFERENCE",
+    "historical_structural_audit": "NOT_APPLICABLE",
+    "architecture": {
+      "allocated_parameters": 1894080,
+      "active_trainable_parameters": 1894080,
+      "state_dimensions": 129,
+      "state_bytes": 516,
+      "estimated_forward_linear_flops": "NOT_MEASURED",
+      "reference_config": {
+        "name": "T1-modern-transformer",
+        "vocab_size": 2048,
+        "context_length": 128,
+        "dim": 192,
+        "layers": 4,
+        "heads": 6,
+        "kv_heads": 2,
+        "ffn_dim": 480,
+        "normalization": "RMSNorm",
+        "position": "RoPE",
+        "activation": "SwiGLU",
+        "tied_embeddings": true,
+        "kv_cache": false
+      },
+      "context": 128,
+      "kv_cache": false
+    },
+    "training": {
+      "status": "COMPLETE",
+      "tokens": 250000,
+      "updates": 977,
+      "resumed_from_tokens": 192000,
+      "resumed_from_updates": 750,
+      "target_tokens": 250000,
+      "new_tokens": 58000,
+      "elapsed_seconds": 4013.325185079,
+      "checkpoint_save_seconds": 5.0065090679991044,
+      "checkpoint_restore_seconds": 0.3109973790001277,
+      "tokens_per_second": 62.29248527616605,
+      "effective_precision": {
+        "autocast_enabled": false,
+        "grad_scaler_enabled": false,
+        "model_dtype": "torch.float32",
+        "state_dtype": "torch.float32",
+        "loss_dtype": "torch.float32",
+        "optimizer_dtypes": [
+          "torch.float32"
+        ]
+      },
+      "peak_vram_bytes": 2173932544,
+      "first_loss": 7.647443771362305,
+      "last_loss": 4.610959529876709,
+      "overflow_count": 0
+    },
+    "checkpoint_sha256": "b6402e77c6a550d2b0ac87ebba22111d0725f6dee53c280b2d403e229cc474d2",
+    "validation": {
+      "nll": 4.482235645156518,
+      "ppl": 88.4321547619375,
+      "documents": 16,
+      "tokens": 3322
+    },
+    "development_holdout": {
+      "nll": 4.526112391490572,
+      "ppl": 92.39865215651767,
+      "documents": 205,
+      "tokens": 47403
+    },
+    "test": "NOT_AVAILABLE",
+    "generation_metrics": {
+      "greedy": {
+        "prompts": 16,
+        "generated_tokens": 2048,
+        "average_generated_length": 128.0,
+        "eos_rate": 0.0,
+        "tokens_per_second": 179.3031088892408,
+        "repeated_3gram_rate": 0.8874007936507937,
+        "distinct_1": 0.08251953125,
+        "distinct_2": 0.09744094488188976,
+        "average_token_entropy": 5.0559506573481485,
+        "average_sampling_entropy": 0.0
+      },
+      "sampling": {
+        "prompts": 16,
+        "generated_tokens": 1739,
+        "average_generated_length": 108.6875,
+        "eos_rate": 0.5625,
+        "tokens_per_second": 156.3539657359078,
+        "repeated_3gram_rate": 0.048824014756829494,
+        "distinct_1": 0.4821193662989126,
+        "distinct_2": 0.8145920895637333,
+        "average_token_entropy": 5.0434713241237885,
+        "average_sampling_entropy": 2.0013126194704367
+      }
+    },
+    "performance": {
+      "history_scaling": [
+        {
+          "history_tokens_including_bos": 32,
+          "prefill_seconds": 0.167750438999974,
+          "prefill_seconds_per_token": 0.005242201218749187,
+          "single_token_decode_seconds": 0.010725446999458654,
+          "persistent_state_bytes": 516,
+          "snapshot_bytes_after_prefill": 9893,
+          "nonzero_state_blocks_after_prefill": 1,
+          "snapshot_scope": "bounded reference token context, identities and RNG",
+          "context_window": 128,
+          "retained_reference_context_tokens": 32,
+          "kv_cache_bytes": 0,
+          "kv_cache_status": "DISABLED_BOUNDED_CONTEXT_REPLAY"
+        },
+        {
+          "history_tokens_including_bos": 128,
+          "prefill_seconds": 0.6564177910004219,
+          "prefill_seconds_per_token": 0.005128263992190796,
+          "single_token_decode_seconds": 0.01573592800014012,
+          "persistent_state_bytes": 516,
+          "snapshot_bytes_after_prefill": 9893,
+          "nonzero_state_blocks_after_prefill": 1,
+          "snapshot_scope": "bounded reference token context, identities and RNG",
+          "context_window": 128,
+          "retained_reference_context_tokens": 128,
+          "kv_cache_bytes": 0,
+          "kv_cache_status": "DISABLED_BOUNDED_CONTEXT_REPLAY"
+        },
+        {
+          "history_tokens_including_bos": 512,
+          "prefill_seconds": 2.6848150709993206,
+          "prefill_seconds_per_token": 0.005243779435545548,
+          "single_token_decode_seconds": 0.010793760000524344,
+          "persistent_state_bytes": 516,
+          "snapshot_bytes_after_prefill": 9893,
+          "nonzero_state_blocks_after_prefill": 1,
+          "snapshot_scope": "bounded reference token context, identities and RNG",
+          "context_window": 128,
+          "retained_reference_context_tokens": 128,
+          "kv_cache_bytes": 0,
+          "kv_cache_status": "DISABLED_BOUNDED_CONTEXT_REPLAY"
+        },
+        {
+          "history_tokens_including_bos": 1024,
+          "prefill_seconds": 5.302722655000252,
+          "prefill_seconds_per_token": 0.005178440092773684,
+          "single_token_decode_seconds": 0.01065317199936544,
+          "persistent_state_bytes": 516,
+          "snapshot_bytes_after_prefill": 9893,
+          "nonzero_state_blocks_after_prefill": 1,
+          "snapshot_scope": "bounded reference token context, identities and RNG",
+          "context_window": 128,
+          "retained_reference_context_tokens": 128,
+          "kv_cache_bytes": 0,
+          "kv_cache_status": "DISABLED_BOUNDED_CONTEXT_REPLAY"
+        }
+      ],
+      "gpu_peak_allocated_bytes": 26680832,
+      "cpu_process_peak_rss_bytes": 2006097920,
+      "gpu_utilization": "NOT_MEASURED",
+      "memory_scope": "process high-water marks; includes other resident frozen assets",
+      "timing_scope": "synchronized end-to-end forward/finite checks/readout/CPU sampling, excludes network/assets",
+      "flops": "NOT_MEASURED",
+      "prefill_complexity": "C1 processes every input event; fixed state does not make prefill constant time"
+    }
+  }
+}

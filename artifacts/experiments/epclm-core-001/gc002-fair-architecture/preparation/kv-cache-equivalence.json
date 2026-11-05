@@ -1,0 +1,157 @@
+{
+  "identity": {
+    "git_commit": "ba35017c2c51b0799c3baa28b4d741a46282b4f7",
+    "source_files_sha256": {
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "e17d01d8fa6df2fa5d173d12ab8f4eb47ff0b51d4327a037f79970d0749058c1",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/preparation.py": "9e56a9a4c89198ea36b42fe5541620da0b34499d1667031f429433947b2080bf",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/run.py": "0b413633204ff7872285048abb04a3957b0bfd2135b8a979e090e59ed741925d"
+    },
+    "protocol_sha256": "d3e08853a21a58657558e8abf0b5f2bf9dd1686d8d50a78e0fccd911d36e1b56",
+    "dataset_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "seed": 713,
+    "seed_scope": "synthetic correctness fixtures only; formal seeds not selected",
+    "hardware": {
+      "device": "cuda",
+      "gpu": "Tesla T4"
+    },
+    "software": {
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128",
+      "cuda_runtime": "12.8",
+      "driver_version": null,
+      "power_limit": null,
+      "kernel_configuration": "default SDPA with explicit local causal mask; TF32 disabled"
+    }
+  },
+  "result": {
+    "T1-KV": {
+      "status": "PASS",
+      "device": "cuda",
+      "dtype": "fp32",
+      "batch": 1,
+      "weights": "SYNTHETIC_RANDOM_NOT_HISTORICAL_CHECKPOINT",
+      "model_config": {
+        "vocab": 2048,
+        "dim": 192,
+        "layers": 4,
+        "heads": 6,
+        "kv_heads": 2,
+        "ffn": 480,
+        "window": 128
+      },
+      "model_sha256": "7e2acd3db4c7e67ac9231f67d634190d2db7ef278121c0c10b9a2896c2b49f80",
+      "semantics": "causal sliding window from sequence start; absolute RoPE IDs; GC001 replay differs after eviction",
+      "historical_weight_loading": "STRICT_NATIVE_STATE_DICT_COMPATIBLE",
+      "historical_pre_window_max_error": 0.0,
+      "max_error_tolerance": 1e-05,
+      "cases": [
+        {
+          "length": 32,
+          "max_absolute_logit_error": 4.842877388000488e-07,
+          "argmax_identical": true,
+          "sliding_window_exercised": false,
+          "eos_id_in_input": 3
+        },
+        {
+          "length": 128,
+          "max_absolute_logit_error": 6.556510925292969e-07,
+          "argmax_identical": true,
+          "sliding_window_exercised": false,
+          "eos_id_in_input": 3
+        },
+        {
+          "length": 385,
+          "max_absolute_logit_error": 9.5367431640625e-07,
+          "argmax_identical": true,
+          "sliding_window_exercised": true,
+          "eos_id_in_input": 3
+        }
+      ],
+      "chunked_prefill_max_error": 7.748603820800781e-07,
+      "snapshot_continuation_bitwise_equal": true,
+      "eos_stop": "PASS_SYNTHETIC_PREDICTED_STOP_ID; actual EOS ID 3 also included in equivalence inputs",
+      "memory": {
+        "batch": 1,
+        "cached_tokens": 128,
+        "absolute_next_position": 385,
+        "kv_tensor_payload_bytes": 262144,
+        "kv_tensor_backing_storage_bytes": 262144,
+        "persistent_state_bytes_per_stream": 262144,
+        "token_buffer_bytes": 0,
+        "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+        "python_metadata_shallow_bytes": 500,
+        "tensor_wrapper_shallow_bytes": 576,
+        "serialization_bytes": 265229,
+        "theoretical_full_window_gqa_bytes_per_stream": 262144,
+        "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+        "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+      },
+      "optimizer_updates": 0
+    },
+    "T1-PM-KV": {
+      "status": "PASS",
+      "device": "cuda",
+      "dtype": "fp32",
+      "batch": 1,
+      "weights": "SYNTHETIC_RANDOM_NOT_HISTORICAL_CHECKPOINT",
+      "model_config": {
+        "vocab": 2048,
+        "dim": 128,
+        "layers": 4,
+        "heads": 2,
+        "kv_heads": 2,
+        "ffn": 288,
+        "window": 128
+      },
+      "model_sha256": "0d41a8726d7bf8a5588cb0188d9a7530683711a23b3fc5415bc870ed1c39bea6",
+      "semantics": "causal sliding window from sequence start; absolute RoPE IDs; GC001 replay differs after eviction",
+      "historical_weight_loading": "NEW_CANDIDATE",
+      "historical_pre_window_max_error": null,
+      "max_error_tolerance": 1e-05,
+      "cases": [
+        {
+          "length": 32,
+          "max_absolute_logit_error": 3.2782554626464844e-07,
+          "argmax_identical": true,
+          "sliding_window_exercised": false,
+          "eos_id_in_input": 3
+        },
+        {
+          "length": 128,
+          "max_absolute_logit_error": 5.960464477539062e-07,
+          "argmax_identical": true,
+          "sliding_window_exercised": false,
+          "eos_id_in_input": 3
+        },
+        {
+          "length": 385,
+          "max_absolute_logit_error": 7.152557373046875e-07,
+          "argmax_identical": true,
+          "sliding_window_exercised": true,
+          "eos_id_in_input": 3
+        }
+      ],
+      "chunked_prefill_max_error": 6.556510925292969e-07,
+      "snapshot_continuation_bitwise_equal": true,
+      "eos_stop": "PASS_SYNTHETIC_PREDICTED_STOP_ID; actual EOS ID 3 also included in equivalence inputs",
+      "memory": {
+        "batch": 1,
+        "cached_tokens": 128,
+        "absolute_next_position": 385,
+        "kv_tensor_payload_bytes": 524288,
+        "kv_tensor_backing_storage_bytes": 524288,
+        "persistent_state_bytes_per_stream": 524288,
+        "token_buffer_bytes": 0,
+        "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+        "python_metadata_shallow_bytes": 500,
+        "tensor_wrapper_shallow_bytes": 576,
+        "serialization_bytes": 527373,
+        "theoretical_full_window_gqa_bytes_per_stream": 524288,
+        "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+        "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+      },
+      "optimizer_updates": 0
+    }
+  }
+}

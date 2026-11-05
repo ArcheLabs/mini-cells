@@ -14,7 +14,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Provenance
 
-- Source commit: `26186fed2048ff111005bdc0a5e575fcc7b1377c`
+- Source commit: `5bd2f2c5e67adad703ea31a29d8a4488a92f9e15`
 - Source branch: `codex/epclm-core-001`
 - Kaggle script version ID: `not recorded`
 - Source results directory: `results/epclm-core-001-pilot/publish`
