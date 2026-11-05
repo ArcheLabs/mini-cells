@@ -236,6 +236,17 @@
       "baseline_source": "cf777887532a021826afb05f063addc651af5570",
       "scientific_decision": false,
       "note": "Same-parameter C2 vs C-DKV; historical validation remains development data. New seeds are not independent confirmation data. No local real training."
+    },
+    {
+      "id": "M3C-001-TPU-JAX",
+      "name": "Community JAX candidate TPU correctness audit",
+      "status": "implementation_tpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-001-TPU-JAX",
+      "entry": "run_audit.py",
+      "training_tokens": 0,
+      "scientific_decision": false,
+      "candidate_source": "ffa55848fc513ca91aa330bda4c33c86dab74827",
+      "note": "Independent community backend. SISO gates before MIMO; official kernel equivalence NOT_VERIFIED. M3C-002 conditional on TPU gates and review; historical PyTorch results unchanged."
     }
   ],
   "schema_version": 2

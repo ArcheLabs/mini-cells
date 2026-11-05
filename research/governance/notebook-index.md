@@ -34,3 +34,5 @@ storage. The shared Kaggle helpers live in [`shared/kaggle/`](../../shared/kaggl
 - [CLM Workspace Depth-KV](../projects/cellular-language-models/experiments/clm-workspace-depth-kv-001/notebook.ipynb): C2/C-DKV and unchanged T0 references, three new seeds, 2M per arm/seed; automatic engineering smoke then budget-gated paired run, FP32 dual T4. GPU execution pending.
 
 - [M3C-001 官方模块推理审计](../projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-001/notebook.ipynb)：0 训练 Token，T4 输出硬件阻塞；支持设备分别审计 SISO/MIMO。
+
+- [M3C-001-TPU-JAX](../projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-001-TPU-JAX/notebook.ipynb)：社区候选，TPU SISO → MIMO 合成正确性门禁，0 训练 Token。
