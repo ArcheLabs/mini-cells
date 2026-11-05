@@ -1,0 +1,50 @@
+{
+  "format": "minicells.gc002.t1-fresh-02.v1",
+  "experiment": "GC002-T1-FRESH-02",
+  "run_id": "epclm-gc002-t1-fresh-02-9b50e98f7dc2-309b3926",
+  "source_commit": "9b50e98f7dc25d7e3e3b5d6f7195691f6ca18eaf",
+  "training_status": "COMPLETE",
+  "evaluation_status": "COMPLETE",
+  "status": "COMPLETE",
+  "research_review_status": "PENDING",
+  "independent_test_accessed": false,
+  "training_tokens": 250000,
+  "optimizer_updates": 977,
+  "model_parameters": 967808,
+  "dataset_version": 142,
+  "tokenizer_version": "Kaggle output 142",
+  "seed": 173020021,
+  "fresh_initialization": true,
+  "splits": {
+    "train": {
+      "documents": 1827,
+      "prediction_tokens": 416027
+    },
+    "validation": {
+      "documents": 16,
+      "prediction_tokens": 3322
+    },
+    "development_holdout": {
+      "documents": 205,
+      "prediction_tokens": 47403
+    }
+  },
+  "gpu": {
+    "name": "Tesla T4",
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "precision": "fp32",
+    "tf32": false
+  },
+  "training_peak_allocated_bytes": 60551680,
+  "training_peak_reserved_bytes": 67108864,
+  "validation_status": "COMPLETE",
+  "holdout_status": "COMPLETE",
+  "generation_status": "COMPLETE",
+  "inference_status": "COMPLETE",
+  "memory_status": "COMPLETE",
+  "publication": {
+    "status": "PUSH_PENDING_REMOTE_VERIFICATION",
+    "branch": "kaggle/epclm-gc002-t1-fresh-02-9b50e98f7dc2-309b3926"
+  }
+}

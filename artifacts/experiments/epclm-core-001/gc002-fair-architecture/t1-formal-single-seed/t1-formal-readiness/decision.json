@@ -1,10 +1,10 @@
 {
   "format": "minicells.gc002.t1-formal.v1",
   "experiment": "gc002-t1-pm-kv-formal",
-  "status": "FORMAL_TRAINING_COMPLETE",
-  "overall_status": "FORMAL_TRAINING_COMPLETE",
+  "status": "INCOMPLETE",
+  "overall_status": "INCOMPLETE",
   "identity": {
-    "source": "63cb0a48c2f59362e5e41864effa2d310bc3cddf",
+    "source": "506c693907c7f14b77e35f2b4e7bf2b86676e893",
     "protocol": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
     "dataset": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
     "tokenizer": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
@@ -22,20 +22,20 @@
       "grad_scaler": false
     },
     "mode": "GC002_T1_PM_KV_FORMAL_SINGLE_SEED",
-    "run_id": "gc002-t1-formal-63cb0a48c2f5-s173020021"
+    "run_id": "gc002-t1-formal-506c693907c7-s173020021"
   },
   "t1_02_training_state_consistency": "PASS",
-  "t1_03_flops_accounting": "PASS",
-  "t1_04_engineering_validation": "PASS",
-  "t1_05_formal_single_seed": "COMPLETE",
-  "engineering_status": "ENGINEERING_VALIDATED",
-  "formal_training_status": "FORMAL_TRAINING_COMPLETE",
-  "formal_training_complete": true,
+  "t1_03_flops_accounting": "FAIL",
+  "t1_04_engineering_validation": "NOT_STARTED",
+  "t1_05_formal_single_seed": "BLOCKED",
+  "engineering_status": "NOT_VALIDATED",
+  "formal_training_status": "BLOCKED",
+  "formal_training_complete": false,
   "model_parameters": 967808,
   "training_token_budget": 250000,
   "seed_count": 1,
-  "formal_compute_matching_status": "READY",
-  "formal_compute_matching_ready": true,
+  "formal_compute_matching_status": "NOT_READY",
+  "formal_compute_matching_ready": false,
   "independent_test_accessed": false,
   "gc001_results_modified": false,
   "formal_hypotheses": {
@@ -58,9 +58,13 @@
     "autocast": false,
     "grad_scaler": false
   },
-  "error": null,
+  "error": {
+    "stage": "T1_03_FLOPS_ACCOUNTING",
+    "type": "NameError",
+    "message": "name 'values' is not defined"
+  },
   "source_branch": "codex/gc002-t1-formal-readiness",
-  "run_id": "gc002-t1-formal-63cb0a48c2f5-s173020021",
+  "run_id": "gc002-t1-formal-506c693907c7-s173020021",
   "protocol": {
     "format": "minicells.gc002.t1-formal-protocol.v1",
     "status": "FROZEN_T1_SINGLE_SEED_CONDITIONAL_ON_ENGINEERING_GATES",
@@ -252,7 +256,7 @@
     "status": "NO_PRIOR_FORMAL_CHECKPOINT",
     "max_versions": 3,
     "checkpoint_identity": {
-      "source": "63cb0a48c2f59362e5e41864effa2d310bc3cddf",
+      "source": "506c693907c7f14b77e35f2b4e7bf2b86676e893",
       "protocol": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
       "dataset": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
       "tokenizer": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
@@ -272,33 +276,6 @@
       "mode": "GC002_T1_PM_KV_FORMAL_SINGLE_SEED"
     }
   },
-  "t1_03_compute_scope": "T1-PM-KV target-runtime arithmetic ledger; does not freeze GC002 cross-model Track C budget",
-  "smoke_profile": {
-    "status": "MEASURED_ON_TARGET_GPU",
-    "gpu": "Tesla T4",
-    "precision": "fp32",
-    "warmup_updates_excluded": 5,
-    "measured_updates": 45,
-    "median_update_seconds": 0.5773298219999106,
-    "p95_update_seconds": 0.9028750810000474,
-    "median_tokens_per_second": 443.42071073549994,
-    "overall_smoke_tokens_per_second": 422.00217016646627,
-    "peak_cuda_allocated_bytes": 69497344,
-    "peak_cuda_reserved_bytes": 96468992,
-    "gpu_utilization": "NOT_MEASURED_NO_NVML_DEPENDENCY",
-    "scope": "50-update full-sequence FP32 smoke; no CPU performance benchmark"
-  },
-  "latest_formal_update": {
-    "update": 977,
-    "tokens": 250000,
-    "loss": 5.2752556800842285,
-    "tokens_per_second": 395.0563189955309
-  },
-  "formal_progress": {
-    "committed_tokens": 250000,
-    "optimizer_updates": 977,
-    "checkpoint_sha256": "78d5adb63a435e072fc735f640e789e69e0617a8711406b6e9fec10d19ab4415"
-  },
-  "GC001_results_modified": false,
-  "execution_seconds": 781.1340522940001
+  "failed_stage": "T1_03_FLOPS_ACCOUNTING",
+  "execution_seconds": 146.71978114699996
 }

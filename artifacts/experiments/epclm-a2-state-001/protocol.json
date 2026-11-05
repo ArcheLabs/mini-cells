@@ -1,0 +1,116 @@
+{
+  "ablations": [
+    "persistent",
+    "read_disabled",
+    "write_disabled",
+    "reset_every_chunk",
+    "B3_attention_read_disabled",
+    "B3_ffn_read_disabled"
+  ],
+  "arms": [
+    "B1",
+    "B2",
+    "B3"
+  ],
+  "baseline_branch": "kaggle/epclm-x4c-001-bc1288d34748-b8cc5876",
+  "baseline_protocol_sha256": "0958e1282974b06d95d09d732799cc0c7c0932d56a9177d9b51fc9e11b580496",
+  "baseline_result_commit": "029f10682e506e18c2264f90c0209c2d2c238085",
+  "baseline_source_commit": "bc1288d34748038455b2e9b441095821da6d5bc3",
+  "budget": {
+    "execution_seconds": 5400,
+    "hard_limit_seconds": 7200,
+    "publication_seconds": 600,
+    "safety_seconds": 1200
+  },
+  "data": {
+    "dataset_manifest_sha256": "dfc7eeee33aaab5693a43bf72c88a991ee572b84cc93a5793e6901bf2c9cb6dc",
+    "manifest_hash_convention": "epclm001.common.sha canonical JSON; identical to historical run",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "train_sha256": "3c8edf7a559e2e677be15ecc25eb5da90c19096bad82ab4e7a0c28b44b426c93",
+    "validation_sha256": "4a8c15e6a53657488c78209e37fdd98e67e4e159875946cce1fc8663221f8d8f"
+  },
+  "evaluation": {
+    "atol": 2e-05,
+    "batch8_decode": true,
+    "dtype": "float32",
+    "generation_prompts": [
+      "Once upon a time",
+      "A little girl found",
+      "The dog wanted",
+      "One sunny day"
+    ],
+    "generation_seed": 713,
+    "generation_tokens": 64,
+    "inference_prefill": [
+      32,
+      64,
+      128
+    ],
+    "inference_repetitions": 10,
+    "inference_warmup": 3,
+    "rtol": 0.0002,
+    "sampling_temperature": 0.8,
+    "sampling_top_k": 40,
+    "sampling_top_p": 0.95
+  },
+  "experiment": "EPCLM-A2-STATE-001",
+  "format": "minicells.epclm-a2-state-001.protocol.v1",
+  "independent_test_accessed": false,
+  "publication": {
+    "checkpoints": "publish final per-arm checkpoints in result branch as explicitly requested by SPEC step 8; no optimizer resume state",
+    "decision": "finalize before SHA manifest; never mutate after publication",
+    "receipt": "append independent receipt; verify artifact and receipt commits separately"
+  },
+  "scientific_confirmation": false,
+  "scope": "1M single-seed within independent 125-token samples; no beyond-128 memory claim",
+  "seed": 91001,
+  "state": {
+    "B1_read_heads": "existing 4 Token Attention heads, no added multihead module; explicitly confirmed by user",
+    "B2_read_heads": 1,
+    "chunk": 32,
+    "gate": "one shared sigmoid scalar: memory value gain and FFN residual context",
+    "initialization": "learnable slot embeddings, independent CPU RNG fork",
+    "no_routing": true,
+    "partial_chunk": "finish independent sample: flush final 29 after predictions",
+    "shape": [
+      16,
+      128
+    ],
+    "state_projection": "one shared 128->188 bridge; Stage Q/K/V and out weights reused",
+    "state_scores": "unrotated content Q/K; Token Q/K keep original RoPE",
+    "update": "shared GRUCell equations in FP32"
+  },
+  "state_seed": 9100101,
+  "training": {
+    "batch": 8,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "clip": 1.0,
+    "detach_policy": "independent 125-token random stream sample resets Session each optimizer update; no detach at internal 32-token write boundaries",
+    "dev_smoke_milestone": 100000,
+    "initial_scale": 65536,
+    "lr": 0.0003,
+    "maximum_consecutive_overflows": 5,
+    "precision": "float16_autocast_with_fp32_parameters_and_GradScaler",
+    "profiles": {
+      "dev": {
+        "tokens": 1000000,
+        "warmup": 100
+      },
+      "development": {
+        "tokens": 10000000,
+        "warmup": 1000
+      },
+      "smoke": {
+        "tokens": 100000,
+        "warmup": 20
+      }
+    },
+    "resume_policy": "no optimizer checkpoint recovery; failed model restarts fresh; final weights saved once",
+    "sequence_length": 125,
+    "tbptt_chunks": 4,
+    "weight_decay": 0.1
+  }
+}

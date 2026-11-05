@@ -126,8 +126,83 @@
       "directory": "research/projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall",
       "protocol": "research/governance/validations/epclm-002-a0-persistent-state-recall/protocol.json",
       "artifacts": "artifacts/experiments/epclm-002-a0-persistent-state-recall",
+      "full_protocol_label": "A0-v0.1-full",
+      "screening_plan": "research/projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/A0-v0.2-screening.md",
       "scientific_decision": false,
-      "note": "Development pilot only: Direct Address 128/128; learned-cells accuracy 0/64 (100-step) and 0/32 (500-step). The registered formal matrix has not run; H2 remains INCONCLUSIVE and the v1 full-scan candidate cannot satisfy H3. These pilot results are not a scientific decision."
+      "note": "Historical development pilot remains as recorded. A0-v0.2 screening implementation is prepared but has not been run. The registered full matrix remains frozen and unrun; H2 remains INCONCLUSIVE and the v1 full-scan candidate cannot satisfy H3. No scientific decision is made."
+    },
+    {
+      "id": "EPCLM-CORE-001",
+      "name": "event-driven-persistent-cellular-computing",
+      "status": "development_implementation",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/protocol.json",
+      "scientific_decision": false,
+      "note": "Development only. GPU pilot and H1-H5 NOT EVALUATED; independent confirmation sealed."
+    },
+    {
+      "id": "EPCLM-CORE-001-C1-DIAGNOSTIC",
+      "name": "frozen-c1-mechanism-diagnostic",
+      "status": "development_observed",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/diagnostic-protocol.json",
+      "scientific_decision": false,
+      "note": "Frozen diagnostic COMPLETE; D0 exact and unchanged weights; model recovered from private version 142. State and communication dependence observed. No formal confirmation; H1-H5 NOT_EVALUATED.",
+      "result_branch": "kaggle/epclm-core-001-c1-diagnostic-7ee5cd46e10c"
+    },
+    {
+      "id": "EPCLM-CORE-001-CP-001",
+      "name": "communication-propagation",
+      "status": "development_implementation_ready_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/communication-propagation-protocol.json",
+      "scientific_decision": false,
+      "note": "Frozen C1; global one-event and local single-round pulses; SHAM and ring-cone validation; 16 stories, <=48 probes, <=240 pulse branches. Recovery <=600s, diagnosis <=900s. No training/confirmation; H1-H5 NOT_EVALUATED."
+    },
+    {
+      "id": "EPCLM-GC-001",
+      "name": "generative-core-and-development-baselines",
+      "status": "development_observed",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/generative-core-protocol.json",
+      "audit": "research/projects/cellular-language-models/experiments/epclm-core-001/generative-core/generative-core-audit.md",
+      "scientific_decision": false,
+      "note": "Original GC COMPLETE; immutable C1/F0 references and center-only historical baseline. Independent Test NOT_AVAILABLE; H1-H5 NOT_EVALUATED. Repair is a separate study.",
+      "result_commit": "49c6fef619d51cac9ce5079d698e2876ff2d144b"
+    },
+    {
+      "id": "EPCLM-GC-001-BASELINE-REPAIR",
+      "name": "broadcast-independent-flat-matched-controls",
+      "status": "development_implementation_ready_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001/gc001-baseline-repair",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/gc001-baseline-repair/protocol.json",
+      "scientific_decision": false,
+      "note": "P1 fresh 250K C1-BROADCAST/IC-ALL-SELF/F0-PM-BROADCAST; P2 existing Native T1; P3 diagnostics and pending blind review. Original GC49c6fef immutable. GPU unrun; H1-H5 NOT_EVALUATED."
+    },
+    {
+      "id": "EPCLM-GC002-FAIR-ARCHITECTURE",
+      "name": "direction-c-fair-architecture-comparison",
+      "status": "protocol_draft_engineering_preparation_no_training_authorized",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/protocol.json",
+      "scientific_decision": false,
+      "authorized_phases": [
+        0,
+        1
+      ],
+      "authorized_training_tokens": 0,
+      "note": "GC001 immutable; separate parameter/token/FLOPs/inference-memory tracks. Native GQA KV and parameter-matched candidate preparation; raw asset audit, GPU/full FLOPs, seed/budget freeze pending. H1-H5 NOT_EVALUATED; Human Review PENDING."
+    },
+    {
+      "id": "EPCLM-GC002-T1-PILOT",
+      "name": "approved-t1-pm-kv-minimal-gpu-pilot",
+      "status": "user_authorized_pilot_implementation",
+      "directory": "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture",
+      "protocol": "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/pilot-protocol.json",
+      "authorized_training_tokens": 12800,
+      "authorized_updates": 50,
+      "scientific_decision": false,
+      "note": "User explicitly approved this minimal Pilot only. Full GC002 and larger budgets remain unauthorized. H1-H5 NOT_EVALUATED; human review PENDING."
     }
   ],
   "schema_version": 2

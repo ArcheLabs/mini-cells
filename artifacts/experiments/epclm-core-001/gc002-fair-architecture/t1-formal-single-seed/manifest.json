@@ -1,8 +1,8 @@
 {
   "format": "minicells.gc002.t1-formal-run-manifest.v1",
-  "run_id": "gc002-t1-formal-63cb0a48c2f5-s173020021",
+  "run_id": "gc002-t1-formal-506c693907c7-s173020021",
   "identity": {
-    "source": "63cb0a48c2f59362e5e41864effa2d310bc3cddf",
+    "source": "506c693907c7f14b77e35f2b4e7bf2b86676e893",
     "protocol": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
     "dataset": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
     "tokenizer": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
@@ -20,9 +20,9 @@
       "grad_scaler": false
     },
     "mode": "GC002_T1_PM_KV_FORMAL_SINGLE_SEED",
-    "run_id": "gc002-t1-formal-63cb0a48c2f5-s173020021"
+    "run_id": "gc002-t1-formal-506c693907c7-s173020021"
   },
-  "status": "FORMAL_TRAINING_COMPLETE",
+  "status": "INCOMPLETE",
   "source_branch": "codex/gc002-t1-formal-readiness",
   "protocol": {
     "format": "minicells.gc002.t1-formal-protocol.v1",
@@ -166,8 +166,8 @@
   "formal_seed_count": 1,
   "stages": {
     "t1_02_training_state_consistency": "PASS",
-    "t1_03_flops_accounting": "PASS",
-    "t1_04_engineering_validation": "PASS",
-    "t1_05_formal_single_seed": "COMPLETE"
+    "t1_03_flops_accounting": "FAIL",
+    "t1_04_engineering_validation": "NOT_STARTED",
+    "t1_05_formal_single_seed": "BLOCKED"
   }
 }

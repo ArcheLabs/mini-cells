@@ -5,7 +5,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Decision
 
-- Status: `FORMAL_TRAINING_COMPLETE`
+- Status: `INCOMPLETE`
 - Diagnosis: `not provided`
 
 ## Key metrics
@@ -14,7 +14,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Provenance
 
-- Source commit: `63cb0a48c2f59362e5e41864effa2d310bc3cddf`
+- Source commit: `506c693907c7f14b77e35f2b4e7bf2b86676e893`
 - Source branch: `codex/gc002-t1-formal-readiness`
 - Kaggle script version ID: `not recorded`
 - Source results directory: `results/epclm-gc002-t1-formal/publish`
