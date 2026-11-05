@@ -203,6 +203,28 @@
       "authorized_updates": 50,
       "scientific_decision": false,
       "note": "User explicitly approved this minimal Pilot only. Full GC002 and larger budgets remain unauthorized. H1-H5 NOT_EVALUATED; human review PENDING."
+    },
+    {
+      "id": "clm-workspace-depth-kv-001",
+      "name": "Depth-indexed Workspace KV",
+      "status": "implementation_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/clm-workspace-depth-kv-001",
+      "entry": "execute.py",
+      "seeds": [
+        18001,
+        18002,
+        18003
+      ],
+      "targets_per_model": 2000000,
+      "arms": [
+        "C2",
+        "C-DKV",
+        "T0-P",
+        "T0-F"
+      ],
+      "baseline_source": "cf777887532a021826afb05f063addc651af5570",
+      "scientific_decision": false,
+      "note": "Same-parameter C2 vs C-DKV; historical validation remains development data. New seeds are not independent confirmation data. No local real training."
     }
   ],
   "schema_version": 2
