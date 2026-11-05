@@ -40,3 +40,5 @@ storage. The shared Kaggle helpers live in [`shared/kaggle/`](../../shared/kaggl
 - [M3C-001-T4-Reference](../projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-001-T4-Reference/notebook.ipynb)：当前 M3C 执行入口，纯 PyTorch、T4、FP32、SISO → MIMO，0 正式训练 Token。
 
 - [M3C-002 Bounded Workspace](../projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-002/notebook.ipynb)：T4、SISO Reference，工程门禁与GPU推理成本；MQAR/PPL NOT_EVALUATED，0训练Token。
+
+- [M3C-002B-CAL-001 R线开发校准](../projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-002B-CAL-001/notebook.ipynb)：T4 FP32，Base/W16/W64各32768查询Targets；新开发Seed27101，当前真实Script Version ID首更新前核验，不启动正式训练。

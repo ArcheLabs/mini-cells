@@ -28,6 +28,13 @@ class ExperimentSpec:
 
 
 EXPERIMENTS: dict[str, ExperimentSpec] = {
+    "m3c-002b-cal-001": ExperimentSpec(
+        source_dir="results/m3c-002b-cal-001/publish",
+        artifact_dir="artifacts/experiments/m3c-002b-cal-001",
+        files=("decision.json", "RESEARCH-REPORT.zh-CN.md"),
+        branch="kaggle/m3c-002b-cal-001",
+        expected_format="minicells.m3c-002b-cal-001.v1",
+    ),
     "m3c-002-workspace": ExperimentSpec(
         source_dir="results/m3c-002-workspace/publish",
         artifact_dir="artifacts/experiments/m3c-002-workspace",
