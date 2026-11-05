@@ -1,0 +1,182 @@
+{
+  "T0-P": {
+    "config": {
+      "dim": 256,
+      "heads": 4,
+      "ffn": 512,
+      "encoder_ffn": 1768,
+      "layers": 3,
+      "vocab": 2048,
+      "cells": 8,
+      "state_dim": 256,
+      "window": 256,
+      "chunk": 64,
+      "steps": 2,
+      "top_k": 2,
+      "norm": "LayerNorm"
+    },
+    "parameters": 5912064,
+    "flops": {
+      "total": 11554816,
+      "parts": {
+        "head": 1048576,
+        "attention": 2359296,
+        "ffn": 8146944,
+        "router": 0,
+        "controller": 0
+      },
+      "convention": "MAC=2, full-window forward matmul reference, includes actually executed controller update twice; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs"
+    },
+    "relative_matching_error": 0.00017452786154659172,
+    "matched": true,
+    "matching_convention": "parameters"
+  },
+  "T0-F": {
+    "config": {
+      "dim": 256,
+      "heads": 4,
+      "ffn": 512,
+      "encoder_ffn": 1488,
+      "layers": 3,
+      "vocab": 2048,
+      "cells": 8,
+      "state_dim": 256,
+      "window": 256,
+      "chunk": 64,
+      "steps": 2,
+      "top_k": 2,
+      "norm": "LayerNorm"
+    },
+    "parameters": 5266944,
+    "flops": {
+      "total": 10264576,
+      "parts": {
+        "head": 1048576,
+        "attention": 2359296,
+        "ffn": 6856704,
+        "router": 0,
+        "controller": 0
+      },
+      "convention": "MAC=2, full-window forward matmul reference, includes actually executed controller update twice; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs"
+    },
+    "relative_matching_error": 0.0,
+    "matched": true,
+    "matching_convention": "flops"
+  },
+  "C0": {
+    "config": {
+      "dim": 256,
+      "heads": 4,
+      "ffn": 512,
+      "encoder_ffn": 512,
+      "layers": 3,
+      "vocab": 2048,
+      "cells": 8,
+      "state_dim": 256,
+      "window": 256,
+      "chunk": 64,
+      "steps": 2,
+      "top_k": 2,
+      "norm": "LayerNorm"
+    },
+    "parameters": 3542016,
+    "flops": {
+      "total": 7077888,
+      "parts": {
+        "head": 1048576,
+        "attention": 2097152,
+        "ffn": 3932160,
+        "router": 0,
+        "controller": 0
+      },
+      "convention": "MAC=2, full-window forward matmul reference, includes actually executed controller update twice; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs"
+    }
+  },
+  "C1": {
+    "config": {
+      "dim": 256,
+      "heads": 4,
+      "ffn": 512,
+      "encoder_ffn": 512,
+      "layers": 3,
+      "vocab": 2048,
+      "cells": 8,
+      "state_dim": 256,
+      "window": 256,
+      "chunk": 64,
+      "steps": 2,
+      "top_k": 2,
+      "norm": "LayerNorm"
+    },
+    "parameters": 5116936,
+    "flops": {
+      "total": 7086080,
+      "parts": {
+        "head": 1048576,
+        "attention": 2097152,
+        "ffn": 3932160,
+        "router": 8192,
+        "controller": 0
+      },
+      "convention": "MAC=2, full-window forward matmul reference, includes actually executed controller update twice; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs"
+    }
+  },
+  "C2": {
+    "config": {
+      "dim": 256,
+      "heads": 4,
+      "ffn": 512,
+      "encoder_ffn": 512,
+      "layers": 3,
+      "vocab": 2048,
+      "cells": 8,
+      "state_dim": 256,
+      "window": 256,
+      "chunk": 64,
+      "steps": 2,
+      "top_k": 2,
+      "norm": "LayerNorm"
+    },
+    "parameters": 5913096,
+    "flops": {
+      "total": 10264576,
+      "parts": {
+        "head": 1048576,
+        "attention": 2097152,
+        "ffn": 3932160,
+        "router": 16384,
+        "controller": 3170304
+      },
+      "convention": "MAC=2, full-window forward matmul reference, includes actually executed controller update twice; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs"
+    }
+  },
+  "C3": {
+    "config": {
+      "dim": 256,
+      "heads": 4,
+      "ffn": 512,
+      "encoder_ffn": 512,
+      "layers": 3,
+      "vocab": 2048,
+      "cells": 8,
+      "state_dim": 256,
+      "window": 256,
+      "chunk": 64,
+      "steps": 2,
+      "top_k": 2,
+      "norm": "LayerNorm"
+    },
+    "parameters": 5913096,
+    "flops": {
+      "total": 9740288,
+      "parts": {
+        "head": 1048576,
+        "attention": 1572864,
+        "ffn": 3932160,
+        "router": 16384,
+        "controller": 3170304
+      },
+      "convention": "MAC=2, full-window forward matmul reference, includes actually executed controller update twice; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs"
+    }
+  }
+}

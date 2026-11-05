@@ -1,0 +1,83 @@
+{
+  "NEIGHBORS_REPLACED_BY_SELF": {
+    "nll": 5.922161559794661,
+    "ppl": 373.21757470837406,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 8.276563554999939,
+    "seconds_per_token": 0.0024914399623720464,
+    "state_norm_mean": 188.2220514783796,
+    "state_norm_max": 483.09356689453125,
+    "event_state_delta_mean": 11.133982788432728,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "NEIGHBORS_REPLACED_BY_SELF",
+    "K": 4,
+    "comparison": {
+      "delta_nll": 0.10753516749238336,
+      "paired_document_mean_delta_nll": 0.10791720436330832,
+      "document_bootstrap_95": [
+        0.08102700641428763,
+        0.1364590669514735
+      ],
+      "documents": 16,
+      "tokens": 3322,
+      "positive_delta_document_fraction": 1.0,
+      "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+    }
+  },
+  "CROSS_CELL_REMOVED": {
+    "nll": 5.931120723073271,
+    "ppl": 376.57631518460676,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 7.643458954999915,
+    "seconds_per_token": 0.002300860612582756,
+    "state_norm_mean": 187.28278307108044,
+    "state_norm_max": 477.2838439941406,
+    "event_state_delta_mean": 11.132573132626915,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "CROSS_CELL_REMOVED",
+    "K": 4,
+    "comparison": {
+      "delta_nll": 0.11649433077099379,
+      "paired_document_mean_delta_nll": 0.1167852754249607,
+      "document_bootstrap_95": [
+        0.08804892225781706,
+        0.1466976253088427
+      ],
+      "documents": 16,
+      "tokens": 3322,
+      "positive_delta_document_fraction": 1.0,
+      "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+    }
+  },
+  "single_event_summary": {
+    "events": 48,
+    "mean": -0.0002143035332361857,
+    "positive_fraction": 0.4583333333333333
+  },
+  "cell_sensitivity_summary": {
+    "0": {
+      "events": 48,
+      "mean": 0.05997909605503082,
+      "positive_fraction": 0.4791666666666667
+    },
+    "1": {
+      "events": 48,
+      "mean": 0.001288016637166341,
+      "positive_fraction": 0.6041666666666666
+    },
+    "4": {
+      "events": 48,
+      "mean": 0.0005722691615422567,
+      "positive_fraction": 0.5416666666666666
+    },
+    "8": {
+      "events": 48,
+      "mean": 0.0033611406882603965,
+      "positive_fraction": 0.6458333333333334
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 
 
-BLOCKED_MODEL_ASSET_UNAVAILABLE
+INCOMPLETE
 
 
 
@@ -32,4 +32,4 @@ Engineering checks and numerical observations are separate from hypotheses. One 
 
 
 
-Stop reason: known 6ac7cc1 Batch A training must be recovered before continuing; refusing fresh retraining
+Stop reason: diagnostic/recovery budget exhausted

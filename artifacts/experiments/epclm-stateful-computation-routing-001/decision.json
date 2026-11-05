@@ -1,0 +1,69 @@
+{
+  "dataset_manifest_sha256": "41b6408714d77f1690fc5545db16ba62cd769e7c854afd101c83f18d72d18e23",
+  "environment": {
+    "cuda": "13.0",
+    "gpu": "Tesla T4",
+    "gpu_total_memory_bytes": 15636037632,
+    "precision": "FP32",
+    "tf32": false,
+    "torch": "2.11.0+cu130"
+  },
+  "experiment_id": "epclm-stateful-computation-routing-001",
+  "format": "minicells.epclm-stateful-computation-routing-001.v1",
+  "holdout_sha256": null,
+  "hypotheses": {
+    "H1": "NOT_RUN",
+    "H2": "NOT_RUN",
+    "H3": "NOT_RUN"
+  },
+  "independent_test_accessed": false,
+  "models": {
+    "M0": {
+      "argmax_status": "NOT_RUN",
+      "sampled_status": "NOT_RUN",
+      "training_status": "NOT_RUN"
+    },
+    "M1": {
+      "argmax_status": "NOT_RUN",
+      "sampled_status": "NOT_RUN",
+      "training_status": "NOT_RUN"
+    },
+    "M2": {
+      "argmax_status": "NOT_RUN",
+      "sampled_status": "NOT_RUN",
+      "training_status": "NOT_RUN"
+    },
+    "T0": {
+      "argmax_status": "NOT_RUN",
+      "sampled_status": "NOT_RUN",
+      "training_status": "NOT_RUN"
+    }
+  },
+  "not_run": [
+    "independent_holdout",
+    "long_range_tasks",
+    "M1 All-State-Off: redundant with CellCore-State-Off; no direct State Router path"
+  ],
+  "phases": {
+    "audit": "COMPLETE",
+    "data": "COMPLETE",
+    "evaluation": "NOT_RUN_OR_INCOMPLETE",
+    "training": "NOT_RUN_OR_INCOMPLETE",
+    "warmup": "COMPLETE"
+  },
+  "post_run_data_integrity": "PASS",
+  "protocol_sha256": "6dff32dcb1ac87423bd68645998e9a91be0d349a222cff2202ffcd8d3a825105",
+  "publication_status": "SEE_INDEPENDENT_RECEIPT",
+  "run_id": "epclm-stateful-computation-routing-001-d4554db6fa40",
+  "scientific_confirmation": false,
+  "seed": 91001,
+  "source_commit": "c99ece72dc47bba0859854b60dc2e2f4e20d2f15",
+  "status": "TIME_BUDGET_INSUFFICIENT",
+  "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+  "train_sha256": "2d4af7aa137a839a2f82a1ba7dd09a3b7225bb25b2fabacaace3ec0ff4cd6e26",
+  "training_token_budget": 0,
+  "validation_sha256": "d27f49f13d05a121a336a5a295fda4eca00d8ee719565ec74be2c9b4898e7028",
+  "wall_clock_actual_seconds": 254.23560081199992,
+  "wall_clock_budget_seconds": 10800,
+  "wall_clock_scope": "through decision finalization; final publication elapsed recorded independently"
+}

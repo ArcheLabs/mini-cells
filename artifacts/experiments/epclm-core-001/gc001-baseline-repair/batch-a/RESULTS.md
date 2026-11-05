@@ -5,7 +5,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Decision
 
-- Status: `BLOCKED_MODEL_ASSET_UNAVAILABLE`
+- Status: `INCOMPLETE`
 - Diagnosis: `not provided`
 
 ## Key metrics
@@ -14,7 +14,7 @@ Unlisted caches and other regenerable intermediate files are intentionally exclu
 
 ## Provenance
 
-- Source commit: `ea96fff854b86901e19384354352d13f7dcaa5ba`
+- Source commit: `1a3bd871a2d6964682b0707f3033ea6047123e99`
 - Source branch: `codex/epclm-gc001-baseline-repair`
 - Kaggle script version ID: `not recorded`
 - Source results directory: `results/epclm-gc001-repair-a/publish`
