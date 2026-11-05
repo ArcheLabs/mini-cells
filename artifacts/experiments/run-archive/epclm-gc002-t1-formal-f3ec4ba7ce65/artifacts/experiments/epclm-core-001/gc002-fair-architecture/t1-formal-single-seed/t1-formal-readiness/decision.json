@@ -1,0 +1,282 @@
+{
+  "format": "minicells.gc002.t1-formal.v1",
+  "experiment": "gc002-t1-pm-kv-formal",
+  "status": "INCOMPLETE",
+  "overall_status": "INCOMPLETE",
+  "identity": {
+    "source": "f3ec4ba7ce65e2db3c82f3dc3a81a7590906ee63",
+    "protocol": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
+    "dataset": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "train_json": "711e8f2f1255c1fa2b3855a7cb6cef108b593ea0e1e8b68f96273883da83fdfd",
+    "development_json": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164",
+    "seed": 173020021,
+    "environment": {
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "gpu": "Tesla T4",
+      "precision": "fp32",
+      "tf32": false,
+      "autocast": false,
+      "grad_scaler": false
+    },
+    "mode": "GC002_T1_PM_KV_FORMAL_SINGLE_SEED",
+    "run_id": "gc002-t1-formal-f3ec4ba7ce65-s173020021"
+  },
+  "t1_02_training_state_consistency": "PASS",
+  "t1_03_flops_accounting": "PASS",
+  "t1_04_engineering_validation": "FAIL",
+  "t1_05_formal_single_seed": "BLOCKED",
+  "engineering_status": "ENGINEERING_VALIDATION_FAILED",
+  "formal_training_status": "BLOCKED",
+  "formal_training_complete": false,
+  "model_parameters": 967808,
+  "training_token_budget": 250000,
+  "seed_count": 1,
+  "formal_compute_matching_status": "READY",
+  "formal_compute_matching_ready": true,
+  "independent_test_accessed": false,
+  "gc001_results_modified": false,
+  "formal_hypotheses": {
+    "H1": "NOT_EVALUATED",
+    "H2": "NOT_EVALUATED",
+    "H3": "NOT_EVALUATED",
+    "H4": "NOT_EVALUATED",
+    "H5": "NOT_EVALUATED"
+  },
+  "human_review": "PENDING",
+  "scientific_result_status": "NOT_CONFIRMED",
+  "scientific_result_confirmed": false,
+  "environment": {
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "gpu": "Tesla T4",
+    "precision": "fp32",
+    "tf32": false,
+    "autocast": false,
+    "grad_scaler": false
+  },
+  "error": {
+    "stage": "T1_04_ENGINEERING_VALIDATION",
+    "type": "NameError",
+    "message": "name 'bundle' is not defined"
+  },
+  "source_branch": "codex/gc002-t1-formal-readiness",
+  "run_id": "gc002-t1-formal-f3ec4ba7ce65-s173020021",
+  "protocol": {
+    "format": "minicells.gc002.t1-formal-protocol.v1",
+    "status": "FROZEN_T1_SINGLE_SEED_CONDITIONAL_ON_ENGINEERING_GATES",
+    "authorization": "USER_APPROVED_CONDITIONAL_FORMAL_SINGLE_SEED_RUN",
+    "preceding_pilot": {
+      "branch": "kaggle/epclm-gc002-t1-pilot-b99da3c9d929",
+      "commit": "7d6b5311c8d4e4e44a2fe8ce69e96d09c3534034",
+      "source_commit": "b99da3c9d9294ced7ea63ef793cef5fedecb1492",
+      "pilot_report_sha256": "a8ed905d2ac2e4ab5e55e74df1b63257ce9406df8899690150a49f886951b29b",
+      "status": "COMPLETE_50_UPDATES_12800_TOKENS_RESUME_PASS",
+      "training_flops_recorded": 0,
+      "reused_as_formal_checkpoint": false
+    },
+    "model": {
+      "name": "T1-PM-KV",
+      "vocab": 2048,
+      "dim": 128,
+      "layers": 4,
+      "heads": 2,
+      "kv_heads": 2,
+      "ffn": 288,
+      "window": 128,
+      "active_parameters": 967808,
+      "precision": "fp32"
+    },
+    "parameter_matching": {
+      "reference_model": "C1-BROADCAST",
+      "reference_active_parameters": 966784,
+      "relative_difference_percent": 0.10591817820733151,
+      "maximum_difference_percent": 1.0,
+      "tied_embedding_counted_once": true
+    },
+    "seed": 173020021,
+    "seed_selection": "first seed in the approved GC002 freeze candidate; explicitly selected by user",
+    "training": {
+      "prediction_token_budget": 250000,
+      "batch_lanes": 4,
+      "fresh_prediction_targets_per_lane": 64,
+      "context_reuse_per_sequence_max": 64,
+      "max_input_tokens_per_sequence": 128,
+      "optimizer_updates": 977,
+      "full_update_prediction_tokens": 256,
+      "final_update_prediction_tokens": 144,
+      "document_boundary": "never cross; reset position and context at each document",
+      "position_ids": "absolute within each document; overlapping context retained in each sequence",
+      "loss": "sum over valid next-token targets divided by valid target count; padding and masked context excluded",
+      "eos_token_id": 3,
+      "padding_token_id": 0,
+      "precision": "fp32",
+      "tf32": false,
+      "autocast": false,
+      "grad_scaler": false,
+      "cross_optimizer_training_kv_cache": false
+    },
+    "optimizer": {
+      "name": "AdamW",
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "weight_decay": 0.1,
+      "foreach": false,
+      "gradient_clip_norm": 1.0
+    },
+    "scheduler": {
+      "name": "linear_warmup_then_cosine",
+      "warmup_updates": 97,
+      "total_updates": 977,
+      "step_convention": "optimizer update index starts at 1; lr_multiplier(update_index, 977, 97); warmup update 97 reaches base learning rate; cosine reaches zero after update 977",
+      "source": "native_clm_runtime.lr_multiplier",
+      "warmup_selection": "97 updates explicitly selected by user for formal run; Pilot's 5-update schedule remains Pilot-only"
+    },
+    "checkpoint": {
+      "formal_interval_updates": 98,
+      "formal_interval_prediction_tokens": 25088,
+      "smoke_interval_updates": 5,
+      "smoke_resume_at_update": 25,
+      "atomic_state": [
+        "model",
+        "optimizer",
+        "scheduler",
+        "rng",
+        "sampler",
+        "exposure_ledger",
+        "flops_ledger",
+        "metrics"
+      ]
+    },
+    "engineering_validation": {
+      "t1_03_accounting_probe": {
+        "updates": 2,
+        "prediction_targets": 512,
+        "source": "audited training split only",
+        "formal_training_budget_tokens": 0
+      },
+      "t1_04_smoke": {
+        "updates": 50,
+        "prediction_targets": 12800,
+        "resume_check_after_update": 25,
+        "profile_warmup_updates_excluded": 5,
+        "formal_training_budget_tokens": 0
+      }
+    },
+    "data": {
+      "dataset_manifest_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+      "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+      "train_json_sha256": "711e8f2f1255c1fa2b3855a7cb6cef108b593ea0e1e8b68f96273883da83fdfd",
+      "development_json_sha256": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164",
+      "known_kaggle_asset_version": 142,
+      "training_split_only": true,
+      "independent_test": "SEALED_NOT_ACCESSED"
+    },
+    "budget": {
+      "execution_seconds": 5400,
+      "publication_seconds": 600,
+      "safety_seconds": 1200,
+      "hard_limit_seconds": 7200
+    },
+    "evaluation": {
+      "development_splits": [
+        "validation",
+        "development_holdout"
+      ],
+      "generation_max_new_tokens": 128,
+      "generation_seed": 713,
+      "generation_modes": [
+        "greedy",
+        "sampling_temperature_0.8_top_k_40_top_p_0.95"
+      ],
+      "prompts_source": "gc001-baseline-repair/protocol.json frozen 16 prompt list",
+      "independent_test_access": false,
+      "human_review": "PENDING"
+    },
+    "formal_hypotheses": "NOT_EVALUATED",
+    "other_gc002_tracks": "NOT_AUTHORIZED_BY_THIS_T1_ONLY_PROTOCOL",
+    "historical_results_mutable": false
+  },
+  "data_audit": {
+    "status": "PASS_DEVELOPMENT_ONLY",
+    "special_tokens": {
+      "<pad>": 0,
+      "<unk>": 1,
+      "<bos>": 2,
+      "<eos>": 3
+    },
+    "splits": {
+      "train": {
+        "documents": 1827,
+        "prediction_tokens": 416027,
+        "ordered_story_ids_sha256": "2bddc1c5f54f6009ae05ba3a14b3e5dc7a5dda6c216a2b1dfa4c985c6df27178"
+      },
+      "validation": {
+        "documents": 16,
+        "prediction_tokens": 3322,
+        "ordered_story_ids_sha256": "acc903ed43f9e87ee7c27c248d41e705e53206348fa12d2d734c7e6bb7abf4fc"
+      },
+      "development_holdout": {
+        "documents": 205,
+        "prediction_tokens": 47403,
+        "ordered_story_ids_sha256": "2fdd42f8978dc0659b8fc268564c4300df5fc5b36a96aeef8010b70273f83c28"
+      }
+    },
+    "document_content_and_token_duplicates": "NONE",
+    "document_reset": "EVERY_DOCUMENT",
+    "test_status": "NOT_AVAILABLE",
+    "tokenizer_overlap": "historical tokenizer training may overlap development; development only",
+    "independent_confirmation": "SEALED_NOT_ACCESSED",
+    "eos_training": "EOS is a real final next-token target in every training document"
+  },
+  "asset_recovery": {
+    "status": "VERIFIED_KNOWN_VERSION_INPUTS",
+    "version": 142,
+    "files": {
+      "assets/manifest.json": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+      "assets/tokenizer.json": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+      "assets/train.json": "711e8f2f1255c1fa2b3855a7cb6cef108b593ea0e1e8b68f96273883da83fdfd",
+      "assets/development.json": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164"
+    },
+    "historical_weights_requested": false
+  },
+  "artifact_hashes": {
+    "manifest.json": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer.json": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "train.json": "711e8f2f1255c1fa2b3855a7cb6cef108b593ea0e1e8b68f96273883da83fdfd",
+    "development.json": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164"
+  },
+  "checkpoint_recovery_search": {
+    "status": "NO_PRIOR_FORMAL_CHECKPOINT",
+    "max_versions": 3,
+    "checkpoint_identity": {
+      "source": "f3ec4ba7ce65e2db3c82f3dc3a81a7590906ee63",
+      "protocol": "cbaab70a844bf183d42a70097d6164fec0853d3f96768774fb0c4c5be14da976",
+      "dataset": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+      "tokenizer": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+      "train_json": "711e8f2f1255c1fa2b3855a7cb6cef108b593ea0e1e8b68f96273883da83fdfd",
+      "development_json": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164",
+      "seed": 173020021,
+      "environment": {
+        "python": "3.13.15",
+        "torch": "2.11.0+cu128",
+        "cuda": "12.8",
+        "gpu": "Tesla T4",
+        "precision": "fp32",
+        "tf32": false,
+        "autocast": false,
+        "grad_scaler": false
+      },
+      "mode": "GC002_T1_PM_KV_FORMAL_SINGLE_SEED"
+    }
+  },
+  "t1_03_compute_scope": "T1-PM-KV target-runtime arithmetic ledger; does not freeze GC002 cross-model Track C budget",
+  "failed_stage": "T1_04_ENGINEERING_VALIDATION",
+  "execution_seconds": 146.930983266
+}
