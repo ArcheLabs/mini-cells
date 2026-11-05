@@ -1,0 +1,3277 @@
+{
+  "models": {
+    "C-DKV": {
+      "cases": [
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth10": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth11": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth10": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth11": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "workspace_kv_depth1_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 1,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.28766974806785583,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.3091176450252533,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.28766974806785583,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.3091176450252533,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 2.384185791015625e-07,
+              "maximum_relative": 2.384185791015625e-06,
+              "mean_absolute": 4.309286083525876e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 1.862645149230957e-08,
+              "maximum_relative": 1.862645149230957e-07,
+              "mean_absolute": 2.342411375977349e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 2.2351741790771484e-08,
+              "maximum_relative": 2.2351741790771484e-07,
+              "mean_absolute": 4.577255907634026e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 5.364418029785156e-07,
+              "maximum_relative": 4.0978193283081055e-06,
+              "mean_absolute": 8.902868131599462e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 1.9744038581848145e-06,
+              "mean_absolute": 4.456177649103665e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 3.203749656677246e-07,
+              "maximum_relative": 3.203749656677246e-06,
+              "mean_absolute": 4.322176749838036e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 4.76837158203125e-07,
+              "maximum_relative": 4.256144165992737e-06,
+              "mean_absolute": 8.840606113835747e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 4.917383193969727e-07,
+              "maximum_relative": 4.246830940246582e-06,
+              "mean_absolute": 9.23601533031615e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth10": {
+              "maximum_absolute": 4.76837158203125e-07,
+              "maximum_relative": 4.014979822386522e-06,
+              "mean_absolute": 9.226512531768094e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth11": {
+              "maximum_absolute": 5.140900611877441e-07,
+              "maximum_relative": 5.140900611877441e-06,
+              "mean_absolute": 9.051644411783855e-08,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 1.1920928955078125e-07,
+              "maximum_relative": 1.1920928955078125e-06,
+              "mean_absolute": 4.268562037168522e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 2.086162567138672e-06,
+              "mean_absolute": 4.225289984560732e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 3.3527612686157227e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 4.123701558000903e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 4.76837158203125e-07,
+              "maximum_relative": 4.284083843231201e-06,
+              "mean_absolute": 8.648441962577635e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 4.470348358154297e-07,
+              "maximum_relative": 3.5762786865234375e-06,
+              "mean_absolute": 8.678902929659671e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth10": {
+              "maximum_absolute": 4.76837158203125e-07,
+              "maximum_relative": 3.948807716369629e-06,
+              "mean_absolute": 8.581331201185094e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth11": {
+              "maximum_absolute": 4.470348358154297e-07,
+              "maximum_relative": 4.246830940246582e-06,
+              "mean_absolute": 8.441566023975611e-08,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 5.066394805908203e-07,
+              "maximum_relative": 4.023313522338867e-06,
+              "mean_absolute": 8.4889272500277e-08,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "workspace_kv_depth1_causality": {
+              "maximum_absolute": 1.7881393432617188e-07,
+              "maximum_relative": 1.4901161193847656e-06,
+              "mean_absolute": 2.153473666055561e-08,
+              "nonfinite": 0
+            }
+          },
+          "length": 31,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0002849400043487549,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.017390787601470947,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0002849400043487549,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.017390787601470947,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 5.364418029785156e-07,
+              "maximum_relative": 2.8312206268310547e-06,
+              "mean_absolute": 5.3033051727879865e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 1.7695128917694092e-08,
+              "maximum_relative": 1.7695128917694092e-07,
+              "mean_absolute": 1.363552826205705e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 2.2351741790771484e-08,
+              "maximum_relative": 2.2351741790771484e-07,
+              "mean_absolute": 4.261577757347368e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.0132789611816406e-06,
+              "maximum_relative": 4.76837158203125e-06,
+              "mean_absolute": 9.636516296041009e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 4.246830940246582e-07,
+              "maximum_relative": 4.246830940246582e-06,
+              "mean_absolute": 7.609540375597135e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 4.172325134277344e-07,
+              "maximum_relative": 3.5762786865234375e-06,
+              "mean_absolute": 7.638058718839602e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth10": {
+              "maximum_absolute": 4.6193599700927734e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 7.669036961033271e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth11": {
+              "maximum_absolute": 4.6193599700927734e-07,
+              "maximum_relative": 3.725290298461914e-06,
+              "mean_absolute": 7.767673082526017e-08,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 1.1920928955078125e-07,
+              "maximum_relative": 8.940696716308594e-07,
+              "mean_absolute": 3.510649548843503e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 2.551823854446411e-06,
+              "mean_absolute": 4.20881498541803e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 3.3527612686157227e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 4.120096264159656e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 5.811452865600586e-07,
+              "maximum_relative": 4.860356966673862e-06,
+              "mean_absolute": 9.144388002368942e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 5.066394805908203e-07,
+              "maximum_relative": 4.055037152284058e-06,
+              "mean_absolute": 9.114543786381546e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth10": {
+              "maximum_absolute": 5.066394805908203e-07,
+              "maximum_relative": 4.172325134277344e-06,
+              "mean_absolute": 8.797211847877406e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth11": {
+              "maximum_absolute": 4.76837158203125e-07,
+              "maximum_relative": 4.246830940246582e-06,
+              "mean_absolute": 9.04506407550798e-08,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.0132789611816406e-06,
+              "maximum_relative": 5.21540641784668e-06,
+              "mean_absolute": 1.0278407103214704e-07,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "workspace_kv_depth1_causality": {
+              "maximum_absolute": 2.384185791015625e-07,
+              "maximum_relative": 1.4080433174967766e-06,
+              "mean_absolute": 1.4011970250749073e-08,
+              "nonfinite": 0
+            }
+          },
+          "length": 64,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0002849698066711426,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0012510120868682861,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0002849698066711426,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0012510120868682861,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 5.960464477539062e-07,
+              "maximum_relative": 3.444539970587357e-06,
+              "mean_absolute": 6.433604227140677e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 2.60770320892334e-08,
+              "maximum_relative": 2.60770320892334e-07,
+              "mean_absolute": 3.726505770629274e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 2.9802322387695312e-08,
+              "maximum_relative": 2.980232238769531e-07,
+              "mean_absolute": 4.759349359062526e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 6.885687525937101e-06,
+              "mean_absolute": 1.3132761012002447e-07,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.364418029785156e-06,
+              "mean_absolute": 7.444102578801903e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 4.07220795750618e-06,
+              "mean_absolute": 7.147859548695124e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 7.003545761108398e-07,
+              "maximum_relative": 6.370246410369873e-06,
+              "mean_absolute": 1.2385756065214082e-07,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 1.2256244019681617e-07,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth10": {
+              "maximum_absolute": 7.748603820800781e-07,
+              "maximum_relative": 7.152557373046875e-06,
+              "mean_absolute": 1.293779234856629e-07,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth11": {
+              "maximum_absolute": 8.642673492431641e-07,
+              "maximum_relative": 8.64267349243164e-06,
+              "mean_absolute": 1.3201029958054278e-07,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 2.086162567138672e-07,
+              "maximum_relative": 1.1920928955078125e-06,
+              "mean_absolute": 4.609455572790466e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 7.084790354383586e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 6.769513305471264e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.476176738739014e-06,
+              "mean_absolute": 1.1514294584458185e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 5.811452865600586e-06,
+              "mean_absolute": 1.1348760864393626e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth10": {
+              "maximum_absolute": 7.37607479095459e-07,
+              "maximum_relative": 7.37607479095459e-06,
+              "mean_absolute": 1.227281245519407e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth11": {
+              "maximum_absolute": 7.748603820800781e-07,
+              "maximum_relative": 6.556510925292969e-06,
+              "mean_absolute": 1.260069240061057e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 6.7427754402160645e-06,
+              "mean_absolute": 1.310217641048439e-07,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "workspace_kv_depth1_causality": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 2.2351741790771484e-06,
+              "mean_absolute": 4.291290878200016e-08,
+              "nonfinite": 0
+            }
+          },
+          "length": 129,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0002619624137878418,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0012511610984802246,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0002619624137878418,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0012511610984802246,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 4.023313522338867e-06,
+              "mean_absolute": 6.82448018096693e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 2.60770320892334e-08,
+              "maximum_relative": 2.60770320892334e-07,
+              "mean_absolute": 3.663438219447812e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 3.3527612686157227e-08,
+              "maximum_relative": 3.3527612686157227e-07,
+              "mean_absolute": 5.2879807199701645e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 5.401670932769775e-06,
+              "mean_absolute": 1.0474519029912699e-07,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 6.556510925292969e-06,
+              "mean_absolute": 1.0021459218023665e-07,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.6996941566467285e-06,
+              "mean_absolute": 1.0035958553089586e-07,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth10": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 5.513429641723633e-06,
+              "mean_absolute": 1.0545802098249624e-07,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth11": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 6.407499313354492e-06,
+              "mean_absolute": 1.049961966259616e-07,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 1.9371509552001953e-07,
+              "maximum_relative": 1.7136335372924805e-06,
+              "mean_absolute": 4.5299767492679166e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 7.109451871656347e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 6.77507117075038e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 1.1572749514243696e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 7.003545761108398e-07,
+              "maximum_relative": 7.0035457611083984e-06,
+              "mean_absolute": 1.1449577641542419e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth10": {
+              "maximum_absolute": 7.450580596923828e-07,
+              "maximum_relative": 6.332993507385254e-06,
+              "mean_absolute": 1.271089615784149e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth11": {
+              "maximum_absolute": 8.195638656616211e-07,
+              "maximum_relative": 8.195638656616211e-06,
+              "mean_absolute": 1.2993368159186502e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.430511474609375e-06,
+              "maximum_relative": 8.095521479845047e-06,
+              "mean_absolute": 1.3411256816198147e-07,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "workspace_kv_depth1_causality": {
+              "maximum_absolute": 3.2782554626464844e-07,
+              "maximum_relative": 3.0174851417541504e-06,
+              "mean_absolute": 4.314316726095058e-08,
+              "nonfinite": 0
+            }
+          },
+          "length": 255,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0001361072063446045,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0012510716915130615,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0001361072063446045,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0012510716915130615,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 4.246830940246582e-06,
+              "mean_absolute": 6.912543426551565e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 2.60770320892334e-08,
+              "maximum_relative": 2.60770320892334e-07,
+              "mean_absolute": 3.6901586231152805e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 4.470348358154297e-08,
+              "maximum_relative": 4.470348358154297e-07,
+              "mean_absolute": 5.577027284431324e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 8.046627044677734e-07,
+              "maximum_relative": 5.085021257400513e-06,
+              "mean_absolute": 9.01762717830934e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 4.172325134277344e-07,
+              "maximum_relative": 3.5017728805541992e-06,
+              "mean_absolute": 6.822219233981741e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 4.172325134277344e-07,
+              "maximum_relative": 3.951816324843094e-06,
+              "mean_absolute": 6.774281047228214e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth10": {
+              "maximum_absolute": 5.364418029785156e-07,
+              "maximum_relative": 4.76837158203125e-06,
+              "mean_absolute": 8.787210248328847e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv_depth11": {
+              "maximum_absolute": 5.364418029785156e-07,
+              "maximum_relative": 4.76837158203125e-06,
+              "mean_absolute": 8.82044020045214e-08,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 1.9371509552001953e-07,
+              "maximum_relative": 1.7136335372924805e-06,
+              "mean_absolute": 4.598597769245316e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 7.116032207932221e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 6.757217363428936e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 1.1522378429162927e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 7.0035457611083984e-06,
+              "mean_absolute": 1.1447986736357052e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth10": {
+              "maximum_absolute": 7.450580596923828e-07,
+              "maximum_relative": 6.332993507385254e-06,
+              "mean_absolute": 1.285145430074408e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv_depth11": {
+              "maximum_absolute": 8.195638656616211e-07,
+              "maximum_relative": 8.195638656616211e-06,
+              "mean_absolute": 1.3182386737753404e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.430511474609375e-06,
+              "maximum_relative": 8.097849786281586e-06,
+              "mean_absolute": 1.3478094729180157e-07,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "workspace_kv_depth1_causality": {
+              "maximum_absolute": 3.2782554626464844e-07,
+              "maximum_relative": 3.0174851417541504e-06,
+              "mean_absolute": 4.522262386785769e-08,
+              "nonfinite": 0
+            }
+          },
+          "length": 273,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0001361072063446045,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0012510716915130615,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0001361072063446045,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0012510716915130615,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS"
+    },
+    "C2": {
+      "cases": [
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 1,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.28766974806785583,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.18247495591640472,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.28766974806785583,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.18247495591640472,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 2.384185791015625e-07,
+              "maximum_relative": 2.2351741790771484e-06,
+              "mean_absolute": 2.6914936057664818e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 1.862645149230957e-08,
+              "maximum_relative": 1.862645149230957e-07,
+              "mean_absolute": 2.342411375977349e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 2.2351741790771484e-08,
+              "maximum_relative": 2.2351741790771484e-07,
+              "mean_absolute": 2.582354996505387e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 5.960464477539062e-07,
+              "maximum_relative": 4.9173831939697266e-06,
+              "mean_absolute": 8.77851888958503e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 1.9744038581848145e-06,
+              "mean_absolute": 4.456177649103665e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 3.203749656677246e-07,
+              "maximum_relative": 3.203749656677246e-06,
+              "mean_absolute": 4.322176749838036e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 4.76837158203125e-07,
+              "maximum_relative": 4.256144165992737e-06,
+              "mean_absolute": 8.840606113835747e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 4.917383193969727e-07,
+              "maximum_relative": 4.246830940246582e-06,
+              "mean_absolute": 9.23601533031615e-08,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 1.1920928955078125e-07,
+              "maximum_relative": 5.960464477539062e-07,
+              "mean_absolute": 2.308127911021529e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 2.086162567138672e-06,
+              "mean_absolute": 4.225289984560732e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 3.3527612686157227e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 4.123701558000903e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 4.76837158203125e-07,
+              "maximum_relative": 4.284083843231201e-06,
+              "mean_absolute": 8.648441962577635e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 4.470348358154297e-07,
+              "maximum_relative": 3.5762786865234375e-06,
+              "mean_absolute": 8.678902929659671e-08,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 7.748603820800781e-07,
+              "maximum_relative": 4.172325134277344e-06,
+              "mean_absolute": 8.196219170031327e-08,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 31,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0002849400043487549,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0014170706272125244,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0002849400043487549,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0014170706272125244,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 4.172325134277344e-07,
+              "maximum_relative": 2.644956111907959e-06,
+              "mean_absolute": 2.1583201004204966e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 1.7695128917694092e-08,
+              "maximum_relative": 1.7695128917694092e-07,
+              "mean_absolute": 1.363552826205705e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 1.862645149230957e-08,
+              "maximum_relative": 1.862645149230957e-07,
+              "mean_absolute": 1.6278089987054045e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 6.587526058865478e-06,
+              "mean_absolute": 9.077588458694663e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 4.246830940246582e-07,
+              "maximum_relative": 4.246830940246582e-06,
+              "mean_absolute": 7.609540375597135e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 4.172325134277344e-07,
+              "maximum_relative": 3.5762786865234375e-06,
+              "mean_absolute": 7.638058718839602e-08,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 1.1920928955078125e-07,
+              "maximum_relative": 5.960464477539062e-07,
+              "mean_absolute": 1.3962562661617994e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 2.551823854446411e-06,
+              "mean_absolute": 4.20881498541803e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 3.3527612686157227e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 4.120096264159656e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 5.811452865600586e-07,
+              "maximum_relative": 4.860356966673862e-06,
+              "mean_absolute": 9.144388002368942e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 5.066394805908203e-07,
+              "maximum_relative": 4.055037152284058e-06,
+              "mean_absolute": 9.114543786381546e-08,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 5.0943344831466675e-06,
+              "mean_absolute": 1.0014989015871834e-07,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 64,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0002849698066711426,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0014171302318572998,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0002849698066711426,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0014171302318572998,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 4.172325134277344e-07,
+              "maximum_relative": 3.129243850708008e-06,
+              "mean_absolute": 5.249013668162661e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 2.60770320892334e-08,
+              "maximum_relative": 2.60770320892334e-07,
+              "mean_absolute": 3.726505770629274e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 2.60770320892334e-08,
+              "maximum_relative": 2.60770320892334e-07,
+              "mean_absolute": 4.004264475554464e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 8.940696716308594e-07,
+              "maximum_relative": 8.046627044677734e-06,
+              "mean_absolute": 1.2912838087686396e-07,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.364418029785156e-06,
+              "mean_absolute": 7.444102578801903e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 4.07220795750618e-06,
+              "mean_absolute": 7.147859548695124e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 7.003545761108398e-07,
+              "maximum_relative": 6.370246410369873e-06,
+              "mean_absolute": 1.2385756065214082e-07,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 1.2256244019681617e-07,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 1.7881393432617188e-07,
+              "maximum_relative": 1.0337680578231812e-06,
+              "mean_absolute": 3.431523509789258e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 7.084790354383586e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 6.769513305471264e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.476176738739014e-06,
+              "mean_absolute": 1.1514294584458185e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 5.811452865600586e-06,
+              "mean_absolute": 1.1348760864393626e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.0132789611816406e-06,
+              "maximum_relative": 6.407499313354492e-06,
+              "mean_absolute": 1.2622841438769683e-07,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 129,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0002619624137878418,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0014172941446304321,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0002619624137878418,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0014172941446304321,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 4.76837158203125e-06,
+              "mean_absolute": 5.6627975197898195e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 2.60770320892334e-08,
+              "maximum_relative": 2.60770320892334e-07,
+              "mean_absolute": 3.663438219447812e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 4.0978193283081055e-08,
+              "maximum_relative": 4.0978193283081055e-07,
+              "mean_absolute": 5.34711341870775e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 6.146728992462158e-06,
+              "mean_absolute": 1.0388293958385475e-07,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 6.556510925292969e-06,
+              "mean_absolute": 1.0021459218023665e-07,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.6996941566467285e-06,
+              "mean_absolute": 1.0035958553089586e-07,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 2.384185791015625e-07,
+              "maximum_relative": 1.1455267667770386e-06,
+              "mean_absolute": 3.271843596053259e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 7.109451871656347e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 6.77507117075038e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 1.1572749514243696e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 7.003545761108398e-07,
+              "maximum_relative": 7.0035457611083984e-06,
+              "mean_absolute": 1.1449577641542419e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.0132789611816406e-06,
+              "maximum_relative": 8.121132850646973e-06,
+              "mean_absolute": 1.3048189373421337e-07,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 255,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0001361072063446045,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0003133714199066162,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0001361072063446045,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0003133714199066162,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 5.364418029785156e-07,
+              "maximum_relative": 3.6507844924926758e-06,
+              "mean_absolute": 5.350415577254353e-08,
+              "nonfinite": 0
+            },
+            "cell_causality_step0": {
+              "maximum_absolute": 2.60770320892334e-08,
+              "maximum_relative": 2.60770320892334e-07,
+              "mean_absolute": 3.6901586231152805e-09,
+              "nonfinite": 0
+            },
+            "cell_causality_step1": {
+              "maximum_absolute": 3.3527612686157227e-08,
+              "maximum_relative": 3.3527612686157227e-07,
+              "mean_absolute": 4.392506358641413e-09,
+              "nonfinite": 0
+            },
+            "encoder_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "encoder_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 4.926696419715881e-06,
+              "mean_absolute": 8.69498961719728e-08,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_encoder_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv0": {
+              "maximum_absolute": 4.172325134277344e-07,
+              "maximum_relative": 3.5017728805541992e-06,
+              "mean_absolute": 6.822219233981741e-08,
+              "nonfinite": 0
+            },
+            "prefill_workspace_kv1": {
+              "maximum_absolute": 4.172325134277344e-07,
+              "maximum_relative": 3.951816324843094e-06,
+              "mean_absolute": 6.774281047228214e-08,
+              "nonfinite": 0
+            },
+            "router_causality_step0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "router_causality_step1": {
+              "maximum_absolute": 2.384185791015625e-07,
+              "maximum_relative": 1.1920928955078125e-06,
+              "mean_absolute": 3.371464885049136e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 7.116032207932221e-08,
+              "nonfinite": 0
+            },
+            "single_encoder_kv1": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 3.3527612686157227e-06,
+              "mean_absolute": 6.757217363428936e-08,
+              "nonfinite": 0
+            },
+            "single_workspace_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 1.1522378429162927e-07,
+              "nonfinite": 0
+            },
+            "single_workspace_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 7.0035457611083984e-06,
+              "mean_absolute": 1.1447986736357052e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 8.121132850646973e-06,
+              "mean_absolute": 1.314364368454335e-07,
+              "nonfinite": 0
+            },
+            "workspace_kv_causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 273,
+          "route_differences": [
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0001361072063446045,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "cached",
+              "minimum_selection_boundary_gap": 0.0003133714199066162,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0001361072063446045,
+              "non_tie_changed_paths": 0,
+              "step": 0
+            },
+            {
+              "changed_paths": 0,
+              "execution": "single",
+              "minimum_selection_boundary_gap": 0.0003133714199066162,
+              "non_tie_changed_paths": 0,
+              "step": 1
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS"
+    },
+    "T0-F": {
+      "cases": [
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 1,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 1.2057567744250264e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 2.980232238769531e-07,
+              "maximum_relative": 2.4586915969848633e-06,
+              "mean_absolute": 4.460832059294262e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 2.2351741790771484e-06,
+              "mean_absolute": 4.3097386992485553e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 5.029141902923584e-07,
+              "maximum_relative": 5.029141902923584e-06,
+              "mean_absolute": 1.0501079827918147e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 5.811452865600586e-07,
+              "maximum_relative": 4.0978193283081055e-06,
+              "mean_absolute": 1.0332752964359315e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 5.811452865600586e-06,
+              "mean_absolute": 1.1775294694871263e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 6.258487701416016e-07,
+              "maximum_relative": 6.258487701416016e-06,
+              "mean_absolute": 1.1711073000242322e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 2.5331974029541016e-07,
+              "maximum_relative": 2.384185791015625e-06,
+              "mean_absolute": 4.259344521528874e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 2.980232238769531e-07,
+              "maximum_relative": 1.9371509552001953e-06,
+              "mean_absolute": 4.1008821227705994e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 5.811452865600586e-07,
+              "maximum_relative": 5.811452865600586e-06,
+              "mean_absolute": 1.0298980868128638e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 4.76837158203125e-07,
+              "maximum_relative": 4.284083843231201e-06,
+              "mean_absolute": 1.0015015305953057e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 5.364418029785156e-07,
+              "maximum_relative": 4.6193599700927734e-06,
+              "mean_absolute": 1.1159128376903027e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 5.066394805908203e-07,
+              "maximum_relative": 4.954636096954346e-06,
+              "mean_absolute": 1.0980194531384768e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 5.476176738739014e-06,
+              "mean_absolute": 1.0925774773795638e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 31,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 6.705522537231445e-06,
+              "mean_absolute": 1.1437261093760753e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 5.960464477539062e-07,
+              "maximum_relative": 3.6135315895080566e-06,
+              "mean_absolute": 8.99361722872527e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 5.066394805908203e-07,
+              "maximum_relative": 4.023313522338867e-06,
+              "mean_absolute": 9.004656931210775e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 6.258487701416016e-07,
+              "maximum_relative": 4.6193599700927734e-06,
+              "mean_absolute": 9.824854885209788e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 4.6193599700927734e-06,
+              "mean_absolute": 9.811529366743343e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 3.5762786865234375e-07,
+              "maximum_relative": 2.384185791015625e-06,
+              "mean_absolute": 4.290459187927809e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 2.980232238769531e-07,
+              "maximum_relative": 2.16066837310791e-06,
+              "mean_absolute": 4.1361516878168914e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 5.811452865600586e-07,
+              "maximum_relative": 5.066394805908203e-06,
+              "mean_absolute": 1.0059567046027951e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 5.513429641723633e-07,
+              "maximum_relative": 5.513429641723633e-06,
+              "mean_absolute": 1.0011996209868812e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 5.960464477539062e-07,
+              "maximum_relative": 4.991888999938965e-06,
+              "mean_absolute": 1.0969707631147685e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 5.885958671569824e-06,
+              "mean_absolute": 1.1026725132978754e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 6.437560841732193e-06,
+              "mean_absolute": 1.220464582729619e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 64,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.2367963790893555e-06,
+              "maximum_relative": 1.0617077350616455e-05,
+              "mean_absolute": 1.7500032356565498e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 4.76837158203125e-06,
+              "mean_absolute": 7.322086759131707e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 4.395842552185059e-06,
+              "mean_absolute": 7.127172807486204e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 7.450580596923828e-06,
+              "mean_absolute": 1.4897355526954925e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 1.0281801223754883e-06,
+              "maximum_relative": 7.236290912260301e-06,
+              "mean_absolute": 1.4731061526163103e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 1.1324882507324219e-06,
+              "maximum_relative": 8.23289155960083e-06,
+              "mean_absolute": 1.775042903773283e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 1.0132789611816406e-06,
+              "maximum_relative": 8.64267349243164e-06,
+              "mean_absolute": 1.731534666760126e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 5.960464477539062e-07,
+              "maximum_relative": 3.874301910400391e-06,
+              "mean_absolute": 6.951366771090761e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 4.544854164123535e-06,
+              "mean_absolute": 6.753409564907997e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 6.817281246185303e-06,
+              "mean_absolute": 1.4755715938008507e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 6.724148988723755e-06,
+              "mean_absolute": 1.463090484321583e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 1.043081283569336e-06,
+              "maximum_relative": 8.940696716308594e-06,
+              "mean_absolute": 1.715169872795741e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 1.0132789611816406e-06,
+              "maximum_relative": 8.083879947662354e-06,
+              "mean_absolute": 1.709537684746465e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.3113021850585938e-06,
+              "maximum_relative": 1.0505318641662598e-05,
+              "mean_absolute": 1.6955216608494084e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 129,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.3709068298339844e-06,
+              "maximum_relative": 7.279296369233634e-06,
+              "mean_absolute": 1.3239930751751672e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 4.76837158203125e-06,
+              "mean_absolute": 9.396874389722143e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 7.748603820800781e-07,
+              "maximum_relative": 4.7497451305389404e-06,
+              "mean_absolute": 9.232387299107359e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 8.940696716308594e-07,
+              "maximum_relative": 7.450580596923828e-06,
+              "mean_absolute": 1.290394351372015e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.885958671569824e-06,
+              "mean_absolute": 1.2927831960496405e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 4.172325134277344e-06,
+              "mean_absolute": 6.967707122385036e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 4.544854164123535e-06,
+              "mean_absolute": 6.759238146969437e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 7.897615432739258e-06,
+              "mean_absolute": 1.547741277363457e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 1.1324882507324219e-06,
+              "maximum_relative": 7.469207048416138e-06,
+              "mean_absolute": 1.5316484791583207e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 1.2218952178955078e-06,
+              "maximum_relative": 8.64267349243164e-06,
+              "mean_absolute": 1.80373390890054e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 9.462237358093262e-06,
+              "mean_absolute": 1.8059424178318295e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.2516975402832031e-06,
+              "maximum_relative": 1.1138617992401123e-05,
+              "mean_absolute": 1.7750490144408104e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 255,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.2516975402832031e-06,
+              "maximum_relative": 9.08970832824707e-06,
+              "mean_absolute": 1.531715980718218e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 1.0132789611816406e-06,
+              "maximum_relative": 7.394701242446899e-06,
+              "mean_absolute": 1.37668124011725e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 1.1324882507324219e-06,
+              "maximum_relative": 7.76723027229309e-06,
+              "mean_absolute": 1.3749425420428452e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 7.3015689849853516e-06,
+              "mean_absolute": 1.6326002594269085e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 1.043081283569336e-06,
+              "maximum_relative": 8.195638656616211e-06,
+              "mean_absolute": 1.64277338399188e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 4.172325134277344e-06,
+              "mean_absolute": 6.970344657020178e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 4.544854164123535e-06,
+              "mean_absolute": 6.768743787688436e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 8.791685104370117e-06,
+              "mean_absolute": 1.4447226703850902e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 1.1324882507324219e-06,
+              "maximum_relative": 7.962808012962341e-06,
+              "mean_absolute": 1.4311871154859546e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 8.27014446258545e-06,
+              "mean_absolute": 1.703400869246252e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 1.0021030902862549e-05,
+              "mean_absolute": 1.7120044049079297e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.3113021850585938e-06,
+              "maximum_relative": 9.760260581970215e-06,
+              "mean_absolute": 1.717210693641391e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 273,
+          "route_differences": [],
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS"
+    },
+    "T0-P": {
+      "cases": [
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            }
+          },
+          "length": 1,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 7.748603820800781e-07,
+              "maximum_relative": 6.258487701416016e-06,
+              "mean_absolute": 1.2442690433545067e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 2.980232238769531e-07,
+              "maximum_relative": 2.3096799850463867e-06,
+              "mean_absolute": 4.351242921529774e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 2.980232238769531e-07,
+              "maximum_relative": 2.60770320892334e-06,
+              "mean_absolute": 4.2904090946649376e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 5.066394805908203e-07,
+              "maximum_relative": 5.008187144994736e-06,
+              "mean_absolute": 1.0686192553066576e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 5.029141902923584e-06,
+              "mean_absolute": 1.0593524280011479e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 5.960464477539062e-07,
+              "maximum_relative": 5.9604644775390625e-06,
+              "mean_absolute": 1.2099916091301566e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 6.854534149169922e-07,
+              "maximum_relative": 5.774199962615967e-06,
+              "mean_absolute": 1.2222203338296822e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 2.980232238769531e-07,
+              "maximum_relative": 2.2351741790771484e-06,
+              "mean_absolute": 4.1504598868868925e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 2.682209014892578e-07,
+              "maximum_relative": 2.682209014892578e-06,
+              "mean_absolute": 4.072893133866273e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 5.066394805908203e-07,
+              "maximum_relative": 4.76837158203125e-06,
+              "mean_absolute": 1.0870123645645435e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 5.960464477539062e-07,
+              "maximum_relative": 5.066394805908203e-06,
+              "mean_absolute": 1.0754252599554093e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 6.556510925292969e-07,
+              "maximum_relative": 5.4389238357543945e-06,
+              "mean_absolute": 1.2637616464417079e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 7.301568984985352e-07,
+              "maximum_relative": 7.3015689849853516e-06,
+              "mean_absolute": 1.259644903939261e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 6.109476089477539e-06,
+              "mean_absolute": 1.294166196430524e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 31,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 8.083879947662354e-06,
+              "mean_absolute": 1.503872937291817e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 7.301568984985352e-07,
+              "maximum_relative": 5.662441253662109e-06,
+              "mean_absolute": 1.2388835557430866e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 7.748603820800781e-07,
+              "maximum_relative": 6.109476089477539e-06,
+              "mean_absolute": 1.2292241535760695e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 6.705522537231445e-06,
+              "mean_absolute": 1.3592999437150866e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 7.450580596923828e-07,
+              "maximum_relative": 7.450580596923828e-06,
+              "mean_absolute": 1.3746443983109202e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 3.2782554626464844e-07,
+              "maximum_relative": 3.2782554626464844e-06,
+              "mean_absolute": 4.167687706058132e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 2.682209014892578e-07,
+              "maximum_relative": 2.682209014892578e-06,
+              "mean_absolute": 4.0692555103305494e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.811452865600586e-06,
+              "mean_absolute": 1.312639739126098e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 7.003545761108398e-07,
+              "maximum_relative": 7.0035457611083984e-06,
+              "mean_absolute": 1.327984477939026e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 7.748603820800781e-07,
+              "maximum_relative": 6.854534149169922e-06,
+              "mean_absolute": 1.4866424180581816e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 6.593763828277588e-06,
+              "mean_absolute": 1.4961196370677499e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.0132789611816406e-06,
+              "maximum_relative": 7.748603820800781e-06,
+              "mean_absolute": 1.6151625459315255e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 64,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.3113021850585938e-06,
+              "maximum_relative": 9.909272193908691e-06,
+              "mean_absolute": 1.9603790235578344e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 6.258487701416016e-06,
+              "mean_absolute": 7.30437434981468e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 8.344650268554688e-07,
+              "maximum_relative": 5.21540641784668e-06,
+              "mean_absolute": 7.059651352392393e-08,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 7.636845111846924e-06,
+              "mean_absolute": 1.5687477628034685e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 7.37607479095459e-06,
+              "mean_absolute": 1.5723493618224893e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 1.3113021850585938e-06,
+              "maximum_relative": 9.02198280527955e-06,
+              "mean_absolute": 1.87438999432743e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 1.1324882507324219e-06,
+              "maximum_relative": 8.381903171539307e-06,
+              "mean_absolute": 1.896892598551858e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.364418029785156e-06,
+              "mean_absolute": 6.896600979189316e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.21540641784668e-06,
+              "mean_absolute": 6.662000373580668e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 7.748603820800781e-06,
+              "mean_absolute": 1.564820166777281e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 7.3015689849853516e-06,
+              "mean_absolute": 1.5735405156647175e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 1.430511474609375e-06,
+              "maximum_relative": 8.996576070785522e-06,
+              "mean_absolute": 1.8783728705784597e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 8.866190910339355e-06,
+              "mean_absolute": 1.8597586404212052e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.3113021850585938e-06,
+              "maximum_relative": 1.169741153717041e-05,
+              "mean_absolute": 1.9069821632911044e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 129,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 1.125037670135498e-05,
+              "mean_absolute": 1.817568033857242e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 1.1324882507324219e-06,
+              "maximum_relative": 7.152557373046875e-06,
+              "mean_absolute": 1.4840583162367693e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 7.0035457611083984e-06,
+              "mean_absolute": 1.4814403925811348e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 1.2516975402832031e-06,
+              "maximum_relative": 9.462237358093262e-06,
+              "mean_absolute": 1.8009947666541848e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 9.387731552124023e-06,
+              "mean_absolute": 1.788892944887266e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.662441253662109e-06,
+              "mean_absolute": 6.886558878704818e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.21540641784668e-06,
+              "mean_absolute": 6.691774245837223e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 1.430511474609375e-06,
+              "maximum_relative": 9.238719940185547e-06,
+              "mean_absolute": 1.668983173885863e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 1.043081283569336e-06,
+              "maximum_relative": 8.791685104370117e-06,
+              "mean_absolute": 1.6683566173014697e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 1.430511474609375e-06,
+              "maximum_relative": 1.0207295417785645e-05,
+              "mean_absolute": 1.9882003243765212e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 9.313225746154785e-06,
+              "mean_absolute": 1.9871198730925244e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.3113021850585938e-06,
+              "maximum_relative": 1.2740492820739746e-05,
+              "mean_absolute": 2.061865274072261e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 255,
+          "route_differences": [],
+          "status": "PASS"
+        },
+        {
+          "errors": {
+            "causality": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "fp32_reference": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_cached": {
+              "maximum_absolute": 1.3709068298339844e-06,
+              "maximum_relative": 9.462237358093262e-06,
+              "mean_absolute": 1.6448646533717692e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv0": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer0_kv1": {
+              "maximum_absolute": 0.0,
+              "maximum_relative": 0.0,
+              "mean_absolute": 0.0,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv0": {
+              "maximum_absolute": 8.046627044677734e-07,
+              "maximum_relative": 6.472626864706399e-06,
+              "mean_absolute": 1.1894496765307849e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer1_kv1": {
+              "maximum_absolute": 7.748603820800781e-07,
+              "maximum_relative": 5.736947059631348e-06,
+              "mean_absolute": 1.1886862694154843e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv0": {
+              "maximum_absolute": 1.1324882507324219e-06,
+              "maximum_relative": 1.0987203495460562e-05,
+              "mean_absolute": 1.579439583565545e-07,
+              "nonfinite": 0
+            },
+            "prefill_layer2_kv1": {
+              "maximum_absolute": 9.5367431640625e-07,
+              "maximum_relative": 8.940696716308594e-06,
+              "mean_absolute": 1.576081842813437e-07,
+              "nonfinite": 0
+            },
+            "single_layer0_kv0": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.662441253662109e-06,
+              "mean_absolute": 6.881932534952284e-08,
+              "nonfinite": 0
+            },
+            "single_layer0_kv1": {
+              "maximum_absolute": 7.152557373046875e-07,
+              "maximum_relative": 5.21540641784668e-06,
+              "mean_absolute": 6.695670151657396e-08,
+              "nonfinite": 0
+            },
+            "single_layer1_kv0": {
+              "maximum_absolute": 1.430511474609375e-06,
+              "maximum_relative": 9.462237358093262e-06,
+              "mean_absolute": 1.7145546848951199e-07,
+              "nonfinite": 0
+            },
+            "single_layer1_kv1": {
+              "maximum_absolute": 1.0728836059570312e-06,
+              "maximum_relative": 7.189810276031494e-06,
+              "mean_absolute": 1.722784759294882e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv0": {
+              "maximum_absolute": 1.430511474609375e-06,
+              "maximum_relative": 9.909272193908691e-06,
+              "mean_absolute": 2.0281999013604946e-07,
+              "nonfinite": 0
+            },
+            "single_layer2_kv1": {
+              "maximum_absolute": 1.1920928955078125e-06,
+              "maximum_relative": 1.085922122001648e-05,
+              "mean_absolute": 2.03089811634527e-07,
+              "nonfinite": 0
+            },
+            "token_decode": {
+              "maximum_absolute": 1.430511474609375e-06,
+              "maximum_relative": 1.2785947546944954e-05,
+              "mean_absolute": 2.0882649209852389e-07,
+              "nonfinite": 0
+            }
+          },
+          "length": 273,
+          "route_differences": [],
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS"
+    }
+  },
+  "policy": {
+    "bf16_framework_supported": true,
+    "bf16_native_hardware_supported": false,
+    "cuda_version": "13.0",
+    "diagnostic_non_native_bf16": false,
+    "fp16_hardware_supported": true,
+    "gpu_capability": [
+      7,
+      5
+    ],
+    "gpu_name": "Tesla T4",
+    "requested_precision": "fp32",
+    "scaler_enabled": false,
+    "selected_precision": "fp32",
+    "selection_reason": "explicit request; non-native BF16 diagnostic only",
+    "torch_version": "2.11.0+cu130"
+  },
+  "status": "PASS",
+  "tolerances": {
+    "bf16": {
+      "atol": 0.15,
+      "mean": 0.02,
+      "rtol": 0.4
+    },
+    "fp16": {
+      "atol": 0.05,
+      "mean": 0.005,
+      "rtol": 0.2
+    },
+    "fp32": {
+      "atol": 2e-05,
+      "mean": 2e-06,
+      "rtol": 0.0002
+    },
+    "relative_denominator_floor": 0.1,
+    "route_tie_gap": 0.002
+  }
+}

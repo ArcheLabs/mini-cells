@@ -1,0 +1,252 @@
+{
+  "cache": "/kaggle/working/stateful-routing-data",
+  "configs": {
+    "C-DKV": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 1572864,
+          "cell": 3145728,
+          "controller": 1585152,
+          "encoder_ffn": 786432,
+          "head": 1048576,
+          "kv_projection": 786432,
+          "router": 16384
+        },
+        "total": 8941568
+      },
+      "parameters": 5913096
+    },
+    "C2": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 512,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2097152,
+          "controller": 1585152,
+          "ffn": 3932160,
+          "head": 1048576,
+          "router": 16384
+        },
+        "total": 8679424
+      },
+      "parameters": 5913096
+    },
+    "T0-F": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 1144,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2359296,
+          "controller": 0,
+          "ffn": 5271552,
+          "head": 1048576,
+          "router": 0
+        },
+        "total": 8679424
+      },
+      "matched": true,
+      "matching_convention": "flops",
+      "parameters": 4474368,
+      "relative_matching_error": 0.0
+    },
+    "T0-P": {
+      "config": {
+        "cells": 8,
+        "chunk": 64,
+        "dim": 256,
+        "encoder_ffn": 1768,
+        "ffn": 512,
+        "heads": 4,
+        "layers": 3,
+        "norm": "LayerNorm",
+        "state_dim": 256,
+        "steps": 2,
+        "top_k": 2,
+        "vocab": 2048,
+        "window": 256
+      },
+      "flops": {
+        "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+        "parts": {
+          "attention": 2359296,
+          "controller": 0,
+          "ffn": 8146944,
+          "head": 1048576,
+          "router": 0
+        },
+        "total": 11554816
+      },
+      "matched": true,
+      "matching_convention": "parameters",
+      "parameters": 5912064,
+      "relative_matching_error": 0.00017452786154659172
+    }
+  },
+  "data": {
+    "dataset": "roneneldan/TinyStories",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "files": {
+      "document_index.jsonl": "2f2fbae06552dafb54cdb4dce15ac591578b174d790f4cdf33622a115bef87c2",
+      "train.json": "2d4af7aa137a839a2f82a1ba7dd09a3b7225bb25b2fabacaace3ec0ff4cd6e26",
+      "validation.json": "d27f49f13d05a121a336a5a295fda4eca00d8ee719565ec74be2c9b4898e7028"
+    },
+    "holdout": "NOT_ACCESSED",
+    "max_document_targets": 4096,
+    "selection": "first complete nonempty documents <= max targets; filtered-length development subset; not historical A2 stream",
+    "tokenizer_path": "research/projects/cellular-computing/experiments/007-minicells-30m/artifacts/tokenizer.json",
+    "tokenizer_sha256": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2"
+  },
+  "output": "/kaggle/working/clm-depth-kv-2efe4682b078/clm-depth-kv-001-2efe4682b078",
+  "plans": {
+    "smoke": "312dfc67fe1e284cd854424fde78ad3bb4674fd4121b8b5ccba7586dda8b733f",
+    "train": "95e11558d74d4321be9b1efd16b918eb01e23c6cf4694a4393348bf9e85dbcb7"
+  },
+  "protocol": {
+    "checkpoint_interval_targets": 250000,
+    "counterfactual": {
+      "fixed_pairs": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "oracle": "bounded optional offline path diagnostic; NOT_RUN in initial smoke",
+      "random_seed": 4301,
+      "shuffle": "permute normal route assignments and their selected weights across tokens within each evaluated chunk, separately per step; update actual controller path"
+    },
+    "evaluation": {
+      "bootstrap_repetitions": 2000,
+      "bootstrap_seed": 91002,
+      "documents": 32,
+      "threshold": 0.01
+    },
+    "experiment": {
+      "arms": [
+        "C2",
+        "C-DKV",
+        "T0-P",
+        "T0-F"
+      ],
+      "benchmark_samples": 5,
+      "benchmark_warmup": 3,
+      "cross_session_recovery_validation": "REMOVED_BY_USER",
+      "decode_tokens": 32,
+      "evaluation_seconds": 6900,
+      "execution_seconds": 6000,
+      "id": "clm-workspace-depth-kv-001",
+      "kv_projection": "shared",
+      "scientific_confirmation": false,
+      "seeds": [
+        18001,
+        18002,
+        18003
+      ],
+      "session_seconds": 7200,
+      "smoke_targets": 16384,
+      "targets_per_model": 2000000,
+      "workspace_kv_mode": "depth_indexed"
+    },
+    "format": "minicells.clm-depth-kv.protocol.v1",
+    "groups": {
+      "documents": 8,
+      "max_document_targets": 4096
+    },
+    "model": {
+      "cells": 8,
+      "chunk": 64,
+      "dim": 256,
+      "encoder_ffn": 512,
+      "ffn": 512,
+      "heads": 4,
+      "layers": 3,
+      "norm": "LayerNorm",
+      "state_dim": 256,
+      "steps": 2,
+      "top_k": 2,
+      "vocab": 2048,
+      "window": 256
+    },
+    "optimizer": {
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "clip": 1.0,
+      "lr": 0.0003,
+      "warmup_fraction": 0.1,
+      "weight_decay": 0.1
+    },
+    "pin_memory": true,
+    "precision": {
+      "consistency_fallback": "fp32",
+      "fallback": "fp16_grad_scaler",
+      "initial_scale": 1024,
+      "max_consecutive_overflows": 5,
+      "prefer": "bf16",
+      "requested": "fp32",
+      "router": "fp32"
+    },
+    "router": {
+      "balance": "N * sum(stopgrad(top2_assignment_fraction) * mean(full_router_softmax)), averaged over steps; diagnostic auxiliary only",
+      "balance_alpha": 0.001,
+      "noise": 0.0,
+      "temperature": 1.0
+    },
+    "smoke": {
+      "seed": 17
+    }
+  },
+  "source": "2efe4682b078bbb45eee36b61bf63f581a378421"
+}

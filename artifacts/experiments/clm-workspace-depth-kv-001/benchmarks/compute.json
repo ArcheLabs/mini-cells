@@ -1,0 +1,164 @@
+{
+  "18001/C-DKV": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8941568,
+    "parts": {
+      "attention": 1572864,
+      "cell": 3145728,
+      "controller": 1585152,
+      "encoder_ffn": 786432,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 16384
+    }
+  },
+  "18001/C2": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8679424,
+    "parts": {
+      "attention": 1572864,
+      "cell": 3145728,
+      "controller": 1585152,
+      "encoder_ffn": 786432,
+      "head": 1048576,
+      "kv_projection": 524288,
+      "router": 16384
+    }
+  },
+  "18001/T0-F": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8679424,
+    "parts": {
+      "attention": 1572864,
+      "controller": 0,
+      "ffn": 5271552,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 0
+    }
+  },
+  "18001/T0-P": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 11554816,
+    "parts": {
+      "attention": 1572864,
+      "controller": 0,
+      "ffn": 8146944,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 0
+    }
+  },
+  "18002/C-DKV": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8941568,
+    "parts": {
+      "attention": 1572864,
+      "cell": 3145728,
+      "controller": 1585152,
+      "encoder_ffn": 786432,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 16384
+    }
+  },
+  "18002/C2": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8679424,
+    "parts": {
+      "attention": 1572864,
+      "cell": 3145728,
+      "controller": 1585152,
+      "encoder_ffn": 786432,
+      "head": 1048576,
+      "kv_projection": 524288,
+      "router": 16384
+    }
+  },
+  "18002/T0-F": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8679424,
+    "parts": {
+      "attention": 1572864,
+      "controller": 0,
+      "ffn": 5271552,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 0
+    }
+  },
+  "18002/T0-P": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 11554816,
+    "parts": {
+      "attention": 1572864,
+      "controller": 0,
+      "ffn": 8146944,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 0
+    }
+  },
+  "18003/C-DKV": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8941568,
+    "parts": {
+      "attention": 1572864,
+      "cell": 3145728,
+      "controller": 1585152,
+      "encoder_ffn": 786432,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 16384
+    }
+  },
+  "18003/C2": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8679424,
+    "parts": {
+      "attention": 1572864,
+      "cell": 3145728,
+      "controller": 1585152,
+      "encoder_ffn": 786432,
+      "head": 1048576,
+      "kv_projection": 524288,
+      "router": 16384
+    }
+  },
+  "18003/T0-F": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 8679424,
+    "parts": {
+      "attention": 1572864,
+      "controller": 0,
+      "ffn": 5271552,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 0
+    }
+  },
+  "18003/T0-P": {
+    "T0-F_matches": "C2 only; not C-DKV",
+    "convention": "MAC=2, full-window forward matmul reference, includes actually executed one effective controller update; excludes elementwise/norm/dispatch/softmax and backward; not measured hardware FLOPs",
+    "forward_flops_per_token": 11554816,
+    "parts": {
+      "attention": 1572864,
+      "controller": 0,
+      "ffn": 8146944,
+      "head": 1048576,
+      "kv_projection": 786432,
+      "router": 0
+    }
+  }
+}
