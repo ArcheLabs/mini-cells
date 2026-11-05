@@ -1,0 +1,74 @@
+{
+  "format": "minicells.gc002.protocol-draft.v1",
+  "version": "1.0-draft",
+  "status": "PROTOCOL_DRAFT_NOT_AUTHORIZED_TO_TRAIN",
+  "authorized_phases": [
+    0,
+    1
+  ],
+  "authorized_training_tokens": 0,
+  "protocol_frozen": false,
+  "historical_results_mutable": false,
+  "tracks": {
+    "A": {
+      "control": "active_parameters",
+      "target": 966784,
+      "relative_tolerance": 0.01
+    },
+    "B": {
+      "control": "committed_token_exposure",
+      "same_order_per_seed": true
+    },
+    "C": {
+      "control": "total_training_flops",
+      "relative_tolerance": 0.05,
+      "budget": null,
+      "checkpoints": null,
+      "model_config": null
+    },
+    "D": {
+      "control": "same_task_and_explicit_persistent_memory_budget",
+      "inference_semantics": "absolute-position causal sliding-window from sequence start"
+    }
+  },
+  "data": {
+    "reproduction": "GC001_FROZEN_DEVELOPMENT_ONLY",
+    "confirmatory": "NOT_PREPARED_TEST_SEALED",
+    "raw_asset_verification": "REQUIRED_BEFORE_PHASE_0_PASS"
+  },
+  "seeds": {
+    "formal_minimum": 3,
+    "confirmatory_recommended": 5,
+    "selected": null
+  },
+  "budgets": {
+    "training_tokens": null,
+    "gpu_hours": null,
+    "pilot_authorized": false,
+    "kaggle_hard_seconds": 7200,
+    "preparation_seconds": 5400,
+    "publication_seconds": 600,
+    "safety_seconds": 1200
+  },
+  "correctness": {
+    "dtype": "fp32",
+    "max_absolute_logit_error": 1e-05,
+    "lengths": [
+      32,
+      128,
+      385
+    ],
+    "batch": 1,
+    "token_eos_id_from_history": 3,
+    "tied_embedding_parameter_count": "COUNT_ONCE"
+  },
+  "gates": {
+    "phase0": "metadata_and_raw_asset_token_audits_required",
+    "phase1": "cache_equivalence_actual_memory_and_gpu_profile_required",
+    "phase2": "frozen_budgets_seeds_data_statistics_required",
+    "phase3": "SEPARATE_EXPLICIT_TRAINING_APPROVAL_REQUIRED"
+  },
+  "formal_hypotheses": "NOT_EVALUATED",
+  "human_review": "PENDING",
+  "training_entrypoint": null
+}

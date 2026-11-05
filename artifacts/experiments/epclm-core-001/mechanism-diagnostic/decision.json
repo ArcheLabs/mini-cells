@@ -1,0 +1,462 @@
+{
+  "format": "minicells.epclm-core-001.c1-diagnostic.v1",
+  "status": "COMPLETE",
+  "identity": {
+    "experiment": "epclm-core-001-c1-diagnostic",
+    "mode": "FROZEN_MODEL_DIAGNOSTIC",
+    "training_source": "398a191dbb32e383c86c89b9c981777c7cd6c77f",
+    "training_weight_sha256": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf",
+    "training_checkpoint_sha256": "36a58f642f93b859ce33f5fd55bd92c9f4196669dc8c62293088ea43ce8e7fd1",
+    "diagnostic_source": "7ee5cd46e10c29bf70854c3cd52a232fa9da1adc",
+    "diagnostic_protocol_sha256": "b1bcbf0b2f8d814609f9b9fead317d7e0c3ada1eabaec71823a64ecef023bef2",
+    "data_manifest_sha256": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "training_tokens": 250000,
+    "optimizer_updates": 0,
+    "formal_confirmation": false,
+    "interventions": {
+      "format": "minicells.c1-mechanism-diagnostic.protocol.v1",
+      "stage": "DEVELOPMENT_FROZEN_MODEL",
+      "training_identity": {
+        "source": "398a191dbb32e383c86c89b9c981777c7cd6c77f",
+        "protocol": "2835ced239c30dc71ad1f8066b7e61aa329203ca448c5dcf5adb98fff2170aa2",
+        "data": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+        "seed": 173018021,
+        "mode": "DEVELOPMENT_PAIR",
+        "arms": [
+          "C1",
+          "F0"
+        ],
+        "target_tokens": 250000
+      },
+      "checkpoint_identity": {
+        "namespace": "epclm-core-001-development-pair",
+        "path": "C1.pt",
+        "sha256": "36a58f642f93b859ce33f5fd55bd92c9f4196669dc8c62293088ea43ce8e7fd1",
+        "weights_sha256": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf"
+      },
+      "expected_validation_nll": 5.814626392302277,
+      "baseline_atol": 0.0001,
+      "documents": 16,
+      "history_pairs": 8,
+      "probe_fractions": [
+        0.25,
+        0.5,
+        0.75
+      ],
+      "probe_cells": [
+        0,
+        1,
+        4,
+        8
+      ],
+      "K": [
+        2,
+        4,
+        8
+      ],
+      "extra_evolve": [
+        4,
+        8
+      ],
+      "bootstrap_draws": 1000,
+      "seed": 713,
+      "precision": "fp32",
+      "recovery_seconds": 600,
+      "diagnostic_seconds": 2400,
+      "execution_seconds": 5400,
+      "publication_reserve_seconds": 600,
+      "safety_seconds": 1200,
+      "max_saved_versions": 25,
+      "formal_confirmation": false
+    }
+  },
+  "hypotheses": {
+    "H1": "NOT_EVALUATED",
+    "H2": "NOT_EVALUATED",
+    "H3": "NOT_EVALUATED",
+    "H4": "NOT_EVALUATED",
+    "H5": "NOT_EVALUATED"
+  },
+  "findings": [
+    "STATE_DEPENDENCE_OBSERVED",
+    "COMMUNICATION_DEPENDENCE_OBSERVED"
+  ],
+  "timings": {
+    "asset_recovery_seconds": 53.44670358399998,
+    "D0_baseline": 9.633055240999965,
+    "D0_repeat": 8.792463538999982,
+    "RESET_EVERY_TOKEN": 8.827444663000051,
+    "RESET_AT_PROBE": 8.77127727300001,
+    "ENTRY_ONLY": 8.847988533000034,
+    "NEIGHBORS_REPLACED_BY_SELF": 8.277317853999989,
+    "CROSS_CELL_REMOVED": 7.644153001000063,
+    "D1_history_pairs": 1.9600676370000656,
+    "D3_K2": 5.613303676999976,
+    "D3_K8": 14.678854511000054,
+    "event_probes": 1.2441390060000685,
+    "execution_seconds": 138.463154493
+  },
+  "environment": {
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "gpu": "Tesla T4",
+    "precision": "fp32",
+    "autocast_enabled": false,
+    "grad_scaler_created": false,
+    "inference_mode": true
+  },
+  "limitations": [
+    "single training seed; 16 development documents; out-of-distribution interventions",
+    "no independently trained no-connection control; no evidence of reasoning or universal architectural superiority"
+  ],
+  "functional_preflight": "PASS_FORWARD_ONLY_NO_TRAINING",
+  "asset_provenance": {
+    "storage": "PRIVATE_KAGGLE_OUTPUT",
+    "kaggle_version": 142,
+    "manifest_path": "epclm-core-001-development-pair/recovery.json"
+  },
+  "model_config": {
+    "vocab": 2048,
+    "cells": 16,
+    "dim": 128,
+    "steps": 4,
+    "alpha": 0.1,
+    "arm": "C1",
+    "window": 4,
+    "max_state_abs": 10000.0
+  },
+  "data_assets": {
+    "manifest.json": "1eac9053e15ab4666a4f77635dd785728801a2cbea44a22472c42e8a920092cb",
+    "tokenizer.json": "becc6a25669e0f66424244f19fc846dfd8304bfd529c6187d772e8f961233be2",
+    "development.json": "a45f368bb494cb3890e9a1c889fc5c9b805b414d34b1e0c057988c792eb42164"
+  },
+  "weights_before": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf",
+  "D0": {
+    "status": "PASS",
+    "nll": 5.814626392302277,
+    "ppl": 335.16615445117395,
+    "documents": 16,
+    "tokens": 3322,
+    "seconds": 9.629776230000061,
+    "seconds_per_token": 0.002898788750752577,
+    "state_norm_mean": 200.0118471285724,
+    "state_norm_max": 505.2760925292969,
+    "event_state_delta_mean": 11.168440111999695,
+    "numerical_stability": "PASS",
+    "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+    "mode": "NORMAL",
+    "K": 4,
+    "checks": {
+      "frozen": "PASS",
+      "pure_read": "PASS",
+      "repeat": "PASS",
+      "stream_segment": "PASS",
+      "snapshot_restore": "PASS"
+    },
+    "expected_nll": 5.814626392302277,
+    "atol": 0.0001
+  },
+  "D1": {
+    "RESET_EVERY_TOKEN": {
+      "nll": 7.08826984785394,
+      "ppl": 1197.8335724371243,
+      "documents": 16,
+      "tokens": 3322,
+      "seconds": 8.826748929000019,
+      "seconds_per_token": 0.002657058678205906,
+      "state_norm_mean": 11.131168070936116,
+      "state_norm_max": 13.295266151428223,
+      "event_state_delta_mean": 11.131168070936116,
+      "numerical_stability": "PASS",
+      "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+      "mode": "RESET_EVERY_TOKEN",
+      "K": 4,
+      "comparison": {
+        "delta_nll": 1.2736434555516625,
+        "paired_document_mean_delta_nll": 1.2754323109275079,
+        "document_bootstrap_95": [
+          1.1903340981950044,
+          1.362818323572377
+        ],
+        "documents": 16,
+        "tokens": 3322,
+        "positive_delta_document_fraction": 1.0,
+        "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+      }
+    },
+    "RESET_AT_PROBE": {
+      "nll": 5.873753115050338,
+      "ppl": 355.58101552438694,
+      "documents": 16,
+      "tokens": 3322,
+      "seconds": 8.770610725999973,
+      "seconds_per_token": 0.0026401597609873487,
+      "state_norm_mean": 112.75756062462271,
+      "state_norm_max": 278.0208740234375,
+      "event_state_delta_mean": 11.164074110310167,
+      "numerical_stability": "PASS",
+      "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+      "mode": "RESET_AT_PROBE",
+      "K": 4,
+      "comparison": {
+        "delta_nll": 0.059126722748059954,
+        "paired_document_mean_delta_nll": 0.05901145023310877,
+        "document_bootstrap_95": [
+          0.0342123998103566,
+          0.09133051982013986
+        ],
+        "documents": 16,
+        "tokens": 3322,
+        "positive_delta_document_fraction": 0.9375,
+        "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+      },
+      "post_probe_comparison": {
+        "delta_nll": 0.11804024817851874,
+        "paired_document_mean_delta_nll": 0.11787001433256972,
+        "document_bootstrap_95": [
+          0.06822110149517614,
+          0.1825487572784075
+        ],
+        "documents": 16,
+        "tokens": 1664,
+        "positive_delta_document_fraction": 0.9375,
+        "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+      }
+    },
+    "ENTRY_ONLY": {
+      "nll": 5.926930496952464,
+      "ppl": 375.0016766220179,
+      "documents": 16,
+      "tokens": 3322,
+      "seconds": 8.847327841999913,
+      "seconds_per_token": 0.0026632534142082822,
+      "state_norm_mean": 187.1137998355289,
+      "state_norm_max": 478.39862060546875,
+      "event_state_delta_mean": 11.133498943404646,
+      "numerical_stability": "PASS",
+      "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+      "mode": "ENTRY_ONLY",
+      "K": 4,
+      "comparison": {
+        "delta_nll": 0.11230410465018567,
+        "paired_document_mean_delta_nll": 0.11245152189955368,
+        "document_bootstrap_95": [
+          0.08416116916083415,
+          0.14165458894420188
+        ],
+        "documents": 16,
+        "tokens": 3322,
+        "positive_delta_document_fraction": 1.0,
+        "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+      },
+      "intervention_schedule": "clear non-entry cells before every event"
+    },
+    "history_pairs": {
+      "status": "COMPLETE",
+      "pairs": 8,
+      "excluded_count": 0,
+      "means": {
+        "normal": {
+          "margin": -0.003463447093963623,
+          "correct_target_nll": 7.788469225168228
+        },
+        "reset": {
+          "margin": 0.0,
+          "correct_target_nll": 7.68293696641922
+        },
+        "swapped": {
+          "margin": 0.003463447093963623,
+          "correct_target_nll": 7.7850057780742645
+        }
+      },
+      "bidirectional_pair_success_fraction": 0.0,
+      "direction_correct_fraction": 0.0,
+      "suffix_ids_identical_within_pair": true,
+      "balanced_two_directions": true,
+      "semantic_signal_rule": "at least 8 accepted pairs, >=75% bidirectional pairs correct, normal correct-target NLL < reset; descriptive only"
+    }
+  },
+  "D2": {
+    "NEIGHBORS_REPLACED_BY_SELF": {
+      "nll": 5.922161559794661,
+      "ppl": 373.21757470837406,
+      "documents": 16,
+      "tokens": 3322,
+      "seconds": 8.276563554999939,
+      "seconds_per_token": 0.0024914399623720464,
+      "state_norm_mean": 188.2220514783796,
+      "state_norm_max": 483.09356689453125,
+      "event_state_delta_mean": 11.133982788432728,
+      "numerical_stability": "PASS",
+      "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+      "mode": "NEIGHBORS_REPLACED_BY_SELF",
+      "K": 4,
+      "comparison": {
+        "delta_nll": 0.10753516749238336,
+        "paired_document_mean_delta_nll": 0.10791720436330832,
+        "document_bootstrap_95": [
+          0.08102700641428763,
+          0.1364590669514735
+        ],
+        "documents": 16,
+        "tokens": 3322,
+        "positive_delta_document_fraction": 1.0,
+        "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+      }
+    },
+    "CROSS_CELL_REMOVED": {
+      "nll": 5.931120723073271,
+      "ppl": 376.57631518460676,
+      "documents": 16,
+      "tokens": 3322,
+      "seconds": 7.643458954999915,
+      "seconds_per_token": 0.002300860612582756,
+      "state_norm_mean": 187.28278307108044,
+      "state_norm_max": 477.2838439941406,
+      "event_state_delta_mean": 11.132573132626915,
+      "numerical_stability": "PASS",
+      "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+      "mode": "CROSS_CELL_REMOVED",
+      "K": 4,
+      "comparison": {
+        "delta_nll": 0.11649433077099379,
+        "paired_document_mean_delta_nll": 0.1167852754249607,
+        "document_bootstrap_95": [
+          0.08804892225781706,
+          0.1466976253088427
+        ],
+        "documents": 16,
+        "tokens": 3322,
+        "positive_delta_document_fraction": 1.0,
+        "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+      }
+    },
+    "single_event_summary": {
+      "events": 48,
+      "mean": -0.0002143035332361857,
+      "positive_fraction": 0.4583333333333333
+    },
+    "cell_sensitivity_summary": {
+      "0": {
+        "events": 48,
+        "mean": 0.05997909605503082,
+        "positive_fraction": 0.4791666666666667
+      },
+      "1": {
+        "events": 48,
+        "mean": 0.001288016637166341,
+        "positive_fraction": 0.6041666666666666
+      },
+      "4": {
+        "events": 48,
+        "mean": 0.0005722691615422567,
+        "positive_fraction": 0.5416666666666666
+      },
+      "8": {
+        "events": 48,
+        "mean": 0.0033611406882603965,
+        "positive_fraction": 0.6458333333333334
+      }
+    }
+  },
+  "D3": {
+    "4": {
+      "nll": 5.814626392302277,
+      "ppl": 335.16615445117395,
+      "documents": 16,
+      "tokens": 3322,
+      "seconds": 9.629776230000061,
+      "seconds_per_token": 0.002898788750752577,
+      "state_norm_mean": 200.0118471285724,
+      "state_norm_max": 505.2760925292969,
+      "event_state_delta_mean": 11.168440111999695,
+      "numerical_stability": "PASS",
+      "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+      "mode": "NORMAL",
+      "K": 4
+    },
+    "2": {
+      "nll": 5.827611493766487,
+      "ppl": 339.5467003393133,
+      "documents": 16,
+      "tokens": 3322,
+      "seconds": 5.6126580229999945,
+      "seconds_per_token": 0.001689541849187235,
+      "state_norm_mean": 189.64028892166854,
+      "state_norm_max": 482.873046875,
+      "event_state_delta_mean": 11.140491882625076,
+      "numerical_stability": "PASS",
+      "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+      "mode": "NORMAL",
+      "K": 2,
+      "comparison": {
+        "delta_nll": 0.012985101464209536,
+        "paired_document_mean_delta_nll": 0.01267261228069011,
+        "document_bootstrap_95": [
+          0.005317630630503246,
+          0.020647079459095226
+        ],
+        "documents": 16,
+        "tokens": 3322,
+        "positive_delta_document_fraction": 0.8125,
+        "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+      }
+    },
+    "8": {
+      "nll": 5.854044475984602,
+      "ppl": 348.6416054170865,
+      "documents": 16,
+      "tokens": 3322,
+      "seconds": 14.67812914000001,
+      "seconds_per_token": 0.004418461511137872,
+      "state_norm_mean": 236.43874386030103,
+      "state_norm_max": 583.6861572265625,
+      "event_state_delta_mean": 11.271772341007644,
+      "numerical_stability": "PASS",
+      "timing_scope": "synchronized forward plus diagnostic finite checks/metric collection; excludes asset/network time",
+      "mode": "NORMAL",
+      "K": 8,
+      "comparison": {
+        "delta_nll": 0.039418083682324356,
+        "paired_document_mean_delta_nll": 0.04165294861760334,
+        "document_bootstrap_95": [
+          0.026447861115702503,
+          0.05414959381457477
+        ],
+        "documents": 16,
+        "tokens": 3322,
+        "positive_delta_document_fraction": 1.0,
+        "interpretation": "exploratory single-seed development; positive means intervention worsens prediction"
+      }
+    },
+    "extra_evolution_summary": {
+      "0": {
+        "events": 48,
+        "mean": 0.0,
+        "positive_fraction": 0.0
+      },
+      "4": {
+        "events": 48,
+        "mean": -0.0005162705977757772,
+        "positive_fraction": 0.5
+      },
+      "8": {
+        "events": 48,
+        "mean": -0.001044576366742452,
+        "positive_fraction": 0.5
+      }
+    }
+  },
+  "event_probes": {
+    "documents": 16,
+    "positions_per_document": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "events": 48,
+    "normal_history_K": 4
+  },
+  "finding_rules": "exploratory labels: natural-document paired interval excludes zero in expected direction; semantic pair rule recorded separately; no confirmation",
+  "weights_after": "3787241e0ea18a206fb9625828d512845dce8b7156908255792fe420f12eacbf"
+}

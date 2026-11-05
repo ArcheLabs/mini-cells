@@ -1,0 +1,83 @@
+{
+  "baseline_run_id": "epclm-x4c-001-bc1288d34748-b8cc5876",
+  "baseline_source": "bc1288d34748038455b2e9b441095821da6d5bc3",
+  "data_boundary": "Native continuous token stream sampled as independent 125-token examples; no State across samples or long-memory claim",
+  "historical_backbone_configuration": {
+    "alpha": 0.11920292202211755,
+    "attention_masks": [
+      [
+        true
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ]
+    ],
+    "cell_ffn": null,
+    "chunk_size": 32,
+    "dense_width": null,
+    "dim": 188,
+    "ffn": 639,
+    "ffn_masks": [
+      [
+        true
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ]
+    ],
+    "heads": 4,
+    "iterations": [
+      1,
+      1,
+      1
+    ],
+    "name": "A2",
+    "routed": null,
+    "state_kind": null,
+    "state_read_rank": null,
+    "state_write_hidden": null,
+    "training_execution": "legacy_parallel_sequence",
+    "vocab": 2048,
+    "windows": [
+      8,
+      32,
+      128
+    ]
+  },
+  "historical_checkpoint": {
+    "file": "models/G1/A2/private/final-model.pt",
+    "location": "Kaggle Output only; owner access required if private; not committed to Git"
+  },
+  "historical_evaluation": "archived measured values; not reevaluated without final weights",
+  "historical_final_weight_identity": "aebea43c18f5ba9e17f05ad7e99490c454e2b4219715f5732d94d7843880b831",
+  "historical_initial_weights": "NOT_ARCHIVED_IN_PUBLISHED_ARTIFACTS",
+  "independent_native_reconstruction_sha256": "1ea683a38c48bd02b26c16a6d30ebe19de48c2d901ecb3424fac64b0f40106de",
+  "initialization_reconstruction_sha256": "1ea683a38c48bd02b26c16a6d30ebe19de48c2d901ecb3424fac64b0f40106de",
+  "initialization_status": "SOURCE_AND_SEED_RECONSTRUCTION_HASH_VERIFIED; NO_ARCHIVED_INITIAL_HASH",
+  "local_torch_version": "2.11.0+cu128",
+  "protocol_note": "publication JSON was sorted; source bytes hash and parsed content both verified",
+  "published_protocol_sha256": "a36d6d895fad6959b4c9d75b7a96cded6ec5c7c081a112f34faa8e5ed3c28637",
+  "source_matches": {
+    "architecture.py": true,
+    "audit.py": true,
+    "cell.py": true,
+    "common.py": true,
+    "decisions.py": true,
+    "evaluate.py": true,
+    "flops.py": true,
+    "mechanisms.py": true,
+    "research_report.py": true,
+    "routing.py": true,
+    "runtime.py": true,
+    "state.py": true,
+    "train.py": true
+  },
+  "source_protocol_sha256": "0958e1282974b06d95d09d732799cc0c7c0932d56a9177d9b51fc9e11b580496",
+  "strict_historical_initialization_match": false
+}

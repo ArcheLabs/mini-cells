@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "device": "cuda",
+  "dtype": "fp32",
+  "batch": 1,
+  "weights": "SYNTHETIC_RANDOM_NOT_HISTORICAL_CHECKPOINT",
+  "model_config": {
+    "vocab": 2048,
+    "dim": 128,
+    "layers": 4,
+    "heads": 2,
+    "kv_heads": 2,
+    "ffn": 288,
+    "window": 128
+  },
+  "model_sha256": "0d41a8726d7bf8a5588cb0188d9a7530683711a23b3fc5415bc870ed1c39bea6",
+  "semantics": "causal sliding window from sequence start; absolute RoPE IDs; GC001 replay differs after eviction",
+  "historical_weight_loading": "NEW_CANDIDATE",
+  "historical_pre_window_max_error": null,
+  "max_error_tolerance": 1e-05,
+  "cases": [
+    {
+      "length": 32,
+      "max_absolute_logit_error": 3.2782554626464844e-07,
+      "argmax_identical": true,
+      "sliding_window_exercised": false,
+      "eos_id_in_input": 3
+    },
+    {
+      "length": 128,
+      "max_absolute_logit_error": 5.960464477539062e-07,
+      "argmax_identical": true,
+      "sliding_window_exercised": false,
+      "eos_id_in_input": 3
+    },
+    {
+      "length": 385,
+      "max_absolute_logit_error": 7.152557373046875e-07,
+      "argmax_identical": true,
+      "sliding_window_exercised": true,
+      "eos_id_in_input": 3
+    }
+  ],
+  "chunked_prefill_max_error": 6.556510925292969e-07,
+  "snapshot_continuation_bitwise_equal": true,
+  "eos_stop": "PASS_SYNTHETIC_PREDICTED_STOP_ID; actual EOS ID 3 also included in equivalence inputs",
+  "memory": {
+    "batch": 1,
+    "cached_tokens": 128,
+    "absolute_next_position": 385,
+    "kv_tensor_payload_bytes": 524288,
+    "kv_tensor_backing_storage_bytes": 524288,
+    "persistent_state_bytes_per_stream": 524288,
+    "token_buffer_bytes": 0,
+    "token_buffer_policy": "no token history retained by model cache; caller input/output excluded",
+    "python_metadata_shallow_bytes": 508,
+    "tensor_wrapper_shallow_bytes": 576,
+    "serialization_bytes": 527373,
+    "theoretical_full_window_gqa_bytes_per_stream": 524288,
+    "temporary_activations": "NOT_INCLUDED_IN_PERSISTENT_STATE; GPU profile required",
+    "framework_allocator_overhead": "GPU_PROFILE_REQUIRED"
+  },
+  "optimizer_updates": 0
+}

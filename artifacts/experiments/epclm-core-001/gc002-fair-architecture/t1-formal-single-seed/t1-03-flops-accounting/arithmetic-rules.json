@@ -1,12 +1,3 @@
 {
-  "status": "DECLARED",
-  "mac_to_flops": 2,
-  "pointwise": "one operation per output unless operator-specific reference formula is listed",
-  "softmax": "5 scalar operations per element; backward 4 per element",
-  "normalization": "reference formulas in flops_audit.py",
-  "memory": "reported separately as logical output bytes for memory/shape dispatches",
-  "integer_operations": "retained in operator input/output dtypes; not added to FLOPs",
-  "data_transfer": "reported as logical copy/to operations and bytes; not measured physical traffic",
-  "kernel_launches": "profiler CUDA activity events only; not added to FLOPs",
-  "unknown_float_ops": "UNSUPPORTED; block formal compute readiness"
+  "status": "NOT_RUN"
 }

@@ -1,0 +1,53 @@
+{
+  "format": "minicells.epclm-002-a0-development.v1",
+  "experiment_id": "epclm-002-a0-persistent-state-recall",
+  "plan_id": "A0-v0.2-screening",
+  "status": "DEVELOPMENT_SCREENING_STOPPED_FOR_DIAGNOSTICS",
+  "formal_run": false,
+  "scientific_decision": false,
+  "h1": "INCONCLUSIVE_DEVELOPMENT_ONLY",
+  "h2": "INCONCLUSIVE_DEVELOPMENT_ONLY",
+  "h3": "OUT_OF_SCOPE_FOR_A0_V0_2",
+  "stages": {
+    "preflight": "PASS",
+    "training": {
+      "flat-recurrent": "COMPLETE",
+      "learned-cells": "COMPLETE"
+    },
+    "gpu_pilot": "COMPLETE",
+    "screening": {
+      "flat-recurrent-f01-d00": "COMPLETE",
+      "learned-cells-f01-d00": "COMPLETE",
+      "flat-recurrent-f01-d64": "COMPLETE",
+      "learned-cells-f01-d64": "COMPLETE",
+      "flat-recurrent-f08-d00": "COMPLETE",
+      "learned-cells-f08-d00": "COMPLETE",
+      "remaining_matrix": "NOT_RUN_LOW_LOAD_STOP_RULE",
+      "flat-recurrent-f08-d64": "INCOMPLETE_STOP_RULE",
+      "flat-recurrent-f32-d00": "INCOMPLETE_STOP_RULE",
+      "flat-recurrent-f32-d64": "INCOMPLETE_STOP_RULE",
+      "learned-cells-f08-d64": "INCOMPLETE_STOP_RULE",
+      "learned-cells-f32-d00": "INCOMPLETE_STOP_RULE",
+      "learned-cells-f32-d64": "INCOMPLETE_STOP_RULE"
+    },
+    "paired_analysis": "COMPLETE_WITH_AVAILABLE_CELLS",
+    "publication": "AUTOMATIC_PUSH_REQUESTED"
+  },
+  "timed_out": false,
+  "selected_episodes_per_cell": 76,
+  "target_episodes_per_cell": 128,
+  "completed_cells": 6,
+  "planned_cells": 12,
+  "protocol_sha256": "1814af87c51401518cca019c8d9559173607e312de6571e66429dd7c084fd1eb",
+  "source_commit": "748ff0e97e0abf9b6cdd0451b4a3474d520ec297",
+  "diagnostic_interpretation": {
+    "flags": [
+      {
+        "rule": "BOTH_ARCHITECTURES_FAIL_LOW_LOAD",
+        "action": "STOP_SAMPLE_EXPANSION_AND_INSPECT_STATE_WRITE_READ"
+      }
+    ],
+    "scientific_decision": false,
+    "interpretation": "Development screening diagnostics only. Small differences require paired confirmatory analysis across multiple training seeds."
+  }
+}
