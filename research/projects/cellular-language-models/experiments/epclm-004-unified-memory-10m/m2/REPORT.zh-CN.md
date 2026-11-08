@@ -25,7 +25,7 @@
 
 参数匹配选择：E2/E3 state size 都为 20（默认 16 的明确调整），expand=2、conv=4、dt_rank=auto；E3 FFN=848（E0/E1=704）。这些设置写入固定配置，实际计数和公共 Embedding / SSM 哈希见 [parameter-counts.json](audit/parameter-counts.json)。不同层数和运算构成不等于计算预算匹配，必须同时报告系统成本。
 
-工程 Smoke 用 **W32、序列 128**，确保实际跨越局部窗口，避免 W256 在长度 128 下与 E0 完全等效。W32 是明确的工程设置，不宣称是论文最优窗口。后续改变窗口必须形成新协议身份。
+工程 Smoke 用 **W32、序列 128**，确保实际跨越局部窗口，避免 W256 在长度 128 下与 E0 完全等效。W32 是明确的工程设置，不宣称是论文最优窗口。该范围是逐层直接读取的范围；多层 SWA 可以间接传播更早信息，不能宣称整个模型只含最近 32 Token 的信息。后续改变窗口必须形成新协议身份。
 
 ## 3. 官方版本与参考后端
 
@@ -40,6 +40,8 @@ Samba 模块仅替换扩展导入、显式禁用 fused fast path，并用官方�
 ## 4. 统一协议与基础设施
 
 所有模型共用冻结 Tokenizer SHA `d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04`、WikiText revision 与 MQAR 规则。GPU Smoke 共用 bindings8、length128、单 Query、data seed41001、model/sampler seed41017、train128/validation32，Test 封闭。完成后检查逐更新 input hash 完全相同。
+
+训练均对完整 Episode 反向传播；Mamba 的 scan 状态在该序列内保留梯度，不做 chunk detach；不同 Episode/optimizer update 不携带激活或 Runtime State。推理 full/cache 检查单独在 no_grad 下执行，不将其缓存作为训练路径。
 
 所有模型为 AdamW、LR=3e-4、betas=(0.9,0.95)、WD=0.1、clip=1、FP32、TF32 off、恒定 LR、Batch4、2 updates。为与 M1 统一，WD 应用全部静态参数；不声称复现原论文的参数分组/优化器策略。字段实际生效，拒绝不支持的精度/优化器/Scheduler 配置。
 
