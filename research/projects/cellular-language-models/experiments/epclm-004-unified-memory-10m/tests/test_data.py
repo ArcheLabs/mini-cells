@@ -43,12 +43,13 @@ def test_tokenizer_fixed_ids_train_only_adapter_and_manifest(tmp_path,monkeypatc
     assert [tok.token_to_id(t) for t in TOKENS]==list(range(536))
     assert tok.get_vocab_size()==800
     calls=[]
-    def fake(**kw):
+    def fake(*args,**kw):
         calls.append(kw)
         return iter([{'text':'\n'},{'text':'some train line\r\n'}])
     import datasets
     monkeypatch.setattr(datasets,'load_dataset',fake)
     assert data.wikitext_prefix('train',1)==['some train line\n']
-    assert calls[0]['revision']==WIKITEXT['revision'] and calls[0]['name']=='wikitext-103-raw-v1'
+    assert WIKITEXT['revision'] in calls[0]['data_files']['train'][0]
+    assert '/wikitext-103-raw-v1/train-' in calls[0]['data_files']['train'][0]
     with pytest.raises(ValueError):data.wikitext_prefix('test',1)
     assert len(calls)==1

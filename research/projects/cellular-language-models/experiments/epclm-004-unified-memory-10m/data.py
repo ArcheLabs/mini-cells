@@ -125,16 +125,18 @@ def train_bpe(texts, destination, vocab_size=8192):
     tokenizer.save(str(destination)); return tokenizer
 
 
-def wikitext_prefix(split, nonempty_lines):
+def wikitext_prefix(split, nonempty_lines, exclude=()):
     if split not in ('train','validation') or nonempty_lines < 1:
         raise ValueError('M1 adapter permits train/validation only; test sealed')
     from datasets import load_dataset
-    stream = load_dataset(**WIKITEXT, split=split, streaming=True)
+    shards = 2 if split == 'train' else 1
+    urls = [f"https://huggingface.co/datasets/{WIKITEXT['path']}/resolve/{WIKITEXT['revision']}/{WIKITEXT['name']}/{split}-{i:05d}-of-{shards:05d}.parquet" for i in range(shards)]
+    stream = load_dataset('parquet', data_files={split:urls}, split=split, streaming=True)
     rows = []
     for row in stream:
         # No normalization except newline canonicalization and omission of blank lines.
         text = row['text'].replace('\r\n','\n')
-        if text.strip(): rows.append(text)
+        if text.strip() and text not in exclude: rows.append(text)
         if len(rows) == nonempty_lines: return rows
     raise ValueError('WikiText prefix incomplete; no corpus substitution allowed')
 
@@ -143,14 +145,15 @@ def prepare_wikitext(folder, train_lines=2048, validation_lines=32):
     folder = Path(folder); folder.mkdir(parents=True,exist_ok=True)
     manifest_path = folder/'dataset.json'
     request = {'dataset':WIKITEXT,'train_lines':train_lines,'validation_lines':validation_lines,
-               'preprocessing':'nonempty-lines-crlf-to-lf-v1','tokenizer':'ByteLevel-BPE-8192-reserved536-v1'}
+               'preprocessing':'nonempty-lines-crlf-to-lf-validation-excludes-train-exact-lines-v2','tokenizer':'ByteLevel-BPE-8192-reserved536-v1'}
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text())
         if manifest['request'] != request: raise ValueError('cached data request differs')
         for name,sha in manifest['files'].items():
             if file_hash(folder/name) != sha: raise ValueError('asset hash differs: '+name)
         return manifest
-    texts = {s:wikitext_prefix(s,n) for s,n in [('train',train_lines),('validation',validation_lines)]}
+    texts = {'train':wikitext_prefix('train',train_lines)}
+    texts['validation'] = wikitext_prefix('validation',validation_lines,exclude=set(texts['train']))
     if set(texts['train']) & set(texts['validation']):
         raise ValueError('exact selected line overlap; choose explicit larger/sanitized policy')
     tokenizer = train_bpe(texts['train'],folder/'tokenizer.json')
