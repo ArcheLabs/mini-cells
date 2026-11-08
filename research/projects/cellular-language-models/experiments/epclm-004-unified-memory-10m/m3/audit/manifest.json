@@ -1,0 +1,28 @@
+{
+  "format": "minicells.epclm004.m3-local-evidence.v1",
+  "status": "BLOCKED_GPU_ACCESS",
+  "gates": {
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "gate6": "NOT_RUN",
+  "source_sha256": {
+    "gates.py": "7befe176c054c88ec5d5f22b2aa7113c51d30bef5ae7881a62d29bc4449037ff",
+    "mag_model.py": "4aad2e5d57fcfc6b3ca3bceb4ef3d8710ff661dae8fd36e81756dde7df3d9aaf",
+    "memory.py": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
+    "run.py": "a74366f89f4c92ca42190cd3dfa463811705e7d53fabdfc2de43d1d7fdd9985a"
+  },
+  "protocol_sha256": "d53333f99733fdfae0ad62f78f88c7b7c03a2885d3e27852498cadcec41503be",
+  "frozen_files_verified": 78,
+  "hypotheses": "NOT_EVALUATED",
+  "actual_full_size_training_updates": 0,
+  "cpu_tiny_updates": 2,
+  "cpu_gate_wall_seconds": 1.550641990994336,
+  "python": "3.11.18",
+  "torch": "2.6.0+cpu",
+  "cuda_available": false,
+  "evidence_scope": "CPU engineering gates; planned GPU data identity only; no actual GPU metrics"
+}
