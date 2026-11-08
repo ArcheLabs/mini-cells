@@ -1,0 +1,418 @@
+{
+  "format": "minicells.epclm004.m3.v1",
+  "run_id": "epclm004-m3-2b5362884492-d8942eb1",
+  "branch": "kaggle/epclm004-m3-2b5362884492-d8942eb1",
+  "identity": {
+    "source": "2b53628844928445e120549aec3b01077165ab81",
+    "implementation": {
+      "gates.py": "7befe176c054c88ec5d5f22b2aa7113c51d30bef5ae7881a62d29bc4449037ff",
+      "mag_model.py": "4aad2e5d57fcfc6b3ca3bceb4ef3d8710ff661dae8fd36e81756dde7df3d9aaf",
+      "memory.py": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
+      "run.py": "a74366f89f4c92ca42190cd3dfa463811705e7d53fabdfc2de43d1d7fdd9985a"
+    },
+    "protocol": "d53333f99733fdfae0ad62f78f88c7b7c03a2885d3e27852498cadcec41503be"
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "independent_test_accessed": false,
+  "script_version_id": null,
+  "gates": {
+    "gate1": {
+      "status": "PASS",
+      "finite_difference": [
+        {
+          "parameter": "initial.w1",
+          "index": 2,
+          "autodiff": 0.012866944769254377,
+          "finite_difference": 0.012866944765210773,
+          "absolute_error": 4.043603993308942e-12,
+          "tolerance": 4.5733889530421545e-06
+        },
+        {
+          "parameter": "initial.ln_weight",
+          "index": 2,
+          "autodiff": 0.8331195485255032,
+          "finite_difference": 0.833119548515615,
+          "absolute_error": 9.888201368823957e-12,
+          "tolerance": 0.00016862390970312299
+        },
+        {
+          "parameter": "key.weight",
+          "index": 9,
+          "autodiff": 0.31910280171844424,
+          "finite_difference": 0.3191028011384489,
+          "absolute_error": 5.799953295415605e-10,
+          "tolerance": 6.582056022768978e-05
+        },
+        {
+          "parameter": "value.weight",
+          "index": 10,
+          "autodiff": -0.04750206269817059,
+          "finite_difference": -0.04750206270554002,
+          "absolute_error": 7.36943145396296e-12,
+          "tolerance": 1.1500412541108003e-05
+        },
+        {
+          "parameter": "query.weight",
+          "index": 8,
+          "autodiff": 0.8214199054785815,
+          "finite_difference": 0.8214199053835357,
+          "absolute_error": 9.50457490489498e-11,
+          "tolerance": 0.00016628398107670713
+        },
+        {
+          "parameter": "controls.weight",
+          "index": 4,
+          "autodiff": -0.014763691302488773,
+          "finite_difference": -0.014763691302821512,
+          "absolute_error": 3.3273904465058735e-13,
+          "tolerance": 4.952738260564302e-06
+        }
+      ],
+      "recurrence_max_abs_error": 1.1102230246251565e-16,
+      "eta_theta_alpha": [
+        [
+          0.4996857716653379,
+          0.025016580800472,
+          2.4721770110925137e-05
+        ],
+        [
+          0.4999623288992692,
+          0.02499685416742209,
+          2.472093622161051e-05
+        ],
+        [
+          0.4999844448375218,
+          0.02500379198466628,
+          2.4728175802641597e-05
+        ]
+      ],
+      "precision": "float64",
+      "gradient": "complete higher-order, three chunks",
+      "identity": "6ed5be1920e028127b6c5812a715659de78b3f5513e2ae210827f4e1570a2190",
+      "wall_seconds": 0.646279045,
+      "artifact_sha256": {}
+    },
+    "gate2": {
+      "status": "PASS",
+      "future_error": 0.0,
+      "read_before_write_error": 0.0,
+      "batch_isolation_error": 6.661338147750939e-16,
+      "chunk": 3,
+      "order": "all reads use preceding chunk state; then one chunk update",
+      "identity": "6ed5be1920e028127b6c5812a715659de78b3f5513e2ae210827f4e1570a2190",
+      "wall_seconds": 0.04055153400000222,
+      "artifact_sha256": {}
+    },
+    "gate3": {
+      "status": "PASS",
+      "restore_max_abs_error": 0.0,
+      "static_unchanged": true,
+      "fork_tensor_alias": false,
+      "bytes": 10104,
+      "write_seconds": 3.5160909720000006,
+      "manifest_sha256": "13a74208be55c0c35b253bcd14b1d4915789add31b69b42d3f51775de65e219f",
+      "identity": "6ed5be1920e028127b6c5812a715659de78b3f5513e2ae210827f4e1570a2190",
+      "wall_seconds": 3.5855358299999978,
+      "artifact_sha256": {
+        "gate3/6ed5be1920e02812/cell/manifest.json": "13a74208be55c0c35b253bcd14b1d4915789add31b69b42d3f51775de65e219f",
+        "gate3/6ed5be1920e02812/cell/50d72f6aad434949b0f26b882b27a8c0/fast_weights.pt": "04f7c56a57db558eaaf0f6af70f8094eb2d5e991b0f4a452e1becaf33f19aedf",
+        "gate3/6ed5be1920e02812/cell/50d72f6aad434949b0f26b882b27a8c0/momentum.pt": "5bc985c8af5287ef7bcd1f07eb18de39e0d4fc8e140b40f0a82148e012782a73"
+      }
+    },
+    "gate4": {
+      "status": "PASS",
+      "loss": 4.135310649871826,
+      "embedding_delta": 0.04679199308156967,
+      "causal_error": 0.0,
+      "batch_isolation_error": 0.0,
+      "gate_range": [
+        0.4513051211833954,
+        0.46079757809638977
+      ],
+      "static_parameters": 4036,
+      "dynamic": {
+        "fast_weights": 672,
+        "momentum": 672,
+        "fast_parameters_per_stream": 84
+      },
+      "outer_updates": 2,
+      "probe_inner_updates": 4,
+      "training_inner_updates": 8,
+      "runtime_reset_preserves_cell": true,
+      "checkpoint_restore_error": 0.0,
+      "resumed_updates_only": 1,
+      "ledger": {
+        "input_tokens": 32,
+        "processed_tensor_tokens": 32,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 4,
+        "query_target_tokens": 4,
+        "committed_updates": 2
+      },
+      "identity": "6ed5be1920e028127b6c5812a715659de78b3f5513e2ae210827f4e1570a2190",
+      "wall_seconds": 5.835229157000015,
+      "artifact_sha256": {
+        "gate4/6ed5be1920e02812/training/metrics.json": "6721a3cb3956cb479bb291e186f9579cfb162e5f953661d0272f6cebcca8fdc5",
+        "gate4/6ed5be1920e02812/training/metrics.jsonl": "d74764eb551b41b3376b63dfe230713069509ed7013853eb82f01c59aa86e15b",
+        "gate4/6ed5be1920e02812/training/checkpoint.pt": "29c357fe09dd5385d78795156a77f082e194ac1c8f5cae94d26cade3cc2d42c5"
+      }
+    },
+    "gate5": {
+      "status": "PASS",
+      "task": "four latent keys -> nonidentity permuted values; no query answers supplied",
+      "scope": "Memory positive control; not language MQAR or H3 evidence",
+      "initial_accuracy": 0.0,
+      "restored_accuracy": 1.0,
+      "restore_max_abs_error": 0.0,
+      "inner_updates": 128,
+      "fast_delta": 7.102184894720914,
+      "momentum_norm": 0.03441788105720662,
+      "static_unchanged": true,
+      "memory_update_seconds": 0.20917451200000414,
+      "recall_seconds": 0.00047755200000665354,
+      "fast_weights": 17024,
+      "momentum": 17024,
+      "fast_parameters_per_stream": 4256,
+      "bytes": 56449,
+      "write_seconds": 0.010019765999999208,
+      "manifest_sha256": "b8900b09aeed2b0a5ceb48b0fb81a09283fedab2d256549399c0d182c9cca7a1",
+      "identity": "6ed5be1920e028127b6c5812a715659de78b3f5513e2ae210827f4e1570a2190",
+      "wall_seconds": 0.34003827899999806,
+      "artifact_sha256": {
+        "gate5/6ed5be1920e02812/recall-cell/manifest.json": "b8900b09aeed2b0a5ceb48b0fb81a09283fedab2d256549399c0d182c9cca7a1",
+        "gate5/6ed5be1920e02812/recall-cell/77a0b06c31c94be4bdd337738cda78f4/fast_weights.pt": "b2b9c85f48640d1fea8a17b5527f48d4090ab4ed5a59b0f44375fb9d6c1ebdd3",
+        "gate5/6ed5be1920e02812/recall-cell/77a0b06c31c94be4bdd337738cda78f4/momentum.pt": "d58e15ad1fd66164928dcdd04ea4529255db850536ebf98f17fe094efeb6eb46"
+      }
+    }
+  },
+  "gate6": {
+    "identity": {
+      "source": "2b53628844928445e120549aec3b01077165ab81",
+      "implementation": {
+        "gates.py": "7befe176c054c88ec5d5f22b2aa7113c51d30bef5ae7881a62d29bc4449037ff",
+        "mag_model.py": "4aad2e5d57fcfc6b3ca3bceb4ef3d8710ff661dae8fd36e81756dde7df3d9aaf",
+        "memory.py": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
+        "run.py": "a74366f89f4c92ca42190cd3dfa463811705e7d53fabdfc2de43d1d7fdd9985a"
+      },
+      "protocol": "d53333f99733fdfae0ad62f78f88c7b7c03a2885d3e27852498cadcec41503be"
+    },
+    "status": "PASS",
+    "hardware": {
+      "gpu": "Tesla T4",
+      "torch": "2.11.0+cu130",
+      "cuda": "13.0",
+      "precision": "fp32",
+      "tf32": false
+    },
+    "training": {
+      "status": "COMPLETE",
+      "error": null,
+      "ledger": {
+        "input_tokens": 1024,
+        "processed_tensor_tokens": 1024,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 8,
+        "query_target_tokens": 8,
+        "committed_updates": 2
+      },
+      "initial_evaluation": {
+        "nll": 9.093025207519531,
+        "supervised_targets": 4,
+        "query_targets": 4,
+        "query_exact_match": 0.0,
+        "query_prediction_counts": {
+          "5437": 1,
+          "3107": 2,
+          "6978": 1
+        }
+      },
+      "validation": {
+        "nll": 9.215458869934082,
+        "supervised_targets": 4,
+        "query_targets": 4,
+        "query_exact_match": 0.0,
+        "query_prediction_counts": {
+          "498": 4
+        }
+      },
+      "history": [
+        {
+          "update": 1,
+          "loss": 8.79998779296875,
+          "gradient_norm": 16.299278259277344,
+          "parameter_change_norm": 0.43133023381233215,
+          "compute_seconds": 0.6402507509999964,
+          "input_sha256": "82679bb8aa8b51d42cb53c2381efa921b3e0b9636efba62cbddb8772ec4dfa95",
+          "supervised_targets": 4,
+          "query_targets": 4
+        },
+        {
+          "update": 2,
+          "loss": 8.9807710647583,
+          "gradient_norm": 10.100008010864258,
+          "parameter_change_norm": 0.34959787130355835,
+          "compute_seconds": 0.13400649499999417,
+          "input_sha256": "1ee9c87c75bb70f0010c95156758a19a3c2de82ffb5caf44d5d762fba3a748f4",
+          "supervised_targets": 4,
+          "query_targets": 4
+        }
+      ],
+      "parameters": {
+        "static_parameters": 10168580,
+        "embedding_parameters": 2097152,
+        "tied_embedding_head": true,
+        "by_module": {
+          "embedding": 2097152,
+          "blocks": 8033280,
+          "final_norm": 256
+        }
+      },
+      "checkpoint_policy": {
+        "writes_this_process": 2,
+        "write_seconds_this_process": 3.745395782999992,
+        "policy": {
+          "every_updates": 8,
+          "every_seconds": 120
+        }
+      },
+      "checkpoint": {
+        "sha256": "a9c7fba767174a9f85d95c6d466416ed10c155d88633298194a884c7cfc8befb",
+        "bytes": 178448493,
+        "durable_updates": 2
+      },
+      "hypotheses": "NOT_EVALUATED",
+      "training_peak_allocated_bytes": 411926016
+    },
+    "events": [
+      {
+        "input_sha256": "82679bb8aa8b51d42cb53c2381efa921b3e0b9636efba62cbddb8772ec4dfa95",
+        "inner_updates": 8,
+        "fast_delta": 6.498286707231359,
+        "momentum_norm": 0.7011779588811291,
+        "gate_min": 0.48118919134140015,
+        "gate_max": 0.49580898880958557
+      },
+      {
+        "input_sha256": "1ee9c87c75bb70f0010c95156758a19a3c2de82ffb5caf44d5d762fba3a748f4",
+        "inner_updates": 8,
+        "fast_delta": 6.523120230501799,
+        "momentum_norm": 0.7142603542236629,
+        "gate_min": 0.48294466733932495,
+        "gate_max": 0.49443721771240234
+      }
+    ],
+    "training_inner_updates": 16,
+    "restore_max_abs_error": 0.0,
+    "optimizer_restored": true,
+    "cross_session": {
+      "status": "PASS",
+      "task": "four latent keys -> nonidentity permuted values; no query answers supplied",
+      "scope": "Memory positive control; not language MQAR or H3 evidence",
+      "initial_accuracy": 0.0,
+      "restored_accuracy": 1.0,
+      "restore_max_abs_error": 0.0,
+      "inner_updates": 128,
+      "fast_delta": 7.066900123220232,
+      "momentum_norm": 0.035759665149499756,
+      "static_unchanged": true,
+      "memory_update_seconds": 0.2765949300000159,
+      "recall_seconds": 0.0006242830000076083,
+      "fast_weights": 17024,
+      "momentum": 17024,
+      "fast_parameters_per_stream": 4256,
+      "bytes": 56507,
+      "write_seconds": 0.01636272099997882,
+      "manifest_sha256": "ad92286c03cb9d341820ebb31bc85defae4539aa6760b30431b388cad5af6045"
+    },
+    "resources": {
+      "static_parameters": 10168580,
+      "frozen_E1_parameters": 10130688,
+      "parameter_difference_fraction": 0.003740318525257136,
+      "fast_weights_parameters_per_stream": 4256,
+      "momentum_bytes_per_stream": 17024,
+      "runtime_cell_snapshot_bytes": 34048,
+      "runtime_kv_or_ssm_bytes": 0,
+      "runtime_policy": "full-sequence SWA; no KV/SSM dependency; Cell is separate",
+      "training_peak_allocated_bytes": 411926016,
+      "inference_peak_allocated_bytes": 84866048,
+      "inference_full_sequence_seconds": 0.04516211500001077,
+      "cell_checkpoint_bytes": 56507,
+      "cell_checkpoint_write_seconds": 0.01636272099997882,
+      "memory_update_seconds": 0.2765949300000159,
+      "recall_seconds": 0.0006242830000076083,
+      "timing_scope": "memory/recall timings are 128-step latent positive control; not formal throughput",
+      "model_checkpoint_write_seconds": 3.745395782999992
+    },
+    "training_identity": {
+      "source": "2b53628844928445e120549aec3b01077165ab81",
+      "implementation": {
+        "gates.py": "7befe176c054c88ec5d5f22b2aa7113c51d30bef5ae7881a62d29bc4449037ff",
+        "mag_model.py": "4aad2e5d57fcfc6b3ca3bceb4ef3d8710ff661dae8fd36e81756dde7df3d9aaf",
+        "memory.py": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
+        "run.py": "a74366f89f4c92ca42190cd3dfa463811705e7d53fabdfc2de43d1d7fdd9985a"
+      },
+      "protocol": "d53333f99733fdfae0ad62f78f88c7b7c03a2885d3e27852498cadcec41503be",
+      "data": {
+        "format": "minicells.epclm004.dataset.v1",
+        "config": {
+          "bindings": 8,
+          "length": 128,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+        "special_ids": {
+          "<pad>": 0,
+          "<unk>": 1,
+          "<bos>": 2,
+          "<eos>": 3,
+          "<fact>": 4,
+          "<query>": 5,
+          "<answer>": 6,
+          "<hole>": 7
+        },
+        "splits": {
+          "train": {
+            "episodes": 16,
+            "content_sha256": "05d8c7b2810adb08cb311a6228be67f4fc9b3cee49d8856c3feb67b50bc1ead9"
+          },
+          "validation": {
+            "episodes": 4,
+            "content_sha256": "4c268b56fce4c6ad3cf523ef0a5f1fd77c8eb502224fee6e8593ab9178010c9d"
+          }
+        },
+        "test_status": "SEALED_NOT_ACCESSED"
+      },
+      "model_id": "mag_lite_single_memory"
+    },
+    "artifact_sha256": {
+      "dataset-manifest.json": "3dd513b4589c38524ac2265ec894bf58f4f47856397772cc4502f6372921c9b8",
+      "training-events.json": "7f21d04858b653f2dc14d58d4a5aab586d07d3024233180e435d7f324eddec41",
+      "recall-cell/manifest.json": "ad92286c03cb9d341820ebb31bc85defae4539aa6760b30431b388cad5af6045",
+      "training/metrics.json": "b743d889773bd59414764982cfb026ea6d91e1e5ad4925a6205630066fcc1a93",
+      "training/metrics.jsonl": "4c8107eab43bc5cec6265d065b34c1b1e1a67480915e707971ca1a9a1fc14a36",
+      "training/checkpoint.pt": "a9c7fba767174a9f85d95c6d466416ed10c155d88633298194a884c7cfc8befb",
+      "recall-cell/5ed05703ca10443aa270cf8f03d7393b/fast_weights.pt": "a3f429fbd1751cad8ea63dcf12fa82abc6d5fe57fed7016f4dd13d995b494d85",
+      "recall-cell/5ed05703ca10443aa270cf8f03d7393b/momentum.pt": "736936c166ed05b0eaaff19d708c551f1ac3bb97fe6dc7ed38e75c0940293129"
+    }
+  },
+  "status": "M3_ENGINEERING_COMPLETE",
+  "wall_seconds": 73.74885465399998,
+  "publication": {
+    "status": "REMOTE_SHA_VERIFIED",
+    "branch": "kaggle/epclm004-m3-2b5362884492-d8942eb1",
+    "commit": "7d0c3eb2a146da9d3bc60cd3c5944cf73d4bdb58",
+    "verified_report_files": 19,
+    "scope": "prior verified GPU report commit; this completion record is metadata-only"
+  },
+  "publication_repair": {
+    "branch": "kaggle/epclm004-m3-publication-repair-d8942eb1",
+    "source_fix_commit": "6f525c6907ce917897de78ffc26c389de7570b6c",
+    "new_training_updates": 0,
+    "original_branch_preserved": true,
+    "original_decision_preserved": "decision-before-publication-repair.json",
+    "binary_checkpoint_scope": "verified by original T4 run; not re-downloaded in metadata repair"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "status": "PASS",
+  "finite_difference": [
+    {
+      "parameter": "initial.w1",
+      "index": 2,
+      "autodiff": 0.012866944769254377,
+      "finite_difference": 0.012866944765210773,
+      "absolute_error": 4.043603993308942e-12,
+      "tolerance": 4.5733889530421545e-06
+    },
+    {
+      "parameter": "initial.ln_weight",
+      "index": 2,
+      "autodiff": 0.8331195485255032,
+      "finite_difference": 0.833119548515615,
+      "absolute_error": 9.888201368823957e-12,
+      "tolerance": 0.00016862390970312299
+    },
+    {
+      "parameter": "key.weight",
+      "index": 9,
+      "autodiff": 0.31910280171844424,
+      "finite_difference": 0.3191028011384489,
+      "absolute_error": 5.799953295415605e-10,
+      "tolerance": 6.582056022768978e-05
+    },
+    {
+      "parameter": "value.weight",
+      "index": 10,
+      "autodiff": -0.04750206269817059,
+      "finite_difference": -0.04750206270554002,
+      "absolute_error": 7.36943145396296e-12,
+      "tolerance": 1.1500412541108003e-05
+    },
+    {
+      "parameter": "query.weight",
+      "index": 8,
+      "autodiff": 0.8214199054785815,
+      "finite_difference": 0.8214199053835357,
+      "absolute_error": 9.50457490489498e-11,
+      "tolerance": 0.00016628398107670713
+    },
+    {
+      "parameter": "controls.weight",
+      "index": 4,
+      "autodiff": -0.014763691302488773,
+      "finite_difference": -0.014763691302821512,
+      "absolute_error": 3.3273904465058735e-13,
+      "tolerance": 4.952738260564302e-06
+    }
+  ],
+  "recurrence_max_abs_error": 1.1102230246251565e-16,
+  "eta_theta_alpha": [
+    [
+      0.4996857716653379,
+      0.025016580800472,
+      2.4721770110925137e-05
+    ],
+    [
+      0.4999623288992692,
+      0.02499685416742209,
+      2.472093622161051e-05
+    ],
+    [
+      0.4999844448375218,
+      0.02500379198466628,
+      2.4728175802641597e-05
+    ]
+  ],
+  "precision": "float64",
+  "gradient": "complete higher-order, three chunks",
+  "identity": "6ed5be1920e028127b6c5812a715659de78b3f5513e2ae210827f4e1570a2190",
+  "wall_seconds": 0.646279045,
+  "artifact_sha256": {}
+}
