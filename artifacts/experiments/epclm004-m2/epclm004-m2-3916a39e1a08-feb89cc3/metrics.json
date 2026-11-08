@@ -1,0 +1,554 @@
+{
+  "E0": {
+    "status": "COMPLETE",
+    "error": null,
+    "ledger": {
+      "input_tokens": 1024,
+      "processed_tensor_tokens": 1024,
+      "padding_tokens": 0,
+      "supervised_target_tokens": 8,
+      "query_target_tokens": 8,
+      "committed_updates": 2
+    },
+    "initial_evaluation": {
+      "nll": 9.032995700836182,
+      "supervised_targets": 32,
+      "query_targets": 32,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "1890": 4,
+        "2507": 4,
+        "1356": 1,
+        "986": 3,
+        "4184": 1,
+        "418": 1,
+        "1867": 1,
+        "7320": 1,
+        "5619": 1,
+        "1240": 3,
+        "3929": 2,
+        "1814": 1,
+        "7348": 1,
+        "5757": 1,
+        "3370": 1,
+        "2898": 2,
+        "3275": 1,
+        "5223": 2,
+        "5694": 1
+      }
+    },
+    "validation": {
+      "nll": 9.100540399551392,
+      "supervised_targets": 32,
+      "query_targets": 32,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "410": 32
+      }
+    },
+    "history": [
+      {
+        "update": 1,
+        "loss": 8.876825332641602,
+        "gradient_norm": 31.397363662719727,
+        "parameter_change_norm": 0.4292803406715393,
+        "compute_seconds": 0.361531991999982,
+        "input_sha256": "4bce8681668e437ae140db84acd4d9e71d471823b17591dc6d701553d4ff704b",
+        "supervised_targets": 4,
+        "query_targets": 4
+      },
+      {
+        "update": 2,
+        "loss": 9.17470932006836,
+        "gradient_norm": 15.999835014343262,
+        "parameter_change_norm": 0.32719966769218445,
+        "compute_seconds": 0.056706013000052735,
+        "input_sha256": "d42203bf8c527608cbda21de2e3a4c372a9556708840c8eae8e777847bd44eae",
+        "supervised_targets": 4,
+        "query_targets": 4
+      }
+    ],
+    "parameters": {
+      "static_parameters": 10130688,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "by_module": {
+        "embedding": 2097152,
+        "blocks": 8033280,
+        "final_norm": 256
+      }
+    },
+    "checkpoint_policy": {
+      "writes_this_process": 2,
+      "write_seconds_this_process": 3.8191105459999335,
+      "policy": {
+        "every_updates": 8,
+        "every_seconds": 120,
+        "final": true,
+        "timeout": true,
+        "unsafe_update_rollback": "last durable checkpoint"
+      }
+    },
+    "checkpoint": {
+      "sha256": "47da260aff7ca33cee9b0dcf8fdb377640402324e941100cafd05351f8300227",
+      "bytes": 177683245,
+      "durable_updates": 2,
+      "payload_verified": true
+    },
+    "hypotheses": "NOT_EVALUATED",
+    "training_peak_allocated_bytes": 345202688,
+    "identity": {
+      "source_commit": "3916a39e1a0846a3be4ed71fc58cbb42f3f3c533",
+      "implementation_sha256": "aee8857b6e892cb53d731654ac0da8c6f113482c199e0526ede33d882defc2fe",
+      "protocol_sha256": "0a52cc4a35b707bf385bdd397ee947aaba937d4d15eee99f0bd2b2b81d47e154",
+      "arm": "E0",
+      "dataset_sha256": "b734833dda18613323dd1b6b5c845f6b4d0a19cbd4f48b47aece2f60ced86063",
+      "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04"
+    },
+    "resource_profile": {
+      "batch": 1,
+      "input_tokens": 128,
+      "prefill_tokens": 120,
+      "teacher_forced_decode_tokens": 8,
+      "full_forward_p50_seconds": 0.01336136300005819,
+      "prefill_seconds": 0.0170041129999845,
+      "decode_token_p50_seconds": 0.017143025500047315,
+      "full_vs_cached_max_abs_error": 1.1920928955078125e-06,
+      "runtime_state": {
+        "tensor_payload_bytes": 2621440,
+        "retained_storage_bytes": 2621440,
+        "retained_bytes_per_stream": 2621440,
+        "mamba_payload_bytes": 0,
+        "kv_payload_bytes": 2621440,
+        "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+      },
+      "inference_peak_allocated_bytes": 89544704,
+      "backend": "PyTorch reference; not an optimized native-kernel benchmark"
+    }
+  },
+  "E1": {
+    "status": "COMPLETE",
+    "error": null,
+    "ledger": {
+      "input_tokens": 1024,
+      "processed_tensor_tokens": 1024,
+      "padding_tokens": 0,
+      "supervised_target_tokens": 8,
+      "query_target_tokens": 8,
+      "committed_updates": 2
+    },
+    "initial_evaluation": {
+      "nll": 9.031142354011536,
+      "supervised_targets": 32,
+      "query_targets": 32,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "5437": 13,
+        "1202": 3,
+        "3107": 1,
+        "3581": 1,
+        "547": 3,
+        "435": 1,
+        "4631": 1,
+        "3528": 1,
+        "3672": 1,
+        "4416": 1,
+        "157": 1,
+        "811": 1,
+        "4717": 1,
+        "7148": 1,
+        "4621": 1,
+        "2317": 1
+      }
+    },
+    "validation": {
+      "nll": 9.090220332145691,
+      "supervised_targets": 32,
+      "query_targets": 32,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "410": 30,
+        "287": 2
+      }
+    },
+    "history": [
+      {
+        "update": 1,
+        "loss": 9.04916763305664,
+        "gradient_norm": 30.012956619262695,
+        "parameter_change_norm": 0.4284725487232208,
+        "compute_seconds": 0.07329639199997473,
+        "input_sha256": "4bce8681668e437ae140db84acd4d9e71d471823b17591dc6d701553d4ff704b",
+        "supervised_targets": 4,
+        "query_targets": 4
+      },
+      {
+        "update": 2,
+        "loss": 9.082962989807129,
+        "gradient_norm": 16.65848159790039,
+        "parameter_change_norm": 0.3165546953678131,
+        "compute_seconds": 0.0630581020000136,
+        "input_sha256": "d42203bf8c527608cbda21de2e3a4c372a9556708840c8eae8e777847bd44eae",
+        "supervised_targets": 4,
+        "query_targets": 4
+      }
+    ],
+    "parameters": {
+      "static_parameters": 10130688,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "by_module": {
+        "embedding": 2097152,
+        "blocks": 8033280,
+        "final_norm": 256
+      }
+    },
+    "checkpoint_policy": {
+      "writes_this_process": 2,
+      "write_seconds_this_process": 3.7541738959999975,
+      "policy": {
+        "every_updates": 8,
+        "every_seconds": 120,
+        "final": true,
+        "timeout": true,
+        "unsafe_update_rollback": "last durable checkpoint"
+      }
+    },
+    "checkpoint": {
+      "sha256": "2a2c3a7a1f77069c827a1ae516d42d54b7bbb0a6dfee22720cf4b8c3443bf198",
+      "bytes": 177621933,
+      "durable_updates": 2,
+      "payload_verified": true
+    },
+    "hypotheses": "NOT_EVALUATED",
+    "training_peak_allocated_bytes": 345858048,
+    "identity": {
+      "source_commit": "3916a39e1a0846a3be4ed71fc58cbb42f3f3c533",
+      "implementation_sha256": "aee8857b6e892cb53d731654ac0da8c6f113482c199e0526ede33d882defc2fe",
+      "protocol_sha256": "0a52cc4a35b707bf385bdd397ee947aaba937d4d15eee99f0bd2b2b81d47e154",
+      "arm": "E1",
+      "dataset_sha256": "b734833dda18613323dd1b6b5c845f6b4d0a19cbd4f48b47aece2f60ced86063",
+      "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04"
+    },
+    "resource_profile": {
+      "batch": 1,
+      "input_tokens": 128,
+      "prefill_tokens": 120,
+      "teacher_forced_decode_tokens": 8,
+      "full_forward_p50_seconds": 0.015564483000048313,
+      "prefill_seconds": 0.015138162999960514,
+      "decode_token_p50_seconds": 0.015379392999932406,
+      "full_vs_cached_max_abs_error": 9.5367431640625e-07,
+      "runtime_state": {
+        "tensor_payload_bytes": 655360,
+        "retained_storage_bytes": 655360,
+        "retained_bytes_per_stream": 655360,
+        "mamba_payload_bytes": 0,
+        "kv_payload_bytes": 655360,
+        "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+      },
+      "inference_peak_allocated_bytes": 87578624,
+      "backend": "PyTorch reference; not an optimized native-kernel benchmark"
+    }
+  },
+  "E2": {
+    "status": "COMPLETE",
+    "error": null,
+    "ledger": {
+      "input_tokens": 1024,
+      "processed_tensor_tokens": 1024,
+      "padding_tokens": 0,
+      "supervised_target_tokens": 8,
+      "query_target_tokens": 8,
+      "committed_updates": 2
+    },
+    "initial_evaluation": {
+      "nll": 8.9912348985672,
+      "supervised_targets": 32,
+      "query_targets": 32,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "5228": 1,
+        "6280": 1,
+        "515": 1,
+        "5440": 1,
+        "4728": 1,
+        "849": 1,
+        "7081": 2,
+        "3786": 1,
+        "4854": 1,
+        "4442": 1,
+        "4499": 1,
+        "6414": 1,
+        "95": 1,
+        "1137": 1,
+        "5397": 1,
+        "6868": 1,
+        "3981": 1,
+        "7608": 1,
+        "5014": 1,
+        "1044": 1,
+        "6311": 1,
+        "6129": 1,
+        "315": 1,
+        "2": 1,
+        "952": 1,
+        "7433": 1,
+        "4560": 1,
+        "1651": 1,
+        "2754": 1,
+        "4901": 1,
+        "5367": 1
+      }
+    },
+    "validation": {
+      "nll": 8.95701265335083,
+      "supervised_targets": 32,
+      "query_targets": 32,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "1684": 1,
+        "3230": 3,
+        "470": 5,
+        "410": 13,
+        "1946": 1,
+        "3865": 1,
+        "291": 1,
+        "4946": 2,
+        "6129": 1,
+        "3367": 1,
+        "7560": 1,
+        "8088": 1,
+        "5367": 1
+      }
+    },
+    "history": [
+      {
+        "update": 1,
+        "loss": 8.830572128295898,
+        "gradient_norm": 33.386985778808594,
+        "parameter_change_norm": 0.426812082529068,
+        "compute_seconds": 2.1917246909999903,
+        "input_sha256": "4bce8681668e437ae140db84acd4d9e71d471823b17591dc6d701553d4ff704b",
+        "supervised_targets": 4,
+        "query_targets": 4
+      },
+      {
+        "update": 2,
+        "loss": 9.271568298339844,
+        "gradient_norm": 29.019908905029297,
+        "parameter_change_norm": 0.34077540040016174,
+        "compute_seconds": 2.163481049999973,
+        "input_sha256": "d42203bf8c527608cbda21de2e3a4c372a9556708840c8eae8e777847bd44eae",
+        "supervised_targets": 4,
+        "query_targets": 4
+      }
+    ],
+    "parameters": {
+      "static_parameters": 10092288,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "by_module": {
+        "embedding": 2097152,
+        "blocks": 7994880,
+        "final_norm": 256
+      }
+    },
+    "checkpoint_policy": {
+      "writes_this_process": 2,
+      "write_seconds_this_process": 3.7129308179999043,
+      "policy": {
+        "every_updates": 8,
+        "every_seconds": 120,
+        "final": true,
+        "timeout": true,
+        "unsafe_update_rollback": "last durable checkpoint"
+      }
+    },
+    "checkpoint": {
+      "sha256": "fb14031b812341a91db0d7c143971f6e187f6f71dc5277cbf68efcebbe9d656c",
+      "bytes": 175789997,
+      "durable_updates": 2,
+      "payload_verified": true
+    },
+    "hypotheses": "NOT_EVALUATED",
+    "training_peak_allocated_bytes": 1281119232,
+    "identity": {
+      "source_commit": "3916a39e1a0846a3be4ed71fc58cbb42f3f3c533",
+      "implementation_sha256": "aee8857b6e892cb53d731654ac0da8c6f113482c199e0526ede33d882defc2fe",
+      "protocol_sha256": "0a52cc4a35b707bf385bdd397ee947aaba937d4d15eee99f0bd2b2b81d47e154",
+      "arm": "E2",
+      "dataset_sha256": "b734833dda18613323dd1b6b5c845f6b4d0a19cbd4f48b47aece2f60ced86063",
+      "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04"
+    },
+    "resource_profile": {
+      "batch": 1,
+      "input_tokens": 128,
+      "prefill_tokens": 120,
+      "teacher_forced_decode_tokens": 8,
+      "full_forward_p50_seconds": 0.3175676609999982,
+      "prefill_seconds": 0.30343914900004165,
+      "decode_token_p50_seconds": 0.019602025499978026,
+      "full_vs_cached_max_abs_error": 1.8775463104248047e-06,
+      "runtime_state": {
+        "tensor_payload_bytes": 884736,
+        "retained_storage_bytes": 884736,
+        "retained_bytes_per_stream": 884736,
+        "mamba_payload_bytes": 884736,
+        "kv_payload_bytes": 0,
+        "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+      },
+      "inference_peak_allocated_bytes": 87654400,
+      "backend": "PyTorch reference; not an optimized native-kernel benchmark"
+    }
+  },
+  "E3": {
+    "status": "COMPLETE",
+    "error": null,
+    "ledger": {
+      "input_tokens": 1024,
+      "processed_tensor_tokens": 1024,
+      "padding_tokens": 0,
+      "supervised_target_tokens": 8,
+      "query_target_tokens": 8,
+      "committed_updates": 2
+    },
+    "initial_evaluation": {
+      "nll": 9.070460081100464,
+      "supervised_targets": 32,
+      "query_targets": 32,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "3017": 2,
+        "3045": 1,
+        "286": 1,
+        "5279": 1,
+        "6077": 1,
+        "1386": 1,
+        "7035": 1,
+        "5781": 2,
+        "6784": 1,
+        "6713": 1,
+        "1123": 1,
+        "1059": 2,
+        "3817": 1,
+        "4948": 1,
+        "4464": 1,
+        "7479": 1,
+        "4902": 1,
+        "4844": 1,
+        "1151": 1,
+        "182": 1,
+        "7323": 1,
+        "5144": 1,
+        "3152": 1,
+        "1776": 1,
+        "6280": 1,
+        "4428": 1,
+        "6277": 1,
+        "7505": 1,
+        "7872": 1
+      }
+    },
+    "validation": {
+      "nll": 9.024204850196838,
+      "supervised_targets": 32,
+      "query_targets": 32,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "3862": 1,
+        "287": 12,
+        "410": 1,
+        "5321": 1,
+        "516": 1,
+        "3442": 1,
+        "4421": 1,
+        "3778": 7,
+        "429": 2,
+        "3753": 1,
+        "408": 2,
+        "458": 1,
+        "8045": 1
+      }
+    },
+    "history": [
+      {
+        "update": 1,
+        "loss": 8.647682189941406,
+        "gradient_norm": 38.77534484863281,
+        "parameter_change_norm": 0.42630958557128906,
+        "compute_seconds": 0.5243919370000185,
+        "input_sha256": "4bce8681668e437ae140db84acd4d9e71d471823b17591dc6d701553d4ff704b",
+        "supervised_targets": 4,
+        "query_targets": 4
+      },
+      {
+        "update": 2,
+        "loss": 9.186792373657227,
+        "gradient_norm": 25.468351364135742,
+        "parameter_change_norm": 0.33639949560165405,
+        "compute_seconds": 0.5070045410000148,
+        "input_sha256": "d42203bf8c527608cbda21de2e3a4c372a9556708840c8eae8e777847bd44eae",
+        "supervised_targets": 4,
+        "query_targets": 4
+      }
+    ],
+    "parameters": {
+      "static_parameters": 10135808,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "by_module": {
+        "embedding": 2097152,
+        "blocks": 8038400,
+        "final_norm": 256
+      }
+    },
+    "checkpoint_policy": {
+      "writes_this_process": 2,
+      "write_seconds_this_process": 3.714846639000143,
+      "policy": {
+        "every_updates": 8,
+        "every_seconds": 120,
+        "final": true,
+        "timeout": true,
+        "unsafe_update_rollback": "last durable checkpoint"
+      }
+    },
+    "checkpoint": {
+      "sha256": "1fee744edff096fa2e24037d6e276dd61be9867fe521e5443ac8ba5ad1c3f5ef",
+      "bytes": 177111405,
+      "durable_updates": 2,
+      "payload_verified": true
+    },
+    "hypotheses": "NOT_EVALUATED",
+    "training_peak_allocated_bytes": 569260032,
+    "identity": {
+      "source_commit": "3916a39e1a0846a3be4ed71fc58cbb42f3f3c533",
+      "implementation_sha256": "aee8857b6e892cb53d731654ac0da8c6f113482c199e0526ede33d882defc2fe",
+      "protocol_sha256": "0a52cc4a35b707bf385bdd397ee947aaba937d4d15eee99f0bd2b2b81d47e154",
+      "arm": "E3",
+      "dataset_sha256": "b734833dda18613323dd1b6b5c845f6b4d0a19cbd4f48b47aece2f60ced86063",
+      "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04"
+    },
+    "resource_profile": {
+      "batch": 1,
+      "input_tokens": 128,
+      "prefill_tokens": 120,
+      "teacher_forced_decode_tokens": 8,
+      "full_forward_p50_seconds": 0.0761959310000293,
+      "prefill_seconds": 0.07607360700001209,
+      "decode_token_p50_seconds": 0.01302651200001037,
+      "full_vs_cached_max_abs_error": 1.7881393432617188e-06,
+      "runtime_state": {
+        "tensor_payload_bytes": 458752,
+        "retained_storage_bytes": 458752,
+        "retained_bytes_per_stream": 458752,
+        "mamba_payload_bytes": 196608,
+        "kv_payload_bytes": 262144,
+        "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+      },
+      "inference_peak_allocated_bytes": 87402496,
+      "backend": "PyTorch reference; not an optimized native-kernel benchmark"
+    }
+  }
+}

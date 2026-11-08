@@ -1,0 +1,257 @@
+{
+  "format": "minicells.epclm004.m2-run.v1",
+  "run_id": "epclm004-m2-3916a39e1a08-feb89cc3",
+  "identity": {
+    "source_commit": "3916a39e1a0846a3be4ed71fc58cbb42f3f3c533",
+    "implementation_sha256": "aee8857b6e892cb53d731654ac0da8c6f113482c199e0526ede33d882defc2fe",
+    "protocol_sha256": "0a52cc4a35b707bf385bdd397ee947aaba937d4d15eee99f0bd2b2b81d47e154"
+  },
+  "protocol": {
+    "format": "minicells.epclm004.m2-protocol.v1",
+    "scope": "engineering correctness and cost only",
+    "parameters_reference": "frozen M1 E0 10130688; +/-1% relative to that baseline, not exactly 10M",
+    "arms": {
+      "E0": {
+        "model": {
+          "vocab": 8192,
+          "dim": 256,
+          "layers": 10,
+          "heads": 4,
+          "kv_heads": 4,
+          "ffn": 704,
+          "window": 16384
+        },
+        "state_size": null
+      },
+      "E1": {
+        "model": {
+          "vocab": 8192,
+          "dim": 256,
+          "layers": 10,
+          "heads": 4,
+          "kv_heads": 4,
+          "ffn": 704,
+          "window": 32
+        },
+        "state_size": null
+      },
+      "E2": {
+        "model": {
+          "vocab": 8192,
+          "dim": 256,
+          "layers": 18,
+          "heads": 4,
+          "kv_heads": 4,
+          "ffn": 704,
+          "window": 32
+        },
+        "state_size": 20
+      },
+      "E3": {
+        "model": {
+          "vocab": 8192,
+          "dim": 256,
+          "layers": 8,
+          "heads": 4,
+          "kv_heads": 4,
+          "ffn": 848,
+          "window": 32
+        },
+        "state_size": 20
+      }
+    },
+    "model_seed": 41017,
+    "data": {
+      "bindings": 8,
+      "length": 128,
+      "queries": 1,
+      "interference": 1.0,
+      "seed": 41001,
+      "regime": "unseen_pairs"
+    },
+    "data_sizes": {
+      "train": 128,
+      "validation": 32,
+      "test": 0
+    },
+    "training": {
+      "seed": 41017,
+      "batch": 4,
+      "lr": 0.0003,
+      "updates": 2,
+      "precision": "fp32",
+      "tf32": false,
+      "optimizer": "AdamW",
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "weight_decay": 0.1,
+      "weight_decay_policy": "all static parameters as in M1",
+      "clip": 1.0,
+      "scheduler": "constant-engineering-smoke",
+      "checkpoint": {
+        "every_updates": 8,
+        "every_seconds": 120,
+        "final": true,
+        "timeout": true,
+        "unsafe_update_rollback": "last durable checkpoint"
+      }
+    },
+    "budget": {
+      "execution_seconds": 5400,
+      "publication_reserve_seconds": 600,
+      "safety_seconds": 1200,
+      "notebook_hard_seconds": 7200
+    },
+    "backend": "official Mamba1 PyTorch reference; no native kernel performance claim",
+    "hypotheses": "NOT_EVALUATED",
+    "profile": "gpu-engineering"
+  },
+  "environment": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "cuda_build": "13.0",
+    "device": "cuda",
+    "gpu": "Tesla T4",
+    "dependencies": {
+      "numpy": "2.1.3",
+      "einops": "0.8.2",
+      "tokenizers": "0.20.3",
+      "datasets": "3.6.0"
+    },
+    "precision": "fp32",
+    "actual_tf32": {
+      "matmul": false,
+      "cudnn": false
+    }
+  },
+  "kaggle_identity_status": "ID_PENDING_IF_RUNTIME_NOT_EXPOSED",
+  "kaggle_script_version_id": null,
+  "formal_training_tokens": 0,
+  "frozen_source_lock": {
+    "format": "minicells.epclm004.m2-source-lock.v1",
+    "frozen_e0_commit": "b089f18f13893920e9e996ce91ce39bec642bc6d",
+    "frozen_files": {
+      "e0.py": "c9915f10e330091d09fa3120a18c57bb8910aa7889d9e2ffa81a616b5a4a66aa",
+      "run.py": "ef770de3903a47ba4a92f549aa2d647caeb48463c0e2d42e0699570887dda92d",
+      "data.py": "9476c6493176cf5e39caa2f146946d2c4cd180ec29d742e9902bb5bd156dbee2",
+      "configs/model-e0.json": "52c07ccd7e12867aa00674ed6c892c802eb10a8546ee4fd472b1fe6f4093eab2",
+      "assets/tokenizer.json": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04"
+    },
+    "inherited_files": {
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "7386bac2ec3b7cc0cb9eb82d903756834dae06c993d48af9bc428d3baf66aac3",
+      "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_runtime.py": "3c1ae7d35ce51724954bd0d323125cbe48ff8cbd9c488abf2a4671f0f83bffb4",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/implementation/trainer.py": "f77fd42822569ee2efa25e77e3f3f8e93de7af5381b220ee8aa56eb6c8c4ade6"
+    }
+  },
+  "upstream_source_lock": {
+    "format": "minicells.epclm004.m2-upstream.v1",
+    "backend": "pytorch-reference-only-no-native-extension",
+    "samba": {
+      "repository": "https://github.com/microsoft/Samba",
+      "commit": "617c7a0f8c71f1b7cb6180b86f9543d146f5c66f",
+      "file": "lit_gpt/mamba_simple.py",
+      "original_sha256": "de3eb58c348b4320531bd7c4ecf96eb8592609d215adf638b90d708f56e515c7"
+    },
+    "mamba": {
+      "repository": "https://github.com/state-spaces/mamba",
+      "tag": "v1.2.2",
+      "commit": "a07faffa36a7b89e754b5de972418475bcdd77b6",
+      "file": "mamba_ssm/ops/selective_scan_interface.py",
+      "original_file_sha256": "fe606b4c7e81b47bb091cf59dc474aece1112a6ca01eb6f22309090e56030bc4",
+      "extracted_function_sha256": "61364612bc9d15630c28d0a09933ae895b4fcb88db3e9a855542e3b291c7774a"
+    },
+    "adaptations": [
+      "Samba class unchanged except extension imports replaced by pinned reference function and fast path disabled/rejected",
+      "Fix unavailable optional conv/update import by explicit None assignments",
+      "No CUDA kernel rewrite or dependency installation; module API/state definitions retained"
+    ],
+    "native_kernel_equivalence": "NOT_VERIFIED",
+    "mamba3_substitution": false,
+    "vendored_sha256": {
+      "vendor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vendor/selective_scan_ref.py": "0113cb9152826dc265027553df291400d3b4693d4c41985d3ca61030f1e288f0",
+      "vendor/samba_mamba1.py": "c7beb09d29c0ff6eb7013eaff01e82d0458ee8f2109fe16e98e2d82c2d3d7639"
+    }
+  },
+  "data_assets": {
+    "format": "minicells.epclm004.wikitext.v1",
+    "request": {
+      "dataset": {
+        "path": "Salesforce/wikitext",
+        "name": "wikitext-103-raw-v1",
+        "revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+      },
+      "train_lines": 2048,
+      "validation_lines": 32,
+      "preprocessing": "nonempty-lines-crlf-to-lf-validation-excludes-train-exact-lines-v2",
+      "tokenizer": "ByteLevel-BPE-8192-reserved536-v1"
+    },
+    "text_sha256": {
+      "train": "f580bb08f1c4d50f09cd364aebdc393aba5bf4ec7b7af9daf0bcee6e5d62495c",
+      "validation": "687c1b72cb84fa147688154aa055362da81cd5cf4142a42437b6d1398d5c2fd8"
+    },
+    "files": {
+      "tokenizer.json": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+      "train.json": "3e50ba974947f9b278f78a069cff7be827df32695a811a29ae805970ac6ed4ca",
+      "validation.json": "700663878d29e1f628619bbb1b65fd00756c6d48ef20ad24ee0febc5fcb0e285"
+    },
+    "vocab_size": 8192,
+    "test_status": "SEALED_NOT_ACCESSED",
+    "special_ids": {
+      "<pad>": 0,
+      "<unk>": 1,
+      "<bos>": 2,
+      "<eos>": 3,
+      "<fact>": 4,
+      "<query>": 5,
+      "<answer>": 6,
+      "<hole>": 7
+    },
+    "tokenizer_train_split": "train only"
+  },
+  "dataset_sha256": "b734833dda18613323dd1b6b5c845f6b4d0a19cbd4f48b47aece2f60ced86063",
+  "counts": {
+    "E0": {
+      "static_parameters": 10130688,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "by_module": {
+        "embedding": 2097152,
+        "blocks": 8033280,
+        "final_norm": 256
+      }
+    },
+    "E1": {
+      "static_parameters": 10130688,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "by_module": {
+        "embedding": 2097152,
+        "blocks": 8033280,
+        "final_norm": 256
+      }
+    },
+    "E2": {
+      "static_parameters": 10092288,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "by_module": {
+        "embedding": 2097152,
+        "blocks": 7994880,
+        "final_norm": 256
+      }
+    },
+    "E3": {
+      "static_parameters": 10135808,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "by_module": {
+        "embedding": 2097152,
+        "blocks": 8038400,
+        "final_norm": 256
+      }
+    }
+  }
+}
