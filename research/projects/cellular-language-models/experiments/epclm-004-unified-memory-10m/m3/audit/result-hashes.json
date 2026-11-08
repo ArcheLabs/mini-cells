@@ -1,8 +1,9 @@
 {
-  "scope": "all curated M3 delivery files except this manifest; Git commit authenticates this file",
+  "scope": "curated delivery excluding this self-manifest",
   "sha256": {
     "README.md": "ee390ec311ae5df03ee401df6384d764005f2461a2ece2eff508b91f890cf3c6",
-    "REPORT.zh-CN.md": "cae538e8916ec0f4f812989f28c5612372b23a5ccb2934b1d25c64337bbd8d83",
+    "REPORT.zh-CN.md": "a1c94318c80aafc7734e96cb4ed4101fda69f2edf0f8795f81ad7f57366cfa95",
+    "audit/REPORT-before-t4.zh-CN.md": "cae538e8916ec0f4f812989f28c5612372b23a5ccb2934b1d25c64337bbd8d83",
     "audit/cpu/gate1.json": "d415b8ba01130803e8f9afd1641cd0df72d1487f3b5da4dbf279439445361116",
     "audit/cpu/gate2.json": "db8f93d11aa33f5f275dd015db8b25f35e3dd3082a82d9de7c750ae9c50a68a2",
     "audit/cpu/gate3/4f4516535c61629e/cell/manifest.json": "60c749742a8726edb082da0aadceaeb6887f2e674dda0b2adb4e9dc6de228312",
@@ -16,6 +17,8 @@
     "audit/manifest.json": "ef3eb2074cd893919a34231f7306c60c94082ac0122e10702ee2eb77e68e2a8a",
     "audit/parameter-counts.json": "516ffeca77bdbf1cb7b0da4b0b99ac520038a1cb0ea84b41c1c0f13991251e8e",
     "audit/planned-dataset-manifest.json": "3dd513b4589c38524ac2265ec894bf58f4f47856397772cc4502f6372921c9b8",
+    "audit/publication-fix.json": "7d6161ee1802eda3ada7b346d0287ece978c6553f23dda7af4334c5421692709",
+    "audit/publication-regression.log": "99d161a645be50b349f708e7258256d26012e07682341df9edd3b5d8fc1da2cf",
     "configs/smoke.json": "9e029b19fa3dfa8aaaa5eb624ff230f8cbb62ac21d90e876c460fb98986dc0cc",
     "configs/source-lock.json": "40598768ed8887791eeb040ab26c7432b5895d4724755c3fba19986259c9974b",
     "gates.py": "7befe176c054c88ec5d5f22b2aa7113c51d30bef5ae7881a62d29bc4449037ff",
@@ -23,7 +26,8 @@
     "mag_model.py": "4aad2e5d57fcfc6b3ca3bceb4ef3d8710ff661dae8fd36e81756dde7df3d9aaf",
     "memory.py": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
     "notebook.ipynb": "01f1b1c0a61c3db6f2b121afecc78c0a3317a5dcb9bba87213a79c44146584b8",
-    "run.py": "a74366f89f4c92ca42190cd3dfa463811705e7d53fabdfc2de43d1d7fdd9985a",
-    "tests/test_gates.py": "0f9e8f8ed94fd32f9d8b5e47f182af448ac17e8f9e137134bd5bc775c49a3d6e"
+    "run.py": "7c8c30e859f4b32202b0087afc58cbde0717ffa7676087127af80370e193b085",
+    "tests/test_gates.py": "0f9e8f8ed94fd32f9d8b5e47f182af448ac17e8f9e137134bd5bc775c49a3d6e",
+    "tests/test_publication.py": "d3666266497d4d4ba67d177f0277ce991112c2e1dd882ccf10424db0fccee98e"
   }
 }

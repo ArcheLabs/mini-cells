@@ -9,6 +9,7 @@ import shutil
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 import uuid
 import torch
@@ -179,32 +180,49 @@ def artifacts(out):
 def publish(out,decision):
     sys.path.insert(0,str(ROOT))
     from scripts.research.publish_experiment_results import ExperimentSpec,prepare_artifacts,push_results
-    files=artifacts(out);stage=ROOT/'results/epclm004-m3/publish'
-    if stage.exists():shutil.rmtree(stage)
-    stage.mkdir(parents=True)
-    names=[]
-    for p in files:
-        relative=str(p.relative_to(out));target=stage/relative;target.parent.mkdir(parents=True,exist_ok=True)
-        shutil.copyfile(p,target);names.append(relative)
-    hashes={name:file_hash(stage/name) for name in names}
-    write(stage/'publication-files.json',hashes);names.append('publication-files.json')
-    destination=ROOT/'artifacts/experiments/epclm004-m3'/decision['run_id']
-    spec=ExperimentSpec(str(stage.relative_to(ROOT)),str(destination.relative_to(ROOT)),tuple(names),decision['branch'],decision['format'])
-    folder=prepare_artifacts(ROOT,'epclm004-m3',spec,decision.get('script_version_id'))
-    push_results(ROOT,folder,'epclm004-m3',decision['branch'],'GITHUB_TOKEN','origin/main')
-    for name,sha in hashes.items():
-        if file_hash(destination/name)!=sha:raise ValueError('published report hash differs')
-    receipt={'status':'REMOTE_SHA_VERIFIED','branch':decision['branch'],
-        'commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
-        'file_count':len(hashes),'files':hashes}
+    # The shared publisher switches its checkout. Each attempt gets a clean isolated
+    # repository, so a second publication cannot dirty/switch the live experiment.
+    source=decision['identity']['source']
+    origin=subprocess.check_output(['git','remote','get-url','origin'],cwd=ROOT,text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='epclm004-m3-publish-') as temporary:
+        root=Path(temporary)/'repo'
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout',str(ROOT),str(root)],check=True)
+        subprocess.run(['git','remote','set-url','origin',origin],cwd=root,check=True)
+        subprocess.run(['git','checkout','--quiet','--detach',source],cwd=root,check=True)
+        files=artifacts(out);stage=root/'results/epclm004-m3/publish';stage.mkdir(parents=True)
+        names=[]
+        for p in files:
+            relative=str(p.relative_to(out));target=stage/relative;target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(p,target);names.append(relative)
+        hashes={name:file_hash(stage/name) for name in names}
+        write(stage/'publication-files.json',hashes);names.append('publication-files.json')
+        destination=root/'artifacts/experiments/epclm004-m3'/decision['run_id']
+        spec=ExperimentSpec(str(stage.relative_to(root)),str(destination.relative_to(root)),tuple(names),decision['branch'],decision['format'])
+        folder=prepare_artifacts(root,'epclm004-m3',spec,decision.get('script_version_id'))
+        push_results(root,folder,'epclm004-m3',decision['branch'],'GITHUB_TOKEN','origin/main')
+        for name,sha in hashes.items():
+            if file_hash(destination/name)!=sha:raise ValueError('published report hash differs')
+        receipt={'status':'REMOTE_SHA_VERIFIED','branch':decision['branch'],
+            'commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),
+            'file_count':len(hashes),'files':hashes}
     write(out/'publication.json',receipt)
     return receipt
+
+
+def finish_publication(out,decision):
+    decision['publication']=publish(out,decision)
+    if decision['status']=='GPU_SMOKE_PASS_PUBLICATION_PENDING':
+        decision['status']='M3_ENGINEERING_COMPLETE'
+        write(out/'decision.json',decision);report(out,decision)
+        # Link to a prior verified commit rather than inventing a self-referential SHA.
+        publish(out,decision)
+    else:write(out/'decision.json',decision)
 
 
 def launch(args):
     out=args.output;out.mkdir(parents=True,exist_ok=True)
     if args.publish_only:
-        decision=json.loads((out/'decision.json').read_text());publish(out,decision);return
+        decision=json.loads((out/'decision.json').read_text());finish_publication(out,decision);return
     started=args.started or time.monotonic();protocol=json.loads((BASE/'configs/smoke.json').read_text())
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     run_id='epclm004-m3-'+source[:12]+'-'+uuid.uuid4().hex[:8]
@@ -235,15 +253,7 @@ def launch(args):
     finally:
         signal.alarm(0);decision['wall_seconds']=time.monotonic()-started
         write(out/'decision.json',decision);report(out,decision)
-    if args.publish:
-        receipt=publish(out,decision)
-        decision['publication']=receipt
-        if decision['status']=='GPU_SMOKE_PASS_PUBLICATION_PENDING':
-            decision['status']='M3_ENGINEERING_COMPLETE'
-            write(out/'decision.json',decision);report(out,decision)
-            # Completion references a prior verified report commit, avoiding a self-hash cycle.
-            publish(out,decision)
-        else:write(out/'decision.json',decision)
+    if args.publish:finish_publication(out,decision)
     print({'status':decision['status'],'report':str(out/'decision.json')},flush=True)
     if exit_code:raise SystemExit(exit_code)
 
