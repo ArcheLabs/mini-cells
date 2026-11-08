@@ -22,8 +22,12 @@ def test_causal_full_sequence_masked_loss_gradients_and_parameter_count():
     a=m(x);b=m(y)
     torch.testing.assert_close(a[:,:7],b[:,:7],atol=1e-6,rtol=1e-6)
     # A token beyond Config.window=1 must still have a differentiable path to the final output.
-    m.zero_grad();m(x)[:,-1,264].sum().backward()
-    assert m.token_embedding.weight.grad[x[0,0]].norm()>0
+    captured=[]
+    def retain(module,inputs,output):
+        output.retain_grad();captured.append(output)
+    hook=m.token_embedding.register_forward_hook(retain)
+    m.zero_grad();m(x)[:,-1,264].sum().backward();hook.remove()
+    assert captured[0].grad[0,0].norm()>0
     labels=torch.full((2,12),-100);labels[0,-1]=264;labels[1,-2:]=265
     loss=masked_loss(a,labels)
     expected=F.cross_entropy(torch.stack([a[0,-1],a[1,-2],a[1,-1]]),torch.tensor([264,265,265]))
