@@ -1,0 +1,17 @@
+# M1 Dataset / Batch / Run contracts
+
+All models share one 8192-entry ByteLevel BPE trained only on the locked WikiText-103 train prefix. Reserved IDs: PAD=0, UNK=1, BOS=2, EOS=3, FACT=4, QUERY=5, ANSWER=6, HOLE=7; keys=8..263, values=264..519, noise=520..535. These reserved symbolic entries share the tokenizer/model vocabulary, rather than using an independent synthetic tokenizer. They are marked special so BPE cannot split them.
+
+MQAR input is BOS, FACT/key/value triples, a controlled noise/HOLE gap, QUERY/key/ANSWER. The label at ANSWER predicts the value; that gold answer is never appended as input. Default training uses one query at the last input position. Optional generator multi-query support uses HOLE between queries, never answer feedback; the M1 trainer rejects multi-query configs. Gap length is fixed by sequence length; `interference` controls the proportion of noise rather than neutral HOLE tokens in that gap.
+
+`unseen_pairs`: all splits use the same 256 key and 256 value symbols; `(key_index + value_index) % 3` assigns each pair exclusively to train/validation/test. Each episode redraws a mapping. This measures disjoint-pair composition, not unseen vocabulary. `unseen_symbols`: train uses indices 0..127, validation 128..191, test 192..255 for both keys and values. Symbol generalization is a separate condition, never merged into an aggregate pair-generalization claim. All splits use split-qualified deterministic seeds and content identities. No global fixed key→value answer map exists.
+
+Dataset manifest records config, explicit split content hashes/counts, tokenizer hash and IDs. The developer entry creates train/validation only. Test generation is an explicit data API for correctness fixtures; no experiment test is generated or opened in M1 runs. WikiText adapter prohibits test access and never substitutes another corpus.
+
+Batch contains `[B,T]` input IDs, same-position prediction labels (`-100` means unscored), boolean query mask, independent episode IDs and nonpadding input count. Right padding is never supervised; valid earlier tokens cannot attend future padding. Episodes are separate batch lanes. LM labels are the next token; MQAR's ANSWER-position labels are the requested values. Loss is the sum over valid labels divided by their count, never a mean of per-episode means.
+
+Run manifest binds source commit, implementation/config/dataset/tokenizer hashes, seed, hardware/software, model count, supervision policy and exact committed ledger. Input tokens exclude right padding; processed tensor tokens and padding are reported separately. Supervised targets include LM and query targets; query targets are a labeled subset. Only a successfully committed optimizer update advances these counters. Rejected attempts restore sampler/RNG and leave ledger unchanged; checkpoint payload saves model, optimizer, RNG, sampler and ledger together.
+
+WikiText identity: `Salesforce/wikitext`, `wikitext-103-raw-v1`, revision `b08601e04326c79dfdd32d625aee71d232d685c3`. Preprocessing canonicalizes CRLF and excludes blank lines; each remaining line is an independent segment, EOS bounded. Prefix truncation and exact-text split overlap checks are explicit in assets metadata. The short LM adapter is not an evaluation of the entire WikiText-103 benchmark.
+
+Dependencies added to the audit interpreter only: tokenizers==0.20.3 and datasets==3.6.0, with their resolver dependencies. No Mamba/FA2/transformers installation. `requirements-m1.txt` pins direct additions; runtime manifest records installed package versions.
