@@ -1,0 +1,30 @@
+{
+  "format": "minicells.epclm004.m2-upstream.v1",
+  "backend": "pytorch-reference-only-no-native-extension",
+  "samba": {
+    "repository": "https://github.com/microsoft/Samba",
+    "commit": "617c7a0f8c71f1b7cb6180b86f9543d146f5c66f",
+    "file": "lit_gpt/mamba_simple.py",
+    "original_sha256": "de3eb58c348b4320531bd7c4ecf96eb8592609d215adf638b90d708f56e515c7"
+  },
+  "mamba": {
+    "repository": "https://github.com/state-spaces/mamba",
+    "tag": "v1.2.2",
+    "commit": "a07faffa36a7b89e754b5de972418475bcdd77b6",
+    "file": "mamba_ssm/ops/selective_scan_interface.py",
+    "original_file_sha256": "fe606b4c7e81b47bb091cf59dc474aece1112a6ca01eb6f22309090e56030bc4",
+    "extracted_function_sha256": "61364612bc9d15630c28d0a09933ae895b4fcb88db3e9a855542e3b291c7774a"
+  },
+  "adaptations": [
+    "Samba class unchanged except extension imports replaced by pinned reference function and fast path disabled/rejected",
+    "Fix unavailable optional conv/update import by explicit None assignments",
+    "No CUDA kernel rewrite or dependency installation; module API/state definitions retained"
+  ],
+  "native_kernel_equivalence": "NOT_VERIFIED",
+  "mamba3_substitution": false,
+  "vendored_sha256": {
+    "vendor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/selective_scan_ref.py": "0113cb9152826dc265027553df291400d3b4693d4c41985d3ca61030f1e288f0",
+    "vendor/samba_mamba1.py": "c7beb09d29c0ff6eb7013eaff01e82d0458ee8f2109fe16e98e2d82c2d3d7639"
+  }
+}
