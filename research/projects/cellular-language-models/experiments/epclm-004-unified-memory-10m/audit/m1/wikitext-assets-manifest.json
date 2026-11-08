@@ -1,0 +1,53 @@
+{
+  "format": "minicells.epclm004.wikitext.v1",
+  "request": {
+    "dataset": {
+      "path": "Salesforce/wikitext",
+      "name": "wikitext-103-raw-v1",
+      "revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+    },
+    "train_lines": 2048,
+    "validation_lines": 32,
+    "preprocessing": "nonempty-lines-crlf-to-lf-validation-excludes-train-exact-lines-v2",
+    "tokenizer": "ByteLevel-BPE-8192-reserved536-v1"
+  },
+  "text_sha256": {
+    "train": "f580bb08f1c4d50f09cd364aebdc393aba5bf4ec7b7af9daf0bcee6e5d62495c",
+    "validation": "687c1b72cb84fa147688154aa055362da81cd5cf4142a42437b6d1398d5c2fd8"
+  },
+  "files": {
+    "tokenizer.json": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+    "train.json": "3e50ba974947f9b278f78a069cff7be827df32695a811a29ae805970ac6ed4ca",
+    "validation.json": "700663878d29e1f628619bbb1b65fd00756c6d48ef20ad24ee0febc5fcb0e285"
+  },
+  "vocab_size": 8192,
+  "test_status": "SEALED_NOT_ACCESSED",
+  "special_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3,
+    "<fact>": 4,
+    "<query>": 5,
+    "<answer>": 6,
+    "<hole>": 7
+  },
+  "tokenizer_train_split": "train only",
+  "transport_verification": {
+    "method": "Windows existing proxy; pinned Parquet downloaded and LFS-SHA256 verified; local transport only",
+    "source_files": {
+      "train": {
+        "url": "https://huggingface.co/datasets/Salesforce/wikitext/resolve/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/train-00000-of-00002.parquet",
+        "sha256": "74da360f23826045b3e6ac6375411fdb15f003030aa74f2596ed08b857cb9212",
+        "bytes": 156987808,
+        "hf_lfs_hash_match": true
+      },
+      "validation": {
+        "url": "https://huggingface.co/datasets/Salesforce/wikitext/resolve/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/validation-00000-of-00001.parquet",
+        "sha256": "204929b7ff9d6184953f867dedb860e40aa69c078fc1e54b3baaa8fb28511c4c",
+        "bytes": 657209,
+        "hf_lfs_hash_match": true
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "format": "minicells.epclm004.m1-validation.v1",
+  "status": "CPU_VALIDATED_TARGET_T4_EXECUTION_PENDING",
+  "tested_source_commit": "597b37aefedadf3a319102d76966c1dbb6a1d611",
+  "tests": {
+    "passed": 6,
+    "seconds": 16.64,
+    "matrix": "M1 only; no historical matrix"
+  },
+  "target_e0_parameters": 10130688,
+  "cpu_training_parameters": 272480,
+  "canonical_tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "gpu_target": "Kaggle Tesla T4 SM75",
+  "gpu_actual_execution": "NOT_RUN_TARGET_UNAVAILABLE",
+  "local_gpu_historical_audit": "Quadro K620 SM50, 2048 MiB; not the target",
+  "local_active_python_cuda": false,
+  "gpu_precheck": "GPU_UNAVAILABLE before data/training",
+  "checkpoint_restore": "fresh-instance evaluation matches for both actual CPU entries; exact optimizer/RNG/sampler resume and rollback covered by integration tests",
+  "postrun_packaging": "Frozen tokenizer copied from verified assets; fresh asset preparation verified against same train-prefix/content/hash; training model code unchanged. Completed CPU models not retrained.",
+  "scientific_hypotheses": "NOT_EVALUATED",
+  "independent_test_accessed": false,
+  "screening_tokens": 0,
+  "confirmation_tokens": 0,
+  "scope": "CPU tiny training is engineering validation, not 10M training or recall confirmation",
+  "postfreeze_tests": {
+    "data_subset_passed": 2,
+    "seconds": 14.13,
+    "fresh_asset_validation": "PASS",
+    "tokenizer_hash_and_ids": "PASS"
+  }
+}

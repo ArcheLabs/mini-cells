@@ -2,6 +2,7 @@
 from dataclasses import dataclass, asdict
 import hashlib
 import json
+import shutil
 from pathlib import Path
 import numpy as np
 import torch
@@ -144,11 +145,15 @@ def wikitext_prefix(split, nonempty_lines, exclude=()):
 def prepare_wikitext(folder, train_lines=2048, validation_lines=32):
     folder = Path(folder); folder.mkdir(parents=True,exist_ok=True)
     manifest_path = folder/'dataset.json'
+    lock = json.loads((Path(__file__).parent/'configs/tokenizer-lock.json').read_text())
+    frozen = Path(__file__).parent/'assets/tokenizer.json'
+    if file_hash(frozen) != lock['sha256']: raise ValueError('frozen tokenizer hash differs')
     request = {'dataset':WIKITEXT,'train_lines':train_lines,'validation_lines':validation_lines,
                'preprocessing':'nonempty-lines-crlf-to-lf-validation-excludes-train-exact-lines-v2','tokenizer':'ByteLevel-BPE-8192-reserved536-v1'}
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text())
         if manifest['request'] != request: raise ValueError('cached data request differs')
+        if manifest['files']['tokenizer.json'] != lock['sha256']: raise ValueError('cached tokenizer differs from frozen vocabulary')
         for name,sha in manifest['files'].items():
             if file_hash(folder/name) != sha: raise ValueError('asset hash differs: '+name)
         return manifest
@@ -156,7 +161,10 @@ def prepare_wikitext(folder, train_lines=2048, validation_lines=32):
     texts['validation'] = wikitext_prefix('validation',validation_lines,exclude=set(texts['train']))
     if set(texts['train']) & set(texts['validation']):
         raise ValueError('exact selected line overlap; choose explicit larger/sanitized policy')
-    tokenizer = train_bpe(texts['train'],folder/'tokenizer.json')
+    if digest(texts['train']) != lock['train_text_sha256']: raise ValueError('tokenizer training prefix identity differs')
+    shutil.copyfile(frozen,folder/'tokenizer.json')
+    from tokenizers import Tokenizer
+    tokenizer = Tokenizer.from_file(str(folder/'tokenizer.json'))
     for split,lines in texts.items():
         (folder/(split+'.json')).write_text(json.dumps(lines,ensure_ascii=False)+'\n')
     manifest = {'format':'minicells.epclm004.wikitext.v1','request':request,
