@@ -2,6 +2,10 @@
 
 Updated 2026-10-30. This is a research history, not a count of successful directories. The inventory covers main snapshot `3a70e57e6fbf2c515fda239aae03641a66ff6d74`; historical synthesis below draws on the existing Research Ledger. Newer records still require source-level integration. **Full historical acceptance remains incomplete.** Original experiments and results are unchanged.
 
+### Incremental evidence update — 2026-11-08, EPCLM-004
+
+[M1 acceptance](../projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/docs/M1-ACCEPTANCE.zh-CN.md) freezes the 10.13M E0 and records real T4 FP32 updates, checkpoint restoration, common assets and publication. MQAR remains 0/32; execution success is not memory efficacy. Kaggle saved version 366932788 was supplied by the user. [M2](../projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/README.md) adds parameter-matched E1 SWA, pinned official Mamba-1 PyTorch reference and Samba-lite with CPU engineering evidence; target T4 and native-kernel performance remain unverified. H1–H6 remain NOT_EVALUATED; no 20M/100M training or historical-result replacement. This addition does not extend the older inventory's completeness claim.
+
 ## 1. MiniCells Research Story
 
 MiniCells began by asking whether computation could be organized as interacting, reusable Cells rather than a fixed monolithic model. Early foundations, self-organization, routing and growth experiments established implementable mechanisms and experimental vocabulary. They did not establish a natural Cell ontology, safe language learning, or hardware superiority.

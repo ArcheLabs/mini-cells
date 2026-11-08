@@ -1,5 +1,6 @@
 """One bounded M2 engineering run: common correctness, two updates/arm, costs."""
-import argparse,copy,gc,hashlib,json,math,platform,signal,subprocess,sys,time,uuid
+import argparse,gc,json,platform,signal,subprocess,sys,time,uuid
+import importlib.metadata
 from pathlib import Path
 import numpy as np
 import torch
@@ -15,6 +16,8 @@ def verify_sources():
     lock=json.loads((BASE/'configs/source-lock.json').read_text())
     for name,sha in lock['frozen_files'].items():
         if file_hash(M1/name)!=sha:raise ValueError('frozen M1 source changed: '+name)
+    for name,sha in lock.get('inherited_files',{}).items():
+        if file_hash(ROOT/name)!=sha:raise ValueError('frozen inherited helper changed: '+name)
     upstream=json.loads((BASE/'configs/upstream-lock.json').read_text())
     for name,sha in upstream['vendored_sha256'].items():
         if file_hash(BASE/name)!=sha:raise ValueError('pinned upstream reference changed: '+name)
@@ -96,6 +99,7 @@ def launch(args):
     started=args.started or time.monotonic();out=args.output;out.mkdir(parents=True,exist_ok=True)
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     protocol=json.loads((BASE/'configs/protocol.json').read_text());protocol['profile']='cpu-tiny' if args.tiny else 'gpu-engineering'
+    if protocol['training']['updates']!=2:raise ValueError('M2 entry authorizes only two engineering updates per arm')
     if args.tiny:
         for arm in protocol['arms']:
             protocol['arms'][arm]={'model':dict(vocab=8192,dim=32,layers=2,heads=4,kv_heads=4,ffn=64,window=16384 if arm=='E0' else 4),
@@ -122,10 +126,15 @@ def launch(args):
     def interrupted(signum,frame):raise TimeoutError('termination signal; restore or flush a consistent prefix')
     signal.signal(signal.SIGTERM,interrupted)
     try:
-        verify_sources()
+        frozen,upstream=verify_sources()
+        manifest['frozen_source_lock']=frozen;manifest['upstream_source_lock']=upstream
+        manifest['environment']['dependencies']={p:importlib.metadata.version(p) for p in ('numpy','einops','tokenizers','datasets')}
         if args.device=='cuda':
             if not torch.cuda.is_available() or torch.cuda.get_device_capability()<(7,5):raise RuntimeError('enable target T4 or newer GPU')
             torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
+        manifest['environment']['precision']='fp32'
+        manifest['environment']['actual_tf32']={'matmul':torch.backends.cuda.matmul.allow_tf32,'cudnn':torch.backends.cudnn.allow_tf32} if args.device=='cuda' else None
+        write(out/'manifest.json',manifest)
         if args.publish:
             sys.path.insert(0,str(ROOT))
             from scripts.research.publish_experiment_results import validate_origin,load_github_token

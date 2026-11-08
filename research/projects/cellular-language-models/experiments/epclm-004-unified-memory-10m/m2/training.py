@@ -11,7 +11,12 @@ from data import batch,digest
 def fit(model,rows,validation,config,out,identity,deadline=float('inf'),stop_after=None):
     out=Path(out);out.mkdir(parents=True,exist_ok=True);path=out/'checkpoint.pt'
     device=next(model.parameters()).device
-    optimizer=torch.optim.AdamW(model.parameters(),lr=config['lr'],betas=(.9,.95),weight_decay=.1)
+    if config.get('precision','fp32')!='fp32' or config.get('optimizer','AdamW')!='AdamW':
+        raise ValueError('M2 supports declared FP32 AdamW only')
+    if config.get('tf32',False) or config.get('scheduler','constant-engineering-smoke')!='constant-engineering-smoke':
+        raise ValueError('M2 requires TF32 off and constant smoke LR')
+    optimizer=torch.optim.AdamW(model.parameters(),lr=config['lr'],
+        betas=tuple(config.get('betas',(.9,.95))),weight_decay=config.get('weight_decay',.1))
     sampler=Sampler(rows,config['seed'],config['batch'])
     ledger={k:0 for k in ('input_tokens','processed_tensor_tokens','padding_tokens',
                          'supervised_target_tokens','query_target_tokens','committed_updates')}
@@ -58,7 +63,7 @@ def fit(model,rows,validation,config,out,identity,deadline=float('inf'),stop_aft
             loss.backward();grads=[p.grad for p in model.parameters() if p.requires_grad]
             if any(g is None for g in grads) or not torch.stack([g.isfinite().all() for g in grads]).all():
                 raise FloatingPointError('nonfinite/missing gradient; no clipping or update')
-            norm=torch.nn.utils.clip_grad_norm_(model.parameters(),1.,error_if_nonfinite=True)
+            norm=torch.nn.utils.clip_grad_norm_(model.parameters(),config.get('clip',1.),error_if_nonfinite=True)
             before=model.token_embedding.weight.detach().clone() if ledger['committed_updates']<2 else None
             stepped=True;optimizer.step()
             if not torch.stack([p.isfinite().all() for p in model.parameters()]).all():

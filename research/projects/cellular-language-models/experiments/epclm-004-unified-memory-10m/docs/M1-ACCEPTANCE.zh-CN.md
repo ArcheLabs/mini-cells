@@ -10,6 +10,6 @@ T4 FP32 上 10,130,688 参数 E0 已完成 MQAR 32 updates / 128 Query targets�
 
 同 Seed 证据：本地 torch2.6 与 Kaggle torch2.11 的 CPU tiny 运行，全部训练输入 SHA 一致、Ledger 一致，逐次 Loss 最大差 9.54e-7。它支持数据/CPU路径可复现，不等于已经完成同一 T4 环境的独立重复训练。已有中断/恢复测试另外给出逐元素一致证据。不额外运行 GPU 重复来弥补零召回。
 
-当前日志不包含真实 Kaggle Script Version ID；已向用户请求带 ID 的已保存版本链接。在收到之前明确保持 ID_PENDING，不能使用上一次运行版本号、Notebook ordinal 或 Git SHA 替代。此保留项不阻断 M2 工程实现。
+用户补充本次已保存版本 ID `366932788`，对应 `bingjiangli/minicells?scriptVersionId=366932788`。验收记录按 USER_SUPPLIED_SAVED_VERSION_ID 补录三个同次 Notebook 阶段的关联；未独立调用平台 API 复核，不回填或覆盖原始 ID_PENDING manifest。
 
 M1 代码、配置、冻结 Tokenizer 和原始实验记录均保留。M2 新目录只复用 M1 组件，不修改冻结 E0。完整 Checkpoint 保存频率优化属于 M2。H1–H6 始终为 NOT_EVALUATED。

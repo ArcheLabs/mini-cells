@@ -20,7 +20,7 @@ HybridCLM lines so each experiment can be read in its research context.
 
 ## Running an experiment
 
-- [EPCLM-003/004 — Unified Memory Architecture, 10M](experiments/epclm-004-unified-memory-10m/README.md): M1 unified data and E0 implemented with CPU tiny training/restore evidence; target T4 smoke pending. M2–M7 remain unimplemented.
+- [EPCLM-003/004 — Unified Memory Architecture, 10M](experiments/epclm-004-unified-memory-10m/README.md): M1 T4 engineering accepted and frozen; M2 matched E0/E1/Mamba-1/Samba-lite implemented and CPU validated, target GPU pending. No scientific confirmation.
 
 Start from that experiment's README or notebook and use its frozen configuration
 and source commit. Do not infer scientific approval from the presence of a
