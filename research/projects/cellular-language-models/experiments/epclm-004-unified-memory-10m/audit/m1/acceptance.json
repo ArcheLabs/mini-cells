@@ -1,0 +1,113 @@
+{
+  "format": "minicells.epclm004.m1-acceptance.v1",
+  "status": "M1_ENGINEERING_PASS",
+  "review_basis": "user acceptance + remote original reports",
+  "source_commit": "b089f18f13893920e9e996ce91ce39bec642bc6d",
+  "runs": [
+    {
+      "branch": "kaggle/epclm004-m1-cpu-tiny-mqar-b089f18f1389-5e3c413c",
+      "commit": "d4f74dcb10b561f776b23391a370259e43f0813a",
+      "artifact_path": "artifacts/experiments/epclm-004-m1-e0/epclm004-m1-cpu-tiny-mqar-b089f18f1389-5e3c413c",
+      "training_status": "COMPLETE",
+      "checkpoint_restore": "PASS",
+      "publication_status": "REMOTE_SHA_VERIFIED_IN_RUNTIME_LOG_AND_BRANCH_FETCHED",
+      "legacy_decision_publication": "PENDING_WRITTEN_BEFORE_PUSH",
+      "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+      "ledger": {
+        "input_tokens": 1536,
+        "processed_tensor_tokens": 1536,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 48,
+        "query_target_tokens": 48,
+        "committed_updates": 12
+      },
+      "validation": {
+        "nll": 8.93866229057312,
+        "supervised_targets": 32,
+        "query_targets": 32,
+        "query_exact_match": 0.0,
+        "query_prediction_counts": {
+          "6": 32
+        }
+      },
+      "compute_seconds": 0.19987063099978286,
+      "kaggle_script_version_id": null,
+      "identity_status": "ID_PENDING_USER_SAVED_VERSION_URL_REQUESTED",
+      "published_artifact_hashes": "PASS"
+    },
+    {
+      "branch": "kaggle/epclm004-m1-gpu-smoke-mqar-b089f18f1389-9881193f",
+      "commit": "c7fe71d616583948c7671ecf9632d3d178b536f4",
+      "artifact_path": "artifacts/experiments/epclm-004-m1-e0/epclm004-m1-gpu-smoke-mqar-b089f18f1389-9881193f",
+      "training_status": "COMPLETE",
+      "checkpoint_restore": "PASS",
+      "publication_status": "REMOTE_SHA_VERIFIED_IN_RUNTIME_LOG_AND_BRANCH_FETCHED",
+      "legacy_decision_publication": "PENDING_WRITTEN_BEFORE_PUSH",
+      "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+      "ledger": {
+        "input_tokens": 16384,
+        "processed_tensor_tokens": 16384,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 128,
+        "query_target_tokens": 128,
+        "committed_updates": 32
+      },
+      "validation": {
+        "nll": 8.18458604812622,
+        "supervised_targets": 32,
+        "query_targets": 32,
+        "query_exact_match": 0.0,
+        "query_prediction_counts": {
+          "474": 32
+        }
+      },
+      "compute_seconds": 2.320327752000196,
+      "kaggle_script_version_id": null,
+      "identity_status": "ID_PENDING_USER_SAVED_VERSION_URL_REQUESTED",
+      "published_artifact_hashes": "PASS"
+    },
+    {
+      "branch": "kaggle/epclm004-m1-gpu-smoke-lm-b089f18f1389-6ab475cb",
+      "commit": "28e1bb517f06fc36f422ab336ff6d099f2825e5e",
+      "artifact_path": "artifacts/experiments/epclm-004-m1-e0/epclm004-m1-gpu-smoke-lm-b089f18f1389-6ab475cb",
+      "training_status": "COMPLETE",
+      "checkpoint_restore": "PASS",
+      "publication_status": "REMOTE_SHA_VERIFIED_IN_RUNTIME_LOG_AND_BRANCH_FETCHED",
+      "legacy_decision_publication": "PENDING_WRITTEN_BEFORE_PUSH",
+      "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+      "ledger": {
+        "input_tokens": 893,
+        "processed_tensor_tokens": 1708,
+        "padding_tokens": 815,
+        "supervised_target_tokens": 893,
+        "query_target_tokens": 0,
+        "committed_updates": 4
+      },
+      "validation": {
+        "nll": 8.751841798375864,
+        "supervised_targets": 2135,
+        "query_targets": 0,
+        "query_exact_match": null,
+        "query_prediction_counts": {},
+        "ppl": 6322.321833396593
+      },
+      "compute_seconds": 0.549722791000022,
+      "kaggle_script_version_id": null,
+      "identity_status": "ID_PENDING_USER_SAVED_VERSION_URL_REQUESTED",
+      "published_artifact_hashes": "PASS"
+    }
+  ],
+  "same_seed_evidence": {
+    "scope": "same seed CPU tiny across local torch2.6 and Kaggle torch2.11; not independent T4-training replication",
+    "input_hashes_identical": true,
+    "max_loss_difference": 9.5367431640625e-07,
+    "ledger_identical": true
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "historical_outputs_modified": false,
+  "mqAr_zero_recall_preserved": true,
+  "remaining": [
+    "actual saved Kaggle Script Version ID",
+    "independent same-device repeat not performed; no extra GPU training requested"
+  ]
+}
