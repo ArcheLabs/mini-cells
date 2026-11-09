@@ -1,0 +1,24 @@
+{
+  "format": "minicells.epclm004.tokenizer-lock.v1",
+  "vocab_size": 8192,
+  "sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "dataset": {
+    "path": "Salesforce/wikitext",
+    "name": "wikitext-103-raw-v1",
+    "revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+  },
+  "training_lines": 2048,
+  "train_text_sha256": "f580bb08f1c4d50f09cd364aebdc393aba5bf4ec7b7af9daf0bcee6e5d62495c",
+  "special_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3,
+    "<fact>": 4,
+    "<query>": 5,
+    "<answer>": 6,
+    "<hole>": 7
+  },
+  "tokenizers_version": "0.20.3",
+  "recipe": "ByteLevel-BPE-8192-reserved536-v1"
+}
