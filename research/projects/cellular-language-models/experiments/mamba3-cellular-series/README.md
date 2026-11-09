@@ -48,3 +48,7 @@ M3C 是新的实验系列，不修改或取代以下历史记录：
 - Mamba-3 的官方代码版本、模型配置、数据身份、硬件兼容性和精确训练预算必须在 M3C-001 Gate 0 中锁定。
 - Mamba-2 的 SSD/DART 推导不能未经证明直接移植到 Mamba-3；M3C-006 必须先推导 Mamba-3 自身的 Chunk State Memory。
 - 任何效率结论必须报告真实 Decode 延迟、Prefill 吞吐、显存、Workspace Cache、Recurrent State、Kernel/Dispatch 开销及能耗；理论 FLOPs 或逻辑稀疏率不能替代实测。
+
+## 独立 TPU/JAX 候选路径
+
+[M3C-001-TPU-JAX](M3C-001-TPU-JAX/README.md)：社区候选实现，先 SISO 门禁再 MIMO。官方 PyTorch 审计历史不变；TPU 通过后作为 M3C-002 候选底座，尚未产生 TPU 实测或科学结论。
