@@ -10,3 +10,6 @@
 - Test freeze happens before Pilot, but Test is never evaluated until all three-seed training checkpoints finish. Positive preflight metrics are functional checks, not a requirement that random-weight Oracle improves answer EM. Scientific adequacy is checked later.
 - Raw M5 binary availability remains unverified outside saved Kaggle Output. Fresh SV training does not depend on Smoke checkpoint recovery. No claim of M5 permanent weight archival is made.
 - This workspace has CPU only and cannot launch Kaggle with the available credentials. Local evidence is explicitly synthetic component validation. T4 results and final H5 outcome remain pending.
+
+- Frozen M5 closes a Chunk at each forward_state call, including partial Chunks. Snapshot evaluation therefore uses an explicitly versioned history-prefill/three-token-Query boundary. It is identical for all policies and paired On/Off; it is not claimed numerically equivalent to a single concatenated training call. This inference distribution change is recorded, not silently patched in the frozen model.
+- Capacity128 is an inference intervention on Capacity64-trained weights. No additional Capacity128 training budget or parameter-matched training group is introduced.

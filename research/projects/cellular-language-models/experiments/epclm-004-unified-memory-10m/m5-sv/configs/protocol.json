@@ -240,7 +240,14 @@
     "validation_stability_nll_tolerance": 0.01,
     "validation_stability_em_tolerance": 0.01,
     "minimum_seeds": 3,
-    "m6_authorized": false
+    "m6_authorized": false,
+    "primary_long_conditions": [
+      "length-2048",
+      "length-8192",
+      "length-16384",
+      "delay-256",
+      "delay-512"
+    ]
   },
   "budget": {
     "execution_seconds": 9600,
@@ -249,5 +256,6 @@
     "evaluation_pause_before_seconds": 90
   },
   "test_policy": "Hash before Pilot; evaluate only after all four arms for all three seeds finish. Never tune on Test.",
-  "scope": "Diagnostic scientific validation, not M6 confirmation"
+  "scope": "Diagnostic scientific validation, not M6 confirmation",
+  "inference_boundary": "Frozen M5 explicit history-prefill call, then a separate three-token query call; identical boundaries for every policy and On/Off pair. Not claimed numerically equivalent to a concatenated training call."
 }
