@@ -1,0 +1,134 @@
+{
+  "format": "minicells.epclm004.m5.protocol.v1",
+  "model": {
+    "vocab": 8192,
+    "dim": 256,
+    "layers": 8,
+    "heads": 4,
+    "kv_heads": 4,
+    "ffn": 816,
+    "window": 32
+  },
+  "state_size": 20,
+  "chunk": 32,
+  "summary_tokens": 4,
+  "capacity": 64,
+  "capacity_tiers": [
+    64,
+    128
+  ],
+  "read_top_k": 8,
+  "predictor": {
+    "type": "ema",
+    "beta": 0.875,
+    "history": "all past with exponential decay; effective horizon 8",
+    "error": "mean squared L2; read before update"
+  },
+  "seed": 41017,
+  "arms": {
+    "E3": {
+      "policy": null,
+      "summary_enabled": false
+    },
+    "E6": {
+      "policy": null,
+      "summary_enabled": true
+    },
+    "E7-Random": {
+      "policy": "random",
+      "summary_enabled": true
+    },
+    "E7-FIFO": {
+      "policy": "fifo",
+      "summary_enabled": true
+    },
+    "E7-Innovation": {
+      "policy": "innovation",
+      "summary_enabled": true
+    }
+  },
+  "training": {
+    "seed": 41017,
+    "batch": 1,
+    "lr": 0.0003,
+    "updates": 2,
+    "precision": "fp32",
+    "tf32": false,
+    "optimizer": "AdamW",
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "scheduler": "constant-engineering-smoke",
+    "checkpoint": {
+      "every_updates": 8,
+      "every_seconds": 120
+    }
+  },
+  "mqar": {
+    "bindings": 8,
+    "length": 512,
+    "queries": 1,
+    "interference": 1.0,
+    "seed": 41001,
+    "regime": "unseen_pairs"
+  },
+  "data_sizes": {
+    "train": 16,
+    "validation": 4,
+    "test": 0
+  },
+  "evaluation": {
+    "episodes_per_case": 1,
+    "lengths": [
+      256,
+      512,
+      2048,
+      8192,
+      16384
+    ],
+    "bindings": [
+      8,
+      16,
+      32,
+      64
+    ],
+    "queries": [
+      1,
+      8,
+      32
+    ],
+    "interference": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "delay_multipliers": [
+      0.5,
+      1,
+      2,
+      8,
+      16
+    ],
+    "lm_limit": 4,
+    "key_similarity": [
+      "low",
+      "random",
+      "high"
+    ],
+    "value_repeat": [
+      false,
+      true
+    ]
+  },
+  "budget": {
+    "execution_seconds": 5400,
+    "publication_seconds": 600,
+    "hard_seconds": 7200
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "hypotheses": "NOT_EVALUATED",
+  "formal_training_authorized": false
+}
