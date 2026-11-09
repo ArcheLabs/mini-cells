@@ -1,0 +1,123 @@
+{
+  "format": "minicells.epclm004.m3-frozen-baseline.v1",
+  "freeze_date": "2026-11-09",
+  "status": "FROZEN_NO_FURTHER_TRAINING",
+  "engineering_status": "M3_ENGINEERING_COMPLETE",
+  "scientific_hypotheses": "NOT_EVALUATED",
+  "additional_training_authorized": false,
+  "m4_authorized": false,
+  "model_id": "mag_lite_single_memory",
+  "run_id": "epclm004-m3-2b5362884492-d8942eb1",
+  "seed": 41017,
+  "training_source_commit": "2b53628844928445e120549aec3b01077165ab81",
+  "publication_fix_commit": "6f525c6907ce917897de78ffc26c389de7570b6c",
+  "original_result_commit": "7d0c3eb2a146da9d3bc60cd3c5944cf73d4bdb58",
+  "final_result_commit": "ed3b2497d182fc015c3ca06edf648efeb3042bc3",
+  "execution": {
+    "kernel": "bingjiangli/minicells",
+    "script_version_id": 367010882,
+    "url": "https://www.kaggle.com/code/bingjiangli/minicells?scriptVersionId=367010882",
+    "version_provenance": "user provided; payload identity must match frozen hashes"
+  },
+  "implementation_sha256": {
+    "gates.py": "7befe176c054c88ec5d5f22b2aa7113c51d30bef5ae7881a62d29bc4449037ff",
+    "mag_model.py": "4aad2e5d57fcfc6b3ca3bceb4ef3d8710ff661dae8fd36e81756dde7df3d9aaf",
+    "memory.py": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
+    "run.py": "a74366f89f4c92ca42190cd3dfa463811705e7d53fabdfc2de43d1d7fdd9985a"
+  },
+  "protocol_sha256": "d53333f99733fdfae0ad62f78f88c7b7c03a2885d3e27852498cadcec41503be",
+  "protocol": {
+    "format": "minicells.epclm004.m3.protocol.v1",
+    "model_id": "mag_lite_single_memory",
+    "model": {
+      "vocab": 8192,
+      "dim": 256,
+      "layers": 10,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 704,
+      "window": 32
+    },
+    "memory": {
+      "memory_dim": 32,
+      "hidden": 64,
+      "chunk": 16
+    },
+    "training": {
+      "seed": 41017,
+      "batch": 4,
+      "lr": 0.0003,
+      "updates": 2,
+      "precision": "fp32",
+      "tf32": false,
+      "optimizer": "AdamW",
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "weight_decay": 0.1,
+      "clip": 1.0,
+      "scheduler": "constant-engineering-smoke",
+      "checkpoint": {
+        "every_updates": 8,
+        "every_seconds": 120
+      }
+    },
+    "mqar": {
+      "bindings": 8,
+      "length": 128,
+      "queries": 1,
+      "interference": 1.0,
+      "seed": 41001,
+      "regime": "unseen_pairs"
+    },
+    "episodes": {
+      "train": 16,
+      "validation": 4
+    },
+    "limits": {
+      "execution_seconds": 5400,
+      "publication_seconds": 600,
+      "total_seconds": 7200
+    },
+    "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+    "hypotheses": "NOT_EVALUATED"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "dataset_manifest_sha256": "3dd513b4589c38524ac2265ec894bf58f4f47856397772cc4502f6372921c9b8",
+  "ledger": {
+    "input_tokens": 1024,
+    "processed_tensor_tokens": 1024,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 8,
+    "query_target_tokens": 8,
+    "committed_updates": 2
+  },
+  "hardware": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "precision": "fp32",
+    "tf32": false
+  },
+  "expected_gpu_files": {
+    "dataset-manifest.json": "3dd513b4589c38524ac2265ec894bf58f4f47856397772cc4502f6372921c9b8",
+    "training-events.json": "7f21d04858b653f2dc14d58d4a5aab586d07d3024233180e435d7f324eddec41",
+    "recall-cell/manifest.json": "ad92286c03cb9d341820ebb31bc85defae4539aa6760b30431b388cad5af6045",
+    "training/metrics.json": "b743d889773bd59414764982cfb026ea6d91e1e5ad4925a6205630066fcc1a93",
+    "training/metrics.jsonl": "4c8107eab43bc5cec6265d065b34c1b1e1a67480915e707971ca1a9a1fc14a36",
+    "training/checkpoint.pt": "a9c7fba767174a9f85d95c6d466416ed10c155d88633298194a884c7cfc8befb",
+    "recall-cell/5ed05703ca10443aa270cf8f03d7393b/fast_weights.pt": "a3f429fbd1751cad8ea63dcf12fa82abc6d5fe57fed7016f4dd13d995b494d85",
+    "recall-cell/5ed05703ca10443aa270cf8f03d7393b/momentum.pt": "736936c166ed05b0eaaff19d708c551f1ac3bb97fe6dc7ed38e75c0940293129",
+    "gate6.json": "b09a89d1a5ac159aed4cc663cc2938d8bcb66288cdbde8a5e496db5dff4cb30b"
+  },
+  "checkpoint_bytes": 178448493,
+  "archive": {
+    "tag": "epclm004-m3-frozen-d8942eb1",
+    "repository": "ArcheLabs/mini-cells",
+    "asset": "epclm004-m3-d8942eb1.tar.gz",
+    "weights_in_git": false,
+    "completion_requires": "matching weight hashes, permanent storage receipt, archive download read-back hash"
+  },
+  "scope": "Controlled latent associative memory engineering evidence; not long-context quality, memory/SSM complementarity or H3 confirmation."
+}
