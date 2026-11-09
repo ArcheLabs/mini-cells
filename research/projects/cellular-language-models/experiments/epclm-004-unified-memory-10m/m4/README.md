@@ -1,6 +1,6 @@
 # M4 — E5 Mamba-1 / SWA / Titans 三路融合
 
-状态：**实现与 CPU 工程门禁已通过，真实 T4 Smoke 待运行**。
+状态：**M4_ENGINEERING_COMPLETE**。真实 T4 两次更新及发布已完成，见 [实际验收报告](REPORT.zh-CN.md)。无需重复运行 Smoke；权重永久归档尚待单独完成。
 不启动 M5、M6、20M Screening 或 100M Confirmation。H1–H6 均为 `NOT_EVALUATED`。
 
 ## 与原规格的对应
