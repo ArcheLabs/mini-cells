@@ -30,6 +30,7 @@ def check_time(deadline, reserve=120):
 
 
 def construct(protocol, arm, seeds):
+    if arm not in protocol['arms'] and arm!='E7-Oracle':raise ValueError('unknown experiment arm')
     return ValidationModel(protocol['model'],policy=protocol['arms'].get(arm,'innovation'),
         summary_enabled=True,capacity=protocol['capacity'],summary_tokens=protocol['summary_tokens'],
         chunk=protocol['chunk'],state_size=protocol['state_size'],read_top_k=protocol['read_top_k'],
@@ -40,6 +41,8 @@ def source_identity(protocol):
     files=[BASE/'run.py',*sorted((BASE/'src').glob('*.py')),*sorted((BASE/'tests').glob('*.py'))]
     return {'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         'config_sha256':digest(protocol),'tokenizer_sha256':protocol['tokenizer_sha256'],
+        'runtime':{'python':sys.version.split()[0],'torch':torch.__version__,'cuda':torch.version.cuda,
+                   'gpu':torch.cuda.get_device_name() if torch.cuda.is_available() else None},
         'implementation':{str(p.relative_to(BASE)):file_hash(p) for p in files}}
 
 
@@ -110,7 +113,8 @@ def observed_result(model, row, path, identity, deadline, **kwargs):
         if saved['identity']!=key or digest(saved['result'])!=saved['sha256']:raise ValueError('evaluation artifact identity/hash differs')
         return saved['result']
     check_time(deadline,300 if len(row['history'])>=8192 else 90)
-    result=evaluate_episode(model,row,**kwargs)
+    runtime_folder=path.parent/'runtime'
+    result=evaluate_episode(model,row,runtime_folder=str(runtime_folder) if not (runtime_folder/'manifest.json').exists() else None,**kwargs)
     write(path,{'identity':key,'result':result,'sha256':digest(result)})
     return result
 
@@ -176,12 +180,19 @@ def train_arm(out, protocol, arm, seeds, budget, identity, deadline, pilot=False
             if prior:
                 if prior['identity']!=training_id:raise ValueError('training curve identity differs')
                 continue
+            existing_metrics=folder/'metrics.json'
+            if existing_metrics.exists() and json.loads(existing_metrics.read_text())['ledger']['committed_updates']>target:
+                raise ValueError('missing historical validation boundary; refusing to invent a convergence curve')
             check_time(deadline,180)
             metrics=fit(model,rows,val,config,folder,training_id,deadline-150,stop_after=target)
             if metrics['ledger']['committed_updates']<target:raise Pause('training checkpoint saved at session deadline')
+            metrics['parameters']={'static_parameters':sum(p.numel() for p in model.parameters()),
+                'breakdown':model.resources(model.new_runtime(1))['static_parameter_breakdown'],'tied_embedding_head':True}
+            write(folder/'metrics.json',metrics)
+            prior_resources=json.loads((folder/'resources.json').read_text()) if (folder/'resources.json').exists() else {}
             write(folder/'resources.json',{'static_parameters':sum(p.numel() for p in model.parameters()),
                 'static_weight_bytes':sum(p.numel()*p.element_size() for p in model.parameters()),
-                'training_peak_allocated_bytes':metrics['training_peak_allocated_bytes'],
+                'training_peak_allocated_bytes':max(prior_resources.get('training_peak_allocated_bytes') or 0,metrics['training_peak_allocated_bytes'] or 0),
                 'checkpoint':metrics['checkpoint'],'checkpoint_write':metrics['checkpoint_policy'],
                 'training_compute_tokens_per_second':metrics['ledger']['input_tokens']/sum(h['compute_seconds'] for h in metrics['history']),
                 'training_flops':None,'flops_reason':'no complete validated operator/FLOPs counter for this reference path',
@@ -246,8 +257,9 @@ def main_training_and_test(out, protocol, identity, deadline):
         for arm in protocol['arms']:
             metrics,curve=train_arm(out,protocol,arm,seeds,protocol['training']['input_tokens_per_arm_per_seed'],identity,deadline)
             previous,last=curve[-2]['validation'],curve[-1]['validation'];rules=protocol['decision']
-            stable=previous['nll']-last['nll']<=rules['validation_stability_nll_tolerance'] and last['query_exact_match']-previous['query_exact_match']<=rules['validation_stability_em_tolerance']
-            adequacy[str(seeds['model_seed'])+':'+arm]={'stable':stable,'last_quarter_previous':previous,'final':last}
+            learned=metrics['initial_evaluation']['nll']-last['nll']>=rules['main_min_validation_nll_improvement'] and last['query_exact_match']*last['query_targets']>=rules['main_min_validation_correct']
+            plateau=abs(previous['nll']-last['nll'])<=rules['validation_stability_nll_tolerance'] and abs(last['query_exact_match']-previous['query_exact_match'])<=rules['validation_stability_em_tolerance']
+            adequacy[str(seeds['model_seed'])+':'+arm]={'stable':bool(plateau and learned),'learned':bool(learned),'plateau':bool(plateau),'last_quarter_previous':previous,'final':last}
     paired=[]
     for seeds in protocol['seeds']:
         records=[json.loads((out/'training'/str(seeds['model_seed'])/arm/'metrics.json').read_text()) for arm in protocol['arms']]
@@ -299,11 +311,60 @@ def publish(out, decision):
 
 def report(out, decision):
     write(out/'decision.json',decision)
-    lines=['# M5-SV actual execution report','', 'Status: '+decision['status'], 'H5_STATUS: '+decision['H5_STATUS'],
+    protocol=json.loads((BASE/'configs/protocol.json').read_text())
+    lines=['# M5-SV actual execution report','', '## Executive summary','',
+        'Status: '+decision['status'], 'H5_STATUS: '+decision['H5_STATUS'],
         '', 'M6 is not authorized. Engineering/protocol PASS does not establish scientific support.',
-        '', 'Source: '+decision['identity']['source_commit'], 'Config hash: '+decision['identity']['config_sha256'],
-        '', 'See dataset-manifest.json, freeze.json, pilot/, training/, metrics/ and scientific-decision.json for raw identities and evidence.',
-        'Detailed query traces and checkpoint binaries are retained in Kaggle Output; publication excludes them.',
+        'The frozen M5 baseline was a two-update engineering Smoke, not scientific validation.',
+        '', '## Experimental setup','', 'Source: '+decision['identity']['source_commit'],
+        'Config hash: '+decision['identity']['config_sha256'],
+        'Tokenizer hash: '+decision['identity']['tokenizer_sha256'],
+        'Hardware: '+json.dumps(decision.get('hardware',{})),
+        'Seeds: '+json.dumps(protocol['seeds']),
+        'Data: independent modulo-three binding partitions; Test is hashed before Pilot and sealed until all main checkpoints finish.',
+        'Budgets: 1,000,000 inputs per arm/seed, 12M main total; separately bounded 65,536-input Pilot.',
+        '', '## Actual training and resource evidence','',
+        '| Run | Updates | Input tokens | Targets | Validation EM | Peak bytes | Compute tokens/s | Checkpoint bytes |',
+        '|---|---:|---:|---:|---:|---:|---:|---:|']
+    for kind in ('pilot','training'):
+        for path in sorted((out/kind).glob('*/*/metrics.json')):
+            r=json.loads(path.read_text());ledger=r['ledger'];resources_path=path.parent/'resources.json'
+            resources=json.loads(resources_path.read_text()) if resources_path.exists() else {}
+            validation=r.get('validation') or {}
+            values=[str(path.parent.relative_to(out)),ledger['committed_updates'],ledger['input_tokens'],
+                ledger['supervised_target_tokens'],validation.get('query_exact_match'),
+                resources.get('training_peak_allocated_bytes'),resources.get('training_compute_tokens_per_second'),r['checkpoint']['bytes']]
+            lines.append('| '+' | '.join(str(v) for v in values)+' |')
+    lines+=['','Training FLOPs are not claimed: no validated complete operator counter is installed.',
+        'Static module counts, checkpoint write timings, optimizer/RNG/sampler identities and validation curves are retained beside each run.',
+        '', '## SV1 and SV2','',
+        'Raw per-record innovation scores and E6 recoverability labels, including undefined single-class AUROC/AUPRC, are retained in Output.',
+        'Development summaries are in metrics/development/. Independent Test reports include admission precision/recall/coverage,',
+        'Hit@1/Hit@K/Recall@K/MRR, per-layer candidates, paired On/Off EM, conditional EM, rescue and regression.',
+        'Primary retrieval uses the last SWA layer, not an optimistic union. Oracle is diagnostic admission only.',
+        '', '## SV3 independent evaluation','']
+    final=out/'scientific-decision.json'
+    if final.exists():
+        scientific=json.loads(final.read_text());lines+=[scientific['outcome'],'',
+            '| Capacity | Arm | Metric | Per-seed values | Mean | Sample SD | Seed t CI95 |',
+            '|---|---|---|---|---:|---:|---|']
+        for cap,arms in scientific['seed_tables'].items():
+            for arm,metrics in arms.items():
+                for name,r in metrics.items():
+                    lines.append('| '+' | '.join(map(str,[cap,arm,name,r['per_seed'],r['mean'],r['sample_std'],r['seed_t_ci95']]))+' |')
+        lines+=['', 'Paired policy/On-Off differences and95% crossed seed/Episode bootstrap intervals are in scientific-decision.json.',
+            'All conditions, including failures, are displayed separately in condition_tables; primary long conditions were frozen before Test.',
+            'Continuing validation improvement or unestimable recoverability evidence forces INCONCLUSIVE.']
+    else:lines+=['Independent scientific evaluation is incomplete. No final accuracy or H5 support is inferred.']
+    lines+=['','## Resource analysis and limitations','',
+        'Each capacity report includes weights, SSM, local KV, derived Summary, predictor, payload and metadata bytes, plus actual query/prefill/read/update timing.',
+        'Same-checkpoint policy interventions are iso-parameter. Resource ratios compare measured dynamic bytes and Query latency to E6; no extra training group is added.',
+        'Query latency includes snapshot cloning and three-token computation. It is an instrumented diagnostic, not a production benchmark.',
+        'Capacity128 is inference-only on capacity64-trained weights; cosine strata are not semantic similarity. E3 remains an original Smoke reference.',
+        'Full query traces and Model/Optimizer/Runtime binaries stay in Kaggle Output; Git receives reports and hash manifests.',
+        '', '## Scientific conclusion','',
+        'Innovation validity, admission, retrieval, utilization, final accuracy and resource acceptability must all pass the frozen criteria before SUPPORTED.',
+        'The actual H5_STATUS above is the only current verdict. No automatic M6 decision or budget expansion follows.',
         '', '```json',json.dumps(decision.get('error'),indent=2),'```']
     (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
 
@@ -320,6 +381,7 @@ def launch(args):
         verify_baseline();resume_output(out,identity)
         previous=json.loads((out/'decision.json').read_text()) if (out/'decision.json').exists() else None
         if previous and previous['status']=='SCIENTIFIC_EVALUATION_COMPLETE':
+            if file_hash(out/'scientific-decision.json')!=previous.get('scientific_result_sha256'):raise ValueError('completed scientific verdict hash differs')
             decision=previous
         else:
             decision['stages']['SV0']=functional_gate(out,identity)
@@ -330,7 +392,7 @@ def launch(args):
             decision['stages']['SV1_SV2']=development_diagnostics(out,protocol,identity,deadline,protocol['pilot'])
             pilot_and_freeze(out,protocol,identity,data,deadline)
             scientific=main_training_and_test(out,protocol,identity,deadline);write(out/'scientific-decision.json',scientific)
-            decision.update(status=scientific['status'],H5_STATUS=scientific['H5_STATUS'])
+            decision.update(status=scientific['status'],H5_STATUS=scientific['H5_STATUS'],scientific_result_sha256=file_hash(out/'scientific-decision.json'))
     except Pause as error:
         decision.update(status='PARTIAL_RESUME_REQUIRED',H5_STATUS='INCONCLUSIVE',error=str(error))
     except Exception as error:

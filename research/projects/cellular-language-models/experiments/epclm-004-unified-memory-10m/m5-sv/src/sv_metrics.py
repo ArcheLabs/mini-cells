@@ -69,19 +69,18 @@ def bootstrap_paired(left, right, seed=83101, draws=2000):
             'ci95':np.quantile(boot,[.025,.975]).tolist(),'bootstrap_seed':seed,'draws':draws,'unit':'episode'}
 
 
-def hierarchical_paired(pairs, seed=83101, draws=2000):
-    """Resample paired training seeds, then paired episodes within each seed."""
+def paired_seed_episode_bootstrap(pairs, seed=83101, draws=2000):
+    """Crossed bootstrap: pair policies, resample seeds and shared Episode IDs."""
     if len(pairs)<3:raise ValueError('three paired seeds required')
-    rng=np.random.default_rng(seed);arrays=[]
+    ids=sorted(pairs[0][0]);rng=np.random.default_rng(seed);arrays=[]
+    if not ids:raise ValueError('empty episodes')
     for left,right in pairs:
-        if set(left)!=set(right) or not left:raise ValueError('unpaired episodes')
-        arrays.append(np.array([left[k]-right[k] for k in sorted(left)]))
-    means=np.array([a.mean() for a in arrays]);boot=[]
+        if set(left)!=set(ids) or set(right)!=set(ids):raise ValueError('unpaired/common Test episodes')
+        arrays.append(np.array([left[k]-right[k] for k in ids]))
+    matrix=np.stack(arrays);means=matrix.mean(1);boot=[]
     for _ in range(draws):
-        samples=[]
-        for i in rng.integers(0,len(arrays),len(arrays)):
-            a=arrays[i];samples.append(a[rng.integers(0,len(a),len(a))].mean())
-        boot.append(np.mean(samples))
+        rows=rng.integers(0,len(arrays),len(arrays));columns=rng.integers(0,len(ids),len(ids))
+        boot.append(matrix[rows][:,columns].mean())
     return {'paired_difference':float(means.mean()),'seed_differences':means.tolist(),
             'seed_std':float(means.std(ddof=1)),'ci95':np.quantile(boot,[.025,.975]).tolist(),
-            'bootstrap_seed':seed,'draws':draws,'unit':'paired seed then episode'}
+            'bootstrap_seed':seed,'draws':draws,'unit':'paired seeds and shared Episode IDs (crossed bootstrap)'}

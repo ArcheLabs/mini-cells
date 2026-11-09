@@ -1,9 +1,11 @@
 """Aggregate retained observations without changing the frozen success criteria."""
 import math
+import hashlib
+import random
 from pathlib import Path
 import json
 import numpy as np
-from sv_metrics import summarize_queries, discrimination, hierarchical_paired, safe_ratio
+from sv_metrics import summarize_queries, discrimination, paired_seed_episode_bootstrap, safe_ratio
 from e0 import write
 
 
@@ -30,7 +32,15 @@ def condition_report(records, baseline_records):
             if label['record_id'] in r['record_scores']:
                 scores.append(r['record_scores'][label['record_id']]);failures.append(1-label['correct'])
     totals={q['query_id']:q['correct_on'] for r in baseline_records for q in r['queries']}
-    report={'episodes':episodes,'query_summary':summarize_queries(all_queries,totals),
+    no_history=[q for r in baseline_records for q in r.get('no_history',[])]
+    guesses=[]
+    for r in baseline_records:
+        for q in r['queries']:
+            seed=int(hashlib.sha256(('83101:'+q['query_id']).encode()).hexdigest()[:16],16)
+            guesses.append(int(264+random.Random(seed).randrange(256)==q['expected_value_id']))
+    report={'controls':{'no_history_em':safe_ratio(sum(q['correct'] for q in no_history),len(no_history)),
+                'random_guess_expected_em':1/256,'random_guess_realized_em':safe_ratio(sum(guesses),len(guesses)),
+                'random_guess_seed_rule':'sha256(83101:query_id), uniform over256 known value tokens'},'episodes':episodes,'query_summary':summarize_queries(all_queries,totals),
             'recoverability':discrimination(scores,failures),'episode_count':len(episodes),
             'aggregation':'query summary is descriptive; inferential unit is paired Episode within paired seed',
             'resources':{'static_parameters':records[0]['resources']['static_parameters'],
@@ -76,14 +86,14 @@ def scientific_decision(root, protocol, adequacy):
                 if arm=='E7-Innovation':
                     for control in ('E6','E7-Random','E7-FIFO'):
                         pairs=[({e['episode_id']:e['em'] for e in records[i]['episodes']}, {e['episode_id']:e['em'] for e in reports[cap,control][i][name]['episodes']}) for i in range(3)]
-                        condition_tables[str(cap)][name][arm][control+':paired_em']=hierarchical_paired(pairs,boot_seed,draws)
+                        condition_tables[str(cap)][name][arm][control+':paired_em']=paired_seed_episode_bootstrap(pairs,boot_seed,draws)
         def paired(arm, other, metric, other_metric=None):
             pairs=[]
             for i in range(3):
                 left={e['episode_id']:e[metric] for name,r in reports[cap,arm][i].items() if name in primary for e in r['episodes']}
                 right={e['episode_id']:e[other_metric or metric] for name,r in reports[cap,other][i].items() if name in primary for e in r['episodes']}
                 pairs.append((left,right))
-            return hierarchical_paired(pairs,boot_seed,draws)
+            return paired_seed_episode_bootstrap(pairs,boot_seed,draws)
         checks={};comparisons[str(cap)]={}
         for control in ('E7-Random','E7-FIFO'):
             for metric in ('admission_coverage','hit_at_k','mrr','em'):
@@ -119,4 +129,5 @@ def scientific_decision(root, protocol, adequacy):
         outcome='B: admission without sufficient utilization' if adm else ('C: Oracle benefit without Innovation support' if oracle>0 else 'D: no Oracle answer benefit')
     return {'status':'SCIENTIFIC_EVALUATION_COMPLETE','H5_STATUS':status,'outcome':outcome,'adequacy':adequacy,
             'primary_long_conditions':primary,'seed_tables':tables,'condition_tables':condition_tables,'paired_comparisons':comparisons,
+            'e3_reference':'Original M5 Smoke only; no SV Test re-evaluation without available weights',
             'm6_authorized':False,'scope':'M5-SV diagnostic evidence, not M6 formal confirmation'}

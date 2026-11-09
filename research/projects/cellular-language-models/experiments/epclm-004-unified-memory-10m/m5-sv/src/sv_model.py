@@ -64,9 +64,8 @@ def synchronize(device):
 
 @torch.no_grad()
 def query(model, snapshot, question, enabled=True):
-    device=model.token_embedding.weight.device;state=model.detached(snapshot)
-    ids=torch.tensor([question['input_ids']],device=device)
-    synchronize(device);began=time.perf_counter()
+    device=model.token_embedding.weight.device;synchronize(device);began=time.perf_counter()
+    state=model.detached(snapshot);ids=torch.tensor([question['input_ids']],device=device)
     with observe(model,read_enabled=enabled):
         logits,state,trace=model.forward_state(ids,state,trace_queries=[[2]],read_positions=[2],profile=True)
     synchronize(device);seconds=time.perf_counter()-began
@@ -89,7 +88,7 @@ def ranked_ids(trace, mapping):
 
 
 @torch.no_grad()
-def evaluate_episode(model, row, oracle=False, recover_all=False, no_history=False):
+def evaluate_episode(model, row, oracle=False, recover_all=False, no_history=False, runtime_folder=None):
     model.eval();device=model.token_embedding.weight.device;mapping=position_ids(row)
     all_future={rid for q in row['queries'] for rid in q['required_record_ids']}
     old_oracle=model.oracle_required
@@ -116,6 +115,7 @@ def evaluate_episode(model, row, oracle=False, recover_all=False, no_history=Fal
                 'retrieval':retrieval(last,question['required_record_ids']),'per_layer':layers,
                 'retrieval_primary':'last SWA layer actual top-k candidates; no any-layer success union',
                 'latency_on_seconds':on['seconds'],'latency_off_seconds':off['seconds'],
+                'latency_scope':'snapshot fork plus three-token forward, including phase synchronization; excludes report hashing',
                 'per_input_token_latency_seconds':on['per_input_token_seconds'],'store_read_timing':on['read_timing']})
         recoverability=[]
         if recover_all:
@@ -131,6 +131,11 @@ def evaluate_episode(model, row, oracle=False, recover_all=False, no_history=Fal
                 controls.append({'query_id':question['query_id'],'correct':answer['correct'],'prediction':answer['prediction']})
         assert runtime_digest(snapshot)==before,'query contaminated shared prefill snapshot'
         resources=model.resources(snapshot)
+        if runtime_folder is not None:
+            from pathlib import Path
+            import json
+            resources['runtime_checkpoint']=model.checkpoint(snapshot,runtime_folder)
+            resources['runtime_checkpoint']['manifest']=json.loads((Path(runtime_folder)/'manifest.json').read_text())
         if device.type=='cuda':resources['inference_peak_allocated_bytes']=torch.cuda.max_memory_allocated(device)
         return {'episode_id':row['id'],'condition':row['condition'],'history_tokens':len(row['history']),
             'queries':output,'recoverability':recoverability,'no_history':controls,
