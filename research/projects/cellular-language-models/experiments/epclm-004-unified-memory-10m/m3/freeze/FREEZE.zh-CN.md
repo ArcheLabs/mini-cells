@@ -95,3 +95,19 @@ API 不暴露映射时不声称独立验证映射，最终文件身份仍必须�
 仅新增两项归档接线测试，验证精确版本/缓存复用及错误报告阻止权重下载。
 未重跑数学门禁、未测试或改写既有 Kaggle 传输机制、未重训。
 真实文件尚未在当前环境取回，永久归档仍须实际回读凭据，不以单元测试代替。
+
+
+## 保全完成 — 2026-11-09
+
+实际归档已返回 `REMOTE_ARCHIVE_READBACK_VERIFIED`，新增训练更新 **0**。
+归档与回读凭据均已上传至 GitHub Release，不再仅依赖 Kaggle Output。
+
+- 归档大小：**136,015,964 bytes**。
+- SHA-256：`d4e83d86be2eb8275990468dcd58cb1751013170faf614f18a42672c69890df1`。
+- [权重 Release](https://github.com/ArcheLabs/mini-cells/releases/tag/epclm004-m3-frozen-d8942eb1)。
+- [归档回执](archive-receipt.json) 与 [GitHub 元数据核验](archive-release-verification.json)。
+
+已独立核对 GitHub 归档资产的大小、摘要、原训练源码指向及回执摘要。
+本次没有再次下载整个归档或重新执行训练；完整下载回读由归档运行完成。
+前面的访问阻塞记录是历史过程，本节与 ARCHIVE-STATUS.json 为当前状态。
+冻结定义与原实现快照未改动。M3 的两项冻结保全工作已完成，M4 仍未启动。
