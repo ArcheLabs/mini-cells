@@ -1,0 +1,12 @@
+# Implementation decisions and deviations
+
+- English SPEC.md/REPORT.md replace the requested new Chinese-named documents, following the user's latest language instruction. Historical Chinese documents are not translated or rewritten; English workflow addenda preserve their evidence.
+- No M5 source, original result or checkpoint is modified. Scoped sequential instrumentation delegates to frozen attention/scan functions, and always restores them. A thin subclass separates store_seed from model_seed and supplies an evaluation-only Oracle.
+- Oracle prioritizes ground-truth value source positions within the same bounded Store. Ground truth never enters Q/K/V, the predictor or training. Its admission priority statistics are not described as innovation distributions. Its performance is a selection diagnostic, not an answer-injection upper bound.
+- Primary retrieval is the last SWA layer's actual candidates, with every layer reported separately. This avoids an optimistic any-layer union; it does not imply lower-layer contributions are absent.
+- Test conditions are representative one-factor variations with500 Episodes each. Multi-query history is a single common snapshot; queries do not extend one another's histories. Similarity is frozen untrained embedding cosine, not semantics.
+- Pilot and main budgets are separate. Exact1M input accounting uses1953 length512 episodes plus one length64 episode shuffled once. Training uses single-query episodes; multi-query evaluation branches independently. No budget is silently rounded upward.
+- The existing constant-LR M2 fit adapter and atomic checkpoint/rollback are reused without creating a generic trainer. Its scheduler label retains the historical name constant-engineering-smoke; that label does not make the longer run a Smoke or prove adequate training.
+- Test freeze happens before Pilot, but Test is never evaluated until all three-seed training checkpoints finish. Positive preflight metrics are functional checks, not a requirement that random-weight Oracle improves answer EM. Scientific adequacy is checked later.
+- Raw M5 binary availability remains unverified outside saved Kaggle Output. Fresh SV training does not depend on Smoke checkpoint recovery. No claim of M5 permanent weight archival is made.
+- This workspace has CPU only and cannot launch Kaggle with the available credentials. Local evidence is explicitly synthetic component validation. T4 results and final H5 outcome remain pending.

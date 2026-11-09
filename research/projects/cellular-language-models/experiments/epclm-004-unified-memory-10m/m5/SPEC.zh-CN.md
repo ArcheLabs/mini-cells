@@ -582,3 +582,12 @@ M5 完成后：
 最终架构由实验决定，而不是预先假设三种记忆机制必须同时存在。
 
 **M5 的核心目标：验证模型能否识别自身递归状态难以保留的信息，并通过固定容量的精确存储机制，在需要时重新读取这些信息。**
+
+# 13. Engineering completion and scientific validation
+
+M5 ENGINEERING_COMPLETE means implementation, Gates0–7, real T4 Smoke and verified
+publication; it does not mean H5 is supported. The subsequent scientific stage is
+[M5-SV](../m5-sv/SPEC.md), covering innovation validity, admission, retrieval,
+utilization and independent evaluation. M5-SV must precede any M6 candidate decision.
+This addendum supersedes the earlier direct M5-to-M6 progression only; all original
+model definitions, engineering acceptance history and evidence remain unchanged.

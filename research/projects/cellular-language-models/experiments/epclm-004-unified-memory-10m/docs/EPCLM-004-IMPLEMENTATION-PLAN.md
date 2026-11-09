@@ -101,3 +101,14 @@ E2/E3 必须在真实 Mamba 模块可实例化后计数；E4/E5 必须纳入 Mem
 - **规格排版：** 原文包含 Pandoc `{=tex}` 与损坏下标。保存原文不修改；M3 实现时回读论文原式，特别区分 momentum 系数与内层学习率，不把损坏简式当代码。
 
 M0 没有依赖阻塞：审计已完成。上述项目属于进入相应后续里程碑前需要解决的实现与实验设计问题。
+
+## 8. M5-SV Scientific Validation — current implementation addendum
+
+Status: IMPLEMENTATION_IN_PROGRESS; actual T4 scientific validation is pending.
+The historical M0 audit above is preserved. The archived M5 result reports Gates0–7
+passed, with only two updates per arm. This is engineering completion, not H5 support.
+M5-SV runs SV0 Protocol Audit, SV1 Innovation Validity, SV2 Retrieval and Utilization,
+and SV3 Independent Evaluation. See [SPEC](../m5-sv/SPEC.md) and
+[baseline audit](../m5-sv/audit/m5-baseline-audit.md). All results must come from real
+execution; no mock recall or historical Smoke can replace independent validation.
+M6 cannot launch automatically and requires completion of M5-SV first.
