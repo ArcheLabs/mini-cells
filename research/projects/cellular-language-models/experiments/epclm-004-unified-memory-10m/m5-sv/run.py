@@ -20,6 +20,7 @@ from sv_analysis import condition_report, scientific_decision
 from data import digest, file_hash
 from e0 import ROOT, write, load_checkpoint
 from training import fit
+from sv_publication import publisher_module
 
 
 class Pause(RuntimeError): pass
@@ -288,7 +289,8 @@ def main_training_and_test(out, protocol, identity, deadline):
 
 
 def publish(out, decision):
-    from scripts.research.publish_experiment_results import ExperimentSpec,prepare_artifacts,push_results
+    publisher=publisher_module()
+    ExperimentSpec=publisher.ExperimentSpec;prepare_artifacts=publisher.prepare_artifacts;push_results=publisher.push_results
     with tempfile.TemporaryDirectory(prefix='m5-sv-publish-') as temp:
         root=Path(temp)/'repo';subprocess.run(['git','clone','--quiet','--shared','--no-checkout',str(ROOT),str(root)],check=True)
         origin=subprocess.check_output(['git','remote','get-url','origin'],cwd=ROOT,text=True).strip()
@@ -402,9 +404,15 @@ def launch(args):
         write(out/'run-manifest.json',{'identity':identity,'run_id':run_id,'saved_at_utc':datetime.now(timezone.utc).isoformat(),
             'status':decision['status'],'requires_attached_output':'BLOCKED_MISSING_OUTPUT' in str(decision.get('error','')),
             'resume':'attach exact saved Output; no source/config substitution'})
+    print({'status':decision['status'],'H5_STATUS':decision['H5_STATUS'],'error':decision.get('error'),'report':str(out/'REPORT.md')},flush=True)
     if args.publish:
-        proof=publish(out,decision);print({'publication':proof['status'],'branch':proof['branch'],'commit':proof['commit']},flush=True)
-    print({'status':decision['status'],'H5_STATUS':decision['H5_STATUS'],'report':str(out/'REPORT.md')},flush=True)
+        try:
+            proof=publish(out,decision);print({'publication':proof['status'],'branch':proof['branch'],'commit':proof['commit']},flush=True)
+        except Exception as error:
+            failure={'stage':'RESULT_PUBLICATION_FAILED','experiment_status':decision['status'],
+                'experiment_error':decision.get('error'),'publication_error':f'{type(error).__name__}: {error}',
+                'output_retained':str(out),'new_training_for_retry':False}
+            write(out/'publication-error.json',failure);print(failure,flush=True);raise
     if decision['status']=='BLOCKED':raise SystemExit(1)
 
 

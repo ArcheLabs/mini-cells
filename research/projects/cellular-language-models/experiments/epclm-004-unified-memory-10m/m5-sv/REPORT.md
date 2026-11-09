@@ -35,3 +35,13 @@ Evidence files: audit/development-pytest.log, audit/cpu-driver-fixture.json, aud
 ## Outstanding execution
 
 The full frozen Test bank has not been generated or evaluated in this workspace. No canonical10M T4 Pilot,12M main training or scientific Test run has occurred. Run notebook.ipynb on Tesla T4. Sessions are bounded and resumable; no completed unit is deliberately retrained. If Pilot learnability is insufficient, main training remains stopped with an explicit INCONCLUSIVE report. If full evaluation cannot finish, H5 cannot be SUPPORTED.
+
+## Version190 publication repair
+
+The saved run hit ModuleNotFoundError for scripts.research at publication time. Direct execution did not reliably expose the repository root as a Python package; another scripts namespace can also shadow it. The entry now loads the existing publisher by its exact file path, registers its module for dataclass annotations, and runs a cheap import preflight before experiment work. Experiment status/error is printed before publication and retained separately if publication fails.
+
+Use [publication-repair.ipynb](publication-repair.ipynb) for this saved failure. CPU is sufficient; enable Internet plus the existing GITHUB_TOKEN and KAGGLE_API_TOKEN secrets. It uses the already tested exact-version downloader for bingjiangli/minicells Version190 only. It downloads curated metadata, validates the original46f17f3 source/config/code identities, and republishes the original decision and logs with a repair receipt. It never calls the experiment launcher, loads checkpoint tensors, downloads sealed Test inputs or executes optimizer updates. Script Version ID stays unknown unless exposed by the exact-version API.
+
+The repair preserves the original experimental status, including any Pilot failure hidden by the publication traceback. A successful metadata publication does not turn an experiment failure into scientific success. Check repair-receipt.json for the original status/error and the verified remote commit. Original M5-SV binary checkpoints remain in saved Kaggle Output; this repair does not claim a weight archive or scientific continuation.
+
+Three targeted regressions passed: direct isolated-file import despite a conflicting scripts module, publication-only evidence preservation without weights, and original experiment error visibility when publication fails. AST comparison confirms all scientific entry functions are unchanged; only publish/launch transport and logging changed. Actual recovery/publication of Version190 must run in Kaggle, where the existing secrets are available.
