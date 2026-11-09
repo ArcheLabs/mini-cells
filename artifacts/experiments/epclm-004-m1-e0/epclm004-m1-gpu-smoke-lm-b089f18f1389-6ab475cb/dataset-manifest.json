@@ -1,0 +1,36 @@
+{
+  "format": "minicells.epclm004.dataset.v1",
+  "config": {
+    "dataset": {
+      "path": "Salesforce/wikitext",
+      "name": "wikitext-103-raw-v1",
+      "revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+    },
+    "train_lines": 2048,
+    "validation_lines": 32,
+    "preprocessing": "nonempty-lines-crlf-to-lf-validation-excludes-train-exact-lines-v2",
+    "tokenizer": "ByteLevel-BPE-8192-reserved536-v1"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "special_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3,
+    "<fact>": 4,
+    "<query>": 5,
+    "<answer>": 6,
+    "<hole>": 7
+  },
+  "splits": {
+    "train": {
+      "episodes": 128,
+      "content_sha256": "e637d274eb200988e75d3ff3a183a0e1a2ec876b240ba425fceef8588d3de9b0"
+    },
+    "validation": {
+      "episodes": 32,
+      "content_sha256": "27822006a6ebd7e4e98f0a313a3e4bbc61c5ae4efa1102d4554bf32f632fcb4e"
+    }
+  },
+  "test_status": "SEALED_NOT_ACCESSED"
+}
