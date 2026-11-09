@@ -7,6 +7,8 @@ HybridCLM lines so each experiment can be read in its research context.
 
 ## Contents
 
+- [`literature/`](literature/README.md) indexes theory documents in Chinese and
+  English and the existing experiment-specific paper collections.
 - [`context/`](context/) preserves the original stage documents and conclusions.
 - [`experiments/`](experiments/) contains experiment units, including the
   routing series, compositional Cell Graph, and Path-First CLM.
