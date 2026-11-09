@@ -1,5 +1,7 @@
 # Research Experiments
 
+- **EPCLM-003/004** — [Unified Memory Architecture, 10M](../projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/README.md). M1 T4 engineering PASS and frozen, including zero MQAR recall; saved Kaggle ID 366932788 user-supplied. M2 four matched baselines and periodic checkpoints CPU validated; target T4 pending. No Screening/Confirmation; H1–H6 NOT_EVALUATED. M0 and original evidence preserved.
+
 Every experiment belongs to one project and lives at:
 
 ```text

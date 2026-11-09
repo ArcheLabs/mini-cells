@@ -1,0 +1,101 @@
+{
+  "format": "minicells.epclm004.m2-protocol.v1",
+  "scope": "engineering correctness and cost only",
+  "parameters_reference": "frozen M1 E0 10130688; +/-1% relative to that baseline, not exactly 10M",
+  "arms": {
+    "E0": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 10,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 16384
+      },
+      "state_size": null
+    },
+    "E1": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 10,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 32
+      },
+      "state_size": null
+    },
+    "E2": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 18,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 32
+      },
+      "state_size": 20
+    },
+    "E3": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 8,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 848,
+        "window": 32
+      },
+      "state_size": 20
+    }
+  },
+  "model_seed": 41017,
+  "data": {
+    "bindings": 8,
+    "length": 128,
+    "queries": 1,
+    "interference": 1.0,
+    "seed": 41001,
+    "regime": "unseen_pairs"
+  },
+  "data_sizes": {
+    "train": 128,
+    "validation": 32,
+    "test": 0
+  },
+  "training": {
+    "seed": 41017,
+    "batch": 4,
+    "lr": 0.0003,
+    "updates": 2,
+    "precision": "fp32",
+    "tf32": false,
+    "optimizer": "AdamW",
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "weight_decay_policy": "all static parameters as in M1",
+    "clip": 1.0,
+    "scheduler": "constant-engineering-smoke",
+    "checkpoint": {
+      "every_updates": 8,
+      "every_seconds": 120,
+      "final": true,
+      "timeout": true,
+      "unsafe_update_rollback": "last durable checkpoint"
+    }
+  },
+  "budget": {
+    "execution_seconds": 5400,
+    "publication_reserve_seconds": 600,
+    "safety_seconds": 1200,
+    "notebook_hard_seconds": 7200
+  },
+  "backend": "official Mamba1 PyTorch reference; no native kernel performance claim",
+  "hypotheses": "NOT_EVALUATED"
+}

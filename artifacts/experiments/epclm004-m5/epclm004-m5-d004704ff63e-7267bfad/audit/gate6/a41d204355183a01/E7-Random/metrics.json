@@ -1,0 +1,77 @@
+{
+  "status": "COMPLETE",
+  "error": null,
+  "ledger": {
+    "input_tokens": 64,
+    "processed_tensor_tokens": 64,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 2,
+    "query_target_tokens": 2,
+    "committed_updates": 2
+  },
+  "initial_evaluation": {
+    "nll": 6.2401251792907715,
+    "supervised_targets": 1,
+    "query_targets": 1,
+    "query_exact_match": 0.0,
+    "query_prediction_counts": {
+      "165": 1
+    }
+  },
+  "validation": {
+    "nll": 6.241255760192871,
+    "supervised_targets": 1,
+    "query_targets": 1,
+    "query_exact_match": 0.0,
+    "query_prediction_counts": {
+      "165": 1
+    }
+  },
+  "history": [
+    {
+      "update": 1,
+      "loss": 6.271337985992432,
+      "gradient_norm": 5.299923896789551,
+      "parameter_change_norm": 0.02777988277375698,
+      "compute_seconds": 0.16509428200004095,
+      "input_sha256": "e9fd5df8750de0f65434d28fac2642cd5baf6740b42fb049d96f47972e8a5959",
+      "supervised_targets": 1,
+      "query_targets": 1
+    },
+    {
+      "update": 2,
+      "loss": 6.276610851287842,
+      "gradient_norm": 6.157188415527344,
+      "parameter_change_norm": 0.023635422810912132,
+      "compute_seconds": 0.1746976619999714,
+      "input_sha256": "e932ed9558af65306852c379bc3f616cf5758b2292133f0f46f89f17ffae7c7a",
+      "supervised_targets": 1,
+      "query_targets": 1
+    }
+  ],
+  "parameters": {
+    "static_parameters": 21584,
+    "embedding_parameters": 8576,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 0,
+      "blocks": 0,
+      "final_norm": 0
+    }
+  },
+  "checkpoint_policy": {
+    "writes_this_process": 2,
+    "write_seconds_this_process": 0.037552003000030254,
+    "policy": {
+      "every_updates": 8,
+      "every_seconds": 120
+    }
+  },
+  "checkpoint": {
+    "sha256": "444cf622e78d0fc5f8ef5e778880e45662325f90aa72ef287f64337ea7737e3f",
+    "bytes": 491245,
+    "durable_updates": 2
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "training_peak_allocated_bytes": null
+}

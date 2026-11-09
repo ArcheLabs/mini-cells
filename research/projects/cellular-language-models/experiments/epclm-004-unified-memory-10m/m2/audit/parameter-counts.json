@@ -1,0 +1,178 @@
+{
+  "E0": {
+    "static_parameters": 10130688,
+    "embedding_parameters": 2097152,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 2097152,
+      "blocks": 8033280,
+      "final_norm": 256
+    },
+    "model": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 10,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 16384
+      },
+      "state_size": null
+    },
+    "embedding_initialization_sha256": "7202e9115799e910e51070c62700373c9d6fcf10b8231af2e8013fc6aab73ad1",
+    "delta_from_frozen_e0": 0.0,
+    "mixer_kinds": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ]
+  },
+  "E1": {
+    "static_parameters": 10130688,
+    "embedding_parameters": 2097152,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 2097152,
+      "blocks": 8033280,
+      "final_norm": 256
+    },
+    "model": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 10,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 32
+      },
+      "state_size": null
+    },
+    "embedding_initialization_sha256": "7202e9115799e910e51070c62700373c9d6fcf10b8231af2e8013fc6aab73ad1",
+    "delta_from_frozen_e0": 0.0,
+    "mixer_kinds": [
+      "swa",
+      "swa",
+      "swa",
+      "swa",
+      "swa",
+      "swa",
+      "swa",
+      "swa",
+      "swa",
+      "swa"
+    ]
+  },
+  "E2": {
+    "static_parameters": 10092288,
+    "embedding_parameters": 2097152,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 2097152,
+      "blocks": 7994880,
+      "final_norm": 256
+    },
+    "model": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 18,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 32
+      },
+      "state_size": 20
+    },
+    "embedding_initialization_sha256": "7202e9115799e910e51070c62700373c9d6fcf10b8231af2e8013fc6aab73ad1",
+    "delta_from_frozen_e0": -0.0037904631946024114,
+    "mixer_kinds": [
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1",
+      "mamba1"
+    ],
+    "mamba_initialization_sha256_by_logical_index": [
+      "bf4b34cbbe80e71c42fc1d8aade6ac1bb4f31c5444cf5b8fb631ee76bd1fc2b0",
+      "f2731548c3f58cc4e2bf1fd5d7355f1b12cd3071d06057f629076eecff6d7ade",
+      "cbac6b6134a943f2a2ebee64170512e77a29fd732cbb4c8bcd07cbdfec280ebe",
+      "a5f5e06dfcb2076390a363379be0ee7b5adbd0100309777ea8d62864fcbf6083",
+      "e126b9ab382552068e2eb8c1d162f250f0358aa267e4c5f501585ff9beb658c1",
+      "5675efb455af32b4dc435f45ad7693c1d1f093d9f3568813b6c6c2547d0f9f68",
+      "c4182dfe61be1973774002928ca74d2952f97131cd941356bbb635f793488675",
+      "fad3c5a25a985f37077a599663fe41c3e5d48143f659f6fe40caea5e408e2908",
+      "eb3e220b96c828074cd3b00c15e45620f7316b3de6573b736f4266654cd346ac",
+      "416b8511effe17fbc027e537febe8bc6b34534ea8e45c95bb3bc80ef6abe9f43",
+      "e4e8d78cbfa0e230fa95f130fe941af5043689b7ac11c2351263893477614417",
+      "b346c33419ddbd4e44ea0834ba8f9a205eb6719b9f173ce1ac8a0e2afbfe192f",
+      "19e4161e7271cc96e58216de0627be22af5be657fb4161cb553aa9a101fb35a4",
+      "e4ef80ba50fe2eb03905aee0ef8f25e929c6c45b9c61c307c1a9755627eea4b7",
+      "d1443aa03e3b172d85b0b53ffac7757ca9c0eccf058c4eaa2d383d6c0f138a17",
+      "2317ec4a071f376e52f3182d159c1bf447a740011ff72e8e80cdeb0280cc95cf",
+      "dabee6fa5aa25537fa2e2817c15cbf07d01a613fee401de797059f4a55e2fa17",
+      "f9eb5276b1f706b18e8bd8feb3f5bf331d5713e29aa7f930d8aed3aa96a75de6"
+    ]
+  },
+  "E3": {
+    "static_parameters": 10135808,
+    "embedding_parameters": 2097152,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 2097152,
+      "blocks": 8038400,
+      "final_norm": 256
+    },
+    "model": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 8,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 848,
+        "window": 32
+      },
+      "state_size": 20
+    },
+    "embedding_initialization_sha256": "7202e9115799e910e51070c62700373c9d6fcf10b8231af2e8013fc6aab73ad1",
+    "delta_from_frozen_e0": 0.0005053950926137141,
+    "mixer_kinds": [
+      "mamba1",
+      "swa",
+      "mamba1",
+      "swa",
+      "mamba1",
+      "swa",
+      "mamba1",
+      "swa"
+    ],
+    "mamba_initialization_sha256_by_logical_index": [
+      "bf4b34cbbe80e71c42fc1d8aade6ac1bb4f31c5444cf5b8fb631ee76bd1fc2b0",
+      "f2731548c3f58cc4e2bf1fd5d7355f1b12cd3071d06057f629076eecff6d7ade",
+      "cbac6b6134a943f2a2ebee64170512e77a29fd732cbb4c8bcd07cbdfec280ebe",
+      "a5f5e06dfcb2076390a363379be0ee7b5adbd0100309777ea8d62864fcbf6083"
+    ]
+  }
+}

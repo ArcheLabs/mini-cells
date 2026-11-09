@@ -1,0 +1,33 @@
+{
+  "format": "minicells.epclm004.dataset.v1",
+  "config": {
+    "bindings": 8,
+    "length": 512,
+    "queries": 1,
+    "interference": 1.0,
+    "seed": 41001,
+    "regime": "unseen_pairs"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "special_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3,
+    "<fact>": 4,
+    "<query>": 5,
+    "<answer>": 6,
+    "<hole>": 7
+  },
+  "splits": {
+    "train": {
+      "episodes": 16,
+      "content_sha256": "854cf98dff9b8436127ef5a86a18c7180119fa4f30b31e16a9df0e661028457b"
+    },
+    "validation": {
+      "episodes": 4,
+      "content_sha256": "23089cabb6c0a3ac1ff145546e469696b22c65e8978378cb127069bc31984f2b"
+    }
+  },
+  "test_status": "SEALED_NOT_ACCESSED"
+}

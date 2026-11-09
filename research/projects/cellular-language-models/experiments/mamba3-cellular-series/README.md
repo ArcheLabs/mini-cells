@@ -25,7 +25,7 @@ M3C 研究一种以 **Mamba-3 为层级主干、以无持久状态的平面 Cell
 | 编号 | 研究内容 | 状态 |
 |---|---|---|
 | M3C-001 | 官方 Mamba-3 SISO/MIMO 基线与运行时复现 | [模块审计入口](M3C-001/README.md)已实现；GPU 未运行，T4 不满足依赖门禁 |
-| M3C-002 | 有界 Shared Workspace Attention | 未开始 |
+| M3C-002 | 有界 Shared Workspace Attention | 002A T4工程PASS；[002B正式门禁设计](M3C-002B/README.md)未冻结，任务收益未评估 |
 | M3C-003 | 固定调用的 Stateless Cell Adapter | 未开始 |
 | M3C-004 | 跨 Mamba 层的动态 Cell / Skip 路由 | 未开始 |
 | M3C-005 | 同层多次 Cell 调用与自适应计算深度 | 未开始 |
@@ -48,3 +48,23 @@ M3C 是新的实验系列，不修改或取代以下历史记录：
 - Mamba-3 的官方代码版本、模型配置、数据身份、硬件兼容性和精确训练预算必须在 M3C-001 Gate 0 中锁定。
 - Mamba-2 的 SSD/DART 推导不能未经证明直接移植到 Mamba-3；M3C-006 必须先推导 Mamba-3 自身的 Chunk State Memory。
 - 任何效率结论必须报告真实 Decode 延迟、Prefill 吞吐、显存、Workspace Cache、Recurrent State、Kernel/Dispatch 开销及能耗；理论 FLOPs 或逻辑稀疏率不能替代实测。
+
+## 独立 TPU/JAX 候选路径
+
+[M3C-001-TPU-JAX](M3C-001-TPU-JAX/README.md)：社区候选实现，先 SISO 门禁再 MIMO。官方 PyTorch 审计历史不变；TPU 通过后作为 M3C-002 候选底座，尚未产生 TPU 实测或科学结论。
+
+## 当前执行路径：T4 Reference
+
+[M3C-001-T4-Reference](M3C-001-T4-Reference/README.md)使用纯 PyTorch 第三方实现，首轮 FP32 正确性检查。官方 BLOCKED_HARDWARE 与 TPU/JAX 记录保留；不再要求等待 H100 或完成 TPU 路径后才能推进。M3C-002 至006的研究路线不变，底座差异显式记录。
+
+## 当前下一步
+
+[M3C-002 Workspace Notebook](M3C-002/notebook.ipynb)：基于已通过T4审计的Reference，自动工程门禁与GPU成本测量；暂不训练，不将工程成功写成完整Gate002通过。
+
+## M3C-002B：正式门禁设计
+
+[Gate002预注册候选](M3C-002B/PREREGISTRATION.zh-CN.md)与[冻结候选清单](M3C-002B/freeze-candidate.json)：基于002A实际T4结果，只做任务/统计/预算设计；正式阈值与预算未冻结，训练授权仍为0，不新增启动器。
+
+## 当前执行：M3C-002B-CAL-001
+
+[R线开发校准训练](M3C-002B-CAL-001/README.md)及[Notebook](M3C-002B-CAL-001/notebook.ipynb)：三臂各32,768查询Targets、新开发Seed27101；正式训练/测试/PPL关闭，正式预注册候选仍未冻结。

@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "loss": 4.135310649871826,
+  "embedding_delta": 0.04679199680685997,
+  "causal_error": 0.0,
+  "batch_isolation_error": 2.9802322387695312e-08,
+  "gate_range": [
+    0.4513051211833954,
+    0.46079757809638977
+  ],
+  "static_parameters": 4036,
+  "dynamic": {
+    "fast_weights": 672,
+    "momentum": 672,
+    "fast_parameters_per_stream": 84
+  },
+  "outer_updates": 2,
+  "probe_inner_updates": 4,
+  "training_inner_updates": 8,
+  "runtime_reset_preserves_cell": true,
+  "checkpoint_restore_error": 0.0,
+  "resumed_updates_only": 1,
+  "ledger": {
+    "input_tokens": 32,
+    "processed_tensor_tokens": 32,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 4,
+    "query_target_tokens": 4,
+    "committed_updates": 2
+  },
+  "identity": "4f4516535c61629e06c23f0a7fe8054d1d189f3292c47ae1182fc820e0326937",
+  "wall_seconds": 1.0595127939959639,
+  "artifact_sha256": {
+    "gate4/4f4516535c61629e/training/checkpoint.pt": "5b28d2f7ba6f862bd7389e5313a306104f41871efb85a25a93eb0fe9329ab9be",
+    "gate4/4f4516535c61629e/training/metrics.json": "fd6b9bd2bda803f35c8cdf12c14d82081d56656a2fbb5196204e8227d7ae6c08",
+    "gate4/4f4516535c61629e/training/metrics.jsonl": "58c7e01d2253aba7a3c36ca03e59246a304c69bc406b3bb34af51df5a0e75f9c"
+  }
+}

@@ -1,0 +1,3055 @@
+{
+  "status": "PASS",
+  "identity": {
+    "source_commit": "d004704ff63e8a99fc474a88f144bac4b9438894",
+    "implementation": {
+      "run.py": "39f65f6e49d265c0ac0208786338f54641ce32242bcb65adac1213034b70feaf",
+      "src/bmojo.py": "99503ec8245a36c6d8dbf496a3da70127b48e15aa94d9b01e867aec35d58f9c4",
+      "src/gate0.py": "06422e9804526179dfe8c5919ea20c31dddb0a91a9a48568cf60f051108b2266",
+      "src/m5_checks.py": "0446bb5ab6d58abed7cf7111442d8d4d0ab7f6c542fd64ce14d49cb697c88509",
+      "src/store.py": "a9ffe0c78fa591126f49927cd1a9c9060c00901aeb94179529946fa410f7f2c5",
+      "src/tasks.py": "6a0c0a064e5cad406da214b2cd2755dd46af62652143e97ef80afce954baea39"
+    },
+    "protocol": "1ed8446c5ac37e35afc474b621d54d8638690caf13f63df0138ad992464ced61"
+  },
+  "arm": "E6",
+  "training": {
+    "status": "COMPLETE",
+    "error": null,
+    "ledger": {
+      "input_tokens": 1024,
+      "processed_tensor_tokens": 1024,
+      "padding_tokens": 0,
+      "supervised_target_tokens": 2,
+      "query_target_tokens": 2,
+      "committed_updates": 2
+    },
+    "initial_evaluation": {
+      "nll": 9.18495774269104,
+      "supervised_targets": 4,
+      "query_targets": 4,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "2118": 1,
+        "7462": 1,
+        "7366": 1,
+        "4103": 1
+      }
+    },
+    "validation": {
+      "nll": 9.057668447494507,
+      "supervised_targets": 4,
+      "query_targets": 4,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "477": 4
+      }
+    },
+    "history": [
+      {
+        "update": 1,
+        "loss": 8.748331069946289,
+        "gradient_norm": 86.01873779296875,
+        "parameter_change_norm": 0.42145276069641113,
+        "compute_seconds": 1.6616954709999732,
+        "input_sha256": "04671fd542efc156900e7e01d5aeb962573fbfb6a302b3502f45133b66d97939",
+        "supervised_targets": 1,
+        "query_targets": 1
+      },
+      {
+        "update": 2,
+        "loss": 8.684187889099121,
+        "gradient_norm": 60.82023239135742,
+        "parameter_change_norm": 0.3240560293197632,
+        "compute_seconds": 1.6681316130000141,
+        "input_sha256": "f1260a206622c010e5138ebec558a435225468826a11d4b2ccdfbc2cc9de05b5",
+        "supervised_targets": 1,
+        "query_targets": 1
+      }
+    ],
+    "parameters": {
+      "static_parameters": 10021120,
+      "breakdown": {
+        "embedding": 2097152,
+        "mamba": 1775616,
+        "attention": 1048576,
+        "mlp": 5013504,
+        "norm": 4352,
+        "summary_projection": 81920
+      },
+      "tied_embedding_head": true
+    },
+    "checkpoint_policy": {
+      "writes_this_process": 2,
+      "write_seconds_this_process": 3.620964807000007,
+      "policy": {
+        "every_updates": 8,
+        "every_seconds": 120
+      }
+    },
+    "checkpoint": {
+      "sha256": "e28b43036bf5a33eb881c819b96815d17662032a0fd439d89d3ddaba445525e5",
+      "bytes": 175074413,
+      "durable_updates": 2
+    },
+    "hypotheses": "NOT_EVALUATED",
+    "training_peak_allocated_bytes": 737749504
+  },
+  "training_events": [
+    {
+      "input_sha256": "04671fd542efc156900e7e01d5aeb962573fbfb6a302b3502f45133b66d97939",
+      "position": 512,
+      "store": [],
+      "attention_read_host_seconds": 0.15977746500004741,
+      "store_read_preparation_seconds": 0.0,
+      "store_update_host_seconds": 0.0
+    },
+    {
+      "input_sha256": "f1260a206622c010e5138ebec558a435225468826a11d4b2ccdfbc2cc9de05b5",
+      "position": 512,
+      "store": [],
+      "attention_read_host_seconds": 0.1563983680000547,
+      "store_read_preparation_seconds": 0.0,
+      "store_update_host_seconds": 0.0
+    }
+  ],
+  "model_restore_error": 0.0,
+  "runtime_restore_error": 0.0,
+  "store_only": null,
+  "resources": {
+    "static_parameter_breakdown": {
+      "embedding": 2097152,
+      "mamba": 1775616,
+      "attention": 1048576,
+      "mlp": 5013504,
+      "norm": 4352,
+      "summary_projection": 81920
+    },
+    "static_parameters": 10021120,
+    "static_weight_bytes": 40084480,
+    "mamba_runtime_bytes": 196608,
+    "kv_bytes": 262144,
+    "predictor_bytes": 0,
+    "summary_materialized_bytes_per_chunk": 16384,
+    "persistent_summary_bytes": 0,
+    "store_payload_bytes": 0,
+    "store_metadata_serialized_bytes": 0,
+    "stores": [],
+    "training_peak_allocated_bytes": 737749504,
+    "inference_probe_peak_allocated_bytes": 76236800,
+    "inference_peak_allocated_bytes": 92261376,
+    "gradient_tensor_bytes_after_fit_this_process": 40084480,
+    "expected_full_static_gradient_bytes": 40084480,
+    "optimizer_tensor_bytes": 80169352,
+    "activation_workspace_other_residual_estimate_bytes": 577411192,
+    "residual_scope": "unattributed estimate; tensor residency/allocator overhead not independently separated",
+    "inference_seconds_512_tokens": 0.4745915190000005,
+    "inference_tokens_per_second": 1078.8224810228846,
+    "training_compute_tokens_per_second": 307.5234761950191,
+    "fit_wall_seconds_this_process": 11.28417454700002,
+    "new_committed_updates_this_process": 2,
+    "throughput_scope": "engineering smoke/probe only; fit wall includes validation and IO; profiled inference includes phase synchronization, not formal performance",
+    "read_update_latency": {
+      "attention_read_host_seconds": 0.1403991729997074,
+      "store_read_preparation_seconds": 0.0,
+      "store_update_host_seconds": 0.0,
+      "scope": "Store read is K/V projection, top-k and gather; excludes shared softmax. profile=True synchronizes GPU phase boundaries; otherwise host dispatch timing. No formal performance claim."
+    },
+    "model_checkpoint_bytes": 175074413,
+    "runtime_checkpoint": {
+      "bytes": 704918,
+      "write_seconds": 0.22039511299999504,
+      "manifest_sha256": "ba1aafee9850fa51e4181e440b809d53d855bae0dbd32b4cc72f3a8427df1ae9"
+    }
+  },
+  "wiki_validation": {
+    "initial": {
+      "nll": 9.048292392233144,
+      "query_exact_match": null,
+      "recall_at_1": null,
+      "supervised_targets": 345,
+      "query_targets": 0,
+      "store_retrieval_hit_rate": null,
+      "gold_record_coverage": null,
+      "hit_definition": "retrieved gold value token position; not admission-score rank",
+      "episodes": [],
+      "ppl": 8504.004015686352
+    },
+    "final": {
+      "nll": 9.03015457927317,
+      "query_exact_match": null,
+      "recall_at_1": null,
+      "supervised_targets": 345,
+      "query_targets": 0,
+      "store_retrieval_hit_rate": null,
+      "gold_record_coverage": null,
+      "hit_definition": "retrieved gold value token position; not admission-score rank",
+      "episodes": [],
+      "ppl": 8351.15038716371
+    },
+    "delta_nll": -0.018137812959974298
+  },
+  "evaluations": {
+    "0": [
+      {
+        "case": "length-256",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 256,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.94727897644043,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "360ed84ceb6b56fad9523e83073bb50b0cd18e0d28a371a3ff703918f16d074c",
+            "input_sha256": "264de954ef8ff8abbb7510a89a921226a53b4ca2dca7b85111da54e385aeade2",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 255,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 255,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 255,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 255,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "length-512",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.137858390808105,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "2a61715cf44636bf3c19eaade02d3b1103dff2c8fef17ff45d9a813e66b40d7f",
+            "input_sha256": "66b881444d82fce809cc0b96c662fa1c09df3d7bb0d11d02386d16b41f5b8572",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "length-2048",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 2048,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.995946884155273,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "59b0b493817f31526d304268c690e6d21b1d140fafe53f6183332b8cd5b739c6",
+            "input_sha256": "ab4c20c50fcc5edffeffdf75aab934d2dc5c34de855c5b7575e89cb10a6717cb",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 2047,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 2047,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 2047,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 2047,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "length-8192",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 8192,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.03718090057373,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "fc534754b7bae2744d0102d91f452fe214cdaaf2fa7491c588e68d09f62d3f91",
+            "input_sha256": "307671448412f8f63e0b61792b0de8ffec88c614960de0eadb204f8c7ce076d7",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 8191,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 8191,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 8191,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 8191,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "length-16384",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 16384,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.997455596923828,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "fbe79a723f2edada5278e8884460f516ffac08e505130443a242fc631ce19dbc",
+            "input_sha256": "ed44d0aed24b51aad4e1bc5686aa2984b5022643257a52939e8217135594ea68",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 16383,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 16383,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 16383,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 16383,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "bindings-16",
+        "task": "mqar",
+        "config": {
+          "bindings": 16,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.2510347366333,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "53c151ef41b1ceca91394abdf3864cb7930164f8a6fed9c231eb7ec2208581eb",
+            "input_sha256": "dc34534773efc21cc45a5ea1cbf67718c9f2c318b10cff51c45719ee1469741b",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "bindings-32",
+        "task": "mqar",
+        "config": {
+          "bindings": 32,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.951793670654297,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "23e49f376a7bd5ce19a2dfeb04610b0043c1f28f6d226e375e38d5d8a99d32d1",
+            "input_sha256": "d07c5d7326e511c6378e7c893a6237ef314db3c002c3db721add94ae1a4acccc",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "bindings-64",
+        "task": "mqar",
+        "config": {
+          "bindings": 64,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.750934600830078,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "d1e3fd137f160ded637a0fd39249b2ed0cbd11d326c547de32040ae028210b3b",
+            "input_sha256": "3e98b032b26fa969adf45b5bcb72193fe26ce5e263104d79daff49bff71c6529",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "queries-8",
+        "task": "mqar",
+        "config": {
+          "bindings": 32,
+          "length": 512,
+          "queries": 8,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.155403137207031,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 8,
+        "query_targets": 8,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "f0e9cfc33daf2472db5675f99edd39dd25f01afe18193dd30a3982ac85b183cb",
+            "input_sha256": "b68c4628f7f0362c820db7ba8a04f885b3df996385bc34e1f60f7bf537f6e253",
+            "targets": 8,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 483,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 487,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 491,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 495,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 499,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 503,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 507,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 483,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 487,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 491,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 495,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 499,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 503,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 507,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 483,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 487,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 491,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 495,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 499,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 503,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 507,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 483,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 487,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 491,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 495,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 499,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 503,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 507,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "queries-32",
+        "task": "mqar",
+        "config": {
+          "bindings": 32,
+          "length": 512,
+          "queries": 32,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.111403465270996,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 32,
+        "query_targets": 32,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "ae12233c80ad3e9cad7efe02486ee60e2f7bafdb45961dd152de8c5c0e12775f",
+            "input_sha256": "8eff473b4eede315077350df093064cdd98f8f6db2f15e8e88f09072adc0a8a7",
+            "targets": 32,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 387,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 391,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 395,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 399,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 403,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 407,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 411,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 415,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 387,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 391,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 395,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 399,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 403,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 407,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 411,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 415,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 387,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 391,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 395,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 399,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 403,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 407,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 411,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 415,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 387,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 391,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 395,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 399,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 403,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 407,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 411,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 415,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 419,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 423,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 427,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 431,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 435,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 439,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 443,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 447,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 419,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 423,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 427,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 431,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 435,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 439,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 443,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 447,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 419,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 423,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 427,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 431,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 435,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 439,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 443,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 447,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 419,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 423,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 427,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 431,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 435,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 439,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 443,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 447,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 451,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 455,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 459,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 463,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 467,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 471,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 475,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 479,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 451,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 455,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 459,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 463,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 467,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 471,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 475,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 479,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 451,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 455,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 459,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 463,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 467,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 471,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 475,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 479,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 451,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 455,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 459,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 463,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 467,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 471,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 475,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 479,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 483,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 487,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 491,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 495,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 499,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 503,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 507,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 483,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 487,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 491,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 495,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 499,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 503,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 507,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 483,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 487,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 491,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 495,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 499,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 503,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 507,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 483,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 487,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 491,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 495,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 499,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 503,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 507,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "interference-0.0",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 512,
+          "queries": 1,
+          "interference": 0.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.37652587890625,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "48ae75320bbfcd42f6b5a62604fdf17cb748568b5f058bd9ee73b8ed0cee08c1",
+            "input_sha256": "3fdc094c945a74954215846b61cd9b25165af0e7a2ced6c5f6297dd900e6d16e",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "interference-0.5",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 512,
+          "queries": 1,
+          "interference": 0.5,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.532960891723633,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "ece660fae27c25665886f96f001a356108eee8c5651aa20642d98a004cb2ef72",
+            "input_sha256": "3c0e16b92242c94192eb625d1fa9434f2148da46f539af0771545b953478ab83",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "similarity-low",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "low",
+        "value_repeat": false,
+        "nll": 8.949913024902344,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "0ee28bf025c46fb9b789dfcd3d4e5107311664cd358e894a77ee11367ba0a9d3",
+            "input_sha256": "4ba6e1643c20b65671d3becc3b1678e3f674800f8e71c545a2eba4ee272e1b2f",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "similarity-high",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "high",
+        "value_repeat": false,
+        "nll": 9.45518684387207,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "e6888b408da09a8867bdc179f8b8e4614c475c6ef702edce2197e690eda16824",
+            "input_sha256": "6ff3468ac38a901b99ff0a3512d34d717da1c10854baa01cd05111654242c6a1",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "repeated-values",
+        "task": "mqar",
+        "config": {
+          "bindings": 8,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": true,
+        "nll": 9.586982727050781,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "e4ca931916bd442b9905f9f32318d337df9f91987b7d1078e56d9c2b61c4fe83",
+            "input_sha256": "892653adf00a94e24c2537bca0256fcf8f9f6c4c29a533af770212011b08673b",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "delay-16",
+        "task": "mqar",
+        "config": {
+          "bindings": 1,
+          "length": 20,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.168006896972656,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "80ff298ed616260ff2c18d04d50c078604c2a09dfc5df9e3cc78192dba5c9881",
+            "input_sha256": "ad3bfd19bbc1f3577c11f332796fd9179be592f75b249112de96e621f5dbf5b0",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 163840,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 19,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 19,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 19,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 19,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "delay-32",
+        "task": "mqar",
+        "config": {
+          "bindings": 1,
+          "length": 36,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.991206169128418,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "1ad1735f59afb4ac9f3335d0a061ec53049189ca0cd23b4b0e06ea8a64fd855c",
+            "input_sha256": "9346fdcd3ab73ea453fb53c5ec1b9df0f1719a5e287cad023602ff6ee017d79e",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 35,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 35,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 35,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 35,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "delay-64",
+        "task": "mqar",
+        "config": {
+          "bindings": 1,
+          "length": 68,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.964244842529297,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "8eea41178b2d2b19bfeb479c718360877c12980033753f2e2d48430965a62d8e",
+            "input_sha256": "27994d048c722ad5506a38913acbe207c0a21256dc073f924fc1ea2b2d196926",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 67,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 67,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 67,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 67,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "delay-256",
+        "task": "mqar",
+        "config": {
+          "bindings": 1,
+          "length": 260,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.634765625,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "3873b905f0a5b43cce2e909706b8c3735ea33088ae21cba48ba21393bfa6904b",
+            "input_sha256": "48847a0a22e1a65c62affee7455861827b1e279c74e6483ab5ef4c4a4a84e40f",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 259,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 259,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 259,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 259,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "delay-512",
+        "task": "mqar",
+        "config": {
+          "bindings": 1,
+          "length": 516,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.366524696350098,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "0fefc2eb305fee165a3da04f981bc6c491e7e545b9f7fba6c5995f224e5ba7bd",
+            "input_sha256": "eb04e466c3896f64b5792343aa80044a090552abb2427c4c5be19d72f36d91f3",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 515,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 515,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 515,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 515,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "selective-copy",
+        "task": "selective_copy",
+        "config": {
+          "bindings": 1,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 9.024835586547852,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "204083ec2aa10b3c840e8de592166a94fd90aaa24598386dae672e951171788b",
+            "input_sha256": "9c0ffce50b5ca437e5b6417297cd3d04ea13b0d806e945e5befeb075383dcb21",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "induction",
+        "task": "induction",
+        "config": {
+          "bindings": 8,
+          "length": 512,
+          "queries": 1,
+          "interference": 1.0,
+          "seed": 41001,
+          "regime": "unseen_pairs"
+        },
+        "similarity": "random",
+        "value_repeat": false,
+        "nll": 8.817389488220215,
+        "query_exact_match": 0.0,
+        "recall_at_1": 0.0,
+        "supervised_targets": 1,
+        "query_targets": 1,
+        "store_retrieval_hit_rate": 0.0,
+        "gold_record_coverage": 0.0,
+        "hit_definition": "retrieved gold value token position; not admission-score rank",
+        "episodes": [
+          {
+            "episode": "c43115a71da540244fc1b04bb7c3e9f77800df6dd602370aed3eac15a483491d",
+            "input_sha256": "b84967a8a570e32e074bfaa4d929e7b5d506b7dc9be1fe971dc2734410846ff0",
+            "targets": 1,
+            "correct": 0,
+            "store_metrics": [],
+            "resources": {
+              "static_parameter_breakdown": {
+                "embedding": 2097152,
+                "mamba": 1775616,
+                "attention": 1048576,
+                "mlp": 5013504,
+                "norm": 4352,
+                "summary_projection": 81920
+              },
+              "static_parameters": 10021120,
+              "static_weight_bytes": 40084480,
+              "mamba_runtime_bytes": 196608,
+              "kv_bytes": 262144,
+              "predictor_bytes": 0,
+              "summary_materialized_bytes_per_chunk": 16384,
+              "persistent_summary_bytes": 0,
+              "store_payload_bytes": 0,
+              "store_metadata_serialized_bytes": 0,
+              "stores": []
+            },
+            "trace": [
+              {
+                "layer": 1,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 3,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 5,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              },
+              {
+                "layer": 7,
+                "stream": 0,
+                "query_position": 511,
+                "selected_positions": [],
+                "stored_positions": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "capacity128_scope": "inference-only with the capacity64-trained model; no retraining",
+  "hypotheses": "NOT_EVALUATED",
+  "files": {
+    "events.json": "b6bd96bd2f79ada2b594a0a491f1b014837e1a62a2d990e31b23dadad02e51de",
+    "runtime/manifest.json": "ba1aafee9850fa51e4181e440b809d53d855bae0dbd32b4cc72f3a8427df1ae9",
+    "training/metrics.json": "4083985a0110f6fa3064f824ddb760667ab43ee260bfbb867a83a0cd2ad5c68f",
+    "training/metrics.jsonl": "53948ff95d6af0ca782ca2916271097e207cba6500cba05e59a42efc44b04c83",
+    "training/checkpoint.pt": "e28b43036bf5a33eb881c819b96815d17662032a0fd439d89d3ddaba445525e5",
+    "runtime/1c3eb4ab8e724cecaf3110912869d2d6/store.pt": "d42d64b2e9b28c8ad907f4b3110b0d979cad62f9db9dd670d14d299bf2f35b20",
+    "runtime/1c3eb4ab8e724cecaf3110912869d2d6/kv.pt": "2e56181d17f5aeebb8de93cedde036483f25c9a52a19cd4b34108c78bea539ff",
+    "runtime/1c3eb4ab8e724cecaf3110912869d2d6/mamba.pt": "84c73ae88833d872bdc88888c31064b4f9774f168e1ea27871335d1677114ba2",
+    "runtime/1c3eb4ab8e724cecaf3110912869d2d6/predictor.pt": "d42d64b2e9b28c8ad907f4b3110b0d979cad62f9db9dd670d14d299bf2f35b20"
+  }
+}

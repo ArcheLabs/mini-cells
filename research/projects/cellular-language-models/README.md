@@ -7,6 +7,8 @@ HybridCLM lines so each experiment can be read in its research context.
 
 ## Contents
 
+- [`literature/`](literature/README.md) indexes theory documents in Chinese and
+  English and the existing experiment-specific paper collections.
 - [`context/`](context/) preserves the original stage documents and conclusions.
 - [`experiments/`](experiments/) contains experiment units, including the
   routing series, compositional Cell Graph, and Path-First CLM.
@@ -17,6 +19,8 @@ HybridCLM lines so each experiment can be read in its research context.
 - [Mamba-3 Cellular (M3C)](experiments/mamba3-cellular-series/README.md): Mamba-3 hierarchical backbone with optional stateless, flat Cells and bounded shared Workspace Attention. Proposal only; no training authorized.
 
 ## Running an experiment
+
+- [EPCLM-003/004 — Unified Memory Architecture, 10M](experiments/epclm-004-unified-memory-10m/README.md): M1 T4 engineering accepted and frozen; M2 matched E0/E1/Mamba-1/Samba-lite implemented and CPU validated, target GPU pending. No scientific confirmation.
 
 Start from that experiment's README or notebook and use its frozen configuration
 and source commit. Do not infer scientific approval from the presence of a

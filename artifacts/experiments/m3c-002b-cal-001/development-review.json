@@ -1,0 +1,89 @@
+{
+  "type": "POSTHOC_DEVELOPMENT_REVIEW_NOT_PREREGISTERED",
+  "run_id": "m3c-002b-cal-001-254ddc8e2b9f-3b0ad91d",
+  "source_commit": "254ddc8e2b9fe43a1a051e687278f6e3f21e2363",
+  "identity_status": "SAVED_VERSION_URL_RECORDED_FROM_USER; independent platform access unavailable",
+  "script_version_id": "365972453",
+  "training_status": "COMPLETE",
+  "development_targets": 98304,
+  "formal_training_targets": 0,
+  "formal_test_accessed": false,
+  "scientific_hypotheses": "NOT_EVALUATED",
+  "learnability": "ASSOCIATIVE_RETRIEVAL_NOT_DEMONSTRATED_AT_THIS_BUDGET",
+  "observed_failure_mode": "All 3072 development queries predict value token 118 in every arm",
+  "fixed_legal_value_guess_expected_accuracy": 0.015625,
+  "uniform_value_nll_reference": 4.1588830833596715,
+  "arms": {
+    "M3-Base": {
+      "updates": 512,
+      "query_targets": 32768,
+      "prediction_counts": {
+        "118": 3072
+      },
+      "correct_queries": 48,
+      "evaluation_queries": 3072,
+      "dev_em": 0.015625,
+      "initial_query_nll": 5.555125828366727,
+      "final_query_nll": 4.17582915420644,
+      "no_binding_control_em": 0.015625,
+      "no_binding_control_nll": 4.176373732741922,
+      "repeat_first_em": 0.014322916666666666,
+      "repeat_later_em": 0.014322916666666666,
+      "train_seconds_excluding_overheads": 18.72955455099941,
+      "query_targets_per_second": 1749.5344008729508,
+      "update_p95_seconds": 0.0371642117499789,
+      "training_peak_mib": 96.34912109375,
+      "parameters": 171952,
+      "decode_ms_per_token": 2.7467811249977103
+    },
+    "M3-WA-W16": {
+      "updates": 512,
+      "query_targets": 32768,
+      "prediction_counts": {
+        "118": 3072
+      },
+      "correct_queries": 48,
+      "evaluation_queries": 3072,
+      "dev_em": 0.015625,
+      "initial_query_nll": 5.554856315099944,
+      "final_query_nll": 4.175403081579134,
+      "no_binding_control_em": 0.015625,
+      "no_binding_control_nll": 4.175488077259312,
+      "repeat_first_em": 0.014322916666666666,
+      "repeat_later_em": 0.014322916666666666,
+      "train_seconds_excluding_overheads": 20.083217428999546,
+      "query_targets_per_second": 1631.6110760561712,
+      "update_p95_seconds": 0.04191666019999615,
+      "training_peak_mib": 103.34423828125,
+      "parameters": 204850,
+      "decode_ms_per_token": 3.970911687503076,
+      "prediction_agreement_with_base": 1.0
+    },
+    "M3-WA-W64": {
+      "updates": 512,
+      "query_targets": 32768,
+      "prediction_counts": {
+        "118": 3072
+      },
+      "correct_queries": 48,
+      "evaluation_queries": 3072,
+      "dev_em": 0.015625,
+      "initial_query_nll": 5.555114303094645,
+      "final_query_nll": 4.175667216302827,
+      "no_binding_control_em": 0.015625,
+      "no_binding_control_nll": 4.175587693306928,
+      "repeat_first_em": 0.014322916666666666,
+      "repeat_later_em": 0.014322916666666666,
+      "train_seconds_excluding_overheads": 19.794032647000677,
+      "query_targets_per_second": 1655.448416417825,
+      "update_p95_seconds": 0.04100419970001212,
+      "training_peak_mib": 104.09423828125,
+      "parameters": 204850,
+      "decode_ms_per_token": 4.034489062497926,
+      "prediction_agreement_with_base": 1.0
+    }
+  },
+  "variance_limit": "Zero paired bootstrap interval follows identical constant predictions; cannot establish equivalence, training-seed variance, or formal power",
+  "m3c003": "BLOCKED_NO_REPEATABLE_RETRIEVAL_BENEFIT",
+  "recommended_next": "Targeted development learnability diagnostics before scaling budget or formal confirmation; no new training authorized by this report"
+}

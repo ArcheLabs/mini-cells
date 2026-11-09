@@ -2,6 +2,8 @@
 
 本索引区分原始论文、官方实现和相邻研究。引用外部论文不表示 MiniCells 已复现其结果，也不表示相关机制已适配 Mamba-3。
 
+相关理论综述：[EPCLM-002 Persistent State Theory v0.2 中文原文](../../literature/EPCLM-002-Persistent-State-Theory-v0.2.zh-CN.md) / [English translation](../../literature/EPCLM-002-Persistent-State-Theory-v0.2.en.md)。该文扩展讨论 SSM、Titans、局部 Attention 与可移植记忆；其中实验安排为研究提案，不构成 M3C 训练授权。另见[文献与理论索引](../../literature/README.md)。
+
 ## A. Mamba 与 State Space Model
 
 ### A1. Mamba — Linear-Time Sequence Modeling with Selective State Spaces

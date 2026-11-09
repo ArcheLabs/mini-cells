@@ -1,0 +1,137 @@
+{
+  "format": "minicells.epclm004.run.v1",
+  "source_commit": "597b37aefedadf3a319102d76966c1dbb6a1d611",
+  "implementation_sha256": "c5ab04ee9accb32a97837139c98e4958004a3796047e654cdc07be334106f314",
+  "config": {
+    "profile": "cpu-tiny",
+    "task": "lm",
+    "mqar": {
+      "bindings": 2,
+      "length": 32,
+      "queries": 1,
+      "interference": 1.0,
+      "seed": 41001,
+      "regime": "unseen_pairs"
+    },
+    "model": {
+      "vocab": 8192,
+      "dim": 32,
+      "layers": 1,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 64,
+      "window": 16384
+    },
+    "training": {
+      "seed": 41017,
+      "batch": 4,
+      "lr": 0.001,
+      "updates": 12,
+      "precision": "fp32",
+      "scheduler": "constant-smoke-only",
+      "attention": "full-causal-supplied-sequence-no-training-cache"
+    }
+  },
+  "config_sha256": "9adb57710410ab6b2a806e4a416ff6cd752ec4e9799cd9c4aa6f87a09ccc948e",
+  "environment": {
+    "python": "3.11.18",
+    "torch": "2.6.0+cpu",
+    "cuda_build": null,
+    "cuda_available": false,
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.31",
+    "dependencies": {
+      "numpy": "2.4.6",
+      "tokenizers": "0.20.3",
+      "datasets": "3.6.0"
+    }
+  },
+  "seed": 41017,
+  "test_status": "SEALED_NOT_ACCESSED",
+  "evidence_level": "ENGINEERING_DEVELOPMENT",
+  "formal_training_tokens": 0,
+  "kaggle_script_version_id": null,
+  "kaggle_identity_status": "ID_PENDING_IF_NOT_EXPOSED",
+  "budget": {
+    "max_updates": 12,
+    "execution_seconds": 1800,
+    "scope": "M1 smoke only"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "wikitext_assets": {
+    "format": "minicells.epclm004.wikitext.v1",
+    "request": {
+      "dataset": {
+        "path": "Salesforce/wikitext",
+        "name": "wikitext-103-raw-v1",
+        "revision": "b08601e04326c79dfdd32d625aee71d232d685c3"
+      },
+      "train_lines": 2048,
+      "validation_lines": 32,
+      "preprocessing": "nonempty-lines-crlf-to-lf-validation-excludes-train-exact-lines-v2",
+      "tokenizer": "ByteLevel-BPE-8192-reserved536-v1"
+    },
+    "text_sha256": {
+      "train": "f580bb08f1c4d50f09cd364aebdc393aba5bf4ec7b7af9daf0bcee6e5d62495c",
+      "validation": "687c1b72cb84fa147688154aa055362da81cd5cf4142a42437b6d1398d5c2fd8"
+    },
+    "files": {
+      "tokenizer.json": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+      "train.json": "3e50ba974947f9b278f78a069cff7be827df32695a811a29ae805970ac6ed4ca",
+      "validation.json": "700663878d29e1f628619bbb1b65fd00756c6d48ef20ad24ee0febc5fcb0e285"
+    },
+    "vocab_size": 8192,
+    "test_status": "SEALED_NOT_ACCESSED",
+    "special_ids": {
+      "<pad>": 0,
+      "<unk>": 1,
+      "<bos>": 2,
+      "<eos>": 3,
+      "<fact>": 4,
+      "<query>": 5,
+      "<answer>": 6,
+      "<hole>": 7
+    },
+    "tokenizer_train_split": "train only",
+    "transport_verification": {
+      "method": "Windows existing proxy; pinned Parquet downloaded and LFS-SHA256 verified; local transport only",
+      "source_files": {
+        "train": {
+          "url": "https://huggingface.co/datasets/Salesforce/wikitext/resolve/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/train-00000-of-00002.parquet",
+          "sha256": "74da360f23826045b3e6ac6375411fdb15f003030aa74f2596ed08b857cb9212",
+          "bytes": 156987808,
+          "hf_lfs_hash_match": true
+        },
+        "validation": {
+          "url": "https://huggingface.co/datasets/Salesforce/wikitext/resolve/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/validation-00000-of-00001.parquet",
+          "sha256": "204929b7ff9d6184953f867dedb860e40aa69c078fc1e54b3baaa8fb28511c4c",
+          "bytes": 657209,
+          "hf_lfs_hash_match": true
+        }
+      }
+    }
+  },
+  "dataset_sha256": "7847895c4da9a8f01b7fc947c7c33c2f1c85fa5da0c7db492ba35d4ee1ce7b0c",
+  "parameters": {
+    "static_parameters": 272480,
+    "embedding_parameters": 262144,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 262144,
+      "blocks": 10304,
+      "final_norm": 32
+    }
+  },
+  "ledger": {
+    "input_tokens": 1369,
+    "processed_tensor_tokens": 1536,
+    "padding_tokens": 167,
+    "supervised_target_tokens": 1369,
+    "query_target_tokens": 0,
+    "committed_updates": 12
+  },
+  "checkpoint": {
+    "sha256": "729f01741f22d86c92c3fa464ed5f6df2af9d5fe58ec17b260556d15b0693346",
+    "bytes": 4818976,
+    "restored_evaluation": "PASS"
+  }
+}

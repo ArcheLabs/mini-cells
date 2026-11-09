@@ -1,0 +1,15 @@
+{
+  "format": "minicells.epclm004.m4.local-evidence.v1",
+  "status": "M4_CPU_ENGINEERING_PASS_T4_PENDING",
+  "canonical_gpu_updates": 0,
+  "cpu_tiny_updates": 2,
+  "frozen_M3_commit": "b31b744b5ca87eb2715e26315b9579abacb972e6",
+  "implementation_sha256": {
+    "checks.py": "8db31acbbfee941a75548b21c9876c74637abe62cd408ffcca05170a4ed3d916",
+    "fusion.py": "54a5e28d347c4c69f4cbd88904a9f02bc8aa17d698e12fe7c7133b8baf9d1167",
+    "run.py": "1c3e3f7e768a10e34ea50d183a2b68720ed0618d1c42b0d17faeee60e34b4433"
+  },
+  "numerical_preflight": "audit/cpu-preflight.json",
+  "scope": "CPU fusion/streaming/restore verified; GPU driver and timings require actual T4 execution; no repeated old-model tests",
+  "hypotheses": "NOT_EVALUATED"
+}

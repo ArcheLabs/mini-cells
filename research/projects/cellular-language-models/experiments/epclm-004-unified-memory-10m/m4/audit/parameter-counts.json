@@ -1,0 +1,31 @@
+{
+  "static_parameters": 10065158,
+  "static_by_module": {
+    "final_norm": 256,
+    "gate": 3075,
+    "memory": 28931,
+    "memory_norm": 512,
+    "memory_output": 8192,
+    "post_mlp": 509952,
+    "post_norm": 256,
+    "ssm": 3553536,
+    "swa": 3863296,
+    "token_embedding": 2097152
+  },
+  "cell": {
+    "fast_weights": 17024,
+    "momentum": 17024,
+    "fast_parameters_per_stream": 4256
+  },
+  "swa_runtime": null,
+  "ssm_runtime": null,
+  "delta_from_10m": 0.0065158000000000715,
+  "delta_from_frozen_e0": -0.006468464925580619,
+  "common_initialization": "canonical frozen E0 embedding, shape-compatible E4 SWA/Memory, and first eight E2 Mamba initializations match exactly",
+  "hardware": "CPU instantiation only; no canonical training",
+  "theoretical_runtime_fp32_bytes_per_stream": {
+    "swa_kv": 327680,
+    "mamba_conv_and_ssm": 393216
+  },
+  "gpu_measurements": null
+}

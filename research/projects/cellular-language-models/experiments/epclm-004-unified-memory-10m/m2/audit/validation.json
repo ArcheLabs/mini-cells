@@ -1,0 +1,37 @@
+{
+  "format": "minicells.epclm004.m2-validation.v1",
+  "status": "CPU_VALIDATED_TARGET_GPU_PENDING",
+  "executed_source_commit": "542683712db31c55c58a379fa961b4017c8d8f35",
+  "test_scope": "M2 only",
+  "optimizer_updates_per_arm": 2,
+  "input_tokens_per_arm": 256,
+  "query_targets_per_arm": 8,
+  "training_inputs_identical": true,
+  "completed_retry": {
+    "training_callback_forbidden": "PASS",
+    "checkpoint_bytes_unchanged": "PASS"
+  },
+  "parameter_match_reference": 10130688,
+  "parameter_counts": {
+    "E0": 10130688,
+    "E1": 10130688,
+    "E2": 10092288,
+    "E3": 10135808
+  },
+  "checkpoint_regression": {
+    "12_update_full_writes": 3,
+    "legacy_M1_writes": 13,
+    "exact_resume": "PASS",
+    "prestep_flush": "PASS",
+    "poststep_nan_rollback": "PASS"
+  },
+  "target_gpu_executed": false,
+  "native_mamba_kernels_executed": false,
+  "hypotheses": "NOT_EVALUATED",
+  "postrun_changes": "Strict config guards, source/environment metadata and documentation only; effective FP32/AdamW/betas/WD/clip unchanged. Completed tiny models not retrained.",
+  "final_tests": {
+    "passed": 4,
+    "seconds": 24.89
+  },
+  "m1_saved_kaggle_script_version_id": "366932788"
+}

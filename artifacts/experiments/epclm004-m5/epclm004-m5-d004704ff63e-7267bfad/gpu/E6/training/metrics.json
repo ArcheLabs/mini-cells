@@ -1,0 +1,82 @@
+{
+  "status": "COMPLETE",
+  "error": null,
+  "ledger": {
+    "input_tokens": 1024,
+    "processed_tensor_tokens": 1024,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 2,
+    "query_target_tokens": 2,
+    "committed_updates": 2
+  },
+  "initial_evaluation": {
+    "nll": 9.18495774269104,
+    "supervised_targets": 4,
+    "query_targets": 4,
+    "query_exact_match": 0.0,
+    "query_prediction_counts": {
+      "2118": 1,
+      "7462": 1,
+      "7366": 1,
+      "4103": 1
+    }
+  },
+  "validation": {
+    "nll": 9.057668447494507,
+    "supervised_targets": 4,
+    "query_targets": 4,
+    "query_exact_match": 0.0,
+    "query_prediction_counts": {
+      "477": 4
+    }
+  },
+  "history": [
+    {
+      "update": 1,
+      "loss": 8.748331069946289,
+      "gradient_norm": 86.01873779296875,
+      "parameter_change_norm": 0.42145276069641113,
+      "compute_seconds": 1.6616954709999732,
+      "input_sha256": "04671fd542efc156900e7e01d5aeb962573fbfb6a302b3502f45133b66d97939",
+      "supervised_targets": 1,
+      "query_targets": 1
+    },
+    {
+      "update": 2,
+      "loss": 8.684187889099121,
+      "gradient_norm": 60.82023239135742,
+      "parameter_change_norm": 0.3240560293197632,
+      "compute_seconds": 1.6681316130000141,
+      "input_sha256": "f1260a206622c010e5138ebec558a435225468826a11d4b2ccdfbc2cc9de05b5",
+      "supervised_targets": 1,
+      "query_targets": 1
+    }
+  ],
+  "parameters": {
+    "static_parameters": 10021120,
+    "breakdown": {
+      "embedding": 2097152,
+      "mamba": 1775616,
+      "attention": 1048576,
+      "mlp": 5013504,
+      "norm": 4352,
+      "summary_projection": 81920
+    },
+    "tied_embedding_head": true
+  },
+  "checkpoint_policy": {
+    "writes_this_process": 2,
+    "write_seconds_this_process": 3.620964807000007,
+    "policy": {
+      "every_updates": 8,
+      "every_seconds": 120
+    }
+  },
+  "checkpoint": {
+    "sha256": "e28b43036bf5a33eb881c819b96815d17662032a0fd439d89d3ddaba445525e5",
+    "bytes": 175074413,
+    "durable_updates": 2
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "training_peak_allocated_bytes": 737749504
+}

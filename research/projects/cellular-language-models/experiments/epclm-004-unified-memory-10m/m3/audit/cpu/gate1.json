@@ -1,0 +1,76 @@
+{
+  "status": "PASS",
+  "finite_difference": [
+    {
+      "parameter": "initial.w1",
+      "index": 2,
+      "autodiff": 0.012866944769254377,
+      "finite_difference": 0.012866944754108543,
+      "absolute_error": 1.5145834239560507e-11,
+      "tolerance": 4.573388950821708e-06
+    },
+    {
+      "parameter": "initial.ln_weight",
+      "index": 2,
+      "autodiff": 0.8331195485255031,
+      "finite_difference": 0.8331195485378194,
+      "absolute_error": 1.2316370145981637e-11,
+      "tolerance": 0.00016862390970756388
+    },
+    {
+      "parameter": "key.weight",
+      "index": 9,
+      "autodiff": 0.31910280171844424,
+      "finite_difference": 0.31910280111624445,
+      "absolute_error": 6.021997900340637e-10,
+      "tolerance": 6.582056022324888e-05
+    },
+    {
+      "parameter": "value.weight",
+      "index": 10,
+      "autodiff": -0.04750206269817056,
+      "finite_difference": -0.04750206270554002,
+      "absolute_error": 7.369459209538576e-12,
+      "tolerance": 1.1500412541108003e-05
+    },
+    {
+      "parameter": "query.weight",
+      "index": 8,
+      "autodiff": 0.8214199054785812,
+      "finite_difference": 0.8214199053835357,
+      "absolute_error": 9.504552700434488e-11,
+      "tolerance": 0.00016628398107670713
+    },
+    {
+      "parameter": "controls.weight",
+      "index": 4,
+      "autodiff": -0.014763691302488778,
+      "finite_difference": -0.014763691291719281,
+      "absolute_error": 1.0769496405771406e-11,
+      "tolerance": 4.952738258343856e-06
+    }
+  ],
+  "recurrence_max_abs_error": 4.163336342344337e-17,
+  "eta_theta_alpha": [
+    [
+      0.4996857716653379,
+      0.025016580800472,
+      2.4721770110925137e-05
+    ],
+    [
+      0.4999623288992692,
+      0.02499685416742209,
+      2.472093622161051e-05
+    ],
+    [
+      0.4999844448375218,
+      0.02500379198466628,
+      2.4728175802641597e-05
+    ]
+  ],
+  "precision": "float64",
+  "gradient": "complete higher-order, three chunks",
+  "identity": "4f4516535c61629e06c23f0a7fe8054d1d189f3292c47ae1182fc820e0326937",
+  "wall_seconds": 0.0914658000037889,
+  "artifact_sha256": {}
+}

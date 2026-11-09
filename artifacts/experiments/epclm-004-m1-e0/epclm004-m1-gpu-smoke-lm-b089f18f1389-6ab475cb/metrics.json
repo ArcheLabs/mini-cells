@@ -1,0 +1,85 @@
+{
+  "status": "COMPLETE",
+  "ledger": {
+    "input_tokens": 893,
+    "processed_tensor_tokens": 1708,
+    "padding_tokens": 815,
+    "supervised_target_tokens": 893,
+    "query_target_tokens": 0,
+    "committed_updates": 4
+  },
+  "initial_evaluation": {
+    "nll": 9.061534470640803,
+    "supervised_targets": 2135,
+    "query_targets": 0,
+    "query_exact_match": null,
+    "query_prediction_counts": {}
+  },
+  "validation": {
+    "nll": 8.751841798375864,
+    "supervised_targets": 2135,
+    "query_targets": 0,
+    "query_exact_match": null,
+    "query_prediction_counts": {},
+    "ppl": 6322.321833396593
+  },
+  "parameters": {
+    "static_parameters": 10130688,
+    "embedding_parameters": 2097152,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 2097152,
+      "blocks": 8033280,
+      "final_norm": 256
+    }
+  },
+  "peak_allocated_bytes": 358282240,
+  "checkpoint": {
+    "sha256": "ec8b5e8df125e932d0595ed530014390870e45b49dd002ff7c2aaac22adcc316",
+    "bytes": 177513837,
+    "restored_evaluation": "PASS"
+  },
+  "history": [
+    {
+      "update": 1,
+      "loss": 9.080334663391113,
+      "gradient_norm": 5.3063859939575195,
+      "parameter_change_norm": 0.4332166314125061,
+      "input_sha256": "bfd623c24d8105f2483e2dc82704f0076277b146535556b2bb128541b7811bf7",
+      "supervised_targets": 223,
+      "query_targets": 0,
+      "compute_seconds": 0.37479418800000985
+    },
+    {
+      "update": 2,
+      "loss": 8.84079647064209,
+      "gradient_norm": 4.625617027282715,
+      "parameter_change_norm": 0.3247987926006317,
+      "input_sha256": "b823518f77ff94e20cc40a16288a516d9b558c2f603974ba55f52dbaca78b6ea",
+      "supervised_targets": 173,
+      "query_targets": 0,
+      "compute_seconds": 0.059271190000004026
+    },
+    {
+      "update": 3,
+      "loss": 8.834102630615234,
+      "gradient_norm": 2.8753457069396973,
+      "parameter_change_norm": null,
+      "input_sha256": "a9ef6469e23fa5d8dc35abd89e0118fa682b2c1ea77c9ab1389a4e1e0a9dc390",
+      "supervised_targets": 397,
+      "query_targets": 0,
+      "compute_seconds": 0.05642797000001565
+    },
+    {
+      "update": 4,
+      "loss": 8.788636207580566,
+      "gradient_norm": 5.560943126678467,
+      "parameter_change_norm": null,
+      "input_sha256": "dd465adf6d67531ae7060de5702f276235f89f4c74f6ac145b4cc9ad3560931c",
+      "supervised_targets": 100,
+      "query_targets": 0,
+      "compute_seconds": 0.05922944299999244
+    }
+  ],
+  "hypotheses": "NOT_EVALUATED"
+}
