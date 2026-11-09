@@ -1,16 +1,20 @@
 # EPCLM-003/004 — Unified Memory Architecture, 10M
 
-**Current milestone: M1 implemented and CPU validated; target T4 execution pending.**
-E0 and unified data are available; M2–M7 remain pending. Scientific hypotheses
-H1–H6 remain `NOT_EVALUATED`.
+**M1 engineering acceptance: PASS and frozen. M2: implemented / CPU validated,
+target T4 four-arm validation pending.** M3–M7 remain pending. Scientific
+hypotheses H1–H6 remain `NOT_EVALUATED`.
+
+- [Current M2 entry and Notebook](m2/README.md): frozen E0, matched E1 SWA,
+  pinned Mamba-1 reference E2, Samba-lite E3, periodic checkpoints.
+- [M1 acceptance / Kaggle Script Version ID 366932788](docs/M1-ACCEPTANCE.zh-CN.md)
 
 - [M1 实施与实际结果报告](docs/M1-IMPLEMENTATION-REPORT.zh-CN.md)
-- [Kaggle Notebook](notebook.ipynb): T4 + Internet + existing `GITHUB_TOKEN`, Save & Run All.
+- [Historical M1 Notebook](notebook.ipynb): preserved; use the M2 entry above for the next stage.
 - [Data / Batch / Run contracts](docs/M1-DATA-CONTRACT.md)
 - [Frozen 8192 BPE identity](configs/tokenizer-lock.json)
 - [CPU evidence and target GPU limitation](audit/m1/validation-summary.json)
 
-The Notebook runs bounded CPU tiny validation, E0 MQAR (32 GPU updates), and
+The preserved M1 Notebook runs bounded CPU tiny validation, E0 MQAR (32 GPU updates), and
 E0 WikiText (4 GPU updates). It never starts 20M Screening or 100M Confirmation.
 Each stage publishes through the existing GitHub result publisher. Private
 checkpoints stay in Kaggle Output; `run.py --publish-only` retries publication.
@@ -43,4 +47,4 @@ and a three-path candidate at approximately 10M static parameters. B'MOJO-inspir
 storage and Gated-SWA are later stages. No architecture or resource advantage is
 assumed. The passed M3C Mamba-3 reference is a distinct implementation and study.
 
-本次已经完成 M1 代码、CPU 小样本真实更新与恢复验证。实际 T4 短训练、显存和吞吐仍待用户运行上面的新 Notebook；本机 CPU / K620 环境不能替代该结果。不要运行历史实验入口来代替本研究。
+M1 已完成 T4 实际更新、恢复与发布验收，零召回结果保持不变。M2 代码和 CPU 小样本工程验证已完成；下一次运行使用 M2 Notebook，不重复运行 M1 来弥补零召回。

@@ -1,5 +1,7 @@
 # EPCLM-004 M1 — Unified Data & E0 Baseline 实施报告
 
+> 后续验收更新：M1 已在 T4 实际运行并通过工程验收，见 [M1-ACCEPTANCE](M1-ACCEPTANCE.zh-CN.md)。下文保留实施时的历史状态，原始结果不改写。
+
 状态：`CPU_VALIDATED_TARGET_T4_EXECUTION_PENDING`。M0 基线为 `434219d1d73380714986922d1618a8f4713fad67`。本次只实施 M1，没有 Mamba、Titans、MAG、B'MOJO 或三路融合。
 
 ## 1. 实际交付
