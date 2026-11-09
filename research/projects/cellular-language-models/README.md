@@ -20,6 +20,8 @@ HybridCLM lines so each experiment can be read in its research context.
 
 ## Running an experiment
 
+- [EPCLM-003/004 — Unified Memory Architecture, 10M](experiments/epclm-004-unified-memory-10m/README.md): M0 repository/environment audit and staged implementation plan. E0–E5 implementation and training remain pending.
+
 Start from that experiment's README or notebook and use its frozen configuration
 and source commit. Do not infer scientific approval from the presence of a
 launcher or a completed development run.

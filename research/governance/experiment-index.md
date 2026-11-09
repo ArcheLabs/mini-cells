@@ -1,5 +1,7 @@
 # Research Experiments
 
+- **EPCLM-003/004** — [Unified Memory Architecture, 10M](../projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/README.md). M0 audit complete; E0–E5 implementation and training pending. No training performed; H1–H6 NOT_EVALUATED. Source specification and observed environment are preserved with the experiment.
+
 Every experiment belongs to one project and lives at:
 
 ```text

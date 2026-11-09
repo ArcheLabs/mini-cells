@@ -1,0 +1,160 @@
+{
+  "format": "minicells.epclm004.m0-audit.v1",
+  "date": "2026-11-08",
+  "status": "M0_AUDIT_COMPLETE_IMPLEMENTATION_PENDING",
+  "source_commit_audited": "0c47b9f40b8e2c5ec164cc84103de3e767038e21",
+  "main_commit_audited": "700101cff63ff20ff285b40cb955dff39ebabee8",
+  "specification_sha256": "75cf739faac5a63b72c1adf0a348511f48d2012b3e6932bf7387c3d937a094ff",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "0c47b9f40b8e2c5ec164cc84103de3e767038e21",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "exit_code": 0,
+      "stdout": "700101cff63ff20ff285b40cb955dff39ebabee8",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "617c7a0f8c71f1b7cb6180b86f9543d146f5c66f",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/lib/wsl/lib/nvidia-smi",
+        "--query-gpu=name,driver_version,memory.total,compute_cap",
+        "--format=csv,noheader"
+      ],
+      "exit_code": 0,
+      "stdout": "Quadro K620, 546.01, 2048 MiB, 5.0",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-c",
+        "import sys,torch; from importlib import metadata; import json; names=['torch','numpy','pytest','PyYAML','einops','tokenizers','datasets','sentencepiece','mamba-ssm','causal-conv1d','triton','flash-attn','xformers','lightning','lightning-utilities','transformers']; installed={d.metadata['Name'].lower().replace('_','-'):d.version for d in metadata.distributions()}; print(json.dumps({'python':sys.version,'packages':{n:installed.get(n.lower().replace('_','-')) for n in names},'cuda_build':torch.version.cuda,'cuda_available':torch.cuda.is_available(),'gpu_count':torch.cuda.device_count()}))"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"python\": \"3.8.10 (default, Mar 18 2025, 20:04:55) \\n[GCC 9.4.0]\", \"packages\": {\"torch\": \"2.4.1\", \"numpy\": \"1.24.4\", \"pytest\": \"8.3.5\", \"PyYAML\": \"5.3.1\", \"einops\": null, \"tokenizers\": null, \"datasets\": null, \"sentencepiece\": null, \"mamba-ssm\": null, \"causal-conv1d\": null, \"triton\": \"3.0.0\", \"flash-attn\": null, \"xformers\": null, \"lightning\": null, \"lightning-utilities\": null, \"transformers\": null}, \"cuda_build\": \"12.1\", \"cuda_available\": true, \"gpu_count\": 1}",
+      "stderr": ""
+    }
+  ],
+  "inspected_repository_file_sha256": {
+    "AGENTS.md": "247a43e58a249d1c6952e9f4b1e18141acc89cf105ee5259ee50bbef7acb325f",
+    "pyproject.toml": "7524a89fae39eafadd7490767e5a14381c25d36d462c9a946795ed876bcaa37b",
+    "src/minicells/training/runner.py": "f99723e019db0c76e3d58b2f7a2e4db9c0a7a29db1db1942d42a3d3b19f82277",
+    "src/minicells/data/_legacy.py": "3158d42eb822d486806320198907a4a7a342f1af1814624987e369679dfb14f5",
+    "shared/python/experiments/common/train.py": "20a7d38e8a9216d38fe6399d80cb973200f24e0215fcdc1c8c8d6550917cbabb",
+    "scripts/research/publish_experiment_results.py": "3bce49ad78cf9ae263207d56d16349d8406a4fdbf1f2a28810edc2128efa3b63",
+    "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "7386bac2ec3b7cc0cb9eb82d903756834dae06c993d48af9bc428d3baf66aac3",
+    "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/training_path.py": "56b0668d92ab240216acd32e0806563936a90cb8a4caad0c3ed45f81f3b18c94",
+    "research/projects/cellular-language-models/experiments/epclm-core-001/implementation/trainer.py": "f77fd42822569ee2efa25e77e3f3f8e93de7af5381b220ee8aa56eb6c8c4ade6",
+    "research/projects/cellular-language-models/experiments/epclm-core-001/implementation/data.py": "1a4c59bc49d6a66d8ef45c32aab929170227196af06f7c75dd2e42dfb0541783",
+    "research/projects/cellular-language-models/experiments/clm-workspace-controller-001/recovery.py": "665188a2bcbaa3847c1f2808221db5780db6dd76b865d6556bb9d3b4ee353831",
+    ".github/workflows/clm003-phase0.yml": "09121848054574f1ef14591141030de375a7e78cc87efbc294777e6ffd59cdec"
+  },
+  "samba_source_file_sha256": {
+    "Dockerfile": "2d1d9eb99722cde2569f75f46777dfdca056628376a8144f3c0b75df5e453298",
+    "lit_gpt/model.py": "54fc56457281e32a5de14e1915da9e62c5dc71612ca8cb6a7d34525d592edcfa",
+    "lit_gpt/mamba_simple.py": "de3eb58c348b4320531bd7c4ecf96eb8592609d215adf638b90d708f56e515c7",
+    "lit_gpt/config.py": "d8dc03991e386d67bc5d8819109a2bcf89c4186114b161451643f3d1accf0d79",
+    "lit_gpt/fused_rotary_embedding.py": "ff17f5b45610c18960bf9f2a3a8451d0d2484069bd514a4c6f7a52fd21bf8ffe"
+  },
+  "branch_only_sources": {
+    "research/projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-002B-CAL-001/data.py": {
+      "source_commit": "254ddc8e2b9fe43a1a051e687278f6e3f21e2363",
+      "sha256": "f955fd24bfdc95546932fa2eefb367d19b71c763b0258dbbea95d37ef82c76fe",
+      "present_in_audited_worktree": false
+    },
+    "research/projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-002B-CAL-001/train.py": {
+      "source_commit": "254ddc8e2b9fe43a1a051e687278f6e3f21e2363",
+      "sha256": "8fe5bfbffa02545d54a235e756c14bab7c1be860ff501417ad265882420fa1d6",
+      "present_in_audited_worktree": false
+    },
+    "research/projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-002B-CAL-001/identity.py": {
+      "source_commit": "254ddc8e2b9fe43a1a051e687278f6e3f21e2363",
+      "sha256": "5e2ec6cdaebd9a37ad84b1d7899522378588b07b174e1eedac4b4fd643e0387f",
+      "present_in_audited_worktree": false
+    }
+  },
+  "parameter_probes": [
+    {
+      "arm": "E0",
+      "status": "CONSTRUCTOR_COUNT_ONLY",
+      "config": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 10,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 16384
+      },
+      "static_parameters": 10130688,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "fp32_weight_bytes": 40522752,
+      "estimated_full_window_kv_bytes_per_stream": 335544320,
+      "forward_calls": 0,
+      "optimizer_updates": 0
+    },
+    {
+      "arm": "E1",
+      "status": "CONSTRUCTOR_COUNT_ONLY",
+      "config": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 10,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 256
+      },
+      "static_parameters": 10130688,
+      "embedding_parameters": 2097152,
+      "tied_embedding_head": true,
+      "fp32_weight_bytes": 40522752,
+      "estimated_full_window_kv_bytes_per_stream": 5242880,
+      "forward_calls": 0,
+      "optimizer_updates": 0
+    }
+  ],
+  "checks_performed": [
+    "source and dependency inspection",
+    "CPU constructor-only parameter counts",
+    "local device/driver queries",
+    "document/manifest validation"
+  ],
+  "not_performed": [
+    "model forward/backward",
+    "optimizer updates",
+    "training",
+    "GPU performance benchmark",
+    "dependency installations",
+    "full CPU test matrix",
+    "Kaggle recovery validation",
+    "formal hypothesis testing"
+  ],
+  "all_hypotheses": "NOT_EVALUATED",
+  "training_tokens_consumed": 0,
+  "optimizer_updates": 0,
+  "next_milestone": "M1 after M0 review per supplied specification section 20"
+}
