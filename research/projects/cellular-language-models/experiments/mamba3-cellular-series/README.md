@@ -64,3 +64,7 @@ M3C 是新的实验系列，不修改或取代以下历史记录：
 ## M3C-002B：正式门禁设计
 
 [Gate002预注册候选](M3C-002B/PREREGISTRATION.zh-CN.md)与[冻结候选清单](M3C-002B/freeze-candidate.json)：基于002A实际T4结果，只做任务/统计/预算设计；正式阈值与预算未冻结，训练授权仍为0，不新增启动器。
+
+## 当前执行：M3C-002B-CAL-001
+
+[R线开发校准训练](M3C-002B-CAL-001/README.md)及[Notebook](M3C-002B-CAL-001/notebook.ipynb)：三臂各32,768查询Targets、新开发Seed27101；正式训练/测试/PPL关闭，正式预注册候选仍未冻结。

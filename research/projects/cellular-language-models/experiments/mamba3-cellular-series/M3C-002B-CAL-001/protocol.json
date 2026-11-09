@@ -1,0 +1,85 @@
+{
+  "experiment": "M3C-002B-CAL-001",
+  "type": "DEVELOPMENT_CALIBRATION",
+  "model_seed": 27101,
+  "data_seed": 2710101,
+  "arms": {
+    "M3-Base": 0,
+    "M3-WA-W16": 16,
+    "M3-WA-W64": 64
+  },
+  "model": {
+    "d_model": 64,
+    "n_layer": 2,
+    "d_state": 16,
+    "headdim": 16,
+    "expand": 2,
+    "chunk_size": 16,
+    "vocab_size": 256,
+    "use_mimo": false
+  },
+  "workspace_heads": 4,
+  "precision": "fp32",
+  "tf32": false,
+  "training": {
+    "targets_per_arm": 32768,
+    "total_targets": 98304,
+    "episodes_per_arm": 4096,
+    "batch_episodes": 8,
+    "query_targets_per_episode": 8,
+    "updates_per_arm": 512,
+    "full_sequence_length": 160,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.01,
+    "clip": 1.0,
+    "scheduler": "constant",
+    "evaluation_updates": [
+      0,
+      256,
+      512
+    ],
+    "checkpoint_every_updates": 64,
+    "input_tokens_per_arm_including_padding": 655360,
+    "total_input_tokens_including_padding": 1966080
+  },
+  "development_evaluation": {
+    "episodes": 384,
+    "conditions": 6,
+    "episodes_per_condition": 64,
+    "bootstrap_samples": 1000,
+    "bootstrap_seed": 2710102,
+    "scope": "paired episode sampling only; one model seed does not estimate training-seed variance"
+  },
+  "budget": {
+    "session_seconds": 7200,
+    "execution_seconds": 5400,
+    "evaluation_seconds": 6000,
+    "publication_seconds": 600,
+    "safety_seconds": 600
+  },
+  "formal_training_targets": 0,
+  "formal_test_access": false,
+  "natural_language_ppl": "NOT_RUN",
+  "scientific_hypotheses": "NOT_EVALUATED",
+  "kaggle_kernel": "bingjiangli/minicells",
+  "identity_required_before_first_update": false,
+  "next_stage": "NO_AUTOMATIC_FORMAL_TRAINING_OR_M3C003",
+  "development_training_authorized": true,
+  "formal_training_authorized": false,
+  "trained_inference": {
+    "context": 96,
+    "teacher_forced_decode_tokens": 16,
+    "development_episode_index": 2,
+    "condition": "mqar-gap64",
+    "batch": 1,
+    "warmup": 3,
+    "samples": 5
+  },
+  "allow_deferred_script_version_id_development_only": true,
+  "script_version_id_policy": "User authorized ID_PENDING for development; append actual saved-version URL after execution; formal training remains unauthorized"
+}
