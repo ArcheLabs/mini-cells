@@ -1,23 +1,7 @@
-# Experiment EPCLM004-M3 Results
+# EPCLM-004 M3 Results
 
-This directory contains curated, reproducible outputs of the Kaggle run.
-Unlisted caches and other regenerable intermediate files are intentionally excluded.
+Status: `M3_ENGINEERING_COMPLETE` after metadata-only publication recovery.
 
-## Decision
+All six engineering gates passed on the original T4 run. Two outer updates, 1,024 input tokens, eight supervised targets. No retraining. H3 remains `NOT_EVALUATED`.
 
-- Status: `GPU_SMOKE_PASS_PUBLICATION_PENDING`
-- Diagnosis: `not provided`
-
-## Key metrics
-
-- See `decision.json`.
-
-## Provenance
-
-- Source commit: `2b53628844928445e120549aec3b01077165ab81`
-- Source branch: `research/epclm-004-m3-mag-lite`
-- Kaggle script version ID: `not recorded`
-- Source results directory: `results/epclm004-m3/publish`
-
-Machine-readable provenance and SHA-256 hashes are in `metadata.json`.
-The authoritative experiment decision is `decision.json`.
+See `decision.json`, `REPORT.zh-CN.md` and `gpu/gate6.json`. The original result commit is `7d0c3eb2a146da9d3bc60cd3c5944cf73d4bdb58`; original decisions and publication metadata are preserved.
