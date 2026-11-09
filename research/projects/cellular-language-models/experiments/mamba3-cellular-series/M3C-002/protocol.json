@@ -1,0 +1,63 @@
+{
+  "id": "M3C-002",
+  "phase": "WORKSPACE_ENGINEERING",
+  "baseline": "M3C-001-T4-Reference",
+  "implementation": "SISO third-party PyTorch Reference",
+  "precision": "fp32",
+  "tf32": false,
+  "seed": 18001,
+  "arms": [
+    "M3-Base",
+    "M3-WA-W16",
+    "M3-WA-W64"
+  ],
+  "placement": "after complete Reference mixer+MLP residual block",
+  "heads": 4,
+  "kv_position": "current token included; t-W<j<=t",
+  "norm": "Reference RMSNorm",
+  "residual_gate": "tanh(scalar), initial parameter .01 per layer",
+  "attention": "PyTorch SDPA, explicit causal/window bool mask, no dropout or new position embedding",
+  "cache": "clone last W KV per layer; native Mamba state unchanged; no auto-detach inside full forward",
+  "gradient_scope": "within full sequence; cached path used under inference_mode; training TBPTT not frozen",
+  "training_tokens": 0,
+  "optimizer_updates": 0,
+  "formal_gate002": "NOT_EVALUATED",
+  "quality_metrics": [
+    "MQAR_NOT_EVALUATED",
+    "PPL_NOT_EVALUATED"
+  ],
+  "correctness": {
+    "dim": 32,
+    "layers": 2,
+    "state": 8,
+    "chunk": 4,
+    "window": 4,
+    "batch": 2,
+    "length": 24,
+    "atol": 0.0001,
+    "rtol": 0.0001
+  },
+  "inference": {
+    "dim": 64,
+    "layers": 2,
+    "state": 16,
+    "head_dim": 16,
+    "chunk": 16,
+    "vocab": 128,
+    "context": 128,
+    "teacher_forced_decode_tokens": 16,
+    "batches": [
+      1,
+      4
+    ],
+    "windows": [
+      0,
+      16,
+      64
+    ],
+    "warmup": 3,
+    "samples": 5
+  },
+  "official_kernel_equivalence": "NOT_VERIFIED",
+  "m3c003": "BLOCKED_NO_REPEATED_TASK_BENEFIT_EVIDENCE"
+}

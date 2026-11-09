@@ -1,0 +1,42 @@
+{
+  "branch": "kaggle/m3c-001-t4-reference-33c102158673-1793875675325206621",
+  "commit": "eb3fe8ac9ea9b2367e37bd6f9caa317dfed96f10",
+  "decision": {
+    "format": "minicells.m3c-001-t4-reference.v1",
+    "run_id": "m3c-001-t4-reference-33c102158673-1793875675325206621",
+    "source_commit": "33c1021586733e93f3fa036561bb5966221f3fed",
+    "status": "GPU_REFERENCE_GATES_PASS",
+    "siso": "PASS",
+    "mimo": "PASS",
+    "training_tokens": 0,
+    "optimizer_updates": 0,
+    "precision": "fp32",
+    "tf32": false,
+    "initialization": "upstream create_toy_model initializer",
+    "scientific_hypotheses": "NOT_EVALUATED",
+    "official_kernel_equivalence": "NOT_VERIFIED",
+    "m3c002": "REFERENCE_BACKEND_READY_FOR_REVIEW"
+  },
+  "environment": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]"
+  },
+  "files_sha256": {
+    "decision.json": "4747fea3dadff79cdc2f3f4f04ef8c3124db6d11f960d5684bd6d7c3aa698df3",
+    "environment.json": "4ac93e78c4c7a14802fcc672dff1b4700dfdc9d230269846791badd54c9c394f",
+    "siso.json": "55adc1273d7abea801c33cda9eee65cbf740e7426e9b9c3e66049745e81a4b28",
+    "mimo.json": "67b494b964646a4c7d4f74f3496d5a4eabb1939f0f7f76f02ab8246ea433e0a0"
+  },
+  "siso": {
+    "status": "PASS",
+    "max_error": 4.172325134277344e-07,
+    "gradient_norm": 2.317946897009857
+  },
+  "mimo": {
+    "status": "PASS",
+    "max_error": 8.344650268554688e-07,
+    "gradient_norm": 2.8675383946856177
+  }
+}

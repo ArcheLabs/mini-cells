@@ -258,6 +258,17 @@
       "scientific_decision": false,
       "candidate_source": "15ba9983123703d9f4f7d6f8709152d0a07edbd9",
       "note": "FP32 SISO then MIMO synthetic forward/backward/cache gates. Third-party definition; official kernel equivalence NOT_VERIFIED. No formal training; historical audits unchanged."
+    },
+    {
+      "id": "M3C-002-WORKSPACE-ENGINEERING",
+      "name": "Layer-local Bounded Workspace",
+      "status": "implementation_gpu_unrun",
+      "directory": "research/projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-002",
+      "entry": "run.py",
+      "training_tokens": 0,
+      "scientific_decision": false,
+      "scope": "SISO Reference, correctness and inference cost only; MQAR/PPL NOT_EVALUATED",
+      "baseline_result_commit": "eb3fe8ac9ea9b2367e37bd6f9caa317dfed96f10"
     }
   ],
   "schema_version": 2
