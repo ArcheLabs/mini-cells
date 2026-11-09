@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "config": {
+    "d_model": 32,
+    "n_layer": 1,
+    "d_state": 8,
+    "expand": 2,
+    "headdim": 8,
+    "chunk_size": 4,
+    "vocab_size": 64,
+    "pad_vocab_size_multiple": 16,
+    "use_mimo": false,
+    "mimo_rank": 4
+  },
+  "precision": "fp32",
+  "loss": 4.1823577880859375,
+  "gradient_norm": 2.317946897009857,
+  "gradient_tensors_checked": 16,
+  "all_gradients_finite": true,
+  "parameters": 34184,
+  "errors": {
+    "full_cached_logits": 1.1920928955078125e-07,
+    "layer0_ssm_state": 4.172325134277344e-07,
+    "layer0_prev_Bx": 1.7881393432617188e-07,
+    "layer0_cum_angle": 1.341104507446289e-07,
+    "snapshot_restore": 0.0,
+    "reset": 0.0,
+    "batch_isolation": 1.1920928955078125e-07,
+    "causality": 0.0
+  },
+  "optimizer_updates": 0,
+  "synthetic_prediction_targets": 22,
+  "multi_token_cached_continuation": "NOT_SUPPORTED_STEP_REQUIRES_ONE_TOKEN",
+  "cache": [
+    {
+      "ssm_state": {
+        "shape": [
+          2,
+          8,
+          8,
+          8
+        ],
+        "dtype": "torch.float32",
+        "bytes": 4096
+      },
+      "prev_Bx": {
+        "shape": [
+          2,
+          8,
+          8,
+          8
+        ],
+        "dtype": "torch.float32",
+        "bytes": 4096
+      },
+      "cum_angle": {
+        "shape": [
+          2,
+          8,
+          4
+        ],
+        "dtype": "torch.float32",
+        "bytes": 256
+      }
+    }
+  ]
+}
