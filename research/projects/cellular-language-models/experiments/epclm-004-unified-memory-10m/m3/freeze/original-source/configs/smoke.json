@@ -1,0 +1,12 @@
+{
+  "format": "minicells.epclm004.m3.protocol.v1",
+  "model_id": "mag_lite_single_memory",
+  "model": {"vocab":8192,"dim":256,"layers":10,"heads":4,"kv_heads":4,"ffn":704,"window":32},
+  "memory": {"memory_dim":32,"hidden":64,"chunk":16},
+  "training": {"seed":41017,"batch":4,"lr":0.0003,"updates":2,"precision":"fp32","tf32":false,"optimizer":"AdamW","betas":[0.9,0.95],"weight_decay":0.1,"clip":1.0,"scheduler":"constant-engineering-smoke","checkpoint":{"every_updates":8,"every_seconds":120}},
+  "mqar": {"bindings":8,"length":128,"queries":1,"interference":1.0,"seed":41001,"regime":"unseen_pairs"},
+  "episodes": {"train":16,"validation":4},
+  "limits": {"execution_seconds":5400,"publication_seconds":600,"total_seconds":7200},
+  "tokenizer_sha256":"d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "hypotheses":"NOT_EVALUATED"
+}

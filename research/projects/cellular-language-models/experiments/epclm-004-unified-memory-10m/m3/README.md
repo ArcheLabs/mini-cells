@@ -1,3 +1,9 @@
+# M3 已正式冻结 — 禁止追加训练
+
+数学、实现与实验身份见 [冻结记录](freeze/FREEZE.zh-CN.md)。
+权重保全状态见 [ARCHIVE-STATUS.json](freeze/ARCHIVE-STATUS.json)。
+只运行 [archive-only.ipynb](archive-only.ipynb) 进行 CPU 归档；下文训练命令是历史说明，不再放行。
+
 # M3 — Titans MAG-lite (`mag_lite_single_memory`)
 
 One shared dynamic Memory, unchanged M2 E1 SWA, FP32, two real outer updates.

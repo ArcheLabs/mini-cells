@@ -223,6 +223,8 @@ def launch(args):
     out=args.output;out.mkdir(parents=True,exist_ok=True)
     if args.publish_only:
         decision=json.loads((out/'decision.json').read_text());finish_publication(out,decision);return
+    if (BASE/'freeze/BASELINE.json').exists():
+        raise RuntimeError('M3_FROZEN_NO_FURTHER_TRAINING: use archive-only.ipynb; --publish-only remains available')
     started=args.started or time.monotonic();protocol=json.loads((BASE/'configs/smoke.json').read_text())
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     run_id='epclm004-m3-'+source[:12]+'-'+uuid.uuid4().hex[:8]
