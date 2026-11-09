@@ -1,0 +1,35 @@
+{
+  "M3-Base": {
+    "full_decode_max_error": 3.814697265625e-05,
+    "decode_ms_per_token_p50": 2.7467811249977103,
+    "decode_ms_per_token_p95_small_sample": 2.7582590000037044,
+    "context": 96,
+    "teacher_forced_tokens": 16,
+    "batch": 1,
+    "samples": 5,
+    "warmup": 3,
+    "scope": "trained FP32 model, teacher-forced fixed tokens, no sampling or language PPL"
+  },
+  "M3-WA-W16": {
+    "full_decode_max_error": 0.00012874603271484375,
+    "decode_ms_per_token_p50": 3.970911687503076,
+    "decode_ms_per_token_p95_small_sample": 3.9860954999966225,
+    "context": 96,
+    "teacher_forced_tokens": 16,
+    "batch": 1,
+    "samples": 5,
+    "warmup": 3,
+    "scope": "trained FP32 model, teacher-forced fixed tokens, no sampling or language PPL"
+  },
+  "M3-WA-W64": {
+    "full_decode_max_error": 4.76837158203125e-06,
+    "decode_ms_per_token_p50": 4.034489062497926,
+    "decode_ms_per_token_p95_small_sample": 4.129112937498292,
+    "context": 96,
+    "teacher_forced_tokens": 16,
+    "batch": 1,
+    "samples": 5,
+    "warmup": 3,
+    "scope": "trained FP32 model, teacher-forced fixed tokens, no sampling or language PPL"
+  }
+}

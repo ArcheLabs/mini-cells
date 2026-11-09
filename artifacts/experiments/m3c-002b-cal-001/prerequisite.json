@@ -1,0 +1,81 @@
+{
+  "status": "ENGINEERING_EVIDENCE_ONLY_NOT_PREREGISTRATION",
+  "result_branch": "kaggle/m3c-002-workspace-2ad2d8acabbd-1793876648601731043",
+  "result_commit": "fb4ce7621a1be22bf9a6764e74293876207706a3",
+  "source_commit": "2ad2d8acabbd359ac5e921423ddcc871ee34509d",
+  "reference_commit": "15ba9983123703d9f4f7d6f8709152d0a07edbd9",
+  "gpu": "Tesla T4",
+  "engineering_status": "WORKSPACE_ENGINEERING_PASS",
+  "max_comparison_error": 7.152557373046875e-07,
+  "kaggle_script_version_id": null,
+  "script_version_provenance": "NOT_RECORDED_IN_PUBLISHED_METADATA; do not infer from timestamps or source SHA",
+  "files_sha256": {
+    "decision.json": "67ac484a30aee6f8b4bda8d3e3011e4e63f62ed3767b5d12b37439a24299d4ff",
+    "correctness.json": "09eaa507c3cdb37d4d43561963b03fdcdff2dc085a4f207a97a2b9a61bbaa6d3",
+    "inference-cost.json": "151ea1de4e4b47d8e61ad2ca035a98fae7ed62e8872f2968ce08f8e593d91926",
+    "environment.json": "f0012997f69ba95f93f9fe1a4863cf437e0a9d055f41943a245ca9d39676f9b3",
+    "metadata.json": "81a1203690b43fe60bfb8be43f33ea628b8c2fb4c89ec3964e664b22836d3cdd"
+  },
+  "cost_rows": [
+    {
+      "arm": "M3-Base",
+      "window": 0,
+      "batch": 1,
+      "parameters": 163760,
+      "workspace_parameters": 0,
+      "prefill_ms_p50": 11.439540999958808,
+      "decode_token_ms_p50": 2.9706451250000043,
+      "peak_allocated_bytes": 18991616
+    },
+    {
+      "arm": "M3-Base",
+      "window": 0,
+      "batch": 4,
+      "parameters": 163760,
+      "workspace_parameters": 0,
+      "prefill_ms_p50": 11.459005000006073,
+      "decode_token_ms_p50": 2.9527631250019226,
+      "peak_allocated_bytes": 22860800
+    },
+    {
+      "arm": "M3-WA",
+      "window": 16,
+      "batch": 1,
+      "parameters": 196658,
+      "workspace_parameters": 32898,
+      "prefill_ms_p50": 14.520599999968908,
+      "decode_token_ms_p50": 5.081524812499794,
+      "peak_allocated_bytes": 19132928
+    },
+    {
+      "arm": "M3-WA",
+      "window": 16,
+      "batch": 4,
+      "parameters": 196658,
+      "workspace_parameters": 32898,
+      "prefill_ms_p50": 14.787024999975529,
+      "decode_token_ms_p50": 5.102042312500998,
+      "peak_allocated_bytes": 23026688
+    },
+    {
+      "arm": "M3-WA",
+      "window": 64,
+      "batch": 1,
+      "parameters": 196658,
+      "workspace_parameters": 32898,
+      "prefill_ms_p50": 15.00295300002108,
+      "decode_token_ms_p50": 5.114706000000524,
+      "peak_allocated_bytes": 19157504
+    },
+    {
+      "arm": "M3-WA",
+      "window": 64,
+      "batch": 4,
+      "parameters": 196658,
+      "workspace_parameters": 32898,
+      "prefill_ms_p50": 14.11384199997201,
+      "decode_token_ms_p50": 5.14063906249973,
+      "peak_allocated_bytes": 23124992
+    }
+  ]
+}
