@@ -1,0 +1,79 @@
+{
+  "status": "COMPLETE",
+  "error": null,
+  "ledger": {
+    "input_tokens": 1024,
+    "processed_tensor_tokens": 1024,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 8,
+    "query_target_tokens": 8,
+    "committed_updates": 2
+  },
+  "initial_evaluation": {
+    "nll": 9.093025207519531,
+    "supervised_targets": 4,
+    "query_targets": 4,
+    "query_exact_match": 0.0,
+    "query_prediction_counts": {
+      "5437": 1,
+      "3107": 2,
+      "6978": 1
+    }
+  },
+  "validation": {
+    "nll": 9.215458869934082,
+    "supervised_targets": 4,
+    "query_targets": 4,
+    "query_exact_match": 0.0,
+    "query_prediction_counts": {
+      "498": 4
+    }
+  },
+  "history": [
+    {
+      "update": 1,
+      "loss": 8.79998779296875,
+      "gradient_norm": 16.299278259277344,
+      "parameter_change_norm": 0.43133023381233215,
+      "compute_seconds": 0.6402507509999964,
+      "input_sha256": "82679bb8aa8b51d42cb53c2381efa921b3e0b9636efba62cbddb8772ec4dfa95",
+      "supervised_targets": 4,
+      "query_targets": 4
+    },
+    {
+      "update": 2,
+      "loss": 8.9807710647583,
+      "gradient_norm": 10.100008010864258,
+      "parameter_change_norm": 0.34959787130355835,
+      "compute_seconds": 0.13400649499999417,
+      "input_sha256": "1ee9c87c75bb70f0010c95156758a19a3c2de82ffb5caf44d5d762fba3a748f4",
+      "supervised_targets": 4,
+      "query_targets": 4
+    }
+  ],
+  "parameters": {
+    "static_parameters": 10168580,
+    "embedding_parameters": 2097152,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 2097152,
+      "blocks": 8033280,
+      "final_norm": 256
+    }
+  },
+  "checkpoint_policy": {
+    "writes_this_process": 2,
+    "write_seconds_this_process": 3.745395782999992,
+    "policy": {
+      "every_updates": 8,
+      "every_seconds": 120
+    }
+  },
+  "checkpoint": {
+    "sha256": "a9c7fba767174a9f85d95c6d466416ed10c155d88633298194a884c7cfc8befb",
+    "bytes": 178448493,
+    "durable_updates": 2
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "training_peak_allocated_bytes": 411926016
+}
