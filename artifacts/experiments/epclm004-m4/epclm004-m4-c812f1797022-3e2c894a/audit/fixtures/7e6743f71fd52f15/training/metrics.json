@@ -1,0 +1,79 @@
+{
+  "status": "COMPLETE",
+  "error": null,
+  "ledger": {
+    "input_tokens": 32,
+    "processed_tensor_tokens": 32,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 4,
+    "query_target_tokens": 4,
+    "committed_updates": 2
+  },
+  "initial_evaluation": {
+    "nll": 3.941689968109131,
+    "supervised_targets": 2,
+    "query_targets": 2,
+    "query_exact_match": 0.5,
+    "query_prediction_counts": {
+      "11": 1,
+      "46": 1
+    }
+  },
+  "validation": {
+    "nll": 3.9435853958129883,
+    "supervised_targets": 2,
+    "query_targets": 2,
+    "query_exact_match": 0.5,
+    "query_prediction_counts": {
+      "11": 1,
+      "46": 1
+    }
+  },
+  "history": [
+    {
+      "update": 1,
+      "loss": 3.8970189094543457,
+      "gradient_norm": 2.853795051574707,
+      "parameter_change_norm": 0.031999729573726654,
+      "compute_seconds": 0.04510521500000664,
+      "input_sha256": "6ad7374ec64f9fc5bb7c8a242136545ba413690c87bf2aceb55eb4ba5292ba68",
+      "supervised_targets": 2,
+      "query_targets": 2
+    },
+    {
+      "update": 2,
+      "loss": 3.8846049308776855,
+      "gradient_norm": 5.2004780769348145,
+      "parameter_change_norm": 0.022716576233506203,
+      "compute_seconds": 0.028634186000005002,
+      "input_sha256": "dd6dd17898aa5a7ce0da6d45f73ff19d91ef7731f16d711a201bc80c20f3ef4b",
+      "supervised_targets": 2,
+      "query_targets": 2
+    }
+  ],
+  "parameters": {
+    "static_parameters": 8022,
+    "embedding_parameters": 1024,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 1024,
+      "blocks": 0,
+      "final_norm": 16
+    }
+  },
+  "checkpoint_policy": {
+    "writes_this_process": 1,
+    "write_seconds_this_process": 0.01468097000000057,
+    "policy": {
+      "every_updates": 8,
+      "every_seconds": 120
+    }
+  },
+  "checkpoint": {
+    "sha256": "c64fc22d25a9d87ecbe21fa31efe43f771bedf4bd0626ead1df9f6bbab8e151f",
+    "bytes": 226093,
+    "durable_updates": 2
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "training_peak_allocated_bytes": null
+}

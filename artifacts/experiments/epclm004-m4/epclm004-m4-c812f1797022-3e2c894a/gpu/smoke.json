@@ -1,0 +1,238 @@
+{
+  "identity": {
+    "source_commit": "c812f1797022934d951c713389883abb8a1c6715",
+    "implementation": {
+      "checks.py": "8db31acbbfee941a75548b21c9876c74637abe62cd408ffcca05170a4ed3d916",
+      "fusion.py": "54a5e28d347c4c69f4cbd88904a9f02bc8aa17d698e12fe7c7133b8baf9d1167",
+      "run.py": "1c3e3f7e768a10e34ea50d183a2b68720ed0618d1c42b0d17faeee60e34b4433"
+    },
+    "protocol": "8e57e6b8c311b7333e7e80c49794c08e75f5f62c58b39a44f882cc2e53d867f5"
+  },
+  "status": "PASS",
+  "hardware": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "precision": "fp32",
+    "tf32": false
+  },
+  "training": {
+    "status": "COMPLETE",
+    "error": null,
+    "ledger": {
+      "input_tokens": 1024,
+      "processed_tensor_tokens": 1024,
+      "padding_tokens": 0,
+      "supervised_target_tokens": 8,
+      "query_target_tokens": 8,
+      "committed_updates": 2
+    },
+    "initial_evaluation": {
+      "nll": 9.264724731445312,
+      "supervised_targets": 4,
+      "query_targets": 4,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "1882": 1,
+        "3880": 1,
+        "4734": 1,
+        "6665": 1
+      }
+    },
+    "validation": {
+      "nll": 9.245018005371094,
+      "supervised_targets": 4,
+      "query_targets": 4,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "6792": 1,
+        "6436": 2,
+        "498": 1
+      }
+    },
+    "history": [
+      {
+        "update": 1,
+        "loss": 8.79299259185791,
+        "gradient_norm": 24.52437400817871,
+        "parameter_change_norm": 0.4294615089893341,
+        "compute_seconds": 1.4009635459999856,
+        "input_sha256": "82679bb8aa8b51d42cb53c2381efa921b3e0b9636efba62cbddb8772ec4dfa95",
+        "supervised_targets": 4,
+        "query_targets": 4
+      },
+      {
+        "update": 2,
+        "loss": 9.012718200683594,
+        "gradient_norm": 17.721696853637695,
+        "parameter_change_norm": 0.3626853823661804,
+        "compute_seconds": 1.054843333000008,
+        "input_sha256": "1ee9c87c75bb70f0010c95156758a19a3c2de82ffb5caf44d5d762fba3a748f4",
+        "supervised_targets": 4,
+        "query_targets": 4
+      }
+    ],
+    "parameters": {
+      "static_parameters": 10065158,
+      "static_by_module": {
+        "final_norm": 256,
+        "gate": 3075,
+        "memory": 28931,
+        "memory_norm": 512,
+        "memory_output": 8192,
+        "post_mlp": 509952,
+        "post_norm": 256,
+        "ssm": 3553536,
+        "swa": 3863296,
+        "token_embedding": 2097152
+      },
+      "cell": null,
+      "swa_runtime": null,
+      "ssm_runtime": null
+    },
+    "checkpoint_policy": {
+      "writes_this_process": 2,
+      "write_seconds_this_process": 7.808382410999997,
+      "policy": {
+        "every_updates": 8,
+        "every_seconds": 120
+      }
+    },
+    "checkpoint": {
+      "sha256": "dff7709b552a0f6a53fdf29a3e699090761bfbee4ec880a2bda56f698f38e9ee",
+      "bytes": 175911149,
+      "durable_updates": 2
+    },
+    "hypotheses": "NOT_EVALUATED",
+    "training_peak_allocated_bytes": 785603584
+  },
+  "events": [
+    {
+      "input_sha256": "82679bb8aa8b51d42cb53c2381efa921b3e0b9636efba62cbddb8772ec4dfa95",
+      "inner_updates": 8,
+      "fast_delta": 6.498286707231359,
+      "momentum_norm": 0.7011779588811291,
+      "gate_mean": [
+        0.36837199330329895,
+        0.32477688789367676,
+        0.3068510890007019
+      ]
+    },
+    {
+      "input_sha256": "1ee9c87c75bb70f0010c95156758a19a3c2de82ffb5caf44d5d762fba3a748f4",
+      "inner_updates": 8,
+      "fast_delta": 6.538848978647525,
+      "momentum_norm": 0.7109837003883254,
+      "gate_mean": [
+        0.2686997652053833,
+        0.35415923595428467,
+        0.37714096903800964
+      ]
+    }
+  ],
+  "inner_batch_updates": 16,
+  "checkpoint_restore_error": 0.0,
+  "full_vs_chunk_cache_error": 2.4437904357910156e-06,
+  "gate_mean": [
+    0.25290390849113464,
+    0.24027207493782043,
+    0.5068240165710449
+  ],
+  "resources": {
+    "static_parameters": 10065158,
+    "static_by_module": {
+      "final_norm": 256,
+      "gate": 3075,
+      "memory": 28931,
+      "memory_norm": 512,
+      "memory_output": 8192,
+      "post_mlp": 509952,
+      "post_norm": 256,
+      "ssm": 3553536,
+      "swa": 3863296,
+      "token_embedding": 2097152
+    },
+    "cell": {
+      "fast_weights": 17024,
+      "momentum": 17024,
+      "fast_parameters_per_stream": 4256
+    },
+    "swa_runtime": {
+      "tensor_payload_bytes": 327680,
+      "retained_storage_bytes": 327680,
+      "retained_bytes_per_stream": 327680,
+      "mamba_payload_bytes": 0,
+      "kv_payload_bytes": 327680,
+      "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+    },
+    "ssm_runtime": {
+      "tensor_payload_bytes": 393216,
+      "retained_storage_bytes": 393216,
+      "retained_bytes_per_stream": 393216,
+      "mamba_payload_bytes": 393216,
+      "kv_payload_bytes": 0,
+      "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+    },
+    "training_peak_allocated_bytes": 785603584,
+    "inference_peak_allocated_bytes": 85832192,
+    "full_forward_seconds": 0.16057962299998962,
+    "timing_scope": "single engineering probe, no formal throughput claim"
+  },
+  "ablations": {
+    "swa": {
+      "gate_mean": [
+        0.0,
+        0.4900077283382416,
+        0.5099923014640808
+      ],
+      "seconds": 0.15161711799999011
+    },
+    "ssm": {
+      "gate_mean": [
+        0.33369195461273193,
+        0.0,
+        0.6663080453872681
+      ],
+      "seconds": 0.034563455000011345
+    },
+    "memory": {
+      "gate_mean": [
+        0.5198477506637573,
+        0.4801522195339203,
+        0.0
+      ],
+      "seconds": 0.15256017899997687
+    }
+  },
+  "cross_session_memory": {
+    "status": "PASS",
+    "task": "four latent keys -> nonidentity permuted values; no query answers supplied",
+    "scope": "Memory positive control; not language MQAR or H3 evidence",
+    "initial_accuracy": 0.0,
+    "restored_accuracy": 1.0,
+    "restore_max_abs_error": 0.0,
+    "inner_updates": 128,
+    "fast_delta": 7.063046255707773,
+    "momentum_norm": 0.035024391372426154,
+    "static_unchanged": true,
+    "memory_update_seconds": 0.2678587460000017,
+    "recall_seconds": 0.0005845419999559454,
+    "fast_weights": 17024,
+    "momentum": 17024,
+    "fast_parameters_per_stream": 4256,
+    "bytes": 56580,
+    "write_seconds": 0.010627655000007508,
+    "manifest_sha256": "734e6952d61b6d884984b43dd4bb776888b7675719a1b6ccb74da486e0d40309"
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "files": {
+    "dataset-manifest.json": "3dd513b4589c38524ac2265ec894bf58f4f47856397772cc4502f6372921c9b8",
+    "events.json": "15d836296bcadcfa3aed4dd1447775f05db032b9699dbcac7eb80d5d963f807f",
+    "recall-cell/manifest.json": "734e6952d61b6d884984b43dd4bb776888b7675719a1b6ccb74da486e0d40309",
+    "training/metrics.json": "012eda2bf392b60928a7e5200f0028d9cf33305a417527eb09ea1f13a7046e0a",
+    "training/checkpoint.pt": "dff7709b552a0f6a53fdf29a3e699090761bfbee4ec880a2bda56f698f38e9ee",
+    "training/metrics.jsonl": "9bb48174923950a4ce72092de7aded139aead961dbc4a48c783093bd279d66f6",
+    "recall-cell/e2e2fcde13224dd5a445349a1c6a5912/fast_weights.pt": "774b7e56250c2192857c3f0dfee0bf83a84ee43889e64a4ddb92b31ec41a9a4d",
+    "recall-cell/e2e2fcde13224dd5a445349a1c6a5912/momentum.pt": "fb541e7b5b8478ab149cee60829a213006e58870a5d83517b14a90132969f9f8"
+  }
+}
