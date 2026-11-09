@@ -45,3 +45,11 @@ Use [publication-repair.ipynb](publication-repair.ipynb) for this saved failure.
 The repair preserves the original experimental status, including any Pilot failure hidden by the publication traceback. A successful metadata publication does not turn an experiment failure into scientific success. Check repair-receipt.json for the original status/error and the verified remote commit. Original M5-SV binary checkpoints remain in saved Kaggle Output; this repair does not claim a weight archive or scientific continuation.
 
 Three targeted regressions passed: direct isolated-file import despite a conflicting scripts module, publication-only evidence preservation without weights, and original experiment error visibility when publication fails. AST comparison confirms all scientific entry functions are unchanged; only publish/launch transport and logging changed. Actual recovery/publication of Version190 must run in Kaggle, where the existing secrets are available.
+
+## Shallow publication checkout correction
+
+The first repair reached publication but the isolated clone could not check out the original46f17f3 commit. A source commit fetched only into the parent checkout's FETCH_HEAD can be absent or hidden after cloning a shallow checkout. Publication now explicitly fetches that exact SHA from origin into the isolated checkout, verifies FETCH_HEAD equals it, then checks it out. It never substitutes current HEAD or main for the original source.
+
+Four focused publication regressions pass, including real shallow Git repositories and the complete artifact-preparation path (only the final authenticated GitHub push is replaced). A separate read-only check against the real GitHub repository fetched and checked out the exact original commit and matched source bytes. No experimental execution, tensors or optimizer state were touched. Repeated publication-only runs also preserve original evidence while excluding generated receipts from original-file comparisons.
+
+Run the same publication-repair.ipynb again; it fetches the updated repair branch automatically and still reads Version190. The original experimental status/error is now printed before publication so a publication error cannot hide it. Live Kaggle result publication remains to be executed; local source verification is not claimed as a completed Kaggle repair.

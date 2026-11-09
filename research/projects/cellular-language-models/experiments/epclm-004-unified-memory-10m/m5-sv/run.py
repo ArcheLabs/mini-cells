@@ -20,7 +20,7 @@ from sv_analysis import condition_report, scientific_decision
 from data import digest, file_hash
 from e0 import ROOT, write, load_checkpoint
 from training import fit
-from sv_publication import publisher_module
+from sv_publication import publisher_module, publication_checkout
 
 
 class Pause(RuntimeError): pass
@@ -292,10 +292,8 @@ def publish(out, decision):
     publisher=publisher_module()
     ExperimentSpec=publisher.ExperimentSpec;prepare_artifacts=publisher.prepare_artifacts;push_results=publisher.push_results
     with tempfile.TemporaryDirectory(prefix='m5-sv-publish-') as temp:
-        root=Path(temp)/'repo';subprocess.run(['git','clone','--quiet','--shared','--no-checkout',str(ROOT),str(root)],check=True)
-        origin=subprocess.check_output(['git','remote','get-url','origin'],cwd=ROOT,text=True).strip()
-        subprocess.run(['git','remote','set-url','origin',origin],cwd=root,check=True)
-        subprocess.run(['git','checkout','--quiet','--detach',decision['identity']['source_commit']],cwd=root,check=True)
+        root=Path(temp)/'repo'
+        publication_checkout(ROOT,root,decision['identity']['source_commit'])
         stage=root/'results/epclm004-m5-sv/publish';stage.mkdir(parents=True);names=[]
         for p in out.rglob('*'):
             rel=p.relative_to(out)

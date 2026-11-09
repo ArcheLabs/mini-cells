@@ -22,3 +22,5 @@
 - E3 is a historical Smoke reference only because its actual binary checkpoint is not available in the Git archive; no E3 scientific Test result is fabricated and no extra training arm is added.
 
 - Publication repair is a transport-only patch. Original experiment identity, decision/error, model/data/budget and checkpoint bytes are not migrated or changed. configs/publication-repair-source.json fixes saved Version190; it never treats190 as a Script Version ID. The normal launcher uses a new source identity; the repair entry alone republishes the existing46f17f3 run without starting it again.
+
+- Historical-source checkout now fetches and validates the exact original commit in the isolated publication clone itself. Parent-checkout verification alone is not relied on across shallow boundaries. Repeat retries compare only copied original files, excluding generated repair/publication receipts. No scientific functions, configuration or data change in this correction.

@@ -79,17 +79,20 @@ def recover(destination):
 
 def republish(source, destination, origin):
     decision=verify_original(source);output=destination/'publication'
-    output.mkdir(parents=True,exist_ok=True)
+    output.mkdir(parents=True,exist_ok=True);original_names=[]
     for path in source.rglob('*'):
         relative=path.relative_to(source)
         if path.is_file() and selected(relative):
             target=output/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,target)
-    before={str(p.relative_to(output)):sha(p) for p in output.rglob('*') if p.is_file()}
+            original_names.append(str(relative))
+    before={name:sha(output/name) for name in original_names}
     receipt={'format':'minicells.m5-sv.publication-repair.v1','original_run_id':decision['run_id'],
         'original_source_commit':decision['identity']['source_commit'],'original_status':decision['status'],
         'original_error':decision.get('error'),'source':origin,'new_optimizer_updates':0,
         'checkpoint_tensors_loaded':False,'experiment_reexecuted':False,'original_metadata_sha256':before}
     write(output/'publication-repair.json',receipt)
+    print({'stage':'PUBLICATION_ONLY_SOURCE_VERIFIED','original_experiment_status':decision['status'],
+           'original_error':decision.get('error'),'new_optimizer_updates':0},flush=True)
     publisher=entry_module();proof=publisher.publish(output,decision)
     for name,expected in before.items():
         if sha(output/name)!=expected:raise ValueError('publication retry changed original evidence: '+name)
