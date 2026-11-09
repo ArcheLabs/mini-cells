@@ -36,3 +36,5 @@ storage. The shared Kaggle helpers live in [`shared/kaggle/`](../../shared/kaggl
 - [M3C-001 官方模块推理审计](../projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-001/notebook.ipynb)：0 训练 Token，T4 输出硬件阻塞；支持设备分别审计 SISO/MIMO。
 
 - [M3C-001-TPU-JAX](../projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-001-TPU-JAX/notebook.ipynb)：社区候选，TPU SISO → MIMO 合成正确性门禁，0 训练 Token。
+
+- [M3C-001-T4-Reference](../projects/cellular-language-models/experiments/mamba3-cellular-series/M3C-001-T4-Reference/notebook.ipynb)：当前 M3C 执行入口，纯 PyTorch、T4、FP32、SISO → MIMO，0 正式训练 Token。

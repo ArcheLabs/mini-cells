@@ -52,3 +52,7 @@ M3C 是新的实验系列，不修改或取代以下历史记录：
 ## 独立 TPU/JAX 候选路径
 
 [M3C-001-TPU-JAX](M3C-001-TPU-JAX/README.md)：社区候选实现，先 SISO 门禁再 MIMO。官方 PyTorch 审计历史不变；TPU 通过后作为 M3C-002 候选底座，尚未产生 TPU 实测或科学结论。
+
+## 当前执行路径：T4 Reference
+
+[M3C-001-T4-Reference](M3C-001-T4-Reference/README.md)使用纯 PyTorch 第三方实现，首轮 FP32 正确性检查。官方 BLOCKED_HARDWARE 与 TPU/JAX 记录保留；不再要求等待 H100 或完成 TPU 路径后才能推进。M3C-002 至006的研究路线不变，底座差异显式记录。
