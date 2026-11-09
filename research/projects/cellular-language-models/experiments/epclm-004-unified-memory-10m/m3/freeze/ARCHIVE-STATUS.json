@@ -1,10 +1,17 @@
 {
-  "status": "BLOCKED_SOURCE_ACCESS",
+  "status": "AWAITING_EXACT_VERSION_DOWNLOAD",
   "script_version_id": 367010882,
   "actual_weights_downloaded": false,
   "permanent_weights_archive_verified": false,
-  "reason": "No Kaggle API credentials; Kaggle HTTP requests timed out; browser bridge unavailable. Frozen identities are available; actual binary payload is not.",
+  "reason": "Archive-only entry now downloads exact Version 184 automatically when no valid mount/cache exists. Live archive not yet executed here; no source credentials available.",
   "new_training_updates": 0,
   "archive_only_entry": "../archive-only.ipynb",
-  "tests": "3 passed; fixture tests only, not actual weight archival"
+  "tests": "3 passed; fixture tests only, not actual weight archival",
+  "version_number": 184,
+  "manual_mount_required": false,
+  "required_existing_secrets": [
+    "GITHUB_TOKEN",
+    "KAGGLE_API_TOKEN"
+  ],
+  "retrieval_tests": "2 passed; transport unchanged; no new training"
 }

@@ -29,6 +29,7 @@ def checked_files(source,frozen):
     tokenizer=BASE.parent/'assets/tokenizer.json'
     if sha256(tokenizer)!=frozen['tokenizer_sha256']:raise ValueError('frozen tokenizer differs')
     files['tokenizer.json']=tokenizer
+    if (BASE/'archive-source.json').exists():files['archive-source.json']=BASE/'archive-source.json'
     for path in (BASE/'freeze').rglob('*'):
         if path.is_file() and '__pycache__' not in path.parts and path.name!='ARCHIVE-STATUS.json':files[str(path.relative_to(BASE))]=path
     return files
@@ -115,6 +116,57 @@ def upload(path,receipt,frozen):
     return proof
 
 
+def recovery_backend():
+    import sys
+    root=next(p for p in BASE.parents if (p/'pyproject.toml').exists())
+    helper=root/'research/projects/cellular-language-models/experiments/epclm-002-a0-persistent-state-recall/scripts'
+    sys.path.insert(0,str(helper))
+    from kaggle_output_recovery import _load_backend
+    api,fetch=_load_backend(root)
+    from kaggle_posthoc.kaggle_source import inventory
+    return api,inventory,fetch
+
+
+def recover(cache,frozen):
+    config=json.loads((BASE/'archive-source.json').read_text());version=config['version_number']
+    if type(version) is not int or version<1 or version==config['script_version_id']:
+        raise ValueError('exact ordinal version required; never substitute Script Version ID')
+    if config['script_version_id']!=frozen['execution']['script_version_id']:
+        raise ValueError('archive source Script Version ID differs from frozen baseline')
+    cache=Path(cache);cache.mkdir(parents=True,exist_ok=True);receipt=cache/'download-source.json'
+    identity={k:config[k] for k in ('kernel','version_number','script_version_id')}
+    if receipt.exists():
+        saved=json.loads(receipt.read_text())
+        if saved['identity']!=identity:raise ValueError('download cache belongs to another saved version')
+        source=cache/saved['prefix'];checked_files(source,frozen)
+        print({'stage':'ARCHIVE_SOURCE_REUSED','version_number':version},flush=True);return source
+    api,inventory,fetch=recovery_backend()
+    print({'stage':'EXACT_ARCHIVE_SOURCE','version_number':version,'script_version_id':config['script_version_id']},flush=True)
+    inv=inventory(api,version)
+    observed=inv.get('metadata',{}).get('script_version_id')
+    if observed is not None and int(observed)!=config['script_version_id']:
+        raise ValueError('Kaggle exposed a different Script Version ID; no payload downloaded')
+    names={row['name'] for row in inv['files']}
+    suffix='gpu/gate6.json';expected=frozen['expected_gpu_files']
+    candidates=sorted(name for name in names if name==suffix or name.endswith('/'+suffix))
+    for report_name in candidates:
+        prefix=report_name[:-len(suffix)]
+        required={prefix+'gpu/'+name:sha for name,sha in expected.items()}
+        if not set(required)<=names:continue
+        report=cache/report_name
+        if not report.exists() or sha256(report)!=expected['gate6.json']:
+            fetch(api,inv,[report_name],cache)
+        if sha256(report)!=expected['gate6.json']:continue
+        # Only after frozen report identity matches may the large checkpoint be fetched.
+        missing=[name for name,sha in required.items() if not (cache/name).is_file() or sha256(cache/name)!=sha]
+        if missing:fetch(api,inv,missing,cache)
+        source=cache/prefix;checked_files(source,frozen)
+        receipt.write_text(json.dumps({'identity':identity,'prefix':prefix,
+            'files':expected,'status':'FROZEN_PAYLOAD_HASH_VERIFIED','mapping_provenance':config['mapping_provenance']},indent=2)+'\n')
+        return source
+    raise RuntimeError(f'FROZEN_REPORT_NOT_FOUND_IN_EXACT_VERSION_{version}: no other versions searched; no training performed')
+
+
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--source',type=Path)
     parser.add_argument('--destination',type=Path,required=True);parser.add_argument('--upload',action='store_true')
@@ -129,7 +181,7 @@ def main():
             try:checked_files(candidate,frozen)
             except ValueError:continue
             source=candidate;break
-    if source is None:raise RuntimeError('FROZEN_WEIGHTS_NOT_MOUNTED: attach saved Output scriptVersionId=367010882; no training will run')
+    if source is None:source=recover(args.destination/'source-cache',frozen)
     path,receipt=pack(source,args.destination,frozen)
     if args.upload:receipt=upload(path,receipt,frozen)
     receipt['wall_seconds']=time.monotonic()-started

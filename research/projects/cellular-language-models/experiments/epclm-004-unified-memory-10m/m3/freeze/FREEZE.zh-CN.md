@@ -74,3 +74,24 @@ Cell 的 Fast Weights、Momentum、Manifest，以及冻结的 Tokenizer、数学
 永久位置：GitHub Release `epclm004-m3-frozen-d8942eb1`，指向原训练源码。
 **只有返回 `REMOTE_ARCHIVE_READBACK_VERIFIED` 后，才算权重永久归档完成。**
 当前未取得实际二进制文件；不得把尚未创建的 Release URL 当作已存在的归档。
+
+
+## 归档入口修复：未挂载旧 Output
+
+已确认映射：**Version 184 / Script Version ID 367010882**，由用户提供。
+操作配置为 `../archive-source.json`；未更改冻结 BASELINE 或模型数学。
+
+`archive-only.ipynb` 先复用本地/挂载的正确文件；没有时，复用仓库已有的
+`kaggle_output_recovery._load_backend`、`inventory`、`fetch`，只枚举 Version 184，
+不扫描其他版本，不取 latest，不把 Script Version ID 当作版本序号。
+先验证固定 Gate 6 报告 Hash，再下载该目录缺失的固定文件；已有成功下载记录
+经 Hash 复核后直接复用。Kaggle API 如返回 Script Version ID，则额外检查该 ID。
+API 不暴露映射时不声称独立验证映射，最终文件身份仍必须匹配冻结 Hash。
+
+运行只需 CPU、Internet 和既有 `GITHUB_TOKEN` / `KAGGLE_API_TOKEN` Secrets。
+无需手动挂载 Output；原有下载器可能安装其已固定的轻量 Kaggle CLI，
+不安装训练依赖，不加载 Torch 或检查点，不启动训练。
+
+仅新增两项归档接线测试，验证精确版本/缓存复用及错误报告阻止权重下载。
+未重跑数学门禁、未测试或改写既有 Kaggle 传输机制、未重训。
+真实文件尚未在当前环境取回，永久归档仍须实际回读凭据，不以单元测试代替。

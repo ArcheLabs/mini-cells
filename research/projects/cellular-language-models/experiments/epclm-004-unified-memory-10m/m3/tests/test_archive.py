@@ -75,3 +75,47 @@ def test_frozen_entry_cannot_start_training(tmp_path):
     result=subprocess.run([sys.executable,str(BASE/'run.py'),'--output',str(tmp_path/'blocked')],capture_output=True,text=True)
     assert result.returncode!=0 and 'M3_FROZEN_NO_FURTHER_TRAINING' in result.stderr
     assert not list(tmp_path.rglob('checkpoint.pt'))
+
+
+def test_missing_mount_downloads_only_exact_frozen_files_and_reuses_cache(tmp_path,monkeypatch):
+    base=tmp_path/'m3';base.mkdir();(base/'freeze').mkdir()
+    (base.parent/'assets').mkdir();(base.parent/'assets/tokenizer.json').write_bytes(b'fixture-tokenizer')
+    config={'kernel':'bingjiangli/minicells','script_version_id':367010882,'version_number':184,'mapping_provenance':'fixture'}
+    (base/'archive-source.json').write_text(json.dumps(config));monkeypatch.setattr(archive,'BASE',base)
+    names=('gate6.json','training/checkpoint.pt','recall-cell/generation/fast_weights.pt','recall-cell/generation/momentum.pt')
+    blobs={'saved/gpu/'+name:('fixture-'+name).encode() for name in names}
+    expected={name:hashlib.sha256(blobs['saved/gpu/'+name]).hexdigest() for name in names}
+    frozen={'execution':{'script_version_id':367010882},'expected_gpu_files':expected,
+            'tokenizer_sha256':archive.sha256(base.parent/'assets/tokenizer.json')}
+    listed=[];downloads=[]
+    def inventory(api,version):
+        listed.append(version);assert version==184
+        return {'version_number':version,'files':[{'name':n} for n in (*blobs,'unrelated/large.bin')]}
+    def fetch(api,inv,selected,destination):
+        assert inv['version_number']==184
+        downloads.extend(selected)
+        for name in selected:
+            path=destination/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(blobs[name])
+    monkeypatch.setattr(archive,'recovery_backend',lambda:(object(),inventory,fetch))
+    source=archive.recover(tmp_path/'cache',frozen)
+    assert source==tmp_path/'cache/saved'
+    assert listed==[184] and downloads[0]=='saved/gpu/gate6.json' and set(downloads)==set(blobs)
+    assert archive.recover(tmp_path/'cache',frozen)==source
+    assert listed==[184] and len(downloads)==len(blobs)  # No re-enumeration or re-download.
+    config['version_number']=367010882;(base/'archive-source.json').write_text(json.dumps(config))
+    with pytest.raises(ValueError,match='ordinal'):archive.recover(tmp_path/'wrong',frozen)
+
+
+def test_wrong_frozen_report_never_downloads_model_weights(tmp_path,monkeypatch):
+    base=tmp_path/'m3';base.mkdir();monkeypatch.setattr(archive,'BASE',base)
+    (base/'archive-source.json').write_text(json.dumps({'kernel':'bingjiangli/minicells','script_version_id':367010882,
+        'version_number':184,'mapping_provenance':'fixture'}))
+    names=['saved/gpu/gate6.json','saved/gpu/training/checkpoint.pt'];downloads=[]
+    def fetch(api,inv,selected,destination):
+        downloads.extend(selected)
+        for name in selected:
+            p=destination/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'wrong report')
+    monkeypatch.setattr(archive,'recovery_backend',lambda:(object(),lambda api,v:{'version_number':v,'files':[{'name':n} for n in names]},fetch))
+    frozen={'execution':{'script_version_id':367010882},'expected_gpu_files':{'gate6.json':'0'*64,'training/checkpoint.pt':'1'*64}}
+    with pytest.raises(RuntimeError,match='EXACT_VERSION_184'):archive.recover(tmp_path/'cache',frozen)
+    assert downloads==['saved/gpu/gate6.json']
