@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/kaggle/working/minicells-epclm004-m5-sv/research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m5-sv/run.py", line 413, in <module>
+    launch(p.parse_args())
+    ~~~~~~^^^^^^^^^^^^^^^^
+  File "/kaggle/working/minicells-epclm004-m5-sv/research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m5-sv/run.py", line 406, in launch
+    proof=publish(out,decision);print({'publication':proof['status'],'branch':proof['branch'],'commit':proof['commit']},flush=True)
+  File "/kaggle/working/minicells-epclm004-m5-sv/research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m5-sv/run.py", line 291, in publish
+    from scripts.research.publish_experiment_results import ExperimentSpec,prepare_artifacts,push_results
+ModuleNotFoundError: No module named 'scripts.research'
