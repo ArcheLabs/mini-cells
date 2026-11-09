@@ -104,7 +104,7 @@ M0 没有依赖阻塞：审计已完成。上述项目属于进入相应后续�
 
 ## 8. M5-SV Scientific Validation — current implementation addendum
 
-Status: IMPLEMENTATION_IN_PROGRESS; actual T4 scientific validation is pending.
+Status: IMPLEMENTED_CPU_VALIDATED_T4_PENDING; actual T4 scientific validation is pending.
 The historical M0 audit above is preserved. The archived M5 result reports Gates0–7
 passed, with only two updates per arm. This is engineering completion, not H5 support.
 M5-SV runs SV0 Protocol Audit, SV1 Innovation Validity, SV2 Retrieval and Utilization,

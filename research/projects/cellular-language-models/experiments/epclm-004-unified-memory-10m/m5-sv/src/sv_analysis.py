@@ -17,6 +17,14 @@ def episode_measurements(result, e6):
         values=[q['admission'][key] for q in queries if q['admission'][key] is not None]
         summary['admission_'+key]=sum(values)/len(values) if values else None
     summary['nll']=sum(q['nll_on'] for q in queries)/len(queries)
+    summary['query_ppl']=math.exp(summary['nll']) if summary['nll']<700 else None
+    stores=result['resources']['stores']
+    summary['store_occupancy']=sum(s['occupancy'] for s in stores)
+    summary['store_write_count']=sum(s['writes'] for s in stores)
+    summary['store_replacement_rate']=safe_ratio(sum(s['replacements'] for s in stores),sum(s['full_attempts'] for s in stores))
+    summary['average_stored_token_age']=safe_ratio(sum((s['average_stored_age'] or 0)*s['occupancy'] for s in stores),sum(s['occupancy'] for s in stores))
+    summary['store_read_preparation_seconds']=sum(q['store_read_timing']['store_read_preparation_seconds'] for q in queries)/len(queries)
+    summary['store_update_seconds']=result['prefill_timing']['store_update_host_seconds']
     summary['query_latency_seconds']=sum(q['latency_on_seconds'] for q in queries)/len(queries)
     summary['query_count']=len(queries)
     summary['resource_bytes']=sum(result['resources'][k] for k in (
@@ -49,6 +57,9 @@ def condition_report(records, baseline_records):
                 'mean_query_latency_seconds':float(np.mean([e['query_latency_seconds'] for e in episodes])),
                 'mean_prefill_seconds':float(np.mean([r['prefill_seconds'] for r in records])),
                 'by_first_episode':records[0]['resources']}}
+    report['query_summary']['nll']=sum(q['nll_on'] for q in all_queries)/len(all_queries)
+    report['query_summary']['query_ppl']=math.exp(report['query_summary']['nll']) if report['query_summary']['nll']<700 else None
+    report['query_summary']['ppl_scope']='masked synthetic Query targets, not natural-language perplexity'
     return report
 
 

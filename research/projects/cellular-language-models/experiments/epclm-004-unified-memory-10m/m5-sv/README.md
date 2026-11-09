@@ -7,3 +7,5 @@ Read [SPEC.md](SPEC.md), [baseline audit](audit/m5-baseline-audit.md), [REPORT.m
 The single [Notebook](notebook.ipynb) targets the existing Kaggle Notebook with Tesla T4, Internet and existing secrets. It proceeds automatically through protocol checks, frozen data, development diagnostics, bounded Pilot, immutable freeze, three paired seeds and independent Test. Each session is limited to3 hours. Attach the prior saved Output for subsequent sessions; exact source/config identity is checked automatically. Completed updates and evaluation Episodes are reused.
 
 A failed learnability Pilot is INCONCLUSIVE and stops further training. A timeout leaves PARTIAL work and publishes it. All required Test cases must finish before a scientific verdict. A completed engineering stage cannot set H5=SUPPORTED.
+
+Implementation status: CPU component validation complete; real T4 execution pending. The regression suite and tiny orchestration evidence are under audit/. H5 remains NOT_EVALUATED until actual scientific runs. Main budget is12M input tokens; Pilot adds a separately bounded65,536 inputs. Capacity128 is an inference intervention on capacity64-trained weights.

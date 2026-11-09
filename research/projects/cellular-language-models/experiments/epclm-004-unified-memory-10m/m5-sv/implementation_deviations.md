@@ -13,3 +13,10 @@
 
 - Frozen M5 closes a Chunk at each forward_state call, including partial Chunks. Snapshot evaluation therefore uses an explicitly versioned history-prefill/three-token-Query boundary. It is identical for all policies and paired On/Off; it is not claimed numerically equivalent to a single concatenated training call. This inference distribution change is recorded, not silently patched in the frozen model.
 - Capacity128 is an inference intervention on Capacity64-trained weights. No additional Capacity128 training budget or parameter-matched training group is introduced.
+
+- Store RNG resets to the declared store_seed for each independent Episode, preserving the original per-Stream seeded reservoir semantics. Random positions are therefore paired within equal-length Episodes, not newly seeded per Query.
+- Auxiliary perplexity is masked synthetic Query perplexity, explicitly not WikiText or natural-language PPL. No unrelated language-model training or corpus download is added.
+
+- Query latency includes the independent snapshot fork and three-token computation, including profiling synchronization, but excludes report/digest work. Resource acceptance uses that same timing definition across arms.
+- Crossed bootstrap resamples paired training seeds and common Episode IDs shared across seeds, preserving policy pairing and repeated-Query clustering. It does not treat per-Query or cross-seed reuse of one Episode as independent new samples.
+- E3 is a historical Smoke reference only because its actual binary checkpoint is not available in the Git archive; no E3 scientific Test result is fabricated and no extra training arm is added.
