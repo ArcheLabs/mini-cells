@@ -54,13 +54,16 @@ def launch(args):
     identity={'source_commit':source,'protocol_sha256':digest(p),'dataset_sha256':digest(data),'environment_sha256':digest({k:env[k] for k in ('python','torch','cuda','gpu','driver','precision','tf32','amp','deterministic_algorithms')}),
         'dependency_lock_sha256':file_hash(BASE/'configs/dependency-lock.json')}
     decision={'training_status':'RUNNING','publication_status':'PENDING','gate_a':'NOT_PASSED','overfit_started':False,'pilot_started':False,'test_accessed':False,'arms':{}}
+    publishing=False
     try:
         deadline=time.monotonic()+p['execution']['execution_seconds']
         for arm in p['arms']:
             if time.monotonic()+300>=deadline:raise RuntimeError('SESSION_LIMIT: resume existing Gate A Output')
             folder=out/arm;folder.mkdir(exist_ok=True)
             if (folder/'publication.json').exists():
-                proof=publish_bundle(folder);index=publish_index(json.loads((folder/'run-manifest.json').read_text()),proof);decision['arms'][arm]={**proof,'index':index};continue
+                decision['arms'][arm]={'training_status':'COMPLETED','publication_status':'PENDING'}
+                publishing=True
+                proof=publish_bundle(folder);index=publish_index(json.loads((folder/'run-manifest.json').read_text()),proof);decision['arms'][arm]={**proof,'index':index,'training_status':'COMPLETED'};publishing=False;continue
             model=construct(arm,p).cuda();manifest={**identity,'phase':'gpu-smoke','arm':arm,'seed':p['seeds']['model'],
                 'initialization_sha256':state_hash(model),'runtime':'new Episode per update; no persisted cross-Episode Store',
                 'scheduler_state':'constant LR, no mutable scheduler','gradient_accumulation':'none'}
@@ -80,10 +83,13 @@ def launch(args):
             write(recovery_path,recovery)
             write(folder/'training-status.json',{'training_status':'COMPLETED','smoke_updates':1,'smoke_targets':8,'recovery_fixture':recovery,
                 'not_applicable':{'scientific_validation':'Smoke only','test':'not generated or accessed','scheduler':'constant, no state'}})
-            proof=publish_bundle(folder);index=publish_index(manifest,proof);decision['arms'][arm]={**proof,'index':index}
+            decision['arms'][arm]={'training_status':'COMPLETED','publication_status':'PENDING'}
+            publishing=True
+            proof=publish_bundle(folder);index=publish_index(manifest,proof);decision['arms'][arm]={**proof,'index':index,'training_status':'COMPLETED'};publishing=False
         decision.update(training_status='COMPLETED',publication_status='VERIFIED',gate_a='PASS')
     except Exception as error:
-        decision.update(error=f'{type(error).__name__}: {error}',publication_status='FAILED_OR_PENDING',gate_a='NOT_PASSED')
+        completed=len(decision['arms'])==len(p['arms']) and all(v.get('training_status')=='COMPLETED' for v in decision['arms'].values())
+        decision.update(error=f'{type(error).__name__}: {error}',training_status='COMPLETED' if completed else 'INTERRUPTED',publication_status='FAILED' if publishing else 'PENDING',gate_a='NOT_PASSED')
         raise
     finally:write(out/'gate-a.json',decision);print(decision,flush=True)
 
