@@ -1,0 +1,54 @@
+{
+  "status": "STOPPED_INITIALIZATION_MISMATCH",
+  "initialization_sha256": {
+    "E0": "e626f2bf3270e8280ab201fa30b68e5e2b14f3f5ed73f6b4abb2c952f2c7db45",
+    "E6": "ad3c7bfde6ccae44f5ce2e94c6e7eef46887ec25325b5b97320e36cfb8e70197",
+    "E7-Innovation": "ad3c7bfde6ccae44f5ce2e94c6e7eef46887ec25325b5b97320e36cfb8e70197"
+  },
+  "expected_initialization_sha256": {
+    "E0": "e626f2bf3270e8280ab201fa30b68e5e2b14f3f5ed73f6b4abb2c952f2c7db45",
+    "E6": "1eb1485c2e430a54bd48b95daa8f2aa005f19003f7585822d556f442c146245e",
+    "E7-Innovation": "1eb1485c2e430a54bd48b95daa8f2aa005f19003f7585822d556f442c146245e"
+  },
+  "mismatched_arms": [
+    "E6",
+    "E7-Innovation"
+  ],
+  "torch": "2.6.0+cpu",
+  "overfit_weights_loaded": false,
+  "parameters": {
+    "E0": {
+      "static_parameters": 10130688,
+      "embedding_parameters": 2097152,
+      "backbone_excluding_embedding_parameters": 8033536,
+      "summary_parameters": 0,
+      "predictor_parameters": 0,
+      "store_trainable_parameters": 0,
+      "tied_embedding_lm_head": true,
+      "weight_bytes": 40522752,
+      "class": "e0.E0"
+    },
+    "E6": {
+      "static_parameters": 10021120,
+      "embedding_parameters": 2097152,
+      "backbone_excluding_embedding_parameters": 7842048,
+      "summary_parameters": 81920,
+      "predictor_parameters": 0,
+      "store_trainable_parameters": 0,
+      "tied_embedding_lm_head": true,
+      "weight_bytes": 40084480,
+      "class": "bmojo.BMojo"
+    },
+    "E7-Innovation": {
+      "static_parameters": 10021120,
+      "embedding_parameters": 2097152,
+      "backbone_excluding_embedding_parameters": 7842048,
+      "summary_parameters": 81920,
+      "predictor_parameters": 0,
+      "store_trainable_parameters": 0,
+      "tied_embedding_lm_head": true,
+      "weight_bytes": 40084480,
+      "class": "bmojo.BMojo"
+    }
+  }
+}
