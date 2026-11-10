@@ -104,6 +104,7 @@ def publish_bundle(folder):
 def publish_index(manifest,proof):
     """Main-derived metadata branch; exact source fetched inside the isolated clone."""
     pub=publisher()
+    schema='minicells.b0.overfit-index.v1' if manifest['phase']=='overfit' else 'minicells.b0.gate-a-index.v1'
     with tempfile.TemporaryDirectory(prefix='b0-index-') as temp:
         root=Path(temp)/'repo';subprocess.run(['git','clone','--quiet','--shared','--no-checkout',str(ROOT),str(root)],check=True)
         origin=subprocess.check_output(['git','remote','get-url','origin'],cwd=ROOT,text=True).strip()
@@ -111,10 +112,10 @@ def publish_index(manifest,proof):
         subprocess.run(['git','fetch','--quiet','--depth=1','origin',manifest['source_commit']],cwd=root,check=True,timeout=180)
         subprocess.run(['git','checkout','--quiet','--detach',manifest['source_commit']],cwd=root,check=True)
         stage=root/'results/b0-gate-a-index';stage.mkdir(parents=True)
-        write(stage/'decision.json',{'format':'minicells.b0.gate-a-index.v1','status':'PUBLICATION_VERIFIED',
-            'training_status':'COMPLETED','publication_status':'VERIFIED','manifest':manifest,'artifact':proof,'hypotheses':'NOT_EVALUATED'})
+        write(stage/'decision.json',{'format':schema,'status':'PUBLICATION_VERIFIED',
+            'training_status':'COMPLETED','publication_status':'VERIFIED','scientific_status':proof.get('scientific_status','NOT_EVALUATED'),'manifest':manifest,'artifact':proof,'hypotheses':'NOT_EVALUATED'})
         branch='kaggle/'+manifest['run_id'];destination='artifacts/experiments/epclm004-m5-sv-b0/'+manifest['run_id']
-        spec=pub.ExperimentSpec(str(stage.relative_to(root)),destination,('decision.json',),branch,'minicells.b0.gate-a-index.v1')
+        spec=pub.ExperimentSpec(str(stage.relative_to(root)),destination,('decision.json',),branch,schema)
         folder=pub.prepare_artifacts(root,'epclm004-m5-sv-b0',spec,None)
         pub.push_results(root,folder,'epclm004-m5-sv-b0',branch,'GITHUB_TOKEN','origin/main')
         return {'branch':branch,'remote_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'status':'REMOTE_SHA_VERIFIED'}

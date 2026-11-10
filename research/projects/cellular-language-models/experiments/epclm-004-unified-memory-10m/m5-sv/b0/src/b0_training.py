@@ -4,6 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 import json
 import math
+import os
 import time
 import torch
 from b0_models import EXPERIMENT,parameter_report
@@ -89,7 +90,12 @@ def fit_stage(model,rows,validation,protocol,folder,identity,stage,deadline=floa
             checkpoint=record['checkpoint'],checkpoint_write=record['checkpoint_policy'],training_flops=None,
             flops_status='NOT_MEASURED_NO_VALIDATED_COMPLETE_COUNTER',**parameter_report(model))
         write(resources_path,resources);write(metrics_path,record)
-        (folder/'updates.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in record['history']))
+        ledger_path=folder/'updates.jsonl'
+        previous=[json.loads(line) for line in ledger_path.read_text().splitlines()] if ledger_path.exists() else []
+        if previous!=record['history'][:len(previous)]:raise ValueError('LEDGER_CHECKPOINT_MISMATCH: historical update rows changed')
+        with ledger_path.open('a') as stream:
+            for row in record['history'][len(previous):]:stream.write(json.dumps(row)+'\n')
+            stream.flush();os.fsync(stream.fileno())
         if actual<target:return {'status':'INCOMPLETE_RESOURCE_LIMIT','curve':curve,'ledger':record['ledger']}
         curve.append({'update':actual,'ledger':record['ledger'],'evaluation':record['validation'],
             'checkpoint_sha256_at_boundary':record['checkpoint']['sha256']});write(curve_path,curve)
