@@ -73,8 +73,10 @@ def launch(args):
             if (folder/'publication.json').exists():
                 results[arm]={**json.loads((folder/'result.json').read_text()),'training_status':'COMPLETED','publication_status':'PENDING'}
                 publishing=True
-                publishing=True
-            proof=publish_arm(folder);results[arm].update(proof);publishing=False;publishing=False;continue
+                proof=publish_arm(folder)
+                results[arm].update(proof)
+                publishing=False
+                continue
             if (folder/'result.json').exists():
                 result=json.loads((folder/'result.json').read_text());verify_checkpoint(folder/'training')
             else:
