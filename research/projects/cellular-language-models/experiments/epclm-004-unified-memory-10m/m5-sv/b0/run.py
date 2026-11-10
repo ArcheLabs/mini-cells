@@ -24,11 +24,14 @@ def launch(args):
         if result.returncode:raise RuntimeError('B0 engineering tests failed')
         write(out/'decision.json',{'status':'ENGINEERING_REVIEW_COMPLETE_EXPERIMENTS_NOT_STARTED','identity':identity,'test_accessed':False,'hypotheses':'NOT_EVALUATED'})
         return
+    raise RuntimeError('GPU_EXECUTION_NOT_READY: mandatory Smoke, verified artifact return and isolated Test preparation are not yet integrated; no training started')
     import torch
     if not torch.cuda.is_available() or 'T4' not in torch.cuda.get_device_name():raise RuntimeError('Actual Tesla T4 required')
     torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
     deadline=time.monotonic()+p['execution']['execution_seconds'];results={}
     for stage in ('overfit','pilot'):
+        if stage=='pilot' and not all(results.get('overfit:'+arm,{}).get('status')=='OVERFIT_ESTABLISHED' for arm in p['arms']):
+            write(out/'decision.json',{'status':'OVERFIT_NOT_ESTABLISHED','results':results,'pilot_started':False});return
         for arm in p['arms']:
             model=construct(arm,p).cuda()
             train=banks['overfit'] if stage=='overfit' else banks['pilot_train'];val=train if stage=='overfit' else banks['validation']
