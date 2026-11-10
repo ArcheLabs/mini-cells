@@ -1,0 +1,122 @@
+{
+  "models": {
+    "E0": {
+      "vocab": 8192,
+      "dim": 256,
+      "layers": 10,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 704,
+      "window": 16384
+    },
+    "E6_E7": {
+      "vocab": 8192,
+      "dim": 256,
+      "layers": 8,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 816,
+      "window": 32
+    }
+  },
+  "memory": {
+    "state_size": 20,
+    "summary_tokens": 4,
+    "capacity": 64,
+    "read_top_k": 8,
+    "chunk": 32
+  },
+  "predictor": {
+    "type": "ema",
+    "beta": 0.875,
+    "history": "all past with exponential decay; effective horizon 8",
+    "error": "mean squared L2; read before update"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "format": "minicells.b0-p3.protocol.v1",
+  "master_seed": 93031,
+  "seeds": {
+    "model": 75043,
+    "store": 78043,
+    "statistics": 96031
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "precision": "fp32",
+    "tf32": false,
+    "batch": 8,
+    "scheduler": "constant-engineering-smoke",
+    "updates": null,
+    "checkpoint": {
+      "every_updates": 64,
+      "every_seconds": 86400
+    },
+    "loss": "active_candidate_only",
+    "execution": "native_independent_batch8"
+  },
+  "stages": {
+    "1": {
+      "level": 8,
+      "length": 64,
+      "valid_length": 59,
+      "epochs": 2,
+      "updates": 128,
+      "validation_updates": [
+        0,
+        32,
+        64,
+        96,
+        128
+      ]
+    },
+    "2": {
+      "level": 16,
+      "length": 128,
+      "valid_length": 115,
+      "epochs": null,
+      "updates": null
+    }
+  },
+  "stage2_choices": [
+    384,
+    320,
+    256,
+    192
+  ],
+  "gpu_phase_limit_seconds": 7200,
+  "planning_limit_seconds": 6480,
+  "benchmark": {
+    "warmup_updates": 1,
+    "measured_updates": 2,
+    "safety_factor": 1.25
+  },
+  "gate": {
+    "validation_accuracy_min": 0.6,
+    "training_online_accuracy_min": 0.75,
+    "training_online_scope": "all8192 Stage1 targets before each optimizer update",
+    "nll_improvement_min": 0.5,
+    "bootstrap_draws": 2000,
+    "collapse_episode_fraction": 0.5,
+    "collapse_dominant_rate": 0.9,
+    "collapse_scope": "active_candidate;K>1 only"
+  },
+  "query_isolated": {
+    "mappings": 64,
+    "queries_per_mapping": 4,
+    "policy": "run only when mandatory remaining phases fit;otherwise NOT_RUN_BUDGET"
+  },
+  "test_status": "SEALED_NOT_ACCESSED",
+  "authorized_scope": "P3 single-seed development only;no12M,no main multi-seed,no M6",
+  "models_order": [
+    "E0",
+    "E6",
+    "E7-Innovation"
+  ]
+}
