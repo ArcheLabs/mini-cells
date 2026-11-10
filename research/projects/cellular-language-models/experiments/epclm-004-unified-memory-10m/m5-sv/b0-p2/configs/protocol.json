@@ -1,0 +1,126 @@
+{
+  "format": "minicells.b0-p2.protocol.v1",
+  "baseline_main": "ce9f1905b8d9a8badd2dbed111f68e180e71a619",
+  "arms": [
+    "E0",
+    "E6",
+    "E7-Innovation"
+  ],
+  "models": {
+    "E0": {
+      "vocab": 8192,
+      "dim": 256,
+      "layers": 10,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 704,
+      "window": 16384
+    },
+    "E6_E7": {
+      "vocab": 8192,
+      "dim": 256,
+      "layers": 8,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 816,
+      "window": 32
+    }
+  },
+  "memory": {
+    "state_size": 20,
+    "summary_tokens": 4,
+    "capacity": 64,
+    "read_top_k": 8,
+    "chunk": 32
+  },
+  "predictor": {
+    "type": "ema",
+    "beta": 0.875,
+    "history": "all past with exponential decay; effective horizon 8",
+    "error": "mean squared L2; read before update"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "data": {
+    "bindings": 8,
+    "length": 512,
+    "queries": 8,
+    "interference": 1.0,
+    "regime": "unseen_pairs"
+  },
+  "seeds": {
+    "model": 75017,
+    "store": 78017,
+    "sampler": 76003,
+    "statistics": 86003
+  },
+  "sizes": {
+    "training": 512,
+    "validation": 64,
+    "training_diagnostic": 32
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "precision": "fp32",
+    "tf32": false,
+    "batch": 1,
+    "scheduler": "constant-engineering-smoke",
+    "updates": null,
+    "checkpoint": {
+      "every_updates": 128,
+      "every_seconds": 86400
+    }
+  },
+  "metrics": {
+    "alpha": 0.05,
+    "binomial_null": 0.00390625,
+    "full_vocab_random": 0.0001220703125,
+    "bootstrap_draws": 2000,
+    "bootstrap_unit": "episode",
+    "rank_tie_rule": "descending logit, then ascending token ID",
+    "logit_margin": "gold minus highest non-gold logit"
+  },
+  "execution": {
+    "gpu": "Tesla T4",
+    "gpu_phase_limit_seconds": 7200,
+    "planning_limit_seconds": 6480,
+    "hard_session_seconds": 10800,
+    "test_accessed": false,
+    "m5_sv_12m_authorized": false,
+    "three_seed_main_authorized": false,
+    "m6_authorized": false
+  },
+  "dataset_version": "B0-P2-DATASET-v2",
+  "split_seed": 75029,
+  "p2": {
+    "budget_choices": [
+      1024,
+      768,
+      640
+    ],
+    "gpu_phase_limit_seconds": 7200,
+    "planning_limit_seconds": 6480,
+    "unique_marginal_jsd_bits_max": 0.02,
+    "observed_marginal_jsd_bits_max": 0.01,
+    "split_attempts": 32,
+    "training_diagnostic_episodes": 32,
+    "benchmark_updates": 4,
+    "timing_safety_factor": 1.25,
+    "test_accessed": false,
+    "authorization": "B0-P2 single-seed development only",
+    "validation_boundaries": [
+      0,
+      256,
+      512,
+      768,
+      1024
+    ],
+    "benchmark_warmup_updates": 1
+  }
+}
