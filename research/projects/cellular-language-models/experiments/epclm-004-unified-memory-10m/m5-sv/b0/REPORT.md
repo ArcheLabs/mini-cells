@@ -1,0 +1,27 @@
+# M5-SV-B0 — Full Context Baseline and Learnability Calibration
+
+Status: implementation and CPU engineering checks complete; canonical GPU training not started. H1–H6 remain NOT_EVALUATED.
+
+Baseline main: ce9f1905b8d9a8badd2dbed111f68e180e71a619. Main contains E0/M2/M5, but not the earlier M5-SV research implementation. B0 therefore imports e0.E0 and the original m5 BMojo directly. It does not import the earlier SV snapshot harness or12M launcher. Historical results/configurations are unchanged.
+
+E0 uses the frozen model-e0.json:8192 vocabulary,256 width,10 layers,4 heads/KV heads,704 FFN. E0.forward uses full causal SDPA; window16384 is not a training attention limit; cached() is forbidden. E6/E7 retain the frozen M5 configuration, FFN816, eight alternating blocks, state_size20, W32, chunk32, four Summary tokens, capacity64 and Top-8 reads. Predictor and Store have no trainable parameters. E6/E7 initialization hashes match exactly.
+
+All arms call model(input_ids) once for the entire512-token Episode in both training and primary evaluation. Runtime is fresh each call. Eight distinct bindings are queried once each, only ANSWER positions supervised. Later queries receive no gold answers. M5 keeps the full Episode graph; EMA/admission selection remain detached. Chunk readers precede writes and Summary uses the preceding Chunk's actual SSM state. Aligned32-token streaming is a separate diagnostic;509+3 is never a primary metric.
+
+Data:16 fixed overfit episodes (8192 inputs,128 targets,128 distinct bindings);512 Pilot train episodes (262144 inputs,4096 targets);64 validation episodes (32768 inputs,512 targets). Main's original modulo-three binding partition and frozen tokenizer are retained. Seeds and exact content hashes are in configs/ and audit/. Test is RESERVED_NOT_GENERATED_NOT_ACCESSED, honoring the latest user instruction. The specification's request to generate64 Test episodes is deferred; seal_test requires explicit future authorization and is never called by review or training.
+
+Training: original M2 fit/atomic checkpoints/rollback/sampler/RNG, standard FP32 AdamW(.0003, betas .9/.95, weight decay .1), clip1, TF32 off, constant LR. A private module instance adds complete per-update parameter-mutation observations and richer evaluation without modifying M2 or global Torch. All parameter changes are retained inside optimizer checkpoints. GPU observer copies are included in measured cost. Full8192-way Query probabilities are saved as compressed NPZ alongside per-query diagnostics.
+
+Overfit:512 maximum updates, evaluate all128 targets every16 updates; require122 correct at three consecutive evaluations. All arms retain the same maximum budget. Missing success is OVERFIT_NOT_ESTABLISHED, not evidence of incapability. Pilot starts fresh;512 updates per arm, validation at128/256/384/512. No automatic12M or M6 progression. Results require research-owner interpretation; no automatic architecture-superiority verdict.
+
+Metrics: full-vocabulary EM and masked Query NLL are primary. Value-constrained EM, Top-5, deterministic gold rank (ties by token ID), gold probability, value probability mass, invalid-output rate, gold-versus-best-other margin and prediction counts are diagnostic. Requested one-sided exact binomial tests against1/256 and Wilson intervals are explicitly nominal because Queries cluster within Episodes; Episode bootstrap is additionally reported. Full-vocabulary random reference is1/8192.
+
+Parameters actually instantiated: E0 10,130,688; E6/E7 10,021,120 each. Embeddings2,097,152 each; Summary81,920 in E6/E7; predictor/Store trainable parameters0. Embedding and LM head are tied. Difference versus E0 is-1.0815%, below5%, but this is not strict parameter matching.
+
+Seven focused tests passed, covering all three original classes, full512-token causality, distant history access in E0, Query masks, real tiny optimizer updates, Episode/Store isolation, aligned streaming, paired initialization, metrics, Test guards and checkpoint/RNG/sampler/optimizer continuation. CPU fixtures are not canonical10M learning runs. See audit/tests.log, parameters.json and chunk-semantics.json for actual evidence. GPU memory/throughput and overfit/Pilot quality remain unmeasured.
+
+Review command: `OMP_NUM_THREADS=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python run.py --output /kaggle/working/epclm004-b0-review`.
+
+Only after engineering review approval: `OMP_NUM_THREADS=1 python run.py --output /kaggle/working/epclm004-b0-experiment --execute`. The explicit flag authorizes only B0's two bounded stages; it does not authorize Test,12M or M6. Preserve the complete Output to resume with the same source/config/dataset identity. Completed curves and checkpoints are reused; dataset/config changes are rejected.
+
+Known limits: historical SV code is absent from main; the earlier nonaligned snapshot evaluation is not a B0 baseline. E0/E6 parameter counts are close but not identical. Test generation is deferred. No real fixed-sample overfit, Learnability Pilot, GPU benchmark or scientific conclusion exists in this delivery. Result files remain in the independent B0 Output namespace; no old SV artifact is overwritten. Automated GitHub result return is not included in this review-only entry and remains an execution-integration limitation before deploying the GPU workflow.

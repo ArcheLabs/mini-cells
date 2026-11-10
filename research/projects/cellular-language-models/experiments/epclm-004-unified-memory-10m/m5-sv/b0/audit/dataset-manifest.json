@@ -1,0 +1,80 @@
+{
+  "format": "minicells.m5-sv-b0.datasets.v1",
+  "config": {
+    "bindings": 8,
+    "length": 512,
+    "queries": 8,
+    "interference": 1.0,
+    "regime": "unseen_pairs"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "special_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3,
+    "<fact>": 4,
+    "<query>": 5,
+    "<answer>": 6,
+    "<hole>": 7
+  },
+  "splits": {
+    "train": {
+      "episodes": 528,
+      "content_sha256": "69af605d94a881114892e80be953fbad2705a435db9544b7b269406f3dd1d3c7"
+    },
+    "validation": {
+      "episodes": 64,
+      "content_sha256": "3889b96c9c24f3861379278792aae2ae3f6529d2ecc56825edfb0859f5d1ed52"
+    }
+  },
+  "test_status": "SEALED_NOT_ACCESSED",
+  "tokenizer": {
+    "sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+    "vocab_size": 8192,
+    "special_ids": {
+      "<pad>": 0,
+      "<unk>": 1,
+      "<bos>": 2,
+      "<eos>": 3,
+      "<fact>": 4,
+      "<query>": 5,
+      "<answer>": 6,
+      "<hole>": 7
+    }
+  },
+  "banks": {
+    "overfit": {
+      "episodes": 16,
+      "input_tokens": 8192,
+      "supervised_targets": 128,
+      "unique_binding_pairs": 128,
+      "content_sha256": "69ced4701719602ea31f359c3ab844e50b959b76a3328384a7ef453c87ce7223"
+    },
+    "pilot_train": {
+      "episodes": 512,
+      "input_tokens": 262144,
+      "supervised_targets": 4096,
+      "unique_binding_pairs": 3746,
+      "content_sha256": "f4faf1f99967e0f1f1a859b2f4e8ceb3bcd4756ec3dc5ab19fa2b53fa22275e9"
+    },
+    "validation": {
+      "episodes": 64,
+      "input_tokens": 32768,
+      "supervised_targets": 512,
+      "unique_binding_pairs": 506,
+      "content_sha256": "3889b96c9c24f3861379278792aae2ae3f6529d2ecc56825edfb0859f5d1ed52"
+    }
+  },
+  "test": {
+    "status": "RESERVED_NOT_GENERATED_NOT_ACCESSED",
+    "episodes": 64,
+    "data_seed": 95009,
+    "split_rule": "(key_index+value_index) mod3 ==2"
+  },
+  "files": {
+    "overfit.json": "2ea430b35a8d7d9f4eec8de9926a59310a58f584f144cb081afe1ce5d97c6618",
+    "pilot_train.json": "6e8ef9fbf985f9fcd05ed653fd709ec16730d4ae68edfe41fb73be440681b1f5",
+    "validation.json": "e54b37f04d54e282367117c363e76f891909b9acedebbec33c4331d1e2d65f87"
+  }
+}

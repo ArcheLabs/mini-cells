@@ -1,0 +1,126 @@
+{
+  "format": "minicells.m5-sv-b0.protocol.v1",
+  "baseline_main": "ce9f1905b8d9a8badd2dbed111f68e180e71a619",
+  "arms": [
+    "E0",
+    "E6",
+    "E7-Innovation"
+  ],
+  "models": {
+    "E0": {
+      "vocab": 8192,
+      "dim": 256,
+      "layers": 10,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 704,
+      "window": 16384
+    },
+    "E6_E7": {
+      "vocab": 8192,
+      "dim": 256,
+      "layers": 8,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 816,
+      "window": 32
+    }
+  },
+  "memory": {
+    "state_size": 20,
+    "summary_tokens": 4,
+    "capacity": 64,
+    "read_top_k": 8,
+    "chunk": 32
+  },
+  "predictor": {
+    "type": "ema",
+    "beta": 0.875,
+    "history": "all past with exponential decay; effective horizon 8",
+    "error": "mean squared L2; read before update"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "data": {
+    "bindings": 8,
+    "length": 512,
+    "queries": 8,
+    "interference": 1.0,
+    "regime": "unseen_pairs"
+  },
+  "seeds": {
+    "model": 75017,
+    "store": 78017,
+    "overfit": 75011,
+    "pilot_train": 75023,
+    "validation": 85009,
+    "reserved_test": 95009,
+    "sampler": 76003,
+    "statistics": 86003
+  },
+  "sizes": {
+    "overfit": 16,
+    "pilot_train": 512,
+    "validation": 64,
+    "reserved_test": 64
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "precision": "fp32",
+    "tf32": false,
+    "batch": 1,
+    "scheduler": "constant-engineering-smoke",
+    "updates": 512,
+    "checkpoint": {
+      "every_updates": 16,
+      "every_seconds": 120
+    }
+  },
+  "overfit": {
+    "evaluation_every": 16,
+    "minimum_correct": 122,
+    "targets": 128,
+    "consecutive_evaluations": 3,
+    "maximum_updates": 512,
+    "early_stop": false
+  },
+  "pilot": {
+    "validation_updates": [
+      128,
+      256,
+      384,
+      512
+    ],
+    "input_tokens_per_arm": 262144,
+    "targets_per_arm": 4096,
+    "total_input_tokens": 786432,
+    "fresh_initialization": true
+  },
+  "metrics": {
+    "alpha": 0.05,
+    "binomial_null": 0.00390625,
+    "full_vocab_random": 0.0001220703125,
+    "bootstrap_draws": 2000,
+    "bootstrap_unit": "episode",
+    "rank_tie_rule": "descending logit, then ascending token ID",
+    "logit_margin": "gold minus highest non-gold logit"
+  },
+  "execution": {
+    "default": "engineering_review_only",
+    "experiments_require_explicit_execute": true,
+    "test_generation_authorized_this_task": false,
+    "original_sv_test_accessed": false,
+    "m5_sv_12m_authorized": false,
+    "m6_authorized": false,
+    "gpu": "Tesla T4",
+    "execution_seconds": 9600,
+    "publication_reserve_seconds": 600,
+    "hard_seconds": 10800
+  }
+}
