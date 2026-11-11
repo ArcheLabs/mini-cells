@@ -59,7 +59,7 @@ def source_lock():
 
 def serialize(model):
     stream=io.BytesIO()
-    torch.save(model.state_dict(),stream)
+    torch.save({name: tensor.detach().contiguous() for name, tensor in model.state_dict().items()},stream)
     return stream.getvalue()
 
 
