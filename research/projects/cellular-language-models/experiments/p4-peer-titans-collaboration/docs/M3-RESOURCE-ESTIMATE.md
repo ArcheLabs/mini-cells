@@ -1,0 +1,9 @@
+# M3 resource estimate
+
+M3 width 64 contains 4,256 Fast Weight scalars and the same number of Momentum scalars. At FP32 this is 34,048 bytes per Cell or 68,096 for two. A width-129 union has 67,848 bytes, 248 bytes below the peer total. Count state payload independently of serialized checkpoint size, transient stacked-read buffers and static projections.
+
+Peer Smoke planning at 4 bindings per domain and 128 presentations: P0 has 256 Chunk-4 calls and two peers have 128 each. Two capacity modes across 15 paired episodes cost at most 15,360 acquisition calls and 61,440 presentations if both acquisition paths are repeated per mode. P1–P4 and branch ablations reuse the acquired Cells. Prior CPU M1.1 Chunk-4 measurements were about 0.25 seconds for 4 bindings and 0.38 for 8. This implies roughly 26 seconds of acquisition at width 64 for the conservative 30 paired episode budget. The larger union width, batch recall, fresh processes and serialization add cost. At 20 paired episodes per mode the base workload scales to 20,480 acquisition calls before larger capacities.
+
+E2 static weights are 40,369,152 bytes at FP32. The batch-one recurrent payload measured 884,736 bytes. Adding one H=64 Titans Cell gives 918,784 bytes of persistent dynamic payload at batch one, excluding the adapters, allocator, activations and result tensors. Head and adapter fitting and all token lengths must be priced separately.
+
+For SSM–Titans Smoke, time one short and one long episode per arm before expanding to 15 per task configuration. Estimate screening from measured tokens processed, writes, query reads and head updates per paired episode, multiplied by the number of task configurations and 20 episodes. Distinguish sequential wall time, synchronized overlapping wall time and device memory peak. P4-M1.1 T4 timing measures Titans alone and cannot price E2 or the coupled path. No validated combined GPU time is available.
