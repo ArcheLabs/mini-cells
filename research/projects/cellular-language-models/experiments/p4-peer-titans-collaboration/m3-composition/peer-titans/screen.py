@@ -13,7 +13,7 @@ import time
 import torch
 from torch.nn import functional as F
 
-from run import (M3, NeuralMemory, evaluate, generate, independent, initialize,
+from run import (M3, NeuralMemory, evaluate, independent, initialize,
                  interface, learn, read, restore, save, state_hash, tensor_hash, write)
 
 BASE = Path(__file__).resolve().parent
@@ -109,7 +109,8 @@ def episode(path, seed, n, width):
     metrics={k:score(result[k],candidate,labels,early) for k in ('P1','P2','P3')}
     metrics['P0']=score(union_output,candidate,labels,early)
     crossed=evaluate(memory,a,b,wrong_q)['P4']
-    metrics['P4']=score(crossed,candidate,(wrong+torch.tensor([[0],[n]])).flip(0),early)
+    wrong_early=torch.stack([torch.isin(wrong[i],order[i,:n//2]) for i in range(2)]).flip(0)
+    metrics['P4']=score(crossed,candidate,(wrong+torch.tensor([[0],[n]])).flip(0),wrong_early)
     metrics['P2_A']=[metrics['P2']['recall'][0],None]
     metrics['P2_B']=[None,metrics['P2']['recall'][1]]
     wrong_metrics=rejection(crossed,candidate)
