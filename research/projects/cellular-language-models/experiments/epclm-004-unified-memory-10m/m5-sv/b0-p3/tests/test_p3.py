@@ -184,3 +184,13 @@ def test_variable_candidate_baselines_are_not_ln8():
     rows=[render([(8,264),(9,264)],[8],32,{'split':'validation'}),render([(8,264),(9,265)],[9],32,{'split':'validation'})]
     records=[statistics(torch.zeros(1,536),row)[0] for row in rows];r=aggregate(records,draws=30)
     assert r['random_active_accuracy']==.75 and abs(r['random_active_nll']-.5*np.log(2))<1e-12
+
+
+def test_summary_identity_reconstruction():
+    from recover_summary import common_identity, BRANCHES
+    fields=('experiment','source_commit','template_sha256','dataset_sha256','environment_sha256','protocol_sha256','config_sha256')
+    manifests=[{**dict.fromkeys(fields,'same'),'arm':arm} for arm in BRANCHES]
+    assert common_identity(manifests)==dict.fromkeys(fields,'same')
+    with pytest.raises(TypeError):common_identity(['overwritten-string']*3)
+    manifests[1]['dataset_sha256']='different'
+    with pytest.raises(ValueError):common_identity(manifests)

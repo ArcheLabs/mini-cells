@@ -168,16 +168,16 @@ def launch(args):
     if tracked.returncode:raise ValueError('Commit P3 source before execution')
     env=environment()
     if not env['gpu'] or 'T4' not in env['gpu']:raise RuntimeError('BLOCKED_HARDWARE: actual Tesla T4 required')
-    key={**namespace,'dataset_sha256':data['dataset_sha256'],'environment_sha256':digest({k:env[k] for k in ('python','torch','cuda','gpu','driver','precision','tf32','amp')})}
+    experiment_identity={**namespace,'dataset_sha256':data['dataset_sha256'],'environment_sha256':digest({k:env[k] for k in ('python','torch','cuda','gpu','driver','precision','tf32','amp')})}
     header=out/'execution-identity.json'
     if not header.exists() and Path('/kaggle/input').exists():
         options=[]
         for f in Path('/kaggle/input').rglob('execution-identity.json'):
-            if json.loads(f.read_text())==key:
+            if json.loads(f.read_text())==experiment_identity:
                 budget=f.parent/'gpu-budget.json';options.append((json.loads(budget.read_text())['charged_seconds'] if budget.exists() else 0,str(f.parent)))
         if options:shutil.copytree(Path(max(options)[1]),out,dirs_exist_ok=True)
-    if header.exists() and json.loads(header.read_text())!=key:raise ValueError('P3 resume identity differs')
-    write(header,key);bench={};template=out/'protocol-template.json'
+    if header.exists() and json.loads(header.read_text())!=experiment_identity:raise ValueError('P3 resume identity differs')
+    write(header,experiment_identity);bench={};template=out/'protocol-template.json'
     for arm in p['models_order']:
         bench[arm]={}
         for stage in (1,2):
@@ -198,7 +198,7 @@ def launch(args):
     configuration={'models':p['models'],'memory':p['memory'],'predictor':p['predictor'],'training':p['training'],'stages':p['stages']}
     identities={};results={a:{} for a in p['models_order']}
     for arm in p['models_order']:
-        folder=out/arm;folder.mkdir(exist_ok=True);identity={**key,'phase':'b0-p3','arm':arm,'model_seed':p['seeds']['model'],
+        folder=out/arm;folder.mkdir(exist_ok=True);identity={**experiment_identity,'phase':'b0-p3','arm':arm,'model_seed':p['seeds']['model'],
             'protocol_sha256':digest(p),'config_sha256':digest(configuration),'initialization_sha256':initial[arm],'logical_batch_size':8,'historical_weights_loaded':False,
             'planned_stage_updates':{stage:cfg['updates'] for stage,cfg in p['stages'].items()},
             'planned_logical_input_slots_per_arm':sum(cfg['updates']*8*cfg['length'] for cfg in p['stages'].values()),
@@ -256,19 +256,19 @@ def launch(args):
             for stage in stages:
                 validation[str(stage)]={}
                 for path in sorted((folder/'training'/('stage'+str(stage))/'evaluation').iterdir(),key=lambda f:int(f.name)):
-                    value=json.loads((path/'metrics.json').read_text());key=str(stage)+':'+path.name
+                    value=json.loads((path/'metrics.json').read_text());metric_key=str(stage)+':'+path.name
                     validation[str(stage)][path.name]=value
-                    distribution[key]={name:value[name] for name in ('prediction_distribution','dominant_token_rate','unique_predicted_tokens','collapse_episode_fraction')}
-                    decomposition[key]={name:value[name] for name in ('full_nll','type_nll','candidate_nll','active_nll','value_nll','random_active_nll')}
+                    distribution[metric_key]={name:value[name] for name in ('prediction_distribution','dominant_token_rate','unique_predicted_tokens','collapse_episode_fraction')}
+                    decomposition[metric_key]={name:value[name] for name in ('full_nll','type_nll','candidate_nll','active_nll','value_nll','random_active_nll')}
                     memory=json.loads((path/'memory-diagnostics.json').read_text())
                     state_norms=[v for row in memory for v in row.get('state_norms',[])]
-                    states[key]={'raw_records':str((path/'memory-diagnostics.json').relative_to(folder)),
+                    states[metric_key]={'raw_records':str((path/'memory-diagnostics.json').relative_to(folder)),
                         'episode_stream_resets':sum(row.get('episode_reset_count',0) for row in memory),
                         'state_norm_mean':float(np.mean(state_norms)) if state_norms else None,
                         'state_update_norm':'NOT_AVAILABLE','saturation':'NOT_AVAILABLE: no calibrated threshold'}
                     actual=[row['store'] for row in memory if 'write_attempts' in row.get('store',{})]
                     reads=[read for row in actual for read in row['retrieval_records']]
-                    store[key]={'raw_records':str((path/'memory-diagnostics.json').relative_to(folder)),
+                    store[metric_key]={'raw_records':str((path/'memory-diagnostics.json').relative_to(folder)),
                         'status':'OBSERVED' if actual else 'NOT_APPLICABLE',
                         'write_attempts':sum(row['write_attempts'] for row in actual),'accepted_writes':sum(row['accepted_writes'] for row in actual),
                         'rejected_writes':sum(row['rejected_writes'] for row in actual),'evictions':sum(row['evictions'] for row in actual),
@@ -347,7 +347,8 @@ def launch(args):
             report+=f"{arm}:8-pair final EM {before['active_exact_match']:.4f};16-pair start EM {initial16['active_exact_match']:.4f};16-pair final EM {after['active_exact_match']:.4f}. Chance-normalized start shift {skill(initial16)-skill(before):.4f}. The start shift uses the same trained weights but different independent mappings; continued16-pair training is a separate effect.\n"
     report+='\nE6 success establishes the combined Mamba/SWA/Summary path, not a causal Summary-only contribution. E7 versus E6 point estimates/intervals and position traces are preliminary; Store ablation and independent seeds would be needed for a mechanism claim. Further scaling or formal replication are research-owner decisions, not automatic actions.\n'
     report+='\n## Paired Mapping-cluster analysis\n\n'+json.dumps(paired,indent=2)+'\n\nGPU phase account:\n\n'+json.dumps(decision['gpu_budget'],indent=2)
-    summary={**key,'phase':'b0-p3-summary','run_id':'b0-p3-summary-'+digest(key)[:20]}
+    if not isinstance(experiment_identity,dict):raise TypeError('Experiment identity must be a mapping')
+    summary={**experiment_identity,'phase':'b0-p3-summary','run_id':'b0-p3-summary-'+digest(experiment_identity)[:20]}
     decision['summary_index']=metadata(summary,{a:r['artifact'] for a,r in returned.items()},decision,report)
     decision['end_to_end_wall_seconds']=time.monotonic()-started;write(out/'decision.json',decision);(out/'REPORT.md').write_text(report)
     print({'execution_status':'COMPLETE','stage1_gate':gate['status'],'stage2_started':2 in stages,'gpu_charged_seconds':decision['gpu_budget']['charged_seconds']},flush=True)
@@ -361,7 +362,9 @@ if __name__=='__main__':
         args.output.mkdir(parents=True,exist_ok=True)
         budget=json.loads((args.output/'gpu-budget.json').read_text()) if (args.output/'gpu-budget.json').exists() else {}
         status='TIME_BUDGET_EXCEEDED' if isinstance(error,TimeoutError) or budget.get('charged_seconds',0)>=7200 else 'STOPPED'
-        failure={'status':status,'error':type(error).__name__+': '+str(error),'gpu_budget':budget,'test_status':'SEALED_NOT_ACCESSED'}
+        import traceback
+        failed_frame=traceback.extract_tb(error.__traceback__)[-1]
+        failure={'failed_phase':failed_frame.name,'failed_line':failed_frame.lineno,'status':status,'error':type(error).__name__+': '+str(error),'gpu_budget':budget,'test_status':'SEALED_NOT_ACCESSED'}
         write(args.output/'execution-error.json',failure)
         (args.output/'STOPPED.md').write_text('# B0-P3 stopped\n\n'+json.dumps(failure,indent=2)+'\n\nNo incomplete run is a PASS. Retained checkpoints and logs are authoritative; no fallback or budget expansion.\n')
         raise
