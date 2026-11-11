@@ -3,6 +3,7 @@ import argparse
 import copy
 import json
 from pathlib import Path
+from pickle import UnpicklingError
 import shutil
 import subprocess
 import sys
@@ -185,7 +186,7 @@ def negative_checks(memory, output, expected):
                 receipt['manifest_sha256'] = file_hash(path)
         try:
             restore(memory,folder,receipt)
-        except (FileNotFoundError,ValueError,RuntimeError,EOFError) as error:
+        except (FileNotFoundError,ValueError,RuntimeError,EOFError,UnpicklingError) as error:
             checks.append(dict(case=kind,error=str(error)))
         else:
             raise RuntimeError(f'Accepted invalid checkpoint: {kind}')

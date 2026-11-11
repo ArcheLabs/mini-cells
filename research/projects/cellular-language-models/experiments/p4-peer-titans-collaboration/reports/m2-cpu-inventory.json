@@ -1,0 +1,555 @@
+{
+  "writer_pid": 5430,
+  "cells": {
+    "a": {
+      "state": {
+        "fast": {
+          "b1": "43299045628ed679cfbd64acbeaebe2905553ed420ae461cc0ef2ae8f34edf54",
+          "b2": "a8e146943ce182b4b77a2f3d08170c7f141accf261ca22fb0980330416095001",
+          "ln_bias": "22732362a56adcc5b19900519f6502580276cfe4b6c9e2dead8284fa7cbb0151",
+          "ln_weight": "b8006cd098f65548480cdf1fa77984bf0e634f6c2f76124eb025bbb7c458ab1e",
+          "w1": "601062711747f84bf9f93a629643a652e41f663b49fc663cb6ff609e1525d4bf",
+          "w2": "45f601007396294c0a0b17bc0b2d9e42ee4017f9f6987a5f351b65145424d1da"
+        },
+        "momentum": {
+          "b1": "c6a8c5a049230a37a26f6e01281efba3b6745da38e7f20725825bd4c550cc6c6",
+          "b2": "bf32a588b4886cad1bf2bbaaebd1bd77dcaf8550252d5665ab36b30a6a17adcd",
+          "ln_bias": "47f427b9277dfc0788d9d2ebe269aa91db9173ad56b5540f43322d2283b8f531",
+          "ln_weight": "2cf5547f1a0b70b87b290c77ac2aee14d9a357ce88b734db73d266db7369ae4d",
+          "w1": "1af003f66323c6bd6066b9bf0391d26e246df34a0da45f410ad98cb9080bd4f1",
+          "w2": "8355a76bf69c52fc76fb9d3cd82c0b5edc6c6e1bb7536b4a542e4f25f7493a41"
+        },
+        "step": 128,
+        "metadata": {
+          "cell_id": "b58af61bea6e47fb85604859534b87d4",
+          "revision": 128,
+          "parent": null,
+          "architecture_id": "mag_lite_single_memory",
+          "interface_version": 1,
+          "memory_dim": 32,
+          "hidden": 64,
+          "provenance": []
+        }
+      },
+      "output": "a1dd39fa2744c9b863cccb59c2c76c2f621ca0b2495e82780d8ccb2d31fe7166",
+      "recall_seconds": 0.0005474999998114072,
+      "shapes": {
+        "fast": {
+          "b1": {
+            "shape": [
+              1,
+              64
+            ],
+            "dtype": "torch.float32"
+          },
+          "b2": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_bias": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w1": {
+            "shape": [
+              1,
+              64,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w2": {
+            "shape": [
+              1,
+              32,
+              64
+            ],
+            "dtype": "torch.float32"
+          }
+        },
+        "momentum": {
+          "b1": {
+            "shape": [
+              1,
+              64
+            ],
+            "dtype": "torch.float32"
+          },
+          "b2": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_bias": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w1": {
+            "shape": [
+              1,
+              64,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w2": {
+            "shape": [
+              1,
+              32,
+              64
+            ],
+            "dtype": "torch.float32"
+          }
+        }
+      },
+      "bytes": 55755,
+      "write_seconds": 0.049409098999603884,
+      "manifest_sha256": "5c130c43f561f93c406e5259d438ccf080bdf052b745f6dec9dd7742cdbbea7a"
+    },
+    "b": {
+      "state": {
+        "fast": {
+          "b1": "82b0121593e3bebd8e323ab62e55cb0852e87f4417aaf06566a164c2c7be71c6",
+          "b2": "c38c2230b8af5b765b874ef535a63969e13a8633db9a694ce557bc54b511dee7",
+          "ln_bias": "8566170a6f92871146dce741aca2e5d754ee2711284dca7bbf7c8a1d090d8134",
+          "ln_weight": "048c57bc327c062c6b5e0e14f1472410c3e091d173a305a7d344e5e194dd0a16",
+          "w1": "4e19a826e2b7c3b5244e3d083c6bbbe29abcca005c5a29b01fc2e54957a1745b",
+          "w2": "718da87dd2324b9b350aae15f31964709a734db82991352a587fd1ca447588e0"
+        },
+        "momentum": {
+          "b1": "ddeabf151582e12929aa0c788911373cca74b70515b3c12f81015a69a25c209c",
+          "b2": "ac2395df27cc5b432310f8dd6bf9f4c0d714df9e5d4172a5948d59d8906e16e8",
+          "ln_bias": "ad5f76d8c0dd486b06f65b132fdd6ac445d469909fba6101d32ebdbd7de3afc7",
+          "ln_weight": "16faa3885c09b6b58c6d20b1550968f051a94adfd613f9a13db8e83da6b12d08",
+          "w1": "45800a9fc4ef5a0be8a30e88c17d193bfb5a31183d3ed090b0f9ff5840d8b4ff",
+          "w2": "7918d4e8b04dfa2ee3e695c149d0c22cf902eb9734191dbd5cd274f8c8183b08"
+        },
+        "step": 128,
+        "metadata": {
+          "cell_id": "3ab4972193b444c093a409138845a071",
+          "revision": 128,
+          "parent": null,
+          "architecture_id": "mag_lite_single_memory",
+          "interface_version": 1,
+          "memory_dim": 32,
+          "hidden": 64,
+          "provenance": []
+        }
+      },
+      "output": "81669582ed4abf6db06c9cbd513fd5875fa29165c64f4f391f89a4c8612b1fc7",
+      "recall_seconds": 0.0006462999990617391,
+      "shapes": {
+        "fast": {
+          "b1": {
+            "shape": [
+              1,
+              64
+            ],
+            "dtype": "torch.float32"
+          },
+          "b2": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_bias": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w1": {
+            "shape": [
+              1,
+              64,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w2": {
+            "shape": [
+              1,
+              32,
+              64
+            ],
+            "dtype": "torch.float32"
+          }
+        },
+        "momentum": {
+          "b1": {
+            "shape": [
+              1,
+              64
+            ],
+            "dtype": "torch.float32"
+          },
+          "b2": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_bias": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w1": {
+            "shape": [
+              1,
+              64,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w2": {
+            "shape": [
+              1,
+              32,
+              64
+            ],
+            "dtype": "torch.float32"
+          }
+        }
+      },
+      "bytes": 55883,
+      "write_seconds": 0.07903069899839466,
+      "manifest_sha256": "0163d0faacd18e70dfc7fb4059fbf6acdb992e156182ebc9b9fa173331cf9341"
+    },
+    "a1": {
+      "state": {
+        "fast": {
+          "b1": "37aeaa680a095fa088789e6f4430d2ca42fec2767a4ac4077c61fc820580e552",
+          "b2": "38de2fede9564a12f223440c6544010ae8f600c38de98d7b5fc8bdce9c7193e8",
+          "ln_bias": "e8cbb8c88220bf40c636aee317473b1706d4677f760ba5d6d17ab444e9d731f9",
+          "ln_weight": "2fcb98acb33a78ddeb85e32da488e236ef1618fb07e71f855ab78c72a0a70dc1",
+          "w1": "3899077892159a37be09736a6e51d40c79a95fadb03df8c8ad65a27a325e8712",
+          "w2": "1ae7806ea86a28c0439af36d73b1f6d377f7809c588e0c605cafcefcf393dda9"
+        },
+        "momentum": {
+          "b1": "b374204512871fcea22da8d483d2310869e2db1b49776c11576c40910a2f0605",
+          "b2": "db0070739458bcbe7924ce65680ae23053436955d7a4ef38cd1091e4d691dfe2",
+          "ln_bias": "41a3030da1d123cf2c2e868c0ab6765d5a556ddb3225a5a8f491b44bab2a4d7c",
+          "ln_weight": "1c0c5fc381156a7fa911bf1074064f7cab11ea872cb3a6008af1421e7b761424",
+          "w1": "69aad1f2c3e82bb33bbc003b91d81ea6d1c587ea957bfb6e829a60e472db4039",
+          "w2": "9080ef910698df325db4d34d56207717b87dffe483c74d37272c52b627125d77"
+        },
+        "step": 256,
+        "metadata": {
+          "cell_id": "5d8d96c9ad414d3a9a0ac480e1877d14",
+          "revision": 128,
+          "parent": {
+            "cell_id": "b58af61bea6e47fb85604859534b87d4",
+            "revision": 128
+          },
+          "architecture_id": "mag_lite_single_memory",
+          "interface_version": 1,
+          "memory_dim": 32,
+          "hidden": 64,
+          "provenance": []
+        }
+      },
+      "output": "d6f7609d08db8dae9bae178bf87e7c0b2de5a4d758e7fa3b1deebdbd8d39c17b",
+      "recall_seconds": 0.0004771000021719374,
+      "shapes": {
+        "fast": {
+          "b1": {
+            "shape": [
+              1,
+              64
+            ],
+            "dtype": "torch.float32"
+          },
+          "b2": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_bias": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w1": {
+            "shape": [
+              1,
+              64,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w2": {
+            "shape": [
+              1,
+              32,
+              64
+            ],
+            "dtype": "torch.float32"
+          }
+        },
+        "momentum": {
+          "b1": {
+            "shape": [
+              1,
+              64
+            ],
+            "dtype": "torch.float32"
+          },
+          "b2": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_bias": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w1": {
+            "shape": [
+              1,
+              64,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w2": {
+            "shape": [
+              1,
+              32,
+              64
+            ],
+            "dtype": "torch.float32"
+          }
+        }
+      },
+      "bytes": 56601,
+      "write_seconds": 0.05029259900038596,
+      "manifest_sha256": "e57a3a59e48e6d93f29797b780a2c9c5214a90c2c8a9fba5002a66d170935969"
+    },
+    "a2": {
+      "state": {
+        "fast": {
+          "b1": "ee6681fd469239a1a38c93b39d5ffb12e9e93d7ef34ef62615174c463611016d",
+          "b2": "d5e1f155c5a7fdedeb0a3156fcd7722c97dde20ba780545e16529f286557075c",
+          "ln_bias": "cfddfd956c90940974e5ae9716828a21ae4c82631dbf07bfd63dc3d611afe8ba",
+          "ln_weight": "3d2f4e7a7b28c8c1777b69fd92d4a2a8da760f13f372e823c777a1a8e1b67467",
+          "w1": "9116ef41a8e9122eca8ce65ba3b1841ae1d20f26f5f0d819e06f979ef5c3cbc9",
+          "w2": "439921a8951dac5cb42574f7a805cc817893bc61f09271cf1d4cac69b40d3480"
+        },
+        "momentum": {
+          "b1": "2211f090c65f92b2d67287a9497fb8e69ec0e033030299b0ab1c6c7d0012a90f",
+          "b2": "95e205e35ce0bf69a9b2c75784a6c768df29f6531640ebf8a99b3befc694228f",
+          "ln_bias": "aec801af13320591d0b4260db2801ddb9a747519edcc0780693a94ad0998e11d",
+          "ln_weight": "1d6dc2e0e67c7e15e4280654294dbcfc82c42cab7143632237bec5b258ef6ae9",
+          "w1": "c95b36520a94b3e2bc11f8683240f001fb7cc5263aed9ec75d16769bcac7aae6",
+          "w2": "d5e54acb539cc648ff497d95e6abe3048462d1d7c6254655cfae14c7fa35a30e"
+        },
+        "step": 256,
+        "metadata": {
+          "cell_id": "ed7f5141d64b4b60a7b90739fd7869d2",
+          "revision": 128,
+          "parent": {
+            "cell_id": "b58af61bea6e47fb85604859534b87d4",
+            "revision": 128
+          },
+          "architecture_id": "mag_lite_single_memory",
+          "interface_version": 1,
+          "memory_dim": 32,
+          "hidden": 64,
+          "provenance": []
+        }
+      },
+      "output": "1543d0dcd2d47171c93f8096a1f402a6e8b1e7e05cca9160364cd9a5f3a1e87e",
+      "recall_seconds": 0.0006536000000778586,
+      "shapes": {
+        "fast": {
+          "b1": {
+            "shape": [
+              1,
+              64
+            ],
+            "dtype": "torch.float32"
+          },
+          "b2": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_bias": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w1": {
+            "shape": [
+              1,
+              64,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w2": {
+            "shape": [
+              1,
+              32,
+              64
+            ],
+            "dtype": "torch.float32"
+          }
+        },
+        "momentum": {
+          "b1": {
+            "shape": [
+              1,
+              64
+            ],
+            "dtype": "torch.float32"
+          },
+          "b2": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_bias": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "ln_weight": {
+            "shape": [
+              1,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w1": {
+            "shape": [
+              1,
+              64,
+              32
+            ],
+            "dtype": "torch.float32"
+          },
+          "w2": {
+            "shape": [
+              1,
+              32,
+              64
+            ],
+            "dtype": "torch.float32"
+          }
+        }
+      },
+      "bytes": 56025,
+      "write_seconds": 0.0547645989972807,
+      "manifest_sha256": "6e58ae73e07cf832ea4132e866a24cf6d1c7b8cfdda6c45a0f77356690ea68ef"
+    }
+  },
+  "static_interface": {
+    "interface": 1,
+    "architecture": "mag_lite_single_memory",
+    "source": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
+    "static": {
+      "key.weight": "f87658f9e068e09eef2d6ee2a0c9c43fffea471654e6bf3021e6465bf8e6b628",
+      "value.weight": "5c7b664760cde43a08998ec191c3abdf8a00eb8b08163748f3d54652a6316246",
+      "query.weight": "236eb493ecd9f578a2adff6aba389d1b0e07c35da844f49f78d4f5d1ce6e2241",
+      "controls.weight": "d041d23c491580210b65eeefe27e1a95589e5bc0c5106ba3ea566932c0e55345",
+      "controls.bias": "2f32c649b8c0e2253b26fbe08334beb5d948e5e46c3bbec2ddbbd6a617f95a2f",
+      "initial.b1": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+      "initial.b2": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+      "initial.ln_bias": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+      "initial.ln_weight": "b638277a8690e175a9137feff1e43c067f9faf4e2f600caf468fb05b0403b717",
+      "initial.w1": "f614f24dc6120b85b78c52f56575e8b278d58fa4df6445dd612f659cdc15c7f0",
+      "initial.w2": "3e8a974aa5863bb156884fa108d1d24fc560f86061d7750d1a3a065636bd8b0b"
+    },
+    "controls": [
+      0.05,
+      0.01
+    ]
+  },
+  "ab_update_seconds": 0.3520208950030792,
+  "source": "80beb24e7e2e98d44d3f5ad047ea2dd54525964c"
+}
