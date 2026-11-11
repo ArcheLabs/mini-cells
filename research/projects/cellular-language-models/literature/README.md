@@ -28,7 +28,3 @@ Keep experiment-specific bibliographies with their experiments and link them
 here rather than duplicating their paper entries.
 
 各实验已有参考文献保留在原位置，通过本索引关联，不重复维护相同论文条目。
-
-## Papers / 论文
-
-- **Titans: Learning to Memorize at Test Time** (NeurIPS 2025). Adaptive neural memory, surprise momentum and forgetting. [Proceedings entry](https://papers.neurips.cc/paper_files/paper/2025/hash/a4ca07aa108036f80cbb5b82285fd4b1-Abstract-Conference.html) · [P4 discussion and ablation plan](../experiments/p4-peer-titans-collaboration/docs/TITANS-MEMORY-POLICY.md)
