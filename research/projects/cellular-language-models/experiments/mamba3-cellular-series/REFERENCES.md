@@ -68,6 +68,12 @@
 - M3C 用途：M3C-006 的直接研究参照；帮助设计共享压缩记忆与 Attention 式检索。
 - 边界：DART 当前推导基于 Mamba-2 SSD。Mamba-3 的复数状态、Exponential-Trapezoidal Recurrence 和 MIMO 需要重新推导，不能直接移植公式或声称已兼容。
 
+### B4. Titans: Learning to Memorize at Test Time
+
+- Venue: NeurIPS 2025. [Proceedings](https://papers.neurips.cc/paper_files/paper/2025/hash/a4ca07aa108036f80cbb5b82285fd4b1-Abstract-Conference.html) · [Full paper](https://proceedings.neurips.cc/paper_files/paper/2025/file/a4ca07aa108036f80cbb5b82285fd4b1-Paper-Conference.pdf)
+- Relevance: Online neural memory, surprise momentum, adaptive forgetting, and integration with attention. Section 4.5 and Table 4 report the component ablations.
+- MiniCells follow-up: [P4 memory controls, forgetting ablations, and Memory Policy proposal](../p4-peer-titans-collaboration/docs/TITANS-MEMORY-POLICY.md). The proposal records differences between the paper and the frozen M3 Memory implementation.
+
 ## C. 动态计算与路由
 
 ### C1. Mixture-of-Depths: Dynamically allocating compute in transformer-based language models
