@@ -1,0 +1,25 @@
+{
+  "full_forward": "PASS",
+  "cached_forward": "PASS",
+  "hidden_state_adapter": "PASS",
+  "lm_head_parity": "PASS",
+  "batch_isolation_same_shape": "PASS",
+  "batch_shape_parity": [
+    {
+      "max_abs": 2.086162567138672e-06,
+      "outside_original_tolerance": 18
+    },
+    {
+      "max_abs": 1.9669532775878906e-06,
+      "outside_original_tolerance": 27
+    }
+  ],
+  "full_cached_error": 1.6689300537109375e-06,
+  "lm_head_error": 0.0,
+  "kv_entries": 0,
+  "runtime_state_bytes": 884736,
+  "logits_sha256": "f0c8caa7b6c7e5509aa4006ca6512b9baa0046be67505e18c67a31265bff5843",
+  "fresh_restore": "PASS",
+  "fresh_initializer_byte_identity": "PASS",
+  "reader_pid": 9351
+}
