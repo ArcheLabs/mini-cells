@@ -85,9 +85,10 @@ def acquire(memory, cell, keys, values, indices):
     return memory.learn(keys[indices][None], values[indices][None], cell, 'online_adapt')[0]
 
 
-def run_episode(folder, n, seed, geometry, method, width, exposures):
-    memory = initialize(41035)
-    data = generate(n, seed, geometry, memory.dim)
+def run_episode(folder, n, seed, geometry, method, width, exposures, device="cpu"):
+    memory = initialize(41035).to(device)
+    data = tuple(t.to(device) for t in generate(n, seed, geometry, memory.dim))
+    synchronize = torch.cuda.synchronize if device == "cuda" else lambda: None
     keys, candidates, targets, random, hard, cosine = data
     values = candidates[targets]*math.sqrt(memory.dim)
     cell = memory.create(mode='online_adapt')
@@ -102,8 +103,10 @@ def run_episode(folder, n, seed, geometry, method, width, exposures):
             order = order.flip(0)
         seen = []
         for indices in order.split(width):
+            synchronize()
             started = time.perf_counter()
             cell = acquire(memory, cell, keys, values, indices)
+            synchronize()
             elapsed += time.perf_counter()-started
             counts[indices] += 1
             seen.extend(indices.tolist())
@@ -124,11 +127,11 @@ def run_episode(folder, n, seed, geometry, method, width, exposures):
     identity = {'initializer_seed':41035, 'interface':1, 'task':'p4-m11'}
     checkpoint = memory.checkpoint(cell, folder, identity)
     del cell, memory, initial
-    fresh = initialize(41035)
+    fresh = initialize(41035).to(device)
     restored = fresh.restore(folder, identity)
     error = float((read(fresh, restored, keys)-expected).abs().max())
     assert error == 0 and state_hash(restored) == snapshot
-    i,j = torch.triu_indices(n,n,1)
+    i,j = torch.triu_indices(n,n,1,device=device)
     return dict(n=n, seed=seed, method=method, width=width, geometry=geometry,
                 generator='p4-m11-v1', shape=list(keys.shape), dtype=str(keys.dtype),
                 hashes=[tensor_hash(x) for x in (keys, values, random, hard)],
