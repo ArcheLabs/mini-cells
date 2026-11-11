@@ -72,3 +72,5 @@ Phase A instruments the existing engine and runs controlled ablations, including
 
 - [Titans: Learning to Memorize at Test Time, NeurIPS 2025 proceedings entry](https://papers.neurips.cc/paper_files/paper/2025/hash/a4ca07aa108036f80cbb5b82285fd4b1-Abstract-Conference.html)
 - [Google Research, Titans and MIRAS](https://research.google/blog/titans-miras-helping-ai-have-long-term-memory/) (companion overview)
+
+See also the [comparison of Titans, Nested Learning and TNT](MEMORY-COMPOSITION-PRIOR-WORK.md) for the R2 composition scope.

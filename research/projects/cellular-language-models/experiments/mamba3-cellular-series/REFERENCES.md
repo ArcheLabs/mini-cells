@@ -74,6 +74,16 @@
 - Relevance: Online neural memory, surprise momentum, adaptive forgetting, and integration with attention. Section 4.5 and Table 4 report the component ablations.
 - MiniCells follow-up: [P4 memory controls, forgetting ablations, and Memory Policy proposal](../p4-peer-titans-collaboration/docs/TITANS-MEMORY-POLICY.md). The proposal records differences between the paper and the frozen M3 Memory implementation.
 
+### B5. Nested Learning: The Illusion of Deep Learning Architectures
+
+- [Paper](https://arxiv.org/abs/2512.24695). Continuum Memory System, update frequencies, nested/sequential/head-wise organization, and HOPE.
+- MiniCells relevance: Reference topologies for memory composition and independently evolving state.
+
+### B6. TNT: Improving Chunkwise Training for Test-Time Memorization
+
+- [Paper](https://arxiv.org/abs/2511.07343). Global/local neural memory, periodic local resets, context parallelism, multi-resolution chunks and finer-resolution adaptation.
+- MiniCells relevance: Direct architectural comparator for R2. [P4 comparison and scope](../p4-peer-titans-collaboration/docs/MEMORY-COMPOSITION-PRIOR-WORK.md)
+
 ## C. 动态计算与路由
 
 ### C1. Mixture-of-Depths: Dynamically allocating compute in transformer-based language models
