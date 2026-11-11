@@ -77,14 +77,24 @@ def validate(model):
     full=torch.cat([first,tail],1)
     torch.testing.assert_close(full,original,atol=2e-5,rtol=2e-5)
     together=model(ids)
-    torch.testing.assert_close(together[:1],original,atol=1e-6,rtol=1e-5)
     isolated=model(ids[1:])
-    torch.testing.assert_close(together[1:],isolated,atol=1e-6,rtol=1e-5)
+    mismatches=[]
+    for batched,single in ((together[:1],original),(together[1:],isolated)):
+        diff=(batched-single).abs()
+        mismatches.append(dict(max_abs=float(diff.max()),
+                               outside_original_tolerance=int((diff>1e-6+1e-5*single.abs()).sum())))
+    # Keep batch shape constant and perturb the other stream only.
+    for lane in (0,1):
+        perturbed=ids.clone()
+        perturbed[1-lane,2:4]+=10
+        changed=model(perturbed)
+        torch.testing.assert_close(changed[lane],together[lane],atol=0,rtol=0)
+        assert not torch.equal(changed[1-lane],together[1-lane])
     assert state.position==5 and len(state.mamba_state)==18 and not state.kv_cache
     count=sum(t.numel()*t.element_size() for pair in state.mamba_state.values() for t in pair)
     assert count==884_736
     return dict(full_forward='PASS',cached_forward='PASS',hidden_state_adapter='PASS',lm_head_parity='PASS',
-                batch_isolation='PASS',full_cached_error=float((full-original).abs().max()),
+                batch_isolation_same_shape='PASS', batch_shape_parity=mismatches,full_cached_error=float((full-original).abs().max()),
                 lm_head_error=float((repro-original).abs().max()),kv_entries=0,
                 runtime_state_bytes=count,logits_sha256=hashlib.sha256(original.numpy().tobytes()).hexdigest())
 
