@@ -1,0 +1,122 @@
+{
+  "source_commit": "6ff2e8aeb081c710f9111771a1e2f122e34389c9",
+  "script_version_id": null,
+  "config_sha256": "b781e522008c48d5bae247395294848b6e3b454e06d17e0acfbf78247e846e60",
+  "runner_sha256": "1747485e74da5dcbf17370c88f7a5f50d75383600b5a92bc03020ef23042844f",
+  "gpu": "Tesla T4",
+  "torch": "2.11.0+cu130",
+  "gpu_total_bytes": 15636037632,
+  "precision": "fp32",
+  "batch": 1,
+  "test": "SEALED",
+  "official_updates": 0,
+  "measurements": {
+    "E0": {
+      "1024": {
+        "status": "PASS",
+        "seconds": 0.19348202800000536,
+        "targets": 1024,
+        "input_tokens": 1024,
+        "targets_per_second": 5292.481222080077,
+        "allocated_bytes": 556724736,
+        "reserved_bytes": 568328192
+      },
+      "4096": {
+        "status": "PASS",
+        "seconds": 0.8930358650000016,
+        "targets": 4096,
+        "input_tokens": 4096,
+        "targets_per_second": 4586.60190540051,
+        "allocated_bytes": 1680785920,
+        "reserved_bytes": 1874853888
+      },
+      "16384": {
+        "status": "PASS",
+        "seconds": 11.374510926,
+        "targets": 16384,
+        "input_tokens": 16384,
+        "targets_per_second": 1440.4135796774565,
+        "allocated_bytes": 5997724160,
+        "reserved_bytes": 6635388928
+      }
+    },
+    "E3": {
+      "1024": {
+        "status": "PASS",
+        "seconds": 8.650645666999992,
+        "targets": 1024,
+        "input_tokens": 1024,
+        "targets_per_second": 118.37266713007318,
+        "allocated_bytes": 946530816,
+        "reserved_bytes": 1134559232
+      },
+      "4096": {
+        "status": "PASS",
+        "seconds": 121.57847798700004,
+        "targets": 4096,
+        "input_tokens": 4096,
+        "targets_per_second": 33.690173358133094,
+        "allocated_bytes": 3413152256,
+        "reserved_bytes": 4043309056
+      },
+      "16384": {
+        "status": "OOM"
+      }
+    },
+    "MAG": {
+      "1024": {
+        "status": "PASS",
+        "seconds": 0.9230811989999665,
+        "targets": 4,
+        "input_tokens": 1024,
+        "targets_per_second": 4.33331326034314,
+        "allocated_bytes": 222077440,
+        "reserved_bytes": 241172480
+      },
+      "4096": {
+        "status": "PASS",
+        "seconds": 3.484905792999939,
+        "targets": 4,
+        "input_tokens": 4096,
+        "targets_per_second": 1.1478072113268372,
+        "allocated_bytes": 572506624,
+        "reserved_bytes": 612368384
+      },
+      "16384": {
+        "status": "PASS",
+        "seconds": 14.429701309999928,
+        "targets": 4,
+        "input_tokens": 16384,
+        "targets_per_second": 0.2772060151534779,
+        "allocated_bytes": 2162960896,
+        "reserved_bytes": 2927624192
+      }
+    }
+  },
+  "recovery": {
+    "E0": {
+      "status": "PASS",
+      "checkpoint": "E0-engineering.pt",
+      "sha256": "89b3d4ead0ca1b830ff3ddd1fc6fa3c8ceaeb0744f09949b6f69e9485d33da8c",
+      "bytes": 163635821,
+      "comparison": "exact",
+      "cursor": 2
+    },
+    "E3": {
+      "status": "PASS",
+      "checkpoint": "E3-engineering.pt",
+      "sha256": "b352edabacb2d2eefae2159701cac518c353e9112bb228cd10fa0ccd1c1e7c62",
+      "bytes": 163699477,
+      "comparison": "exact",
+      "cursor": 2
+    },
+    "MAG": {
+      "status": "PASS",
+      "checkpoint": "MAG-engineering.pt",
+      "sha256": "53d91c5ea4025d028ce9adfd31024e98a73212b54b4fc8ae69692744a7bb7b60",
+      "bytes": 49612627,
+      "comparison": "exact",
+      "cursor": 2
+    }
+  }
+}
