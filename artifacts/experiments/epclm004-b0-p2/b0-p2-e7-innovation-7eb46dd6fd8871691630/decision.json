@@ -1,0 +1,86 @@
+{
+  "format": "minicells.b0-p2.index.v1",
+  "status": "DEVELOPMENT_PILOT_COMPLETE",
+  "manifest": {
+    "source_commit": "fe31d2695675eec1c33b09c70f681dd331a07782",
+    "protocol_template_sha256": "230c56ace9bb5a321187b3186a0522a2b53cd9dba8069ae48c6de7934fa15f26",
+    "dataset_sha256": "d2d01b6829909ecb10ee7045009085c2269d9dee7f20f072e6c8c141c28279ee",
+    "environment_sha256": "088dbbab9607cc168d913d5f601652be10348da062b0025e7ad7e6930f8e8b33",
+    "phase": "b0-p2",
+    "arm": "E7-Innovation",
+    "seed": 75017,
+    "protocol_sha256": "bf5827a453601dab7ee1141a9f4af53ec2f49b1cda6671d3dd8c094299706263",
+    "config_sha256": "74be19212d101710bedea15871563e55851ee72ae32ec4380e1e516d2d5944b9",
+    "update_budget": 640,
+    "initialization_sha256": "1eb1485c2e430a54bd48b95daa8f2aa005f19003f7585822d556f442c146245e",
+    "old_weights_loaded": false,
+    "environment_identity_fields": [
+      "python",
+      "torch",
+      "cuda",
+      "gpu",
+      "driver",
+      "precision",
+      "tf32",
+      "amp"
+    ],
+    "run_id": "b0-p2-e7-innovation-7eb46dd6fd8871691630"
+  },
+  "artifact": {
+    "publication_status": "VERIFIED",
+    "run_id": "b0-p2-e7-innovation-7eb46dd6fd8871691630",
+    "artifact_id": 731056423,
+    "download_url": "https://github.com/ArcheLabs/mini-cells/releases/download/b0-p2-e7-innovation-7eb46dd6fd8871691630/bundle.tar.gz",
+    "release_url": "https://github.com/ArcheLabs/mini-cells/releases/tag/b0-p2-e7-innovation-7eb46dd6fd8871691630",
+    "sha256": "b203865874e161ad2afb447e009172f0fa063f8c8b39c597e8cc119af7fe5543",
+    "bytes": 306898582,
+    "files_verified": 55,
+    "retention": "GitHub Release; retained until explicitly removed, not an expiring Actions artifact"
+  },
+  "independent_verification": {
+    "download": {
+      "status": "PASS",
+      "sha256": "b203865874e161ad2afb447e009172f0fa063f8c8b39c597e8cc119af7fe5543",
+      "bytes": 306898582,
+      "files_verified": 55,
+      "scope": "All archived files, including checkpoint/probabilities/metrics/report; no trusted status substitution"
+    },
+    "payload": {
+      "status": "PASS",
+      "ledger": {
+        "input_tokens": 327680,
+        "processed_tensor_tokens": 327680,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 5120,
+        "query_target_tokens": 5120,
+        "committed_updates": 640
+      },
+      "history_steps_verified": 640,
+      "test_accessed": false
+    },
+    "restore": {
+      "status": "PASS",
+      "restored_state_sha256": "44dd870392962608e22ec7e3e3ea91137c574861a3c604b216daff4e666c920d",
+      "new_optimizer_updates": 0,
+      "checks": {
+        "training": {
+          "status": "PASS",
+          "correct": 4,
+          "nll_abs_error": 0.0,
+          "probability_max_abs_error": 0.0,
+          "tolerance": 2e-05
+        },
+        "validation": {
+          "status": "PASS",
+          "correct": 2,
+          "nll_abs_error": 0.0,
+          "probability_max_abs_error": 0.0,
+          "tolerance": 2e-05
+        }
+      },
+      "test_accessed": false
+    }
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "test_accessed": false
+}
