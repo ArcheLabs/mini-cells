@@ -1,0 +1,16 @@
+[
+  {
+    "source": "b8a2eaf",
+    "phase": "freeze",
+    "status": "FAIL",
+    "check": "cross-batch-shape logits parity",
+    "details": "18 of 40960 elements outside atol=1e-6, rtol=1e-5 in lane 0. Greatest offending absolute difference 1.918291673064232e-6. Final validation preserves the original tolerance for this diagnostic and separately tests same-shape cross-stream independence."
+  },
+  {
+    "source": "589f3ca",
+    "phase": "restore",
+    "status": "FAIL",
+    "check": "weights-only load",
+    "details": "PyTorch UnpicklingError for unsupported builtins.getattr in the original state dict serialization. Plain tensor serialization resolves this with weights_only=True."
+  }
+]
