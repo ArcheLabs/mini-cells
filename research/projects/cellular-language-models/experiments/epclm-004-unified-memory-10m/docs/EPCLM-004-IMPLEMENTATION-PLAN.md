@@ -112,3 +112,7 @@ and SV3 Independent Evaluation. See [SPEC](../m5-sv/SPEC.md) and
 [baseline audit](../m5-sv/audit/m5-baseline-audit.md). All results must come from real
 execution; no mock recall or historical Smoke can replace independent validation.
 M6 cannot launch automatically and requires completion of M5-SV first.
+
+## M5-SV-B0 — Independent engineering stage
+
+Audited main: ce9f190. See [B0 specification and actual report](../m5-sv/b0/REPORT.md). B0.1 reuses E0; B0.2 unifies full-Episode interfaces; B0.3 audits Chunk semantics; B0.4 fixed-sample overfit and B0.5 Learnability Pilot were initially held pending engineering review; B0.6 requires research-owner interpretation. Original12M training, Test evaluation and M6 remain unauthorized. Historical M0 records above are preserved.

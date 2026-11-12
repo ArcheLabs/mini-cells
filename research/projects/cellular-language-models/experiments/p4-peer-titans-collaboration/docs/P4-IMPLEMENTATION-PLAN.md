@@ -1,0 +1,5 @@
+# P4 implementation plan
+
+M0 audits the frozen EPCLM-004 M3 source, archive and execution environment. M1 first runs the exact frozen Gate 5 control, then measures S4/S8/S16/S32/S64 using fresh Cells with the same deterministic M3 initializer. Run latent association acquisition, known and unknown recall, state immutability and checkpoint restore checks on CPU. Each stage has a separate commit.
+
+For the later capacity comparison, count Fast Weights and Momentum in both arms. At dimension 32 the M3 parameter count is 65H + 96. Two H=64 Cells contain 8,512 fast parameters. A single H=129 Cell contains 8,481 (0.36% smaller), or H=130 contains 8,546 (0.40% larger). Use H=129 as the conservative near-match and report the residual difference, static parameters, actual bytes and compute. Strict equality would require an additional architecture decision. Peer isolation can be implemented by separate create calls or M3 fork, with independent checkpoint roots. The key risk is interference as more unrelated associations share a fixed fast-weight function.

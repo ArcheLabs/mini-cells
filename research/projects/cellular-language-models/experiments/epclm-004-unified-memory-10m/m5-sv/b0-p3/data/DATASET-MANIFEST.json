@@ -1,0 +1,74 @@
+{
+  "format": "B0-P3-EPISODE-LOCAL-v1",
+  "master_seed": 93031,
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "structural_ids": {
+    "BOS": 2,
+    "EOS": 3,
+    "PAD": 0,
+    "FACT": 4,
+    "QUERY": 5,
+    "ANSWER": 6,
+    "SEP_alias_existing_HOLE": 7
+  },
+  "levels": {
+    "8": {
+      "prepared_training_episodes_maximum": 1024,
+      "validation_episodes": 256,
+      "logical_length": 64,
+      "valid_length": 59,
+      "prepared_training_targets_maximum": 8192,
+      "training_mapping_count": 1024,
+      "validation_mapping_count": 256,
+      "mapping_intersection": 0,
+      "episode_intersection": 0,
+      "keys_with_multiple_training_values": 256,
+      "training_episodes_with_repeated_values": 106,
+      "candidate_count_histogram": {
+        "6": 3,
+        "7": 29,
+        "8": 224
+      },
+      "validation_random_active_accuracy": 0.1275111607142857,
+      "validation_random_active_nll": 2.0609436643225445,
+      "oracle_exact_match": 1.0,
+      "single_pair_overlap_allowed": true,
+      "single_pair_overlap_count": 223
+    },
+    "16": {
+      "prepared_training_episodes_maximum": 3072,
+      "validation_episodes": 256,
+      "logical_length": 128,
+      "valid_length": 115,
+      "prepared_training_targets_maximum": 49152,
+      "training_mapping_count": 3072,
+      "validation_mapping_count": 256,
+      "mapping_intersection": 0,
+      "episode_intersection": 0,
+      "keys_with_multiple_training_values": 256,
+      "training_episodes_with_repeated_values": 1201,
+      "candidate_count_histogram": {
+        "13": 1,
+        "14": 27,
+        "15": 62,
+        "16": 166
+      },
+      "validation_random_active_accuracy": 0.06450713999542124,
+      "validation_random_active_nll": 2.7420638188172433,
+      "oracle_exact_match": 1.0,
+      "single_pair_overlap_allowed": true,
+      "single_pair_overlap_count": 2038
+    }
+  },
+  "test_status": "SEALED_NOT_ACCESSED",
+  "train_test_intersection": "NOT_CHECKED_TEST_SEALED",
+  "dataset_sha256": "ed9c3d0fdefffb187297b59a8b9dc7009d090764780a7cf900f6914f84c88e52",
+  "files": {
+    "16-query_isolated.json": "e3f2667cd4bb6ceb0fe98d6d2af02354e24d52e7db9f1fcabaa4a915411b94c8",
+    "8-train.json": "dea3c2a4c7949f70d10bc9bfba5b748986c7a5114e945c77f40d443ef8237ebe",
+    "16-train.json": "93f4ba282657288f4ee0d51c63dea95aeeeac6f308ce0d3e44430897255d22d1",
+    "8-query_isolated.json": "e49f6885fbde65a9c858285fbc94d9f194dfabdfda0ebd3743f31ab856ff6d52",
+    "8-validation.json": "5216580aa6b14328b0f6e326dc0fdb0b114b12fec7aa052b9b0ad952f08700b5",
+    "16-validation.json": "7c8305e587b058b83624ed3c58edb09f6d6a84be6533bfbc5f2fb2f09b461d84"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "pilot_train": {
+    "episodes": 512,
+    "binding_observations": 4096,
+    "unique_pairs": 3746,
+    "duplicate_observations": 350,
+    "duplicate_fraction": 0.08544921875,
+    "maximum_pair_multiplicity": 3,
+    "multiplicity_histogram": {
+      "1": 3414,
+      "2": 314,
+      "3": 18
+    },
+    "distinct_keys": 256,
+    "distinct_values": 256,
+    "content_sha256": "f4faf1f99967e0f1f1a859b2f4e8ceb3bcd4756ec3dc5ab19fa2b53fa22275e9",
+    "input_tokens": 262144,
+    "supervised_targets": 4096
+  },
+  "validation": {
+    "episodes": 64,
+    "binding_observations": 512,
+    "unique_pairs": 506,
+    "duplicate_observations": 6,
+    "duplicate_fraction": 0.01171875,
+    "maximum_pair_multiplicity": 2,
+    "multiplicity_histogram": {
+      "1": 500,
+      "2": 6
+    },
+    "distinct_keys": 225,
+    "distinct_values": 216,
+    "content_sha256": "3889b96c9c24f3861379278792aae2ae3f6529d2ecc56825edfb0859f5d1ed52",
+    "input_tokens": 32768,
+    "supervised_targets": 512
+  },
+  "status": "PASS",
+  "train_validation_pair_overlap": 0,
+  "test_status": "RESERVED_NOT_GENERATED_NOT_ACCESSED",
+  "interpretation": "4096 target observations cover3746 distinct training pairs; no independent-example claim",
+  "generalization": "Unseen pairs among shared symbols; not unseen-symbol generalization",
+  "caveat": "Modulo-three partition creates split-dependent conditional value support. Nominal binomial diagnostics are not scientific confirmation."
+}

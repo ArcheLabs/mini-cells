@@ -55,3 +55,7 @@ H5 can be SUPPORTED only when all requirements, adequate training, complete thre
 One Kaggle Notebook invocation runs cached functional SV0 checks, freezes data, runs development SV1/SV2, Pilot, budget freeze, main training and sealed Test in order. At most3 hours per session:9600 seconds experiment,600 seconds publication reserve,10800 hard cap. Resume exact-identity checkpoints from working Output or attached saved Outputs, preserve completed units, and publish reports/metrics/hash manifests through the existing isolated publisher with remote SHA verification. Missing prior Output is BLOCKED rather than silently restarting an ongoing run. Kaggle Script Version ID may remain explicitly pending until the saved version is supplied; never invent one.
 
 All new documentation, code comments and report text are English. Existing Chinese historical documents receive English addenda only. `REPORT.md` contains actual run status, not simulated science. Each implementation phase has its own commit. Raw logs, configuration and code/data/result hashes are retained. Weight files stay outside Git.
+
+## M5-SV-B0 prerequisite
+
+See [B0](b0/SPEC.md). E0 is added only in this independent calibration stage; the original SV did not contain E0. B0 uses full-Episode training and evaluation. B0-1 fixed-sample overfit and B0-2 Pilot were subject to prior engineering review. Original12M training remains blocked until a research decision following B0; no Test or M6 is authorized.

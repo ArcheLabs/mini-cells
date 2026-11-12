@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/minicells-b0-pilot/research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m5-sv/b0/pilot/run.py", line 195, in <module>
+    try:launch(args)
+        ^^^^^^^^^^^^
+  File "/tmp/minicells-b0-pilot/research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m5-sv/b0/pilot/run.py", line 121, in launch
+    if mismatches:raise ValueError('STOP: fresh initialization differs; require the validated T4 software environment; no fallback')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: STOP: fresh initialization differs; require the validated T4 software environment; no fallback
