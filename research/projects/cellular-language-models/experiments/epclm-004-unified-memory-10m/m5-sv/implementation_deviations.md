@@ -1,0 +1,26 @@
+# Implementation decisions and deviations
+
+- English SPEC.md/REPORT.md replace the requested new Chinese-named documents, following the user's latest language instruction. Historical Chinese documents are not translated or rewritten; English workflow addenda preserve their evidence.
+- No M5 source, original result or checkpoint is modified. Scoped sequential instrumentation delegates to frozen attention/scan functions, and always restores them. A thin subclass separates store_seed from model_seed and supplies an evaluation-only Oracle.
+- Oracle prioritizes ground-truth value source positions within the same bounded Store. Ground truth never enters Q/K/V, the predictor or training. Its admission priority statistics are not described as innovation distributions. Its performance is a selection diagnostic, not an answer-injection upper bound.
+- Primary retrieval is the last SWA layer's actual candidates, with every layer reported separately. This avoids an optimistic any-layer union; it does not imply lower-layer contributions are absent.
+- Test conditions are representative one-factor variations with500 Episodes each. Multi-query history is a single common snapshot; queries do not extend one another's histories. Similarity is frozen untrained embedding cosine, not semantics.
+- Pilot and main budgets are separate. Exact1M input accounting uses1953 length512 episodes plus one length64 episode shuffled once. Training uses single-query episodes; multi-query evaluation branches independently. No budget is silently rounded upward.
+- The existing constant-LR M2 fit adapter and atomic checkpoint/rollback are reused without creating a generic trainer. Its scheduler label retains the historical name constant-engineering-smoke; that label does not make the longer run a Smoke or prove adequate training.
+- Test freeze happens before Pilot, but Test is never evaluated until all three-seed training checkpoints finish. Positive preflight metrics are functional checks, not a requirement that random-weight Oracle improves answer EM. Scientific adequacy is checked later.
+- Raw M5 binary availability remains unverified outside saved Kaggle Output. Fresh SV training does not depend on Smoke checkpoint recovery. No claim of M5 permanent weight archival is made.
+- This workspace has CPU only and cannot launch Kaggle with the available credentials. Local evidence is explicitly synthetic component validation. T4 results and final H5 outcome remain pending.
+
+- Frozen M5 closes a Chunk at each forward_state call, including partial Chunks. Snapshot evaluation therefore uses an explicitly versioned history-prefill/three-token-Query boundary. It is identical for all policies and paired On/Off; it is not claimed numerically equivalent to a single concatenated training call. This inference distribution change is recorded, not silently patched in the frozen model.
+- Capacity128 is an inference intervention on Capacity64-trained weights. No additional Capacity128 training budget or parameter-matched training group is introduced.
+
+- Store RNG resets to the declared store_seed for each independent Episode, preserving the original per-Stream seeded reservoir semantics. Random positions are therefore paired within equal-length Episodes, not newly seeded per Query.
+- Auxiliary perplexity is masked synthetic Query perplexity, explicitly not WikiText or natural-language PPL. No unrelated language-model training or corpus download is added.
+
+- Query latency includes the independent snapshot fork and three-token computation, including profiling synchronization, but excludes report/digest work. Resource acceptance uses that same timing definition across arms.
+- Crossed bootstrap resamples paired training seeds and common Episode IDs shared across seeds, preserving policy pairing and repeated-Query clustering. It does not treat per-Query or cross-seed reuse of one Episode as independent new samples.
+- E3 is a historical Smoke reference only because its actual binary checkpoint is not available in the Git archive; no E3 scientific Test result is fabricated and no extra training arm is added.
+
+- Publication repair is a transport-only patch. Original experiment identity, decision/error, model/data/budget and checkpoint bytes are not migrated or changed. configs/publication-repair-source.json fixes saved Version190; it never treats190 as a Script Version ID. The normal launcher uses a new source identity; the repair entry alone republishes the existing46f17f3 run without starting it again.
+
+- Historical-source checkout now fetches and validates the exact original commit in the isolated publication clone itself. Parent-checkout verification alone is not relied on across shallow boundaries. Repeat retries compare only copied original files, excluding generated repair/publication receipts. No scientific functions, configuration or data change in this correction.
