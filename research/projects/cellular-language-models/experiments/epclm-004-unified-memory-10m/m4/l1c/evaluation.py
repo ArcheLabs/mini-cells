@@ -5,7 +5,7 @@ import time
 import torch
 from torch.nn import functional as F
 
-from model import A_LENGTH, cell_hash
+from context_model import A_LENGTH, cell_hash
 from adapter import load_session,save_session,tensor_digest
 from data import digest
 from e0 import write

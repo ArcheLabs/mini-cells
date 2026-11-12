@@ -10,9 +10,9 @@ import torch
 
 from l1c import (MASKS,P,TRAIN,build,gradient_probe,train_sessions,expected_order,
                  frozen_hash,load_checkpoint,tensor_digest,write)
-from dataset import CONFIG,bank,render
+from l1c_data import CONFIG,bank,render
 from evaluation import input_batch,at_query,persist,restore,evaluate_batch
-from model import cell_hash
+from context_model import cell_hash
 from adapter import save_checkpoint
 
 

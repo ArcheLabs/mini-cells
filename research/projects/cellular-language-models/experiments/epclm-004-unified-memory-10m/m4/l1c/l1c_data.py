@@ -3,7 +3,7 @@ from dataclasses import replace
 
 import numpy as np
 
-from model import A_LENGTH,B_LENGTH
+from context_model import A_LENGTH,B_LENGTH
 from data import ANSWER,BOS,FACT,HOLE,QUERY,MQARConfig,digest,episode
 
 CONFIG=MQARConfig(bindings=16,length=512,queries=8,interference=1.,seed=51001,

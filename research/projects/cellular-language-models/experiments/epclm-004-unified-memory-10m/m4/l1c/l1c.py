@@ -12,9 +12,9 @@ import time
 import numpy as np
 import torch
 
-from model import BASE, Contextual, MASKS, A_LENGTH, B_LENGTH
+from context_model import BASE, Contextual, MASKS, A_LENGTH, B_LENGTH
 from adapter import M4, frozen_hash, tensor_digest
-from dataset import bank
+from l1c_data import bank
 from evaluation import evaluate_batch,persist,restore
 from data import batch,digest,file_hash
 from e0 import ROOT,Sampler,load_checkpoint,masked_loss,write
@@ -109,6 +109,8 @@ def predict_profile(rows,model):
 
 def identity_for(data):
     identity=source_identity()
+    identity["base_main"]="99aff2b"
+    identity["historical_l1_result"]="cc46f0911ea00a5f42d0013b3a321014b397fdfc"
     identity['config_sha256']=digest([P,S,TRAIN])
     identity['dataset_sha256']=digest(data)
     assert identity['tokenizer_sha256']==S['tokenizer_sha256']
