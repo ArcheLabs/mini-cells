@@ -1,0 +1,20 @@
+{
+  "config": {
+    "model": {
+      "vocab": 8192,
+      "dim": 256,
+      "layers": 18,
+      "heads": 4,
+      "kv_heads": 4,
+      "ffn": 704,
+      "window": 32
+    },
+    "state_size": 20
+  },
+  "expansion": 2,
+  "convolution": 4,
+  "tied_output": true,
+  "swa": false,
+  "state_summary": false,
+  "attention_kv": false
+}
