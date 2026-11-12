@@ -69,7 +69,7 @@ def trial(model,row,identity,folder):
         sync(model)
         pred=logits.argmax(-1)
         hits=pred.eq(x['targets'])
-        results[name]=dict(recall=float(hits.float().mean()),exact=float(hits.all()),
+        results[name]=dict(recall=float(hits.float().mean()),exact=float(hits.float().mean()),episode_exact=float(hits.all()),
                            nll=float(F.cross_entropy(logits.flatten(0,1),x['targets'].flatten())),
                            predictions=pred[0].tolist(),targets=x['targets'][0].tolist(),
                            query_seconds=time.perf_counter()-start,import_seconds=import_seconds,
@@ -131,7 +131,7 @@ def lifecycle(model,row,identity,folder):
 def compare(banks):
     rng=np.random.default_rng(P['bootstrap_seed'])
     result={}
-    for metric in ('recall','exact','nll'):
+    for metric in ('recall','exact','episode_exact','nll'):
         vals=np.array([[[row['conditions'][c][metric] for row in rows] for rows in banks.values()]
                        for c in CONDITIONS])
         means=vals.mean((1,2))

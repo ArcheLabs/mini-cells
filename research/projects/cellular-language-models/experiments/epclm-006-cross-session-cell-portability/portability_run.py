@@ -14,7 +14,7 @@ from portable_model import BASE,EP4,P,PortableModel
 from portability_data import datasets
 from cell_artifact import compatibility
 from harness import compare,lifecycle,trial,tensors,sync
-from preflight import TRAIN,checks,gradient,prepare_restore,fresh_process
+from portability_preflight import TRAIN,checks,gradient,prepare_restore,fresh_process
 from e0 import ROOT,Sampler,load_checkpoint,write
 from data import digest,file_hash
 from training import fit
@@ -27,7 +27,7 @@ def git(*args):
 
 
 def source_identity():
-    modules=('portable_model','portability_data','cell_artifact','preflight','harness','baselines',
+    modules=('portable_model','portability_data','cell_artifact','portability_preflight','harness','baselines',
              'memory','data','e0','training','cached_transformer','native_clm_runtime','trainer')
     paths=[Path(sys.modules[name].__file__).resolve() for name in modules]
     paths += [BASE/'config.json',Path(__file__),EP4/'m2/configs/protocol.json',
@@ -142,7 +142,13 @@ def run(out,started):
         raise RuntimeError('BLOCKED_RESOURCE_LIMIT')
     model=PortableModel().cuda()
     torch.manual_seed(P['model_seed'])
-    fit_result=fit(model,train,val,TRAIN,out/'training',identity,deadline)
+    metrics_path=out/'training/metrics.json'
+    existing=json.loads(metrics_path.read_text()) if metrics_path.exists() else {}
+    if existing.get('status')=='COMPLETE':
+        assert file_hash(out/'training/checkpoint.pt')==existing['checkpoint']['sha256']
+        fit_result=existing
+    else:
+        fit_result=fit(model,train,val,TRAIN,out/'training',identity,deadline)
     ledger=fit_result['ledger']
     assert fit_result['status']=='COMPLETE'
     assert (ledger['committed_updates'],ledger['input_tokens'],ledger['query_target_tokens'])==(
@@ -193,7 +199,7 @@ def run(out,started):
     primary=analysis['exact']
     contrasts=[primary[key] for key in ('C1-C0','C1-C2')]
     signal='INCONCLUSIVE' if len(analysis['argmax_counts']['C1'])==1 else (
-        'POSITIVE_PORTABILITY_SIGNAL' if all(c['mean']>=P['minimum_gain'] and c['ci95'][0]>0 for c in contrasts)
+        'POSITIVE_SCREENING_SIGNAL' if all(c['mean']>=P['minimum_gain'] and c['ci95'][0]>0 for c in contrasts)
         else 'NO_POSITIVE_SIGNAL')
     resources=dict(training=fit_result['training_peak_allocated_bytes'],
                    evaluation_peak_allocated_bytes=torch.cuda.max_memory_allocated(),
@@ -219,7 +225,7 @@ def run(out,started):
            '| 条件 | Query Recall@1 | Episode Exact Match | NLL |','|---|---:|---:|---:|']
     for c in primary['conditions']:
         lines.append(f"| {c} | {analysis['recall']['conditions'][c]:.2%} | "
-                     f"{primary['conditions'][c]:.2%} | {analysis['nll']['conditions'][c]:.4f} |")
+                     f"{analysis['episode_exact']['conditions'][c]:.2%} | {analysis['nll']['conditions'][c]:.4f} |")
     lines+=['','C1−C0 和 C1−C2 的配对区间见 comparison.json。C3 保留创建者上下文。'
             'C2 记录无关 Cell 的召回。任务未定义显式拒答 Token。资源和恢复证据另存。']
     (out/'REPORT.zh-CN.md').write_text('\n'.join(lines)+'\n')

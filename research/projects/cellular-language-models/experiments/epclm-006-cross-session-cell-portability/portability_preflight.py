@@ -68,11 +68,13 @@ def prepare_restore(out,model,row,identity,expected):
     x=tensors(model,row)
     payload=dict(target=x['target_ids'].cpu(),packets=x['query_packets'].cpu(),expected=expected.cpu())
     with torch.no_grad():
-        first,rt=model.backbone.cached(x['target_ids'][:,:16])
+        _,rt=model.backbone.cached(x['target_ids'][:,:16])
         tail,_=model.backbone.cached(x['target_ids'][:,16:],rt)
-        payload.update(mamba={k:tuple(t.cpu() for t in v) for k,v in rt.mamba_state.items()},
-                       kv={k:tuple(t.cpu() for t in v) for k,v in rt.kv_cache.items()},
-                       position=rt.position,expected_tail=tail.cpu())
+        payload.update(position=rt.position,expected_tail=tail.cpu())
+        for name,group in [('mamba',rt.mamba_state),('swa',rt.kv_cache)]:
+            path=out/f'target-{name}.pt'
+            save_checkpoint({k:tuple(t.cpu() for t in v) for k,v in group.items()},path)
+            payload[name+'_sha256']=file_hash(path)
     save_checkpoint(payload,out/'restore-input.pt')
     write(out/'restore-identity.json',identity)
 
@@ -93,8 +95,12 @@ def restore_check(out,device,fixture,checkpoint):
     torch.testing.assert_close(actual,data['expected'],**P['tolerance'])
     assert state_hash(cell)==before
     backbone=model.backbone
-    moved=lambda group:{k:tuple(t.to(device) for t in pair) for k,pair in group.items()}
-    runtime=Runtime(id(backbone),data['position'],moved(data['mamba']),moved(data['kv']),backbone._version())
+    groups={}
+    for name in ('mamba','swa'):
+        path=out/f'target-{name}.pt'
+        assert file_hash(path)==data[name+'_sha256']
+        groups[name]={k:tuple(t.to(device) for t in pair) for k,pair in load_checkpoint(path).items()}
+    runtime=Runtime(id(backbone),data['position'],groups['mamba'],groups['swa'],backbone._version())
     tail,_=backbone.cached(data['target'][:,16:].to(device),runtime)
     torch.testing.assert_close(tail.cpu(),data['expected_tail'],**P['tolerance'])
     write(out/'fresh-restore.json',dict(status='PASS',pid=os.getpid(),
