@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "reader_pid": 5468,
+  "writer_pid": 5430,
+  "restored": [
+    "a",
+    "b",
+    "a1",
+    "a2"
+  ],
+  "negative": [
+    {
+      "case": "missing_cell",
+      "error": "[Errno 2] No such file or directory: '/tmp/p4-m2-check/negative/missing_cell/manifest.json'"
+    },
+    {
+      "case": "missing_component",
+      "error": "[Errno 2] No such file or directory: '/tmp/p4-m2-check/negative/missing_component/3859af1e45f84594a9ad566e6de6957e/fast_weights.pt'"
+    },
+    {
+      "case": "manifest_hash",
+      "error": "Manifest hash mismatch"
+    },
+    {
+      "case": "bad_manifest",
+      "error": "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+    },
+    {
+      "case": "corrupt_tensor",
+      "error": "could not find MARK"
+    },
+    {
+      "case": "component_hash",
+      "error": "Component hash mismatch"
+    },
+    {
+      "case": "architecture",
+      "error": "Architecture mismatch"
+    },
+    {
+      "case": "interface",
+      "error": "Static interface mismatch"
+    },
+    {
+      "case": "shape",
+      "error": "Shape or dtype mismatch"
+    },
+    {
+      "case": "dtype",
+      "error": "Shape or dtype mismatch"
+    }
+  ],
+  "torch": "2.6.0+cpu",
+  "device": "cpu",
+  "manifest_sha256": "d6440c6c805444f8410aa2571003ce2c34a66e11919c2c7bab42fcf24c4cb20f"
+}
