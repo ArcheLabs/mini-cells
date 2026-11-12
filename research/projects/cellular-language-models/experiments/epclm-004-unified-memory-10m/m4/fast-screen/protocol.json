@@ -1,0 +1,15 @@
+{
+  "level": "L1",
+  "mqar": {"bindings":16,"length":512,"queries":8,"interference":1.0,"seed":51001,"regime":"unseen_pairs"},
+  "model_seed":51017,
+  "train_episodes":128,
+  "validation_episodes":32,
+  "evaluation_seeds":[61001,61002,61003],
+  "evaluation_episodes_per_seed":64,
+  "bootstrap_seed":71001,
+  "bootstrap_replicates":10000,
+  "minimum_practical_gain":0.03,
+  "cache_tolerance":{"atol":0.00002,"rtol":0.00002},
+  "execution_seconds":9600,
+  "session_seconds":10500
+}

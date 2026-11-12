@@ -1,0 +1,226 @@
+{
+  "format": "minicells.b0-p2.index.v1",
+  "status": "DEVELOPMENT_PILOT_COMPLETE",
+  "manifest": {
+    "source_commit": "fe31d2695675eec1c33b09c70f681dd331a07782",
+    "protocol_template_sha256": "230c56ace9bb5a321187b3186a0522a2b53cd9dba8069ae48c6de7934fa15f26",
+    "dataset_sha256": "d2d01b6829909ecb10ee7045009085c2269d9dee7f20f072e6c8c141c28279ee",
+    "environment_sha256": "088dbbab9607cc168d913d5f601652be10348da062b0025e7ad7e6930f8e8b33",
+    "run_id": "b0-p2-summary-cf170dd15bb79ae3fc9d",
+    "phase": "b0-p2-summary"
+  },
+  "artifact": {
+    "arms": {
+      "E0": {
+        "publication_status": "VERIFIED",
+        "run_id": "b0-p2-e0-2993a008267e653c7f92",
+        "artifact_id": 730823785,
+        "download_url": "https://github.com/ArcheLabs/mini-cells/releases/download/b0-p2-e0-2993a008267e653c7f92/bundle.tar.gz",
+        "release_url": "https://github.com/ArcheLabs/mini-cells/releases/tag/b0-p2-e0-2993a008267e653c7f92",
+        "sha256": "8a1a75ab0af096f22f7856a75ee72818285f769339225c6b637fa4da32593d9c",
+        "bytes": 306490731,
+        "files_verified": 55,
+        "retention": "GitHub Release; retained until explicitly removed, not an expiring Actions artifact"
+      },
+      "E6": {
+        "publication_status": "VERIFIED",
+        "run_id": "b0-p2-e6-1fe1e18770a69dd0774d",
+        "artifact_id": 730927928,
+        "download_url": "https://github.com/ArcheLabs/mini-cells/releases/download/b0-p2-e6-1fe1e18770a69dd0774d/bundle.tar.gz",
+        "release_url": "https://github.com/ArcheLabs/mini-cells/releases/tag/b0-p2-e6-1fe1e18770a69dd0774d",
+        "sha256": "68e7b3b1cf7cc97adc655845a8d402599f0c58d71dc3c205600a81e065a4e15b",
+        "bytes": 305381920,
+        "files_verified": 55,
+        "retention": "GitHub Release; retained until explicitly removed, not an expiring Actions artifact"
+      },
+      "E7-Innovation": {
+        "publication_status": "VERIFIED",
+        "run_id": "b0-p2-e7-innovation-7eb46dd6fd8871691630",
+        "artifact_id": 731056423,
+        "download_url": "https://github.com/ArcheLabs/mini-cells/releases/download/b0-p2-e7-innovation-7eb46dd6fd8871691630/bundle.tar.gz",
+        "release_url": "https://github.com/ArcheLabs/mini-cells/releases/tag/b0-p2-e7-innovation-7eb46dd6fd8871691630",
+        "sha256": "b203865874e161ad2afb447e009172f0fa063f8c8b39c597e8cc119af7fe5543",
+        "bytes": 306898582,
+        "files_verified": 55,
+        "retention": "GitHub Release; retained until explicitly removed, not an expiring Actions artifact"
+      }
+    }
+  },
+  "independent_verification": {
+    "paired_analysis": {
+      "E6 minus E0": {
+        "metrics": {
+          "exact_match": {
+            "mean_difference": 0.0,
+            "episode_bootstrap_95ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "nll": {
+            "mean_difference": 0.004657388960279896,
+            "episode_bootstrap_95ci": [
+              -0.0034201512163199986,
+              0.012583616366941728
+            ]
+          },
+          "type_nll": {
+            "mean_difference": 0.00048775851591225695,
+            "episode_bootstrap_95ci": [
+              0.0004816228032097199,
+              0.0004936699678799105
+            ]
+          },
+          "conditional_nll": {
+            "mean_difference": 0.004169630444367536,
+            "episode_bootstrap_95ci": [
+              -0.003792767106141675,
+              0.012353433282199726
+            ]
+          }
+        },
+        "episodes": 64,
+        "seed_count": 1
+      },
+      "E7-Innovation minus E6": {
+        "metrics": {
+          "exact_match": {
+            "mean_difference": 0.0,
+            "episode_bootstrap_95ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "nll": {
+            "mean_difference": -0.0029394060547512785,
+            "episode_bootstrap_95ci": [
+              -0.007918385754307157,
+              0.002172420713630229
+            ]
+          },
+          "type_nll": {
+            "mean_difference": 8.5518066852747e-05,
+            "episode_bootstrap_95ci": [
+              7.808799471679109e-05,
+              9.279763061403536e-05
+            ]
+          },
+          "conditional_nll": {
+            "mean_difference": -0.003024924121603878,
+            "episode_bootstrap_95ci": [
+              -0.007628414789255915,
+              0.0018142549372556856
+            ]
+          }
+        },
+        "episodes": 64,
+        "seed_count": 1
+      },
+      "E7-Innovation minus E0": {
+        "metrics": {
+          "exact_match": {
+            "mean_difference": 0.0,
+            "episode_bootstrap_95ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "nll": {
+            "mean_difference": 0.0017179829055286172,
+            "episode_bootstrap_95ci": [
+              -0.006145286803385358,
+              0.009604405406617327
+            ]
+          },
+          "type_nll": {
+            "mean_difference": 0.000573276582765004,
+            "episode_bootstrap_95ci": [
+              0.0005604676722766704,
+              0.0005845322532887335
+            ]
+          },
+          "conditional_nll": {
+            "mean_difference": 0.0011447063227636584,
+            "episode_bootstrap_95ci": [
+              -0.007239591553793389,
+              0.009119845211411515
+            ]
+          }
+        },
+        "episodes": 64,
+        "seed_count": 1
+      }
+    },
+    "gpu_budget": {
+      "charged_seconds": 4922.42444932,
+      "phases": [
+        {
+          "action": "benchmark",
+          "arm": "E0",
+          "started_epoch": 1794301913.1891227,
+          "elapsed_seconds": 19.271839617000012,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "benchmark",
+          "arm": "E6",
+          "started_epoch": 1794301932.4617603,
+          "elapsed_seconds": 97.71914942900003,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "benchmark",
+          "arm": "E7-Innovation",
+          "started_epoch": 1794302030.1817884,
+          "elapsed_seconds": 118.26935447100004,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "train",
+          "arm": "E0",
+          "started_epoch": 1794302148.7776184,
+          "elapsed_seconds": 123.94159077500001,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "verify",
+          "arm": "E0",
+          "started_epoch": 1794302517.3554728,
+          "elapsed_seconds": 14.407262999000068,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "train",
+          "arm": "E6",
+          "started_epoch": 1794302559.745813,
+          "elapsed_seconds": 2040.6605388080002,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "verify",
+          "arm": "E6",
+          "started_epoch": 1794304857.988361,
+          "elapsed_seconds": 82.87088382999991,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "train",
+          "arm": "E7-Innovation",
+          "started_epoch": 1794304968.7415915,
+          "elapsed_seconds": 2325.835682688,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "verify",
+          "arm": "E7-Innovation",
+          "started_epoch": 1794307558.082143,
+          "elapsed_seconds": 99.44814670300002,
+          "status": "COMPLETE"
+        }
+      ],
+      "status": "WITHIN_LIMIT"
+    }
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "test_accessed": false
+}
