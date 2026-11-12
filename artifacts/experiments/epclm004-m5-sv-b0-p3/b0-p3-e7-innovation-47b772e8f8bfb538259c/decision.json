@@ -1,0 +1,112 @@
+{
+  "format": "minicells.b0-p3.index.v1",
+  "manifest": {
+    "experiment": "B0-P3",
+    "source_commit": "266dc1a868d135626079d8188321ae8dfb0db60e",
+    "template_sha256": "73caf4aed969d4712e53af8ca945936442898e9ae19770f19d127ebec50ca6e2",
+    "dataset_sha256": "ed9c3d0fdefffb187297b59a8b9dc7009d090764780a7cf900f6914f84c88e52",
+    "environment_sha256": "088dbbab9607cc168d913d5f601652be10348da062b0025e7ad7e6930f8e8b33",
+    "phase": "b0-p3",
+    "arm": "E7-Innovation",
+    "model_seed": 75043,
+    "protocol_sha256": "af7b8de0796ba3ae039af8a004e1c822bf705ea7540ecabb9002a55c946245fe",
+    "config_sha256": "893c7db2f9539c8f000c3f7ff3650c86af00a58066e100ae013209b80217b853",
+    "initialization_sha256": "e2fdcb122fdf341ed102d5fb1279b9b1582ea7df6396efc902c111157009121c",
+    "logical_batch_size": 8,
+    "historical_weights_loaded": false,
+    "planned_stage_updates": {
+      "1": 128,
+      "2": 384
+    },
+    "planned_logical_input_slots_per_arm": 458752,
+    "planned_supervised_targets_per_arm": 57344,
+    "run_id": "b0-p3-e7-innovation-47b772e8f8bfb538259c"
+  },
+  "artifact": {
+    "publication_status": "VERIFIED",
+    "run_id": "b0-p3-e7-innovation-47b772e8f8bfb538259c",
+    "artifact_id": 731929143,
+    "download_url": "https://github.com/ArcheLabs/mini-cells/releases/download/b0-p3-e7-innovation-47b772e8f8bfb538259c/bundle.tar.gz",
+    "release_url": "https://github.com/ArcheLabs/mini-cells/releases/tag/b0-p3-e7-innovation-47b772e8f8bfb538259c",
+    "sha256": "5a687d58424817d7b7a7789e33d2c6c4b5ea94a53f7225fd3303137daef15e0c",
+    "bytes": 187122178,
+    "files_verified": 69,
+    "retention": "GitHub Release; retained until explicitly removed, not an expiring Actions artifact"
+  },
+  "verification": {
+    "download": {
+      "status": "PASS",
+      "sha256": "5a687d58424817d7b7a7789e33d2c6c4b5ea94a53f7225fd3303137daef15e0c",
+      "bytes": 187122178,
+      "files_verified": 69,
+      "scope": "All archived files, including checkpoint/probabilities/metrics/report; no trusted status substitution"
+    },
+    "payload": {
+      "status": "PASS",
+      "stages": [
+        1
+      ],
+      "global_steps": 128,
+      "test_comparison": "NOT_CHECKED_TEST_SEALED"
+    },
+    "restore": {
+      "status": "PASS",
+      "stages": {
+        "1": {
+          "status": "PASS",
+          "checkpoint_sha256": "0cad1365830a638587e365e1064fe844c60d6793341102076de22d8757ee2efe",
+          "probability_log_max_abs_error": {
+            "full_log_probabilities": 0.0,
+            "value_log_probabilities": 0.0,
+            "candidate_log_probabilities": 0.0
+          },
+          "tolerance": 2e-05
+        }
+      },
+      "new_optimizer_updates": 0,
+      "test_accessed": false
+    },
+    "stage1_gate": "BLOCKED",
+    "stage2_started": false,
+    "charged_worker_phases": [
+      {
+        "action": "benchmark1",
+        "arm": "E7-Innovation",
+        "started_epoch": 1794323880.8323493,
+        "elapsed_seconds": 22.572704338999984,
+        "status": "COMPLETE"
+      },
+      {
+        "action": "benchmark2",
+        "arm": "E7-Innovation",
+        "started_epoch": 1794323903.4066272,
+        "elapsed_seconds": 37.268293137,
+        "status": "COMPLETE"
+      },
+      {
+        "action": "stage1",
+        "arm": "E7-Innovation",
+        "started_epoch": 1794324077.2011266,
+        "elapsed_seconds": 129.27383541899997,
+        "status": "COMPLETE"
+      },
+      {
+        "action": "isolated1",
+        "arm": "E7-Innovation",
+        "started_epoch": 1794324233.6963177,
+        "elapsed_seconds": 9.388494541,
+        "status": "COMPLETE"
+      },
+      {
+        "action": "verify",
+        "arm": "E7-Innovation",
+        "started_epoch": 1794324771.2895024,
+        "elapsed_seconds": 20.87197566399982,
+        "status": "COMPLETE"
+      }
+    ],
+    "independent_worker_log": ""
+  },
+  "test_status": "SEALED_NOT_ACCESSED",
+  "hypotheses": "NOT_EVALUATED"
+}
