@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "device": "cuda",
+  "e3_parameters": 10135808,
+  "backbone": {
+    "full_cached_max_abs": 3.762543201446533e-06,
+    "i0_i1_max_abs": 3.4698071479797363,
+    "window_tokens": 32,
+    "isolated_streams": true,
+    "causal": true,
+    "mamba_bytes": 196608,
+    "swa_bytes": 262144
+  },
+  "gradient_paths": {
+    "memory.key.weight": 0.030148416757583618,
+    "memory.value.weight": 0.02221715822815895,
+    "memory.query.weight": 0.46452218294143677,
+    "memory.initial.w1": 0.0037118885666131973
+  },
+  "fixture_ledger": null,
+  "lifecycle": {
+    "status": "PASS",
+    "replacement": "PASS",
+    "failed_replacement_preserved": true,
+    "fork": "PASS",
+    "unload": "PASS",
+    "delete_local_copy": "PASS",
+    "existing_session_state_retained": {
+      "mamba_bytes": 1024,
+      "swa_bytes": 4096
+    },
+    "replaced_argmax": [
+      [
+        38,
+        827,
+        582,
+        506
+      ]
+    ]
+  },
+  "fresh_restore": {
+    "status": "PASS",
+    "pid": 73,
+    "cell_output_max_abs": 0.0,
+    "session_output_max_abs": 0.0
+  },
+  "official_updates": 0
+}
