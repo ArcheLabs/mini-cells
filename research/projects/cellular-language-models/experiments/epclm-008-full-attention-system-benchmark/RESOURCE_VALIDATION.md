@@ -10,9 +10,10 @@ next-token targets. OOM is recorded at the requested length.
 Recovery compares the next committed update after fresh-process restore
 against uninterrupted execution at length 1024. The archive includes the
 interruption checkpoints. GitHub receives reports and the execution log.
-The saved Kaggle Output contains the weight archive. Durable remote
-archive readback and saved-version identity backfill remain separate
-verification steps if Kaggle does not expose the version ID at runtime.
+The saved Kaggle Output contains the weight archive. The notebook also uploads
+the archive as a GitHub Release asset and verifies downloaded bytes before
+publishing the decision. If Kaggle omits the saved-version ID, the report records
+a null ID pending backfill from the actual saved version.
 
 ## Exact History proposed defaults for review
 
