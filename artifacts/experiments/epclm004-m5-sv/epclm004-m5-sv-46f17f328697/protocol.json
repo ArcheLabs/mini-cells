@@ -1,0 +1,263 @@
+{
+  "format": "minicells.m5-sv.protocol.v1",
+  "model": {
+    "vocab": 8192,
+    "dim": 256,
+    "layers": 8,
+    "heads": 4,
+    "kv_heads": 4,
+    "ffn": 816,
+    "window": 32
+  },
+  "state_size": 20,
+  "summary_tokens": 4,
+  "chunk": 32,
+  "capacity": 64,
+  "capacity_tiers": [
+    64,
+    128
+  ],
+  "read_top_k": 8,
+  "predictor_beta": 0.875,
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "arms": {
+    "E6": null,
+    "E7-Random": "random",
+    "E7-FIFO": "fifo",
+    "E7-Innovation": "innovation"
+  },
+  "seeds": [
+    {
+      "model_seed": 51017,
+      "data_seed": 62017,
+      "store_seed": 72017
+    },
+    {
+      "model_seed": 51031,
+      "data_seed": 62031,
+      "store_seed": 72031
+    },
+    {
+      "model_seed": 51047,
+      "data_seed": 62047,
+      "store_seed": 72047
+    }
+  ],
+  "split_seeds": {
+    "validation": 83021,
+    "test": 93031
+  },
+  "conditions": [
+    {
+      "name": "length-256",
+      "length": 256,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "length-512",
+      "length": 512,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "length-2048",
+      "length": 2048,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "length-8192",
+      "length": 8192,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "length-16384",
+      "length": 16384,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "bindings-16",
+      "length": 512,
+      "bindings": 16,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "bindings-32",
+      "length": 512,
+      "bindings": 32,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "bindings-64",
+      "length": 512,
+      "bindings": 64,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "queries-8",
+      "length": 512,
+      "bindings": 32,
+      "queries": 8,
+      "interference": 1.0
+    },
+    {
+      "name": "queries-32",
+      "length": 512,
+      "bindings": 32,
+      "queries": 32,
+      "interference": 1.0
+    },
+    {
+      "name": "interference-0.0",
+      "length": 512,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 0.0
+    },
+    {
+      "name": "interference-0.5",
+      "length": 512,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 0.5
+    },
+    {
+      "name": "key-similarity-low",
+      "length": 512,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 1.0,
+      "similarity": "low"
+    },
+    {
+      "name": "key-similarity-high",
+      "length": 512,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 1.0,
+      "similarity": "high"
+    },
+    {
+      "name": "repeated-values",
+      "length": 512,
+      "bindings": 8,
+      "queries": 1,
+      "interference": 1.0,
+      "repeat": true
+    },
+    {
+      "name": "delay-16",
+      "length": 20,
+      "bindings": 1,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "delay-32",
+      "length": 36,
+      "bindings": 1,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "delay-64",
+      "length": 68,
+      "bindings": 1,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "delay-256",
+      "length": 260,
+      "bindings": 1,
+      "queries": 1,
+      "interference": 1.0
+    },
+    {
+      "name": "delay-512",
+      "length": 516,
+      "bindings": 1,
+      "queries": 1,
+      "interference": 1.0
+    }
+  ],
+  "test_episodes_per_condition": 500,
+  "validation_episodes": 16,
+  "pilot": {
+    "model_seed": 50003,
+    "data_seed": 61003,
+    "store_seed": 71003,
+    "input_tokens_per_arm": 16384,
+    "min_validation_nll_improvement": 0.02,
+    "min_correct_validation_queries": 2
+  },
+  "training": {
+    "input_tokens_per_arm_per_seed": 1000000,
+    "total_input_tokens": 12000000,
+    "length": 512,
+    "batch": 1,
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "precision": "fp32",
+    "tf32": false,
+    "optimizer": "AdamW",
+    "scheduler": "constant-engineering-smoke",
+    "checkpoint": {
+      "every_updates": 64,
+      "every_seconds": 120
+    },
+    "curve_fractions": [
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ]
+  },
+  "decision": {
+    "coverage_min_difference": 0.05,
+    "utility_min_delta_em": 0.02,
+    "confidence": 0.95,
+    "bootstrap_draws": 2000,
+    "bootstrap_seed": 83101,
+    "max_query_latency_ratio_vs_e6": 2.0,
+    "max_added_dynamic_bytes_vs_e6": 2097152,
+    "validation_stability_nll_tolerance": 0.01,
+    "validation_stability_em_tolerance": 0.01,
+    "minimum_seeds": 3,
+    "m6_authorized": false,
+    "primary_long_conditions": [
+      "length-2048",
+      "length-8192",
+      "length-16384",
+      "delay-256",
+      "delay-512"
+    ],
+    "main_min_validation_correct": 2,
+    "main_min_validation_nll_improvement": 0.02
+  },
+  "budget": {
+    "execution_seconds": 9600,
+    "publication_reserve_seconds": 600,
+    "hard_seconds": 10800,
+    "evaluation_pause_before_seconds": 90
+  },
+  "test_policy": "Hash before Pilot; evaluate only after all four arms for all three seeds finish. Never tune on Test.",
+  "scope": "Diagnostic scientific validation, not M6 confirmation",
+  "inference_boundary": "Frozen M5 explicit history-prefill call, then a separate three-token query call; identical boundaries for every policy and On/Off pair. Not claimed numerically equivalent to a concatenated training call."
+}
