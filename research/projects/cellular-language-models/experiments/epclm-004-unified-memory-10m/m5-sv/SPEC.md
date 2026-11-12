@@ -1,7 +1,3 @@
-# Historical M5-SV specification and B0 addendum
-
-The following historical specification is preserved from research source46f17f3; it was not present on audited main. Its old execution path is not authorized by this delivery.
-
 # EPCLM-004 M5-SV — Scientific Validation, v0.1
 
 ## Scope and evidence boundary
@@ -62,4 +58,4 @@ All new documentation, code comments and report text are English. Existing Chine
 
 ## M5-SV-B0 prerequisite
 
-See [B0](b0/SPEC.md). E0 is added only in this independent calibration stage; the original SV did not contain E0. B0 uses full-Episode training and evaluation. B0-1 fixed-sample overfit and B0-2 Pilot require prior engineering review. Original12M training remains blocked until a research decision following B0; no Test or M6 is authorized.
+See [B0](b0/SPEC.md). E0 is added only in this independent calibration stage; the original SV did not contain E0. B0 uses full-Episode training and evaluation. B0-1 fixed-sample overfit and B0-2 Pilot were subject to prior engineering review. Original12M training remains blocked until a research decision following B0; no Test or M6 is authorized.

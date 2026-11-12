@@ -102,6 +102,17 @@ E2/E3 必须在真实 Mamba 模块可实例化后计数；E4/E5 必须纳入 Mem
 
 M0 没有依赖阻塞：审计已完成。上述项目属于进入相应后续里程碑前需要解决的实现与实验设计问题。
 
-## M5-SV-B0 — Current independent engineering stage
+## 8. M5-SV Scientific Validation — current implementation addendum
 
-Audited main: ce9f190. See [B0 specification and actual report](../m5-sv/b0/REPORT.md). B0.1 reuses E0; B0.2 unifies full-Episode interfaces; B0.3 audits Chunk semantics; B0.4 fixed-sample overfit and B0.5 Learnability Pilot remain unexecuted pending engineering review; B0.6 requires research-owner interpretation. Original12M training, Test evaluation and M6 remain unauthorized. Historical M0 records above are preserved.
+Status: IMPLEMENTED_CPU_VALIDATED_T4_PENDING; actual T4 scientific validation is pending.
+The historical M0 audit above is preserved. The archived M5 result reports Gates0–7
+passed, with only two updates per arm. This is engineering completion, not H5 support.
+M5-SV runs SV0 Protocol Audit, SV1 Innovation Validity, SV2 Retrieval and Utilization,
+and SV3 Independent Evaluation. See [SPEC](../m5-sv/SPEC.md) and
+[baseline audit](../m5-sv/audit/m5-baseline-audit.md). All results must come from real
+execution; no mock recall or historical Smoke can replace independent validation.
+M6 cannot launch automatically and requires completion of M5-SV first.
+
+## M5-SV-B0 — Independent engineering stage
+
+Audited main: ce9f190. See [B0 specification and actual report](../m5-sv/b0/REPORT.md). B0.1 reuses E0; B0.2 unifies full-Episode interfaces; B0.3 audits Chunk semantics; B0.4 fixed-sample overfit and B0.5 Learnability Pilot were initially held pending engineering review; B0.6 requires research-owner interpretation. Original12M training, Test evaluation and M6 remain unauthorized. Historical M0 records above are preserved.
