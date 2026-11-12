@@ -1,0 +1,68 @@
+{
+  "protocol": {
+    "level": "L1",
+    "mqar": {
+      "bindings": 16,
+      "length": 512,
+      "queries": 8,
+      "interference": 1.0,
+      "seed": 51001,
+      "regime": "unseen_pairs"
+    },
+    "model_seed": 51017,
+    "train_episodes": 128,
+    "validation_episodes": 32,
+    "evaluation_seeds": [
+      61001,
+      61002,
+      61003
+    ],
+    "evaluation_episodes_per_seed": 64,
+    "bootstrap_seed": 71001,
+    "bootstrap_replicates": 10000,
+    "minimum_practical_gain": 0.03,
+    "cache_tolerance": {
+      "atol": 2e-05,
+      "rtol": 2e-05
+    },
+    "execution_seconds": 9600,
+    "session_seconds": 10500
+  },
+  "model": {
+    "vocab": 8192,
+    "dim": 256,
+    "layers": 5,
+    "heads": 4,
+    "kv_heads": 4,
+    "ffn": 664,
+    "window": 32
+  },
+  "fusion": {
+    "ssm_layers": 8,
+    "state_size": 20,
+    "memory_dim": 32,
+    "memory_hidden": 64,
+    "chunk": 16,
+    "seed": 51017
+  },
+  "training": {
+    "seed": 51017,
+    "batch": 4,
+    "lr": 0.0003,
+    "updates": 32,
+    "precision": "fp32",
+    "tf32": false,
+    "optimizer": "AdamW",
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "scheduler": "constant-engineering-smoke",
+    "checkpoint": {
+      "every_updates": 8,
+      "every_seconds": 120
+    }
+  }
+}

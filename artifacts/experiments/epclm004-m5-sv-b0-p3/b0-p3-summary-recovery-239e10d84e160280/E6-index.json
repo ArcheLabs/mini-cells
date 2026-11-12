@@ -1,0 +1,115 @@
+{
+  "revision": "d18084db64498c0ebf5e714ee2e175c894293fac",
+  "index": {
+    "format": "minicells.b0-p3.index.v1",
+    "manifest": {
+      "experiment": "B0-P3",
+      "source_commit": "266dc1a868d135626079d8188321ae8dfb0db60e",
+      "template_sha256": "73caf4aed969d4712e53af8ca945936442898e9ae19770f19d127ebec50ca6e2",
+      "dataset_sha256": "ed9c3d0fdefffb187297b59a8b9dc7009d090764780a7cf900f6914f84c88e52",
+      "environment_sha256": "088dbbab9607cc168d913d5f601652be10348da062b0025e7ad7e6930f8e8b33",
+      "phase": "b0-p3",
+      "arm": "E6",
+      "model_seed": 75043,
+      "protocol_sha256": "af7b8de0796ba3ae039af8a004e1c822bf705ea7540ecabb9002a55c946245fe",
+      "config_sha256": "893c7db2f9539c8f000c3f7ff3650c86af00a58066e100ae013209b80217b853",
+      "initialization_sha256": "e2fdcb122fdf341ed102d5fb1279b9b1582ea7df6396efc902c111157009121c",
+      "logical_batch_size": 8,
+      "historical_weights_loaded": false,
+      "planned_stage_updates": {
+        "1": 128,
+        "2": 384
+      },
+      "planned_logical_input_slots_per_arm": 458752,
+      "planned_supervised_targets_per_arm": 57344,
+      "run_id": "b0-p3-e6-0500486aa3f49400cec9"
+    },
+    "artifact": {
+      "publication_status": "VERIFIED",
+      "run_id": "b0-p3-e6-0500486aa3f49400cec9",
+      "artifact_id": 731918620,
+      "download_url": "https://github.com/ArcheLabs/mini-cells/releases/download/b0-p3-e6-0500486aa3f49400cec9/bundle.tar.gz",
+      "release_url": "https://github.com/ArcheLabs/mini-cells/releases/tag/b0-p3-e6-0500486aa3f49400cec9",
+      "sha256": "07d0b9213c0af8d60cb66956470725eee94f42fb11c4e7a1191b3421bd8c3f66",
+      "bytes": 184019915,
+      "files_verified": 69,
+      "retention": "GitHub Release; retained until explicitly removed, not an expiring Actions artifact"
+    },
+    "verification": {
+      "download": {
+        "status": "PASS",
+        "sha256": "07d0b9213c0af8d60cb66956470725eee94f42fb11c4e7a1191b3421bd8c3f66",
+        "bytes": 184019915,
+        "files_verified": 69,
+        "scope": "All archived files, including checkpoint/probabilities/metrics/report; no trusted status substitution"
+      },
+      "payload": {
+        "status": "PASS",
+        "stages": [
+          1
+        ],
+        "global_steps": 128,
+        "test_comparison": "NOT_CHECKED_TEST_SEALED"
+      },
+      "restore": {
+        "status": "PASS",
+        "stages": {
+          "1": {
+            "status": "PASS",
+            "checkpoint_sha256": "63a33ae750d3a0a83b03a1b906924ce9e6673d6e39ecfd4a26508aec642b416c",
+            "probability_log_max_abs_error": {
+              "full_log_probabilities": 0.0,
+              "value_log_probabilities": 0.0,
+              "candidate_log_probabilities": 0.0
+            },
+            "tolerance": 2e-05
+          }
+        },
+        "new_optimizer_updates": 0,
+        "test_accessed": false
+      },
+      "stage1_gate": "BLOCKED",
+      "stage2_started": false,
+      "charged_worker_phases": [
+        {
+          "action": "benchmark1",
+          "arm": "E6",
+          "started_epoch": 1794323836.1732032,
+          "elapsed_seconds": 17.816179818000023,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "benchmark2",
+          "arm": "E6",
+          "started_epoch": 1794323853.9907691,
+          "elapsed_seconds": 26.840268616000003,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "stage1",
+          "arm": "E6",
+          "started_epoch": 1794323987.8889155,
+          "elapsed_seconds": 89.01736208300002,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "isolated1",
+          "arm": "E6",
+          "started_epoch": 1794324225.105946,
+          "elapsed_seconds": 8.589189781999949,
+          "status": "COMPLETE"
+        },
+        {
+          "action": "verify",
+          "arm": "E6",
+          "started_epoch": 1794324576.4578164,
+          "elapsed_seconds": 17.518584838000038,
+          "status": "COMPLETE"
+        }
+      ],
+      "independent_worker_log": ""
+    },
+    "test_status": "SEALED_NOT_ACCESSED",
+    "hypotheses": "NOT_EVALUATED"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "result_commit": "4887883a01ffe0e5bd8515524ac13cd6a2a6b120",
+  "training_source": "d004704ff63e8a99fc474a88f144bac4b9438894",
+  "result_path": "artifacts/experiments/epclm004-m5/epclm004-m5-d004704ff63e-7267bfad",
+  "result_sha256": "08c22031312f4014fb69355fe95a2c51d05416ccf35bd691723d9017b17088c4",
+  "gates": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS",
+    "6": "PASS",
+    "7": "PASS"
+  },
+  "script_version_id": null,
+  "arms": {
+    "E3": {
+      "ledger": {
+        "input_tokens": 1024,
+        "processed_tensor_tokens": 1024,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 2,
+        "query_target_tokens": 2,
+        "committed_updates": 2
+      },
+      "checkpoint": {
+        "sha256": "a0047d93d88f89dc25efaa3657cc3d5e9c6cb69d798481a0cf8018b688ca4f10",
+        "bytes": 173699309,
+        "durable_updates": 2
+      },
+      "parameters": 9939200
+    },
+    "E6": {
+      "ledger": {
+        "input_tokens": 1024,
+        "processed_tensor_tokens": 1024,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 2,
+        "query_target_tokens": 2,
+        "committed_updates": 2
+      },
+      "checkpoint": {
+        "sha256": "e28b43036bf5a33eb881c819b96815d17662032a0fd439d89d3ddaba445525e5",
+        "bytes": 175074413,
+        "durable_updates": 2
+      },
+      "parameters": 10021120
+    },
+    "E7-Random": {
+      "ledger": {
+        "input_tokens": 1024,
+        "processed_tensor_tokens": 1024,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 2,
+        "query_target_tokens": 2,
+        "committed_updates": 2
+      },
+      "checkpoint": {
+        "sha256": "d3cb3312374a24fa0aec74e2e572b2197cc2481dd8e8cab07d2e88cd3a16103a",
+        "bytes": 175170797,
+        "durable_updates": 2
+      },
+      "parameters": 10021120
+    },
+    "E7-FIFO": {
+      "ledger": {
+        "input_tokens": 1024,
+        "processed_tensor_tokens": 1024,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 2,
+        "query_target_tokens": 2,
+        "committed_updates": 2
+      },
+      "checkpoint": {
+        "sha256": "5b2ee2b6733a9fb505c2830de54169c71f4c9844aefd90cb3f888e5409698f99",
+        "bytes": 175063725,
+        "durable_updates": 2
+      },
+      "parameters": 10021120
+    },
+    "E7-Innovation": {
+      "ledger": {
+        "input_tokens": 1024,
+        "processed_tensor_tokens": 1024,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 2,
+        "query_target_tokens": 2,
+        "committed_updates": 2
+      },
+      "checkpoint": {
+        "sha256": "6ad4bc7ca8add534285f3a0487c10a162a443427d0b65f28c3492fd2a7e5cc62",
+        "bytes": 175158765,
+        "durable_updates": 2
+      },
+      "parameters": 10021120
+    }
+  },
+  "published_files_checked": 50,
+  "m5_checkpoint_availability": "Hash known; weights were retained in Kaggle Output, not present in Git; fresh SV runs do not depend on them."
+}
