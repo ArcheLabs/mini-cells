@@ -1,0 +1,49 @@
+{
+  "format": "minicells.b0.pilot-index.v1",
+  "training_status": "COMPLETED",
+  "publication_status": "VERIFIED",
+  "manifest": {
+    "source_commit": "8bb11b03da52ecf9ae74bca8846eb4ece065a091",
+    "phase": "pilot",
+    "protocol_sha256": "82eda88f844b36c3701b7bd8ef6e4e27da2194e3862bca706796837d7efd8fe3",
+    "dataset_sha256": "9a8757e8c0b777b904f795cf6c27b09366fd80210bfb30b42df974386168ec4b",
+    "software": {
+      "python": "3.13.16",
+      "torch": "2.11.0+cu130",
+      "cuda": "13.0",
+      "gpu": "Tesla T4",
+      "driver": "580.178.04\n580.178.04",
+      "precision": "fp32",
+      "tf32": false,
+      "amp": false
+    },
+    "arm": "E7-Innovation",
+    "seed": 75017,
+    "initialization_sha256": "1eb1485c2e430a54bd48b95daa8f2aa005f19003f7585822d556f442c146245e",
+    "overfit_index_commit": "b4951fc07099ab4f7e05096b28d3d3cb0547e2b1",
+    "overfit_weights_loaded": false,
+    "run_id": "b0-pilot-e7-innovation-48a48d821d15a28d5e02"
+  },
+  "artifact": {
+    "publication_status": "VERIFIED",
+    "run_id": "b0-pilot-e7-innovation-48a48d821d15a28d5e02",
+    "artifact_id": 730359903,
+    "download_url": "https://github.com/ArcheLabs/mini-cells/releases/download/b0-pilot-e7-innovation-48a48d821d15a28d5e02/bundle.tar.gz",
+    "release_url": "https://github.com/ArcheLabs/mini-cells/releases/tag/b0-pilot-e7-innovation-48a48d821d15a28d5e02",
+    "sha256": "78a2eb02e47c07b8c89df4f1f141b315726a0d2d3e3985859ab9f36b61717019",
+    "bytes": 208748690,
+    "files_verified": 22,
+    "retention": "GitHub Release; retained until explicitly removed, not an expiring Actions artifact",
+    "scientific_status": "PILOT_COMPLETE_REQUIRES_RESEARCH_REVIEW",
+    "training_ledger": {
+      "input_tokens": 262144,
+      "processed_tensor_tokens": 262144,
+      "padding_tokens": 0,
+      "supervised_target_tokens": 4096,
+      "query_target_tokens": 4096,
+      "committed_updates": 512
+    }
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "test_accessed": false
+}

@@ -1,0 +1,335 @@
+{
+  "status": "PASS",
+  "device": "cpu",
+  "arms": {
+    "F00": {
+      "status": "PASS",
+      "calls": {
+        "swa": 1,
+        "ssm": 0,
+        "memory": 0
+      },
+      "gradient_norms": {
+        "token_embedding": 3.533942892169072,
+        "swa": 0.6220309464671981,
+        "gate": 0.0,
+        "post_norm": 0.003523612370773549,
+        "post_mlp": 0.05555140604161107,
+        "final_norm": 0.06424838478125923
+      },
+      "cache_max_abs_error": 5.960464477539063e-08,
+      "resources": {
+        "static_parameters": 25974,
+        "static_by_module": {
+          "final_norm": 16,
+          "gate": 195,
+          "memory": 291,
+          "memory_norm": 32,
+          "memory_output": 64,
+          "post_mlp": 1536,
+          "post_norm": 16,
+          "ssm": 2240,
+          "swa": 5200,
+          "token_embedding": 16384
+        },
+        "cell": null,
+        "swa_runtime": {
+          "tensor_payload_bytes": 2048,
+          "retained_storage_bytes": 2048,
+          "retained_bytes_per_stream": 2048,
+          "mamba_payload_bytes": 0,
+          "kv_payload_bytes": 2048,
+          "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+        },
+        "ssm_runtime": null
+      },
+      "conditions": {
+        "natural": {
+          "ssm_bytes": 0,
+          "ssm_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "ssm_norm": 0.0,
+          "fast_bytes": 0,
+          "momentum_bytes": 0,
+          "fast_sha256": null,
+          "momentum_sha256": null,
+          "momentum_norm": 0,
+          "updates": 0
+        }
+      },
+      "restore": {
+        "natural": {
+          "max_abs": 0.0,
+          "seconds": 0.0054466209999759485,
+          "pid": 69
+        }
+      }
+    },
+    "F10": {
+      "status": "PASS",
+      "calls": {
+        "swa": 1,
+        "ssm": 1,
+        "memory": 0
+      },
+      "gradient_norms": {
+        "token_embedding": 3.7014055726846493,
+        "swa": 0.43253317022445387,
+        "ssm": 0.23625678660448202,
+        "gate": 0.01931491807107247,
+        "post_norm": 0.004435970131272063,
+        "post_mlp": 0.05882138672734229,
+        "final_norm": 0.05926984695589834
+      },
+      "cache_max_abs_error": 7.450580596923828e-08,
+      "resources": {
+        "static_parameters": 25974,
+        "static_by_module": {
+          "final_norm": 16,
+          "gate": 195,
+          "memory": 291,
+          "memory_norm": 32,
+          "memory_output": 64,
+          "post_mlp": 1536,
+          "post_norm": 16,
+          "ssm": 2240,
+          "swa": 5200,
+          "token_embedding": 16384
+        },
+        "cell": null,
+        "swa_runtime": {
+          "tensor_payload_bytes": 2048,
+          "retained_storage_bytes": 2048,
+          "retained_bytes_per_stream": 2048,
+          "mamba_payload_bytes": 0,
+          "kv_payload_bytes": 2048,
+          "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+        },
+        "ssm_runtime": {
+          "tensor_payload_bytes": 1024,
+          "retained_storage_bytes": 1024,
+          "retained_bytes_per_stream": 1024,
+          "mamba_payload_bytes": 1024,
+          "kv_payload_bytes": 0,
+          "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+        }
+      },
+      "conditions": {
+        "natural": {
+          "ssm_bytes": 1024,
+          "ssm_sha256": "0ec1d6b40a6d7d8f0ef198f5c0bf3147cfd9fce7ae154ffff607dce7a2a62c1e",
+          "ssm_norm": 6.735907415090495,
+          "fast_bytes": 0,
+          "momentum_bytes": 0,
+          "fast_sha256": null,
+          "momentum_sha256": null,
+          "momentum_norm": 0,
+          "updates": 0
+        }
+      },
+      "restore": {
+        "natural": {
+          "max_abs": 0.0,
+          "seconds": 0.0139787289999731,
+          "pid": 70
+        }
+      }
+    },
+    "F01": {
+      "status": "PASS",
+      "calls": {
+        "swa": 1,
+        "ssm": 0,
+        "memory": 1
+      },
+      "gradient_norms": {
+        "token_embedding": 3.1479829597351245,
+        "swa": 0.2970041746350862,
+        "memory": 0.22002610779812207,
+        "memory_output": 0.1453693998874403,
+        "memory_norm": 0.039197522248086654,
+        "gate": 0.024916903917571905,
+        "post_norm": 0.00655242827490391,
+        "post_mlp": 0.06721662504159516,
+        "final_norm": 0.07418887264802422
+      },
+      "cache_max_abs_error": 5.960464477539063e-08,
+      "resources": {
+        "static_parameters": 25974,
+        "static_by_module": {
+          "final_norm": 16,
+          "gate": 195,
+          "memory": 291,
+          "memory_norm": 32,
+          "memory_output": 64,
+          "post_mlp": 1536,
+          "post_norm": 16,
+          "ssm": 2240,
+          "swa": 5200,
+          "token_embedding": 16384
+        },
+        "cell": {
+          "fast_weights": 336,
+          "momentum": 336,
+          "fast_parameters_per_stream": 84,
+          "fast_delta": 0.5902572587145878
+        },
+        "swa_runtime": {
+          "tensor_payload_bytes": 2048,
+          "retained_storage_bytes": 2048,
+          "retained_bytes_per_stream": 2048,
+          "mamba_payload_bytes": 0,
+          "kv_payload_bytes": 2048,
+          "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+        },
+        "ssm_runtime": null
+      },
+      "conditions": {
+        "natural": {
+          "ssm_bytes": 0,
+          "ssm_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "ssm_norm": 0.0,
+          "fast_bytes": 336,
+          "momentum_bytes": 336,
+          "fast_sha256": "e342305611650c26cd0927b470aa3dbe7dd474c979d045e48175adcb62fed785",
+          "momentum_sha256": "fb7294c979fa0dafaf128a4bbd7248b20367822f829af2fd309ea3c47ec857e2",
+          "momentum_norm": 0.17149483247033367,
+          "updates": 4
+        }
+      },
+      "restore": {
+        "natural": {
+          "max_abs": 0.0,
+          "seconds": 0.010386545000017122,
+          "pid": 71
+        }
+      }
+    },
+    "F11": {
+      "status": "PASS",
+      "calls": {
+        "swa": 1,
+        "ssm": 1,
+        "memory": 1
+      },
+      "gradient_norms": {
+        "token_embedding": 3.2784421987320815,
+        "swa": 0.2533026552701417,
+        "ssm": 0.21320765682481976,
+        "memory": 0.20776223781560377,
+        "memory_output": 0.11038362830491887,
+        "memory_norm": 0.03181498959497845,
+        "gate": 0.1612762041637035,
+        "post_norm": 0.005853767306894165,
+        "post_mlp": 0.0768296734989073,
+        "final_norm": 0.06673697552116738
+      },
+      "cache_max_abs_error": 7.450580596923828e-08,
+      "resources": {
+        "static_parameters": 25974,
+        "static_by_module": {
+          "final_norm": 16,
+          "gate": 195,
+          "memory": 291,
+          "memory_norm": 32,
+          "memory_output": 64,
+          "post_mlp": 1536,
+          "post_norm": 16,
+          "ssm": 2240,
+          "swa": 5200,
+          "token_embedding": 16384
+        },
+        "cell": {
+          "fast_weights": 336,
+          "momentum": 336,
+          "fast_parameters_per_stream": 84,
+          "fast_delta": 0.5902572587145878
+        },
+        "swa_runtime": {
+          "tensor_payload_bytes": 2048,
+          "retained_storage_bytes": 2048,
+          "retained_bytes_per_stream": 2048,
+          "mamba_payload_bytes": 0,
+          "kv_payload_bytes": 2048,
+          "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+        },
+        "ssm_runtime": {
+          "tensor_payload_bytes": 1024,
+          "retained_storage_bytes": 1024,
+          "retained_bytes_per_stream": 1024,
+          "mamba_payload_bytes": 1024,
+          "kv_payload_bytes": 0,
+          "scope": "runtime tensor state only; no weights/optimizer/activations/Python metadata"
+        }
+      },
+      "conditions": {
+        "C00": {
+          "ssm_bytes": 0,
+          "ssm_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "ssm_norm": 0.0,
+          "fast_bytes": 0,
+          "momentum_bytes": 0,
+          "fast_sha256": null,
+          "momentum_sha256": null,
+          "momentum_norm": 0,
+          "updates": 0
+        },
+        "C10": {
+          "ssm_bytes": 1024,
+          "ssm_sha256": "0ec1d6b40a6d7d8f0ef198f5c0bf3147cfd9fce7ae154ffff607dce7a2a62c1e",
+          "ssm_norm": 6.735907415090495,
+          "fast_bytes": 0,
+          "momentum_bytes": 0,
+          "fast_sha256": null,
+          "momentum_sha256": null,
+          "momentum_norm": 0,
+          "updates": 0
+        },
+        "C01": {
+          "ssm_bytes": 0,
+          "ssm_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "ssm_norm": 0.0,
+          "fast_bytes": 336,
+          "momentum_bytes": 336,
+          "fast_sha256": "e342305611650c26cd0927b470aa3dbe7dd474c979d045e48175adcb62fed785",
+          "momentum_sha256": "fb7294c979fa0dafaf128a4bbd7248b20367822f829af2fd309ea3c47ec857e2",
+          "momentum_norm": 0.17149483247033367,
+          "updates": 4
+        },
+        "C11": {
+          "ssm_bytes": 1024,
+          "ssm_sha256": "0ec1d6b40a6d7d8f0ef198f5c0bf3147cfd9fce7ae154ffff607dce7a2a62c1e",
+          "ssm_norm": 6.735907415090495,
+          "fast_bytes": 336,
+          "momentum_bytes": 336,
+          "fast_sha256": "e342305611650c26cd0927b470aa3dbe7dd474c979d045e48175adcb62fed785",
+          "momentum_sha256": "fb7294c979fa0dafaf128a4bbd7248b20367822f829af2fd309ea3c47ec857e2",
+          "momentum_norm": 0.17149483247033367,
+          "updates": 4
+        }
+      },
+      "restore": {
+        "C00": {
+          "max_abs": 0.0,
+          "seconds": 0.012203853000016807,
+          "pid": 72
+        },
+        "C01": {
+          "max_abs": 0.0,
+          "seconds": 0.010263281000050029,
+          "pid": 72
+        },
+        "C10": {
+          "max_abs": 0.0,
+          "seconds": 0.013272253000025103,
+          "pid": 72
+        },
+        "C11": {
+          "max_abs": 0.0,
+          "seconds": 0.015990519000013137,
+          "pid": 72
+        }
+      }
+    }
+  },
+  "optimizer_updates": 0
+}
