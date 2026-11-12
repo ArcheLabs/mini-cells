@@ -87,7 +87,7 @@ def profile(arm, length, device):
 
 
 def snapshot(model, optimizer, scheduler, cursor, cell, logits, device):
-    return dict(model=model.state_dict(), optimizer=optimizer.state_dict(),
+    return dict(model={key: value.detach().clone() for key, value in model.state_dict().items()}, optimizer=optimizer.state_dict(),
                 scheduler=scheduler.state_dict(), cursor=cursor, logits=logits,
                 cell=None if cell is None else dict(fast=cell.fast, momentum=cell.momentum,
                                                    step=cell.update_step, metadata=cell.metadata),
@@ -114,9 +114,9 @@ def restore(saved, model, optimizer, scheduler, device):
     return None
 
 
-def recovery(arm, output, device, worker=False):
+def recovery(arm, output, device, worker=False, length=1024):
     model, optimizer, scheduler = setup(arm, device)
-    args = (model, optimizer, scheduler, arm, 1024)
+    args = (model, optimizer, scheduler, arm, length)
     checkpoint = output / f'{arm}-engineering.pt'
     if worker:
         with zipfile.ZipFile(checkpoint.with_suffix('.zip')) as bundle, tempfile.TemporaryDirectory() as tmp:
@@ -146,7 +146,7 @@ def recovery(arm, output, device, worker=False):
     gc.collect()
     if device == 'cuda':
         torch.cuda.empty_cache()
-    subprocess.run([sys.executable, __file__, str(output), '--device', device, '--worker', arm],
+    subprocess.run([sys.executable, __file__, str(output), '--device', device, '--worker', arm, '--recovery-length', str(length)],
                    check=True, timeout=600)
     resumed_file = output / f'{arm}-resumed.pt'
     expected, resumed = (torch.load(path, weights_only=True, map_location='cpu')
@@ -211,13 +211,14 @@ if __name__ == '__main__':
     parser.add_argument('output', type=Path)
     parser.add_argument('--device', default='cuda', choices=('cuda', 'cpu'))
     parser.add_argument('--worker', choices=ARMS)
+    parser.add_argument('--recovery-length', type=int, default=1024)
     args = parser.parse_args()
     torch.set_num_threads(1)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
     torch.use_deterministic_algorithms(True)
     if args.worker:
-        recovery(args.worker, args.output, args.device, worker=True)
+        recovery(args.worker, args.output, args.device, worker=True, length=args.recovery_length)
     else:
         if args.device != 'cuda' or not torch.cuda.is_available() or 'T4' not in torch.cuda.get_device_name():
             raise RuntimeError('Tesla T4 required for resource measurements')
