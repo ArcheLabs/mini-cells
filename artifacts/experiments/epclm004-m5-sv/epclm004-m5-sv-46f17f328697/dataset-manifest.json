@@ -1,0 +1,215 @@
+{
+  "development": {
+    "format": "minicells.m5-sv.bank.v1",
+    "request": {
+      "conditions": [
+        {
+          "name": "development-256",
+          "length": 256,
+          "bindings": 8,
+          "queries": 4,
+          "interference": 1.0
+        },
+        {
+          "name": "development-512",
+          "length": 512,
+          "bindings": 8,
+          "queries": 4,
+          "interference": 1.0
+        }
+      ],
+      "split": "validation",
+      "data_seed": 83021,
+      "episodes_per_condition": 4,
+      "reference_sha256": "b096f400a65c79fd418a1dc0ba4dc126a7bed1c8cdf378d413168daf1ed8e623"
+    },
+    "sha256": "8c15aff22aad8e29032df9951592a71f4a99f9545de5d5a62ac373ff226e8b86",
+    "episodes": 8,
+    "test_use": "DEVELOPMENT"
+  },
+  "test": {
+    "format": "minicells.m5-sv.bank.v1",
+    "request": {
+      "conditions": [
+        {
+          "name": "length-256",
+          "length": 256,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "length-512",
+          "length": 512,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "length-2048",
+          "length": 2048,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "length-8192",
+          "length": 8192,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "length-16384",
+          "length": 16384,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "bindings-16",
+          "length": 512,
+          "bindings": 16,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "bindings-32",
+          "length": 512,
+          "bindings": 32,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "bindings-64",
+          "length": 512,
+          "bindings": 64,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "queries-8",
+          "length": 512,
+          "bindings": 32,
+          "queries": 8,
+          "interference": 1.0
+        },
+        {
+          "name": "queries-32",
+          "length": 512,
+          "bindings": 32,
+          "queries": 32,
+          "interference": 1.0
+        },
+        {
+          "name": "interference-0.0",
+          "length": 512,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 0.0
+        },
+        {
+          "name": "interference-0.5",
+          "length": 512,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 0.5
+        },
+        {
+          "name": "key-similarity-low",
+          "length": 512,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 1.0,
+          "similarity": "low"
+        },
+        {
+          "name": "key-similarity-high",
+          "length": 512,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 1.0,
+          "similarity": "high"
+        },
+        {
+          "name": "repeated-values",
+          "length": 512,
+          "bindings": 8,
+          "queries": 1,
+          "interference": 1.0,
+          "repeat": true
+        },
+        {
+          "name": "delay-16",
+          "length": 20,
+          "bindings": 1,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "delay-32",
+          "length": 36,
+          "bindings": 1,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "delay-64",
+          "length": 68,
+          "bindings": 1,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "delay-256",
+          "length": 260,
+          "bindings": 1,
+          "queries": 1,
+          "interference": 1.0
+        },
+        {
+          "name": "delay-512",
+          "length": 516,
+          "bindings": 1,
+          "queries": 1,
+          "interference": 1.0
+        }
+      ],
+      "split": "test",
+      "data_seed": 93031,
+      "episodes_per_condition": 500,
+      "reference_sha256": "b096f400a65c79fd418a1dc0ba4dc126a7bed1c8cdf378d413168daf1ed8e623"
+    },
+    "sha256": "baaf3ea7af1fd860ed0fc47081b139ad6dc0cbf395a29bf99fc36f23b308d5da",
+    "episodes": 10000,
+    "test_use": "GENERATED_AND_HASHED_NOT_EVALUATED"
+  },
+  "training": {
+    "61003": {
+      "input_tokens": 16384,
+      "episodes": 32,
+      "sha256": "3f90cf9e07d8153f692b99d5aca45a0e825c0463677662025ed4f0f9591fb9d4"
+    },
+    "62017": {
+      "input_tokens": 1000000,
+      "episodes": 1954,
+      "sha256": "7032284984dab752e7027fa04a86bc0f04e69506cd12e636defbe6ab265ef50b"
+    },
+    "62031": {
+      "input_tokens": 1000000,
+      "episodes": 1954,
+      "sha256": "348f47b3374ba61c6313333fcaced28858bc316b9d95e570e15ac3a9a569717e"
+    },
+    "62047": {
+      "input_tokens": 1000000,
+      "episodes": 1954,
+      "sha256": "810f1c9521e8428e486d8bde1e7a5dd08d362a609f6f7ab14fc8c49d743ed228"
+    }
+  },
+  "isolation": {
+    "status": "PASS",
+    "binding_partition": "(key_index + value_index) mod 3 = split index",
+    "token_generalization": "shared token vocabulary; unseen pairs, not unseen symbols"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04"
+}
