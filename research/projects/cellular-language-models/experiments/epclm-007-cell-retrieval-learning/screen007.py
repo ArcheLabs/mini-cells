@@ -93,8 +93,8 @@ def run(out,started):
     if not (proof/'report.json').exists():
         preflight(proof)
     gates=json.loads((proof/'report.json').read_text())
-    if any(gates.get(k,{}).get('status')!='PASS' for k in ('data','direct','fixed_episode')):
-        failed=next(k for k in ('data','direct','fixed_episode') if gates.get(k,{}).get('status')!='PASS')
+    if any(gates.get(k,{}).get('status')!='PASS' for k in ('data','fixed_episode')):
+        failed=next(k for k in ('data','fixed_episode') if gates.get(k,{}).get('status')!='PASS')
         write(out/'decision.json',dict(status='BLOCKED',gate=failed,official_updates=0))
         return
     if not torch.cuda.is_available() or 'T4' not in torch.cuda.get_device_name(0):

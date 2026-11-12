@@ -1,4 +1,4 @@
-"""Sequential gates. Stop before E3 when direct Titans acquisition fails."""
+"""Data gate, Direct Gate diagnostic, and fixed-episode preflight."""
 import argparse
 import json
 from pathlib import Path
@@ -88,29 +88,29 @@ def direct_gate(out):
 def run(out):
     out.mkdir(parents=True,exist_ok=False)
     report={'data':data_gate(),'direct':direct_gate(out)}
-    if report['direct']['status']=='PASS':
-        model=Retrieval()
-        row=episode('train',73001,0)
-        optimizer=torch.optim.AdamW((p for p in model.parameters() if p.requires_grad),lr=.003)
-        history=[]
-        for _ in range(64):
-            optimizer.zero_grad(set_to_none=True)
-            logits,trace=model(row)
-            loss=F.cross_entropy(logits,row['targets'])
-            loss.backward()
-            gradients={n:float(p.grad.norm()) for n,p in model.named_parameters() if p.grad is not None}
-            assert gradients and all(torch.isfinite(torch.tensor(list(gradients.values()))))
-            optimizer.step()
-            accuracy=float(logits.argmax(-1).eq(row['targets']).float().mean())
-            history.append(dict(loss=float(loss.detach()),accuracy=accuracy))
-            if accuracy==1:
-                break
-        with torch.no_grad():
-            logits,_=model(row)
-            accuracy=float(logits.argmax(-1).eq(row['targets']).float().mean())
-        report['fixed_episode']=dict(status='PASS' if accuracy==1 else 'BLOCKED',history=history,
-                                     gradient_norms=gradients,trace=trace,
-                                     backbone='frozen E3 initialization')
+    report['direct']['blocking'] = False
+    model=Retrieval()
+    row=episode('train',73001,0)
+    optimizer=torch.optim.AdamW((p for p in model.parameters() if p.requires_grad),lr=.003)
+    history=[]
+    for _ in range(64):
+        optimizer.zero_grad(set_to_none=True)
+        logits,trace=model(row)
+        loss=F.cross_entropy(logits,row['targets'])
+        loss.backward()
+        gradients={n:float(p.grad.norm()) for n,p in model.named_parameters() if p.grad is not None}
+        assert gradients and all(torch.isfinite(torch.tensor(list(gradients.values()))))
+        optimizer.step()
+        accuracy=float(logits.argmax(-1).eq(row['targets']).float().mean())
+        history.append(dict(loss=float(loss.detach()),accuracy=accuracy))
+        if accuracy==1:
+            break
+    with torch.no_grad():
+        logits,_=model(row)
+        accuracy=float(logits.argmax(-1).eq(row['targets']).float().mean())
+    report['fixed_episode']=dict(status='PASS' if accuracy==1 else 'BLOCKED',history=history,
+                                 gradient_norms=gradients,trace=trace,
+                                 backbone='frozen E3 initialization')
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
 
 

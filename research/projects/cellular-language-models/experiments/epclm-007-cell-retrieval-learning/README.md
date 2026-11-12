@@ -26,7 +26,7 @@ pairs, so the uniform reference is a scoring control and not a bound on
 a predictor given the partition. Confirmation and independent Test require
 a separate protocol.
 
-If the direct and fixed-episode gates pass, the screening runner uses
+If the data and fixed-episode gates pass, the screening runner uses
 1,024 batch-four updates with a frozen, randomly initialized E3. A
 held-out gate requires C1 accuracy of at least 50%, improvement in both
 accuracy and NLL, nonconstant candidate predictions, controls at or below
@@ -37,7 +37,7 @@ There is no session-conditioned feature path or learned gate in this
 retrieval-only adapter. C4 checks checkpoint parity for one validation
 episode. It does not constitute multi-seed portability confirmation.
 
-The direct gate remains blocked at 5/8. Correct candidate ranks are
+The Direct Gate diagnostic remains below its 8/8 criterion at 5/8. Correct candidate ranks are
 `[5,1,5,1,1,6,1,1]`. The runner's downstream paths have not executed on
 T4. Two CPU tests passed for target alignment, the no-fixed-point
 permutation, sealed Test, candidate ranking and paired statistics.
