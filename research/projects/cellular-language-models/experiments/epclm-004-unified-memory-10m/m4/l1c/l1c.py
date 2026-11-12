@@ -109,7 +109,7 @@ def predict_profile(rows,model):
 
 def identity_for(data):
     identity=source_identity()
-    identity["base_main"]="99aff2b"
+    identity["base_main"]="99aff2e83a9b08d76f860d1d322dff8fd68a7f5f"
     identity["historical_l1_result"]="cc46f0911ea00a5f42d0013b3a321014b397fdfc"
     identity['config_sha256']=digest([P,S,TRAIN])
     identity['dataset_sha256']=digest(data)
@@ -267,6 +267,14 @@ def run(out,started):
                 for s,v in result['evaluation'].items()} for a,result in arm_results.items()}
     assert all(sum(len(v) for v in r.values())==192 for r in metrics.values())
     comparison=compare(metrics)
+    conditions=('natural','no_cell','no_ssm','swa_only')
+    ablation={}
+    for condition in conditions:
+        rows=[r for seed in arm_results['F11']['evaluation'].values()
+              for ob in seed['observations'] for r in ob['metrics'][condition]]
+        ablation[condition]={key:float(np.mean([r[key] for r in rows]))
+                             for key in ('source_a_em','source_b_em','exact_match','episode_em','nll')}
+    write(out/'ablation-summary.json',ablation)
     a=comparison['source_a_em']['contrasts']['F11_minus_F10']['mean']
     b=comparison['source_b_em']['contrasts']['F11_minus_F01']['mean']
     gain=comparison['exact_match']['contrasts']['over_strongest']['mean']
@@ -287,7 +295,7 @@ def run(out,started):
         vals=[comparison[key]['by_arm'][arm] for key in ('source_a_em','source_b_em','exact_match','episode_em')]
         lines.append('| '+arm+' | '+' | '.join(f'{x:.2%}' for x in vals)+' |')
     lines+=['','Paired interactions, source-specific gains and intervals are in comparison.json. '
-            'Gate, top-k, rejection, ablation and resource observations are in the per-arm records.']
+            'Gate, top-k, ablation and resource observations are in the per-arm records.']
     (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
     write(out/'integrity.json',{str(f.relative_to(out)):file_hash(f) for f in out.rglob('*')
                                 if f.is_file() and f.name not in ('integrity.json','publication.json','error.json')})
