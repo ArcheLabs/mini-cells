@@ -11,8 +11,29 @@
     "../epclm-004-unified-memory-10m/data.py": "9476c6493176cf5e39caa2f146946d2c4cd180ec29d742e9902bb5bd156dbee2",
     "../epclm-004-unified-memory-10m/configs/tokenizer-lock.json": "381c0bf7e6af667af950883bf015b6a102e674801fb07bcbc2f6cd8c19178e20",
     "../epclm-007-cell-retrieval-learning/config.json": "33e9b9d946e5ea92fbce1f90442731da9b552925b89ff48d6249c5b426fe95c6",
-    "../epclm-006-cross-session-cell-portability/portable_model.py": "9c39f24635301b267a37534ab8c8b0e9985bb02d3ed9cf7ffd0440da234e0fc2"
+    "../epclm-006-cross-session-cell-portability/portable_model.py": "9c39f24635301b267a37534ab8c8b0e9985bb02d3ed9cf7ffd0440da234e0fc2",
+    "FREEZE_DECISIONS.md": "ff84614aae2c55b8b4877f65040c7f55745767c28a9f459dd638a74f31f0c553"
   },
   "test": "SEALED",
-  "formal_execution_authorized": false
+  "formal_execution_authorized": false,
+  "t4_engineering_evidence": {
+    "commit": "b2e9e24e0e2cea9d6f93768fc101b272cda10db5",
+    "path": "artifacts/experiments/epclm008/epclm008-t4-preflight-3523c90d7aab-5752a309",
+    "publication_manifest_sha256": "42b8153b9bee3ab90b3953d6d8d3c56ab6abe3faacb1e358f29862dfd701e05f",
+    "verified_reports": 6,
+    "decision": {
+      "status": "INCONCLUSIVE",
+      "engineering_preflight": "PASS",
+      "official_training_updates": 0,
+      "test": "SEALED",
+      "e0_chunk_max_abs_error": 9.5367431640625e-07,
+      "formal_benchmark": "PENDING",
+      "format": "minicells.epclm008.preflight.v1",
+      "run_id": "epclm008-t4-preflight-3523c90d7aab-5752a309",
+      "source_commit": "3523c90d7aabee00651ac536f3e301d06bb95c0d",
+      "gpu": "Tesla T4",
+      "gpu_total_bytes": 15636037632,
+      "branch": "kaggle/epclm008-t4-preflight-3523c90d7aab-5752a309"
+    }
+  }
 }
