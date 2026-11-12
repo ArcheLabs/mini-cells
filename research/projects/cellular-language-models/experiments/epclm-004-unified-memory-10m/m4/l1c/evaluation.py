@@ -95,9 +95,7 @@ def persist(model,rows,folder,identity,tolerance):
                                        for pair in ssm.mamba_state.values() for t in pair),
                                    cell_bytes=0 if cell is None else sum(t.numel()*t.element_size()
                                        for group in (cell.fast,cell.momentum) for t in group.values()),
-                                   swa_kv_bytes=swa.retained_storage_bytes if hasattr(swa,'retained_storage_bytes') else
-                                   model.swa.cache_memory(swa)['retained_storage_bytes'] if hasattr(model.swa,'cache_memory') else
-                                   None,
+                                   swa_kv_bytes=sum(t.numel()*t.element_size() for pair in swa.layers for t in pair),
                                    full_cached_error=float((expected-reference).abs().max())))
 
 
