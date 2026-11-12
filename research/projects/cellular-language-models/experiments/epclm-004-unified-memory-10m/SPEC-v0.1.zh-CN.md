@@ -1400,6 +1400,16 @@ Implementation，不要先写优化 Kernel。
 
 验收：容量、淘汰、读取、Checkpoint 均通过测试。
 
+## M5-SV — Scientific Validation
+
+M5 engineering completion must be followed by SV0 Protocol Audit, SV1 Innovation Validity,
+SV2 Retrieval and Utilization, and SV3 Independent Evaluation before M6. Preserve H1–H6,
+E6/E7 model definitions, Store representations and admission policies. H5 remains
+NOT_EVALUATED until actual scientific evidence exists. See [M5-SV SPEC](m5-sv/SPEC.md).
+
+M6 requires completed M5-SV, frozen data/protocol and confirmed candidate architectures.
+No automatic M6 launch is authorized by this addendum.
+
 ## M6 --- Formal Screening and Confirmation
 
 -   先完成 20M Token Screening；

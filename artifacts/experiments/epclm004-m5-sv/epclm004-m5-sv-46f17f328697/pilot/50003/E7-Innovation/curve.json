@@ -1,0 +1,54 @@
+[
+  {
+    "target_updates": 32,
+    "identity": {
+      "run": {
+        "source_commit": "46f17f3286976e63354fa78eb8b7f2ff2ec893f9",
+        "config_sha256": "d269de14b38ad7ce72a5a0fe5d85f78340b9394ea06ab12dc0f03355527be83e",
+        "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+        "runtime": {
+          "python": "3.13.16",
+          "torch": "2.11.0+cu130",
+          "cuda": "13.0",
+          "gpu": "Tesla T4"
+        },
+        "implementation": {
+          "run.py": "d89d2a356b173776d9295cd9b2bb6f561074731ca3b76fb0ac71070d1f7ef276",
+          "src/sv_analysis.py": "6c0524c10da54cb88194f051fd1078c9304524e5f52b35d9a1ef68c298c98899",
+          "src/sv_data.py": "62b6b7d16a1dae141a579d306bb58837add8c3c3f4059e40aacd2f65472a153e",
+          "src/sv_metrics.py": "79ba31bf75451e762c2afdd6a141e328f2ec8b8607cf48f0cd979bd09abbb433",
+          "src/sv_model.py": "6fff1e2295c140a19c3652a391ac9b2d35040d74d239c8f14d60d539d1ef9ad8",
+          "tests/test_scientific_protocol.py": "72d564dd7a3ccb44323f82588ff446609ed6912304a2b85f2da83ae4f9df2959"
+        }
+      },
+      "arm": "E7-Innovation",
+      "seeds": {
+        "model_seed": 50003,
+        "data_seed": 61003,
+        "store_seed": 71003
+      },
+      "input_budget": 16384,
+      "train_sha256": "3f90cf9e07d8153f692b99d5aca45a0e825c0463677662025ed4f0f9591fb9d4",
+      "validation_sha256": "b8166b0f5e6beb12bc428dab445cdff09db843795ab531b0b3c49801a86fc1d0"
+    },
+    "validation": {
+      "nll": 8.70282644033432,
+      "supervised_targets": 16,
+      "query_targets": 16,
+      "query_exact_match": 0.0,
+      "query_prediction_counts": {
+        "391": 4,
+        "421": 12
+      }
+    },
+    "ledger": {
+      "input_tokens": 16384,
+      "processed_tensor_tokens": 16384,
+      "padding_tokens": 0,
+      "supervised_target_tokens": 32,
+      "query_target_tokens": 32,
+      "committed_updates": 32
+    },
+    "checkpoint_sha256_at_boundary": "97a26de58d42a7a514b5d0c5dd34031d9bf3cd1417eb286eb82108c4f013bade"
+  }
+]
