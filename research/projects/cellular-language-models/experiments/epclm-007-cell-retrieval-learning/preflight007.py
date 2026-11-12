@@ -10,7 +10,7 @@ from retrieval import *
 def data_gate():
     pairs={}
     for split,seed in [('train',73001),('validation',73002)]:
-        rows=[episode(split,seed,i) for i in range(128)]
+        rows=[episode(split,seed,i) for i in range(4096 if split=='train' else 512)]
         pairs[split]={(int(k),int(v)) for r in rows for k,v in zip(r['keys'],r['values'])}
         assert set(k for k,v in pairs[split])==set(range(SYMBOLS))
         assert set(v for k,v in pairs[split])==set(range(SYMBOLS))
@@ -18,7 +18,12 @@ def data_gate():
             oracle=dict(zip(row['keys'].tolist(),row['values'].tolist()))
             assert row['candidates'][row['targets']].tolist()==[oracle[k] for k in row['queries'].tolist()]
     assert not pairs['train'] & pairs['validation']
-    assert all((v-k)%3==OFFSETS[s] for s,ps in pairs.items() for k,v in ps)
+    partition=torch.Generator().manual_seed(73000)
+    keys=torch.randperm(SYMBOLS,generator=partition).reshape(4,64)
+    vals=torch.randperm(SYMBOLS,generator=partition).reshape(4,64)
+    kg={int(k):g for g,row in enumerate(keys) for k in row}
+    vg={int(v):g for g,row in enumerate(vals) for v in row}
+    assert all((vg[v]-kg[k])%4==OFFSETS[s] for s,ps in pairs.items() for k,v in ps)
     return dict(status='PASS',oracle=1.,random=1/8,train_pairs=len(pairs['train']),
                 validation_pairs=len(pairs['validation']),test='SEALED',dropout=0)
 
@@ -55,8 +60,11 @@ def direct_gate(out):
     negative=rank(read(wrong),v)
     accuracy=float(logits.argmax(-1).eq(labels).float().mean())
     control=float(negative.argmax(-1).eq(labels).float().mean())
+    ranks=(logits>logits.gather(1,labels[:,None])).sum(1)+1
+    diagnostic=dict(ranks=ranks.tolist(),predictions=logits.argmax(-1).tolist(),
+                    targets=labels.tolist(),cosine=F.cosine_similarity(y,v[labels]).tolist())
     if accuracy!=1 or control>=accuracy or delta<=0:
-        return dict(status='BLOCKED',correct=accuracy,permuted=control,fast_delta=delta,trace=trace)
+        return dict(status='BLOCKED',correct=accuracy,permuted=control,fast_delta=delta,trace=trace,per_association=diagnostic)
     identity=compatibility(model,'direct-fixture')
     identity['cell_interface_version']='separated-kvq-v2'
     export_cell(correct,out/'cell',identity,uuid.uuid4().hex)
@@ -87,6 +95,9 @@ def run(out):
             history.append(dict(loss=float(loss.detach()),accuracy=accuracy))
             if accuracy==1:
                 break
+        with torch.no_grad():
+            logits,_=model(row)
+            accuracy=float(logits.argmax(-1).eq(row['targets']).float().mean())
         report['fixed_episode']=dict(status='PASS' if accuracy==1 else 'BLOCKED',history=history,
                                      gradient_norms=gradients,trace=trace,
                                      backbone='frozen E3 initialization')

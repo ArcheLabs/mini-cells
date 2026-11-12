@@ -11,7 +11,7 @@ from cell_artifact import compatibility, export_cell, import_cell
 from data import digest
 
 OFFSETS = {'train': 0, 'validation': 1, 'test': 2}
-SYMBOLS = 24
+SYMBOLS = 256
 CANDIDATES = 8
 
 
@@ -20,13 +20,17 @@ def episode(split, seed, index):
         raise ValueError('Test is sealed')
     identity = digest(['epclm007-v1', split, seed, index])
     rng = torch.Generator().manual_seed(int(identity[:16],16))
-    keys = torch.randperm(SYMBOLS,generator=rng)[:CANDIDATES]
+    # Fixed shuffled blocks give each split full symbol support with disjoint pairs.
+    partition = torch.Generator().manual_seed(73000)
+    key_blocks = torch.randperm(SYMBOLS,generator=partition).reshape(4,64)
+    value_blocks = torch.randperm(SYMBOLS,generator=partition).reshape(4,64)
     mapping = torch.empty(SYMBOLS,dtype=torch.long)
-    for residue in range(3):
-        pool = torch.arange((residue+OFFSETS[split])%3,SYMBOLS,3)
-        mapping[residue::3] = pool[torch.randperm(len(pool),generator=rng)]
+    for group in range(4):
+        pool = value_blocks[(group+OFFSETS[split])%4]
+        mapping[key_blocks[group]] = pool[torch.randperm(64,generator=rng)]
+    keys = torch.randperm(SYMBOLS,generator=rng)[:CANDIDATES]
     values = mapping[keys]
-    order = torch.randperm(CANDIDATES,generator=rng)
+    order = torch.randperm(CANDIDATES,generator=rng)[:4]
     candidate_order = torch.randperm(CANDIDATES,generator=rng)
     candidates = values[candidate_order]
     targets = (values[order,None]==candidates).long().argmax(-1)
