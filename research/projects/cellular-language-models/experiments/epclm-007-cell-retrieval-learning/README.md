@@ -41,3 +41,14 @@ The direct gate remains blocked at 5/8. Correct candidate ranks are
 `[5,1,5,1,1,6,1,1]`. The runner's downstream paths have not executed on
 T4. Two CPU tests passed for target alignment, the no-fixed-point
 permutation, sealed Test, candidate ranking and paired statistics.
+
+### Gate P — Cross-session Cell portability
+
+Run `python migration007.py <new-output-directory>` from this directory.
+The CPU FP32 run uses the frozen Direct Gate fixture and 128 full-set replay updates
+in Source. Source must reproduce 5/8 before export. The launcher waits for Source
+to exit before launching Target. Target rebuilds the seeded static parameters and
+uses only the portable Cell for dynamic state. The fixture uses no tokenizer,
+E3 backbone, or external checkpoint. The existing v1 artifact format is reused.
+Gate P compares complete readouts, scores, candidate rankings, margins and
+persistent-state hashes. The Direct Gate still requires 8/8.

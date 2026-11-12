@@ -28,7 +28,7 @@ def data_gate():
                 validation_pairs=len(pairs['validation']),test='SEALED',dropout=0)
 
 
-def direct_gate(out):
+def direct_fixture():
     class Fixture(torch.nn.Module):
         def __init__(self):
             super().__init__()
@@ -39,25 +39,35 @@ def direct_gate(out):
     k=torch.eye(32)[:8]
     v=F.layer_norm(k,(32,))
     labels=torch.tensor([2,0,3,1,6,4,7,5])
-    def write(mapping):
-        c=model.memory.create(1,'online_adapt')
-        initial=c.detached()
-        trace=[]
-        for _ in range(128):
-            c,diag=model.memory.learn(k[None],v[mapping][None],c,'online_adapt')
-            trace.append({n:float(x.mean()) for n,x in diag.items()})
-        delta=sum(float((x.detach()-initial.fast[n]).square().sum()) for n,x in c.fast.items())**.5
-        return c,trace,delta
-    correct,trace,delta=write(labels)
-    wrong,_,_=write(labels.roll(1))
-    def read(c):
-        before=state_hash(c)
-        output=model.memory.recall(k[None],c)[0]
-        assert state_hash(c)==before
-        return output
-    y=read(correct)
+    return model,k,v,labels
+
+
+def direct_write(model,k,v,mapping):
+    c=model.memory.create(1,'online_adapt')
+    initial=c.detached()
+    trace=[]
+    for _ in range(128):
+        c,diag=model.memory.learn(k[None],v[mapping][None],c,'online_adapt')
+        trace.append({n:float(x.mean()) for n,x in diag.items()})
+    delta=sum(float((x.detach()-initial.fast[n]).square().sum()) for n,x in c.fast.items())**.5
+    return c,trace,delta
+
+
+def direct_read(model,k,cell):
+    before=state_hash(cell)
+    output=model.memory.recall(k[None],cell)[0]
+    if state_hash(cell)!=before:
+        raise RuntimeError("Read-only Cell mutated")
+    return output
+
+
+def direct_gate(out):
+    model,k,v,labels=direct_fixture()
+    correct,trace,delta=direct_write(model,k,v,labels)
+    wrong,_,_=direct_write(model,k,v,labels.roll(1))
+    y=direct_read(model,k,correct)
     logits=rank(y,v)
-    negative=rank(read(wrong),v)
+    negative=rank(direct_read(model,k,wrong),v)
     accuracy=float(logits.argmax(-1).eq(labels).float().mean())
     control=float(negative.argmax(-1).eq(labels).float().mean())
     ranks=(logits>logits.gather(1,labels[:,None])).sum(1)+1
@@ -68,7 +78,7 @@ def direct_gate(out):
     identity=compatibility(model,'direct-fixture')
     identity['cell_interface_version']='separated-kvq-v2'
     export_cell(correct,out/'cell',identity,uuid.uuid4().hex)
-    torch.testing.assert_close(read(import_cell(out/'cell',model,identity)),y,atol=0,rtol=0)
+    torch.testing.assert_close(direct_read(model,k,import_cell(out/'cell',model,identity)),y,atol=0,rtol=0)
     return dict(status='PASS',correct=accuracy,permuted=control,fast_delta=delta,trace=trace,
                 cosine=float(F.cosine_similarity(y,v[labels]).mean()),
                 momentum_norm=sum(float(t.square().sum()) for t in correct.momentum.values())**.5,
