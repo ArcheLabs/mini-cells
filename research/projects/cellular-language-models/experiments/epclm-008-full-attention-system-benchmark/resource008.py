@@ -1,6 +1,9 @@
 """Isolated FP32 engineering measurements and process-restart validation."""
 import argparse
 import gc
+import shutil
+import tempfile
+import zipfile
 import json
 import os
 from pathlib import Path
@@ -30,7 +33,7 @@ def setup(arm, device):
         model.backbone.requires_grad_(False)
     else:
         config = M2['arms'][arm]
-        model = build(arm, config['model'], 42, state_size=config['state_size'])
+        model = build(arm, config['model'], P['model_seed'], state_size=config['state_size'])
     model = model.to(device).train()
     optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()),
                                   lr=.0003, betas=(.9, .95), weight_decay=.1)
@@ -46,6 +49,9 @@ def objective(model, arm, ids, cell=None):
         packet = P['segment_tokens']
         source = ids[:, :P['bindings'] * packet].reshape(1, P['bindings'], packet)
         queries = ids[:, -1-P['queries']*packet:-1].reshape(1, P['queries'], packet)
+        if cell is not None:
+            for weight in cell.fast.values():
+                weight.requires_grad_()
         cell = model.acquire(source, cell)
         hidden = model.backbone(ids[:, :-1])
         logits = model.query(hidden[:, -1-P['queries']*packet+packet::packet], queries, cell)
@@ -113,7 +119,13 @@ def recovery(arm, output, device, worker=False):
     args = (model, optimizer, scheduler, arm, 1024)
     checkpoint = output / f'{arm}-engineering.pt'
     if worker:
-        saved = torch.load(checkpoint, weights_only=True, map_location='cpu')
+        with zipfile.ZipFile(checkpoint.with_suffix('.zip')) as bundle, tempfile.TemporaryDirectory() as tmp:
+            restored = Path(tmp) / checkpoint.name
+            with bundle.open(checkpoint.name) as source, restored.open('wb') as target:
+                shutil.copyfileobj(source, target)
+            if file_hash(restored) != file_hash(checkpoint):
+                raise ValueError('Archived checkpoint hash differs')
+            saved = torch.load(restored, weights_only=True, map_location='cpu')
         cell = restore(saved, model, optimizer, scheduler, device)
         logits, cell, _ = step(*args, saved['cursor'], device, cell)
         torch.save(snapshot(model, optimizer, scheduler, 2, cell, logits, device),
@@ -122,6 +134,8 @@ def recovery(arm, output, device, worker=False):
     logits, cell, _ = step(*args, 0, device)
     torch.save(snapshot(model, optimizer, scheduler, 1, cell, logits, device), checkpoint)
     sha = file_hash(checkpoint)
+    with zipfile.ZipFile(checkpoint.with_suffix('.zip'), 'w') as bundle:
+        bundle.write(checkpoint, checkpoint.name)
     logits, cell, _ = step(*args, 1, device, cell)
     expected = snapshot(model, optimizer, scheduler, 2, cell, logits, device)
     del args, model, optimizer, scheduler, cell
@@ -141,8 +155,12 @@ def recovery(arm, output, device, worker=False):
         if state['cell'] is not None:
             # Cell UUID identifies the episode. Compare numerical state separately.
             state['cell'].pop('metadata')
+    for key in ("numpy_rng", "python_rng"):
+        if expected.pop(key) != resumed.pop(key):
+            raise ValueError(f"Restored {key} differs")
     torch.testing.assert_close(expected, resumed, rtol=0, atol=0)
     assert file_hash(checkpoint) == sha
+    checkpoint.with_suffix('.zip').unlink()
     expected_file.unlink()
     resumed_file.unlink()
     return dict(status='PASS', checkpoint=checkpoint.name, sha256=sha,
