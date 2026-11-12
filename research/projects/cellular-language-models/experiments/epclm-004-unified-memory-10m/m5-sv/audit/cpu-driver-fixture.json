@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "scope": "CPU tiny orchestration fixture; not T4 or scientific validation",
+  "ledger": {
+    "input_tokens": 128,
+    "processed_tensor_tokens": 128,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 4,
+    "query_target_tokens": 4,
+    "committed_updates": 4
+  },
+  "curve_boundaries": [
+    2,
+    4
+  ],
+  "completed_training_reused": true,
+  "separate_runtime_checkpoint_restore": true,
+  "runtime_manifest": {
+    "format": "minicells.m5.runtime.v1",
+    "model_sha256": "764667de51543983136c43c08715a3503c65035559b19bd705e43967572822a9",
+    "generation": "36b20e53e227499eab875e2d3a515c55",
+    "position": 61,
+    "batch": 1,
+    "components": {
+      "mamba.pt": "c7f2f7601d7c38f4707cd19e954ad7f6b522fd108a0de0da1493d1148b32ad25",
+      "kv.pt": "a44c5a1ea83049af58bb6b339d024430730542a4e8686a81b07562923a052a3e",
+      "predictor.pt": "a01495efe208ef0cec7d9ff8db9415a2e0f69edd6f8c20c66cf9ba9cdd4c24b7",
+      "store.pt": "e08d0ba5b8989fd8506ad53d7c4fe8f8e3268a21984a959bed75c42b84896bce"
+    },
+    "summary_state": "derived from mamba.pt plus static summary projection; no duplicate hidden state"
+  }
+}

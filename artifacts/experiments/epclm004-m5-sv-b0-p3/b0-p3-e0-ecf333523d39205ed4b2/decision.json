@@ -1,0 +1,112 @@
+{
+  "format": "minicells.b0-p3.index.v1",
+  "manifest": {
+    "experiment": "B0-P3",
+    "source_commit": "266dc1a868d135626079d8188321ae8dfb0db60e",
+    "template_sha256": "73caf4aed969d4712e53af8ca945936442898e9ae19770f19d127ebec50ca6e2",
+    "dataset_sha256": "ed9c3d0fdefffb187297b59a8b9dc7009d090764780a7cf900f6914f84c88e52",
+    "environment_sha256": "088dbbab9607cc168d913d5f601652be10348da062b0025e7ad7e6930f8e8b33",
+    "phase": "b0-p3",
+    "arm": "E0",
+    "model_seed": 75043,
+    "protocol_sha256": "af7b8de0796ba3ae039af8a004e1c822bf705ea7540ecabb9002a55c946245fe",
+    "config_sha256": "893c7db2f9539c8f000c3f7ff3650c86af00a58066e100ae013209b80217b853",
+    "initialization_sha256": "9d05d7fae7e2aaeec2e7f7d6068112511878dd6db6f377442048ce388c51b3fb",
+    "logical_batch_size": 8,
+    "historical_weights_loaded": false,
+    "planned_stage_updates": {
+      "1": 128,
+      "2": 384
+    },
+    "planned_logical_input_slots_per_arm": 458752,
+    "planned_supervised_targets_per_arm": 57344,
+    "run_id": "b0-p3-e0-ecf333523d39205ed4b2"
+  },
+  "artifact": {
+    "publication_status": "VERIFIED",
+    "run_id": "b0-p3-e0-ecf333523d39205ed4b2",
+    "artifact_id": 731908758,
+    "download_url": "https://github.com/ArcheLabs/mini-cells/releases/download/b0-p3-e0-ecf333523d39205ed4b2/bundle.tar.gz",
+    "release_url": "https://github.com/ArcheLabs/mini-cells/releases/tag/b0-p3-e0-ecf333523d39205ed4b2",
+    "sha256": "e99a8ea1d73b69a557864728b37745bfe147321aafce734699c94adf78dfd4dd",
+    "bytes": 185344916,
+    "files_verified": 69,
+    "retention": "GitHub Release; retained until explicitly removed, not an expiring Actions artifact"
+  },
+  "verification": {
+    "download": {
+      "status": "PASS",
+      "sha256": "e99a8ea1d73b69a557864728b37745bfe147321aafce734699c94adf78dfd4dd",
+      "bytes": 185344916,
+      "files_verified": 69,
+      "scope": "All archived files, including checkpoint/probabilities/metrics/report; no trusted status substitution"
+    },
+    "payload": {
+      "status": "PASS",
+      "stages": [
+        1
+      ],
+      "global_steps": 128,
+      "test_comparison": "NOT_CHECKED_TEST_SEALED"
+    },
+    "restore": {
+      "status": "PASS",
+      "stages": {
+        "1": {
+          "status": "PASS",
+          "checkpoint_sha256": "dbc962b96c978749464b0b2d7dd1e8579a683faaaaec6b53fa7c7a0664c2c238",
+          "probability_log_max_abs_error": {
+            "full_log_probabilities": 0.0,
+            "value_log_probabilities": 0.0,
+            "candidate_log_probabilities": 0.0
+          },
+          "tolerance": 2e-05
+        }
+      },
+      "new_optimizer_updates": 0,
+      "test_accessed": false
+    },
+    "stage1_gate": "BLOCKED",
+    "stage2_started": false,
+    "charged_worker_phases": [
+      {
+        "action": "benchmark1",
+        "arm": "E0",
+        "started_epoch": 1794323802.0985699,
+        "elapsed_seconds": 14.956034484000014,
+        "status": "COMPLETE"
+      },
+      {
+        "action": "benchmark2",
+        "arm": "E0",
+        "started_epoch": 1794323817.0559187,
+        "elapsed_seconds": 19.11607072199999,
+        "status": "COMPLETE"
+      },
+      {
+        "action": "stage1",
+        "arm": "E0",
+        "started_epoch": 1794323941.2617328,
+        "elapsed_seconds": 46.34860819100004,
+        "status": "COMPLETE"
+      },
+      {
+        "action": "isolated1",
+        "arm": "E0",
+        "started_epoch": 1794324218.3730278,
+        "elapsed_seconds": 6.73159444800001,
+        "status": "COMPLETE"
+      },
+      {
+        "action": "verify",
+        "arm": "E0",
+        "started_epoch": 1794324386.9367414,
+        "elapsed_seconds": 14.55691101900004,
+        "status": "COMPLETE"
+      }
+    ],
+    "independent_worker_log": ""
+  },
+  "test_status": "SEALED_NOT_ACCESSED",
+  "hypotheses": "NOT_EVALUATED"
+}

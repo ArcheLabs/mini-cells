@@ -1,0 +1,52 @@
+{
+  "format": "minicells.epclm004.dataset.v1",
+  "config": {
+    "bindings": 16,
+    "length": 512,
+    "queries": 8,
+    "interference": 1.0,
+    "seed": 51001,
+    "regime": "unseen_pairs"
+  },
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "special_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3,
+    "<fact>": 4,
+    "<query>": 5,
+    "<answer>": 6,
+    "<hole>": 7
+  },
+  "splits": {
+    "train": {
+      "episodes": 128,
+      "content_sha256": "f81c80ca272d4d41180149af0063dd231dea2ede67ad9cf3298fbafc94b3b19b"
+    },
+    "validation": {
+      "episodes": 32,
+      "content_sha256": "c73d182ad728271e065df64ee1855817b21f51695e456650cdcb8323f3045c2e"
+    }
+  },
+  "test_status": "SEALED_NOT_ACCESSED",
+  "evaluation": {
+    "61001": {
+      "episodes": 64,
+      "sha256": "cd71bd9b967ca3698e46fdaa6967925190b5312ea1df1a6b0ff917f855b95f9a"
+    },
+    "61002": {
+      "episodes": 64,
+      "sha256": "8b0d72072e1f11dfe55f4dcf55f7026aeab213def4d1a11d6f15e256d251be73"
+    },
+    "61003": {
+      "episodes": 64,
+      "sha256": "073ce7b5e02af7dc1d1072a96b9ff8d5990cdf6692959c1f8d490a1423f64193"
+    }
+  },
+  "train_heldout_pair_overlap": 0,
+  "minimum_fact_query_delay": 435,
+  "swa_receptive_field": 156,
+  "input_sha256": "cd4fda33de2fab132012cecef1881a88252916414ccf8ceb7630af6b586f72a0",
+  "target_sha256": "a6ddbd730b1b7b1386bc3c8d4753f636c86af3dd81cb34fe44d7d71b9a7cf25e"
+}
