@@ -46,7 +46,7 @@ class HeadMemory(nn.Module):
                 reads.append(memory.recall(queries.float(), cell).reshape(
                     q.shape[0], q.shape[2], -1, q.shape[-1]))
             residual = torch.cat(reads, dim=2).flatten(-2).to(args[0].dtype)
-            return (args[0] + residual * self.gate.sigmoid() * output_gate.sigmoid(),)
+            return (args[0] + (residual * self.gate.sigmoid() * output_gate.sigmoid()).to(args[0].dtype),)
 
         with chunk_local(model, index):
             capture_handle = attention.register_forward_pre_hook(capture, with_kwargs=True)
