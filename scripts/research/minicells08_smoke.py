@@ -16,7 +16,7 @@ from cell_artifact import export_cell, import_cell, state_hash, tensor_digest
 from memory import NeuralMemory
 
 
-def main(output):
+def setup():
     torch.manual_seed(42)
     if not torch.cuda.is_available() or 'T4' not in torch.cuda.get_device_name():
         raise RuntimeError('Select a Tesla T4 accelerator')
@@ -30,7 +30,11 @@ def main(output):
         [('memory', memory), ('projection', projection), ('gate', gate)]
         for key, value in module.state_dict().items()
     })}
-    runtime = MultiCellRuntime(backbone, memory, projection, gate)
+    return MultiCellRuntime(backbone, memory, projection, gate), identity
+
+
+def main(output):
+    runtime, identity = setup()
     ids = torch.tensor([[2, 3, 4, 5]], device='cuda')
     for name in ('A', 'B', 'C'):
         runtime.create(name)
@@ -47,7 +51,7 @@ def main(output):
     assert not torch.equal(read['logits'], baseline['logits'])
     runtime.export_bundle(learned['runtime_state'], ('A', 'B', 'C'), output / 'bundle',
                           identity=identity, exporter=export_cell)
-    fresh = MultiCellRuntime(backbone, memory, projection, gate)
+    fresh = MultiCellRuntime(runtime.backbone, runtime.memory, runtime.projection, runtime.gate)
     state = fresh.import_bundle(output / 'bundle', identity=identity, importer=import_cell)
     assert state.cache.get_seq_length() == 0
     assert state_hash(fresh.get('C')) == state_hash(runtime.get('C'))
