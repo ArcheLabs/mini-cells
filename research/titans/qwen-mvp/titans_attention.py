@@ -16,7 +16,7 @@ class HeadMemory(nn.Module):
         self.gate = nn.Parameter(torch.zeros(attention.o_proj.in_features))
 
     @contextmanager
-    def attach(self, model, index, cells, *, write=True, mode='online_adapt'):
+    def attach(self, model, index, cells, *, write=True, mode='online_adapt', read_cells=None):
         from transformers.models.qwen3_5.modeling_qwen3_5 import apply_rotary_pos_emb
 
         if len(cells) != len(self.shards):
@@ -24,6 +24,10 @@ class HeadMemory(nn.Module):
         attention = model.model.layers[index].self_attn
         pending = []
         original = tuple(cells)
+        readers = (original,) if read_cells is None else tuple(tuple(group) for group in read_cells)
+        if any(len(group) != len(original) for group in readers):
+            raise ValueError("Invalid read shard count")
+        readers = tuple(group for group in readers if all(cell.update_step for cell in group))
 
         def capture(module, args, kwargs):
             hidden = kwargs['hidden_states']
@@ -41,9 +45,11 @@ class HeadMemory(nn.Module):
             q, _, _, output_gate = pending[0]
             groups = q.chunk(len(self.shards), dim=1)
             reads = []
-            for memory, cell, queries in zip(self.shards, original, groups):
+            for i, (memory, queries) in enumerate(zip(self.shards, groups)):
                 queries = queries.transpose(1, 2).flatten(1, 2)
-                reads.append(memory.recall(queries.float(), cell, 'meta_train' if mode == 'meta_train' else 'read_only').reshape(
+                reads.append(torch.stack([memory.recall(queries.float(), group[i],
+                    'meta_train' if mode == 'meta_train' else 'read_only')
+                    for group in readers]).mean(0).reshape(
                     q.shape[0], q.shape[2], -1, q.shape[-1]))
             residual = torch.cat(reads, dim=2).flatten(-2).to(args[0].dtype)
             return (args[0] + (residual * self.gate.sigmoid() * output_gate.sigmoid()).to(args[0].dtype),)
@@ -51,7 +57,7 @@ class HeadMemory(nn.Module):
         with chunk_local(model, index):
             capture_handle = attention.register_forward_pre_hook(capture, with_kwargs=True)
             fuse_handle = (attention.o_proj.register_forward_pre_hook(fuse)
-                           if all(cell.update_step for cell in original) else None)
+                           if readers else None)
             try:
                 yield
                 if write:
