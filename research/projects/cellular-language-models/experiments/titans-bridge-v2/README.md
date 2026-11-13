@@ -33,3 +33,16 @@ the test matrix. Use at least 100 paired episodes per primary condition
 and bootstrap at episode level.
 
 Tracks B and later remain pending. Test data have not been materialized.
+
+## Reproduction result
+
+P4-M1 finished all 15 episodes. Recall@1 was 100% for all three seeds at
+4, 8 and 16 associations. The original M1.1 runner completed 75 episodes.
+In all nine insertion-order trials the first group fell from 100% recall
+to 0% after the third write. See the archived manifests for geometry,
+update counts, the granularity curves and all insertion orders.
+
+The 0.8 development pilot at fd454c39f4b29954e83d9de331569a3feb26db65
+reported 64/512 correct-Cell recalls, 74/512 empty-Cell recalls and
+67/512 permuted-Cell recalls. All three produced 0/512 exact answers.
+The pilot report does not include the adapter weights.
