@@ -21,13 +21,16 @@ CONFIG = dict(loads=[8, 16, 32, 64], seeds=[41036, 41037, 41038],
               initialization_seed=41035, bootstrap=10000)
 
 
-def run(n, seed, method, width):
-    memory = initialize(CONFIG['initialization_seed'])
-    keys, candidates, labels, _, hard, _ = generate(n, seed, 'gaussian', memory.dim)
+def run(n, seed, method, width, device):
+    memory = initialize(CONFIG['initialization_seed']).to(device)
+    keys, candidates, labels, _, hard, _ = (x.to(device) for x in generate(n, seed, 'gaussian', memory.dim))
     values = candidates[labels] * math.sqrt(memory.dim)
     cell = memory.create(mode='online_adapt')
     initial = cell.detached()
     rng = torch.Generator().manual_seed(seed + 17)
+    if device == 'cuda':
+        torch.cuda.synchronize()
+        torch.cuda.reset_peak_memory_stats()
     start = time.perf_counter()
     for _ in range(CONFIG['exposures']):
         for ids in torch.randperm(n, generator=rng).split(width):
@@ -36,7 +39,10 @@ def run(n, seed, method, width):
                                        memory_forward, transition)
             else:
                 cell, _ = memory.learn(keys[ids][None], values[ids][None], cell, 'online_adapt')
+    if device == 'cuda':
+        torch.cuda.synchronize()
     seconds = time.perf_counter() - start
+    peak = torch.cuda.max_memory_allocated() if device == 'cuda' else None
     scores = F.normalize(read(memory, cell, keys), dim=-1) @ candidates.T
     correct = scores.gather(1, labels[:, None]).flatten()
     other = scores.scatter(1, labels[:, None], -torch.inf).amax(1)
@@ -50,13 +56,14 @@ def run(n, seed, method, width):
                 delta=norm({k: v-initial.fast[k] for k, v in cell.fast.items()}),
                 presentations=n*CONFIG['exposures'], gradients=cell.update_step,
                 transitions=cell.update_step, controls=cell.update_step,
-                outer_optimizer_updates=0, update_seconds=seconds)
+                outer_optimizer_updates=0, update_seconds=seconds, peak_cuda_bytes=peak)
 
 
-def main(output):
+def main(output, device):
     torch.set_num_threads(1)
-    output.mkdir()
-    (output / 'config.json').write_text(json.dumps(CONFIG, indent=2))
+    output.mkdir(exist_ok=True)
+    (output / 'config.json').write_text(json.dumps({**CONFIG, "device": device, "torch": str(torch.__version__),
+                                                   "gpu": torch.cuda.get_device_name() if device == "cuda" else None}, indent=2))
     with (output / 'episodes.jsonl').open('w', buffering=1) as stream:
         for n in CONFIG['loads']:
             for seed in CONFIG['seeds']:
@@ -64,7 +71,7 @@ def main(output):
                     data_seed = seed * 100 + episode
                     for method, width in [('batch', n), ('chunk4', 4), ('chunk8', 8), ('sequential', 1), ('chunk_start_reference4', 4)]:
                         try:
-                            row = run(n, data_seed, method, width)
+                            row = run(n, data_seed, method, width, device)
                         except Exception as error:
                             row = dict(method=method, status='FAIL', error=repr(error))
                         stream.write(json.dumps(dict(n=n, seed=seed, episode=episode, **row),
@@ -74,4 +81,8 @@ def main(output):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
-    main(parser.parse_args().output)
+    parser.add_argument('--device', choices=('cpu', 'cuda'), default='cpu')
+    args = parser.parse_args()
+    if args.device == 'cuda' and (not torch.cuda.is_available() or 'T4' not in torch.cuda.get_device_name()):
+        parser.error('Tesla T4 required')
+    main(args.output, args.device)
