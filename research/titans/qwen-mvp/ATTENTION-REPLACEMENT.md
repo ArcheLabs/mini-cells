@@ -9,3 +9,8 @@ are single-token on the pinned DeltaNet backend.
 
 T4 execution and language-quality measurements are pending. Titans
 fusion, gradient updates and outer LM training are subsequent gates.
+
+The smoke also reports paired teacher-forced next-token NLL and top-1
+counts on two fixed text passages. Each arm sees the same four-token
+prefix and then identical one-token calls. This is a language-path
+diagnostic on a small fixture. Corpus-level quality remains unmeasured.
