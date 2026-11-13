@@ -1,0 +1,71 @@
+{
+  "status": "E3_GRADIENT_SMOKE_PASS",
+  "identity": {
+    "model": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "dtype": "torch.float32",
+    "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "transformers": "5.3.0"
+  },
+  "layer": 3,
+  "gpu": "Tesla T4",
+  "updates": [
+    {
+      "update": 1,
+      "nll": 12.85142707824707,
+      "gradients": {
+        "gate": 0.3623262093632873,
+        "shards.0.controls.weight": 0.08239952361038783,
+        "shards.0.controls.bias": 0.08957960235687927,
+        "shards.0.initial.b1": 0.17447855330351505,
+        "shards.0.initial.b2": 2.2002999956498552,
+        "shards.0.initial.ln_bias": 1.359776900168332,
+        "shards.0.initial.ln_weight": 3.09272893403,
+        "shards.0.initial.w1": 0.20065881437590605,
+        "shards.0.initial.w2": 0.6089033530266623,
+        "shards.1.controls.weight": 0.02770176619234368,
+        "shards.1.controls.bias": 0.03212723513905169,
+        "shards.1.initial.b1": 0.06318196909076187,
+        "shards.1.initial.b2": 0.7916724861802383,
+        "shards.1.initial.ln_bias": 0.15342404227896397,
+        "shards.1.initial.ln_weight": 0.8309661227345797,
+        "shards.1.initial.w1": 0.07610985416934386,
+        "shards.1.initial.w2": 0.3793848111766345
+      }
+    },
+    {
+      "update": 2,
+      "nll": 12.685023307800293,
+      "gradients": {
+        "gate": 0.3947569687069362,
+        "shards.0.controls.weight": 0.09580813570030744,
+        "shards.0.controls.bias": 0.10415660527467556,
+        "shards.0.initial.b1": 0.17978889405203632,
+        "shards.0.initial.b2": 2.233695249229156,
+        "shards.0.initial.ln_bias": 1.4197724673295893,
+        "shards.0.initial.ln_weight": 3.2252956498389813,
+        "shards.0.initial.w1": 0.202823901996337,
+        "shards.0.initial.w2": 0.6344788341445485,
+        "shards.1.controls.weight": 0.025520380654677592,
+        "shards.1.controls.bias": 0.02959736451504918,
+        "shards.1.initial.b1": 0.07236504921200007,
+        "shards.1.initial.b2": 0.8390549834680766,
+        "shards.1.initial.ln_bias": 0.16316520134417656,
+        "shards.1.initial.ln_weight": 0.8767792622266565,
+        "shards.1.initial.w1": 0.08436251220393112,
+        "shards.1.initial.w2": 0.46112547960117006
+      }
+    }
+  ],
+  "supervised_targets": 2,
+  "fixture_nll": {
+    "E2": 12.346128463745117,
+    "E3": 12.369839668273926
+  },
+  "checkpoint_restore": "PASS",
+  "checkpoint_sha256": "85b14ce4fc4df6d8509bd30fcf585f8ea474250b1bdbb7e4ad47be769b54a4fd",
+  "peak_cuda_bytes": 3106969600,
+  "format": "minicells.qwen-mvp.e3-smoke.v1",
+  "source_commit": "a648cdb9459273b1ac0f881f9ec07d88344cf6dd",
+  "run_id": "qwen-mvp-e3-smoke-96db971c4023"
+}
