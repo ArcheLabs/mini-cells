@@ -42,7 +42,7 @@ class Qwen35Adapter:
                                transformers=TRANSFORMERS))
 
     @torch.no_grad()
-    def encode(self, ids, state=None):
+    def encode(self, ids, state=None, *, absolute_positions=False):
         cache = self.cache_type(self.config)
         processed = 0
         if state is not None:
@@ -52,8 +52,16 @@ class Qwen35Adapter:
                 values = getattr(state.cache, name)
                 setattr(cache, name, [None if v is None else v.clone() for v in values])
         chunks = ids.split(1, dim=1) if processed else (ids,)
-        hidden = [self.model.model(input_ids=chunk, past_key_values=cache,
-                                   use_cache=True).last_hidden_state for chunk in chunks]
+        hidden = []
+        position = processed
+        for chunk in chunks:
+            kwargs = {}
+            if absolute_positions:
+                kwargs['position_ids'] = torch.arange(
+                    position, position + chunk.shape[1], device=ids.device)[None]
+            hidden.append(self.model.model(input_ids=chunk, past_key_values=cache,
+                                          use_cache=True, **kwargs).last_hidden_state)
+            position += chunk.shape[1]
         return torch.cat(hidden, dim=1), Session(cache, processed + ids.shape[1])
 
     def logits(self, hidden):

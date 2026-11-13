@@ -22,9 +22,10 @@ def chunk_local(model, index):
     def local_inputs(module, args, kwargs):
         hidden = kwargs.get('hidden_states', args[0] if args else None)
         mask = kwargs.get('attention_mask')
-        if mask is None:
+        if mask is None and hidden.shape[1] != 1:
             raise ValueError('Expected native eager causal mask')
-        kwargs['attention_mask'] = mask[..., -hidden.shape[1]:]
+        if mask is not None:
+            kwargs['attention_mask'] = mask[..., -hidden.shape[1]:]
         if kwargs.get('past_key_values') is not None:
             kwargs['past_key_values'] = ChunkCache()
         return args, kwargs
