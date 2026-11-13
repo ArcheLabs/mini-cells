@@ -16,7 +16,7 @@ class HeadMemory(nn.Module):
         self.gate = nn.Parameter(torch.zeros(attention.o_proj.in_features))
 
     @contextmanager
-    def attach(self, model, index, cells, *, write=True):
+    def attach(self, model, index, cells, *, write=True, mode='online_adapt'):
         from transformers.models.qwen3_5.modeling_qwen3_5 import apply_rotary_pos_emb
 
         if len(cells) != len(self.shards):
@@ -43,7 +43,7 @@ class HeadMemory(nn.Module):
             reads = []
             for memory, cell, queries in zip(self.shards, original, groups):
                 queries = queries.transpose(1, 2).flatten(1, 2)
-                reads.append(memory.recall(queries.float(), cell).reshape(
+                reads.append(memory.recall(queries.float(), cell, 'meta_train' if mode == 'meta_train' else 'read_only').reshape(
                     q.shape[0], q.shape[2], -1, q.shape[-1]))
             residual = torch.cat(reads, dim=2).flatten(-2).to(args[0].dtype)
             return (args[0] + (residual * self.gate.sigmoid() * output_gate.sigmoid()).to(args[0].dtype),)
@@ -57,7 +57,7 @@ class HeadMemory(nn.Module):
                 if write:
                     _, keys, values, _ = pending[0]
                     updates = [memory.learn(keys[:, i].float(), values[:, i].float(),
-                                            cell, 'online_adapt')[0]
+                                            cell, mode)[0]
                                for i, (memory, cell) in enumerate(zip(self.shards, original))]
                     if not all(t.isfinite().all() for cell in updates
                                for t in (*cell.fast.values(), *cell.momentum.values())):
