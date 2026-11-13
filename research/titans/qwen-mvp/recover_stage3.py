@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE = Path(__file__).with_name('stage6-source.json')
@@ -43,7 +44,10 @@ def recover(output):
 
 
 if __name__ == '__main__':
-    from stage6 import main
-
-    report = Path(sys.argv[1])
-    main(report, recover(report.parent), SOURCE)
+    report = Path(sys.argv[1]).resolve()
+    checkpoint = recover(report.parent)
+    subprocess.run(
+        [sys.executable, str(SOURCE.with_name('stage6.py')), str(report),
+         str(checkpoint), str(SOURCE)],
+        check=True,
+    )
