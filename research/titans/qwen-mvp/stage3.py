@@ -13,7 +13,7 @@ def main(output):
     if not torch.cuda.is_available() or 'T4' not in torch.cuda.get_device_name():
         raise RuntimeError('Tesla T4 required')
     torch.manual_seed(42)
-    adapter = Qwen35Adapter.load()
+    adapter = Qwen35Adapter.load(dtype=torch.float32)
     model = adapter.model.requires_grad_(False)
     model.set_attn_implementation('eager')
     index = model.config.layer_types.index('full_attention')
@@ -39,10 +39,12 @@ def main(output):
                                  use_cache=True).last_hidden_state
         loss = F.cross_entropy(adapter.logits(hidden[:, -1]).float(), ids[:, 5])
         loss.backward()
-        gradients = {name: float(p.grad.norm()) for name, p in params.items() if p.grad is not None}
-        if gradients.keys() != params.keys() or not all(
-                torch.isfinite(torch.tensor(v)) for v in gradients.values()):
-            raise RuntimeError('Missing or nonfinite outer gradients')
+        missing = [name for name, p in params.items() if p.grad is None]
+        nonfinite = [name for name, p in params.items()
+                     if p.grad is not None and not p.grad.isfinite().all()]
+        if missing or nonfinite:
+            raise RuntimeError(f'Update {update + 1}: missing={missing}, nonfinite={nonfinite}')
+        gradients = {name: float(p.grad.double().norm()) for name, p in params.items()}
         for prefix in ('gate', 'shards.0.initial', 'shards.1.initial',
                        'shards.0.controls', 'shards.1.controls'):
             if not any(v > 0 for name, v in gradients.items() if name.startswith(prefix)):
