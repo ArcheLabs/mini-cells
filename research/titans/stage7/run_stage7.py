@@ -46,7 +46,6 @@ class Memory(nn.Module):
                 self.address[h](queries[:, h*4:h*4+4]), dim=-1)
             v = self.value[h](values[:, h])
             cell = shard.create(mode=mode)
-            initial = cell
             if control != 'empty':
                 targets = v if control == 'correct' else v.roll(1, 0)
                 for x, y in zip(k.split(width), targets.split(width)):
@@ -193,7 +192,7 @@ def main(config_path, output):
     finally:
         for name in ('baseline', 'false_recall', 'generalization_gate', 'distractor', 'contradiction',
                      'interference', 'isolation', 'persistence', 'tnt', 'fusion'):
-            report['gates'][name] = 'PENDING_IMPLEMENTATION'
+            report['gates'][name] = 'ERROR'
         report.update(seconds=time.monotonic()-started, config_sha256=digest(config))
         save(output/'smoke.json', report)
         (output/'FINAL_REPORT.md').write_text('# Stage 7 development evidence\n\n' +
