@@ -52,6 +52,25 @@ def measure(adapter, memories, sequence, *, train):
 
 def main(output, resume=None):
     deadline = time.monotonic() + 8800
+    # The original T4 run reached 67 logged updates in 9,600 seconds,
+    # including validation and checkpoint writes.
+    if resume:
+        saved = torch.load(resume, weights_only=True, map_location='cpu')
+        completed = len(saved['history'])
+        stopped = saved['stale'] >= 3
+        del saved
+    else:
+        completed, stopped = 0, False
+    remaining = 0 if stopped else max(0, UPDATES - completed)
+    projected = remaining * (9600 / 67) * 1.15
+    if projected > 8800:
+        output.write_text(json.dumps(dict(
+            status='STAGE6C_BLOCKED_BUDGET', completed_updates=completed,
+            remaining_updates=remaining, projected_seconds=round(projected),
+            training_budget_seconds=8800, optimizer_updates_this_session=0,
+            estimate_basis='67 logged updates in 9600 seconds, plus 15% margin',
+        ), indent=2))
+        return
     from itertools import islice
     from transformers import AutoTokenizer
 
