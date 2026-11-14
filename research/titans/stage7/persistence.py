@@ -14,19 +14,21 @@ def restore(path):
 
     sys.path.insert(0, str(BASE.parents[2] / 'research/projects/cellular-language-models/experiments'
                           / 'epclm-006-cross-session-cell-portability'))
-    from cell_artifact import import_cell
+    from cell_artifact import import_cell, state_hash
 
     payload = torch.load(path / 'fixture.pt', weights_only=True, map_location='cpu')
     adapter = Qwen35Adapter.load()
     if adapter.identity != payload['identity']['model']:
         raise ValueError('Restored backbone identity differs')
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, revision=REVISION)
-    (_, queries, _), _ = encode(adapter, tokenizer, json.loads((path / 'packets.json').read_text()))
+    (_, queries, values), _ = encode(adapter, tokenizer, json.loads((path / 'packets.json').read_text()))
     model = Memory().cuda()
     model.load_state_dict(payload['weights'])
+    scores = []
     for index, shard in enumerate(model.shards):
         holder = SimpleNamespace(memory=shard, parameters=shard.parameters)
         cell = import_cell(path / f'shard-{index}', holder, payload['identity'])
+        before = state_hash(cell)
         query, expected = payload['reads'][index]
         with torch.no_grad():
             fresh = torch.nn.functional.normalize(
@@ -34,7 +36,22 @@ def restore(path):
             torch.testing.assert_close(fresh.cpu(), query, atol=1e-5, rtol=1e-4)
             actual = shard.recall(fresh, cell).cpu()
         torch.testing.assert_close(actual, expected, atol=1e-5, rtol=1e-4)
-    (path / 'restore.json').write_text(json.dumps({'status': 'PASS', 'shards': 2}))
+        if state_hash(cell) != before:
+            raise RuntimeError('Read changed restored Cell')
+        with torch.no_grad():
+            normalized = torch.nn.functional.normalize
+            read = model.readout[index](actual.to(values.device).reshape(len(values), 4, -1))
+            candidates = model.value[index](values[:, index])
+            scores.append((normalized(read, dim=-1) @ normalized(candidates, dim=-1).T).mean(1)*10)
+    actual_scores = torch.stack(scores).mean(0).cpu()
+    expected_scores = payload['scores']
+    torch.testing.assert_close(actual_scores, expected_scores, atol=1e-5, rtol=1e-4)
+    if not torch.equal(actual_scores.argmax(1), expected_scores.argmax(1)):
+        raise RuntimeError('Restored predictions differ')
+    accuracy = float(actual_scores.argmax(1).eq(torch.arange(len(values))).float().mean())
+    (path / 'restore.json').write_text(json.dumps({'status': 'PASS', 'shards': 2,
+                                                   'queries': len(values), 'recall': accuracy,
+                                                   'recall_drop': 0.0}))
 
 
 if __name__ == '__main__':

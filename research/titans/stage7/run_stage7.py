@@ -169,12 +169,12 @@ def export_persistence(model, features, output, identity, rows):
     path.mkdir()
     captured = []
     with torch.no_grad():
-        model(features, capture=captured)
+        scores, _ = model(features, capture=captured)
     source = str(uuid.uuid4())
     for index, (cell, _, _) in enumerate(captured):
         export_cell(cell, path / f'shard-{index}', identity, source)
     torch.save(dict(weights=dict(model.state_dict()), identity=identity,
-                    reads=[(query, expected) for _, query, expected in captured]), path / 'fixture.pt')
+                    scores=scores.cpu(), reads=[(query, expected) for _, query, expected in captured]), path / 'fixture.pt')
     save(path / 'packets.json', rows)
 
 
