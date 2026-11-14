@@ -44,6 +44,6 @@ if __name__ == '__main__':
     checkpoint = recover(report.parent)
     subprocess.run(
         [sys.executable, str(Path(__file__).with_name('train6c.py')), str(report),
-         '--resume', str(checkpoint)],
+         '--resume', str(checkpoint), '--target-updates', '96'],
         check=True,
     )

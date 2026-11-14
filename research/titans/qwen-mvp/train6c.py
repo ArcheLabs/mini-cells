@@ -3,7 +3,6 @@ import hashlib
 import json
 from pathlib import Path
 import sys
-import time
 
 import torch
 from torch.nn.functional import cross_entropy
@@ -50,27 +49,7 @@ def measure(adapter, memories, sequence, *, train):
     return total / 1024
 
 
-def main(output, resume=None):
-    deadline = time.monotonic() + 8800
-    # The original T4 run reached 67 logged updates in 9,600 seconds,
-    # including validation and checkpoint writes.
-    if resume:
-        saved = torch.load(resume, weights_only=True, map_location='cpu')
-        completed = len(saved['history'])
-        stopped = saved['stale'] >= 3
-        del saved
-    else:
-        completed, stopped = 0, False
-    remaining = 0 if stopped else max(0, UPDATES - completed)
-    projected = remaining * (9600 / 67) * 1.15
-    if projected > 8800:
-        output.write_text(json.dumps(dict(
-            status='STAGE6C_BLOCKED_BUDGET', completed_updates=completed,
-            remaining_updates=remaining, projected_seconds=round(projected),
-            training_budget_seconds=8800, optimizer_updates_this_session=0,
-            estimate_basis='67 logged updates in 9600 seconds, plus 15% margin',
-        ), indent=2))
-        return
+def main(output, resume=None, *, target_updates=UPDATES):
     from itertools import islice
     from transformers import AutoTokenizer
 
@@ -115,9 +94,11 @@ def main(output, resume=None):
     if resume and checkpoint.resolve() != resume.resolve():
         import shutil
         shutil.copy2(resume, checkpoint)
-    iterator = islice(windows('train', tokenizer), len(history), UPDATES)
+    if not len(history) <= target_updates <= UPDATES:
+        raise ValueError("Invalid target for restored training progress")
+    iterator = islice(windows('train', tokenizer), len(history), target_updates)
     for sequence in iterator:
-        if stale >= 3 or time.monotonic() >= deadline:
+        if stale >= 3:
             break
         optimizer.zero_grad(set_to_none=True)
         loss = measure(adapter, native, sequence, train=True)
@@ -146,13 +127,13 @@ def main(output, resume=None):
         with output.with_name('training.jsonl').open('a') as log:
             log.write(json.dumps(row) + '\n')
         print(row, flush=True)
-    complete = len(history) == UPDATES or stale >= 3
-    if not complete and time.monotonic() < deadline:
+    complete = len(history) == target_updates or stale >= 3
+    if not complete:
         raise RuntimeError('Training stream exhausted')
     with checkpoint.open('rb') as stream:
         checkpoint_sha256 = hashlib.file_digest(stream, 'sha256').hexdigest()
     output.write_text(json.dumps(dict(status='STAGE6C_TRAIN_COMPLETE' if complete else 'STAGE6C_TRAIN_PAUSED',
-        checkpoint_sha256=checkpoint_sha256, identity=identity,
+        checkpoint_sha256=checkpoint_sha256, identity=identity, target_updates=target_updates,
         updates=len(history), supervised_targets=1024 * len(history), best_validation_nll=best,
         peak_cuda_bytes=torch.cuda.max_memory_allocated(), test='SEALED'), indent=2))
 
@@ -163,5 +144,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
     parser.add_argument('--resume', type=Path)
+    parser.add_argument('--target-updates', type=int, default=UPDATES)
     args = parser.parse_args()
-    main(args.output, args.resume)
+    main(args.output, args.resume, target_updates=args.target_updates)
