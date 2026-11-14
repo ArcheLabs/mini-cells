@@ -37,8 +37,10 @@ class Memory(nn.Module):
         self.readout = nn.ModuleList(nn.Linear(32, 32) for _ in range(2))
         self.shards = nn.ModuleList(NeuralMemory(32) for _ in range(2))
 
-    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None, positions=None, intervention=None, distractors=None):
+    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None, positions=None, intervention=None, distractors=None, query_override=None):
         keys, queries, values = episode
+        if query_override is not None:
+            queries = query_override
         assert keys.shape == values.shape and keys.shape[1:] == (2, 256)
         assert queries.shape == (keys.shape[0], 8, 256)
         scores, alignment, separation, retention = [], [], [], []
@@ -240,9 +242,21 @@ def main(config_path, output, resume=None):
         with checkpoint.open('rb') as stream:
             report['checkpoint_sha256'] = hashlib.file_digest(stream, 'sha256').hexdigest()
         results = []
+        validation_scores = []
+        with torch.no_grad():
+            for i in range(len(data['validation'])):
+                if time.monotonic() >= deadline - 120:
+                    break
+                a, _ = encode(adapter, tokenizer, data['validation'][i])
+                b, _ = encode(adapter, tokenizer, data['validation'][(i+1)%len(data['validation'])])
+                unknown, _ = model(a, query_override=b[1])
+                validation_scores.extend(unknown.amax(1).tolist())
+        cutoff = (sorted(validation_scores)[int(.95*len(validation_scores))]
+                  if validation_scores else None)
+        report['rejection_cutoff'] = cutoff
         persistence_features = None
         with torch.no_grad():
-            for rows in data['test']:
+            for test_index, rows in enumerate(data['test']):
                 if time.monotonic() >= deadline:
                     break
                 features, lengths = encode(adapter, tokenizer, rows)
@@ -250,6 +264,11 @@ def main(config_path, output, resume=None):
                 if persistence_features is None:
                     persistence_features = features
                 row = {}
+                if cutoff is not None:
+                    alternate, _ = encode(adapter, tokenizer,
+                                          data['test'][(test_index+1)%len(data['test'])])
+                    unknown, _ = model(features, query_override=alternate[1])
+                    row['false_recall'] = float((unknown.amax(1) > cutoff).float().mean())
                 for exact in (True, False):
                     for control in ('correct', 'empty', 'donor'):
                         scores, _ = model(features, exact=exact, control=control)
@@ -283,6 +302,10 @@ def main(config_path, output, resume=None):
                 report['recall']['False/correct'] >= config['thresholds']['paraphrase']
                 and all(gain['mean'] >= config['thresholds']['gain'] and gain['ci95'][0] > 0
                         for gain in gains)) else 'FAIL'
+            if cutoff is not None:
+                report['gates']['false_recall'] = ('PASS' if
+                    report['recall']['false_recall'] <= config['thresholds']['false_recall']
+                    else 'FAIL')
             report['gates']['contradiction'] = 'PASS' if (
                 report['contradiction']['latest_correct'] >= .90 and
                 report['contradiction']['stale_value'] <= .05) else 'FAIL'
