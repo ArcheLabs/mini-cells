@@ -15,6 +15,7 @@ from torch.nn import functional as F
 
 BASE = Path(__file__).resolve().parent
 sys.path.insert(0, str(BASE.parent / 'qwen-mvp'))
+from statistics7 import paired
 from stage2 import NeuralMemory, Qwen35Adapter
 from minicells_runtime.qwen35 import MODEL_ID, REVISION
 
@@ -243,11 +244,16 @@ def main(config_path, output):
                 'PASS' if report['recall']['True/correct'] >= config['thresholds']['addressing'] else 'FAIL')
             for key in ('latest_correct', 'stale_value', 'unrelated_recall'):
                 report.setdefault('contradiction', {})[key] = report['recall'][key]
-            gains = [report['recall']['False/correct'] - report['recall'][f'False/{control}']
-                     for control in ('empty', 'donor')]
+            report['paired'] = {
+                f'{exact}/{control}': paired([row[f'{exact}/correct'] - row[f'{exact}/{control}']
+                                             for row in results])
+                for exact in (True, False) for control in ('empty', 'donor')
+            }
+            gains = [report['paired'][f'False/{control}'] for control in ('empty', 'donor')]
             report['gates']['generalization_gate'] = 'PASS' if (
                 report['recall']['False/correct'] >= config['thresholds']['paraphrase']
-                and min(gains) >= config['thresholds']['gain']) else 'FAIL'
+                and all(gain['mean'] >= config['thresholds']['gain'] and gain['ci95'][0] > 0
+                        for gain in gains)) else 'FAIL'
             report['outcome'] = 'FAILURE' if report['gates']['addressing_accuracy']=='FAIL' else 'INCONCLUSIVE'
         else:
             report['gates']['retrieval'] = 'SKIPPED_BUDGET'
