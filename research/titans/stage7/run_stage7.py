@@ -1,0 +1,208 @@
+"""Clean-slate episodic training on native pre-RoPE Qwen head features."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import random
+import sys
+import time
+
+import torch
+from torch import nn
+from torch.nn import functional as F
+
+BASE = Path(__file__).resolve().parent
+sys.path.insert(0, str(BASE.parent / 'qwen-mvp'))
+from stage2 import NeuralMemory, Qwen35Adapter
+from minicells_runtime.qwen35 import MODEL_ID, REVISION
+
+
+def digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
+
+
+def save(path, data):
+    temp = path.with_suffix('.tmp')
+    temp.write_text(json.dumps(data, indent=2, allow_nan=False))
+    temp.replace(path)
+
+
+class Memory(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.address = nn.ModuleList(nn.Linear(256, 32) for _ in range(2))
+        self.value = nn.ModuleList(nn.Linear(256, 32) for _ in range(2))
+        self.readout = nn.ModuleList(nn.Linear(32, 32) for _ in range(2))
+        self.shards = nn.ModuleList(NeuralMemory(32) for _ in range(2))
+
+    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt'):
+        keys, queries, values = episode
+        assert keys.shape == values.shape and keys.shape[1:] == (2, 256)
+        assert queries.shape == (keys.shape[0], 8, 256)
+        scores, alignment, separation, retention = [], [], [], []
+        for h, shard in enumerate(self.shards):
+            k = F.normalize(self.address[h](keys[:, h]), dim=-1)
+            q = k[:, None].expand(-1, 4, -1) if exact else F.normalize(
+                self.address[h](queries[:, h*4:h*4+4]), dim=-1)
+            v = self.value[h](values[:, h])
+            cell = shard.create(mode=mode)
+            initial = cell
+            if control != 'empty':
+                targets = v if control == 'correct' else v.roll(1, 0)
+                for x, y in zip(k.split(width), targets.split(width)):
+                    cell, _ = shard.learn(x[None], y[None], cell, mode)
+            read = shard.recall(q.flatten(0, 1)[None], cell,
+                                'meta_train' if mode == 'meta_train' else 'read_only')
+            read = self.readout[h](read.reshape(len(k), 4, -1))
+            scores.append((F.normalize(read, dim=-1) @ F.normalize(v, dim=-1).T).mean(1)*10)
+            alignment.append((1-(q*k[:, None]).sum(-1)).mean())
+            similarity = k @ k.T
+            separation.append(similarity.masked_fill(torch.eye(len(k), dtype=torch.bool,
+                                                               device=k.device), 0).relu().mean())
+            retention.append(F.mse_loss(shard.recall(k[None], cell, mode)[0], v))
+        return torch.stack(scores).mean(0), [torch.stack(x).mean() for x in
+                                             (alignment, separation, retention)]
+
+
+def dataset(config):
+    templates = [
+        ('The assigned code for {} is', 'What is the code of {}?', 'The value is {}.'),
+        ('Record the key for {}.', 'Which key belongs to {}?', 'The key reads {}.'),
+        ('Identifier entry for {}.', 'Retrieve the identifier assigned to {}.', 'Identifier: {}.'),
+    ]
+    result = {}
+    for split, (key, query, value) in zip(('train', 'validation', 'test'), templates):
+        rng = random.Random(f"{config['seed']}:{split}")
+        result[split] = []
+        for i in range(config[split+'_episodes']):
+            names = [f'{split}-{i}-{j}-{rng.getrandbits(32):08x}' for j in range(config['candidates'])]
+            result[split].append([(key.format(n), query.format(n),
+                                   value.format(f'{split}-{rng.getrandbits(48):012x}')) for n in names])
+    return result
+
+
+@torch.no_grad()
+def encode(adapter, tokenizer, rows):
+    attention = adapter.model.model.layers[3].self_attn
+    result = []
+    def capture(module, args, kwargs):
+        x = kwargs['hidden_states'][:, -1]
+        q = module.q_proj(x).reshape(8, 512)[:, :256]
+        k = module.k_proj(x).reshape(2, 256)
+        v = module.v_proj(x).reshape(2, 256)
+        result.append((module.k_norm(k).float(), module.q_norm(q).float(), v.float()))
+    hook = attention.register_forward_pre_hook(capture, with_kwargs=True)
+    try:
+        for field in range(3):
+            for row in rows:
+                ids = tokenizer.encode(row[field], add_special_tokens=False)
+                adapter.encode(torch.tensor([ids], device='cuda'))
+    finally:
+        hook.remove()
+    n = len(rows)
+    return tuple(torch.stack([item[i] for item in result[i*n:(i+1)*n]]) for i in range(3))
+
+
+def main(config_path, output):
+    from transformers import AutoTokenizer
+
+    started = time.monotonic()
+    output.mkdir(parents=True, exist_ok=True)
+    config = json.loads(config_path.read_text())
+    save(output/'config.json', config)
+    report = dict(status='MINICELLS_MVP_INCOMPLETE', outcome='INCONCLUSIVE', gates={})
+    try:
+        if not torch.cuda.is_available() or 'T4' not in torch.cuda.get_device_name():
+            raise RuntimeError('Tesla T4 required')
+        torch.manual_seed(config['seed'])
+        torch.cuda.set_per_process_memory_fraction(
+            min(1., config['max_gpu_memory_gib']*2**30/torch.cuda.get_device_properties(0).total_memory))
+        data = dataset(config)
+        if len(data['test'])*config['candidates'] > config['max_eval_examples']:
+            raise ValueError('Test exceeds the frozen example budget')
+        save(output/'dataset_manifest.json', {k: dict(episodes=len(v), sha256=digest(v))
+                                              for k,v in data.items()})
+        adapter = Qwen35Adapter.load()
+        adapter.model.requires_grad_(False)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, revision=REVISION)
+        save(output/'environment.json', dict(model=adapter.identity, gpu=torch.cuda.get_device_name(),
+             torch=str(torch.__version__), tokenizer_sha256=hashlib.sha256(
+                 tokenizer.backend_tokenizer.to_str().encode()).hexdigest()))
+        versions = [p._version for p in adapter.model.parameters()]
+        model = Memory().cuda()
+        optimizer = torch.optim.AdamW(model.parameters(), lr=.001)
+        labels = torch.arange(config['candidates'], device='cuda')
+        cache = []
+        history = []
+        deadline = started + config['wall_seconds'] - config['publish_reserve']
+        for i in range(config['max_steps']):
+            if i*len(labels) >= config['max_train_tokens'] or time.monotonic() >= min(started+6000, deadline):
+                break
+            if i < len(data['train']):
+                cache.append(encode(adapter, tokenizer, data['train'][i]))
+            features = cache[i % len(cache)]
+            optimizer.zero_grad(set_to_none=True)
+            scores, (address, separation, interference) = model(features, mode='meta_train')
+            weights = config['loss_weights']
+            loss = (weights['retrieval']*F.cross_entropy(scores, labels) + weights['address']*address
+                    + weights['separation']*separation + weights['interference']*interference)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1., error_if_nonfinite=True)
+            optimizer.step()
+            history.append(float(loss.detach()))
+            if (i+1)%8 == 0:
+                print(f'Training update {i+1}: {history[-1]:.4f}', flush=True)
+                save(output/'training.json', history)
+                torch.save(dict(model=model.state_dict(), optimizer=optimizer.state_dict(),
+                                step=i+1, rng=torch.get_rng_state(), config=config),
+                           output/'checkpoint.pt')
+        if not history:
+            raise RuntimeError('No committed training updates')
+        save(output/'training.json', history)
+        checkpoint = output/'checkpoint.pt'
+        torch.save(dict(model=model.state_dict(), optimizer=optimizer.state_dict(),
+                        step=len(history), rng=torch.get_rng_state(), config=config), checkpoint)
+        with checkpoint.open('rb') as stream:
+            report['checkpoint_sha256'] = hashlib.file_digest(stream, 'sha256').hexdigest()
+        results = []
+        with torch.no_grad():
+            for rows in data['test']:
+                if time.monotonic() >= deadline:
+                    break
+                features = encode(adapter, tokenizer, rows)
+                row = {}
+                for exact in (True, False):
+                    for control in ('correct', 'empty', 'donor'):
+                        scores, _ = model(features, exact=exact, control=control)
+                        row[f'{exact}/{control}'] = scores.argmax(1).eq(labels).float().mean().item()
+                results.append(row)
+                save(output/'retrieval.json', results)
+                print(f"Paired test episodes: {len(results)}/{config['test_episodes']}", flush=True)
+        if versions != [p._version for p in adapter.model.parameters()]:
+            raise RuntimeError('Frozen backbone changed')
+        if len(results) == config['test_episodes']:
+            report['recall'] = {k: sum(r[k] for r in results)/len(results) for k in results[0]}
+            report['gates']['addressing_accuracy'] = (
+                'PASS' if report['recall']['True/correct'] >= config['thresholds']['addressing'] else 'FAIL')
+            report['outcome'] = 'FAILURE' if report['gates']['addressing_accuracy']=='FAIL' else 'INCONCLUSIVE'
+        else:
+            report['gates']['retrieval'] = 'SKIPPED_BUDGET'
+    except Exception as error:
+        report.update(error=str(error), outcome='FAILURE')
+        raise
+    finally:
+        for name in ('baseline', 'false_recall', 'generalization_gate', 'distractor', 'contradiction',
+                     'interference', 'isolation', 'persistence', 'tnt', 'fusion'):
+            report['gates'][name] = 'PENDING_IMPLEMENTATION'
+        report.update(seconds=time.monotonic()-started, config_sha256=digest(config))
+        save(output/'smoke.json', report)
+        (output/'FINAL_REPORT.md').write_text('# Stage 7 development evidence\n\n' +
+                                            '```json\n'+json.dumps(report, indent=2)+'\n```\n')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--config', type=Path, default=BASE/'experiment_config.yaml')
+    parser.add_argument('--output', type=Path, required=True)
+    args = parser.parse_args()
+    main(args.config, args.output)
