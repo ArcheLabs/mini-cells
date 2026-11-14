@@ -56,7 +56,7 @@ def main(output, checkpoint):
         tokens = torch.tensor([ids], device='cuda')
         donor = torch.tensor([donor_ids[:512]], device='cuda')
         rows, resources, layers, recall = {}, {}, {}, {}
-        for arm in ('E1', 'E2', 'E3'):
+        for arm in (('E1', 'E2', 'E3', 'E4') if probes else ('E1', 'E2', 'E3')):
             print(f'{arm}: RUNNING', flush=True)
             torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats()
@@ -71,6 +71,8 @@ def main(output, checkpoint):
                         other = HybridSession(adapter, modules)
                         other.forward(donor)
                         session.cells = other.cells
+                    if start == 0 and arm == 'E4':
+                        session.cells = HybridSession(adapter, modules).cells
                 if start and not probes:
                     losses.append(torch.cat([
                         cross_entropy(adapter.logits(hidden[:, j:j+16]).flatten(0, 1),
@@ -112,24 +114,44 @@ def main(output, checkpoint):
         with output.with_name(name).open('a') as stream:
             stream.write(json.dumps(row, allow_nan=False) + '\n')
 
-    paired, window_times = [], []
-    for index, ids in enumerate(samples):
-        donor = (index + 2) % 4
-        if ids[:512] == samples[donor][:512]:
-            raise ValueError('Donor history duplicates target')
-        result = evaluate(ids, samples[donor])
-        paired.append(result['rows'])
-        window_times.append(sum(x['seconds'] for x in result['resources'].values()))
-        write_record('windows.jsonl', dict(index=index, donor=donor, **result,
-            token_sha256=hashlib.sha256(json.dumps(ids).encode()).hexdigest()))
-        print(f'Completed language window {index + 1}/4', flush=True)
-        projected = mean(window_times) * (7 - index)
-        print(f'Estimated remaining evaluation: {projected:.0f}s', flush=True)
-        if time.monotonic() - started + projected > 4800:
-            report.update(status='MINIMAL_DIAGNOSTIC_PAUSED', windows=index+1,
-                          projected_remaining_seconds=projected)
-            output.write_text(json.dumps(report, indent=2))
-            return
+    reuse = output.with_name('reused-windows.jsonl')
+    if reuse.exists():
+        previous = json.loads(output.with_name('reused-manifest.json').read_text())
+        current = json.loads(output.with_name('manifest.json').read_text())
+        if previous != current:
+            raise ValueError('Prior window checkpoint or configuration differs')
+        records = [json.loads(line) for line in reuse.read_text().splitlines()]
+        if len(records) != len(samples):
+            raise ValueError('Incomplete prior windows')
+        for index, (row, ids) in enumerate(zip(records, samples)):
+            expected = hashlib.sha256(json.dumps(ids).encode()).hexdigest()
+            if (row['index'] != index or row['donor'] != (index+2)%4
+                    or row['token_sha256'] != expected
+                    or set(row['rows']) != {'E1', 'E2', 'E3'}
+                    or any(list(map(len, losses)) != [512, 512] for losses in row['rows'].values())):
+                raise ValueError('Prior window identity or shape differs')
+            write_record('windows.jsonl', row)
+        paired = [row['rows'] for row in records]
+        print('Reused all four verified language windows', flush=True)
+    else:
+        paired, window_times = [], []
+        for index, ids in enumerate(samples):
+            donor = (index + 2) % 4
+            if ids[:512] == samples[donor][:512]:
+                raise ValueError('Donor history duplicates target')
+            result = evaluate(ids, samples[donor])
+            paired.append(result['rows'])
+            window_times.append(sum(x['seconds'] for x in result['resources'].values()))
+            write_record('windows.jsonl', dict(index=index, donor=donor, **result,
+                token_sha256=hashlib.sha256(json.dumps(ids).encode()).hexdigest()))
+            print(f'Completed language window {index + 1}/4', flush=True)
+            projected = mean(window_times) * (7 - index)
+            print(f'Estimated remaining evaluation: {projected:.0f}s', flush=True)
+            if time.monotonic() - started + projected > 4800:
+                report.update(status='MINIMAL_DIAGNOSTIC_PAUSED', windows=index+1,
+                              projected_remaining_seconds=projected)
+                output.write_text(json.dumps(report, indent=2))
+                return
 
     report['comparisons'] = paired_summary(paired)
     output.write_text(json.dumps(report, indent=2))
@@ -172,7 +194,7 @@ def main(output, checkpoint):
 def paired_summary(windows):
     result = {}
     for segment, sl in [('B', slice(0, 512)), ('C', slice(512, 1024)), ('BC', slice(None))]:
-        scores = {arm: [mean(row[arm][sl]) for row in windows] for arm in windows[0]}
+        scores = {arm: [mean((row[arm][0] + row[arm][1])[sl]) for row in windows] for arm in windows[0]}
         comparisons = {}
         for arm in ('E1', 'E3'):
             delta = [a-b for a,b in zip(scores[arm], scores['E2'])]
