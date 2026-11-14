@@ -38,7 +38,7 @@ class Memory(nn.Module):
         self.readout = nn.ModuleList(nn.Linear(32, 32) for _ in range(2))
         self.shards = nn.ModuleList(NeuralMemory(32) for _ in range(2))
 
-    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None, positions=None, intervention=None):
+    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None, positions=None, intervention=None, distractors=None):
         keys, queries, values = episode
         assert keys.shape == values.shape and keys.shape[1:] == (2, 256)
         assert queries.shape == (keys.shape[0], 8, 256)
@@ -54,6 +54,11 @@ class Memory(nn.Module):
                 groups = (positions // width).unique_consecutive(return_counts=True)[1].tolist() if positions is not None else [1] * len(k)
                 for x, y in zip(k.split(groups), targets.split(groups)):
                     cell, _ = shard.learn(x[None], y[None], cell, mode)
+                if distractors is not None:
+                    dk = F.normalize(self.address[h](distractors[0][:, h]), dim=-1)
+                    dv = self.value[h](distractors[2][:, h])
+                    for x, y in zip(dk.split(1), dv.split(1)):
+                        cell, _ = shard.learn(x[None], y[None], cell, mode)
                 if intervention == 'latest':
                     cell, _ = shard.learn(k[:1][None], v[1:2][None], cell, mode)
                 if intervention == 'fork':
@@ -274,12 +279,25 @@ def main(config_path, output, resume=None):
             report['outcome'] = 'FAILURE' if report['gates']['addressing_accuracy']=='FAIL' else 'INCONCLUSIVE'
         else:
             report['gates']['retrieval'] = 'SKIPPED_BUDGET'
+        if persistence_features is not None and time.monotonic() < deadline - 120:
+            with torch.no_grad():
+                extras, extra_lengths = encode(adapter, tokenizer, data['validation'][0])
+                before, _ = model(persistence_features)
+                after, _ = model(persistence_features, distractors=extras)
+                old = float(before.argmax(1).eq(labels).float().mean())
+                retained = float(after.argmax(1).eq(labels).float().mean())
+                save(output/'distractor.json', dict(before=old, after=retained,
+                     input_tokens=sum(extra_lengths), scope='single disjoint episode'))
+                report['gates']['distractor'] = 'INCONCLUSIVE'
+        else:
+            report['gates']['distractor'] = 'SKIPPED_BUDGET'
         if persistence_features is not None and deadline - time.monotonic() > 90:
             try:
                 verify_persistence(model, persistence_features, output,
                     {'checkpoint_sha256': report['checkpoint_sha256'], 'schema': 'stage7-v1'},
                     timeout=min(90, deadline - time.monotonic()))
                 report['gates']['artifact_roundtrip'] = 'PASS'
+                report['gates']['fork_isolation'] = 'PASS'
             except Exception as error:
                 report['gates']['artifact_roundtrip'] = 'ERROR'
                 report['persistence_error'] = str(error)
