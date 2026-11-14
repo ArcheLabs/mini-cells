@@ -309,7 +309,7 @@ def main(config_path, output, resume=None):
     finally:
         for name in ('baseline', 'false_recall', 'generalization_gate', 'distractor', 'contradiction',
                      'interference', 'isolation', 'persistence', 'tnt', 'fusion'):
-            report['gates'].setdefault(name, 'PENDING_IMPLEMENTATION')
+            report['gates'].setdefault(name, 'NOT_IMPLEMENTED')
         report.update(seconds=time.monotonic()-started, config_sha256=digest(config))
         save(output/'smoke.json', report)
         (output/'FINAL_REPORT.md').write_text('# Stage 7 development evidence\n\n' +
