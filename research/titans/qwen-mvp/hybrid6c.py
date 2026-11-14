@@ -9,11 +9,12 @@ from titans_attention import HeadMemory
 
 
 class HybridSession:
-    def __init__(self, adapter, memories, *, mode='online_adapt', length=512):
+    def __init__(self, adapter, memories, *, mode='online_adapt', length=512, detach_backbone_cache=False):
         self.adapter = adapter
         self.model = adapter.model
         self.memories = memories
         self.mode = mode
+        self.detach_backbone_cache = detach_backbone_cache
         self.cache = adapter.cache_type(adapter.config)
         self.cells = {i: [m.create(mode=mode) for m in memory.shards]
                       for i, memory in memories.items()}
@@ -90,6 +91,13 @@ class HybridSession:
             for entries in self.pending.values():
                 capture = entries[-1]
                 entries[-1] = (capture['k'], capture['v'])
+            if self.detach_backbone_cache:
+                for name in ('key_cache', 'value_cache', 'conv_states', 'recurrent_states'):
+                    tensors = getattr(self.cache, name)
+                    for index, tensor in enumerate(tensors):
+                        if tensor is not None:
+                            # Conv state is updated in place by the native decoder.
+                            tensors[index] = tensor.detach().clone() if name == 'conv_states' else tensor.detach()
             outputs.append(hidden)
             self.clock.advance(width)
         return torch.cat(outputs, dim=1)
