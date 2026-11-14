@@ -31,8 +31,18 @@ def main(output):
     for index, cell in session.cells.items():
         if any(shard.update_step != 1 for shard in cell):
             raise RuntimeError(f'Wrong commit count at layer {index}')
-    hidden = session.forward(ids[:, 512:1536])
-    loss = cross_entropy(adapter.logits(hidden).flatten(0, 1), ids[:, 513:].flatten())
+    # The reference DeltaNet retains large recurrent tensors for backward.
+    # Offload saved tensors without detaching the cross-segment graph.
+    with torch.autograd.graph.save_on_cpu(pin_memory=False):
+        total = None
+        for start in range(512, 1536, 16):
+            hidden = session.forward(ids[:, start:start + 16])
+            logits = adapter.logits(hidden).flatten(0, 1)
+            term = cross_entropy(logits, ids[:, start + 1:start + 17].flatten(),
+                                 reduction='sum')
+            total = term if total is None else total + term
+        loss = total / 1024
+        del hidden, logits
     loss.backward()
     for index, memory in memories.items():
         for param in [memory.gate, *(m.controls.weight for m in memory.shards)]:
@@ -40,7 +50,7 @@ def main(output):
                 raise RuntimeError(f'Invalid outer gradient at layer {index}')
     output.write_text(json.dumps(dict(status='STAGE6C_GRADIENT_SMOKE_PASS',
         identity=adapter.identity, layers=list(memories), segment_length=512,
-        supervised_targets=1024, optimizer_updates=0, nll=float(loss.detach()),
+        supervised_targets=1024, saved_tensor_offload="cpu", loss_tile_tokens=16, optimizer_updates=0, nll=float(loss.detach()),
         peak_cuda_bytes=torch.cuda.max_memory_allocated()), indent=2))
 
 

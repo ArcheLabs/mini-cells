@@ -19,3 +19,10 @@ partial flush, preserving nonselected caches and recurrent state. Live
 Qwen integration, per-layer fusion, differentiable segment training and
 the experiment matrix remain pending. The lifecycle tests use synthetic
 cache entries and establish only the boundary bookkeeping behavior.
+
+The first real T4 gradient smoke exhausted VRAM inside the native
+DeltaNet recurrent forward (14.37 GiB PyTorch allocated). The revised
+smoke offloads tensors saved for backward to CPU and computes the same
+1024-target mean loss in 16-token tiles. Segment length and the gradient
+graph are preserved. Host memory and execution time require measurement
+on the next T4 run.
