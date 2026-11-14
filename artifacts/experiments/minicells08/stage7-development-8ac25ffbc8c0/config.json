@@ -1,0 +1,25 @@
+{
+  "seed": 42,
+  "train_episodes": 128,
+  "validation_episodes": 16,
+  "test_episodes": 32,
+  "candidates": 16,
+  "max_steps": 256,
+  "max_train_tokens": 196608,
+  "max_eval_examples": 512,
+  "max_gpu_memory_gib": 13,
+  "wall_seconds": 10800,
+  "publish_reserve": 600,
+  "loss_weights": {
+    "address": 1.0,
+    "retrieval": 1.0,
+    "separation": 0.3,
+    "interference": 0.2
+  },
+  "thresholds": {
+    "addressing": 0.95,
+    "paraphrase": 0.7,
+    "gain": 0.2,
+    "false_recall": 0.05
+  }
+}
