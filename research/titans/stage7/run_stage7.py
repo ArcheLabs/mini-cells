@@ -37,7 +37,7 @@ class Memory(nn.Module):
         self.readout = nn.ModuleList(nn.Linear(32, 32) for _ in range(2))
         self.shards = nn.ModuleList(NeuralMemory(32) for _ in range(2))
 
-    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None):
+    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None, positions=None, intervention=None):
         keys, queries, values = episode
         assert keys.shape == values.shape and keys.shape[1:] == (2, 256)
         assert queries.shape == (keys.shape[0], 8, 256)
@@ -50,8 +50,18 @@ class Memory(nn.Module):
             cell = shard.create(mode=mode)
             if control != 'empty':
                 targets = v if control == 'correct' else v.roll(1, 0)
-                for x, y in zip(k.split(width), targets.split(width)):
+                groups = (positions // width).unique_consecutive(return_counts=True)[1].tolist() if positions is not None else [1] * len(k)
+                for x, y in zip(k.split(groups), targets.split(groups)):
                     cell, _ = shard.learn(x[None], y[None], cell, mode)
+                if intervention == 'latest':
+                    cell, _ = shard.learn(k[:1][None], v[1:2][None], cell, mode)
+                if intervention == 'fork':
+                    from cell_artifact import state_hash
+                    before = state_hash(cell)
+                    fork = shard.fork(cell)
+                    updated, _ = shard.learn(k[:1][None], v[1:2][None], fork, mode)
+                    if state_hash(cell) != before or updated.update_step != cell.update_step + 1:
+                        raise RuntimeError('Fork isolation failed')
             read = shard.recall(q.flatten(0, 1)[None], cell,
                                 'meta_train' if mode == 'meta_train' else 'read_only')
             if capture is not None:
@@ -88,6 +98,7 @@ def dataset(config):
 def encode(adapter, tokenizer, rows):
     attention = adapter.model.model.layers[3].self_attn
     result = []
+    lengths = []
     def capture(module, args, kwargs):
         x = kwargs['hidden_states'][:, -1]
         q = module.q_proj(x).reshape(8, 512)[:, :256]
@@ -99,11 +110,13 @@ def encode(adapter, tokenizer, rows):
         for field in range(3):
             for row in rows:
                 ids = tokenizer.encode(row[field], add_special_tokens=False)
+                lengths.append(len(ids))
                 adapter.encode(torch.tensor([ids], device='cuda'))
     finally:
         hook.remove()
     n = len(rows)
-    return tuple(torch.stack([item[i] for item in result[i*n:(i+1)*n]]) for i in range(3))
+    features = tuple(torch.stack([item[i] for item in result[i*n:(i+1)*n]]) for i in range(3))
+    return features, lengths
 
 
 def verify_persistence(model, features, output, identity, timeout):
@@ -111,6 +124,8 @@ def verify_persistence(model, features, output, identity, timeout):
                           / 'epclm-006-cross-session-cell-portability'))
     from cell_artifact import export_cell
 
+    with torch.no_grad():
+        model(features, intervention='fork')
     path = output / 'portable'
     path.mkdir()
     captured = []
@@ -158,13 +173,17 @@ def main(config_path, output):
         labels = torch.arange(config['candidates'], device='cuda')
         cache = []
         history = []
+        train_tokens = 0
         deadline = started + config['wall_seconds'] - config['publish_reserve']
         for i in range(config['max_steps']):
-            if i*len(labels) >= config['max_train_tokens'] or time.monotonic() >= min(started+6000, deadline):
+            if time.monotonic() >= min(started+6000, deadline):
                 break
             if i < len(data['train']):
                 cache.append(encode(adapter, tokenizer, data['train'][i]))
-            features = cache[i % len(cache)]
+            features, lengths = cache[i % len(cache)]
+            if train_tokens + sum(lengths) > config['max_train_tokens']:
+                break
+            train_tokens += sum(lengths)
             optimizer.zero_grad(set_to_none=True)
             scores, (address, separation, interference) = model(features, mode='meta_train')
             weights = config['loss_weights']
@@ -182,6 +201,8 @@ def main(config_path, output):
                            output/'checkpoint.pt')
         if not history:
             raise RuntimeError('No committed training updates')
+        report['training_tokens'] = train_tokens
+        report['training_steps'] = len(history)
         save(output/'training.json', history)
         checkpoint = output/'checkpoint.pt'
         torch.save(dict(model=model.state_dict(), optimizer=optimizer.state_dict(),
@@ -194,7 +215,8 @@ def main(config_path, output):
             for rows in data['test']:
                 if time.monotonic() >= deadline:
                     break
-                features = encode(adapter, tokenizer, rows)
+                features, lengths = encode(adapter, tokenizer, rows)
+                ends = torch.tensor([lengths[i] + lengths[2*len(labels)+i] for i in range(len(labels))], device='cuda').cumsum(0)-1
                 if persistence_features is None:
                     persistence_features = features
                 row = {}
@@ -203,8 +225,13 @@ def main(config_path, output):
                         scores, _ = model(features, exact=exact, control=control)
                         row[f'{exact}/{control}'] = scores.argmax(1).eq(labels).float().mean().item()
                 for width in (16, 64, 512):
-                    scores, _ = model(features, exact=True, width=width)
+                    scores, _ = model(features, exact=True, width=width, positions=ends)
                     row[f'width_{width}'] = float(scores.argmax(1).eq(labels).float().mean())
+                scores, _ = model(features, exact=True, intervention='latest')
+                prediction = scores.argmax(1)
+                row['latest_correct'] = int(prediction[0]) == 1
+                row['stale_value'] = int(prediction[0]) == 0
+                row['unrelated_recall'] = float(prediction[1:].eq(labels[1:]).float().mean())
                 results.append(row)
                 save(output/'retrieval.json', results)
                 print(f"Paired test episodes: {len(results)}/{config['test_episodes']}", flush=True)
@@ -214,6 +241,13 @@ def main(config_path, output):
             report['recall'] = {k: sum(r[k] for r in results)/len(results) for k in results[0]}
             report['gates']['addressing_accuracy'] = (
                 'PASS' if report['recall']['True/correct'] >= config['thresholds']['addressing'] else 'FAIL')
+            for key in ('latest_correct', 'stale_value', 'unrelated_recall'):
+                report.setdefault('contradiction', {})[key] = report['recall'][key]
+            gains = [report['recall']['False/correct'] - report['recall'][f'False/{control}']
+                     for control in ('empty', 'donor')]
+            report['gates']['generalization_gate'] = 'PASS' if (
+                report['recall']['False/correct'] >= config['thresholds']['paraphrase']
+                and min(gains) >= config['thresholds']['gain']) else 'FAIL'
             report['outcome'] = 'FAILURE' if report['gates']['addressing_accuracy']=='FAIL' else 'INCONCLUSIVE'
         else:
             report['gates']['retrieval'] = 'SKIPPED_BUDGET'
@@ -234,7 +268,7 @@ def main(config_path, output):
     finally:
         for name in ('baseline', 'false_recall', 'generalization_gate', 'distractor', 'contradiction',
                      'interference', 'isolation', 'persistence', 'tnt', 'fusion'):
-            report['gates'][name] = 'ERROR'
+            report['gates'].setdefault(name, 'PENDING_IMPLEMENTATION')
         report.update(seconds=time.monotonic()-started, config_sha256=digest(config))
         save(output/'smoke.json', report)
         (output/'FINAL_REPORT.md').write_text('# Stage 7 development evidence\n\n' +
