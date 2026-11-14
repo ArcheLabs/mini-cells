@@ -15,6 +15,7 @@ from torch.nn import functional as F
 BASE = Path(__file__).resolve().parent
 sys.path.insert(0, str(BASE.parent / 'qwen-mvp'))
 from statistics7 import paired
+from fusion7 import evaluate_fusion
 from stage2 import NeuralMemory, Qwen35Adapter
 from minicells_runtime.qwen35 import MODEL_ID, REVISION
 
@@ -354,9 +355,7 @@ def main(config_path, output, resume=None):
             report['gates']['contradiction'] = 'PASS' if (
                 report['contradiction']['latest_correct'] >= .90 and
                 report['contradiction']['stale_value'] <= .05) else 'FAIL'
-            report['gates']['fusion'] = (
-                'NOT_IMPLEMENTED' if report['gates']['generalization_gate'] == 'PASS'
-                and report['gates']['addressing_accuracy'] == 'PASS' else 'SKIPPED_GATE')
+            report['gates']['fusion'] = 'SKIPPED_GATE'
             report['outcome'] = 'FAILURE' if report['gates']['addressing_accuracy']=='FAIL' else 'INCONCLUSIVE'
         else:
             report['gates']['retrieval'] = 'SKIPPED_BUDGET'
@@ -419,6 +418,16 @@ def main(config_path, output, resume=None):
                 report['persistence_error'] = str(error)
         else:
             report['gates']['artifact_roundtrip'] = 'SKIPPED_BUDGET'
+        if all(report['gates'].get(key) == 'PASS' for key in
+               ('addressing_accuracy', 'generalization_gate', 'false_recall')):
+            if time.monotonic() < deadline - 420:
+                fusion, weights = evaluate_fusion(adapter, tokenizer, model, data, encode, deadline - 300)
+                save(output/'fusion.json', fusion)
+                report['gates']['fusion'] = fusion['status']
+                if weights is not None:
+                    torch.save(weights, output/'fusion.pt')
+            else:
+                report['gates']['fusion'] = 'SKIPPED_BUDGET'
     except Exception as error:
         report.update(error=str(error), outcome='FAILURE')
         raise
