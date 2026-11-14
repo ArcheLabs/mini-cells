@@ -371,13 +371,27 @@ def main(config_path, output, resume=None):
             report['gates']['baseline'] = 'SKIPPED_BUDGET'
         if persistence_features is not None and time.monotonic() < deadline - 120:
             with torch.no_grad():
-                extras, extra_lengths = encode(adapter, tokenizer, data['validation'][0])
                 before, _ = model(persistence_features)
-                after, _ = model(persistence_features, distractors=extras)
                 old = float(before.argmax(1).eq(labels).float().mean())
-                retained = float(after.argmax(1).eq(labels).float().mean())
-                save(output/'distractor.json', dict(before=old, after=retained,
-                     input_tokens=sum(extra_lengths), scope='single disjoint episode'))
+                banks = [[], [], []]
+                tokens = 0
+                ladder = []
+                for episode in data['validation']:
+                    if time.monotonic() >= deadline - 300:
+                        break
+                    extra, lengths = encode(adapter, tokenizer, episode)
+                    for bank, features in zip(banks, extra):
+                        bank.extend(features.split(1))
+                    tokens += sum(lengths[:len(labels)]) + sum(lengths[2*len(labels):])
+                    if tokens >= (1024, 4096, 16384)[len(ladder)]:
+                        after, _ = model(persistence_features, distractors=tuple(torch.cat(bank) for bank in banks))
+                        ladder.append(dict(target_tokens=(1024, 4096, 16384)[len(ladder)],
+                                           actual_write_tokens=tokens,
+                                           recall=float(after.argmax(1).eq(labels).float().mean())))
+                        save(output/'distractor.json', dict(before=old, ladder=ladder,
+                             scope='single held-out episode'))
+                        if len(ladder) == 3:
+                            break
                 report['gates']['distractor'] = 'INCONCLUSIVE'
             trajectory = {}
             with torch.no_grad():
