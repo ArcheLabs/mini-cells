@@ -143,7 +143,7 @@ def verify_persistence(model, features, output, identity, timeout):
     save(output / 'persistence.json', proof)
 
 
-def main(config_path, output):
+def main(config_path, output, resume=None):
     from transformers import AutoTokenizer
 
     started = time.monotonic()
@@ -172,16 +172,37 @@ def main(config_path, output):
         model = Memory().cuda()
         optimizer = torch.optim.AdamW(model.parameters(), lr=.001)
         labels = torch.arange(config['candidates'], device='cuda')
-        cache = []
+        cache = {}
         history = []
         train_tokens = 0
         deadline = started + config['wall_seconds'] - config['publish_reserve']
-        for i in range(config['max_steps']):
+        checkpoint = output / 'checkpoint.pt'
+        identity = dict(config=config, dataset_sha256=digest(data), backbone=adapter.identity,
+                        tokenizer_sha256=hashlib.sha256(tokenizer.backend_tokenizer.to_str().encode()).hexdigest())
+        if resume:
+            restored = torch.load(resume, weights_only=True, map_location='cpu')
+            if restored['identity'] != identity:
+                raise ValueError('Checkpoint identity mismatch')
+            model.load_state_dict(restored['model'])
+            optimizer.load_state_dict(restored['optimizer'])
+            torch.set_rng_state(restored['rng'])
+            torch.cuda.set_rng_state(restored['cuda_rng'])
+            history, train_tokens = restored['history'], restored['train_tokens']
+
+        def checkpoint_training():
+            temp = checkpoint.with_suffix('.tmp')
+            torch.save(dict(model=dict(model.state_dict()), optimizer=optimizer.state_dict(),
+                            step=len(history), rng=torch.get_rng_state(), cuda_rng=torch.cuda.get_rng_state(),
+                            identity=identity, history=history, train_tokens=train_tokens), temp)
+            temp.replace(checkpoint)
+
+        for i in range(len(history), config['max_steps']):
             if time.monotonic() >= min(started+6000, deadline):
                 break
-            if i < len(data['train']):
-                cache.append(encode(adapter, tokenizer, data['train'][i]))
-            features, lengths = cache[i % len(cache)]
+            index = i % len(data['train'])
+            if index not in cache:
+                cache[index] = encode(adapter, tokenizer, data['train'][index])
+            features, lengths = cache[index]
             if train_tokens + sum(lengths) > config['max_train_tokens']:
                 break
             train_tokens += sum(lengths)
@@ -197,17 +218,13 @@ def main(config_path, output):
             if (i+1)%8 == 0:
                 print(f'Training update {i+1}: {history[-1]:.4f}', flush=True)
                 save(output/'training.json', history)
-                torch.save(dict(model=model.state_dict(), optimizer=optimizer.state_dict(),
-                                step=i+1, rng=torch.get_rng_state(), config=config),
-                           output/'checkpoint.pt')
+                checkpoint_training()
         if not history:
             raise RuntimeError('No committed training updates')
         report['training_tokens'] = train_tokens
         report['training_steps'] = len(history)
         save(output/'training.json', history)
-        checkpoint = output/'checkpoint.pt'
-        torch.save(dict(model=model.state_dict(), optimizer=optimizer.state_dict(),
-                        step=len(history), rng=torch.get_rng_state(), config=config), checkpoint)
+        checkpoint_training()
         with checkpoint.open('rb') as stream:
             report['checkpoint_sha256'] = hashlib.file_digest(stream, 'sha256').hexdigest()
         results = []
@@ -285,5 +302,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config', type=Path, default=BASE/'experiment_config.yaml')
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--resume', type=Path)
     args = parser.parse_args()
-    main(args.config, args.output)
+    main(args.config, args.output, args.resume)
