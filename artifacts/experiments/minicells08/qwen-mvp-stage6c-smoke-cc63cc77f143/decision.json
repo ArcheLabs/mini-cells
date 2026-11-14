@@ -1,0 +1,28 @@
+{
+  "status": "STAGE6C_TRUNCATED_DIAGNOSTIC_PASS",
+  "identity": {
+    "model": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "dtype": "torch.float32",
+    "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "transformers": "5.3.0"
+  },
+  "layers": [
+    3,
+    7,
+    11,
+    15,
+    19,
+    23
+  ],
+  "segment_length": 512,
+  "supervised_targets": 1024,
+  "backbone_cache_gradients": "detached_between_calls",
+  "loss_tile_tokens": 16,
+  "optimizer_updates": 0,
+  "nll": 12.489801779389381,
+  "peak_cuda_bytes": 4600617984,
+  "format": "minicells.qwen-mvp.stage6c-smoke.v1",
+  "source_commit": "c4b3d7cf4a6df1b76fccc4da72767014537c5e6b",
+  "run_id": "qwen-mvp-stage6c-smoke-cc63cc77f143"
+}
