@@ -37,7 +37,7 @@ class Memory(nn.Module):
         self.readout = nn.ModuleList(nn.Linear(32, 32) for _ in range(2))
         self.shards = nn.ModuleList(NeuralMemory(32) for _ in range(2))
 
-    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None, positions=None, intervention=None, distractors=None, query_override=None):
+    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None, positions=None, intervention=None, distractors=None, query_override=None, tnt=False, trajectory=None):
         keys, queries, values = episode
         if query_override is not None:
             queries = query_override
@@ -48,13 +48,26 @@ class Memory(nn.Module):
             k = F.normalize(self.address[h](keys[:, h]), dim=-1)
             q = k[:, None].expand(-1, 4, -1) if exact else F.normalize(
                 self.address[h](queries[:, h*4:h*4+4]), dim=-1)
+            if tnt and control != 'empty':
+                _, singular, basis = torch.linalg.svd(k, full_matrices=False)
+                basis = basis[singular > singular.max() * 1e-5]
+                q = F.normalize((q @ basis.T) @ basis, dim=-1)
             v = self.value[h](values[:, h])
             cell = shard.create(mode=mode)
             if control != 'empty':
                 targets = v if control == 'correct' else v.roll(1, 0)
                 groups = (positions // width).unique_consecutive(return_counts=True)[1].tolist() if positions is not None else [1] * len(k)
+                seen = 0
                 for x, y in zip(k.split(groups), targets.split(groups)):
                     cell, _ = shard.learn(x[None], y[None], cell, mode)
+                    if trajectory is not None:
+                        previous = seen
+                        seen += len(x)
+                        scores_now = F.normalize(self.readout[h](shard.recall(k[:seen][None], cell)[0]), dim=-1) @ F.normalize(v, dim=-1).T
+                        hits = scores_now.argmax(1).eq(torch.arange(seen, device=k.device))
+                        trajectory.append(dict(shard=h, step=cell.update_step, seen=seen,
+                            old_recall=float(hits[:previous].float().mean()) if previous else None,
+                            new_recall=float(hits[previous:].float().mean())))
                 if distractors is not None:
                     dk = F.normalize(self.address[h](distractors[0][:, h]), dim=-1)
                     dv = self.value[h](distractors[2][:, h])
@@ -284,6 +297,20 @@ def main(config_path, output, resume=None):
                 results.append(row)
                 save(output/'retrieval.json', results)
                 print(f"Paired test episodes: {len(results)}/{config['test_episodes']}", flush=True)
+        report['gates']['tnt'] = 'SKIPPED_BUDGET'
+        if len(results) == config['test_episodes'] and time.monotonic() < deadline - 600:
+            tnt_rows = []
+            with torch.no_grad():
+                for i, rows in enumerate(data['test']):
+                    if time.monotonic() >= deadline - 300:
+                        break
+                    features, _ = encode(adapter, tokenizer, rows)
+                    scores, _ = model(features, tnt=True)
+                    tnt_rows.append(dict(episode=i, projected=float(scores.argmax(1).eq(labels).float().mean()),
+                                         direct=results[i]['False/correct']))
+                save(output/'tnt.json', dict(scope='frozen read-time span ablation', rows=tnt_rows))
+            if len(tnt_rows) == len(results):
+                report['gates']['tnt'] = 'INCONCLUSIVE'
         if versions != [p._version for p in adapter.model.parameters()]:
             raise RuntimeError('Frozen backbone changed')
         if len(results) == config['test_episodes']:
@@ -325,6 +352,18 @@ def main(config_path, output, resume=None):
                 save(output/'distractor.json', dict(before=old, after=retained,
                      input_tokens=sum(extra_lengths), scope='single disjoint episode'))
                 report['gates']['distractor'] = 'INCONCLUSIVE'
+            trajectory = {}
+            with torch.no_grad():
+                ends = torch.tensor([len(tokenizer.encode(k, add_special_tokens=False))
+                                     + len(tokenizer.encode(v, add_special_tokens=False))
+                                     for k, _, v in data['test'][0]], device='cuda').cumsum(0)-1
+                for width in (1, 16, 64, 512):
+                    records = []
+                    model(persistence_features, exact=True, width=width,
+                          positions=ends if width != 1 else None, trajectory=records)
+                    trajectory[str(width)] = records
+            save(output/'interference.json', trajectory)
+            report['gates']['interference'] = 'INCONCLUSIVE'
         else:
             report['gates']['distractor'] = 'SKIPPED_BUDGET'
         if persistence_features is not None and deadline - time.monotonic() > 90:
