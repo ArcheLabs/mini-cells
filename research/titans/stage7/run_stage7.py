@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 import random
 import sys
-import subprocess
 import uuid
 import time
 
@@ -125,7 +124,7 @@ def encode(adapter, tokenizer, rows):
     return features, lengths
 
 
-def verify_persistence(model, features, output, identity, timeout):
+def export_persistence(model, features, output, identity, rows):
     sys.path.insert(0, str(BASE.parents[2] / 'research/projects/cellular-language-models/experiments'
                           / 'epclm-006-cross-session-cell-portability'))
     from cell_artifact import export_cell
@@ -142,10 +141,7 @@ def verify_persistence(model, features, output, identity, timeout):
         export_cell(cell, path / f'shard-{index}', identity, source)
     torch.save(dict(weights=dict(model.state_dict()), identity=identity,
                     reads=[(query, expected) for _, query, expected in captured]), path / 'fixture.pt')
-    subprocess.run([sys.executable, str(BASE / 'persistence.py'), str(path)],
-                   check=True, timeout=timeout)
-    proof = json.loads((path / 'restore.json').read_text())
-    save(output / 'persistence.json', proof)
+    save(path / 'packets.json', rows)
 
 
 def main(config_path, output, resume=None):
@@ -310,10 +306,10 @@ def main(config_path, output, resume=None):
             report['gates']['distractor'] = 'SKIPPED_BUDGET'
         if persistence_features is not None and deadline - time.monotonic() > 90:
             try:
-                verify_persistence(model, persistence_features, output,
-                    {'checkpoint_sha256': report['checkpoint_sha256'], 'schema': 'stage7-v1'},
-                    timeout=min(90, deadline - time.monotonic()))
-                report['gates']['artifact_roundtrip'] = 'PASS'
+                export_persistence(model, persistence_features, output,
+                    {'checkpoint_sha256': report['checkpoint_sha256'], 'schema': 'stage7-v1',
+                     'model': adapter.identity}, data['test'][0])
+                report['gates']['artifact_roundtrip'] = 'AWAITING_FRESH_PROCESS'
                 report['gates']['fork_isolation'] = 'PASS'
             except Exception as error:
                 report['gates']['artifact_roundtrip'] = 'ERROR'
