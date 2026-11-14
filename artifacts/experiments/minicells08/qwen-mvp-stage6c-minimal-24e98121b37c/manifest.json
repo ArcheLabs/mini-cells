@@ -1,0 +1,36 @@
+{
+  "checkpoint_sha256": "5bc07a3e4f0d78f6943030f7be0e39eb1cac3db6c50db45d35cdc329a36d4aa6",
+  "checkpoint_update": 64,
+  "identity": {
+    "model": {
+      "model": "Qwen/Qwen3.5-0.8B",
+      "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "dtype": "torch.float32",
+      "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+      "transformers": "5.3.0"
+    },
+    "corpus_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+    "seed": 42,
+    "segment": 512,
+    "tile": 16,
+    "layers": [
+      3,
+      7,
+      11,
+      15,
+      19,
+      23
+    ],
+    "updates": 256,
+    "cache_gradient": "detach_between_calls",
+    "validation_sha256": "092ae0d5a0c8332bce40ede0bf1c551a638399869f473f2022ce92f64ae4811f",
+    "implementation_sha256": {
+      "train6c.py": "7845c1224a145efa137a8dc26da80ad76245acdd5fd46397bfd31633c6d2cbde",
+      "hybrid6c.py": "ab9d9cf325c3c23ec6c1ba3917ca3cd7d3276419f673cd4631a32209c3cfc347",
+      "segment6c.py": "156c761f5f5800aacb5810fcb5970ebc2da4a27db3402b3a89ca3b609465985a",
+      "titans_attention.py": "a10b3cef47d4369b541123c78cd250e290a0ee2924af10fb059160e00eae1a6c"
+    }
+  },
+  "test_windows": 4,
+  "factual_seed": 6406
+}
