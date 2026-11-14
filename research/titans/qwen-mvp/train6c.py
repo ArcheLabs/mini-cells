@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import time
 
 import torch
 from torch.nn.functional import cross_entropy
@@ -50,6 +51,7 @@ def measure(adapter, memories, sequence, *, train):
 
 
 def main(output, resume=None):
+    deadline = time.monotonic() + 8800
     from itertools import islice
     from transformers import AutoTokenizer
 
@@ -82,16 +84,21 @@ def main(output, resume=None):
     stale = 0
     if resume:
         saved = torch.load(resume, weights_only=True, map_location='cpu')
-        if saved['identity'] != identity:
+        previous = dict(identity, implementation_sha256=dict(identity['implementation_sha256']))
+        previous['implementation_sha256']['train6c.py'] = '7845c1224a145efa137a8dc26da80ad76245acdd5fd46397bfd31633c6d2cbde'
+        if saved['identity'] not in (identity, previous):
             raise ValueError('Resume identity mismatch')
         memories.load_state_dict(saved['adapter'])
         optimizer.load_state_dict(saved['optimizer'])
         history, best, stale = saved['history'], saved['best'], saved['stale']
         torch.set_rng_state(saved['rng'])
     checkpoint = output.with_name('adapter.pt')
+    if resume and checkpoint.resolve() != resume.resolve():
+        import shutil
+        shutil.copy2(resume, checkpoint)
     iterator = islice(windows('train', tokenizer), len(history), UPDATES)
     for sequence in iterator:
-        if stale >= 3:
+        if stale >= 3 or time.monotonic() >= deadline:
             break
         optimizer.zero_grad(set_to_none=True)
         loss = measure(adapter, native, sequence, train=True)
@@ -120,9 +127,13 @@ def main(output, resume=None):
         with output.with_name('training.jsonl').open('a') as log:
             log.write(json.dumps(row) + '\n')
         print(row, flush=True)
-    if len(history) != UPDATES and stale < 3:
+    complete = len(history) == UPDATES or stale >= 3
+    if not complete and time.monotonic() < deadline:
         raise RuntimeError('Training stream exhausted')
-    output.write_text(json.dumps(dict(status='STAGE6C_TRAIN_COMPLETE', identity=identity,
+    with checkpoint.open('rb') as stream:
+        checkpoint_sha256 = hashlib.file_digest(stream, 'sha256').hexdigest()
+    output.write_text(json.dumps(dict(status='STAGE6C_TRAIN_COMPLETE' if complete else 'STAGE6C_TRAIN_PAUSED',
+        checkpoint_sha256=checkpoint_sha256, identity=identity,
         updates=len(history), supervised_targets=1024 * len(history), best_validation_nll=best,
         peak_cuda_bytes=torch.cuda.max_memory_allocated(), test='SEALED'), indent=2))
 
