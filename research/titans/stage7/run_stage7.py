@@ -139,6 +139,24 @@ def encode(adapter, tokenizer, rows):
     return features, lengths
 
 
+@torch.no_grad()
+def baseline(adapter, tokenizer, rows):
+    """Rank the same candidate continuations using native Qwen token likelihood."""
+    candidates = [tokenizer.encode(v, add_special_tokens=False) for _, _, v in rows]
+    scores = []
+    device = next(adapter.model.parameters()).device
+    for _, question, _ in rows:
+        prefix = tokenizer.encode(question, add_special_tokens=False)
+        ranking = []
+        for candidate in candidates:
+            ids = torch.tensor([prefix + candidate], device=device)
+            hidden, _ = adapter.encode(ids[:, :-1])
+            logits = adapter.logits(hidden[:, len(prefix)-1:]).float()
+            ranking.append(-float(F.cross_entropy(logits[0], ids[0, len(prefix):])))
+        scores.append(ranking)
+    return scores
+
+
 def export_persistence(model, features, output, identity, rows):
     sys.path.insert(0, str(BASE.parents[2] / 'research/projects/cellular-language-models/experiments'
                           / 'epclm-006-cross-session-cell-portability'))
@@ -342,6 +360,15 @@ def main(config_path, output, resume=None):
             report['outcome'] = 'FAILURE' if report['gates']['addressing_accuracy']=='FAIL' else 'INCONCLUSIVE'
         else:
             report['gates']['retrieval'] = 'SKIPPED_BUDGET'
+        if persistence_features is not None and time.monotonic() < deadline - 900:
+            native_scores = baseline(adapter, tokenizer, data['test'][0])
+            hits = sum(max(range(len(scores)), key=scores.__getitem__) == i
+                       for i, scores in enumerate(native_scores))
+            save(output/'baseline.json', dict(correct=hits, queries=len(native_scores),
+                 scores=native_scores, scope='one episode; mean candidate token log probability'))
+            report['gates']['baseline'] = 'INCONCLUSIVE'
+        else:
+            report['gates']['baseline'] = 'SKIPPED_BUDGET'
         if persistence_features is not None and time.monotonic() < deadline - 120:
             with torch.no_grad():
                 extras, extra_lengths = encode(adapter, tokenizer, data['validation'][0])
