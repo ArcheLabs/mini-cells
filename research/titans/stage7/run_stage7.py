@@ -201,7 +201,9 @@ def main(config_path, output, resume=None):
                             identity=identity, history=history, train_tokens=train_tokens), temp)
             temp.replace(checkpoint)
 
-        for i in range(len(history), config['max_steps']):
+        first_step = len(history)
+        warmup_started = time.monotonic()
+        for i in range(first_step, config['max_steps']):
             if time.monotonic() >= min(started+6000, deadline):
                 break
             index = i % len(data['train'])
@@ -220,6 +222,15 @@ def main(config_path, output, resume=None):
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1., error_if_nonfinite=True)
             optimizer.step()
             history.append(float(loss.detach()))
+            if i == first_step:
+                torch.cuda.synchronize()
+                seconds = time.monotonic() - warmup_started
+                available = max(0., min(started + 6000, deadline) - time.monotonic())
+                report['warmup'] = dict(step_seconds=seconds, input_tokens=sum(lengths),
+                                        estimated_additional_steps=int(available / max(seconds, .001)),
+                                        peak_cuda_bytes=torch.cuda.max_memory_allocated())
+                print(report['warmup'], flush=True)
+                checkpoint_training()
             if (i+1)%8 == 0:
                 print(f'Training update {i+1}: {history[-1]:.4f}', flush=True)
                 save(output/'training.json', history)
@@ -276,6 +287,12 @@ def main(config_path, output, resume=None):
                 report['recall']['False/correct'] >= config['thresholds']['paraphrase']
                 and all(gain['mean'] >= config['thresholds']['gain'] and gain['ci95'][0] > 0
                         for gain in gains)) else 'FAIL'
+            report['gates']['contradiction'] = 'PASS' if (
+                report['contradiction']['latest_correct'] >= .90 and
+                report['contradiction']['stale_value'] <= .05) else 'FAIL'
+            report['gates']['fusion'] = (
+                'NOT_IMPLEMENTED' if report['gates']['generalization_gate'] == 'PASS'
+                and report['gates']['addressing_accuracy'] == 'PASS' else 'SKIPPED_GATE')
             report['outcome'] = 'FAILURE' if report['gates']['addressing_accuracy']=='FAIL' else 'INCONCLUSIVE'
         else:
             report['gates']['retrieval'] = 'SKIPPED_BUDGET'
