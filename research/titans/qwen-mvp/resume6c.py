@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[3]
 SOURCE = "qwen-mvp-stage6c-train-5255aa8c407c"
 
 
-def recover(output):
+def recover(output, filename='adapter.pt'):
     sys.path.insert(0, str(ROOT / 'research/projects/cellular-language-models/experiments'
                           / 'epclm-002-a0-persistent-state-recall/scripts'))
     from kaggle_output_recovery import _load_backend, _version_number
@@ -17,7 +17,7 @@ def recover(output):
     api, fetch = _load_backend(ROOT)
     from kaggle_posthoc.kaggle_source import inventory
 
-    name = SOURCE + '/adapter.pt'
+    name = SOURCE + '/' + filename
     latest = _version_number(api.metadata())
     for version in range(latest, max(0, latest - 30), -1):
         print(f'Inspect saved Kaggle version {version}', flush=True)
