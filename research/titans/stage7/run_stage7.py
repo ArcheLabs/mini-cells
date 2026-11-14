@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 import random
 import sys
+import subprocess
+import uuid
 import time
 
 import torch
@@ -35,7 +37,7 @@ class Memory(nn.Module):
         self.readout = nn.ModuleList(nn.Linear(32, 32) for _ in range(2))
         self.shards = nn.ModuleList(NeuralMemory(32) for _ in range(2))
 
-    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt'):
+    def forward(self, episode, *, exact=False, control='correct', width=1, mode='online_adapt', capture=None):
         keys, queries, values = episode
         assert keys.shape == values.shape and keys.shape[1:] == (2, 256)
         assert queries.shape == (keys.shape[0], 8, 256)
@@ -52,6 +54,8 @@ class Memory(nn.Module):
                     cell, _ = shard.learn(x[None], y[None], cell, mode)
             read = shard.recall(q.flatten(0, 1)[None], cell,
                                 'meta_train' if mode == 'meta_train' else 'read_only')
+            if capture is not None:
+                capture.append((cell.detached(), q.flatten(0, 1)[None].detach().cpu(), read.detach().cpu()))
             read = self.readout[h](read.reshape(len(k), 4, -1))
             scores.append((F.normalize(read, dim=-1) @ F.normalize(v, dim=-1).T).mean(1)*10)
             alignment.append((1-(q*k[:, None]).sum(-1)).mean())
@@ -100,6 +104,27 @@ def encode(adapter, tokenizer, rows):
         hook.remove()
     n = len(rows)
     return tuple(torch.stack([item[i] for item in result[i*n:(i+1)*n]]) for i in range(3))
+
+
+def verify_persistence(model, features, output, identity, timeout):
+    sys.path.insert(0, str(BASE.parents[2] / 'research/projects/cellular-language-models/experiments'
+                          / 'epclm-006-cross-session-cell-portability'))
+    from cell_artifact import export_cell
+
+    path = output / 'portable'
+    path.mkdir()
+    captured = []
+    with torch.no_grad():
+        model(features, capture=captured)
+    source = str(uuid.uuid4())
+    for index, (cell, _, _) in enumerate(captured):
+        export_cell(cell, path / f'shard-{index}', identity, source)
+    torch.save(dict(weights=dict(model.state_dict()), identity=identity,
+                    reads=[(query, expected) for _, query, expected in captured]), path / 'fixture.pt')
+    subprocess.run([sys.executable, str(BASE / 'persistence.py'), str(path)],
+                   check=True, timeout=timeout)
+    proof = json.loads((path / 'restore.json').read_text())
+    save(output / 'persistence.json', proof)
 
 
 def main(config_path, output):
@@ -164,16 +189,22 @@ def main(config_path, output):
         with checkpoint.open('rb') as stream:
             report['checkpoint_sha256'] = hashlib.file_digest(stream, 'sha256').hexdigest()
         results = []
+        persistence_features = None
         with torch.no_grad():
             for rows in data['test']:
                 if time.monotonic() >= deadline:
                     break
                 features = encode(adapter, tokenizer, rows)
+                if persistence_features is None:
+                    persistence_features = features
                 row = {}
                 for exact in (True, False):
                     for control in ('correct', 'empty', 'donor'):
                         scores, _ = model(features, exact=exact, control=control)
                         row[f'{exact}/{control}'] = scores.argmax(1).eq(labels).float().mean().item()
+                for width in (16, 64, 512):
+                    scores, _ = model(features, exact=True, width=width)
+                    row[f'width_{width}'] = float(scores.argmax(1).eq(labels).float().mean())
                 results.append(row)
                 save(output/'retrieval.json', results)
                 print(f"Paired test episodes: {len(results)}/{config['test_episodes']}", flush=True)
@@ -186,6 +217,17 @@ def main(config_path, output):
             report['outcome'] = 'FAILURE' if report['gates']['addressing_accuracy']=='FAIL' else 'INCONCLUSIVE'
         else:
             report['gates']['retrieval'] = 'SKIPPED_BUDGET'
+        if persistence_features is not None and deadline - time.monotonic() > 90:
+            try:
+                verify_persistence(model, persistence_features, output,
+                    {'checkpoint_sha256': report['checkpoint_sha256'], 'schema': 'stage7-v1'},
+                    timeout=min(90, deadline - time.monotonic()))
+                report['gates']['artifact_roundtrip'] = 'PASS'
+            except Exception as error:
+                report['gates']['artifact_roundtrip'] = 'ERROR'
+                report['persistence_error'] = str(error)
+        else:
+            report['gates']['artifact_roundtrip'] = 'SKIPPED_BUDGET'
     except Exception as error:
         report.update(error=str(error), outcome='FAILURE')
         raise
