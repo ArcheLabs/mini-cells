@@ -1,0 +1,21 @@
+name: Persistent cognitive CPU
+on:
+  push:
+    paths: ['research/persistent-cognitive/**', 'tests/research/persistent_cognitive/**', '.github/workflows/persistent-cognitive-cpu.yml']
+  pull_request:
+    paths: ['research/persistent-cognitive/**', 'tests/research/persistent_cognitive/**', '.github/workflows/persistent-cognitive-cpu.yml']
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      OMP_NUM_THREADS: '1'
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install pytest transformers==5.3.0 safetensors==0.6.2
+      - run: python -m compileall -q research/persistent-cognitive
+      - run: python -m pytest -q tests/research/persistent_cognitive
