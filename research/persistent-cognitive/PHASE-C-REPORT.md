@@ -15,3 +15,8 @@ features remains unverified. Address solves run in FP32 or FP64.
 
 Phase A/B remains PARTIAL. Pretrained Memory-on fusion and cross-window
 retrieval are outstanding. The CPU test does not measure either.
+
+The completion review adds two independent CPU oracles. A diagonal
+covariance checks the spectral shrinkage coefficients and rejects an
+asymmetric matrix. Direct autograd checks the configured learning and
+forgetting coefficients, momentum sign and covariance increment.
