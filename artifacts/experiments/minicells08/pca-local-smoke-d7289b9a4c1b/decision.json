@@ -1,0 +1,29 @@
+{
+  "status": "PCA_LOCAL_ATTENTION_SMOKE_PASS",
+  "identity": {
+    "model": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "dtype": "torch.float32",
+    "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "transformers": "5.3.0"
+  },
+  "layers": [
+    3,
+    7,
+    11,
+    15,
+    19,
+    23
+  ],
+  "q_heads": 8,
+  "kv_heads": 2,
+  "head_dim": 256,
+  "window": 4,
+  "torch": "2.11.0+cu130",
+  "gpu": "Tesla T4",
+  "memory_retrieval": "UNVERIFIED",
+  "training_updates": 0,
+  "format": "minicells.pca.local-smoke.v1",
+  "source_commit": "1a61a708e196d14b9e707b4859e50be6589a691b",
+  "run_id": "pca-local-smoke-d7289b9a4c1b"
+}
