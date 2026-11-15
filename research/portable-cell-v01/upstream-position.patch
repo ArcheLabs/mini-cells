@@ -70,6 +70,21 @@ index 2509c32..8047bcb 100644
          return q, k, v, memory_q, memory_k, v, rotated
  
  # ---------------------------------------------------------------------------
+diff --git a/train_datasets.py b/train_datasets.py
+index d9b6149..6d79ae4 100644
+--- a/train_datasets.py
++++ b/train_datasets.py
+@@ -303,6 +303,10 @@ class LongAlignSFTDataset(IterableDataset):
+                 tokenize=True,
+                 add_generation_prompt=True,
+             )
++            # Oversize prompts are rejected by _tokenize_item. Avoid encoding
++            # the conversation a second time before rejecting them.
++            if len(prompt_ids) >= self.max_length:
++                return None, None
+             full_ids = self.tokenizer.apply_chat_template(
+                 supervised_messages,
+                 tokenize=True,
 diff --git a/train_titan_llama.py b/train_titan_llama.py
 index 7506bb4..62b8e3e 100644
 --- a/train_titan_llama.py
