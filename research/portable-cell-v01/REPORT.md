@@ -70,3 +70,11 @@ facts and reports a separate verdict.
 
 Local verification covers CPU fixtures, syntax and applying the upstream
 patch. No GPU results or semantic success have been established locally.
+
+Bootstrap materializes the configured upstream stream before runtime smoke
+and training. It logs each awaited batch and source, stops an individual
+data read after 180 seconds, and publishes a data manifest with the SHA256.
+Training validates and reads only the saved batches with Hugging Face offline
+flags enabled. The configured sample order, shuffle buffers, token budget
+and training loop are preserved. Data preparation still requires the source
+files to be reachable.

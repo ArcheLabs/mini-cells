@@ -44,8 +44,9 @@ def worker(args):
     settings['neural_memory_layers'] = tuple(settings['neural_memory_layers'])
     config = TitanLLaMAConfig(**{f.name: settings[f.name] for f in dataclasses.fields(TitanLLaMAConfig)
                                 if f.name in settings})
-    if args.mode == 'train':
+    if args.mode in ('prepare-data', 'train'):
         import train_titan_llama as upstream_training
+        from bootstrap_data import LocalBootstrap, prepare
 
         settings.update(batch_size=1, micro_batch_size=1, gradient_accumulation_steps=1,
                         sequence_length=2 * CHUNK, total_tokens=args.steps * 2 * CHUNK,
@@ -55,6 +56,12 @@ def worker(args):
         fields = {field.name for field in dataclasses.fields(upstream_training.TrainingConfig)}
         training = upstream_training.TrainingConfig(**{k: v for k, v in settings.items() if k in fields})
         (args.output / 'training_config.json').write_text(json.dumps(vars(training), indent=2))
+        if args.mode == 'prepare-data':
+            prepare(args.output, upstream_training.make_dataset, training)
+            return
+        dataset = LocalBootstrap(args.output, training)
+        upstream_training.make_dataset = lambda _config: dataset
+        print(f'Training data verified locally ({training.total_steps} batches)', flush=True)
         original_create = upstream_training.create_model_and_optimizer
         before = {}
         names = []
@@ -323,7 +330,7 @@ def main():
     parser.add_argument('--steps', type=int, default=12, choices=range(11, 129))
     parser.add_argument('--outer-checkpoint', type=Path)
     parser.add_argument('--outer-sha256')
-    parser.add_argument('--mode', choices=('continuous', 'export', 'restore', 'train', 'smoke', 'semantic'))
+    parser.add_argument('--mode', choices=('continuous', 'export', 'restore', 'train', 'smoke', 'semantic', 'prepare-data'))
     parser.add_argument('--variant', choices=('initial', 'trained'), default='initial')
     args = parser.parse_args()
     if len(args.revision) != 40 or any(c not in '0123456789abcdef' for c in args.revision):
@@ -360,18 +367,27 @@ def main():
         start = time.monotonic()
         print(f'{variant}: {mode}', flush=True)
         try:
-            subprocess.run(commands + ['--mode', mode, '--variant', variant], check=True, env=environment)
+            worker_env = dict(environment)
+            if mode == 'prepare-data':
+                worker_env.update(CUDA_VISIBLE_DEVICES='', HF_HUB_ETAG_TIMEOUT='30',
+                                  HF_HUB_DOWNLOAD_TIMEOUT='45')
+            elif mode == 'train':
+                worker_env.update(HF_HUB_OFFLINE='1', HF_DATASETS_OFFLINE='1')
+            subprocess.run(commands + ['--mode', mode, '--variant', variant], check=True, env=worker_env)
         finally:
             report['timings_seconds'][f'{variant}/{mode}'] = time.monotonic() - start
 
     try:
+        if not args.outer_checkpoint:
+            run('prepare-data', 'trained')
         run('smoke', 'initial')
         report['acceptance'] = dict(runtime='PCC_REAL_RUNTIME_SMOKE_PASS', fork='PCC_FORK_PASS')
         (args.output / 'runtime_smoke.json').write_bytes(
             (args.output / 'initial/generation.json').read_bytes())
         for variant in ('initial', 'trained'):
             if variant == 'trained':
-                initial_elapsed = sum(report['timings_seconds'].values())
+                initial_elapsed = sum(value for phase, value in report['timings_seconds'].items()
+                                      if phase.startswith('initial/'))
                 print(f'Fixed-init workflow: {initial_elapsed:.1f}s. '
                       f'Trained comparison repeats the same three workers after {args.steps} outer steps.',
                       flush=True)

@@ -81,3 +81,22 @@ def test_runtime_comparison_detects_state_and_retrieval_errors(tmp_path):
     save_file({'retrieval': value + 0.1}, str(tmp_path / 'restore-read.safetensors'))
     with pytest.raises(AssertionError):
         compare(tmp_path)
+
+
+def test_bootstrap_batches_round_trip_in_upstream_order(tmp_path):
+    from types import SimpleNamespace
+
+    from bootstrap_data import LocalBootstrap, prepare
+
+    config = SimpleNamespace(dataset_name='longalign_fineweb_pretrain',
+                             longalign_shuffle_seed=314159, total_steps=2, sequence_length=4)
+    rows = [{name: torch.full((4,), index, dtype=torch.int64)
+             for name in ('input_ids', 'attention_mask', 'labels')} for index in (1, 2)]
+    prepare(tmp_path, lambda _: iter(rows), config)
+    loader = torch.utils.data.DataLoader(LocalBootstrap(tmp_path, config), batch_size=1)
+    for expected, actual in zip(rows, loader, strict=True):
+        for name in expected:
+            torch.testing.assert_close(actual[name], expected[name].unsqueeze(0))
+    (tmp_path / 'bootstrap-data.safetensors').write_bytes(b'corrupt')
+    with pytest.raises(ValueError, match='identity mismatch'):
+        LocalBootstrap(tmp_path, config)
