@@ -18,3 +18,11 @@ corruption and cross-schema rejection. Session restore was verified
 with a synthetic cache layout. Pretrained Qwen restart and Memory-on
 fusion/addressing/cross-window retrieval remain open. Phase A/B remains
 PARTIAL. No training or CUDA optimization was performed.
+
+The original pretrained T4 smoke passed at result commit 79ed540, with
+zero logit error after same-process restore. The separate restart
+notebook now waits for Source to exit before Target loads the pinned
+model and restores Cell and Session independently. It compares the
+next-token logits and committed state digest. The reference tensor
+layout comes from an unrelated shape probe. T4 restart results remain
+pending. Long-range recall is a separate acceptance item.

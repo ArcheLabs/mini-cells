@@ -16,8 +16,7 @@ from session import Session, _tensors, advance, restore_session, snapshot_sessio
 
 
 @torch.no_grad()
-def main(output):
-    started = time.monotonic()
+def setup():
     if not torch.cuda.is_available() or 'T4' not in torch.cuda.get_device_name():
         raise RuntimeError('Tesla T4 required')
     torch.manual_seed(42)
@@ -32,6 +31,15 @@ def main(output):
                     tokenizer=sha(tokenizer.backend_tokenizer.to_str().encode()),
                     architecture='persistent-cognitive-v2/window=4',
                     meta=sha(save(weights)), layer_map=sha(repr(tuple(retrofit.memories)).encode()))
+    return adapter, retrofit, identity
+
+
+@torch.no_grad()
+def main(output):
+    started = time.monotonic()
+    adapter, retrofit, identity = setup()
+    model = adapter.model
+
     def fresh():
         return adapter.cache_type(adapter.config)
 
