@@ -70,3 +70,16 @@ index 2509c32..8047bcb 100644
          return q, k, v, memory_q, memory_k, v, rotated
  
  # ---------------------------------------------------------------------------
+diff --git a/train_titan_llama.py b/train_titan_llama.py
+index 7506bb4..62b8e3e 100644
+--- a/train_titan_llama.py
++++ b/train_titan_llama.py
+@@ -209,6 +209,8 @@ def create_model_and_optimizer(config: TrainingConfig, device):
+     else:
+         model = TitanLLaMAForCausalLM(model_config)
+ 
++    if config.freeze_backbone:
++        model.freeze_backbone()
+     model = model.to(device)
+ 
+     # Align training config with backbone in case it was derived from a pretrained checkpoint

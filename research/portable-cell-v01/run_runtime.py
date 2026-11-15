@@ -62,6 +62,16 @@ def worker(args):
         def create(config, device):
             model, optimizer, scheduler = original_create(config, device)
             trainable = parameters(model)
+            permitted = all(
+                name.startswith('backbone.model.layers.') and
+                ('.neural_memory.' in name or '.to_learned_v_mix.' in name)
+                for name in trainable
+            )
+            optimized = {id(param) for group in optimizer.param_groups for param in group['params']}
+            if not trainable or not permitted or optimized != {id(param) for param in trainable.values()}:
+                raise RuntimeError('Frozen Backbone contract failed before training')
+            print(f'Verified {sum(p.numel() for p in trainable.values()):,} '
+                  'trainable NMM/Gate parameters in the upstream optimizer', flush=True)
             names.extend(trainable)
             before.update({k: v.detach().cpu().clone() for k, v in trainable.items()
                            if 'history_mix' in k or 'memory_model_parameters' in k})
