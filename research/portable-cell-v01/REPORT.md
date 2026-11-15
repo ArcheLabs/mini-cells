@@ -38,29 +38,33 @@ Run the engineering fixtures with PyTorch, Safetensors and pytest installed.
 python -m pytest -q research/portable-cell-v01
 ```
 
-## Single-session GPU follow-up
+## v0.2 GPU entry
 
-Run [kaggle_runtime.py](kaggle_runtime.py) in a Kaggle GPU notebook with Internet
-and an `HF_TOKEN` secret granted access to Llama 3.2 1B Instruct. The launcher
-resolves the current model revision once and passes its immutable SHA to every
-worker. The experiment uses one Titan decoder layer (8), FP32, seed 42, and
-16-token chunks. It enables upstream history blending. The default training
-fallback performs four outer AdamW steps on seeded synthetic token IDs and
-checks that both the shared memory initialization and history gate changed.
-The backbone is frozen. This is a reproducible engineering checkpoint.
+Import `portable_cell_end2end.ipynb` into Kaggle, enable GPU and Internet,
+configure `GITHUB_TOKEN`, and select Save & Run All. The model snapshot is
+resolved once and hashed, and all subprocesses use that same local snapshot.
+The runtime follows the pinned upstream seg512 architecture on layers 0–3.
+FP32 uses standard attention kernels.
 
-Both comparisons run an in-process arm, an export worker, and a fresh import
-worker. Both arms start a fresh Session before Chunk 2. The restore worker
-derives the expected tensor layout from an unrelated input, discards that
-state, and restores the saved Chunk 1 Cell. The report compares every state
-tensor, the committed cursor, and the raw NMM retrieval vector using
-`atol=1e-6` and `rtol=1e-5`. Results, checkpoint, and phase timings stay in
-the saved Kaggle output. The first comparison provides a measured timing
-reference for the rest of the workflow. The launcher uses a small fixed
-training budget and has no run-time countdown.
+Bootstrap uses the upstream trainer and LongAlign/FineWeb route. The default
+plan is 12 updates at 1024 tokens, batch size 1 and the upstream warmup.
+The trainer writes its native checkpoint after every update. Wall time is
+measured and reported without a countdown, per the user's earlier instruction.
+The simulator-free GPU route still needs to run before throughput or time
+estimates for this configuration can be established.
 
-The local checkout has no supported GPU or cached gated model weights. Before
-running this entry, the engineering fixtures, patch application, and Python
-compilation can be verified locally. The real GPU forward, short training,
-and parity results are pending. A parity pass measures migration fidelity.
-Semantic recall remains a separate experiment.
+The launcher discovers compatible manifests in mounted /kaggle/input assets.
+Explicit checkpoint input is also available through the runner CLI. Search of
+unmounted Kaggle versions, historical branches, and upstream model releases
+is not automated in this entry. The launcher records artifact hashes and
+publishes curated files using the repository publisher. Raw files exceeding
+GitHub's file limit and the full optimizer checkpoint remain in Kaggle Output.
+
+Both parity arms reset Session state before Chunk 2. The comparison covers
+serialized states, each layer's memory output, and full logits with fixed
+FP32 tolerances. Exact normalized snapshot hashes are also reported. The
+semantic worker compares Correct, Empty and Donor on 16 fixed synthetic
+facts and reports a separate verdict.
+
+Local verification covers CPU fixtures, syntax and applying the upstream
+patch. No GPU results or semantic success have been established locally.

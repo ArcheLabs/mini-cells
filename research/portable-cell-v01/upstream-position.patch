@@ -1,5 +1,5 @@
 diff --git a/titan_llama.py b/titan_llama.py
-index 2509c32..fbbd33b 100644
+index 2509c32..8047bcb 100644
 --- a/titan_llama.py
 +++ b/titan_llama.py
 @@ -639,6 +639,7 @@ class TitanDecoderLayer(nn.Module):
@@ -58,7 +58,7 @@ index 2509c32..fbbd33b 100644
  
          if rotated:
 -            return q, k, v, q, k, v, rotated
-+            memory_q, memory_k = (q, k) if memory_position is position else attention.apply_rope(
++            memory_q, memory_k = (q, k) if type(position) is int and memory_position == position else attention.apply_rope(
 +                q_raw, k_raw, seq_offset=memory_position
 +            )
 +            return q, k, v, memory_q, memory_k, v, rotated
