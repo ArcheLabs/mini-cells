@@ -51,9 +51,20 @@ with tempfile.TemporaryDirectory(prefix='portable-source-') as directory:
         run('git', '-C', str(upstream), 'checkout', '--detach', 'FETCH_HEAD')
         run('git', '-C', str(upstream), 'apply', str(source / 'upstream-position.patch'))
         run(sys.executable, '-m', 'pip', 'install', '-q', str(upstream) + '[research]')
-        from huggingface_hub import model_info, snapshot_download
+        # This text-only run does not use torchvision. Kaggle's preinstalled
+        # extension can target a different Torch ABI after upstream pins Torch.
+        with (working / 'runtime.log').open('w') as log:
+            for command in (
+                [sys.executable, '-m', 'pip', 'uninstall', '-y', 'torchvision'],
+                [sys.executable, '-c',
+                 'import torch; from transformers import LlamaForCausalLM; '
+                 'assert torch.cuda.is_available(), "CUDA unavailable"; '
+                 'print(torch.__version__, torch.cuda.get_device_name(0), LlamaForCausalLM.__name__)'],
+            ):
+                subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
+        from huggingface_hub import snapshot_download
 
-        revision = model_info(model).sha
+        revision = '5a8abab4a5d6f164389b1079fb721cfab8d7126c'
         model_path = Path(snapshot_download(model, revision=revision,
                                             allow_patterns=['*.json', '*.safetensors', '*.model', '*.jinja']))
         model_files = {p.name: digest(p) for p in sorted(model_path.iterdir()) if p.is_file()}
@@ -78,7 +89,7 @@ with tempfile.TemporaryDirectory(prefix='portable-source-') as directory:
         (working / 'source_audit.json').write_text(json.dumps(
             dict(identity=identity, model_files=model_files, mounted_candidates=candidates), indent=2))
         print(f'Results directory: {output}', flush=True)
-        with (working / 'runtime.log').open('w') as log:
+        with (working / 'runtime.log').open('a') as log:
             command = [sys.executable, str(source / 'run_runtime.py'), '--upstream', str(upstream),
                        '--output', str(output), '--revision', revision, '--model-path', str(model_path),
                        '--backbone-fingerprint', fingerprint, *outer]
