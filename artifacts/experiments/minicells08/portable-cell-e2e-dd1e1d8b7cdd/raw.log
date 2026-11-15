@@ -1,0 +1,151 @@
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint: 
+hint: 	git config --global init.defaultBranch <name>
+hint: 
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint: 
+hint: 	git branch -m <name>
+Initialized empty Git repository in /tmp/portable-upstream-hkuz0c7e/titans/.git/
+From https://github.com/sarahpannn/titans-pytorch
+ * branch            c60b4efaa3a3c6df4deebd57cbccf75947b87cad -> FETCH_HEAD
+HEAD is now at c60b4ef Add Titan-Llama support
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+torchvision 0.26.0+cu130 requires torch==2.11.0, but you have torch 2.9.1 which is incompatible.
+gradio-client 2.7.2 requires huggingface-hub<3.0,>=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.
+gradio 6.30.0 requires huggingface-hub<3.0,>=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.
+gradio 6.30.0 requires pillow<13.0,>=8.0, but you have pillow 13.0.0 which is incompatible.
+diffusers 0.42.0 requires huggingface-hub<3.0,>=1.32.0, but you have huggingface-hub 0.36.2 which is incompatible.
+Found existing installation: torchvision 0.26.0+cu130
+Uninstalling torchvision-0.26.0+cu130:
+  Successfully uninstalled torchvision-0.26.0+cu130
+2.9.1+cu128 Tesla T4 LlamaForCausalLM
+
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]
+Fetching 7 files:  14%|█▍        | 1/7 [00:00<00:01,  3.01it/s]
+Fetching 7 files:  57%|█████▋    | 4/7 [00:05<00:04,  1.38s/it]
+Fetching 7 files: 100%|██████████| 7/7 [00:05<00:00,  1.35it/s]
+initial: smoke
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
+initial: continuous
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
+initial: export
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
+initial: restore
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
+Fixed-init workflow: 83.8s. Trained comparison repeats the same three workers after 12 outer steps.
+Planning estimate: 167.6s for both parity runs plus model load and 12 short outer updates.
+trained: prepare-data
+Loading SFT dataset(s) zai-org/LongAlign-10k::train (streaming=True)...
+SFT streaming dataset ready
+Data preparation: FineWeb-Edu, 6 batches
+Data preparation: cached FineWeb-Edu block 1/6
+Data preparation: cached FineWeb-Edu block 2/6
+Data preparation: cached FineWeb-Edu block 3/6
+Data preparation: cached FineWeb-Edu block 4/6
+Data preparation: cached FineWeb-Edu block 5/6
+Data preparation: cached FineWeb-Edu block 6/6
+Data preparation: LongAlign, 6 batches
+FINEWEB_ONLY_FALLBACK: 
+Data preparation: FineWeb-Edu, 12 batches
+Data preparation: cached FineWeb-Edu block 7/12
+Data preparation: cached FineWeb-Edu block 8/12
+Data preparation: cached FineWeb-Edu block 9/12
+Data preparation: cached FineWeb-Edu block 10/12
+Data preparation: cached FineWeb-Edu block 11/12
+Data preparation: cached FineWeb-Edu block 12/12
+trained: train
+Training data verified locally (12 batches)
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
+Total parameters: 1,253,148,920
+Trainable parameters: 17,227,872
+Frozen parameters: 1,235,921,048
+  - nm_read_side      : 16,785,408 (16.79M)
+  - nm_inner_model    : 393,216 (0.39M)
+  - nm_write_side     : 49,248 (0.05M)
+Neural memory parameters: 17,227,872
+AdamW: FP32 master weights and moments; model compute dtype unchanged
+Verified 17,227,872 trainable NMM/Gate parameters in the upstream optimizer
+
+  0%|          | 0/12 [00:00<?, ?it/s]2026-11-15 16:35:33,849 - train_titan_llama - INFO - step=0/12 loss=4.3390 accuracy=0.3099 lr=5.900e-05 seconds=1.88
+
+  8%|▊         | 1/12 [00:09<01:49,  9.92s/it]2026-11-15 16:35:43,525 - train_titan_llama - INFO - step=1/12 loss=4.1793 accuracy=0.3431 lr=1.080e-04 seconds=1.63
+Estimated remaining training and saves: 139s
+
+ 17%|█▋        | 2/12 [00:23<02:02, 12.28s/it]2026-11-15 16:35:57,421 - train_titan_llama - INFO - step=2/12 loss=4.1443 accuracy=0.3314 lr=1.570e-04 seconds=1.60
+
+ 25%|██▌       | 3/12 [00:44<02:25, 16.11s/it]2026-11-15 16:36:18,099 - train_titan_llama - INFO - step=3/12 loss=3.9464 accuracy=0.2913 lr=2.060e-04 seconds=1.60
+
+ 33%|███▎      | 4/12 [01:26<03:31, 26.49s/it]2026-11-15 16:37:00,513 - train_titan_llama - INFO - step=4/12 loss=3.8540 accuracy=0.3148 lr=2.550e-04 seconds=1.63
+
+ 42%|████▏     | 5/12 [01:36<02:22, 20.37s/it]2026-11-15 16:37:10,054 - train_titan_llama - INFO - step=5/12 loss=4.2707 accuracy=0.2659 lr=3.040e-04 seconds=1.63
+
+ 50%|█████     | 6/12 [02:12<02:34, 25.81s/it]2026-11-15 16:37:46,410 - train_titan_llama - INFO - step=6/12 loss=3.7805 accuracy=0.3441 lr=3.530e-04 seconds=1.61
+
+ 58%|█████▊    | 7/12 [02:22<01:42, 20.47s/it]2026-11-15 16:37:55,916 - train_titan_llama - INFO - step=7/12 loss=3.4385 accuracy=0.3431 lr=4.020e-04 seconds=1.64
+
+ 67%|██████▋   | 8/12 [02:41<01:19, 19.95s/it]2026-11-15 16:38:14,752 - train_titan_llama - INFO - step=8/12 loss=2.5155 accuracy=0.4673 lr=4.510e-04 seconds=1.64
+
+ 75%|███████▌  | 9/12 [02:59<00:58, 19.58s/it]2026-11-15 16:38:33,537 - train_titan_llama - INFO - step=9/12 loss=2.7602 accuracy=0.4604 lr=5.000e-04 seconds=1.66
+
+ 83%|████████▎ | 10/12 [03:23<00:41, 20.74s/it]2026-11-15 16:38:56,869 - train_titan_llama - INFO - step=10/12 loss=3.4793 accuracy=0.3441 lr=2.550e-04 seconds=1.65
+
+ 92%|█████████▏| 11/12 [03:39<00:19, 19.35s/it]2026-11-15 16:39:13,073 - train_titan_llama - INFO - step=11/12 loss=3.7400 accuracy=0.3187 lr=1.000e-05 seconds=1.67
+
+100%|██████████| 12/12 [04:22<00:00, 26.46s/it]
+100%|██████████| 12/12 [04:22<00:00, 21.85s/it]
+trained: continuous
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
+trained: export
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
+trained: restore
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
+trained: semantic
+[from_pretrained_llama] Replacing layers [0, 1, 2, 3] with TitanDecoderLayer
+
+[freeze_backbone] ***** BEGIN *****
+[freeze_backbone] NM trainable:     17,227,872
+[freeze_backbone] ***** END *****
+
