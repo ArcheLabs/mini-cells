@@ -35,3 +35,33 @@ def test_cell_only_restore_and_fork(tmp_path):
     (path / 'session.pt').touch()
     with pytest.raises(ValueError):
         restore(path, memories, fingerprint)
+
+
+def test_phase_c_reference_and_long_run():
+    torch.manual_seed(7)
+    memory = NeuralMemory(4)
+    x = torch.eye(4)
+    expected = torch.tensor(memory.update.controls)
+    torch.testing.assert_close(memory.controls(x).sigmoid(), expected.expand(4, -1))
+    base = memory.create()
+    single, _ = memory.scan(x, x, x[:, None], base)
+    manual = []
+    state = base
+    with torch.no_grad():
+        for key in x:
+            state = memory.transition(key, key, state, state.fast)
+            manual.append(memory.read(key[None], state))
+        torch.testing.assert_close(single, torch.stack(manual))
+        chunked, _ = memory.scan(x, x, x[:, None], base, chunk=4)
+        changed = x.clone()
+        changed[2:] *= -1
+        prefix, _ = memory.scan(changed, changed, x[:, None], base, chunk=4)
+        torch.testing.assert_close(chunked[:2], prefix[:2])
+        state = memory.transition(x[0], x[0], base, base.fast)
+        for _ in range(512):
+            state = memory.transition(x[1], x[1], state, state.fast)
+        projected = memory.project(x, state.address)
+    assert state.step == 513
+    assert 0 < projected[0, 0] < projected[1, 1] <= 1
+    assert projected[2:].count_nonzero() == 0
+    assert all(t.isfinite().all() and t.norm() < 100 for t in (*state.fast, *state.momentum))

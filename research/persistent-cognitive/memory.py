@@ -1,5 +1,6 @@
 """Independent per-KV-head memory with tokenwise causal transitions."""
 from dataclasses import dataclass
+import math
 
 import torch
 from torch import nn
@@ -14,12 +15,23 @@ class Shard:
     step: int
 
 
+@dataclass(frozen=True)
+class UpdateConfig:
+    gamma: float = .05
+    delta: float = .01
+    controls: tuple = (.5, .1, .01, .99)
+
+
 class NeuralMemory(nn.Module):
-    def __init__(self, width=256, expansion=4, ridge=.01):
+    def __init__(self, width=256, expansion=4, ridge=.01, update=UpdateConfig()):
         super().__init__()
-        if width < 1 or expansion < 1 or ridge <= 0:
+        if width < 1 or expansion < 1 or not math.isfinite(ridge) or ridge <= 0:
             raise ValueError('Invalid memory geometry')
+        if (not 0 < update.gamma <= 1 or not 0 <= update.delta <= 1
+                or len(update.controls) != 4 or not all(0 < x < 1 for x in update.controls)):
+            raise ValueError('Invalid update controls')
         self.ridge = ridge
+        self.update = update
         self.initial = nn.ParameterList([
             nn.Parameter(torch.empty(width * expansion, width)),
             nn.Parameter(torch.empty(width, width * expansion)),
@@ -27,6 +39,9 @@ class NeuralMemory(nn.Module):
         for weight in self.initial:
             nn.init.xavier_uniform_(weight)
         self.controls = nn.Linear(width, 4)
+        nn.init.zeros_(self.controls.weight)
+        with torch.no_grad():
+            self.controls.bias.copy_(torch.tensor(update.controls).logit())
 
     def create(self):
         fast = tuple(weight.clone() for weight in self.initial)
@@ -38,11 +53,20 @@ class NeuralMemory(nn.Module):
         return x + F.layer_norm(F.linear(F.gelu(F.linear(x, fast[0])), fast[1]),
                                 (x.shape[-1],))
 
+    def project(self, query, address):
+        dtype = torch.float64 if address.dtype == torch.float64 else torch.float32
+        with torch.autocast(device_type=query.device.type, enabled=False):
+            matrix, query = address.to(dtype), query.to(dtype)
+            if not torch.isfinite(matrix).all() or not torch.allclose(matrix, matrix.mT):
+                raise ValueError('Address matrix must be finite and symmetric')
+            eye = torch.eye(matrix.shape[0], device=query.device, dtype=dtype)
+            projected = torch.linalg.solve(matrix + self.ridge * eye, (query @ matrix).mT).mT
+            if not torch.isfinite(projected).all():
+                raise FloatingPointError('Nonfinite address projection')
+        return projected
+
     def read(self, query, state):
-        eye = torch.eye(state.address.shape[0], device=query.device, dtype=query.dtype)
-        projected = torch.linalg.solve(state.address + self.ridge * eye,
-                                       (query @ state.address).mT).mT
-        return self.predict(projected, state.fast)
+        return self.predict(self.project(query, state.address).to(state.fast[0].dtype), state.fast)
 
     def transition(self, key, value, state, reference, *, meta=False):
         u = F.normalize(key, dim=-1)
@@ -51,8 +75,8 @@ class NeuralMemory(nn.Module):
             loss = (self.predict(u, weights) - value).square().mean()
             grads = torch.autograd.grad(loss, weights, create_graph=meta)
         eta, rate, forget, rho = self.controls(u).sigmoid().unbind()
-        momentum = tuple(eta * m - .05 * rate * g for m, g in zip(state.momentum, grads))
-        fast = tuple((1 - .01 * forget) * w + m for w, m in zip(state.fast, momentum))
+        momentum = tuple(eta * m - self.update.gamma * rate * g for m, g in zip(state.momentum, grads))
+        fast = tuple((1 - self.update.delta * forget) * w + m for w, m in zip(state.fast, momentum))
         address = rho * state.address + (1 - rho) * torch.outer(u, u)
         if not meta:
             fast = tuple(w.detach() for w in fast)
