@@ -1,12 +1,11 @@
 """Cell-only persistence. Shared parameters and Session tensors live elsewhere."""
-from dataclasses import dataclass
-import hashlib
-import json
-from pathlib import Path
-import tempfile
+from dataclasses import dataclass, replace
+from threading import Lock
 import uuid
 
-import torch
+from safetensors.torch import save
+
+from artifact import canonical, checked, digest, read, write
 
 from memory import Shard
 
@@ -36,54 +35,75 @@ class Cell:
                     (self.id, self.revision))
 
 
+def tensors(cell):
+    return {f'{key}/{kind}/{i}': tensor
+            for key, shard in cell.shards.items()
+            for kind, values in [('fast', shard.fast), ('momentum', shard.momentum),
+                                 ('address', (shard.address,))]
+            for i, tensor in enumerate(values)}
+
+
+def state_hash(cell):
+    payload = save({k: v.detach().cpu().contiguous().clone() for k, v in tensors(cell).items()})
+    return digest(canonical([digest(payload), {k: s.step for k, s in cell.shards.items()}]))
+
+
 def snapshot(cell, path):
-    path = Path(path)
-    if path.exists():
-        raise FileExistsError(path)
-    with tempfile.TemporaryDirectory(dir=path.parent) as tmp:
-        stage = Path(tmp) / 'cell'
-        stage.mkdir()
-        payload = stage / 'tensors.pt'
-        torch.save({k: dict(fast=tuple(w.detach().cpu() for w in s.fast),
-                            momentum=tuple(m.detach().cpu() for m in s.momentum),
-                            address=s.address.detach().cpu(), step=s.step)
-                    for k, s in cell.shards.items()}, payload)
-        manifest = dict(schema='persistent-cognitive-v1', id=cell.id, revision=cell.revision,
-                        fingerprints=cell.fingerprints, parent=cell.parent,
-                        sha256=hashlib.sha256(payload.read_bytes()).hexdigest())
-        (stage / 'manifest.json').write_text(json.dumps(manifest, sort_keys=True))
-        stage.rename(path)
+    write(path, dict(schema='persistent-cognitive-v2', id=cell.id, revision=cell.revision,
+                     fingerprints=cell.fingerprints, parent=cell.parent,
+                     steps={k: s.step for k, s in cell.shards.items()},
+                     state_hash=state_hash(cell)), tensors(cell))
 
 
 def restore(path, memories, fingerprints):
-    path = Path(path)
-    if {item.name for item in path.iterdir()} != {'manifest.json', 'tensors.pt'}:
-        raise ValueError('Unexpected Cell files')
-    manifest = json.loads((path / 'manifest.json').read_text())
-    payload = path / 'tensors.pt'
-    if (set(manifest) != {'schema', 'id', 'revision', 'fingerprints', 'parent', 'sha256'}
-            or manifest['schema'] != 'persistent-cognitive-v1'
-            or manifest['fingerprints'] != fingerprints
-            or type(manifest['revision']) is not int or manifest['revision'] < 0
-            or hashlib.sha256(payload.read_bytes()).hexdigest() != manifest['sha256']):
-        raise ValueError('Incompatible or damaged Cell')
-    uuid.UUID(manifest['id'])
-    records = torch.load(payload, weights_only=True, map_location='cpu')
-    if records.keys() != memories.keys():
-        raise ValueError('Cell shard mapping differs')
-    shards = {}
-    for key, record in records.items():
-        reference = memories[key].create()
-        if (record.keys() != {'fast', 'momentum', 'address', 'step'}
-                or type(record['step']) is not int or record['step'] < 0):
-            raise ValueError('Unexpected shard schema')
-        def check(actual, expected):
-            if (actual.shape != expected.shape or actual.dtype != expected.dtype
-                    or not actual.isfinite().all()):
-                raise ValueError('Invalid Cell tensor')
-            return actual.to(expected.device)
-        fast = tuple(check(a, b) for a, b in zip(record['fast'], reference.fast, strict=True))
-        momentum = tuple(check(a, b) for a, b in zip(record['momentum'], reference.momentum, strict=True))
-        shards[key] = Shard(fast, momentum, check(record['address'], reference.address), record['step'])
-    return Cell(manifest['id'], manifest['revision'], dict(fingerprints), shards,
-                tuple(manifest['parent']) if manifest['parent'] else None)
+    meta, records = read(path, 'persistent-cognitive-v2')
+    if (meta.keys() != {'id', 'revision', 'fingerprints', 'parent', 'steps', 'state_hash'}
+            or meta['fingerprints'] != fingerprints
+            or type(meta['revision']) is not int or meta['revision'] < 0
+            or meta['steps'].keys() != memories.keys()
+            or any(type(step) is not int or step < 0 for step in meta['steps'].values())):
+        raise ValueError('Incompatible Cell metadata')
+    uuid.UUID(meta['id'])
+    parent = meta['parent']
+    if parent is not None:
+        if not isinstance(parent, list) or len(parent) != 2 or type(parent[1]) is not int or parent[1] < 0:
+            raise ValueError('Invalid Cell parent')
+        uuid.UUID(parent[0])
+    fresh = Cell.create(memories, fingerprints)
+    state = checked(records, tensors(fresh))
+    shards = {key: Shard(tuple(state[f'{key}/fast/{i}'] for i in range(len(s.fast))),
+                         tuple(state[f'{key}/momentum/{i}'] for i in range(len(s.momentum))),
+                         state[f'{key}/address/0'], meta['steps'][key])
+              for key, s in fresh.shards.items()}
+    cell = Cell(meta['id'], meta['revision'], dict(fingerprints), shards,
+                tuple(parent) if parent else None)
+    if state_hash(cell) != meta['state_hash']:
+        raise ValueError('Cell state hash differs')
+    return cell
+
+
+class CellSlot:
+    """Serialize publication of competing staged revisions."""
+
+    def __init__(self, cell):
+        self._cell = cell
+        self._lock = Lock()
+
+    @property
+    def current(self):
+        with self._lock:
+            return self._cell
+
+    def commit(self, staged, expected_revision):
+        with self._lock:
+            current = self._cell
+            if current.revision != expected_revision:
+                raise ValueError('Cell revision conflict')
+            if (staged.id != current.id or staged.fingerprints != current.fingerprints
+                    or staged.parent != current.parent or staged.revision != expected_revision + 1
+                    or staged.shards.keys() != current.shards.keys()
+                    or any(staged.shards[k].step <= s.step for k, s in current.shards.items())):
+                raise ValueError('Invalid staged Cell')
+            checked(tensors(staged), tensors(current))
+            self._cell = staged
+            return staged
