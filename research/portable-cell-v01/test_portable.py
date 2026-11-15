@@ -62,3 +62,22 @@ export(cell.staged({0: state._replace(seq_index=8)}, tokens=4, chunk_size=4),
 ''', str(tmp_path)], cwd=Path(__file__).parent, check=True)
     next_cell = restore(tmp_path / 'next', cell)
     assert (next_cell.id, next_cell.revision, next_cell.position) == (cell.id, 2, 8)
+
+
+def test_runtime_comparison_detects_state_and_retrieval_errors(tmp_path):
+    from safetensors.torch import save_file
+
+    from run_runtime import CHUNK, compare
+
+    value = torch.ones(2)
+    cell = Cell.create('c' * 64)
+    for position in (CHUNK, 2 * CHUNK):
+        state = State(position, {'w': value}, None, (value, value), (value,), None)
+        cell = cell.staged({8: state}, tokens=CHUNK, chunk_size=CHUNK)
+    for arm in ('continuous', 'restore'):
+        export(cell, tmp_path / arm)
+        save_file({'retrieval': value}, str(tmp_path / f'{arm}-read.safetensors'))
+    assert compare(tmp_path)['seq_index'] == 2 * CHUNK
+    save_file({'retrieval': value + 0.1}, str(tmp_path / 'restore-read.safetensors'))
+    with pytest.raises(AssertionError):
+        compare(tmp_path)

@@ -37,3 +37,30 @@ Run the engineering fixtures with PyTorch, Safetensors and pytest installed.
 ```sh
 python -m pytest -q research/portable-cell-v01
 ```
+
+## Single-session GPU follow-up
+
+Run [kaggle_runtime.py](kaggle_runtime.py) in a Kaggle GPU notebook with Internet
+and an `HF_TOKEN` secret granted access to Llama 3.2 1B Instruct. The launcher
+resolves the current model revision once and passes its immutable SHA to every
+worker. The experiment uses one Titan decoder layer (8), FP32, seed 42, and
+16-token chunks. It enables upstream history blending. The default training
+fallback performs four outer AdamW steps on seeded synthetic token IDs and
+checks that both the shared memory initialization and history gate changed.
+The backbone is frozen. This is a reproducible engineering checkpoint.
+
+Both comparisons run an in-process arm, an export worker, and a fresh import
+worker. Both arms start a fresh Session before Chunk 2. The restore worker
+derives the expected tensor layout from an unrelated input, discards that
+state, and restores the saved Chunk 1 Cell. The report compares every state
+tensor, the committed cursor, and the raw NMM retrieval vector using
+`atol=1e-6` and `rtol=1e-5`. Results, checkpoint, and phase timings stay in
+the saved Kaggle output. The first comparison provides a measured timing
+reference for the rest of the workflow. The launcher uses a small fixed
+training budget and has no run-time countdown.
+
+The local checkout has no supported GPU or cached gated model weights. Before
+running this entry, the engineering fixtures, patch application, and Python
+compilation can be verified locally. The real GPU forward, short training,
+and parity results are pending. A parity pass measures migration fidelity.
+Semantic recall remains a separate experiment.

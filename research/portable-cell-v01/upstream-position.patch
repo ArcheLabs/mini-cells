@@ -1,8 +1,16 @@
 diff --git a/titan_llama.py b/titan_llama.py
-index 2509c32..d7f9e26 100644
+index 2509c32..fbbd33b 100644
 --- a/titan_llama.py
 +++ b/titan_llama.py
-@@ -684,6 +684,8 @@ class TitanDecoderLayer(nn.Module):
+@@ -639,6 +639,7 @@ class TitanDecoderLayer(nn.Module):
+             hidden_states,
+             state,
+             self._titan_shared_state.value_residual,
++            memory_position=getattr(self, "portable_memory_position", None),
+         )
+ 
+         if self.segmented_attn.graph_safe_decode:
+@@ -684,6 +685,8 @@ class TitanDecoderLayer(nn.Module):
          x: torch.Tensor,
          state: TitanLayerState,
          value_residual: Optional[torch.Tensor],
@@ -11,7 +19,7 @@ index 2509c32..d7f9e26 100644
      ) -> Tuple[torch.Tensor, TitanLayerState, Optional[torch.Tensor]]:
          """The Titan decoder block as a pure function of its inputs and state.
  
-@@ -691,11 +693,13 @@ class TitanDecoderLayer(nn.Module):
+@@ -691,11 +694,13 @@ class TitanDecoderLayer(nn.Module):
          decoder-layer signature, which keeps the production path free of the
          adapter's branching.
          """
@@ -26,7 +34,7 @@ index 2509c32..d7f9e26 100644
          )
  
  
-@@ -707,7 +711,7 @@ class TitanDecoderLayer(nn.Module):
+@@ -707,7 +712,7 @@ class TitanDecoderLayer(nn.Module):
                  state=state.memory,
                  context=x,
                  detach_mem_state=True,
@@ -35,7 +43,7 @@ index 2509c32..d7f9e26 100644
              )
          else:
              # SegmentedAttention._memory_to_heads short-circuits on None, so the
-@@ -745,7 +749,8 @@ class TitanDecoderLayer(nn.Module):
+@@ -745,7 +750,8 @@ class TitanDecoderLayer(nn.Module):
          return x, next_state, attn_intermediates.value_residual
  
  
@@ -45,7 +53,7 @@ index 2509c32..d7f9e26 100644
          """Project Q/K/V once and rotate once, for both attention and memory.
  
          Attention and the neural memory previously rotated independent copies of
-@@ -770,10 +775,13 @@ class TitanDecoderLayer(nn.Module):
+@@ -770,10 +776,13 @@ class TitanDecoderLayer(nn.Module):
              return q, k, v, q_raw, k_raw, v, rotated
  
          if rotated:
