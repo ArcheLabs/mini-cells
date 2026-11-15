@@ -57,7 +57,21 @@ def worker(args):
         training = upstream_training.TrainingConfig(**{k: v for k, v in settings.items() if k in fields})
         (args.output / 'training_config.json').write_text(json.dumps(vars(training), indent=2))
         if args.mode == 'prepare-data':
-            prepare(args.output, upstream_training.make_dataset, training)
+            from importlib.metadata import version
+            from bootstrap_data import cache_key
+
+            cache_root = args.data_cache or args.output.parent / 'portable-bootstrap-cache'
+            inputs_root = Path('/kaggle/input')
+            mirrors = tuple(inputs_root.rglob('portable-bootstrap-cache')) if inputs_root.is_dir() else ()
+            tokenizer = cache_key({
+                'files': {path.name: sha(path) for path in args.model_path.iterdir()
+                          if path.is_file() and (path.name.startswith(('tokenizer', 'special_tokens'))
+                                                 or path.suffix in ('.jinja', '.model'))},
+                'transformers': version('transformers'), 'tokenizers': version('tokenizers'),
+            })
+            prepare(args.output, upstream_training.make_dataset, training, cache_root, tokenizer,
+                    {'commit': UPSTREAM, 'patch': sha(Path(__file__).with_name('upstream-position.patch')),
+                     'datasets_version': version('datasets')}, mirrors)
             return
         dataset = LocalBootstrap(args.output, training)
         upstream_training.make_dataset = lambda _config: dataset
@@ -328,6 +342,7 @@ def main():
     parser.add_argument('--model-path', type=Path, required=True)
     parser.add_argument('--backbone-fingerprint', required=True)
     parser.add_argument('--steps', type=int, default=12, choices=range(11, 129))
+    parser.add_argument('--data-cache', type=Path)
     parser.add_argument('--outer-checkpoint', type=Path)
     parser.add_argument('--outer-sha256')
     parser.add_argument('--mode', choices=('continuous', 'export', 'restore', 'train', 'smoke', 'semantic', 'prepare-data'))
@@ -350,6 +365,8 @@ def main():
                 '--output', str(args.output.resolve()), '--revision', args.revision, '--steps', str(args.steps),
                 '--model-path', str(args.model_path.resolve()),
                 '--backbone-fingerprint', args.backbone_fingerprint]
+    if args.data_cache:
+        commands += ['--data-cache', str(args.data_cache.resolve())]
     environment = {**os.environ, 'CUBLAS_WORKSPACE_CONFIG': ':4096:8', 'WANDB_MODE': 'disabled'}
     (args.output / 'environment.json').write_text(json.dumps({
         'torch': torch.__version__, 'cuda': torch.version.cuda,
@@ -378,8 +395,6 @@ def main():
             report['timings_seconds'][f'{variant}/{mode}'] = time.monotonic() - start
 
     try:
-        if not args.outer_checkpoint:
-            run('prepare-data', 'trained')
         run('smoke', 'initial')
         report['acceptance'] = dict(runtime='PCC_REAL_RUNTIME_SMOKE_PASS', fork='PCC_FORK_PASS')
         (args.output / 'runtime_smoke.json').write_bytes(
@@ -399,6 +414,7 @@ def main():
                 else:
                     print(f'Planning estimate: {initial_elapsed * 2:.1f}s for both parity runs '
                           f'plus model load and {args.steps} short outer updates.', flush=True)
+                    run('prepare-data', variant)
                     run('train', variant)
                     report['outer_source'] = 'BOUNDED_BOOTSTRAP_CHECKPOINT'
                 report['outer_sha256'] = sha(args.output / 'outer.safetensors')
@@ -426,6 +442,9 @@ def main():
         report.update(status='ERROR', error=str(error))
         raise
     finally:
+        data_report = args.output / 'bootstrap-data.json'
+        if data_report.exists():
+            report['bootstrap_data'] = json.loads(data_report.read_text())
         summary.write_text(json.dumps(report, indent=2))
 
 

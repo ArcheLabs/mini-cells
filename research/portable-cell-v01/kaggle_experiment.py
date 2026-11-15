@@ -69,7 +69,8 @@ def main(output):
             dict(identity=identity, model_files=model_files, mounted_candidates=candidates), indent=2))
         run(sys.executable, str(source / 'run_runtime.py'), '--upstream', str(upstream),
             '--output', str(output), '--revision', revision, '--model-path', str(model_path),
-            '--backbone-fingerprint', fingerprint, *outer)
+            '--backbone-fingerprint', fingerprint,
+            '--data-cache', '/kaggle/working/portable-bootstrap-cache', *outer)
 
 
 if __name__ == '__main__':

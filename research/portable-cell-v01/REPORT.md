@@ -71,10 +71,29 @@ facts and reports a separate verdict.
 Local verification covers CPU fixtures, syntax and applying the upstream
 patch. No GPU results or semantic success have been established locally.
 
-Bootstrap materializes the configured upstream stream before runtime smoke
-and training. It logs each awaited batch and source, stops an individual
-data read after 180 seconds, and publishes a data manifest with the SHA256.
-Training validates and reads only the saved batches with Hugging Face offline
-flags enabled. The configured sample order, shuffle buffers, token budget
-and training loop are preserved. Data preparation still requires the source
-files to be reachable.
+## Bootstrap data preparation
+
+Runtime Smoke and fixed-init parity run before bootstrap data preparation.
+The default bootstrap uses the configured LongAlign/FineWeb-Edu mix and
+preserves causal-LM labels. LongAlign skips samples when the normalized
+prompt or first assistant response exceeds 32 KiB in UTF-8, before either
+is tokenized. The upstream token-window rejection and response-tail
+truncation still apply to eligible samples. These filters can change which
+source rows make up the bootstrap batch.
+
+Each network iterator read has a 45-second budget. Encoding each raw
+sample has an 8-second budget and skips that sample on timeout. Each
+source collection has a 180-second budget. If LongAlign is unavailable
+within those limits, the same step and token budget is filled from FineWeb
+and marked `FINEWEB_ONLY_FALLBACK` in the data and runtime reports.
+
+Individual source samples and packed blocks are saved atomically under
+`/kaggle/working/portable-bootstrap-cache`. Cache entries are keyed by
+source revisions, data settings, tokenizer fingerprint and source-local
+indices. A restart uses any accessible matching cache. To carry a cache
+across isolated Kaggle sessions, attach the earlier saved Output containing
+that directory. For partial hits, the pinned stream may need to replay raw
+rows to reach the next uncached index. Successfully cached rows are not
+re-tokenized. Reports record source order, cache hit rates, skipped and
+truncated counts for work completed in the current attempt, and separate
+network, encoding and total preparation time.
