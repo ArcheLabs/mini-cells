@@ -89,3 +89,17 @@ def advance(session, slot, model, retrofit, ids, fingerprints, *, memory_enabled
     return outputs, replace(session, cell_revision=staged.revision,
                             position=session.position + ids.shape[1],
                             runtime_cache=outputs.past_key_values)
+
+
+def generate(session, slot, model, retrofit, ids, fingerprints, *, max_new_tokens):
+    """Greedy generation. Return the final unconsumed token with the Session."""
+    import torch
+
+    if max_new_tokens < 1:
+        raise ValueError('Expected positive generation length')
+    emitted = []
+    for _ in range(max_new_tokens):
+        output, session = advance(session, slot, model, retrofit, ids, fingerprints)
+        ids = output.logits[:, -1].argmax(-1, keepdim=True)
+        emitted.append(ids)
+    return torch.cat(emitted, dim=1), session

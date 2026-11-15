@@ -65,3 +65,14 @@ def test_phase_c_reference_and_long_run():
     assert 0 < projected[0, 0] < projected[1, 1] <= 1
     assert projected[2:].count_nonzero() == 0
     assert all(t.isfinite().all() and t.norm() < 100 for t in (*state.fast, *state.momentum))
+
+
+def test_online_write_inside_inference_mode():
+    memory = NeuralMemory(4)
+    with torch.inference_mode():
+        cell = memory.create()
+        inputs = torch.eye(4)
+        reads, updated = memory.scan(inputs, inputs, inputs[:, None], cell, chunk=2)
+    assert updated.step == 4 and reads.isfinite().all()
+    assert any(not torch.equal(a, b) for a, b in zip(cell.fast, updated.fast))
+    assert all(p.grad is None for p in memory.parameters())

@@ -36,7 +36,7 @@ class Retrofit(nn.Module):
             nn.init.constant_(gate.bias, -2.1972246)
 
     def forward(self, model, cell, *, chunk=1, meta=False, memory_enabled=True,
-                memory_strength=1., **inputs):
+                memory_strength=1., diagnostics=None, **inputs):
         """Run a text call with explicit absolute positions on cached continuation."""
         if memory_enabled and (cell is None or cell.shards.keys() != self.memories.keys()):
             raise ValueError('Cell mapping differs')
@@ -99,6 +99,14 @@ class Retrofit(nn.Module):
                     features = torch.stack([t.float().square().mean(-1).add(1e-8).sqrt()
                                             for t in (captured['q'][None], local, memory)], dim=-1)
                     weight = self.mix[str(index)](features).sigmoid() * memory_strength
+                    if diagnostics is not None:
+                        forgetting = torch.stack([
+                            self.memories[f'{index}:{h}'].controls(
+                                torch.nn.functional.normalize(captured['k'][:, h], dim=-1)
+                            ).sigmoid()[..., 2].mean() * self.memories[f'{index}:{h}'].update.delta
+                            for h in range(self.kv_heads)])
+                        diagnostics[str(index)] = dict(gate=float(weight.detach().mean()),
+                                                       forgetting=float(forgetting.detach().mean()))
                     mixed = torch.lerp(local.float(), memory.float(), weight)
                     return (mixed.flatten(-2).to(args[0].dtype),)
 

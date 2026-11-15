@@ -69,9 +69,14 @@ class NeuralMemory(nn.Module):
         return self.predict(self.project(query, state.address).to(state.fast[0].dtype), state.fast)
 
     def transition(self, key, value, state, reference, *, meta=False):
+        if torch.is_inference_mode_enabled():
+            if meta:
+                raise ValueError('Meta-training requires autograd')
+            with torch.inference_mode(False), torch.no_grad():
+                return self.transition(key.clone(), value.clone(), state, reference)
         u = F.normalize(key, dim=-1)
         with torch.enable_grad():
-            weights = reference if meta else tuple(w.detach().requires_grad_(True) for w in reference)
+            weights = reference if meta else tuple(w.detach().clone().requires_grad_(True) for w in reference)
             loss = (self.predict(u, weights) - value).square().mean()
             grads = torch.autograd.grad(loss, weights, create_graph=meta)
         eta, rate, forget, rho = self.controls(u).sigmoid().unbind()
