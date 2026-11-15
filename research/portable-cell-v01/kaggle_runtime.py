@@ -1,150 +1,92 @@
-"""Kaggle Python entry for Portable Cell v0.2.
+"""Portable Cell v0.2 Kaggle launcher. Enable GPU, Internet and GITHUB_TOKEN."""
 
-Paste this entire .py file into a Python code cell or Kaggle script.
-Enable GPU, Internet and GITHUB_TOKEN, then choose Save & Run All.
-"""
+from pathlib import Path
 import hashlib
 import json
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import sys
 import tempfile
-
-from kaggle_secrets import UserSecretsClient
+import uuid
 
 remote = 'https://github.com/ArcheLabs/mini-cells.git'
-upstream_url = 'https://github.com/sarahpannn/titans-pytorch.git'
-upstream_commit = 'c60b4efaa3a3c6df4deebd57cbccf75947b87cad'
-model = 'unsloth/Llama-3.2-1B-Instruct'
-working = Path(tempfile.mkdtemp(prefix='portable-cell-e2e-', dir='/kaggle/working'))
-output = working / 'results'
-run_id = working.name
-branch = f'kaggle/{run_id}'
+branch = 'research/portable-cell-v01'
+run_id = 'portable-cell-e2e-' + uuid.uuid4().hex[:12]
+work = Path('/kaggle/working') / run_id
+work.mkdir()
+output = work / 'results'
+log = work / 'raw.log'
+result_branch = 'kaggle/' + run_id
 format_name = 'minicells.portable-cell-e2e.v2'
 
+with tempfile.TemporaryDirectory() as tmp:
+    repo = Path(tmp) / 'repo'
+    subprocess.run(['git', 'clone', '--depth=1', '--branch', branch, remote, str(repo)],
+                   check=True, timeout=300)
+    source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip()
+    sys.path.insert(0, str(repo))
+    from scripts.research.publish_experiment_results import (
+        ExperimentSpec, load_github_token, prepare_artifacts, push_results,
+    )
 
-def run(*args):
-    subprocess.run(args, check=True)
+    load_github_token('GITHUB_TOKEN')
+    command = [sys.executable, '-u', str(repo / 'research/portable-cell-v01/kaggle_experiment.py'),
+               str(output)]
+    with log.open('w') as stream, subprocess.Popen(
+        command, cwd=repo, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+    ) as process:
+        for line in process.stdout:
+            stream.write(line)
+            stream.flush()
+            print(line, end='', flush=True)
+        exit_code = process.wait()
 
+    output.mkdir(exist_ok=True)
+    report = output / 'runtime-report.json'
+    decision = json.loads(report.read_text()) if report.exists() else {'status': 'ERROR'}
+    if exit_code:
+        decision.update(status='ERROR', exit_code=exit_code)
+    decision.update(format=format_name, source_commit=source, run_id=run_id)
+    (output / 'decision.json').write_text(json.dumps(decision, indent=2))
+    (output / 'REPORT.md').write_text(f'# Portable Cell v0.2\n\nStatus: {decision["status"]}\n')
+    shutil.move(log, output / log.name)
+    log = output / log.name
+    audit = work / 'source_audit.json'
+    if audit.exists():
+        shutil.move(audit, output / audit.name)
 
-def digest(path):
-    with path.open('rb') as handle:
-        h = hashlib.sha256()
-        for block in iter(lambda: handle.read(1024 * 1024), b''):
-            h.update(block)
-        return h.hexdigest()
+    manifest = {}
+    for path in sorted(output.rglob('*')):
+        if path.is_file():
+            with path.open('rb') as handle:
+                manifest[path.relative_to(output).as_posix()] = {
+                    'sha256': hashlib.file_digest(handle, 'sha256').hexdigest(),
+                    'bytes': path.stat().st_size,
+                }
+    (output / 'manifest.json').write_text(json.dumps(manifest, indent=2))
 
+    stage = repo / 'results/portable-cell-e2e'
+    selected = []
+    for path in sorted(output.rglob('*')):
+        if (path.is_file() and path.suffix in ('.json', '.md', '.log', '.safetensors')
+                and path.stat().st_size < 95 * 1024 * 1024):
+            relative = path.relative_to(output)
+            (stage / relative).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, stage / relative)
+            selected.append(relative.as_posix())
 
-print('Portable Cell v0.2 Kaggle Python entry', flush=True)
-with tempfile.TemporaryDirectory(prefix='portable-source-') as directory:
-    root = Path(directory)
-    repo, upstream = root / 'mini-cells', root / 'titans'
-    run('git', 'clone', '--depth', '1', '--branch', 'research/portable-cell-v01', remote, str(repo))
-    source = repo / 'research/portable-cell-v01'
-    source_commit = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', 'HEAD'],
-                                            text=True).strip()
-    decision = dict(format=format_name, run_id=run_id, source_commit=source_commit, status='ERROR')
+    receipt = {'status': 'PUBLICATION_FAILED', 'branch': result_branch}
     try:
-        run('git', 'init', str(upstream))
-        run('git', '-C', str(upstream), 'fetch', '--depth', '1', upstream_url, upstream_commit)
-        run('git', '-C', str(upstream), 'checkout', '--detach', 'FETCH_HEAD')
-        run('git', '-C', str(upstream), 'apply', str(source / 'upstream-position.patch'))
-        run(sys.executable, '-m', 'pip', 'install', '-q', str(upstream) + '[research]')
-        # This text-only run does not use torchvision. Kaggle's preinstalled
-        # extension can target a different Torch ABI after upstream pins Torch.
-        with (working / 'runtime.log').open('w') as log:
-            for command in (
-                [sys.executable, '-m', 'pip', 'uninstall', '-y', 'torchvision'],
-                [sys.executable, '-c',
-                 'import torch; from transformers import LlamaForCausalLM; '
-                 'assert torch.cuda.is_available(), "CUDA unavailable"; '
-                 'print(torch.__version__, torch.cuda.get_device_name(0), LlamaForCausalLM.__name__)'],
-            ):
-                subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
-        from huggingface_hub import snapshot_download
-
-        revision = '5a8abab4a5d6f164389b1079fb721cfab8d7126c'
-        model_path = Path(snapshot_download(model, revision=revision,
-                                            allow_patterns=['*.json', '*.safetensors', '*.model', '*.jinja']))
-        model_files = {p.name: digest(p) for p in sorted(model_path.iterdir()) if p.is_file()}
-        fingerprint = hashlib.sha256(json.dumps(model_files, sort_keys=True).encode()).hexdigest()
-        identity = dict(model_id=model, revision=revision, backbone_fingerprint=fingerprint,
-                        titan_source_commit=upstream_commit,
-                        upstream_config_sha256=digest(upstream / 'configs/seg512_pretrain/training_config.json'),
-                        runtime_precision='float32', use_flex_attn=False, use_flash_attn=False)
-        candidates = []
-        outer = []
-        for path in sorted(Path('/kaggle/input').rglob('checkpoint_manifest.json')):
-            try:
-                record = json.loads(path.read_text())
-                weights = path.with_name('outer.safetensors')
-                compatible = all(record.get(k) == v for k, v in identity.items())
-                compatible = compatible and weights.is_file() and digest(weights) == record.get('outer_sha256')
-                if compatible and not outer:
-                    outer = ['--outer-checkpoint', str(weights), '--outer-sha256', record['outer_sha256']]
-                candidates.append(dict(path=str(path), identity_and_hash_match=compatible))
-            except (ValueError, OSError):
-                candidates.append(dict(path=str(path), identity_and_hash_match=False))
-        (working / 'source_audit.json').write_text(json.dumps(
-            dict(identity=identity, model_files=model_files, mounted_candidates=candidates), indent=2))
-        print(f'Results directory: {output}', flush=True)
-        with (working / 'runtime.log').open('a') as log:
-            command = [sys.executable, str(source / 'run_runtime.py'), '--upstream', str(upstream),
-                       '--output', str(output), '--revision', revision, '--model-path', str(model_path),
-                       '--backbone-fingerprint', fingerprint, *outer]
-            with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                  text=True, bufsize=1) as process:
-                for line in process.stdout:
-                    print(line, end='', flush=True)
-                    log.write(line)
-                    log.flush()
-                if process.wait():
-                    raise RuntimeError(f'Runtime worker failed with exit code {process.returncode}')
-        decision.update(json.loads((output / 'runtime-report.json').read_text()))
+        spec = ExperimentSpec('results/portable-cell-e2e', 'artifacts/experiments/minicells08/' + run_id,
+                              tuple(selected), result_branch, format_name)
+        destination = prepare_artifacts(repo, 'minicells08', spec, os.getenv('KAGGLE_KERNEL_VERSION'))
+        push_results(repo, destination, 'minicells08', result_branch, 'GITHUB_TOKEN', 'origin/main')
+        receipt.update(status='REMOTE_SHA_VERIFIED', acceptance='PCC_ARTIFACT_PUBLISH_PASS',
+                       commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip())
     except Exception as error:
-        decision['error'] = str(error)
-        raise
-    finally:
-        output.mkdir(exist_ok=True)
-        if (output / 'runtime-report.json').exists():
-            decision.update(json.loads((output / 'runtime-report.json').read_text()))
-        for name in ('source_audit.json', 'runtime.log'):
-            if (working / name).exists():
-                shutil.move(working / name, output / name)
-        (output / 'decision.json').write_text(json.dumps(decision, indent=2))
-        (output / 'REPORT.md').write_text(
-            f'# Portable Cell v0.2\n\nStatus: {decision["status"]}\n\n'
-            'See decision.json, runtime-report.json and semantic_recall.json for evidence.\n')
-        manifest = {p.relative_to(output).as_posix(): {'sha256': digest(p), 'bytes': p.stat().st_size}
-                    for p in sorted(output.rglob('*')) if p.is_file()}
-        (output / 'manifest.json').write_text(json.dumps(manifest, indent=2))
-        publication = {'status': 'ERROR', 'branch': branch}
-        try:
-            os.environ['GITHUB_TOKEN'] = UserSecretsClient().get_secret('GITHUB_TOKEN')
-            sys.path.insert(0, str(repo))
-            from scripts.research.publish_experiment_results import ExperimentSpec, prepare_artifacts, push_results
-
-            stage = repo / 'portable-results'
-            selected = []
-            for path in sorted(output.rglob('*')):
-                if not path.is_file() or path.suffix not in ('.json', '.md', '.log', '.safetensors'):
-                    continue
-                if path.stat().st_size >= 95 * 1024 * 1024:
-                    continue
-                relative = path.relative_to(output)
-                target = stage / relative
-                target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(path, target)
-                selected.append(relative.as_posix())
-            spec = ExperimentSpec('portable-results', f'artifacts/experiments/minicells08/{run_id}',
-                                  tuple(selected), branch, format_name)
-            destination = prepare_artifacts(repo, 'minicells08', spec, os.getenv('KAGGLE_KERNEL_VERSION'))
-            push_results(repo, destination, 'minicells08', branch, 'GITHUB_TOKEN', 'origin/main')
-            publication.update(status='PCC_ARTIFACT_PUBLISH_PASS', commit=subprocess.check_output(
-                ['git', '-C', str(repo), 'rev-parse', 'HEAD'], text=True).strip())
-        except Exception as error:
-            publication['error_type'] = type(error).__name__
-        (output / 'publication.json').write_text(json.dumps(publication, indent=2))
-        print(publication, flush=True)
+        receipt['error_type'] = type(error).__name__
+    (output / 'publication.json').write_text(json.dumps(receipt, indent=2))
+    print(decision['status'], receipt, flush=True)
+    if exit_code or receipt['status'] != 'REMOTE_SHA_VERIFIED':
+        raise RuntimeError(f'Inspect {log} and {output / "publication.json"}')
