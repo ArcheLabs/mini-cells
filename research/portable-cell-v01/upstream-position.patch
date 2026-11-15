@@ -1,0 +1,64 @@
+diff --git a/titan_llama.py b/titan_llama.py
+index 2509c32..d7f9e26 100644
+--- a/titan_llama.py
++++ b/titan_llama.py
+@@ -684,6 +684,8 @@ class TitanDecoderLayer(nn.Module):
+         x: torch.Tensor,
+         state: TitanLayerState,
+         value_residual: Optional[torch.Tensor],
++        *,
++        memory_position: Optional[int] = None,
+     ) -> Tuple[torch.Tensor, TitanLayerState, Optional[torch.Tensor]]:
+         """The Titan decoder block as a pure function of its inputs and state.
+ 
+@@ -691,11 +693,13 @@ class TitanDecoderLayer(nn.Module):
+         decoder-layer signature, which keeps the production path free of the
+         adapter's branching.
+         """
++        if memory_position is None:
++            memory_position = state.position
+         residual = x
+         x = self.input_layernorm(x)
+ 
+         q, k, v, memory_q, memory_k, memory_v, rotated = self._project_and_rotate(
+-            x, state.position
++            x, state.position, memory_position
+         )
+ 
+ 
+@@ -707,7 +711,7 @@ class TitanDecoderLayer(nn.Module):
+                 state=state.memory,
+                 context=x,
+                 detach_mem_state=True,
+-                seq_offset=state.position,
++                seq_offset=memory_position,
+             )
+         else:
+             # SegmentedAttention._memory_to_heads short-circuits on None, so the
+@@ -745,7 +749,8 @@ class TitanDecoderLayer(nn.Module):
+         return x, next_state, attn_intermediates.value_residual
+ 
+ 
+-    def _project_and_rotate(self, normed_hidden_states: torch.Tensor, position: int):
++    def _project_and_rotate(self, normed_hidden_states: torch.Tensor, position: int,
++                            memory_position: int):
+         """Project Q/K/V once and rotate once, for both attention and memory.
+ 
+         Attention and the neural memory previously rotated independent copies of
+@@ -770,10 +775,13 @@ class TitanDecoderLayer(nn.Module):
+             return q, k, v, q_raw, k_raw, v, rotated
+ 
+         if rotated:
+-            return q, k, v, q, k, v, rotated
++            memory_q, memory_k = (q, k) if memory_position is position else attention.apply_rope(
++                q_raw, k_raw, seq_offset=memory_position
++            )
++            return q, k, v, memory_q, memory_k, v, rotated
+ 
+-        memory_q = attention.rotary_emb.rotate_queries_or_keys(q_raw, offset=position)
+-        memory_k = attention.rotary_emb.rotate_queries_or_keys(k_raw, offset=position)
++        memory_q = attention.rotary_emb.rotate_queries_or_keys(q_raw, offset=memory_position)
++        memory_k = attention.rotary_emb.rotate_queries_or_keys(k_raw, offset=memory_position)
+         return q, k, v, memory_q, memory_k, v, rotated
+ 
+ # ---------------------------------------------------------------------------
