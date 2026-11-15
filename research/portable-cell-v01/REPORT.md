@@ -40,8 +40,10 @@ python -m pytest -q research/portable-cell-v01
 
 ## v0.2 GPU entry
 
-Import `portable_cell_end2end.ipynb` into Kaggle, enable GPU and Internet,
-configure `GITHUB_TOKEN`, and select Save & Run All. The model snapshot is
+For a Kaggle Python script or code cell, paste the complete contents of
+[`kaggle_runtime.py`](kaggle_runtime.py). The optional .ipynb file is for
+Notebook import. Enable GPU and Internet, configure `GITHUB_TOKEN`, and
+select Save & Run All. The first log line identifies the Python entry. The model snapshot is
 resolved once and hashed, and all subprocesses use that same local snapshot.
 The runtime follows the pinned upstream seg512 architecture on layers 0–3.
 FP32 uses standard attention kernels.

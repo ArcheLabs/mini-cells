@@ -1,8 +1,8 @@
-# %% [markdown]
-# # Portable Cell v0.2
-# Enable GPU, Internet and the GITHUB_TOKEN secret. Use Save & Run All.
+"""Kaggle Python entry for Portable Cell v0.2.
 
-# %%
+Paste this entire .py file into a Python code cell or Kaggle script.
+Enable GPU, Internet and GITHUB_TOKEN, then choose Save & Run All.
+"""
 import hashlib
 import json
 import os
@@ -37,6 +37,7 @@ def digest(path):
         return h.hexdigest()
 
 
+print('Portable Cell v0.2 Kaggle Python entry', flush=True)
 with tempfile.TemporaryDirectory(prefix='portable-source-') as directory:
     root = Path(directory)
     repo, upstream = root / 'mini-cells', root / 'titans'
