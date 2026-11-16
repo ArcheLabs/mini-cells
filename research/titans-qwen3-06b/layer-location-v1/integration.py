@@ -40,7 +40,10 @@ class AttentionMemory(nn.Module):
         if not self.write_enabled:
             if self.cell is None:
                 return (native, *auxiliary)
-            read, _ = self.memory.read_only(q.squeeze(1), self.cell)
+            read, _ = self.memory.read_only(
+                (q.squeeze(1) * q.shape[-1] ** -0.25, k.squeeze(1), v.squeeze(1)),
+                self.cell,
+            )
         else:
             read, _, self.cell = self.memory(
                 q, k, v, state=self.cell, detach_mem_state=False, seq_offset=self.position
@@ -98,6 +101,7 @@ def build_memory(upstream_checkout):
         raise RuntimeError("Titans was imported from a different checkout")
     return neural_memory.NeuralMemory(
         dim=512, heads=1, chunk_size=1, bypass_projections=True,
+        heterogeneous_qkv=True,
         detach_inner_grads=False, mem_model_norm_add_residual=False,
         default_model_kwargs={"depth": 2, "expansion_factor": 4.0},
     )
