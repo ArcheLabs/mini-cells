@@ -1,0 +1,30 @@
+{
+  "status": "SMOKE_ONLY",
+  "seed": 42,
+  "revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "hashes": {
+    "model.safetensors": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba",
+    "config.json": "504a6b58c4271583724e66584b6b7698aea18450209df6b2f7582df0e89cee59"
+  },
+  "tokenizer_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+  "dataset_sha256": "58457edaa33375aa004394ef67c8077084da69f02e35b49eb3541588225588a7",
+  "checkpoint_sha256": "7d38006838a41964295d5557068f091fb80d51209160f104b74e8dc02a1d0e5b",
+  "test": "SEALED",
+  "backbone_frozen": true,
+  "losses": [
+    6.903724193572998,
+    7.409712791442871,
+    6.77646017074585,
+    6.272985458374023,
+    5.933337211608887,
+    5.526381492614746,
+    5.060576915740967,
+    4.658235549926758
+  ],
+  "validation_recall1": {
+    "seen": 0.4375,
+    "held_query": 0.25,
+    "held_both": 0.15625,
+    "value": 0.15625
+  }
+}
