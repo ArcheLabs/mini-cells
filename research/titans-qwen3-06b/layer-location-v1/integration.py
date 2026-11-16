@@ -75,7 +75,7 @@ def install(model, layer, memory):
     return wrapper
 
 
-def build_memory(upstream_checkout):
+def build_memory(upstream_checkout, *, chunk_size=1, accelerated=True):
     """Load the pinned upstream implementation and keep its adaptive updates."""
     from pathlib import Path
     import subprocess
@@ -100,9 +100,10 @@ def build_memory(upstream_checkout):
     if root not in Path(neural_memory.__file__).resolve().parents:
         raise RuntimeError("Titans was imported from a different checkout")
     memory = neural_memory.NeuralMemory(
-        dim=512, heads=1, chunk_size=1, bypass_projections=True,
+        dim=512, heads=1, chunk_size=chunk_size, bypass_projections=True,
         heterogeneous_qkv=True,
-        detach_inner_grads=False, mem_model_norm_add_residual=False,
+        detach_inner_grads=True, use_accelerated_scan=accelerated,
+        mem_model_norm_add_residual=False,
         default_model_kwargs={"depth": 2, "expansion_factor": 4.0},
     )
     # Upstream retains the template module alongside its active parameter bank.

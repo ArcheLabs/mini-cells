@@ -20,6 +20,8 @@ def main():
     parser.add_argument("output", type=Path)
     parser.add_argument("--timing-only", action="store_true")
     args = parser.parse_args()
+    if not args.timing_only:
+        parser.error("Screening is paused pending verified training-memory preflight")
     tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
     train = generate("train", 100)
     validation = generate("validation", 8)
@@ -52,8 +54,8 @@ def main():
         started = time.monotonic()
         for index, segments in enumerate(training[:5], 1):
             optimizer.zero_grad(set_to_none=True)
-            logits, targets = forward_episode(model, segments, wrapper=wrapper)
-            answer_loss(logits, targets).backward()
+            with torch.no_grad():
+                logits, targets = forward_episode(model, segments, wrapper=wrapper)
             wrapper.reset_episode()
             del logits, targets
             print({"layer": layer, "warmup_episode": index, "total": 5}, flush=True)
@@ -75,7 +77,7 @@ def main():
             torch.cuda.synchronize()
             warmup["seconds_per_eval_episode_e0_e6"] = time.monotonic() - started
             warmup["evaluation_peak_allocated_bytes"] = torch.cuda.max_memory_allocated()
-            warmup["estimated_screen_seconds"] = (
+            warmup["estimated_inference_only_seconds"] = (
                 105 * seconds + 32 * warmup["seconds_per_eval_episode_e0_e6"]
             )
             (folder / "warmup.json").write_text(json.dumps(warmup))
