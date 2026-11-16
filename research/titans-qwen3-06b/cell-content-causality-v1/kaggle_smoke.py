@@ -48,10 +48,18 @@ def main():
     directory = repo / "research/titans-qwen3-06b/cell-content-causality-v1"
     run(sys.executable, "-m", "unittest", "-v", cwd=directory)
     output = root / ("cell-content-causality-" + uuid.uuid4().hex[:12])
-    completed = subprocess.run(
-        [sys.executable, "smoke.py", str(upstream), str(output)], cwd=directory
-    )
+    log = root / f"{output.name}.log"
+    command = [sys.executable, "smoke.py", str(upstream), str(output)]
+    with log.open("w") as stream, subprocess.Popen(
+        command, cwd=directory, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        text=True,
+    ) as process:
+        for line in process.stdout:
+            stream.write(line)
+            print(line, end="", flush=True)
+        completed = subprocess.CompletedProcess(command, process.wait())
     output.mkdir(exist_ok=True)
+    shutil.move(log, output / "run.log")
     kind = "minicells.titans-cell-content-causality.v1"
     decision = {"format": kind, "run_id": output.name,
                 "status": "RUN_COMPLETE" if completed.returncode == 0 else "RUN_FAILED",
