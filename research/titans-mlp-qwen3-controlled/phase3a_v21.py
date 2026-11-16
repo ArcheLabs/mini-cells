@@ -46,7 +46,7 @@ def contrastive(q, k):
     return (F.cross_entropy(scores, target) + F.cross_entropy(scores.T, target)) / 2
 
 
-def extract(model, tokenizer, rows, kind):
+def extract(model, tokenizer, rows, kind, *, last=False):
     out = []
     captured = []
     hook = model.model.layers[22].register_forward_hook(lambda _m, _a, y: captured.append(y))
@@ -56,10 +56,14 @@ def extract(model, tokenizer, rows, kind):
             inputs = tokenizer([x[0] for x in batch], padding=True, return_tensors='pt',
                                return_offsets_mapping=True)
             offsets = inputs.pop('offset_mapping')
+            lengths = inputs['attention_mask'].sum(1)
             captured.clear()
             with torch.no_grad():
                 model.model(**inputs.to(model.device), use_cache=False)
             for index, (_, spans) in enumerate(batch):
+                if last:
+                    out.append(captured[0][index, lengths[index] - 1].cpu())
+                    continue
                 vectors = []
                 previous = -1
                 for j, (start, end) in enumerate(spans):
