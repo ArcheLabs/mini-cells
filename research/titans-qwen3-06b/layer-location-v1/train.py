@@ -18,6 +18,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("upstream")
     parser.add_argument("output", type=Path)
+    parser.add_argument("--timing-only", action="store_true")
     args = parser.parse_args()
     tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
     train = generate("train", 100)
@@ -62,6 +63,19 @@ def main():
         folder = args.output / f"layer_{layer}"
         folder.mkdir()
         (folder / "warmup.json").write_text(json.dumps(warmup))
+        if args.timing_only:
+            torch.cuda.synchronize()
+            started = time.monotonic()
+            evaluate(model, wrapper, layer, validation[0], tokenizer)
+            torch.cuda.synchronize()
+            warmup["seconds_per_eval_episode_e0_e6"] = time.monotonic() - started
+            warmup["estimated_screen_seconds"] = (
+                105 * seconds + 32 * warmup["seconds_per_eval_episode_e0_e6"]
+            )
+            (folder / "warmup.json").write_text(json.dumps(warmup))
+            print({"layer": layer, "timing_only": warmup}, flush=True)
+            model.model.layers[layer].self_attn = wrapper.attention
+            continue
         for step in range(101):
             if step in (0, 25, 50, 100):
                 torch.save({"step": step, "parameters": named,

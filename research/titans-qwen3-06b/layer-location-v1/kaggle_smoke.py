@@ -7,6 +7,7 @@ import sys
 SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
 BRANCH = "codex/titans-layer-location-v1"
 UPSTREAM = "https://github.com/sarahpannn/titans-pytorch.git"
+RUN_EPISODE_TIMING = False
 REVISION = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
 
 
@@ -34,6 +35,9 @@ def main():
     directory = repo / "research/titans-qwen3-06b/layer-location-v1"
     run(sys.executable, "-m", "unittest", "-v", cwd=directory)
     run(sys.executable, "smoke.py", str(upstream), cwd=directory)
+    if RUN_EPISODE_TIMING:
+        run(sys.executable, "train.py", str(upstream), str(root / "layer-location-timing"),
+            "--timing-only", cwd=directory)
 
 
 if __name__ == "__main__":
