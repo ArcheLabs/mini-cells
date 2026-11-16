@@ -23,7 +23,14 @@ def main():
     run("git", "init", str(upstream))
     run("git", "fetch", "--depth", "1", UPSTREAM, REVISION, cwd=upstream)
     run("git", "checkout", "--detach", "FETCH_HEAD", cwd=upstream)
+    # Titans pins Torch 2.9; Kaggle's optional media extensions are built
+    # for its preinstalled Torch. This experiment only uses text.
+    run(sys.executable, "-m", "pip", "uninstall", "-y", "torchvision", "torchaudio")
     run(sys.executable, "-m", "pip", "install", "transformers==4.57.6", str(upstream))
+    run(sys.executable, "-c",
+        "import torch; from transformers import Qwen3ForCausalLM; "
+        "assert torch.cuda.is_available(), 'Kaggle GPU unavailable'; "
+        "print(torch.__version__, torch.cuda.get_device_name())")
     directory = repo / "research/titans-qwen3-06b/layer-location-v1"
     run(sys.executable, "-m", "unittest", "-v", cwd=directory)
     run(sys.executable, "smoke.py", str(upstream), cwd=directory)
