@@ -55,7 +55,12 @@ def attempt(model, upstream, layer, chunk, segments, accelerated):
         result.update(status="OOM", phase=phase, error=str(error),
                       peak_bytes=torch.cuda.max_memory_allocated())
     except RuntimeError as error:
-        result.update(status="ERROR", phase=phase, error=str(error))
+        # TorchScript surfaces CUDA allocator failures as plain RuntimeError.
+        if "CUDA out of memory" in str(error):
+            result.update(status="OOM", phase=phase, error=str(error),
+                          peak_bytes=torch.cuda.max_memory_allocated())
+        else:
+            result.update(status="ERROR", phase=phase, error=str(error))
     finally:
         if wrapper is not None:
             wrapper.reset_episode()
