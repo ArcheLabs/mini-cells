@@ -50,7 +50,11 @@ def main():
     p.add_argument('snapshot', type=Path)
     p.add_argument('output', type=Path)
     p.add_argument('--smoke', action='store_true')
+    p.add_argument('--device', choices=('cpu', 'cuda'), default='cpu')
     args = p.parse_args()
+    if args.device == 'cuda':
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
     torch.set_num_threads(2)
     start = time.monotonic()
     hashes = verify_snapshot(args.snapshot)
@@ -58,7 +62,7 @@ def main():
     tokenizer.pad_token = tokenizer.eos_token or tokenizer.convert_ids_to_tokens(151643)
     tokenizer.padding_side = 'right'
     model = AutoModelForCausalLM.from_pretrained(args.snapshot, dtype=torch.float32,
-        attn_implementation='sdpa', local_files_only=True).eval().requires_grad_(False)
+        attn_implementation='sdpa', local_files_only=True).eval().requires_grad_(False).to(args.device)
     loading_seconds = time.monotonic()-start
     args.output.mkdir(parents=True, exist_ok=False)
     captured = []
@@ -70,12 +74,12 @@ def main():
         for i in range(0, len(texts), 32):
             batch = tokenizer(texts[i:i+32], padding=True, return_tensors='pt')
             captured.clear()
-            model.model(**batch, use_cache=False)
-            hidden, mask = captured[0], batch.attention_mask
+            model.model(**batch.to(args.device), use_cache=False)
+            hidden, mask = captured[0], batch['attention_mask']
             assert hidden.shape[-1] == 1024 and hidden.isfinite().all()
             length = mask.sum(1)
-            last.append(hidden[torch.arange(len(mask)), length-1])
-            mean.append((hidden * mask[...,None]).sum(1)/length[:,None])
+            last.append(hidden[torch.arange(len(mask), device=hidden.device), length-1].cpu())
+            mean.append((hidden * mask[...,None]).sum(1).div(length[:,None]).cpu())
         return {'last': normalize(torch.cat(last)), 'mean': normalize(torch.cat(mean))}
 
     counts = (32,32,32) if args.smoke else (1024,256,512)
@@ -146,7 +150,7 @@ def main():
         hashes=hashes,tokenizer_sha256=sha(args.snapshot/'tokenizer.json'),dataset_sha256=sha(data),
         code_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         loading_seconds=loading_seconds, elapsed_seconds=time.monotonic()-start, training_updates=0,
-        device='cpu',dtype='float32',hidden_layer=22),indent=2))
+        device=args.device,dtype='float32',hidden_layer=22),indent=2))
 
 
 if __name__ == '__main__':
