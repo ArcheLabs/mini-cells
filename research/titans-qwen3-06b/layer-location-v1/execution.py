@@ -3,12 +3,13 @@ import torch
 from torch.nn import functional as F
 
 
-def forward_episode(model, segments, *, wrapper=None, full_history=False):
+def forward_episode(model, segments, *, wrapper=None, full_history=False, empty_query=False, read_enabled=True, query_write=True):
     """Return supervised logits and labels with causal next-token alignment."""
     if not segments or any(len(ids) != len(labels) for ids, labels in segments):
         raise ValueError("Expected token-aligned segments")
     if wrapper is not None:
         wrapper.reset_episode()
+        wrapper.read_enabled = read_enabled
     if full_history:
         if wrapper is not None:
             raise ValueError("Full-history condition uses native Qwen")
@@ -17,7 +18,12 @@ def forward_episode(model, segments, *, wrapper=None, full_history=False):
     device = model.get_input_embeddings().weight.device
     selected, expected = [], []
     offset = 0
-    for ids, labels in segments:
+    for index, (ids, labels) in enumerate(segments):
+        if wrapper is not None and index == len(segments) - 1:
+            if empty_query:
+                wrapper.reset_episode()
+                wrapper.read_enabled = read_enabled
+            wrapper.write_enabled = query_write
         if not ids or labels[0] != -100:
             raise ValueError("Each segment must begin with unsupervised context")
         tokens = torch.tensor([ids], device=device)

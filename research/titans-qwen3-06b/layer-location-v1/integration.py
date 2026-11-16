@@ -28,6 +28,8 @@ class AttentionMemory(nn.Module):
     def reset_episode(self):
         self.cell = None
         self.position = 0
+        self.read_enabled = True
+        self.write_enabled = True
 
     def forward(self, hidden_states, *args, **kwargs):
         native, *auxiliary = self.attention(hidden_states, *args, **kwargs)
@@ -35,10 +37,17 @@ class AttentionMemory(nn.Module):
         q = F.normalize(self.query(x), dim=-1).unsqueeze(1)
         k = F.normalize(self.key(x), dim=-1).unsqueeze(1)
         v = self.value(x).unsqueeze(1)
-        read, _, self.cell = self.memory(
-            q, k, v, state=self.cell, detach_mem_state=False, seq_offset=self.position
-        )
+        if not self.write_enabled:
+            if self.cell is None:
+                return (native, *auxiliary)
+            read, _ = self.memory.read_only(q.squeeze(1), self.cell)
+        else:
+            read, _, self.cell = self.memory(
+                q, k, v, state=self.cell, detach_mem_state=False, seq_offset=self.position
+            )
         self.position += x.shape[1]
+        if not self.read_enabled:
+            return (native, *auxiliary)
         gate = self.gate(x).sigmoid()
         mixed = (1 - gate) * native.float() + gate * self.output(read)
         return (mixed.to(native.dtype), *auxiliary)
