@@ -98,6 +98,6 @@ def build_memory(upstream_checkout):
         raise RuntimeError("Titans was imported from a different checkout")
     return neural_memory.NeuralMemory(
         dim=512, heads=1, chunk_size=1, bypass_projections=True,
-        detach_inner_grads=False, mem_model_norm_add_residual=True,
+        detach_inner_grads=False, mem_model_norm_add_residual=False,
         default_model_kwargs={"depth": 2, "expansion_factor": 4.0},
     )
