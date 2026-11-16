@@ -11,9 +11,15 @@ def episodes(split):
     seed, count = SPLITS[split]
     rng = random.Random(seed)
     for index in range(count):
-        numbers = rng.sample(range(10000), 28)
-        names = [f"Person {seed * 1000000 + index * 10000 + n}" for n in numbers[:14]]
-        values = [f"Company {seed * 1000000 + index * 10000 + n}" for n in numbers[14:]]
+        split_offset = {"train": 0, "validation": 100, "test": 132}[split]
+        codes = rng.sample(range(28), 28)
+
+        def code(slot):
+            number = 28 * (split_offset + index) + slot
+            return "".join(chr(65 + (number // divisor) % 26) for divisor in (676, 26, 1))
+
+        names = [f"Person {code(slot)}" for slot in codes[:14]]
+        values = [f"Company {code(slot)}" for slot in codes[14:]]
         facts = list(zip(names[:8], values[:8]))
         distractors = list(zip(names[8:12], values[8:12]))
         slots = rng.sample(range(8), 4)
