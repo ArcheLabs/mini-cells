@@ -34,3 +34,13 @@ For a local CPU run:
 ```sh
 python phase3a_v21.py /path/to/verified/qwen/snapshot /path/to/new-output
 ```
+
+## Canonical template correction
+
+The new 64-entry registry preserves canonical relations across families
+A1/A2, B and C. The training smoke consumes only A1/A2, and validation
+can use B. All 64 placeholder renderings passed actual tokenizer offset
+validation. The corrected CPU smoke ran with frozen Qwen, finite losses
+and exact checkpoint readback. Validation Recall@1 was 25.0% Seen,
+28.125% Held Query, 25.0% Held Both, and 9.375% Value. See
+[CPU evidence](smoke/cpu/results.json) and [freeze review](PHASE_3A_V21_FREEZE.md).

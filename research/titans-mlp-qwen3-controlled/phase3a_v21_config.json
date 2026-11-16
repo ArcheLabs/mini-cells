@@ -1,0 +1,132 @@
+{
+  "status": "NOT_FROZEN",
+  "model": {
+    "id": "Qwen/Qwen3-0.6B-Base",
+    "revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+    "hashes": {
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "config.json": "504a6b58c4271583724e66584b6b7698aea18450209df6b2f7582df0e89cee59",
+      "model.safetensors": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba"
+    },
+    "hidden_layer": 22,
+    "precision": "float32",
+    "backbone_frozen": true
+  },
+  "dataset": {
+    "entities": [
+      256,
+      64,
+      128
+    ],
+    "relations_per_entity": 4,
+    "relations": 8,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "families": {
+      "train": [
+        "A1",
+        "A2"
+      ],
+      "validation": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "test": [
+        "A1",
+        "A2",
+        "C"
+      ]
+    }
+  },
+  "adapter": {
+    "query_dim": 2048,
+    "key_dim": 2048,
+    "value_dim": 1024,
+    "projection_dim": 256,
+    "projection": "linear",
+    "layer_norm": true,
+    "l2_normalize": true
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 128,
+    "max_epochs": 100,
+    "early_stopping_patience": 10,
+    "gradient_clip": 1.0,
+    "temperature": 0.07,
+    "hard_negative_logit_bias": 0.5
+  },
+  "evaluation": {
+    "candidates": [
+      32,
+      128,
+      512
+    ],
+    "methods": [
+      "Random",
+      "Raw Cosine",
+      "V1 Ridge",
+      "Shared Linear",
+      "Separate Linear",
+      "Separate MLP",
+      "Canonical Oracle"
+    ],
+    "test": "SEALED",
+    "conditions": {
+      "seen": [
+        "A",
+        "A"
+      ],
+      "validation_held_query": [
+        "A",
+        "B"
+      ],
+      "validation_held_write": [
+        "B",
+        "A"
+      ],
+      "validation_held_both": [
+        "B",
+        "B"
+      ],
+      "test_held_query": [
+        "A",
+        "C"
+      ],
+      "test_held_write": [
+        "C",
+        "A"
+      ],
+      "test_held_both": [
+        "C",
+        "C"
+      ]
+    },
+    "thresholds": {
+      "seen32": 0.9,
+      "held_query32": 0.8,
+      "held_both32": 0.8,
+      "unknown_fpr_max": 0.05,
+      "held_gain_min": 0.1,
+      "paired_ci95_lower_gt": 0,
+      "scaling": [
+        0.8,
+        0.7,
+        0.5
+      ],
+      "value": [
+        0.9,
+        0.8,
+        0.6
+      ]
+    }
+  }
+}
