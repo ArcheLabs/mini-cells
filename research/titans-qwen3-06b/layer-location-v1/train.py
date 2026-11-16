@@ -20,8 +20,6 @@ def main():
     parser.add_argument("output", type=Path)
     parser.add_argument("--timing-only", action="store_true")
     args = parser.parse_args()
-    if not args.timing_only:
-        parser.error("Screening is paused pending verified training-memory preflight")
     config = json.loads(Path(__file__).with_name("screen_config.lock.json").read_text())
     tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
     train = generate("train", 100)
@@ -54,7 +52,7 @@ def main():
         torch.cuda.reset_peak_memory_stats()
         torch.cuda.synchronize()
         started = time.monotonic()
-        for index, segments in enumerate(training[:5], 1):
+        for index, segments in enumerate(training[:5] if args.timing_only else [], 1):
             optimizer.zero_grad(set_to_none=True)
             with torch.no_grad():
                 logits, targets = forward_episode(model, segments, wrapper=wrapper)

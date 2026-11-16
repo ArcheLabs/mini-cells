@@ -10,7 +10,7 @@ import sys
 SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
 BRANCH = "codex/titans-layer-location-v1"
 UPSTREAM = "https://github.com/sarahpannn/titans-pytorch.git"
-RUN_EPISODE_TIMING = True
+RUN_MODE = "screen"
 REVISION = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
 
 
@@ -23,7 +23,7 @@ def main():
     root = Path("/kaggle/working")
     repo, upstream = root / "layer-location-source", root / "layer-location-titans"
     run("git", "clone", "--depth", "1", "--branch", BRANCH, SOURCE, str(repo))
-    if RUN_EPISODE_TIMING:
+    if RUN_MODE != "preflight":
         sys.path.insert(0, str(repo))
         from scripts.research.publish_experiment_results import load_github_token
         load_github_token("GITHUB_TOKEN")
@@ -47,14 +47,14 @@ def main():
         "print(torch.__version__, torch.cuda.get_device_name())")
     directory = repo / "research/titans-qwen3-06b/layer-location-v1"
     run(sys.executable, "-m", "unittest", "-v", cwd=directory)
-    if not RUN_EPISODE_TIMING:
+    if RUN_MODE == "preflight":
         output = root / ("layer-location-preflight-" + uuid.uuid4().hex[:12])
         run(sys.executable, "memory_preflight.py", str(upstream), str(output), cwd=directory)
         return
-    if RUN_EPISODE_TIMING:
-        output = root / ("layer-location-timing-" + uuid.uuid4().hex[:12])
-        run(sys.executable, "train.py", str(upstream), str(output),
-            "--timing-only", cwd=directory)
+    if RUN_MODE != "preflight":
+        output = root / (f"layer-location-{RUN_MODE}-" + uuid.uuid4().hex[:12])
+        options = ["--timing-only"] if RUN_MODE == "timing" else []
+        run(sys.executable, "train.py", str(upstream), str(output), *options, cwd=directory)
         publish(repo, output)
 
 
@@ -64,17 +64,29 @@ def publish(repo, output):
         ExperimentSpec, prepare_artifacts, push_results,
     )
 
-    format_id = "minicells.titans-layer-location.timing.v1"
+    format_id = f"minicells.titans-layer-location.{RUN_MODE}.v1"
+    files = ["decision.json", "data.json"]
+    for layer in (3, 22):
+        prefix = f"layer_{layer}/"
+        if RUN_MODE == "screen":
+            files.extend(prefix + f"validation_{step:03}.json" for step in (0, 25, 50, 100))
+            files.append(prefix + "metrics.jsonl")
+        else:
+            files.append(prefix + "warmup.json")
     (output / "decision.json").write_text(json.dumps({
-        "format": format_id, "status": "TIMING_COMPLETE", "optimizer_updates": 0,
+        "format": format_id, "status": "SCREEN_COMPLETE" if RUN_MODE == "screen" else "TIMING_COMPLETE",
+        "optimizer_updates": 200 if RUN_MODE == "screen" else 0,
         "run_id": output.name,
     }, indent=2))
     source = f"results/{output.name}"
     branch = f"kaggle/{output.name}"
-    shutil.copytree(output, repo / source)
+    for name in files:
+        target = repo / source / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(output / name, target)
     spec = ExperimentSpec(
         source, f"artifacts/experiments/titans-layer-location/{output.name}",
-        ("decision.json", "data.json", "layer_3/warmup.json", "layer_22/warmup.json"),
+        tuple(files),
         branch, format_id,
     )
     folder = prepare_artifacts(repo, "titans-layer-location", spec,
