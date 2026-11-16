@@ -36,8 +36,14 @@ def attempt(model, upstream, layer, chunk, segments, accelerated):
         loss.backward()
         torch.cuda.synchronize()
         result["backward_peak_bytes"] = torch.cuda.max_memory_allocated()
-        if not torch.isfinite(loss) or not any(p.grad is not None for p in params):
-            raise RuntimeError("Missing training signal or nonfinite loss")
+        if not torch.isfinite(loss):
+            raise RuntimeError("Nonfinite answer loss")
+        bank = wrapper.memory.memory_model_parameters
+        if any(p.grad is None for p in bank):
+            raise RuntimeError("An active Titans weight did not receive an outer gradient")
+        result["memory_gradient_norm"] = torch.stack([p.grad.norm() for p in bank]).norm().item()
+        if not result["memory_gradient_norm"] > 0:
+            raise RuntimeError("Active Titans weights received no training signal")
         torch.nn.utils.clip_grad_norm_(params, 1., error_if_nonfinite=True)
         phase = "optimizer"
         torch.cuda.reset_peak_memory_stats()
@@ -68,6 +74,8 @@ def main():
     ).eval().cuda()
     tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
     episode = encode(generate("train", 1)[0], tokenizer)
+    print({"gpu": torch.cuda.get_device_name(), "torch": torch.__version__,
+           "episode_segment_tokens": [len(ids) for ids, _ in episode]}, flush=True)
     raw = tokenizer.encode("The quick brown fox crossed the field. " * 32,
                            add_special_tokens=False)[:128]
     assert len(raw) == 128
