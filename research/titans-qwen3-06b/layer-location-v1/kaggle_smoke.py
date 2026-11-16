@@ -23,6 +23,10 @@ def main():
     root = Path("/kaggle/working")
     repo, upstream = root / "layer-location-source", root / "layer-location-titans"
     run("git", "clone", "--depth", "1", "--branch", BRANCH, SOURCE, str(repo))
+    if RUN_EPISODE_TIMING:
+        sys.path.insert(0, str(repo))
+        from scripts.research.publish_experiment_results import load_github_token
+        load_github_token("GITHUB_TOKEN")
     upstream.mkdir()
     run("git", "init", str(upstream))
     run("git", "fetch", "--depth", "1", UPSTREAM, REVISION, cwd=upstream)

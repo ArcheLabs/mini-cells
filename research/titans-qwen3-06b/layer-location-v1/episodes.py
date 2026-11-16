@@ -71,5 +71,5 @@ def encode(episode, tokenizer, *, donor=False):
         labels.extend([-100] * len(context) + target)
     segments.append((ids, labels))
     if any(not 0 < len(ids) <= 128 for ids, _ in segments):
-        raise ValueError("Episode exceeds the frozen segment budget")
+        raise ValueError(f"Segment token counts {[len(ids) for ids, _ in segments]} exceed the 1–128 token bounds (donor={donor})")
     return segments

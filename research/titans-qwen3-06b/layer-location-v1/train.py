@@ -27,6 +27,8 @@ def main():
     for episode in validation:
         encode(episode, tokenizer)
         encode(episode, tokenizer, donor=True)
+    print({"stage": "TOKEN_BUDGET_VERIFIED", "training_episodes": len(training),
+           "validation_episodes": len(validation)}, flush=True)
     model = AutoModelForCausalLM.from_pretrained(
         MODEL, revision=REVISION, torch_dtype=torch.float16,
         attn_implementation="eager",
@@ -48,11 +50,13 @@ def main():
         torch.cuda.reset_peak_memory_stats()
         torch.cuda.synchronize()
         started = time.monotonic()
-        for segments in training[:5]:
+        for index, segments in enumerate(training[:5], 1):
             optimizer.zero_grad(set_to_none=True)
             logits, targets = forward_episode(model, segments, wrapper=wrapper)
             answer_loss(logits, targets).backward()
             wrapper.reset_episode()
+            del logits, targets
+            print({"layer": layer, "warmup_episode": index, "total": 5}, flush=True)
         optimizer.zero_grad(set_to_none=True)
         torch.cuda.synchronize()
         seconds = (time.monotonic() - started) / 5
@@ -65,10 +69,12 @@ def main():
         (folder / "warmup.json").write_text(json.dumps(warmup))
         if args.timing_only:
             torch.cuda.synchronize()
+            torch.cuda.reset_peak_memory_stats()
             started = time.monotonic()
             evaluate(model, wrapper, layer, validation[0], tokenizer)
             torch.cuda.synchronize()
             warmup["seconds_per_eval_episode_e0_e6"] = time.monotonic() - started
+            warmup["evaluation_peak_allocated_bytes"] = torch.cuda.max_memory_allocated()
             warmup["estimated_screen_seconds"] = (
                 105 * seconds + 32 * warmup["seconds_per_eval_episode_e0_e6"]
             )
