@@ -25,15 +25,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=False)
     torch.manual_seed(42)
     tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL, revision=REVISION, dtype=torch.float16, attn_implementation="eager",
-    ).eval().cuda()
-    wrapper = install(model, 22, build_memory(args.upstream, chunk_size=4, accelerated=False))
-    params = [p for p in wrapper.parameters() if p.requires_grad]
-    optimizer = torch.optim.AdamW(params, lr=.001, betas=(.9, .95), weight_decay=.01)
-    for step, episode in enumerate(episodes("train")):
-        if step == 5:
-            break
+    def encode_training(episode):
         encode = lambda text: tokenizer.encode(text, add_special_tokens=False)
         item = episode["queries"][0]
         history = encode_history(tokenizer, episode["facts"], episode["distractors"])
@@ -42,7 +34,19 @@ def main():
         segments = [(ids, [-100] * len(ids)) for ids in history]
         segments.append((prompt + answer, [-100] * len(prompt) + answer))
         if any(len(ids) > 128 for ids, _ in segments):
-            raise ValueError("Smoke episode exceeds the segment limit")
+            raise ValueError(f"Training segment lengths: {[len(ids) for ids, _ in segments]}")
+        return segments
+    training = [encode_training(episode) for episode in episodes("train")]
+    print({"stage": "TOKEN_BUDGET_VERIFIED", "episodes": len(training),
+           "max_segment_tokens": max(len(ids) for row in training for ids, _ in row)},
+          flush=True)
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL, revision=REVISION, dtype=torch.float16, attn_implementation="eager",
+    ).eval().cuda()
+    wrapper = install(model, 22, build_memory(args.upstream, chunk_size=4, accelerated=False))
+    params = [p for p in wrapper.parameters() if p.requires_grad]
+    optimizer = torch.optim.AdamW(params, lr=.001, betas=(.9, .95), weight_decay=.01)
+    for step, segments in enumerate(training[:5]):
         optimizer.zero_grad(set_to_none=True)
         torch.cuda.reset_peak_memory_stats()
         started = time.monotonic()

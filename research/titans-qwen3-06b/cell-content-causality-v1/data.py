@@ -12,8 +12,8 @@ def episodes(split):
     rng = random.Random(seed)
     for index in range(count):
         numbers = rng.sample(range(10000), 28)
-        names = [f"Person {split[0] + str(seed)}-{index}-{n}" for n in numbers[:14]]
-        values = [f"Company {seed}-{index}-{n}" for n in numbers[14:]]
+        names = [f"Person {seed * 1000000 + index * 10000 + n}" for n in numbers[:14]]
+        values = [f"Company {seed * 1000000 + index * 10000 + n}" for n in numbers[14:]]
         facts = list(zip(names[:8], values[:8]))
         distractors = list(zip(names[8:12], values[8:12]))
         slots = rng.sample(range(8), 4)
