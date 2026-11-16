@@ -34,7 +34,8 @@ def query(model, wrapper, saved, prompt, answer, *, read=True, write=False,
             if token in stop_ids:
                 break
             generated.append(token)
-        return {"answer_nll": nll, "generated_ids": generated, "expected_ids": answer}
+        return {"answer_nll": nll, "generated_ids": generated, "expected_ids": answer,
+                "greedy_exact_match": generated == answer}
     finally:
         if wrapper is not None:
             wrapper.reset_episode()
