@@ -1,0 +1,66 @@
+{
+  "status": "SMOKE_ONLY",
+  "seed": 42,
+  "revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "device": "cuda:0",
+  "torch_version": "2.11.0+cu130",
+  "gpu": "Tesla T4",
+  "dtype": "torch.float32",
+  "hashes": {
+    "model.safetensors": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba",
+    "config.json": "504a6b58c4271583724e66584b6b7698aea18450209df6b2f7582df0e89cee59"
+  },
+  "tokenizer_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+  "dataset_sha256": "9d9991dded9c931f67da5c8fe9520beefc86e34027f501703627abc12f984ed4",
+  "checkpoint_sha256": "0f985e86cce3082e4be8b329c03cc7321d2725fe34f7a0822bae38f519a5ce05",
+  "test": "SEALED",
+  "backbone_frozen": true,
+  "losses": [
+    {
+      "qk": 3.6103155612945557,
+      "value": 3.4144949913024902,
+      "total": 7.024810791015625
+    },
+    {
+      "qk": 3.5531039237976074,
+      "value": 3.567537307739258,
+      "total": 7.120641231536865
+    },
+    {
+      "qk": 3.8272957801818848,
+      "value": 3.3584976196289062,
+      "total": 7.185793399810791
+    },
+    {
+      "qk": 3.0993051528930664,
+      "value": 3.294832229614258,
+      "total": 6.394137382507324
+    },
+    {
+      "qk": 2.653174877166748,
+      "value": 3.3025166988372803,
+      "total": 5.955691337585449
+    },
+    {
+      "qk": 2.3649187088012695,
+      "value": 3.2744269371032715,
+      "total": 5.639345645904541
+    },
+    {
+      "qk": 2.1771483421325684,
+      "value": 3.2235734462738037,
+      "total": 5.400721549987793
+    },
+    {
+      "qk": 2.014007568359375,
+      "value": 3.1690924167633057,
+      "total": 5.183099746704102
+    }
+  ],
+  "validation_recall1": {
+    "seen": 0.25,
+    "held_query": 0.28125,
+    "held_both": 0.25,
+    "value": 0.09375
+  }
+}
