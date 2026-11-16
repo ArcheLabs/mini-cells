@@ -28,7 +28,7 @@ def build_history(model, wrapper, segments):
         wrapper.reset_episode()
 
 
-def evaluate_episode(model, wrapper, tokenizer, episode, unrelated):
+def evaluate_episode(model, wrapper, tokenizer, episode, unrelated, *, layer=22):
     def build(facts, distractors):
         return build_history(model, wrapper, encode_history(tokenizer, facts, distractors))
 
@@ -40,6 +40,16 @@ def evaluate_episode(model, wrapper, tokenizer, episode, unrelated):
         prompt = encode(f"Question: {item['prompt']}\nAnswer:")
         answer = encode(" " + item["answer"])
         options = {"stop_ids": (tokenizer.eos_token_id,)}
+        history = sum(encode_history(tokenizer, episode["facts"], episode["distractors"]), [])
+        block = model.model.layers[layer]
+        block.self_attn = wrapper.attention
+        try:
+            for name, context in (("E0", history + prompt), ("E1", prompt)):
+                result = query(model, None, None, context, answer, **options)
+                rows.append({"condition": name, "entity": item["entity"],
+                             "template": item["template"], **result})
+        finally:
+            block.self_attn = wrapper
         conditions = {"E2": correct, "E3": (None, 0), "E4": donor, "E5": correct,
                       "E6": correct}
         if "counterfactual" in item:
