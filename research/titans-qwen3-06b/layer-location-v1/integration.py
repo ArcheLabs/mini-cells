@@ -99,9 +99,15 @@ def build_memory(upstream_checkout):
         sys.path.pop(0)
     if root not in Path(neural_memory.__file__).resolve().parents:
         raise RuntimeError("Titans was imported from a different checkout")
-    return neural_memory.NeuralMemory(
+    memory = neural_memory.NeuralMemory(
         dim=512, heads=1, chunk_size=1, bypass_projections=True,
         heterogeneous_qkv=True,
         detach_inner_grads=False, mem_model_norm_add_residual=False,
         default_model_kwargs={"depth": 2, "expansion_factor": 4.0},
     )
+    # Upstream retains the template module alongside its active parameter bank.
+    active = {id(parameter) for parameter in memory.memory_model_parameters}
+    for parameter in memory.memory_model.parameters():
+        if id(parameter) not in active:
+            parameter.requires_grad_(False)
+    return memory
