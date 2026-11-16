@@ -1,13 +1,16 @@
 """Kaggle Python script. Enable Internet and select a GPU accelerator."""
 from pathlib import Path
+import json
 import os
+import shutil
+import uuid
 import subprocess
 import sys
 
 SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
 BRANCH = "codex/titans-layer-location-v1"
 UPSTREAM = "https://github.com/sarahpannn/titans-pytorch.git"
-RUN_EPISODE_TIMING = False
+RUN_EPISODE_TIMING = True
 REVISION = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
 
 
@@ -36,8 +39,38 @@ def main():
     run(sys.executable, "-m", "unittest", "-v", cwd=directory)
     run(sys.executable, "smoke.py", str(upstream), cwd=directory)
     if RUN_EPISODE_TIMING:
-        run(sys.executable, "train.py", str(upstream), str(root / "layer-location-timing"),
+        output = root / ("layer-location-timing-" + uuid.uuid4().hex[:12])
+        run(sys.executable, "train.py", str(upstream), str(output),
             "--timing-only", cwd=directory)
+        publish(repo, output)
+
+
+def publish(repo, output):
+    sys.path.insert(0, str(repo))
+    from scripts.research.publish_experiment_results import (
+        ExperimentSpec, prepare_artifacts, push_results,
+    )
+
+    format_id = "minicells.titans-layer-location.timing.v1"
+    (output / "decision.json").write_text(json.dumps({
+        "format": format_id, "status": "TIMING_COMPLETE", "optimizer_updates": 0,
+        "run_id": output.name,
+    }, indent=2))
+    source = f"results/{output.name}"
+    branch = f"kaggle/{output.name}"
+    shutil.copytree(output, repo / source)
+    spec = ExperimentSpec(
+        source, f"artifacts/experiments/titans-layer-location/{output.name}",
+        ("decision.json", "data.json", "layer_3/warmup.json", "layer_22/warmup.json"),
+        branch, format_id,
+    )
+    folder = prepare_artifacts(repo, "titans-layer-location", spec,
+                               os.getenv("KAGGLE_SCRIPT_VERSION_ID"))
+    push_results(repo, folder, "titans-layer-location", branch, "GITHUB_TOKEN", "origin/main")
+    sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
+    receipt = {"status": "REMOTE_SHA_VERIFIED", "branch": branch, "commit": sha}
+    (output / "publication.json").write_text(json.dumps(receipt, indent=2))
+    print(receipt, flush=True)
 
 
 if __name__ == "__main__":
