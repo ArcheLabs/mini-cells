@@ -44,8 +44,24 @@ def main():
             optimizer, lambda step: (step + 1) / 3 if step < 3 else
             (1 + math.cos(math.pi * (step - 3) / 97)) / 2,
         )
+        torch.cuda.reset_peak_memory_stats()
+        torch.cuda.synchronize()
+        started = time.monotonic()
+        for segments in training[:5]:
+            optimizer.zero_grad(set_to_none=True)
+            logits, targets = forward_episode(model, segments, wrapper=wrapper)
+            answer_loss(logits, targets).backward()
+            wrapper.reset_episode()
+        optimizer.zero_grad(set_to_none=True)
+        torch.cuda.synchronize()
+        seconds = (time.monotonic() - started) / 5
+        warmup = {"seconds_per_episode": seconds, "training_seconds_100": 100 * seconds,
+                  "training_seconds_200": 200 * seconds,
+                  "peak_allocated_bytes": torch.cuda.max_memory_allocated()}
+        print({"layer": layer, "warmup": warmup}, flush=True)
         folder = args.output / f"layer_{layer}"
         folder.mkdir()
+        (folder / "warmup.json").write_text(json.dumps(warmup))
         for step in range(101):
             if step in (0, 25, 50, 100):
                 torch.save({"step": step, "parameters": named,
