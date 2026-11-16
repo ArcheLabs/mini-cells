@@ -43,6 +43,7 @@ def main():
     p.add_argument('snapshot', type=Path)
     p.add_argument('output', type=Path)
     p.add_argument('--full-validation', action='store_true')
+    p.add_argument('--device', choices=('cpu', 'cuda'), default='cpu')
     args = p.parse_args()
     cfg = load_config(args.config)
     training = cfg['training']
@@ -59,7 +60,7 @@ def main():
     tok = AutoTokenizer.from_pretrained(args.snapshot, local_files_only=True)
     tok.pad_token = tok.eos_token or tok.convert_ids_to_tokens(151643)
     model = AutoModelForCausalLM.from_pretrained(args.snapshot, dtype=torch.float32,
-        local_files_only=True, attn_implementation='sdpa').eval().requires_grad_(False)
+        local_files_only=True, attn_implementation='sdpa').eval().requires_grad_(False).to(args.device)
     sizes = (*cfg['dataset']['entities'][:2], 0) if args.full_validation else (8, 8, 0)
     data = dataset(seed, sizes)
     del data['test']
@@ -210,7 +211,8 @@ def main():
             calibration[name] = dict(threshold=cutoff, negative_count=len(negatives),
                 observed_fpr=float((negatives>=cutoff).float().mean()), families=breakdown)
     (args.output/'report.json').write_text(json.dumps(dict(
-        status='VALIDATION_ONLY_PREFLIGHT', config_sha256=sha(args.config),
+        status='VALIDATION_ONLY_PREFLIGHT', device=args.device,
+        gpu=torch.cuda.get_device_name() if args.device == 'cuda' else None, config_sha256=sha(args.config),
         checkpoint_sha256=checkpoints, seed=seed, test='SEALED', training=history,
         methods=methods, calibration=calibration,
         validation_partitions=dict(selection=sorted(selection_entities),
