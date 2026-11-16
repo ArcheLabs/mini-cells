@@ -15,6 +15,12 @@ from audit_qwen import REVISION, sha, verify_snapshot
 RELATIONS = ('works on', 'belongs to', 'is assigned to', 'operates', 'reports to',
              'uses', 'manages', 'is located in')
 RIDGE = (.01, .1, 1., 10.)
+QUESTIONS = (
+    'Which project does {} work on?', 'Which group does {} belong to?',
+    'What is {} assigned to?', 'What does {} operate?', 'Who does {} report to?',
+    'What does {} use?', 'What does {} manage?', 'Where is {} located?',
+)
+
 
 
 def facts(seed, split, count):
@@ -76,6 +82,7 @@ def main():
     seeds = (42,) if args.smoke else (42,43,44,45,46)
     rows, datasets = [], {}
     for seed in seeds:
+        print(f'Seed {seed} starting', flush=True)
         splits = [facts(seed, i, size) for i,size in enumerate(counts)]
         identifiers = [tuple(tokenizer.encode(x, add_special_tokens=False))
                        for split in splits for entity,_,value in split for x in (entity,value)]
@@ -89,19 +96,21 @@ def main():
             for j,(e,r,v) in enumerate(split):
                 texts['write'].append(f'{e} {r} {v}.')
                 texts['write_alt'].append(f'The record states that {e} {r} {v}.')
-                texts['query'].append(f'What does {e} {r}?')
-                texts['query_alt'].append(f'Which record lists what {e} {r}?')
+                texts['query'].append(QUESTIONS[j % 8].format(e))
+                texts['query_alt'].append('According to the record, ' + QUESTIONS[j % 8].format(e).replace(QUESTIONS[j % 8][0], QUESTIONS[j % 8][0].lower(), 1))
                 texts['held_query'].append(f'Identify the target of the {r} relation for {e}.')
                 texts['held_write'].append(f'Relation {r}: subject {e}, object {v}.')
-                texts['negative_entity'].append(f'What does Z{e} {r}?')
-                texts['negative_relation'].append(f'What does {e} {RELATIONS[(j+1)%8]}?')
+                texts['negative_entity'].append(QUESTIONS[j % 8].format('Z'+e))
+                texts['negative_relation'].append(QUESTIONS[(j+1)%8].format(e))
                 texts['bare'].append(v)
                 texts['contextual'].append(f'Answer: {v}')
             if idx != 2:
                 texts.pop('held_query')
                 texts.pop('held_write')
             records.append(texts)
-            encoded.append({key:encode(value) for key,value in texts.items()})
+            needed = (('write', 'write_alt', 'query', 'query_alt') if idx == 0
+                      else ('write', 'query') if idx == 1 else tuple(texts))
+            encoded.append({key:encode(texts[key]) for key in needed})
         datasets[str(seed)] = records
         for pool in ('last','mean'):
             train, val, test = [{k:v[pool] for k,v in split.items()} for split in encoded]
@@ -130,6 +139,7 @@ def main():
                   negative_entity_cosine=float((test['negative_entity']*w).sum(1).mean()),
                   negative_relation_cosine=float((test['negative_relation']*w).sum(1).mean())))
         print(f'Seed {seed} finished',flush=True)
+        (args.output/'partial.json').write_text(json.dumps(rows))
     data = args.output/'dataset.json'
     data.write_text(json.dumps(datasets,ensure_ascii=False))
     (args.output/'results.json').write_text(json.dumps(dict(rows=rows,counts=counts,revision=REVISION,
