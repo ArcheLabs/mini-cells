@@ -49,9 +49,9 @@ round trip, fingerprint rejection, independent Fork updates, momentum
 carry and forgetting in isolation. The existing PCA codec supplies the
 hash and tensor validation.
 
-## Qwen structure and gate
+## Initial Qwen structure check
 
-**PHASE_1 = FAIL**. The required pretrained-weight CPU audit is incomplete.
+The initial pretrained-weight CPU audit was blocked.
 Hugging Face requests for the pinned model weights repeatedly timed out
 using the snapshot client and direct HTTPS. The inspected official config
 is pinned to `da87bfb608c14b7cf20ba1ce41287e8de496c0cd`, SHA256
@@ -65,5 +65,31 @@ exactly once in layer order. The post-block hook at index 22 saw input
 and output [1, 4, 1024]. The evidence is in qwen-config-structure.json.
 The pretrained-weight gate requires rerunning audit_qwen.py successfully.
 
-CPU tests: 2 passed. Phase 2 remains closed. No Outer Training or GPU
+CPU tests: 2 passed. No Outer Training or GPU
 work was performed.
+
+## Final gate — PASS
+
+The original pretrained snapshot was recovered from the Hugging Face cache.
+The pinned model has one weight file, model.safetensors. Its SHA256 matches
+the Hugging Face content-addressed blob digest. The audit requires the exact
+file set and verifies weight and configuration hashes before inference. With
+the real weights, the frozen CPU model executed all 28 dense decoder blocks
+in order with SDPA and no KV cache. Block 23 input and output were
+[1, 4, 1024], and the final logits were finite. See qwen-pretrained-audit.json.
+
+The follow-up fixes writes per association across capacity, with five seeds
+and one, two and four presentations per pair. Mean Recall@1:
+
+| Writes per pair | 4 pairs | 8 pairs | 16 pairs | 32 pairs |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 55% | 50% | 35% | 22.5% |
+| 2 | 95% | 82.5% | 72.5% | 54.4% |
+| 4 | 100% | 100% | 100% | 97.5% |
+
+At equal exposure, recall still falls with more associations in the one-
+and two-write conditions. At four writes the 32-association condition
+uses 128 updates. The old 64-update result at 32 associations had only
+two writes per pair. Results remain limited to this geometry and exact
+addressing. Phase 2 may extract frozen representations. No training starts
+under this gate.

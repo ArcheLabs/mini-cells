@@ -10,9 +10,7 @@
 
 ## Phase 1 checkpoint
 
-The CPU recurrence, Cell tests, five-seed matrix and official-config
-structure check are complete. Phase 1 is FAIL pending a successful
-pretrained-weight audit. Run `python audit_qwen.py` on CPU with
-Transformers 4.57.3 and the pinned Hugging Face snapshot available.
-Require all architecture and hook assertions before Phase 2.
-See [PHASE_1.md](PHASE_1.md) for evidence and limitations.
+PASS. The pinned pretrained CPU forward and block-23 hooks passed. See
+[PHASE_1.md](PHASE_1.md) for the equal-write capacity comparison and audit.
+Phase 2 is limited to representation extraction and distribution checks.
+Phase 3 remains awaiting training authorization.

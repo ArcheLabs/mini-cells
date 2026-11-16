@@ -7,6 +7,25 @@ import re
 
 import torch
 
+REVISION = 'da87bfb608c14b7cf20ba1ce41287e8de496c0cd'
+WEIGHTS = {'model.safetensors': 'cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba'}
+
+
+def sha(path):
+    with path.open('rb') as f:
+        return hashlib.file_digest(f, 'sha256').hexdigest()
+
+
+def verify_snapshot(path):
+    expected = {**WEIGHTS, 'config.json': '504a6b58c4271583724e66584b6b7698aea18450209df6b2f7582df0e89cee59'}
+    if {p.name for p in path.glob('*.safetensors')} != WEIGHTS.keys():
+        raise ValueError('Unexpected weight file set')
+    actual = {name: sha(path / name) for name in expected}
+    if actual != expected:
+        raise ValueError('Pinned snapshot hash mismatch')
+    return actual
+
+
 
 def inspect(model):
     config = model.config
@@ -42,8 +61,11 @@ def inspect(model):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('revision', nargs='?', default='da87bfb608c14b7cf20ba1ce41287e8de496c0cd')
+    parser.add_argument('revision', nargs='?', default=REVISION)
+    parser.add_argument('--snapshot', type=Path)
     args = parser.parse_args()
+    if args.revision != REVISION:
+        parser.error('Audit is frozen to the original revision')
     if not re.fullmatch('[0-9a-f]{40}', args.revision):
         parser.error('Supply an immutable Hugging Face commit SHA')
     from huggingface_hub import snapshot_download
@@ -51,15 +73,16 @@ def main():
 
     torch.set_num_threads(2)
     model_id = 'Qwen/Qwen3-0.6B-Base'
-    path = Path(snapshot_download(model_id, revision=args.revision,
+    path = args.snapshot or Path(snapshot_download(model_id, revision=args.revision,
                                   allow_patterns=['*.json', '*.safetensors', '*.jinja', 'merges.txt']))
+    verified = verify_snapshot(path)
     model = AutoModelForCausalLM.from_pretrained(path, torch_dtype=torch.float32,
                                                 attn_implementation='sdpa').eval().requires_grad_(False)
     calls = inspect(model)
     config = model.config
     hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
               for p in path.iterdir() if p.name.startswith(('config.json', 'tokenizer', 'merges', 'vocab'))}
-    print(json.dumps(dict(model=model_id, revision=args.revision, hashes=hashes,
+    print(json.dumps(dict(model=model_id, revision=args.revision, hashes={**hashes, **verified},
                           model_type=config.model_type, architectures=config.architectures,
                           attention='Qwen3Attention/sdpa', frozen=True, device='cpu', hooks=calls,
                           torch=torch.__version__, transformers=__version__), indent=2))
