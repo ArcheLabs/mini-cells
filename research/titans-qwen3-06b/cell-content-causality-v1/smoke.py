@@ -70,7 +70,7 @@ def main():
     report = {
         "status": "ENGINEERING_SMOKE_COMPLETE",
         "diagnostics": compare(model, wrapper, correct, alternative,
-                               encode(f"Question: {item['prompt']}\nAnswer:"), 22),
+                               tokenizer.encode(f"Question: {item['prompt']}\nAnswer:", add_special_tokens=False), 22),
         "evaluation": evaluate_episode(model, wrapper, tokenizer, selected, donor),
         "manifests": [manifest(split) for split in ("train", "validation", "test")],
     }
