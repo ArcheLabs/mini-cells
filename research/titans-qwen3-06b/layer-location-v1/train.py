@@ -22,6 +22,7 @@ def main():
     args = parser.parse_args()
     if not args.timing_only:
         parser.error("Screening is paused pending verified training-memory preflight")
+    config = json.loads(Path(__file__).with_name("screen_config.lock.json").read_text())
     tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
     train = generate("train", 100)
     validation = generate("validation", 8)
@@ -41,7 +42,8 @@ def main():
     }))
     for layer in LAYERS:
         torch.manual_seed(42)
-        wrapper = install(model, layer, build_memory(args.upstream))
+        wrapper = install(model, layer, build_memory(args.upstream, chunk_size=config["chunk_size"],
+                                                    accelerated=config["accelerated_scan"]))
         named = {name: p for name, p in wrapper.named_parameters() if p.requires_grad}
         optimizer = torch.optim.AdamW(named.values(), lr=.001, weight_decay=.01,
                                       betas=(.9, .95))
@@ -73,12 +75,13 @@ def main():
             torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats()
             started = time.monotonic()
-            evaluate(model, wrapper, layer, validation[0], tokenizer)
+            for episode in validation:
+                evaluate(model, wrapper, layer, episode, tokenizer)
             torch.cuda.synchronize()
-            warmup["seconds_per_eval_episode_e0_e6"] = time.monotonic() - started
+            warmup["seconds_per_eval_episode_e0_e6"] = (time.monotonic() - started) / len(validation)
             warmup["evaluation_peak_allocated_bytes"] = torch.cuda.max_memory_allocated()
-            warmup["estimated_inference_only_seconds"] = (
-                105 * seconds + 32 * warmup["seconds_per_eval_episode_e0_e6"]
+            warmup["estimated_screen_evaluation_seconds"] = (
+                len(config["checkpoints"]) * len(validation) * warmup["seconds_per_eval_episode_e0_e6"]
             )
             (folder / "warmup.json").write_text(json.dumps(warmup))
             print({"layer": layer, "timing_only": warmup}, flush=True)

@@ -10,7 +10,7 @@ import sys
 SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
 BRANCH = "codex/titans-layer-location-v1"
 UPSTREAM = "https://github.com/sarahpannn/titans-pytorch.git"
-RUN_EPISODE_TIMING = False
+RUN_EPISODE_TIMING = True
 REVISION = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
 
 
