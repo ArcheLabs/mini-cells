@@ -1,0 +1,61 @@
+{
+  "format": "minicells.titans-p1-1.v1",
+  "status": "INCONCLUSIVE",
+  "engineering_status": "PASS",
+  "scientific_status": "INCONCLUSIVE",
+  "gates": {
+    "memory_effectiveness": true,
+    "content_specificity": false,
+    "zero_read_separation": true,
+    "specificity_fraction": false,
+    "seed_consistency": false
+  },
+  "specificity_fraction": 0.0003175063951918696,
+  "statistics": {
+    "memory": {
+      "mean": 0.08939473703503609,
+      "ci95": [
+        0.08289764324824016,
+        0.09579278652866681
+      ],
+      "per_seed": [
+        0.09165222942829132,
+        0.09210774302482605,
+        0.08442423865199089
+      ],
+      "win_rate": 1,
+      "pairs": 192
+    },
+    "specificity": {
+      "mean": 2.8383400705119428e-05,
+      "ci95": [
+        -6.1011148823642926e-05,
+        0.00012973282072278416
+      ],
+      "per_seed": [
+        -4.949793219568427e-05,
+        4.046907027557833e-06,
+        0.00013060122728348472
+      ],
+      "win_rate": 0.5104166666666666,
+      "pairs": 192
+    },
+    "content": {
+      "mean": 0.0775926299393177,
+      "ci95": [
+        0.07118940353393555,
+        0.08384562656283379
+      ],
+      "per_seed": [
+        0.07946115359663963,
+        0.08103888481855392,
+        0.07227785140275955
+      ],
+      "win_rate": 1,
+      "pairs": 192
+    }
+  },
+  "run_id": "titans-p1-1-13c8dbc1f67b",
+  "kaggle_script_version_id": null,
+  "source_commit": "ff1adc83f9a225b83164035bb46d0bb0e22c6f67"
+}
