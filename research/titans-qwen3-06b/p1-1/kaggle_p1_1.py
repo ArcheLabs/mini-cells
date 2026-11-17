@@ -21,8 +21,10 @@ def run(*args, cwd=None, timeout=None):
 
 def main():
     script_version = os.getenv("KAGGLE_SCRIPT_VERSION_ID") or SCRIPT_VERSION_ID
-    if not SMOKE and not (script_version.isdecimal() and int(script_version) > 0):
-        raise ValueError("Set SCRIPT_VERSION_ID to the numeric Kaggle scriptVersionId")
+    if not (script_version.isdecimal() and int(script_version) > 0):
+        script_version = None
+        print("KAGGLE_SCRIPT_VERSION_ID unavailable; recording exact Git source commit",
+              flush=True)
     os.environ["PYTHONUNBUFFERED"] = "1"
     root = Path("/kaggle/working")
     repo, upstream = root / "layer-location-source", root / "layer-location-titans"
@@ -82,6 +84,10 @@ def main():
         "scientific_status": "NOT_EVALUATED", "returncode": completed.returncode,
     }
     decision["run_id"] = output.name
+    decision["kaggle_script_version_id"] = script_version
+    decision["source_commit"] = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=repo, text=True,
+    ).strip()
     decision_path.write_text(json.dumps(decision, indent=2))
     source = f"results/{output.name}"
     shutil.copytree(output, repo / source)
