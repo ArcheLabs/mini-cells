@@ -86,7 +86,11 @@ def main():
         optimizer.zero_grad(set_to_none=True)
         torch.cuda.reset_peak_memory_stats()
         started = time.monotonic()
-        losses = episode_loss(model, wrapper, torch.tensor([ids], device="cuda"))
+        audit = {} if step == 1 else None
+        losses = episode_loss(model, wrapper, torch.tensor([ids], device="cuda"), audit=audit)
+        if audit is not None:
+            (args.output / "meta_gradient.json").write_text(json.dumps(audit, indent=2))
+            print({"stage": "META_GRADIENT_VERIFIED", **audit}, flush=True)
         losses.mean().backward()
         groups = (wrapper.memory.memory_model_parameters, wrapper.memory.history_mix_proj.parameters())
         for group in groups:

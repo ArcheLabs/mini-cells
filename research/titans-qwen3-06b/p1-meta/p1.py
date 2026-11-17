@@ -88,7 +88,7 @@ def install(model):
     return wrapper
 
 
-def episode_loss(model, wrapper, tokens):
+def episode_loss(model, wrapper, tokens, *, audit=None):
     """One graph across all chunks, with an independent Qwen forward per chunk."""
     if tokens.shape != (1, 4 * CHUNK):
         raise ValueError("Expected one 2048-token episode")
@@ -101,6 +101,16 @@ def episode_loss(model, wrapper, tokens):
             logits = model(input_ids=ids, position_ids=positions, use_cache=False).logits
             losses.append(F.cross_entropy(logits[:, :-1].float().flatten(0, 1),
                                           ids[:, 1:].flatten()))
+            if audit is not None and offset == CHUNK:
+                fast = wrapper.state.updates
+                slow = tuple(wrapper.memory.memory_model_parameters)
+                gradients = torch.autograd.grad(losses[-1], (*fast, *slow), retain_graph=True)
+                for name, group in (("early_fast", gradients[:len(fast)]),
+                                    ("slow_initialization", gradients[len(fast):])):
+                    norm = torch.stack([grad.float().norm() for grad in group]).norm()
+                    if not torch.isfinite(norm) or norm.item() == 0:
+                        raise RuntimeError(f"Invalid meta-gradient: {name}")
+                    audit[name] = norm.item()
             wrapper.commit()
         return torch.stack(losses)
     finally:
