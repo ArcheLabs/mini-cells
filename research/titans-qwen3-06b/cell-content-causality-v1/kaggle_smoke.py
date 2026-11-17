@@ -78,6 +78,7 @@ def main():
     spec = ExperimentSpec(source, f"artifacts/experiments/{output.name}",
                           tuple(sorted(file.name for file in output.iterdir())),
                           branch, kind)
+    run("git", "sparse-checkout", "add", spec.artifact_dir, cwd=repo, timeout=180)
     folder = prepare_artifacts(repo, "titans-cell-content-causality", spec,
                                os.getenv("KAGGLE_SCRIPT_VERSION_ID"))
     push_results(repo, folder, "titans-cell-content-causality", branch,
