@@ -73,7 +73,7 @@ def install(model):
     block = model.model.layers[LAYER]
     memory = NeuralMemory(
         dim=1024, dim_head=128, heads=8, retrieve_heads=16, chunk_size=CHUNK,
-        batch_size=8, bypass_projections=True, heterogeneous_qkv=True,
+        batch_size=CHUNK, bypass_projections=True, heterogeneous_qkv=True,
         detach_inner_grads=False, mem_model_norm_add_residual=False,
         default_model_kwargs={"depth": 2, "expansion_factor": 1.0},
         max_grad_norm=1.0, default_step_transform_max_lr=.0025,
