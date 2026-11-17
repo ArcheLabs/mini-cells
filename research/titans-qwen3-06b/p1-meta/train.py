@@ -62,6 +62,26 @@ def main():
               "titans_revision": revision, "seed": 42, "layer": 3, "chunk": 512,
               "trainable": list(named), "gpu": torch.cuda.get_device_name()}
     (args.output / "config.json").write_text(json.dumps(config, indent=2))
+    def save_checkpoint(step):
+        path = args.output / f"step_{step:03}.pt"
+        torch.save({"parameters": {n: p.detach().cpu() for n, p in named.items()},
+                    "optimizer": optimizer.state_dict(), "scheduler": scheduler.state_dict(),
+                    "global_step": step, "configuration": config,
+                    "rng_cpu": torch.get_rng_state(), "rng_cuda": torch.cuda.get_rng_state()},
+                   path)
+
+        saved = torch.load(path, map_location="cpu", weights_only=True)
+        if saved["global_step"] != step:
+            raise RuntimeError("Checkpoint step mismatch")
+        for name, param in named.items():
+            torch.testing.assert_close(saved["parameters"][name], param.detach().cpu(),
+                                       rtol=0, atol=0)
+        optimizer.load_state_dict(saved["optimizer"])
+        scheduler.load_state_dict(saved["scheduler"])
+        torch.set_rng_state(saved["rng_cpu"])
+        torch.cuda.set_rng_state(saved["rng_cuda"])
+        print({"stage": "CHECKPOINT_VERIFIED", "step": step}, flush=True)
+
     for step, ids in enumerate(samples[:args.steps], 1):
         optimizer.zero_grad(set_to_none=True)
         torch.cuda.reset_peak_memory_stats()
@@ -81,12 +101,12 @@ def main():
         with (args.output / "training.jsonl").open("a") as stream:
             stream.write(json.dumps(row) + "\n")
         print(row, flush=True)
-    torch.save({"parameters": {n: p.detach().cpu() for n, p in named.items()},
-                "optimizer": optimizer.state_dict(), "scheduler": scheduler.state_dict(),
-                "global_step": args.steps, "configuration": config,
-                "rng_cpu": torch.get_rng_state(), "rng_cuda": torch.cuda.get_rng_state()},
-               args.output / f"step_{args.steps:03}.pt")
-
+        if step in (20, args.steps):
+            save_checkpoint(step)
+        if step == 20:
+            report = evaluate(model, wrapper, samples[200:])
+            (args.output / "validation_020.json").write_text(json.dumps(report, indent=2))
+            print("P1_SMOKE_COMPLETE", flush=True)
     report = evaluate(model, wrapper, samples[200:])
     (args.output / "validation.json").write_text(json.dumps(report, indent=2))
 
