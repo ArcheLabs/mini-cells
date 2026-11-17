@@ -110,6 +110,14 @@ def main():
     decision = classify(results, engineering_pass=True, smoke=args.smoke)
     save("statistics.json", decision.get("statistics", {}))
     save("decision.json", {"format": "minicells.titans-p1-1.v1", **decision})
+    (args.output / "RESULTS.md").write_text(
+        "# P1.1 实验结果\n\n"
+        f"运行模式：{'工程 Smoke' if args.smoke else '三 Seed 正式验证'}。\n\n"
+        f"判定：{decision['status']}。\n\n"
+        "逐文档 NLL、Gate 和读取诊断见各 Seed 的 validation JSON。"
+        "配对置信区间和科学门槛见 statistics.json 和 decision.json。\n",
+        encoding="utf-8",
+    )
 
 
 if __name__ == "__main__":
