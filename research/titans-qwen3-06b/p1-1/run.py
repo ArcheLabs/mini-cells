@@ -11,23 +11,22 @@ import torch
 
 from corpus import CORPUS, SOURCE, select
 from decision import classify
-from evaluation import evaluate_p1_1
+from p1_1_evaluation import evaluate_p1_1
 from protocol import SEEDS, donor_assignments
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("upstream", type=Path)
+    parser.add_argument("output", type=Path)
+    parser.add_argument("--smoke", action="store_true")
+    args = parser.parse_args()
     from datasets import load_dataset
     from transformers import AutoModelForCausalLM, AutoTokenizer
     MODEL = "Qwen/Qwen3-0.6B-Base"
     REVISION = "da87bfb608c14b7cf20ba1ce41287e8de496c0cd"
     UPSTREAM = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
     from p1 import episode_loss, install
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("upstream", type=Path)
-    parser.add_argument("output", type=Path)
-    parser.add_argument("--smoke", action="store_true")
-    args = parser.parse_args()
     actual = subprocess.check_output(["git", "rev-parse", "HEAD"],
                                      cwd=args.upstream, text=True).strip()
     if actual != UPSTREAM:
