@@ -4,10 +4,6 @@ from pathlib import Path
 import re
 import sys
 
-from datasets import load_dataset
-from transformers import AutoTokenizer
-
-from train import MODEL, REVISION
 
 SOURCE = "Salesforce/wikitext"
 CORPUS = "b08601e04326c79dfdd32d625aee71d232d685c3"
@@ -29,6 +25,10 @@ def articles(rows):
 
 
 def prepare(path):
+    from datasets import load_dataset
+    from transformers import AutoTokenizer
+    from train import MODEL, REVISION
+
     tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
     seen = set()
     with path.open("w") as output:

@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
-BRANCH = "codex/titans-cell-content-causality-v1"
+BRANCH = "codex/titans-p1-meta"
 UPSTREAM = "https://github.com/sarahpannn/titans-pytorch.git"
 REVISION = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
 
