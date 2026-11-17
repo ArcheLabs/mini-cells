@@ -18,7 +18,9 @@ from protocol import SEEDS, donor_assignments
 def main():
     from datasets import load_dataset
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from train import MODEL, REVISION, UPSTREAM
+    MODEL = "Qwen/Qwen3-0.6B-Base"
+    REVISION = "da87bfb608c14b7cf20ba1ce41287e8de496c0cd"
+    UPSTREAM = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
     from p1 import episode_loss, install
 
     parser = argparse.ArgumentParser()
@@ -52,6 +54,8 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(
         MODEL, revision=REVISION, dtype=torch.float16, attn_implementation="eager",
     ).eval().cuda()
+    compatibility = documents["p1_compat_validation"]
+    compat_assignments = donor_assignments(len(compatibility), 1)
     results, baseline = {}, None
     seeds, steps = (SEEDS[:1], 20) if args.smoke else (SEEDS, 200)
     save("config.json", {"seeds": seeds, "steps": steps, "layer": 3, "chunk": 512,
@@ -85,6 +89,10 @@ def main():
                 save(f"seed_{seed}/validation_step_{step:03}.json", evaluated)
             if step == steps:
                 results[seed] = evaluated["documents"]
+                if seed == 42:
+                    save("p1_compat_validation.json", evaluate_p1_1(
+                        model, wrapper, compatibility, compat_assignments,
+                    ))
                 break
             started = time.monotonic()
             optimizer.zero_grad(set_to_none=True)
