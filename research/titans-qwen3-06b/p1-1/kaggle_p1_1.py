@@ -9,7 +9,8 @@ import sys
 
 SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
 BRANCH = "codex/titans-p1-1-content-verification"
-SMOKE = True
+SMOKE = False
+SCRIPT_VERSION_ID = ""
 UPSTREAM = "https://github.com/sarahpannn/titans-pytorch.git"
 REVISION = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
 
@@ -19,6 +20,9 @@ def run(*args, cwd=None, timeout=None):
 
 
 def main():
+    script_version = os.getenv("KAGGLE_SCRIPT_VERSION_ID") or SCRIPT_VERSION_ID
+    if not SMOKE and not (script_version.isdecimal() and int(script_version) > 0):
+        raise ValueError("Set SCRIPT_VERSION_ID to the numeric Kaggle scriptVersionId")
     os.environ["PYTHONUNBUFFERED"] = "1"
     root = Path("/kaggle/working")
     repo, upstream = root / "layer-location-source", root / "layer-location-titans"
@@ -88,7 +92,7 @@ def main():
                           branch, kind)
     run("git", "sparse-checkout", "add", spec.artifact_dir, cwd=repo, timeout=180)
     folder = prepare_artifacts(repo, "titans-p1-1", spec,
-                               os.getenv("KAGGLE_SCRIPT_VERSION_ID"))
+                               script_version or None)
     push_results(repo, folder, "titans-p1-1", branch,
                  "GITHUB_TOKEN", "origin/main")
     sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()

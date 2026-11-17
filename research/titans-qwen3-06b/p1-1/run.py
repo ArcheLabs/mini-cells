@@ -100,15 +100,25 @@ def main():
             token_ids = torch.tensor([documents["train"][step]], device="cuda")
             loss = episode_loss(model, wrapper, token_ids, audit=audit).mean()
             loss.backward()
-            gate_grad = wrapper.memory.history_mix.grad
-            if gate_grad is None or not gate_grad.count_nonzero():
-                raise RuntimeError("Gate has no training gradient")
+            group_norms = {}
+            for name, parameters in (
+                ("slow_memory", wrapper.memory.memory_model_parameters),
+                ("gate_bias", (wrapper.memory.history_mix,)),
+                ("gate_projection", wrapper.memory.history_mix_proj.parameters()),
+            ):
+                grads = [parameter.grad for parameter in parameters]
+                if any(grad is None for grad in grads):
+                    raise RuntimeError(f"Missing {name} gradient")
+                magnitude = torch.stack([grad.float().norm() for grad in grads]).norm().item()
+                if not 0 < magnitude < float("inf"):
+                    raise RuntimeError(f"Invalid {name} gradient norm: {magnitude}")
+                group_norms[name] = magnitude
             norm = torch.nn.utils.clip_grad_norm_(named.values(), 1., error_if_nonfinite=True)
             optimizer.step()
             scheduler.step()
             row = {"step": step + 1, "loss": loss.item(), "gradient_norm": norm.item(),
                    "seconds": time.monotonic() - started, "peak_bytes": torch.cuda.max_memory_allocated(),
-                   "meta_gradient": audit}
+                   "meta_gradient": audit, "group_gradient_norms": group_norms}
             print({"seed": seed, **row}, flush=True)
             with (folder / "training.jsonl").open("a") as stream:
                 stream.write(json.dumps(row) + "\n")
