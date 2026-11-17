@@ -9,6 +9,7 @@ import time
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from evaluation import evaluate
 from p1 import episode_loss, install
 
 MODEL = "Qwen/Qwen3-0.6B-Base"
@@ -20,6 +21,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("documents", type=Path, help="UTF-8 JSONL with one text per document")
     parser.add_argument("output", type=Path)
+    parser.add_argument("--steps", type=int, choices=(20, 200), default=20)
     parser.add_argument("--upstream", type=Path, required=True)
     parser.add_argument("--dataset-source", required=True)
     parser.add_argument("--dataset-revision", required=True)
@@ -60,7 +62,7 @@ def main():
               "titans_revision": revision, "seed": 42, "layer": 3, "chunk": 512,
               "trainable": list(named), "gpu": torch.cuda.get_device_name()}
     (args.output / "config.json").write_text(json.dumps(config, indent=2))
-    for step, ids in enumerate(samples[:20], 1):
+    for step, ids in enumerate(samples[:args.steps], 1):
         optimizer.zero_grad(set_to_none=True)
         torch.cuda.reset_peak_memory_stats()
         started = time.monotonic()
@@ -81,9 +83,12 @@ def main():
         print(row, flush=True)
     torch.save({"parameters": {n: p.detach().cpu() for n, p in named.items()},
                 "optimizer": optimizer.state_dict(), "scheduler": scheduler.state_dict(),
-                "global_step": 20, "configuration": config,
+                "global_step": args.steps, "configuration": config,
                 "rng_cpu": torch.get_rng_state(), "rng_cuda": torch.cuda.get_rng_state()},
-               args.output / "step_020.pt")
+               args.output / f"step_{args.steps:03}.pt")
+
+    report = evaluate(model, wrapper, samples[200:])
+    (args.output / "validation.json").write_text(json.dumps(report, indent=2))
 
 
 if __name__ == "__main__":
