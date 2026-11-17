@@ -13,15 +13,22 @@ UPSTREAM = "https://github.com/sarahpannn/titans-pytorch.git"
 REVISION = "c60b4efaa3a3c6df4deebd57cbccf75947b87cad"
 
 
-def run(*args, cwd=None):
-    subprocess.run(args, cwd=cwd, check=True)
+def run(*args, cwd=None, timeout=None):
+    subprocess.run(args, cwd=cwd, check=True, timeout=timeout)
 
 
 def main():
     os.environ["PYTHONUNBUFFERED"] = "1"
     root = Path("/kaggle/working")
     repo, upstream = root / "layer-location-source", root / "layer-location-titans"
-    run("git", "clone", "--depth", "1", "--branch", BRANCH, SOURCE, str(repo))
+    print("SOURCE_FETCH_START", flush=True)
+    run("git", "clone", "--progress", "--depth", "1", "--single-branch",
+        "--filter=blob:none", "--sparse", "--branch", BRANCH, SOURCE, str(repo),
+        timeout=180)
+    run("git", "sparse-checkout", "set", "scripts/research",
+        "research/titans-qwen3-06b/cell-content-causality-v1",
+        "research/titans-qwen3-06b/layer-location-v1", cwd=repo, timeout=180)
+    print("SOURCE_FETCH_COMPLETE", flush=True)
     sys.path.insert(0, str(repo))
     from scripts.research.publish_experiment_results import (
         ExperimentSpec, load_github_token, prepare_artifacts, push_results,
@@ -29,7 +36,7 @@ def main():
     load_github_token("GITHUB_TOKEN")
     upstream.mkdir()
     run("git", "init", str(upstream))
-    run("git", "fetch", "--depth", "1", UPSTREAM, REVISION, cwd=upstream)
+    run("git", "fetch", "--depth", "1", UPSTREAM, REVISION, cwd=upstream, timeout=180)
     run("git", "checkout", "--detach", "FETCH_HEAD", cwd=upstream)
     # Use the pinned checkout directly. Preserve Kaggle's matched Torch stack.
     import tomllib
