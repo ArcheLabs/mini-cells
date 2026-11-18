@@ -100,6 +100,16 @@ def main():
         block.self_attn = native
         torch.manual_seed(seed)
         wrapper = install(model).eval()
+        # CPU install can retain expanded parameter storage because .to(cpu)
+        # is a no-op. Keep Parameter identity and materialize writable storage.
+        with torch.no_grad():
+            for parameter in wrapper.parameters():
+                if parameter.requires_grad and any(
+                    size > 1 and stride == 0
+                    for size, stride in zip(parameter.shape, parameter.stride())
+                ):
+                    parameter.data = parameter.detach().clone()
+
         for step in (0, 200):
             path = a.artifact / f"seed_{seed}/step_{step:03}.pt"
             restore(wrapper, path, step)
