@@ -15,20 +15,47 @@ sys.path.insert(0, str(HERE.parent / "p1-2"))
 from replay import MODEL, REV, UP, ART, SEEDS, capture, same_tree, verify, restore, save, sha, finite
 
 KIND = "minicells.titans-p1-3-diagnostic.v1"
-WORDS = " apple pear lemon peach plum mango grape melon lime cherry banana orange".split()
+VALUES = tuple("ABCDEFGHIJKL")
+
+
+def build_episodes(encode, count):
+    rng = random.Random(20261119)
+    ids = {value: encode(" " + value) for value in VALUES}
+    if any(len(x) != 1 for x in ids.values()) or len({tuple(x) for x in ids.values()}) != len(VALUES):
+        raise ValueError(f"Invalid candidate token IDs: {ids}")
+    plans = []
+    for _ in range(count):
+        keys = rng.sample(range(10000, 99999), 4)
+        values = rng.sample(VALUES, 4)
+        writes = []
+        for binding in (values, values[1:] + values[:1]):
+            text, locations = "", []
+            for key, value in zip(keys, binding):
+                prefix = text + f"Code {key}:"
+                text = prefix + " " + value
+                tokens = encode(text)
+                if tokens != encode(prefix) + ids[value]:
+                    raise ValueError(f"Write value boundary changed: {key}, {value}")
+                locations.append(len(tokens) - 1)
+                text += "\n"
+            tokens = encode(text)
+            if any(tokens[pos] != ids[value][0] for pos, value in zip(locations, binding)):
+                raise ValueError("Joined write token offsets changed")
+            writes.append((tokens, locations))
+        prompts = [f"What value is assigned to code {key}?\nCode {key}:" for key in keys]
+        queries = [encode(prompt) for prompt in prompts]
+        for prompt, query in zip(prompts, queries):
+            for value in values:
+                if encode(prompt + " " + value) != query + ids[value]:
+                    raise ValueError(f"Query value boundary changed: {value}")
+        plans.append((keys, values, [ids[v][0] for v in values], writes, queries))
+    return plans
 
 
 @torch.no_grad()
-def evaluate(model, wrapper, tokenizer, cases):
-    rng = random.Random(20261119)
+def evaluate(model, wrapper, tokenizer, plans):
     device = next(model.parameters()).device
-
-    def encode(text):
-        return tokenizer.encode(text, add_special_tokens=False)
-
-    candidates = [encode(" " + word) for word in WORDS]
-    if any(len(x) != 1 for x in candidates) or len({x[0] for x in candidates}) != len(WORDS):
-        raise ValueError("Candidate vocabulary must contain distinct single tokens")
+    encode = lambda text: tokenizer.encode(text, add_special_tokens=False)
 
     def forward(ids, start):
         tokens = torch.tensor([ids], device=device)
@@ -36,22 +63,9 @@ def evaluate(model, wrapper, tokenizer, cases):
                      device=device)[None], use_cache=False).logits
 
     rows = []
-    for episode in range(cases):
-        keys = rng.sample(range(10000, 99999), 4)
-        words = rng.sample(WORDS, 4)
-        ids = [candidates[WORDS.index(w)][0] for w in words]
-        shifted = words[1:] + words[:1]
-
+    for episode, (keys, words, ids, writes, queries) in enumerate(plans):
         def write(values):
-            tokens, locations = [], []
-            for key, word in zip(keys, values):
-                prefix = f"Code {key}:"
-                whole = encode(prefix + " " + word)
-                if whole != encode(prefix) + candidates[WORDS.index(word)]:
-                    raise ValueError("Value token boundary changed")
-                tokens.extend(whole)
-                locations.append(len(tokens) - 1)
-                tokens.extend(encode("\n"))
+            tokens, locations = values
             filler = encode(" Information follows.\n") * 512
             pad = 512 - len(tokens)
             wrapper.state = None
@@ -61,10 +75,10 @@ def evaluate(model, wrapper, tokenizer, cases):
             wrapper.commit()
             return wrapper.state, targets
 
-        correct, prototypes = write(words)
-        donor, _ = write(shifted)
+        correct, prototypes = write(writes[0])
+        donor, _ = write(writes[1])
         for i, key in enumerate(keys):
-            query = encode(f"What value is assigned to code {key}?\nCode {key}:")
+            query = queries[i]
             qkv = None
             for condition, state in (("correct", correct), ("swapped", donor), ("empty", None)):
                 wrapper.state = state
@@ -85,7 +99,7 @@ def evaluate(model, wrapper, tokenizer, cases):
                     lm_candidate_correct=int(prediction.argmax()) == i,
                     lm_log_probability=logits.log_softmax(0)[ids[i]].item(),
                     swapped_retrieval_credit=float(winners[(i+1)%4]) / int(winners.sum())))
-        print(f"Binding episodes {episode+1}/{cases}", flush=True)
+        print(f"Binding episodes {episode+1}/{len(plans)}", flush=True)
     wrapper.state = wrapper.pending = None
     return rows
 
@@ -105,6 +119,9 @@ def main():
     verify(args.artifact)
     sys.path.insert(0, str(args.upstream.resolve()))
     tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=REV)
+    plans = build_episodes(lambda text: tokenizer.encode(text, add_special_tokens=False),
+                           16)
+    print(f"TOKENIZER_PREFLIGHT_PASS episodes={len(plans)}", flush=True)
     model = AutoModelForCausalLM.from_pretrained(MODEL, revision=REV, dtype=torch.float16,
                                                 attn_implementation="eager").eval().cuda()
     block = model.model.layers[3]
@@ -117,7 +134,7 @@ def main():
         for step in (200,) if args.smoke else (0, 200):
             checkpoint = args.artifact / f"seed_{seed}/step_{step:03}.pt"
             restored = restore(wrapper, checkpoint, step)
-            rows = evaluate(model, wrapper, tokenizer, 1 if args.smoke else 16)
+            rows = evaluate(model, wrapper, tokenizer, plans[:1] if args.smoke else plans)
             key = f"seed_{seed}_step_{step:03}"
             save(args.output / f"{key}.json", rows)
             summary[key] = dict(conditions={c: {k: mean(r[k] for r in rows if r["condition"] == c)
