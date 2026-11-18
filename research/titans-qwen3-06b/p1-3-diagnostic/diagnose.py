@@ -79,23 +79,36 @@ def evaluate(model, wrapper, tokenizer, plans):
             addresses = expand_values(
                 wrapper.pending[1][0, [pad + p for p in locations]].reshape(4, 8, 128),
                 wrapper.memory.retrieve_heads_per_memory_head)
+            original = wrapper.pending
             wrapper.commit()
-            return wrapper.state, targets, addresses
+            state = wrapper.state
+            q, k, v = original
+            positions = [pad + pos for pos in locations]
+            swapped_v = v.clone()
+            swapped_v[:, positions] = v[:, positions[1:] + positions[:1]]
+            wrapper.state = None
+            wrapper.pending = (q, k, swapped_v)
+            wrapper.commit()
+            return state, targets, addresses, wrapper.state
 
-        correct, prototypes, addresses = write(writes[0])
-        donor, _, _ = write(writes[1])
+        correct, prototypes, addresses, value_swap = write(writes[0])
+        donor, _, _, _ = write(writes[1])
         candidates = normalize(prototypes.float())
         oracle_scores = finite(candidates @ candidates.T)
         expected = torch.arange(len(words), device=device)
         if not torch.equal(oracle_scores.argmax(-1), expected) or (oracle_scores == oracle_scores.max(-1, keepdim=True).values).sum(-1).ne(1).any():
             raise ValueError("Oracle Value probe failed to identify distinct candidates")
         address_reads = {}
-        for label, cell in (("correct", correct), ("swapped", donor)):
+        for label, cell in (("correct", correct), ("swapped", donor), ("fixed_k_value_swap", value_swap)):
             read, returned = wrapper.memory.read_only((addresses[None], None, None), cell)
             if returned is not cell:
                 raise ValueError("read_only did not return the original state")
             address_reads[label] = read[0]
         for i, key in enumerate(keys):
+            j = (i + 1) % len(words)
+            baseline = finite(candidates @ normalize(address_reads["correct"][i].float(), dim=0))
+            swapped = finite(candidates @ normalize(address_reads["fixed_k_value_swap"][i].float(), dim=0))
+            swap_margin_shift = ((swapped[j] - swapped[i]) - (baseline[j] - baseline[i])).item()
             query = queries[i]
             qkv = None
             for condition, state in (("correct", correct), ("swapped", donor), ("empty", None)):
@@ -117,6 +130,8 @@ def evaluate(model, wrapper, tokenizer, plans):
                 winners = scores == scores.max()
                 rows.append(dict(episode=episode, keys=keys, values=words, query_index=i,
                     condition=condition, cosine_scores=scores.tolist(),
+                    fixed_k_swap_scores=swapped.tolist(),
+                    fixed_k_swap_margin_shift=swap_margin_shift,
                     oracle_correct_scores=oracle_scores[i].tolist(),
                     oracle_swapped_scores=oracle_scores[j].tolist(),
                     same_address_scores=matched_scores.tolist(),
@@ -167,7 +182,11 @@ def main():
             summary[key] = dict(conditions={c: {k: mean(r[k] for r in rows if r["condition"] == c)
                 for k in ("retrieval_credit", "swapped_retrieval_credit", "lm_candidate_correct",
                           "lm_log_probability", "same_address_correct_credit", "same_address_swapped_credit")} for c in ("correct", "swapped", "empty")},
-                checkpoint_sha256=sha(checkpoint), restored=restored)
+                fixed_k_value_swap={
+                    "mean_margin_shift": mean(r["fixed_k_swap_margin_shift"] for r in rows if r["condition"] == "correct"),
+                    "positive_shift_rate": mean(r["fixed_k_swap_margin_shift"] > 0 for r in rows if r["condition"] == "correct"),
+                    "queries": sum(r["condition"] == "correct" for r in rows),
+                }, checkpoint_sha256=sha(checkpoint), restored=restored)
     save(args.output / "summary.json", summary)
     lines = ["# Random binding diagnostic", "",
              "| Checkpoint | Condition | Question probe Recall@1 | Same-address Recall@1 | Same-address swapped-value credit | LM candidate accuracy | Mean target log P |",
@@ -177,6 +196,12 @@ def main():
             lines.append(f"| {key} | {condition} | {m['retrieval_credit']:.3f} | "
                          f"{m['same_address_correct_credit']:.3f} | {m['same_address_swapped_credit']:.3f} | "
                          f"{m['lm_candidate_correct']:.3f} | {m['lm_log_probability']:.5f} |")
+    lines += ["", "## Fixed K, swapped V", "",
+              "| Checkpoint | Queries | Mean margin shift toward swapped value | Positive shift rate |",
+              "|---|---:|---:|---:|"]
+    for key, entry in summary.items():
+        m = entry["fixed_k_value_swap"]
+        lines.append(f"| {key} | {m['queries']} | {m['mean_margin_shift']:.8g} | {m['positive_shift_rate']:.2%} |")
     lines += ["", "Direct probe: cosine against contextualized write V, repeated across the two Q heads per KV group.",
               "This is a geometry probe; low scores alone cannot rule out information in another representation.",
               "Empty has four tied retrieval candidates (0.25 credit). No outer training."]
