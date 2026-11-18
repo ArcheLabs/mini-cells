@@ -1,0 +1,1396 @@
+{
+  "format": "minicells.ham-001a.v1",
+  "status": "DIAGNOSTIC_ONLY",
+  "next_step": "Single-binding directional evidence survives both address paths; quantify effect sizes and test interference before expanding scope.",
+  "outcomes": {
+    "ham_geometry/q_equals_k": [
+      2,
+      2,
+      3,
+      1
+    ],
+    "native_geometry/q_equals_k": [
+      3,
+      3,
+      3,
+      0
+    ],
+    "native_geometry/native_qk": [
+      3,
+      3,
+      3,
+      0
+    ]
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "device": "cpu",
+  "dtype": "float32",
+  "outer_updates": 0,
+  "model": "Qwen/Qwen3-0.6B-Base",
+  "model_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "titans_revision": "c60b4efaa3a3c6df4deebd57cbccf75947b87cad",
+  "torch": "2.11.0+cu130",
+  "transformers": "4.57.6",
+  "numpy": "2.1.3",
+  "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "started": "2026-11-18T15:15:38.516244+00:00",
+  "finished": "2026-11-18T15:16:22.704909+00:00",
+  "source_commit": "2edba5f05f3dd0544d1cdaec436572fae6a6437c",
+  "rows": [
+    {
+      "seed": 42,
+      "geometry": "ham_geometry",
+      "config": {
+        "heads": 2,
+        "dimension": 32,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "q_equals_k",
+      "input_sha256": "db7c2b7a1c1ef71f688111a77da85f3e924788ccfe990a04fcc7bad32732a5bf",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.03125274181365967,
+            "cosine": 0.024800557643175125,
+            "output_norm": 0.07256297767162323
+          },
+          "post": {
+            "mse": 0.03125274181365967,
+            "cosine": 0.024800557643175125,
+            "output_norm": 0.07256297767162323
+          },
+          "post_original": {
+            "mse": 0.03125274181365967,
+            "cosine": 0.024800557643175125,
+            "output_norm": 0.07256297767162323
+          },
+          "post_alternate": {
+            "mse": 0.031100261956453323,
+            "cosine": 0.07234862446784973,
+            "output_norm": 0.07256297767162323
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.03125274181365967,
+            "cosine": 0.024800557643175125,
+            "output_norm": 0.07256297767162323
+          },
+          "post": {
+            "mse": 0.03125273808836937,
+            "cosine": 0.02480057068169117,
+            "output_norm": 0.07256235927343369
+          },
+          "post_original": {
+            "mse": 0.03125273808836937,
+            "cosine": 0.02480057068169117,
+            "output_norm": 0.07256235927343369
+          },
+          "post_alternate": {
+            "mse": 0.031100261956453323,
+            "cosine": 0.07234910130500793,
+            "output_norm": 0.07256235927343369
+          },
+          "fast_weight_delta": 3.444302135936739e-05,
+          "momentum_norm": 3.4451799288056984e-05,
+          "gradient_norm": {
+            "weighted": 3.4451799288056984e-05,
+            "raw": 0.028536882351235575
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.03133463114500046,
+            "cosine": -0.00894162617623806,
+            "output_norm": 0.06203017011284828
+          },
+          "post": {
+            "mse": 0.031334638595581055,
+            "cosine": -0.008942874148488045,
+            "output_norm": 0.06203027069568634
+          },
+          "post_original": {
+            "mse": 0.031334638595581055,
+            "cosine": -0.008942874148488045,
+            "output_norm": 0.06203027069568634
+          },
+          "post_alternate": {
+            "mse": 0.031223062425851822,
+            "cosine": 0.03175659105181694,
+            "output_norm": 0.06203027069568634
+          },
+          "fast_weight_delta": 3.444302135936739e-05,
+          "momentum_norm": 3.4451799288056984e-05,
+          "gradient_norm": {
+            "weighted": 3.4451799288056984e-05,
+            "raw": 0.028536882351235575
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.031100261956453323,
+            "cosine": 0.07234862446784973,
+            "output_norm": 0.07256297767162323
+          },
+          "post": {
+            "mse": 0.03110024705529213,
+            "cosine": 0.07235335558652878,
+            "output_norm": 0.07256189733743668
+          },
+          "post_original": {
+            "mse": 0.03125276416540146,
+            "cosine": 0.02479279227554798,
+            "output_norm": 0.07256189733743668
+          },
+          "post_alternate": {
+            "mse": 0.03110024705529213,
+            "cosine": 0.07235335558652878,
+            "output_norm": 0.07256189733743668
+          },
+          "fast_weight_delta": 3.2083014017470904e-05,
+          "momentum_norm": 3.2078405721152496e-05,
+          "gradient_norm": {
+            "weighted": 3.2078405721152496e-05,
+            "raw": 0.026683755253743613
+          }
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "geometry": "native_geometry",
+      "config": {
+        "heads": 8,
+        "dimension": 128,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "q_equals_k",
+      "input_sha256": "61cab5c55114c4b9082541fb0abd00742439cc5980240973eb7e8ec95c8c8824",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.1154368445277214,
+            "cosine": -0.0047313799150288105,
+            "output_norm": 14.827455520629883
+          },
+          "post": {
+            "mse": 0.1154368445277214,
+            "cosine": -0.0047313799150288105,
+            "output_norm": 14.827455520629883
+          },
+          "post_original": {
+            "mse": 0.1154368445277214,
+            "cosine": -0.0047313799150288105,
+            "output_norm": 14.827455520629883
+          },
+          "post_alternate": {
+            "mse": 0.11198544502258301,
+            "cosine": 0.05485796183347702,
+            "output_norm": 14.827455520629883
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.1154368445277214,
+            "cosine": -0.0047313799150288105,
+            "output_norm": 14.827455520629883
+          },
+          "post": {
+            "mse": 0.11513050645589828,
+            "cosine": -0.004551416262984276,
+            "output_norm": 14.807029724121094
+          },
+          "post_original": {
+            "mse": 0.11513050645589828,
+            "cosine": -0.004551416262984276,
+            "output_norm": 14.807029724121094
+          },
+          "post_alternate": {
+            "mse": 0.11169413477182388,
+            "cosine": 0.05486036092042923,
+            "output_norm": 14.807029724121094
+          },
+          "fast_weight_delta": 0.001822235303937127,
+          "momentum_norm": 0.0018222339335957167,
+          "gradient_norm": {
+            "weighted": 0.0018222341897426064,
+            "raw": 1.3617697164244165
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.18174779415130615,
+            "cosine": 0.013905903324484825,
+            "output_norm": 18.92948341369629
+          },
+          "post": {
+            "mse": 0.18174009025096893,
+            "cosine": 0.013918020762503147,
+            "output_norm": 18.929109573364258
+          },
+          "post_original": {
+            "mse": 0.18174009025096893,
+            "cosine": 0.013918020762503147,
+            "output_norm": 18.929109573364258
+          },
+          "post_alternate": {
+            "mse": 0.1809583306312561,
+            "cosine": 0.024490341544151306,
+            "output_norm": 18.929109573364258
+          },
+          "fast_weight_delta": 0.001822235303937127,
+          "momentum_norm": 0.0018222339335957167,
+          "gradient_norm": {
+            "weighted": 0.0018222341897426064,
+            "raw": 1.3617697164244165
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.11198544502258301,
+            "cosine": 0.05485796183347702,
+            "output_norm": 14.827455520629883
+          },
+          "post": {
+            "mse": 0.11169242858886719,
+            "cosine": 0.05499803647398949,
+            "output_norm": 14.807470321655273
+          },
+          "post_original": {
+            "mse": 0.11514551937580109,
+            "cosine": -0.004700974095612764,
+            "output_norm": 14.807470321655273
+          },
+          "post_alternate": {
+            "mse": 0.11169242858886719,
+            "cosine": 0.05499803647398949,
+            "output_norm": 14.807470321655273
+          },
+          "fast_weight_delta": 0.0017798234877884627,
+          "momentum_norm": 0.0017798242236673027,
+          "gradient_norm": {
+            "weighted": 0.0017798244953727426,
+            "raw": 1.3333782340521656
+          }
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "geometry": "native_geometry",
+      "config": {
+        "heads": 8,
+        "dimension": 128,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "native_qk",
+      "input_sha256": "2b8bc9a913089dcfb672d5f0e826c465ca50237183df89eaa62a6b0baf5c025b",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.09836992621421814,
+            "cosine": -0.023194992914795876,
+            "output_norm": 13.525964736938477
+          },
+          "post": {
+            "mse": 0.09836992621421814,
+            "cosine": -0.023194992914795876,
+            "output_norm": 13.525964736938477
+          },
+          "post_original": {
+            "mse": 0.09836992621421814,
+            "cosine": -0.023194992914795876,
+            "output_norm": 13.525964736938477
+          },
+          "post_alternate": {
+            "mse": 0.09775613993406296,
+            "cosine": -0.011578183621168137,
+            "output_norm": 13.525964736938477
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.09836992621421814,
+            "cosine": -0.023194992914795876,
+            "output_norm": 13.525964736938477
+          },
+          "post": {
+            "mse": 0.0983627587556839,
+            "cosine": -0.023177586495876312,
+            "output_norm": 13.525495529174805
+          },
+          "post_original": {
+            "mse": 0.0983627587556839,
+            "cosine": -0.023177586495876312,
+            "output_norm": 13.525495529174805
+          },
+          "post_alternate": {
+            "mse": 0.09775015711784363,
+            "cosine": -0.0115829948335886,
+            "output_norm": 13.525495529174805
+          },
+          "fast_weight_delta": 0.001822235303937127,
+          "momentum_norm": 0.0018222339335957167,
+          "gradient_norm": {
+            "weighted": 0.0018222341897426064,
+            "raw": 1.3617697164244165
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.115702323615551,
+            "cosine": 0.022937143221497536,
+            "output_norm": 14.95669937133789
+          },
+          "post": {
+            "mse": 0.11569888889789581,
+            "cosine": 0.022948913276195526,
+            "output_norm": 14.956510543823242
+          },
+          "post_original": {
+            "mse": 0.11569888889789581,
+            "cosine": 0.022948913276195526,
+            "output_norm": 14.956510543823242
+          },
+          "post_alternate": {
+            "mse": 0.11664282530546188,
+            "cosine": 0.006792164407670498,
+            "output_norm": 14.956510543823242
+          },
+          "fast_weight_delta": 0.001822235303937127,
+          "momentum_norm": 0.0018222339335957167,
+          "gradient_norm": {
+            "weighted": 0.0018222341897426064,
+            "raw": 1.3617697164244165
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.09775613993406296,
+            "cosine": -0.011578183621168137,
+            "output_norm": 13.525964736938477
+          },
+          "post": {
+            "mse": 0.09775019437074661,
+            "cosine": -0.011575782671570778,
+            "output_norm": 13.525525093078613
+          },
+          "post_original": {
+            "mse": 0.09836357086896896,
+            "cosine": -0.023185260593891144,
+            "output_norm": 13.525525093078613
+          },
+          "post_alternate": {
+            "mse": 0.09775019437074661,
+            "cosine": -0.011575782671570778,
+            "output_norm": 13.525525093078613
+          },
+          "fast_weight_delta": 0.0017798234877884627,
+          "momentum_norm": 0.0017798242236673027,
+          "gradient_norm": {
+            "weighted": 0.0017798244953727426,
+            "raw": 1.3333782340521656
+          }
+        }
+      }
+    },
+    {
+      "seed": 43,
+      "geometry": "ham_geometry",
+      "config": {
+        "heads": 2,
+        "dimension": 32,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "q_equals_k",
+      "input_sha256": "18bdd25c80d1e5c1706f9ca627ad5bae04359d38c60d53ed8d3e0487502d088f",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.03229837492108345,
+            "cosine": -0.2601531147956848,
+            "output_norm": 0.08203808218240738
+          },
+          "post": {
+            "mse": 0.03229837492108345,
+            "cosine": -0.2601531147956848,
+            "output_norm": 0.08203808218240738
+          },
+          "post_original": {
+            "mse": 0.03229837492108345,
+            "cosine": -0.2601531147956848,
+            "output_norm": 0.08203808218240738
+          },
+          "post_alternate": {
+            "mse": 0.031528130173683167,
+            "cosine": -0.04770807921886444,
+            "output_norm": 0.08203808218240738
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.03229837492108345,
+            "cosine": -0.2601531147956848,
+            "output_norm": 0.08203808218240738
+          },
+          "post": {
+            "mse": 0.032298363745212555,
+            "cosine": -0.26015567779541016,
+            "output_norm": 0.08203674852848053
+          },
+          "post_original": {
+            "mse": 0.032298363745212555,
+            "cosine": -0.26015567779541016,
+            "output_norm": 0.08203674852848053
+          },
+          "post_alternate": {
+            "mse": 0.03152814880013466,
+            "cosine": -0.04771445319056511,
+            "output_norm": 0.08203674852848053
+          },
+          "fast_weight_delta": 4.2298302736363526e-05,
+          "momentum_norm": 4.230141165806328e-05,
+          "gradient_norm": {
+            "weighted": 4.230141165806328e-05,
+            "raw": 0.03143921391607554
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.03096715360879898,
+            "cosine": 0.10814619064331055,
+            "output_norm": 0.08021702617406845
+          },
+          "post": {
+            "mse": 0.03096715547144413,
+            "cosine": 0.1081458106637001,
+            "output_norm": 0.08021702617406845
+          },
+          "post_original": {
+            "mse": 0.03096715547144413,
+            "cosine": 0.1081458106637001,
+            "output_norm": 0.08021702617406845
+          },
+          "post_alternate": {
+            "mse": 0.030857104808092117,
+            "cosine": 0.13918857276439667,
+            "output_norm": 0.08021702617406845
+          },
+          "fast_weight_delta": 4.2298302736363526e-05,
+          "momentum_norm": 4.230141165806328e-05,
+          "gradient_norm": {
+            "weighted": 4.230141165806328e-05,
+            "raw": 0.03143921391607554
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.031528130173683167,
+            "cosine": -0.04770807921886444,
+            "output_norm": 0.08203808218240738
+          },
+          "post": {
+            "mse": 0.03152813762426376,
+            "cosine": -0.04771171510219574,
+            "output_norm": 0.08203648775815964
+          },
+          "post_original": {
+            "mse": 0.032298360019922256,
+            "cosine": -0.2601555585861206,
+            "output_norm": 0.08203648775815964
+          },
+          "post_alternate": {
+            "mse": 0.03152813762426376,
+            "cosine": -0.04771171510219574,
+            "output_norm": 0.08203648775815964
+          },
+          "fast_weight_delta": 3.7278547464647886e-05,
+          "momentum_norm": 3.727944702423224e-05,
+          "gradient_norm": {
+            "weighted": 3.727944702423224e-05,
+            "raw": 0.02776100953420275
+          }
+        }
+      }
+    },
+    {
+      "seed": 43,
+      "geometry": "native_geometry",
+      "config": {
+        "heads": 8,
+        "dimension": 128,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "q_equals_k",
+      "input_sha256": "6fbca91826e64b73344254df2ece1c95bfcca14aa84fbf5c822623e8fbe542dc",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.22835160791873932,
+            "cosine": 0.026327218860387802,
+            "output_norm": 21.35796356201172
+          },
+          "post": {
+            "mse": 0.22835160791873932,
+            "cosine": 0.026327218860387802,
+            "output_norm": 21.35796356201172
+          },
+          "post_original": {
+            "mse": 0.22835160791873932,
+            "cosine": 0.026327218860387802,
+            "output_norm": 21.35796356201172
+          },
+          "post_alternate": {
+            "mse": 0.23197224736213684,
+            "cosine": -0.017070040106773376,
+            "output_norm": 21.35796356201172
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.22835160791873932,
+            "cosine": 0.026327218860387802,
+            "output_norm": 21.35796356201172
+          },
+          "post": {
+            "mse": 0.22656579315662384,
+            "cosine": 0.02657344751060009,
+            "output_norm": 21.27273178100586
+          },
+          "post_original": {
+            "mse": 0.22656579315662384,
+            "cosine": 0.02657344751060009,
+            "output_norm": 21.27273178100586
+          },
+          "post_alternate": {
+            "mse": 0.23018662631511688,
+            "cosine": -0.01700037717819214,
+            "output_norm": 21.27273178100586
+          },
+          "fast_weight_delta": 0.004391434439813098,
+          "momentum_norm": 0.004391439495418088,
+          "gradient_norm": {
+            "weighted": 0.0043914455478543,
+            "raw": 3.2793392516058217
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.12513840198516846,
+            "cosine": 0.04834039881825447,
+            "output_norm": 15.69564437866211
+          },
+          "post": {
+            "mse": 0.1250946819782257,
+            "cosine": 0.04832340031862259,
+            "output_norm": 15.692688941955566
+          },
+          "post_original": {
+            "mse": 0.1250946819782257,
+            "cosine": 0.04832340031862259,
+            "output_norm": 15.692688941955566
+          },
+          "post_alternate": {
+            "mse": 0.1269187331199646,
+            "cosine": 0.018567120656371117,
+            "output_norm": 15.692688941955566
+          },
+          "fast_weight_delta": 0.004391434439813098,
+          "momentum_norm": 0.004391439495418088,
+          "gradient_norm": {
+            "weighted": 0.0043914455478543,
+            "raw": 3.2793392516058217
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.23197224736213684,
+            "cosine": -0.017070040106773376,
+            "output_norm": 21.35796356201172
+          },
+          "post": {
+            "mse": 0.2301521897315979,
+            "cosine": -0.01678534969687462,
+            "output_norm": 21.271936416625977
+          },
+          "post_original": {
+            "mse": 0.22656618058681488,
+            "cosine": 0.026370976120233536,
+            "output_norm": 21.271936416625977
+          },
+          "post_alternate": {
+            "mse": 0.2301521897315979,
+            "cosine": -0.01678534969687462,
+            "output_norm": 21.271936416625977
+          },
+          "fast_weight_delta": 0.004429074500992191,
+          "momentum_norm": 0.004429079765113724,
+          "gradient_norm": {
+            "weighted": 0.004429086129728118,
+            "raw": 3.313936142519471
+          }
+        }
+      }
+    },
+    {
+      "seed": 43,
+      "geometry": "native_geometry",
+      "config": {
+        "heads": 8,
+        "dimension": 128,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "native_qk",
+      "input_sha256": "f78b0b872d8ba9dedf3ba2959f3e6cffd169eff16d8024ef1ab678988e6bf23b",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.11076701432466507,
+            "cosine": -0.022425353527069092,
+            "output_norm": 14.431279182434082
+          },
+          "post": {
+            "mse": 0.11076701432466507,
+            "cosine": -0.022425353527069092,
+            "output_norm": 14.431279182434082
+          },
+          "post_original": {
+            "mse": 0.11076701432466507,
+            "cosine": -0.022425353527069092,
+            "output_norm": 14.431279182434082
+          },
+          "post_alternate": {
+            "mse": 0.10854584723711014,
+            "cosine": 0.016976555809378624,
+            "output_norm": 14.431279182434082
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.11076701432466507,
+            "cosine": -0.022425353527069092,
+            "output_norm": 14.431279182434082
+          },
+          "post": {
+            "mse": 0.11075706034898758,
+            "cosine": -0.022408610209822655,
+            "output_norm": 14.430644989013672
+          },
+          "post_original": {
+            "mse": 0.11075706034898758,
+            "cosine": -0.022408610209822655,
+            "output_norm": 14.430644989013672
+          },
+          "post_alternate": {
+            "mse": 0.10853692144155502,
+            "cosine": 0.016976872459053993,
+            "output_norm": 14.430644989013672
+          },
+          "fast_weight_delta": 0.004391434439813098,
+          "momentum_norm": 0.004391439495418088,
+          "gradient_norm": {
+            "weighted": 0.0043914455478543,
+            "raw": 3.2793392516058217
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.10379563271999359,
+            "cosine": 0.017407754436135292,
+            "output_norm": 14.090271949768066
+          },
+          "post": {
+            "mse": 0.1037919819355011,
+            "cosine": 0.01741981878876686,
+            "output_norm": 14.09005069732666
+          },
+          "post_original": {
+            "mse": 0.1037919819355011,
+            "cosine": 0.01741981878876686,
+            "output_norm": 14.09005069732666
+          },
+          "post_alternate": {
+            "mse": 0.10499594360589981,
+            "cosine": -0.004454662092030048,
+            "output_norm": 14.09005069732666
+          },
+          "fast_weight_delta": 0.004391434439813098,
+          "momentum_norm": 0.004391439495418088,
+          "gradient_norm": {
+            "weighted": 0.0043914455478543,
+            "raw": 3.2793392516058217
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.10854584723711014,
+            "cosine": 0.016976555809378624,
+            "output_norm": 14.431279182434082
+          },
+          "post": {
+            "mse": 0.10853592306375504,
+            "cosine": 0.01699638180434704,
+            "output_norm": 14.430652618408203
+          },
+          "post_original": {
+            "mse": 0.1107582375407219,
+            "cosine": -0.022427508607506752,
+            "output_norm": 14.430652618408203
+          },
+          "post_alternate": {
+            "mse": 0.10853592306375504,
+            "cosine": 0.01699638180434704,
+            "output_norm": 14.430652618408203
+          },
+          "fast_weight_delta": 0.004429074500992191,
+          "momentum_norm": 0.004429079765113724,
+          "gradient_norm": {
+            "weighted": 0.004429086129728118,
+            "raw": 3.313936142519471
+          }
+        }
+      }
+    },
+    {
+      "seed": 44,
+      "geometry": "ham_geometry",
+      "config": {
+        "heads": 2,
+        "dimension": 32,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "q_equals_k",
+      "input_sha256": "d74e6a998793f059d05e032d9e0dedd1bdfaf82356fdc98d42825ef6f0b585c2",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.0312499962747097,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.0312499962747097,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.0312499962747097,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.03125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.031076712533831596,
+            "cosine": 0.08264030516147614,
+            "output_norm": 0.06619195640087128
+          },
+          "post": {
+            "mse": 0.031076712533831596,
+            "cosine": 0.08264030516147614,
+            "output_norm": 0.06619195640087128
+          },
+          "post_original": {
+            "mse": 0.031076712533831596,
+            "cosine": 0.08264030516147614,
+            "output_norm": 0.06619195640087128
+          },
+          "post_alternate": {
+            "mse": 0.031020265072584152,
+            "cosine": 0.10193604230880737,
+            "output_norm": 0.06619195640087128
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.031076712533831596,
+            "cosine": 0.08264030516147614,
+            "output_norm": 0.06619195640087128
+          },
+          "post": {
+            "mse": 0.031076734885573387,
+            "cosine": 0.08263310045003891,
+            "output_norm": 0.06618979573249817
+          },
+          "post_original": {
+            "mse": 0.031076734885573387,
+            "cosine": 0.08263310045003891,
+            "output_norm": 0.06618979573249817
+          },
+          "post_alternate": {
+            "mse": 0.03102031722664833,
+            "cosine": 0.10192007571458817,
+            "output_norm": 0.06618979573249817
+          },
+          "fast_weight_delta": 3.3670896534616146e-05,
+          "momentum_norm": 3.3657445559865316e-05,
+          "gradient_norm": {
+            "weighted": 3.3657445559865316e-05,
+            "raw": 0.027519484475771284
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.03087731823325157,
+            "cosine": 0.14239805936813354,
+            "output_norm": 0.0721420869231224
+          },
+          "post": {
+            "mse": 0.03087732382118702,
+            "cosine": 0.1423967182636261,
+            "output_norm": 0.07214198261499405
+          },
+          "post_original": {
+            "mse": 0.03087732382118702,
+            "cosine": 0.1423967182636261,
+            "output_norm": 0.07214198261499405
+          },
+          "post_alternate": {
+            "mse": 0.031173989176750183,
+            "cosine": 0.04934610426425934,
+            "output_norm": 0.07214198261499405
+          },
+          "fast_weight_delta": 3.3670896534616146e-05,
+          "momentum_norm": 3.3657445559865316e-05,
+          "gradient_norm": {
+            "weighted": 3.3657445559865316e-05,
+            "raw": 0.027519484475771284
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.031020265072584152,
+            "cosine": 0.10193604230880737,
+            "output_norm": 0.06619195640087128
+          },
+          "post": {
+            "mse": 0.031020257622003555,
+            "cosine": 0.10194030404090881,
+            "output_norm": 0.06619076430797577
+          },
+          "post_original": {
+            "mse": 0.031076733022928238,
+            "cosine": 0.08263394236564636,
+            "output_norm": 0.06619076430797577
+          },
+          "post_alternate": {
+            "mse": 0.031020257622003555,
+            "cosine": 0.10194030404090881,
+            "output_norm": 0.06619076430797577
+          },
+          "fast_weight_delta": 3.265183661208944e-05,
+          "momentum_norm": 3.265469714864802e-05,
+          "gradient_norm": {
+            "weighted": 3.265469714864802e-05,
+            "raw": 0.02677949487066586
+          }
+        }
+      }
+    },
+    {
+      "seed": 44,
+      "geometry": "native_geometry",
+      "config": {
+        "heads": 8,
+        "dimension": 128,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "q_equals_k",
+      "input_sha256": "0fea56dee1da7613c54bac40c77e83da197a4e8d114be0b000b71496e03fc1ae",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.007812499068677425,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.1454562246799469,
+            "cosine": 0.0057340022176504135,
+            "output_norm": 16.812660217285156
+          },
+          "post": {
+            "mse": 0.1454562246799469,
+            "cosine": 0.0057340022176504135,
+            "output_norm": 16.812660217285156
+          },
+          "post_original": {
+            "mse": 0.1454562246799469,
+            "cosine": 0.0057340022176504135,
+            "output_norm": 16.812660217285156
+          },
+          "post_alternate": {
+            "mse": 0.1442195326089859,
+            "cosine": 0.0245647132396698,
+            "output_norm": 16.812660217285156
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.1454562246799469,
+            "cosine": 0.0057340022176504135,
+            "output_norm": 16.812660217285156
+          },
+          "post": {
+            "mse": 0.1449228972196579,
+            "cosine": 0.005888206884264946,
+            "output_norm": 16.780719757080078
+          },
+          "post_original": {
+            "mse": 0.1449228972196579,
+            "cosine": 0.005888206884264946,
+            "output_norm": 16.780719757080078
+          },
+          "post_alternate": {
+            "mse": 0.14370125532150269,
+            "cosine": 0.024525359272956848,
+            "output_norm": 16.780719757080078
+          },
+          "fast_weight_delta": 0.002325726916147616,
+          "momentum_norm": 0.0023257575361394778,
+          "gradient_norm": {
+            "weighted": 0.002325758054879298,
+            "raw": 1.8565354352379912
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.23815853893756866,
+            "cosine": -0.016938598826527596,
+            "output_norm": 21.652128219604492
+          },
+          "post": {
+            "mse": 0.23811106383800507,
+            "cosine": -0.016927402466535568,
+            "output_norm": 21.649930953979492
+          },
+          "post_original": {
+            "mse": 0.23811106383800507,
+            "cosine": -0.016927402466535568,
+            "output_norm": 21.649930953979492
+          },
+          "post_alternate": {
+            "mse": 0.23747724294662476,
+            "cosine": -0.009432768449187279,
+            "output_norm": 21.649930953979492
+          },
+          "fast_weight_delta": 0.002325726916147616,
+          "momentum_norm": 0.0023257575361394778,
+          "gradient_norm": {
+            "weighted": 0.002325758054879298,
+            "raw": 1.8565354352379912
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.1442195326089859,
+            "cosine": 0.0245647132396698,
+            "output_norm": 16.812660217285156
+          },
+          "post": {
+            "mse": 0.14369338750839233,
+            "cosine": 0.024698544293642044,
+            "output_norm": 16.780935287475586
+          },
+          "post_original": {
+            "mse": 0.1449379175901413,
+            "cosine": 0.005712623707950115,
+            "output_norm": 16.780935287475586
+          },
+          "post_alternate": {
+            "mse": 0.14369338750839233,
+            "cosine": 0.024698544293642044,
+            "output_norm": 16.780935287475586
+          },
+          "fast_weight_delta": 0.002311944278381667,
+          "momentum_norm": 0.002311970473053678,
+          "gradient_norm": {
+            "weighted": 0.002311971008823773,
+            "raw": 1.8426113461671452
+          }
+        }
+      }
+    },
+    {
+      "seed": 44,
+      "geometry": "native_geometry",
+      "config": {
+        "heads": 8,
+        "dimension": 128,
+        "beta": 1.0,
+        "alpha": 0.99,
+        "normalize_keys": true,
+        "window": 16
+      },
+      "mode": "native_qk",
+      "input_sha256": "afe7453f31cba79e0f6144ff8453fe0c13cbd9ad327fcad022624da1d9eb529b",
+      "controls": {
+        "C0": {
+          "pre": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_original": {
+            "mse": 0.0078125,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "post_alternate": {
+            "mse": 0.007812499068677425,
+            "cosine": 0.0,
+            "output_norm": 0.0
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C1": {
+          "pre": {
+            "mse": 0.11537309736013412,
+            "cosine": 0.005821819882839918,
+            "output_norm": 14.865277290344238
+          },
+          "post": {
+            "mse": 0.11537309736013412,
+            "cosine": 0.005821819882839918,
+            "output_norm": 14.865277290344238
+          },
+          "post_original": {
+            "mse": 0.11537309736013412,
+            "cosine": 0.005821819882839918,
+            "output_norm": 14.865277290344238
+          },
+          "post_alternate": {
+            "mse": 0.11112339794635773,
+            "cosine": 0.07900717854499817,
+            "output_norm": 14.865277290344238
+          },
+          "fast_weight_delta": 0.0,
+          "momentum_norm": 0.0,
+          "gradient_norm": null
+        },
+        "C2": {
+          "pre": {
+            "mse": 0.11537309736013412,
+            "cosine": 0.005821819882839918,
+            "output_norm": 14.865277290344238
+          },
+          "post": {
+            "mse": 0.11536118388175964,
+            "cosine": 0.00583735341206193,
+            "output_norm": 14.864516258239746
+          },
+          "post_original": {
+            "mse": 0.11536118388175964,
+            "cosine": 0.00583735341206193,
+            "output_norm": 14.864516258239746
+          },
+          "post_alternate": {
+            "mse": 0.11111285537481308,
+            "cosine": 0.07900308817625046,
+            "output_norm": 14.864516258239746
+          },
+          "fast_weight_delta": 0.002325726916147616,
+          "momentum_norm": 0.0023257575361394778,
+          "gradient_norm": {
+            "weighted": 0.002325758054879298,
+            "raw": 1.8565354352379912
+          }
+        },
+        "C3": {
+          "pre": {
+            "mse": 0.11700504273176193,
+            "cosine": -0.03734789788722992,
+            "output_norm": 14.80549430847168
+          },
+          "post": {
+            "mse": 0.11700151860713959,
+            "cosine": -0.037340421229600906,
+            "output_norm": 14.80528450012207
+          },
+          "post_original": {
+            "mse": 0.11700151860713959,
+            "cosine": -0.037340421229600906,
+            "output_norm": 14.80528450012207
+          },
+          "post_alternate": {
+            "mse": 0.11529276520013809,
+            "cosine": -0.0077941687777638435,
+            "output_norm": 14.80528450012207
+          },
+          "fast_weight_delta": 0.002325726916147616,
+          "momentum_norm": 0.0023257575361394778,
+          "gradient_norm": {
+            "weighted": 0.002325758054879298,
+            "raw": 1.8565354352379912
+          }
+        },
+        "C4": {
+          "pre": {
+            "mse": 0.11112339794635773,
+            "cosine": 0.07900717854499817,
+            "output_norm": 14.865277290344238
+          },
+          "post": {
+            "mse": 0.11111227422952652,
+            "cosine": 0.0790187269449234,
+            "output_norm": 14.864541053771973
+          },
+          "post_original": {
+            "mse": 0.11536244302988052,
+            "cosine": 0.005821496248245239,
+            "output_norm": 14.864541053771973
+          },
+          "post_alternate": {
+            "mse": 0.11111227422952652,
+            "cosine": 0.0790187269449234,
+            "output_norm": 14.864541053771973
+          },
+          "fast_weight_delta": 0.002311944278381667,
+          "momentum_norm": 0.002311970473053678,
+          "gradient_norm": {
+            "weighted": 0.002311971008823773,
+            "raw": 1.8426113461671452
+          }
+        }
+      }
+    }
+  ]
+}
