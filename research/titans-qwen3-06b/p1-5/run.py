@@ -84,7 +84,8 @@ def main():
                         same_tree(tuple(t[:, -1] for t in state.updates), observed["fast"])
                         same_tree(tuple(t[0] for t in state.states[1]), observed["momentum"])
                     print("INSTRUMENTATION_EQUIVALENCE_PASS", flush=True)
-                row["stages"] = summarize(observations, tensors)
+                tokens, locations = plan[3][0]
+                row["stages"] = summarize(observations, tensors, [512-len(tokens)+i for i in locations])
                 rows.append(row)
                 for condition, metrics in row["metrics"].items():
                     for metric, matrix in metrics.items():
@@ -155,6 +156,8 @@ def main():
     save(a.output / "decision.json", dict(format="minicells.titans-p1-5.v1",
          status="DIAGNOSTIC_ONLY", diagnostic_status="COMPLETE", device="cpu",
          outer_updates=0, checkpoints=6, episodes_per_checkpoint=16, conditions_per_episode=3,
+         python=sys.version, torch=torch.__version__, cpu_threads=a.threads,
+         model_revision=REV, upstream_revision=UP, artifact_commit=ART,
          p1_4_reproduction="PASS", instrumentation_equivalence="PASS"))
     save(a.output / "sha256.json", {str(p.relative_to(a.output)):sha(p)
                                    for p in a.output.rglob("*") if p.is_file()})

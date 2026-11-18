@@ -26,7 +26,8 @@ def observe(wrapper):
             with capture(memory, write=True) as inner:
                 commit()
         finally:
-            del memory.memory_grads
+            if "memory_grads" in vars(memory):
+                del memory.memory_grads
         state = wrapper.state
         fast = tuple(t[:, -1] for t in state.updates)
         same_tree(fast, state.states[0])
@@ -66,7 +67,7 @@ def compare(a, b, c):
                 swap_random_norm_ratio=(d.norm(dim=-1)/e.norm(dim=-1).clamp_min(1e-30)).tolist())
 
 
-def summarize(records, tensors):
+def summarize(records, tensors, positions):
     a,b,c=records
     for key in ('keys','lr','beta','decay','initial'):
         same_tree(a[key],b[key])
@@ -78,6 +79,13 @@ def summarize(records, tensors):
         if not isinstance(vals[0],tuple):
             vals=[(v,) for v in vals]
         result[key]=[compare(*v) for v in zip(*vals)]
+    selected = torch.zeros(512, dtype=torch.bool)
+    selected[positions] = True
+    if a["loss"].shape[-1] == 512:
+        result["loss_positions"] = {
+            label: dict(target=record["loss"][..., selected].tolist(),
+                        other_mean=record["loss"][..., ~selected].mean(-1).tolist())
+            for label, record in zip(("baseline", "swap", "random"), records)}
     result['read']=[compare(*(t.transpose(0,1) for t in tensors['reads'].values()))]
     result['controls']={k:dict(values=a[k].tolist(),mean=a[k].mean().item(),
                                min=a[k].min().item(),max=a[k].max().item()) for k in ('lr','beta','decay')}
