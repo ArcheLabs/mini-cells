@@ -76,11 +76,25 @@ def evaluate(model, wrapper, tokenizer, plans):
             forward(filler[:pad] + tokens, 0)
             targets = wrapper.pending[2][0, [pad + p for p in locations]].reshape(4, 8, 128)
             targets = expand_values(targets, wrapper.memory.retrieve_heads_per_memory_head)
+            addresses = expand_values(
+                wrapper.pending[1][0, [pad + p for p in locations]].reshape(4, 8, 128),
+                wrapper.memory.retrieve_heads_per_memory_head)
             wrapper.commit()
-            return wrapper.state, targets
+            return wrapper.state, targets, addresses
 
-        correct, prototypes = write(writes[0])
-        donor, _ = write(writes[1])
+        correct, prototypes, addresses = write(writes[0])
+        donor, _, _ = write(writes[1])
+        candidates = normalize(prototypes.float())
+        oracle_scores = finite(candidates @ candidates.T)
+        expected = torch.arange(len(words), device=device)
+        if not torch.equal(oracle_scores.argmax(-1), expected) or (oracle_scores == oracle_scores.max(-1, keepdim=True).values).sum(-1).ne(1).any():
+            raise ValueError("Oracle Value probe failed to identify distinct candidates")
+        address_reads = {}
+        for label, cell in (("correct", correct), ("swapped", donor)):
+            read, returned = wrapper.memory.read_only((addresses[None], None, None), cell)
+            if returned is not cell:
+                raise ValueError("read_only did not return the original state")
+            address_reads[label] = read[0]
         for i, key in enumerate(keys):
             query = queries[i]
             qkv = None
@@ -95,10 +109,19 @@ def evaluate(model, wrapper, tokenizer, plans):
                 prediction = logits[ids]
                 # Empty bypasses memory. A zero read gives tied candidates; score ties fractionally.
                 read = observed["read"][0, -1] if state is not None else torch.zeros_like(prototypes[0])
-                scores = finite(normalize(prototypes.float()) @ normalize(read.float(), dim=0))
+                scores = finite(candidates @ normalize(read.float(), dim=0))
+                matched = address_reads[condition][i] if state is not None else torch.zeros_like(read)
+                matched_scores = finite(candidates @ normalize(matched.float(), dim=0))
+                matched_winners = matched_scores == matched_scores.max()
+                j = (i + 1) % len(words)
                 winners = scores == scores.max()
                 rows.append(dict(episode=episode, keys=keys, values=words, query_index=i,
                     condition=condition, cosine_scores=scores.tolist(),
+                    oracle_correct_scores=oracle_scores[i].tolist(),
+                    oracle_swapped_scores=oracle_scores[j].tolist(),
+                    same_address_scores=matched_scores.tolist(),
+                    same_address_correct_credit=float(matched_winners[i]) / int(matched_winners.sum()),
+                    same_address_swapped_credit=float(matched_winners[j]) / int(matched_winners.sum()),
                     retrieval_credit=float(winners[i]) / int(winners.sum()),
                     lm_candidate_correct=int(prediction.argmax()) == i,
                     lm_log_probability=logits.log_softmax(0)[ids[i]].item(),
@@ -143,15 +166,16 @@ def main():
             save(args.output / f"{key}.json", rows)
             summary[key] = dict(conditions={c: {k: mean(r[k] for r in rows if r["condition"] == c)
                 for k in ("retrieval_credit", "swapped_retrieval_credit", "lm_candidate_correct",
-                          "lm_log_probability")} for c in ("correct", "swapped", "empty")},
+                          "lm_log_probability", "same_address_correct_credit", "same_address_swapped_credit")} for c in ("correct", "swapped", "empty")},
                 checkpoint_sha256=sha(checkpoint), restored=restored)
     save(args.output / "summary.json", summary)
     lines = ["# Random binding diagnostic", "",
-             "| Checkpoint | Condition | Direct probe Recall@1 | LM candidate accuracy | Mean target log P |",
-             "|---|---|---:|---:|---:|"]
+             "| Checkpoint | Condition | Question probe Recall@1 | Same-address Recall@1 | Same-address swapped-value credit | LM candidate accuracy | Mean target log P |",
+             "|---|---|---:|---:|---:|---:|---:|"]
     for key, entry in summary.items():
         for condition, m in entry["conditions"].items():
             lines.append(f"| {key} | {condition} | {m['retrieval_credit']:.3f} | "
+                         f"{m['same_address_correct_credit']:.3f} | {m['same_address_swapped_credit']:.3f} | "
                          f"{m['lm_candidate_correct']:.3f} | {m['lm_log_probability']:.5f} |")
     lines += ["", "Direct probe: cosine against contextualized write V, repeated across the two Q heads per KV group.",
               "This is a geometry probe; low scores alone cannot rule out information in another representation.",
