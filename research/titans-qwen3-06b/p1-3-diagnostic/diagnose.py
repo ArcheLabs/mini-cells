@@ -52,6 +52,10 @@ def build_episodes(encode, count):
     return plans
 
 
+def expand_values(values, group_size):
+    return values.repeat_interleave(group_size, dim=1).flatten(1)
+
+
 @torch.no_grad()
 def evaluate(model, wrapper, tokenizer, plans):
     device = next(model.parameters()).device
@@ -71,7 +75,7 @@ def evaluate(model, wrapper, tokenizer, plans):
             wrapper.state = None
             forward(filler[:pad] + tokens, 0)
             targets = wrapper.pending[2][0, [pad + p for p in locations]].reshape(4, 8, 128)
-            targets = targets[:, :, None, :].expand(-1, -1, 4, -1).reshape(4, 2048)
+            targets = expand_values(targets, wrapper.memory.retrieve_heads_per_memory_head)
             wrapper.commit()
             return wrapper.state, targets
 
@@ -149,7 +153,7 @@ def main():
         for condition, m in entry["conditions"].items():
             lines.append(f"| {key} | {condition} | {m['retrieval_credit']:.3f} | "
                          f"{m['lm_candidate_correct']:.3f} | {m['lm_log_probability']:.5f} |")
-    lines += ["", "Direct probe: cosine against contextualized write V, repeated across the four Q heads per KV group.",
+    lines += ["", "Direct probe: cosine against contextualized write V, repeated across the two Q heads per KV group.",
               "This is a geometry probe; low scores alone cannot rule out information in another representation.",
               "Empty has four tied retrieval candidates (0.25 credit). No outer training."]
     (args.output / "RESULTS.md").write_text("\n".join(lines) + "\n")
