@@ -21,7 +21,8 @@ def run(*args, cwd=None, timeout=None):
 def main():
     script_version = os.getenv("KAGGLE_SCRIPT_VERSION_ID") or SCRIPT_VERSION_ID
     if not (script_version.isdecimal() and int(script_version) > 0):
-        raise ValueError("Set SCRIPT_VERSION_ID to the numeric Kaggle scriptVersionId if Kaggle does not inject it")
+        script_version = None
+        print("KAGGLE_SCRIPT_VERSION_ID unavailable; recording exact Git source commit", flush=True)
     if script_version:
         os.environ["KAGGLE_SCRIPT_VERSION_ID"] = script_version
     os.environ["PYTHONUNBUFFERED"] = "1"
