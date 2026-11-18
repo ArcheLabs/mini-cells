@@ -1,0 +1,13 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1794988419.242278      96 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+Traceback (most recent call last):
+  File "/kaggle/working/p14-cw5m6qkb/layer-location-source/research/titans-qwen3-06b/p1-4/run.py", line 152, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/working/p14-cw5m6qkb/layer-location-source/research/titans-qwen3-06b/p1-4/run.py", line 105, in main
+    restore(wrapper, path, step)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/working/p14-cw5m6qkb/layer-location-source/research/titans-qwen3-06b/p1-2/replay.py", line 81, in restore
+    param.copy_(value)
+    ~~~~~~~~~~~^^^^^^^
+RuntimeError: unsupported operation: more than one element of the written-to tensor refers to a single memory location. Please clone() the tensor before performing the operation.
