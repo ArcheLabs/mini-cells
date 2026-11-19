@@ -57,16 +57,21 @@ def verify(model, cell, device):
         require(cache.get_seq_length() == index%2+1, "Cache did not advance")
         require(cell.position == cell.state.seq_index == index+1, "Cell did not persist")
         if index == 0:
-            earliest = cell.state.updates
+            # The pinned store carries states[0] into the next recurrence.
+            # updates is a sibling unsqueeze view used for the immediate read,
+            # so a later loss need not depend on that specific view.
+            earliest = cell.state.states[0]
     loss = output.logits.float().square().mean()
     slow = tuple(memory.memory_model_parameters)
     gradients = torch.autograd.grad(loss, (*earliest,*slow), allow_unused=True)
-    def check_slice(values):
-        require(all(x is not None and torch.isfinite(x).all() for x in values), "Missing/nonfinite gradient")
-        require(any(x.count_nonzero() for x in values), "Zero gradient")
+    def check_slice(group, values):
+        for i, grad in enumerate(values):
+            require(grad is not None, f"{group}[{i}]: disconnected gradient")
+            require(torch.isfinite(grad).all(), f"{group}[{i}]: nonfinite gradient")
+        require(any(x.count_nonzero() for x in values), f"{group}: all gradients zero")
         return [x.norm().item() for x in values]
-    result = dict(early_fast_grad_norms=check_slice(gradients[:len(earliest)]),
-                  slow_grad_norms=check_slice(gradients[len(earliest):]))
+    result = dict(early_fast_grad_norms=check_slice("early recurrent fast weights", gradients[:len(earliest)]),
+                  slow_grad_norms=check_slice("slow weights", gradients[len(earliest):]))
     cell.reset_episode()
     require(cell.state is None and cell.position == 0, "Episode reset failed")
     return result
