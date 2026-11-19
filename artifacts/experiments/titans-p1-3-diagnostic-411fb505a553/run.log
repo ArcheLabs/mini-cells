@@ -1,0 +1,17 @@
+TOKENIZER_PREFLIGHT_PASS episodes=16
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1794981589.954523     112 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+Traceback (most recent call last):
+  File "/kaggle/working/layer-location-source/research/titans-qwen3-06b/p1-3-diagnostic/diagnose.py", line 163, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/working/layer-location-source/research/titans-qwen3-06b/p1-3-diagnostic/diagnose.py", line 137, in main
+    rows = evaluate(model, wrapper, tokenizer, plans[:1] if args.smoke else plans)
+  File "/usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/kaggle/working/layer-location-source/research/titans-qwen3-06b/p1-3-diagnostic/diagnose.py", line 78, in evaluate
+    correct, prototypes = write(writes[0])
+                          ~~~~~^^^^^^^^^^^
+  File "/kaggle/working/layer-location-source/research/titans-qwen3-06b/p1-3-diagnostic/diagnose.py", line 74, in write
+    targets = targets[:, :, None, :].expand(-1, -1, 4, -1).reshape(4, 2048)
+RuntimeError: shape '[4, 2048]' is invalid for input of size 16384
