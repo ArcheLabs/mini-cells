@@ -1,0 +1,17 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1795084393.448911      75 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+Traceback (most recent call last):
+  File "/kaggle/working/p14-xtexgs4m/layer-location-source/research/titans-qwen3-06b/gate1/preflight.py", line 96, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/working/p14-xtexgs4m/layer-location-source/research/titans-qwen3-06b/gate1/preflight.py", line 89, in main
+    evidence = verify(model,install(model,"G1-A"),a.device)
+  File "/kaggle/working/p14-xtexgs4m/layer-location-source/research/titans-qwen3-06b/gate1/preflight.py", line 68, in verify
+    result = dict(early_fast_grad_norms=check_slice(gradients[:len(earliest)]),
+                                        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/working/p14-xtexgs4m/layer-location-source/research/titans-qwen3-06b/gate1/preflight.py", line 65, in check_slice
+    require(all(x is not None and torch.isfinite(x).all() for x in values), "Missing/nonfinite gradient")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/working/p14-xtexgs4m/layer-location-source/research/titans-qwen3-06b/gate1/preflight.py", line 14, in require
+    raise RuntimeError(message)
+RuntimeError: Missing/nonfinite gradient
