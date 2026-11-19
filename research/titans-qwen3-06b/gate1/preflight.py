@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 import torch
-from adapter import MODEL, REVISION, TITANS, install
+from adapter import MODEL, REVISION, TITANS, SEGMENT, install
 
 
 def require(condition, message):
@@ -77,6 +77,36 @@ def verify(model, cell, device):
     return result
 
 
+@torch.no_grad()
+def verify_segment(model, cell, device):
+    """Cross a real 128-token boundary without retaining a long graph."""
+    from transformers import DynamicCache
+    cell.reset_episode()
+    cache = DynamicCache()
+    for index in range(SEGMENT + 1):
+        offset = index % SEGMENT
+        if offset == 0:
+            previous_cache = cache
+            cache = DynamicCache()
+            require(cache.get_seq_length() == 0, "New cache is not empty")
+            if index:
+                require(previous_cache.get_seq_length() == SEGMENT, "Incomplete prior segment")
+                require(cell.state.seq_index == SEGMENT, "Cell lost at cache reset")
+        output = model(input_ids=torch.tensor([[100 + index]], device=device),
+                       position_ids=torch.tensor([[offset]], device=device),
+                       past_key_values=cache, use_cache=True)
+        require(cache.get_seq_length() == offset + 1, "Incorrect cache length")
+        require(cell.position == cell.state.seq_index == index + 1, "Incorrect Cell position")
+        require(torch.isfinite(output.logits).all(), "Nonfinite logits")
+        require(all(torch.isfinite(t).all() for group in cell.state.states for t in group),
+                "Nonfinite fast weights or momentum")
+        if (index + 1) % 32 == 0:
+            print(f"SEGMENT_PREFLIGHT {index+1}/{SEGMENT+1}", flush=True)
+    cell.reset_episode()
+    return {"segment_tokens": SEGMENT, "tokens_processed": SEGMENT + 1,
+            "new_cache_tokens": cache.get_seq_length(), "status": "PASS"}
+
+
 def main():
     from transformers import AutoModelForCausalLM
     p = argparse.ArgumentParser(description=__doc__)
@@ -91,7 +121,9 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(MODEL,revision=REVISION,
         dtype=torch.float32 if a.device=="cpu" else torch.float16,
         attn_implementation="eager").to(a.device).eval()
-    evidence = verify(model,install(model,"G1-A"),a.device)
+    cell = install(model, "G1-A")
+    evidence = verify(model, cell, a.device)
+    evidence["full_segment_boundary"] = verify_segment(model, cell, a.device)
     a.output.mkdir(parents=True)
     (a.output / "decision.json").write_text(json.dumps(dict(format="minicells.titans-gate0.v1", status="PARTIAL_GATE0", model_revision=REVISION,
         titans_revision=revision, device=a.device, **evidence), indent=2, allow_nan=False))

@@ -19,3 +19,13 @@ Step 200 swap update weakens further after clipping. This is single-chunk
 evidence, not proof about multi-token momentum or forgetting. Exact checkpoint
 lineage verification and native hook, causality, GQA, reset, and gradient
 tests remain required before any training. No formal runner is enabled.
+
+### Historical run provenance supplement
+
+- Result commit: `0f8f6dd66fc38bb7ee58d96b370cbd49edefa61d`.
+- Kaggle Script Version ID: `371383948` (operator supplied; not independently verified).
+- Applies to that historical run only. Its published decision is unchanged.
+
+The extended preflight checks 128 tokens followed by the first token in a new
+native cache. That check runs without gradients; the separate short case still
+checks cross-segment gradients. Neither check executes optimizer updates.
