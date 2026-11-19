@@ -1,0 +1,62 @@
+{
+  "config": {
+    "scope": "H4 L1-C",
+    "source_seed": 51001,
+    "model_seed": 51017,
+    "evaluation_seeds": [
+      61001,
+      61002,
+      61003
+    ],
+    "input_budget": 65536,
+    "query_budget": 1024,
+    "updates": 32,
+    "batch": 4,
+    "minimum_practical_gain": 0.03,
+    "bootstrap_seed": 71001,
+    "bootstrap_replicates": 10000,
+    "execution_seconds": 9600,
+    "session_seconds": 10500,
+    "tolerance": {
+      "atol": 2e-05,
+      "rtol": 2e-05
+    }
+  },
+  "training": {
+    "seed": 51017,
+    "batch": 4,
+    "lr": 0.0003,
+    "updates": 32,
+    "precision": "fp32",
+    "tf32": false,
+    "optimizer": "AdamW",
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "scheduler": "constant-engineering-smoke",
+    "checkpoint": {
+      "every_updates": 8,
+      "every_seconds": 120
+    }
+  },
+  "model": {
+    "vocab": 8192,
+    "dim": 256,
+    "layers": 5,
+    "heads": 4,
+    "kv_heads": 4,
+    "ffn": 664,
+    "window": 32
+  },
+  "fusion": {
+    "ssm_layers": 8,
+    "state_size": 20,
+    "memory_dim": 32,
+    "memory_hidden": 64,
+    "chunk": 16,
+    "seed": 41017
+  }
+}

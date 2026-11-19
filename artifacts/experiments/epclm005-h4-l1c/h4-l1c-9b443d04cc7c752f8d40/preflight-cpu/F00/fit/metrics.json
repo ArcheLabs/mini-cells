@@ -1,0 +1,67 @@
+{
+  "status": "COMPLETE",
+  "error": null,
+  "ledger": {
+    "input_tokens": 1024,
+    "processed_tensor_tokens": 1024,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 16,
+    "query_target_tokens": 16,
+    "committed_updates": 1
+  },
+  "initial_evaluation": {
+    "nll": 6.931384563446045,
+    "supervised_targets": 8,
+    "query_targets": 8,
+    "query_exact_match": 0.0,
+    "query_prediction_counts": {
+      "6": 8
+    }
+  },
+  "validation": {
+    "nll": 6.929654121398926,
+    "supervised_targets": 8,
+    "query_targets": 8,
+    "query_exact_match": 0.0,
+    "query_prediction_counts": {
+      "6": 8
+    }
+  },
+  "history": [
+    {
+      "update": 1,
+      "loss": 6.908236980438232,
+      "gradient_norm": 1.3965734243392944,
+      "parameter_change_norm": 0.038398221135139465,
+      "compute_seconds": 0.038161806999994496,
+      "input_sha256": "8ef92fbd5c89295b694bd9fa8cb78e3433a0bb0a883b2fc2fd22100f620fc496",
+      "supervised_targets": 16,
+      "query_targets": 16
+    }
+  ],
+  "parameters": {
+    "static_parameters": 25974,
+    "embedding_parameters": 16384,
+    "tied_embedding_head": true,
+    "by_module": {
+      "embedding": 16384,
+      "blocks": 0,
+      "final_norm": 16
+    }
+  },
+  "checkpoint_policy": {
+    "writes_this_process": 2,
+    "write_seconds_this_process": 0.03825733499996886,
+    "policy": {
+      "every_updates": 8,
+      "every_seconds": 120
+    }
+  },
+  "checkpoint": {
+    "sha256": "f26c65c0aa0b9dd39b4df0a9cce4bb38f1fcf9573e4c3c32230ab7b8f60cf5ec",
+    "bytes": 500141,
+    "durable_updates": 1
+  },
+  "hypotheses": "NOT_EVALUATED",
+  "training_peak_allocated_bytes": null
+}
