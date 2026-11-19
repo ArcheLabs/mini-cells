@@ -2,6 +2,7 @@
 import argparse
 import copy
 import json
+import subprocess
 from pathlib import Path
 
 import torch
@@ -10,7 +11,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from audit_qwen import REVISION, sha, verify_snapshot
 from phase3a import metrics
-from phase3a_rejection import split_validation, unknown_queries
+from phase3a_rejection import independent_partitions, rejection_audit, unknown_queries
 from phase3a_templates import SPLIT_FAMILIES
 from phase3a_v21 import Adapter, dataset, extract
 
@@ -44,13 +45,16 @@ def main():
     p.add_argument('output', type=Path)
     p.add_argument('--full-validation', action='store_true')
     p.add_argument('--device', choices=('cpu', 'cuda'), default='cpu')
+    p.add_argument('--seed', type=int)
     args = p.parse_args()
     cfg = load_config(args.config)
     training = cfg['training']
     if training['optimizer'] != 'AdamW':
         raise ValueError('Unsupported optimizer')
     torch.set_num_threads(2)
-    seed = cfg['dataset']['seeds'][0]
+    seed = args.seed if args.seed is not None else cfg['dataset']['seeds'][0]
+    if seed not in cfg['dataset']['seeds']:
+        p.error('Seed is outside the configured protocol')
     generator = torch.Generator().manual_seed(seed)
     torch.manual_seed(seed)
     hashes = verify_snapshot(args.snapshot)
@@ -64,18 +68,21 @@ def main():
     sizes = (*cfg['dataset']['entities'][:2], 0) if args.full_validation else (8, 8, 0)
     data = dataset(seed, sizes)
     del data['test']
-    selection, calibration_rows = split_validation(data['validation'], seed)
+    selection, calibration_rows, audit_rows = independent_partitions(data['validation'], seed)
     seen = ('query', 'write', 'query:1', 'write:1', 'bare', 'contextual')
     features = {split: {view: extract(model, tok, rows, view) for view in
                 (seen if split == 'train' else (*seen, 'held_query', 'held_write'))}
                 for split, rows in data.items()}
-    unknown = unknown_queries(calibration_rows)
     families = {'A1':'query','A2':'query:1','B':'held_query'}
-    calibration_features = {
-        kind: {family:extract(model,tok,rows,query) for family,query in families.items()}
-        for kind,rows in ({'known':calibration_rows}|unknown).items()
-    }
-    calibration_key = extract(model,tok,calibration_rows,'write')
+
+    def rejection_features(rows):
+        return (extract(model,tok,rows,'write'), {
+            kind:{family:extract(model,tok,group,query) for family,query in families.items()}
+            for kind,group in ({'known':rows}|unknown_queries(rows)).items()
+        })
+
+    calibration_features = rejection_features(calibration_rows)
+    audit_features = rejection_features(audit_rows)
     selection_entities = {row[0] for row in selection}
     selection_indices = torch.tensor([i for i,row in enumerate(data['validation'])
                                       if row[0] in selection_entities])
@@ -191,32 +198,23 @@ def main():
                 for a,b in zip(left.split(width),right.split(width),strict=True) if len(a)==width]
                 for width in widths}
         with torch.no_grad():
-            key = model.encode('key', calibration_key)
-            scored = {kind: {family: model.encode('query',x) @ key.T for family,x in bank.items()}
-                      for kind,bank in calibration_features.items()}
-            negatives = torch.cat([x.max(1).values for kind,bank in scored.items()
-                                   if kind != 'known' for x in bank.values()])
-            cutoff = calibrate(negatives, cfg['evaluation']['thresholds']['unknown_fpr_max'])
-            breakdown = {}
-            for family, known in scored['known'].items():
-                maximum, winner = known.max(1)
-                accepted = maximum >= cutoff
-                right = winner.eq(torch.arange(len(known)))
-                breakdown[family] = dict(
-                    known_count=len(known), coverage=float(accepted.float().mean()),
-                    selective_recall1=float(right[accepted].float().mean()) if accepted.any() else None,
-                    unknown={kind:{'count':len(bank[family]),
-                        'fpr':float((bank[family].max(1).values>=cutoff).float().mean())}
-                        for kind,bank in scored.items() if kind!='known'})
-            calibration[name] = dict(threshold=cutoff, negative_count=len(negatives),
-                observed_fpr=float((negatives>=cutoff).float().mean()), families=breakdown)
+            def score_partition(features):
+                writes, queries = features
+                key = model.encode('key',writes)
+                return {kind:{family:model.encode('query',x) @ key.T for family,x in bank.items()}
+                        for kind,bank in queries.items()}
+            calibration[name] = rejection_audit(score_partition(calibration_features),
+                score_partition(audit_features), calibrate, cfg['evaluation']['thresholds']['unknown_fpr_max'])
     (args.output/'report.json').write_text(json.dumps(dict(
         status='VALIDATION_ONLY_PREFLIGHT', device=args.device,
         gpu=torch.cuda.get_device_name() if args.device == 'cuda' else None, config_sha256=sha(args.config),
+        source_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+        model_revision=REVISION, hashes=hashes, torch_version=torch.__version__,
+        cuda=torch.version.cuda, unavailable_candidate_sizes=[n for n in cfg['evaluation']['candidates'] if n not in widths],
         checkpoint_sha256=checkpoints, seed=seed, test='SEALED', training=history,
         methods=methods, calibration=calibration,
         validation_partitions=dict(selection=sorted(selection_entities),
-            calibration=sorted({row[0] for row in calibration_rows})), value_retrieval=value_retrieval, facts={k:len(v) for k,v in data.items()}), indent=2))
+            calibration=sorted({row[0] for row in calibration_rows}), audit=sorted({row[0] for row in audit_rows})), value_retrieval=value_retrieval, facts={k:len(v) for k,v in data.items()}), indent=2))
 
 
 if __name__ == '__main__':

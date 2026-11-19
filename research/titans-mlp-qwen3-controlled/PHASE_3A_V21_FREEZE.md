@@ -54,3 +54,9 @@ Use the same preflight with --full-validation to generate the configured
 Train/Validation sizes for the first configured seed. That path remains
 unexecuted at full scale. The 512-way evaluation, independent final
 rejection assessment and five-seed acceptance are still pending.
+
+## Independent rejection review
+
+See [the Freeze Review](PHASE_3A_V21_FREEZE_REVIEW.md) for the verified T4
+baseline, three-way entity isolation, calibration options and pending
+owner decisions. The configuration remains NOT_FROZEN and Test SEALED.
