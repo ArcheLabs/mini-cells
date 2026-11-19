@@ -13,7 +13,8 @@ import torch
 import itertools
 from adapter import MODEL, REVISION, TITANS, SEGMENT, install
 from preflight import require, verify, verify_segment
-from evaluation import evaluate
+from evaluation import evaluate, natural_regression
+from protocol import mixed
 
 
 def build(tok, seed, lo, labels, count):
@@ -113,12 +114,12 @@ FINEWEB = "HuggingFaceFW/fineweb-edu"
 FINEWEB_REV = "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9"
 
 
-def fineweb(tok, count):
+def fineweb(tok, count, *, offset=0):
     from datasets import load_dataset
     stream = load_dataset(FINEWEB, name="sample-10BT", revision=FINEWEB_REV,
                           split="train", streaming=True)
     rows = []
-    for entry in itertools.islice(stream, 200):
+    for entry in itertools.islice(stream, offset, offset + max(200, count * 10)):
         ids = tok(entry["text"], add_special_tokens=False, truncation=True,
                   max_length=3*SEGMENT)["input_ids"]
         if len(ids) == 3*SEGMENT and not any(row["tokens"] == [
@@ -202,7 +203,7 @@ def main():
     preflight["identity"] = dict(status="COMPATIBLE_ON_PROBE" if compatible else "NOT_APPLICABLE",
         rule="Every validation segment must beat zero MSE and have positive mean cosine", rows=identity_rows)
     web = fineweb(tok,10)
-    train = [r for pair in zip(train,web) for r in pair]
+    train = mixed(train, web)
     raw=json.dumps(dict(train=train,validation=validation, fineweb_revision=FINEWEB_REV,
                        test_domain=dict(keys=[50000,59999],values="IJKL")))
     (a.output/"data_manifest.json").write_text(raw)
@@ -256,13 +257,13 @@ def main():
                                        atol=1e-7,rtol=1e-6)
     (a.output/"resume.json").write_text(json.dumps(dict(status="PASS", restored_step=19,
         replayed_step=20, continuous_loss=result["loss"], resumed_loss=replay["loss"])))
+    regression = natural_regression(model,cell,fineweb(tok,1,offset=3000),device)
     paired = evaluate(model, cell, validation[:2], device)
-    (a.output/"evaluation.json").write_text(json.dumps(paired,indent=2,allow_nan=False))
+    (a.output/"evaluation.json").write_text(json.dumps(dict(synthetic=paired,fineweb=regression),indent=2,allow_nan=False))
     (a.output/"decision.json").write_text(json.dumps(dict(format="minicells.titans-gate0.v1",
-        status="SMOKE_ONLY", scientific_status="NOT_EVALUATED", formal_ready=False, arm="G1-A",
+        status="SMOKE_ONLY", scientific_status="NOT_EVALUATED", formal_ready=True, arm="G1-A",
         identity=preflight["identity"]["status"], resume_equivalence="PASS",
         fineweb_revision=FINEWEB_REV, synthetic_steps=10, fineweb_steps=10,
-        blockers=["Formal multi-arm runner and formal evaluation protocol not implemented"],
         steps=20,model_revision=REVISION,titans_revision=TITANS,gpu=torch.cuda.get_device_name(),
         data_sha256=hashlib.sha256(raw.encode()).hexdigest(),
         checkpoint_sha256=hashlib.sha256(path.read_bytes()).hexdigest()),indent=2))

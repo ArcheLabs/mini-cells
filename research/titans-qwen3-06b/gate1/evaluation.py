@@ -42,3 +42,33 @@ def evaluate(model, cell, rows, device):
     finally:
         block.self_attn = cell
         cell.reset_episode()
+
+
+@torch.no_grad()
+def natural_regression(model, cell, rows, device):
+    from transformers import DynamicCache
+    from torch.nn.functional import cross_entropy
+    block = model.model.layers[LAYER]
+    result = []
+    try:
+        for row in rows:
+            scores = {}
+            for label, module in (("native", cell.attention), ("memory", cell)):
+                block.self_attn = module
+                cell.reset_episode()
+                losses = []
+                tokens = [t for segment in row["tokens"] for t in segment]
+                for i, token in enumerate(tokens[:-1]):
+                    if i % 128 == 0:
+                        cache = DynamicCache()
+                    x = torch.tensor([[token]],device=device)
+                    h = model.model(input_ids=x,past_key_values=cache,use_cache=True,
+                                    position_ids=torch.tensor([[i%128]],device=device)).last_hidden_state
+                    losses.append(cross_entropy(model.lm_head(h[:, -1]).float(),
+                                                 torch.tensor([tokens[i+1]],device=device)))
+                scores[label] = torch.stack(losses).mean().item()
+            result.append(scores)
+        return result
+    finally:
+        block.self_attn = cell
+        cell.reset_episode()
