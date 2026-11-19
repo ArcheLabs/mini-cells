@@ -34,6 +34,8 @@ def main():
     print("SOURCE_FETCH_START", flush=True)
     run("git", "init", str(repo))
     run("git", "remote", "add", "origin", SOURCE, cwd=repo)
+    run("git", "config", "remote.origin.promisor", "true", cwd=repo)
+    run("git", "config", "remote.origin.partialclonefilter", "blob:none", cwd=repo)
     run("git", "sparse-checkout", "set", "scripts/research",
         "research/titans-qwen3-06b/p1-meta",
         "research/titans-qwen3-06b/p1-2-training", cwd=repo)
