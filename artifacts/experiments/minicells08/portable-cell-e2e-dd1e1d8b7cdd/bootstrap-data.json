@@ -1,0 +1,91 @@
+{
+  "policy": {
+    "max_raw_bytes": 32768,
+    "network_read_seconds": 45,
+    "tokenize_sample_seconds": 8,
+    "source_seconds": 180,
+    "oversized_prompt": "skip",
+    "oversized_response": "skip",
+    "eligible_response_truncation": "upstream",
+    "labels": "causal LM for all packed tokens"
+  },
+  "dataset": "longalign_fineweb_pretrain",
+  "shuffle_seed": 314159,
+  "steps": 12,
+  "sequence_length": 1024,
+  "input_tokens": 12288,
+  "source_order": [
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu",
+    "FineWeb-Edu"
+  ],
+  "statistics": {
+    "LongAlign": {
+      "cache_hits": 0,
+      "cache_misses": 6,
+      "raw_cache_hits": 0,
+      "raw_cache_misses": 9889,
+      "network_seconds": 30.30432627299274,
+      "tokenize_seconds": 35.40583891100846,
+      "skipped": 9888,
+      "truncated": 0,
+      "tokenize_timeouts": 0,
+      "raw_prompt_oversize": 7773,
+      "cache_hit_rate": 0.0
+    },
+    "FineWeb-Edu": {
+      "cache_hits": 6,
+      "cache_misses": 12,
+      "raw_cache_hits": 10,
+      "raw_cache_misses": 19,
+      "network_seconds": 5.274491356999533,
+      "tokenize_seconds": 0.060167234999994434,
+      "skipped": 0,
+      "truncated": 0,
+      "tokenize_timeouts": 0,
+      "cache_hit_rate": 0.3333333333333333
+    }
+  },
+  "status": "FINEWEB_ONLY_FALLBACK",
+  "source_revisions": {
+    "FineWeb-Edu": "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9",
+    "LongAlign": "12f17c4baff1001f0d44c4f8feab09ee2ee8c6dc"
+  },
+  "cache_identity": {
+    "datasets": {
+      "LongAlign": "zai-org/LongAlign-10k",
+      "FineWeb-Edu": "HuggingFaceFW/fineweb-edu"
+    },
+    "revisions": {
+      "FineWeb-Edu": "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9",
+      "LongAlign": "12f17c4baff1001f0d44c4f8feab09ee2ee8c6dc"
+    },
+    "upstream": {
+      "commit": "c60b4efaa3a3c6df4deebd57cbccf75947b87cad",
+      "patch": "35fb66412e31c036229432c06ad2d206d16d6f38f457c0504176cd8f1207cfae",
+      "datasets_version": "4.8.5"
+    },
+    "tokenizer_fingerprint": "34c8d0d35a1c2c2f1253f64ffa81418e3661b75bff99f709b242fd43687f315c",
+    "config": {
+      "dataset": "longalign_fineweb_pretrain",
+      "shuffle_seed": 314159,
+      "sequence_length": 1024,
+      "fineweb_buffer": 1024,
+      "longalign_buffer": 1024
+    },
+    "policy": 1
+  },
+  "fallback_reason": "StopIteration: ",
+  "sha256": "885daf70c7bd7fd4e74e72745faef4959026bba8f23f825cacea40808d890a61",
+  "bytes": 295152,
+  "preparation_seconds": 77.83719627200003
+}

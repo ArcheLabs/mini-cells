@@ -1,0 +1,1317 @@
+{
+  "status": "ENGINEERING_COMPLETE_SEMANTIC_NOT_ESTABLISHED",
+  "upstream": "c60b4efaa3a3c6df4deebd57cbccf75947b87cad",
+  "patch_sha256": "35fb66412e31c036229432c06ad2d206d16d6f38f457c0504176cd8f1207cfae",
+  "base_revision": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+  "backbone_fingerprint": "81ee9baf22075acb7dfe6fcbdc92e18b2b448d015e28cdef37a331d313f1f3a3",
+  "seed": 42,
+  "chunk": 512,
+  "torch": "2.9.1+cu128",
+  "gpu": "Tesla T4",
+  "session_policy": "reset both arms before chunk 2",
+  "semantic_validation": "FAIL",
+  "timings_seconds": {
+    "initial/smoke": 21.771745843000076,
+    "initial/continuous": 20.978319552000016,
+    "initial/export": 20.14854281999999,
+    "initial/restore": 20.882058408000034,
+    "trained/prepare-data": 87.47674257699998,
+    "trained/train": 294.95797205299993,
+    "trained/continuous": 23.422406868000053,
+    "trained/export": 20.705307823000112,
+    "trained/restore": 21.49449157999993,
+    "trained/semantic": 25.326069692000146
+  },
+  "acceptance": {
+    "runtime": "PCC_REAL_RUNTIME_SMOKE_PASS",
+    "checkpoint": "PCC_TITAN_CHECKPOINT_READY",
+    "storage": "PCC_CELL_STORAGE_PASS",
+    "fork": "PCC_FORK_PASS",
+    "restore": "PCC_CROSS_PROCESS_RESTORE_PASS",
+    "equivalence": "PCC_CONTINUE_EQUIVALENCE_PASS"
+  },
+  "initial": {
+    "status": "PASS",
+    "position": 1024,
+    "seq_index": 1024,
+    "revision": 2,
+    "layout": {
+      "0": [
+        "tuple",
+        [
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "0"
+              ],
+              [
+                "tensor",
+                "1"
+              ],
+              [
+                "tensor",
+                "2"
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "3"
+                  ],
+                  [
+                    "tensor",
+                    "4"
+                  ],
+                  [
+                    "tensor",
+                    "5"
+                  ]
+                ]
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "6"
+                  ],
+                  [
+                    "tensor",
+                    "7"
+                  ],
+                  [
+                    "tensor",
+                    "8"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "9"
+              ],
+              [
+                "tensor",
+                "10"
+              ],
+              [
+                "tensor",
+                "11"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "1": [
+        "tuple",
+        [
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "12"
+              ],
+              [
+                "tensor",
+                "13"
+              ],
+              [
+                "tensor",
+                "14"
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "15"
+                  ],
+                  [
+                    "tensor",
+                    "16"
+                  ],
+                  [
+                    "tensor",
+                    "17"
+                  ]
+                ]
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "18"
+                  ],
+                  [
+                    "tensor",
+                    "19"
+                  ],
+                  [
+                    "tensor",
+                    "20"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "21"
+              ],
+              [
+                "tensor",
+                "22"
+              ],
+              [
+                "tensor",
+                "23"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "2": [
+        "tuple",
+        [
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "24"
+              ],
+              [
+                "tensor",
+                "25"
+              ],
+              [
+                "tensor",
+                "26"
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "27"
+                  ],
+                  [
+                    "tensor",
+                    "28"
+                  ],
+                  [
+                    "tensor",
+                    "29"
+                  ]
+                ]
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "30"
+                  ],
+                  [
+                    "tensor",
+                    "31"
+                  ],
+                  [
+                    "tensor",
+                    "32"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "33"
+              ],
+              [
+                "tensor",
+                "34"
+              ],
+              [
+                "tensor",
+                "35"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "3": [
+        "tuple",
+        [
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "36"
+              ],
+              [
+                "tensor",
+                "37"
+              ],
+              [
+                "tensor",
+                "38"
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "39"
+                  ],
+                  [
+                    "tensor",
+                    "40"
+                  ],
+                  [
+                    "tensor",
+                    "41"
+                  ]
+                ]
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "42"
+                  ],
+                  [
+                    "tensor",
+                    "43"
+                  ],
+                  [
+                    "tensor",
+                    "44"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "45"
+              ],
+              [
+                "tensor",
+                "46"
+              ],
+              [
+                "tensor",
+                "47"
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    "tensor_errors": {
+      "37": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "46": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "38": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "7": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "24": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "32": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "12": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "17": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "25": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "44": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "15": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "0": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "26": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "22": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "28": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "40": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "5": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "35": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "8": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "29": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "20": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "19": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "21": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "41": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "11": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "13": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "16": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "39": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "42": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "3": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "6": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "1": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "34": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "36": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "2": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "10": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "47": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "33": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "27": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "18": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "31": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "4": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "43": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "9": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "45": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "14": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "23": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "30": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "logits": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "retrieval_0": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "retrieval_1": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "retrieval_2": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "retrieval_3": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      }
+    },
+    "normalized_cell_sha256": [
+      "0fc84e4152ada28c2c7219d9b81cde8bf33f4c46aed6c5c65efb5542fd133843",
+      "0fc84e4152ada28c2c7219d9b81cde8bf33f4c46aed6c5c65efb5542fd133843"
+    ],
+    "normalized_hash_match": true,
+    "atol": 1e-06,
+    "rtol": 1e-05
+  },
+  "outer_source": "BOUNDED_BOOTSTRAP_CHECKPOINT",
+  "outer_sha256": "d57210f8f55f45b1b83c9aa009d67dc1fdc39d0c2f3b8f2a24dd0cb49c25537e",
+  "trained": {
+    "status": "PASS",
+    "position": 1024,
+    "seq_index": 1024,
+    "revision": 2,
+    "layout": {
+      "0": [
+        "tuple",
+        [
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "0"
+              ],
+              [
+                "tensor",
+                "1"
+              ],
+              [
+                "tensor",
+                "2"
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "3"
+                  ],
+                  [
+                    "tensor",
+                    "4"
+                  ],
+                  [
+                    "tensor",
+                    "5"
+                  ]
+                ]
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "6"
+                  ],
+                  [
+                    "tensor",
+                    "7"
+                  ],
+                  [
+                    "tensor",
+                    "8"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "9"
+              ],
+              [
+                "tensor",
+                "10"
+              ],
+              [
+                "tensor",
+                "11"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "1": [
+        "tuple",
+        [
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "12"
+              ],
+              [
+                "tensor",
+                "13"
+              ],
+              [
+                "tensor",
+                "14"
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "15"
+                  ],
+                  [
+                    "tensor",
+                    "16"
+                  ],
+                  [
+                    "tensor",
+                    "17"
+                  ]
+                ]
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "18"
+                  ],
+                  [
+                    "tensor",
+                    "19"
+                  ],
+                  [
+                    "tensor",
+                    "20"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "21"
+              ],
+              [
+                "tensor",
+                "22"
+              ],
+              [
+                "tensor",
+                "23"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "2": [
+        "tuple",
+        [
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "24"
+              ],
+              [
+                "tensor",
+                "25"
+              ],
+              [
+                "tensor",
+                "26"
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "27"
+                  ],
+                  [
+                    "tensor",
+                    "28"
+                  ],
+                  [
+                    "tensor",
+                    "29"
+                  ]
+                ]
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "30"
+                  ],
+                  [
+                    "tensor",
+                    "31"
+                  ],
+                  [
+                    "tensor",
+                    "32"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "33"
+              ],
+              [
+                "tensor",
+                "34"
+              ],
+              [
+                "tensor",
+                "35"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "3": [
+        "tuple",
+        [
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "36"
+              ],
+              [
+                "tensor",
+                "37"
+              ],
+              [
+                "tensor",
+                "38"
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "39"
+                  ],
+                  [
+                    "tensor",
+                    "40"
+                  ],
+                  [
+                    "tensor",
+                    "41"
+                  ]
+                ]
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tensor",
+                    "42"
+                  ],
+                  [
+                    "tensor",
+                    "43"
+                  ],
+                  [
+                    "tensor",
+                    "44"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "tuple",
+            [
+              [
+                "tensor",
+                "45"
+              ],
+              [
+                "tensor",
+                "46"
+              ],
+              [
+                "tensor",
+                "47"
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    "tensor_errors": {
+      "40": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "18": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "25": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "30": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "37": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "19": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "10": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "41": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "44": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "15": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "45": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "17": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "8": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "12": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "21": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "32": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "46": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "13": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "4": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "7": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "20": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "31": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "34": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "27": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "38": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "39": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "47": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "29": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "33": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "2": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "24": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "1": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "26": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "3": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "5": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "22": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "6": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "9": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "11": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "28": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "14": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "35": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "36": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "16": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "43": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "42": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "23": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "0": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "logits": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "retrieval_0": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "retrieval_1": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "retrieval_2": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      },
+      "retrieval_3": {
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "relative_l2": 0.0
+      }
+    },
+    "normalized_cell_sha256": [
+      "64906a1cdf0af6a45999556e1583966a7f6d14cc8764d41811c1f1837121d4da",
+      "64906a1cdf0af6a45999556e1583966a7f6d14cc8764d41811c1f1837121d4da"
+    ],
+    "normalized_hash_match": true,
+    "atol": 1e-06,
+    "rtol": 1e-05
+  },
+  "bootstrap_data": {
+    "policy": {
+      "max_raw_bytes": 32768,
+      "network_read_seconds": 45,
+      "tokenize_sample_seconds": 8,
+      "source_seconds": 180,
+      "oversized_prompt": "skip",
+      "oversized_response": "skip",
+      "eligible_response_truncation": "upstream",
+      "labels": "causal LM for all packed tokens"
+    },
+    "dataset": "longalign_fineweb_pretrain",
+    "shuffle_seed": 314159,
+    "steps": 12,
+    "sequence_length": 1024,
+    "input_tokens": 12288,
+    "source_order": [
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu",
+      "FineWeb-Edu"
+    ],
+    "statistics": {
+      "LongAlign": {
+        "cache_hits": 0,
+        "cache_misses": 6,
+        "raw_cache_hits": 0,
+        "raw_cache_misses": 9889,
+        "network_seconds": 30.30432627299274,
+        "tokenize_seconds": 35.40583891100846,
+        "skipped": 9888,
+        "truncated": 0,
+        "tokenize_timeouts": 0,
+        "raw_prompt_oversize": 7773,
+        "cache_hit_rate": 0.0
+      },
+      "FineWeb-Edu": {
+        "cache_hits": 6,
+        "cache_misses": 12,
+        "raw_cache_hits": 10,
+        "raw_cache_misses": 19,
+        "network_seconds": 5.274491356999533,
+        "tokenize_seconds": 0.060167234999994434,
+        "skipped": 0,
+        "truncated": 0,
+        "tokenize_timeouts": 0,
+        "cache_hit_rate": 0.3333333333333333
+      }
+    },
+    "status": "FINEWEB_ONLY_FALLBACK",
+    "source_revisions": {
+      "FineWeb-Edu": "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9",
+      "LongAlign": "12f17c4baff1001f0d44c4f8feab09ee2ee8c6dc"
+    },
+    "cache_identity": {
+      "datasets": {
+        "LongAlign": "zai-org/LongAlign-10k",
+        "FineWeb-Edu": "HuggingFaceFW/fineweb-edu"
+      },
+      "revisions": {
+        "FineWeb-Edu": "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9",
+        "LongAlign": "12f17c4baff1001f0d44c4f8feab09ee2ee8c6dc"
+      },
+      "upstream": {
+        "commit": "c60b4efaa3a3c6df4deebd57cbccf75947b87cad",
+        "patch": "35fb66412e31c036229432c06ad2d206d16d6f38f457c0504176cd8f1207cfae",
+        "datasets_version": "4.8.5"
+      },
+      "tokenizer_fingerprint": "34c8d0d35a1c2c2f1253f64ffa81418e3661b75bff99f709b242fd43687f315c",
+      "config": {
+        "dataset": "longalign_fineweb_pretrain",
+        "shuffle_seed": 314159,
+        "sequence_length": 1024,
+        "fineweb_buffer": 1024,
+        "longalign_buffer": 1024
+      },
+      "policy": 1
+    },
+    "fallback_reason": "StopIteration: ",
+    "sha256": "885daf70c7bd7fd4e74e72745faef4959026bba8f23f825cacea40808d890a61",
+    "bytes": 295152,
+    "preparation_seconds": 77.83719627200003
+  },
+  "format": "minicells.portable-cell-e2e.v2",
+  "source_commit": "f6668582fac8ea52a6043afdb6bc9583b25699ad",
+  "run_id": "portable-cell-e2e-dd1e1d8b7cdd"
+}
