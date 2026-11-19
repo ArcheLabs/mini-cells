@@ -1,0 +1,59 @@
+{
+  "protocol": {
+    "interface": "canonical-reset-segment-v1",
+    "segment_tokens": 4,
+    "bindings": 8,
+    "queries": 4,
+    "target_prefix_tokens": 16,
+    "cell_chunk": 4,
+    "model_seed": 61017,
+    "train_seed": 62001,
+    "validation_seed": 62002,
+    "evaluation_seeds": [
+      62101,
+      62102,
+      62103
+    ],
+    "evaluation_episodes_per_seed": 64,
+    "train_episodes": 128,
+    "validation_episodes": 32,
+    "batch": 4,
+    "updates": 32,
+    "input_tokens": 8192,
+    "query_targets": 512,
+    "cell_dropout": 0.15,
+    "minimum_gain": 0.03,
+    "bootstrap_seed": 62199,
+    "bootstrap_replicates": 10000,
+    "tolerance": {
+      "atol": 2e-05,
+      "rtol": 2e-05
+    },
+    "execution_seconds": 9600,
+    "session_seconds": 10500
+  },
+  "training": {
+    "seed": 61017,
+    "batch": 4,
+    "lr": 0.0003,
+    "updates": 32,
+    "precision": "fp32",
+    "tf32": false,
+    "optimizer": "AdamW",
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "weight_decay_policy": "all static parameters as in M1",
+    "clip": 1.0,
+    "scheduler": "constant-engineering-smoke",
+    "checkpoint": {
+      "every_updates": 8,
+      "every_seconds": 120,
+      "final": true,
+      "timeout": true,
+      "unsafe_update_rollback": "last durable checkpoint"
+    }
+  }
+}

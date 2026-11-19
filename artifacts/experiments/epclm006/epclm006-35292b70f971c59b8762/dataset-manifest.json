@@ -1,0 +1,38 @@
+{
+  "format": "epclm006-episodic-v1",
+  "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+  "train_sha256": "315be1d269cf8f115fa6f34c0a0ce840789f235fa2dccdc57451db85288ee275",
+  "validation_sha256": "2fbe6e78e54ef78a98bfd1894ce2d830529180cbed7d41e126346930ccd8dfa3",
+  "evaluation_sha256": {
+    "62101": "ab54f6fc1fc39fede6659901ad272f90298396be7b68bdda6b6575fdde99a8ac",
+    "62102": "3655f8dc0c4641947e0621b2c5169786700105bc0869e27f3f97b8ddd14073ab",
+    "62103": "1b89187e62f505aaec6ba14ace6b8dbe461d036d71d9394c6eff9b6598e4d6fa"
+  },
+  "test_status": "SEALED_NOT_ACCESSED",
+  "test_recipe_sha256": "910c4800dc6ee752ae8b086d38b90ca7e4f590b18fd37eea18a1f372d1f1a694",
+  "seed_namespaces": {
+    "train": 62001,
+    "validation": 62002,
+    "evaluation": [
+      62101,
+      62102,
+      62103
+    ]
+  },
+  "entity_and_answer_pools": {
+    "train": [
+      0,
+      128
+    ],
+    "validation": [
+      128,
+      192
+    ],
+    "test": [
+      192,
+      256
+    ]
+  },
+  "query_tokens_per_episode": 4,
+  "input_tokens_per_episode": 64
+}

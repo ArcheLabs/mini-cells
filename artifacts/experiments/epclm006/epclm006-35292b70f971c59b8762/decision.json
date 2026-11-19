@@ -1,0 +1,50 @@
+{
+  "format": "minicells.epclm006.portability.v1",
+  "status": "SCREENING_EXECUTED",
+  "signal": "INCONCLUSIVE",
+  "identity": {
+    "source_commit": "d6f25b1cb1b7e62351dab8d7c83b88356ef374ff",
+    "files": {
+      "research/projects/cellular-language-models/experiments/epclm-006-cross-session-cell-portability/portable_model.py": "9c39f24635301b267a37534ab8c8b0e9985bb02d3ed9cf7ffd0440da234e0fc2",
+      "research/projects/cellular-language-models/experiments/epclm-006-cross-session-cell-portability/portability_data.py": "6990538d8e0e6d72fed017c87781844849b26b9e0d6be661165bf776c2fc582e",
+      "research/projects/cellular-language-models/experiments/epclm-006-cross-session-cell-portability/cell_artifact.py": "5282c8a2b4323d8a8454a686db395455011f4d528326640bbcabba87332fd7e9",
+      "research/projects/cellular-language-models/experiments/epclm-006-cross-session-cell-portability/portability_preflight.py": "7fbdf68d5c6c65ef8ccea14254fe751dcd7e81fca4dd47b46e22fda2d801d09d",
+      "research/projects/cellular-language-models/experiments/epclm-006-cross-session-cell-portability/harness.py": "c71006d83e7d8d0b4c3cd88071034a9f33db5448cf4d83bea9a8daa5d8597573",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/baselines.py": "d2483fde41bb3f0c7efbf97bb625a313e3b419d8fef5bc9bb52d06ee3c485fdf",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/memory.py": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/data.py": "9476c6493176cf5e39caa2f146946d2c4cd180ec29d742e9902bb5bd156dbee2",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/e0.py": "c9915f10e330091d09fa3120a18c57bb8910aa7889d9e2ffa81a616b5a4a66aa",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/training.py": "9dfacacec7abb9bb58d3b62cfb8fe8b04731d972729a86d66f3b368b4893b18f",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/gc002-fair-architecture/cached_transformer.py": "7386bac2ec3b7cc0cb9eb82d903756834dae06c993d48af9bc428d3baf66aac3",
+      "research/projects/cellular-language-models/experiments/native-clm-v0/implementation/native_clm_runtime.py": "3c1ae7d35ce51724954bd0d323125cbe48ff8cbd9c488abf2a4671f0f83bffb4",
+      "research/projects/cellular-language-models/experiments/epclm-core-001/implementation/trainer.py": "f77fd42822569ee2efa25e77e3f3f8e93de7af5381b220ee8aa56eb6c8c4ade6",
+      "research/projects/cellular-language-models/experiments/epclm-006-cross-session-cell-portability/config.json": "51d34b4a99b49897c6aceed70ce602e22f165eb9c80d3b55522254cf38facf7b",
+      "research/projects/cellular-language-models/experiments/epclm-006-cross-session-cell-portability/portability_run.py": "25528c54c54228bcf1178326912f78ed73edd0a08253c72d1092eb23bf16ea55",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/configs/protocol.json": "efa672b1e7b994b39f92e4dc715294f4ccf716144d72cba30c7599c887c59c63",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/vendor/samba_mamba1.py": "c7beb09d29c0ff6eb7013eaff01e82d0458ee8f2109fe16e98e2d82c2d3d7639",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/vendor/selective_scan_ref.py": "0113cb9152826dc265027553df291400d3b4693d4c41985d3ca61030f1e288f0"
+    },
+    "config_sha256": "44c0ffd35d14584e648c680792b8326c84ddaf2ed18844b5acccde27e1cf683a",
+    "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+    "dataset_sha256": "baeef916e0b6261e793ac26d588a4a54ce535bdb398aac0449062b10775dcf86",
+    "gpu": "Tesla T4",
+    "driver": "580.178.04",
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "precision": "fp32",
+    "tf32": false
+  },
+  "run_id": "epclm006-35292b70f971c59b8762",
+  "branch": "kaggle/epclm006-35292b70f971c59b8762",
+  "checkpoint_sha256": "07c8905149db066ffe525beded9b24abe0d3fef3e88765084bbf35d04bb986c9",
+  "ledger": {
+    "input_tokens": 8192,
+    "processed_tensor_tokens": 8192,
+    "padding_tokens": 0,
+    "supervised_target_tokens": 512,
+    "query_target_tokens": 512,
+    "committed_updates": 32
+  },
+  "training_seeds": 1,
+  "test_status": "SEALED_NOT_ACCESSED"
+}

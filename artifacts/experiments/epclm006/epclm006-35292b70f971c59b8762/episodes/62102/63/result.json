@@ -1,0 +1,165 @@
+{
+  "id": "53d070790a1b83c061ac9576333e92236c21636151f18191d894715bb3d038a7",
+  "query_fact_ids": [
+    "1b885acb7d94e44ae6ffb43c5a2a69e6d151f6ec5a1145f86d7c690cfd9f4212",
+    "d15026f0204f5b795b0e724db309dc01014b8268028271380a6cf3208bcec383",
+    "78d2688863d366de1d9df5c153a2c211ed2272cf83d7e20c4e57136c6bad7903",
+    "ffec52152120e7f34cf583ab2e308481b94d965bea7a9b5fae125d0fdc060fd6"
+  ],
+  "conditions": {
+    "C0": {
+      "recall": 0.0,
+      "exact": 0.0,
+      "episode_exact": 0.0,
+      "nll": 9.185653686523438,
+      "predictions": [
+        326,
+        326,
+        326,
+        326
+      ],
+      "targets": [
+        429,
+        405,
+        398,
+        440
+      ],
+      "query_seconds": 0.04106547200001387,
+      "import_seconds": 1.9407000024784793e-05,
+      "source_runtime_transferred": false,
+      "creator_context_retained": false,
+      "source_history_replayed": false,
+      "cell_state": null,
+      "mamba_bytes": 196608,
+      "swa_bytes": 262144
+    },
+    "C1": {
+      "recall": 0.0,
+      "exact": 0.0,
+      "episode_exact": 0.0,
+      "nll": 9.727333068847656,
+      "predictions": [
+        328,
+        328,
+        328,
+        328
+      ],
+      "targets": [
+        429,
+        405,
+        398,
+        440
+      ],
+      "query_seconds": 0.06273382599999877,
+      "import_seconds": 0.0034454269999741882,
+      "source_runtime_transferred": false,
+      "creator_context_retained": false,
+      "source_history_replayed": false,
+      "cell_state": {
+        "fast": "9a825e03544bfd1f5a9b4f9e83db25b888eb2eddc131df0285fd4bd581ae5a46",
+        "momentum": "5073a8e46cdc3f2c75cc3c9cb62be6c46b479054d8130bf23236ce4a484d3b68",
+        "step": 2
+      },
+      "mamba_bytes": 196608,
+      "swa_bytes": 262144
+    },
+    "C2": {
+      "recall": 0.0,
+      "exact": 0.0,
+      "episode_exact": 0.0,
+      "nll": 9.731537818908691,
+      "predictions": [
+        328,
+        328,
+        328,
+        328
+      ],
+      "targets": [
+        429,
+        405,
+        398,
+        440
+      ],
+      "query_seconds": 0.06231728799997427,
+      "import_seconds": 0.0036477699999863944,
+      "source_runtime_transferred": false,
+      "creator_context_retained": false,
+      "source_history_replayed": false,
+      "cell_state": {
+        "fast": "2b55e280aa7c776f5a94c350713756e8ff7d6307e9a90e29aa555b44265c0330",
+        "momentum": "9bfca022516088d91c084ffc25a21e22954a51da3fdc90b6078a7b1b8562241b",
+        "step": 2
+      },
+      "mamba_bytes": 196608,
+      "swa_bytes": 262144
+    },
+    "C3": {
+      "recall": 0.0,
+      "exact": 0.0,
+      "episode_exact": 0.0,
+      "nll": 9.71184253692627,
+      "predictions": [
+        328,
+        328,
+        328,
+        328
+      ],
+      "targets": [
+        429,
+        405,
+        398,
+        440
+      ],
+      "query_seconds": 0.16444882399997596,
+      "import_seconds": 4.204599997592595e-05,
+      "source_runtime_transferred": false,
+      "creator_context_retained": true,
+      "source_history_replayed": false,
+      "cell_state": {
+        "fast": "9a825e03544bfd1f5a9b4f9e83db25b888eb2eddc131df0285fd4bd581ae5a46",
+        "momentum": "5073a8e46cdc3f2c75cc3c9cb62be6c46b479054d8130bf23236ce4a484d3b68",
+        "step": 2
+      },
+      "mamba_bytes": 196608,
+      "swa_bytes": 262144
+    },
+    "C3-reset": {
+      "recall": 0.0,
+      "exact": 0.0,
+      "episode_exact": 0.0,
+      "nll": 9.727333068847656,
+      "predictions": [
+        328,
+        328,
+        328,
+        328
+      ],
+      "targets": [
+        429,
+        405,
+        398,
+        440
+      ],
+      "query_seconds": 0.061645688999988124,
+      "import_seconds": 2.1294000021043757e-05,
+      "source_runtime_transferred": false,
+      "creator_context_retained": false,
+      "source_history_replayed": false,
+      "cell_state": {
+        "fast": "9a825e03544bfd1f5a9b4f9e83db25b888eb2eddc131df0285fd4bd581ae5a46",
+        "momentum": "5073a8e46cdc3f2c75cc3c9cb62be6c46b479054d8130bf23236ce4a484d3b68",
+        "step": 2
+      },
+      "mamba_bytes": 196608,
+      "swa_bytes": 262144
+    }
+  },
+  "artifact_sha256": {
+    "correct": "411e249abd592e31e6e22fa96e14b6e41e39a374d476768b7ea562c242f7aa8e",
+    "unrelated": "a8374c494fac07d90ff5576d26e3cca5c86b114b34da7ae98409f9f78e23296b"
+  },
+  "export_seconds": 0.005647864000025038,
+  "cell_bytes": 39158,
+  "checkpoint_sha256": "07c8905149db066ffe525beded9b24abe0d3fef3e88765084bbf35d04bb986c9",
+  "artifact_dir": "episodes/62102/63/attempt-0/artifacts"
+}
