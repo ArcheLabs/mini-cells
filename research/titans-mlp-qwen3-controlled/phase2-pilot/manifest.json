@@ -1,0 +1,166 @@
+{
+  "revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "hashes": {
+    "model.safetensors": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba",
+    "config.json": "504a6b58c4271583724e66584b6b7698aea18450209df6b2f7582df0e89cee59"
+  },
+  "tokenizer_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+  "dataset_sha256": "997dd8ea767282dc8f25310158cc553289b8dc25eef5a6920ca6602a9c14765c",
+  "representations_sha256": "cf414c93e2940c0daf7d8842996545c0876dfc45e27351737b89b442fbac6b8d",
+  "pooling": "last non-padding token",
+  "block_index": 22,
+  "statistics": {
+    "train": {
+      "write": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 96,
+        "padding": 0,
+        "mean": 0.4229206144809723,
+        "std": 9.386711120605469,
+        "norm_mean": 300.6480712890625,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 9.15641975402832
+      },
+      "value": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 32,
+        "padding": 0,
+        "mean": 0.4964425563812256,
+        "std": 9.215853691101074,
+        "norm_mean": 295.2871398925781,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 8.892425537109375
+      },
+      "query": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 80,
+        "padding": 0,
+        "mean": 0.3139263987541199,
+        "std": 8.308634757995605,
+        "norm_mean": 266.0475769042969,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 8.093071937561035
+      }
+    },
+    "validation": {
+      "write": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 112,
+        "padding": 0,
+        "mean": 0.38095077872276306,
+        "std": 9.734097480773926,
+        "norm_mean": 311.7076416015625,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 9.653429985046387
+      },
+      "value": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 32,
+        "padding": 0,
+        "mean": 0.5912448167800903,
+        "std": 8.674947738647461,
+        "norm_mean": 276.6524353027344,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 8.51913070678711
+      },
+      "query": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 88,
+        "padding": 0,
+        "mean": 0.3631022572517395,
+        "std": 8.456740379333496,
+        "norm_mean": 270.8483581542969,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 8.054574012756348
+      }
+    },
+    "test": {
+      "write": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 120,
+        "padding": 0,
+        "mean": 0.5279638171195984,
+        "std": 9.861858367919922,
+        "norm_mean": 316.0113830566406,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 9.942440032958984
+      },
+      "value": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 32,
+        "padding": 0,
+        "mean": 0.5841777920722961,
+        "std": 9.398873329162598,
+        "norm_mean": 301.3068542480469,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 9.115118980407715
+      },
+      "query": {
+        "shape": [
+          8,
+          1024
+        ],
+        "tokens": 96,
+        "padding": 0,
+        "mean": 0.3254598379135132,
+        "std": 8.519861221313477,
+        "norm_mean": 272.7966003417969,
+        "random_projection_shape": [
+          8,
+          512
+        ],
+        "random_projection_std": 8.276331901550293
+      }
+    }
+  },
+  "projection": "independent fixed Gaussian matrices, seed 42",
+  "training_updates": 0
+}
