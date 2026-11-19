@@ -20,6 +20,8 @@ class OnlineMemory(nn.Module):
     def reset_episode(self):
         self.state = None
         self.position = 0
+        self.read_only = False
+        self.zero_read = False
 
     def forward(self, hidden_states, position_embeddings, **kwargs):
         from transformers.models.qwen3.modeling_qwen3 import apply_rotary_pos_emb
@@ -37,6 +39,16 @@ class OnlineMemory(nn.Module):
             q, k = apply_rotary_pos_emb(captured["q"].transpose(1, 2),
                                         captured["k"].transpose(1, 2), *position_embeddings)
             v = captured["v"].unflatten(-1, (8, 128)).transpose(1, 2)
+            if self.read_only:
+                if self.state is None:
+                    return None
+                addr = (q.float() * 128**-.25).transpose(1,2).flatten(2)
+                read, _ = self.memory.read_only((addr,None,None),self.state)
+                if self.zero_read:
+                    read = torch.zeros_like(read)
+                gate = (self.memory.history_mix_proj(hidden_states.float())
+                        + self.memory.history_mix.flatten()).sigmoid()
+                return (((1-gate)*inputs[0].float()+gate*read).to(inputs[0].dtype),)
             read, gate, self.state = self.memory(q.float(), k.float(), v.float(),
                 state=self.state, context=hidden_states.float(),
                 detach_mem_state=False, seq_offset=self.position)

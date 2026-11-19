@@ -10,8 +10,10 @@ import sys
 import time
 
 import torch
+import itertools
 from adapter import MODEL, REVISION, TITANS, SEGMENT, install
 from preflight import require, verify, verify_segment
+from evaluation import evaluate
 
 
 def build(tok, seed, lo, labels, count):
@@ -84,7 +86,7 @@ def identity_probe(model, cell, rows, device):
     weights = trial.init_weights(1)
     scores = []
     def capture(module, args, kwargs):
-        x = kwargs["hidden_states"]
+        x = kwargs["hidden_states"] if "hidden_states" in kwargs else args[0]
         rope = kwargs["position_embeddings"]
         k = attention.k_norm(attention.k_proj(x).unflatten(-1, (8,128))).transpose(1,2)
         _, k = apply_rotary_pos_emb(k, k, *rope)
@@ -107,11 +109,34 @@ def identity_probe(model, cell, rows, device):
     return scores
 
 
+FINEWEB = "HuggingFaceFW/fineweb-edu"
+FINEWEB_REV = "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9"
+
+
+def fineweb(tok, count):
+    from datasets import load_dataset
+    stream = load_dataset(FINEWEB, name="sample-10BT", revision=FINEWEB_REV,
+                          split="train", streaming=True)
+    rows = []
+    for entry in itertools.islice(stream, 200):
+        ids = tok(entry["text"], add_special_tokens=False, truncation=True,
+                  max_length=3*SEGMENT)["input_ids"]
+        if len(ids) == 3*SEGMENT and not any(row["tokens"] == [
+            ids[i:i+SEGMENT] for i in range(0, len(ids), SEGMENT)] for row in rows):
+            rows.append(dict(source="fineweb_edu", tokens=[
+                ids[i:i+SEGMENT] for i in range(0,len(ids),SEGMENT)]))
+            if len(rows) == count:
+                return rows
+    raise RuntimeError("Insufficient distinct FineWeb-Edu windows")
+
+
 def train_step(model, cell, row, optimizer, device):
     from transformers import DynamicCache
     cell.reset_episode()
     optimizer.zero_grad(set_to_none=True)
     early = None
+    natural = row.get("source") == "fineweb_edu"
+    losses = []
     for segment, ids in enumerate(row["tokens"]):
         cache = DynamicCache()
         for offset, token in enumerate(ids):
@@ -121,11 +146,17 @@ def train_step(model, cell, row, optimizer, device):
             x = torch.tensor([[token]],device=device)
             h = model.model(input_ids=x,past_key_values=cache,use_cache=True,
                             position_ids=torch.tensor([[offset]],device=device)).last_hidden_state
+            if natural:
+                target = ids[offset+1] if offset+1 < SEGMENT else row["tokens"][segment+1][0]
+                next_id = torch.tensor([target],device=device)
+                losses.append(torch.nn.functional.cross_entropy(model.lm_head(h[:, -1]).float(), next_id))
             if segment == offset == 0:
                 early = cell.state.states[0]
     require(cell.state.seq_index == 383, "Expected 383 causal writes")
     loss = torch.nn.functional.cross_entropy(model.lm_head(h[:, -1]).float(),
                 torch.tensor([row["tokens"][-1][-1]],device=device))
+    if natural:
+        loss = torch.stack(losses).mean()
     require(torch.isfinite(loss), "Nonfinite loss")
     grads = torch.autograd.grad(loss, early, retain_graph=True)
     require(all(torch.isfinite(g).all() for g in grads) and any(g.count_nonzero() for g in grads),
@@ -159,23 +190,37 @@ def main():
     preflight["full_segment_boundary"]=verify_segment(model,cell,device)
     preflight["momentum_and_decay"]=recurrence(cell.memory,device)
     tok=AutoTokenizer.from_pretrained(MODEL,revision=REVISION)
-    train=build(tok,42,10000,"ABCD",20)
+    train=build(tok,42,10000,"ABCD",10)
     validation=build(tok,43,30000,"EFGH",8)
     # Test domain is reserved only; no test examples are generated.
     require(not ({k for r in train for k in r["keys"]} & {k for r in validation for k in r["keys"]}),
             "Entity overlap")
     require(not ({v for r in train for v in r["values"]} & {v for r in validation for v in r["values"]}),
             "Value overlap")
-    raw=json.dumps(dict(train=train,validation=validation,test_domain=dict(keys=[50000,59999],values="IJKL")))
+    identity_rows = identity_probe(model,cell,validation,device)
+    compatible = all(r["mse"] < r["zero_mse"] and r["cosine"] > 0 for r in identity_rows)
+    preflight["identity"] = dict(status="COMPATIBLE_ON_PROBE" if compatible else "NOT_APPLICABLE",
+        rule="Every validation segment must beat zero MSE and have positive mean cosine", rows=identity_rows)
+    web = fineweb(tok,10)
+    train = [r for pair in zip(train,web) for r in pair]
+    raw=json.dumps(dict(train=train,validation=validation, fineweb_revision=FINEWEB_REV,
+                       test_domain=dict(keys=[50000,59999],values="IJKL")))
     (a.output/"data_manifest.json").write_text(raw)
-    preflight["identity"]={"status":"MEASURED_NOT_APPROVED", "rows":identity_probe(model,cell,validation,device)}
     (a.output/"preflight.json").write_text(json.dumps(preflight,indent=2))
     memory, fusion = [], []
     for name,param in cell.memory.named_parameters():
         if param.requires_grad:
             (fusion if name.startswith("history_mix") else memory).append(param)
-    opt=torch.optim.AdamW([dict(params=memory,lr=5e-4),dict(params=fusion,lr=5e-5)],
-                          betas=(.9,.95),weight_decay=.01)
+    def make_optimizer():
+        return torch.optim.AdamW([dict(params=memory,lr=5e-4),dict(params=fusion,lr=5e-5)],
+                                 betas=(.9,.95),weight_decay=.01)
+    opt=make_optimizer()
+    params={n:p for n,p in cell.memory.named_parameters() if p.requires_grad}
+    resume_path=a.output/"resume-step19.pt"
+    def checkpoint(path, step):
+        torch.save(dict(parameters={n:p.detach().cpu() for n,p in params.items()},
+                        optimizer=opt.state_dict(),cpu_rng=torch.get_rng_state(),
+                        cuda_rng=torch.cuda.get_rng_state(),step=step),path)
     with (a.output/"training.jsonl").open("w") as stream:
         for step,row in enumerate(train,1):
             started=time.monotonic()
@@ -186,25 +231,38 @@ def main():
             stream.write(json.dumps(result,allow_nan=False)+"\n")
             stream.flush()
             print(result,flush=True)
-    params={n:p for n,p in cell.memory.named_parameters() if p.requires_grad}
+            if step == 19:
+                checkpoint(resume_path,19)
+            if result["peak_bytes"] > 13*2**30:
+                raise RuntimeError("Smoke peak allocation exceeded 13 GiB")
     path=a.output/"smoke.pt"
-    torch.save(dict(parameters={n:p.detach().cpu() for n,p in params.items()},optimizer=opt.state_dict(),
-                    cpu_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state(),step=20),path)
-    restored=torch.load(path,map_location="cpu",weights_only=True)
-    for n,p in params.items():
-        torch.testing.assert_close(p.detach().cpu(),restored["parameters"][n],atol=0,rtol=0)
-    restored_opt = torch.optim.AdamW([dict(params=memory,lr=5e-4),dict(params=fusion,lr=5e-5)],
-                                    betas=(.9,.95),weight_decay=.01)
-    restored_opt.load_state_dict(restored["optimizer"])
-    for param, state in opt.state.items():
-        for name, tensor in state.items():
-            torch.testing.assert_close(restored_opt.state[param][name],tensor,atol=0,rtol=0)
+    checkpoint(path,20)
+    expected=torch.load(path,map_location="cpu",weights_only=True)
+    restored=torch.load(resume_path,map_location="cpu",weights_only=True)
+    with torch.no_grad():
+        for n,p in params.items():
+            p.copy_(restored["parameters"][n])
+    opt=make_optimizer()
+    opt.load_state_dict(restored["optimizer"])
     torch.set_rng_state(restored["cpu_rng"])
     torch.cuda.set_rng_state(restored["cuda_rng"])
+    replay=train_step(model,cell,train[restored["step"]],opt,device)
+    torch.testing.assert_close(replay["loss"],result["loss"],atol=1e-6,rtol=1e-6)
+    for n,p in params.items():
+        torch.testing.assert_close(p.detach().cpu(),expected["parameters"][n],atol=1e-7,rtol=1e-6)
+    for key,state in opt.state_dict()["state"].items():
+        for name,tensor in state.items():
+            torch.testing.assert_close(tensor.cpu(),expected["optimizer"]["state"][key][name],
+                                       atol=1e-7,rtol=1e-6)
+    (a.output/"resume.json").write_text(json.dumps(dict(status="PASS", restored_step=19,
+        replayed_step=20, continuous_loss=result["loss"], resumed_loss=replay["loss"])))
+    paired = evaluate(model, cell, validation[:2], device)
+    (a.output/"evaluation.json").write_text(json.dumps(paired,indent=2,allow_nan=False))
     (a.output/"decision.json").write_text(json.dumps(dict(format="minicells.titans-gate0.v1",
         status="SMOKE_ONLY", scientific_status="NOT_EVALUATED", formal_ready=False, arm="G1-A",
-        blockers=["Identity compatibility not established", "Formal FineWeb-Edu protocol not wired",
-                  "Full optimizer resume equivalence not verified"],
+        identity=preflight["identity"]["status"], resume_equivalence="PASS",
+        fineweb_revision=FINEWEB_REV, synthetic_steps=10, fineweb_steps=10,
+        blockers=["Formal multi-arm runner and formal evaluation protocol not implemented"],
         steps=20,model_revision=REVISION,titans_revision=TITANS,gpu=torch.cuda.get_device_name(),
         data_sha256=hashlib.sha256(raw.encode()).hexdigest(),
         checkpoint_sha256=hashlib.sha256(path.read_bytes()).hexdigest()),indent=2))
