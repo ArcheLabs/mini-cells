@@ -19,15 +19,19 @@ MODEL = "Qwen/Qwen3-0.6B-Base"
 KIND = "minicells.titans-p1-2-training.v1"
 
 
-def episodes(tok):
+def episodes(tok, count=8, seed=42, excluded=()):
     encode = lambda s: tok.encode(s, add_special_tokens=False)
     values = [encode(" "+c) for c in "ABCDEFGHIJKL"]
     if not all(len(v)==1 for v in values) or len({v[0] for v in values}) != 12:
         raise ValueError("Candidate tokenizer mismatch")
-    rng = random.Random(42)
+    rng = random.Random(seed)
     out = []
-    for _ in range(8):
+    seen = set(excluded)
+    while len(out) < count:
         keys = rng.sample(range(10000,99999), 4)
+        if seen.intersection(keys):
+            continue
+        seen.update(keys)
         chosen = rng.sample(range(12),4)
         labels = [values[i][0] for i in chosen]
         write = "".join(f"Code {k}: {'ABCDEFGHIJKL'[i]}\n" for k,i in zip(keys,chosen))
@@ -44,7 +48,12 @@ def episodes(tok):
                  pad("The weather was clear.",512), pad(prompt,511)+[labels[0]]]
         if any(set(labels).intersection(part) for part in (parts[1],parts[2],parts[3][:-1])):
             raise ValueError("Answer leaked outside write segment")
-        out.append(dict(keys=keys,labels=labels,segments=parts))
+        rotated = chosen[1:] + chosen[:1]
+        shuffled = pad("".join(f"Code {k}: {'ABCDEFGHIJKL'[i]}\n" for k,i in zip(keys,rotated)),512)
+        if len(encode(write)) != len(encode("".join(
+            f"Code {k}: {'ABCDEFGHIJKL'[i]}\n" for k,i in zip(keys,rotated)))):
+            raise ValueError("Shuffle changed write token length")
+        out.append(dict(keys=keys,labels=labels,segments=parts,shuffled=shuffled))
     return out
 
 
@@ -86,7 +95,7 @@ def update(model, wrapper, segments, optimizer, scheduler, chunk):
         optimizer.zero_grad(set_to_none=True)
         loss.backward()
         norms = {n:None if p.grad is None else p.grad.float().norm().item() for n,p in params.items()}
-        for prefix in ("memory_q_proj","memory_k_proj","memory_v_proj") if chunk == 16 else ():
+        for prefix in ("memory_q_proj","memory_k_proj","memory_v_proj") if hasattr(wrapper,"memory_q_proj") and wrapper.memory_q_proj.weight.requires_grad else ():
             if not any(v is not None and v>0 for n,v in norms.items() if n.startswith(prefix)):
                 raise ValueError(f"No projection gradient: {prefix}")
         torch.nn.utils.clip_grad_norm_(params.values(),1,error_if_nonfinite=True)
