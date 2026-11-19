@@ -1,0 +1,13 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1794980980.584815     113 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+Traceback (most recent call last):
+  File "/kaggle/working/layer-location-source/research/titans-qwen3-06b/p1-3-diagnostic/diagnose.py", line 146, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/working/layer-location-source/research/titans-qwen3-06b/p1-3-diagnostic/diagnose.py", line 120, in main
+    rows = evaluate(model, wrapper, tokenizer, 1 if args.smoke else 16)
+  File "/usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/kaggle/working/layer-location-source/research/titans-qwen3-06b/p1-3-diagnostic/diagnose.py", line 31, in evaluate
+    raise ValueError("Candidate vocabulary must contain distinct single tokens")
+ValueError: Candidate vocabulary must contain distinct single tokens
