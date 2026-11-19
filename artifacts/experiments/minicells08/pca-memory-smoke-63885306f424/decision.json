@@ -1,0 +1,39 @@
+{
+  "status": "PCA_MEMORY_RUNTIME_SMOKE_PASS",
+  "identity": {
+    "model": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "dtype": "torch.float32",
+    "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "transformers": "5.3.0"
+  },
+  "fingerprints": {
+    "backbone": "3cef5fff1112965b3eb974a2e912f0efa9965defe4fb35c7f5d2c15b94863c83",
+    "tokenizer": "a57b5c62cd5f242a06c632b82cc0b4f8239d08cc80fd9347fc1f629be977c6ca",
+    "architecture": "persistent-cognitive-v2/window=4",
+    "meta": "c295700de7276141f906a98a86fcff8c3307a032c82ab542c0109b2a4daffa7e",
+    "layer_map": "a1768e20bacc20b2a07250909b46faf21c23259ea5134c5b41fc174b5daec9c8"
+  },
+  "layers": [
+    3,
+    7,
+    11,
+    15,
+    19,
+    23
+  ],
+  "window": 4,
+  "processed_tokens": 6,
+  "memory_on_logit_max_abs": 3.285069465637207,
+  "restored_logit_max_abs": 0.0,
+  "cell_only_empty_session": true,
+  "full_session_restore": true,
+  "training_updates": 0,
+  "cross_window_recall": "UNVERIFIED",
+  "phase_ab": "PARTIAL",
+  "seconds": 22.40245033299999,
+  "peak_cuda_bytes": 3458215936,
+  "format": "minicells.pca.memory-smoke.v1",
+  "source_commit": "6e48f29f34a5c5ac7745e56a94c12d5e3480a14d",
+  "run_id": "pca-memory-smoke-63885306f424"
+}
