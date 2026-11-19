@@ -1,0 +1,46 @@
+{
+  "diagnosis": null,
+  "experiment_format": "minicells.phase3a-v21-validation.v1",
+  "experiment_id": "phase3a",
+  "files": [
+    {
+      "bytes": 391,
+      "path": "decision.json",
+      "sha256": "6242a1e8d79eb6bb33d2121f809ab66b51fdcd20df55fe98a16d8695c07d7df1"
+    },
+    {
+      "bytes": 385187,
+      "path": "validation/report.json",
+      "sha256": "356e917f4de11bb1bb0893021fb308f1fc834f68b9289d0364a3a9cd6339042e"
+    },
+    {
+      "bytes": 5249752,
+      "path": "validation/separate-linear.safetensors",
+      "sha256": "8ca7dfa098d47c399881188958766cf8cd05ad406eabbc9419e7a358122c0eca"
+    },
+    {
+      "bytes": 5776400,
+      "path": "validation/separate-mlp.safetensors",
+      "sha256": "0cc37a70aca6d45e8e80f7a8b44313ea7003a2575424ff673c6d5599190b082c"
+    },
+    {
+      "bytes": 5249752,
+      "path": "validation/shared-linear.safetensors",
+      "sha256": "a250309f43f790cd6d658b6c7543d23f8daa267623513436f8af2edeb9f3d075"
+    }
+  ],
+  "format": "minicells.experiment-publication.v1",
+  "kaggle": {
+    "kernel_run_type": "Batch",
+    "script_version_id": null
+  },
+  "published_at_utc": "2026-11-16T11:19:29.736273+00:00",
+  "runtime": {
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "python": "3.13.16"
+  },
+  "source_branch": "codex/phase3a-v21-template-smoke",
+  "source_commit": "5afbdef234363724f82e7c437d6e87192b6a09d5",
+  "source_results_dir": "results/phase3a",
+  "status": "VALIDATION_ONLY_PREFLIGHT"
+}
