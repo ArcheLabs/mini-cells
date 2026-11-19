@@ -1,0 +1,100 @@
+diff --git a/titan_llama.py b/titan_llama.py
+index 2509c32..8047bcb 100644
+--- a/titan_llama.py
++++ b/titan_llama.py
+@@ -639,6 +639,7 @@ class TitanDecoderLayer(nn.Module):
+             hidden_states,
+             state,
+             self._titan_shared_state.value_residual,
++            memory_position=getattr(self, "portable_memory_position", None),
+         )
+ 
+         if self.segmented_attn.graph_safe_decode:
+@@ -684,6 +685,8 @@ class TitanDecoderLayer(nn.Module):
+         x: torch.Tensor,
+         state: TitanLayerState,
+         value_residual: Optional[torch.Tensor],
++        *,
++        memory_position: Optional[int] = None,
+     ) -> Tuple[torch.Tensor, TitanLayerState, Optional[torch.Tensor]]:
+         """The Titan decoder block as a pure function of its inputs and state.
+ 
+@@ -691,11 +694,13 @@ class TitanDecoderLayer(nn.Module):
+         decoder-layer signature, which keeps the production path free of the
+         adapter's branching.
+         """
++        if memory_position is None:
++            memory_position = state.position
+         residual = x
+         x = self.input_layernorm(x)
+ 
+         q, k, v, memory_q, memory_k, memory_v, rotated = self._project_and_rotate(
+-            x, state.position
++            x, state.position, memory_position
+         )
+ 
+ 
+@@ -707,7 +712,7 @@ class TitanDecoderLayer(nn.Module):
+                 state=state.memory,
+                 context=x,
+                 detach_mem_state=True,
+-                seq_offset=state.position,
++                seq_offset=memory_position,
+             )
+         else:
+             # SegmentedAttention._memory_to_heads short-circuits on None, so the
+@@ -745,7 +750,8 @@ class TitanDecoderLayer(nn.Module):
+         return x, next_state, attn_intermediates.value_residual
+ 
+ 
+-    def _project_and_rotate(self, normed_hidden_states: torch.Tensor, position: int):
++    def _project_and_rotate(self, normed_hidden_states: torch.Tensor, position: int,
++                            memory_position: int):
+         """Project Q/K/V once and rotate once, for both attention and memory.
+ 
+         Attention and the neural memory previously rotated independent copies of
+@@ -770,10 +776,13 @@ class TitanDecoderLayer(nn.Module):
+             return q, k, v, q_raw, k_raw, v, rotated
+ 
+         if rotated:
+-            return q, k, v, q, k, v, rotated
++            memory_q, memory_k = (q, k) if type(position) is int and memory_position == position else attention.apply_rope(
++                q_raw, k_raw, seq_offset=memory_position
++            )
++            return q, k, v, memory_q, memory_k, v, rotated
+ 
+-        memory_q = attention.rotary_emb.rotate_queries_or_keys(q_raw, offset=position)
+-        memory_k = attention.rotary_emb.rotate_queries_or_keys(k_raw, offset=position)
++        memory_q = attention.rotary_emb.rotate_queries_or_keys(q_raw, offset=memory_position)
++        memory_k = attention.rotary_emb.rotate_queries_or_keys(k_raw, offset=memory_position)
+         return q, k, v, memory_q, memory_k, v, rotated
+ 
+ # ---------------------------------------------------------------------------
+diff --git a/train_datasets.py b/train_datasets.py
+index d9b6149..6d79ae4 100644
+--- a/train_datasets.py
++++ b/train_datasets.py
+@@ -303,6 +303,10 @@ class LongAlignSFTDataset(IterableDataset):
+                 tokenize=True,
+                 add_generation_prompt=True,
+             )
++            # Oversize prompts are rejected by _tokenize_item. Avoid encoding
++            # the conversation a second time before rejecting them.
++            if len(prompt_ids) >= self.max_length:
++                return None, None
+             full_ids = self.tokenizer.apply_chat_template(
+                 supervised_messages,
+                 tokenize=True,
+diff --git a/train_titan_llama.py b/train_titan_llama.py
+index 7506bb4..62b8e3e 100644
+--- a/train_titan_llama.py
++++ b/train_titan_llama.py
+@@ -209,6 +209,8 @@ def create_model_and_optimizer(config: TrainingConfig, device):
+     else:
+         model = TitanLLaMAForCausalLM(model_config)
+ 
++    if config.freeze_backbone:
++        model.freeze_backbone()
+     model = model.to(device)
+ 
+     # Align training config with backbone in case it was derived from a pretrained checkpoint
