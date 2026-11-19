@@ -14,6 +14,7 @@ class NativeMemory(nn.Module):
         self.memory = memory
         self.state = None
         self.pending = None
+        self.read_override = None
 
     def forward(self, hidden_states, position_embeddings, **kwargs):
         from transformers.models.qwen3.modeling_qwen3 import apply_rotary_pos_emb
@@ -44,6 +45,8 @@ class NativeMemory(nn.Module):
             if self.state is None:
                 return None
             read, _ = self.memory.read_only(self.pending, self.state)
+            if self.read_override == "zero":
+                read = torch.zeros_like(read)
             gate = (self.memory.history_mix_proj(hidden_states.float()).reshape(
                 *hidden_states.shape[:2], 16, 128
             ) + self.memory.history_mix.reshape(1, 1, 16, 128)).sigmoid().flatten(2)
