@@ -1,0 +1,61 @@
+{
+  "status": "PARTIAL",
+  "seeds": [
+    42,
+    137,
+    2027
+  ],
+  "architectures": {
+    "E0": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 10,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 704,
+        "window": 16384
+      },
+      "state_size": null
+    },
+    "E3": {
+      "model": {
+        "vocab": 8192,
+        "dim": 256,
+        "layers": 8,
+        "heads": 4,
+        "kv_heads": 4,
+        "ffn": 848,
+        "window": 32
+      },
+      "state_size": 20
+    }
+  },
+  "historical_m2_optimizer_reference": {
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip": 1.0,
+    "precision": "fp32",
+    "tf32": false
+  },
+  "backbone_supervised_tokens_per_arm_per_seed": null,
+  "batch": null,
+  "sequence_length": null,
+  "gradient_accumulation": null,
+  "scheduler": null,
+  "checkpoint_hashes": null,
+  "memory": {
+    "updates_per_seed": 1024,
+    "data": "EPCLM-007 disjoint associative-pair generator",
+    "inner_updates": 8,
+    "batch_episodes": 4,
+    "train_seed": 73001,
+    "validation_seed": 73002,
+    "backbone": "same-seed frozen trained E3 checkpoint SHA256"
+  }
+}
