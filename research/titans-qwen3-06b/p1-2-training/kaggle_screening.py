@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
-BRANCH = "codex/titans-p1-2-training"
+SOURCE_COMMIT = "f6f3b536471c65e5d97bfc8ae6611a1df1b0836b"
 ARTIFACT = "0cc6870ded45abd3a0f5835cc9700f0fb52f8784"
 ARTIFACT_DIR = "artifacts/experiments/titans-p1-1-13c8dbc1f67b"
 SCRIPT_VERSION_ID = ""
@@ -32,13 +32,14 @@ def main():
     root = Path("/kaggle/working")
     repo, upstream = root / "layer-location-source", root / "layer-location-titans"
     print("SOURCE_FETCH_START", flush=True)
-    run("git", "clone", "--progress", "--depth", "1", "--single-branch",
-        "--filter=blob:none", "--sparse", "--branch", BRANCH, SOURCE, str(repo),
-        timeout=180)
+    run("git", "init", str(repo))
+    run("git", "remote", "add", "origin", SOURCE, cwd=repo)
     run("git", "sparse-checkout", "set", "scripts/research",
         "research/titans-qwen3-06b/p1-meta",
-        "research/titans-qwen3-06b/p1-2-training",
-        cwd=repo, timeout=180)
+        "research/titans-qwen3-06b/p1-2-training", cwd=repo)
+    run("git", "fetch", "--depth=1", "--filter=blob:none", "origin",
+        SOURCE_COMMIT, cwd=repo, timeout=180)
+    run("git", "checkout", "--detach", SOURCE_COMMIT, cwd=repo, timeout=180)
     print("SOURCE_FETCH_COMPLETE", flush=True)
     sys.path.insert(0, str(repo))
     from scripts.research.publish_experiment_results import (
