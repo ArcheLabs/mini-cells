@@ -40,7 +40,7 @@ def main():
     from scripts.research.publish_experiment_results import (
         ExperimentSpec, load_github_token, prepare_artifacts, push_results,
     )
-    load_github_token("GITHUB_TOKEN")
+    token = load_github_token("GITHUB_TOKEN")
     upstream.mkdir()
     run("git", "init", str(upstream))
     run("git", "fetch", "--depth", "1", UPSTREAM, REVISION, cwd=upstream, timeout=180)
@@ -95,6 +95,46 @@ def main():
         f.relative_to(output).as_posix(): hashlib.sha256(f.read_bytes()).hexdigest()
         for f in sorted(output.rglob("*")) if f.is_file() and f.suffix != ".pt"
     }, indent=2))
+    if completed.returncode == 0:
+        import requests
+        try:
+            import tarfile
+            bundle = root / (output.name + ".tar.gz")
+            with tarfile.open(bundle, "w:gz") as archive:
+                for checkpoint in sorted((output / "formal").glob("*.pt")):
+                    archive.add(checkpoint, arcname=checkpoint.name)
+            headers = {"Authorization": "Bearer " + token,
+                       "Accept": "application/vnd.github+json"}
+            endpoint = "https://api.github.com/repos/ArcheLabs/mini-cells/releases"
+            release = requests.post(endpoint, headers=headers, timeout=60,
+                                    json={"tag_name": output.name, "name": output.name})
+            release.raise_for_status()
+            upload = release.json()["upload_url"].split("{")[0]
+            with bundle.open("rb") as stream:
+                asset = requests.post(upload, headers={**headers, "Content-Type": "application/gzip"},
+                                      params={"name": "checkpoints.tar.gz"}, data=stream, timeout=300)
+            asset.raise_for_status()
+            view = asset.json()
+            with requests.get(view["url"], headers={**headers, "Accept": "application/octet-stream"},
+                              stream=True, timeout=120) as download:
+                download.raise_for_status()
+                digest = hashlib.sha256()
+                for chunk in download.iter_content(1024*1024):
+                    digest.update(chunk)
+            with bundle.open("rb") as stream:
+                local = hashlib.file_digest(stream, "sha256").hexdigest()
+            if digest.hexdigest() != local:
+                raise RuntimeError("Checkpoint bundle readback hash mismatch")
+            decision["checkpoint_archive"] = {"status": "VERIFIED", "sha256": local,
+                                              "url": view["browser_download_url"]}
+        except (OSError, ValueError, RuntimeError, requests.RequestException) as error:
+            decision["checkpoint_archive"] = {"status": "FAILED", "error_type": type(error).__name__}
+            decision["diagnostic_status"] = "INCOMPLETE_PUBLICATION"
+        decision_path.write_text(json.dumps(decision, indent=2))
+        (output / "sha256.json").write_text(json.dumps({
+            f.relative_to(output).as_posix(): hashlib.sha256(f.read_bytes()).hexdigest()
+            for f in output.rglob("*") if f.is_file() and f.suffix != ".pt" and f.name != "sha256.json"
+        }, indent=2))
     source = f"results/{output.name}"
     shutil.copytree(output, repo / source, ignore=shutil.ignore_patterns("*.pt"))
     branch = f"kaggle/{output.name}"
@@ -110,6 +150,8 @@ def main():
     sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
     print({"status": "REMOTE_SHA_VERIFIED", "branch": branch, "commit": sha}, flush=True)
     completed.check_returncode()
+    if decision.get("checkpoint_archive", {}).get("status") != "VERIFIED":
+        raise RuntimeError("Checkpoint archive verification failed; see published decision.json")
 
 
 if __name__ == "__main__":
