@@ -1,0 +1,23 @@
+{
+  "dataset_source": "Salesforce/wikitext:wikitext-103-raw-v1",
+  "dataset_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+  "data_sha256": "acd0a67f4feb5c99b3011b07ed378cd483c3172dc23ff4b9bbd8541e3e60e4b2",
+  "model_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "titans_revision": "c60b4efaa3a3c6df4deebd57cbccf75947b87cad",
+  "seed": 42,
+  "layer": 3,
+  "chunk": 512,
+  "trainable": [
+    "memory.history_mix",
+    "memory.history_mix_proj.weight",
+    "memory.memory_model_parameters.0",
+    "memory.memory_model_parameters.1",
+    "memory.to_adaptive_step.0.weight",
+    "memory.to_adaptive_step.0.bias",
+    "memory.to_momentum.0.weight",
+    "memory.to_momentum.0.bias",
+    "memory.to_decay_factor.0.weight",
+    "memory.to_decay_factor.0.bias"
+  ],
+  "gpu": "Tesla T4"
+}
