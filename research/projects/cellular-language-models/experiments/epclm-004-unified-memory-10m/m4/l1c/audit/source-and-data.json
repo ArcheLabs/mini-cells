@@ -1,0 +1,174 @@
+{
+  "historical": {
+    "F00": {
+      "ledger": {
+        "input_tokens": 65536,
+        "processed_tensor_tokens": 65536,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 1024,
+        "query_target_tokens": 1024,
+        "committed_updates": 32
+      },
+      "checkpoint_sha256": "525493bea20ec58d9340118ea269100763a00626ed4227e46c9ac0e653f6fcf9",
+      "delayed": {
+        "432": 1536
+      },
+      "cross_session": {
+        "432": 1536
+      }
+    },
+    "F10": {
+      "ledger": {
+        "input_tokens": 65536,
+        "processed_tensor_tokens": 65536,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 1024,
+        "query_target_tokens": 1024,
+        "committed_updates": 32
+      },
+      "checkpoint_sha256": "e2335c8785265c449361dfce7d28a960ea5107055352d53fcbcb0ba8a7118ab7",
+      "delayed": {
+        "432": 1536
+      },
+      "cross_session": {
+        "432": 1536
+      }
+    },
+    "F01": {
+      "ledger": {
+        "input_tokens": 65536,
+        "processed_tensor_tokens": 65536,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 1024,
+        "query_target_tokens": 1024,
+        "committed_updates": 32
+      },
+      "checkpoint_sha256": "09e014aa9e6eb8d8e08f52c4c518cf86758d1154cb8c10e8ed2b9a8bcfccbd1b",
+      "delayed": {
+        "432": 1536
+      },
+      "cross_session": {
+        "432": 1536
+      }
+    },
+    "F11": {
+      "ledger": {
+        "input_tokens": 65536,
+        "processed_tensor_tokens": 65536,
+        "padding_tokens": 0,
+        "supervised_target_tokens": 1024,
+        "query_target_tokens": 1024,
+        "committed_updates": 32
+      },
+      "checkpoint_sha256": "122e6858616d65950d30ff7e39bfd410781776711d3bf7708a40534b87570907",
+      "delayed": {
+        "432": 1536
+      },
+      "cross_session": {
+        "432": 1536
+      }
+    }
+  },
+  "initialization": {
+    "F00": {
+      "resident": 10065158,
+      "active": 6473987,
+      "sha256": "30c477ee71a96196cb8155c6d669738a7348ebd42a1adf0d925a6c2add281bb6"
+    },
+    "F10": {
+      "resident": 10065158,
+      "active": 10027523,
+      "sha256": "30c477ee71a96196cb8155c6d669738a7348ebd42a1adf0d925a6c2add281bb6"
+    },
+    "F01": {
+      "resident": 10065158,
+      "active": 6511622,
+      "sha256": "30c477ee71a96196cb8155c6d669738a7348ebd42a1adf0d925a6c2add281bb6"
+    },
+    "F11": {
+      "resident": 10065158,
+      "active": 10065158,
+      "sha256": "30c477ee71a96196cb8155c6d669738a7348ebd42a1adf0d925a6c2add281bb6"
+    }
+  },
+  "dataset": {
+    "format": "epclm005.h4-l1c.dataset.v1",
+    "train": {
+      "episodes": 128,
+      "sha256": "02563675dcfd739bff0015dff243d88ec526c0327e5e6156436fcdec26a9a983"
+    },
+    "validation": {
+      "episodes": 32,
+      "sha256": "f44d01f92aa0c938fc55dad7f6a319afc9668d1a3ad72f58f64ae7c1850c4ae1"
+    },
+    "evaluation": {
+      "61001": {
+        "episodes": 64,
+        "sha256": "481837b5a5ae63f008360f5524ce1f8188cbd78c40abcf90d586d92b125a3aa6"
+      },
+      "61002": {
+        "episodes": 64,
+        "sha256": "c34b3dc4ec3d5501bf6eead83f076a7ae8c09917d4a5d2a498b16fd4412eb431"
+      },
+      "61003": {
+        "episodes": 64,
+        "sha256": "5394c8af7cc322d66976bf4341a96a106f3d72faa5eeb83d0a3ccde43645d774"
+      }
+    },
+    "train_heldout_pair_overlap": 0,
+    "test_status": "SEALED_NOT_ACCESSED",
+    "fact_to_first_b_answer": 187,
+    "swa_receptive_field": 156
+  },
+  "source": {
+    "source_commit": "3e83ac36ee464b8aa52dbeb8e06254a4dc6ea651",
+    "base_main": "99aff2e83a9b08d76f860d1d322dff8fd68a7f5f",
+    "source_files": {
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/baselines.py": "d2483fde41bb3f0c7efbf97bb625a313e3b419d8fef5bc9bb52d06ee3c485fdf",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/training.py": "9dfacacec7abb9bb58d3b62cfb8fe8b04731d972729a86d66f3b368b4893b18f",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/count_parameters.py": "1d3c7d0210f71f710e704db7df9ab776fc94990b3ab3b5e41afe1a2c5a2ffce5",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/run.py": "32e28a2c9343ee2715a0b5b4a6caaad24c7aa984354c0a0c59176a8a994536d5",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/configs/source-lock.json": "03d93d7e7dc739e859064fec0a53cd24fd3c67c242386fdfe70de1ae73635c6e",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/configs/upstream-lock.json": "905d1f379ed015ea3c6ee0d92f1675502cf9823a616f248f440520ce2aa75b31",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/configs/protocol.json": "efa672b1e7b994b39f92e4dc715294f4ccf716144d72cba30c7599c887c59c63",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/vendor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/vendor/selective_scan_ref.py": "0113cb9152826dc265027553df291400d3b4693d4c41985d3ca61030f1e288f0",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m2/vendor/samba_mamba1.py": "c7beb09d29c0ff6eb7013eaff01e82d0458ee8f2109fe16e98e2d82c2d3d7639",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/memory.py": "dc0f9bf1d7d4f2fe5cba5cc00d68d0e0e1965d469710d767449d3f0400d8636a",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/gates.py": "7befe176c054c88ec5d5f22b2aa7113c51d30bef5ae7881a62d29bc4449037ff",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/archive.py": "9262e32e769fcd2be92fe3de96aa202eb32f5a138603a6118f5c6f33a162123d",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/run.py": "6109556b9331539fbd174b16da3a18d77a2ed9549ff57e056b84cac73bd32b4e",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/archive-source.json": "6357da7d7bbb3d7d684b8cccda0f5650d3639ace816ff5c44d52dbd07d068126",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/mag_model.py": "4aad2e5d57fcfc6b3ca3bceb4ef3d8710ff661dae8fd36e81756dde7df3d9aaf",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/configs/source-lock.json": "40598768ed8887791eeb040ab26c7432b5895d4724755c3fba19986259c9974b",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m3/configs/smoke.json": "9e029b19fa3dfa8aaaa5eb624ff230f8cbb62ac21d90e876c460fb98986dc0cc",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/fusion.py": "54a5e28d347c4c69f4cbd88904a9f02bc8aa17d698e12fe7c7133b8baf9d1167",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/checks.py": "8db31acbbfee941a75548b21c9876c74637abe62cd408ffcca05170a4ed3d916",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/run.py": "1c3e3f7e768a10e34ea50d183a2b68720ed0618d1c42b0d17faeee60e34b4433",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/fast-screen/protocol.json": "3ada7a0bb111333c97f0391195055d3d22349136a3d09f0449503a7099efb266",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/fast-screen/preflight.py": "19fcba5b6fedc2814682aee28642e009856cfa31616205eb29c135c7b0ee926e",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/fast-screen/test_screening.py": "56f06487e5ac5da0f59cb3e9b44b7190cc9595e38f4226e8775d8a09c4a62e0c",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/fast-screen/screening.py": "dfc542a5643c9bbc686814a678ccd12e02ed5ac1791a36d83f56a625816519c4",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/fast-screen/adapter.py": "6a562b711143088b70e5b14250c5038bab6d4f5df902b38e29f8c87e8c86973c",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/configs/source-lock.json": "8c23aa1f796ebf371130704b11d9400c10a59bf93d93d1316e08790b47ce1c7c",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/configs/smoke.json": "b6e766d0ba64cd2257b9a0c19dbc6333f46a2664cc08c92ca0208a4ab5cc7fe7",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/l1c/l1c.py": "2485bef0585b946c2a7c6a5eaaec57c881f6e6914c2f3ca08718186951316182",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/l1c/context_model.py": "12ec8227c50fe34c17fe9a6230e2910373a600f52cea0519f6d33b8481c8b173",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/l1c/evaluation.py": "e1f900485103e02a4965000b6ee0f7627096c0edae62aadb89134c5893dbedbe",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/l1c/test_l1c.py": "74bc9340b25c9e41aa9f1fe0b8107f3a6a1924637735e81ad29dc0e7620235ad",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/l1c/checks_l1c.py": "f08e667c572ca9f8e1361c62a524dd7c205bb2e92cbac9b2e81a6739641a5cb4",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/l1c/config.json": "a9d7bd67175456e1552cd4bdb2e98c39039577422056adf79c0e2e3cbdcba763",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/m4/l1c/l1c_data.py": "a2ab92e7641def970a543926457ff8406c6be86af587538ac32cc7ca9b7b18cb",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/data.py": "9476c6493176cf5e39caa2f146946d2c4cd180ec29d742e9902bb5bd156dbee2",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/e0.py": "c9915f10e330091d09fa3120a18c57bb8910aa7889d9e2ffa81a616b5a4a66aa",
+      "research/projects/cellular-language-models/experiments/epclm-004-unified-memory-10m/configs/model-e0.json": "52c07ccd7e12867aa00674ed6c892c802eb10a8546ee4fd472b1fe6f4093eab2"
+    },
+    "config_sha256": "cd39bdf80c5a61462f54aad418ae38e33c483145d5e9fd0efd0ecf493eefb2f9",
+    "tokenizer_sha256": "d1ed85988c25e27618ea8de951c9005758d57fef9e46832fa623a0812afe2d04",
+    "m4_result_commit": "f0ab964502c1caa15d09ea1185ce16bec1674a20",
+    "m4_verified_result_sha256": "ba84e15e3ca7ef27a88e4b10bfe2694c0c0145a356709ac75b9f41a7c0febe14",
+    "historical_l1_result": "cc46f0911ea00a5f42d0013b3a321014b397fdfc",
+    "dataset_sha256": "c8f3f94867a43ff5292803a47630f9b34712865ffa0e1f6f9dbdef76f25d79b3"
+  },
+  "historical_checkpoint_bytes": "Not available locally; recorded digests audited"
+}
