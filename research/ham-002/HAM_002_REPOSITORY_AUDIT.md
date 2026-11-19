@@ -1,0 +1,5 @@
+# HAM-002 repository audit and plan
+
+HAM-001 supplies deterministic KV generators, scoring, attention references and a pinned B4 adapter. Its Delta implementation assumes equal key/value dimensions. HAM-001A established directional single-write effects without reliable recovery against zero. Neither experiment is rerun by this package. The pinned B4 adapter delegates store/read to Titans and exports copied episodic state. No verified Mamba-2 adapter exists for these projected inputs.
+
+Add rectangular Delta memory, composed parallel memory, tests, paired CPU evaluation and a separate publication launcher. Reuse historical generators, scoring, and B4 without editing them. Validate Delta equations before hybrid execution. Evaluate fixed fusion settings on validation seeds and report held-out seeds separately. Treat independent synthetic context transfer as state portability, not Transformer prefix equivalence. Compare latency and state bytes without claiming matched budgets. Further architecture work depends on evidence from the parallel experiment.
