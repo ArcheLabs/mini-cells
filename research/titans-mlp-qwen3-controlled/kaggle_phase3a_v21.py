@@ -8,7 +8,7 @@ import sys
 import tempfile
 
 REMOTE = 'https://github.com/ArcheLabs/mini-cells.git'
-BRANCH = 'codex/titans-mlp-qwen3-controlled'
+BRANCH = 'codex/phase3a-v21-template-smoke'
 MODEL = 'Qwen/Qwen3-0.6B-Base'
 REVISION = 'da87bfb608c14b7cf20ba1ce41287e8de496c0cd'
 output = Path(tempfile.mkdtemp(prefix='phase3a-v21-', dir='/kaggle/working'))
@@ -44,6 +44,7 @@ with tempfile.TemporaryDirectory() as tmp:
         run(sys.executable, '-u', str(project / 'phase3a_v21.py'), snapshot,
             str(smoke), '--device', 'cuda', cwd=repo)
         data = json.loads((smoke / 'results.json').read_text())
+        assert data['device'].startswith('cuda') and 'T4' in data['gpu'] and data['dtype'] == 'torch.float32'
         decision.update(status=data['status'], test=data['test'], validation_recall1=data['validation_recall1'])
     except Exception as exc:
         error = exc

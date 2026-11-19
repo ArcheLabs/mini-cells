@@ -11,7 +11,8 @@ from torch.nn import functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from audit_qwen import REVISION, sha, verify_snapshot
-from phase3a_v21_data import dataset, view as address_view
+from phase3a_v21_data import dataset
+from phase3a_templates import view as address_view
 
 
 def view(row, kind):
@@ -21,7 +22,7 @@ def view(row, kind):
         return prefix + value, [(len(prefix), len(prefix) + len(value))]
     held = kind.startswith('held_')
     role, _, variant = kind.removeprefix('held_').partition(':')
-    return address_view(row, role, int(variant or 0), held)
+    return address_view(row, role, 'B' if held else ('A2' if variant else 'A1'))
 
 
 class Adapter(nn.Module):
@@ -45,7 +46,7 @@ def contrastive(q, k):
     return (F.cross_entropy(scores, target) + F.cross_entropy(scores.T, target)) / 2
 
 
-def extract(model, tokenizer, rows, kind):
+def extract(model, tokenizer, rows, kind, *, last=False):
     out = []
     captured = []
     hook = model.model.layers[22].register_forward_hook(lambda _m, _a, y: captured.append(y))
@@ -55,10 +56,14 @@ def extract(model, tokenizer, rows, kind):
             inputs = tokenizer([x[0] for x in batch], padding=True, return_tensors='pt',
                                return_offsets_mapping=True)
             offsets = inputs.pop('offset_mapping')
+            lengths = inputs['attention_mask'].sum(1)
             captured.clear()
             with torch.no_grad():
                 model.model(**inputs.to(model.device), use_cache=False)
             for index, (_, spans) in enumerate(batch):
+                if last:
+                    out.append(captured[0][index, lengths[index] - 1].cpu())
+                    continue
                 vectors = []
                 previous = -1
                 for j, (start, end) in enumerate(spans):
@@ -93,9 +98,12 @@ def main():
         attn_implementation='sdpa', local_files_only=True).eval().requires_grad_(False).to(args.device)
     splits = dataset(42, (8, 8, 0))
     del splits["test"]
-    features = {split: {kind: extract(model, tokenizer, rows, kind) for kind in
-                ('write', 'query', 'held_write', 'held_query', 'write:1', 'query:1', 'bare', 'contextual')}
-                for split, rows in splits.items()}
+    seen = ('write', 'query', 'write:1', 'query:1', 'bare', 'contextual')
+    features = {
+        split: {kind: extract(model, tokenizer, rows, kind) for kind in
+                (seen if split == 'train' else (*seen, 'held_write', 'held_query'))}
+        for split, rows in splits.items()
+    }
     adapter = Adapter()
     optimizer = torch.optim.AdamW(adapter.parameters(), lr=.001, weight_decay=.0001)
     train = features['train']
@@ -141,7 +149,9 @@ def main():
             'value': recall(adapter.encode('value', validation['bare']) @ adapter.encode('value', validation['contextual']).T),
         }
     (args.output / 'results.json').write_text(json.dumps(dict(status='SMOKE_ONLY', seed=42,
-        revision=REVISION, hashes=hashes, tokenizer_sha256=sha(args.snapshot/'tokenizer.json'),
+        revision=REVISION, device=str(model.device), torch_version=torch.__version__,
+        gpu=torch.cuda.get_device_name() if model.device.type == 'cuda' else None,
+        dtype=str(next(model.parameters()).dtype), hashes=hashes, tokenizer_sha256=sha(args.snapshot/'tokenizer.json'),
         dataset_sha256=sha(data), checkpoint_sha256=sha(checkpoint), test="SEALED",
         backbone_frozen=not any(p.requires_grad for p in model.parameters()),
         losses=losses, validation_recall1=results), indent=2))
