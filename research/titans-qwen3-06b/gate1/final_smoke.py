@@ -131,7 +131,7 @@ def fineweb(tok, count, *, offset=0):
     raise RuntimeError("Insufficient distinct FineWeb-Edu windows")
 
 
-def train_step(model, cell, row, optimizer, device):
+def train_step(model, cell, row, optimizer, device, *, clip=1.):
     from transformers import DynamicCache
     cell.reset_episode()
     optimizer.zero_grad(set_to_none=True)
@@ -164,7 +164,7 @@ def train_step(model, cell, row, optimizer, device):
             "Invalid early recurrent gradient")
     loss.backward()
     params = [p for group in optimizer.param_groups for p in group["params"]]
-    grad = torch.nn.utils.clip_grad_norm_(params,1,error_if_nonfinite=True)
+    grad = torch.nn.utils.clip_grad_norm_(params,clip,error_if_nonfinite=True)
     require(grad > 0 and all(p.grad is None for p in cell.attention.parameters()), "Gradient check failed")
     optimizer.step()
     cell.reset_episode()
