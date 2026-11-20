@@ -66,7 +66,7 @@ def main():
     kind='minicells.mom-int-001.preflight.v1'
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip()
     receipt=output/'preflight.json'
-    status='BLOCKED_OR_ERROR'
+    status='BLOCKED_OR_ERROR' if not receipt.exists() else 'FAIL'
     if code==0:
         try:
             report=json.loads(receipt.read_text())
