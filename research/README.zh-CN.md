@@ -26,3 +26,9 @@
 - 实验结果与所属实验放在一起；仓库级发布产物保留在顶层 `artifacts/`。
 - 跨项目共享代码放在 [`../shared/`](../shared/)；项目专属逻辑留在项目或实验目录中。
 - 运行成功、机制有用或路径可视化，都不能单独证明科学主张成立。
+
+## 查找权威记录
+
+- [归属与状态规则](governance/status-and-ownership.md)：确定实验归属，分别记录运行、工程验收和科学结论。
+- [实验注册表](governance/registry.yaml)与[证据地图](governance/MINICELLS_EVIDENCE_MAP.md)：查找实验及其支持的结论。
+- [Hybrid CLM 历史路径](08-hybrid-clm/README.md)：保留原证据地址，规范记录归细胞语言模型项目。
