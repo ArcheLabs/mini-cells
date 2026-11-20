@@ -1,6 +1,8 @@
 """Real-weight MoM CUDA adapter and fresh-process cache continuation probe."""
 import argparse
 import hashlib
+import functools
+import inspect
 import json
 from pathlib import Path
 import subprocess
@@ -12,6 +14,19 @@ REVISION='f4081422ea2cf01b1b5d646cac05cad62a5d5438'
 MOM='125038087b71b635c171cec857bd0f21d10955b6'
 PREFIX=[1,19,71,112,52,13,541,90]
 SUFFIX=[43,25,18]
+
+
+def adapt_time_major_kernel(kernel):
+    """Legacy MoM explicitly requests the modern kernel's Time-major layout."""
+    if 'head_first' in inspect.signature(kernel).parameters:
+        return kernel
+
+    @functools.wraps(kernel)
+    def wrapped(*args, head_first=False, **kwargs):
+        if head_first is not False:
+            raise ValueError('Only the legacy time-major call is supported')
+        return kernel(*args, **kwargs)
+    return wrapped
 
 
 def main():
@@ -28,6 +43,12 @@ def main():
     sys.path.insert(0,str(a.source.resolve()))
     from mom.models.mom_gated_deltanet import MomGatedDeltaNetForCausalLM
     from fla.models.utils import Cache
+    from mom.layers import mom_gated_deltanet as layer
+    for name in ('chunk_gated_delta_rule', 'fused_recurrent_gated_delta_rule'):
+        kernel=getattr(layer,name)
+        print(f'FLA {name}: {inspect.signature(kernel)}',flush=True)
+        setattr(layer,name,adapt_time_major_kernel(kernel))
+    print(f'FLA cache restore: {inspect.signature(Cache.from_legacy_cache)}',flush=True)
     torch.manual_seed(42)
     start=time.monotonic()
     model, info = MomGatedDeltaNetForCausalLM.from_pretrained(a.snapshot,local_files_only=True,
