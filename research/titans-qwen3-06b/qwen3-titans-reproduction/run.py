@@ -73,7 +73,7 @@ def objective(model, batch, mode='titans', use_checkpoint=False):
         correct = ((logits.argmax(-1) == target) & (target != -100)).sum()
         return loss, correct
 
-    h = forward(ids, mask)
+    h = forward(ids, mask)[:, :-1]
     evaluate = lambda a, b: checkpoint(tile, a, b, use_reentrant=False) if use_checkpoint else tile(a, b)
     pairs = [evaluate(h[:, i:i+512], labels[:, i:i+512]) for i in range(0, length - 1, 512)]
     return sum(x[0] for x in pairs), count, sum(int(x[1]) for x in pairs)

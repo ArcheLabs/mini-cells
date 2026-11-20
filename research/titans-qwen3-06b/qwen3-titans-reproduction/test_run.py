@@ -51,3 +51,24 @@ class TrainingProtocolTest(unittest.TestCase):
         for key in ('exp_avg', 'exp_avg_sq'):
             torch.testing.assert_close(opt_a.state[a][key], opt_b.state[b][key], atol=0, rtol=0)
         self.assertEqual(lr_a.state_dict(), lr_b.state_dict())
+
+    def test_objective_aligns_final_tile_at_16k(self):
+        import sys
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        from run import objective
+
+        model = torch.nn.Module()
+        model.lm_head = torch.nn.Linear(4, 8)
+        length = 16384
+        ids = torch.arange(length).reshape(1, -1) % 8
+        hidden = torch.randn(1, length, 4, requires_grad=True)
+        batch = dict(input_ids=ids, attention_mask=torch.ones_like(ids), labels=ids)
+        with patch.dict(sys.modules, {'model': SimpleNamespace(hidden_states=lambda *args: hidden)}):
+            loss, count, _ = objective(model, batch, use_checkpoint=True)
+        reference = torch.nn.functional.cross_entropy(
+            model.lm_head(hidden[:, :-1]).reshape(-1, 8), ids[:, 1:].flatten(), reduction='sum')
+        self.assertEqual(count, 16383)
+        torch.testing.assert_close(loss, reference)
+        loss.backward()
+        self.assertEqual(hidden.grad[:, -1].count_nonzero().item(), 0)
