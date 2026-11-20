@@ -1,6 +1,6 @@
 # MA-001.4 — Multi-Cell Runtime Feasibility
 
-Owner: Continual Learning. See [current status](RESULTS.md).
+Owner: Continual Learning. See [engineering PASS and run evidence](RESULTS.md).
 
 Run from this experiment directory with CPU PyTorch and the dependencies for
 the HAM-001 adapter:
