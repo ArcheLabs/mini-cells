@@ -1,0 +1,21 @@
+{
+ "claims": {
+  "minicells-01": [["learned cell","preserves","learned state across restart"]],
+  "minicells-06": [["learned cell","resets","session state"]],
+  "minicells-05": [["learned cell","forks","independent copy"]],
+  "minicells-07": [["learned cell","recovers","checkpoint"]],
+  "jamscript-11": [["compiler","maps executable offsets","source positions"]],
+  "jamscript-10": [["compiler","emits","debug symbols"]],
+  "jamscript-06": [["compiler","traces","async calls"]],
+  "minijam-05": [["validator","records","execution trace"]],
+  "minijam-02": [["validator","records","state witness"]],
+  "finance-03": [["portfolio","measures","rate sensitivity"]]
+ },
+ "cases": [
+  {"id":"q018","facets":[["learned cell","preserves","learned state across restart"]],"grades":{"minicells-01":3,"minicells-06":2,"minicells-07":2,"minicells-05":1,"finance-03":0}},
+  {"id":"q029","facets":[["compiler","maps executable offsets","source positions"]],"grades":{"jamscript-11":3,"jamscript-10":2,"jamscript-06":1,"minijam-02":0}},
+  {"id":"q044","facets":[["validator","records","execution trace"],["compiler","emits","debug symbols"]],"grades":{"minijam-05":3,"jamscript-10":3,"minijam-02":1,"jamscript-06":1,"finance-03":0}},
+  {"id":"pair-0-weak","facets":[["learned cell","provides","contractor passcode"]],"grades":{"minicells-07":1,"minicells-01":1,"finance-03":0}},
+  {"id":"pair-1-weak","facets":[["compiler","records","purchase approver"]],"grades":{"jamscript-11":1,"jamscript-06":1,"finance-03":0}}
+ ]
+}

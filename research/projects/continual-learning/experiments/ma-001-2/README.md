@@ -35,3 +35,22 @@ labeled positives on this development subset, not a support classifier.
 The structured prototype still takes pre-normalized claims; grade-0
 annotations and a pinned semantic support reranker are pending. MA-002
 has not been accessed.
+
+## Structured evidence audit
+
+Run `python compare_structured.py` against the saved top-16 traces.
+The five selected cases use authored normalized claims and separate grades
+0–3. Candidates and their order are unchanged. On q018 the Dense winner
+is supporting Session Reset; on q029 it is unjudged Standard Library; on
+q044 it is direct Debug Symbols but a single record covers only one facet.
+The structured replay supports all three valid queries and identifies both
+Cells on q044. It marks the two unsupported probes RELATED with no primary
+Cell. Missing claim annotations are not negative labels. The structured
+router still does not infer grade 2; grade 2 here is a human annotation.
+
+This is an oracle-input diagnostic with partial claim coverage and five
+cases selected from observed development errors. It is not evidence of
+automatic query parsing or a fair accuracy comparison with Dense. The
+next comparison needs a pinned automatic text scorer on the same candidates
+and an independent development annotation pass before any threshold choice.
+No MA-002 data were accessed.
