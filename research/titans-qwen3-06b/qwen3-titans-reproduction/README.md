@@ -63,3 +63,18 @@ selects Flash or Efficient SDPA when supported by the inputs and GPU; otherwise
 it uses Math SDPA with per-group recomputation during backward. It retains the
 pinned upstream KV expansion, so native GQA copy elimination is not claimed.
 The launcher logs the selected backend and per-layer allocation / running peak.
+
+Memory CUDA training now checkpoints each full NeuralMemory call separately,
+replaying it during backward. The upstream TTT boundary, update timeline and
+higher-order gradients are unchanged. Reentrant replay avoids saved-tensor
+hooks inside the pinned implementation's torch.func.grad. Layer 0 uses a
+scalar autograd anchor because its inputs come from frozen layers. The CPU
+preflight compares the pinned Memory read, blend and parameter gradients with
+and without replay across a TTT boundary.
+
+The upstream rolling accumulation re-copies the preceding timeline at each
+TTT boundary. For this no-gated-transition configuration a separate optimization
+could assemble all non-final timeline blocks without their final entry, then
+append the complete final block in one concatenation. This change is not
+combined with recomputation: replay addresses the graphs retained across the
+four layers, whereas timeline collection only reduces temporary copy traffic.

@@ -20,3 +20,26 @@ class WindowAttentionTest(unittest.TestCase):
         got = torch.autograd.grad((actual*weight).sum(), (q, k, v))
         for a, b in zip(got, ref):
             torch.testing.assert_close(a, b, rtol=1e-10, atol=1e-12)
+
+    def test_recompute_preserves_inner_gradient_path(self):
+        from memory_recompute import recompute_memory
+
+        for train_input in (False, True):
+            w = torch.tensor([.3, -.2], requires_grad=True)
+            x = torch.tensor([.5, .8], requires_grad=train_input)
+
+            def memory(inputs):
+                updated = w
+                for target in (.1, .7):
+                    surprise = torch.func.grad(lambda p: (p * inputs - target).square().sum())
+                    updated = updated - .2 * surprise(updated)
+                return updated * inputs
+
+            def measure(recompute):
+                w.grad = x.grad = None
+                out = recompute_memory(memory, x) if recompute else memory(x)
+                out.square().sum().backward()
+                return out.detach(), w.grad.clone(), x.grad.clone() if train_input else w.grad.clone()
+
+            for actual, expected in zip(measure(True), measure(False)):
+                torch.testing.assert_close(actual, expected, rtol=0, atol=0)

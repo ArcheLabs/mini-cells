@@ -74,6 +74,38 @@ class AdapterTest(unittest.TestCase):
         self.assertTrue(all(w.grad is not None and w.grad.isfinite().all()
                             for w in memory.memory_model_parameters))
 
+    def test_recompute_matches_pinned_memory(self):
+        from memory_recompute import recompute_memory
+        memory = self.base.model.layers[0].self_attn.memory
+        gen = torch.Generator().manual_seed(20)
+
+        def sample(heads):
+            return .03 * torch.randn(1, heads, 1026, 128, generator=gen)
+
+        inputs = (sample(16), sample(8), sample(8), torch.zeros(1, 1026, 1024))
+
+        def call(q, k, v, context):
+            read, blend, _ = memory(q, k, v, context=context)
+            return read, blend
+
+        def measure(checkpointed):
+            memory.zero_grad(set_to_none=True)
+            read, blend = (recompute_memory(call, *inputs) if checkpointed else call(*inputs))
+            (read.square().mean() + blend.square().mean()).backward()
+            return read.detach(), blend.detach(), {
+                name: p.grad.detach().clone() for name, p in memory.named_parameters()
+                if p.grad is not None
+            }
+
+        a, b, grads = measure(False)
+        ra, rb, replay = measure(True)
+        torch.testing.assert_close(ra, a)
+        torch.testing.assert_close(rb, b)
+        self.assertEqual(grads.keys(), replay.keys())
+        self.assertTrue(any(g.count_nonzero() for g in grads.values()))
+        for name, grad in grads.items():
+            torch.testing.assert_close(replay[name], grad, rtol=1e-5, atol=1e-8)
+
 
 if __name__ == '__main__':
     unittest.main()

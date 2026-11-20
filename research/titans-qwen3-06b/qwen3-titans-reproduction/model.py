@@ -8,6 +8,7 @@ from titans_pytorch.mac_transformer import SegmentedAttention
 from titans_pytorch.neural_memory import NeuralMemory, MemoryMLP
 
 from window_attention import WindowAttention
+from memory_recompute import recompute_memory
 
 LAYERS = (0, 1, 2, 3)
 SEGMENT = 512
@@ -81,34 +82,61 @@ class Attention(nn.Module):
         if session['mode'] == 'native':
             return self.native(hidden_states, position_embeddings, attention_mask, **kwargs)
         q, k, v = self.projections(hidden_states, position_embeddings)
+        trace_rows = DIAGNOSTICS.get()
+        trace_enabled = trace_rows is not None and q.is_cuda
         def trace(stage, **fields):
-            if DIAGNOSTICS.get() is not None and q.is_cuda:
+            if trace_enabled:
                 row = dict(layer=self.layer, stage=stage, **fields,
                            allocated_bytes=torch.cuda.memory_allocated(q.device),
                            running_peak_bytes=torch.cuda.max_memory_allocated(q.device))
-                DIAGNOSTICS.get().append(row)
+                trace_rows.append(row)
                 print(row, flush=True)
 
         trace('before_memory', q=list(q.shape), k=list(k.shape), v=list(v.shape),
               windows_per_sequence=(q.shape[-2] + SEGMENT - 1) // SEGMENT)
         if session['mode'] == 'titans':
-            with torch.autocast(hidden_states.device.type, enabled=False):
-                read, blend, state = self.memory(q.float(), k.float(), v.float(),
-                    context=hidden_states.float(), store_mask=session['mask'])
-            rows = DIAGNOSTICS.get()
-            if rows is not None and state.seq_index >= SEGMENT:
-                fast, momentum = state.states
-                initial = self.memory.memory_model_parameters
-                differences = [(w.detach().reshape(-1, *p.shape) - p.detach()).square()
-                               for w, p in zip(fast, initial)]
-                mix = self.segmented.to_learned_v_mix
-                rows.append(dict(layer=self.layer, sequence_index=int(state.seq_index),
-                    fast_weight_delta_rms=float((sum(v.sum() for v in differences) /
-                                                 sum(v.numel() for v in differences)).sqrt()),
-                    momentum_norm=float(sum(m.detach().square().sum() for m in momentum).sqrt()),
-                    memory_read_rms=float(read.detach().square().mean().sqrt()),
-                    history_blend_mean=float(blend.detach().mean()),
-                    value_residual_mix=float(mix(hidden_states.detach()).detach().float().mean()) if mix else None))
+            mask = session['mask']
+
+            def memory_call(mq, mk, mv, context):
+                replay = use_recompute and torch.is_grad_enabled()
+                if replay and trace_enabled:
+                    print(dict(layer=self.layer, stage='memory_backward_recompute_start',
+                               allocated_bytes=torch.cuda.memory_allocated(mq.device),
+                               running_peak_bytes=torch.cuda.max_memory_allocated(mq.device)), flush=True)
+                with torch.autocast(mq.device.type, enabled=False):
+                    read, blend, state = self.memory(mq.float(), mk.float(), mv.float(),
+                        context=context.float(), store_mask=mask)
+                rows = DIAGNOSTICS.get()
+                if rows is not None and state.seq_index >= SEGMENT:
+                    fast, momentum = state.states
+                    initial = self.memory.memory_model_parameters
+                    differences = [(w.detach().reshape(-1, *p.shape) - p.detach()).square()
+                                   for w, p in zip(fast, initial)]
+                    mix = self.segmented.to_learned_v_mix
+                    rows.append(dict(layer=self.layer, sequence_index=int(state.seq_index),
+                        fast_weight_delta_rms=float((sum(v.sum() for v in differences) /
+                                                     sum(v.numel() for v in differences)).sqrt()),
+                        momentum_norm=float(sum(m.detach().square().sum() for m in momentum).sqrt()),
+                        memory_read_rms=float(read.detach().square().mean().sqrt()),
+                        history_blend_mean=float(blend.detach().mean()),
+                        value_residual_mix=float(mix(context.detach()).detach().float().mean()) if mix else None))
+                if replay and trace_enabled:
+                    print(dict(layer=self.layer, stage='memory_backward_recompute_end',
+                               allocated_bytes=torch.cuda.memory_allocated(mq.device),
+                               running_peak_bytes=torch.cuda.max_memory_allocated(mq.device)), flush=True)
+                return read, blend
+
+            use_recompute = q.is_cuda and torch.is_grad_enabled()
+            if use_recompute:
+                read, blend = recompute_memory(memory_call, q, k, v, hidden_states)
+                # A hook on the input edge runs after the checkpoint backward.
+                for tensor in (q, k, v):
+                    if tensor.requires_grad:
+                        tensor.register_hook(lambda grad: trace('memory_input_gradient'))
+                        break
+            else:
+                read, blend = memory_call(q, k, v, hidden_states)
+            trace('after_memory', recomputation=use_recompute)
             read, blend = read.to(q.dtype), blend.to(q.dtype)
         else:
             read = blend = None
