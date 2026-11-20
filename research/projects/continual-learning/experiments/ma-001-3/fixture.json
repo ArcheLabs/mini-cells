@@ -1,0 +1,30 @@
+{
+ "events":[
+ ["e01","portable","The Portable Cell export stores fast weights in a snapshot that a fresh process imports after a notebook restart.","restore"],
+ ["e02","portable","Runtime reset clears Qwen KV and recurrent state during a notebook restart without importing any snapshot.","reset"],
+ ["e03","portable","The loader verifies the snapshot checksum before accepting the restored fast weights.","verify"],
+ ["e04","compiler","The source map translates executable offsets to original source locations when the debugger resolves an instruction.","map"],
+ ["e05","compiler","The debug-symbol table records function names alongside executable addresses; it does not record original source locations.","symbols"],
+ ["e06","compiler","Async call tracing records call scheduling and executable offsets without translating them to source locations.","async"],
+ ["e07","validator","The validator records instruction execution traces when replaying work packages.","trace"],
+ ["e08","validator","The validator records a state witness when verifying a work package, separate from instruction tracing.","witness"],
+ ["e09","training","The outer optimizer accumulates gradients across microbatches before stepping.","accumulate"],
+ ["e10","training","The validation loader groups documents by length to lower padding overhead.","padding"],
+ ["e11","security","The deployment service rotates API credentials monthly.","rotate"],
+ ["e12","network","The peer discovery service announces new validator endpoints.","discover"],
+ ["e13","finance","The risk report marks long duration positions as sensitive to rate changes.","duration"],
+ ["e14","storage","The archive service compresses raw telemetry before uploading it.","archive"],
+ ["e15","release","The release job signs a manifest after artifact upload.","sign"],
+ ["e16","protocol","Accumulate commits guaranteed work results into the service state.","commit"],
+ ["e17","network","The gossip relay forwards validator messages without executing work packages.","relay"],
+ ["e18","training","The evaluation job records perplexity on held-out text before any further updates.","perplexity"]
+ ],
+ "queries":[
+ ["q1","After the notebook restarts, how do we get the learned state back, and what integrity check is performed?",["restore","verify"],"SUPPORTED","323000000000000000"],
+ ["q2","Which artifact translates instruction addresses back into the program text?",["map"],"SUPPORTED","000321000000000000"],
+ ["q3","Where are work-package instructions traced, and where are debugger function names recorded?",["trace","symbols"],"SUPPORTED","000131310000000000"],
+ ["q4","What passcode is required to open the Portable Cell snapshot after restart?",["passcode"],"RELATED","111000000000000000"],
+ ["q5","How are learned weights restored, and which vendor approved the snapshot format?",["restore","approve"],"RELATED","321000000000000000"],
+ ["q6","What is the boiling point of mercury?",["boiling"],"NO_MATCH","000000000000000000"]
+ ]
+}
