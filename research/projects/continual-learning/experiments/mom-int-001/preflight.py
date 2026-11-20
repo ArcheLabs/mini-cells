@@ -39,6 +39,27 @@ def restore_cache(cache_type, layers, seen_tokens):
     return cache
 
 
+def compare(a,b,torch,path=''):
+    """Collect every unequal leaf, including per-layer tensors."""
+    def mismatch(**details):
+        return [dict(path=path,**details)]
+    if torch.is_tensor(a) and torch.is_tensor(b):
+        if a.shape!=b.shape or a.dtype!=b.dtype:
+            return mismatch(reason='tensor schema')
+        if torch.equal(a,b):
+            return []
+        diff=(a.float()-b.float()).abs()
+        return mismatch(unequal=int((a!=b).sum()),elements=a.numel(),
+                        max_abs=float(diff.max()) if diff.isfinite().all() else None)
+    if type(a)!=type(b):
+        return mismatch(reason='type')
+    if isinstance(a,dict) and a.keys()==b.keys():
+        return [d for k in a for d in compare(a[k],b[k],torch,f'{path}/{k}')]
+    if isinstance(a,(tuple,list)) and len(a)==len(b):
+        return [d for i,(x,y) in enumerate(zip(a,b)) for d in compare(x,y,torch,f'{path}/{i}')]
+    return [] if a==b else mismatch(reason='value or structure')
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('source',type=Path)
@@ -92,55 +113,64 @@ def main():
         if x is None or isinstance(x,(int,bool)):
             return x
         raise TypeError(f'Unknown cache member: {type(x)}')
+    def capture(result):
+        cache=result.past_key_values
+        return dict(logits=result.logits.cpu(), layers=clone(cache.to_legacy_cache(),'cpu'),
+                    seen_tokens=cache.get_seq_length())
+
     bundle=a.output/'cache.pt'
     if a.restore:
         saved=torch.load(bundle,map_location='cpu',weights_only=True)
         cache=restore_cache(Cache,clone(saved['layers'],'cuda'),saved['seen_tokens'])
-        result=step(SUFFIX,cache)
-        torch.save(dict(logits=result.logits.cpu(),layers=clone(result.past_key_values.to_legacy_cache(),'cpu'),
-                        seen_tokens=result.past_key_values.get_seq_length()),a.output/'restored.pt')
+        restored_initial=clone(cache.to_legacy_cache(),'cpu')
+        restored=capture(step(SUFFIX,cache))
+        fresh=step(PREFIX)
+        prefix=capture(fresh)
+        rebuilt=capture(step(SUFFIX,fresh.past_key_values))
+        torch.save(dict(initial=restored_initial,restored=restored,prefix=prefix,rebuilt=rebuilt),
+                   a.output/'restored.pt')
         return
     result=step(PREFIX)
     cache=result.past_key_values
-    state=clone(cache.to_legacy_cache(),'cpu')
+    prefix=capture(result)
+    state=prefix['layers']
     if len(state)!=24 or cache.get_seq_length()!=len(PREFIX):
         raise AssertionError('Unexpected checkpoint layer count or cache position')
     for layer in state:
         if (len(layer['recurrent_state'])!=5 or layer['conv_state'] is None
                 or not any(torch.is_tensor(t) for t in layer['recurrent_state'])):
             raise AssertionError('Expected expert recurrence and convolution state')
-    torch.save(dict(layers=state,seen_tokens=cache.get_seq_length()),bundle)
-    expected=step(SUFFIX,cache)
-    reference_logits=expected.logits.cpu()
-    reference_layers=clone(expected.past_key_values.to_legacy_cache(),'cpu')
-    reference_count=expected.past_key_values.get_seq_length()
-    del expected,result,cache,model
+    torch.save(dict(layers=state,seen_tokens=prefix['seen_tokens']),bundle)
+    reference=capture(step(SUFFIX,cache))
+    saved=torch.load(bundle,map_location='cpu',weights_only=True)
+    local_cache=restore_cache(Cache,clone(saved['layers'],'cuda'),saved['seen_tokens'])
+    local_initial=clone(local_cache.to_legacy_cache(),'cpu')
+    local=capture(step(SUFFIX,local_cache))
+    del result,cache,local_cache,model
     torch.cuda.empty_cache()
     subprocess.run([sys.executable,str(Path(__file__).resolve()),str(a.source.resolve()),
                     str(a.snapshot.resolve()),str(a.output.resolve()),'--restore'],check=True)
     actual=torch.load(a.output/'restored.pt',weights_only=True)
-    def equal(x,y):
-        if torch.is_tensor(x):
-            torch.testing.assert_close(x,y,rtol=0,atol=0)
-        elif isinstance(x,dict):
-            assert x.keys()==y.keys()
-            for k in x:
-                equal(x[k],y[k])
-        elif isinstance(x,(list,tuple)):
-            for u,v in zip(x,y,strict=True):
-                equal(u,v)
-        else:
-            assert x==y
-    equal(reference_logits,actual['logits'])
-    equal(reference_layers,actual['layers'])
-    assert actual['seen_tokens']==reference_count==len(PREFIX)+len(SUFFIX)
+    comparisons={key: compare(x,y,torch) for key,x,y in [
+        ('local_initial_cache',state,local_initial),
+        ('worker_initial_cache',state,actual['initial']),
+        ('local_resume',reference,local),
+        ('worker_resume',reference,actual['restored']),
+        ('worker_rebuilt_prefix',prefix,actual['prefix']),
+        ('worker_rebuilt_continuation',reference,actual['rebuilt']),
+        ('worker_resume_vs_rebuild',actual['rebuilt'],actual['restored'])]}
+    passed=(reference['seen_tokens']==len(PREFIX)+len(SUFFIX) and
+            all(not comparisons[k] for k in ('local_initial_cache','worker_initial_cache',
+                                             'local_resume','worker_resume')))
     with (a.snapshot/'model.safetensors').open('rb') as f:
         receipt['weights_sha256']=hashlib.file_digest(f,'sha256').hexdigest()
-    receipt.update(status='PASS',scope='REAL_MOM_CACHE_PREFLIGHT_ONLY',max_error=0,cache_layers=len(state),
+    receipt.update(status='PASS' if passed else 'FAIL',scope='REAL_MOM_CACHE_PREFLIGHT_ONLY',
+                   comparisons=comparisons, cache_layers=len(state),
                    cache_keys=sorted(state[0]),bundle_bytes=bundle.stat().st_size,
                    peak_allocated_bytes=torch.cuda.max_memory_allocated())
     (a.output/'preflight.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    return 0 if passed else 1
 
 
 if __name__=='__main__':
-    main()
+    raise SystemExit(main())
