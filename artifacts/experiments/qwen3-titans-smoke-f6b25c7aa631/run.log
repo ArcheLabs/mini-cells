@@ -1,0 +1,309 @@
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint: 
+hint: 	git config --global init.defaultBranch <name>
+hint: 
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint: 
+hint: 	git branch -m <name>
+Initialized empty Git repository in /tmp/qwen-repro-260p2dqv/titans/.git/
+From https://github.com/sarahpannn/titans-pytorch
+ * branch            c60b4efaa3a3c6df4deebd57cbccf75947b87cad -> FETCH_HEAD
+HEAD is now at c60b4ef Add Titan-Llama support
+Collecting transformers==4.57.6
+  Downloading transformers-4.57.6-py3-none-any.whl.metadata (43 kB)
+Collecting datasets==4.4.1
+  Downloading datasets-4.4.1-py3-none-any.whl.metadata (19 kB)
+Collecting assoc-scan==0.0.6
+  Downloading assoc_scan-0.0.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting accelerated-scan==0.3.1
+  Downloading accelerated_scan-0.3.1-py3-none-any.whl.metadata (5.2 kB)
+Requirement already satisfied: wandb in /usr/local/lib/python3.13/dist-packages (0.28.1)
+Requirement already satisfied: accelerate in /usr/local/lib/python3.13/dist-packages (1.15.0)
+Collecting axial_positional_embedding>=0.3.10
+  Downloading axial_positional_embedding-0.3.12-py3-none-any.whl.metadata (4.3 kB)
+Requirement already satisfied: einops>=0.8.0 in /usr/local/lib/python3.13/dist-packages (0.8.2)
+Collecting einx>=0.3.0
+  Downloading einx-0.4.3-py3-none-any.whl.metadata (6.9 kB)
+Collecting hyper-connections>=0.1.11
+  Downloading hyper_connections-0.4.11-py3-none-any.whl.metadata (7.5 kB)
+Requirement already satisfied: Ninja in /usr/local/lib/python3.13/dist-packages (1.13.2)
+Collecting rotary-embedding-torch
+  Downloading rotary_embedding_torch-0.9.2-py3-none-any.whl.metadata (8.6 kB)
+Requirement already satisfied: tqdm in /usr/local/lib/python3.13/dist-packages (4.67.3)
+Collecting x-transformers
+  Downloading x_transformers-2.32.1-py3-none-any.whl.metadata (109 kB)
+Requirement already satisfied: filelock in /usr/local/lib/python3.13/dist-packages (from transformers==4.57.6) (4.2.4)
+Collecting huggingface-hub<1.0,>=0.34.0 (from transformers==4.57.6)
+  Downloading huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+Requirement already satisfied: numpy>=1.17 in /usr/local/lib/python3.13/dist-packages (from transformers==4.57.6) (2.1.3)
+Requirement already satisfied: packaging>=20.0 in /usr/local/lib/python3.13/dist-packages (from transformers==4.57.6) (26.3)
+Requirement already satisfied: pyyaml>=5.1 in /usr/local/lib/python3.13/dist-packages (from transformers==4.57.6) (6.0.3)
+Requirement already satisfied: regex!=2019.12.17 in /usr/local/lib/python3.13/dist-packages (from transformers==4.57.6) (2025.11.3)
+Requirement already satisfied: requests in /usr/local/lib/python3.13/dist-packages (from transformers==4.57.6) (2.34.2)
+Collecting tokenizers<=0.23.0,>=0.22.0 (from transformers==4.57.6)
+  Downloading tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+Requirement already satisfied: safetensors>=0.4.3 in /usr/local/lib/python3.13/dist-packages (from transformers==4.57.6) (0.8.0)
+Requirement already satisfied: pyarrow>=21.0.0 in /usr/local/lib/python3.13/dist-packages (from datasets==4.4.1) (23.0.1)
+Collecting dill<0.4.1,>=0.3.0 (from datasets==4.4.1)
+  Downloading dill-0.4.0-py3-none-any.whl.metadata (10 kB)
+Requirement already satisfied: pandas in /usr/local/lib/python3.13/dist-packages (from datasets==4.4.1) (2.3.3)
+Requirement already satisfied: httpx<1.0.0 in /usr/local/lib/python3.13/dist-packages (from datasets==4.4.1) (0.28.1)
+Requirement already satisfied: xxhash in /usr/local/lib/python3.13/dist-packages (from datasets==4.4.1) (4.0.2)
+Collecting multiprocess<0.70.19 (from datasets==4.4.1)
+  Downloading multiprocess-0.70.18-py313-none-any.whl.metadata (7.2 kB)
+Collecting fsspec<=2025.10.0,>=2023.1.0 (from fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1)
+  Downloading fsspec-2025.10.0-py3-none-any.whl.metadata (10 kB)
+Requirement already satisfied: torch>=2.0 in /usr/local/lib/python3.13/dist-packages (from assoc-scan==0.0.6) (2.11.0+cu130)
+Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in /usr/local/lib/python3.13/dist-packages (from fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1) (3.14.5)
+Requirement already satisfied: anyio in /usr/local/lib/python3.13/dist-packages (from httpx<1.0.0->datasets==4.4.1) (4.15.1)
+Requirement already satisfied: certifi in /usr/local/lib/python3.13/dist-packages (from httpx<1.0.0->datasets==4.4.1) (2026.10.23)
+Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.13/dist-packages (from httpx<1.0.0->datasets==4.4.1) (1.0.9)
+Requirement already satisfied: idna in /usr/local/lib/python3.13/dist-packages (from httpx<1.0.0->datasets==4.4.1) (3.20)
+Requirement already satisfied: h11>=0.16 in /usr/local/lib/python3.13/dist-packages (from httpcore==1.*->httpx<1.0.0->datasets==4.4.1) (0.16.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /usr/local/lib/python3.13/dist-packages (from huggingface-hub<1.0,>=0.34.0->transformers==4.57.6) (1.7.0)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /usr/local/lib/python3.13/dist-packages (from huggingface-hub<1.0,>=0.34.0->transformers==4.57.6) (4.16.0)
+Requirement already satisfied: click>=8.2.0 in /usr/local/lib/python3.13/dist-packages (from wandb) (8.5.0)
+Requirement already satisfied: platformdirs in /usr/local/lib/python3.13/dist-packages (from wandb) (4.13.5)
+Requirement already satisfied: protobuf!=5.28.0,!=5.29.0,<8,>=5 in /usr/local/lib/python3.13/dist-packages (from wandb) (7.36.2)
+Requirement already satisfied: pydantic<3,>=2.6 in /usr/local/lib/python3.13/dist-packages (from wandb) (2.14.1)
+Requirement already satisfied: sentry-sdk>=2.0.0 in /usr/local/lib/python3.13/dist-packages (from wandb) (2.73.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.13/dist-packages (from pydantic<3,>=2.6->wandb) (0.8.0)
+Requirement already satisfied: pydantic-core==2.50.1 in /usr/local/lib/python3.13/dist-packages (from pydantic<3,>=2.6->wandb) (2.50.1)
+Requirement already satisfied: typing-inspection>=0.4.4 in /usr/local/lib/python3.13/dist-packages (from pydantic<3,>=2.6->wandb) (0.4.4)
+Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.13/dist-packages (from requests->transformers==4.57.6) (3.4.9)
+Requirement already satisfied: urllib3<3,>=1.26 in /usr/local/lib/python3.13/dist-packages (from requests->transformers==4.57.6) (2.8.0)
+Requirement already satisfied: psutil in /usr/local/lib/python3.13/dist-packages (from accelerate) (5.9.5)
+Requirement already satisfied: sympy in /usr/local/lib/python3.13/dist-packages (from einx>=0.3.0) (1.14.0)
+Requirement already satisfied: frozendict in /usr/local/lib/python3.13/dist-packages (from einx>=0.3.0) (2.4.7)
+Collecting torch-einops-utils>=0.0.20 (from hyper-connections>=0.1.11)
+  Downloading torch_einops_utils-0.2.8-py3-none-any.whl.metadata (6.7 kB)
+Collecting loguru (from x-transformers)
+  Downloading loguru-0.8.0-py3-none-any.whl.metadata (23 kB)
+Requirement already satisfied: aiohappyeyeballs>=2.5.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1) (2.7.1)
+Requirement already satisfied: aiosignal>=1.4.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1) (1.4.0)
+Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1) (26.1.0)
+Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1) (1.8.0)
+Requirement already satisfied: multidict<8.0,>=4.5 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1) (7.2.0)
+Requirement already satisfied: propcache>=0.2.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1) (0.5.4)
+Requirement already satisfied: yarl<2.0,>=1.25.1 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.10.0,>=2023.1.0->datasets==4.4.1) (1.25.1)
+Requirement already satisfied: setuptools<82 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (81.0.0)
+Requirement already satisfied: networkx>=2.5.1 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (3.7)
+Requirement already satisfied: jinja2 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (3.1.6)
+Requirement already satisfied: cuda-toolkit==13.0.2 in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (13.0.2)
+Requirement already satisfied: cuda-bindings<14,>=13.0.3 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (13.0.3)
+Requirement already satisfied: nvidia-cudnn-cu13==9.19.0.56 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (9.19.0.56)
+Requirement already satisfied: nvidia-cusparselt-cu13==0.8.0 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (0.8.0)
+Requirement already satisfied: nvidia-nccl-cu13==2.28.9 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (2.28.9)
+Requirement already satisfied: nvidia-nvshmem-cu13==3.4.5 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (3.4.5)
+Requirement already satisfied: triton==3.6.0 in /usr/local/lib/python3.13/dist-packages (from torch>=2.0->assoc-scan==0.0.6) (3.6.0)
+Requirement already satisfied: nvidia-cublas==13.1.0.3.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (13.1.0.3)
+Requirement already satisfied: nvidia-cuda-runtime==13.0.96.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (13.0.96)
+Requirement already satisfied: nvidia-cufft==12.0.0.61.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (12.0.0.61)
+Requirement already satisfied: nvidia-cufile==1.15.1.6.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (1.15.1.6)
+Requirement already satisfied: nvidia-cuda-cupti==13.0.85.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (13.0.85)
+Requirement already satisfied: nvidia-curand==10.4.0.35.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (10.4.0.35)
+Requirement already satisfied: nvidia-cusolver==12.0.4.66.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (12.0.4.66)
+Requirement already satisfied: nvidia-cusparse==12.6.3.3.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (12.6.3.3)
+Requirement already satisfied: nvidia-nvjitlink==13.0.88.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (13.0.88)
+Requirement already satisfied: nvidia-cuda-nvrtc==13.0.88.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (13.0.88)
+Requirement already satisfied: nvidia-nvtx==13.0.85.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.2; platform_system == "Linux"->torch>=2.0->assoc-scan==0.0.6) (13.0.85)
+Requirement already satisfied: cuda-pathfinder~=1.1 in /usr/local/lib/python3.13/dist-packages (from cuda-bindings<14,>=13.0.3->torch>=2.0->assoc-scan==0.0.6) (1.8.4)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /usr/local/lib/python3.13/dist-packages (from sympy->einx>=0.3.0) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.13/dist-packages (from jinja2->torch>=2.0->assoc-scan==0.0.6) (3.0.4)
+Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.13/dist-packages (from pandas->datasets==4.4.1) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.13/dist-packages (from pandas->datasets==4.4.1) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.13/dist-packages (from pandas->datasets==4.4.1) (2026.5)
+Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.13/dist-packages (from python-dateutil>=2.8.2->pandas->datasets==4.4.1) (1.17.0)
+Downloading transformers-4.57.6-py3-none-any.whl (12.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 21.7 MB/s  0:00:00
+Downloading datasets-4.4.1-py3-none-any.whl (511 kB)
+Downloading assoc_scan-0.0.6-py3-none-any.whl (5.9 kB)
+Downloading accelerated_scan-0.3.1-py3-none-any.whl (13 kB)
+Downloading dill-0.4.0-py3-none-any.whl (119 kB)
+Downloading fsspec-2025.10.0-py3-none-any.whl (200 kB)
+Downloading huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 9.9 MB/s  0:00:00
+Downloading multiprocess-0.70.18-py313-none-any.whl (151 kB)
+Downloading tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 29.6 MB/s  0:00:00
+Downloading axial_positional_embedding-0.3.12-py3-none-any.whl (6.7 kB)
+Downloading einx-0.4.3-py3-none-any.whl (163 kB)
+Downloading hyper_connections-0.4.11-py3-none-any.whl (29 kB)
+Downloading rotary_embedding_torch-0.9.2-py3-none-any.whl (17 kB)
+Downloading x_transformers-2.32.1-py3-none-any.whl (155 kB)
+Downloading torch_einops_utils-0.2.8-py3-none-any.whl (30 kB)
+Downloading loguru-0.8.0-py3-none-any.whl (69 kB)
+Installing collected packages: loguru, fsspec, dill, multiprocess, huggingface-hub, einx, tokenizers, transformers, datasets, torch-einops-utils, rotary-embedding-torch, axial_positional_embedding, accelerated-scan, hyper-connections, assoc-scan, x-transformers
+  Attempting uninstall: fsspec
+    Found existing installation: fsspec 2025.12.0
+    Uninstalling fsspec-2025.12.0:
+      Successfully uninstalled fsspec-2025.12.0
+  Attempting uninstall: dill
+    Found existing installation: dill 0.4.1
+    Uninstalling dill-0.4.1:
+      Successfully uninstalled dill-0.4.1
+  Attempting uninstall: multiprocess
+    Found existing installation: multiprocess 0.70.19
+    Uninstalling multiprocess-0.70.19:
+      Successfully uninstalled multiprocess-0.70.19
+  Attempting uninstall: huggingface-hub
+    Found existing installation: huggingface_hub 1.33.0
+    Uninstalling huggingface_hub-1.33.0:
+      Successfully uninstalled huggingface_hub-1.33.0
+  Attempting uninstall: tokenizers
+    Found existing installation: tokenizers 0.23.3
+    Uninstalling tokenizers-0.23.3:
+      Successfully uninstalled tokenizers-0.23.3
+  Attempting uninstall: transformers
+    Found existing installation: transformers 5.20.2
+    Uninstalling transformers-5.20.2:
+      Successfully uninstalled transformers-5.20.2
+  Attempting uninstall: datasets
+    Found existing installation: datasets 4.8.5
+    Uninstalling datasets-4.8.5:
+      Successfully uninstalled datasets-4.8.5
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+bigframes 2.51.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+pathos 0.3.5 requires dill>=0.4.1, but you have dill 0.4.0 which is incompatible.
+pathos 0.3.5 requires multiprocess>=0.70.19, but you have multiprocess 0.70.18 which is incompatible.
+gcsfs 2025.12.0 requires fsspec==2025.12.0, but you have fsspec 2025.10.0 which is incompatible.
+gradio-client 2.7.2 requires huggingface-hub<3.0,>=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.
+gradio 6.30.0 requires huggingface-hub<3.0,>=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.
+gradio 6.30.0 requires pillow<13.0,>=8.0, but you have pillow 13.0.0 which is incompatible.
+diffusers 0.42.0 requires huggingface-hub<3.0,>=1.32.0, but you have huggingface-hub 0.36.2 which is incompatible.
+Successfully installed accelerated-scan-0.3.1 assoc-scan-0.0.6 axial_positional_embedding-0.3.12 datasets-4.4.1 dill-0.4.0 einx-0.4.3 fsspec-2025.10.0 huggingface-hub-0.36.2 hyper-connections-0.4.11 loguru-0.8.0 multiprocess-0.70.18 rotary-embedding-torch-0.9.2 tokenizers-0.22.2 torch-einops-utils-0.2.8 transformers-4.57.6 x-transformers-2.32.1
+test_fp32_optimizer_and_scheduler_roundtrip (test_run.TrainingProtocolTest.test_fp32_optimizer_and_scheduler_roundtrip) ... ok
+test_objective_aligns_final_tile_at_16k (test_run.TrainingProtocolTest.test_objective_aligns_final_tile_at_16k) ... ok
+test_upstream_schedule_and_step_budget (test_run.TrainingProtocolTest.test_upstream_schedule_and_step_budget) ... ok
+test_memory_cut_and_reset (test_model.AdapterTest.test_memory_cut_and_reset) ... /tmp/qwen-repro-260p2dqv/source/research/titans-qwen3-06b/qwen3-titans-reproduction/test_model.py:71: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  self.assertGreater(float((a[:, SEGMENT:] - b[:, SEGMENT:]).abs().max()), 0)
+ok
+test_native_and_training_boundary (test_model.AdapterTest.test_native_and_training_boundary) ... ok
+test_recompute_matches_pinned_memory (test_model.AdapterTest.test_recompute_matches_pinned_memory) ... ok
+test_segment_causality_and_value_handoff (test_model.AdapterTest.test_segment_causality_and_value_handoff) ... ok
+test_output_and_gradients_match_folded_reference (test_window_attention.WindowAttentionTest.test_output_and_gradients_match_folded_reference) ... ok
+test_recompute_preserves_inner_gradient_path (test_window_attention.WindowAttentionTest.test_recompute_preserves_inner_gradient_path) ... ok
+test_causal_padding_gqa_and_gradients (test_full_attention.FullAttentionTest.test_causal_padding_gqa_and_gradients) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 12.588s
+
+OK
+[W1120 04:18:13.062795213 sdp_utils.cpp:342] Warning: Flash attention only supports gpu architectures in the range [sm80, sm121]. Attempting to run on a sm 7.5 gpu. (function check_flash_attention_hardware_support)
+[W1120 04:18:13.063681122 sdp_utils_cpp.h:91] Warning: Expected query, key and value to all be of dtype: {Half, Float}. Got Query dtype: c10::BFloat16, Key dtype: c10::BFloat16, and Value dtype: c10::BFloat16 instead. (function check_tensor_dtype)
+[W1120 04:18:14.936094642 sdp_utils_cpp.h:91] Warning: Expected query, key and value to all be of dtype: {Half}. Got Query dtype: c10::BFloat16, Key dtype: c10::BFloat16, and Value dtype: c10::BFloat16 instead. (function check_tensor_dtype)
+{'full_attention_backend': 'QUERY_BLOCK_MATH', 'probes': {'FLASH_ATTENTION': {'available': False, 'reasons': ['See PyTorch native SDPA debug messages in run.log']}, 'EFFICIENT_ATTENTION': {'available': False, 'reasons': ['See PyTorch native SDPA debug messages in run.log']}, 'CUDNN_ATTENTION': {'available': False, 'reasons': ['See PyTorch native SDPA debug messages in run.log']}}, 'qkv_shapes': [[1, 16, 16384, 128], [1, 8, 16384, 128], [1, 8, 16384, 128]], 'qkv_strides': [(33554432, 128, 2048, 1), (33554432, 2097152, 128, 1), (33554432, 2097152, 128, 1)], 'dtype': 'torch.bfloat16', 'mask': None}
+
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]
+Fetching 7 files:  14%|█▍        | 1/7 [00:00<00:01,  3.59it/s]
+Fetching 7 files:  57%|█████▋    | 4/7 [00:03<00:02,  1.11it/s]
+Fetching 7 files: 100%|██████████| 7/7 [00:03<00:00,  2.05it/s]
+Loading SFT dataset(s) zai-org/LongAlign-10k::train (streaming=True)...
+SFT streaming dataset ready
+{'layer': 0, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 1754513920, 'running_peak_bytes': 1957937664}
+{'layer': 0, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 2023998464, 'running_peak_bytes': 3126576128}
+{'layer': 0, 'stage': 'before_attention', 'allocated_bytes': 1889780736, 'running_peak_bytes': 3126576128}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 0, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 1990444032, 'running_peak_bytes': 3126576128}
+{'layer': 1, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 2797454336, 'running_peak_bytes': 3126576128}
+{'layer': 1, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 3065890304, 'running_peak_bytes': 4168467968}
+{'layer': 1, 'stage': 'before_attention', 'allocated_bytes': 2931672576, 'running_peak_bytes': 4168467968}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 1, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 3233924608, 'running_peak_bytes': 4168467968}
+{'layer': 2, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 4007380480, 'running_peak_bytes': 4208707072}
+{'layer': 2, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 4275816448, 'running_peak_bytes': 5378394112}
+{'layer': 2, 'stage': 'before_attention', 'allocated_bytes': 4141598720, 'running_peak_bytes': 5378394112}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 2, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 4443850752, 'running_peak_bytes': 5378394112}
+{'layer': 3, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 5217306624, 'running_peak_bytes': 5418633216}
+{'layer': 3, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 5485742592, 'running_peak_bytes': 6588320256}
+{'layer': 3, 'stage': 'before_attention', 'allocated_bytes': 5351524864, 'running_peak_bytes': 6588320256}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 3, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 5653776896, 'running_peak_bytes': 6588320256}
+[W1120 04:18:49.086860449 sdp_utils.cpp:342] Warning: Flash attention only supports gpu architectures in the range [sm80, sm121]. Attempting to run on a sm 7.5 gpu. (function check_flash_attention_hardware_support)
+[W1120 04:18:49.086905102 sdp_utils_cpp.h:91] Warning: Expected query, key and value to all be of dtype: {Half, Float}. Got Query dtype: c10::BFloat16, Key dtype: c10::BFloat16, and Value dtype: c10::BFloat16 instead. (function check_tensor_dtype)
+[W1120 04:18:49.086925469 sdp_utils.cpp:718] Warning: cuDNN SDPA is not deterministic. (function check_cudnn_deterministic)
+{'full_attention_backend': 'QUERY_BLOCK_MATH', 'probes': {'FLASH_ATTENTION': {'available': False, 'reasons': ['See PyTorch native SDPA debug messages in run.log']}, 'EFFICIENT_ATTENTION': {'available': False, 'reasons': ['See PyTorch native SDPA debug messages in run.log']}, 'CUDNN_ATTENTION': {'available': False, 'reasons': ['See PyTorch native SDPA debug messages in run.log']}}, 'qkv_shapes': [[1, 16, 16384, 128], [1, 8, 16384, 128], [1, 8, 16384, 128]], 'qkv_strides': [(33554432, 128, 2048, 1), (33554432, 2097152, 128, 1), (33554432, 2097152, 128, 1)], 'dtype': 'torch.bfloat16', 'mask': None}
+{'layer': 3, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 5686579712, 'running_peak_bytes': 9951105024}
+{'layer': 3, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 8890003968, 'running_peak_bytes': 9951105024}
+{'layer': 3, 'stage': 'memory_input_gradient', 'allocated_bytes': 5328599040, 'running_peak_bytes': 9951105024}
+{'layer': 2, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 4554914304, 'running_peak_bytes': 9951105024}
+{'layer': 2, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 7756765696, 'running_peak_bytes': 9951105024}
+{'layer': 2, 'stage': 'memory_input_gradient', 'allocated_bytes': 4195885056, 'running_peak_bytes': 9951105024}
+{'layer': 1, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 3388645888, 'running_peak_bytes': 9951105024}
+{'layer': 1, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 6592070144, 'running_peak_bytes': 9951105024}
+{'layer': 1, 'stage': 'memory_input_gradient', 'allocated_bytes': 3029616640, 'running_peak_bytes': 9951105024}
+{'layer': 0, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 2247772160, 'running_peak_bytes': 9951105024}
+{'layer': 0, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 5340047360, 'running_peak_bytes': 9951105024}
+{"stage": "pretrain", "step": 1, "tokens": 16383, "nll": 4.8465735251480195, "accuracy": 0.25636330342428126, "lr": 1e-05, "seconds": 234.20799029800003}
+{'layer': 0, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 2072266752, 'running_peak_bytes': 2275690496}
+{'layer': 0, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 2340702720, 'running_peak_bytes': 3443280384}
+{'layer': 0, 'stage': 'before_attention', 'allocated_bytes': 2206484992, 'running_peak_bytes': 3443280384}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 0, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 2307148288, 'running_peak_bytes': 3443280384}
+{'layer': 1, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 3114158592, 'running_peak_bytes': 3443280384}
+{'layer': 1, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 3382594560, 'running_peak_bytes': 4485172224}
+{'layer': 1, 'stage': 'before_attention', 'allocated_bytes': 3248376832, 'running_peak_bytes': 4485172224}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 1, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 3550628864, 'running_peak_bytes': 4485172224}
+{'layer': 2, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 4324084736, 'running_peak_bytes': 4525411328}
+{'layer': 2, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 4592520704, 'running_peak_bytes': 5695098368}
+{'layer': 2, 'stage': 'before_attention', 'allocated_bytes': 4458302976, 'running_peak_bytes': 5695098368}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 2, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 4760555008, 'running_peak_bytes': 5695098368}
+{'layer': 3, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 5534010880, 'running_peak_bytes': 5735337472}
+{'layer': 3, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 5802446848, 'running_peak_bytes': 6905024512}
+{'layer': 3, 'stage': 'before_attention', 'allocated_bytes': 5668229120, 'running_peak_bytes': 6905024512}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 3, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 5970481152, 'running_peak_bytes': 6905024512}
+{'layer': 3, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 5969728512, 'running_peak_bytes': 10234253824}
+{'layer': 3, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 9172104192, 'running_peak_bytes': 10234253824}
+{'layer': 3, 'stage': 'memory_input_gradient', 'allocated_bytes': 5610699264, 'running_peak_bytes': 10234253824}
+{'layer': 2, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 4837014528, 'running_peak_bytes': 10234253824}
+{'layer': 2, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 8038341632, 'running_peak_bytes': 10234253824}
+{'layer': 2, 'stage': 'memory_input_gradient', 'allocated_bytes': 4477985280, 'running_peak_bytes': 10234253824}
+{'layer': 1, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 3670746112, 'running_peak_bytes': 10234253824}
+{'layer': 1, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 6871024640, 'running_peak_bytes': 10234253824}
+{'layer': 1, 'stage': 'memory_input_gradient', 'allocated_bytes': 3311716864, 'running_peak_bytes': 10234253824}
+{'layer': 0, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 2529872384, 'running_peak_bytes': 10234253824}
+{'layer': 0, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 5613234688, 'running_peak_bytes': 10234253824}
+{"stage": "pretrain", "step": 2, "tokens": 16383, "nll": 5.772490920466337, "accuracy": 0.18134651773179516, "lr": 5.9000000000000004e-05, "seconds": 242.11641284899997}
+Loading SFT dataset(s) zai-org/LongAlign-10k::train (streaming=True)...
+SFT streaming dataset ready
+{'layer': 0, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 2273610240, 'running_peak_bytes': 2477033984}
+{'layer': 0, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 2542046208, 'running_peak_bytes': 3645672448}
+{'layer': 0, 'stage': 'before_attention', 'allocated_bytes': 2407828480, 'running_peak_bytes': 3645672448}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 0, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 2508491776, 'running_peak_bytes': 3645672448}
+{'layer': 1, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 3315502080, 'running_peak_bytes': 3645672448}
+{'layer': 1, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 3583938048, 'running_peak_bytes': 4687564288}
+{'layer': 1, 'stage': 'before_attention', 'allocated_bytes': 3449720320, 'running_peak_bytes': 4687564288}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 1, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 3751972352, 'running_peak_bytes': 4687564288}
+{'layer': 2, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 4525428224, 'running_peak_bytes': 4726754816}
+{'layer': 2, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 4793864192, 'running_peak_bytes': 5897490432}
+{'layer': 2, 'stage': 'before_attention', 'allocated_bytes': 4659646464, 'running_peak_bytes': 5897490432}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 2, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 4961898496, 'running_peak_bytes': 5897490432}
+{'layer': 3, 'stage': 'before_memory', 'q': [1, 16, 16384, 128], 'k': [1, 8, 16384, 128], 'v': [1, 8, 16384, 128], 'windows_per_sequence': 32, 'allocated_bytes': 5735354368, 'running_peak_bytes': 5936680960}
+{'layer': 3, 'stage': 'after_memory', 'recomputation': True, 'allocated_bytes': 6003790336, 'running_peak_bytes': 7107416576}
+{'layer': 3, 'stage': 'before_attention', 'allocated_bytes': 5869572608, 'running_peak_bytes': 7107416576}
+{'sdpa_backend': 'MATH', 'folded_q': [32, 16, 512, 128], 'windows_per_call': 2}
+{'layer': 3, 'stage': 'after_attention', 'backend': 'MATH', 'windows_per_call': 2, 'allocated_bytes': 6171824640, 'running_peak_bytes': 7107416576}
+{'layer': 3, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 6171073024, 'running_peak_bytes': 10435598336}
+{'layer': 3, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 9368730112, 'running_peak_bytes': 10435598336}
+{'layer': 3, 'stage': 'memory_input_gradient', 'allocated_bytes': 5812043776, 'running_peak_bytes': 10435598336}
+{'layer': 2, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 5038359040, 'running_peak_bytes': 10435598336}
+{'layer': 2, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 8241783296, 'running_peak_bytes': 10435598336}
+{'layer': 2, 'stage': 'memory_input_gradient', 'allocated_bytes': 4679329792, 'running_peak_bytes': 10435598336}
+{'layer': 1, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 3872090624, 'running_peak_bytes': 10435598336}
+{'layer': 1, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 7077612032, 'running_peak_bytes': 10435598336}
+{'layer': 1, 'stage': 'memory_input_gradient', 'allocated_bytes': 3513061376, 'running_peak_bytes': 10435598336}
+{'layer': 0, 'stage': 'memory_backward_recompute_start', 'allocated_bytes': 2731216896, 'running_peak_bytes': 10435598336}
+{'layer': 0, 'stage': 'memory_backward_recompute_end', 'allocated_bytes': 5811957760, 'running_peak_bytes': 10435598336}
+{"stage": "pretrain", "step": 2, "tokens": 16383, "nll": 5.772490920466337, "accuracy": 0.18134651773179516, "lr": 5.9000000000000004e-05, "seconds": 242.85583436600007}
