@@ -1,0 +1,179 @@
+{
+  "events": [
+    {
+      "query_id": "q018",
+      "cell_id": "minicells",
+      "primary": [
+        {
+          "event": "minicells-01",
+          "evidence": {
+            "id": "[\"minicells-01\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: portable cell.",
+            "descriptor": "portable cell",
+            "fused": 0.0287391216352965,
+            "dense_score": 0.8420248031616211,
+            "descriptor_dense_score": 0.8445385098457336,
+            "channel_ranks": {
+              "dense": 21,
+              "bm25": 1,
+              "entity": null,
+              "metadata": null
+            }
+          }
+        }
+      ],
+      "winner": {
+        "id": "[\"minicells-06\", \"minicells\"]",
+        "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: session reset.",
+        "descriptor": "session reset",
+        "fused": 0.031544957774465976,
+        "dense_score": 0.8612608909606934,
+        "descriptor_dense_score": 0.850456714630127,
+        "channel_ranks": {
+          "dense": 1,
+          "bm25": 6,
+          "entity": null,
+          "metadata": null
+        }
+      },
+      "annotation": {
+        "primary": [
+          "minicells-01"
+        ],
+        "supporting": [
+          "minicells-06",
+          "minicells-07"
+        ],
+        "reason": "Portable Cell is the target capability; session reset and checkpoint recovery are supporting evidence."
+      },
+      "outcome": "below_threshold"
+    },
+    {
+      "query_id": "q029",
+      "cell_id": "jamscript",
+      "primary": [
+        {
+          "event": "jamscript-11",
+          "evidence": {
+            "id": "[\"jamscript-11\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: source map.",
+            "descriptor": "source map",
+            "fused": 0.029709507042253523,
+            "dense_score": 0.8357511162757874,
+            "descriptor_dense_score": 0.7540730834007263,
+            "channel_ranks": {
+              "dense": 4,
+              "bm25": 11,
+              "entity": null,
+              "metadata": null
+            }
+          }
+        }
+      ],
+      "winner": {
+        "id": "[\"jamscript-06\", \"jamscript\"]",
+        "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: async call.",
+        "descriptor": "async call",
+        "fused": 0.03128054740957967,
+        "dense_score": 0.8360375761985779,
+        "descriptor_dense_score": 0.7569649815559387,
+        "channel_ranks": {
+          "dense": 2,
+          "bm25": 6,
+          "entity": null,
+          "metadata": null
+        }
+      },
+      "annotation": {
+        "primary": [
+          "jamscript-11"
+        ],
+        "supporting": [
+          "jamscript-10"
+        ],
+        "reason": "Source map is the explicit executable-to-source mapping; debug symbols support debugging but do not substitute for that mapping."
+      },
+      "outcome": "below_threshold"
+    },
+    {
+      "query_id": "q044",
+      "cell_id": "minijam",
+      "primary": [
+        {
+          "event": "minijam-05",
+          "evidence": {
+            "id": "[\"minijam-05\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: execution trace.",
+            "descriptor": "execution trace",
+            "fused": 0.029827662395050816,
+            "dense_score": 0.8301230669021606,
+            "descriptor_dense_score": 0.8260892629623413,
+            "channel_ranks": {
+              "dense": 13,
+              "bm25": 2,
+              "entity": null,
+              "metadata": null
+            }
+          }
+        }
+      ],
+      "winner": {
+        "id": "[\"minijam-05\", \"minijam\"]",
+        "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: execution trace.",
+        "descriptor": "execution trace",
+        "fused": 0.029827662395050816,
+        "dense_score": 0.8301230669021606,
+        "descriptor_dense_score": 0.8260892629623413,
+        "channel_ranks": {
+          "dense": 13,
+          "bm25": 2,
+          "entity": null,
+          "metadata": null
+        }
+      },
+      "annotation": {
+        "primary": [
+          "minijam-05"
+        ],
+        "supporting": [],
+        "reason": "Execution trace is the explicit MiniJAM half of the query."
+      },
+      "outcome": "below_threshold"
+    }
+  ],
+  "weak": [
+    {
+      "query_id": "diagnostic-0",
+      "top_score": 0.032266458495966696,
+      "margin": 0.0002644103648863083,
+      "returned": [
+        "ai_memory",
+        "architecture"
+      ]
+    },
+    {
+      "query_id": "diagnostic-1",
+      "top_score": 0.032018442622950824,
+      "margin": 0.0038412175938019703,
+      "returned": [
+        "finance"
+      ]
+    },
+    {
+      "query_id": "diagnostic-2",
+      "top_score": 0.03278688524590164,
+      "margin": 0.002421115749697361,
+      "returned": [
+        "linear"
+      ]
+    }
+  ],
+  "scalar_threshold_counterexample": {
+    "valid": "q018",
+    "weak": "diagnostic-2",
+    "valid_score": 0.031544957774465976,
+    "weak_score": 0.03278688524590164,
+    "valid_margin": 0.0026948124859645234,
+    "weak_margin": 0.002421115749697361
+  }
+}

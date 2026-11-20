@@ -34,3 +34,33 @@ not a routing success rate.
 Before MA-002, add event-level relevance labels to development diagnostics
 and investigate evidence for resolving weak matches. The independent
 180-query confirmation set is specified but not built, opened, or run.
+
+## Event-level follow-up
+
+The [development annotations](event-labels.json) and
+[joined trace](artifacts/event-diagnosis.json) distinguish primary records
+from supporting context. These annotations were added after observing
+development errors; they are diagnostic labels, not independent evidence.
+
+| Query | Primary record | Dense rank | BM25 rank | Winning record in the missing Cell |
+|---|---|---:|---:|---|
+| q018 | Portable Cell | 21 | 1 | Session reset (supporting) |
+| q029 | Source map | 4 | 11 | Async call (not annotated relevant) |
+| q044 | Execution trace | 13 | 2 | Execution trace (primary) |
+
+All three primary records exist and had nonzero Dense and lexical scores;
+none matched an entity. q018 and q029 show a record-level ranking problem
+in addition to final rejection. q044 isolates rejection of the primary
+record even though its Cell is ranked second. The fixture is insufficient
+to attribute either ranking error to encoder capacity rather than content.
+
+A monotone minimum score alone cannot admit q018 or q029 while rejecting
+all three weak probes: each weak probe scores higher than both valid
+queries. A margin minimum alone cannot admit q018 while rejecting the
+account probe (margin 0.00384 vs 0.00269). These counterexamples do not
+rule out joint rules. Do not fit a joint rule to just three probes.
+
+Next: build paired development cases that preserve topic words but vary
+whether the query identifies an actual event, and assess event-level
+evidence rather than merely lowering the Cell score threshold. MA-002
+remains unopened.
