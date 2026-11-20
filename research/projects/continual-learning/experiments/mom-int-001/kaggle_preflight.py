@@ -66,7 +66,17 @@ def main():
     kind='minicells.mom-int-001.preflight.v1'
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip()
     receipt=output/'preflight.json'
-    status=json.loads(receipt.read_text())['status'] if receipt.exists() else 'BLOCKED_OR_ERROR'
+    status='BLOCKED_OR_ERROR'
+    if code==0:
+        try:
+            report=json.loads(receipt.read_text())
+            if report.get('status')!='PASS':
+                raise ValueError('MoM preflight did not report PASS')
+            status='PASS'
+        except (OSError,ValueError) as exc:
+            code=1
+            reason=str(exc)
+            print(reason,flush=True)
     (output/'decision.json').write_text(json.dumps(dict(format=kind,source_commit=source,
         model_revision=REV,status=status, fla_version=FLA,fla_wheel_sha256=FLA_SHA256,
         reason=reason,returncode=code,scientific_status='DEVELOPMENT_ONLY'),indent=2))
