@@ -13,9 +13,25 @@ is ungrounded. It can combine covered facets from different Cells. If any
 required facet is uncovered it does not return primary Cells. RELATED does
 not assert that the Cell lacks the requested information.
 
-Next implementation work: generate actual Raw Hybrid record candidates and
-record each channel's score/rank; author independent four-grade event
-annotations including auxiliary evidence and competitors; compare Dense
-and structured claim coverage plus an explicitly pinned cross-encoder.
-The prototype does not yet extract claims from natural language, recognize
-grade-2 auxiliary evidence, or establish end-to-end evidence quality.
+## Development candidate audit
+
+Run `python diagnose.py E5_SNAPSHOT MA001_1_INDEX NEW_OUTPUT`. Uses the
+existing Raw Hybrid channel scoring before Cell aggregation and rejection.
+The original baseline and cutoff are untouched. Gold labels join only after
+retrieval. The 23 observed development queries comprise three annotated
+misses and ten topic-matched pairs. Unjudged records remain null.
+
+| Measure | Result |
+| --- | --- |
+| Annotated direct events in first 8 | 12/14 |
+| Annotated direct events in first 16 | 14/14 |
+| Annotated direct events in first 32 | 14/14 |
+| Dense top-ranked candidate annotated direct | 11/23 |
+| Dense top-ranked candidate unjudged | 2/23 |
+
+See [candidate traces](artifacts/candidate-traces.json) for channel scores,
+ranks and graded matches. This establishes candidate coverage of the
+labeled positives on this development subset, not a support classifier.
+The structured prototype still takes pre-normalized claims; grade-0
+annotations and a pinned semantic support reranker are pending. MA-002
+has not been accessed.
