@@ -64,3 +64,23 @@ Next: build paired development cases that preserve topic words but vary
 whether the query identifies an actual event, and assess event-level
 evidence rather than merely lowering the Cell score threshold. MA-002
 remains unopened.
+
+## Topic-matched development probes
+
+Ten authored pairs share an event term. The valid query seeks documented
+material; its paired weak query asks for unsupported specifics or requires
+missing context. These are adversarial development probes, not a representative
+estimate of false-positive rate.
+
+The frozen Raw Hybrid routed to the intended Cell on 10/10 valid probes, but
+routed 10/10 weak probes. No pair passed both routing requirements. The valid
+query had a strictly higher top RRF score on only 1/10 pairs. Its Dense score
+against the annotated target event was higher in 10/10 pairs. That comparison
+uses a known target and its matched counterpart; it does not establish a
+deployment-ready threshold or show that the target can be identified without
+labels. See [paired traces](artifacts/paired-probes.json).
+
+Keep the current baselines frozen. A development candidate should compare
+query-to-record evidence among retrieved candidates, including hard competing
+records, and test whether it can reject unsupported requests without losing
+valid paraphrases. Do not advance to MA-002 confirmation yet.
