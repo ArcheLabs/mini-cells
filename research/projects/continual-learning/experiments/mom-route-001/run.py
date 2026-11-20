@@ -21,6 +21,8 @@ FACTS=[
 ('minicells','dataset snapshot ID','voro-62','sena-62'),
 ('minicells','training run alias','tiva-53','mora-53'),
 ('minicells','model checkpoint label','nalo-78','veka-78')]
+TOKENIZER_REV='46b15820a4df269e99aed9d709e017677c15d24b'
+E5_REV='614241f622f53c4eeff9890bdc4f31cfecc418b3'
 ARMS=('no_memory','oracle','routed','fault')
 
 
@@ -46,6 +48,8 @@ def main():
         from mom.layers import mom_gated_deltanet as layer
         for name in ('chunk_gated_delta_rule','fused_recurrent_gated_delta_rule'):
             setattr(layer,name,adapt_time_major_kernel(getattr(layer,name)))
+        if a.tokenizer_snapshot.name!=TOKENIZER_REV or a.e5_snapshot.name!=E5_REV:
+            raise ValueError('Unexpected tokenizer or E5 snapshot revision')
         tok=AutoTokenizer.from_pretrained(a.tokenizer_snapshot,local_files_only=True)
         model,info=MomGatedDeltaNetForCausalLM.from_pretrained(a.mom_snapshot,local_files_only=True,
                          torch_dtype=torch.float16,output_loading_info=True)
@@ -97,7 +101,18 @@ def main():
     write('manifest.json',dict(mom_source=MOM,model_revision=REVISION,
           tokenizer_snapshot=str(a.tokenizer_snapshot),threshold=threshold,
           frozen_config_sha256=hashlib.sha256(frozen_path.read_bytes()).hexdigest(),
+          tokenizer_revision=TOKENIZER_REV,e5_revision=E5_REV,
           records=records,cases=cases))
+    answer_checks=[]
+    for _,targets in cases[:12]:
+        yes=', '.join(FACTS[i][2] for i in targets)
+        no=', '.join([FACTS[targets[0]][3]]+[FACTS[i][2] for i in targets[1:]])
+        y,n=ids(' '+yes),ids(' '+no)
+        if not y or not n or y==n:
+            raise ValueError('Invalid answer tokenization')
+        answer_checks.append(dict(correct=yes,distractor=no,correct_ids=y,distractor_ids=n,
+                                  equal_lengths=len(y)==len(n)))
+    write('tokenizer-check.json',answer_checks)
     for (query,targets),ds in zip(cases,dense):
         # One synthetic Cell per address record lets the unchanged Ranker expose
         # its record scores before the normal max-per-Cell aggregation.
