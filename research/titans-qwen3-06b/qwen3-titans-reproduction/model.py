@@ -7,6 +7,8 @@ from transformers.models.qwen3.modeling_qwen3 import apply_rotary_pos_emb
 from titans_pytorch.mac_transformer import SegmentedAttention
 from titans_pytorch.neural_memory import NeuralMemory, MemoryMLP
 
+from window_attention import WindowAttention
+
 LAYERS = (0, 1, 2, 3)
 SEGMENT = 512
 TTT_BATCH = 1024
@@ -32,6 +34,7 @@ class Attention(nn.Module):
         ).to(native.q_proj.weight)
         # The trainer must not register the reference module's unused Q/K/V
         # projections as trainable. Use the original Qwen output projection.
+        self.segmented.attend = WindowAttention()
         self.segmented.requires_grad_(False)
         del self.segmented.to_q, self.segmented.to_kv
         self.segmented.to_out = native.o_proj
@@ -78,6 +81,16 @@ class Attention(nn.Module):
         if session['mode'] == 'native':
             return self.native(hidden_states, position_embeddings, attention_mask, **kwargs)
         q, k, v = self.projections(hidden_states, position_embeddings)
+        def trace(stage, **fields):
+            if DIAGNOSTICS.get() is not None and q.is_cuda:
+                row = dict(layer=self.layer, stage=stage, **fields,
+                           allocated_bytes=torch.cuda.memory_allocated(q.device),
+                           running_peak_bytes=torch.cuda.max_memory_allocated(q.device))
+                DIAGNOSTICS.get().append(row)
+                print(row, flush=True)
+
+        trace('before_memory', q=list(q.shape), k=list(k.shape), v=list(v.shape),
+              windows_per_sequence=(q.shape[-2] + SEGMENT - 1) // SEGMENT)
         if session['mode'] == 'titans':
             with torch.autocast(hidden_states.device.type, enabled=False):
                 read, blend, state = self.memory(q.float(), k.float(), v.float(),
@@ -99,9 +112,12 @@ class Attention(nn.Module):
             read, blend = read.to(q.dtype), blend.to(q.dtype)
         else:
             read = blend = None
+        trace("before_attention")
         out, info = self.segmented(hidden_states, value_residual=session['value'],
             memory_values=read, memory_mix=blend, return_cache=False,
             precomputed_qkv=(q, k, v), qkv_already_rotated=True)
+        trace('after_attention', backend=self.segmented.attend.backend,
+              windows_per_call=self.segmented.attend.windows_per_call)
         session['value'] = info.value_residual
         return out, None
 

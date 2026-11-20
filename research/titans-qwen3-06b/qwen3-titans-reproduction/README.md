@@ -57,3 +57,9 @@ Add `--resume` to restore from the last saved optimizer boundary. It uses the st
 ## Kaggle preflight
 
 Paste `kaggle_smoke.py` into a Kaggle **Python Script**. Select T4, enable Internet and grant the existing `GITHUB_TOKEN` secret access. No script version or dataset commit needs to be entered. Launch once: the script runs the deterministic tests, real data smoke, and disk restore check, then publishes reports to a fresh GitHub results branch. Checkpoints remain in Kaggle Output; reports and logs go to GitHub.
+
+The segmented path runs SDPA in groups of two folded windows. It explicitly
+selects Flash or Efficient SDPA when supported by the inputs and GPU; otherwise
+it uses Math SDPA with per-group recomputation during backward. It retains the
+pinned upstream KV expansion, so native GQA copy elimination is not claimed.
+The launcher logs the selected backend and per-layer allocation / running peak.
