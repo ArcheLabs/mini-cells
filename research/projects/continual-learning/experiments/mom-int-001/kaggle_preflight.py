@@ -12,7 +12,8 @@ BRANCH = 'codex/ma-001'
 EXPERIMENTS = 'research/projects/continual-learning/experiments'
 REV = 'f4081422ea2cf01b1b5d646cac05cad62a5d5438'
 MOM = '125038087b71b635c171cec857bd0f21d10955b6'
-FLA = 'a46f204c1c7ac5c70ee99168adef7682e6fbf2a3'
+FLA = '0.2.2'
+FLA_SHA256 = 'b6a62b140209d1350861d768e9acb3786548a47960cc324aca39de940ca6b83f'
 
 
 def main():
@@ -41,8 +42,18 @@ def main():
         run(['git','checkout','--detach','FETCH_HEAD'],cwd=upstream)
         constraints=repo.parent/'constraints.txt'
         constraints.write_text('torch=='+version('torch')+'\ntriton=='+version('triton')+'\n')
-        run([sys.executable,'-m','pip','install','-c',str(constraints),'transformers==4.51.3',
-             'git+https://github.com/fla-org/flash-linear-attention.git@'+FLA],timeout=240)
+        import hashlib
+        wheel_dir=scratch/'wheels'
+        wheel_dir.mkdir()
+        run([sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps',
+             '--timeout','15','--retries','2','--dest',str(wheel_dir),
+             'flash-linear-attention=='+FLA],timeout=90)
+        wheel=wheel_dir/'flash_linear_attention-0.2.2-py3-none-any.whl'
+        if hashlib.sha256(wheel.read_bytes()).hexdigest()!=FLA_SHA256:
+            raise ValueError('FLA wheel SHA-256 mismatch')
+        run([sys.executable,'-m','pip','install','--only-binary=:all:',
+             '--timeout','15','--retries','2','-c',str(constraints),
+             'transformers==4.51.3',str(wheel)],timeout=180)
         snapshot=subprocess.check_output([sys.executable,'-c',
             "from huggingface_hub import snapshot_download; import sys; print(snapshot_download('linear-moe-hub/MoM-Gated-Deltanet-340M',revision=sys.argv[1],allow_patterns=['config.json','model.safetensors']))",
             REV],text=True,timeout=420).strip()
@@ -50,12 +61,13 @@ def main():
             str(upstream),snapshot,str(output)],timeout=420).returncode
     except (subprocess.SubprocessError,OSError) as exc:
         reason=str(exc)
+        print(reason,flush=True)
     kind='minicells.mom-int-001.preflight.v1'
     source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip()
     receipt=output/'preflight.json'
     status=json.loads(receipt.read_text())['status'] if receipt.exists() else 'BLOCKED_OR_ERROR'
     (output/'decision.json').write_text(json.dumps(dict(format=kind,source_commit=source,
-        model_revision=REV,status=status, fla_revision=FLA,
+        model_revision=REV,status=status, fla_version=FLA,fla_wheel_sha256=FLA_SHA256,
         reason=reason,returncode=code,scientific_status='DEVELOPMENT_ONLY'),indent=2))
     relative='results/'+name
     shutil.copytree(output,repo/relative,ignore=shutil.ignore_patterns('*.pt','*.sqlite'))
