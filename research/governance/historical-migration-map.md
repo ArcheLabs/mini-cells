@@ -57,3 +57,11 @@ source commit retain their original paths at that commit. The CLM-002 Gate 0
 Notebook contains a historical sparse checkout pattern for the old directory;
 its frozen launcher is preserved and should be read with its original source
 identity. This move makes no change to any run or scientific conclusion.
+
+## Qwen studies added during review
+
+| Former path | Current path |
+|---|---|
+| `research/titans-qwen3-06b/gate1` | [`projects/cellular-language-models/experiments/titans-qwen3-06b-gate1`](../projects/cellular-language-models/experiments/titans-qwen3-06b-gate1/) |
+| `research/titans-qwen3-06b/qtr-1` | [`projects/cellular-language-models/experiments/titans-qwen3-06b-qtr-1`](../projects/cellular-language-models/experiments/titans-qwen3-06b-qtr-1/) |
+| `research/titans-qwen3-06b/qwen3-titans-reproduction` | [`projects/cellular-language-models/experiments/titans-qwen3-06b-qwen3-titans-reproduction`](../projects/cellular-language-models/experiments/titans-qwen3-06b-qwen3-titans-reproduction/) |
