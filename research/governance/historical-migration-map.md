@@ -45,3 +45,15 @@ Historical launchers and evidence retain their original contents. Run frozen lau
 | `research/titans/stage6d` | [`projects/continual-learning/experiments/titans-stage6d`](../projects/continual-learning/experiments/titans-stage6d/) |
 | `research/titans/stage7` | [`projects/continual-learning/experiments/titans-stage7`](../projects/continual-learning/experiments/titans-stage7/) |
 | `research/08-hybrid-clm/experiments/005-compositional-cell-graph/artifacts` | [`projects/cellular-language-models/experiments/005-compositional-cell-graph/artifacts`](../projects/cellular-language-models/experiments/005-compositional-cell-graph/artifacts/) |
+
+## Residual artifact migration
+
+The ten tracked evidence files left under
+`research/08-hybrid-clm/experiments/005-compositional-cell-graph/artifacts/`
+move byte for byte to
+[the owning experiment's artifacts directory](../projects/cellular-language-models/experiments/005-compositional-cell-graph/artifacts/).
+Use the same relative path beneath that directory. Historical runs that pin a
+source commit retain their original paths at that commit. The CLM-002 Gate 0
+Notebook contains a historical sparse checkout pattern for the old directory;
+its frozen launcher is preserved and should be read with its original source
+identity. This move makes no change to any run or scientific conclusion.
