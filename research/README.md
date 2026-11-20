@@ -32,12 +32,3 @@ project folders own the research itself.
   stays with its project or experiment.
 - A successful run, useful mechanism, or visualized path does not by itself
   establish a scientific claim.
-
-## Find the right record
-
-- [Ownership and status rules](governance/status-and-ownership.md): decide where
-  a study belongs and distinguish execution, engineering and scientific evidence.
-- [Experiment registry](governance/registry.yaml) and
-  [evidence map](governance/MINICELLS_EVIDENCE_MAP.md): locate studies and claims.
-- [Historical Hybrid CLM paths](08-hybrid-clm/README.md): preserved evidence URLs;
-  the owning project is Cellular Language Models.

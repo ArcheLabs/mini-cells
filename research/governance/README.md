@@ -18,8 +18,6 @@ The registry and indexes help locate them; they do not change their status.
 
 Current development launch policy: [one-launch automatic workflow](automatic-development-workflow.md). Manual registration fields are not a prerequisite for development execution.
 
-See [Ownership and evidence status](status-and-ownership.md) for the record hierarchy and study closure checklist.
-
 ## MiniCells Evidence Map
 
 Read the [Research History and Evidence Map](MINICELLS_EVIDENCE_MAP.md) for the integrated narrative. Original protocols and results remain authoritative; the Map is not a parallel registry or execution authorization.
