@@ -29,6 +29,16 @@ def adapt_time_major_kernel(kernel):
     return wrapped
 
 
+def restore_cache(cache_type, layers, seen_tokens):
+    # FLA 0.2.2 exports a tuple but its importer only consumes lists.
+    cache = cache_type.from_legacy_cache(list(layers), seen_tokens=seen_tokens)
+    if len(cache) != len(layers) or any(cache.get_seq_length(i) != seen_tokens
+                                       for i in range(len(layers))):
+        raise AssertionError(f'Cache round trip: layers={len(cache)}/{len(layers)}, '
+                             f'position={cache.get_seq_length()}/{seen_tokens}')
+    return cache
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('source',type=Path)
@@ -85,9 +95,7 @@ def main():
     bundle=a.output/'cache.pt'
     if a.restore:
         saved=torch.load(bundle,map_location='cpu',weights_only=True)
-        cache=Cache.from_legacy_cache(clone(saved['layers'],'cuda'),seen_tokens=saved['seen_tokens'])
-        if cache.get_seq_length()!=saved['seen_tokens']:
-            raise AssertionError('Initial cache position mismatch')
+        cache=restore_cache(Cache,clone(saved['layers'],'cuda'),saved['seen_tokens'])
         result=step(SUFFIX,cache)
         torch.save(dict(logits=result.logits.cpu(),layers=clone(result.past_key_values.to_legacy_cache(),'cpu'),
                         seen_tokens=result.past_key_values.get_seq_length()),a.output/'restored.pt')
