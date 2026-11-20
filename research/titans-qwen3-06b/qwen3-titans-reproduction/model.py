@@ -173,7 +173,11 @@ def hidden_states(model, ids, mask, mode):
         raise ValueError('Expected right padded sequences')
     handle = SESSION.set(dict(mode=mode, mask=mask, value=None))
     try:
-        return model.model(input_ids=ids, attention_mask=mask, use_cache=False).last_hidden_state
+        attention_mask = mask
+        if model.config._attn_implementation == 'repro_exact':
+            # A mapping bypasses Transformers' dense causal mask builder.
+            attention_mask = {'full_attention': None if bool(mask.all()) else mask}
+        return model.model(input_ids=ids, attention_mask=attention_mask, use_cache=False).last_hidden_state
     finally:
         SESSION.reset(handle)
 
@@ -191,3 +195,10 @@ def checkpoint_native_layers(model):
 
     for layer in model.model.layers[4:]:
         layer.forward = wrap(layer.forward)
+
+
+def install_full_attention_kernel(model):
+    from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS
+    from full_attention import qwen_attention
+    ALL_ATTENTION_FUNCTIONS.register('repro_exact', qwen_attention)
+    model.config._attn_implementation = 'repro_exact'

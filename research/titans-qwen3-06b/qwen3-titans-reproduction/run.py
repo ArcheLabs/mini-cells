@@ -294,7 +294,8 @@ def main():
                 torch.testing.assert_close(param, expected, rtol=0, atol=0)
     write(root / 'compatibility-report.json', dict(native_equivalence='PASS', identity_initialization='PASS',
                                                    native_positions=40960, experiment_position_limit=32768))
-    from model import checkpoint_native_layers
+    from model import checkpoint_native_layers, install_full_attention_kernel
+    install_full_attention_kernel(model)
     checkpoint_native_layers(model)
     named = {n: p.numel() for n,p in model.named_parameters() if p.requires_grad}
     write(root / 'trainable-parameters.json', dict(total=sum(named.values()), parameters=named))

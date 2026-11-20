@@ -65,7 +65,10 @@ def main():
                 'accelerated-scan==0.3.1', 'wandb', 'accelerate',
                 *(d for d in deps if not d.startswith('torch')))
             phase = 'deterministic-tests'
-            run(sys.executable, '-m', 'unittest', '-v', 'test_run', 'test_model', 'test_window_attention', cwd=repo / DIRECTORY)
+            run(sys.executable, '-m', 'unittest', '-v', 'test_run', 'test_model', 'test_window_attention', 'test_full_attention', cwd=repo / DIRECTORY)
+            phase = 'full-attention-16k'
+            run(sys.executable, 'full_attention.py', str(output / 'full-attention-16k.json'),
+                cwd=repo / DIRECTORY)
             phase = 'real-data-smoke-and-restore'
             run(sys.executable, 'run.py', str(upstream), str(output / 'smoke'),
                 '--smoke', cwd=repo / DIRECTORY)

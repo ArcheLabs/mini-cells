@@ -78,3 +78,13 @@ could assemble all non-final timeline blocks without their final entry, then
 append the complete final block in one concatenation. This change is not
 combined with recomputation: replay addresses the graphs retained across the
 four layers, whereas timeline collection only reduces temporary copy traffic.
+
+For Qwen layers 4–27 the launcher now runs a standalone 16K attention
+forward/backward measurement before loading the model. The kernel probes
+Flash, Efficient, and cuDNN SDPA and records their eligibility, the selected
+backend, and mask/layout details. Packed data uses implicit causal masking;
+right-padded data uses a compact padding mask. If no eligible fused backend
+can be used, 128-query blocks score the entire key sequence with an absolute
+causal mask and recompute their score intermediates in backward. GQA retains
+explicit KV expansion. Model projections, normalization, RoPE, and the full
+receptive field remain unchanged.
