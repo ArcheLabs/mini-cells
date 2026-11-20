@@ -62,8 +62,13 @@ def main():
                    load_seconds=time.monotonic()-start)
     def step(tokens, cache=None):
         with torch.inference_mode():
-            result=model(input_ids=torch.tensor([tokens],device='cuda'),past_key_values=cache,
-                         use_cache=True,return_dict=True)
+            # The legacy CausalLM wrapper adds training aux loss to None
+            # during label-free inference. Use its unchanged backbone and head.
+            result=model.model(input_ids=torch.tensor([tokens],device='cuda'),past_key_values=cache,
+                               use_cache=True,return_dict=True)
+            from types import SimpleNamespace
+            result=SimpleNamespace(logits=model.lm_head(result.last_hidden_state),
+                                   past_key_values=result.past_key_values)
         if not torch.isfinite(result.logits).all():
             raise FloatingPointError('MoM logits nonfinite')
         return result
