@@ -54,3 +54,16 @@ automatic query parsing or a fair accuracy comparison with Dense. The
 next comparison needs a pinned automatic text scorer on the same candidates
 and an independent development annotation pass before any threshold choice.
 No MA-002 data were accessed.
+
+## Automatic text baseline
+
+`python lexical_audit.py` compares query-term coverage and Dense similarity
+over identical retrieved top-16 records. Neither method uses Gold IDs to select
+a record. Over 23 cases, both selected 11 annotated direct records at rank 1;
+one lexical and two Dense winners are unjudged. In 10 matched pairs the best
+candidate's score was strictly higher for the valid request in 8 lexical and
+10 Dense comparisons. This uses the actual candidate maximum, not the Gold
+record. It does not calibrate a support decision for a single query.
+See [automatic traces](artifacts/lexical-audit.json). This lexical control
+does not substitute for a semantic support reranker; that comparison remains
+pending. No threshold changed and MA-002 was not accessed.
