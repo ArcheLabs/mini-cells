@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
@@ -58,10 +59,13 @@ def embeddings(download, output, snapshot=None):
 def evaluate(rows, queries, arm, dense, threshold):
     result=[]
     for i, q in enumerate(queries):
+        start=time.perf_counter()
         ranking=rows.scores(q['query'],arm,None if dense is None else dense[i])
         returned=rows.route(ranking,threshold)
         expected=set(q['relevant_cell_ids'])
+        accepted=[cell for cell,score in ranking if score>threshold]
         result.append(dict(**q, returned_cell_ids=returned,
+                           ranked_accepted=accepted[:5], ranking_ms=(time.perf_counter()-start)*1000,
                            recall=len(expected.intersection(returned))/len(expected) if expected else None,
                            all_relevant=expected.issubset(returned) if expected else None))
     return result
@@ -71,7 +75,20 @@ def metrics(results):
     mean=lambda xs:sum(xs)/len(xs) if xs else None
     pos=[r for r in results if r['recall'] is not None]
     multi=[r for r in pos if r['query_type']=='multi']
-    return dict(recall_at_3=mean([r['recall'] for r in pos]),
+    def recall(row,k):
+        expected=set(row['relevant_cell_ids'])
+        return len(expected.intersection(row['ranked_accepted'][:k]))/len(expected)
+    neg=[r for r in results if not r['relevant_cell_ids']]
+    return dict(recall_at_1=mean([recall(r,1) for r in pos]),
+                recall_at_5=mean([recall(r,5) for r in pos]),
+                mrr_at_5=mean([next((1/i for i,c in enumerate(r['ranked_accepted'],1)
+                                   if c in r['relevant_cell_ids']),0.) for r in pos]),
+                precision_at_3=mean([len(set(r['returned_cell_ids']).intersection(r['relevant_cell_ids']))/3
+                                     for r in results]),
+                abstention_accuracy=mean([not r['returned_cell_ids'] for r in neg]),
+                mean_candidates=mean([len(r['returned_cell_ids']) for r in results]),
+                mean_ranking_ms=mean([r['ranking_ms'] for r in results]),
+                recall_at_3=mean([r['recall'] for r in pos]),
                 multi_recall_at_3=mean([r['recall'] for r in multi]),
                 multi_all_relevant_at_3=mean([r['all_relevant'] for r in multi]),
                 no_match_fpr=mean([bool(r['returned_cell_ids']) for r in results if r['query_type']=='no_match']),
