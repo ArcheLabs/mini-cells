@@ -1,0 +1,10 @@
+minijam|execution client;distributed validation|Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules.
+minicells|persistent learned module;cell lifecycle|Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell.
+jamscript|program translation;toolchain|The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them.
+locus|credential lifecycle;authorization|Identity records govern who can sign and delegate permissions. Recovery and revocation are authorization operations independent of account balances.
+jam|service protocol;distributed state|Protocol notes describe how guaranteed work reaches shared service state. Availability and finality are specified independently of client implementation.
+ai_memory|content association;online adaptation|A learned lookup uses prediction errors to store information. Similar keys can interfere even when the training backbone remains frozen.
+linear|sequence recurrence;parallel scan|A state matrix carries information between positions. Associative scans parallelize recurrence, while decay controls retention between updates.
+training|optimization recipe;language model evaluation|The offline optimizer combines gradients over microbatches. Token packing, precision and held-out scoring are specified separately from online memory writes.
+finance|portfolio risk;financial accounts|Positions are reviewed for rate sensitivity, collateral and exit costs. Account ownership affects settlement and differs from software permissions.
+architecture|interface governance;operational reliability|Compatibility reviews record what clients can rely on when an interface changes. Migration and reversal plans track obligations across components.
