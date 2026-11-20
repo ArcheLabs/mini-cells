@@ -1,0 +1,993 @@
+[
+  {
+    "query_id": "q008",
+    "query": "Why do we use gradient accumulation in Qwen training?",
+    "query_type": "direct",
+    "relevant_cell_ids": [
+      "training"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "training"
+    ],
+    "missing": {},
+    "top_score": 0.048915917503966164,
+    "margin": 0.01716988575793442
+  },
+  {
+    "query_id": "q010",
+    "query": "How do we govern API versioning?",
+    "query_type": "direct",
+    "relevant_cell_ids": [
+      "architecture"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "architecture"
+    ],
+    "missing": {},
+    "top_score": 0.04918032786885246,
+    "margin": 0.02206228462177695
+  },
+  {
+    "query_id": "q006",
+    "query": "How does TTT-MLP use a surprise gradient?",
+    "query_type": "direct",
+    "relevant_cell_ids": [
+      "ai_memory"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "ai_memory"
+    ],
+    "missing": {},
+    "top_score": 0.048915917503966164,
+    "margin": 0.01741790163095029
+  },
+  {
+    "query_id": "q007",
+    "query": "Where is the Gated DeltaNet recurrence described?",
+    "query_type": "direct",
+    "relevant_cell_ids": [
+      "linear"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "linear"
+    ],
+    "missing": {},
+    "top_score": 0.04891591750396616,
+    "margin": 0.024593573181621833
+  },
+  {
+    "query_id": "q015",
+    "query": "Where can I find the work package format?",
+    "query_type": "direct",
+    "relevant_cell_ids": [
+      "jam"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "jam"
+    ],
+    "missing": {},
+    "top_score": 0.04918032786885246,
+    "margin": 0.02229860743874493
+  },
+  {
+    "query_id": "q022",
+    "query": "How do different associations compete for the same learned lookup slot?",
+    "query_type": "paraphrase",
+    "relevant_cell_ids": [
+      "ai_memory"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "ai_memory"
+    ],
+    "missing": {},
+    "top_score": 0.032018442622950824,
+    "margin": 0.009209164272435358
+  },
+  {
+    "query_id": "q018",
+    "query": "How do we restart the notebook while retaining the learned module?",
+    "query_type": "paraphrase",
+    "relevant_cell_ids": [
+      "minicells"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [],
+    "missing": {
+      "minicells": {
+        "indexed": true,
+        "cell_rank": 1,
+        "outcome": "below_threshold",
+        "records": [
+          {
+            "id": "[\"minicells-01\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: portable cell.",
+            "descriptor": "portable cell",
+            "fused": 0.0287391216352965,
+            "dense_score": 0.8420248031616211,
+            "descriptor_dense_score": 0.8445385098457336,
+            "channel_ranks": {
+              "dense": 21,
+              "bm25": 1,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-02\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: fast weights.",
+            "descriptor": "fast weights",
+            "fused": 0.02946236559139785,
+            "dense_score": 0.8470029830932617,
+            "descriptor_dense_score": 0.821334719657898,
+            "channel_ranks": {
+              "dense": 15,
+              "bm25": 2,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-03\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: memory gate.",
+            "descriptor": "memory gate",
+            "fused": 0.030798389007344232,
+            "dense_score": 0.8522219657897949,
+            "descriptor_dense_score": 0.820894718170166,
+            "channel_ranks": {
+              "dense": 7,
+              "bm25": 3,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-04\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: address index.",
+            "descriptor": "address index",
+            "fused": 0.028125,
+            "dense_score": 0.8438372611999512,
+            "descriptor_dense_score": 0.8189526796340942,
+            "channel_ranks": {
+              "dense": 20,
+              "bm25": 4,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-05\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: cell fork.",
+            "descriptor": "cell fork",
+            "fused": 0.02967032967032967,
+            "dense_score": 0.8499491214752197,
+            "descriptor_dense_score": 0.820215106010437,
+            "channel_ranks": {
+              "dense": 10,
+              "bm25": 5,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-06\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: session reset.",
+            "descriptor": "session reset",
+            "fused": 0.031544957774465976,
+            "dense_score": 0.8612608909606934,
+            "descriptor_dense_score": 0.850456714630127,
+            "channel_ranks": {
+              "dense": 1,
+              "bm25": 6,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-07\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: checkpoint recovery.",
+            "descriptor": "checkpoint recovery",
+            "fused": 0.03055037313432836,
+            "dense_score": 0.855259358882904,
+            "descriptor_dense_score": 0.8250698447227478,
+            "channel_ranks": {
+              "dense": 4,
+              "bm25": 7,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-08\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: cell isolation.",
+            "descriptor": "cell isolation",
+            "fused": 0.027364110201042444,
+            "dense_score": 0.8449910879135132,
+            "descriptor_dense_score": 0.8181756734848022,
+            "channel_ranks": {
+              "dense": 19,
+              "bm25": 8,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-09\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: retention benchmark.",
+            "descriptor": "retention benchmark",
+            "fused": 0.03036576949620428,
+            "dense_score": 0.8554203510284424,
+            "descriptor_dense_score": 0.8265624642372131,
+            "channel_ranks": {
+              "dense": 3,
+              "bm25": 9,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-10\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: donor memory.",
+            "descriptor": "donor memory",
+            "fused": 0.02877846790890269,
+            "dense_score": 0.8519597053527832,
+            "descriptor_dense_score": 0.8180837631225586,
+            "channel_ranks": {
+              "dense": 9,
+              "bm25": 10,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-11\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: memory fusion.",
+            "descriptor": "memory fusion",
+            "fused": 0.027783137179239824,
+            "dense_score": 0.8491984605789185,
+            "descriptor_dense_score": 0.812323808670044,
+            "channel_ranks": {
+              "dense": 13,
+              "bm25": 11,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minicells-12\", \"minicells\"]",
+            "raw": "Notebook runs carry learned state between sessions. Tests distinguish independent copies from shared state and distinguish restoration from starting with an empty cell. Review item: revision fingerprint.",
+            "descriptor": "revision fingerprint",
+            "fused": 0.02797339593114241,
+            "dense_score": 0.8495436310768127,
+            "descriptor_dense_score": 0.8344031572341919,
+            "channel_ranks": {
+              "dense": 11,
+              "bm25": 12,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"projection\", \"minicells\"]",
+            "raw": "GPU-PVM and portable learned cells",
+            "descriptor": "joint execution review",
+            "fused": 0.020939017808958446,
+            "dense_score": 0.8145079016685486,
+            "descriptor_dense_score": 0.7621599435806274,
+            "channel_ranks": {
+              "dense": 25,
+              "bm25": 49,
+              "entity": null,
+              "metadata": null
+            }
+          }
+        ]
+      }
+    },
+    "top_score": 0.031544957774465976,
+    "margin": 0.0026948124859645234
+  },
+  {
+    "query_id": "q030",
+    "query": "How does a large prediction error make the model store a fact?",
+    "query_type": "paraphrase",
+    "relevant_cell_ids": [
+      "ai_memory"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "ai_memory"
+    ],
+    "missing": {},
+    "top_score": 0.03252247488101534,
+    "margin": 0.008299506837822577
+  },
+  {
+    "query_id": "q029",
+    "query": "What relates executable offsets back to the original program?",
+    "query_type": "paraphrase",
+    "relevant_cell_ids": [
+      "jamscript"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [],
+    "missing": {
+      "jamscript": {
+        "indexed": true,
+        "cell_rank": 1,
+        "outcome": "below_threshold",
+        "records": [
+          {
+            "id": "[\"jamscript-01\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: compiler lowering.",
+            "descriptor": "compiler lowering",
+            "fused": 0.030886196246139225,
+            "dense_score": 0.8312796354293823,
+            "descriptor_dense_score": 0.7686612606048584,
+            "channel_ranks": {
+              "dense": 9,
+              "bm25": 1,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-02\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: borrow checker.",
+            "descriptor": "borrow checker",
+            "fused": 0.030834914611005692,
+            "dense_score": 0.832334041595459,
+            "descriptor_dense_score": 0.7513611316680908,
+            "channel_ranks": {
+              "dense": 8,
+              "bm25": 2,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-03\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: gas meter.",
+            "descriptor": "gas meter",
+            "fused": 0.02976190476190476,
+            "dense_score": 0.8285536766052246,
+            "descriptor_dense_score": 0.7512101531028748,
+            "channel_ranks": {
+              "dense": 12,
+              "bm25": 3,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-04\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: JAM bytecode.",
+            "descriptor": "JAM bytecode",
+            "fused": 0.03055037313432836,
+            "dense_score": 0.833227276802063,
+            "descriptor_dense_score": 0.7266778349876404,
+            "channel_ranks": {
+              "dense": 7,
+              "bm25": 4,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-05\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: contract ABI.",
+            "descriptor": "contract ABI",
+            "fused": 0.02946912242686891,
+            "dense_score": 0.8300648927688599,
+            "descriptor_dense_score": 0.7269129753112793,
+            "channel_ranks": {
+              "dense": 11,
+              "bm25": 5,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-06\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: async call.",
+            "descriptor": "async call",
+            "fused": 0.03128054740957967,
+            "dense_score": 0.8360375761985779,
+            "descriptor_dense_score": 0.7569649815559387,
+            "channel_ranks": {
+              "dense": 2,
+              "bm25": 6,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-07\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: type inference.",
+            "descriptor": "type inference",
+            "fused": 0.030309988518943745,
+            "dense_score": 0.835435688495636,
+            "descriptor_dense_score": 0.7584319114685059,
+            "channel_ranks": {
+              "dense": 5,
+              "bm25": 7,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-08\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: FFI binding.",
+            "descriptor": "FFI binding",
+            "fused": 0.03057889822595705,
+            "dense_score": 0.8358904719352722,
+            "descriptor_dense_score": 0.7358580827713013,
+            "channel_ranks": {
+              "dense": 3,
+              "bm25": 8,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-09\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: artifact packaging.",
+            "descriptor": "artifact packaging",
+            "fused": 0.02877846790890269,
+            "dense_score": 0.8301799297332764,
+            "descriptor_dense_score": 0.7437896728515625,
+            "channel_ranks": {
+              "dense": 10,
+              "bm25": 9,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-10\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: debug symbols.",
+            "descriptor": "debug symbols",
+            "fused": 0.029437229437229435,
+            "dense_score": 0.8350498676300049,
+            "descriptor_dense_score": 0.7723320722579956,
+            "channel_ranks": {
+              "dense": 6,
+              "bm25": 10,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-11\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: source map.",
+            "descriptor": "source map",
+            "fused": 0.029709507042253523,
+            "dense_score": 0.8357511162757874,
+            "descriptor_dense_score": 0.7540730834007263,
+            "channel_ranks": {
+              "dense": 4,
+              "bm25": 11,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"jamscript-12\", \"jamscript\"]",
+            "raw": "The compiler transforms source instructions into VM operations. Build and debugging notes distinguish executable offsets from the source constructs that produced them. Review item: standard library.",
+            "descriptor": "standard library",
+            "fused": 0.03028233151183971,
+            "dense_score": 0.8383530378341675,
+            "descriptor_dense_score": 0.7514036893844604,
+            "channel_ranks": {
+              "dense": 1,
+              "bm25": 12,
+              "entity": null,
+              "metadata": null
+            }
+          }
+        ]
+      }
+    },
+    "top_score": 0.03128054740957967,
+    "margin": 0.00763793572573087
+  },
+  {
+    "query_id": "q019",
+    "query": "How do high-level instructions become executable VM operations?",
+    "query_type": "paraphrase",
+    "relevant_cell_ids": [
+      "jamscript"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "jamscript"
+    ],
+    "missing": {},
+    "top_score": 0.032018442622950824,
+    "margin": 0.008889544494052694
+  },
+  {
+    "query_id": "q045",
+    "query": "How do mixed precision and prefix scans change training execution?",
+    "query_type": "multi",
+    "relevant_cell_ids": [
+      "training",
+      "linear"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "training",
+      "linear"
+    ],
+    "missing": {},
+    "top_score": 0.0479384003974168,
+    "margin": 0.01541592551640146
+  },
+  {
+    "query_id": "q040",
+    "query": "Does donor memory alter held-out perplexity with a frozen backbone?",
+    "query_type": "multi",
+    "relevant_cell_ids": [
+      "minicells",
+      "training"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "training",
+      "minicells"
+    ],
+    "missing": {},
+    "top_score": 0.04839549075403121,
+    "margin": 0.002430402121078215
+  },
+  {
+    "query_id": "q033",
+    "query": "Compare GPU-PVM execution, portable cell restart, and Titans Neural Memory recall.",
+    "query_type": "multi",
+    "relevant_cell_ids": [
+      "minijam",
+      "minicells",
+      "ai_memory"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "minijam",
+      "minicells",
+      "ai_memory"
+    ],
+    "missing": {},
+    "top_score": 0.047891458495966696,
+    "margin": 0.001249211853720053
+  },
+  {
+    "query_id": "q044",
+    "query": "How does execution tracing interact with compiler debug symbols?",
+    "query_type": "multi",
+    "relevant_cell_ids": [
+      "minijam",
+      "jamscript"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "jamscript"
+    ],
+    "missing": {
+      "minijam": {
+        "indexed": true,
+        "cell_rank": 2,
+        "outcome": "below_threshold",
+        "records": [
+          {
+            "id": "[\"minijam-01\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: GPU-PVM.",
+            "descriptor": "GPU-PVM",
+            "fused": 0.023684210526315787,
+            "dense_score": 0.7977477312088013,
+            "descriptor_dense_score": 0.7764838933944702,
+            "channel_ranks": {
+              "dense": 35,
+              "bm25": 16,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-02\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: state witness.",
+            "descriptor": "state witness",
+            "fused": 0.021996021996022,
+            "dense_score": 0.7898857593536377,
+            "descriptor_dense_score": 0.7761931419372559,
+            "channel_ranks": {
+              "dense": 51,
+              "bm25": 17,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-03\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: validator network.",
+            "descriptor": "validator network",
+            "fused": 0.021153846153846155,
+            "dense_score": 0.7855651378631592,
+            "descriptor_dense_score": 0.7792537212371826,
+            "channel_ranks": {
+              "dense": 60,
+              "bm25": 18,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-04\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: block production.",
+            "descriptor": "block production",
+            "fused": 0.02227361246348588,
+            "dense_score": 0.7925293445587158,
+            "descriptor_dense_score": 0.78914475440979,
+            "channel_ranks": {
+              "dense": 44,
+              "bm25": 19,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-05\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: execution trace.",
+            "descriptor": "execution trace",
+            "fused": 0.029827662395050816,
+            "dense_score": 0.8301230669021606,
+            "descriptor_dense_score": 0.8260892629623413,
+            "channel_ranks": {
+              "dense": 13,
+              "bm25": 2,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-06\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: peer discovery.",
+            "descriptor": "peer discovery",
+            "fused": 0.023735955056179776,
+            "dense_score": 0.8008753657341003,
+            "descriptor_dense_score": 0.7990089058876038,
+            "channel_ranks": {
+              "dense": 29,
+              "bm25": 20,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-07\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: ticket selection.",
+            "descriptor": "ticket selection",
+            "fused": 0.023215244229736982,
+            "dense_score": 0.7983883619308472,
+            "descriptor_dense_score": 0.7868983745574951,
+            "channel_ranks": {
+              "dense": 32,
+              "bm25": 21,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-08\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: core scheduling.",
+            "descriptor": "core scheduling",
+            "fused": 0.021540916343742875,
+            "dense_score": 0.7919082641601562,
+            "descriptor_dense_score": 0.7888473272323608,
+            "channel_ranks": {
+              "dense": 47,
+              "bm25": 22,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-09\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: availability shard.",
+            "descriptor": "availability shard",
+            "fused": 0.021949182870094237,
+            "dense_score": 0.7949316501617432,
+            "descriptor_dense_score": 0.7804774045944214,
+            "channel_ranks": {
+              "dense": 41,
+              "bm25": 23,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-10\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: reference vectors.",
+            "descriptor": "reference vectors",
+            "fused": 0.023015873015873017,
+            "dense_score": 0.8002504110336304,
+            "descriptor_dense_score": 0.8019920587539673,
+            "channel_ranks": {
+              "dense": 30,
+              "bm25": 24,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-11\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: service lifecycle.",
+            "descriptor": "service lifecycle",
+            "fused": 0.021764705882352943,
+            "dense_score": 0.7957285642623901,
+            "descriptor_dense_score": 0.774371862411499,
+            "channel_ranks": {
+              "dense": 40,
+              "bm25": 25,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"minijam-12\", \"minijam\"]",
+            "raw": "Prototype notes concern validator machines that execute work, form peers and produce blocks. Performance decisions distinguish VM execution from protocol rules. Review item: rollup bridge.",
+            "descriptor": "rollup bridge",
+            "fused": 0.021336644840821855,
+            "dense_score": 0.7928708791732788,
+            "descriptor_dense_score": 0.7850337624549866,
+            "channel_ranks": {
+              "dense": 43,
+              "bm25": 26,
+              "entity": null,
+              "metadata": null
+            }
+          },
+          {
+            "id": "[\"projection\", \"minijam\"]",
+            "raw": "GPU-PVM and portable learned cells",
+            "descriptor": "joint execution review",
+            "fused": 0.00847457627118644,
+            "dense_score": 0.787104606628418,
+            "descriptor_dense_score": 0.7585322856903076,
+            "channel_ranks": {
+              "dense": 58,
+              "bm25": null,
+              "entity": null,
+              "metadata": null
+            }
+          }
+        ]
+      }
+    },
+    "top_score": 0.04918032786885246,
+    "margin": 0.019352665473801642
+  },
+  {
+    "query_id": "q047",
+    "query": "Compare cell fork isolation and delegated authority.",
+    "query_type": "multi",
+    "relevant_cell_ids": [
+      "minicells",
+      "locus"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "minicells",
+      "locus"
+    ],
+    "missing": {},
+    "top_score": 0.048651507139079855,
+    "margin": 0.00023962189317820737
+  },
+  {
+    "query_id": "q060",
+    "query": "Does key collision affect TTT-MLP associative recall?",
+    "query_type": "hard",
+    "relevant_cell_ids": [
+      "ai_memory"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "ai_memory"
+    ],
+    "missing": {},
+    "top_score": 0.048915917503966164,
+    "margin": 0.01967989531019749
+  },
+  {
+    "query_id": "q049",
+    "query": "Where is GPU-PVM execution optimized, rather than protocol finality?",
+    "query_type": "hard",
+    "relevant_cell_ids": [
+      "minijam"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "minijam",
+      "jam"
+    ],
+    "missing": {},
+    "top_score": 0.04918032786885246,
+    "margin": 0.007222213978134884
+  },
+  {
+    "query_id": "q052",
+    "query": "Which rules determine account ownership for settlement risk?",
+    "query_type": "hard",
+    "relevant_cell_ids": [
+      "finance"
+    ],
+    "expected_action": "route",
+    "rejection_category": "valid_match",
+    "returned": [
+      "finance"
+    ],
+    "missing": {},
+    "top_score": 0.04891591750396616,
+    "margin": 0.021703773853466342
+  },
+  {
+    "query_id": "q065",
+    "query": "What was the score in yesterday's football match?",
+    "query_type": "no_match",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "no_match",
+    "returned": [],
+    "missing": {},
+    "top_score": 0.02610218048702849,
+    "margin": 0.0009607599967707894
+  },
+  {
+    "query_id": "q064",
+    "query": "How do I make sourdough from rye?",
+    "query_type": "no_match",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "no_match",
+    "returned": [],
+    "missing": {},
+    "top_score": 0.02813852813852814,
+    "margin": 0.0031599383583397304
+  },
+  {
+    "query_id": "q069",
+    "query": "What did they decide last night?",
+    "query_type": "insufficient",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "ambiguous",
+    "returned": [],
+    "missing": {},
+    "top_score": 0.02815814850530376,
+    "margin": 0.011764705882352941
+  },
+  {
+    "query_id": "q072",
+    "query": "Which method did we finally choose?",
+    "query_type": "insufficient",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "ambiguous",
+    "returned": [],
+    "missing": {},
+    "top_score": 0.01639344262295082,
+    "margin": 0.0019006889997624146
+  },
+  {
+    "query_id": "q078",
+    "query": "Which note describes that issue?",
+    "query_type": "insufficient",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "ambiguous",
+    "returned": [],
+    "missing": {},
+    "top_score": 0.03128054740957967,
+    "margin": 0.007165250605926703
+  },
+  {
+    "query_id": "q079",
+    "query": "Where was the old file kept?",
+    "query_type": "insufficient",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "ambiguous",
+    "returned": [],
+    "missing": {},
+    "top_score": 0.03057889822595705,
+    "margin": 0.0017916381197912688
+  },
+  {
+    "query_id": "diagnostic-0",
+    "query_type": "weak_match",
+    "query": "What was the retention decision?",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "weak_match",
+    "returned": [
+      "ai_memory",
+      "architecture"
+    ],
+    "missing": {},
+    "top_score": 0.032266458495966696,
+    "margin": 0.0002644103648863083
+  },
+  {
+    "query_id": "diagnostic-1",
+    "query_type": "weak_match",
+    "query": "Which account should I look at?",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "weak_match",
+    "returned": [
+      "finance"
+    ],
+    "missing": {},
+    "top_score": 0.032018442622950824,
+    "margin": 0.0038412175938019703
+  },
+  {
+    "query_id": "diagnostic-2",
+    "query_type": "weak_match",
+    "query": "What did we change about the model update?",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "weak_match",
+    "returned": [
+      "linear"
+    ],
+    "missing": {},
+    "top_score": 0.03278688524590164,
+    "margin": 0.002421115749697361
+  },
+  {
+    "query_id": "diagnostic-3",
+    "query_type": "ambiguous",
+    "query": "Which of the two configurations did we pick?",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "ambiguous",
+    "returned": [],
+    "missing": {},
+    "top_score": 0.025165372447512224,
+    "margin": 0.001425671288456224
+  },
+  {
+    "query_id": "diagnostic-4",
+    "query_type": "no_match",
+    "query": "What was the catering budget for the annual retreat?",
+    "relevant_cell_ids": [],
+    "expected_action": "abstain",
+    "rejection_category": "no_match",
+    "returned": [],
+    "missing": {},
+    "top_score": 0.029726775956284153,
+    "margin": 0.0005882624427706387
+  }
+]
