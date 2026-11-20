@@ -17,7 +17,8 @@ FLA_SHA256 = 'b6a62b140209d1350861d768e9acb3786548a47960cc324aca39de940ca6b83f'
 
 
 def main():
-    repo = Path(tempfile.mkdtemp(prefix='ma001-semantic-')) / 'source'
+    scratch = Path(tempfile.mkdtemp(prefix='mom-preflight-'))
+    repo = scratch / 'source'
     subprocess.run(['git','clone','--depth','1','--filter=blob:none','--sparse',
                     '--branch',BRANCH,SOURCE,str(repo)],check=True,timeout=180)
     subprocess.run(['git','sparse-checkout','set','scripts/research',
@@ -59,7 +60,7 @@ def main():
             REV],text=True,timeout=420).strip()
         code=subprocess.run([sys.executable,'-u',str(repo/EXPERIMENTS/'mom-int-001/preflight.py'),
             str(upstream),snapshot,str(output)],timeout=420).returncode
-    except (subprocess.SubprocessError,OSError) as exc:
+    except (subprocess.SubprocessError,OSError,ValueError) as exc:
         reason=str(exc)
         print(reason,flush=True)
     kind='minicells.mom-int-001.preflight.v1'
