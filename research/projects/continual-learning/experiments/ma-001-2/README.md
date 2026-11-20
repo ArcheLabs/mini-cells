@@ -67,3 +67,16 @@ record. It does not calibrate a support decision for a single query.
 See [automatic traces](artifacts/lexical-audit.json). This lexical control
 does not substitute for a semantic support reranker; that comparison remains
 pending. No threshold changed and MA-002 was not accessed.
+
+## Pinned semantic support probe
+
+`semantic_audit.py` scores the existing top-16 candidates with
+`cross-encoder/nli-deberta-v3-small` at
+`fa2804872c3b4bd748f38c0185cc85775361e735`. Use
+`python semantic_audit.py REVISION OUTPUT --download` or pass an already
+downloaded pinned directory via `--snapshot`. Candidate texts are premises,
+authored closed claims are hypotheses, and the entailment column is resolved
+from the model label mapping. The claims are controlled inputs; this is not
+automatic question decomposition. No support threshold is fitted. The local
+attempt is [blocked](artifacts/semantic-audit.json): the weight download
+timed out and the local snapshot has no weight file.
