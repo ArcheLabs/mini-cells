@@ -8,9 +8,19 @@ import sys
 import time
 
 HERE=Path(__file__).resolve().parent
-sys.path.insert(0,str(HERE.parent/'mom-route-002'))
-from run import FACTS, MOM, REVISION, TOKENIZER_REV, adapt_time_major_kernel
-from preflight import restore_cache, compare
+sys.path.insert(0,str(HERE.parent/'mom-int-001'))
+from preflight import MOM, REVISION, adapt_time_major_kernel, restore_cache, compare
+FACTS=[
+('minijam','test gateway alias','veka-27','nalo-27'),
+('minijam','peer relay tag','voro-63','sena-63'),
+('minijam','RPC probe marker','tiva-51','mora-51'),
+('jamscript','compiler marker','sena-41','veka-41'),
+('jamscript','source map label','nalo-82','voro-82'),
+('jamscript','service runtime tag','mora-34','tiva-34'),
+('minicells','dataset snapshot ID','voro-62','sena-62'),
+('minicells','training run alias','tiva-53','mora-53'),
+('minicells','model checkpoint label','nalo-78','veka-78')]
+TOKENIZER_REV='46b15820a4df269e99aed9d709e017677c15d24b'
 from state import clone_tree, export, fingerprint, query_copy
 
 CASES=[(f'What is the current {f[1]}?',[i]) for i,f in enumerate(FACTS)]
