@@ -77,7 +77,7 @@ def main():
         code=1
     (output/'decision.json').write_text(json.dumps(dict(format=kind,source_commit=source,
         model_revision=REV,status=status, fla_version=FLA,fla_wheel_sha256=FLA_SHA256,
-        reason=reason,returncode=code,scientific_status='DEVELOPMENT_ONLY'),indent=2))
+        reason=reason or ('Zero-tolerance cache or score comparison failed' if status=='BASELINE_MISMATCH' else None),returncode=code,scientific_status='DEVELOPMENT_ONLY'),indent=2))
     relative='results/'+name
     shutil.copytree(output,repo/relative,ignore=shutil.ignore_patterns('*.pt','*.sqlite'))
     artifact='artifacts/experiments/'+name

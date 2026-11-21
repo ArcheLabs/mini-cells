@@ -12,4 +12,4 @@ tolerance. Negative margins remain visible even when restore is identical.
 Routing is not used; expert telemetry consists of per-layer counts.
 Checkpoint tensors remain in Kaggle Output; JSON/JSONL reports return to GitHub.
 This baseline does not adjudicate the full protocol's conflict, interference
-or version-update cases. CUDA execution is pending.
+or version-update cases. The CUDA baseline completed with BASELINE_MISMATCH; see RESULTS.md.
