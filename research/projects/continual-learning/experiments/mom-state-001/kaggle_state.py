@@ -8,7 +8,7 @@ import uuid
 from pathlib import Path
 
 SOURCE = 'https://github.com/ArcheLabs/mini-cells.git'
-BRANCH = 'codex/ma-001'
+BRANCH = 'codex/mom-state-001'
 EXPERIMENTS = 'research/projects/continual-learning/experiments'
 REV = 'f4081422ea2cf01b1b5d646cac05cad62a5d5438'
 MOM = '125038087b71b635c171cec857bd0f21d10955b6'
