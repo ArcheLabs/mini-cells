@@ -181,7 +181,7 @@ def main():
     write('decision.json',dict(status='NO_GO' if oracle<10 else 'GO' if routed>=9 and max(flips.values())<=2 and multi>=2 and not any(r['leakage'] for r in rows)
         else 'PARTIAL_PASS',oracle_correct=oracle,routed_correct=routed,fault_flips=flips,breakdown=breakdown,legacy_correct=sum(positive(r,'legacy_top16') for r in valid),
         no_match_false_routes=sum(bool(r['threshold_cells']) for r in rows[14:]),
-        oracle_denominator=oracle,route_coverage=sum(r['cell_recall']==1 for r in valid),multi_coverage=multi,
+        oracle_denominator=len(valid),fault_oracle_denominator=sum(positive(r,"oracle") for r in probes),route_coverage=sum(r['cell_recall']==1 for r in valid),multi_coverage=multi,
         weak_top16_exposed=sum(bool(r['candidates']) for r in rows[12:14]),
         weak_threshold_routes=sum(bool(r['threshold_cells']) for r in rows[12:14]),
         memory_gain={arm:sum(r['arms'][arm]['margin']-r['arms']['no_memory']['margin']

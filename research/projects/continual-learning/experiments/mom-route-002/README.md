@@ -11,4 +11,4 @@ arm; the Oracle arm is the correct-only control. Native expert selections
 are logged separately. See [protocol](PROTOCOL.md).
 
 Kaggle Python Script: `kaggle_route.py`, single T4, Internet, GITHUB_TOKEN.
-No training. CUDA results pending.
+No training. CUDA development result: PARTIAL_PASS. See RESULTS.md.
