@@ -1,0 +1,80 @@
+{
+  "status": "PARTIAL_PASS",
+  "oracle_correct": 12,
+  "routed_correct": 8,
+  "fault_flips": {
+    "correct_then_wrong": 5,
+    "wrong_then_correct": 2
+  },
+  "breakdown": {
+    "single": {
+      "count": 9,
+      "selected_counts": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "evidence_missing": 0,
+      "leakage": 0,
+      "accuracy_counts": {
+        "no_memory": 2,
+        "oracle": 9,
+        "routed": 6,
+        "legacy_top16": 8
+      }
+    },
+    "multi": {
+      "count": 3,
+      "selected_counts": [
+        3,
+        3,
+        3
+      ],
+      "evidence_missing": 0,
+      "leakage": 0,
+      "accuracy_counts": {
+        "no_memory": 1,
+        "oracle": 3,
+        "routed": 2,
+        "legacy_top16": 2
+      }
+    },
+    "weak": {
+      "count": 2,
+      "selected_counts": [
+        2,
+        2
+      ],
+      "evidence_missing": 2,
+      "leakage": 0,
+      "accuracy_counts": null
+    },
+    "no_match": {
+      "count": 1,
+      "selected_counts": [
+        1
+      ],
+      "evidence_missing": 1,
+      "leakage": 0,
+      "accuracy_counts": null
+    }
+  },
+  "legacy_correct": 10,
+  "no_match_false_routes": 1,
+  "oracle_denominator": 12,
+  "route_coverage": 12,
+  "multi_coverage": 3,
+  "weak_top16_exposed": 2,
+  "weak_threshold_routes": 2,
+  "memory_gain": {
+    "oracle": 2.2470979491869607,
+    "routed": 0.31613842646280926,
+    "legacy_top16": 0.5383822917938232
+  }
+}
