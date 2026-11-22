@@ -1,0 +1,722 @@
+{
+  "model": "cross-encoder/nli-deberta-v3-small",
+  "revision": "fa2804872c3b4bd748f38c0185cc85775361e735",
+  "status": "SCORED",
+  "torch": "2.11.0+cu130",
+  "transformers": "4.57.3",
+  "label_mapping": {
+    "0": "contradiction",
+    "1": "entailment",
+    "2": "neutral"
+  },
+  "rows": [
+    {
+      "query_id": "q018",
+      "claim": "The learned cell preserves learned state across a restart.",
+      "candidates": [
+        {
+          "event": "minicells-01",
+          "cell": "minicells",
+          "grade": 3,
+          "dense": 0.8420248031616211,
+          "entailment": 0.9576127529144287
+        },
+        {
+          "event": "minicells-08",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8449910879135132,
+          "entailment": 0.8385642170906067
+        },
+        {
+          "event": "minicells-06",
+          "cell": "minicells",
+          "grade": 2,
+          "dense": 0.8612607717514038,
+          "entailment": 0.6447129845619202
+        },
+        {
+          "event": "minicells-07",
+          "cell": "minicells",
+          "grade": 2,
+          "dense": 0.855259358882904,
+          "entailment": 0.436029851436615
+        },
+        {
+          "event": "minicells-09",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8554204702377319,
+          "entailment": 0.3514198064804077
+        },
+        {
+          "event": "minicells-03",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8522219657897949,
+          "entailment": 0.13525310158729553
+        },
+        {
+          "event": "minicells-04",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8438373804092407,
+          "entailment": 0.09934806078672409
+        },
+        {
+          "event": "minicells-12",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8495436906814575,
+          "entailment": 0.08599895238876343
+        },
+        {
+          "event": "minicells-10",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8519596457481384,
+          "entailment": 0.07933144271373749
+        },
+        {
+          "event": "minicells-05",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8499492406845093,
+          "entailment": 0.05564498528838158
+        },
+        {
+          "event": "ai_memory-08",
+          "cell": "ai_memory",
+          "grade": null,
+          "dense": 0.8569894433021545,
+          "entailment": 0.03183671459555626
+        },
+        {
+          "event": "ai_memory-05",
+          "cell": "ai_memory",
+          "grade": null,
+          "dense": 0.8493390083312988,
+          "entailment": 0.025969907641410828
+        },
+        {
+          "event": "minicells-11",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8491985201835632,
+          "entailment": 0.021928943693637848
+        },
+        {
+          "event": "minicells-02",
+          "cell": "minicells",
+          "grade": null,
+          "dense": 0.8470031023025513,
+          "entailment": 0.017125485464930534
+        },
+        {
+          "event": "ai_memory-01",
+          "cell": "ai_memory",
+          "grade": null,
+          "dense": 0.8544239401817322,
+          "entailment": 0.003805827582255006
+        },
+        {
+          "event": "ai_memory-02",
+          "cell": "ai_memory",
+          "grade": null,
+          "dense": 0.8529049754142761,
+          "entailment": 0.003495006589218974
+        }
+      ]
+    },
+    {
+      "query_id": "q029",
+      "claim": "A source map relates executable offsets to the corresponding original source positions.",
+      "candidates": [
+        {
+          "event": "jamscript-11",
+          "cell": "jamscript",
+          "grade": 3,
+          "dense": 0.8357510566711426,
+          "entailment": 0.9222576022148132
+        },
+        {
+          "event": "jamscript-10",
+          "cell": "jamscript",
+          "grade": 2,
+          "dense": 0.8350498676300049,
+          "entailment": 0.1934751272201538
+        },
+        {
+          "event": "jamscript-07",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8354357481002808,
+          "entailment": 0.015393608249723911
+        },
+        {
+          "event": "training-01",
+          "cell": "training",
+          "grade": null,
+          "dense": 0.798043966293335,
+          "entailment": 0.00851340964436531
+        },
+        {
+          "event": "jamscript-08",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.835890531539917,
+          "entailment": 0.00591783644631505
+        },
+        {
+          "event": "jamscript-02",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.832334041595459,
+          "entailment": 0.005481347907334566
+        },
+        {
+          "event": "jamscript-05",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8300648927688599,
+          "entailment": 0.004892419558018446
+        },
+        {
+          "event": "training-09",
+          "cell": "training",
+          "grade": null,
+          "dense": 0.8013508319854736,
+          "entailment": 0.004580555018037558
+        },
+        {
+          "event": "jamscript-12",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8383530974388123,
+          "entailment": 0.004269369877874851
+        },
+        {
+          "event": "jamscript-06",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8360376358032227,
+          "entailment": 0.0040864539332687855
+        },
+        {
+          "event": "jamscript-04",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8332271575927734,
+          "entailment": 0.0030870679765939713
+        },
+        {
+          "event": "training-06",
+          "cell": "training",
+          "grade": null,
+          "dense": 0.7992364168167114,
+          "entailment": 0.0016741767758503556
+        },
+        {
+          "event": "jamscript-01",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8312796950340271,
+          "entailment": 0.0013526532566174865
+        },
+        {
+          "event": "jamscript-09",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8301799297332764,
+          "entailment": 0.0007354043773375452
+        },
+        {
+          "event": "training-11",
+          "cell": "training",
+          "grade": null,
+          "dense": 0.7940775752067566,
+          "entailment": 0.00071883131749928
+        },
+        {
+          "event": "jamscript-03",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8285536170005798,
+          "entailment": 0.0005020194221287966
+        }
+      ]
+    },
+    {
+      "query_id": "q044",
+      "claim": "Validator execution tracing is documented.",
+      "candidates": [
+        {
+          "event": "jamscript-11",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8544493913650513,
+          "entailment": 0.9850988388061523
+        },
+        {
+          "event": "jamscript-10",
+          "cell": "jamscript",
+          "grade": 3,
+          "dense": 0.8743433952331543,
+          "entailment": 0.984980583190918
+        },
+        {
+          "event": "minijam-05",
+          "cell": "minijam",
+          "grade": 3,
+          "dense": 0.8301231861114502,
+          "entailment": 0.9802150726318359
+        },
+        {
+          "event": "jamscript-08",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.855289101600647,
+          "entailment": 0.970076322555542
+        },
+        {
+          "event": "jamscript-07",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8532403707504272,
+          "entailment": 0.9638919234275818
+        },
+        {
+          "event": "jamscript-06",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.858557939529419,
+          "entailment": 0.9436202049255371
+        },
+        {
+          "event": "jamscript-12",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8533065319061279,
+          "entailment": 0.784291684627533
+        },
+        {
+          "event": "jamscript-02",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8551064729690552,
+          "entailment": 0.7395095825195312
+        },
+        {
+          "event": "jamscript-09",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8547654747962952,
+          "entailment": 0.39689207077026367
+        },
+        {
+          "event": "jamscript-05",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8494797945022583,
+          "entailment": 0.3038483262062073
+        },
+        {
+          "event": "jamscript-01",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8490990400314331,
+          "entailment": 0.0872415155172348
+        },
+        {
+          "event": "jamscript-03",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.847156822681427,
+          "entailment": 0.06894649565219879
+        },
+        {
+          "event": "minijam-06",
+          "cell": "minijam",
+          "grade": null,
+          "dense": 0.8008754849433899,
+          "entailment": 0.05840541794896126
+        },
+        {
+          "event": "minijam-07",
+          "cell": "minijam",
+          "grade": null,
+          "dense": 0.7983883619308472,
+          "entailment": 0.02872353233397007
+        },
+        {
+          "event": "minijam-01",
+          "cell": "minijam",
+          "grade": null,
+          "dense": 0.797747790813446,
+          "entailment": 0.007644748315215111
+        },
+        {
+          "event": "jamscript-04",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8525873422622681,
+          "entailment": 0.006016467232257128
+        }
+      ]
+    },
+    {
+      "query_id": "q044",
+      "claim": "The compiler provides debugging symbols.",
+      "candidates": [
+        {
+          "event": "jamscript-10",
+          "cell": "jamscript",
+          "grade": 3,
+          "dense": 0.8743433952331543,
+          "entailment": 0.9897114038467407
+        },
+        {
+          "event": "jamscript-11",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8544493913650513,
+          "entailment": 0.9616491794586182
+        },
+        {
+          "event": "jamscript-08",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.855289101600647,
+          "entailment": 0.8345919251441956
+        },
+        {
+          "event": "jamscript-07",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8532403707504272,
+          "entailment": 0.3706893026828766
+        },
+        {
+          "event": "jamscript-06",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.858557939529419,
+          "entailment": 0.19877184927463531
+        },
+        {
+          "event": "jamscript-01",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8490990400314331,
+          "entailment": 0.16934990882873535
+        },
+        {
+          "event": "jamscript-12",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8533065319061279,
+          "entailment": 0.16853490471839905
+        },
+        {
+          "event": "jamscript-05",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8494797945022583,
+          "entailment": 0.12108800560235977
+        },
+        {
+          "event": "jamscript-09",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8547654747962952,
+          "entailment": 0.1027684137225151
+        },
+        {
+          "event": "jamscript-02",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8551064729690552,
+          "entailment": 0.0247332900762558
+        },
+        {
+          "event": "jamscript-03",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.847156822681427,
+          "entailment": 0.00667162798345089
+        },
+        {
+          "event": "jamscript-04",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.8525873422622681,
+          "entailment": 0.0011356918839737773
+        },
+        {
+          "event": "minijam-06",
+          "cell": "minijam",
+          "grade": null,
+          "dense": 0.8008754849433899,
+          "entailment": 0.0005511574563570321
+        },
+        {
+          "event": "minijam-01",
+          "cell": "minijam",
+          "grade": null,
+          "dense": 0.797747790813446,
+          "entailment": 0.0005076348898001015
+        },
+        {
+          "event": "minijam-05",
+          "cell": "minijam",
+          "grade": 3,
+          "dense": 0.8301231861114502,
+          "entailment": 0.00031956026214174926
+        },
+        {
+          "event": "minijam-07",
+          "cell": "minijam",
+          "grade": null,
+          "dense": 0.7983883619308472,
+          "entailment": 9.857465920504183e-05
+        }
+      ]
+    },
+    {
+      "query_id": "pair-0-weak",
+      "claim": "The record specifies a checkpoint recovery passcode for the contractor.",
+      "candidates": [
+        {
+          "event": "locus-07",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.7998813986778259,
+          "entailment": 0.00041030545253306627
+        },
+        {
+          "event": "locus-03",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.8064291477203369,
+          "entailment": 0.0003777918464038521
+        },
+        {
+          "event": "locus-10",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.8096349835395813,
+          "entailment": 0.00021423539146780968
+        },
+        {
+          "event": "locus-02",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.8001197576522827,
+          "entailment": 0.00020413153106346726
+        },
+        {
+          "event": "locus-05",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.8119450807571411,
+          "entailment": 0.0001831097324611619
+        },
+        {
+          "event": "locus-01",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.8000240325927734,
+          "entailment": 0.00015802100824657828
+        },
+        {
+          "event": "locus-11",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.8037062883377075,
+          "entailment": 0.00015431613428518176
+        },
+        {
+          "event": "locus-04",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.8030177354812622,
+          "entailment": 0.00014991448551882058
+        },
+        {
+          "event": "locus-08",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.7992639541625977,
+          "entailment": 0.0001372378901578486
+        },
+        {
+          "event": "locus-06",
+          "cell": "locus",
+          "grade": null,
+          "dense": 0.8022034764289856,
+          "entailment": 0.00012920999142806977
+        },
+        {
+          "event": "architecture-02",
+          "cell": "architecture",
+          "grade": null,
+          "dense": 0.7829961776733398,
+          "entailment": 0.00010832708358066157
+        },
+        {
+          "event": "architecture-03",
+          "cell": "architecture",
+          "grade": null,
+          "dense": 0.7803373336791992,
+          "entailment": 8.227882062783465e-05
+        },
+        {
+          "event": "minicells-07",
+          "cell": "minicells",
+          "grade": 1,
+          "dense": 0.7899566888809204,
+          "entailment": 6.315708742477e-05
+        },
+        {
+          "event": "architecture-06",
+          "cell": "architecture",
+          "grade": null,
+          "dense": 0.7856916189193726,
+          "entailment": 3.9934264350449666e-05
+        },
+        {
+          "event": "architecture-07",
+          "cell": "architecture",
+          "grade": null,
+          "dense": 0.7846035361289978,
+          "entailment": 2.2276890376815572e-05
+        },
+        {
+          "event": "architecture-10",
+          "cell": "architecture",
+          "grade": null,
+          "dense": 0.7916068434715271,
+          "entailment": 1.012459415505873e-05
+        }
+      ]
+    },
+    {
+      "query_id": "pair-1-weak",
+      "claim": "The record identifies the person who approved the source map purchase last Tuesday.",
+      "candidates": [
+        {
+          "event": "ai_memory-02",
+          "cell": "ai_memory",
+          "grade": null,
+          "dense": 0.7357099652290344,
+          "entailment": 8.407722634728998e-05
+        },
+        {
+          "event": "training-07",
+          "cell": "training",
+          "grade": null,
+          "dense": 0.7416542768478394,
+          "entailment": 5.702827911591157e-05
+        },
+        {
+          "event": "training-03",
+          "cell": "training",
+          "grade": null,
+          "dense": 0.7364176511764526,
+          "entailment": 4.8912457714322954e-05
+        },
+        {
+          "event": "training-09",
+          "cell": "training",
+          "grade": null,
+          "dense": 0.7402999401092529,
+          "entailment": 4.6855049731675535e-05
+        },
+        {
+          "event": "jamscript-11",
+          "cell": "jamscript",
+          "grade": 1,
+          "dense": 0.7764288187026978,
+          "entailment": 3.592052235035226e-05
+        },
+        {
+          "event": "jamscript-04",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7402389049530029,
+          "entailment": 1.859366602730006e-05
+        },
+        {
+          "event": "jamscript-05",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7481309175491333,
+          "entailment": 1.0553846550465096e-05
+        },
+        {
+          "event": "jamscript-07",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7366225123405457,
+          "entailment": 1.0405260582047049e-05
+        },
+        {
+          "event": "jamscript-02",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7448287010192871,
+          "entailment": 1.0278054105583578e-05
+        },
+        {
+          "event": "jamscript-03",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7472881078720093,
+          "entailment": 9.881530786515214e-06
+        },
+        {
+          "event": "jamscript-01",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7305084466934204,
+          "entailment": 9.803958164411597e-06
+        },
+        {
+          "event": "jamscript-10",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7380571961402893,
+          "entailment": 9.596128620614763e-06
+        },
+        {
+          "event": "jamscript-06",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7404003739356995,
+          "entailment": 9.47991884459043e-06
+        },
+        {
+          "event": "jamscript-12",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.74193274974823,
+          "entailment": 8.59650390339084e-06
+        },
+        {
+          "event": "jamscript-09",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.760729193687439,
+          "entailment": 8.457194780930877e-06
+        },
+        {
+          "event": "jamscript-08",
+          "cell": "jamscript",
+          "grade": null,
+          "dense": 0.7364209890365601,
+          "entailment": 8.026066097954754e-06
+        }
+      ]
+    }
+  ]
+}
