@@ -201,7 +201,7 @@ def recurrence(attn, ops, projected, conv, states, use_cache, active, observer=N
             outputs.append(torch.zeros_like(v[bank]))
             continue
         kernel = ops.fused_recurrent_gated_delta_rule
-        probe = observer.before(q[bank], k[bank], v[bank], g[bank], beta[bank], state) if observer else None
+        probe = observer.before(bank, q[bank], k[bank], v[bank], g[bank], beta[bank], state) if observer else None
         result, final = kernel(
             q=q[bank], k=k[bank], v=v[bank], g=g[bank], beta=beta[bank], initial_state=state,
             output_final_state=use_cache, cu_seqlens=None, head_first=False,

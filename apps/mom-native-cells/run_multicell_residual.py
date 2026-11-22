@@ -17,7 +17,7 @@ import torch
 from backend import Backbone, LAYERS, sha
 from cells import Cells
 from compositional_recall import encode, read, write, write_cells, restore_cells
-from gdr_diagnostics import FIELDS, OUTPUT_TOLERANCE, STATE_TOLERANCE, ResidualTrace, parity_report, reference
+from gdr_diagnostics import FIELDS, OUTPUT_TOLERANCE, STATE_TOLERANCE, ResidualTrace, parity_report, reference, statistics
 from multicell_fusion import FusionConfig, FusionReader
 from residual_metrics import group_bootstrap, metrics, rank_signal, ranking
 from run_multicell_fusion import evaluate, fingerprint, question
@@ -140,8 +140,8 @@ def score_trace(trace, tokens, labels, query, trace_writer=None):
     return row
 
 
-def collect(reader, states, labels, query, kernel, *, verify=False, writer=None):
-    trace = ResidualTrace(kernel, verify=verify)
+def collect(reader, states, labels, query, kernel, *, verify=False, writer=None, capture=False):
+    trace = ResidualTrace(kernel, verify=verify, capture=capture)
     tokens = encode(reader.backbone.tokenizer, query["prompt"])
     diag = SimpleNamespace(residual=trace, timing=True, measure=lambda *_: nullcontext(), removed_unit=None)
     # Only the native kernel's outputs and state continue through the model.
@@ -159,9 +159,9 @@ def snapshot_cells(store, meta):
                         revision=item["revision"]) for label, item in meta.items()}
 
 
-def compare_scores(before, after, mapping, **tolerance):
+def compare_scores(before, after, mapping, *, keys=None, **tolerance):
     maximum = 0.0
-    for key in [f"{s}_{c}" for s in SUBSYSTEMS for c in CHANNELS]:
+    for key in keys or [f"{s}_{c}" for s in SUBSYSTEMS for c in CHANNELS]:
         for target, source in mapping.items():
             a, b = after[key][target], before[key][source]
             maximum = max(maximum, abs(a - b))
@@ -194,7 +194,7 @@ def verify_trace(before, after, mapping, labels, observed_labels=LABELS, **toler
 
 
 def run_group(reader, root, group, kernel, *, verify=False, check_controls=False,
-              writer=None, persistent=None, qa=False, original_traces=None):
+              writer=None, persistent=None, qa=False, capture=False, original_traces=None):
     if persistent is None:
         store, meta, states = pin_groups(reader.backbone, root, group)
     else:
@@ -205,11 +205,14 @@ def run_group(reader, root, group, kernel, *, verify=False, check_controls=False
         raise AssertionError("Persisted and in-memory state digests differ")
     rows, routers, parity, controls, answers = [], [], {}, {}, []
     for i, query in enumerate(group["queries"]):
-        row, trace = collect(reader, states, LABELS, query, kernel, verify=verify and i == 0, writer=writer)
+        row, trace = collect(reader, states, LABELS, query, kernel, verify=verify and i == 0,
+                             writer=writer, capture=capture)
+        if capture:
+            torch.save({"inputs": trace.inputs, "packing": trace.positions},
+                       Path(root) / f"{query['id']}-inputs.pt")
         if original_traces is not None:
             originals = SimpleNamespace(banks=original_traces[query["id"]])
-            row["restored_trace_max_abs"] = verify_trace(originals, trace, dict(zip(LABELS, LABELS)),
-                                                         LABELS, **SCORE_TOLERANCE)
+            row["rollout_trace"] = trace_drift(originals.banks, trace.banks)
         rows.append(row)
         routers.append(dict(query_id=query["id"], cell_slots=LABELS, layers=trace.routers))
         if trace.parity:
@@ -367,7 +370,7 @@ def archive_stage(reader, args, groups, diagnostic, stage, *, verify=False):
                     export_seconds += time.monotonic() - start
 
                 result = run_group(reader, target, group, diagnostic, verify=verify,
-                                   check_controls=check_controls, writer=emit)
+                                   check_controls=check_controls, writer=emit, capture=keep)
             elapsed = time.monotonic() - started
         rows.extend(result["rows"])
         routers.extend(result["router"])
@@ -390,6 +393,59 @@ def archive_stage(reader, args, groups, diagnostic, stage, *, verify=False):
     return rows, controls, records
 
 
+def trace_drift(left, right):
+    """Report the whole rollout, including routing changes and secondary measures."""
+    def by_position(banks):
+        return {(slot, layer, bank, token): row
+                for slot, layer, bank, tokens, values in banks
+                for token, row in zip(tokens.tolist(), values, strict=True)}
+
+    before, after = by_position(left), by_position(right)
+    common = sorted(before.keys() & after.keys())
+    errors = {}
+    if common:
+        expected = torch.stack([before[key] for key in common])
+        measured = torch.stack([after[key] for key in common])
+        delta = (measured - expected).abs()
+        limit = SCORE_TOLERANCE["atol"] + SCORE_TOLERANCE["rtol"] * expected.abs()
+        for i, name in enumerate(FIELDS):
+            errors[name] = dict(max_abs=float(delta[..., i].max()),
+                                outside_old_tolerance=int((delta[..., i] > limit[..., i]).sum()))
+    return dict(common_positions=len(common), removed_positions=len(before.keys() - after.keys()),
+                added_positions=len(after.keys() - before.keys()), fields=errors)
+
+
+def replay_fixed_inputs(backbone, original, trace, states, diagnostic):
+    from mom.layers import mom_gated_deltanet as ops
+
+    report = {}
+    for slot, layer, bank, tokens, expected in trace["banks"]:
+        name = f"{layer}.{bank}"
+        operands = original[name]
+        state = states[LABELS[slot]].get(name)
+        state = state.to(backbone.device) if state is not None else None
+        q, k, v, g, beta = operands
+        native, final = ops.fused_recurrent_gated_delta_rule(
+            q, k, v, g, beta, initial_state=state, output_final_state=True)
+        output, sidecar_final, prediction, residual = diagnostic(
+            q, k, v, g, beta, state.clone() if state is not None else None)
+        for label, actual, target, tolerance in (
+                ("output", output, native, OUTPUT_TOLERANCE),
+                ("state", sidecar_final, final, STATE_TOLERANCE)):
+            result = parity_report(actual, target, **tolerance)
+            if not result["passed"]:
+                raise AssertionError(f"Fixed-input {label} parity failed at {LABELS[slot]}/{name}: {result}")
+        if tokens.numel() == 0:
+            continue
+        # Replay indexes must follow the actual native packing, not a token sort.
+        positions = trace["packing"][name]
+        actual = statistics(native, prediction, residual, v, beta, g)[0, positions]
+        torch.testing.assert_close(actual, expected.to(actual.device), **SCORE_TOLERANCE,
+                                   msg=lambda msg: f"Fixed-input residual differs at {LABELS[slot]}/{name}: {msg}")
+        report[f"{LABELS[slot]}/{name}"] = float((actual - expected.to(actual.device)).abs().max())
+    return dict(banks=len(report), max_abs=max(report.values()))
+
+
 def restored_check(backbone, args, assets, diagnostic):
     source = Cells(args.scratch / "original", backbone)
     meta = read(args.output / "restore-cells.json")
@@ -407,15 +463,27 @@ def restored_check(backbone, args, assets, diagnostic):
             original_traces[entry["query_id"]].append(
                 (LABELS.index(entry["cell"]), entry["layer"], entry["bank"],
                  torch.tensor(entry["token_index"], dtype=torch.long), values))
+    fixed = {}
+    for query_id, banks in original_traces.items():
+        fixture = torch.load(source.root / f"{query_id}-inputs.pt", map_location=backbone.device,
+                             weights_only=True)
+        fixed[query_id] = replay_fixed_inputs(backbone, fixture["inputs"],
+                                             {"banks": banks, "packing": fixture["packing"]},
+                                             imported_states, diagnostic)
+    write(args.output / "restore-fixed-input.json", dict(status="PASS", queries=fixed,
+                                                        tolerance=SCORE_TOLERANCE))
     result = run_group(FusionReader(backbone), imported.root, group, diagnostic, verify=True,
                        persistent=(imported, meta, imported_states), original_traces=original_traces)
     original = {row["id"]: row for row in read(args.output / "smoke-cell-scores.json")}
     identity = dict(zip(LABELS, LABELS, strict=True))
-    comparisons = {row["id"]: compare_scores(original[row["id"]], row, identity, **SCORE_TOLERANCE)
+    rollout = {row["id"]: row["rollout_trace"] for row in result["rows"]}
+    write(args.output / "restore-rollout.json", rollout)
+    comparisons = {row["id"]: compare_scores({PRIMARY: original[row["id"]][PRIMARY]},
+                                             {PRIMARY: row[PRIMARY]}, identity,
+                                             keys=(PRIMARY,), **SCORE_TOLERANCE)
                    for row in result["rows"]}
     write(args.output / "restore.json", dict(status="PASS", pid=os.getpid(), comparisons=comparisons,
-                                             token_head_max_abs={row["id"]: row["restored_trace_max_abs"]
-                                                                 for row in result["rows"]},
+                                             fixed_input=fixed, rollout=rollout,
                                              tolerance=SCORE_TOLERANCE, parity=result["parity"],
                                              state_integrity=result["integrity"]))
 

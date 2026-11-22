@@ -58,12 +58,14 @@ STATE_TOLERANCE = dict(atol=5e-5, rtol=5e-4)
 
 
 class ResidualTrace:
-    def __init__(self, kernel, verify=False):
+    def __init__(self, kernel, verify=False, capture=False):
         self.kernel = kernel
         self.verify = verify
         self.routers = []
         self.banks = []
         self.parity = {}
+        self.inputs = {} if capture else None
+        self.positions = {} if capture else None
 
     def begin_layer(self, layer, probabilities, selected, weights, packed_tokens):
         self.layer = layer
@@ -81,7 +83,11 @@ class BankTrace:
     def __init__(self, target, slot, shared):
         self.target, self.slot, self.shared = target, slot, shared
 
-    def before(self, q, k, v, g, beta, state):
+    def before(self, bank, q, k, v, g, beta, state):
+        if self.target.inputs is not None and self.slot == 0:
+            bank = 4 if self.shared else bank
+            self.target.inputs[f"{self.target.layer}.{bank}"] = tuple(
+                tensor.cpu() for tensor in (q, k, v, g, beta))
         return self.target.kernel(q, k, v, g, beta, state.clone() if state is not None else None)
 
     def after(self, bank, probe, native_output, native_state, value, beta, decay):
@@ -107,5 +113,7 @@ class BankTrace:
         else:
             tokens = self.target.packed[bank]
         mask = tokens >= 0
+        if self.target.positions is not None and self.slot == 0:
+            self.target.positions[f"{self.target.layer}.{bank}"] = mask.nonzero().flatten()
         self.target.banks.append((self.slot, self.target.layer, bank, tokens[mask],
                                   values.detach().cpu()[mask]))

@@ -26,14 +26,16 @@ class GatedDeltaTest(unittest.TestCase):
     def test_missing_state_is_zero_and_padding_is_not_recorded(self):
         q = k = v = torch.ones((1, 2, 1, 1))
         params = torch.zeros((1, 2, 1))
-        trace = ResidualTrace(reference, verify=True)
+        trace = ResidualTrace(reference, verify=True, capture=True)
         p = torch.full((1, 1, 4), .25)
         trace.begin_layer(0, p, torch.tensor([[[0, 1]]]), torch.full((1, 1, 2), .5),
                           torch.tensor([[-1, 0]]))
         observer = trace.for_cell(0)
-        probe = observer.before(q, k, v, params, params, None)
+        probe = observer.before(0, q, k, v, params, params, None)
         observer.after(0, probe, *probe[:2], v, params, params)
         self.assertEqual(trace.banks[0][3].tolist(), [0])
+        self.assertEqual(trace.positions["0.0"].tolist(), [1])
+        torch.testing.assert_close(trace.inputs["0.0"][0], q)
         self.assertEqual(trace.routers[0]["topk_mass"], [.5])
         self.assertTrue(trace.parity["state"]["passed"])
         self.assertFalse(parity_report(q, q + 1, atol=1e-6, rtol=0)["passed"])

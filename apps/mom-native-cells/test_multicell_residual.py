@@ -4,9 +4,9 @@ from unittest.mock import patch
 
 import torch
 
-from gdr_diagnostics import FIELDS
+from gdr_diagnostics import FIELDS, reference, statistics
 from residual_metrics import curve, group_bootstrap, metrics, rank_signal
-from run_multicell_residual import PRIMARY, SEEDS, dataset, score_trace, verify_trace
+from run_multicell_residual import PRIMARY, SEEDS, dataset, replay_fixed_inputs, score_trace, trace_drift, verify_trace
 
 
 class ResidualExperimentTest(unittest.TestCase):
@@ -50,3 +50,27 @@ class ResidualExperimentTest(unittest.TestCase):
                          "RESEARCH_PASS")
         self.assertNotEqual(rank_signal(results, {str(seed): results for seed in SEEDS}, [.9], False, .5),
                             "RESEARCH_PASS")
+
+
+    def test_restore_separates_fixed_input_parity_from_rollout_drift(self):
+        q = k = v = torch.ones((1, 2, 1, 1))
+        g = beta = torch.zeros((1, 2, 1))
+        state = torch.ones((1, 1, 1, 1))
+        operands = (q, k, v, g, beta)
+        native, _, prediction, error = reference(*operands, state)
+        expected = statistics(native, prediction, error, v, beta, g)[0, 1:]
+        banks = [(0, 0, 0, torch.tensor([0]), expected)]
+
+        upstream = SimpleNamespace(fused_recurrent_gated_delta_rule=lambda *args, initial_state, **kw:
+                                   reference(*args, initial_state)[:2])
+        with patch.dict("sys.modules", {"mom": SimpleNamespace(),
+                                       "mom.layers": SimpleNamespace(mom_gated_deltanet=upstream)}):
+            result = replay_fixed_inputs(SimpleNamespace(device="cpu"), {"0.0": operands},
+                                         {"banks": banks, "packing": {"0.0": torch.tensor([1])}},
+                                         {"A": {"0.0": state}}, reference)
+        self.assertEqual(result, {"banks": 1, "max_abs": 0})
+        drifted = expected.clone()
+        drifted[..., FIELDS.index("prediction_cosine")] -= 0.03
+        report = trace_drift(banks, [(0, 0, 0, torch.tensor([0]), drifted)])
+        self.assertEqual(report["fields"]["prediction_cosine"]["outside_old_tolerance"], 1)
+        self.assertEqual(report["fields"]["relative_residual_norm"]["outside_old_tolerance"], 0)

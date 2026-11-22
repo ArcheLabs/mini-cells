@@ -27,7 +27,11 @@ padding after the kernel returns. The four routed bank identities and the
 separate shared bank keep their original labels. Queries use independent
 working caches. The experiment hashes both full ZIP bytes and stored tensors
 before and after use. A fresh process imports the saved Smoke Cells using the
-ordinary public bundle path and compares token/head residual statistics.
+ordinary public bundle path. It replays the original projected operands with
+the imported state and applies the original token/head tolerances to every
+residual field. Full forward passes can regenerate different operands.
+Their drift is reported per field and routing position, and the primary
+Cell scores still have to pass the original score tolerance.
 
 ## Data and decision
 
