@@ -61,3 +61,22 @@ recall. GPU acceptance and browser walkthrough remain pending. The local
 unit tests exercise fusion placement on a synthetic branch, lineage and
 the portable bundle envelope. Mid-document CUDA resume, full metrics, and
 retention across knowledge replacement still require additional work.
+
+## Recall Diagnostic v1
+
+The initial T4 engineering run produced incorrect free-form answers.
+See [the original run](https://github.com/ArcheLabs/mini-cells/tree/kaggle/mom-native-cells-fd68aeab620d/artifacts/experiments/mom-native-cells-fd68aeab620d).
+
+Run `kaggle_recall.py` as a Python Script on one T4 with Internet and
+GITHUB_TOKEN. The runner scores the original two facts in Cloze and QA
+formats, with separate founder, prize-year and joint questions. Each cell
+is written once per run. Full-cache and recurrent-only states come from
+that exact write. The joint full-cache arm fuses the two live streams
+layer by layer. A/B-only controls use the recurrent-only path.
+Candidate scores use separately cloned or freshly initialized caches.
+Reports include total and mean token log probability, ranks, ties and
+margins. Public facts may also be present in the pretrained model.
+
+For a follow-up, pass `--ablation` to recall_diagnostic.py to isolate
+convolution reset and position reset. The default remote run covers the
+three core arms and fresh-process import. It does not rerun free generation.
