@@ -1,0 +1,1797 @@
+{
+  "model": "cross-encoder/nli-deberta-v3-small",
+  "revision": "fa2804872c3b4bd748f38c0185cc85775361e735",
+  "candidate_source_sha256": "3f59cd6d5b6e2ed8c5262b235870ba873d254b2f701a157b1d1f1d43924325df",
+  "status": "SCORED",
+  "torch": "2.11.0+cu130",
+  "transformers": "4.57.3",
+  "label_mapping": {
+    "0": "contradiction",
+    "1": "entailment",
+    "2": "neutral"
+  },
+  "rows": [
+    {
+      "query_id": "q1",
+      "claim": "A fresh process imports saved fast weights after a notebook restart.",
+      "candidates": [
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 3,
+          "dense": 0.8508700132369995,
+          "entailment": 0.9953450560569763,
+          "probabilities": {
+            "contradiction": 0.0004640206752810627,
+            "entailment": 0.9953450560569763,
+            "neutral": 0.0041908761486411095
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.8341681957244873,
+          "entailment": 0.005358916241675615,
+          "probabilities": {
+            "contradiction": 0.6019374132156372,
+            "entailment": 0.005358916241675615,
+            "neutral": 0.3927036225795746
+          }
+        },
+        {
+          "event": "e18",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.8060911893844604,
+          "entailment": 0.0038670033682137728,
+          "probabilities": {
+            "contradiction": 0.8496507406234741,
+            "entailment": 0.0038670033682137728,
+            "neutral": 0.1464821845293045
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 2,
+          "dense": 0.8841080069541931,
+          "entailment": 0.003674757666885853,
+          "probabilities": {
+            "contradiction": 0.010909322649240494,
+            "entailment": 0.003674757666885853,
+            "neutral": 0.9854158759117126
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.8121069073677063,
+          "entailment": 0.002403218299150467,
+          "probabilities": {
+            "contradiction": 0.053130511194467545,
+            "entailment": 0.002403218299150467,
+            "neutral": 0.9444662928581238
+          }
+        },
+        {
+          "event": "e16",
+          "cell": "protocol",
+          "grade": 0,
+          "dense": 0.8151447772979736,
+          "entailment": 0.002117414027452469,
+          "probabilities": {
+            "contradiction": 0.07675487548112869,
+            "entailment": 0.002117414027452469,
+            "neutral": 0.9211277365684509
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.803452730178833,
+          "entailment": 0.0020332185085862875,
+          "probabilities": {
+            "contradiction": 0.015448378399014473,
+            "entailment": 0.0020332185085862875,
+            "neutral": 0.9825184345245361
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.8511779308319092,
+          "entailment": 0.0018339904490858316,
+          "probabilities": {
+            "contradiction": 0.10383705794811249,
+            "entailment": 0.0018339904490858316,
+            "neutral": 0.8943289518356323
+          }
+        },
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.8262498378753662,
+          "entailment": 0.0012579342583194375,
+          "probabilities": {
+            "contradiction": 0.009736877866089344,
+            "entailment": 0.0012579342583194375,
+            "neutral": 0.9890051484107971
+          }
+        },
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 3,
+          "dense": 0.8446334004402161,
+          "entailment": 0.0012009716592729092,
+          "probabilities": {
+            "contradiction": 0.013799969106912613,
+            "entailment": 0.0012009716592729092,
+            "neutral": 0.9849991202354431
+          }
+        },
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.8311948776245117,
+          "entailment": 0.0011969954939559102,
+          "probabilities": {
+            "contradiction": 0.005393015220761299,
+            "entailment": 0.0011969954939559102,
+            "neutral": 0.9934099316596985
+          }
+        },
+        {
+          "event": "e11",
+          "cell": "security",
+          "grade": 0,
+          "dense": 0.8119757175445557,
+          "entailment": 0.00046327104791998863,
+          "probabilities": {
+            "contradiction": 0.002778609748929739,
+            "entailment": 0.00046327104791998863,
+            "neutral": 0.9967581629753113
+          }
+        },
+        {
+          "event": "e06",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.8018753528594971,
+          "entailment": 0.00036694141454063356,
+          "probabilities": {
+            "contradiction": 0.5822516679763794,
+            "entailment": 0.00036694141454063356,
+            "neutral": 0.4173813760280609
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.8152425289154053,
+          "entailment": 0.0003350327315274626,
+          "probabilities": {
+            "contradiction": 0.8504036664962769,
+            "entailment": 0.0003350327315274626,
+            "neutral": 0.1492612659931183
+          }
+        },
+        {
+          "event": "e13",
+          "cell": "finance",
+          "grade": 0,
+          "dense": 0.8005027770996094,
+          "entailment": 0.000132231623865664,
+          "probabilities": {
+            "contradiction": 0.9873864054679871,
+            "entailment": 0.000132231623865664,
+            "neutral": 0.01248143520206213
+          }
+        },
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.8489274978637695,
+          "entailment": 2.914445212809369e-05,
+          "probabilities": {
+            "contradiction": 0.9988552331924438,
+            "entailment": 2.914445212809369e-05,
+            "neutral": 0.0011155410902574658
+          }
+        }
+      ]
+    },
+    {
+      "query_id": "q1",
+      "claim": "The loader verifies the snapshot checksum before accepting restored fast weights.",
+      "candidates": [
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 3,
+          "dense": 0.8446334004402161,
+          "entailment": 0.9899299740791321,
+          "probabilities": {
+            "contradiction": 0.0015994175337255,
+            "entailment": 0.9899299740791321,
+            "neutral": 0.008470699191093445
+          }
+        },
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 3,
+          "dense": 0.8508700132369995,
+          "entailment": 0.0004850212426390499,
+          "probabilities": {
+            "contradiction": 0.000691847933921963,
+            "entailment": 0.0004850212426390499,
+            "neutral": 0.9988231062889099
+          }
+        },
+        {
+          "event": "e16",
+          "cell": "protocol",
+          "grade": 0,
+          "dense": 0.8151447772979736,
+          "entailment": 0.0003359767433721572,
+          "probabilities": {
+            "contradiction": 0.012179521843791008,
+            "entailment": 0.0003359767433721572,
+            "neutral": 0.9874845147132874
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.8121069073677063,
+          "entailment": 0.0001304530305787921,
+          "probabilities": {
+            "contradiction": 0.24999023973941803,
+            "entailment": 0.0001304530305787921,
+            "neutral": 0.7498793601989746
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 2,
+          "dense": 0.8841080069541931,
+          "entailment": 0.00011756699677789584,
+          "probabilities": {
+            "contradiction": 0.9536060094833374,
+            "entailment": 0.00011756699677789584,
+            "neutral": 0.04627646505832672
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.803452730178833,
+          "entailment": 0.00010767410276457667,
+          "probabilities": {
+            "contradiction": 0.07234708964824677,
+            "entailment": 0.00010767410276457667,
+            "neutral": 0.9275452494621277
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.8152425289154053,
+          "entailment": 7.129688310669735e-05,
+          "probabilities": {
+            "contradiction": 0.9691726565361023,
+            "entailment": 7.129688310669735e-05,
+            "neutral": 0.03075610101222992
+          }
+        },
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.8489274978637695,
+          "entailment": 3.414228922338225e-05,
+          "probabilities": {
+            "contradiction": 0.9976713061332703,
+            "entailment": 3.414228922338225e-05,
+            "neutral": 0.0022945748642086983
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.8341681957244873,
+          "entailment": 3.1818319257581607e-05,
+          "probabilities": {
+            "contradiction": 0.9920319318771362,
+            "entailment": 3.1818319257581607e-05,
+            "neutral": 0.00793625507503748
+          }
+        },
+        {
+          "event": "e11",
+          "cell": "security",
+          "grade": 0,
+          "dense": 0.8119757175445557,
+          "entailment": 2.781772127491422e-05,
+          "probabilities": {
+            "contradiction": 0.9964067339897156,
+            "entailment": 2.781772127491422e-05,
+            "neutral": 0.0035654969979077578
+          }
+        },
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.8262498378753662,
+          "entailment": 2.6365103622083552e-05,
+          "probabilities": {
+            "contradiction": 0.9991432428359985,
+            "entailment": 2.6365103622083552e-05,
+            "neutral": 0.0008304682560265064
+          }
+        },
+        {
+          "event": "e13",
+          "cell": "finance",
+          "grade": 0,
+          "dense": 0.8005027770996094,
+          "entailment": 1.760334453138057e-05,
+          "probabilities": {
+            "contradiction": 0.9993739724159241,
+            "entailment": 1.760334453138057e-05,
+            "neutral": 0.0006083918851800263
+          }
+        },
+        {
+          "event": "e18",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.8060911893844604,
+          "entailment": 1.2733464245684445e-05,
+          "probabilities": {
+            "contradiction": 0.9989528656005859,
+            "entailment": 1.2733464245684445e-05,
+            "neutral": 0.0010343254543840885
+          }
+        },
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.8311948776245117,
+          "entailment": 1.2510878150351346e-05,
+          "probabilities": {
+            "contradiction": 0.9994391798973083,
+            "entailment": 1.2510878150351346e-05,
+            "neutral": 0.000548314768821001
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.8511779308319092,
+          "entailment": 1.2371094271657057e-05,
+          "probabilities": {
+            "contradiction": 0.996870219707489,
+            "entailment": 1.2371094271657057e-05,
+            "neutral": 0.0031174125615507364
+          }
+        },
+        {
+          "event": "e06",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.8018753528594971,
+          "entailment": 9.999092981161084e-06,
+          "probabilities": {
+            "contradiction": 0.9992654919624329,
+            "entailment": 9.999092981161084e-06,
+            "neutral": 0.0007244932348839939
+          }
+        }
+      ]
+    },
+    {
+      "query_id": "q2",
+      "claim": "A source map translates executable offsets to original source locations.",
+      "candidates": [
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 3,
+          "dense": 0.8329781889915466,
+          "entailment": 0.9921585321426392,
+          "probabilities": {
+            "contradiction": 0.0006193115841597319,
+            "entailment": 0.9921585321426392,
+            "neutral": 0.007222251500934362
+          }
+        },
+        {
+          "event": "e06",
+          "cell": "compiler",
+          "grade": 1,
+          "dense": 0.7680649161338806,
+          "entailment": 0.03092455491423607,
+          "probabilities": {
+            "contradiction": 0.7809582948684692,
+            "entailment": 0.03092455491423607,
+            "neutral": 0.1881171613931656
+          }
+        },
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 2,
+          "dense": 0.7840632200241089,
+          "entailment": 0.0019941164646297693,
+          "probabilities": {
+            "contradiction": 0.9913617968559265,
+            "entailment": 0.0019941164646297693,
+            "neutral": 0.006644028704613447
+          }
+        },
+        {
+          "event": "e16",
+          "cell": "protocol",
+          "grade": 0,
+          "dense": 0.7330979704856873,
+          "entailment": 0.0015400438569486141,
+          "probabilities": {
+            "contradiction": 0.986390233039856,
+            "entailment": 0.0015400438569486141,
+            "neutral": 0.012069707736372948
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7963305711746216,
+          "entailment": 0.0009837336838245392,
+          "probabilities": {
+            "contradiction": 0.9737362265586853,
+            "entailment": 0.0009837336838245392,
+            "neutral": 0.025280043482780457
+          }
+        },
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7763663530349731,
+          "entailment": 0.0006360116531141102,
+          "probabilities": {
+            "contradiction": 0.9976916313171387,
+            "entailment": 0.0006360116531141102,
+            "neutral": 0.0016722815344110131
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7426427006721497,
+          "entailment": 0.000624234729912132,
+          "probabilities": {
+            "contradiction": 0.9964874982833862,
+            "entailment": 0.000624234729912132,
+            "neutral": 0.0028882576152682304
+          }
+        },
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.8181331157684326,
+          "entailment": 0.0005932581261731684,
+          "probabilities": {
+            "contradiction": 0.9969159364700317,
+            "entailment": 0.0005932581261731684,
+            "neutral": 0.002490847371518612
+          }
+        },
+        {
+          "event": "e17",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7391042709350586,
+          "entailment": 0.0004725551698356867,
+          "probabilities": {
+            "contradiction": 0.9984607696533203,
+            "entailment": 0.0004725551698356867,
+            "neutral": 0.0010667038150131702
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.7730624675750732,
+          "entailment": 0.0002512234204914421,
+          "probabilities": {
+            "contradiction": 0.9987623691558838,
+            "entailment": 0.0002512234204914421,
+            "neutral": 0.0009864228777587414
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.7994239330291748,
+          "entailment": 0.0002060790138784796,
+          "probabilities": {
+            "contradiction": 0.9988890290260315,
+            "entailment": 0.0002060790138784796,
+            "neutral": 0.0009048067149706185
+          }
+        },
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7632489204406738,
+          "entailment": 0.0001912799198180437,
+          "probabilities": {
+            "contradiction": 0.9989274144172668,
+            "entailment": 0.0001912799198180437,
+            "neutral": 0.0008813682943582535
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7538349628448486,
+          "entailment": 0.00013598280202131718,
+          "probabilities": {
+            "contradiction": 0.998917818069458,
+            "entailment": 0.00013598280202131718,
+            "neutral": 0.000946154585108161
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7816430330276489,
+          "entailment": 8.069412433542311e-05,
+          "probabilities": {
+            "contradiction": 0.9994221925735474,
+            "entailment": 8.069412433542311e-05,
+            "neutral": 0.0004972305032424629
+          }
+        },
+        {
+          "event": "e18",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7563764452934265,
+          "entailment": 7.271151844179258e-05,
+          "probabilities": {
+            "contradiction": 0.9995985627174377,
+            "entailment": 7.271151844179258e-05,
+            "neutral": 0.00032881894730962813
+          }
+        },
+        {
+          "event": "e09",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7639128565788269,
+          "entailment": 4.500991417444311e-05,
+          "probabilities": {
+            "contradiction": 0.9994070529937744,
+            "entailment": 4.500991417444311e-05,
+            "neutral": 0.000547917908988893
+          }
+        }
+      ]
+    },
+    {
+      "query_id": "q3",
+      "claim": "The validator records instruction traces when replaying work packages.",
+      "candidates": [
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 3,
+          "dense": 0.8657548427581787,
+          "entailment": 0.9896163940429688,
+          "probabilities": {
+            "contradiction": 0.0016010287217795849,
+            "entailment": 0.9896163940429688,
+            "neutral": 0.00878259539604187
+          }
+        },
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 3,
+          "dense": 0.859939455986023,
+          "entailment": 0.031402260065078735,
+          "probabilities": {
+            "contradiction": 0.1947355568408966,
+            "entailment": 0.031402260065078735,
+            "neutral": 0.7738621830940247
+          }
+        },
+        {
+          "event": "e06",
+          "cell": "compiler",
+          "grade": 1,
+          "dense": 0.8182412385940552,
+          "entailment": 0.023663325235247612,
+          "probabilities": {
+            "contradiction": 0.6189737915992737,
+            "entailment": 0.023663325235247612,
+            "neutral": 0.35736286640167236
+          }
+        },
+        {
+          "event": "e18",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7647404670715332,
+          "entailment": 0.0183288361877203,
+          "probabilities": {
+            "contradiction": 0.9014919400215149,
+            "entailment": 0.0183288361877203,
+            "neutral": 0.08017928153276443
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.791297972202301,
+          "entailment": 0.006760060787200928,
+          "probabilities": {
+            "contradiction": 0.9787440896034241,
+            "entailment": 0.006760060787200928,
+            "neutral": 0.01449583936482668
+          }
+        },
+        {
+          "event": "e16",
+          "cell": "protocol",
+          "grade": 0,
+          "dense": 0.7629367113113403,
+          "entailment": 0.005845401436090469,
+          "probabilities": {
+            "contradiction": 0.031112683936953545,
+            "entailment": 0.005845401436090469,
+            "neutral": 0.9630418419837952
+          }
+        },
+        {
+          "event": "e17",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7801562547683716,
+          "entailment": 0.0037472310941666365,
+          "probabilities": {
+            "contradiction": 0.9906564950942993,
+            "entailment": 0.0037472310941666365,
+            "neutral": 0.00559617392718792
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 1,
+          "dense": 0.828396201133728,
+          "entailment": 0.001738163991831243,
+          "probabilities": {
+            "contradiction": 0.99538654088974,
+            "entailment": 0.001738163991831243,
+            "neutral": 0.0028753855731338263
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7836134433746338,
+          "entailment": 0.0011384430108591914,
+          "probabilities": {
+            "contradiction": 0.005661275703459978,
+            "entailment": 0.0011384430108591914,
+            "neutral": 0.9932002425193787
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7662118077278137,
+          "entailment": 0.00021213317813817412,
+          "probabilities": {
+            "contradiction": 0.09149465709924698,
+            "entailment": 0.00021213317813817412,
+            "neutral": 0.9082931876182556
+          }
+        },
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7756236791610718,
+          "entailment": 0.0001925189862959087,
+          "probabilities": {
+            "contradiction": 0.99562007188797,
+            "entailment": 0.0001925189862959087,
+            "neutral": 0.004187375772744417
+          }
+        },
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7945213317871094,
+          "entailment": 0.00018621821072883904,
+          "probabilities": {
+            "contradiction": 0.995881199836731,
+            "entailment": 0.00018621821072883904,
+            "neutral": 0.003932585474103689
+          }
+        },
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 1,
+          "dense": 0.8623298406600952,
+          "entailment": 5.990568024571985e-05,
+          "probabilities": {
+            "contradiction": 0.9980687499046326,
+            "entailment": 5.990568024571985e-05,
+            "neutral": 0.0018713662866503
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.7891734838485718,
+          "entailment": 4.429098407854326e-05,
+          "probabilities": {
+            "contradiction": 0.9980814456939697,
+            "entailment": 4.429098407854326e-05,
+            "neutral": 0.001874297857284546
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7838837504386902,
+          "entailment": 3.851500878226943e-05,
+          "probabilities": {
+            "contradiction": 0.991995096206665,
+            "entailment": 3.851500878226943e-05,
+            "neutral": 0.007966347970068455
+          }
+        },
+        {
+          "event": "e09",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7762587070465088,
+          "entailment": 2.6980529582942836e-05,
+          "probabilities": {
+            "contradiction": 0.9990546107292175,
+            "entailment": 2.6980529582942836e-05,
+            "neutral": 0.0009183866786770523
+          }
+        }
+      ]
+    },
+    {
+      "query_id": "q3",
+      "claim": "A debug-symbol table records function names alongside executable addresses.",
+      "candidates": [
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 3,
+          "dense": 0.859939455986023,
+          "entailment": 0.9959326386451721,
+          "probabilities": {
+            "contradiction": 0.00040426073246635497,
+            "entailment": 0.9959326386451721,
+            "neutral": 0.0036631568800657988
+          }
+        },
+        {
+          "event": "e06",
+          "cell": "compiler",
+          "grade": 1,
+          "dense": 0.8182412385940552,
+          "entailment": 0.159992977976799,
+          "probabilities": {
+            "contradiction": 0.23057077825069427,
+            "entailment": 0.159992977976799,
+            "neutral": 0.6094362735748291
+          }
+        },
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 1,
+          "dense": 0.8623298406600952,
+          "entailment": 0.0020836936309933662,
+          "probabilities": {
+            "contradiction": 0.022600993514060974,
+            "entailment": 0.0020836936309933662,
+            "neutral": 0.9753153324127197
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.791297972202301,
+          "entailment": 0.000986910192295909,
+          "probabilities": {
+            "contradiction": 0.021458707749843597,
+            "entailment": 0.000986910192295909,
+            "neutral": 0.9775543808937073
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.7891734838485718,
+          "entailment": 0.0006966861546970904,
+          "probabilities": {
+            "contradiction": 0.16479294002056122,
+            "entailment": 0.0006966861546970904,
+            "neutral": 0.8345103859901428
+          }
+        },
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 3,
+          "dense": 0.8657548427581787,
+          "entailment": 0.0006343737477436662,
+          "probabilities": {
+            "contradiction": 0.292203426361084,
+            "entailment": 0.0006343737477436662,
+            "neutral": 0.7071621417999268
+          }
+        },
+        {
+          "event": "e16",
+          "cell": "protocol",
+          "grade": 0,
+          "dense": 0.7629367113113403,
+          "entailment": 0.0004352106188889593,
+          "probabilities": {
+            "contradiction": 0.023122429847717285,
+            "entailment": 0.0004352106188889593,
+            "neutral": 0.976442277431488
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7662118077278137,
+          "entailment": 0.00017363984079565853,
+          "probabilities": {
+            "contradiction": 0.9769039750099182,
+            "entailment": 0.00017363984079565853,
+            "neutral": 0.02292233519256115
+          }
+        },
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7945213317871094,
+          "entailment": 0.00015415185771416873,
+          "probabilities": {
+            "contradiction": 0.907777726650238,
+            "entailment": 0.00015415185771416873,
+            "neutral": 0.0920681282877922
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7838837504386902,
+          "entailment": 0.00013742706505581737,
+          "probabilities": {
+            "contradiction": 0.7082605361938477,
+            "entailment": 0.00013742706505581737,
+            "neutral": 0.2916020154953003
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7836134433746338,
+          "entailment": 7.759937579976395e-05,
+          "probabilities": {
+            "contradiction": 0.8094563484191895,
+            "entailment": 7.759937579976395e-05,
+            "neutral": 0.190466046333313
+          }
+        },
+        {
+          "event": "e17",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7801562547683716,
+          "entailment": 3.345884397276677e-05,
+          "probabilities": {
+            "contradiction": 0.9985346794128418,
+            "entailment": 3.345884397276677e-05,
+            "neutral": 0.0014319007750600576
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 1,
+          "dense": 0.828396201133728,
+          "entailment": 2.4443817892461084e-05,
+          "probabilities": {
+            "contradiction": 0.9907512068748474,
+            "entailment": 2.4443817892461084e-05,
+            "neutral": 0.009224350564181805
+          }
+        },
+        {
+          "event": "e09",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7762587070465088,
+          "entailment": 2.3458147552446462e-05,
+          "probabilities": {
+            "contradiction": 0.9957290291786194,
+            "entailment": 2.3458147552446462e-05,
+            "neutral": 0.004247487522661686
+          }
+        },
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7756236791610718,
+          "entailment": 2.1103140170453116e-05,
+          "probabilities": {
+            "contradiction": 0.9982636570930481,
+            "entailment": 2.1103140170453116e-05,
+            "neutral": 0.001715276506729424
+          }
+        },
+        {
+          "event": "e18",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7647404670715332,
+          "entailment": 1.3990773368277587e-05,
+          "probabilities": {
+            "contradiction": 0.9977843165397644,
+            "entailment": 1.3990773368277587e-05,
+            "neutral": 0.0022016330622136593
+          }
+        }
+      ]
+    },
+    {
+      "query_id": "q4",
+      "claim": "A passcode is required to open the Portable Cell snapshot.",
+      "candidates": [
+        {
+          "event": "e17",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7538952827453613,
+          "entailment": 0.0014643389731645584,
+          "probabilities": {
+            "contradiction": 0.6016172766685486,
+            "entailment": 0.0014643389731645584,
+            "neutral": 0.3969184160232544
+          }
+        },
+        {
+          "event": "e18",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7408771514892578,
+          "entailment": 0.0009972936240956187,
+          "probabilities": {
+            "contradiction": 0.08007784932851791,
+            "entailment": 0.0009972936240956187,
+            "neutral": 0.918924868106842
+          }
+        },
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7783461809158325,
+          "entailment": 0.0008742669015191495,
+          "probabilities": {
+            "contradiction": 0.3432954251766205,
+            "entailment": 0.0008742669015191495,
+            "neutral": 0.6558303236961365
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7448535561561584,
+          "entailment": 0.0007117358036339283,
+          "probabilities": {
+            "contradiction": 0.11217831820249557,
+            "entailment": 0.0007117358036339283,
+            "neutral": 0.8871099352836609
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7592911720275879,
+          "entailment": 0.0005123807932250202,
+          "probabilities": {
+            "contradiction": 0.018786083906888962,
+            "entailment": 0.0005123807932250202,
+            "neutral": 0.9807015061378479
+          }
+        },
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 1,
+          "dense": 0.8561114072799683,
+          "entailment": 0.00047170696780085564,
+          "probabilities": {
+            "contradiction": 0.0005306677776388824,
+            "entailment": 0.00047170696780085564,
+            "neutral": 0.9989976286888123
+          }
+        },
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 1,
+          "dense": 0.8062238693237305,
+          "entailment": 0.0004205656878184527,
+          "probabilities": {
+            "contradiction": 0.022068185731768608,
+            "entailment": 0.0004205656878184527,
+            "neutral": 0.9775112867355347
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.7825061678886414,
+          "entailment": 0.00035163271240890026,
+          "probabilities": {
+            "contradiction": 0.009509198367595673,
+            "entailment": 0.00035163271240890026,
+            "neutral": 0.9901392459869385
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 1,
+          "dense": 0.8202961683273315,
+          "entailment": 0.0002810823789332062,
+          "probabilities": {
+            "contradiction": 0.007745158858597279,
+            "entailment": 0.0002810823789332062,
+            "neutral": 0.9919737577438354
+          }
+        },
+        {
+          "event": "e09",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7681915760040283,
+          "entailment": 0.0002444325655233115,
+          "probabilities": {
+            "contradiction": 0.024871869012713432,
+            "entailment": 0.0002444325655233115,
+            "neutral": 0.9748836755752563
+          }
+        },
+        {
+          "event": "e11",
+          "cell": "security",
+          "grade": 0,
+          "dense": 0.7652149200439453,
+          "entailment": 0.0002417104406049475,
+          "probabilities": {
+            "contradiction": 0.01472077239304781,
+            "entailment": 0.0002417104406049475,
+            "neutral": 0.9850375056266785
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.7820835709571838,
+          "entailment": 0.00020610749197658151,
+          "probabilities": {
+            "contradiction": 0.0017942178528755903,
+            "entailment": 0.00020610749197658151,
+            "neutral": 0.9979996085166931
+          }
+        },
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7788430452346802,
+          "entailment": 0.00019434571731835604,
+          "probabilities": {
+            "contradiction": 0.34536921977996826,
+            "entailment": 0.00019434571731835604,
+            "neutral": 0.6544364094734192
+          }
+        },
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7656112909317017,
+          "entailment": 0.00015052175149321556,
+          "probabilities": {
+            "contradiction": 0.7085992097854614,
+            "entailment": 0.00015052175149321556,
+            "neutral": 0.2912502586841583
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7563471794128418,
+          "entailment": 5.2176455938024446e-05,
+          "probabilities": {
+            "contradiction": 0.9805533289909363,
+            "entailment": 5.2176455938024446e-05,
+            "neutral": 0.01939457654953003
+          }
+        },
+        {
+          "event": "e06",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7859320640563965,
+          "entailment": 2.0310810214141384e-05,
+          "probabilities": {
+            "contradiction": 0.9889400601387024,
+            "entailment": 2.0310810214141384e-05,
+            "neutral": 0.011039691045880318
+          }
+        }
+      ]
+    },
+    {
+      "query_id": "q5",
+      "claim": "A fresh process imports saved fast weights after a notebook restart.",
+      "candidates": [
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 3,
+          "dense": 0.8226169347763062,
+          "entailment": 0.9953450560569763,
+          "probabilities": {
+            "contradiction": 0.0004640206752810627,
+            "entailment": 0.9953450560569763,
+            "neutral": 0.0041908761486411095
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.7916061878204346,
+          "entailment": 0.005358916241675615,
+          "probabilities": {
+            "contradiction": 0.6019374132156372,
+            "entailment": 0.005358916241675615,
+            "neutral": 0.3927036225795746
+          }
+        },
+        {
+          "event": "e18",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7661912441253662,
+          "entailment": 0.0038670033682137728,
+          "probabilities": {
+            "contradiction": 0.8496507406234741,
+            "entailment": 0.0038670033682137728,
+            "neutral": 0.1464821845293045
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 2,
+          "dense": 0.819433867931366,
+          "entailment": 0.003674757666885853,
+          "probabilities": {
+            "contradiction": 0.010909322649240494,
+            "entailment": 0.003674757666885853,
+            "neutral": 0.9854158759117126
+          }
+        },
+        {
+          "event": "e17",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.75758957862854,
+          "entailment": 0.00254286197014153,
+          "probabilities": {
+            "contradiction": 0.3920157253742218,
+            "entailment": 0.00254286197014153,
+            "neutral": 0.6054414510726929
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7758618593215942,
+          "entailment": 0.002403218299150467,
+          "probabilities": {
+            "contradiction": 0.053130511194467545,
+            "entailment": 0.002403218299150467,
+            "neutral": 0.9444662928581238
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7861939072608948,
+          "entailment": 0.0020332185085862875,
+          "probabilities": {
+            "contradiction": 0.015448378399014473,
+            "entailment": 0.0020332185085862875,
+            "neutral": 0.9825184345245361
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7892007231712341,
+          "entailment": 0.0018339904490858316,
+          "probabilities": {
+            "contradiction": 0.10383705794811249,
+            "entailment": 0.0018339904490858316,
+            "neutral": 0.8943289518356323
+          }
+        },
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7575905323028564,
+          "entailment": 0.0012579342583194375,
+          "probabilities": {
+            "contradiction": 0.009736877866089344,
+            "entailment": 0.0012579342583194375,
+            "neutral": 0.9890051484107971
+          }
+        },
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 1,
+          "dense": 0.8444514274597168,
+          "entailment": 0.0012009716592729092,
+          "probabilities": {
+            "contradiction": 0.013799969106912613,
+            "entailment": 0.0012009716592729092,
+            "neutral": 0.9849991202354431
+          }
+        },
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7736270427703857,
+          "entailment": 0.0011969954939559102,
+          "probabilities": {
+            "contradiction": 0.005393015220761299,
+            "entailment": 0.0011969954939559102,
+            "neutral": 0.9934099316596985
+          }
+        },
+        {
+          "event": "e11",
+          "cell": "security",
+          "grade": 0,
+          "dense": 0.7650579214096069,
+          "entailment": 0.00046327104791998863,
+          "probabilities": {
+            "contradiction": 0.002778609748929739,
+            "entailment": 0.00046327104791998863,
+            "neutral": 0.9967581629753113
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.7787067890167236,
+          "entailment": 0.0003350327315274626,
+          "probabilities": {
+            "contradiction": 0.8504036664962769,
+            "entailment": 0.0003350327315274626,
+            "neutral": 0.1492612659931183
+          }
+        },
+        {
+          "event": "e09",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7754215002059937,
+          "entailment": 0.00013508387201000005,
+          "probabilities": {
+            "contradiction": 0.9682446122169495,
+            "entailment": 0.00013508387201000005,
+            "neutral": 0.031620316207408905
+          }
+        },
+        {
+          "event": "e13",
+          "cell": "finance",
+          "grade": 0,
+          "dense": 0.7571081519126892,
+          "entailment": 0.000132231623865664,
+          "probabilities": {
+            "contradiction": 0.9873864054679871,
+            "entailment": 0.000132231623865664,
+            "neutral": 0.01248143520206213
+          }
+        },
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7911297678947449,
+          "entailment": 2.914445212809369e-05,
+          "probabilities": {
+            "contradiction": 0.9988552331924438,
+            "entailment": 2.914445212809369e-05,
+            "neutral": 0.0011155410902574658
+          }
+        }
+      ]
+    },
+    {
+      "query_id": "q5",
+      "claim": "The record identifies the vendor that approved the snapshot format.",
+      "candidates": [
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 1,
+          "dense": 0.8444514274597168,
+          "entailment": 0.9535922408103943,
+          "probabilities": {
+            "contradiction": 0.008269078098237514,
+            "entailment": 0.9535922408103943,
+            "neutral": 0.03813868761062622
+          }
+        },
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7911297678947449,
+          "entailment": 0.0009144340874627233,
+          "probabilities": {
+            "contradiction": 0.04096057638525963,
+            "entailment": 0.0009144340874627233,
+            "neutral": 0.9581250548362732
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.7787067890167236,
+          "entailment": 0.0006961003527976573,
+          "probabilities": {
+            "contradiction": 0.544183075428009,
+            "entailment": 0.0006961003527976573,
+            "neutral": 0.45512092113494873
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7861939072608948,
+          "entailment": 0.0006562548805959523,
+          "probabilities": {
+            "contradiction": 0.025179950520396233,
+            "entailment": 0.0006562548805959523,
+            "neutral": 0.9741637706756592
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.7916061878204346,
+          "entailment": 0.000553041638340801,
+          "probabilities": {
+            "contradiction": 0.0018363946583122015,
+            "entailment": 0.000553041638340801,
+            "neutral": 0.9976105690002441
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7758618593215942,
+          "entailment": 0.0005220736493356526,
+          "probabilities": {
+            "contradiction": 0.7782321572303772,
+            "entailment": 0.0005220736493356526,
+            "neutral": 0.22124576568603516
+          }
+        },
+        {
+          "event": "e11",
+          "cell": "security",
+          "grade": 0,
+          "dense": 0.7650579214096069,
+          "entailment": 0.0004947064444422722,
+          "probabilities": {
+            "contradiction": 0.012578308582305908,
+            "entailment": 0.0004947064444422722,
+            "neutral": 0.9869269728660583
+          }
+        },
+        {
+          "event": "e17",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.75758957862854,
+          "entailment": 0.000276382575975731,
+          "probabilities": {
+            "contradiction": 0.0041131372563540936,
+            "entailment": 0.000276382575975731,
+            "neutral": 0.9956105351448059
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7892007231712341,
+          "entailment": 0.0002653511764947325,
+          "probabilities": {
+            "contradiction": 0.0042005665600299835,
+            "entailment": 0.0002653511764947325,
+            "neutral": 0.9955340623855591
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 2,
+          "dense": 0.819433867931366,
+          "entailment": 0.0002623547916300595,
+          "probabilities": {
+            "contradiction": 0.0020413727033883333,
+            "entailment": 0.0002623547916300595,
+            "neutral": 0.9976962208747864
+          }
+        },
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 3,
+          "dense": 0.8226169347763062,
+          "entailment": 0.0002610743686091155,
+          "probabilities": {
+            "contradiction": 0.0008117371471598744,
+            "entailment": 0.0002610743686091155,
+            "neutral": 0.9989271759986877
+          }
+        },
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7575905323028564,
+          "entailment": 0.00011836365592898801,
+          "probabilities": {
+            "contradiction": 0.3194408118724823,
+            "entailment": 0.00011836365592898801,
+            "neutral": 0.6804408431053162
+          }
+        },
+        {
+          "event": "e18",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7661912441253662,
+          "entailment": 4.2816329369088635e-05,
+          "probabilities": {
+            "contradiction": 0.9880527257919312,
+            "entailment": 4.2816329369088635e-05,
+            "neutral": 0.01190442219376564
+          }
+        },
+        {
+          "event": "e13",
+          "cell": "finance",
+          "grade": 0,
+          "dense": 0.7571081519126892,
+          "entailment": 1.6186961147468537e-05,
+          "probabilities": {
+            "contradiction": 0.997016429901123,
+            "entailment": 1.6186961147468537e-05,
+            "neutral": 0.0029674640391021967
+          }
+        },
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7736270427703857,
+          "entailment": 1.4510285836877301e-05,
+          "probabilities": {
+            "contradiction": 0.9949619770050049,
+            "entailment": 1.4510285836877301e-05,
+            "neutral": 0.005023571662604809
+          }
+        },
+        {
+          "event": "e09",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7754215002059937,
+          "entailment": 1.0348060641263146e-05,
+          "probabilities": {
+            "contradiction": 0.9984235763549805,
+            "entailment": 1.0348060641263146e-05,
+            "neutral": 0.0015661224024370313
+          }
+        }
+      ]
+    },
+    {
+      "query_id": "q6",
+      "claim": "The record states the boiling point of mercury.",
+      "candidates": [
+        {
+          "event": "e01",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7368847131729126,
+          "entailment": 4.34758621850051e-05,
+          "probabilities": {
+            "contradiction": 0.998610258102417,
+            "entailment": 4.34758621850051e-05,
+            "neutral": 0.001346237724646926
+          }
+        },
+        {
+          "event": "e14",
+          "cell": "storage",
+          "grade": 0,
+          "dense": 0.7372819185256958,
+          "entailment": 3.5535034839995205e-05,
+          "probabilities": {
+            "contradiction": 0.9999188184738159,
+            "entailment": 3.5535034839995205e-05,
+            "neutral": 4.56519155704882e-05
+          }
+        },
+        {
+          "event": "e11",
+          "cell": "security",
+          "grade": 0,
+          "dense": 0.7306475639343262,
+          "entailment": 2.8338274205452763e-05,
+          "probabilities": {
+            "contradiction": 0.999934196472168,
+            "entailment": 2.8338274205452763e-05,
+            "neutral": 3.740630563697778e-05
+          }
+        },
+        {
+          "event": "e13",
+          "cell": "finance",
+          "grade": 0,
+          "dense": 0.7378391027450562,
+          "entailment": 2.4637913156766444e-05,
+          "probabilities": {
+            "contradiction": 0.9996911287307739,
+            "entailment": 2.4637913156766444e-05,
+            "neutral": 0.0002842650283128023
+          }
+        },
+        {
+          "event": "e15",
+          "cell": "release",
+          "grade": 0,
+          "dense": 0.7342624664306641,
+          "entailment": 2.4358512746402994e-05,
+          "probabilities": {
+            "contradiction": 0.9999094009399414,
+            "entailment": 2.4358512746402994e-05,
+            "neutral": 6.632219447055832e-05
+          }
+        },
+        {
+          "event": "e12",
+          "cell": "network",
+          "grade": 0,
+          "dense": 0.7480032444000244,
+          "entailment": 2.053078424069099e-05,
+          "probabilities": {
+            "contradiction": 0.9999063014984131,
+            "entailment": 2.053078424069099e-05,
+            "neutral": 7.31566542526707e-05
+          }
+        },
+        {
+          "event": "e03",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7303897142410278,
+          "entailment": 1.9656861695693806e-05,
+          "probabilities": {
+            "contradiction": 0.9994505047798157,
+            "entailment": 1.9656861695693806e-05,
+            "neutral": 0.000529822485987097
+          }
+        },
+        {
+          "event": "e09",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7608307003974915,
+          "entailment": 1.9370218069525436e-05,
+          "probabilities": {
+            "contradiction": 0.9999574422836304,
+            "entailment": 1.9370218069525436e-05,
+            "neutral": 2.325911736988928e-05
+          }
+        },
+        {
+          "event": "e16",
+          "cell": "protocol",
+          "grade": 0,
+          "dense": 0.7133039236068726,
+          "entailment": 1.4851296327833552e-05,
+          "probabilities": {
+            "contradiction": 0.9999338388442993,
+            "entailment": 1.4851296327833552e-05,
+            "neutral": 5.128079283167608e-05
+          }
+        },
+        {
+          "event": "e10",
+          "cell": "training",
+          "grade": 0,
+          "dense": 0.7289786338806152,
+          "entailment": 1.4168155757943168e-05,
+          "probabilities": {
+            "contradiction": 0.9998692274093628,
+            "entailment": 1.4168155757943168e-05,
+            "neutral": 0.00011652789544314146
+          }
+        },
+        {
+          "event": "e08",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7165039777755737,
+          "entailment": 1.3159070476831403e-05,
+          "probabilities": {
+            "contradiction": 0.992763340473175,
+            "entailment": 1.3159070476831403e-05,
+            "neutral": 0.007223508786410093
+          }
+        },
+        {
+          "event": "e06",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.730914831161499,
+          "entailment": 1.2959940249857027e-05,
+          "probabilities": {
+            "contradiction": 0.9999450445175171,
+            "entailment": 1.2959940249857027e-05,
+            "neutral": 4.1922547097783536e-05
+          }
+        },
+        {
+          "event": "e05",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7535353899002075,
+          "entailment": 1.1738423381757457e-05,
+          "probabilities": {
+            "contradiction": 0.9996786117553711,
+            "entailment": 1.1738423381757457e-05,
+            "neutral": 0.00030955940019339323
+          }
+        },
+        {
+          "event": "e04",
+          "cell": "compiler",
+          "grade": 0,
+          "dense": 0.7447413206100464,
+          "entailment": 1.1264008207945153e-05,
+          "probabilities": {
+            "contradiction": 0.9999589920043945,
+            "entailment": 1.1264008207945153e-05,
+            "neutral": 2.9752172849839553e-05
+          }
+        },
+        {
+          "event": "e02",
+          "cell": "portable",
+          "grade": 0,
+          "dense": 0.7440217733383179,
+          "entailment": 1.0762420970422681e-05,
+          "probabilities": {
+            "contradiction": 0.9975798726081848,
+            "entailment": 1.0762420970422681e-05,
+            "neutral": 0.002409391338005662
+          }
+        },
+        {
+          "event": "e07",
+          "cell": "validator",
+          "grade": 0,
+          "dense": 0.7116391658782959,
+          "entailment": 7.596174782520393e-06,
+          "probabilities": {
+            "contradiction": 0.9998844861984253,
+            "entailment": 7.596174782520393e-06,
+            "neutral": 0.00010788504005176947
+          }
+        }
+      ]
+    }
+  ]
+}
