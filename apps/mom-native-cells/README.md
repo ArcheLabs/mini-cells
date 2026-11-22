@@ -5,7 +5,8 @@ state is the FP32 native recurrent matrices for the 24 layers and five banks.
 A bank that never received tokens is represented by its native absent state.
 A new document or query starts a stream at offset zero with empty short
 convolution caches. Within a document the native cache persists across
-chunks. This version restarts a failed document from its last committed Cell.
+chunks. The Web writer checkpoints complete stream state after each chunk. Resubmit
+the same text and chunk size against the same revision to resume.
 
 ## Run
 
@@ -48,6 +49,7 @@ The progress endpoint supports polling and cancellation between chunks.
 ## Acceptance
 
 ```sh
+python -m pip install httpx
 python -m unittest -v test_runtime
 python acceptance.py /path/to/mom /path/to/model-snapshot /path/to/tokenizer-snapshot /path/to/new-evidence
 ```
@@ -57,5 +59,5 @@ tests native versus one-branch fusion, and imports then appends knowledge
 in another process. Review the saved answer text for actual knowledge
 recall. GPU acceptance and browser walkthrough remain pending. The local
 unit tests exercise fusion placement on a synthetic branch, lineage and
-the portable bundle envelope. Mid-document resume, full metrics, and
+the portable bundle envelope. Mid-document CUDA resume, full metrics, and
 retention across knowledge replacement still require additional work.

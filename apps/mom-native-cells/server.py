@@ -80,7 +80,11 @@ def app_for(cells):
 
     @app.delete("/api/cells/{cell_id}")
     async def delete(cell_id: str):
-        await operation(lambda: cells.path(cell_id).unlink())
+        def remove():
+            path = cells.path(cell_id)
+            path.unlink()
+            path.with_suffix(".stream").unlink(missing_ok=True)
+        await operation(remove)
         return {"deleted": cell_id}
 
     @app.post("/api/cells/{cell_id}/fork")
@@ -108,7 +112,7 @@ def app_for(cells):
                 job.update(event="write_progress", processed_tokens=done, total_tokens=total,
                            tokens_per_second=done / max(time.monotonic()-started, 1e-9))
             try:
-                result = cells.write(cell_id, body.text, body.chunk_size, progress, lambda: job["cancel"])
+                result = cells.write(cell_id, body.text, body.chunk_size, progress, lambda: job["cancel"], resume=True)
                 job.update(event="write_completed" if result else "write_cancelled", result=result)
             except Exception as exc:
                 job.update(event="write_failed", error=str(exc))

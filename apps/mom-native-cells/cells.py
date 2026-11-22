@@ -89,24 +89,83 @@ class Cells:
             raise ValueError("Cell already exists. Fork before importing a second copy.")
         return self.store(meta, tensors)
 
-    def write(self, cell_id, text, chunk_size, progress, cancelled):
+    def save_stream(self, path, identity, cache, offset):
+        tensors = {}
+        def encode(item):
+            if torch.is_tensor(item):
+                key = str(len(tensors))
+                tensors[key] = item.detach().cpu().contiguous().clone()
+                return {"tensor": key}
+            if item is None:
+                return None
+            if isinstance(item, (list, tuple)):
+                return [encode(value) for value in item]
+            raise TypeError(type(item))
+
+        states = []
+        for layer in cache.to_legacy_cache():
+            if layer["attn_state"] is not None or layer["ffn_state"] is not None:
+                raise ValueError("Unexpected native stream fields")
+            states.append({key: encode(layer[key]) for key in ("recurrent_state", "conv_state")})
+        data = save(tensors)
+        receipt = dict(identity=identity, position=cache.get_seq_length(), offset=offset,
+                       states=states, sha256=hashlib.sha256(data).hexdigest())
+        with tempfile.NamedTemporaryFile(dir=self.root, delete=False) as temp:
+            staged = Path(temp.name)
+        try:
+            with zipfile.ZipFile(staged, "w") as bundle:
+                bundle.writestr("stream.json", json.dumps(receipt))
+                bundle.writestr("stream.safetensors", data)
+            staged.replace(path)
+        finally:
+            staged.unlink(missing_ok=True)
+
+    def load_stream(self, path, identity):
+        with zipfile.ZipFile(path) as bundle:
+            receipt = json.loads(bundle.read("stream.json"))
+            if receipt["identity"] != identity:
+                return None
+            data = bundle.read("stream.safetensors")
+        if hashlib.sha256(data).hexdigest() != receipt["sha256"]:
+            raise ValueError("Stream checksum mismatch")
+        tensors = load(data)
+        def decode(item):
+            if isinstance(item, dict):
+                return tensors[item["tensor"]].to(self.backbone.device)
+            if isinstance(item, list):
+                return [decode(value) for value in item]
+            return item
+        layers = [{**{k:decode(v) for k,v in layer.items()}, "attn_state": None, "ffn_state": None}
+                  for layer in receipt["states"]]
+        return self.backbone.cache_type.from_legacy_cache(layers, seen_tokens=receipt["position"]), receipt["offset"]
+
+    def write(self, cell_id, text, chunk_size, progress, cancelled, resume=False):
         meta, tensors = self.read(cell_id)
         tokens = self.backbone.tokenizer.encode(text, add_special_tokens=False)
         if not tokens or not 1 <= chunk_size <= 2048:
             raise ValueError("Provide nonempty text and a chunk size between 1 and 2048")
-        cache = self.backbone.stream(tensors)
-        for start in range(0, len(tokens), chunk_size):
+        stream_path = self.path(cell_id).with_suffix(".stream")
+        identity = dict(revision=meta["revision"], cell=cell_id, chunk_size=chunk_size,
+                        text=hashlib.sha256(text.encode()).hexdigest(),
+                        state=meta["tensor_sha256"], backbone=self.backbone.identity)
+        prior = self.load_stream(stream_path, identity) if resume and stream_path.exists() else None
+        cache, offset = prior if prior else (self.backbone.stream(tensors), 0)
+        for start in range(offset, len(tokens), chunk_size):
             if cancelled():
                 return None
             end = min(start + chunk_size, len(tokens))
             self.backbone.step(tokens[start:end], [cache], [1.0])
+            if resume:
+                self.save_stream(stream_path, identity, cache, end)
             progress(end, len(tokens))
         if cancelled():
             return None
-        return self.store({**meta, "parent_revision": meta["revision"], "revision": meta["revision"] + 1,
+        result = self.store({**meta, "parent_revision": meta["revision"], "revision": meta["revision"] + 1,
                            "updated_at": datetime.now(timezone.utc).isoformat(),
                            "tokens_written": meta["tokens_written"] + len(tokens)},
                           self.backbone.persistent(cache))
+        stream_path.unlink(missing_ok=True)
+        return result
 
     @torch.inference_mode()
     def query(self, question, choices, max_new_tokens, temperature):

@@ -87,6 +87,7 @@ class Backbone:
                 return kernel(*args, **kwargs)
             mom_gated_deltanet.fused_recurrent_gated_delta_rule = time_major
         self.cache_type = Cache
+        self.device = torch.device("cuda")
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_snapshot, local_files_only=True)
         self.native_bf16 = torch.cuda.is_bf16_supported(including_emulation=False)
         if dtype == "bfloat16" and not self.native_bf16:
