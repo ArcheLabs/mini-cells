@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniCells</title>
+<style>
+body{font:16px/1.5 system-ui;background:#f2f5f6;color:#172b37;margin:0}
+main{max-width:1000px;margin:auto;padding:32px}section{background:white;padding:20px;margin:16px 0;border:1px solid #d6dfe2;border-radius:12px}
+button,input,textarea{font:inherit;padding:7px}button{cursor:pointer}textarea{display:block;width:95%;margin:10px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere}
+#answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}article{border:1px solid #d6dfe2;padding:12px}
+label{margin-right:10px}#cells div{padding:8px 0;border-bottom:1px solid #eee}
+</style>
+<main>
+<h1>MiniCells</h1>
+<p id="status" role="status"></p>
+<section><h2>Cells</h2>
+<input id="name" placeholder="Cell 名称" aria-label="Cell 名称"><button id="create">创建</button>
+<input id="bundle" type="file" accept=".zip" aria-label="Cell 文件"><button id="importCell">导入</button>
+<div id="cells"></div></section>
+<section><h2>写入知识</h2><select id="target" aria-label="写入目标"></select>
+<textarea id="text" rows="6" placeholder="粘贴自然语言文档" aria-label="知识正文"></textarea>
+<button id="write">追加写入</button> <button id="cancel" disabled>取消</button>
+<output id="progress"></output></section>
+<section><h2>查询</h2><textarea id="question" rows="2" aria-label="问题"></textarea>
+<button id="ask">查询选中 Cells</button> <button id="compare">对照无 Cell / A / B / A+B</button>
+<div id="answers"></div></section>
+</main>
+<script>
+const el = id => document.getElementById(id);
+async function api(path, method='GET', body) {
+  const form = body instanceof File;
+  const response = await fetch('/api/'+path, {method, body:form?body:JSON.stringify(body),
+    headers:body&&!form?{'Content-Type':'application/json'}:{}});
+  const result = await response.json();
+  if (!response.ok) throw Error(JSON.stringify(result.detail ?? result));
+  return result;
+}
+function button(id, fn) {
+  el(id).onclick=async()=>{el(id).disabled=true;try{await fn()}catch(e){el('status').textContent=e.message}
+    finally{if(id!=='cancel')el(id).disabled=false}};
+}
+async function refresh() {
+  const selection = new Map(choices().map(c=>[c.cell_id,c.weight]));
+  el('cells').replaceChildren();el('target').replaceChildren();
+  for(const cell of await api('cells')) {
+    const row=document.createElement('div');
+    const check=document.createElement('input'); check.type='checkbox'; check.value=cell.cell_id;
+    check.checked=selection.has(cell.cell_id); check.setAttribute('aria-label',cell.name);
+    const weight=document.createElement('input');weight.type='number';weight.min=0;weight.step=0.1;weight.value=selection.get(cell.cell_id)??1;
+    weight.style.width='65px';weight.setAttribute('aria-label','融合权重');
+    const label=document.createElement('label');label.textContent=cell.name+' · v'+cell.revision+' · '+cell.tokens_written+' tokens ';
+    const link=document.createElement('a');link.href='/api/cells/'+cell.cell_id+'/export';link.textContent='导出';
+    const fork=document.createElement('button');fork.textContent='Fork';fork.onclick=async()=>{
+      try{await api('cells/'+cell.cell_id+'/fork','POST');await refresh()}catch(e){el('status').textContent=e.message}};
+    row.append(check,label,weight,' ',link,' ',fork);el('cells').append(row);
+    el('target').add(new Option(cell.name,cell.cell_id));
+  }
+}
+function choices(){return [...el('cells').querySelectorAll('div')].flatMap(row=>{
+  const [check,weight]=row.querySelectorAll('input');return check.checked?[{cell_id:check.value,weight:Number(weight.value)}]:[];
+})}
+button('create',async()=>{await api('cells','POST',{name:el('name').value});await refresh()});
+button('importCell',async()=>{await api('cells/import','POST',el('bundle').files[0]);await refresh()});
+let job;
+button('cancel',async()=>{await api('progress/'+job,'DELETE')});
+button('write',async()=>{
+  job=(await api('cells/'+el('target').value+'/write','POST',{text:el('text').value})).job_id;
+  el('cancel').disabled=false;
+  try {
+    while(true){
+      const p=await api('progress/'+job);
+      el('progress').textContent=p.event+' '+(p.processed_tokens??0)+' / '+(p.total_tokens??'…')+
+        (p.error?' · '+p.error:'');
+      if(['write_failed','write_completed','write_cancelled'].includes(p.event))break;
+      await new Promise(r=>setTimeout(r,500));
+    }
+    await refresh();
+  }finally{el('cancel').disabled=true;}
+});
+async function answer(label,cells){
+  const article=document.createElement('article'), header=document.createElement('strong'), output=document.createElement('pre');
+  header.textContent=label;output.textContent='生成中…';article.append(header,output);el('answers').append(article);
+  try{const r=await api('query','POST',{question:el('question').value,cells});output.textContent=r.answer+'\n\n'+Math.round(r.latency_ms)+' ms';}
+  catch(e){output.textContent=e.message}
+}
+button('ask',async()=>{el('answers').replaceChildren();await answer('选中 Cells',choices())});
+button('compare',async()=>{
+  const [a,b]=choices();
+  if(!a||!b||a.weight<=0||b.weight<=0)throw Error('请选择两个正权重的 Cell');
+  el('answers').replaceChildren();
+  for(const [label,cells] of [['No Cell',[]],['A',[a]],['B',[b]],['A+B',[a,b]]]) await answer(label,cells);
+});
+refresh().catch(e=>el('status').textContent=e.message);
+</script>
+</html>
