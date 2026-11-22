@@ -14,6 +14,16 @@ read outputs, changing only the Cell order. The fixed-input threshold is
 report weight and Top-K drift separately. Partial preflight JSON records
 completed modes and failed checks even when training remains blocked.
 
+The second T4 run passed single-Cell parity exactly on one and 21 tokens and
+passed all fixed-input gate permutation checks. The independent factorized
+reference and hierarchical reference still differed after 24 layers. Their
+maximum absolute hidden-state difference was 0.2333984375. Both reference
+modes now accumulate in FP64 before casting once to the backbone dtype.
+A CPU fixture reproduces an FP16 rounding mismatch with the previous FP32
+reductions and verifies exact equality on the same operands with the new
+reductions. Learned gate arithmetic and the original GPU tolerances are
+unchanged. Benchmarks include the cost of the reference accumulators.
+
 Awaiting a real GPU run for whole-model parity and fresh restoration,
 Gate convergence, QA quality, failure cases and measured performance. This
 pilot does not confer product acceptance. Retain legacy equal fusion as the

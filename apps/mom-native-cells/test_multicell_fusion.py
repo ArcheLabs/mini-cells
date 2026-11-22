@@ -36,6 +36,25 @@ class FusionTests(unittest.TestCase):
         actual = fuse(self.hidden, self.selected, FusionConfig("global_factorized"))[0]
         torch.testing.assert_close(actual, expected, rtol=0, atol=1e-6)
 
+    def test_factorization_matches_at_fp16_rounding_boundary(self):
+        routed = torch.tensor([[-1.404296875, -0.1383056640625],
+                               [2.6484375, -0.95849609375]], dtype=torch.float16)
+        shared = torch.tensor([0.10211181640625, -0.818359375], dtype=torch.float16)
+        weights = torch.tensor([0.77490234375, 0.2252197265625], dtype=torch.float16)
+        tokens = torch.zeros(1, 1, 1, dtype=torch.float16)
+        reads = [CellReadResult(routed[i].reshape(1, 1, 2, 1, 1), None, None,
+                                weights.reshape(1, 1, 2), shared[i].reshape(1, 1, 1, 1))
+                 for i in range(2)]
+        product = routed.float() * weights.float()
+        old_grouped = (product.sum(-1) + shared).mean().half()
+        old_global = ((product * 0.5).sum() + shared.float().mean()).half()
+        self.assertNotEqual(old_grouped, old_global)
+        grouped = fuse(tokens, reads, FusionConfig("hierarchical_equal"))[0]
+        global_pool = fuse(tokens, reads, FusionConfig("global_factorized"))[0]
+        expected = ((routed.double() * weights.double()).sum() + shared.double().sum()) * 0.5
+        torch.testing.assert_close(grouped, global_pool, rtol=0, atol=0)
+        torch.testing.assert_close(grouped.reshape(()), expected.half(), rtol=0, atol=0)
+
     def test_permutation_and_joint_normalization(self):
         for mode in ("hierarchical_gate", "global_topk_gate", "global_all4_gate"):
             reads = self.reads if mode == "global_all4_gate" else self.selected

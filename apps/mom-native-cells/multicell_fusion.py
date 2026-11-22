@@ -66,9 +66,13 @@ def weights(gate, hidden, candidates, config, prior=None):
 
 
 def fuse(hidden, reads, config, gate=None, removed_unit=None):
-    routed = torch.stack([r.routed_outputs for r in reads], dim=2).float()
-    shared = torch.stack([r.shared_output for r in reads], dim=2).float()
-    native = reads[0].topk_weights.float()
+    # These two reference modes use equivalent sums with different grouping.
+    # FP64 preserves the FP16 products through both reductions before casting.
+    compared = config.mode in ("hierarchical_equal", "global_factorized")
+    accumulation = torch.float64 if compared and len(reads) > 1 else torch.float32
+    routed = torch.stack([r.routed_outputs for r in reads], dim=2).to(accumulation)
+    shared = torch.stack([r.shared_output for r in reads], dim=2).to(accumulation)
+    native = reads[0].topk_weights.to(accumulation)
     if config.mode == "global_all4_gate":
         ix = reads[0].topk_indices[:, :, None, :, None, None]
         ix = ix.expand(*routed.shape[:3], ix.shape[3], *routed.shape[-2:])
