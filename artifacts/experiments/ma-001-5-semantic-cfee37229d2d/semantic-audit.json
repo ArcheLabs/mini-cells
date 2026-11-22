@@ -1,0 +1,153 @@
+{
+  "model": "cross-encoder/nli-deberta-v3-small",
+  "revision": "fa2804872c3b4bd748f38c0185cc85775361e735",
+  "fixture_sha256": "36ace2cf08fe9c3302c1fca825076893835859a02d9d5a7e15b931a0d80c4383",
+  "status": "SCORED",
+  "torch": "2.11.0+cu130",
+  "transformers": "4.57.3",
+  "rows": [
+    {
+      "id": "actor-approval",
+      "claim": "Orion approved the snapshot format.",
+      "present": {
+        "contradiction": 0.00012111244723200798,
+        "entailment": 0.9953123331069946,
+        "neutral": 0.004566507879644632
+      },
+      "absent": {
+        "contradiction": 0.0009480311418883502,
+        "entailment": 0.001017618109472096,
+        "neutral": 0.9980342984199524
+      }
+    },
+    {
+      "id": "actor-execution",
+      "claim": "The validator recorded instruction traces during replay.",
+      "present": {
+        "contradiction": 0.0018915619002655149,
+        "entailment": 0.9882110953330994,
+        "neutral": 0.009897309355437756
+      },
+      "absent": {
+        "contradiction": 0.011445940472185612,
+        "entailment": 0.02473035268485546,
+        "neutral": 0.9638237357139587
+      }
+    },
+    {
+      "id": "actor-checksum",
+      "claim": "The restore worker validated the snapshot checksum.",
+      "present": {
+        "contradiction": 0.00042664611828513443,
+        "entailment": 0.9945694804191589,
+        "neutral": 0.005003776401281357
+      },
+      "absent": {
+        "contradiction": 0.00014443905092775822,
+        "entailment": 0.0007064950768835843,
+        "neutral": 0.9991490840911865
+      }
+    },
+    {
+      "id": "attribute-rate",
+      "claim": "The optimizer used a learning rate of 0.0005.",
+      "present": {
+        "contradiction": 0.0009240075596608222,
+        "entailment": 0.9917197227478027,
+        "neutral": 0.007356285583227873
+      },
+      "absent": {
+        "contradiction": 0.009016726166009903,
+        "entailment": 9.482918540015817e-05,
+        "neutral": 0.9908884763717651
+      }
+    },
+    {
+      "id": "attribute-hash",
+      "claim": "The manifest records a SHA-256 checksum of the Cell bundle.",
+      "present": {
+        "contradiction": 0.0003520099853631109,
+        "entailment": 0.9971191883087158,
+        "neutral": 0.002528877928853035
+      },
+      "absent": {
+        "contradiction": 0.00022613840701524168,
+        "entailment": 0.00013418127491604537,
+        "neutral": 0.999639630317688
+      }
+    },
+    {
+      "id": "attribute-window",
+      "claim": "The attention window spans 512 tokens.",
+      "present": {
+        "contradiction": 0.0009079804294742644,
+        "entailment": 0.9929723739624023,
+        "neutral": 0.006119538098573685
+      },
+      "absent": {
+        "contradiction": 0.0014160166028887033,
+        "entailment": 7.075300527503714e-05,
+        "neutral": 0.9985132813453674
+      }
+    },
+    {
+      "id": "relation-approval",
+      "claim": "Orion approved the snapshot format.",
+      "present": {
+        "contradiction": 0.0001789414818631485,
+        "entailment": 0.9966853260993958,
+        "neutral": 0.003135772654786706
+      },
+      "absent": {
+        "contradiction": 0.0031293390784412622,
+        "entailment": 0.9348746538162231,
+        "neutral": 0.061995990574359894
+      }
+    },
+    {
+      "id": "relation-cause",
+      "claim": "A stale snapshot caused the restart failure.",
+      "present": {
+        "contradiction": 0.0005662841722369194,
+        "entailment": 0.9944494962692261,
+        "neutral": 0.004984206520020962
+      },
+      "absent": {
+        "contradiction": 0.7531810402870178,
+        "entailment": 0.03473161906003952,
+        "neutral": 0.21208731830120087
+      }
+    },
+    {
+      "id": "relation-mapping",
+      "claim": "The debugger translates executable offsets into source positions.",
+      "present": {
+        "contradiction": 0.00041763921035453677,
+        "entailment": 0.9947910308837891,
+        "neutral": 0.004791343118995428
+      },
+      "absent": {
+        "contradiction": 0.9017317891120911,
+        "entailment": 0.02366255410015583,
+        "neutral": 0.07460569590330124
+      }
+    }
+  ],
+  "summary": {
+    "actor": {
+      "pairs": 3,
+      "higher_with_evidence": 3,
+      "unsupported_entailment_argmax": 0
+    },
+    "attribute": {
+      "pairs": 3,
+      "higher_with_evidence": 3,
+      "unsupported_entailment_argmax": 0
+    },
+    "relation": {
+      "pairs": 3,
+      "higher_with_evidence": 3,
+      "unsupported_entailment_argmax": 1
+    }
+  }
+}
