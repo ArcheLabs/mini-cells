@@ -1,0 +1,124 @@
+{
+  "status": "FAIL",
+  "modes": {
+    "single_cell": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {},
+      "rollout_weight_max_abs": {},
+      "layers_with_topk_changes": 0
+    },
+    "legacy_equal": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {},
+      "rollout_weight_max_abs": {},
+      "layers_with_topk_changes": 0
+    },
+    "hierarchical_equal": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "global_factorized": {
+      "permutation_max_abs": 0.0234375,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0,
+        "unit": 4.649162292480469e-05
+      },
+      "layers_with_topk_changes": 0
+    },
+    "hierarchical_gate": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "global_topk_gate": {
+      "permutation_max_abs": 0.0185546875,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 1.3828277587890625e-05,
+        "unit": 2.2977590560913086e-05
+      },
+      "layers_with_topk_changes": 0
+    },
+    "global_all4_gate": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "all4_with_prior": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "null": {
+      "permutation_max_abs": 0.03125,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 5.960464477539063e-08,
+        "unit": 5.960464477539063e-08
+      },
+      "rollout_weight_max_abs": {
+        "cell": 1.773238182067871e-05,
+        "unit": 1.835078001022339e-05
+      },
+      "layers_with_topk_changes": 0
+    },
+    "single_parity_1": 0.0,
+    "single_parity_21": 0.0,
+    "factorization_max_abs": 0.2333984375
+  },
+  "failures": [
+    {
+      "check": "factorization",
+      "detail": "Tensor-likes are not close!\n\nMismatched elements: 1019 / 21504 (4.7%)\nGreatest absolute difference: 0.2333984375 at index (0, 18, 977) (up to 0.025 allowed)\nGreatest relative difference: 22.900287628173828 at index (0, 18, 596) (up to 0.01 allowed)"
+    }
+  ],
+  "state_hashes": {
+    "A": "d579c860aa0e3ae6e1fa5f76dc3f6961089d1cd7bdb401b605f050c5d3dca183",
+    "B": "125c44d97959a045f952688b5e1cb6ff69e30ea921cdf43381fecafd061ca74a"
+  },
+  "fp16_tolerance": {
+    "atol": 0.025,
+    "rtol": 0.01
+  },
+  "fixed_input_weight_atol": 1e-06
+}
