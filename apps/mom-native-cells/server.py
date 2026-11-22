@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 
 from backend import Backbone
 from cells import Cells
+from multicell_fusion import LEARNED, MODES, FusionConfig, FusionGate, read_query
 
 
 class Create(BaseModel):
@@ -34,7 +35,13 @@ class Query(BaseModel):
     temperature: float = Field(default=0, ge=0, le=2)
 
 
-def app_for(cells):
+class Read(BaseModel):
+    model_config = {"extra": "forbid"}
+    question: str = Field(min_length=1)
+    max_new_tokens: int = Field(default=128, ge=1, le=512)
+
+
+def app_for(cells, fusion_config=FusionConfig(), fusion_gate=None):
     app = FastAPI()
     worker = ThreadPoolExecutor(max_workers=1)
     jobs = {}
@@ -138,6 +145,11 @@ def app_for(cells):
         return await operation(cells.query, body.question, [c.model_dump() for c in body.cells],
                                body.max_new_tokens, body.temperature)
 
+    @app.post("/api/read")
+    async def read_all(body: Read):
+        return await operation(read_query, cells, body.question, body.max_new_tokens,
+                               fusion_config, fusion_gate)
+
     return app
 
 
@@ -147,10 +159,24 @@ def main():
         parser.add_argument(name, type=Path)
     parser.add_argument("--dtype", choices=("bfloat16", "float16"), default="bfloat16")
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--fusion-mode", choices=MODES, default="legacy_equal")
+    parser.add_argument("--gate-checkpoint", type=Path)
+    parser.add_argument("--router-prior", type=float, default=0)
+    parser.add_argument("--null-candidate", action="store_true")
     args = parser.parse_args()
+    config = FusionConfig(args.fusion_mode, args.router_prior, args.null_candidate)
+    if (config.mode in LEARNED) != (args.gate_checkpoint is not None):
+        parser.error("Provide --gate-checkpoint exactly when selecting a learned fusion mode")
     import uvicorn
     model = Backbone(args.source, args.snapshot, args.tokenizer, args.dtype)
-    uvicorn.run(app_for(Cells(args.storage, model)), host="127.0.0.1", port=args.port)
+    gate = None
+    if args.gate_checkpoint:
+        import torch
+
+        checkpoint = torch.load(args.gate_checkpoint, map_location="cpu", weights_only=True)
+        gate = FusionGate().to(model.device).eval().requires_grad_(False)
+        gate.load_state_dict(checkpoint["gate"])
+    uvicorn.run(app_for(Cells(args.storage, model), config, gate), host="127.0.0.1", port=args.port)
 
 
 if __name__ == "__main__":
