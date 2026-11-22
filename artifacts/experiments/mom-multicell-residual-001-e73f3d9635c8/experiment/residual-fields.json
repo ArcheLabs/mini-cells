@@ -1,0 +1,18 @@
+{
+  "fields": [
+    "prediction_norm",
+    "value_norm",
+    "raw_residual_norm",
+    "relative_residual_norm",
+    "delta_norm",
+    "relative_delta_norm",
+    "prediction_cosine",
+    "read_output_norm",
+    "beta",
+    "g"
+  ],
+  "layout": "query/cell/layer/bank, [token,head,field]",
+  "shared_bank": 4,
+  "routed_banks": "actual native Top-2 only",
+  "scope": "Only the first Smoke group's raw trace is returned to GitHub"
+}
