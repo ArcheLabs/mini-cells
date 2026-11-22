@@ -80,3 +80,31 @@ margins. Public facts may also be present in the pretrained model.
 For a follow-up, pass `--ablation` to recall_diagnostic.py to isolate
 convolution reset and position reset. The default remote run covers the
 three core arms and fresh-process import. It does not rerun free generation.
+
+## MoM Compositional Recall v2
+
+Run `kaggle_compositional_recall.py` as a Kaggle **Python Script** with a T4 or
+other CUDA GPU, Internet access, and the existing `GITHUB_TOKEN` secret. One
+launch runs the CPU checks, verifies the pinned dependencies, executes the
+paired diagnostic and returns results to a verified GitHub artifact branch.
+
+The development fixture contains 16 disjoint two-hop groups across four seeds,
+with both projects queried per group. A stores project-to-relay mappings. B
+stores relay-to-code mappings. Both swaps change values while preserving fact
+order and the candidate set. All four combinations are scored before and
+after a fresh process imports the individually exported recurrent states.
+No Cell and each single-Cell variant are scored once per query and evaluated
+against the same counterfactual gold assignments. Each answer starts with
+new query caches and dual-Cell inference uses the existing equal-weight fusion.
+
+The primary metric is total teacher-forced answer log probability. Both
+candidates have exactly the same token count within each query. Ties are
+counted separately and do not earn Top-1 credit. A complete factorial result
+for a query requires a positive gold margin in all four combinations. A
+complete group requires both queries to pass this check. The report includes
+individual margins, per-token scores, both process results, state checksums
+and per-seed counts. Bundles are temporary experimental inputs.
+
+This run is development-only. Diagnostic completion indicates that all arms
+were scored. The factorial and single-Cell controls determine the strength of
+the compositional recall evidence.
