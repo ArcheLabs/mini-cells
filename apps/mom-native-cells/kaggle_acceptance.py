@@ -66,7 +66,7 @@ def main():
         tokenizer=download('fla-hub/gla-1.3B-100B','46b15820a4df269e99aed9d709e017677c15d24b',
                            ['*.json','tokenizer.model'])
         code=subprocess.run([sys.executable,'-u',str(repo/APP/'acceptance.py'),
-            str(upstream),snapshot,tokenizer,str(output/'experiment')],timeout=1800).returncode
+            str(upstream),snapshot,tokenizer,str(output/'experiment'),'--dtype','auto'],timeout=1800).returncode
     except (subprocess.SubprocessError,OSError,ValueError) as exc:
         reason=str(exc)
         print(reason,flush=True)

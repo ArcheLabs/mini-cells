@@ -19,28 +19,41 @@ def main():
     p = argparse.ArgumentParser()
     for name in ("source", "snapshot", "tokenizer", "output"):
         p.add_argument(name, type=Path)
-    p.add_argument("--dtype", default="bfloat16", choices=("bfloat16", "float16"))
+    p.add_argument("--dtype", default="bfloat16", choices=("auto", "bfloat16", "float16"))
     p.add_argument("--restore", action="store_true")
     a = p.parse_args()
     out = a.output
     out.mkdir(parents=True, exist_ok=True)
+    if not torch.cuda.is_available():
+        raise RuntimeError("CUDA is required for this acceptance run")
+    if a.dtype == "auto":
+        a.dtype = "bfloat16" if torch.cuda.is_bf16_supported(including_emulation=False) else "float16"
+    print(f"Acceptance device: {torch.cuda.get_device_name()}, dtype: {a.dtype}", flush=True)
     backbone = Backbone(a.source, a.snapshot, a.tokenizer, dtype=a.dtype)
+    prompts = [QUESTION, "Who founded the Green Belt Movement?"]
+    lengths = [len(backbone.tokenizer.encode(f"Question: {q}\nAnswer:", add_special_tokens=False))
+               for q in prompts]
+    if not backbone.native_bf16 and max(lengths) > 64:
+        raise ValueError(f"Acceptance query exceeds the T4 short-kernel limit: {lengths}")
+    print(f"Acceptance prompt token counts: {lengths}", flush=True)
     cells = Cells(out / ("restored" if a.restore else "original"), backbone)
     if a.restore:
         cell = cells.import_bundle((out / "export.zip").read_bytes())
         assert cell["tensor_sha256"] == json.loads((out/"manifest.json").read_text())["tensor_sha256"]
         selection = [{"cell_id": cell["cell_id"]}]
         answers = {"restored": cells.query("Who founded the Green Belt Movement?", selection, 32, 0)}
-        cells.write(cell["cell_id"], B, 512, lambda *_: None, lambda: False)
+        cells.write(cell["cell_id"], B, 32, lambda *_: None, lambda: False)
         answers["updated"] = cells.query(QUESTION, selection, 48, 0)
         (out/"restore.json").write_text(json.dumps(answers, indent=2))
         return
     ids = [cells.create(name)["cell_id"] for name in ("Movement","Prize")]
     for cell, text in zip(ids, (A, B)):
+        print(f"Writing Cell {cell}", flush=True)
         cells.write(cell, text, 32, lambda *_: None, lambda: False)
     selections = [[{"cell_id": c}] for c in ids]
     qa = {}
     for key, selected in zip(("none","a","b","both"), ([],*selections,sum(selections,[]))):
+        print(f"Querying {key}", flush=True)
         before = [cells.read(c)[0]["tensor_sha256"] for c in ids]
         qa[key] = cells.query(QUESTION, selected, 48, 0)
         assert before == [cells.read(c)[0]["tensor_sha256"] for c in ids]
