@@ -4,7 +4,7 @@ import unittest
 import torch
 from torch import nn
 
-from multicell_fusion import CellReadResult, FusionConfig, FusionGate, FusionReader, fuse
+from multicell_fusion import CellReadResult, FusionConfig, FusionGate, FusionReader, fuse, permutation_errors
 
 
 class FusionTests(unittest.TestCase):
@@ -40,8 +40,16 @@ class FusionTests(unittest.TestCase):
         for mode in ("hierarchical_gate", "global_topk_gate", "global_all4_gate"):
             reads = self.reads if mode == "global_all4_gate" else self.selected
             config = FusionConfig(mode, router_prior=float(mode == "global_all4_gate"), null_candidate=True)
-            out, alpha, beta = fuse(self.hidden, reads, config, self.gate)
-            rev, swapped_alpha, swapped_beta = fuse(self.hidden, reads[::-1], config, self.gate)
+            normal = fuse(self.hidden, reads, config, self.gate)
+            reverse = fuse(self.hidden, reads[::-1], config, self.gate)
+            out, alpha, beta = normal
+            rev, swapped_alpha, swapped_beta = reverse
+            errors = permutation_errors(normal, reverse, len(reads), reads[0].routed_outputs.shape[2])
+            self.assertLessEqual(max(errors.values()), 1e-6)
+            # A genuine candidate-weight mismatch must remain visible.
+            changed = permutation_errors(normal, (rev, swapped_alpha + 2e-5, swapped_beta),
+                                         len(reads), reads[0].routed_outputs.shape[2])
+            self.assertGreater(changed["cell"], 1e-6)
             torch.testing.assert_close(out, rev, rtol=0, atol=1e-6)
             torch.testing.assert_close(alpha[..., :-1], swapped_alpha[..., :-1].flip(-1))
             if beta is not None:
@@ -117,9 +125,10 @@ class FusionTests(unittest.TestCase):
                                    conv_state=([None, None],) * 3, offset=0)}) for c in range(2)]
 
         work = caches()
-        trace = Diagnostics()
+        trace = Diagnostics(check_permutation=True)
         result, _ = read_layer(attn, ops, self.hidden, work, FusionConfig("hierarchical_equal"), None, trace)
         self.assertEqual(router.calls, 1)
+        self.assertEqual(trace.layers[0]["fixed_input_permutation_max_abs"], {"cell": 0})
         self.assertEqual(len(calls), 6)
         self.assertEqual(len(set(calls)), 6)
         self.assertEqual([int(state) for state in work[0][0]["recurrent_state"]], [0, 1, 3, 4, 5])

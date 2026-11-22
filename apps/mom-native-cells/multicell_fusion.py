@@ -117,11 +117,30 @@ def fuse(hidden, reads, config, gate=None, removed_unit=None):
     return mixed.to(reads[0].shared_output.dtype), alpha, beta
 
 
+def reorder_weights(value, order, lanes):
+    count = len(order) * lanes
+    candidates = value[..., :count].unflatten(-1, (len(order), lanes))
+    reordered = candidates.index_select(-2, order).flatten(-2)
+    return torch.cat((reordered, value[..., count:]), dim=-1)
+
+
+def permutation_errors(reference, reordered, cells, lanes):
+    order = torch.arange(cells - 1, -1, -1, device=reference[0].device)
+    errors = {}
+    for name, before, after, width in zip(("cell", "unit"), reference[1:], reordered[1:],
+                                          (1, lanes), strict=True):
+        if before is not None:
+            after = reorder_weights(after, order, width)
+            errors[name] = float((before - after).detach().abs().max())
+    return errors
+
+
 class Diagnostics:
-    def __init__(self, timing=False, removed_unit=None):
+    def __init__(self, timing=False, removed_unit=None, check_permutation=False):
         self.layers = []
         self.timing = timing
         self.removed_unit = removed_unit
+        self.check_permutation = check_permutation
         self.read_seconds = 0.0
         self.fusion_seconds = 0.0
 
@@ -235,10 +254,16 @@ def read_layer(attn, ops, hidden, caches, config, gate, diagnostics):
                 ], dim=2)
             reads.append(CellReadResult(outputs, probs, selected, top, shared_read[0]))
     with timing("fusion_seconds", hidden.device):
-        result, alpha, beta = fuse(hidden, reads, config, gate,
-                                   diagnostics.removed_unit if diagnostics else None)
+        mixed = fuse(hidden, reads, config, gate, diagnostics.removed_unit if diagnostics else None)
+    result, alpha, beta = mixed
     if diagnostics is not None and not diagnostics.timing:
         diagnostics.record(attn.layer_idx, alpha, beta, selected, all4, config.null_candidate)
+        if diagnostics.check_permutation and len(reads) > 1:
+            # Hold the operands fixed so model-level FP16 drift cannot enter the test.
+            reversed_fusion = fuse(hidden, reads[::-1], config, gate, diagnostics.removed_unit)
+            errors = permutation_errors(mixed, reversed_fusion, len(reads),
+                                        attn.num_memories if all4 else attn.topk)
+            diagnostics.layers[-1]["fixed_input_permutation_max_abs"] = errors
     if attn.use_gate:
         result = attn.o_norm(result, attn.g_proj(hidden).unflatten(-1, (attn.num_heads, -1)))
     else:

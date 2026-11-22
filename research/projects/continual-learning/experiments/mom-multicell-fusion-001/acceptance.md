@@ -8,6 +8,11 @@ an absolute tolerance of 1e-6 on ordinary fixture outputs. The real-model
 preflight records individual FP16 hidden-state maximum errors and applies
 the predeclared tolerance (atol 0.025, rtol 0.01). Separate subprocesses check
 fresh-process restore with the pinned model and identical persistent hashes.
+Gate weights are compared at each layer with identical hidden states and
+read outputs, changing only the Cell order. The fixed-input threshold is
+1e-6. Full forward passes retain their original hidden-state tolerance and
+report weight and Top-K drift separately. Partial preflight JSON records
+completed modes and failed checks even when training remains blocked.
 
 Awaiting a real GPU run for whole-model parity and fresh restoration,
 Gate convergence, QA quality, failure cases and measured performance. This

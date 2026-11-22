@@ -176,7 +176,22 @@ def smoke(backbone, args, restored):
     gate = new_gate(backbone, TRAIN_SEED)
     gates = {"single_cell": FusionConfig("single_cell"), **CONFIGS,
              "null": FusionConfig("global_topk_gate", null_candidate=True)}
-    result, summaries = {}, {}
+    result, summaries, failures = {}, {}, []
+    stage = "preflight-restored" if restored else "preflight"
+    fp16_tolerance = {"atol": 0.025, "rtol": 0.01}
+    local_weight_atol = 1e-6
+
+    def check(name, actual, expected, tolerance=fp16_tolerance):
+        try:
+            torch.testing.assert_close(actual, expected, **tolerance)
+        except AssertionError as exc:
+            failures.append(dict(check=name, detail=str(exc)))
+
+    def progress():
+        write(out / f"{stage}-progress.json", dict(
+            status="FAIL" if failures else "RUNNING", modes=summaries, failures=failures,
+            state_hashes=before, fp16_tolerance=fp16_tolerance,
+            fixed_input_weight_atol=local_weight_atol))
     bundle_hashes = {key: sha(store.path(item["cell_id"])) for key, item in meta.items()}
 
     def run(config, labels, ids=token_ids, trace=None):
@@ -184,34 +199,51 @@ def smoke(backbone, args, restored):
 
     for name, config in gates.items():
         labels = ("A",) if name == "single_cell" else ("A", "B")
-        trace = Diagnostics()
+        trace = Diagnostics(check_permutation=True)
         result[name] = run(config, labels, trace=trace)
-        if not torch.isfinite(result[name]).all():
-            raise RuntimeError(f"Nonfinite preflight output in {name}")
         reversed_trace = Diagnostics()
         reverse = run(config, labels[::-1], trace=reversed_trace)
         same = run(config, labels)
-        torch.testing.assert_close(result[name], reverse, rtol=0.01, atol=0.025)
-        torch.testing.assert_close(result[name], same, rtol=0.01, atol=0.025)
+        for label, output in (("forward", result[name]), ("reverse", reverse), ("repeat", same)):
+            if not torch.isfinite(output).all():
+                raise FloatingPointError(f"Nonfinite {label} preflight output in {name}")
+        check(f"{name}:permutation", result[name], reverse)
+        check(f"{name}:repeat", result[name], same)
+        local = {}
+        rollout = {}
+        topk_changes = 0
         for left, right in zip(trace.layers, reversed_trace.layers, strict=True):
+            errors = left.get("fixed_input_permutation_max_abs", {})
+            for field, error in errors.items():
+                local[field] = max(local.get(field, 0), error)
+                if not error <= local_weight_atol:
+                    failures.append(dict(check=f"{name}:layer{left['layer']}:{field}",
+                                         detail=f"Same-input weight permutation error {error:.8g}"))
+            same_topk = left["topk"] == right["topk"]
+            topk_changes += not same_topk
             width = 4 if config.mode == "global_all4_gate" else 2
             for field, lanes in (("cell", 1), ("unit", width)):
-                if left[field] is None:
+                if left[field] is None or (field == "unit" and width != 4 and not same_topk):
                     continue
                 count = len(labels) * lanes
                 a, b = (torch.tensor(entry[field]["mean"]) for entry in (left, right))
-                torch.testing.assert_close(a[:count], b[:count].reshape(len(labels), lanes).flip(0).flatten())
-                torch.testing.assert_close(a[count:], b[count:])
-        summaries[name] = {"permutation_max_abs": float((result[name] - reverse).abs().max()),
-                           "repeat_max_abs": float((result[name] - same).abs().max())}
+                aligned = torch.cat((b[:count].reshape(len(labels), lanes).flip(0).flatten(), b[count:]))
+                rollout[field] = max(rollout.get(field, 0), float((a - aligned).abs().max()))
+        summaries[name] = dict(permutation_max_abs=float((result[name] - reverse).abs().max()),
+                               repeat_max_abs=float((result[name] - same).abs().max()),
+                               fixed_input_weight_max_abs=local, rollout_weight_max_abs=rollout,
+                               layers_with_topk_changes=topk_changes)
+        print(stage, name, summaries[name], flush=True)
+        progress()
 
     for length in (1, len(token_ids)):
         native = run(FusionConfig("single_cell"), ("A",), token_ids[:length])
         experimental = run(FusionConfig("hierarchical_equal"), ("A",), token_ids[:length])
-        torch.testing.assert_close(native, experimental, rtol=0.01, atol=0.025)
+        check(f"single_parity_{length}", native, experimental)
         summaries[f"single_parity_{length}"] = float((native - experimental).abs().max())
-    torch.testing.assert_close(result["hierarchical_equal"], result["global_factorized"], rtol=0.01, atol=0.025)
+    check("factorization", result["hierarchical_equal"], result["global_factorized"])
     summaries["factorization_max_abs"] = float((result["hierarchical_equal"] - result["global_factorized"]).abs().max())
+    progress()
     if {key: fingerprint(state) for key, state in tensors.items()} != before:
         raise RuntimeError("Persistent source tensors were modified by a query")
     # Mutate one temporary recurrent state and the position of its stream.
@@ -222,10 +254,13 @@ def smoke(backbone, args, restored):
     for key, item in meta.items():
         if sha(store.path(item["cell_id"])) != bundle_hashes[key]:
             raise RuntimeError("Persistent bundle changed")
-    write(out / ("preflight-restored.json" if restored else "preflight.json"),
+    if failures:
+        raise RuntimeError(f"{stage} failed {len(failures)} checks; see {stage}-progress.json")
+    write(out / f"{stage}.json",
           dict(status="PASS", modes=summaries, state_hashes=before,
                conv_and_position="transient", pid=os.getpid(),
-               fp16_tolerance={"atol": 0.025, "rtol": 0.01}, identity=backbone.identity))
+               fp16_tolerance=fp16_tolerance, fixed_input_weight_atol=local_weight_atol,
+               identity=backbone.identity))
 
 
 def save_training(path, gate, optimizer, step, losses):

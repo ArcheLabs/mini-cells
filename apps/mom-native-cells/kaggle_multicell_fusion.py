@@ -76,6 +76,14 @@ def main():
         diagnosis = result['diagnosis']
     else:
         diagnosis = reason or 'Experiment did not emit a completion receipt'
+        for stage in ("preflight-restored", "preflight"):
+            path = experiment / f"{stage}-progress.json"
+            if path.exists():
+                evidence = json.loads(path.read_text())
+                if evidence['failures']:
+                    check = evidence['failures'][0]['check']
+                    diagnosis = f"{stage} failed {len(evidence['failures'])} checks, starting with {check}."
+                    break
     (output/'decision.json').write_text(json.dumps(dict(
         format=kind, source_commit=source, model_revision=REV, mom_revision=MOM,
         tokenizer_revision='46b15820a4df269e99aed9d709e017677c15d24b',
