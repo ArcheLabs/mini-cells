@@ -17,7 +17,8 @@ Safetensors weights, and the matching tokenizer assets. The local loader checks
 revision directories, exact architecture, weight loading and vocabulary.
 The manifest records file hashes and runtime dependency versions.
 
-From this directory run:
+After installing CUDA PyTorch and Triton, install the application dependencies
+with `python -m pip install -r requirements.txt`. From this directory run:
 
 ```sh
 python server.py /path/to/mom /path/to/model-snapshot /path/to/tokenizer-snapshot /path/to/cells
