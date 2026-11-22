@@ -1,0 +1,33 @@
+{
+  "pid": 168,
+  "gpu": "Tesla T4",
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "backbone": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-340M",
+    "model_revision": "f4081422ea2cf01b1b5d646cac05cad62a5d5438",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "fla-hub/gla-1.3B-100B",
+    "tokenizer_revision": "46b15820a4df269e99aed9d709e017677c15d24b",
+    "tokenizer_hash": "beea13aa38f463df5a44d41386ab44555b8809adbad38370234939edd05fcef6",
+    "tokenizer_files": {
+      "generation_config.json": "2b28ca181334342888bdce7357ef10db0fba08895bcd9dde3be410a6a2af3491",
+      "special_tokens_map.json": "6fa06efa2785e450051989a6f8fb4416b10149ded485ddd3f127a40734f5cfd0",
+      "tokenizer.json": "bdc45dc7f18a5c55e0dcb36f4f187a7c429d6aaa1693a17d20422b85081642d9",
+      "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055",
+      "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b"
+    },
+    "config_hash": "fb53d2d0a1423d4c30ee15b6d38a0abb18d5c70a5ef8af16a0aa540759205208",
+    "weights_sha256": "9ef6a2fff60772d3cbdf000904f0ab08b794217f5d7ac9a80e9fb7e00bb729c5",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2"
+  }
+}

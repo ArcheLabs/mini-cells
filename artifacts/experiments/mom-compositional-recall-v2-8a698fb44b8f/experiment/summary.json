@@ -1,0 +1,107 @@
+{
+  "groups": 16,
+  "queries": 32,
+  "primary_metric": "total_logp",
+  "conditions": {
+    "no_cell": {
+      "top1": 64,
+      "total": 128
+    },
+    "A0": {
+      "top1": 32,
+      "total": 64
+    },
+    "A1": {
+      "top1": 32,
+      "total": 64
+    },
+    "B0": {
+      "top1": 32,
+      "total": 64
+    },
+    "B1": {
+      "top1": 32,
+      "total": 64
+    },
+    "A0+B0": {
+      "top1": 16,
+      "total": 32
+    },
+    "A0+B1": {
+      "top1": 18,
+      "total": 32
+    },
+    "A1+B0": {
+      "top1": 16,
+      "total": 32
+    },
+    "A1+B1": {
+      "top1": 15,
+      "total": 32
+    },
+    "fresh_process": {
+      "top1": 65,
+      "total": 128
+    }
+  },
+  "local_all_four": 0,
+  "fresh_all_four": 0,
+  "both_all_four": 0,
+  "fresh_by_pair": {
+    "A0+B0": {
+      "top1": 16,
+      "total": 32
+    },
+    "A0+B1": {
+      "top1": 18,
+      "total": 32
+    },
+    "A1+B0": {
+      "top1": 16,
+      "total": 32
+    },
+    "A1+B1": {
+      "top1": 15,
+      "total": 32
+    }
+  },
+  "restore_rank_changes": 0,
+  "local_complete_groups": 0,
+  "fresh_complete_groups": 0,
+  "max_abs_restore_margin_delta": 0.11732122302055359,
+  "max_abs_restore_gold_logp_delta": 0.12629345059394836,
+  "per_seed": {
+    "42": {
+      "queries": 8,
+      "all_four": 0,
+      "fresh_all_four": 0,
+      "groups": 4,
+      "complete_groups": 0,
+      "fresh_complete_groups": 0
+    },
+    "43": {
+      "queries": 8,
+      "all_four": 0,
+      "fresh_all_four": 0,
+      "groups": 4,
+      "complete_groups": 0,
+      "fresh_complete_groups": 0
+    },
+    "44": {
+      "queries": 8,
+      "all_four": 0,
+      "fresh_all_four": 0,
+      "groups": 4,
+      "complete_groups": 0,
+      "fresh_complete_groups": 0
+    },
+    "45": {
+      "queries": 8,
+      "all_four": 0,
+      "fresh_all_four": 0,
+      "groups": 4,
+      "complete_groups": 0,
+      "fresh_complete_groups": 0
+    }
+  }
+}
