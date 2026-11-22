@@ -184,7 +184,7 @@ def pack_projections(attn, packed):
     return q, k, v, beta.sigmoid(), -attn.A_log.float().exp() * F.softplus(a.float() + attn.dt_bias)
 
 
-def recurrence(attn, ops, projected, conv, states, use_cache, active):
+def recurrence(attn, ops, projected, conv, states, use_cache, active, observer=None):
     q, k, v, beta, g = projected
     banks, batch, length, _ = q.shape
     convolved = []
@@ -200,10 +200,14 @@ def recurrence(attn, ops, projected, conv, states, use_cache, active):
             # Native decode preserves recurrent state for unselected expert banks.
             outputs.append(torch.zeros_like(v[bank]))
             continue
-        result, final = ops.fused_recurrent_gated_delta_rule(
+        kernel = ops.fused_recurrent_gated_delta_rule
+        probe = observer.before(q[bank], k[bank], v[bank], g[bank], beta[bank], state) if observer else None
+        result, final = kernel(
             q=q[bank], k=k[bank], v=v[bank], g=g[bank], beta=beta[bank], initial_state=state,
             output_final_state=use_cache, cu_seqlens=None, head_first=False,
         )
+        if observer:
+            observer.after(bank, probe, result, final, v[bank], beta[bank], g[bank])
         outputs.append(result)
         states[bank] = final
     return torch.stack(outputs), (q_conv, k_conv, v_conv)
@@ -232,19 +236,29 @@ def read_layer(attn, ops, hidden, caches, config, gate, diagnostics):
               attn.shared_v(hidden).unsqueeze(0), attn.shared_b(hidden).sigmoid().unsqueeze(0),
               (-attn.A_log.float().exp() *
                F.softplus(attn.shared_a(hidden).float() + attn.dt_bias)).unsqueeze(0))
+    residual = getattr(diagnostics, "residual", None)
+    if residual:
+        if all4 or batch != 1:
+            raise ValueError("Residual diagnostic expects batch-one native Top-2")
+        packed_tokens = torch.full((attn.num_memories, packed.shape[2]), -1, device=hidden.device)
+        real_tokens = order[indices] // attn.topk
+        packed_tokens[:, -real_tokens.shape[-1]:] = real_tokens.masked_fill(~valid, -1)
+        residual.begin_layer(attn.layer_idx, probs, selected, top, packed_tokens)
     reads = []
     timing = diagnostics.measure if diagnostics else lambda *_: nullcontext()
     with timing("read_seconds", hidden.device):
-        for cache in caches:
+        for slot, cache in enumerate(caches):
             prior = cache[attn.layer_idx] if len(cache) > attn.layer_idx else None
             banks = list(prior["recurrent_state"]) if prior else [None] * (attn.num_memories + 1)
             conv = prior["conv_state"] if prior else ([None, None],) * 3
             routed_states = banks[:-1]
             routed, routed_conv = recurrence(attn, ops, projected, [c[0] for c in conv],
-                                             routed_states, use_cache=True, active=active)
+                                             routed_states, use_cache=True, active=active,
+                                             observer=residual.for_cell(slot) if residual else None)
             shared_banks = banks[-1:]
             shared_read, shared_conv = recurrence(attn, ops, shared, [c[1] for c in conv],
-                                                  shared_banks, use_cache=True, active=(True,))
+                                                  shared_banks, use_cache=True, active=(True,),
+                                                  observer=residual.for_cell(slot, shared=True) if residual else None)
             cache.update(recurrent_state=[*routed_states, *shared_banks],
                          conv_state=tuple([a, b] for a, b in zip(routed_conv, shared_conv, strict=True)),
                          layer_idx=attn.layer_idx, offset=packed.shape[2])
