@@ -1,0 +1,119 @@
+{
+  "status": "RUNNING",
+  "modes": {
+    "single_cell": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {},
+      "rollout_weight_max_abs": {},
+      "layers_with_topk_changes": 0
+    },
+    "legacy_equal": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {},
+      "rollout_weight_max_abs": {},
+      "layers_with_topk_changes": 0
+    },
+    "hierarchical_equal": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "global_factorized": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "hierarchical_gate": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "global_topk_gate": {
+      "permutation_max_abs": 0.02734375,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 2.771615982055664e-06,
+        "unit": 2.1785497665405273e-05
+      },
+      "layers_with_topk_changes": 0
+    },
+    "global_all4_gate": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "all4_with_prior": {
+      "permutation_max_abs": 0.0,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "rollout_weight_max_abs": {
+        "cell": 0,
+        "unit": 0
+      },
+      "layers_with_topk_changes": 0
+    },
+    "null": {
+      "permutation_max_abs": 0.033203125,
+      "repeat_max_abs": 0.0,
+      "fixed_input_weight_max_abs": {
+        "cell": 5.960464477539063e-08,
+        "unit": 2.9802322387695312e-08
+      },
+      "rollout_weight_max_abs": {
+        "cell": 2.2530555725097656e-05,
+        "unit": 2.422928810119629e-05
+      },
+      "layers_with_topk_changes": 0
+    },
+    "single_parity_1": 0.0,
+    "single_parity_21": 0.0,
+    "factorization_max_abs": 0.0
+  },
+  "failures": [],
+  "state_hashes": {
+    "A": "f955a158fbd5c2db796c0c80160a44149426c1b9d715cdf082d9338599c367fd",
+    "B": "f323cee22e8c1f5d67be3d8a4be3fa21d31b4ac0fd1bc8f5731214e7f3ebb181"
+  },
+  "fp16_tolerance": {
+    "atol": 0.025,
+    "rtol": 0.01
+  },
+  "fixed_input_weight_atol": 1e-06
+}

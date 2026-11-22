@@ -1,0 +1,1326 @@
+{
+  "train": [
+    {
+      "group": "train-0",
+      "facts": {
+        "A": "Project PX-4339 is assigned relay key RX-4061.",
+        "B": "Relay key RX-4061 resolves to recovery code ZC-4197.",
+        "direct": "Project PX-4339 uses recovery code ZC-4197.",
+        "D0": "Project PX-4327 uses recovery code ZC-4324. Relay RX-4444 belongs to an unrelated simulation.",
+        "D1": "Project PX-4127 uses recovery code ZC-4037. Relay RX-4475 belongs to an unrelated simulation.",
+        "D2": "Project PX-4371 uses recovery code ZC-4048. Relay RX-4269 belongs to an unrelated simulation.",
+        "D3": "Project PX-4207 uses recovery code ZC-4073. Relay RX-4394 belongs to an unrelated simulation.",
+        "D4": "Project PX-4341 uses recovery code ZC-4404. Relay RX-4310 belongs to an unrelated simulation.",
+        "D5": "Project PX-4046 uses recovery code ZC-4088. Relay RX-4333 belongs to an unrelated simulation.",
+        "D6": "Project PX-4181 uses recovery code ZC-4317. Relay RX-4095 belongs to an unrelated simulation."
+      },
+      "rows": [
+        {
+          "category": "T1",
+          "prompt": "Question: What recovery code does Project PX-4339 use?\nAnswer:",
+          "gold": " ZC-4197",
+          "candidates": [
+            " ZC-4197",
+            " ZC-4332"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T2",
+          "prompt": "Question: What recovery code is assigned to Project PX-4339?\nAnswer:",
+          "gold": " ZC-4197",
+          "candidates": [
+            " ZC-4197",
+            " ZC-4332"
+          ],
+          "cells": [
+            "A",
+            "B"
+          ],
+          "relevant": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "category": "T4",
+          "prompt": "Question: Which code unlocks recovery for PX-4339?\nAnswer:",
+          "gold": " ZC-4197",
+          "candidates": [
+            " ZC-4197",
+            " ZC-4332"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T5",
+          "prompt": "Question: What recovery code does Project PX-4438 use? If the information is unavailable, answer Unknown.\nAnswer:",
+          "gold": " Unknown",
+          "candidates": [
+            " Unknown",
+            " ZC-4197"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": []
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-4339 use?\nAnswer:",
+          "gold": " ZC-4197",
+          "candidates": [
+            " ZC-4197",
+            " ZC-4332"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-4339 use?\nAnswer:",
+          "gold": " ZC-4197",
+          "candidates": [
+            " ZC-4197",
+            " ZC-4332"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-4339 use?\nAnswer:",
+          "gold": " ZC-4197",
+          "candidates": [
+            " ZC-4197",
+            " ZC-4332"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-4339 use?\nAnswer:",
+          "gold": " ZC-4197",
+          "candidates": [
+            " ZC-4197",
+            " ZC-4332"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "train-1",
+      "facts": {
+        "A": "Project PX-4190 is assigned relay key RX-4230.",
+        "B": "Relay key RX-4230 resolves to recovery code ZC-4001.",
+        "direct": "Project PX-4190 uses recovery code ZC-4001.",
+        "D0": "Project PX-4480 uses recovery code ZC-4247. Relay RX-4011 belongs to an unrelated simulation.",
+        "D1": "Project PX-4085 uses recovery code ZC-4353. Relay RX-4180 belongs to an unrelated simulation.",
+        "D2": "Project PX-4416 uses recovery code ZC-4347. Relay RX-4428 belongs to an unrelated simulation.",
+        "D3": "Project PX-4487 uses recovery code ZC-4222. Relay RX-4164 belongs to an unrelated simulation.",
+        "D4": "Project PX-4086 uses recovery code ZC-4211. Relay RX-4124 belongs to an unrelated simulation.",
+        "D5": "Project PX-4237 uses recovery code ZC-4249. Relay RX-4315 belongs to an unrelated simulation.",
+        "D6": "Project PX-4454 uses recovery code ZC-4348. Relay RX-4229 belongs to an unrelated simulation."
+      },
+      "rows": [
+        {
+          "category": "T1",
+          "prompt": "Question: What recovery code does Project PX-4190 use?\nAnswer:",
+          "gold": " ZC-4001",
+          "candidates": [
+            " ZC-4001",
+            " ZC-4464"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T2",
+          "prompt": "Question: What recovery code is assigned to Project PX-4190?\nAnswer:",
+          "gold": " ZC-4001",
+          "candidates": [
+            " ZC-4001",
+            " ZC-4464"
+          ],
+          "cells": [
+            "A",
+            "B"
+          ],
+          "relevant": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "category": "T4",
+          "prompt": "Question: Which code unlocks recovery for PX-4190?\nAnswer:",
+          "gold": " ZC-4001",
+          "candidates": [
+            " ZC-4001",
+            " ZC-4464"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T5",
+          "prompt": "Question: What recovery code does Project PX-4082 use? If the information is unavailable, answer Unknown.\nAnswer:",
+          "gold": " Unknown",
+          "candidates": [
+            " Unknown",
+            " ZC-4001"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": []
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-4190 use?\nAnswer:",
+          "gold": " ZC-4001",
+          "candidates": [
+            " ZC-4001",
+            " ZC-4464"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-4190 use?\nAnswer:",
+          "gold": " ZC-4001",
+          "candidates": [
+            " ZC-4001",
+            " ZC-4464"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-4190 use?\nAnswer:",
+          "gold": " ZC-4001",
+          "candidates": [
+            " ZC-4001",
+            " ZC-4464"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-4190 use?\nAnswer:",
+          "gold": " ZC-4001",
+          "candidates": [
+            " ZC-4001",
+            " ZC-4464"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        }
+      ]
+    }
+  ],
+  "validation": [
+    {
+      "group": "validation-0",
+      "facts": {
+        "A": "Project PX-5213 is assigned relay key RX-5464.",
+        "B": "Relay key RX-5464 resolves to recovery code ZC-5231.",
+        "direct": "Project PX-5213 uses recovery code ZC-5231.",
+        "D0": "Project PX-5392 uses recovery code ZC-5278. Relay RX-5078 belongs to an unrelated simulation.",
+        "D1": "Project PX-5470 uses recovery code ZC-5324. Relay RX-5380 belongs to an unrelated simulation.",
+        "D2": "Project PX-5225 uses recovery code ZC-5062. Relay RX-5383 belongs to an unrelated simulation.",
+        "D3": "Project PX-5409 uses recovery code ZC-5113. Relay RX-5153 belongs to an unrelated simulation.",
+        "D4": "Project PX-5418 uses recovery code ZC-5109. Relay RX-5473 belongs to an unrelated simulation.",
+        "D5": "Project PX-5396 uses recovery code ZC-5105. Relay RX-5474 belongs to an unrelated simulation.",
+        "D6": "Project PX-5199 uses recovery code ZC-5398. Relay RX-5373 belongs to an unrelated simulation."
+      },
+      "rows": [
+        {
+          "category": "T1",
+          "prompt": "Question: What recovery code does Project PX-5213 use?\nAnswer:",
+          "gold": " ZC-5231",
+          "candidates": [
+            " ZC-5071",
+            " ZC-5231"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T2",
+          "prompt": "Question: What recovery code is assigned to Project PX-5213?\nAnswer:",
+          "gold": " ZC-5231",
+          "candidates": [
+            " ZC-5071",
+            " ZC-5231"
+          ],
+          "cells": [
+            "A",
+            "B"
+          ],
+          "relevant": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "category": "T4",
+          "prompt": "Question: Which code unlocks recovery for PX-5213?\nAnswer:",
+          "gold": " ZC-5231",
+          "candidates": [
+            " ZC-5071",
+            " ZC-5231"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T5",
+          "prompt": "Question: What recovery code does Project PX-5326 use? If the information is unavailable, answer Unknown.\nAnswer:",
+          "gold": " Unknown",
+          "candidates": [
+            " Unknown",
+            " ZC-5231"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": []
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-5213 use?\nAnswer:",
+          "gold": " ZC-5231",
+          "candidates": [
+            " ZC-5071",
+            " ZC-5231"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-5213 use?\nAnswer:",
+          "gold": " ZC-5231",
+          "candidates": [
+            " ZC-5071",
+            " ZC-5231"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-5213 use?\nAnswer:",
+          "gold": " ZC-5231",
+          "candidates": [
+            " ZC-5071",
+            " ZC-5231"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-5213 use?\nAnswer:",
+          "gold": " ZC-5231",
+          "candidates": [
+            " ZC-5071",
+            " ZC-5231"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        }
+      ]
+    }
+  ],
+  "test": [
+    {
+      "group": "test-0",
+      "facts": {
+        "A": "Project PX-6348 is assigned relay key RX-6174.",
+        "B": "Relay key RX-6174 resolves to recovery code ZC-6134.",
+        "direct": "Project PX-6348 uses recovery code ZC-6134.",
+        "D0": "Project PX-6497 uses recovery code ZC-6345. Relay RX-6396 belongs to an unrelated simulation.",
+        "D1": "Project PX-6444 uses recovery code ZC-6181. Relay RX-6281 belongs to an unrelated simulation.",
+        "D2": "Project PX-6332 uses recovery code ZC-6422. Relay RX-6090 belongs to an unrelated simulation.",
+        "D3": "Project PX-6031 uses recovery code ZC-6260. Relay RX-6183 belongs to an unrelated simulation.",
+        "D4": "Project PX-6369 uses recovery code ZC-6052. Relay RX-6014 belongs to an unrelated simulation.",
+        "D5": "Project PX-6477 uses recovery code ZC-6492. Relay RX-6094 belongs to an unrelated simulation.",
+        "D6": "Project PX-6050 uses recovery code ZC-6375. Relay RX-6266 belongs to an unrelated simulation."
+      },
+      "rows": [
+        {
+          "category": "T1",
+          "prompt": "Question: What recovery code does Project PX-6348 use?\nAnswer:",
+          "gold": " ZC-6134",
+          "candidates": [
+            " ZC-6134",
+            " ZC-6474"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T2",
+          "prompt": "Question: What recovery code is assigned to Project PX-6348?\nAnswer:",
+          "gold": " ZC-6134",
+          "candidates": [
+            " ZC-6134",
+            " ZC-6474"
+          ],
+          "cells": [
+            "A",
+            "B"
+          ],
+          "relevant": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "category": "T4",
+          "prompt": "Question: Which code unlocks recovery for PX-6348?\nAnswer:",
+          "gold": " ZC-6134",
+          "candidates": [
+            " ZC-6134",
+            " ZC-6474"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T5",
+          "prompt": "Question: What recovery code does Project PX-6403 use? If the information is unavailable, answer Unknown.\nAnswer:",
+          "gold": " Unknown",
+          "candidates": [
+            " Unknown",
+            " ZC-6134"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": []
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6348 use?\nAnswer:",
+          "gold": " ZC-6134",
+          "candidates": [
+            " ZC-6134",
+            " ZC-6474"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6348 use?\nAnswer:",
+          "gold": " ZC-6134",
+          "candidates": [
+            " ZC-6134",
+            " ZC-6474"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6348 use?\nAnswer:",
+          "gold": " ZC-6134",
+          "candidates": [
+            " ZC-6134",
+            " ZC-6474"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6348 use?\nAnswer:",
+          "gold": " ZC-6134",
+          "candidates": [
+            " ZC-6134",
+            " ZC-6474"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "test-1",
+      "facts": {
+        "A": "Project PX-6286 is assigned relay key RX-6252.",
+        "B": "Relay key RX-6252 resolves to recovery code ZC-6318.",
+        "direct": "Project PX-6286 uses recovery code ZC-6318.",
+        "D0": "Project PX-6334 uses recovery code ZC-6170. Relay RX-6236 belongs to an unrelated simulation.",
+        "D1": "Project PX-6171 uses recovery code ZC-6391. Relay RX-6058 belongs to an unrelated simulation.",
+        "D2": "Project PX-6143 uses recovery code ZC-6475. Relay RX-6155 belongs to an unrelated simulation.",
+        "D3": "Project PX-6298 uses recovery code ZC-6138. Relay RX-6148 belongs to an unrelated simulation.",
+        "D4": "Project PX-6205 uses recovery code ZC-6068. Relay RX-6176 belongs to an unrelated simulation.",
+        "D5": "Project PX-6349 uses recovery code ZC-6194. Relay RX-6377 belongs to an unrelated simulation.",
+        "D6": "Project PX-6282 uses recovery code ZC-6223. Relay RX-6479 belongs to an unrelated simulation."
+      },
+      "rows": [
+        {
+          "category": "T1",
+          "prompt": "Question: What recovery code does Project PX-6286 use?\nAnswer:",
+          "gold": " ZC-6318",
+          "candidates": [
+            " ZC-6241",
+            " ZC-6318"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T2",
+          "prompt": "Question: What recovery code is assigned to Project PX-6286?\nAnswer:",
+          "gold": " ZC-6318",
+          "candidates": [
+            " ZC-6241",
+            " ZC-6318"
+          ],
+          "cells": [
+            "A",
+            "B"
+          ],
+          "relevant": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "category": "T4",
+          "prompt": "Question: Which code unlocks recovery for PX-6286?\nAnswer:",
+          "gold": " ZC-6318",
+          "candidates": [
+            " ZC-6241",
+            " ZC-6318"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T5",
+          "prompt": "Question: What recovery code does Project PX-6371 use? If the information is unavailable, answer Unknown.\nAnswer:",
+          "gold": " Unknown",
+          "candidates": [
+            " Unknown",
+            " ZC-6318"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": []
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6286 use?\nAnswer:",
+          "gold": " ZC-6318",
+          "candidates": [
+            " ZC-6241",
+            " ZC-6318"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6286 use?\nAnswer:",
+          "gold": " ZC-6318",
+          "candidates": [
+            " ZC-6241",
+            " ZC-6318"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6286 use?\nAnswer:",
+          "gold": " ZC-6318",
+          "candidates": [
+            " ZC-6241",
+            " ZC-6318"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6286 use?\nAnswer:",
+          "gold": " ZC-6318",
+          "candidates": [
+            " ZC-6241",
+            " ZC-6318"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "test-2",
+      "facts": {
+        "A": "Project PX-6308 is assigned relay key RX-6219.",
+        "B": "Relay key RX-6219 resolves to recovery code ZC-6003.",
+        "direct": "Project PX-6308 uses recovery code ZC-6003.",
+        "D0": "Project PX-6311 uses recovery code ZC-6276. Relay RX-6284 belongs to an unrelated simulation.",
+        "D1": "Project PX-6062 uses recovery code ZC-6000. Relay RX-6429 belongs to an unrelated simulation.",
+        "D2": "Project PX-6083 uses recovery code ZC-6476. Relay RX-6344 belongs to an unrelated simulation.",
+        "D3": "Project PX-6488 uses recovery code ZC-6456. Relay RX-6067 belongs to an unrelated simulation.",
+        "D4": "Project PX-6156 uses recovery code ZC-6485. Relay RX-6130 belongs to an unrelated simulation.",
+        "D5": "Project PX-6211 uses recovery code ZC-6272. Relay RX-6222 belongs to an unrelated simulation.",
+        "D6": "Project PX-6204 uses recovery code ZC-6082. Relay RX-6317 belongs to an unrelated simulation."
+      },
+      "rows": [
+        {
+          "category": "T1",
+          "prompt": "Question: What recovery code does Project PX-6308 use?\nAnswer:",
+          "gold": " ZC-6003",
+          "candidates": [
+            " ZC-6003",
+            " ZC-6436"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T2",
+          "prompt": "Question: What recovery code is assigned to Project PX-6308?\nAnswer:",
+          "gold": " ZC-6003",
+          "candidates": [
+            " ZC-6003",
+            " ZC-6436"
+          ],
+          "cells": [
+            "A",
+            "B"
+          ],
+          "relevant": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "category": "T4",
+          "prompt": "Question: Which code unlocks recovery for PX-6308?\nAnswer:",
+          "gold": " ZC-6003",
+          "candidates": [
+            " ZC-6003",
+            " ZC-6436"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T5",
+          "prompt": "Question: What recovery code does Project PX-6022 use? If the information is unavailable, answer Unknown.\nAnswer:",
+          "gold": " Unknown",
+          "candidates": [
+            " Unknown",
+            " ZC-6003"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": []
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6308 use?\nAnswer:",
+          "gold": " ZC-6003",
+          "candidates": [
+            " ZC-6003",
+            " ZC-6436"
+          ],
+          "cells": [
+            "direct"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6308 use?\nAnswer:",
+          "gold": " ZC-6003",
+          "candidates": [
+            " ZC-6003",
+            " ZC-6436"
+          ],
+          "cells": [
+            "direct",
+            "D0"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6308 use?\nAnswer:",
+          "gold": " ZC-6003",
+          "candidates": [
+            " ZC-6003",
+            " ZC-6436"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        },
+        {
+          "category": "T3",
+          "prompt": "Question: What recovery code does Project PX-6308 use?\nAnswer:",
+          "gold": " ZC-6003",
+          "candidates": [
+            " ZC-6003",
+            " ZC-6436"
+          ],
+          "cells": [
+            "direct",
+            "D0",
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6"
+          ],
+          "relevant": [
+            "direct"
+          ]
+        }
+      ]
+    }
+  ],
+  "v2_replay": [
+    {
+      "group": "42-0",
+      "seed": 42,
+      "projects": [
+        "PJ-2654",
+        "PJ-2114"
+      ],
+      "keys": [
+        "RK-3025",
+        "RK-3759"
+      ],
+      "codes": [
+        " RC-1281",
+        " RC-1250"
+      ],
+      "candidates": [
+        " RC-1250",
+        " RC-1281"
+      ],
+      "facts": {
+        "A0": "Project PJ-2654 is assigned relay key RK-3025.\nProject PJ-2114 is assigned relay key RK-3759.",
+        "B0": "Relay key RK-3025 resolves to recovery code RC-1281.\nRelay key RK-3759 resolves to recovery code RC-1250.",
+        "A1": "Project PJ-2654 is assigned relay key RK-3759.\nProject PJ-2114 is assigned relay key RK-3025.",
+        "B1": "Relay key RK-3025 resolves to recovery code RC-1250.\nRelay key RK-3759 resolves to recovery code RC-1281."
+      }
+    },
+    {
+      "group": "42-1",
+      "seed": 42,
+      "projects": [
+        "PJ-2143",
+        "PJ-2756"
+      ],
+      "keys": [
+        "RK-3105",
+        "RK-3693"
+      ],
+      "codes": [
+        " RC-1760",
+        " RC-1915"
+      ],
+      "candidates": [
+        " RC-1760",
+        " RC-1915"
+      ],
+      "facts": {
+        "A0": "Project PJ-2143 is assigned relay key RK-3105.\nProject PJ-2756 is assigned relay key RK-3693.",
+        "B0": "Relay key RK-3105 resolves to recovery code RC-1760.\nRelay key RK-3693 resolves to recovery code RC-1915.",
+        "A1": "Project PJ-2143 is assigned relay key RK-3693.\nProject PJ-2756 is assigned relay key RK-3105.",
+        "B1": "Relay key RK-3105 resolves to recovery code RC-1915.\nRelay key RK-3693 resolves to recovery code RC-1760."
+      }
+    },
+    {
+      "group": "42-2",
+      "seed": 42,
+      "projects": [
+        "PJ-2606",
+        "PJ-2434"
+      ],
+      "keys": [
+        "RK-3033",
+        "RK-3031"
+      ],
+      "codes": [
+        " RC-1095",
+        " RC-1223"
+      ],
+      "candidates": [
+        " RC-1095",
+        " RC-1223"
+      ],
+      "facts": {
+        "A0": "Project PJ-2606 is assigned relay key RK-3033.\nProject PJ-2434 is assigned relay key RK-3031.",
+        "B0": "Relay key RK-3033 resolves to recovery code RC-1095.\nRelay key RK-3031 resolves to recovery code RC-1223.",
+        "A1": "Project PJ-2606 is assigned relay key RK-3031.\nProject PJ-2434 is assigned relay key RK-3033.",
+        "B1": "Relay key RK-3033 resolves to recovery code RC-1223.\nRelay key RK-3031 resolves to recovery code RC-1095."
+      }
+    },
+    {
+      "group": "42-3",
+      "seed": 42,
+      "projects": [
+        "PJ-2620",
+        "PJ-2520"
+      ],
+      "keys": [
+        "RK-3028",
+        "RK-3578"
+      ],
+      "codes": [
+        " RC-1204",
+        " RC-1737"
+      ],
+      "candidates": [
+        " RC-1204",
+        " RC-1737"
+      ],
+      "facts": {
+        "A0": "Project PJ-2620 is assigned relay key RK-3028.\nProject PJ-2520 is assigned relay key RK-3578.",
+        "B0": "Relay key RK-3028 resolves to recovery code RC-1204.\nRelay key RK-3578 resolves to recovery code RC-1737.",
+        "A1": "Project PJ-2620 is assigned relay key RK-3578.\nProject PJ-2520 is assigned relay key RK-3028.",
+        "B1": "Relay key RK-3028 resolves to recovery code RC-1737.\nRelay key RK-3578 resolves to recovery code RC-1204."
+      }
+    },
+    {
+      "group": "43-0",
+      "seed": 43,
+      "projects": [
+        "PJ-2294",
+        "PJ-2039"
+      ],
+      "keys": [
+        "RK-3719",
+        "RK-3788"
+      ],
+      "codes": [
+        " RC-1148",
+        " RC-1990"
+      ],
+      "candidates": [
+        " RC-1148",
+        " RC-1990"
+      ],
+      "facts": {
+        "A0": "Project PJ-2294 is assigned relay key RK-3719.\nProject PJ-2039 is assigned relay key RK-3788.",
+        "B0": "Relay key RK-3719 resolves to recovery code RC-1148.\nRelay key RK-3788 resolves to recovery code RC-1990.",
+        "A1": "Project PJ-2294 is assigned relay key RK-3788.\nProject PJ-2039 is assigned relay key RK-3719.",
+        "B1": "Relay key RK-3719 resolves to recovery code RC-1990.\nRelay key RK-3788 resolves to recovery code RC-1148."
+      }
+    },
+    {
+      "group": "43-1",
+      "seed": 43,
+      "projects": [
+        "PJ-2696",
+        "PJ-2382"
+      ],
+      "keys": [
+        "RK-3723",
+        "RK-3821"
+      ],
+      "codes": [
+        " RC-1099",
+        " RC-1470"
+      ],
+      "candidates": [
+        " RC-1099",
+        " RC-1470"
+      ],
+      "facts": {
+        "A0": "Project PJ-2696 is assigned relay key RK-3723.\nProject PJ-2382 is assigned relay key RK-3821.",
+        "B0": "Relay key RK-3723 resolves to recovery code RC-1099.\nRelay key RK-3821 resolves to recovery code RC-1470.",
+        "A1": "Project PJ-2696 is assigned relay key RK-3821.\nProject PJ-2382 is assigned relay key RK-3723.",
+        "B1": "Relay key RK-3723 resolves to recovery code RC-1470.\nRelay key RK-3821 resolves to recovery code RC-1099."
+      }
+    },
+    {
+      "group": "43-2",
+      "seed": 43,
+      "projects": [
+        "PJ-2019",
+        "PJ-2632"
+      ],
+      "keys": [
+        "RK-3531",
+        "RK-3447"
+      ],
+      "codes": [
+        " RC-1598",
+        " RC-1388"
+      ],
+      "candidates": [
+        " RC-1388",
+        " RC-1598"
+      ],
+      "facts": {
+        "A0": "Project PJ-2019 is assigned relay key RK-3531.\nProject PJ-2632 is assigned relay key RK-3447.",
+        "B0": "Relay key RK-3531 resolves to recovery code RC-1598.\nRelay key RK-3447 resolves to recovery code RC-1388.",
+        "A1": "Project PJ-2019 is assigned relay key RK-3447.\nProject PJ-2632 is assigned relay key RK-3531.",
+        "B1": "Relay key RK-3531 resolves to recovery code RC-1388.\nRelay key RK-3447 resolves to recovery code RC-1598."
+      }
+    },
+    {
+      "group": "43-3",
+      "seed": 43,
+      "projects": [
+        "PJ-2409",
+        "PJ-2184"
+      ],
+      "keys": [
+        "RK-3063",
+        "RK-3885"
+      ],
+      "codes": [
+        " RC-1111",
+        " RC-1851"
+      ],
+      "candidates": [
+        " RC-1111",
+        " RC-1851"
+      ],
+      "facts": {
+        "A0": "Project PJ-2409 is assigned relay key RK-3063.\nProject PJ-2184 is assigned relay key RK-3885.",
+        "B0": "Relay key RK-3063 resolves to recovery code RC-1111.\nRelay key RK-3885 resolves to recovery code RC-1851.",
+        "A1": "Project PJ-2409 is assigned relay key RK-3885.\nProject PJ-2184 is assigned relay key RK-3063.",
+        "B1": "Relay key RK-3063 resolves to recovery code RC-1851.\nRelay key RK-3885 resolves to recovery code RC-1111."
+      }
+    },
+    {
+      "group": "44-0",
+      "seed": 44,
+      "projects": [
+        "PJ-2426",
+        "PJ-2542"
+      ],
+      "keys": [
+        "RK-3562",
+        "RK-3730"
+      ],
+      "codes": [
+        " RC-1896",
+        " RC-1122"
+      ],
+      "candidates": [
+        " RC-1122",
+        " RC-1896"
+      ],
+      "facts": {
+        "A0": "Project PJ-2426 is assigned relay key RK-3562.\nProject PJ-2542 is assigned relay key RK-3730.",
+        "B0": "Relay key RK-3562 resolves to recovery code RC-1896.\nRelay key RK-3730 resolves to recovery code RC-1122.",
+        "A1": "Project PJ-2426 is assigned relay key RK-3730.\nProject PJ-2542 is assigned relay key RK-3562.",
+        "B1": "Relay key RK-3562 resolves to recovery code RC-1122.\nRelay key RK-3730 resolves to recovery code RC-1896."
+      }
+    },
+    {
+      "group": "44-1",
+      "seed": 44,
+      "projects": [
+        "PJ-2395",
+        "PJ-2235"
+      ],
+      "keys": [
+        "RK-3302",
+        "RK-3032"
+      ],
+      "codes": [
+        " RC-1237",
+        " RC-1123"
+      ],
+      "candidates": [
+        " RC-1123",
+        " RC-1237"
+      ],
+      "facts": {
+        "A0": "Project PJ-2395 is assigned relay key RK-3302.\nProject PJ-2235 is assigned relay key RK-3032.",
+        "B0": "Relay key RK-3302 resolves to recovery code RC-1237.\nRelay key RK-3032 resolves to recovery code RC-1123.",
+        "A1": "Project PJ-2395 is assigned relay key RK-3032.\nProject PJ-2235 is assigned relay key RK-3302.",
+        "B1": "Relay key RK-3302 resolves to recovery code RC-1123.\nRelay key RK-3032 resolves to recovery code RC-1237."
+      }
+    },
+    {
+      "group": "44-2",
+      "seed": 44,
+      "projects": [
+        "PJ-2164",
+        "PJ-2104"
+      ],
+      "keys": [
+        "RK-3811",
+        "RK-3536"
+      ],
+      "codes": [
+        " RC-1719",
+        " RC-1321"
+      ],
+      "candidates": [
+        " RC-1321",
+        " RC-1719"
+      ],
+      "facts": {
+        "A0": "Project PJ-2164 is assigned relay key RK-3811.\nProject PJ-2104 is assigned relay key RK-3536.",
+        "B0": "Relay key RK-3811 resolves to recovery code RC-1719.\nRelay key RK-3536 resolves to recovery code RC-1321.",
+        "A1": "Project PJ-2164 is assigned relay key RK-3536.\nProject PJ-2104 is assigned relay key RK-3811.",
+        "B1": "Relay key RK-3811 resolves to recovery code RC-1321.\nRelay key RK-3536 resolves to recovery code RC-1719."
+      }
+    },
+    {
+      "group": "44-3",
+      "seed": 44,
+      "projects": [
+        "PJ-2427",
+        "PJ-2623"
+      ],
+      "keys": [
+        "RK-3803",
+        "RK-3722"
+      ],
+      "codes": [
+        " RC-1701",
+        " RC-1345"
+      ],
+      "candidates": [
+        " RC-1345",
+        " RC-1701"
+      ],
+      "facts": {
+        "A0": "Project PJ-2427 is assigned relay key RK-3803.\nProject PJ-2623 is assigned relay key RK-3722.",
+        "B0": "Relay key RK-3803 resolves to recovery code RC-1701.\nRelay key RK-3722 resolves to recovery code RC-1345.",
+        "A1": "Project PJ-2427 is assigned relay key RK-3722.\nProject PJ-2623 is assigned relay key RK-3803.",
+        "B1": "Relay key RK-3803 resolves to recovery code RC-1345.\nRelay key RK-3722 resolves to recovery code RC-1701."
+      }
+    },
+    {
+      "group": "45-0",
+      "seed": 45,
+      "projects": [
+        "PJ-2442",
+        "PJ-2286"
+      ],
+      "keys": [
+        "RK-3508",
+        "RK-3270"
+      ],
+      "codes": [
+        " RC-1083",
+        " RC-1322"
+      ],
+      "candidates": [
+        " RC-1083",
+        " RC-1322"
+      ],
+      "facts": {
+        "A0": "Project PJ-2442 is assigned relay key RK-3508.\nProject PJ-2286 is assigned relay key RK-3270.",
+        "B0": "Relay key RK-3508 resolves to recovery code RC-1083.\nRelay key RK-3270 resolves to recovery code RC-1322.",
+        "A1": "Project PJ-2442 is assigned relay key RK-3270.\nProject PJ-2286 is assigned relay key RK-3508.",
+        "B1": "Relay key RK-3508 resolves to recovery code RC-1322.\nRelay key RK-3270 resolves to recovery code RC-1083."
+      }
+    },
+    {
+      "group": "45-1",
+      "seed": 45,
+      "projects": [
+        "PJ-2023",
+        "PJ-2076"
+      ],
+      "keys": [
+        "RK-3505",
+        "RK-3011"
+      ],
+      "codes": [
+        " RC-1121",
+        " RC-1302"
+      ],
+      "candidates": [
+        " RC-1121",
+        " RC-1302"
+      ],
+      "facts": {
+        "A0": "Project PJ-2023 is assigned relay key RK-3505.\nProject PJ-2076 is assigned relay key RK-3011.",
+        "B0": "Relay key RK-3505 resolves to recovery code RC-1121.\nRelay key RK-3011 resolves to recovery code RC-1302.",
+        "A1": "Project PJ-2023 is assigned relay key RK-3011.\nProject PJ-2076 is assigned relay key RK-3505.",
+        "B1": "Relay key RK-3505 resolves to recovery code RC-1302.\nRelay key RK-3011 resolves to recovery code RC-1121."
+      }
+    },
+    {
+      "group": "45-2",
+      "seed": 45,
+      "projects": [
+        "PJ-2330",
+        "PJ-2903"
+      ],
+      "keys": [
+        "RK-3784",
+        "RK-3681"
+      ],
+      "codes": [
+        " RC-1036",
+        " RC-1947"
+      ],
+      "candidates": [
+        " RC-1036",
+        " RC-1947"
+      ],
+      "facts": {
+        "A0": "Project PJ-2330 is assigned relay key RK-3784.\nProject PJ-2903 is assigned relay key RK-3681.",
+        "B0": "Relay key RK-3784 resolves to recovery code RC-1036.\nRelay key RK-3681 resolves to recovery code RC-1947.",
+        "A1": "Project PJ-2330 is assigned relay key RK-3681.\nProject PJ-2903 is assigned relay key RK-3784.",
+        "B1": "Relay key RK-3784 resolves to recovery code RC-1947.\nRelay key RK-3681 resolves to recovery code RC-1036."
+      }
+    },
+    {
+      "group": "45-3",
+      "seed": 45,
+      "projects": [
+        "PJ-2145",
+        "PJ-2289"
+      ],
+      "keys": [
+        "RK-3843",
+        "RK-3947"
+      ],
+      "codes": [
+        " RC-1779",
+        " RC-1166"
+      ],
+      "candidates": [
+        " RC-1166",
+        " RC-1779"
+      ],
+      "facts": {
+        "A0": "Project PJ-2145 is assigned relay key RK-3843.\nProject PJ-2289 is assigned relay key RK-3947.",
+        "B0": "Relay key RK-3843 resolves to recovery code RC-1779.\nRelay key RK-3947 resolves to recovery code RC-1166.",
+        "A1": "Project PJ-2145 is assigned relay key RK-3947.\nProject PJ-2289 is assigned relay key RK-3843.",
+        "B1": "Relay key RK-3843 resolves to recovery code RC-1166.\nRelay key RK-3947 resolves to recovery code RC-1779."
+      }
+    }
+  ]
+}
