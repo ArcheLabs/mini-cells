@@ -6,6 +6,9 @@ from .hybrid import CellMutation, CellPlacement, HybridCLM, ModelInspection
 
 __all__ = [
     "CLM",
+    "MiniCells",
+    "QueryResult",
+    "Cell",
     "GenerationResult",
     "CharVocab",
     "EchoModel",
@@ -18,6 +21,9 @@ __all__ = [
 
 
 def __getattr__(name):
+    if name in ("MiniCells", "QueryResult", "Cell"):
+        from minicells_native import sdk
+        return getattr(sdk, name)
     if name == "EchoModel":
         from .model import EchoModel
         return EchoModel

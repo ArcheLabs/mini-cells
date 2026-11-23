@@ -1,5 +1,27 @@
 [English] | [中文](README.zh-CN.md)
 
+## Native MoM Python SDK
+
+Install from the SDK branch with CUDA-enabled PyTorch already available.
+
+```sh
+python -m pip install "mini-cells[mom] @ git+https://github.com/ArcheLabs/mini-cells.git@codex/minicells-python-sdk-001"
+```
+
+```python
+from minicells import MiniCells
+
+with MiniCells.open(storage="./memory") as mc:
+    cell = mc.cells.create("Alice")
+    mc.cells.write(cell.id, "Alice was born in London.")
+    result = mc.query("Where was Alice born?", max_new_tokens=24)
+    print(result.text, result.selected_cell_ids)
+```
+
+See the [quickstart](docs/python-sdk/quickstart.md), [API reference](docs/python-sdk/python-api.md),
+and [acceptance status](docs/python-sdk/acceptance.md).
+
+
 # MiniCells
 
 MiniCells explores whether pretrained language models can be transformed into

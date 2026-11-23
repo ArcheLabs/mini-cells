@@ -108,3 +108,11 @@ and per-seed counts. Bundles are temporary experimental inputs.
 This run is development-only. Diagnostic completion indicates that all arms
 were scored. The factorial and single-Cell controls determine the strength of
 the compositional recall evidence.
+
+## Python SDK
+
+Install the `mom` extra and use `from minicells import MiniCells`. The Web Demo
+shares this runtime. The query endpoint defaults to automatic selection.
+The `/api/query` legacy weighted request remains available for manual
+comparisons. See [installation](../../docs/python-sdk/installation.md) and
+[the Python API](../../docs/python-sdk/python-api.md).

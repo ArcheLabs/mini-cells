@@ -22,7 +22,7 @@ label{margin-right:10px}#cells div{padding:8px 0;border-bottom:1px solid #eee}
 <button id="write">追加写入</button> <button id="cancel" disabled>取消</button>
 <output id="progress"></output></section>
 <section><h2>查询</h2><textarea id="question" rows="2" aria-label="问题"></textarea>
-<button id="ask">查询选中 Cells</button> <button id="compare">对照无 Cell / A / B / A+B</button>
+<button id="ask">查询</button> <button id="compare">对照无 Cell / A / B / A+B</button>
 <div id="answers"></div></section>
 </main>
 <script>
@@ -83,7 +83,7 @@ async function answer(label,cells){
   try{const r=await api('query','POST',{question:el('question').value,cells});output.textContent=r.answer+'\n\n'+Math.round(r.latency_ms)+' ms';}
   catch(e){output.textContent=e.message}
 }
-button('ask',async()=>{el('answers').replaceChildren();await answer('选中 Cells',choices())});
+button('ask',async()=>{el('answers').replaceChildren();const selected=choices();await answer(selected.length?'选中 Cells':'自动选择',selected.length?selected:'auto')});
 button('compare',async()=>{
   const [a,b]=choices();
   if(!a||!b||a.weight<=0||b.weight<=0)throw Error('请选择两个正权重的 Cell');
