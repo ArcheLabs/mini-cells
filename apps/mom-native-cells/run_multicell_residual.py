@@ -447,17 +447,17 @@ def replay_fixed_inputs(backbone, original, trace, states, diagnostic):
 
 
 def restored_check(backbone, args, assets, diagnostic):
-    source = Cells(args.scratch / "original", backbone)
+    original_store = Cells(args.scratch / "original", backbone)
     meta = read(args.output / "restore-cells.json")
     imported = Cells(args.scratch / "imported", backbone)
-    imported_states = restore_cells(source, imported, meta)
-    initial = snapshot_cells(source, meta)
+    imported_states = restore_cells(original_store, imported, meta)
+    initial = snapshot_cells(original_store, meta)
     if any(fingerprint(state) != initial[label]["state_sha256"] for label, state in imported_states.items()):
         raise AssertionError("Restored recurrent tensors differ")
     group = assets["smoke"][0]
     original_traces = {query["id"]: [] for query in group["queries"]}
-    with gzip.open(args.output / "sample-residual-records.jsonl.gz", "rt", encoding="utf-8") as source:
-        for line in source:
+    with gzip.open(args.output / "sample-residual-records.jsonl.gz", "rt", encoding="utf-8") as archive:
+        for line in archive:
             entry = json.loads(line)
             values = torch.tensor(entry["values"], dtype=torch.float32).reshape(-1, 4, len(FIELDS))
             original_traces[entry["query_id"]].append(
@@ -465,7 +465,7 @@ def restored_check(backbone, args, assets, diagnostic):
                  torch.tensor(entry["token_index"], dtype=torch.long), values))
     fixed = {}
     for query_id, banks in original_traces.items():
-        fixture = torch.load(source.root / f"{query_id}-inputs.pt", map_location=backbone.device,
+        fixture = torch.load(original_store.root / f"{query_id}-inputs.pt", map_location=backbone.device,
                              weights_only=True)
         fixed[query_id] = replay_fixed_inputs(backbone, fixture["inputs"],
                                              {"banks": banks, "packing": fixture["packing"]},

@@ -1,12 +1,19 @@
+import gzip
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
 import torch
 
+from cells import Cells
+from compositional_recall import read, write
 from gdr_diagnostics import FIELDS, reference, statistics
 from residual_metrics import curve, group_bootstrap, metrics, rank_signal
-from run_multicell_residual import PRIMARY, SEEDS, dataset, replay_fixed_inputs, score_trace, trace_drift, verify_trace
+from run_multicell_residual import (LABELS, PRIMARY, SEEDS, dataset, replay_fixed_inputs, restored_check,
+                                    score_trace, trace_drift, verify_trace)
 
 
 class ResidualExperimentTest(unittest.TestCase):
@@ -74,3 +81,41 @@ class ResidualExperimentTest(unittest.TestCase):
         report = trace_drift(banks, [(0, 0, 0, torch.tensor([0]), drifted)])
         self.assertEqual(report["fields"]["prediction_cosine"]["outside_old_tolerance"], 1)
         self.assertEqual(report["fields"]["relative_residual_norm"]["outside_old_tolerance"], 0)
+
+
+    def test_restore_worker_reads_archive_and_replays_saved_operands(self):
+        upstream = SimpleNamespace(fused_recurrent_gated_delta_rule=lambda *args, initial_state, **kw:
+                                   reference(*args, initial_state)[:2])
+        backbone = SimpleNamespace(device="cpu", identity={"model": "test"})
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "output"
+            output.mkdir()
+            store = Cells(root / "original", backbone)
+            meta = {label: store.create(label) for label in LABELS}
+            write(output / "restore-cells.json", meta)
+
+            query_id = "fixture-T1"
+            q = k = v = torch.ones((1, 2, 4, 1))
+            g = beta = torch.zeros((1, 2, 4))
+            operands = (q, k, v, g, beta)
+            native, _, predicted, residual = reference(*operands)
+            values = statistics(native, predicted, residual, v, beta, g)[0, 1:].tolist()
+            with gzip.open(output / "sample-residual-records.jsonl.gz", "wt", encoding="utf-8") as stream:
+                stream.write(json.dumps(dict(query_id=query_id, cell="A", layer=0, bank=0,
+                                             token_index=[0], values=values)) + "\n")
+            torch.save({"inputs": {"0.0": operands}, "packing": {"0.0": torch.tensor([1])}},
+                       store.root / f"{query_id}-inputs.pt")
+            row = {"id": query_id, PRIMARY: dict.fromkeys(LABELS, -1.0)}
+            write(output / "smoke-cell-scores.json", [row])
+            args = SimpleNamespace(scratch=root, output=output)
+            assets = {"smoke": [{"queries": [{"id": query_id}]}]}
+            rollout = dict(rows=[{**row, "rollout_trace": {"common_positions": 1}}], parity={}, integrity={})
+            with patch.dict("sys.modules", {"mom": SimpleNamespace(),
+                                           "mom.layers": SimpleNamespace(mom_gated_deltanet=upstream)}):
+                with patch("run_multicell_residual.run_group", return_value=rollout) as run:
+                    restored_check(backbone, args, assets, reference)
+            self.assertEqual(len(run.call_args.kwargs["original_traces"][query_id]), 1)
+            self.assertEqual(read(output / "restore-fixed-input.json")["queries"][query_id],
+                             {"banks": 1, "max_abs": 0})
+            self.assertEqual(read(output / "restore.json")["status"], "PASS")
