@@ -1,0 +1,162 @@
+{
+  "cells": [
+    "2176dc2a-81fa-4e92-b83a-96715fe593d0",
+    "ddc5e754-902c-4244-8ed5-b043c21a342e"
+  ],
+  "hashes": {
+    "2176dc2a-81fa-4e92-b83a-96715fe593d0": "fdea6363674a8c471c1974ea2496b83f922c57cbe6493381a69398dcd1758406",
+    "ddc5e754-902c-4244-8ed5-b043c21a342e": "a94e4a91366ead340fc22b77c3e5011e054620e4b0f6f4c8245a90fd29baccd8"
+  },
+  "teacher_forced": [
+    [
+      -0.03380367159843445,
+      -0.0010550415609031916,
+      -0.019016219303011894,
+      -0.010506909340620041,
+      -0.0022509971167892218,
+      -0.4972307085990906
+    ],
+    [
+      -11.797853469848633,
+      -1.5807180404663086,
+      -3.0493624210357666,
+      -0.8573490977287292
+    ]
+  ],
+  "probes": {
+    "base": {
+      "text": "Paris-a-, \n\n\n\nThe,",
+      "mode": "manual",
+      "candidate_cell_ids": [],
+      "selected_cell_ids": [],
+      "cell_scores": {},
+      "fallback_reason": "explicit_no_cells",
+      "latency": 79.66902261200005,
+      "generation_tokens": 12,
+      "diagnostics": {
+        "scoring_seconds": 7.649999815839692e-07,
+        "selection_seconds": 1.301999986935698e-06,
+        "fusion_and_generation_seconds": 79.66789545799998,
+        "peak_gpu_bytes": 1307745792,
+        "selection_top_k": 2,
+        "selection_threshold": null,
+        "ranked_cell_ids": [],
+        "fusion_mode": "native",
+        "unscored_cell_ids": []
+      }
+    },
+    "single": {
+      "text": "Wangvera B-which B\nW,-p",
+      "mode": "manual",
+      "candidate_cell_ids": [
+        "2176dc2a-81fa-4e92-b83a-96715fe593d0"
+      ],
+      "selected_cell_ids": [
+        "2176dc2a-81fa-4e92-b83a-96715fe593d0"
+      ],
+      "cell_scores": {},
+      "fallback_reason": null,
+      "latency": 2.5208429770000294,
+      "generation_tokens": 12,
+      "diagnostics": {
+        "scoring_seconds": 7.300000106624793e-07,
+        "selection_seconds": 1.1089999816249474e-06,
+        "fusion_and_generation_seconds": 2.5202174329999707,
+        "peak_gpu_bytes": 1168562688,
+        "selection_top_k": 2,
+        "selection_threshold": null,
+        "ranked_cell_ids": [],
+        "fusion_mode": "hierarchical_equal",
+        "unscored_cell_ids": []
+      }
+    },
+    "two": {
+      "text": "Wang B 14, Bp, Bumbai",
+      "mode": "manual",
+      "candidate_cell_ids": [
+        "2176dc2a-81fa-4e92-b83a-96715fe593d0",
+        "ddc5e754-902c-4244-8ed5-b043c21a342e"
+      ],
+      "selected_cell_ids": [
+        "2176dc2a-81fa-4e92-b83a-96715fe593d0",
+        "ddc5e754-902c-4244-8ed5-b043c21a342e"
+      ],
+      "cell_scores": {},
+      "fallback_reason": null,
+      "latency": 3.985988676999966,
+      "generation_tokens": 12,
+      "diagnostics": {
+        "scoring_seconds": 5.310000119607139e-07,
+        "selection_seconds": 7.790000040586165e-07,
+        "fusion_and_generation_seconds": 3.9854569870000205,
+        "peak_gpu_bytes": 1298487808,
+        "selection_top_k": 2,
+        "selection_threshold": null,
+        "ranked_cell_ids": [],
+        "fusion_mode": "hierarchical_equal",
+        "unscored_cell_ids": []
+      }
+    },
+    "auto": {
+      "text": "Wang B 14, Bp, Bumbai",
+      "mode": "auto",
+      "candidate_cell_ids": [
+        "2176dc2a-81fa-4e92-b83a-96715fe593d0",
+        "ddc5e754-902c-4244-8ed5-b043c21a342e"
+      ],
+      "selected_cell_ids": [
+        "2176dc2a-81fa-4e92-b83a-96715fe593d0",
+        "ddc5e754-902c-4244-8ed5-b043c21a342e"
+      ],
+      "cell_scores": {
+        "2176dc2a-81fa-4e92-b83a-96715fe593d0": 0.014669433236122131,
+        "ddc5e754-902c-4244-8ed5-b043c21a342e": 0.014444971457123756
+      },
+      "fallback_reason": null,
+      "latency": 5.564745186999971,
+      "generation_tokens": 12,
+      "diagnostics": {
+        "scoring_seconds": 1.6198369139999613,
+        "selection_seconds": 1.155700005028848e-05,
+        "fusion_and_generation_seconds": 3.944270187000029,
+        "peak_gpu_bytes": 1298500096,
+        "selection_top_k": 2,
+        "selection_threshold": null,
+        "ranked_cell_ids": [
+          "2176dc2a-81fa-4e92-b83a-96715fe593d0",
+          "ddc5e754-902c-4244-8ed5-b043c21a342e"
+        ],
+        "fusion_mode": "hierarchical_equal",
+        "unscored_cell_ids": []
+      }
+    }
+  },
+  "model": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-340M",
+    "model_revision": "f4081422ea2cf01b1b5d646cac05cad62a5d5438",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "fla-hub/gla-1.3B-100B",
+    "tokenizer_revision": "46b15820a4df269e99aed9d709e017677c15d24b",
+    "tokenizer_hash": "beea13aa38f463df5a44d41386ab44555b8809adbad38370234939edd05fcef6",
+    "tokenizer_files": {
+      "generation_config.json": "2b28ca181334342888bdce7357ef10db0fba08895bcd9dde3be410a6a2af3491",
+      "special_tokens_map.json": "6fa06efa2785e450051989a6f8fb4416b10149ded485ddd3f127a40734f5cfd0",
+      "tokenizer.json": "bdc45dc7f18a5c55e0dcb36f4f187a7c429d6aaa1693a17d20422b85081642d9",
+      "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055",
+      "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b"
+    },
+    "config_hash": "fb53d2d0a1423d4c30ee15b6d38a0abb18d5c70a5ef8af16a0aa540759205208",
+    "weights_sha256": "9ef6a2fff60772d3cbdf000904f0ab08b794217f5d7ac9a80e9fb7e00bb729c5",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 512351520
+  }
+}
