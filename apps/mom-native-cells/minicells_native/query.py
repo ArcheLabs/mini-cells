@@ -34,8 +34,41 @@ class SharedNorm:
 
 
 @torch.inference_mode()
-def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None):
+def score_cells(runtime, reader, tokens, candidates, probe=None):
+    phase = probe.phase if probe else lambda *_: nullcontext()
+    scores = {}
+    for cell in candidates:
+        if not runtime.cells._get(cell)["tokens_written"]:
+            continue
+        trace = SharedNorm()
+        with phase("cell_load", cell):
+            caches = reader.start([runtime.cells._state(cell)])
+        total = 0.0
+        for start in range(0, len(tokens), 64):
+            chunk = tokens[start:start + 64]
+            trace.values.clear()
+            with phase("independent_read", cell):
+                reader.step(chunk, caches, SELECTIVE, diagnostics=trace)
+            with phase("norm_reduce", cell):
+                total += len(chunk) * trace.score()
+        scores[cell] = total / len(tokens)
+        if probe:
+            probe.cache(caches)
+        del caches
+    return scores
+
+
+def select_cells(runtime, scores):
+    ranking = sorted(scores, key=lambda cell: (-scores[cell], cell))
+    selected = [cell for cell in ranking if runtime._threshold is None
+                or scores[cell] >= runtime._threshold][:runtime._top_k]
+    return ranking, selected
+
+
+@torch.inference_mode()
+def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None, *, token_ids=None, probe=None):
     started = time.perf_counter()
+    phase = probe.phase if probe else lambda *_: nullcontext()
     if not isinstance(prompt, str) or not prompt.strip():
         raise ValueError("Query prompt must be nonempty text")
     if type(max_new_tokens) is not int or not 1 <= max_new_tokens <= 512:
@@ -44,7 +77,8 @@ def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None)
         raise ValueError("temperature must be between 0 and 2")
     mode, candidates = runtime._candidate_ids(cells)
     backbone = runtime._backbone
-    tokens = backbone.tokenizer.encode(f"Question: {prompt}\nAnswer:", add_special_tokens=False)
+    tokens = (backbone.tokenizer.encode(f"Question: {prompt}\nAnswer:", add_special_tokens=False)
+              if token_ids is None else token_ids)
     if not tokens or len(tokens) + max_new_tokens > 2048:
         raise ValueError("Query and generation must fit within 2048 tokens")
     reader = FusionReader(backbone)
@@ -55,27 +89,14 @@ def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None)
     scores, fallback, ranking = {}, None, []
     scoring_started = time.perf_counter()
     if mode == "auto":
-        for cell in candidates:
-            if not runtime.cells._get(cell)["tokens_written"]:
-                continue
-            trace = SharedNorm()
-            caches = reader.start([runtime.cells._state(cell)])
-            weight, total = 0, 0.0
-            for start in range(0, len(tokens), 64):
-                chunk = tokens[start:start + 64]
-                trace.values.clear()
-                reader.step(chunk, caches, SELECTIVE, diagnostics=trace)
-                total += len(chunk) * trace.score()
-                weight += len(chunk)
-            scores[cell] = total / weight
-            del caches
+        with phase("scoring"):
+            scores = score_cells(runtime, reader, tokens, candidates, probe)
     scoring = time.perf_counter() - scoring_started
 
     selection_started = time.perf_counter()
     if mode == "auto":
-        ranking = sorted(scores, key=lambda cell: (-scores[cell], cell))
-        selected = [cell for cell in ranking if runtime._threshold is None
-                    or scores[cell] >= runtime._threshold][:runtime._top_k]
+        with phase("selector"):
+            ranking, selected = select_cells(runtime, scores)
         if not selected:
             fallback = "no_match" if candidates else "no_registered_cells"
     else:
@@ -92,20 +113,40 @@ def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None)
     selection = time.perf_counter() - selection_started
 
     generation_started = time.perf_counter()
-    caches = reader.start(runtime.cells._state(cell) for cell in selected) if selected else [backbone.stream({})]
+    if probe:
+        probe.selected = list(selected)
+    with phase("selected_cell_load"):
+        caches = (reader.start(runtime.cells._state(cell) for cell in selected)
+                  if selected else [backbone.stream({})])
     if selected and weights is None:
         def step(ids):
-            return reader.step(ids, caches, SELECTIVE)
+            with phase("fusion_forward"):
+                return reader.step(ids, caches, SELECTIVE)
     else:
         def step(ids):
             return backbone.step(ids, caches, weights if selected else [1.0])
     # Keep the same working caches across chunks and generation. The prefill path
     # handles queries longer than T4's recurrent limit without using Chunk kernels.
     final_start = ((len(tokens) - 1) // 64) * 64
-    for i in range(0, final_start, 64):
-        step(tokens[i:i + 64])
+    with phase("prefill"):
+        for i in range(0, final_start, 64):
+            step(tokens[i:i + 64])
+        hidden = step(tokens[final_start:]) if probe else None
     tail = tokens[final_start:]
-    text, answer = generate(backbone, tail, step, max_new_tokens, temperature)
+    with phase("generation"):
+        if probe:
+            def decode(ids):
+                nonlocal hidden
+                if hidden is not None:
+                    result, hidden = hidden, None
+                    return result
+                return step(ids)
+            text, answer = generate(backbone, tail, decode, max_new_tokens, temperature,
+                                    stop_on_eos=probe.stop_on_eos, observe=probe.logits)
+            probe.tokens = answer
+            probe.cache(caches)
+        else:
+            text, answer = generate(backbone, tail, step, max_new_tokens, temperature)
     generation = time.perf_counter() - generation_started
     peak = torch.cuda.max_memory_allocated(backbone.device) if cuda else None
     diagnostics = dict(scoring_seconds=scoring, selection_seconds=selection,
