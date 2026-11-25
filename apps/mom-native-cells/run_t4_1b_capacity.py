@@ -13,6 +13,7 @@ import subprocess
 import sys
 
 HERE = Path(__file__).resolve().parent
+DECISION_FORMAT = "minicells.t4.1b.capacity.001.v1"
 GIB = 2**30
 PROMPTS = (128, 512, 1024)
 CELLS = (1, 2, 4, 8)
@@ -25,6 +26,11 @@ def write(out, filename, value):
     pending = dest.with_suffix(dest.suffix + ".tmp")
     pending.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     pending.replace(dest)
+
+
+def write_decision(out, status, diagnosis):
+    write(out, "decision.json", dict(format=DECISION_FORMAT, status=status,
+                                    diagnosis=diagnosis, generation_quality="NOT_EVALUATED"))
 
 
 def read(out, name):
@@ -432,8 +438,7 @@ def summarize(out, *, blocked=None):
         runtime_gpu=gpu or None, generation_quality="NOT_EVALUATED",
         run_id=out.name, timestamp=datetime.now(timezone.utc).isoformat())
     write(out, "summary.json", summary)
-    write(out, "decision.json", dict(status=status, diagnosis=blocked or status,
-                                    generation_quality="NOT_EVALUATED"))
+    write_decision(out, status, blocked or status)
     (out / "report.md").write_text(f"""# MINICELLS-T4-1B-CAPACITY-001
 
 **{status}**. {blocked or 'See gate results and the measured configurations below.'}

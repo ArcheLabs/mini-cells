@@ -27,7 +27,7 @@ def main():
         run("git", "sparse-checkout", "set", "scripts/research", APP, cwd=repo, timeout=120)
         sys.path.insert(0, str(repo))
         sys.path.insert(0, str(repo / APP))
-        from run_t4_1b_capacity import validate_target
+        from run_t4_1b_capacity import DECISION_FORMAT, validate_target, write_decision
         from scripts.research.publish_experiment_results import (
             ExperimentSpec, load_github_token, prepare_artifacts, push_results,
         )
@@ -60,9 +60,7 @@ def main():
                     "--output", str(output), timeout=7200)
             except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
                 output.mkdir(exist_ok=True)
-                (output / "decision.json").write_text(json.dumps(dict(
-                    status="BLOCKED", diagnosis=f"Capacity runner did not finish: {exc}",
-                    generation_quality="NOT_EVALUATED")), encoding="utf-8")
+                write_decision(output, "BLOCKED", f"Capacity runner did not finish: {exc}")
         receipt = output / "decision.json"
         value = json.loads(receipt.read_text(encoding="utf-8"))
         if resume:
@@ -80,7 +78,7 @@ def main():
         run("git", "sparse-checkout", "add", artifact, cwd=repo, timeout=120)
         files = tuple(sorted(p.relative_to(repo / relative).as_posix()
                              for p in (repo / relative).rglob("*") if p.is_file()))
-        spec = ExperimentSpec(relative, artifact, files, branch, "minicells.t4.1b.capacity.001.v1")
+        spec = ExperimentSpec(relative, artifact, files, branch, DECISION_FORMAT)
         bundle = prepare_artifacts(repo, name, spec, version_id)
         push_results(repo, bundle, name, branch, "GITHUB_TOKEN", "origin/main")
         print(f"Published: {branch} ({value['status']})", flush=True)
