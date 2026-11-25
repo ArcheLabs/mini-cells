@@ -1,0 +1,92 @@
+{
+  "architecture": "mom_gated_deltanet",
+  "config": {
+    "_name_or_path": "configs/mom_gated_deltanet_1.3B_4e2a1s.json",
+    "architectures": [
+      "MomGatedDeltaNetForCausalLM"
+    ],
+    "attn": null,
+    "attn_mode": "chunk",
+    "aux_loss_scale": 0.01,
+    "bos_token_id": 1,
+    "capacity": 1.0,
+    "conv_size": 4,
+    "eos_token_id": 2,
+    "expand_v": 1,
+    "fuse_cross_entropy": true,
+    "head_dim": 256,
+    "hidden_act": "swish",
+    "hidden_ratio": 4,
+    "hidden_size": 2048,
+    "initializer_range": 0.02,
+    "intermediate_size": null,
+    "max_position_embeddings": 2048,
+    "model_type": "mom_gated_deltanet",
+    "norm_eps": 1e-06,
+    "norm_first": false,
+    "num_heads": 4,
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_mem": true,
+    "single_kv_proj": false,
+    "tie_word_embeddings": true,
+    "topk": 2,
+    "torch_dtype": "bfloat16",
+    "transformers_version": "4.47.1",
+    "use_cache": true,
+    "use_gate": true,
+    "use_layer_wise_balance": true,
+    "use_short_conv": true,
+    "vocab_size": 32000
+  },
+  "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+  "elapsed_seconds": 45.827,
+  "gates": {
+    "CHECKPOINT_INTEGRITY": "PASS",
+    "CONFIG_AUDIT": "PASS",
+    "MODEL_IDENTITY": "PASS",
+    "MODEL_REVISION_PINNED": "PASS",
+    "PARAMETER_COUNT_VERIFIED": "PASS"
+  },
+  "generation_config_hash": "dfbf1d6403235b70efa8fc7a6ebf225aeb886b9d89ad09e2178c422cede8abc2",
+  "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+  "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+  "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+  "parameter_count": 1552884000,
+  "python": "3.13.16",
+  "recorded_at": "2026-11-25T14:48:24.064267+00:00",
+  "runtime_dtype": "float16",
+  "shard_names": [
+    "model.safetensors"
+  ],
+  "shard_sha256_expected": {
+    "model.safetensors": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771"
+  },
+  "shard_sha256_observed": {
+    "model.safetensors": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771"
+  },
+  "shard_sizes": {
+    "model.safetensors": 3236933080
+  },
+  "source_dtype": "bfloat16",
+  "status": "PASS",
+  "stored_parameter_count": 1618420000,
+  "tensor_count": 843,
+  "tensor_dtype_summary": {
+    "BF16": {
+      "elements": 1618420000,
+      "tensors": 843
+    }
+  },
+  "tied_weight_sha256": {
+    "lm_head.weight": "4e81dd0665c363ab739f89d1fe09aada974f2c2c4d76c9ffdf36425e6105e3b5",
+    "model.embeddings.weight": "4e81dd0665c363ab739f89d1fe09aada974f2c2c4d76c9ffdf36425e6105e3b5"
+  },
+  "tokenizer_files": {
+    "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+    "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+    "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+  },
+  "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+  "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc"
+}

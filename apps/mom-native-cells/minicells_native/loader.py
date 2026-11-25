@@ -12,9 +12,10 @@ UPSTREAM = "https://github.com/OpenSparseLLMs/MoM.git"
 def load_backbone(model, device, dtype, cache_dir=None, source=None, tokenizer=None):
     import torch
 
-    from .backend import Backbone, MODEL, MOM, REVISION, TOKENIZER, TOKENIZER_REV
+    from .backend import Backbone, MOM
+    from .model_registry import MODELS, snapshot_model
 
-    if device != "cuda" or not torch.cuda.is_available():
+    if device not in ("cuda", "cuda:0") or not torch.cuda.is_available():
         raise ModelLoadError("The current MoM runtime requires a CUDA-enabled PyTorch and CUDA GPU.")
     types = {"auto": "float16", "fp16": "float16", "bf16": "bfloat16", "fp32": "float32"}
     if dtype not in types:
@@ -28,18 +29,17 @@ def load_backbone(model, device, dtype, cache_dir=None, source=None, tokenizer=N
 
         cache = Path(cache_dir or Path.home() / ".cache" / "minicells").expanduser().resolve()
         cache.mkdir(parents=True, exist_ok=True)
-        if str(model) == MODEL:
-            snapshot = snapshot_download(MODEL, revision=REVISION,
-                                         allow_patterns=["config.json", "model.safetensors"],
-                                         cache_dir=cache / "hub")
-        else:
+        spec = MODELS.get(str(model))
+        if spec is None:
             snapshot = Path(model).expanduser().resolve()
-            if not snapshot.is_dir() or snapshot.name != REVISION:
-                raise ModelLoadError(f"Use {MODEL} or its snapshot directory named {REVISION}")
+            spec = snapshot_model(snapshot)
+        else:
+            snapshot = snapshot_download(spec.id, revision=spec.revision,
+                                         allow_patterns=spec.checkpoint_files, cache_dir=cache / "hub")
         if tokenizer is None:
-            tokenizer = snapshot_download(TOKENIZER, revision=TOKENIZER_REV,
-                                          allow_patterns=["*.json", "tokenizer.model"],
-                                          cache_dir=cache / "hub")
+            tokenizer = snapshot if spec.tokenizer_in_snapshot else snapshot_download(
+                spec.tokenizer, revision=spec.tokenizer_revision,
+                allow_patterns=["*.json", "tokenizer.model"], cache_dir=cache / "hub")
         if source is None:
             source = cache / MOM
             with FileLock(str(source) + ".lock", timeout=180):
@@ -51,7 +51,7 @@ def load_backbone(model, device, dtype, cache_dir=None, source=None, tokenizer=N
                             subprocess.run(["git", *args], cwd=checkout, timeout=180, check=True,
                                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                         shutil.move(checkout, source)
-        return Backbone(source, snapshot, tokenizer, dtype=dtype)
+        return Backbone(source, snapshot, tokenizer, dtype=dtype, device=device)
     except ModelLoadError:
         raise
     except Exception as exc:

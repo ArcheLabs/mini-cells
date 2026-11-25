@@ -10,6 +10,7 @@ import torch
 from minicells_native.generation import generate
 from minicells_native.query import run_query
 from capacity_meter import QueryProbe
+from preflight_t4_1b import FORMAT, GATES, approved, check_logits
 from test_sdk import Fixture, Reader, fixture_patch
 from minicells_native.sdk import MiniCells
 from run_t4_1b_capacity import (
@@ -20,10 +21,12 @@ from run_t4_1b_capacity import (
 class CapacityTest(unittest.TestCase):
     def test_model_gate_blocks_before_hardware_worker(self):
         with tempfile.TemporaryDirectory() as tmp, patch(
-                "sys.argv", ["capacity", "--output", str(Path(tmp) / "run")]), patch(
                 "run_t4_1b_capacity.environment", return_value={"hardware_status": "NON_TARGET"}), patch(
                 "run_t4_1b_capacity.subprocess.run") as worker:
-            main()
+            target = Path(tmp) / "target.json"
+            target.write_text(json.dumps(dict(approved_target=None, reason="Fixture blocked")))
+            with patch("sys.argv", ["capacity", "--output", str(Path(tmp) / "run"), "--target", str(target)]):
+                main()
             worker.assert_not_called()
             out = Path(tmp) / "run"
             summary = read(out, "summary.json")
@@ -40,6 +43,51 @@ class CapacityTest(unittest.TestCase):
         self.assertIn("historical", validate_target(manifest))
         target["revision"] = "a"*40
         self.assertIn("not registered", validate_target(manifest))
+
+    def test_preflight_failure_stops_before_capacity(self):
+        with tempfile.TemporaryDirectory() as tmp, patch(
+                "sys.argv", ["capacity", "--output", str(Path(tmp) / "run")]), patch(
+                "run_t4_1b_capacity.environment", return_value={"hardware_status": "NON_TARGET"}), patch(
+                "run_t4_1b_capacity.subprocess.run", return_value=SimpleNamespace(returncode=1)) as worker:
+            main()
+            self.assertEqual(worker.call_count, 1)
+            self.assertIn("preflight_t4_1b.py", worker.call_args.args[0][2])
+            self.assertEqual(set(read(Path(tmp) / "run", "summary.json")["gates"].values()), {"NOT_RUN"})
+
+    def test_passing_standalone_preflight_still_leaves_capacity_unrun(self):
+        target = read(HERE, "capacity_target.json")["approved_target"]
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "run"
+
+            def completed(*args, **kwargs):
+                write(out, "preflight_result.json", dict(format=FORMAT, status="PASS", target=target,
+                      source_commit="fixture", gates=dict.fromkeys(GATES, "PASS")))
+                return SimpleNamespace(returncode=0)
+
+            with patch("sys.argv", ["capacity", "--output", str(out), "--stage", "preflight"]), patch(
+                    "run_t4_1b_capacity.environment", return_value={}), patch(
+                    "run_t4_1b_capacity.subprocess.run", side_effect=completed) as worker, patch(
+                    "preflight_t4_1b.source_commit", return_value="fixture"):
+                main()
+            self.assertEqual(worker.call_count, 1)
+            self.assertEqual(read(out, "decision.json")["status"], "PASS")
+            self.assertEqual(read(out, "summary.json")["status"], "NOT_RUN")
+
+    def test_preflight_receipt_is_bound_to_complete_gates_target_and_commit(self):
+        target = json.loads((HERE / "capacity_target.json").read_text())["approved_target"]
+        self.assertIsNone(validate_target({"approved_target": target}))
+        receipt = dict(format=FORMAT, status="PASS", target=target, source_commit="example",
+                       gates=dict.fromkeys(GATES, "PASS"))
+        self.assertTrue(approved(receipt, target, "example"))
+        self.assertFalse(approved(receipt, target, "other"))
+        receipt["gates"]["FLA_NATIVE_KERNEL"] = "NOT_RUN"
+        self.assertFalse(approved(receipt, target, "example"))
+
+    def test_logits_gate_rejects_constant_and_nonfinite(self):
+        self.assertEqual(check_logits(torch, torch.tensor([[[1., 0.]]]), 1, 2)["shape"], [1, 1, 2])
+        for values in ([1., 1.], [1., float("nan")]):
+            with self.assertRaisesRegex(ValueError, "finite, nonconstant"):
+                check_logits(torch, torch.tensor([[values]]), 1, 2)
 
     def test_matrix_exact_lengths_and_repeats(self):
         cases = matrix()

@@ -1,39 +1,41 @@
 # MINICELLS-T4-1B-CAPACITY-001
 
-## Decision
+## Status
 
-**BLOCKED at Stage 0.** No repository-designated MiniCells 1B checkpoint was
-identified that the pinned Native MoM SDK can load. The hardware workload is
-unrun and the maximum supported T4 configuration is unknown.
+The operator approved the pinned MoM 1.3B checkpoint. The
+[Phase 1 audit](../../artifacts/experiments/minicells-t4-1b-capacity-001/phase-1-kaggle/README.md)
+passed on Kaggle CPU. The [compatibility report](NATIVE_MOM_13B_COMPATIBILITY.md)
+records the local Meta and software checks. Actual T4 gates are pending.
 
-| Source | Evidence |
-| --- | --- |
-| SDK branch at `117c6e4559275b1a3d156be1e3fb48556759bd25` | Loader pins the MoM-340M model and revision `f4081422ea2cf01b1b5d646cac05cad62a5d5438`; Backbone requires hidden size 1024. |
-| ArcheLabs default branch `32048a03fa297cd8ab481d34ed86f115de534169` | Repository and relevant MoM refs/configs yielded no designated Native MiniCells 1B checkpoint. |
-| [Upstream MoM-1.3B checkpoint](https://huggingface.co/linear-moe-hub/MoM-Gated-Deltanet-1.3B/tree/5c8be94196cb1827e820077680ac2ee46ac949bc) | Safetensors metadata lists 1,618,420,000 parameters. Its configuration uses hidden size 2048, 24 layers, four routed banks plus Shared Memory, four heads of width 256. It is outside the current SDK registration and is not designated as the MiniCells target. |
+## Single-GPU preflight
 
-The target gate reads [the checked-in audit manifest](../../apps/mom-native-cells/capacity_target.json).
-An approved entry must carry a repository designation, immutable checkpoint
-and tokenizer identity, and match the registered native loader. The historical
-SDK checkpoint is explicitly excluded.
+The [Kaggle Script](../../apps/mom-native-cells/kaggle_t4_1b_capacity.py)
+runs only the independent preflight. Enable Internet and select the T4
+accelerator. On a T4 ×2 session the launcher exposes the first GPU as
+`cuda:0`. The existing `GITHUB_TOKEN` secret is used for result publication
+and the publisher verifies the result branch commit.
 
-## Runbook
+The independent runner can also be invoked on a compatible host from a
+checked-out source commit with the `mom` extras, NVML and psutil available:
 
 ```sh
-python apps/mom-native-cells/run_t4_1b_capacity.py --stage audit --output ./capacity-model-audit
+CUDA_VISIBLE_DEVICES=0 python apps/mom-native-cells/preflight_t4_1b.py --output ./t4-preflight
 ```
 
-The audit requires Python 3.11+ and emits `environment.json`, `model_manifest.json`,
-`cell_schema.json`, `failures.json`, `summary.json`, `decision.json` and `report.md`.
-The workload default runs `load`, `storage`, `scoring`, `generation` and
-`recovery` as separate workers. A single stage can be repeated with
-`--stage <stage> --output <existing-run>`; the run retains the previous stage
-measurements. Each runtime worker loads only one model.
+The runner reports actual GPU detection, strict weight loading and placement,
+a short native FLA forward, logit sanity, 1024-token prefill, 128-token
+generation, and memory measurements in `preflight_result.json` and
+`T4_SINGLE_GPU_PREFLIGHT.md`. The FP16 prefill uses the SDK's existing
+64-token recurrent execution path. The evidence applies to the recurrent
+kernel and does not certify the BF16 Chunk kernel on T4.
 
-The [Kaggle launcher](../../apps/mom-native-cells/kaggle_t4_1b_capacity.py)
-uses the repository publisher and the existing `GITHUB_TOKEN`. In this
-revision it can publish the audit without starting the GPU workload. The
-capacity sweep is intended for one visible T4 once the model gate can pass.
+## Capacity runbook
+
+The capacity runner's `--stage all` runs its independent preflight before
+any A–F worker. A standalone capacity stage requires a complete passing
+preflight receipt in the same result directory for the exact target and
+source commit. On failure, the capacity gates remain NOT_RUN. The capacity
+matrix and acceptance thresholds below are unchanged.
 
 ## Measurement protocol
 

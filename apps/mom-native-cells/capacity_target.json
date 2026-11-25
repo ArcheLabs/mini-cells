@@ -1,24 +1,39 @@
 {
-  "status": "BLOCKED",
-  "reason": "No repository-designated MiniCells 1B checkpoint compatible with the current Native MoM SDK was identified.",
-  "approved_target": null,
-  "audit": {
-    "sdk": "117c6e4559275b1a3d156be1e3fb48556759bd25",
-    "repository_main": "32048a03fa297cd8ab481d34ed86f115de534169",
-    "sdk_registered_model": "linear-moe-hub/MoM-Gated-Deltanet-340M",
-    "sdk_registered_model_revision": "f4081422ea2cf01b1b5d646cac05cad62a5d5438",
-    "sdk_required_hidden_size": 1024,
-    "upstream_candidate": {
-      "id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
-      "revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
-      "published_parameter_count": 1618420000,
-      "hidden_size": 2048,
-      "num_hidden_layers": 24,
-      "routed_banks": 4,
-      "shared_memory": true,
-      "num_heads": 4,
-      "head_width": 256,
-      "reason_excluded": "SDK supports a different pinned checkpoint and hidden size; no repository designation as the MiniCells 1B target."
+  "approved_target": {
+    "id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "repository_designation": "MiniCells Native MoM 1.3B operator-approved target",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "parameters": 1552884000,
+    "architecture": "mom-gated-deltanet",
+    "runtime_dtype": "float16",
+    "audit_artifact": "artifacts/experiments/minicells-t4-1b-capacity-001/phase-1-kaggle/model_manifest.json"
+  },
+  "previous_audit": {
+    "status": "BLOCKED",
+    "reason": "No repository-designated MiniCells 1B checkpoint compatible with the current Native MoM SDK was identified.",
+    "approved_target": null,
+    "audit": {
+      "sdk": "117c6e4559275b1a3d156be1e3fb48556759bd25",
+      "repository_main": "32048a03fa297cd8ab481d34ed86f115de534169",
+      "sdk_registered_model": "linear-moe-hub/MoM-Gated-Deltanet-340M",
+      "sdk_registered_model_revision": "f4081422ea2cf01b1b5d646cac05cad62a5d5438",
+      "sdk_required_hidden_size": 1024,
+      "upstream_candidate": {
+        "id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+        "revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+        "published_parameter_count": 1618420000,
+        "hidden_size": 2048,
+        "num_hidden_layers": 24,
+        "routed_banks": 4,
+        "shared_memory": true,
+        "num_heads": 4,
+        "head_width": 256,
+        "reason_excluded": "SDK supports a different pinned checkpoint and hidden size; no repository designation as the MiniCells 1B target."
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-"""MINICELLS-T4-1B-CAPACITY-001. Run model audit before starting CUDA work."""
+"""MINICELLS-T4-1B-CAPACITY-001. Gate capacity on the independent T4 preflight."""
 import argparse
 from collections import Counter
 from dataclasses import asdict
@@ -70,10 +70,17 @@ def validate_target(config):
         return "The target manifest has invalid revision or SHA-256 fields."
     if target["revision"] == BASELINE_REVISION:
         return "The historical SDK checkpoint is excluded from this experiment."
-    from minicells_native.backend import MODEL, REVISION, TOKENIZER_REV
+    from minicells_native.model_assets import ASSETS_13B, MODEL_13B, REVISION_13B
+    from minicells_native.model_assets import TOKENIZER_FILES_13B, tokenizer_hash
 
-    if (target["id"], target["revision"], target["tokenizer_revision"]) != (MODEL, REVISION, TOKENIZER_REV):
-        return "The designated checkpoint is not registered by the existing Native MoM loader."
+    if (target["id"], target["revision"], target["tokenizer_revision"]) != (MODEL_13B, REVISION_13B, REVISION_13B):
+        return "The designated checkpoint is not registered for this capacity protocol."
+    expected = dict(weights_sha256=ASSETS_13B["model.safetensors"],
+                    config_hash=ASSETS_13B["config.json"],
+                    tokenizer_hash=tokenizer_hash(TOKENIZER_FILES_13B),
+                    parameters=1552884000, architecture="mom-gated-deltanet", runtime_dtype="float16")
+    if any(target.get(key) != value for key, value in expected.items()):
+        return "The designated checkpoint identity differs from the audited target."
     return None
 
 
@@ -107,15 +114,16 @@ def build_prompts(tokenizer):
     return {str(n): base[:n] for n in PROMPTS}
 
 
-def checked_runtime(meter, out, target, storage, record):
+def checked_runtime(meter, out, target, storage, record, *, device="cuda:0"):
     import torch
     from minicells import MiniCells
 
     with meter.measure(record):
-        runtime = MiniCells.open(target["id"], storage, device="cuda", dtype="fp16", max_cells=8)
+        runtime = MiniCells.open(target["id"], storage, device=device, dtype="fp16", max_cells=8)
     try:
         identity = runtime.model_info
-        for key, name in (("model_revision", "revision"), ("weights_sha256", "weights_sha256"),
+        for key, name in (("model_id", "id"), ("model_revision", "revision"),
+                          ("weights_sha256", "weights_sha256"), ("config_hash", "config_hash"),
                           ("tokenizer_hash", "tokenizer_hash"), ("tokenizer_revision", "tokenizer_revision")):
             if identity.get(key) != target[name]:
                 raise ValueError(f"Loaded checkpoint identity mismatch: {key}")
@@ -132,7 +140,7 @@ def checked_runtime(meter, out, target, storage, record):
                 raise ValueError("Model must be frozen with FP16 parameters")
             counts[str(param.dtype)] += param.numel()
             weight_bytes += param.numel() * param.element_size()
-        if model.training or sum(counts.values()) < 1_000_000_000:
+        if model.training or sum(counts.values()) != target["parameters"]:
             raise ValueError("Loaded model is not an evaluated 1B-class checkpoint")
         embedding = model.get_input_embeddings().weight.numel()
         write(out, "model_manifest.json", dict(identity=identity, config=config,
@@ -456,11 +464,17 @@ Generation quality: `NOT_EVALUATED`. This report concerns capacity only.
     return status
 
 
+
+def preflight_passed(out, config, approved, source_commit):
+    return ((out / "preflight_result.json").is_file()
+            and approved(read(out, "preflight_result.json"), config["approved_target"], source_commit()))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--target", type=Path, default=HERE / "capacity_target.json")
-    parser.add_argument("--stage", choices=("all", "audit", *STAGES), default="all")
+    parser.add_argument("--stage", choices=("all", "audit", "preflight", *STAGES), default="all")
     parser.add_argument("--worker", choices=STAGES, help=argparse.SUPPRESS)
     args = parser.parse_args()
     out = args.output.resolve()
@@ -477,6 +491,23 @@ def main():
         if reason or args.stage == "audit":
             summarize(out, blocked=reason or "Audit only; no GPU workload requested.")
             print(reason or "Audit complete.", flush=True)
+            return
+        from preflight_t4_1b import approved, source_commit
+
+        if args.stage in ("all", "preflight"):
+            completed = subprocess.run([sys.executable, "-u", str(HERE / "preflight_t4_1b.py"),
+                                        "--output", str(out), "--target", str(args.target.resolve())])
+            passed = completed.returncode == 0 and preflight_passed(out, config, approved, source_commit)
+            if args.stage == "preflight" and passed:
+                write(out, "summary.json", dict(status="NOT_RUN", preflight_status="PASS",
+                                               gates=dict.fromkeys("ABCDEF", "NOT_RUN")))
+                write_decision(out, "PASS", "Single-GPU preflight passed; capacity was not requested.")
+                return
+            if not passed:
+                summarize(out, blocked="Single-GPU preflight did not pass; see preflight_result.json.")
+                return
+        elif not preflight_passed(out, config, approved, source_commit):
+            summarize(out, blocked="A passing preflight receipt for this target and code is required.")
             return
         stages = STAGES if args.stage == "all" else (args.stage,)
         (out / "work").mkdir(exist_ok=True)
@@ -503,8 +534,10 @@ def main():
         summarize(out)
         return
 
-    if reason:
-        raise SystemExit(reason)
+    from preflight_t4_1b import approved, source_commit
+
+    if reason or not preflight_passed(out, config, approved, source_commit):
+        raise SystemExit(reason or "Capacity worker requires a passing T4 preflight receipt.")
     try:
         import torch
         from capacity_meter import Meter

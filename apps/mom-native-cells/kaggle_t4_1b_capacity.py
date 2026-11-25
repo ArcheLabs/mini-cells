@@ -1,4 +1,4 @@
-"""Publish the model audit, or run the capacity suite if the model gate is satisfied."""
+"""Run and publish the independent Native MoM 1.3B T4 preflight."""
 import json
 import os
 from pathlib import Path
@@ -10,9 +10,10 @@ import tempfile
 import uuid
 
 SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
-BRANCH = "codex/minicells-t4-1b-capacity-001"
+BRANCH = "codex/native-mom-13b-checkpoint-audit"
 APP = "apps/mom-native-cells"
 EXPERIMENT = "minicells-t4-1b-capacity-001"
+RUN_STAGE = "preflight"
 
 
 def run(*args, **kwargs):
@@ -43,11 +44,14 @@ def main():
             ["git", "rev-parse", "HEAD"], text=True, cwd=repo).strip()
         version_id = os.getenv("KAGGLE_SCRIPT_VERSION_ID")
         if not resume:
-            manifest = repo / APP / "capacity_target.json"
-            target = json.loads(manifest.read_text(encoding="utf-8"))
-            # Current release fails closed with standard library only, without a CUDA install.
-            if not validate_target(target):
+            try:
+                manifest = repo / APP / "capacity_target.json"
+                target = json.loads(manifest.read_text(encoding="utf-8"))
+                reason = validate_target(target)
+                if reason:
+                    raise RuntimeError(reason)
                 from importlib.metadata import version
+
                 constraints = Path(tmp) / "constraints.txt"
                 constraints.write_text(f"torch=={version('torch')}\ntriton=={version('triton')}\n")
                 run("git", "sparse-checkout", "add", "src", cwd=repo, timeout=120)
@@ -55,10 +59,10 @@ def main():
                     "pyproject.toml", "README.md", "LICENSE", cwd=repo, timeout=120)
                 run(sys.executable, "-m", "pip", "install", "-c", str(constraints),
                     str(repo) + "[mom]", "nvidia-ml-py", "psutil", timeout=240)
-            try:
+                env = {**os.environ, "CUDA_VISIBLE_DEVICES": "0"}
                 run(sys.executable, "-u", str(repo / APP / "run_t4_1b_capacity.py"),
-                    "--output", str(output), timeout=7200)
-            except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+                    "--output", str(output), "--stage", RUN_STAGE, timeout=7200, env=env)
+            except (RuntimeError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
                 output.mkdir(exist_ok=True)
                 write_decision(output, "BLOCKED", f"Capacity runner did not finish: {exc}")
         receipt = output / "decision.json"
@@ -82,7 +86,7 @@ def main():
         bundle = prepare_artifacts(repo, name, spec, version_id)
         push_results(repo, bundle, name, branch, "GITHUB_TOKEN", "origin/main")
         print(f"Published: {branch} ({value['status']})", flush=True)
-        if value["status"] != "FULL PASS":
+        if value["status"] != ("PASS" if RUN_STAGE == "preflight" else "FULL PASS"):
             raise SystemExit(f"{value['status']}: see the published report")
 
 

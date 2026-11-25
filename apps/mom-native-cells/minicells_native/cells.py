@@ -60,12 +60,15 @@ class Cells:
         if hashlib.sha256(data).hexdigest() != meta["tensor_sha256"]:
             raise ValueError("Cell checksum mismatch")
         tensors = load(data)
-        allowed = {f"{i}.{j}" for i in range(LAYERS) for j in range(BANKS)}
+        layers = getattr(self.backbone, "layer_count", LAYERS)
+        banks = getattr(self.backbone, "bank_count", BANKS)
+        shape = getattr(self.backbone, "recurrent_shape", (1, HEADS, WIDTH, WIDTH))
+        allowed = {f"{i}.{j}" for i in range(layers) for j in range(banks)}
         if (set(tensors) - allowed or bool(tensors) != (meta["tokens_written"] > 0)
-                or (tensors and any(f"{i}.4" not in tensors for i in range(LAYERS)))):
+                or (tensors and any(f"{i}.{banks - 1}" not in tensors for i in range(layers)))):
             raise ValueError("Invalid layer or bank coverage")
         for tensor in tensors.values():
-            if (tensor.shape != (1, HEADS, WIDTH, WIDTH) or tensor.dtype != torch.float32
+            if (tensor.shape != shape or tensor.dtype != torch.float32
                     or not torch.isfinite(tensor).all()):
                 raise ValueError("Invalid native recurrent tensor")
         return meta, tensors
