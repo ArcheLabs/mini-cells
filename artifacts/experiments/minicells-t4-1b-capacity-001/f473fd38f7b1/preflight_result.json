@@ -1,0 +1,72 @@
+{
+  "format": "minicells.t4.1b.preflight.v1",
+  "status": "BLOCKED",
+  "gates": {
+    "GPU_DETECTION": "PASS",
+    "CHECKPOINT_GPU_LOAD": "NOT_RUN",
+    "STRICT_LOADING": "NOT_RUN",
+    "FORWARD": "NOT_RUN",
+    "FLA_NATIVE_KERNEL": "NOT_RUN",
+    "LOGITS_SANITY": "NOT_RUN",
+    "PREFILL": "NOT_RUN",
+    "GENERATION": "NOT_RUN",
+    "MEMORY_MEASUREMENT": "FAIL"
+  },
+  "environment": {
+    "timestamp": "2026-11-25T15:46:05.971421+00:00",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130",
+    "physical_devices": [
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      },
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      }
+    ],
+    "hardware_status": "T4_PRESENT",
+    "cuda_runtime": "13.0",
+    "name": "Tesla T4",
+    "compute_capability": [
+      7,
+      5
+    ]
+  },
+  "target": {
+    "id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "repository_designation": "MiniCells Native MoM 1.3B operator-approved target",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "parameters": 1552884000,
+    "architecture": "mom-gated-deltanet",
+    "runtime_dtype": "float16",
+    "audit_artifact": "artifacts/experiments/minicells-t4-1b-capacity-001/phase-1-kaggle/model_manifest.json"
+  },
+  "measurements": {},
+  "source_commit": "36e8c8e4e4d16ded93a6d5f1cccd5f5b78849fb4",
+  "protocol": {
+    "device": "cuda:0",
+    "input_tokens": 1024,
+    "generated_tokens": 128,
+    "prefill_chunk_tokens": 64,
+    "stop_on_eos": false
+  },
+  "target_manifest_sha256": "915c9213ffc9009f9560b48b7db4a3d1fefc9bb4efeb49e0029133dc2dd5506e",
+  "failed_gate": "MEMORY_MEASUREMENT",
+  "error_type": "ValueError",
+  "reason": "Cannot map CUDA device to a unique NVML device",
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/minicells-capacity-zvr9gl0l/source/apps/mom-native-cells/preflight_t4_1b.py\", line 85, in run\n    meter = Meter()\n  File \"/tmp/minicells-capacity-zvr9gl0l/source/apps/mom-native-cells/capacity_meter.py\", line 26, in __init__\n    raise ValueError(\"Cannot map CUDA device to a unique NVML device\")\nValueError: Cannot map CUDA device to a unique NVML device\n",
+  "oom": false,
+  "elapsed_seconds": 5.493720351999997
+}
