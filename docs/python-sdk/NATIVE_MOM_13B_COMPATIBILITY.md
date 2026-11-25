@@ -41,3 +41,15 @@ the runtime and native forward execution still need a real run.
 
 The approved protocol uses the independent T4 preflight for real checkpoint
 loading, native FLA execution, and logits checks.
+
+## T4 load follow-up
+
+The [Kaggle receipt](https://github.com/ArcheLabs/mini-cells/blob/dc1e10a68b0cfb07b023fdd64ae41b4392601b7b/artifacts/experiments/minicells-t4-1b-capacity-001/5bf731e76c6c/preflight_result.json)
+shows successful T4 detection and NVML sampling, followed by a dtype check
+failure before CUDA placement. A small on-disk checkpoint using the pinned
+MoM model classes and Transformers 4.51.3 reproduced the failure on CPU.
+The loader preserved the explicitly constructed FP32 `A_log` parameter.
+The revised staging check admits only that known FP32 exception. Placement
+then explicitly converts the audited model to its requested runtime dtype
+and validates placement, dtype, parameter coverage and weight tying.
+This correction still needs a real T4 run.

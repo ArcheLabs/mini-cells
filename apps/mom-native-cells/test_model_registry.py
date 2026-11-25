@@ -47,6 +47,36 @@ class ModelRegistryTest(unittest.TestCase):
             download.assert_not_called()
         self.assertEqual(MODELS[MODEL_13B].hidden_size, 2048)
 
+    def test_staging_allows_only_fp32_decay_before_explicit_runtime_cast(self):
+        shapes = expected_shapes(CONFIG)
+        params = {}
+        for name, shape in shapes.items():
+            dtype = torch.float32 if name.endswith(".attn.A_log") else torch.float16
+            params[name] = torch.nn.Parameter(torch.zeros(shape, dtype=dtype))
+        params["lm_head.weight"] = params["model.embeddings.weight"]
+
+        def embedding(name):
+            return SimpleNamespace(weight=params[name])
+
+        model = SimpleNamespace(
+            named_parameters=lambda **kwargs: params.items(),
+            parameters=lambda: iter(dict.fromkeys(params.values())),
+            get_input_embeddings=lambda: embedding("model.embeddings.weight"),
+            get_output_embeddings=lambda: embedding("lm_head.weight"),
+        )
+        audit = dict(config=CONFIG, parameter_count=sum(p.numel() for p in model.parameters()))
+        cpu = torch.device("cpu")
+        validate_loaded_checkpoint(model, {}, audit, torch.float16, cpu, cpu_staging=True)
+        with self.assertRaisesRegex(ValueError, "attn.A_log"):
+            validate_loaded_checkpoint(model, {}, audit, torch.float16, cpu)
+        norm = params["model.norm.weight"]
+        norm.data = norm.data.float()
+        with self.assertRaisesRegex(ValueError, "model.norm.weight"):
+            validate_loaded_checkpoint(model, {}, audit, torch.float16, cpu, cpu_staging=True)
+        for param in model.parameters():
+            param.data = param.data.half()
+        validate_loaded_checkpoint(model, {}, audit, torch.float16, cpu)
+
     def test_post_load_checks(self):
         shapes = expected_shapes(CONFIG)
         params = {name: torch.nn.Parameter(torch.empty(shape, device="meta", dtype=torch.float16))
@@ -65,7 +95,7 @@ class ModelRegistryTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Weight load mismatch"):
             validate_loaded_checkpoint(model, {"missing_keys": ["x"]}, audit, torch.float16,
                                        torch.device("meta"))
-        with self.assertRaisesRegex(ValueError, "device or dtype"):
+        with self.assertRaisesRegex(ValueError, "dtype mismatch"):
             validate_loaded_checkpoint(model, {}, audit, torch.float32, torch.device("meta"))
         params["lm_head.weight"] = torch.nn.Parameter(torch.empty_like(tied.weight))
         with self.assertRaisesRegex(ValueError, "must share"):

@@ -13,7 +13,7 @@ from .model_registry import MODEL, REVISION, TOKENIZER, TOKENIZER_REV, load_toke
 LAYERS, BANKS, HEADS, WIDTH = 24, 5, 4, 256
 
 
-def validate_loaded_checkpoint(model, info, audit, dtype, device):
+def validate_loaded_checkpoint(model, info, audit, dtype, device, *, cpu_staging=False):
     if any(info.values()):
         raise ValueError(f"Weight load mismatch: {info}")
     if audit is None:
@@ -25,8 +25,18 @@ def validate_loaded_checkpoint(model, info, audit, dtype, device):
     parameters = list(model.parameters())
     if sum(param.numel() for param in parameters) != audit["parameter_count"]:
         raise ValueError("Loaded parameter count differs from the verified checkpoint")
-    if any(p.dtype != dtype or p.device != device for p in parameters):
-        raise ValueError("Loaded parameter device or dtype mismatch")
+    misplaced = {name: str(param.device) for name, param in named.items() if param.device != device}
+    if misplaced:
+        raise ValueError(f"Loaded parameter device mismatch: expected {device}; {list(misplaced.items())[:8]}")
+    # Transformers 4.51.3 retains the explicit FP32 constructor dtype of MoM's A_log.
+    wrong_dtype = {
+        name: str(param.dtype) for name, param in named.items()
+        if param.dtype != dtype and not (
+            cpu_staging and device.type == "cpu" and name.endswith(".attn.A_log")
+            and param.dtype == torch.float32)
+    }
+    if wrong_dtype:
+        raise ValueError(f"Loaded parameter dtype mismatch: expected {dtype}; {list(wrong_dtype.items())[:8]}")
 
 
 @contextmanager
@@ -101,9 +111,10 @@ class Backbone:
         self.native_bf16 = torch.cuda.is_bf16_supported(including_emulation=False)
         if dtype == "bfloat16" and not self.native_bf16:
             raise RuntimeError("Select float16 explicitly for a GPU without native BF16")
+        runtime_dtype = getattr(torch, dtype)
         self.model, info = MomGatedDeltaNetForCausalLM.from_pretrained(
-            snapshot, local_files_only=True, torch_dtype=getattr(torch, dtype), output_loading_info=True)
-        validate_loaded_checkpoint(self.model, info, audit, getattr(torch, dtype), torch.device("cpu"))
+            snapshot, local_files_only=True, torch_dtype=runtime_dtype, output_loading_info=True)
+        validate_loaded_checkpoint(self.model, info, audit, runtime_dtype, torch.device("cpu"), cpu_staging=True)
         config = self.model.config
         for key, value in dict(hidden_size=spec.hidden_size, num_hidden_layers=24, num_memories=4,
                                shared_mem=True, topk=2, num_heads=4, head_dim=256,
@@ -116,7 +127,15 @@ class Backbone:
         self.bank_count = config.num_memories + int(config.shared_mem)
         self.recurrent_shape = (1, config.num_heads, config.head_dim,
                                 int(config.head_dim * config.expand_v))
-        self.model.to(self.device).eval().requires_grad_(False)
+        if audit is not None:
+            if self.device.index is None:
+                self.device = torch.device("cuda", torch.cuda.current_device())
+            self.model.to(device=self.device, dtype=runtime_dtype)
+            self.model.tie_weights()
+            validate_loaded_checkpoint(self.model, info, audit, runtime_dtype, self.device)
+        else:
+            self.model.to(self.device)
+        self.model.eval().requires_grad_(False)
         files = (audit["tokenizer_files"] if audit else
                  {p.name: sha(p) for p in sorted(tokenizer_snapshot.iterdir())
                   if p.is_file() and p.name != "config.json"})
