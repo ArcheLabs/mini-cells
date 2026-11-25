@@ -2,8 +2,26 @@
 from collections import defaultdict
 from contextlib import contextmanager
 import os
+import re
 from threading import Event, Thread
 import time
+
+
+GPU_UUID = re.compile(r"GPU-[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}")
+
+
+def nvml_device(nvml, torch_uuid, visibility):
+    """Resolve cuda:0 without confusing CUDA order with NVML's physical order."""
+    torch_uuid = str(torch_uuid)
+    selected = visibility if GPU_UUID.fullmatch(visibility) else None
+    reported = torch_uuid if GPU_UUID.fullmatch(torch_uuid) else None
+    if selected and reported and selected.lower() != reported.lower():
+        raise ValueError("CUDA device UUID differs from CUDA_VISIBLE_DEVICES")
+    if selected or reported:
+        return nvml.nvmlDeviceGetHandleByUUID(reported or selected)
+    if nvml.nvmlDeviceGetCount() == 1:
+        return nvml.nvmlDeviceGetHandleByIndex(0)
+    raise ValueError("Cannot map cuda:0 to NVML; set CUDA_VISIBLE_DEVICES to the full GPU UUID")
 
 
 class Meter:
@@ -17,13 +35,10 @@ class Meter:
         nvml.nvmlInit()
         try:
             props = torch.cuda.get_device_properties(0)
-            uuid = getattr(props, "uuid", None)
-            if isinstance(uuid, str) and uuid.startswith("GPU-"):
-                self.handle = nvml.nvmlDeviceGetHandleByUUID(uuid)
-            elif nvml.nvmlDeviceGetCount() == 1:
-                self.handle = nvml.nvmlDeviceGetHandleByIndex(0)
-            else:
-                raise ValueError("Cannot map CUDA device to a unique NVML device")
+            self.handle = nvml_device(nvml, getattr(props, "uuid", None),
+                                      os.environ.get("CUDA_VISIBLE_DEVICES", ""))
+            uuid = nvml.nvmlDeviceGetUUID(self.handle)
+            self.device_uuid = uuid.decode() if isinstance(uuid, bytes) else uuid
         except BaseException:
             nvml.nvmlShutdown()
             raise

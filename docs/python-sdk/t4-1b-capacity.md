@@ -11,15 +11,16 @@ records the local Meta and software checks. Actual T4 gates are pending.
 
 The [Kaggle Script](../../apps/mom-native-cells/kaggle_t4_1b_capacity.py)
 runs only the independent preflight. Enable Internet and select the T4
-accelerator. On a T4 ×2 session the launcher exposes the first GPU as
-`cuda:0`. The existing `GITHUB_TOKEN` secret is used for result publication
+accelerator. On a T4 ×2 session the launcher selects a physical T4 by UUID and exposes it as
+`cuda:0`. NVML samples the same UUID. The existing `GITHUB_TOKEN` secret is used for result publication
 and the publisher verifies the result branch commit.
 
 The independent runner can also be invoked on a compatible host from a
 checked-out source commit with the `mom` extras, NVML and psutil available:
 
 ```sh
-CUDA_VISIBLE_DEVICES=0 python apps/mom-native-cells/preflight_t4_1b.py --output ./t4-preflight
+# Copy the full UUID for one T4 from nvidia-smi -L.
+CUDA_VISIBLE_DEVICES="$T4_GPU_UUID" python apps/mom-native-cells/preflight_t4_1b.py --output ./t4-preflight
 ```
 
 The runner reports actual GPU detection, strict weight loading and placement,

@@ -20,6 +20,19 @@ def run(*args, **kwargs):
     subprocess.run(args, check=True, **kwargs)
 
 
+def t4_uuid():
+    devices = subprocess.check_output(
+        ["nvidia-smi", "--query-gpu=uuid,name,compute_cap", "--format=csv,noheader,nounits"],
+        text=True, timeout=15,
+    )
+    for line in devices.splitlines():
+        uuid, name, capability = (item.strip() for item in line.split(","))
+        if (name == "Tesla T4" and capability == "7.5"
+                and re.fullmatch(r"GPU-[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", uuid)):
+            return uuid
+    return ""
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix="minicells-capacity-") as tmp:
         repo = Path(tmp) / "source"
@@ -59,7 +72,13 @@ def main():
                     "pyproject.toml", "README.md", "LICENSE", cwd=repo, timeout=120)
                 run(sys.executable, "-m", "pip", "install", "-c", str(constraints),
                     str(repo) + "[mom]", "nvidia-ml-py", "psutil", timeout=240)
-                env = {**os.environ, "CUDA_VISIBLE_DEVICES": "0"}
+                try:
+                    visible_gpu = t4_uuid()
+                except (OSError, subprocess.SubprocessError) as exc:
+                    print(f"T4 UUID detection failed: {exc}", flush=True)
+                    visible_gpu = ""
+                print(f"CUDA_VISIBLE_DEVICES={visible_gpu or '<no T4>'}", flush=True)
+                env = {**os.environ, "CUDA_VISIBLE_DEVICES": visible_gpu}
                 run(sys.executable, "-u", str(repo / APP / "run_t4_1b_capacity.py"),
                     "--output", str(output), "--stage", RUN_STAGE, timeout=7200, env=env)
             except (RuntimeError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:

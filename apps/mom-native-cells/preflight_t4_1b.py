@@ -86,7 +86,7 @@ def run(out, config):
         meter.baseline = meter.sample()
         driver = meter.nvml.nvmlSystemGetDriverVersion()
         report["environment"].update(driver=driver.decode() if isinstance(driver, bytes) else driver,
-                                     baseline=meter.baseline)
+                                     device_uuid=meter.device_uuid, baseline=meter.baseline)
         stats = report["measurements"]
 
         phase = "CHECKPOINT_GPU_LOAD"

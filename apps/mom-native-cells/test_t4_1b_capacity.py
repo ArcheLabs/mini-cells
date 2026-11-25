@@ -3,13 +3,14 @@ from pathlib import Path
 import tempfile
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import torch
 
 from minicells_native.generation import generate
 from minicells_native.query import run_query
-from capacity_meter import QueryProbe
+from capacity_meter import QueryProbe, nvml_device
+from kaggle_t4_1b_capacity import t4_uuid
 from preflight_t4_1b import FORMAT, GATES, approved, check_logits
 from test_sdk import Fixture, Reader, fixture_patch
 from minicells_native.sdk import MiniCells
@@ -19,6 +20,24 @@ from run_t4_1b_capacity import (
 
 
 class CapacityTest(unittest.TestCase):
+    def test_dual_t4_launcher_and_meter_use_same_full_uuid(self):
+        first = "GPU-01234567-89ab-cdef-0123-456789abcdef"
+        second = "GPU-98765432-10ab-cdef-0123-456789abcdef"
+        output = f"{first}, Tesla T4, 7.5\n{second}, Tesla T4, 7.5\n"
+        nvml = Mock()
+        nvml.nvmlDeviceGetCount.return_value = 2
+        with patch("kaggle_t4_1b_capacity.subprocess.check_output", return_value=output):
+            visible = t4_uuid()
+        self.assertEqual(visible, first)
+        self.assertIs(nvml_device(nvml, None, visible), nvml.nvmlDeviceGetHandleByUUID.return_value)
+        nvml.nvmlDeviceGetHandleByUUID.assert_called_once_with(first)
+        nvml.nvmlDeviceGetHandleByIndex.assert_not_called()
+
+        with self.assertRaisesRegex(ValueError, "differs"):
+            nvml_device(nvml, second, visible)
+        with self.assertRaisesRegex(ValueError, "full GPU UUID"):
+            nvml_device(nvml, None, "0")
+
     def test_model_gate_blocks_before_hardware_worker(self):
         with tempfile.TemporaryDirectory() as tmp, patch(
                 "run_t4_1b_capacity.environment", return_value={"hardware_status": "NON_TARGET"}), patch(
