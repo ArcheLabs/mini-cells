@@ -1,0 +1,117 @@
+{
+  "format": "minicells.t4.1b.preflight.v1",
+  "status": "BLOCKED",
+  "gates": {
+    "GPU_DETECTION": "PASS",
+    "CHECKPOINT_GPU_LOAD": "FAIL",
+    "STRICT_LOADING": "NOT_RUN",
+    "FORWARD": "NOT_RUN",
+    "FLA_NATIVE_KERNEL": "NOT_RUN",
+    "LOGITS_SANITY": "NOT_RUN",
+    "PREFILL": "NOT_RUN",
+    "GENERATION": "NOT_RUN",
+    "MEMORY_MEASUREMENT": "NOT_RUN"
+  },
+  "environment": {
+    "timestamp": "2026-11-25T23:33:55.831832+00:00",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130",
+    "physical_devices": [
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      },
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      }
+    ],
+    "hardware_status": "T4_PRESENT",
+    "cuda_runtime": "13.0",
+    "name": "Tesla T4",
+    "compute_capability": [
+      7,
+      5
+    ],
+    "driver": "580.178.04",
+    "device_uuid": "GPU-24a5a1c5-e1eb-0639-ecce-330df46223bc",
+    "baseline": {
+      "device_used": 580059136,
+      "device_total": 16106127360,
+      "other_processes": {},
+      "other_process_bytes": 0,
+      "allocated": 0,
+      "reserved": 0,
+      "cpu_rss": 611565568
+    }
+  },
+  "target": {
+    "id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "repository_designation": "MiniCells Native MoM 1.3B operator-approved target",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "parameters": 1552884000,
+    "architecture": "mom-gated-deltanet",
+    "runtime_dtype": "float16",
+    "audit_artifact": "artifacts/experiments/minicells-t4-1b-capacity-001/phase-1-kaggle/model_manifest.json"
+  },
+  "measurements": {
+    "load": {
+      "seconds": 74.44604211700005,
+      "before": {
+        "device_used": 580059136,
+        "device_total": 16106127360,
+        "other_processes": {},
+        "other_process_bytes": 0,
+        "allocated": 0,
+        "reserved": 0,
+        "cpu_rss": 616275968
+      },
+      "after": {
+        "device_used": 580059136,
+        "device_total": 16106127360,
+        "other_processes": {},
+        "other_process_bytes": 0,
+        "allocated": 0,
+        "reserved": 0,
+        "cpu_rss": 4877131776
+      },
+      "peak": {
+        "allocated": 0,
+        "reserved": 0,
+        "device_used": 580059136
+      },
+      "peak_increase": {
+        "allocated": 0,
+        "reserved": 0,
+        "device_used": 0
+      },
+      "other_process_peak": 0,
+      "device_sampler_errors": []
+    }
+  },
+  "source_commit": "bfd90ba55d5cf9986fdeafc38eab19d50100577d",
+  "protocol": {
+    "device": "cuda:0",
+    "input_tokens": 1024,
+    "generated_tokens": 128,
+    "prefill_chunk_tokens": 64,
+    "stop_on_eos": false
+  },
+  "target_manifest_sha256": "915c9213ffc9009f9560b48b7db4a3d1fefc9bb4efeb49e0029133dc2dd5506e",
+  "failed_gate": "CHECKPOINT_GPU_LOAD",
+  "error_type": "ModelLoadError",
+  "reason": "Could not open pinned MoM model: Loaded parameter device or dtype mismatch",
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/minicells-capacity-nvqyoz9q/source/apps/mom-native-cells/minicells_native/loader.py\", line 54, in load_backbone\n    return Backbone(source, snapshot, tokenizer, dtype=dtype, device=device)\n  File \"/tmp/minicells-capacity-nvqyoz9q/source/apps/mom-native-cells/minicells_native/backend.py\", line 106, in __init__\n    validate_loaded_checkpoint(self.model, info, audit, getattr(torch, dtype), torch.device(\"cpu\"))\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/minicells-capacity-nvqyoz9q/source/apps/mom-native-cells/minicells_native/backend.py\", line 29, in validate_loaded_checkpoint\n    raise ValueError(\"Loaded parameter device or dtype mismatch\")\nValueError: Loaded parameter device or dtype mismatch\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/minicells-capacity-nvqyoz9q/source/apps/mom-native-cells/preflight_t4_1b.py\", line 95, in run\n    with checked_runtime(meter, out, config[\"approved_target\"], out / \"work\" / \"preflight-cells\",\n         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                         stats[\"load\"], device=\"cuda:0\") as mc:\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/minicells-capacity-nvqyoz9q/source/apps/mom-native-cells/run_t4_1b_capacity.py\", line 122, in checked_runtime\n    runtime = MiniCells.open(target[\"id\"], storage, device=device, dtype=\"fp16\", max_cells=8)\n  File \"/tmp/minicells-capacity-nvqyoz9q/source/apps/mom-native-cells/minicells_native/sdk.py\", line 42, in open\n    backbone = load_backbone(model, device, dtype, cache_dir, source, tokenizer)\n  File \"/tmp/minicells-capacity-nvqyoz9q/source/apps/mom-native-cells/minicells_native/loader.py\", line 58, in load_backbone\n    raise ModelLoadError(f\"Could not open pinned MoM model: {getattr(exc, 'stderr', None) or exc}\") from exc\nminicells_native.errors.ModelLoadError: Could not open pinned MoM model: Loaded parameter device or dtype mismatch\n",
+  "oom": false,
+  "elapsed_seconds": 82.87137150800004
+}

@@ -1,0 +1,29 @@
+{
+  "status": "BLOCKED",
+  "reason": "Single-GPU preflight did not pass; see preflight_result.json.",
+  "model_identity": null,
+  "joined_artifacts": {
+    "model": "model_manifest.json",
+    "environment": "environment.json",
+    "schema": "cell_schema.json"
+  },
+  "gates": {
+    "A": "NOT_RUN",
+    "B": "NOT_RUN",
+    "C": "NOT_RUN",
+    "D": "NOT_RUN",
+    "E": "NOT_RUN",
+    "F": "NOT_RUN"
+  },
+  "maximum_measured_configurations": {
+    "auto": [],
+    "manual": [],
+    "no_memory": []
+  },
+  "peak_device_bytes": null,
+  "peak_other_process_bytes": null,
+  "runtime_gpu": null,
+  "generation_quality": "NOT_EVALUATED",
+  "run_id": "minicells-t4-1b-capacity-001-5bf731e76c6c",
+  "timestamp": "2026-11-25T23:35:24.023169+00:00"
+}
