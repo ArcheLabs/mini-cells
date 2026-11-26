@@ -73,6 +73,28 @@ class CapacityTest(unittest.TestCase):
             self.assertIn("preflight_t4_1b.py", worker.call_args.args[0][2])
             self.assertEqual(set(read(Path(tmp) / "run", "summary.json")["gates"].values()), {"NOT_RUN"})
 
+    def test_passing_preflight_starts_each_capacity_worker_in_order(self):
+        target = read(HERE, "capacity_target.json")["approved_target"]
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "run"
+
+            def completed(args):
+                if args[2].endswith("preflight_t4_1b.py"):
+                    write(out, "preflight_result.json", dict(format=FORMAT, status="PASS", target=target,
+                          source_commit="fixture", gates=dict.fromkeys(GATES, "PASS")))
+                else:
+                    self.assertEqual(read(out, "preflight_result.json")["status"], "PASS")
+                return SimpleNamespace(returncode=0)
+
+            with patch("sys.argv", ["capacity", "--output", str(out), "--stage", "all"]), patch(
+                    "run_t4_1b_capacity.environment", return_value={}), patch(
+                    "run_t4_1b_capacity.subprocess.run", side_effect=completed) as worker, patch(
+                    "preflight_t4_1b.source_commit", return_value="fixture"):
+                main()
+            self.assertIn("preflight_t4_1b.py", worker.call_args_list[0].args[0][2])
+            self.assertEqual([call.args[0][-1] for call in worker.call_args_list[1:]],
+                             ["load", "storage", "scoring", "generation", "recovery"])
+
     def test_passing_standalone_preflight_still_leaves_capacity_unrun(self):
         target = read(HERE, "capacity_target.json")["approved_target"]
         with tempfile.TemporaryDirectory() as tmp:

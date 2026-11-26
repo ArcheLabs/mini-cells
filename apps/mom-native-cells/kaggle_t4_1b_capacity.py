@@ -1,4 +1,4 @@
-"""Run and publish the independent Native MoM 1.3B T4 preflight."""
+"""Run and publish Native MoM 1.3B capacity after the T4 preflight passes."""
 import json
 import os
 from pathlib import Path
@@ -13,7 +13,7 @@ SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
 BRANCH = "codex/native-mom-13b-checkpoint-audit"
 APP = "apps/mom-native-cells"
 EXPERIMENT = "minicells-t4-1b-capacity-001"
-RUN_STAGE = "preflight"
+RUN_STAGE = "all"
 
 
 def run(*args, **kwargs):

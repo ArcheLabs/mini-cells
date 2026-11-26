@@ -5,15 +5,21 @@
 The operator approved the pinned MoM 1.3B checkpoint. The
 [Phase 1 audit](../../artifacts/experiments/minicells-t4-1b-capacity-001/phase-1-kaggle/README.md)
 passed on Kaggle CPU. The [compatibility report](NATIVE_MOM_13B_COMPATIBILITY.md)
-records the local Meta and software checks. Actual T4 gates are pending.
+records the local Meta and software checks. The single-T4 preflight passed
+all nine gates on Kaggle. [Published preflight receipt](https://github.com/ArcheLabs/mini-cells/blob/3d068d1f80e99756c4cd7e50ba3f0ab868079195/artifacts/experiments/minicells-t4-1b-capacity-001/4230429be5ba/preflight_result.json).
+
+| Operation | Seconds | Peak device memory (MiB) |
+| --- | ---: | ---: |
+| Download and strict load to cuda:0 | 64.17 | 3,529.2 |
+| First 16-token forward | 69.15 | 4,127.2 |
+| 1024-token prefill | 4.44 | 4,133.2 |
+| 128-token greedy generation | 20.72 | 4,133.2 |
+
+The validated configuration is one Tesla T4, FP16, 1,552,884,000 parameters,
+and no external Cell. Decode throughput was 6.18 tokens/s. These results
+establish runtime feasibility for the tested configuration.
 
 ## Single-GPU preflight
-
-The [Kaggle Script](../../apps/mom-native-cells/kaggle_t4_1b_capacity.py)
-runs only the independent preflight. Enable Internet and select the T4
-accelerator. On a T4 ×2 session the launcher selects a physical T4 by UUID and exposes it as
-`cuda:0`. NVML samples the same UUID. The existing `GITHUB_TOKEN` secret is used for result publication
-and the publisher verifies the result branch commit.
 
 The independent runner can also be invoked on a compatible host from a
 checked-out source commit with the `mom` extras, NVML and psutil available:
@@ -31,6 +37,12 @@ generation, and memory measurements in `preflight_result.json` and
 kernel and does not certify the BF16 Chunk kernel on T4.
 
 ## Capacity runbook
+
+Upload the [Kaggle Script](../../apps/mom-native-cells/kaggle_t4_1b_capacity.py),
+enable Internet, select the T4 accelerator, and enable the existing
+`GITHUB_TOKEN` secret. The launcher selects one physical T4 by UUID and exposes
+it as `cuda:0`. It runs the preflight and capacity in the same session and
+publishes the receipts to a verified GitHub result branch.
 
 The capacity runner's `--stage all` runs its independent preflight before
 any A–F worker. A standalone capacity stage requires a complete passing
@@ -62,6 +74,4 @@ matrix and acceptance thresholds below are unchanged.
   Later cases proceed only if the same model passes a short health check.
   The maximum is computed from successfully repeated configurations per mode.
 
-The current evidence is an audit and CPU regression coverage of the runner.
-No model loading time, VRAM ceiling, context limit, generation operability
-or recovery result has been measured for the designated 1B model.
+The multi-Cell capacity ceiling and recovery performance remain unmeasured.
