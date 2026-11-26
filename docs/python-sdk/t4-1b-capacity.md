@@ -74,4 +74,35 @@ matrix and acceptance thresholds below are unchanged.
   Later cases proceed only if the same model passes a short health check.
   The maximum is computed from successfully repeated configurations per mode.
 
-The multi-Cell capacity ceiling and recovery performance remain unmeasured.
+## Capacity result
+
+The Kaggle run returned **FULL PASS** at source commit `75b171e4d`. A–F all
+passed. All 12 Read All and 47 generation configurations passed, with
+14 and 55 successful measured trials respectively. No trial recorded a
+failure. [Verified capacity artifacts](https://github.com/ArcheLabs/mini-cells/tree/d480bf23926cc72adc2b9c2ff3919406375d0438/artifacts/experiments/minicells-t4-1b-capacity-001/33c9856baf45).
+
+| Registered Cells | Prompt and generated tokens | Selection mode | Median (s) | Peak device memory (MiB) |
+| ---: | --- | --- | ---: | ---: |
+| 0 | 1024 + 128 | No memory | 23.90 | 4,131.2 |
+| 1 | 1024 + 128 | Manual | 23.30 | 4,137.2 |
+| 1 | 1024 + 128 | Auto | 27.30 | 4,137.2 |
+| 8 | 1024 + 128 | Manual | 33.48 | 4,265.2 |
+| 8 | 1024 + 128 | Auto | 62.94 | 4,265.2 |
+
+The longest generation cases at eight Cells had three measured repetitions
+after warm-up. Automatic selection scored all eight registered Cells and
+then fused two, as did the explicit manual selection. At 1024 input tokens,
+Read All took 3.68, 7.25, 14.42, and 28.77 seconds at 1, 2, 4, and 8 Cells.
+The 2- and 4-Cell generation configurations used 12 new tokens.
+
+The peak sampled device usage was 4.17 GiB against a 12 GiB limit. The tested
+Cell contained 117 MiB of CPU tensor payload. Most high-count capacity Cells
+were replicas of one seed state. In the independent recovery process, import
+of all eight Cells took 7.82 seconds and recovered the exact ZIP hashes.
+Continued writing modified only the target Cell, and the subsequent query
+succeeded.
+
+Eight is the highest tested registry size. Simultaneous fusion of eight
+Cells and generation quality were outside this protocol. The result records
+the source commit and runtime environment. Kaggle's script version ID was
+unavailable.

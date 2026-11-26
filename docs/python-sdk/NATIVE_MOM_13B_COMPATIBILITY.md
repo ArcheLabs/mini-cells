@@ -1,8 +1,8 @@
 # Native MoM 1.3B runtime compatibility
 
 The pinned Kaggle checkpoint audit passed. The runtime implementation has
-passed local structural and software tests. Actual 1.3B weight loading through
-the runtime and native forward execution still need a real run.
+passed local structural and software tests. Actual 1.3B weight loading and native FLA execution passed on Kaggle
+single-T4. [Preflight and capacity results](t4-1b-capacity.md).
 
 | Area | Existing runtime | 1.3B implementation and verification |
 | --- | --- | --- |
@@ -34,10 +34,10 @@ the runtime and native forward execution still need a real run.
 | Architecture compatibility and tensor shape validation | PASS on Meta |
 | Model initialization | PASS on Meta |
 | Strict-loading rejection tests | PASS |
-| Real checkpoint load through the SDK | NOT_RUN |
+| Real checkpoint load through the SDK | PASS on T4 |
 | Native CPU forward | N/A under the approved acceptance change |
 | 340M software regression | PASS |
-| T4 single-GPU preflight and A–F capacity | NOT_RUN |
+| T4 single-GPU preflight and A–F capacity | PASS on T4 |
 
 The approved protocol uses the independent T4 preflight for real checkpoint
 loading, native FLA execution, and logits checks.
@@ -52,4 +52,4 @@ The loader preserved the explicitly constructed FP32 `A_log` parameter.
 The revised staging check admits only that known FP32 exception. Placement
 then explicitly converts the audited model to its requested runtime dtype
 and validates placement, dtype, parameter coverage and weight tying.
-This correction still needs a real T4 run.
+The subsequent T4 preflight and capacity runs both passed.
