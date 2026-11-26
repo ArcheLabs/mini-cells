@@ -126,15 +126,30 @@ T4, Internet, and the existing GitHub secret. The diagnostic uses the
 audited 1.3B FP16 checkpoint and the BOS plain France continuation fixture
 from Phase A. Four independent caches cover whole prefill, two chunks,
 prefill plus tokenwise decode, and all-tokenwise execution. Zero-based
-token positions align per-layer router logits, expert assignments and
-actual packing order, shared Q/K/V before and after convolution, and
-attention, block and head outputs. Comparisons report the first measured
-exact difference and the first difference outside the frozen Phase A
-bound. Final cache fields and cursors use the existing Phase A comparison.
+token positions align per-layer router logits, expert assignments, actual
+packing order, and attention, block and head outputs. For both the expert
+and shared paths the trace captures Q/K/V before and after convolution.
+Expert tensors are compared on common (layer, expert, original token)
+coordinates with padding excluded. The published JSON includes per-token
+expert RMS and max absolute activation, full-vector error summaries, and
+tokens that enter or leave each expert across schedules.
 
-Routed expert tensors include padding and different recurrence contexts.
-This trace captures their order explicitly and compares numerical Q/K/V
-only on the token-aligned shared path. The first measured difference is
-limited to the recorded observation points. No source or dependency
-patch, training, or later phase is applied. This short trace uses fused
-recurrent execution and leaves longer chunk-kernel behavior open.
+Convolution records include extension availability, the effective
+`use_fast_conv1d` flag and the dispatched FLA Triton or causal-conv1d entry
+point for each layer, projection, path and chunk. Router records include
+the actual ordered top-2 selection and top-2 versus top-3 margins on logits
+and FP32 softmax probabilities. Reports summarize both ordered and
+set-wise agreement and the first change across layers and tokens.
+
+Comparisons report the first measured exact difference and the first
+difference outside the frozen Phase A bound. Final cache fields and
+cursors use the existing Phase A comparison. Observations are limited to
+the recorded points. The weights, dependencies, upstream behavior and
+acceptance gates are held fixed. This short trace uses fused recurrent
+execution.
+
+A.3 is the separately gated comparison of packing-only, convolution-only
+and combined interventions against the A.2 baseline. A.4 rechecks base
+generation and consistency after those results, including inputs beyond
+64 tokens that exercise the chunk kernel. Phase B can start after the
+base runtime passes A.4.
