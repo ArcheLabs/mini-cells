@@ -153,3 +153,46 @@ and combined interventions against the A.2 baseline. A.4 rechecks base
 generation and consistency after those results, including inputs beyond
 64 tokens that exercise the chunk kernel. Phase B can start after the
 base runtime passes A.4.
+
+## Phase A.3 controlled interventions
+
+A.2 found the first out-of-tolerance stage at layer 0 expert Q after
+convolution in all three split schedules. The shared Q input for the
+two-chunk schedule agreed exactly before convolution. The unmodified
+whole pass also packed at least one expert out of chronological order in
+all 24 layers. [A.2 artifacts](https://github.com/ArcheLabs/mini-cells/tree/eb3acfe54f9cbe59dc23ac640683e173d94f8a3d/artifacts/experiments/minicells-root-cause-001/a2-e686342397c2).
+
+Run [kaggle_phase_a3.py](kaggle_phase_a3.py) in Kaggle Script mode with
+T4, Internet, and the existing GitHub secret. The four arms use the A.2
+prompt and token schedules, FP16 1.3B weights and the pinned dependencies.
+Each pass starts with an independent cache. The interventions are scoped to
+the benchmark process and independently toggled across arms.
+
+| Arm | Stable expert sort | Correct Triton convolution state |
+| --- | --- | --- |
+| Original | Off | Off |
+| Packing only | On | Off |
+| Convolution only | Off | On |
+| Both | On | On |
+
+The sort replaces only the tie behavior of the pinned sort. The convolution
+intervention supplies width-4 weights to the existing one-token Triton
+entry and prepends the last width-minus-one cached inputs to multi-token
+Triton prefill, then keeps the causal suffix and rolls the full cache.
+The experiment keeps the upstream expert padding, routing, Delta kernels,
+and cache management outside convolution. Expert padding and kernel
+rounding may still contribute to remaining schedule differences.
+
+The T4 component preflight checks the stable packer and independently
+compares the original and corrected FLA paths against a Torch causal
+oracle. Both a single-lane fixture and a four-expert 1024-channel SiLU
+fixture cover whole, split and tokenwise schedules. The corrected path
+must meet A.1's numerical tolerances and produce the exact expected final
+convolution cache before the four model arms run.
+
+Each arm compares split against its own whole pass under the frozen Phase A
+tolerance. Comparisons to the original use the same schedule. The JSON
+includes final Logits differences, first numerical divergence, expert
+set agreement, packing inversions, cache summaries, and paired effects on
+mean absolute Logits error. A.3 measures a short fused-recurrent fixture.
+The A.4 generation and long-input acceptance gate stays separate.
