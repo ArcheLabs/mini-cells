@@ -196,3 +196,34 @@ includes final Logits differences, first numerical divergence, expert
 set agreement, packing inversions, cache summaries, and paired effects on
 mean absolute Logits error. A.3 measures a short fused-recurrent fixture.
 The A.4 generation and long-input acceptance gate stays separate.
+
+## Phase A.3.1 expert convolution padding
+
+A.3 fixed both packing order and short-convolution dispatch. All six
+top-1 logits agreed across schedules, but all three split schedules still
+exceeded the frozen elementwise tolerance. The first exceedance in every
+split was layer 0, expert 3, Q convolution, token 3.
+[A.3 artifacts](https://github.com/ArcheLabs/mini-cells/tree/cfa5e9c0d0ee4ff8c89cc49dd605be5f968f9f4b/artifacts/experiments/minicells-root-cause-001/a3-b462ea0b8238).
+
+Run [kaggle_phase_a31.py](kaggle_phase_a31.py) in Kaggle Script mode with
+T4, Internet, and the existing GitHub secret. The preflight captures the
+actual layer-0 Q projections and top-2 assignments from the six-token A.3
+fixture. It holds those projections, expert assignments and convolution
+weights constant while replaying all four schedules. The baseline must
+reproduce the anchor discrepancy. The candidate must match an independent
+FP32 Torch convolution over valid expert inputs and match all expert
+final caches exactly before the full-model arms start.
+
+The candidate processes padded prefixes with scratch state. It preserves
+their output positions and uses incoming history for their calculation.
+Only valid tokens commit history to the expert convolution cache. The
+full-model arms start from the A.3 combined intervention and differ only
+in that policy. The shared path and the recurrence are unchanged. Full
+model routing remains live so downstream changes can be measured
+separately from the fixed-route preflight.
+
+The report compares each arm's split outputs with its own whole pass and
+compares matching schedules across arms. It includes first divergences,
+routing agreement, cache summaries and the frozen Logits gate. This
+short fused-recurrent diagnostic does not perform A.4 generation or
+long-sequence acceptance.
