@@ -1,0 +1,21 @@
+{
+  "format": "minicells.root-cause.001.phase-a4.v1",
+  "status": "FAIL",
+  "engineering_status": "PASS",
+  "diagnosis": "A.4 acceptance gates remain unmet.",
+  "phase_b_ready": false,
+  "gates": {
+    "tokenizer": "PASS",
+    "native_reference": "PASS",
+    "upstream_split": "PASS",
+    "greedy_reference": "PASS",
+    "base_completion": "PASS",
+    "anchor_split_cache": "PASS",
+    "greedy_schedule": "PASS",
+    "sdk_single_call_65": "BLOCKED",
+    "native_kernel": "PASS",
+    "schedule_parity": "FAIL"
+  },
+  "source_commit": "bb374534ac6eb04a92521365388f220e5d79ad7f",
+  "script_version_id": null
+}
